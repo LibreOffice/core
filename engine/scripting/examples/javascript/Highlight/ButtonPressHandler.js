@@ -17,7 +17,7 @@
  */
 //this script acts as a handler for the buttons in the Highlight dialog
 importClass(Packages.com.sun.star.uno.UnoRuntime);
-importClass(Packages.com.sun.star.uno.Type);
+importClass(Packages.cpo.uno.Type);
 importClass(Packages.com.sun.star.uno.AnyConverter);
 
 importClass(Packages.com.sun.star.awt.XButton);

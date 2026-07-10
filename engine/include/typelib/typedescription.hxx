@@ -26,7 +26,7 @@
 
 #include "rtl/alloc.h"
 #include "rtl/ustring.hxx"
-#include "com/sun/star/uno/Type.h"
+#include "cpo/uno/Type.h"
 #include "typelib/typedescription.h"
 
 
@@ -59,7 +59,7 @@ public:
 
         @param rType a type
     */
-    inline TypeDescription( const css::uno::Type & rType );
+    inline TypeDescription( const cpo::uno::Type & rType );
     /** Copy constructor:
 
         @param rDescr another TypeDescription
@@ -150,7 +150,7 @@ inline TypeDescription::TypeDescription( typelib_TypeDescriptionReference * pTyp
         typelib_typedescriptionreference_getDescription( &_pTypeDescr, pTypeDescrRef );
 }
 
-inline TypeDescription::TypeDescription( const css::uno::Type & rType )
+inline TypeDescription::TypeDescription( const cpo::uno::Type & rType )
     : _pTypeDescr( NULL )
 {
     if (rType.getTypeLibType())

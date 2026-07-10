@@ -297,7 +297,7 @@ cpo::uno::Sequence<sal_Int8> OSingleSelectQueryComposer::getImplementationId()
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-cpo::uno::Sequence< css::uno::Type > OSingleSelectQueryComposer::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > OSingleSelectQueryComposer::getTypes()
 {
     return  ::comphelper::concatSequences(
         OSubComponent::getTypes( ),

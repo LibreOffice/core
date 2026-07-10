@@ -32,7 +32,7 @@ import com.sun.star.document.XExporter;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Any;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.xml.sax.XDocumentHandler;

@@ -17,7 +17,7 @@
  */
 package com.sun.star.lib.uno.helper;
 
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.TypeClass;
@@ -441,7 +441,7 @@ XMultiPropertySet
      *  <li>java.lang.Float</li>
      *  <li>java.lang.Double</li>
      *  <li>String</li>
-     *  <li>com.sun.star.uno.Type</li>
+     *  <li>cpo.uno.Type</li>
      *  <li><em>objects which implement UNO interfaces</em></li>
      *  <li><em>arrays which contain elements of the types above</em></li>
      *  <li>com.sun.star.uno.Any containing an instance of one of the above types</li>

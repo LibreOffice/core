@@ -96,12 +96,12 @@ void SvxShapeGroup::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 }
 
 
-cpo::uno::Any SAL_CALL SvxShapeGroup::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeGroup::queryInterface( const cpo::uno::Type & rType )
 {
     return SvxShape::queryInterface( rType );
 }
 
-cpo::uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -342,7 +342,7 @@ cpo::uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
 // css::container::XElementAccess
 
 
-uno::Type SAL_CALL SvxShapeGroup::getElementType()
+cpo::uno::Type SAL_CALL SvxShapeGroup::getElementType()
 {
     return cppu::UnoType<drawing::XShape>::get();
 }
@@ -368,7 +368,7 @@ SvxShapeConnector::~SvxShapeConnector() noexcept
 
 // XTypeProvider
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SvxShapeConnector::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxShapeConnector::getTypes()
 {
     return SvxShape::getTypes();
 }
@@ -393,12 +393,12 @@ SvxShapeControl::~SvxShapeControl() noexcept
 }
 
 
-cpo::uno::Any SAL_CALL SvxShapeControl::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeControl::queryInterface( const cpo::uno::Type & rType )
 {
     return SvxShapeText::queryInterface( rType );
 }
 
-cpo::uno::Any SAL_CALL SvxShapeControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -411,7 +411,7 @@ cpo::uno::Any SAL_CALL SvxShapeControl::queryAggregation( const uno::Type & rTyp
 
 // XTypeProvider
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SvxShapeControl::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxShapeControl::getTypes()
 {
     return SvxShape::getTypes();
 }
@@ -1507,12 +1507,12 @@ SvxCustomShape::~SvxCustomShape() noexcept
 {
 }
 
-cpo::uno::Any SAL_CALL SvxCustomShape::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxCustomShape::queryInterface( const cpo::uno::Type & rType )
 {
     return SvxShapeText::queryInterface( rType );
 }
 
-cpo::uno::Any SAL_CALL SvxCustomShape::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxCustomShape::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aReturn = SvxShapeText::queryAggregation( rType );
     if ( !aReturn.hasValue() )

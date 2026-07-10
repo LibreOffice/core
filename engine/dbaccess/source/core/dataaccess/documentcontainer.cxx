@@ -116,7 +116,7 @@ cpo::uno::Sequence<sal_Int8> ODocumentContainer::getImplementationId()
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-cpo::uno::Sequence< css::uno::Type > ODocumentContainer::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > ODocumentContainer::getTypes()
 {
     return  ::comphelper::concatSequences(
         ODefinitionContainer::getTypes( ),

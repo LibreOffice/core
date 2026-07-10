@@ -2198,7 +2198,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         const ParamInfo& rInfo = rInfoSeq[i];
                         const Reference< XIdlClass >& rxClass = rInfo.aType;
 
-                        css::uno::Type aType( rxClass->getTypeClass(), rxClass->getName() );
+                        cpo::uno::Type aType( rxClass->getTypeClass(), rxClass->getName() );
 
                         // ATTENTION: Don't forget for Sbx-Parameter the offset!
                         pAnyArgs[i] = sbxToUnoValue(pParams->Get(i + 1), aType);
@@ -3603,7 +3603,7 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         Reference< XTypeDescription > xParamTypeDesc = xParam->getType();
                         if( !xParamTypeDesc.is() )
                             continue;
-                        css::uno::Type aType( xParamTypeDesc->getTypeClass(), xParamTypeDesc->getName() );
+                        cpo::uno::Type aType( xParamTypeDesc->getTypeClass(), xParamTypeDesc->getName() );
 
                         // sbx parameter needs offset 1
                         pAnyArgs[i] = sbxToUnoValue(pParams->Get(iSbx), aType);
@@ -4655,7 +4655,7 @@ SbxVariable* SbUnoStructRefObject::Find( const OUString& rName, SbxClassType t )
             SbxDataType eRealSbxType = eSbxType;
             Property aProp;
             aProp.Name = rName;
-            aProp.Type = css::uno::Type( it->second->getTypeClass(), it->second->getTypeName() );
+            aProp.Type = cpo::uno::Type( it->second->getTypeClass(), it->second->getTypeName() );
             const bool bIsStruct = aProp.Type.getTypeClass() == css::uno::TypeClass_STRUCT;
             SbUnoProperty* pProp = new SbUnoProperty( rName, eSbxType, eRealSbxType, std::move(aProp), 0, false, bIsStruct );
             SbxVariableRef xVarRef = pProp;
@@ -4716,7 +4716,7 @@ void SbUnoStructRefObject::implCreateAll()
         SbxDataType eRealSbxType = eSbxType;
         Property aProp;
         aProp.Name = rName;
-        aProp.Type = css::uno::Type( field.second->getTypeClass(), field.second->getTypeName() );
+        aProp.Type = cpo::uno::Type( field.second->getTypeClass(), field.second->getTypeName() );
         const bool bIsStruct = aProp.Type.getTypeClass() == css::uno::TypeClass_STRUCT;
         SbUnoProperty* pProp = new SbUnoProperty( rName, eSbxType, eRealSbxType, std::move(aProp), 0, false, bIsStruct );
         SbxVariableRef xVarRef = pProp;
@@ -4866,7 +4866,7 @@ StructRefInfo SbUnoStructRefObject::getStructMember( const OUString& rMemberName
     }
     StructFieldInfo::iterator it = maFields.find( rMemberName );
 
-    css::uno::Type aFoundType;
+    cpo::uno::Type aFoundType;
     sal_Int32 nFoundPos = -1;
 
     if ( it != maFields.end() )

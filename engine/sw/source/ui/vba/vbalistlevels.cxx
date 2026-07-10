@@ -74,7 +74,7 @@ cpo::uno::Any SAL_CALL SwVbaListLevels::Item( const cpo::uno::Any& Index1, const
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaListLevels::getElementType()
 {
     return cppu::UnoType<word::XListLevel>::get();

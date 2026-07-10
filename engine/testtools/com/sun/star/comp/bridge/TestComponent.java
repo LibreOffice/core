@@ -59,7 +59,7 @@ import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
 
 import com.sun.star.uno.Any;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 

@@ -155,7 +155,7 @@ void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
     if ( rEvent.IsEnabled )
     {
         eState = SfxItemState::DEFAULT;
-        css::uno::Type aType = rEvent.State.getValueType();
+        cpo::uno::Type aType = rEvent.State.getValueType();
 
         if ( aType == ::cppu::UnoType<void>::get() )
         {

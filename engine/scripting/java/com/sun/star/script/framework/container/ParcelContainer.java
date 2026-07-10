@@ -35,7 +35,7 @@ import com.sun.star.script.framework.provider.PathUtils;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.ucb.XSimpleFileAccess2;
 
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 

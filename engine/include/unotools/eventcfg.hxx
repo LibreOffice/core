@@ -72,7 +72,7 @@ class UNOTOOLS_DLLPUBLIC GlobalEventConfig final :
         cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
         cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
         bool SAL_CALL hasByName( const OUString& aName ) override;
-        css::uno::Type SAL_CALL getElementType(  ) override;
+        cpo::uno::Type SAL_CALL getElementType(  ) override;
         bool SAL_CALL hasElements(  ) override;
         static const OUString & GetEventName( GlobalEventId nID );
 

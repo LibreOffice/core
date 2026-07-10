@@ -56,7 +56,7 @@ XCommandInfo_impl::release()
 
 
 cpo::uno::Any SAL_CALL
-XCommandInfo_impl::queryInterface( const uno::Type& rType )
+XCommandInfo_impl::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                           static_cast< XCommandInfo* >(this) );

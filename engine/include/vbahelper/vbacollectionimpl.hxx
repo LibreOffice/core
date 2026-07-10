@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -176,7 +176,7 @@ private:
 public:
     XNamedObjectCollectionHelper( XNamedVec sMap ) : mXNamedVec(std::move( sMap )), cachePos(mXNamedVec.begin()) {}
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override { return cppu::UnoType< OneIfc >::get(); }
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override { return cppu::UnoType< OneIfc >::get(); }
     virtual bool SAL_CALL hasElements(  ) override { return ( mXNamedVec.size() > 0 ); }
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
@@ -325,7 +325,7 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override = 0;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override = 0;
+    virtual cpo::uno::Type SAL_CALL getElementType() override = 0;
     // XElementAccess
     virtual bool SAL_CALL hasElements() override
     {

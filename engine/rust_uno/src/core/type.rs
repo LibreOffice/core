@@ -63,7 +63,7 @@ impl Type {
     /// Create a new Type set to void
     ///
     /// Creates the default UNO type (void). This is equivalent to the default
-    /// constructor in C++ com::sun::star::uno::Type.
+    /// constructor in C++ cpo::uno::Type.
     pub fn new() -> Self {
         unsafe {
             let void_type_ref =

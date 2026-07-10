@@ -79,7 +79,7 @@ public:
     void                ToggleEnableState();
 
     // XInterface
-    cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override;
+    cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & aType) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

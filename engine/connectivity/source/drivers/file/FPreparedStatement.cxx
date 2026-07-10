@@ -117,7 +117,7 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType )
                                         static_cast< XResultSetMetaDataSupplier*>(this));
 }
 
-cpo::uno::Sequence< css::uno::Type > SAL_CALL OPreparedStatement::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL OPreparedStatement::getTypes(  )
 {
     ::cppu::OTypeCollection aTypes( cppu::UnoType<XPreparedStatement>::get(),
                                     cppu::UnoType<XParameters>::get(),

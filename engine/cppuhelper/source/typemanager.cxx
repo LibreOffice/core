@@ -43,7 +43,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -1933,7 +1933,7 @@ bool cppuhelper::TypeManager::hasByHierarchicalName(
     return find(aName).hasValue();
 }
 
-css::uno::Type cppuhelper::TypeManager::getElementType()
+cpo::uno::Type cppuhelper::TypeManager::getElementType()
 {
     return cppu::UnoType< OUString >::get();
 }

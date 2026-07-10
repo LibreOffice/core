@@ -202,7 +202,7 @@ static cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > Impl
 
 
 // css::uno::XInterface
-cpo::uno::Any StdTabControllerModel::queryAggregation( const css::uno::Type & rType )
+cpo::uno::Any StdTabControllerModel::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< css::awt::XTabControllerModel* >(this),
@@ -215,9 +215,9 @@ cpo::uno::Any StdTabControllerModel::queryAggregation( const css::uno::Type & rT
 IMPL_IMPLEMENTATION_ID( StdTabControllerModel )
 
 // css::lang::XTypeProvider
-cpo::uno::Sequence< css::uno::Type > StdTabControllerModel::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > StdTabControllerModel::getTypes()
 {
-    static const cpo::uno::Sequence< css::uno::Type > aTypeList {
+    static const cpo::uno::Sequence< cpo::uno::Type > aTypeList {
         cppu::UnoType<css::lang::XTypeProvider>::get(),
         cppu::UnoType<css::awt::XTabControllerModel>::get(),
         cppu::UnoType<css::lang::XServiceInfo>::get(),

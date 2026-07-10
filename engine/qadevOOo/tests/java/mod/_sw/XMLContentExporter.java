@@ -32,7 +32,7 @@ import com.sun.star.text.XSimpleText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.Any;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.xml.sax.XDocumentHandler;

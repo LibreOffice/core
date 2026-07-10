@@ -337,7 +337,7 @@ OPropertySetAggregationHelper::~OPropertySetAggregationHelper()
 }
 
 
-cpo::uno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const  css::uno::Type& _rType)
+cpo::uno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const  cpo::uno::Type& _rType)
 {
     cpo::uno::Any aReturn = OPropertyStateHelper::queryInterface(_rType);
 

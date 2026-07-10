@@ -43,7 +43,7 @@ namespace pcr
         // XPropertyControl
         virtual cpo::uno::Any SAL_CALL getValue() override;
         virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual css::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Type SAL_CALL getValueType() override;
 
         virtual void SAL_CALL disposing() override
         {
@@ -93,7 +93,7 @@ namespace pcr
         // XPropertyControl
         virtual cpo::uno::Any SAL_CALL getValue() override;
         virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual css::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Type SAL_CALL getValueType() override;
 
         void SetFormatDescription( const FormatDescription& rDesc );
 
@@ -126,7 +126,7 @@ namespace pcr
         // XPropertyControl
         virtual cpo::uno::Any SAL_CALL getValue() override;
         virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
-        virtual css::uno::Type SAL_CALL getValueType() override;
+        virtual cpo::uno::Type SAL_CALL getValueType() override;
 
         virtual void SetModifyHandler() override
         {

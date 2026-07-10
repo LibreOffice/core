@@ -33,7 +33,7 @@ namespace dbaccess
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
 
     namespace {
 

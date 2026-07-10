@@ -276,7 +276,7 @@ public:
         mxEnumerationAccess = xModel->getSwTextFields();
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override { return  mxEnumerationAccess->getElementType(); }
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override { return  mxEnumerationAccess->getElementType(); }
     virtual bool SAL_CALL hasElements(  ) override { return mxEnumerationAccess->hasElements(); }
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override
@@ -533,7 +533,7 @@ SwVbaFields::getServiceImplName()
 }
 
 // XEnumerationAccess
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 SwVbaFields::getElementType()
 {
     return  cppu::UnoType<word::XField>::get();

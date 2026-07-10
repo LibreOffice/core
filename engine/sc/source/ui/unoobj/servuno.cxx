@@ -164,7 +164,7 @@ public:
         return aNames;
     }
     // XElemenAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override { return uno::Type(); }
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override { return cpo::uno::Type(); }
     virtual bool SAL_CALL hasElements(  ) override { return true; }
 
 };

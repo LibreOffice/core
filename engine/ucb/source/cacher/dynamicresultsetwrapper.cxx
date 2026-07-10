@@ -105,7 +105,7 @@ void DynamicResultSetWrapper::impl_InitResultSetTwo( std::unique_lock<std::mutex
 }
 
 // XInterface methods.
-cpo::uno::Any SAL_CALL DynamicResultSetWrapper::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL DynamicResultSetWrapper::queryInterface( const cpo::uno::Type & rType )
 {
     //list all interfaces inclusive baseclasses of interfaces
     cpo::uno::Any aRet = cppu::queryInterface( rType,
@@ -429,7 +429,7 @@ void SAL_CALL DynamicResultSetWrapperListener::release()
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL DynamicResultSetWrapperListener::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL DynamicResultSetWrapperListener::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< XDynamicResultSetListener* >(this),

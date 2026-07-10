@@ -613,7 +613,7 @@ cpo::uno::Any SAL_CALL ScSubTotalDescriptorBase::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(uno::Reference<sheet::XSubTotalField>(xField));
 }
 
-uno::Type SAL_CALL ScSubTotalDescriptorBase::getElementType()
+cpo::uno::Type SAL_CALL ScSubTotalDescriptorBase::getElementType()
 {
     return cppu::UnoType<sheet::XSubTotalField>::get();
 }
@@ -2283,7 +2283,7 @@ cpo::uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(uno::Reference<sheet::XDatabaseRange>(xRange));
 }
 
-uno::Type SAL_CALL ScDatabaseRangesObj::getElementType()
+cpo::uno::Type SAL_CALL ScDatabaseRangesObj::getElementType()
 {
     return cppu::UnoType<sheet::XDatabaseRange>::get();
 }

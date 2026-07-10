@@ -94,7 +94,7 @@ public:
                          bool bReadOnly );
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -107,7 +107,7 @@ public:
 
     // XTypeProvider
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
 
     // XComponent
     virtual void SAL_CALL
@@ -149,7 +149,7 @@ public:
     hasByName( const OUString & aName ) override;
 
     // XElementAccess ( base of XNameAccess )
-    virtual uno::Type SAL_CALL
+    virtual cpo::uno::Type SAL_CALL
     getElementType() override;
     virtual bool SAL_CALL
     hasElements() override;
@@ -494,7 +494,7 @@ void SAL_CALL HierarchyDataAccess::release()
 }
 
 // virtual
-cpo::uno::Any SAL_CALL HierarchyDataAccess::queryInterface( const uno::Type & aType )
+cpo::uno::Any SAL_CALL HierarchyDataAccess::queryInterface( const cpo::uno::Type & aType )
 {
     // Interfaces supported in read-only and read-write mode.
     cpo::uno::Any aRet = cppu::queryInterface( aType,
@@ -527,7 +527,7 @@ XTYPEPROVIDER_COMMON_IMPL( HierarchyDataAccess );
 
 
 // virtual
-cpo::uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
 {
     if ( m_bReadOnly )
     {
@@ -691,7 +691,7 @@ bool SAL_CALL HierarchyDataAccess::hasByName( const OUString & aName )
 
 
 // virtual
-uno::Type SAL_CALL HierarchyDataAccess::getElementType()
+cpo::uno::Type SAL_CALL HierarchyDataAccess::getElementType()
 {
     uno::Reference< container::XElementAccess > xOrig
         = ensureOrigInterface( m_xCfgEA );

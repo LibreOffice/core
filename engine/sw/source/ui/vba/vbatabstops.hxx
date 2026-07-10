@@ -39,7 +39,7 @@ public:
     virtual void SAL_CALL ClearAll(  ) override;
 
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaTabStops_BASE

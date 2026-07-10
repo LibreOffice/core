@@ -24,7 +24,7 @@ import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawView;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 /**
 * Testing <code>com.sun.star.drawing.XDrawView</code>

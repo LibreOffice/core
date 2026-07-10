@@ -66,7 +66,7 @@ public:
 
     // XElementAccess
     virtual bool SAL_CALL hasElements(  ) override;
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
 
     // XCloneable
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;

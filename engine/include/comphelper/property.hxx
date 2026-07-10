@@ -122,7 +122,7 @@ tryPropertyValueEnum(cpo::uno::Any& /*out*/_rConvertedValue, cpo::uno::Any& /*ou
                     false, if the value could be converted and has not changed
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
-COMPHELPER_DLLPUBLIC bool tryPropertyValue(cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, const cpo::uno::Any& _rValueToSet, const cpo::uno::Any& _rCurrentValue, const css::uno::Type& _rExpectedType);
+COMPHELPER_DLLPUBLIC bool tryPropertyValue(cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, const cpo::uno::Any& _rValueToSet, const cpo::uno::Any& _rCurrentValue, const cpo::uno::Type& _rExpectedType);
 
 }
 

@@ -342,7 +342,7 @@ cpo::uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
 }
 
 // css::container::XElementAccess
-uno::Type SAL_CALL SvxDrawPage::getElementType()
+cpo::uno::Type SAL_CALL SvxDrawPage::getElementType()
 {
     return cppu::UnoType<drawing::XShape>::get();
 }

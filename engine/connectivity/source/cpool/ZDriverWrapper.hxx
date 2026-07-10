@@ -54,7 +54,7 @@ namespace connectivity
 
 
         // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
 
     private:
         /// dtor

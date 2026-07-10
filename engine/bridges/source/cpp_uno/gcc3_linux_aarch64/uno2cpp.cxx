@@ -479,7 +479,7 @@ void unoInterfaceProxyDispatch(
                     typelib_TypeDescription * td = nullptr;
                     TYPELIB_DANGER_GET(
                         &td,
-                        (static_cast<css::uno::Type *>(pArgs[0])
+                        (static_cast<cpo::uno::Type *>(pArgs[0])
                          ->getTypeLibType()));
                     if (td != nullptr) {
                         uno_Interface * ifc = nullptr;

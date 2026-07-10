@@ -101,7 +101,7 @@ cpo::uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolba
 }
 
 // XEnumerationAccess
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 ScVbaCommandBarControls::getElementType()
 {
     return cppu::UnoType<XCommandBarControl>::get();
@@ -248,7 +248,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 /*Index*/ ) override
         { throw lang::IndexOutOfBoundsException(); }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
         { return cppu::UnoType<XCommandBarControl>::get(); }
     virtual bool SAL_CALL hasElements(  ) override
         { return false; }
@@ -264,7 +264,7 @@ VbaDummyCommandBarControls::VbaDummyCommandBarControls(
 }
 
 // XEnumerationAccess
-uno::Type SAL_CALL VbaDummyCommandBarControls::getElementType()
+cpo::uno::Type SAL_CALL VbaDummyCommandBarControls::getElementType()
 {
     return cppu::UnoType<XCommandBarControl>::get();
 }

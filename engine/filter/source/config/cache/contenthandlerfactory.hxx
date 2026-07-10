@@ -81,7 +81,7 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
       virtual bool SAL_CALL hasByName( const OUString& aName ) override
         { return BaseContainer::hasByName(aName); }
 
-      virtual css::uno::Type SAL_CALL getElementType() override
+      virtual cpo::uno::Type SAL_CALL getElementType() override
         { return BaseContainer::getElementType(); }
       virtual bool SAL_CALL hasElements() override
         { return BaseContainer::hasElements(); }

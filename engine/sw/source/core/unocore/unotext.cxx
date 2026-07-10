@@ -148,7 +148,7 @@ css::uno::Reference< css::text::XTextCursor > SAL_CALL SwXText::createTextCursor
 
 
 cpo::uno::Any SAL_CALL
-SwXText::queryInterface(const uno::Type& rType)
+SwXText::queryInterface(const cpo::uno::Type& rType)
 {
     cpo::uno::Any aRet;
     if (rType == cppu::UnoType<text::XText>::get())
@@ -214,10 +214,10 @@ SwXText::queryInterface(const uno::Type& rType)
     return aRet;
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
 SwXText::getTypes()
 {
-    static const cpo::uno::Sequence< uno::Type > aTypes {
+    static const cpo::uno::Sequence< cpo::uno::Type > aTypes {
         cppu::UnoType<text::XText>::get(),
         cppu::UnoType<text::XTextRangeCompare>::get(),
         cppu::UnoType<text::XRelativeTextContentInsert>::get(),
@@ -2427,11 +2427,11 @@ SwXBodyText::getSupportedServiceNames()
     return { u"com.sun.star.text.Text"_ustr };
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
 SwXBodyText::getTypes()
 {
-    const cpo::uno::Sequence< uno::Type > aTypes = SwXBodyText_Base::getTypes();
-    const cpo::uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
+    const cpo::uno::Sequence< cpo::uno::Type > aTypes = SwXBodyText_Base::getTypes();
+    const cpo::uno::Sequence< cpo::uno::Type > aTextTypes = SwXText::getTypes();
     return ::comphelper::concatSequences(aTypes, aTextTypes);
 }
 
@@ -2442,7 +2442,7 @@ SwXBodyText::getImplementationId()
 }
 
 cpo::uno::Any SAL_CALL
-SwXBodyText::queryInterface(const uno::Type& rType)
+SwXBodyText::queryInterface(const cpo::uno::Type& rType)
 {
     const cpo::uno::Any ret = SwXText::queryInterface(rType);
     return (ret.getValueType() == cppu::UnoType<void>::get())
@@ -2538,7 +2538,7 @@ SwXBodyText::createParagraphEnumeration()
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::Body);
 }
 
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 SwXBodyText::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();
@@ -2645,7 +2645,7 @@ const SwStartNode* SwXHeadFootText::GetStartNode() const
     return pSttNd;
 }
 
-cpo::uno::Sequence<uno::Type> SAL_CALL SwXHeadFootText::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> SAL_CALL SwXHeadFootText::getTypes()
 {
     return ::comphelper::concatSequences(
         SwXHeadFootText_Base::getTypes(),
@@ -2657,7 +2657,7 @@ cpo::uno::Sequence<sal_Int8> SAL_CALL SwXHeadFootText::getImplementationId()
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-cpo::uno::Any SAL_CALL SwXHeadFootText::queryInterface(const uno::Type& rType)
+cpo::uno::Any SAL_CALL SwXHeadFootText::queryInterface(const cpo::uno::Type& rType)
 {
     const cpo::uno::Any ret = SwXHeadFootText_Base::queryInterface(rType);
     return (ret.getValueType() == cppu::UnoType<void>::get())
@@ -2761,7 +2761,7 @@ uno::Reference<container::XEnumeration> SAL_CALL SwXHeadFootText::createEnumerat
                 : CursorType::Footer);
 }
 
-uno::Type SAL_CALL SwXHeadFootText::getElementType()
+cpo::uno::Type SAL_CALL SwXHeadFootText::getElementType()
     { return cppu::UnoType<text::XTextRange>::get(); }
 
 bool SAL_CALL SwXHeadFootText::hasElements()

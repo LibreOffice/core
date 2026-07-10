@@ -139,7 +139,7 @@ $(eval $(call gb_Jar_add_sourcefiles,libreoffice,\
     ridljar/com/sun/star/uno/IMapping \
     ridljar/com/sun/star/uno/IQueryInterface \
     ridljar/com/sun/star/uno/MappingException \
-    ridljar/com/sun/star/uno/Type \
+    ridljar/cpo/uno/Type \
     ridljar/com/sun/star/uno/UnoRuntime \
     ridljar/com/sun/star/uno/WeakReference \
 ))

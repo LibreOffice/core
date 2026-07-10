@@ -31,7 +31,7 @@ inline const sal_Int32& TaskManager::MyProperty::getHandle() const
 {
     return Handle;
 }
-inline const css::uno::Type& TaskManager::MyProperty::getType() const
+inline const cpo::uno::Type& TaskManager::MyProperty::getType() const
 {
     return Typ;
 }

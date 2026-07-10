@@ -91,7 +91,7 @@ connectivity/source/manager/mdrivermanager.cxx:149
     const struct std::pair<const class rtl::OUString, class com::sun::star::uno::Reference<class com::sun::star::sdbc::XDriver> > & _rElement
     ExtractDriverFromCollectionElement()
 cppuhelper/inc/compbase2.hxx:71
-    class cpo::uno::Any WeakComponentImplHelper_query(const class com::sun::star::uno::Type &,struct cppu::class_data *,class cppuhelper::WeakComponentImplHelperBase2 *)
+    class cpo::uno::Any WeakComponentImplHelper_query(const class cpo::uno::Type &,struct cppu::class_data *,class cppuhelper::WeakComponentImplHelperBase2 *)
     struct cppu::class_data * cd
     class_data_get()
 dbaccess/source/core/api/RowSetRow.hxx:40
@@ -247,15 +247,15 @@ include/basegfx/utils/bgradient.hxx:46
     const class basegfx::BColorStop & 
     front()
 include/comphelper/compbase.hxx:120
-    class cpo::uno::Any WeakComponentImplHelper_query(const class com::sun::star::uno::Type &,struct cppu::class_data *,class comphelper::WeakComponentImplHelperBase *)
+    class cpo::uno::Any WeakComponentImplHelper_query(const class cpo::uno::Type &,struct cppu::class_data *,class comphelper::WeakComponentImplHelperBase *)
     struct cppu::class_data * cd
     class_data_get()
 include/comphelper/compbase.hxx:177
-    class cpo::uno::Any WeakImplHelper_query(const class com::sun::star::uno::Type &,struct cppu::class_data *,class comphelper::WeakImplHelperBase *)
+    class cpo::uno::Any WeakImplHelper_query(const class cpo::uno::Type &,struct cppu::class_data *,class comphelper::WeakImplHelperBase *)
     struct cppu::class_data * cd
     class_data_get()
 include/comphelper/propertybag.hxx:107
-    void comphelper::PropertyBag::addVoidProperty(const class rtl::OUString &,const class com::sun::star::uno::Type &,int,int)
+    void comphelper::PropertyBag::addVoidProperty(const class rtl::OUString &,const class cpo::uno::Type &,int,int)
     int _nHandle
     findFreeHandle()
 include/connectivity/dbtools.hxx:181

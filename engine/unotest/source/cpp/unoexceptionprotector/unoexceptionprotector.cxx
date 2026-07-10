@@ -30,7 +30,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
@@ -45,13 +45,13 @@
 
 namespace {
 
-css::uno::Type translateType(css::uno::Reference<css::reflection::XIdlClass> const & type) {
-    return css::uno::Type(type->getTypeClass(), type->getName());
+cpo::uno::Type translateType(css::uno::Reference<css::reflection::XIdlClass> const & type) {
+    return cpo::uno::Type(type->getTypeClass(), type->getName());
 }
 
 void printUnoValue(
     std::ostream & out, css::uno::Reference<css::reflection::XIdlReflection> const & reflections,
-    css::uno::Type const & type, cpo::uno::Any const & value)
+    cpo::uno::Type const & type, cpo::uno::Any const & value)
 {
     switch (type.getTypeClass()) {
     case css::uno::TypeClass_VOID:
@@ -107,7 +107,7 @@ void printUnoValue(
         out << '"' << *o3tl::forceAccess<OUString>(value) << '"'; //TODO: encode content
         break;
     case css::uno::TypeClass_TYPE:
-        out << o3tl::forceAccess<css::uno::Type>(value)->getTypeName();
+        out << o3tl::forceAccess<cpo::uno::Type>(value)->getTypeName();
         break;
     case css::uno::TypeClass_ANY:
         out << value.getValueTypeName() << ": ";

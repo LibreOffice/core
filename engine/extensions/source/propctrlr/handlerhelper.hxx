@@ -68,7 +68,7 @@ namespace pcr
                 const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                 const css::uno::Reference< css::script::XTypeConverter >& _rxTypeConverter,
                 const cpo::uno::Any& _rPropertyValue,
-                const css::uno::Type& _rControlValueType
+                const cpo::uno::Type& _rControlValueType
             );
 
         /** creates an <member scope="css::inspection">PropertyControlType::ListBox</member>-type control

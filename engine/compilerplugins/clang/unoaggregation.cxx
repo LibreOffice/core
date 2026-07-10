@@ -33,19 +33,16 @@ bool isQueryInterface(CXXMethodDecl const* decl)
     {
         return false;
     }
-    // need to this formatting to make css->cpo transition work nicely
-    // clang-format off
     if (!loplugin::TypeCheck(decl->getParamDecl(0)->getType())
              .LvalueReference()
              .ConstNonVolatile()
              .Class("Type")
              .Namespace("uno")
-             .Namespace("star").Namespace("sun").Namespace("com")
+             .Namespace("cpo")
              .GlobalNamespace())
     {
         return false;
     }
-    // clang-format on
     return true;
 }
 

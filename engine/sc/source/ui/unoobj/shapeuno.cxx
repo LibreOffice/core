@@ -127,7 +127,7 @@ ScShapeObj::~ScShapeObj()
 
 // XInterface
 
-cpo::uno::Any SAL_CALL ScShapeObj::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL ScShapeObj::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aRet = ScShapeObj_Base::queryInterface( rType );
 
@@ -1367,11 +1367,11 @@ void SAL_CALL ScShapeObj::setParent( const uno::Reference< uno::XInterface >& )
 
 // XTypeProvider
 
-cpo::uno::Sequence<uno::Type> SAL_CALL ScShapeObj::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> SAL_CALL ScShapeObj::getTypes()
 {
-    cpo::uno::Sequence< uno::Type > aBaseTypes( ScShapeObj_Base::getTypes() );
+    cpo::uno::Sequence< cpo::uno::Type > aBaseTypes( ScShapeObj_Base::getTypes() );
 
-    cpo::uno::Sequence< uno::Type > aTextTypes;
+    cpo::uno::Sequence< cpo::uno::Type > aTextTypes;
     if ( bIsTextShape )
         aTextTypes = ScShapeObj_TextBase::getTypes();
 
@@ -1380,7 +1380,7 @@ cpo::uno::Sequence<uno::Type> SAL_CALL ScShapeObj::getTypes()
         mxShapeAgg->queryAggregation( cppu::UnoType<lang::XTypeProvider>::get()) >>= xBaseProvider;
     OSL_ENSURE( xBaseProvider.is(), "ScShapeObj: No XTypeProvider from aggregated shape!" );
 
-    cpo::uno::Sequence< uno::Type > aAggTypes;
+    cpo::uno::Sequence< cpo::uno::Type > aAggTypes;
     if( xBaseProvider.is() )
         aAggTypes = xBaseProvider->getTypes();
 
@@ -1481,7 +1481,7 @@ public:
     }
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type SAL_CALL getElementType() override
     {
         return cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get();
     }

@@ -69,7 +69,7 @@ cpo::uno::Any SAL_CALL SwVbaListTemplates::Item( const cpo::uno::Any& Index1, co
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaListTemplates::getElementType()
 {
     return cppu::UnoType<word::XListTemplate>::get();

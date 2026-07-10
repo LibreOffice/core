@@ -27,7 +27,7 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <osl/diagnose.h>
 
 typedef cppu::WeakImplHelper<
@@ -80,7 +80,7 @@ public:
     // methods for XElementAccess
 
 
-    virtual css::uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type SAL_CALL getElementType() override
     {
         return cppu::UnoType<T>::get();
     }

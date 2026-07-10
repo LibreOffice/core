@@ -209,7 +209,7 @@ bool ContentResultSetWrapper::impl_isForwardOnly(std::unique_lock<std::mutex>& /
 
 // XInterface methods.
 
-cpo::uno::Any SAL_CALL ContentResultSetWrapper::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL ContentResultSetWrapper::queryInterface( const cpo::uno::Type & rType )
 {
     //list all interfaces inclusive baseclasses of interfaces
     cpo::uno::Any aRet = cppu::queryInterface( rType,
@@ -1155,7 +1155,7 @@ void SAL_CALL ContentResultSetWrapperListener::release()
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL ContentResultSetWrapperListener::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL ContentResultSetWrapperListener::queryInterface( const cpo::uno::Type & rType )
 {
     //list all interfaces inclusive baseclasses of interfaces
     cpo::uno::Any aRet = cppu::queryInterface( rType,

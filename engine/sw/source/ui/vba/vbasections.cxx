@@ -116,7 +116,7 @@ public:
         uno::Reference< beans::XPropertySet > xPageProps( mxSections[ Index ], uno::UNO_SET_THROW );
         return cpo::uno::Any( uno::Reference< word::XSection >( new SwVbaSection( mxParent,  mxContext, mxModel, xPageProps ) ) );
     }
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         return cppu::UnoType<word::XSection>::get();
     }
@@ -182,7 +182,7 @@ SwVbaSections::PageSetup( )
 }
 
 // XEnumerationAccess
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 SwVbaSections::getElementType()
 {
     return cppu::UnoType<word::XSection>::get();

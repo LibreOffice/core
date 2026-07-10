@@ -150,7 +150,7 @@ void ScConditionalFormatTest::testCondFormatXIndex()
     uno::Reference<sheet::XConditionalFormat> xCondFormat = xCondFormats[0];
     CPPUNIT_ASSERT(xCondFormat.is());
 
-    uno::Type aType = xCondFormat->getElementType();
+    cpo::uno::Type aType = xCondFormat->getElementType();
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.beans.XPropertySet"_ustr, aType.getTypeName());
 
     CPPUNIT_ASSERT(xCondFormat->hasElements());
@@ -263,7 +263,7 @@ void ScConditionalFormatTest::testDataBarProperties()
     uno::Reference<sheet::XConditionalFormat> xCondFormat = xCondFormats[0];
     CPPUNIT_ASSERT(xCondFormat.is());
 
-    uno::Type aType = xCondFormat->getElementType();
+    cpo::uno::Type aType = xCondFormat->getElementType();
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.beans.XPropertySet"_ustr, aType.getTypeName());
 
     CPPUNIT_ASSERT(xCondFormat->hasElements());
@@ -397,7 +397,7 @@ void ScConditionalFormatTest::testColorScaleProperties()
     uno::Reference<sheet::XConditionalFormat> xCondFormat = xCondFormats[0];
     CPPUNIT_ASSERT(xCondFormat.is());
 
-    uno::Type aType = xCondFormat->getElementType();
+    cpo::uno::Type aType = xCondFormat->getElementType();
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.beans.XPropertySet"_ustr, aType.getTypeName());
 
     CPPUNIT_ASSERT(xCondFormat->hasElements());

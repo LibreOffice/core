@@ -16,7 +16,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <comphelper/processfactory.hxx>
@@ -45,20 +45,20 @@ using namespace emscripten;
 using namespace css::uno;
 using namespace cpo::uno;
 
-template <> struct emscripten::smart_ptr_trait<css::uno::Type>
+template <> struct emscripten::smart_ptr_trait<cpo::uno::Type>
 {
-    using PointerType = css::uno::Type;
+    using PointerType = cpo::uno::Type;
     using element_type = typelib_TypeDescriptionReference;
-    static typelib_TypeDescriptionReference* get(css::uno::Type const& ptr)
+    static typelib_TypeDescriptionReference* get(cpo::uno::Type const& ptr)
     {
         return ptr.getTypeLibType();
     }
     static sharing_policy get_sharing_policy() { return sharing_policy::NONE; }
-    static css::uno::Type* share(typelib_TypeDescriptionReference* v)
+    static cpo::uno::Type* share(typelib_TypeDescriptionReference* v)
     {
-        return new css::uno::Type(v);
+        return new cpo::uno::Type(v);
     }
-    static css::uno::Type* construct_null() { return new css::uno::Type(); }
+    static cpo::uno::Type* construct_null() { return new cpo::uno::Type(); }
 };
 
 EM_JS(void, jsRegisterChar, (std::type_info const* raw),
@@ -176,15 +176,15 @@ Reference<css::frame::XModel> getCurrentModelFromViewSh()
 
 struct LessType
 {
-    bool operator()(css::uno::Type const& type1, css::uno::Type const& type2) const
+    bool operator()(cpo::uno::Type const& type1, cpo::uno::Type const& type2) const
     {
         return type1.getTypeLibType() < type2.getTypeLibType();
     }
 };
 
-std::map<css::uno::Type, std::type_info const*, LessType> unoTypes;
+std::map<cpo::uno::Type, std::type_info const*, LessType> unoTypes;
 
-std::type_info const* getTypeId(css::uno::Type const& type)
+std::type_info const* getTypeId(cpo::uno::Type const& type)
 {
     auto const i = unoTypes.find(type);
     if (i == unoTypes.end())
@@ -194,7 +194,7 @@ std::type_info const* getTypeId(css::uno::Type const& type)
     return i->second;
 }
 
-Any constructAny(const css::uno::Type& rUnoType, const val& rObject)
+Any constructAny(const cpo::uno::Type& rUnoType, const val& rObject)
 {
     switch (rUnoType.getTypeClass())
     {
@@ -225,7 +225,7 @@ Any constructAny(const css::uno::Type& rUnoType, const val& rObject)
         case TypeClass_STRING:
             return Any{ OUString(rObject.as<std::u16string>()) };
         case TypeClass_TYPE:
-            return cpo::uno::Any(rObject.as<css::uno::Type>());
+            return cpo::uno::Any(rObject.as<cpo::uno::Type>());
         case TypeClass_SEQUENCE:
         case TypeClass_STRUCT:
         case TypeClass_EXCEPTION:
@@ -256,7 +256,7 @@ Any constructAny(const css::uno::Type& rUnoType, const val& rObject)
 
 namespace unoembindhelpers::detail
 {
-void registerUnoType(css::uno::Type const& type, std::type_info const* id) { unoTypes[type] = id; }
+void registerUnoType(cpo::uno::Type const& type, std::type_info const* id) { unoTypes[type] = id; }
 }
 
 EMSCRIPTEN_BINDINGS(PrimaryBindings)
@@ -265,7 +265,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         .value("FromSize", unoembindhelpers::uno_Sequence::FromSize);
 
     emscripten::class_<typelib_TypeDescriptionReference>("uno_Type")
-        .smart_ptr<css::uno::Type>("uno_Type$")
+        .smart_ptr<cpo::uno::Type>("uno_Type$")
         .class_function("Void", +[]() { return cppu::UnoType<void>::get(); })
         .class_function("Boolean", +[]() { return cppu::UnoType<bool>::get(); })
         .class_function("Byte", +[]() { return cppu::UnoType<sal_Int8>::get(); })
@@ -279,33 +279,33 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         .class_function("Double", +[]() { return cppu::UnoType<double>::get(); })
         .class_function("Char", +[]() { return cppu::UnoType<sal_Unicode>::get(); })
         .class_function("String", +[]() { return cppu::UnoType<OUString>::get(); })
-        .class_function("Type", +[]() { return cppu::UnoType<css::uno::Type>::get(); })
+        .class_function("Type", +[]() { return cppu::UnoType<cpo::uno::Type>::get(); })
         .class_function("Any", +[]() { return cppu::UnoType<cpo::uno::Any>::get(); })
         .class_function("Sequence",
-                        +[](css::uno::Type const& type) {
-                            return css::uno::Type(css::uno::TypeClass_SEQUENCE,
+                        +[](cpo::uno::Type const& type) {
+                            return cpo::uno::Type(css::uno::TypeClass_SEQUENCE,
                                                   "[]" + type.getTypeName());
                         })
         .class_function("Enum",
                         +[](std::u16string const& name) {
-                            return css::uno::Type(css::uno::TypeClass_ENUM, OUString(name));
+                            return cpo::uno::Type(css::uno::TypeClass_ENUM, OUString(name));
                         })
         .class_function("Struct",
                         +[](std::u16string const& name) {
-                            return css::uno::Type(css::uno::TypeClass_STRUCT, OUString(name));
+                            return cpo::uno::Type(css::uno::TypeClass_STRUCT, OUString(name));
                         })
         .class_function("Exception",
                         +[](std::u16string const& name) {
-                            return css::uno::Type(css::uno::TypeClass_EXCEPTION, OUString(name));
+                            return cpo::uno::Type(css::uno::TypeClass_EXCEPTION, OUString(name));
                         })
         .class_function("Interface",
                         +[](std::u16string const& name) {
-                            return css::uno::Type(css::uno::TypeClass_INTERFACE, OUString(name));
+                            return cpo::uno::Type(css::uno::TypeClass_INTERFACE, OUString(name));
                         })
-        .function("getTypeClass", +[](css::uno::Type const& self) { return self.getTypeClass(); })
+        .function("getTypeClass", +[](cpo::uno::Type const& self) { return self.getTypeClass(); })
         .function(
             "getSequenceComponentType",
-            +[](css::uno::Type const& self) {
+            +[](cpo::uno::Type const& self) {
                 if (self.getTypeClass() != css::uno::TypeClass_SEQUENCE)
                 {
                     throw std::invalid_argument("bad non-sequence type");
@@ -317,10 +317,10 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                     throw std::invalid_argument("bad sequence type");
                 }
                 assert(desc.get()->eTypeClass == typelib_TypeClass_SEQUENCE);
-                return css::uno::Type(
+                return cpo::uno::Type(
                     reinterpret_cast<typelib_IndirectTypeDescription const*>(desc.get())->pType);
             })
-        .function("toString", +[](css::uno::Type const& self) {
+        .function("toString", +[](cpo::uno::Type const& self) {
             auto const name = self.getTypeName();
             return std::u16string(name.getStr(), name.getLength());
         });
@@ -359,7 +359,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                 case css::uno::TypeClass_STRING:
                     return emscripten::val(*o3tl::forceAccess<OUString>(self));
                 case css::uno::TypeClass_TYPE:
-                    return emscripten::val(*o3tl::forceAccess<css::uno::Type>(self));
+                    return emscripten::val(*o3tl::forceAccess<cpo::uno::Type>(self));
                 case css::uno::TypeClass_SEQUENCE:
                 {
                     auto const seq = *static_cast<uno_Sequence* const*>(self.getValue());
@@ -409,7 +409,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
 
     function("getCurrentModelFromViewSh", &getCurrentModelFromViewSh);
     function("getUnoComponentContext", &comphelper::getProcessComponentContext);
-    function("throwUnoException", +[](css::uno::Type const& type, emscripten::val const& value,
+    function("throwUnoException", +[](cpo::uno::Type const& type, emscripten::val const& value,
                                       emscripten::val const& toDelete) {
         auto const any = constructAny(type, value);
         auto const len = toDelete["length"].as<std::size_t>();

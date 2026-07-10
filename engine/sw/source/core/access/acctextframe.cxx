@@ -102,7 +102,7 @@ void SwAccessibleTextFrame::Notify(const SfxHint& rHint)
 // XInterface
 
 cpo::uno::Any SAL_CALL
-    SwAccessibleTextFrame::queryInterface (const css::uno::Type & rType)
+    SwAccessibleTextFrame::queryInterface (const cpo::uno::Type & rType)
 {
     cpo::uno::Any aReturn = SwAccessibleContext::queryInterface (rType);
     if ( ! aReturn.hasValue())

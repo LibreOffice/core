@@ -539,7 +539,7 @@ cpo::uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         const cpo::uno::Any& rArg = pArgArr[nPos];
 
         uno::TypeClass eClass = rArg.getValueTypeClass();
-        const uno::Type& aType = rArg.getValueType();
+        const cpo::uno::Type& aType = rArg.getValueType();
         if ( eClass == uno::TypeClass_BYTE ||
              eClass == uno::TypeClass_BOOLEAN ||
              eClass == uno::TypeClass_SHORT ||

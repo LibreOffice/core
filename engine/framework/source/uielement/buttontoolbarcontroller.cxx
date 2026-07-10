@@ -61,7 +61,7 @@ ButtonToolbarController::~ButtonToolbarController()
 }
 
         // XInterface
-cpo::uno::Any SAL_CALL ButtonToolbarController::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL ButtonToolbarController::queryInterface( const cpo::uno::Type& rType )
 {
     Any a = ::cppu::queryInterface(
                 rType ,

@@ -166,9 +166,9 @@ namespace connectivity::odbc
         virtual void SAL_CALL release() noexcept override;
         virtual void SAL_CALL acquire() noexcept override;
         // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
         //XTypeProvider
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -228,7 +228,7 @@ namespace connectivity::odbc
         OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}
         DECLARE_SERVICE_INFO();
 
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
         // XBatchExecution

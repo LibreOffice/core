@@ -64,7 +64,7 @@ public:
     virtual ~ViewShellWrapper() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
 
     /** This method is typically used
         to obtain a pointer to the wrapped ViewShell object for a given

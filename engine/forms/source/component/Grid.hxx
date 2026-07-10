@@ -97,7 +97,7 @@ public:
 
     // UNO Binding
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OControlModel)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
 
     // XChild
     virtual void SAL_CALL setParent(const css::uno::Reference<css::uno::XInterface>& Parent) override;
@@ -109,7 +109,7 @@ public:
     virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;

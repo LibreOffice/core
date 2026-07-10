@@ -24,7 +24,7 @@ import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 

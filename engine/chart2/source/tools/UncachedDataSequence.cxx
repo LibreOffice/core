@@ -247,7 +247,7 @@ cpo::uno::Any SAL_CALL UncachedDataSequence::getByIndex( ::sal_Int32 )
 }
 
 // ____ XElementAccess (base of XIndexAccess) ____
-uno::Type SAL_CALL UncachedDataSequence::getElementType()
+cpo::uno::Type SAL_CALL UncachedDataSequence::getElementType()
 {
     return cppu::UnoType<cpo::uno::Any>::get();
 }

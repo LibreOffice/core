@@ -1677,7 +1677,7 @@ void OWriteStream::ModifyParentUnlockMutex_Impl(osl::ClearableMutexGuard& aGuard
     }
 }
 
-cpo::uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL OWriteStream::queryInterface( const cpo::uno::Type& rType )
 {
     // common interfaces
     cpo::uno::Any aReturn = ::cppu::queryInterface
@@ -1736,7 +1736,7 @@ void SAL_CALL OWriteStream::release() noexcept
     OWeakObject::release();
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL OWriteStream::getTypes()
 {
     if (! m_oTypeCollection)
     {

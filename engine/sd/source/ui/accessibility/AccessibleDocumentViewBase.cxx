@@ -326,7 +326,7 @@ awt::Rectangle AccessibleDocumentViewBase::implGetBounds()
 //=====  XInterface  ==========================================================
 
 cpo::uno::Any SAL_CALL
-    AccessibleDocumentViewBase::queryInterface (const uno::Type & rType)
+    AccessibleDocumentViewBase::queryInterface (const cpo::uno::Type & rType)
 {
     cpo::uno::Any aReturn = AccessibleContextBase::queryInterface (rType);
     if ( ! aReturn.hasValue())

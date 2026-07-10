@@ -62,7 +62,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/ElementChange.hpp>
@@ -178,12 +178,12 @@ void Access::initBroadcaster(
     initBroadcasterAndChanges(modifications, broadcaster, nullptr);
 }
 
-cpo::uno::Sequence< css::uno::Type > Access::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > Access::getTypes()
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    std::vector< css::uno::Type > types { cppu::UnoType< css::uno::XInterface >::get(),
+    std::vector< cpo::uno::Type > types { cppu::UnoType< css::uno::XInterface >::get(),
                                           cppu::UnoType< css::uno::XWeak >::get(),
                                           cppu::UnoType< css::lang::XTypeProvider >::get(),
                                           cppu::UnoType< css::lang::XServiceInfo >::get(),
@@ -337,7 +337,7 @@ void Access::removeEventListener(
     }
 }
 
-css::uno::Type Access::getElementType() {
+cpo::uno::Type Access::getElementType() {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
@@ -463,7 +463,7 @@ OUString Access::getDescriptionByHierarchicalName(OUString const & aName)
     return child->getNode()->getDescription();
 }
 
-css::uno::Type Access::getTypeByHierarchicalName(OUString const & aName)
+cpo::uno::Type Access::getTypeByHierarchicalName(OUString const & aName)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -1362,7 +1362,7 @@ void Access::clearListeners() noexcept {
     }
 }
 
-cpo::uno::Any Access::queryInterface(css::uno::Type const & aType)
+cpo::uno::Any Access::queryInterface(cpo::uno::Type const & aType)
 {
     cpo::uno::Any res(OWeakObject::queryInterface(aType));
     if (res.hasValue()) {
@@ -2171,7 +2171,7 @@ bool Access::setChildProperty(
 }
 
 css::beans::Property Access::asProperty() {
-    css::uno::Type type;
+    cpo::uno::Type type;
     bool nillable;
     bool removable;
     const rtl::Reference< Node >& p(getNode());

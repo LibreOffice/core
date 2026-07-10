@@ -106,7 +106,7 @@ namespace comphelper
         */
         void    addVoidProperty(
                     const OUString& _rName,
-                    const css::uno::Type& _rType,
+                    const cpo::uno::Type& _rType,
                     sal_Int32 _nHandle,
                     sal_Int32 _nAttributes
                 );

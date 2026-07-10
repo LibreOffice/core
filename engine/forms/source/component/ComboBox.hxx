@@ -51,7 +51,7 @@ class OComboBoxModel final
 
     ::std::unique_ptr< ::dbtools::FormattedColumnValue > m_pValueFormatter;
 
-    virtual cpo::uno::Sequence< css::uno::Type>   _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type>   _getTypes() override;
 
 public:
     OComboBoxModel(
@@ -82,7 +82,7 @@ public:
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OComboBoxModel, OBoundControlModel)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
 
     // XPersistObject
     virtual OUString SAL_CALL    getServiceName() override;

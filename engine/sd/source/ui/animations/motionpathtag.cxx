@@ -1170,7 +1170,7 @@ void SAL_CALL MotionPathTag::disposing( const EventObject& /*Source*/ )
         Dispose();
 }
 
-Any SAL_CALL MotionPathTag::queryInterface( const css::uno::Type& aType )
+Any SAL_CALL MotionPathTag::queryInterface( const cpo::uno::Type& aType )
 {
     if( aType == cppu::UnoType<XChangesListener>::get() )
         return Any( Reference< XChangesListener >( this ) );

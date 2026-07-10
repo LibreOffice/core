@@ -24,7 +24,7 @@ import com.sun.star.container.XSet;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.XTypeConverter;
 import com.sun.star.uno.Any;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.TypeClass;
 
 /**

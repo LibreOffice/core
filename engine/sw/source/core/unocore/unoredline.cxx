@@ -318,7 +318,7 @@ const SwStartNode* SwXRedlineText::GetStartNode() const
     return m_aNodeIndex.GetNode().GetStartNode();
 }
 
-cpo::uno::Any SwXRedlineText::queryInterface( const uno::Type& rType )
+cpo::uno::Any SwXRedlineText::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aRet;
 
@@ -340,7 +340,7 @@ cpo::uno::Any SwXRedlineText::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-cpo::uno::Sequence<uno::Type> SwXRedlineText::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> SwXRedlineText::getTypes()
 {
     return cppu::OTypeCollection(
             cppu::UnoType<container::XEnumerationAccess>::get(),
@@ -408,7 +408,7 @@ uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration()
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::Redline);
 }
 
-uno::Type SwXRedlineText::getElementType(  )
+cpo::uno::Type SwXRedlineText::getElementType(  )
 {
     return cppu::UnoType<text::XTextRange>::get();
 }
@@ -715,7 +715,7 @@ uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration()
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::Redline);
 }
 
-uno::Type SwXRedline::getElementType(  )
+cpo::uno::Type SwXRedline::getElementType(  )
 {
     return cppu::UnoType<text::XTextRange>::get();
 }
@@ -762,7 +762,7 @@ rtl::Reference< SwXTextCursor > SwXRedline::createXTextCursorByRange(
     throw uno::RuntimeException();
 }
 
-cpo::uno::Any SwXRedline::queryInterface( const uno::Type& rType )
+cpo::uno::Any SwXRedline::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aRet = SwXText::queryInterface(rType);
     if(!aRet.hasValue())
@@ -772,7 +772,7 @@ cpo::uno::Any SwXRedline::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-cpo::uno::Sequence<uno::Type> SwXRedline::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> SwXRedline::getTypes()
 {
     return comphelper::concatSequences(
             SwXText::getTypes(),

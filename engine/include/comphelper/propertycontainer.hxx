@@ -25,7 +25,7 @@
 #include <comphelper/comphelperdllapi.h>
 
 
-namespace com::sun::star::uno { class Type; }
+namespace cpo::uno { class Type; }
 
 namespace comphelper
 {
@@ -52,7 +52,7 @@ protected:
     /// for scripting : the types of the interfaces supported by this class
     ///
     /// @throws css::uno::RuntimeException
-    cpo::uno::Sequence< css::uno::Type > getBaseTypes();
+    cpo::uno::Sequence< cpo::uno::Type > getBaseTypes();
 
 // OPropertySetHelper overridables
     virtual bool SAL_CALL convertFastPropertyValue(

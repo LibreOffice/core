@@ -21,7 +21,7 @@
 
 #include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <memory>
 #include <mutex>
 
@@ -104,7 +104,7 @@ namespace utl
         void    registerExchangeLocation(
             const OUString& _rRelativePathAscii,
             void* _pContainer,
-            const css::uno::Type& _rValueType
+            const cpo::uno::Type& _rValueType
         );
 
     public:

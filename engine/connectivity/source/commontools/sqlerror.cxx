@@ -40,7 +40,7 @@ namespace connectivity
     using ::cpo::uno::Any;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::sdbc::SQLException;
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
 
     class SQLError_Impl
     {

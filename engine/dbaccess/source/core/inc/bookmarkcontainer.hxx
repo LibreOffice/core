@@ -87,7 +87,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 // css::container::XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
     virtual bool SAL_CALL hasElements(  ) override;
 
 // css::container::XEnumerationAccess

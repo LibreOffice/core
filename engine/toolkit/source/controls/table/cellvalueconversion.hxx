@@ -38,7 +38,7 @@ public:
 
 private:
     bool ensureNumberFormatter();
-    const StandardFormatNormalizer* getValueNormalizer(css::uno::Type const& i_valueType);
+    const StandardFormatNormalizer* getValueNormalizer(cpo::uno::Type const& i_valueType);
 
     css::uno::Reference<css::util::XNumberFormatter> xNumberFormatter;
     bool bAttemptedFormatterCreation;

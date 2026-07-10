@@ -169,7 +169,7 @@ OUString convertBasicValueToString(const cpo::uno::Any& aValue,
         }
         case uno::TypeClass_TYPE:
         {
-            auto aType = aValue.get<uno::Type>();
+            auto aType = aValue.get<cpo::uno::Type>();
             aRetStr = aType.getTypeName();
             break;
         }
@@ -304,7 +304,7 @@ OUString getAnyType(const cpo::uno::Any& aValue)
 
 /** converts a Type to a XIdlClass */
 uno::Reference<reflection::XIdlClass>
-convertTypeToIdlClass(const uno::Type& rType,
+convertTypeToIdlClass(const cpo::uno::Type& rType,
                       const uno::Reference<uno::XComponentContext>& xContext)
 {
     auto xReflection = reflection::theCoreReflection::get(xContext);

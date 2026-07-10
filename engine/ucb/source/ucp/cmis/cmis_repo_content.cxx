@@ -275,7 +275,7 @@ namespace cmis
         // TODO Implement me
     }
 
-    cpo::uno::Sequence< uno::Type > SAL_CALL RepoContent::getTypes()
+    cpo::uno::Sequence< cpo::uno::Type > SAL_CALL RepoContent::getTypes()
     {
         static cppu::OTypeCollection s_aFolderCollection
             (CPPU_TYPE_REF( lang::XTypeProvider ),

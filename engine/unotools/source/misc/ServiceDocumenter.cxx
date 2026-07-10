@@ -34,7 +34,7 @@ void unotools::misc::ServiceDocumenter::showInterfaceDocs(const Reference<XTypeP
         return;
     auto xMSF(m_xContext->getServiceManager());
     Reference<system::XSystemShellExecute> xShell(xMSF->createInstanceWithContext(u"com.sun.star.system.SystemShellExecute"_ustr, m_xContext), uno::UNO_QUERY);
-    const cpo::uno::Sequence<css::uno::Type> aTypes = xTypeProvider->getTypes();
+    const cpo::uno::Sequence<cpo::uno::Type> aTypes = xTypeProvider->getTypes();
     for(const auto& aType : aTypes)
     {
         auto sUrl = aType.getTypeName();

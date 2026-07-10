@@ -309,7 +309,7 @@ void unoInterfaceProxyDispatch(uno_Interface* pUnoI, const typelib_TypeDescripti
                 {
                     typelib_TypeDescription* pTD = 0;
                     TYPELIB_DANGER_GET(
-                        &pTD, reinterpret_cast<css::uno::Type*>(pArgs[0])->getTypeLibType());
+                        &pTD, reinterpret_cast<cpo::uno::Type*>(pArgs[0])->getTypeLibType());
                     if (pTD)
                     {
                         uno_Interface* pInterface = 0;
@@ -347,7 +347,7 @@ void unoInterfaceProxyDispatch(uno_Interface* pUnoI, const typelib_TypeDescripti
                 "illegal member type description!",
                 ::com::sun::star::uno::Reference<::com::sun::star::uno::XInterface>());
 
-            css::uno::Type const& rExcType = cppu::UnoType<decltype(aExc)>::get();
+            cpo::uno::Type const& rExcType = cppu::UnoType<decltype(aExc)>::get();
             // binary identical null reference
             ::uno_type_any_construct(*ppException, &aExc, rExcType.getTypeLibType(), 0);
         }

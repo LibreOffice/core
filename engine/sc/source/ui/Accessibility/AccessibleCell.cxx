@@ -114,7 +114,7 @@ IMPLEMENT_FORWARD_XINTERFACE3( ScAccessibleCell, ScAccessibleCellBase, Accessibl
 
     //=====  XTypeProvider  ===================================================
 
-cpo::uno::Sequence< css::uno::Type > SAL_CALL ScAccessibleCell::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL ScAccessibleCell::getTypes()
 {
     return ::comphelper::concatSequences(
         ScAccessibleCellBase::getTypes(),

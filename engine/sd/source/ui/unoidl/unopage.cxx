@@ -527,7 +527,7 @@ rtl::Reference<SdrObject> SdGenericDrawPage::CreateSdrObject_( const Reference< 
 }
 
 // XInterface
-Any SdGenericDrawPage::queryInterface(const uno::Type & rType)
+Any SdGenericDrawPage::queryInterface(const cpo::uno::Type & rType)
 {
     Any aAny;
 
@@ -1925,7 +1925,7 @@ SdPageLinkTargets::~SdPageLinkTargets() noexcept
 }
 
 // XElementAccess
-uno::Type SAL_CALL SdPageLinkTargets::getElementType()
+cpo::uno::Type SAL_CALL SdPageLinkTargets::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }
@@ -2074,7 +2074,7 @@ SdDrawPage::~SdDrawPage() noexcept
 }
 
 // XInterface
-Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
+Any SAL_CALL SdDrawPage::queryInterface( const cpo::uno::Type & rType )
 {
     if( rType == cppu::UnoType<drawing::XMasterPageTarget>::get() )
     {
@@ -2106,7 +2106,7 @@ void SAL_CALL SdDrawPage::release() noexcept
 UNO3_GETIMPLEMENTATION2_IMPL( SdDrawPage, SdGenericDrawPage );
 
 // XTypeProvider
-Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes()
+Sequence< cpo::uno::Type > SAL_CALL SdDrawPage::getTypes()
 {
     ::SolarMutexGuard aGuard;
 
@@ -2118,7 +2118,7 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes()
         bool bPresPage = IsImpressDocument() && ePageKind != PageKind::Handout;
 
         // Collect the types of this class.
-        ::std::vector<uno::Type> aTypes;
+        ::std::vector<cpo::uno::Type> aTypes;
         aTypes.reserve(13);
         aTypes.push_back(cppu::UnoType<drawing::XDrawPage>::get());
         aTypes.push_back(cppu::UnoType<beans::XPropertySet>::get());
@@ -2438,7 +2438,7 @@ Any SAL_CALL SdDrawPage::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-uno::Type SAL_CALL SdDrawPage::getElementType()
+cpo::uno::Type SAL_CALL SdDrawPage::getElementType()
 {
     return SdGenericDrawPage::getElementType();
 }
@@ -2674,7 +2674,7 @@ SdMasterPage::~SdMasterPage() noexcept
 }
 
 // XInterface
-Any SAL_CALL SdMasterPage::queryInterface( const uno::Type & rType )
+Any SAL_CALL SdMasterPage::queryInterface( const cpo::uno::Type & rType )
 {
     ::SolarMutexGuard aGuard;
 
@@ -2711,7 +2711,7 @@ void SAL_CALL SdMasterPage::release() noexcept
 UNO3_GETIMPLEMENTATION2_IMPL( SdMasterPage, SdGenericDrawPage );
 
 // XTypeProvider
-Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes()
+Sequence< cpo::uno::Type > SAL_CALL SdMasterPage::getTypes()
 {
     ::SolarMutexGuard aGuard;
 
@@ -2723,7 +2723,7 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes()
         bool bPresPage = IsImpressDocument() && SvxDrawPage::mpPage && ePageKind != PageKind::Handout;
 
         // Collect the types of this class.
-        ::std::vector<uno::Type> aTypes;
+        ::std::vector<cpo::uno::Type> aTypes;
         aTypes.reserve(12);
         aTypes.push_back(cppu::UnoType<drawing::XDrawPage>::get());
         aTypes.push_back(cppu::UnoType<beans::XPropertySet>::get());
@@ -2793,7 +2793,7 @@ bool SAL_CALL SdMasterPage::hasElements()
     return SvxDrawPage::mpPage->GetObjCount() > 0;
 }
 
-uno::Type SAL_CALL SdMasterPage::getElementType()
+cpo::uno::Type SAL_CALL SdMasterPage::getElementType()
 {
     return SdGenericDrawPage::getElementType();
 }

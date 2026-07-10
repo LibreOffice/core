@@ -52,7 +52,7 @@ class PropertySetContainer : public comphelper::WeakImplHelper<css::container::X
         virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
         // XElementAccess
-        virtual css::uno::Type SAL_CALL getElementType() override
+        virtual cpo::uno::Type SAL_CALL getElementType() override
         {
             return cppu::UnoType<css::beans::XPropertySet>::get();
         }

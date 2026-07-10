@@ -127,7 +127,7 @@ cpo::uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
     return comphelper::containerToSequence(aNames);
 }
 
-uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
+cpo::uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
 {
     return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }

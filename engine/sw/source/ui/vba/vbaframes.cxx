@@ -75,7 +75,7 @@ SwVbaFrames::SwVbaFrames( const uno::Reference< XHelperInterface >& xParent,
 {
 }
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaFrames::getElementType()
 {
     return cppu::UnoType<word::XFrame>::get();

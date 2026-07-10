@@ -94,7 +94,7 @@ using namespace ::dbtools;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
     using ::com::sun::star::uno::Reference;
     using ::cpo::uno::Any;
     using ::com::sun::star::uno::XComponentContext;

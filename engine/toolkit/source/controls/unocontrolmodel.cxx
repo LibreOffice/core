@@ -413,7 +413,7 @@ void UnoControlModel::ImplRegisterProperties( const std::vector< sal_uInt16 > &r
 }
 
 // css::uno::XInterface
-cpo::uno::Any UnoControlModel::queryAggregation( const css::uno::Type & rType )
+cpo::uno::Any UnoControlModel::queryAggregation( const cpo::uno::Type & rType )
 {
     Any aRet = UnoControlModel_Base::queryAggregation( rType );
     if ( !aRet.hasValue() )
@@ -559,7 +559,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
         if ( !bVoid )
         {
             const cpo::uno::Any& rValue = *pProp;
-            const css::uno::Type& rType = rValue.getValueType();
+            const cpo::uno::Type& rType = rValue.getValueType();
 
             if ( rType == cppu::UnoType< bool >::get() )
             {
@@ -781,7 +781,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
         {
             if ( maData.find( nPropId ) != maData.end() )
             {
-                const css::uno::Type* pType = GetPropertyType( nPropId );
+                const cpo::uno::Type* pType = GetPropertyType( nPropId );
                 if ( *pType == cppu::UnoType<bool>::get() )
                 {
                     bool b = InStream->readBoolean();
@@ -1040,7 +1040,7 @@ bool UnoControlModel::convertFastPropertyValue( std::unique_lock<std::mutex>& rG
     }
     else
     {
-        const css::uno::Type* pDestType = GetPropertyType( static_cast<sal_uInt16>(nPropId) );
+        const cpo::uno::Type* pDestType = GetPropertyType( static_cast<sal_uInt16>(nPropId) );
         if ( pDestType->getTypeClass() == TypeClass_ANY )
         {
             rConvertedValue = rValue;

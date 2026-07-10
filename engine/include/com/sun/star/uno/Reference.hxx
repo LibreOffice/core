@@ -43,7 +43,7 @@ namespace com::sun::star::uno
 
 
 inline XInterface * BaseReference::iquery(
-    XInterface * pInterface, const Type & rType )
+    XInterface * pInterface, const cpo::uno::Type & rType )
 {
     if (pInterface)
     {
@@ -66,7 +66,7 @@ inline XInterface * Reference< interface_type >::iquery(
 }
 
 inline XInterface * BaseReference::iquery_throw(
-    XInterface * pInterface, const Type & rType )
+    XInterface * pInterface, const cpo::uno::Type & rType )
 {
     XInterface * pQueried = iquery( pInterface, rType );
     if (pQueried)

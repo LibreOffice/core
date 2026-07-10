@@ -3256,7 +3256,7 @@ void FmXGridCell::SetTextLineColor(const Color& _rColor)
 
 Sequence< Type > SAL_CALL FmXGridCell::getTypes( )
 {
-    Sequence< uno::Type > aTypes = ::comphelper::concatSequences(
+    Sequence< cpo::uno::Type > aTypes = ::comphelper::concatSequences(
         ::cppu::OComponentHelper::getTypes(),
         FmXGridCell_Base::getTypes()
     );
@@ -3288,7 +3288,7 @@ void FmXGridCell::disposing()
 }
 
 
-Any SAL_CALL FmXGridCell::queryAggregation( const css::uno::Type& _rType )
+Any SAL_CALL FmXGridCell::queryAggregation( const cpo::uno::Type& _rType )
 {
     Any aReturn = OComponentHelper::queryAggregation( _rType );
 
@@ -3657,7 +3657,7 @@ void FmXEditCell::disposing()
     FmXDataCell::disposing();
 }
 
-Any SAL_CALL FmXEditCell::queryAggregation( const css::uno::Type& _rType )
+Any SAL_CALL FmXEditCell::queryAggregation( const cpo::uno::Type& _rType )
 {
     Any aReturn = FmXTextCell::queryAggregation( _rType );
 
@@ -3667,7 +3667,7 @@ Any SAL_CALL FmXEditCell::queryAggregation( const css::uno::Type& _rType )
     return aReturn;
 }
 
-Sequence< css::uno::Type > SAL_CALL FmXEditCell::getTypes(  )
+Sequence< cpo::uno::Type > SAL_CALL FmXEditCell::getTypes(  )
 {
     return ::comphelper::concatSequences(
         FmXTextCell::getTypes(),
@@ -3871,7 +3871,7 @@ void FmXCheckBoxCell::disposing()
 }
 
 
-Any SAL_CALL FmXCheckBoxCell::queryAggregation( const css::uno::Type& _rType )
+Any SAL_CALL FmXCheckBoxCell::queryAggregation( const cpo::uno::Type& _rType )
 {
     Any aReturn = FmXDataCell::queryAggregation( _rType );
 
@@ -3882,7 +3882,7 @@ Any SAL_CALL FmXCheckBoxCell::queryAggregation( const css::uno::Type& _rType )
 }
 
 
-Sequence< css::uno::Type > SAL_CALL FmXCheckBoxCell::getTypes(  )
+Sequence< cpo::uno::Type > SAL_CALL FmXCheckBoxCell::getTypes(  )
 {
     return ::comphelper::concatSequences(
         FmXDataCell::getTypes(),
@@ -4018,7 +4018,7 @@ void FmXListBoxCell::disposing()
     FmXTextCell::disposing();
 }
 
-Any SAL_CALL FmXListBoxCell::queryAggregation( const css::uno::Type& _rType )
+Any SAL_CALL FmXListBoxCell::queryAggregation( const cpo::uno::Type& _rType )
 {
     Any aReturn = FmXTextCell::queryAggregation(_rType);
 
@@ -4028,7 +4028,7 @@ Any SAL_CALL FmXListBoxCell::queryAggregation( const css::uno::Type& _rType )
     return aReturn;
 }
 
-Sequence< css::uno::Type > SAL_CALL FmXListBoxCell::getTypes(  )
+Sequence< cpo::uno::Type > SAL_CALL FmXListBoxCell::getTypes(  )
 {
     return ::comphelper::concatSequences(
         FmXTextCell::getTypes(),
@@ -4342,7 +4342,7 @@ void FmXComboBoxCell::disposing()
     FmXTextCell::disposing();
 }
 
-Any SAL_CALL FmXComboBoxCell::queryAggregation( const css::uno::Type& _rType )
+Any SAL_CALL FmXComboBoxCell::queryAggregation( const cpo::uno::Type& _rType )
 {
     Any aReturn = FmXTextCell::queryAggregation(_rType);
 
@@ -4520,7 +4520,7 @@ void FmXFilterCell::disposing()
 }
 
 
-Any SAL_CALL FmXFilterCell::queryAggregation( const css::uno::Type& _rType )
+Any SAL_CALL FmXFilterCell::queryAggregation( const cpo::uno::Type& _rType )
 {
     Any aReturn = FmXGridCell::queryAggregation(_rType);
 
@@ -4531,7 +4531,7 @@ Any SAL_CALL FmXFilterCell::queryAggregation( const css::uno::Type& _rType )
 }
 
 
-Sequence< css::uno::Type > SAL_CALL FmXFilterCell::getTypes(  )
+Sequence< cpo::uno::Type > SAL_CALL FmXFilterCell::getTypes(  )
 {
     return ::comphelper::concatSequences(
         FmXGridCell::getTypes(),

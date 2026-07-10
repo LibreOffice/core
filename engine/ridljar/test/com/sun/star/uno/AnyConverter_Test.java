@@ -894,7 +894,7 @@ class ATypeProvider implements com.sun.star.lang.XTypeProvider
         return new byte[0];
     }
 
-    public com.sun.star.uno.Type[] getTypes()
+    public cpo.uno.Type[] getTypes()
     {
         return new Type[]{new Type(XTypeProvider.class)};
     }

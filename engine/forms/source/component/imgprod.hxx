@@ -72,7 +72,7 @@ public:
     void            SetDoneHdl( const Link<Graphic*,void>& i_rHdl ) { maDoneHdl = i_rHdl; }
 
     // css::uno::XInterface
-    cpo::uno::Any   SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    cpo::uno::Any   SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     void            SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
     void            SAL_CALL release() noexcept override  { OWeakObject::release(); }
 

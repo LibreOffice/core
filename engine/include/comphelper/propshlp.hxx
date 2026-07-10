@@ -75,13 +75,13 @@ public:
        Only returns a reference to XMultiPropertySet, XFastPropertySet, XPropertySet and
        XEventListener.
      */
-    virtual cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& rType) override;
 
     /** eases implementing XTypeProvider::getTypes, returns the types of XMultiPropertySet, XFastPropertySet, XPropertySet
 
         @throws css::uno::RuntimeException
      */
-    static cpo::uno::Sequence<css::uno::Type> getTypes();
+    static cpo::uno::Sequence<cpo::uno::Type> getTypes();
 
     /**
        Send a disposing notification to the listeners

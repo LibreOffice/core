@@ -195,7 +195,7 @@ void FSStorage::CopyContentToStorage_Impl(ucbhelper::Content& rContent,
 
 //  XInterface
 
-cpo::uno::Any SAL_CALL FSStorage::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL FSStorage::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aReturn = ::cppu::queryInterface
                 (   rType
@@ -225,9 +225,9 @@ void SAL_CALL FSStorage::release() noexcept
 
 //  XTypeProvider
 
-cpo::uno::Sequence< uno::Type > SAL_CALL FSStorage::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL FSStorage::getTypes()
 {
-    static const cpo::uno::Sequence<uno::Type> aTypes {
+    static const cpo::uno::Sequence<cpo::uno::Type> aTypes {
         cppu::UnoType<lang::XTypeProvider>::get(),
         cppu::UnoType<embed::XStorage>::get(),
         cppu::UnoType<embed::XHierarchicalStorageAccess>::get(),
@@ -855,10 +855,10 @@ bool SAL_CALL FSStorage::hasByName( const OUString& aName )
       || ::utl::UCBContentHelper::IsDocument( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
 }
 
-uno::Type SAL_CALL FSStorage::getElementType()
+cpo::uno::Type SAL_CALL FSStorage::getElementType()
 {
     // it is a multitype container
-    return uno::Type();
+    return cpo::uno::Type();
 }
 
 bool SAL_CALL FSStorage::hasElements()

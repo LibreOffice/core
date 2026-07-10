@@ -25,7 +25,7 @@ namespace comphelper
 {
 
 
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::lang::XTypeProvider;
     using ::cpo::uno::Any;
@@ -38,7 +38,7 @@ namespace comphelper
     // OPropertyStateHelper
 
 
-    cpo::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  css::uno::Type& _rType)
+    cpo::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  cpo::uno::Type& _rType)
     {
         cpo::uno::Any aReturn = OPropertySetHelper2::queryInterface(_rType);
         // our own ifaces
@@ -49,7 +49,7 @@ namespace comphelper
     }
 
 
-    cpo::uno::Sequence<css::uno::Type> OPropertyStateHelper::getTypes()
+    cpo::uno::Sequence<cpo::uno::Type> OPropertyStateHelper::getTypes()
     {
         return {
             cppu::UnoType<css::beans::XPropertySet>::get(),

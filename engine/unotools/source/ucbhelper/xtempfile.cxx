@@ -43,7 +43,7 @@ OTempFileService::~OTempFileService ()
 
 //  XTypeProvider
 
-cpo::uno::Sequence< css::uno::Type > SAL_CALL OTempFileService::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL OTempFileService::getTypes(  )
 {
     static ::cppu::OTypeCollection ourTypeCollection(
                 cppu::UnoType<css::beans::XPropertySet>::get()

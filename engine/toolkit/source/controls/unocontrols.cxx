@@ -164,7 +164,7 @@ UnoEditControl::UnoEditControl()
     maComponentInfos.nHeight = 12;
 }
 
-cpo::uno::Any SAL_CALL UnoEditControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL UnoEditControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aReturn = UnoControlBase::queryAggregation( rType );
     if ( !aReturn.hasValue() )
@@ -172,7 +172,7 @@ cpo::uno::Any SAL_CALL UnoEditControl::queryAggregation( const uno::Type & rType
     return aReturn;
 }
 
-cpo::uno::Any SAL_CALL UnoEditControl::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL UnoEditControl::queryInterface( const cpo::uno::Type & rType )
 {
     return UnoControlBase::queryInterface( rType );
 }
@@ -1567,7 +1567,7 @@ OUString UnoFixedHyperlinkControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-cpo::uno::Any UnoFixedHyperlinkControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoFixedHyperlinkControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XFixedHyperlink* >(this),
@@ -1578,7 +1578,7 @@ cpo::uno::Any UnoFixedHyperlinkControl::queryAggregation( const uno::Type & rTyp
 IMPL_IMPLEMENTATION_ID( UnoFixedHyperlinkControl )
 
 // lang::XTypeProvider
-cpo::uno::Sequence< css::uno::Type > UnoFixedHyperlinkControl::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > UnoFixedHyperlinkControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -1764,7 +1764,7 @@ OUString UnoFixedTextControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-cpo::uno::Any UnoFixedTextControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoFixedTextControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XFixedText* >(this),
@@ -1775,7 +1775,7 @@ cpo::uno::Any UnoFixedTextControl::queryAggregation( const uno::Type & rType )
 IMPL_IMPLEMENTATION_ID( UnoFixedTextControl )
 
 // lang::XTypeProvider
-cpo::uno::Sequence< css::uno::Type > UnoFixedTextControl::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > UnoFixedTextControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -3026,7 +3026,7 @@ void UnoComboBoxControl::dispose()
     maItemListeners.disposeAndClear( aEvt );
     UnoControl::dispose();
 }
-cpo::uno::Any UnoComboBoxControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoComboBoxControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XComboBox* >(this) );
@@ -3046,7 +3046,7 @@ cpo::uno::Any UnoComboBoxControl::queryAggregation( const uno::Type & rType )
 IMPL_IMPLEMENTATION_ID( UnoComboBoxControl )
 
 // lang::XTypeProvider
-cpo::uno::Sequence< css::uno::Type > UnoComboBoxControl::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > UnoComboBoxControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<awt::XComboBox>::get(),
@@ -3314,7 +3314,7 @@ UnoSpinFieldControl::UnoSpinFieldControl()
 }
 
 // uno::XInterface
-cpo::uno::Any UnoSpinFieldControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoSpinFieldControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XSpinField* >(this) );
@@ -3324,7 +3324,7 @@ cpo::uno::Any UnoSpinFieldControl::queryAggregation( const uno::Type & rType )
 IMPL_IMPLEMENTATION_ID( UnoSpinFieldControl )
 
 // lang::XTypeProvider
-cpo::uno::Sequence< css::uno::Type > UnoSpinFieldControl::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > UnoSpinFieldControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -3473,7 +3473,7 @@ OUString UnoDateFieldControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-cpo::uno::Any UnoDateFieldControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoDateFieldControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XDateField* >(this) );
@@ -3483,7 +3483,7 @@ cpo::uno::Any UnoDateFieldControl::queryAggregation( const uno::Type & rType )
 IMPL_IMPLEMENTATION_ID( UnoDateFieldControl )
 
 // lang::XTypeProvider
-cpo::uno::Sequence< css::uno::Type > UnoDateFieldControl::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > UnoDateFieldControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -3740,7 +3740,7 @@ OUString UnoTimeFieldControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-cpo::uno::Any UnoTimeFieldControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoTimeFieldControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XTimeField* >(this) );
@@ -3750,7 +3750,7 @@ cpo::uno::Any UnoTimeFieldControl::queryAggregation( const uno::Type & rType )
 IMPL_IMPLEMENTATION_ID( UnoTimeFieldControl )
 
 // lang::XTypeProvider
-cpo::uno::Sequence< css::uno::Type > UnoTimeFieldControl::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > UnoTimeFieldControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -3967,7 +3967,7 @@ OUString UnoNumericFieldControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-cpo::uno::Any UnoNumericFieldControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoNumericFieldControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XNumericField* >(this) );
@@ -3977,7 +3977,7 @@ cpo::uno::Any UnoNumericFieldControl::queryAggregation( const uno::Type & rType 
 IMPL_IMPLEMENTATION_ID( UnoNumericFieldControl )
 
 // lang::XTypeProvider
-cpo::uno::Sequence< css::uno::Type > UnoNumericFieldControl::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > UnoNumericFieldControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -4189,7 +4189,7 @@ OUString UnoCurrencyFieldControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-cpo::uno::Any UnoCurrencyFieldControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoCurrencyFieldControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XCurrencyField* >(this) );
@@ -4199,7 +4199,7 @@ cpo::uno::Any UnoCurrencyFieldControl::queryAggregation( const uno::Type & rType
 IMPL_IMPLEMENTATION_ID( UnoCurrencyFieldControl )
 
 // lang::XTypeProvider
-cpo::uno::Sequence< css::uno::Type > UnoCurrencyFieldControl::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > UnoCurrencyFieldControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -4431,7 +4431,7 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const OUString& rPropName, con
 
 
 // uno::XInterface
-cpo::uno::Any UnoPatternFieldControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoPatternFieldControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XPatternField* >(this) );
@@ -4441,7 +4441,7 @@ cpo::uno::Any UnoPatternFieldControl::queryAggregation( const uno::Type & rType 
 IMPL_IMPLEMENTATION_ID( UnoPatternFieldControl )
 
 // lang::XTypeProvider
-cpo::uno::Sequence< css::uno::Type > UnoPatternFieldControl::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > UnoPatternFieldControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -4582,7 +4582,7 @@ OUString UnoProgressBarControl::GetComponentServiceName() const
 }
 
 // uno::XInterface
-cpo::uno::Any UnoProgressBarControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoProgressBarControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XProgressBar* >(this) );
@@ -4592,7 +4592,7 @@ cpo::uno::Any UnoProgressBarControl::queryAggregation( const uno::Type & rType )
 IMPL_IMPLEMENTATION_ID( UnoProgressBarControl )
 
 // lang::XTypeProvider
-cpo::uno::Sequence< css::uno::Type > UnoProgressBarControl::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > UnoProgressBarControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),

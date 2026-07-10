@@ -20,7 +20,7 @@
 package com.sun.star.lib.uno.environments.remote;
 
 import com.sun.star.uno.IEnvironment;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 public final class remote_environment implements IEnvironment {
     public remote_environment(Object context) {

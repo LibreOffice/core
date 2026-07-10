@@ -32,7 +32,7 @@ import com.sun.star.ucb.XContentProvider;
 import com.sun.star.ucb.XDynamicResultSet;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.AnyConverter;
 import java.io.PrintWriter;
 import lib.TestCase;

@@ -21,7 +21,7 @@
 #include <cpo/uno/Sequence.hxx>
 
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Type;
+using ::cpo::uno::Type;
 
 namespace comphelper
 {

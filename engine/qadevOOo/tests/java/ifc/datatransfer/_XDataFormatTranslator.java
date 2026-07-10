@@ -22,7 +22,7 @@ import lib.MultiMethodTest;
 
 import com.sun.star.datatransfer.DataFlavor;
 import com.sun.star.datatransfer.XDataFormatTranslator;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 /**
 * Testing <code>com.sun.star.datatransfer.XDataFormatTranslator</code>

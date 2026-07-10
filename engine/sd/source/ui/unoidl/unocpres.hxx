@@ -73,7 +73,7 @@ public:
     virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // XIndexAccess
@@ -127,7 +127,7 @@ public:
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 };
 

@@ -37,7 +37,7 @@ namespace comphelper
     using ::cpo::uno::Sequence;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::beans::NamedValue;
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
     using ::com::sun::star::uno::cpp_acquire;
     using ::com::sun::star::uno::cpp_release;
     using ::com::sun::star::uno::cpp_queryInterface;

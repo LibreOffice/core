@@ -348,7 +348,7 @@ inline bool extract(
                 reinterpret_cast< uno_AcquireFunc >(css::uno::cpp_acquire),
                 reinterpret_cast< uno_ReleaseFunc >(css::uno::cpp_release) );
         }
-        else if (auto t = o3tl::tryAccess<css::uno::Type>(rObj))
+        else if (auto t = o3tl::tryAccess<cpo::uno::Type>(rObj))
         {
             rDest = pRefl->forType( t->getTypeLibType() );
             return rDest.is();

@@ -589,7 +589,7 @@ include/comphelper/proparrhlp.hxx:83
 include/comphelper/propcontainerimplhelper.hxx:44
      comphelper::OPropertyContainerImplHelper::OPropertyContainerImplHelper(type-parameter-?-? &&...)
 include/comphelper/PropertyInfoHash.hxx:36
-     comphelper::PropertyInfo::PropertyInfo(const rtl::OUString &,int,const com::sun::star::uno::Type &,short)
+     comphelper::PropertyInfo::PropertyInfo(const rtl::OUString &,int,const cpo::uno::Type &,short)
 include/comphelper/propimplhelper.hxx:52
     comphelper::detail::TypeList<type-parameter-?-?..., type-parameter-?-?...> comphelper::detail::operator+(comphelper::detail::TypeList<type-parameter-?-?...>,comphelper::detail::TypeList<type-parameter-?-?...>)
 include/comphelper/propimplhelper.hxx:60

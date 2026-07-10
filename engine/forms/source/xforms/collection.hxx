@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <vector>
 
 
@@ -141,7 +141,7 @@ protected:
 public:
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type SAL_CALL getElementType() override
     {
         return cppu::UnoType<T>::get();
     }

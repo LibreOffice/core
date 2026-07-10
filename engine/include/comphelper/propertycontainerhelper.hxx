@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_PROPERTYCONTAINERHELPER_HXX
 #define INCLUDED_COMPHELPER_PROPERTYCONTAINERHELPER_HXX
 
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <cstddef>
 #include <limits>
@@ -54,7 +54,7 @@ struct COMPHELPER_DLLPUBLIC PropertyDescription
     LocationAccess       aLocation;      // access to the property value
 
     PropertyDescription()
-        :aProperty( OUString(), -1, css::uno::Type(), 0 )
+        :aProperty( OUString(), -1, cpo::uno::Type(), 0 )
         ,eLocated( LocationType::HoldMyself )
     {
         aLocation.nOwnClassVectorIndex = std::numeric_limits<std::size_t>::max();
@@ -98,7 +98,7 @@ protected:
                                         to which _pPointerToMember points.
     */
     void    registerProperty(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        void* _pPointerToMember, const css::uno::Type& _rMemberType);
+        void* _pPointerToMember, const cpo::uno::Type& _rMemberType);
 
 
     /** register a property. The property is represented through a cpo::uno::Any member of the
@@ -112,7 +112,7 @@ protected:
                                         _pPointerToMember points (this is always an Any).
     */
     void    registerMayBeVoidProperty(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        cpo::uno::Any* _pPointerToMember, const css::uno::Type& _rExpectedType);
+        cpo::uno::Any* _pPointerToMember, const cpo::uno::Type& _rExpectedType);
 
     /** register a property. The repository will create an own object holding this property, so there is no
         need to declare an extra member in your derived class
@@ -125,7 +125,7 @@ protected:
                                         Else it must contain a value compatible with the type described by _rType.
     */
     void    registerPropertyNoMember(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        const css::uno::Type& _rType, cpo::uno::Any const & _pInitialValue);
+        const cpo::uno::Type& _rType, cpo::uno::Any const & _pInitialValue);
 
     /** revokes a previously registered property
         @throw  css::beans::UnknownPropertyException

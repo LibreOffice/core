@@ -264,7 +264,7 @@ public:
         }
         throw lang::IndexOutOfBoundsException();
     }
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         return  cppu::UnoType<word::XBorder>::get();
     }
@@ -323,7 +323,7 @@ SwVbaBorders::createCollectionObject( const cpo::uno::Any& aSource )
     return aSource; // it's already a Border object
 }
 
-uno::Type
+cpo::uno::Type
 SwVbaBorders::getElementType()
 {
     return cppu::UnoType<word::XBorders>::get();

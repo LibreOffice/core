@@ -26,7 +26,7 @@ import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.XInterface;
 
 /**

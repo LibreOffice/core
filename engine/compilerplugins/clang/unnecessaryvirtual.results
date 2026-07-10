@@ -235,7 +235,7 @@ forms/source/xforms/datatypes.hxx:218
 forms/source/xforms/datatypes.hxx:219
     class cppu::IPropertyArrayHelper & xforms::ODerivedDataType::getInfoHelper()
 forms/source/xforms/namedcollection.hxx:80
-    class com::sun::star::uno::Type NamedCollection::getElementType()
+    class cpo::uno::Type NamedCollection::getElementType()
 forms/source/xforms/namedcollection.hxx:85
     unsigned char NamedCollection::hasElements()
 forms/source/xforms/namedcollection.hxx:91

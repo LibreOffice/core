@@ -94,7 +94,7 @@ public:
         uno::Reference< text::XDocumentIndex > xToc( maToc[Index], uno::UNO_SET_THROW );
         return cpo::uno::Any( uno::Reference< word::XTableOfContents >( new SwVbaTableOfContents( mxParent, mxContext, mxTextDocument, xToc ) ) );
     }
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         return cppu::UnoType<word::XTableOfContents>::get();
     }
@@ -152,7 +152,7 @@ SwVbaTablesOfContents::Add( const uno::Reference< word::XRange >& Range, const c
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaTablesOfContents::getElementType()
 {
     return cppu::UnoType<word::XTableOfContents>::get();

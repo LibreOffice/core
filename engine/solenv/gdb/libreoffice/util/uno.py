@@ -154,11 +154,11 @@ class Type(object):
 
 def make_uno_type(val):
     '''Creates a UNO type from gdb.Value of type
-        com::sun::star::uno::Type, typelib_TypeDescription, or
+        cpo::uno::Type, typelib_TypeDescription, or
         typelib_TypeDescriptionReference
     '''
 
-    cssu_type = 'com::sun::star::uno::Type'
+    cssu_type = 'cpo::uno::Type'
     type_desc = '_typelib_TypeDescription'
     type_descs =(
             type_desc,
@@ -225,7 +225,7 @@ def make_uno_type(val):
     elif type_class == TypeClass.STRING:
         uno_type = PrimitiveType(type_class, name, 'rtl::OUString')
     elif type_class == TypeClass.TYPE:
-        uno_type = PrimitiveType(type_class, name, 'com::sun::star::uno::Type')
+        uno_type = PrimitiveType(type_class, name, 'cpo::uno::Type')
     elif type_class == TypeClass.ANY:
         uno_type = PrimitiveType(type_class, name, 'cpo::uno::Any')
     elif type_class == TypeClass.ENUM:

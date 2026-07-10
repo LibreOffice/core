@@ -166,7 +166,7 @@ Desktop::~Desktop()
     SAL_WARN_IF( m_aTransactionManager.getWorkingMode()!=E_CLOSE, "fwk.desktop", "Desktop::~Desktop(): Who forgot to dispose this service?" );
 }
 
-cpo::uno::Any SAL_CALL Desktop::queryInterface( const css::uno::Type& _rType )
+cpo::uno::Any SAL_CALL Desktop::queryInterface( const cpo::uno::Type& _rType )
 {
     cpo::uno::Any aRet = Desktop_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
@@ -174,7 +174,7 @@ cpo::uno::Any SAL_CALL Desktop::queryInterface( const css::uno::Type& _rType )
     return aRet;
 }
 
-cpo::uno::Sequence< css::uno::Type > SAL_CALL Desktop::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Desktop::getTypes(  )
 {
     return comphelper::concatSequences(
         Desktop_BASE::getTypes(),

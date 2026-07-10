@@ -25,7 +25,7 @@ import java.util.HashMap;
 
 import com.sun.star.uno.IBridge;
 import com.sun.star.uno.IEnvironment;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 
 class TestBridge implements IBridge {

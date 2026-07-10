@@ -70,7 +70,7 @@ bool SAL_CALL GraphicNameAccess::hasElements()
     return ( !m_aNameToElementMap.empty() );
 }
 
-uno::Type SAL_CALL GraphicNameAccess::getElementType()
+cpo::uno::Type SAL_CALL GraphicNameAccess::getElementType()
 {
     return cppu::UnoType<graphic::XGraphic>::get();
 }

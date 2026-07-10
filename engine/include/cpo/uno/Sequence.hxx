@@ -46,7 +46,7 @@ typelib_TypeDescriptionReference * Sequence< E >::s_pType = NULL;
 template< class E >
 inline Sequence< E >::Sequence()
 {
-    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
         NULL, 0, css::uno::cpp_acquire );
@@ -70,7 +70,7 @@ inline Sequence< E >::Sequence(
 template< class E >
 inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 {
-    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
 
     bool success =
     ::uno_type_sequence_construct(
@@ -83,7 +83,7 @@ inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 template< class E >
 inline Sequence< E >::Sequence( sal_Int32 len )
 {
-    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     bool success =
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
@@ -106,7 +106,7 @@ inline Sequence< E >::~Sequence()
 {
     if (osl_atomic_decrement( &_pSequence->nRefCount ) == 0)
     {
-        const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+        const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
         uno_type_sequence_destroy(
             _pSequence, rType.getTypeLibType(), css::uno::cpp_release );
     }
@@ -115,7 +115,7 @@ inline Sequence< E >::~Sequence()
 template< class E >
 inline Sequence< E > & Sequence< E >::operator = ( const Sequence & rSeq )
 {
-    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     ::uno_type_sequence_assign(
         &_pSequence, rSeq._pSequence, rType.getTypeLibType(), css::uno::cpp_release );
     return *this;
@@ -133,7 +133,7 @@ inline bool Sequence< E >::operator == ( const Sequence & rSeq ) const
         return true;
     if (_pSequence->nElements != rSeq._pSequence->nElements)
         return false;
-    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     return ::uno_type_equalData(
         const_cast< Sequence * >( this ), rType.getTypeLibType(),
         const_cast< Sequence * >( &rSeq ), rType.getTypeLibType(),
@@ -150,7 +150,7 @@ inline bool Sequence< E >::operator != ( const Sequence & rSeq ) const
 template< class E >
 inline E * Sequence< E >::getArray()
 {
-    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     bool success =
     ::uno_type_sequence_reference2One(
         &_pSequence, rType.getTypeLibType(),
@@ -177,7 +177,7 @@ inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
 template< class E >
 inline void Sequence< E >::realloc( sal_Int32 nSize )
 {
-    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     bool success =
     ::uno_type_sequence_realloc(
         &_pSequence, rType.getTypeLibType(), nSize,
@@ -278,7 +278,7 @@ template <class E> inline auto asNonConstRange(cpo::uno::Sequence<E>& s)
 
 namespace cppu {
 
-template< typename T > inline ::com::sun::star::uno::Type const &
+template< typename T > inline ::cpo::uno::Type const &
 getTypeFavourUnsigned(
     SAL_UNUSED_PARAMETER ::cpo::uno::Sequence< T > const *)
 {
@@ -295,7 +295,7 @@ getTypeFavourUnsigned(
         &::cpo::uno::Sequence< T >::s_pType);
 }
 
-template< typename T > inline ::com::sun::star::uno::Type const &
+template< typename T > inline ::cpo::uno::Type const &
 getTypeFavourChar(
     SAL_UNUSED_PARAMETER ::cpo::uno::Sequence< T > const *)
 {
@@ -318,7 +318,7 @@ getTypeFavourChar(
 
 // generic sequence template
 template< class E >
-inline const ::com::sun::star::uno::Type &
+inline const ::cpo::uno::Type &
 SAL_CALL getCppuType(
     SAL_UNUSED_PARAMETER const ::cpo::uno::Sequence< E > * )
 {
@@ -328,8 +328,8 @@ SAL_CALL getCppuType(
 
 // generic sequence template for given element type (e.g. C++ arrays)
 template< class E >
-inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType )
+inline const ::cpo::uno::Type &
+SAL_CALL getCppuSequenceType( const ::cpo::uno::Type & rElementType )
 {
     if (! ::cpo::uno::Sequence< E >::s_pType)
     {
@@ -337,23 +337,23 @@ SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType )
             & ::cpo::uno::Sequence< E >::s_pType,
             rElementType.getTypeLibType() );
     }
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
+    return * reinterpret_cast< const ::cpo::uno::Type * >(
         & ::cpo::uno::Sequence< E >::s_pType );
 }
 
 // char sequence
-inline const ::com::sun::star::uno::Type &
+inline const ::cpo::uno::Type &
 SAL_CALL getCharSequenceCppuType()
 {
     static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = NULL;
     if (! s_pType_com_sun_star_uno_Sequence_Char)
     {
-        const ::com::sun::star::uno::Type & rElementType = cppu::UnoType<cppu::UnoCharType>::get();
+        const ::cpo::uno::Type & rElementType = cppu::UnoType<cppu::UnoCharType>::get();
         ::typelib_static_sequence_type_init(
             & s_pType_com_sun_star_uno_Sequence_Char,
             rElementType.getTypeLibType() );
     }
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
+    return * reinterpret_cast< const ::cpo::uno::Type * >(
         & s_pType_com_sun_star_uno_Sequence_Char );
 }
 

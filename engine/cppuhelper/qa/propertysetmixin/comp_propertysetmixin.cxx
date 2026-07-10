@@ -40,7 +40,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <osl/mutex.hxx>
@@ -66,7 +66,7 @@ public:
             cpo::uno::Sequence< OUString >())
     {}
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
+    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & type)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL acquire() throw () { OWeakObject::acquire(); }
@@ -94,7 +94,7 @@ private:
     virtual ~Empty1() {}
 };
 
-cpo::uno::Any Empty1::queryInterface(css::uno::Type const & type)
+cpo::uno::Any Empty1::queryInterface(cpo::uno::Type const & type)
     throw (css::uno::RuntimeException)
 {
     cpo::uno::Any a(OWeakObject::queryInterface(type));
@@ -124,7 +124,7 @@ public:
             cpo::uno::Sequence< OUString >())
     {}
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
+    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & type)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL acquire() throw () { OWeakObject::acquire(); }
@@ -152,7 +152,7 @@ private:
     virtual ~Empty2() {}
 };
 
-cpo::uno::Any Empty2::queryInterface(css::uno::Type const & type)
+cpo::uno::Any Empty2::queryInterface(cpo::uno::Type const & type)
     throw (css::uno::RuntimeException)
 {
     cpo::uno::Any a(OWeakObject::queryInterface(type));
@@ -194,7 +194,7 @@ public:
             false)
     {}
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
+    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & type)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL acquire() throw () { OWeakObject::acquire(); }
@@ -249,7 +249,7 @@ private:
         css::beans::Defaulted< css::beans::Optional< sal_Int32 > > > m_a2;
 };
 
-cpo::uno::Any Full::queryInterface(css::uno::Type const & type)
+cpo::uno::Any Full::queryInterface(cpo::uno::Type const & type)
     throw (css::uno::RuntimeException)
 {
     cpo::uno::Any a(OWeakObject::queryInterface(type));

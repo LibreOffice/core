@@ -96,7 +96,7 @@ inline void ProgressLevel::update( cpo::uno::Any const & status ) const
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool interactContinuation(
     cpo::uno::Any const & request,
-    css::uno::Type const & continuation,
+    cpo::uno::Type const & continuation,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool * pcont, bool * pabort );
 

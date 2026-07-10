@@ -116,7 +116,7 @@ cpo::uno::Any SAL_CALL SwVbaColumns::Item( const cpo::uno::Any& Index1, const cp
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaColumns::getElementType()
 {
     return cppu::UnoType<word::XColumn>::get();

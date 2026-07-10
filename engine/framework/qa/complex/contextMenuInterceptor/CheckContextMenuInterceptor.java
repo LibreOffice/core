@@ -35,7 +35,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ui.XContextMenuInterception;
 import com.sun.star.ui.XContextMenuInterceptor;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;

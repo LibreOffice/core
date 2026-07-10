@@ -34,7 +34,7 @@ class OConnectionPointHelper final :   public  css::lang::XConnectionPoint
 public:
     OConnectionPointHelper( ::osl::Mutex&                       aMutex                      ,
                             OConnectionPointContainerHelper*    pContainerImplementation    ,
-                            css::uno::Type const &              aType                       );
+                            cpo::uno::Type const &              aType                       );
 
     virtual ~OConnectionPointHelper() override;
 
@@ -53,7 +53,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual cpo::uno::Any queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
 
     /**
         @short      increment refcount
@@ -75,7 +75,7 @@ public:
 
     //  XConnectionPoint
 
-    virtual css::uno::Type getConnectionType() override;
+    virtual cpo::uno::Type getConnectionType() override;
 
     virtual css::uno::Reference< css::lang::XConnectionPointContainer > getConnectionPointContainer() override;
 
@@ -98,7 +98,7 @@ private:
     css::uno::WeakReference< css::lang::XConnectionPointContainer >   m_oContainerWeakReference;   // Reference to container-class!. Don't use Reference<...>
                                                                                             // It is a ring-reference => and must be a wekreference!
     OConnectionPointContainerHelper*                                  m_pContainerImplementation;
-    css::uno::Type                                                    m_aInterfaceType;
+    cpo::uno::Type                                                    m_aInterfaceType;
     css::uno::Reference< css::uno::XInterface >                       m_xLock;
 };
 

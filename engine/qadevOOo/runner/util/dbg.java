@@ -20,7 +20,7 @@ package util;
 
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.Property;
@@ -91,7 +91,7 @@ public class dbg {
      * Prints information about an interface type.
      *
      * @param aType The type of the given interface.
-     * @see com.sun.star.uno.Type
+     * @see cpo.uno.Type
      */
     private static void printInterfaceInfo(Type aType) {
         try {

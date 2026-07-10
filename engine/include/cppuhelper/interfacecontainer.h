@@ -481,12 +481,12 @@ struct SAL_WARN_UNUSED OBroadcastHelperVar
 // helper function call class
 struct hashType_Impl
 {
-    size_t operator()(const css::uno::Type & s) const
+    size_t operator()(const cpo::uno::Type & s) const
     { return static_cast<size_t>(s.getTypeName().hashCode()); }
 };
 
 
-/** Specialized class for key type css::uno::Type,
+/** Specialized class for key type cpo::uno::Type,
     without explicit usage of STL symbols.
 */
 class CPPUHELPER_DLLPUBLIC OMultiTypeInterfaceContainerHelper
@@ -508,14 +508,14 @@ public:
     /**
       Return all id's under which at least one interface is added.
      */
-    cpo::uno::Sequence< css::uno::Type > SAL_CALL getContainedTypes() const;
+    cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getContainedTypes() const;
 
     /**
       Return the container created under this key.
       @return the container created under this key. If the container
                  was not created, null was returned.
      */
-    OInterfaceContainerHelper * SAL_CALL getContainer( const css::uno::Type & rKey ) const;
+    OInterfaceContainerHelper * SAL_CALL getContainer( const cpo::uno::Type & rKey ) const;
 
     /** Inserts an element into the container with the specified key.
         The position is not specified, thus it is not specified in which order events are fired.
@@ -536,7 +536,7 @@ public:
                 the new count of elements in the container
     */
     sal_Int32 SAL_CALL addInterface(
-        const css::uno::Type & rKey,
+        const cpo::uno::Type & rKey,
         const css::uno::Reference< css::uno::XInterface > & r );
 
     /** Removes an element from the container with the specified key.
@@ -550,7 +550,7 @@ public:
                 the new count of elements in the container
     */
     sal_Int32 SAL_CALL removeInterface(
-        const css::uno::Type & rKey,
+        const cpo::uno::Type & rKey,
         const css::uno::Reference< css::uno::XInterface > & rxIFace );
 
     /**
@@ -563,7 +563,7 @@ public:
      */
     void SAL_CALL clear();
 
-    typedef css::uno::Type keyType;
+    typedef cpo::uno::Type keyType;
 private:
     void *          m_pMap;
     ::osl::Mutex &  rMutex;

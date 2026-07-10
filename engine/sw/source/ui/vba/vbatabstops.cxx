@@ -95,7 +95,7 @@ public:
 
         return cpo::uno::Any( uno::Reference< word::XTabStop >( new SwVbaTabStop( mxParent, mxContext ) ) );
     }
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         return cppu::UnoType<word::XTabStop>::get();
     }
@@ -234,7 +234,7 @@ void SAL_CALL SwVbaTabStops::ClearAll()
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaTabStops::getElementType()
 {
     return cppu::UnoType<word::XTabStop>::get();

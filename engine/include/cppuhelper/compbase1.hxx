@@ -51,7 +51,7 @@ namespace cppu
         WeakComponentImplHelper1( ::osl::Mutex & rMutex ) SAL_NOEXCEPT
             : WeakComponentImplHelperBase( rMutex )
             {}
-        virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryInterface( cpo::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakComponentImplHelper_query( rType, cd::get(), this, static_cast<WeakComponentImplHelperBase *>(this) ); }
         virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE
             { WeakComponentImplHelperBase::acquire(); }
@@ -63,7 +63,7 @@ namespace cppu
             { WeakComponentImplHelperBase::addEventListener(xListener); }
         virtual void SAL_CALL removeEventListener(const css::uno::Reference< css::lang::XEventListener > & xListener) SAL_OVERRIDE
             { WeakComponentImplHelperBase::removeEventListener(xListener); }
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakComponentImplHelper_getTypes( cd::get() ); }
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
@@ -89,13 +89,13 @@ namespace cppu
         PartialWeakComponentImplHelper1( ::osl::Mutex & rMutex ) SAL_NOEXCEPT
             : WeakComponentImplHelperBase( rMutex )
             {}
-        virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryInterface( cpo::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakComponentImplHelper_query( rType, cd::get(), this, static_cast<WeakComponentImplHelperBase *>(this) ); }
         virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE
             { WeakComponentImplHelperBase::acquire(); }
         virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { WeakComponentImplHelperBase::release(); }
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakComponentImplHelper_getTypes( cd::get() ); }
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
@@ -129,15 +129,15 @@ namespace cppu
         WeakAggComponentImplHelper1( ::osl::Mutex & rMutex ) SAL_NOEXCEPT
             : WeakAggComponentImplHelperBase( rMutex )
             {}
-        virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryInterface( cpo::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakAggComponentImplHelperBase::queryInterface( rType ); }
-        virtual cpo::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryAggregation( cpo::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakAggComponentImplHelper_queryAgg( rType, cd::get(), this, static_cast<WeakAggComponentImplHelperBase *>(this) ); }
         virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE
             { WeakAggComponentImplHelperBase::acquire(); }
         virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { WeakAggComponentImplHelperBase::release(); }
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakAggComponentImplHelper_getTypes( cd::get() ); }
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }

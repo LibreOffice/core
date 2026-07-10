@@ -100,7 +100,7 @@ SwVbaAutoTextEntries::SwVbaAutoTextEntries( const uno::Reference< XHelperInterfa
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaAutoTextEntries::getElementType()
 {
     return cppu::UnoType<word::XAutoTextEntry>::get();

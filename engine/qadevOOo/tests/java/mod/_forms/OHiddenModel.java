@@ -31,7 +31,7 @@ import com.sun.star.container.XNameContainer;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;

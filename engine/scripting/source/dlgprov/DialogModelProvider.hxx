@@ -44,7 +44,7 @@ private:
     virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // css::container::XElementAccess:
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // css::container::XNameAccess:

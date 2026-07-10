@@ -88,7 +88,7 @@ ScVbaComments::createCollectionObject( const cpo::uno::Any& aSource )
     return AnnotationToComment( aSource,  mxContext, mxModel );
 }
 
-uno::Type
+cpo::uno::Type
 ScVbaComments::getElementType()
 {
     return cppu::UnoType<excel::XComment>::get();

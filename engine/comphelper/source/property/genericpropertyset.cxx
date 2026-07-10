@@ -195,7 +195,7 @@ void SAL_CALL GenericPropertySet::release() noexcept
     OWeakObject::release();
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL GenericPropertySet::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GenericPropertySet::getTypes()
 {
     return cpo::uno::Sequence {
         cppu::UnoType<XAggregation>::get(),

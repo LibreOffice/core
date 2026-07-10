@@ -82,7 +82,7 @@ public:
                             createEnumeration() override;
 
                             // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
                             // XContainer
@@ -132,7 +132,7 @@ public:
                             createEnumeration() override;
 
                             // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
                             // XContainer
@@ -234,7 +234,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
                             // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 };
 

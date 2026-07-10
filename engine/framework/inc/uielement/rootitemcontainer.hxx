@@ -60,10 +60,10 @@ class RootItemContainer final : private cppu::BaseMutex,
             { OWeakObject::acquire(); }
         virtual void SAL_CALL release() noexcept override
             { OWeakObject::release(); }
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& type) override;
 
         // XTypeProvider
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XIndexContainer
         virtual void SAL_CALL insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
@@ -79,7 +79,7 @@ class RootItemContainer final : private cppu::BaseMutex,
         virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
         // XElementAccess
-        virtual css::uno::Type SAL_CALL getElementType() override
+        virtual cpo::uno::Type SAL_CALL getElementType() override
         {
             return cppu::UnoType<cpo::uno::Sequence< css::beans::PropertyValue >>::get();
         }

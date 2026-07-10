@@ -21,7 +21,7 @@ package ifc.form;
 import lib.MultiMethodTest;
 
 import com.sun.star.form.XGridFieldDataSupplier;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 /**
 * Testing <code>com.sun.star.form.XGridFieldDataSupplier</code>

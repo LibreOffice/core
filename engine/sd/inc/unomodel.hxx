@@ -133,7 +133,7 @@ private:
 
     const SvxItemPropertySet*   mpPropSet;
 
-    cpo::uno::Sequence< css::uno::Type > maTypeSequence;
+    cpo::uno::Sequence< cpo::uno::Type > maTypeSequence;
 
     OUString   maBuildId;
 
@@ -171,7 +171,7 @@ public:
     UNO3_GETIMPLEMENTATION_DECL(SdXImpressDocument)
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     SD_DLLPUBLIC virtual void SAL_CALL acquire() noexcept override;
     SD_DLLPUBLIC virtual void SAL_CALL release() noexcept override;
 
@@ -183,7 +183,7 @@ public:
     virtual void SAL_CALL setViewData( const css::uno::Reference < css::container::XIndexAccess >& aData ) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XDrawPageDuplicator
@@ -366,7 +366,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // XServiceInfo
@@ -407,7 +407,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // XServiceInfo
@@ -454,7 +454,7 @@ public:
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // XServiceInfo
@@ -518,7 +518,7 @@ public:
     virtual bool SAL_CALL hasByName(const OUString& aName) override;
 
     // css::container::XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // css::lang::XServiceInfo

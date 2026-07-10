@@ -22,7 +22,7 @@
 
 #include "cpo/uno/Any.h"
 #include "cpo/uno/Sequence.h"
-#include "com/sun/star/uno/Type.h"
+#include "cpo/uno/Type.h"
 #include "com/sun/star/uno/genfunc.h"
 #include "cppuhelper/cppuhelperdllapi.h"
 #include "sal/types.h"
@@ -49,7 +49,7 @@ namespace cppu
 
 /** function pointer signature for getCppuType
 */
-typedef css::uno::Type const & (SAL_CALL * fptr_getCppuType)( void * );
+typedef cpo::uno::Type const & (SAL_CALL * fptr_getCppuType)( void * );
 
 /** single type + object offset
 */
@@ -102,26 +102,26 @@ struct SAL_WARN_UNUSED class_data
 /** ImplHelper
 */
 CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL ImplHelper_query(
-    css::uno::Type const & rType,
+    cpo::uno::Type const & rType,
     class_data * cd,
     void * that );
 /** ImplHelper
 */
 CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL ImplHelper_queryNoXInterface(
-    css::uno::Type const & rType,
+    cpo::uno::Type const & rType,
     class_data * cd,
     void * that );
 /** ImplHelper
 */
-CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< css::uno::Type >
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< cpo::uno::Type >
 SAL_CALL ImplHelper_getTypes(
     class_data * cd );
 /** ImplHelper
 */
-CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< css::uno::Type >
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< cpo::uno::Type >
 SAL_CALL ImplInhHelper_getTypes(
     class_data * cd,
-    cpo::uno::Sequence< css::uno::Type > const & rAddTypes );
+    cpo::uno::Sequence< cpo::uno::Type > const & rAddTypes );
 /** ImplHelper
 */
 CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< sal_Int8 >
@@ -131,13 +131,13 @@ SAL_CALL ImplHelper_getImplementationId(
 /** WeakImplHelper
 */
 CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL WeakImplHelper_query(
-    css::uno::Type const & rType,
+    cpo::uno::Type const & rType,
     class_data * cd,
     void * that,
     ::cppu::OWeakObject * pBase );
 /** WeakImplHelper
 */
-CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< css::uno::Type >
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< cpo::uno::Type >
 SAL_CALL WeakImplHelper_getTypes(
     class_data * cd );
 
@@ -145,13 +145,13 @@ SAL_CALL WeakImplHelper_getTypes(
 */
 CPPUHELPER_DLLPUBLIC cpo::uno::Any
 SAL_CALL WeakAggImplHelper_queryAgg(
-    css::uno::Type const & rType,
+    cpo::uno::Type const & rType,
     class_data * cd,
     void * that,
     ::cppu::OWeakAggObject * pBase );
 /** WeakAggImplHelper
 */
-CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< css::uno::Type >
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< cpo::uno::Type >
 SAL_CALL WeakAggImplHelper_getTypes(
     class_data * cd );
 

@@ -1729,7 +1729,7 @@ void ScModelObj::initializeForTiledRendering(const cpo::uno::Sequence<css::beans
     }
 }
 
-cpo::uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL ScModelObj::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aReturn = ::cppu::queryInterface(rType,
                 static_cast< sheet::XSpreadsheetDocument *>(this),
@@ -1779,14 +1779,14 @@ void SAL_CALL ScModelObj::release() noexcept
     SfxBaseModel::release();
 }
 
-cpo::uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> SAL_CALL ScModelObj::getTypes()
 {
-    static const cpo::uno::Sequence<uno::Type> aTypes = [&]()
+    static const cpo::uno::Sequence<cpo::uno::Type> aTypes = [&]()
     {
-        cpo::uno::Sequence<uno::Type> aAggTypes;
+        cpo::uno::Sequence<cpo::uno::Type> aAggTypes;
         if ( GetFormatter().is() )
         {
-            const uno::Type& rProvType = cppu::UnoType<lang::XTypeProvider>::get();
+            const cpo::uno::Type& rProvType = cppu::UnoType<lang::XTypeProvider>::get();
             cpo::uno::Any aNumProv(xNumberAgg->queryAggregation(rProvType));
             if(auto xNumProv
                = o3tl::tryAccess<uno::Reference<lang::XTypeProvider>>(aNumProv))
@@ -1797,7 +1797,7 @@ cpo::uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes()
         return comphelper::concatSequences(
             SfxBaseModel::getTypes(),
             aAggTypes,
-            cpo::uno::Sequence<uno::Type>
+            cpo::uno::Sequence<cpo::uno::Type>
             {
                 cppu::UnoType<sheet::XSpreadsheetDocument>::get(),
                 cppu::UnoType<document::XActionLockable>::get(),
@@ -3986,7 +3986,7 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
 
     if ( GetFormatter().is() )
     {
-        const uno::Type& rTunnelType = cppu::UnoType<lang::XUnoTunnel>::get();
+        const cpo::uno::Type& rTunnelType = cppu::UnoType<lang::XUnoTunnel>::get();
         cpo::uno::Any aNumTunnel(xNumberAgg->queryAggregation(rTunnelType));
         if(auto xTunnelAgg = o3tl::tryAccess<uno::Reference<lang::XUnoTunnel>>(
                aNumTunnel))
@@ -4498,7 +4498,7 @@ cpo::uno::Any SAL_CALL ScDrawPagesObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(xPage);
 }
 
-uno::Type SAL_CALL ScDrawPagesObj::getElementType()
+cpo::uno::Type SAL_CALL ScDrawPagesObj::getElementType()
 {
     return cppu::UnoType<drawing::XDrawPage>::get();
 }
@@ -4826,7 +4826,7 @@ cpo::uno::Any SAL_CALL ScTableSheetsObj::getByIndex( sal_Int32 nIndex )
 //    return cpo::uno::Any();
 }
 
-uno::Type SAL_CALL ScTableSheetsObj::getElementType()
+cpo::uno::Type SAL_CALL ScTableSheetsObj::getElementType()
 {
     return cppu::UnoType<sheet::XSpreadsheet>::get();
 }
@@ -5005,7 +5005,7 @@ rtl::Reference<ScTableColumnObj> ScTableColumnsObj::getScTableColumnByIndex( sal
     return xColumn;
 }
 
-uno::Type SAL_CALL ScTableColumnsObj::getElementType()
+cpo::uno::Type SAL_CALL ScTableColumnsObj::getElementType()
 {
     return cppu::UnoType<table::XCellRange>::get();
 }
@@ -5251,7 +5251,7 @@ rtl::Reference<ScTableRowObj> ScTableRowsObj::GetTableRowByIndex( sal_Int32 nInd
     return xRow;
 }
 
-uno::Type SAL_CALL ScTableRowsObj::getElementType()
+cpo::uno::Type SAL_CALL ScTableRowsObj::getElementType()
 {
     return cppu::UnoType<table::XCellRange>::get();
 }
@@ -5573,7 +5573,7 @@ cpo::uno::Any SAL_CALL ScAnnotationsObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(uno::Reference<sheet::XSheetAnnotation>(xAnnotation));
 }
 
-uno::Type SAL_CALL ScAnnotationsObj::getElementType()
+cpo::uno::Type SAL_CALL ScAnnotationsObj::getElementType()
 {
     return cppu::UnoType<sheet::XSheetAnnotation>::get();
 }
@@ -5727,7 +5727,7 @@ cpo::uno::Any SAL_CALL ScScenariosObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(uno::Reference<sheet::XScenario>(xScen));
 }
 
-uno::Type SAL_CALL ScScenariosObj::getElementType()
+cpo::uno::Type SAL_CALL ScScenariosObj::getElementType()
 {
     return cppu::UnoType<sheet::XScenario>::get();
 }

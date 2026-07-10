@@ -77,7 +77,7 @@ OInputCompStream::~OInputCompStream()
     }
 }
 
-cpo::uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL OInputCompStream::queryInterface( const cpo::uno::Type& rType )
 {
     // common interfaces
     cpo::uno::Any aReturn = ::cppu::queryInterface

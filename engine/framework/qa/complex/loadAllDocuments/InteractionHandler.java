@@ -80,8 +80,8 @@ public class InteractionHandler implements XInteractionHandler
 
         com.sun.star.task.XInteractionAbort xAbort     = null;
         com.sun.star.task.XInteractionRetry xRetry     = null;
-        com.sun.star.uno.Type               xAbortType = new com.sun.star.uno.Type(com.sun.star.task.XInteractionAbort.class);
-        com.sun.star.uno.Type               xRetryType = new com.sun.star.uno.Type(com.sun.star.task.XInteractionRetry.class);
+        cpo.uno.Type               xAbortType = new cpo.uno.Type(com.sun.star.task.XInteractionAbort.class);
+        cpo.uno.Type               xRetryType = new cpo.uno.Type(com.sun.star.task.XInteractionRetry.class);
 
         for (int i=0; i<lContinuations.length; ++i)
         {

@@ -26,7 +26,7 @@ namespace com::sun::star::container
 {
 class XNameContainer;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 class Type;
 }
@@ -38,7 +38,7 @@ template <class interface_type> class Reference;
 namespace comphelper
 {
 COMPHELPER_DLLPUBLIC css::uno::Reference<css::container::XNameContainer>
-NameContainer_createInstance(const css::uno::Type& aType);
+NameContainer_createInstance(const cpo::uno::Type& aType);
 }
 
 #endif // INCLUDED_COMPHELPER_NAMECONTAINER_HXX

@@ -60,7 +60,7 @@ void PreventDuplicateInteraction::useDefaultUUIHandler()
     // <- SAFE
 }
 
-cpo::uno::Any SAL_CALL PreventDuplicateInteraction::queryInterface( const css::uno::Type& aType )
+cpo::uno::Any SAL_CALL PreventDuplicateInteraction::queryInterface( const cpo::uno::Type& aType )
 {
     if ( aType.equals( cppu::UnoType<XInteractionHandler2>::get() ) )
     {
@@ -180,7 +180,7 @@ void PreventDuplicateInteraction::addInteractionRule(const PreventDuplicateInter
     // <- SAFE
 }
 
-bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&                               aInteraction,
+bool PreventDuplicateInteraction::getInteractionInfo(const cpo::uno::Type&                               aInteraction,
                                                            PreventDuplicateInteraction::InteractionInfo* pReturn     ) const
 {
     // SAFE ->

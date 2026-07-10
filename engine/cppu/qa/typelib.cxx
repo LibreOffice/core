@@ -18,7 +18,7 @@
 #include <com/sun/star/io/XTextInputStream.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
@@ -93,9 +93,9 @@ public:
         CPPUNIT_ASSERT(offsets != nullptr);
         auto const typerefs = t->aBase.ppTypeRefs;
         CPPUNIT_ASSERT(typerefs != nullptr);
-        CPPUNIT_ASSERT_EQUAL(t1, css::uno::Type(typerefs[0]));
-        CPPUNIT_ASSERT_EQUAL(t2, css::uno::Type(typerefs[1]));
-        CPPUNIT_ASSERT_EQUAL(t3, css::uno::Type(typerefs[2]));
+        CPPUNIT_ASSERT_EQUAL(t1, cpo::uno::Type(typerefs[0]));
+        CPPUNIT_ASSERT_EQUAL(t2, cpo::uno::Type(typerefs[1]));
+        CPPUNIT_ASSERT_EQUAL(t3, cpo::uno::Type(typerefs[2]));
         CPPUNIT_ASSERT(t->aBase.ppMemberNames == nullptr);
         CPPUNIT_ASSERT(t->pParameterizedTypes == nullptr);
         CPPUNIT_ASSERT(typelib_typedescription_complete(&td));
@@ -106,9 +106,9 @@ public:
         CPPUNIT_ASSERT_EQUAL(sal_Int32(3), t->aBase.nMembers);
         CPPUNIT_ASSERT(t->aBase.pMemberOffsets != nullptr);
         CPPUNIT_ASSERT(t->aBase.ppTypeRefs != nullptr);
-        CPPUNIT_ASSERT_EQUAL(t1, css::uno::Type(t->aBase.ppTypeRefs[0]));
-        CPPUNIT_ASSERT_EQUAL(t2, css::uno::Type(t->aBase.ppTypeRefs[1]));
-        CPPUNIT_ASSERT_EQUAL(t3, css::uno::Type(t->aBase.ppTypeRefs[2]));
+        CPPUNIT_ASSERT_EQUAL(t1, cpo::uno::Type(t->aBase.ppTypeRefs[0]));
+        CPPUNIT_ASSERT_EQUAL(t2, cpo::uno::Type(t->aBase.ppTypeRefs[1]));
+        CPPUNIT_ASSERT_EQUAL(t3, cpo::uno::Type(t->aBase.ppTypeRefs[2]));
         CPPUNIT_ASSERT(t->aBase.ppMemberNames != nullptr);
         CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, OUString::unacquired(&t->aBase.ppMemberNames[0]));
         CPPUNIT_ASSERT_EQUAL(u"Handle"_ustr, OUString::unacquired(&t->aBase.ppMemberNames[1]));
@@ -118,9 +118,9 @@ public:
         CPPUNIT_ASSERT_EQUAL(t->aBase.pMemberOffsets[0], offsets[0]);
         CPPUNIT_ASSERT_EQUAL(t->aBase.pMemberOffsets[1], offsets[1]);
         CPPUNIT_ASSERT_EQUAL(t->aBase.pMemberOffsets[2], offsets[2]);
-        CPPUNIT_ASSERT_EQUAL(css::uno::Type(t->aBase.ppTypeRefs[0]), css::uno::Type(typerefs[0]));
-        CPPUNIT_ASSERT_EQUAL(css::uno::Type(t->aBase.ppTypeRefs[1]), css::uno::Type(typerefs[1]));
-        CPPUNIT_ASSERT_EQUAL(css::uno::Type(t->aBase.ppTypeRefs[2]), css::uno::Type(typerefs[2]));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Type(t->aBase.ppTypeRefs[0]), cpo::uno::Type(typerefs[0]));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Type(t->aBase.ppTypeRefs[1]), cpo::uno::Type(typerefs[1]));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Type(t->aBase.ppTypeRefs[2]), cpo::uno::Type(typerefs[2]));
         typelib_typedescription_release(td);
         typelib_typedescriptionreference_release(ref);
     }
@@ -146,8 +146,8 @@ public:
         CPPUNIT_ASSERT(offsets != nullptr);
         auto const typerefs = t->aBase.ppTypeRefs;
         CPPUNIT_ASSERT(typerefs != nullptr);
-        CPPUNIT_ASSERT_EQUAL(t1, css::uno::Type(typerefs[0]));
-        CPPUNIT_ASSERT_EQUAL(t2, css::uno::Type(typerefs[1]));
+        CPPUNIT_ASSERT_EQUAL(t1, cpo::uno::Type(typerefs[0]));
+        CPPUNIT_ASSERT_EQUAL(t2, cpo::uno::Type(typerefs[1]));
         CPPUNIT_ASSERT(t->aBase.ppMemberNames == nullptr);
         CPPUNIT_ASSERT(t->pParameterizedTypes != nullptr);
         CPPUNIT_ASSERT_EQUAL(param[0], t->pParameterizedTypes[0]);
@@ -160,8 +160,8 @@ public:
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), t->aBase.nMembers);
         CPPUNIT_ASSERT(t->aBase.pMemberOffsets != nullptr);
         CPPUNIT_ASSERT(t->aBase.ppTypeRefs != nullptr);
-        CPPUNIT_ASSERT_EQUAL(t1, css::uno::Type(t->aBase.ppTypeRefs[0]));
-        CPPUNIT_ASSERT_EQUAL(t2, css::uno::Type(t->aBase.ppTypeRefs[1]));
+        CPPUNIT_ASSERT_EQUAL(t1, cpo::uno::Type(t->aBase.ppTypeRefs[0]));
+        CPPUNIT_ASSERT_EQUAL(t2, cpo::uno::Type(t->aBase.ppTypeRefs[1]));
         CPPUNIT_ASSERT(t->aBase.ppMemberNames != nullptr);
         CPPUNIT_ASSERT_EQUAL(u"IsPresent"_ustr, OUString::unacquired(&t->aBase.ppMemberNames[0]));
         CPPUNIT_ASSERT_EQUAL(u"Value"_ustr, OUString::unacquired(&t->aBase.ppMemberNames[1]));
@@ -171,8 +171,8 @@ public:
         // `offsets` and `typerefs` must still be valid:
         CPPUNIT_ASSERT_EQUAL(t->aBase.pMemberOffsets[0], offsets[0]);
         CPPUNIT_ASSERT_EQUAL(t->aBase.pMemberOffsets[1], offsets[1]);
-        CPPUNIT_ASSERT_EQUAL(css::uno::Type(t->aBase.ppTypeRefs[0]), css::uno::Type(typerefs[0]));
-        CPPUNIT_ASSERT_EQUAL(css::uno::Type(t->aBase.ppTypeRefs[1]), css::uno::Type(typerefs[1]));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Type(t->aBase.ppTypeRefs[0]), cpo::uno::Type(typerefs[0]));
+        CPPUNIT_ASSERT_EQUAL(cpo::uno::Type(t->aBase.ppTypeRefs[1]), cpo::uno::Type(typerefs[1]));
         typelib_typedescription_release(td);
         typelib_typedescriptionreference_release(ref);
     }

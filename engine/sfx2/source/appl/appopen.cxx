@@ -685,7 +685,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,cpo::uno::Any(uno::Reference<task::XInteractionHandler>(pHandler))) );
 
             // define rules for this handler
-            css::uno::Type aInteraction = ::cppu::UnoType<css::task::ErrorCodeRequest>::get();
+            cpo::uno::Type aInteraction = ::cppu::UnoType<css::task::ErrorCodeRequest>::get();
             ::sfx2::PreventDuplicateInteraction::InteractionInfo aRule(aInteraction);
             pHandler->addInteractionRule(aRule);
 

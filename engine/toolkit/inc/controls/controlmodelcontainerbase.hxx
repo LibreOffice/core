@@ -113,7 +113,7 @@ public:
     void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
     // css::container::XElementAccess
-    css::uno::Type SAL_CALL getElementType(  ) override;
+    cpo::uno::Type SAL_CALL getElementType(  ) override;
     bool SAL_CALL hasElements(  ) override;
 
     // css::container::XNameContainer, XNameReplace, XNameAccess
@@ -193,7 +193,7 @@ class ResourceListener final : public css::util::XModifyListener,
         void stopListening();
 
         // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
 

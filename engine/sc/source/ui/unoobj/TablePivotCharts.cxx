@@ -219,7 +219,7 @@ cpo::uno::Any SAL_CALL TablePivotCharts::getByIndex(sal_Int32 nIndex)
     return cpo::uno::Any(xChart);
 }
 
-uno::Type SAL_CALL TablePivotCharts::getElementType()
+cpo::uno::Type SAL_CALL TablePivotCharts::getElementType()
 {
     return cppu::UnoType<table::XTablePivotChart>::get();
 }

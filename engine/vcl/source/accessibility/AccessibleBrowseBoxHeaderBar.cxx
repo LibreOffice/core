@@ -269,7 +269,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderBar::deselectAccessibleChild(
 
 // XInterface -----------------------------------------------------------------
 
-Any SAL_CALL AccessibleBrowseBoxHeaderBar::queryInterface( const uno::Type& rType )
+Any SAL_CALL AccessibleBrowseBoxHeaderBar::queryInterface( const cpo::uno::Type& rType )
 {
     Any aAny( AccessibleBrowseBoxTableBase::queryInterface( rType ) );
     return aAny.hasValue() ?

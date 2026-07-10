@@ -672,7 +672,7 @@ bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rR
     return false;
 }
 
-static bool IsTypeName( std::u16string_view rName, const uno::Type& rType )
+static bool IsTypeName( std::u16string_view rName, const cpo::uno::Type& rType )
 {
     return rName == rType.getTypeName();
 }
@@ -1566,7 +1566,7 @@ void ScUnoAddInCall::SetResult( const cpo::uno::Any& rNewRes )
     // Reflection* pRefl = rNewRes.getReflection();
 
     uno::TypeClass eClass = rNewRes.getValueTypeClass();
-    const uno::Type& aType = rNewRes.getValueType();
+    const cpo::uno::Type& aType = rNewRes.getValueType();
     switch (eClass)
     {
         case uno::TypeClass_VOID:

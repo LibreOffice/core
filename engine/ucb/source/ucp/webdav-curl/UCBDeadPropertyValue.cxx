@@ -37,7 +37,7 @@ constexpr OUString aTypeFloat = u"float"_ustr;
 constexpr OUString aTypeDouble = u"double"_ustr;
 
 // static
-bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
+bool UCBDeadPropertyValue::supportsType( const cpo::uno::Type & rType )
 {
     if ( ( rType != cppu::UnoType<OUString>::get() )
          &&
@@ -132,7 +132,7 @@ UCBDeadPropertyValue::toXML(const cpo::uno::Any & rInData)
 
     // Check property type. Extract type and value as string.
 
-    const uno::Type& rType = rInData.getValueType();
+    const cpo::uno::Type& rType = rInData.getValueType();
     OUString aStringValue;
     OUString aStringType;
 

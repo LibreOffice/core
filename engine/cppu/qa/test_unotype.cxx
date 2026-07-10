@@ -31,7 +31,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -98,7 +98,7 @@ void Test::testUnoType() {
         DerivedInterface2::dummy(nullptr);
     }
 
-    css::uno::Type t;
+    cpo::uno::Type t;
     t = cppu::UnoType<cppu::UnoVoidType>::get();
     CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_VOID, t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(u"void"_ustr, t.getTypeName());
@@ -142,7 +142,7 @@ void Test::testUnoType() {
     t = cppu::UnoType<OUString>::get();
     CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_STRING, t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(u"string"_ustr, t.getTypeName());
-    t = cppu::UnoType<css::uno::Type>::get();
+    t = cppu::UnoType<cpo::uno::Type>::get();
     CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_TYPE, t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(u"type"_ustr, t.getTypeName());
     t = cppu::UnoType<cpo::uno::Any>::get();
@@ -275,8 +275,8 @@ void Test::testGetTypeFavourUnsigned() {
         cppu::getTypeFavourUnsigned(static_cast<OUString *>(nullptr)),
         cppu::UnoType<OUString>::get());
     CPPUNIT_ASSERT_EQUAL(
-        cppu::getTypeFavourUnsigned(static_cast<css::uno::Type *>(nullptr)),
-        cppu::UnoType<css::uno::Type>::get());
+        cppu::getTypeFavourUnsigned(static_cast<cpo::uno::Type *>(nullptr)),
+        cppu::UnoType<cpo::uno::Type>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(static_cast<cpo::uno::Any *>(nullptr)),
         cppu::UnoType<cpo::uno::Any>::get());
@@ -440,8 +440,8 @@ void Test::testGetTypeFavourChar() {
         cppu::getTypeFavourChar(static_cast<OUString *>(nullptr)),
         cppu::UnoType<OUString>::get());
     CPPUNIT_ASSERT_EQUAL(
-        cppu::getTypeFavourChar(static_cast<css::uno::Type *>(nullptr)),
-        cppu::UnoType<css::uno::Type>::get());
+        cppu::getTypeFavourChar(static_cast<cpo::uno::Type *>(nullptr)),
+        cppu::UnoType<cpo::uno::Type>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(static_cast<cpo::uno::Any *>(nullptr)),
         cppu::UnoType<cpo::uno::Any>::get());

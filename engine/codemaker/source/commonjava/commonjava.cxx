@@ -56,7 +56,7 @@ OString translateUnoToJavaType(
             { "double"_ostr, "java/lang/Double"_ostr },
             { "char"_ostr, "java/lang/Character"_ostr },
             { "java/lang/String"_ostr, "java/lang/String"_ostr },
-            { "com/sun/star/uno/Type"_ostr, "com/sun/star/uno/Type"_ostr },
+            { "cpo/uno/Type"_ostr, "cpo/uno/Type"_ostr },
             { "java/lang/Object"_ostr, "java/lang/Object"_ostr } };
         buf.append(javaTypes[static_cast<int>(sort)][referenceType]);
     } else {

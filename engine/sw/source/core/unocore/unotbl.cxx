@@ -754,7 +754,7 @@ SwXCell::~SwXCell()
     EndListeningAll();
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SwXCell::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SwXCell::getTypes(  )
 {
     return comphelper::concatSequences(
             SwXCellBaseClass::getTypes(),
@@ -779,7 +779,7 @@ void SAL_CALL SwXCell::release(  ) noexcept
     SwXCellBaseClass::release();
 }
 
-cpo::uno::Any SAL_CALL SwXCell::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL SwXCell::queryInterface( const cpo::uno::Type& aType )
 {
     cpo::uno::Any aRet = SwXText::queryInterface(aType);
     if(aRet.getValueType() == cppu::UnoType<void>::get())
@@ -1111,7 +1111,7 @@ rtl::Reference<SwXParagraphEnumeration> SwXCell::createSwEnumeration()
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::TableText, m_pBox);
 }
 
-uno::Type SAL_CALL SwXCell::getElementType()
+cpo::uno::Type SAL_CALL SwXCell::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();
 }
@@ -3878,7 +3878,7 @@ cpo::uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     return cpo::uno::Any(xRet);
 }
 
-uno::Type SAL_CALL SwXTableRows::getElementType()
+cpo::uno::Type SAL_CALL SwXTableRows::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }
@@ -4037,7 +4037,7 @@ cpo::uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
     return cpo::uno::Any(uno::Reference<uno::XInterface>()); // i#21699 not supported
 }
 
-uno::Type SAL_CALL SwXTableColumns::getElementType()
+cpo::uno::Type SAL_CALL SwXTableColumns::getElementType()
 {
     return cppu::UnoType<uno::XInterface>::get();
 }

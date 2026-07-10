@@ -28,7 +28,7 @@
 #include <memory>
 
 namespace com::sun::star::sdbc { class SQLException; }
-namespace com::sun::star::uno { class Type; }
+namespace cpo::uno { class Type; }
 namespace com::sun::star::uno { class XInterface; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
@@ -193,7 +193,7 @@ namespace connectivity
         void            raiseTypedException(
                             const ErrorCondition _eCondition,
                             const css::uno::Reference< css::uno::XInterface >& _rxContext,
-                            const css::uno::Type& _rExceptionType
+                            const cpo::uno::Type& _rExceptionType
                         ) const;
 
         /** retrieves an <code>SQLException</code> object which contains information about

@@ -509,7 +509,7 @@ JNI_info::JNI_info(
     JLocalAutoRef jo_Enum(
         jni, find_class( jni, "com.sun.star.uno.Enum" ) );
     JLocalAutoRef jo_Type(
-        jni, find_class( jni, "com.sun.star.uno.Type" ) );
+        jni, find_class( jni, "cpo.uno.Type" ) );
     JLocalAutoRef jo_TypeClass(
         jni, find_class( jni, "com.sun.star.uno.TypeClass" ) );
     JLocalAutoRef jo_IEnvironment(
@@ -628,7 +628,7 @@ JNI_info::JNI_info(
     m_method_UnoRuntime_queryInterface = jni->GetStaticMethodID(
         static_cast<jclass>(jo_UnoRuntime.get()),
         "queryInterface",
-        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)Ljava/lang/Object;" );
+        "(Lcpo/uno/Type;Ljava/lang/Object;)Ljava/lang/Object;" );
     jni.ensure_no_exception();
     assert( m_method_UnoRuntime_queryInterface != nullptr );
 
@@ -665,13 +665,13 @@ JNI_info::JNI_info(
     // ctor Any( Type, Object )
     m_ctor_Any_with_Type_Object = jni->GetMethodID(
         static_cast<jclass>(jo_Any.get()),
-        "<init>", "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V" );
+        "<init>", "(Lcpo/uno/Type;Ljava/lang/Object;)V" );
     jni.ensure_no_exception();
     assert( m_ctor_Any_with_Type_Object != nullptr );
 
     // field Any._type
     m_field_Any_type = jni->GetFieldID(
-        static_cast<jclass>(jo_Any.get()), "_type", "Lcom/sun/star/uno/Type;" );
+        static_cast<jclass>(jo_Any.get()), "_type", "Lcpo/uno/Type;" );
     jni.ensure_no_exception();
     assert( m_field_Any_type != nullptr );
     // field Any._object
@@ -684,13 +684,13 @@ JNI_info::JNI_info(
     m_method_IEnvironment_getRegisteredInterface = jni->GetMethodID(
         static_cast<jclass>(jo_IEnvironment.get()),
         "getRegisteredInterface",
-        "(Ljava/lang/String;Lcom/sun/star/uno/Type;)Ljava/lang/Object;" );
+        "(Ljava/lang/String;Lcpo/uno/Type;)Ljava/lang/Object;" );
     jni.ensure_no_exception();
     assert( m_method_IEnvironment_getRegisteredInterface != nullptr );
     // method IEnvironment.registerInterface()
     m_method_IEnvironment_registerInterface = jni->GetMethodID(
         static_cast<jclass>(jo_IEnvironment.get()), "registerInterface",
-        "(Ljava/lang/Object;[Ljava/lang/String;Lcom/sun/star/uno/Type;)"
+        "(Ljava/lang/Object;[Ljava/lang/String;Lcpo/uno/Type;)"
         "Ljava/lang/Object;" );
     jni.ensure_no_exception();
     assert( m_method_IEnvironment_registerInterface != nullptr );
@@ -704,7 +704,7 @@ JNI_info::JNI_info(
     // static method JNI_proxy.create()
     m_method_JNI_proxy_create = jni->GetStaticMethodID(
         static_cast<jclass>(jo_JNI_proxy.get()), "create",
-        "(JLcom/sun/star/uno/IEnvironment;JJLcom/sun/star/uno/Type;Ljava/lang"
+        "(JLcom/sun/star/uno/IEnvironment;JJLcpo/uno/Type;Ljava/lang"
         "/String;Ljava/lang/reflect/Constructor;"
         "Lcom/sun/star/lib/util/AsynchronousFinalizer;)Ljava/lang/Object;" );
     jni.ensure_no_exception();
@@ -721,7 +721,7 @@ JNI_info::JNI_info(
     assert( m_field_JNI_proxy_m_td_handle != nullptr );
     // field JNI_proxy.m_type
     m_field_JNI_proxy_m_type = jni->GetFieldID(
-        static_cast<jclass>(jo_JNI_proxy.get()), "m_type", "Lcom/sun/star/uno/Type;" );
+        static_cast<jclass>(jo_JNI_proxy.get()), "m_type", "Lcpo/uno/Type;" );
     jni.ensure_no_exception();
     assert( m_field_JNI_proxy_m_type != nullptr );
     // field JNI_proxy.m_oid
@@ -766,25 +766,25 @@ JNI_info::JNI_info(
     JLocalAutoRef jo_Any_VOID(
         jni, jni->GetStaticObjectField(
             static_cast<jclass>(jo_Any.get()), field_Any_VOID ) );
-    // get com.sun.star.uno.Type.UNSIGNED_SHORT
+    // get cpo.uno.Type.UNSIGNED_SHORT
     jfieldID field_Type_UNSIGNED_SHORT = jni->GetStaticFieldID(
-        static_cast<jclass>(jo_Type.get()), "UNSIGNED_SHORT", "Lcom/sun/star/uno/Type;" );
+        static_cast<jclass>(jo_Type.get()), "UNSIGNED_SHORT", "Lcpo/uno/Type;" );
     jni.ensure_no_exception();
     assert( field_Type_UNSIGNED_SHORT != nullptr );
     JLocalAutoRef jo_Type_UNSIGNED_SHORT(
         jni, jni->GetStaticObjectField(
             static_cast<jclass>(jo_Type.get()), field_Type_UNSIGNED_SHORT ) );
-    // get com.sun.star.uno.Type.UNSIGNED_LONG
+    // get cpo.uno.Type.UNSIGNED_LONG
     jfieldID field_Type_UNSIGNED_LONG = jni->GetStaticFieldID(
-        static_cast<jclass>(jo_Type.get()), "UNSIGNED_LONG", "Lcom/sun/star/uno/Type;" );
+        static_cast<jclass>(jo_Type.get()), "UNSIGNED_LONG", "Lcpo/uno/Type;" );
     jni.ensure_no_exception();
     assert( field_Type_UNSIGNED_LONG != nullptr );
     JLocalAutoRef jo_Type_UNSIGNED_LONG(
         jni, jni->GetStaticObjectField(
             static_cast<jclass>(jo_Type.get()), field_Type_UNSIGNED_LONG ) );
-    // get com.sun.star.uno.Type.UNSIGNED_HYPER
+    // get cpo.uno.Type.UNSIGNED_HYPER
     jfieldID field_Type_UNSIGNED_HYPER = jni->GetStaticFieldID(
-        static_cast<jclass>(jo_Type.get()), "UNSIGNED_HYPER", "Lcom/sun/star/uno/Type;" );
+        static_cast<jclass>(jo_Type.get()), "UNSIGNED_HYPER", "Lcpo/uno/Type;" );
     jni.ensure_no_exception();
     assert( field_Type_UNSIGNED_HYPER != nullptr );
     JLocalAutoRef jo_Type_UNSIGNED_HYPER(

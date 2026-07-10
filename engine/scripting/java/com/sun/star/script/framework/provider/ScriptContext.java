@@ -32,7 +32,7 @@ import com.sun.star.lib.uno.helper.PropertySet;
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.provider.XScriptContext;
 
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 

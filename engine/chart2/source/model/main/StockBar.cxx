@@ -95,7 +95,7 @@ StockBar::~StockBar()
 {}
 
 // ____ XTypeProvider ____
-cpo::uno::Sequence< css::uno::Type > SAL_CALL StockBar::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL StockBar::getTypes()
 {
     return ::comphelper::concatSequences(
         impl::StockBar_Base::getTypes(),

@@ -932,17 +932,17 @@ void Binding::_checkBindingID()
 // XValueBinding
 
 
-cpo::uno::Sequence<css::uno::Type> Binding::getSupportedValueTypes()
+cpo::uno::Sequence<cpo::uno::Type> Binding::getSupportedValueTypes()
 {
     return Convert::get().getTypes();
 }
 
-bool Binding::supportsType( const css::uno::Type& rType )
+bool Binding::supportsType( const cpo::uno::Type& rType )
 {
     return Convert::get().hasType( rType );
 }
 
-cpo::uno::Any Binding::getValue( const css::uno::Type& rType )
+cpo::uno::Any Binding::getValue( const cpo::uno::Type& rType )
 {
     // first, check for model
     checkLive();

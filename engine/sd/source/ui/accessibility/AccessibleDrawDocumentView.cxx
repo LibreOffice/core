@@ -353,7 +353,7 @@ cpo::uno::Sequence< OUString> SAL_CALL
 //=====  XInterface  ==========================================================
 
 cpo::uno::Any SAL_CALL
-    AccessibleDrawDocumentView::queryInterface (const uno::Type & rType)
+    AccessibleDrawDocumentView::queryInterface (const cpo::uno::Type & rType)
 {
     cpo::uno::Any aReturn = AccessibleDocumentViewBase::queryInterface (rType);
     if ( ! aReturn.hasValue())

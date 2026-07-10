@@ -44,7 +44,7 @@ SwVbaVariables::SwVbaVariables( const uno::Reference< XHelperInterface >& xParen
 {
 }
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaVariables::getElementType()
 {
     return cppu::UnoType<word::XVariable>::get();

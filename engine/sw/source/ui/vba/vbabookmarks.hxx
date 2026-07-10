@@ -45,7 +45,7 @@ public:
     /// @throws css::uno::RuntimeException
     static void addBookmarkByName( const rtl::Reference< SwXTextDocument >& xModel, const OUString& rName, const css::uno::Reference< css::text::XTextRange >& rTextRange );
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaBookmarks_BASE

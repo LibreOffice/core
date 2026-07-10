@@ -222,7 +222,7 @@ ScVbaNames::Add( const cpo::uno::Any& Name ,
 }
 
 // XEnumerationAccess
-css::uno::Type
+cpo::uno::Type
 ScVbaNames::getElementType()
 {
     return cppu::UnoType<ov::excel::XName>::get();

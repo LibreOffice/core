@@ -52,11 +52,11 @@ protected:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // XNameAccess
@@ -99,7 +99,7 @@ cpo::uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getSupportedServic
     return aSeq;
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
 {
     static const cpo::uno::Sequence aTypes {
         cppu::UnoType<lang::XServiceInfo>::get(),
@@ -135,7 +135,7 @@ void SAL_CALL GalleryThemeProvider::initialize( const cpo::uno::Sequence< cpo::u
 }
 
 
-uno::Type SAL_CALL GalleryThemeProvider::getElementType()
+cpo::uno::Type SAL_CALL GalleryThemeProvider::getElementType()
 {
     return cppu::UnoType<gallery::XGalleryTheme>::get();
 }

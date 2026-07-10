@@ -19,7 +19,7 @@
 
 #include <comphelper/kit.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <svtools/javacontext.hxx>
 #include <svtools/javainteractionhandler.hxx>
 

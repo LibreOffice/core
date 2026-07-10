@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_PROPERTYINFOHASH_HXX
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Type.h>
+#include <cpo/uno/Type.h>
 #include <unordered_map>
 
 namespace comphelper
@@ -29,13 +29,13 @@ namespace comphelper
     struct PropertyInfo
     {
         OUString maName;
-        css::uno::Type maType;
+        cpo::uno::Type maType;
         sal_Int32 mnHandle;
         sal_Int16 mnAttributes;
 
-        PropertyInfo(OUString const & aName, sal_Int32 nHandle, css::uno::Type const & aType, sal_Int16 nAttributes)
+        PropertyInfo(OUString const & aName, sal_Int32 nHandle, cpo::uno::Type const & aType, sal_Int16 nAttributes)
             : maName(aName), maType(aType), mnHandle(nHandle), mnAttributes(nAttributes) {}
-        PropertyInfo(OUString && aName, sal_Int32 nHandle, css::uno::Type const & aType, sal_Int16 nAttributes)
+        PropertyInfo(OUString && aName, sal_Int32 nHandle, cpo::uno::Type const & aType, sal_Int16 nAttributes)
             : maName(std::move(aName)), maType(aType), mnHandle(nHandle), mnAttributes(nAttributes) {}
     };
     struct PropertyData

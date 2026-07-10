@@ -69,11 +69,11 @@ public:
     SdXShape(SvxShape* pShape, SdXImpressDocument* pModel);
     virtual ~SdXShape() noexcept;
 
-    virtual bool queryAggregation( const css::uno::Type & rType, cpo::uno::Any& aAny ) override;
+    virtual bool queryAggregation( const cpo::uno::Type & rType, cpo::uno::Any& aAny ) override;
     virtual void dispose() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -91,7 +91,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
 
     // XEventsSupplier
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;

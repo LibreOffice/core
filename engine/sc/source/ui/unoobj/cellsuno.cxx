@@ -4451,7 +4451,7 @@ cpo::uno::Any SAL_CALL ScCellRangesObj::getByIndex( sal_Int32 nIndex )
 
 }
 
-uno::Type SAL_CALL ScCellRangesObj::getElementType()
+cpo::uno::Type SAL_CALL ScCellRangesObj::getElementType()
 {
     return cppu::UnoType<table::XCellRange>::get();
 }
@@ -6018,7 +6018,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScCellObj::createEnumeration()
     return GetUnoText().createEnumeration();
 }
 
-uno::Type SAL_CALL ScCellObj::getElementType()
+cpo::uno::Type SAL_CALL ScCellObj::getElementType()
 {
     SolarMutexGuard aGuard;
     return GetUnoText().getElementType();
@@ -8519,7 +8519,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScCellsObj::createEnumeration()
     return nullptr;
 }
 
-uno::Type SAL_CALL ScCellsObj::getElementType()
+cpo::uno::Type SAL_CALL ScCellsObj::getElementType()
 {
     return cppu::UnoType<table::XCell>::get();
 }
@@ -8757,7 +8757,7 @@ cpo::uno::Any SAL_CALL ScCellFormatsObj::getByIndex( sal_Int32 nIndex )
 
 }
 
-uno::Type SAL_CALL ScCellFormatsObj::getElementType()
+cpo::uno::Type SAL_CALL ScCellFormatsObj::getElementType()
 {
     return cppu::UnoType<table::XCellRange>::get();
 }
@@ -9109,7 +9109,7 @@ cpo::uno::Any SAL_CALL ScUniqueCellFormatsObj::getByIndex( sal_Int32 nIndex )
 
 }
 
-uno::Type SAL_CALL ScUniqueCellFormatsObj::getElementType()
+cpo::uno::Type SAL_CALL ScUniqueCellFormatsObj::getElementType()
 {
     return cppu::UnoType<sheet::XSheetCellRangeContainer>::get();
 }

@@ -46,7 +46,7 @@ VARTYPE getVarType(const cpo::uno::Any& val);
     The function returns false if the name does not represent
     a valid type.
 */
-bool getType(BSTR name, css::uno::Type& type);
+bool getType(BSTR name, cpo::uno::Type& type);
 void o2u_attachCurrentThread();
 
 class BridgeRuntimeError

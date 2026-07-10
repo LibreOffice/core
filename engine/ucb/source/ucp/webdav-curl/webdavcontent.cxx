@@ -280,7 +280,7 @@ void SAL_CALL Content::release() noexcept
 
 
 // virtual
-cpo::uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL Content::queryInterface( const cpo::uno::Type & rType )
 {
     // Note: isFolder may require network activities! So call it only
     //       if it is really necessary!!!
@@ -326,7 +326,7 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 
 
 // virtual
-cpo::uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Content::getTypes()
 {
     bool bFolder = false;
     try

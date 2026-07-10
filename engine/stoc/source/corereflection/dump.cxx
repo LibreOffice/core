@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <config_typesizes.h>
@@ -57,7 +57,7 @@ template <typename T> OUString hex(T value, sal_Int32 width)
     return buf.makeStringAndClear();
 }
 
-css::uno::TypeDescription getTypeDescription(css::uno::Type const& type)
+css::uno::TypeDescription getTypeDescription(cpo::uno::Type const& type)
 {
     typelib_TypeDescription* d = nullptr;
     type.getDescription(&d);
@@ -171,10 +171,10 @@ public:
                 return "\"" + buf + "\"";
             }
             case css::uno::TypeClass_TYPE:
-                return value.get<css::uno::Type>().getTypeName();
+                return value.get<cpo::uno::Type>().getTypeName();
             case css::uno::TypeClass_SEQUENCE:
             {
-                css::uno::Type const t(reinterpret_cast<typelib_IndirectTypeDescription const*>(
+                cpo::uno::Type const t(reinterpret_cast<typelib_IndirectTypeDescription const*>(
                                            getTypeDescription(value.getValueType()).get())
                                            ->pType);
                 auto const n = getTypeDescription(t).get()->nSize;
@@ -338,7 +338,7 @@ private:
                 buffer->append(", ");
             }
             buffer->append(OUString::unacquired(description->ppMemberNames + i) + ": ");
-            css::uno::Type t(description->ppTypeRefs[i]);
+            cpo::uno::Type t(description->ppTypeRefs[i]);
             cpo::uno::Any const m(static_cast<char const*>(data) + description->pMemberOffsets[i],
                                   t);
             buffer->append(t == cppu::UnoType<cpo::uno::Any>::get() ? dumpAny(m) : dumpValue(m));

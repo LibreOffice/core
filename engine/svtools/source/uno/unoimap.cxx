@@ -321,9 +321,9 @@ void SAL_CALL SvUnoImageMapObject::release() noexcept
     OWeakObject::release();
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
 {
-    static const cpo::uno::Sequence< uno::Type > aTypes {
+    static const cpo::uno::Sequence< cpo::uno::Type > aTypes {
         cppu::UnoType<XEventsSupplier>::get(),
         cppu::UnoType<XServiceInfo>::get(),
         cppu::UnoType<XPropertySet>::get(),

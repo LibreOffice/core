@@ -38,10 +38,10 @@ namespace com { namespace sun { namespace star {
         struct PropertyValue;
     }
     namespace uno {
-        class Type;
         class XComponentContext;
     }
 } } }
+namespace cpo::uno { class Type; }
 
 namespace cppu {
 
@@ -239,7 +239,7 @@ protected:
        object.
     */
     virtual cpo::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & type) SAL_OVERRIDE;
+        cpo::uno::Type const & type) SAL_OVERRIDE;
 
     // @see css::beans::XPropertySet::getPropertySetInfo
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() SAL_OVERRIDE;
@@ -316,7 +316,7 @@ private:
         css::uno::Reference< css::uno::XComponentContext > const & context,
         Implements implements,
         cpo::uno::Sequence< rtl::OUString > const & absentOptional,
-        css::uno::Type const & type);
+        cpo::uno::Type const & type);
 
     class Impl;
     Impl * m_impl;

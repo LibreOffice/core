@@ -45,7 +45,7 @@ namespace comphelper
     using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::Exception;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
     using ::com::sun::star::uno::cpp_queryInterface;
     using ::com::sun::star::uno::cpp_acquire;
     using ::com::sun::star::uno::cpp_release;

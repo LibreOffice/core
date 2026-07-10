@@ -49,7 +49,7 @@ class ScriptEventContainer final : public ::cppu::WeakImplHelper<
     NameContainerNameMap mHashMap;
     cpo::uno::Sequence< OUString > mNames;
     std::vector< cpo::uno::Any > mValues;
-    css::uno::Type mType;
+    cpo::uno::Type mType;
 
     ContainerListenerMultiplexer maContainerListeners;
 
@@ -57,7 +57,7 @@ public:
     ScriptEventContainer();
 
     // Methods XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
     virtual bool SAL_CALL hasElements(  ) override;
 
     // Methods XNameAccess

@@ -327,7 +327,7 @@ private:
      *          The owner of this class has to be sure, that no new property
      *          clashes with an existing one.
      */
-    void impl_addPropertyInfo(const OUString& rName, FramePropHandle eHandle, const css::uno::Type& rType, sal_Int16 nAttributes);
+    void impl_addPropertyInfo(const OUString& rName, FramePropHandle eHandle, const cpo::uno::Type& rType, sal_Int16 nAttributes);
     /** mark the object as "dead".
      */
     void impl_disablePropertySet();
@@ -2837,7 +2837,7 @@ void XFrameImpl::impl_setPropertyChangeBroadcaster(XFrameImpl& xBroadcaster)
     m_xBroadcaster = &xBroadcaster;
 }
 
-void XFrameImpl::impl_addPropertyInfo(const OUString& rName, FramePropHandle eHandle, const css::uno::Type& rType, sal_Int16 nAttributes)
+void XFrameImpl::impl_addPropertyInfo(const OUString& rName, FramePropHandle eHandle, const cpo::uno::Type& rType, sal_Int16 nAttributes)
 {
     SolarMutexGuard g;
     css::beans::Property aProperty(rName, static_cast<sal_Int32>(eHandle), rType, nAttributes);

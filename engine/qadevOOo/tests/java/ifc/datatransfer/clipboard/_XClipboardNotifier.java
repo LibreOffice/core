@@ -29,7 +29,7 @@ import com.sun.star.datatransfer.clipboard.XClipboardListener;
 import com.sun.star.datatransfer.clipboard.XClipboardNotifier;
 import com.sun.star.datatransfer.clipboard.XClipboardOwner;
 import com.sun.star.lang.EventObject;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
 /**

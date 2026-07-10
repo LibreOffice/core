@@ -131,7 +131,7 @@ namespace comphelper
     public:
         virtual bool isLess( cpo::uno::Any const & _lhs, cpo::uno::Any const & _rhs ) const override
         {
-            css::uno::Type lhs, rhs;
+            cpo::uno::Type lhs, rhs;
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
@@ -146,7 +146,7 @@ namespace comphelper
     class EnumPredicateLess final : public IKeyPredicateLess
     {
     public:
-        EnumPredicateLess( css::uno::Type const & _enumType )
+        EnumPredicateLess( cpo::uno::Type const & _enumType )
             :m_enumType( _enumType )
         {
         }
@@ -164,7 +164,7 @@ namespace comphelper
         }
 
     private:
-        css::uno::Type const   m_enumType;
+        cpo::uno::Type const   m_enumType;
     };
 
 
@@ -202,7 +202,7 @@ namespace comphelper
     */
     ::std::unique_ptr< IKeyPredicateLess > COMPHELPER_DLLPUBLIC
         getStandardLessPredicate(
-            css::uno::Type const & i_type,
+            cpo::uno::Type const & i_type,
             css::uno::Reference< css::i18n::XCollator > const & i_collator
         );
 

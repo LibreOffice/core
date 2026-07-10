@@ -21,7 +21,7 @@ package qa;
 
 import complexlib.ComplexTestCase;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import java.io.PrintWriter;
 import com.sun.star.lang.*;
 import com.sun.star.beans.*;

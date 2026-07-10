@@ -130,7 +130,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
                         (container-lock is ignored)
             @return     A uno-type descriptor.
         */
-        virtual css::uno::Type SAL_CALL getElementType() override;
+        virtual cpo::uno::Type SAL_CALL getElementType() override;
 
         /**
             @short      get fill state of current container

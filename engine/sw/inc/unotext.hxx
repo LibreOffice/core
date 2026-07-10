@@ -97,10 +97,10 @@ public:
 
     // XInterface
     virtual cpo::uno::Any SAL_CALL queryInterface(
-            const css::uno::Type& rType) override;
+            const cpo::uno::Type& rType) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type >
+    virtual cpo::uno::Sequence< cpo::uno::Type >
         SAL_CALL getTypes() override;
 
     // XPropertySet

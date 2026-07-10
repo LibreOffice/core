@@ -92,7 +92,7 @@ com_sun_star_comp_sdb_XMLFullExporter_get_implementation(
 
 namespace dbaxml
 {
-    static OUString lcl_implGetPropertyXMLType(const css::uno::Type& _rType)
+    static OUString lcl_implGetPropertyXMLType(const cpo::uno::Type& _rType)
     {
         // possible types we can write (either because we recognize them directly or because we convert _rValue
         // into one of these types)

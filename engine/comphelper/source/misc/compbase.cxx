@@ -64,7 +64,7 @@ void SAL_CALL WeakComponentImplHelperBase::removeEventListener(
     maEventListeners.removeInterface(aGuard, rxListener);
 }
 
-cpo::uno::Any SAL_CALL WeakComponentImplHelperBase::queryInterface(css::uno::Type const& rType)
+cpo::uno::Any SAL_CALL WeakComponentImplHelperBase::queryInterface(cpo::uno::Type const& rType)
 {
     cpo::uno::Any aReturn = ::cppu::queryInterface(rType, static_cast<css::uno::XWeak*>(this),
                                                    static_cast<css::lang::XComponent*>(this));
@@ -73,7 +73,7 @@ cpo::uno::Any SAL_CALL WeakComponentImplHelperBase::queryInterface(css::uno::Typ
     return OWeakObject::queryInterface(rType);
 }
 
-static void checkInterface(css::uno::Type const& rType)
+static void checkInterface(cpo::uno::Type const& rType)
 {
     if (css::uno::TypeClass_INTERFACE != rType.getTypeClass())
     {
@@ -108,7 +108,7 @@ static cppu::type_entry* getTypeEntries(cppu::class_data* cd)
             for (sal_Int32 n = cd->m_nTypes; n--;)
             {
                 cppu::type_entry* pEntry = &pEntries[n];
-                css::uno::Type const& rType = (*pEntry->m_type.getCppuType)(nullptr);
+                cpo::uno::Type const& rType = (*pEntry->m_type.getCppuType)(nullptr);
                 OSL_ENSURE(rType.getTypeClass() == css::uno::TypeClass_INTERFACE,
                            "### wrong helper init: expected interface!");
                 OSL_ENSURE(
@@ -228,7 +228,7 @@ static void* queryDeepNoXInterface(typelib_TypeDescriptionReference const* pDema
     return nullptr;
 }
 
-cpo::uno::Any WeakComponentImplHelper_query(css::uno::Type const& rType, cppu::class_data* cd,
+cpo::uno::Any WeakComponentImplHelper_query(cpo::uno::Type const& rType, cppu::class_data* cd,
                                             WeakComponentImplHelperBase* pBase)
 {
     checkInterface(rType);
@@ -242,7 +242,7 @@ cpo::uno::Any WeakComponentImplHelper_query(css::uno::Type const& rType, cppu::c
 
 WeakImplHelperBase::~WeakImplHelperBase() {}
 
-cpo::uno::Any WeakImplHelper_query(css::uno::Type const& rType, cppu::class_data* cd,
+cpo::uno::Any WeakImplHelper_query(cpo::uno::Type const& rType, cppu::class_data* cd,
                                    WeakImplHelperBase* pBase)
 {
     checkInterface(rType);

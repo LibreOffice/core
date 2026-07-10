@@ -20,7 +20,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <cppu/unotype.hxx>
 #include <sal/types.h>
 
@@ -38,7 +38,7 @@ namespace unoembindhelpers
 {
 namespace detail
 {
-void registerUnoType(css::uno::Type const& type, std::type_info const* id);
+void registerUnoType(cpo::uno::Type const& type, std::type_info const* id);
 }
 
 enum class uno_Sequence

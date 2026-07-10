@@ -144,7 +144,7 @@ SvxUnoTextContent::~SvxUnoTextContent() noexcept
 }
 
 // uno::XInterface
-cpo::uno::Any SAL_CALL SvxUnoTextContent::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoTextContent::queryAggregation( const cpo::uno::Type & rType )
 {
     QUERYINT( text::XTextRange );
     else QUERYINT( beans::XMultiPropertyStates );
@@ -163,7 +163,7 @@ cpo::uno::Any SAL_CALL SvxUnoTextContent::queryAggregation( const uno::Type & rT
         return OWeakAggObject::queryAggregation( rType );
 }
 
-cpo::uno::Any SAL_CALL SvxUnoTextContent::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoTextContent::queryInterface( const cpo::uno::Type & rType )
 {
     return OWeakAggObject::queryInterface(rType);
 }
@@ -180,9 +180,9 @@ void SAL_CALL SvxUnoTextContent::release() noexcept
 
 // XTypeProvider
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
 {
-    static const cpo::uno::Sequence< uno::Type > TYPES {
+    static const cpo::uno::Sequence< cpo::uno::Type > TYPES {
             cppu::UnoType<text::XTextRange>::get(),
             cppu::UnoType<beans::XPropertySet>::get(),
             cppu::UnoType<beans::XMultiPropertySet>::get(),
@@ -267,7 +267,7 @@ uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextContent::createEnum
 
 // XElementAccess ( container::XEnumerationAccess )
 
-uno::Type SAL_CALL SvxUnoTextContent::getElementType()
+cpo::uno::Type SAL_CALL SvxUnoTextContent::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();
 }
@@ -459,7 +459,7 @@ SvxUnoTextCursor::~SvxUnoTextCursor() noexcept
 // Comment out automatically - [getIdlClass(es) or queryInterface]
 // Please use the XTypeProvider!
 //bool SvxUnoTextCursor::queryInterface( uno::Uik aUIK, Reference< uno::XInterface > & xRef)
-cpo::uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const cpo::uno::Type & rType )
 {
     if( rType == cppu::UnoType<text::XTextRange>::get())
         return cpo::uno::Any(uno::Reference< text::XTextRange >(static_cast<SvxUnoTextRangeBase *>(this)));
@@ -476,7 +476,7 @@ cpo::uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const uno::Type & rTy
         return OWeakAggObject::queryAggregation( rType );
 }
 
-cpo::uno::Any SAL_CALL SvxUnoTextCursor::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoTextCursor::queryInterface( const cpo::uno::Type & rType )
 {
     return OWeakAggObject::queryInterface(rType);
 }
@@ -492,9 +492,9 @@ void SAL_CALL SvxUnoTextCursor::release() noexcept
 }
 
 // XTypeProvider
-cpo::uno::Sequence< uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
 {
-    static const cpo::uno::Sequence< uno::Type > TYPES {
+    static const cpo::uno::Sequence< cpo::uno::Type > TYPES {
             cppu::UnoType<text::XTextRange>::get(),
              cppu::UnoType<text::XTextCursor>::get(),
              cppu::UnoType<beans::XPropertySet>::get(),

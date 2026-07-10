@@ -30,7 +30,7 @@ import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.table.XCellRange;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
 /**

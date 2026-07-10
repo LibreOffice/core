@@ -191,7 +191,7 @@ public:
     }
 
     // XElementAccess
-    uno::Type SAL_CALL getElementType() override
+    cpo::uno::Type SAL_CALL getElementType() override
     {
         return cppu::UnoType<word::XContentControl>::get();
     }
@@ -246,7 +246,7 @@ SwVbaContentControls::SwVbaContentControls(const uno::Reference<XHelperInterface
 // }
 
 // XEnumerationAccess
-uno::Type SwVbaContentControls::getElementType()
+cpo::uno::Type SwVbaContentControls::getElementType()
 {
     return cppu::UnoType<word::XContentControl>::get();
 }

@@ -551,7 +551,7 @@ bool SwFormatRuby::PutValue( const cpo::uno::Any& rVal,
         break;
         case MID_RUBY_ABOVE:
         {
-            const uno::Type& rType = cppu::UnoType<bool>::get();
+            const cpo::uno::Type& rType = cppu::UnoType<bool>::get();
             if(rVal.hasValue() && rVal.getValueType() == rType)
             {
                 bool bAbove = *o3tl::doAccess<bool>(rVal);

@@ -66,7 +66,7 @@ SwVbaDocuments::SwVbaDocuments( const uno::Reference< XHelperInterface >& xParen
 {
 }
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaDocuments::getElementType()
 {
     return cppu::UnoType<word::XDocument>::get();

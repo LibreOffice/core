@@ -385,7 +385,7 @@ public:
             XPropertySetInfo > const & xPropertySetInfoOrigin );
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -393,7 +393,7 @@ public:
 
     // XTypeProvider
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
 
     // XPropertySetInfo
     virtual Sequence< css::beans::Property > SAL_CALL
@@ -492,7 +492,7 @@ void SAL_CALL CCRS_PropertySetInfo::release()
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL CCRS_PropertySetInfo::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL CCRS_PropertySetInfo::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< XTypeProvider* >(this),

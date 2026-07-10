@@ -49,7 +49,7 @@ class EDITENG_DLLPUBLIC SvxUnoTextField final : public cppu::BaseMutex,
     const SfxItemPropertySet*   mpPropSet;
     sal_Int32                   mnServiceId;
     std::unique_ptr<SvxUnoFieldData_Impl>        mpImpl;
-    cpo::uno::Sequence< css::uno::Type > maTypeSequence;
+    cpo::uno::Sequence< cpo::uno::Type > maTypeSequence;
 
 public:
     SvxUnoTextField( sal_Int32 nServiceId ) noexcept;
@@ -60,13 +60,13 @@ public:
     std::unique_ptr<SvxFieldData> CreateFieldData() const noexcept;
 
     // css::uno::XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
     // css::lang::XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XTextField

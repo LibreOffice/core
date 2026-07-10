@@ -112,7 +112,7 @@ ScVbaShapes::createCollectionObject( const cpo::uno::Any& aSource )
     return cpo::uno::Any();
 }
 
-uno::Type
+cpo::uno::Type
 ScVbaShapes::getElementType()
 {
     return cppu::UnoType<ooo::vba::msforms::XShape>::get();

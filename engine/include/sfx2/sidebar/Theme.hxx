@@ -156,7 +156,7 @@ private:
     void SetupPropertyMaps();
     void UpdateTheme();
     static PropertyType GetPropertyType (const ThemeItem eItem);
-    static css::uno::Type const & GetCppuType (const PropertyType eType);
+    static cpo::uno::Type const & GetCppuType (const PropertyType eType);
     static sal_Int32 GetIndex (
         const ThemeItem eItem,
         const PropertyType eType);

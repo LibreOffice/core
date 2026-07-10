@@ -95,7 +95,7 @@ public:
     {
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<text::XTextRange>::get(); }
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<text::XTextRange>::get(); }
     virtual bool SAL_CALL hasElements(  ) override { return true; }
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override
@@ -148,7 +148,7 @@ SwVbaParagraphs::SwVbaParagraphs( const uno::Reference< XHelperInterface >& xPar
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaParagraphs::getElementType()
 {
     return cppu::UnoType<word::XParagraph>::get();

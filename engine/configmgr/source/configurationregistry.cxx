@@ -40,7 +40,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -380,7 +380,7 @@ css::registry::RegistryValueType RegistryKey::getValueType()
 {
     std::unique_lock g(service_.mutex_);
     service_.checkValid();
-    css::uno::Type t(value_.getValueType());
+    cpo::uno::Type t(value_.getValueType());
     switch (t.getTypeClass()) {
     case css::uno::TypeClass_LONG:
         return css::registry::RegistryValueType_LONG;

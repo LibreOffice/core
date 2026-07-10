@@ -29,7 +29,7 @@ importClass(Packages.com.sun.star.util.XModifiable);
 importClass(Packages.com.sun.star.frame.XStorable);
 importClass(Packages.com.sun.star.frame.XModel);
 importClass(Packages.com.sun.star.uno.AnyConverter);
-importClass(Packages.com.sun.star.uno.Type);
+importClass(Packages.cpo.uno.Type);
 
 importClass(java.lang.System);
 

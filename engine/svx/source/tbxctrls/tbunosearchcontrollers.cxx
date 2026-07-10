@@ -1476,7 +1476,7 @@ public:
     virtual ~FindbarDispatcher() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -1513,7 +1513,7 @@ FindbarDispatcher::~FindbarDispatcher()
 }
 
 // XInterface
-cpo::uno::Any SAL_CALL FindbarDispatcher::queryInterface( const css::uno::Type& aType )
+cpo::uno::Any SAL_CALL FindbarDispatcher::queryInterface( const cpo::uno::Type& aType )
 {
     cpo::uno::Any aReturn( ::cppu::queryInterface( aType,
         static_cast< css::lang::XServiceInfo* >(this),

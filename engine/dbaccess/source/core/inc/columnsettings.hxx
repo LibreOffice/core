@@ -33,7 +33,7 @@ namespace dbaccess
                     sal_Int32 _nHandle,
                     sal_Int32 _nAttributes,
                     void* _pPointerToMember,
-                    const css::uno::Type& _rMemberType
+                    const cpo::uno::Type& _rMemberType
                 ) = 0;
 
         virtual void registerMayBeVoidProperty(
@@ -41,7 +41,7 @@ namespace dbaccess
                     sal_Int32 _nHandle,
                     sal_Int32 _nAttributes,
                     cpo::uno::Any* _pPointerToMember,
-                    const css::uno::Type& _rExpectedType
+                    const cpo::uno::Type& _rExpectedType
                 ) = 0;
 
     protected:

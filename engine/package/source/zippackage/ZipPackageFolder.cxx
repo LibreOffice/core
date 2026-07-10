@@ -185,7 +185,7 @@ uno::Reference< XEnumeration > SAL_CALL ZipPackageFolder::createEnumeration(  )
     return uno::Reference < XEnumeration> (new ZipPackageFolderEnumeration(maContents));
 }
     // XElementAccess
-uno::Type SAL_CALL ZipPackageFolder::getElementType(  )
+cpo::uno::Type SAL_CALL ZipPackageFolder::getElementType(  )
 {
     return cppu::UnoType<XInterface>::get();
 }

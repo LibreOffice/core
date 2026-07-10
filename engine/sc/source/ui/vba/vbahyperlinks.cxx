@@ -126,7 +126,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
 private:
@@ -172,7 +172,7 @@ cpo::uno::Any SAL_CALL ScVbaHlinkContainer::getByIndex( sal_Int32 nIndex )
     throw lang::IndexOutOfBoundsException();
 }
 
-uno::Type SAL_CALL ScVbaHlinkContainer::getElementType()
+cpo::uno::Type SAL_CALL ScVbaHlinkContainer::getElementType()
 {
     return cppu::UnoType<excel::XHyperlink>::get();
 }
@@ -257,7 +257,7 @@ uno::Reference< container::XEnumeration > SAL_CALL ScVbaHyperlinks::createEnumer
 
 // XElementAccess -------------------------------------------------------------
 
-uno::Type SAL_CALL ScVbaHyperlinks::getElementType()
+cpo::uno::Type SAL_CALL ScVbaHyperlinks::getElementType()
 {
     return cppu::UnoType<excel::XHyperlink>::get();
 }

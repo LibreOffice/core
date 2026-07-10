@@ -33,7 +33,7 @@ class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLEnumPropertyHdl : public XMLProperty
 {
 private:
     const SvXMLEnumMapEntry<sal_uInt16>* mpEnumMap;
-    const css::uno::Type & mrType;
+    const cpo::uno::Type & mrType;
 
 public:
     template<typename EnumT>

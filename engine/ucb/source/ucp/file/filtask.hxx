@@ -159,7 +159,7 @@ namespace fileaccess
             OUString                    PropertyName;
             sal_Int32                   Handle;
             bool                        isNative;
-            css::uno::Type              Typ;        // Duplicates information in Value
+            cpo::uno::Type              Typ;        // Duplicates information in Value
             cpo::uno::Any               Value;
             css::beans::PropertyState   State;
             sal_Int16                   Attributes;
@@ -168,7 +168,7 @@ namespace fileaccess
             MyProperty( bool                              theIsNative,
                         const OUString&                   thePropertyName,
                         sal_Int32                         theHandle,
-                        const css::uno::Type&             theTyp,
+                        const cpo::uno::Type&             theTyp,
                         const cpo::uno::Any&              theValue,
                         const css::beans::PropertyState&  theState,
                         sal_Int16                         theAttributes );
@@ -176,7 +176,7 @@ namespace fileaccess
             inline const bool& IsNative() const;
             const OUString& getPropertyName() const { return PropertyName; }
             inline const sal_Int32& getHandle() const;
-            inline const css::uno::Type& getType() const;
+            inline const cpo::uno::Type& getType() const;
             inline const cpo::uno::Any& getValue() const;
             inline const css::beans::PropertyState& getState() const;
             inline const sal_Int16& getAttributes() const;

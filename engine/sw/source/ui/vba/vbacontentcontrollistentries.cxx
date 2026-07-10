@@ -72,7 +72,7 @@ public:
             new SwVbaContentControlListEntry(mxParent, mxContext, m_pCC, Index)));
     }
 
-    uno::Type SAL_CALL getElementType() override
+    cpo::uno::Type SAL_CALL getElementType() override
     {
         return cppu::UnoType<word::XContentControlListEntry>::get();
     }
@@ -136,7 +136,7 @@ void SwVbaContentControlListEntries::Clear() { m_pCC->ClearListItems(); }
 sal_Int32 SwVbaContentControlListEntries::getCount() { return m_pCC->GetListItems().size(); }
 
 // XEnumerationAccess
-uno::Type SwVbaContentControlListEntries::getElementType()
+cpo::uno::Type SwVbaContentControlListEntries::getElementType()
 {
     return cppu::UnoType<word::XContentControlListEntry>::get();
 }

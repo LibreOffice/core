@@ -56,7 +56,7 @@ ScVbaFileDialogSelectedItems::ScVbaFileDialogSelectedItems(
 
 
 // XEnumerationAccess
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 ScVbaFileDialogSelectedItems::getElementType()
 {
     return cppu::UnoType<OUString>::get();

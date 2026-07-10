@@ -53,7 +53,7 @@ class OImageControlModel final
     OUString                                          m_sDocumentURL;
 
     // UNO binding
-    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
     ImageProducer* GetImageProducer() { return m_xImageProducer.get(); }
 
@@ -74,7 +74,7 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OImageControlModel, OBoundControlModel)
-    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override
@@ -149,14 +149,14 @@ private:
     ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener> m_aModifyListeners;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
     explicit OImageControlControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS( OImageControlControl, OBoundControl )
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
 
     // XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override;

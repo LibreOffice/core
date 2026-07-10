@@ -880,7 +880,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
         } catch (const css::uno::Exception &) {
             // ignore
         }
-        const css::uno::Type & type = any.getValueType();
+        const cpo::uno::Type & type = any.getValueType();
         std::vector<std::pair<OUString, OUString> > as;
         as.emplace_back("meta:name", name);
         static constexpr OUString vt = u"meta:value-type"_ustr;
@@ -2286,7 +2286,7 @@ void SfxDocumentMetaData::createUserDefined(std::unique_lock<std::mutex>& g)
     if ( m_xUserDefined.is() )
         return;
 
-    cpo::uno::Sequence<css::uno::Type> types{
+    cpo::uno::Sequence<cpo::uno::Type> types{
         ::cppu::UnoType<bool>::get(),
         ::cppu::UnoType< OUString>::get(),
         ::cppu::UnoType<css::util::DateTime>::get(),

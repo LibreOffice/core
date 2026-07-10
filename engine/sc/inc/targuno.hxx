@@ -59,7 +59,7 @@ public:
     virtual bool SAL_CALL           hasByName(const OUString& aName) override;
 
                             // css::container::XElementAccess
-    virtual css::uno::Type SAL_CALL        getElementType() override;
+    virtual cpo::uno::Type SAL_CALL        getElementType() override;
     virtual bool SAL_CALL           hasElements() override;
 
                             // css::lang::XServiceInfo
@@ -127,7 +127,7 @@ public:
     virtual bool SAL_CALL           hasByName(const OUString& aName) override;
 
                             // css::container::XElementAccess
-    virtual css::uno::Type SAL_CALL        getElementType() override;
+    virtual cpo::uno::Type SAL_CALL        getElementType() override;
     virtual bool SAL_CALL           hasElements() override;
 
                             // css::lang::XServiceInfo

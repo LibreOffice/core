@@ -32,7 +32,7 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.comp.loader.FactoryHelper;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 /**
  * Class MyPersistObject implements an XPersistObject, XServiceInfo,

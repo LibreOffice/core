@@ -50,7 +50,7 @@ namespace comphelper
         OPropertyStateHelper(::cppu::OBroadcastHelper& rBHlp,
                              ::cppu::IEventNotificationHook *i_pFireEvents);
 
-        virtual cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& aType) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& aType) override;
 
     // XPropertyState
         virtual css::beans::PropertyState SAL_CALL
@@ -72,7 +72,7 @@ namespace comphelper
 
         void firePropertyChange(sal_Int32 nHandle, const cpo::uno::Any& aNewValue, const cpo::uno::Any& aOldValue);
 
-        static cpo::uno::Sequence<css::uno::Type> getTypes();
+        static cpo::uno::Sequence<cpo::uno::Type> getTypes();
     };
 
 

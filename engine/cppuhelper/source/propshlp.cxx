@@ -42,15 +42,15 @@ IPropertyArrayHelper::~IPropertyArrayHelper()
 {
 }
 
-static const css::uno::Type & getPropertyTypeIdentifier( )
+static const cpo::uno::Type & getPropertyTypeIdentifier( )
 {
     return cppu::UnoType<XPropertyChangeListener>::get();
 }
-static const css::uno::Type & getPropertiesTypeIdentifier()
+static const cpo::uno::Type & getPropertiesTypeIdentifier()
 {
     return cppu::UnoType<XPropertiesChangeListener>::get();
 }
-static const css::uno::Type & getVetoableTypeIdentifier()
+static const cpo::uno::Type & getVetoableTypeIdentifier()
 {
     return cppu::UnoType<XVetoableChangeListener>::get();
 }
@@ -205,7 +205,7 @@ OPropertySetHelper2::~OPropertySetHelper2()
 }
 
 // XInterface
-Any OPropertySetHelper::queryInterface( const css::uno::Type & rType )
+Any OPropertySetHelper::queryInterface( const cpo::uno::Type & rType )
 {
     return ::cppu::queryInterface(
         rType,
@@ -214,7 +214,7 @@ Any OPropertySetHelper::queryInterface( const css::uno::Type & rType )
         static_cast< XFastPropertySet * >( this ) );
 }
 
-Any OPropertySetHelper2::queryInterface( const css::uno::Type & rType )
+Any OPropertySetHelper2::queryInterface( const cpo::uno::Type & rType )
 {
     Any cnd(cppu::queryInterface(rType, static_cast< XPropertySetOption * >(this)));
     if ( cnd.hasValue() )
@@ -225,7 +225,7 @@ Any OPropertySetHelper2::queryInterface( const css::uno::Type & rType )
 /**
  * called from the derivee's XTypeProvider::getTypes implementation
  */
-cpo::uno::Sequence< css::uno::Type > OPropertySetHelper::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > OPropertySetHelper::getTypes()
 {
     return {
         UnoType<css::beans::XPropertySet>::get(),

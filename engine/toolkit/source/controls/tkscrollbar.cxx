@@ -107,7 +107,7 @@ namespace toolkit
     }
 
     // css::uno::XInterface
-    cpo::uno::Any UnoScrollBarControl::queryAggregation( const uno::Type & rType )
+    cpo::uno::Any UnoScrollBarControl::queryAggregation( const cpo::uno::Type & rType )
     {
         cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                             static_cast< awt::XAdjustmentListener* >(this),
@@ -118,7 +118,7 @@ namespace toolkit
     IMPL_IMPLEMENTATION_ID( UnoScrollBarControl )
 
     // css::lang::XTypeProvider
-    cpo::uno::Sequence< css::uno::Type > UnoScrollBarControl::getTypes()
+    cpo::uno::Sequence< cpo::uno::Type > UnoScrollBarControl::getTypes()
     {
         static const ::cppu::OTypeCollection aTypeList(
             cppu::UnoType<css::lang::XTypeProvider>::get(),

@@ -172,7 +172,7 @@ protected:
 
 protected:
     // XInterface
-    cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
+    cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& _rType ) override;
 
     // XTypeProvider
     DECLARE_XTYPEPROVIDER( )

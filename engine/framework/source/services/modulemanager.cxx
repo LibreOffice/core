@@ -91,7 +91,7 @@ public:
     virtual bool SAL_CALL hasByName(const OUString& sName) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
 
     virtual bool SAL_CALL hasElements() override;
 
@@ -280,7 +280,7 @@ bool SAL_CALL ModuleManager::hasByName(const OUString& sName)
     return m_xCFG && m_xCFG->hasByName(sName);
 }
 
-css::uno::Type SAL_CALL ModuleManager::getElementType()
+cpo::uno::Type SAL_CALL ModuleManager::getElementType()
 {
     return cppu::UnoType<cpo::uno::Sequence< css::beans::PropertyValue >>::get();
 }

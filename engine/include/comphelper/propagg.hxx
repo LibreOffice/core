@@ -207,7 +207,7 @@ protected:
 public:
     OPropertySetAggregationHelper( ::cppu::OBroadcastHelper& rBHelper );
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& aType) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& aType) override;
 
 // XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;

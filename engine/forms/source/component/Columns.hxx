@@ -63,7 +63,7 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OGridColumn_BASE)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
 
     static const cpo::uno::Sequence<sal_Int8>& getUnoTunnelId();
     // XUnoTunnel
@@ -71,7 +71,7 @@ public:
 
     // XTypeProvider
     virtual cpo::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< css::uno::Type>   SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type>   SAL_CALL getTypes() override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;

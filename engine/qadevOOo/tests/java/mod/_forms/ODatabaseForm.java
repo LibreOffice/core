@@ -60,7 +60,7 @@ import com.sun.star.sdbc.XRowUpdate;
 import com.sun.star.task.XInteractionRequest;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.Date;

@@ -42,7 +42,7 @@ public:
                           const SwFlyFrame& rFlyFrame);
 
     virtual cpo::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & rType ) override;
+        cpo::uno::Type const & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
     // XAccessibleSelection

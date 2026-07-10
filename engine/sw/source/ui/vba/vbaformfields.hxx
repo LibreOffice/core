@@ -30,7 +30,7 @@ public:
     //css::uno::Reference<ooo::vba::word::XFormField> SAL_CALL Add(const cpo::uno::Any& Range, sal_Int32 Type) override;
 
     // XEnumerationAccess
-    css::uno::Type SAL_CALL getElementType() override;
+    cpo::uno::Type SAL_CALL getElementType() override;
     css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
 
     // SwVbaFormFields_BASE

@@ -43,7 +43,7 @@ uno::Reference< text::XText > SAL_CALL SvxAccessibleTextPropertySet::getText()
   return uno::Reference< text::XText > ();
 }
 
-cpo::uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryInterface( const cpo::uno::Type & rType )
 {
     return OWeakObject::queryInterface(rType);
 }
@@ -61,7 +61,7 @@ void SAL_CALL SvxAccessibleTextPropertySet::release()
 }
 
 // XTypeProvider
-cpo::uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes()
 {
     static ::cppu::OTypeCollection ourTypeCollection(
                 ::cppu::UnoType<beans::XPropertySet>::get(),

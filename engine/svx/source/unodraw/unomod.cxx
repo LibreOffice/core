@@ -81,7 +81,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // XServiceInfo
@@ -237,7 +237,7 @@ SvxUnoDrawingModel::~SvxUnoDrawingModel() noexcept
 {
 }
 
-cpo::uno::Any SAL_CALL SvxUnoDrawingModel::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoDrawingModel::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -252,7 +252,7 @@ cpo::uno::Any SAL_CALL SvxUnoDrawingModel::queryInterface( const uno::Type & rTy
 }
 
 // XTypeProvider
-cpo::uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  )
 {
     if( !maTypeSequence.hasElements() )
     {
@@ -566,7 +566,7 @@ cpo::uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoDrawPagesAccess::getElementType()
+cpo::uno::Type SAL_CALL SvxUnoDrawPagesAccess::getElementType()
 {
     return cppu::UnoType<drawing::XDrawPage>::get();
 }

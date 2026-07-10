@@ -2849,7 +2849,7 @@ bool SwXTextFieldMasters::hasByName(const OUString& rName)
     return bRet;
 }
 
-uno::Type  SwXTextFieldMasters::getElementType()
+cpo::uno::Type  SwXTextFieldMasters::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 
@@ -2916,7 +2916,7 @@ rtl::Reference< SwXFieldEnumeration >  SwXTextFieldTypes::createFieldEnumeration
     return new SwXFieldEnumeration(GetDoc());
 }
 
-uno::Type  SwXTextFieldTypes::getElementType()
+cpo::uno::Type  SwXTextFieldTypes::getElementType()
 {
     return cppu::UnoType<text::XDependentTextField>::get();
 }

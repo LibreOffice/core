@@ -216,7 +216,7 @@ public:
         insertByName( aName, aElement ); // insert will overwrite
     }
     // XElemenAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         return ::cppu::UnoType<OUString>::get();
     }
@@ -263,7 +263,7 @@ public:
         return aNames;
     }
     // XElemenAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override { return uno::Type(); }
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override { return cpo::uno::Type(); }
     virtual bool SAL_CALL hasElements(  ) override { return true; }
 
 };
@@ -960,7 +960,7 @@ bool SwXTextTables::hasByName(const OUString& rName)
     return bRet;
 }
 
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
     SwXTextTables::getElementType(  )
 {
     return cppu::UnoType<XTextTable>::get();
@@ -1238,7 +1238,7 @@ bool SwXFrames::hasByName(const OUString& rName)
     }
 }
 
-uno::Type SAL_CALL SwXFrames::getElementType()
+cpo::uno::Type SAL_CALL SwXFrames::getElementType()
 {
     SolarMutexGuard aGuard;
     switch(m_eType)
@@ -1250,7 +1250,7 @@ uno::Type SAL_CALL SwXFrames::getElementType()
         case FLYCNTTYPE_OLE:
             return cppu::UnoType<XEmbeddedObjectSupplier>::get();
         default:
-            return uno::Type();
+            return cpo::uno::Type();
     }
 }
 
@@ -1479,7 +1479,7 @@ bool SwXTextSections::hasByName(const OUString& rName)
     return bRet;
 }
 
-uno::Type SAL_CALL SwXTextSections::getElementType()
+cpo::uno::Type SAL_CALL SwXTextSections::getElementType()
 {
     return cppu::UnoType<XTextSection>::get();
 }
@@ -1609,7 +1609,7 @@ bool SwXBookmarks::hasByName(const OUString& rName)
     return pMarkAccess->findBookmark(SwMarkName(rName)) != pMarkAccess->getBookmarksEnd();
 }
 
-uno::Type SAL_CALL SwXBookmarks::getElementType()
+cpo::uno::Type SAL_CALL SwXBookmarks::getElementType()
 {
     return cppu::UnoType<XTextContent>::get();
 }
@@ -1664,7 +1664,7 @@ cpo::uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
     throw IndexOutOfBoundsException();
 }
 
-uno::Type SAL_CALL SwXNumberingRulesCollection::getElementType()
+cpo::uno::Type SAL_CALL SwXNumberingRulesCollection::getElementType()
 {
     return cppu::UnoType<XIndexReplace>::get();
 }
@@ -1740,7 +1740,7 @@ rtl::Reference<SwXFootnote> SwXFootnotes::getFootnoteByIndex(sal_Int32 nIndex)
     throw IndexOutOfBoundsException();
 }
 
-uno::Type SAL_CALL SwXFootnotes::getElementType()
+cpo::uno::Type SAL_CALL SwXFootnotes::getElementType()
 {
     return cppu::UnoType<XFootnote>::get();
 }
@@ -1821,7 +1821,7 @@ bool SwXReferenceMarks::hasByName(const OUString& rName)
     return nullptr != GetDoc().GetRefMark( SwMarkName(rName) );
 }
 
-uno::Type SAL_CALL SwXReferenceMarks::getElementType()
+cpo::uno::Type SAL_CALL SwXReferenceMarks::getElementType()
 {
     return cppu::UnoType<XTextContent>::get();
 }

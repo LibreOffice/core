@@ -52,12 +52,12 @@ namespace {
 
 struct ImplPropertyInfo
 {
-    css::uno::Type           aType;
+    cpo::uno::Type           aType;
     sal_uInt16               nPropId;
     sal_Int16                nAttribs;
     bool                     bDependsOnOthers;   // eg. VALUE depends on MIN/MAX and must be set after MIN/MAX.
 
-    ImplPropertyInfo( sal_uInt16 nId, const css::uno::Type& rType,
+    ImplPropertyInfo( sal_uInt16 nId, const cpo::uno::Type& rType,
                         sal_Int16 nAttrs, bool bDepends = false )
          : aType(rType)
          , nPropId(nId)
@@ -307,7 +307,7 @@ const OUString& GetPropertyName( sal_uInt16 nPropertyId )
     return EMPTY;
 }
 
-const css::uno::Type* GetPropertyType( sal_uInt16 nPropertyId )
+const cpo::uno::Type* GetPropertyType( sal_uInt16 nPropertyId )
 {
     const ImplPropertyInfo* pImplPropertyInfo = ImplGetImplPropertyInfo( nPropertyId );
     DBG_ASSERT( pImplPropertyInfo, "Invalid PropertyId!" );

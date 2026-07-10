@@ -59,7 +59,7 @@ namespace connectivity::file
             );
 
         //XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing() override;
 

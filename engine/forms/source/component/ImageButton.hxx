@@ -65,7 +65,7 @@ class OImageButtonControl : public OClickableImageBaseControl,
 {
 protected:
     // UNO Binding
-    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
     explicit OImageButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
@@ -78,7 +78,7 @@ public:
 
     // UNO Binding
     DECLARE_UNO3_AGG_DEFAULTS(OImageButtonControl, OClickableImageBaseControl)
-    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
 
     // XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override

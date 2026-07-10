@@ -99,14 +99,14 @@ public:
     virtual void SAL_CALL characters(const OUString & aChars) override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) final override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) final override;
     virtual void SAL_CALL acquire() noexcept final override
     { osl_atomic_increment(&m_nRefCount); }
     virtual void SAL_CALL release() noexcept final override
     { if (osl_atomic_decrement(&m_nRefCount) == 0) delete this; }
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) final override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) final override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) final override;
 };
 

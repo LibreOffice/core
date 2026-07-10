@@ -167,9 +167,9 @@ Any StdTabController::queryAggregation( const Type & rType )
 IMPL_IMPLEMENTATION_ID( StdTabController )
 
 // XTypeProvider
-cpo::uno::Sequence< css::uno::Type > StdTabController::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > StdTabController::getTypes()
 {
-    static const cpo::uno::Sequence< css::uno::Type > aTypeList {
+    static const cpo::uno::Sequence< cpo::uno::Type > aTypeList {
         cppu::UnoType<css::lang::XTypeProvider>::get(),
         cppu::UnoType<XTabController>::get(),
         cppu::UnoType<XServiceInfo>::get()

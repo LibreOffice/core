@@ -499,8 +499,8 @@ static void lcl_queryInterface(const SwFrameFormat* pShape, cpo::uno::Any& rAny,
     }
 }
 
-cpo::uno::Any SwTextBoxHelper::queryInterface(const SwFrameFormat* pShape, const uno::Type& rType,
-                                              SdrObject* pObj)
+cpo::uno::Any SwTextBoxHelper::queryInterface(const SwFrameFormat* pShape,
+                                              const cpo::uno::Type& rType, SdrObject* pObj)
 {
     cpo::uno::Any aRet;
 

@@ -201,11 +201,11 @@ SwXFootnote::getSupportedServiceNames()
             g_ServicesFootnote);
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
 SwXFootnote::getTypes()
 {
-    const cpo::uno::Sequence< uno::Type > aTypes = SwXFootnote_Base::getTypes();
-    const cpo::uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
+    const cpo::uno::Sequence< cpo::uno::Type > aTypes = SwXFootnote_Base::getTypes();
+    const cpo::uno::Sequence< cpo::uno::Type > aTextTypes = SwXText::getTypes();
     return ::comphelper::concatSequences(aTypes, aTextTypes);
 }
 
@@ -216,7 +216,7 @@ SwXFootnote::getImplementationId()
 }
 
 cpo::uno::Any SAL_CALL
-SwXFootnote::queryInterface(const uno::Type& rType)
+SwXFootnote::queryInterface(const cpo::uno::Type& rType)
 {
     const cpo::uno::Any ret = SwXFootnote_Base::queryInterface(rType);
     return (ret.getValueType() == cppu::UnoType<void>::get())
@@ -452,7 +452,7 @@ SwXFootnote::createEnumeration()
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::Footnote);
 }
 
-uno::Type SAL_CALL SwXFootnote::getElementType()
+cpo::uno::Type SAL_CALL SwXFootnote::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();
 }

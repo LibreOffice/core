@@ -50,7 +50,7 @@ inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescription
         try
         {
             cpo::uno::Any aRet( static_cast< XInterface * >( pCppI )->queryInterface(
-                * reinterpret_cast< const Type * >( &pType ) ) );
+                * reinterpret_cast< const cpo::uno::Type * >( &pType ) ) );
             if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
             {
                 XInterface * pRet = static_cast< XInterface * >( aRet.pReserved );

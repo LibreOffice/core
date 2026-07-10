@@ -78,7 +78,7 @@ class SAL_WARN_UNUSED FmXModifyMultiplexer final : public OWeakSubObject
 public:
     FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
     DECLARE_UNO3_DEFAULTS(FmXModifyMultiplexer,OWeakSubObject)
-    virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any  SAL_CALL queryInterface(const cpo::uno::Type& _rType) override;
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -98,7 +98,7 @@ public:
     FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
     DECLARE_UNO3_DEFAULTS(FmXUpdateMultiplexer,OWeakSubObject)
 
-    virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any  SAL_CALL queryInterface(const cpo::uno::Type& _rType) override;
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -119,7 +119,7 @@ public:
     FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
     DECLARE_UNO3_DEFAULTS(FmXSelectionMultiplexer, OWeakSubObject)
 
-    virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any  SAL_CALL queryInterface(const cpo::uno::Type& _rType) override;
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -139,7 +139,7 @@ public:
     FmXGridControlMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );
     DECLARE_UNO3_DEFAULTS( FmXGridControlMultiplexer, OWeakSubObject )
 
-    virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any  SAL_CALL queryInterface(const cpo::uno::Type& _rType) override;
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -158,7 +158,7 @@ class SAL_WARN_UNUSED FmXContainerMultiplexer final : public OWeakSubObject,
 public:
     FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
     DECLARE_UNO3_DEFAULTS(FmXContainerMultiplexer,OWeakSubObject)
-    virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any  SAL_CALL queryInterface(const cpo::uno::Type& _rType) override;
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -205,10 +205,10 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(FmXGridControl, UnoControl)
-    virtual cpo::uno::Any  SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any  SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
 
 // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type> SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type> SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
 
 // css::lang::XComponent
@@ -233,7 +233,7 @@ public:
     virtual bool SAL_CALL commit() override;
 
 // css::container::XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
     virtual bool SAL_CALL hasElements(  ) override;
 
 // css::container::XEnumerationAccess
@@ -252,8 +252,8 @@ public:
     virtual void SAL_CALL setCurrentColumnPosition(sal_Int16 nPos) override;
 
 // css::form::XGridFieldDataSupplier (base of XGridControl)
-    virtual cpo::uno::Sequence< bool > SAL_CALL queryFieldDataType( const css::uno::Type& xType ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const css::uno::Type& xType ) override;
+    virtual cpo::uno::Sequence< bool > SAL_CALL queryFieldDataType( const cpo::uno::Type& xType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const cpo::uno::Type& xType ) override;
 
 // UnoControl
     virtual OUString GetComponentServiceName() const override;
@@ -373,7 +373,7 @@ public:
     virtual bool SAL_CALL commit() override;
 
 // css::container::XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
     virtual bool SAL_CALL hasElements(  ) override;
 
 // css::container::XEnumerationAccess
@@ -416,8 +416,8 @@ public:
     virtual void SAL_CALL setCurrentColumnPosition(sal_Int16 nPos) override;
 
 // css::form::XGridFieldDataSupplier (base of XGridControl)
-    virtual cpo::uno::Sequence< bool > SAL_CALL queryFieldDataType( const css::uno::Type& xType ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const css::uno::Type& xType ) override;
+    virtual cpo::uno::Sequence< bool > SAL_CALL queryFieldDataType( const cpo::uno::Type& xType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const cpo::uno::Type& xType ) override;
 
 // css::sdb::XRowSetSupplier
     virtual css::uno::Reference< css::sdbc::XRowSet >  SAL_CALL getRowSet() override;

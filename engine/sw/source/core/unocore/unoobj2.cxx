@@ -1445,7 +1445,7 @@ SwXTextRange::createEnumeration()
     return SwXParagraphEnumeration::Create(m_xParentText, pNewCursor, eSetType);
 }
 
-uno::Type SAL_CALL SwXTextRange::getElementType()
+cpo::uno::Type SAL_CALL SwXTextRange::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();
 }
@@ -1624,7 +1624,7 @@ struct SwXTextRangesImpl final : public SwXTextRanges
         { return { u"com.sun.star.text.TextRanges"_ustr }; };
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type SAL_CALL getElementType() override
         { return cppu::UnoType<text::XTextRange>::get(); };
     virtual bool SAL_CALL hasElements() override
         { return getCount() > 0; };

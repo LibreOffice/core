@@ -57,10 +57,10 @@ class ODBExport : public SvXMLExport
     struct TypedPropertyValue
     {
         OUString         Name;
-        css::uno::Type   Type;
+        cpo::uno::Type   Type;
         cpo::uno::Any    Value;
 
-        TypedPropertyValue( OUString _name, const css::uno::Type& _type, cpo::uno::Any _value )
+        TypedPropertyValue( OUString _name, const cpo::uno::Type& _type, cpo::uno::Any _value )
             :Name(std::move( _name ))
             ,Type( _type )
             ,Value(std::move( _value ))

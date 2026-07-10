@@ -24,7 +24,7 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XFramesSupplier;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 /**
 * Testing <code>com.sun.star.frame.XFramesSupplier</code>

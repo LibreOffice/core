@@ -121,7 +121,7 @@ private:
    class MyService : public comphelper::WeakComponentImplHelper<XFoo, XBar>,
                      public comphelper::OPropertySetHelper
    {
-       cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override
+       cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& rType) override
        {
            auto ret = WeakComponentImplHelper::queryInterface(rType);
            if (!ret.hasValue())

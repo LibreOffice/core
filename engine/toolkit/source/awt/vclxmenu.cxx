@@ -202,7 +202,7 @@ bool SAL_CALL VCLXMenu::supportsService(const OUString& rServiceName )
 }
 
 cpo::uno::Any VCLXMenu::queryInterface(
-    const css::uno::Type & rType )
+    const cpo::uno::Type & rType )
 {
     std::unique_lock aGuard( maMutex );
     const bool bIsPopupMenu = IsPopupMenu();
@@ -227,7 +227,7 @@ cpo::uno::Any VCLXMenu::queryInterface(
 }
 
 
-cpo::uno::Sequence< css::uno::Type > VCLXMenu::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > VCLXMenu::getTypes()
 {
     std::unique_lock aGuard( maMutex );
     const bool bIsPopupMenu = IsPopupMenu();

@@ -76,7 +76,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     public Object convertToControlValue(
             String PropertyName,
             Object PropertyValue,
-            com.sun.star.uno.Type ControlValueType)
+            cpo.uno.Type ControlValueType)
             throws com.sun.star.beans.UnknownPropertyException {
         return null;
     }

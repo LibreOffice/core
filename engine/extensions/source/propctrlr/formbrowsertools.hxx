@@ -74,7 +74,7 @@ namespace pcr
 
     struct TypeLessByName
     {
-        bool operator() (const css::uno::Type& _rLhs, const css::uno::Type& _rRhs) const
+        bool operator() (const cpo::uno::Type& _rLhs, const cpo::uno::Type& _rRhs) const
         {
             return _rLhs.getTypeName() < _rRhs.getTypeName();
         }

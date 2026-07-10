@@ -39,7 +39,7 @@ namespace sd::colortoolpanel
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
     using ::com::sun::star::drawing::framework::XResourceId;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::drawing::framework::AbstractPane;

@@ -671,7 +671,7 @@ public:
     FolderFileAccess(uno::Reference< uno::XComponentContext > context, OUString url)
         : mxContext(std::move(context)), maURL(std::move(url)) {}
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override { return cppu::UnoType<io::XInputStream>::get(); }
+    virtual cpo::uno::Type SAL_CALL getElementType() override { return cppu::UnoType<io::XInputStream>::get(); }
     virtual bool SAL_CALL hasElements() override { return true; }
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override

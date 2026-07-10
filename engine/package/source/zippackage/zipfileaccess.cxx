@@ -339,7 +339,7 @@ bool SAL_CALL OZipFileAccess::hasByName( const OUString& aName )
     return ( aIter != m_pZipFile->GetEntryHash().end() );
 }
 
-uno::Type SAL_CALL OZipFileAccess::getElementType()
+cpo::uno::Type SAL_CALL OZipFileAccess::getElementType()
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 

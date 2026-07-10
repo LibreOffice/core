@@ -31,7 +31,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
@@ -293,7 +293,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
                     inArgs.size() == 1
                     && inArgs[0].getType().equals(
                         css::uno::TypeDescription(
-                            cppu::UnoType< css::uno::Type >::get())));
+                            cppu::UnoType< cpo::uno::Type >::get())));
                 if (!(type.equals(
                           css::uno::TypeDescription(
                               cppu::UnoType<

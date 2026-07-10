@@ -63,7 +63,7 @@ public:
 
     //Methods
     //  XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
 
     //  XServiceInfo
     virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;

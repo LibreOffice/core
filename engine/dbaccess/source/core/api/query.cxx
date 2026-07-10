@@ -109,7 +109,7 @@ cpo::uno::Sequence<sal_Int8> OQuery::getImplementationId()
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-cpo::uno::Sequence< css::uno::Type > OQuery::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > OQuery::getTypes()
 {
     return  ::comphelper::concatSequences(
         OQueryDescriptor_Base::getTypes( ),

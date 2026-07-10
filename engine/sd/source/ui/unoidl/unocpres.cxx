@@ -147,7 +147,7 @@ void SAL_CALL SdXCustomPresentation::replaceByIndex( sal_Int32 Index, const cpo:
 }
 
 // XElementAccess
-uno::Type SAL_CALL SdXCustomPresentation::getElementType()
+cpo::uno::Type SAL_CALL SdXCustomPresentation::getElementType()
 {
     return cppu::UnoType<drawing::XDrawPage>::get();
 }
@@ -418,7 +418,7 @@ bool SAL_CALL SdXCustomPresentationAccess::hasByName( const OUString& aName )
 }
 
 // XElementAccess
-uno::Type SAL_CALL SdXCustomPresentationAccess::getElementType()
+cpo::uno::Type SAL_CALL SdXCustomPresentationAccess::getElementType()
 {
     return cppu::UnoType<container::XIndexContainer>::get();
 }

@@ -121,7 +121,7 @@ bool SAL_CALL ScLinkTargetTypesObj::hasByName(const OUString& aName)
 
 // container::XElementAccess
 
-uno::Type SAL_CALL ScLinkTargetTypesObj::getElementType()
+cpo::uno::Type SAL_CALL ScLinkTargetTypesObj::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }
@@ -279,7 +279,7 @@ bool SAL_CALL ScLinkTargetsObj::hasByName(const OUString& aName)
 
 // container::XElementAccess
 
-uno::Type SAL_CALL ScLinkTargetsObj::getElementType()
+cpo::uno::Type SAL_CALL ScLinkTargetsObj::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }

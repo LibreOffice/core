@@ -138,9 +138,9 @@ public:
     virtual ~OEditControl() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OEditControl, OBoundControl)
-    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
 
-    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;

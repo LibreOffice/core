@@ -81,7 +81,7 @@ ScVbaWorkbooks::ScVbaWorkbooks( const uno::Reference< XHelperInterface >& xParen
 {
 }
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 ScVbaWorkbooks::getElementType()
 {
     return cppu::UnoType<excel::XWorkbook>::get();

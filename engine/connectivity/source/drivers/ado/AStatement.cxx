@@ -119,7 +119,7 @@ Any SAL_CALL OStatement_Base::queryInterface( const Type & rType )
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
 
-cpo::uno::Sequence< css::uno::Type > SAL_CALL OStatement_Base::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL OStatement_Base::getTypes(  )
 {
     return comphelper::concatSequences(cppu::OPropertySetHelper::getTypes(),
                                        OStatement_BASE::getTypes());

@@ -37,7 +37,7 @@ namespace comphelper
     class NameContainer : public ::cppu::WeakImplHelper< css::container::XNameContainer >
     {
     public:
-        explicit NameContainer( const css::uno::Type& aType );
+        explicit NameContainer( const cpo::uno::Type& aType );
 
         // XNameContainer
         virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
@@ -53,11 +53,11 @@ namespace comphelper
 
         // XElementAccess
         virtual bool SAL_CALL hasElements(  ) override;
-        virtual css::uno::Type SAL_CALL getElementType(  ) override;
+        virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
 
     private:
         SvGenericNameContainerMapImpl maProperties;
-        const css::uno::Type maType;
+        const cpo::uno::Type maType;
         std::mutex maMutex;
     };
 
@@ -71,7 +71,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-NameContainer::NameContainer( const css::uno::Type& aType )
+NameContainer::NameContainer( const cpo::uno::Type& aType )
 : maType( aType )
 {
 }

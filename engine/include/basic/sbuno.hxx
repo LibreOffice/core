@@ -23,7 +23,7 @@
 #include <basic/basicdllapi.h>
 
 namespace cpo::uno { class Any; }
-namespace com::sun::star::uno { class Type; }
+namespace cpo::uno { class Type; }
 namespace com::sun::star::beans { struct Property; }
 
 class SbxObject;
@@ -37,7 +37,7 @@ BASIC_DLLPUBLIC void createAllObjectProperties( SbxObject* pObj );
 BASIC_DLLPUBLIC void SetSbUnoObjectDfltPropName( SbxObject* pObj );
 
 BASIC_DLLPUBLIC cpo::uno::Any sbxToUnoValue( const SbxValue* pVar );
-cpo::uno::Any sbxToUnoValue( const SbxValue* pVar, const css::uno::Type& rType, css::beans::Property const * pUnoProperty = nullptr );
+cpo::uno::Any sbxToUnoValue( const SbxValue* pVar, const cpo::uno::Type& rType, css::beans::Property const * pUnoProperty = nullptr );
 
 BASIC_DLLPUBLIC void unoToSbxValue( SbxVariable* pVar, const cpo::uno::Any& aValue );
 

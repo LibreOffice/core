@@ -26,7 +26,7 @@
 #include "rtl/alloc.h"
 
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 
 /** Enum defining UNO_TYPE_NO_ACQUIRE for type description reference transfer.
@@ -62,14 +62,14 @@ public:
         @param eTypeClass type class of type
         @param rTypeName name of type
     */
-    inline Type( TypeClass eTypeClass, const ::rtl::OUString & rTypeName );
+    inline Type( css::uno::TypeClass eTypeClass, const ::rtl::OUString & rTypeName );
 
     /** Constructor: Type is constructed by given name and type class.
 
         @param eTypeClass type class of type
         @param pTypeName name of type
     */
-    inline Type( TypeClass eTypeClass, const char * pTypeName );
+    inline Type( css::uno::TypeClass eTypeClass, const char * pTypeName );
 
     /** Constructor: Type is (copy) constructed by given C type description reference.
 
@@ -116,8 +116,8 @@ public:
 
         @return type class of set type
     */
-    TypeClass SAL_CALL getTypeClass() const
-        { return static_cast<TypeClass>(_pType->eTypeClass); }
+    css::uno::TypeClass SAL_CALL getTypeClass() const
+        { return static_cast<css::uno::TypeClass>(_pType->eTypeClass); }
 
     /** Gets the name of the set type.
 

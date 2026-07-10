@@ -516,13 +516,13 @@ public:
         { OWeakObject::acquire(); }
     virtual void SAL_CALL release() noexcept override
         { OWeakObject::release(); }
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& type) override;
 
     /// Initialization function after having acquire()'d.
     void initListeners();
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
 
     // css.frame.XDispatch
     virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
@@ -1271,7 +1271,7 @@ void AutoRecovery::disposing()
     m_xAsyncDispatcher.reset();
 }
 
-Any SAL_CALL AutoRecovery::queryInterface( const css::uno::Type& _rType )
+Any SAL_CALL AutoRecovery::queryInterface( const cpo::uno::Type& _rType )
 {
     Any aRet = AutoRecovery_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
@@ -1279,7 +1279,7 @@ Any SAL_CALL AutoRecovery::queryInterface( const css::uno::Type& _rType )
     return aRet;
 }
 
-Sequence< css::uno::Type > SAL_CALL AutoRecovery::getTypes(  )
+Sequence< cpo::uno::Type > SAL_CALL AutoRecovery::getTypes(  )
 {
     return comphelper::concatSequences(
         AutoRecovery_BASE::getTypes(),

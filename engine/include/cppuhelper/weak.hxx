@@ -110,7 +110,7 @@ public:
         @return demanded type or empty any
     */
     virtual cpo::uno::Any SAL_CALL queryInterface(
-        const css::uno::Type & rType ) SAL_OVERRIDE;
+        const cpo::uno::Type & rType ) SAL_OVERRIDE;
     /** increasing m_refCount
     */
     virtual void SAL_CALL acquire()

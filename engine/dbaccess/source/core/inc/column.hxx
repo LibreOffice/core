@@ -62,11 +62,11 @@ namespace dbaccess
         virtual ~OColumn() override;
 
     // css::lang::XTypeProvider
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override = 0;
 
     // css::uno::XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
 
@@ -87,8 +87,8 @@ namespace dbaccess
 
     protected:
         // IPropertyContainer
-        virtual void registerProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, void* _pPointerToMember, const css::uno::Type& _rMemberType ) override;
-        virtual void registerMayBeVoidProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, cpo::uno::Any* _pPointerToMember, const css::uno::Type& _rExpectedType ) override;
+        virtual void registerProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, void* _pPointerToMember, const cpo::uno::Type& _rMemberType ) override;
+        virtual void registerMayBeVoidProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, cpo::uno::Any* _pPointerToMember, const cpo::uno::Type& _rExpectedType ) override;
     };
 
     // IColumnFactory - used by OColumns for creating new columns
@@ -189,11 +189,11 @@ namespace dbaccess
         virtual ~OColumns() override;
 
         //XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override { OColumns_BASE::acquire(); }
         virtual void SAL_CALL release() noexcept override { OColumns_BASE::release(); }
         //XTypeProvider
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
 
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;

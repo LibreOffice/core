@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_UNOMASTER_HXX
 #define INCLUDED_SVX_UNOMASTER_HXX
 
-#include <com/sun/star/uno/Type.h>
+#include <cpo/uno/Type.h>
 #include <cpo/uno/Any.h>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -33,7 +33,7 @@
 class SvxShapeMaster
 {
 public:
-    virtual bool queryAggregation( const css::uno::Type & rType, cpo::uno::Any& aAny ) = 0;
+    virtual bool queryAggregation( const cpo::uno::Type & rType, cpo::uno::Any& aAny ) = 0;
 
     /// @throws css::uno::RuntimeException
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) = 0;
@@ -60,7 +60,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) = 0;
 
     /// @throws css::uno::RuntimeException
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) = 0;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) = 0;
 
     /// @throws css::uno::RuntimeException
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() = 0;

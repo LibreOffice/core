@@ -69,7 +69,7 @@ class Wrapper
         return xQueryInterface.isSame( aObject );
     }
 
-    public Object queryInterface( com.sun.star.uno.Type aType )
+    public Object queryInterface( cpo.uno.Type aType )
     {
         return xQueryInterface.queryInterface( aType );
     }

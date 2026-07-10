@@ -22,7 +22,7 @@ import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XTypeProvider;
 
 import com.sun.star.uno.XWeak;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.XInterface;
 
 import java.util.ArrayList;

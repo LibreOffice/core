@@ -68,7 +68,7 @@ ScVbaStyles::createCollectionObject(const cpo::uno::Any& aObject)
     return lcl_createAPIStyleToVBAObject( aObject, mxParent, mxContext, mxModel );
 }
 
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 ScVbaStyles::getElementType()
 {
     return cppu::UnoType<excel::XStyle>::get();

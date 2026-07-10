@@ -66,7 +66,7 @@ public:
     void InternalDispose();
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& rType ) override;
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;

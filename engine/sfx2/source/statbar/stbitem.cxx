@@ -208,7 +208,7 @@ void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent
         if ( rEvent.IsEnabled )
         {
             eState = SfxItemState::DEFAULT;
-            uno::Type aType = rEvent.State.getValueType();
+            cpo::uno::Type aType = rEvent.State.getValueType();
 
             if ( aType == cppu::UnoType<void>::get() )
             {

@@ -43,7 +43,7 @@ namespace comphelper
 
     struct UnoTypeLess
     {
-        bool operator()( const css::uno::Type& _rLHS, const css::uno::Type& _rRHS ) const
+        bool operator()( const cpo::uno::Type& _rLHS, const cpo::uno::Type& _rRHS ) const
         {
             return rtl_ustr_compare(
                 _rLHS.getTypeLibType()->pTypeName->buffer,
@@ -53,7 +53,7 @@ namespace comphelper
     };
 
     typedef std::map< sal_Int32, cpo::uno::Any >     MapInt2Any;
-    typedef std::set< css::uno::Type, UnoTypeLess >  TypeBag;
+    typedef std::set< cpo::uno::Type, UnoTypeLess >  TypeBag;
 
     typedef ::cppu::WeakImplHelper  <   css::beans::XPropertyBag
                                     ,   css::util::XModifiable
@@ -148,7 +148,7 @@ namespace comphelper
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
 
         // XElementAccess (base of XEnumerationAccess)
-        virtual css::uno::Type SAL_CALL getElementType(  ) override;
+        virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
         virtual bool SAL_CALL hasElements(  ) override;
         // UNO interface implementations
 

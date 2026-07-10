@@ -70,7 +70,7 @@ cpo::uno::Sequence< OUString > SAL_CALL CreationWizardUnoDlg::getSupportedServic
 }
 
 // XInterface
-cpo::uno::Any SAL_CALL CreationWizardUnoDlg::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL CreationWizardUnoDlg::queryInterface( const cpo::uno::Type& aType )
 {
     return OComponentHelper::queryInterface( aType );
 }
@@ -82,7 +82,7 @@ void SAL_CALL CreationWizardUnoDlg::release() noexcept
 {
     OComponentHelper::release();
 }
-cpo::uno::Any SAL_CALL CreationWizardUnoDlg::queryAggregation( uno::Type const & rType )
+cpo::uno::Any SAL_CALL CreationWizardUnoDlg::queryAggregation( cpo::uno::Type const & rType )
 {
     if (rType == cppu::UnoType<ui::dialogs::XAsynchronousExecutableDialog>::get())
     {
@@ -112,9 +112,9 @@ cpo::uno::Any SAL_CALL CreationWizardUnoDlg::queryAggregation( uno::Type const &
     return OComponentHelper::queryAggregation( rType );
 }
 
-cpo::uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > CreationWizardUnoDlg::getTypes()
 {
-    static cpo::uno::Sequence<uno::Type> aTypeList{ cppu::UnoType<lang::XComponent>::get(),
+    static cpo::uno::Sequence<cpo::uno::Type> aTypeList{ cppu::UnoType<lang::XComponent>::get(),
                                                cppu::UnoType<lang::XTypeProvider>::get(),
                                                cppu::UnoType<uno::XAggregation>::get(),
                                                cppu::UnoType<uno::XWeak>::get(),

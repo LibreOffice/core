@@ -114,7 +114,7 @@ public:
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // ____ XInterface (for new interfaces) ____
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
 
     // ____ ::utl::OEventListenerAdapter ____
     virtual void _disposing( const css::lang::EventObject& rSource ) override;
@@ -132,7 +132,7 @@ public:
     // ____ XAggregation ____
     virtual void SAL_CALL setDelegator(
         const css::uno::Reference< css::uno::XInterface >& rDelegator ) override;
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& aType ) override;
 
     // ____ WrappedPropertySet ____
     virtual const cpo::uno::Sequence< css::beans::Property >& getPropertySequence() override;

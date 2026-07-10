@@ -748,7 +748,7 @@ void SAL_CALL UnoMultiPageControl::removeTabListener( const Reference< XTabListe
 IMPL_IMPLEMENTATION_ID( UnoMultiPageControl )
 
 // lang::XTypeProvider
-cpo::uno::Sequence< css::uno::Type > UnoMultiPageControl::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > UnoMultiPageControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -760,7 +760,7 @@ cpo::uno::Sequence< css::uno::Type > UnoMultiPageControl::getTypes()
 }
 
 // uno::XInterface
-cpo::uno::Any UnoMultiPageControl::queryAggregation( const uno::Type & rType )
+cpo::uno::Any UnoMultiPageControl::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< awt::XTabListener* >(this),

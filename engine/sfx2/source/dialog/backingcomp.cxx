@@ -81,12 +81,12 @@ public:
     explicit BackingComp();
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
     virtual void          SAL_CALL acquire       (                             ) noexcept override;
     virtual void          SAL_CALL release       (                             ) noexcept override;
 
     // XTypeProvide
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes           () override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes           () override;
     virtual cpo::uno::Sequence< sal_Int8 >       SAL_CALL getImplementationId() override;
 
     // XServiceInfo
@@ -147,7 +147,7 @@ BackingComp::BackingComp()
             Note: There exist two possible results ... this instance itself and her window member!
  */
 
-cpo::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const css::uno::Type& aType )
+cpo::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const cpo::uno::Type& aType )
 {
     // first look for own supported interfaces
     cpo::uno::Any aResult = ::cppu::queryInterface(
@@ -213,13 +213,13 @@ void SAL_CALL BackingComp::release()
     @return A list of all supported interface types.
 */
 
-cpo::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL BackingComp::getTypes()
 {
     static cppu::OTypeCollection aTypeCollection = [this]() {
         SolarMutexGuard aGuard;
         css::uno::Reference<css::lang::XTypeProvider> xProvider(m_xWindow, css::uno::UNO_QUERY);
 
-        cpo::uno::Sequence<css::uno::Type> lWindowTypes;
+        cpo::uno::Sequence<cpo::uno::Type> lWindowTypes;
         if (xProvider.is())
             lWindowTypes = xProvider->getTypes();
 

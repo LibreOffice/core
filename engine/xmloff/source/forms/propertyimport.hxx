@@ -38,7 +38,7 @@ namespace xmloff
     public:
         template<typename EnumT>
         static cpo::uno::Any convertString(
-            const css::uno::Type& _rExpectedType,
+            const cpo::uno::Type& _rExpectedType,
             const OUString& _rReadCharacters,
             const SvXMLEnumMapEntry<EnumT>* _pEnumMap = nullptr
         )
@@ -47,13 +47,13 @@ namespace xmloff
                     reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(_pEnumMap), /*_bInvertBoolean*/false);
         }
         static cpo::uno::Any convertString(
-            const css::uno::Type& _rExpectedType,
+            const cpo::uno::Type& _rExpectedType,
             const OUString& _rReadCharacters,
             const SvXMLEnumMapEntry<sal_uInt16>* _pEnumMap = nullptr,
             const bool _bInvertBoolean = false
         );
 
-        static css::uno::Type xmlTypeToUnoType( const OUString& _rType );
+        static cpo::uno::Type xmlTypeToUnoType( const OUString& _rType );
     };
 
     class OFormLayerXMLImport_Impl;

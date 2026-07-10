@@ -97,7 +97,7 @@ public:
         const OUString& rName ) override;
 
     // XElementAccess (via XNameReplace)
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
 
     // XElementAccess (via XNameReplace)
     virtual bool SAL_CALL hasElements() override;

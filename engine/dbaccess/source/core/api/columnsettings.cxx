@@ -34,7 +34,7 @@ namespace dbaccess
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
 

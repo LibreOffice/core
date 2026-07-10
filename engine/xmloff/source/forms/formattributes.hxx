@@ -23,7 +23,7 @@
 
 #include <map>
 
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <xmloff/xmlnamespace.hxx>
@@ -308,7 +308,7 @@ namespace xmloff
         struct AttributeAssignment
         {
             OUString                 sPropertyName;          // the property name
-            css::uno::Type           aPropertyType;          // the property type
+            cpo::uno::Type           aPropertyType;          // the property type
 
             // entries which are special to some value types
             const SvXMLEnumMapEntry<sal_uInt16>*
@@ -393,7 +393,7 @@ namespace xmloff
         void    addEnumProperty(
             sal_Int32 nAttributeToken, const OUString& _rPropertyName,
             const SvXMLEnumMapEntry<EnumT>* _pValueMap,
-            const css::uno::Type* _pType = nullptr)
+            const cpo::uno::Type* _pType = nullptr)
         {
             addEnumPropertyImpl(nAttributeToken, _rPropertyName,
                                 reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(_pValueMap), _pType);
@@ -403,11 +403,11 @@ namespace xmloff
         void addEnumPropertyImpl(
             sal_Int32 nAttributeToken, const OUString& _rPropertyName,
             const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
-            const css::uno::Type* _pType);
+            const cpo::uno::Type* _pType);
         /// some common code for the various add*Property methods
         AttributeAssignment& implAdd(
             sal_Int32 nAttributeToken, const OUString& _rPropertyName,
-            const css::uno::Type& _rType);
+            const cpo::uno::Type& _rType);
     };
 }   // namespace xmloff
 

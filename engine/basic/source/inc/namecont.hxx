@@ -63,13 +63,13 @@ class NameContainer final
     // library index file and module streams, which macro signatures sign over.
     std::vector<OUString> maNamesOrder;
 
-    css::uno::Type mType;
+    cpo::uno::Type mType;
 
     ::comphelper::OInterfaceContainerHelper4<css::container::XContainerListener> maContainerListeners;
     ::comphelper::OInterfaceContainerHelper4<css::util::XChangesListener> maChangesListeners;
 
 public:
-    NameContainer(const css::uno::Type& rType, cppu::OWeakObject& owner)
+    NameContainer(const cpo::uno::Type& rType, cppu::OWeakObject& owner)
         : rOwner(owner)
         , mType( rType )
     {}
@@ -81,7 +81,7 @@ public:
                        std::unique_lock<std::mutex>& guard);
 
     // Methods XElementAccess
-    const css::uno::Type & getElementType();
+    const cpo::uno::Type & getElementType();
     bool hasElements();
 
     // Methods XNameAccess
@@ -349,7 +349,7 @@ public:
     static void leaveMethod();
 
     // Methods XElementAccess
-    virtual css::uno::Type getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
     virtual bool hasElements() override;
 
     // Methods XNameAccess
@@ -531,12 +531,12 @@ private:
 public:
     SfxLibrary(
         ModifiableHelper& _rModifiable,
-        const css::uno::Type& aType,
+        const cpo::uno::Type& aType,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI
     );
     SfxLibrary(
         ModifiableHelper& _rModifiable,
-        const css::uno::Type& aType,
+        const cpo::uno::Type& aType,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         OUString aLibInfoFileURL,
         OUString aStorageURL,
@@ -544,7 +544,7 @@ public:
     );
 
     // Methods XElementAccess
-    virtual css::uno::Type getElementType(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
     virtual bool hasElements(  ) override;
 
     // Methods XNameAccess

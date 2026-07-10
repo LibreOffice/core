@@ -62,7 +62,7 @@ typedef std::map<
             std::span<SfxItemPropertyMapEntry const>,
             css::uno::Reference<css::beans::XPropertySetInfo>,
             SdExtPropertySetInfoCacheCompare > SdExtPropertySetInfoCache;
-typedef std::map< SdrObjKind, cpo::uno::Sequence< css::uno::Type> > SdTypesCache;
+typedef std::map< SdrObjKind, cpo::uno::Sequence< cpo::uno::Type> > SdTypesCache;
 
 /*
 

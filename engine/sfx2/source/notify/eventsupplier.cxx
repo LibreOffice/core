@@ -141,9 +141,9 @@ bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName )
 
 //  --- XElementAccess ( parent of XNameAccess ) ---
 
-uno::Type SAL_CALL SfxEvents_Impl::getElementType()
+cpo::uno::Type SAL_CALL SfxEvents_Impl::getElementType()
 {
-    uno::Type aElementType = cppu::UnoType<cpo::uno::Sequence < beans::PropertyValue >>::get();
+    cpo::uno::Type aElementType = cppu::UnoType<cpo::uno::Sequence < beans::PropertyValue >>::get();
     return aElementType;
 }
 

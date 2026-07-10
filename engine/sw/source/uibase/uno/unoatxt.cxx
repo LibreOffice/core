@@ -85,7 +85,7 @@ cpo::uno::Any SwXAutoTextContainer::getByIndex(sal_Int32 nIndex)
     return getByName(m_pGlossaries->GetGroupName( static_cast<size_t>(nIndex) ));
 }
 
-uno::Type SwXAutoTextContainer::getElementType()
+cpo::uno::Type SwXAutoTextContainer::getElementType()
 {
     return cppu::UnoType<text::XAutoTextGroup>::get();
 
@@ -476,7 +476,7 @@ cpo::uno::Any SwXAutoTextGroup::getByIndex(sal_Int32 nIndex)
     return getByName(pGlosGroup->GetShortName(o3tl::narrowing<sal_uInt16>(nIndex)));
 }
 
-uno::Type SwXAutoTextGroup::getElementType()
+cpo::uno::Type SwXAutoTextGroup::getElementType()
 {
     return cppu::UnoType<text::XAutoTextEntry>::get();
 

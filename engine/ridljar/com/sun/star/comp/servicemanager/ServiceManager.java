@@ -63,7 +63,7 @@ public class ServiceManager implements XMultiServiceFactory,
         if (DEBUG) System.err.println( dbg );
     }
 
-    private static com.sun.star.uno.Type UNO_TYPE = null;
+    private static cpo.uno.Type UNO_TYPE = null;
 
     static String[] supportedServiceNames = {
             "com.sun.star.lang.MultiServiceFactory",
@@ -495,11 +495,11 @@ public class ServiceManager implements XMultiServiceFactory,
      * @see     com.sun.star.container.XElementAccess
      * @see     com.sun.star.uno.TypeClass
      */
-    public com.sun.star.uno.Type getElementType()
+    public cpo.uno.Type getElementType()
             throws com.sun.star.uno.RuntimeException
     {
         if ( UNO_TYPE == null )
-            UNO_TYPE = new com.sun.star.uno.Type(ServiceManager.class);
+            UNO_TYPE = new cpo.uno.Type(ServiceManager.class);
 
         return UNO_TYPE;
     }

@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svx/AccessibleShape.hxx>
@@ -61,7 +61,7 @@ public:
     //=====  XInterface  ======================================================
 
     virtual cpo::uno::Any SAL_CALL
-        queryInterface (const css::uno::Type & rType) override;
+        queryInterface (const cpo::uno::Type & rType) override;
 
     virtual void SAL_CALL
         acquire()
@@ -83,7 +83,7 @@ public:
 
     //=====  XTypeProvider  ===================================================
 
-    virtual cpo::uno::Sequence< css::uno::Type> SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type> SAL_CALL
         getTypes() override;
 
 protected:

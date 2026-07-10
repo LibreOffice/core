@@ -90,7 +90,7 @@ namespace
 namespace
 {
 
-Any convertAsEnum(bool bEnumAsInt, const css::uno::Type& _rExpectedType,
+Any convertAsEnum(bool bEnumAsInt, const cpo::uno::Type& _rExpectedType,
                   std::u16string_view _rReadCharacters, const SvXMLEnumMapEntry<sal_uInt16>* _pEnumMap)
 {
     Any aReturn;
@@ -114,7 +114,7 @@ Any convertAsEnum(bool bEnumAsInt, const css::uno::Type& _rExpectedType,
 
 }
 
-Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
+Any PropertyConversion::convertString( const cpo::uno::Type& _rExpectedType,
     const OUString& _rReadCharacters, const SvXMLEnumMapEntry<sal_uInt16>* _pEnumMap, const bool _bInvertBoolean )
 {
     Any aReturn;
@@ -262,7 +262,7 @@ Type PropertyConversion::xmlTypeToUnoType( const OUString& _rType )
 {
     Type aUnoType( cppu::UnoType<void>::get() );
 
-    static const std::map< OUString, css::uno::Type > s_aTypeNameMap
+    static const std::map< OUString, cpo::uno::Type > s_aTypeNameMap
     {
         { token::GetXMLToken( token::XML_BOOLEAN ) , cppu::UnoType<bool>::get()},
         // Not a copy paste error, quotation from:
@@ -417,7 +417,7 @@ void OSinglePropertyContext::startFastElement(
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     css::beans::PropertyValue aPropValue;      // the property the instance imports currently
-    css::uno::Type aPropType;          // the type of the property the instance imports currently
+    cpo::uno::Type aPropType;          // the type of the property the instance imports currently
 
     OUString sType, sValue;
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
@@ -443,7 +443,7 @@ void OSinglePropertyContext::startFastElement(
     // the name of the property
     OSL_ENSURE(!aPropValue.Name.isEmpty(), "OSinglePropertyContext::StartElement: invalid property name!");
 
-    // needs to be translated into a css::uno::Type
+    // needs to be translated into a cpo::uno::Type
     aPropType = PropertyConversion::xmlTypeToUnoType( sType );
     if( TypeClass_VOID == aPropType.getTypeClass() )
     {
@@ -499,7 +499,7 @@ void OListPropertyContext::endFastElement(sal_Int32 )
 
     Sequence< Any > aListElements( m_aListValues.size() );
     Any* pListElement = aListElements.getArray();
-    css::uno::Type aType = PropertyConversion::xmlTypeToUnoType( m_sPropertyType );
+    cpo::uno::Type aType = PropertyConversion::xmlTypeToUnoType( m_sPropertyType );
     for ( const auto& rListValue : m_aListValues )
     {
         *pListElement = PropertyConversion::convertString( aType, rListValue );

@@ -24,7 +24,7 @@ public:
 class Good : public Base, public css::lang::XMain
 {
 public:
-    cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const& aType) override
+    cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const& aType) override
     {
         return Base::queryInterface(aType);
     }

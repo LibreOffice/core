@@ -52,7 +52,7 @@ public:
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
     virtual bool SAL_CALL hasElements(  ) override;
 
     //XServiceInfo
@@ -131,7 +131,7 @@ bool SAL_CALL NamedPropertyValuesContainer::hasByName( const OUString& aName )
 }
 
 // XElementAccess
-css::uno::Type SAL_CALL NamedPropertyValuesContainer::getElementType(  )
+cpo::uno::Type SAL_CALL NamedPropertyValuesContainer::getElementType(  )
 {
     return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }

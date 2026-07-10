@@ -85,7 +85,7 @@ void OPropertySet::SetNewValuesExplicitlyEvenIfTheyEqualDefault()
 OPropertySet::~OPropertySet()
 {}
 
-Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
+Any SAL_CALL OPropertySet::queryInterface( const cpo::uno::Type& aType )
 {
     return ::cppu::queryInterface(
         aType,
@@ -99,10 +99,10 @@ Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
 }
 
 //  ____ XTypeProvider ____
-Sequence< uno::Type > SAL_CALL
+Sequence< cpo::uno::Type > SAL_CALL
     OPropertySet::getTypes()
 {
-    static const Sequence< uno::Type > aTypeList{
+    static const Sequence< cpo::uno::Type > aTypeList{
         cppu::UnoType<lang::XTypeProvider>::get(),
         cppu::UnoType<beans::XPropertySet>::get(),
         cppu::UnoType<beans::XMultiPropertySet>::get(),

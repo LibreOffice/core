@@ -42,7 +42,7 @@ namespace dbtools::param
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XParameters;
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::XWeak;
     using ::com::sun::star::beans::XPropertySet;
@@ -98,7 +98,7 @@ namespace dbtools::param
 
     IMPLEMENT_FORWARD_REFCOUNT( ParameterWrapper, UnoBase )
 
-    cpo::uno::Any ParameterWrapper::queryInterface(css::uno::Type const & aType)
+    cpo::uno::Any ParameterWrapper::queryInterface(cpo::uno::Type const & aType)
     {
         cpo::uno::Any a(UnoBase::queryInterface(aType));
         if (!a.hasValue()) {

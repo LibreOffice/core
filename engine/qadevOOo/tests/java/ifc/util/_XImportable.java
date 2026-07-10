@@ -21,7 +21,7 @@ import lib.MultiMethodTest;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.table.XCellRange;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XImportable;
 

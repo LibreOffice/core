@@ -340,7 +340,7 @@ cpo::uno::Any SAL_CALL SwVbaRows::Item( const cpo::uno::Any& Index1, const cpo::
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaRows::getElementType()
 {
     return cppu::UnoType<word::XRow>::get();

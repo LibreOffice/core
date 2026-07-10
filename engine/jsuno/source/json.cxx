@@ -26,7 +26,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <o3tl/unreachable.hxx>
@@ -423,7 +423,7 @@ bool splitJsonObject(OUString const& json, std::map<OUString, OUString>& out)
 }
 }
 
-void appendUnoAsJson(OStringBuffer& buf, css::uno::Type const& type, void const* value)
+void appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type, void const* value)
 {
     switch (type.getTypeClass())
     {
@@ -496,7 +496,7 @@ void appendUnoAsJson(OStringBuffer& buf, css::uno::Type const& type, void const*
         case css::uno::TypeClass_ANY:
         {
             auto const any = static_cast<uno_Any const*>(value);
-            appendUnoAsJson(buf, *reinterpret_cast<css::uno::Type const*>(&any->pType), any->pData);
+            appendUnoAsJson(buf, *reinterpret_cast<cpo::uno::Type const*>(&any->pType), any->pData);
             return;
         }
         case css::uno::TypeClass_SEQUENCE:
@@ -586,7 +586,7 @@ void appendUnoAsJson(OStringBuffer& buf, css::uno::Type const& type, void const*
     }
 }
 
-cpo::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
+cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
 {
     switch (type.getTypeClass())
     {
@@ -743,7 +743,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return cpo::uno::Any(css::uno::Type(tdesc.get()->pWeakRef));
+            return cpo::uno::Any(cpo::uno::Type(tdesc.get()->pWeakRef));
         }
         case css::uno::TypeClass_ANY:
         {
@@ -780,7 +780,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                                                  + u" does not parse as UNO type "_ustr
                                                  + type.getTypeName());
             }
-            return parseJsonToAny(itVal->second, css::uno::Type(tdesc.get()->pWeakRef));
+            return parseJsonToAny(itVal->second, cpo::uno::Type(tdesc.get()->pWeakRef));
         }
         case css::uno::TypeClass_SEQUENCE:
         {
@@ -794,7 +794,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
             css::uno::TypeDescription desc(type);
             css::uno::TypeDescription elemDesc(
                 reinterpret_cast<typelib_IndirectTypeDescription const*>(desc.get())->pType);
-            css::uno::Type const elemType(elemDesc.get()->pWeakRef);
+            cpo::uno::Type const elemType(elemDesc.get()->pWeakRef);
             uno_Sequence* seq;
             uno_sequence_construct(&seq, desc.get(), nullptr, static_cast<sal_Int32>(elems.size()),
                                    css::uno::cpp_acquire);
@@ -853,7 +853,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type)
                             + u"\" of UNO type "_ustr + type.getTypeName());
                     }
                     mems.push_back(
-                        parseJsonToAny(it->second, css::uno::Type(compDesc->ppTypeRefs[i])));
+                        parseJsonToAny(it->second, cpo::uno::Type(compDesc->ppTypeRefs[i])));
                 }
                 compDesc = compDesc->pBaseTypeDescription;
                 if (compDesc == nullptr)

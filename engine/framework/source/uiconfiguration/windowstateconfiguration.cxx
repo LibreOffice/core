@@ -127,7 +127,7 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
         virtual void SAL_CALL replaceByName( const OUString& sName, const cpo::uno::Any& aPropertySet ) override;
 
         // XElementAccess
-        virtual css::uno::Type SAL_CALL getElementType() override;
+        virtual cpo::uno::Type SAL_CALL getElementType() override;
 
         virtual bool SAL_CALL hasElements() override;
 
@@ -1258,7 +1258,7 @@ public:
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     typedef std::unordered_map< OUString,

@@ -434,7 +434,7 @@ void vtableCall(
                 typelib_TypeDescription * td = nullptr;
                 TYPELIB_DANGER_GET(
                     &td,
-                    (reinterpret_cast<css::uno::Type *>(gpr[1])
+                    (reinterpret_cast<cpo::uno::Type *>(gpr[1])
                      ->getTypeLibType()));
                 if (td != nullptr && td->eTypeClass == typelib_TypeClass_INTERFACE) {
                     css::uno::XInterface * ifc = nullptr;

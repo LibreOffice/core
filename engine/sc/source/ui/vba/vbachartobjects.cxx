@@ -173,7 +173,7 @@ ScVbaChartObjects::createEnumeration()
 
 // XElementAccess
 
-uno::Type
+cpo::uno::Type
 ScVbaChartObjects::getElementType()
 {
     return cppu::UnoType<excel::XChartObject>::get();

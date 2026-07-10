@@ -35,7 +35,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <editeng/AccessibleContextBase.hxx>
@@ -266,7 +266,7 @@ public:
     //=====  XInterface  ======================================================
 
     virtual cpo::uno::Any SAL_CALL
-        queryInterface (const css::uno::Type & rType) override;
+        queryInterface (const cpo::uno::Type & rType) override;
 
     virtual void SAL_CALL
         acquire()
@@ -289,7 +289,7 @@ public:
 
     //=====  XTypeProvider  ===================================================
 
-    virtual cpo::uno::Sequence< css::uno::Type> SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type> SAL_CALL
         getTypes() override;
 
     //=====  IAccessibleViewForwarderListener  ================================

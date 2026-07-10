@@ -55,7 +55,7 @@ public:
     GraphicRendererVCL();
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -65,7 +65,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // PropertySetHelper
@@ -90,7 +90,7 @@ GraphicRendererVCL::GraphicRendererVCL() :
 {
 }
 
-cpo::uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -144,9 +144,9 @@ cpo::uno::Sequence< OUString > SAL_CALL GraphicRendererVCL::getSupportedServiceN
 }
 
 
-cpo::uno::Sequence< uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
 {
-    static const cpo::uno::Sequence< uno::Type >  aTypes {
+    static const cpo::uno::Sequence< cpo::uno::Type >  aTypes {
         cppu::UnoType<lang::XServiceInfo>::get(),
         cppu::UnoType<lang::XTypeProvider>::get(),
         cppu::UnoType<beans::XPropertySet>::get(),

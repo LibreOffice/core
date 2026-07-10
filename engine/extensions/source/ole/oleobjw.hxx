@@ -65,7 +65,7 @@ public:
     ~IUnknownWrapper() override;
 
     //XInterface
-    cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& t) override;
+    cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& t) override;
 
     // XInvokation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
@@ -215,7 +215,7 @@ protected:
     // information.
     // m_TypeDescription is only useful when an object wraps an IDispatch object that implements
     // a UNO interface. The value is set during a call to XInitialization::initialize.
-    cpo::uno::Sequence<css::uno::Type> m_seqTypes;
+    cpo::uno::Sequence<cpo::uno::Type> m_seqTypes;
     CComPtr<IUnknown> m_spUnknown;
     CComPtr<IDispatch> m_spDispatch;
         OUString m_sTypeName; // is "" ( not initialised ), "IDispatch" ( we have no idea ) or "SomeLibrary.SomeTypeName" if we managed to get a type

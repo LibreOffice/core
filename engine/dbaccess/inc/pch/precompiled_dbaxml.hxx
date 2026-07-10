@@ -71,7 +71,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.h>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.h>
+#include <cpo/uno/Type.h>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/namedvaluecollection.hxx>

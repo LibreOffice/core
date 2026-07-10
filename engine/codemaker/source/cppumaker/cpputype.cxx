@@ -353,12 +353,12 @@ void CppuType::dumpGetCppuTypePreamble(FileStream & out)
         out << " > {\npublic:\n";
         inc();
         out << indent()
-            << "static inline ::css::uno::Type const & get() {\n";
+            << "static inline ::cpo::uno::Type const & get() {\n";
     } else {
         if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
             out << "\n\n";
         }
-        out << ("inline ::css::uno::Type const &"
+        out << ("inline ::cpo::uno::Type const &"
                 " cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ");
         dumpType(out, name_, false, false, true);
         out << " const *) {\n";
@@ -546,8 +546,7 @@ void CppuType::dumpHFileContent(
     includes.dump(out, nullptr, false);
         // 'exceptions = false' would be wrong for services/singletons, but
         // those don't dump .hdl files anyway
-    out << ("\nnamespace com { namespace sun { namespace star { namespace uno"
-            " { class Type; } } } }\n\n");
+    out << "\nnamespace cpo::uno { class Type; }\n\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
         out << "\n";
     }
@@ -556,7 +555,7 @@ void CppuType::dumpHFileContent(
           || name_ == "com.sun.star.uno.Exception"
           || isPolymorphic())) {
         out << "\n" << indent()
-            << ("inline ::css::uno::Type const &"
+            << ("inline ::cpo::uno::Type const &"
                 " cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ");
         dumpType(out, name_, false, false, true);
         out << " const *);\n";
@@ -591,7 +590,7 @@ void CppuType::dumpLightGetCppuType(FileStream & out)
         << getTypeClass(name_, true) << ", \"" << name_ << "\" );\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return * reinterpret_cast< ::css::uno::Type * >("
+        << ("return * reinterpret_cast< ::cpo::uno::Type * >("
             " &the_type );\n");
     dumpGetCppuTypePostamble(out);
 }
@@ -764,7 +763,7 @@ void CppuType::dumpType(
         out << "::rtl::OUString";
         break;
     case codemaker::UnoType::Sort::Type:
-        out << "::css::uno::Type";
+        out << "::cpo::uno::Type";
         break;
     case codemaker::UnoType::Sort::Any:
         out << "::cpo::uno::Any";
@@ -1127,7 +1126,7 @@ void InterfaceType::dumpDeclaration(FileStream & out)
     dumpAttributes(out);
     dumpMethods(out);
     out << "\n" << indent()
-        << ("static inline ::css::uno::Type const & SAL_CALL"
+        << ("static inline ::cpo::uno::Type const & SAL_CALL"
             " static_type(void * = 0);\n\n");
     dec();
     out << "protected:\n";
@@ -1148,7 +1147,7 @@ void InterfaceType::dumpHppFile(
     includes.dump(out, &name_, !(m_cppuTypeLeak || m_cppuTypeDynamic));
     out << "\n#include <type_traits>\n\n";
     dumpGetCppuType(out);
-    out << "\n::css::uno::Type const & "
+    out << "\n::cpo::uno::Type const & "
         << codemaker::cpp::scopedCppName(u2b(name_))
         << "::static_type(SAL_UNUSED_PARAMETER void *) {\n";
     inc();
@@ -1259,7 +1258,7 @@ void InterfaceType::dumpNormalGetCppuType(FileStream & out)
         << (bases == 0 ? "0" : "aSuperTypes") << " );\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return * reinterpret_cast< ::css::uno::Type * >("
+        << ("return * reinterpret_cast< ::cpo::uno::Type * >("
             " &the_type );\n");
     dumpGetCppuTypePostamble(out);
 }
@@ -1269,10 +1268,10 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out)
     codemaker::cppumaker::dumpNamespaceOpen(out, name_, false);
     OUString staticTypeClass("the" + id_ + "Type");
     out << " namespace detail {\n\n" << indent() << "struct " << staticTypeClass
-        << " : public rtl::StaticWithInit< ::css::uno::Type *, "
+        << " : public rtl::StaticWithInit< ::cpo::uno::Type *, "
         << staticTypeClass << " >\n" << indent() << "{\n";
     inc();
-    out << indent() << "::css::uno::Type * operator()() const\n"
+    out << indent() << "::cpo::uno::Type * operator()() const\n"
         << indent() << "{\n";
     inc();
     out << indent() << "::rtl::OUString sTypeName( \"" << name_ << "\" );\n\n"
@@ -1320,7 +1319,7 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out)
     out << indent()
         << ("typelib_typedescription_release( (typelib_TypeDescription*)pTD"
             " );\n\n")
-        << indent() << "return new ::css::uno::Type( "
+        << indent() << "return new ::cpo::uno::Type( "
         << getTypeClass(name_) << ", sTypeName ); // leaked\n";
     dec();
     out << indent() << "}\n";
@@ -1329,7 +1328,7 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out)
     codemaker::cppumaker::dumpNamespaceClose(out, name_, false);
     out << " }\n\n";
     dumpGetCppuTypePreamble(out);
-    out << indent() << "const ::css::uno::Type &rRet = *detail::"
+    out << indent() << "const ::cpo::uno::Type &rRet = *detail::"
         << staticTypeClass << "::get();\n" << indent()
         << "// End inline typedescription generation\n" << indent()
         << "static bool bInitStarted = false;\n" << indent()
@@ -1939,7 +1938,7 @@ void PlainStructType::dumpLightGetCppuType(FileStream & out)
         << getTypeClass(name_, true) << ", \"" << name_ << "\");\n";
     dec();
     out << indent() << "}\n" << indent()
-        << "return *reinterpret_cast< ::css::uno::Type * >(&the_type);\n";
+        << "return *reinterpret_cast< ::cpo::uno::Type * >(&the_type);\n";
     dumpGetCppuTypePostamble(out);
 }
 
@@ -1979,7 +1978,7 @@ void PlainStructType::dumpNormalGetCppuType(FileStream & out)
     out << ", " << entity_->getDirectMembers().size() << ", the_members, 0);\n";
     dec();
     out << indent() << "}\n" << indent()
-        << "return *reinterpret_cast< ::css::uno::Type * >(&the_type);\n";
+        << "return *reinterpret_cast< ::cpo::uno::Type * >(&the_type);\n";
     dumpGetCppuTypePostamble(out);
 }
 
@@ -1989,10 +1988,10 @@ void PlainStructType::dumpComprehensiveGetCppuType(FileStream & out)
     codemaker::cppumaker::dumpNamespaceOpen(out, name_, false);
     out << " namespace detail {\n\n" << indent() << "struct "
         << staticTypeClass
-        << " : public rtl::StaticWithInit< ::css::uno::Type *, "
+        << " : public rtl::StaticWithInit< ::cpo::uno::Type *, "
         << staticTypeClass << " >\n" << indent() << "{\n";
     inc();
-    out << indent() << "::css::uno::Type * operator()() const\n"
+    out << indent() << "::cpo::uno::Type * operator()() const\n"
         << indent() << "{\n";
     inc();
     out << indent() << "::rtl::OUString the_name( \"" << name_ << "\" );\n";
@@ -2043,7 +2042,7 @@ void PlainStructType::dumpComprehensiveGetCppuType(FileStream & out)
     out << ", " << entity_->getDirectMembers().size() << ", the_members);\n"
         << indent() << "::typelib_typedescription_register(&the_newType);\n"
         << indent() << "::typelib_typedescription_release(the_newType);\n"
-        << indent() << "return new ::css::uno::Type("
+        << indent() << "return new ::cpo::uno::Type("
         << getTypeClass(name_) << ", the_name); // leaked\n";
     dec();
     out << indent() << "}\n";
@@ -2397,7 +2396,7 @@ void PolyStructType::dumpLightGetCppuType(FileStream & out)
 
     dec();
     out << indent() << "}\n" << indent()
-        << "return *reinterpret_cast< ::css::uno::Type * >(&the_type);\n";
+        << "return *reinterpret_cast< ::cpo::uno::Type * >(&the_type);\n";
     dumpGetCppuTypePostamble(out);
 }
 
@@ -2464,7 +2463,7 @@ void PolyStructType::dumpNormalGetCppuType(FileStream & out)
         << ", the_members, the_parameterizedTypes);\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return *reinterpret_cast< ::css::uno::Type * >("
+        << ("return *reinterpret_cast< ::cpo::uno::Type * >("
             "&the_type);\n");
     dumpGetCppuTypePostamble(out);
 }
@@ -2475,12 +2474,12 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
     dumpTemplateHead(out);
     OUString staticTypeClass("the" + id_ + "Type");
     out << "struct " << staticTypeClass
-        << " : public rtl::StaticWithInit< ::css::uno::Type *, "
+        << " : public rtl::StaticWithInit< ::cpo::uno::Type *, "
         << staticTypeClass;
     dumpTemplateParameters(out);
     out << " >\n" << indent() << "{\n";
     inc();
-    out << indent() << "::css::uno::Type * operator()() const\n"
+    out << indent() << "::cpo::uno::Type * operator()() const\n"
         << indent() << "{\n";
     inc();
 
@@ -2513,7 +2512,7 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
                 second) {
                 sal_uInt32 k = static_cast< sal_uInt32 >(parameters.size() - 1);
                 out << indent()
-                    << "::css::uno::Type const & the_ptype" << k
+                    << "::cpo::uno::Type const & the_ptype" << k
                     << " = ::cppu::getTypeFavourChar(static_cast< ";
                 dumpTypeParameterName(out, member.type);
                 out << " * >(0));\n" << indent()
@@ -2569,7 +2568,7 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
         << entity_->getMembers().size() << ", the_members);\n" << indent()
         << "::typelib_typedescription_register(&the_newType);\n" << indent()
         << "::typelib_typedescription_release(the_newType);\n" << indent()
-        << "return new ::css::uno::Type(" << getTypeClass(name_)
+        << "return new ::cpo::uno::Type(" << getTypeClass(name_)
         << ", the_name); // leaked\n";
     dec();
     out << indent() << "}\n";
@@ -2887,7 +2886,7 @@ void ExceptionType::dumpLightGetCppuType(FileStream & out)
         << getTypeClass(name_, true) << ", \"" << name_ << "\" );\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return * reinterpret_cast< ::css::uno::Type * >("
+        << ("return * reinterpret_cast< ::cpo::uno::Type * >("
             " &the_type );\n");
     dumpGetCppuTypePostamble(out);
 }
@@ -2906,7 +2905,7 @@ void ExceptionType::dumpNormalGetCppuType(FileStream & out)
             baseException = true;
         } else {
             out << indent()
-                << ("const ::css::uno::Type& rBaseType ="
+                << ("const ::cpo::uno::Type& rBaseType ="
                     " ::cppu::UnoType< ");
             dumpType(out, base, true, false, false, true);
             out << " >::get();\n\n";
@@ -2922,7 +2921,7 @@ void ExceptionType::dumpNormalGetCppuType(FileStream & out)
             OUString modType(typeToIdentifier(type));
             if (seen.insert(type).second) {
                 out << indent()
-                    << "const ::css::uno::Type& rMemberType_"
+                    << "const ::cpo::uno::Type& rMemberType_"
                     << modType << " = ::cppu::UnoType< ";
                 dumpType(out, type, false, false, false, true);
                 out << " >::get();\n";
@@ -2947,7 +2946,7 @@ void ExceptionType::dumpNormalGetCppuType(FileStream & out)
         << " );\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return * reinterpret_cast< const ::css::uno::Type * >("
+        << ("return * reinterpret_cast< const ::cpo::uno::Type * >("
             " &the_type );\n");
     dumpGetCppuTypePostamble(out);
 }
@@ -2958,10 +2957,10 @@ void ExceptionType::dumpComprehensiveGetCppuType(FileStream & out)
     out << " namespace detail {\n\n";
     OUString staticTypeClass("the" + id_ + "Type");
     out << indent() << "struct " << staticTypeClass
-        << " : public rtl::StaticWithInit< ::css::uno::Type *, "
+        << " : public rtl::StaticWithInit< ::cpo::uno::Type *, "
         << staticTypeClass << " >\n" << indent() << "{\n";
     inc();
-    out << indent() << "::css::uno::Type * operator()() const\n"
+    out << indent() << "::cpo::uno::Type * operator()() const\n"
         << indent() << "{\n";
     inc();
     out << indent() << "::rtl::OUString sTypeName( \"" << name_ << "\" );\n\n"
@@ -2970,7 +2969,7 @@ void ExceptionType::dumpComprehensiveGetCppuType(FileStream & out)
     OUString base(entity_->getDirectBase());
     if (!base.isEmpty()) {
         out << indent()
-            << ("const ::css::uno::Type& rSuperType ="
+            << ("const ::cpo::uno::Type& rSuperType ="
                 " ::cppu::UnoType< ");
         dumpType(out, base, false, false, false, true);
         out << " >::get();\n";
@@ -3013,7 +3012,7 @@ void ExceptionType::dumpComprehensiveGetCppuType(FileStream & out)
             " );\n\n")
         << indent() << "typelib_typedescription_release( pTD );\n" << indent()
         << "// End inline typedescription generation\n\n" << indent()
-        << "return new ::css::uno::Type( " << getTypeClass(name_)
+        << "return new ::cpo::uno::Type( " << getTypeClass(name_)
         << ", sTypeName ); // leaked\n";
     dec();
     out << indent() << "}\n";
@@ -3233,7 +3232,7 @@ void EnumType::dumpNormalGetCppuType(FileStream& o)
     dec();
     o << indent() << "}\n";
     o << indent()
-      << ("return * reinterpret_cast< ::css::uno::Type * >("
+      << ("return * reinterpret_cast< ::cpo::uno::Type * >("
           " &the_type );\n");
     dumpGetCppuTypePostamble(o);
 }
@@ -3247,10 +3246,10 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     o << " namespace detail {\n\n";
 
     OUString sStaticTypeClass("the" + id_ + "Type");
-    o << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::css::uno::Type *, " << sStaticTypeClass << " >\n";
+    o << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::cpo::uno::Type *, " << sStaticTypeClass << " >\n";
     o << indent() << "{\n";
     inc();
-    o << indent() << "::css::uno::Type * operator()() const\n";
+    o << indent() << "::cpo::uno::Type * operator()() const\n";
     o << indent() << "{\n";
 
     inc();
@@ -3294,7 +3293,7 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "typelib_typedescription_release( pTD );\n"
       << indent() << "// End inline typedescription generation\n\n";
 
-    o << indent() << "return new ::css::uno::Type( "
+    o << indent() << "return new ::cpo::uno::Type( "
       << getTypeClass(name_) << ", sTypeName ); // leaked\n";
 
     dec();

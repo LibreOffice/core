@@ -21,7 +21,7 @@ package ifc.lang;
 import lib.MultiPropertyTest;
 
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.XComponentContext;
 
 public class _ServiceManager extends MultiPropertyTest {

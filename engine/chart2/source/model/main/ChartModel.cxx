@@ -705,7 +705,7 @@ void SAL_CALL ChartModel::close( bool bDeliverOwnership )
 }
 
 // lang::XTypeProvider
-cpo::uno::Sequence< uno::Type > SAL_CALL ChartModel::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL ChartModel::getTypes()
 {
     uno::Reference< lang::XTypeProvider > xAggTypeProvider;
     if( (m_xOldModelAgg->queryAggregation( cppu::UnoType<decltype(xAggTypeProvider)>::get()) >>= xAggTypeProvider)
@@ -1047,7 +1047,7 @@ void ChartModel::setTitleObject( const rtl::Reference< Title >& xTitle )
 }
 
 // ____ XInterface (for old API wrapper) ____
-cpo::uno::Any SAL_CALL ChartModel::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL ChartModel::queryInterface( const cpo::uno::Type& aType )
 {
     cpo::uno::Any aResult( impl::ChartModel_Base::queryInterface( aType ));
 

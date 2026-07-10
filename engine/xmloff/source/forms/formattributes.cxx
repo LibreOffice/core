@@ -373,7 +373,7 @@ namespace xmloff
     void OAttribute2Property::addEnumPropertyImpl(
             sal_Int32 nAttributeToken, const OUString& _rPropertyName,
             const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
-            const css::uno::Type* _pType)
+            const cpo::uno::Type* _pType)
     {
         AttributeAssignment& aAssignment = implAdd(nAttributeToken, _rPropertyName,
             _pType ? *_pType : ::cppu::UnoType<sal_Int32>::get());
@@ -382,7 +382,7 @@ namespace xmloff
 
     OAttribute2Property::AttributeAssignment& OAttribute2Property::implAdd(
             sal_Int32 nAttributeToken, const OUString& _rPropertyName,
-            const css::uno::Type& _rType)
+            const cpo::uno::Type& _rType)
     {
         nAttributeToken &= TOKEN_MASK;
         OSL_ENSURE(m_aKnownProperties.end() == m_aKnownProperties.find(nAttributeToken),

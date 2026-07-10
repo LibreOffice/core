@@ -52,7 +52,7 @@ public:
             throw lang::IndexOutOfBoundsException();
         return cpo::uno::Any( uno::Reference< word::XPane >( new SwVbaPane( mxParent,  mxContext, mxModel ) ) );
     }
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         return cppu::UnoType<word::XPane>::get();
     }
@@ -88,7 +88,7 @@ SwVbaPanes::SwVbaPanes( const uno::Reference< XHelperInterface >& xParent, const
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaPanes::getElementType()
 {
     return cppu::UnoType<word::XPane>::get();

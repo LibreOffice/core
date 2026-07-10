@@ -43,7 +43,7 @@ import com.sun.star.table.XTableChart;
 import com.sun.star.table.XTableCharts;
 import com.sun.star.table.XTableChartsSupplier;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 

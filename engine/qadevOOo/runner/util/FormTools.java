@@ -36,7 +36,7 @@ import com.sun.star.form.XLoadable;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 /**
  * contains helper methods forms

@@ -61,7 +61,7 @@ public:
     virtual ~WeakComponentImplHelperBase() SAL_OVERRIDE;
 
     virtual cpo::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & rType ) SAL_OVERRIDE;
+        cpo::uno::Type const & rType ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
         SAL_NOEXCEPT SAL_OVERRIDE;
     virtual void SAL_CALL release()
@@ -92,9 +92,9 @@ public:
     virtual ~WeakAggComponentImplHelperBase() SAL_OVERRIDE;
 
     virtual cpo::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & rType ) SAL_OVERRIDE;
+        cpo::uno::Type const & rType ) SAL_OVERRIDE;
     virtual cpo::uno::Any SAL_CALL queryAggregation(
-        css::uno::Type const & rType ) SAL_OVERRIDE;
+        cpo::uno::Type const & rType ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
         SAL_NOEXCEPT SAL_OVERRIDE;
     virtual void SAL_CALL release()
@@ -109,25 +109,25 @@ public:
 /** WeakComponentImplHelper
 */
 CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL WeakComponentImplHelper_query(
-    css::uno::Type const & rType,
+    cpo::uno::Type const & rType,
     class_data * cd,
     void * that,
     ::cppu::WeakComponentImplHelperBase * pBase );
 /** WeakComponentImplHelper
 */
-CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< css::uno::Type > SAL_CALL WeakComponentImplHelper_getTypes(
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< cpo::uno::Type > SAL_CALL WeakComponentImplHelper_getTypes(
     class_data * cd );
 
 /** WeakAggComponentImplHelper
 */
 CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
-    css::uno::Type const & rType,
+    cpo::uno::Type const & rType,
     class_data * cd,
     void * that,
     ::cppu::WeakAggComponentImplHelperBase * pBase );
 /** WeakAggComponentImplHelper
 */
-CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< css::uno::Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< cpo::uno::Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
     class_data * cd );
 
 }

@@ -71,7 +71,7 @@ using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::XWeak;
-using ::com::sun::star::uno::Type;
+using ::cpo::uno::Type;
 using ::cpo::uno::Any;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::lang::XServiceInfo;

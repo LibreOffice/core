@@ -217,11 +217,11 @@ private:
     std::uint16_t const* ptr_;
 };
 
-ValueRef createDefaultValue(JSContext* ctx, css::uno::Type const& type);
-cpo::uno::Any fromJs(JSContext* ctx, css::uno::Type const& type, JSValueConst val);
+ValueRef createDefaultValue(JSContext* ctx, cpo::uno::Type const& type);
+cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst val);
 JSValue invokeUno(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, int magic,
                   JSValueConst* func_data);
-ValueRef mapTypeToJs(JSContext* ctx, css::uno::Type const& type);
+ValueRef mapTypeToJs(JSContext* ctx, cpo::uno::Type const& type);
 ValueRef toJs(JSContext* ctx, cpo::uno::Any const& value);
 
 #if defined DBG_UTIL
@@ -562,7 +562,7 @@ JSValue wrapUnoObject(JSContext* ctx, css::uno::Reference<css::uno::XInterface> 
 
 struct EnumeratorData
 {
-    css::uno::Type type;
+    cpo::uno::Type type;
     sal_Int32 value;
     OUString name;
 };
@@ -596,7 +596,7 @@ void compoundFinalizer(JSRuntime* rt, JSValueConst val)
         JS_GetOpaque(val, getRuntimeData(rt)->compoundClassId)));
 }
 
-typelib_TypeDescriptionReference* typeAcquire(css::uno::Type const& type)
+typelib_TypeDescriptionReference* typeAcquire(cpo::uno::Type const& type)
 {
     auto const ref = type.getTypeLibType();
     typelib_typedescriptionreference_acquire(ref);
@@ -616,7 +616,7 @@ JSValue typeToString(JSContext* ctx, JSValueConst this_val, int, JSValueConst*)
 {
     return callFromJs(ctx, [ctx, this_val] {
         auto const name
-            = css::uno::Type(static_cast<typelib_TypeDescriptionReference*>(
+            = cpo::uno::Type(static_cast<typelib_TypeDescriptionReference*>(
                                  JS_GetOpaque(this_val, getRuntimeData(ctx)->typeClassId)))
                   .getTypeName();
         return JS_NewStringUTF16(ctx, reinterpret_cast<std::uint16_t const*>(name.getStr()),
@@ -624,7 +624,7 @@ JSValue typeToString(JSContext* ctx, JSValueConst this_val, int, JSValueConst*)
     });
 }
 
-void setTypeProperty(JSContext* ctx, JSValueConst obj, char const* prop, css::uno::Type const& type)
+void setTypeProperty(JSContext* ctx, JSValueConst obj, char const* prop, cpo::uno::Type const& type)
 {
     ValueRef val(ctx, JS_NewObjectClass(ctx, getRuntimeData(ctx)->typeClassId));
     [[maybe_unused]] auto const e = JS_SetOpaque(val, typeAcquire(type));
@@ -646,10 +646,10 @@ JSValue unoTypeSequence(JSContext* ctx, JSValueConst, int argc, JSValueConst* ar
             JS_ThrowTypeError(ctx, "TODO: BAD UNO TYPE VALUE");
             throw JsException();
         }
-        css::uno::Type const type(
+        cpo::uno::Type const type(
             css::uno::TypeClass_SEQUENCE,
             "[]"
-                + css::uno::Type(static_cast<typelib_TypeDescriptionReference*>(
+                + cpo::uno::Type(static_cast<typelib_TypeDescriptionReference*>(
                                      JS_GetOpaque(argv[0], getRuntimeData(ctx)->typeClassId)))
                       .getTypeName());
         ValueRef val(ctx, JS_NewObjectClass(ctx, getRuntimeData(ctx)->typeClassId));
@@ -674,7 +674,7 @@ JSValue unoTypeEnum(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
             JS_ThrowTypeError(ctx, "TODO: BAD UNO TYPE VALUE");
             throw JsException();
         }
-        css::uno::Type const type(static_cast<typelib_TypeDescriptionReference*>(
+        cpo::uno::Type const type(static_cast<typelib_TypeDescriptionReference*>(
             JS_GetOpaque(argv[0], getRuntimeData(ctx)->enumClassId)));
         ValueRef val(ctx, JS_NewObjectClass(ctx, getRuntimeData(ctx)->typeClassId));
         [[maybe_unused]] auto const e = JS_SetOpaque(val, typeAcquire(type));
@@ -752,7 +752,7 @@ JSValue unoTypeStruct(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv
                     JS_ThrowTypeError(ctx, "TODO: BAD TYPE ARGUMENT");
                     throw JsException();
                 }
-                css::uno::Type argType(static_cast<typelib_TypeDescriptionReference*>(
+                cpo::uno::Type argType(static_cast<typelib_TypeDescriptionReference*>(
                     JS_GetOpaque(arg, getRuntimeData(ctx)->typeClassId)));
                 switch (argType.getTypeClass())
                 {
@@ -770,7 +770,7 @@ JSValue unoTypeStruct(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv
             }
             buf.append('>');
         }
-        css::uno::Type const type(td->getTypeClass(), buf.makeStringAndClear());
+        cpo::uno::Type const type(td->getTypeClass(), buf.makeStringAndClear());
         ValueRef val(ctx, JS_NewObjectClass(ctx, getRuntimeData(ctx)->typeClassId));
         [[maybe_unused]] auto const e = JS_SetOpaque(val, typeAcquire(type));
         assert(e == 0); //TODO
@@ -799,7 +799,7 @@ JSValue unoTypeException(JSContext* ctx, JSValueConst, int argc, JSValueConst* a
             JS_ThrowTypeError(ctx, "TODO: BAD UNO TYPE VALUE");
             throw JsException();
         }
-        css::uno::Type const type(static_cast<typelib_TypeDescriptionReference*>(
+        cpo::uno::Type const type(static_cast<typelib_TypeDescriptionReference*>(
             JS_GetOpaque(data, getRuntimeData(ctx)->exceptionClassId)));
         ValueRef val(ctx, JS_NewObjectClass(ctx, getRuntimeData(ctx)->typeClassId));
         [[maybe_unused]] auto const e = JS_SetOpaque(val, typeAcquire(type));
@@ -823,7 +823,7 @@ JSValue unoTypeInterface(JSContext* ctx, JSValueConst, int argc, JSValueConst* a
             JS_ThrowTypeError(ctx, "TODO: BAD UNO TYPE VALUE");
             throw JsException();
         }
-        css::uno::Type const type(static_cast<typelib_TypeDescriptionReference*>(
+        cpo::uno::Type const type(static_cast<typelib_TypeDescriptionReference*>(
             JS_GetOpaque(argv[0], getRuntimeData(ctx)->interfaceClassId)));
         ValueRef val(ctx, JS_NewObjectClass(ctx, getRuntimeData(ctx)->typeClassId));
         [[maybe_unused]] auto const e = JS_SetOpaque(val, typeAcquire(type));
@@ -869,7 +869,7 @@ JSValue structCtor(JSContext* ctx, JSValueConst new_target, int argc, JSValueCon
             JS_GetOpaque(data, getRuntimeData(ctx)->structClassId)));
         int argIdx = 0;
         auto const params = td->getTypeParameters();
-        std::vector<css::uno::Type> typeArgs;
+        std::vector<cpo::uno::Type> typeArgs;
         OUStringBuffer buf(td->getName());
         if (params.hasElements())
         {
@@ -917,7 +917,7 @@ JSValue structCtor(JSContext* ctx, JSValueConst new_target, int argc, JSValueCon
                     JS_ThrowTypeError(ctx, "TODO: BAD TYPE ARGUMENT");
                     throw JsException();
                 }
-                css::uno::Type argType(static_cast<typelib_TypeDescriptionReference*>(
+                cpo::uno::Type argType(static_cast<typelib_TypeDescriptionReference*>(
                     JS_GetOpaque(arg, getRuntimeData(ctx)->typeClassId)));
                 switch (argType.getTypeClass())
                 {
@@ -937,7 +937,7 @@ JSValue structCtor(JSContext* ctx, JSValueConst new_target, int argc, JSValueCon
             buf.append('>');
             ++argIdx;
         }
-        css::uno::Type type(css::uno::TypeClass_STRUCT, buf.makeStringAndClear());
+        cpo::uno::Type type(css::uno::TypeClass_STRUCT, buf.makeStringAndClear());
         ValueRef proto(ctx, JS_GetPropertyStr(ctx, new_target, "prototype"));
         if (JS_IsException(proto))
         {
@@ -984,7 +984,7 @@ JSValue structCtor(JSContext* ctx, JSValueConst new_target, int argc, JSValueCon
                 }
                 if (has == 0)
                 {
-                    css::uno::Type memType;
+                    cpo::uno::Type memType;
                     if (memberTypes[i]->getTypeClass() == css::uno::TypeClass_UNKNOWN)
                     {
                         sal_Int32 j = 0;
@@ -1001,7 +1001,7 @@ JSValue structCtor(JSContext* ctx, JSValueConst new_target, int argc, JSValueCon
                     }
                     else
                     {
-                        memType = css::uno::Type(memberTypes[i]->getTypeClass(),
+                        memType = cpo::uno::Type(memberTypes[i]->getTypeClass(),
                                                  memberTypes[i]->getName());
                     }
                     val = createDefaultValue(ctx, memType);
@@ -1036,7 +1036,7 @@ JSValue exceptionCtor(JSContext* ctx, JSValueConst new_target, int argc, JSValue
         {
             throw JsException();
         }
-        css::uno::Type const type(static_cast<typelib_TypeDescriptionReference*>(
+        cpo::uno::Type const type(static_cast<typelib_TypeDescriptionReference*>(
             JS_GetOpaque(data, getRuntimeData(ctx)->exceptionClassId)));
         css::uno::TypeDescription desc(type);
         auto compDesc = reinterpret_cast<typelib_CompoundTypeDescription const*>(desc.get());
@@ -1146,7 +1146,7 @@ JSValue createService(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv
                 for (sal_Int32 j = i; j != argc - 1; ++j)
                 {
                     args.getArray()[j] = fromJs(ctx,
-                                                css::uno::Type(params[i]->getType()->getTypeClass(),
+                                                cpo::uno::Type(params[i]->getType()->getTypeClass(),
                                                                params[i]->getType()->getName()),
                                                 argv[j + 1]);
                 }
@@ -1154,7 +1154,7 @@ JSValue createService(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv
             else
             {
                 args.getArray()[i] = fromJs(ctx,
-                                            css::uno::Type(params[i]->getType()->getTypeClass(),
+                                            cpo::uno::Type(params[i]->getType()->getTypeClass(),
                                                            params[i]->getType()->getName()),
                                             argv[i + 1]);
             }
@@ -1235,7 +1235,7 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
     {
         case css::uno::TypeClass_ENUM:
         {
-            css::uno::Type type(tc, id);
+            cpo::uno::Type type(tc, id);
             val = JS_NewObjectClass(ctx, getRuntimeData(ctx)->enumClassId);
             [[maybe_unused]] auto e = JS_SetOpaque(val, typeAcquire(type));
             assert(e == 0); //TODO
@@ -1291,7 +1291,7 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
             assert(!JS_IsException(val)); //TODO
             JS_SetConstructor(ctx, val, proto);
             ValueRef data(ctx, JS_NewObjectClass(ctx, getRuntimeData(ctx)->exceptionClassId));
-            [[maybe_unused]] auto const e = JS_SetOpaque(data, typeAcquire(css::uno::Type(tc, id)));
+            [[maybe_unused]] auto const e = JS_SetOpaque(data, typeAcquire(cpo::uno::Type(tc, id)));
             assert(e == 0); //TODO
 #if defined DBG_UTIL
             getRuntimeData(ctx)->toFinalize.inc();
@@ -1302,7 +1302,7 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
         case css::uno::TypeClass_INTERFACE:
         {
             val = JS_NewObjectClass(ctx, getRuntimeData(ctx)->interfaceClassId);
-            [[maybe_unused]] auto const e = JS_SetOpaque(val, typeAcquire(css::uno::Type(tc, id)));
+            [[maybe_unused]] auto const e = JS_SetOpaque(val, typeAcquire(cpo::uno::Type(tc, id)));
             assert(e == 0); //TODO
 #if defined DBG_UTIL
             getRuntimeData(ctx)->toFinalize.inc();
@@ -1423,7 +1423,7 @@ ValueRef getUnoidlRepresentation(JSContext* ctx, std::u16string_view id)
     return obj;
 }
 
-ValueRef createDefaultValue(JSContext* ctx, css::uno::Type const& type)
+ValueRef createDefaultValue(JSContext* ctx, cpo::uno::Type const& type)
 {
     switch (type.getTypeClass())
     {
@@ -1499,7 +1499,7 @@ ValueRef createDefaultValue(JSContext* ctx, css::uno::Type const& type)
                             css::uno::UNO_QUERY_THROW);
                         if (JS_SetPropertyUint32(
                                 ctx, args, arg++,
-                                mapTypeToJs(ctx, css::uno::Type(td->getTypeClass(), td->getName()))
+                                mapTypeToJs(ctx, cpo::uno::Type(td->getTypeClass(), td->getName()))
                                     .release())
                             == -1)
                         {
@@ -1574,7 +1574,7 @@ cpo::uno::Any fromJsString(JSContext* ctx, JSValueConst val)
     return cpo::uno::Any(s);
 }
 
-cpo::uno::Any fromJsSequence(JSContext* ctx, css::uno::Type const& type, JSValueConst val)
+cpo::uno::Any fromJsSequence(JSContext* ctx, cpo::uno::Type const& type, JSValueConst val)
 {
     if (!JS_IsArray(val))
     {
@@ -1633,7 +1633,7 @@ cpo::uno::Any fromJsEnum(JSContext* ctx, JSValueConst val)
     return { &data->value, data->type };
 }
 
-cpo::uno::Any fromJsInterface(JSContext* ctx, css::uno::Type const& type, JSValueConst val)
+cpo::uno::Any fromJsInterface(JSContext* ctx, cpo::uno::Type const& type, JSValueConst val)
 {
     if (JS_IsNull(val))
     {
@@ -1655,7 +1655,7 @@ cpo::uno::Any fromJsInterface(JSContext* ctx, css::uno::Type const& type, JSValu
     return a;
 }
 
-cpo::uno::Any fromJs(JSContext* ctx, css::uno::Type const& type, JSValueConst val)
+cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst val)
 {
     switch (type.getTypeClass())
     {
@@ -1836,7 +1836,7 @@ cpo::uno::Any fromJs(JSContext* ctx, css::uno::Type const& type, JSValueConst va
                 JS_ThrowTypeError(ctx, "TODO: BAD UNO TYPE VALUE");
                 throw JsException();
             }
-            return cpo::uno::Any(css::uno::Type(static_cast<typelib_TypeDescriptionReference*>(
+            return cpo::uno::Any(cpo::uno::Type(static_cast<typelib_TypeDescriptionReference*>(
                 JS_GetOpaque(val, getRuntimeData(ctx)->typeClassId))));
         case css::uno::TypeClass_ANY:
             if (JS_IsUndefined(val))
@@ -1936,14 +1936,14 @@ cpo::uno::Any fromJs(JSContext* ctx, css::uno::Type const& type, JSValueConst va
                 if (JS_GetClassID(val) == getRuntimeData(ctx)->compoundClassId)
                 {
                     return fromJs(ctx,
-                                  css::uno::Type(static_cast<typelib_TypeDescriptionReference*>(
+                                  cpo::uno::Type(static_cast<typelib_TypeDescriptionReference*>(
                                       JS_GetOpaque(val, getRuntimeData(ctx)->compoundClassId))),
                                   val);
                 }
                 if (JS_GetClassID(val) == getRuntimeData(ctx)->typeClassId)
                 {
                     return cpo::uno::Any(
-                        css::uno::Type(static_cast<typelib_TypeDescriptionReference*>(
+                        cpo::uno::Type(static_cast<typelib_TypeDescriptionReference*>(
                             JS_GetOpaque(val, getRuntimeData(ctx)->typeClassId))));
                 }
                 ValueRef const global(ctx, JS_GetGlobalObject(ctx));
@@ -1984,7 +1984,7 @@ cpo::uno::Any fromJs(JSContext* ctx, css::uno::Type const& type, JSValueConst va
                         throw JsException();
                     }
                     return fromJs(ctx,
-                                  css::uno::Type(static_cast<typelib_TypeDescriptionReference*>(
+                                  cpo::uno::Type(static_cast<typelib_TypeDescriptionReference*>(
                                       JS_GetOpaque(anyType, getRuntimeData(ctx)->typeClassId))),
                                   anyVal);
                 }
@@ -2061,7 +2061,7 @@ cpo::uno::Any fromJs(JSContext* ctx, css::uno::Type const& type, JSValueConst va
     }
 }
 
-ValueRef mapTypeToJs(JSContext* ctx, css::uno::Type const& type)
+ValueRef mapTypeToJs(JSContext* ctx, cpo::uno::Type const& type)
 {
     switch (type.getTypeClass())
     {
@@ -2149,7 +2149,7 @@ ValueRef mapTypeToJs(JSContext* ctx, css::uno::Type const& type)
     }
 }
 
-ValueRef toJs(JSContext* ctx, css::uno::Type const& type, void const* value)
+ValueRef toJs(JSContext* ctx, cpo::uno::Type const& type, void const* value)
 {
     switch (type.getTypeClass())
     {
@@ -2193,7 +2193,7 @@ ValueRef toJs(JSContext* ctx, css::uno::Type const& type, void const* value)
         case css::uno::TypeClass_ANY:
         {
             auto const any = static_cast<uno_Any const*>(value);
-            return toJs(ctx, *reinterpret_cast<css::uno::Type const*>(&any->pType), any->pData);
+            return toJs(ctx, *reinterpret_cast<cpo::uno::Type const*>(&any->pType), any->pData);
         }
         case css::uno::TypeClass_SEQUENCE:
         {
@@ -2312,7 +2312,7 @@ ValueRef toJs(JSContext* ctx, css::uno::Type const& type, void const* value)
                             css::uno::UNO_QUERY_THROW);
                         if (JS_SetPropertyUint32(
                                 ctx, args, arg++,
-                                mapTypeToJs(ctx, css::uno::Type(td->getTypeClass(), td->getName()))
+                                mapTypeToJs(ctx, cpo::uno::Type(td->getTypeClass(), td->getName()))
                                     .release())
                             == -1)
                         {
@@ -2388,7 +2388,7 @@ sal_Int64 g_nextProxyCallId = 0;
 
 // Return the declared return type of `methodName` on `interfaceType`, or void if it has no
 // such method:
-css::uno::Type lookupMethodReturnType(css::uno::Type const& interfaceType,
+cpo::uno::Type lookupMethodReturnType(cpo::uno::Type const& interfaceType,
                                       std::u16string_view methodName)
 {
     typelib_TypeDescription* td = nullptr;
@@ -2398,7 +2398,7 @@ css::uno::Type lookupMethodReturnType(css::uno::Type const& interfaceType,
         return cppu::UnoType<void>::get();
     }
     typelib_typedescription_complete(&td);
-    css::uno::Type ret = cppu::UnoType<void>::get();
+    cpo::uno::Type ret = cppu::UnoType<void>::get();
     if (td->eTypeClass == typelib_TypeClass_INTERFACE)
     {
         auto const ifaceTd = reinterpret_cast<typelib_InterfaceTypeDescription*>(td);
@@ -2414,7 +2414,7 @@ css::uno::Type lookupMethodReturnType(css::uno::Type const& interfaceType,
                         = reinterpret_cast<typelib_InterfaceMethodTypeDescription*>(memberTd);
                     if (OUString::unacquired(&methodTd->aBase.pMemberName) == methodName)
                     {
-                        ret = css::uno::Type(methodTd->pReturnTypeRef);
+                        ret = cpo::uno::Type(methodTd->pReturnTypeRef);
                         typelib_typedescription_release(memberTd);
                         break;
                     }
@@ -2430,7 +2430,7 @@ css::uno::Type lookupMethodReturnType(css::uno::Type const& interfaceType,
 class ProxyInvocation final : public cppu::WeakImplHelper<css::script::XInvocation>
 {
 public:
-    ProxyInvocation(css::uno::Type interfaceType, OUString proxyId,
+    ProxyInvocation(cpo::uno::Type interfaceType, OUString proxyId,
                     std::function<void(OUString const&)> proxyCallHook)
         : m_interfaceType(std::move(interfaceType))
         , m_proxyId(std::move(proxyId))
@@ -2451,7 +2451,7 @@ public:
         aOutParamIndex = {};
         aOutParam = {};
 
-        css::uno::Type const returnType = lookupMethodReturnType(m_interfaceType, aFunctionName);
+        cpo::uno::Type const returnType = lookupMethodReturnType(m_interfaceType, aFunctionName);
         bool const isVoid = returnType.getTypeClass() == css::uno::TypeClass_VOID;
         // Void-return methods are fire-and-forget; non-void methods spin Application::Yield
         // below until the iframe answers (listener notifications often fire from engine code
@@ -2543,7 +2543,7 @@ public:
     bool SAL_CALL hasProperty(OUString const&) override { return false; }
 
 private:
-    css::uno::Type m_interfaceType;
+    cpo::uno::Type m_interfaceType;
     OUString m_proxyId;
     std::function<void(OUString const&)> m_proxyCallHook;
 };
@@ -2558,7 +2558,7 @@ JSValue internalCreateProxy(JSContext* ctx, JSValueConst, int argc, JSValueConst
                               "$internal.createProxy: first argument must be a UNO interface type");
             throw JsException();
         }
-        css::uno::Type const interfaceType(static_cast<typelib_TypeDescriptionReference*>(
+        cpo::uno::Type const interfaceType(static_cast<typelib_TypeDescriptionReference*>(
             JS_GetOpaque(argv[0], getRuntimeData(ctx)->interfaceClassId)));
         if (!JS_IsString(argv[1]))
         {
@@ -2851,7 +2851,7 @@ OUString jsuno::execute(OUString const& script, std::function<void(OUString cons
         setTypeProperty(ctx, type, "double", cppu::UnoType<double>::get());
         setTypeProperty(ctx, type, "char", cppu::UnoType<char16_t>::get());
         setTypeProperty(ctx, type, "string", cppu::UnoType<OUString>::get());
-        setTypeProperty(ctx, type, "type", cppu::UnoType<css::uno::Type>::get());
+        setTypeProperty(ctx, type, "type", cppu::UnoType<cpo::uno::Type>::get());
         setTypeProperty(ctx, type, "any", cppu::UnoType<cpo::uno::Any>::get());
         JS_SetPropertyStr(ctx, type, "sequence",
                           JS_NewCFunction(ctx, unoTypeSequence, "sequence", 1));

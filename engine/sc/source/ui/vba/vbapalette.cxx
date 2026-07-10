@@ -72,7 +72,7 @@ public:
     }
 
     // Methods XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type SAL_CALL getElementType() override
     {
         return ::cppu::UnoType<sal_Int32>::get();
     }

@@ -199,7 +199,7 @@ namespace cppu_ifcontainer
 
         void testOMultiTypeInterfaceContainerHelper()
         {
-            uno::Type pTypes[nTests] =
+            cpo::uno::Type pTypes[nTests] =
             {
                 ::cppu::UnoType< bool >::get(),
                 ::cppu::UnoType< float >::get(),
@@ -213,7 +213,7 @@ namespace cppu_ifcontainer
                 ::cppu::UnoType< ::sal_Int8 >::get()
             };
             doContainerTest< cppu::OMultiTypeInterfaceContainerHelper,
-                uno::Type> (pTypes);
+                cpo::uno::Type> (pTypes);
         }
 
         void testOMultiTypeInterfaceContainerHelperInt32()

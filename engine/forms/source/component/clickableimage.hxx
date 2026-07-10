@@ -83,7 +83,7 @@ namespace frm
         void SetURL(const OUString& rURL);
         void DataAvailable();
 
-        cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+        cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
         bool isDispatchUrlInternal() const { return m_bDispatchUrlInternal; }
         void     setDispatchUrlInternal(bool _bDispatch) { m_bDispatchUrlInternal = _bDispatch; }
 
@@ -103,7 +103,7 @@ namespace frm
 
         // UNO Binding
         DECLARE_UNO3_AGG_DEFAULTS(OClickableImageBaseModel, OControlModel)
-        virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
 
     protected:
         // OComponentHelper
@@ -218,7 +218,7 @@ namespace frm
     protected:
         // UNO Binding
         DECLARE_UNO3_AGG_DEFAULTS(OClickableImageBaseControl, OControl)
-        virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
 
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
@@ -234,7 +234,7 @@ namespace frm
     protected:
         virtual void actionPerformed_Impl( bool bNotifyListener, const css::awt::MouseEvent& rEvt );
 
-        cpo::uno::Sequence< css::uno::Type > _getTypes() override;
+        cpo::uno::Sequence< cpo::uno::Type > _getTypes() override;
 
         /** approves the action by calling the approve listeners
             @return <TRUE/> if and only if the action has <em>not</em> been cancelled by a listener

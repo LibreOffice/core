@@ -17,7 +17,7 @@
  */
 
 package com.sun.star.lib.uno.helper;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XEventListener;

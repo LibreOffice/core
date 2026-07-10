@@ -22,7 +22,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <comphelper/processfactory.hxx>
@@ -223,10 +223,10 @@ public:
     void testParseType()
     {
         CPPUNIT_ASSERT_EQUAL(cppu::UnoType<sal_Int32>::get(),
-                             parseJsonToAny(u"\"long\""_ustr, cppu::UnoType<css::uno::Type>::get())
-                                 .get<css::uno::Type>());
+                             parseJsonToAny(u"\"long\""_ustr, cppu::UnoType<cpo::uno::Type>::get())
+                                 .get<cpo::uno::Type>());
         CPPUNIT_ASSERT_THROW(
-            parseJsonToAny(u"\"no.such.type\""_ustr, cppu::UnoType<css::uno::Type>::get()),
+            parseJsonToAny(u"\"no.such.type\""_ustr, cppu::UnoType<cpo::uno::Type>::get()),
             css::uno::RuntimeException);
     }
 

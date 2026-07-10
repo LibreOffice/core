@@ -75,7 +75,7 @@ Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActio
 
 // XInterface
 cpo::uno::Any SAL_CALL
-    AccessibleOLEShape::queryInterface (const css::uno::Type & rType)
+    AccessibleOLEShape::queryInterface (const cpo::uno::Type & rType)
 {
     cpo::uno::Any aReturn = AccessibleShape::queryInterface (rType);
     if ( ! aReturn.hasValue())
@@ -117,7 +117,7 @@ cpo::uno::Sequence< OUString> SAL_CALL
 }
 
 // XTypeProvider
-cpo::uno::Sequence<uno::Type> SAL_CALL AccessibleOLEShape::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> SAL_CALL AccessibleOLEShape::getTypes()
 {
     // Get list of types from the context base implementation...
     return comphelper::concatSequences(AccessibleShape::getTypes(),

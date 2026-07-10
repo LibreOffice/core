@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -32,7 +32,7 @@ namespace frm
 
     struct TypeCompareLess
     {
-        bool operator()( const css::uno::Type& _rLHS, const css::uno::Type& _rRHS ) const
+        bool operator()( const cpo::uno::Type& _rLHS, const cpo::uno::Type& _rRHS ) const
         {
             return _rLHS.getTypeName() < _rRHS.getTypeName();
         }
@@ -44,8 +44,8 @@ namespace frm
     class TypeBag
     {
     public:
-        typedef cpo::uno::Sequence< css::uno::Type >            TypeSequence;
-        typedef ::std::set< css::uno::Type, TypeCompareLess >   TypeSet;
+        typedef cpo::uno::Sequence< cpo::uno::Type >            TypeSequence;
+        typedef ::std::set< cpo::uno::Type, TypeCompareLess >   TypeSet;
 
     private:
         TypeSet     m_aTypes;
@@ -65,9 +65,9 @@ namespace frm
             const TypeSequence& _rTypes3
         );
 
-        void    addType( const css::uno::Type& i_rType );
+        void    addType( const cpo::uno::Type& i_rType );
         void    addTypes( const TypeSequence& _rTypes );
-        void    removeType( const css::uno::Type& i_rType );
+        void    removeType( const cpo::uno::Type& i_rType );
 
         /** returns the types represented by this bag
         */

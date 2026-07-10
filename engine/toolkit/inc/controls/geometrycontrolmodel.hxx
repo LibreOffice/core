@@ -102,17 +102,17 @@ namespace toolkit { class ScriptEventContainer; }
         virtual ~OGeometryControlModel_Base() override;
 
         // XAggregation
-        cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _aType ) override;
+        cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _aType ) override;
 
     public:
         // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
         virtual void SAL_CALL acquire(  ) noexcept override;
         virtual void SAL_CALL release(  ) noexcept override;
 
     protected:
         // XTypeProvider
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
 
         // OPropertySetHelper overridables
         virtual bool SAL_CALL convertFastPropertyValue(

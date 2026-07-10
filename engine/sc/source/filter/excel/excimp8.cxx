@@ -77,7 +77,7 @@ private:
     std::mutex m_aMutex;
 public:
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<container::XIndexContainer>::get(); }
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<container::XIndexContainer>::get(); }
     virtual bool SAL_CALL hasElements(  ) override
     {
         std::unique_lock aGuard( m_aMutex );

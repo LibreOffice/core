@@ -92,7 +92,7 @@ protected:
     virtual css::awt::Rectangle implGetBounds() override;
 
 private:
-    cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
+    cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& rType) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

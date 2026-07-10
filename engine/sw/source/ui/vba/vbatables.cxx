@@ -94,7 +94,7 @@ public:
         return cpo::uno::Any( uno::Reference< text::XTextTable >( mxTables[ Index ] ) );
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<text::XTextTable>::get(); }
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<text::XTextTable>::get(); }
     virtual bool SAL_CALL hasElements(  ) override { return getCount() > 0 ; }
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
@@ -219,7 +219,7 @@ SwVbaTables::getServiceImplName()
 }
 
 // XEnumerationAccess
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 SwVbaTables::getElementType()
 {
     return  cppu::UnoType<word::XTable>::get();

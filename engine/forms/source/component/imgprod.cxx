@@ -49,7 +49,7 @@ ImageProducer::~ImageProducer()
 
 
 // XInterface
-cpo::uno::Any ImageProducer::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any ImageProducer::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< css::lang::XInitialization* >(this),

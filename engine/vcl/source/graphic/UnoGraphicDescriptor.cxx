@@ -155,7 +155,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString& rURL )
 }
 
 
-cpo::uno::Any SAL_CALL GraphicDescriptor::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL GraphicDescriptor::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -207,9 +207,9 @@ cpo::uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNa
 }
 
 
-cpo::uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GraphicDescriptor::getTypes()
 {
-    static const cpo::uno::Sequence< uno::Type > aTypes {
+    static const cpo::uno::Sequence< cpo::uno::Type > aTypes {
         cppu::UnoType<uno::XAggregation>::get(),
         cppu::UnoType<lang::XServiceInfo>::get(),
         cppu::UnoType<lang::XTypeProvider>::get(),

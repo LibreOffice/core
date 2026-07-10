@@ -55,10 +55,10 @@ namespace dbaui
 
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS(SbaXGridControl, FmXGridControl)
-        virtual cpo::uno::Any  SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any  SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
 
         // XTypeProvider
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
         // css::lang::XServiceInfo
@@ -95,9 +95,9 @@ namespace dbaui
         // UNO
         virtual void SAL_CALL  acquire() noexcept override { FmXGridPeer::acquire(); }
         virtual void SAL_CALL release() noexcept override { FmXGridPeer::release(); }
-        virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any  SAL_CALL queryInterface(const cpo::uno::Type& _rType) override;
 
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
 
         // css::frame::XDispatch
         virtual void SAL_CALL dispatch(const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs) override;

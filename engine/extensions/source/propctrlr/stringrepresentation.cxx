@@ -71,7 +71,7 @@ public:
 
     // inspection::XStringRepresentation:
     virtual OUString SAL_CALL convertToControlValue(const cpo::uno::Any & PropertyValue) override;
-    virtual cpo::uno::Any SAL_CALL convertToPropertyValue(const OUString & ControlValue, const uno::Type & ControlValueType) override;
+    virtual cpo::uno::Any SAL_CALL convertToPropertyValue(const OUString & ControlValue, const cpo::uno::Type & ControlValueType) override;
 
     // lang::XInitialization:
     virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
@@ -103,7 +103,7 @@ private:
     static bool    convertStringToGenericValue(
                         const OUString&              _rStringRep,
                                 cpo::uno::Any&   _rValue,
-                        const uno::Type& _rTargetType
+                        const cpo::uno::Type& _rTargetType
                     );
 
     /** uses the simple convert method from the type converter
@@ -170,7 +170,7 @@ OUString SAL_CALL StringRepresentation::convertToControlValue(const cpo::uno::An
     return sReturn;
 }
 
-cpo::uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const OUString & ControlValue, const uno::Type & ControlValueType)
+cpo::uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const OUString & ControlValue, const cpo::uno::Type & ControlValueType)
 {
     cpo::uno::Any aReturn;
 
@@ -483,7 +483,7 @@ cpo::uno::Any StringRepresentation::convertStringToSimple( const OUString& _rVal
     return aReturn;
 }
 
-bool StringRepresentation::convertStringToGenericValue( const OUString& _rStringRep, cpo::uno::Any& _rValue, const uno::Type& _rTargetType )
+bool StringRepresentation::convertStringToGenericValue( const OUString& _rStringRep, cpo::uno::Any& _rValue, const cpo::uno::Type& _rTargetType )
 {
     bool bCanConvert = true;
 
@@ -501,7 +501,7 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
 
     case uno::TypeClass_SEQUENCE:
     {
-        uno::Type aElementType = ::comphelper::getSequenceElementType( _rTargetType );
+        cpo::uno::Type aElementType = ::comphelper::getSequenceElementType( _rTargetType );
 
         switch ( aElementType.getTypeClass() )
         {

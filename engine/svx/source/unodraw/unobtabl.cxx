@@ -44,7 +44,7 @@ public:
     virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
 };
 
 }
@@ -86,7 +86,7 @@ NameOrIndex* SvxUnoBitmapTable::createItem() const
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoBitmapTable::getElementType(  )
+cpo::uno::Type SAL_CALL SvxUnoBitmapTable::getElementType(  )
 {
     return ::cppu::UnoType<awt::XBitmap>::get();
 }

@@ -28,7 +28,7 @@ import util.utils;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.xml.AttributeData;
 
 
@@ -504,7 +504,7 @@ public class _CharacterProperties extends MultiPropertyTest {
             return res;
         }
 
-        public com.sun.star.uno.Type getElementType() {
+        public cpo.uno.Type getElementType() {
             Iterator<String> oEnum = members.keySet().iterator();
             String key = oEnum.next();
             Object o = members.get(key);

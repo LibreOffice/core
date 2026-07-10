@@ -88,7 +88,7 @@ cpo::uno::Any SAL_CALL IndexedPropertyValuesContainer::getByIndex( sal_Int32 nIn
 }
 
 // XElementAccess
-css::uno::Type SAL_CALL IndexedPropertyValuesContainer::getElementType(  )
+cpo::uno::Type SAL_CALL IndexedPropertyValuesContainer::getElementType(  )
 {
     return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }

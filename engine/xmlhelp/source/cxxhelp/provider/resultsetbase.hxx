@@ -57,7 +57,7 @@ namespace chelp {
 
         // XInterface
         virtual cpo::uno::Any SAL_CALL
-        queryInterface( const css::uno::Type& aType ) override;
+        queryInterface( const cpo::uno::Type& aType ) override;
 
         virtual void SAL_CALL
         acquire()

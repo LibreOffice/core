@@ -58,7 +58,7 @@ struct DefaultPropertyValue
 {
     OUString               Name;
     cpo::uno::Any          DefaultValue;
-    const css::uno::Type&  ValueType;
+    const cpo::uno::Type&  ValueType;
 
     DefaultPropertyValue(const OUString& _aName, const cpo::uno::Any& _rDefaultValue)
         :Name( _aName )
@@ -68,7 +68,7 @@ struct DefaultPropertyValue
         OSL_ENSURE( ValueType.getTypeClass() != css::uno::TypeClass_VOID,
             "AsciiPropertyValue::AsciiPropertyValue: NULL values not allowed here, use the other CTOR for this!" );
     }
-    DefaultPropertyValue(const OUString& _aName, const css::uno::Type& _rValeType)
+    DefaultPropertyValue(const OUString& _aName, const cpo::uno::Type& _rValeType)
         :Name( _aName )
         ,ValueType( _rValeType )
     {

@@ -474,7 +474,7 @@ const struct
     const char* name;
     GInterfaceInitFunc const aInit;
     GetGIfaceType const aGetGIfaceType;
-    const css::uno::Type& (*aGetUnoType)();
+    const cpo::uno::Type& (*aGetUnoType)();
 } TYPE_TABLE[] = {
 #if GTK_CHECK_VERSION(4, 14, 0)
     { "Text", lo_accessible_text_init, gtk_accessible_text_get_type,
@@ -484,7 +484,7 @@ const struct
       cppu::UnoType<css::accessibility::XAccessibleValue>::get },
 };
 
-static bool isOfType(css::uno::XInterface* xInterface, const css::uno::Type& rType)
+static bool isOfType(css::uno::XInterface* xInterface, const cpo::uno::Type& rType)
 {
     if (!xInterface)
         return false;

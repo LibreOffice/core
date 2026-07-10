@@ -112,7 +112,7 @@ bool SAL_CALL NameContainer::hasElements()
     return ! m_aMap.empty();
 }
 
-uno::Type SAL_CALL NameContainer::getElementType()
+cpo::uno::Type SAL_CALL NameContainer::getElementType()
 {
     return ::cppu::UnoType<OUString>::get();
 }

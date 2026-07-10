@@ -135,7 +135,7 @@ ODefinitionContainer::~ODefinitionContainer()
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( ODefinitionContainer,OContentHelper,ODefinitionContainer_Base)
-cpo::uno::Sequence< css::uno::Type > ODefinitionContainer::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > ODefinitionContainer::getTypes()
 {
     return  ::comphelper::concatSequences(
         OContentHelper::getTypes( ),

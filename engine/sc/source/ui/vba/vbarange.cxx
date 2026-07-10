@@ -302,7 +302,7 @@ public:
         return cpo::uno::Any( m_xRange );
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override { return cppu::UnoType<table::XCellRange>::get(); }
+    virtual cpo::uno::Type SAL_CALL getElementType() override { return cppu::UnoType<table::XCellRange>::get(); }
     virtual bool SAL_CALL hasElements() override { return true; }
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() override { return new SingleRangeEnumeration( m_xRange ); }
@@ -335,7 +335,7 @@ public:
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override { return cppu::UnoType<excel::XRange>::get(); }
+    virtual cpo::uno::Type SAL_CALL getElementType() override { return cppu::UnoType<excel::XRange>::get(); }
 
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 

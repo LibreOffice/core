@@ -43,7 +43,7 @@ public:
     virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
 };
 }
 
@@ -67,7 +67,7 @@ NameOrIndex* SvxUnoDashTable::createItem() const
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoDashTable::getElementType()
+cpo::uno::Type SAL_CALL SvxUnoDashTable::getElementType()
 {
     return cppu::UnoType<drawing::LineDash>::get();
 }

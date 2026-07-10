@@ -27,7 +27,7 @@ import com.sun.star.script.framework.provider.PathUtils;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.ucb.XSimpleFileAccess2;
 
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
 import java.io.ByteArrayInputStream;
@@ -141,7 +141,7 @@ public class Parcel implements XNameContainer {
         return result;
     }
 
-    public com.sun.star.uno.Type getElementType() {
+    public cpo.uno.Type getElementType() {
         // TODO at the moment this returns void indicating
         // type is unknown ( from UNO point of view this is correct )
         // but, maybe we want to have a private UNO interface

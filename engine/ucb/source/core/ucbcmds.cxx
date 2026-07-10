@@ -67,7 +67,7 @@ using namespace com::sun::star;
 namespace
 {
 // Helper to provide defaults for type and attributes (save some typing)
-beans::Property makeProperty(const OUString& n, sal_Int32 h, uno::Type t = {}, sal_Int16 a = {})
+beans::Property makeProperty(const OUString& n, sal_Int32 h, cpo::uno::Type t = {}, sal_Int16 a = {})
 {
     return { n, h, t, a };
 }

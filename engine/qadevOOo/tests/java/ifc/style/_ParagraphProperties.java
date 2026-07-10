@@ -31,7 +31,7 @@ import com.sun.star.container.XIndexReplace;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.xml.AttributeData;
 
 
@@ -426,7 +426,7 @@ public class _ParagraphProperties extends MultiPropertyTest {
             return keySet.toArray(new String[keySet.size()]);
         }
 
-        public com.sun.star.uno.Type getElementType() {
+        public cpo.uno.Type getElementType() {
             String key = members.keySet().iterator().next();
             Object o = members.get(key);
             return new Type(o.getClass());

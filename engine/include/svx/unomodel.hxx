@@ -56,7 +56,7 @@ private:
     css::uno::Reference< css::uno::XInterface > mxTransGradientTable;
     css::uno::Reference< css::uno::XInterface > mxMarkerTable;
 
-    cpo::uno::Sequence< css::uno::Type > maTypeSequence;
+    cpo::uno::Sequence< cpo::uno::Type > maTypeSequence;
 
 protected:
     // SvxUnoDrawMSFactory
@@ -69,7 +69,7 @@ public:
     SdrModel* GetDoc() const { return mpDoc; }
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     {  SfxBaseModel::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -81,7 +81,7 @@ public:
     virtual bool SAL_CALL hasControllersLocked(  ) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XDrawPagesSupplier

@@ -26,7 +26,7 @@
 #include <osl/diagnose.h>
 #include <tools/date.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -278,12 +278,12 @@ Convert& Convert::get()
     return aConvert;
 }
 
-bool Convert::hasType( const css::uno::Type& rType )
+bool Convert::hasType( const cpo::uno::Type& rType )
 {
     return maMap.contains( rType );
 }
 
-cpo::uno::Sequence<css::uno::Type> Convert::getTypes() const
+cpo::uno::Sequence<cpo::uno::Type> Convert::getTypes() const
 {
     return comphelper::mapKeysToSequence( maMap );
 }
@@ -295,7 +295,7 @@ OUString Convert::toXSD( const cpo::uno::Any& rAny )
 }
 
 cpo::uno::Any Convert::toAny( const OUString& rValue,
-                              const css::uno::Type& rType )
+                              const cpo::uno::Type& rType )
 {
     Map_t::iterator aIter = maMap.find( rType );
     return aIter != maMap.end() ? aIter->second.second( rValue ) : cpo::uno::Any();

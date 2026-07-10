@@ -629,7 +629,7 @@ sal_Int32 SAL_CALL SwXStyleFamily::getCount()
 };
 
     //XElementAccess
-uno::Type SAL_CALL SwXStyleFamily::getElementType()
+cpo::uno::Type SAL_CALL SwXStyleFamily::getElementType()
 {
     return cppu::UnoType<style::XStyle>::get();
 };
@@ -780,7 +780,7 @@ rtl::Reference<SwXStyleFamily> SwXStyleFamilies::GetStylesByIndex(sal_Int32 nInd
     return rxFamily;
 }
 
-uno::Type SwXStyleFamilies::getElementType()
+cpo::uno::Type SwXStyleFamilies::getElementType()
 {
     return cppu::UnoType<container::XNameContainer>::get();
 }
@@ -3629,7 +3629,7 @@ cpo::uno::Any SwXAutoStyles::getByIndex(sal_Int32 nIndex)
     return aRet;
 }
 
-uno::Type SwXAutoStyles::getElementType(  )
+cpo::uno::Type SwXAutoStyles::getElementType(  )
 {
     return cppu::UnoType<style::XAutoStyleFamily>::get();
 }
@@ -3938,7 +3938,7 @@ uno::Reference< container::XEnumeration > SwXAutoStyleFamily::createEnumeration(
         (new SwXAutoStylesEnumerator( *m_pDocShell->GetDoc(), m_eFamily ));
 }
 
-uno::Type SwXAutoStyleFamily::getElementType(  )
+cpo::uno::Type SwXAutoStyleFamily::getElementType(  )
 {
     return cppu::UnoType<style::XAutoStyle>::get();
 }
@@ -4768,7 +4768,7 @@ void SAL_CALL SwXTextTableStyle::removeByName(const OUString& /*Name*/)
 }
 
 //XElementAccess
-uno::Type SAL_CALL SAL_CALL SwXTextTableStyle::getElementType()
+cpo::uno::Type SAL_CALL SAL_CALL SwXTextTableStyle::getElementType()
 {
     return cppu::UnoType<style::XStyle>::get();
 }

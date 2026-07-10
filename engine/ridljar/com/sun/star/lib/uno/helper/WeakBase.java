@@ -20,7 +20,7 @@ package com.sun.star.lib.uno.helper;
 import com.sun.star.uno.XWeak;
 import com.sun.star.uno.XAdapter;
 import com.sun.star.lang.XTypeProvider;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;

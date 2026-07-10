@@ -422,8 +422,8 @@ public:
 
     void setPropName(const OUString& rPropName) { m_aPropName = rPropName; }
     OUString const& getPropName() const { return m_aPropName; }
-    void setPropType(const css::uno::Type& rPropType) { m_aPropType = rPropType; }
-    css::uno::Type const& getPropType() const { return m_aPropType; }
+    void setPropType(const cpo::uno::Type& rPropType) { m_aPropType = rPropType; }
+    cpo::uno::Type const& getPropType() const { return m_aPropType; }
     void setTableRowWidthAfter(int nTableRowWidthAfter)
     {
         m_nTableRowWidthAfter = nTableRowWidthAfter;
@@ -630,7 +630,7 @@ private:
     /// User-defined property: key name.
     OUString m_aPropName;
     /// User-defined property: value type.
-    css::uno::Type m_aPropType;
+    cpo::uno::Type m_aPropType;
 
     /// Width of invisible cell at the end of the row.
     int m_nTableRowWidthAfter;

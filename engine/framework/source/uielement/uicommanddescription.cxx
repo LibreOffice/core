@@ -86,7 +86,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
         // XElementAccess
-        virtual css::uno::Type SAL_CALL getElementType() override;
+        virtual cpo::uno::Type SAL_CALL getElementType() override;
 
         virtual bool SAL_CALL hasElements() override;
 

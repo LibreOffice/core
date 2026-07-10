@@ -42,7 +42,7 @@ namespace pcr
 
     struct TypeLess
     {
-        bool operator()( const css::uno::Type& _rLHS, const css::uno::Type& _rRHS ) const
+        bool operator()( const cpo::uno::Type& _rLHS, const cpo::uno::Type& _rRHS ) const
         {
             return _rLHS.getTypeName() < _rRHS.getTypeName();
         }
@@ -73,7 +73,7 @@ namespace pcr
         PropertyMap                                                                         m_aProperties;
         /// property change listeners
         ::comphelper::OInterfaceContainerHelper2                                                   m_aPropertyListeners;
-        std::map< css::uno::Type, ::rtl::Reference< IPropertyEnumRepresentation >, TypeLess >
+        std::map< cpo::uno::Type, ::rtl::Reference< IPropertyEnumRepresentation >, TypeLess >
                                                                                             m_aEnumConverters;
 
         /// has ->m_aProperties been initialized?
@@ -92,7 +92,7 @@ namespace pcr
         virtual cpo::uno::Any                                       SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
         virtual void                                                SAL_CALL setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
         virtual cpo::uno::Any                                       SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rControlValue ) override;
-        virtual cpo::uno::Any                                       SAL_CALL convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) override;
+        virtual cpo::uno::Any                                       SAL_CALL convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const cpo::uno::Type& _rControlValueType ) override;
         virtual css::beans::PropertyState                           SAL_CALL getPropertyState( const OUString& _rPropertyName ) override;
         virtual void                                                SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual void                                                SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
@@ -126,7 +126,7 @@ namespace pcr
         /** retrieves the enum converter for the given ENUM type
         */
         ::rtl::Reference< IPropertyEnumRepresentation >
-                impl_getEnumConverter( const css::uno::Type& _rEnumType );
+                impl_getEnumConverter( const cpo::uno::Type& _rEnumType );
 
         GenericPropertyHandler( const GenericPropertyHandler& ) = delete;
         GenericPropertyHandler& operator=( const GenericPropertyHandler& ) = delete;

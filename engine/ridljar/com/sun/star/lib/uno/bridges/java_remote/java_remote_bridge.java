@@ -51,7 +51,7 @@ import com.sun.star.lib.util.DisposeNotifier;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.IBridge;
 import com.sun.star.uno.IEnvironment;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;

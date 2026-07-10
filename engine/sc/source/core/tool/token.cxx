@@ -1037,7 +1037,7 @@ bool ScTokenArray::AddFormulaToken(
         {
             case uno::TypeClass_STRUCT:
                 {
-                    uno::Type aType = rToken.Data.getValueType();
+                    cpo::uno::Type aType = rToken.Data.getValueType();
                     if ( aType.equals( cppu::UnoType<sheet::SingleReference>::get() ) )
                     {
                         ScSingleRefData aSingleRef;

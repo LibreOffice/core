@@ -24,7 +24,7 @@
 
 
 using com::sun::star::uno::TypeClass;
-using com::sun::star::uno::Type;
+using cpo::uno::Type;
 using com::sun::star::uno::RuntimeException;
 using cpo::uno::Any;
 using com::sun::star::uno::TypeDescription;

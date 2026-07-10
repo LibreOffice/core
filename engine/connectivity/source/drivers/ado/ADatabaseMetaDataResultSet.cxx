@@ -97,7 +97,7 @@ Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType )
     return aRet.hasValue() ? aRet : ODatabaseMetaDataResultSet_BASE::queryInterface(rType);
 }
 
-cpo::uno::Sequence< css::uno::Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  )
 {
     return comphelper::concatSequences(cppu::OPropertySetHelper::getTypes(),
                                        ODatabaseMetaDataResultSet_BASE::getTypes());

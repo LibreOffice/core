@@ -120,7 +120,7 @@ public:
     using OWeakObject::acquire;
     using OWeakObject::release;
 
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
     getTypes() override;
 
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
@@ -143,7 +143,7 @@ public:
         css::uno::Reference< css::lang::XEventListener >
             const & aListener) override;
 
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
 
     virtual bool SAL_CALL hasElements() override;
 
@@ -161,7 +161,7 @@ public:
     virtual OUString SAL_CALL getDescriptionByHierarchicalName(
         OUString const & aName) override;
 
-    virtual css::uno::Type SAL_CALL getTypeByHierarchicalName(
+    virtual cpo::uno::Type SAL_CALL getTypeByHierarchicalName(
         OUString const & aName) override;
 
     virtual bool SAL_CALL getModifiedByHierarchicalName(
@@ -313,7 +313,7 @@ protected:
     virtual rtl::Reference< RootAccess > getRootAccess() = 0;
     virtual rtl::Reference< Access > getParentAccess() = 0;
 
-    virtual void addTypes(std::vector< css::uno::Type > * types)
+    virtual void addTypes(std::vector< cpo::uno::Type > * types)
         const = 0;
 
     virtual void addSupportedServiceNames(
@@ -323,7 +323,7 @@ protected:
     virtual void clearListeners() noexcept;
 
     virtual cpo::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & aType) override;
+        cpo::uno::Type const & aType) override;
 
     Components & getComponents() const { return components_;}
 

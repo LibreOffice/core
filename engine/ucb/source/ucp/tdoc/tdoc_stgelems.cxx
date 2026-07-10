@@ -147,7 +147,7 @@ Storage::~Storage()
 
 
 // virtual
-cpo::uno::Any SAL_CALL Storage::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL Storage::queryInterface( const cpo::uno::Type& aType )
 {
     // First, try to use interfaces implemented by myself and base class(es)
     cpo::uno::Any aRet = StorageUNOBase::queryInterface( aType );
@@ -187,7 +187,7 @@ void SAL_CALL Storage::release()
 
 
 // virtual
-cpo::uno::Sequence< uno::Type > SAL_CALL Storage::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Storage::getTypes()
 {
     return m_xWrappedTypeProv->getTypes();
 }
@@ -230,7 +230,7 @@ void SAL_CALL Storage::removeEventListener(
 
 
 // virtual
-uno::Type SAL_CALL Storage::getElementType()
+cpo::uno::Type SAL_CALL Storage::getElementType()
 {
     return m_xWrappedStorage->getElementType();
 }
@@ -516,7 +516,7 @@ OutputStream::~OutputStream()
 
 
 // virtual
-cpo::uno::Any SAL_CALL OutputStream::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL OutputStream::queryInterface( const cpo::uno::Type& aType )
 {
     cpo::uno::Any aRet = OutputStreamUNOBase::queryInterface( aType );
 
@@ -534,7 +534,7 @@ cpo::uno::Any SAL_CALL OutputStream::queryInterface( const uno::Type& aType )
 
 
 // virtual
-cpo::uno::Sequence< uno::Type > SAL_CALL OutputStream::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL OutputStream::getTypes()
 {
     return m_xWrappedTypeProv->getTypes();
 }
@@ -684,7 +684,7 @@ Stream::~Stream()
 
 
 // virtual
-cpo::uno::Any SAL_CALL Stream::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL Stream::queryInterface( const cpo::uno::Type& aType )
 {
     cpo::uno::Any aRet = StreamUNOBase::queryInterface( aType );
 
@@ -702,7 +702,7 @@ cpo::uno::Any SAL_CALL Stream::queryInterface( const uno::Type& aType )
 
 
 // virtual
-cpo::uno::Sequence< uno::Type > SAL_CALL Stream::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Stream::getTypes()
 {
     return m_xWrappedTypeProv->getTypes();
 }

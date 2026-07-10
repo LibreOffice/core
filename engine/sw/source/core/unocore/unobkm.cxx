@@ -545,7 +545,7 @@ bool SwXFieldmarkParameters::hasByName(const OUString& aName)
     return (pParameters->find(aName) != pParameters->end());
 }
 
-uno::Type SwXFieldmarkParameters::getElementType()
+cpo::uno::Type SwXFieldmarkParameters::getElementType()
 {
     return ::cppu::UnoType<void>::get();
 }

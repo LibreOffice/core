@@ -1883,7 +1883,7 @@ SdXImpressDocument::~SdXImpressDocument() noexcept
 }
 
 // XInterface
-cpo::uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SdXImpressDocument::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -1968,13 +1968,13 @@ sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const cpo::uno::Sequence< s
 }
 
 // XTypeProvider
-cpo::uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SdXImpressDocument::getTypes(  )
 {
     ::SolarMutexGuard aGuard;
 
     if( !maTypeSequence.hasElements() )
     {
-        cpo::uno::Sequence< uno::Type > aTypes( SfxBaseModel::getTypes() );
+        cpo::uno::Sequence< cpo::uno::Type > aTypes( SfxBaseModel::getTypes() );
         aTypes = comphelper::concatSequences(aTypes,
             cpo::uno::Sequence {
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -5670,7 +5670,7 @@ bool SAL_CALL SdDrawPagesAccess::hasByName( const OUString& aName )
 }
 
 // XElementAccess
-uno::Type SAL_CALL SdDrawPagesAccess::getElementType()
+cpo::uno::Type SAL_CALL SdDrawPagesAccess::getElementType()
 {
     return cppu::UnoType<drawing::XDrawPage>::get();
 }
@@ -5863,7 +5863,7 @@ cpo::uno::Any SAL_CALL SdMasterPagesAccess::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-uno::Type SAL_CALL SdMasterPagesAccess::getElementType()
+cpo::uno::Type SAL_CALL SdMasterPagesAccess::getElementType()
 {
     return cppu::UnoType<drawing::XDrawPage>::get();
 }
@@ -6106,7 +6106,7 @@ bool SAL_CALL SdDocLinkTargets::hasByName( const OUString& aName )
 }
 
 // container::XElementAccess
-uno::Type SAL_CALL SdDocLinkTargets::getElementType()
+cpo::uno::Type SAL_CALL SdDocLinkTargets::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }
@@ -6364,7 +6364,7 @@ bool SAL_CALL SdDocLinkTarget::hasByName(const OUString& aName)
 
 // container::XElementAccess
 
-uno::Type SAL_CALL SdDocLinkTarget::getElementType()
+cpo::uno::Type SAL_CALL SdDocLinkTarget::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }

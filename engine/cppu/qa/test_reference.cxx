@@ -28,7 +28,7 @@
 namespace
 {
 
-using ::com::sun::star::uno::Type;
+using ::cpo::uno::Type;
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
@@ -85,7 +85,7 @@ private:
 
 struct Base1: public css::uno::XInterface {
     virtual ~Base1() = delete;
-    static ::css::uno::Type const & static_type(void * = nullptr) // loplugin:refcounting
+    static ::cpo::uno::Type const & static_type(void * = nullptr) // loplugin:refcounting
     { return ::cppu::UnoType<Base1>::get(); }
 };
 struct Base2: public Base1 {

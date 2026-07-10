@@ -654,7 +654,7 @@ void SAL_CALL AccessibleShape::removeAccessibleEventListener (
 
 // XInterface
 cpo::uno::Any SAL_CALL
-    AccessibleShape::queryInterface (const css::uno::Type & rType)
+    AccessibleShape::queryInterface (const cpo::uno::Type & rType)
 {
     cpo::uno::Any aReturn = AccessibleContextBase::queryInterface (rType);
     if ( ! aReturn.hasValue())
@@ -795,14 +795,14 @@ cpo::uno::Sequence<OUString> SAL_CALL
 }
 
 // XTypeProvider
-cpo::uno::Sequence<uno::Type> SAL_CALL
+cpo::uno::Sequence<cpo::uno::Type> SAL_CALL
     AccessibleShape::getTypes()
 {
     ensureAlive();
     // Get list of types from the context base implementation, ...
-    cpo::uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
+    cpo::uno::Sequence<cpo::uno::Type> aTypeList (AccessibleContextBase::getTypes());
     // ... define local types
-    cpo::uno::Sequence<uno::Type> localTypesList = {
+    cpo::uno::Sequence<cpo::uno::Type> localTypesList = {
         cppu::UnoType<lang::XEventListener>::get(),
         cppu::UnoType<document::XEventListener>::get(),
         cppu::UnoType<lang::XUnoTunnel>::get()

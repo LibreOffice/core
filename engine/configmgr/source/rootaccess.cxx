@@ -28,7 +28,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/ChangesEvent.hpp>
 #include <com/sun/star/util/ChangesSet.hpp>
@@ -247,7 +247,7 @@ rtl::Reference< Access > RootAccess::getParentAccess() {
     return rtl::Reference< Access >();
 }
 
-void RootAccess::addTypes(std::vector< css::uno::Type > * types) const {
+void RootAccess::addTypes(std::vector< cpo::uno::Type > * types) const {
     assert(types != nullptr);
     types->push_back(cppu::UnoType< css::util::XChangesNotifier >::get());
     types->push_back(cppu::UnoType< css::util::XChangesBatch >::get());
@@ -279,7 +279,7 @@ void RootAccess::clearListeners() noexcept {
     Access::clearListeners();
 }
 
-cpo::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
+cpo::uno::Any RootAccess::queryInterface(cpo::uno::Type const & aType)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);

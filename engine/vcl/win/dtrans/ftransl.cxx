@@ -70,7 +70,7 @@ struct FormatEntry
 {
     FormatEntry(const OUString& mime_content_type, const OUString& human_presentable_name,
                 CLIPFORMAT std_clipboard_format_id,
-                css::uno::Type const& cppu_type = CPPUTYPE_SEQSALINT8)
+                cpo::uno::Type const& cppu_type = CPPUTYPE_SEQSALINT8)
     : aDataFlavor(mime_content_type, human_presentable_name, cppu_type)
     , aNativeFormatName(human_presentable_name)
     , aStandardFormatId(std_clipboard_format_id)

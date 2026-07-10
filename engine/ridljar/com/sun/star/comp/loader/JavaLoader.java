@@ -39,7 +39,7 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.util.XMacroExpander;
 
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.lib.util.StringHelper;

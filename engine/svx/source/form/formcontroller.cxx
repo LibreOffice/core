@@ -128,7 +128,7 @@ namespace svxform
     using ::cpo::uno::Any;
     using ::com::sun::star::frame::XDispatch;
     using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdbc::XRowSet;

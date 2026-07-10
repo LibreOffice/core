@@ -105,7 +105,7 @@ namespace pcr
         virtual cpo::uno::Any                                SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
         virtual void                                         SAL_CALL setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
         virtual cpo::uno::Any                                SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rControlValue ) override;
-        virtual cpo::uno::Any                                SAL_CALL convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) override;
+        virtual cpo::uno::Any                                SAL_CALL convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const cpo::uno::Type& _rControlValueType ) override;
         virtual css::beans::PropertyState                    SAL_CALL getPropertyState( const OUString& _rPropertyName ) override;
         virtual void                                         SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual void                                         SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
@@ -166,7 +166,7 @@ namespace pcr
                 Takes, upon successful return, the types of possible listeners at the introspectee
         */
         void    impl_getComponentListenerTypes_nothrow(
-                    std::vector< css::uno::Type >& _out_rTypes
+                    std::vector< cpo::uno::Type >& _out_rTypes
                 ) const;
 
         /** returns a secondary component to be used for event inspection

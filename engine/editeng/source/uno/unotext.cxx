@@ -1573,7 +1573,7 @@ SvxUnoTextRange::~SvxUnoTextRange() noexcept
 {
 }
 
-cpo::uno::Any SAL_CALL SvxUnoTextRange::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoTextRange::queryAggregation( const cpo::uno::Type & rType )
 {
     QUERYINT( text::XTextRange );
     else if( rType == cppu::UnoType<beans::XMultiPropertyStates>::get())
@@ -1591,7 +1591,7 @@ cpo::uno::Any SAL_CALL SvxUnoTextRange::queryAggregation( const uno::Type & rTyp
         return OWeakAggObject::queryAggregation( rType );
 }
 
-cpo::uno::Any SAL_CALL SvxUnoTextRange::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoTextRange::queryInterface( const cpo::uno::Type & rType )
 {
     return OWeakAggObject::queryInterface(rType);
 }
@@ -1610,9 +1610,9 @@ void SAL_CALL SvxUnoTextRange::release()
 
 // XTypeProvider
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SvxUnoTextRange::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoTextRange::getTypes()
 {
-    static const cpo::uno::Sequence< uno::Type > TYPES {
+    static const cpo::uno::Sequence< cpo::uno::Type > TYPES {
             cppu::UnoType<text::XTextRange>::get(),
             cppu::UnoType<beans::XPropertySet>::get(),
             cppu::UnoType<beans::XMultiPropertySet>::get(),
@@ -1675,7 +1675,7 @@ SvxUnoTextBase::~SvxUnoTextBase() noexcept
 }
 
 // XInterface
-cpo::uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const cpo::uno::Type & rType )
 {
     QUERYINT( text::XText );
     QUERYINT( text::XSimpleText );
@@ -1702,9 +1702,9 @@ cpo::uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType
 
 // XTypeProvider
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SvxUnoTextBase::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoTextBase::getTypes()
 {
-    static const cpo::uno::Sequence< uno::Type > TYPES {
+    static const cpo::uno::Sequence< cpo::uno::Type > TYPES {
             cppu::UnoType<text::XText>::get(),
             cppu::UnoType<container::XEnumerationAccess>::get(),
             cppu::UnoType<beans::XPropertySet>::get(),
@@ -1969,7 +1969,7 @@ uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextBase::createEnumera
 }
 
 // XElementAccess ( container::XEnumerationAccess )
-uno::Type SAL_CALL SvxUnoTextBase::getElementType(  )
+cpo::uno::Type SAL_CALL SvxUnoTextBase::getElementType(  )
 {
     return cppu::UnoType<text::XTextRange>::get();
 }
@@ -2250,7 +2250,7 @@ SvxUnoText::~SvxUnoText() noexcept
 }
 
 // uno::XInterface
-cpo::uno::Any SAL_CALL SvxUnoText::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoText::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny( SvxUnoTextBase::queryAggregation( rType ) );
     if( !aAny.hasValue() )
@@ -2259,7 +2259,7 @@ cpo::uno::Any SAL_CALL SvxUnoText::queryAggregation( const uno::Type & rType )
     return aAny;
 }
 
-cpo::uno::Any SAL_CALL SvxUnoText::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoText::queryInterface( const cpo::uno::Type & rType )
 {
     return OWeakAggObject::queryInterface( rType );
 }
@@ -2275,7 +2275,7 @@ void SAL_CALL SvxUnoText::release() noexcept
 }
 
 // lang::XTypeProvider
-cpo::uno::Sequence< uno::Type > SAL_CALL SvxUnoText::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoText::getTypes(  )
 {
     return SvxUnoTextBase::getTypes();
 }

@@ -95,7 +95,7 @@ public:
     removeEventListener(const css::uno::Reference<css::lang::XEventListener>& xListener) override;
 
     // XElementAccess
-    css::uno::Type SAL_CALL getElementType() override;
+    cpo::uno::Type SAL_CALL getElementType() override;
     bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
@@ -161,7 +161,7 @@ public:
     cpo::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     // XElementAccess
-    css::uno::Type SAL_CALL getElementType() override;
+    cpo::uno::Type SAL_CALL getElementType() override;
     bool SAL_CALL hasElements() override;
 };
 

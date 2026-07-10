@@ -44,14 +44,14 @@ namespace comphelper
 struct PropertyMapEntry
 {
     OUString       maName;
-    css::uno::Type maType;
+    cpo::uno::Type maType;
     sal_Int32      mnHandle;
     /// flag bitmap, @see css::beans::PropertyAttribute
     sal_Int16      mnAttributes;
     sal_uInt8      mnMemberId;
     PropertyMoreFlags mnMoreFlags;
 
-    PropertyMapEntry(OUString _aName, sal_Int32 _nHandle, css::uno::Type const & _rType,
+    PropertyMapEntry(OUString _aName, sal_Int32 _nHandle, cpo::uno::Type const & _rType,
                      sal_Int16 _nAttributes, sal_uInt8 _nMemberId, PropertyMoreFlags _nMoreFlags = PropertyMoreFlags::NONE)
         : maName(std::move( _aName ))
         , maType( _rType )

@@ -74,7 +74,7 @@ namespace pcr
     using ::com::sun::star::uno::XComponentContext;
     using ::cpo::uno::Any;
     using ::com::sun::star::uno::TypeClass_STRING;
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
     using ::com::sun::star::beans::theIntrospection;
     using ::com::sun::star::beans::XPropertyChangeListener;
     using ::com::sun::star::beans::Property;

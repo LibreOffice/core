@@ -512,7 +512,7 @@ void ScCondFormatObj::removeByIndex(const sal_Int32 nIndex)
     getCoreObject()->RemoveEntry(nIndex);
 }
 
-uno::Type ScCondFormatObj::getElementType()
+cpo::uno::Type ScCondFormatObj::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }

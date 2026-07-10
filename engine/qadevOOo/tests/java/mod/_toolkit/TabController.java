@@ -25,7 +25,7 @@ import com.sun.star.drawing.XControlShape;
 import com.sun.star.form.XForm;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.view.XControlAccess;

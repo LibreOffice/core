@@ -53,14 +53,14 @@ public:
     static css::uno::Reference< css::awt::XControl >  FindControl( cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > >& rCtrls, const css::uno::Reference< css::awt::XControlModel > & rxCtrlModel );
 
     // css::uno::XInterface
-    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryInterface( const cpo::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
-    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
 
     // css::lang::XTypeProvider
-    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< cpo::uno::Type >  SAL_CALL getTypes() override;
     cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // XTabController

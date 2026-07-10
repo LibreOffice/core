@@ -21,7 +21,7 @@ package com.sun.star.bridges.jni_uno;
 
 import com.sun.star.lib.util.AsynchronousFinalizer;
 import com.sun.star.lib.util.NativeLibraryLoader;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.IEnvironment;
 import com.sun.star.uno.IQueryInterface;

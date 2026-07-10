@@ -187,7 +187,7 @@ public:
         getSupportedServiceNames() override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // XIndexAccess
@@ -227,7 +227,7 @@ public:
         getSupportedServiceNames() override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // XIndexAccess
@@ -2466,7 +2466,7 @@ SwXDocumentIndexes::hasByName(const OUString& rName)
     return false;
 }
 
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 SwXDocumentIndexes::getElementType()
 {
     return cppu::UnoType<text::XDocumentIndex>::get();
@@ -2579,7 +2579,7 @@ SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
     return aRet;
 }
 
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getElementType()
 {
     return cppu::UnoType<cpo::uno::Sequence<OUString>>::get();
@@ -3077,7 +3077,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
     return aRet;
 }
 
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getElementType()
 {
     return cppu::UnoType<cpo::uno::Sequence< beans::PropertyValues >>::get();

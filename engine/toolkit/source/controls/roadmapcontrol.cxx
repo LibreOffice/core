@@ -129,7 +129,7 @@ using namespace cpo::uno;
  IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlRoadmapModel, UnoControlRoadmapModel_Base, UnoControlRoadmapModel_IBase )
 
 
-    cpo::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const css::uno::Type & rType )
+    cpo::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const cpo::uno::Type & rType )
     {
         Any aRet = UnoControlRoadmapModel_Base::queryAggregation( rType );
         if ( !aRet.hasValue() )
@@ -346,7 +346,7 @@ using namespace cpo::uno;
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoRoadmapControl, UnoControlRoadmap_Base, UnoControlRoadmap_IBase )
 
-cpo::uno::Any UnoRoadmapControl::queryAggregation(css::uno::Type const & aType) {
+cpo::uno::Any UnoRoadmapControl::queryAggregation(cpo::uno::Type const & aType) {
     auto ret = UnoControlRoadmap_Base::queryAggregation(aType);
     if (!ret.hasValue()) {
         ret = UnoControlRoadmap_IBase::queryInterface(aType);

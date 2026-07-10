@@ -56,10 +56,10 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                 break;
             case XML_DATA_SOURCE_SETTING_TYPE:
                 {
-                    // needs to be translated into a css::uno::Type
-                    static std::map< OUString, css::uno::Type > s_aTypeNameMap = []()
+                    // needs to be translated into a cpo::uno::Type
+                    static std::map< OUString, cpo::uno::Type > s_aTypeNameMap = []()
                     {
-                        std::map< OUString, css::uno::Type > tmp;
+                        std::map< OUString, cpo::uno::Type > tmp;
                         tmp[GetXMLToken( XML_BOOLEAN)]   = cppu::UnoType<bool>::get();
                         // Not a copy paste error, see comment xmloff/source/forms/propertyimport.cxx lines 244-248
                         tmp[GetXMLToken( XML_FLOAT)]     = ::cppu::UnoType<double>::get();
@@ -71,7 +71,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                         return tmp;
                     }();
 
-                    const std::map< OUString, css::uno::Type >::const_iterator aTypePos = s_aTypeNameMap.find(aIter.toString());
+                    const std::map< OUString, cpo::uno::Type >::const_iterator aTypePos = s_aTypeNameMap.find(aIter.toString());
                     OSL_ENSURE(s_aTypeNameMap.end() != aTypePos, "OXMLDataSourceSetting::OXMLDataSourceSetting: invalid type!");
                     if (s_aTypeNameMap.end() != aTypePos)
                         m_aPropType = aTypePos->second;
@@ -154,7 +154,7 @@ ODBFilter& OXMLDataSourceSetting::GetOwnImport()
     return static_cast<ODBFilter&>(GetImport());
 }
 
-Any OXMLDataSourceSetting::convertString(const css::uno::Type& _rExpectedType, const OUString& _rReadCharacters)
+Any OXMLDataSourceSetting::convertString(const cpo::uno::Type& _rExpectedType, const OUString& _rReadCharacters)
 {
     Any aReturn;
     switch (_rExpectedType.getTypeClass())

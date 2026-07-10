@@ -49,7 +49,7 @@ Graphic::~Graphic() noexcept
 {
 }
 
-cpo::uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL Graphic::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
     if( rType == cppu::UnoType<graphic::XGraphic>::get())
@@ -98,7 +98,7 @@ cpo::uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
     return aRet;
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Graphic::getTypes()
 {
     return cppu::OTypeCollection(
             cppu::UnoType<graphic::XGraphic>::get(),

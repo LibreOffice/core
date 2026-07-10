@@ -34,7 +34,7 @@ class OFileControlModel
     OUString                         m_sDefaultValue;
 
 protected:
-    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
     OFileControlModel(
@@ -47,7 +47,7 @@ public:
     virtual ~OFileControlModel() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OFileControlModel, OControlModel)
-    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override

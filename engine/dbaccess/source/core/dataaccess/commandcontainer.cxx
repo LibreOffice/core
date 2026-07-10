@@ -49,7 +49,7 @@ OCommandContainer::~OCommandContainer()
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandContainer,ODefinitionContainer,OCommandContainer_BASE)
-cpo::uno::Sequence< css::uno::Type > OCommandContainer::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > OCommandContainer::getTypes()
 {
     return  ::comphelper::concatSequences(
         ODefinitionContainer::getTypes( ),

@@ -208,13 +208,13 @@ namespace svxform
         virtual ~FormController() override;
 
     // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& type) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
 
     // XDispatch
         virtual void SAL_CALL dispatch( const css::util::URL& _rURL, const cpo::uno::Sequence< css::beans::PropertyValue >& _rArgs ) override;
@@ -257,7 +257,7 @@ namespace svxform
         virtual void SAL_CALL setActiveTerm( ::sal_Int32 ActiveTerm ) override;
 
     // XElementAccess
-        virtual css::uno::Type SAL_CALL getElementType() override;
+        virtual cpo::uno::Type SAL_CALL getElementType() override;
         virtual bool SAL_CALL hasElements() override;
 
     // css::container::XEnumerationAccess

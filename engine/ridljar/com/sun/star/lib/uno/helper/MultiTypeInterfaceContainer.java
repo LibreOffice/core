@@ -17,7 +17,7 @@
  */
 
 package com.sun.star.lib.uno.helper;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.lang.EventObject;
 import java.util.HashMap;
 import java.util.Map;

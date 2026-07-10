@@ -39,6 +39,7 @@
 #include <typeinfo>
 
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 void MapReturn(long d0, long d1, typelib_TypeClass eReturnType, long *pRegisterReturn)
 {

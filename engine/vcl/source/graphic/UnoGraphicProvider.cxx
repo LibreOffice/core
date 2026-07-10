@@ -124,7 +124,7 @@ protected:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XGraphicProvider
@@ -161,9 +161,9 @@ cpo::uno::Sequence< OUString > SAL_CALL GraphicProvider::getSupportedServiceName
     return { u"com.sun.star.graphic.GraphicProvider"_ustr };
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GraphicProvider::getTypes()
 {
-    static const cpo::uno::Sequence< uno::Type > aTypes {
+    static const cpo::uno::Sequence< cpo::uno::Type > aTypes {
         cppu::UnoType<lang::XServiceInfo>::get(),
         cppu::UnoType<lang::XTypeProvider>::get(),
         cppu::UnoType<graphic::XGraphicProvider>::get()

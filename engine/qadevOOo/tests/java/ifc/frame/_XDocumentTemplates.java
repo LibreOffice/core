@@ -33,7 +33,7 @@ import com.sun.star.ucb.XContent;
 import com.sun.star.ucb.XContentAccess;
 import com.sun.star.ucb.XDynamicResultSet;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 /**
 * Testing <code>com.sun.star.frame.XDesktop</code>

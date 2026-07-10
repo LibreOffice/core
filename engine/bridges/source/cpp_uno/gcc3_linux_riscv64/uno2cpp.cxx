@@ -39,6 +39,7 @@
 #include "abi.hxx"
 
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace
 {

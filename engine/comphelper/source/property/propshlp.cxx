@@ -116,7 +116,7 @@ OPropertySetHelper::OPropertySetHelper(bool bIgnoreRuntimeExceptionsWhileFiring)
 OPropertySetHelper::~OPropertySetHelper() {}
 
 // XInterface
-Any OPropertySetHelper::queryInterface(const css::uno::Type& rType)
+Any OPropertySetHelper::queryInterface(const cpo::uno::Type& rType)
 {
     return ::cppu::queryInterface(rType, static_cast<XPropertySet*>(this),
                                   static_cast<XMultiPropertySet*>(this),
@@ -126,7 +126,7 @@ Any OPropertySetHelper::queryInterface(const css::uno::Type& rType)
 /**
  * called from the derivee's XTypeProvider::getTypes implementation
  */
-cpo::uno::Sequence<css::uno::Type> OPropertySetHelper::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> OPropertySetHelper::getTypes()
 {
     return { UnoType<css::beans::XPropertySet>::get(),
              UnoType<css::beans::XMultiPropertySet>::get(),

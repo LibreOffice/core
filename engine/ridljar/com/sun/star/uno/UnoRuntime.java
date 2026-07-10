@@ -365,7 +365,7 @@ public class UnoRuntime {
         default:
             throw new IllegalArgumentException(
                 "com.sun.star.uno.UnoRuntime.completeValue called with bad"
-                + " com.sun.star.uno.Type");
+                + " cpo.uno.Type");
         }
     }
 

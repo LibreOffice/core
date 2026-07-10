@@ -3187,7 +3187,7 @@ void SAL_CALL SwXTextFrame::release(  )noexcept
     SwXFrame::release();
 }
 
-::cpo::uno::Any SAL_CALL SwXTextFrame::queryInterface( const uno::Type& aType )
+::cpo::uno::Any SAL_CALL SwXTextFrame::queryInterface( const cpo::uno::Type& aType )
 {
     ::cpo::uno::Any aRet = SwXFrame::queryInterface(aType);
     if(aRet.getValueType() == cppu::UnoType<void>::get())
@@ -3197,7 +3197,7 @@ void SAL_CALL SwXTextFrame::release(  )noexcept
     return aRet;
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SwXTextFrame::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SwXTextFrame::getTypes(  )
 {
     return comphelper::concatSequences(
         SwXTextFrameBaseClass::getTypes(),
@@ -3305,7 +3305,7 @@ rtl::Reference< SwXParagraphEnumeration >  SwXTextFrame::createSwEnumeration()
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::Frame);
 }
 
-uno::Type  SwXTextFrame::getElementType()
+cpo::uno::Type  SwXTextFrame::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();
 }

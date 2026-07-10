@@ -25,7 +25,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/TypeClass.hpp>
-#include <com/sun/star/uno/Type.h>
+#include <cpo/uno/Type.h>
 #include <cpo/uno/Any.hxx>
 
 namespace cppu
@@ -37,7 +37,7 @@ namespace cppu
  * @param rType         enum type
  * @return enum or empty any.
  */
-inline cpo::uno::Any int2enum(sal_Int32 nEnum, const css::uno::Type& rType)
+inline cpo::uno::Any int2enum(sal_Int32 nEnum, const cpo::uno::Type& rType)
 {
     assert(rType.getTypeClass() == css::uno::TypeClass_ENUM);
     return cpo::uno::Any(&nEnum, rType);

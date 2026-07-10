@@ -41,7 +41,7 @@ import com.sun.star.lib.uno.helper.PropertySetMixin;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.IQueryInterface;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.XComponentContext;
 import test.cppuhelper.propertysetmixin.XSupplier;
 import test.cppuhelper.propertysetmixin.XTest3;

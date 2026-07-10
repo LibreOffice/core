@@ -23,7 +23,7 @@ import com.sun.star.lib.uno.typeinfo.MemberTypeInfo;
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.ParameterTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.TypeClass;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
@@ -404,7 +404,7 @@ public final class TypeDescription {
 
         case TypeClass.TYPE_value:
             return new TypeDescription(
-                typeClass, typeName, "[Lcom.sun.star.uno.Type;", zClass, null,
+                typeClass, typeName, "[Lcpo.uno.Type;", zClass, null,
                 null);
 
         case TypeClass.ANY_value:

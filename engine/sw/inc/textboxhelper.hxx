@@ -15,7 +15,7 @@
 #include <vector>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Type.h>
+#include <cpo/uno/Type.h>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <svx/swframetypes.hxx>
 
@@ -72,7 +72,7 @@ public:
     /// to the given pObject shape.
     static void destroy(const SwFrameFormat* pShape, const SdrObject* pObject);
     /// Get interface of a shape's TextBox, if there is any.
-    static cpo::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType,
+    static cpo::uno::Any queryInterface(const SwFrameFormat* pShape, const cpo::uno::Type& rType,
                                         SdrObject* pObj);
 
     /// Sync property of TextBox with the one of the shape.

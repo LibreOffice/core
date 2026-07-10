@@ -33,7 +33,7 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 /**
  * Test for object which is represented by service

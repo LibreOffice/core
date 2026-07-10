@@ -301,7 +301,7 @@ typelib_TypeClass __cdecl cpp_mediate(void** pCallStack, const sal_Int32 nFuncti
                     typelib_TypeDescription* pQueryTD = nullptr;
                     TYPELIB_DANGER_GET(
                         &pQueryTD,
-                        static_cast<uno::Type*>(pCallStack[nCppStackPos])->getTypeLibType());
+                        static_cast<cpo::uno::Type*>(pCallStack[nCppStackPos])->getTypeLibType());
                     if (pQueryTD)
                     {
                         uno::XInterface* pInterface = nullptr;

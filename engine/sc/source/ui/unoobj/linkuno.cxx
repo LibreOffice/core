@@ -476,7 +476,7 @@ cpo::uno::Any SAL_CALL ScSheetLinksObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(uno::Reference<beans::XPropertySet>(xLink));
 }
 
-uno::Type SAL_CALL ScSheetLinksObj::getElementType()
+cpo::uno::Type SAL_CALL ScSheetLinksObj::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }
@@ -975,7 +975,7 @@ cpo::uno::Any SAL_CALL ScAreaLinksObj::getByIndex( sal_Int32 nIndex )
 
 }
 
-uno::Type SAL_CALL ScAreaLinksObj::getElementType()
+cpo::uno::Type SAL_CALL ScAreaLinksObj::getElementType()
 {
     return cppu::UnoType<sheet::XAreaLink>::get();
 }
@@ -1258,7 +1258,7 @@ cpo::uno::Any SAL_CALL ScDDELinksObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(uno::Reference<sheet::XDDELink>(xLink));
 }
 
-uno::Type SAL_CALL ScDDELinksObj::getElementType()
+cpo::uno::Type SAL_CALL ScDDELinksObj::getElementType()
 {
     return cppu::UnoType<sheet::XDDELink>::get();
 }
@@ -1574,7 +1574,7 @@ uno::Reference< container::XEnumeration > SAL_CALL ScExternalDocLinkObj::createE
     return aRef;
 }
 
-uno::Type SAL_CALL ScExternalDocLinkObj::getElementType()
+cpo::uno::Type SAL_CALL ScExternalDocLinkObj::getElementType()
 {
     return cppu::UnoType<sheet::XExternalDocLink>::get();
 }
@@ -1691,7 +1691,7 @@ uno::Reference< container::XEnumeration > SAL_CALL ScExternalDocLinksObj::create
     return aRef;
 }
 
-uno::Type SAL_CALL ScExternalDocLinksObj::getElementType()
+cpo::uno::Type SAL_CALL ScExternalDocLinksObj::getElementType()
 {
     return cppu::UnoType<sheet::XExternalDocLinks>::get();
 }

@@ -162,7 +162,7 @@ class PreventDuplicateInteraction final :
         {
             public:
                 /// describe the interaction.
-                css::uno::Type m_aInteraction;
+                cpo::uno::Type m_aInteraction;
                 /// after max count was reached this interaction will be blocked.
                 sal_Int32 m_nMaxCount;
                 /// count how often this interaction was called.
@@ -173,7 +173,7 @@ class PreventDuplicateInteraction final :
 
             public:
 
-                InteractionInfo(const css::uno::Type& aInteraction)
+                InteractionInfo(const cpo::uno::Type& aInteraction)
                     : m_aInteraction(aInteraction)
                     , m_nMaxCount   (1   )
                     , m_nCallCount  (0           )
@@ -236,7 +236,7 @@ class PreventDuplicateInteraction final :
 
             @threadsafe yes
         */
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
 
     // c++ interface
     public:
@@ -318,7 +318,7 @@ class PreventDuplicateInteraction final :
 
             @threadsafe yes
         */
-        bool getInteractionInfo(const css::uno::Type&                               aInteraction,
+        bool getInteractionInfo(const cpo::uno::Type&                               aInteraction,
                                                   PreventDuplicateInteraction::InteractionInfo* pReturn     ) const;
 };
 

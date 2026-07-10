@@ -269,12 +269,12 @@ cpo::uno::Any SAL_CALL ScNameToIndexAccess::getByIndex( sal_Int32 nIndex )
 
 // XElementAccess
 
-css::uno::Type SAL_CALL ScNameToIndexAccess::getElementType(  )
+cpo::uno::Type SAL_CALL ScNameToIndexAccess::getElementType(  )
 {
     if ( xNameAccess.is() )
         return xNameAccess->getElementType();
     else
-        return uno::Type();
+        return cpo::uno::Type();
 }
 
 bool SAL_CALL ScNameToIndexAccess::hasElements(  )

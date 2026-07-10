@@ -612,7 +612,7 @@ cpo::uno::Any SwFmDrawPage::getByIndex(sal_Int32 nIndex)
     return SwTextBoxHelper::getByIndex(GetSdrPage(), nIndex);
 }
 
-uno::Type  SwFmDrawPage::getElementType()
+cpo::uno::Type  SwFmDrawPage::getElementType()
 {
     return cppu::UnoType<drawing::XShape>::get();
 }
@@ -895,7 +895,7 @@ sal_Int64 SAL_CALL SwXShape::getSomething( const cpo::uno::Sequence< sal_Int8 >&
 
     if( m_xShapeAgg.is() )
     {
-        const uno::Type& rTunnelType = cppu::UnoType<lang::XUnoTunnel>::get();
+        const cpo::uno::Type& rTunnelType = cppu::UnoType<lang::XUnoTunnel>::get();
         cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rTunnelType );
         if(auto xAggTunnel = o3tl::tryAccess<uno::Reference<lang::XUnoTunnel>>(
                aAgg))
@@ -919,7 +919,7 @@ SwXShape::SwXShape(
     if(!xShape.is())  // default Ctor
         return;
 
-    const uno::Type& rAggType = cppu::UnoType<uno::XAggregation>::get();
+    const cpo::uno::Type& rAggType = cppu::UnoType<uno::XAggregation>::get();
     //aAgg contains a reference of the SvxShape!
     {
         cpo::uno::Any aAgg = xShape->queryInterface(rAggType);
@@ -983,7 +983,7 @@ SwXShape::~SwXShape()
     mxShape.clear();
 }
 
-cpo::uno::Any SwXShape::queryInterface( const uno::Type& aType )
+cpo::uno::Any SwXShape::queryInterface( const cpo::uno::Type& aType )
 {
     cpo::uno::Any aRet;
     SdrObject* pObj = nullptr;
@@ -1012,9 +1012,9 @@ cpo::uno::Any SwXShape::queryInterface( const uno::Type& aType )
     return aRet;
 }
 
-cpo::uno::Sequence< uno::Type > SwXShape::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SwXShape::getTypes(  )
 {
-    cpo::uno::Sequence< uno::Type > aRet = SwXShapeBaseClass::getTypes();
+    cpo::uno::Sequence< cpo::uno::Type > aRet = SwXShapeBaseClass::getTypes();
     if(m_xShapeAgg.is())
     {
         cpo::uno::Any aProv = m_xShapeAgg->queryAggregation(cppu::UnoType<XTypeProvider>::get());
@@ -1040,7 +1040,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo()
     {
         if(m_xShapeAgg.is())
         {
-            const uno::Type& rPropSetType = cppu::UnoType<beans::XPropertySet>::get();
+            const cpo::uno::Type& rPropSetType = cppu::UnoType<beans::XPropertySet>::get();
             cpo::uno::Any aPSet = m_xShapeAgg->queryAggregation( rPropSetType );
             if(auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(
                    aPSet))
@@ -1460,7 +1460,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const cpo::uno::A
     }
     else
     {
-        const uno::Type& rPSetType =
+        const cpo::uno::Type& rPSetType =
             cppu::UnoType<beans::XPropertySet>::get();
         cpo::uno::Any aPSet = m_xShapeAgg->queryAggregation(rPSetType);
         auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(
@@ -1806,7 +1806,7 @@ cpo::uno::Any SwXShape::_getPropAtAggrObj( const OUString& _rPropertyName )
 {
     cpo::uno::Any aRet;
 
-    const uno::Type& rPSetType =
+    const cpo::uno::Type& rPSetType =
                 cppu::UnoType<beans::XPropertySet>::get();
     cpo::uno::Any aPSet = m_xShapeAgg->queryAggregation(rPSetType);
     auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(aPSet);
@@ -1928,7 +1928,7 @@ cpo::uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
         {
             if(!xShapePrState.is())
             {
-                const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
+                const cpo::uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
                 cpo::uno::Any aPState = m_xShapeAgg->queryAggregation(rPStateType);
                 auto ps = o3tl::tryAccess<uno::Reference<XPropertyState>>(
                     aPState);
@@ -1993,7 +1993,7 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
     }
     else
     {
-        const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
+        const cpo::uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
         cpo::uno::Any aPState = m_xShapeAgg->queryAggregation(rPStateType);
         auto xShapePrState = o3tl::tryAccess<uno::Reference<XPropertyState>>(
             aPState);
@@ -2025,7 +2025,7 @@ cpo::uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
     }
     else
     {
-        const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
+        const cpo::uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
         cpo::uno::Any aPState = m_xShapeAgg->queryAggregation(rPStateType);
         auto xShapePrState = o3tl::tryAccess<uno::Reference<XPropertyState>>(
             aPState);
@@ -2745,7 +2745,7 @@ SwXGroupShape::~SwXGroupShape()
 {
 }
 
-cpo::uno::Any SwXGroupShape::queryInterface( const uno::Type& rType )
+cpo::uno::Any SwXGroupShape::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aRet;
     if(rType == cppu::UnoType<XShapes>::get())
@@ -2776,7 +2776,7 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape )
     uno::Reference<XShapes> xShapes;
     if( m_xShapeAgg.is() )
     {
-        const uno::Type& rType = cppu::UnoType<XShapes>::get();
+        const cpo::uno::Type& rType = cppu::UnoType<XShapes>::get();
         cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
         aAgg >>= xShapes;
     }
@@ -2821,7 +2821,7 @@ void SwXGroupShape::remove( const uno::Reference< XShape >& xShape )
     uno::Reference<XShapes> xShapes;
     if( m_xShapeAgg.is() )
     {
-        const uno::Type& rType = cppu::UnoType<XShapes>::get();
+        const cpo::uno::Type& rType = cppu::UnoType<XShapes>::get();
         cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
         aAgg >>= xShapes;
     }
@@ -2836,7 +2836,7 @@ sal_Int32 SwXGroupShape::getCount()
     uno::Reference<XIndexAccess> xAcc;
     if( m_xShapeAgg.is() )
     {
-        const uno::Type& rType = cppu::UnoType<XIndexAccess>::get();
+        const cpo::uno::Type& rType = cppu::UnoType<XIndexAccess>::get();
         cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
         aAgg >>= xAcc;
     }
@@ -2851,7 +2851,7 @@ cpo::uno::Any SwXGroupShape::getByIndex(sal_Int32 nIndex)
     uno::Reference<XIndexAccess> xAcc;
     if( m_xShapeAgg.is() )
     {
-        const uno::Type& rType = cppu::UnoType<XIndexAccess>::get();
+        const cpo::uno::Type& rType = cppu::UnoType<XIndexAccess>::get();
         cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
         aAgg >>= xAcc;
     }
@@ -2860,13 +2860,13 @@ cpo::uno::Any SwXGroupShape::getByIndex(sal_Int32 nIndex)
     return xAcc->getByIndex(nIndex);
 }
 
-uno::Type SwXGroupShape::getElementType(  )
+cpo::uno::Type SwXGroupShape::getElementType(  )
 {
     SolarMutexGuard aGuard;
     uno::Reference<XIndexAccess> xAcc;
     if( m_xShapeAgg.is() )
     {
-        const uno::Type& rType = cppu::UnoType<XIndexAccess>::get();
+        const cpo::uno::Type& rType = cppu::UnoType<XIndexAccess>::get();
         cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
         aAgg >>= xAcc;
     }
@@ -2881,7 +2881,7 @@ bool SwXGroupShape::hasElements(  )
     uno::Reference<XIndexAccess> xAcc;
     if( m_xShapeAgg.is() )
     {
-        const uno::Type& rType = cppu::UnoType<XIndexAccess>::get();
+        const cpo::uno::Type& rType = cppu::UnoType<XIndexAccess>::get();
         cpo::uno::Any aAgg = m_xShapeAgg->queryAggregation( rType );
         aAgg >>= xAcc;
     }

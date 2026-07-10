@@ -86,9 +86,9 @@ namespace cppu
         ImplHelper7 & operator =(ImplHelper7 const &) = default;
         ImplHelper7 & operator =(ImplHelper7 &&) = default;
 
-        virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryInterface( cpo::uno::Type const & rType ) SAL_OVERRIDE
             { return ImplHelper_query( rType, cd::get(), this ); }
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return ImplHelper_getTypes( cd::get() ); }
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
@@ -114,13 +114,13 @@ namespace cppu
     {
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, WeakImplHelper7<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7> > > {};
     public:
-        virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryInterface( cpo::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakImplHelper_query( rType, cd::get(), this, static_cast<OWeakObject *>(this) ); }
         virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE
             { OWeakObject::acquire(); }
         virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { OWeakObject::release(); }
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakImplHelper_getTypes( cd::get() ); }
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
@@ -146,15 +146,15 @@ namespace cppu
     {
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData7< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, WeakAggImplHelper7<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7> > > {};
     public:
-        virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryInterface( cpo::uno::Type const & rType ) SAL_OVERRIDE
             { return OWeakAggObject::queryInterface( rType ); }
-        virtual cpo::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryAggregation( cpo::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakAggImplHelper_queryAgg( rType, cd::get(), this, static_cast<OWeakAggObject *>(this) ); }
         virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE
             { OWeakAggObject::acquire(); }
         virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { OWeakAggObject::release(); }
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakAggImplHelper_getTypes( cd::get() ); }
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
@@ -210,7 +210,7 @@ namespace cppu
             BaseClass(arg1, arg2, arg3, arg4, arg5, arg6) {}
     public:
         ImplInheritanceHelper7() {}
-        virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryInterface( cpo::uno::Type const & rType ) SAL_OVERRIDE
             {
                 cpo::uno::Any aRet( ImplHelper_queryNoXInterface( rType, cd::get(), this ) );
                 if (aRet.hasValue())
@@ -221,7 +221,7 @@ namespace cppu
             { BaseClass::acquire(); }
         virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { BaseClass::release(); }
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return ImplInhHelper_getTypes( cd::get(), BaseClass::getTypes() ); }
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
@@ -278,9 +278,9 @@ namespace cppu
             BaseClass(arg1, arg2, arg3, arg4, arg5, arg6) {}
     public:
         AggImplInheritanceHelper7() {}
-        virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryInterface( cpo::uno::Type const & rType ) SAL_OVERRIDE
             { return BaseClass::queryInterface( rType ); }
-        virtual cpo::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) SAL_OVERRIDE
+        virtual cpo::uno::Any SAL_CALL queryAggregation( cpo::uno::Type const & rType ) SAL_OVERRIDE
             {
                 cpo::uno::Any aRet( ImplHelper_queryNoXInterface( rType, cd::get(), this ) );
                 if (aRet.hasValue())
@@ -291,7 +291,7 @@ namespace cppu
             { BaseClass::acquire(); }
         virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { BaseClass::release(); }
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return ImplInhHelper_getTypes( cd::get(), BaseClass::getTypes() ); }
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }

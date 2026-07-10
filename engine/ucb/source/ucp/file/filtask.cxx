@@ -93,7 +93,7 @@ TaskManager::MyProperty::MyProperty( const OUString&                         the
 TaskManager::MyProperty::MyProperty( bool                               theisNative,
                                const OUString&                    thePropertyName,
                                sal_Int32                          theHandle,
-                               const css::uno::Type&              theTyp,
+                               const cpo::uno::Type&              theTyp,
                                const cpo::uno::Any&               theValue,
                                const css::beans::PropertyState&   theState,
                                sal_Int16                          theAttributes )

@@ -26,7 +26,7 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 

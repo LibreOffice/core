@@ -66,10 +66,10 @@ class OFormattedModel final
         DECLARE_UNO3_AGG_DEFAULTS( OFormattedModel, OEditBaseModel )
 
         // XTypeProvider
-        virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+        virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
         // XAggregation
-        virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
 
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
@@ -118,7 +118,7 @@ class OFormattedModel final
                             translateDbColumnToControlValue( ) override;
         virtual bool        commitControlValueToDbColumn( bool _bPostReset ) override;
 
-        virtual cpo::uno::Sequence< css::uno::Type >
+        virtual cpo::uno::Sequence< cpo::uno::Type >
                             getSupportedBindingTypes() override;
         virtual cpo::uno::Any
                             translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
@@ -151,9 +151,9 @@ class OFormattedModel final
         virtual ~OFormattedControl() override;
 
         DECLARE_UNO3_AGG_DEFAULTS(OFormattedControl, OBoundControl)
-        virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+        virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
 
-        virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+        virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
         // css::lang::XServiceInfo
         OUString SAL_CALL getImplementationName() override

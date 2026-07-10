@@ -27,10 +27,10 @@ class Type;
 
 // Append a JSON serialisation of the UNO value at `value` (typed `type`) to `buf`; interface
 // values render as `null`, enums by their IDL name as a JSON string:
-void appendUnoAsJson(OStringBuffer& buf, css::uno::Type const& type, void const* value);
+void appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type, void const* value);
 
 // Decode the JSON value `json` into an `Any` of type `type`; throws css::uno::RuntimeException
 // on malformed input or on a type whose decoder is not implemented yet:
-cpo::uno::Any parseJsonToAny(OUString const& json, css::uno::Type const& type);
+cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -166,7 +166,10 @@ public:
     }
 
     // XElementAccess
-    uno::Type SAL_CALL getElementType() override { return cppu::UnoType<word::XFormField>::get(); }
+    cpo::uno::Type SAL_CALL getElementType() override
+    {
+        return cppu::UnoType<word::XFormField>::get();
+    }
 
     bool SAL_CALL hasElements() override { return getCount() != 0; }
 
@@ -217,7 +220,7 @@ void SwVbaFormFields::setShaded(bool /*bSet*/)
 // }
 
 // XEnumerationAccess
-uno::Type SwVbaFormFields::getElementType() { return cppu::UnoType<word::XFormField>::get(); }
+cpo::uno::Type SwVbaFormFields::getElementType() { return cppu::UnoType<word::XFormField>::get(); }
 
 uno::Reference<container::XEnumeration> SwVbaFormFields::createEnumeration()
 {

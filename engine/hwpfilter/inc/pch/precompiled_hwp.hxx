@@ -65,8 +65,8 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Type.h>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.h>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.h>

@@ -97,12 +97,12 @@ public:
     SVX_DLLPRIVATE void copyFormatFrom( const CellRef& xSourceCell );
 
     // XInterface
-    SVX_DLLPRIVATE virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& Type ) override;
+    SVX_DLLPRIVATE virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& Type ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
-    SVX_DLLPRIVATE virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    SVX_DLLPRIVATE virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     SVX_DLLPRIVATE virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XLayoutConstrains

@@ -64,12 +64,12 @@ public:
 
     // XInterface
     virtual cpo::uno::Any SAL_CALL queryInterface(
-            const css::uno::Type& rType) override;
+            const cpo::uno::Type& rType) override;
     virtual void SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
     virtual void SAL_CALL release() noexcept override { OWeakObject::release(); }
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type >
+    virtual cpo::uno::Sequence< cpo::uno::Type >
         SAL_CALL getTypes() override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId() override;
@@ -110,7 +110,7 @@ public:
             const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess

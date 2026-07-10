@@ -316,7 +316,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("ShowSectionLimitGuide"),      HANDLE_SHOW_SECTION_LIMIT_GUIDE,        cppu::UnoType<bool>::get(),           0,   0},
         { OUString("ShowGuidesWhileMoving"),      HANDLE_SHOW_GUIDES_WHILE_MOVING,        cppu::UnoType<bool>::get(),           0,   0},
 */
-        { OUString(), 0, css::uno::Type(), 0}
+        { OUString(), 0, cpo::uno::Type(), 0}
     };
     return new MasterPropertySetInfo ( aWriterSettingsInfoMap );
 }
@@ -362,9 +362,9 @@ void SwXDocumentSettings::release ()
     OWeakObject::release();
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
 {
-    static const cpo::uno::Sequence< uno::Type > aTypes {
+    static const cpo::uno::Sequence< cpo::uno::Type > aTypes {
         // from MasterPropertySet
         cppu::UnoType<XPropertySet>::get(),
         cppu::UnoType<XPropertyState>::get(),

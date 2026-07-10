@@ -19,7 +19,7 @@ package ifc.configuration.backend;
 
 import com.sun.star.configuration.backend.TemplateIdentifier;
 import com.sun.star.configuration.backend.XUpdateHandler;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 import lib.MultiMethodTest;
 

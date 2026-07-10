@@ -44,7 +44,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <osl/interlck.h>
 #include <rtl/ustring.hxx>
@@ -79,7 +79,7 @@ private:
 
 class Impl1: public Interface1, private Base {
 public:
-    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override
+    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & type) override
     {
         if (type == cppu::UnoType<css::uno::XInterface>::get()) {
             css::uno::Reference< css::uno::XInterface > ref(
@@ -104,7 +104,7 @@ public:
 
 class Impl2: public Interface2a, public Interface3, private Base {
 public:
-    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override
+    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & type) override
     {
         if (type == cppu::UnoType<css::uno::XInterface>::get()) {
             css::uno::Reference< css::uno::XInterface > ref(
@@ -138,7 +138,7 @@ public:
 
 class Impl2b: public Interface2b, private Base {
 public:
-    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override
+    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & type) override
     {
         if (type == cppu::UnoType<css::uno::XInterface>::get()) {
             css::uno::Reference< css::uno::XInterface > ref(
@@ -283,12 +283,12 @@ void Test::testVoid() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -386,12 +386,12 @@ void Test::testBoolean() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -491,12 +491,12 @@ void Test::testByte() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -596,12 +596,12 @@ void Test::testShort() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -703,12 +703,12 @@ void Test::testUnsignedShort() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -808,12 +808,12 @@ void Test::testLong() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -913,12 +913,12 @@ void Test::testUnsignedLong() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -1018,12 +1018,12 @@ void Test::testHyper() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -1123,12 +1123,12 @@ void Test::testUnsignedHyper() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -1228,12 +1228,12 @@ void Test::testFloat() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -1333,12 +1333,12 @@ void Test::testDouble() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -1439,12 +1439,12 @@ void Test::testChar() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -1544,12 +1544,12 @@ void Test::testString() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"1"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -1587,7 +1587,7 @@ void Test::testString() {
 
 void Test::testType() {
     cpo::uno::Any a(cppu::UnoType<sal_Int32>::get());
-    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<css::uno::Type>::get()));
+    CPPUNIT_ASSERT(bool(a.getValueType() == cppu::UnoType<cpo::uno::Type>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b));
@@ -1649,11 +1649,11 @@ void Test::testType() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type", (a >>= b));
+            "cpo::uno::Type", (a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type", cppu::UnoType<sal_Int32>::get(), b);
+            "cpo::uno::Type", cppu::UnoType<sal_Int32>::get(), b);
     }
     {
         cpo::uno::Sequence< OUString > b(2);
@@ -1755,12 +1755,12 @@ void Test::testSequence() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -1879,12 +1879,12 @@ void Test::testEnum() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -1989,12 +1989,12 @@ void Test::testStruct() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -2125,12 +2125,12 @@ void Test::testException() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -2255,12 +2255,12 @@ void Test::testInterface() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {
@@ -2381,12 +2381,12 @@ void Test::testNull() {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "OUString", u"2"_ustr, b );
     }
     {
-        css::uno::Type b(cppu::UnoType<OUString>::get());
+        cpo::uno::Type b(cppu::UnoType<OUString>::get());
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Type",
+            "cpo::uno::Type",
             cppu::UnoType<OUString>::get(), b);
     }
     {

@@ -41,6 +41,7 @@
 
 
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 void MapReturn(long r0, typelib_TypeClass eTypeClass, sal_uInt64* pRegisterReturn)
 {

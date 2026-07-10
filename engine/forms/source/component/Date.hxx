@@ -34,7 +34,7 @@ class ODateModel
     bool               m_bDateTimeField;
 
 protected:
-    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
     ODateModel(
@@ -78,7 +78,7 @@ protected:
 
     virtual cpo::uno::Any
                             translateControlValueToExternalValue( ) const override;
-    virtual cpo::uno::Sequence< css::uno::Type >
+    virtual cpo::uno::Sequence< cpo::uno::Type >
                             getSupportedBindingTypes() override;
     virtual cpo::uno::Any   translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
 
@@ -97,7 +97,7 @@ protected:
 class ODateControl: public OBoundControl
 {
 protected:
-    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
     explicit ODateControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);

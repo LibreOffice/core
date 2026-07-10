@@ -239,7 +239,7 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -269,7 +269,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXColorTable::createEntry(const OUString& r
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoXColorTable::getElementType()
+cpo::uno::Type SAL_CALL SvxUnoXColorTable::getElementType()
 {
     return ::cppu::UnoType<sal_Int32>::get();
 }
@@ -297,7 +297,7 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -337,7 +337,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXLineEndTable::createEntry(const OUString&
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoXLineEndTable::getElementType()
+cpo::uno::Type SAL_CALL SvxUnoXLineEndTable::getElementType()
 {
     return cppu::UnoType<drawing::PolyPolygonBezierCoords>::get();
 }
@@ -365,7 +365,7 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -415,7 +415,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXDashTable::createEntry(const OUString& rN
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoXDashTable::getElementType()
+cpo::uno::Type SAL_CALL SvxUnoXDashTable::getElementType()
 {
     return cppu::UnoType<drawing::LineDash>::get();
 }
@@ -443,7 +443,7 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -488,7 +488,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXHatchTable::createEntry(const OUString& r
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoXHatchTable::getElementType()
+cpo::uno::Type SAL_CALL SvxUnoXHatchTable::getElementType()
 {
     return cppu::UnoType<drawing::Hatch>::get();
 }
@@ -516,7 +516,7 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -551,7 +551,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXGradientTable::createEntry(const OUString
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoXGradientTable::getElementType()
+cpo::uno::Type SAL_CALL SvxUnoXGradientTable::getElementType()
 {
     return cppu::UnoType<awt::Gradient>::get();
 }
@@ -579,7 +579,7 @@ public:
     virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const cpo::uno::Any& rAny) const override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -623,7 +623,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXBitmapTable::createEntry(const OUString& 
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoXBitmapTable::getElementType()
+cpo::uno::Type SAL_CALL SvxUnoXBitmapTable::getElementType()
 {
     return ::cppu::UnoType<awt::XBitmap>::get();
 }

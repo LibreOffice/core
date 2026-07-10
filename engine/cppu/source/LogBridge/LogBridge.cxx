@@ -25,7 +25,7 @@
 #include <cppu/Enterable.hxx>
 #include <cppu/helper/purpenv/Environment.hxx>
 #include <cppu/helper/purpenv/Mapping.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <sal/log.hxx>
 
 namespace
@@ -161,7 +161,7 @@ bool LogBridge::v_isValid(OUString * pReason)
                SAL_INFO("cppu.log", "" << *static_cast<double*>(pArg));
                 break;
             case typelib_TypeClass_TYPE:
-                SAL_INFO("cppu.log", "" << static_cast<css::uno::Type*>(pArg)->getTypeName());
+                SAL_INFO("cppu.log", "" << static_cast<cpo::uno::Type*>(pArg)->getTypeName());
                 break;
             case typelib_TypeClass_ANY:
                 if ( static_cast<uno_Any*>(pArg)->pData )

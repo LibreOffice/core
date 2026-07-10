@@ -115,7 +115,7 @@ SQLExceptionInfo& SQLExceptionInfo::operator=(const cpo::uno::Any& _rCaughtSQLEx
 
 SQLExceptionInfo::SQLExceptionInfo(const cpo::uno::Any& _rError)
 {
-    const css::uno::Type& aSQLExceptionType = cppu::UnoType<css::sdbc::SQLException>::get();
+    const cpo::uno::Type& aSQLExceptionType = cppu::UnoType<css::sdbc::SQLException>::get();
     bool bValid = isAssignableFrom(aSQLExceptionType, _rError.getValueType());
     if (bValid)
         m_aContent = _rError;

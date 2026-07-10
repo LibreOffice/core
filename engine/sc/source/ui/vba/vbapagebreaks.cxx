@@ -93,7 +93,7 @@ public:
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) override;
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         if( m_bColumn )
              return cppu::UnoType<excel::XVPageBreak>::get();
@@ -241,7 +241,7 @@ ScVbaHPageBreaks::createCollectionObject( const cpo::uno::Any& aSource )
     return aSource; // it's already a pagebreak object
 }
 
-uno::Type
+cpo::uno::Type
 ScVbaHPageBreaks::getElementType()
 {
     return cppu::UnoType<excel::XHPageBreak>::get();
@@ -298,7 +298,7 @@ ScVbaVPageBreaks::createCollectionObject( const cpo::uno::Any& aSource )
     return aSource; // it's already a pagebreak object
 }
 
-uno::Type
+cpo::uno::Type
 ScVbaVPageBreaks::getElementType()
 {
     return cppu::UnoType<excel::XVPageBreak>::get();

@@ -23,7 +23,7 @@ import com.sun.star.beans.*;
 import com.sun.star.container.*;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XTypeProvider;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.comp.loader.FactoryHelper;

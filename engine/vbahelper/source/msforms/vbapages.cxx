@@ -25,7 +25,7 @@ ScVbaPages::ScVbaPages( const uno::Reference< XHelperInterface >& xParent, const
 {
 }
 
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 ScVbaPages::getElementType()
 {
     // return cppu::UnoType<msforms::XPage>::get();

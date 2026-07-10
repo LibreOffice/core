@@ -70,7 +70,7 @@ namespace frm
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
         // OBoundControlModel overridables
-        virtual cpo::uno::Sequence< css::uno::Type >
+        virtual cpo::uno::Sequence< cpo::uno::Type >
                                 getSupportedBindingTypes() override;
         virtual cpo::uno::Any   translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
         virtual cpo::uno::Any   translateControlValueToExternalValue( ) const override;

@@ -45,7 +45,7 @@
 #include <com/sun/star/bridge/UnoUrlResolver.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 
 #include <test/testtools/bridgetest/BadConstructorArguments.hpp>
 #include <test/testtools/bridgetest/TestPolyStruct.hpp>

@@ -91,7 +91,7 @@ void SAL_CALL ToolbarLayoutManager::release() noexcept
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL ToolbarLayoutManager::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL ToolbarLayoutManager::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any a = ::cppu::queryInterface( rType,
         static_cast< awt::XDockableWindowListener* >(this),

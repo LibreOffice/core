@@ -91,7 +91,7 @@ public:
                 const css::uno::Reference< css::sdbc::XConnection >& i_rConnection
             );
 
-    virtual cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override;
     virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
 // css::uno::XInterface

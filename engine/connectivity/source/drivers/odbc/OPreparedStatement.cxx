@@ -76,7 +76,7 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType )
     return aRet.hasValue() ? aRet : OPreparedStatement_BASE::queryInterface(rType);
 }
 
-cpo::uno::Sequence< css::uno::Type > SAL_CALL OPreparedStatement::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL OPreparedStatement::getTypes(  )
 {
     return ::comphelper::concatSequences(OPreparedStatement_BASE::getTypes(),OStatement_BASE2::getTypes());
 }

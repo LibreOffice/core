@@ -21,7 +21,7 @@ package com.sun.star.lib.uno.helper;
 import com.sun.star.bridge.XBridgeSupplier2;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.XAdapter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.XReference;
 import com.sun.star.uno.XWeak;
 

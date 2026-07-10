@@ -58,7 +58,7 @@ OFSStreamContainer::~OFSStreamContainer()
 }
 
 // XInterface
-cpo::uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL OFSStreamContainer::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aReturn = ::cppu::queryInterface
                 (   rType
@@ -133,12 +133,12 @@ void SAL_CALL OFSStreamContainer::release()
 }
 
 //  XTypeProvider
-cpo::uno::Sequence< uno::Type > SAL_CALL OFSStreamContainer::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL OFSStreamContainer::getTypes()
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_aTypes.hasElements() )
     {
-        std::vector<uno::Type> tmp
+        std::vector<cpo::uno::Type> tmp
         {
             cppu::UnoType<lang::XTypeProvider>::get(),
             cppu::UnoType<embed::XExtendedStorageStream>::get()

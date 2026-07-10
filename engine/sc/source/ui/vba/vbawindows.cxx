@@ -195,7 +195,7 @@ public:
     }
 
     //XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         return cppu::UnoType<sheet::XSpreadsheetDocument>::get();
     }
@@ -245,7 +245,7 @@ ScVbaWindows::createCollectionObject( const cpo::uno::Any& aSource )
     return ComponentToWindow( aSource,  mxContext, Application() );
 }
 
-uno::Type
+cpo::uno::Type
 ScVbaWindows::getElementType()
 {
     return cppu::UnoType<excel::XWindows>::get();

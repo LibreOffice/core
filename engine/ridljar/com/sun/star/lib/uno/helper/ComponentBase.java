@@ -20,7 +20,7 @@ package com.sun.star.lib.uno.helper;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.EventObject;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 /** This class can be used as the base class for UNO components. In addition to the functionality ,which
  *  is inherited from WeakBase, it implements com.sun.star.lang.XComponent.

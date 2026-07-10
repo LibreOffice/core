@@ -178,7 +178,7 @@ namespace {
 
 struct TypeList
 {
-    uno::Type const * pTypeList;
+    cpo::uno::Type const * pTypeList;
     int nListLength;
 };
 

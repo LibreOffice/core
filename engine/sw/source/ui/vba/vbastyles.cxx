@@ -185,7 +185,7 @@ public:
         mxParaStyles = xStyleFamilies->GetParagraphStyles();
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<style::XStyle>::get(); }
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<style::XStyle>::get(); }
     virtual bool SAL_CALL hasElements(  ) override { return getCount() > 0; }
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
@@ -290,7 +290,7 @@ SwVbaStyles::createCollectionObject(const cpo::uno::Any& aObject)
     return cpo::uno::Any( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProp ) ) );
 }
 
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 SwVbaStyles::getElementType()
 {
     return cppu::UnoType<word::XStyle>::get();

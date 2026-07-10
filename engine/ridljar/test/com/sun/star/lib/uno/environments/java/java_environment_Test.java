@@ -19,7 +19,7 @@
 
 package com.sun.star.lib.uno.environments.java;
 
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.XInterface;
 import org.junit.Test;
 import static org.junit.Assert.*;

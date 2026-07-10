@@ -52,7 +52,7 @@ namespace comphelper
     using ::com::sun::star::uno::RuntimeException;
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
     using ::com::sun::star::container::XEnumerableMap;
     using ::com::sun::star::lang::NoSupportException;
     using ::com::sun::star::beans::IllegalTypeException;
@@ -330,9 +330,9 @@ namespace comphelper
 
         Type aKeyType, aValueType;
         if ( !( _arguments[0] >>= aKeyType ) )
-            throw IllegalArgumentException(u"com.sun.star.uno.Type expected."_ustr, *this, 1 );
+            throw IllegalArgumentException(u"cpo.uno.Type expected."_ustr, *this, 1 );
         if ( !( _arguments[1] >>= aValueType ) )
-            throw IllegalArgumentException(u"com.sun.star.uno.Type expected."_ustr, *this, 2 );
+            throw IllegalArgumentException(u"cpo.uno.Type expected."_ustr, *this, 2 );
 
         Sequence< Pair< Any, Any > > aInitialValues;
         bool bMutable = true;

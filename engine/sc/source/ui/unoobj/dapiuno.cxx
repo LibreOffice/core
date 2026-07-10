@@ -496,7 +496,7 @@ Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
     return Any( Reference<XDataPilotTable2>(xTable) );
 }
 
-uno::Type SAL_CALL ScDataPilotTablesObj::getElementType()
+cpo::uno::Type SAL_CALL ScDataPilotTablesObj::getElementType()
 {
     return cppu::UnoType<XDataPilotTable2>::get();
 }
@@ -996,7 +996,7 @@ ScDataPilotTableObj::~ScDataPilotTableObj()
 {
 }
 
-Any SAL_CALL ScDataPilotTableObj::queryInterface( const uno::Type& rType )
+Any SAL_CALL ScDataPilotTableObj::queryInterface( const cpo::uno::Type& rType )
 {
     // since we manually do resolve the query for XDataPilotTable2
     // we also need to do the same for XDataPilotTable
@@ -1020,11 +1020,11 @@ void SAL_CALL ScDataPilotTableObj::release() noexcept
     ScDataPilotDescriptorBase::release();
 }
 
-Sequence< uno::Type > SAL_CALL ScDataPilotTableObj::getTypes()
+Sequence< cpo::uno::Type > SAL_CALL ScDataPilotTableObj::getTypes()
 {
     return comphelper::concatSequences(
         ScDataPilotDescriptorBase::getTypes(),
-        Sequence< uno::Type >
+        Sequence< cpo::uno::Type >
         {
             cppu::UnoType<XDataPilotTable2>::get(),
             cppu::UnoType<XModifyBroadcaster>::get()
@@ -1597,7 +1597,7 @@ rtl::Reference<ScDataPilotFieldObj> ScDataPilotFieldsObj::getScDataPilotFieldObj
 
 // XElementAccess
 
-uno::Type SAL_CALL ScDataPilotFieldsObj::getElementType()
+cpo::uno::Type SAL_CALL ScDataPilotFieldsObj::getElementType()
 {
     return cppu::UnoType<XPropertySet>::get();
 }
@@ -2880,7 +2880,7 @@ Reference<XEnumeration> SAL_CALL ScDataPilotFieldGroupsObj::createEnumeration()
 
 // XElementAccess
 
-uno::Type SAL_CALL ScDataPilotFieldGroupsObj::getElementType()
+cpo::uno::Type SAL_CALL ScDataPilotFieldGroupsObj::getElementType()
 {
     return cppu::UnoType<XNameAccess>::get();
 }
@@ -3052,7 +3052,7 @@ Reference< XEnumeration > SAL_CALL ScDataPilotFieldGroupObj::createEnumeration()
 
 // XElementAccess
 
-uno::Type SAL_CALL ScDataPilotFieldGroupObj::getElementType()
+cpo::uno::Type SAL_CALL ScDataPilotFieldGroupObj::getElementType()
 {
     return cppu::UnoType<XNamed>::get();
 }
@@ -3203,7 +3203,7 @@ Any SAL_CALL ScDataPilotItemsObj::getByIndex( sal_Int32 nIndex )
     return Any( xItem );
 }
 
-uno::Type SAL_CALL ScDataPilotItemsObj::getElementType()
+cpo::uno::Type SAL_CALL ScDataPilotItemsObj::getElementType()
 {
     return cppu::UnoType<XPropertySet>::get();
 }

@@ -102,7 +102,7 @@ public class ServicesHandler implements XPropertyHandler
         // ignoring this
     }
 
-    public Object convertToControlValue(String _propertyName, Object _propertyValue, com.sun.star.uno.Type type) throws com.sun.star.beans.UnknownPropertyException
+    public Object convertToControlValue(String _propertyName, Object _propertyValue, cpo.uno.Type type) throws com.sun.star.beans.UnknownPropertyException
     {
         return _propertyValue;
     }

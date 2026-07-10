@@ -73,7 +73,7 @@ public:
         {}
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException)
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) throw(css::uno::RuntimeException)
     {
         // execution time remains appr. constant any time
         Any aRet;

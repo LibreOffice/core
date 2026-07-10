@@ -323,7 +323,7 @@ OUString cppName(OUString const& name)
     }
     else if (n == "type")
     {
-        buf.append("::com::sun::star::uno::Type");
+        buf.append("::cpo::uno::Type");
     }
     else if (n == "any")
     {
@@ -480,7 +480,7 @@ void dumpType(std::ostream& out, rtl::Reference<TypeManager> const& manager,
             out << "::rtl::OUString";
             break;
         case codemaker::UnoType::Sort::Type:
-            out << "::com::sun::star::uno::Type";
+            out << "::cpo::uno::Type";
             break;
         case codemaker::UnoType::Sort::Any:
             out << "::cpo::uno::Any";

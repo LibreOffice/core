@@ -2009,7 +2009,7 @@ void OStorage::MakeLinkToSubComponent_Impl( const uno::Reference< lang::XCompone
 
 //  XInterface
 
-cpo::uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL OStorage::queryInterface( const cpo::uno::Type& rType )
 {
     // common interfaces
     cpo::uno::Any aReturn = ::cppu::queryInterface
@@ -2079,7 +2079,7 @@ void SAL_CALL OStorage::release() noexcept
 }
 
 //  XTypeProvider
-cpo::uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL OStorage::getTypes()
 {
     if (! m_oTypeCollection)
     {
@@ -3874,7 +3874,7 @@ bool SAL_CALL OStorage::hasByName( const OUString& aName )
     return ( pElement != nullptr );
 }
 
-uno::Type SAL_CALL OStorage::getElementType()
+cpo::uno::Type SAL_CALL OStorage::getElementType()
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -3885,7 +3885,7 @@ uno::Type SAL_CALL OStorage::getElementType()
     }
 
     // it is a multitype container
-    return uno::Type();
+    return cpo::uno::Type();
 }
 
 bool SAL_CALL OStorage::hasElements()

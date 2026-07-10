@@ -89,7 +89,7 @@ void SAL_CALL DatabaseDataProvider::disposing()
     m_xActiveConnection.clear();
 }
 
-cpo::uno::Any DatabaseDataProvider::queryInterface(uno::Type const & type)
+cpo::uno::Any DatabaseDataProvider::queryInterface(cpo::uno::Type const & type)
 {
     return TDatabaseDataProvider::queryInterface(type);
 }

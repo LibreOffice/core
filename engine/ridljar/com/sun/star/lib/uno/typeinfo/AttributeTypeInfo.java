@@ -17,7 +17,7 @@
  */
 package com.sun.star.lib.uno.typeinfo;
 
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 public class AttributeTypeInfo extends TypeInfo
 {

@@ -71,7 +71,7 @@ void SAL_CALL DialogModelProvider::initialize(const cpo::uno::Sequence< cpo::uno
 }
 
 // container::XElementAccess:
-uno::Type SAL_CALL DialogModelProvider::getElementType()
+cpo::uno::Type SAL_CALL DialogModelProvider::getElementType()
 {
     return m_xDialogModel->getElementType();
 }

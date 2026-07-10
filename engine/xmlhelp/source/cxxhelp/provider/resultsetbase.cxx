@@ -65,7 +65,7 @@ ResultSetBase::release()
 
 
 cpo::uno::Any SAL_CALL
-ResultSetBase::queryInterface( const uno::Type& rType )
+ResultSetBase::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                           static_cast< lang::XComponent* >(this),
@@ -348,7 +348,7 @@ public:
         OWeakObject::release();
     }
 
-    cpo::uno::Any SAL_CALL queryInterface( const uno::Type& rType ) override
+    cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& rType ) override
     {
         cpo::uno::Any aRet = cppu::queryInterface( rType,
                                               static_cast< beans::XPropertySetInfo* >(this) );

@@ -39,7 +39,7 @@ Class::getImplementationId()          \
 }
 
 #define GETTYPES_IMPL_START( Class )                                        \
-cpo::uno::Sequence< css::uno::Type > SAL_CALL         \
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL         \
 Class::getTypes()          \
 {                                                                           \
     static cppu::OTypeCollection collection(

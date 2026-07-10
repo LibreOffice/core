@@ -40,7 +40,7 @@ namespace cmis
     {
     }
 
-    cpo::uno::Any SAL_CALL StdInputStream::queryInterface( const uno::Type& rType )
+    cpo::uno::Any SAL_CALL StdInputStream::queryInterface( const cpo::uno::Type& rType )
     {
         cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                           static_cast< XInputStream* >( this ),

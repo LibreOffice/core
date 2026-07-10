@@ -56,7 +56,7 @@ class SVT_DLLPUBLIC StatusbarController :
         ::tools::Rectangle getControlRect() const;
 
         // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
 

@@ -508,7 +508,7 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
     }
 }
 
-css::uno::Type const & Theme::GetCppuType (const PropertyType eType)
+cpo::uno::Type const & Theme::GetCppuType (const PropertyType eType)
 {
     switch(eType)
     {

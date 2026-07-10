@@ -1645,7 +1645,7 @@ public:
         :mpLib( pLib ) {}
 
     // Methods XElementAccess
-    virtual uno::Type getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
     virtual bool hasElements() override;
 
     // Methods XNameAccess
@@ -1664,9 +1664,9 @@ public:
 }
 
 // Methods XElementAccess
-uno::Type ModuleContainer_Impl::getElementType()
+cpo::uno::Type ModuleContainer_Impl::getElementType()
 {
-    uno::Type aModuleType = cppu::UnoType<script::XStarBasicModuleInfo>::get();
+    cpo::uno::Type aModuleType = cppu::UnoType<script::XStarBasicModuleInfo>::get();
     return aModuleType;
 }
 
@@ -1718,8 +1718,8 @@ void ModuleContainer_Impl::replaceByName( const OUString& aName, const cpo::uno:
 // Methods XNameContainer
 void ModuleContainer_Impl::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
-    uno::Type aModuleType = cppu::UnoType<script::XStarBasicModuleInfo>::get();
-    const uno::Type& aAnyType = aElement.getValueType();
+    cpo::uno::Type aModuleType = cppu::UnoType<script::XStarBasicModuleInfo>::get();
+    const cpo::uno::Type& aAnyType = aElement.getValueType();
     if( aModuleType != aAnyType )
     {
         throw lang::IllegalArgumentException(u"types do not match"_ustr, getXWeak(), 2);
@@ -1776,7 +1776,7 @@ public:
         :mpLib( pLib ) {}
 
     // Methods XElementAccess
-    virtual uno::Type getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
     virtual bool hasElements() override;
 
     // Methods XNameAccess
@@ -1795,9 +1795,9 @@ public:
 }
 
 // Methods XElementAccess
-uno::Type DialogContainer_Impl::getElementType()
+cpo::uno::Type DialogContainer_Impl::getElementType()
 {
-    uno::Type aModuleType = cppu::UnoType<script::XStarBasicDialogInfo>::get();
+    cpo::uno::Type aModuleType = cppu::UnoType<script::XStarBasicDialogInfo>::get();
     return aModuleType;
 }
 
@@ -1882,8 +1882,8 @@ void DialogContainer_Impl::replaceByName( const OUString& aName, const cpo::uno:
 // Methods XNameContainer
 void DialogContainer_Impl::insertByName( const OUString&, const cpo::uno::Any& aElement )
 {
-    uno::Type aModuleType = cppu::UnoType<script::XStarBasicDialogInfo>::get();
-    const uno::Type& aAnyType = aElement.getValueType();
+    cpo::uno::Type aModuleType = cppu::UnoType<script::XStarBasicDialogInfo>::get();
+    const cpo::uno::Type& aAnyType = aElement.getValueType();
     if( aModuleType != aAnyType )
     {
         throw lang::IllegalArgumentException(u"types do not match"_ustr, getXWeak(), 2);
@@ -1915,7 +1915,7 @@ public:
         :mpMgr( pMgr ) {}
 
     // Methods XElementAccess
-    virtual uno::Type getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
     virtual bool hasElements() override;
 
     // Methods XNameAccess
@@ -1933,9 +1933,9 @@ public:
 
 
 // Methods XElementAccess
-uno::Type LibraryContainer_Impl::getElementType()
+cpo::uno::Type LibraryContainer_Impl::getElementType()
 {
-    uno::Type aType = cppu::UnoType<script::XStarBasicLibraryInfo>::get();
+    cpo::uno::Type aType = cppu::UnoType<script::XStarBasicLibraryInfo>::get();
     return aType;
 }
 

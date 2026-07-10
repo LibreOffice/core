@@ -25,7 +25,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
@@ -74,7 +74,7 @@ void Impl::initialize(cpo::uno::Sequence< cpo::uno::Any > const & arguments)
     double arg9 = double();
     sal_Unicode arg10 = sal_Unicode();
     OUString arg11;
-    css::uno::Type arg12;
+    cpo::uno::Type arg12;
     bool arg13;
     cpo::uno::Sequence< bool > arg14;
     cpo::uno::Sequence< ::sal_Int8 > arg15;
@@ -88,7 +88,7 @@ void Impl::initialize(cpo::uno::Sequence< cpo::uno::Any > const & arguments)
     cpo::uno::Sequence< double > arg23;
     cpo::uno::Sequence< sal_Unicode > arg24;
     cpo::uno::Sequence< OUString > arg25;
-    cpo::uno::Sequence< css::uno::Type > arg26;
+    cpo::uno::Sequence< cpo::uno::Type > arg26;
     cpo::uno::Sequence< cpo::uno::Any > arg27;
     bool arg27b;
     cpo::uno::Sequence< cpo::uno::Sequence< bool > > arg28;
@@ -203,7 +203,7 @@ private:
 
 void Impl2::initialize(cpo::uno::Sequence< cpo::uno::Any > const & arguments)
 {
-    ttb::TestPolyStruct< css::uno::Type > arg0;
+    ttb::TestPolyStruct< cpo::uno::Type > arg0;
     ttb::TestPolyStruct< cpo::uno::Any > arg1;
     cpo::uno::Any arg1b(true);
     ttb::TestPolyStruct< bool > arg2;
@@ -227,7 +227,7 @@ void Impl2::initialize(cpo::uno::Sequence< cpo::uno::Any > const & arguments)
         ::sal_Unicode, ttb::TestPolyStruct < cpo::uno::Any > > > arg16;
     ttb::TestPolyStruct2< ttb::TestPolyStruct2<sal_Unicode, cpo::uno::Any >,
         ttb::TestPolyStruct<sal_Unicode> > arg17;
-    ttb::TestPolyStruct<cpo::uno::Sequence< css::uno::Type > > arg18;
+    ttb::TestPolyStruct<cpo::uno::Sequence< cpo::uno::Type > > arg18;
     ttb::TestPolyStruct<cpo::uno::Sequence<cpo::uno::Any> > arg19;
     ttb::TestPolyStruct<cpo::uno::Sequence< bool > > arg20;
     ttb::TestPolyStruct<cpo::uno::Sequence< ::sal_Int8 > > arg21;

@@ -39,7 +39,7 @@ public:
     // XCommandBars
     virtual css::uno::Reference< ov::XCommandBar > SAL_CALL Add( const cpo::uno::Any& Name, const cpo::uno::Any& Position, const cpo::uno::Any& MenuBar, const cpo::uno::Any& Temporary ) override;
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 

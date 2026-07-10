@@ -28,7 +28,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Array;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 public class ValueChanger {
 

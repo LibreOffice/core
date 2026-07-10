@@ -37,7 +37,7 @@ using namespace ::ooo::vba;
 using namespace css;
 
 /// @throws lang::IllegalArgumentException
-static sal_Int8 lcl_toMSOPropType( const uno::Type& aType )
+static sal_Int8 lcl_toMSOPropType( const cpo::uno::Type& aType )
 {
     sal_Int16 msoType = office::MsoDocProperties::msoPropertyTypeString;
 
@@ -725,7 +725,7 @@ protected:
         return true;
     }
 // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         return  cppu::UnoType<XDocumentProperty>::get();
     }
@@ -756,7 +756,7 @@ SwVbaBuiltinDocumentProperties::Add( const OUString& /*Name*/, bool /*LinkToCont
 }
 
 // XEnumerationAccess
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 SwVbaBuiltinDocumentProperties::getElementType()
 {
     return  cppu::UnoType<XDocumentProperty>::get();
@@ -857,7 +857,7 @@ public:
     }
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         return  cppu::UnoType<XDocumentProperty>::get();
     }

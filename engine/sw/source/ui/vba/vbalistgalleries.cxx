@@ -71,7 +71,7 @@ cpo::uno::Any SAL_CALL SwVbaListGalleries::Item( const cpo::uno::Any& Index1, co
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaListGalleries::getElementType()
 {
     return cppu::UnoType<word::XListGallery>::get();

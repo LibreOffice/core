@@ -23,7 +23,7 @@
 #include <vector>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -70,7 +70,7 @@ namespace treeview {
 
         // XNameAccess
 
-        virtual css::uno::Type SAL_CALL
+        virtual cpo::uno::Type SAL_CALL
         getElementType(  ) override
         {
             return cppu::UnoType<void>::get();

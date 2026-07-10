@@ -69,7 +69,7 @@
     <DisplayString Condition="pType->eTypeClass == 10">{*((float*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_FLOAT -->
     <DisplayString Condition="pType->eTypeClass == 11">{*((double*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_DOUBLE -->
     <DisplayString Condition="pType->eTypeClass == 12">{*((rtl::OUString*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_STRING -->
-    <DisplayString Condition="pType->eTypeClass == 13">{*((com::sun::star::uno::Type*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_TYPE -->
+    <DisplayString Condition="pType->eTypeClass == 13">{*((cpo::uno::Type*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_TYPE -->
     <DisplayString Condition="pType->eTypeClass == 14">{*((_uno_Any*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_ANY -->
     <DisplayString Condition="pType->eTypeClass == 15">{*((sal_Int32*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_ENUM -->
     <DisplayString Condition="pType->eTypeClass == 19">{*((com::sun::star::uno::Exception*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_EXCEPTION -->
@@ -92,7 +92,7 @@
       <Item Name="pData" Condition="pType->eTypeClass == 10">(float*)pData</Item><!-- typelib_TypeClass_FLOAT -->
       <Item Name="pData" Condition="pType->eTypeClass == 11">(double*)pData</Item><!-- typelib_TypeClass_DOUBLE -->
       <Item Name="pData" Condition="pType->eTypeClass == 12">(rtl::OUString*)pData</Item><!-- typelib_TypeClass_STRING -->
-      <Item Name="pData" Condition="pType->eTypeClass == 13">(com::sun::star::uno::Type*)pData</Item><!-- typelib_TypeClass_TYPE -->
+      <Item Name="pData" Condition="pType->eTypeClass == 13">(cpo::uno::Type*)pData</Item><!-- typelib_TypeClass_TYPE -->
       <Item Name="pData" Condition="pType->eTypeClass == 14">(_uno_Any*)pData</Item><!-- typelib_TypeClass_ANY -->
       <Item Name="pData" Condition="pType->eTypeClass == 15">(sal_Int32*)pData</Item><!-- typelib_TypeClass_ENUM -->
       <Item Name="pData" Condition="pType->eTypeClass == 19">(com::sun::star::uno::Exception*)pData</Item><!-- typelib_TypeClass_EXCEPTION -->
@@ -321,7 +321,7 @@
       <ExpandedItem>m_rInnerRef</ExpandedItem>
     </Expand>
   </Type>
-  <Type Name="com::sun::star::uno::Type">
+  <Type Name="cpo::uno::Type">
     <DisplayString>{_pType->eTypeClass,en}</DisplayString>
     <Expand>
       <Item Name="Type Class">_pType->eTypeClass,en</Item>

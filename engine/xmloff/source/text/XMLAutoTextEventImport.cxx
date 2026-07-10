@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Type;
+using ::cpo::uno::Type;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::container::XNameReplace;

@@ -78,7 +78,7 @@ void ViewShellWrapper::disposing(std::unique_lock<std::mutex>&)
     mpViewShell.reset();
 }
 
-cpo::uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL ViewShellWrapper::queryInterface( const cpo::uno::Type & rType )
 {
     if( mpSlideSorterViewShell &&
         rType == cppu::UnoType<view::XSelectionSupplier>::get() )

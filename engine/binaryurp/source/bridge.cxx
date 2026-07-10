@@ -862,7 +862,7 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
     typelib_TypeDescription * p = ifc.get();
     std::vector< BinaryAny > inArgs;
     inArgs.emplace_back(
-            css::uno::TypeDescription(cppu::UnoType< css::uno::Type >::get()),
+            css::uno::TypeDescription(cppu::UnoType< cpo::uno::Type >::get()),
             &p);
     BinaryAny ret;
     std::vector< BinaryAny> outArgs;

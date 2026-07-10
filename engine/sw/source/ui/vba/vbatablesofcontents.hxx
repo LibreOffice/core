@@ -43,7 +43,7 @@ public:
     virtual css::uno::Reference< ::ooo::vba::word::XTableOfContents > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const cpo::uno::Any& UseHeadingStyles, const cpo::uno::Any& UpperHeadingLevel, const cpo::uno::Any& LowerHeadingLevel, const cpo::uno::Any& UseFields, const cpo::uno::Any& TableID, const cpo::uno::Any& RightAlignPageNumbers, const cpo::uno::Any& IncludePageNumbers, const cpo::uno::Any& AddedStyles, const cpo::uno::Any& UseHyperlinks, const cpo::uno::Any& HidePageNumbersInWeb, const cpo::uno::Any& UseOutlineLevels ) override;
 
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaTablesOfContents_BASE

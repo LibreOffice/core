@@ -1188,7 +1188,7 @@ css::uno::Reference< css::ucb::XContent >
     }
 }
 
-cpo::uno::Sequence< css::uno::Type > SAL_CALL Content::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Content::getTypes()
 {
     if ( isFolder( css::uno::Reference< css::ucb::XCommandEnvironment >() ) )
     {
@@ -1325,7 +1325,7 @@ void SAL_CALL Content::release() noexcept
     ContentImplHelper::release();
 }
 
-cpo::uno::Any SAL_CALL Content::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL Content::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType, static_cast< css::ucb::XContentCreator * >( this ) );
     return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface(rType);

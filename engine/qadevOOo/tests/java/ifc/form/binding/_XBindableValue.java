@@ -19,7 +19,7 @@ package ifc.form.binding;
 
 import com.sun.star.form.binding.XBindableValue;
 import com.sun.star.form.binding.XValueBinding;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 import java.util.ArrayList;
 
@@ -84,11 +84,11 @@ public class _XBindableValue extends MultiMethodTest {
     static class MyValueBinding implements XValueBinding {
         private final ArrayList<Type> types = new ArrayList<Type>();
 
-        public com.sun.star.uno.Type[] getSupportedValueTypes() {
+        public cpo.uno.Type[] getSupportedValueTypes() {
             return types.toArray(new Type[types.size()]);
         }
 
-        public Object getValue(com.sun.star.uno.Type type)
+        public Object getValue(cpo.uno.Type type)
             throws com.sun.star.form.binding.IncompatibleTypesException {
             return "MyValueBinding";
         }
@@ -98,7 +98,7 @@ public class _XBindableValue extends MultiMethodTest {
                    com.sun.star.lang.NoSupportException {
         }
 
-        public boolean supportsType(com.sun.star.uno.Type type) {
+        public boolean supportsType(cpo.uno.Type type) {
             types.add(type);
             return true;
         }

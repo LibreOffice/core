@@ -1743,7 +1743,7 @@ namespace cmis
         ContentImplHelper::release();
     }
 
-    cpo::uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
+    cpo::uno::Any SAL_CALL Content::queryInterface( const cpo::uno::Type & rType )
     {
         cpo::uno::Any aRet = cppu::queryInterface( rType, static_cast< ucb::XContentCreator * >( this ) );
         return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface(rType);
@@ -1953,7 +1953,7 @@ namespace cmis
         }
     }
 
-    cpo::uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
+    cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Content::getTypes()
     {
         try
         {

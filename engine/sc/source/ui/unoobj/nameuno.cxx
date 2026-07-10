@@ -599,7 +599,7 @@ cpo::uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(uno::Reference< sheet::XNamedRange >(xRange));
 }
 
-uno::Type SAL_CALL ScNamedRangesObj::getElementType()
+cpo::uno::Type SAL_CALL ScNamedRangesObj::getElementType()
 {
     return cppu::UnoType<sheet::XNamedRange>::get();   // must be suitable for getByIndex
 }
@@ -1131,7 +1131,7 @@ cpo::uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(uno::Reference< sheet::XLabelRange >(xRange));
 }
 
-uno::Type SAL_CALL ScLabelRangesObj::getElementType()
+cpo::uno::Type SAL_CALL ScLabelRangesObj::getElementType()
 {
     return cppu::UnoType<sheet::XLabelRange>::get();   // must be suitable for getByIndex
 }

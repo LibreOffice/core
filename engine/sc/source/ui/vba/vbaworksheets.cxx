@@ -80,7 +80,7 @@ class SheetCollectionHelper : public ::cppu::WeakImplHelper< container::XNameAcc
 public:
     explicit SheetCollectionHelper( SheetMap&& sMap ) : mSheetMap( std::move(sMap) ), cachePos(mSheetMap.begin()) {}
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<sheet::XSpreadsheet>::get(); }
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<sheet::XSpreadsheet>::get(); }
     virtual bool SAL_CALL hasElements(  ) override { return ( !mSheetMap.empty() ); }
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
@@ -169,7 +169,7 @@ ScVbaWorksheets::ScVbaWorksheets( const uno::Reference< XHelperInterface >& xPar
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 ScVbaWorksheets::getElementType()
 {
     return cppu::UnoType<excel::XWorksheet>::get();

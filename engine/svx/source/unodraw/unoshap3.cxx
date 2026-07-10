@@ -82,7 +82,7 @@ void Svx3DSceneObject::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 }
 
 
-cpo::uno::Any SAL_CALL Svx3DSceneObject::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL Svx3DSceneObject::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -95,7 +95,7 @@ cpo::uno::Any SAL_CALL Svx3DSceneObject::queryAggregation( const uno::Type & rTy
     return aAny;
 }
 
-cpo::uno::Any SAL_CALL Svx3DSceneObject::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL Svx3DSceneObject::queryInterface( const cpo::uno::Type & rType )
 {
     return SvxShape::queryInterface( rType );
 }
@@ -219,7 +219,7 @@ cpo::uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
 
 // css::container::XElementAccess
 
-uno::Type SAL_CALL Svx3DSceneObject::getElementType()
+cpo::uno::Type SAL_CALL Svx3DSceneObject::getElementType()
 {
     return cppu::UnoType<drawing::XShape>::get();
 }

@@ -336,7 +336,7 @@ using namespace cpo::uno;
                 const bool bValueIsSequence = TypeClass_SEQUENCE == eValueTypeClass;
                 if ( bValueIsSequence )
                 {
-                    uno::Type aSimpleType( getSequenceElementType( rPropValues.Value.getValueType() ) );
+                    cpo::uno::Type aSimpleType( getSequenceElementType( rPropValues.Value.getValueType() ) );
                     eValueTypeClass = aSimpleType.getTypeClass();
                 }
 
@@ -346,7 +346,7 @@ using namespace cpo::uno;
                 const bool bPropIsSequence = TypeClass_SEQUENCE == ePropTypeClass;
                 if( bPropIsSequence )
                 {
-                    uno::Type aSimpleType( ::comphelper::getSequenceElementType( aProperty.Type ) );
+                    cpo::uno::Type aSimpleType( ::comphelper::getSequenceElementType( aProperty.Type ) );
                     ePropTypeClass = aSimpleType.getTypeClass();
                 }
 

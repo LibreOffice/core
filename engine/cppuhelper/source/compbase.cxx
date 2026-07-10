@@ -50,7 +50,7 @@ void SAL_CALL WeakComponentImplHelperBase2::removeEventListener(
     maEventListeners.removeInterface(aGuard, rxListener);
 }
 
-cpo::uno::Any SAL_CALL WeakComponentImplHelperBase2::queryInterface(css::uno::Type const& rType)
+cpo::uno::Any SAL_CALL WeakComponentImplHelperBase2::queryInterface(cpo::uno::Type const& rType)
 {
     cpo::uno::Any aReturn = ::cppu::queryInterface(rType, static_cast<css::uno::XWeak*>(this),
                                                    static_cast<css::lang::XComponent*>(this));
@@ -59,7 +59,7 @@ cpo::uno::Any SAL_CALL WeakComponentImplHelperBase2::queryInterface(css::uno::Ty
     return OWeakObject::queryInterface(rType);
 }
 
-static void checkInterface(css::uno::Type const& rType)
+static void checkInterface(cpo::uno::Type const& rType)
 {
     if (css::uno::TypeClass_INTERFACE != rType.getTypeClass())
     {
@@ -172,7 +172,7 @@ static void* queryDeepNoXInterface(typelib_TypeDescriptionReference const* pDema
     return nullptr;
 }
 
-cpo::uno::Any WeakComponentImplHelper_query(css::uno::Type const& rType, cppu::class_data* cd,
+cpo::uno::Any WeakComponentImplHelper_query(cpo::uno::Type const& rType, cppu::class_data* cd,
                                             WeakComponentImplHelperBase2* pBase)
 {
     checkInterface(rType);

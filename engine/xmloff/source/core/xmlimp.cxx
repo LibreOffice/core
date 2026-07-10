@@ -83,7 +83,7 @@
 #include <RDFaImportHelper.hxx>
 
 // L10nMapper bits to split out ...
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/io/XTextInputStream2.hpp>
 #include <com/sun/star/io/TextInputStream.hpp>

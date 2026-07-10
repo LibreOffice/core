@@ -81,7 +81,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XInterface
-     virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+     virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
      virtual void SAL_CALL acquire() noexcept override;
      virtual void SAL_CALL release() noexcept override;
 

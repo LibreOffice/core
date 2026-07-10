@@ -29,13 +29,13 @@
 #include "rtl/alloc.h"
 
 namespace cpo::uno { class Any; }
+namespace cpo::uno { class Type; }
 
 namespace com::sun::star::uno
 {
 
 class RuntimeException;
 class XInterface;
-class Type;
 
 /** This base class serves as a base class for all template reference classes and
     has been introduced due to compiler problems with templated operators ==, =!.
@@ -53,7 +53,7 @@ protected:
         @param rType interface type
         @return interface of demanded type (may be null)
     */
-    inline static XInterface * SAL_CALL iquery( XInterface * pInterface, const Type & rType );
+    inline static XInterface * SAL_CALL iquery( XInterface * pInterface, const cpo::uno::Type & rType );
     /** Queries given interface for type rType.
         Throws a RuntimeException if the demanded interface cannot be queried.
 
@@ -61,7 +61,7 @@ protected:
         @param rType interface type
         @return interface of demanded type
     */
-    inline static XInterface * SAL_CALL iquery_throw( XInterface * pInterface, const Type & rType );
+    inline static XInterface * SAL_CALL iquery_throw( XInterface * pInterface, const cpo::uno::Type & rType );
 
 public:
     /** Gets interface pointer. This call does not acquire the interface.

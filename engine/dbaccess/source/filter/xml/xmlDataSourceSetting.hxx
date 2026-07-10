@@ -30,11 +30,11 @@ namespace dbaxml
         css::beans::PropertyValue          m_aSetting;
         cpo::uno::Sequence< cpo::uno::Any> m_aInfoSequence;
         OXMLDataSourceSetting*             m_pContainer;
-        css::uno::Type                     m_aPropType;    // the type of the property the instance imports currently
+        cpo::uno::Type                     m_aPropType;    // the type of the property the instance imports currently
         bool                               m_bIsList;
 
         ODBFilter& GetOwnImport();
-        static cpo::uno::Any convertString(const css::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
+        static cpo::uno::Any convertString(const cpo::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
     public:
 
         OXMLDataSourceSetting( ODBFilter& rImport

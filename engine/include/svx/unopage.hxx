@@ -109,7 +109,7 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
     virtual void SAL_CALL sort( const cpo::uno::Sequence< sal_Int32 >& sortOrder ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // XIndexAccess

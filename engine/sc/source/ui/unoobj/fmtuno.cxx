@@ -382,7 +382,7 @@ cpo::uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(xEntry);
 }
 
-uno::Type SAL_CALL ScTableConditionalFormat::getElementType()
+cpo::uno::Type SAL_CALL ScTableConditionalFormat::getElementType()
 {
     return cppu::UnoType<sheet::XSheetConditionalEntry>::get();
 }

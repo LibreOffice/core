@@ -67,7 +67,7 @@ Content::~Content()
 }
 
 // virtual
-cpo::uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL Content::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet;
     return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
@@ -78,7 +78,7 @@ cpo::uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
 // virtual
-cpo::uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Content::getTypes()
 {
     static cppu::OTypeCollection ourTypeCollection(
                    CPPU_TYPE_REF( lang::XTypeProvider ),

@@ -201,7 +201,7 @@ void Includes::dump(
     }
     if (m_includeType) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"com/sun/star/uno/Type." << hxxExtension[(m_filetype == FileType::HPP)]
+        out << "#include \"cpo/uno/Type." << hxxExtension[(m_filetype == FileType::HPP)]
             << "\"\n";
     }
     if (m_includeCppuMacrosHxx) {

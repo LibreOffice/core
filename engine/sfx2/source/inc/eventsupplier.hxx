@@ -27,7 +27,7 @@
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>
 #include <vector>
@@ -63,7 +63,7 @@ public:
     virtual bool SAL_CALL   hasByName( const OUString& aName ) override;
 
     //  --- XElementAccess ( parent of XNameAccess ) ---
-    virtual css::uno::Type SAL_CALL    getElementType() override;
+    virtual cpo::uno::Type SAL_CALL    getElementType() override;
     virtual bool SAL_CALL   hasElements() override;
 
     // --- ::document::XDocumentEventListener ---

@@ -33,7 +33,7 @@ public:
         const cpo::uno::Sequence< css::beans::NamedValue >& aObjectProps );
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override ;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& rType ) override ;
 
     // XVisualObject
     virtual css::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect ) override;

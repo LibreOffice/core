@@ -28,7 +28,7 @@
 #include "com/sun/star/lang/XTypeProvider.hpp"
 #include "cpo/uno/Any.h"
 #include "cpo/uno/Sequence.hxx"
-#include "com/sun/star/uno/Type.h"
+#include "cpo/uno/Type.h"
 #include "cppuhelper/implbase_ex.hxx"
 #include "cppuhelper/weak.hxx"
 #include "rtl/instance.hxx"
@@ -105,14 +105,14 @@ public:
     WeakImplHelper & operator =(WeakImplHelper const &) = default;
     WeakImplHelper & operator =(WeakImplHelper &&) = default;
 
-    cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override
+    cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & aType) override
     { return WeakImplHelper_query(aType, cd::get(), this, this); }
 
     void SAL_CALL acquire() SAL_NOEXCEPT override { OWeakObject::acquire(); }
 
     void SAL_CALL release() SAL_NOEXCEPT override { OWeakObject::release(); }
 
-    cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
+    cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override
     { return WeakImplHelper_getTypes(cd::get()); }
 
     cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
@@ -158,7 +158,7 @@ public:
     ImplInheritanceHelper & operator =(ImplInheritanceHelper const &) = default;
     ImplInheritanceHelper & operator =(ImplInheritanceHelper &&) = default;
 
-    cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override
+    cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & aType) override
     {
         cpo::uno::Any ret(ImplHelper_queryNoXInterface(aType, cd::get(), this));
         return ret.hasValue() ? ret : BaseClass::queryInterface(aType);
@@ -168,7 +168,7 @@ public:
 
     void SAL_CALL release() SAL_NOEXCEPT override { BaseClass::release(); }
 
-    cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
+    cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override
     { return ImplInhHelper_getTypes(cd::get(), BaseClass::getTypes()); }
 
     cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override

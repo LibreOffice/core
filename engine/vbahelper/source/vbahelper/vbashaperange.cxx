@@ -381,7 +381,7 @@ void SAL_CALL ScVbaShapeRange::ZOrder( sal_Int32 ZOrderCmd )
     }
 }
 
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 ScVbaShapeRange::getElementType()
 {
     return cppu::UnoType<msforms::XShape>::get();

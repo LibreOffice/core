@@ -165,7 +165,7 @@ std::vector<css::uno::Reference<css::drawing::XShape>> SvxShapeCollection::getAl
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxShapeCollection::getElementType()
+cpo::uno::Type SAL_CALL SvxShapeCollection::getElementType()
 {
     return cppu::UnoType<drawing::XShape>::get();
 }

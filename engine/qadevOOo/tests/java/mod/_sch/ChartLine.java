@@ -29,7 +29,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.chart.XChartDocument;
 import com.sun.star.chart.XDiagram;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 /**
 * Test for object which is represented by service

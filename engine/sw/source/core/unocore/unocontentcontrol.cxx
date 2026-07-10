@@ -1378,7 +1378,7 @@ void SAL_CALL SwXContentControl::removeVetoableChangeListener(
 }
 
 // XElementAccess
-uno::Type SAL_CALL SwXContentControl::getElementType()
+cpo::uno::Type SAL_CALL SwXContentControl::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();
 }
@@ -1459,7 +1459,10 @@ cpo::uno::Any SwXContentControls::getByIndex(sal_Int32 nIndex)
     return aRet;
 }
 
-uno::Type SwXContentControls::getElementType() { return cppu::UnoType<text::XTextContent>::get(); }
+cpo::uno::Type SwXContentControls::getElementType()
+{
+    return cppu::UnoType<text::XTextContent>::get();
+}
 
 bool SwXContentControls::hasElements()
 {

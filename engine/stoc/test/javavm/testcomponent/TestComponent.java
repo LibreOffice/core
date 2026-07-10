@@ -45,7 +45,7 @@ public class TestComponent implements XServiceInfo, XTypeProvider
     public static final String __serviceName="JavaTestComponent";
 
     // XTypeProvider
-    public com.sun.star.uno.Type[] getTypes(  )
+    public cpo.uno.Type[] getTypes(  )
     {
         Type[] retValue= new Type[2];
         retValue[0]= new Type( XServiceInfo.class);

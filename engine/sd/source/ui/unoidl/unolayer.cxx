@@ -600,7 +600,7 @@ bool SAL_CALL SdLayerManager::hasByName( const OUString& aName )
 }
 
 // XElementAccess
-uno::Type SAL_CALL SdLayerManager::getElementType()
+cpo::uno::Type SAL_CALL SdLayerManager::getElementType()
 {
     return cppu::UnoType<drawing::XLayer>::get();
 }

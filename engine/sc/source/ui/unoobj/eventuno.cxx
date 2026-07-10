@@ -158,7 +158,7 @@ bool SAL_CALL ScSheetEventsObj::hasByName( const OUString& aName )
 
 // XElementAccess
 
-uno::Type SAL_CALL ScSheetEventsObj::getElementType()
+cpo::uno::Type SAL_CALL ScSheetEventsObj::getElementType()
 {
     return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }

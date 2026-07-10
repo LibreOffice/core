@@ -316,11 +316,11 @@ private:
 
 public:
 
-    virtual cpo::uno::Sequence<css::uno::Type> SAL_CALL getSupportedValueTypes() override;
+    virtual cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getSupportedValueTypes() override;
 
-    virtual bool SAL_CALL supportsType( const css::uno::Type& aType ) override;
+    virtual bool SAL_CALL supportsType( const cpo::uno::Type& aType ) override;
 
-    virtual cpo::uno::Any SAL_CALL getValue( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL getValue( const cpo::uno::Type& aType ) override;
 
     virtual void SAL_CALL setValue( const cpo::uno::Any& aValue ) override;
 

@@ -51,7 +51,7 @@ public class _XElementAccess extends MultiMethodTest {
     */
     public void _getElementType(){
         // Testing getElementType() method
-        com.sun.star.uno.Type type = oObj.getElementType();
+        cpo.uno.Type type = oObj.getElementType();
         tRes.tested( "getElementType()", type != null );
     } // end ElementType
 

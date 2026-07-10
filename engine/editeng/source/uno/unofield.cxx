@@ -528,7 +528,7 @@ std::unique_ptr<SvxFieldData> SvxUnoTextField::CreateFieldData() const noexcept
 }
 
 // uno::XInterface
-cpo::uno::Any SAL_CALL SvxUnoTextField::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoTextField::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -544,13 +544,13 @@ cpo::uno::Any SAL_CALL SvxUnoTextField::queryAggregation( const uno::Type & rTyp
 
 // XTypeProvider
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoTextField::getTypes()
 {
     if( !maTypeSequence.hasElements() )
     {
         maTypeSequence = comphelper::concatSequences(
             OComponentHelper::getTypes(),
-            std::initializer_list<uno::Type>{
+            std::initializer_list<cpo::uno::Type>{
                 cppu::UnoType<text::XTextField>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
                 cppu::UnoType<lang::XServiceInfo>::get(),
@@ -564,7 +564,7 @@ cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextField::getImplementationId()
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-cpo::uno::Any SAL_CALL SvxUnoTextField::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoTextField::queryInterface( const cpo::uno::Type & rType )
 {
     return OComponentHelper::queryInterface(rType);
 }

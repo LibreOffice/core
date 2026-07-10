@@ -170,7 +170,7 @@ void SAL_CALL HierarchyContent::release()
 
 
 // virtual
-cpo::uno::Any SAL_CALL HierarchyContent::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL HierarchyContent::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ContentImplHelper::queryInterface( rType );
 
@@ -198,7 +198,7 @@ XTYPEPROVIDER_COMMON_IMPL( HierarchyContent );
 
 
 // virtual
-cpo::uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL HierarchyContent::getTypes()
 {
     if ( isFolder() && !isReadOnly() )
     {

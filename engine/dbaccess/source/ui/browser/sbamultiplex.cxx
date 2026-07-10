@@ -31,7 +31,7 @@ SbaXStatusMultiplexer::SbaXStatusMultiplexer(::cppu::OWeakObject& rSource, ::osl
 {
 }
 
-cpo::uno::Any  SAL_CALL SbaXStatusMultiplexer::queryInterface(const css::uno::Type& _rType)
+cpo::uno::Any  SAL_CALL SbaXStatusMultiplexer::queryInterface(const cpo::uno::Type& _rType)
 {
     cpo::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
     if (!aReturn.hasValue())

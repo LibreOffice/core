@@ -68,7 +68,7 @@ private:
 
     virtual bool SAL_CALL hasByHierarchicalName(OUString const & aName) override;
 
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
 
     virtual bool SAL_CALL hasElements() override;
 

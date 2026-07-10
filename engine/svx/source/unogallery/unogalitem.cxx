@@ -70,7 +70,7 @@ bool GalleryItem::isValid() const
 }
 
 
-cpo::uno::Any SAL_CALL GalleryItem::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL GalleryItem::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -122,7 +122,7 @@ cpo::uno::Sequence< OUString > SAL_CALL GalleryItem::getSupportedServiceNames()
     return { u"com.sun.star.gallery.GalleryItem"_ustr };
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL GalleryItem::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GalleryItem::getTypes()
 {
     static const cpo::uno::Sequence aTypes {
         cppu::UnoType<lang::XServiceInfo>::get(),

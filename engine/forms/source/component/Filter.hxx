@@ -78,7 +78,7 @@ namespace frm
         explicit OFilterControl( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
 
         DECLARE_UNO3_AGG_DEFAULTS(OFilterControl,OWeakAggObject)
-        cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+        cpo::uno::Any  SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
 
         virtual OUString GetComponentServiceName() const override;
         virtual void SAL_CALL   createPeer( const css::uno::Reference< css::awt::XToolkit > & rxToolkit, const css::uno::Reference< css::awt::XWindowPeer >  & rParentPeer ) override;

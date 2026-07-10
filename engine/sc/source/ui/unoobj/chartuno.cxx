@@ -332,7 +332,7 @@ cpo::uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(uno::Reference<table::XTableChart>(xChart));
 }
 
-uno::Type SAL_CALL ScChartsObj::getElementType()
+cpo::uno::Type SAL_CALL ScChartsObj::getElementType()
 {
     return cppu::UnoType<table::XTableChart>::get();
 }

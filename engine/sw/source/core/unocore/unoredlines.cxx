@@ -71,7 +71,7 @@ uno::Reference< container::XEnumeration >  SwXRedlines::createEnumeration()
     return uno::Reference< container::XEnumeration >(new SwXRedlineEnumeration(GetDoc()));
 }
 
-uno::Type SwXRedlines::getElementType(  )
+cpo::uno::Type SwXRedlines::getElementType(  )
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }

@@ -42,7 +42,7 @@ public:
         return cpo::uno::Any( uno::Reference< uno::XInterface >() );
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type SAL_CALL getElementType() override
     {
         // no Pages object yet #FIXME
         //return cppu::UnoType<msforms::XPage>::get();

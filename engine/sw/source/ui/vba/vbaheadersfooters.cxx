@@ -61,7 +61,7 @@ public:
             throw lang::IndexOutOfBoundsException();
         return cpo::uno::Any( uno::Reference< word::XHeaderFooter >( new SwVbaHeaderFooter( mxParent,  mxContext, mxModel, mxPageStyleProps, mbHeader, Index ) ) );
     }
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         return cppu::UnoType<word::XHeaderFooter>::get();
     }
@@ -120,7 +120,7 @@ cpo::uno::Any SAL_CALL SwVbaHeadersFooters::Item( const cpo::uno::Any& Index1, c
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaHeadersFooters::getElementType()
 {
     return cppu::UnoType<word::XHeaderFooter>::get();

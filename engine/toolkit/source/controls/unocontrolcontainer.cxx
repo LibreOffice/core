@@ -535,7 +535,7 @@ cpo::uno::Sequence< ::sal_Int32 > SAL_CALL UnoControlContainer::getIdentifiers( 
 }
 
 // container::XElementAccess
-uno::Type SAL_CALL UnoControlContainer::getElementType(  )
+cpo::uno::Type SAL_CALL UnoControlContainer::getElementType(  )
 {
     return cppu::UnoType<awt::XControlModel>::get();
 }

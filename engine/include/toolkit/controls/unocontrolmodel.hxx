@@ -116,12 +116,12 @@ public:
     virtual rtl::Reference<UnoControlModel> Clone() const = 0;
 
     // css::uno::XInterface
-    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryInterface( const cpo::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
     void                        SAL_CALL acquire() noexcept override;
     void                        SAL_CALL release() noexcept override;
 
     // css::uno::XAggregation
-    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
 
     // css::util::XCloneable
     css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;

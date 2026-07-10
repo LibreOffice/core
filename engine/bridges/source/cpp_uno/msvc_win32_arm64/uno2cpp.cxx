@@ -287,7 +287,7 @@ void unoInterfaceProxyDispatch(uno_Interface* pUnoI, typelib_TypeDescription con
                 {
                     typelib_TypeDescription* td = 0;
                     TYPELIB_DANGER_GET(
-                        &td, (reinterpret_cast<css::uno::Type*>(pArgs[0])->getTypeLibType()));
+                        &td, (reinterpret_cast<cpo::uno::Type*>(pArgs[0])->getTypeLibType()));
                     if (td != 0)
                     {
                         uno_Interface* ifc = 0;

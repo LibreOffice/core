@@ -281,7 +281,7 @@ cpo::uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(uno::Reference< container::XNamed >(xFormat));
 }
 
-uno::Type SAL_CALL ScAutoFormatsObj::getElementType()
+cpo::uno::Type SAL_CALL ScAutoFormatsObj::getElementType()
 {
     return cppu::UnoType<container::XNamed>::get();    // must match getByIndex
 }
@@ -394,7 +394,7 @@ cpo::uno::Any SAL_CALL ScAutoFormatObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any();
 }
 
-uno::Type SAL_CALL ScAutoFormatObj::getElementType()
+cpo::uno::Type SAL_CALL ScAutoFormatObj::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();  // must match getByIndex
 }

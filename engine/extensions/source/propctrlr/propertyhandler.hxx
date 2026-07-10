@@ -93,7 +93,7 @@ namespace pcr
         virtual cpo::uno::Sequence< OUString > SAL_CALL getSupersededProperties( ) override;
         virtual cpo::uno::Sequence< OUString > SAL_CALL getActuatingProperties( ) override;
         virtual cpo::uno::Any SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rControlValue ) override;
-        virtual cpo::uno::Any SAL_CALL convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) override;
+        virtual cpo::uno::Any SAL_CALL convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const cpo::uno::Type& _rControlValueType ) override;
         virtual css::beans::PropertyState  SAL_CALL getPropertyState( const OUString& _rPropertyName ) override;
         virtual css::inspection::LineDescriptor SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
         virtual bool SAL_CALL isComposable( const OUString& _rPropertyName ) override;
@@ -205,7 +205,7 @@ namespace pcr
         void implAddPropertyDescription(
                     std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
-                    const css::uno::Type& _rType,
+                    const cpo::uno::Type& _rType,
                     sal_Int16 _nAttribs = 0
                 ) const;
 

@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
@@ -117,7 +117,7 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // css.container.XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
 
     virtual bool SAL_CALL hasElements() override;
 
@@ -408,7 +408,7 @@ uno::Reference< container::XEnumeration > SAL_CALL SfxGlobalEvents_Impl::createE
 }
 
 
-uno::Type SAL_CALL SfxGlobalEvents_Impl::getElementType()
+cpo::uno::Type SAL_CALL SfxGlobalEvents_Impl::getElementType()
 {
     return cppu::UnoType<frame::XModel>::get();
 }

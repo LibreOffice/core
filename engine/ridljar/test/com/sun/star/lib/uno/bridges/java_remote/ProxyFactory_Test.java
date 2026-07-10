@@ -21,7 +21,7 @@ package com.sun.star.lib.uno.bridges.java_remote;
 
 import com.sun.star.uno.IQueryInterface;
 import com.sun.star.uno.MappingException;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;

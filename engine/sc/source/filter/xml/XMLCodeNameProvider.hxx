@@ -43,7 +43,7 @@ public:
 
     virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
 
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
 
     virtual bool SAL_CALL hasElements() override;
 

@@ -344,7 +344,7 @@ public:
         }
         throw lang::IndexOutOfBoundsException();
     }
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         return  cppu::UnoType<excel::XBorder>::get();
     }
@@ -409,7 +409,7 @@ ScVbaBorders::createCollectionObject( const cpo::uno::Any& aSource )
     return aSource; // it's already a Border object
 }
 
-uno::Type
+cpo::uno::Type
 ScVbaBorders::getElementType()
 {
     return cppu::UnoType<excel::XBorders>::get();

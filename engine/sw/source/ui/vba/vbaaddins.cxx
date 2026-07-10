@@ -59,7 +59,7 @@ SwVbaAddins::SwVbaAddins( const uno::Reference< XHelperInterface >& xParent, con
 {
 }
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaAddins::getElementType()
 {
     return cppu::UnoType<word::XAddin>::get();

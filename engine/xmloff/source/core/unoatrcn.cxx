@@ -45,7 +45,7 @@ SvUnoAttributeContainer::SvUnoAttributeContainer( std::unique_ptr<SvXMLAttrConta
 }
 
 // container::XElementAccess
-uno::Type SAL_CALL SvUnoAttributeContainer::getElementType()
+cpo::uno::Type SAL_CALL SvUnoAttributeContainer::getElementType()
 {
     return cppu::UnoType<xml::AttributeData>::get();
 }

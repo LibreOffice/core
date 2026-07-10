@@ -419,8 +419,8 @@ public:
     virtual ~SvxUnoTextRange() noexcept override;
 
     // css::uno::XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -431,7 +431,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
 
     // css::lang::XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 };
 
@@ -457,7 +457,7 @@ public:
 
     // css::uno::XInterface
     /// @throws css::uno::RuntimeException
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType );
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType );
 
     // css::text::XSimpleText
     virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL createTextCursor(  ) override final;
@@ -480,7 +480,7 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override final;
 
     // css::container::XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override final;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override final;
     virtual bool SAL_CALL hasElements(  ) override final;
 
     // css::text::XTextRangeMover
@@ -504,7 +504,7 @@ public:
     static  cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static( );
 
     // css::lang::XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 };
 
@@ -523,13 +523,13 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override final;
 
     // css::uno::XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override final;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override final;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override final;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override final;
     virtual void SAL_CALL acquire() noexcept override final;
     virtual void SAL_CALL release() noexcept override final;
 
     // css::lang::XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override final;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override final;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override final;
 };
 
@@ -561,8 +561,8 @@ public:
     virtual ~SvxUnoTextContent() noexcept override;
 
     // css::uno::XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
 
@@ -582,7 +582,7 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
 
     // css::container::XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // css::beans::XPropertySet
@@ -603,7 +603,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // css::lang::XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 };
 
@@ -658,8 +658,8 @@ public:
     virtual ~SvxUnoTextCursor() noexcept override;
 
     // css::uno::XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override final;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override final;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override final;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override final;
     virtual void SAL_CALL acquire() noexcept override final;
     virtual void SAL_CALL release() noexcept override final;
 
@@ -686,7 +686,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override final;
 
     // css::lang::XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override final;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override final;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override final;
 
 };

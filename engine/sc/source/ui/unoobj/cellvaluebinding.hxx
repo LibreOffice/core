@@ -67,9 +67,9 @@ namespace calc
         virtual ~OCellValueBinding( ) override;
 
         // XValueBinding
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getSupportedValueTypes(  ) override;
-        virtual bool SAL_CALL supportsType( const css::uno::Type& aType ) override;
-        virtual cpo::uno::Any SAL_CALL getValue( const css::uno::Type& aType ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getSupportedValueTypes(  ) override;
+        virtual bool SAL_CALL supportsType( const cpo::uno::Type& aType ) override;
+        virtual cpo::uno::Any SAL_CALL getValue( const cpo::uno::Type& aType ) override;
         virtual void SAL_CALL setValue( const cpo::uno::Any& aValue ) override;
 
         // OComponentHelper/XComponent
@@ -99,10 +99,10 @@ namespace calc
         virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     private:
-        void    checkValueType( std::unique_lock<std::mutex>& rGuard, const css::uno::Type& _rType ) const;
+        void    checkValueType( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Type& _rType ) const;
         void    checkInitialized();
-        cpo::uno::Sequence< css::uno::Type > getSupportedValueTypes(std::unique_lock<std::mutex>& rGuard) const;
-        bool    supportsType( std::unique_lock<std::mutex>& rGuard, const css::uno::Type& aType ) const;
+        cpo::uno::Sequence< cpo::uno::Type > getSupportedValueTypes(std::unique_lock<std::mutex>& rGuard) const;
+        bool    supportsType( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Type& aType ) const;
 
         /** notifies our modify listeners
             @precond

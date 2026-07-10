@@ -21,7 +21,7 @@
 #include "basecontainer.hxx"
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/uno/Type.h>
+#include <cpo/uno/Type.h>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -287,7 +287,7 @@ bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
 }
 
 
-css::uno::Type SAL_CALL BaseContainer::getElementType()
+cpo::uno::Type SAL_CALL BaseContainer::getElementType()
 {
     // no lock necessary - because the type of our items
     // is fix! no internal call or member needed ...

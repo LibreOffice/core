@@ -32,7 +32,7 @@ import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 
 /**
@@ -360,7 +360,7 @@ public class FactoryHelper {
             return new byte[0];
         }
         //XTypeProvider
-        public com.sun.star.uno.Type[] getTypes()
+        public cpo.uno.Type[] getTypes()
         {
             Type[] t = new Type[] {
                 new Type(XSingleServiceFactory.class),

@@ -154,7 +154,7 @@ void SAL_CALL ContentImplHelper::release()
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL ContentImplHelper::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL ContentImplHelper::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
             static_cast< lang::XTypeProvider * >(this),

@@ -67,7 +67,7 @@ sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageWidth()
 
 // XInterface
 cpo::uno::Any SAL_CALL
-    AccessibleGraphicShape::queryInterface (const css::uno::Type & rType)
+    AccessibleGraphicShape::queryInterface (const cpo::uno::Type & rType)
 {
     cpo::uno::Any aReturn = AccessibleShape::queryInterface (rType);
     if ( ! aReturn.hasValue())
@@ -109,7 +109,7 @@ cpo::uno::Sequence< OUString> SAL_CALL
 }
 
 // XTypeProvider
-cpo::uno::Sequence<uno::Type> SAL_CALL
+cpo::uno::Sequence<cpo::uno::Type> SAL_CALL
     AccessibleGraphicShape::getTypes()
 {
     // Get list of types from the context base implementation...

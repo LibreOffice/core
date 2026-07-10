@@ -96,7 +96,7 @@ class OComponentAccess final : public ::cppu::WeakImplHelper< css::container::XE
             @return     The uno-type XComponent.
         *//*-*****************************************************************************************************/
 
-        virtual css::uno::Type SAL_CALL getElementType() override;
+        virtual cpo::uno::Type SAL_CALL getElementType() override;
 
         /*-****************************************************************************************************
             @short      get state of componentlist of enumeration.

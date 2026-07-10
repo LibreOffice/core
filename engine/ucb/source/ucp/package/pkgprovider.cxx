@@ -64,7 +64,7 @@ public:
 
     // XInterface
     virtual cpo::uno::Any SAL_CALL
-    queryInterface( const uno::Type& aType ) override
+    queryInterface( const cpo::uno::Type& aType ) override
     { return m_xNA->queryInterface( aType ); }
     virtual void SAL_CALL
     acquire() noexcept override
@@ -113,7 +113,7 @@ void SAL_CALL ContentProvider::release()
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL ContentProvider::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< lang::XTypeProvider* >(this),

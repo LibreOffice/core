@@ -117,7 +117,7 @@ class OListBoxModel final :public OBoundControlModel
 private:
     ::connectivity::ORowSetValue getFirstSelectedValue() const;
 
-    virtual cpo::uno::Sequence< css::uno::Type>   _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type>   _getTypes() override;
 
 public:
     OListBoxModel(
@@ -137,7 +137,7 @@ public:
 
 // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OListBoxModel, OBoundControlModel)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -182,7 +182,7 @@ private:
 
     // OBoundControlModel overridables
     virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
-    virtual cpo::uno::Sequence< css::uno::Type >
+    virtual cpo::uno::Sequence< cpo::uno::Type >
                             getSupportedBindingTypes() override;
     virtual cpo::uno::Any   translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
     virtual cpo::uno::Any   translateControlValueToExternalValue( ) const override;
@@ -258,7 +258,7 @@ private:
 
 protected:
     // UNO binding
-    virtual cpo::uno::Sequence< css::uno::Type>   _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type>   _getTypes() override;
 
 public:
     explicit OListBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
@@ -266,7 +266,7 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OListBoxControl, OBoundControl)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
 
 // XServiceInfo
     OUString SAL_CALL getImplementationName() override

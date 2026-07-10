@@ -4276,8 +4276,8 @@ include/codemaker/typemanager.hxx
 include/codemaker/unotype.hxx
 include/com/sun/star/uno/Reference.h
 include/com/sun/star/uno/Reference.hxx
-include/com/sun/star/uno/Type.h
-include/com/sun/star/uno/Type.hxx
+include/cpo/uno/Type.h
+include/cpo/uno/Type.hxx
 include/com/sun/star/uno/genfunc.hxx
 include/comphelper/ChainablePropertySet.hxx
 include/comphelper/ChainablePropertySetInfo.hxx

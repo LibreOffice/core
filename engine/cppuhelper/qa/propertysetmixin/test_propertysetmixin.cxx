@@ -43,7 +43,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -72,8 +72,8 @@ std::ostream & operator <<(std::ostream & out, OUString const & value) {
     return out << OUStringToOString(value, RTL_TEXTENCODING_UTF8).getStr();
 }
 
-std::ostream & operator <<(std::ostream & out, css::uno::Type const & value) {
-    return out << "com::sun::star::uno::Type[" << value.getTypeName() << ']';
+std::ostream & operator <<(std::ostream & out, cpo::uno::Type const & value) {
+    return out << "cpo::uno::Type[" << value.getTypeName() << ']';
 }
 
 std::ostream & operator <<(std::ostream & out, cpo::uno::Any const & value) {

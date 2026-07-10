@@ -138,9 +138,9 @@ cpo::uno::Any SAL_CALL SfxUnoPanels::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-uno::Type SAL_CALL SfxUnoPanels::getElementType()
+cpo::uno::Type SAL_CALL SfxUnoPanels::getElementType()
 {
-    return uno::Type();
+    return cpo::uno::Type();
 }
 
 bool SAL_CALL SfxUnoPanels::hasElements()

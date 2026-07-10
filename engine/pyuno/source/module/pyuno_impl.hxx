@@ -89,7 +89,7 @@ void logReply( RuntimeCargo *cargo, const char *intro,
               const cpo::uno::Sequence< cpo::uno::Any > & args );
 void logException( RuntimeCargo *cargo, const char *intro,
                    void * ptr, std::u16string_view aFunctionName,
-                   const void * data, const css::uno::Type & type );
+                   const void * data, const cpo::uno::Type & type );
 const sal_Int32 VAL2STR_MODE_DEEP = 0;
 const sal_Int32 VAL2STR_MODE_SHALLOW = 1;
 OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef, sal_Int32 mode = VAL2STR_MODE_DEEP );
@@ -205,7 +205,7 @@ cpo::uno::Any PyEnum2Enum( PyObject *obj );
 /// @throws css::uno::RuntimeException
 sal_Unicode PyChar2Unicode( PyObject *o );
 /// @throws css::uno::RuntimeException
-css::uno::Type PyType2Type( PyObject * o );
+cpo::uno::Type PyType2Type( PyObject * o );
 
 void raisePyExceptionWithAny( const cpo::uno::Any &a );
 const char *typeClassToString( css::uno::TypeClass t );
@@ -256,7 +256,7 @@ class Adapter : public cppu::WeakImplHelper<
 {
     PyRef mWrappedObject;
     PyInterpreterState *mInterpreter;  // interpreters don't seem to be refcounted !
-    cpo::uno::Sequence< css::uno::Type > mTypes;
+    cpo::uno::Sequence< cpo::uno::Type > mTypes;
     MethodOutIndexMap m_methodOutIndexMap;
 
 private:
@@ -265,11 +265,11 @@ private:
 public:
 public:
     Adapter( PyRef obj,
-             const cpo::uno::Sequence< css::uno::Type > & types );
+             const cpo::uno::Sequence< cpo::uno::Type > & types );
 
     static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     const PyRef& getWrappedObject() const { return mWrappedObject; }
-    const cpo::uno::Sequence< css::uno::Type >& getWrappedTypes() const { return mTypes; }
+    const cpo::uno::Sequence< cpo::uno::Type >& getWrappedTypes() const { return mTypes; }
     virtual ~Adapter() override;
 
     // XInvocation

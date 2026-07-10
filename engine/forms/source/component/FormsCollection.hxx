@@ -52,10 +52,10 @@ public:
 public:
     DECLARE_UNO3_AGG_DEFAULTS(OFormsCollection, ::cppu::OComponentHelper)
 
-    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XPersistObject
@@ -80,7 +80,7 @@ public:
     using OInterfaceContainer::disposing;
 
     // inheritance ambiguity
-    virtual css::uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type SAL_CALL getElementType() override
         { return OInterfaceContainer::getElementType(); }
     virtual bool SAL_CALL hasElements() override
         { return OInterfaceContainer::hasElements(); }

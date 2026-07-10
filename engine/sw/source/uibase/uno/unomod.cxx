@@ -177,7 +177,7 @@ static rtl::Reference<ChainablePropertySetInfo> lcl_createViewSettingsInfo()
         { u"ZoomType"_ustr,             HANDLE_VIEWSET_ZOOM_TYPE            , cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE},
         { u"ZoomValue"_ustr,            HANDLE_VIEWSET_ZOOM                 , cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE},
         { u"TextBoundaries"_ustr,       HANDLE_VIEWSET_TEXTBOUNDARIES       , cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE},
-        { OUString(), 0, css::uno::Type(), 0 }
+        { OUString(), 0, cpo::uno::Type(), 0 }
     };
     return new ChainablePropertySetInfo ( aViewSettingsMap_Impl );
 }
@@ -203,7 +203,7 @@ static rtl::Reference<ChainablePropertySetInfo> lcl_createPrintSettingsInfo()
         { u"PrintTables"_ustr,          HANDLE_PRINTSET_TABLES             , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { u"PrintTextPlaceholder"_ustr,  HANDLE_PRINTSET_PLACEHOLDER        , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { u"PrintEmptyPages"_ustr,      HANDLE_PRINTSET_EMPTY_PAGES        , cppu::UnoType<bool>::get(), PROPERTY_NONE},
-        { OUString(), 0, css::uno::Type(), 0}
+        { OUString(), 0, cpo::uno::Type(), 0}
     };
     return new ChainablePropertySetInfo ( aPrintSettingsMap_Impl );
 }

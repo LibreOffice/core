@@ -22,7 +22,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.EventObject;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.beans.PropertyValue;

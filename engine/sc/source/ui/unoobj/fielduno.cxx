@@ -354,7 +354,7 @@ cpo::uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(xField);
 }
 
-uno::Type SAL_CALL ScCellFieldsObj::getElementType()
+cpo::uno::Type SAL_CALL ScCellFieldsObj::getElementType()
 {
     return cppu::UnoType<text::XTextField>::get();
 }
@@ -501,7 +501,7 @@ cpo::uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(xField);
 }
 
-uno::Type SAL_CALL ScHeaderFieldsObj::getElementType()
+cpo::uno::Type SAL_CALL ScHeaderFieldsObj::getElementType()
 {
     return cppu::UnoType<text::XTextField>::get();
 }
@@ -1281,11 +1281,11 @@ cpo::uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
             u"com.sun.star.text.TextContent"_ustr};
 }
 
-cpo::uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> SAL_CALL ScEditFieldObj::getTypes()
 {
     return comphelper::concatSequences(
         ScEditFieldObj_Base::getTypes(),
-        cpo::uno::Sequence<uno::Type>
+        cpo::uno::Sequence<cpo::uno::Type>
         {
             cppu::UnoType<text::XTextField>::get(),
             cppu::UnoType<beans::XPropertySet>::get(),

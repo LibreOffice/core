@@ -312,10 +312,10 @@ OMultiTypeInterfaceContainerHelper2::~OMultiTypeInterfaceContainerHelper2()
 {
 }
 
-std::vector< css::uno::Type > OMultiTypeInterfaceContainerHelper2::getContainedTypes() const
+std::vector< cpo::uno::Type > OMultiTypeInterfaceContainerHelper2::getContainedTypes() const
 {
     ::osl::MutexGuard aGuard( rMutex );
-    std::vector< Type > aInterfaceTypes;
+    std::vector< cpo::uno::Type > aInterfaceTypes;
     aInterfaceTypes.reserve( m_aMap.size() );
     for (const auto& rItem : m_aMap)
     {
@@ -327,19 +327,19 @@ std::vector< css::uno::Type > OMultiTypeInterfaceContainerHelper2::getContainedT
     return aInterfaceTypes;
 }
 
-OMultiTypeInterfaceContainerHelper2::t_type2ptr::iterator OMultiTypeInterfaceContainerHelper2::findType(const Type & rKey )
+OMultiTypeInterfaceContainerHelper2::t_type2ptr::iterator OMultiTypeInterfaceContainerHelper2::findType(const cpo::uno::Type & rKey )
 {
     return std::find_if(m_aMap.begin(), m_aMap.end(),
         [&rKey](const t_type2ptr::value_type& rItem) { return rItem.first == rKey; });
 }
 
-OMultiTypeInterfaceContainerHelper2::t_type2ptr::const_iterator OMultiTypeInterfaceContainerHelper2::findType(const Type & rKey ) const
+OMultiTypeInterfaceContainerHelper2::t_type2ptr::const_iterator OMultiTypeInterfaceContainerHelper2::findType(const cpo::uno::Type & rKey ) const
 {
     return std::find_if(m_aMap.begin(), m_aMap.end(),
         [&rKey](const t_type2ptr::value_type& rItem) { return rItem.first == rKey; });
 }
 
-OInterfaceContainerHelper2 * OMultiTypeInterfaceContainerHelper2::getContainer( const Type & rKey ) const
+OInterfaceContainerHelper2 * OMultiTypeInterfaceContainerHelper2::getContainer( const cpo::uno::Type & rKey ) const
 {
     ::osl::MutexGuard aGuard( rMutex );
 
@@ -350,7 +350,7 @@ OInterfaceContainerHelper2 * OMultiTypeInterfaceContainerHelper2::getContainer( 
 }
 
 sal_Int32 OMultiTypeInterfaceContainerHelper2::addInterface(
-    const Type & rKey, const Reference< XInterface > & rListener )
+    const cpo::uno::Type & rKey, const Reference< XInterface > & rListener )
 {
     ::osl::MutexGuard aGuard( rMutex );
     auto iter = findType( rKey );
@@ -364,7 +364,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelper2::addInterface(
 }
 
 sal_Int32 OMultiTypeInterfaceContainerHelper2::removeInterface(
-    const Type & rKey, const Reference< XInterface > & rListener )
+    const cpo::uno::Type & rKey, const Reference< XInterface > & rListener )
 {
     ::osl::MutexGuard aGuard( rMutex );
 

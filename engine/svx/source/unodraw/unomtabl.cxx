@@ -97,7 +97,7 @@ public:
     virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
     virtual bool SAL_CALL hasElements(  ) override;
 };
 
@@ -401,7 +401,7 @@ bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoMarkerTable::getElementType(  )
+cpo::uno::Type SAL_CALL SvxUnoMarkerTable::getElementType(  )
 {
     return cppu::UnoType<drawing::PointSequence>::get();
 }

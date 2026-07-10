@@ -1015,9 +1015,9 @@ cppuhelper::ServiceManager::createInstanceWithArgumentsAndContext(
                            : impl->createInstanceWithArguments(Context, false, Arguments);
 }
 
-css::uno::Type cppuhelper::ServiceManager::getElementType()
+cpo::uno::Type cppuhelper::ServiceManager::getElementType()
 {
-    return css::uno::Type();
+    return cpo::uno::Type();
 }
 
 bool cppuhelper::ServiceManager::hasElements()

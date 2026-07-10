@@ -104,7 +104,7 @@ PageBackground::~PageBackground()
 {}
 
 // ____ XTypeProvider ____
-cpo::uno::Sequence< css::uno::Type > SAL_CALL PageBackground::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL PageBackground::getTypes()
 {
     return ::comphelper::concatSequences(
         impl::PageBackground_Base::getTypes(),

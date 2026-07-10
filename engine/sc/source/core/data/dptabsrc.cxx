@@ -1342,7 +1342,7 @@ bool SAL_CALL ScDPDimensions::hasByName( const OUString& aName )
     return false;
 }
 
-uno::Type SAL_CALL ScDPDimensions::getElementType()
+cpo::uno::Type SAL_CALL ScDPDimensions::getElementType()
 {
     return cppu::UnoType<container::XNamed>::get();
 }
@@ -1779,7 +1779,7 @@ bool SAL_CALL ScDPHierarchies::hasByName( const OUString& aName )
     return false;
 }
 
-uno::Type SAL_CALL ScDPHierarchies::getElementType()
+cpo::uno::Type SAL_CALL ScDPHierarchies::getElementType()
 {
     return cppu::UnoType<container::XNamed>::get();
 }
@@ -1940,7 +1940,7 @@ bool SAL_CALL ScDPLevels::hasByName( const OUString& aName )
     return false;
 }
 
-uno::Type SAL_CALL ScDPLevels::getElementType()
+cpo::uno::Type SAL_CALL ScDPLevels::getElementType()
 {
     return cppu::UnoType<container::XNamed>::get();
 }
@@ -2414,7 +2414,7 @@ bool SAL_CALL ScDPMembers::hasByName( const OUString& aName )
     return ( GetIndexFromName( aName ) >= 0 );
 }
 
-uno::Type SAL_CALL ScDPMembers::getElementType()
+cpo::uno::Type SAL_CALL ScDPMembers::getElementType()
 {
     return cppu::UnoType<container::XNamed>::get();
 }

@@ -36,7 +36,7 @@ public class XSchemaHandlerImpl
     }
 
     public void addProperty(String str, short param,
-                            com.sun.star.uno.Type type)
+                            cpo.uno.Type type)
         throws com.sun.star.configuration.backend.MalformedDataException,
                com.sun.star.lang.WrappedTargetException {
         calls += ("addProperty();" + ls);

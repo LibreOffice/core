@@ -3104,7 +3104,7 @@ SwXTextCursor::createEnumeration()
     return SwXParagraphEnumeration::Create(pParentText, pNewCursor, eSetType);
 }
 
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 SwXTextCursor::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();

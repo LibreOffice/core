@@ -32,7 +32,7 @@
 
 #include <typelib/typedescription.hxx>
 
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 
 namespace jvmaccess { class UnoVirtualMachine; }
 
@@ -198,9 +198,9 @@ public:
     jmethodID                   m_method_AsynchronousFinalizer_drain;
 
     ::com::sun::star::uno::TypeDescription m_XInterface_queryInterface_td;
-    ::com::sun::star::uno::Type const & m_Exception_type;
-    ::com::sun::star::uno::Type const & m_RuntimeException_type;
-    ::com::sun::star::uno::Type const & m_void_type;
+    ::cpo::uno::Type const & m_Exception_type;
+    ::cpo::uno::Type const & m_RuntimeException_type;
+    ::cpo::uno::Type const & m_void_type;
     JNI_interface_type_info const * m_XInterface_type_info;
 
     // noncopyable
@@ -287,9 +287,9 @@ inline void JNI_info::append_sig(
         break;
     case typelib_TypeClass_TYPE:
         if ( use_slashes ) {
-            buf->append( "Lcom/sun/star/uno/Type;" );
+            buf->append( "Lcpo/uno/Type;" );
         } else {
-            buf->append( "Lcom.sun.star.uno.Type;" );
+            buf->append( "Lcpo.uno.Type;" );
         }
         break;
     case typelib_TypeClass_ANY:

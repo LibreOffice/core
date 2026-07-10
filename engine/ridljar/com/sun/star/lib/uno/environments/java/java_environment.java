@@ -20,7 +20,7 @@
 package com.sun.star.lib.uno.environments.java;
 
 import com.sun.star.uno.IEnvironment;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;

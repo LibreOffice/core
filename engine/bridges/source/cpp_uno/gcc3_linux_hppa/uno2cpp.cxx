@@ -39,6 +39,7 @@
 #include <typeinfo>
 
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     void * pRegisterReturn, typelib_TypeDescription *pReturnTypeDescr, bool bRegisterReturn,

@@ -79,12 +79,12 @@ public:
     void* getUserValue(sal_uInt16 nItemId);
 
     // css::uno::XInterface
-    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     void SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
     void SAL_CALL release() noexcept override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< cpo::uno::Type >  SAL_CALL getTypes() override;
     cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // css::awt::XMenu

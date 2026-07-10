@@ -108,7 +108,7 @@ public:
 
     /** Returns a sequence of all supported interfaces.
     */
-    virtual cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override;
 
 private:
     /// Mutex guarding this object.

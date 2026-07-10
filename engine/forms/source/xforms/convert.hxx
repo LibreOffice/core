@@ -29,8 +29,8 @@ namespace xforms
 
 struct TypeLess
 {
-    bool operator()( const css::uno::Type& rType1,
-                     const css::uno::Type& rType2 ) const
+    bool operator()( const cpo::uno::Type& rType1,
+                     const cpo::uno::Type& rType2 ) const
     { return rType1.getTypeName() < rType2.getTypeName(); }
 };
 
@@ -40,7 +40,7 @@ class Convert
     typedef OUString (*fn_toXSD)( const cpo::uno::Any& );
     typedef cpo::uno::Any (*fn_toAny)( const OUString& );
     typedef std::pair<fn_toXSD,fn_toAny> Convert_t;
-    typedef std::map<css::uno::Type, Convert_t, TypeLess> Map_t;
+    typedef std::map<cpo::uno::Type, Convert_t, TypeLess> Map_t;
     Map_t maMap;
 
     Convert();
@@ -52,16 +52,16 @@ public:
     static Convert& get();
 
     /// can we convert this type?
-    bool hasType( const css::uno::Type& );
+    bool hasType( const cpo::uno::Type& );
 
     /// get list of convertible types
-    cpo::uno::Sequence<css::uno::Type> getTypes() const;
+    cpo::uno::Sequence<cpo::uno::Type> getTypes() const;
 
     /// convert any to XML representation
     OUString toXSD( const cpo::uno::Any& rAny );
 
     /// convert XML representation to Any of given type
-    cpo::uno::Any toAny( const OUString&, const css::uno::Type& );
+    cpo::uno::Any toAny( const OUString&, const cpo::uno::Type& );
 
     /** replace all sequences of 0x08, 0x0A, 0x0D, 0x20 with a single 0x20.
         also strip leading/trailing whitespace.

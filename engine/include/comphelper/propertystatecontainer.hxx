@@ -90,7 +90,7 @@ namespace comphelper
 
     protected:
         // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& _rType ) override;
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )
 

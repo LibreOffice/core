@@ -153,7 +153,7 @@ public:
     void ReleaseViewShellBase();
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
     SD_DLLPUBLIC virtual void SAL_CALL acquire() noexcept override;
     SD_DLLPUBLIC virtual void SAL_CALL release() noexcept override;
 
@@ -267,7 +267,7 @@ private:
 
     css::uno::Reference< css::drawing::XLayer> mxCurrentLayer;
 
-    const css::uno::Type m_aSelectionTypeIdentifier;
+    const cpo::uno::Type m_aSelectionTypeIdentifier;
 
     /** This pointer to the ViewShellBase can be NULL (after a call to
         ReleaseViewShellBase()).

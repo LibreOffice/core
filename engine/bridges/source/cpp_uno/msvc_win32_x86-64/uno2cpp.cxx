@@ -38,6 +38,7 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -400,7 +401,7 @@ void unoInterfaceProxyDispatch(
         case 0: // queryInterface() opt
         {
             typelib_TypeDescription * pTD = nullptr;
-            TYPELIB_DANGER_GET( &pTD, static_cast< uno::Type * >( pArgs[0] )->getTypeLibType() );
+            TYPELIB_DANGER_GET( &pTD, static_cast< cpo::uno::Type * >( pArgs[0] )->getTypeLibType() );
 
             if ( pTD )
             {
@@ -432,7 +433,7 @@ void unoInterfaceProxyDispatch(
             {
                 uno::RuntimeException aExc( "Too many parameters!" );
 
-                uno::Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
+                cpo::uno::Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
                 ::uno_type_any_construct(*ppException, &aExc, rExcType.getTypeLibType(), nullptr);
             }
         }
@@ -442,7 +443,7 @@ void unoInterfaceProxyDispatch(
     {
         uno::RuntimeException aExc("Illegal member type description!", uno::Reference<uno::XInterface>());
 
-        uno::Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
+        cpo::uno::Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
         // binary identical null reference
         ::uno_type_any_construct(*ppException, &aExc, rExcType.getTypeLibType(), nullptr);
     }

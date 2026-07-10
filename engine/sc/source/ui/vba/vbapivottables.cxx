@@ -64,7 +64,7 @@ ScVbaPivotTables::createCollectionObject( const cpo::uno::Any& aSource )
     return DataPilotToPivotTable( aSource,  mxContext );
 }
 
-uno::Type
+cpo::uno::Type
 ScVbaPivotTables::getElementType()
 {
     return cppu::UnoType<excel::XPivotTable>::get();

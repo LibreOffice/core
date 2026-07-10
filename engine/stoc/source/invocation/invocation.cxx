@@ -91,7 +91,7 @@ public:
 
 
     // XTypeProvider
-    virtual Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XMaterialHolder

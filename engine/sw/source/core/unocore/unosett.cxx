@@ -1203,7 +1203,7 @@ cpo::uno::Sequence<beans::PropertyValue> SwXNumberingRules::getRuleByIndex(sal_I
         throw uno::RuntimeException(u"Could not get numbering rule."_ustr);
 }
 
-uno::Type SwXNumberingRules::getElementType()
+cpo::uno::Type SwXNumberingRules::getElementType()
 {
     return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }

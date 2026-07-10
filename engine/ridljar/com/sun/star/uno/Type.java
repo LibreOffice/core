@@ -624,7 +624,7 @@ public class Type {
             } else if (base.equals(TYPE_NAME_STRING)) {
                 buf.append("Ljava.lang.String;");
             } else if (base.equals(TYPE_NAME_TYPE)) {
-                buf.append("Lcom.sun.star.uno.Type;");
+                buf.append("Lcpo.uno.Type;");
             } else if (base.equals(TYPE_NAME_ANY)) {
                 buf.append("Ljava.lang.Object;");
             } else {

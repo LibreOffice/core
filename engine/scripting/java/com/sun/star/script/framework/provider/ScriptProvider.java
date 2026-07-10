@@ -66,7 +66,7 @@ import com.sun.star.ucb.XUniversalContentBroker;
 
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -263,7 +263,7 @@ public abstract class ScriptProvider implements
      *
      * @return    The types value
      */
-    public com.sun.star.uno.Type[] getTypes() {
+    public cpo.uno.Type[] getTypes() {
         Type[] retValue = new Type[ 8 ];
         retValue[ 0 ] = new Type(XScriptProvider.class);
         retValue[ 1 ] = new Type(XBrowseNode.class);
@@ -523,7 +523,7 @@ public abstract class ScriptProvider implements
         return ((UnoPkgContainer)m_container).hasRegisteredUnoPkgContainer(aName);
     }
 
-    public com.sun.star.uno.Type getElementType() {
+    public cpo.uno.Type getElementType() {
         // TODO at the moment this returns void indicating
         // type is unknown should indicate XPackage ? do we implement XPackage
         return new Type();

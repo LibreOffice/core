@@ -339,7 +339,7 @@ dbaccess/source/core/dataaccess/documentdefinition.hxx:183
     int i_nHandle
     7
 dbaccess/source/core/inc/columnsettings.hxx:39
-    void dbaccess::IPropertyContainer::registerMayBeVoidProperty(const class rtl::OUString &,int,int,class cpo::uno::Any *,const class com::sun::star::uno::Type &)
+    void dbaccess::IPropertyContainer::registerMayBeVoidProperty(const class rtl::OUString &,int,int,class cpo::uno::Any *,const class cpo::uno::Type &)
     int _nAttributes
     3
 dbaccess/source/ui/dlg/dsnItem.hxx:39
@@ -563,7 +563,7 @@ include/connectivity/sqlerror.hxx:162
     const int _eCondition
     200
 include/connectivity/sqlerror.hxx:187
-    void connectivity::SQLError::raiseTypedException(const int,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,const class com::sun::star::uno::Type &) const
+    void connectivity::SQLError::raiseTypedException(const int,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,const class cpo::uno::Type &) const
     const int _eCondition
     100
 include/dbaccess/genericcontroller.hxx:294
@@ -3119,7 +3119,7 @@ tools/source/stream/strmunx.cxx:95
     int nErrno
     21
 ucb/source/core/ucbcmds.cxx:70
-    struct com::sun::star::beans::Property makeProperty(const class rtl::OUString &,int,class com::sun::star::uno::Type,short)
+    struct com::sun::star::beans::Property makeProperty(const class rtl::OUString &,int,class cpo::uno::Type,short)
     int h
     -1
 ucb/source/ucp/webdav-curl/CurlSession.cxx:209

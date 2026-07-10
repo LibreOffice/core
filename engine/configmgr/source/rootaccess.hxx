@@ -99,7 +99,7 @@ private:
 
     virtual rtl::Reference< Access > getParentAccess() override;
 
-    virtual void addTypes(std::vector< css::uno::Type > * types)
+    virtual void addTypes(std::vector< cpo::uno::Type > * types)
         const override;
 
     virtual void addSupportedServiceNames(
@@ -110,7 +110,7 @@ private:
     virtual void clearListeners() noexcept override;
 
     virtual cpo::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & aType) override;
+        cpo::uno::Type const & aType) override;
 
     virtual OUString SAL_CALL getImplementationName() override;
 

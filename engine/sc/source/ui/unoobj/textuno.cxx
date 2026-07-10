@@ -513,7 +513,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFooterTextObj::createEn
 
 // XElementAccess
 
-uno::Type SAL_CALL ScHeaderFooterTextObj::getElementType()
+cpo::uno::Type SAL_CALL ScHeaderFooterTextObj::getElementType()
 {
     SolarMutexGuard aGuard;
     if (!mxUnoText.is())

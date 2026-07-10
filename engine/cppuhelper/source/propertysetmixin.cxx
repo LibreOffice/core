@@ -61,7 +61,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -244,7 +244,7 @@ void Data::initProperties(
                         PropertyData(
                             css::beans::Property(
                                 name, static_cast< sal_Int32 >(handles),
-                                css::uno::Type(
+                                cpo::uno::Type(
                                     t->getTypeClass(), t->getName()),
                                 attrAttribs),
                             (std::find(absentOptional.begin(), absentOptional.end(), name)
@@ -354,7 +354,7 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & context,
         Implements theImplements,
         cpo::uno::Sequence< OUString > const & absentOptional,
-        css::uno::Type const & type);
+        cpo::uno::Type const & type);
 
     OUString const & translateHandle(
         css::uno::Reference< css::uno::XInterface > const & object,
@@ -398,7 +398,7 @@ private:
         bool isDefaulted, bool wrapOptional);
 
     css::uno::Reference< css::uno::XComponentContext > const & m_context;
-    css::uno::Type m_type;
+    cpo::uno::Type m_type;
     css::uno::Reference< css::reflection::XIdlClass > m_idlClass;
 };
 
@@ -406,7 +406,7 @@ PropertySetMixinImpl::Impl::Impl(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     Implements theImplements,
     cpo::uno::Sequence< OUString > const & absentOptional,
-    css::uno::Type const & type):
+    cpo::uno::Type const & type):
     implements(theImplements), disposed(false), m_context(context),
     m_type(type)
 {
@@ -827,7 +827,7 @@ PropertySetMixinImpl::PropertySetMixinImpl(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     Implements implements,
     cpo::uno::Sequence< OUString > const & absentOptional,
-    css::uno::Type const & type)
+    cpo::uno::Type const & type)
 {
     m_impl = new Impl(context, implements, absentOptional, type);
     m_impl->acquire();
@@ -945,7 +945,7 @@ void PropertySetMixinImpl::dispose() {
     }
 }
 
-cpo::uno::Any PropertySetMixinImpl::queryInterface(css::uno::Type const & type)
+cpo::uno::Any PropertySetMixinImpl::queryInterface(cpo::uno::Type const & type)
 {
     if ((m_impl->implements & IMPLEMENTS_PROPERTY_SET) != 0
          && type == cppu::UnoType<css::beans::XPropertySet>::get())

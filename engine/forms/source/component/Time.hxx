@@ -35,7 +35,7 @@ private:
     bool                        m_bDateTimeField;
 
 protected:
-    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
     OTimeModel(
@@ -76,7 +76,7 @@ protected:
                             translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
-    virtual cpo::uno::Sequence< css::uno::Type >
+    virtual cpo::uno::Sequence< cpo::uno::Type >
                             getSupportedBindingTypes() override;
     virtual cpo::uno::Any   translateControlValueToExternalValue( ) const override;
     virtual cpo::uno::Any   translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
@@ -95,7 +95,7 @@ protected:
 class OTimeControl: public OBoundControl
 {
 protected:
-    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
     explicit OTimeControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);

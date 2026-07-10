@@ -743,7 +743,7 @@ SdUnoFindAllAccess::~SdUnoFindAllAccess() noexcept
 }
 
 // XElementAccess
-uno::Type SAL_CALL SdUnoFindAllAccess::getElementType()
+cpo::uno::Type SAL_CALL SdUnoFindAllAccess::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();
 }

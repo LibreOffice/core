@@ -42,7 +42,7 @@ public:
     virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
 };
 }
 
@@ -69,7 +69,7 @@ NameOrIndex* SvxUnoTransGradientTable::createItem() const
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoTransGradientTable::getElementType()
+cpo::uno::Type SAL_CALL SvxUnoTransGradientTable::getElementType()
 {
     // tdf#158421 use newer extended type for the list
     return cppu::UnoType<awt::Gradient2>::get();

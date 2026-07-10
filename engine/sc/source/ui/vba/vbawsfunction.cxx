@@ -93,7 +93,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const cpo::uno::Sequence< 
                 case uno::TypeClass_SEQUENCE:
                 {
                     // the sheet.FunctionAccess service doesn't deal with Sequences, only Sequences of Sequence
-                    uno::Type aType = rArray.getValueType();
+                    cpo::uno::Type aType = rArray.getValueType();
                     if ( aType.equals( cppu::UnoType<cpo::uno::Sequence<sal_Int16>>::get() ) )
                     {
                         cpo::uno::Sequence< cpo::uno::Sequence< sal_Int16 > >  aTmp(1);

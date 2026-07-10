@@ -342,7 +342,7 @@ sal_uInt64 vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, unsigned 
                 {
                     typelib_TypeDescription* td = nullptr;
                     TYPELIB_DANGER_GET(
-                        &td, (reinterpret_cast<css::uno::Type*>(arguments[0])->getTypeLibType()));
+                        &td, (reinterpret_cast<cpo::uno::Type*>(arguments[0])->getTypeLibType()));
                     if (td != nullptr && td->eTypeClass == typelib_TypeClass_INTERFACE)
                     {
                         css::uno::XInterface* ifc = nullptr;

@@ -58,7 +58,7 @@ public:
     virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 };
 
@@ -158,7 +158,7 @@ bool SAL_CALL SvxUnoColorTable::hasByName( const OUString& aName )
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoColorTable::getElementType()
+cpo::uno::Type SAL_CALL SvxUnoColorTable::getElementType()
 {
     return ::cppu::UnoType<sal_Int32>::get();
 }

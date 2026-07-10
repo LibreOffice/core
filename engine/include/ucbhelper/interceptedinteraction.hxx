@@ -65,7 +65,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
             /** @short  specify the fix continuation, which must be selected, if the
                         interaction could be intercepted successfully.
               */
-            css::uno::Type Continuation;
+            cpo::uno::Type Continuation;
 
 
             /** @short  it's a unique identifier, which must be managed by the outside code.
@@ -87,7 +87,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
             {
                 Handle     = INVALID_HANDLE;
             }
-            InterceptedRequest(cpo::uno::Any Request_, css::uno::Type Continuation_, sal_Int32 Handle_)
+            InterceptedRequest(cpo::uno::Any Request_, cpo::uno::Type Continuation_, sal_Int32 Handle_)
                 : Request(std::move(Request_)), Continuation(std::move(Continuation_)), Handle(Handle_)
             {
             }
@@ -181,7 +181,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
          */
         static css::uno::Reference< css::task::XInteractionContinuation > extractContinuation(
                     const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations,
-                    const css::uno::Type&                                                                                             aType         );
+                    const cpo::uno::Type&                                                                                             aType         );
 
 
     // usable for derived classes

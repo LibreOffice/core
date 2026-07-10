@@ -141,7 +141,7 @@ cpo::uno::Sequence<sal_Int8> OComponentDefinition::getImplementationId()
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-cpo::uno::Sequence< css::uno::Type > OComponentDefinition::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > OComponentDefinition::getTypes()
 {
     return  ::comphelper::concatSequences(
         ODataSettings::getTypes( ),

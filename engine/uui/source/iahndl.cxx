@@ -274,7 +274,7 @@ namespace
             SAL_WARN( "uui","no type found for '" << i_rTypeName << "'" );
             return false;
         }
-        const css::uno::Type aType( pTypeDesc->pWeakRef );
+        const cpo::uno::Type aType( pTypeDesc->pWeakRef );
 
         const bool bExactMatch = i_rPropagation == u"named-only";
         if ( bExactMatch )

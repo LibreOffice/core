@@ -45,7 +45,7 @@ namespace pcr
     using ::com::sun::star::beans::Property;
     using ::cpo::uno::Any;
     using ::com::sun::star::lang::IllegalArgumentException;
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
     using ::com::sun::star::util::VetoException;
     using ::com::sun::star::beans::PropertyVetoException;
     using ::com::sun::star::uno::UNO_QUERY;

@@ -55,7 +55,7 @@ ScVbaMenuBars::~ScVbaMenuBars()
 }
 
 // XEnumerationAccess
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 ScVbaMenuBars::getElementType()
 {
     return cppu::UnoType<excel::XMenuBar>::get();

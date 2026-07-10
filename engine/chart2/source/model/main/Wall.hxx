@@ -51,7 +51,7 @@ public:
     explicit Wall( const Wall & rOther );
 
     // ____ XTypeProvider ____
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
 
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;

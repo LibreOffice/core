@@ -58,7 +58,7 @@ Type elementType(Type type) {
     }
 }
 
-css::uno::Type const & mapType(Type type) {
+cpo::uno::Type const & mapType(Type type) {
     switch (type) {
     case TYPE_ANY:
         return cppu::UnoType< cpo::uno::Any >::get();

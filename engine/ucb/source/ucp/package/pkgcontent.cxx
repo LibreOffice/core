@@ -296,7 +296,7 @@ void SAL_CALL Content::release()
 
 
 // virtual
-cpo::uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL Content::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet;
 
@@ -315,7 +315,7 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 
 
 // virtual
-cpo::uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Content::getTypes()
 {
     if ( isFolder() )
     {

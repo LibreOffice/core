@@ -37,7 +37,7 @@ public class XLayerHandlerImpl
     }
 
     public void addProperty(String str, short param,
-                            com.sun.star.uno.Type type)
+                            cpo.uno.Type type)
         throws com.sun.star.configuration.backend.MalformedDataException,
                com.sun.star.lang.WrappedTargetException {
         calls += ("addProperty(" + str + "," + param + "," + type + ");" + ls);
@@ -80,7 +80,7 @@ public class XLayerHandlerImpl
     }
 
     public void overrideProperty(String str, short param,
-                                 com.sun.star.uno.Type type, boolean param3)
+                                 cpo.uno.Type type, boolean param3)
         throws com.sun.star.configuration.backend.MalformedDataException,
                com.sun.star.lang.WrappedTargetException {
         calls += ("overrideProperty(" + str + "," + param + "," + type + "," + param3 + ");" + ls);

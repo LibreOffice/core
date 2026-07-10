@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -144,8 +144,8 @@ bool checkAnyString(cpo::uno::Any const& value)
 
 bool checkAnyType(cpo::uno::Any const& value)
 {
-    return value.getValueType() == cppu::UnoType<css::uno::Type>::get()
-           && *o3tl::forceAccess<css::uno::Type>(value) == cppu::UnoType<sal_Int32>::get();
+    return value.getValueType() == cppu::UnoType<cpo::uno::Type>::get()
+           && *o3tl::forceAccess<cpo::uno::Type>(value) == cppu::UnoType<sal_Int32>::get();
 }
 
 bool checkAnySequence(cpo::uno::Any const& value)
@@ -523,7 +523,7 @@ void doExecuteTest(css::uno::Reference<css::testuno::XTest> const& test)
     {
         auto const val = test->getSequenceType();
         verify(val
-               == cpo::uno::Sequence<css::uno::Type>{
+               == cpo::uno::Sequence<cpo::uno::Type>{
                       cppu::UnoType<sal_Int32>::get(), cppu::UnoType<void>::get(),
                       cppu::UnoType<cpo::uno::Sequence<css::testuno::Enum>>::get() });
         bool const ok = test->isSequenceType(val);
@@ -649,7 +649,7 @@ void doExecuteTest(css::uno::Reference<css::testuno::XTest> const& test)
         double value10;
         sal_Unicode value11;
         OUString value12;
-        css::uno::Type value13;
+        cpo::uno::Type value13;
         cpo::uno::Any value14;
         cpo::uno::Sequence<OUString> value15;
         css::testuno::Enum value16;
@@ -808,9 +808,9 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
 
     bool SAL_CALL isString(OUString const& value) override { return value == u"hä"; }
 
-    css::uno::Type SAL_CALL getType() override { return cppu::UnoType<sal_Int32>::get(); }
+    cpo::uno::Type SAL_CALL getType() override { return cppu::UnoType<sal_Int32>::get(); }
 
-    bool SAL_CALL isType(css::uno::Type const& value) override
+    bool SAL_CALL isType(cpo::uno::Type const& value) override
     {
         return value == cppu::UnoType<sal_Int32>::get();
     }
@@ -1162,16 +1162,16 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
         return value == cpo::uno::Sequence<OUString>{ u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr };
     }
 
-    cpo::uno::Sequence<css::uno::Type> SAL_CALL getSequenceType() override
+    cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getSequenceType() override
     {
         return { cppu::UnoType<sal_Int32>::get(), cppu::UnoType<void>::get(),
                  cppu::UnoType<cpo::uno::Sequence<css::testuno::Enum>>::get() };
     }
 
-    bool SAL_CALL isSequenceType(cpo::uno::Sequence<css::uno::Type> const& value) override
+    bool SAL_CALL isSequenceType(cpo::uno::Sequence<cpo::uno::Type> const& value) override
     {
         return value
-               == cpo::uno::Sequence<css::uno::Type>{
+               == cpo::uno::Sequence<cpo::uno::Type>{
                       cppu::UnoType<sal_Int32>::get(), cppu::UnoType<void>::get(),
                       cppu::UnoType<cpo::uno::Sequence<css::testuno::Enum>>::get()
                   };
@@ -1373,7 +1373,7 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
     void SAL_CALL getOut(bool& value1, sal_Int8& value2, sal_Int16& value3, sal_uInt16& value4,
                          sal_Int32& value5, sal_uInt32& value6, sal_Int64& value7,
                          sal_uInt64& value8, float& value9, double& value10, sal_Unicode& value11,
-                         OUString& value12, css::uno::Type& value13, cpo::uno::Any& value14,
+                         OUString& value12, cpo::uno::Type& value13, cpo::uno::Any& value14,
                          cpo::uno::Sequence<OUString>& value15, css::testuno::Enum& value16,
                          css::testuno::Struct& value17,
                          css::uno::Reference<css::testuno::XTest>& value18) override

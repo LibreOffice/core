@@ -78,7 +78,7 @@ service EnumerableMap : XEnumerableMap
             if KeyType or ValueType are unsupported types.
             For values, all type classes except com::sun::star::uno::TypeClass::VOID
             and com::sun::star::uno::TypeClass::UNKNOWN are accepted.
-            For keys, scalar types, strings, com::sun::star::uno::Type itself, and interface
+            For keys, scalar types, strings, cpo::uno::Type itself, and interface
             types are accepted.
     */
     create( [in] type KeyType, [in] type ValueType )
@@ -100,7 +100,7 @@ service EnumerableMap : XEnumerableMap
             if KeyType or ValueType are unsupported types.
             For values, all type classes except com::sun::star::uno::TypeClass::VOID
             are accepted.<br/>
-            For keys, scalar types, strings, com::sun::star::uno::Type itself, and interface
+            For keys, scalar types, strings, cpo::uno::Type itself, and interface
             types are accepted.
         @throws ::com::sun::star::lang::IllegalArgumentException
             if any of the given values or keys violates the <a href="#keyrules">key rules</a> or

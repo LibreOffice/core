@@ -180,7 +180,7 @@ cpo::uno::Any SAL_CALL UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 
 }
 
 // XElementAccess
-uno::Type SAL_CALL UnoControlTabPageContainerModel::getElementType(  )
+cpo::uno::Type SAL_CALL UnoControlTabPageContainerModel::getElementType(  )
 {
     return cppu::UnoType<css::awt::XControlModel>::get();
 }

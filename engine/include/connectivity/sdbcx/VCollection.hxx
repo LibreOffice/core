@@ -175,11 +175,11 @@ namespace connectivity::sdbcx
         virtual void SAL_CALL release() noexcept override;
 
         // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
 
         // css::container::XElementAccess
-        virtual css::uno::Type SAL_CALL getElementType(  ) override;
+        virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
         virtual bool SAL_CALL hasElements(  ) override;
         // css::container::XIndexAccess
         virtual sal_Int32 SAL_CALL getCount(  ) override;

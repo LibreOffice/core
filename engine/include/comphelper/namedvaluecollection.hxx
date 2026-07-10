@@ -277,14 +277,14 @@ namespace comphelper
         bool    get_ensureType(
                     const OUString& _rValueName,
                     void* _pValueLocation,
-                    const css::uno::Type& _rExpectedValueType
+                    const cpo::uno::Type& _rExpectedValueType
                 ) const;
 
         static bool get_ensureType(
                     const cpo::uno::Sequence<css::beans::PropertyValue> & rPropSeq,
                     std::u16string_view _rValueName,
                     void* _pValueLocation,
-                    const css::uno::Type& _rExpectedValueType
+                    const cpo::uno::Type& _rExpectedValueType
                 );
 
         const cpo::uno::Any&

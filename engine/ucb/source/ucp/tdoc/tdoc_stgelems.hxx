@@ -85,7 +85,7 @@ public:
 
     // XInterface
     virtual cpo::uno::Any SAL_CALL queryInterface(
-            const css::uno::Type& aType ) override;
+            const cpo::uno::Type& aType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -93,7 +93,7 @@ public:
 
     // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
     getTypes() override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId() override;
@@ -115,7 +115,7 @@ public:
     hasByName( const OUString& aName ) override;
 
     // XElementAccess (base of XNameAccess)
-    virtual css::uno::Type SAL_CALL
+    virtual cpo::uno::Type SAL_CALL
     getElementType() override;
     virtual bool SAL_CALL
     hasElements() override;
@@ -200,11 +200,11 @@ public:
 
     // XInterface
     virtual cpo::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type& aType ) override;
+    queryInterface( const cpo::uno::Type& aType ) override;
 
     // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
     getTypes() override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId() override;
@@ -260,11 +260,11 @@ public:
 
     // XInterface
     virtual cpo::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type& aType ) override;
+    queryInterface( const cpo::uno::Type& aType ) override;
 
     // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
     getTypes() override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId() override;

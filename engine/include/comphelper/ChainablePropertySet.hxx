@@ -113,7 +113,7 @@ namespace comphelper
         virtual ~ChainablePropertySet()
             noexcept override;
 
-        cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override final
+        cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override final
         { return ChainablePropertySetBase::queryInterface( aType ); }
         void SAL_CALL acquire(  ) noexcept override final
         { ChainablePropertySetBase::acquire( ); }

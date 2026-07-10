@@ -35,6 +35,7 @@
 #include "share.hxx"
 
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace {
 
@@ -383,7 +384,7 @@ void unoInterfaceProxyDispatch(
         case 0: // queryInterface() opt
         {
             typelib_TypeDescription * pTD = nullptr;
-            TYPELIB_DANGER_GET( &pTD, static_cast< Type * >( pArgs[0] )->getTypeLibType() );
+            TYPELIB_DANGER_GET( &pTD, static_cast< cpo::uno::Type * >( pArgs[0] )->getTypeLibType() );
             if (pTD)
             {
                 uno_Interface * pInterface = nullptr;
@@ -422,7 +423,7 @@ void unoInterfaceProxyDispatch(
             u"illegal member type description!"_ustr,
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
 
-        Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
+        cpo::uno::Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
         // binary identical null reference
         ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), nullptr );
     }

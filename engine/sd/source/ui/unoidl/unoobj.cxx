@@ -271,7 +271,7 @@ void SdXShape::dispose()
     delete this;
 }
 
-cpo::uno::Any SAL_CALL SdXShape::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SdXShape::queryInterface( const cpo::uno::Type & rType )
 {
     return mpShape->queryInterface( rType );
 }
@@ -286,7 +286,7 @@ void SAL_CALL SdXShape::release() noexcept
     mpShape->release();
 }
 
-bool SdXShape::queryAggregation( const css::uno::Type & rType, cpo::uno::Any& aAny )
+bool SdXShape::queryAggregation( const cpo::uno::Type & rType, cpo::uno::Any& aAny )
 {
     if( mpModel && mpModel ->IsImpressDocument() )
     {
@@ -300,7 +300,7 @@ bool SdXShape::queryAggregation( const css::uno::Type & rType, cpo::uno::Any& aA
     return false;
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SdXShape::getTypes()
 {
     if( mpModel && !mpModel->IsImpressDocument() )
     {
@@ -309,7 +309,7 @@ cpo::uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
     else
     {
         SdrObjKind nObjId = mpShape->getShapeKind();
-        cpo::uno::Sequence< uno::Type > aTypes;
+        cpo::uno::Sequence< cpo::uno::Type > aTypes;
         SdTypesCache& gImplTypesCache = SdModule::get()->gImplTypesCache;
         SdTypesCache::iterator aIter( gImplTypesCache.find( nObjId ) );
         if( aIter == gImplTypesCache.end() )
@@ -1081,7 +1081,7 @@ public:
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
     virtual bool SAL_CALL hasElements(  ) override;
 
     // XServiceInfo
@@ -1632,7 +1632,7 @@ bool SAL_CALL SdUnoEventsAccess::hasByName( const OUString& aName )
 }
 
 // XElementAccess
-uno::Type SAL_CALL SdUnoEventsAccess::getElementType(  )
+cpo::uno::Type SAL_CALL SdUnoEventsAccess::getElementType(  )
 {
     return cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get();
 }

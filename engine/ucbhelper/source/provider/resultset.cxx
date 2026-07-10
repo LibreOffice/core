@@ -43,17 +43,17 @@ struct PropertyInfo
     OUString    aName;
     sal_Int32   nHandle;
     sal_Int16   nAttributes;
-    const uno::Type& (*pGetCppuType)();
+    const cpo::uno::Type& (*pGetCppuType)();
 };
 
 }
 
-static const uno::Type& sal_Int32_getCppuType()
+static const cpo::uno::Type& sal_Int32_getCppuType()
 {
     return cppu::UnoType<sal_Int32>::get();
 }
 
-static const uno::Type& bool_getCppuType()
+static const cpo::uno::Type& bool_getCppuType()
 {
     return cppu::UnoType<bool>::get();
 }
@@ -100,7 +100,7 @@ public:
         sal_Int32 nProps );
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -108,7 +108,7 @@ public:
 
     // XTypeProvider
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
 
     // XPropertySetInfo
     virtual cpo::uno::Sequence< beans::Property > SAL_CALL getProperties() override;
@@ -1461,7 +1461,7 @@ void SAL_CALL PropertySetInfo::release()
 }
 
 cpo::uno::Any SAL_CALL PropertySetInfo::queryInterface(
-                                const css::uno::Type & rType )
+                                const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< lang::XTypeProvider* >(this),

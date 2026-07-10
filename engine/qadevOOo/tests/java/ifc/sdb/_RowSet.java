@@ -23,7 +23,7 @@ import lib.StatusException;
 
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 /**
  * Testing <code>com.sun.star.sdb.RowSet</code>

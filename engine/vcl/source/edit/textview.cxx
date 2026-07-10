@@ -70,7 +70,7 @@ TETextDataObject::TETextDataObject( OUString aText ) : maText(std::move( aText )
 }
 
 // css::uno::XInterface
-cpo::uno::Any TETextDataObject::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any TETextDataObject::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType, static_cast< css::datatransfer::XTransferable* >(this) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));

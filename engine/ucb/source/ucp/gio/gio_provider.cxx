@@ -79,7 +79,7 @@ void SAL_CALL ContentProvider::release()
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL ContentProvider::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< css::lang::XTypeProvider* >(this),

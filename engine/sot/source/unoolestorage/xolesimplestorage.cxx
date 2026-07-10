@@ -505,7 +505,7 @@ bool SAL_CALL OLESimpleStorage::hasByName( const OUString& aName )
 }
 
 
-uno::Type SAL_CALL OLESimpleStorage::getElementType()
+cpo::uno::Type SAL_CALL OLESimpleStorage::getElementType()
 {
     std::unique_lock aGuard( m_aMutex );
 

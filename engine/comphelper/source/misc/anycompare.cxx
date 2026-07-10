@@ -31,7 +31,7 @@
 namespace comphelper
 {
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::Type;
+    using ::cpo::uno::Type;
     using ::com::sun::star::uno::TypeDescription;
     using ::com::sun::star::uno::TypeClass_CHAR;
     using ::com::sun::star::uno::TypeClass_BOOLEAN;

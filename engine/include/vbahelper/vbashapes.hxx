@@ -77,7 +77,7 @@ public:
     static void setDefaultShapeProperties( const css::uno::Reference< css::drawing::XShape >& xShape );
     static void setShape_NameProperty( const css::uno::Reference< css::drawing::XShape >& xShape, const OUString& sName );
     //XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     virtual void SAL_CALL SelectAll() override;

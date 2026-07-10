@@ -69,7 +69,7 @@ public:
         mxNameAccess.set( mxIndexAccess, uno::UNO_QUERY_THROW );
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override { return  mxIndexAccess->getElementType(); }
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override { return  mxIndexAccess->getElementType(); }
     virtual bool SAL_CALL hasElements(  ) override { return mxIndexAccess->hasElements(); }
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
@@ -126,7 +126,7 @@ SwVbaBookmarks::SwVbaBookmarks( const uno::Reference< XHelperInterface >& xParen
 {
 }
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaBookmarks::getElementType()
 {
     return cppu::UnoType<word::XBookmark>::get();

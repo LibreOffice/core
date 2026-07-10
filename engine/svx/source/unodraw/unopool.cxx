@@ -305,7 +305,7 @@ cpo::uno::Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMap
 
 // XInterface
 
-cpo::uno::Any SAL_CALL SvxUnoDrawPool::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxUnoDrawPool::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -325,7 +325,7 @@ cpo::uno::Any SAL_CALL SvxUnoDrawPool::queryInterface( const uno::Type & rType )
     return aAny;
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawPool::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoDrawPool::getTypes()
 {
     static const cpo::uno::Sequence aTypes {
         cppu::UnoType<lang::XServiceInfo>::get(),

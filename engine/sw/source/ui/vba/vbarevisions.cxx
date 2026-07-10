@@ -62,7 +62,7 @@ public:
     RevisionCollectionHelper( const rtl::Reference< SwXTextDocument >& xModel, const uno::Reference< text::XTextRange >& xTextRange );
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<beans::XPropertySet>::get(); }
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<beans::XPropertySet>::get(); }
     virtual bool SAL_CALL hasElements(  ) override { return ( !mRevisionMap.empty() ); }
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override { return mRevisionMap.size(); }
@@ -142,7 +142,7 @@ SwVbaRevisions::SwVbaRevisions( const uno::Reference< XHelperInterface >& xParen
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaRevisions::getElementType()
 {
     return cppu::UnoType<word::XRevision>::get();

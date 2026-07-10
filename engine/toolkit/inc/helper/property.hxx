@@ -23,9 +23,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::uno {
-    class Type;
-}
+namespace cpo::uno { class Type; }
 namespace cpo::uno { class Any; }
 
 
@@ -234,7 +232,7 @@ namespace cpo::uno { class Any; }
 
 
 sal_uInt16        GetPropertyId( const OUString& rPropertyName );
-const css::uno::Type*  GetPropertyType( sal_uInt16 nPropertyId );
+const cpo::uno::Type*  GetPropertyType( sal_uInt16 nPropertyId );
 const OUString&        GetPropertyName( sal_uInt16 nPropertyId );
 sal_Int16                           GetPropertyAttribs( sal_uInt16 nPropertyId );
 bool                            DoesDependOnOthers( sal_uInt16 nPropertyId );

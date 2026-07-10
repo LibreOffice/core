@@ -551,7 +551,7 @@ SfxBaseModel::~SfxBaseModel()
 }
 
 //  XInterface
-Any SAL_CALL SfxBaseModel::queryInterface( const uno::Type& rType )
+Any SAL_CALL SfxBaseModel::queryInterface( const cpo::uno::Type& rType )
 {
     if  (   ( !m_bSupportEmbeddedScripts && rType.equals( cppu::UnoType<document::XEmbeddedScripts>::get() ) )
         ||  ( !m_bSupportDocRecovery && (rType.equals( cppu::UnoType<XDocumentRecovery>::get() ) || rType.equals( cppu::UnoType<XDocumentRecovery2>::get() )) )
@@ -567,22 +567,22 @@ Any SAL_CALL SfxBaseModel::queryInterface( const uno::Type& rType )
 
 namespace
 {
-    void lcl_stripType( Sequence< uno::Type >& io_rTypes, const uno::Type& i_rTypeToStrip )
+    void lcl_stripType( Sequence< cpo::uno::Type >& io_rTypes, const cpo::uno::Type& i_rTypeToStrip )
     {
-        Sequence< uno::Type > aStrippedTypes( io_rTypes.getLength() - 1 );
+        Sequence< cpo::uno::Type > aStrippedTypes( io_rTypes.getLength() - 1 );
         ::std::remove_copy_if(
             std::cbegin(io_rTypes),
             std::cend(io_rTypes),
             aStrippedTypes.getArray(),
-            [&i_rTypeToStrip](const uno::Type& aType) { return aType == i_rTypeToStrip; }
+            [&i_rTypeToStrip](const cpo::uno::Type& aType) { return aType == i_rTypeToStrip; }
         );
         io_rTypes = std::move(aStrippedTypes);
     }
 }
 
-Sequence< uno::Type > SAL_CALL SfxBaseModel::getTypes()
+Sequence< cpo::uno::Type > SAL_CALL SfxBaseModel::getTypes()
 {
-    Sequence< uno::Type > aTypes( SfxBaseModel_Base::getTypes() );
+    Sequence< cpo::uno::Type > aTypes( SfxBaseModel_Base::getTypes() );
 
     if ( !m_bSupportEmbeddedScripts )
         lcl_stripType( aTypes, cppu::UnoType<document::XEmbeddedScripts>::get() );

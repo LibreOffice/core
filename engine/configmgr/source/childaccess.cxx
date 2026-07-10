@@ -29,7 +29,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -299,7 +299,7 @@ ChildAccess::~ChildAccess() {
     }
 }
 
-void ChildAccess::addTypes(std::vector< css::uno::Type > * types) const {
+void ChildAccess::addTypes(std::vector< cpo::uno::Type > * types) const {
     assert(types != nullptr);
     types->push_back(cppu::UnoType< css::container::XChild >::get());
     types->push_back(cppu::UnoType< css::lang::XUnoTunnel >::get());
@@ -315,7 +315,7 @@ void ChildAccess::addSupportedServiceNames(
         : u"com.sun.star.configuration.SetElement"_ustr);
 }
 
-cpo::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)
+cpo::uno::Any ChildAccess::queryInterface(cpo::uno::Type const & aType)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);

@@ -191,12 +191,12 @@ public:
 
     // css::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageControl, ControlContainerBase, "com.sun.star.awt.UnoControlMultiPage" )
-    cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return ControlContainerBase::queryInterface(rType); }
-    cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+    cpo::uno::Any  SAL_CALL queryInterface( const cpo::uno::Type & rType ) override { return ControlContainerBase::queryInterface(rType); }
+    cpo::uno::Any  SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
     // css::lang::XTypeProvider
-    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< cpo::uno::Type >  SAL_CALL getTypes() override;
     cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     // css::awt::XSimpleTabController

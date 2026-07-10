@@ -68,7 +68,7 @@ namespace pcr
     {
     private:
         const IPropertyInfoService& m_rMetaData;
-        css::uno::Type              m_aType;
+        cpo::uno::Type              m_aType;
         const sal_Int32             m_nPropertyId;
 
     public:
@@ -78,7 +78,7 @@ namespace pcr
                 An instance implementing IPropertyInfoService. Must live at least as
                 long as the DefaultEnumRepresentation should live.
         */
-        DefaultEnumRepresentation( const IPropertyInfoService& _rInfo, const css::uno::Type& _rType, sal_Int32 _nPropertyId );
+        DefaultEnumRepresentation( const IPropertyInfoService& _rInfo, const cpo::uno::Type& _rType, sal_Int32 _nPropertyId );
 
     protected:
         virtual ~DefaultEnumRepresentation() override;

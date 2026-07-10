@@ -370,7 +370,7 @@ void DispatchRecorder::implts_recordMacro( std::u16string_view aURL,
     /* } */
 }
 
-css::uno::Type SAL_CALL DispatchRecorder::getElementType()
+cpo::uno::Type SAL_CALL DispatchRecorder::getElementType()
 {
     return cppu::UnoType<css::frame::DispatchStatement>::get();
 }

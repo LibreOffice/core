@@ -38,7 +38,7 @@
 struct SfxItemPropertyMapEntry
 {
     OUString                            aName; ///< name of property
-    css::uno::Type                      aType; ///< UNO type of property
+    cpo::uno::Type                      aType; ///< UNO type of property
     sal_uInt16                          nWID;  ///< WhichId of SfxPoolItem
     /// flag bitmap, @see css::beans::PropertyAttribute
     sal_Int16                           nFlags;
@@ -47,7 +47,7 @@ struct SfxItemPropertyMapEntry
     sal_uInt8                           nMemberId;
     PropertyMoreFlags                   nMoreFlags;
 
-    SfxItemPropertyMapEntry(OUString _aName, sal_uInt16 _nWID, css::uno::Type const & _rType,
+    SfxItemPropertyMapEntry(OUString _aName, sal_uInt16 _nWID, cpo::uno::Type const & _rType,
                                sal_Int16 _nFlags, sal_uInt8 const _nMemberId, PropertyMoreFlags _nMoreFlags = PropertyMoreFlags::NONE)
         : aName(std::move( _aName ))
         , aType(     _rType )

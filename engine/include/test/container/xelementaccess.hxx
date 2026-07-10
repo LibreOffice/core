@@ -13,7 +13,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 
 #include <test/testdllapi.hxx>
 
@@ -22,7 +22,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XElementAccess
 {
 public:
-    XElementAccess(css::uno::Type const& rType)
+    XElementAccess(cpo::uno::Type const& rType)
         : m_aType(rType)
     {
     }
@@ -36,7 +36,7 @@ protected:
     ~XElementAccess() {}
 
 private:
-    css::uno::Type m_aType;
+    cpo::uno::Type m_aType;
 };
 
 } // namespace apitest

@@ -324,7 +324,7 @@ typelib_TypeDescriptionReference* mapCliType(System::Type^ cliType)
     if (cliType->IsEnum)
     {
         OUString usTypeName= mapCliTypeName(cliType->FullName);
-        css::uno::Type unoType(css::uno::TypeClass_ENUM, usTypeName);
+        cpo::uno::Type unoType(css::uno::TypeClass_ENUM, usTypeName);
         retVal= unoType.getTypeLibType();
         typelib_typedescriptionreference_acquire(retVal);
     }
@@ -850,7 +850,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                 break;
             }
             uno::Any aAny= *safe_cast<uno::Any^>(cli_data);
-            css::uno::Type  value_td( mapCliType(aAny.Type), SAL_NO_ACQUIRE);
+            cpo::uno::Type  value_td( mapCliType(aAny.Type), SAL_NO_ACQUIRE);
 
             if (assign)
                 uno_any_destruct( pAny, 0 );
@@ -963,7 +963,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                 case css::uno::TypeClass_STRUCT:
                 case css::uno::TypeClass_EXCEPTION:
                 {
-                    css::uno::Type anyType(value_td);
+                    cpo::uno::Type anyType(value_td);
                     typelib_TypeDescription* td= NULL;
                     anyType.getDescription(&td);
                     std::unique_ptr< rtl_mem > mem(rtl_mem::allocate(td->nSize));
@@ -988,7 +988,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                 OUString str = "[map_to_uno():Any" + value_td.getTypeName() + "]The Any type " + value_td.getTypeName() + " does not correspond to its value type: ";
                 if(aAny.Value != nullptr)
                 {
-                    css::uno::Type td(mapCliType(aAny.Value->GetType()), SAL_NO_ACQUIRE);
+                    cpo::uno::Type td(mapCliType(aAny.Value->GetType()), SAL_NO_ACQUIRE);
                     str += td.getTypeName();
                 }
                 if (assign)

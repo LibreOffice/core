@@ -20,7 +20,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XTypeProvider;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 
 /** This handler displays lower level UNO information.  These are the

@@ -22,19 +22,16 @@
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::uno
-{
-class Type;
-}
 namespace cpo::uno
 {
+class Type;
 template <class E> class Sequence;
 }
 
 namespace comphelper
 {
 COMPHELPER_DLLPUBLIC cpo::uno::Sequence<OUString>
-getEventMethodsForType(const css::uno::Type& type);
+getEventMethodsForType(const cpo::uno::Type& type);
 
 } // namespace comphelper
 

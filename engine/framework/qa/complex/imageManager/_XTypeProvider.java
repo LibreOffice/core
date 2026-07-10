@@ -21,7 +21,7 @@ package complex.imageManager;
 
 
 import com.sun.star.lang.XTypeProvider;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 /**
 * Testing <code>com.sun.star.lang.XTypeProvider</code>

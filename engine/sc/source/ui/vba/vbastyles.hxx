@@ -41,7 +41,7 @@ public:
     // XStyles
      virtual css::uno::Reference< ov::excel::XStyle > SAL_CALL Add( const OUString& Name, const cpo::uno::Any& BasedOn ) override;
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     virtual cpo::uno::Any createCollectionObject(const cpo::uno::Any&) override;
     // XHelperInterface

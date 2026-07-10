@@ -128,9 +128,9 @@ cpo::uno::Any SAL_CALL SfxUnoDecks::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-uno::Type SAL_CALL SfxUnoDecks::getElementType()
+cpo::uno::Type SAL_CALL SfxUnoDecks::getElementType()
 {
-    return uno::Type();
+    return cpo::uno::Type();
 }
 
 bool SAL_CALL SfxUnoDecks::hasElements()

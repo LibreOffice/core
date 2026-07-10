@@ -88,7 +88,7 @@ protected:
     OInterfaceMap                           m_aMap;
     ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener> m_aContainerListeners;
 
-    const css::uno::Type                    m_aElementType;
+    const cpo::uno::Type                    m_aElementType;
 
     css::uno::Reference< css::uno::XComponentContext>     m_xContext;
 
@@ -100,7 +100,7 @@ public:
     OInterfaceContainer(
         const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
         ::osl::Mutex& _rMutex,
-        const css::uno::Type& _rElementType);
+        const cpo::uno::Type& _rElementType);
 
     OInterfaceContainer( ::osl::Mutex& _rMutex, const OInterfaceContainer& _cloneSource );
 
@@ -124,7 +124,7 @@ public:
     virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 
 // css::container::XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override ;
+    virtual cpo::uno::Type SAL_CALL getElementType() override ;
     virtual bool SAL_CALL hasElements() override;
 
 // css::container::XEnumerationAccess
@@ -278,8 +278,8 @@ public:
 
     DECLARE_UNO3_AGG_DEFAULTS(OFormComponents, ::cppu::OComponentHelper)
 
-    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;

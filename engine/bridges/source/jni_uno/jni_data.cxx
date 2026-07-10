@@ -1642,7 +1642,7 @@ void Bridge::map_to_java(
                 jo_any.reset( java_data2.l );
 
                 // determine inner element type
-                ::com::sun::star::uno::Type element_type(
+                ::cpo::uno::Type element_type(
                     reinterpret_cast<typelib_IndirectTypeDescription *>(seq_td.get())->pType );
                 while (element_type.getTypeLibType()->eTypeClass ==
                          typelib_TypeClass_SEQUENCE)

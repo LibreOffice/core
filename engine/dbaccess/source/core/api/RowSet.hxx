@@ -250,16 +250,16 @@ namespace dbaccess
         explicit ORowSet(const css::uno::Reference<css::uno::XComponentContext>&);
 
         // css::lang::XTypeProvider
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // css::uno::XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
 
     // css::uno::XAggregation
-        virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
+        virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& aType ) override;
 
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -470,14 +470,14 @@ namespace dbaccess
         virtual ~ORowSetClone() override;
 
     // css::lang::XTypeProvider
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override
         {
             return cpo::uno::Sequence<sal_Int8>();
         }
 
     // css::uno::XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
 

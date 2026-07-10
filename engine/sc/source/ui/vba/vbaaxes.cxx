@@ -135,7 +135,7 @@ public:
         }
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type SAL_CALL getElementType() override
     {
         return cppu::UnoType<excel::XAxis>::get();
     }
@@ -157,7 +157,7 @@ ScVbaAxes::ScVbaAxes( const uno::Reference< XHelperInterface >& xParent,const un
 {
 }
 
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 ScVbaAxes::getElementType()
 {
     return  cppu::UnoType<excel::XAxes>::get();

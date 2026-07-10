@@ -27,7 +27,7 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 /** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getComponentFactory</CODE>) and a

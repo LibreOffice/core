@@ -22,7 +22,7 @@
 
 #include "typelib/typedescription.h"
 #include "uno/sequence2.h"
-#include "com/sun/star/uno/Type.h"
+#include "cpo/uno/Type.h"
 #include "rtl/alloc.h"
 
 #include <cassert>

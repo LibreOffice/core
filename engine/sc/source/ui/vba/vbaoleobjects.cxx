@@ -62,7 +62,7 @@ public:
     }
 
         // Methods XElementAccess
-        virtual uno::Type SAL_CALL getElementType() override
+        virtual cpo::uno::Type SAL_CALL getElementType() override
         {
             return cppu::UnoType<drawing::XControlShape>::get();
         }
@@ -160,7 +160,7 @@ ScVbaOLEObjects::getItemByStringIndex( const OUString& sIndex )
     }
 }
 
-uno::Type
+cpo::uno::Type
 ScVbaOLEObjects::getElementType()
 {
     return cppu::UnoType<ooo::vba::excel::XOLEObject>::get();

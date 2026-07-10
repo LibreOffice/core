@@ -32,7 +32,7 @@
 #include "cpo/uno/Any.h"
 #include "uno/data.h"
 #include "uno/sequence2.h"
-#include "com/sun/star/uno/Type.hxx"
+#include "cpo/uno/Type.hxx"
 #include "com/sun/star/uno/Reference.h"
 #include "com/sun/star/uno/genfunc.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -87,7 +87,7 @@ inline Any::Any( const Any & rAny )
     ::uno_type_any_construct( this, rAny.pData, rAny.pType, css::uno::cpp_acquire );
 }
 
-inline Any::Any( const void * pData_, const css::uno::Type & rType )
+inline Any::Any( const void * pData_, const cpo::uno::Type & rType )
 {
     ::uno_type_any_construct(
         this, const_cast< void * >( pData_ ), rType.getTypeLibType(),
@@ -155,7 +155,7 @@ inline ::rtl::OUString Any::getValueTypeName() const
     return ::rtl::OUString( pType->pTypeName );
 }
 
-inline void Any::setValue( const void * pData_, const css::uno::Type & rType )
+inline void Any::setValue( const void * pData_, const cpo::uno::Type & rType )
 {
     setValue(pData_, rType.getTypeLibType());
 }
@@ -180,7 +180,7 @@ inline void Any::clear()
         this, css::uno::cpp_release );
 }
 
-inline bool Any::isExtractableTo( const css::uno::Type & rType ) const
+inline bool Any::isExtractableTo( const cpo::uno::Type & rType ) const
 {
     return ::uno_type_isAssignableFromData(
         rType.getTypeLibType(), pData, pType,
@@ -238,7 +238,7 @@ template<> bool fromAny(Any const & any, Any * value) {
 template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value )
 {
-    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned(&value);
+    const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned(&value);
     rAny.setValue(static_cast< const void * >( &value ), rType);
 }
 
@@ -262,7 +262,7 @@ template<> void SAL_CALL operator <<=(Any &, Any const &) = delete;
 template< class C >
 inline bool SAL_CALL operator >>= ( const Any & rAny, C & value )
 {
-    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned(&value);
+    const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned(&value);
     return ::uno_type_assignData(
         &value, rType.getTypeLibType(),
         rAny.pData, rAny.pType,
@@ -527,21 +527,21 @@ inline bool SAL_CALL operator == (const Any& rAny, const rtl::OUStringLiteral<N>
 // type
 
 template<>
-inline bool SAL_CALL operator >>= ( const Any & rAny, css::uno::Type & value )
+inline bool SAL_CALL operator >>= ( const Any & rAny, cpo::uno::Type & value )
 {
     if (typelib_TypeClass_TYPE == rAny.pType->eTypeClass)
     {
-        value = * static_cast< const css::uno::Type * >( rAny.pData );
+        value = * static_cast< const cpo::uno::Type * >( rAny.pData );
         return true;
     }
     return false;
 }
 
 template<>
-inline bool SAL_CALL operator == ( const Any & rAny, const css::uno::Type & value )
+inline bool SAL_CALL operator == ( const Any & rAny, const cpo::uno::Type & value )
 {
     return (typelib_TypeClass_TYPE == rAny.pType->eTypeClass &&
-            value.equals( * static_cast< const css::uno::Type * >( rAny.pData ) ));
+            value.equals( * static_cast< const cpo::uno::Type * >( rAny.pData ) ));
 }
 // any
 
@@ -563,7 +563,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const css::uno::BaseReferen
 template< class C >
 inline bool SAL_CALL operator == ( const Any & rAny, const C & value )
 {
-    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned(&value);
+    const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned(&value);
     return ::uno_type_equalData(
         rAny.pData, rAny.pType,
         const_cast< C * >( &value ), rType.getTypeLibType(),
@@ -636,7 +636,7 @@ inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, t
             o << ' ' << any.get<rtl::OUString>();
             break;
         case typelib_TypeClass_TYPE:
-            o << ' ' << any.get<css::uno::Type>().getTypeName();
+            o << ' ' << any.get<cpo::uno::Type>().getTypeName();
             break;
         case typelib_TypeClass_SEQUENCE:
             o << " len "

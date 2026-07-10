@@ -55,7 +55,7 @@ ScVbaFormatConditions::Delete(  )
     }
 }
 
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 ScVbaFormatConditions::getElementType()
 {
     return cppu::UnoType<excel::XFormatCondition>::get();

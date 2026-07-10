@@ -80,7 +80,7 @@ cpo::uno::Sequence<sal_Int8> OCommandDefinition::getImplementationId()
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-cpo::uno::Sequence< css::uno::Type > OCommandDefinition::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > OCommandDefinition::getTypes()
 {
     return  ::comphelper::concatSequences(
         OCommandDefinition_Base::getTypes( ),

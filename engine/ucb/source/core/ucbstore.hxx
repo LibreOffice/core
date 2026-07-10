@@ -121,7 +121,7 @@ public:
     removePropertySet( const OUString& key ) override;
 
     // XElementAccess ( XNameAccess is derived from it )
-    virtual css::uno::Type SAL_CALL
+    virtual cpo::uno::Type SAL_CALL
     getElementType() override;
     virtual bool SAL_CALL
     hasElements() override;

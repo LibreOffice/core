@@ -37,7 +37,7 @@ import com.sun.star.sdbc.XColumnLocate;
 import com.sun.star.ucb.Command;
 import com.sun.star.ucb.OpenMode;
 import com.sun.star.ucb.XCommandProcessor;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.util.XModifiable;
 import connectivity.tools.CRMDatabase;
 import connectivity.tools.HsqlColumnDescriptor;

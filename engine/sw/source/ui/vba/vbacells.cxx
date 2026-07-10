@@ -89,7 +89,7 @@ public:
         throw css::lang::IndexOutOfBoundsException();
 
     }
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         return cppu::UnoType<word::XCell>::get();
     }
@@ -176,7 +176,7 @@ void SAL_CALL SwVbaCells::SetHeight( float height, sal_Int32 heightrule )
 }
 
 // XEnumerationAccess
-uno::Type
+cpo::uno::Type
 SwVbaCells::getElementType()
 {
     return cppu::UnoType<word::XCell>::get();

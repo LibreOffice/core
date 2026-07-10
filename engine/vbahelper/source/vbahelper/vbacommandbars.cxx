@@ -82,7 +82,7 @@ ScVbaCommandBars::~ScVbaCommandBars()
 }
 
 // XEnumerationAccess
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 ScVbaCommandBars::getElementType()
 {
     return cppu::UnoType<XCommandBar>::get();

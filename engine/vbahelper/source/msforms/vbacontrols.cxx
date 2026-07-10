@@ -100,7 +100,7 @@ public:
 
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) override
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override
     {
         return cppu::UnoType<awt::XControl>::get();
     }
@@ -484,7 +484,7 @@ void SAL_CALL ScVbaControls::Remove( const cpo::uno::Any& StringKeyOrIndex )
 }
 
 
-uno::Type
+cpo::uno::Type
 ScVbaControls::getElementType()
 {
     return cppu::UnoType<ooo::vba::msforms::XControl>::get();

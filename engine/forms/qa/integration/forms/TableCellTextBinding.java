@@ -18,7 +18,7 @@
 
 package integration.forms;
 
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.table.XCell;
 import com.sun.star.util.XModifyListener;
@@ -63,7 +63,7 @@ public class TableCellTextBinding
 
     /** retrieves the list of data types which this binding can exchange
     */
-    public com.sun.star.uno.Type[] getSupportedValueTypes()
+    public cpo.uno.Type[] getSupportedValueTypes()
     {
         try
         {
@@ -80,7 +80,7 @@ public class TableCellTextBinding
 
     /** retrieves the current value
     */
-    public Object getValue(com.sun.star.uno.Type type) throws com.sun.star.form.binding.IncompatibleTypesException
+    public Object getValue(cpo.uno.Type type) throws com.sun.star.form.binding.IncompatibleTypesException
     {
         if ( !type.equals( getStringType() ) )
             throw new com.sun.star.form.binding.IncompatibleTypesException();
@@ -113,7 +113,7 @@ public class TableCellTextBinding
 
     /** determines whether a given value type is supported
     */
-    public boolean supportsType(com.sun.star.uno.Type type)
+    public boolean supportsType(cpo.uno.Type type)
     {
         return type.equals( getStringType() );
     }
@@ -122,7 +122,7 @@ public class TableCellTextBinding
     */
     private static final Type getStringType()
     {
-        return new com.sun.star.uno.Type( String.class );
+        return new cpo.uno.Type( String.class );
     }
 
     /** runs the thread

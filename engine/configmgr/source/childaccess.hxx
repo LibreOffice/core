@@ -99,13 +99,13 @@ private:
     virtual ~ChildAccess() override;
 
     virtual void addTypes(
-        std::vector< css::uno::Type > * types) const override;
+        std::vector< cpo::uno::Type > * types) const override;
 
     virtual void addSupportedServiceNames(
         std::vector<OUString> * services) override;
 
     virtual cpo::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & aType) override;
+        cpo::uno::Type const & aType) override;
 
     rtl::Reference< RootAccess > root_;
     rtl::Reference< Access > parent_; // null if free node

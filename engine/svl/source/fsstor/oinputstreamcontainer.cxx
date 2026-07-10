@@ -37,7 +37,7 @@ OFSInputStreamContainer::~OFSInputStreamContainer()
 {
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
 {
     if (m_bSeekable)
     {
@@ -56,7 +56,7 @@ cpo::uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
     }
 }
 
-cpo::uno::Any SAL_CALL OFSInputStreamContainer::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL OFSInputStreamContainer::queryInterface( const cpo::uno::Type& rType )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.

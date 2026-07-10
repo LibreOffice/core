@@ -67,8 +67,8 @@ namespace toolkit
                                     UnoScrollBarControl();
         OUString             GetComponentServiceName() const override;
 
-        cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
-        cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
+        cpo::uno::Any  SAL_CALL queryInterface( const cpo::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
+        cpo::uno::Any  SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
         void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
         void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
         void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
@@ -76,7 +76,7 @@ namespace toolkit
         void SAL_CALL dispose(  ) override;
 
         // css::lang::XTypeProvider
-        cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+        cpo::uno::Sequence< cpo::uno::Type >  SAL_CALL getTypes() override;
         cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
         // css::awt::XAdjustmentListener

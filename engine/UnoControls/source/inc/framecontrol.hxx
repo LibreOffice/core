@@ -47,7 +47,7 @@ public:
     //  XInterface
 
     virtual cpo::uno::Any queryInterface(
-        const css::uno::Type& aType
+        const cpo::uno::Type& aType
     ) override;
 
     /**
@@ -70,7 +70,7 @@ public:
 
     //  XTypeProvider
 
-    virtual cpo::uno::Sequence< css::uno::Type > getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
     OUString getImplementationName() override;
 
@@ -103,19 +103,19 @@ public:
 
     //  XConnectionPointContainer
 
-    virtual cpo::uno::Sequence< css::uno::Type > getConnectionPointTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getConnectionPointTypes() override;
 
     virtual css::uno::Reference< css::lang::XConnectionPoint > queryConnectionPoint(
-        const css::uno::Type& aType
+        const cpo::uno::Type& aType
     ) override;
 
     virtual void advise(
-        const css::uno::Type&                                aType       ,
+        const cpo::uno::Type&                                aType       ,
         const css::uno::Reference< css::uno::XInterface >&    xListener
     ) override;
 
     virtual void unadvise(
-        const css::uno::Type&                                aType ,
+        const cpo::uno::Type&                                aType ,
         const css::uno::Reference< css::uno::XInterface >&    xListener
     ) override;
 

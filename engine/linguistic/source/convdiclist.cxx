@@ -84,7 +84,7 @@ public:
     ConvDicNameContainer& operator=(const ConvDicNameContainer&) = delete;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
     virtual bool SAL_CALL hasElements(  ) override;
 
     // XNameAccess
@@ -162,7 +162,7 @@ uno::Reference< XConversionDictionary > ConvDicNameContainer::GetByName(
     return xRes;
 }
 
-uno::Type SAL_CALL ConvDicNameContainer::getElementType(  )
+cpo::uno::Type SAL_CALL ConvDicNameContainer::getElementType(  )
 {
     return cppu::UnoType<XConversionDictionary>::get();
 }

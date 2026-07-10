@@ -21,7 +21,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Type.h>
+#include <cpo/uno/Type.h>
 
 #include <cppuhelper/implbase.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
@@ -182,7 +182,7 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
     try
     {
         cpo::uno::Any any = xPropSet->getPropertyValue(rName);
-        const uno::Type& type = any.getValueType();
+        const cpo::uno::Type& type = any.getValueType();
         if (type == cppu::UnoType<bool>::get())
         {
             // boolean type

@@ -79,7 +79,7 @@ public:
     virtual cpo::uno::Sequence< ::sal_Int32 > SAL_CALL getIdentifiers(  ) override;
 
     // css::container::XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
     virtual bool SAL_CALL hasElements(  ) override;
 
     // css::awt::XControlContainer

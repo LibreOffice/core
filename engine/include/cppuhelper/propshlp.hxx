@@ -394,13 +394,13 @@ public:
        Only returns a reference to XMultiPropertySet, XFastPropertySet, XPropertySet and
        XEventListener.
      */
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) SAL_OVERRIDE;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) SAL_OVERRIDE;
 
     /** eases implementing XTypeProvider::getTypes, returns the types of XMultiPropertySet, XFastPropertySet, XPropertySet
 
         @throws css::uno::RuntimeException
      */
-    cpo::uno::Sequence< css::uno::Type > getTypes();
+    cpo::uno::Sequence< cpo::uno::Type > getTypes();
 
     /**
        Send a disposing notification to the listeners in the containers aBoundLC
@@ -657,7 +657,7 @@ public:
         bool bIgnoreRuntimeExceptionsWhileFiring = false);
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) SAL_OVERRIDE;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) SAL_OVERRIDE;
 
     // XPropertySetOption
     virtual void SAL_CALL enableChangeListenerNotification( bool bEnable ) SAL_OVERRIDE;

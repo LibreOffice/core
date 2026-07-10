@@ -309,7 +309,7 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
     return (xNumTunnel.is()) ? xNumTunnel->getSomething(rId) : 0;
 }
 
-Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType )
+Any SAL_CALL SwXTextDocument::queryInterface( const cpo::uno::Type& rType )
 {
     Any aRet = SwXTextDocumentBaseClass::queryInterface(rType);
     if ( !aRet.hasValue() )
@@ -346,9 +346,9 @@ void SAL_CALL SwXTextDocument::release()noexcept
     SfxBaseModel::release();
 }
 
-Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes()
+Sequence< cpo::uno::Type > SAL_CALL SwXTextDocument::getTypes()
 {
-    Sequence< uno::Type > aNumTypes;
+    Sequence< cpo::uno::Type > aNumTypes;
     GetNumberFormatter();
     if (auto xNumProv = comphelper::query_aggregation<XTypeProvider>(m_xNumFormatAgg))
         aNumTypes = xNumProv->getTypes();
@@ -1407,7 +1407,7 @@ public:
     }
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override
+    virtual cpo::uno::Type SAL_CALL getElementType() override
     {
         return cppu::UnoType<drawing::XDrawPage>::get();
     }
@@ -4485,7 +4485,7 @@ bool SwXLinkTargetSupplier::hasByName(const OUString& rName)
     return false;
 }
 
-uno::Type  SwXLinkTargetSupplier::getElementType()
+cpo::uno::Type  SwXLinkTargetSupplier::getElementType()
 {
     return cppu::UnoType<XPropertySet>::get();
 
@@ -4711,7 +4711,7 @@ bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
     return bRet;
 }
 
-uno::Type  SwXLinkNameAccessWrapper::getElementType()
+cpo::uno::Type  SwXLinkNameAccessWrapper::getElementType()
 {
     return cppu::UnoType<XPropertySet>::get();
 }

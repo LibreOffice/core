@@ -1104,7 +1104,7 @@ SwXMeta::setParent(uno::Reference< uno::XInterface > const& /*xParent*/)
 }
 
 // XElementAccess
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 SwXMeta::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();

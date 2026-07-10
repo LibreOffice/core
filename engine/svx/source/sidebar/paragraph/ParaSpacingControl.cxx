@@ -188,7 +188,7 @@ void SAL_CALL ParaLRSpacingControl::notifyContextChangeEvent(const css::ui::Cont
     }
 }
 
-::cpo::uno::Any SAL_CALL ParaLRSpacingControl::queryInterface(const ::css::uno::Type& aType)
+::cpo::uno::Any SAL_CALL ParaLRSpacingControl::queryInterface(const ::cpo::uno::Type& aType)
 {
     ::cpo::uno::Any a(SfxToolBoxControl::queryInterface(aType));
     if (a.hasValue())

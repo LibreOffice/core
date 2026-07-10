@@ -44,12 +44,12 @@ public:
     virtual ~Controller() override;
 
     // XInterface
-    virtual cpo::uno::Any queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
     virtual void acquire() noexcept override;
     virtual void release() noexcept override;
 
     // XTypeProvider ( ::SfxBaseController )
-    virtual cpo::uno::Sequence< css::uno::Type > getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
     virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
     // XPropertySet

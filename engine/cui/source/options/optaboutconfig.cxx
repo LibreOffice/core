@@ -22,7 +22,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/util/InvalidStateException.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
@@ -455,7 +455,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
             OUString sTooltip;
             OUString sType;
             bool bWasModified = false;
-            css::uno::Type aType = cppu::UnoType<void>::get();
+            cpo::uno::Type aType = cppu::UnoType<void>::get();
             OUString sDynamicType = aNode.getValueTypeName();
             try
             {

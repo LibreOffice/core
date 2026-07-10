@@ -35,7 +35,7 @@ namespace rtl { template <class reference_type> class Reference; }
 namespace comphelper
 {
     /// returns true if objects of the types given are "compatible"
-    COMPHELPER_DLLPUBLIC bool isAssignableFrom(const css::uno::Type& _rAssignable, const css::uno::Type& _rFrom);
+    COMPHELPER_DLLPUBLIC bool isAssignableFrom(const cpo::uno::Type& _rAssignable, const cpo::uno::Type& _rFrom);
 
     /** ask the given object for an XComponent interface and dispose on it
     */
@@ -68,7 +68,7 @@ namespace comphelper
 
     /** examine a sequence for the com.sun.star.uno::Type of its elements.
     */
-    COMPHELPER_DLLPUBLIC css::uno::Type getSequenceElementType(const css::uno::Type& _rSequenceType);
+    COMPHELPER_DLLPUBLIC cpo::uno::Type getSequenceElementType(const cpo::uno::Type& _rSequenceType);
 
 
 //= replacement of the former UsrAny.getXXX methods

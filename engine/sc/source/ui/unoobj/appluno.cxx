@@ -561,7 +561,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScFunctionListObj::createEnumer
 
 // XElementAccess
 
-uno::Type SAL_CALL ScFunctionListObj::getElementType()
+cpo::uno::Type SAL_CALL ScFunctionListObj::getElementType()
 {
     return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }

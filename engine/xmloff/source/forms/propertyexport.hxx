@@ -351,7 +351,7 @@ namespace xmloff
                 </ul>
                 If the type is not convertible, float is returned
         */
-        static ::xmloff::token::XMLTokenEnum implGetPropertyXMLType(const css::uno::Type& _rType);
+        static ::xmloff::token::XMLTokenEnum implGetPropertyXMLType(const cpo::uno::Type& _rType);
 
 #ifdef DBG_UTIL
                 void AddAttribute( sal_uInt16 _nPrefix, const OUString& _rName, const OUString& _rValue );
@@ -381,11 +381,11 @@ namespace xmloff
         */
         void dbg_implCheckProperty(
             const OUString& _rPropertyName,
-            const css::uno::Type* _pType);
+            const cpo::uno::Type* _pType);
 
 //      void dbg_implCheckProperty(
 //          const char* _rPropertyName,
-//          const css::uno::Type* _pType)
+//          const cpo::uno::Type* _pType)
 //      {
 //          dbg_implCheckProperty(OUString::createFromAscii(_rPropertyName), _pType);
 //      }

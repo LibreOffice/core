@@ -61,9 +61,9 @@ public:
 
     // XAggregation
     virtual cpo::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & rType ) SAL_OVERRIDE;
+        cpo::uno::Type const & rType ) SAL_OVERRIDE;
     virtual cpo::uno::Any SAL_CALL queryAggregation(
-        css::uno::Type const & rType ) SAL_OVERRIDE;
+        cpo::uno::Type const & rType ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
         SAL_NOEXCEPT SAL_OVERRIDE;
     virtual void SAL_CALL release()
@@ -76,7 +76,7 @@ public:
     /** @attention
         XTypeProvider::getTypes() has to be re-implemented!
     */
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE;
 
     // XComponent
     virtual void SAL_CALL dispose() SAL_OVERRIDE;

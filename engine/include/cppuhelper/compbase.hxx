@@ -26,7 +26,7 @@
 #include "cpo/uno/Any.h"
 #include "com/sun/star/uno/Reference.h"
 #include "cpo/uno/Sequence.h"
-#include "com/sun/star/uno/Type.h"
+#include "cpo/uno/Type.h"
 #include "cppuhelper/compbase_ex.hxx"
 #include "cppuhelper/implbase.hxx"
 #include "rtl/instance.hxx"
@@ -74,7 +74,7 @@ public:
     PartialWeakComponentImplHelper(osl::Mutex & mutex) SAL_NOEXCEPT:
         WeakComponentImplHelperBase(mutex) {}
 
-    cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) SAL_OVERRIDE
+    cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & aType) SAL_OVERRIDE
     { return WeakComponentImplHelper_query(aType, cd::get(), this, this); }
 
     void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE
@@ -87,7 +87,7 @@ public:
         SAL_OVERRIDE
     { WeakComponentImplHelperBase::dispose(); }
 
-    cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() SAL_OVERRIDE
+    cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() SAL_OVERRIDE
     { return WeakComponentImplHelper_getTypes(cd::get()); }
 
     cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() SAL_OVERRIDE

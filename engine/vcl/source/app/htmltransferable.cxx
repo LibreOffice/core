@@ -39,7 +39,7 @@ HtmlTransferable::HtmlTransferable(OString sData)
 HtmlTransferable::~HtmlTransferable() {}
 
 // css::uno::XInterface
-cpo::uno::Any HtmlTransferable::queryInterface(const uno::Type& rType)
+cpo::uno::Any HtmlTransferable::queryInterface(const cpo::uno::Type& rType)
 {
     cpo::uno::Any aRet
         = ::cppu::queryInterface(rType, static_cast<datatransfer::XTransferable*>(this));

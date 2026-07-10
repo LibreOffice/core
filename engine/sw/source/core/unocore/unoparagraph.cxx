@@ -1245,7 +1245,7 @@ SwXParagraph::createTextFieldsEnumeration()
             m_nSelectionStartPos, m_nSelectionEndPos, /*bOnlyTextFields*/true);
 }
 
-uno::Type SAL_CALL SwXParagraph::getElementType()
+cpo::uno::Type SAL_CALL SwXParagraph::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();
 }

@@ -20,7 +20,7 @@ package ifc.style;
 
 import com.sun.star.container.XNameContainer;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.xml.AttributeData;
 import lib.MultiPropertyTest;
 

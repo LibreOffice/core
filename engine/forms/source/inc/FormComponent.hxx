@@ -191,11 +191,11 @@ protected:
 
 // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
 
 // XTypeProvider
     virtual cpo::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< css::uno::Type>   SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type>   SAL_CALL getTypes() override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -229,7 +229,7 @@ protected:
     virtual bool                                    SAL_CALL isTransparent() override;
 
 protected:
-    virtual cpo::uno::Sequence< css::uno::Type>   _getTypes();
+    virtual cpo::uno::Sequence< cpo::uno::Type>   _getTypes();
         // overwrite this and call the base class if you have additional types
 
     cpo::uno::Sequence< OUString > getAggregateServiceNames() const;
@@ -256,7 +256,7 @@ public:
     virtual ~OBoundControl() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OBoundControl, OControl)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
 
     // XBoundControl
     virtual bool SAL_CALL   getLock() override;
@@ -273,7 +273,7 @@ public:
     virtual void SAL_CALL disposing() override;
 
 protected:
-    virtual cpo::uno::Sequence< css::uno::Type>   _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type>   _getTypes() override;
     // implement the lock setting
     void         _setLock(bool _bLock);
 };
@@ -352,7 +352,7 @@ protected:
 
     using OComponentHelper::m_rBHelper;
 
-    virtual cpo::uno::Sequence< css::uno::Type>   _getTypes();
+    virtual cpo::uno::Sequence< cpo::uno::Type>   _getTypes();
 
     void    readHelpTextCompatibly(const css::uno::Reference< css::io::XObjectInputStream >& _rxInStream);
     void    writeHelpTextCompatibly(const css::uno::Reference< css::io::XObjectOutputStream >& _rxOutStream);
@@ -364,11 +364,11 @@ protected:
 
 public:
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
 
 // XTypeProvider
     virtual cpo::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
-    virtual cpo::uno::Sequence< css::uno::Type>   SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type>   SAL_CALL getTypes() override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -532,7 +532,7 @@ private:
     OUString                            m_sValuePropertyName;
     sal_Int32                           m_nValuePropertyAggregateHandle;
     sal_Int32                           m_nFieldType;
-    css::uno::Type                      m_aValuePropertyType;
+    cpo::uno::Type                      m_aValuePropertyType;
     bool                                m_bValuePropertyMayBeVoid;
 
     ResetHelper                         m_aResetHelper;
@@ -545,7 +545,7 @@ private:
                                         m_xExternalBinding;
     css::uno::Reference< css::form::validation::XValidator >
                                         m_xValidator;
-    css::uno::Type                      m_aExternalValueType;
+    cpo::uno::Type                      m_aExternalValueType;
 
 // <properties>
     OUString                            m_aControlSource;           // data source, name of the field
@@ -738,7 +738,7 @@ protected:
 
         The default implementation returns the type of our value property.
     */
-    virtual cpo::uno::Sequence< css::uno::Type >
+    virtual cpo::uno::Sequence< cpo::uno::Type >
                             getSupportedBindingTypes();
 
     /** translates the given value, which was obtained from the current external value binding,
@@ -890,7 +890,7 @@ protected:
     */
     virtual void            resetNoBroadcast();
 
-    virtual cpo::uno::Sequence< css::uno::Type>   _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type>   _getTypes() override;
 
     /// sets m_xField to the given new value, without notifying our listeners
     void    impl_setField_noNotify(
@@ -919,7 +919,7 @@ public:
 public:
     // UNO link
     DECLARE_UNO3_AGG_DEFAULTS(OBoundControlModel, OControlModel)
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -1042,7 +1042,7 @@ protected:
 
         @see initValueProperty
     */
-    const css::uno::Type&
+    const cpo::uno::Type&
                 getExternalValueType() const { return m_aExternalValueType; }
 
     /** initializes the control from m_xField

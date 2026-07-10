@@ -46,9 +46,9 @@ protected:
     }
 
     // XTypeProvider
-    cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
+    cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override
     {
-        static const cpo::uno::Sequence<uno::Type> aTypes{
+        static const cpo::uno::Sequence<cpo::uno::Type> aTypes{
             cppu::UnoType<lang::XServiceInfo>::get(), cppu::UnoType<lang::XTypeProvider>::get(),
             cppu::UnoType<graphic::XGraphicMapper>::get()
         };

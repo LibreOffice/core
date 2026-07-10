@@ -77,7 +77,10 @@ public:
             new SwVbaFormFieldDropDownListEntry(mxParent, mxContext, m_rDropDown, Index)));
     }
 
-    uno::Type SAL_CALL getElementType() override { return cppu::UnoType<word::XListEntry>::get(); }
+    cpo::uno::Type SAL_CALL getElementType() override
+    {
+        return cppu::UnoType<word::XListEntry>::get();
+    }
 
     bool SAL_CALL hasElements() override { return getCount() != 0; }
 
@@ -131,7 +134,7 @@ sal_Int32 SwVbaFormFieldDropDownListEntries::getCount()
 }
 
 // XEnumerationAccess
-uno::Type SwVbaFormFieldDropDownListEntries::getElementType()
+cpo::uno::Type SwVbaFormFieldDropDownListEntries::getElementType()
 {
     return cppu::UnoType<word::XListEntry>::get();
 }

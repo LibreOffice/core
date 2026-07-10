@@ -283,7 +283,7 @@ cppcanvas/source/mtfrenderer/mtftools.cxx:284
     const double nX1
     0
 cppu/qa/test_reference.cxx:88
-    const class com::sun::star::uno::Type & (anonymous namespace)::Base1::static_type(void *)
+    const class cpo::uno::Type & (anonymous namespace)::Base1::static_type(void *)
     void * 
     0
 cppu/qa/test_unotype.cxx:63
@@ -4199,7 +4199,7 @@ test/source/sheet/xdatapilottable2.cxx:237
     int nRow
     0
 ucb/source/core/ucbcmds.cxx:70
-    struct com::sun::star::beans::Property makeProperty(const class rtl::OUString &,int,class com::sun::star::uno::Type,short)
+    struct com::sun::star::beans::Property makeProperty(const class rtl::OUString &,int,class cpo::uno::Type,short)
     short a
     0
 ucb/source/ucp/tdoc/tdoc_provider.hxx:106

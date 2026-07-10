@@ -37,7 +37,7 @@ public:
     sal_Int32 SAL_CALL getCount() override;
 
     // XEnumerationAccess
-    css::uno::Type SAL_CALL getElementType() override;
+    cpo::uno::Type SAL_CALL getElementType() override;
     css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
 
     // SwVbaFormFieldDropDownListEntries_BASE

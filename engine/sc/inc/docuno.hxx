@@ -155,7 +155,7 @@ public:
     void                    NotifyChanges( const OUString& rOperation, const ScRangeList& rRanges,
                                            const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties );
 
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL   acquire() noexcept override;
     virtual void SAL_CALL   release() noexcept override;
 
@@ -263,7 +263,7 @@ public:
     SC_DLLPUBLIC static const cpo::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
                             /// XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     virtual void SAL_CALL dispose() override;
@@ -443,7 +443,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             /// XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
                             /// XServiceInfo
@@ -508,7 +508,7 @@ public:
                             createEnumeration() override;
 
                             /// XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
                             /// XIndexAccess
@@ -571,7 +571,7 @@ public:
                             createEnumeration() override;
 
                             /// XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
                             /// XPropertySet
@@ -633,7 +633,7 @@ public:
                             createEnumeration() override;
 
                             /// XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
                             /// XPropertySet
@@ -725,7 +725,7 @@ public:
                             createEnumeration() override;
 
                             /// XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
                             /// XServiceInfo
@@ -775,7 +775,7 @@ public:
                             createEnumeration() override;
 
                             /// XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
                             /// XServiceInfo

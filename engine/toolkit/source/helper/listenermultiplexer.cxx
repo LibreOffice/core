@@ -39,7 +39,7 @@ void SAL_CALL EventListenerMultiplexer::release() noexcept
 }
 
 // css::uno::XInterface
-cpo::uno::Any EventListenerMultiplexer::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any EventListenerMultiplexer::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                                         static_cast< css::lang::XEventListener* >(this) );

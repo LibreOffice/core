@@ -438,7 +438,7 @@ Reference< XEnumeration > SAL_CALL OSDBCDriverManager::createEnumeration(  )
 }
 
 
-css::uno::Type SAL_CALL OSDBCDriverManager::getElementType(  )
+cpo::uno::Type SAL_CALL OSDBCDriverManager::getElementType(  )
 {
     return cppu::UnoType<XDriver>::get();
 }

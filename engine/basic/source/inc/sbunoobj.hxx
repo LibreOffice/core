@@ -44,13 +44,13 @@ void registerComponentToBeDisposedForBasic( const css::uno::Reference< css::lang
 class StructRefInfo
 {
     cpo::uno::Any& maAny;
-    css::uno::Type maType;
+    cpo::uno::Type maType;
     sal_Int32 mnPos;
 public:
-    StructRefInfo( cpo::uno::Any& aAny, css::uno::Type const & rType, sal_Int32 nPos ) : maAny( aAny ), maType( rType ), mnPos( nPos ) {}
+    StructRefInfo( cpo::uno::Any& aAny, cpo::uno::Type const & rType, sal_Int32 nPos ) : maAny( aAny ), maType( rType ), mnPos( nPos ) {}
 
     sal_Int32 getPos() const { return mnPos; }
-    const css::uno::Type& getType() const { return maType; }
+    const cpo::uno::Type& getType() const { return maType; }
     OUString getTypeName() const;
     cpo::uno::Any& getRootAnyRef() { return maAny; };
 

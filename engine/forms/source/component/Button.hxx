@@ -56,9 +56,9 @@ public:
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS( OButtonModel, OClickableImageBaseModel )
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& _rType ) override;
 
-    cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+    cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override
@@ -130,7 +130,7 @@ private:
 protected:
 
     // UNO binding
-    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
     explicit OButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
@@ -144,7 +144,7 @@ public:
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OButtonControl, OClickableImageBaseControl)
-    virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
 
     // XActionListener
     virtual void SAL_CALL actionPerformed(const css::awt::ActionEvent& rEvent) override;

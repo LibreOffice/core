@@ -36,7 +36,7 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextEmbeddedObjectsSupplier;
 import com.sun.star.text.XTextFrame;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;

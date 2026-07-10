@@ -68,9 +68,9 @@ namespace connectivity::sdbcx
         virtual void SAL_CALL release() noexcept override;
 
         //XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
         //XTypeProvider
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
 
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing() override;

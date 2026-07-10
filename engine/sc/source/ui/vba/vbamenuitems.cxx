@@ -65,7 +65,7 @@ ScVbaMenuItems::ScVbaMenuItems( const uno::Reference< XHelperInterface >& xParen
 }
 
 // XEnumerationAccess
-uno::Type SAL_CALL
+cpo::uno::Type SAL_CALL
 ScVbaMenuItems::getElementType()
 {
     return cppu::UnoType<excel::XMenuItem>::get();

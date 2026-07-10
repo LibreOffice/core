@@ -96,9 +96,9 @@ cpo::uno::Sequence< OUString > SAL_CALL
 }
 
 // XElementAccess
-uno::Type SAL_CALL DispatchDisabler::getElementType()
+cpo::uno::Type SAL_CALL DispatchDisabler::getElementType()
 {
-    uno::Type aModuleType = cppu::UnoType<OUString>::get();
+    cpo::uno::Type aModuleType = cppu::UnoType<OUString>::get();
     return aModuleType;
 }
 

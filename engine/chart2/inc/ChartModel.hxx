@@ -370,7 +370,7 @@ public:
         const css::datatransfer::DataFlavor& aFlavor ) override;
 
     // lang::XTypeProvider (override method of WeakImplHelper)
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
         getTypes() override;
 
     // ____ document::XDocumentPropertiesSupplier ____
@@ -419,7 +419,7 @@ public:
     virtual void SAL_CALL setTitleObject( const css::uno::Reference< css::chart2::XTitle >& Title ) override;
 
     // ____ XInterface (for old API wrapper) ____
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
 
     // ____ XLoadable ____
     virtual void SAL_CALL initNew() override;

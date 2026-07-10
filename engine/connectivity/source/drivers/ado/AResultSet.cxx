@@ -131,7 +131,7 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType )
     return aRet.hasValue() ? aRet : OResultSet_BASE::queryInterface(rType);
 }
 
-cpo::uno::Sequence< css::uno::Type > SAL_CALL OResultSet::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL OResultSet::getTypes(  )
 {
     return comphelper::concatSequences(cppu::OPropertySetHelper::getTypes(),
                                        OResultSet_BASE::getTypes());

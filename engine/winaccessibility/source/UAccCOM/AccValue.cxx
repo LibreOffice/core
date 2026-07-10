@@ -90,35 +90,35 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
 
             case VT_BOOL:
             {
-                css::uno::Type typeInfo(TypeClass_BOOLEAN, "bool");
+                cpo::uno::Type typeInfo(TypeClass_BOOLEAN, "bool");
                 anyVal.setValue(&value.boolVal, typeInfo);
             }
             break;
 
             case VT_I2:
             {
-                css::uno::Type typeInfo(TypeClass_SHORT, "short");
+                cpo::uno::Type typeInfo(TypeClass_SHORT, "short");
                 anyVal.setValue(&value.iVal, typeInfo);
             }
             break;
 
             case VT_I4:
             {
-                css::uno::Type typeInfo(TypeClass_LONG, "long");
+                cpo::uno::Type typeInfo(TypeClass_LONG, "long");
                 anyVal.setValue(&value.lVal, typeInfo);
             }
             break;
 
             case VT_R4:
             {
-                css::uno::Type typeInfo(TypeClass_FLOAT, "float");
+                cpo::uno::Type typeInfo(TypeClass_FLOAT, "float");
                 anyVal.setValue(&value.fltVal, typeInfo);
             }
             break;
 
             case VT_R8:
             {
-                css::uno::Type typeInfo(TypeClass_DOUBLE, "double");
+                cpo::uno::Type typeInfo(TypeClass_DOUBLE, "double");
                 anyVal.setValue(&value.dblVal, typeInfo);
             }
             break;

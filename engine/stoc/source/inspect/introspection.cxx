@@ -1399,7 +1399,7 @@ OUString ImplIntrospectionAccess::getExactName( const OUString& rApproximateName
 struct TypeKey {
     TypeKey(
         css::uno::Reference<css::beans::XPropertySetInfo> theProperties,
-        std::vector<css::uno::Type> const & theTypes):
+        std::vector<cpo::uno::Type> const & theTypes):
         properties(std::move(theProperties))
     {
         //TODO: Could even sort the types lexicographically first, to increase
@@ -1407,7 +1407,7 @@ struct TypeKey {
         // but the old scheme of using getImplementationId() would have missed
         // those matches, too:
         OUStringBuffer b(static_cast<int>(theTypes.size() * 64));
-        for (const css::uno::Type& rType : theTypes) {
+        for (const cpo::uno::Type& rType : theTypes) {
             b.append(rType.getTypeName()
                 + "*"); // arbitrary delimiter not used by type grammar
         }
@@ -1534,7 +1534,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         reflection = reflection_;
     }
     cpo::uno::Any aToInspectObj;
-    css::uno::Type t;
+    cpo::uno::Type t;
     if (aObject >>= t) {
         css::uno::Reference<css::reflection::XIdlClass> c(
             reflection->forName(t.getTypeName()));

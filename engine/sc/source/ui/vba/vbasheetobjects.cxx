@@ -84,14 +84,14 @@ public:
         uno::Reference< uno::XComponentContext > xContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
-        const uno::Type& rVbaType );
+        const cpo::uno::Type& rVbaType );
 
     /** Returns the VBA helper interface of the VBA collection object. */
     const uno::Reference< XHelperInterface >& getParent() const { return mxParent; }
     /** Returns the component context of the VBA collection object. */
     const uno::Reference< uno::XComponentContext >& getContext() const { return mxContext; }
     /** Returns the VBA type information of the objects in this container. */
-    const uno::Type& getVbaType() const { return maVbaType; }
+    const cpo::uno::Type& getVbaType() const { return maVbaType; }
 
     /** Collects all shapes supported by this instance and inserts them into
         the internal shape vector.
@@ -130,7 +130,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
 protected:
@@ -164,7 +164,7 @@ protected:
 
 private:
     typedef ::std::vector< uno::Reference< drawing::XShape > > ShapeVector;
-    const uno::Type maVbaType;
+    const cpo::uno::Type maVbaType;
     ShapeVector maShapes;
 };
 
@@ -173,7 +173,7 @@ ScVbaObjectContainer::ScVbaObjectContainer(
         uno::Reference< uno::XComponentContext > xContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
-        const uno::Type& rVbaType ) :
+        const cpo::uno::Type& rVbaType ) :
     mxParent(std::move( xParent )),
     mxContext(std::move( xContext )),
     mxModel( rxModel, uno::UNO_SET_THROW ),
@@ -249,7 +249,7 @@ cpo::uno::Any SAL_CALL ScVbaObjectContainer::getByIndex( sal_Int32 nIndex )
 
 // XElementAccess
 
-uno::Type SAL_CALL ScVbaObjectContainer::getElementType()
+cpo::uno::Type SAL_CALL ScVbaObjectContainer::getElementType()
 {
     return cppu::UnoType<drawing::XShape>::get();
 }
@@ -321,7 +321,7 @@ uno::Reference< container::XEnumeration > SAL_CALL ScVbaSheetObjectsBase::create
 
 // XElementAccess
 
-uno::Type SAL_CALL ScVbaSheetObjectsBase::getElementType()
+cpo::uno::Type SAL_CALL ScVbaSheetObjectsBase::getElementType()
 {
     return mxContainer->getVbaType();
 }
@@ -381,7 +381,7 @@ public:
         const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
-        const uno::Type& rVbaType,
+        const cpo::uno::Type& rVbaType,
         OUString aModelServiceName,
         sal_Int16 /* css::form::FormComponentType */ eType );
 
@@ -408,7 +408,7 @@ ScVbaControlContainer::ScVbaControlContainer(
         const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
-        const uno::Type& rVbaType,
+        const cpo::uno::Type& rVbaType,
         OUString aModelServiceName,
         sal_Int16 /* css::form::FormComponentType */ eType ) :
     ScVbaObjectContainer( rxParent, rxContext, rxModel, rxSheet, rVbaType ),

@@ -144,7 +144,7 @@ void appendPointer(OUStringBuffer & buffer, void * pointer) {
 
 void logException( RuntimeCargo *cargo, const char *intro,
                    void * ptr, std::u16string_view aFunctionName,
-                   const void * data, const css::uno::Type & type )
+                   const void * data, const cpo::uno::Type & type )
 {
     if( isLog( cargo, LogLevel::CALL ) )
     {

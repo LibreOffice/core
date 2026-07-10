@@ -136,11 +136,11 @@ namespace connectivity::skeleton
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing();
         // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException);
+        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) throw(css::uno::RuntimeException);
         virtual void SAL_CALL acquire() throw(css::uno::RuntimeException);
         virtual void SAL_CALL release() throw(css::uno::RuntimeException);
         //XTypeProvider
-        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException);
+        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException);
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException);
         // XResultSet

@@ -151,10 +151,10 @@ public:
     // Interfaces
 
     // ____ XInterface ____
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
 
     // ____ XTypeProvider ____
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
         getTypes() override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId() override;

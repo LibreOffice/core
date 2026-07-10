@@ -175,7 +175,7 @@ void SAL_CALL AccessibleListBoxEntry::disposing()
     m_pTreeListBox = nullptr;
 }
 
-cpo::uno::Any SAL_CALL AccessibleListBoxEntry::queryInterface(const uno::Type& rType)
+cpo::uno::Any SAL_CALL AccessibleListBoxEntry::queryInterface(const cpo::uno::Type& rType)
 {
     if (rType == cppu::UnoType<XAccessibleText>::get())
     {

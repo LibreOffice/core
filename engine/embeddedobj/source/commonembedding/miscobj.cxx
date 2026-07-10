@@ -468,7 +468,7 @@ void OCommonEmbeddedObject::handleLinkedOLE( CopyBackToOLELink eState )
 }
 
 
-cpo::uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aReturn;
 
@@ -755,9 +755,9 @@ cpo::uno::Sequence<OUString> SAL_CALL OCommonEmbeddedObject::getSupportedService
     return { u"com.sun.star.comp.embed.OCommonEmbeddedObject"_ustr };
 }
 
-cpo::uno::Sequence<uno::Type> SAL_CALL OCommonEmbeddedObject::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> SAL_CALL OCommonEmbeddedObject::getTypes()
 {
-    static const cpo::uno::Sequence<uno::Type> aTypes{
+    static const cpo::uno::Sequence<cpo::uno::Type> aTypes{
         cppu::UnoType<embed::XEmbeddedObject>::get(),
         cppu::UnoType<embed::XEmbedPersist2>::get(),
         cppu::UnoType<embed::XLinkageSupport>::get(),

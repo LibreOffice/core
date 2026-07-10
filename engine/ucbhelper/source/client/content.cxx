@@ -133,7 +133,7 @@ public:
         : m_rContent( rContent ) {}
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         noexcept override;
     virtual void SAL_CALL release()
@@ -1300,7 +1300,7 @@ void SAL_CALL ContentEventListener_Impl::release()
     OWeakObject::release();
 }
 
-cpo::uno::Any SAL_CALL ContentEventListener_Impl::queryInterface( const css::uno::Type & rType )
+cpo::uno::Any SAL_CALL ContentEventListener_Impl::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = cppu::queryInterface( rType,
                                                static_cast< XContentEventListener* >(this),

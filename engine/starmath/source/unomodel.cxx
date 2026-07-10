@@ -329,7 +329,7 @@ SmModel::~SmModel() noexcept
 
 SmDocShell* SmModel::GetSmDocShell() const { return static_cast<SmDocShell*>(GetObjectShell()); }
 
-cpo::uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL SmModel::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aRet =  ::cppu::queryInterface ( rType,
                                     // PropertySetHelper interfaces
@@ -353,7 +353,7 @@ void SAL_CALL SmModel::release() noexcept
     OWeakObject::release();
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  )
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SmModel::getTypes(  )
 {
     return comphelper::concatSequences(SfxBaseModel::getTypes(),
         cpo::uno::Sequence  {

@@ -64,7 +64,7 @@ vcl::unohelper::DragAndDropWrapper::~DragAndDropWrapper()
 }
 
 // uno::XInterface
-cpo::uno::Any vcl::unohelper::DragAndDropWrapper::queryInterface( const uno::Type & rType )
+cpo::uno::Any vcl::unohelper::DragAndDropWrapper::queryInterface( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aRet = ::cppu::queryInterface( rType,
                             static_cast< css::lang::XEventListener* >( static_cast<css::datatransfer::dnd::XDragGestureListener*>(this) ),

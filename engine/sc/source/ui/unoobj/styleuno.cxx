@@ -510,7 +510,7 @@ cpo::uno::Any SAL_CALL ScStyleFamiliesObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(uno::Reference< container::XNameContainer >(xFamily));
 }
 
-uno::Type SAL_CALL ScStyleFamiliesObj::getElementType()
+cpo::uno::Type SAL_CALL ScStyleFamiliesObj::getElementType()
 {
     return cppu::UnoType<container::XNameContainer>::get();    // has to fit to getByIndex
 }
@@ -834,7 +834,7 @@ cpo::uno::Any SAL_CALL ScStyleFamilyObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(uno::Reference< style::XStyle >(xObj));
 }
 
-uno::Type SAL_CALL ScStyleFamilyObj::getElementType()
+cpo::uno::Type SAL_CALL ScStyleFamilyObj::getElementType()
 {
     return cppu::UnoType<style::XStyle>::get();    // has to fit to getByIndex
 }

@@ -65,7 +65,7 @@ import com.sun.star.script.XEventAttacherManager;
 import com.sun.star.script.XLibraryContainer;
 import com.sun.star.task.XJob;
 import com.sun.star.uno.Exception;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.InvalidStateException;

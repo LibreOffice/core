@@ -22,7 +22,7 @@ import lib.MultiPropertyTest;
 
 import com.sun.star.text.XTextColumns;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+import cpo.uno.Type;
 
 /**
  * Testing <code>com.sun.star.text.TextSection</code>

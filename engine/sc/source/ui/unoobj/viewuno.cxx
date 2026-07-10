@@ -148,7 +148,7 @@ void ScViewPaneBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         pViewShell = nullptr;
 }
 
-cpo::uno::Any SAL_CALL ScViewPaneBase::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL ScViewPaneBase::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aReturn = ::cppu::queryInterface(rType,
                     static_cast<sheet::XViewPane*>(this),
@@ -163,9 +163,9 @@ cpo::uno::Any SAL_CALL ScViewPaneBase::queryInterface( const uno::Type& rType )
     return cpo::uno::Any();          // OWeakObject is in derived objects
 }
 
-cpo::uno::Sequence<uno::Type> SAL_CALL ScViewPaneBase::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> SAL_CALL ScViewPaneBase::getTypes()
 {
-    static const cpo::uno::Sequence<uno::Type> aTypes
+    static const cpo::uno::Sequence<cpo::uno::Type> aTypes
     {
         cppu::UnoType<sheet::XViewPane>::get(),
         cppu::UnoType<sheet::XCellRangeReferrer>::get(),
@@ -422,7 +422,7 @@ ScViewPaneObj::~ScViewPaneObj()
 {
 }
 
-cpo::uno::Any SAL_CALL ScViewPaneObj::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL ScViewPaneObj::queryInterface( const cpo::uno::Type& rType )
 {
     //  ScViewPaneBase has everything except OWeakObject
 
@@ -474,7 +474,7 @@ ScTabViewObj::~ScTabViewObj()
     }
 }
 
-cpo::uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
+cpo::uno::Any SAL_CALL ScTabViewObj::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aReturn = ::cppu::queryInterface(rType,
                     static_cast<sheet::XSpreadsheetView*>(this),
@@ -583,12 +583,12 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
     nPreviousTab = nNewTab;
 }
 
-cpo::uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> SAL_CALL ScTabViewObj::getTypes()
 {
     return comphelper::concatSequences(
         ScViewPaneBase::getTypes(),
         SfxBaseController::getTypes(),
-        cpo::uno::Sequence<uno::Type>
+        cpo::uno::Sequence<cpo::uno::Type>
         {
             cppu::UnoType<sheet::XSpreadsheetView>::get(),
             cppu::UnoType<container::XEnumerationAccess>::get(),
@@ -1021,7 +1021,7 @@ cpo::uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
     return cpo::uno::Any(uno::Reference<sheet::XViewPane>(xPane));
 }
 
-uno::Type SAL_CALL ScTabViewObj::getElementType()
+cpo::uno::Type SAL_CALL ScTabViewObj::getElementType()
 {
     return cppu::UnoType<sheet::XViewPane>::get();
 }
@@ -2224,7 +2224,7 @@ ScPreviewObj::~ScPreviewObj()
         EndListening(*mpViewShell);
 }
 
-cpo::uno::Any ScPreviewObj::queryInterface(const uno::Type& rType)
+cpo::uno::Any ScPreviewObj::queryInterface(const cpo::uno::Type& rType)
 {
     cpo::uno::Any aReturn = ::cppu::queryInterface(rType,
                     static_cast<sheet::XSelectedSheetsSupplier*>(this));

@@ -217,7 +217,7 @@ public:
     cpo::uno::Sequence< OUString > _getSupportedServiceNames();
 
     /// @throws css::uno::RuntimeException
-    cpo::uno::Sequence< css::uno::Type > const & _getTypes(  );
+    cpo::uno::Sequence< cpo::uno::Type > const & _getTypes(  );
 
     void setMaster( SvxShapeMaster* pMaster );
 
@@ -225,7 +225,7 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) noexcept override final;
 
     // XAggregation
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& aType ) override;
 
     // XNamed
     virtual OUString SAL_CALL getName(  ) override;
@@ -290,7 +290,7 @@ public:
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XActionLockable
@@ -349,8 +349,8 @@ public:
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { SvxShape::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -371,7 +371,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 };
 
@@ -382,8 +382,8 @@ public:
     virtual ~SvxShapeRect() noexcept override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { OWeakAggObject::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -430,8 +430,8 @@ public:
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { SvxShape::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -446,7 +446,7 @@ public:
     virtual void SAL_CALL addBottom( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // XIndexAccess
@@ -482,7 +482,7 @@ public:
     virtual ~SvxShapeConnector() noexcept override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 };
 
@@ -500,8 +500,8 @@ public:
     virtual ~SvxShapeControl() noexcept override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { SvxShapeText::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -530,7 +530,7 @@ public:
     virtual void SAL_CALL setControl( const css::uno::Reference< css::awt::XControlModel >& xControl ) override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 };
 
@@ -651,8 +651,8 @@ public:
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { SvxShape::acquire(); }
     virtual void SAL_CALL release() noexcept override
@@ -663,7 +663,7 @@ public:
     virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
     virtual bool SAL_CALL hasElements(  ) override;
 
     // XIndexAccess
@@ -784,8 +784,8 @@ public:
     virtual ~SvxCustomShape() noexcept override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
     { SvxShapeText::acquire(); }
     virtual void SAL_CALL release() noexcept override

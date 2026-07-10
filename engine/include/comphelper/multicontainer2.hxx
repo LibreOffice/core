@@ -64,14 +64,14 @@ public:
     /**
       Return all id's under which at least one interface is added.
      */
-    std::vector<css::uno::Type> getContainedTypes() const;
+    std::vector<cpo::uno::Type> getContainedTypes() const;
 
     /**
       Return the container created under this key.
       @return the container created under this key. If the container
                  was not created, null was returned.
      */
-    OInterfaceContainerHelper2* getContainer(const css::uno::Type& rKey) const;
+    OInterfaceContainerHelper2* getContainer(const cpo::uno::Type& rKey) const;
 
     /** Inserts an element into the container with the specified key.
         The position is not specified, thus it is not specified in which order events are fired.
@@ -91,7 +91,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 addInterface(const css::uno::Type& rKey,
+    sal_Int32 addInterface(const cpo::uno::Type& rKey,
                            const css::uno::Reference<css::uno::XInterface>& r);
 
     /** Removes an element from the container with the specified key.
@@ -104,7 +104,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 removeInterface(const css::uno::Type& rKey,
+    sal_Int32 removeInterface(const cpo::uno::Type& rKey,
                               const css::uno::Reference<css::uno::XInterface>& rxIFace);
 
     /**
@@ -117,14 +117,14 @@ public:
      */
     void clear();
 
-    typedef css::uno::Type keyType;
+    typedef cpo::uno::Type keyType;
 
 private:
-    typedef std::vector<std::pair<css::uno::Type, std::unique_ptr<OInterfaceContainerHelper2>>>
+    typedef std::vector<std::pair<cpo::uno::Type, std::unique_ptr<OInterfaceContainerHelper2>>>
         t_type2ptr;
 
-    t_type2ptr::iterator findType(const css::uno::Type& rKey);
-    t_type2ptr::const_iterator findType(const css::uno::Type& rKey) const;
+    t_type2ptr::iterator findType(const cpo::uno::Type& rKey);
+    t_type2ptr::const_iterator findType(const cpo::uno::Type& rKey) const;
 
     t_type2ptr m_aMap;
     ::osl::Mutex& rMutex;

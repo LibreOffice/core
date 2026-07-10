@@ -42,7 +42,7 @@ namespace framework
 
             // XElementAccess
             virtual bool SAL_CALL hasElements() override;
-            virtual css::uno::Type SAL_CALL getElementType(  ) override;
+            virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
 
         private:
             typedef std::unordered_map<OUString, css::uno::Reference< css::graphic::XGraphic >> NameGraphicHashMap;

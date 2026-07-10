@@ -51,7 +51,7 @@ forms/source/xforms/datatypes.hxx:234
 forms/source/xforms/datatypes.hxx:237
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySetInfo> xforms::ODerivedDataType::getPropertySetInfo()
 forms/source/xforms/namedcollection.hxx:80
-    class com::sun::star::uno::Type NamedCollection::getElementType()
+    class cpo::uno::Type NamedCollection::getElementType()
 forms/source/xforms/namedcollection.hxx:85
     unsigned char NamedCollection::hasElements()
 forms/source/xforms/namedcollection.hxx:91

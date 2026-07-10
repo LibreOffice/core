@@ -230,7 +230,7 @@ void SvxShape::setMaster( SvxShapeMaster* pMaster )
 }
 
 
-cpo::uno::Any SAL_CALL SvxShape::queryAggregation( const uno::Type& rType )
+cpo::uno::Any SAL_CALL SvxShape::queryAggregation( const cpo::uno::Type& rType )
 {
     if( mpImpl->mpMaster )
     {
@@ -709,7 +709,7 @@ cpo::uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     return aAny;
 }
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxShape::getTypes()
 {
     if( mpImpl->mpMaster )
     {
@@ -722,7 +722,7 @@ cpo::uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
 }
 
 
-cpo::uno::Sequence< uno::Type > const & SvxShape::_getTypes()
+cpo::uno::Sequence< cpo::uno::Type > const & SvxShape::_getTypes()
 {
     switch( mpImpl->mnObjId )
     {
@@ -737,7 +737,7 @@ cpo::uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     case SdrObjKind::Media:
     case SdrObjKind::Table:
         {
-            static cpo::uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<cpo::uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -757,7 +757,7 @@ cpo::uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     // group shape
     case SdrObjKind::Group:
         {
-            static cpo::uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<cpo::uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -779,7 +779,7 @@ cpo::uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     // connector shape
     case SdrObjKind::Edge:
         {
-            static cpo::uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<cpo::uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -804,7 +804,7 @@ cpo::uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     // control shape
     case SdrObjKind::UNO:
         {
-            static cpo::uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<cpo::uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -825,7 +825,7 @@ cpo::uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     // 3d scene shape
     case SdrObjKind::E3D_Scene:
         {
-            static cpo::uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<cpo::uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -845,7 +845,7 @@ cpo::uno::Sequence< uno::Type > const & SvxShape::_getTypes()
         }
     case SdrObjKind::CustomShape:
         {
-            static cpo::uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<cpo::uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -886,7 +886,7 @@ cpo::uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     case SdrObjKind::OLE2: // #i118485# Moved to shapes with text
     default:
         {
-            static cpo::uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<cpo::uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -3835,13 +3835,13 @@ void SvxShapeText::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 
 // XInterface
 
-cpo::uno::Any SAL_CALL SvxShapeText::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeText::queryInterface( const cpo::uno::Type & rType )
 {
     return SvxShape::queryInterface( rType );
 }
 
 
-cpo::uno::Any SAL_CALL SvxShapeText::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeText::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny( SvxShape::queryAggregation( rType ) );
     if( aAny.hasValue() )
@@ -3872,7 +3872,7 @@ bool SAL_CALL SvxShapeText::supportsService( const OUString& ServiceName )
 
     // XTypeProvider
 
-cpo::uno::Sequence< uno::Type > SAL_CALL SvxShapeText::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxShapeText::getTypes()
 {
     return SvxShape::getTypes();
 }
@@ -4007,12 +4007,12 @@ SvxShapeRect::~SvxShapeRect() noexcept
 {
 }
 
-cpo::uno::Any SAL_CALL SvxShapeRect::queryInterface( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeRect::queryInterface( const cpo::uno::Type & rType )
 {
     return SvxShapeText::queryInterface( rType );
 }
 
-cpo::uno::Any SAL_CALL SvxShapeRect::queryAggregation( const uno::Type & rType )
+cpo::uno::Any SAL_CALL SvxShapeRect::queryAggregation( const cpo::uno::Type & rType )
 {
     return SvxShapeText::queryAggregation( rType );
 }

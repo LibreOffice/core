@@ -727,7 +727,7 @@ ChartDocumentWrapper::~ChartDocumentWrapper()
 
 // ____ XInterface (for new interfaces) ____
 // [-loplugin:unoaggregation]
-cpo::uno::Any SAL_CALL ChartDocumentWrapper::queryInterface( const uno::Type& aType )
+cpo::uno::Any SAL_CALL ChartDocumentWrapper::queryInterface( const cpo::uno::Type& aType )
 {
     if( m_xDelegator.is())
         // calls queryAggregation if the delegator doesn't know aType
@@ -1462,7 +1462,7 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
     }
 }
 
-cpo::uno::Any SAL_CALL ChartDocumentWrapper::queryAggregation( const uno::Type& rType )
+cpo::uno::Any SAL_CALL ChartDocumentWrapper::queryAggregation( const cpo::uno::Type& rType )
 {
     return ChartDocumentWrapper_Base::queryInterface( rType );
 }

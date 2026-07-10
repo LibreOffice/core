@@ -604,7 +604,7 @@ using namespace cpo::uno;
         return aBuffer.makeStringAndClear();
     }
 
-    token::XMLTokenEnum OPropertyExport::implGetPropertyXMLType(const css::uno::Type& _rType)
+    token::XMLTokenEnum OPropertyExport::implGetPropertyXMLType(const cpo::uno::Type& _rType)
     {
         // handle the type description
         switch (_rType.getTypeClass())

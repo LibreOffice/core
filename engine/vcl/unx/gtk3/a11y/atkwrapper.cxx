@@ -18,7 +18,7 @@
  */
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleRelation.hpp>
@@ -756,7 +756,7 @@ atk_object_wrapper_get_type()
 }
 
 static bool
-isOfType( uno::XInterface *pInterface, const uno::Type & rType )
+isOfType( uno::XInterface *pInterface, const cpo::uno::Type & rType )
 {
     g_return_val_if_fail( pInterface != nullptr, false );
 
@@ -816,7 +816,7 @@ constexpr struct {
         OString sName;
         GInterfaceInitFunc const   aInit;
         GetGIfaceType const        aGetGIfaceType;
-        const uno::Type &  (*aGetUnoType) ();
+        const cpo::uno::Type &  (*aGetUnoType) ();
 } aTypeTable[] = {
 // re-location heaven:
     {

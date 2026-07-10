@@ -356,7 +356,7 @@
 
 #include <memory>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -458,7 +458,7 @@ void Test::testBigStruct() {
 #endif
 #endif
 
-    css::uno::Type t(
+    cpo::uno::Type t(
         cppu::UnoType< test::codemaker::cppumaker::BigStruct >::get());
     typelib_TypeDescription * td = nullptr;
     t.getDescription(&td);

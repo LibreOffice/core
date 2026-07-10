@@ -103,7 +103,7 @@ include/comphelper/interfacecontainer4.hxx:66
 include/comphelper/interfacecontainer4.hxx:100
     comphelper::OInterfaceIteratorHelper4<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper4>(const comphelper::OInterfaceIteratorHelper4<ListenerT> &)
 include/comphelper/multicontainer2.hxx:94
-    int comphelper::OMultiTypeInterfaceContainerHelper2::addInterface(const com::sun::star::uno::Type &,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
+    int comphelper::OMultiTypeInterfaceContainerHelper2::addInterface(const cpo::uno::Type &,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
 include/editeng/editview.hxx:290
     ErrCode EditView::Read(SvStream &,enum EETextFormat,SvKeyValueIterator *)
 include/editeng/outliner.hxx:335

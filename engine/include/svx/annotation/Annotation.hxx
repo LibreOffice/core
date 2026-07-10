@@ -149,7 +149,7 @@ public:
     Annotation& operator=(const Annotation&) = delete;
 
     // XInterface:
-    virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const& type) override;
+    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const& type) override;
     virtual void SAL_CALL acquire() noexcept override
     {
         comphelper::WeakComponentImplHelper<css::office::XAnnotation>::acquire();
