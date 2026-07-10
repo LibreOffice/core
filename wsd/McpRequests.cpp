@@ -23,6 +23,7 @@
 #include <net/HttpRequest.hpp>
 #include <net/Socket.hpp>
 #include <wsd/COOLWSD.hpp>
+#include <wsd/ContentType.hpp>
 #include <wsd/McpServer.hpp>
 #include <wsd/McpTools.hpp>
 #include <wsd/McpUploads.hpp>
@@ -70,21 +71,40 @@ bool constantTimeEquals(const std::string& expected, const std::string& given)
     return difference == 0;
 }
 
-/// Load the document named by input and run one extract request over it, driving the same stateless
-/// broker that the convert-to extract endpoints use. The outcome is delivered through complete.
-/// Returns true when the request was started and will complete later, false when it failed right
-/// away and complete has already been called.
-bool startMcpExtraction(const std::string& requestType, const std::string& filter,
-                        const McpTools::ResolvedInput& input, SocketDisposition& disposition,
-                        const std::string& id, const McpServer::McpToolCompletion& complete)
+/// What the convert-to broker is asked to do with the document. A tool fills in only the fields its
+/// own request type reads and leaves the rest empty.
+struct McpBrokerRequest
+{
+    std::string requestType;
+    std::string format;
+    std::string options;
+    std::string lang;
+    std::string target;
+    std::string filter;
+    std::string transformJSON;
+};
+
+/// Puts the responder that carries one request's outcome on the broker.
+using McpResponderInstaller = std::function<void(const std::shared_ptr<ConvertToBroker>&)>;
+
+/// Load the document named by input and run one request over it, driving the same stateless broker
+/// that the convert-to endpoints use. The client socket moves to the broker through disposition, in
+/// the same way a convert-to request does. The outcome is delivered through complete, by way of the
+/// responder that installResponder puts on the broker. Returns true when the request was started
+/// and will complete later, false when it failed right away and complete has already been called.
+bool startMcpDocumentRequest(const McpBrokerRequest& brokerRequest,
+                             const McpTools::ResolvedInput& input,
+                             const McpResponderInstaller& installResponder,
+                             SocketDisposition& disposition, const std::string& id,
+                             const McpServer::McpToolCompletion& complete)
 {
     Poco::URI uriPublic = RequestDetails::sanitizeLocalPath(input.fromPath);
     const std::string docKey = RequestDetails::getDocKey(uriPublic);
 
     std::shared_ptr<ConvertToBroker> docBroker = getConvertToBrokerImplementation(
-        requestType, input.fromPath, uriPublic, docKey, /*format=*/std::string(),
-        /*options=*/std::string(), /*lang=*/std::string(), /*target=*/std::string(), filter,
-        /*transformJSON=*/std::string());
+        brokerRequest.requestType, input.fromPath, uriPublic, docKey, brokerRequest.format,
+        brokerRequest.options, brokerRequest.lang, brokerRequest.target, brokerRequest.filter,
+        brokerRequest.transformJSON);
     if (!docBroker)
     {
         StatelessBatchBroker::removeFile(input.fromPath);
@@ -92,16 +112,7 @@ bool startMcpExtraction(const std::string& requestType, const std::string& filte
         return false;
     }
 
-    // A successful extraction carries its payload straight back to the model; a failure becomes a
-    // readable message the model can react to.
-    docBroker->setExtractResponder(
-        [complete](bool success, const std::string& payload)
-        {
-            if (success)
-                complete({ /*isError=*/false, payload });
-            else
-                complete({ /*isError=*/true, McpTools::describeFailure(payload, "processed") });
-        });
+    installResponder(docBroker);
 
     std::unique_lock<std::mutex> docBrokersLock(DocBrokersMutex);
     COOLWSD::cleanupDocBrokers();
@@ -109,6 +120,108 @@ bool startMcpExtraction(const std::string& requestType, const std::string& filte
 
     docBroker->startConversion(disposition, id, AdditionalFilePocoUris());
     return true;
+}
+
+/// Turns the input part of a tool's arguments into a document and starts the work that tool does
+/// with it. Returns whether the work was started and will report its own outcome later.
+using McpDocumentWork = std::function<bool(const McpTools::ResolvedInput&)>;
+
+/// Read the input part of a tool's arguments and hand the document to startWork. An input that is
+/// refused becomes the tool's failure. Returns whether the outcome reached complete before this
+/// call returned.
+bool runWithDocument(const Poco::JSON::Object::Ptr& arguments,
+                     const McpServer::McpToolCompletion& complete, const McpDocumentWork& startWork)
+{
+    const McpTools::ResolvedInput input = McpTools::resolveInput(arguments);
+    if (!input.ok)
+    {
+        complete({ /*isError=*/true, input.errorText });
+        return true;
+    }
+
+    return !startWork(input);
+}
+
+/// Run one extract request over the document named by input. The extracted payload comes back
+/// through complete.
+bool startMcpExtraction(const std::string& requestType, const std::string& filter,
+                        const McpTools::ResolvedInput& input, SocketDisposition& disposition,
+                        const std::string& id, const McpServer::McpToolCompletion& complete)
+{
+    McpBrokerRequest brokerRequest;
+    brokerRequest.requestType = requestType;
+    brokerRequest.filter = filter;
+
+    // A successful extraction carries its payload straight back to the model; a failure becomes a
+    // readable message the model can react to.
+    const McpResponderInstaller installResponder =
+        [complete](const std::shared_ptr<ConvertToBroker>& docBroker)
+    {
+        docBroker->setExtractResponder(
+            [complete](bool success, const std::string& payload)
+            {
+                if (success)
+                    complete({ /*isError=*/false, payload });
+                else
+                    complete({ /*isError=*/true, McpTools::describeFailure(payload, "processed") });
+            });
+    };
+
+    return startMcpDocumentRequest(brokerRequest, input, installResponder, disposition, id,
+                                   complete);
+}
+
+/// Build a tool result that carries a produced document. The document comes back to the model as an
+/// embedded resource, with its media type derived from the result file name.
+McpServer::McpToolResult makeDocumentResult(std::string bytes, const std::string& filename)
+{
+    McpServer::McpToolResult result;
+    result.isDocument = true;
+    result.documentBytes = std::move(bytes);
+    result.documentFilename = filename.empty() ? "document" : filename;
+    result.documentMimeType = std::string(ContentType::fromFileName(result.documentFilename));
+    return result;
+}
+
+/// Run one conversion or transform over the document named by input. The produced document comes
+/// back through complete as an embedded resource.
+bool startMcpConversion(const std::string& requestType, const std::string& format,
+                        const std::string& options, const std::string& lang,
+                        const std::string& transformJSON, const McpTools::ResolvedInput& input,
+                        SocketDisposition& disposition, const std::string& id,
+                        const McpServer::McpToolCompletion& complete)
+{
+    McpBrokerRequest brokerRequest;
+    brokerRequest.requestType = requestType;
+    brokerRequest.format = format;
+    brokerRequest.options = options;
+    brokerRequest.lang = lang;
+    brokerRequest.transformJSON = transformJSON;
+
+    // A successful conversion carries the produced document straight back to the model; a failure
+    // becomes a readable message the model can react to.
+    const McpResponderInstaller installResponder =
+        [complete](const std::shared_ptr<ConvertToBroker>& docBroker)
+    {
+        docBroker->setSaveAsResponder(
+            [complete](bool success, std::string payloadOrError, const std::string& filename,
+                       const std::string& note)
+            {
+                if (!success)
+                {
+                    complete({ /*isError=*/true,
+                               McpTools::describeFailure(payloadOrError, "produced") });
+                    return;
+                }
+                McpServer::McpToolResult result =
+                    makeDocumentResult(std::move(payloadOrError), filename);
+                result.note = note;
+                complete(std::move(result));
+            });
+    };
+
+    return startMcpDocumentRequest(brokerRequest, input, installResponder, disposition, id,
+                                   complete);
 }
 }
 
@@ -501,13 +614,6 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
                     return true;
                 }
 
-                McpTools::ResolvedInput input = McpTools::resolveInput(arguments);
-                if (!input.ok)
-                {
-                    complete({ /*isError=*/true, input.errorText });
-                    return true;
-                }
-
                 // A spreadsheet range or sheet, or a text-document target, is folded into the text
                 // filter as a ",name:value" part, and any of them alone asks for the text view. The
                 // target and the sheet may hold spaces and the separator character, so they are
@@ -528,9 +634,14 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
                 if (textFilter && !target.empty())
                     filter += ",target:" + Uri::encode(target, "%|,/?:@&=+$#");
 
-                const bool started = startMcpExtraction("extract-document-structure", filter, input,
-                                                        disposition, sessionId, complete);
-                return !started;
+                return runWithDocument(arguments, complete,
+                                       [&disposition, sessionId, filter,
+                                        complete](const McpTools::ResolvedInput& input)
+                                       {
+                                           return startMcpExtraction("extract-document-structure",
+                                                                     filter, input, disposition,
+                                                                     sessionId, complete);
+                                       });
             };
         }
         else if (tool.name == McpServer::ToolName::ExtractLinkTargets)
@@ -538,16 +649,79 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
             tool.executor = [&disposition, sessionId](const Poco::JSON::Object::Ptr& arguments,
                                                       const McpServer::McpToolCompletion& complete)
             {
-                McpTools::ResolvedInput input = McpTools::resolveInput(arguments);
-                if (!input.ok)
+                return runWithDocument(
+                    arguments, complete,
+                    [&disposition, sessionId, complete](const McpTools::ResolvedInput& input)
+                    {
+                        return startMcpExtraction("extract-link-targets", std::string(), input,
+                                                  disposition, sessionId, complete);
+                    });
+            };
+        }
+        else if (tool.name == McpServer::ToolName::ConvertDocument)
+        {
+            tool.executor = [&disposition, sessionId](const Poco::JSON::Object::Ptr& arguments,
+                                                      const McpServer::McpToolCompletion& complete)
+            {
+                std::optional<McpServer::McpToolResult> invalid =
+                    McpServer::validateConvertArguments(arguments);
+                if (invalid)
                 {
-                    complete({ /*isError=*/true, input.errorText });
+                    complete(*invalid);
                     return true;
                 }
 
-                const bool started = startMcpExtraction("extract-link-targets", std::string(),
-                                                        input, disposition, sessionId, complete);
-                return !started;
+                const std::string format =
+                    arguments->optValue<std::string>("format", std::string());
+                const std::string options =
+                    arguments->optValue<std::string>("options", std::string());
+                const std::string lang = arguments->optValue<std::string>("lang", std::string());
+
+                return runWithDocument(arguments, complete,
+                                       [&disposition, sessionId, format, options, lang,
+                                        complete](const McpTools::ResolvedInput& input)
+                                       {
+                                           return startMcpConversion(
+                                               "convert-to", format, options, lang,
+                                               /*transformJSON=*/std::string(), input, disposition,
+                                               sessionId, complete);
+                                       });
+            };
+        }
+        else if (tool.name == McpServer::ToolName::TransformDocumentStructure)
+        {
+            tool.executor = [&disposition, sessionId](const Poco::JSON::Object::Ptr& arguments,
+                                                      const McpServer::McpToolCompletion& complete)
+            {
+                std::optional<McpServer::McpToolResult> invalid =
+                    McpServer::validateTransformArguments(arguments);
+                if (invalid)
+                {
+                    complete(*invalid);
+                    return true;
+                }
+
+                // The transform is a JSON string that may hold spaces and other characters that the
+                // engine-side command is split on, so it is percent-encoded before it reaches the
+                // kit.
+                const std::string transform =
+                    arguments->optValue<std::string>("transform", std::string());
+                std::string encodedTransform;
+                Poco::URI::encode(transform, "", encodedTransform);
+
+                const std::string format =
+                    arguments->optValue<std::string>("format", std::string());
+
+                return runWithDocument(arguments, complete,
+                                       [&disposition, sessionId, format, encodedTransform,
+                                        complete](const McpTools::ResolvedInput& input)
+                                       {
+                                           return startMcpConversion(
+                                               "transform-document-structure", format,
+                                               /*options=*/std::string(),
+                                               /*lang=*/std::string(), encodedTransform, input,
+                                               disposition, sessionId, complete);
+                                       });
             };
         }
 

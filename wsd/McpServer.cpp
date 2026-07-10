@@ -13,15 +13,18 @@
 
 #include <wsd/McpServer.hpp>
 
+#include <wsd/AIUtil.hpp>
 #include <wsd/DocumentToolDescriptions.hpp>
 
 #include <common/Log.hpp>
 #include <common/Util.hpp>
+#include <common/base64.hpp>
 
 #include <Poco/Dynamic/Var.h>
 #include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
 #include <Poco/JSON/Parser.h>
+#include <Poco/URI.h>
 
 #include <algorithm>
 #include <optional>
@@ -92,18 +95,45 @@ std::string makeResultBody(const Poco::Dynamic::Var& id, const Poco::JSON::Objec
     return stringify(root);
 }
 
-// Wrap a tool outcome as a tools/call result. The text is carried in a single text content block,
-// and isError says whether that text is a failure the model should read or the tool's successful
-// output.
+// Wrap a tool outcome as a tools/call result. A text outcome is carried in a single text content
+// block. A document outcome is carried in one embedded resource content block whose blob is the
+// document bytes encoded as base64. A note follows as a further text content block. isError says
+// whether the outcome is a failure the model should read or the tool's successful output.
 std::string makeToolResultBody(const Poco::Dynamic::Var& id,
                                const McpServer::McpToolResult& outcome)
 {
-    Poco::JSON::Object::Ptr textBlock = new Poco::JSON::Object();
-    textBlock->set("type", "text");
-    textBlock->set("text", outcome.text);
+    Poco::JSON::Object::Ptr block = new Poco::JSON::Object();
+    if (outcome.isDocument)
+    {
+        // The file name is one path segment of the URI, with every character outside the unreserved
+        // set percent-encoded.
+        std::string encodedFilename;
+        Poco::URI::encode(outcome.documentFilename, "!#$&'()*+,/:;=?@[]%", encodedFilename);
+
+        Poco::JSON::Object::Ptr resource = new Poco::JSON::Object();
+        resource->set("uri", "cool://converted/" + encodedFilename);
+        resource->set("mimeType", outcome.documentMimeType);
+        resource->set("blob", macaron::Base64::Encode(outcome.documentBytes));
+
+        block->set("type", "resource");
+        block->set("resource", resource);
+    }
+    else
+    {
+        block->set("type", "text");
+        block->set("text", outcome.text);
+    }
 
     Poco::JSON::Array::Ptr content = new Poco::JSON::Array();
-    content->add(textBlock);
+    content->add(block);
+
+    if (!outcome.note.empty())
+    {
+        Poco::JSON::Object::Ptr note = new Poco::JSON::Object();
+        note->set("type", "text");
+        note->set("text", outcome.note);
+        content->add(note);
+    }
 
     Poco::JSON::Object::Ptr result = new Poco::JSON::Object();
     result->set("content", content);
@@ -214,6 +244,79 @@ std::string makeExtractLinkTargetsDescription()
            InputAlternativesDescription;
 }
 
+// Mark the named properties as required in a schema.
+void setRequired(Poco::JSON::Object::Ptr schema, const std::vector<std::string>& names)
+{
+    Poco::JSON::Array::Ptr required = new Poco::JSON::Array();
+    for (const std::string& name : names)
+        required->add(name);
+    schema->set("required", required);
+}
+
+Poco::JSON::Object::Ptr makeConvertDocumentSchema()
+{
+    Poco::JSON::Object::Ptr properties = new Poco::JSON::Object();
+    addInputProperties(properties);
+    addStringProperty(properties, "format",
+                      "The target file format as an extension, for example \"pdf\", \"odt\" or "
+                      "\"docx\".");
+    addStringProperty(properties, "options",
+                      "Filter options passed to the document engine, in the same form the "
+                      "convert-to endpoint accepts.");
+    addStringProperty(properties, "lang",
+                      "The language to load the document in, as a language tag such as \"en-US\".");
+    Poco::JSON::Object::Ptr schema = makeObjectSchema(properties);
+    setRequired(schema, { "format" });
+    return schema;
+}
+
+Poco::JSON::Object::Ptr makeTransformDocumentStructureSchema()
+{
+    Poco::JSON::Object::Ptr properties = new Poco::JSON::Object();
+    addInputProperties(properties);
+    addStringProperty(properties, "transform",
+                      "A JSON string describing the changes to make, following the transform "
+                      "grammar.");
+    addStringProperty(properties, "format",
+                      "The file format the changed document is returned in, as an extension. When "
+                      "it is left out the document is returned in the format it came in.");
+    Poco::JSON::Object::Ptr schema = makeObjectSchema(properties);
+    setRequired(schema, { "transform" });
+    return schema;
+}
+
+std::string makeConvertDocumentDescription()
+{
+    return std::string(
+               "Convert a document to another file format and return the converted document. Set "
+               "\"format\" to the target format as an extension, for example \"pdf\", \"odt\" or "
+               "\"docx\". The converted document comes back as an embedded resource.") +
+           InputAlternativesDescription;
+}
+
+std::string makeTransformDocumentStructureDescription()
+{
+    return std::string(
+               "Change a text document or a presentation and return the changed document. A "
+               "spreadsheet cannot be transformed. For a text document, a transform fills content "
+               "controls, sets document properties under \"DocumentProperties\" (for example "
+               "\"Title\", \"Subject\", \"Author\", \"Description\" or \"Keywords\" as a list), "
+               "changes chart data under \"Charts.ByIndex.N\", replaces text throughout the "
+               "document under \"ReplaceText\", and runs a top-level \"UnoCommand\" from the "
+               "list of allowed commands. For a presentation, it runs \"SlideCommands\", "
+               "described below. A "
+               "transform that names a command or key the server does not know, or a command "
+               "that is not allowed, is refused, and the failure names it. Warnings about "
+               "commands that ran with a problem come back as a note after the document.\n\n") +
+           DocumentToolDescriptions::TRANSFORM_INTRO +
+           DocumentToolDescriptions::TRANSFORM_IMPRESS_INTRO + AIUtil::getSlideCommandDocs() +
+           DocumentToolDescriptions::TRANSFORM_IMPRESS_DETAILS +
+           DocumentToolDescriptions::TRANSFORM_WRITER +
+           " The changed document is returned as an embedded resource. Set \"format\" to return it "
+           "in a different file format." +
+           InputAlternativesDescription;
+}
+
 // Serialise the tools as the array a tools/list response carries.
 Poco::JSON::Array::Ptr makeToolsArray(const std::vector<McpServer::McpTool>& tools)
 {
@@ -274,6 +377,20 @@ std::vector<McpServer::McpTool> McpServer::documentToolDefinitions()
         links.inputSchema = makeExtractLinkTargetsSchema();
         tools.push_back(std::move(links));
 
+        McpTool convert;
+        convert.name = ToolName::ConvertDocument;
+        convert.title = "Convert document";
+        convert.description = makeConvertDocumentDescription();
+        convert.inputSchema = makeConvertDocumentSchema();
+        tools.push_back(std::move(convert));
+
+        McpTool transform;
+        transform.name = ToolName::TransformDocumentStructure;
+        transform.title = "Transform document";
+        transform.description = makeTransformDocumentStructureDescription();
+        transform.inputSchema = makeTransformDocumentStructureSchema();
+        tools.push_back(std::move(transform));
+
         return tools;
     }();
 
@@ -287,16 +404,51 @@ std::string McpServer::withEndpointAddress(const std::string& description,
 }
 
 std::optional<McpServer::McpToolResult>
+McpServer::validateCommandArguments(const Poco::JSON::Object::Ptr& arguments)
+{
+    // An extension or a language tag is a short run of ASCII letters, digits and hyphens.
+    const auto isPlainWord = [](const std::string& value)
+    {
+        return value.size() <= 35 &&
+               std::all_of(value.begin(), value.end(),
+                           [](char character)
+                           {
+                               return (character >= 'a' && character <= 'z') ||
+                                      (character >= 'A' && character <= 'Z') ||
+                                      (character >= '0' && character <= '9') || character == '-';
+                           });
+    };
+
+    if (!isPlainWord(arguments->optValue<std::string>("format", std::string())))
+        return McpToolResult(/*error=*/true, "Set the format argument to a file extension such "
+                                             "as \"pdf\", \"odt\" or \"docx\", made of "
+                                             "letters and digits only.");
+
+    if (!isPlainWord(arguments->optValue<std::string>("lang", std::string())))
+        return McpToolResult(/*error=*/true, "Set the lang argument to a language tag such as "
+                                             "\"en-US\", made of letters, digits and hyphens.");
+
+    const std::string options = arguments->optValue<std::string>("options", std::string());
+    if (std::any_of(options.begin(), options.end(),
+                    [](char character) { return static_cast<unsigned char>(character) < 0x20; }))
+        return McpToolResult(/*error=*/true,
+                             "The options argument holds a control character, such as a line "
+                             "break. Write the options on one line.");
+
+    return std::nullopt;
+}
+
+std::optional<McpServer::McpToolResult>
 McpServer::validateExtractArguments(const Poco::JSON::Object::Ptr& arguments)
 {
     static const std::set<std::string> filters = { "text",     "contentcontrol", "charts",
                                                    "docprops", "trackchanges",   "slides" };
     const std::string filter = arguments->optValue<std::string>("filter", std::string());
     if (!filter.empty() && filters.count(filter) == 0)
-        return McpToolResult{ /*isError=*/true,
-                              "Set the filter argument to one of \"text\", \"contentcontrol\", "
-                              "\"charts\", \"docprops\", \"trackchanges\" or \"slides\", or "
-                              "leave it out." };
+        return McpToolResult(/*error=*/true,
+                             "Set the filter argument to one of \"text\", \"contentcontrol\", "
+                             "\"charts\", \"docprops\", \"trackchanges\" or \"slides\", or "
+                             "leave it out.");
 
     // A range is a cell or a block of cells, such as A1, $A$1 or A1:D100.
     const std::string range = arguments->optValue<std::string>("range", std::string());
@@ -309,11 +461,53 @@ McpServer::validateExtractArguments(const Poco::JSON::Object::Ptr& arguments)
                                 (character >= '0' && character <= '9') || character == ':' ||
                                 character == '$';
                      }))
-        return McpToolResult{ /*isError=*/true,
-                              "Set the range argument to a cell range such as \"A1:D100\", made "
-                              "of letters, digits, colons and dollar signs." };
+        return McpToolResult(/*error=*/true,
+                             "Set the range argument to a cell range such as \"A1:D100\", made "
+                             "of letters, digits, colons and dollar signs.");
 
     return std::nullopt;
+}
+
+std::optional<McpServer::McpToolResult>
+McpServer::validateConvertArguments(const Poco::JSON::Object::Ptr& arguments)
+{
+    const std::string format = arguments->optValue<std::string>("format", std::string());
+    if (format.empty())
+    {
+        McpToolResult result;
+        result.isError = true;
+        result.text = "Set the format argument to the target file format as an extension, for "
+                      "example \"pdf\", \"odt\" or \"docx\".";
+        return result;
+    }
+    return validateCommandArguments(arguments);
+}
+
+std::optional<McpServer::McpToolResult>
+McpServer::validateTransformArguments(const Poco::JSON::Object::Ptr& arguments)
+{
+    const std::string transform = arguments->optValue<std::string>("transform", std::string());
+    if (transform.empty())
+    {
+        McpToolResult result;
+        result.isError = true;
+        result.text = "Set the transform argument to a JSON string describing the changes to make.";
+        return result;
+    }
+
+    try
+    {
+        Poco::JSON::Parser parser;
+        parser.parse(transform);
+    }
+    catch (const std::exception& exc)
+    {
+        McpToolResult result;
+        result.isError = true;
+        result.text = "The transform argument is not valid JSON: " + std::string(exc.what());
+        return result;
+    }
+    return validateCommandArguments(arguments);
 }
 
 bool McpServer::isSupportedProtocolVersion(const std::string& version)

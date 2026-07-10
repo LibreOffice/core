@@ -165,6 +165,25 @@ void ConvertToBroker::failWaitingRequest(const std::string& message)
     _waitingRequestFailure = message;
 }
 
+void ConvertToBroker::dumpState(std::ostream& os)
+{
+    // The base dump ends with its own closing line and a newline, so this one
+    // starts a block of its own after it.
+    DocumentBroker::dumpState(os);
+
+    os << " ConvertToBroker:";
+    os << "\n   format: " << _format;
+    os << "\n   options: " << _options;
+    os << "\n   inFilterOptions: " << _inFilterOptions;
+    os << "\n   lang: " << _lang;
+    os << "\n   extractResponder: " << (_responders && _responders->extract);
+    os << "\n   saveAsResponder: " << (_responders && _responders->saveAs);
+    os << "\n   hasSaveAsResponder: " << _hasSaveAsResponder;
+    os << "\n   waitingSocket: " << !_waitingSocket.expired();
+    os << "\n   waitingRequestFailure: " << _waitingRequestFailure;
+    os << '\n';
+}
+
 void ConvertToBroker::sendStartMessage(const std::shared_ptr<ClientSession>& clientSession,
                                        const std::string& encodedFrom)
 {
@@ -202,8 +221,12 @@ void TransformDocumentStructureBroker::sendStartMessage(
 {
     ConvertToBroker::sendStartMessage(clientSession, encodedFrom);
 
-    const auto command =
+    std::string command =
         "transformdocumentstructure url=" + encodedFrom + " transform=" + _transformJSON;
+
+    // A responder answers with the transform's outcome, so the kit reports it.
+    if (hasSaveAsResponder())
+        command += " notify=true";
     forwardToChild(clientSession, command);
 }
 

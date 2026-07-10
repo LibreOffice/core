@@ -2422,13 +2422,19 @@ extractdocumentstructure url=<documentURL> filter=<filterType>
 
     https://sdk.collaboraonline.com/docs/extract_transform_api.html#general-extraction
 
-transformdocumentstructure url=<documentURL> transform=<JSONTransformation>
+transformdocumentstructure url=<documentURL> transform=<JSONTransformation> [notify=true]
 
     Modifies a document's structure based on a JSON transformation recipe.
 
     url=<documentURL> : Specifies the document location.
 
     transform=<JSONTransformation> : Defines the structural modifications in JSON format.
+
+    notify=true : Optional. The kit answers with
+    'transformeddocumentstructure: <JSON>' once the transform has run. The
+    JSON has a boolean "success", false when a part of the transform was not
+    applied, and may name those parts. A spreadsheet is not transformed and
+    gets "success": false at once.
 
     This command applies the transformation rules and returns the modified document.
 

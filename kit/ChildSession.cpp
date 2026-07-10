@@ -507,16 +507,26 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                 "\"value\":\"" + encodedTransformQueryJSON + "\""
             "}}";
 
+        // An interactive session, and a request that names notify=true, get the outcome of the
+        // transform as a transformeddocumentstructure: message. Other requests go on to save the
+        // document whatever the outcome.
+        std::string url;
+        getTokenString(tokens[1], "url", url);
+        const bool notify =
+            url == "interactive" || (tokens.size() > 3 && tokens.equals(3, "notify=true"));
+
+        // A spreadsheet has no transforms to apply.
+        if (notify && getLOKitDocument()->getDocumentType() == COKitDocumentType::SPREADSHEET)
+        {
+            sendTextFrame("transformeddocumentstructure: {\"success\":false,\"error\":\"A "
+                          "spreadsheet has no transforms. Only text documents and presentations "
+                          "can be transformed.\"}");
+            return true;
+        }
+
         try
         {
-            // For interactive sessions, request a notification so we get
-            // the real success/failure via LOK_CALLBACK_UNO_COMMAND_RESULT.
-            // For MCP/convert-to, the saveas flow returns the modified
-            // document, so no notification is needed.
-            std::string url;
-            getTokenString(tokens[1], "url", url);
-            bool interactive = (url == "interactive");
-            getLOKitDocument()->postUnoCommand(command.c_str(), arguments.c_str(), interactive);
+            getLOKitDocument()->postUnoCommand(command.c_str(), arguments.c_str(), notify);
         }
         catch (const std::exception& exc)
         {

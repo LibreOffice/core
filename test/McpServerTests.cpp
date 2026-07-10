@@ -36,6 +36,9 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testNotificationIsAcknowledgedWithNoBody);
     CPPUNIT_TEST(testPingIsAnswered);
     CPPUNIT_TEST(testToolsListDescribesBothDocumentTools);
+    CPPUNIT_TEST(testToolsListDescribesTheWritePathTools);
+    CPPUNIT_TEST(testConvertArgumentsRequireAFormat);
+    CPPUNIT_TEST(testTransformArgumentsRequireParsableJson);
     CPPUNIT_TEST(testToolsCallUnknownToolIsRejected);
     CPPUNIT_TEST(testToolsCallWithoutNameIsRejected);
     CPPUNIT_TEST(testToolsCallWithNonObjectArgumentsIsRejected);
@@ -53,6 +56,9 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     void testNotificationIsAcknowledgedWithNoBody();
     void testPingIsAnswered();
     void testToolsListDescribesBothDocumentTools();
+    void testToolsListDescribesTheWritePathTools();
+    void testConvertArgumentsRequireAFormat();
+    void testTransformArgumentsRequireParsableJson();
     void testToolsCallUnknownToolIsRejected();
     void testToolsCallWithoutNameIsRejected();
     void testToolsCallWithNonObjectArgumentsIsRejected();
@@ -306,6 +312,81 @@ void McpServerTests::testToolsListDescribesBothDocumentTools()
     {
         LOK_ASSERT(hasProperty(structure, property));
         LOK_ASSERT(!hasProperty(targets, property));
+    }
+}
+
+void McpServerTests::testToolsListDescribesTheWritePathTools()
+{
+    constexpr std::string_view testname = __func__;
+
+    const McpServer::McpResponse response =
+        call(R"({"jsonrpc":"2.0","id":10,"method":"tools/list"})", std::string(),
+             McpServer::documentToolDefinitions());
+    LOK_ASSERT_EQUAL(200, response.statusCode);
+
+    // Both write-path tools are listed with their distinguishing arguments.
+    LOK_ASSERT(contains(response.body, R"("name":"convert_document")"));
+    LOK_ASSERT(contains(response.body, R"("name":"transform_document_structure")"));
+    LOK_ASSERT(contains(response.body, R"("format")"));
+    LOK_ASSERT(contains(response.body, R"("transform")"));
+    // Each names its required argument in the schema.
+    LOK_ASSERT(contains(response.body, R"("required":["format"])"));
+    LOK_ASSERT(contains(response.body, R"("required":["transform"])"));
+}
+
+void McpServerTests::testConvertArgumentsRequireAFormat()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A convert call with no target format is a readable failure, not a usable request, so
+    // validation reports it before any document work starts.
+    {
+        Poco::JSON::Object::Ptr arguments = new Poco::JSON::Object();
+        arguments->set("data", "abc");
+        const auto invalid = McpServer::validateConvertArguments(arguments);
+        LOK_ASSERT(invalid.has_value());
+        LOK_ASSERT(invalid->isError);
+        LOK_ASSERT(contains(invalid->text, "format"));
+    }
+
+    // A convert call that names a format passes validation.
+    {
+        Poco::JSON::Object::Ptr arguments = new Poco::JSON::Object();
+        arguments->set("data", "abc");
+        arguments->set("format", "pdf");
+        LOK_ASSERT(!McpServer::validateConvertArguments(arguments).has_value());
+    }
+}
+
+void McpServerTests::testTransformArgumentsRequireParsableJson()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A transform that is not valid JSON is a readable failure so the calling model gets actionable
+    // feedback before a document is loaded.
+    {
+        Poco::JSON::Object::Ptr arguments = new Poco::JSON::Object();
+        arguments->set("data", "abc");
+        arguments->set("transform", "{not valid json");
+        const auto invalid = McpServer::validateTransformArguments(arguments);
+        LOK_ASSERT(invalid.has_value());
+        LOK_ASSERT(invalid->isError);
+        LOK_ASSERT(contains(invalid->text, "JSON"));
+    }
+
+    // A missing transform is also reported.
+    {
+        Poco::JSON::Object::Ptr arguments = new Poco::JSON::Object();
+        arguments->set("data", "abc");
+        LOK_ASSERT(McpServer::validateTransformArguments(arguments).has_value());
+    }
+
+    // A transform that parses as JSON passes validation.
+    {
+        Poco::JSON::Object::Ptr arguments = new Poco::JSON::Object();
+        arguments->set("data", "abc");
+        arguments->set("transform", R"({"Transforms":{"SlideCommands":[]}})");
+        LOK_ASSERT(!McpServer::validateTransformArguments(arguments).has_value());
     }
 }
 

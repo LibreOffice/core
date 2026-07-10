@@ -5416,7 +5416,68 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
 #endif
 
         LOG_TRC("Sending transformed document structure response.");
-        if (!saveAsSocket)
+        if (_convertResponders && _convertResponders->extract)
+        {
+            auto responder = std::move(_convertResponders->extract);
+            responder(true, payload->jsonString());
+        }
+        else if (_convertResponders && _convertResponders->saveAs)
+        {
+            // The kit reports the outcome here, as the engine's own result or as
+            // {"success":false} when the engine produced no result. The engine reports a
+            // transform with parts it did not know or allow as not successful, with a "message"
+            // that names those parts, and it has applied all the rest. A transform that was
+            // applied, in whole or in part, is passed over, because what this request answers
+            // with is the transformed document and that arrives later as a save-as. A transform
+            // that failed, which carries an "error" or nothing, is itself the outcome, so it goes
+            // back through the responder and the document is closed here.
+            bool succeeded = false;
+            std::string message;
+            std::string error;
+            Poco::JSON::Object::Ptr result;
+            if (JsonUtil::parseJSON(payload->jsonString(), result))
+            {
+                JsonUtil::findJSONValue(result, "success", succeeded);
+                message = result->optValue<std::string>("message", std::string());
+                error = result->optValue<std::string>("error", std::string());
+            }
+
+            if (result && (succeeded || (!message.empty() && error.empty())))
+            {
+                // The parts that were not applied and the warnings go with the document, as
+                // its note.
+                std::string& note = _convertResponders->transformNote;
+                if (!succeeded)
+                    note = message + " The rest of the transform was applied.";
+                Poco::JSON::Array::Ptr warnings = result->getArray("warnings");
+                if (warnings && warnings->size() > 0)
+                {
+                    note += std::string(note.empty() ? "" : "\n") +
+                            "The transform ran with these warnings:";
+                    for (std::size_t i = 0; i < warnings->size(); ++i)
+                        note += "\n- " + warnings->getElement<std::string>(i);
+                }
+
+                LOG_TRC("Transformed document structure passed over, the document follows.");
+                return true;
+            }
+
+            if (!error.empty())
+                message = std::move(error);
+
+            LOG_DBG("Transform of [" << docBroker->getDocKey()
+                                     << "] was not applied: " << payload->jsonString());
+            auto responder = std::move(_convertResponders->saveAs);
+            responder(/*success=*/false,
+                      message.empty() ? std::string("The transform was not applied.") : message,
+                      std::string(), std::string());
+
+            LOG_DBG("Removing transform ClientSession after failure.");
+            docBroker->removeSession(client_from_this());
+            docBroker->stop("Aborting transform handler.");
+            return true;
+        }
+        else if (!saveAsSocket)
             LOG_ERR("Error in transformeddocumentstructure: not in isConvertTo mode");
         else
         {
@@ -5483,6 +5544,13 @@ void ClientSession::failPendingResponder(const std::string& message)
         auto responder = std::move(_convertResponders->extract);
         responder(false, message);
     }
+
+    if (_convertResponders->saveAs)
+    {
+        LOG_DBG("Reporting an unfinished convert request as a failure: " << message);
+        auto responder = std::move(_convertResponders->saveAs);
+        responder(false, message, std::string(), std::string());
+    }
 }
 
 void ClientSession::abortConversion(const std::shared_ptr<DocumentBroker>& docBroker,
@@ -5503,6 +5571,26 @@ void ClientSession::abortConversion(const std::shared_ptr<DocumentBroker>& docBr
         LOG_DBG("Removing extract ClientSession after failure.");
         docBroker->removeSession(client_from_this());
         docBroker->stop("Aborting extract handler.");
+        return;
+    }
+
+    // A conversion or transform responder reports the failure the same way.
+    if (_convertResponders && _convertResponders->saveAs)
+    {
+        auto responder = std::move(_convertResponders->saveAs);
+        responder(false, errorKind, std::string(), std::string());
+
+        LOG_DBG("Removing convert ClientSession after failure.");
+        docBroker->removeSession(client_from_this());
+        docBroker->stop("Aborting convert handler.");
+        return;
+    }
+
+    // Once the responders have answered the request, a later failure is dropped, since the client
+    // has its answer already.
+    if (_convertResponders)
+    {
+        LOG_DBG("Dropping a failure that came after the request was answered: " << errorKind);
         return;
     }
 
@@ -5654,6 +5742,59 @@ bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
     else
     {
         // using the convert-to REST API
+        // Once the responders have answered the request, a later result is dropped, since the
+        // client has its answer already.
+        if (_convertResponders && !_convertResponders->saveAs)
+        {
+            LOG_DBG("Dropping a save-as result that came after the request was answered.");
+            return true;
+        }
+
+        // With a save-as responder, the produced document goes to it as bytes.
+        if (_convertResponders)
+        {
+            // The produced document is read into memory and handed on whole. Its size is bounded
+            // by the same ai.mcp.max_file_size setting that bounds the input. Zero means no limit,
+            // and then the largest size a whole-file read takes is the bound.
+            const std::size_t configuredMax =
+                ConfigUtil::getConfigValue<std::size_t>("ai.mcp.max_file_size", 0);
+            const int maxProducedBytes =
+                (configuredMax == 0 ||
+                 configuredMax > static_cast<std::size_t>(std::numeric_limits<int>::max()))
+                    ? std::numeric_limits<int>::max()
+                    : static_cast<int>(configuredMax);
+
+            auto responder = std::move(_convertResponders->saveAs);
+            const std::string resultPath = resultURL.getPath();
+            const std::size_t producedBytes =
+                resultPath.empty() ? 0 : FileUtil::Stat(resultPath).size();
+            if (resultPath.empty() || producedBytes == 0)
+            {
+                responder(false, "the conversion produced no document", std::string(),
+                          std::string());
+            }
+            else if (producedBytes > NumUtil::makeUnsigned(maxProducedBytes))
+            {
+                responder(false, "the produced document is larger than the server accepts",
+                          std::string(), std::string());
+            }
+            else
+            {
+                std::string bytes;
+                if (FileUtil::readFile(resultPath, bytes, maxProducedBytes) > 0)
+                    responder(true, std::move(bytes), Poco::Path(resultPath).getFileName(),
+                              _convertResponders->transformNote);
+                else
+                    responder(false, "the produced document could not be read", std::string(),
+                              std::string());
+            }
+
+            LOG_TRC("Removing save-as ClientSession after conversion.");
+            docBroker->removeSession(client_from_this());
+            docBroker->stop("Finished saveas handler.");
+            return true;
+        }
+
         if (!resultURL.getPath().empty())
         {
             LOG_TRC("Sending file: " << resultURL.getPath());
@@ -6036,6 +6177,9 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tconvertResponders: " << static_cast<bool>(_convertResponders)
        << "\n\t\textractResponder: "
        << (_convertResponders && _convertResponders->extract)
+       << "\n\t\tsaveAsResponder: " << (_convertResponders && _convertResponders->saveAs)
+       << "\n\t\ttransformNote: "
+       << (_convertResponders ? _convertResponders->transformNote : std::string())
        << "\n\t\trequestedTiles: " << getRequestedTiles().size()
        << "\n\t\tbeingRendered: " << (!docBroker ? -1 : docBroker->tileCache().countTilesBeingRenderedForSession(client_from_this(), std::chrono::steady_clock::now()));
 

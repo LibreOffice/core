@@ -56,11 +56,33 @@ public:
     /// reserved for a malformed call.
     struct McpToolResult
     {
+        McpToolResult() = default;
+        /// A text result: the text and whether it describes a failure.
+        McpToolResult(bool error, std::string resultText)
+            : isError(error)
+            , text(std::move(resultText))
+        {
+        }
+
         /// True when the text describes a failure the model should read, false when the text is the
         /// tool's successful output.
         bool isError = false;
         /// The text placed in the single text content block of the result.
         std::string text;
+        /// True when the result carries a produced document rather than text. The document is
+        /// written as one embedded resource content block: documentBytes holds the raw bytes,
+        /// documentFilename names the file, and documentMimeType gives its media type. The bytes
+        /// are turned into base64 when the block is built.
+        bool isDocument = false;
+        /// The raw bytes of the produced document, when isDocument is true.
+        std::string documentBytes;
+        /// The name of the produced document, carrying its extension.
+        std::string documentFilename;
+        /// The media type of the produced document.
+        std::string documentMimeType;
+        /// A remark about the result, or empty for none. It is written as a text content block
+        /// after the main one.
+        std::string note;
     };
 
     /// Delivers the outcome of a tool once it is known.
@@ -99,6 +121,9 @@ public:
         static constexpr std::string_view ExtractDocumentStructure =
             "extract_document_structure";
         static constexpr std::string_view ExtractLinkTargets = "extract_link_targets";
+        static constexpr std::string_view ConvertDocument = "convert_document";
+        static constexpr std::string_view TransformDocumentStructure =
+            "transform_document_structure";
     };
 
     /// The document tools with their names, descriptions and argument schemas filled in and their
@@ -111,12 +136,31 @@ public:
     static std::string withEndpointAddress(const std::string& description,
                                            const std::string& endpointUrl);
 
+    /// Check the arguments a convert_document call carries before any document work starts. Returns
+    /// an empty optional when they are usable, or a readable failure result when a required
+    /// argument such as the target format is missing.
+    static std::optional<McpToolResult>
+    validateConvertArguments(const Poco::JSON::Object::Ptr& arguments);
+
     /// Check the arguments an extract_document_structure call carries before any document work
     /// starts. Returns an empty optional when the filter is absent or one of the documented views,
     /// and the range is absent or made of letters, digits, colons and dollar signs. Otherwise
     /// returns a readable failure naming the argument.
     static std::optional<McpToolResult>
     validateExtractArguments(const Poco::JSON::Object::Ptr& arguments);
+
+    /// Check the format, lang and options arguments any tool may carry. Returns an empty optional
+    /// when each is absent or well formed: a format is an extension and a lang a language tag, both
+    /// made of ASCII letters, digits and hyphens, and options hold no control characters. Otherwise
+    /// returns a readable failure naming the argument.
+    static std::optional<McpToolResult>
+    validateCommandArguments(const Poco::JSON::Object::Ptr& arguments);
+
+    /// Check the arguments a transform_document_structure call carries before any document work
+    /// starts. Returns an empty optional when the transform is present and parses as JSON, or a
+    /// readable failure result when it is missing or cannot be parsed.
+    static std::optional<McpToolResult>
+    validateTransformArguments(const Poco::JSON::Object::Ptr& arguments);
 
     /// The MCP protocol versions this server understands.
     static bool isSupportedProtocolVersion(const std::string& version);

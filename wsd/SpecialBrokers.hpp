@@ -58,6 +58,8 @@ class ConvertToBroker : public StatelessBatchBroker
     /// The functions that carry the outcome to a caller in this process, until the session that
     /// loads the document takes them, or null when there are none.
     std::unique_ptr<ConvertResponders> _responders;
+    /// True when a save-as responder was installed.
+    bool _hasSaveAsResponder = false;
     /// The socket moved to this broker for the request, while it exists.
     std::weak_ptr<StreamSocket> _waitingSocket;
     /// The failure the request gets as its answer in place of loading the document, or empty to
@@ -90,6 +92,18 @@ public:
         responders().extract = std::move(responder);
     }
 
+    /// Install the function that carries the outcome of a conversion or transform: true, the
+    /// produced document bytes, the result file name and a note on success, or false, a message,
+    /// an empty file name and an empty note on failure. The note holds the warnings of a transform
+    /// that ran with a problem, and is empty otherwise.
+    void setSaveAsResponder(std::function<void(bool success, std::string payloadOrError,
+                                               const std::string& filename, const std::string& note)>
+                                responder)
+    {
+        responders().saveAs = std::move(responder);
+        _hasSaveAsResponder = true;
+    }
+
     /// Move socket to this broker for response & do conversion
     void startConversion(SocketDisposition& disposition, const std::string& id,
                          const AdditionalFilePocoUris& additionalFileUrisPublic);
@@ -102,6 +116,8 @@ public:
 
     /// How many live conversions are running.
     static std::size_t getInstanceCount();
+
+    void dumpState(std::ostream& os) override;
 
 protected:
     bool isConvertTo() const override { return true; }
@@ -120,6 +136,9 @@ protected:
     /// True when the answer is the document saved in the requested format once it has loaded,
     /// false when the answer is what the kit extracts from it.
     virtual bool answersWithDocument() const { return true; }
+
+    /// True when a save-as responder takes the outcome.
+    bool hasSaveAsResponder() const { return _hasSaveAsResponder; }
 
     virtual void sendStartMessage(const std::shared_ptr<ClientSession>& clientSession,
                                   const std::string& encodedFrom);

@@ -24,6 +24,8 @@
 #include <thread>
 #include <typeinfo>
 
+#include <unistd.h>
+
 #include <Common.hpp>
 #include <Protocol.hpp>
 #include <Unit.hpp>
@@ -52,6 +54,9 @@ std::string readWholeFile(const std::string& path)
     std::ifstream stream(path, std::ios::binary);
     return std::string(std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>());
 }
+
+/// The name of a document whose kit exits when it is asked to save it, as a crash would end it.
+const std::string KitCrashName = "kitcrash";
 
 /// The largest document the endpoint accepts in this test.
 constexpr std::int64_t MaxFileSize = 32 * 1024 * 1024;
@@ -189,6 +194,18 @@ public:
         return contentBlock(body, 0);
     }
 
+    /// The base64 blob of a document returned inline as an embedded resource.
+    static std::string resourceBlobFrom(const std::string& body)
+    {
+        auto block = firstContentBlock(body);
+        if (!block)
+            return std::string();
+        auto resource = block->getObject("resource");
+        if (!resource)
+            return std::string();
+        return resource->optValue<std::string>("blob", std::string());
+    }
+
     /// The text of a tool result carried in a text content block.
     static std::string textResultFrom(const std::string& body)
     {
@@ -221,6 +238,8 @@ public:
             LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
             LOK_ASSERT(contains(response->getBody(), R"("name":"extract_document_structure")"));
             LOK_ASSERT(contains(response->getBody(), R"("name":"extract_link_targets")"));
+            LOK_ASSERT(contains(response->getBody(), R"("name":"convert_document")"));
+            LOK_ASSERT(contains(response->getBody(), R"("name":"transform_document_structure")"));
         }
 
         // Extracting the text of a document passed as base64 bytes returns its body, and is not
@@ -316,10 +335,114 @@ public:
                                 "The data argument is not valid base64"));
         }
 
-        // Listing the link targets of a spreadsheet answers with its targets.
+        // Converting a small text document to PDF inline returns the produced PDF as an embedded
+        // resource whose bytes begin with the PDF marker.
+        {
+            const std::string textData = Util::base64Encode(std::string("hello world"));
+            auto response =
+                mcpCall(session, R"({"jsonrpc":"2.0","id":7,"method":"tools/call","params":)"
+                                 R"({"name":"convert_document","arguments":)"
+                                 R"({"data":")" +
+                                     textData +
+                                     R"(","filename":"hello.txt","format":"pdf"}}})");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(contains(response->getBody(), R"("isError":false)"));
+
+            const std::string blob = resourceBlobFrom(response->getBody());
+            LOK_ASSERT(!blob.empty());
+            const std::string pdf = Util::base64Decode(blob);
+            LOK_ASSERT(pdf.rfind("%PDF-", 0) == 0);
+        }
+
+        // Transforming a document with content controls returns the changed document, an OOXML
+        // package whose first content control holds the new value.
+        {
+            const std::string structurePath = Poco::Path(TDOC, "docStructure.docx").toString();
+            const std::string structureData = Util::base64Encode(readWholeFile(structurePath));
+            const std::string transform =
+                R"({\"Transforms\":{\"ContentControls.ByIndex.0\":{\"content\":\"Short text\"}}})";
+            auto response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":9,"method":"tools/call","params":)"
+                         R"({"name":"transform_document_structure","arguments":)"
+                         R"({"data":")" + structureData + R"(","filename":"docStructure.docx",)"
+                         R"("transform":")" + transform + R"(","format":"docx"}}})");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(contains(response->getBody(), R"("isError":false)"));
+
+            const std::string blob = resourceBlobFrom(response->getBody());
+            LOK_ASSERT(!blob.empty());
+            const std::string docx = Util::base64Decode(blob);
+            // An OOXML package is a zip archive, so it begins with the zip local file header
+            // marker.
+            LOK_ASSERT(docx.rfind("PK", 0) == 0);
+
+            auto controls = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":25,"method":"tools/call","params":)"
+                         R"({"name":"extract_document_structure","arguments":)"
+                         R"({"data":")" + blob + R"(","filename":"docStructure.docx",)"
+                         R"("filter":"contentcontrol"}}})");
+            LOK_ASSERT(contains(controls->getBody(), R"("isError":false)"));
+            const std::string structure = textResultFrom(controls->getBody());
+            LOK_ASSERT(contains(structure, "ContentControls.ByIndex.0"));
+            LOK_ASSERT(contains(structure, "Short text"));
+            LOK_ASSERT(!contains(structure, "plain text value"));
+        }
+
+        // A transform that names a key the engine does not know returns the document with the rest
+        // applied, and a note that names the key.
+        {
+            const std::string structurePath = Poco::Path(TDOC, "docStructure.docx").toString();
+            const std::string structureData = Util::base64Encode(readWholeFile(structurePath));
+            auto response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":12,"method":"tools/call","params":)"
+                         R"({"name":"transform_document_structure","arguments":)"
+                         R"({"data":")" + structureData + R"(","filename":"docStructure.docx",)"
+                         R"("transform":"{\"Transforms\":{\"NoSuchKey\":1}}"}}})");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(contains(response->getBody(), R"("isError":false)"));
+            LOK_ASSERT(Util::base64Decode(resourceBlobFrom(response->getBody())).rfind("PK", 0) ==
+                       0);
+            auto note = contentBlock(response->getBody(), 1);
+            LOK_ASSERT(note);
+            LOK_ASSERT(contains(note->optValue<std::string>("text", std::string()), "NoSuchKey"));
+        }
+
+        // Replacing text in a text document returns the document with the text replaced.
+        {
+            const std::string sourcePath = Poco::Path(TDOC, "hello.odt").toString();
+            const std::string sourceData = Util::base64Encode(readWholeFile(sourcePath));
+            auto response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":18,"method":"tools/call","params":)"
+                         R"({"name":"transform_document_structure","arguments":)"
+                         R"({"data":")" + sourceData + R"(","filename":"hello.odt",)"
+                         R"("transform":"{\"Transforms\":{\"ReplaceText\":)"
+                         R"({\"search\":\"world\",\"replace\":\"there\"}}}"}}})");
+            LOK_ASSERT(contains(response->getBody(), R"("isError":false)"));
+
+            const std::string replaced = resourceBlobFrom(response->getBody());
+            auto text = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":19,"method":"tools/call","params":)"
+                         R"({"name":"extract_document_structure","arguments":)"
+                         R"({"data":")" + replaced + R"(","filename":"hello.odt",)"
+                         R"("filter":"text"}}})");
+            LOK_ASSERT(contains(textResultFrom(text->getBody()), "there"));
+            LOK_ASSERT(!contains(textResultFrom(text->getBody()), "world"));
+        }
+
+        // A spreadsheet has no transforms, and a transform on one says so.
         {
             const std::string sheetPath = Poco::Path(TDOC, "convert-to.xlsx").toString();
             const std::string sheetData = Util::base64Encode(readWholeFile(sheetPath));
+            auto response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":13,"method":"tools/call","params":)"
+                         R"({"name":"transform_document_structure","arguments":)"
+                         R"({"data":")" + sheetData + R"(","filename":"convert-to.xlsx",)"
+                         R"("transform":"{\"Transforms\":{}}"}}})");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(contains(response->getBody(), R"("isError":true)"));
+            LOK_ASSERT(contains(textResultFrom(response->getBody()), "spreadsheet"));
+
+            // Listing the link targets of a spreadsheet answers with its targets.
             auto targets = mcpCall(
                 session, R"({"jsonrpc":"2.0","id":17,"method":"tools/call","params":)"
                          R"({"name":"extract_link_targets","arguments":)"
@@ -360,6 +483,20 @@ public:
                          R"("range":"A1:B5 "}}})");
             LOK_ASSERT(contains(response->getBody(), R"("isError":true)"));
             LOK_ASSERT(contains(textResultFrom(response->getBody()), "range argument"));
+        }
+
+        // Converting to a format the engine does not know is a readable tool failure, not a
+        // protocol error.
+        {
+            const std::string textData = Util::base64Encode(std::string("hello world"));
+            auto response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":10,"method":"tools/call","params":)"
+                         R"({"name":"convert_document","arguments":)"
+                         R"({"data":")" + textData + R"(","filename":"hello.txt",)"
+                         R"("format":"nosuchformat"}}})");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(!contains(response->getBody(), R"("error")"));
+            LOK_ASSERT(contains(response->getBody(), R"("isError":true)"));
         }
 
         // Uploading without the right bearer token is refused.
@@ -460,6 +597,22 @@ public:
             auto response = session->syncRequest(request);
             LOK_ASSERT_EQUAL(http::StatusCode::BadRequest, response->statusCode());
         }
+
+        // A tool call whose kit ends before the result is ready is answered with a failure that
+        // says so.
+        {
+            const std::string textData = Util::base64Encode(std::string("hello world"));
+            auto response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":24,"method":"tools/call","params":)"
+                         R"({"name":"convert_document","arguments":)"
+                         R"({"data":")" + textData + R"(","filename":")" + KitCrashName +
+                             R"(.txt","format":"pdf"}}})");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(contains(response->getBody(), R"("id":24)"));
+            LOK_ASSERT(contains(response->getBody(), R"("isError":true)"));
+            LOK_ASSERT(contains(textResultFrom(response->getBody()),
+                                "stopped before the result was ready"));
+        }
     }
 
     void invokeWSDTest() override
@@ -495,6 +648,18 @@ public:
         : UnitKit("UnitKitMcp")
     {
         setTimeout(1h);
+    }
+
+    bool filterKitMessage(WebSocketHandler*, std::string& message) override
+    {
+        if (message.find(" saveas ") != std::string::npos &&
+            message.find(KitCrashName) != std::string::npos)
+        {
+            TST_LOG("Ending the kit on [" << message << ']');
+            _exit(0);
+        }
+
+        return false;
     }
 };
 

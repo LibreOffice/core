@@ -23,6 +23,18 @@ struct ConvertResponders
     /// failure kind on failure.
     std::function<void(bool success, const std::string& payload)> extract;
 
+    /// The outcome of a conversion or transform: true, the produced document bytes, the result file
+    /// name and a note on success, or false, a message, an empty file name and an empty note on
+    /// failure. The note holds the warnings of a transform that ran with a problem, and is empty
+    /// otherwise.
+    std::function<void(bool success, std::string payloadOrError, const std::string& filename,
+                       const std::string& note)>
+        saveAs;
+
+    /// The warnings of a transform that ran with a problem, as one sentence for the produced
+    /// document's note, or empty when it ran without one.
+    std::string transformNote;
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
