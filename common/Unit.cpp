@@ -451,6 +451,15 @@ void UnitBase::exitTest(TestResult result, const std::string& reason, LOG_CAPTUR
     }
 }
 
+void UnitBase::failSuite(std::string_view reason) {
+    TST_LOG_NAME(
+        "UnitBase", "ERROR: FAILURE: failSuite, not attributed to a running test: " << reason);
+    std::lock_guard<std::mutex> g(_lock);
+    if (GlobalResult == TestResult::Ok) {
+        GlobalResult = TestResult::Failed;
+    }
+}
+
 std::string UnitBase::getReason() const
 {
     std::lock_guard<std::mutex> guard(_lock);

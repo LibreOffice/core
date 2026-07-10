@@ -17,6 +17,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include <Poco/Exception.h>
@@ -123,6 +124,12 @@ protected:
     {
         exitTest(TestResult::Ok, reason, LOG_PASS_PARENT_CALLER);
     }
+
+    // Mark the whole run as failed for a reason that cannot be attributed to any single running
+    // test, such as an asynchronous kit crash reported by the forkit after the test that owned that
+    // kit already finished (the currently-running test keeps its own result and is allowed to
+    // finish, but the process still exits with a failure status):
+    void failSuite(std::string_view reason);
 
     /// Called when a test has ended, to clean up.
     virtual void endTest(const std::string& reason);
@@ -487,7 +494,7 @@ public:
     virtual void kitSegfault(int /* count */)
     {
         if (get().isUnitTesting())
-            exitTest(TestResult::Failed, "kit segfault");
+            failSuite("kit segfault");
     }
 
     /// When we get a killed message from forkit; override to test crashes ...
@@ -499,7 +506,7 @@ public:
     virtual void kitOomKilled(int /* count */)
     {
         if (get().isUnitTesting())
-            exitTest(TestResult::Failed, "kit killed by oom");
+            failSuite("kit killed by oom");
     }
 
     /// Intercept createStorage
