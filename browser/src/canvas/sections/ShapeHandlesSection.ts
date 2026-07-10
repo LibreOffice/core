@@ -370,7 +370,11 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	private getRotationHandle() {
-		if (this.sectionProperties.info?.handles?.kinds?.rectangle && !this.sectionProperties.hasVideo) {
+		if (
+			this.sectionProperties.info?.handles?.kinds?.rectangle &&
+			GraphicSelection.extraInfo?.isRotatable !== false &&
+			!this.sectionProperties.hasVideo
+		) {
 			const rotationInfo = this.getRotationInfo(); // Rotation section will read the information from this (parent) class.
 			const rotationHandlePosition: cool.SimplePoint = this.getRotationHandlePosition(rotationInfo);
 			rotationInfo.initialPosition = rotationHandlePosition.clone();

@@ -1067,6 +1067,24 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                 aExtraInfo.append(", \"graphicExtension\": \"" + aGraphicExtension.toUtf8() + "\"");
             }
 
+            // The selection is rotatable only when every marked object allows
+            // free rotation; a media object, for one, does not.
+            if (!bIsChart)
+            {
+                bool bRotatable = true;
+                for (size_t nMark = 0; nMark < rMarkList.GetMarkCount(); ++nMark)
+                {
+                    SdrObjTransformInfoRec aTransformInfo;
+                    rMarkList.GetMark(nMark)->GetMarkedSdrObj()->TakeObjInfo(aTransformInfo);
+                    if (!aTransformInfo.bRotateFreeAllowed)
+                    {
+                        bRotatable = false;
+                        break;
+                    }
+                }
+                aExtraInfo.append(", \"isRotatable\": " + OString::boolean(bRotatable));
+            }
+
             if (bIsChart)
             {
                 KitChartHelper aChartHelper(pViewShell);
