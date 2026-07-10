@@ -214,8 +214,12 @@ void KitWebSocketHandler::onDisconnect()
         //FIXME: We could try to recover.
         LOG_ERR("Kit for DocBroker ["
                 << _docKey
-                << "] connection lost without exit arriving from wsd. Setting TerminationFlag");
-        SigUtil::setTerminationFlag();
+                << "] connection lost without exit arriving from wsd.");
+        if (Util::isKitInProcess()) {
+            SigUtil::setTerminationFlag();
+        } else {
+            Util::forcedExit(EX_OK);
+        }
     }
 #if DOCS_SHARE_PROCESS
     {
