@@ -394,6 +394,8 @@ keyboardShortcuts.definitions.set('default', new Array<ShortcutDescriptor>(
     new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', key: 'F9', unoAction: '.uno:Calculate' }),
     new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', modifier: Mod.CTRL, key: ',', unoAction: '.uno:InsertCurrentDate' }),
     new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', modifier: Mod.CTRL, key: ';', unoAction: '.uno:InsertCurrentDate' }),
+    new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', modifier: Mod.SHIFT, key: 'F10', dispatchAction: 'sheettabmenu',
+        condition: () => { const el = document.activeElement; return !!el && el.classList.contains('spreadsheet-tab'); } }),
 
     // Writer.
     new ShortcutDescriptor({ docType: 'text', eventType: 'keydown', key: 'PageUp', dispatchAction: 'scrollpageup', viewType: ViewType.ReadOnly }),

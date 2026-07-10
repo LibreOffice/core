@@ -38,6 +38,10 @@ interface MapInterface extends Evented {
 	};
 	addressInputField: AddressInputField;
 
+	tabsControl?: {
+		openContextMenuForFocusedTab(): void;
+	};
+
 	removeLayer(layer: any): void;
 	addLayer(layer: any): void;
 	setZoom(

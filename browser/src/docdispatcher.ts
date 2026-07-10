@@ -639,6 +639,11 @@ class Dispatcher {
 	}
 
 	private addCalcCommands() {
+		this.actionsMap['sheettabmenu'] = function () {
+			if (app.map.tabsControl)
+				app.map.tabsControl.openContextMenuForFocusedTab();
+		};
+
 		this.actionsMap['acceptformula'] = function () {
 			if (window.mode.isSmallScreenDevice()) {
 				app.map.focus();

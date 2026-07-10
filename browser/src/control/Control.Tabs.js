@@ -34,6 +34,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 		this._spreadsheetTabs = {};
 		this._tabForContextMenu = 0;
 		var map = this._map;
+		map.tabsControl = this;
 		var tableCell = document.getElementById('spreadsheet-toolbar');
 		this._tabsCont = window.L.DomUtil.create('div', 'spreadsheet-tabs-container', tableCell);
 
@@ -442,12 +443,38 @@ window.L.Control.Tabs = window.L.Control.extend({
 			container.append(this._menuPosEl);
 		}
 		const rect = container.getBoundingClientRect();
+
+		let clientX = evt.clientX;
+		let clientY = evt.clientY;
+		if (typeof clientX !== 'number' || typeof clientY !== 'number') {
+			const target = evt.currentTarget || evt.target;
+			const targetRect = target.getBoundingClientRect();
+			clientX = targetRect.left;
+			clientY = targetRect.top;
+		}
+
 		this._menuPosEl.style.position = 'absolute';
 		this._menuPosEl.style.zIndex = '1500';
-		this._menuPosEl.style.left = (evt.clientX - rect.left) + 'px';
-		this._menuPosEl.style.top = (evt.clientY - rect.top) + 'px';
+		this._menuPosEl.style.left = (clientX - rect.left) + 'px';
+		this._menuPosEl.style.top = (clientY - rect.top) + 'px';
 
 		return this._menuPosEl;
+	},
+
+	openContextMenuForFocusedTab: function() {
+		if (this._map.isReadOnlyMode())
+			return;
+
+		var tab = document.activeElement;
+		if (!tab || !tab.classList || !tab.classList.contains('spreadsheet-tab'))
+			return;
+
+		var match = tab.id.match(/\d+/);
+		if (!match)
+			return;
+
+		this._tabForContextMenu = parseInt(match[0]);
+		this._openTabContextMenu({ type: 'keydown', currentTarget: tab });
 	},
 
 	_openTabContextMenu: function(evt) {
