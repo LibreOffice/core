@@ -85,7 +85,13 @@ window.L.Map = window.L.Evented.extend({
 		}
 
 		if (options.center && options.zoom !== undefined) {
-			this.setView(InternPointUtil.flexConstruct(options.center), options.zoom, true /* reset */);
+			// Establish the initial map state directly (was setView -> _resetView,
+			// which ran before the doc layer/layout existed so its map events had no
+			// listeners and its setViewRectangleFromPointAndScale was skipped). The
+			// zoom is set just above; the first viewed rectangle and tile kickoff
+			// come later from the doc layer's onAdd (applyZoom / _viewReset). Only
+			// _loaded needs to be set here.
+			this._loaded = true;
 		}
 
 		Cursor.imagePath = options.cursorURL;
@@ -475,43 +481,6 @@ window.L.Map = window.L.Evented.extend({
 		this.fire('removeview', {viewId: viewid, username: username});
 	},
 
-	panBy: function (offset) {
-		offset = cool.Point.toPoint(offset).round();
-
-		if (!offset.x && !offset.y)
-			return this;
-
-		//If we pan too far then chrome gets issues with tiles
-		// and makes them disappear or appear in the wrong place (slightly offset) #2602
-		if (!this.getSize().contains(offset)) {
-			this._resetView(this.unproject(this.project(this.getCenter()).add(offset)), this.getZoom());
-			return this;
-		}
-
-		this.fire('movestart');
-		window.L.DomUtil.setPosition(this._mapPane, this._getMapPanePos().subtract(offset));
-		this.fire('move').fire('moveend');
-
-		return this;
-	},
-
-	setView: function (center, zoom, reset) {
-		zoom = zoom === undefined ? this._zoom : this._limitZoom(zoom);
-		center = InternPointUtil.flexConstruct(center);
-
-		if (this._loaded && !reset && zoom === this._zoom) {
-			// difference between the new and current centers in pixels
-			var offset = this._getCenterOffset(center)._floor();
-			this.panBy(offset);
-			return this;
-		}
-		else {
-			this._resetView(center, zoom);
-
-			return this;
-		}
-	},
-
 	updateAvatars: function() {
 		if (this._docLayer && this._docLayer._annotations && this._docLayer._annotations._items) {
 			for (var idxAnno in this._docLayer._annotations._items) {
@@ -719,11 +688,6 @@ window.L.Map = window.L.Evented.extend({
 		return this._viewInfo[viewid].readonly !== '0';
 	},
 
-	getCenter: function () { // (Boolean) -> Intern
-		this._checkIfLoaded();
-		return this.layerPointToIntern(this._getCenterLayerPoint());
-	},
-
 	getZoom: function () {
 		return this._zoom;
 	},
@@ -806,11 +770,6 @@ window.L.Map = window.L.Evented.extend({
 		}
 
 		return this._size.clone();
-	},
-
-	getPixelOrigin: function () {
-		this._checkIfLoaded();
-		return this._pixelOrigin;
 	},
 
 	getPane: function (pane) {
@@ -896,103 +855,6 @@ window.L.Map = window.L.Evented.extend({
 		newZoom = newZoom === undefined ? this.getZoom() : newZoom;
 
 		return InternPointUtil.rescale(point, oldZoom, newZoom);
-	},
-
-	layerPointToIntern: function (point) { // (Point)
-		var projectedPoint = cool.Point.toPoint(point).add(this.getPixelOrigin());
-		return this.unproject(projectedPoint);
-	},
-
-	internToLayerPoint: function (intern) { // (Intern)
-		var projectedPoint = this.project(InternPointUtil.flexConstruct(intern))._round();
-		return projectedPoint._subtract(this.getPixelOrigin());
-	},
-
-	containerPointToLayerPoint: function (point) { // (Point)
-		var splitPanesContext = this.getSplitPanesContext();
-		if (!splitPanesContext) {
-			return this.containerPointToLayerPointIgnoreSplits(point);
-		}
-		var splitPos = splitPanesContext.getSplitPos();
-		var pixelOrigin = this.getPixelOrigin();
-		var mapPanePos = this._getMapPanePos();
-		var result = cool.Point.toPoint(point).clone();
-		var pointX = point.x;
-		if (this._docLayer.isCalcRTL()) {
-			pointX = this._container.clientWidth - pointX;
-			result.x = pointX;
-		}
-
-		if (pointX <= splitPos.x) {
-			result.x -= pixelOrigin.x;
-		}
-		else {
-			result.x -= mapPanePos.x;
-		}
-
-		if (point.y <= splitPos.y) {
-			result.y -= pixelOrigin.y;
-		}
-		else {
-			result.y -= mapPanePos.y;
-		}
-
-		return result;
-	},
-
-	containerPointToLayerPointIgnoreSplits: function (point) { // (Point)
-		return cool.Point.toPoint(point).subtract(this._getMapPanePos());
-	},
-
-	layerPointToContainerPoint: function (point) { // (Point)
-		var splitPanesContext = this.getSplitPanesContext();
-		if (!splitPanesContext) {
-			return this.layerPointToContainerPointIgnoreSplits(point);
-		}
-
-		var splitPos = splitPanesContext.getSplitPos();
-		var pixelOrigin = this.getPixelOrigin();
-		var mapPanePos = this._getMapPanePos();
-		var result = cool.Point.toPoint(point).add(pixelOrigin);
-
-		if (result.x > splitPos.x) {
-			result.x -= (pixelOrigin.x - mapPanePos.x);
-		}
-
-		if (result.y > splitPos.y) {
-			result.y -= (pixelOrigin.y - mapPanePos.y);
-		}
-
-		return result;
-	},
-
-	layerPointToContainerPointIgnoreSplits: function (point) { // (Point)
-		return cool.Point.toPoint(point).add(this._getMapPanePos());
-	},
-
-	containerPointToInternIgnoreSplits: function (point) {
-		var layerPoint = this.containerPointToLayerPointIgnoreSplits(cool.Point.toPoint(point));
-		return this.layerPointToIntern(layerPoint);
-	},
-
-	internToContainerPointIgnoreSplits: function (intern) {
-		return this.layerPointToContainerPointIgnoreSplits(this.internToLayerPoint(InternPointUtil.flexConstruct(intern)));
-	},
-
-	internToContainerPoint: function (intern) {
-		return this.layerPointToContainerPoint(this.internToLayerPoint(InternPointUtil.flexConstruct(intern)));
-	},
-
-	mouseEventToContainerPoint: function (e) { // (MouseEvent)
-		return window.L.DomEvent.getMousePosition(e, this._container);
-	},
-
-	mouseEventToLayerPoint: function (e) { // (MouseEvent)
-		return this.containerPointToLayerPoint(this.mouseEventToContainerPoint(e));
-	},
-
-	mouseEventToIntern: function (e) { // (MouseEvent)
-		return this.layerPointToIntern(this.mouseEventToLayerPoint(e));
 	},
 
 	// Give the focus to the text input.
@@ -1106,66 +968,8 @@ window.L.Map = window.L.Evented.extend({
 
 	// private methods that modify map state
 
-	_resetView: function (center, zoom) {
-		var zoomChanged = (this._zoom !== zoom);
-
-		this.fire('movestart');
-
-		if (zoomChanged) {
-			this.fire('zoomstart');
-		}
-
-		this._zoom = zoom;
-
-		window.L.DomUtil.setPosition(this._mapPane, new cool.Point(0, 0));
-
-		this._pixelOrigin = this._getNewPixelOrigin(center);
-
-		var loading = !this._loaded;
-		this._loaded = true;
-
-		this.fire('viewreset', {hard: true});
-
-		if (loading) {
-			this.fire('load');
-		}
-
-		// The viewed rectangle, not the map pane, drives what is drawn. The new
-		// zoom scale is now in effect (viewreset updated app.twipsToPixels), so
-		// set it from the post-zoom centre before 'move' so its listeners see the
-		// new position. Hand the layout a document-space point and the new scale.
-		if ((zoomChanged || loading)
-			&& app.activeDocument && app.activeDocument.activeLayout) {
-			var centerCore = this.project(center, zoom).multiplyBy(app.dpiScale);
-			var centerPoint = cool.SimplePoint.fromCorePixels(
-				[Math.round(centerCore.x), Math.round(centerCore.y)]);
-			app.activeDocument.activeLayout.setViewRectangleFromPointAndScale(
-				centerPoint, app.twipsToPixels);
-		}
-
-		this.fire('move');
-
-		if (zoomChanged) {
-			this.fire('zoomend');
-			this.fire('zoomlevelschange');
-		}
-
-		// don't allow to turn off the following when moving to other sheet
-		var backupFollowed = app.getFollowedViewId();
-
-		this.fire('moveend', {hard: true});
-
-		app.setFollowingUser(backupFollowed);
-	},
-
 	_getZoomSpan: function () {
 		return this.getMaxZoom() - this.getMinZoom();
-	},
-
-	_checkIfLoaded: function () {
-		if (!this._loaded) {
-			throw new Error('Set map center and zoom first.');
-		}
 	},
 
 	// DOM event handling
@@ -1399,13 +1203,6 @@ window.L.Map = window.L.Evented.extend({
 		var data = {
 			originalEvent: e
 		};
-		if (e.type !== 'keypress' && e.type !== 'keyup' && e.type !== 'keydown' &&
-			e.type !== 'copy' && e.type !== 'cut' && e.type !== 'paste' &&
-		    e.type !== 'compositionstart' && e.type !== 'compositionupdate' && e.type !== 'compositionend' && e.type !== 'textInput') {
-			data.containerPoint = this.mouseEventToContainerPoint(e);
-			data.layerPoint = this.containerPointToLayerPoint(data.containerPoint);
-			data.intern = this.layerPointToIntern(data.layerPoint);
-		}
 		if (type === 'click') {
 			target.fire('preclick', data, true);
 		}
@@ -1435,24 +1232,6 @@ window.L.Map = window.L.Evented.extend({
 
 	// private methods for getting map state
 
-	_getMapPanePos: function () {
-		return window.L.DomUtil.getPosition(this._mapPane) || new cool.Point(0, 0);
-	},
-
-	_getNewPixelOrigin: function (center, zoom) {
-		var viewHalf = this.getSize()._divideBy(2);
-		return this.project(center, zoom)._subtract(viewHalf)._add(this._getMapPanePos())._floor();
-	},
-
-	// layer point of the current center
-	_getCenterLayerPoint: function () {
-		return this.containerPointToLayerPointIgnoreSplits(this.getSize()._divideBy(2));
-	},
-
-	// offset of the specified place to the current center in pixels
-	_getCenterOffset: function (intern) {
-		return this.internToLayerPoint(intern).subtract(this._getCenterLayerPoint());
-	},
 
 	// adjust center for view to get inside bounds
 	_limitZoom: function (zoom) {

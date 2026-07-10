@@ -60,7 +60,6 @@ interface MapInterface extends Evented {
 
 	getDocSize(): cool.Point;
 	getSize(): cool.Point;
-	getCenter(): InternPointLike;
 	getContainer(): Element;
 	_getCurrentFontName(): string;
 
@@ -181,13 +180,7 @@ interface MapInterface extends Evented {
 		external?: boolean,
 		calledFromSetPartHandler?: boolean,
 	): void;
-	mouseEventToIntern(e: any): InternPointLike;
 	_limitZoom(zoom: number): number;
-	setView(
-		center: [number, number],
-		zoom?: number,
-		reset?: boolean,
-	): MapInterface;
 	isViewReadOnly(viewid: number): boolean;
 	context?: { appId: string; context: string };
 	eSignature?: cool.ESignature;

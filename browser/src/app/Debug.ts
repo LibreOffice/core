@@ -1032,9 +1032,23 @@ class DebugManager {
 			case 0:
 				{
 					window.app.console.log('Automated User: Click in center');
-					const pos = this._docLayer._internToTwips(this._map.getCenter());
-					this._docLayer._postMouseEvent('buttondown', pos.x, pos.y, 1, 1, 0);
-					this._docLayer._postMouseEvent('buttonup', pos.x, pos.y, 1, 1, 0);
+					const center = app.activeDocument.activeLayout.viewedRectangle.center;
+					this._docLayer._postMouseEvent(
+						'buttondown',
+						center[0],
+						center[1],
+						1,
+						1,
+						0,
+					);
+					this._docLayer._postMouseEvent(
+						'buttonup',
+						center[0],
+						center[1],
+						1,
+						1,
+						0,
+					);
 					waitTime = 500;
 				}
 				break;
@@ -1112,9 +1126,23 @@ class DebugManager {
 			case 3:
 				{
 					window.app.console.log('Automated User: Select Shape');
-					const pos = this._docLayer._internToTwips(this._map.getCenter());
-					this._docLayer._postMouseEvent('buttondown', pos.x, pos.y, 1, 1, 0);
-					this._docLayer._postMouseEvent('buttonup', pos.x, pos.y, 1, 1, 0);
+					const center = app.activeDocument.activeLayout.viewedRectangle.center;
+					this._docLayer._postMouseEvent(
+						'buttondown',
+						center[0],
+						center[1],
+						1,
+						1,
+						0,
+					);
+					this._docLayer._postMouseEvent(
+						'buttonup',
+						center[0],
+						center[1],
+						1,
+						1,
+						0,
+					);
 					waitTime = 1000;
 				}
 				break;

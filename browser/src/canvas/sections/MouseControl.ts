@@ -692,12 +692,11 @@ class MouseControl extends CanvasSectionObject {
 		if (this.inSwipeAction) this.containerObject.stopAnimating();
 	}
 
-	onDrop(position: cool.SimplePoint, e: DragEvent): void {
-		this.refreshPosition(position);
+	// Click at the given point, so that the insert position is as close to it as possible. The point
+	// is local to this section, in core pixels.
+	public moveCursorToPoint(point: cool.SimplePoint, modifier: number): void {
+		this.refreshPosition(point);
 
-		const modifier = MouseControl.readModifier(e);
-
-		// Move the cursor, so that the insert position is as close to the drop coordinates as possible.
 		this.postCoreMouseEvent(
 			'buttondown',
 			this.currentPosition,
@@ -712,6 +711,10 @@ class MouseControl extends CanvasSectionObject {
 			app.LOButtons.left,
 			modifier,
 		);
+	}
+
+	onDrop(position: cool.SimplePoint, e: DragEvent): void {
+		this.moveCursorToPoint(position, MouseControl.readModifier(e));
 
 		if (app.map._clip && e.dataTransfer) {
 			// Always capture the html content separate as we may lose it when we

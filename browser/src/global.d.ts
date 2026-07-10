@@ -65,7 +65,6 @@ declare namespace JSDialog {
 declare namespace L {
     class Map {
         constructor(element: string | HTMLElement, options?: any);
-        setView(center: [number, number], zoom: number): this;
         addLayer(layer: any): this;
         removeLayer(layer: any): this;
         fire(type: string, data?: any, propagate?: boolean): this;
@@ -77,7 +76,6 @@ declare namespace L {
         removeEventListener(type: string, fn?: (event: any) => void, context?: any): this;
         eachLayer(fn: (layer: any) => void, context?: any): this;
         getZoom(): number;
-        getCenter(): [number, number];
         fitBounds(bounds: any, options?: any): this; // Replace 'any' with the appropriate type if known
 
         statusBar: JSDialog.StatusBar

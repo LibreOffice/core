@@ -3372,30 +3372,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		app.activeDocument.activeView.clearTextSelection();
 	},
 
-	// A drag that carries this type is a slide preview being reordered in
-	// the slide sorter; the document area takes no drops from it.
-	_isSlideDrag: function (e) {
-		return e.dataTransfer && e.dataTransfer.types &&
-			Array.prototype.indexOf.call(e.dataTransfer.types, 'application/x-cool-slide') !== -1;
-	},
-
-	_onDragOver: function (e) {
-		e = e.originalEvent;
-		if (this._isSlideDrag(e))
-			return;
-		e.preventDefault();
-	},
-
-	// Move the cursor, so that the insert position is as close to the drop coordinates as possible.
-	_moveCursorToDropPoint: function (intern) {
-		const mousePos = this._internToTwips(intern);
-		const count = 1;
-		const buttons = 1;
-		const modifier = this._map.keyboard.modifier;
-		this._postMouseEvent('buttondown', mousePos.x, mousePos.y, count, buttons, modifier);
-		this._postMouseEvent('buttonup', mousePos.x, mousePos.y, count, buttons, modifier);
-	},
-
 	// Insert a file that the app received as a drag and drop from the desktop, at the point where it
 	// was dropped. The bytes arrive base64-encoded, as the bridge from the app carries strings only,
 	// and the point arrives in physical pixels relative to the app window. The web view covers the
@@ -3408,32 +3384,18 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		if (x >= 0 && y >= 0) {
 			const scale = window.devicePixelRatio || 1;
-			const containerRect = this._map._container.getBoundingClientRect();
-			const containerPoint = new cool.Point(
-				x / scale - containerRect.left, y / scale - containerRect.top);
-			this._moveCursorToDropPoint(
-				this._map.layerPointToIntern(this._map.containerPointToLayerPoint(containerPoint)));
+			const canvasRectangle = app.sectionContainer.getCanvasBoundingClientRect();
+			const documentAnchor = app.sectionContainer.getDocumentAnchor();
+			// The mouse control section starts at the document anchor, so subtract it to get the
+			// point in that section's own coordinates.
+			const point = cool.SimplePoint.fromCorePixels([
+				(x / scale - canvasRectangle.left) * app.dpiScale - documentAnchor[0],
+				(y / scale - canvasRectangle.top) * app.dpiScale - documentAnchor[1]]);
+			app.activeDocument.mouseControl.moveCursorToPoint(point, this._map.keyboard.modifier);
 		}
 
 		const bytes = Uint8Array.from(window.atob(base64Data), (c) => c.charCodeAt(0));
 		this._map._clip._asyncReadPasteFile(new File([bytes], name, { type: mimetype }));
-	},
-
-	_onDrop: function (e) {
-		if (this._isSlideDrag(e.originalEvent))
-			return;
-
-		this._moveCursorToDropPoint(e.intern);
-
-		e = e.originalEvent;
-		e.preventDefault();
-
-		if (this._map._clip) {
-			// Always capture the html content separate as we may lose it when we
-			// pass the clipboard data to a different context (async calls, f.e.).
-			var htmlText = e.dataTransfer.getData('text/html');
-			this._map._clip.dataTransferToDocument(e.dataTransfer, /* preferInternal = */ false, htmlText);
-		}
 	},
 
 	/* in impress, we always recalculate zoom on resize to keep the slide in-view.
@@ -4126,9 +4088,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		map._fadeAnimated = false;
 
-		map.on('dragover', this._onDragOver, this);
-		map.on('drop', this._onDrop, this);
-
 		map.on('zoomstart', this._onZoomStart, this);
 		map.on('zoomend', this._onZoomEnd, this);
 		if (this._docType === 'spreadsheet') {
@@ -4197,7 +4156,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 	getEvents: function () {
 		var events = {
-			viewreset: this._viewReset,
 			movestart: this._moveStart,
 			// update tiles on move, but not more often than once per given interval
 			move: app.util.throttle(this._move, this.options.updateInterval, this),

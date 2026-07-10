@@ -853,8 +853,9 @@ class Socket {
 			return false;
 		}
 
-		const center = this._map.getCenter();
-		if (isNaN(center.x) || isNaN(center.y) || isNaN(this._map.getZoom())) {
+		// The map zoom is set during map init, so a valid zoom means the map is
+		// initialised (the viewed rectangle / scroll comes from the layout now).
+		if (isNaN(this._map.getZoom())) {
 			return false;
 		}
 
