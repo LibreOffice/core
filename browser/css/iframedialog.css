@@ -26,3 +26,56 @@
 #iframe-feedback {
 	height: 470px;
 }
+
+/* Extension modal dialogs: separate prefix so titlebar layout can be centered with a transform
+   without disturbing the Feedback dialog above, which relies on content-side -50% margins.  Sizing
+   is inline from the width/height options passed to the L.IFrameDialog constructor; the
+   titlebar/title/close-X rules replace what jQuery UI provides under .ui-dialog. */
+.iframe-extension-wrap {
+	position: absolute;
+	z-index: 1106;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	background: var(--color-background-lighter);
+	border: 1px solid var(--color-border);
+	box-shadow: var(--shadow-elevated);
+	border-radius: var(--border-radius);
+	overflow: hidden;
+}
+.iframe-extension-wrap:focus {
+	outline: none;
+}
+.iframe-extension-wrap .ui-dialog-titlebar {
+	padding: .4em 1em;
+	position: relative;
+	background: var(--color-background);
+	border-bottom: 1px solid var(--color-border);
+}
+.iframe-extension-wrap .ui-dialog-title {
+	margin: 0;
+	padding-right: 24px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 1em;
+	font-weight: bold;
+	color: var(--color-main-text);
+}
+.iframe-extension-wrap .ui-dialog-titlebar-close {
+	position: absolute;
+	right: .3em;
+	top: 50%;
+	width: 20px;
+	margin: -10px 0 0;
+	padding: 1px;
+	height: 20px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+}
+.iframe-extension-modal {
+	display: block;
+	border: 0;
+	width: 100%;
+}

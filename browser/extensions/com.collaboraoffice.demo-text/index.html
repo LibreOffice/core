@@ -14,6 +14,7 @@ button { padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer; f
 .divider { margin: 16px 0; border-top: 1px solid #ddd; }
 .result { margin-top: 8px; padding: 6px; border: 1px solid #ddd; border-radius: 4px; min-height: 1.5em; white-space: pre-wrap; word-break: break-word; }
 .result.error { color: #b00; border-color: #f5c0c0; background: #fff5f5; }
+.swatch { display: inline-block; width: 14px; height: 14px; vertical-align: middle; border: 1px solid #999; margin-right: 6px; }
 </style>
 <script src="../cool.js"></script>
 </head>
@@ -35,6 +36,11 @@ button { padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer; f
 <input id="paraN" type="number" min="1" value="1">
 <button onclick="readNthParagraph()">Read Nth paragraph</button>
 <div id="readResult" class="result"></div>
+
+<div class="divider"></div>
+
+<button onclick="pickAndColorize()">Pick paragraph color...</button>
+<div id="colorResult" class="result">no color picked yet</div>
 
 <script>
 function apply() {
@@ -58,6 +64,39 @@ function apply() {
       }
     }
   }, greeting, colorize);
+}
+
+async function pickAndColorize() {
+  const outcome = await cool.dialog.open({
+    url: 'picker.html',
+    title: 'Pick a color',
+    width: 320,
+  });
+  const el = document.getElementById('colorResult');
+  if (outcome.cancelled) {
+    el.textContent = 'cancelled';
+    return;
+  }
+  const picked = outcome.value;
+  el.innerHTML = '';
+  const s = document.createElement('span');
+  s.className = 'swatch';
+  s.style.background = picked.color;
+  el.appendChild(s);
+  el.appendChild(document.createTextNode('applying ' + picked.name + ' (' + picked.color + ')...'));
+  const rgb = parseInt(picked.color.slice(1), 16); // color value is "#rrggbb"
+  await cool.callRemote(function (rgb) {
+    const desktop = uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
+    const text = desktop.getCurrentFrame().getController().getModel().getText();
+    for (const para of text.createEnumeration()) {
+      try {
+        para.setPropertyValue('CharColor', rgb);
+      } catch (e) {
+        console.log('caught:', e);
+      }
+    }
+  }, rgb);
+  el.lastChild.textContent = picked.name + ' (' + picked.color + ') applied';
 }
 
 function readNthParagraph() {

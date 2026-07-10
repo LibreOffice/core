@@ -27,12 +27,13 @@ window.L.IFrameDialog = window.L.Class.extend({
 		this._loading = false;
 		window.L.setOptions(this, options);
 
-		const containerCss = this.options.dialogCssClass;
-		this._container = window.L.DomUtil.create('div', this.options.prefix + '-wrap ' + containerCss);
+		const containerCss = this.options.dialogCssClass || '';
+		this._container = window.L.DomUtil.create(
+			'div', (this.options.prefix + '-wrap ' + containerCss).trim());
 		if (this.options.titlebar) {
 			const titlebar = window.L.DomUtil.create('div', 'ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix', this._container);
 			const title = window.L.DomUtil.create('h2', 'ui-dialog-title', titlebar);
-			title.innerText = _('Options');
+			title.innerText = this.options.title || _('Options');
 			const closeButton = window.L.DomUtil.create('button', 'ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close', titlebar);
 			window.L.DomUtil.create('span', 'ui-button-icon ui-icon ui-icon-closethick', closeButton);
 			window.L.DomEvent.on(closeButton, 'click', () => this.remove(this._container));
@@ -45,16 +46,20 @@ window.L.IFrameDialog = window.L.Class.extend({
 		// this should be set for making it focusable
 		this._container.tabIndex = -1;
 
-		form = window.L.DomUtil.create('form', '', content);
-
-		this.fillParams(url, params, form);
+		if (!this.options.directSrc) {
+			form = window.L.DomUtil.create('form', '', content);
+			this.fillParams(url, params, form);
+		}
 
 		this._iframe = window.L.DomUtil.create('iframe', this.options.prefix + '-modal', content);
-		this._iframe.name = form.target;
+		if (form) {
+			this._iframe.name = form.target;
+		}
 
 		if (this.options.id) {
 			this._iframe.id = this.options.id;
 		}
+
 
 		const modalButtons = this.options.modalButtons;
 		if (modalButtons) {
@@ -88,7 +93,11 @@ window.L.IFrameDialog = window.L.Class.extend({
 			document.body.appendChild(this._container);
 		}
 
-		form.submit();
+		if (this.options.directSrc) {
+			this._iframe.src = url;
+		} else {
+			form.submit();
+		}
 		this._iframe.addEventListener('load', window.L.bind(this.onLoad, this));
 	},
 

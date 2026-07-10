@@ -71,6 +71,29 @@
  * <json-value>` and unblocks the proxy.  If `callId` is absent the
  * call was fire-and-forget (void-return method or the proxy has a
  * fixed return value); no response is expected.
+ *
+ * The extension can also open a modal dialog whose body is another
+ * page under the extension's own base URL:
+ *
+ *   { msgId: 'Extension_ShowDialog', dialogId, url, title?, width?,
+ *     height? }
+ *
+ * The dialog page is expected to load cool.js too and use
+ * cool.dialog.close(value) / cool.dialog.cancel(), which the dialog
+ * iframe posts back as:
+ *
+ *   { msgId: 'Extension_DialogClose', value }
+ *   { msgId: 'Extension_DialogCancel' }
+ *
+ * COOL then dismisses the dialog and delivers the outcome to the
+ * originating sidebar iframe:
+ *
+ *   { msgId: 'Extension_DialogResult', dialogId, cancelled, value? }
+ *
+ * The titlebar close X and Esc pressed inside the dialog iframe map
+ * to Extension_DialogCancel via the iframe removal path.  Only one
+ * dialog per extension can be open at a time; a second open() while
+ * the first is still up resolves immediately as cancelled.
  */
 
 /* global app */
@@ -109,12 +132,38 @@ interface ExtensionResizeMessage {
 	height: number;
 }
 
-type ExtensionMessage =
+interface ExtensionShowDialogMessage {
+	msgId: 'Extension_ShowDialog';
+	dialogId: string;
+	url: string;
+	title?: string;
+	width?: number;
+	height?: number;
+}
+
+interface ExtensionDialogCloseMessage {
+	msgId: 'Extension_DialogClose';
+	value: unknown;
+}
+
+interface ExtensionDialogCancelMessage {
+	msgId: 'Extension_DialogCancel';
+}
+
+type ExtensionSidebarMessage =
 	| ExtensionCallMessage
 	| ExtensionCloseMessage
 	| ExtensionProxyReturnMessage
 	| ExtensionTeardownDoneMessage
+	| ExtensionResizeMessage
+	| ExtensionShowDialogMessage;
+
+type ExtensionDialogMessage =
+	| ExtensionDialogCloseMessage
+	| ExtensionDialogCancelMessage
 	| ExtensionResizeMessage;
+
+type ExtensionMessage = ExtensionSidebarMessage | ExtensionDialogMessage;
 
 interface ExtensionScriptResult {
 	id: string;
@@ -139,6 +188,14 @@ window.L.Control.Extension = window.L.Control.extend({
 	_panel: null as HTMLDivElement | null,
 	_iframe: null as HTMLIFrameElement | null,
 	_teardownTimer: null as ReturnType<typeof setTimeout> | null,
+	// One modal dialog per extension at a time.  origRemove holds the un-hooked
+	// L.IFrameDialog.remove so _closeDialog can dismiss without re-entering the
+	// user-close override installed in _openDialog.
+	_dialog: null as null | {
+		iframeDialog: any;
+		origRemove: () => void;
+		dialogId: string;
+	},
 
 	onAdd: function (map: any) {
 		this.map = map;
@@ -340,6 +397,12 @@ window.L.Control.Extension = window.L.Control.extend({
 			clearTimeout(this._teardownTimer);
 			this._teardownTimer = null;
 		}
+		// A dialog owned by this extension outlives the sidebar iframe if we
+		// don't dismiss it; no one would be left to receive the result either.
+		if (this._dialog) {
+			this._dialog.origRemove();
+			this._dialog = null;
+		}
 		if (this._panel) {
 			this._panel.remove();
 			this._panel = null;
@@ -348,11 +411,15 @@ window.L.Control.Extension = window.L.Control.extend({
 	},
 
 	_onPostMessage: function (e: MessageEvent) {
-		// Silently ignore postMessages from senders other than our iframe
-		// (browser extensions, dev tools, third-party libs).  Anything
-		// from the iframe, however, is expected to be our protocol; warn
-		// about deviations.
-		if (!this._iframe || e.source !== this._iframe.contentWindow) return;
+		// Route by the sender window: our sidebar iframe speaks the sidebar
+		// half of the protocol, our dialog iframe (when one is open) speaks
+		// the dialog half.  Silently ignore everything else (browser
+		// extensions, dev tools, third-party libs).
+		const fromSidebar = this._iframe && e.source === this._iframe.contentWindow;
+		const fromDialog =
+			this._dialog &&
+			e.source === this._dialog.iframeDialog._iframe.contentWindow;
+		if (!fromSidebar && !fromDialog) return;
 		let msg: ExtensionMessage | null;
 		try {
 			msg = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
@@ -364,6 +431,14 @@ window.L.Control.Extension = window.L.Control.extend({
 			console.warn('postMessage is not an object: ' + JSON.stringify(msg));
 			return;
 		}
+		if (fromSidebar) {
+			this._handleSidebarMessage(msg as ExtensionSidebarMessage);
+		} else {
+			this._handleDialogMessage(msg as ExtensionDialogMessage);
+		}
+	},
+
+	_handleSidebarMessage: function (msg: ExtensionSidebarMessage) {
 		switch (msg.msgId) {
 			case 'Extension_Call':
 				app.socket.sendMessage(
@@ -395,10 +470,125 @@ window.L.Control.Extension = window.L.Control.extend({
 					this._iframe.style.height = msg.height + 'px';
 				}
 				break;
+			case 'Extension_ShowDialog':
+				this._openDialog(msg);
+				break;
 			default:
 				console.warn('unexpected msgId: ' + (msg as any).msgId);
 				break;
 		}
+	},
+
+	_handleDialogMessage: function (msg: ExtensionDialogMessage) {
+		switch (msg.msgId) {
+			case 'Extension_DialogClose':
+				this._closeDialog({ cancelled: false, value: msg.value });
+				break;
+			case 'Extension_DialogCancel':
+				this._closeDialog({ cancelled: true });
+				break;
+			case 'Extension_Resize':
+				// Dialog iframe reports its content's actual scrollHeight
+				// (cool.js sends this on load and via ResizeObserver).  Fit
+				// the iframe height so no empty space is left below.
+				if (this._dialog) {
+					this._dialog.iframeDialog._iframe.style.height = msg.height + 'px';
+				}
+				break;
+			default:
+				console.warn('unexpected msgId: ' + (msg as any).msgId);
+				break;
+		}
+	},
+
+	_openDialog: function (msg: ExtensionShowDialogMessage) {
+		if (this._dialog) {
+			// One modal at a time per extension; the second open() resolves as
+			// cancelled straight away rather than queueing behind the first.
+			this._postDialogResult(msg.dialogId, { cancelled: true });
+			return;
+		}
+		const base = new URL(this.options.baseUrl, document.baseURI);
+		const resolved = new URL(msg.url, base);
+		// Check, just in case:
+		if (!resolved.href.startsWith(base.href)) {
+			console.warn(
+				'Extension_ShowDialog: url [' +
+					msg.url +
+					'] resolves outside baseUrl [' +
+					base.href +
+					']; refusing',
+			);
+			this._postDialogResult(msg.dialogId, { cancelled: true });
+			return;
+		}
+		const iframeOptions: any = {
+			// Own prefix rather than iframe-dialog so extension-specific CSS
+			// can stand on its own without disturbing the Feedback dialog.
+			prefix: 'iframe-extension',
+			titlebar: true,
+			directSrc: true,
+		};
+		if (msg.title !== undefined) iframeOptions.title = msg.title;
+		const iframeDialog = window.L.iframeDialog(
+			resolved.href,
+			{},
+			null,
+			iframeOptions,
+		);
+		// Size on the wrap, not on the iframe: the wrap is the visible dialog
+		// box, and the iframe fills it via width: 100% and the height that
+		// Extension_Resize keeps in sync with the picker's actual content.
+		if (msg.width !== undefined) {
+			iframeDialog._container.style.width = msg.width + 'px';
+		}
+		if (msg.height !== undefined) {
+			iframeDialog._iframe.style.height = msg.height + 'px';
+		}
+		const origRemove = iframeDialog.remove.bind(iframeDialog);
+		// Titlebar X and in-iframe Esc both call remove() directly.  Turn
+		// either of those user gestures into a cancel result on the sidebar
+		// side; the code path from _closeDialog uses origRemove and does not
+		// re-enter this override.
+		iframeDialog.remove = () => {
+			origRemove();
+			if (this._dialog && this._dialog.iframeDialog === iframeDialog) {
+				const dialogId = this._dialog.dialogId;
+				this._dialog = null;
+				this._postDialogResult(dialogId, { cancelled: true });
+			}
+		};
+		this._dialog = {
+			iframeDialog: iframeDialog,
+			origRemove: origRemove,
+			dialogId: msg.dialogId,
+		};
+		iframeDialog.show();
+	},
+
+	_closeDialog: function (result: { cancelled: boolean; value?: unknown }) {
+		if (!this._dialog) return;
+		const dialogId = this._dialog.dialogId;
+		const origRemove = this._dialog.origRemove;
+		this._dialog = null;
+		origRemove();
+		this._postDialogResult(dialogId, result);
+	},
+
+	_postDialogResult: function (
+		dialogId: string,
+		result: { cancelled: boolean; value?: unknown },
+	) {
+		if (!this._iframe || !this._iframe.contentWindow) return;
+		this._iframe.contentWindow.postMessage(
+			JSON.stringify({
+				msgId: 'Extension_DialogResult',
+				dialogId: dialogId,
+				cancelled: result.cancelled,
+				value: result.cancelled ? null : result.value,
+			}),
+			'*',
+		);
 	},
 
 	_onScriptResult: function (e: ExtensionScriptResult) {

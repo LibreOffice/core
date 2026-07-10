@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Pick a color</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px; padding: 12px; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.swatch { height: 40px; border: 1px solid #999; border-radius: 4px; cursor: pointer; position: relative; }
+.swatch:hover { outline: 2px solid #0369a1; }
+.swatch span { position: absolute; left: 4px; bottom: 2px; font-size: 11px; color: #fff; text-shadow: 0 0 2px #000; }
+</style>
+<script src="../cool.js"></script>
+</head>
+<body>
+
+<div class="grid" id="swatches"></div>
+
+<script>
+const colors = [
+    { name: 'red',     color: '#dc2626' },
+    { name: 'orange',  color: '#ea580c' },
+    { name: 'yellow',  color: '#eab308' },
+    { name: 'green',   color: '#16a34a' },
+    { name: 'blue',    color: '#2563eb' },
+    { name: 'indigo',  color: '#4f46e5' },
+    { name: 'violet',  color: '#7c3aed' },
+    { name: 'black',   color: '#111827' },
+];
+
+const grid = document.getElementById('swatches');
+colors.forEach(function (c) {
+    const swatch = document.createElement('div');
+    swatch.className = 'swatch';
+    swatch.style.background = c.color;
+    const label = document.createElement('span');
+    label.textContent = c.name;
+    swatch.appendChild(label);
+    swatch.onclick = function () { cool.dialog.close(c); };
+    grid.appendChild(swatch);
+});
+</script>
+</body>
+</html>
