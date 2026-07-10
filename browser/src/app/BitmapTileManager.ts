@@ -1832,13 +1832,13 @@ class BitmapTileManager extends RenderManagerBase {
 	public predictTilesToSlurp() {
 		if (!this.checkPointers()) return 0;
 
-		var size = app.map.getSize();
+		Util.ensureValue(app.activeDocument);
 
-		if (size.x === 0 || size.y === 0) return 0;
+		var size = app.activeDocument.activeLayout.frameSize;
+
+		if (size.cX === 0 || size.cY === 0) return 0;
 
 		var zoom = Math.round(app.map.getZoom());
-
-		Util.ensureValue(app.activeDocument);
 
 		var pixelBounds =
 			app.activeDocument.activeLayout.getViewportCorePixelBounds();
@@ -1903,8 +1903,8 @@ class BitmapTileManager extends RenderManagerBase {
 			return;
 
 		// be sure canvas is initialized already and has the correct size.
-		const size: any = map.getSize();
-		if (size.x === 0 || size.y === 0) {
+		const size: any = app.activeDocument.activeLayout.frameSize;
+		if (size.cX === 0 || size.cY === 0) {
 			setTimeout(
 				function () {
 					this.update();

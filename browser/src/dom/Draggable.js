@@ -137,12 +137,12 @@ window.L.Draggable = window.L.Evented.extend({
 				    correction = new cool.Point(rect.left, rect.top);
 				offset = offset.add(correction);
 			}
-			if (this._map.getDocSize().x < this._map.getSize().x) {
+			if (this._map.getDocSize().x < app.activeDocument.activeLayout.frameSize.cX) {
 				// don't pan horizontally when the document fits in the viewing
 				// area horizontally (docWidth < viewAreaWidth)
 				offset.x = 0;
 			}
-			if (this._map.getDocSize().y < this._map.getSize().y) {
+			if (this._map.getDocSize().y < app.activeDocument.activeLayout.frameSize.cY) {
 				// don't pan vertically when the document fits in the viewing
 				// area horizontally (docHeight < viewAreaHeight)
 				offset.y = 0;

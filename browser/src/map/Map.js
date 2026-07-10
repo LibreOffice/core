@@ -899,14 +899,6 @@ window.L.Map = window.L.Evented.extend({
 		return zoomIndex;
 	},
 
-	getBounds: function () {
-		var bounds = this.getPixelBounds(),
-		    tl = this.unproject(bounds.getTopLeft()),
-		    br = this.unproject(bounds.getBottomRight());
-
-		return InternBoundsUtil.flexConstruct(tl, br);
-	},
-
 	getMinZoom: function () {
 		return this.options.minZoom === undefined ? this._layersMinZoom || 0 : this.options.minZoom;
 	},
@@ -939,13 +931,6 @@ window.L.Map = window.L.Evented.extend({
 	getPixelBounds: function (center, zoom) {
 		var topLeftPoint = this._getTopLeftPoint(center, zoom);
 		return new cool.Bounds(topLeftPoint, topLeftPoint.add(this.getSize()));
-	},
-
-	getPixelBoundsCore: function (center, zoom) {
-		var bounds = this.getPixelBounds(center, zoom);
-		bounds.min = bounds.min.multiplyBy(app.dpiScale);
-		bounds.max = bounds.max.multiplyBy(app.dpiScale);
-		return bounds;
 	},
 
 	getPixelOrigin: function () {

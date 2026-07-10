@@ -3101,7 +3101,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (app.isXVisibleInTheDisplayedArea(Math.round(center.x * CSSPixelsToTwips)))
 			center.x = app.activeDocument.activeLayout.viewedRectangle.cX1;
 		else {
-			center.x -= this._map.getSize().divideBy(2).x;
+			center.x -= app.activeDocument.activeLayout.frameSize.cX / 2;
 			center.x = Math.round(center.x < 0 ? 0 : center.x);
 			needsXScroll = true;
 		}
@@ -3116,7 +3116,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (app.isYVisibleInTheDisplayedArea(Math.round(controlYDown * CSSPixelsToTwips)) && app.isYVisibleInTheDisplayedArea(Math.round(controlYUp * CSSPixelsToTwips)))
 			center.y = app.activeDocument.activeLayout.viewedRectangle.cY1;
 		else {
-			center.y -= this._map.getSize().divideBy(2).y;
+			center.y -= app.activeDocument.activeLayout.frameSize.cY / 2;
 			center.y = Math.round(center.y < 0 ? 0 : center.y);
 			needsYScroll = true;
 		}
@@ -3538,8 +3538,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (this._map.uiManager.getStartCompareChanges()) // comparechanges view, don't zoom in, to have space for two pages side by side.
 			return;
 
-		var oldSize = e && e.oldSize ? e.oldSize : this._map.getSize();
-		var newSize = e && e.newSize ? e.newSize : this._map.getSize();
+		const frame = app.activeDocument.activeLayout.frameSize;
+		var oldSize = e && e.oldSize ? e.oldSize : new cool.Point(frame.cX, frame.cY);
+		var newSize = e && e.newSize ? e.newSize : new cool.Point(frame.cX, frame.cY);
 		newSize.x *= app.dpiScale;
 		newSize.y *= app.dpiScale;
 		oldSize.x *= app.dpiScale;
