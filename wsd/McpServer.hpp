@@ -149,6 +149,10 @@ public:
     static std::optional<McpToolResult>
     validateExtractArguments(const Poco::JSON::Object::Ptr& arguments);
 
+    /// The value of a Content-Disposition header that offers a download named filename: the name as
+    /// printable ASCII in filename, and in full as percent-encoded UTF-8 in filename*.
+    static std::string contentDisposition(const std::string& filename);
+
     /// Check the format, lang and options arguments any tool may carry. Returns an empty optional
     /// when each is absent or well formed: a format is an extension and a lang a language tag, both
     /// made of ASCII letters, digits and hyphens, and options hold no control characters. Otherwise

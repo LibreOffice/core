@@ -29,6 +29,7 @@
 #include <Common.hpp>
 #include <Protocol.hpp>
 #include <Unit.hpp>
+#include <common/JailUtil.hpp>
 #include <common/Util.hpp>
 #include <helpers.hpp>
 #include <wsd/McpTools.hpp>
@@ -36,6 +37,7 @@
 #include <Poco/JSON/Object.h>
 #include <Poco/JSON/Parser.h>
 #include <Poco/Path.h>
+#include <Poco/Util/Application.h>
 #include <Poco/Util/LayeredConfiguration.h>
 
 using namespace std::literals;
@@ -53,6 +55,33 @@ std::string readWholeFile(const std::string& path)
 {
     std::ifstream stream(path, std::ios::binary);
     return std::string(std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>());
+}
+
+/// The number of files named filename anywhere under the directories that hold the incoming
+/// documents of this process. The child root of a process is a directory under childRootBase whose
+/// name starts with the process id and a dash.
+std::size_t countIncomingFiles(const std::string& childRootBase, const std::string& filename)
+{
+    const std::string prefix = std::to_string(getpid()) + '-';
+    std::error_code error;
+    std::size_t count = 0;
+    for (std::filesystem::directory_iterator root(childRootBase, error), rootEnd;
+         !error && root != rootEnd; root.increment(error))
+    {
+        if (!root->path().filename().string().starts_with(prefix))
+            continue;
+
+        std::error_code innerError;
+        for (std::filesystem::recursive_directory_iterator
+                 it(root->path().string() + JailUtil::CHILDROOT_TMP_INCOMING_PATH, innerError),
+             end;
+             !innerError && it != end; it.increment(innerError))
+        {
+            if (it->path().filename() == filename)
+                ++count;
+        }
+    }
+    return count;
 }
 
 /// The name of a document whose kit exits when it is asked to save it, as a crash would end it.
@@ -215,8 +244,28 @@ public:
         return block->optValue<std::string>("text", std::string());
     }
 
+    static std::string stringValueFrom(const std::string& json, const std::string& key)
+    {
+        try
+        {
+            Poco::JSON::Parser parser;
+            auto object = parser.parse(json).extract<Poco::JSON::Object::Ptr>();
+            return object->optValue<std::string>(key, std::string());
+        }
+        catch (const std::exception&)
+        {
+            return std::string();
+        }
+    }
+
     void runTest(const std::shared_ptr<http::Session>& session)
     {
+        // The configured child root, under which this process has a child root of its own.
+        const std::string childRootBase =
+            Poco::Path(Poco::Util::Application::instance().config().getString("child_root_path"))
+                .makeAbsolute()
+                .toString();
+
         const std::string helloPath = Poco::Path(TDOC, "hello.odt").toString();
         const std::string helloData = Util::base64Encode(readWholeFile(helloPath));
 
@@ -352,6 +401,60 @@ public:
             LOK_ASSERT(!blob.empty());
             const std::string pdf = Util::base64Decode(blob);
             LOK_ASSERT(pdf.rfind("%PDF-", 0) == 0);
+        }
+
+        // The same conversion asked for as a download link returns a JSON text result naming a
+        // download path. Fetching it with the bearer token gives the PDF with the right content
+        // type; a second fetch finds nothing because the link serves the document only once.
+        {
+            const std::string textData = Util::base64Encode(std::string("hello world"));
+            auto response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":8,"method":"tools/call","params":)"
+                         R"({"name":"convert_document","arguments":)"
+                         R"({"data":")" + textData + R"(","filename":"hello.txt",)"
+                         R"("format":"pdf","output":"link"}}})");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(contains(response->getBody(), R"("isError":false)"));
+
+            // The link is a full address of this server, ending in the download path.
+            const std::string linkJson = textResultFrom(response->getBody());
+            const std::string downloadUrl = stringValueFrom(linkJson, "download_url");
+            LOK_ASSERT(downloadUrl.rfind("http", 0) == 0);
+            const std::size_t pathStart = downloadUrl.find("/cool/mcp/download/");
+            LOK_ASSERT(pathStart != std::string::npos);
+            const std::string downloadPath = downloadUrl.substr(pathStart);
+            LOK_ASSERT(contains(linkJson, R"("mimeType":"application/pdf")"));
+
+            // The produced document waits in the store until it is fetched, and is gone from disk
+            // once it has been served.
+            LOK_ASSERT_EQUAL(static_cast<std::size_t>(1),
+                             countIncomingFiles(childRootBase, "hello.pdf"));
+
+            auto download = mcpGet(session, downloadPath);
+            LOK_ASSERT(download->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(std::string(download->getBody()).rfind("%PDF-", 0) == 0);
+            LOK_ASSERT(download->get("Content-Type") == "application/pdf");
+            LOK_ASSERT_EQUAL_STR(R"(attachment; filename="hello.pdf"; filename*=UTF-8''hello.pdf)",
+                                 download->get("Content-Disposition"));
+            LOK_ASSERT_EQUAL(static_cast<std::size_t>(0),
+                             countIncomingFiles(childRootBase, "hello.pdf"));
+
+            // The link is single use, and a second fetch is told so.
+            auto again = mcpGet(session, downloadPath);
+            LOK_ASSERT(again->statusCode() == http::StatusCode::Gone);
+
+            // A link that was never issued is not found.
+            auto unknown = mcpGet(session, "/cool/mcp/download/0123456789abcdef");
+            LOK_ASSERT(unknown->statusCode() == http::StatusCode::NotFound);
+        }
+
+        // Fetching a download link without the right bearer token is refused before the link is
+        // looked up, and the reply names the credential it lacks.
+        {
+            auto response =
+                mcpGet(session, "/cool/mcp/download/does-not-exist", "Bearer wrong-key");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::Unauthorized);
+            LOK_ASSERT(contains(response->getBody(), "bearer token"));
         }
 
         // Transforming a document with content controls returns the changed document, an OOXML
@@ -499,11 +602,13 @@ public:
             LOK_ASSERT(contains(response->getBody(), R"("isError":true)"));
         }
 
-        // Uploading without the right bearer token is refused.
+        // Uploading without the right bearer token is refused, and the reply names the credential
+        // it lacks.
         {
             auto response =
                 mcpUpload(session, helloPath, "?filename=hello.odt", "Bearer wrong-key");
             LOK_ASSERT(response->statusCode() == http::StatusCode::Unauthorized);
+            LOK_ASSERT(contains(response->getBody(), "bearer token"));
         }
 
         // An upload is accepted when the scheme of the authorization header is written in another
@@ -582,11 +687,16 @@ public:
             LOK_ASSERT(contains(response->getBody(), "larger than the server accepts"));
         }
 
-        // The message address takes only POST.
+        // The message address takes only POST, and a download link only GET.
         {
             auto response = mcpGet(session, "/cool/mcp");
             LOK_ASSERT_EQUAL(http::StatusCode::MethodNotAllowed, response->statusCode());
             LOK_ASSERT_EQUAL_STR("POST", response->get("Allow"));
+
+            response = mcpCall(session, "{}", "Bearer " + ApiKey,
+                               "/cool/mcp/download/0123456789abcdef");
+            LOK_ASSERT_EQUAL(http::StatusCode::MethodNotAllowed, response->statusCode());
+            LOK_ASSERT_EQUAL_STR("GET", response->get("Allow"));
         }
 
         // An upload with an empty body is a bad request.

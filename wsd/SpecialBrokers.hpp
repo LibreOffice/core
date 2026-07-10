@@ -93,12 +93,14 @@ public:
     }
 
     /// Install the function that carries the outcome of a conversion or transform: true, the
-    /// produced document bytes, the result file name and a note on success, or false, a message,
-    /// an empty file name and an empty note on failure. The note holds the warnings of a transform
-    /// that ran with a problem, and is empty otherwise.
-    void setSaveAsResponder(std::function<void(bool success, std::string payloadOrError,
-                                               const std::string& filename, const std::string& note)>
-                                responder)
+    /// path of the produced document, the result file name and a note on success, or false, a
+    /// message, an empty file name and an empty note on failure. The file at the path is there
+    /// until the function returns. The note holds the warnings of a transform that ran with a
+    /// problem, and is empty otherwise.
+    void setSaveAsResponder(
+        std::function<void(bool success, const std::string& pathOrError,
+                           const std::string& filename, const std::string& note)>
+            responder)
     {
         responders().saveAs = std::move(responder);
         _hasSaveAsResponder = true;

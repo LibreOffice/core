@@ -104,11 +104,11 @@ bool refuseMcpRequestEarly(const Poco::Net::HTTPRequest& request,
 /// True when the request is a POST to the upload address of the Model Context Protocol endpoint.
 bool isMcpUpload(const Poco::Net::HTTPRequest& request);
 
-/// Serve the Model Context Protocol endpoint at /cool/mcp. Applies the
-/// endpoint's own gates (config switch, HTTP method, Origin, bearer key)
-/// and then hands the body to the transport-agnostic core. A tool call
-/// that loads a document keeps the request open and transfers the socket
-/// through the disposition, in the same way a convert-to request does.
+/// Serve the Model Context Protocol endpoint at /cool/mcp. Applies the endpoint's own gates (config
+/// switch, HTTP method, Origin, bearer key) and then hands the body to the transport-agnostic core.
+/// A tool call that loads a document keeps the request open and transfers the socket through the
+/// disposition, in the same way a convert-to request does. A download hands the socket to a session
+/// that sends the document as the socket drains.
 /// @return true if request has been handled synchronously and response sent, otherwise false
 bool handleMcpRequest(const Poco::Net::HTTPRequest& request,
                       const RequestDetails& requestDetails, std::istream& message,

@@ -10,10 +10,11 @@
  */
 
 /*
- * A short-lived store of documents uploaded to the Model Context Protocol endpoint. A client with
- * shell access can send the bytes of a document once and then name it by identifier in one or more
- * tool calls. Each entry carries the time it stops being valid. An entry whose time has passed is
- * unknown to a lookup, and it is removed from disk the next time the store is used.
+ * A short-lived store of documents held by the Model Context Protocol endpoint under an identifier.
+ * It holds documents a client uploaded once and names by identifier in any number of later tool
+ * calls, and documents a tool produced that a client fetches once through a download link. Each
+ * entry carries the time it stops being valid. An entry whose time has passed is unknown to a
+ * lookup, and it is removed from disk the next time the store is used.
  */
 
 #pragma once
@@ -22,6 +23,7 @@
 
 #include <chrono>
 #include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <istream>
 #include <map>
@@ -33,14 +35,25 @@ class McpUploads
 public:
     using Clock = std::chrono::steady_clock;
 
-    /// How long an uploaded document stays available before it is removed.
+    /// What a stored document is there for. A document a client uploaded is named in later tool
+    /// calls and stays available until its time passes. A document a tool produced is fetched once
+    /// through a download link. The two are told apart, so an identifier of one kind is unknown to
+    /// the other.
+    enum class Kind : std::uint8_t
+    {
+        Upload,
+        Download
+    };
+
+    /// How long a stored document stays available before it is removed.
     static constexpr std::chrono::seconds TimeToLive{ 900 };
 
     /// The most bytes the store holds at one time, over every stored document.
     static constexpr std::size_t MaxStoredBytes = std::size_t(2) * 1024 * 1024 * 1024;
 
-    /// The most documents the store holds at one time. The documents being written count. The
-    /// number allows about 18 new documents a second over the 15 minutes each one stays.
+    /// The most documents the store holds at one time. The documents being written count, and so
+    /// does a produced document that was fetched, until its time passes. The number allows about 18
+    /// new documents a second over the 15 minutes each one stays.
     static constexpr std::size_t MaxStoredEntries = 16384;
 
     /// The time every upload is given to arrive whole, on top of the time its size needs.
@@ -60,17 +73,22 @@ public:
     /// The one store for the process.
     static McpUploads& instance();
 
-    /// Store the given bytes as an uploaded document named after filename and return the identifier
-    /// a later tool call uses to name it. Returns an empty string when the document cannot be
+    /// Store the given bytes as a document of the given kind, named after filename, and return the
+    /// identifier used to name it later. Returns an empty string when the document cannot be
     /// stored, which includes when it would take the store past MaxStoredBytes. now is the current
     /// time, taken as an argument so a test can control it.
-    std::string store(const std::string& filename, const std::string& bytes,
+    std::string store(Kind kind, const std::string& filename, const std::string& bytes,
                       Clock::time_point now = Clock::now());
 
     /// Store the next size bytes of source in the same way. Returns an empty string when source
     /// ends before size bytes, as well as in the cases above.
-    std::string store(const std::string& filename, std::istream& source, std::size_t size,
-                      Clock::time_point now = Clock::now());
+    std::string store(Kind kind, const std::string& filename, std::istream& source,
+                      std::size_t size, Clock::time_point now = Clock::now());
+
+    /// Store the file at source, of size bytes, in the same way, as a hard link to it or, where
+    /// that fails, a copy. The file at source is left in place.
+    std::string storeFile(Kind kind, const std::string& filename, const std::string& source,
+                          std::size_t size, Clock::time_point now = Clock::now());
 
     /// True when a document of size bytes fits in the store as it is now, after the documents whose
     /// time has passed are removed, both in bytes and in the number of documents. now is the
@@ -87,15 +105,29 @@ public:
     /// stored.
     void release(std::size_t size);
 
-    /// Enter the document written at path, whose size bytes and place reserve already counted, and
-    /// return the identifier used to name it later. The store owns the file from then on.
-    std::string adopt(const std::string& path, std::size_t size,
+    /// Enter the document written at path, whose size bytes and place reserve already counted, as a
+    /// document of the given kind, and return the identifier used to name it later. The store owns
+    /// the file from then on.
+    std::string adopt(Kind kind, const std::string& path, std::size_t size,
                       Clock::time_point now = Clock::now());
 
-    /// Return the stored path for id, or an empty string when id is unknown or its time has passed.
-    /// Entries whose time has passed are removed as they are found. now is the current time, taken
-    /// as an argument so a test can control it.
+    /// Return the stored path of the uploaded document id names, or an empty string when id is
+    /// unknown, names a document of another kind, or its time has passed. Entries whose time has
+    /// passed are removed as they are found. now is the current time, taken as an argument so a
+    /// test can control it.
     std::string lookup(const std::string& id, Clock::time_point now = Clock::now());
+
+    /// Return the stored path of the produced document id names, and mark it taken so a later
+    /// lookup or take finds nothing. Returns an empty string when id is unknown, names a document
+    /// of another kind, has been taken already, or its time has passed. alreadyTaken is set to true
+    /// when the id names a document taken before, and to false otherwise. The file on disk is left
+    /// in place for the caller to serve once and then remove with discardFile. now is the current
+    /// time, taken as an argument so a test can control it.
+    std::string take(const std::string& id, bool& alreadyTaken,
+                     Clock::time_point now = Clock::now());
+
+    /// Remove a file handed out by take together with the directory that held it.
+    static void discardFile(const std::string& path);
 
     /// Remove every document whose time has passed. Does nothing when another call holds the store,
     /// since the next call removes them as well. now is the current time, taken as an argument so a
@@ -105,16 +137,18 @@ public:
 private:
     struct Entry
     {
+        /// Where the document is stored, or empty once a download has taken it.
         std::string path;
+        Kind kind = Kind::Upload;
         Clock::time_point expiry;
-        /// The size of the stored document in bytes.
+        /// The size of the stored document in bytes, or zero once it has been taken.
         std::size_t size = 0;
     };
 
     /// Count size bytes against the store, write the document with write, which returns its path or
     /// an empty string on failure, and enter it under a new identifier. Returns the identifier, or
     /// an empty string when the store has no room or the write fails.
-    std::string storeWith(std::size_t size, const std::function<std::string()>& write,
+    std::string storeWith(Kind kind, std::size_t size, const std::function<std::string()>& write,
                           Clock::time_point now);
 
     /// Remove every entry whose time has passed, deleting each one's file and the directory that

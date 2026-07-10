@@ -30,29 +30,39 @@ McpUploads& McpUploads::instance()
     return uploads;
 }
 
-std::string McpUploads::store(const std::string& filename, const std::string& bytes,
+std::string McpUploads::store(Kind kind, const std::string& filename, const std::string& bytes,
                               Clock::time_point now)
 {
-    return storeWith(bytes.size(),
+    return storeWith(kind, bytes.size(),
                      [&filename, &bytes]()
                      { return McpTools::writeIncomingDocument(filename, bytes); },
                      now);
 }
 
-std::string McpUploads::store(const std::string& filename, std::istream& source, std::size_t size,
-                              Clock::time_point now)
+std::string McpUploads::store(Kind kind, const std::string& filename, std::istream& source,
+                              std::size_t size, Clock::time_point now)
 {
-    return storeWith(size,
+    return storeWith(kind, size,
                      [&filename, &source, size]()
                      { return McpTools::writeIncomingDocument(filename, source, size); },
                      now);
 }
 
-std::string McpUploads::storeWith(std::size_t size, const std::function<std::string()>& write,
+std::string McpUploads::storeFile(Kind kind, const std::string& filename,
+                                  const std::string& source, std::size_t size,
                                   Clock::time_point now)
 {
+    return storeWith(kind, size,
+                     [&filename, &source]()
+                     { return McpTools::linkIncomingDocument(filename, source); },
+                     now);
+}
+
+std::string McpUploads::storeWith(Kind kind, std::size_t size,
+                                  const std::function<std::string()>& write, Clock::time_point now)
+{
     // The size is counted against the store while the file is written. The lock is held only to
-    // count the size and to enter the document, so a lookup goes ahead during the write.
+    // count the size and to enter the document, so a lookup or a take goes ahead during the write.
     if (!reserve(size, now))
         return std::string();
 
@@ -63,7 +73,7 @@ std::string McpUploads::storeWith(std::size_t size, const std::function<std::str
         return std::string();
     }
 
-    return adopt(path, size, now);
+    return adopt(kind, path, size, now);
 }
 
 bool McpUploads::reserve(std::size_t size, Clock::time_point now)
@@ -88,14 +98,15 @@ void McpUploads::release(std::size_t size)
         --_pendingEntries;
 }
 
-std::string McpUploads::adopt(const std::string& path, std::size_t size, Clock::time_point now)
+std::string McpUploads::adopt(Kind kind, const std::string& path, std::size_t size,
+                              Clock::time_point now)
 {
     const std::string id = Util::rng::getHexString(32);
     std::lock_guard<std::mutex> lock(_mutex);
     if (_pendingEntries > 0)
         --_pendingEntries;
-    _entries[id] = Entry{ path, now + TimeToLive, size };
-    LOG_TRC("MCP: stored upload [" << id << "] at [" << path << ']');
+    _entries[id] = Entry{ path, kind, now + TimeToLive, size };
+    LOG_TRC("MCP: stored document [" << id << "] at [" << path << ']');
     return id;
 }
 
@@ -105,10 +116,34 @@ std::string McpUploads::lookup(const std::string& id, Clock::time_point now)
     purgeExpired(now);
 
     const auto it = _entries.find(id);
-    if (it == _entries.end())
+    if (it == _entries.end() || it->second.kind != Kind::Upload)
         return std::string();
     return it->second.path;
 }
+
+std::string McpUploads::take(const std::string& id, bool& alreadyTaken, Clock::time_point now)
+{
+    std::lock_guard<std::mutex> lock(_mutex);
+    purgeExpired(now);
+
+    alreadyTaken = false;
+    const auto it = _entries.find(id);
+    if (it == _entries.end() || it->second.kind != Kind::Download)
+        return std::string();
+
+    // The entry stays until its time passes, with no path, so a second fetch is told the link was
+    // used.
+    std::string path = std::move(it->second.path);
+    it->second.path.clear();
+    _storedBytes -= it->second.size;
+    it->second.size = 0;
+    alreadyTaken = path.empty();
+    if (!path.empty())
+        LOG_TRC("MCP: handed out document [" << id << "] from [" << path << ']');
+    return path;
+}
+
+void McpUploads::discardFile(const std::string& path) { FileUtil::removeFileAndEmptyParent(path); }
 
 bool McpUploads::hasRoomFor(std::size_t size, Clock::time_point now)
 {
@@ -136,7 +171,8 @@ void McpUploads::purgeExpired(Clock::time_point now)
     {
         if (it->second.expiry <= now)
         {
-            FileUtil::removeFileAndEmptyParent(it->second.path);
+            if (!it->second.path.empty())
+                FileUtil::removeFileAndEmptyParent(it->second.path);
             _storedBytes -= it->second.size;
             it = _entries.erase(it);
         }

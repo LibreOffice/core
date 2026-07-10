@@ -187,6 +187,33 @@ void addInputProperties(Poco::JSON::Object::Ptr properties)
                       "this is.");
 }
 
+// How a tool that produces a document returns it. This is added to the two write-path tools so a
+// client can ask for a large document as a download link.
+const std::string OutputDescription =
+    " Set \"output\" to \"inline\" (the default) to get the produced document in the result, or to "
+    "\"link\" to get a download_url instead, which suits a large document. Fetch the download_url "
+    "with a GET request whose Authorization header carries the bearer token the MCP client is "
+    "configured with. That token lives in the client's configuration and is not passed to the "
+    "tools, so when it is not available, ask the user for it, or give the user the link to fetch. "
+    "A link serves the document once, and expires after 15 minutes. A document larger than 16 "
+    "MB comes as a download_url even with \"inline\".";
+
+// Add the output property that says how a produced document is returned.
+void addOutputProperty(Poco::JSON::Object::Ptr properties)
+{
+    Poco::JSON::Object::Ptr property = new Poco::JSON::Object();
+    property->set("type", "string");
+    property->set("description",
+                  "How the produced document is returned. \"inline\" returns the document in the "
+                  "result. \"link\" returns a download_url, fetched once within 15 minutes with "
+                  "the bearer token the MCP client is configured with.");
+    Poco::JSON::Array::Ptr allowed = new Poco::JSON::Array();
+    allowed->add("inline");
+    allowed->add("link");
+    property->set("enum", allowed);
+    properties->set("output", property);
+}
+
 Poco::JSON::Object::Ptr makeObjectSchema(const Poco::JSON::Object::Ptr& properties)
 {
     Poco::JSON::Object::Ptr schema = new Poco::JSON::Object();
@@ -265,6 +292,7 @@ Poco::JSON::Object::Ptr makeConvertDocumentSchema()
                       "convert-to endpoint accepts.");
     addStringProperty(properties, "lang",
                       "The language to load the document in, as a language tag such as \"en-US\".");
+    addOutputProperty(properties);
     Poco::JSON::Object::Ptr schema = makeObjectSchema(properties);
     setRequired(schema, { "format" });
     return schema;
@@ -280,6 +308,7 @@ Poco::JSON::Object::Ptr makeTransformDocumentStructureSchema()
     addStringProperty(properties, "format",
                       "The file format the changed document is returned in, as an extension. When "
                       "it is left out the document is returned in the format it came in.");
+    addOutputProperty(properties);
     Poco::JSON::Object::Ptr schema = makeObjectSchema(properties);
     setRequired(schema, { "transform" });
     return schema;
@@ -291,7 +320,7 @@ std::string makeConvertDocumentDescription()
                "Convert a document to another file format and return the converted document. Set "
                "\"format\" to the target format as an extension, for example \"pdf\", \"odt\" or "
                "\"docx\". The converted document comes back as an embedded resource.") +
-           InputAlternativesDescription;
+           InputAlternativesDescription + OutputDescription;
 }
 
 std::string makeTransformDocumentStructureDescription()
@@ -314,7 +343,7 @@ std::string makeTransformDocumentStructureDescription()
            DocumentToolDescriptions::TRANSFORM_WRITER +
            " The changed document is returned as an embedded resource. Set \"format\" to return it "
            "in a different file format." +
-           InputAlternativesDescription;
+           InputAlternativesDescription + OutputDescription;
 }
 
 // Serialise the tools as the array a tools/list response carries.
@@ -466,6 +495,23 @@ McpServer::validateExtractArguments(const Poco::JSON::Object::Ptr& arguments)
                              "of letters, digits, colons and dollar signs.");
 
     return std::nullopt;
+}
+
+std::string McpServer::contentDisposition(const std::string& filename)
+{
+    // The plain name keeps printable ASCII only, with each other byte, a backslash and a quote
+    // replaced by an underscore. The full name follows as percent-encoded UTF-8 (RFC 6266).
+    std::string plainName = filename;
+    for (char& character : plainName)
+    {
+        const unsigned char value = static_cast<unsigned char>(character);
+        if (value < 0x20 || value >= 0x7f || character == '\\' || character == '"')
+            character = '_';
+    }
+
+    std::string encodedName;
+    Poco::URI::encode(filename, "#&+:;=?@/", encodedName);
+    return "attachment; filename=\"" + plainName + "\"; filename*=UTF-8''" + encodedName;
 }
 
 std::optional<McpServer::McpToolResult>

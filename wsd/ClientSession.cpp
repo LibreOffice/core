@@ -5750,19 +5750,13 @@ bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
             return true;
         }
 
-        // With a save-as responder, the produced document goes to it as bytes.
+        // With a save-as responder, the produced document goes to it by its path.
         if (_convertResponders)
         {
-            // The produced document is read into memory and handed on whole. Its size is bounded
-            // by the same ai.mcp.max_file_size setting that bounds the input. Zero means no limit,
-            // and then the largest size a whole-file read takes is the bound.
-            const std::size_t configuredMax =
+            // The produced document is bounded by the same ai.mcp.max_file_size setting that
+            // bounds the input. Zero means no limit.
+            const std::size_t maxProducedBytes =
                 ConfigUtil::getConfigValue<std::size_t>("ai.mcp.max_file_size", 0);
-            const int maxProducedBytes =
-                (configuredMax == 0 ||
-                 configuredMax > static_cast<std::size_t>(std::numeric_limits<int>::max()))
-                    ? std::numeric_limits<int>::max()
-                    : static_cast<int>(configuredMax);
 
             auto responder = std::move(_convertResponders->saveAs);
             const std::string resultPath = resultURL.getPath();
@@ -5773,20 +5767,15 @@ bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
                 responder(false, "the conversion produced no document", std::string(),
                           std::string());
             }
-            else if (producedBytes > NumUtil::makeUnsigned(maxProducedBytes))
+            else if (maxProducedBytes != 0 && producedBytes > maxProducedBytes)
             {
                 responder(false, "the produced document is larger than the server accepts",
                           std::string(), std::string());
             }
             else
             {
-                std::string bytes;
-                if (FileUtil::readFile(resultPath, bytes, maxProducedBytes) > 0)
-                    responder(true, std::move(bytes), Poco::Path(resultPath).getFileName(),
-                              _convertResponders->transformNote);
-                else
-                    responder(false, "the produced document could not be read", std::string(),
-                              std::string());
+                responder(true, resultPath, Poco::Path(resultPath).getFileName(),
+                          _convertResponders->transformNote);
             }
 
             LOG_TRC("Removing save-as ClientSession after conversion.");

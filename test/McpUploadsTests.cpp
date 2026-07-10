@@ -44,10 +44,14 @@ class McpUploadsTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testReservedRoomIsHeldUntilGivenBack);
     CPPUNIT_TEST(testDocumentIsGoneAfterItsTimeToLive);
     CPPUNIT_TEST(testExpiredDocumentIsRemovedFromDisk);
+    CPPUNIT_TEST(testTakenDocumentIsHandedOutOnlyOnce);
+    CPPUNIT_TEST(testDiscardedFileIsRemovedFromDisk);
+    CPPUNIT_TEST(testAnIdentifierServesOnlyItsOwnKind);
     CPPUNIT_TEST(testStreamedDocumentIsStoredWhole);
     CPPUNIT_TEST(testShortStreamIsRefusedAndLeavesNothing);
     CPPUNIT_TEST(testLongNameKeepsItsExtension);
     CPPUNIT_TEST(testStoreHoldsABoundedNumberOfDocuments);
+    CPPUNIT_TEST(testStoredFileIsKeptWholeAndSourceIsLeft);
     CPPUNIT_TEST(testUploadIsGivenTimeForItsSize);
     CPPUNIT_TEST(testUploadSinkReportsAFullStore);
     CPPUNIT_TEST_SUITE_END();
@@ -58,10 +62,14 @@ class McpUploadsTests : public CPPUNIT_NS::TestFixture
     void testReservedRoomIsHeldUntilGivenBack();
     void testDocumentIsGoneAfterItsTimeToLive();
     void testExpiredDocumentIsRemovedFromDisk();
+    void testTakenDocumentIsHandedOutOnlyOnce();
+    void testDiscardedFileIsRemovedFromDisk();
+    void testAnIdentifierServesOnlyItsOwnKind();
     void testStreamedDocumentIsStoredWhole();
     void testShortStreamIsRefusedAndLeavesNothing();
     void testLongNameKeepsItsExtension();
     void testStoreHoldsABoundedNumberOfDocuments();
+    void testStoredFileIsKeptWholeAndSourceIsLeft();
     void testUploadIsGivenTimeForItsSize();
     void testUploadSinkReportsAFullStore();
 
@@ -152,7 +160,8 @@ void McpUploadsTests::testStoredDocumentIsFoundByItsId()
     constexpr std::string_view testname = __func__;
 
     const auto now = McpUploads::Clock::now();
-    const std::string id = McpUploads::instance().store("hello.odt", "some document bytes", now);
+    const std::string id = McpUploads::instance().store(McpUploads::Kind::Upload, "hello.odt",
+                                                       "some document bytes", now);
     LOK_ASSERT(!id.empty());
 
     const std::string path = McpUploads::instance().lookup(id, now);
@@ -202,7 +211,8 @@ void McpUploadsTests::testDocumentIsGoneAfterItsTimeToLive()
     constexpr std::string_view testname = __func__;
 
     const auto now = McpUploads::Clock::now();
-    const std::string id = McpUploads::instance().store("hello.odt", "bytes", now);
+    const std::string id =
+        McpUploads::instance().store(McpUploads::Kind::Upload, "hello.odt", "bytes", now);
 
     // Just before its time is up the document is still found.
     LOK_ASSERT(!McpUploads::instance().lookup(id, now + McpUploads::TimeToLive -
@@ -220,7 +230,8 @@ void McpUploadsTests::testExpiredDocumentIsRemovedFromDisk()
     constexpr std::string_view testname = __func__;
 
     const auto now = McpUploads::Clock::now();
-    const std::string id = McpUploads::instance().store("hello.odt", "bytes", now);
+    const std::string id =
+        McpUploads::instance().store(McpUploads::Kind::Upload, "hello.odt", "bytes", now);
     const std::string path = McpUploads::instance().lookup(id, now);
     LOK_ASSERT(fileExists(path));
 
@@ -231,6 +242,73 @@ void McpUploadsTests::testExpiredDocumentIsRemovedFromDisk()
     LOK_ASSERT(!fileExists(path));
 }
 
+void McpUploadsTests::testTakenDocumentIsHandedOutOnlyOnce()
+{
+    constexpr std::string_view testname = __func__;
+
+    const auto now = McpUploads::Clock::now();
+    const std::string id =
+        McpUploads::instance().store(McpUploads::Kind::Download, "result.pdf", "bytes", now);
+
+    // Taking the document returns its path and leaves the file on disk to be served.
+    bool alreadyTaken = true;
+    const std::string path = McpUploads::instance().take(id, alreadyTaken, now);
+    LOK_ASSERT(!path.empty());
+    LOK_ASSERT(!alreadyTaken);
+    LOK_ASSERT(fileExists(path));
+
+    // A second take, and a lookup, find nothing: the document is handed out only once, and the
+    // second take says it was taken before.
+    LOK_ASSERT(McpUploads::instance().take(id, alreadyTaken, now).empty());
+    LOK_ASSERT(alreadyTaken);
+    LOK_ASSERT(McpUploads::instance().lookup(id, now).empty());
+
+    // An identifier that was never issued is not one taken before.
+    LOK_ASSERT(McpUploads::instance().take("0123456789abcdef", alreadyTaken, now).empty());
+    LOK_ASSERT(!alreadyTaken);
+}
+
+void McpUploadsTests::testDiscardedFileIsRemovedFromDisk()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::size_t before = countIncomingEntries();
+    const auto now = McpUploads::Clock::now();
+    const std::string id =
+        McpUploads::instance().store(McpUploads::Kind::Download, "result.pdf", "bytes", now);
+    bool alreadyTaken = false;
+    const std::string path = McpUploads::instance().take(id, alreadyTaken, now);
+    LOK_ASSERT(fileExists(path));
+
+    // Discarding the served file removes it from disk, and the directory that held it with it.
+    McpUploads::discardFile(path);
+    LOK_ASSERT(!fileExists(path));
+    LOK_ASSERT(!std::filesystem::exists(std::filesystem::path(path).parent_path()));
+    LOK_ASSERT_EQUAL(before, countIncomingEntries());
+}
+
+void McpUploadsTests::testAnIdentifierServesOnlyItsOwnKind()
+{
+    constexpr std::string_view testname = __func__;
+
+    const auto now = McpUploads::Clock::now();
+
+    // An uploaded document is not a produced one, so it cannot be taken and stays available to be
+    // looked up afterwards.
+    const std::string uploadId =
+        McpUploads::instance().store(McpUploads::Kind::Upload, "hello.odt", "bytes", now);
+    bool alreadyTaken = false;
+    LOK_ASSERT(McpUploads::instance().take(uploadId, alreadyTaken, now).empty());
+    LOK_ASSERT(!McpUploads::instance().lookup(uploadId, now).empty());
+
+    // A produced document is not an uploaded one, so it cannot be looked up and stays available to
+    // be taken afterwards.
+    const std::string downloadId =
+        McpUploads::instance().store(McpUploads::Kind::Download, "result.pdf", "bytes", now);
+    LOK_ASSERT(McpUploads::instance().lookup(downloadId, now).empty());
+    LOK_ASSERT(!McpUploads::instance().take(downloadId, alreadyTaken, now).empty());
+}
+
 void McpUploadsTests::testStreamedDocumentIsStoredWhole()
 {
     constexpr std::string_view testname = __func__;
@@ -238,7 +316,8 @@ void McpUploadsTests::testStreamedDocumentIsStoredWhole()
     // The stored document is the stated number of bytes, and what follows in the stream is left.
     std::istringstream source("document bytes and what follows");
     const auto now = McpUploads::Clock::now();
-    const std::string id = McpUploads::instance().store("hello.odt", source, 14, now);
+    const std::string id =
+        McpUploads::instance().store(McpUploads::Kind::Upload, "hello.odt", source, 14, now);
     LOK_ASSERT(!id.empty());
 
     std::string stored;
@@ -254,7 +333,8 @@ void McpUploadsTests::testShortStreamIsRefusedAndLeavesNothing()
     // behind.
     const std::size_t before = countIncomingEntries();
     std::istringstream source("short");
-    LOK_ASSERT(McpUploads::instance().store("hello.odt", source, 100).empty());
+    LOK_ASSERT(
+        McpUploads::instance().store(McpUploads::Kind::Upload, "hello.odt", source, 100).empty());
     LOK_ASSERT_EQUAL(before, countIncomingEntries());
 }
 
@@ -284,14 +364,17 @@ void McpUploadsTests::testStoreHoldsABoundedNumberOfDocuments()
     // A stored document and the documents being written together fill the store up to its number of
     // documents, and one more is refused, however small.
     const auto now = McpUploads::Clock::now();
-    LOK_ASSERT(!McpUploads::instance().store("one.odt", "bytes", now).empty());
+    LOK_ASSERT(
+        !McpUploads::instance().store(McpUploads::Kind::Upload, "one.odt", "bytes", now).empty());
     {
         HeldRoom room;
         for (std::size_t i = 1; i < McpUploads::MaxStoredEntries; ++i)
             LOK_ASSERT(room.reserve(1, now));
         LOK_ASSERT(!McpUploads::instance().hasRoomFor(1, now));
         LOK_ASSERT(!room.reserve(1, now));
-        LOK_ASSERT(McpUploads::instance().store("two.odt", "bytes", now).empty());
+        LOK_ASSERT(McpUploads::instance()
+                       .store(McpUploads::Kind::Upload, "two.odt", "bytes", now)
+                       .empty());
 
         // A document given back makes room for one more.
         room.release();
@@ -301,6 +384,44 @@ void McpUploadsTests::testStoreHoldsABoundedNumberOfDocuments()
 
     // Once the documents being written are given back, the store has room again.
     LOK_ASSERT(McpUploads::instance().hasRoomFor(McpUploads::MaxStoredBytes - 5, now));
+}
+
+void McpUploadsTests::testStoredFileIsKeptWholeAndSourceIsLeft()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string source = COOLWSD::ChildRoot + "/produced.pdf";
+    {
+        std::ofstream stream(source, std::ios::binary);
+        stream << "produced bytes";
+    }
+
+    // The stored document holds the bytes of the file, and the file itself stays where it was.
+    const auto now = McpUploads::Clock::now();
+    const std::string id =
+        McpUploads::instance().storeFile(McpUploads::Kind::Download, "result.pdf", source, 14, now);
+    LOK_ASSERT(!id.empty());
+    LOK_ASSERT(fileExists(source));
+
+    // The size given is counted against the store until the document is taken.
+    LOK_ASSERT(!McpUploads::instance().hasRoomFor(McpUploads::MaxStoredBytes - 13, now));
+
+    // Removing the file leaves the stored document whole.
+    FileUtil::removeFile(source);
+    bool alreadyTaken = false;
+    const std::string path = McpUploads::instance().take(id, alreadyTaken, now);
+    std::string stored;
+    FileUtil::readFile(path, stored);
+    LOK_ASSERT_EQUAL_STR("produced bytes", stored);
+    LOK_ASSERT(McpUploads::instance().hasRoomFor(McpUploads::MaxStoredBytes, now));
+    McpUploads::discardFile(path);
+
+    // A file that does not exist stores nothing, and leaves no directory behind.
+    const std::size_t before = countIncomingEntries();
+    LOK_ASSERT(McpUploads::instance()
+                   .storeFile(McpUploads::Kind::Download, "result.pdf", source, 14, now)
+                   .empty());
+    LOK_ASSERT_EQUAL(before, countIncomingEntries());
 }
 
 void McpUploadsTests::testUploadIsGivenTimeForItsSize()

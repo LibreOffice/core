@@ -48,6 +48,7 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testInvalidRequestsAreRejected);
     CPPUNIT_TEST(testUnsupportedProtocolHeaderIsRejected);
     CPPUNIT_TEST(testExtractArgumentsNameAViewAndACellRange);
+    CPPUNIT_TEST(testDownloadNameIsOfferedInPlainAndInFull);
     CPPUNIT_TEST_SUITE_END();
 
     void testInitializeNegotiatesProtocolVersion();
@@ -68,6 +69,7 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     void testInvalidRequestsAreRejected();
     void testUnsupportedProtocolHeaderIsRejected();
     void testExtractArgumentsNameAViewAndACellRange();
+    void testDownloadNameIsOfferedInPlainAndInFull();
 
     /// Run one message through the core and return the single response it produces. Fails the test
     /// if the core does not answer.
@@ -319,19 +321,24 @@ void McpServerTests::testToolsListDescribesTheWritePathTools()
 {
     constexpr std::string_view testname = __func__;
 
-    const McpServer::McpResponse response =
-        call(R"({"jsonrpc":"2.0","id":10,"method":"tools/list"})", std::string(),
-             McpServer::documentToolDefinitions());
+    const McpServer::McpResponse response = listTools();
     LOK_ASSERT_EQUAL(200, response.statusCode);
 
-    // Both write-path tools are listed with their distinguishing arguments.
-    LOK_ASSERT(contains(response.body, R"("name":"convert_document")"));
-    LOK_ASSERT(contains(response.body, R"("name":"transform_document_structure")"));
-    LOK_ASSERT(contains(response.body, R"("format")"));
-    LOK_ASSERT(contains(response.body, R"("transform")"));
-    // Each names its required argument in the schema.
-    LOK_ASSERT(contains(response.body, R"("required":["format"])"));
-    LOK_ASSERT(contains(response.body, R"("required":["transform"])"));
+    // A conversion requires the format to produce, and a transform requires the transform and takes
+    // the format as an option. Both can return the document as a link.
+    const Poco::JSON::Object::Ptr convert = inputSchemaOf(response.body, "convert_document");
+    LOK_ASSERT(convert);
+    LOK_ASSERT(hasProperty(convert, "format"));
+    LOK_ASSERT(hasProperty(convert, "output"));
+    LOK_ASSERT(requiredOf(convert) == std::vector<std::string>{ "format" });
+
+    const Poco::JSON::Object::Ptr transform =
+        inputSchemaOf(response.body, "transform_document_structure");
+    LOK_ASSERT(transform);
+    LOK_ASSERT(hasProperty(transform, "transform"));
+    LOK_ASSERT(hasProperty(transform, "format"));
+    LOK_ASSERT(hasProperty(transform, "output"));
+    LOK_ASSERT(requiredOf(transform) == std::vector<std::string>{ "transform" });
 }
 
 void McpServerTests::testConvertArgumentsRequireAFormat()
@@ -575,6 +582,20 @@ void McpServerTests::testExtractArgumentsNameAViewAndACellRange()
         LOK_ASSERT(invalid.has_value());
         LOK_ASSERT(contains(invalid->text, "range argument"));
     }
+}
+
+void McpServerTests::testDownloadNameIsOfferedInPlainAndInFull()
+{
+    constexpr std::string_view testname = __func__;
+
+    LOK_ASSERT_EQUAL_STR(R"(attachment; filename="report.pdf"; filename*=UTF-8''report.pdf)",
+                         McpServer::contentDisposition("report.pdf"));
+
+    // A name with letters outside ASCII and a backslash is plain ASCII in filename, and in full as
+    // percent-encoded UTF-8 in filename*.
+    LOK_ASSERT_EQUAL_STR(
+        R"(attachment; filename="R__sum__ a_b.odt"; filename*=UTF-8''R%C3%A9sum%C3%A9%20a%5Cb.odt)",
+        McpServer::contentDisposition("R\xc3\xa9sum\xc3\xa9 a\\b.odt"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(McpServerTests);

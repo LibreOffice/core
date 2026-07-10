@@ -21,6 +21,7 @@
 #include <common/Util.hpp>
 #include <net/HttpHelper.hpp>
 #include <net/HttpRequest.hpp>
+#include <net/HttpServer.hpp>
 #include <net/Socket.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/ContentType.hpp>
@@ -171,9 +172,9 @@ bool startMcpExtraction(const std::string& requestType, const std::string& filte
                                    complete);
 }
 
-/// Build a tool result that carries a produced document. The document comes back to the model as an
-/// embedded resource, with its media type derived from the result file name.
-McpServer::McpToolResult makeDocumentResult(std::string bytes, const std::string& filename)
+/// Build a tool result that carries a produced document inline. The document comes back to the
+/// model as an embedded resource, with its media type derived from the result file name.
+McpServer::McpToolResult makeInlineDocumentResult(std::string bytes, const std::string& filename)
 {
     McpServer::McpToolResult result;
     result.isDocument = true;
@@ -183,11 +184,81 @@ McpServer::McpToolResult makeDocumentResult(std::string bytes, const std::string
     return result;
 }
 
+/// Store the produced document at path, of size bytes, for one download and build a tool result
+/// whose text is a small JSON object naming the download address, how long it stays valid, the file
+/// name, its media type and its size. linkBase is the address the document's identifier is added
+/// to.
+McpServer::McpToolResult makeDownloadLinkResult(const std::string& path, std::size_t size,
+                                                const std::string& filename,
+                                                const std::string& linkBase)
+{
+    // The name is cleaned here as well as when the document is stored, so that the name the model
+    // is given is the name the download will carry.
+    const std::string safeName = McpTools::filenameOrDefault(filename);
+    const std::string fileId =
+        McpUploads::instance().storeFile(McpUploads::Kind::Download, safeName, path, size);
+    if (fileId.empty())
+        return { /*isError=*/true, "The produced document could not be stored for download." };
+
+    Poco::JSON::Object::Ptr object = new Poco::JSON::Object();
+    object->set("download_url", linkBase + fileId);
+    object->set("expires_in", static_cast<int>(McpUploads::TimeToLive.count()));
+    object->set("filename", safeName);
+    object->set("mimeType", std::string(ContentType::fromFileName(safeName)));
+    object->set("size", static_cast<Poco::UInt64>(size));
+
+    std::ostringstream stream;
+    object->stringify(stream);
+    return { /*isError=*/false, stream.str() };
+}
+
+/// The tool result for the produced document at pathOrError: the document inline when asLink is
+/// false, or as a download link made from downloadBase, with the note after it. A document larger
+/// than MaxInlineDocumentBytes comes as a link either way, and the note then says why. A failure,
+/// whose message pathOrError holds, becomes a readable message the model can react to.
+McpServer::McpToolResult makeProducedDocumentResult(const std::string& downloadBase, bool asLink,
+                                                    bool success, const std::string& pathOrError,
+                                                    const std::string& filename,
+                                                    const std::string& note)
+{
+    if (!success)
+        return { /*isError=*/true, McpTools::describeFailure(pathOrError, "produced") };
+
+    const std::size_t size = FileUtil::Stat(pathOrError).size();
+    std::string resultNote = note;
+    if (!asLink && size > McpTools::MaxInlineDocumentBytes)
+    {
+        asLink = true;
+        resultNote = "The document is larger than 16 MB, the most a result carries inline, so it "
+                     "comes as a download link." +
+                     (note.empty() ? std::string() : '\n' + note);
+    }
+
+    McpServer::McpToolResult result;
+    if (asLink)
+        result = makeDownloadLinkResult(pathOrError, size, filename, downloadBase);
+    else
+    {
+        std::string bytes;
+        if (FileUtil::readFile(pathOrError, bytes,
+                               static_cast<int>(McpTools::MaxInlineDocumentBytes)) <= 0)
+            return { /*isError=*/true,
+                     McpTools::describeFailure("the produced document could not be read",
+                                               "produced") };
+        result = makeInlineDocumentResult(std::move(bytes), filename);
+    }
+    if (!result.isError)
+        result.note = resultNote;
+    return result;
+}
+
 /// Run one conversion or transform over the document named by input. The produced document comes
-/// back through complete as an embedded resource.
+/// back through complete: as an embedded resource when asLink is false, or as a download link made
+/// from downloadBase.
 bool startMcpConversion(const std::string& requestType, const std::string& format,
                         const std::string& options, const std::string& lang,
-                        const std::string& transformJSON, const McpTools::ResolvedInput& input,
+                        const std::string& transformJSON, const std::string& downloadBase,
+                        bool asLink, const McpTools::ResolvedInput& input,
                         SocketDisposition& disposition, const std::string& id,
                         const McpServer::McpToolCompletion& complete)
 {
@@ -198,25 +269,15 @@ bool startMcpConversion(const std::string& requestType, const std::string& forma
     brokerRequest.lang = lang;
     brokerRequest.transformJSON = transformJSON;
 
-    // A successful conversion carries the produced document straight back to the model; a failure
-    // becomes a readable message the model can react to.
     const McpResponderInstaller installResponder =
-        [complete](const std::shared_ptr<ConvertToBroker>& docBroker)
+        [complete, downloadBase, asLink](const std::shared_ptr<ConvertToBroker>& docBroker)
     {
         docBroker->setSaveAsResponder(
-            [complete](bool success, std::string payloadOrError, const std::string& filename,
-                       const std::string& note)
+            [complete, downloadBase, asLink](bool success, const std::string& pathOrError,
+                                             const std::string& filename, const std::string& note)
             {
-                if (!success)
-                {
-                    complete({ /*isError=*/true,
-                               McpTools::describeFailure(payloadOrError, "produced") });
-                    return;
-                }
-                McpServer::McpToolResult result =
-                    makeDocumentResult(std::move(payloadOrError), filename);
-                result.note = note;
-                complete(std::move(result));
+                complete(makeProducedDocumentResult(downloadBase, asLink, success, pathOrError,
+                                                    filename, note));
             });
     };
 
@@ -233,11 +294,14 @@ enum class McpPath : std::uint8_t
     /// The JSON-RPC message path, /cool/mcp itself.
     Message,
     /// The upload path, /cool/mcp/upload.
-    Upload
+    Upload,
+    /// A download link, /cool/mcp/download/<id>.
+    Download
 };
 
-/// The part of the endpoint that path names.
-McpPath classifyMcpPath(const std::string& path)
+/// The part of the endpoint that path names. For a download link, downloadId is set to the
+/// identifier the link carries.
+McpPath classifyMcpPath(const std::string& path, std::string& downloadId)
 {
     Poco::StringTokenizer segments(path, "/",
                                    Poco::StringTokenizer::TOK_IGNORE_EMPTY |
@@ -246,6 +310,11 @@ McpPath classifyMcpPath(const std::string& path)
     {
         if (segments[i] == "mcp" && segments[i + 1] == "upload")
             return McpPath::Upload;
+        if (segments[i] == "mcp" && segments[i + 1] == "download" && i + 2 < segments.count())
+        {
+            downloadId = segments[i + 2];
+            return McpPath::Download;
+        }
     }
     return McpPath::Message;
 }
@@ -373,8 +442,18 @@ bool McpRequests::refuseMcpRequest(const Poco::Net::HTTPRequest& request,
         schemeEnd == std::string::npos ? std::string() : authorization.substr(schemeEnd + 1);
     if (!Util::iequal(scheme, "Bearer") || !constantTimeEquals(apiKey, credential))
     {
-        HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, socket,
-                                         std::string_view(), "WWW-Authenticate: Bearer\r\n");
+        // An upload or a download is a plain HTTP request that the caller makes itself, outside its
+        // MCP client, so the reply to one says which credential it lacks.
+        std::string ignoredId;
+        const McpPath refusedPath =
+            classifyMcpPath(Poco::URI(request.getURI()).getPath(), ignoredId);
+        const std::string_view body =
+            refusedPath == McpPath::Upload || refusedPath == McpPath::Download
+                ? "This request needs the bearer token that the MCP client is configured with, "
+                  "sent in an \"Authorization: Bearer <token>\" header.\n"
+                : std::string_view();
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, socket, body,
+                                         "WWW-Authenticate: Bearer\r\n");
         return true;
     }
 
@@ -383,7 +462,8 @@ bool McpRequests::refuseMcpRequest(const Poco::Net::HTTPRequest& request,
 
     // A body states its length, so it is weighed against the accepted size before it arrives. A
     // chunked body, or a POST with no Content-Length, states none and is refused.
-    const McpPath path = classifyMcpPath(Poco::URI(request.getURI()).getPath());
+    std::string downloadId;
+    const McpPath path = classifyMcpPath(Poco::URI(request.getURI()).getPath(), downloadId);
     const std::streamsize declaredLength = request.getContentLength();
     if (request.getChunkedTransferEncoding() || declaredLength < 0)
     {
@@ -433,8 +513,9 @@ bool McpRequests::refuseMcpRequestEarly(const Poco::Net::HTTPRequest& request,
 bool McpRequests::isMcpUpload(const Poco::Net::HTTPRequest& request)
 {
     const std::optional<Poco::Net::HTTPRequest> stripped = strippedMcpRequest(request);
+    std::string ignoredId;
     return stripped && stripped->getMethod() == Poco::Net::HTTPRequest::HTTP_POST &&
-           classifyMcpPath(Poco::URI(stripped->getURI()).getPath()) == McpPath::Upload;
+           classifyMcpPath(Poco::URI(stripped->getURI()).getPath(), ignoredId) == McpPath::Upload;
 }
 
 std::shared_ptr<McpUploadSink> McpUploadSink::start(const Poco::Net::HTTPRequest& request,
@@ -479,7 +560,7 @@ McpUploadSink::~McpUploadSink()
     if (_stream.is_open())
         _stream.close();
     if (!_path.empty())
-        FileUtil::removeFileAndEmptyParent(_path);
+        McpUploads::discardFile(_path);
     McpUploads::instance().release(_size);
 }
 
@@ -503,7 +584,8 @@ void McpUploadSink::finish(const std::shared_ptr<StreamSocket>& socket)
         return;
     }
 
-    const std::string fileId = McpUploads::instance().adopt(_path, _size);
+    const std::string fileId =
+        McpUploads::instance().adopt(McpUploads::Kind::Upload, _path, _size);
     _stored = true;
     sendUploadAnswer(socket, fileId);
 }
@@ -519,7 +601,65 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
     if (refuseMcpRequest(request, socket))
         return true;
 
-    // The endpoint only takes POST.
+    const Poco::URI parsedUri(request.getURI());
+    std::string downloadId;
+    const McpPath path = classifyMcpPath(parsedUri.getPath(), downloadId);
+
+    // A download link is the one path under the endpoint that is fetched with GET. It serves the
+    // produced document once and then removes it, so a second fetch of the same link finds nothing.
+    if (path == McpPath::Download)
+    {
+        if (request.getMethod() != Poco::Net::HTTPRequest::HTTP_GET)
+        {
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::MethodNotAllowed, socket,
+                                             std::string_view(), "Allow: GET\r\n");
+            return true;
+        }
+
+        bool alreadyTaken = false;
+        const std::string downloadPath = McpUploads::instance().take(downloadId, alreadyTaken);
+        if (downloadPath.empty() && alreadyTaken)
+        {
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::Gone, socket,
+                                             "This download link was already used. A link "
+                                             "serves its document once.\n");
+            return true;
+        }
+        if (downloadPath.empty())
+        {
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket,
+                                             "This download link is unknown or has expired.\n");
+            return true;
+        }
+
+        const std::string downloadName = Poco::Path(downloadPath).getFileName();
+        http::ServerSession::ResponseHeaders headers;
+        headers.emplace_back("Content-Type", std::string(ContentType::fromFileName(downloadName)));
+        headers.emplace_back("Content-Disposition", McpServer::contentDisposition(downloadName));
+        headers.emplace_back("Cache-Control", "no-cache");
+        headers.emplace_back("X-Content-Type-Options", "nosniff");
+        headers.emplace_back("Connection", "close");
+
+        // The session sends the document a block at a time as the socket drains, and closes the
+        // connection after the last block.
+        const auto session = std::make_shared<http::ServerSession>();
+        const bool opened = session->asyncUpload(downloadPath, std::move(headers));
+
+        // The name goes from disk now. The session keeps the file open, so its bytes stay readable
+        // until the session closes it, after the last block or when the client goes.
+        McpUploads::discardFile(downloadPath);
+        if (!opened)
+        {
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::InternalServerError, socket);
+            return true;
+        }
+
+        socket->ignoreInput();
+        socket->setHandler(session);
+        return false;
+    }
+
+    // Every other path under the endpoint takes POST only.
     if (request.getMethod() != Poco::Net::HTTPRequest::HTTP_POST)
     {
         HttpHelper::sendErrorAndShutdown(http::StatusCode::MethodNotAllowed, socket,
@@ -537,8 +677,7 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
         return true;
     }
 
-    const Poco::URI parsedUri(request.getURI());
-    if (classifyMcpPath(parsedUri.getPath()) == McpPath::Upload)
+    if (path == McpPath::Upload)
     {
         // The whole request body is the raw document, with no form or multipart wrapping. A
         // filename query parameter names it.
@@ -548,8 +687,9 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
             return true;
         }
 
-        const std::string fileId = McpUploads::instance().store(
-            uploadFilename(parsedUri), message, NumUtil::makeUnsigned(bodyLength));
+        const std::string fileId =
+            McpUploads::instance().store(McpUploads::Kind::Upload, uploadFilename(parsedUri),
+                                         message, NumUtil::makeUnsigned(bodyLength));
         if (fileId.empty())
         {
             HttpHelper::sendErrorAndShutdown(http::StatusCode::InternalServerError, socket);
@@ -564,9 +704,10 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
     message.read(body.data(), bodyLength);
     const std::string protocolVersionHeader = request.get("MCP-Protocol-Version", std::string());
 
-    // The address of this endpoint as the client reaches it, with the service root. The upload
-    // address the descriptions give is made from it.
+    // The address of this endpoint as the client reaches it, with the service root. Download links
+    // and the upload address the descriptions give are made from it.
     const std::string endpointUrl = ServerURL(requestDetails).getSubURLForEndpoint("/cool/mcp");
+    const std::string downloadBase = endpointUrl + "/download/";
 
     // The response is always sent with sendAndShutdown, so the connection is closed after this one
     // message either way.
@@ -660,8 +801,9 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
         }
         else if (tool.name == McpServer::ToolName::ConvertDocument)
         {
-            tool.executor = [&disposition, sessionId](const Poco::JSON::Object::Ptr& arguments,
-                                                      const McpServer::McpToolCompletion& complete)
+            tool.executor = [&disposition, sessionId,
+                             downloadBase](const Poco::JSON::Object::Ptr& arguments,
+                                           const McpServer::McpToolCompletion& complete)
             {
                 std::optional<McpServer::McpToolResult> invalid =
                     McpServer::validateConvertArguments(arguments);
@@ -676,22 +818,25 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
                 const std::string options =
                     arguments->optValue<std::string>("options", std::string());
                 const std::string lang = arguments->optValue<std::string>("lang", std::string());
+                const bool asLink =
+                    arguments->optValue<std::string>("output", std::string()) == "link";
 
-                return runWithDocument(arguments, complete,
-                                       [&disposition, sessionId, format, options, lang,
-                                        complete](const McpTools::ResolvedInput& input)
-                                       {
-                                           return startMcpConversion(
-                                               "convert-to", format, options, lang,
-                                               /*transformJSON=*/std::string(), input, disposition,
-                                               sessionId, complete);
-                                       });
+                return runWithDocument(
+                    arguments, complete,
+                    [&disposition, sessionId, format, options, lang, downloadBase, asLink,
+                     complete](const McpTools::ResolvedInput& input)
+                    {
+                        return startMcpConversion("convert-to", format, options, lang,
+                                                  /*transformJSON=*/std::string(), downloadBase,
+                                                  asLink, input, disposition, sessionId, complete);
+                    });
             };
         }
         else if (tool.name == McpServer::ToolName::TransformDocumentStructure)
         {
-            tool.executor = [&disposition, sessionId](const Poco::JSON::Object::Ptr& arguments,
-                                                      const McpServer::McpToolCompletion& complete)
+            tool.executor = [&disposition, sessionId,
+                             downloadBase](const Poco::JSON::Object::Ptr& arguments,
+                                           const McpServer::McpToolCompletion& complete)
             {
                 std::optional<McpServer::McpToolResult> invalid =
                     McpServer::validateTransformArguments(arguments);
@@ -711,17 +856,20 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
 
                 const std::string format =
                     arguments->optValue<std::string>("format", std::string());
+                const bool asLink =
+                    arguments->optValue<std::string>("output", std::string()) == "link";
 
-                return runWithDocument(arguments, complete,
-                                       [&disposition, sessionId, format, encodedTransform,
-                                        complete](const McpTools::ResolvedInput& input)
-                                       {
-                                           return startMcpConversion(
-                                               "transform-document-structure", format,
-                                               /*options=*/std::string(),
-                                               /*lang=*/std::string(), encodedTransform, input,
-                                               disposition, sessionId, complete);
-                                       });
+                return runWithDocument(
+                    arguments, complete,
+                    [&disposition, sessionId, format, encodedTransform, downloadBase, asLink,
+                     complete](const McpTools::ResolvedInput& input)
+                    {
+                        return startMcpConversion("transform-document-structure", format,
+                                                  /*options=*/std::string(),
+                                                  /*lang=*/std::string(), encodedTransform,
+                                                  downloadBase, asLink, input, disposition,
+                                                  sessionId, complete);
+                    });
             };
         }
 
