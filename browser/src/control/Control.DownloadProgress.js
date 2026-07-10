@@ -216,11 +216,11 @@ window.L.Control.DownloadProgress = window.L.Control.extend({
 	},
 
 	_setProgressCursor: function() {
-		this._map.getContainer().style.cursor = 'progress';
+		document.getElementById('document-container').style.cursor = 'progress';
 	},
 
 	_setNormalCursor: function() {
-		this._map.getContainer().style.cursor = 'default';
+		document.getElementById('document-container').style.cursor = 'default';
 	},
 
 	startProgressMode: function() {

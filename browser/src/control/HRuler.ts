@@ -80,7 +80,10 @@ class HRuler extends Ruler {
 		this._map.on('scrolllimits', this._updatePaintTimer, this);
 		this._map.on('moveend fixruleroffset', this.fixOffset, this);
 		this._map.on('updatepermission', this._changeInteractions, this);
-		window.L.DomUtil.addClass(this._map.getContainer(), 'hasruler');
+		window.L.DomUtil.addClass(
+			document.getElementById('document-container'),
+			'hasruler',
+		);
 
 		const container: HTMLDivElement = this._initLayout();
 		const corner: HTMLElement =

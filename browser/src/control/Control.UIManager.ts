@@ -1653,7 +1653,7 @@ class UIManager extends window.L.Control {
 		if (app.UI.horizontalRuler) app.UI.horizontalRuler.show();
 		if (app.UI.verticalRuler) app.UI.verticalRuler.show();
 
-		$('#map').addClass('hasruler');
+		$('#document-container').addClass('hasruler');
 		this.setDocTypePref('ShowRuler', true);
 		this.map.fire('rulerchanged');
 
@@ -1671,7 +1671,7 @@ class UIManager extends window.L.Control {
 		if (app.UI.horizontalRuler) app.UI.horizontalRuler.hide();
 		if (app.UI.verticalRuler) app.UI.verticalRuler.hide();
 
-		$('#map').removeClass('hasruler');
+		$('#document-container').removeClass('hasruler');
 		this.setDocTypePref('ShowRuler', false);
 
 		if (app.sectionContainer

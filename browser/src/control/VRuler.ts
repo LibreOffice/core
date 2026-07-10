@@ -62,7 +62,10 @@ class VRuler extends Ruler {
 		);
 		this._map.on('commandstatechanged', this.onCommandStateChanged, this);
 		this._map.on('rulerchanged', this._onRulerChanged, this);
-		window.L.DomUtil.addClass(this._map.getContainer(), 'hasruler');
+		window.L.DomUtil.addClass(
+			document.getElementById('document-container'),
+			'hasruler',
+		);
 
 		const container: HTMLDivElement = this._initLayout();
 		const corner: HTMLElement =
