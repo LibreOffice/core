@@ -15,6 +15,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
+#include <com/sun/star/text/XEndnotesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
@@ -765,6 +766,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159207_footerFramePrBorder)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Left border:", static_cast<sal_uInt32>(0), nBorderWidth);
 
     // TODO: there SHOULD BE a top border, and even if loaded, it would be lost on re-import...
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf171002EndnoteTextRoundtrip)
+{
+    // tdf171002.docx has two endnotes: one with body text "SSSS" and one empty.
+    createSwDoc("tdf171002.docx");
+    saveAndReload(TestFilter::DOCX);
+
+    uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
+
+    // The document has 2 real endnotes; both must survive round-trip.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected 2 endnotes after DOCX round-trip (tdf#171002)",
+                                 static_cast<sal_Int32>(2), xEndnotes->getCount());
+
+    // The first endnote body text "SSSS" must survive the round-trip.
+    uno::Reference<text::XText> xEndnoteText;
+    xEndnotes->getByIndex(0) >>= xEndnoteText;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Endnote body text 'SSSS' lost after DOCX round-trip; "
+                                 "lcl_checkId() fix may be missing or broken (tdf#171002)",
+                                 u"SSSS"_ustr, xEndnoteText->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf160814_commentOrder)
