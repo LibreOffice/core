@@ -210,6 +210,10 @@ window.L.Control.Tabs = window.L.Control.extend({
 				}
 				var ssTabScroll = window.L.DomUtil.create('div', 'spreadsheet-tab-scroll', this._tabsCont);
 				ssTabScroll.id = 'spreadsheet-tab-scroll';
+
+				ssTabScroll.setAttribute('role', 'tablist');
+				ssTabScroll.setAttribute('aria-label', _('Sheets'));
+
 				if (!window.mode.isSmallScreenDevice())
 					ssTabScroll.style.overflowX = 'scroll';
 
@@ -262,6 +266,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 					dropZoneIndicator.id = 'drop-zone-' + i;
 					var id = 'spreadsheet-tab' + i;
 					var tab = window.L.DomUtil.create('button', 'spreadsheet-tab', ssTabScroll);
+					tab.setAttribute('role', 'tab');
 					var label = window.L.DomUtil.create('div', '', tab);
 					window.L.DomUtil.create('div', 'lock', tab);
 					window.L.DomUtil.create('div', 'view-indicator', tab);
@@ -335,14 +340,19 @@ window.L.Control.Tabs = window.L.Control.extend({
 						}
 					}
 
-					label.textContent = e.partNames[i];
+					var tabName = e.partNames[i];
+					label.textContent = tabName;
 					tab.id = id;
+					tab.setAttribute('aria-label', app.calc.isPartProtected(i)
+						? _('{0}, protected').replace('{0}', tabName)
+						: tabName);
 
 					window.L.DomEvent
 						.on(tab, 'click', window.L.DomEvent.stopPropagation)
 						.on(tab, 'click', window.L.DomEvent.stop)
 						.on(tab, 'click', this._setPart, this)
 						.on(tab, 'click', this._map.focus, this._map);
+					window.L.DomEvent.on(tab, 'keydown', this._onTabKeyDown, this);
 					this._addDnDHandlers(tab);
 					this._spreadsheetTabs[id] = tab;
 				}
@@ -359,15 +369,23 @@ window.L.Control.Tabs = window.L.Control.extend({
 				this._addDnDHandlers(dropZoneEndContainer);
 				dropZoneEndContainer.setAttribute('draggable', false);
 			}
+
+			var scrollCont = document.getElementById('spreadsheet-tab-scroll');
+			var focusInTablist = scrollCont && scrollCont.contains(document.activeElement);
 			for (var key in this._spreadsheetTabs) {
 				var part =  parseInt(key.match(/\d+/g)[0]);
-				window.L.DomUtil.removeClass(this._spreadsheetTabs[key], 'spreadsheet-tab-selected');
-				if (part === selectedPart || app.calc.isDefaultPartOfSelectedSheetView(part)) {
+				var tabEl = this._spreadsheetTabs[key];
+				window.L.DomUtil.removeClass(tabEl, 'spreadsheet-tab-selected');
+				var isSelected = (part === selectedPart || app.calc.isDefaultPartOfSelectedSheetView(part));
+				if (isSelected) {
 					// close auto filter popups on sheet tab selected
 					this._map.fire('closeAutoFilterDialog');
 					this._map.fire('closepopups');
-					window.L.DomUtil.addClass(this._spreadsheetTabs[key], 'spreadsheet-tab-selected');
+					window.L.DomUtil.addClass(tabEl, 'spreadsheet-tab-selected');
 				}
+				tabEl.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+				if (!focusInTablist)
+					tabEl.setAttribute('tabindex', isSelected ? '0' : '-1');
 			}
 
 			// Restore horizontal scroll position
@@ -472,6 +490,51 @@ window.L.Control.Tabs = window.L.Control.extend({
 			element.addEventListener('dragleave', this._handleDragLeave, false);
 			element.addEventListener('drop', this._handleDrop.bind(this), false);
 			element.addEventListener('dragend', this._handleDragEnd, false);
+		}
+	},
+
+	_onTabKeyDown: function (e) {
+		var key = e.key;
+		if (key !== 'ArrowLeft' && key !== 'ArrowRight' &&
+			key !== 'Home' && key !== 'End' &&
+			key !== 'Enter' && key !== ' ' && key !== 'Spacebar')
+			return;
+
+		var scroll = document.getElementById('spreadsheet-tab-scroll');
+		if (!scroll)
+			return;
+		var tabs = Array.prototype.filter.call(
+			scroll.querySelectorAll('.spreadsheet-tab'),
+			function (t) { return t.offsetParent !== null; });
+		if (!tabs.length)
+			return;
+
+		var current = tabs.indexOf(e.currentTarget);
+		if (current === -1)
+			return;
+
+		if (key === 'Enter' || key === ' ' || key === 'Spacebar') {
+			window.L.DomEvent.stop(e);
+			this._setPart(e);
+			this._map.focus();
+			return;
+		}
+
+		var next = current;
+		if (key === 'ArrowLeft')
+			next = (current - 1 + tabs.length) % tabs.length;
+		else if (key === 'ArrowRight')
+			next = (current + 1) % tabs.length;
+		else if (key === 'Home')
+			next = 0;
+		else if (key === 'End')
+			next = tabs.length - 1;
+
+		if (next !== current) {
+			window.L.DomEvent.stop(e);
+			tabs[current].setAttribute('tabindex', '-1');
+			tabs[next].setAttribute('tabindex', '0');
+			tabs[next].focus();
 		}
 	},
 
