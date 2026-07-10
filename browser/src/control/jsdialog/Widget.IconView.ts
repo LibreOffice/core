@@ -30,11 +30,14 @@ function _createEntryImage(
 	builder: JSBuilder,
 	entryData: IconViewEntry,
 	image: string,
+	hasText: boolean = false,
 ) {
 	const img = window.L.DomUtil.create('img', builder.options.cssClass, parent);
 	if (image) img.src = image;
 
-	if (entryData.text) {
+	if (hasText) {
+		img.alt = '';
+	} else if (entryData.text) {
 		img.alt = entryData.text;
 	} else if (entryData.tooltip) {
 		img.alt = entryData.tooltip;
@@ -93,7 +96,7 @@ function _iconViewEntry(
 	builder: JSBuilder,
 ) {
 	const disabled = parentData.enabled === false;
-	const hasText = entry.text && parentData.textWithIconEnabled;
+	const hasText = !!(entry.text && parentData.textWithIconEnabled);
 	const isMultiSelect = parentData.selectionmode === 'multiple';
 	const ariaStateAttr = isMultiSelect ? 'aria-selected' : 'aria-checked';
 
@@ -151,7 +154,7 @@ function _iconViewEntry(
 
 		parentContainer.requestRenders(entry, placeholder, entryContainer);
 	} else {
-		_createEntryImage(entryContainer, builder, entry, entry.image);
+		_createEntryImage(entryContainer, builder, entry, entry.image, hasText);
 	}
 
 	if (hasText) _createEntryText(entryContainer, entry);
@@ -429,7 +432,7 @@ JSDialog.iconView = function (
 			let container = dropdown[pos] as HTMLElement;
 			const entry = data.entries[pos];
 			const image = builder.rendersCache[id].images[pos];
-			const hasText = entry.text && data.textWithIconEnabled;
+			const hasText = !!(entry.text && data.textWithIconEnabled);
 
 			container.replaceChildren();
 			if (hasText) {
@@ -440,7 +443,7 @@ JSDialog.iconView = function (
 				);
 			}
 
-			_createEntryImage(container, builder, entry, image);
+			_createEntryImage(container, builder, entry, image, hasText);
 			if (hasText) _createEntryText(container, entry);
 		} else {
 			app.console.debug('IconView: not found entry: ' + pos);

@@ -162,7 +162,10 @@ class A11yValidator {
 
 			const parent = img.parentElement;
 			const span =
-				parent && (parent.querySelector('span.unolabel') as HTMLSpanElement);
+				parent &&
+				(parent.querySelector(
+					'span.unolabel, span.ui-iconview-entry-title',
+				) as HTMLSpanElement);
 			const explicitLabel = span && span.innerText.trim().length > 0;
 			const visibleLabel =
 				parent && document.querySelector(`label[for="${parent.id}"]`);
