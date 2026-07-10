@@ -1810,8 +1810,9 @@ AC_ARG_ENABLE(python,
          'fully-internal' even forces the internal version for uses of Python
          during the build.
          On macOS the only choices are
-         'internal' (default) or 'fully-internal'. Otherwise the default is 'auto'.
-         ]))
+         'internal' (default) or 'fully-internal'. Otherwise the default is 'internal'.
+         ]),
+,enable_python=internal)
 
 libo_FUZZ_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--disable-gtk3],
