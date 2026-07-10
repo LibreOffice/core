@@ -4464,6 +4464,10 @@ void DomainMapper::lcl_positivePercentage(const OUString& rText)
 
 void DomainMapper::lcl_checkId(const sal_Int32 nId)
 {
+    // tdf#171002
+    if (!m_pImpl->IsInFootOrEndnote())
+        return;
+
     if (m_pImpl->IsInFootnote())
     {
         m_pImpl->m_aFootnoteIds.push_back(nId);
