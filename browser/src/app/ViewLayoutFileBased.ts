@@ -37,9 +37,8 @@ class ViewLayoutFileBased extends ViewLayoutBase {
 		super.dispose();
 	}
 
-	public override onResize(): void {
-		this.reset();
-	}
+	// No onResize override: the inherited ViewLayout.onResize calls the doc
+	// layer's _syncTileContainerSize, whose tail resets this file-based layout.
 
 	private getPartCount(): number {
 		const docLayer = app.map._docLayer;

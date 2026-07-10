@@ -29,13 +29,6 @@ window.L.TileSectionManager = window.L.Class.extend({
 			splitPanesContext.getSplitPos() : new cool.Point(0, 0);
 		this._updatesRunning = false;
 
-		var canvasContainer = document.getElementById('document-container');
-		var that = this;
-		this.resObserver = new ResizeObserver(function() {
-			that._layer._syncTileContainerSize();
-		});
-		this.resObserver.observe(canvasContainer);
-
 		this._zoomAtDocEdgeX = true;
 		this._zoomAtDocEdgeY = true;
 	},
@@ -3979,6 +3972,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	_syncTileContainerSize: function () {
 		if (!this._map) return;
 
+		// Impress/Draw lay out their mobile presentation chrome here (moving the
+		// slide sorter out of the flex so document-container gets its height). It
+		// must run for every Impress layout - the edit view (ViewLayoutImpress) AND
+		// the read-only/mobile fileBasedView (ViewLayoutFileBased) - and for the
+		// canvas-size safety net which calls this directly, so keep it here rather
+		// than in a single layout's onResize.
 		if (this.isImpress() || this.isDraw()) this.onResizeImpress();
 
 		if (!this._container) return;

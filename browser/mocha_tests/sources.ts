@@ -36,6 +36,7 @@
 /// <reference path="../src/app/ImpressSelectionMiddleware.ts" />
 /// <reference path="../src/app/ViewLayout.ts" />
 /// <reference path="../src/app/ViewLayoutWriter.ts" />
+/// <reference path="../src/app/ViewLayoutImpress.ts" />
 /// <reference path="../src/app/ViewLayoutCalc.ts" />
 /// <reference path="../src/app/ViewLayoutMultiPage.ts" />
 /// <reference path="../src/app/ViewLayoutFileBased.ts" />

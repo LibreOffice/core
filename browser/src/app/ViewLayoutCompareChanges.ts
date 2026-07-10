@@ -49,6 +49,7 @@ class ViewLayoutCompareChanges extends ViewLayoutBase {
 	}
 
 	public override onResize(): void {
+		super.onResize();
 		// Defer so that the document anchor section picks up its new size
 		// first.
 		app.layoutingService.appendLayoutingTask(() => {

@@ -662,7 +662,7 @@ class CanvasSectionContainer {
 			const documentContainer = document.getElementById('document-container');
 			if (documentContainer && documentContainer.clientWidth !== 0 || documentContainer.clientHeight !== 0) {
 				if (app.map._docLayer) {
-					app.map._docLayer._syncTileContainerSize(true);
+					app.map._docLayer._syncTileContainerSize();
 					app.activeDocument.activeLayout.sendClientVisibleArea();
 					this.requestReDraw();
 					return false;

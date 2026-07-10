@@ -31,6 +31,7 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 	}
 
 	public override onResize(): void {
+		super.onResize();
 		this.reset();
 	}
 

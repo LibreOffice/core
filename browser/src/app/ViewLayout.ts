@@ -315,24 +315,26 @@ class ViewLayoutBase {
 	}
 
 	// The single-window layouts that place one page/slide with the inherited view
-	// machinery (centred when smaller than the viewport): Impress/Draw edit (plain
-	// ViewLayoutBase) and Writer. Calc (fills the viewport, own scroll/viewed
-	// rectangle) and the stacked-page subclasses build their own and opt out.
+	// machinery (centred when smaller than the viewport): Writer and Impress/Draw
+	// edit (ViewLayoutImpress) override this to true. Calc (fills the viewport, own
+	// scroll/viewed rectangle) and the stacked-page subclasses keep the default.
 	protected usesSingleWindowView(): boolean {
-		return this.type === 'ViewLayoutBase';
+		return false;
 	}
 
-	// Resize handler, bound to app.events 'resize' in the constructor and
-	// dispatched polymorphically. The 'resize' event (a ResizeObserver on the
-	// container) can fire before the document anchor section has been resized, so
-	// defer to the layouting phase where the frame size has settled - otherwise
-	// centering would use a stale frame. Derived classes override this when a
-	// resize needs their own work (stacked-page reset, Writer comment margin).
+	// Single resize handler, bound to app.events 'resize' in the constructor and
+	// dispatched polymorphically. First resize the canvas / document-anchor
+	// section (the doc layer's _syncTileContainerSize; Calc's override is
+	// self-complete and rebuilds its own viewed rectangle). Then, for single-window
+	// layouts, rebuild the centred viewed rectangle - deferred to the layouting
+	// phase so it reads the settled frame. Derived classes override to add their
+	// own work (stacked-page reset, Writer comment margin).
 	public onResize(): void {
-		if (!this.usesSingleWindowView()) return;
-		app.layoutingService.appendLayoutingTask(() =>
-			this.rebuildSingleWindowView(),
-		);
+		app.map._docLayer._syncTileContainerSize();
+		if (this.usesSingleWindowView())
+			app.layoutingService.appendLayoutingTask(() =>
+				this.rebuildSingleWindowView(),
+			);
 	}
 
 	private rebuildSingleWindowView(): void {
