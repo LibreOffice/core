@@ -3972,7 +3972,8 @@ kbd,
 }
 
 /* Listbox UI grid */
-.jsdialog.ui-grid[role='listbox']:not(:has(> .ui-iconview)) {
+/* exclude text/bg color-picker: it's not a scolling list */
+.jsdialog.ui-grid[role='listbox']:not(:has(> .ui-iconview)):not(:has(> .ui-color-picker)) {
 	max-height: min(470px, 45vh);
 }
 
