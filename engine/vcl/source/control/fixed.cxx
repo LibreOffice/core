@@ -21,6 +21,7 @@
 
 #include <vcl/cvtgrf.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/font.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/settings.hxx>
@@ -123,6 +124,13 @@ void FixedText::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     {
         rJsonWriter.put("xalign", "left");
     }
+
+    // A bold weight can be requested via the .ui <attributes> (e.g. a
+    // <attribute name="weight" value="bold"/>). It is applied natively on
+    // the desktop through the control font, but the browser has no way to
+    // know about it unless we export it here.
+    if (IsControlFont() && GetControlFont().GetWeight() >= WEIGHT_BOLD)
+        rJsonWriter.put("bold", true);
 }
 
 DrawTextFlags FixedText::ImplGetTextStyle( WinBits nWinStyle )

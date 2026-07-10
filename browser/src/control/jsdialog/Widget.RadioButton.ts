@@ -69,8 +69,16 @@ function radiobuttonControl(
 	const isDisabled = data.enabled === false;
 	if (isDisabled) {
 		radiobutton.setAttribute('disabled', 'disabled');
-		radiobutton.setAttribute('aria-disabled', isDisabled);
+		radiobutton.setAttribute('aria-disabled', 'true');
+		container.setAttribute('disabled', 'true');
 	}
+
+	// Runtime 'enable'/'disable' actions toggle the 'disabled' attribute on
+	// the container (data.id), but the actual state lives on the inner
+	// <input> (data.id + '-input'). Mirror the container's state onto the
+	// input (and label) so set_sensitive() from the core actually takes
+	// effect - otherwise a disabled radio button can never be re-enabled.
+	JSDialog.SynchronizeDisabledState(container, [radiobutton, radiobuttonLabel]);
 
 	if (data.checked === true) $(radiobutton).prop('checked', true);
 

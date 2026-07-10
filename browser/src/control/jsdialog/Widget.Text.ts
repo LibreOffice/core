@@ -30,6 +30,7 @@ function staticTextControl(
 	else if (data.html) statictext.innerHTML = app.LOUtil.sanitize(data.html);
 
 	statictext.id = data.id;
+	if (data.bold) statictext.style.fontWeight = 'bold';
 	if (data.style && data.style.length) {
 		window.L.DomUtil.addClass(statictext, data.style);
 	} else {

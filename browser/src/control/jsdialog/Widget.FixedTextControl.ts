@@ -43,6 +43,8 @@ JSDialog.fixedtextControl = function (
 		fixedtext.style.cssText = 'text-align:' + data.xalign + ';';
 	}
 
+	if (data.bold) fixedtext.style.fontWeight = 'bold';
+
 	const accKey = builder._getAccessKeyFromText(data.text);
 	builder._stressAccessKey(fixedtext, accKey);
 

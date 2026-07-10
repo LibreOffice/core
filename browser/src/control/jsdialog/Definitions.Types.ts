@@ -376,6 +376,7 @@ interface TextWidget extends WidgetJSON {
 	hidden?: boolean;
 	renderAsStatic?: boolean;
 	xalign: string;
+	bold?: boolean;
 }
 
 // type: 'pushbutton'
