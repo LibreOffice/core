@@ -285,26 +285,8 @@ describe(['tagdesktop'], 'Accessibility Impress Dialog Tests', { testIsolation: 
                 return helper.processToIdle(win);
             });
 
-        a11yHelper.getActiveDialog(2)
-            .then(() => helper.processToIdle(win))
-            .then(() => {
-                a11yHelper.runA11yValidation(win, 'validatedialogsa11y');
-                cy.cGet('[role="dialog"][aria-labelledby*="Name"] #ok-button')
-                    .should('be.enabled').click();
-                return helper.processToIdle(win);
-            });
+        a11yHelper.testNameDialog(win, 1);
 
-        cy.cGet('button.ui-pushbutton[aria-label="Add"]:visible').click();
-        a11yHelper.getActiveDialog(2)
-            .then(() => helper.processToIdle(win))
-            .then(() => {
-                cy.cGet('#name_entry-input').type('{selectall}{backspace}Hatching 1');
-                cy.cGet('[role="dialog"][aria-labelledby*="Name"] #ok-button')
-                    .should('be.enabled').click();
-                return helper.processToIdle(win);
-            });
-
-        a11yHelper.handleDialog(win, 2);
         a11yHelper.closeActiveDialog(1);
         helper.typeIntoDocument('{esc}');
     });

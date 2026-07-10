@@ -204,7 +204,7 @@ function testNameDialog(win, level) {
 			cy.cGet('.ui-dialog[role="dialog"]').should('have.length', level);
 		});
 	/* Then add the same name again so we get the warning subdialog */
-	cy.cGet('button.ui-pushbutton[aria-label="Add"]:visible').click();
+	cy.cGet('button.ui-pushbutton[aria-label="Add"]:visible').should('not.be.disabled').click();
 	getActiveDialog(level + 1)
 		.then(() => {
 			return helper.processToIdle(win);
@@ -549,6 +549,7 @@ module.exports.resetState = resetState;
 module.exports.checkA11yErrors = checkA11yErrors;
 module.exports.runA11yValidation = runA11yValidation;
 module.exports.getActiveDialog = getActiveDialog;
+module.exports.testNameDialog = testNameDialog;
 module.exports.closeActiveDialog = closeActiveDialog;
 module.exports.getActiveTabPanel = getActiveTabPanel;
 module.exports.traverseTabs = traverseTabs;

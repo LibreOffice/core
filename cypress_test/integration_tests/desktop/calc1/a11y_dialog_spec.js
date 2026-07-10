@@ -252,29 +252,7 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
                 return helper.processToIdle(win);
             });
 
-        // First Add: accept the default suggested name "Hatching 1".
-        a11yHelper.getActiveDialog(2)
-            .then(() => helper.processToIdle(win))
-            .then(() => {
-                a11yHelper.runA11yValidation(win, 'validatedialogsa11y');
-                cy.cGet('[role="dialog"][aria-labelledby*="Name"] #ok-button')
-                    .should('be.enabled').click();
-                return helper.processToIdle(win);
-            });
-
-        // Add again with a duplicate name to force the warning subdialog.
-        cy.cGet('button.ui-pushbutton[aria-label="Add"]:visible').click();
-        a11yHelper.getActiveDialog(2)
-            .then(() => helper.processToIdle(win))
-            .then(() => {
-                cy.cGet('#name_entry-input').type('{selectall}{backspace}Hatching 1');
-                cy.cGet('[role="dialog"][aria-labelledby*="Name"] #ok-button')
-                    .should('be.enabled').click();
-                return helper.processToIdle(win);
-            });
-
-        // queryduplicatedialog replaces namedialog at the same level.
-        a11yHelper.handleDialog(win, 2);
+        a11yHelper.testNameDialog(win, 1);
 
         a11yHelper.closeActiveDialog(1);
         helper.typeIntoDocument('{esc}');
