@@ -548,7 +548,6 @@ COOL_JS_LST =\
 	src/dom/CompactViewAccessibility.ts \
 	src/dom/NotebookbarAccessibilityDefinitions.js \
 	src/dom/NotebookbarAccessibility.js \
-	src/map/handler/Map.Scroll.js \
 	src/dom/DomEvent.Pointer.js \
 	src/map/handler/Map.Keyboard.js \
 	src/map/handler/Map.KeyboardShortcuts.ts \

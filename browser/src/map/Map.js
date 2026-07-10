@@ -126,8 +126,6 @@ window.L.Map = window.L.Evented.extend({
 
 		this.addHandler('keyboard', window.L.Map.Keyboard);
 
-		this.addHandler('scrollHandler', window.L.Map.Scroll);
-
 		this._addLayers(this.options.layers);
 		app.socket = new app.definitions.Socket(this);
 
@@ -665,7 +663,6 @@ window.L.Map = window.L.Evented.extend({
 			['ViewLayoutMultiPage', 'ViewLayoutCompareChanges'].includes(app.activeDocument.activeLayout.type))
 			animate = false;
 
-		var curCenter = this.getCenter();
 		// Document layouts zoom through the ZoomControl section, not the map.
 		if (app.activeDocument && app.activeDocument.activeLayout) {
 			var zoomControl = app.sectionContainer.getSectionWithName(app.CSections.ZoomControl.name);
@@ -673,66 +670,10 @@ window.L.Map = window.L.Evented.extend({
 				// Match the old semantics: only the 3rd arg means "animate"
 				// (callers passing {animate:false} in options leave it undefined).
 				zoomControl.zoomTo(this._limitZoom(zoom), undefined, !!animate);
-				return this;
 			}
 		}
 
-		this._docLayer.setZoomChanged(true);
-		var thisObj = this;
-		var cssBounds = this.getPixelBounds();
-		var mapUpdater;
-		var runAtFinish;
-		if (this._docLayer && app.file.textCursor.visible && app.activeDocument.activeLayout.viewedRectangle.containsPoint(app.file.textCursor.rectangle.center)) {
-			// Calculate new center after zoom. The intent is that the caret
-			// position stays the same.
-			var zoomScale = 1.0 / this.getZoomScale(zoom, this._zoom);
-			var caretPos = this._docLayer._twipsToIntern({ x: app.file.textCursor.rectangle.center[0], y: app.file.textCursor.rectangle.center[1] });
-			var newCenter = InternPointUtil.flexConstruct(curCenter.x + (caretPos.x - curCenter.x) * (1.0 - zoomScale),
-						     curCenter.y + (caretPos.y - curCenter.y) * (1.0 - zoomScale));
-
-			mapUpdater = function() {
-				thisObj.setView(newCenter, zoom);
-			};
-			runAtFinish = function() {
-				thisObj._docLayer.setZoomChanged(false);
-			};
-
-			if (animate) {
-				this._docLayer.runZoomAnimation(zoom,
-					// pinchCenter
-					InternPointUtil.flexConstruct(
-						// Use the current x-center if there is a left margin.
-						cssBounds.min.x < 0 ? curCenter.x : caretPos.x,
-						// Use the current y-center if there is a top margin.
-						cssBounds.min.y < 0 ? curCenter.y : caretPos.y),
-					mapUpdater,
-					runAtFinish);
-			} else {
-				mapUpdater();
-				runAtFinish();
-			}
-
-			return;
-		}
-
-		mapUpdater = function() {
-			thisObj.setView(curCenter, zoom);
-		};
-
-		runAtFinish = function() {
-			thisObj._docLayer.setZoomChanged(false);
-		};
-
-		if (animate) {
-			this._docLayer.runZoomAnimation(zoom,
-				// pinchCenter
-				curCenter,
-				mapUpdater,
-				runAtFinish);
-		} else {
-			mapUpdater();
-			runAtFinish();
-		}
+		return this;
 	},
 
 	zoomIn: function (delta, options, animate) {
@@ -815,9 +756,6 @@ window.L.Map = window.L.Evented.extend({
 		var handler = this[name] = new HandlerClass(this);
 
 		this._handlers.push(handler);
-
-		if (name === 'scrollHandler')
-			this.scrollHandler = handler; // Reference for external use.
 
 		if (this.options[name]) {
 			handler.enable();

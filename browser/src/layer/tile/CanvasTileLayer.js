@@ -4294,24 +4294,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 	},
 
-	// Meant for desktop case, where the ending zoom and centers are all known in advance.
-	runZoomAnimation: function (zoomEnd, pinchCenter, mapUpdater, runAtFinish) {
-
-		if (this._map.getDocType() === 'spreadsheet')
-			OtherViewCellCursorSection.closePopups();
-
-		this.preZoomAnimation(pinchCenter);
-		this.zoomStep(this._map.getZoom(), pinchCenter);
-		var thisObj = this;
-		this.zoomStepEnd(zoomEnd, pinchCenter,
-			mapUpdater,
-			// runAtFinish
-			function () {
-				thisObj.postZoomAnimation();
-				runAtFinish();
-			});
-	},
-
 	_viewReset: function (e) {
 		this._reset(e && e.hard);
 		if (this._docType === 'spreadsheet' && this._annotations !== undefined) {

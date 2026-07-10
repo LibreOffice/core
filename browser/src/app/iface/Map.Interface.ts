@@ -196,7 +196,6 @@ interface MapInterface extends Evented {
 		reset?: boolean,
 	): MapInterface;
 	isViewReadOnly(viewid: number): boolean;
-	scrollHandler: typeof window.L.Map.Scroll;
 	context?: { appId: string; context: string };
 	eSignature?: cool.ESignature;
 
