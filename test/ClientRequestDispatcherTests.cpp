@@ -21,6 +21,7 @@
 #include <wsd/ClientRequestDispatcher.hpp>
 #include <wsd/ContentType.hpp>
 #include <wsd/FileServer.hpp>
+#include <wsd/McpUploads.hpp>
 #include <wsd/RequestDetails.hpp>
 #include <wsd/ServerURL.hpp>
 
@@ -30,6 +31,7 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <chrono>
 #include <memory>
 #include <string>
 
@@ -85,7 +87,10 @@ class ClientRequestDispatcherTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testServerURL_HostHeaderNegativePort);
     CPPUNIT_TEST(testServerURL_HostHeaderIPv6);
 
+    CPPUNIT_TEST(testMcpUploadPastItsDeadlineIsClosed);
+    CPPUNIT_TEST(testMcpUploadThatCannotBeWrittenIsAnInternalError);
     CPPUNIT_TEST(testMcpEndpointThatIsOffIsNotFound);
+    CPPUNIT_TEST(testMcpUploadTheStoreHasNoRoomForIsRefused);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -702,6 +707,67 @@ private:
         const std::string _savedChildRoot;
     };
 
+    /// The header of an upload of size bytes to the Model Context Protocol endpoint, with the key.
+    static std::string mcpUploadHeader(std::size_t size)
+    {
+        return "POST /cool/mcp/upload?filename=big.odt HTTP/1.1\r\nHost: localhost\r\n"
+               "Authorization: Bearer secret\r\nContent-Length: " +
+               std::to_string(size) + "\r\n\r\n";
+    }
+
+    /// An upload whose body does not arrive in the time it was given is answered with 408, its
+    /// connection is closed, and its room in the store is given back.
+    void testMcpUploadPastItsDeadlineIsClosed()
+    {
+        constexpr std::string_view testname = __func__;
+
+        const std::string childRoot = FileUtil::createRandomTmpDir();
+        {
+            const McpEndpointSettings endpoint(childRoot);
+
+            auto handler = std::make_shared<ClientRequestDispatcher>();
+            auto socket = std::make_shared<MockStreamSocket>();
+            socket->setHandler(handler);
+            std::shared_ptr<ProtocolHandlerInterface> base = handler;
+            base->onConnect(socket);
+
+            constexpr std::size_t size = 64 * 1024;
+            const std::string header = mcpUploadHeader(size);
+            socket->getInBuffer().append(header.data(), header.size());
+            const auto start = std::chrono::steady_clock::now();
+            SocketDisposition disposition(socket);
+            base->handleIncomingMessage(disposition);
+
+            // The upload waits for its body and holds its room meanwhile.
+            LOK_ASSERT(socket->getOutput().empty());
+            LOK_ASSERT(!McpUploads::instance().hasRoomFor(McpUploads::MaxStoredBytes - size + 1));
+            LOK_ASSERT(!base->checkTimeout(start));
+
+            // Once its time has passed, it is answered and closed, and its room is given back.
+            LOK_ASSERT(base->checkTimeout(start + McpUploads::uploadTimeLimit(size) +
+                                          std::chrono::minutes(1)));
+            LOK_ASSERT(socket->getOutput().find("HTTP/1.1 408") != std::string::npos);
+            LOK_ASSERT(socket->isShutdown());
+            LOK_ASSERT(McpUploads::instance().hasRoomFor(McpUploads::MaxStoredBytes));
+        }
+        FileUtil::removeFile(childRoot, /*recursive=*/true);
+    }
+
+    /// An upload whose file cannot be made is answered with 500 Internal Server Error, and gives
+    /// its room back.
+    void testMcpUploadThatCannotBeWrittenIsAnInternalError()
+    {
+        constexpr std::string_view testname = __func__;
+
+        // No directory can be made under a file.
+        const McpEndpointSettings endpoint("/dev/null");
+
+        constexpr std::size_t size = 64 * 1024;
+        const std::string response = dispatchRequest(mcpUploadHeader(size));
+        LOK_ASSERT(response.find("HTTP/1.1 500") != std::string::npos);
+        LOK_ASSERT(McpUploads::instance().hasRoomFor(McpUploads::MaxStoredBytes));
+    }
+
     /// A message with the key to the Model Context Protocol endpoint that is switched off, or
     /// switched on with no key set, finds nothing there.
     void testMcpEndpointThatIsOffIsNotFound()
@@ -724,6 +790,31 @@ private:
         FileUtil::removeFile(childRoot, /*recursive=*/true);
     }
 
+    /// An upload the store has no room for is answered with 507 Insufficient Storage on its
+    /// header, whether its body would be held in memory or written to disk.
+    void testMcpUploadTheStoreHasNoRoomForIsRefused()
+    {
+        constexpr std::string_view testname = __func__;
+
+        const std::string childRoot = FileUtil::createRandomTmpDir();
+        {
+            const McpEndpointSettings endpoint(childRoot);
+
+            // The room of the whole store is held by a document being written, and given back
+            // when the test ends.
+            LOK_ASSERT(McpUploads::instance().reserve(McpUploads::MaxStoredBytes));
+            struct RoomRelease
+            {
+                ~RoomRelease() { McpUploads::instance().release(McpUploads::MaxStoredBytes); }
+            } roomRelease;
+
+            const std::string small = mcpUploadHeader(5) + "bytes";
+            LOK_ASSERT(dispatchRequest(small).starts_with("HTTP/1.1 507"));
+            LOK_ASSERT(dispatchRequest(mcpUploadHeader(1024 * 1024)).starts_with("HTTP/1.1 507"));
+        }
+        LOK_ASSERT(McpUploads::instance().hasRoomFor(McpUploads::MaxStoredBytes));
+        FileUtil::removeFile(childRoot, /*recursive=*/true);
+    }
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ClientRequestDispatcherTests);

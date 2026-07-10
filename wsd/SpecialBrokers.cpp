@@ -62,11 +62,7 @@ using namespace COOLProtocol;
 
 void StatelessBatchBroker::removeFile(const std::string& uriOrig)
 {
-    // Remove and report errors on failure.
-    FileUtil::removeFile(uriOrig);
-    const std::string dir = Poco::Path(uriOrig).parent().toString();
-    if (FileUtil::isEmptyDirectory(dir))
-        FileUtil::removeFile(dir);
+    FileUtil::removeFileAndEmptyParent(uriOrig);
 }
 
 static std::atomic<std::size_t> convertToBrokerInstanceCounter;

@@ -73,6 +73,7 @@
 #include <wsd/ClientRequestDispatcher.hpp>
 #include <wsd/CollabBroker.hpp>
 #include <wsd/DocumentBroker.hpp>
+#include <wsd/McpUploads.hpp>
 #include <wsd/PreviewCache.hpp>
 #if !MOBILEAPP
 #include <wsd/PreviewSession.hpp>
@@ -4946,6 +4947,7 @@ void COOLWSD::innerMain()
 
 #if !MOBILEAPP
         SavedClipboards->checkexpiry(timeNow);
+        McpUploads::instance().purgeExpiredEntries();
 
         const std::chrono::milliseconds durationFetch
             = std::chrono::duration_cast<std::chrono::milliseconds>(timeNow - stampFetch);

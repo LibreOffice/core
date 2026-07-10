@@ -227,6 +227,14 @@ namespace FileUtil
         return false;
     }
 
+    void removeFileAndEmptyParent(const std::string& path)
+    {
+        removeFile(path);
+        const std::string parent = Poco::Path(path).parent().toString();
+        if (isEmptyDirectory(parent))
+            removeFile(parent);
+    }
+
     bool compareFileContents(const std::string& rhsPath, const std::string& lhsPath)
     {
         std::ifstream rhs;

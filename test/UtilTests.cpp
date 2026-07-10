@@ -42,6 +42,7 @@ class UtilTests : public CPPUNIT_NS::TestFixture
 
     CPPUNIT_TEST(testCoreVersionMismatch);
     CPPUNIT_TEST(testCoreCommitMismatch);
+    CPPUNIT_TEST(testCleanupFilename);
     CPPUNIT_TEST_SUITE_END();
 
     void testCharacterConverter();
@@ -53,6 +54,7 @@ class UtilTests : public CPPUNIT_NS::TestFixture
     void testIsRtlLanguage();
     void testCoreVersionMismatch();
     void testCoreCommitMismatch();
+    void testCleanupFilename();
 };
 
 void UtilTests::testCharacterConverter()
@@ -259,6 +261,23 @@ void UtilTests::testCoreCommitMismatch()
     TST_LOG("Commit mismatch: " << commit);
     LOK_ASSERT(commit.find("[12345678abcdef]") != std::string::npos);
     LOK_ASSERT(commit.find("[eb4fe084]") != std::string::npos);
+}
+
+void UtilTests::testCleanupFilename()
+{
+    constexpr std::string_view testname = __func__;
+
+    // An ordinary name is handed back as it stands.
+    LOK_ASSERT_EQUAL(std::string("report.odt"), Util::cleanupFilename("report.odt"));
+
+    // A name is a single component: a path separator does not survive.
+    LOK_ASSERT_EQUAL(std::string("-etc-passwd"), Util::cleanupFilename("/etc/passwd"));
+
+    // A cleaned name is printable throughout, so a name carrying a line break
+    // comes back with the break replaced.
+    LOK_ASSERT_EQUAL(std::string("report--odt"), Util::cleanupFilename("report\r\nodt"));
+    LOK_ASSERT_EQUAL(std::string("a-b"), Util::cleanupFilename("a\tb"));
+    LOK_ASSERT_EQUAL(std::string("a-b"), Util::cleanupFilename("a\x7f" "b"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UtilTests);

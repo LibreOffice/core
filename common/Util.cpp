@@ -240,7 +240,19 @@ namespace Util
     {
         static constexpr std::string_view mtch(",/?:@&=+$#'\"");
         static constexpr std::string_view repl("------------");
-        return replaceAllOf(filename, mtch, repl);
+        std::string cleaned = replaceAllOf(filename, mtch, repl);
+
+        // A cleaned name holds printable characters only, so that it reads the
+        // same wherever it is written out again. Every control character,
+        // newlines among them, becomes a dash like the punctuation above.
+        for (char& character : cleaned)
+        {
+            const unsigned char value = static_cast<unsigned char>(character);
+            if (value < 0x20 || value == 0x7f)
+                character = '-';
+        }
+
+        return cleaned;
     }
 
     std::string formatLinesForLog(const std::string_view s)

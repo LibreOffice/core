@@ -278,6 +278,7 @@ clienttest_SOURCES = \
 	TestGlobals.cpp \
 	TestStubs.cpp \
 	ClientRequestDispatcherTests.cpp \
+	McpUploadsTests.cpp \
 	XcuScrubWhiteBoxTests.cpp \
 	test.cpp
 

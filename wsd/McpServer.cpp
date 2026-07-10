@@ -39,11 +39,23 @@ const std::string JsonRpcVersion = "2.0";
 // the newest version we support.
 const std::string LatestProtocolVersion = "2025-11-25";
 
+// The text in a description that stands for the address of this endpoint, which each request puts
+// in.
+const std::string EndpointPlaceholder = "{mcp_endpoint}";
+
 // How a client gives the server a document to work on. This paragraph is added to every tool
-// description so a client knows how to pass a document.
+// description so a client knows the ways to pass a document and the trade-offs between them.
 const std::string InputAlternativesDescription =
-    " Set \"data\" to the document bytes encoded as base64. Set \"filename\" to the original "
-    "file name so the server can tell which kind of document it is.";
+    " The document is passed in exactly one of two ways. For a file on the client's disk, an "
+    "upload costs the least: send the raw bytes in the body of a POST to " +
+    EndpointPlaceholder +
+    "/upload?filename=<name>, with an Authorization header that carries the bearer token the MCP "
+    "client is configured with, and set \"file_id\" to the file_id it answers with. That token "
+    "lives in the client's configuration and is not passed to the tools, so when it is not "
+    "available, pass the document as \"data\" instead. A file_id stays valid for 15 minutes "
+    "and can be used in any number of calls. Or set \"data\" to the document bytes encoded as "
+    "base64, for a document of up to 16 MB. Set \"filename\" to the file name with its "
+    "extension, so the server can tell which kind of document it is.";
 
 std::string stringify(const Poco::JSON::Object::Ptr& object)
 {
@@ -134,9 +146,15 @@ void addStringProperty(Poco::JSON::Object::Ptr properties, const std::string& na
 // described in one place.
 void addInputProperties(Poco::JSON::Object::Ptr properties)
 {
-    addStringProperty(properties, "data", "The document bytes encoded as base64.");
+    addStringProperty(properties, "data",
+                      "The document bytes encoded as base64. Pass exactly one of data or "
+                      "file_id.");
+    addStringProperty(properties, "file_id",
+                      "An identifier from an earlier upload, valid for 15 minutes and in any "
+                      "number of calls. Pass exactly one of data or file_id.");
     addStringProperty(properties, "filename",
-                      "The original file name, used to tell which kind of document this is.");
+                      "The file name with its extension, used to tell which kind of document "
+                      "this is.");
 }
 
 Poco::JSON::Object::Ptr makeObjectSchema(const Poco::JSON::Object::Ptr& properties)
@@ -260,6 +278,12 @@ std::vector<McpServer::McpTool> McpServer::documentToolDefinitions()
     }();
 
     return definitions;
+}
+
+std::string McpServer::withEndpointAddress(const std::string& description,
+                                           const std::string& endpointUrl)
+{
+    return Util::replace(description, EndpointPlaceholder, endpointUrl);
 }
 
 std::optional<McpServer::McpToolResult>

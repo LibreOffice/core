@@ -275,6 +275,7 @@ coolwsd_sources = \
                   wsd/McpRequests.cpp \
                   wsd/McpServer.cpp \
                   wsd/McpTools.cpp \
+                  wsd/McpUploads.cpp \
                   wsd/ProofKey.cpp \
                   wsd/PreviewCache.cpp \
                   wsd/PreviewSession.cpp \
@@ -383,6 +384,7 @@ wsd_headers = \
               wsd/McpRequests.hpp \
               wsd/McpServer.hpp \
               wsd/McpTools.hpp \
+              wsd/McpUploads.hpp \
               wsd/PlatformDesktop.hpp \
               wsd/PlatformMobile.hpp \
               wsd/PlatformUnix.hpp \

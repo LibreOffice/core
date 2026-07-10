@@ -106,6 +106,11 @@ public:
     /// so the two always describe the same tools.
     static std::vector<McpTool> documentToolDefinitions();
 
+    /// The description with the address of this endpoint, as the client reaches it, put in place of
+    /// the placeholder the descriptions carry for it.
+    static std::string withEndpointAddress(const std::string& description,
+                                           const std::string& endpointUrl);
+
     /// Check the arguments an extract_document_structure call carries before any document work
     /// starts. Returns an empty optional when the filter is absent or one of the documented views,
     /// and the range is absent or made of letters, digits, colons and dollar signs. Otherwise

@@ -11,13 +11,14 @@
 
 /*
  * End to end test for the Model Context Protocol endpoint: the handshake, the tool listing, running
- * each document tool over a document passed as base64 bytes, and the failure and authentication
- * paths.
+ * each document tool over a document passed as base64 bytes and as an uploaded file, and the
+ * failure and authentication paths.
  */
 
 #include <config.h>
 
 #include <cstdint>
+#include <filesystem>
 #include <fstream>
 #include <string>
 #include <thread>
@@ -51,6 +52,13 @@ std::string readWholeFile(const std::string& path)
     std::ifstream stream(path, std::ios::binary);
     return std::string(std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>());
 }
+
+/// The largest document the endpoint accepts in this test.
+constexpr std::int64_t MaxFileSize = 32 * 1024 * 1024;
+
+/// The largest request body the server holds in memory while it arrives. A larger upload is written
+/// to disk as it arrives.
+constexpr std::uintmax_t MaxInMemoryBody = 16 * 1024;
 }
 
 /// Inside the WSD process.
@@ -85,6 +93,7 @@ public:
         // Switch the endpoint on and give it a key to require.
         config.setBool("ai.mcp.enable", true);
         config.setString("ai.mcp.api_key", ApiKey);
+        config.setInt64("ai.mcp.max_file_size", MaxFileSize);
     }
 
     /// Send jsonBody to the message address path, with bearer as the Authorization header, or with
@@ -110,6 +119,26 @@ public:
         return request;
     }
 
+    /// The answer to a tools/call of the named tool with the given arguments, as JSON text.
+    std::shared_ptr<const http::Response> toolCall(const std::shared_ptr<http::Session>& session,
+                                                   int id, const std::string& name,
+                                                   const std::string& arguments)
+    {
+        return mcpCall(session, R"({"jsonrpc":"2.0","id":)" + std::to_string(id) +
+                                    R"(,"method":"tools/call","params":{"name":")" + name +
+                                    R"(","arguments":)" + arguments + "}}");
+    }
+
+    std::shared_ptr<const http::Response>
+    mcpUpload(const std::shared_ptr<http::Session>& session, const std::string& path,
+              const std::string& query, const std::string& bearer = "Bearer " + ApiKey)
+    {
+        http::Request request("/cool/mcp/upload" + query, http::Request::VERB_POST);
+        request.set("Authorization", bearer);
+        request.setBodyFile(path);
+        return session->syncRequest(request);
+    }
+
     std::shared_ptr<const http::Response> mcpGet(const std::shared_ptr<http::Session>& session,
                                                  const std::string& path,
                                                  const std::string& bearer = "Bearer " + ApiKey)
@@ -117,6 +146,20 @@ public:
         http::Request request(path, http::Request::VERB_GET);
         request.set("Authorization", bearer);
         return session->syncRequest(request);
+    }
+
+    static std::string fileIdFrom(const std::string& body)
+    {
+        try
+        {
+            Poco::JSON::Parser parser;
+            auto object = parser.parse(body).extract<Poco::JSON::Object::Ptr>();
+            return object->optValue<std::string>("file_id", std::string());
+        }
+        catch (const std::exception&)
+        {
+            return std::string();
+        }
     }
 
     /// The content block at the given position in a tool result, as an object, or null.
@@ -193,6 +236,42 @@ public:
             LOK_ASSERT(contains(response->getBody(), "Hello world"));
         }
 
+        // The same document uploaded once and then named by its file_id gives the same result.
+        {
+            auto uploadResponse = mcpUpload(session, helloPath, "?filename=hello.odt");
+            LOK_ASSERT(uploadResponse->statusCode() == http::StatusCode::OK);
+            const std::string fileId = fileIdFrom(uploadResponse->getBody());
+            LOK_ASSERT(!fileId.empty());
+            LOK_ASSERT(contains(uploadResponse->getBody(), R"("expires_in":900)"));
+
+            auto response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":4,"method":"tools/call","params":)"
+                         R"({"name":"extract_document_structure","arguments":)"
+                         R"({"file_id":")" + fileId + R"(","filter":"text"}}})");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(contains(response->getBody(), R"("isError":false)"));
+            LOK_ASSERT(contains(response->getBody(), "Hello world"));
+        }
+
+        // A document too large to be held in memory while it arrives is uploaded and named by its
+        // file_id in the same way.
+        {
+            // A body of up to 16 KB is held in memory, and a larger one is written to disk.
+            const std::string largePath = Poco::Path(TDOC, "docStructure.docx").toString();
+            LOK_ASSERT(std::filesystem::file_size(largePath) > MaxInMemoryBody);
+            auto uploadResponse = mcpUpload(session, largePath, "?filename=docStructure.docx");
+            LOK_ASSERT(uploadResponse->statusCode() == http::StatusCode::OK);
+            const std::string fileId = fileIdFrom(uploadResponse->getBody());
+            LOK_ASSERT(!fileId.empty());
+
+            auto response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":23,"method":"tools/call","params":)"
+                         R"({"name":"extract_document_structure","arguments":)"
+                         R"({"file_id":")" + fileId + R"(","filter":"text"}}})");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(contains(response->getBody(), R"("isError":false)"));
+        }
+
         // Listing link targets of a document passed as base64 bytes returns a categorised result.
         {
             auto response = mcpCall(
@@ -202,6 +281,39 @@ public:
             LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
             LOK_ASSERT(contains(response->getBody(), R"("isError":false)"));
             LOK_ASSERT(contains(response->getBody(), "Headings"));
+        }
+
+        // An unknown file_id is a tool failure the model can read, not a protocol error.
+        {
+            auto response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":6,"method":"tools/call","params":)"
+                         R"({"name":"extract_link_targets","arguments":)"
+                         R"({"file_id":"does-not-exist"}}})");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(!contains(response->getBody(), R"("error")"));
+            LOK_ASSERT(contains(response->getBody(), R"("isError":true)"));
+            LOK_ASSERT(contains(textResultFrom(response->getBody()),
+                                "The file_id is unknown or has expired."));
+        }
+
+        // A document given both inline and by file_id, given neither way, or given as text that is
+        // not base64, is a tool failure that says how to give it.
+        {
+            auto response = toolCall(session, 26, "extract_link_targets",
+                                     R"({"data":")" + helloData + R"(","file_id":"abc"})");
+            LOK_ASSERT(contains(response->getBody(), R"("isError":true)"));
+            LOK_ASSERT(contains(textResultFrom(response->getBody()),
+                                "Provide the document as only one of the data or file_id"));
+
+            response = toolCall(session, 27, "extract_link_targets", R"({"filename":"a.odt"})");
+            LOK_ASSERT(contains(response->getBody(), R"("isError":true)"));
+            LOK_ASSERT(contains(textResultFrom(response->getBody()),
+                                "Provide the document as the data or the file_id argument."));
+
+            response = toolCall(session, 28, "extract_link_targets", R"({"data":"abc"})");
+            LOK_ASSERT(contains(response->getBody(), R"("isError":true)"));
+            LOK_ASSERT(contains(textResultFrom(response->getBody()),
+                                "The data argument is not valid base64"));
         }
 
         // Listing the link targets of a spreadsheet answers with its targets.
@@ -248,6 +360,21 @@ public:
                          R"("range":"A1:B5 "}}})");
             LOK_ASSERT(contains(response->getBody(), R"("isError":true)"));
             LOK_ASSERT(contains(textResultFrom(response->getBody()), "range argument"));
+        }
+
+        // Uploading without the right bearer token is refused.
+        {
+            auto response =
+                mcpUpload(session, helloPath, "?filename=hello.odt", "Bearer wrong-key");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::Unauthorized);
+        }
+
+        // An upload is accepted when the scheme of the authorization header is written in another
+        // case.
+        {
+            auto response =
+                mcpUpload(session, helloPath, "?filename=hello.odt", "bearer " + ApiKey);
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
         }
 
         const std::string initialize = R"({"jsonrpc":"2.0","id":30,"method":"initialize"})";
@@ -303,13 +430,19 @@ public:
             LOK_ASSERT_EQUAL(http::StatusCode::LengthRequired, response->statusCode());
         }
 
-        // A message over the most a message may hold is refused on its header alone. No byte of the
-        // body is sent, so the answer shows the server decided from the header.
+        // A message over the most a message may hold, and an upload over the largest document the
+        // server accepts, are refused on their header alone. No byte of either body is sent, so the
+        // answer shows the server decided from the header.
         {
             auto response = session->syncRequest(headerOnlyPost(
                 "/cool/mcp", static_cast<std::int64_t>(McpTools::MaxMessageBytes) + 1));
             LOK_ASSERT_EQUAL(http::StatusCode::PayloadTooLarge, response->statusCode());
             LOK_ASSERT(contains(response->getBody(), "Upload a large document"));
+
+            response = session->syncRequest(
+                headerOnlyPost("/cool/mcp/upload?filename=big.odt", MaxFileSize + 1));
+            LOK_ASSERT_EQUAL(http::StatusCode::PayloadTooLarge, response->statusCode());
+            LOK_ASSERT(contains(response->getBody(), "larger than the server accepts"));
         }
 
         // The message address takes only POST.
@@ -317,6 +450,15 @@ public:
             auto response = mcpGet(session, "/cool/mcp");
             LOK_ASSERT_EQUAL(http::StatusCode::MethodNotAllowed, response->statusCode());
             LOK_ASSERT_EQUAL_STR("POST", response->get("Allow"));
+        }
+
+        // An upload with an empty body is a bad request.
+        {
+            http::Request request("/cool/mcp/upload?filename=empty.odt", http::Request::VERB_POST);
+            request.set("Authorization", "Bearer " + ApiKey);
+            request.setBody(std::string(), "application/octet-stream");
+            auto response = session->syncRequest(request);
+            LOK_ASSERT_EQUAL(http::StatusCode::BadRequest, response->statusCode());
         }
     }
 

@@ -758,6 +758,30 @@ void socketEraseConsumedBytes(const std::shared_ptr<StreamSocket>& socket, size_
 #endif // !MOBILEAPP
 } // namespace
 
+bool ClientRequestDispatcher::checkTimeout(std::chrono::steady_clock::time_point now)
+{
+#if !MOBILEAPP
+    if (!_mcpUpload || !_mcpUpload->isPastDeadline(now))
+        return false;
+
+    // Dropping the sink removes its file and gives its room in the store back.
+    LOG_WRN("MCP: closing an upload that did not arrive whole in the time it was given");
+    _mcpUpload.reset();
+    _postContentPending = 0;
+
+    std::shared_ptr<StreamSocket> socket = _socket.lock();
+    if (socket)
+    {
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::RequestTimeout, socket);
+        socket->shutdownConnection();
+    }
+    return true;
+#else
+    (void)now;
+    return false;
+#endif
+}
+
 void ClientRequestDispatcher::handleIncomingMessage(SocketDisposition& disposition)
 {
     std::shared_ptr<StreamSocket> socket = _socket.lock();
@@ -780,6 +804,31 @@ void ClientRequestDispatcher::handleIncomingMessage(SocketDisposition& dispositi
 
     Poco::Net::HTTPRequest request;
     ssize_t headerSize;
+    if (_postContentPending && _mcpUpload)
+    {
+        const std::streamsize available =
+            std::min<std::streamsize>(_postContentPending, socket->getInBuffer().size());
+        const bool written =
+            _mcpUpload->write(socket->getInBuffer().data(), NumUtil::makeUnsigned(available));
+        socket->eraseFirstInputBytes(available);
+        _postContentPending -= available;
+        if (!written)
+        {
+            _postContentPending = 0;
+            _mcpUpload.reset();
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::InternalServerError, socket);
+            socket->ignoreInput();
+            return;
+        }
+
+        if (!_postContentPending)
+        {
+            _mcpUpload->finish(socket);
+            _mcpUpload.reset();
+        }
+        return;
+    }
+
     if (_postContentPending)
     {
         std::streamsize available = std::min<std::streamsize>(_postContentPending,
@@ -833,7 +882,7 @@ void ClientRequestDispatcher::handleIncomingMessage(SocketDisposition& dispositi
     if (headerSize < 0)
         return;
 
-    assert(!_postStream.is_open() && !_postFileDir && !_postContentPending);
+    assert(!_postStream.is_open() && !_postFileDir && !_postContentPending && !_mcpUpload);
 
     // A request for the Model Context Protocol endpoint is weighed as soon as its header is in, so
     // a request that is refused is answered and closed before its body is read.
@@ -849,6 +898,31 @@ void ClientRequestDispatcher::handleIncomingMessage(SocketDisposition& dispositi
         request.getContentLength() > MaxInMemoryHttpRequestSize && // avoid disk I/O for small data
         !request.getChunkedTransferEncoding() && // ignore chunked transfer for now
         !request.has("ProxyPrefix"); // proxy mode assumes nothing consumed
+
+    // A large upload to the Model Context Protocol endpoint is written as it arrives straight to
+    // the file that the store adopts once the upload is whole.
+    if (canStreamToFile && McpRequests::isMcpUpload(request))
+    {
+        bool storeFull = false;
+        _mcpUpload = McpUploadSink::start(request, storeFull, now);
+        if (!_mcpUpload)
+        {
+            if (storeFull)
+                HttpHelper::sendErrorAndShutdown(
+                    http::StatusCode::InsufficientStorage, socket,
+                    "The server holds too many uploaded documents. Try again later.\n");
+            else
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::InternalServerError, socket);
+            socket->ignoreInput();
+            return;
+        }
+
+        socket->handleExpect(request.get("Expect", std::string()));
+        socket->eraseFirstInputBytes(headerSize);
+        _postContentPending = request.getContentLength();
+        _lastSeenHTTPHeader = now;
+        return;
+    }
 
     if (canStreamToFile)
     {
@@ -1680,7 +1754,8 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
 
         else if (McpRequests::isMcpRequest(requestDetails))
         {
-            servedSync = McpRequests::handleMcpRequest(request, message, disposition, socket);
+            servedSync = McpRequests::handleMcpRequest(request, requestDetails, message,
+                                                       disposition, socket);
         }
         else if (!requestDetails.isWebSocket() && !isCollab &&
                  (requestDetails.equals(RequestDetails::Field::Type, "cool") ||

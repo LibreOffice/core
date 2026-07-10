@@ -181,6 +181,10 @@ namespace FileUtil
         removeFile(path.toString(), recursive);
     }
 
+    /// Remove the file, and then remove the directory that held it when that directory is left
+    /// empty. This suits a file that was given a directory to itself.
+    void removeFileAndEmptyParent(const std::string& path);
+
     /// Remove empty directories recursively.
     /// We seem to leave behind empty directories in jails and that causes a lot of noise.
     void removeEmptyDirTree(const std::string& path);

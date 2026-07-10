@@ -11,6 +11,7 @@
 
 #include <config.h>
 
+#include <common/JsonUtil.hpp>
 #include <wsd/McpServer.hpp>
 
 #include <test/lokassert.hpp>
@@ -18,6 +19,8 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <cstddef>
+#include <sstream>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -102,6 +105,56 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     static bool contains(const std::string& haystack, const std::string& needle)
     {
         return haystack.find(needle) != std::string::npos;
+    }
+
+    /// The tools/list answer for the document tools.
+    static McpServer::McpResponse listTools()
+    {
+        return call(R"({"jsonrpc":"2.0","id":3,"method":"tools/list"})", std::string(),
+                    McpServer::documentToolDefinitions());
+    }
+
+    /// The input schema of the tool named name in a tools/list response body, or null when the
+    /// listing has no tool of that name.
+    static Poco::JSON::Object::Ptr inputSchemaOf(const std::string& body, const std::string& name)
+    {
+        Poco::JSON::Object::Ptr root;
+        if (!JsonUtil::parseJSON(body, root) || !root->getObject("result"))
+            return nullptr;
+        Poco::JSON::Array::Ptr tools = root->getObject("result")->getArray("tools");
+        for (std::size_t index = 0; tools && index < tools->size(); ++index)
+        {
+            Poco::JSON::Object::Ptr tool = tools->getObject(index);
+            if (tool && tool->optValue<std::string>("name", std::string()) == name)
+                return tool->getObject("inputSchema");
+        }
+        return nullptr;
+    }
+
+    /// True when schema names property among its properties.
+    static bool hasProperty(const Poco::JSON::Object::Ptr& schema, const std::string& property)
+    {
+        Poco::JSON::Object::Ptr properties = schema ? schema->getObject("properties") : nullptr;
+        return properties && properties->has(property);
+    }
+
+    /// The names schema lists as required, in their order, or none when it lists none.
+    static std::vector<std::string> requiredOf(const Poco::JSON::Object::Ptr& schema)
+    {
+        std::vector<std::string> names;
+        Poco::JSON::Array::Ptr required = schema ? schema->getArray("required") : nullptr;
+        for (std::size_t index = 0; required && index < required->size(); ++index)
+            names.push_back(required->getElement<std::string>(index));
+        return names;
+    }
+
+    /// The schema as JSON text.
+    static std::string schemaText(const Poco::JSON::Object::Ptr& schema)
+    {
+        std::ostringstream stream;
+        if (schema)
+            schema->stringify(stream);
+        return stream.str();
     }
 };
 
@@ -230,22 +283,30 @@ void McpServerTests::testToolsListDescribesBothDocumentTools()
 {
     constexpr std::string_view testname = __func__;
 
-    const McpServer::McpResponse response =
-        call(R"({"jsonrpc":"2.0","id":3,"method":"tools/list"})", std::string(),
-             McpServer::documentToolDefinitions());
+    const McpServer::McpResponse response = listTools();
     LOK_ASSERT_EQUAL(200, response.statusCode);
 
-    // Both document tools are listed, each with a name, a description and an argument schema.
-    LOK_ASSERT(contains(response.body, R"("name":"extract_document_structure")"));
-    LOK_ASSERT(contains(response.body, R"("name":"extract_link_targets")"));
+    // Both document tools are listed, each with a description and an argument schema that takes the
+    // document as data or as a file_id.
     LOK_ASSERT(contains(response.body, R"("description":)"));
-    LOK_ASSERT(contains(response.body, R"("inputSchema")"));
-    // The shared input properties appear in the schema.
-    LOK_ASSERT(contains(response.body, R"("data")"));
-    // The structure tool advertises its extra arguments.
-    LOK_ASSERT(contains(response.body, R"("filter")"));
-    LOK_ASSERT(contains(response.body, R"("range")"));
-    LOK_ASSERT(contains(response.body, R"("target")"));
+    const Poco::JSON::Object::Ptr structure =
+        inputSchemaOf(response.body, "extract_document_structure");
+    const Poco::JSON::Object::Ptr targets = inputSchemaOf(response.body, "extract_link_targets");
+    LOK_ASSERT(structure && targets);
+    for (const Poco::JSON::Object::Ptr& schema : { structure, targets })
+    {
+        LOK_ASSERT(hasProperty(schema, "data"));
+        LOK_ASSERT(hasProperty(schema, "file_id"));
+        LOK_ASSERT(hasProperty(schema, "filename"));
+    }
+
+    // The structure tool also takes a view and the part of the document to read, and the link
+    // targets tool takes neither.
+    for (const char* property : { "filter", "range", "sheet", "target" })
+    {
+        LOK_ASSERT(hasProperty(structure, property));
+        LOK_ASSERT(!hasProperty(targets, property));
+    }
 }
 
 void McpServerTests::testToolsCallUnknownToolIsRejected()

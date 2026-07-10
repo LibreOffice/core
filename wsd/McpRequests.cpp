@@ -14,6 +14,7 @@
 #include <wsd/McpRequests.hpp>
 
 #include <common/ConfigUtil.hpp>
+#include <common/FileUtil.hpp>
 #include <common/Log.hpp>
 #include <common/NumUtil.hpp>
 #include <common/Uri.hpp>
@@ -24,21 +25,27 @@
 #include <wsd/COOLWSD.hpp>
 #include <wsd/McpServer.hpp>
 #include <wsd/McpTools.hpp>
+#include <wsd/McpUploads.hpp>
 #include <wsd/RequestDetails.hpp>
+#include <wsd/ServerURL.hpp>
 #include <wsd/SpecialBrokers.hpp>
 
 #include <Poco/JSON/Object.h>
 #include <Poco/Net/HTTPRequest.h>
+#include <Poco/StringTokenizer.h>
 #include <Poco/URI.h>
 
 #include <atomic>
 #include <cassert>
 #include <cstddef>
+#include <cstdint>
+#include <fstream>
 #include <functional>
 #include <istream>
 #include <memory>
 #include <mutex>
 #include <optional>
+#include <sstream>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -107,6 +114,81 @@ bool startMcpExtraction(const std::string& requestType, const std::string& filte
 
 namespace
 {
+/// The part of the Model Context Protocol endpoint a request path names.
+enum class McpPath : std::uint8_t
+{
+    /// The JSON-RPC message path, /cool/mcp itself.
+    Message,
+    /// The upload path, /cool/mcp/upload.
+    Upload
+};
+
+/// The part of the endpoint that path names.
+McpPath classifyMcpPath(const std::string& path)
+{
+    Poco::StringTokenizer segments(path, "/",
+                                   Poco::StringTokenizer::TOK_IGNORE_EMPTY |
+                                       Poco::StringTokenizer::TOK_TRIM);
+    for (std::size_t i = 0; i + 1 < segments.count(); ++i)
+    {
+        if (segments[i] == "mcp" && segments[i + 1] == "upload")
+            return McpPath::Upload;
+    }
+    return McpPath::Message;
+}
+
+/// The name an upload goes by: its filename query parameter, or "document" when it has none.
+std::string uploadFilename(const Poco::URI& uri)
+{
+    for (const auto& parameter : uri.getQueryParameters())
+    {
+        if (parameter.first == "filename" && !parameter.second.empty())
+            return parameter.second;
+    }
+    return "document";
+}
+
+/// Answer an upload with the identifier its document is stored under, and how long it stays.
+void sendUploadAnswer(const std::shared_ptr<StreamSocket>& socket, const std::string& fileId)
+{
+    Poco::JSON::Object::Ptr result = new Poco::JSON::Object();
+    result->set("file_id", fileId);
+    result->set("expires_in", static_cast<int>(McpUploads::TimeToLive.count()));
+    std::ostringstream resultStream;
+    result->stringify(resultStream);
+
+    http::Response httpResponse(http::StatusCode::OK);
+    httpResponse.setBody(resultStream.str(), "application/json");
+    httpResponse.setConnectionToken(http::Header::ConnectionToken::Close);
+    socket->sendAndShutdown(httpResponse);
+    socket->ignoreInput();
+}
+
+/// A copy of request with the service root taken off its address, when the address is for the Model
+/// Context Protocol endpoint, plainly or in the hex form, and nothing otherwise. Reading the
+/// details takes the service root off the address of the request they are read from, so they are
+/// read from the copy and request keeps the address it came with.
+std::optional<Poco::Net::HTTPRequest> strippedMcpRequest(const Poco::Net::HTTPRequest& request)
+{
+    const std::string& uri = request.getURI();
+    if (uri.find("/mcp") == std::string::npos && uri.find("cool/0x") == std::string::npos)
+        return std::nullopt;
+
+    Poco::Net::HTTPRequest stripped(request);
+    try
+    {
+        if (!McpRequests::isMcpRequest(RequestDetails(stripped, COOLWSD::ServiceRoot)))
+            return std::nullopt;
+    }
+    catch (const std::exception& exc)
+    {
+        // An address that cannot be read counts as an address for another endpoint.
+        LOG_DBG_S("MCP: leaving an unreadable address to the dispatcher: " << exc.what());
+        return std::nullopt;
+    }
+    return stripped;
+}
+
 /// The number of bytes in message from its read position to its end, or -1 when the stream cannot
 /// tell.
 std::streamsize remainingBytes(std::istream& message)
@@ -188,7 +270,9 @@ bool McpRequests::refuseMcpRequest(const Poco::Net::HTTPRequest& request,
 
     // A body states its length, so it is weighed against the accepted size before it arrives. A
     // chunked body, or a POST with no Content-Length, states none and is refused.
-    if (request.getChunkedTransferEncoding() || request.getContentLength() < 0)
+    const McpPath path = classifyMcpPath(Poco::URI(request.getURI()).getPath());
+    const std::streamsize declaredLength = request.getContentLength();
+    if (request.getChunkedTransferEncoding() || declaredLength < 0)
     {
         LOG_WRN_S("MCP: refusing a request that does not state its length");
         HttpHelper::sendErrorAndShutdown(http::StatusCode::LengthRequired, socket,
@@ -196,16 +280,30 @@ bool McpRequests::refuseMcpRequest(const Poco::Net::HTTPRequest& request,
         return true;
     }
 
-    // A larger message would be parsed on the web-server thread at length. A document that large
+    // A limit of zero means no limit is configured for an upload. A message has a limit of its own,
+    // since a larger one would be parsed on the web-server thread at length. A document that large
     // travels as an upload instead.
-    const std::streamsize declaredLength = request.getContentLength();
-    if (declaredLength != Poco::Net::HTTPMessage::UNKNOWN_CONTENT_LENGTH &&
-        (declaredLength < 0 || NumUtil::makeUnsigned(declaredLength) > McpTools::MaxMessageBytes))
+    const std::size_t maxBytes =
+        path == McpPath::Upload ? McpTools::maxDocumentBytes() : McpTools::MaxMessageBytes;
+    if (maxBytes != 0 && NumUtil::makeUnsigned(declaredLength) > maxBytes)
     {
-        LOG_WRN_S("MCP: refusing a message larger than the accepted size");
-        HttpHelper::sendErrorAndShutdown(http::StatusCode::PayloadTooLarge, socket,
-                                         "The message is too large. Upload a large document "
-                                         "and pass its file_id.\n");
+        LOG_WRN_S("MCP: refusing a request body larger than the accepted size");
+        HttpHelper::sendErrorAndShutdown(
+            http::StatusCode::PayloadTooLarge, socket,
+            path == McpPath::Upload ? "The document is larger than the server accepts.\n"
+                                    : "The message is too large. Upload a large document and pass "
+                                      "its file_id.\n");
+        return true;
+    }
+
+    // An upload is written to disk as it arrives, so the store is asked for room before then.
+    if (path == McpPath::Upload &&
+        !McpUploads::instance().hasRoomFor(NumUtil::makeUnsigned(declaredLength)))
+    {
+        LOG_WRN_S("MCP: refusing an upload the store has no room for");
+        HttpHelper::sendErrorAndShutdown(
+            http::StatusCode::InsufficientStorage, socket,
+            "The server holds too many uploaded documents. Try again later.\n");
         return true;
     }
 
@@ -215,30 +313,90 @@ bool McpRequests::refuseMcpRequest(const Poco::Net::HTTPRequest& request,
 bool McpRequests::refuseMcpRequestEarly(const Poco::Net::HTTPRequest& request,
                                         const std::shared_ptr<StreamSocket>& socket)
 {
-    // Only an address that can name the endpoint, plainly or in the hex form, is parsed here.
-    const std::string& uri = request.getURI();
-    if (uri.find("/mcp") == std::string::npos && uri.find("cool/0x") == std::string::npos)
-        return false;
+    const std::optional<Poco::Net::HTTPRequest> stripped = strippedMcpRequest(request);
+    return stripped && refuseMcpRequest(*stripped, socket);
+}
 
-    // Reading the details takes the service root off the address of the request they are read from,
-    // so they are read from a copy, and the request itself reaches the dispatcher as it came.
-    Poco::Net::HTTPRequest stripped(request);
-    try
+bool McpRequests::isMcpUpload(const Poco::Net::HTTPRequest& request)
+{
+    const std::optional<Poco::Net::HTTPRequest> stripped = strippedMcpRequest(request);
+    return stripped && stripped->getMethod() == Poco::Net::HTTPRequest::HTTP_POST &&
+           classifyMcpPath(Poco::URI(stripped->getURI()).getPath()) == McpPath::Upload;
+}
+
+std::shared_ptr<McpUploadSink> McpUploadSink::start(const Poco::Net::HTTPRequest& request,
+                                                    bool& storeFull,
+                                                    std::chrono::steady_clock::time_point now)
+{
+    storeFull = false;
+    const std::streamsize declaredLength = request.getContentLength();
+    if (declaredLength <= 0)
+        return nullptr;
+
+    const std::size_t size = NumUtil::makeUnsigned(declaredLength);
+    if (!McpUploads::instance().reserve(size, now))
     {
-        if (!isMcpRequest(RequestDetails(stripped, COOLWSD::ServiceRoot)))
-            return false;
-    }
-    catch (const std::exception& exc)
-    {
-        // An address that cannot be read is answered by the dispatcher with the other requests.
-        LOG_DBG_S("MCP: leaving an unreadable address to the dispatcher: " << exc.what());
-        return false;
+        storeFull = true;
+        return nullptr;
     }
 
-    return refuseMcpRequest(stripped, socket);
+    // The sink gives the room back if it fails from here on.
+    std::shared_ptr<McpUploadSink> sink(
+        new McpUploadSink(size, now + McpUploads::uploadTimeLimit(size)));
+    sink->_path = McpTools::makeIncomingPath(uploadFilename(Poco::URI(request.getURI())));
+    if (sink->_path.empty())
+        return nullptr;
+
+    sink->_stream.open(sink->_path, std::ios::binary);
+    if (!sink->_stream.good())
+    {
+        LOG_ERR_S("MCP: failed to open the upload file [" << sink->_path << ']');
+        return nullptr;
+    }
+
+    LOG_TRC_S("MCP: writing an upload of " << size << " bytes to [" << sink->_path << ']');
+    return sink;
+}
+
+McpUploadSink::~McpUploadSink()
+{
+    if (_stored)
+        return;
+
+    if (_stream.is_open())
+        _stream.close();
+    if (!_path.empty())
+        FileUtil::removeFileAndEmptyParent(_path);
+    McpUploads::instance().release(_size);
+}
+
+bool McpUploadSink::write(const char* data, std::size_t size)
+{
+    if (_written + size > _size)
+        return false;
+    _stream.write(data, static_cast<std::streamsize>(size));
+    _written += size;
+    return _stream.good();
+}
+
+void McpUploadSink::finish(const std::shared_ptr<StreamSocket>& socket)
+{
+    _stream.close();
+    if (_written != _size || !_stream.good())
+    {
+        LOG_ERR_S("MCP: the upload to [" << _path << "] could not be written whole");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::InternalServerError, socket);
+        socket->ignoreInput();
+        return;
+    }
+
+    const std::string fileId = McpUploads::instance().adopt(_path, _size);
+    _stored = true;
+    sendUploadAnswer(socket, fileId);
 }
 
 bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
+                                   const RequestDetails& requestDetails,
                                    std::istream& message,
                                    SocketDisposition& disposition,
                                    const std::shared_ptr<StreamSocket>& socket)
@@ -266,9 +424,36 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
         return true;
     }
 
+    const Poco::URI parsedUri(request.getURI());
+    if (classifyMcpPath(parsedUri.getPath()) == McpPath::Upload)
+    {
+        // The whole request body is the raw document, with no form or multipart wrapping. A
+        // filename query parameter names it.
+        if (bodyLength == 0)
+        {
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket);
+            return true;
+        }
+
+        const std::string fileId = McpUploads::instance().store(
+            uploadFilename(parsedUri), message, NumUtil::makeUnsigned(bodyLength));
+        if (fileId.empty())
+        {
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::InternalServerError, socket);
+            return true;
+        }
+
+        sendUploadAnswer(socket, fileId);
+        return true;
+    }
+
     std::string body(NumUtil::makeUnsigned(bodyLength), '\0');
     message.read(body.data(), bodyLength);
     const std::string protocolVersionHeader = request.get("MCP-Protocol-Version", std::string());
+
+    // The address of this endpoint as the client reaches it, with the service root. The upload
+    // address the descriptions give is made from it.
+    const std::string endpointUrl = ServerURL(requestDetails).getSubURLForEndpoint("/cool/mcp");
 
     // The response is always sent with sendAndShutdown, so the connection is closed after this one
     // message either way.
@@ -301,6 +486,8 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
     std::vector<McpServer::McpTool> tools = McpServer::documentToolDefinitions();
     for (McpServer::McpTool& tool : tools)
     {
+        tool.description = McpServer::withEndpointAddress(tool.description, endpointUrl);
+
         if (tool.name == McpServer::ToolName::ExtractDocumentStructure)
         {
             tool.executor = [&disposition, sessionId](const Poco::JSON::Object::Ptr& arguments,

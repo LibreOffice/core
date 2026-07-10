@@ -29,6 +29,7 @@
 #include <memory>
 #include <string>
 
+class McpUploadSink;
 class WopiProxy;
 
 /// Find the DocumentBroker for the given docKey, if one exists.
@@ -97,6 +98,10 @@ private:
     }
 
     void performWrites(std::size_t /*capacity*/) override {}
+
+    /// Close the connection of an upload to the Model Context Protocol endpoint whose body has not
+    /// arrived whole in the time it was given. Returns true when it was closed.
+    bool checkTimeout(std::chrono::steady_clock::time_point now) override;
 
 #if !MOBILEAPP
     /// Does this address feature in the allowed hosts list.
@@ -260,6 +265,10 @@ private:
     std::unique_ptr<FileUtil::OwnedFile> _postFileDir;
     std::fstream _postStream;
     [[maybe_unused]] std::streamsize _postContentPending = 0;
+
+    /// The upload to the Model Context Protocol endpoint whose body is arriving, when there is one.
+    /// Its body bytes go to it in place of the scratch file above.
+    std::shared_ptr<McpUploadSink> _mcpUpload;
 
     /// The current position while reading the header.
     std::size_t _headerPos = 0;
