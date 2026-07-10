@@ -183,14 +183,6 @@ std::shared_ptr<SalBitmap> SvpGraphicsBackend::getBitmap(tools::Long nX, tools::
     return m_rCairoCommon.getBitmap(nX, nY, nWidth, nHeight, bWithoutAlpha);
 }
 
-void SvpGraphicsBackend::drawBitmapBuffer(const SalTwoRect& rTR, const BitmapBuffer* pBuffer,
-                                          cairo_operator_t eOp)
-{
-    cairo_surface_t* source = CairoCommon::createCairoSurface(pBuffer);
-    m_rCairoCommon.copyWithOperator(rTR, source, eOp, getAntiAlias());
-    cairo_surface_destroy(source);
-}
-
 Color SvpGraphicsBackend::getPixel(tools::Long nX, tools::Long nY)
 {
     return CairoCommon::getPixel(m_rCairoCommon.m_pSurface, nX, nY);

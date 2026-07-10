@@ -55,8 +55,6 @@
 #include <vcl/window.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
-void WeldEditView::SetText(const OUString& rStr) { GetEditEngine()->SetText(rStr); }
-
 OUString WeldEditView::GetText() const { return GetEditEngine()->GetText(); }
 
 void WeldEditView::SetModifyHdl(const Link<LinkParamNone*, void>& rLink)
@@ -67,12 +65,6 @@ void WeldEditView::SetModifyHdl(const Link<LinkParamNone*, void>& rLink)
 EditView* WeldEditView::GetEditView() const { return m_xEditView.get(); }
 
 EditEngine* WeldEditView::GetEditEngine() const { return m_xEditEngine.get(); }
-
-bool WeldEditView::HasSelection() const
-{
-    EditView* pEditView = GetEditView();
-    return pEditView && pEditView->HasSelection();
-}
 
 void WeldEditView::Delete()
 {

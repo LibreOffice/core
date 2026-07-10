@@ -13649,8 +13649,6 @@ vcl/unx/generic/fontmanager/fontconfig.cxx
 vcl/unx/generic/fontmanager/fontmanager.cxx
 vcl/unx/generic/fontmanager/fontsubst.cxx
 vcl/unx/generic/fontmanager/helper.cxx
-vcl/unx/generic/gdi/cairo_xlib_cairo.cxx
-vcl/unx/generic/gdi/cairo_xlib_cairo.hxx
 vcl/unx/generic/gdi/cairotextrender.cxx
 vcl/unx/generic/gdi/font.cxx
 vcl/unx/generic/gdi/freetypetextrender.cxx

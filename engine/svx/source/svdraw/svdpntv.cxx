@@ -1100,29 +1100,6 @@ void SdrPaintView::SetAnimationEnabled( bool bEnable )
     SetAnimationMode( bEnable ? SdrAnimationMode::Animate : SdrAnimationMode::Disable );
 }
 
-void SdrPaintView::SetAnimationPause( bool bSet )
-{
-    if(mbAnimationPause == bSet)
-        return;
-
-    mbAnimationPause = bSet;
-
-    if(!mpPageView)
-        return;
-
-    for(sal_uInt32 b(0); b < mpPageView->PageWindowCount(); b++)
-    {
-        SdrPageWindow& rPageWindow = *(mpPageView->GetPageWindow(b));
-        sdr::contact::ObjectContact& rObjectContact = rPageWindow.GetObjectContact();
-        sdr::animation::primitiveAnimator& rAnimator = rObjectContact.getPrimitiveAnimator();
-
-        if(rAnimator.IsPaused() != bSet)
-        {
-            rAnimator.SetPaused(bSet);
-        }
-    }
-}
-
 void SdrPaintView::SetAnimationMode( const SdrAnimationMode eMode )
 {
     meAnimationMode = eMode;

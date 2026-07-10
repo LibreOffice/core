@@ -182,15 +182,6 @@ inline bool surface_get_device_position(GdkSurface* pSurface,
 #endif
 }
 
-inline GdkGLContext* surface_create_gl_context(GdkSurface* pSurface)
-{
-#if GTK_CHECK_VERSION(4, 0, 0)
-    return gdk_surface_create_gl_context(pSurface, nullptr);
-#else
-    return gdk_window_create_gl_context(pSurface, nullptr);
-#endif
-}
-
 void set_buildable_id(GtkBuildable* pWidget, const OUString& rId);
 OUString get_buildable_id(GtkBuildable* pWidget);
 

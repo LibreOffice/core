@@ -2820,12 +2820,6 @@ bool GtkSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nP
 }
 #endif
 
-void GtkSalGraphics::WidgetQueueDraw() const
-{
-    //request gtk to sync the entire contents
-    mpFrame->queue_draw();
-}
-
 namespace {
 
 void getStyleContext(GtkStyleContext** style, GtkWidget* widget)

@@ -40,7 +40,6 @@ public:
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 
     void SetCustomType(const OUString& rType) { m_aCustomType = rType; }
-    const OUString& GetCustomType() const { return m_aCustomType; }
 
     void SetDumpCallback(const DumpCallback& rCallback) { m_aDumpCallback = rCallback; }
 };

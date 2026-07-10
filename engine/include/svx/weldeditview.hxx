@@ -33,8 +33,6 @@ public:
     virtual int GetSurroundingText(OUString& rSurrounding) override;
     virtual bool DeleteSurroundingText(const Selection& rRange) override;
 
-    void SetText(const OUString& rStr);
-
     OUString GetText() const;
 
     virtual FactoryFunction GetUITestFactory() const override;
@@ -43,8 +41,6 @@ public:
 
     virtual EditView* GetEditView() const;
     virtual EditEngine* GetEditEngine() const;
-
-    bool HasSelection() const;
 
     void Delete();
     void Cut();

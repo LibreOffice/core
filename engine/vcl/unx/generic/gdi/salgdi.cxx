@@ -52,7 +52,6 @@
 
 #include <unx/salframe.h>
 #include <unx/cairotextrender.hxx>
-#include "cairo_xlib_cairo.hxx"
 #include <cairo-xlib.h>
 
 #include "X11CairoSalGraphicsImpl.hxx"

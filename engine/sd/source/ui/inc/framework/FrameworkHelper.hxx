@@ -102,12 +102,6 @@ public:
     */
     static void ReleaseInstance (const ViewShellBase& rBase);
 
-    /** Return an identifier for the given view URL.  This identifier can be
-        used in a switch statement.  See GetViewURL() for a mapping in the
-        opposite direction.
-    */
-    static ViewShell::ShellType GetViewId (const OUString& rsViewURL);
-
     /** Return a view URL for the given identifier.  See GetViewId() for a
         mapping in the opposite direction.
     */

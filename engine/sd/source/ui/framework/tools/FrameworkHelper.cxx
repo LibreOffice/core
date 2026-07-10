@@ -426,27 +426,6 @@ rtl::Reference<ResourceId> FrameworkHelper::RequestView (
     return xViewId;
 }
 
-ViewShell::ShellType FrameworkHelper::GetViewId (const OUString& rsViewURL)
-{
-    if (maViewURLMap.empty())
-    {
-        maViewURLMap[msImpressViewURL] = ViewShell::ST_IMPRESS;
-        maViewURLMap[msDrawViewURL] = ViewShell::ST_DRAW;
-        maViewURLMap[msOutlineViewURL] = ViewShell::ST_OUTLINE;
-        maViewURLMap[msNotesViewURL] = ViewShell::ST_NOTES;
-        maViewURLMap[msHandoutViewURL] = ViewShell::ST_HANDOUT;
-        maViewURLMap[msSlideSorterURL] = ViewShell::ST_SLIDE_SORTER;
-        maViewURLMap[msPresentationViewURL] = ViewShell::ST_PRESENTATION;
-        maViewURLMap[msSidebarViewURL] = ViewShell::ST_SIDEBAR;
-        maViewURLMap[msNotesPanelViewURL] = ViewShell::ST_NOTESPANEL;
-    }
-    ViewURLMap::const_iterator iView (maViewURLMap.find(rsViewURL));
-    if (iView != maViewURLMap.end())
-        return iView->second;
-    else
-        return ViewShell::ST_NONE;
-}
-
 const OUString & FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
 {
     switch (eType)

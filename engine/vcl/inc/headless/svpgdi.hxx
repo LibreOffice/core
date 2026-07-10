@@ -50,16 +50,11 @@ public:
         return CairoCommon::getDamageKey();
     }
 
-protected:
-
-    cairo_t* createTmpCompatibleCairoContext() const;
-
 public:
     SvpSalGraphics();
     virtual ~SvpSalGraphics() override;
 
     virtual SalGraphicsImpl* GetImpl() const override { return m_pBackend.get(); }
-    std::unique_ptr<SvpGraphicsBackend> const& getSvpBackend() { return m_pBackend; }
 
     SAL_DLLPRIVATE virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
 
@@ -92,11 +87,6 @@ public:
     void clipRegion(cairo_t* cr)
     {
         m_aCairoCommon.clipRegion(cr);
-    }
-
-    void copySource(const SalTwoRect& rTR, cairo_surface_t* source)
-    {
-        m_aCairoCommon.copySource(rTR, source, getAntiAlias());
     }
 };
 

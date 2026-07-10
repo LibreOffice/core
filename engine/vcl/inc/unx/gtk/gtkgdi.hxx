@@ -115,8 +115,6 @@ class GtkSalGraphics final : public SvpSalGraphics
 public:
     GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
 
-    void WidgetQueueDraw() const;
-
     virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
 
     virtual OUString getRenderBackendName() const override { return u"gtk3svp"_ustr; }
