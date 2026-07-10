@@ -251,6 +251,8 @@ void ScTabViewShell::FinishProtectTable()
     TabChanged();
     UpdateInputHandler(true);   // to immediately enable input again
     SelectionChanged();
+    // need to update overlays after a sheet protection change
+    UpdateAllOverlays();
 }
 
 void ScTabViewShell::ExecProtectTable( SfxRequest& rReq )
