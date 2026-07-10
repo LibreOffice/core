@@ -98,16 +98,6 @@ class InternPointUtil {
 		const scale = InternPointUtil.scale(newZoom - oldZoom);
 		return cool.Point.toPoint(point.x * scale, point.y * scale);
 	}
-
-	// used in Map.prototype.distance()
-	public static distance(
-		intern1: cool.SimplePoint,
-		intern2: cool.SimplePoint,
-	): number {
-		const dx = intern2.x - intern1.x;
-		const dy = intern2.y - intern1.y;
-		return Math.sqrt(dx * dx + dy * dy);
-	}
 }
 
 /// Static methods needed for converting rectangular region to internal units(twips for now) and back.

@@ -3,7 +3,7 @@
  * window.L.CanvasTileLayer is a layer with canvas based rendering.
  */
 
-/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection CompareChangesLabelSection InternBoundsUtil AnimatedGifManager */
+/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection CompareChangesLabelSection AnimatedGifManager */
 
 function clamp(num, min, max)
 {
@@ -630,7 +630,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			this._tileZoom = tileZoom;
 			if (tileZoomChanged) {
 				this._updateTileTwips();
-				this._updateMaxBounds();
+				this._updateScrollLimits();
 			}
 
 			if (app.tile.size.x === 0 || app.tile.size.y === 0) {
@@ -4367,19 +4367,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		return this._cssPixelsToTwips(pixels);
 	},
 
-	_updateMaxBounds: function (sizeChanged, allPages = true) {
+	_updateScrollLimits: function (allPages = true) {
 		if (app.activeDocument.fileSize.x === 0 || app.activeDocument.fileSize.y === 0) {
 			return;
 		}
 
 		var docPixelLimits = new cool.Point(app.activeDocument.fileSize.pX / app.dpiScale, app.activeDocument.fileSize.pY / app.dpiScale);
-		var scrollPixelLimits = new cool.Point(app.activeDocument.activeLayout.viewSize.pX / app.dpiScale, app.activeDocument.activeLayout.viewSize.pY / app.dpiScale);
-		var topLeft = this._map.unproject(new cool.Point(0, 0));
-
-		if (this._documentInfo === '' || sizeChanged) {
-			// we just got the first status so we need to center the document
-			this._map.setMaxBounds(InternBoundsUtil.flexConstruct(topLeft, this._map.unproject(scrollPixelLimits)));
-		}
 
 		this._docPixelSize = {x: docPixelLimits.x, y: docPixelLimits.y};
 		if (allPages) this._map.fire('scrolllimits', {});

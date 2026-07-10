@@ -1052,7 +1052,7 @@ class Dispatcher {
 					// size. Seed it from the document size.
 					app.activeDocument.activeLayout.viewSize =
 						app.activeDocument.fileSize.clone();
-					app.map._docLayer._updateMaxBounds(true);
+					app.map._docLayer._updateScrollLimits();
 					app.activeDocument.activeLayout.adjustViewZoomLevel();
 				} else {
 					app.activeDocument.activeLayout = new ViewLayoutMultiPage();

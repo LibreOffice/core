@@ -13,7 +13,7 @@
  * Calc tile layer is used to display a spreadsheet document
  */
 
-/* global app RenderManager cool FocusCellSection SplitterLinesSection InternBoundsUtil */
+/* global app RenderManager cool FocusCellSection SplitterLinesSection */
 
 window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	options: {
@@ -251,14 +251,9 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		// When there will be a Intern conversion, we should use CSS pixels.
 		var newSizePx = this._twipsToPixels(new cool.Point(newDocWidth, newDocHeight));
 
-		var topLeft = this._map.unproject(new cool.Point(0, 0));
-		var bottomRight = this._map.unproject(newSizePx);
-
 		this._docPixelSize = newSizePx.clone();
 		app.activeDocument.fileSize = new cool.SimplePoint(newDocWidth, newDocHeight);
 		app.activeDocument.activeLayout.viewSize = app.activeDocument.fileSize.clone();
-
-		this._map.setMaxBounds(InternBoundsUtil.flexConstruct(topLeft, bottomRight));
 
 		this._map.fire('scrolllimits', newSizePx.clone());
 
@@ -494,14 +489,11 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			if (width < frameSize.cX || height < frameSize.cY) {
 				width = Math.max(width, frameSize.cX);
 				height = Math.max(height, frameSize.cY);
-				var topLeft = this._map.unproject(new cool.Point(0, 0));
-				var bottomRight = this._map.unproject(new cool.Point(width, height));
-				this._map.setMaxBounds(InternBoundsUtil.flexConstruct(topLeft, bottomRight));
 				this._docPixelSize = {x: width, y: height};
 				this._map.fire('scrolllimits', {x: width, y: height});
 			}
 			else {
-				this._updateMaxBounds(true);
+				this._updateScrollLimits();
 			}
 
 			this._adjustCanvasSectionsForLayoutChange();

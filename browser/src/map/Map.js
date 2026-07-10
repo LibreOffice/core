@@ -3,7 +3,7 @@
  * window.L.Map is the central class of the API - it is used to create a map.
  */
 
-/* global app _ Cursor JSDialog RenderManager cool InternPointUtil InternBoundsUtil OverviewFade */
+/* global app _ Cursor JSDialog RenderManager cool InternPointUtil OverviewFade */
 
 window.L.Map = window.L.Evented.extend({
 
@@ -23,7 +23,6 @@ window.L.Map = window.L.Evented.extend({
 		// percentages available are then rounded to the nearest five percent.
 		minZoom: 1,
 		maxZoom: 18,
-		maxBounds: InternBoundsUtil.flexConstruct([0, 0], [100, 100]),
 		fadeAnimation: false, // Not useful for typing.
 		markerZoomAnimation: true,
 		// defaultZoom:
@@ -80,10 +79,6 @@ window.L.Map = window.L.Evented.extend({
 
 		this._initEvents();
 		this._cacheSVG = [];
-
-		if (options.maxBounds) {
-			this.setMaxBounds(options.maxBounds);
-		}
 
 		if (options.zoom !== undefined) {
 			this._zoom = this._limitZoom(options.zoom);
@@ -502,7 +497,7 @@ window.L.Map = window.L.Evented.extend({
 
 	setView: function (center, zoom, reset) {
 		zoom = zoom === undefined ? this._zoom : this._limitZoom(zoom);
-		center = this._limitCenter(InternPointUtil.flexConstruct(center), zoom, this.options.maxBounds);
+		center = InternPointUtil.flexConstruct(center);
 
 		if (this._loaded && !reset && zoom === this._zoom) {
 			// difference between the new and current centers in pixels
@@ -690,30 +685,6 @@ window.L.Map = window.L.Evented.extend({
 		return this.setZoom(requestedZoom, options, animate);
 	},
 
-	panTo: function (center) { // (Intern)
-		return this.setView(center, this._zoom);
-	},
-
-	setMaxBounds: function (bounds) {
-		bounds = InternBoundsUtil.flexConstruct(bounds);
-
-		this.options.maxBounds = bounds;
-
-		if (this._loaded) {
-			this.panInsideBounds(this.options.maxBounds);
-		}
-	},
-
-	panInsideBounds: function (bounds) {
-		var center = this.getCenter(),
-		    newCenter = this._limitCenter(center, this._zoom, bounds);
-
-		if (center.equals(newCenter)) { return this; }
-		if (this.distance(center, newCenter) < 0.0000001) { return this; }
-
-		return this.panTo(newCenter);
-	},
-
 	// If map size has already been updated, invalidateSize needs the oldSize to work properly
 	// (e.g. if getSize() has already been called with _sizeChanged === true)
 	invalidateSize: function (debounceMoveend, oldSize) {
@@ -739,14 +710,6 @@ window.L.Map = window.L.Evented.extend({
 			oldSize: oldSize,
 			newSize: newSize
 		});
-	},
-
-	stop: function () {
-		app.util.cancelAnimFrame(this._flyToFrame);
-		if (this._panAnim) {
-			this._panAnim.stop();
-		}
-		return this;
 	},
 
 	// TODO handler.addTo
@@ -909,13 +872,6 @@ window.L.Map = window.L.Evented.extend({
 			this.options.maxZoom;
 	},
 
-	getLayerMaxBounds: function () {
-		const tl = InternBoundsUtil.getTopLeft(this.options.maxBounds);
-		const br = InternBoundsUtil.getBottomRight(this.options.maxBounds);
-		return cool.Bounds.toBounds(this.internToLayerPoint(tl),
-			this.internToLayerPoint(br));
-	},
-
 	getSize: function () {
 		if (!this._size || this._sizeChanged) {
 			this._size = new cool.Point(
@@ -1031,10 +987,6 @@ window.L.Map = window.L.Evented.extend({
 	internToLayerPoint: function (intern) { // (Intern)
 		var projectedPoint = this.project(InternPointUtil.flexConstruct(intern))._round();
 		return projectedPoint._subtract(this.getPixelOrigin());
-	},
-
-	distance: function (intern1, intern2) { // (Intern, Intern) -> number
-		return InternPointUtil.distance(InternPointUtil.flexConstruct(intern1), InternPointUtil.flexConstruct(intern2));
 	},
 
 	containerPointToLayerPoint: function (point) { // (Point)
@@ -1592,42 +1544,6 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	// adjust center for view to get inside bounds
-	_limitCenter: function (center, zoom, bounds) {
-
-		if (!bounds) { return center; }
-
-		var centerPoint = this.project(center, zoom),
-		    viewHalf = this.getSize().divideBy(2),
-		    viewBounds = new cool.Bounds(centerPoint.subtract(viewHalf), centerPoint.add(viewHalf)),
-		    offset = this._getBoundsOffset(viewBounds, bounds, zoom);
-
-		return this.unproject(centerPoint.add(offset), zoom);
-	},
-
-	// returns offset needed for pxBounds to get inside maxBounds at a specified zoom
-	_getBoundsOffset: function (pxBounds, maxBounds, zoom) {
-		const tl = InternBoundsUtil.getTopLeft(maxBounds);
-		const br = InternBoundsUtil.getBottomRight(maxBounds);
-		var tlOffset = this.project(tl, zoom).subtract(pxBounds.min),
-		    brOffset = this.project(br, zoom).subtract(pxBounds.max),
-
-		    dx = this._rebound(tlOffset.x, -brOffset.x),
-		    dy = this._rebound(tlOffset.y, -brOffset.y);
-
-		return new cool.Point(dx, dy);
-	},
-
-	_rebound: function (left, right) {
-		return left + right > 0 ?
-			Math.round(left - right) / 2 :
-			Math.max(0, Math.ceil(left)) - Math.max(0, Math.floor(right));
-		// TODO: do we really need ceil and floor ?
-		// for spreadsheets it can cause one pixel alignment offset btw grid and row/column header
-		// and a one pixel horizontal auto-scrolling issue;
-		// both issues have been fixed by rounding the projection: see Map.project above;
-		// anyway in case of similar problems, this code needs to be checked
-	},
-
 	_limitZoom: function (zoom) {
 		var min = this.getMinZoom(),
 		    max = this.getMaxZoom();

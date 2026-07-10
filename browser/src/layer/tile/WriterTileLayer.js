@@ -110,7 +110,7 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 	_setNewSize: function (/*cool.SimplePoint*/ size) {
 		app.activeDocument.fileSize = size;
 		app.activeDocument.activeLayout.viewSize = size.clone();
-		this._updateMaxBounds(true);
+		this._updateScrollLimits();
 	},
 
 	_releaseReconnectFileSize: function () {
@@ -143,7 +143,7 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 			this._map.setPermission('readonly');
 
 		// Suppress shrinking sizes during reconnect's incremental reload
-		// so setMaxBounds doesn't pan the view; timer covers real shrinks.
+		// so the view doesn't jump; timer covers real shrinks.
 		if (app.socket._reconnecting && !this._reconnectFileSize && app.activeDocument.fileSize.y > 0)
 			this._reconnectFileSize = app.activeDocument.fileSize.clone();
 		if (this._reconnectFileSize) {

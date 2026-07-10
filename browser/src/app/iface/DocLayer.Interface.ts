@@ -123,7 +123,7 @@ interface DocLayerInterface {
 		maxZoom?: number,
 		recalcFirstFit?: boolean,
 	): void;
-	_updateMaxBounds(sizeChanged?: boolean, allPages?: boolean): void;
+	_updateScrollLimits(allPages?: boolean): void;
 	_corePixelsToTwips(corePixels: { x: number; y: number }): cool.Point;
 	// Is this still in user?
 	_ySplitter: any;
