@@ -191,7 +191,7 @@ window.L.Clipboard = window.L.Class.extend({
 	// used for DisableCopy mode to fill the clipboard
 	_getDisabledCopyStubHtml: function() {
 		return this._substProductName(this._originWrapBody(
-		    '    <p>' + _('Copying from the document disabled') + '</p>\n',
+		    '    <p>' + _('Copying from the document has been disabled by your administrator') + '</p>\n',
 		    true
 		));
 	},
