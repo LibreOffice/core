@@ -81,6 +81,7 @@ $(readlicense_oo_DIR)/license.txt : \
 endif
 
 SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
+		$(BUILDDIR)/instsetoo_native/util/openoffice.lst \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_brand.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_extensions.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_office.txt \
@@ -97,6 +98,7 @@ SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
 	$(call gb_ExternalExecutable_get_command,python) $(create_SBOM) \
 		$(readlicense_oo_DIR) \
 		$(readlicense_oo_DIR)/LICENSE.html \
+		$(BUILDDIR)/instsetoo_native/util/openoffice.lst \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_ure.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_office.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_brand.txt \
