@@ -855,47 +855,6 @@ void AquaSalMenu::RemoveMenuBarButton( sal_uInt16 i_nId )
         statusLayout();
 }
 
-tools::Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame )
-{
-    if( ! i_pReferenceFrame || ! AquaSalFrame::isAlive( static_cast<AquaSalFrame*>(i_pReferenceFrame) ) )
-        return tools::Rectangle();
-
-    MenuBarButtonEntry* pEntry = findButtonItem( i_nItemId );
-
-    if( ! pEntry )
-        return tools::Rectangle();
-
-    NSStatusItem* pItem = SalData::getStatusItem();
-    if( ! pItem )
-        return tools::Rectangle();
-
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // "'view' is deprecated: first deprecated in macOS 10.14 - Use the standard button property
-        // instead"
-    NSView* pNSView = [pItem view];
-SAL_WNODEPRECATED_DECLARATIONS_POP
-    if( ! pNSView )
-        return tools::Rectangle();
-    NSWindow* pNSWin = [pNSView window];
-    if( ! pNSWin )
-        return tools::Rectangle();
-
-    NSRect aRect = [pNSWin convertRectToScreen:[pNSWin frame]];
-
-    // make coordinates relative to reference frame
-    static_cast<AquaSalFrame*>(i_pReferenceFrame)->CocoaToVCL( aRect.origin );
-    aRect.origin.x -= i_pReferenceFrame->GetUnmirroredGeometry().x();
-    aRect.origin.y -= i_pReferenceFrame->GetUnmirroredGeometry().y() + aRect.size.height;
-
-    return tools::Rectangle( Point(static_cast<tools::Long>(aRect.origin.x),
-                static_cast<tools::Long>(aRect.origin.y)
-                ),
-              Size( static_cast<tools::Long>(aRect.size.width),
-                static_cast<tools::Long>(aRect.size.height)
-              )
-            );
-}
-
 /*
  * SalMenuItem
  */

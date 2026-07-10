@@ -759,28 +759,6 @@ void GtkSalMenu::RemoveMenuBarButton( sal_uInt16 nId )
     maExtraButtons.erase(it);
 }
 
-tools::Rectangle GtkSalMenu::GetMenuBarButtonRectPixel(sal_uInt16 nId, SalFrame* pReferenceFrame)
-{
-    if (!pReferenceFrame)
-        return tools::Rectangle();
-
-    const auto it = std::find_if(maExtraButtons.begin(), maExtraButtons.end(), [&nId](const auto &item) {
-        return item.first == nId; });
-    if (it == maExtraButtons.end())
-        return tools::Rectangle();
-
-    GtkWidget* pButton = it->second;
-
-    GtkSalFrame* pFrame = static_cast<GtkSalFrame*>(pReferenceFrame);
-
-    gtk_coord x, y;
-    if (!gtk_widget_translate_coordinates(pButton, GTK_WIDGET(pFrame->getMouseEventWidget()), 0, 0, &x, &y))
-        return tools::Rectangle();
-
-    return tools::Rectangle(Point(x, y), Size(gtk_widget_get_allocated_width(pButton),
-                                              gtk_widget_get_allocated_height(pButton)));
-}
-
 //Typically when the menubar is deactivated we want the focus to return
 //to where it came from. If the menubar was activated because of F6
 //moving focus into the associated VCL menubar then on pressing ESC

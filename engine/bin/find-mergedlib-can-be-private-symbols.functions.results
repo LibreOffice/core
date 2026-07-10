@@ -2408,7 +2408,6 @@ SalLayoutGlyphsCache::dropCaches()
 SalLayoutGlyphsCache::dumpState(rtl::OStringBuffer&)
 SalLayoutGlyphsCache::getCacheName() const
 SalMenu::AddMenuBarButton(SalMenuButtonItem const&)
-SalMenu::GetMenuBarButtonRectPixel(unsigned short, SalFrame*)
 SalMenu::GetMenuBarHeight() const
 SalMenu::RemoveMenuBarButton(unsigned short)
 SalMenu::ShowCloseButton(bool)

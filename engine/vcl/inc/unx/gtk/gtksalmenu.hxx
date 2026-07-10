@@ -129,7 +129,6 @@ public:
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;
     virtual void ShowCloseButton(bool bShow) override;
     virtual void RemoveMenuBarButton( sal_uInt16 nId ) override;
-    virtual tools::Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame ) override;
     virtual bool CanGetFocus() const override;
     virtual bool TakeFocus() override;
     virtual int GetMenuBarHeight() const override;

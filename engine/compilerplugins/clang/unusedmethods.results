@@ -2368,8 +2368,6 @@ vcl/inc/salgeom.hxx:68
     std::basic_ostream<char> & operator<<(std::basic_ostream<char> &,const SalFrameGeometry &)
 vcl/inc/salmenu.hxx:68
     void SalMenu::RemoveMenuBarButton(unsigned short)
-vcl/inc/salmenu.hxx:80
-    tools::Rectangle SalMenu::GetMenuBarButtonRectPixel(unsigned short,SalFrame *)
 vcl/inc/saltimer.hxx:68
      VersionedEvent::VersionedEvent()
 vcl/inc/saltimer.hxx:70

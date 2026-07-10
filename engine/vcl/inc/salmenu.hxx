@@ -74,11 +74,6 @@ public:
     // TODO: implement show/hide for the Win/Mac VCL native backends
     virtual void ShowItem( unsigned nPos, bool bShow ) { EnableItem( nPos, bShow ); }
 
-    // return an empty rectangle if not implemented
-    // return Rectangle( Point( -1, -1 ), Size( 1, 1 ) ) if menu bar buttons implemented
-    // but rectangle cannot be determined
-    virtual tools::Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame );
-
     virtual int GetMenuBarHeight() const;
 };
 

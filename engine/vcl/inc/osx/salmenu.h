@@ -64,7 +64,6 @@ public:
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) override;
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;
     virtual void RemoveMenuBarButton( sal_uInt16 nId ) override;
-    virtual tools::Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame ) override;
 
     int getItemIndexByPos( sal_uInt16 nPos ) const;
     const AquaSalFrame* getFrame() const;
