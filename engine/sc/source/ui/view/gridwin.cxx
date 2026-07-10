@@ -143,6 +143,8 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
+#include <svx/sdr/overlay/overlaypolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <comphelper/kit.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
 #include <sfx2/kit/helper.hxx>
@@ -1717,6 +1719,19 @@ void ScGridWindow::MoveMouseStatus( ScGridWindow& rDestWin )
     }
 }
 
+static bool lcl_HitHandleTriangle(const tools::Rectangle& rRect, const Point& rPos, bool bRTL)
+{
+    // Hit-test the corner triangle, not its bounding box. bRTL flips it to the
+    // lower-left triangle.
+    const tools::Long nW = rRect.GetWidth();
+    const tools::Long nH = rRect.GetHeight();
+    if (nW <= 0 || nH <= 0)
+        return true;
+    const double u = static_cast<double>(rPos.X() - rRect.Left()) / nW;
+    const double v = static_cast<double>(rPos.Y() - rRect.Top()) / nH;
+    return bRTL ? (v >= u) : (u + v >= 1.0);
+}
+
 bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
 {
     //  MouseEvent buttons must only be checked if bAction==TRUE
@@ -1767,7 +1782,11 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
                     }
                     bNewPointer = true;
                 }
-                else if (mpDBExpandRect && mpDBExpandRect->Contains(aMousePos))
+                // Online posts the marker centre (which can miss the triangle) and
+                // hit-tests in the browser, so core keeps the plain rectangle there.
+                else if (mpDBExpandRect && mpDBExpandRect->Contains(aMousePos) &&
+                         (comphelper::COKit::isActive() ||
+                          lcl_HitHandleTriangle(*mpDBExpandRect, aMousePos, bLayoutRTL)))
                 {
                     SetPointer( PointerStyle::SESize );
                     if (bAction)
@@ -6364,9 +6383,9 @@ void ScGridWindow::CursorChanged()
     // now, just re-create them
 
     UpdateCursorOverlay();
+    UpdateDatabaseOverlay();
     UpdateAutoFillOverlay();
     UpdateSparklineGroupOverlay();
-    UpdateDatabaseOverlay();
 }
 
 void ScGridWindow::ImpCreateOverlayObjects()
@@ -6374,13 +6393,13 @@ void ScGridWindow::ImpCreateOverlayObjects()
     UpdateHighlightOverlay();
     UpdateSelectionOverlay();
     UpdateCursorOverlay();
+    UpdateDatabaseOverlay();
     UpdateAutoFillOverlay();
     UpdateCopySourceOverlay();
     UpdateDragRectOverlay();
     UpdateHeaderOverlay();
     UpdateShrinkOverlay();
     UpdateSparklineGroupOverlay();
-    UpdateDatabaseOverlay();
 }
 
 void ScGridWindow::ImpDestroyOverlayObjects()
@@ -7122,13 +7141,17 @@ std::unique_ptr<sdr::overlay::OverlayObjectList> ScGridWindow::DrawFillMarker(SC
         nY2 += rMerge.GetRowMerge() - 1;
     }
 
+    // The table handle tucks fully inside the corner; AutoFill stays centred.
+    const tools::Long nHalfW = aFillHandleSize.Width() / 2;
+    const tools::Long nHalfH = aFillHandleSize.Height() / 2;
+
     if (bLayoutRTL && !comphelper::COKit::isActive())
-        aFillPos.AdjustX( -(nSizeXPix + (aFillHandleSize.Width() / 2)) );
+        aFillPos.AdjustX( -(nSizeXPix + (bIsTableArea ? 0 : nHalfW)) );
     else
-        aFillPos.AdjustX(nSizeXPix - (aFillHandleSize.Width() / 2) );
+        aFillPos.AdjustX( nSizeXPix - (bIsTableArea ? aFillHandleSize.Width() : nHalfW) );
 
     aFillPos.AdjustY(nSizeYPix);
-    aFillPos.AdjustY( -(aFillHandleSize.Height() / 2) );
+    aFillPos.AdjustY( -(bIsTableArea ? aFillHandleSize.Height() : nHalfH) );
 
     tools::Rectangle aFillRect(aFillPos, aFillHandleSize);
 
@@ -7145,6 +7168,41 @@ std::unique_ptr<sdr::overlay::OverlayObjectList> ScGridWindow::DrawFillMarker(SC
     else if (xOverlayManager.is())
     {
         const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
+
+        std::unique_ptr<sdr::overlay::OverlayObjectList> pOverlayList(new sdr::overlay::OverlayObjectList);
+
+        if (bIsTableArea)
+        {
+            // Corner triangle: the square with its inner-facing corner cut off.
+            const Color aTableHandleColor
+                = ScModule::get()->GetColorConfig().GetColorValue(svtools::CALCDBFOCUS).nColor;
+
+            basegfx::B2DPolygon aTriangle;
+            if (bLayoutRTL)
+            {
+                aTriangle.append(basegfx::B2DPoint(aFillRect.Left(),  aFillRect.Top()));
+                aTriangle.append(basegfx::B2DPoint(aFillRect.Left(),  aFillRect.Bottom()));
+                aTriangle.append(basegfx::B2DPoint(aFillRect.Right(), aFillRect.Bottom()));
+            }
+            else
+            {
+                aTriangle.append(basegfx::B2DPoint(aFillRect.Right(), aFillRect.Top()));
+                aTriangle.append(basegfx::B2DPoint(aFillRect.Right(), aFillRect.Bottom()));
+                aTriangle.append(basegfx::B2DPoint(aFillRect.Left(),  aFillRect.Bottom()));
+            }
+            aTriangle.setClosed(true);
+            aTriangle.transform(aTransform);
+
+            std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlayPolyPolygon(
+                basegfx::B2DPolyPolygon(aTriangle),
+                aTableHandleColor,   // no border: stroke matches the fill colour
+                0.0,
+                aTableHandleColor));
+            xOverlayManager->add(*pOverlay);
+            pOverlayList->append(std::move(pOverlay));
+
+            return pOverlayList;
+        }
 
         // Outer rectangle (always white for contrast)
         std::vector< basegfx::B2DRange > aRangesOuter;
@@ -7183,7 +7241,6 @@ std::unique_ptr<sdr::overlay::OverlayObjectList> ScGridWindow::DrawFillMarker(SC
 
         xOverlayManager->add(*pOverlayOuter);
         xOverlayManager->add(*pOverlayInner);
-        std::unique_ptr<sdr::overlay::OverlayObjectList> pOverlayList(new sdr::overlay::OverlayObjectList);
         pOverlayList->append(std::move(pOverlayOuter));
         pOverlayList->append(std::move(pOverlayInner));
 

@@ -1014,7 +1014,8 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 				this._tableAutoFillAreaPixels = app.LOUtil.createRectangle(topLeftPixels.x, topLeftPixels.y, offsetPixels.x, offsetPixels.y);
 
 				if (tablefillMarkerSection)
-					tablefillMarkerSection.calculatePositionViaCellCursor([this._tableAutoFillAreaPixels.x1, this._tableAutoFillAreaPixels.y1]);
+					// Pass the cell's bottom-right corner; the marker tucks itself there.
+					tablefillMarkerSection.calculatePositionViaCellCursor([topLeftPixels.x + offsetPixels.x, topLeftPixels.y + offsetPixels.y]);
 			}
 			else {
 				this._tableAutoFillAreaPixels = null;

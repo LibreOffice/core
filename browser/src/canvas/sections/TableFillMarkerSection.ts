@@ -20,6 +20,35 @@ app.definitions.TableFillMarkerSection = class TableFillMarkerSection extends (
 
 	constructor() {
 		super(app.CSections.TableFillMarker.name);
+		// Draw the triangle in onDraw(); '' stops the container filling a square.
+		this.sectionProperties.fillColor = this.backgroundColor;
+		this.backgroundColor = '';
+	}
+
+	public onDraw(): void {
+		// v2/v4/v3 are view-pixel corners, so RTL is already handled.
+		const r = this.boundingRectangle;
+		this.context.save();
+		this.context.setTransform(1, 0, 0, 1, 0, 0);
+		this.context.beginPath();
+		this.context.moveTo(r.v2X, r.v2Y); // top-right
+		this.context.lineTo(r.v4X, r.v4Y); // bottom-right
+		this.context.lineTo(r.v3X, r.v3Y); // bottom-left
+		this.context.closePath();
+		this.context.fillStyle = this.sectionProperties.fillColor;
+		this.context.fill();
+		this.context.restore();
+	}
+
+	public isHit(point: number[]): boolean {
+		// Hit-test the triangle, not the bounding square.
+		if (!super.isHit(point)) return false;
+		if (this.size[0] <= 0 || this.size[1] <= 0) return true;
+		const rtl = app.map._docLayer.isCalcRTL();
+		const addition = this.documentObject && rtl ? -this.size[0] : 0;
+		const u = (point[0] - (this.myTopLeft[0] + addition)) / this.size[0];
+		const v = (point[1] - this.myTopLeft[1]) / this.size[1];
+		return rtl ? v >= u : u + v >= 1;
 	}
 
 	public calculatePositionViaCellSelection(point: Array<number>) {
@@ -28,8 +57,12 @@ app.definitions.TableFillMarkerSection = class TableFillMarkerSection extends (
 
 	// Give bottom right position of the bottom right cell of table style area, in core pixels.
 	// It is Called with null parameter when table fill marker is not visible.
-	public calculatePositionViaCellCursor(point: Array<number>) {
-		this.sectionProperties.cellCursorPoint = point;
+	public calculatePositionViaCellCursor(point: Array<number> | null) {
+		// Anchor the marker's bottom-right at the point.
+		this.sectionProperties.cellCursorPoint =
+			point === null
+				? null
+				: [point[0] - this.size[0], point[1] - this.size[1]];
 		this.setMarkerPosition();
 	}
 
