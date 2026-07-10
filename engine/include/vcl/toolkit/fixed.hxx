@@ -87,6 +87,7 @@ public:
     virtual void    LoseFocus() override;
     virtual void    ApplySettings(vcl::RenderContext&) override;
     virtual void    DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
+    virtual std::string_view GetTypeName() const override;
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) FixedLine final : public Control

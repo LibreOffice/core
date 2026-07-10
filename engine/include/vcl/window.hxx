@@ -759,7 +759,10 @@ public:
     WindowExtendedStyle                 GetExtendedStyle() const;
     void                                SetType( WindowType eType );
     WindowType                          GetType() const;
-    std::string_view GetTypeName() const;
+    // Name of the widget type in the property tree sent to the client. Defaults
+    // to the name of GetType(); a subclass shown as a different kind of widget
+    // than its window type overrides this to report what it is presented as.
+    virtual std::string_view GetTypeName() const;
     bool IsFormControl() const;
     void SetFormControl(bool bFormControl);
     bool                                IsSystemWindow() const;

@@ -3474,7 +3474,7 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     if (pAccLabelFor)
     {
         rJsonWriter.put("labelFor", pAccLabelFor->get_id());
-        rJsonWriter.put("labelForType", windowTypeName(pAccLabelFor->GetType()));
+        rJsonWriter.put("labelForType", pAccLabelFor->GetTypeName());
     }
 
     auto aLabelledBy = GetAllAccessibleRelationLabeledBy();

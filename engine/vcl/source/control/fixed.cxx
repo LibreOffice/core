@@ -479,8 +479,15 @@ void SelectableFixedText::LoseFocus()
 void SelectableFixedText::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     Edit::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("type", "fixedtext");
     rJsonWriter.put("selectable", true);
+}
+
+std::string_view SelectableFixedText::GetTypeName() const
+{
+    // A selectable fixed text is a read-only edit peer, but it is shown as
+    // static text. Present it as fixed text so the client renders it as static
+    // text and a caption that labels it does not treat it as an editable field.
+    return "fixedtext";
 }
 
 void FixedLine::ImplInit( vcl::Window* pParent, WinBits nStyle )
