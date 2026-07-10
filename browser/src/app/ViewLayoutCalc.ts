@@ -116,61 +116,30 @@ class ViewLayoutCalc extends ViewLayoutBase {
 		);
 	}
 
-	// The viewed rectangle already tracks the visible area (in twips), so it is
-	// read directly rather than through the map pixel bounds. The bounds stay
-	// correct while scrolling, with no map pane involved.
-	protected override getVisibleAreaBounds(): any {
-		const r = this._viewedRectangle;
-		return new cool.Bounds(
-			new cool.Point(r.x1, r.y1),
-			new cool.Point(r.x2, r.y2),
+	// Calc needs splitx/splity so the server renders frozen and split panes
+	// correctly.
+	protected override clientVisibleAreaMessage(): string {
+		const splitPosition = app.map._docLayer._corePixelsToTwips(
+			app.map._docLayer._splitPanesContext
+				? app.map._docLayer._splitPanesContext.getSplitPos()
+				: new cool.Point(0, 0),
+		);
+
+		return (
+			super.clientVisibleAreaMessage() +
+			' splitx=' +
+			Math.round(splitPosition.x) +
+			' splity=' +
+			Math.round(splitPosition.y)
 		);
 	}
 
-	// Calc needs splitx/splity so the server renders frozen/split panes
-	// correctly, plus the splitter onPositionChange notifications, the
-	// context-toolbar hide, the cache suppression, and the forceUpdate flag.
-	public override sendClientVisibleArea(forceUpdate: boolean = false) {
-		if (!app.map._docLoaded) return;
-
-		var splitPos = app.map._docLayer._splitPanesContext
-			? app.map._docLayer._splitPanesContext.getSplitPos()
-			: new cool.Point(0, 0);
-
-		const visibleArea = this.getVisibleAreaBounds();
-
-		splitPos = app.map._docLayer._corePixelsToTwips(splitPos);
-		var size = visibleArea.getSize();
-		var visibleTopLeft = visibleArea.min;
-		var newClientVisibleAreaCommand =
-			'clientvisiblearea x=' +
-			Math.round(visibleTopLeft.x) +
-			' y=' +
-			Math.round(visibleTopLeft.y) +
-			' width=' +
-			Math.round(size.x) +
-			' height=' +
-			Math.round(size.y) +
-			' splitx=' +
-			Math.round(splitPos.x) +
-			' splity=' +
-			Math.round(splitPos.y);
-
-		if (
-			this.clientVisibleAreaCommand !== newClientVisibleAreaCommand ||
-			forceUpdate
-		) {
-			if (app.map._docLayer._ySplitter) {
-				app.map._docLayer._ySplitter.onPositionChange();
-			}
-			if (app.map._docLayer._xSplitter) {
-				app.map._docLayer._xSplitter.onPositionChange();
-			}
-			app.socket.sendMessage(newClientVisibleAreaCommand);
-			if (app.map.contextToolbar) app.map.contextToolbar.hideContextToolbar();
-			if (!app.map._fatal && app.idleHandler._active && app.socket.connected())
-				this.clientVisibleAreaCommand = newClientVisibleAreaCommand;
-		}
+	// The splitters are placed from the visible area, so they follow it.
+	protected override onVisibleAreaChanged(): void {
+		if (app.map._docLayer._ySplitter)
+			app.map._docLayer._ySplitter.onPositionChange();
+		if (app.map._docLayer._xSplitter)
+			app.map._docLayer._xSplitter.onPositionChange();
 	}
 
 	public override refreshScrollProperties(): any {

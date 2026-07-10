@@ -666,10 +666,8 @@ window.L.Map = window.L.Evented.extend({
 			animate = false;
 
 		var curCenter = this.getCenter();
-		// New-structure layouts (Calc, MultiPage, FileBased, CompareChanges) zoom
-		// through the ZoomControl section, not the map.
-		if (app.activeDocument && app.activeDocument.activeLayout
-			&& app.activeDocument.activeLayout.usesZoomControl()) {
+		// Document layouts zoom through the ZoomControl section, not the map.
+		if (app.activeDocument && app.activeDocument.activeLayout) {
 			var zoomControl = app.sectionContainer.getSectionWithName(app.CSections.ZoomControl.name);
 			if (zoomControl) {
 				// Match the old semantics: only the 3rd arg means "animate"
@@ -1338,15 +1336,12 @@ window.L.Map = window.L.Evented.extend({
 			this.fire('load');
 		}
 
-		// For Calc the viewed rectangle, not the map pane, drives what is drawn.
-		// The new zoom scale is now in effect (viewreset updated
-		// app.twipsToPixels), so set it from the post-zoom centre before 'move'
-		// so its listeners see the new position. Hand the layout a document-space
-		// point and the new scale; other layouts still derive the rectangle from
-		// the map pane in _syncTilePanePos.
+		// The viewed rectangle, not the map pane, drives what is drawn. The new
+		// zoom scale is now in effect (viewreset updated app.twipsToPixels), so
+		// set it from the post-zoom centre before 'move' so its listeners see the
+		// new position. Hand the layout a document-space point and the new scale.
 		if ((zoomChanged || loading)
-			&& app.activeDocument && app.activeDocument.activeLayout
-			&& app.activeDocument.activeLayout.usesZoomControl()) {
+			&& app.activeDocument && app.activeDocument.activeLayout) {
 			var centerCore = this.project(center, zoom).multiplyBy(app.dpiScale);
 			var centerPoint = cool.SimplePoint.fromCorePixels(
 				[Math.round(centerCore.x), Math.round(centerCore.y)]);

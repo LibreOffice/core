@@ -411,9 +411,9 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 		// The viewed rectangle spans the visible frame (the tiles section). Now
 		// that the layout has settled, rebuild it at that size (twips at the
-		// current zoom) and re-apply the scroll position. _syncTilePanePos no
-		// longer maintains the viewed rectangle for Calc, so establishing it here
-		// is what makes the document draw on load and after a resize.
+		// current zoom) and re-apply the scroll position. Nothing else maintains
+		// the viewed rectangle on load/resize, so establishing it here is what
+		// makes the document draw on load and after a resize.
 		const frame = app.activeDocument.activeLayout.frameSize;
 		app.activeDocument.activeLayout.viewedRectangle = cool.SimpleRectangle.fromCorePixels(
 			[scrollX, scrollY, frame.pX, frame.pY]);

@@ -853,13 +853,9 @@ export class ScrollSection extends CanvasSectionObject {
 			e.preventDefault();
 			e.stopImmediatePropagation();
 			this.stopPropagating();
-			// New-structure layouts zoom through ZoomControl, which is itself a
-			// window section and receives this same wheel event from the container
-			// - so we must NOT call it here (that would zoom twice). Just skip the
-			// map wheel-zoom.
-			if (app.activeDocument?.activeLayout?.usesZoomControl())
-				return;
-			app.map.scrollHandler._onWheelScroll(e);
+			// ZoomControl is itself a window section and receives this same wheel
+			// event from the container, so it handles the ctrl+wheel zoom. Nothing
+			// more to do here.
 			return;
 		}
 

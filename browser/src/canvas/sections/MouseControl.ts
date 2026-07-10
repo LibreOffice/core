@@ -692,14 +692,10 @@ class MouseControl extends CanvasSectionObject {
 		this.clickCount = 0;
 	}
 
-	// Calc drives pinch zoom through ZoomControl (a window section that receives
-	// the same multi-touch events), so the map-based pinch here is bypassed.
+	// ZoomControl (a window section that receives the same multi-touch events)
+	// drives pinch zoom, so the map-based pinch here is bypassed.
 	private zoomHandledByZoomControl(): boolean {
-		return !!(
-			app.activeDocument &&
-			app.activeDocument.activeLayout &&
-			app.activeDocument.activeLayout.usesZoomControl()
-		);
+		return !!(app.activeDocument && app.activeDocument.activeLayout);
 	}
 
 	onMultiTouchStart(e: TouchEvent): void {

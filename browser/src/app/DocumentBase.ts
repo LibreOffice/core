@@ -97,11 +97,8 @@ class DocumentBase {
 			app.sectionContainer.addSection(new cool.RulerSpacerSection());
 		}
 
-		// Owns zooming for the new-structure (off-map) layouts, replacing the
-		// map's zoomIn/zoomOut/setZoom. Added for every doc type; it stays inert
-		// (its handlers early-return) while the active layout is still map-coupled
-		// (usesZoomControl() === false), and activates when swapped to an off-map
-		// layout.
+		// Owns zooming for the document layouts, replacing the map's
+		// zoomIn/zoomOut/setZoom.
 		app.sectionContainer.addSection(new ZoomControl());
 
 		// Layout spacers that let the tiles (document-anchor) section shrink to

@@ -50,29 +50,21 @@ window.L.TileSectionManager = window.L.Class.extend({
 	// Details of tile areas to render
 	_paintContext: function() {
 		// Which tiles are drawn, and where, is anchored to viewBounds. The
-		// off-map layouts scroll the layout, not the leaflet map, so
-		// map.getPixelBoundsCore() is stale and would keep painting the initial
-		// region. Read the viewed rectangle (already in core pixels) instead so
-		// drawing tracks the scroll. All document layouts are now off-map
-		// (usesZoomControl), so the map-based branch below is only a fallback
-		// kept until the leaflet map is fully removed.
-		var layout = app.activeDocument && app.activeDocument.activeLayout;
+		// layout scrolls itself, not the leaflet map, so read the viewed
+		// rectangle (already in core pixels) so drawing tracks the scroll.
+		var layout = app.activeDocument.activeLayout;
 		var viewBounds;
-		if (layout && layout.usesZoomControl()) {
-			if (this._inZoomAnim && this._zoomStartViewBounds) {
-				// During a zoom the viewed rectangle is driven to intermediate
-				// frame values; anchor the frame and final-center computation to
-				// the gesture's starting bounds instead.
-				viewBounds = this._zoomStartViewBounds;
-			} else {
-				var r = layout.viewedRectangle;
-				viewBounds = new cool.Bounds(
-					new cool.Point(r.pX1, r.pY1),
-					new cool.Point(r.pX1 + r.pWidth, r.pY1 + r.pHeight),
-				);
-			}
+		if (this._inZoomAnim && this._zoomStartViewBounds) {
+			// During a zoom the viewed rectangle is driven to intermediate
+			// frame values; anchor the frame and final-center computation to
+			// the gesture's starting bounds instead.
+			viewBounds = this._zoomStartViewBounds;
 		} else {
-			viewBounds = this._map.getPixelBoundsCore();
+			var r = layout.viewedRectangle;
+			viewBounds = new cool.Bounds(
+				new cool.Point(r.pX1, r.pY1),
+				new cool.Point(r.pX1 + r.pWidth, r.pY1 + r.pHeight),
+			);
 		}
 		var splitPanesContext = this._layer.getSplitPanesContext();
 		var paneBoundsList = splitPanesContext ?
@@ -550,7 +542,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			RenderManager.update();
 		}, this);
 		this._map.on('sheetgeometrychanged', this._painter.update, this._painter);
-		this._map.on('move', this._syncTilePanePos, this);
 
 		this._map.on('viewrowcolumnheaders', this._painter.update, this._painter);
 		this._map.on('messagesdone', RenderManager.sendProcessedResponse, RenderManager);
@@ -715,15 +706,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		RenderManager.update();
 		RenderManager.resetPreFetching(true);
-	},
-
-	_isInternInView: function (position) {
-		var centerOffset = this._map._getCenterOffset(position);
-		var viewHalf = this._map.getSize()._divideBy(2);
-		var positionInView =
-			centerOffset.x > -viewHalf.x && centerOffset.x < viewHalf.x &&
-			centerOffset.y > -viewHalf.y && centerOffset.y < viewHalf.y;
-		return positionInView;
 	},
 
 	_moveEnd: function () {
@@ -3888,32 +3870,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}.bind(this));
 	},
 
-	_syncTilePanePos: function () {
-		// Calc renders on the section-container canvas and drives its viewed
-		// rectangle from the layout (on scroll) and from _resetView via
-		// ViewLayoutCalc.setViewRectangleFromPointAndScale (on zoom). It needs
-		// nothing from the map pane here: repositioning the tile-pane container
-		// or deriving the viewed rectangle would reintroduce the map-element
-		// dependency. So this is a no-op for Calc.
-		if (app.activeDocument && app.activeDocument.activeLayout
-			&& app.activeDocument.activeLayout.usesZoomControl())
-			return;
-
-		if (this._container) {
-			var mapPanePos = this._map._getMapPanePos();
-			window.L.DomUtil.setPosition(this._container, new cool.Point(-mapPanePos.x , -mapPanePos.y));
-		}
-		var documentBounds = this._map.getPixelBoundsCore();
-		var documentPos = documentBounds.min;
-		var documentEndPos = documentBounds.max;
-
-		const size = [documentEndPos.x - documentPos.x, documentEndPos.y - documentPos.y];
-
-		app.activeDocument.activeLayout.viewedRectangle = new cool.SimpleRectangle(
-			documentPos.x * app.pixelsToTwips, documentPos.y * app.pixelsToTwips, size[0] * app.pixelsToTwips, size[1] * app.pixelsToTwips
-		);
-	},
-
 	pauseDrawing: function () {
 		if (this._painter && app.sectionContainer)
 			app.sectionContainer.pauseDrawing();
@@ -4025,19 +3981,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		const hasVisibleCursor = app.file.textCursor.visible
 			&& this._map._docLayer._cursorMarker && this._map._docLayer._cursorMarker.isDomAttached();
 		if (hasVisibleCursor) {
-			if (app.activeDocument.activeLayout.usesZoomControl()) {
-				const cursor = app.file.textCursor.rectangle;
-				const view = app.activeDocument.activeLayout.viewedRectangle;
-				if (!view.containsPoint([cursor.x1, cursor.y2]))
-					app.activeDocument.activeLayout.scrollTo(
-						cursor.pX1 - view.pWidth / 2,
-						cursor.pY2 - view.pHeight / 2);
-				return;
-			}
-			const cursorPos = this._map._docLayer._twipsToIntern({ x: app.file.textCursor.rectangle.x1, y: app.file.textCursor.rectangle.y2 });
-			const cursorPositionInView = this._isInternInView(cursorPos);
-			if (!cursorPositionInView)
-				this._map.panTo(cursorPos);
+			const cursor = app.file.textCursor.rectangle;
+			const view = app.activeDocument.activeLayout.viewedRectangle;
+			if (!view.containsPoint([cursor.x1, cursor.y2]))
+				app.activeDocument.activeLayout.scrollTo(
+					cursor.pX1 - view.pWidth / 2,
+					cursor.pY2 - view.pHeight / 2);
 		}
 		// In Calc a cell is selected for typing without an active caret cursor. The
 		// keyboard is up, so scroll the sheet to keep the selected cell visible.
@@ -4309,10 +4258,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// The viewport bounds at the start of the gesture. Zoom frames drive the
 		// viewed rectangle to intermediate values, so the final-center
 		// computation reads this stable snapshot instead of the live bounds.
-		this._painter._zoomStartViewBounds =
-			app.activeDocument.activeLayout.usesZoomControl()
-				? this._painter._paintContext().viewBounds
-				: null;
+		this._painter._zoomStartViewBounds = this._painter._paintContext().viewBounds;
 		// Snapshot the starting scale. Each zoom frame drives app.twipsToPixels
 		// to base * _zoomFrameScale (see TilesSection.drawZoomFrame) so vector
 		// document sections scale in lockstep with the tiles.

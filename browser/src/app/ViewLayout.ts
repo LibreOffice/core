@@ -132,34 +132,49 @@ class ViewLayoutBase {
 		this.lastViewedRectangle = new cool.SimpleRectangle(0, 0, 0, 0);
 	}
 
-	protected getVisibleAreaBounds() {
-		let visibleArea = app.map.getPixelBounds();
-		visibleArea = new cool.Bounds(
-			app.map._docLayer._pixelsToTwips(visibleArea.min),
-			app.map._docLayer._pixelsToTwips(visibleArea.max),
+	// The message text for the current visible area, in whole twips.
+	protected clientVisibleAreaMessage(): string {
+		const rectangle = this.viewedRectangle;
+
+		return (
+			'clientvisiblearea x=' +
+			Math.round(rectangle.x1) +
+			' y=' +
+			Math.round(rectangle.y1) +
+			' width=' +
+			Math.round(rectangle.width) +
+			' height=' +
+			Math.round(rectangle.height)
 		);
-		return visibleArea;
 	}
 
-	// forceUpdate is part of the API (Calc overrides this with a de-duplicating,
-	// map-based variant that honours it); this off-map default sends the current
-	// viewed rectangle every call and does not need it.
+	// Layout work that belongs with a new visible area, run just before the
+	// message goes out.
+	protected onVisibleAreaChanged(): void {
+		return;
+	}
+
+	// Sends the visible area to the server when it differs from the one last
+	// sent. forceUpdate sends an unchanged area again.
 	public sendClientVisibleArea(forceUpdate: boolean = false): void {
-		void forceUpdate;
+		if (!app.map._docLoaded) return;
+		// A zoom animation drives the viewed rectangle through intermediate frame
+		// values; the settled area goes out when the animation ends.
+		if (app.sectionContainer.isInZoomAnimation()) return;
 
-		const visibleAreaCommand =
-			'clientvisiblearea x=' +
-			this.viewedRectangle.x1 +
-			' y=' +
-			this.viewedRectangle.y1 +
-			' width=' +
-			this.viewedRectangle.width +
-			' height=' +
-			this.viewedRectangle.height;
+		const visibleAreaCommand = this.clientVisibleAreaMessage();
+		if (visibleAreaCommand === this.clientVisibleAreaCommand && !forceUpdate)
+			return;
 
+		this.onVisibleAreaChanged();
 		app.socket.sendMessage(visibleAreaCommand);
 
 		if (app.map.contextToolbar) app.map.contextToolbar.hideContextToolbar(); // hide context toolbar when scroll/window resize etc...
+
+		// The command counts as sent only while the connection is healthy, so the
+		// area goes out again after a drop.
+		if (!app.map._fatal && app.idleHandler._active && app.socket.connected())
+			this.clientVisibleAreaCommand = visibleAreaCommand;
 	}
 
 	public getLastPanDirection(): Array<number> {
@@ -267,13 +282,6 @@ class ViewLayoutBase {
 
 	protected getDocumentAnchorSection(): CanvasSectionObject {
 		return app.sectionContainer.getDocumentAnchorSection();
-	}
-
-	// Every document layout drives its own viewed rectangle and zooms through
-	// ZoomControl instead of the leaflet map. Subclasses may still read this to
-	// gate shared map-vs-off-map code paths.
-	public usesZoomControl(): boolean {
-		return true;
 	}
 
 	// The single-window layouts that place one page/slide with the inherited view
