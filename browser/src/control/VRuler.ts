@@ -361,7 +361,10 @@ class VRuler extends Ruler {
 			this.options.pageWidth - (this.options.leftOffset + this.options.margin2);
 		this.options.pageBottomMargin = bottomMargin;
 
-		const scale: number = this._map.getZoomScale(this._map.getZoom(), 10);
+		const scale: number = app.activeDocument.getZoomScale(
+			this._map.getZoom(),
+			10,
+		);
 		const wPixel: number =
 			docLayer._docPixelSize.y / docLayer._pages -
 			this.options.tileMargin * 2 * scale;

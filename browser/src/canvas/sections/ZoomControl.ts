@@ -73,7 +73,17 @@ class ZoomControl extends CanvasSectionObject {
 		const layout = this.layout;
 		if (!layout) return;
 
+		// A request past the zoom range switches to or from the Overview slide
+		// instead of zooming. It needs the unclamped request, so ask before
+		// limiting.
+		if (OverviewFade.handleZoomBeyondLimit(targetZoom)) return;
+
 		const target = app.map._limitZoom(targetZoom);
+		if (target === app.map.getZoom()) return;
+
+		// Other views' cell cursor name popups are placed for the current scale.
+		if (app.map._docLayer._docType === 'spreadsheet')
+			OtherViewCellCursorSection.closePopups();
 
 		// Animate only the centre-anchored (programmatic: menu / keyboard /
 		// status bar) case. There the zoom pivots on the view centre and the
@@ -114,7 +124,10 @@ class ZoomControl extends CanvasSectionObject {
 
 		this.zoomTarget = target;
 		this.zoomAnchor = anchor;
-		this.zoomEndScale = app.map.getZoomScale(target, app.map.getZoom());
+		this.zoomEndScale = app.activeDocument.getZoomScale(
+			target,
+			app.map.getZoom(),
+		);
 
 		layout.beginZoom(anchor);
 		this.startAnimating({ duration: this.zoomDurationMs });
@@ -164,17 +177,15 @@ class ZoomControl extends CanvasSectionObject {
 
 		// Wheel up (deltaY < 0) zooms in.
 		const step = e.deltaY < 0 ? 1 : -1;
-		const target = app.map._limitZoom(app.map.getZoom() + step);
-		if (target === app.map.getZoom()) return;
-
 		const anchor = this.layout.canvasToDocumentPoint(point);
-		this.zoomTo(target, anchor, false);
+		this.zoomTo(app.map.getZoom() + step, anchor, false);
 	}
 
 	// ---- Pinch zoom -----------------------------------------------------
 	// Distance between the two fingers when the gesture started, the
 	// document-space anchor (twips) under the pinch centre, and the running
-	// target zoom. The zoom is committed when the gesture ends.
+	// requested zoom (unclamped; zoomTo limits it). The zoom is committed when
+	// the gesture ends.
 	private pinchStartDistance: number | null = null;
 	private pinchStartZoom: number | null = null;
 	private pinchAnchor: cool.SimplePoint | null = null;
@@ -206,8 +217,9 @@ class ZoomControl extends CanvasSectionObject {
 		if (!distance || !this.pinchStartDistance) return;
 
 		const ratio = distance / this.pinchStartDistance;
-		this.pinchTargetZoom = app.map._limitZoom(
-			app.map.getScaleZoom(ratio, this.pinchStartZoom),
+		this.pinchTargetZoom = app.activeDocument.getScaleZoom(
+			ratio,
+			this.pinchStartZoom,
 		);
 	}
 
@@ -215,11 +227,10 @@ class ZoomControl extends CanvasSectionObject {
 		void e;
 		if (this.pinchTargetZoom !== null && this.pinchAnchor) {
 			const delta = this.pinchTargetZoom - this.pinchStartZoom;
-			const finalZoom = app.map._limitZoom(
+			const finalZoom =
 				delta > 0
 					? Math.ceil(this.pinchTargetZoom)
-					: Math.floor(this.pinchTargetZoom),
-			);
+					: Math.floor(this.pinchTargetZoom);
 			this.zoomTo(finalZoom, this.pinchAnchor, false);
 		}
 		this.pinchStartDistance = null;

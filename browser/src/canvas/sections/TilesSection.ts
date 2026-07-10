@@ -723,7 +723,7 @@ export class TilesSection extends CanvasSectionObject {
 
 		var frameScale = this.sectionProperties.tsManager.zoomFrameScale();
 		var docLayer = this.sectionProperties.docLayer;
-		var targetZoom = Math.round(this.map.getScaleZoom(frameScale, areaZoom));
+		var targetZoom = Math.round(app.activeDocument.getScaleZoom(frameScale, areaZoom));
 		var bestZoomLevel = targetZoom;
 		var availAreaScoreAtBestZL = -Infinity; // Higher the better.
 		var area = area.clone();
@@ -745,7 +745,7 @@ export class TilesSection extends CanvasSectionObject {
 			// Compute area for zoom-level 'zoom'.
 			var areaAtZoom = this.scaleBoundsForZoom(area, zoom, areaZoom);
 			//console.log('DEBUG:: areaAtZoom = ' + areaAtZoom);
-			var relScale = this.map.getZoomScale(zoom, areaZoom);
+			var relScale = app.activeDocument.getZoomScale(zoom, areaZoom);
 
 			this.forEachTileInArea(areaAtZoom, zoom, part, mode, ctx, function(tile, coords, section) {
 				if (tile && tile.image) {
@@ -1042,7 +1042,7 @@ export class TilesSection extends CanvasSectionObject {
 
 			var docRangeScaled = (bestZoomSrc == zoom) ? docRange : this.scaleBoundsForZoom(docRange, bestZoomSrc, zoom);
 			var destPosScaled = (bestZoomSrc == zoom) ? destPos : this.scalePosForZoom(destPos, bestZoomSrc, zoom);
-			var relScale = (bestZoomSrc == zoom) ? 1 : this.map.getZoomScale(bestZoomSrc, zoom);
+			var relScale = (bestZoomSrc == zoom) ? 1 : app.activeDocument.getZoomScale(bestZoomSrc, zoom);
 
 			this.beforeDraw(canvasContext);
 			this.forEachTileInArea(docRangeScaled, bestZoomSrc, part, mode, ctx, function (tile, coords, section): boolean {
@@ -1121,7 +1121,7 @@ export class TilesSection extends CanvasSectionObject {
 
 	private scalePosForZoom(pos: any, toZoom: number, fromZoom: number): any {
 		var docLayer = this.sectionProperties.docLayer;
-		var convScale = this.map.getZoomScale(toZoom, fromZoom);
+		var convScale = app.activeDocument.getZoomScale(toZoom, fromZoom);
 
 		if (docLayer.sheetGeometry) {
 			var toScale = convScale * RenderManager.tileSize * 15.0 / app.tile.size.x;
@@ -1135,7 +1135,7 @@ export class TilesSection extends CanvasSectionObject {
 
 	private scaleBoundsForZoom(corePxBounds: any, toZoom: number, fromZoom: number) {
 		var docLayer = this.sectionProperties.docLayer;
-		var convScale = this.map.getZoomScale(toZoom, fromZoom);
+		var convScale = app.activeDocument.getZoomScale(toZoom, fromZoom);
 
 		if (docLayer.sheetGeometry) {
 

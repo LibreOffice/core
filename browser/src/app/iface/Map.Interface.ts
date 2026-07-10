@@ -165,11 +165,9 @@ interface MapInterface extends Evented {
 	hasFocus(): boolean;
 	lockAccessibilityOn(): void;
 	_partsDirection: number;
-	getZoomScale(toZoom: number, fomZoom?: number): number;
 	_docLoaded: boolean;
 	contextToolbar?: ContextToolbar;
 	getSplitPanesContext(): cool.SplitPanesContext | undefined;
-	getScaleZoom(scale: number, fromZoom?: number): number;
 	scrollingIsHandled: boolean;
 	showComments(on?: boolean): void;
 	showResolvedComments(on?: boolean): void;

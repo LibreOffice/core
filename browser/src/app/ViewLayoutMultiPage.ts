@@ -47,7 +47,7 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 		const halfWidth = Math.round(anchorSection.size[0] * 0.5);
 
 		const ratio = halfWidth / app.activeDocument.fileSize.pX;
-		let zoom = app.map.getScaleZoom(ratio);
+		let zoom = app.activeDocument.getScaleZoom(ratio);
 		zoom = Math.min(max, Math.max(min, zoom));
 
 		if (zoom > 1) zoom = Math.floor(zoom);

@@ -2214,7 +2214,8 @@ class BitmapTileManager extends RenderManagerBase {
 
 		var zoom = forZoom || Math.round(app.map.getZoom());
 		var currZoom = Math.round(app.map.getZoom());
-		var relScale = currZoom == zoom ? 1 : app.map.getZoomScale(zoom, currZoom);
+		var relScale =
+			currZoom == zoom ? 1 : app.activeDocument.getZoomScale(zoom, currZoom);
 
 		var ratio = (this.tileSize * relScale) / app.tile.size.y;
 		var mode = 0; // mode is different only in Impress MasterPage mode so far

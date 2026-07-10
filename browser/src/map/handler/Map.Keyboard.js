@@ -7,7 +7,7 @@
  * at TextInput.
  */
 
-/* global app UNOKey RenderManager OverviewFade */
+/* global app UNOKey RenderManager */
 
 window.L.Map.mergeOptions({
 	keyboard: true,
@@ -760,8 +760,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			}
 			else if (key in this._zoomKeys) {
 				const requestedZoom = map.getZoom() + (ev.shiftKey ? 3 : 1) * this._zoomKeys[key];
-				if (!OverviewFade.handleZoomBeyondLimit(requestedZoom))
-					app.zoomControl.zoomTo(requestedZoom, undefined, true);
+				app.zoomControl.zoomTo(requestedZoom, undefined, true);
 			}
 			else if (ev.key && ev.key.length === 1 && !ev.ctrlKey && !ev.altKey && !map.isEditMode()) {
 				map.uiManager.showViewModeAttention();

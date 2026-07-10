@@ -692,64 +692,6 @@ window.L.Map = window.L.Evented.extend({
 		return this._zoom;
 	},
 
-	getZoomPercent: function() {
-		let zoomPercent = 100;
-		switch (this._zoom) {
-			case 1:  zoomPercent =  20; break;  // 0.2102
-			case 2:  zoomPercent =  25; break;  // 0.2500
-			case 3:  zoomPercent =  30; break;  // 0.2973
-			case 4:  zoomPercent =  35; break;  // 0.3535
-			case 5:  zoomPercent =  40; break;  // 0.4204
-			case 6:  zoomPercent =  50; break;  // 0.5
-			case 7:  zoomPercent =  60; break;  // 0.5946
-			case 8:  zoomPercent =  70; break;  // 0.7071
-			case 9:  zoomPercent =  85; break;  // 0.8409
-			case 10: zoomPercent = 100; break; // 1
-			case 11: zoomPercent = 120; break; // 1.1892
-			// Why do we call this 150% even if it is actually closer to 140%
-			case 12: zoomPercent = 150; break; // 1.4142
-			case 13: zoomPercent = 170; break; // 1.6818
-			case 14: zoomPercent = 200; break; // 2
-			case 15: zoomPercent = 235; break; // 2.3784
-			case 16: zoomPercent = 280; break; // 2.8284
-			case 17: zoomPercent = 335; break; // 3.3636
-			case 18: zoomPercent = 400; break; // 4
-			default:
-				var zoomRatio = this.getZoomScale(this.getZoom(), this.options.zoom);
-				zoomPercent = this.getZoomPercent( Math.round( this.getScaleZoom(zoomRatio) ) ); // this will return one of the above percentages
-			break;
-		}
-		return zoomPercent;
-	},
-
-	getZoomIndex: function(zoomPercent) {
-		let zoomIndex = 0;
-		switch(zoomPercent) {
-			case 20: zoomIndex = 1; break;
-			case 25: zoomIndex = 2; break;
-			case 30: zoomIndex = 3; break;
-			case 35: zoomIndex = 4; break;
-			case 40: zoomIndex = 5; break;
-			case 50: zoomIndex = 6; break;
-			case 60: zoomIndex = 7; break;
-			case 70: zoomIndex = 8; break;
-			case 85: zoomIndex = 9; break;
-			case 100: zoomIndex = 10; break;
-			case 120: zoomIndex = 11; break;
-			case 150: zoomIndex = 12; break;
-			case 170: zoomIndex = 13; break;
-			case 200: zoomIndex = 14; break;
-			case 235: zoomIndex = 15; break;
-			case 280: zoomIndex = 16; break;
-			case 335: zoomIndex = 17; break;
-			case 400: zoomIndex = 18; break;
-			default:
-			//TODO: calculate the nearest index
-				zoomIndex = 10;
-		}
-		return zoomIndex;
-	},
-
 	getMinZoom: function () {
 		return this.options.minZoom === undefined ? this._layersMinZoom || 0 : this.options.minZoom;
 	},
@@ -820,41 +762,6 @@ window.L.Map = window.L.Evented.extend({
 						this.formulabar.isInEditMode())))
 		)
 			app.dispatcher.dispatch('acceptformula');
-	},
-
-	// TODO replace with universal implementation after refactoring projections
-
-	getZoomScale: function (toZoom, fromZoom) {
-		fromZoom = fromZoom === undefined ? this.getZoom() : fromZoom;
-		return InternPointUtil.scale(toZoom) / InternPointUtil.scale(fromZoom);
-	},
-
-	getScaleZoom: function (scale, fromZoom) {
-		fromZoom = fromZoom === undefined ? this.getZoom() : fromZoom;
-		return fromZoom + (Math.log(scale) / Math.log(InternPointUtil.SCALE));
-	},
-
-
-	// conversion methods
-
-	project: function (intern, zoom) { // (Intern[, Number]) -> Point
-		zoom = zoom === undefined ? this.getZoom() : zoom;
-		var projectedPoint = InternPointUtil.internToPoint(InternPointUtil.flexConstruct(intern), zoom);
-		return new cool.Point(app.util.round(projectedPoint.x, 1e-6), app.util.round(projectedPoint.y, 1e-6));
-	},
-
-	unproject: function (point, zoom) { // (Point[, Number]) -> Intern
-		zoom = zoom === undefined ? this.getZoom() : zoom;
-		return InternPointUtil.pointToIntern(new cool.Point(point.x, point.y), zoom);
-	},
-
-	// rescaling
-
-	rescale: function(point, oldZoom, newZoom) {
-		oldZoom = oldZoom === undefined ? this.getZoom() : oldZoom;
-		newZoom = newZoom === undefined ? this.getZoom() : newZoom;
-
-		return InternPointUtil.rescale(point, oldZoom, newZoom);
 	},
 
 	// Give the focus to the text input.

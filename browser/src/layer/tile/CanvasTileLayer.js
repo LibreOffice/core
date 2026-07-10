@@ -218,7 +218,7 @@ window.L.TileSectionManager = window.L.Class.extend({
 		return {
 			offset: this._offset,
 			topLeft: docTopLeft.add(this._offset),
-			center: this._map.rescale(newPaneCenter, this._map.getZoom(), this._map.getScaleZoom(scale)),
+			center: app.activeDocument.rescale(newPaneCenter, this._map.getZoom(), app.activeDocument.getScaleZoom(scale)),
 		};
 	},
 
@@ -279,7 +279,7 @@ window.L.TileSectionManager = window.L.Class.extend({
 
 	_calcZoomFrameParams: function (zoom, newCenter) {
 		this._zoomFrameScale = this._calcZoomFrameScale(zoom);
-		this._newCenter = this._layer._map.project(newCenter).multiplyBy(app.dpiScale); // in core pixels
+		this._newCenter = app.activeDocument.project(newCenter).multiplyBy(app.dpiScale); // in core pixels
 	},
 
 	setWaitForTiles: function (wait) {
@@ -324,7 +324,7 @@ window.L.TileSectionManager = window.L.Class.extend({
 
 		// Calculate the final center at final zoom in advance.
 		var newMapCenter = this._getZoomMapCenter(zoom).divideBy(app.dpiScale);
-		var newMapCenterIntern = map.unproject(newMapCenter, zoom);
+		var newMapCenterIntern = app.activeDocument.unproject(newMapCenter, zoom);
 		app.sectionContainer.setZoomChanged(true);
 
 		var stopAnimation = noGap ? true : false;
@@ -722,7 +722,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		    'tiletwipwidth=' + app.tile.size.x + ' ' +
 		    'tiletwipheight=' + app.tile.size.y + ' ' +
 		    'dpiscale=' + window.devicePixelRatio + ' ' +
-		    'zoompercent=' + this._map.getZoomPercent()
+		    'zoompercent=' + app.activeDocument.getZoomPercent()
 
 		if (this._clientZoom !== newClientZoom || forceUpdate || this.isImpress()) {
 			// the zoom level has changed
@@ -1315,7 +1315,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			const strZoomPercent = payload.match(/\d+/);
 			const zoomPercent = strZoomPercent ? parseInt(strZoomPercent[0], 10) : NaN;
 			if (zoomPercent) {
-				const zoomIndex = this._map.getZoomIndex(zoomPercent);
+				const zoomIndex = app.activeDocument.getZoomIndex(zoomPercent);
 				app.activeDocument.activeLayout.applyZoom(zoomIndex);
 			}
 		}
@@ -3084,7 +3084,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (pos instanceof cool.SimplePoint) // Turn into lat/lng if required (pos may also be a simplePoint.).
 			pos = this._twipsToIntern({ x: pos.x, y: pos.y });
 
-		var center = this._map.project(pos);
+		var center = app.activeDocument.project(pos);
 
 		let needsXScroll = false;
 		let needsYScroll = false;
@@ -3447,7 +3447,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		const xRatio = availW / documentWidth;
 		const yRatio = availH / documentHeight;
 		const ratio = Math.min(xRatio, yRatio);
-		return this._map.getScaleZoom(ratio);
+		return app.activeDocument.getScaleZoom(ratio);
 	},
 
 	_writerDynamicZoom: function(containerWidth, documentWidth, bringCommentsIntoView) {
@@ -3455,7 +3455,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (bringCommentsIntoView && commentSection)
 			containerWidth -= commentSection.sectionProperties.commentWidth;
 		const ratio = containerWidth / documentWidth;
-		return this._map.getScaleZoom(ratio);
+		return app.activeDocument.getScaleZoom(ratio);
 	},
 
 	_recalcZoom: function(newSize, bringCommentsIntoView, maxZoom) {
@@ -4180,7 +4180,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// the other callers still pass an intern point which we project here.
 		this._pinchStartCenter = pinchStartCenterCorePx
 			? pinchStartCenterCorePx
-			: this._map.project(pinchStartCenter).multiplyBy(app.dpiScale); // in core pixels
+			: app.activeDocument.project(pinchStartCenter).multiplyBy(app.dpiScale); // in core pixels
 		this._painter._offset = new cool.Point(0, 0);
 		// The viewport bounds at the start of the gesture. Zoom frames drive the
 		// viewed rectangle to intermediate values, so the final-center
@@ -4277,11 +4277,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 	_twipsToIntern: function (twips, zoom) {
 		var pixels = this._twipsToCssPixels(twips);
-		return this._map.unproject(pixels, zoom);
+		return app.activeDocument.unproject(pixels, zoom);
 	},
 
 	_internToTwips: function (intern, zoom) {
-		var pixels = this._map.project(intern, zoom);
+		var pixels = app.activeDocument.project(intern, zoom);
 		return this._cssPixelsToTwips(pixels);
 	},
 

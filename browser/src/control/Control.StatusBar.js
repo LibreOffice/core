@@ -145,7 +145,7 @@ class StatusBar extends JSDialog.Toolbar {
 	}
 
 	onZoomEnd() {
-		var zoomPercent = this.map.getZoomPercent();
+		var zoomPercent = app.activeDocument.getZoomPercent();
 		var zoomSelected = 'zoom' + zoomPercent;
 
 		this.builder.updateWidget(this.parentContainer,

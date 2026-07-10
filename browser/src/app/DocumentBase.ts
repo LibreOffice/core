@@ -168,4 +168,134 @@ class DocumentBase {
 	public isModeActive(mode: number): boolean {
 		return this._activeModes.includes(mode);
 	}
+
+	// Coordinate/scale math (pure InternPointUtil, no map DOM). The zoom defaults
+	// to the current zoom; callers pass an explicit zoom for the zoom-animation
+	// frames. Moved off the leaflet map so document code does not depend on it.
+	public project(intern: any, zoom?: number): cool.Point {
+		const z = zoom === undefined ? app.map.getZoom() : zoom;
+		const projectedPoint = InternPointUtil.internToPoint(
+			InternPointUtil.flexConstruct(intern) as cool.SimplePoint,
+			z,
+		);
+		return new cool.Point(
+			app.util.round(projectedPoint.x, 1e-6),
+			app.util.round(projectedPoint.y, 1e-6),
+		);
+	}
+
+	public unproject(point: any, zoom?: number): cool.SimplePoint {
+		const z = zoom === undefined ? app.map.getZoom() : zoom;
+		return InternPointUtil.pointToIntern(new cool.Point(point.x, point.y), z);
+	}
+
+	public rescale(point: any, oldZoom?: number, newZoom?: number): cool.Point {
+		const o = oldZoom === undefined ? app.map.getZoom() : oldZoom;
+		const n = newZoom === undefined ? app.map.getZoom() : newZoom;
+		return InternPointUtil.rescale(point, o, n);
+	}
+
+	// Ratio between two zoom levels (pure scale math). fromZoom defaults to the
+	// current zoom.
+	public getZoomScale(toZoom: number, fromZoom?: number): number {
+		const from = fromZoom === undefined ? app.map.getZoom() : fromZoom;
+		return InternPointUtil.scale(toZoom) / InternPointUtil.scale(from);
+	}
+
+	// Inverse of getZoomScale: the zoom level that produces the given scale
+	// relative to fromZoom (defaults to the current zoom).
+	public getScaleZoom(scale: number, fromZoom?: number): number {
+		const from = fromZoom === undefined ? app.map.getZoom() : fromZoom;
+		return from + Math.log(scale) / Math.log(InternPointUtil.SCALE);
+	}
+
+	// The current zoom level as a UI percentage (100 = default zoom).
+	public getZoomPercent(): number {
+		switch (app.map.getZoom()) {
+			case 1:
+				return 20;
+			case 2:
+				return 25;
+			case 3:
+				return 30;
+			case 4:
+				return 35;
+			case 5:
+				return 40;
+			case 6:
+				return 50;
+			case 7:
+				return 60;
+			case 8:
+				return 70;
+			case 9:
+				return 85;
+			case 10:
+				return 100;
+			case 11:
+				return 120;
+			case 12:
+				return 150;
+			case 13:
+				return 170;
+			case 14:
+				return 200;
+			case 15:
+				return 235;
+			case 16:
+				return 280;
+			case 17:
+				return 335;
+			case 18:
+				return 400;
+			// Zoom is always one of the integer levels above; treat anything else
+			// as the default 100%.
+			default:
+				return 100;
+		}
+	}
+
+	// Zoom level for a given UI percentage (inverse of getZoomPercent's table).
+	public getZoomIndex(zoomPercent: number): number {
+		switch (zoomPercent) {
+			case 20:
+				return 1;
+			case 25:
+				return 2;
+			case 30:
+				return 3;
+			case 35:
+				return 4;
+			case 40:
+				return 5;
+			case 50:
+				return 6;
+			case 60:
+				return 7;
+			case 70:
+				return 8;
+			case 85:
+				return 9;
+			case 100:
+				return 10;
+			case 120:
+				return 11;
+			case 150:
+				return 12;
+			case 170:
+				return 13;
+			case 200:
+				return 14;
+			case 235:
+				return 15;
+			case 280:
+				return 16;
+			case 335:
+				return 17;
+			case 400:
+				return 18;
+			default:
+				return 10; // TODO: calculate the nearest index
+		}
+	}
 }

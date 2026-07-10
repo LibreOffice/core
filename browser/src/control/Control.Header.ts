@@ -101,7 +101,7 @@ export class Header extends CanvasSectionObject {
 
 	_getFontSize(): number {
 		const map = this._map;
-		const zoomScale = map.getZoomScale(map.getZoom(), map.options.defaultZoom);
+		const zoomScale = app.activeDocument.getZoomScale(map.getZoom(), map.options.defaultZoom);
 		if (zoomScale < 0.68)
 			return Math.round(8 * app.dpiScale);
 		else if (zoomScale < 0.8)
