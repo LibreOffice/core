@@ -128,6 +128,7 @@
 #include <shapeuno.hxx>
 #include <sheetevents.hxx>
 #include <styleuno.hxx>
+#include <tabprotection.hxx>
 #include <tabvwsh.hxx>
 #include <targuno.hxx>
 #include <unonames.hxx>
@@ -680,6 +681,26 @@ OUString ScModelObj::getPartInfo( int nPart )
     jsonWriter.put("rtllayout", static_cast<unsigned int>(bIsRTLLayout));
     jsonWriter.put("protected", static_cast<unsigned int>(bIsProtected));
     jsonWriter.put("selected", static_cast<unsigned int>(bIsSelected));
+
+    // On a protected sheet these flags say which structural edits the
+    // protection options still leave enabled: inserting or deleting columns
+    // and rows. A value of 1 means the edit stays allowed, 0 means the
+    // protection blocks it. They are absent on an unprotected sheet.
+    if (bIsProtected)
+    {
+        const ScTableProtection* pProtect = rDocument.GetTabProtection(nPart);
+        if (pProtect)
+        {
+            jsonWriter.put("insertcolumnsallowed",
+                static_cast<unsigned int>(pProtect->isOptionEnabled(ScTableProtection::INSERT_COLUMNS)));
+            jsonWriter.put("insertrowsallowed",
+                static_cast<unsigned int>(pProtect->isOptionEnabled(ScTableProtection::INSERT_ROWS)));
+            jsonWriter.put("deletecolumnsallowed",
+                static_cast<unsigned int>(pProtect->isOptionEnabled(ScTableProtection::DELETE_COLUMNS)));
+            jsonWriter.put("deleterowsallowed",
+                static_cast<unsigned int>(pProtect->isOptionEnabled(ScTableProtection::DELETE_ROWS)));
+        }
+    }
 
     const sc::SheetViewID nSheetViewID = pViewData->GetSheetViewIDForSheet(nPart);
     if (nSheetViewID != sc::DefaultSheetViewID)

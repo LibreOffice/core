@@ -296,6 +296,17 @@ app.calc.isPartProtected = function (part) {
 	return app.map._docLayer._lastStatusJSON.parts[part].protected === 1;
 };
 
+// Returns whether a structural edit is still allowed on the given sheet
+// when that sheet is protected. The edit argument is one of
+// 'insertcolumns', 'insertrows', 'deletecolumns' or 'deleterows', matching
+// the flags core sends in the part status. Every edit is allowed on an
+// unprotected sheet. On a protected sheet an edit is allowed only when core
+// marked it so; a missing flag means the edit is blocked.
+app.calc.isProtectedSheetEditAllowed = function (part, edit) {
+	if (!app.calc.isPartProtected(part)) return true;
+	return app.map._docLayer._lastStatusJSON.parts[part][edit + 'allowed'] === 1;
+};
+
 app.calc.isPartSheetView = function (part) {
 	if (!app.map._docLayer || !app.map._docLayer._lastStatusJSON) return false;
 	if (part >= app.map._docLayer._lastStatusJSON.parts.length) return false;

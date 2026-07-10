@@ -567,13 +567,37 @@ export class Header extends CanvasSectionObject {
 		return this._menuPosEl;
 	}
 
-	// A protected sheet rejects every header command that changes it, so
-	// on such a sheet only the commands that still work there stay in the
-	// menu.
+	// Sheet protection blocks some header commands but leaves others
+	// working, and which structural edits stay allowed is chosen when the
+	// sheet is protected. Keep in the menu only the commands that still work
+	// on the current sheet.
 	_isHeaderCommandUsable(command: string): boolean {
-		if (command === '.uno:FreezePanes')
+		const part = this._map._docLayer._selectedPart;
+		if (!(app.calc as any).isPartProtected(part))
 			return true;
-		return !(app.calc as any).isPartProtected(this._map._docLayer._selectedPart);
+
+		switch (command) {
+		// Freezing panes and opening the width or height dialog keep working
+		// on a protected sheet.
+		case '.uno:FreezePanes':
+		case '.uno:ColumnWidth':
+		case '.uno:RowHeight':
+			return true;
+		case '.uno:InsertColumnsBefore':
+		case '.uno:InsertColumnsAfter':
+			return (app.calc as any).isProtectedSheetEditAllowed(part, 'insertcolumns');
+		case '.uno:DeleteColumns':
+			return (app.calc as any).isProtectedSheetEditAllowed(part, 'deletecolumns');
+		case '.uno:InsertRowsBefore':
+		case '.uno:InsertRowsAfter':
+			return (app.calc as any).isProtectedSheetEditAllowed(part, 'insertrows');
+		case '.uno:DeleteRows':
+			return (app.calc as any).isProtectedSheetEditAllowed(part, 'deleterows');
+		// Hiding, showing and optimal sizing are rejected on any protected
+		// sheet.
+		default:
+			return false;
+		}
 	}
 
 	private _getDropdownEntries(): any[] {
