@@ -94,8 +94,8 @@ void AccessibilityIssue::gotoIssue() const
             // bring issue to attention
             if (bSelected)
             {
-                if (const SwFlyFrameFormat* pFlyFormat
-                    = m_pDoc->FindFlyByName(UIName(TempIssueObject.m_sObjectID), SwNodeType::NONE))
+                if (const SwFlyFrameFormat* pFlyFormat = TempIssueObject.m_pDoc->FindFlyByName(
+                        UIName(TempIssueObject.m_sObjectID), SwNodeType::NONE))
                 {
                     if (SwFlyFrame* pFlyFrame
                         = SwIterator<SwFlyFrame, SwFormat>(*pFlyFormat).First())
@@ -264,18 +264,20 @@ void AccessibilityIssue::quickFixIssue() const
     if (!pShell)
         return;
 
+    AccessibilityIssue TempIssueObject(*this);
+
     if (canGotoIssue())
         gotoIssue();
 
     bool bResetAndQueue = true;
 
-    switch (m_eIssueObject)
+    switch (TempIssueObject.m_eIssueObject)
     {
         case IssueObject::GRAPHIC:
         case IssueObject::OLE:
         {
-            SwFlyFrameFormat* pFlyFormat
-                = const_cast<SwFlyFrameFormat*>(m_pDoc->FindFlyByName(UIName(m_sObjectID)));
+            SwFlyFrameFormat* pFlyFormat = const_cast<SwFlyFrameFormat*>(
+                TempIssueObject.m_pDoc->FindFlyByName(UIName(TempIssueObject.m_sObjectID)));
             if (pFlyFormat)
             {
                 OUString aDescription(pFlyFormat->GetObjDescription());
@@ -289,18 +291,22 @@ void AccessibilityIssue::quickFixIssue() const
 
                 bResetAndQueue = false;
                 pDlg->StartExecuteAsync(
-                    [this, pDlg, pFlyFormat, pWrtShell](sal_Int32 nResult) -> void {
+                    [TempIssueObject, pDlg, pFlyFormat, pWrtShell](sal_Int32 nResult) -> void
+                    {
                         if (nResult == RET_OK)
                         {
-                            m_pDoc->SetFlyFrameTitle(*pFlyFormat, pDlg->GetTitle());
-                            m_pDoc->SetFlyFrameDescription(*pFlyFormat, pDlg->GetDescription());
-                            m_pDoc->SetFlyFrameDecorative(*pFlyFormat, pDlg->IsDecorative());
+                            TempIssueObject.m_pDoc->SetFlyFrameTitle(*pFlyFormat, pDlg->GetTitle());
+                            TempIssueObject.m_pDoc->SetFlyFrameDescription(*pFlyFormat,
+                                                                           pDlg->GetDescription());
+                            TempIssueObject.m_pDoc->SetFlyFrameDecorative(*pFlyFormat,
+                                                                          pDlg->IsDecorative());
 
                             pWrtShell->SetModified();
                         }
                         pDlg->disposeOnce();
-                        if (m_pNode)
-                            m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(m_pNode);
+                        if (TempIssueObject.m_pNode)
+                            TempIssueObject.m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(
+                                TempIssueObject.m_pNode);
                     });
             }
         }
@@ -310,7 +316,7 @@ void AccessibilityIssue::quickFixIssue() const
         {
             SwWrtShell* pWrtShell = pShell->GetWrtShell();
             auto pPage = pWrtShell->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-            SdrObject* pObj = pPage->GetObjByName(m_sObjectID);
+            SdrObject* pObj = pPage->GetObjByName(TempIssueObject.m_sObjectID);
             if (pObj)
             {
                 OUString aTitle(pObj->GetTitle());
@@ -322,19 +328,22 @@ void AccessibilityIssue::quickFixIssue() const
                     pWrtShell->GetView().GetFrameWeld(), aTitle, aDescription, isDecorative));
 
                 bResetAndQueue = false;
-                pDlg->StartExecuteAsync([this, pDlg, pObj, pWrtShell](sal_Int32 nResult) -> void {
-                    if (nResult == RET_OK)
+                pDlg->StartExecuteAsync(
+                    [TempIssueObject, pDlg, pObj, pWrtShell](sal_Int32 nResult) -> void
                     {
-                        pObj->SetTitle(pDlg->GetTitle());
-                        pObj->SetDescription(pDlg->GetDescription());
-                        pObj->SetDecorative(pDlg->IsDecorative());
+                        if (nResult == RET_OK)
+                        {
+                            pObj->SetTitle(pDlg->GetTitle());
+                            pObj->SetDescription(pDlg->GetDescription());
+                            pObj->SetDecorative(pDlg->IsDecorative());
 
-                        pWrtShell->SetModified();
-                    }
-                    pDlg->disposeOnce();
-                    if (m_pNode)
-                        m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(m_pNode);
-                });
+                            pWrtShell->SetModified();
+                        }
+                        pDlg->disposeOnce();
+                        if (TempIssueObject.m_pNode)
+                            TempIssueObject.m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(
+                                TempIssueObject.m_pNode);
+                    });
             }
         }
         break;
@@ -348,42 +357,48 @@ void AccessibilityIssue::quickFixIssue() const
                 SwResId(STR_HYPERLINK_NO_NAME_DLG)));
 
             bResetAndQueue = false;
-            xNameDialog->StartExecuteAsync([this, xNameDialog, pWrtShell](sal_Int32 nResult) {
-                if (nResult == RET_OK)
+            xNameDialog->StartExecuteAsync(
+                [TempIssueObject, xNameDialog, pWrtShell](sal_Int32 nResult)
                 {
-                    if (m_eIssueObject == IssueObject::HYPERLINKTEXT)
+                    if (nResult == RET_OK)
                     {
-                        SwContentNode* pContentNode = m_pNode->GetContentNode();
-                        SwPosition aStart(*pContentNode, m_nStart);
-                        SwPosition aEnd(*pContentNode, m_nEnd);
-                        rtl::Reference<SwXTextRange> xRun
-                            = SwXTextRange::CreateXTextRange(*m_pDoc, aStart, &aEnd);
-                        if (xRun.is()
-                            && xRun->getPropertySetInfo()->hasPropertyByName(u"HyperLinkName"_ustr))
+                        if (TempIssueObject.m_eIssueObject == IssueObject::HYPERLINKTEXT)
                         {
-                            xRun->setPropertyValue(u"HyperLinkName"_ustr,
-                                                   cpo::uno::Any(xNameDialog->GetName()));
+                            SwContentNode* pContentNode = TempIssueObject.m_pNode->GetContentNode();
+                            SwPosition aStart(*pContentNode, TempIssueObject.m_nStart);
+                            SwPosition aEnd(*pContentNode, TempIssueObject.m_nEnd);
+                            rtl::Reference<SwXTextRange> xRun = SwXTextRange::CreateXTextRange(
+                                *TempIssueObject.m_pDoc, aStart, &aEnd);
+                            if (xRun.is()
+                                && xRun->getPropertySetInfo()->hasPropertyByName(
+                                    u"HyperLinkName"_ustr))
+                            {
+                                xRun->setPropertyValue(u"HyperLinkName"_ustr,
+                                                       cpo::uno::Any(xNameDialog->GetName()));
+                            }
                         }
-                    }
-                    else
-                    {
-                        SwFlyFrameFormat* const pFlyFormat{ const_cast<SwFlyFrameFormat*>(
-                            m_pDoc->FindFlyByName(UIName(m_sObjectID))) };
-                        if (pFlyFormat)
+                        else
                         {
-                            SwFormatURL item{ pFlyFormat->GetURL() };
-                            item.SetName(xNameDialog->GetName());
-                            SwAttrSet set{ m_pDoc->GetAttrPool(), svl::Items<RES_URL, RES_URL> };
-                            set.Put(item);
-                            m_pDoc->SetFlyFrameAttr(*pFlyFormat, set);
+                            SwFlyFrameFormat* const pFlyFormat{ const_cast<SwFlyFrameFormat*>(
+                                TempIssueObject.m_pDoc->FindFlyByName(
+                                    UIName(TempIssueObject.m_sObjectID))) };
+                            if (pFlyFormat)
+                            {
+                                SwFormatURL item{ pFlyFormat->GetURL() };
+                                item.SetName(xNameDialog->GetName());
+                                SwAttrSet set{ TempIssueObject.m_pDoc->GetAttrPool(),
+                                               svl::Items<RES_URL, RES_URL> };
+                                set.Put(item);
+                                TempIssueObject.m_pDoc->SetFlyFrameAttr(*pFlyFormat, set);
+                            }
                         }
+                        pWrtShell->SetModified();
                     }
-                    pWrtShell->SetModified();
-                }
-                xNameDialog->disposeOnce();
-                if (m_pNode)
-                    m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(m_pNode);
-            });
+                    xNameDialog->disposeOnce();
+                    if (TempIssueObject.m_pNode)
+                        TempIssueObject.m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(
+                            TempIssueObject.m_pNode);
+                });
         }
         break;
         case IssueObject::DOCUMENT_TITLE:
@@ -394,7 +409,8 @@ void AccessibilityIssue::quickFixIssue() const
                 pWrtShell->GetView().GetFrameWeld(), OUString(),
                 SwResId(STR_DOCUMENT_TITLE_DLG_DESC), SwResId(STR_DOCUMENT_TITLE_DLG_TITLE)));
             xNameDialog->StartExecuteAsync(
-                [ xNameDialog, pShell, pDoc = m_pDoc ](sal_Int32 nResult) {
+                [TempIssueObject, xNameDialog, pShell](sal_Int32 nResult)
+                {
                     if (nResult == RET_OK)
                     {
                         const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -403,7 +419,8 @@ void AccessibilityIssue::quickFixIssue() const
                             xDPS->getDocumentProperties());
                         xDocumentProperties->setTitle(xNameDialog->GetName());
 
-                        pDoc->getOnlineAccessibilityCheck()->resetAndQueueDocumentLevel();
+                        TempIssueObject.m_pDoc->getOnlineAccessibilityCheck()
+                            ->resetAndQueueDocumentLevel();
                     }
                     xNameDialog->disposeOnce();
                 });
@@ -421,7 +438,7 @@ void AccessibilityIssue::quickFixIssue() const
         {
             uno::Reference<frame::XModel> xModel(pShell->GetModel(), uno::UNO_QUERY_THROW);
 
-            if (m_sObjectID.isEmpty())
+            if (TempIssueObject.m_sObjectID.isEmpty())
             {
                 // open the dialog "Tools/Options/Languages and Locales - General"
                 cpo::uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
@@ -433,7 +450,7 @@ void AccessibilityIssue::quickFixIssue() const
             else
             {
                 cpo::uno::Sequence<beans::PropertyValue> aArgs{
-                    comphelper::makePropertyValue(u"Param"_ustr, m_sObjectID),
+                    comphelper::makePropertyValue(u"Param"_ustr, TempIssueObject.m_sObjectID),
                     comphelper::makePropertyValue(u"Family"_ustr, sal_Int16(SfxStyleFamily::Para))
                 };
 
@@ -445,8 +462,9 @@ void AccessibilityIssue::quickFixIssue() const
         default:
             break;
     }
-    if (bResetAndQueue && m_pNode)
-        m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(m_pNode);
+    if (bResetAndQueue && TempIssueObject.m_pNode)
+        TempIssueObject.m_pDoc->getOnlineAccessibilityCheck()->resetAndQueue(
+            TempIssueObject.m_pNode);
 }
 
 } // end sw namespace
