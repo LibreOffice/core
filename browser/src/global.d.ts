@@ -76,8 +76,6 @@ declare namespace L {
         addEventListener(type: string, fn: (event: any) => void, context?: any): this;
         removeEventListener(type: string, fn?: (event: any) => void, context?: any): this;
         eachLayer(fn: (layer: any) => void, context?: any): this;
-        invalidateSize(options?: boolean, oldSize?: any): this;
-        getBounds(): any; // Replace 'any' with the appropriate type if known
         getZoom(): number;
         getCenter(): [number, number];
         fitBounds(bounds: any, options?: any): this; // Replace 'any' with the appropriate type if known

@@ -64,6 +64,9 @@ class ViewLayoutBase {
 	protected _documentAnchorPosition: number[]; // The position of document section on the canvas. Always canvas (core) pixels, no need for SimplePoint class.
 	public scrollProperties: ScrollProperties = new ScrollProperties();
 	protected currentCoordList: Array<TileCoordData> = [];
+	// app.events is a bridge over DOM events, so the resize handler is kept bound
+	// here: off has to be given the same function reference that on registered.
+	private readonly boundOnResize = () => this.onResize();
 
 	constructor() {
 		this._viewedRectangle = new cool.SimpleRectangle(0, 0, 0, 0);
@@ -73,17 +76,28 @@ class ViewLayoutBase {
 		this._documentAnchorPosition = [0, 0];
 
 		// The stacked-page subclasses (MultiPage/FileBased/CompareChanges) install
-		// their own zoomend/resize handlers that rebuild page geometry and request
-		// tiles. The plain single-window layout (Impress/Draw edit) has none, so
-		// without these the viewed rectangle (which carries the centering offset)
-		// is never rebuilt on load/zoom/resize: the slide would not centre and
-		// would go blank after a zoom. Guarded by usesSingleWindowView() so it is a
-		// no-op for the subclasses (they handle their own).
-		app.map.on('zoomend', this.rebuildSingleWindowView.bind(this));
-		app.events.on('resize', this.rebuildSingleWindowViewDeferred.bind(this));
+		// their own zoomend handler and override onResize to rebuild page geometry
+		// and request tiles. The plain single-window layout (Impress/Draw edit) has
+		// none, so without these the viewed rectangle (which carries the centering
+		// offset) is never rebuilt on load/zoom/resize: the slide would not centre
+		// and would go blank after a zoom. rebuildSingleWindowView is guarded by
+		// usesSingleWindowView() so the zoomend path is a no-op for the subclasses.
+		// Each handler is registered for this layout alone, so dispose removes exactly
+		// this instance's subscriptions.
+		app.map.on('zoomend', this.rebuildSingleWindowView, this);
+		app.events.on('resize', this.boundOnResize);
 		app.layoutingService.appendLayoutingTask(() =>
 			this.rebuildSingleWindowView(),
 		);
+	}
+
+	// Drops the subscriptions this layout made, so that only the layout which is
+	// currently active rebuilds its geometry, sends a visible area to the server
+	// and asks for tiles on a resize or a zoom. A subclass that subscribes to
+	// more events overrides this and calls it.
+	public dispose(): void {
+		app.map.off('zoomend', this.rebuildSingleWindowView, this);
+		app.events.off('resize', this.boundOnResize);
 	}
 
 	/*
@@ -308,12 +322,13 @@ class ViewLayoutBase {
 		return this.type === 'ViewLayoutBase';
 	}
 
-	// The 'resize' event (a ResizeObserver on the container) can fire before the
-	// document anchor section has been resized, so defer to the layouting phase
-	// where the frame size has settled - otherwise centering would use a stale
-	// frame. Zoom end runs synchronously (no resize in flight, and we want the
-	// centred rectangle committed before the next redraw).
-	private rebuildSingleWindowViewDeferred(): void {
+	// Resize handler, bound to app.events 'resize' in the constructor and
+	// dispatched polymorphically. The 'resize' event (a ResizeObserver on the
+	// container) can fire before the document anchor section has been resized, so
+	// defer to the layouting phase where the frame size has settled - otherwise
+	// centering would use a stale frame. Derived classes override this when a
+	// resize needs their own work (stacked-page reset, Writer comment margin).
+	public onResize(): void {
 		if (!this.usesSingleWindowView()) return;
 		app.layoutingService.appendLayoutingTask(() =>
 			this.rebuildSingleWindowView(),

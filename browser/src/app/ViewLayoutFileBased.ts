@@ -23,14 +23,22 @@ class ViewLayoutFileBased extends ViewLayoutBase {
 	constructor() {
 		super();
 
-		app.events.on('resize', this.reset.bind(this));
-		app.map.on('zoomend', this.reset.bind(this));
+		app.map.on('zoomend', this.reset, this);
 
 		// Populate rectangles synchronously so callers that read documentRectangles
 		// right after `new ViewLayoutFileBased()` (e.g. paint paths kicked off
 		// immediately after swapLayout) see a fully-built layout.
 		this.resetViewLayout();
 		app.layoutingService.appendLayoutingTask(() => this.updateViewData());
+	}
+
+	public override dispose(): void {
+		app.map.off('zoomend', this.reset, this);
+		super.dispose();
+	}
+
+	public override onResize(): void {
+		this.reset();
 	}
 
 	private getPartCount(): number {

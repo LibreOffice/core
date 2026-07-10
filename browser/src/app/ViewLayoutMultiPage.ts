@@ -19,10 +19,18 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 	constructor() {
 		super();
 
-		app.events.on('resize', this.reset.bind(this));
-		app.map.on('zoomend', this.reset.bind(this));
+		app.map.on('zoomend', this.reset, this);
 
 		this.adjustViewZoomLevel();
+		this.reset();
+	}
+
+	public override dispose(): void {
+		app.map.off('zoomend', this.reset, this);
+		super.dispose();
+	}
+
+	public override onResize(): void {
 		this.reset();
 	}
 

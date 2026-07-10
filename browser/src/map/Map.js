@@ -636,33 +636,6 @@ window.L.Map = window.L.Evented.extend({
 		}
 	},
 
-	// If map size has already been updated, invalidateSize needs the oldSize to work properly
-	// (e.g. if getSize() has already been called with _sizeChanged === true)
-	invalidateSize: function (debounceMoveend, oldSize) {
-		if (!this._loaded) { return this; }
-
-		if (!oldSize) oldSize = this.getSize();
-		this._sizeChanged = true;
-		const newSize = this.getSize();
-
-		if (oldSize.x === newSize.x && oldSize.y === newSize.y)
-			return this;
-
-		this.fire('move');
-
-		if (debounceMoveend) {
-			clearTimeout(this._sizeTimer);
-			this._sizeTimer = setTimeout(window.L.bind(this.fire, this, 'moveend'), 200);
-		} else {
-			this.fire('moveend');
-		}
-
-		return this.fire('resize', {
-			oldSize: oldSize,
-			newSize: newSize
-		});
-	},
-
 	// TODO handler.addTo
 	addHandler: function (name, HandlerClass) {
 		if (!HandlerClass) { return this; }
@@ -833,11 +806,6 @@ window.L.Map = window.L.Evented.extend({
 		}
 
 		return this._size.clone();
-	},
-
-	getPixelBounds: function (center, zoom) {
-		var topLeftPoint = this._getTopLeftPoint(center, zoom);
-		return new cool.Bounds(topLeftPoint, topLeftPoint.add(this.getSize()));
 	},
 
 	getPixelOrigin: function () {
@@ -1469,14 +1437,6 @@ window.L.Map = window.L.Evented.extend({
 
 	_getMapPanePos: function () {
 		return window.L.DomUtil.getPosition(this._mapPane) || new cool.Point(0, 0);
-	},
-
-	_getTopLeftPoint: function (center, zoom) {
-		var pixelOrigin = center && zoom !== undefined ?
-			this._getNewPixelOrigin(center, zoom) :
-			this.getPixelOrigin();
-
-		return pixelOrigin.subtract(this._getMapPanePos());
 	},
 
 	_getNewPixelOrigin: function (center, zoom) {

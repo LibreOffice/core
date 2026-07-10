@@ -80,12 +80,6 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		map.addControl(window.L.control.tabs());
 		window.L.CanvasTileLayer.prototype.onAdd.call(this, map);
 
-		map.on('resize', function () {
-			if (app.file.textCursor.visible) {
-				this._onUpdateCursor(true /* scroll */);
-			}
-		}.bind(this));
-
 		app.sectionContainer.addSection(new app.definitions.CellFillMarkerSection());
 		app.sectionContainer.addSection(new SplitterLinesSection());
 		app.sectionContainer.addSection(new app.definitions.TableFillMarkerSection());
@@ -419,6 +413,10 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 		this._mobileChecksAfterResizeEvent(heightIncreased);
 		this._nonDesktopChecksAfterResizeEvent(heightIncreased);
+
+		// Keep the cell edit cursor in view after the relayout (was a map
+		// 'resize' listener; folded here now that resize is map-free).
+		if (app.file.textCursor.visible) this._onUpdateCursor(true /* scroll */);
 
 		app.sectionContainer.requestReDraw();
 

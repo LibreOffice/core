@@ -70,6 +70,7 @@ describe('View Layout Tests', function () {
 		// app.map stub.
 		app.map = {
 			on: function () {},
+			off: function () {},
 			uiManager: null,
 			_docLayer: {
 				_docType: 'text',
@@ -513,7 +514,8 @@ describe('View Layout Tests', function () {
 
     it('Check Pan Direction', function () {
 		app.map = {
-			on: function() {}
+			on: function() {},
+			off: function() {}
 		} as any
 
         const viewLayout = new ViewLayoutBase();

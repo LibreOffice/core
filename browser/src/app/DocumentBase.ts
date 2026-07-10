@@ -12,7 +12,7 @@
 
 class DocumentBase {
 	public readonly type: string = 'DocumentBase';
-	public activeLayout: ViewLayoutBase;
+	private _activeLayout: ViewLayoutBase;
 	public tableMiddleware: TableMiddleware;
 	public selectionMiddleware: ImpressSelectionMiddleware | null;
 	public mouseControl: MouseControl | null = null;
@@ -32,13 +32,13 @@ class DocumentBase {
 		if (!app.activeDocument) app.activeDocument = this;
 
 		if (app.map._docLayer._docType === 'text') {
-			this.activeLayout = new ViewLayoutWriter();
+			this._activeLayout = new ViewLayoutWriter();
 		} else if (app.file.fileBasedView) {
-			this.activeLayout = new ViewLayoutFileBased();
+			this._activeLayout = new ViewLayoutFileBased();
 		} else if (app.map._docLayer._docType === 'spreadsheet') {
-			this.activeLayout = new ViewLayoutCalc();
+			this._activeLayout = new ViewLayoutCalc();
 		} else {
-			this.activeLayout = new ViewLayoutBase();
+			this._activeLayout = new ViewLayoutBase();
 		}
 		this._fileSize = new cool.SimplePoint(0, 0);
 		this.tableMiddleware = new TableMiddleware();
@@ -60,6 +60,21 @@ class DocumentBase {
 			getComputedStyle(dummyDiv).getPropertyValue('background-color');
 		this.activeView.setColor(this.activeViewSelectionColor);
 		dummyDiv.remove();
+	}
+
+	public get activeLayout(): ViewLayoutBase {
+		return this._activeLayout;
+	}
+
+	// Setting a new layout releases the previous one.
+	// The new layout is built before this runs,
+	// and dispose removes only the subscriptions that were made with the
+	// replaced layout as the context, so the new one's stay in place.
+	public set activeLayout(newLayout: ViewLayoutBase) {
+		if (this._activeLayout === newLayout) return;
+
+		this._activeLayout.dispose();
+		this._activeLayout = newLayout;
 	}
 
 	// Swap the layout at runtime (e.g. mobile Impress toggling fileBasedView

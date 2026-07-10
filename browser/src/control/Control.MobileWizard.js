@@ -33,7 +33,9 @@ window.L.Control.MobileWizard = window.L.Control.extend({
 		map.on('closemobilewizard', this._closeWizard, this);
 		map.on('showwizardsidebar', this._showWizardSidebar, this);
 		map.on('mobilewizardback', this.goLevelUp, this);
-		map.on('resize', this._onResize, this);
+		// Orientation is a device/window signal, not a map one.
+		this._boundOnResize = this._onResize.bind(this);
+		window.addEventListener('resize', this._boundOnResize);
 		map.on('jsdialogupdate', this.onJSUpdate, this);
 		map.on('jsdialogaction', this.onJSAction, this);
 
@@ -45,9 +47,10 @@ window.L.Control.MobileWizard = window.L.Control.extend({
 		this.map.off('closemobilewizard', this._closeWizard, this);
 		this.map.off('showwizardsidebar', this._showWizardSidebar, this);
 		this.map.off('mobilewizardback', this.goLevelUp, this);
-		this.map.off('resize', this._onResize, this);
 		this.map.off('jsdialogupdate', this.onJSUpdate, this);
 		this.map.off('jsdialogaction', this.onJSAction, this);
+		if (this._boundOnResize)
+			window.removeEventListener('resize', this._boundOnResize);
 	},
 
 	_setupBackButton: function() {

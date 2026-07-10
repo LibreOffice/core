@@ -165,7 +165,6 @@ interface MapInterface extends Evented {
 	calcInputBarHasFocus(): boolean;
 	hasFocus(): boolean;
 	lockAccessibilityOn(): void;
-	getPixelBounds(center?: InternPointLike, zoom?: number): cool.Bounds;
 	_partsDirection: number;
 	getZoomScale(toZoom: number, fomZoom?: number): number;
 	_docLoaded: boolean;

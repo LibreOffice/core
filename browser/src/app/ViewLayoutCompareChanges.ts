@@ -27,8 +27,7 @@ class ViewLayoutCompareChanges extends ViewLayoutBase {
 	constructor() {
 		super();
 
-		app.events.on('resize', this.onResize.bind(this));
-		app.map.on('zoomend', this.onZoomEnd.bind(this));
+		app.map.on('zoomend', this.onZoomEnd, this);
 
 		this.adjustViewZoomLevel();
 
@@ -38,13 +37,18 @@ class ViewLayoutCompareChanges extends ViewLayoutBase {
 		});
 	}
 
+	public override dispose(): void {
+		app.map.off('zoomend', this.onZoomEnd, this);
+		super.dispose();
+	}
+
 	/// Refresh the view after scroll or zoom change.
 	private refreshView(): void {
 		this.updateViewData();
 		app.sectionContainer.requestReDraw();
 	}
 
-	private onResize(): void {
+	public override onResize(): void {
 		// Defer so that the document anchor section picks up its new size
 		// first.
 		app.layoutingService.appendLayoutingTask(() => {

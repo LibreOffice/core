@@ -886,8 +886,12 @@ class UIManager extends window.L.Control {
 		});
 		this.map.on('backstagehide', () => {
 			setTimeout(() => {
-				this.map.invalidateSize(); // triggers Leaflet layout recalculation
+				// Backstage toggled #document-container visibility; recalc the
+				// layout on the map-free path (the ResizeObserver may miss the
+				// 0 -> restore transition).
 				const docLayer = this.map._docLayer;
+				if (docLayer) docLayer._syncTileContainerSize();
+				app.events.fire('resize', {});
 				if (docLayer && docLayer._docType === 'spreadsheet') {
 					docLayer._resetClientVisArea();
 					docLayer._requestNewTiles();

@@ -3929,33 +3929,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 	},
 
-	_getTilesSectionRectangle: function () {
-		var section = app.sectionContainer.getSectionWithName(app.CSections.Tiles.name);
-		if (section) {
-			return app.LOUtil.createRectangle(section.myTopLeft[0] / app.dpiScale, section.myTopLeft[1] / app.dpiScale, section.size[0] / app.dpiScale, section.size[1] / app.dpiScale);
-		}
-		else {
-			return app.LOUtil.createRectangle(0, 0, 0, 0);
-		}
-	},
-
-	_getRealMapSize: function() {
-		this._map._sizeChanged = true; // force using real size
-		return this._map.getPixelBounds().getSize();
-	},
-
 	_getDocumentContainerSize: function() {
 		let documentContainerSize = document.getElementById('document-container').getBoundingClientRect();
 		documentContainerSize = [documentContainerSize.width, documentContainerSize.height];
 		return documentContainerSize;
-	},
-
-	_resizeMapElementAndTilesLayer: function(sizeRectangle) {
-		const mapElement = this._map.getContainer(); // map's size = tiles section's size.
-		mapElement.style.left = sizeRectangle.getPxX1() + 'px';
-		mapElement.style.top = sizeRectangle.getPxY1() + 'px';
-		mapElement.style.width = sizeRectangle.getPxWidth() + 'px';
-		mapElement.style.height = sizeRectangle.getPxHeight() + 'px';
 	},
 
 	_mobileChecksAfterResizeEvent: function(heightIncreased) {
@@ -4006,27 +3983,23 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		if (!this._container) return;
 
+		// Remember the visible frame across the relayout to detect growth.
+		const oldFrame = app.activeDocument.activeLayout.frameSize;
+
 		const documentContainerSize = this._getDocumentContainerSize();
 
-		app.sectionContainer.onResize(documentContainerSize[0], documentContainerSize[1]); // Canvas's size = documentContainer's size.
+		// Canvas matches the document container. The map element is CSS-sized
+		// (absolute inset:0) and is no longer resized here; the layout rebuilds
+		// its viewed rectangle from the new frame in ViewLayout.onResize.
+		app.sectionContainer.onResize(documentContainerSize[0], documentContainerSize[1]);
 
-		const oldSize = this._getRealMapSize();
-
-		this._resizeMapElementAndTilesLayer(this._getTilesSectionRectangle());
-
-		const newSize = this._getRealMapSize();
-		const heightIncreased = oldSize.y < newSize.y;
-		const widthIncreased = oldSize.x < newSize.x;
-
-		if (oldSize.x !== newSize.x || oldSize.y !== newSize.y)
-			this._map.invalidateSize(false, oldSize);
+		const frame = app.activeDocument.activeLayout.frameSize;
+		const heightIncreased = oldFrame.pY < frame.pY;
+		const widthIncreased = oldFrame.pX < frame.pX;
 
 		this._mobileChecksAfterResizeEvent(heightIncreased);
 
 		this._fitWidthZoom();
-
-		// Center the view w.r.t the new map-pane position using the current zoom.
-		this._map.setView(this._map.getCenter());
 
 		this._nonDesktopChecksAfterResizeEvent(heightIncreased);
 
@@ -4163,11 +4136,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			map.on('zoomend', this._onCellCursorShift, this);
 		}
 		map.on('error', this._mapOnError, this);
-		if (map.options.autoFitWidth !== false) {
-			// always true since autoFitWidth is never set
-			map.on('resize', this._fitWidthZoom, this);
-		}
-		this._map.on('resize', this._syncTileContainerSize, this);
 		// Retrieve the initial cell cursor position (as COKit only sends us an
 		// updated cell cursor when the selected cell is changed and not the initial
 		// cell).

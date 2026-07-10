@@ -46,12 +46,22 @@ class ViewLayoutWriter extends ViewLayoutBase {
 		app.map.on('insertannotation', this.onCommentLayoutChange, this);
 		app.map.on('importannotations', this.onCommentLayoutChange, this);
 		app.map.on('showannotationschanged', this.onCommentLayoutChange, this);
+	}
 
-		// A resize changes both the frame (base centering) and the side margins
-		// (comment shift), so the shift must be recomputed on the next rebuild.
-		app.events.on('resize', () => {
-			this.commentMarginDirty = true;
-		});
+	public override dispose(): void {
+		app.map.off('zoomlevelschange', this.onCommentLayoutChange, this);
+		app.map.off('deleteannotation', this.onCommentLayoutChange, this);
+		app.map.off('insertannotation', this.onCommentLayoutChange, this);
+		app.map.off('importannotations', this.onCommentLayoutChange, this);
+		app.map.off('showannotationschanged', this.onCommentLayoutChange, this);
+		super.dispose();
+	}
+
+	// A resize changes both the frame (base centering) and the side margins
+	// (comment shift), so the shift must be recomputed before the base rebuild.
+	public override onResize(): void {
+		this.commentMarginDirty = true;
+		super.onResize();
 	}
 
 	// Writer places one continuous page column with the inherited single-window
