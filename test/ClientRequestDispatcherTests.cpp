@@ -11,6 +11,8 @@
 
 #include <config.h>
 
+#include <common/ConfigUtil.hpp>
+#include <common/FileUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <net/HttpRequest.hpp>
 #include <test/MockStreamSocket.hpp>
@@ -33,7 +35,10 @@
 
 #include <unistd.h>
 
+#include <Poco/AutoPtr.h>
 #include <Poco/Net/HTTPRequest.h>
+#include <Poco/Util/Application.h>
+#include <Poco/Util/MapConfiguration.h>
 
 /// Unit tests for ClientRequestDispatcher.
 class ClientRequestDispatcherTests : public CPPUNIT_NS::TestFixture
@@ -79,6 +84,8 @@ class ClientRequestDispatcherTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testServerURL_ProxyPrefixValidPort);
     CPPUNIT_TEST(testServerURL_HostHeaderNegativePort);
     CPPUNIT_TEST(testServerURL_HostHeaderIPv6);
+
+    CPPUNIT_TEST(testMcpEndpointThatIsOffIsNotFound);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -657,6 +664,66 @@ private:
 
         COOLWSD::ServerName = saved;
     }
+
+    /// Gives the Model Context Protocol endpoint the settings enable and apiKey, by default on
+    /// with the key "secret", and points the child root at childRoot for as long as it lives, and
+    /// puts all of them back when it goes. Some settings are read from the application's
+    /// configuration, so an application that carries the same settings lives as long as this
+    /// does.
+    class McpEndpointSettings
+    {
+    public:
+        explicit McpEndpointSettings(const std::string& childRoot, bool enable = true,
+                                     const std::string& apiKey = "secret")
+            : _config(new Poco::Util::MapConfiguration)
+            , _application(new Poco::Util::Application)
+            , _savedChildRoot(COOLWSD::ChildRoot)
+        {
+            _config->setBool("ai.mcp.enable", enable);
+            _config->setString("ai.mcp.api_key", apiKey);
+            _application->config().add(_config, /*priority=*/0, /*writeable=*/false);
+            _savedConfig = ConfigUtil::setConfigForTest(_config);
+            COOLWSD::ChildRoot = childRoot;
+        }
+
+        ~McpEndpointSettings()
+        {
+            ConfigUtil::setConfigForTest(_savedConfig);
+            COOLWSD::ChildRoot = _savedChildRoot;
+        }
+
+        McpEndpointSettings(const McpEndpointSettings&) = delete;
+        McpEndpointSettings& operator=(const McpEndpointSettings&) = delete;
+
+    private:
+        Poco::AutoPtr<Poco::Util::MapConfiguration> _config;
+        Poco::AutoPtr<Poco::Util::Application> _application;
+        const Poco::Util::AbstractConfiguration* _savedConfig = nullptr;
+        const std::string _savedChildRoot;
+    };
+
+    /// A message with the key to the Model Context Protocol endpoint that is switched off, or
+    /// switched on with no key set, finds nothing there.
+    void testMcpEndpointThatIsOffIsNotFound()
+    {
+        constexpr std::string_view testname = __func__;
+
+        const std::string message = R"({"jsonrpc":"2.0","id":1,"method":"initialize"})";
+        const std::string request = "POST /cool/mcp HTTP/1.1\r\nHost: localhost\r\n"
+                                    "Authorization: Bearer secret\r\nContent-Length: " +
+                                    std::to_string(message.size()) + "\r\n\r\n" + message;
+        const std::string childRoot = FileUtil::createRandomTmpDir();
+        {
+            const McpEndpointSettings endpoint(childRoot, /*enable=*/false);
+            LOK_ASSERT(dispatchRequest(request).starts_with("HTTP/1.1 404"));
+        }
+        {
+            const McpEndpointSettings endpoint(childRoot, /*enable=*/true, /*apiKey=*/"");
+            LOK_ASSERT(dispatchRequest(request).starts_with("HTTP/1.1 404"));
+        }
+        FileUtil::removeFile(childRoot, /*recursive=*/true);
+    }
+
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ClientRequestDispatcherTests);

@@ -43,6 +43,7 @@
 #include <wsd/RemoteDocumentBroker.hpp>
 #include <wsd/Exceptions.hpp>
 #include <wsd/FileServer.hpp>
+#include <wsd/McpRequests.hpp>
 #include <wsd/ProofKey.hpp>
 #include <wsd/ProxyRequestHandler.hpp>
 #include <wsd/RequestDetails.hpp>
@@ -833,6 +834,14 @@ void ClientRequestDispatcher::handleIncomingMessage(SocketDisposition& dispositi
         return;
 
     assert(!_postStream.is_open() && !_postFileDir && !_postContentPending);
+
+    // A request for the Model Context Protocol endpoint is weighed as soon as its header is in, so
+    // a request that is refused is answered and closed before its body is read.
+    if (McpRequests::refuseMcpRequestEarly(request, socket))
+    {
+        socket->ignoreInput();
+        return;
+    }
 
     // start streaming condition
     const bool canStreamToFile =
@@ -1669,6 +1678,10 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
             socket->setHandler(handler);
         }
 
+        else if (McpRequests::isMcpRequest(requestDetails))
+        {
+            servedSync = McpRequests::handleMcpRequest(request, message, socket);
+        }
         else if (!requestDetails.isWebSocket() && !isCollab &&
                  (requestDetails.equals(RequestDetails::Field::Type, "cool") ||
                   requestDetails.equals(RequestDetails::Field::Type, "lool")))

@@ -147,6 +147,8 @@ all_la_unit_tests = \
 	unit-wopi-httpredirect.la \
 	unit-convert-to-password-protected.la \
 	unit-bad-doc-load.la \
+	unit-mcp.la \
+	unit-mcp-service-root.la \
 	unit-hosting.la \
 	unit-legacy-uno-api-warning.la \
 	unit-legacy-uno-api-warning-suppressed.la \
@@ -209,6 +211,7 @@ test_base_sources = \
 	KitQueueTests.cpp \
 	LoadCommandTests.cpp \
 	LoggingWhiteBoxTests.cpp \
+	McpServerTests.cpp \
 	NetUtilWhiteBoxTests.cpp \
 	NumUtilWhiteBoxTests.cpp \
 	OomKillsWhiteBoxTests.cpp \
@@ -329,6 +332,10 @@ unit_copy_paste_writer_la_SOURCES = UnitCopyPasteWriter.cpp
 unit_copy_paste_writer_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_convert_la_SOURCES = UnitConvert.cpp
 unit_convert_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_mcp_la_SOURCES = UnitMcp.cpp
+unit_mcp_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_mcp_service_root_la_SOURCES = UnitMcpServiceRoot.cpp
+unit_mcp_service_root_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_convert_csv_la_SOURCES = UnitConvertCSV.cpp
 unit_convert_csv_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_convert_to_password_protected_la_SOURCES = UnitConvertToPasswordProtected.cpp
