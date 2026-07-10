@@ -274,6 +274,7 @@ coolwsd_sources = \
                   wsd/HostUtil.cpp \
                   wsd/McpRequests.cpp \
                   wsd/McpServer.cpp \
+                  wsd/McpTools.cpp \
                   wsd/ProofKey.cpp \
                   wsd/PreviewCache.cpp \
                   wsd/PreviewSession.cpp \
@@ -370,6 +371,7 @@ wsd_headers = \
               wsd/ClientSession.hpp \
               wsd/ContentSecurityPolicy.hpp \
               wsd/ContentType.hpp \
+              wsd/ConvertResponders.hpp \
               wsd/DeckSpec.hpp \
               wsd/DocumentToolDescriptions.hpp \
               wsd/DocumentBroker.hpp \
@@ -380,6 +382,7 @@ wsd_headers = \
               wsd/HostUtil.hpp \
               wsd/McpRequests.hpp \
               wsd/McpServer.hpp \
+              wsd/McpTools.hpp \
               wsd/PlatformDesktop.hpp \
               wsd/PlatformMobile.hpp \
               wsd/PlatformUnix.hpp \

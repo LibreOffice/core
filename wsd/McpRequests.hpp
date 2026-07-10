@@ -25,6 +25,7 @@ class HTTPRequest;
 }
 
 class RequestDetails;
+class SocketDisposition;
 class StreamSocket;
 
 namespace McpRequests
@@ -35,7 +36,7 @@ bool isMcpRequest(const RequestDetails& requestDetails);
 /// Refuse a request for the Model Context Protocol endpoint that is not to be served, as soon as
 /// its header is known. It is refused when the endpoint is off or has no key (404), when it comes
 /// from a web page (403), when it lacks the key (401), and for a POST whose body has no stated
-/// length (411). Returns true when a refusal was sent.
+/// length (411) or a length over what the path accepts (413). Returns true when a refusal was sent.
 bool refuseMcpRequest(const Poco::Net::HTTPRequest& request,
                       const std::shared_ptr<StreamSocket>& socket);
 
@@ -47,9 +48,12 @@ bool refuseMcpRequestEarly(const Poco::Net::HTTPRequest& request,
 
 /// Serve the Model Context Protocol endpoint at /cool/mcp. Applies the
 /// endpoint's own gates (config switch, HTTP method, Origin, bearer key)
-/// and then hands the body to the transport-agnostic core.
+/// and then hands the body to the transport-agnostic core. A tool call
+/// that loads a document keeps the request open and transfers the socket
+/// through the disposition, in the same way a convert-to request does.
 /// @return true if request has been handled synchronously and response sent, otherwise false
 bool handleMcpRequest(const Poco::Net::HTTPRequest& request, std::istream& message,
+                      SocketDisposition& disposition,
                       const std::shared_ptr<StreamSocket>& socket);
 }
 

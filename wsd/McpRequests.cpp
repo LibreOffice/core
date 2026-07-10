@@ -16,23 +16,33 @@
 #include <common/ConfigUtil.hpp>
 #include <common/Log.hpp>
 #include <common/NumUtil.hpp>
+#include <common/Uri.hpp>
 #include <common/Util.hpp>
 #include <net/HttpHelper.hpp>
 #include <net/HttpRequest.hpp>
 #include <net/Socket.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/McpServer.hpp>
+#include <wsd/McpTools.hpp>
 #include <wsd/RequestDetails.hpp>
+#include <wsd/SpecialBrokers.hpp>
 
+#include <Poco/JSON/Object.h>
 #include <Poco/Net/HTTPRequest.h>
+#include <Poco/URI.h>
 
+#include <atomic>
 #include <cassert>
 #include <cstddef>
+#include <functional>
 #include <istream>
 #include <memory>
+#include <mutex>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <utility>
+#include <vector>
 
 namespace
 {
@@ -53,6 +63,50 @@ bool constantTimeEquals(const std::string& expected, const std::string& given)
     return difference == 0;
 }
 
+/// Load the document named by input and run one extract request over it, driving the same stateless
+/// broker that the convert-to extract endpoints use. The outcome is delivered through complete.
+/// Returns true when the request was started and will complete later, false when it failed right
+/// away and complete has already been called.
+bool startMcpExtraction(const std::string& requestType, const std::string& filter,
+                        const McpTools::ResolvedInput& input, SocketDisposition& disposition,
+                        const std::string& id, const McpServer::McpToolCompletion& complete)
+{
+    Poco::URI uriPublic = RequestDetails::sanitizeLocalPath(input.fromPath);
+    const std::string docKey = RequestDetails::getDocKey(uriPublic);
+
+    std::shared_ptr<ConvertToBroker> docBroker = getConvertToBrokerImplementation(
+        requestType, input.fromPath, uriPublic, docKey, /*format=*/std::string(),
+        /*options=*/std::string(), /*lang=*/std::string(), /*target=*/std::string(), filter,
+        /*transformJSON=*/std::string());
+    if (!docBroker)
+    {
+        StatelessBatchBroker::removeFile(input.fromPath);
+        complete({ /*isError=*/true, "The document could not be processed." });
+        return false;
+    }
+
+    // A successful extraction carries its payload straight back to the model; a failure becomes a
+    // readable message the model can react to.
+    docBroker->setExtractResponder(
+        [complete](bool success, const std::string& payload)
+        {
+            if (success)
+                complete({ /*isError=*/false, payload });
+            else
+                complete({ /*isError=*/true, McpTools::describeFailure(payload, "processed") });
+        });
+
+    std::unique_lock<std::mutex> docBrokersLock(DocBrokersMutex);
+    COOLWSD::cleanupDocBrokers();
+    DocBrokers.emplace(docKey, docBroker);
+
+    docBroker->startConversion(disposition, id, AdditionalFilePocoUris());
+    return true;
+}
+}
+
+namespace
+{
 /// The number of bytes in message from its read position to its end, or -1 when the stream cannot
 /// tell.
 std::streamsize remainingBytes(std::istream& message)
@@ -65,6 +119,25 @@ std::streamsize remainingBytes(std::istream& message)
     message.seekg(position);
     return end == std::streampos(-1) ? -1 : static_cast<std::streamsize>(end - position);
 }
+
+/// Counts the Model Context Protocol tool calls that are running. Each running call holds one
+/// instance, and the count goes down when the last copy of it goes away.
+class RunningMcpTool final
+{
+public:
+    RunningMcpTool() { ++Count; }
+    ~RunningMcpTool() { --Count; }
+    RunningMcpTool(const RunningMcpTool&) = delete;
+    RunningMcpTool& operator=(const RunningMcpTool&) = delete;
+
+    /// The number of tool calls running now.
+    static std::size_t count() { return Count; }
+
+private:
+    static std::atomic<std::size_t> Count;
+};
+
+std::atomic<std::size_t> RunningMcpTool::Count(0);
 }
 
 bool McpRequests::isMcpRequest(const RequestDetails& requestDetails)
@@ -110,14 +183,29 @@ bool McpRequests::refuseMcpRequest(const Poco::Net::HTTPRequest& request,
         return true;
     }
 
-    // A body states its length. A chunked body, or a POST with no Content-Length, states none and
-    // is refused.
-    if (request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST &&
-        (request.getChunkedTransferEncoding() || request.getContentLength() < 0))
+    if (request.getMethod() != Poco::Net::HTTPRequest::HTTP_POST)
+        return false;
+
+    // A body states its length, so it is weighed against the accepted size before it arrives. A
+    // chunked body, or a POST with no Content-Length, states none and is refused.
+    if (request.getChunkedTransferEncoding() || request.getContentLength() < 0)
     {
         LOG_WRN_S("MCP: refusing a request that does not state its length");
         HttpHelper::sendErrorAndShutdown(http::StatusCode::LengthRequired, socket,
                                          "Send the request with a Content-Length header.\n");
+        return true;
+    }
+
+    // A larger message would be parsed on the web-server thread at length. A document that large
+    // travels as an upload instead.
+    const std::streamsize declaredLength = request.getContentLength();
+    if (declaredLength != Poco::Net::HTTPMessage::UNKNOWN_CONTENT_LENGTH &&
+        (declaredLength < 0 || NumUtil::makeUnsigned(declaredLength) > McpTools::MaxMessageBytes))
+    {
+        LOG_WRN_S("MCP: refusing a message larger than the accepted size");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::PayloadTooLarge, socket,
+                                         "The message is too large. Upload a large document "
+                                         "and pass its file_id.\n");
         return true;
     }
 
@@ -152,6 +240,7 @@ bool McpRequests::refuseMcpRequestEarly(const Poco::Net::HTTPRequest& request,
 
 bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
                                    std::istream& message,
+                                   SocketDisposition& disposition,
                                    const std::shared_ptr<StreamSocket>& socket)
 {
     assert(socket && "Must have a valid socket");
@@ -184,28 +273,125 @@ bool McpRequests::handleMcpRequest(const Poco::Net::HTTPRequest& request,
     // The response is always sent with sendAndShutdown, so the connection is closed after this one
     // message either way.
     std::weak_ptr<StreamSocket> socketWeak = socket;
-    McpServer::handleMessage(
-        body, protocolVersionHeader,
+    std::function<void(McpServer::McpResponse)> sendResponse =
         [socketWeak](McpServer::McpResponse mcpResponse)
+    {
+        std::shared_ptr<StreamSocket> streamSocket = socketWeak.lock();
+        if (!streamSocket)
         {
-            std::shared_ptr<StreamSocket> streamSocket = socketWeak.lock();
-            if (!streamSocket)
+            LOG_WRN_S("MCP: socket gone before the response could be sent");
+            return;
+        }
+
+        http::Response httpResponse(static_cast<http::StatusCode>(mcpResponse.statusCode));
+        if (mcpResponse.body.empty())
+            httpResponse.setContentLength(0);
+        else
+            httpResponse.setBody(std::move(mcpResponse.body), "application/json");
+        httpResponse.setConnectionToken(http::Header::ConnectionToken::Close);
+        streamSocket->sendAndShutdown(httpResponse);
+        streamSocket->ignoreInput();
+    };
+
+    // A fresh identifier for the throwaway session a tool call may create.
+    const std::string sessionId = "mcp_" + Util::rng::getHexString(8);
+
+    // The tools and their executors live only as long as this call, and so does disposition, which
+    // the executors hold by reference.
+    std::vector<McpServer::McpTool> tools = McpServer::documentToolDefinitions();
+    for (McpServer::McpTool& tool : tools)
+    {
+        if (tool.name == McpServer::ToolName::ExtractDocumentStructure)
+        {
+            tool.executor = [&disposition, sessionId](const Poco::JSON::Object::Ptr& arguments,
+                                                      const McpServer::McpToolCompletion& complete)
             {
-                LOG_WRN_S("MCP: socket gone before the response could be sent");
-                return;
+                std::optional<McpServer::McpToolResult> invalid =
+                    McpServer::validateExtractArguments(arguments);
+                if (invalid)
+                {
+                    complete(*invalid);
+                    return true;
+                }
+
+                McpTools::ResolvedInput input = McpTools::resolveInput(arguments);
+                if (!input.ok)
+                {
+                    complete({ /*isError=*/true, input.errorText });
+                    return true;
+                }
+
+                // A spreadsheet range or sheet, or a text-document target, is folded into the text
+                // filter as a ",name:value" part, and any of them alone asks for the text view. The
+                // target and the sheet may hold spaces and the separator character, so they are
+                // percent-encoded because the command is split on spaces and then read as a query
+                // on the engine side. Each of them runs to the end of the filter, so it comes last.
+                std::string filter = arguments->optValue<std::string>("filter", std::string());
+                const std::string range = arguments->optValue<std::string>("range", std::string());
+                const std::string sheet = arguments->optValue<std::string>("sheet", std::string());
+                const std::string target =
+                    arguments->optValue<std::string>("target", std::string());
+                if (filter.empty() && (!range.empty() || !sheet.empty() || !target.empty()))
+                    filter = "text";
+                const bool textFilter = filter.rfind("text", 0) == 0;
+                if (textFilter && !range.empty())
+                    filter += ",range:" + range;
+                if (textFilter && !sheet.empty())
+                    filter += ",sheet:" + Uri::encode(sheet, "%|,/?:@&=+$#");
+                if (textFilter && !target.empty())
+                    filter += ",target:" + Uri::encode(target, "%|,/?:@&=+$#");
+
+                const bool started = startMcpExtraction("extract-document-structure", filter, input,
+                                                        disposition, sessionId, complete);
+                return !started;
+            };
+        }
+        else if (tool.name == McpServer::ToolName::ExtractLinkTargets)
+        {
+            tool.executor = [&disposition, sessionId](const Poco::JSON::Object::Ptr& arguments,
+                                                      const McpServer::McpToolCompletion& complete)
+            {
+                McpTools::ResolvedInput input = McpTools::resolveInput(arguments);
+                if (!input.ok)
+                {
+                    complete({ /*isError=*/true, input.errorText });
+                    return true;
+                }
+
+                const bool started = startMcpExtraction("extract-link-targets", std::string(),
+                                                        input, disposition, sessionId, complete);
+                return !started;
+            };
+        }
+
+        if (!tool.executor)
+        {
+            LOG_ERR_S("MCP: tool [" << tool.name << "] is offered with nothing to run it");
+            continue;
+        }
+
+        // A call holds its place among the running calls until the last copy of its completion is
+        // gone, which is once it has answered and its document work has been let go.
+        tool.executor = [executor = std::move(tool.executor)](
+                            const Poco::JSON::Object::Ptr& arguments,
+                            const McpServer::McpToolCompletion& complete)
+        {
+            const std::size_t maxRunning =
+                ConfigUtil::getConfigValue<std::size_t>("ai.mcp.max_running_tools", 0);
+            if (maxRunning != 0 && RunningMcpTool::count() >= maxRunning)
+            {
+                complete({ /*isError=*/true, "The server is busy with other tool calls. Try "
+                                             "again in a little while." });
+                return true;
             }
 
-            http::Response httpResponse(static_cast<http::StatusCode>(mcpResponse.statusCode));
-            if (mcpResponse.body.empty())
-                httpResponse.setContentLength(0);
-            else
-                httpResponse.setBody(std::move(mcpResponse.body), "application/json");
-            httpResponse.setConnectionToken(http::Header::ConnectionToken::Close);
-            streamSocket->sendAndShutdown(httpResponse);
-            streamSocket->ignoreInput();
-        });
+            const auto running = std::make_shared<RunningMcpTool>();
+            return executor(arguments, [complete, running](McpServer::McpToolResult result)
+                            { complete(std::move(result)); });
+        };
+    }
 
-    return true;
+    return McpServer::handleMessage(body, protocolVersionHeader, tools, sendResponse);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

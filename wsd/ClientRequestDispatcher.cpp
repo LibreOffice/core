@@ -1680,7 +1680,7 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
 
         else if (McpRequests::isMcpRequest(requestDetails))
         {
-            servedSync = McpRequests::handleMcpRequest(request, message, socket);
+            servedSync = McpRequests::handleMcpRequest(request, message, disposition, socket);
         }
         else if (!requestDetails.isWebSocket() && !isCollab &&
                  (requestDetails.equals(RequestDetails::Field::Type, "cool") ||
@@ -3112,12 +3112,7 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
             LOG_TRC("Have " << DocBrokers.size() << " DocBrokers after inserting [" << docKey
                             << "].");
 
-            if (!docBroker->startConversion(disposition, _id, additionalFileUrisPublic))
-            {
-                LOG_WRN("Failed to create Client Session with id [" << _id << "] on docKey ["
-                                                                    << docKey << "].");
-                COOLWSD::cleanupDocBrokers();
-            }
+            docBroker->startConversion(disposition, _id, additionalFileUrisPublic);
         }
         else
         {

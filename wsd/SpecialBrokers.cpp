@@ -106,7 +106,8 @@ ConvertToBroker::ConvertToBroker(const std::string& uri, const Poco::URI& uriPub
 
 ConvertToBroker::~ConvertToBroker() {}
 
-bool ConvertToBroker::startConversion(SocketDisposition& disposition, const std::string& id, const AdditionalFilePocoUris& additionalFileUrisPublic)
+void ConvertToBroker::startConversion(SocketDisposition& disposition, const std::string& id,
+                                      const AdditionalFilePocoUris& additionalFileUrisPublic)
 {
     std::shared_ptr<ConvertToBroker> docBroker =
         std::static_pointer_cast<ConvertToBroker>(shared_from_this());
@@ -127,11 +128,27 @@ bool ConvertToBroker::startConversion(SocketDisposition& disposition, const std:
                                                      additionalFileUrisPublic);
     _clientSession->construct();
 
+    if (_responders)
+        _clientSession->setConvertResponders(std::move(_responders));
+
+    _waitingSocket = std::static_pointer_cast<StreamSocket>(disposition.getSocket());
+
     docBroker->setupTransfer(
         disposition,
         [docBroker](const std::shared_ptr<Socket>& moveSocket)
         {
             auto streamSocket = std::static_pointer_cast<StreamSocket>(moveSocket);
+
+            // A request that failed before the socket came gets the failure as its answer, and
+            // the connection closes once that is sent.
+            if (!docBroker->_waitingRequestFailure.empty())
+            {
+                docBroker->_clientSession->failPendingResponder(
+                    docBroker->_waitingRequestFailure);
+                streamSocket->asyncShutdown();
+                return;
+            }
+
             docBroker->_clientSession->setSaveAsSocket(streamSocket);
 
             // First add and load the session.
@@ -145,7 +162,11 @@ bool ConvertToBroker::startConversion(SocketDisposition& disposition, const std:
 
             // Save is done in the setLoaded
         });
-    return true;
+}
+
+void ConvertToBroker::failWaitingRequest(const std::string& message)
+{
+    _waitingRequestFailure = message;
 }
 
 void ConvertToBroker::sendStartMessage(const std::shared_ptr<ClientSession>& clientSession,

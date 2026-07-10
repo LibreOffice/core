@@ -22,6 +22,7 @@
 #include <common/TilePrioritizer.hpp>
 #include <common/Uri.hpp>
 #include <common/Util.hpp>
+#include <wsd/ConvertResponders.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/SenderQueue.hpp>
 #include <wsd/ServerURL.hpp>
@@ -37,6 +38,7 @@
 #include <Poco/URI.h>
 
 #include <deque>
+#include <memory>
 #include <optional>
 #include <utility>
 
@@ -240,6 +242,18 @@ public:
         _saveAsSocket = socket;
         _isConvertTo = static_cast<bool>(socket);
     }
+
+    /// Install the functions that carry the outcome of this convert-to session's request, in
+    /// place of a response on the save-as socket.
+    void setConvertResponders(std::unique_ptr<ConvertResponders> responders)
+    {
+        _convertResponders = std::move(responders);
+    }
+
+    /// Report a failure through whichever responder is still installed, and drop it, so a request
+    /// that has not been answered yet gets the given message as its outcome. Does nothing when no
+    /// responder is installed.
+    void failPendingResponder(const std::string& message);
 
     std::shared_ptr<DocumentBroker> getDocumentBroker() const { return _docBroker.lock(); }
 
@@ -801,6 +815,10 @@ private:
 
     /// The socket to which the converted (saveas) doc is sent.
     std::weak_ptr<StreamSocket> _saveAsSocket;
+
+    /// The functions that carry the outcome of a convert-to request to a caller in this process,
+    /// or null when the outcome goes to the save-as socket.
+    std::unique_ptr<ConvertResponders> _convertResponders;
 
     /// Time of last state transition
     std::chrono::steady_clock::time_point _lastStateTime;

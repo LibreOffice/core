@@ -20,6 +20,7 @@
 
 #include <string>
 #include <string_view>
+#include <vector>
 
 /// Whitebox tests that drive the transport-agnostic MCP core directly, with no HTTP layer in the
 /// way.
@@ -31,11 +32,16 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testRequestIdKeepsItsJsonType);
     CPPUNIT_TEST(testNotificationIsAcknowledgedWithNoBody);
     CPPUNIT_TEST(testPingIsAnswered);
-    CPPUNIT_TEST(testToolsListIsEmpty);
-    CPPUNIT_TEST(testToolsCallHasNoTool);
+    CPPUNIT_TEST(testToolsListDescribesBothDocumentTools);
+    CPPUNIT_TEST(testToolsCallUnknownToolIsRejected);
+    CPPUNIT_TEST(testToolsCallWithoutNameIsRejected);
+    CPPUNIT_TEST(testToolsCallWithNonObjectArgumentsIsRejected);
+    CPPUNIT_TEST(testToolFailureIsReportedAsAReadableResult);
+    CPPUNIT_TEST(testToolSuccessIsReportedAsTextContent);
     CPPUNIT_TEST(testUnknownMethodIsRejected);
     CPPUNIT_TEST(testInvalidRequestsAreRejected);
     CPPUNIT_TEST(testUnsupportedProtocolHeaderIsRejected);
+    CPPUNIT_TEST(testExtractArgumentsNameAViewAndACellRange);
     CPPUNIT_TEST_SUITE_END();
 
     void testInitializeNegotiatesProtocolVersion();
@@ -43,21 +49,27 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     void testRequestIdKeepsItsJsonType();
     void testNotificationIsAcknowledgedWithNoBody();
     void testPingIsAnswered();
-    void testToolsListIsEmpty();
-    void testToolsCallHasNoTool();
+    void testToolsListDescribesBothDocumentTools();
+    void testToolsCallUnknownToolIsRejected();
+    void testToolsCallWithoutNameIsRejected();
+    void testToolsCallWithNonObjectArgumentsIsRejected();
+    void testToolFailureIsReportedAsAReadableResult();
+    void testToolSuccessIsReportedAsTextContent();
     void testUnknownMethodIsRejected();
     void testInvalidRequestsAreRejected();
     void testUnsupportedProtocolHeaderIsRejected();
+    void testExtractArgumentsNameAViewAndACellRange();
 
     /// Run one message through the core and return the single response it produces. Fails the test
     /// if the core does not answer.
     static McpServer::McpResponse call(const std::string& body,
-                                       const std::string& protocolVersionHeader = std::string())
+                                       const std::string& protocolVersionHeader = std::string(),
+                                       const std::vector<McpServer::McpTool>& tools = {})
     {
         constexpr std::string_view testname = "McpServerTests";
         McpServer::McpResponse captured;
         bool answered = false;
-        McpServer::handleMessage(body, protocolVersionHeader,
+        McpServer::handleMessage(body, protocolVersionHeader, tools,
                                  [&captured, &answered](McpServer::McpResponse response)
                                  {
                                      captured = std::move(response);
@@ -65,6 +77,26 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
                                  });
         LOK_ASSERT_MESSAGE("the core must answer every message", answered);
         return captured;
+    }
+
+    /// The document tools with a stub executor attached to each that finishes at once, reporting
+    /// either a success payload or a readable failure.
+    static std::vector<McpServer::McpTool> toolsWithStubExecutor(bool succeed)
+    {
+        std::vector<McpServer::McpTool> tools = McpServer::documentToolDefinitions();
+        for (McpServer::McpTool& tool : tools)
+        {
+            tool.executor = [succeed](const Poco::JSON::Object::Ptr&,
+                                      const McpServer::McpToolCompletion& complete)
+            {
+                if (succeed)
+                    complete({ /*isError=*/false, "the extracted document body" });
+                else
+                    complete({ /*isError=*/true, "the document could not be read" });
+                return true;
+            };
+        }
+        return tools;
     }
 
     static bool contains(const std::string& haystack, const std::string& needle)
@@ -194,26 +226,100 @@ void McpServerTests::testPingIsAnswered()
     LOK_ASSERT(contains(response.body, R"("result":{})"));
 }
 
-void McpServerTests::testToolsListIsEmpty()
+void McpServerTests::testToolsListDescribesBothDocumentTools()
 {
     constexpr std::string_view testname = __func__;
 
     const McpServer::McpResponse response =
-        call(R"({"jsonrpc":"2.0","id":3,"method":"tools/list"})");
+        call(R"({"jsonrpc":"2.0","id":3,"method":"tools/list"})", std::string(),
+             McpServer::documentToolDefinitions());
     LOK_ASSERT_EQUAL(200, response.statusCode);
-    LOK_ASSERT(contains(response.body, R"("tools":[])"));
+
+    // Both document tools are listed, each with a name, a description and an argument schema.
+    LOK_ASSERT(contains(response.body, R"("name":"extract_document_structure")"));
+    LOK_ASSERT(contains(response.body, R"("name":"extract_link_targets")"));
+    LOK_ASSERT(contains(response.body, R"("description":)"));
+    LOK_ASSERT(contains(response.body, R"("inputSchema")"));
+    // The shared input properties appear in the schema.
+    LOK_ASSERT(contains(response.body, R"("data")"));
+    // The structure tool advertises its extra arguments.
+    LOK_ASSERT(contains(response.body, R"("filter")"));
+    LOK_ASSERT(contains(response.body, R"("range")"));
+    LOK_ASSERT(contains(response.body, R"("target")"));
 }
 
-void McpServerTests::testToolsCallHasNoTool()
+void McpServerTests::testToolsCallUnknownToolIsRejected()
 {
     constexpr std::string_view testname = __func__;
 
-    // With no tools registered yet, any call is answered as invalid params.
+    // A tool name that is not registered is a protocol error, not a tool result, so it comes back
+    // as a JSON-RPC invalid-params error.
     const McpServer::McpResponse response =
         call(R"({"jsonrpc":"2.0","id":4,"method":"tools/call",)"
-             R"("params":{"name":"whatever"}})");
+             R"("params":{"name":"no_such_tool","arguments":{}}})",
+             std::string(), McpServer::documentToolDefinitions());
     LOK_ASSERT_EQUAL(200, response.statusCode);
     LOK_ASSERT(contains(response.body, "-32602"));
+    LOK_ASSERT(!contains(response.body, R"("result")"));
+}
+
+void McpServerTests::testToolsCallWithoutNameIsRejected()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A call that names no tool is a protocol error.
+    const McpServer::McpResponse response =
+        call(R"({"jsonrpc":"2.0","id":4,"method":"tools/call","params":{}})", std::string(),
+             McpServer::documentToolDefinitions());
+    LOK_ASSERT_EQUAL(200, response.statusCode);
+    LOK_ASSERT(contains(response.body, "-32602"));
+}
+
+void McpServerTests::testToolsCallWithNonObjectArgumentsIsRejected()
+{
+    constexpr std::string_view testname = __func__;
+
+    // Arguments that are present but not an object are a protocol error, decided before any tool
+    // runs.
+    const McpServer::McpResponse response =
+        call(R"({"jsonrpc":"2.0","id":4,"method":"tools/call",)"
+             R"("params":{"name":"extract_link_targets","arguments":"oops"}})",
+             std::string(), McpServer::documentToolDefinitions());
+    LOK_ASSERT_EQUAL(200, response.statusCode);
+    LOK_ASSERT(contains(response.body, "-32602"));
+}
+
+void McpServerTests::testToolFailureIsReportedAsAReadableResult()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A tool that cannot do its work reports a normal result with isError set and readable text, so
+    // the calling model can read and react to it. It is not a JSON-RPC error.
+    const McpServer::McpResponse response =
+        call(R"({"jsonrpc":"2.0","id":8,"method":"tools/call",)"
+             R"("params":{"name":"extract_document_structure","arguments":{}}})",
+             std::string(), toolsWithStubExecutor(/*succeed=*/false));
+    LOK_ASSERT_EQUAL(200, response.statusCode);
+    LOK_ASSERT(!contains(response.body, R"("error")"));
+    LOK_ASSERT(contains(response.body, R"("isError":true)"));
+    LOK_ASSERT(contains(response.body, R"("type":"text")"));
+    LOK_ASSERT(contains(response.body, "could not be read"));
+}
+
+void McpServerTests::testToolSuccessIsReportedAsTextContent()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A successful tool result carries its output as a text content block and is not marked as an
+    // error.
+    const McpServer::McpResponse response =
+        call(R"({"jsonrpc":"2.0","id":9,"method":"tools/call",)"
+             R"("params":{"name":"extract_link_targets","arguments":{}}})",
+             std::string(), toolsWithStubExecutor(/*succeed=*/true));
+    LOK_ASSERT_EQUAL(200, response.statusCode);
+    LOK_ASSERT(contains(response.body, R"("isError":false)"));
+    LOK_ASSERT(contains(response.body, R"("type":"text")"));
+    LOK_ASSERT(contains(response.body, "the extracted document body"));
 }
 
 void McpServerTests::testUnknownMethodIsRejected()
@@ -290,6 +396,42 @@ void McpServerTests::testUnsupportedProtocolHeaderIsRejected()
             call(R"({"jsonrpc":"2.0","id":1,"method":"ping"})", "2025-06-18");
         LOK_ASSERT_EQUAL(200, response.statusCode);
         LOK_ASSERT(contains(response.body, R"("result":{})"));
+    }
+}
+
+void McpServerTests::testExtractArgumentsNameAViewAndACellRange()
+{
+    constexpr std::string_view testname = __func__;
+
+    // No filter, a documented view and a cell range all pass.
+    for (const char* filter : { "", "text", "slides", "trackchanges" })
+    {
+        Poco::JSON::Object::Ptr arguments = new Poco::JSON::Object();
+        if (*filter)
+            arguments->set("filter", std::string(filter));
+        arguments->set("range", "$A$1:D100");
+        LOK_ASSERT(!McpServer::validateExtractArguments(arguments).has_value());
+    }
+
+    // A filter that is not a view, or that carries more after the view, is a failure that names the
+    // filter.
+    for (const char* filter : { "text&x=1", "text,range:A1", "nosuchview" })
+    {
+        Poco::JSON::Object::Ptr arguments = new Poco::JSON::Object();
+        arguments->set("filter", std::string(filter));
+        const auto invalid = McpServer::validateExtractArguments(arguments);
+        LOK_ASSERT(invalid.has_value());
+        LOK_ASSERT(contains(invalid->text, "filter argument"));
+    }
+
+    // A range with a space, a separator or a query character is a failure that names the range.
+    for (const char* range : { "A1:B5 ", "A1,sheet:x", "A1&x=1" })
+    {
+        Poco::JSON::Object::Ptr arguments = new Poco::JSON::Object();
+        arguments->set("range", std::string(range));
+        const auto invalid = McpServer::validateExtractArguments(arguments);
+        LOK_ASSERT(invalid.has_value());
+        LOK_ASSERT(contains(invalid->text, "range argument"));
     }
 }
 

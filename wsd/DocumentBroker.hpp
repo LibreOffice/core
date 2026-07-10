@@ -1374,6 +1374,18 @@ private:
     /// a convert-to request or doctored to look like one.
     virtual bool isConvertTo() const { return false; }
 
+    /// Report the given failure to a request that waits for this broker's outcome and has no
+    /// session in it yet. The failure is its answer once its socket reaches this broker's poll.
+    /// Does nothing for a broker that serves no such request.
+    virtual void failWaitingRequest(const std::string& /*message*/) {}
+
+    /// True from failWaitingRequest until the socket of the request it failed is gone.
+    virtual bool hasWaitingRequestSocket() const { return false; }
+
+    /// Run the poll for up to two seconds, while it holds sockets or hasWaitingRequestSocket is
+    /// true, so the sockets send what they hold.
+    void flushSockets();
+
     /// Request manager.
     /// Encapsulates common fields for
     /// Save and Upload requests.

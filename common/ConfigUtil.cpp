@@ -82,6 +82,8 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "ai.image_size", "" },
     { "ai.mcp.api_key", "" },
     { "ai.mcp.enable", "false" },
+    { "ai.mcp.max_file_size", "104857600" },
+    { "ai.mcp.max_running_tools", "8" },
     { "ai.model", "" },
     { "ai.show_ai_notebookbar", "false" },
     { "ai.show_ai_sidebar", "false" },

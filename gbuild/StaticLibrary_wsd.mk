@@ -68,6 +68,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,wsd, \
     wsd/HostUtil \
     wsd/McpRequests \
     wsd/McpServer \
+    wsd/McpTools \
     wsd/ProofKey \
     wsd/PreviewCache \
     wsd/PreviewSession \

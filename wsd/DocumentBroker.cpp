@@ -426,7 +426,12 @@ void DocumentBroker::pollThread()
         // abnormal close frame handshake
         ws.shutdown(WebSocketHandler::StatusCodes::ENDPOINT_GOING_AWAY);
 #endif
+        // A request that waits for this broker's outcome gets the failure as its answer when its
+        // socket reaches this poll, and the flush runs the poll until that answer is sent.
+        failWaitingRequest("no document engine process was free; try again shortly");
+
         stop("Failed to get new child.");
+        flushSockets();
 
         // Stop to mark it done and cleanup.
         _poll->stop();
@@ -1114,35 +1119,16 @@ void DocumentBroker::pollThread()
 
     failLoadingSessions(/*remove=*/false);
 
+    // The polling thread is ending and the sessions go with it, so a request that installed a
+    // responder and has not been answered is answered here. This runs on this broker's own poll
+    // thread, and before the flush below, so the answer still reaches the client socket that was
+    // moved into this poll.
+    for (const auto& sessionIt : _sessions)
+        sessionIt.second->failPendingResponder(
+            "the document engine stopped before the result was ready");
+
     // Flush socket data first, if any.
-    if (_poll->getSocketCount())
-    {
-        static constexpr std::chrono::microseconds flushTimeoutMicroS(std::chrono::seconds(2));
-        LOG_INF("Flushing " << _poll->getSocketCount() << " sockets for doc [" << _docKey
-                            << "] for " << flushTimeoutMicroS);
-
-        const auto flushStartTime = std::chrono::steady_clock::now();
-        while (_poll->getSocketCount())
-        {
-            const auto now = std::chrono::steady_clock::now();
-            const auto elapsedMicroS =
-                std::chrono::duration_cast<std::chrono::microseconds>(now - flushStartTime);
-            if (elapsedMicroS > flushTimeoutMicroS)
-                break;
-
-            const std::chrono::microseconds timeoutMicroS =
-                std::min(flushTimeoutMicroS - elapsedMicroS, flushTimeoutMicroS/10);
-            if (_poll->poll(timeoutMicroS) == 0 && UnitWSD::isUnitTesting())
-            {
-                // Polling timed out, no more data to flush.
-                break;
-            }
-
-            processBatchUpdates();
-        }
-
-        LOG_INF("Finished flushing socket for doc [" << _docKey << ']');
-    }
+    flushSockets();
 
     // Terminate properly while we can.
     LOG_DBG("Terminating child with reason: [" << _closeReason << ']');
@@ -1270,6 +1256,38 @@ DocumentBroker::~DocumentBroker()
 void DocumentBroker::joinThread()
 {
     _poll->joinThread();
+}
+
+void DocumentBroker::flushSockets()
+{
+    if (!_poll->getSocketCount() && !hasWaitingRequestSocket())
+        return;
+
+    static constexpr std::chrono::microseconds flushTimeoutMicroS(std::chrono::seconds(2));
+    LOG_INF("Flushing " << _poll->getSocketCount() << " sockets for doc [" << _docKey
+                        << "] for " << flushTimeoutMicroS);
+
+    const auto flushStartTime = std::chrono::steady_clock::now();
+    while (_poll->getSocketCount() || hasWaitingRequestSocket())
+    {
+        const auto now = std::chrono::steady_clock::now();
+        const auto elapsedMicroS =
+            std::chrono::duration_cast<std::chrono::microseconds>(now - flushStartTime);
+        if (elapsedMicroS > flushTimeoutMicroS)
+            break;
+
+        const std::chrono::microseconds timeoutMicroS =
+            std::min(flushTimeoutMicroS - elapsedMicroS, flushTimeoutMicroS/10);
+        if (_poll->poll(timeoutMicroS) == 0 && UnitWSD::isUnitTesting())
+        {
+            // Polling timed out, no more data to flush.
+            break;
+        }
+
+        processBatchUpdates();
+    }
+
+    LOG_INF("Finished flushing socket for doc [" << _docKey << ']');
 }
 
 void DocumentBroker::stop(const std::string_view reason)

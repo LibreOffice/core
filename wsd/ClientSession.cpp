@@ -5358,7 +5358,12 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
 #endif
 
         LOG_TRC("Sending extracted link targets response.");
-        if (!saveAsSocket)
+        if (_convertResponders && _convertResponders->extract)
+        {
+            auto responder = std::move(_convertResponders->extract);
+            responder(true, payload->jsonString());
+        }
+        else if (!saveAsSocket)
             LOG_ERR("Error in extractedlinktargets: not in isConvertTo mode");
         else
         {
@@ -5382,7 +5387,12 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
 #endif
 
         LOG_TRC("Sending extracted document structure response.");
-        if (!saveAsSocket)
+        if (_convertResponders && _convertResponders->extract)
+        {
+            auto responder = std::move(_convertResponders->extract);
+            responder(true, payload->jsonString());
+        }
+        else if (!saveAsSocket)
             LOG_ERR("Error in extracteddocumentstructure: not in isConvertTo mode");
         else
         {
@@ -5462,6 +5472,19 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
     return std::nullopt;
 }
 
+void ClientSession::failPendingResponder(const std::string& message)
+{
+    if (!_convertResponders)
+        return;
+
+    if (_convertResponders->extract)
+    {
+        LOG_DBG("Reporting an unfinished extract request as a failure: " << message);
+        auto responder = std::move(_convertResponders->extract);
+        responder(false, message);
+    }
+}
+
 void ClientSession::abortConversion(const std::shared_ptr<DocumentBroker>& docBroker,
                                     const std::shared_ptr<StreamSocket>& saveAsSocket,
                                     std::string errorKind)
@@ -5469,6 +5492,20 @@ void ClientSession::abortConversion(const std::shared_ptr<DocumentBroker>& docBr
     assert(_isConvertTo && "Expected convert-to context");
 
     LOG_DBG("Conversion request of [" << docBroker->getDocKey() << "] failed: " << errorKind);
+
+    // When an extract responder is installed, the failure is passed to it as the outcome of the
+    // request.
+    if (_convertResponders && _convertResponders->extract)
+    {
+        auto responder = std::move(_convertResponders->extract);
+        responder(false, errorKind);
+
+        LOG_DBG("Removing extract ClientSession after failure.");
+        docBroker->removeSession(client_from_this());
+        docBroker->stop("Aborting extract handler.");
+        return;
+    }
+
     if (!saveAsSocket)
         LOG_WRN("Conversion of [" << docBroker->getDocKey() << "] failed with [" << errorKind
                                   << "] after the client disconnected, "
@@ -5996,6 +6033,9 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tnextStatusReattached: " << _nextStatusReattached
        << "\n\t\tclientSelectedMode: " << _clientSelectedMode
        << "\n\t\tvisibleAreaMode: " << _visibleAreaMode
+       << "\n\t\tconvertResponders: " << static_cast<bool>(_convertResponders)
+       << "\n\t\textractResponder: "
+       << (_convertResponders && _convertResponders->extract)
        << "\n\t\trequestedTiles: " << getRequestedTiles().size()
        << "\n\t\tbeingRendered: " << (!docBroker ? -1 : docBroker->tileCache().countTilesBeingRenderedForSession(client_from_this(), std::chrono::steady_clock::now()));
 

@@ -20,9 +20,11 @@
 #error This file should be excluded from Mobile App builds
 #endif // MOBILEAPP
 
+#include <wsd/ConvertResponders.hpp>
 #include <wsd/DocumentBroker.hpp>
 
 #include <cstddef>
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -53,6 +55,22 @@ class ConvertToBroker : public StatelessBatchBroker
     const std::string _options;
     const std::string _inFilterOptions;
     const std::string _lang;
+    /// The functions that carry the outcome to a caller in this process, until the session that
+    /// loads the document takes them, or null when there are none.
+    std::unique_ptr<ConvertResponders> _responders;
+    /// The socket moved to this broker for the request, while it exists.
+    std::weak_ptr<StreamSocket> _waitingSocket;
+    /// The failure the request gets as its answer in place of loading the document, or empty to
+    /// load it.
+    std::string _waitingRequestFailure;
+
+    /// The responders, made when the first one is installed.
+    ConvertResponders& responders()
+    {
+        if (!_responders)
+            _responders = std::make_unique<ConvertResponders>();
+        return *_responders;
+    }
 
 public:
     /// Construct DocumentBroker with URI and docKey
@@ -64,8 +82,17 @@ public:
     /// _lang accessors
     const std::string& getLang() { return _lang; }
 
+    /// Install the function that carries the outcome of an extract request: true and the
+    /// extracted payload on success, false and the failure kind on failure.
+    void setExtractResponder(
+        std::function<void(bool success, const std::string& payload)> responder)
+    {
+        responders().extract = std::move(responder);
+    }
+
     /// Move socket to this broker for response & do conversion
-    bool startConversion(SocketDisposition& disposition, const std::string& id, const AdditionalFilePocoUris& additionalFileUrisPublic);
+    void startConversion(SocketDisposition& disposition, const std::string& id,
+                         const AdditionalFilePocoUris& additionalFileUrisPublic);
 
     /// When the load completes - lets start saving
     void setLoaded() override;
@@ -78,6 +105,13 @@ public:
 
 protected:
     bool isConvertTo() const override { return true; }
+
+    void failWaitingRequest(const std::string& message) override;
+
+    bool hasWaitingRequestSocket() const override
+    {
+        return !_waitingRequestFailure.empty() && !_waitingSocket.expired();
+    }
 
     virtual bool isReadOnly() const { return true; }
 

@@ -75,9 +75,11 @@
         <deck_budgets desc="Limits the AI deck generation validates each deck against. A design template's manifest may only lower these, never raise them.">
             <max_slides desc="The largest number of slides one AI-generated deck may have." type="int" default="30">30</max_slides>
         </deck_budgets>
-        <mcp desc="Endpoint that serves Model Context Protocol clients. Disabled unless it is enabled here and a key is set. When on, the endpoint is reached at /cool/mcp and clients must present the key as a bearer token.">
+        <mcp desc="Endpoint that serves Model Context Protocol clients. Disabled unless it is enabled here and a key is set. When on, the endpoint is reached at /cool/mcp and clients must present the key as a bearer token. The key is the only gate: net.post_allow does not apply to this endpoint.">
             <enable desc="Master switch for the Model Context Protocol endpoint. When false, the endpoint is not served and requests for it are answered as if the path did not exist." type="bool" default="false">false</enable>
             <api_key desc="Key that a client must present as a bearer token to use the endpoint. The endpoint stays disabled while this is empty." type="string" default=""></api_key>
+            <max_file_size desc="Maximum document size in bytes that a tool will accept, whether the document is given inline or uploaded. The same size bounds the document a tool produces. 0 for unlimited. A document given inline is limited to 16 MB whatever this setting says, because it is parsed and decoded on the thread that serves every web request, so a larger document is uploaded first." type="uint" default="104857600">104857600</max_file_size>
+            <max_running_tools desc="The most tool calls that run at one time. A call over the limit is answered with a failure that asks the client to try again. 0 for unlimited." type="uint" default="8">8</max_running_tools>
         </mcp>
     </ai>
 
