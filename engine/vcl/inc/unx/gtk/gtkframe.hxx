@@ -537,8 +537,6 @@ public:
     virtual void SetWindowState(const vcl::WindowData*) override;
     virtual bool GetWindowState(vcl::WindowData*) override;
     virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay ) override;
-    // Enable/Disable ScreenSaver, SystemAgents, ...
-    virtual void                StartPresentation( bool bStart ) override;
     // Show Window over all other Windows
     virtual void                SetAlwaysOnTop( bool bOnTop ) override;
 

@@ -1909,25 +1909,6 @@ void WinSalFrame::ShowFullScreen(const bool bFullScreen, const sal_Int32 nDispla
     }
 }
 
-void WinSalFrame::StartPresentation( bool bStart )
-{
-    if ( mbPresentation == bStart )
-        return;
-
-    mbPresentation = bStart;
-
-    if ( bStart )
-    {
-        // turn off screen-saver / power saving when in Presentation mode
-        SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);
-    }
-    else
-    {
-        // turn on screen-saver / power saving back
-        SetThreadExecutionState(ES_CONTINUOUS);
-    }
-}
-
 void WinSalFrame::SetAlwaysOnTop( bool bOnTop )
 {
     HWND hWnd;

@@ -1943,28 +1943,6 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
     }
 }
 
-void X11SalFrame::StartPresentation( bool bStart )
-{
-    maSessionManagerInhibitor.inhibit( bStart,
-                                    u"presentation",
-                                    APPLICATION_INHIBIT_IDLE,
-                                    mhWindow,
-                                    GetXDisplay() );
-
-    if( ! bStart && hPresentationWindow != None )
-        doReparentPresentationDialogues( GetDisplay() );
-    hPresentationWindow = (bStart && IsOverrideRedirect() ) ? GetWindow() : None;
-
-    if( bStart && hPresentationWindow )
-    {
-        /*  #i10559# workaround for WindowMaker: try to restore
-         *  current focus after presentation window is gone
-         */
-        int revert_to = 0;
-        XGetInputFocus( GetXDisplay(), &hPresFocusWindow, &revert_to );
-    }
-}
-
 // Pointer
 
 void X11SalFrame::SetPointer( PointerStyle ePointerStyle )

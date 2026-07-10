@@ -2692,11 +2692,6 @@ void GtkSalFrame::SessionManagerInhibit(bool bStart, ApplicationInhibitFlags eTy
                                       nWindow, aDisplay, application_id);
 }
 
-void GtkSalFrame::StartPresentation( bool bStart )
-{
-    SessionManagerInhibit(bStart, APPLICATION_INHIBIT_IDLE, u"presentation", nullptr);
-}
-
 void GtkSalFrame::SetAlwaysOnTop( bool bOnTop )
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)

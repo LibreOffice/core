@@ -341,10 +341,6 @@ void SvpSalFrame::ShowFullScreen( bool, sal_Int32 )
                 SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
 }
 
-void SvpSalFrame::StartPresentation( bool )
-{
-}
-
 void SvpSalFrame::SetAlwaysOnTop( bool )
 {
 }

@@ -1026,32 +1026,6 @@ void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
     }
 }
 
-void AquaSalFrame::StartPresentation( bool bStart )
-{
-    if ( !mpNSWindow )
-        return;
-
-    OSX_SALDATA_RUNINMAIN( StartPresentation( bStart ) )
-
-    if( bStart )
-    {
-        GetSalData()->maPresentationFrames.push_back( this );
-        IOPMAssertionCreateWithName(kIOPMAssertionTypeNoDisplaySleep,
-                                    kIOPMAssertionLevelOn,
-                                    CFSTR("LibreOffice presentation running"),
-                                    &mnAssertionID);
-        [mpNSWindow setLevel: NSPopUpMenuWindowLevel];
-        if( mbShown )
-            [mpNSWindow makeMainWindow];
-    }
-    else
-    {
-        GetSalData()->maPresentationFrames.remove( this );
-        IOPMAssertionRelease(mnAssertionID);
-        [mpNSWindow setLevel: NSNormalWindowLevel];
-    }
-}
-
 void AquaSalFrame::SetAlwaysOnTop( bool )
 {
 }
