@@ -323,8 +323,17 @@ const std::shared_ptr<VectorGraphicData>& ImpGraphic::getVectorGraphicData() con
 {
     // If the type is clearly a bitmap, we know the vector graphic data will be empty, no need to
     // swap in.
-    if (mpGfxLink && mpGfxLink->GetType() == GfxLinkType::NativePng)
-        return maVectorGraphicData;
+    if (mpGfxLink)
+    {
+        switch (mpGfxLink->GetType())
+        {
+            case GfxLinkType::NativePng:
+            case GfxLinkType::NativeJpg:
+                return maVectorGraphicData;
+            default:
+                break;
+        }
+    }
 
     ensureAvailable();
 
