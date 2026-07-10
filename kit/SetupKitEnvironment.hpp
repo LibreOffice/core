@@ -57,6 +57,10 @@ inline void setupKitEnvironment(const std::string& userInterface)
     ::setenv("CONFIGURATION_LAYERS", layers.c_str(),
              1 /* override */);
 
+    // Turn off the shared library loader service in the engine. A
+    // KIT_ALWAYS_ACTIVE engine ignores this and turns it off at compile time.
+    ::setenv("KIT_DISABLE_SHARED_LIBRARY_LOADER", "1", 1 /* override */);
+
 #if !MOBILEAPP
     // No-caps tracing can spawn eg. glxinfo & other oddness.
     unsetenv("DISPLAY");

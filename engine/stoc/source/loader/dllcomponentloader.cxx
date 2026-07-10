@@ -18,6 +18,8 @@
  */
 
 
+#include <config_features.h>
+
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
@@ -26,11 +28,14 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
+#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+
+#include <cstdlib>
 
 namespace com::sun::star::registry { class XRegistryKey; }
 
@@ -43,6 +48,18 @@ using namespace css::registry;
 using namespace cppu;
 
 namespace {
+
+// Online loads its components through the service manager's internal path,
+// not this service. KIT_ALWAYS_ACTIVE turns the service off at compile time;
+// other builds honour a runtime flag the kit sets.
+bool isSharedLibraryLoaderDisabled()
+{
+#if KIT_ALWAYS_ACTIVE
+    return true;
+#else
+    return std::getenv("KIT_DISABLE_SHARED_LIBRARY_LOADER") != nullptr;
+#endif
+}
 
 class DllComponentLoader
     : public WeakImplHelper< XImplementationLoader,
@@ -118,6 +135,11 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
     const OUString & rImplName, const OUString &, const OUString & rLibName,
     const Reference< XRegistryKey > & )
 {
+    if (isSharedLibraryLoaderDisabled())
+        throw css::loader::CannotActivateFactoryException(
+            u"the shared library loader is disabled"_ustr,
+            static_cast<cppu::OWeakObject*>(this));
+
     return loadSharedLibComponentFactory(
         cppu::bootstrap_expandUri(rLibName), rImplName, m_xSMgr);
 }
