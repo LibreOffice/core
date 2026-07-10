@@ -484,6 +484,8 @@ window.L.Control.Tabs = window.L.Control.extend({
 		JSDialog.CloseAllDropdowns();
 		const menuPosEl = this._createMenuPositionElement(evt);
 
+		const keyboardInitiated = !!evt && evt.type === 'keydown';
+
 		const entries = this._buildMenuEntries();
 		const callback = (objectType, eventType, object, data, entry) => {
 			if (eventType !== 'selected')
@@ -504,7 +506,7 @@ window.L.Control.Tabs = window.L.Control.extend({
 			'bottom',
 			false,
 			false,
-			true,
+			!keyboardInitiated,
 		);
 	},
 
