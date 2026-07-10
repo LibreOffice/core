@@ -682,7 +682,12 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	padding-inline: 8px !important;
 	margin-inline-end: 0 !important;
 	margin-block: 0 !important;
-	/* A transparent edge on every tab so selecting one does not shift the tab. */
+	/* Only the inline-start border carries the accent. The other three sides
+	   have no border, so nothing miters into the accent and cuts its top and
+	   bottom into slants. A transparent inline-start edge on every tab keeps
+	   selecting one from shifting it sideways. */
+	border-block: 0 !important;
+	border-inline-end: 0 !important;
 	border-inline-start: 3px solid transparent !important;
 }
 
