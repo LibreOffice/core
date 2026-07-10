@@ -35,12 +35,16 @@
 #include <ctime>
 #include <iomanip>
 #include <iostream>
+#include <mutex>
 #include <sstream>
 #include <string>
 #include <string_view>
 #include <thread>
 #include <unistd.h>
 #include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <vector>
 
 namespace
 {
@@ -49,9 +53,17 @@ std::atomic_int32_t ThreadLocalBufferCount(0);
 
 #ifndef NDEBUG
 // In debug builds, we track the thread-ids to list the ones still running at exit.
-thread_local std::int32_t OwnThreadIdIndex = 0;
-std::int32_t ThreadIdArray[256];
-std::atomic_int32_t NextThreadIdIndex(0);
+struct RunningThreadIds {
+    std::mutex mutex;
+    std::unordered_set<ProcUtil::ThreadId> ids;
+};
+RunningThreadIds & runningThreadIds()
+{
+    // Leak the RunningThreadIds instance, so it is guaranteed to be still around when any
+    // non-joined thread's ~ThreadLocalBuffer runs late during exit:
+    static RunningThreadIds * ids = new RunningThreadIds;
+    return *ids;
+}
 #endif // !NDEBUG
 
 /// Which log areas should be disabled
@@ -224,8 +236,11 @@ namespace Log
         /// logged in the parent confusing our counting.
         ThreadLocalBufferCount = 0;
 #ifndef NDEBUG
-        NextThreadIdIndex = 0;
-        memset(ThreadIdArray, 0, sizeof(ThreadIdArray));
+        // The parent process should have been single-threaded at fork, so the only ID on record (if
+        // any) should be the one of that single parent-process thread (but which is a stale ID in
+        // the child process, so clear the set):
+        assert(runningThreadIds().ids.size() <= 1);
+        runningThreadIds().ids.clear();
 #endif // !NDEBUG
 
         // The PID has changed after the fork.
@@ -252,8 +267,10 @@ namespace Log
             {
                 ++ThreadLocalBufferCount;
 #ifndef NDEBUG
-                OwnThreadIdIndex = NextThreadIdIndex++;
-                ThreadIdArray[OwnThreadIdIndex] = ProcUtil::getThreadId();
+                {
+                    std::scoped_lock const guard(runningThreadIds().mutex);
+                    runningThreadIds().ids.insert(ProcUtil::getThreadId());
+                }
 #endif // !NDEBUG
             }
 
@@ -262,7 +279,10 @@ namespace Log
                 flush();
                 --ThreadLocalBufferCount;
 #ifndef NDEBUG
-                ThreadIdArray[OwnThreadIdIndex] = 0;
+                {
+                    std::scoped_lock const guard(runningThreadIds().mutex);
+                    runningThreadIds().ids.erase(ProcUtil::getThreadId());
+                }
 #endif // !NDEBUG
             }
 
@@ -615,13 +635,20 @@ namespace Log
 
 #ifndef NDEBUG
             const auto currentThreadId = ProcUtil::getThreadId();
-            for (int i = 0; i < NextThreadIdIndex; ++i)
+            std::vector<ProcUtil::ThreadId> stillRunning;
             {
-                if (ThreadIdArray[i] && ThreadIdArray[i] != currentThreadId)
-                {
-                    LOG_ERR(">>> Thread " << ThreadIdArray[i]
-                                          << " is still running while shutting down logging");
+                std::scoped_lock const guard(runningThreadIds().mutex);
+                for (auto const & threadId: runningThreadIds().ids) {
+                    if (threadId != currentThreadId)
+                    {
+                        stillRunning.push_back(threadId);
+                    }
                 }
+            }
+            for (const auto & threadId: stillRunning)
+            {
+                LOG_ERR(">>> Thread " << threadId
+                                      << " is still running while shutting down logging");
             }
 
             // Flush before we assert (no assertion in non-debug builds).
