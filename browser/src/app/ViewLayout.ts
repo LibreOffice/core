@@ -44,8 +44,6 @@ class ScrollProperties {
 	horizontalScrollRightOffset: number = 20 /*usableThickness*/; // To prevent overlapping of the scroll bars.
 	scrollBarThickness: number = 6 * app.roundedDpiScale;
 	edgeOffset: number = 0;
-
-	moveBy: number[] | null = null; // Pending move event (pX, pY).
 }
 
 // FIXME: should be abstract to split Writer and other layouts
@@ -61,7 +59,7 @@ class ViewLayoutBase {
 	// Scrollable extent WITHOUT comment overflow - the layout's own document/page
 	// extent. Stacked-page layouts capture it when they recompute their layout;
 	// side-space and page-positioning read this stable value so a comment-inflated
-	// viewSize never feeds back into them. See ViewLayoutNewBase.getBaseViewSize.
+	// viewSize never feeds back into them. See getBaseViewSize.
 	protected _baseViewSize: cool.SimplePoint;
 	protected _documentAnchorPosition: number[]; // The position of document section on the canvas. Always canvas (core) pixels, no need for SimplePoint class.
 	public scrollProperties: ScrollProperties = new ScrollProperties();
@@ -73,6 +71,19 @@ class ViewLayoutBase {
 		this._viewSize = new cool.SimplePoint(0, 0);
 		this._baseViewSize = new cool.SimplePoint(0, 0);
 		this._documentAnchorPosition = [0, 0];
+
+		// The stacked-page subclasses (MultiPage/FileBased/CompareChanges) install
+		// their own zoomend/resize handlers that rebuild page geometry and request
+		// tiles. The plain single-window layout (Impress/Draw edit) has none, so
+		// without these the viewed rectangle (which carries the centering offset)
+		// is never rebuilt on load/zoom/resize: the slide would not centre and
+		// would go blank after a zoom. Guarded by usesSingleWindowView() so it is a
+		// no-op for the subclasses (they handle their own).
+		app.map.on('zoomend', this.rebuildSingleWindowView.bind(this));
+		app.events.on('resize', this.rebuildSingleWindowViewDeferred.bind(this));
+		app.layoutingService.appendLayoutingTask(() =>
+			this.rebuildSingleWindowView(),
+		);
 	}
 
 	/*
@@ -130,41 +141,25 @@ class ViewLayoutBase {
 		return visibleArea;
 	}
 
+	// forceUpdate is part of the API (Calc overrides this with a de-duplicating,
+	// map-based variant that honours it); this off-map default sends the current
+	// viewed rectangle every call and does not need it.
 	public sendClientVisibleArea(forceUpdate: boolean = false): void {
-		if (!app.map._docLoaded) return;
-		// During a zoom animation app.twipsToPixels and the viewedRectangle are
-		// driven through intermediate frame values; do not push those to core.
-		// The real visible area is sent once the animation settles.
-		if (app.sectionContainer.isInZoomAnimation()) return;
+		void forceUpdate;
 
-		var splitPos = app.map._docLayer._splitPanesContext
-			? app.map._docLayer._splitPanesContext.getSplitPos()
-			: new cool.Point(0, 0);
-
-		const visibleArea = this.getVisibleAreaBounds();
-
-		var size = visibleArea.getSize();
-		var visibleTopLeft = visibleArea.min;
-		var newClientVisibleAreaCommand =
+		const visibleAreaCommand =
 			'clientvisiblearea x=' +
-			Math.round(visibleTopLeft.x) +
+			this.viewedRectangle.x1 +
 			' y=' +
-			Math.round(visibleTopLeft.y) +
+			this.viewedRectangle.y1 +
 			' width=' +
-			Math.round(size.x) +
+			this.viewedRectangle.width +
 			' height=' +
-			Math.round(size.y);
+			this.viewedRectangle.height;
 
-		if (
-			this.clientVisibleAreaCommand !== newClientVisibleAreaCommand ||
-			forceUpdate
-		) {
-			// Visible area is dirty, update it on the server
-			app.socket.sendMessage(newClientVisibleAreaCommand);
-			if (app.map.contextToolbar) app.map.contextToolbar.hideContextToolbar(); // hide context toolbar when scroll/window resize etc...
-			if (!app.map._fatal && app.idleHandler._active && app.socket.connected())
-				this.clientVisibleAreaCommand = newClientVisibleAreaCommand;
-		}
+		app.socket.sendMessage(visibleAreaCommand);
+
+		if (app.map.contextToolbar) app.map.contextToolbar.hideContextToolbar(); // hide context toolbar when scroll/window resize etc...
 	}
 
 	public getLastPanDirection(): Array<number> {
@@ -274,13 +269,78 @@ class ViewLayoutBase {
 		return app.sectionContainer.getDocumentAnchorSection();
 	}
 
-	// New-structure (off-map) layouts drive their own viewed rectangle and zoom
-	// through ZoomControl instead of the leaflet map, and override this to return
-	// true (see ViewLayoutNewBase). ViewLayoutBase itself is no longer
-	// instantiated directly - every document layout now extends ViewLayoutNewBase
-	// - so this base value is only a default.
+	// Every document layout drives its own viewed rectangle and zooms through
+	// ZoomControl instead of the leaflet map. Subclasses may still read this to
+	// gate shared map-vs-off-map code paths.
 	public usesZoomControl(): boolean {
-		return false;
+		return true;
+	}
+
+	// The single-window layouts that place one page/slide with the inherited view
+	// machinery (centred when smaller than the viewport): Impress/Draw edit (plain
+	// ViewLayoutBase) and Writer. Calc (fills the viewport, own scroll/viewed
+	// rectangle) and the stacked-page subclasses build their own and opt out.
+	protected usesSingleWindowView(): boolean {
+		return this.type === 'ViewLayoutBase';
+	}
+
+	// The 'resize' event (a ResizeObserver on the container) can fire before the
+	// document anchor section has been resized, so defer to the layouting phase
+	// where the frame size has settled - otherwise centering would use a stale
+	// frame. Zoom end runs synchronously (no resize in flight, and we want the
+	// centred rectangle committed before the next redraw).
+	private rebuildSingleWindowViewDeferred(): void {
+		if (!this.usesSingleWindowView()) return;
+		app.layoutingService.appendLayoutingTask(() =>
+			this.rebuildSingleWindowView(),
+		);
+	}
+
+	private rebuildSingleWindowView(): void {
+		if (!this.usesSingleWindowView()) return; // subclasses handle their own
+
+		// applyZoom rebuilds the viewed rectangle around the zoom anchor
+		// (setViewRectangleFromPointAndScale) which may leave a non-negative scroll
+		// offset (when zoomed in) or the negative centering origin (when it fits).
+		// Fold only the real (non-negative) scroll back into scrollProperties, then
+		// let refreshVisibleAreaRectangle re-derive and re-centre the rectangle for
+		// the current frame/zoom and request the tiles.
+		// The scroll stays inside the range the document itself spans,
+		// [0, base view size - frame]. The base size leaves out the comment
+		// overflow, so a document narrower than the frame keeps its centred
+		// placement and a comment column that does not fit hangs off the side.
+		// Plain scrolling still reaches the comment column through the full view
+		// size.
+		const base = this.getBaseViewSize();
+		const frame = this.frameSize;
+		const maxX = Math.max(0, base.pX - frame.pX);
+		const maxY = Math.max(0, base.pY - frame.pY);
+
+		this.scrollProperties.viewX = Math.min(
+			maxX,
+			Math.max(0, this._viewedRectangle.pX1),
+		);
+		this.scrollProperties.viewY = Math.min(
+			maxY,
+			Math.max(0, this._viewedRectangle.pY1),
+		);
+		this.updateViewData();
+	}
+
+	// Centre content (a single slide/page) that is smaller than the viewport.
+	// Returned in core pixels [x, y]; zero on an axis where the content fills or
+	// exceeds the viewport (then normal scrolling applies).
+	protected getCenteringOffset(): number[] {
+		const frame = this.frameSize; // Viewport, core pixels.
+		const content = this._viewSize; // Slide/page size; pX tracks app.twipsToPixels.
+
+		// Before the first status the content size is not known yet - no centering.
+		if (content.pX <= 0 || content.pY <= 0) return [0, 0];
+
+		return [
+			Math.max(0, Math.round((frame.pX - content.pX) / 2)),
+			Math.max(0, Math.round((frame.pY - content.pY) / 2)),
+		];
 	}
 
 	// ---- Zoom (driven by ZoomControl) ----------------------------------
@@ -436,61 +496,6 @@ class ViewLayoutBase {
 		}
 	}
 
-	private calculateHorizontalScrollLength(
-		documentAnchor: CanvasSectionObject,
-	): void {
-		const canvasWidth: number = documentAnchor.size[0];
-		this.scrollProperties.xOffset = documentAnchor.myTopLeft[0];
-
-		this.scrollProperties.horizontalScrollRailwayOffset =
-			documentAnchor.myTopLeft[0];
-		this.scrollProperties.horizontalScrollRailwayLength =
-			canvasWidth - this.scrollProperties.horizontalScrollRightOffset;
-
-		if (app.map._docLayer._docType === 'spreadsheet') {
-			var splitPanesContext: any = app.map.getSplitPanesContext();
-			var splitPos = { x: 0, y: 0 };
-			if (splitPanesContext) {
-				splitPos = splitPanesContext.getSplitPos().clone();
-				splitPos.x = Math.round(splitPos.x * app.dpiScale);
-			}
-
-			this.scrollProperties.xOffset += splitPos.x;
-			this.scrollProperties.horizontalScrollLength =
-				canvasWidth -
-				splitPos.x -
-				this.scrollProperties.horizontalScrollRightOffset;
-		} else {
-			this.scrollProperties.horizontalScrollLength =
-				canvasWidth - this.scrollProperties.horizontalScrollRightOffset;
-		}
-	}
-
-	private calculateVerticalScrollLength(
-		documentAnchor: CanvasSectionObject,
-	): void {
-		const result: number = documentAnchor.size[1];
-		this.scrollProperties.yOffset = documentAnchor.myTopLeft[1];
-
-		this.scrollProperties.verticalScrollRailwayOffset =
-			documentAnchor.myTopLeft[1];
-		this.scrollProperties.verticalScrollRailwayLength = result;
-
-		if (app.map._docLayer._docType !== 'spreadsheet') {
-			this.scrollProperties.verticalScrollLength = result;
-		} else {
-			const splitPanesContext: any = app.map.getSplitPanesContext();
-			let splitPos = { x: 0, y: 0 };
-			if (splitPanesContext) {
-				splitPos = splitPanesContext.getSplitPos().clone();
-				splitPos.y = Math.round(splitPos.y * app.dpiScale);
-			}
-
-			this.scrollProperties.yOffset += splitPos.y;
-			this.scrollProperties.verticalScrollLength = result - splitPos.y;
-		}
-	}
-
 	protected calculateTheScrollSizes() {
 		// Sizes of the scroll bars.
 		this.scrollProperties.verticalScrollSize = Math.round(
@@ -528,30 +533,35 @@ class ViewLayoutBase {
 		const documentAnchor = this.getDocumentAnchorSection();
 
 		// The length of the railway that the scroll bar moves on up & down or left & right.
-		this.calculateVerticalScrollLength(documentAnchor);
-		this.calculateHorizontalScrollLength(documentAnchor);
+		this.scrollProperties.horizontalScrollLength = documentAnchor.size[0];
+		this.scrollProperties.verticalScrollLength = documentAnchor.size[1];
+
+		// This layout never restricts scrolling to less than the whole document
+		// anchor, so the drawn railway matches the scrollable length exactly.
+		this.scrollProperties.horizontalScrollRailwayOffset =
+			this.scrollProperties.xOffset;
+		this.scrollProperties.horizontalScrollRailwayLength =
+			this.scrollProperties.horizontalScrollLength;
+		this.scrollProperties.verticalScrollRailwayOffset =
+			this.scrollProperties.yOffset;
+		this.scrollProperties.verticalScrollRailwayLength =
+			this.scrollProperties.verticalScrollLength;
 
 		// Sizes of the scroll bars.
 		this.calculateTheScrollSizes();
 
-		// 1px scrolling = xpx document height / width.
+		// The ratio maps scrollbar-track pixels to view-space pixels: scroll()
+		// takes view-space deltas, so a pointer delta on the track is scaled by
+		// this. scroll() places the bar at viewX / viewSize * trackLength, so the
+		// pointer-to-view factor is the inverse of that.
 		this.scrollProperties.horizontalScrollRatio =
-			(this.viewSize.pX - documentAnchor.size[0]) /
-			(this.scrollProperties.horizontalScrollLength -
-				this.scrollProperties.horizontalScrollSize);
+			this.scrollProperties.horizontalScrollLength > 0 && this.viewSize.pX > 0
+				? this.viewSize.pX / this.scrollProperties.horizontalScrollLength
+				: 1;
 		this.scrollProperties.verticalScrollRatio =
-			(this.viewSize.pY - documentAnchor.size[1]) /
-			(this.scrollProperties.verticalScrollLength -
-				this.scrollProperties.verticalScrollSize);
-
-		// The start position of scroll bars on canvas.
-		this.scrollProperties.startX =
-			this.viewedRectangle.pX1 / this.scrollProperties.horizontalScrollRatio +
-			this.scrollProperties.xOffset;
-
-		this.scrollProperties.startY =
-			this.viewedRectangle.pY1 / this.scrollProperties.verticalScrollRatio +
-			this.scrollProperties.yOffset;
+			this.scrollProperties.verticalScrollLength > 0 && this.viewSize.pY > 0
+				? this.viewSize.pY / this.scrollProperties.verticalScrollLength
+				: 1;
 
 		// Properties for quick scrolling.
 		this.scrollProperties.verticalScrollStep = documentAnchor.size[1] / 2;
@@ -561,33 +571,242 @@ class ViewLayoutBase {
 	protected refreshCurrentCoordList() {
 		this.currentCoordList.length = 0;
 		const zoom = Math.round(app.map.getZoom());
-
-		const columnCount = Math.ceil(
-			this._viewedRectangle.pWidth / RenderManager.tileSize,
-		);
-		const rowCount = Math.ceil(
-			this._viewedRectangle.pHeight / RenderManager.tileSize,
-		);
-		const startX =
-			Math.floor(this._viewedRectangle.pX1 / RenderManager.tileSize) *
-			RenderManager.tileSize;
-		const startY =
-			Math.floor(this._viewedRectangle.pY1 / RenderManager.tileSize) *
-			RenderManager.tileSize;
+		const tileSize = RenderManager.tileSize;
 
 		// The coordinates name tiles of the part the view currently shows:
 		// part 0 for a text document, the selected sheet for a spreadsheet,
 		// and the shown page's unique id for a presentation or drawing.
 		const part = app.map._docLayer.getSelectedPart();
 
-		for (let i = 0; i <= columnCount; i++) {
-			for (let j = 0; j <= rowCount; j++) {
+		const r = this._viewedRectangle;
+
+		const startCol = Math.floor(r.pX1 / tileSize);
+		const startRow = Math.floor(r.pY1 / tileSize);
+		const endCol = Math.floor((r.pX1 + r.pWidth - 1) / tileSize);
+		const endRow = Math.floor((r.pY1 + r.pHeight - 1) / tileSize);
+
+		this.pushTileGrid(
+			startCol * tileSize,
+			startRow * tileSize,
+			endCol - startCol,
+			endRow - startRow,
+			zoom,
+			tileSize,
+			part,
+			new Set<string>(),
+		);
+	}
+
+	// Shared visible-area computation for the stacked-page layouts
+	// (ViewLayoutMultiPage, ViewLayoutFileBased). Builds the bounding document
+	// rectangle of every part whose view rectangle intersects the viewport.
+	// When no part is visible (e.g. before reset finishes) the view is snapped
+	// back to the start of `snapAxis` and the computation retried.
+	protected refreshVisibleAreaRectangleImpl(
+		documentRectangles: cool.SimpleRectangle[],
+		viewRectangles: cool.SimpleRectangle[],
+		snapAxis: 'x' | 'y',
+	): void {
+		const documentAnchor = this.getDocumentAnchorSection();
+
+		// When the document container is hidden (e.g. BackstageView in CODA), the
+		// anchor section has zero size - bail out to avoid an infinite retry loop.
+		if (documentAnchor.size[0] <= 0 || documentAnchor.size[1] <= 0) return;
+
+		const view = cool.SimpleRectangle.fromCorePixels([
+			this.scrollProperties.viewX,
+			this.scrollProperties.viewY,
+			documentAnchor.size[0],
+			documentAnchor.size[1],
+		]);
+
+		const resultingRectangle: cool.SimpleRectangle = new cool.SimpleRectangle(
+			Number.POSITIVE_INFINITY,
+			Number.POSITIVE_INFINITY,
+			-10000,
+			-10000,
+		);
+
+		for (let i = 0; i < documentRectangles.length; i++) {
+			const documentRectangle = documentRectangles[i];
+			const viewRectangle = viewRectangles[i];
+
+			if (view.intersectsRectangle(viewRectangle.toArray())) {
+				if (resultingRectangle.pX1 > documentRectangle.pX1)
+					resultingRectangle.pX1 = documentRectangle.pX1;
+				if (resultingRectangle.pY1 > documentRectangle.pY1)
+					resultingRectangle.pY1 = documentRectangle.pY1;
+				if (resultingRectangle.pX2 < documentRectangle.pX2)
+					resultingRectangle.pX2 = documentRectangle.pX2;
+				if (resultingRectangle.pY2 < documentRectangle.pY2)
+					resultingRectangle.pY2 = documentRectangle.pY2;
+			}
+		}
+
+		if (
+			resultingRectangle.pX1 === Number.POSITIVE_INFINITY ||
+			resultingRectangle.pY1 === Number.POSITIVE_INFINITY
+		) {
+			if (documentRectangles.length === 0) {
+				// No layout yet (transient, e.g. before a part switch finishes): snap
+				// the scroll back to the start of snapAxis and retry once the layout
+				// exists.
+				app.layoutingService.appendLayoutingTask(() => {
+					if (snapAxis === 'x') this.scrollProperties.viewX = 0;
+					else this.scrollProperties.viewY = 0;
+					this.refreshVisibleAreaRectangle();
+				});
+				return;
+			}
+
+			// Pages exist but none intersect the viewport: the view is scrolled into
+			// the region the comment overflow made scrollable beyond the last page.
+			// The viewed rectangle is clamped to the nearest page, so its tiles stay
+			// valid while the scroll position is kept and the bottom comments there
+			// stay reachable; the comment section draws the comments. The scroll is
+			// not snapped back because the snap axis need not match the overflowing
+			// axis (MultiPage snaps X while the comment overflow is vertical).
+			let nearest = 0;
+			let bestDistance = Number.POSITIVE_INFINITY;
+			for (let i = 0; i < viewRectangles.length; i++) {
+				const vr = viewRectangles[i];
+				const dx = Math.max(vr.pX1 - view.pX2, view.pX1 - vr.pX2, 0);
+				const dy = Math.max(vr.pY1 - view.pY2, view.pY1 - vr.pY2, 0);
+				const distance = dx * dx + dy * dy;
+				if (distance < bestDistance) {
+					bestDistance = distance;
+					nearest = i;
+				}
+			}
+
+			this._viewedRectangle = documentRectangles[nearest].clone();
+
+			app.sectionContainer.onNewDocumentTopLeft();
+			app.sectionContainer.requestReDraw();
+		} else {
+			this._viewedRectangle = resultingRectangle;
+
+			app.sectionContainer.onNewDocumentTopLeft();
+			app.sectionContainer.requestReDraw();
+		}
+	}
+
+	// Default single-window viewed rectangle: the frame positioned at the
+	// current scroll offset (scrollProperties.viewX/Y), in twips. Stacked-page
+	// layouts (MultiPage/FileBased/CompareChanges) override to compute it from
+	// page geometry via refreshVisibleAreaRectangleImpl.
+	protected refreshVisibleAreaRectangle(): void {
+		const documentAnchor = this.getDocumentAnchorSection();
+		if (!documentAnchor) return;
+
+		// Centre content smaller than the viewport by starting the viewed
+		// rectangle at a negative document offset (the gray margin to the left/top
+		// of the slide). The whole pipeline - drawing (documentToViewX/Y), mouse
+		// hit-testing (MouseControl), tile requests and the zoom anchor - reads
+		// viewedRectangle, so centring stays consistent from this single source.
+		// The scroll offset (scrollProperties.viewX/Y) stays a pure, non-negative
+		// scroll position; the centring is applied on top of it here. This mirrors
+		// the negative-origin viewed rectangle used by ViewLayoutCompareChanges.
+		const centering = this.getCenteringOffset();
+
+		this._viewedRectangle = cool.SimpleRectangle.fromCorePixels([
+			this.scrollProperties.viewX - centering[0],
+			this.scrollProperties.viewY - centering[1],
+			documentAnchor.size[0],
+			documentAnchor.size[1],
+		]);
+
+		app.sectionContainer.onNewDocumentTopLeft();
+		app.sectionContainer.requestReDraw();
+	}
+
+	// Default commit used by scroll(): rebuild the viewed rectangle and fetch
+	// tiles. Stacked-page layouts override with their own (viewSize recompute
+	// etc.).
+	protected updateViewData(): void {
+		this.commitVisibleAreaAndRequestTiles();
+	}
+
+	// Recompute the visible area, push it to the server and request the tiles
+	// needed to render it.
+	protected commitVisibleAreaAndRequestTiles(): void {
+		this.refreshVisibleAreaRectangle();
+
+		if (app.map._docLayer?._cursorMarker)
+			app.map._docLayer._cursorMarker.update();
+
+		app.map._docLayer._sendClientZoom();
+		this.sendClientVisibleArea();
+
+		this.refreshCurrentCoordList();
+		// requestVisibleTiles refreshes every tile's distance from the view
+		// before asking for tiles, so a tile that has just moved off screen
+		// stops counting as pending and coherency-paused drawing resumes as
+		// soon as the visible tiles are ready.
+		RenderManager.requestVisibleTiles(this.currentCoordList);
+	}
+
+	// Reset currentCoordList and return the per-frame constants shared by the
+	// tile-queue builders: rounded zoom, tile size and the viewport rectangle.
+	protected beginCoordList(): {
+		zoom: number;
+		tileSize: number;
+		view: cool.SimpleRectangle;
+	} {
+		this.currentCoordList.length = 0;
+		const zoom = Math.round(app.map.getZoom());
+		const tileSize = RenderManager.tileSize;
+
+		const documentAnchor = this.getDocumentAnchorSection();
+		const view = cool.SimpleRectangle.fromCorePixels([
+			this.scrollProperties.viewX,
+			this.scrollProperties.viewY,
+			documentAnchor.size[0],
+			documentAnchor.size[1],
+		]);
+
+		return { zoom, tileSize, view };
+	}
+
+	// Visible portion of one part's view rectangle, clipped to the viewport,
+	// in view coordinates.
+	protected getVisibleViewBounds(
+		view: cool.SimpleRectangle,
+		viewRect: cool.SimpleRectangle,
+	): { vx1: number; vy1: number; vx2: number; vy2: number } {
+		return {
+			vx1: Math.max(view.pX1, viewRect.pX1),
+			vy1: Math.max(view.pY1, viewRect.pY1),
+			vx2: Math.min(view.pX1 + view.pWidth, viewRect.pX1 + viewRect.pWidth),
+			vy2: Math.min(view.pY1 + view.pHeight, viewRect.pY1 + viewRect.pHeight),
+		};
+	}
+
+	// Enqueue every tile of one part's grid into currentCoordList, skipping
+	// duplicates (tracked in `added`) and invalid tiles.
+	protected pushTileGrid(
+		startX: number,
+		startY: number,
+		columnCount: number,
+		rowCount: number,
+		zoom: number,
+		tileSize: number,
+		part: PartNumber,
+		added: Set<string>,
+	): void {
+		for (let c = 0; c <= columnCount; c++) {
+			for (let r = 0; r <= rowCount; r++) {
 				const coords = new TileCoordData(
-					startX + i * RenderManager.tileSize,
-					startY + j * RenderManager.tileSize,
+					startX + c * tileSize,
+					startY + r * tileSize,
 					zoom,
 					part,
+					0,
 				);
+
+				const key = coords.key();
+				if (added.has(key)) continue;
+				added.add(key);
 
 				if (RenderManager.isValidTile(coords))
 					this.currentCoordList.push(coords);
@@ -604,111 +823,14 @@ class ViewLayoutBase {
 		return false;
 	}
 
-	// virtual function implemented by the children
 	public unselectCommentOnScroll() {
-		return;
-	}
+		const commentSection = app.sectionContainer.getSectionWithName(
+			app.CSections.CommentList.name,
+		) as cool.CommentSection;
 
-	private addToMoveBy(pX: number, pY: number) {
-		if (this.scrollProperties.moveBy !== null) {
-			// Add offset to the pending move event.
-			if (pX !== 0) {
-				this.scrollProperties.moveBy[0] += pX;
-			}
-			if (pY !== 0) {
-				this.scrollProperties.moveBy[1] += pY;
-			}
-		} else {
-			// Create a new pending move event.
-			this.scrollProperties.moveBy = [pX, pY];
+		if (commentSection && commentSection.sectionProperties.selectedComment) {
+			commentSection.unselect();
 		}
-	}
-	/*
-		`ignoreScrollbarLength` relaxes the scrollbar-length constraints while
-		scrolling the document to make some space for the comments.
-	*/
-	protected scrollHorizontal(
-		pX: number,
-		ignoreScrollbarLength: boolean = false,
-	): void {
-		const scrollProps: ScrollProperties = this.scrollProperties;
-		const psX = pX / scrollProps.horizontalScrollRatio;
-		if (document.documentElement.dir === 'rtl') pX = -pX;
-
-		if (!ignoreScrollbarLength) {
-			let control = scrollProps.moveBy ? scrollProps.moveBy[0] : 0; // Add pending offset.
-			control /= scrollProps.horizontalScrollRatio; // Convert to scroll bar position diff.
-
-			const endPosition =
-				scrollProps.startX - scrollProps.xOffset + control + psX;
-			if (pX > 0) {
-				if (
-					endPosition + scrollProps.horizontalScrollSize >
-					scrollProps.horizontalScrollLength
-				)
-					pX =
-						(scrollProps.horizontalScrollLength -
-							scrollProps.horizontalScrollSize -
-							scrollProps.startX +
-							scrollProps.xOffset -
-							control) *
-						scrollProps.horizontalScrollRatio;
-
-				if (pX < 0) pX = 0;
-			} else {
-				if (endPosition < 0)
-					pX =
-						(scrollProps.startX - scrollProps.xOffset + control) *
-						-1 *
-						scrollProps.horizontalScrollRatio;
-
-				if (pX > 0) pX = 0;
-			}
-		}
-
-		this.addToMoveBy(pX, 0);
-	}
-
-	// For scrolling with screen offset.
-	// This function shouldn't care about the document content, size etc.
-	// All this cares is the current scroll position and the scroll length.
-	// For making a portion of the document visible, use other methods.
-	protected scrollVertical(pY: number): void {
-		const scrollProps: ScrollProperties = this.scrollProperties;
-
-		let control = scrollProps.moveBy ? scrollProps.moveBy[1] : 0; // Add pending offset.
-		control /= scrollProps.verticalScrollRatio; // Convert to scroll bar position diff.
-
-		const psY = pY / scrollProps.verticalScrollRatio;
-
-		const endPosition =
-			scrollProps.startY - scrollProps.yOffset + control + psY;
-
-		if (pY > 0) {
-			if (
-				endPosition + scrollProps.verticalScrollSize >
-				scrollProps.verticalScrollLength
-			)
-				pY =
-					(scrollProps.verticalScrollLength -
-						scrollProps.verticalScrollSize -
-						scrollProps.startY +
-						scrollProps.yOffset -
-						control) *
-					scrollProps.verticalScrollRatio;
-
-			if (pY < 0) pY = 0;
-		} else {
-			if (endPosition < 0)
-				pY =
-					(scrollProps.startY - scrollProps.yOffset + control) *
-					-1 *
-					scrollProps.verticalScrollRatio;
-
-			if (pY > 0) pY = 0;
-		}
-
-		this.addToMoveBy(0, pY);
 	}
 
 	public canScrollHorizontal(documentAnchor: CanvasSectionObject): boolean {
@@ -723,27 +845,50 @@ class ViewLayoutBase {
 		pX: number,
 		pY: number,
 		userIsScrolling: boolean = false,
-	): void {
-		// While a zoom is waiting for its new tiles the canvas is not cleared (to
-		// avoid white flicker), so scrolling in that window leaves smears.
-		// Force a clear in that case; the flag is reset once the zoom finishes.
-		if (
-			app.sectionContainer.isZoomChanged() &&
-			!app.sectionContainer.isInZoomAnimation()
-		)
-			app.sectionContainer.setScrollingBeforeZoomSettled(true);
+	): boolean {
 		if (userIsScrolling) this.unselectCommentOnScroll();
 		this.refreshScrollProperties();
 		const documentAnchor = this.getDocumentAnchorSection();
+		let scrolled = false;
 
-		if (pX !== 0 && this.canScrollHorizontal(documentAnchor))
-			this.scrollHorizontal(pX);
+		if (pX !== 0 && this.canScrollHorizontal(documentAnchor)) {
+			const max = Math.max(0, this._viewSize.pX - documentAnchor.size[0]);
+			const newViewX = Math.max(
+				0,
+				Math.min(this.scrollProperties.viewX + pX, max),
+			);
+			if (newViewX !== this.scrollProperties.viewX) {
+				this.scrollProperties.viewX = newViewX;
+				this.scrollProperties.startX = Math.round(
+					(this.scrollProperties.viewX / this._viewSize.pX) *
+						this.scrollProperties.horizontalScrollLength,
+				);
+				scrolled = true;
+			}
+		}
 
-		if (pY !== 0 && this.canScrollVertical(documentAnchor))
-			this.scrollVertical(pY);
+		if (pY !== 0 && this.canScrollVertical(documentAnchor)) {
+			const max = Math.max(0, this._viewSize.pY - documentAnchor.size[1]);
+			const newViewY = Math.max(
+				0,
+				Math.min(this.scrollProperties.viewY + pY, max),
+			);
+			if (newViewY !== this.scrollProperties.viewY) {
+				this.scrollProperties.viewY = newViewY;
+				this.scrollProperties.startY = Math.round(
+					(this.scrollProperties.viewY / this._viewSize.pY) *
+						this.scrollProperties.verticalScrollLength,
+				);
+				scrolled = true;
+			}
+		}
 
-		this.refreshCurrentCoordList();
-		app.sectionContainer.requestReDraw();
+		if (scrolled) {
+			this.updateViewData();
+			app.sectionContainer.requestReDraw();
+		}
+
+		return scrolled;
 	}
 
 	public scrollTo(
@@ -752,8 +897,6 @@ class ViewLayoutBase {
 		userIsScrolling: boolean = false,
 	): void {
 		this.refreshScrollProperties();
-
-		this.scrollProperties.moveBy = null;
 
 		pX -= this.viewedRectangle.pX1;
 		pY -= this.viewedRectangle.pY1;

@@ -1355,8 +1355,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		const left = GraphicSelection.rectangle.v1X;
 		const top = GraphicSelection.rectangle.v1Y;
 
-		const leftAddition = app.activeDocument.activeLayout.type === 'ViewLayoutBase' ? 0 : this.containerObject.getDocumentAnchor()[0];
-		const topAddition = app.activeDocument.activeLayout.type === 'ViewLayoutBase' ? 0 : this.containerObject.getDocumentAnchor()[1];
+		const leftAddition = this.containerObject.getDocumentAnchor()[0];
+		const topAddition = this.containerObject.getDocumentAnchor()[1];
 
 		this.sectionProperties.svg.style.left = Math.round((left + leftAddition) / app.dpiScale) + 'px';
 		this.sectionProperties.svg.style.top = Math.round((top + topAddition) / app.dpiScale) + 'px';

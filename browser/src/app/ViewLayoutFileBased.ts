@@ -15,7 +15,7 @@
 // docLayer._partDimensions; falls back to uniform (_partWidthTwips,
 // _partHeightTwips) when the per-part array is empty.
 
-class ViewLayoutFileBased extends ViewLayoutNewBase {
+class ViewLayoutFileBased extends ViewLayoutBase {
 	public readonly type: string = 'ViewLayoutFileBased';
 	public documentRectangles = Array<cool.SimpleRectangle>();
 	public viewRectangles = Array<cool.SimpleRectangle>();
@@ -278,7 +278,7 @@ class ViewLayoutFileBased extends ViewLayoutNewBase {
 		this.commitVisibleAreaAndRequestTiles();
 	}
 
-	// The direct-delta scroll now lives in ViewLayoutNewBase; here we only add
+	// The direct-delta scroll now lives in ViewLayoutBase; here we only add
 	// the file-based follow-up of recomputing which part is selected.
 	public override scroll(
 		pX: number,

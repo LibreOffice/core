@@ -12,7 +12,7 @@
  * Impress tile layer is used to display a presentation document
  */
 
-/* global app $ cool RenderManager ViewLayoutNewBase ViewLayoutFileBased */
+/* global app $ cool RenderManager ViewLayoutBase ViewLayoutFileBased */
 
 // Single source of truth for Impress view modes. Keyed by the core
 // 'contextchange' context. 'mode' is the persisted string, 'uno' enters the
@@ -328,7 +328,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			this._partWidthTwips,
 			this._partHeightTwips,
 		);
-		app.activeDocument.swapLayout(new ViewLayoutNewBase());
+		app.activeDocument.swapLayout(new ViewLayoutBase());
 		app.activeDocument.activeLayout.viewSize =
 			app.activeDocument.fileSize.clone();
 		this._updateMaxBounds(true, true);

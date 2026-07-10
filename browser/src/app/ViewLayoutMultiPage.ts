@@ -9,7 +9,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-class ViewLayoutMultiPage extends ViewLayoutNewBase {
+class ViewLayoutMultiPage extends ViewLayoutBase {
 	public readonly type: string = 'ViewLayoutMultiPage';
 	public gapBetweenPages = 20; // Core pixels.
 	private maxRowsSize = 2;

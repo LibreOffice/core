@@ -231,13 +231,6 @@ export class ScrollSection extends CanvasSectionObject {
 		this.onScrollVelocity({ vx: vx, vy: vy, pos: e.pos });
 	}
 
-	public onUpdateScrollOffset (): void {
-		if (this.map._docLayer._docType === 'spreadsheet') {
-			this.map._docLayer.refreshViewData();
-			this.map._docLayer._restrictDocumentSize();
-		}
-	}
-
 	private DrawVerticalScrollBarMobile(): void {
 		const scrollProps: ScrollProperties = (app.activeDocument as DocumentBase).activeLayout.scrollProperties;
 
@@ -384,24 +377,8 @@ export class ScrollSection extends CanvasSectionObject {
 		}
 	}
 
-	private doMove() {
-		const scrollProps: ScrollProperties = (app.activeDocument as DocumentBase).activeLayout.scrollProperties;
-
-		this.map.panBy(new cool.Point(scrollProps.moveBy[0] / app.dpiScale, scrollProps.moveBy[1] / app.dpiScale));
-		scrollProps.moveBy = null;
-		this.onUpdateScrollOffset();
-
-		if (app && app.file.fileBasedView === true)
-			app.map._docLayer._checkSelectedPart();
-
-		app.activeDocument.activeLayout.refreshScrollProperties();
-	}
-
 	public onDraw(frameCount: number, elapsedTime: number): void {
-		if (app.activeDocument.activeLayout.scrollProperties.moveBy !== null)
-			this.doMove();
-		else
-			app.activeDocument.activeLayout.refreshScrollProperties();
+		app.activeDocument.activeLayout.refreshScrollProperties();
 
 		if (this.isAnimating && frameCount >= 0)
 			this.calculateCurrentAlpha(elapsedTime);

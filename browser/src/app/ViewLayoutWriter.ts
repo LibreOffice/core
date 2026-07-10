@@ -14,7 +14,7 @@ type DocumentSpacingInfo = {
 	commentSectionWidth: number;
 };
 
-class ViewLayoutWriter extends ViewLayoutNewBase {
+class ViewLayoutWriter extends ViewLayoutBase {
 	public readonly type: string = 'ViewLayoutWriter';
 
 	// Cached comment-margin shift (canvas pixels) and its dirty flag. The shift is

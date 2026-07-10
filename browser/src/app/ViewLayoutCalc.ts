@@ -9,7 +9,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-class ViewLayoutCalc extends ViewLayoutNewBase {
+class ViewLayoutCalc extends ViewLayoutBase {
 	public readonly type: string = 'ViewLayoutCalc';
 
 	constructor() {
@@ -82,32 +82,6 @@ class ViewLayoutCalc extends ViewLayoutNewBase {
 			point.pY + this._viewedRectangle.pY1 - this._documentAnchorPosition[1];
 
 		return result;
-	}
-
-	// CalcTileLayer assigns viewSize from fileSize when the document size is
-	// known, and re-assigns when the document grows. ViewLayoutNewBase
-	// disables the setter; re-enable it for Calc.
-	public override get viewSize() {
-		return this._viewSize;
-	}
-	public override set viewSize(size: cool.SimplePoint) {
-		this._viewSize = size;
-	}
-
-	// Scroll drives the viewedRectangle update from inside the layout, but
-	// zoom and the initial document load still come in via map events, so the
-	// setter must stay writable from outside.
-	public override get viewedRectangle() {
-		return this._viewedRectangle;
-	}
-	public override set viewedRectangle(rectangle: cool.SimpleRectangle) {
-		if (!this._viewedRectangle.equals(rectangle.toArray()))
-			this.lastViewedRectangle = this._viewedRectangle.clone();
-
-		this._viewedRectangle = rectangle;
-
-		app.sectionContainer.onNewDocumentTopLeft();
-		app.sectionContainer.requestReDraw();
 	}
 
 	// A zoom keeps the cell the user works in on screen: the anchor is the top

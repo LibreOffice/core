@@ -14,7 +14,7 @@ enum TileMode {
 	RightSide = 2,
 }
 
-class ViewLayoutCompareChanges extends ViewLayoutNewBase {
+class ViewLayoutCompareChanges extends ViewLayoutBase {
 	public readonly type: string = 'ViewLayoutCompareChanges';
 
 	/// Last tile mode seen when converting from canvas to document coordinates.
