@@ -82,7 +82,6 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 		app.sectionContainer.addSection(new app.definitions.CellFillMarkerSection());
 		app.sectionContainer.addSection(new SplitterLinesSection());
-		app.sectionContainer.addSection(new app.definitions.TableFillMarkerSection());
 
 		this.insertMode = false;
 		this._resetInternalState();
@@ -985,7 +984,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			app.calc.filterPopupCell = { 'popupId': e.state.popupId, 'row': e.state.row, 'column': e.state.column };
 		}
 		else if (e.commandName === 'TableAutoFillInfo') {
-			this._onTableAutoFillStateChanged(e.state.rectangle);
+			this._onTableAutoFillStateChanged(e.state.marks);
 		}
 		else if (e.commandName === 'SparklineGroup') {
 			this._onSparklineGroupMsg(e.state);
@@ -995,32 +994,42 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		}
 	},
 
-	_onTableAutoFillStateChanged: function (textMsg) {
-		var tablefillMarkerSection = app.sectionContainer.getSectionWithName(app.CSections.TableFillMarker.name);
-		if (textMsg.match('EMPTY')) {
-			if (tablefillMarkerSection)
-				tablefillMarkerSection.calculatePositionViaCellCursor(null);
-			this._tableAutoFillAreaPixels = null;
-		}
-		else
-		{
-			var strTwips = textMsg.match(/\d+/g);
-			if (strTwips != null && this._map.isEditMode()) {
-				var topLeftTwips = new cool.Point(parseInt(strTwips[0]), parseInt(strTwips[1]));
-				var offset = new cool.Point(parseInt(strTwips[2]), parseInt(strTwips[3]));
+	// One marker per mark (one per visible styled table), pooled by name so we
+	// grow/shrink and reposition rather than recreating them each message.
+	_onTableAutoFillStateChanged: function (marks) {
+		if (!Array.isArray(marks))
+			marks = [];
 
-				var topLeftPixels = this._twipsToCorePixels(topLeftTwips);
-				var offsetPixels = this._twipsToCorePixels(offset);
-				this._tableAutoFillAreaPixels = app.LOUtil.createRectangle(topLeftPixels.x, topLeftPixels.y, offsetPixels.x, offsetPixels.y);
+		var baseName = app.CSections.TableFillMarker.name;
+		var count = this._map.isEditMode() ? marks.length : 0;
 
-				if (tablefillMarkerSection)
-					// Pass the cell's bottom-right corner; the marker tucks itself there.
-					tablefillMarkerSection.calculatePositionViaCellCursor([topLeftPixels.x + offsetPixels.x, topLeftPixels.y + offsetPixels.y]);
+		for (var i = 0; i < count; i++) {
+			var name = baseName + ' ' + i;
+			var section = app.sectionContainer.getSectionWithName(name);
+			if (!section) {
+				section = new app.definitions.TableFillMarkerSection(name);
+				app.sectionContainer.addSection(section);
 			}
-			else {
-				this._tableAutoFillAreaPixels = null;
-			}
+
+			var strTwips = String(marks[i].rectangle).match(/\d+/g);
+			if (!strTwips)
+				continue;
+			var topLeftTwips = new cool.Point(parseInt(strTwips[0]), parseInt(strTwips[1]));
+			var offset = new cool.Point(parseInt(strTwips[2]), parseInt(strTwips[3]));
+			var topLeftPixels = this._twipsToCorePixels(topLeftTwips);
+			var offsetPixels = this._twipsToCorePixels(offset);
+			section.calculatePositionViaCellCursor([topLeftPixels.x + offsetPixels.x, topLeftPixels.y + offsetPixels.y]);
 		}
+
+		var prev = this._tableFillMarkerCount || 0;
+		for (var j = count; j < prev; j++) {
+			if (app.sectionContainer.getSectionWithName(baseName + ' ' + j))
+				app.sectionContainer.removeSection(baseName + ' ' + j);
+		}
+		this._tableFillMarkerCount = count;
+		this._tableFillMarkersVisible = count > 0;
+
+		app.sectionContainer.requestReDraw();
 	},
 
 	_onSplitStateChanged: function (e, isSplitCol) {

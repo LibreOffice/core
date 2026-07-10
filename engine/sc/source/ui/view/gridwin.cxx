@@ -1782,22 +1782,37 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
                     }
                     bNewPointer = true;
                 }
-                // Online posts the marker centre (which can miss the triangle) and
-                // hit-tests in the browser, so core keeps the plain rectangle there.
-                else if (mpDBExpandRect && mpDBExpandRect->Contains(aMousePos) &&
-                         (comphelper::COKit::isActive() ||
-                          lcl_HitHandleTriangle(*mpDBExpandRect, aMousePos, bLayoutRTL)))
+                else
                 {
-                    SetPointer( PointerStyle::SESize );
-                    if (bAction)
+                    const tools::Long nExpand = 2 + 2 * GetDPIScaleFactor();
+                    for (const auto& rHandle : maDBExpandHandles)
                     {
-                        SCCOL nX = maDBRange.aEnd.Col();
-                        SCROW nY = maDBRange.aEnd.Row();
+                        tools::Rectangle aHitRect = rHandle.first;
+                        aHitRect.expand(nExpand);
+                        if (!aHitRect.Contains(aMousePos))
+                            continue;
+                        // Online posts the marker centre and hit-tests in the browser,
+                        // so core keeps the plain rectangle there; desktop uses the triangle.
+                        if (!comphelper::COKit::isActive() &&
+                            !lcl_HitHandleTriangle(aHitRect, aMousePos, bLayoutRTL))
+                            continue;
 
-                        mrViewData.SetDragMode(
-                            maDBRange.aStart.Col(), maDBRange.aStart.Row(), nX, nY, ScFillMode::DBEXPAND );
+                        SetPointer( PointerStyle::SESize );
+                        if (bAction)
+                        {
+                            const ScAddress& rCell = rHandle.second;
+                            if (ScDBData* pDBData = rDoc.GetTableDBAtCursor(
+                                    rCell.Col(), rCell.Row(), rCell.Tab(), ScDBDataPortion::AREA))
+                            {
+                                pDBData->GetArea(maDBRange);
+                                mrViewData.SetDragMode(
+                                    maDBRange.aStart.Col(), maDBRange.aStart.Row(),
+                                    maDBRange.aEnd.Col(), maDBRange.aEnd.Row(), ScFillMode::DBEXPAND );
+                            }
+                        }
+                        bNewPointer = true;
+                        break;
                     }
-                    bNewPointer = true;
                 }
             }
         }
@@ -2535,9 +2550,9 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         pView->StopRefMode();
         mrViewData.ResetFillMode();
         pView->GetFunctionSet().SetAnchorFlag( false );    // #i5819# don't use AutoFill anchor flag for selection
-        ScAddress aCurrentAddress = mrViewData.GetCurPos();
         ScDocument& rDocument = mrViewData.GetDocument();
-        if (ScDBData* pDBData = rDocument.GetTableDBAtCursor(aCurrentAddress.Col(), aCurrentAddress.Row(), aCurrentAddress.Tab(), ScDBDataPortion::AREA))
+        // Resolve from the grabbed handle's range, not the cursor (they can differ).
+        if (ScDBData* pDBData = rDocument.GetTableDBAtCursor(maDBRange.aStart.Col(), maDBRange.aStart.Row(), maDBRange.aStart.Tab(), ScDBDataPortion::AREA))
         {
             SCTAB nTab = mrViewData.GetTabNumber();
             ScDBDocFunc aFunc( *mrViewData.GetDocShell() );
@@ -6667,38 +6682,56 @@ void ScGridWindow::updateOtherKitSelections() const
 namespace
 {
 
-void updateCOKitAutoFill(const ScViewData& rViewData, tools::Rectangle const & rRectangle, bool bIsTableArea)
+void updateCOKitAutoFill(const ScViewData& rViewData, tools::Rectangle const & rRectangle)
 {
     if (!comphelper::COKit::isActive())
         return;
 
-    double nPPTX = rViewData.GetPPTX();
-    double nPPTY = rViewData.GetPPTY();
+    const double nPPTX = rViewData.GetPPTX();
+    const double nPPTY = rViewData.GetPPTY();
 
     OString sRectangleString = "EMPTY"_ostr;
     if (!rRectangle.IsEmpty())
     {
-        // selection start handle
         tools::Rectangle aLogicRectangle(
                 rRectangle.Left()  / nPPTX, rRectangle.Top() / nPPTY,
                 rRectangle.Right() / nPPTX, rRectangle.Bottom() / nPPTY);
         sRectangleString = aLogicRectangle.toString();
     }
 
-    ScTabViewShell* pViewShell = rViewData.GetViewShell();
-    if (bIsTableArea)
-    {
-        tools::JsonWriter writer;
-        writer.put("commandName", "TableAutoFillInfo");
-        {
-            const auto aState = writer.startNode("state");
-            writer.put("rectangle", sRectangleString);
-        }
-        OString info = writer.finishAndGetAsOString();
-        pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, info);
-    }
-    else
+    if (ScTabViewShell* pViewShell = rViewData.GetViewShell())
         pViewShell->viewCallback(COKitCallbackType::CELL_AUTO_FILL_AREA, sRectangleString);
+}
+
+void updateCOKitTableHandles(const ScViewData& rViewData,
+                             const std::vector<std::pair<tools::Rectangle, ScAddress>>& rHandles)
+{
+    if (!comphelper::COKit::isActive())
+        return;
+
+    ScTabViewShell* pViewShell = rViewData.GetViewShell();
+    if (!pViewShell)
+        return;
+
+    const double nPPTX = rViewData.GetPPTX();
+    const double nPPTY = rViewData.GetPPTY();
+
+    tools::JsonWriter writer;
+    writer.put("commandName", "TableAutoFillInfo");
+    {
+        const auto aState = writer.startNode("state");
+        const auto aMarks = writer.startArray("marks");
+        for (const auto& rHandle : rHandles)
+        {
+            const tools::Rectangle& rRect = rHandle.first;
+            const auto aMark = writer.startStruct();
+            tools::Rectangle aLogicRectangle(
+                    rRect.Left()  / nPPTX, rRect.Top() / nPPTY,
+                    rRect.Right() / nPPTX, rRect.Bottom() / nPPTY);
+            writer.put("rectangle", aLogicRectangle.toString());
+        }
+    }
+    pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, writer.finishAndGetAsOString());
 }
 
 } //end anonymous namespace
@@ -7033,13 +7066,10 @@ void ScGridWindow::UpdateSelectionOverlay()
 
 void ScGridWindow::DeleteDatabaseOverlay()
 {
-    mpDBExpandRect.reset();
+    maDBExpandHandles.clear();
     mpOODatabase.reset();
-    if (comphelper::COKit::isActive()) // notify the COKit
-    {
-        tools::Rectangle aEmptyRect;
-        updateCOKitAutoFill(mrViewData, aEmptyRect, true);
-    }
+    if (comphelper::COKit::isActive()) // clear the client's markers
+        updateCOKitTableHandles(mrViewData, {});
 }
 
 void ScGridWindow::UpdateDatabaseOverlay()
@@ -7055,29 +7085,88 @@ void ScGridWindow::UpdateDatabaseOverlay()
     if (aOldMode != aDrawMode)
         SetMapMode(aDrawMode);
 
-    DeleteDatabaseOverlay();
+    // Clear locally rather than via DeleteDatabaseOverlay so the client gets one
+    // marks message below, not an extra empty one first.
+    maDBExpandHandles.clear();
+    mpOODatabase.reset();
 
     ScDocument& rDocument = mrViewData.GetDocument();
-    ScAddress aCurrentAddress = mrViewData.GetCurPos();
-    const ScDBData* pDBData = rDocument.GetTableDBAtCursor(aCurrentAddress.Col(), aCurrentAddress.Row(),
-        aCurrentAddress.Tab(), ScDBDataPortion::AREA);
-    if (!pDBData)
+    ScDBCollection* pDBs = rDocument.GetDBCollection();
+    const SCTAB nTab = mrViewData.GetTabNumber();
+
+    if (pDBs)
+    {
+        for (const auto& rxData : pDBs->getNamedDBs())
+        {
+            const ScDBData& rData = *rxData;
+            if (!rData.GetTableStyleInfo())
+                continue;
+
+            ScRange aRange;
+            rData.GetArea(aRange);
+            if (aRange.aStart.Tab() != nTab)
+                continue;
+
+            // skip tables entirely outside the visible range
+            if (aRange.aEnd.Col() < maVisibleRange.mnCol1 || aRange.aStart.Col() > maVisibleRange.mnCol2 ||
+                aRange.aEnd.Row() < maVisibleRange.mnRow1 || aRange.aStart.Row() > maVisibleRange.mnRow2)
+                continue;
+
+            // no handle on a protected/non-editable table
+            const bool bEditable = ScEditableTester::CreateAndTestBlock(
+                rDocument, nTab, aRange.aStart.Col(), aRange.aStart.Row(),
+                aRange.aEnd.Col(), aRange.aEnd.Row()).IsEditable();
+            if (!bEditable)
+                continue;
+
+            tools::Rectangle aFillRect = ComputeFillHandleRect(aRange.aEnd.Col(), aRange.aEnd.Row(), true);
+            maDBExpandHandles.emplace_back(aFillRect, aRange.aEnd);
+        }
+    }
+
+    if (comphelper::COKit::isActive())
+    {
+        updateCOKitTableHandles(mrViewData, maDBExpandHandles);
+        return;
+    }
+
+    if (maDBExpandHandles.empty())
         return;
 
-    ScRange aCurrRange;
-    pDBData->GetArea(aCurrRange);
-    maDBRange = aCurrRange;
-
-    // Only draw the table-resize handle when the table area is editable; on a
-    // protected sheet the handle (and thus the resize affordance) must not appear.
-    const bool bEditable = ScEditableTester::CreateAndTestBlock(
-        rDocument, aCurrRange.aStart.Tab(), aCurrRange.aStart.Col(), aCurrRange.aStart.Row(),
-        aCurrRange.aEnd.Col(), aCurrRange.aEnd.Row()).IsEditable();
-    if (!bEditable)
+    rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
+    if (!xOverlayManager.is())
         return;
 
-    // Draw only the bottom-right resize handle, no outline around the table.
-    mpOODatabase = DrawFillMarker(aCurrRange.aEnd.Col(), aCurrRange.aEnd.Row(), mpDBExpandRect, true);
+    const bool bLayoutRTL = rDocument.IsLayoutRTL(nTab);
+    const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
+    basegfx::B2DPolyPolygon aTriangles;
+    for (const auto& rHandle : maDBExpandHandles)
+    {
+        const tools::Rectangle& r = rHandle.first;
+        basegfx::B2DPolygon aTriangle;
+        if (bLayoutRTL)
+        {
+            aTriangle.append(basegfx::B2DPoint(r.Left(),  r.Top()));
+            aTriangle.append(basegfx::B2DPoint(r.Left(),  r.Bottom()));
+            aTriangle.append(basegfx::B2DPoint(r.Right(), r.Bottom()));
+        }
+        else
+        {
+            aTriangle.append(basegfx::B2DPoint(r.Right(), r.Top()));
+            aTriangle.append(basegfx::B2DPoint(r.Right(), r.Bottom()));
+            aTriangle.append(basegfx::B2DPoint(r.Left(),  r.Bottom()));
+        }
+        aTriangle.setClosed(true);
+        aTriangle.transform(aTransform);
+        aTriangles.append(aTriangle);
+    }
+
+    const Color aColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::CALCDBFOCUS).nColor;
+    std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlayPolyPolygon(
+        aTriangles, aColor, 0.0, aColor));
+    xOverlayManager->add(*pOverlay);
+    mpOODatabase.reset(new sdr::overlay::OverlayObjectList);
+    mpOODatabase->append(std::move(pOverlay));
 }
 
 void ScGridWindow::UpdateHighlightOverlay()
@@ -7114,32 +7203,22 @@ void ScGridWindow::DeleteAutoFillOverlay()
     mpAutoFillRect.reset();
 }
 
-std::unique_ptr<sdr::overlay::OverlayObjectList> ScGridWindow::DrawFillMarker(SCCOL nX, SCROW nY, std::optional<tools::Rectangle>& rRect, bool bIsTableArea)
+tools::Rectangle ScGridWindow::ComputeFillHandleRect(SCCOL nX, SCROW nY, bool bIsTableArea)
 {
-    SCTAB nTab = mrViewData.CurrentTabForData();
+    const SCTAB nTab = mrViewData.CurrentTabForData();
     ScDocument& rDoc = mrViewData.GetDocument();
-    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
+    const bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
-    // tdf#162006 Ensures the AutoFill handle is visible at any zoom level
+    // tdf#162006 Ensures the handle is visible at any zoom level
     // At 100% = Total Size 8 (2px for the external white line; 6px for the handle itself)
     const double fScaleFactor(2 + 2 * GetDPIScaleFactor());
     const double fZoom(2 + 2 * mrViewData.GetZoomX());
-    Size aFillHandleSize(fScaleFactor + fZoom, fScaleFactor + fZoom);
+    const Size aFillHandleSize(fScaleFactor + fZoom, fScaleFactor + fZoom);
 
     Point aFillPos = mrViewData.GetScrPos( nX, nY, eWhich, true );
     tools::Long nSizeXPix;
     tools::Long nSizeYPix;
     mrViewData.GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
-
-    // Consider the case of merged cells to determine where to place the AutoFill handle
-    SCCOL nX2 = mrViewData.GetCurX();
-    SCCOL nY2 = mrViewData.GetCurY();
-    const ScMergeAttr& rMerge = rDoc.GetAttr(nX2, nY2, nTab, ATTR_MERGE);
-    if (rMerge.GetColMerge() >= 1 || rMerge.GetRowMerge() >= 1)
-    {
-        nX2 += rMerge.GetColMerge() - 1;
-        nY2 += rMerge.GetRowMerge() - 1;
-    }
 
     // The table handle tucks fully inside the corner; AutoFill stays centred.
     const tools::Long nHalfW = aFillHandleSize.Width() / 2;
@@ -7153,56 +7232,28 @@ std::unique_ptr<sdr::overlay::OverlayObjectList> ScGridWindow::DrawFillMarker(SC
     aFillPos.AdjustY(nSizeYPix);
     aFillPos.AdjustY( -(bIsTableArea ? aFillHandleSize.Height() : nHalfH) );
 
-    tools::Rectangle aFillRect(aFillPos, aFillHandleSize);
+    return tools::Rectangle(aFillPos, aFillHandleSize);
+}
+
+std::unique_ptr<sdr::overlay::OverlayObjectList> ScGridWindow::DrawFillMarker(SCCOL nX, SCROW nY, std::optional<tools::Rectangle>& rRect)
+{
+    tools::Rectangle aFillRect = ComputeFillHandleRect(nX, nY, /*bIsTableArea*/false);
 
     // expand rect to increase hit area
     rRect = aFillRect;
-    rRect->expand(fScaleFactor);
+    rRect->expand(2 + 2 * GetDPIScaleFactor());
 
     // #i70788# get the OverlayManager safely
     rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
     if (comphelper::COKit::isActive()) // notify the COKit
     {
-        updateCOKitAutoFill(mrViewData, aFillRect, bIsTableArea);
+        updateCOKitAutoFill(mrViewData, aFillRect);
     }
     else if (xOverlayManager.is())
     {
         const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
 
         std::unique_ptr<sdr::overlay::OverlayObjectList> pOverlayList(new sdr::overlay::OverlayObjectList);
-
-        if (bIsTableArea)
-        {
-            // Corner triangle: the square with its inner-facing corner cut off.
-            const Color aTableHandleColor
-                = ScModule::get()->GetColorConfig().GetColorValue(svtools::CALCDBFOCUS).nColor;
-
-            basegfx::B2DPolygon aTriangle;
-            if (bLayoutRTL)
-            {
-                aTriangle.append(basegfx::B2DPoint(aFillRect.Left(),  aFillRect.Top()));
-                aTriangle.append(basegfx::B2DPoint(aFillRect.Left(),  aFillRect.Bottom()));
-                aTriangle.append(basegfx::B2DPoint(aFillRect.Right(), aFillRect.Bottom()));
-            }
-            else
-            {
-                aTriangle.append(basegfx::B2DPoint(aFillRect.Right(), aFillRect.Top()));
-                aTriangle.append(basegfx::B2DPoint(aFillRect.Right(), aFillRect.Bottom()));
-                aTriangle.append(basegfx::B2DPoint(aFillRect.Left(),  aFillRect.Bottom()));
-            }
-            aTriangle.setClosed(true);
-            aTriangle.transform(aTransform);
-
-            std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlayPolyPolygon(
-                basegfx::B2DPolyPolygon(aTriangle),
-                aTableHandleColor,   // no border: stroke matches the fill colour
-                0.0,
-                aTableHandleColor));
-            xOverlayManager->add(*pOverlay);
-            pOverlayList->append(std::move(pOverlay));
-
-            return pOverlayList;
-        }
 
         // Outer rectangle (always white for contrast)
         std::vector< basegfx::B2DRange > aRangesOuter;
@@ -7279,7 +7330,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
         return;
     }
 
-    mpOOAutoFill = DrawFillMarker(nX, nY, mpAutoFillRect, false);
+    mpOOAutoFill = DrawFillMarker(nX, nY, mpAutoFillRect);
 }
 
 void ScGridWindow::DeleteDragRectOverlay()
