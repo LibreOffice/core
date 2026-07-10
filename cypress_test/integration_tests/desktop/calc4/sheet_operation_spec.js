@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require Cypress */
 
 var helper = require('../../common/helper');
 var calcHelper = require('../../common/calc_helper');
@@ -8,6 +8,19 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet Operations.', functi
 	beforeEach(function () {
 		helper.setupAndLoadDocument('calc/sheet_operation.ods');
 	});
+
+	// Wait one Chrome repaint cycle (two requestAnimationFrame) so a focus
+	// change is applied before we sample it or send the next key - no
+	// server round-trip.
+	function waitAFrame() {
+		cy.getFrameWindow().then(function (win) {
+			return new Cypress.Promise(function (resolve) {
+				win.requestAnimationFrame(function () {
+					win.requestAnimationFrame(resolve);
+				});
+			});
+		});
+	}
 
 	it('Insert sheet', function () {
 		calcHelper.assertNumberofSheets(1);
@@ -85,6 +98,39 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet Operations.', functi
 		cy.cGet('.spreadsheet-tab.spreadsheet-tab-selected').should('have.text', 'renameSheet');
 	});
 
+	it('Navigate sheet tab context menu with arrow keys', function () {
+		calcHelper.assertNumberofSheets(1);
+		cy.cGet('#spreadsheet-tab0').should('have.text', 'Sheet1');
+		cy.cGet('#spreadsheet-tab0').focus().should('have.focus');
+		cy.realPress(['Shift', 'F10']);
+		waitAFrame();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Insert sheet before this')
+			.should('have.focus');
+		// Arrow Down moves focus to the next entry, Enter activates it.
+		cy.realPress('ArrowDown');
+		waitAFrame();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Insert sheet after this')
+			.should('have.focus');
+		cy.realPress('Enter');
+		cy.getFrameWindow().then(function (win) { return helper.processToIdle(win); });
+		calcHelper.assertNumberofSheets(2);
+		cy.cGet('#spreadsheet-tab0').should('have.text', 'Sheet1');
+		cy.cGet('#spreadsheet-tab1').should('have.text', 'Sheet2');
+	});
+
+	it('Shift+F10 opens the menu for the focused tab, not the selected one', function () {
+		calcHelper.assertNumberofSheets(1);
+		cy.cGet('#spreadsheet-toolbar #insertsheet').click();
+		calcHelper.assertNumberofSheets(2);
+		cy.cGet('#spreadsheet-tab0').click();
+		cy.cGet('#spreadsheet-tab0').should('have.class', 'spreadsheet-tab-selected');
+		cy.cGet('#spreadsheet-tab1').focus().should('have.focus');
+		cy.realPress(['Shift', 'F10']);
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Insert sheet before this').click();
+		calcHelper.assertNumberofSheets(3);
+		cy.cGet('#spreadsheet-tab0').should('have.text', 'Sheet1');
+		cy.cGet('#spreadsheet-tab2').should('have.text', 'Sheet2');
+	});
 
 	it('Open the cell context menu with Shift+F10', function () {
 		// With focus on a data cell (not a sheet tab), Shift+F10 must open the
