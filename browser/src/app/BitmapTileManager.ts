@@ -529,21 +529,10 @@ class BitmapTileManager extends RenderManagerBase {
 			updated = true;
 		}
 
-		// Calc scrolls the layout, not the leaflet map, so map.getCenter() is
-		// stale. Read the viewed rectangle (already in core pixels) directly so
-		// prefetch and split-pane borders track the real viewport.
-		const layout = app.activeDocument.activeLayout;
-		let pixelBounds;
-		if (layout.type === 'ViewLayoutCalc') {
-			const r = layout.viewedRectangle;
-			pixelBounds = new cool.Bounds(
-				new cool.Point(r.pX1, r.pY1),
-				new cool.Point(r.pX1 + r.pWidth, r.pY1 + r.pHeight),
-			);
-		} else {
-			const center = app.map.getCenter();
-			pixelBounds = app.map.getPixelBoundsCore(center, this._zoom);
-		}
+		// The layout scrolls itself, not the leaflet map, so read the layout
+		// viewport (core pixels) directly for prefetch and split-pane borders.
+		const pixelBounds =
+			app.activeDocument.activeLayout.getViewportCorePixelBounds();
 		if (!this._pixelBounds || !pixelBounds.equals(this._pixelBounds)) {
 			this._pixelBounds = pixelBounds;
 			updated = true;
@@ -1851,17 +1840,8 @@ class BitmapTileManager extends RenderManagerBase {
 
 		Util.ensureValue(app.activeDocument);
 
-		// Calc scrolls the layout, read the viewed rectangle (already in core pixels).
-		var pixelBounds;
-		if (app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
-			const r = app.activeDocument.activeLayout.viewedRectangle;
-			pixelBounds = new cool.Bounds(
-				new cool.Point(r.pX1, r.pY1),
-				new cool.Point(r.pX1 + r.pWidth, r.pY1 + r.pHeight),
-			);
-		} else {
-			pixelBounds = app.map.getPixelBoundsCore(app.map.getCenter(), zoom);
-		}
+		var pixelBounds =
+			app.activeDocument.activeLayout.getViewportCorePixelBounds();
 
 		var queue = this.getMissingTiles(pixelBounds, zoom);
 
@@ -1907,7 +1887,7 @@ class BitmapTileManager extends RenderManagerBase {
 		return this;
 	}
 
-	public update(center: any = null, zoom: number = null) {
+	public update(zoom: number = null) {
 		const map: any = app.map;
 
 		if (
@@ -1950,10 +1930,9 @@ class BitmapTileManager extends RenderManagerBase {
 		} else if (app.activeDocument.activeLayout.type === 'ViewLayoutMultiPage')
 			return;
 		else if (app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
-			// Calc drives scrolling from the layout, not the leaflet map, so
-			// map.getCenter() is stale. Let the layout compute the visible
-			// tiles from its viewed rectangle and hand them to us. This path is
-			// reached both on scroll and on invalidation-triggered refetches
+			// Calc runs its own richer tile refresh (client zoom + visible area +
+			// coord list) rather than the generic getMissingTiles path below. This
+			// is reached both on scroll and on invalidation-triggered refetches
 			// (_requestNewTiles -> update).
 			app.map._docLayer._sendClientZoom();
 			const layout = app.activeDocument.activeLayout as ViewLayoutCalc;
@@ -1963,14 +1942,12 @@ class BitmapTileManager extends RenderManagerBase {
 			return;
 		}
 
-		if (!center) {
-			center = map.getCenter();
-		}
 		if (!zoom) {
 			zoom = Math.round(map.getZoom());
 		}
 
-		var pixelBounds = map.getPixelBoundsCore(center, zoom);
+		var pixelBounds =
+			app.activeDocument.activeLayout.getViewportCorePixelBounds();
 		var queue = this.getMissingTiles(pixelBounds, zoom, true);
 
 		app.map._docLayer._sendClientZoom();
@@ -2123,10 +2100,10 @@ class BitmapTileManager extends RenderManagerBase {
 			return;
 		}
 
-		var center = app.map.getCenter();
 		var zoom = Math.round(app.map.getZoom());
 
-		var pixelBounds = app.map.getPixelBoundsCore(center, zoom);
+		var pixelBounds =
+			app.activeDocument.activeLayout.getViewportCorePixelBounds();
 
 		// create a queue of coordinates to load tiles from
 		const queue = this.getMissingTiles(pixelBounds, zoom, true);

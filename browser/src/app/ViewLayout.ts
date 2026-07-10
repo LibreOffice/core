@@ -272,6 +272,22 @@ class ViewLayoutBase {
 		return cool.SimplePoint.fromCorePixels([anchor.size[0], anchor.size[1]]);
 	}
 
+	// The visible viewport in document core-pixel coordinates: the pure scroll
+	// offset plus the frame size, with no centring baked in. Unlike
+	// viewedRectangle (which the stacked-page layouts build in document-union
+	// space, and which single-window layouts start at a negative centred origin)
+	// this is the real viewport for every layout, so tile fetching and overlay
+	// bounds read it uniformly instead of the leaflet map pixel bounds.
+	public getViewportCorePixelBounds(): cool.Bounds {
+		const frame = this.frameSize;
+		const x = this.scrollProperties.viewX;
+		const y = this.scrollProperties.viewY;
+		return new cool.Bounds(
+			new cool.Point(x, y),
+			new cool.Point(x + frame.pX, y + frame.pY),
+		);
+	}
+
 	public get documentAnchorPosition() {
 		return this._documentAnchorPosition.slice();
 	}

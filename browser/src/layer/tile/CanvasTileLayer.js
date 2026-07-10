@@ -641,7 +641,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			}
 
 			if (!window.L.Browser.mobileWebkit)
-				RenderManager.update(this._map.getCenter(), tileZoom);
+				RenderManager.update(tileZoom);
 
 			if (tileZoomChanged)
 				RenderManager.pruneTiles();

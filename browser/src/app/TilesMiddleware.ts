@@ -154,8 +154,8 @@ class RenderManager {
 		return RenderManager.ensureInstance().redraw();
 	}
 
-	static update(center: any = null, zoom: number = null): void {
-		RenderManager.ensureInstance().update(center, zoom);
+	static update(zoom: number = null): void {
+		RenderManager.ensureInstance().update(zoom);
 	}
 
 	static onWorkerEndTransaction(e: any): void {
