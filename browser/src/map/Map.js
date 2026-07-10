@@ -3,7 +3,7 @@
  * window.L.Map is the central class of the API - it is used to create a map.
  */
 
-/* global app _ Cursor JSDialog RenderManager cool InternPointUtil OverviewFade */
+/* global app _ Cursor JSDialog RenderManager cool InternPointUtil */
 
 window.L.Map = window.L.Evented.extend({
 
@@ -634,55 +634,6 @@ window.L.Map = window.L.Evented.extend({
 			this._textInput.enable();
 			docLayer._updateCursorPos();
 		}
-	},
-
-	setZoom: function (zoom, options, animate) {
-		// do not animate zoom when in a cypress test.
-		if (animate && window.L.Browser.cypressTest)
-			animate = false;
-
-		if (this._docLayer instanceof window.L.CanvasTileLayer) {
-			if (!zoom)
-				zoom = this._clientZoom || this.options.zoom;
-			else
-				this._clientZoom = zoom;
-		}
-
-		if (!this._loaded) {
-			this._zoom = this._limitZoom(zoom);
-			return this;
-		}
-
-		// Do not animate zoom in multi-page or compare changes view.
-		if (animate && app.activeDocument &&
-			['ViewLayoutMultiPage', 'ViewLayoutCompareChanges'].includes(app.activeDocument.activeLayout.type))
-			animate = false;
-
-		// Document layouts zoom through the ZoomControl section, not the map.
-		if (app.activeDocument && app.activeDocument.activeLayout) {
-			var zoomControl = app.sectionContainer.getSectionWithName(app.CSections.ZoomControl.name);
-			if (zoomControl) {
-				// Match the old semantics: only the 3rd arg means "animate"
-				// (callers passing {animate:false} in options leave it undefined).
-				zoomControl.zoomTo(this._limitZoom(zoom), undefined, !!animate);
-			}
-		}
-
-		return this;
-	},
-
-	zoomIn: function (delta, options, animate) {
-		const requestedZoom = this._zoom + (delta || 1);
-		if (OverviewFade.handleZoomBeyondLimit(requestedZoom))
-			return this;
-		return this.setZoom(requestedZoom, options, animate);
-	},
-
-	zoomOut: function (delta, options, animate) {
-		const requestedZoom = this._zoom - (delta || 1);
-		if (OverviewFade.handleZoomBeyondLimit(requestedZoom))
-			return this;
-		return this.setZoom(requestedZoom, options, animate);
 	},
 
 	// If map size has already been updated, invalidateSize needs the oldSize to work properly

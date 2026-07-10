@@ -46,11 +46,6 @@ interface MapInterface extends Evented {
 
 	removeLayer(layer: any): void;
 	addLayer(layer: any): void;
-	setZoom(
-		targetZoom: number,
-		options: { [key: string]: any } | null,
-		animate?: boolean,
-	): void;
 
 	stateChangeHandler: {
 		getItemValue(unoCmd: string): any;

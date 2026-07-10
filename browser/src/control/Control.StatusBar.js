@@ -90,7 +90,7 @@ class StatusBar extends JSDialog.Toolbar {
 		} else if (object.id === 'zoom') {
 			var selected = this._generateZoomItems().filter((item) => { return item.id === data; });
 			if (selected.length)
-				this.map.setZoom(selected[0].scale, null, true /* animate? */);
+				app.zoomControl.zoomTo(selected[0].scale, undefined, true);
 			return;
 		} else if (object.id === 'StateTableCellMenu') {
 			var clicked = parseInt(data);

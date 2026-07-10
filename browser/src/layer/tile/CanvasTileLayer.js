@@ -1323,7 +1323,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			const zoomPercent = strZoomPercent ? parseInt(strZoomPercent[0], 10) : NaN;
 			if (zoomPercent) {
 				const zoomIndex = this._map.getZoomIndex(zoomPercent);
-				this._map.setZoom(zoomIndex, null, false);
+				app.activeDocument.activeLayout.applyZoom(zoomIndex);
 			}
 		}
 	},
@@ -3600,7 +3600,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (zoom > 1)
 			zoom = Math.floor(zoom);
 
-		this._map.setZoom(zoom, {animate: false});
+		app.activeDocument.activeLayout.applyZoom(zoom);
 	},
 
 	// Cells can change position during changes of zoom level in calc
@@ -4084,9 +4084,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			this._firstFitDone = true;
 			if (this._partHasComments)
 				this._includedCommentsInFirstFit = true;
-			map.setZoom(zoom, {animate: false});
+			app.activeDocument.activeLayout.applyZoom(zoom);
 		} else  {
-			map.setZoom();
+			// Client zoom if one is already set, else the default option.
+			app.activeDocument.activeLayout.applyZoom(map._clientZoom || map.options.zoom);
 		}
 
 		this._viewReset();

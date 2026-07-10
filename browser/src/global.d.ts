@@ -81,9 +81,6 @@ declare namespace L {
         getZoom(): number;
         getCenter(): [number, number];
         fitBounds(bounds: any, options?: any): this; // Replace 'any' with the appropriate type if known
-        panTo(center: [number, number]): this;
-        zoomIn(delta?: number, options?: any): this;
-        zoomOut(delta?: number, options?: any): this;
 
         statusBar: JSDialog.StatusBar
     }
@@ -127,6 +124,7 @@ declare namespace L {
 
 interface AppInterface {
 	sectionContainer: CanvasSectionContainer;
+	zoomControl: ZoomControl;
 	LOUtil: typeof LOUtil;
 	socket: Socket;
 	setPermission: (permission: string) => void;

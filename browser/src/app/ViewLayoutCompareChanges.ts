@@ -83,7 +83,7 @@ class ViewLayoutCompareChanges extends ViewLayoutBase {
 
 		if (zoom > 1) zoom = Math.floor(zoom);
 
-		app.map.setZoom(zoom, { animate: false });
+		this.applyZoom(zoom);
 	}
 
 	protected override refreshCurrentCoordList() {

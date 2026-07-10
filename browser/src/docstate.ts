@@ -38,6 +38,7 @@
 	},
 	CSections: {},
 	activeDocument: null, // Active document manager.
+	zoomControl: null, // ZoomControl section; assigned in DocumentBase.
 	definitions: {}, // Class instances are created using definitions under this variable.
 	dpiScale: window.devicePixelRatio,
 	roundedDpiScale: Math.round(window.devicePixelRatio),

@@ -267,13 +267,13 @@ class Dispatcher {
 		};
 
 		this.actionsMap['zoomin'] = () => {
-			app.map.zoomIn(1, null, true /* animate? */);
+			app.zoomControl.zoomTo(app.map.getZoom() + 1, undefined, true);
 		};
 		this.actionsMap['zoomout'] = () => {
-			app.map.zoomOut(1, null, true /* animate? */);
+			app.zoomControl.zoomTo(app.map.getZoom() - 1, undefined, true);
 		};
 		this.actionsMap['zoomreset'] = () => {
-			app.map.setZoom(app.map.options.zoom, null, true);
+			app.zoomControl.zoomTo(app.map.options.zoom, undefined, true);
 		};
 		this.actionsMap['fitwidthzoom'] = () => {
 			if (app.activeDocument.activeLayout)

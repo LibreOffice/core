@@ -98,8 +98,11 @@ class DocumentBase {
 		}
 
 		// Owns zooming for the document layouts, replacing the map's
-		// zoomIn/zoomOut/setZoom.
-		app.sectionContainer.addSection(new ZoomControl());
+		// zoomIn/zoomOut/setZoom. Exposed as app.zoomControl, which drives an
+		// animated zoom directly.
+		const zoomControl = new ZoomControl();
+		app.sectionContainer.addSection(zoomControl);
+		app.zoomControl = zoomControl;
 
 		// Layout spacers that let the tiles (document-anchor) section shrink to
 		// the content size when the document is smaller than the frame. Only

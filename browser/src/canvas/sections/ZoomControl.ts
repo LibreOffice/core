@@ -85,6 +85,9 @@ class ZoomControl extends CanvasSectionObject {
 			return;
 		}
 
+		// When no explicit anchor is given (programmatic zoom that skipped the
+		// animation above, e.g. under cypress), pivot on the current view centre,
+		// captured here while the viewed rectangle still holds the old scale.
 		layout.applyZoom(target, anchorTwips || layout.zoomAnchorPoint());
 	}
 

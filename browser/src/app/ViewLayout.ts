@@ -488,7 +488,7 @@ class ViewLayoutBase {
 	// Used by both the animated end and the non-animated path. Map-free: the
 	// scale is applied via _updateTileTwips (not _resetView) and the doc type's
 	// 'zoomend' listeners do the rest of the post-zoom work.
-	public applyZoom(targetZoom: number, anchorTwips: cool.SimplePoint): void {
+	public applyZoom(targetZoom: number, anchorTwips?: cool.SimplePoint): void {
 		// The zoom internals used here (_zoom, _clientZoom, _tileZoom,
 		// _updateTileTwips) are not on the typed interfaces; cast for now while
 		// the map is still being removed from the zoom path.
@@ -498,14 +498,35 @@ class ViewLayoutBase {
 		const zoomChanged = map._zoom !== zoom;
 
 		map._zoom = zoom;
-		map._clientZoom = zoom; // fallback used when setZoom(0) is called later.
+		map._clientZoom = zoom; // kept in sync as the initial-zoom fallback.
 		docLayer._tileZoom = Math.round(zoom);
 
 		// Recompute app.twipsToPixels for the new zoom (no map pane involved) and
-		// re-sync the canvas, then rebuild the viewed rectangle around the anchor
-		// at that scale.
+		// re-sync the canvas, then place the viewed rectangle at the new scale.
 		docLayer._updateTileTwips();
-		this.setViewRectangleFromPointAndScale(anchorTwips, app.twipsToPixels);
+		if (anchorTwips) {
+			// Explicit pivot (pinch / wheel / ZoomControl programmatic): keep that
+			// document point fixed under the zoom. The anchor is captured before
+			// this call so _updateTileTwips' rebuild does not move it.
+			this.setViewRectangleFromPointAndScale(anchorTwips, app.twipsToPixels);
+			// The rectangle above is a plain scroll position. The single-window
+			// layouts hold their horizontal placement - the centring of a document
+			// narrower than the frame, and Writer's shift for the comment margin - in
+			// the centring offset instead, so take the scroll from that rectangle and
+			// build the final one around it.
+			if (this.usesSingleWindowView()) this.rebuildSingleWindowView();
+		} else if (this.usesSingleWindowView()) {
+			// No pivot (load / fit-width / programmatic): keep the current scroll
+			// position by rebuilding from scrollProperties at the new scale, so a
+			// fit-width Writer or Impress view stays where it is, at the document
+			// top on load.
+			this.refreshVisibleAreaRectangle();
+		} else {
+			this.setViewRectangleFromPointAndScale(
+				this.zoomAnchorPoint(),
+				app.twipsToPixels,
+			);
+		}
 
 		// The doc type's 'zoomend' listeners do the post-zoom work (for Calc:
 		// _onZoomRowColumns -> client zoom, _restrictDocumentSize, view

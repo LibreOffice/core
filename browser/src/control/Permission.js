@@ -649,7 +649,7 @@ window.L.Map.include({
 		app.events.fire('updatepermission', {perm : perm});
 
 		if (this._docLayer._docType === 'text' && (window.mode.isSmallScreenDevice() || window.mode.isTablet())) {
-			this.setZoom(10);
+			app.activeDocument.activeLayout.applyZoom(10);
 		}
 
 		if (window.ThisIsTheiOSApp && window.mode.isTablet() && this._docLayer._docType === 'spreadsheet')

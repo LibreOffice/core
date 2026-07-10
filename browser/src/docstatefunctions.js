@@ -26,6 +26,11 @@ window.addEventListener('load', function () {
 	app.pixelsToTwips = 15;
 	app.twipsToPixels = 1 / app.pixelsToTwips;
 	app.tile.size.pX = app.tile.size.pY = 256;
+
+	// Placeholder ZoomControl so app.zoomControl is a non-null object with the
+	// methods callers use before DocumentBase creates the real section. Replaced
+	// in the DocumentBase constructor when a document loads.
+	app.zoomControl = { zoomTo: function () {} };
 });
 
 app.getViewRectangles = function () {
