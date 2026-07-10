@@ -175,6 +175,100 @@ def parse_packinfo(filename):
         raise Exception(f"unexpected line {i}: {line}")
     return result
 
+def parse_ziplist(filename):
+    """Parse a ziplist file from instsetoo_native."""
+
+    with open(filename) as f:
+        lines = f.read().splitlines()
+
+    # substitute everything outside of "include"
+    def subst_vars(line):
+        return line.replace("{buildid}", os.environ.get("LIBO_VERSION_PATCH"))
+#unused            .replace("{os}", os.environ.get("OS"))
+#unused            .replace("{productversion}", )
+#unused            .replace("{languages}", )
+
+    def parse_group(lines, i):
+        result = {}
+        ingroup = False
+        n = len(lines)
+        while i < n:
+            line = lines[i].strip()
+            i += 1
+
+            # skip comments
+            if len(line) == 0 or line[0] == "#":
+                continue
+            elif len(line) == 1 and line[0] == "{":
+                if ingroup:
+                    raise Exception(f"unexpected start of group in line {i}: {line}")
+                ingroup = True
+            elif len(line) == 1 and line[0] == "}":
+                if not ingroup:
+                    raise Exception(f"unexpected end of group in line {i}: {line}")
+                ingroup = False
+                return (i, result)
+            else:
+                parts = line.split(None, 1)
+                if len(parts) == 1:
+                    if parts[0].lower() in ["settings", "variables"]:
+                        (i_next, group) = parse_group(lines, i)
+                        i = i_next
+                        result[parts[0].lower()] = group
+                    else:
+                        result[parts[0]] = None
+                else:
+                    result[parts[0]] = subst_vars(parts[1])
+
+    result = {}
+    i = 0
+    n = len(lines)
+    while i < n:
+        line = lines[i].strip()
+        i += 1
+
+        # skip comments
+        if len(line) == 0 or line[0] == "#":
+            continue
+
+        if len(line.split(None)) > 1:
+            raise Exception(f"unexpected more than 1 token in line {i}: {line}")
+
+        (i_next, group) = parse_group(lines, i)
+        i = i_next
+        result[line] = group
+
+    return result
+
+def resolve_ziplist_inheritance(ziplist):
+    """Resolve Globals in ziplist file.  (The format supports general
+    inheritance but only Globals is used in practice)"""
+
+    def resolve(product, global_):
+        for key in global_:
+            if key in ["settings", "variables"]:
+                resolve(product[key], global_[key])
+            elif key not in product:
+                product[key] = global_[key]
+
+    def parse_include(variables, filename):
+        with open(filename) as f:
+            INC = re.compile(r"^\s*(\S+)\s*=\s*(.*?)\s*$")
+            for line in f.read().splitlines():
+                match = INC.match(line)
+                if match:
+                    variables[match.group(1)] = match.group(2)
+
+    globals_ = ziplist.pop("Globals")
+    for product in ziplist:
+        resolve(ziplist[product], globals_)
+    for product in ziplist:
+        variables = ziplist[product]["settings"]["variables"]
+        if "ADD_INCLUDE_FILES" in variables:
+            includes = variables["ADD_INCLUDE_FILES"].split(",")
+            for inc in includes:
+                parse_include(variables, os.path.join(SRCDIR, inc))
+
 package_cache = {}
 
 def package_id(package):
@@ -364,17 +458,19 @@ def sbom_skeleton(package, root_spdx_id):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 8:
-        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <4 packinfo> <path of install script>")
+    if len(sys.argv) < 9:
+        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <4 packinfo> <path of install script>")
     else:
         sbom_path = sys.argv[1]
         license_path = sys.argv[2]
+        ziplist = parse_ziplist(sys.argv[3])
+        resolve_ziplist_inheritance(ziplist)
         packinfos = []
-        packinfos += parse_packinfo(sys.argv[3])
         packinfos += parse_packinfo(sys.argv[4])
         packinfos += parse_packinfo(sys.argv[5])
         packinfos += parse_packinfo(sys.argv[6])
-        install_script = parse_install_script(sys.argv[7])
+        packinfos += parse_packinfo(sys.argv[7])
+        install_script = parse_install_script(sys.argv[8])
         process_file(license_path)
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"
