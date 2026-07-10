@@ -4,14 +4,37 @@ COMMIT_MSG_FILE=$1
 COMMIT_SOURCE=$2
 
 if [ "$COMMIT_SOURCE" = "merge" ] && [ -f "$COMMIT_MSG_FILE" ]; then
+    # Filter out known trailers.
+    TRAILERS=$(grep -E '^(Signed-off-by|Change-Id):' "$COMMIT_MSG_FILE")
+
     # We want to uncomment the "# Conflicts:" line and lines after that if they start with "#<tab>".
     # Stop modifying after we hit the first line that doesn't start with "#<tab>".
     awk '
         /^# Conflicts:/ { in_conflicts=1; sub(/^# /, ""); print; next }
         in_conflicts && /^#\t/ { sub(/^#\t/, "\t"); print; next }
         in_conflicts { in_conflicts=0 }
+        /^(Signed-off-by|Change-Id):/ { next }
         { print }
     ' "$COMMIT_MSG_FILE" > "$COMMIT_MSG_FILE.tmp" && mv "$COMMIT_MSG_FILE.tmp" "$COMMIT_MSG_FILE"
+
+    # Add trailers back, after a conflict block but before the other commented lines.
+    if [ -n "$TRAILERS" ]; then
+        TRAILERS="$TRAILERS" awk '
+            BEGIN { emitted = 0 }
+            /^#/ && !emitted {
+                print ""
+                print ENVIRON["TRAILERS"]
+                emitted = 1
+            }
+            { print }
+            END {
+                if (!emitted) {
+                    print ""
+                    print ENVIRON["TRAILERS"]
+                }
+            }
+        ' "$COMMIT_MSG_FILE" > "$COMMIT_MSG_FILE.tmp" && mv "$COMMIT_MSG_FILE.tmp" "$COMMIT_MSG_FILE"
+    fi
 fi
 
 # vim:set shiftwidth=4 expandtab:
