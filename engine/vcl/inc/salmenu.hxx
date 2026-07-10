@@ -65,7 +65,6 @@ public:
     virtual void GetSystemMenuData(SystemMenuData& rData);
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags);
     virtual void ShowCloseButton(bool bShow);
-    virtual void RemoveMenuBarButton( sal_uInt16 nId );
     virtual void Update() {}
 
     virtual bool CanGetFocus() const { return false; }

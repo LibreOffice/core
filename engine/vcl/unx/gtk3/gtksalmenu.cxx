@@ -740,25 +740,6 @@ namespace
     }
 }
 
-void GtkSalMenu::RemoveMenuBarButton( sal_uInt16 nId )
-{
-    const auto it = std::find_if(maExtraButtons.begin(), maExtraButtons.end(), [&nId](const auto &item) {
-        return item.first == nId; });
-    if (it == maExtraButtons.end())
-        return;
-
-    gint nAttach(0);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_container_child_get(GTK_CONTAINER(mpMenuBarContainerWidget), it->second, "left-attach", &nAttach, nullptr);
-    gtk_widget_destroy(it->second);
-#else
-    gtk_grid_query_child(GTK_GRID(mpMenuBarContainerWidget), it->second, &nAttach, nullptr, nullptr, nullptr);
-    g_clear_pointer(&(it->second), gtk_widget_unparent);
-#endif
-    gtk_grid_remove_column(GTK_GRID(mpMenuBarContainerWidget), nAttach);
-    maExtraButtons.erase(it);
-}
-
 //Typically when the menubar is deactivated we want the focus to return
 //to where it came from. If the menubar was activated because of F6
 //moving focus into the associated VCL menubar then on pressing ESC

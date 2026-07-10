@@ -841,20 +841,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 }
 
-void AquaSalMenu::RemoveMenuBarButton( sal_uInt16 i_nId )
-{
-    MenuBarButtonEntry* pEntry = findButtonItem( i_nId );
-    if( pEntry )
-    {
-        releaseButtonEntry( *pEntry );
-        // note: vector guarantees that its contents are in a plain array
-        maButtons.erase( maButtons.begin() + (pEntry - maButtons.data()) );
-    }
-
-    if( pCurrentMenuBar == this )
-        statusLayout();
-}
-
 /*
  * SalMenuItem
  */

@@ -50,8 +50,6 @@ for clazz in (definitionSet - overridingSet):
         continue
     if clazz == "SalMenu::_Bool-AddMenuBarButton(const struct SalMenuButtonItem &,)":
         continue
-    if clazz == "SalMenu::void-RemoveMenuBarButton(sal_uInt16,)":
-        continue
     if clazz == "SalLayout::_Bool-DrawTextSpecial(class SalGraphics &,sal_uInt32,)const":
         continue
     # GTK < 3

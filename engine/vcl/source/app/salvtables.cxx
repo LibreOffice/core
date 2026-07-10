@@ -219,8 +219,6 @@ bool SalMenu::ShowNativePopupMenu(FloatingWindow*, const tools::Rectangle&, Floa
 
 void SalMenu::ShowCloseButton(bool) {}
 
-void SalMenu::RemoveMenuBarButton(sal_uInt16) {}
-
 int SalMenu::GetMenuBarHeight() const { return 0; }
 
 SalMenuItem::~SalMenuItem() {}

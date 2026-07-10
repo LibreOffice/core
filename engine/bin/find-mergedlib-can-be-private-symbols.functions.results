@@ -2409,7 +2409,6 @@ SalLayoutGlyphsCache::dumpState(rtl::OStringBuffer&)
 SalLayoutGlyphsCache::getCacheName() const
 SalMenu::AddMenuBarButton(SalMenuButtonItem const&)
 SalMenu::GetMenuBarHeight() const
-SalMenu::RemoveMenuBarButton(unsigned short)
 SalMenu::ShowCloseButton(bool)
 SalMenu::ShowNativePopupMenu(FloatingWindow*, tools::Rectangle const&, FloatWinPopupFlags)
 SalPrinter::StartJob(rtl::OUString const*, rtl::OUString const&, rtl::OUString const&, ImplJobSetup*, vcl::PrinterController&)
