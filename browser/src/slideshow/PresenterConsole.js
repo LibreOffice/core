@@ -739,6 +739,120 @@ class PresenterConsole {
 		this.tooltip.style.display = 'none';
 	}
 
+	// A minimal hyperlink dialog
+	showExternalLinkDialog(url) {
+		if (!this._proxyPresenter) return;
+
+		const doc = this._proxyPresenter.document;
+		const canvas = doc && doc.querySelector('#current-presentation');
+		if (!doc || !doc.body || !canvas) return;
+
+		const isLinkValid = window.sanitizeUrl(url) !== 'about:blank';
+
+		// Transparent backdrop, invisible (keeps the slide fully visible)
+		const overlay = doc.createElement('div');
+		overlay.style.position = 'fixed';
+		overlay.style.inset = '0';
+		overlay.style.zIndex = '2147483647';
+
+		const msgId = 'presenter-external-link-msg';
+
+		const fontFamily = window
+			.getComputedStyle(document.documentElement)
+			.getPropertyValue('--cool-font');
+
+		const minimalDlg = doc.createElement('div');
+		minimalDlg.setAttribute('role', 'dialog');
+		minimalDlg.setAttribute('aria-modal', 'true');
+		minimalDlg.setAttribute('aria-labelledby', msgId);
+		minimalDlg.tabIndex = -1;
+		minimalDlg.style.outline = 'none';
+
+		// Center the dialog over the slide preview.
+		const rect = canvas.getBoundingClientRect();
+		minimalDlg.style.position = 'absolute';
+		minimalDlg.style.left = rect.left + rect.width / 2 + 'px';
+		minimalDlg.style.top = rect.top + rect.height / 2 + 'px';
+		minimalDlg.style.transform = 'translate(-50%, -50%)';
+		minimalDlg.style.display = 'flex';
+		minimalDlg.style.alignItems = 'center';
+		minimalDlg.style.gap = '14px';
+		minimalDlg.style.maxWidth = '80%';
+		minimalDlg.style.padding = '16px 24px';
+		minimalDlg.style.backgroundColor = '#262626';
+		minimalDlg.style.color = '#e8e8e8';
+		minimalDlg.style.borderRadius = '8px';
+		minimalDlg.style.fontSize = '16px';
+		minimalDlg.style.fontFamily = fontFamily;
+		minimalDlg.style.boxShadow = 'rgba(0, 0, 0, 0.5) 0px 2px 8px 0px';
+
+		const message = doc.createElement('span');
+		message.id = msgId;
+		message.textContent = isLinkValid
+			? _('You are leaving the presentation.')
+			: _('The link is not valid.');
+		minimalDlg.appendChild(message);
+
+		if (isLinkValid) {
+			const action = doc.createElement('button');
+			action.textContent = _('Open link');
+			action.style.border = 'none';
+			action.style.background = 'transparent';
+			action.style.color = '#e88d3a';
+			action.style.fontSize = '16px';
+			action.style.fontFamily = 'inherit';
+			action.style.cursor = 'pointer';
+			action.style.whiteSpace = 'nowrap';
+			action.addEventListener(
+				'click',
+				function () {
+					let target = url;
+					if ('processCoolUrl' in window) {
+						target = window.processCoolUrl({ url: target, type: 'doc' });
+					}
+					window.open(target, '_blank');
+					this._hideExternalLinkDialog();
+				}.bind(this),
+			);
+			minimalDlg.appendChild(action);
+		}
+
+		overlay.appendChild(minimalDlg);
+
+		// Clicking the backdrop (outside the dialog) cancels, like a modal.
+		overlay.addEventListener(
+			'click',
+			function (e) {
+				if (e.target === overlay) this._hideExternalLinkDialog();
+			}.bind(this),
+		);
+
+		// Trap 'Tab' within the dialog, cancel on Escape.
+		this._externalLinkKeyHandler = function (e) {
+			if (e.key === 'Escape') {
+				this._hideExternalLinkDialog();
+			} else if (e.key === 'Tab') {
+				e.preventDefault();
+				const button = minimalDlg.querySelector('button');
+				if (button) button.focus();
+			}
+			e.stopPropagation();
+		}.bind(this);
+		overlay.addEventListener('keydown', this._externalLinkKeyHandler);
+
+		doc.body.appendChild(overlay);
+		this._externalLinkDialog = overlay;
+		minimalDlg.focus();
+	}
+
+	_hideExternalLinkDialog() {
+		if (this._externalLinkDialog) {
+			this._externalLinkDialog.remove();
+			this._externalLinkDialog = null;
+		}
+		this._externalLinkKeyHandler = null;
+	}
+
 	// Attach tooltips to buttons
 	_attachTooltips(buttons) {
 		buttons.forEach(

@@ -223,9 +223,16 @@ class SlideShowNavigator {
 		}
 	}
 
-	private openExternalLink(url?: string) {
+	private openExternalLink(url?: string, fromPresenterConsole = false) {
 		if (!url) return;
 		const map = this.presenter._map;
+
+		const presenterConsole = map.presenterConsole;
+		if (fromPresenterConsole && presenterConsole && presenterConsole._active) {
+			presenterConsole.showExternalLinkDialog(url);
+			return;
+		}
+
 		map.fire('warn', { url: url, map: map, cmd: 'openlink' });
 	}
 
@@ -565,7 +572,11 @@ class SlideShowNavigator {
 
 	// Hit-test the given document coordinates against the current slide's
 	// click interactions (text/shape hyperlinks) and execute the first match.
-	public tryExecuteInteractionAt(x: number, y: number): boolean {
+	public tryExecuteInteractionAt(
+		x: number,
+		y: number,
+		fromPresenterConsole = false,
+	): boolean {
 		const slideInfo = this.theMetaPres.getSlideInfoByIndex(this.currentSlide);
 		if (!slideInfo || !slideInfo.interactions) return false;
 
@@ -574,7 +585,7 @@ class SlideShowNavigator {
 		);
 		if (!shape) return false;
 
-		this._onExecuteInteraction(shape.clickAction);
+		this._onExecuteInteraction(shape.clickAction, fromPresenterConsole);
 		return true;
 	}
 
@@ -625,7 +636,7 @@ class SlideShowNavigator {
 		}
 	}
 
-	_onExecuteInteraction(action: ClickAction) {
+	_onExecuteInteraction(action: ClickAction, fromPresenterConsole = false) {
 		if (action) {
 			switch (action.action) {
 				case 'prevpage':
@@ -644,7 +655,7 @@ class SlideShowNavigator {
 					this.goToSlideAtBookmark(action.bookmark);
 					break;
 				case 'document':
-					this.openExternalLink(action.document);
+					this.openExternalLink(action.document, fromPresenterConsole);
 					break;
 				case 'stoppresentation':
 					this.quit();

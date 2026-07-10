@@ -313,7 +313,7 @@ class SlideShowPresenter {
 			const y = event.relativeY * this._metaPresentation.getDocHeight();
 
 			// text/shape hyperlinks click interactions
-			if (navigator.tryExecuteInteractionAt(x, y)) return;
+			if (navigator.tryExecuteInteractionAt(x, y, true)) return;
 
 			if (!slideInfo.videos || slideInfo.videos.length === 0) return;
 
