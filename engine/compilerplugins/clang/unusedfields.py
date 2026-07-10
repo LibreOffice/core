@@ -86,7 +86,7 @@ for d in definitionSet:
     fieldType = definitionToTypeMap[d]
     if "ModuleClient" in fieldType:
         continue
-    if "::sfx2::sidebar::ControllerItem" in fieldType:
+    if "sfx2::sidebar::ControllerItem" in fieldType:
         continue
     if "(lambda at " in d[0]:
         continue
@@ -128,9 +128,11 @@ for d in definitionSet:
         continue
     if "osl::Mutex" in fieldType:
         continue
-    if "::sfx2::sidebar::ControllerItem" in fieldType:
+    if "sfx2::sidebar::ControllerItem" in fieldType:
         continue
     if "SvxRatioConnector" in fieldType:
+        continue
+    if "Timer" == fieldType:
         continue
     if "(lambda at " in d[0]:
         continue
@@ -154,7 +156,7 @@ for d in definitionSet:
     fieldType = definitionToTypeMap[d]
     if "ModuleClient" in fieldType:
         continue
-    if "::sfx2::sidebar::ControllerItem" in fieldType:
+    if "sfx2::sidebar::ControllerItem" in fieldType:
         continue
     # ignore reference fields, because writing to them actually writes to another field somewhere else
     if fieldType.endswith("&"):
@@ -178,6 +180,9 @@ for d in definitionSet:
         continue
     if "weld::Frame" in fieldType:
         continue
+    # I really don't care about these ancient file formats
+    if srcLoc.startswith("hwpfilter/"):
+        continue
     writeonlySet.add((d[0] + " " + d[1] + " " + definitionToTypeMap[d], srcLoc))
 
 
@@ -199,7 +204,7 @@ for d in definitionSet:
         or srcLoc.startswith("include/svl/svdde.hxx")):
         continue
     # I really don't care about these ancient file formats
-    if (srcLoc.startswith("hwpfilter/"):
+    if srcLoc.startswith("hwpfilter/"):
         continue
     if "(lambda at " in d[0]:
         continue
