@@ -277,7 +277,7 @@ class StatusBar extends JSDialog.Toolbar {
 				configLabel: JSDialog.getStatusbarItemConfigLabel('prevpage'), configPeers: ['nextpage', 'prevnextbreak']},
 			{type: 'customtoolitem',  id: 'nextpage', command: 'next', text: _UNO('.uno:PageDown', 'text'), pressAndHold: true, dataPriority: 9},
 			{type: 'separator', id: 'prevnextbreak', orientation: 'vertical', dataPriority: 9},
-			{type: 'toolitem',  id: 'overview', command: '.uno:InsertCanvasSlide', text: _('Overview'), dataPriority: 9, visible: !app.isReadOnly(),
+			{type: 'customtoolitem',  id: 'overview', command: '.uno:InsertCanvasSlide', text: _('Overview'), dataPriority: 9, visible: !app.isReadOnly(),
 				configLabel: _('Overview'), configPeers: ['overviewbreak']},
 			{type: 'separator', id: 'overviewbreak', orientation: 'vertical', dataPriority: 9, visible: !app.isReadOnly()},
 		].concat(window.mode.isTablet() ? [] : [
