@@ -51,7 +51,6 @@ namespace cppcanvas::internal
             ImplBitmap& operator=( const ImplBitmap& ) = delete;
 
             const css::uno::Reference< css::rendering::XBitmap > mxBitmap;
-            BitmapCanvasSharedPtr                                mpBitmapCanvas;
          };
 
 }

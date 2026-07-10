@@ -179,23 +179,16 @@ struct InsertBookmarkOptions
     bool bMergeMasterPages;   // Merge master pages
     bool bMergeMasterPagesOnly; // Only merge master pages
     bool bPreservePageNames;  // Preserve page names
-    bool bIsClipboardOperation; // Operation triggered by clipboard
-    bool bIsDragAndDropOperation; // Operation triggered by drag and drop
-    bool bIsSameDocumentOperation; // Operation within the same document
-    bool bIsFileDocument;     // Operation involves a file document
 
     InsertBookmarkOptions()
         : bLink(false), bReplace(false), bNoDialogs(false),
           bCopy(true), bMergeMasterPages(true), bMergeMasterPagesOnly(false),
-          bPreservePageNames(false), bIsClipboardOperation(false),
-          bIsDragAndDropOperation(false), bIsSameDocumentOperation(false),
-          bIsFileDocument(false)
+          bPreservePageNames(false)
     {}
 
     // Preset for paste operation
     static InsertBookmarkOptions ForPaste(bool bMergeMasterPages, bool bMergeMasterPagesOnly = false) {
         InsertBookmarkOptions options;
-        options.bIsClipboardOperation = true;
         options.bMergeMasterPages = bMergeMasterPages;
         options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;
         // All defaults are fine for paste
@@ -206,7 +199,6 @@ struct InsertBookmarkOptions
     static InsertBookmarkOptions ForFileInsert(bool bLinkPages) {
         InsertBookmarkOptions options;
         options.bLink = bLinkPages;
-        options.bIsFileDocument = true;
         options.bMergeMasterPagesOnly = false;
         return options;
     }
@@ -214,7 +206,6 @@ struct InsertBookmarkOptions
     // Preset for drag and drop operation
     static InsertBookmarkOptions ForDragDrop(bool bMergeMasterPages, bool bMergeMasterPagesOnly = false) {
         InsertBookmarkOptions options;
-        options.bIsDragAndDropOperation = true;
         options.bNoDialogs = true;
         options.bMergeMasterPages = bMergeMasterPages;
         options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;
@@ -239,7 +230,6 @@ struct InsertBookmarkOptions
         options.bNoDialogs = true;
         options.bMergeMasterPages = false;
         options.bPreservePageNames = bPreserveNames;
-        options.bIsSameDocumentOperation = true;
         options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;
         return options;
     }
@@ -253,7 +243,6 @@ struct InsertBookmarkOptions
         options.bCopy = true;             // Always copy when importing document
         options.bMergeMasterPages = true; // Always merge master pages
         options.bPreservePageNames = false; // Don't preserve page names
-        options.bIsFileDocument = true;   // This is a file document operation
         options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;// Only merge master pages
         return options;
     }

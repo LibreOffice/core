@@ -35,13 +35,6 @@ namespace cppcanvas::internal
             mxBitmap( rBitmap )
         {
             OSL_ENSURE( mxBitmap.is(), "ImplBitmap::ImplBitmap: no valid bitmap" );
-
-            uno::Reference< rendering::XBitmapCanvas > xBitmapCanvas( rBitmap,
-                                                                      uno::UNO_QUERY );
-            if( xBitmapCanvas.is() )
-                mpBitmapCanvas = std::make_shared<ImplBitmapCanvas>(
-                                          uno::Reference< rendering::XBitmapCanvas >(rBitmap,
-                                                                                     uno::UNO_QUERY) );
         }
 
         ImplBitmap::~ImplBitmap()

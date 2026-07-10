@@ -348,10 +348,8 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     OUString sStyleName;
     OUString sNextName;
     OUString sHRef;
-    OUString sCode;
     OUString sMimeType;
     OUString sFrameName;
-    OUString sAppletName;
     OUString sFilterService;
     OUString sBase64CharsLeft;
     OUString sTblName;
@@ -372,7 +370,6 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     sal_uInt16 nType;
     css::text::TextContentAnchorType   eAnchorType;
 
-    bool    bMayScript : 1;
     bool    bMinWidth : 1;
     bool    bMinHeight : 1;
     bool    bSyncWidth : 1;
@@ -853,7 +850,6 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
     nRotation = 0;
     nRelWidth = 0;
     nRelHeight = 0;
-    bMayScript = false;
 
     bMinHeight = false;
     bMinWidth = false;
@@ -862,6 +858,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
     bCreateFailed = false;
     bOwnBase64Stream = false;
     mbMultipleContent = bMultipleContent;
+    OUString sCode;
 
     auto processAttr = [&](sal_Int32 nElement, const sax_fastparser::FastAttributeList::FastAttributeIter& aIter) -> void
     {
@@ -878,7 +875,6 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             sFrameName = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_APPLET_NAME):
-            sAppletName = aIter.toString();
             break;
         case XML_ELEMENT(TEXT, XML_ANCHOR_TYPE):
             if( TextContentAnchorType_AT_PARAGRAPH == eAnchorType ||
@@ -1080,7 +1076,6 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         case XML_ELEMENT(DRAW, XML_ARCHIVE):
             break;
         case XML_ELEMENT(DRAW, XML_MAY_SCRIPT):
-            bMayScript = IsXMLToken( aIter, XML_TRUE );
             break;
         case XML_ELEMENT(DRAW, XML_MIME_TYPE):
         case XML_ELEMENT(LO_EXT, XML_MIME_TYPE):
