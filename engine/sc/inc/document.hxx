@@ -952,6 +952,10 @@ public:
     std::vector<const ScDBData*> GetAllNamedDBsInArea(const ScRange& rRange) const;
     void                         RefreshDirtyTableColumnNames();
     SC_DLLPUBLIC sc::ExternalDataMapper& GetExternalDataMapper();
+    /** True when the document holds at least one external data mapping. Checks
+        without creating the mapper, so it stays cheap for documents that have
+        none. */
+    SC_DLLPUBLIC bool HasDataProviderMappings() const;
 
     SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock( const ScRange& rBlock, OUString& rName,
                                                      bool* pSheetLocal = nullptr ) const;
