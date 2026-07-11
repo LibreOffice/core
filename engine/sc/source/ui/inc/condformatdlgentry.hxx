@@ -81,7 +81,7 @@ public:
 
     void SetPos(const ScAddress& rPos) { maPos = rPos; };
     bool IsSelected() const { return mbActive;}
-    void SetIndex(sal_Int32 nIndex);
+    virtual void SetIndex(sal_Int32 nIndex);
 
     virtual ScFormatEntry* GetEntry() const = 0;
     virtual void SetActive() = 0;
@@ -135,6 +135,7 @@ public:
     virtual ScFormatEntry* GetEntry() const override;
     virtual void SetActive() override;
     virtual void SetInactive() override;
+    virtual void SetIndex(sal_Int32 nIndex) override;
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

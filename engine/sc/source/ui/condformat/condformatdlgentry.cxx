@@ -228,6 +228,20 @@ ScConditionFrmtEntry::~ScConditionFrmtEntry()
 {
 }
 
+void ScConditionFrmtEntry::SetIndex(sal_Int32 nIndex)
+{
+    ScCondFrmtEntry::SetIndex(nIndex);
+
+    // De-duplicate these "id"s in this jsdialog's json.
+    if (comphelper::COKit::isActive())
+    {
+        mxLbCondType->set_buildable_name(u"typeis"_ustr + OUString::number(nIndex));
+        mxEdVal1->GetWidget()->set_buildable_name(u"val1_"_ustr + OUString::number(nIndex));
+        mxEdVal2->GetWidget()->set_buildable_name(u"val2_"_ustr + OUString::number(nIndex));
+        mxFtVal->set_buildable_name(u"valueft"_ustr + OUString::number(nIndex));
+    }
+}
+
 void ScConditionFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
 {
     mxEdVal1->SetGetFocusHdl( LINK( pDialogParent, ScCondFormatDlg, RangeGetFocusHdl ) );

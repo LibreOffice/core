@@ -334,8 +334,12 @@ IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl, weld::Button&, void )
 {
     Freeze();
     maEntries.emplace_back(new ScConditionFrmtEntry(this, mrDoc, mpDialogParent, maPos));
+    sal_Int32 nIndex = 1;
     for(auto& rxEntry : maEntries)
     {
+        // This is needed here as the SetIndex call from RecalcAll() is too
+        // late.
+        rxEntry->SetIndex(nIndex++);
         rxEntry->SetInactive();
     }
     mpDialogParent->InvalidateRefData();
