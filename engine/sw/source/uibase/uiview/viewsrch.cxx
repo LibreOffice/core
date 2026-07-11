@@ -318,9 +318,9 @@ void SwView::ExecSearch(SfxRequest& rReq)
                     if (bBack)
                         m_pWrtShell->Push();
                     OUString aReplace( s_pSrchItem->GetReplaceString() );
-                    i18nutil::SearchOptions2 aTmp( s_pSrchItem->GetSearchOptions() );
-                    std::optional<OUString> xBackRef = sw::ReplaceBackReferences(aTmp,
-                        m_pWrtShell->GetCursor(), m_pWrtShell->GetLayout());
+                    std::optional<OUString> xBackRef = sw::ReplaceBackReferences(
+                        s_pSrchItem->GetSearchOptions(), m_pWrtShell->GetCursor(),
+                        m_pWrtShell->GetLayout());
                     if( xBackRef )
                         s_pSrchItem->SetReplaceString( *xBackRef );
                     Replace();
