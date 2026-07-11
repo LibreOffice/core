@@ -2094,41 +2094,6 @@ void FormulaCompiler::Factor()
                     assert(!"FormulaCompiler::Factor: someone forgot to add a jump count case");
             }
             OpCode eFacOpCode = pFacToken->GetOpCode();
-            eOp = NextToken();
-            if (eOp == ocOpen)
-            {
-                NextToken();
-                // Optional LAMBDA parameters are surrounded by []
-                if (eFacOpCode == ocLambda && mpToken->GetOpCode() == ocTableRefOpen)
-                {
-                    meLastOp = ocSep; // So that NextToken() doesn't produce an error
-                    eOp = NextToken();
-                    if (eOp == ocPush && mpToken->GetType() == svStringName)
-                    {
-                        CheckSetForceArrayParameter(mpToken, 0);
-                        static_cast<FormulaStringNameToken*>(mpToken.get())->SetIsOptional(true);
-                        PutCode(mpToken);
-                        eOp = NextToken();
-                        if (eOp == ocTableRefClose)
-                        {
-                            meLastOp = ocPush; // So that NextToken() doesn't produce an error
-                            eOp = NextToken();
-                        }
-                        else
-                            SetError(FormulaError::PairExpected);
-                    }
-                    else
-                        SetError(FormulaError::ParameterExpected);
-                }
-                else
-                {
-                    CheckSetForceArrayParameter(mpToken, 0);
-                    eOp = Expression();
-                }
-            }
-            else
-                SetError( FormulaError::PairExpected);
-            PutCode( pFacToken );
             // During AutoCorrect (since pArr->GetCodeError() is
             // ignored) an unlimited ocIf would crash because
             // ScRawToken::Clone() allocates the JumpBuffer according to
@@ -2162,6 +2127,55 @@ void FormulaCompiler::Factor()
                     assert(!"FormulaCompiler::Factor: someone forgot to add a jump max case");
             }
             short nJumpCount = 0;
+            // ocLambda requires the operator to appear before all subexpressions in RPN
+            // ocIf, ocIfError, ocIfNA, and ocChoose require the first subexpression
+            // to appear before the operator. ocLet could be arranged either way, but the
+            // interpreter expects the first subexpression to appear before the operator.
+            if (eFacOpCode == ocLambda)
+            {
+                PutCode(pFacToken);
+                if (++nJumpCount <= nJumpMax)
+                    static_cast<FormulaJumpToken*>(&*pFacToken)->GetJump()[ nJumpCount ] = mnPC-1;
+            }
+            eOp = NextToken();
+            if (eOp == ocOpen)
+            {
+                NextToken();
+                // Optional LAMBDA parameters are surrounded by []
+                if (eFacOpCode == ocLambda && mpToken->GetOpCode() == ocTableRefOpen)
+                {
+                    meLastOp = ocSep; // So that NextToken() doesn't produce an error
+                    eOp = NextToken();
+                    if (eOp == ocPush && mpToken->GetType() == svStringName)
+                    {
+                        CheckSetForceArrayParameter(mpToken, 0);
+                        static_cast<FormulaStringNameToken*>(mpToken.get())->SetIsOptional(true);
+                        PutCode(mpToken);
+                        eOp = NextToken();
+                        if (eOp == ocTableRefClose)
+                        {
+                            meLastOp = ocPush; // So that NextToken() doesn't produce an error
+                            eOp = NextToken();
+                        }
+                        else
+                            SetError(FormulaError::PairExpected);
+                    }
+                    else
+                        SetError(FormulaError::ParameterExpected);
+                }
+                else
+                {
+                    CheckSetForceArrayParameter(mpToken, 0);
+                    eOp = Expression();
+                }
+            }
+            else
+                SetError(FormulaError::PairExpected);
+            if (eFacOpCode == ocLambda)
+                // ocSep or ocClose terminate the subexpression
+                PutCode(mpToken);
+            else
+                PutCode(pFacToken);
             while ( (nJumpCount < (FORMULA_MAXPARAMS - 1)) && (eOp == ocSep)
                     && (mpArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
             {

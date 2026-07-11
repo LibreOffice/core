@@ -176,8 +176,7 @@ static std::forward_list<short> lcl_FindReplacementPositions(std::u16string_view
             {
                 short nNextOp = aIter.GetPC() + 1;
                 if (!(nNextOp < rTokens.GetCodeLen()
-                      && (rTokens.GetCode()[nNextOp]->GetOpCode() == ocLet
-                          || rTokens.GetCode()[nNextOp]->GetOpCode() == ocLambda)))
+                      && rTokens.GetCode()[nNextOp]->GetOpCode() == ocLet))
                 {
                     if (pStringNameToken->GetString().getString().equalsIgnoreAsciiCase(aStrName))
                         aPositions.push_front(aIter.GetPC());
@@ -223,25 +222,22 @@ static std::forward_list<short> lcl_FindReplacementPositions(std::u16string_view
                         break;
                         case ocLambda:
                         {
-                            auto pSubToken
-                                = formula::GetStringNameToken(rTokens.GetCode()[aIter.GetPC() - 1]);
-                            if (!(pSubToken && pSubToken->GetString().getString() == aStrName))
+                            bool bFound = false;
+                            for (short nJump = 1; nJump < nJumpCount - 1; ++nJump)
                             {
-                                bool bFound = false;
-                                for (short nJump = 1; nJump < nJumpCount - 1; ++nJump)
+                                auto pSubToken = formula::GetStringNameToken(
+                                    rTokens.GetCode()[pJump[nJump]]);
+                                if (pSubToken
+                                    && pSubToken->GetString().getString().equalsIgnoreAsciiCase(
+                                           aStrName))
                                 {
-                                    pSubToken = formula::GetStringNameToken(
-                                        rTokens.GetCode()[pJump[nJump]]);
-                                    if (pSubToken && pSubToken->GetString().getString() == aStrName)
-                                    {
-                                        // this name shadows the one we're looking for, in the body
-                                        bFound = true;
-                                        break;
-                                    }
+                                    // this name shadows the one we're looking for, in the body
+                                    bFound = true;
+                                    break;
                                 }
-                                if (!bFound)
-                                    aStartPoints.push(pJump[nJumpCount - 1]);
                             }
+                            if (!bFound)
+                                aStartPoints.push(pJump[nJumpCount - 1]);
                         }
                         break;
                         default: // nothing else affects local variables

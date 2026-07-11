@@ -208,9 +208,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLAMBDA)
     m_pDoc->InsertTab(0, u"Formula"_ustr);
 
     // No parameters, constant body.
-    // TODO : The formula system does not yet support this.
-    //m_pDoc->SetString(ScAddress(0, 0, 0), u"=LAMBDA(1)()"_ustr);
-    //CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=LAMBDA(1)()"_ustr);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
 
     // One unused parameter, constant body.
     m_pDoc->SetString(ScAddress(0, 1, 0), u"=LAMBDA(a; 2)(1)"_ustr);

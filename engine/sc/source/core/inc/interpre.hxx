@@ -395,7 +395,6 @@ private:
     void PopError();
     double PopDouble();
     const svl::SharedString & PopString();
-    const svl::SharedString & PopStringName( bool& rIsOptional );
     void ValidateRef( const ScSingleRefData & rRef );
     void ValidateRef( const ScComplexRefData & rRef );
     void ValidateRef( const ScRefList & rRefList );

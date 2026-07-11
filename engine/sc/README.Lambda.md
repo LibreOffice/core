@@ -14,7 +14,6 @@ letters, numbers, and underscores (`_`).
 * You may specify no parameters, if you want the function to operate the same
 way every time it is called (this may be useful if its expression includes
 volatile operators such as `RAND` or `TIME`).
-FIXME: This is not yet true.
 
 * The result of a `LAMBDA` is a function. Don't expect that to show up in the
 spreadsheet in any useful way! You must call the function to use it.
@@ -27,15 +26,16 @@ arguments you want to pass to the function.
 * If you are nesting one `LAMBDA` inside another, you may use the same parameter
 name in both (if you really want - this can easily make things hard to read!).
 The innermost `LAMBDA` specifying a parameter of a given name applies at each
-level of scope.
+level of scope. This also works with `LET`.
 
 * A function can call itself (this is called recursion), but you must be able to
 refer to it from within the function. For example, if cell `A1` is a `LAMBDA`
 formula, the body of the `LAMBDA` can call itself by referring to `A1`. You can
 name your `LAMBDA` cell to make this easier to read.
 
-* If you want your `LAMBDA` function to permit optional parameters, enclose those
-parameter names (in the parameter list, not in the body) in brackets, like this:
+* If you want your `LAMBDA` function to permit optional parameters, enclose
+those parameter names (in the parameter list, not in the body) in brackets, like
+this:
 > =LAMBDA(name1, name2, [name3], [name4], expression)
 
 * `ISOMITTED` can be used within a `LAMBDA` body to detect whether an optional
@@ -97,8 +97,14 @@ and body. It also looks for any parameters between
 `ocTableRefOpen`/`ocTableRefClose` (which correspond to brackets), and sets
 `mIsOptional` for those parameters.
 
+* The `ocLambda` is built in the compiled code as a sequence consisting of the
+`ocLambda` token itself, then the parameter names (`svStringName`) separated by
+`ocSep`, followed by another `ocSep`, then the lambda body, with `ocClose` at
+the end. The jump table points to each parameter name, the body, and the
+position after `ocClose`.
+
 * When interpreted, `ocLambda` causes a `ScFormulaFunction` to be built using
-the contents of the jump table. At this point the optional parameters are
+the contents of the jump table. At this point the required parameters are
 counted, and that information is passed on to the next step.
 
 * `ScFormulaFunction`'s constructor clones the lambda body and saves the
@@ -117,3 +123,6 @@ appear in the body.
 * The presence of an enclosing `LAMBDA` also prevents circular references from
 being a problem, as the body of a `LAMBDA` is not executed until the cell
 containing it already has a value. This allows recursion.
+
+* `LAMBDA` does not currently check for infinite recursion; avoid recursive
+calls that can cause such a loop.
