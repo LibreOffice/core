@@ -122,16 +122,6 @@ ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport,
     }
 }
 
-ScXMLMappingContext::~ScXMLMappingContext()
-{
-    ScDocument* pDoc = GetScImport().GetDocument();
-    auto& rDataMapper = pDoc->GetExternalDataMapper();
-    auto& rDataSources = rDataMapper.getDataSources();
-    if(!rDataSources.empty())
-        rDataSources.back().refresh(pDoc, true);
-
-}
-
 uno::Reference<xml::sax::XFastContextHandler>
     SAL_CALL ScXMLMappingContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& /*xAttrList*/)

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
@@ -29,6 +30,7 @@
 
 #include <ddelink.hxx>
 #include <brdcst.hxx>
+#include <docsh.hxx>
 #include <document.hxx>
 #include <scmatrix.hxx>
 #include <patattr.hxx>
@@ -123,6 +125,10 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
     const OUString& rMimeType, const css::uno::Any & rValue )
 {
+    if (rDoc.GetDocumentShell()
+        && !rDoc.GetDocumentShell()->GetEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+        return SUCCESS;
+
     //  we only master strings...
     if ( SotClipboardFormatId::STRING != SotExchange::GetFormatIdFromMimeType( rMimeType ))
         return SUCCESS;

@@ -36,6 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <comphelper/configuration.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <tablink.hxx>
@@ -138,6 +139,9 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     //  load document
 
     if (rNewFile.isEmpty() || rNewFilter.isEmpty())
+        return false;
+
+    if (!m_rDocSh.GetEmbeddedObjectContainer().getUserAllowsLinkUpdate())
         return false;
 
     OUString aNewUrl = ScGlobal::GetAbsDocName(rNewFile, &m_rDocSh);

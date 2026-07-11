@@ -1756,6 +1756,7 @@ void SfxObjectShell::ShowLinkUpdateInfobar()
     rHelpBtn.connect_clicked(LINK(nullptr, LinkUpdateHelp, DispatchHelpLinksHdl));
 
     weld::Button& rBtn = pInfoBar->addButton();
+    rBtn.set_buildable_name(u"allowupdating"_ustr);
     rBtn.set_label(SfxResId(STR_INFOBAR_ALLOW_UPDATING));
     rBtn.set_tooltip_text(SfxResId(STR_INFOBAR_ALLOW_UPDATING_TOOLTIP));
     rBtn.connect_clicked(LINK(this, SfxObjectShell, AllowLinksUpdateHdl));

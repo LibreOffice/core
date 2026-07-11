@@ -150,6 +150,8 @@ class DataProvider(UITestCase):
                     xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as doc2:
+                xAllow = self.ui_test.wait_until_child_is_available("allowupdating")
+                xAllow.executeAction("CLICK", tuple())
                 # Without the fix in place, this test would have failed with
                 # AssertionError: 'Rank' != 'Rank|Males|Females\r'
                 self.assertEqual("Rank", get_cell_by_position(doc2, 0, 0, 0).getString())

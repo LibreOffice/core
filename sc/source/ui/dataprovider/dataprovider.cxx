@@ -26,6 +26,10 @@
 #include <datamapper.hxx>
 #include <dbdata.hxx>
 #include <docsh.hxx>
+#include <document.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
+#include <sfx2/lnkbase.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <utility>
 
 using namespace com::sun::star;
@@ -194,8 +198,46 @@ const std::vector<std::shared_ptr<sc::DataTransformation>>& ExternalDataSource::
     return maDataTransformations;
 }
 
-ExternalDataMapper::ExternalDataMapper(ScDocument& /*rDoc*/)
-    //mrDoc(rDoc)
+namespace {
+
+// A data mapping fetches external data (CSV, HTML, XML) into a sheet. It is
+// registered in the LinkManager so it passes through the same link update
+// control as sheet links, area links, and external references. The link holds
+// the index of its data source in the mapper. That index is stable because
+// data sources are only ever appended, never removed.
+class ScDataProviderLink final : public sfx2::SvBaseLink
+{
+    ScDocShell& mrDocShell;
+    size_t mnSourceIndex;
+
+public:
+    ScDataProviderLink(ScDocShell& rDocShell, size_t nSourceIndex)
+        : sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SIMPLE_FILE)
+        , mrDocShell(rDocShell)
+        , mnSourceIndex(nSourceIndex)
+    {
+    }
+
+    virtual sfx2::SvBaseLink::UpdateResult DataChanged(const OUString&,
+                                                       const css::uno::Any&) override
+    {
+        if (!mrDocShell.GetEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+            return SUCCESS;
+
+        ScDocument& rDoc = mrDocShell.GetDocument();
+        std::vector<sc::ExternalDataSource>& rSources
+            = rDoc.GetExternalDataMapper().getDataSources();
+        if (mnSourceIndex < rSources.size())
+            rSources[mnSourceIndex].refresh(&rDoc, true);
+
+        return SUCCESS;
+    }
+};
+
+}
+
+ExternalDataMapper::ExternalDataMapper(ScDocument& rDoc)
+    : mrDoc(rDoc)
 {
 }
 
@@ -206,6 +248,19 @@ ExternalDataMapper::~ExternalDataMapper()
 void ExternalDataMapper::insertDataSource(const sc::ExternalDataSource& rSource)
 {
     maDataSources.push_back(rSource);
+
+    ScDocShell* pDocShell = mrDoc.GetDocumentShell();
+    if (!pDocShell)
+        return;
+
+    sfx2::LinkManager* pLinkManager = mrDoc.GetLinkManager();
+    if (!pLinkManager)
+        return;
+
+    ScDataProviderLink* pLink = new ScDataProviderLink(*pDocShell, maDataSources.size() - 1);
+    const OUString& rProvider = rSource.getProvider();
+    pLinkManager->InsertFileLink(*pLink, sfx2::SvBaseLinkObjectType::ClientFile,
+                                 rSource.getURL(), &rProvider, nullptr);
 }
 
 const std::vector<sc::ExternalDataSource>& ExternalDataMapper::getDataSources() const

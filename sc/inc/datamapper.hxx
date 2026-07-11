@@ -94,7 +94,7 @@ public:
 
 class SC_DLLPUBLIC ExternalDataMapper
 {
-    //ScDocument& mrDoc;
+    ScDocument& mrDoc;
     std::vector<ExternalDataSource> maDataSources;
 
 public:
