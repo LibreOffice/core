@@ -10,11 +10,14 @@
 
 #include "helper/qahelper.hxx"
 #include <document.hxx>
+#include <docsh.hxx>
 #include <address.hxx>
 #include <dbdata.hxx>
 #include <datamapper.hxx>
 #include <vcl/scheduler.hxx>
 #include <orcusxml.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
+#include <sfx2/linkmgr.hxx>
 
 #include <memory>
 
@@ -31,6 +34,7 @@ public:
     void testXMLImport();
     void testBaseImport();
     void testTdf169541_TwoDataMapping();
+    void testLinkUpdateGate();
 
     CPPUNIT_TEST_SUITE(ScDataProvidersTest);
     CPPUNIT_TEST(testCSVImport);
@@ -39,6 +43,7 @@ public:
     CPPUNIT_TEST(testXMLImport);
     CPPUNIT_TEST(testBaseImport);
     CPPUNIT_TEST(testTdf169541_TwoDataMapping);
+    CPPUNIT_TEST(testLinkUpdateGate);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -224,6 +229,41 @@ void ScDataProvidersTest::testTdf169541_TwoDataMapping()
     CPPUNIT_ASSERT(pDoc);
     // Because this test is only about the crash, the paths in the test document are
     // not adapted to the test environment and thus no further tests about the content here.
+}
+
+void ScDataProvidersTest::testLinkUpdateGate()
+{
+    // A data mapping loaded from a document is an external link. Its data must
+    // not refresh from the source file until the user allows link updating,
+    // the same gate that governs sheet links and area links.
+    createScDoc("mappinggate.fods");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    ScDocShell* pDocShell = getScDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    // Loading the mapping registered it as a link in the LinkManager.
+    auto& rDataSources = pDoc->GetExternalDataMapper().getDataSources();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rDataSources.size());
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
+    CPPUNIT_ASSERT(pLinkManager);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pLinkManager->GetLinks().size());
+
+    // The saved document holds "unchanged" in A1; the source file holds
+    // "changed". The href stored in the document is not portable, so point the
+    // source at the real test file before asking for an update.
+    rDataSources[0].setURL(createFileURL(u"csv/mappinggate.csv"));
+    CPPUNIT_ASSERT_EQUAL(u"unchanged"_ustr, pDoc->GetString(0, 0, 0));
+
+    // With updating not allowed, updating the links leaves the saved value.
+    pDocShell->GetEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
+    pLinkManager->UpdateAllLinks(false, false, nullptr, OUString());
+    CPPUNIT_ASSERT_EQUAL(u"unchanged"_ustr, pDoc->GetString(0, 0, 0));
+
+    // Once the user allows updating, the same update brings in the live value.
+    pDocShell->GetEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+    pLinkManager->UpdateAllLinks(false, false, nullptr, OUString());
+    CPPUNIT_ASSERT_EQUAL(u"changed"_ustr, pDoc->GetString(0, 0, 0));
 }
 
 ScDataProvidersTest::ScDataProvidersTest()

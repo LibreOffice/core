@@ -501,6 +501,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             rHelpBtn.set_label(GetStandardText(StandardButtonType::Help).replaceFirst("~", ""));
                             rHelpBtn.connect_clicked(LINK(nullptr, LinkHelp, DispatchHelpLinksHdl));
                             weld::Button& rBtn = pInfoBar->addButton();
+                            rBtn.set_buildable_name(u"allowupdating"_ustr);
                             rBtn.set_label(ScResId(STR_ENABLE_CONTENT));
                             rBtn.set_tooltip_text(ScResId(STR_ENABLE_CONTENT_TOOLTIP));
                             rBtn.connect_clicked(LINK(this, ScDocShell, ReloadAllLinksHdl));
