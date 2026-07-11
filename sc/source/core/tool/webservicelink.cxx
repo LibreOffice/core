@@ -40,6 +40,13 @@ sfx2::SvBaseLink::UpdateResult ScWebServiceLink::DataChanged(const OUString&, co
     bHasResult = false;
 
     INetURLObject aURLObject(aURL);
+    if (aURLObject.IsExoticProtocol())
+    {
+        SAL_WARN("sc.ui",
+                 "ScWebServiceLink::DataChanged: blocked exotic protocol: \"" << aURL << "\"");
+        return ERROR_GENERAL;
+    }
+
     const OUString sHost = aURLObject.GetHost();
     if (HostFilter::isForbidden(sHost))
     {
