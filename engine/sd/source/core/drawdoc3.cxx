@@ -206,67 +206,80 @@ static void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBoo
     }
 }
 
+// Load an external drawing or presentation file into a fresh document shell
+::sd::DrawDocShellRef SdDrawDocument::LoadExternalDrawDoc(SfxMedium* pMedium)
+{
+    std::unique_ptr<SfxMedium> xMedium(pMedium);
+
+    std::shared_ptr<const SfxFilter> pFilter = xMedium->GetFilter();
+    if (!pFilter)
+        SfxGetpApp()->GetFilterMatcher().GuessFilter(*xMedium, pFilter);
+
+    if (!pFilter)
+        return {};
+
+    const OUString aServiceName = pFilter->GetServiceName();
+    const bool bCreateGraphicShell = aServiceName == "com.sun.star.drawing.DrawingDocument";
+    const bool bCreateImpressShell = aServiceName == "com.sun.star.presentation.PresentationDocument";
+    if (!bCreateGraphicShell && !bCreateImpressShell)
+        return {};
+
+    // Create a DocShell, as OLE objects might be contained in the
+    // document. (Persist)
+    // If that wasn't the case, we could load the model directly.
+    ::sd::DrawDocShellRef xDocShell;
+    if (bCreateGraphicShell)
+        // Draw
+        xDocShell = new ::sd::GraphicDocShell(SfxObjectCreateMode::STANDARD);
+    else
+        // Impress
+        xDocShell = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD, true, DocumentType::Impress);
+
+    // The shell takes over the medium from here.
+    if (!xDocShell->DoLoad(xMedium.release()))
+    {
+        xDocShell->DoClose();
+        return {};
+    }
+
+    return xDocShell;
+}
+
 // Opens a bookmark document
 SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium* pMedium)
 {
-    bool bOK = true;
-    SdDrawDocument* pBookmarkDoc = nullptr;
-    OUString aBookmarkName = pMedium->GetName();
-    std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
-    if ( !pFilter )
-    {
-        pMedium->UseInteractionHandler( true );
-        SfxGetpApp()->GetFilterMatcher().GuessFilter(*pMedium, pFilter);
-    }
+    std::unique_ptr<SfxMedium> xMedium(pMedium);
+    OUString aBookmarkName = xMedium->GetName();
+    if (!xMedium->GetFilter())
+        xMedium->UseInteractionHandler(true);
 
-    if ( !pFilter )
+    bool bReadError = false;
+    if (!aBookmarkName.isEmpty() && maBookmarkFile != aBookmarkName)
     {
-        bOK = false;
-    }
-    else if ( !aBookmarkName.isEmpty() && maBookmarkFile != aBookmarkName )
-    {
-        bool bCreateGraphicShell = pFilter->GetServiceName() == "com.sun.star.drawing.DrawingDocument";
-        bool bCreateImpressShell = pFilter->GetServiceName() == "com.sun.star.presentation.PresentationDocument";
-        if ( bCreateGraphicShell || bCreateImpressShell )
+        ::sd::DrawDocShellRef xDocShell = LoadExternalDrawDoc(xMedium.release());
+        if (xDocShell.is())
         {
             CloseBookmarkDoc();
-
-            // Create a DocShell, as OLE objects might be contained in the
-            // document. (Persist)
-            // If that wasn't the case, we could load the model directly.
-            if ( bCreateGraphicShell )
-                // Draw
-                mxBookmarkDocShRef = new ::sd::GraphicDocShell(SfxObjectCreateMode::STANDARD);
-            else
-                // Impress
-                mxBookmarkDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD, true, DocumentType::Impress);
-
-            bOK = mxBookmarkDocShRef->DoLoad(pMedium);
-            if( bOK )
-            {
-                maBookmarkFile = aBookmarkName;
-                pBookmarkDoc = mxBookmarkDocShRef->GetDoc();
-            }
+            mxBookmarkDocShRef = xDocShell;
+            maBookmarkFile = aBookmarkName;
         }
+        else
+            bReadError = true;
     }
 
     DBG_ASSERT(!aBookmarkName.isEmpty(), "Empty document name!");
 
-    if (!bOK)
+    if (bReadError)
     {
         std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(nullptr,
                                                        VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_READ_DATA_ERROR)));
         xErrorBox->run();
 
         CloseBookmarkDoc();
-        pBookmarkDoc = nullptr;
-    }
-    else if (mxBookmarkDocShRef.is())
-    {
-        pBookmarkDoc = mxBookmarkDocShRef->GetDoc();
+        return nullptr;
     }
 
-    return pBookmarkDoc;
+    return mxBookmarkDocShRef.is() ? mxBookmarkDocShRef->GetDoc() : nullptr;
 }
 
 // Opens a bookmark document

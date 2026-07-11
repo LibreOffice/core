@@ -653,6 +653,21 @@ public:
     SdDrawDocument* OpenBookmarkDoc(const OUString& rBookmarkFile);
     SAL_DLLPRIVATE SdDrawDocument* OpenBookmarkDoc(SfxMedium* pMedium);
 
+    /** Load an external drawing or presentation file into a fresh document
+     * shell.
+     *
+     * Guesses the filter when the medium does not carry one, accepts only
+     * drawing and presentation documents, and creates the matching shell
+     * type. Takes ownership of the medium: a successful load hands it to the
+     * shell, any other outcome frees it.
+     *
+     * @param pMedium the file to load
+     * @return the loaded shell, or an empty reference when the file has no
+     *         usable filter, is neither a drawing nor a presentation, or
+     *         fails to load
+     */
+    static ::sd::DrawDocShellRef LoadExternalDrawDoc(SfxMedium* pMedium);
+
     SAL_DLLPRIVATE void InsertBookmark(const std::vector<OUString> &rBookmarkList,
                             std::vector<OUString> &rExchangeList, bool bLink,
                             sal_uInt16 nPgPos,
