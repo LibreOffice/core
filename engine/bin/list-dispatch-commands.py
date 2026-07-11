@@ -44,7 +44,6 @@ XCU_DIR = srcdir + '/officecfg/registry/data/org/openoffice/Office/UI/'
 XCU_FILES = (   XCU_DIR + 'BasicIDECommands.xcu',
                 XCU_DIR + 'CalcCommands.xcu',
                 XCU_DIR + 'ChartCommands.xcu',
-                XCU_DIR + 'DbuCommands.xcu',
                 XCU_DIR + 'DrawImpressCommands.xcu',
                 XCU_DIR + 'GenericCommands.xcu',
                 XCU_DIR + 'MathCommands.xcu',

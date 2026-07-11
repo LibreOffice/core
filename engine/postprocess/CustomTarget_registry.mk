@@ -164,7 +164,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/Office/UI/Controller.xcs \
 	$(postprocess_XCS)/Office/UI/DbBrowserWindowState.xcs \
 	$(postprocess_XCS)/Office/UI/DbTableDataWindowState.xcs \
-	$(postprocess_XCS)/Office/UI/DbuCommands.xcs \
 	$(postprocess_XCS)/Office/UI/DrawImpressCommands.xcs \
 	$(postprocess_XCS)/Office/UI/Factories.xcs \
 	$(postprocess_XCS)/Office/UI/GenericCategories.xcs \
@@ -221,7 +220,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCU)/Office/UI/Controller.xcu \
 	$(postprocess_XCU)/Office/UI/DbBrowserWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/DbTableDataWindowState.xcu \
-	$(postprocess_XCU)/Office/UI/DbuCommands.xcu \
 	$(postprocess_XCU)/Office/UI/DrawImpressCommands.xcu \
 	$(postprocess_XCU)/Office/UI/Factories.xcu \
 	$(postprocess_XCU)/Office/UI/GenericCategories.xcu \

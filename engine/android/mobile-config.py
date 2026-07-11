@@ -27,7 +27,6 @@ main_xcd_discard = [
     'org.openoffice.Office.UI/DrawImpressCommands',
     'org.openoffice.Office.UI/Sidebar',
     'org.openoffice.Office.UI/ChartCommands',
-    'org.openoffice.Office.UI/DbuCommands',
     'org.openoffice.Office.UI/Controller',
     'org.openoffice.Office.UI/StartModuleCommands',
     'org.openoffice.Office.UI/BasicIDEWindowState',

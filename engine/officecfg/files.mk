@@ -56,7 +56,6 @@ officecfg_XCSFILES := \
     Office/UI/Controller \
     Office/UI/DbBrowserWindowState \
     Office/UI/DbTableDataWindowState \
-    Office/UI/DbuCommands \
     Office/UI/DrawImpressCommands \
     Office/UI/DrawWindowState \
     Office/UI/Effects \

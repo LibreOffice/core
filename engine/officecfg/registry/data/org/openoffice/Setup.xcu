@@ -388,9 +388,6 @@
         <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
         <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true"/>
         <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true"/>
-        <prop oor:name="ooSetupFactoryCommandConfigRef">
-          <value>DbuCommands</value>
-        </prop>
         <prop oor:name="ooSetupFactoryShortName">
           <value>dbbrowser</value>
         </prop>
@@ -413,9 +410,6 @@
         <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
         <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true"/>
         <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true"/>
-        <prop oor:name="ooSetupFactoryCommandConfigRef">
-          <value>DbuCommands</value>
-        </prop>
         <prop oor:name="ooSetupFactoryShortName">
           <value>dbtdata</value>
         </prop>
