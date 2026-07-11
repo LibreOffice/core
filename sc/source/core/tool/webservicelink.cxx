@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
@@ -21,6 +22,7 @@
 #include <utility>
 #include <webservicelink.hxx>
 #include <brdcst.hxx>
+#include <docsh.hxx>
 #include <document.hxx>
 #include <sc.hrc>
 
@@ -36,6 +38,10 @@ ScWebServiceLink::~ScWebServiceLink() {}
 
 sfx2::SvBaseLink::UpdateResult ScWebServiceLink::DataChanged(const OUString&, const css::uno::Any&)
 {
+    if (pDoc && pDoc->GetDocumentShell()
+        && !pDoc->GetDocumentShell()->GetEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+        return SUCCESS;
+
     aResult.clear();
     bHasResult = false;
 
