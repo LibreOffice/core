@@ -179,6 +179,11 @@
       <!-- this allows you to shift all of our URLs into a sub-path from
            https://my.com/browser/a123... to https://my.com/my/sub/path/browser/a123... -->
       <service_root type="path" default="" desc="Prefix the base URL for all the pages, websockets, etc. with this path. This includes the discovery URL."></service_root>
+      <!-- The host list below always filters the client IP address for POST
+           and REST requests such as convert-to. The allow attribute is
+           separate from that filter: when it is true these hosts also count as
+           allowed external data sources, the same role as net.lok_allow below.
+           Turning the attribute off does not disable the POST and REST filter. -->
       <post_allow desc="Allow/deny client IP address for POST(REST)." allow="true">
         <host desc="The IPv4 private 192.168 block as plain IPv4 dotted decimal addresses.">192\.168\.[0-9]{1,3}\.[0-9]{1,3}</host>
         <host desc="Ditto, but as IPv4-mapped IPv6 addresses">::ffff:192\.168\.[0-9]{1,3}\.[0-9]{1,3}</host>
