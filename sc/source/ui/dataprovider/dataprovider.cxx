@@ -16,6 +16,7 @@
 #include <unotools/charclass.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/urlobj.hxx>
 
 #include "htmldataprovider.hxx"
 #include "xmldataprovider.hxx"
@@ -30,6 +31,13 @@ namespace sc {
 
 std::unique_ptr<SvStream> DataProvider::FetchStreamFromURL(const OUString& rURL, OStringBuffer& rBuffer)
 {
+    INetURLObject aURLObject(rURL);
+    if (aURLObject.IsExoticProtocol())
+    {
+        SAL_WARN("sc.ui", "DataProvider::FetchStreamFromURL: blocked exotic protocol: \"" << rURL << "\"");
+        return nullptr;
+    }
+
     try
     {
         uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess = ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() );

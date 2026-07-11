@@ -32,7 +32,9 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -326,6 +328,12 @@ void Model::loadInstance( sal_Int32 nInstance )
     // if we have a URL, load the document and set it into the instance
     if( !sURL.isEmpty() )
     {
+        if( INetURLObject( sURL ).IsExoticProtocol() )
+        {
+            SAL_WARN("forms.xforms", "Model::loadInstance: blocked exotic protocol: \"" << sURL << "\"");
+            return;
+        }
+
         try
         {
             Reference<XInputStream> xInput =

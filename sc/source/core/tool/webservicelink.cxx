@@ -11,6 +11,7 @@
 #include <osl/thread.h>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
+#include <tools/urlobj.hxx>
 
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -40,6 +41,14 @@ sfx2::SvBaseLink::UpdateResult ScWebServiceLink::DataChanged(const OUString&, co
 {
     aResult.clear();
     bHasResult = false;
+
+    INetURLObject aURLObject(aURL);
+    if (aURLObject.IsExoticProtocol())
+    {
+        SAL_WARN("sc.ui",
+                 "ScWebServiceLink::DataChanged: blocked exotic protocol: \"" << aURL << "\"");
+        return ERROR_GENERAL;
+    }
 
     css::uno::Reference<css::ucb::XSimpleFileAccess3> xFileAccess
         = css::ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
