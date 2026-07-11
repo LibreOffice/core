@@ -10416,9 +10416,9 @@ void ScInterpreter::ScLambda()
 {
     const short* pJump = static_cast<const FormulaJumpToken*>(pCur)->GetJump();
     short nJumpCount = pJump[0];
-    short nJump;
 
-    if (nJumpCount < 1)
+    // This corresponds to LAMBDA(), with no parameters
+    if (nJumpCount < 2)
     {
         PushError(FormulaError::ParameterExpected);
         aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
@@ -10426,52 +10426,40 @@ void ScInterpreter::ScLambda()
     }
 
     FormulaToken** pCode = pArr->GetCode();
-    short nParams = nJumpCount - 1;
+    // One jump for each param, plus a jump for the body, and a jump after the LAMBDA
+    short nParams = nJumpCount - 2;
     std::vector<OUString> aParams(nParams);
     short nFirstOptionalParam = nParams;
 
-    if (nParams < 1)
+    // Param names are found at pJump[1] + 1 to pJump[nJumpCount - 2] + 1
+    for (short nParam = 0; nParam < nParams; ++nParam)
     {
-        // FIXME: jump opcodes need to work differently; this shouldn't be forbidden
-        PushError(FormulaError::ParameterExpected);
-        aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
-        return;
-    }
-
-    // First param name is on the top of the stack
-    bool isOptional = false;
-    aParams[0] = PopStringName(isOptional).getString();
-
-    if (nGlobalError != FormulaError::NONE)
-    {
-        PushError(nGlobalError);
-        aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
-        return;
-    }
-
-    if (isOptional)
-        nFirstOptionalParam = 0;
-
-    // Param names after the first are found at pJump[1] + 1 to pJump[nJumpCount - 2] + 1
-    for (nJump = 1; nJump <= nJumpCount - 2; ++nJump)
-    {
-        if (const FormulaStringNameToken* pToken = GetStringNameToken(pCode[pJump[nJump] + 1]))
+        if (const FormulaStringNameToken* pToken = GetStringNameToken(pCode[pJump[nParam + 1] + 1]))
         {
-            aParams[nJump] = pToken->GetString().getString();
-            // All optional parameters must appear at the end of the parameter list
-            if (nFirstOptionalParam < nParams)
+            if (pCode[pJump[nParam + 1] + 2]->GetType() == svSep) // must be followed by a separator
             {
-                // We've seen at least one optional param; all params after that point must
-                // be optional, as well.
-                if (!pToken->GetIsOptional())
+                aParams[nParam] = pToken->GetString().getString();
+                // All optional parameters must appear at the end of the parameter list
+                if (nFirstOptionalParam < nParams)
                 {
-                    PushError(FormulaError::IllegalParameter);
-                    aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
-                    return;
+                    // We've seen at least one optional param; all params after that point must
+                    // be optional, as well.
+                    if (!pToken->GetIsOptional())
+                    {
+                        PushError(FormulaError::IllegalParameter);
+                        aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
+                        return;
+                    }
                 }
+                else if (pToken->GetIsOptional())
+                    nFirstOptionalParam = nParam;
             }
-            else if (pToken->GetIsOptional())
-                nFirstOptionalParam = nJump;
+            else
+            {
+                PushError(FormulaError::ParameterExpected);
+                aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
+                return;
+            }
         }
         else
         {
@@ -10481,7 +10469,7 @@ void ScInterpreter::ScLambda()
         }
     }
 
-    // Lambda-body is between pJump[nJumpCount - 1] and pJump[nJumpCount]
+    // Lambda-body is found between pJump[nJumpCount - 1] and pJump[nJumpCount]
     FormulaCallableRef pFunc = new ScFormulaFunction(*this, aParams, nFirstOptionalParam, *pArr,
                                                      pJump[nJumpCount - 1], pJump[nJumpCount]);
     PushCallable(pFunc);

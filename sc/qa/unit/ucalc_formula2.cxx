@@ -210,9 +210,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLAMBDA)
     m_pDoc->InsertTab(0, u"Formula"_ustr);
 
     // No parameters, constant body.
-    // TODO : The formula system does not yet support this.
-    //m_pDoc->SetString(ScAddress(0, 0, 0), u"=LAMBDA(1)()"_ustr);
-    //CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=LAMBDA(1)()"_ustr);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
 
     // One unused parameter, constant body.
     m_pDoc->SetString(ScAddress(0, 1, 0), u"=LAMBDA(a; 2)(1)"_ustr);
@@ -231,7 +230,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLAMBDA)
     CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
 
     // Parameter used more than once.
-    m_pDoc->SetString(ScAddress(0, 5, 0), u"=LAMBDA(a;a+a)(5)"_ustr);
+    m_pDoc->SetString(ScAddress(0, 5, 0), u"=LAMBDA(a; a + a)(5)"_ustr);
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0, 5, 0)));
 
     // Operator precedence inside the body.
@@ -253,12 +252,24 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLAMBDA)
     CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(ScAddress(0, 9, 0)));
 
     // String argument flowing through identity body.
-    m_pDoc->SetString(ScAddress(0, 10, 0), u"=LAMBDA(a;a & \"!\")(\"hi\")"_ustr);
+    m_pDoc->SetString(ScAddress(0, 10, 0), u"=LAMBDA(a; a & \"!\")(\"hi\")"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"hi!"_ustr, m_pDoc->GetString(ScAddress(0, 10, 0)));
 
     // Name precedence matches MSO.
     m_pDoc->SetString(ScAddress(0, 11, 0), u"=LAMBDA(SQRT; SQRT(SQRT))(4)"_ustr);
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 11, 0)));
+
+    // Parameter shadowing: LAMBDA within LAMBDA.
+    m_pDoc->SetString(ScAddress(0, 12, 0), u"=LAMBDA(x; LAMBDA(x; x * 2)(3))(10)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0, 12, 0)));
+    m_pDoc->SetString(ScAddress(0, 13, 0), u"=LAMBDA(x; LAMBDA(y; x; x * 2)(5; 3))(10)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0, 13, 0)));
+
+    // Parameter shadowing: LET within LAMBDA.
+    m_pDoc->SetString(ScAddress(0, 14, 0), u"=LAMBDA(x; LET(x; 3; x * 2))(10)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0, 14, 0)));
+    m_pDoc->SetString(ScAddress(0, 15, 0), u"=LAMBDA(x; LET(y; 5; x; 3; x * 2))(10)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0, 15, 0)));
 
     m_pDoc->DeleteTab(0);
 }
