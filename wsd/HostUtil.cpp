@@ -467,7 +467,7 @@ bool HostUtil::isForbiddenKitHost(const std::string& host)
     // Parsed on each call so that it follows the value the remote
     // configuration poll writes.
     const char* allowlist = std::getenv("KIT_HOST_ALLOWLIST");
-    if (!allowlist || allowlist[0] == '\0')
+    if (!allowlist)
         return false;
 
     std::string regex;

@@ -110,13 +110,15 @@ static std::regex g_AllowedHostsRegex("");
 static std::vector<IpNetwork> g_AllowedNetworks;
 static OUString g_ExceptVerifyHost;
 static bool g_AllowedHostsSet = false;
+static bool g_AllowlistConfigured = false;
 static bool g_AllowedHostsExemptVerifyHost = false;
 
 void HostFilter::setAllowedHosts(const char* sAllowlist)
 {
     g_AllowedNetworks.clear();
     g_AllowedHostsSet = false;
-    if (!sAllowlist || sAllowlist[0] == '\0')
+    g_AllowlistConfigured = sAllowlist != nullptr;
+    if (!g_AllowlistConfigured)
         return;
 
     std::string aRegex;
@@ -187,7 +189,7 @@ static bool isAllowedHost(const OString& rHost)
 
 bool HostFilter::isForbidden(const OUString& rHost)
 {
-    if (!g_AllowedHostsSet && g_AllowedNetworks.empty())
+    if (!g_AllowlistConfigured)
         return false;
 
     return !isAllowedHost(rHost.toUtf8());
@@ -203,7 +205,7 @@ bool HostFilter::isExemptVerifyHost(const std::u16string_view rHost)
     if (rHost == g_ExceptVerifyHost)
         return true;
 
-    if ((g_AllowedHostsSet || !g_AllowedNetworks.empty()) && g_AllowedHostsExemptVerifyHost)
+    if (g_AllowlistConfigured && g_AllowedHostsExemptVerifyHost)
         return isAllowedHost(OUString(rHost).toUtf8());
 
     return false;

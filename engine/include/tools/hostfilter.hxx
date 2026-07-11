@@ -22,8 +22,8 @@ public:
     /// network in CIDR notation (10.0.0.0/8, fd00::/8), which allows any
     /// host that is an IP address inside it, or a regular expression that
     /// an allowed host name must match in full. IPv4 networks also cover
-    /// the IPv4-mapped IPv6 spelling of their addresses. An empty list
-    /// disables the filter.
+    /// the IPv4-mapped IPv6 spelling of their addresses. A null pointer
+    /// disables the filter, and an empty list allows no hosts.
     static void setAllowedHosts(const char* sAllowlist);
 
     static void setAllowedHostsExemptVerifyHost(bool allowedHostExceptVerifyHost);

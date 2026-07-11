@@ -25,6 +25,7 @@ namespace
 class TestHostFilter : public CppUnit::TestFixture
 {
 public:
+    void testHostAllowlistStates();
     void testEmptyAllowlist();
     void testNonFileUrl();
     void testAllowedPath();
@@ -40,6 +41,7 @@ public:
     void testUrl();
 
     CPPUNIT_TEST_SUITE(TestHostFilter);
+    CPPUNIT_TEST(testHostAllowlistStates);
     CPPUNIT_TEST(testEmptyAllowlist);
     CPPUNIT_TEST(testNonFileUrl);
     CPPUNIT_TEST(testAllowedPath);
@@ -55,6 +57,27 @@ public:
     CPPUNIT_TEST(testUrl);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void TestHostFilter::testHostAllowlistStates()
+{
+    // A null list means no allowlist was configured, so every host is allowed.
+    HostFilter::setAllowedHosts(nullptr);
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"example.com"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"10.0.0.1"_ustr));
+
+    // An empty list is an allowlist with no hosts, so every host is denied.
+    HostFilter::setAllowedHosts("");
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"example.com"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"10.0.0.1"_ustr));
+
+    // A real regex allows the hosts it matches and denies the rest.
+    HostFilter::setAllowedHosts("example\\.com");
+    CPPUNIT_ASSERT(!HostFilter::isForbidden(u"example.com"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isForbidden(u"other.com"_ustr));
+
+    // Clearing back to no allowlist restores allow-all for later tests.
+    HostFilter::setAllowedHosts(nullptr);
+}
 
 void TestHostFilter::testEmptyAllowlist()
 {
@@ -141,7 +164,7 @@ void TestHostFilter::testParentDirectorySegments()
 void TestHostFilter::testHostRegexOnly()
 {
     // nothing configured: nothing is forbidden
-    HostFilter::setAllowedHosts("");
+    HostFilter::setAllowedHosts(nullptr);
     CPPUNIT_ASSERT(!HostFilter::isForbidden(u"evil.example"_ustr));
 
     HostFilter::setAllowedHosts("localhost\n10\\.[0-9]+\\.[0-9]+\\.[0-9]+");
@@ -156,7 +179,7 @@ void TestHostFilter::testHostRegexOnly()
     CPPUNIT_ASSERT(!HostFilter::isForbidden(u"example.com"_ustr));
     CPPUNIT_ASSERT(HostFilter::isForbidden(u"evil.example"_ustr));
 
-    HostFilter::setAllowedHosts("");
+    HostFilter::setAllowedHosts(nullptr);
     CPPUNIT_ASSERT(!HostFilter::isForbidden(u"evil.example"_ustr));
 }
 
@@ -201,7 +224,7 @@ void TestHostFilter::testHostNetworks()
     CPPUNIT_ASSERT(HostFilter::isForbidden(u"fd00::12345"_ustr));
     CPPUNIT_ASSERT(HostFilter::isForbidden(u"1:2:3:4:5:6:7:8:9"_ustr));
 
-    HostFilter::setAllowedHosts("");
+    HostFilter::setAllowedHosts(nullptr);
 }
 
 void TestHostFilter::testHostNetworksOnly()
@@ -220,7 +243,7 @@ void TestHostFilter::testHostNetworksOnly()
     HostFilter::setAllowedHostsExemptVerifyHost(false);
     CPPUNIT_ASSERT(!HostFilter::isExemptVerifyHost(u"192.168.7.7"));
 
-    HostFilter::setAllowedHosts("");
+    HostFilter::setAllowedHosts(nullptr);
     CPPUNIT_ASSERT(!HostFilter::isForbidden(u"localhost"_ustr));
 }
 
@@ -234,7 +257,7 @@ void TestHostFilter::testHostNetworksInvalid()
     CPPUNIT_ASSERT(HostFilter::isForbidden(u"fd00::1"_ustr));
     CPPUNIT_ASSERT(HostFilter::isForbidden(u"example.com"_ustr));
 
-    HostFilter::setAllowedHosts("");
+    HostFilter::setAllowedHosts(nullptr);
 }
 
 void TestHostFilter::testUrl()

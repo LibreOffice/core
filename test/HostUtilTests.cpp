@@ -414,8 +414,12 @@ void HostUtilTests::testEveryAllowedKitHostIsAccepted()
     LOK_ASSERT(HostUtil::isForbiddenKitHost("example.com"));
     LOK_ASSERT(HostUtil::isForbiddenKitHost("10.0.0.1"));
 
-    // An empty list allows every host.
+    // An empty list allows no hosts.
     ::setenv("KIT_HOST_ALLOWLIST", "", 1);
+    LOK_ASSERT(HostUtil::isForbiddenKitHost("example.com"));
+
+    // No list at all allows every host.
+    ::unsetenv("KIT_HOST_ALLOWLIST");
     LOK_ASSERT(!HostUtil::isForbiddenKitHost("example.com"));
 
     if (previous)
