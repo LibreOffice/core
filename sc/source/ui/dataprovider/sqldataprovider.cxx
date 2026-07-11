@@ -9,6 +9,8 @@
 
 #include "sqldataprovider.hxx"
 #include <datatransformation.hxx>
+#include <sal/log.hxx>
+#include <tools/urlobj.hxx>
 #include <salhelper/thread.hxx>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
@@ -64,6 +66,13 @@ void SQLFetchThread::execute()
 
     OUString aTable = maID.copy(0, nIndex);
     OUString aDatabase = maID.copy(nIndex + 1);
+
+    if (INetURLObject(aDatabase).IsExoticProtocol())
+    {
+        SAL_WARN("sc.ui",
+                 "SQLFetchThread::execute: blocked exotic protocol: \"" << aDatabase << "\"");
+        return;
+    }
 
     try
     {
