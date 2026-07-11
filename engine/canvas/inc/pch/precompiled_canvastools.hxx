@@ -93,7 +93,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rendering/isurfaceproxy.hxx>
-#include <rendering/isurfaceproxymanager.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/time.hxx>
