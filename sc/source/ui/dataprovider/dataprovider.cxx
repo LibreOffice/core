@@ -41,6 +41,12 @@ std::unique_ptr<SvStream> DataProvider::FetchStreamFromURL(const OUString& rURL,
         return nullptr;
     }
 
+    if (HostFilter::isForbidden(aURLObject.GetHost()))
+    {
+        SAL_WARN("sc.ui", "DataProvider::FetchStreamFromURL: blocked host: \"" << rURL << "\"");
+        return nullptr;
+    }
+
     try
     {
         uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess = ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() );
