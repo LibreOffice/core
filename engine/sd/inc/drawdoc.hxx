@@ -180,11 +180,18 @@ struct InsertBookmarkOptions
     bool bMergeMasterPages;   // Merge master pages
     bool bMergeMasterPagesOnly; // Only merge master pages
     bool bPreservePageNames;  // Preserve page names
+    bool bIsClipboardOperation; // Operation triggered by clipboard
+    bool bIsDragAndDropOperation; // Operation triggered by drag and drop
+    bool bIsSameDocumentOperation; // Operation within the same document
+    bool bIsFileDocument;     // Operation involves a file document
+    bool bAdoptTargetDesign;  // Inserted pages take the design of the destination document
 
     InsertBookmarkOptions()
         : bLink(false), bReplace(false), bNoDialogs(false),
           bCopy(true), bMergeMasterPages(true), bMergeMasterPagesOnly(false),
-          bPreservePageNames(false)
+          bPreservePageNames(false), bIsClipboardOperation(false),
+          bIsDragAndDropOperation(false), bIsSameDocumentOperation(false),
+          bIsFileDocument(false), bAdoptTargetDesign(false)
     {}
 
     // Preset for paste operation
@@ -201,6 +208,19 @@ struct InsertBookmarkOptions
         InsertBookmarkOptions options;
         options.bLink = bLinkPages;
         options.bMergeMasterPagesOnly = false;
+        return options;
+    }
+
+    // Preset for inserting pages picked from another presentation file.
+    // With bKeepDesign the source master pages come along; without it the
+    // inserted pages are bound to the destination document's design instead.
+    static InsertBookmarkOptions ForSlideImport(bool bKeepDesign) {
+        InsertBookmarkOptions options;
+        options.bNoDialogs = true;
+        options.bIsFileDocument = true;
+        options.bMergeMasterPagesOnly = false;
+        options.bMergeMasterPages = bKeepDesign;
+        options.bAdoptTargetDesign = !bKeepDesign;
         return options;
     }
 
@@ -692,6 +712,31 @@ public:
         const PageNameList &rBookmarkList,
         PageNameList *pExchangeList,
         bool bLink,
+        sal_uInt16 nInsertPos,
+        ::sd::DrawDocShell* pBookmarkDocSh,
+        std::optional<bool> oScaleObjects = std::nullopt);
+
+    /**
+     * Insert pages from external files with explicit insertion options
+     *
+     * Behaves like the boolean-flag overload but lets the caller choose the
+     * full set of insertion options, including whether the inserted pages
+     * keep the source document's design or are bound to the design of the
+     * destination document.
+     *
+     * @param rBookmarkList List of page names to be inserted
+     * @param pExchangeList Optional list of names to use for the inserted pages
+     * @param rOptions Options controlling the insertion
+     * @param nInsertPos Position where pages should be inserted
+     * @param pBookmarkDocSh Source document shell
+     * @param oScaleObjects Whether inserted objects scale to the page size;
+     *                      unset asks interactively when dialogs are allowed
+     * @return true if operation was successful
+     */
+    bool InsertFileAsPage(
+        const PageNameList &rBookmarkList,
+        PageNameList *pExchangeList,
+        const InsertBookmarkOptions& rOptions,
         sal_uInt16 nInsertPos,
         ::sd::DrawDocShell* pBookmarkDocSh,
         std::optional<bool> oScaleObjects = std::nullopt);

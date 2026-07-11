@@ -49,6 +49,8 @@
 #include <undo/undomanager.hxx>
 #include <GraphicViewShell.hxx>
 #include <sdpage.hxx>
+#include <glob.hxx>
+#include <strings.hxx>
 #include <app.hrc>
 #include <DrawViewShell.hxx>
 #include <LayerTabBar.hxx>
@@ -113,6 +115,9 @@ public:
     void testPageGuidCutPaste();
     void testPageGuidMergedMasters();
     void testInsertFileAsPageKeepsMasterBackground();
+    void testInsertFileAsPageAdoptDesign();
+    void testInsertFileAsPageAdoptDesignAtStart();
+    void testInsertFileAsPageKeepDesign();
 
 private:
     SdDrawDocument* loadSlideImportDocs();
@@ -153,6 +158,9 @@ public:
     CPPUNIT_TEST(testPageGuidCutPaste);
     CPPUNIT_TEST(testPageGuidMergedMasters);
     CPPUNIT_TEST(testInsertFileAsPageKeepsMasterBackground);
+    CPPUNIT_TEST(testInsertFileAsPageAdoptDesign);
+    CPPUNIT_TEST(testInsertFileAsPageAdoptDesignAtStart);
+    CPPUNIT_TEST(testInsertFileAsPageKeepDesign);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1544,6 +1552,119 @@ void SdMiscTest::testInsertFileAsPageKeepsMasterBackground()
                          pBackgroundSheet->GetItemSet().Get(XATTR_FILLSTYLE).GetValue());
     CPPUNIT_ASSERT_EQUAL(Color(0xff0000),
                          pBackgroundSheet->GetItemSet().Get(XATTR_FILLCOLOR).GetColorValue());
+}
+
+void SdMiscTest::testInsertFileAsPageAdoptDesign()
+{
+    // Pages inserted from another presentation are bound to the design of the
+    // destination document when the options ask for it.
+    SdDrawDocument* pDoc = loadSlideImportDocs();
+
+    const sal_uInt16 nMasterCountBefore = pDoc->GetMasterPageCount();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+
+    // The source page named TargetOne collides with an existing page name.
+    std::vector<OUString> aBookmarkList{ u"SourceA"_ustr, u"TargetOne"_ustr };
+    // Insert between the two slides of the destination document.
+    CPPUNIT_ASSERT(pDoc->InsertFileAsPage(aBookmarkList, nullptr,
+                                          InsertBookmarkOptions::ForSlideImport(
+                                              /*bKeepDesign=*/false),
+                                          3, nullptr, /*oScaleObjects=*/true));
+    pDoc->CloseBookmarkDoc();
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    // The source design stayed behind: no new master pages and no source
+    // layout styles in the destination pool.
+    CPPUNIT_ASSERT_EQUAL(nMasterCountBefore, pDoc->GetMasterPageCount());
+    CPPUNIT_ASSERT(
+        !pDoc->GetStyleSheetPool()->Find(u"SourceDesign" + SD_LT_SEPARATOR + STR_LAYOUT_TITLE, SfxStyleFamily::Page));
+
+    for (sal_uInt16 nSdPage = 1; nSdPage <= 2; ++nSdPage)
+    {
+        SdPage* pInserted = pDoc->GetSdPage(nSdPage, PageKind::Standard);
+        CPPUNIT_ASSERT_EQUAL(u"TargetDesign"_ustr,
+                             SdDrawDocument::GetBaseLayoutName(pInserted->GetLayoutName()));
+        CPPUNIT_ASSERT(pInserted->TRG_HasMasterPage());
+        CPPUNIT_ASSERT_EQUAL(u"TargetDesign"_ustr,
+                             SdDrawDocument::GetBaseLayoutName(
+                                 static_cast<SdPage&>(pInserted->TRG_GetMasterPage())
+                                     .GetLayoutName()));
+    }
+
+    // The colliding page name was replaced with a generated one.
+    CPPUNIT_ASSERT(pDoc->GetSdPage(2, PageKind::Standard)->GetName() != "TargetOne");
+
+
+    // The whole insertion is one undo step.
+    pDoc->GetDocSh()->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nMasterCountBefore, pDoc->GetMasterPageCount());
+    pDoc->GetDocSh()->GetUndoManager()->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nMasterCountBefore, pDoc->GetMasterPageCount());
+}
+
+void SdMiscTest::testInsertFileAsPageAdoptDesignAtStart()
+{
+    // An insert in front of the first slide also binds the inserted pages to
+    // the destination design, taken from the page that follows them.
+    SdDrawDocument* pDoc = loadSlideImportDocs();
+
+    const sal_uInt16 nMasterCountBefore = pDoc->GetMasterPageCount();
+
+    std::vector<OUString> aBookmarkList{ u"SourceA"_ustr };
+    // Position 0 is the handout page slot; the insert lands before slide 1.
+    CPPUNIT_ASSERT(pDoc->InsertFileAsPage(aBookmarkList, nullptr,
+                                          InsertBookmarkOptions::ForSlideImport(
+                                              /*bKeepDesign=*/false),
+                                          0, nullptr, /*oScaleObjects=*/true));
+    pDoc->CloseBookmarkDoc();
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nMasterCountBefore, pDoc->GetMasterPageCount());
+
+    SdPage* pInserted = pDoc->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pInserted->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"TargetDesign"_ustr,
+                         SdDrawDocument::GetBaseLayoutName(pInserted->GetLayoutName()));
+    CPPUNIT_ASSERT(pInserted->TRG_HasMasterPage());
+    CPPUNIT_ASSERT_EQUAL(u"TargetDesign"_ustr,
+                         SdDrawDocument::GetBaseLayoutName(
+                             static_cast<SdPage&>(pInserted->TRG_GetMasterPage())
+                                 .GetLayoutName()));
+}
+
+void SdMiscTest::testInsertFileAsPageKeepDesign()
+{
+    // Pages inserted from another presentation keep their own design when the
+    // options ask for it: the source master pages come along.
+    SdDrawDocument* pDoc = loadSlideImportDocs();
+
+    const sal_uInt16 nMasterCountBefore = pDoc->GetMasterPageCount();
+
+    std::vector<OUString> aBookmarkList{ u"SourceA"_ustr };
+    CPPUNIT_ASSERT(pDoc->InsertFileAsPage(aBookmarkList, nullptr,
+                                          InsertBookmarkOptions::ForSlideImport(
+                                              /*bKeepDesign=*/true),
+                                          3, nullptr, /*oScaleObjects=*/true));
+    pDoc->CloseBookmarkDoc();
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDoc->GetSdPageCount(PageKind::Standard));
+    // The source design arrived with the page.
+    CPPUNIT_ASSERT_GREATER(nMasterCountBefore, pDoc->GetMasterPageCount());
+    CPPUNIT_ASSERT(
+        pDoc->GetStyleSheetPool()->Find(u"SourceDesign" + SD_LT_SEPARATOR + STR_LAYOUT_TITLE, SfxStyleFamily::Page));
+
+    SdPage* pInserted = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(u"SourceDesign"_ustr,
+                         SdDrawDocument::GetBaseLayoutName(pInserted->GetLayoutName()));
+
+
+
+    // Undo removes the page together with the imported master pages.
+    pDoc->GetDocSh()->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nMasterCountBefore, pDoc->GetMasterPageCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);
