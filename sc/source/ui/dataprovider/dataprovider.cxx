@@ -17,6 +17,7 @@
 #include <unotools/charclass.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/hostfilter.hxx>
 #include <tools/urlobj.hxx>
 
 #include "htmldataprovider.hxx"
@@ -37,6 +38,12 @@ std::unique_ptr<SvStream> DataProvider::FetchStreamFromURL(const OUString& rURL,
     if (aURLObject.IsExoticProtocol())
     {
         SAL_WARN("sc.ui", "DataProvider::FetchStreamFromURL: blocked exotic protocol: \"" << rURL << "\"");
+        return nullptr;
+    }
+
+    if (HostFilter::isForbidden(aURLObject.GetHost()))
+    {
+        SAL_WARN("sc.ui", "DataProvider::FetchStreamFromURL: blocked host: \"" << rURL << "\"");
         return nullptr;
     }
 
