@@ -32,6 +32,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <svl/style.hxx>
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <vcl/scheduler.hxx>
@@ -59,6 +60,7 @@
 #include <svx/scene3d.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <test/commontesttools.hxx>
 #include <unomodel.hxx>
@@ -110,6 +112,12 @@ public:
     void testPageGuids();
     void testPageGuidCutPaste();
     void testPageGuidMergedMasters();
+    void testInsertFileAsPageKeepsMasterBackground();
+
+private:
+    SdDrawDocument* loadSlideImportDocs();
+
+public:
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf99396);
@@ -144,6 +152,7 @@ public:
     CPPUNIT_TEST(testPageGuids);
     CPPUNIT_TEST(testPageGuidCutPaste);
     CPPUNIT_TEST(testPageGuidMergedMasters);
+    CPPUNIT_TEST(testInsertFileAsPageKeepsMasterBackground);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1490,6 +1499,51 @@ void SdMiscTest::testPageGuidMergedMasters()
                          pDoc->GetMasterSdPage(0, PageKind::Standard)->GetGuid().getOUString());
 
     xSourceComponent->dispose();
+}
+
+// Loads the slide-import target document and opens the source presentation
+// as its bookmark document, the same way the insert-pages-from-file flow
+// does when the user has picked a file.
+SdDrawDocument* SdMiscTest::loadSlideImportDocs()
+{
+    createSdImpressDoc("slide-import-target.odp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    SdDrawDocument* pBookmarkDoc
+        = pDoc->OpenBookmarkDoc(createFileURL(u"slide-import-source.odp"));
+    CPPUNIT_ASSERT(pBookmarkDoc);
+
+    return pDoc;
+}
+
+void SdMiscTest::testInsertFileAsPageKeepsMasterBackground()
+{
+    // Inserting pages from another presentation brings their master pages
+    // along; the master background fill must arrive with them.
+    SdDrawDocument* pDoc = loadSlideImportDocs();
+
+    const sal_uInt16 nMasterCountBefore = pDoc->GetMasterPageCount();
+
+    std::vector<OUString> aBookmarkList{ u"SourceA"_ustr };
+    CPPUNIT_ASSERT(pDoc->InsertFileAsPage(aBookmarkList, nullptr, /*bLink=*/false, 3, nullptr,
+                                          /*oScaleObjects=*/true));
+    pDoc->CloseBookmarkDoc();
+
+    CPPUNIT_ASSERT_GREATER(nMasterCountBefore, pDoc->GetMasterPageCount());
+
+    // The imported master serves its background fill from the background
+    // style copied into this document's pool.
+    SdPage* pInserted = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT(pInserted->TRG_HasMasterPage());
+    SdPage& rNewMaster = static_cast<SdPage&>(pInserted->TRG_GetMasterPage());
+    SfxStyleSheet* pBackgroundSheet = rNewMaster.getSdrPageProperties().GetStyleSheet();
+    CPPUNIT_ASSERT(pBackgroundSheet);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,
+                         pBackgroundSheet->GetItemSet().Get(XATTR_FILLSTYLE).GetValue());
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000),
+                         pBackgroundSheet->GetItemSet().Get(XATTR_FILLCOLOR).GetColorValue());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);

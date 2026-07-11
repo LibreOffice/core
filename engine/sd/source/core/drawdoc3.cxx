@@ -992,6 +992,12 @@ void SdDrawDocument::updateInsertedPages(PageInsertionParams& rParams,
             rParams.mainProps.pPage->SetBorder(rParams.mainProps.left, rParams.mainProps.upper, rParams.mainProps.right, rParams.mainProps.lower);
             rParams.mainProps.pPage->SetOrientation(rParams.mainProps.orientation);
 
+            // A master page cloned from another document arrives without
+            // background fill attributes; bind it to its background style,
+            // which the layout style transfer has placed in this document's
+            // style sheet pool.
+            rParams.mainProps.pPage->EnsureMasterPageDefaultBackground();
+
             rtl::Reference<SvxDrawPage> xNewPage(GetMasterPage(nPage)->getUnoPage());
 
             SdrPage* pMasterPage = xNewPage->GetSdrPage();
