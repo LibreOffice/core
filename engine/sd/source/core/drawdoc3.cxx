@@ -909,9 +909,21 @@ void SdDrawDocument::updateInsertedPages(PageInsertionParams& rParams,
 
     // Update page names (from pExchangeList), layouts, scaling, etc.
     sal_uInt16 nSdPageStart = (rParams.nInsertPos - 1) / 2;
-    sal_uInt16 nSdPageEnd = rOptions.bReplace
-        ? nSdPageStart + rParams.nReplacedStandardPages - 1 // if replacing, update only the replaced pages
-        : GetSdPageCount(PageKind::Standard) - rPageCounts.nDestPageCount + nSdPageStart - 1;
+
+    // When replacing, only the replaced pages are updated; otherwise the
+    // pages added by this insert, which is the growth of the standard-page
+    // count over the destination count captured before the insert.
+    const sal_uInt16 nUpdatedPages = rOptions.bReplace
+        ? rParams.nReplacedStandardPages
+        : GetSdPageCount(PageKind::Standard) - rPageCounts.nDestPageCount;
+
+    // Nothing landed (for example the bookmark names matched no standard page
+    // in the source): there is nothing to update, and the end index below
+    // would otherwise underflow and walk past the last page.
+    if (nUpdatedPages == 0)
+        return;
+
+    sal_uInt16 nSdPageEnd = nSdPageStart + nUpdatedPages - 1;
 
     // When the inserted pages adopt the destination design, bind them to the
     // layout of the destination page right before them; for an insert at the
