@@ -112,6 +112,11 @@ namespace connectivity::firebird
              */
             OUString m_sFBKPath;
 
+            /** When true the embedded database was opened in this session, so the
+                temporary .fdb holds live data that must be written back into the .odb
+                when the connection is disposed. */
+            bool                m_bBackupDataOnDispose;
+
             void loadDatabaseFile(const OUString& pSrcLocation, const OUString& pTmpLocation);
 
             /**
