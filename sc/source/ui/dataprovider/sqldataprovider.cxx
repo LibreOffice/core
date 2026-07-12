@@ -16,6 +16,8 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
+#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include <connectivity/dbtools.hxx>
 #include <dbdocutl.hxx>
 #include <datamapper.hxx>
 #include <utility>
@@ -80,10 +82,13 @@ void SQLFetchThread::execute()
 
         uno::Reference<sdbc::XConnection> xConnection = xSource->connectWithCompletion(xHandler);
 
+        const OUString aQuote = xConnection->getMetaData()->getIdentifierQuoteString();
+        const OUString aQuotedTable = ::dbtools::quoteName(aQuote, aTable);
+
         uno::Reference<sdbc::XStatement> xStatement = xConnection->createStatement();
 
         uno::Reference<sdbc::XResultSet> xResult
-            = xStatement->executeQuery("SELECT * FROM " + aTable);
+            = xStatement->executeQuery("SELECT * FROM " + aQuotedTable);
 
         if (xResult.is())
         {
