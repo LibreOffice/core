@@ -87,6 +87,7 @@ Connection::Connection()
     , m_sConnectionURL()
     , m_sFirebirdURL()
     , m_bIsEmbedded(false)
+    , m_bBackupDataOnDispose(false)
     , m_bIsFile(false)
     , m_bIsAutoCommit(true)
     , m_bIsReadOnly(false)
@@ -346,6 +347,10 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
         if (m_bIsEmbedded) // Add DocumentEventListener to save the .fdb as needed
         {
+            // The database opened without error, so its temporary .fdb is
+            // worth writing back into the .odb on dispose.
+            m_bBackupDataOnDispose = true;
+
             // We need to attach as a document listener in order to be able to store
             // the temporary db back into the .odb when saving
             uno::Reference<XDocumentEventBroadcaster> xBroadcaster(m_xParentDocument, UNO_QUERY);
@@ -842,7 +847,7 @@ void SAL_CALL Connection::documentEventOccured( const DocumentEvent& Event )
     if (Event.EventName == "OnSave" || Event.EventName == "OnSaveAs")
     {
         commit(); // Commit and close transaction
-        if ( m_bIsEmbedded && m_xEmbeddedStorage.is() )
+        if ( m_bIsEmbedded && m_bBackupDataOnDispose && m_xEmbeddedStorage.is() )
         {
             SAL_INFO("connectivity.firebird", "Writing .fbk from running db");
             try
