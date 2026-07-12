@@ -600,6 +600,7 @@ namespace sw
                         }
                         case CH_TXT_ATR_FIELDSTART:
                         {
+                            // can be null while a node split moves the text ahead of the fieldmarks
                             auto const pFieldMark(rIDMA.getFieldmarkAt(SwPosition(rTextNode, i)));
                             startedFields.emplace(pFieldMark, false, 0, 0);
                             break;
@@ -612,7 +613,8 @@ namespace sw
                             }
                             else
                             {   // no way to find the field via MarkManager...
-                                assert(std::get<0>(startedFields.top())->IsCoveringPosition(SwPosition(rTextNode, i)));
+                                assert((std::get<0>(startedFields.top()) == nullptr && rTextNode.HasHints() && rTextNode.GetSwpHints().IsInSplitNode())
+                                    || std::get<0>(startedFields.top())->IsCoveringPosition(SwPosition(rTextNode, i)));
                                 std::get<1>(startedFields.top()) = true;
                                 std::get<2>(startedFields.top()) = n;
                                 std::get<3>(startedFields.top()) = i;
@@ -627,7 +629,8 @@ namespace sw
                             }
                             else
                             {   // fieldmarks must not overlap => stack
-                                assert(std::get<0>(startedFields.top()) == rIDMA.getFieldmarkAt(SwPosition(rTextNode, i)));
+                                assert((std::get<0>(startedFields.top()) == nullptr && rTextNode.HasHints() && rTextNode.GetSwpHints().IsInSplitNode())
+                                    || std::get<0>(startedFields.top()) == rIDMA.getFieldmarkAt(SwPosition(rTextNode, i)));
                                 startedFields.pop();
                             }
                             break;
