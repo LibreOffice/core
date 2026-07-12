@@ -34,18 +34,29 @@
 #include <Poco/URI.h>
 
 #include <cstdlib>
+#include <mutex>
 #include <string>
 
-std::unique_ptr<Poco::Crypto::RSAKey>& JWTAuth::key() {
-    static std::unique_ptr<Poco::Crypto::RSAKey> key(
-        new Poco::Crypto::RSAKey(Poco::Crypto::RSAKey::KL_4096, Poco::Crypto::RSAKey::EXP_LARGE));
-    return key;
+namespace
+{
+    std::once_flag jwtKeyOnceFlag;
+    std::unique_ptr<Poco::Crypto::RSAKey> jwtKey;
 }
 
-// avoid obscure double frees on exit.
+std::unique_ptr<Poco::Crypto::RSAKey>& JWTAuth::key() {
+    std::call_once(jwtKeyOnceFlag, []()
+    {
+        jwtKey = std::make_unique<Poco::Crypto::RSAKey>(
+            Poco::Crypto::RSAKey::KL_4096, Poco::Crypto::RSAKey::EXP_LARGE);
+    });
+    return jwtKey;
+}
+
+// avoid obscure double frees on exit. Release the key during shutdown so it is
+// freed before the OpenSSL teardown that runs at static destruction.
 void JWTAuth::cleanup()
 {
-    key().reset();
+    jwtKey.reset();
 }
 
 std::string JWTAuth::getAccessToken()
