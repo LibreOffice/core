@@ -14,6 +14,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 
+#include <sal/log.hxx>
 #include <datamapper.hxx>
 #include <document.hxx>
 
@@ -102,6 +103,16 @@ ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport,
 
     if (!aProvider.isEmpty())
     {
+        // Only build the data providers we support. The sql provider is left
+        // out: it was never finished and was dropped from the dialog in tdf#169079.
+        if (aProvider != "org.libreoffice.calc.csv"
+            && aProvider != "org.libreoffice.calc.html"
+            && aProvider != "org.libreoffice.calc.xml")
+        {
+            SAL_WARN("sc", "ignoring document data mapping for provider \"" << aProvider << "\"");
+            return;
+        }
+
         ScDocument* pDoc = GetScImport().GetDocument();
         auto& rDataMapper = pDoc->GetExternalDataMapper();
         sc::ExternalDataSource aSource(aURL, aProvider, pDoc);
