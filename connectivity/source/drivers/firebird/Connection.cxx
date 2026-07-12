@@ -228,8 +228,13 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
             // Do any more dpbBuffer additions here
 
+            // attach without running the database's own event triggers
             if (m_bIsEmbedded || m_bIsFile)
             {
+                dpbBuffer.push_back(isc_dpb_no_db_triggers);
+                dpbBuffer.push_back(1); // 1 byte long
+                dpbBuffer.push_back(1);
+
                 userName = "sysdba"_ostr;
                 userPassword = "masterkey"_ostr;
             }
