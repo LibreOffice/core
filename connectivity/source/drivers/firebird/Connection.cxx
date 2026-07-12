@@ -82,6 +82,7 @@ Connection::Connection()
     : Connection_BASE(m_aMutex)
     , m_bIsEmbedded(false)
     , m_bIsFile(false)
+    , m_bBackupDataOnDispose(false)
     , m_bIsAutoCommit(true)
     , m_bIsReadOnly(false)
     , m_aTransactionIsolation(TransactionIsolation::READ_COMMITTED)
@@ -359,6 +360,10 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
         if (m_bIsEmbedded) // Add DocumentEventListener to save the .fdb as needed
         {
+            // The database opened without error, so its temporary .fdb is
+            // worth writing back into the .odb on dispose.
+            m_bBackupDataOnDispose = true;
+
             // We need to attach as a document listener in order to be able to store
             // the temporary db back into the .odb when saving
             uno::Reference<XDocumentEventBroadcaster> xBroadcaster(m_xParentDocument, UNO_QUERY);
@@ -951,7 +956,7 @@ void Connection::disposing()
 void Connection::storeDatabase()
 {
     MutexGuard aGuard(m_aMutex);
-    if (m_bIsEmbedded && m_xEmbeddedStorage.is())
+    if (m_bIsEmbedded && m_bBackupDataOnDispose && m_xEmbeddedStorage.is())
     {
         SAL_INFO("connectivity.firebird", "Writing .fbk from running db");
         try
