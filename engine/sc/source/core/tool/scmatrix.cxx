@@ -2888,7 +2888,7 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
     else
         xMat1->ExecuteOperation(
                 std::pair<size_t, size_t>(0, 0),
-                std::pair<size_t, size_t>(nMaxRow - 1, nMaxCol - 1),
+                std::pair<size_t, size_t>(std::min(nR1, nMaxRow) - 1, std::min(nC1, nMaxCol) - 1),
                 std::move(aDoubleFunc), std::move(aBoolFunc), std::move(aStringFunc), std::move(aEmptyFunc));
 
     std::vector<svl::SharedString> aSharedString(nMaxCol*nMaxRow);
@@ -2952,7 +2952,7 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
     else
         xMat2->ExecuteOperation(
                 std::pair<size_t, size_t>(0, 0),
-                std::pair<size_t, size_t>(nMaxRow - 1, nMaxCol - 1),
+                std::pair<size_t, size_t>(std::min(nR2, nMaxRow) - 1, std::min(nC2, nMaxCol) - 1),
                 std::move(aDoubleFunc2), std::move(aBoolFunc2), std::move(aStringFunc2), std::move(aEmptyFunc2));
 
     aString.clear();

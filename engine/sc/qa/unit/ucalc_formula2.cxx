@@ -2272,6 +2272,44 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testMatrixArithmeticMismatchedExtent)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testMatrixConcatMismatchedExtent)
+{
+    // String concatenation of two two-dimensional ranges of unequal
+    // length extends the result to the longer range. Where the two
+    // ranges overlap the cells join together. The rows past the shorter
+    // operand have no partner to join and stay empty.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // First operand A1:B3, three rows by two columns.
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"a"_ustr);
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"b"_ustr);
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"c"_ustr);
+    m_pDoc->SetString(ScAddress(1, 1, 0), u"d"_ustr);
+    m_pDoc->SetString(ScAddress(0, 2, 0), u"e"_ustr);
+    m_pDoc->SetString(ScAddress(1, 2, 0), u"f"_ustr);
+
+    // Second operand D1:E2, two rows by two columns, one row shorter.
+    m_pDoc->SetString(ScAddress(3, 0, 0), u"1"_ustr);
+    m_pDoc->SetString(ScAddress(4, 0, 0), u"2"_ustr);
+    m_pDoc->SetString(ScAddress(3, 1, 0), u"3"_ustr);
+    m_pDoc->SetString(ScAddress(4, 1, 0), u"4"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(6, 0, 7, 2, aMark, u"=A1:B3&D1:E2"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(u"a1"_ustr, m_pDoc->GetString(ScAddress(6, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"b2"_ustr, m_pDoc->GetString(ScAddress(7, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"c3"_ustr, m_pDoc->GetString(ScAddress(6, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"d4"_ustr, m_pDoc->GetString(ScAddress(7, 1, 0)));
+    // The third row is past the second operand, so those cells stay empty.
+    CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(ScAddress(6, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(ScAddress(7, 2, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testMatrixOp)
 {
     m_pDoc->InsertTab(0, u"Test"_ustr);
