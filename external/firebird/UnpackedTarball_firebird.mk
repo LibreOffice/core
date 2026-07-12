@@ -31,6 +31,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,firebird,\
 #   at <https://github.com/FirebirdSQL/firebird/pull/6948> "extern/cloop: Missing dependencies of
 #   compilations on output directories":
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
+        external/firebird/firebird-nbak-difference-file-access.patch.1 \
         external/firebird/firebird.disable-ib-util-not-found.patch.1 \
 		external/firebird/firebird-Engine12.patch \
 		external/firebird/firebird-rpath.patch.0 \
