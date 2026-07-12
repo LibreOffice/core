@@ -31,6 +31,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,firebird,\
 #   of <https://github.com/FirebirdSQL/firebird/commit/375afe2f8d128986da37171507850e619d465501>
 #   "Fix for most cases of #7522 (#7828)":
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
+        external/firebird/firebird-nbak-difference-file-access.patch.1 \
         external/firebird/firebird.disable-ib-util-not-found.patch.1 \
 		external/firebird/firebird-Engine12.patch \
 		external/firebird/firebird-rpath.patch.0 \

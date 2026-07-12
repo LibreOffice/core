@@ -119,6 +119,39 @@ struct ConnectionGuard
     }
 };
 
+// A set nbackup state makes firebird open a difference file
+// (BackupManager::actualizeState and openDelta, firebird/src/jrd/nbak.cpp).
+// A database we made is never in that state, so refuse it.
+bool databaseHeaderHasBackupState(const OUString& rDatabasePath)
+{
+    OUString sFileURL;
+    if (::osl::FileBase::getFileURLFromSystemPath(rDatabasePath, sFileURL) != ::osl::FileBase::E_None)
+        return false;
+
+    ::osl::File aFile(sFileURL);
+    if (aFile.open(osl_File_OpenFlag_Read) != ::osl::FileBase::E_None)
+        return false;
+
+    // Ods::header_page, firebird/src/jrd/ods.h
+    sal_uInt8 aHeader[44];
+    sal_uInt64 nRead = 0;
+    ::osl::FileBase::RC eRead = aFile.read(aHeader, sizeof(aHeader), nRead);
+    aFile.close();
+
+    if (eRead != ::osl::FileBase::E_None || nRead < sizeof(aHeader))
+        return false;
+
+    // pag_type, Ods::pag_header
+    const sal_uInt8 nPageTypeHeader = 1;
+    if (aHeader[0] != nPageTypeHeader)
+        return false;
+
+    // hdr_flags & hdr_backup_mask, normal state is 0
+    const sal_uInt16 nFlags = aHeader[42] | (aHeader[43] << 8);
+    const sal_uInt16 nBackupStateMask = 0x0C00;
+    return (nFlags & nBackupStateMask) != 0;
+}
+
 }
 
 void Connection::construct(const OUString& url, const Sequence< PropertyValue >& info,
@@ -180,6 +213,15 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
                     SAL_INFO("connectivity.firebird", "Found .fdb instead of .fbk");
                     bIsFdbStored = true;
                     loadDatabaseFile(our_sFDBLocation, m_sFirebirdURL);
+                    // Decline a database whose header asks firebird to use a
+                    // difference file
+                    if (databaseHeaderHasBackupState(m_sFirebirdURL))
+                    {
+                        ::connectivity::SharedResources aResources;
+                        const OUString sMessage = aResources.getResourceString(STR_COULD_NOT_LOAD_FILE).replaceFirst(
+                            "$filename$", m_sConnectionURL);
+                        ::dbtools::throwGenericSQLException(sMessage, *this);
+                    }
                 }
                 else
                 {
