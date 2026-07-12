@@ -1126,8 +1126,7 @@ void InterfaceType::dumpDeclaration(FileStream & out)
     dumpAttributes(out);
     dumpMethods(out);
     out << "\n" << indent()
-        << ("static inline ::cpo::uno::Type const & SAL_CALL"
-            " static_type(void * = 0);\n\n");
+        << ("static inline ::cpo::uno::Type const & static_type(void * = 0);\n\n");
     dec();
     out << "protected:\n";
     inc();
@@ -1177,12 +1176,12 @@ void InterfaceType::dumpAttributes(FileStream & out) const
         dumpDeprecation(out, depr);
         out << "virtual ";
         dumpType(out, attr.type);
-        out << " SAL_CALL get" << attr.name << "() = 0;\n";
+        out << " get" << attr.name << "() = 0;\n";
         if (!attr.readOnly) {
             bool byRef = passByReference(attr.type);
             out << indent();
             dumpDeprecation(out, depr);
-            out << "virtual void SAL_CALL set" << attr.name << "( ";
+            out << "virtual void set" << attr.name << "( ";
             dumpType(out, attr.type, byRef, byRef);
             out << " _" << attr.name.toAsciiLowerCase() << " ) = 0;\n";
         }
@@ -1199,7 +1198,7 @@ void InterfaceType::dumpMethods(FileStream & out) const
         dumpDeprecation(out, m_isDeprecated || isDeprecated(method.annotations));
         out << "virtual ";
         dumpType(out, method.returnType);
-        out << " SAL_CALL " << method.name << "(";
+        out << " " << method.name << "(";
         if (!method.parameters.empty()) {
             out << " ";
             for (std::vector< unoidl::InterfaceTypeEntity::Method::Parameter >::
@@ -3495,7 +3494,7 @@ void ServiceType::dumpHppFile(
           << " && (LO_URE_CURRENT_ENV) == (LO_URE_CTOR_ENV_"
           << name_.replaceAll(".", "_dot_") << ") && defined LO_URE_CTOR_FUN_"
           << name_.replaceAll(".", "_dot_")
-          << "\nextern \"C\" ::css::uno::XInterface * SAL_CALL LO_URE_CTOR_FUN_"
+          << "\nextern \"C\" ::css::uno::XInterface * LO_URE_CTOR_FUN_"
           << name_.replaceAll(".", "_dot_")
           << "(::css::uno::XComponentContext *, ::cpo::uno::Sequence< "
           "::cpo::uno::Any > const &);\n#endif\n";
@@ -3801,7 +3800,7 @@ void SingletonType::dumpHppFile(
       << " && (LO_URE_CURRENT_ENV) == (LO_URE_CTOR_ENV_"
       << name_.replaceAll(".", "_dot_") << ") && defined LO_URE_CTOR_FUN_"
       << name_.replaceAll(".", "_dot_")
-      << "\nextern \"C\" ::css::uno::XInterface * SAL_CALL LO_URE_CTOR_FUN_"
+      << "\nextern \"C\" ::css::uno::XInterface * LO_URE_CTOR_FUN_"
       << name_.replaceAll(".", "_dot_")
       << "(::css::uno::XComponentContext *, ::cpo::uno::Sequence< "
       "::cpo::uno::Any > const &);\n#endif\n";
