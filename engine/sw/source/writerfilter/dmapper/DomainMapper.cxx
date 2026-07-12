@@ -4887,7 +4887,8 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
         {
             // GetTopContext() is changed by inserted breaks, but we want to keep the current context
             PropertyMapPtr pContext = m_pImpl->GetTopContext();
-            if (!m_pImpl->GetFootnoteContext() && !m_pImpl->IsInShape() && !m_pImpl->IsInComments())
+            if (!m_pImpl->GetFootnoteContext() && !m_pImpl->IsInShape() && !m_pImpl->IsInComments()
+                && !m_pImpl->IsInHeaderFooter())
             {
                 auto pPara = static_cast<ParagraphPropertyMap*>(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH).get());
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
