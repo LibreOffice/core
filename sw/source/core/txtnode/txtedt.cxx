@@ -245,8 +245,14 @@ lcl_MaskRedlinesAndHiddenText( const SwTextNode& rNode, OUStringBuffer& rText,
  */
 static SwRect lcl_CalculateRepaintRect(
         const SwTextFrame & rTextFrame, const SwTextNode & rNode,
-        sal_Int32 const nChgStart, sal_Int32 const nChgEnd)
+        sal_Int32 nChgStart, sal_Int32 nChgEnd)
 {
+    // the wrong list range can reach past the text, keep it in bounds
+    const sal_Int32 nLen = rNode.GetText().getLength();
+    if (nChgStart > nLen)
+        nChgStart = nLen;
+    if (nChgEnd > nLen)
+        nChgEnd = nLen;
     TextFrameIndex const iChgStart(rTextFrame.MapModelToView(&rNode, nChgStart));
     TextFrameIndex const iChgEnd(rTextFrame.MapModelToView(&rNode, nChgEnd));
 
