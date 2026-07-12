@@ -32,6 +32,7 @@
 #include <Poco/SAX/InputSource.h>
 #include <Poco/URI.h>
 
+#include <chrono>
 #include <memory>
 #include <regex>
 #include <string>
@@ -330,7 +331,7 @@ UnitBase::TestResult UnitSession::testSlideShow()
         // request slide show
         helpers::sendTextFrame(
             wsdSession, "downloadas name=slideshow.svg id=slideshow format=svg options=", testname);
-        docResponse = helpers::getResponseString(wsdSession, "downloadas:", testname);
+        docResponse = helpers::getResponseString(wsdSession, "downloadas:", testname, 60s);
         LOK_ASSERT_MESSAGE("did not receive a downloadas: message as expected",
                            !docResponse.empty());
 
@@ -463,7 +464,7 @@ UnitBase::TestResult UnitSession::testSlideShowMultiDL()
                                    "downloadas name=" + id_req + ".svg id=" + id_req +
                                        " format=svg options=",
                                    testname);
-            response = helpers::getResponseString(wsdSession, "downloadas:", testname);
+            response = helpers::getResponseString(wsdSession, "downloadas:", testname, 60s);
             LOK_ASSERT_MESSAGE("did not receive a downloadas: message as expected",
                                !response.empty());
 
