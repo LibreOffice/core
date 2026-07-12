@@ -80,7 +80,7 @@ void CollabEndpointTest::testCollabWebSocketAuth()
     TST_LOG("Testing /co/collab WebSocket validation flow");
 
     // Create WebSocket connection to /co/collab with WOPISrc parameter
-    const std::string wopiSrc = "http%3A%2F%2Fexample.com%2Fwopi%2Ffiles%2F123";
+    const std::string wopiSrc = "http%3A%2F%2Fwopi.invalid%2Fwopi%2Ffiles%2F123";
     const std::string path = "/co/collab?WOPISrc=" + wopiSrc;
 
     auto ws = http::WebSocketSession::create(_uri.toString());
@@ -104,8 +104,8 @@ void CollabEndpointTest::testCollabWebSocketAuth()
 
     TST_LOG("Received progress message: " << responseStr);
 
-    // Since we're using a fake WOPI URL (example.com), validation will fail.
-    // We should receive an error message (timeout or load failed)
+    // wopi.invalid is reserved by RFC 6761 to never resolve, so validation
+    // fails immediately. We should receive an error message.
     response = ws->waitForMessage("error:", timeout, testname);
     LOK_ASSERT_MESSAGE("Expected error response for unreachable WOPI server",
                        !response.empty());
@@ -267,7 +267,7 @@ void CollabEndpointTest::testCollabInvalidJsonMessage()
     TST_LOG("Testing /co/collab rejects non-JSON after access_token");
 
     // Create WebSocket connection
-    const std::string wopiSrc = "http%3A%2F%2Fexample.com%2Fwopi%2Ffiles%2Fjson_test";
+    const std::string wopiSrc = "http%3A%2F%2Fwopi.invalid%2Fwopi%2Ffiles%2Fjson_test";
     const std::string path = "/co/collab?WOPISrc=" + wopiSrc;
 
     auto ws = http::WebSocketSession::create(_uri.toString());
@@ -298,7 +298,7 @@ void CollabEndpointTest::testCollabUnknownMessageType()
     TST_LOG("Testing /co/collab message type validation");
 
     // Create WebSocket connection
-    const std::string wopiSrc = "http%3A%2F%2Fexample.com%2Fwopi%2Ffiles%2Fmsg_test";
+    const std::string wopiSrc = "http%3A%2F%2Fwopi.invalid%2Fwopi%2Ffiles%2Fmsg_test";
     const std::string path = "/co/collab?WOPISrc=" + wopiSrc;
 
     auto ws = http::WebSocketSession::create(_uri.toString());
@@ -314,7 +314,7 @@ void CollabEndpointTest::testCollabUnknownMessageType()
     std::vector<char> response = ws->waitForMessage("progress:", timeout, testname);
     LOK_ASSERT_MESSAGE("Expected progress message", !response.empty());
 
-    // Wait for error (WOPI validation fails because example.com is unreachable)
+    // Wait for error (WOPI validation fails because wopi.invalid never resolves)
     response = ws->waitForMessage("error:", timeout, testname);
     LOK_ASSERT_MESSAGE("Expected error for unreachable WOPI server", !response.empty());
 
