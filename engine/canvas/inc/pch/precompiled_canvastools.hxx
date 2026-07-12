@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:11:37 using:
+ Generated on 2026-07-12 11:38:06 using:
  ./bin/update_pch canvas canvastools --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,11 +24,11 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <limits>
+#include <ranges>
 #include <string_view>
-#include <boost/range/adaptor/reversed.hpp>
+#include <utility>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
-#include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <vcl/canvastools.hxx>
@@ -43,10 +43,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygontriangulator.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
@@ -89,12 +86,10 @@
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/util/Endianness.hpp>
-#include <comphelper/scopeguard.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rendering/isurfaceproxy.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/diagnose_ex.hxx>
 #include <tools/time.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
