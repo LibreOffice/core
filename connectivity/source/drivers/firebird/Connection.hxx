@@ -130,6 +130,11 @@ namespace connectivity::firebird
         /** We are using an external (local) file */
         bool                m_bIsFile;
 
+        /** When true the embedded database was opened in this session, so the
+            temporary .fdb holds live data that must be written back into the .odb
+            when the connection is disposed. */
+        bool                m_bBackupDataOnDispose;
+
         /* CONNECTION PROPERTIES */
         bool                m_bIsAutoCommit;
         bool                m_bIsReadOnly;
