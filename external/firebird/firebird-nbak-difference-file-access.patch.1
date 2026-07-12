@@ -1,0 +1,47 @@
+Verify difference file path against DatabaseAccess
+
+The difference file opened in openDelta and beginBackup was not verified
+against DatabaseAccess like the other database file paths.
+
+Submitted upstream as https://github.com/FirebirdSQL/firebird/pull/9089
+
+--- firebird/src/jrd/nbak.cpp
++++ firebird/src/jrd/nbak.cpp
+@@ -35,6 +35,7 @@
+ #include "lck.h"
+ #include "cch.h"
+ #include "lck_proto.h"
++#include "jrd_proto.h"
+ #include "pag_proto.h"
+ #include "err_proto.h"
+ #include "cch_proto.h"
+@@ -224,6 +225,14 @@
+ void BackupManager::openDelta(thread_db* tdbb)
+ {
+ 	fb_assert(!diff_file);
++
++	// Verify difference file path against DatabaseAccess entry of firebird.conf
++	if (!JRD_verify_database_access(diff_name))
++	{
++		ERR_post(Arg::Gds(isc_conf_access_denied) << Arg::Str("difference file") <<
++													 Arg::Str(diff_name));
++	}
++
+ 	diff_file = PIO_open(tdbb, diff_name, diff_name);
+
+ 	if (database->dbb_flags & (DBB_force_write | DBB_no_fs_cache))
+@@ -283,6 +292,14 @@
+ 	{
+ 		// Create file
+ 		NBAK_TRACE(("Creating difference file %s", diff_name.c_str()));
++
++		// Verify difference file path against DatabaseAccess entry of firebird.conf
++		if (!JRD_verify_database_access(diff_name))
++		{
++			ERR_post(Arg::Gds(isc_conf_access_denied) << Arg::Str("difference file") <<
++														 Arg::Str(diff_name));
++		}
++
+ 		diff_file = PIO_create(tdbb, diff_name, true, false);
+ 	}
+ 	catch (const Firebird::Exception&)

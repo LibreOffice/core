@@ -22,6 +22,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,firebird,\
 #   <https://github.com/FirebirdSQL/firebird/pull/227> "Make comparison operator member functions
 #   const":
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
+        external/firebird/firebird-nbak-difference-file-access.patch.1 \
         external/firebird/firebird.disable-ib-util-not-found.patch.1 \
 		external/firebird/firebird-Engine12.patch \
 		external/firebird/firebird-rpath.patch.0 \
