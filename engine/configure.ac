@@ -14342,8 +14342,8 @@ fi
 rm -f a.out a.wasm a.out.js a.out.wasm
 
 dnl cspell:ignore Randr Xext alignof altlinuxhyph appex bzlib ccached coreutils createmsi cxxabi
-dnl cspell:ignore cygdrive devel devenv dlsym dtrace emconfigure fpch frobozz gnucp gpgconf gpgme
-dnl cspell:ignore gpgmepp ifdef ifndef libc libdl libjpipe libstdc longjmp memcpy mscoree msicreator
+dnl cspell:ignore cygdrive devel devenv dlsym dtrace emconfigure fpch frobozz gnucp
+dnl cspell:ignore ifdef ifndef libc libdl libjpipe libstdc longjmp memcpy mscoree msicreator
 dnl cspell:ignore msiglobal mspdb msys nmake omindex optimised pagein pkgmk qconfig qtbase
 dnl cspell:ignore quadrigraph rbbi rpms sccache strbuf stringop tosvg ucrt ustring uuidgen vclplugs
 dnl cspell:ignore vswhere werror wilangid xcent xcrun

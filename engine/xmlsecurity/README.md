@@ -2,8 +2,8 @@
 
 ## Introduction
 
-This code provides dialogs, and infrastructure wrapping `libxmlsec` and
-`gpgme` that implements document signing.
+This code provides dialogs, and infrastructure wrapping `libxmlsec`
+that implements document signing.
 
 For signing a document, a personal key pair is used, which consists of a
 private key and a public key, which is added to the document in addition
@@ -20,7 +20,7 @@ the exported PDF files. It is also possible to sign existing PDF files.
  * `test_docs`: Documents & certificates used for testing.
  * `source`: More on that below.
  * `uiconfig`: User interface configuration for different dialogs, it is recommended to navigate from relevant source file to the .ui file linked in the class which will be under `uiconfig/ui`.
- * `util`: UNO passive registration config for GPG/ NSS.
+ * `util`: UNO passive registration config for NSS.
 
 ## Source Primary Contents
 
@@ -30,7 +30,6 @@ the exported PDF files. It is also possible to sign existing PDF files.
    * `certificateviewer`: More detailed information about each certificate.
    * `digitalsignaturesdialog`: Main window for signatures of the documents and the start point of signing document.
  * `framework`: Various elements for verifying signatures and running security engine.
- * `gpg`: The implementation of encrypting with GPG and security environment initialization.
  * `helper`: Some helper classes that include signatures manager and the helpers for PDF signing, UriBinding, and XML signatures. It also include helper tools for XSecurityEnvironment.
  * `xmlsec`: XML, NSS, MSCrypt encryption/ signing tools, more on the low-level side of actual implementation of algorithms.
 

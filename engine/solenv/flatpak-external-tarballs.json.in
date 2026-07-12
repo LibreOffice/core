@@ -119,27 +119,6 @@
         "dest-filename": "@GLM_TARBALL@"
     },
     {
-        "url": "https://dev-www.libreoffice.org/src/@GPGME_TARBALL@",
-        "sha256": "@GPGME_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@GPGME_TARBALL@"
-    },
-    {
-        "url": "https://dev-www.libreoffice.org/src/@LIBASSUAN_TARBALL@",
-        "sha256": "@LIBASSUAN_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@LIBASSUAN_TARBALL@"
-    },
-    {
-        "url": "https://dev-www.libreoffice.org/src/@LIBGPGERROR_TARBALL@",
-        "sha256": "@LIBGPGERROR_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@LIBGPGERROR_TARBALL@"
-    },
-    {
         "url": "https://dev-www.libreoffice.org/src/@ABW_TARBALL@",
         "sha256": "@ABW_SHA256SUM@",
         "type": "file",

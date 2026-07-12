@@ -121,7 +121,6 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,FREETYPE,FREETYPE_TARBALL) \
 	$(call fetch_Optional,FROZEN,FROZEN_TARBALL) \
 	$(call fetch_Optional,GLM,GLM_TARBALL) \
-	$(call fetch_Optional,GPGMEPP,GPGME_TARBALL) \
 	$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \
 	$(call fetch_Optional,HARFBUZZ,HARFBUZZ_TARBALL) \
 	$(call fetch_Optional,HUNSPELL,HUNSPELL_TARBALL) \
@@ -143,11 +142,9 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,JFREEREPORT,JFREEREPORT_SAC_TARBALL) \
 	$(call fetch_Optional,LIBJPEG_TURBO,LIBJPEG_TURBO_TARBALL) \
 	$(call fetch_Optional,LCMS2,LCMS2_TARBALL) \
-	$(call fetch_Optional,LIBASSUAN,LIBASSUAN_TARBALL) \
 	$(call fetch_Optional,LIBEOT,LIBEOT_TARBALL) \
 	$(call fetch_Optional,LIBEXTTEXTCAT,LIBEXTTEXTCAT_TARBALL) \
 	$(call fetch_Optional,LIBFFI,LIBFFI_TARBALL) \
-	$(call fetch_Optional,LIBGPGERROR,LIBGPGERROR_TARBALL) \
 	$(call fetch_Optional,LIBLANGTAG,LANGTAGREG_TARBALL) \
 	$(call fetch_Optional,LIBLANGTAG,LIBLANGTAG_TARBALL) \
 	$(call fetch_Optional,LIBNUMBERTEXT,LIBNUMBERTEXT_TARBALL) \
