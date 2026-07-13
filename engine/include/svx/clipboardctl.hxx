@@ -32,8 +32,8 @@ class SvxClipboardFormatItem;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipBoardControl final : public SfxToolBoxControl
 {
-    std::unique_ptr<SvxClipboardFormatItem> pClipboardFmtItem;
-    bool                    bDisabled;
+    std::unique_ptr<SvxClipboardFormatItem> m_pClipboardFmtItem;
+    bool                    m_bDisabled;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();

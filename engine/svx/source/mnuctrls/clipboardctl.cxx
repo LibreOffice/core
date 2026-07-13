@@ -44,7 +44,7 @@ SvxClipBoardControl::SvxClipBoardControl(
         sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    bDisabled( false )
+    m_bDisabled( false )
 {
     addStatusListener( u".uno:ClipboardFormatItems"_ustr);
     ToolBox& rBox = GetToolBox();
@@ -58,16 +58,16 @@ SvxClipBoardControl::~SvxClipBoardControl()
 
 void SvxClipBoardControl::CreatePopupWindow()
 {
-    if ( pClipboardFmtItem )
+    if ( m_pClipboardFmtItem )
     {
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"svx/ui/clipboardmenu.ui"_ustr));
         std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"menu"_ustr));
 
-        sal_uInt16 nCount = pClipboardFmtItem->Count();
+        sal_uInt16 nCount = m_pClipboardFmtItem->Count();
         for (sal_uInt16 i = 0;  i < nCount;  ++i)
         {
-            SotClipboardFormatId nFmtID =  pClipboardFmtItem->GetClipbrdFormatId( i );
-            OUString aFmtStr( pClipboardFmtItem->GetClipbrdFormatName( i ) );
+            SotClipboardFormatId nFmtID =  m_pClipboardFmtItem->GetClipbrdFormatId( i );
+            OUString aFmtStr( m_pClipboardFmtItem->GetClipbrdFormatName( i ) );
             if (aFmtStr.isEmpty())
               aFmtStr = SvPasteObjectHelper::GetSotFormatUIName( nFmtID );
             xPopup->append(OUString::number(static_cast<sal_uInt32>(nFmtID)), aFmtStr);
@@ -99,20 +99,20 @@ void SvxClipBoardControl::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItem
 {
     if ( SID_CLIPBOARD_FORMAT_ITEMS == nSID )
     {
-        pClipboardFmtItem.reset();
+        m_pClipboardFmtItem.reset();
         if ( eState >= SfxItemState::DEFAULT )
         {
-            pClipboardFmtItem.reset( static_cast<SvxClipboardFormatItem*>(pState->Clone()) );
+            m_pClipboardFmtItem.reset( static_cast<SvxClipboardFormatItem*>(pState->Clone()) );
             GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) | ToolBoxItemBits::DROPDOWN );
         }
-        else if ( !bDisabled )
+        else if ( !m_bDisabled )
             GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) & ~ToolBoxItemBits::DROPDOWN );
         GetToolBox().Invalidate( GetToolBox().GetItemRect( GetId() ) );
     }
     else
     {
         // enable the item as a whole
-        bDisabled = (GetItemState(pState) == SfxItemState::DISABLED);
+        m_bDisabled = (GetItemState(pState) == SfxItemState::DISABLED);
         GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SfxItemState::DISABLED) );
     }
 }
