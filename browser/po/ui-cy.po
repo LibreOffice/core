@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-13 07:01+0000\n"
+"PO-Revision-Date: 2026-07-11 11:01+0000\n"
 "Last-Translator: Rhoslyn Prys <rprys@posteo.net>\n"
 "Language-Team: Welsh <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/cy/>\n"
-"Language: \n"
+"Language: cy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=(n==0) ? 0 : (n==1) ? 1 : (n==2) ? 2 : "
 "(n==3) ? 3 :(n==6) ? 4 : 5;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -65,7 +65,7 @@ msgstr "Statws"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Manylion"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -443,6 +443,9 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Mae rhai cleientiaid sydd wedi'u cysylltu gyda'r hen ffurf WebSocket URL, y "
+"mae bwriad i'w dynnu. Gwiriwch fod eich dirprwy'n pasio'r ffurf gynnil "
+"drwodd."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -452,7 +455,7 @@ msgstr "Gwall"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Dysgu mwy"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -553,7 +556,7 @@ msgstr "Dangos Mesurydd"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Dangos Marciau Fformatio"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
@@ -641,11 +644,11 @@ msgstr "Cynnwys"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:591
 msgid "Display"
-msgstr ""
+msgstr "Dangos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Dangos Ffiniau"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560
@@ -864,10 +867,13 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Pan ymlaen, mae Writer yn ffitio'r ddogfen i led y porth golwg wrth agor. "
+"Pan i ffwrdd, mae'r ddogfen yn agos ar y lefel Chwyddo Rhagosodeidg wedi'i "
+"osod isod."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1347
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Dim gosodiadau ar gael ar gyfer {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1359
 msgid "Select a tab to browser settings."
@@ -947,7 +953,7 @@ msgstr "Gosodiadau API cyfrif Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2064
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Gosodiadau Zetero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2096
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
@@ -964,7 +970,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2121
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Gosodiadau Llofnodi Dogfen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 #: admin/src/integrator/AdminIntegratorSettings.ts:2176
@@ -1074,7 +1080,7 @@ msgstr "Llwytho Xcu i Fyny"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3375
 #: admin/src/integrator/AdminIntegratorSettings.ts:3385
 msgid "Enter {0}"
-msgstr ""
+msgstr "Rhowch {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 msgid "Reset"
@@ -1082,15 +1088,15 @@ msgstr "Ailosod"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Ailosod i'r rhagosodedig {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Ydych chi'n siŵr eich bod am ailosod i {0}?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
-msgstr ""
+msgstr "Cadw {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -2184,7 +2190,7 @@ msgstr "Peidio dangos eto"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "Digwyddodd {0} gwall wrth brosesu'r gorchymyn {1}."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -3092,7 +3098,7 @@ msgstr "Trwsio"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:850
 msgid "Find"
-msgstr ""
+msgstr "Canfod"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -4196,7 +4202,7 @@ msgstr "Mewnosod tabl arddulliwyd"
 
 #: src/control/Control.NotebookbarCalc.js:1815
 msgid "Select an editable cell range to insert a styled table"
-msgstr ""
+msgstr "Dewis ystod celloedd golygadwy i fewnosod tabl arddulliwyd"
 
 #: src/control/Control.NotebookbarCalc.js:1824
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4477,7 +4483,7 @@ msgstr "Dewis"
 #: src/control/Control.NotebookbarImpress.js:2235
 #: src/control/Control.NotebookbarWriter.js:2638
 msgid "Distribute"
-msgstr ""
+msgstr "Dosbarthu"
 
 #: src/control/Control.NotebookbarImpress.js:2274
 #: src/control/Control.NotebookbarWriter.js:2677
@@ -4598,7 +4604,7 @@ msgstr "Tynnu Adran"
 
 #: src/control/Control.PartsPreview.js:871
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Tynnu Adran a Sleidiau"
 
 #: src/control/Control.PartsPreview.js:880
 msgid "Move Section Up"
@@ -4618,7 +4624,7 @@ msgstr "Ehangu Pob Adran"
 
 #: src/control/Control.PartsPreview.js:940
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr ""
+msgstr "Dileu adran \"%1\" a'i %2 sleid?"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "Enter new section name:"
@@ -4669,10 +4675,12 @@ msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
+"Wedi'i gysylltu gyda'r hen ffurf WebSocket URL, y mae bwriad i'w dynnu. "
+"Gwiriwch fod eich dirprwy'n pasio'r ffurf gynnil drwodd."
 
 #: src/control/Control.ServerAuditDialog.ts:143
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Wedi'i gysylltu gyda'r ffurf gynnil o WebSocket URL,"
 
 #: src/control/Control.ServerAuditDialog.ts:152
 msgid "The IsAdminUser property is not set by integration"
@@ -4786,6 +4794,8 @@ msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"Ffitio'r dudalen i led y ffenestr. Mae modd toglo Chwyddo Clyfar wrth agor "
+"yn y Dewisiadau o dan y tab Ffeil."
 
 #: src/control/Control.StatusBar.js:271
 msgid "Status Bar Menu"
@@ -4906,23 +4916,23 @@ msgstr "Dangos Dewislen"
 
 #: src/control/Control.UIManager.ts:2681
 msgid "Copy error details"
-msgstr ""
+msgstr "Copïo manylion gwall"
 
 #: src/control/Control.UIManager.ts:2728
 msgid "Show technical details"
-msgstr ""
+msgstr "Dangos manylion technegol"
 
 #: src/control/Control.UIManager.ts:2742
 msgid "Technical Details:"
-msgstr ""
+msgstr "Manylion Technegol:"
 
 #: src/control/Control.UIManager.ts:2746
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Manylion gwall wedi'u copïo i'r clipfwrdd"
 
 #: src/control/Control.UIManager.ts:2756
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Wedi methu copïo manylion gwall"
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
@@ -5137,17 +5147,16 @@ msgstr ""
 "dyfyniadau a llyfryddiaeth yn y ddogfen hon."
 
 #: src/control/HRuler.ts:321
-#, fuzzy
 msgid "First line"
-msgstr "Sleid Gyntaf"
+msgstr "Llinell gyntaf"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "Cyn"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
-msgstr ""
+msgstr "Clic dwbl i fewnosod stop tab. Clic de am ragor o ddewisiadau."
 
 #: src/control/HRuler.ts:785 src/control/HRuler.ts:952
 msgid "Left Margin"
@@ -5309,19 +5318,19 @@ msgstr "Teitl, Testun Fertigol, Clipgelf"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Dewis safonol"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Estyn y dewis"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "Ychwanegu'r dewis"
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Rhwystro'r dewis"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -5993,7 +6002,7 @@ msgstr ""
 
 #: src/app/Socket.ts:621
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "Mae'r cysylltiad i'r ddogfen wedi'i golli."
 
 #: src/app/Socket.ts:622
 msgid "The server has been disconnected."
@@ -6063,7 +6072,7 @@ msgstr "Gweinydd anghywir, yn ailgysylltu..."
 
 #: src/app/Socket.ts:1905
 msgid "Unsupported version."
-msgstr ""
+msgstr "Fersiwn heb ei gefnogi."
 
 #: src/app/Socket.ts:1906
 msgid "Unsupported server version."
@@ -6159,7 +6168,7 @@ msgstr "Mae tab {0} wedi'i ddewis"
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "Dim lle ar ddisg ar ôl."
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6513,7 +6522,7 @@ msgstr "Methu llwytho'r clipfwrdd i lawr, ail gopïwch"
 
 #: src/map/Clipboard.js:372
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Wedi methu llwytho'r clipfwrdd"
 
 #: src/map/Clipboard.js:1450
 msgid ""
@@ -6581,10 +6590,9 @@ msgid "Please send us your feedback"
 msgstr "Anfonwch eich adborth atom"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
 msgstr ""
-"Nid oes modd llwytho ffeil o fath: {0} i weinydd gan nad oes gan y ffeil enw"
+"Does dim modd llwytho ffeil o fath: {0} i weinydd gan nad oes gan y ffeil enw"
 
 #: src/map/handler/Map.FileInserter.js:193
 #, javascript-format
@@ -6595,11 +6603,10 @@ msgstr ""
 "Nid oes modd llwytho ffeil o fath: {0} i weinydd gan nad oes gan y ffeil enw"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
 msgstr ""
-"Nid oes modd llwytho ffeil o fath: {0} i weinydd gan nad oes gan fod y ffeil "
-"yn wag"
+"Does dim modd llwytho ffeil o fath: {0} i weinydd gan nad oes gan fod y "
+"ffeil yn wag"
 
 #: src/map/handler/Map.FileInserter.js:197
 #, javascript-format
@@ -6807,9 +6814,8 @@ msgid "Present to all"
 msgstr "Cyflwyno i bawb"
 
 #: src/slideshow/PresenterConsole.js:41
-#, fuzzy
 msgid "Exit"
-msgstr "Golygu"
+msgstr "Gadael"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Go Back"
