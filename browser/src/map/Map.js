@@ -100,7 +100,6 @@ window.L.Map = window.L.Evented.extend({
 		this._handlers = [];
 		this._layers = {};
 		this._zoomBoundLayers = {};
-		this._sizeChanged = true;
 		this._bDisableKeyboard = false;
 		this._fatal = false;
 		this._enabled = true;
@@ -178,7 +177,6 @@ window.L.Map = window.L.Evented.extend({
 			if (window.mode.isSmallScreenDevice())
 			{
 				document.getElementById('document-container').classList.add('mobile');
-				this._size = new cool.Point(0,0);
 				this.showCalcInputBar();
 			}
 		});
@@ -700,18 +698,6 @@ window.L.Map = window.L.Evented.extend({
 		return this.options.maxZoom === undefined ?
 			(this._layersMaxZoom === undefined ? Infinity : this._layersMaxZoom) :
 			this.options.maxZoom;
-	},
-
-	getSize: function () {
-		if (!this._size || this._sizeChanged) {
-			this._size = new cool.Point(
-				this._container.clientWidth,
-				this._container.clientHeight);
-
-			this._sizeChanged = false;
-		}
-
-		return this._size.clone();
 	},
 
 	getPane: function (pane) {

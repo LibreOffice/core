@@ -228,7 +228,9 @@ class Cursor {
 			return xpos;
 		}
 
-		return this.map._size.x - xpos;
+		// Mirror axis for RTL is the document area width (the anchor/tiles
+		// section), which is what the map used to represent.
+		return app.activeDocument.activeLayout.frameSize.cX - xpos;
 	}
 
 	private updatePositionAndSize() {

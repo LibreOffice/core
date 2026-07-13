@@ -864,10 +864,10 @@ class DebugManager {
 			const pos = positions[Math.floor(Math.random() * positions.length)];
 
 			// Calculate mouse click position
-			const viewSize = this._map.getSize();
+			const frame = app.activeDocument.activeLayout.frameSize;
 			const centerPos = {
-				x: pos.x + viewSize.x / 2,
-				y: pos.y + viewSize.y / 2,
+				x: pos.x + frame.cX / 2,
+				y: pos.y + frame.cY / 2,
 			};
 			const centerTwips = this._docLayer._pixelsToTwips(centerPos);
 

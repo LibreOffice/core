@@ -214,15 +214,18 @@ export class ScrollSection extends CanvasSectionObject {
 		const topLeftX = app.activeDocument.activeLayout.viewedRectangle.cX1;
 		const topLeftY = app.activeDocument.activeLayout.viewedRectangle.cY1;
 
-		if (e.pos.y > e.map._size.y - 50) {
+		// The document area (anchor/tiles section) the map used to represent.
+		const frame = app.activeDocument.activeLayout.frameSize;
+
+		if (e.pos.y > frame.cY - 50) {
 			vy = 50;
 		} else if (e.pos.y < 50 && topLeftY > 50) {
 			vy = -50;
 		}
 
-		const mousePosX: number = this.isRTL() ? e.map._size.x - e.pos.x : e.pos.x;
-		const mapLeft: number = this.isRTL() ? e.map._size.x - topLeftX : topLeftX;
-		if (mousePosX > e.map._size.x - 50) {
+		const mousePosX: number = this.isRTL() ? frame.cX - e.pos.x : e.pos.x;
+		const mapLeft: number = this.isRTL() ? frame.cX - topLeftX : topLeftX;
+		if (mousePosX > frame.cX - 50) {
 			vx = 50;
 		} else if (mousePosX < 50 && mapLeft > 50) {
 			vx = -50;

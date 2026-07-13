@@ -59,7 +59,6 @@ interface MapInterface extends Evented {
 	isPresentationOrDrawing(): boolean;
 
 	getDocSize(): cool.Point;
-	getSize(): cool.Point;
 	getContainer(): Element;
 	_getCurrentFontName(): string;
 

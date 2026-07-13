@@ -176,7 +176,8 @@ abstract class AutoCompletePopup {
 			app.CSections.ColumnHeader.name,
 		).size[1];
 
-		if (isSpreadsheetRTL) cursorPos.x = this.map._size.x - cursorPos.x;
+		if (isSpreadsheetRTL)
+			cursorPos.x = app.activeDocument.activeLayout.frameSize.cX - cursorPos.x;
 
 		data.posx = cursorPos.x + offsetX + canvasEl.left;
 		data.posy = cursorPos.y + offsetY + canvasEl.top;
