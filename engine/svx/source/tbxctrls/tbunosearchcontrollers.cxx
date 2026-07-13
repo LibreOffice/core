@@ -356,9 +356,17 @@ IMPL_LINK(FindTextFieldControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
             ActivateFind(bShift);
             bRet = true;
         }
-        else if (aCommand == ".uno:RepeatSearch")
+        // MS Word uses Shift-F4 and Ctrl-PgDown for 'Find Next'
+        else if ((bShift && KEY_F4 == nCode) || (bMod1 && KEY_PAGEDOWN == nCode)
+                 || aCommand == ".uno:RepeatSearch")
         {
             ActivateFind(/*FindPrevious=*/false);
+            bRet = true;
+        }
+        // MS Word uses Ctrl-PgUp for 'Find Previous'
+        else if (bMod1 && KEY_PAGEUP == nCode)
+        {
+            ActivateFind(/*FindPrevious=*/true);
             bRet = true;
         }
         else if (aCommand == ".uno:SearchDialog")
