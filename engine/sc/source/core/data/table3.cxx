@@ -1845,13 +1845,17 @@ void ScTable::Sort(
                 if (IsSheetViewHolder() && GetDefaultViewTable())
                 {
                     auto pSheetView = GetDefaultViewTable()->GetSheetViewManager()->get(mnSheetViewID);
-                    pSheetView->addOrderIndices(aSortOrderInfo);
-                    pSheetView->setSortParam(aSortParam);
+                    if (pSheetView)
+                    {
+                        pSheetView->addOrderIndices(aSortOrderInfo);
+                        pSheetView->setSortParam(aSortParam);
+                    }
                 }
                 else if (GetSheetViewManager())
                 {
                     GetSheetViewManager()->addOrderIndices(aSortOrderInfo);
-                    GetSheetViewManager()->mergeReorderParameters(*pUndo);
+                    if (pUndo)
+                        GetSheetViewManager()->mergeReorderParameters(*pUndo);
                 }
             }
         }

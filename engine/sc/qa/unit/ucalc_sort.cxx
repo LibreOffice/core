@@ -13,6 +13,7 @@
 
 #include <postit.hxx>
 #include <sortparam.hxx>
+#include <attrib.hxx>
 #include <dbdata.hxx>
 #include <formulacell.hxx>
 #include <scopetools.hxx>
@@ -693,6 +694,49 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortWithCellFormats)
     bool bNormal = aCheck.isNormal(m_pDoc->GetPattern(ScAddress(0,3,0)));
     CPPUNIT_ASSERT_MESSAGE("A4 should be neither bold nor italic.", bNormal);
 
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestSort, testSortAutoFilterRangeWithoutUndo)
+{
+    // Sorting an auto-filtered range with no undo data requested must work
+    // while a sheet view of the sorted sheet exists.
+    m_pDoc->InsertTab(0, u"Sort"_ustr);
+
+    m_pDoc->SetString(ScAddress(0,0,0), u"Header"_ustr);
+    m_pDoc->SetValue(ScAddress(0,1,0), 3.0);
+    m_pDoc->SetValue(ScAddress(0,2,0), 1.0);
+    m_pDoc->SetValue(ScAddress(0,3,0), 2.0);
+
+    // Define A1:A4 as sheet-local anonymous database range with an auto-filter.
+    auto pDBData = std::make_unique<ScDBData>(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 3);
+    pDBData->SetHeader(true);
+    pDBData->SetAutoFilter(true);
+    m_pDoc->SetAnonymousDBData(0, std::move(pDBData));
+    m_pDoc->ApplyFlagsTab(0, 0, 0, 0, 0, ScMF::Auto);
+
+    // A sheet view makes the sort record reorder data for it.
+    auto [nSheetViewID, nSheetViewTab] = m_pDoc->CreateNewSheetView(0);
+    CPPUNIT_ASSERT(nSheetViewID != sc::InvalidSheetViewID);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), nSheetViewTab);
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 0;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 3;
+    aSortData.bHasHeader = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+
+    m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 
