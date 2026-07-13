@@ -261,11 +261,6 @@ class CanvasOverlay extends CanvasSectionObject {
 	}
 
 	private draw(paintArea?: cool.Bounds) {
-		if (this.tsManager && this.tsManager.waitForTiles()) {
-			// don't paint anything till tiles arrive for new zoom.
-			return;
-		}
-
 		var orderedPaths = Array<CPath>();
 		this.paths.forEach((path: CPath) => {
 			orderedPaths.push(path);
@@ -281,11 +276,6 @@ class CanvasOverlay extends CanvasSectionObject {
 	}
 
 	private redraw(path: CPath, oldBounds: cool.Bounds) {
-		if (this.tsManager && this.tsManager.waitForTiles()) {
-			// don't paint anything till tiles arrive for new zoom.
-			return;
-		}
-
 		if (!this.isPathVisible(path) && (!oldBounds.isValid() || !this.intersectsVisible(oldBounds)))
 			return;
 		// This does not get called via onDraw(ie, tiles aren't painted), so ask tileSection to "erase" by painting over.

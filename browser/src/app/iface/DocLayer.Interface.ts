@@ -32,8 +32,6 @@ interface PainterInterface {
 	};
 }
 
-type MapUpdaterType = (newMapCenter: InternPointLike) => void;
-
 interface DocLayerInterface {
 	_toolbarCommandValues: any;
 
@@ -135,19 +133,6 @@ interface DocLayerInterface {
 	_openCommentWizard(annotation?: cool.Comment): void;
 	_parseCellRange(cellRange: string): cool.Bounds;
 	_cellRangeToTwipRect(cellRange: cool.Bounds): cool.Bounds;
-	preZoomAnimation(
-		pinchStartCenter: InternPointLike,
-		pinchStartCenterCorePx?: cool.Point,
-	): void;
-	zoomStep(zoom: number, newCenter: InternPointLike): void;
-	zoomStepEnd(
-		zoom: number,
-		newCenter: InternPointLike,
-		mapUpdater: MapUpdaterType,
-		runAtFinish: () => void,
-		noGap?: boolean,
-	): void;
-	postZoomAnimation(): void;
 	_checkSelectedPart(): void;
 	requestNewFiledBasedViewTiles(): void;
 	_docPixelSize: cool.PointLike;

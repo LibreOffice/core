@@ -434,10 +434,10 @@ class ViewLayoutBase {
 	}
 
 	// Start a zoom-frame animation pivoted on anchorTwips. Snapshots the start
-	// state (preZoomAnimation) and switches the tiles section into zoom-frame
-	// drawing. The animation is then driven frame by frame by ZoomControl
-	// through the section container's animation loop - NOT the tile painter's
-	// own requestAnimationFrame. The scale for each frame comes from stepZoom.
+	// state and switches the tiles section into zoom-frame drawing. The
+	// animation is then driven frame by frame by ZoomControl through the
+	// section container's animation loop - NOT the tile painter's own
+	// requestAnimationFrame. The scale for each frame comes from stepZoom.
 	public beginZoom(anchorTwips: cool.SimplePoint): void {
 		const docLayer: any = app.map._docLayer; // _painter is not on the typed interface.
 		const painter = docLayer._painter;
@@ -445,17 +445,33 @@ class ViewLayoutBase {
 		// The anchor is already in core pixels (SimplePoint.pX/pY) - no intern/CRS
 		// round-trip needed. This is both the pinch pivot and the frame centre.
 		const centerCorePx = new cool.Point(anchorTwips.pX, anchorTwips.pY);
-
-		// Snapshot the starting scale / view bounds and hide the cursor.
-		docLayer.preZoomAnimation(null, centerCorePx);
-
+		docLayer._pinchStartCenter = centerCorePx;
 		painter._newCenter = centerCorePx;
+		painter._offset = new cool.Point(0, 0);
+
+		// Snapshot the starting view bounds before _inZoomAnim is set, so
+		// _paintContext reads the live bounds here. Zoom frames drive the
+		// viewed rectangle to intermediate values; the final-center computation
+		// reads this stable snapshot instead.
+		painter._zoomStartViewBounds = painter._paintContext().viewBounds;
+		// The base twips->px each zoom frame scales from (see
+		// TilesSection.drawZoomFrame) so vector sections scale with the tiles.
+		painter._zoomBaseTwipsToPixels = app.twipsToPixels;
+
+		// Hide the cursor and selection handles for the duration of the animation.
+		if (docLayer._cursorMarker && app.file.textCursor.visible)
+			docLayer._cursorMarker.setOpacity(0);
+		const textInput: any = app.map._textInput;
+		if (textInput._cursorHandler) textInput._cursorHandler.setOpacity(0);
+		TextSelections.hideHandles();
+		TextCursorSection.updateVisibilities();
+
 		painter._inZoomAnim = true;
 
-		// Publish the scale the tiles section uses for the zoom frame, decoupled
-		// from the painter's _zoomFrameScale: the base twips->px it started from
-		// and the effective (animated) one. drawZoomFrame derives its bitmap
-		// ratio from these; stepZoom updates the effective value each frame.
+		// Publish the scale the tiles section uses for the zoom frame: the base
+		// twips->px it started from and the effective (animated) one.
+		// drawZoomFrame derives its bitmap ratio from these; stepZoom updates
+		// the effective value each frame.
 		const tiles: any = app.sectionContainer.getSectionWithName(
 			app.CSections.Tiles.name,
 		);
@@ -497,7 +513,19 @@ class ViewLayoutBase {
 		app.sectionContainer.setInZoomAnimation(false);
 
 		this.applyZoom(targetZoom, anchorTwips);
-		docLayer.postZoomAnimation();
+
+		// Restore the cursor and selection handles hidden for the animation.
+		if (app.file.textCursor.visible) docLayer._cursorMarker.setOpacity(1);
+		const textInput: any = app.map._textInput;
+		if (textInput._cursorHandler) textInput._cursorHandler.setOpacity(1);
+		TextSelections.showHandles();
+
+		if (docLayer._annotations && docLayer._annotations.update) {
+			const annotations = docLayer._annotations;
+			setTimeout(function () {
+				annotations.update();
+			}, 250 /* ms */);
+		}
 	}
 
 	// Commit the final integral zoom: set the new scale, rebuild the viewed

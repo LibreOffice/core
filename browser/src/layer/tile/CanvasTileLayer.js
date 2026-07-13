@@ -222,168 +222,14 @@ window.L.TileSectionManager = window.L.Class.extend({
 		};
 	},
 
-	_getZoomMapCenter: function (zoom) {
-		var scale = this._calcZoomFrameScale(zoom);
-		var ctx = this._paintContext();
-		var splitPos = ctx.splitPos;
-		var viewBounds = ctx.viewBounds;
-		var freePaneBounds = new cool.Bounds(viewBounds.min.add(splitPos), viewBounds.max);
-
-		return this._getZoomDocPos(
-			this._newCenter,
-			this._layer._pinchStartCenter,
-			freePaneBounds,
-			{ freezeX: false, freezeY: false },
-			splitPos,
-			scale,
-			true /* findFreePaneCenter */
-		).center;
-	},
-
-	_zoomAnimation: function () {
-		var painter = this;
-
-		var rafFunc = function (timeStamp, final) {
-			painter._layer._refreshRowColumnHeaders();
-
-			// Redraw the section container each frame. The tiles section paints
-			// the scaled zoom frame from its own onDraw, and the overlay and
-			// document sections follow in the same pass instead of freezing.
-			app.sectionContainer.requestReDraw();
-
-			if (!final)
-				painter._zoomRAF = requestAnimationFrame(rafFunc);
-		};
-		this.rafFunc = rafFunc;
-		rafFunc();
-	},
-
-	_calcZoomFrameScale: function (zoom) {
-		zoom = this._layer._map._limitZoom(zoom);
-		var origZoom = this._layer._map.getZoom();
-		// Compute relative-multiplicative scale of this zoom-frame w.r.t the starting zoom(ie the current Map's zoom).
-		return this._layer._map.zoomToFactor(zoom - origZoom + this._layer._map.options.zoom);
-	},
-
-	// The current zoom-frame scale (frame twips->px relative to the zoom start).
-	// For Calc this is owned by ZoomControl, which publishes the effective and
-	// base twips->px into the tiles section; other doc types still use the
-	// painter-computed _zoomFrameScale. Consumers should read this, not the
-	// _zoomFrameScale field, so the source can differ per doc type.
+	// The current zoom-frame scale (frame twips->px relative to the zoom
+	// start). Owned by ZoomControl, which publishes the effective and base
+	// twips->px into the tiles section.
 	zoomFrameScale: function () {
 		var props = this._tilesSection && this._tilesSection.sectionProperties;
 		if (props && props.effectiveTwipsToPixels && props.zoomBaseTwipsToPixels)
 			return props.effectiveTwipsToPixels / props.zoomBaseTwipsToPixels;
-		return this._zoomFrameScale;
-	},
-
-	_calcZoomFrameParams: function (zoom, newCenter) {
-		this._zoomFrameScale = this._calcZoomFrameScale(zoom);
-		this._newCenter = app.activeDocument.project(newCenter).multiplyBy(app.dpiScale); // in core pixels
-	},
-
-	setWaitForTiles: function (wait) {
-		this._waitForTiles = wait;
-	},
-
-	waitForTiles: function () {
-		return this._waitForTiles;
-	},
-
-	zoomStep: function (zoom, newCenter) {
-		if (this._finishingZoom) // finishing steps of animation still going on.
-			return;
-
-		this._calcZoomFrameParams(zoom, newCenter);
-
-		if (!this._inZoomAnim) {
-			app.sectionContainer.setInZoomAnimation(true);
-			this._inZoomAnim = true;
-			// Start RAF loop for zoom-animation
-			this._zoomAnimation();
-		}
-	},
-
-	zoomStepEnd: function (zoom, newCenter, mapUpdater, runAtFinish, noGap) {
-
-		if (!this._inZoomAnim || this._finishingZoom)
-			return;
-
-		this._finishingZoom = true;
-
-		this._map.disableTextInput();
-		// Do a another animation from current non-integral log-zoom to
-		// the final integral zoom, but maintain the same center.
-		var steps = 10;
-		var stepId = noGap ? steps : 0;
-
-		var startZoom = this._zoomFrameScale;
-		var endZoom = this._calcZoomFrameScale(zoom);
-		var painter = this;
-		var map = this._map;
-
-		// Calculate the final center at final zoom in advance.
-		var newMapCenter = this._getZoomMapCenter(zoom).divideBy(app.dpiScale);
-		var newMapCenterIntern = app.activeDocument.unproject(newMapCenter, zoom);
-		app.sectionContainer.setZoomChanged(true);
-
-		var stopAnimation = noGap ? true : false;
-		var waitForTiles = false;
-		var waitTries = 30;
-		var finishingRAF = undefined;
-
-		var finishAnimation = function () {
-
-			if (stepId < steps) {
-				// continue animating till we reach "close" to 'final zoom'.
-				painter._zoomFrameScale = startZoom + (endZoom - startZoom) * stepId / steps;
-				stepId += 1;
-				if (stepId >= steps)
-					stopAnimation = true;
-			}
-
-			if (stopAnimation) {
-				stopAnimation = false;
-				cancelAnimationFrame(painter._zoomRAF);
-				painter._calcZoomFrameParams(zoom, newCenter);
-				// Draw one last frame at final zoom.
-				painter.rafFunc(undefined, true /* final? */);
-				painter._zoomFrameScale = undefined;
-				app.sectionContainer.setInZoomAnimation(false);
-				painter._inZoomAnim = false;
-
-				painter.setWaitForTiles(true);
-				// Set view and paint the tiles if all available.
-				mapUpdater(newMapCenterIntern);
-				waitForTiles = true;
-			}
-
-			if (waitForTiles) {
-				// Wait until we get all tiles or wait time exceeded.
-				if (waitTries <= 0 || painter._tilesSection.haveAllTilesInView()) {
-					// All done.
-					waitForTiles = false;
-					cancelAnimationFrame(finishingRAF);
-					painter.setWaitForTiles(false);
-					app.sectionContainer.setZoomChanged(false);
-					map.enableTextInput();
-					map.focus(map.canAcceptKeyboardInput());
-					// Paint everything.
-					app.sectionContainer.requestReDraw();
-					// Don't let a subsequent pinchZoom start before finishing all steps till this point.
-					painter._finishingZoom = false;
-					// Run the finish callback.
-					runAtFinish();
-					return;
-				}
-				else
-					waitTries -= 1;
-			}
-
-			finishingRAF = requestAnimationFrame(finishAnimation);
-		};
-
-		finishAnimation();
+		return undefined;
 	},
 
 	getTileSectionPos : function () {
@@ -3992,10 +3838,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		return false;
 	},
 
-	setZoomChanged: function (zoomChanged) {
-		app.sectionContainer.setZoomChanged(zoomChanged);
-	},
-
 	setInitialZoom: function (map) {
 		if (this.isWriter()) {
 			let zoom;
@@ -4164,61 +4006,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		};
 
 		return events;
-	},
-
-	// zoom is the new intermediate zoom level (log scale : 1 to 14)
-	zoomStep: function (zoom, newCenter) {
-		this._painter.zoomStep(zoom, newCenter);
-	},
-
-	zoomStepEnd: function (zoom, newCenter, mapUpdater, runAtFinish, noGap) {
-		this._painter.zoomStepEnd(zoom, newCenter, mapUpdater, runAtFinish, noGap);
-	},
-
-	preZoomAnimation: function (pinchStartCenter, pinchStartCenterCorePx) {
-		// Calc passes the centre already in core pixels (no intern/CRS round-trip);
-		// the other callers still pass an intern point which we project here.
-		this._pinchStartCenter = pinchStartCenterCorePx
-			? pinchStartCenterCorePx
-			: app.activeDocument.project(pinchStartCenter).multiplyBy(app.dpiScale); // in core pixels
-		this._painter._offset = new cool.Point(0, 0);
-		// The viewport bounds at the start of the gesture. Zoom frames drive the
-		// viewed rectangle to intermediate values, so the final-center
-		// computation reads this stable snapshot instead of the live bounds.
-		this._painter._zoomStartViewBounds = this._painter._paintContext().viewBounds;
-		// Snapshot the starting scale. Each zoom frame drives app.twipsToPixels
-		// to base * _zoomFrameScale (see TilesSection.drawZoomFrame) so vector
-		// document sections scale in lockstep with the tiles.
-		this._painter._zoomBaseTwipsToPixels = app.twipsToPixels;
-
-		if (this._cursorMarker && app.file.textCursor.visible) {
-			this._cursorMarker.setOpacity(0);
-		}
-		if (this._map._textInput._cursorHandler)
-			this._map._textInput._cursorHandler.setOpacity(0);
-
-		TextSelections.hideHandles();
-
-		TextCursorSection.updateVisibilities();
-	},
-
-	postZoomAnimation: function () {
-		if (app.file.textCursor.visible) {
-			this._cursorMarker.setOpacity(1);
-		}
-
-		if (this._map._textInput._cursorHandler)
-			this._map._textInput._cursorHandler.setOpacity(1);
-
-		TextSelections.showHandles();
-
-		if (this._annotations) {
-			var annotations = this._annotations;
-			if (annotations.update)
-				setTimeout(function() {
-					annotations.update();
-				}, 250 /* ms */);
-		}
 	},
 
 	_viewReset: function (e) {

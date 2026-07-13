@@ -190,8 +190,6 @@ class CanvasSectionContainer {
 	private mouseIsInside: boolean = false;
 	private inZoomAnimation: boolean = false;
 	private postZoomReplay: boolean = false;
-	private zoomChanged: boolean = false;
-	private scrollingBeforeZoomSettled: boolean = false;
 	private documentAnchorSectionName: string = null; // This section's top left point declares the point where document starts.
 	private documentAnchor: Array<number> = null; // This is the point where document starts inside canvas element. Initial value shouldn't be [0, 0].
 	// Above 2 properties can be used with documentBounds.
@@ -352,20 +350,6 @@ class CanvasSectionContainer {
 
 	public isPostZoomReplay (): boolean {
 		return this.postZoomReplay;
-	}
-
-	public setZoomChanged (zoomChanged: boolean) {
-		this.zoomChanged = zoomChanged;
-		if (!zoomChanged)
-			this.scrollingBeforeZoomSettled = false;
-	}
-
-	public setScrollingBeforeZoomSettled (on: boolean) {
-		this.scrollingBeforeZoomSettled = on;
-	}
-
-	public isZoomChanged (): boolean {
-		return this.zoomChanged;
 	}
 
 	public drawingAllowed (): boolean {
@@ -2024,12 +2008,6 @@ class CanvasSectionContainer {
 	}
 
 	private shouldDrawSection (section: CanvasSectionObject) {
-	    // Settling phase (zoom ended but new tiles not in yet: zoomChanged true,
-	    // inZoomAnimation false): the tiles section waits and the canvas is not
-	    // cleared, so skip document sections to avoid stacking on the last frame.
-	    if (section.documentObject && this.zoomChanged && !this.inZoomAnimation)
-	        return false;
-
 	    return section.isLocated && section.showSection && (!section.documentObject || section.isVisible);
 	}
 
@@ -2044,9 +2022,7 @@ class CanvasSectionContainer {
 
 		this.context.setTransform(1, 0, 0, 1, 0, 0);
 
-		if (!this.zoomChanged || this.scrollingBeforeZoomSettled) {
-			this.clearCanvas();
-		}
+		this.clearCanvas();
 
 		this.context.font = String(20 * app.dpiScale) + 'px Verdana';
 		for (var i: number = 0; i < this.sections.length; i++) {
