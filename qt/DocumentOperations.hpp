@@ -28,6 +28,12 @@ struct SaveAsFormat
 };
 
 std::vector<SaveAsFormat> getSaveAsFormats(int docType);
+
+// Shows the printer-selection dialog for an already-exported PDF file and
+// prints or copies it as the user chooses. Removes the file's private temp
+// directory when the dialog finishes.
+void showPrintDialog(const std::string& tempFile, QWidget* parent);
+
 void printDocument(unsigned appDocId, QWidget* parent = nullptr);
 
 // Puts a file at its destination: a rename when the destination is on the
@@ -35,6 +41,12 @@ void printDocument(unsigned appDocId, QWidget* parent = nullptr);
 // beside the destination, then rename over it). An existing destination file
 // stays intact when the operation fails. Returns true on success.
 bool moveOrCopyFile(const std::string& fromPath, const std::string& toPath);
+
+// Removes the private temporary directory holding the given exported file,
+// with everything in it. Refuses, with an error log, a directory that does
+// not lie inside the system temp directory, so a mangled path cannot lead to
+// removing the user's own files.
+void removeExportTempDirectory(const std::string& filePath);
 
 // Asks the user where to save an already-written file and puts it there.
 // Opens a save-file dialog over parent with the given title and suggested

@@ -13,6 +13,7 @@
 
 #include <wsd/COOLWSD.hpp>
 #include <qt/CodaConfig.hpp>
+#include <qt/CODocumentBroker.hpp>
 #include <qt/DBusService.hpp>
 #include <net/FakeSocket.hpp>
 #include <common/Log.hpp>
@@ -310,6 +311,17 @@ int main(int argc, char** argv)
         const std::string nssEnv = "sql:" + nssdb.toString();
         setenv("MOZILLA_CERTIFICATE_FOLDER", nssEnv.c_str(), 1);
     }
+
+    // Every document gets the Qt app's broker subclass, which
+    // routes print and export-as through the document's own poll thread.
+    DocumentBroker::setBrokerFactory(
+        [](DocumentBroker::ChildType type, const std::string& uri, const Poco::URI& uriPublic,
+           const std::string& docKey, const std::string& configId,
+           unsigned mobileAppDocId) -> std::shared_ptr<DocumentBroker>
+        {
+            return std::make_shared<CODocumentBroker>(type, uri, uriPublic, docKey, configId,
+                                                      mobileAppDocId);
+        });
 
     // COOLWSD in a background thread
     coolwsdThread = std::thread(

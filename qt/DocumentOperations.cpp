@@ -104,6 +104,39 @@ void printDocument(unsigned appDocId, QWidget* parent)
         return;
     }
 
+    showPrintDialog(tempFile, parent);
+}
+
+void removeExportTempDirectory(const std::string& filePath)
+{
+    std::error_code errorCode;
+    const std::string dir =
+        std::filesystem::weakly_canonical(std::filesystem::path(filePath).parent_path(), errorCode)
+            .string();
+
+    std::string tempRoot = FileUtil::getSysTempDirectoryPath();
+    while (tempRoot.size() > 1 && tempRoot.back() == '/')
+        tempRoot.pop_back();
+
+    // Only a directory strictly inside the system temp directory is removed:
+    // exports save into a private directory created there, and any other
+    // path means the file path was mangled somewhere on the way.
+    if (errorCode || dir.size() <= tempRoot.size() + 1 ||
+        dir.compare(0, tempRoot.size(), tempRoot) != 0 || dir[tempRoot.size()] != '/')
+    {
+        LOG_ERR("refusing to remove '" << dir << "': not inside the system temp directory '"
+                                       << tempRoot << "'");
+        return;
+    }
+
+    FileUtil::removeFile(dir, /*recursive=*/true);
+}
+
+// Shows the printer-selection dialog for an already-exported PDF file and
+// prints or copies it as the user chooses. Removes the file's private temp
+// directory when the dialog finishes.
+void showPrintDialog(const std::string& tempFile, QWidget* parent)
+{
     // Create a simple custom print dialog, qt's print dialog is overkill for now.
     QDialog* customPrintDialog = new QDialog(parent);
     customPrintDialog->setWindowTitle(QObject::tr("Print Document"));
@@ -177,16 +210,16 @@ void printDocument(unsigned appDocId, QWidget* parent)
         if (printToFileCheck->isChecked() && !filePathEdit->text().isEmpty())
         {
             QString outputFile = filePathEdit->text();
-            LOG_INF("printDocument: User selected print to file: " << outputFile.toStdString());
+            LOG_INF("showPrintDialog: User selected print to file: " << outputFile.toStdString());
 
-            if (FileUtil::copyAtomic(tempFile, outputFile.toStdString(), false))
+            if (moveOrCopyFile(tempFile, outputFile.toStdString()))
             {
-                LOG_INF(
-                    "printDocument: PDF successfully saved to file: " << outputFile.toStdString());
+                LOG_INF("showPrintDialog: PDF successfully saved to file: "
+                        << outputFile.toStdString());
             }
             else
             {
-                LOG_ERR("printDocument: Failed to copy PDF to file: " << outputFile.toStdString());
+                LOG_ERR("showPrintDialog: Failed to copy PDF to file: " << outputFile.toStdString());
                 QMessageBox::warning(parent, QObject::tr("Print to File Error"),
                                      QObject::tr("Failed to save document to file. Please check "
                                                  "the file path and permissions."));
@@ -230,7 +263,7 @@ void printDocument(unsigned appDocId, QWidget* parent)
                 if (result != 0)
                 {
                     LOG_ERR(
-                        "printDocument: failed to print PDF. Tried both 'lp' and 'lpr' commands");
+                        "showPrintDialog: failed to print PDF. Tried both 'lp' and 'lpr' commands");
                     QMessageBox::warning(
                         parent, QObject::tr("Print Error"),
                         QObject::tr(
@@ -238,28 +271,32 @@ void printDocument(unsigned appDocId, QWidget* parent)
                 }
                 else
                 {
-                    LOG_INF("printDocument: PDF sent to printer '" << printerName.toStdString()
-                                                                   << "' using 'lpr'");
+                    LOG_INF("showPrintDialog: PDF sent to printer '" << printerName.toStdString()
+                                                                     << "' using 'lpr'");
                 }
             }
             else
             {
-                LOG_INF("printDocument: PDF sent to printer '" << printerName.toStdString()
-                                                               << "' using 'lp'");
+                LOG_INF("showPrintDialog: PDF sent to printer '" << printerName.toStdString()
+                                                                 << "' using 'lp'");
             }
         }
-
-        // Clean up the temporary file
-        FileUtil::unlinkFile(tempFile);
     });
 
     // Connect cancel button
     QObject::connect(cancelButton, &QPushButton::clicked,
-                     [customPrintDialog, tempFile]() {
+                     [customPrintDialog]() {
         customPrintDialog->reject();
-        LOG_INF("printDocument: Print cancelled by user");
-        FileUtil::unlinkFile(tempFile);
+        LOG_INF("showPrintDialog: print cancelled by user");
     });
+
+    // The dialog deletes itself on close, whichever way it is dismissed;
+    // removing the PDF and its private temp directory on destruction covers
+    // both buttons, Escape, and the window closing with its parent. The
+    // deletion is queued, so the print handler above finishes with the file
+    // before the cleanup runs.
+    QObject::connect(customPrintDialog, &QObject::destroyed,
+                     [tempFile] { removeExportTempDirectory(tempFile); });
 
     customPrintDialog->open();
 }

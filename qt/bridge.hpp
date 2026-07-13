@@ -77,7 +77,6 @@ class Bridge : public QObject
     // because the previous use of the same document was still being unloaded.
     void retryLoadAfterUnloading();
 
-    void showProgressSnackbar();
     void closeSnackbar();
 
     /// Mark the current save as complete: clear _saveInFlight and
@@ -86,14 +85,8 @@ class Bridge : public QObject
 
 
 public:
-    explicit Bridge(QObject* parent, coda::DocumentData& document, QWidget* window, QWebEngineView* webView)
-        : QObject(parent)
-        , _document(document)
-        , _window(window)
-        , _webView(webView)
-        , _closeNotificationPipeForForwardingThread{ -1, -1 }
-    {
-    }
+    explicit Bridge(QObject* parent, coda::DocumentData& document, QWidget* window,
+                    QWebEngineView* webView);
 
     ~Bridge() override;
 
@@ -142,6 +135,21 @@ public:
     /// message back, which the cool slot below turns into an actual
     /// window close.
     void saveAndClose();
+
+    /// Show the indeterminate progress snackbar in the document's web view.
+    void showProgressSnackbar();
+
+    /// The print PDF is ready at pdfPath: close the snackbar and open the
+    /// print dialog. Runs on the GUI thread.
+    void onPrintExportReady(const QString& pdfPath);
+
+    /// The export-as result is ready at filePath: close the snackbar and
+    /// ask the user where to save it. Runs on the GUI thread.
+    void onSaveExportReady(const QString& filePath);
+
+    /// The export failed: close the snackbar and show a warning. Runs on
+    /// the GUI thread.
+    void onExportFailed();
 
 public slots: // called from JavaScript
     // Called from JS via window.postMobileMessage
@@ -200,5 +208,21 @@ public slots: // called from JavaScript
     /// (e.g. a deferred window-close).
     void saveCompleted();
 };
+
+namespace coda
+{
+/// Make bridge reachable under the given app document id. An id of 0 is
+/// ignored.
+void registerBridge(unsigned appDocId, Bridge* bridge);
+
+/// Drop every registration that points at bridge.
+void unregisterBridge(Bridge* bridge);
+
+/// Run fn(bridge) on the GUI thread for the document with the given app
+/// document id. Safe to call from any thread. Returns true when the call was
+/// queued, false when no bridge is registered under the id. A bridge
+/// destroyed before the queued call runs drops the call.
+bool invokeOnBridge(unsigned appDocId, std::function<void(Bridge&)> fn);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
