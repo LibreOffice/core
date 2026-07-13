@@ -872,6 +872,15 @@ void SfxBaseController::BorderWidthsChanged_Impl()
 void SAL_CALL SfxBaseController::dispose()
 {
     SolarMutexGuard aGuard;
+
+    // add idempotentcy guard to prevent teardown races (e.g. async Print Preview closures racing
+    // against XFrame::terminate) from triggering a use-after-free on listeners.
+    if ( m_pData->m_bDisposing )
+    {
+        SAL_WARN( "sfx.view", "SfxBaseController::dispose() re-entered - intercepting double dispose" );
+        return;
+    }
+
     Reference< XController > xKeepAlive( this );
     m_pData->m_bDisposing = true ;
 
