@@ -1185,7 +1185,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		if (data.text)
 			buttonLink.textContent = builder._cleanText(data.text);
 		else if (data.html)
-			buttonLink.innerHTML = data.html;
+			buttonLink.innerHTML = app.LOUtil.sanitize(data.html);
 
 		var accKey = builder._getAccessKeyFromText(data.text);
 		builder._stressAccessKey(buttonLink, accKey);

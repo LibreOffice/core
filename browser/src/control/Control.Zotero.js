@@ -718,7 +718,7 @@ window.L.Control.Zotero = window.L.Control.extend({
 				continue;
 
 			var dummyNode = window.L.DomUtil.create('div');
-			dummyNode.innerHTML = items[iterator].data.note;
+			dummyNode.innerHTML = app.LOUtil.sanitize(items[iterator].data.note);
 			var note = dummyNode.innerText.replaceAll('\n', ' ');
 
 			this.createEntry(index++,

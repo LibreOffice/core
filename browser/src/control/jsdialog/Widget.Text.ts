@@ -27,7 +27,7 @@ function staticTextControl(
 	);
 
 	if (data.text) statictext.textContent = builder._cleanText(data.text);
-	else if (data.html) statictext.innerHTML = data.html;
+	else if (data.html) statictext.innerHTML = app.LOUtil.sanitize(data.html);
 
 	statictext.id = data.id;
 	if (data.style && data.style.length) {

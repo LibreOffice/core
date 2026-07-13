@@ -37,7 +37,7 @@ JSDialog.fixedtextControl = function (
 	fixedtext.id = data.id;
 
 	if (data.text) fixedtext.textContent = builder._cleanText(data.text);
-	else if (data.html) fixedtext.innerHTML = data.html;
+	else if (data.html) fixedtext.innerHTML = app.LOUtil.sanitize(data.html);
 
 	if (data.xalign) {
 		fixedtext.style.cssText = 'text-align:' + data.xalign + ';';
