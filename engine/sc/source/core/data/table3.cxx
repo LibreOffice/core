@@ -1840,7 +1840,13 @@ void ScTable::Sort(
                 aSortOrderInfo.mnLastColumn = rSortParam.nCol2;
                 aSortOrderInfo.mnFirstRow = nRow1;
                 aSortOrderInfo.mnLastRow = nLastRow;
+
+                // The sort info array records the order as absolute row
+                // positions; the sort order info stores 1-based offsets
+                // from the first sorted row.
                 aSortOrderInfo.maOrder = pArray->GetOrderIndices();
+                for (auto& rOrderValue : aSortOrderInfo.maOrder)
+                    rOrderValue -= (nRow1 - 1);
 
                 if (IsSheetViewHolder() && GetDefaultViewTable())
                 {

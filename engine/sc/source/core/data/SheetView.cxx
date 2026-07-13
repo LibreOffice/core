@@ -17,9 +17,13 @@ namespace sc
 {
 namespace
 {
-/** Merge sort order arrays, so the order is the same as it would be by doing multiple independent sort operation */
+/** Merge sort order arrays, so the order is the same as it would be by doing multiple independent sort operation
+ *
+ * Both arrays must use the same convention: nFirstValue is the value of the
+ * range's first position (1 for offsets, the first row when absolute).
+ */
 std::vector<SCCOLROW> mergeOrder(std::vector<SCCOLROW> const& rExistingOrder,
-                                 std::vector<SCCOLROW> const& rAddedOrder)
+                                 std::vector<SCCOLROW> const& rAddedOrder, SCCOLROW nFirstValue = 1)
 {
     size_t nOrderSize = rExistingOrder.size();
     assert(nOrderSize == rAddedOrder.size());
@@ -27,10 +31,24 @@ std::vector<SCCOLROW> mergeOrder(std::vector<SCCOLROW> const& rExistingOrder,
     std::vector<SCCOLROW> aNewOrder(nOrderSize);
     for (size_t nIndex = 0; nIndex < nOrderSize; ++nIndex)
     {
-        size_t nSortedIndex = rAddedOrder[nIndex] - 1;
+        size_t nSortedIndex = rAddedOrder[nIndex] - nFirstValue;
         aNewOrder[nIndex] = rExistingOrder[nSortedIndex];
     }
     return aNewOrder;
+}
+
+/** Convert order values from absolute row positions to 1-based offsets from nFirstRow. */
+void makeOrderRelative(std::vector<SCCOLROW>& rOrder, SCROW nFirstRow)
+{
+    for (auto& rValue : rOrder)
+        rValue -= (nFirstRow - 1);
+}
+
+/** Convert order values from 1-based offsets from nFirstRow to absolute row positions. */
+void makeOrderAbsolute(std::vector<SCCOLROW>& rOrder, SCROW nFirstRow)
+{
+    for (auto& rValue : rOrder)
+        rValue += (nFirstRow - 1);
 }
 
 /** Adjust order indices when rows are inserted within a sorted range. */
@@ -317,10 +335,19 @@ void SheetView::addOrderIndices(SortOrderInfo const& rSortInfo)
 void SheetView::mergeReorderParameters(ReorderParam const& rReorderParameters)
 {
     auto& rParams = ensureSortData().maOriginalReorderParams;
-    if (!rParams.maOrderIndices.empty())
+
+    // Composing the orders needs both to cover the same rows. When the rows
+    // differ the newer sort replaces the tracked one.
+    bool bSameRows = rParams.maSortRange.aStart.Row() == rReorderParameters.maSortRange.aStart.Row()
+                     && rParams.maSortRange.aEnd.Row() == rReorderParameters.maSortRange.aEnd.Row();
+
+    if (!rParams.maOrderIndices.empty() && bSameRows)
     {
+        // The order indices are absolute row positions, so the first sorted
+        // row identifies the first position of the range.
         rParams.maOrderIndices
-            = mergeOrder(rParams.maOrderIndices, rReorderParameters.maOrderIndices);
+            = mergeOrder(rParams.maOrderIndices, rReorderParameters.maOrderIndices,
+                         rParams.maSortRange.aStart.Row());
     }
     else
     {
@@ -357,12 +384,17 @@ SCROW SheetView::reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const
     {
         ScRange const& rRange = mpSortData->maOriginalReorderParams.maSortRange;
 
+        // The reorder parameters hold absolute row positions, the reverser
+        // works with 1-based offsets from the first sorted row.
+        std::vector<SCCOLROW> aOrder = mpSortData->maOriginalReorderParams.maOrderIndices;
+        makeOrderRelative(aOrder, rRange.aStart.Row());
+
         SortOrderReverser aReverser;
         aReverser.addOrderIndices({ rRange.aStart.Col(),
                                     rRange.aEnd.Col(),
                                     rRange.aStart.Row(),
                                     rRange.aEnd.Row(),
-                                    mpSortData->maOriginalReorderParams.maOrderIndices,
+                                    std::move(aOrder),
                                     {} });
 
         nResortedRow = aReverser.resort(nUnsortedRow, nColumn);
@@ -378,12 +410,18 @@ SCROW SheetView::reverseDefaultViewToSheetView(SCROW nRow, SCCOL nColumn) const
     if (mpSortData && !mpSortData->maOriginalReorderParams.maOrderIndices.empty())
     {
         ScRange const& rRange = mpSortData->maOriginalReorderParams.maSortRange;
+
+        // The reorder parameters hold absolute row positions, the reverser
+        // works with 1-based offsets from the first sorted row.
+        std::vector<SCCOLROW> aOrder = mpSortData->maOriginalReorderParams.maOrderIndices;
+        makeOrderRelative(aOrder, rRange.aStart.Row());
+
         SortOrderReverser aReverser;
         aReverser.addOrderIndices({ rRange.aStart.Col(),
                                     rRange.aEnd.Col(),
                                     rRange.aStart.Row(),
                                     rRange.aEnd.Row(),
-                                    mpSortData->maOriginalReorderParams.maOrderIndices,
+                                    std::move(aOrder),
                                     {} });
         nUnsortedRow = aReverser.unsort(nRow, nColumn);
     }
@@ -402,7 +440,14 @@ void SheetView::adjustReorderParamsForInsertRows(SCROW nStartRow, SCROW nRowCoun
     if (!mpSortData || mpSortData->maOriginalReorderParams.maOrderIndices.empty())
         return;
 
+    auto& rOrder = mpSortData->maOriginalReorderParams.maOrderIndices;
     ScRange& rRange = mpSortData->maOriginalReorderParams.maSortRange;
+
+    // The reorder parameters hold absolute row positions. Work on 1-based
+    // offsets from the first sorted row, then convert back with the updated
+    // range start, which moves the values along with a shifted range.
+    makeOrderRelative(rOrder, rRange.aStart.Row());
+
     if (nStartRow < rRange.aStart.Row())
     {
         rRange.aStart.IncRow(nRowCount);
@@ -410,10 +455,11 @@ void SheetView::adjustReorderParamsForInsertRows(SCROW nStartRow, SCROW nRowCoun
     }
     else if (nStartRow <= rRange.aEnd.Row() + 1)
     {
-        expandOrderIndices(mpSortData->maOriginalReorderParams.maOrderIndices, nStartRow,
-                           rRange.aStart.Row(), nRowCount);
+        expandOrderIndices(rOrder, nStartRow, rRange.aStart.Row(), nRowCount);
         rRange.aEnd.IncRow(nRowCount);
     }
+
+    makeOrderAbsolute(rOrder, rRange.aStart.Row());
 }
 
 void SheetView::adjustSortParamForInsertRows(SCROW nStartRow, SCROW nRowCount)
@@ -449,13 +495,18 @@ void SheetView::adjustReorderParamsForDeleteRows(SCROW nStartRow, SCROW nRowCoun
     if (!mpSortData || mpSortData->maOriginalReorderParams.maOrderIndices.empty())
         return;
 
+    auto& rOrder = mpSortData->maOriginalReorderParams.maOrderIndices;
     ScRange& rRange = mpSortData->maOriginalReorderParams.maSortRange;
     SCROW nRangeStart = rRange.aStart.Row();
     SCROW nRangeEnd = rRange.aEnd.Row();
-    deleteRowsFromOrderedRange(nRangeStart, nRangeEnd,
-                               mpSortData->maOriginalReorderParams.maOrderIndices, nStartRow,
-                               nRowCount);
-    if (mpSortData->maOriginalReorderParams.maOrderIndices.empty())
+
+    // The reorder parameters hold absolute row positions. Work on 1-based
+    // offsets from the first sorted row, then convert back with the updated
+    // range start, which moves the values along with a shifted range.
+    makeOrderRelative(rOrder, nRangeStart);
+
+    deleteRowsFromOrderedRange(nRangeStart, nRangeEnd, rOrder, nStartRow, nRowCount);
+    if (rOrder.empty())
     {
         mpSortData->maOriginalReorderParams = ReorderParam();
     }
@@ -463,6 +514,7 @@ void SheetView::adjustReorderParamsForDeleteRows(SCROW nStartRow, SCROW nRowCoun
     {
         rRange.aStart.SetRow(nRangeStart);
         rRange.aEnd.SetRow(nRangeEnd);
+        makeOrderAbsolute(rOrder, nRangeStart);
     }
 }
 

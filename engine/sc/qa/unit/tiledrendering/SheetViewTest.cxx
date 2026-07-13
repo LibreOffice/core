@@ -39,6 +39,7 @@
 #include <dbdata.hxx>
 #include <queryparam.hxx>
 #include <queryentry.hxx>
+#include <globalnames.hxx>
 #include <subtotalparam.hxx>
 #include <drawview.hxx>
 #include <drwlayer.hxx>
@@ -2699,6 +2700,77 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SheetViewSort)
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"9", u"7", u"6", u"4" }),
                              getValues(pTabViewSheetView, 0, 1, 4));
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SheetViewSort_OffsetRange)
+{
+    // Same flow as testSyncAfterSorting_SheetViewSort, with the auto-filter
+    // range anchored at C5 so the sorted rows do not start at the top of the
+    // sheet. Guards the mapping between absolute row positions and offsets
+    // from the first sorted row.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    // Table with the header in C5 and the values in C6:C9.
+    rDocument.SetString(ScAddress(2, 4, 0), u"Header"_ustr);
+    rDocument.SetValue(ScAddress(2, 5, 0), 4.0);
+    rDocument.SetValue(ScAddress(2, 6, 0), 5.0);
+    rDocument.SetValue(ScAddress(2, 7, 0), 3.0);
+    rDocument.SetValue(ScAddress(2, 8, 0), 7.0);
+
+    // Make C5:C9 an auto-filter range.
+    auto pDBData = std::make_unique<ScDBData>(STR_DB_LOCAL_NONAME, 0, 2, 4, 2, 8);
+    pDBData->SetHeader(true);
+    pDBData->SetAutoFilter(true);
+    rDocument.SetAnonymousDBData(0, std::move(pDBData));
+    rDocument.ApplyFlagsTab(2, 4, 2, 4, 0, ScMF::Auto);
+
+    // Setup views
+    ScTestViewCallback aSheetView;
+    ScTabViewShell* pTabViewSheetView = aSheetView.getTabViewShell();
+
+    KitHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+
+    ScTestViewCallback aDefaultView;
+    ScTabViewShell* pTabViewDefaultView = aDefaultView.getTabViewShell();
+
+    // Create the sheet view and sort it ascending.
+    KitHelper::setView(aSheetView.getViewID());
+    Scheduler::ProcessEventsToIdle();
+
+    createNewSheetViewInCurrentView();
+
+    sortAscendingForCell(u"C5");
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                         getValues(pTabViewSheetView, 2, 5, 8));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(pTabViewDefaultView, 2, 5, 8));
+
+    // Change a value in the sorted sheet view. The edit lands on the row
+    // that holds the same value in the unsorted default view, and the sheet
+    // view sorts itself again.
+    typeCharsInCell(std::string("9"), 2, 5, pTabViewSheetView, pModelObj);
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"7", u"9" }),
+                         getValues(pTabViewSheetView, 2, 5, 8));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"9", u"7" }),
+                         getValues(pTabViewDefaultView, 2, 5, 8));
+
+    // Change a value in the unsorted default view. The value shows up on
+    // the row that holds the same value in the sorted sheet view.
+    KitHelper::setView(aDefaultView.getViewID());
+    Scheduler::ProcessEventsToIdle();
+
+    typeCharsInCell(std::string("6"), 2, 6, pTabViewDefaultView, pModelObj);
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"6", u"9", u"7" }),
+                         getValues(pTabViewDefaultView, 2, 5, 8));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"6", u"7", u"9" }),
+                         getValues(pTabViewSheetView, 2, 5, 8));
 }
 
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetView)

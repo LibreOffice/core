@@ -22,14 +22,18 @@ class ScTable;
 
 namespace sc
 {
-/** Contains the information of an performed sort action */
+/** Contains the information of a performed sort action.
+ *
+ * maOrder at position N is the pre-sort position of row mnFirstRow + N, as
+ * a 1-based offset from mnFirstRow. ReorderParam uses absolute rows.
+ */
 struct SC_DLLPUBLIC SortOrderInfo
 {
     SCCOL mnFirstColumn = -1;
     SCCOL mnLastColumn = -1;
     SCROW mnFirstRow = -1;
     SCROW mnLastRow = -1;
-    std::vector<SCCOLROW> maOrder; // Remember the sort order
+    std::vector<SCCOLROW> maOrder;
     std::vector<ScSortKeyState> maKeyStates; // Each column sort information
 };
 
