@@ -348,12 +348,17 @@ IMPL_LINK(FindTextFieldControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
         const OUString aCommand(m_pAcc->findCommand(awtKey));
 
         // Select text in the search box when Ctrl-F pressed
-        if ( bMod1 && nCode == KEY_F )
+        if (bMod1 && nCode == KEY_F && !bShift)
             m_xWidget->select_entry_region(0, -1);
         // Execute the search when Ctrl-G, F3 and Shift-RETURN pressed (in addition to ActivateHdl condition which handles bare RETURN)
         else if ( (bMod1 && KEY_G == nCode) || (bShift && KEY_RETURN == nCode) || (KEY_F3 == nCode) )
         {
             ActivateFind(bShift);
+            bRet = true;
+        }
+        else if (aCommand == ".uno:RepeatSearch")
+        {
+            ActivateFind(/*FindPrevious=*/false);
             bRet = true;
         }
         else if (aCommand == ".uno:SearchDialog")
