@@ -59,6 +59,7 @@
 
 #include <dapiuno.hxx>
 #include <dpobject.hxx>
+#include <dpshttab.hxx>
 #include <dpsave.hxx>
 #include <dpdimsave.hxx>
 #include <document.hxx>
@@ -1372,6 +1373,16 @@ void PivotTable::finalizeImport()
         mpDPObject = mxDPDescriptor->GetDPObject();
         if (!mpDPObject)
             return;
+
+        // Keep a named/table source as a name so the pivot stays dynamic.
+        const OUString aSrcName = mpPivotCache->getSourceDefName();
+        const ScSheetSourceDesc* pDesc = mpDPObject->GetSheetDesc();
+        if (pDesc && !aSrcName.isEmpty())
+        {
+            ScSheetSourceDesc aDesc(*pDesc);
+            aDesc.SetRangeName(aSrcName);
+            mpDPObject->SetSheetDesc(aDesc);
+        }
 
         // global data pilot properties
         if (auto* pSaveData = mpDPObject->GetSaveData())

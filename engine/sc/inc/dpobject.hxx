@@ -378,7 +378,8 @@ public:
         bool hasCache(const OUString& rName) const;
         const ScDPCache* getCache(const OUString& rName, const ScRange& rRange,
                                   const ScDPDimensionSaveData* pDimData, const ScDPDimCalcSaveData* pCalculatedDimData);
-        ScDPCache* getExistingCache(const OUString& rName);
+        SC_DLLPUBLIC ScDPCache* getExistingCache(const OUString& rName);
+        SC_DLLPUBLIC std::vector<OUString> getAllNames() const;
         size_t size() const;
     private:
 
@@ -470,7 +471,7 @@ public:
 
     SC_DLLPUBLIC SheetCaches& GetSheetCaches();
     SC_DLLPUBLIC const SheetCaches& GetSheetCaches() const;
-    NameCaches& GetNameCaches();
+    SC_DLLPUBLIC NameCaches& GetNameCaches();
     SC_DLLPUBLIC const NameCaches& GetNameCaches() const;
     DBCaches& GetDBCaches();
     SC_DLLPUBLIC const DBCaches& GetDBCaches() const;

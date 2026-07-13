@@ -160,6 +160,24 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableDatabaseRangeSourceO
     CPPUNIT_ASSERT_EQUAL(u"testdbrange"_ustr, pDesc->GetRangeName());
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableDatabaseRangeSourceXLSX)
+{
+    createScDoc("xlsx/pivot-table/database-range-source.xlsx");
+
+    ScDPCollection* pDPs = getScDoc()->GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPs->GetCount());
+    const ScSheetSourceDesc* pDesc = (*pDPs)[0].GetSheetDesc();
+    CPPUNIT_ASSERT(pDesc);
+    CPPUNIT_ASSERT_EQUAL(u"Table2"_ustr, pDesc->GetRangeName()); // import kept the name
+
+    // Export must write the name back (worksheetSource@name), not a fixed range.
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pCacheDef = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
+    CPPUNIT_ASSERT(pCacheDef);
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheSource/x:worksheetSource", "name",
+                u"Table2");
+}
+
 namespace
 {
 bool checkVisiblePageFieldMember(const ScDPSaveDimension::MemberList& rMembers,

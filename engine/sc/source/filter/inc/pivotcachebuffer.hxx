@@ -389,6 +389,8 @@ public:
     /** Returns the internal cell range the cache is based on. */
     const ScRange&
                         getSourceRange() const { return maSheetSrcModel.maRange; }
+    /** Returns the defined-name / table name the cache is based on, if any. */
+    const OUString& getSourceDefName() const { return maSheetSrcModel.maDefName; }
     /** Returns the relation identifier of the pivot cache records fragment. */
     const OUString& getRecordsRelId() const { return maDefModel.maRelId; }
 

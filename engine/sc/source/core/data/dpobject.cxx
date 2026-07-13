@@ -3413,6 +3413,15 @@ size_t ScDPCollection::NameCaches::size() const
     return m_Caches.size();
 }
 
+std::vector<OUString> ScDPCollection::NameCaches::getAllNames() const
+{
+    std::vector<OUString> aNames;
+    aNames.reserve(m_Caches.size());
+    for (const auto& rEntry : m_Caches)
+        aNames.push_back(rEntry.first);
+    return aNames;
+}
+
 void ScDPCollection::NameCaches::updateCache(
     const OUString& rName, const ScRange& rRange, o3tl::sorted_vector<ScDPObject*>& rRefs)
 {

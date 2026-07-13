@@ -14,6 +14,7 @@
 #include <dpdimsave.hxx>
 #include <dpitemdata.hxx>
 #include <dpobject.hxx>
+#include <dpshttab.hxx>
 #include <dpsave.hxx>
 #include <dputil.hxx>
 #include <document.hxx>
@@ -327,9 +328,21 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
 
     OUString aSheetName;
     GetDoc().GetName(rEntry.maSrcRange.aStart.Tab(), aSheetName);
-    pDefStrm->singleElement(XML_worksheetSource,
-        XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), rEntry.maSrcRange),
-        XML_sheet, aSheetName.toUtf8());
+
+    // Emit the source name (named range / table) when the cache is name-based,
+    // so it round-trips as a dynamic source instead of a fixed range.
+    OUString aSourceName;
+    const ScDPCache::ScDPObjectSet& rRefs = rEntry.mpCache->GetAllReferences();
+    if (!rRefs.empty())
+        if (const ScSheetSourceDesc* pDesc = (*rRefs.begin())->GetSheetDesc())
+            aSourceName = pDesc->GetRangeName();
+
+    const OString aRef = XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), rEntry.maSrcRange);
+    if (aSourceName.isEmpty())
+        pDefStrm->singleElement(XML_worksheetSource, XML_ref, aRef, XML_sheet, aSheetName.toUtf8());
+    else
+        pDefStrm->singleElement(XML_worksheetSource, XML_ref, aRef, XML_sheet, aSheetName.toUtf8(),
+            XML_name, aSourceName.toUtf8());
 
     pDefStrm->endElement(XML_cacheSource);
 
@@ -802,7 +815,28 @@ void XclExpXmlPivotTableManager::Initialize()
         aCaches.push_back(aEntry); // Cache ID equals position + 1.
     }
 
-    // TODO : Handle name and database caches as well.
+    // Name-based caches (a pivot sourced from a named range or database range),
+    // keyed by name rather than range.
+    ScDPCollection::NameCaches& rNameCaches = pDPColl->GetNameCaches();
+    for (const OUString& rName : rNameCaches.getAllNames())
+    {
+        const ScDPCache* pCache = rNameCaches.getExistingCache(rName);
+        if (!pCache)
+            continue;
+        const ScDPCache::ScDPObjectSet& rRefs = pCache->GetAllReferences();
+        if (rRefs.empty() || !(*rRefs.begin())->GetSheetDesc())
+            continue;
+
+        for (const auto& rRef : rRefs)
+            maCacheIdMap.emplace(rRef, aCaches.size()+1);
+
+        XclExpXmlPivotCaches::Entry aEntry;
+        aEntry.mpCache = pCache;
+        aEntry.maSrcRange = (*rRefs.begin())->GetSheetDesc()->GetSourceRange();
+        aCaches.push_back(aEntry);
+    }
+
+    // TODO : Handle database (external) caches as well.
 
     for (size_t i = 0, n = pDPColl->GetCount(); i < n; ++i)
     {
