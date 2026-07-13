@@ -291,6 +291,63 @@ CPPUNIT_TEST_FIXTURE(NamedSheetViewsImportExportTest, testMultiSheetRoundtripVis
     }
 }
 
+CPPUNIT_TEST_FIXTURE(NamedSheetViewsImportExportTest, testMultiSheetViewsRoundtrip)
+{
+    loadFromFile(u"xlsx/NamedSheetViews.xlsx");
+
+    // Add a second ordinary sheet with its own sheet view, so the round-trip
+    // has named sheet views on two sheets.
+    {
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+        CPPUNIT_ASSERT(pModelObj);
+        ScDocument* pDoc = pModelObj->GetDocument();
+        CPPUNIT_ASSERT(pDoc);
+
+        // Tabs so far: Sheet1, 2 view tabs. Sheet2 goes to the end.
+        SCTAB nSheet2 = pDoc->GetTableCount();
+        pDoc->InsertTab(nSheet2, u"Sheet2"_ustr);
+
+        auto [nViewID, nViewTab] = pDoc->CreateNewSheetView(nSheet2);
+        CPPUNIT_ASSERT(nViewID != sc::InvalidSheetViewID);
+        CPPUNIT_ASSERT_EQUAL(SCTAB(nSheet2 + 1), nViewTab);
+        pDoc->GetSheetViewManager(nSheet2)->get(nViewID)->SetName(u"Sheet2View"_ustr);
+    }
+
+    saveAndReload(TestFilter::XLSX);
+
+    {
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+        CPPUNIT_ASSERT(pModelObj);
+        ScDocument* pDoc = pModelObj->GetDocument();
+        CPPUNIT_ASSERT(pDoc);
+
+        // Tabs: Sheet1, its 2 view tabs, Sheet2, its view tab.
+        CPPUNIT_ASSERT_EQUAL(SCTAB(5), pDoc->GetTableCount());
+
+        // Sheet1 keeps its two sheet views.
+        auto pManager1 = pDoc->GetSheetViewManager(0);
+        CPPUNIT_ASSERT(pManager1);
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pManager1->size());
+
+        // Sheet2 keeps its sheet view, with its name.
+        SCTAB nSheet2 = 3;
+        CPPUNIT_ASSERT(!pDoc->IsSheetViewHolder(nSheet2));
+        CPPUNIT_ASSERT(pDoc->IsSheetViewHolder(nSheet2 + 1));
+
+        auto pManager2 = pDoc->GetSheetViewManager(nSheet2);
+        CPPUNIT_ASSERT(pManager2);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pManager2->size());
+
+        bool bFound = false;
+        for (auto& rSheetView : pManager2->iterateValidSheetViews())
+        {
+            if (rSheetView.GetName() == u"Sheet2View")
+                bFound = true;
+        }
+        CPPUNIT_ASSERT(bFound);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

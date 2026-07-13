@@ -26,6 +26,28 @@ namespace oox::xls::nsv
 {
 using namespace ::com::sun::star;
 
+namespace
+{
+/** Returns the current tab of the sheet that was at nSheet during import.
+ *
+ * Holder tabs created during import shift the sheets after them, so the
+ * import-time index is the position among the non-holder tables.
+ */
+SCTAB lclResolveCurrentTab(ScDocument& rDoc, SCTAB nSheet)
+{
+    SCTAB nSheetIndex = 0;
+    for (SCTAB nTab = 0; nTab < rDoc.GetTableCount(); ++nTab)
+    {
+        if (rDoc.IsSheetViewHolder(nTab))
+            continue;
+        if (nSheetIndex == nSheet)
+            return nTab;
+        ++nSheetIndex;
+    }
+    return -1;
+}
+}
+
 NamedSheetViewImporter::NamedSheetViewImporter(const WorkbookHelper& rHelper, SCTAB nTab)
     : WorkbookHelper(rHelper)
     , mnTab(nTab)
@@ -44,14 +66,18 @@ void NamedSheetViewImporter::finalizeImport()
 
     ScDocument& rDoc = getScDocument();
 
+    SCTAB nTab = lclResolveCurrentTab(rDoc, mnTab);
+    if (nTab < 0)
+        return;
+
     for (const auto& rViewData : maNamedSheetViews)
     {
-        auto[nSheetViewID, nViewTab] = rDoc.CreateNewSheetView(mnTab);
+        auto[nSheetViewID, nViewTab] = rDoc.CreateNewSheetView(nTab);
         if (nSheetViewID == sc::InvalidSheetViewID)
             continue;
 
         // Set the imported name on the sheet view
-        auto pSheetViewManager = rDoc.GetSheetViewManager(mnTab);
+        auto pSheetViewManager = rDoc.GetSheetViewManager(nTab);
         if (!pSheetViewManager)
             continue;
 
