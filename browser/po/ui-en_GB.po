@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-16 14:01+0000\n"
-"Last-Translator: Rob Pearson <rob.dunedin@gmail.com>\n"
+"PO-Revision-Date: 2026-07-02 19:01+0000\n"
+"Last-Translator: FarmYard Gaming <farmyardgaming@gmail.com>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/en_GB/>\n"
-"Language: \n"
+"Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -64,7 +64,7 @@ msgstr "Status"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Details"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -441,6 +441,8 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Some clients connected with the old WebSocket URL form, which is planned for "
+"removal. Check that your proxy passes the compact form through."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -450,7 +452,7 @@ msgstr "Error"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Learn more"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -551,7 +553,7 @@ msgstr "Show Ruler"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Show Formatting Marks"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
@@ -639,11 +641,11 @@ msgstr "Content"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:591
 msgid "Display"
-msgstr ""
+msgstr "Display"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Show Boundaries"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560
@@ -861,10 +863,12 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"When on, Writer fits the document to the viewport width on open. When off, "
+"the document opens at the Default Zoom level set below."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1347
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "No settings available for {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1359
 msgid "Select a tab to browser settings."
@@ -941,7 +945,7 @@ msgstr "Zotero account API settings"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2064
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Zotero Settings"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2096
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
@@ -958,7 +962,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2121
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Document Signing Settings"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 #: admin/src/integrator/AdminIntegratorSettings.ts:2176
@@ -1067,7 +1071,7 @@ msgstr "Upload Xcu"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3375
 #: admin/src/integrator/AdminIntegratorSettings.ts:3385
 msgid "Enter {0}"
-msgstr ""
+msgstr "Enter {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 msgid "Reset"
@@ -1075,15 +1079,15 @@ msgstr "Reset"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Reset to default {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Are you sure you want to reset {0}?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
-msgstr ""
+msgstr "Save {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -2167,7 +2171,7 @@ msgstr "Don’t show this again"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "A {0} error occurred while processing the {1} command."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -3074,7 +3078,7 @@ msgstr "Repair"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:850
 msgid "Find"
-msgstr ""
+msgstr "Find"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -4177,7 +4181,7 @@ msgstr "Insert a styled table"
 
 #: src/control/Control.NotebookbarCalc.js:1815
 msgid "Select an editable cell range to insert a styled table"
-msgstr ""
+msgstr "Select an editable cell range to insert a styled table"
 
 #: src/control/Control.NotebookbarCalc.js:1824
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4458,7 +4462,7 @@ msgstr "Select"
 #: src/control/Control.NotebookbarImpress.js:2235
 #: src/control/Control.NotebookbarWriter.js:2638
 msgid "Distribute"
-msgstr ""
+msgstr "Distribute"
 
 #: src/control/Control.NotebookbarImpress.js:2274
 #: src/control/Control.NotebookbarWriter.js:2677
@@ -4579,7 +4583,7 @@ msgstr "Remove Section"
 
 #: src/control/Control.PartsPreview.js:871
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Remove Section & Slides"
 
 #: src/control/Control.PartsPreview.js:880
 msgid "Move Section Up"
@@ -4599,7 +4603,7 @@ msgstr "Expand All Sections"
 
 #: src/control/Control.PartsPreview.js:940
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr ""
+msgstr "Delete section \"%1\" and its %2 slide(s)?"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "Enter new section name:"
@@ -4650,10 +4654,12 @@ msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
+"Connected with the old WebSocket URL form, which is planned for removal. "
+"Check that your proxy passes the compact form through."
 
 #: src/control/Control.ServerAuditDialog.ts:143
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Connected with the compact WebSocket URL form"
 
 #: src/control/Control.ServerAuditDialog.ts:152
 msgid "The IsAdminUser property is not set by integration"
@@ -4767,6 +4773,8 @@ msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"Fit the page to the window width. Smart Zoom on open can be toggled in "
+"Options under File tab."
 
 #: src/control/Control.StatusBar.js:271
 msgid "Status Bar Menu"
@@ -4885,23 +4893,23 @@ msgstr "Show Menu"
 
 #: src/control/Control.UIManager.ts:2681
 msgid "Copy error details"
-msgstr ""
+msgstr "Copy error details"
 
 #: src/control/Control.UIManager.ts:2728
 msgid "Show technical details"
-msgstr ""
+msgstr "Show technical details"
 
 #: src/control/Control.UIManager.ts:2742
 msgid "Technical Details:"
-msgstr ""
+msgstr "Technical Details:"
 
 #: src/control/Control.UIManager.ts:2746
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Error details copied to clipboard"
 
 #: src/control/Control.UIManager.ts:2756
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Failed to copy error details"
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
@@ -5115,17 +5123,16 @@ msgstr ""
 "and bibliography in this document."
 
 #: src/control/HRuler.ts:321
-#, fuzzy
 msgid "First line"
-msgstr "First Slide"
+msgstr "First line"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "Before"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
-msgstr ""
+msgstr "Double-click to insert a tab stop. Right-click for more options."
 
 #: src/control/HRuler.ts:785 src/control/HRuler.ts:952
 msgid "Left Margin"
@@ -5285,19 +5292,19 @@ msgstr "Title, Vertical Text, Clipart"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Standard selection"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Extending selection"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "Adding selection"
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Block selection"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -5968,7 +5975,7 @@ msgstr ""
 
 #: src/app/Socket.ts:621
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "The connection to the document has been lost."
 
 #: src/app/Socket.ts:622
 msgid "The server has been disconnected."
@@ -6036,7 +6043,7 @@ msgstr "Wrong server, reconnecting..."
 
 #: src/app/Socket.ts:1905
 msgid "Unsupported version."
-msgstr ""
+msgstr "Unsupported version."
 
 #: src/app/Socket.ts:1906
 msgid "Unsupported server version."
@@ -6130,7 +6137,7 @@ msgstr "{0} tab selected"
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "No disk space left."
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6479,7 +6486,7 @@ msgstr "Failed to download clipboard, please re-copy"
 
 #: src/map/Clipboard.js:372
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Failed to upload the clipboard"
 
 #: src/map/Clipboard.js:1450
 msgid ""
@@ -6546,10 +6553,8 @@ msgid "Please send us your feedback"
 msgstr "Please send us your feedback"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
-msgstr ""
-"The file of type: {0} cannot be uploaded to server since the file has no name"
+msgstr "The file of type: {0} cannot be inserted since the file has no name"
 
 #: src/map/handler/Map.FileInserter.js:193
 #, javascript-format
@@ -6560,10 +6565,8 @@ msgstr ""
 "The file of type: {0} cannot be uploaded to server since the file has no name"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
-msgstr ""
-"The file of type: {0} cannot be uploaded to server since the file is empty"
+msgstr "The file of type: {0} cannot be inserted since the file is empty"
 
 #: src/map/handler/Map.FileInserter.js:197
 #, javascript-format
@@ -6769,9 +6772,8 @@ msgid "Present to all"
 msgstr "Present to all"
 
 #: src/slideshow/PresenterConsole.js:41
-#, fuzzy
 msgid "Exit"
-msgstr "Edit"
+msgstr "Exit"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Go Back"
