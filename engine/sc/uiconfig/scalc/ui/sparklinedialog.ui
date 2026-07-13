@@ -801,7 +801,7 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=3 n-rows=3 -->
+                  <!-- n-columns=2 n-rows=5 -->
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -809,6 +809,42 @@
                     <property name="margin-top">6</property>
                     <property name="row-spacing">3</property>
                     <property name="column-spacing">6</property>
+                    <child>
+                      <object class="GtkCheckButton" id="cbDisplayXAxis">
+                        <property name="label" translatable="yes" context="SparklineDialog|checkBox_DisplayX">Display X axis</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="halign">start</property>
+                        <property name="always-show-image">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbDisplayXAxis-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbDisplayXAxix">Check to show the X axis for sparklines.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="lbMinAxis">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label_AxisMinimum">Vertical minimum type:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">cbMinAxisType</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
                     <child>
                       <object class="GtkComboBoxText" id="cbMinAxisType">
                         <property name="visible">True</property>
@@ -831,6 +867,21 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkLabel" id="lbMinValue">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label_AxisMinValue">Vertical minimum value:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">seMinAxis</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkSpinButton" id="seMinAxis">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
@@ -846,8 +897,23 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left-attach">2</property>
-                        <property name="top-attach">1</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="lbMaxAxis">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label_AxisMaximum">Vertical maximum type:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">cbMaxAxisType</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -868,7 +934,22 @@
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="lbMaxValue">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label_AxisMaxValue">Vertical maximum value:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">seMaxAxis</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">4</property>
                       </packing>
                     </child>
                     <child>
@@ -887,59 +968,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left-attach">2</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="lbMaxAxis">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="SparklineDialog|label_AxisMaximum">Vertical maximum:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">cbMaxAxisType</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="lbMinAxis">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="SparklineDialog|label_AxisMinimum">Vertical minimum:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">cbMinAxisType</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="cbDisplayXAxis">
-                        <property name="label" translatable="yes" context="SparklineDialog|checkBox_DisplayX">Display X axis</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="halign">start</property>
-                        <property name="always-show-image">True</property>
-                        <property name="draw-indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="cbDisplayXAxis-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|cbDisplayXAxix">Check to show the X axis for sparklines.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                        <property name="width">3</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">4</property>
                       </packing>
                     </child>
                   </object>
