@@ -33,6 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 #include <rtl/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <salhelper/thread.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
@@ -328,6 +329,38 @@ Player::Player() :
     GError* pError = nullptr;
 
     mbInitialized = gst_init_check( &argc, &argv, &pError );
+
+    if (mbInitialized)
+    {
+        // Drop the "Adaptive" ones to rank none as a crude but simple way to
+        // drop the cases that take a manifest to further resources that it
+        // names. Otherwise an option is to follow more closely what browsers
+        // probably do here and register a handler for fetching data.
+        GstRegistry* pRegistry = gst_registry_get();
+        GList* pFactories = gst_registry_get_feature_list(pRegistry, GST_TYPE_ELEMENT_FACTORY);
+        for (GList* pItem = pFactories; pItem; pItem = pItem->next)
+        {
+            GstElementFactory* pFactory = GST_ELEMENT_FACTORY(pItem->data);
+            const gchar* pKlass = gst_element_factory_get_metadata(pFactory, GST_ELEMENT_METADATA_KLASS);
+            if (!pKlass)
+                continue;
+
+            OString aKlass(pKlass);
+            bool bAdaptive = false;
+            for (sal_Int32 nIndex = 0; nIndex >= 0;)
+            {
+                if (o3tl::getToken(aKlass, 0, '/', nIndex) == "Adaptive")
+                {
+                    bAdaptive = true;
+                    break;
+                }
+            }
+
+            if (bAdaptive)
+                gst_plugin_feature_set_rank(GST_PLUGIN_FEATURE(pFactory), GST_RANK_NONE);
+        }
+        gst_plugin_feature_list_free(pFactories);
+    }
 
     SAL_INFO( "avmedia.gstreamer", AVVERSION << this << " Player::Player" );
 
