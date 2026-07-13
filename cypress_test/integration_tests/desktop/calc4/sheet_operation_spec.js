@@ -86,6 +86,16 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet Operations.', functi
 	});
 
 
+	it('Open the cell context menu with Shift+F10', function () {
+		// With focus on a data cell (not a sheet tab), Shift+F10 must open the
+		// cell context menu.
+		calcHelper.clickOnFirstCell();
+		cy.realPress(['Shift', 'F10']);
+		// The cell context menu is the long one; the sheet tab menu is not shown
+		// in this overlay.
+		helper.getContextMenuItemList().its('length').should('be.greaterThan', 10);
+	});
+
 	it('Hide/Show sheet', function () {
 		calcHelper.assertNumberofSheets(1);
 		cy.cGet('#spreadsheet-toolbar #insertsheet').click();
