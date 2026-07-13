@@ -194,6 +194,28 @@ public:
 
 std::atomic<unsigned> DocumentBroker::DocBrokerId(1);
 
+namespace
+{
+DocumentBroker::BrokerFactory GlobalBrokerFactory;
+}
+
+void DocumentBroker::setBrokerFactory(BrokerFactory factory)
+{
+    GlobalBrokerFactory = std::move(factory);
+}
+
+std::shared_ptr<DocumentBroker> DocumentBroker::create(ChildType type, const std::string& uri,
+                                                       const Poco::URI& uriPublic,
+                                                       const std::string& docKey,
+                                                       const std::string& configId,
+                                                       unsigned mobileAppDocId)
+{
+    if (GlobalBrokerFactory)
+        return GlobalBrokerFactory(type, uri, uriPublic, docKey, configId, mobileAppDocId);
+
+    return std::make_shared<DocumentBroker>(type, uri, uriPublic, docKey, configId, mobileAppDocId);
+}
+
 DocumentBroker::DocumentBroker(ChildType type, const std::string& uri, const Poco::URI& uriPublic,
                                const std::string& docKey, const std::string& configId,
                                unsigned mobileAppDocId)

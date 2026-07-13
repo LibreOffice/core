@@ -678,6 +678,9 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         return false;
     }
 
+    if (docBroker->handleAppMessage(client_from_this(), tokens, firstLine))
+        return true;
+
     if (tokens.equals(0, "DEBUG"))
     {
         LOG_DBG("From client: " << std::string(buffer, length).substr(strlen("DEBUG") + 1));

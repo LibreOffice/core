@@ -270,6 +270,21 @@ public:
                    const std::string& docKey, const std::string& configId,
                    unsigned mobileAppDocId);
 
+    /// CODA can substitute a subclass of DocumentBroker here.
+    using BrokerFactory = std::function<std::shared_ptr<DocumentBroker>(
+        ChildType type, const std::string& uri, const Poco::URI& uriPublic,
+        const std::string& docKey, const std::string& configId, unsigned mobileAppDocId)>;
+
+    /// Install the factory that builds brokers for documents.
+    static void setBrokerFactory(BrokerFactory factory);
+
+    /// Can also be used by derived classes through an installed factory
+    static std::shared_ptr<DocumentBroker> create(ChildType type, const std::string& uri,
+                                                  const Poco::URI& uriPublic,
+                                                  const std::string& docKey,
+                                                  const std::string& configId,
+                                                  unsigned mobileAppDocId);
+
 protected:
     /// Used by derived classes.
     DocumentBroker(ChildType type, const std::string& uri, const Poco::URI& uriPublic,
@@ -277,6 +292,10 @@ protected:
         : DocumentBroker(type, uri, uriPublic, docKey, configId, /*mobileAppDocId=*/0)
     {
     }
+
+    /// The app-side numeric identifier of this document in a mobile-style
+    /// build; 0 in the server build.
+    unsigned getMobileAppDocId() const { return _mobileAppDocId; }
 
 public:
     virtual ~DocumentBroker();
@@ -407,7 +426,7 @@ public:
     void assertCorrectThread(LOG_CAPTURE_CALLER_DECLARATION) const;
 
     /// Pretty print internal state to a stream.
-    void dumpState(std::ostream& os);
+    virtual void dumpState(std::ostream& os);
 
     std::string getJailRoot() const;
 
@@ -511,6 +530,15 @@ public:
     }
 
     bool isMarkedToDestroy() const { return _docState.isMarkedToDestroy() || _stop; }
+
+    /// A message from the CODA, tokenized from its first line.
+    /// Returns true when the message was consumed
+    virtual bool handleAppMessage(const std::shared_ptr<ClientSession>& /*session*/,
+                                  const StringVector& /*tokens*/,
+                                  const std::string& /*firstLine*/)
+    {
+        return false;
+    }
 
     virtual bool handleInput(const std::shared_ptr<Message>& message);
 
