@@ -1575,9 +1575,15 @@ class PresenterConsole {
 				_('Repeat in {0} seconds').replace('{0}', repeat),
 				width / 2,
 				height / 2,
+				Math.max(0, width - 20),
 			);
 		} else {
-			ctx.fillText(_('Click to exit presentation...'), width / 2, height / 2);
+			ctx.fillText(
+				_('Click to exit presentation...'),
+				width / 2,
+				height / 2,
+				Math.max(0, width - 20),
+			);
 		}
 
 		return offscreen.convertToBlob({ type: 'image/png' });
