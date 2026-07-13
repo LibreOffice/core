@@ -462,6 +462,10 @@ public:
         bool insert(std::unique_ptr<ScDBData> p);
 
         iterator erase(const iterator& itr);
+
+        /** Removes the named database ranges of the sheet. */
+        void deleteOnTab(SCTAB nTab);
+
         bool empty() const;
         size_t size() const;
         bool operator== (const NamedDBs& r) const;

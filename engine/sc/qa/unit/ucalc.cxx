@@ -7559,6 +7559,33 @@ CPPUNIT_TEST_FIXTURE(Test, testOverwriteContent)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testOverwriteContentDatabaseRanges)
+{
+    // Overwriting a sheet repeatedly keeps one copy of each of the source
+    // sheet's named database ranges on the target sheet.
+    m_pDoc->InsertTab(0, u"Tab0"_ustr);
+    m_pDoc->InsertTab(1, u"Tab1"_ustr);
+
+    ScDBCollection* pDBs = m_pDoc->GetDBCollection();
+    bool bInserted = pDBs->getNamedDBs().insert(
+        std::make_unique<ScDBData>(u"Data"_ustr, 0, 0, 0, 2, 3));
+    CPPUNIT_ASSERT(bInserted);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDBs->getNamedDBs().size());
+
+    // The first overwrite adds a copy of the range for the target sheet.
+    m_pDoc->OverwriteContent(0, 1);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDBs->getNamedDBs().size());
+
+    // Further overwrites replace that copy.
+    m_pDoc->OverwriteContent(0, 1);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDBs->getNamedDBs().size());
+    m_pDoc->OverwriteContent(0, 1);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDBs->getNamedDBs().size());
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testAutoFilterFlagsAfterColumnInsertUndoRedo)
 {
     m_pDoc->InsertTab(0, u"Sheet1"_ustr);

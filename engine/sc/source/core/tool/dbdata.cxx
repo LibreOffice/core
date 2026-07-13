@@ -2800,13 +2800,13 @@ void ScDBCollection::RefreshDirtyTableColumnNames()
     maNamedDBs.maDirtyTableColumnNames.RemoveAll();
 }
 
-void ScDBCollection::DeleteOnTab( SCTAB nTab )
+void ScDBCollection::NamedDBs::deleteOnTab( SCTAB nTab )
 {
     FindByTable func(nTab);
     // First, collect the positions of all items that need to be deleted.
-    ::std::vector<NamedDBs::DBsType::iterator> v;
+    ::std::vector<DBsType::iterator> v;
     {
-        NamedDBs::DBsType::iterator itr = maNamedDBs.begin(), itrEnd = maNamedDBs.end();
+        DBsType::iterator itr = begin(), itrEnd = end();
         for (; itr != itrEnd; ++itr)
         {
             if (func(*itr))
@@ -2816,8 +2816,12 @@ void ScDBCollection::DeleteOnTab( SCTAB nTab )
 
     // Delete them all.
     for (const auto& rIter : v)
-        maNamedDBs.erase(rIter);
+        erase(rIter);
+}
 
+void ScDBCollection::DeleteOnTab( SCTAB nTab )
+{
+    maNamedDBs.deleteOnTab(nTab);
     maAnonDBs.deleteOnTab(nTab);
 }
 

@@ -860,6 +860,14 @@ bool ScDocument::OverwriteContent(SCTAB nSourceTabNo, SCTAB nTargetTabNo)
             pDPCollection->DeleteByTab(nTargetTabNo);
         }
 
+        // Clear the named database ranges on the target sheet. The copy below
+        // inserts fresh copies of the source sheet's named ranges. The target's
+        // anonymous range is replaced by the copy, so it stays untouched here.
+        if (pDBCollection)
+        {
+            pDBCollection->getNamedDBs().deleteOnTab(nTargetTabNo);
+        }
+
         // Copy all content from source sheet to target sheet
         {
             sc::TableContentCopier aHandler(*this, nSourceTabNo, nTargetTabNo);
