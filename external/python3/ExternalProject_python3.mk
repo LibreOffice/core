@@ -42,7 +42,8 @@ ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_Trace_StartRange,python3,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		cmd /c $(gb_UnpackedTarball_workdir)/python3/PCbuild/find_python.bat -q && \
+		NUGET_URL=https://dist.nuget.org/win-x86-commandline/latest/nuget.exe \
+			cmd /c $(gb_UnpackedTarball_workdir)/python3/PCbuild/find_python.bat -q && \
 		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build $(gb_MSBUILD_CONFIG_AND_PLATFORM) \
 			/p:bz2Dir=$(gb_UnpackedTarball_workdir)/bzip2 \
 			/p:opensslIncludeDir=$(gb_UnpackedTarball_workdir)/openssl/include \
