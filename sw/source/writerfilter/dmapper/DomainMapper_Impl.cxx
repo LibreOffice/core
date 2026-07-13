@@ -1976,9 +1976,6 @@ DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
             if (!bValidX)
                 continue;
             nX = pProp->Getx();
-            // MSO handles large twip values specially (legacy 16bit handling)
-            if (nX >= 0x8000_twip)
-                nX = 0_emu;
             break;
         }
         aFrameProperties.push_back(
@@ -2016,8 +2013,6 @@ DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
             if (!bValidY)
                 continue;
             nY = pProp->Gety();
-            if (nY >= 0x8000_twip)
-                nY = 0_emu;
             break;
         }
         aFrameProperties.push_back(
