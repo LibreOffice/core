@@ -687,7 +687,22 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         }
         else if (tokens.equals(0, "downloadas"))
         {
+#if defined(QTAPP)
+            try
+            {
+                return downloadAs(tokens);
+            }
+            catch (const std::exception& exc)
+            {
+                LOG_ERR("downloadas failed with an exception: " << exc.what());
+                std::string id;
+                getTokenString(tokens, "id", id);
+                sendTextFrameAndLogError("error: cmd=downloadas kind=saveasfailed id=" + id);
+                return false;
+            }
+#else
             return downloadAs(tokens);
+#endif
         }
         else if (tokens.equals(0, "getchildid"))
         {
@@ -1505,7 +1520,7 @@ bool ChildSession::downloadAs(const StringVector& tokens)
     // path-component strip below.
     if (Uri::decode(name).find('/') != std::string::npos)
     {
-        sendTextFrameAndLogError("error: cmd=downloadas kind=syntax");
+        sendTextFrameAndLogError("error: cmd=downloadas kind=syntax id=" + id);
         return false;
     }
 
@@ -1540,6 +1555,71 @@ bool ChildSession::downloadAs(const StringVector& tokens)
     // Prevent user inputting anything funny here.
     // A "name" should always be a name, not a path
     const Poco::Path filenameParam(name);
+#if defined(QTAPP)
+    {
+        // The in-process kit has no jail and no HTTP download service: save
+        // into a fresh private temp directory and hand the absolute path, as
+        // a file URI, to the app code in the reply. The directory is removed,
+        // file included, by the receiver of the reply.
+        std::string tmpDir;
+        try
+        {
+            tmpDir = FileUtil::createRandomTmpDir();
+            if (tmpDir == FileUtil::getSysTempDirectoryPath())
+            {
+                // A failed directory creation makes createRandomTmpDir fall back
+                // to returning the shared system temp root unchanged. Saving or
+                // removing anything there would touch files outside this
+                // download's own private directory, so refuse instead.
+                sendTextFrameAndLogError("error: cmd=downloadas kind=saveasfailed id=" + id);
+                return false;
+            }
+
+            const std::string filePath =
+                tmpDir + '/' + Poco::Path(Uri::decode(name)).getFileName();
+
+            LOG_DBG("Calling COKit's saveAs with URL: ["
+                    << anonymizeUrl(filePath) << "], Format: ["
+                    << (format.empty() ? "(nullptr)" : format.c_str()) << "], Filter Options: ["
+                    << (filterOptions.empty() ? "(nullptr)" : filterOptions.c_str()) << ']');
+
+            // saveAs takes a URI, not a plain path, and decodes any
+            // percent-escapes in it.
+            const std::string fileUri = Poco::URI(Poco::Path(filePath)).toString();
+            const bool ok = getLOKitDocument()->saveAs(
+                fileUri.c_str(), format.empty() ? nullptr : format.c_str(),
+                filterOptions.empty() ? nullptr : filterOptions.c_str());
+            // A true return from saveAs does not guarantee the output landed on
+            // disk: an edge-case document or filter can produce a missing or
+            // empty file.
+            const FileUtil::Stat outStat(filePath);
+            if (!ok || !outStat.exists() || outStat.size() == 0)
+            {
+                LOG_ERR("SaveAs Failed for id=" << id << " [" << anonymizeUrl(filePath)
+                                                << "]. error= " << getLOKitLastError());
+                FileUtil::removeFile(tmpDir, /*recursive=*/true);
+                sendTextFrameAndLogError("error: cmd=downloadas kind=saveasfailed id=" + id);
+                return false;
+            }
+
+            sendTextFrame("downloadas: id=" + id + " url=" + fileUri);
+            return true;
+        }
+        catch (const std::exception& exc)
+        {
+            LOG_ERR("SaveAs failed for id=" << id << " with an exception: " << exc.what());
+        }
+        catch (...)
+        {
+            LOG_ERR("SaveAs failed for id=" << id << " with an unknown exception");
+        }
+
+        if (!tmpDir.empty() && tmpDir != FileUtil::getSysTempDirectoryPath())
+            FileUtil::removeFile(tmpDir, /*recursive=*/true);
+        sendTextFrameAndLogError("error: cmd=downloadas kind=saveasfailed id=" + id);
+        return false;
+    }
+#endif
     const std::string nameAnonym = anonymizeUrl(name);
 
     const std::string jailDoc = getJailDocRoot();
