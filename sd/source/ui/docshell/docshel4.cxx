@@ -451,6 +451,8 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
     }
     else // initial loading of the document
     {
+        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
         mpDoc->EnableUndo(false);
     }
 
