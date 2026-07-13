@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_wasm_strip.h>
 
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
@@ -45,6 +46,7 @@
 #include <bitmap/BitmapFastScaleFilter.hxx>
 #include <bitmap/BitmapInterpolateScaleFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <bitmap/impoctree.hxx>
 #include <bitmap/Octree.hxx>
 #include <bitmap/BlendFrameCache.hxx>
@@ -1860,18 +1862,88 @@ std::pair<Bitmap, AlphaMask> Bitmap::SplitIntoColorAndAlpha() const
         const tools::Long nHeight(pThisAcc->Height());
         const tools::Long nWidth(pThisAcc->Width());
 
-        for (tools::Long y = 0; y < nHeight; ++y)
-        {
-            Scanline pScanlineRead = pThisAcc->GetScanline( y );
-            Scanline pScanlineColor = pColorAcc->GetScanline( y );
-            Scanline pScanlineAlpha = pAlphaAcc->GetScanline( y );
-            for (tools::Long x = 0; x < nWidth; ++x)
-            {
-                BitmapColor aColor = pThisAcc->GetPixelFromData(pScanlineRead, x);
+        // Fast path for the common case, a premultiplied 32-bit truecolor source split into a 24-bit
+        // truecolor color bitmap and an 8-bit alpha mask.
+        bool bFastPath = false;
+#if !ENABLE_WASM_STRIP_PREMULTIPLY
+        const ScanlineFormat eSourceFormat = pThisAcc->GetScanlineFormat();
+        const ScanlineFormat eColorFormat = pColorAcc->GetScanlineFormat();
 
-                // write result back
-                pColorAcc->SetPixelOnData(pScanlineColor, x, aColor);
-                pAlphaAcc->SetPixelOnData(pScanlineAlpha, x, BitmapColor(aColor.GetAlpha()));
+        // Byte offsets of the blue, green, red and alpha channels within the 4-byte source pixel.
+        sal_uInt8 nSourceBlue = 0;
+        sal_uInt8 nSourceGreen = 0;
+        sal_uInt8 nSourceRed = 0;
+        sal_uInt8 nSourceAlpha = 0;
+        if (auto oSource = vcl::bitmap::get32BitTcChannelOffsets(eSourceFormat))
+        {
+            nSourceBlue = oSource->nBlue;
+            nSourceGreen = oSource->nGreen;
+            nSourceRed = oSource->nRed;
+            nSourceAlpha = oSource->nAlpha;
+            bFastPath = true;
+        }
+
+        // Byte offsets of the blue, green and red channels within the 3-byte destination color pixel.
+        sal_uInt8 nColorBlue = 0;
+        sal_uInt8 nColorGreen = 0;
+        sal_uInt8 nColorRed = 0;
+        if (eColorFormat == ScanlineFormat::N24BitTcBgr)
+        {
+            nColorBlue = 0;
+            nColorGreen = 1;
+            nColorRed = 2;
+        }
+        else if (eColorFormat == ScanlineFormat::N24BitTcRgb)
+        {
+            nColorRed = 0;
+            nColorGreen = 1;
+            nColorBlue = 2;
+        }
+        else
+            bFastPath = false;
+
+        // The alpha value maps directly to the palette index of an 8-bit mask.
+        if (pAlphaAcc->GetScanlineFormat() != ScanlineFormat::N8BitPal)
+            bFastPath = false;
+
+        if (bFastPath)
+        {
+            const vcl::bitmap::lookup_table& rUnpremultiply
+                = vcl::bitmap::get_unpremultiply_table();
+            for (tools::Long y = 0; y < nHeight; ++y)
+            {
+                Scanline pScanlineRead = pThisAcc->GetScanline(y);
+                Scanline pScanlineColor = pColorAcc->GetScanline(y);
+                Scanline pScanlineAlpha = pAlphaAcc->GetScanline(y);
+                for (tools::Long x = 0; x < nWidth; ++x)
+                {
+                    const sal_uInt8* pSource = pScanlineRead + x * 4;
+                    const sal_uInt8 nAlpha = pSource[nSourceAlpha];
+                    const std::array<sal_uInt8, 256>& rRow = rUnpremultiply[nAlpha];
+                    sal_uInt8* pColor = pScanlineColor + x * 3;
+                    pColor[nColorBlue] = rRow[pSource[nSourceBlue]];
+                    pColor[nColorGreen] = rRow[pSource[nSourceGreen]];
+                    pColor[nColorRed] = rRow[pSource[nSourceRed]];
+                    pScanlineAlpha[x] = nAlpha;
+                }
+            }
+        }
+#endif
+        if (!bFastPath)
+        {
+            for (tools::Long y = 0; y < nHeight; ++y)
+            {
+                Scanline pScanlineRead = pThisAcc->GetScanline(y);
+                Scanline pScanlineColor = pColorAcc->GetScanline(y);
+                Scanline pScanlineAlpha = pAlphaAcc->GetScanline(y);
+                for (tools::Long x = 0; x < nWidth; ++x)
+                {
+                    BitmapColor aColor = pThisAcc->GetPixelFromData(pScanlineRead, x);
+
+                    // write result back
+                    pColorAcc->SetPixelOnData(pScanlineColor, x, aColor);
+                    pAlphaAcc->SetPixelOnData(pScanlineAlpha, x, BitmapColor(aColor.GetAlpha()));
+                }
             }
         }
     }

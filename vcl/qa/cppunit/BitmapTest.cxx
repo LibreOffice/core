@@ -36,6 +36,7 @@ class BitmapTest : public CppUnit::TestFixture
     void testGreyPalette();
     void testCustom8BitPalette();
     void testErase();
+    void testSplitIntoColorAndAlpha();
     void testBitmap32();
     void testOctree();
     void testEmptyAccess();
@@ -54,6 +55,7 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testGreyPalette);
     CPPUNIT_TEST(testCustom8BitPalette);
     CPPUNIT_TEST(testErase);
+    CPPUNIT_TEST(testSplitIntoColorAndAlpha);
     CPPUNIT_TEST(testBitmap32);
     CPPUNIT_TEST(testOctree);
     CPPUNIT_TEST(testEmptyAccess);
@@ -495,6 +497,47 @@ void BitmapTest::testBitmap32()
 
         aColor = pReadAccess->GetPixel(2, 2);
         CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x99, 0x77, 0x66, 0x55), aColor);
+    }
+}
+
+void BitmapTest::testSplitIntoColorAndAlpha()
+{
+    Bitmap aBitmap(Size(3, 2), vcl::PixelFormat::N32_BPP);
+    {
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->SetPixel(0, 0, BitmapColor(ColorAlpha, 0x11, 0x22, 0x33, 0xFF));
+        pWriteAccess->SetPixel(0, 1, BitmapColor(ColorAlpha, 0x44, 0x55, 0x66, 0xFF));
+        pWriteAccess->SetPixel(0, 2, BitmapColor(ColorAlpha, 0x77, 0x88, 0x99, 0xFF));
+        pWriteAccess->SetPixel(1, 0, BitmapColor(ColorAlpha, 0xAA, 0xBB, 0xCC, 0xFF));
+        // A fully transparent and a semi-transparent pixel, assert the alpha carries through.
+        pWriteAccess->SetPixel(1, 1, BitmapColor(ColorAlpha, 0xDD, 0xEE, 0xFF, 0x00));
+        pWriteAccess->SetPixel(1, 2, BitmapColor(ColorAlpha, 0x10, 0x20, 0x30, 0x80));
+    }
+    CPPUNIT_ASSERT(aBitmap.HasAlpha());
+
+    auto[aColorBmp, aAlphaMask] = aBitmap.SplitIntoColorAndAlpha();
+
+    // The color bitmap is a plain 24-bit truecolor bitmap.
+    CPPUNIT_ASSERT(!aColorBmp.HasAlpha());
+    CPPUNIT_ASSERT_EQUAL(Size(3, 2), aColorBmp.GetSizePixel());
+    CPPUNIT_ASSERT_EQUAL(Size(3, 2), aAlphaMask.GetSizePixel());
+
+    {
+        BitmapScopedReadAccess pColorAcc(aColorBmp);
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x11, 0x22, 0x33), pColorAcc->GetColor(0, 0));
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x44, 0x55, 0x66), pColorAcc->GetColor(0, 1));
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x77, 0x88, 0x99), pColorAcc->GetColor(0, 2));
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0xAA, 0xBB, 0xCC), pColorAcc->GetColor(1, 0));
+    }
+
+    {
+        BitmapScopedReadAccess pAlphaAcc(aAlphaMask);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xFF), pAlphaAcc->GetPixelIndex(0, 0));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xFF), pAlphaAcc->GetPixelIndex(0, 1));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xFF), pAlphaAcc->GetPixelIndex(0, 2));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xFF), pAlphaAcc->GetPixelIndex(1, 0));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAlphaAcc->GetPixelIndex(1, 1));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x80), pAlphaAcc->GetPixelIndex(1, 2));
     }
 }
 
