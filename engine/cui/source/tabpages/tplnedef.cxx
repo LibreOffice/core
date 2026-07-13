@@ -52,8 +52,7 @@ using namespace com::sun::star;
 SvxLineDefTabPage::SvxLineDefTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, u"cui/ui/linestyletabpage.ui"_ustr, u"LineStylePage"_ustr, &rInAttrs)
     , rOutAttrs(rInAttrs)
-    , aXLineAttr(rInAttrs.GetPool())
-    , rXLSet(aXLineAttr.GetItemSet())
+    , m_aLineAttributeSet(rInAttrs.getPool(), WhichRangesContainer(XATTR_LINE_FIRST, XATTR_LINE_LAST))
     , pnDashListState(nullptr)
     , pPageType(nullptr)
     , nDlgType(0)
@@ -97,13 +96,13 @@ SvxLineDefTabPage::SvxLineDefTabPage(weld::Container* pPage, weld::DialogControl
     assert(pPool && "Where is the pool?");
     ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
-    rXLSet.Put( XLineStyleItem(drawing::LineStyle_DASH) );
-    rXLSet.Put( XLineWidthItem(XOUT_WIDTH) );
-    rXLSet.Put( XLineDashItem( OUString(), XDash( css::drawing::DashStyle_RECT, 3, 7, 2, 40, 15 ) ) );
-    rXLSet.Put( XLineColorItem(OUString(), COL_BLACK) );
+    m_aLineAttributeSet.Put( XLineStyleItem(drawing::LineStyle_DASH) );
+    m_aLineAttributeSet.Put( XLineWidthItem(XOUT_WIDTH) );
+    m_aLineAttributeSet.Put( XLineDashItem( OUString(), XDash( css::drawing::DashStyle_RECT, 3, 7, 2, 40, 15 ) ) );
+    m_aLineAttributeSet.Put( XLineColorItem(OUString(), COL_BLACK) );
 
     // #i34740#
-    m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
+    m_aCtlPreview.SetLineAttributes(m_aLineAttributeSet);
 
     m_xBtnAdd->connect_clicked(LINK(this, SvxLineDefTabPage, ClickAddHdl_Impl));
     m_xBtnModify->connect_clicked(LINK(this, SvxLineDefTabPage, ClickModifyHdl_Impl));
@@ -321,10 +320,10 @@ void SvxLineDefTabPage::SelectLinestyleHdl_Impl(const weld::ComboBox* p)
 
     FillDialog_Impl();
 
-    rXLSet.Put( XLineDashItem( OUString(), aDash ) );
+    m_aLineAttributeSet.Put( XLineDashItem( OUString(), aDash ) );
 
     // #i34740#
-    m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
+    m_aCtlPreview.SetLineAttributes(m_aLineAttributeSet);
     m_aCtlPreview.Invalidate();
 
     // Is not set before, in order to take the new style
@@ -848,10 +847,10 @@ void SvxLineDefTabPage::FillDash_Impl()
     aDash.SetDashLen( m_xLbType2->get_active() == 0 ? 0 : GetCoreValue( *m_xMtrLength2, ePoolUnit ) );
     aDash.SetDistance( GetCoreValue( *m_xMtrDistance, ePoolUnit ) );
 
-    rXLSet.Put( XLineDashItem( OUString(), aDash ) );
+    m_aLineAttributeSet.Put( XLineDashItem( OUString(), aDash ) );
 
     // #i34740#
-    m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
+    m_aCtlPreview.SetLineAttributes(m_aLineAttributeSet);
 }
 
 void SvxLineDefTabPage::FillDialog_Impl()

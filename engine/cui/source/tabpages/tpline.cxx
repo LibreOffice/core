@@ -89,8 +89,7 @@ SvxLineTabPage::SvxLineTabPage(weld::Container* pPage, weld::DialogController* p
     , m_bSymbols(false)
     , m_rOutAttrs(rInAttrs)
     , m_bObjSelected(false)
-    , m_aXLineAttr(rInAttrs.GetPool())
-    , m_rXLSet(m_aXLineAttr.GetItemSet())
+    , m_aLineAttributeSet(rInAttrs.getPool(), WhichRangesContainer(XATTR_LINE_FIRST, XATTR_LINE_LAST))
     , m_pnLineEndListState(nullptr)
     , m_pnDashListState(nullptr)
     , m_pnColorListState(nullptr)
@@ -669,20 +668,20 @@ void SvxLineTabPage::FillXLSet_Impl()
 
     if (m_xLbLineStyle->get_active() == -1)
     {
-        m_rXLSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
+        m_aLineAttributeSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
     }
     else if (m_xLbLineStyle->get_active() == 0)
-        m_rXLSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
+        m_aLineAttributeSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
     else if (m_xLbLineStyle->get_active() == 1)
-        m_rXLSet.Put( XLineStyleItem( drawing::LineStyle_SOLID ) );
+        m_aLineAttributeSet.Put( XLineStyleItem( drawing::LineStyle_SOLID ) );
     else
     {
-        m_rXLSet.Put( XLineStyleItem( drawing::LineStyle_DASH ) );
+        m_aLineAttributeSet.Put( XLineStyleItem( drawing::LineStyle_DASH ) );
 
         nPos = m_xLbLineStyle->get_active();
         if (nPos != -1)
         {
-            m_rXLSet.Put( XLineDashItem( m_xLbLineStyle->get_active_text(),
+            m_aLineAttributeSet.Put( XLineDashItem( m_xLbLineStyle->get_active_text(),
                             m_pDashList->GetDash( nPos - 2 )->GetDash() ) );
         }
     }
@@ -691,18 +690,18 @@ void SvxLineTabPage::FillXLSet_Impl()
     if (nPos != -1)
     {
         if( nPos == 0 )
-            m_rXLSet.Put( XLineStartItem() );
+            m_aLineAttributeSet.Put( XLineStartItem() );
         else
-            m_rXLSet.Put( XLineStartItem( m_xLbStartStyle->get_active_text(),
+            m_aLineAttributeSet.Put( XLineStartItem( m_xLbStartStyle->get_active_text(),
                         m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
     }
     nPos = m_xLbEndStyle->get_active();
     if (nPos != -1)
     {
         if( nPos == 0 )
-            m_rXLSet.Put( XLineEndItem() );
+            m_aLineAttributeSet.Put( XLineEndItem() );
         else
-            m_rXLSet.Put( XLineEndItem( m_xLbEndStyle->get_active_text(),
+            m_aLineAttributeSet.Put( XLineEndItem( m_xLbEndStyle->get_active_text(),
                         m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
     }
 
@@ -713,22 +712,22 @@ void SvxLineTabPage::FillXLSet_Impl()
         {
             case 0: // Rounded, default
             {
-                m_rXLSet.Put(XLineJointItem(css::drawing::LineJoint_ROUND));
+                m_aLineAttributeSet.Put(XLineJointItem(css::drawing::LineJoint_ROUND));
                 break;
             }
             case 1: // - none -
             {
-                m_rXLSet.Put(XLineJointItem(css::drawing::LineJoint_NONE));
+                m_aLineAttributeSet.Put(XLineJointItem(css::drawing::LineJoint_NONE));
                 break;
             }
             case 2: // Miter
             {
-                m_rXLSet.Put(XLineJointItem(css::drawing::LineJoint_MITER));
+                m_aLineAttributeSet.Put(XLineJointItem(css::drawing::LineJoint_MITER));
                 break;
             }
             case 3: // Bevel
             {
-                m_rXLSet.Put(XLineJointItem(css::drawing::LineJoint_BEVEL));
+                m_aLineAttributeSet.Put(XLineJointItem(css::drawing::LineJoint_BEVEL));
                 break;
             }
         }
@@ -742,47 +741,47 @@ void SvxLineTabPage::FillXLSet_Impl()
         {
             case 0: // Butt (=Flat), default
             {
-                m_rXLSet.Put(XLineCapItem(css::drawing::LineCap_BUTT));
+                m_aLineAttributeSet.Put(XLineCapItem(css::drawing::LineCap_BUTT));
                 break;
             }
             case 1: // Round
             {
-                m_rXLSet.Put(XLineCapItem(css::drawing::LineCap_ROUND));
+                m_aLineAttributeSet.Put(XLineCapItem(css::drawing::LineCap_ROUND));
                 break;
             }
             case 2: // Square
             {
-                m_rXLSet.Put(XLineCapItem(css::drawing::LineCap_SQUARE));
+                m_aLineAttributeSet.Put(XLineCapItem(css::drawing::LineCap_SQUARE));
                 break;
             }
         }
     }
 
-    m_rXLSet.Put( XLineStartWidthItem( GetCoreValue( *m_xMtrStartWidth, m_ePoolUnit ) ) );
-    m_rXLSet.Put( XLineEndWidthItem( GetCoreValue( *m_xMtrEndWidth, m_ePoolUnit ) ) );
+    m_aLineAttributeSet.Put( XLineStartWidthItem( GetCoreValue( *m_xMtrStartWidth, m_ePoolUnit ) ) );
+    m_aLineAttributeSet.Put( XLineEndWidthItem( GetCoreValue( *m_xMtrEndWidth, m_ePoolUnit ) ) );
 
-    m_rXLSet.Put( XLineWidthItem( GetCoreValue( *m_xMtrLineWidth, m_ePoolUnit ) ) );
+    m_aLineAttributeSet.Put( XLineWidthItem( GetCoreValue( *m_xMtrLineWidth, m_ePoolUnit ) ) );
     NamedColor aNamedColor = m_xLbColor->GetSelectedEntry();
     XLineColorItem aLineColor(aNamedColor.m_aName, aNamedColor.m_aColor);
     aLineColor.setComplexColor(aNamedColor.getComplexColor());
-    m_rXLSet.Put(aLineColor);
+    m_aLineAttributeSet.Put(aLineColor);
 
     // Centered line end
     if( m_xTsbCenterStart->get_state() == TRISTATE_TRUE )
-        m_rXLSet.Put( XLineStartCenterItem( true ) );
+        m_aLineAttributeSet.Put( XLineStartCenterItem( true ) );
     else if( m_xTsbCenterStart->get_state() == TRISTATE_FALSE )
-        m_rXLSet.Put( XLineStartCenterItem( false ) );
+        m_aLineAttributeSet.Put( XLineStartCenterItem( false ) );
 
     if( m_xTsbCenterEnd->get_state() == TRISTATE_TRUE )
-        m_rXLSet.Put( XLineEndCenterItem( true ) );
+        m_aLineAttributeSet.Put( XLineEndCenterItem( true ) );
     else if( m_xTsbCenterEnd->get_state() == TRISTATE_FALSE )
-        m_rXLSet.Put( XLineEndCenterItem( false ) );
+        m_aLineAttributeSet.Put( XLineEndCenterItem( false ) );
 
     // Transparency
     sal_uInt16 nVal = o3tl::sanitizing_cast<sal_uInt16>(m_xMtrTransparent->get_value(FieldUnit::PERCENT));
-    m_rXLSet.Put( XLineTransparenceItem( nVal ) );
+    m_aLineAttributeSet.Put( XLineTransparenceItem( nVal ) );
 
-    m_aCtlPreview.SetLineAttributes(m_aXLineAttr.GetItemSet());
+    m_aCtlPreview.SetLineAttributes(m_aLineAttributeSet);
 }
 
 
@@ -1233,7 +1232,7 @@ void SvxLineTabPage::ChangePreviewHdl_Impl(const weld::MetricSpinButton* pCntrl)
         if(m_nActLineWidth == -1)
         {
             // Don't initialize yet, get the start value
-            const SfxPoolItem* pOld = GetOldItem( m_rXLSet, XATTR_LINEWIDTH );
+            const SfxPoolItem* pOld = GetOldItem( m_aLineAttributeSet, XATTR_LINEWIDTH );
             sal_Int32 nStartLineWidth = 0;
             if(pOld)
                 nStartLineWidth = static_cast<const XLineWidthItem *>(pOld)->GetValue();
@@ -1392,7 +1391,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl, weld::MetricSpinButto
 {
     sal_uInt16 nVal = o3tl::sanitizing_cast<sal_uInt16>(m_xMtrTransparent->get_value(FieldUnit::PERCENT));
 
-    m_rXLSet.Put(XLineTransparenceItem(nVal));
+    m_aLineAttributeSet.Put(XLineTransparenceItem(nVal));
 
     FillXLSet_Impl();
 

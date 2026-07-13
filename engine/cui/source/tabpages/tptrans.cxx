@@ -53,10 +53,10 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransOffHdl_Impl, weld::Toggleable&
     ActivateGradient(false);
 
     // Preview
-    rXFSet.ClearItem(XATTR_FILLTRANSPARENCE);
-    rXFSet.ClearItem(XATTR_FILLFLOATTRANSPARENCE);
-    m_aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
-    m_aCtlBitmapPreview.SetAttributes( aXFillAttr.GetItemSet() );
+    m_aFillAttributeSet.ClearItem(XATTR_FILLTRANSPARENCE);
+    m_aFillAttributeSet.ClearItem(XATTR_FILLFLOATTRANSPARENCE);
+    m_aCtlXRectPreview.SetAttributes(m_aFillAttributeSet);
+    m_aCtlBitmapPreview.SetAttributes(m_aFillAttributeSet);
 
     InvalidatePreview(false);
 }
@@ -68,7 +68,7 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransLinearHdl_Impl, weld::Toggleab
     ActivateGradient(false);
 
     // preview
-    rXFSet.ClearItem (XATTR_FILLFLOATTRANSPARENCE);
+    m_aFillAttributeSet.ClearItem (XATTR_FILLFLOATTRANSPARENCE);
     ModifyTransparentHdl_Impl(*m_xMtrTransparent);
 }
 
@@ -79,7 +79,7 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl, weld::Toggle
     ActivateGradient(true);
 
     // preview
-    rXFSet.ClearItem (XATTR_FILLTRANSPARENCE);
+    m_aFillAttributeSet.ClearItem (XATTR_FILLTRANSPARENCE);
     ModifiedTrgrHdl_Impl(nullptr);
 }
 
@@ -95,7 +95,7 @@ void SvxTransparenceTabPage::ActivateLinear(bool bActivate)
 IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, weld::MetricSpinButton&, void)
 {
     sal_uInt16 nPos = o3tl::sanitizing_cast<sal_uInt16>(m_xMtrTransparent->get_value(FieldUnit::PERCENT));
-    rXFSet.Put(XFillTransparenceItem(nPos));
+    m_aFillAttributeSet.Put(XFillTransparenceItem(nPos));
 
     // preview
     InvalidatePreview();
@@ -130,7 +130,7 @@ void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(const weld::ComboBox* pControl
                 100, 100);
 
     XFillFloatTransparenceItem aItem( aTmpGradient);
-    rXFSet.Put ( aItem );
+    m_aFillAttributeSet.Put ( aItem );
 
     InvalidatePreview();
 }
@@ -190,8 +190,7 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(weld::Container* pPage, weld::Dia
     , nPageType(PageType::Area)
     , nDlgType(0)
     , bBitmap(false)
-    , aXFillAttr(rInAttrs.GetPool())
-    , rXFSet(aXFillAttr.GetItemSet())
+    , m_aFillAttributeSet(rInAttrs.getPool(), WhichRangesContainer(XATTR_FILL_FIRST, XATTR_FILL_LAST))
     , m_xRbtTransOff(m_xBuilder->weld_radio_button(u"RBT_TRANS_OFF"_ustr))
     , m_xRbtTransLinear(m_xBuilder->weld_radio_button(u"RBT_TRANS_LINEAR"_ustr))
     , m_xRbtTransGradient(m_xBuilder->weld_radio_button(u"RBT_TRANS_GRADIENT"_ustr))
@@ -457,15 +456,15 @@ bool SvxTransparenceTabPage::InitPreview(const SfxItemSet& rSet)
     }
 
     // Get fillstyle for preview
-    rXFSet.Put ( rSet.Get(XATTR_FILLSTYLE) );
-    rXFSet.Put ( rSet.Get(XATTR_FILLCOLOR) );
-    rXFSet.Put ( rSet.Get(XATTR_FILLGRADIENT) );
-    rXFSet.Put ( rSet.Get(XATTR_FILLHATCH) );
-    rXFSet.Put ( rSet.Get(XATTR_FILLBACKGROUND) );
-    rXFSet.Put ( rSet.Get(XATTR_FILLBITMAP) );
+    m_aFillAttributeSet.Put ( rSet.Get(XATTR_FILLSTYLE) );
+    m_aFillAttributeSet.Put ( rSet.Get(XATTR_FILLCOLOR) );
+    m_aFillAttributeSet.Put ( rSet.Get(XATTR_FILLGRADIENT) );
+    m_aFillAttributeSet.Put ( rSet.Get(XATTR_FILLHATCH) );
+    m_aFillAttributeSet.Put ( rSet.Get(XATTR_FILLBACKGROUND) );
+    m_aFillAttributeSet.Put ( rSet.Get(XATTR_FILLBITMAP) );
 
-    m_aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
-    m_aCtlBitmapPreview.SetAttributes( aXFillAttr.GetItemSet() );
+    m_aCtlXRectPreview.SetAttributes(m_aFillAttributeSet);
+    m_aCtlBitmapPreview.SetAttributes(m_aFillAttributeSet);
 
     bBitmap = rSet.Get(XATTR_FILLSTYLE).GetValue() == drawing::FillStyle_BITMAP;
 
@@ -491,7 +490,7 @@ void SvxTransparenceTabPage::InvalidatePreview (bool bEnable)
         if ( bEnable )
         {
             m_xCtlBitmapPreview->set_sensitive(true);
-            m_aCtlBitmapPreview.SetAttributes( aXFillAttr.GetItemSet() );
+            m_aCtlBitmapPreview.SetAttributes(m_aFillAttributeSet);
         }
         else
             m_xCtlBitmapPreview->set_sensitive(false);
@@ -502,7 +501,7 @@ void SvxTransparenceTabPage::InvalidatePreview (bool bEnable)
         if ( bEnable )
         {
             m_xCtlXRectPreview->set_sensitive(true);
-            m_aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
+            m_aCtlXRectPreview.SetAttributes(m_aFillAttributeSet);
         }
         else
             m_xCtlXRectPreview->set_sensitive(false);

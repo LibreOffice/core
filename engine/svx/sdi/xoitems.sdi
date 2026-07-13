@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//item String XFillAttrSetItem; SfxSetItem!
 struct XFillBitmap
 {
     String  Name        MID_NAME;
@@ -87,8 +86,6 @@ enum SvxFillStyle
 };
 
 item SvxFillStyle XFillStyleItem;
-
-//item String XLineAttrSetItem; SfxSetItem!
 
 struct XLineColor
 {

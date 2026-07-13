@@ -51,8 +51,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage(weld::Container* pPage, weld::DialogC
     : SfxTabPage(pPage, pController, u"cui/ui/lineendstabpage.ui"_ustr, u"LineEndPage"_ustr, &rInAttrs)
     , rOutAttrs(rInAttrs)
     , pPolyObj(nullptr)
-    , aXLineAttr(rInAttrs.GetPool())
-    , rXLSet(aXLineAttr.GetItemSet())
+    , m_aLineAttributeSet(rInAttrs.getPool(), WhichRangesContainer(XATTR_LINE_FIRST, XATTR_LINE_LAST))
     , pnLineEndListState(nullptr)
     , pPageType(nullptr)
     , nDlgType(0)
@@ -69,14 +68,14 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage(weld::Container* pPage, weld::DialogC
     // this page needs ExchangeSupport
     SetExchangeSupport();
 
-    rXLSet.Put( XLineStyleItem(css::drawing::LineStyle_SOLID) );
-    rXLSet.Put( XLineWidthItem(XOUT_WIDTH) );
-    rXLSet.Put( XLineColorItem( OUString(), COL_BLACK ) );
-    rXLSet.Put( XLineStartWidthItem( m_aCtlPreview.GetOutputSize().Height()  / 2 ) );
-    rXLSet.Put( XLineEndWidthItem( m_aCtlPreview.GetOutputSize().Height() / 2 ) );
+    m_aLineAttributeSet.Put( XLineStyleItem(css::drawing::LineStyle_SOLID) );
+    m_aLineAttributeSet.Put( XLineWidthItem(XOUT_WIDTH) );
+    m_aLineAttributeSet.Put( XLineColorItem( OUString(), COL_BLACK ) );
+    m_aLineAttributeSet.Put( XLineStartWidthItem( m_aCtlPreview.GetOutputSize().Height()  / 2 ) );
+    m_aLineAttributeSet.Put( XLineEndWidthItem( m_aCtlPreview.GetOutputSize().Height() / 2 ) );
 
     // #i34740#
-    m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
+    m_aCtlPreview.SetLineAttributes(m_aLineAttributeSet);
 
     m_xBtnAdd->connect_clicked(LINK(this, SvxLineEndDefTabPage, ClickAddHdl_Impl));
     m_xBtnModify->connect_clicked(LINK( this, SvxLineEndDefTabPage, ClickModifyHdl_Impl));
@@ -206,11 +205,11 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
 
         m_xEdtName->set_text(m_xLbLineEnds->get_active_text());
 
-        rXLSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
-        rXLSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
+        m_aLineAttributeSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
+        m_aLineAttributeSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
 
         // #i34740#
-        m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
+        m_aCtlPreview.SetLineAttributes(m_aLineAttributeSet);
         m_aCtlPreview.Invalidate();
     }
 
@@ -245,11 +244,11 @@ void SvxLineEndDefTabPage::SelectLineEndHdl_Impl()
 
     m_xEdtName->set_text(m_xLbLineEnds->get_active_text());
 
-    rXLSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
-    rXLSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
+    m_aLineAttributeSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
+    m_aLineAttributeSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
 
     // #i34740#
-    m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
+    m_aCtlPreview.SetLineAttributes(m_aLineAttributeSet);
     m_aCtlPreview.Invalidate();
 
     // Is not set before, in order to only take the new style,

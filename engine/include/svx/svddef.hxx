@@ -25,14 +25,10 @@
 
 /*************************************************************************/
 // SdrItemPool V2, 09-11-1995:
-//      7 new Items for XLineAttrSetItem
-//      7 new Items for XFillAttrSetItem
 //      8 new Items for SdrShadowSetItem
 //      5 new Items for SdrCaptionSetItem
 //     25 new Items for SdrMiscSetItem
 //      6 new Items for SdrNotPersist
-// SdrItemPool V3, 29-02-1996
-//     17 new Items for XFillAttrSetItem (Bitmapfill)
 // SdrItemPool V4, 10-08-1996
 //     45 new Items for Edge and Measure (Connector and Measuring object)
 // SdrItemPool V4+, 18-10-1996

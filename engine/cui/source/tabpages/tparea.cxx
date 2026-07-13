@@ -79,8 +79,7 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
     , maFixed_ChangeType(ChangeType::NONE)
     // init with pointers to fixed ChangeType
     , m_pnColorListState(&maFixed_ChangeType)
-    , m_aXFillAttr(rInAttrs.GetPool())
-    , m_rXFSet(m_aXFillAttr.GetItemSet())
+    , m_aFillAttributeSet(rInAttrs.getPool(), WhichRangesContainer(XATTR_FILL_FIRST, XATTR_FILL_LAST))
     , m_xNotebook(m_xBuilder->weld_notebook(u"nbFillType"_ustr))
 {
     if (!bSlideBackground)
@@ -186,7 +185,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
     {
         const XFillStyleItem& aFillStyleItem( rSet.Get( GetWhich( XATTR_FILLSTYLE ) ) );
         eXFS = aFillStyleItem.GetValue();
-        m_rXFSet.Put( aFillStyleItem );
+        m_aFillAttributeSet.Put( aFillStyleItem );
     }
 
     FillType eTargetFillType;
@@ -201,22 +200,22 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         }
         case drawing::FillStyle_SOLID:
         {
-            m_rXFSet.Put( rSet.Get( GetWhich( XATTR_FILLCOLOR ) ) );
+            m_aFillAttributeSet.Put( rSet.Get( GetWhich( XATTR_FILLCOLOR ) ) );
             eTargetFillType = FillType::SOLID_FILL;
             break;
         }
         case drawing::FillStyle_GRADIENT:
         {
-            m_rXFSet.Put( rSet.Get( GetWhich( XATTR_FILLGRADIENT ) ) );
-            m_rXFSet.Put(rSet.Get(GetWhich(XATTR_GRADIENTSTEPCOUNT)));
+            m_aFillAttributeSet.Put( rSet.Get( GetWhich( XATTR_FILLGRADIENT ) ) );
+            m_aFillAttributeSet.Put(rSet.Get(GetWhich(XATTR_GRADIENTSTEPCOUNT)));
             eTargetFillType = FillType::GRADIENT_FILL;
             break;
         }
         case drawing::FillStyle_HATCH:
         {
-            m_rXFSet.Put( rSet.Get(XATTR_FILLHATCH) );
-            m_rXFSet.Put( rSet.Get(XATTR_FILLUSESLIDEBACKGROUND) );
-            m_rXFSet.Put( rSet.Get(XATTR_FILLCOLOR) );
+            m_aFillAttributeSet.Put( rSet.Get(XATTR_FILLHATCH) );
+            m_aFillAttributeSet.Put( rSet.Get(XATTR_FILLUSESLIDEBACKGROUND) );
+            m_aFillAttributeSet.Put( rSet.Get(XATTR_FILLCOLOR) );
             eTargetFillType = FillType::HATCH_FILL;
             break;
         }
@@ -224,7 +223,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         {
             const bool bPattern = rSet.Get(GetWhich(XATTR_FILLBITMAP)).isPattern();
             // pass full item set here, bitmap fill has many attributes (tiling, size, offset etc.)
-            m_rXFSet.Put( rSet );
+            m_aFillAttributeSet.Put( rSet );
             eTargetFillType = bPattern ? FillType::PATTERN_FILL : FillType::BITMAP_FILL;
             break;
         }
@@ -421,7 +420,7 @@ std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreateWithSlideBackground(
 void SvxAreaTabPage::SelectFillTypeByPage(FillType eFillType, const SfxItemSet* _pSet)
 {
     if (_pSet)
-        m_rXFSet.Set(*_pSet);
+        m_aFillAttributeSet.Set(*_pSet);
 
     OUString sPageId = getPageId(eFillType);
     if (sPageId.isEmpty())
@@ -488,14 +487,14 @@ std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreateFillStyleTabPage(FillType eFil
     if (!fnCreate)
         return nullptr;
 
-    std::unique_ptr<SfxTabPage> pTabPage = (*fnCreate)(pPage, GetDialogController(), &m_rXFSet);
+    std::unique_ptr<SfxTabPage> pTabPage = (*fnCreate)(pPage, GetDialogController(), &m_aFillAttributeSet);
     return pTabPage;
 }
 
 void SvxAreaTabPage::SelectFillType(FillType eFillType, const SfxItemSet* _pSet)
 {
     if (_pSet)
-        m_rXFSet.Set(*_pSet);
+        m_aFillAttributeSet.Set(*_pSet);
 
     const OUString pageId = getPageId(eFillType);
     if(!pageId.isEmpty())
@@ -537,8 +536,8 @@ void SvxAreaTabPage::CreatePage(FillType nId, SfxTabPage& rTab)
         rColorTab.SetColorList(m_pColorList);
         rColorTab.SetColorChgd(m_pnColorListState);
         rColorTab.Construct();
-        rColorTab.ActivatePage(m_rXFSet);
-        rColorTab.Reset(&m_rXFSet);
+        rColorTab.ActivatePage(m_aFillAttributeSet);
+        rColorTab.Reset(&m_aFillAttributeSet);
         rColorTab.set_visible(true);
     }
     else if(nId == FillType::GRADIENT_FILL)
@@ -548,8 +547,8 @@ void SvxAreaTabPage::CreatePage(FillType nId, SfxTabPage& rTab)
         rGradientTab.SetGradientList(m_pGradientList);
         rGradientTab.SetColorChgd(m_pnColorListState);
         rGradientTab.Construct();
-        rGradientTab.ActivatePage(m_rXFSet);
-        rGradientTab.Reset(&m_rXFSet);
+        rGradientTab.ActivatePage(m_aFillAttributeSet);
+        rGradientTab.Reset(&m_aFillAttributeSet);
         rGradientTab.set_visible(true);
     }
     else if(nId == FillType::HATCH_FILL)
@@ -559,8 +558,8 @@ void SvxAreaTabPage::CreatePage(FillType nId, SfxTabPage& rTab)
         rHatchTab.SetHatchingList(m_pHatchingList);
         rHatchTab.SetColorChgd(m_pnColorListState);
         rHatchTab.Construct();
-        rHatchTab.ActivatePage(m_rXFSet);
-        rHatchTab.Reset(&m_rXFSet);
+        rHatchTab.ActivatePage(m_aFillAttributeSet);
+        rHatchTab.Reset(&m_aFillAttributeSet);
         rHatchTab.set_visible(true);
     }
     else if(nId == FillType::BITMAP_FILL)
@@ -568,8 +567,8 @@ void SvxAreaTabPage::CreatePage(FillType nId, SfxTabPage& rTab)
         auto& rBitmapTab = static_cast<SvxBitmapTabPage&>(rTab);
         rBitmapTab.SetBitmapList(m_pBitmapList);
         rBitmapTab.Construct();
-        rBitmapTab.ActivatePage(m_rXFSet);
-        rBitmapTab.Reset(&m_rXFSet);
+        rBitmapTab.ActivatePage(m_aFillAttributeSet);
+        rBitmapTab.Reset(&m_aFillAttributeSet);
         rBitmapTab.set_visible(true);
     }
     else if(nId == FillType::PATTERN_FILL)
@@ -579,8 +578,8 @@ void SvxAreaTabPage::CreatePage(FillType nId, SfxTabPage& rTab)
         rPatternTab.SetPatternList(m_pPatternList);
         rPatternTab.SetColorChgd(m_pnColorListState);
         rPatternTab.Construct();
-        rPatternTab.ActivatePage(m_rXFSet);
-        rPatternTab.Reset(&m_rXFSet);
+        rPatternTab.ActivatePage(m_aFillAttributeSet);
+        rPatternTab.Reset(&m_aFillAttributeSet);
         rPatternTab.set_visible(true);
     }
 }

@@ -2920,7 +2920,7 @@ bool SdrObjEditView::SupportsFormatPaintbrush(SdrInventor nObjectInventor,
 static const WhichRangesContainer& GetFormatRangeImpl(bool bTextOnly, bool withParagraphAttr = true)
 {
     static const WhichRangesContainer gFull(
-        svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST, XATTR_FILL_FIRST, XATTRSET_FILL,
+        svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST, XATTR_FILL_FIRST, XATTR_FILL_LAST,
                    SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST, SDRATTR_MISC_FIRST,
                    SDRATTR_MISC_LAST, // table cell formats
                    SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST, SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,

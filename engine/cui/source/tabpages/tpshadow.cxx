@@ -55,8 +55,7 @@ SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogControlle
     , m_pnColorListState(nullptr)
     , m_nPageType(PageType::Area)
     , m_nDlgType(0)
-    , m_aXFillAttr(rInAttrs.GetPool())
-    , m_rXFSet(m_aXFillAttr.GetItemSet())
+    , m_aFillAttributeSet(rInAttrs.getPool(), WhichRangesContainer(XATTR_FILL_FIRST, XATTR_FILL_LAST))
     , m_aCtlPosition(this)
     , m_xTsbShowShadow(m_xBuilder->weld_check_button(u"TSB_SHOW_SHADOW"_ustr))
     , m_xGridShadow(m_xBuilder->weld_widget(u"gridSHADOW"_ustr))
@@ -99,21 +98,21 @@ SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogControlle
             case drawing::FillStyle_SOLID:
                 if( SfxItemState::INVALID != m_rOutAttrs.GetItemState( XATTR_FILLCOLOR ) )
                 {
-                    m_rXFSet.Put( m_rOutAttrs.Get( XATTR_FILLCOLOR ) );
+                    m_aFillAttributeSet.Put( m_rOutAttrs.Get( XATTR_FILLCOLOR ) );
                 }
             break;
 
             case drawing::FillStyle_GRADIENT:
                 if( SfxItemState::INVALID != m_rOutAttrs.GetItemState( XATTR_FILLGRADIENT ) )
                 {
-                    m_rXFSet.Put( m_rOutAttrs.Get( XATTR_FILLGRADIENT ) );
+                    m_aFillAttributeSet.Put( m_rOutAttrs.Get( XATTR_FILLGRADIENT ) );
                 }
             break;
 
             case drawing::FillStyle_HATCH:
                 if( SfxItemState::INVALID != m_rOutAttrs.GetItemState( XATTR_FILLHATCH ) )
                 {
-                    m_rXFSet.Put( m_rOutAttrs.Get( XATTR_FILLHATCH ) );
+                    m_aFillAttributeSet.Put( m_rOutAttrs.Get( XATTR_FILLHATCH ) );
                 }
             break;
 
@@ -121,7 +120,7 @@ SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogControlle
             {
                 if( SfxItemState::INVALID != m_rOutAttrs.GetItemState( XATTR_FILLBITMAP ) )
                 {
-                    m_rXFSet.Put( m_rOutAttrs.Get( XATTR_FILLBITMAP ) );
+                    m_aFillAttributeSet.Put( m_rOutAttrs.Get( XATTR_FILLBITMAP ) );
                 }
             }
             break;
@@ -131,7 +130,7 @@ SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogControlle
     }
     else
     {
-        m_rXFSet.Put( XFillColorItem( OUString(), COL_LIGHTRED ) );
+        m_aFillAttributeSet.Put( XFillColorItem( OUString(), COL_LIGHTRED ) );
     }
 
     if(drawing::FillStyle_NONE == eXFS)
@@ -143,8 +142,8 @@ SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogControlle
         eXFS = drawing::FillStyle_SOLID;
     }
 
-    m_rXFSet.Put( XFillStyleItem( eXFS ) );
-    m_aCtlXRectPreview.SetRectangleAttributes(m_aXFillAttr.GetItemSet());
+    m_aFillAttributeSet.Put( XFillStyleItem( eXFS ) );
+    m_aCtlXRectPreview.SetRectangleAttributes(m_aFillAttributeSet);
 
     m_xTsbShowShadow->connect_toggled(LINK( this, SvxShadowTabPage, ClickShadowHdl_Impl));
     m_xLbShadowColor->SetSelectHdl( LINK( this, SvxShadowTabPage, SelectShadowHdl_Impl ) );
@@ -463,13 +462,13 @@ IMPL_LINK_NOARG(SvxShadowTabPage, SelectShadowHdl_Impl, ColorListBox&, void)
 IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl, weld::MetricSpinButton&, void)
 {
     if (m_xTsbShowShadow->get_state() == TRISTATE_TRUE)
-        m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
+        m_aFillAttributeSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     else
-        m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
+        m_aFillAttributeSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
-    m_rXFSet.Put( XFillColorItem( OUString(), m_xLbShadowColor->GetSelectEntryColor() ) );
+    m_aFillAttributeSet.Put( XFillColorItem( OUString(), m_xLbShadowColor->GetSelectEntryColor() ) );
     sal_uInt16 nVal = static_cast<sal_uInt16>(m_xMtrTransparent->get_value(FieldUnit::PERCENT));
-    m_rXFSet.Put( XFillTransparenceItem( nVal ) );
+    m_aFillAttributeSet.Put( XFillTransparenceItem( nVal ) );
 
     // shadow removal
     sal_Int32 nX = 0, nY = 0;
@@ -489,7 +488,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl, weld::MetricSpinButton&,
 
     m_aCtlXRectPreview.SetShadowPosition(Point(nX, nY));
 
-    m_aCtlXRectPreview.SetShadowAttributes(m_aXFillAttr.GetItemSet());
+    m_aCtlXRectPreview.SetShadowAttributes(m_aFillAttributeSet);
     m_aCtlXRectPreview.Invalidate();
 }
 

@@ -218,6 +218,7 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool)
 , m_nRegister(0)
 #ifdef DBG_UTIL
 , m_nRegisteredSfxItemIter(0)
+, m_bDeleted(false)
 #endif
 , m_aWhichRanges(rPool.GetMergedIdRanges())
 , m_aPoolItemMap()
@@ -235,6 +236,7 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
 , m_nRegister(0)
 #ifdef DBG_UTIL
 , m_nRegisteredSfxItemIter(0)
+, m_bDeleted(false)
 #endif
 , m_aWhichRanges(std::move(wids))
 , m_aPoolItemMap()
@@ -253,6 +255,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
 , m_nRegister( 0 )
 #ifdef DBG_UTIL
 , m_nRegisteredSfxItemIter(0)
+, m_bDeleted(false)
 #endif
 , m_aWhichRanges( rASet.m_aWhichRanges )
 , m_aPoolItemMap()
@@ -281,6 +284,7 @@ SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
 , m_nRegister( rASet.m_nRegister )
 #ifdef DBG_UTIL
 , m_nRegisteredSfxItemIter(0)
+, m_bDeleted(false)
 #endif
 , m_aWhichRanges( std::move(rASet.m_aWhichRanges) )
 , m_aPoolItemMap( std::move(rASet.m_aPoolItemMap) )
@@ -319,6 +323,9 @@ SfxItemSet::~SfxItemSet()
 
     // for invariant-testing
     m_aWhichRanges.reset();
+#ifdef DBG_UTIL
+    m_bDeleted = true;
+#endif
 }
 
 
