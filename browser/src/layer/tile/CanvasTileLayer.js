@@ -2927,10 +2927,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			return;
 		}
 
-		if (pos instanceof cool.SimplePoint) // Turn into lat/lng if required (pos may also be a simplePoint.).
-			pos = this._twipsToIntern({ x: pos.x, y: pos.y });
-
-		var center = app.activeDocument.project(pos);
+		var center;
+		if (pos instanceof cool.SimplePoint)
+			// twips -> CSS pixels directly. This used to round-trip through the
+			// CRS as project(_twipsToIntern(pos)), which cancels out.
+			center = this._twipsToCssPixels({ x: pos.x, y: pos.y });
+		else
+			center = app.activeDocument.project(pos); // intern (CRS) point
 
 		let needsXScroll = false;
 		let needsYScroll = false;
