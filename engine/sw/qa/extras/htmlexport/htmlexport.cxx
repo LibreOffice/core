@@ -174,6 +174,44 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportOfImagesWithSkipImagesEnabled)
     assertXPath(pDoc, "/html/body/p/img", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipHeaderFooterOmitsHeaderFooterContent)
+{
+    // Reproduces the translate-path export: ExportPaMToHTML passes
+    // "NoLineLimit,SkipHeaderFooter,NoPrettyPrint" so the HTML writer must
+    // omit page header/footer *content*, not just the trailing </body> tags.
+    // Without the fix, OutHTML_HeaderFooter (wrthtml.cxx:611/:631) runs
+    // unconditionally and emits <div title="header">/<div title="footer">.
+
+    // Build a doc with a page header and footer via the page style API.
+    createSwDoc();
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
+    xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
+    uno::Reference<text::XText> xHeaderText;
+    xPageStyle->getPropertyValue(u"HeaderText"_ustr) >>= xHeaderText;
+    xHeaderText->setString(u"HEADERMARKER"_ustr);
+    uno::Reference<text::XText> xFooterText;
+    xPageStyle->getPropertyValue(u"FooterText"_ustr) >>= xFooterText;
+    xFooterText->setString(u"FOOTERMARKER"_ustr);
+
+    // Body paragraph.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    xTextDocument->getText()->setString(u"BODYMARKER"_ustr);
+
+    setFilterOptions(u"NoLineLimit,SkipHeaderFooter,NoPrettyPrint"_ustr);
+    save(TestFilter::HTML_WRITER);
+
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Header/footer content must be absent when SkipHeaderFooter is set.
+    assertXPath(pDoc, "//div[@title='header']", 0);
+    assertXPath(pDoc, "//div[@title='footer']", 0);
+    // Body content must still be present.
+    assertXPathContent(pDoc, "//body//span", u"BODYMARKER");
+}
+
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipImagesEmbedded)
 {
     createSwDoc("skipimage-embedded.doc");
