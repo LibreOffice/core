@@ -241,11 +241,21 @@ class ViewLayoutCalc extends ViewLayoutBase {
 		return (viewPos / maxView) * trackMax;
 	}
 
-	// pX, pY are view-space deltas in canvas (core) pixels.
+	// pX, pY are view-space deltas in screen (canvas) pixels, from a relative
+	// scroll (wheel, scrollbar, auto-scroll). In RTL a rightward screen delta
+	// moves the document the other way, so mirror X here - at the screen-input
+	// boundary - and keep the document-space core direction-agnostic.
 	public override scroll(pX: number, pY: number): any {
-		const documentAnchor = this.getDocumentAnchorSection();
-
 		if (this.isRTL()) pX = -pX;
+		this.scrollByDocumentDelta(pX, pY);
+	}
+
+	// pX, pY are document-space scroll deltas in canvas (core) pixels (no RTL
+	// mirroring). Clamps to the scrollable range, updates the viewed rectangle
+	// and refreshes headers/cursor/tiles. Both scroll() (screen input) and
+	// scrollTo() (absolute document position) funnel through here.
+	private scrollByDocumentDelta(pX: number, pY: number): void {
+		const documentAnchor = this.getDocumentAnchorSection();
 
 		const prevX = this._viewedRectangle.pX1;
 		const prevY = this._viewedRectangle.pY1;
@@ -300,11 +310,14 @@ class ViewLayoutCalc extends ViewLayoutBase {
 		RenderManager.requestVisibleTiles(this.currentCoordList);
 	}
 
-	// pX, pY are absolute view-space positions in canvas (core) pixels.
+	// pX, pY are absolute view-space positions in canvas (core) pixels. This is
+	// an absolute document-space move, so it bypasses scroll()'s RTL screen
+	// mirroring and applies the delta directly.
 	public override scrollTo(pX: number, pY: number): void {
 		const deltaX = pX - this._viewedRectangle.pX1;
 		const deltaY = pY - this._viewedRectangle.pY1;
-		if (deltaX !== 0 || deltaY !== 0) this.scroll(deltaX, deltaY);
+		if (deltaX !== 0 || deltaY !== 0)
+			this.scrollByDocumentDelta(deltaX, deltaY);
 	}
 
 	// Recompute the visible entries of the row and column headers after a
