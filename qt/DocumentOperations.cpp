@@ -18,10 +18,6 @@
 
 #include <common/FileUtil.hpp>
 #include <common/Log.hpp>
-#include <common/MobileApp.hpp>
-
-#include <Poco/Path.h>
-#include <Poco/URI.h>
 
 #include <filesystem>
 #include <system_error>
@@ -79,32 +75,6 @@ std::vector<SaveAsFormat> getSaveAsFormats(int docType)
     }
 
     return formats;
-}
-
-void printDocument(unsigned appDocId, QWidget* parent)
-{
-    // Create a temporary PDF file for printing
-    const std::string tempFile = FileUtil::createRandomTmpDir() + "/print.pdf";
-    const std::string tempFileUri = Poco::URI(Poco::Path(tempFile)).toString();
-
-    kit::Document* loKitDoc = DocumentData::get(appDocId).loKitDocument;
-    if (!loKitDoc)
-    {
-        LOG_ERR("printDocument: no loKitDocument");
-        return;
-    }
-
-    loKitDoc->saveAs(tempFileUri.c_str(), "pdf", nullptr);
-
-    // Verify the PDF was created
-    struct stat st;
-    if (FileUtil::getStatOfFile(tempFile, st) != 0)
-    {
-        LOG_ERR("printDocument: failed to create PDF file: " << tempFile);
-        return;
-    }
-
-    showPrintDialog(tempFile, parent);
 }
 
 void removeExportTempDirectory(const std::string& filePath)

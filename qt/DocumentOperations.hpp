@@ -34,8 +34,6 @@ std::vector<SaveAsFormat> getSaveAsFormats(int docType);
 // directory when the dialog finishes.
 void showPrintDialog(const std::string& tempFile, QWidget* parent);
 
-void printDocument(unsigned appDocId, QWidget* parent = nullptr);
-
 // Puts a file at its destination: a rename when the destination is on the
 // same filesystem, otherwise an atomic copy (write to a temporary name
 // beside the destination, then rename over it). An existing destination file

@@ -1092,76 +1092,10 @@ QVariant Bridge::cool(const QString& messageStr)
             _webView->window()->close();
         }
     }
-    else if (tokens.equals(0, "PRINT"))
-    {
-        printDocument(_document._appDocId, _webView);
-    }
     else if (tokens.equals(0, "EXCHANGEMONITORS"))
     {
         if (auto* coda = dynamic_cast<CODAWebEngineView*>(_webView))
             coda->exchangeMonitors();
-    }
-    else if (tokens.equals(0, "downloadas"))
-    {
-        // Parse "format=" argument and handle "direct-" prefix
-        std::string format;
-        if (!COOLProtocol::getTokenString(tokens, "format", format))
-        {
-            LOG_ERR("downloadas: no format= specified");
-            return {};
-        }
-        if (format.starts_with("direct-"))
-            format.erase(0, strlen("direct-"));
-
-        // Build a suggested filename from the current document
-        const QUrl docUrl(QString::fromStdString(_document._fileURL.toString()));
-        const QString docPath = docUrl.isLocalFile() ? docUrl.toLocalFile() : docUrl.toString();
-        const QFileInfo docInfo(docPath);
-        const QString baseName = docInfo.completeBaseName().isEmpty()
-                                 ? QStringLiteral("document")
-                                 : docInfo.completeBaseName();
-        const QString suggestedName = baseName + "." + QString::fromStdString(format);
-
-        // Ask the user for the destination
-        QFileDialog* dialog = new QFileDialog(
-            _webView,
-            QObject::tr("Export As"),
-            QDir::home().filePath(suggestedName),
-            QObject::tr("All Files (*)"));
-
-        dialog->setAcceptMode(QFileDialog::AcceptSave);
-        dialog->setAttribute(Qt::WA_DeleteOnClose);
-
-        unsigned appDocId = _document._appDocId;
-        QObject::connect(dialog, &QFileDialog::fileSelected,
-                        [appDocId, format](const QString& destPath) {
-            // Export directly to the chosen path
-            kit::Document* loKitDoc = DocumentData::get(appDocId).loKitDocument;
-            if (!loKitDoc)
-            {
-                LOG_ERR("downloadas: no loKitDocument");
-                return;
-            }
-
-            const QUrl destUrl = QUrl::fromLocalFile(destPath);
-            const QByteArray urlUtf8 =
-                    destUrl.toString(QUrl::FullyEncoded | QUrl::PreferLocalFile).toUtf8();
-            const QByteArray fmtUtf8 = QString::fromStdString(format).toUtf8();
-
-            loKitDoc->saveAs(urlUtf8.constData(), fmtUtf8.constData(), nullptr);
-
-            // Verify save
-            const QFileInfo outInfo(destPath);
-            if (!outInfo.exists() || outInfo.size() <= 0)
-            {
-                LOG_ERR("downloadas: failed to save to '" << destPath.toStdString() << "'");
-                return;
-            }
-
-            LOG_INF("downloadas: exported to " << destPath.toStdString());
-        });
-
-        dialog->open();
     }
     else if (tokens.equals(0, "exportfile"))
     {
