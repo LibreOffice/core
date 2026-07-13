@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-06 15:01+0000\n"
+"PO-Revision-Date: 2026-07-03 21:01+0000\n"
 "Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
-"Language: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -64,7 +64,7 @@ msgstr "Status"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Detaljer"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -552,7 +552,7 @@ msgstr "Visa linjal"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Visa formateringsmarkeringar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
@@ -644,7 +644,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Visa gränser"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560
@@ -863,10 +863,13 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"När det är påslaget anpassar Writer dokumentet till visningsportens bredd "
+"när det öppnas. När det är avstängt öppnas dokumentet med den "
+"standardzoomnivå som är inställd nedan."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1347
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Inga inställningar tillgängliga för {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1359
 msgid "Select a tab to browser settings."
@@ -945,7 +948,7 @@ msgstr "Zotero-konto, välj API-inställningar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2064
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Zotero inställningar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2096
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
@@ -962,7 +965,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2121
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Dokumentsignering inställningar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 #: admin/src/integrator/AdminIntegratorSettings.ts:2176
@@ -1082,7 +1085,7 @@ msgstr "Återställ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Återställ till standard {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
@@ -1090,7 +1093,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
-msgstr ""
+msgstr "Spara {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -2179,7 +2182,7 @@ msgstr "Visa inte detta igen"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "Ett {0}-fel uppstod vid bearbetning av {1} kommando."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -3087,7 +3090,7 @@ msgstr "Reparera"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:850
 msgid "Find"
-msgstr ""
+msgstr "Hitta"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -4190,7 +4193,7 @@ msgstr "Infoga en stiliserad tabell"
 
 #: src/control/Control.NotebookbarCalc.js:1815
 msgid "Select an editable cell range to insert a styled table"
-msgstr ""
+msgstr "Markera ett redigerbart cellområde för att infoga en formaterad tabell"
 
 #: src/control/Control.NotebookbarCalc.js:1824
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4472,7 +4475,7 @@ msgstr "Välj"
 #: src/control/Control.NotebookbarImpress.js:2235
 #: src/control/Control.NotebookbarWriter.js:2638
 msgid "Distribute"
-msgstr ""
+msgstr "Distribuera"
 
 #: src/control/Control.NotebookbarImpress.js:2274
 #: src/control/Control.NotebookbarWriter.js:2677
@@ -4593,7 +4596,7 @@ msgstr "Ta bort avsnitt"
 
 #: src/control/Control.PartsPreview.js:871
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Ta bort sektion & bilder"
 
 #: src/control/Control.PartsPreview.js:880
 msgid "Move Section Up"
@@ -4613,7 +4616,7 @@ msgstr "Fäll ut alla avsnitt"
 
 #: src/control/Control.PartsPreview.js:940
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr ""
+msgstr "Ta bort avsnitt \"%1\" och dess %2 bild(er)?"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "Enter new section name:"
@@ -4904,19 +4907,19 @@ msgstr ""
 
 #: src/control/Control.UIManager.ts:2728
 msgid "Show technical details"
-msgstr ""
+msgstr "Visa tekniska detaljer"
 
 #: src/control/Control.UIManager.ts:2742
 msgid "Technical Details:"
-msgstr ""
+msgstr "Tekniska detaljer:"
 
 #: src/control/Control.UIManager.ts:2746
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Detaljer för fel kopierat till urklipp"
 
 #: src/control/Control.UIManager.ts:2756
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Misslyckades med att kopiera fel detaljer"
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
@@ -5091,7 +5094,7 @@ msgid ""
 "Once citations are entered their storage and display type can not be "
 "changed."
 msgstr ""
-"När citeringar väl har angetts kan deras lagrings- och visningstyp inte "
+"När citeringar väl har angetts kan deras lagrings och visningstyp inte "
 "ändras."
 
 #: src/control/Control.Zotero.js:1219 src/control/Control.Zotero.js:1543
@@ -5131,17 +5134,17 @@ msgstr ""
 "uppdatera citat och bibliografi i detta dokument."
 
 #: src/control/HRuler.ts:321
-#, fuzzy
 msgid "First line"
-msgstr "Första bilden"
+msgstr "Första rad"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "Före"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
 msgstr ""
+"Dubbelklicka för att infoga ett tabbstopp. Högerklicka för fler alternativ."
 
 #: src/control/HRuler.ts:785 src/control/HRuler.ts:952
 msgid "Left Margin"
@@ -5301,11 +5304,11 @@ msgstr "Titel, vertikal text, clipart-bild"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Standardval"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Utöka val"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
@@ -5313,7 +5316,7 @@ msgstr ""
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Blockval"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -5982,7 +5985,7 @@ msgstr "Kan inte ansluta till ditt dokument. Vänligen försök igen."
 
 #: src/app/Socket.ts:621
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "Anslutningen till dokumentet har brutits."
 
 #: src/app/Socket.ts:622
 msgid "The server has been disconnected."
@@ -6050,7 +6053,7 @@ msgstr "Fel server, försöker ansluta igen ..."
 
 #: src/app/Socket.ts:1905
 msgid "Unsupported version."
-msgstr ""
+msgstr "Version som inte stöds."
 
 #: src/app/Socket.ts:1906
 msgid "Unsupported server version."
@@ -6145,7 +6148,7 @@ msgstr "{0} fliken vald"
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "Inget diskutrymme kvar."
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6499,7 +6502,7 @@ msgstr "Kunde inte ladda ner urklippet, försök igen"
 
 #: src/map/Clipboard.js:372
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Misslyckades med att ladda upp klippbordet"
 
 #: src/map/Clipboard.js:1450
 msgid ""
@@ -6566,11 +6569,8 @@ msgid "Please send us your feedback"
 msgstr "Skicka din återkoppling"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
-msgstr ""
-"En fil av typ {0} kan inte uppladdas till servern eftersom filen inte har "
-"ett namn"
+msgstr "Filen av typ: {0} kan inte infogas eftersom filen saknar namn"
 
 #: src/map/handler/Map.FileInserter.js:193
 #, javascript-format
@@ -6582,9 +6582,8 @@ msgstr ""
 "ett namn"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
-msgstr "Filen av typ {0} kan inte uppladdas till servern eftersom den är tom"
+msgstr "Fil av typ {0} kan inte infogas eftersom filen är tom"
 
 #: src/map/handler/Map.FileInserter.js:197
 #, javascript-format
@@ -6789,9 +6788,8 @@ msgid "Present to all"
 msgstr "Presentera för alla"
 
 #: src/slideshow/PresenterConsole.js:41
-#, fuzzy
 msgid "Exit"
-msgstr "Redigera"
+msgstr "Avsluta"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Go Back"

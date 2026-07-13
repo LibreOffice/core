@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-05-12 14:12+0000\n"
-"Last-Translator: Leif-Jöran Olsson <info@friprogramvarusyndikatet.se>\n"
+"PO-Revision-Date: 2026-07-03 21:01+0000\n"
+"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "help/sv/>\n"
 "Language: sv\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -80,16 +80,15 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-48
 msgid "Open"
-msgstr ""
+msgstr "Öppna"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-79
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>O</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>0</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"O</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-72
 msgid "Print (Download as PDF)"
@@ -97,7 +96,7 @@ msgstr "Skriv ut (ladda ner som PDF)"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:21-70
 msgid "Print"
-msgstr ""
+msgstr "Skriv ut"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:22-72
 msgid "Display the Keyboard shortcuts help"
