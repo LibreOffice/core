@@ -45,7 +45,6 @@ COOLWSD *coolwsd = nullptr;
 // serialized format read back from the pasteboard. This mirrors the ownsClipboard
 // check the Qt (Bridge.cpp) and Windows (do_paste_or_read) app variants do.
 static NSInteger sOwnedPasteboardChangeCount = -1;
-static unsigned sOwnedClipboardDocId = 0;
 
 /**
  * Supplies clipboard bytes to the system pasteboard on demand. After a copy we
@@ -55,14 +54,12 @@ static unsigned sOwnedClipboardDocId = 0;
  * and what the Qt app does with its LazyClipboardMimeData.
  */
 @interface COClipboardOwner : NSObject
-- (instancetype)initWithDocId:(unsigned)appDocId
-                   mimeByType:(NSDictionary<NSPasteboardType, NSString *> *)mimeByType;
+- (instancetype)initWithMimeByType:(NSDictionary<NSPasteboardType, NSString *> *)mimeByType;
 /**
- * Force every advertised format onto the pasteboard now. Used before the source
+ * Force every advertised format onto the pasteboard now. Used before the last
  * document goes away, so a later paste still finds the content.
  */
 - (void)flushTo:(NSPasteboard *)pasteboard;
-@property (nonatomic, readonly) unsigned appDocId;
 @end
 
 /**
@@ -71,6 +68,11 @@ static unsigned sOwnedClipboardDocId = 0;
  * flush) replaces it.
  */
 static COClipboardOwner *sClipboardOwner = nil;
+
+// The engine office handle, captured when the clipboard provider is installed,
+// so a clipboard read can go straight to the process-shared clipboard without
+// needing a particular document.
+static kit::Office *sOffice = nullptr;
 
 static int closeNotificationPipeForForwardingThread[2];
 static std::thread coolwsdThread;
@@ -133,28 +135,19 @@ static void registerAIHttpTransport()
  * Pull the bytes the engine holds for one clipboard format of an open document.
  * Returns nil when the document is gone or offers nothing for that format.
  */
-static NSData *_Nullable copyEngineClipboardData(unsigned appDocId, const char *mime)
+static NSData *_Nullable copyEngineClipboardData(const char *mime)
 {
-    // A still-mounted owner can outlive the document it came from; getIfExists
-    // looks the document up without aborting on a removed id.
-    DocumentData *docData = DocumentData::getIfExists(appDocId);
-    if (!docData || !docData->loKitDocument)
+    // The clipboard is process-global (one shared clipboard for the desktop
+    // app), so read it straight from the office; no document is involved.
+    if (!sOffice)
         return nil;
-    kit::Document *loKitDoc = docData->loKitDocument;
-
-    // getClipboard acts on the kit's current view, so make this document's view
-    // current first.
-    int nViewId = -1;
-    if (!loKitDoc->getViewIds(&nViewId, 1) || nViewId < 0)
-        return nil;
-    loKitDoc->setView(nViewId);
 
     const char *filter[] = { mime, nullptr };
     size_t outCount = 0;
     char **outMimeTypes = nullptr;
     size_t *outSizes = nullptr;
     char **outStreams = nullptr;
-    if (!loKitDoc->getClipboard(filter, &outCount, &outMimeTypes, &outSizes, &outStreams)
+    if (!sOffice->getGlobalClipboard(filter, &outCount, &outMimeTypes, &outSizes, &outStreams)
         || outCount == 0)
         return nil;
 
@@ -173,7 +166,6 @@ static NSData *_Nullable copyEngineClipboardData(unsigned appDocId, const char *
 
 @implementation COClipboardOwner
 {
-    unsigned _appDocId;
     /**
      * Maps an advertised pasteboard type back to the engine mime it stands for,
      * so a request for that type can fetch the matching format.
@@ -181,18 +173,12 @@ static NSData *_Nullable copyEngineClipboardData(unsigned appDocId, const char *
     NSDictionary<NSPasteboardType, NSString *> *_mimeByType;
 }
 
-- (instancetype)initWithDocId:(unsigned)appDocId
-                   mimeByType:(NSDictionary<NSPasteboardType, NSString *> *)mimeByType {
+- (instancetype)initWithMimeByType:(NSDictionary<NSPasteboardType, NSString *> *)mimeByType {
     self = [super init];
     if (self) {
-        _appDocId = appDocId;
         _mimeByType = mimeByType;
     }
     return self;
-}
-
-- (unsigned)appDocId {
-    return _appDocId;
 }
 
 - (void)provideType:(NSPasteboardType)type to:(NSPasteboard *)pasteboard {
@@ -200,7 +186,7 @@ static NSData *_Nullable copyEngineClipboardData(unsigned appDocId, const char *
     if (mime == nil)
         return;
 
-    NSData *data = copyEngineClipboardData(_appDocId, [mime UTF8String]);
+    NSData *data = copyEngineClipboardData([mime UTF8String]);
     if (data != nil)
         [pasteboard setData:data forType:type];
 }
@@ -223,7 +209,6 @@ static NSData *_Nullable copyEngineClipboardData(unsigned appDocId, const char *
  * Private read helpers used by the clipboard provider callbacks below.
  */
 @interface COWrapper ()
-+ (void)ensureClipboardProviderFor:(Document *_Nonnull)document;
 + (char *_Nullable *_Nonnull)copyPasteboardMimeTypes;
 + (BOOL)copyPasteboardData:(NSString *_Nonnull)mime
                        out:(char *_Nullable *_Nonnull)pOutData
@@ -237,21 +222,19 @@ static NSData *_Nullable copyEngineClipboardData(unsigned appDocId, const char *
  * the document's clipboard helpers.
  */
 
-static void clipboardProviderAdvertise(void* pUserData, const char** pMimeTypes)
+static void clipboardProviderAdvertise(void* /*pUserData*/, const char** pMimeTypes)
 {
     @autoreleasepool {
-        Document* document = (__bridge Document*)pUserData;
         NSMutableArray<NSString*>* mimes = [NSMutableArray array];
         for (size_t i = 0; pMimeTypes && pMimeTypes[i]; ++i)
             [mimes addObject:[NSString stringWithUTF8String:pMimeTypes[i]]];
-        [COWrapper advertiseClipboardFor:document mimeTypes:mimes];
+        [COWrapper advertiseClipboard:mimes];
     }
 }
 
-static int clipboardProviderOwns(void* pUserData)
+static int clipboardProviderOwns(void* /*pUserData*/)
 {
-    Document* document = (__bridge Document*)pUserData;
-    return [COWrapper pasteboardOwnedBy:document] ? 1 : 0;
+    return [COWrapper pasteboardOwnedByUs] ? 1 : 0;
 }
 
 static char** clipboardProviderGetMimeTypes(void* /*pUserData*/)
@@ -273,7 +256,23 @@ static int clipboardProviderGetData(void* /*pUserData*/, const char* pMimeType, 
     }
 }
 
-static void clipboardProviderRelease(void* pUserData) { CFBridgingRelease(pUserData); }
+// Install the process-global clipboard provider (declared in macos.h). After
+// this the engine advertises formats on copy and reads the pasteboard on paste
+// through the callbacks above, using one shared clipboard for every document.
+void install_clipboard_provider(kit::Office &rOffice)
+{
+    sOffice = &rOffice;
+
+    static COKitClipboardProvider provider{};
+    provider.nSize = sizeof(provider);
+    provider.pUserData = nullptr; // the callbacks act on the process, not one document
+    provider.advertiseToPlatform = clipboardProviderAdvertise;
+    provider.ownsClipboard = clipboardProviderOwns;
+    provider.getMimeTypes = clipboardProviderGetMimeTypes;
+    provider.getDataForMimeType = clipboardProviderGetData;
+    provider.release = nullptr;
+    rOffice.installClipboardProvider(&provider);
+}
 
 /**
  * Wrapper to be able to call the C++ code from Swift.
@@ -402,19 +401,25 @@ static void clipboardProviderRelease(void* pUserData) { CFBridgingRelease(pUserD
 }
 
 + (void)handleByeWith:(Document *_Nonnull)document {
-    // Pull any clipboard formats this document only promised onto the pasteboard
-    // while its engine is still alive, so a later paste elsewhere still works.
-    [COWrapper materializeClipboardFor:document];
+    if (DocumentData::count() > 1) {
+        // Other documents remain open. Keep the content in the shared clipboard;
+        // just render it now so a lazy transferable (Writer, Impress) stays
+        // readable once this document's engine is gone. No system-pasteboard
+        // write yet.
+        kit::Document * loKitDoc = DocumentData::get(document.appDocId).loKitDocument;
+        if (loKitDoc)
+            loKitDoc->flushClipboard();
+    } else {
+        // Last document closing: serialize the promised formats onto the system
+        // pasteboard now, so the content survives with no engine left to serve it.
+        [COWrapper materializeClipboard];
+    }
 
     // Close one end of the socket pair, that will wake up the forwarding thread
     fakeSocketClose(closeNotificationPipeForForwardingThread[0]);
 }
 
 + (void)handleMessageWith:(Document *)document message:(NSString *)message {
-    // The kit document is ready by the time messages flow; register the clipboard
-    // provider as soon as it is, well before the first copy.
-    [COWrapper ensureClipboardProviderFor:document];
-
     const char *buf = [message UTF8String];
     fakeSocketWriteQueue(document.fakeClientFd, buf, strlen(buf));
 }
@@ -452,8 +457,7 @@ static void clipboardProviderRelease(void* pUserData) { CFBridgingRelease(pUserD
  * actually reads it, through the COClipboardOwner. The mime types are the ones
  * the engine reported it can offer for the current selection.
  */
-+ (BOOL)advertiseClipboardFor:(Document *_Nonnull)document
-                   mimeTypes:(NSArray<NSString *> *_Nonnull)mimeTypes {
++ (BOOL)advertiseClipboard:(NSArray<NSString *> *_Nonnull)mimeTypes {
     NSMutableArray<NSPasteboardType> * types = [NSMutableArray array];
     NSMutableDictionary<NSPasteboardType, NSString *> * mimeByType = [NSMutableDictionary dictionary];
 
@@ -470,12 +474,11 @@ static void clipboardProviderRelease(void* pUserData) { CFBridgingRelease(pUserD
     if (types.count == 0)
         return NO;
 
-    COClipboardOwner * owner = [[COClipboardOwner alloc] initWithDocId:document.appDocId
-                                                           mimeByType:mimeByType];
+    COClipboardOwner * owner = [[COClipboardOwner alloc] initWithMimeByType:mimeByType];
     NSPasteboard * pasteboard = [NSPasteboard generalPasteboard];
     [pasteboard declareTypes:types owner:owner];
     sClipboardOwner = owner;
-    [COWrapper noteClipboardWrittenBy:document];
+    [COWrapper noteClipboardWritten];
     return YES;
 }
 
@@ -484,10 +487,8 @@ static void clipboardProviderRelease(void* pUserData) { CFBridgingRelease(pUserD
  * before a document closes, so a paste into another app keeps working once the
  * engine that would have provided the bytes is gone.
  */
-+ (void)materializeClipboardFor:(Document *_Nonnull)document {
-    if (sClipboardOwner == nil
-        || sClipboardOwner.appDocId != document.appDocId
-        || ![COWrapper pasteboardOwnedBy:document])
++ (void)materializeClipboard {
+    if (sClipboardOwner == nil || ![COWrapper pasteboardOwnedByUs])
         return;
 
     [sClipboardOwner flushTo:[NSPasteboard generalPasteboard]];
@@ -496,20 +497,18 @@ static void clipboardProviderRelease(void* pUserData) { CFBridgingRelease(pUserD
 /**
  * Remember the pasteboard state right after we wrote it ourselves.
  */
-+ (void)noteClipboardWrittenBy:(Document *_Nonnull)document {
++ (void)noteClipboardWritten {
     sOwnedPasteboardChangeCount = [NSPasteboard generalPasteboard].changeCount;
-    sOwnedClipboardDocId = document.appDocId;
 }
 
 /**
- * Whether the pasteboard still holds the copy this document last wrote. When it
- * does, a paste should use the engine's own clipboard rather than reading the
- * pasteboard back, which both preserves full fidelity and avoids the transfer.
+ * Whether the pasteboard still holds the copy we last wrote. When it does, a
+ * paste should use the engine's own clipboard rather than reading the pasteboard
+ * back, which both preserves full fidelity and avoids the transfer.
  */
-+ (BOOL)pasteboardOwnedBy:(Document *_Nonnull)document {
++ (BOOL)pasteboardOwnedByUs {
     return sOwnedPasteboardChangeCount >= 0
-        && [NSPasteboard generalPasteboard].changeCount == sOwnedPasteboardChangeCount
-        && sOwnedClipboardDocId == document.appDocId;
+        && [NSPasteboard generalPasteboard].changeCount == sOwnedPasteboardChangeCount;
 }
 
 /**
@@ -546,34 +545,6 @@ static void clipboardProviderRelease(void* pUserData) { CFBridgingRelease(pUserD
                                                        CFSTR("com.apple.nspboard-type"));
 #pragma clang diagnostic pop
     return aTag != NULL ? (__bridge_transfer NSString *)aTag : nil;
-}
-
-/**
- * Register the platform clipboard provider with the engine for this document,
- * once its kit document is ready. After this the engine advertises on copy and
- * reads the pasteboard on paste through the provider callbacks. Safe to call on
- * every message; it registers a document only once.
- */
-+ (void)ensureClipboardProviderFor:(Document *_Nonnull)document {
-    static std::set<unsigned> sRegistered;
-    if (sRegistered.count(document.appDocId))
-        return;
-
-    kit::Document * loKitDoc = DocumentData::get(document.appDocId).loKitDocument;
-    if (!loKitDoc)
-        return; // the kit document is not loaded yet; try again on the next message
-
-    COKitClipboardProvider provider{};
-    provider.nSize = sizeof(provider);
-    provider.pUserData = (void *)CFBridgingRetain(document);
-    provider.advertiseToPlatform = clipboardProviderAdvertise;
-    provider.ownsClipboard = clipboardProviderOwns;
-    provider.getMimeTypes = clipboardProviderGetMimeTypes;
-    provider.getDataForMimeType = clipboardProviderGetData;
-    provider.release = clipboardProviderRelease;
-    loKitDoc->installClipboardProvider(&provider);
-
-    sRegistered.insert(document.appDocId);
 }
 
 /**

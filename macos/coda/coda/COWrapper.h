@@ -23,15 +23,15 @@
 + (void)handleByeWith:(Document *_Nonnull)document NS_SWIFT_NAME(bye(_:));
 + (void)handleMessageWith:(Document *_Nonnull)document message:(NSString *_Nonnull)message;
 + (void)saveAsWith:(Document *_Nonnull)document url:(NSString *_Nonnull)url format:(NSString *_Nonnull)format filterOptions:(NSString *_Nullable)filterOptions;
-+ (BOOL)advertiseClipboardFor:(Document *_Nonnull)document mimeTypes:(NSArray<NSString *> *_Nonnull)mimeTypes NS_SWIFT_NAME(advertiseClipboard(for:mimeTypes:));
-+ (void)materializeClipboardFor:(Document *_Nonnull)document NS_SWIFT_NAME(materializeClipboard(for:));
++ (BOOL)advertiseClipboard:(NSArray<NSString *> *_Nonnull)mimeTypes;
++ (void)materializeClipboard;
 + (bool)sendToInternalWith:(Document *_Nonnull)document content:(NSString *_Nonnull)content NS_SWIFT_NAME(sendToInternalClipboard(_:content:));
 
 // Record that we just wrote the system pasteboard ourselves, and ask later
 // whether that copy is still the one on the pasteboard. Lets a paste reuse the
 // engine's full-fidelity in-memory clipboard instead of a serialized round-trip.
-+ (void)noteClipboardWrittenBy:(Document *_Nonnull)document NS_SWIFT_NAME(noteClipboardWritten(by:));
-+ (BOOL)pasteboardOwnedBy:(Document *_Nonnull)document NS_SWIFT_NAME(pasteboardOwned(by:));
++ (void)noteClipboardWritten;
++ (BOOL)pasteboardOwnedByUs;
 
 + (bool)isBinaryMessage:(const char *_Nonnull)buffer length:(NSInteger)length;
 
