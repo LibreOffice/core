@@ -12,4 +12,5 @@
   <menu:menuitem menu:id=".uno:RemoveCalcTable"/>
   <menu:menuitem menu:id=".uno:ResizeCalcTable"/>
   <menu:menuitem menu:id=".uno:RenameCalcTable"/>
+  <menu:menuitem menu:id=".uno:DataDataPilotRun"/>
 </menu:menupopup>

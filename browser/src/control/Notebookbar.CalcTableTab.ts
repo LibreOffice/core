@@ -110,6 +110,18 @@ class CalcTableTab implements NotebookbarTab {
 				orientation: 'vertical',
 			},
 			{
+				id: 'summarize-with-pivottable',
+				type: 'bigtoolitem',
+				text: _UNO('.uno:DataDataPilotRun', 'spreadsheet'),
+				command: '.uno:DataDataPilotRun',
+				accessibility: { focusBack: true, combination: 'PV' },
+			},
+			{
+				type: 'separator',
+				id: 'table-tools-break',
+				orientation: 'vertical',
+			},
+			{
 				type: 'overflowgroup',
 				id: 'table-options',
 				name: _('Table Options'),

@@ -1090,7 +1090,8 @@ class Menubar extends window.L.Control {
 					{name: _UNO('.uno:RunInsCalcTable', 'spreadsheet'), uno: '.uno:InsertCalcTable'},
 					{name: _UNO('.uno:RemoveCalcTable', 'spreadsheet'), uno: '.uno:RemoveCalcTable'},
 					{name: _UNO('.uno:ResizeCalcTable', 'spreadsheet'), uno: '.uno:ResizeCalcTable'},
-					{name: _UNO('.uno:RenameCalcTable', 'spreadsheet'), uno: '.uno:RenameCalcTable'}]},
+					{name: _UNO('.uno:RenameCalcTable', 'spreadsheet'), uno: '.uno:RenameCalcTable'},
+					{name: _UNO('.uno:DataDataPilotRun', 'spreadsheet'), uno: '.uno:DataDataPilotRun'}]},
 				{type: 'separator'},
 				{name: _UNO('.uno:NamesMenu', 'spreadsheet'), type: 'menu', menu: [
 					{name: _UNO('.uno:AddName', 'spreadsheet'), uno: '.uno:AddName'},
