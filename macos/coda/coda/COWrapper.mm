@@ -598,18 +598,6 @@ void install_clipboard_provider(kit::Office &rOffice)
 }
 
 /**
- * Insert data into the internal clipboard. The content's format is mimeType\nlegth\ndata\n[...repeat for more mimetypes...].
- */
-+ (bool)sendToInternalWith:(Document *_Nonnull)document content:(NSString *_Nonnull)content {
-    // The clipboard provider serves the paste straight from the platform
-    // pasteboard on the following .uno:Paste, where it can reach the internal
-    // engine formats that the browser's serialized content cannot, or from our
-    // own copy when we still own it. So the content the JavaScript handed us is
-    // not needed here.
-    return true;
-}
-
-/**
  * Reuse the common implementation of the check if the message is binary.
  */
 + (bool)isBinaryMessage:(const char *_Nonnull)buffer length:(NSInteger)length {

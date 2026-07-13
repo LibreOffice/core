@@ -189,7 +189,6 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         // Setup jsHandler as the entry point to call back from JavaScript
         let contentController = WKUserContentController()
         contentController.addScriptMessageHandler(self, contentWorld: .page, name: "lok")
-        contentController.addScriptMessageHandler(self, contentWorld: .page, name: "clipboard")
         ViewController.addDiagnosticMessageHandlers(to: contentController, handler: self)
 
         let config = WKWebViewConfiguration()
@@ -299,21 +298,6 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         }
 
         switch message.name {
-
-        case "clipboard":
-            if let body = message.body as? String {
-                switch body {
-
-                case let s where s.hasPrefix("sendToInternal "):
-                    if !COWrapper.sendToInternalClipboard(document, content: String(s.dropFirst("sendToInternal ".count))) {
-                        COWrapper.LOG_ERR("set clipboard returned failure");
-                        return (nil, "set clipboard returned failure");
-                    }
-
-                default:
-                    COWrapper.LOG_ERR("Invalid clipboard action \(body)")
-                }
-            }
 
         case "lok":
             if let body = message.body as? String {

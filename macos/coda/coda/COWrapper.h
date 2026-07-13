@@ -25,7 +25,6 @@
 + (void)saveAsWith:(Document *_Nonnull)document url:(NSString *_Nonnull)url format:(NSString *_Nonnull)format filterOptions:(NSString *_Nullable)filterOptions;
 + (BOOL)advertiseClipboard:(NSArray<NSString *> *_Nonnull)mimeTypes;
 + (void)materializeClipboard;
-+ (bool)sendToInternalWith:(Document *_Nonnull)document content:(NSString *_Nonnull)content NS_SWIFT_NAME(sendToInternalClipboard(_:content:));
 
 // Record that we just wrote the system pasteboard ourselves, and ask later
 // whether that copy is still the one on the pasteboard. Lets a paste reuse the

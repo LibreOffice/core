@@ -460,12 +460,13 @@ window.L.Clipboard = window.L.Class.extend({
 	},
 
 	_sendToInternalClipboard: async function (content) {
-		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp) {
+		if (window.ThisIsTheiOSApp) {
 			await window.webkit.messageHandlers.clipboard.postMessage(`sendToInternal ${await content.text()}`); // no need to base64 in this direction...
-		} else if (window.ThisIsTheWindowsApp) {
-			// Unclear what to do. In macOS, the sendToInternal thing above seems to be
-			// handled by sendToInternalWith in COWrapper.mm, but that does nothing,
-			// just returns true. So do we need to do anything here then either?
+		} else if (window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp) {
+			// Nothing to send: the engine serves the paste on the following
+			// .uno:Paste, either from our own copy (when we still own the platform
+			// clipboard) or by reading the platform clipboard through the installed
+			// clipboard provider. So the serialized content here is not needed.
 		} else {
 			var formData = new FormData();
 			formData.append('file', content);
