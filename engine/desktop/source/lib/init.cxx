@@ -1266,6 +1266,7 @@ static bool doc_paste(COKitDocument* pThis,
                       size_t nSize);
 static void doc_installClipboardProvider(COKitDocument* pThis,
                                          const COKitClipboardProvider* pProvider);
+static void doc_flushClipboard(COKitDocument* pThis);
 static void doc_setGraphicSelection (COKitDocument* pThis,
                                   int nType,
                                   int nX,
@@ -1556,6 +1557,7 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->transferClipboardFromView = doc_transferClipboardFromView;
         m_pDocumentClass->paste = doc_paste;
         m_pDocumentClass->installClipboardProvider = doc_installClipboardProvider;
+        m_pDocumentClass->flushClipboard = doc_flushClipboard;
         m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
         m_pDocumentClass->resetSelection = doc_resetSelection;
         m_pDocumentClass->getCommandValues = doc_getCommandValues;
@@ -2836,6 +2838,11 @@ static char* lo_extractDocumentStructureRequest(COKit* pThis, const char* pFileP
 
 static int lo_getDocsCount(COKit* pThis);
 
+static void lo_installClipboardProvider(COKit* pThis, const COKitClipboardProvider* pProvider);
+
+static int lo_getGlobalClipboard(COKit* pThis, const char** pMimeTypes, size_t* pOutCount,
+                                 char*** pOutMimeTypes, size_t** pOutSizes, char*** pOutStreams);
+
 static void lo_executeScript(
     char const * script, char ** result, char ** error,
     void (*proxyCallback) (void * data, char const * payload), void * proxyCallbackData);
@@ -2885,6 +2892,8 @@ LibCO_Impl::LibCO_Impl()
         m_pOfficeClass->deliverProxyResult = lo_deliverProxyResult;
         m_pOfficeClass->cancelProxyCalls = lo_cancelProxyCalls;
         m_pOfficeClass->isExpectedReentry = lo_isExpectedReentry;
+        m_pOfficeClass->installClipboardProvider = lo_installClipboardProvider;
+        m_pOfficeClass->getGlobalClipboard = lo_getGlobalClipboard;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -6496,35 +6505,17 @@ static int doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeTy
     return KIT_SELTYPE_TEXT;
 }
 
-static int doc_getClipboard(COKitDocument* pThis,
-                            const char **pMimeTypes,
-                            size_t      *pOutCount,
-                            char      ***pOutMimeTypes,
-                            size_t     **pOutSizes,
-                            char      ***pOutStreams)
+// Serialize the current clipboard's contents into the out parameters. The
+// caller holds the solar mutex and has already zeroed the out parameters. The
+// clipboard is whichever getClipboardForCurView returns: the per-view one on
+// the collaborative server, or the single shared one in the desktop app.
+// Returns 1 on success, 0 when there is nothing on the clipboard.
+static int fetchClipboardContents(const char **pMimeTypes,
+                                  size_t      *pOutCount,
+                                  char      ***pOutMimeTypes,
+                                  size_t     **pOutSizes,
+                                  char      ***pOutStreams)
 {
-    comphelper::ProfileZone aZone("doc_getClipboard");
-
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    assert (pOutCount);
-    assert (pOutMimeTypes);
-    assert (pOutSizes);
-    assert (pOutStreams);
-
-    *pOutCount = 0;
-    *pOutMimeTypes = nullptr;
-    *pOutSizes = nullptr;
-    *pOutStreams = nullptr;
-
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
-    if (!pDoc)
-    {
-        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return 0;
-    }
-
     rtl::Reference<KitClipboard> xClip(KitClipboardFactory::getClipboardForCurView());
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = xClip->getContents();
@@ -6584,6 +6575,67 @@ static int doc_getClipboard(COKitDocument* pThis,
     return 1;
 }
 
+static int doc_getClipboard(COKitDocument* pThis,
+                            const char **pMimeTypes,
+                            size_t      *pOutCount,
+                            char      ***pOutMimeTypes,
+                            size_t     **pOutSizes,
+                            char      ***pOutStreams)
+{
+    comphelper::ProfileZone aZone("doc_getClipboard");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    assert (pOutCount);
+    assert (pOutMimeTypes);
+    assert (pOutSizes);
+    assert (pOutStreams);
+
+    *pOutCount = 0;
+    *pOutMimeTypes = nullptr;
+    *pOutSizes = nullptr;
+    *pOutStreams = nullptr;
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return 0;
+    }
+
+    return fetchClipboardContents(pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
+}
+
+// Office-level clipboard read for the desktop app's one shared clipboard. It
+// needs no document, because the shared clipboard is process-global. The
+// per-document doc_getClipboard stays for the collaborative server, where the
+// clipboard is per view.
+static int lo_getGlobalClipboard(COKit* /*pThis*/,
+                                 const char **pMimeTypes,
+                                 size_t      *pOutCount,
+                                 char      ***pOutMimeTypes,
+                                 size_t     **pOutSizes,
+                                 char      ***pOutStreams)
+{
+    comphelper::ProfileZone aZone("lo_getGlobalClipboard");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    assert (pOutCount);
+    assert (pOutMimeTypes);
+    assert (pOutSizes);
+    assert (pOutStreams);
+
+    *pOutCount = 0;
+    *pOutMimeTypes = nullptr;
+    *pOutSizes = nullptr;
+    *pOutStreams = nullptr;
+
+    return fetchClipboardContents(pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
+}
+
 static int doc_setClipboard(COKitDocument* pThis,
                             const size_t   nInCount,
                             const char   **pInMimeTypes,
@@ -6632,6 +6684,29 @@ static void doc_installClipboardProvider(COKitDocument* pThis,
         return;
 
     forceSetClipboardForCurrentView(pThis)->setProvider(pProvider);
+}
+
+// Office-level: install one process-global provider and switch the kit to a
+// single shared clipboard for every view and document (the desktop app).
+static void lo_installClipboardProvider(COKit* /*pThis*/, const COKitClipboardProvider* pProvider)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    KitClipboardFactory::installGlobalProvider(pProvider);
+}
+
+// Renders the shared clipboard's formats now, so its contents survive the close
+// of the document that produced them. Operates on the process-global shared
+// clipboard, so the document argument only serves to reach this call.
+static void doc_flushClipboard(COKitDocument* /*pThis*/)
+{
+    comphelper::ProfileZone aZone("doc_flushClipboard");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    KitClipboardFactory::flushSharedClipboard();
 }
 
 // See COKit's Document::transferClipboardFromView(); the caller must have

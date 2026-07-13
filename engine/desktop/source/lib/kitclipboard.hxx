@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <limits>
 #include <map>
 #include <optional>
 #include <vector>
@@ -52,6 +53,13 @@ public:
      * Install (or, with nullptr, remove) the app's platform clipboard backend.
      */
     void setProvider(const COKitClipboardProvider* pProvider);
+
+    /**
+     * Render every advertised format now so a lazy transferable (Writer,
+     * Impress) builds its own clip document and stays readable after its source
+     * document is closed. A self-contained transferable (Calc) is unaffected.
+     */
+    void flushContents();
 
     /// get an XInterface easily.
     css::uno::Reference<css::uno::XInterface> getXI()
@@ -136,6 +144,16 @@ class KitClipboardFactory : public ::cppu::WeakComponentImplHelper<css::lang::XS
 {
     static osl::Mutex gMutex;
 
+    /// True while a process-global clipboard provider is installed, which the
+    /// in-process desktop apps do and the collaborative server does not. The kit
+    /// then serves one shared clipboard for all views and documents, instead of
+    /// one clipboard per view.
+    static bool gHasGlobalProvider;
+
+    /// Map key for the single shared clipboard; chosen so it never collides
+    /// with a real view id.
+    static constexpr int SHARED_VIEW_KEY = std::numeric_limits<int>::min();
+
 public:
     KitClipboardFactory()
         : cppu::WeakComponentImplHelper<css::lang::XSingleServiceFactory>(gMutex)
@@ -160,6 +178,15 @@ public:
     /// Release the clipboards of every view of one document as it is destroyed.
     /// Other documents open in the same engine keep their clipboards.
     static void releaseClipboardsForDocument(int nDocId);
+
+    /// Install a process-global clipboard provider and switch to one shared
+    /// clipboard for all views. Pass nullptr to remove it and return to
+    /// per-view clipboards.
+    static void installGlobalProvider(const COKitClipboardProvider* pProvider);
+
+    /// Render the shared clipboard's formats now, so its contents survive the
+    /// close of the document that produced them (see KitClipboard::flushContents).
+    static void flushSharedClipboard();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

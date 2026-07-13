@@ -468,6 +468,18 @@ public:
     }
 
     /**
+     * Renders every advertised clipboard format now, so the clipboard's
+     * contents stay readable after this document is closed. Call it while the
+     * document is still alive, when it produced the current clipboard content
+     * and other documents remain open. A lazy transferable (Writer, Impress)
+     * builds its own clip document; a self-contained one (Calc) is unaffected.
+     */
+    void flushClipboard()
+    {
+        mpDoc->pClass->flushClipboard(mpDoc);
+    }
+
+    /**
      * Pastes content at the current cursor position.
      *
      * @param pMimeType format of pData, for example text/plain;charset=utf-8.
@@ -1416,6 +1428,34 @@ public:
     void registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback)
     {
         return mpThis->pClass->registerRevealInFileManagerCallback(mpThis, pCallback);
+    }
+
+    /**
+     * Installs a process-global clipboard provider and switches the kit to a
+     * single shared clipboard for every view and document. Use this in the
+     * in-process desktop app, where there is one local user and one platform
+     * clipboard, so the clipboard survives closing an individual document. Pass
+     * nullptr to remove the provider and return to the default per-view
+     * clipboards (as used by the collaborative server).
+     */
+    void installClipboardProvider(const COKitClipboardProvider* pProvider)
+    {
+        mpThis->pClass->installClipboardProvider(mpThis, pProvider);
+    }
+
+    /**
+     * Read the desktop app's single process-wide clipboard. See
+     * Document::getClipboard() for the parameters; this needs no document
+     * because the shared clipboard is process-global. The distinct name marks
+     * that it reads one global clipboard, not a per-view one.
+     */
+    bool getGlobalClipboard(const char **pMimeTypes,
+                            size_t      *pOutCount,
+                            char      ***pOutMimeTypes,
+                            size_t     **pOutSizes,
+                            char      ***pOutStreams)
+    {
+        return mpThis->pClass->getGlobalClipboard(mpThis, pMimeTypes, pOutCount, pOutMimeTypes, pOutSizes, pOutStreams);
     }
 
     /**

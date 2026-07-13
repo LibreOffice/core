@@ -29,6 +29,7 @@ using namespace css::uno;
 using namespace cpo::uno;
 
 /* static */ osl::Mutex KitClipboardFactory::gMutex;
+/* static */ bool KitClipboardFactory::gHasGlobalProvider = false;
 static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard>>>& getClipboards()
 {
     static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard>>>
@@ -38,6 +39,22 @@ static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard
 
 rtl::Reference<KitClipboard> KitClipboardFactory::getClipboardForCurView()
 {
+    {
+        osl::MutexGuard aGuard(gMutex);
+        if (gHasGlobalProvider)
+        {
+            // One clipboard for every view and document (the desktop app).
+            auto& gClipboards = getClipboards();
+            auto it = gClipboards.get()->find(SHARED_VIEW_KEY);
+            if (it != gClipboards.get()->end())
+                return it->second;
+            rtl::Reference<KitClipboard> xClip(new KitClipboard());
+            (*gClipboards.get())[SHARED_VIEW_KEY] = xClip;
+            SAL_INFO("kit", "Created shared clipboard " << xClip.get());
+            return xClip;
+        }
+    }
+
     int nViewId = KitHelper::getCurrentView(); // currently active.
 
     osl::MutexGuard aGuard(gMutex);
@@ -74,6 +91,9 @@ void KitClipboardFactory::releaseClipboardForView(int nViewId)
 {
     osl::MutexGuard aGuard(gMutex);
 
+    if (gHasGlobalProvider)
+        return; // the shared clipboard is process-global, not per-view
+
     auto* pClipboards = getClipboards().get();
     if (!pClipboards)
         return;
@@ -90,6 +110,9 @@ void KitClipboardFactory::releaseClipboardsForDocument(int nDocId)
 {
     osl::MutexGuard aGuard(gMutex);
 
+    if (gHasGlobalProvider)
+        return; // the shared clipboard is process-global, not per-document
+
     auto* pClipboards = getClipboards().get();
     if (!pClipboards)
         return;
@@ -97,6 +120,54 @@ void KitClipboardFactory::releaseClipboardsForDocument(int nDocId)
     std::erase_if(*pClipboards,
                   [nDocId](const auto& rPair) { return rPair.second->getDocId() == nDocId; });
     SAL_INFO("kit", "Released clipboards for destroyed document " << nDocId);
+}
+
+void KitClipboardFactory::installGlobalProvider(const COKitClipboardProvider* pProvider)
+{
+    osl::MutexGuard aGuard(gMutex);
+
+    auto& gClipboards = getClipboards();
+    if (pProvider)
+    {
+        gHasGlobalProvider = true;
+        auto& xShared = (*gClipboards.get())[SHARED_VIEW_KEY];
+        if (!xShared.is())
+            xShared = new KitClipboard();
+        xShared->setProvider(pProvider);
+        SAL_INFO("kit", "Installed global clipboard provider; shared clipboard " << xShared.get());
+    }
+    else
+    {
+        if (auto* pClipboards = gClipboards.get())
+        {
+            auto it = pClipboards->find(SHARED_VIEW_KEY);
+            if (it != pClipboards->end())
+            {
+                it->second->setProvider(nullptr);
+                pClipboards->erase(it);
+            }
+        }
+        gHasGlobalProvider = false;
+        SAL_INFO("kit", "Removed global clipboard provider; back to per-view clipboards");
+    }
+}
+
+void KitClipboardFactory::flushSharedClipboard()
+{
+    rtl::Reference<KitClipboard> xShared;
+    {
+        osl::MutexGuard aGuard(gMutex);
+        if (!gHasGlobalProvider)
+            return;
+        if (auto* pClipboards = getClipboards().get())
+        {
+            auto it = pClipboards->find(SHARED_VIEW_KEY);
+            if (it != pClipboards->end())
+                xShared = it->second;
+        }
+    }
+    if (xShared.is())
+        xShared->flushContents();
 }
 
 uno::Reference<uno::XInterface>
@@ -138,6 +209,38 @@ void KitClipboard::setProvider(const COKitClipboardProvider* pProvider)
     }
     else
         m_oProvider.reset();
+}
+
+void KitClipboard::flushContents()
+{
+    Reference<css::datatransfer::XTransferable> xTrans;
+    {
+        osl::MutexGuard aGuard(m_aMutex);
+        xTrans = m_xTransferable;
+    }
+    if (!xTrans.is())
+        return;
+
+    // Pull every format once. For a lazy transferable (Writer, Impress) this
+    // builds its own clip document, so it keeps working after its source
+    // document is gone; a self-contained one (Calc) is unaffected.
+    try
+    {
+        const auto aFlavors = xTrans->getTransferDataFlavors();
+        for (const auto& rFlavor : aFlavors)
+        {
+            try
+            {
+                xTrans->getTransferData(rFlavor);
+            }
+            catch (const uno::Exception&)
+            {
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+    }
 }
 
 Sequence<OUString> KitClipboard::getSupportedServiceNames_static()
@@ -204,7 +307,11 @@ void KitClipboard::setContents(
     // Emit here rather than from SfxClipboardChangeListener: the listener can
     // attach to the pre-Kit default clipboard before the per-view Kit clipboard
     // lands on the window frame, and then miss every real copy.
-    if (!xTrans.is() || !comphelper::COKit::isActive() || m_nViewId < 0)
+    // A real copy needs either a view to notify (the collaborative server) or a
+    // provider to advertise to (the desktop app); the shared clipboard used by
+    // the desktop app has no single view of its own.
+    const bool bHasProvider = m_oProvider && m_oProvider->advertiseToPlatform;
+    if (!xTrans.is() || !comphelper::COKit::isActive() || (m_nViewId < 0 && !bHasProvider))
         return;
 
     std::vector<OString> aMimeTypes;
