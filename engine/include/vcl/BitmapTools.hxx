@@ -14,8 +14,10 @@
 
 #include <vcl/bitmap.hxx>
 #include <vcl/ImageTree.hxx>
+#include <vcl/Scanline.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <array>
+#include <optional>
 #include <vcl/RawBitmap.hxx>
 
 class SvStream;
@@ -33,6 +35,19 @@ VCL_DLLPUBLIC lookup_table const & get_unpremultiply_table();
 
 VCL_DLLPUBLIC sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a);
 VCL_DLLPUBLIC sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a);
+
+/** Byte offsets channels within a 4-byte pixel. */
+struct ScanlineChannelOffsets
+{
+    sal_uInt8 nBlue;
+    sal_uInt8 nGreen;
+    sal_uInt8 nRed;
+    sal_uInt8 nAlpha;
+};
+
+/** For a premultiplied 32-bit truecolor scanline format (ABGR/ARGB/BGRA/RGBA), return the byte offsets */
+VCL_DLLPUBLIC std::optional<ScanlineChannelOffsets>
+get32BitTcChannelOffsets(ScanlineFormat eFormat);
 
 Bitmap VCL_DLLPUBLIC loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
 

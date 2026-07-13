@@ -731,6 +731,23 @@ cpo::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp)
     }
 #endif
 
+std::optional<ScanlineChannelOffsets> get32BitTcChannelOffsets(ScanlineFormat eFormat)
+{
+    switch (eFormat)
+    {
+        case ScanlineFormat::N32BitTcAbgr:
+            return ScanlineChannelOffsets{ 1, 2, 3, 0 };
+        case ScanlineFormat::N32BitTcArgb:
+            return ScanlineChannelOffsets{ 3, 2, 1, 0 };
+        case ScanlineFormat::N32BitTcBgra:
+            return ScanlineChannelOffsets{ 0, 1, 2, 3 };
+        case ScanlineFormat::N32BitTcRgba:
+            return ScanlineChannelOffsets{ 2, 1, 0, 3 };
+        default:
+            return std::nullopt;
+    }
+}
+
 Bitmap GetDownsampledBitmap(Size const& rDstSizeTwip, Point const& rSrcPt, Size const& rSrcSz,
                             Bitmap const& rBmp, tools::Long nMaxBmpDPIX, tools::Long nMaxBmpDPIY)
 {

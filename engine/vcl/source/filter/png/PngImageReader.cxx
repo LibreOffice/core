@@ -8,6 +8,8 @@
  *
  */
 
+#include <config_wasm_strip.h>
+
 #include <vcl/filter/PngImageReader.hxx>
 #include <png.h>
 #include <rtl/crc.h>
@@ -535,14 +537,54 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
             }
         }
         // Fix order and do premultiplication
-        for (png_uint_32 y = 0; y < height; y++)
+        bool bFastPath = false;
+#if !ENABLE_WASM_STRIP_PREMULTIPLY
+        sal_uInt8 nDestinationBlue = 0;
+        sal_uInt8 nDestinationGreen = 0;
+        sal_uInt8 nDestinationRed = 0;
+        sal_uInt8 nDestinationAlpha = 0;
+        if (auto oDestination = vcl::bitmap::get32BitTcChannelOffsets(pWriteAccess->GetScanlineFormat()))
         {
-            Scanline pScanline = pWriteAccess->GetScanline(y);
-            for (size_t i = 0; i < aRowSizeBytes; i += 4)
+            nDestinationBlue = oDestination->nBlue;
+            nDestinationGreen = oDestination->nGreen;
+            nDestinationRed = oDestination->nRed;
+            nDestinationAlpha = oDestination->nAlpha;
+            bFastPath = true;
+        }
+
+        if (bFastPath)
+        {
+            const vcl::bitmap::lookup_table& rPremultiply = vcl::bitmap::get_premultiply_table();
+            for (png_uint_32 y = 0; y < height; y++)
             {
-                Color aCol(ColorAlpha, pScanline[i + 3], pScanline[i + 0], pScanline[i + 1],
-                           pScanline[i + 2]);
-                pWriteAccess->SetPixelOnData(pScanline, i / 4, aCol);
+                Scanline pScanline = pWriteAccess->GetScanline(y);
+                for (size_t i = 0; i < aRowSizeBytes; i += 4)
+                {
+                    const sal_uInt8 nRed = pScanline[i + 0];
+                    const sal_uInt8 nGreen = pScanline[i + 1];
+                    const sal_uInt8 nBlue = pScanline[i + 2];
+                    const sal_uInt8 nAlpha = pScanline[i + 3];
+                    const std::array<sal_uInt8, 256>& rRow = rPremultiply[nAlpha];
+                    sal_uInt8* pDestination = pScanline + i;
+                    pDestination[nDestinationBlue] = rRow[nBlue];
+                    pDestination[nDestinationGreen] = rRow[nGreen];
+                    pDestination[nDestinationRed] = rRow[nRed];
+                    pDestination[nDestinationAlpha] = nAlpha;
+                }
+            }
+        }
+#endif
+        if (!bFastPath)
+        {
+            for (png_uint_32 y = 0; y < height; y++)
+            {
+                Scanline pScanline = pWriteAccess->GetScanline(y);
+                for (size_t i = 0; i < aRowSizeBytes; i += 4)
+                {
+                    Color aCol(ColorAlpha, pScanline[i + 3], pScanline[i + 0], pScanline[i + 1],
+                               pScanline[i + 2]);
+                    pWriteAccess->SetPixelOnData(pScanline, i / 4, aCol);
+                }
             }
         }
     }
