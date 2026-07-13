@@ -32,6 +32,7 @@
 #include <ooxml/resourceids.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <basegfx/units/Length.hxx>
 
 #include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -1074,8 +1075,15 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                         pParaProperties->props().SetvAnchor( nIntValue );
                     break;
                     case NS_ooxml::LN_CT_FramePr_x:
-                        pParaProperties->props().Setx(gfx::Length::twip(nIntValue));
+                    {
+                        // The format ignores large twip position values (legacy 16bit handling),
+                        // so anything at or above 32768 twips is stored as unset.
+                        gfx::Length nX = gfx::Length::twip(nIntValue);
+                        if (nX >= 0x8000_twip)
+                            nX = 0_emu;
+                        pParaProperties->props().Setx(nX);
                         pParaProperties->props().SetxAlign( text::HoriOrientation::NONE );
+                    }
                     break;
                     case NS_ooxml::LN_CT_FramePr_xAlign:
                         switch( nIntValue )
@@ -1090,8 +1098,15 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                         pParaProperties->props().SetxAlign( nIntValue );
                     break;
                     case NS_ooxml::LN_CT_FramePr_y:
-                        pParaProperties->props().Sety(gfx::Length::twip(nIntValue));
+                    {
+                        // The format ignores large twip position values (legacy 16bit handling),
+                        // so anything at or above 32768 twips is stored as unset.
+                        gfx::Length nY = gfx::Length::twip(nIntValue);
+                        if (nY >= 0x8000_twip)
+                            nY = 0_emu;
+                        pParaProperties->props().Sety(nY);
                         pParaProperties->props().SetyAlign( text::VertOrientation::NONE );
+                    }
                     break;
                     case NS_ooxml::LN_CT_FramePr_yAlign:
                         switch( nIntValue )
