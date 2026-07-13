@@ -890,6 +890,19 @@ ErrCodeMsg MarkdownReader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rP
 
     if (m_bInsertMode)
     {
+        if (aPasteInfo.m_bStartAtEndOfPara)
+        {
+            // If the paste created an empty paragraph at the end, join that empty node with the
+            // previous one here.
+            SwNodeIndex aLast(*aPasteInfo.m_pSttNdIdx2, -1);
+            if (aLast.GetIndex() > aPasteInfo.m_pSttNdIdx->GetIndex() + 1)
+            {
+                SwTextNode* pLast = aLast.GetNode().GetTextNode();
+                if (pLast && pLast->GetText().isEmpty())
+                    pLast->JoinPrev();
+            }
+        }
+
         EndPaste(aPasteInfo);
     }
 

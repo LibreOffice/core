@@ -1061,6 +1061,15 @@ CPPUNIT_TEST_FIXTURE(Test, testListPaste)
     // i.e. pasting a list item at the end of a list item joined the two.
     CPPUNIT_ASSERT_EQUAL(u"List A"_ustr, getParagraph(2)->getString());
     CPPUNIT_ASSERT_EQUAL(u"List 1"_ustr, getParagraph(3)->getString());
+
+    // And make sure the pasted list doesn't leave a trailing empty bullet
+    // between "List 2" and the pre-existing "List B" list item:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: List 2
+    // - Actual  :
+    // i.e. paragraph 4 was an empty.
+    CPPUNIT_ASSERT_EQUAL(u"List 2"_ustr, getParagraph(4)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"List B"_ustr, getParagraph(5)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCTLPaste)
