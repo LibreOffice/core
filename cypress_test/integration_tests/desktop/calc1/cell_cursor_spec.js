@@ -309,12 +309,16 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 	it('No jump on long merged cell with split panes', function() {
 		desktopHelper.assertScrollbarPosition('horizontal', 270, 390);
 
-		// Click on second cell in second row
-		cy.cGet('#map')
-		.then(function(items) {
-			expect(items).to.have.lengthOf(1);
-			var XPos = items[0].getBoundingClientRect().left + 140;
-			var YPos = items[0].getBoundingClientRect().top + 30;
+		// Click on second cell in second row. Anchor to the document (cell)
+		// area via getDocumentAnchor(), not #map: #map now spans the whole
+		// document-container including the row/column headers, so a click
+		// relative to it lands in the header band. This mirrors clickOnFirstCell.
+		cy.getFrameWindow().then(function(win) {
+			const anchor = win.app.sectionContainer.getDocumentAnchor();
+			const dpiScale = win.app.dpiScale;
+			const bcr = win.document.getElementById('canvas-container').getBoundingClientRect();
+			const XPos = bcr.left + anchor[0] / dpiScale + 140;
+			const YPos = bcr.top + anchor[1] / dpiScale + 30;
 			cy.cGet('body').click(XPos, YPos);
 		});
 

@@ -13,7 +13,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Multipage View scrollbar p
 	// Bug: Scrollbar dragging did not scroll the document because
 	// verticalScrollRatio and horizontalScrollRatio were not set,
 	// so the drag delta was multiplied by 0 (or undefined).
-	it('Scrollbar scroll ratios are set in multi-page view.', function() {
+	it('Scrollbar dragging moves the document and the bar together in multi-page view.', function() {
 		// Switch to multi-page view.
 		cy.cGet('#multi-page-view-button').click();
 
@@ -21,16 +21,23 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Multipage View scrollbar p
 			helper.processToIdle(win);
 		});
 
-		// Verify scroll ratios are set correctly for scrollbar dragging.
 		cy.getFrameWindow().then(function(win) {
 			var layout = win.app.activeDocument.activeLayout;
 			expect(layout.type).to.equal('ViewLayoutMultiPage');
 
 			var scrollProps = layout.scrollProperties;
-			// verticalScrollRatio must be 20 to compensate for the /20 dampening in scroll().
-			expect(scrollProps.verticalScrollRatio, 'verticalScrollRatio').to.equal(20);
-			// horizontalScrollRatio must be 1 (no dampening on horizontal scroll).
-			expect(scrollProps.horizontalScrollRatio, 'horizontalScrollRatio').to.equal(1);
+			var initialViewY = scrollProps.viewY;
+			var initialStartY = scrollProps.startY;
+
+			// Drag the vertical scroll bar down by 50 pixels of its track, the way
+			// ScrollSection turns a pointer movement into a scroll offset.
+			var trackDistance = 50;
+			win.app.sectionContainer.getSectionWithName('scroll')
+				.scrollVerticalWithOffset(trackDistance * scrollProps.verticalScrollRatio);
+
+			// The document scrolls down, and the bar keeps up with the pointer.
+			expect(scrollProps.viewY, 'viewY after drag').to.be.greaterThan(initialViewY);
+			expect(scrollProps.startY - initialStartY, 'scroll bar movement').to.be.closeTo(trackDistance, 1);
 		});
 	});
 

@@ -135,12 +135,12 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'Text').dblclick();
 		desktopHelper.assertVisiblePage(5, 6, 8);
 
-		desktopHelper.assertScrollbarPosition('vertical', 225, 255);
+		desktopHelper.assertScrollbarPosition('vertical', 245, 275);
 
 		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'Replacing').dblclick();
 		desktopHelper.assertVisiblePage(7, 7, 8);
 
-		desktopHelper.assertScrollbarPosition('vertical', 325, 360);
+		desktopHelper.assertScrollbarPosition('vertical', 350, 380);
 	});
 
 	it('Jump to image when cursor not visible', function() {

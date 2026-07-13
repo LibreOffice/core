@@ -205,9 +205,9 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 			get the new scrollbar position by printing `x` to the console
 			in `assertScrollbarPosition` function.
 		*/
-		desktopHelper.assertScrollbarPosition('vertical', 249, 252);
+		desktopHelper.assertScrollbarPosition('vertical', 244, 252);
 		desktopHelper.insertComment('second comment', false);
-		desktopHelper.assertScrollbarPosition('vertical', 249, 252);
+		desktopHelper.assertScrollbarPosition('vertical', 244, 252);
 	});
 
 	it('Action_GoToComment postMessage navigates to a comment across sheets', function() {

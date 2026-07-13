@@ -26,7 +26,7 @@ describe(['tagdesktop'], 'Calc drag-selection autoscroll', function () {
 			cy.stub(win.app.sectionContainer, 'isDraggingSomething').returns(true);
 
 			var dpi = win.app.dpiScale;
-			var size = win.app.map._size;
+			var frame = win.app.activeDocument.activeLayout.frameSize;
 			var origin = mouseControl.position;
 
 			// A section-local point that lands at the given css position in the
@@ -43,13 +43,13 @@ describe(['tagdesktop'], 'Calc drag-selection autoscroll', function () {
 			};
 
 			mouseControl.onMouseDown(
-				atViewport(size.x / 2, size.y / 2),
+				atViewport(frame.cX / 2, frame.cY / 2),
 				mouseEvent('mousedown')
 			);
 
 			// Pointer in the middle: no autoscroll.
 			mouseControl.onMouseMove(
-				atViewport(size.x / 2, size.y / 2),
+				atViewport(frame.cX / 2, frame.cY / 2),
 				[0, 0],
 				mouseEvent('mousemove')
 			);
@@ -58,7 +58,7 @@ describe(['tagdesktop'], 'Calc drag-selection autoscroll', function () {
 
 			// Pointer just inside the bottom edge: autoscroll starts.
 			mouseControl.onMouseMove(
-				atViewport(size.x / 2, size.y - 10),
+				atViewport(frame.cX / 2, frame.cY - 10),
 				[0, 1000],
 				mouseEvent('mousemove')
 			);
@@ -67,7 +67,7 @@ describe(['tagdesktop'], 'Calc drag-selection autoscroll', function () {
 
 			// Releasing the button stops the autoscroll.
 			mouseControl.onMouseUp(
-				atViewport(size.x / 2, size.y - 10),
+				atViewport(frame.cX / 2, frame.cY - 10),
 				mouseEvent('mouseup')
 			);
 			expect(win.app.map.isAutoScrolling, 'after releasing the button')
@@ -94,7 +94,7 @@ describe(['tagdesktop'], 'Calc drag-selection autoscroll', function () {
 			cy.stub(win.app.sectionContainer, 'isDraggingSomething').returns(true);
 
 			var dpi = win.app.dpiScale;
-			var size = win.app.map._size;
+			var frame = win.app.activeDocument.activeLayout.frameSize;
 			var docAnchor = win.app.sectionContainer.getDocumentAnchor();
 
 			// A marker-local point that lands at the given css position in the
@@ -112,13 +112,13 @@ describe(['tagdesktop'], 'Calc drag-selection autoscroll', function () {
 			};
 
 			marker.onMouseDown(
-				atViewport(size.x / 2, size.y / 2),
+				atViewport(frame.cX / 2, frame.cY / 2),
 				touchEvent('touchstart')
 			);
 
 			// Pointer in the middle: no autoscroll.
 			marker.onMouseMove(
-				atViewport(size.x / 2, size.y / 2),
+				atViewport(frame.cX / 2, frame.cY / 2),
 				[0, 0],
 				touchEvent('touchmove')
 			);
@@ -127,7 +127,7 @@ describe(['tagdesktop'], 'Calc drag-selection autoscroll', function () {
 
 			// Pointer just inside the bottom edge: autoscroll starts.
 			marker.onMouseMove(
-				atViewport(size.x / 2, size.y - 10),
+				atViewport(frame.cX / 2, frame.cY - 10),
 				[0, 1000],
 				touchEvent('touchmove')
 			);
@@ -136,7 +136,7 @@ describe(['tagdesktop'], 'Calc drag-selection autoscroll', function () {
 
 			// Releasing the button stops the autoscroll.
 			marker.onMouseUp(
-				atViewport(size.x / 2, size.y - 10),
+				atViewport(frame.cX / 2, frame.cY - 10),
 				touchEvent('touchend')
 			);
 			expect(win.app.map.isAutoScrolling, 'after releasing the button')

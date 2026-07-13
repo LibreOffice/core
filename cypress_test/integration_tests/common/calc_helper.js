@@ -20,19 +20,22 @@ function clickAtOffset(offsetX, offsetY, right=false) {
 	cy.log('Param - offsetX: ' + offsetX);
 	cy.log('Param - offsetY: ' + offsetY);
 
-	cy.cGet('#map').should('exist');
-	cy.cGet('#map').should('be.visible');
-	cy.cGet('#map')
-		.then(function(items) {
-			expect(items).to.have.lengthOf(1);
-			const XPos = items[0].getBoundingClientRect().left + 2 + offsetX;
-			const YPos = items[0].getBoundingClientRect().top + 2 + offsetY;
-			if (right) {
-				cy.cGet('body').rightclick(XPos, YPos);
-			} else {
-				cy.cGet('body').click(XPos, YPos);
-			}
-		});
+	// Anchor to the document (cell) area, not #map: #map now spans the whole
+	// document-container including the row/column headers, so an offset from
+	// its top-left lands in the header band. getDocumentAnchor() gives the cell
+	// area's canvas offset (matches clickOnFirstCell).
+	cy.getFrameWindow().then(function(win) {
+		const anchor = win.app.sectionContainer.getDocumentAnchor();
+		const dpiScale = win.app.dpiScale;
+		const bcr = win.document.getElementById('canvas-container').getBoundingClientRect();
+		const XPos = bcr.left + anchor[0] / dpiScale + 2 + offsetX;
+		const YPos = bcr.top + anchor[1] / dpiScale + 2 + offsetY;
+		if (right) {
+			cy.cGet('body').rightclick(XPos, YPos);
+		} else {
+			cy.cGet('body').click(XPos, YPos);
+		}
+	});
 
 	cy.log('<< clickAtOffset - end');
 }

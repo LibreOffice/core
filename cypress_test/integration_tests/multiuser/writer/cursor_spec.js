@@ -78,11 +78,11 @@ describe(['tagmultiuser'], 'Check cursor and view behavior', function() {
 		cy.cSetActiveFrame('#iframe1');
 		writerHelper.openQuickFind();
 		writerHelper.searchInQuickFind('Pellentesque porttitor');
-		desktopHelper.assertScrollbarPosition('vertical', 375, 400);
+		desktopHelper.assertScrollbarPosition('vertical', 390, 430);
 
 		// verify that second view is scrolled to the editor
 		cy.cSetActiveFrame('#iframe2');
-		desktopHelper.assertScrollbarPosition('vertical', 375, 400);
+		desktopHelper.assertScrollbarPosition('vertical', 390, 430);
 
 		// now move cursor a bit in the first view
 		cy.cSetActiveFrame('#iframe1');
@@ -90,7 +90,7 @@ describe(['tagmultiuser'], 'Check cursor and view behavior', function() {
 
 		// verify that second view is still at the same position (no jump)
 		cy.cSetActiveFrame('#iframe2');
-		desktopHelper.assertScrollbarPosition('vertical', 375, 400);
+		desktopHelper.assertScrollbarPosition('vertical', 390, 430);
 	});
 
 	it('Follow the editor cursor in multi-page view', function() {

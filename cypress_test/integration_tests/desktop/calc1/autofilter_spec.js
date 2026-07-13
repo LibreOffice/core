@@ -248,14 +248,14 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter Scroll Position
 		// filter is applied, instead of jumping up to an earlier row.
 		var topBeforeScroll;
 		cy.getFrameWindow().then(function(win) {
-			topBeforeScroll = win.L.Map.THIS._getTopLeftPoint().y;
+			topBeforeScroll = win.app.activeDocument.activeLayout.viewedRectangle.pY1;
 			desktopHelper.scrollViewDown(win);
 			helper.processToIdle(win);
 		});
 
 		// The plain scroll moved the live view top further down the sheet.
 		cy.getFrameWindow().then(function(win) {
-			expect(win.L.Map.THIS._getTopLeftPoint().y).to.be.greaterThan(topBeforeScroll);
+			expect(win.app.activeDocument.activeLayout.viewedRectangle.pY1).to.be.greaterThan(topBeforeScroll);
 		});
 
 		var positionBeforeFilter;

@@ -856,6 +856,9 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 	});
 
 	it('Preserves thread layout on copy paste', function() {
+		// Two threads make four comment boxes, more than the 600px viewport the
+		// other tests share leaves below the notebookbar.
+		cy.viewport(1400, 1080);
 		desktopHelper.selectZoomLevel('100', false);
 		cy.getFrameWindow().then(function(win) {
 			return helper.processToIdle(win);

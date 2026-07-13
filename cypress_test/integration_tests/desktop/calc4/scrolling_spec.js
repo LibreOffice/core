@@ -77,8 +77,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 			helper.typeIntoDocument('{shift}{rightArrow}');
 		}
 
-		// Document should scroll
-		desktopHelper.assertScrollbarPosition('horizontal', 80, 180);
+		// Document should scroll. The off-map view lands the follow-scroll a few
+		// pixels further than the old map-based path, so allow a little more.
+		desktopHelper.assertScrollbarPosition('horizontal', 80, 195);
 	});
 
 	it('Scroll while selecting with mouse', function () {

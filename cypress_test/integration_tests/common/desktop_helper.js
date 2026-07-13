@@ -569,17 +569,21 @@ function setAccessibilityState(enable) {
 
 // best way to simulate scrolling using mouse wheel I found -> no click performed
 function scrollWriterDocumentToTop() {
+	// map.panTo was removed with the leaflet scroll path. Scroll the layout up
+	// to the top (large negative view-space delta clamps to 0); the horizontal
+	// position (page centering) is preserved.
 	cy.getFrameWindow()
-		.its('L')
-		.then(function(L) {
-			L.Map.THIS.panTo({y: 363, x: 427});
+		.then(function(win) {
+			win.app.activeDocument.activeLayout.scroll(0, -100000);
 		});
 	assertScrollbarPosition('vertical', 0, 10);
 }
 
 function scrollViewDown(win) {
 	cy.then(function() {
-		win.L.Map.THIS.panBy({x: 0, y: 4000});
+		// map.panBy was removed with the leaflet scroll path; scroll the layout
+		// directly (view-space core-pixel delta).
+		win.app.activeDocument.activeLayout.scroll(0, 4000);
 		win.app.updateFollowingUsers();
 	});
 }

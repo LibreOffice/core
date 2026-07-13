@@ -147,7 +147,10 @@ describe(['tagdesktop'], 'Calc selection drawing with frozen panes', function() 
 
 		// Scroll the moving pane slightly down and to the right.
 		cy.then(function () {
-			win.L.Map.THIS.panBy({ x: 200, y: 200 });
+			// Scroll the moving pane via the layout (map.panBy was removed with
+			// the leaflet map scroll path); scroll() takes view-space core-pixel
+			// deltas.
+			win.app.activeDocument.activeLayout.scroll(200, 200);
 			return helper.processToIdle(win);
 		});
 

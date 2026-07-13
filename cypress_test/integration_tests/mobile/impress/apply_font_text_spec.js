@@ -186,8 +186,11 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font on selected text
 		selectText(this.win);
 
 		mobileHelper.openTextPropertiesPanel();
-		cy.cGet('text tspan.TextPosition').should('have.attr', 'y', '3486');
-		cy.cGet('text tspan.TextPosition tspan').should('have.attr', 'font-size', '635px');
+
+		// The superscript test raised this same text and the document is shared
+		// between the tests, so clear the superscript to start from plain text.
+		cy.cGet('#mobile-wizard .unoSuperScript').click();
+
 		cy.cGet('#mobile-wizard .unoSubScript').click();
 		mobileHelper.closeMobileWizard();
 

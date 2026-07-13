@@ -58,6 +58,12 @@ describe('View Layout Tests', function () {
 			name: 'text selection', zIndex: 5,
 			processingOrder: 74, drawingOrder: 52,
 		};
+		// DocumentBase.addSections() now instantiates ZoomControl, whose field
+		// initialisers read app.CSections.ZoomControl.
+		(app.CSections as any).ZoomControl = {
+			name: 'zoom control', zIndex: 13,
+			processingOrder: 2, drawingOrder: 2,
+		};
 
 		// app.file is populated by docstate.ts in the browser. ViewLayoutMultiPage
 		// reset() reads app.file.writer.pageRectangleList.
@@ -71,6 +77,11 @@ describe('View Layout Tests', function () {
 		app.map = {
 			on: function () {},
 			off: function () {},
+			// applyZoom fires 'zoomend'/'zoomlevelschange' at the end; the doc
+			// type's listeners do the post-zoom work in the browser. Nothing is
+			// wired up here, so fire() is a no-op (the layouts call reset()
+			// directly in their constructors).
+			fire: function () {},
 			uiManager: null,
 			_docLayer: {
 				_docType: 'text',
@@ -78,10 +89,18 @@ describe('View Layout Tests', function () {
 				_sendClientZoom: function () {},
 				// A text document has a single part, part 0.
 				getSelectedPart: function () { return 0; },
+				// applyZoom calls this to recompute app.twipsToPixels for the new
+				// zoom. The tests pin twipsToPixels to a fixed scale (see above),
+				// so keep it a no-op to preserve that scale.
+				_updateTileTwips: function () {},
 			},
 			getScaleZoom: function () { return 1; },
 			setZoom: function () {},
 			getZoom: function () { return 10; },
+			// applyZoom still routes the target through map._limitZoom while the
+			// map is being removed from the zoom path. The test zoom levels are
+			// already valid integral zooms, so clamp is a no-op here.
+			_limitZoom: function (zoom: number) { return zoom; },
 		} as any;
 
 		// sendTileCombineMessage reads app.tile.size.{x,y} and calls

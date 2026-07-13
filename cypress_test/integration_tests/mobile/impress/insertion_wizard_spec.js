@@ -274,6 +274,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		// Insert
 		cy.cGet('#ok').click();
 		// Check the text
+		cy.cGet('body').type('{esc}'); // Make sure to unselect the text before re-selecting it. Or URLPopUp may not show.
 		impressHelper.selectTextOfShape();
 		helper.copy();
 		helper.expectTextForClipboard('some text');
