@@ -2724,7 +2724,11 @@ void SwAccessibleMap::FireEvents()
 
 tools::Rectangle SwAccessibleMap::GetVisibleArea() const
 {
-    return o3tl::convert( GetVisArea().SVRect(), o3tl::Length::twip, o3tl::Length::mm100 );
+    const SwRect& rVisArea = GetVisArea();
+    return tools::Rectangle( rVisArea.getLeft().as_hmm<sal_Int32>(),
+                             rVisArea.getTop().as_hmm<sal_Int32>(),
+                             rVisArea.getRight().as_hmm<sal_Int32>(),
+                             rVisArea.getBottom().as_hmm<sal_Int32>() );
 }
 
 // Convert a MM100 value relative to the document root into a pixel value

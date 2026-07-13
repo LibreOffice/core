@@ -885,12 +885,12 @@ awt::Point SwXTextViewCursor::getPosition()
     const SwFrameFormat& rMaster = rSh.GetPageDesc( rSh.GetCurPageDesc() ).GetMaster();
 
     const SvxULSpaceItem& rUL = rMaster.GetULSpace();
-    const tools::Long nY = aCharRect.Top() - (rUL.GetUpper() + DOCUMENTBORDER);
-    aRet.Y = convertTwipToMm100(nY);
+    aRet.Y = (aCharRect.getTop() - gfx::Length::twip(rUL.GetUpper() + DOCUMENTBORDER))
+                 .as_hmm<sal_Int32>();
 
     const SvxLRSpaceItem& rLR = rMaster.GetLRSpace();
-    const tools::Long nX = aCharRect.Left() - (rLR.ResolveLeft({}) + DOCUMENTBORDER);
-    aRet.X = convertTwipToMm100(nX);
+    aRet.X = (aCharRect.getLeft() - gfx::Length::twip(rLR.ResolveLeft({}) + DOCUMENTBORDER))
+                 .as_hmm<sal_Int32>();
 
     return aRet;
 }

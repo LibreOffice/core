@@ -20,6 +20,7 @@
 
 #include <ostream>
 
+#include <basegfx/units/Length.hxx>
 #include <sal/log.hxx>
 #include <tools/gen.hxx>
 #include "swdllapi.h"
@@ -68,6 +69,14 @@ public:
     tools::Long Right() const { return Width() ? Left() + Width() - 1 : Left(); }
     tools::Long Top() const { return m_Point.Y(); }
     tools::Long Bottom() const { return Height() ? Top() + Height() - 1 : Top(); }
+
+    /// gfx::Length accessors (twip-based, for gradual migration to EMU)
+    gfx::Length getWidth()  const { return gfx::Length::twip(Width()); }
+    gfx::Length getHeight() const { return gfx::Length::twip(Height()); }
+    gfx::Length getLeft()   const { return gfx::Length::twip(Left()); }
+    gfx::Length getRight()  const { return gfx::Length::twip(Right()); }
+    gfx::Length getTop()    const { return gfx::Length::twip(Top()); }
+    gfx::Length getBottom() const { return gfx::Length::twip(Bottom()); }
 
     // In order to be able to access the members of Pos and SSize from the layout side.
     Point& Pos() { return m_Point; }

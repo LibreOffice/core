@@ -1754,9 +1754,9 @@ void SwView::WriteUserDataSequence ( cpo::uno::Sequence < beans::PropertyValue >
     sal_uInt16 nViewID( GetViewFrame().GetCurViewId());
     aVector.push_back(comphelper::makePropertyValue(u"ViewId"_ustr, "view" + OUString::number(nViewID)));
 
-    aVector.push_back(comphelper::makePropertyValue(u"ViewLeft"_ustr, convertTwipToMm100 ( rRect.Left() )));
+    aVector.push_back(comphelper::makePropertyValue(u"ViewLeft"_ustr, rRect.getLeft().as_hmm<sal_Int32>()));
 
-    aVector.push_back(comphelper::makePropertyValue(u"ViewTop"_ustr, convertTwipToMm100 ( rRect.Top() )));
+    aVector.push_back(comphelper::makePropertyValue(u"ViewTop"_ustr, rRect.getTop().as_hmm<sal_Int32>()));
 
     auto visibleLeft = convertTwipToMm100 ( rVis.Left() );
     aVector.push_back(comphelper::makePropertyValue(u"VisibleLeft"_ustr, visibleLeft));

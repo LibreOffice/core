@@ -2225,11 +2225,9 @@ cpo::uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             if ( pTmpFrame )
             {
                 OSL_ENSURE( pTmpFrame->isFrameAreaDefinitionValid(), "frame not valid" );
-                const SwRect &rRect = pTmpFrame->getFrameArea();
-                Size aMM100Size = o3tl::convert(
-                        Size( rRect.Width(), rRect.Height() ),
-                        o3tl::Length::twip, o3tl::Length::mm100 );
-                aAny <<= awt::Size( aMM100Size.Width(), aMM100Size.Height() );
+                const SwRect& rRect = pTmpFrame->getFrameArea();
+                aAny <<= awt::Size(rRect.getWidth().as_hmm<sal_Int32>(),
+                                   rRect.getHeight().as_hmm<sal_Int32>());
             }
         }
         else if(pEntry->nWID == FN_UNO_PARENT_TEXT)
