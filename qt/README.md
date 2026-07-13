@@ -19,13 +19,14 @@ sudo dnf install autoconf automake cppunit-devel fontconfig-devel gcc gcc-c++ \
 
 ### Ubuntu
 
-Tested on Ubuntu 24.04 LTS.
+Tested on Ubuntu 24.04 LTS and 26.04 LTS.
 
 ```bash
 sudo apt install -y autoconf automake build-essential cmake fontconfig git \
-    libcap-dev libcppunit-dev libpam0g-dev libpng-dev libqt6websockets6-dev \
+    libcap-dev libcppunit-dev libpam0g-dev libpng-dev \
     libssl-dev libtool libzstd-dev npm pkg-config python3-lxml python3-polib \
-    qt6-base-dev qt6-tools-dev qt6-tools-dev-tools qt6-webengine-dev
+    qt6-base-dev qt6-tools-dev qt6-tools-dev-tools qt6-webengine-dev \
+    qt6-websockets-dev
 ```
 
 ### Debian
@@ -35,9 +36,9 @@ Tested on Debian 13 (Trixie).
 ```bash
 sudo apt install -y autoconf automake build-essential fontconfig git \
     libcap-dev libcppunit-dev libpam0g-dev libpng-dev \
-    libqt6websockets6-dev libssl-dev libtool libzstd-dev npm pkg-config \
+    libssl-dev libtool libzstd-dev npm pkg-config \
     python3-lxml python3-polib qt6-base-dev qt6-tools-dev qt6-tools-dev-tools \
-    qt6-webengine-dev
+    qt6-webengine-dev qt6-websockets-dev
 ```
 
 ### Arch Linux
