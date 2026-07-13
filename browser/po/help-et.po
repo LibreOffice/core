@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-15 10:01+0000\n"
+"PO-Revision-Date: 2026-07-13 10:56+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
-"Language-Team: Estonian <https://hosted.weblate.org/projects/"
-"collabora-online/help/et/>\n"
+"Language-Team: Estonian <https://hosted.weblate.org/projects/collabora-"
+"online/help/et/>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -83,13 +83,12 @@ msgid "Open"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-79
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>O</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>0</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"O</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-72
 msgid "Print (Download as PDF)"
@@ -583,13 +582,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:143-138
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-105
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-105
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Home</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:79-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-38
@@ -602,13 +600,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:139-118
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-88
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-88
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Home</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-38
 msgid "Go and select text to start of document"
@@ -617,15 +614,14 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-104
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-103
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-103
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Home</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-38
@@ -650,13 +646,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:144-137
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-99
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-99
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>End</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:83-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-38
@@ -669,13 +664,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:140-131
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-86
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-86
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>End</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Z</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Z</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-38
 msgid "Go and select text to end of document"
@@ -684,15 +678,14 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-102
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-101
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-101
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>End</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-38
 msgid "Move the view up one page"
@@ -707,26 +700,24 @@ msgid "Switch cursor between text and header"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-102
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageUp</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>P</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-38
 msgid "Extend the selection up one page"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-97
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageUp</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>P</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-38
 msgid "Move the view down one page"
@@ -741,13 +732,12 @@ msgid "Switch cursor between text and footer"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-102
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageDown</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>P</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageDown</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-38
 msgid "Extend the selection down one page"
