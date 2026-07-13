@@ -2535,7 +2535,7 @@ public:
                      OString const& rGUID, OString const& rFilterGUID);
 
     /** Return the sheet view table for the ID */
-    SCTAB GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID);
+    SC_DLLPUBLIC SCTAB GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID);
 
     bool HasSheetViews(SCTAB nTab) const;
     SC_DLLPUBLIC std::shared_ptr<sc::SheetViewManager> GetSheetViewManager(SCTAB nTable);
@@ -2557,6 +2557,12 @@ public:
      * then reapplies the sheet views's sorting and filtering for the auto-filter.
      */
     void SyncSheetViews(SCTAB nDefaultViewTable);
+
+    /** Removes the sheet view bookkeeping of a table that is about to be
+     *  deleted: a holder table is removed from its sheet view manager, and
+     *  a default view table clears the back pointers of its holder tables.
+     */
+    void CleanupSheetViewsForDeletedTab(SCTAB nTab);
 
 private:
     ScDocument(const ScDocument& r) = delete;

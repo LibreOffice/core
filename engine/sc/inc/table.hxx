@@ -1210,6 +1210,7 @@ public:
     void RemoveSheetViewTablePointer()
     {
         mpSheetViewFor = nullptr;
+        mnSheetViewID = sc::InvalidSheetViewID;
     }
 
 private:

@@ -1202,6 +1202,33 @@ sc::SheetViewID ScDocument::GetTableSheetViewID(SCTAB nTab) const
     return sc::DefaultSheetViewID;
 }
 
+void ScDocument::CleanupSheetViewsForDeletedTab(SCTAB nTab)
+{
+    ScTable* pTable = FetchTable(nTab);
+    if (!pTable)
+        return;
+
+    if (pTable->IsSheetViewHolder())
+    {
+        assert(pTable->GetDefaultViewTable() && "Sheet view holder but the pointer to the table is nullptr");
+        auto pSheetViewManager = pTable->GetDefaultViewTable()->GetSheetViewManager();
+        assert(pSheetViewManager && "Sheet view holder but the table has no SheetViewManager");
+        pSheetViewManager->remove(pTable->GetSheetViewID());
+    }
+    else
+    {
+        auto pManager = pTable->GetSheetViewManager();
+        if (pManager)
+        {
+            for (auto const& rSheetView : pManager->iterateValidSheetViews())
+            {
+                // Set the table pointer to null as the table will be deleted
+                rSheetView.getTablePointer()->RemoveSheetViewTablePointer();
+            }
+        }
+    }
+}
+
 std::pair<sc::SheetViewID, SCTAB> ScDocument::CreateNewSheetView(SCTAB nTab)
 {
     ScTable* pTable = FetchTable(nTab);

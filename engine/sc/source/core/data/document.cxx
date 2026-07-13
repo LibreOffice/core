@@ -724,29 +724,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 if (pTab)
                     pTab->UpdateDeleteTab(aCxt);
 
-            // Delete sheet views holders
-            if (ScTable* pTable = FetchTable(nTab))
-            {
-                if (pTable->IsSheetViewHolder())
-                {
-                    assert(pTable->GetDefaultViewTable() && "Sheet view holder but the pointer to the table is nullptr");
-                    auto pSheetViewManager = pTable->GetDefaultViewTable()->GetSheetViewManager();
-                    assert(pSheetViewManager && "Sheet view holder but the table has no SheetViewManager");
-                    pSheetViewManager->remove(pTable->GetSheetViewID());
-                }
-                else
-                {
-                    auto pManager = pTable->GetSheetViewManager();
-                    if (pManager)
-                    {
-                        for (auto const& rSheetView : pManager->iterateValidSheetViews())
-                        {
-                            // Set the table pointer to null as the table will be deleted
-                            rSheetView.getTablePointer()->RemoveSheetViewTablePointer();
-                        }
-                    }
-                }
-            }
+            CleanupSheetViewsForDeletedTab(nTab);
 
             // tdf#149502 make sure ScTable destructor called after the erase is finished, when
             // maTabs[x].nTab==x is true again, as it should be always true.
@@ -802,22 +780,22 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
             sc::RefUpdateDeleteTabContext aCxt( *this, nTab, nSheets);
             sc::DelayDeletingBroadcasters delayDeletingBroadcasters(*this);
 
-            for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
+            for (SCTAB nTabOffset = 0; nTabOffset < nSheets; ++nTabOffset)
             {
-                ScRange aRange( 0, 0, nTab, MaxCol(), MaxRow(), nTab + aTab );
+                ScRange aRange( 0, 0, nTab, MaxCol(), MaxRow(), nTab + nTabOffset );
                 DelBroadcastAreasInRange( aRange );
 
                 // #i8180# remove database ranges etc. that are on the deleted tab
                 // (restored in undo with ScRefUndoData)
 
-                xColNameRanges->DeleteOnTab( nTab + aTab );
-                xRowNameRanges->DeleteOnTab( nTab + aTab );
-                pDBCollection->DeleteOnTab( nTab + aTab );
+                xColNameRanges->DeleteOnTab( nTab + nTabOffset );
+                xRowNameRanges->DeleteOnTab( nTab + nTabOffset );
+                pDBCollection->DeleteOnTab( nTab + nTabOffset );
                 if (pDPCollection)
-                    pDPCollection->DeleteOnTab( nTab + aTab );
+                    pDPCollection->DeleteOnTab( nTab + nTabOffset );
                 if (pDetOpList)
-                    pDetOpList->DeleteOnTab( nTab + aTab );
-                DeleteAreaLinksOnTab( nTab + aTab );
+                    pDetOpList->DeleteOnTab( nTab + nTabOffset );
+                DeleteAreaLinksOnTab( nTab + nTabOffset );
             }
 
             if (pRangeName)
@@ -847,6 +825,9 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
             for (auto & pTab : maTabs)
                 if (pTab)
                     pTab->UpdateDeleteTab(aCxt);
+
+            for (SCTAB nTabOffset = 0; nTabOffset < nSheets; ++nTabOffset)
+                CleanupSheetViewsForDeletedTab(nTab + nTabOffset);
 
             maTabs.erase(maTabs.begin() + nTab, maTabs.begin() + nTab + nSheets);
 

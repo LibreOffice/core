@@ -1709,6 +1709,44 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testDeleteTabsCleansUpSheetViews)
+{
+    // Deleting tables through the multi-table path keeps the sheet view
+    // bookkeeping consistent, the same as deleting a single table.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    ScTestViewCallback aView1;
+    ScTabViewShell* pTabView1 = aView1.getTabViewShell();
+
+    // One sheet view of the first sheet. The holder table sits at tab 1.
+    createNewSheetViewInCurrentView();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rDocument.GetSheetViewManager(SCTAB(0))->size());
+    CPPUNIT_ASSERT(rDocument.IsSheetViewHolder(SCTAB(1)));
+
+    // Move the view back to the default sheet and delete the holder table.
+    pTabView1->SetTabNo(0);
+    CPPUNIT_ASSERT(rDocument.DeleteTabs(1, 1));
+
+    // The sheet view is gone from the manager and lookups find nothing.
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rDocument.GetSheetViewManager(SCTAB(0))->size());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(-1), rDocument.GetSheetViewNumber(SCTAB(0), sc::SheetViewID(0)));
+
+    // Create a sheet view again and this time delete the default table.
+    createNewSheetViewInCurrentView();
+    CPPUNIT_ASSERT(rDocument.IsSheetViewHolder(SCTAB(1)));
+
+    pTabView1->SetTabNo(0);
+    CPPUNIT_ASSERT(rDocument.DeleteTabs(0, 1));
+
+    // The former holder table is an ordinary table now.
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), rDocument.GetTableCount());
+    CPPUNIT_ASSERT(!rDocument.IsSheetViewHolder(SCTAB(0)));
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID, rDocument.GetTableSheetViewID(SCTAB(0)));
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testNewSheetViewKeepsOthersUnchanged)
 {
     // Regression: SC_TAB_INSERTED was broadcast twice in MakeNewSheetView,
