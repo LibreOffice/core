@@ -292,7 +292,8 @@ void BgSaveParentWebSocketHandler::reportFailedSave(const std::string &reason)
     // either way - that's better than hanging and blocking if we get interactive dialogs on save.
     const std::string saveFailed =
         "client-" + _session->getId() +
-        " unocommandresult: { \"commandName\": \".uno:Save\", \"success\": false }";
+        " unocommandresult: { \"commandName\": \".uno:Save\", \"success\": false, "
+        "\"background\": true }";
     _document->sendFrame(saveFailed, WSOpCode::Text);
 
     _document->updateModifiedOnFailedBgSave();
@@ -364,9 +365,6 @@ void BgSaveParentWebSocketHandler::handleMessage(const std::vector<char>& data)
         return;
     }
 
-    // Messages already include client-foo prefixes inherited from ourselves
-    _document->sendFrame(std::string_view(data.data(), data.size()), WSOpCode::Text);
-
     if (tokens[1] == "error:")
         _document->disableBgSave("on save error");
 
@@ -378,20 +376,49 @@ void BgSaveParentWebSocketHandler::handleMessage(const std::vector<char>& data)
         if (JsonUtil::parseJSON(msg, object) &&
             object->get("commandName").toString() == ".uno:Save")
         {
-            if (object->get("success").toString() == "true")
-            {
-                _document->notifySyntheticUnmodifiedState();
-                _session->saveLogUiBackground();
-            }
-            else
-            {
-                _document->updateModifiedOnFailedBgSave();
-                LOG_DBG("Failed to save, not synthesizing modified state");
-                _document->disableBgSave("on failed save");
-            }
-            _saveCompleted = true;
+            handleBgSaveResult(object, tokens);
+            return;
         }
     }
+
+    // Messages already include client-foo prefixes inherited from ourselves
+    _document->sendFrame(std::string_view(data.data(), data.size()), WSOpCode::Text);
+}
+
+void BgSaveParentWebSocketHandler::handleBgSaveResult(Poco::JSON::Object::Ptr& object,
+                                                    const StringVector tokens)
+{
+    LOG_DBG("Handling background save .uno:Save result");
+
+    // Mark as background save result
+    object->set("background", true);
+
+    // Generate updated JSON
+    std::ostringstream oss;
+    object->stringify(oss);
+
+    // Modify original message:
+    // client-00e unocommandresult: { "commandName": ".uno:Save", "success": true, ...
+    // to:
+    // client-00e unocommandresult: {"background":true,"commandName":".uno:Save", ...
+
+    // <client> <command> <JSON>
+    std::string newMsg = tokens[0] + " " + tokens[1] + " " + oss.str();
+
+    _document->sendFrame(newMsg, WSOpCode::Text);
+
+    if (object->get("success").toString() == "true")
+    {
+        _document->notifySyntheticUnmodifiedState();
+        _session->saveLogUiBackground();
+    }
+    else
+    {
+        _document->updateModifiedOnFailedBgSave();
+        LOG_DBG("Failed to save, not synthesizing modified state");
+        _document->disableBgSave("on failed save");
+    }
+    _saveCompleted = true;
 }
 
 void BgSaveParentWebSocketHandler::onDisconnect()

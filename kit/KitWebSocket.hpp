@@ -17,6 +17,7 @@
  */
 
 #include <net/WebSocketHandler.hpp>
+#include <Poco/JSON/Object.h>
 
 #include <memory>
 #include <string>
@@ -108,6 +109,10 @@ public:
 protected:
     virtual void handleMessage(const std::vector<char>& data) override;
     virtual void onDisconnect() override;
+
+    // interpret internal save result and report it
+    void handleBgSaveResult(Poco::JSON::Object::Ptr& object,
+                          const StringVector tokens);
 
     // something weird happened, cleanup & report save failure
     void terminateSave(const std::string &reason);

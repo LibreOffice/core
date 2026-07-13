@@ -99,6 +99,12 @@ protected:
 
         // Force much faster auto-saving
         config.setBool("per_document.background_autosave", true);
+
+        // Set the timed idle and auto save to their defaults so every test
+        // starts from the same base regardless of the loaded config; an
+        // individual test may override these.
+        config.setInt("per_document.idlesave_duration_secs", 30);
+        config.setInt("per_document.autosave_duration_secs", 300);
     }
 };
 
@@ -437,6 +443,116 @@ public:
     }
 };
 
+// An interactive dialog appearing in the background save child aborts that
+// save without writing a new version. The server must fall back to an
+// ordinary foreground save, and upload that, rather than uploading whatever
+// the aborted background save left on disk. This reproduces the case where a
+// background save was torn down by an unexpected jsdialog and the server
+// uploaded a version it had not just saved causing conflict error.
+class UnitBgSaveDialogAbort : public UnitSaveTortureBase
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, WaitBgSaveFail,
+               WaitForegroundSave)
+    _phase;
+
+public:
+    UnitBgSaveDialogAbort()
+        : UnitSaveTortureBase("UnitBgSaveDialogAbort")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        UnitSaveTortureBase::configure(config);
+
+        // Turn off the timed idle and auto save. The only foreground save that
+        // can then happen is the fallback the server issues after the
+        // background save is aborted.
+        config.setInt("per_document.idlesave_duration_secs", 0);
+        config.setInt("per_document.autosave_duration_secs", 0);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("Got: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+        modifyDocument();
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("Got: [" << message << ']');
+
+        if (_phase != Phase::WaitModifiedStatus)
+            return true;
+
+        TRANSITION_STATE(_phase, Phase::WaitBgSaveFail);
+
+        // Make the bgsave child flush an opening dialog: an interactive prompt
+        // that aborts the background save.
+        createStamp("flushdialogopen");
+
+        forceAutosave();
+        TST_LOG("Sending save request");
+        WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        return true;
+    }
+
+    bool onDocumentSaved(const std::string& message, bool success,
+                         const std::string& result) override
+    {
+        TST_LOG("Save result: success=" << success << " result=[" << result << "] for " << message);
+
+        switch (_phase)
+        {
+            case Phase::WaitBgSaveFail:
+                // The aborted background save reports failure to the client.
+                LOK_ASSERT_MESSAGE("The interrupted background save must report failure", !success);
+                TRANSITION_STATE(_phase, Phase::WaitForegroundSave);
+
+                // The server must retry on its own, without the client asking,
+                // so stop injecting the dialog for that foreground retry.
+                removeStamp("flushdialogopen");
+                break;
+            case Phase::WaitForegroundSave:
+                // The server fell back to a foreground save without a new
+                // client request, and that save succeeds.
+                LOK_ASSERT_MESSAGE("The fallback foreground save must succeed", success);
+                passTest("Aborted background save fell back to a foreground save");
+                break;
+            default:
+                LOK_ASSERT_FAIL("Unexpected save result before a save was requested");
+                break;
+        }
+        return true;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                const std::string docName = "empty.ods";
+                TST_LOG("Loading document: " << docName);
+                connectAndLoadLocalDocument(docName);
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitModifiedStatus:
+            case Phase::WaitBgSaveFail:
+            case Phase::WaitForegroundSave:
+                break;
+        }
+    }
+};
+
 class UnitSaveTortureOne : public UnitSaveTortureBase
 {
     STATE_ENUM(Phase, Load, WaitLoadStatus, WaitFirstModifiedStatus, WaitAfterSaveModifiedStatus,
@@ -695,6 +811,11 @@ public:
 
     virtual std::string getBackgroundSaveInjectMessage() override
     {
+        // A dialog "show" is an interactive prompt that must abort the save.
+        if (stampExists("flushdialogopen"))
+            return "client-0000 jsdialog: { \"id\": 13, \"jsontype\": \"dialog\", "
+                   "\"action\": \"show\" }";
+
         if (!stampExists("flushdialogclose"))
             return std::string();
 
@@ -713,8 +834,8 @@ UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* []
     {
-        new UnitBgSaveCrash(), new UnitBgSaveDialogClose(), new UnitTileCombineRace(),
-            new UnitModified(),
+        new UnitBgSaveCrash(), new UnitBgSaveDialogClose(), new UnitBgSaveDialogAbort(),
+            new UnitTileCombineRace(), new UnitModified(),
             new UnitSaveTortureOne("empty.ods", true, false, "simple_load-modify-bgsave"),
             new UnitSaveTortureOne("empty.odt", true, false, "simple_load-modify-bgsave"),
             new UnitSaveTortureOne("empty.ods", true, true,

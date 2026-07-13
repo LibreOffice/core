@@ -3116,6 +3116,25 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
         }
     }
 
+    const bool wasBackgroundSave =
+        json->has("background") && json->get("background").toString() == "true";
+
+    const bool backgroundSaveFailed =
+        wasBackgroundSave && !success && result != "unmodified";
+
+    // A background save can be aborted while running (for example an
+    // interactive dialog appeared in the child).
+    // Before uploading possibly half-done save - fall back to an ordinary
+    // foreground save first and upload its result.
+    if (backgroundSaveFailed && sendUnoSave(session, /*dontTerminateEdit=*/true,
+                                            /*dontSaveIfUnmodified=*/false,
+                                            /*isAutosave=*/false, /*finalWrite=*/false))
+    {
+        LOG_DBG("Background save of docKey [" << _docKey
+                                              << "] failed; retrying as a foreground save");
+        return;
+    }
+
     // Let the clients know of any save failures.
     if (!success && result != "unmodified")
     {
