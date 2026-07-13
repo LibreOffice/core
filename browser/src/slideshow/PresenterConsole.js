@@ -391,6 +391,8 @@ class PresenterConsole {
 		elem.style.backgroundColor = 'transparent';
 		elem.style.color = this.slideShowColor;
 		elem.style.fontSize = '22px';
+		// keep the slide counter on a single line; the row below wraps instead
+		elem.style.whiteSpace = 'nowrap';
 
 		elem = this._proxyPresenter.document.querySelector(
 			'#current-slide-container',
@@ -404,6 +406,7 @@ class PresenterConsole {
 			'#slideshow-control-container',
 		);
 		slideshowControlContainer.style.display = 'flex';
+		slideshowControlContainer.style.flexWrap = 'wrap';
 		slideshowControlContainer.style.gap = '2vw';
 		slideshowControlContainer.style.alignItems = 'center';
 		slideshowControlContainer.style.marginTop = '1vh';
