@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require Cypress */
+/* global describe it cy beforeEach require Cypress expect */
 
 var helper = require('../../common/helper');
 var impressHelper = require('../../common/impress_helper');
@@ -138,5 +138,108 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress hyperlink popup te
 		helper.processToIdle(this.win);
 
 		cy.cGet('.hyperlink-pop-up-container').should('not.exist');
+	});
+
+	// Filled in by recordNextAuxclick before each middle click.
+	var auxclickRecord = null;
+
+	// Record whether the next middle-button click reaches the page, and
+	// whether it arrives cancelled. A middle click consumed on the canvas
+	// never shows up here; one left to the browser shows up uncancelled.
+	function recordNextAuxclick(win) {
+		cy.then(() => {
+			auxclickRecord = { seen: false, prevented: false };
+			win.document.addEventListener('auxclick', function(e) {
+				auxclickRecord.seen = true;
+				auxclickRecord.prevented = e.defaultPrevented;
+			}, { once: true });
+		});
+	}
+
+
+	it('Middle click on the hyperlink opens the link.', function() {
+		// Find the on-screen middle of the URL field from the caret
+		// positions at its two ends.
+		helper.typeIntoDocument('{home}');
+		cy.then(() => helper.processToIdle(this.win));
+		for (var i = 0; i < 7; i++) {
+			helper.typeIntoDocument('{rightArrow}');
+		}
+		cy.then(() => helper.processToIdle(this.win));
+		helper.getBlinkingCursorPosition('fieldStart');
+
+		helper.typeIntoDocument('{rightArrow}');
+		cy.then(() => helper.processToIdle(this.win));
+		helper.getBlinkingCursorPosition('fieldEnd');
+
+		cy.get('@fieldStart').then((start) => {
+			cy.get('@fieldEnd').then((end) => {
+				cy.wrap({
+					x: (start.x + end.x) / 2,
+					y: (start.y + end.y) / 2,
+				}).as('linkPos');
+			});
+		});
+
+		// Leave text edit; over an unmarked shape the engine reports the
+		// hand pointer for the hyperlink under the mouse.
+		impressHelper.removeShapeSelection();
+
+		// Hover the link until the engine reports the hand pointer for it.
+		cy.get('@linkPos').then((point) => {
+			cy.cGet('body').realMouseMove(point.x, point.y);
+		});
+		cy.cGet('#document-canvas').should('have.css', 'cursor', 'pointer');
+
+		recordNextAuxclick(this.win);
+		cy.get('@linkPos').then((point) => {
+			cy.cGet('body').realClick({ x: point.x, y: point.y, button: 'middle' });
+		});
+
+		// The external-link confirmation shows the link's URL.
+		cy.cGet('#openlink-response').should('exist');
+		cy.cGet('[id^="info-modal-label2"]').should('have.text', 'http://www.example.com/');
+
+		// The click was consumed on the canvas, so the browser saw no
+		// middle click to paste from.
+		cy.then(() => {
+			expect(auxclickRecord.seen).to.be.false;
+		});
+	});
+
+	it('Middle click away from the hyperlink is left to the browser.', function() {
+		impressHelper.removeShapeSelection();
+
+		// A spot near the top-left corner of the view, away from the shape.
+		cy.cGet('#document-canvas').then(function(items) {
+			var rect = items[0].getBoundingClientRect();
+			cy.wrap({ x: rect.left + 20, y: rect.top + 20 }).as('awayPos');
+		});
+
+		// Hover the spot; the engine does not report the hand pointer
+		// there. The pointer only updates on change, so the canvas may
+		// keep its initial cursor rather than settle on a specific one.
+		cy.get('@awayPos').then((point) => {
+			cy.cGet('body').realMouseMove(point.x, point.y);
+		});
+		cy.cGet('#document-canvas').should(($canvas) => {
+			expect($canvas[0].style.cursor).to.not.equal('pointer');
+		});
+
+		recordNextAuxclick(this.win);
+		cy.get('@awayPos').then((point) => {
+			cy.cGet('body').realClick({ x: point.x, y: point.y, button: 'middle' });
+		});
+
+		// The click reaches the page uncancelled, so pasting the primary
+		// selection stays available to the browser.
+		cy.then(() => {
+			expect(auxclickRecord.seen).to.be.true;
+			expect(auxclickRecord.prevented).to.be.false;
+		});
+
+		// And no link dialog opens for it.
+		cy.then(() => helper.processToIdle(this.win));
+		cy.cGet('#openlink-response').should('not.exist');
 	});
 });
