@@ -278,6 +278,15 @@ class LayerDrawing {
 		}
 	}
 
+	public playVideos(slideHash: string) {
+		const videoRenderers = this.videoRenderers.get(slideHash);
+		if (!videoRenderers) return;
+
+		for (const videoRenderer of videoRenderers) {
+			videoRenderer.playVideo();
+		}
+	}
+
 	public getVideoRenderer(
 		slideHash: string,
 		videoInfo: VideoInfo,
@@ -987,6 +996,12 @@ class LayerDrawing {
 		this.handleVideos(slideHash);
 		if (this.videoRenderers.has(slideHash)) {
 			this.loadVideos(slideHash);
+			// In our own Qt browser start playback on slide entry. A plain
+			// browser cannot guarantee sound without a user gesture, so
+			// there the video waits for a click.
+			if (window.ThisIsTheQtApp) {
+				this.playVideos(slideHash);
+			}
 		}
 	}
 }

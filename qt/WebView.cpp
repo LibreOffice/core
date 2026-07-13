@@ -729,6 +729,9 @@ WebView::WebView(QWebEngineProfile* profile, bool isWelcome, QMainWindow* parent
     // blocked (Zotero queries api.zotero.org directly from the page; the
     // COOL server's /co/collab/avatar endpoint is fetched for user avatars).
     page->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
+    // Our own browser, so let slide-show video start with sound on slide
+    // entry, without a click.
+    page->settings()->setAttribute(QWebEngineSettings::PlaybackRequiresUserGesture, false);
 
     QObject::connect(page, &QWebEnginePage::fullScreenRequested,
                      [this](QWebEngineFullScreenRequest request)
