@@ -189,8 +189,9 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             const Graphic* pGraphic = rSh.GetGraphic();
             if( pGraphic )
             {
-                Size aSize (
-                    convertTwipToMm100(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).SSize()));
+                const SwRect aFlyRect(rSh.GetAnyCurRect(CurRectType::FlyEmbedded));
+                Size aSize(aFlyRect.getWidth().as_hmm<sal_Int32>(),
+                           aFlyRect.getHeight().as_hmm<sal_Int32>());
 
                 SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF>( rSh.GetAttrPool() ));
                 rSh.GetCurAttr( aSet );
