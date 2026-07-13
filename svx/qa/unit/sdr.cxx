@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
+
 #include <test/unoapi_test.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -23,6 +25,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>
 #include <vcl/virdev.hxx>
@@ -208,6 +211,37 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testSlideBackground)
     // - Actual  : 0
     // i.e. the rendering did not find the bitmap.
     assertXPath(pDocument, "//bitmap", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdrTest, testMediaLinkNotFetchedWhenUpdatesDisallowed)
+{
+    // A media object referenced by an external xlink:href, with no copy of
+    // the media stored inside the document.
+    loadFromFile(u"media-link.fodp");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    auto* pSvxDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pSvxDrawPage);
+    auto* pMedia = dynamic_cast<SdrMediaObj*>(pSvxDrawPage->GetSdrPage()->GetObj(0));
+    CPPUNIT_ASSERT(pMedia);
+
+    // With link updates disallowed, as when loading or converting a document
+    // without a user present to approve them, asking for the placeholder image
+    // must not reach out to the external URL. Without the fix the snapshot is
+    // generated (an empty placeholder bitmap even where no media backend is built,
+    // and the referenced content where one is), so the returned graphic is set.
+    SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    CPPUNIT_ASSERT(pShell);
+    pShell->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
+    CPPUNIT_ASSERT(!pMedia->getSnapshot().is());
+
+#if HAVE_FEATURE_AVMEDIA
+    // Once updates are allowed the same request produces a graphic, so it was
+    // the permission alone that blocked the fetch above.
+    pShell->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+    CPPUNIT_ASSERT(pMedia->getSnapshot().is());
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(SdrTest, test3DRotatedText)
