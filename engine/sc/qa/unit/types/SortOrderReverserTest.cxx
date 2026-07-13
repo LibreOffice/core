@@ -292,6 +292,22 @@ CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testInsertedRows)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testInsertedRowsWithoutOrder)
+{
+    // Row changes on a reverser that holds no order leave it empty, even
+    // when they touch row 0 while the row range is still unset (-1).
+    sc::SortOrderReverser aReverser;
+    aReverser.insertedRows(0, 2);
+    CPPUNIT_ASSERT(aReverser.maSortInfo.maOrder.empty());
+    CPPUNIT_ASSERT_EQUAL(SCROW(-1), aReverser.maSortInfo.mnFirstRow);
+    CPPUNIT_ASSERT_EQUAL(SCROW(-1), aReverser.maSortInfo.mnLastRow);
+
+    aReverser.deletedRows(0, 2);
+    CPPUNIT_ASSERT(aReverser.maSortInfo.maOrder.empty());
+    CPPUNIT_ASSERT_EQUAL(SCROW(-1), aReverser.maSortInfo.mnFirstRow);
+    CPPUNIT_ASSERT_EQUAL(SCROW(-1), aReverser.maSortInfo.mnLastRow);
+}
+
 CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testDeletedRows)
 {
     // Delete after sort range - no change

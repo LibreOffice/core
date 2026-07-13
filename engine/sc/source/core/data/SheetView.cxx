@@ -244,6 +244,10 @@ SCROW SortOrderReverser::resort(SCROW nRow, SCCOL nColumn) const
 
 void SortOrderReverser::insertedRows(SCROW nStartRow, SCROW nRowCount)
 {
+    // With no recorded order there is nothing to keep in step with the rows.
+    if (maSortInfo.maOrder.empty())
+        return;
+
     if (nStartRow > maSortInfo.mnLastRow + 1)
     {
         // After the sort range - nothing to do.
@@ -264,6 +268,9 @@ void SortOrderReverser::insertedRows(SCROW nStartRow, SCROW nRowCount)
 
 void SortOrderReverser::deletedRows(SCROW nStartRow, SCROW nRowCount)
 {
+    if (maSortInfo.maOrder.empty())
+        return;
+
     deleteRowsFromOrderedRange(maSortInfo.mnFirstRow, maSortInfo.mnLastRow, maSortInfo.maOrder,
                                nStartRow, nRowCount);
 
@@ -277,12 +284,18 @@ void SortOrderReverser::deletedRows(SCROW nStartRow, SCROW nRowCount)
 
 void SortOrderReverser::insertedColumns(SCCOL nStartColumn, SCCOL nColumnCount)
 {
+    if (maSortInfo.maOrder.empty())
+        return;
+
     adjustColumnRangeForInsert(maSortInfo.mnFirstColumn, maSortInfo.mnLastColumn, nStartColumn,
                                nColumnCount);
 }
 
 void SortOrderReverser::deletedColumns(SCCOL nStartColumn, SCCOL nColumnCount)
 {
+    if (maSortInfo.maOrder.empty())
+        return;
+
     deleteColumnsFromOrderedRange(maSortInfo.mnFirstColumn, maSortInfo.mnLastColumn,
                                   maSortInfo.maOrder, nStartColumn, nColumnCount);
     if (maSortInfo.maOrder.empty())
