@@ -604,6 +604,7 @@ ErrCode SwHTMLWriter::WriteStream()
         if( !m_bWriteClipboardDoc && m_pDoc->GetDocShell() &&
              (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) &&
               !m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)) &&
+            !mbSkipHeaderFooter &&
             (pFormatHeader = rPageItemSet.GetItemIfSet( RES_HEADER )) )
         {
             const SwFrameFormat *pHeaderFormat = pFormatHeader->GetHeaderFormat();
@@ -624,6 +625,7 @@ ErrCode SwHTMLWriter::WriteStream()
         const SwFormatFooter* pFormatFooter;
         if( !m_bWriteClipboardDoc && m_pDoc->GetDocShell() &&
             (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE))  &&
+            !mbSkipHeaderFooter &&
             (pFormatFooter = rPageItemSet.GetItemIfSet( RES_FOOTER )) )
         {
             const SwFrameFormat *pFooterFormat = pFormatFooter->GetFooterFormat();
