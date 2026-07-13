@@ -513,7 +513,6 @@ else
   endef
 endif
 
-
 ifneq ($(filter HIGHWAY,$(BUILD_TYPE)),)
 
 define gb_LinkTarget__use_highway
@@ -531,6 +530,25 @@ $(call gb_ExternalProject_use_static_libraries,$(1),highway)
 endef
 
 endif # HIGHWAY
+
+ifneq ($(filter BROTLI,$(BUILD_TYPE)),)
+
+define gb_LinkTarget__use_brotli
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(gb_UnpackedTarball_workdir)/brotli/c \
+	-I$(gb_UnpackedTarball_workdir)/brotli/c/include \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),brotli)
+
+endef
+
+define gb_ExternalProject__use_brotli
+$(call gb_ExternalProject_use_static_libraries,$(1),brotli)
+
+endef
+
+endif # BROTLI
 
 ifneq ($(SYSTEM_LIBJPEG),)
 

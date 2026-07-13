@@ -29,6 +29,11 @@ BREAKPAD_TARBALL := breakpad-b324760c7f53667af128a6b77b790323da04fcb9.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+BROTLI_SHA256SUM := 816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec
+BROTLI_TARBALL := brotli-1.2.0.tar.gz
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 BSH_SHA256SUM := 2248387ceaa319840434a3547a8b2fec12f95a8418ee039ce5ff5726053a139c
 BSH_TARBALL := bsh-2.1.1-src.zip
 # three static lines

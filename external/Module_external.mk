@@ -17,6 +17,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,BOOST,boost) \
 	$(call gb_Helper_optional,BOX2D,box2d) \
 	$(call gb_Helper_optional,BREAKPAD,breakpad) \
+	$(call gb_Helper_optional,BROTLI,brotli) \
 	$(call gb_Helper_optional,BSH,beanshell) \
 	$(call gb_Helper_optional,BZIP2,bzip2) \
 	$(call gb_Helper_optional,CAIRO,cairo) \
