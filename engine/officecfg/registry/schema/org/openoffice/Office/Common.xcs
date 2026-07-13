@@ -297,7 +297,7 @@
            export - can save potentially huge amount of CPU time on
            re-compressing the same JPEG image over and over again.</desc>
         </info>
-        <value>15</value>
+        <value>64</value>
       </prop>
       <group oor:name="macOS">
         <prop oor:name="EnableNativeFullScreenWindows" oor:type="xs:boolean" oor:nillable="false">

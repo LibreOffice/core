@@ -825,9 +825,16 @@ private:
     std::map<const vcl::font::PhysicalFontFace*, pdf::FontSubset> m_aType3Fonts;
     sal_Int32                           m_nNextFID;
 
+    /// Compressed bitmap cache
+    struct PDFBmpCacheEntry
+    {
+        bool m_bTrueColor;
+        std::shared_ptr<SvMemoryStream> m_pStream;
+        AlphaMask m_aAlphaMask;
+    };
+
     /// Cache some most recent bitmaps we've exported, in case we encounter them again..
-    o3tl::lru_map<BitmapChecksum,
-                  std::shared_ptr<SvMemoryStream>> m_aPDFBmpCache;
+    o3tl::lru_map<BitmapChecksum, std::optional<PDFBmpCacheEntry>> m_aPDFBmpCache;
 
     sal_Int32                           m_nCurrentPage;
 
