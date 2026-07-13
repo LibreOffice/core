@@ -295,6 +295,24 @@ void BgSaveParentWebSocketHandler::reportFailedSave(const std::string &reason)
     _saveCompleted = true;
 }
 
+bool BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(const std::string& jsdialogPayload)
+{
+    Poco::JSON::Object::Ptr object;
+    if (!JsonUtil::parseJSON(jsdialogPayload, object))
+        return false;
+
+    const std::string jsontype = object->get("jsontype").toString();
+
+    std::string action;
+    const bool bClosingDialog =
+        jsontype == "dialog" &&
+        JsonUtil::findJSONValue(object, "action", action) && action == "close";
+
+    // allow-list of jsdialog messages in bgsave
+    return jsontype == "notebookbar" || jsontype == "sidebar" ||
+           jsontype == "formulabar" || jsontype == "quickfind" || bClosingDialog;
+}
+
 void BgSaveParentWebSocketHandler::handleMessage(const std::vector<char>& data)
 {
     const StringVector tokens = StringVector::tokenize(data.data(), data.size());
@@ -317,27 +335,11 @@ void BgSaveParentWebSocketHandler::handleMessage(const std::vector<char>& data)
 
     if (tokens[1] == "jsdialog:")
     {
-        Poco::JSON::Object::Ptr object;
-        if (JsonUtil::parseJSON(tokens.cat(' ', 2), object))
+        if (isBenignBgSaveJSDialog(tokens.cat(' ', 2)))
         {
-            const std::string jsontype = object->get("jsontype").toString();
-
-            // A closing dialog is a leftover pre-fork notification, not an
-            // interactive prompt, so let it drop without considering it
-            // grounds to fail bg save.
-            std::string action;
-            const bool bClosingDialog =
-                jsontype == "dialog" &&
-                JsonUtil::findJSONValue(object, "action", action) && action == "close";
-
-            // white-listing to avoid popup & dialog & other interactive errors
-            if (jsontype == "notebookbar" || jsontype == "sidebar" ||
-                jsontype == "formulabar" || bClosingDialog)
-            {
-                LOG_DBG("Unexpected but benign jsdialog message from bgsave process " <<
-                        COOLProtocol::getAbbreviatedMessage(data));
-                return;
-            }
+            LOG_DBG("Unexpected but benign jsdialog message from bgsave process " <<
+                    COOLProtocol::getAbbreviatedMessage(data));
+            return;
         }
 
         terminateSave("Unexpected jsdialog message: " +

@@ -188,6 +188,7 @@ wsd_sources = \
 
 test_base_sources = \
 	AIUtilTests.cpp \
+	BgSaveWhiteBoxTests.cpp \
 	DeltaTests.cpp \
 	FileServeWhiteBoxTests.cpp \
 	HexUtilTests.cpp \
