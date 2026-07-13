@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-20 19:01+0000\n"
+"PO-Revision-Date: 2026-07-13 10:56+0000\n"
 "Last-Translator: Gabriel <bloxgabriel18@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/pt_BR/>\n"
-"Language: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -68,11 +68,11 @@ msgstr "Status"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Detalhes"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
-msgstr ""
+msgstr "Nenhum problema encontrado"
 
 #: admin/admin.strings.js:26
 msgid "Dashboard"
@@ -409,13 +409,15 @@ msgstr "Encerrar esta sessão?"
 #: admin/src/AdminSocketServerAudit.js:35
 #: src/control/Control.ServerAuditDialog.ts:58
 msgid "Your WOPI server is not secure: SSL verification failed"
-msgstr ""
+msgstr "Seu servidor WOPI não é seguro: a verificação SSL falhou"
 
 #: admin/src/AdminSocketServerAudit.js:40
 #: src/control/Control.ServerAuditDialog.ts:72
 msgid ""
 "Documents are not effectively contained: missing capabilities or namespaces."
 msgstr ""
+"Os documentos não estão sendo efetivamente contidos: faltam recursos ou "
+"namespaces."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
@@ -423,6 +425,8 @@ msgid ""
 "BPF filtering of potentially risky system calls (seccomp) is not enabled; a "
 "security hazard."
 msgstr ""
+"A filtragem via BPF de chamadas de sistema potencialmente arriscadas "
+"(seccomp) não está habilitada; isso representa um risco de segurança."
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:95
@@ -430,22 +434,28 @@ msgid ""
 "Your server is configured with insufficient hardware resources, which may "
 "lead to poor performance."
 msgstr ""
+"Seu servidor está configurado com recursos de hardware insuficientes, o que "
+"pode resultar em desempenho insatisfatório."
 
 #: admin/src/AdminSocketServerAudit.js:54
 #: src/control/Control.ServerAuditDialog.ts:109
 msgid "Slow Kit jail setup with copying, cannot bind-mount."
 msgstr ""
+"Configuração lenta de jail do Kit com cópia; não é possível usar bind-mount."
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:119
 msgid "Fast kit jail bind mounting not configured"
-msgstr ""
+msgstr "Montagem de vinculação de jail do Fast Kit não configurada"
 
 #: admin/src/AdminSocketServerAudit.js:59
 msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Alguns clientes se conectaram usando o formato antigo de URL WebSocket, cuja "
+"remoção está planejada. Verifique se o seu proxy permite a passagem do "
+"formato compacto."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -455,7 +465,7 @@ msgstr "Erro"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Ler mais"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -557,15 +567,14 @@ msgstr "Mostrar régua"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Mostrar marcas de formatação"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
 #: src/control/Control.NotebookbarWriter.js:2332
 #: src/control/jsdialog/Widget.HTMLContent.ts:52
-#, fuzzy
 msgid "Show Comments"
-msgstr "0 Comentários"
+msgstr "Mostrar Comentários"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:569
 msgid "Accessibility Checker"
@@ -646,11 +655,11 @@ msgstr "Conteúdo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:591
 msgid "Display"
-msgstr ""
+msgstr "Mostrar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Mostrar limites"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560

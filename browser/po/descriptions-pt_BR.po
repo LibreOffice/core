@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-05-22 17:11+0000\n"
+"PO-Revision-Date: 2026-07-13 10:56+0000\n"
 "Last-Translator: Gabriel <bloxgabriel18@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/app-store-descriptions/pt_BR/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #. App name - 50 chars limit
 #: descriptions/google-play.html%2Bhtml.body.h3:5-1
@@ -59,9 +59,8 @@ msgid "Supported files:"
 msgstr "Arquivos suportados:"
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:26-5
-#, fuzzy
 msgid "Open Document Format (.odt, .odp, .ods, .ots, .ott, .otp)"
-msgstr "Open Document Format (.odt, .odp, .ods, .ots, .ott, .otp)"
+msgstr "Formato de documento aberto (.odt, .odp, .ods, .ots, .ott, .otp)"
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:27-5
 msgid ""
@@ -78,7 +77,7 @@ msgstr "Microsoft Office 97/2000/XP/2003 (.doc, .ppt, .xls, .dot, .xlt, .pps)"
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:31-1
 msgid "Report issues:"
-msgstr ""
+msgstr "Relatar problemas:"
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:35-1
@@ -87,11 +86,15 @@ msgid ""
 "href=\"https://col.la/android\"> https://col.la/android</a>. Please note "
 "that anything you enter in the bugtracker will be public."
 msgstr ""
+"Utilize o sistema de rastreamento de bugs e anexe quaisquer arquivos que "
+"tenham causado problemas em <a href=\"https://col.la/android\"> https://"
+"col.la/android</a>. Lembre-se de que tudo o que você inserir no sistema será "
+"público."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:40-1
 msgid "About the app:"
-msgstr ""
+msgstr "Sobre o aplicativo:"
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:44-1
@@ -100,6 +103,10 @@ msgid ""
 "Windows, Mac, and Linux. This, combined with a new front-end based on "
 "Collabora Online, reads and saves documents similarly to LibreOffice desktop."
 msgstr ""
+"O Collabora Office para Android utiliza o mesmo motor do LibreOffice para "
+"Windows, Mac e Linux. Isso, combinado com uma nova interface baseada no "
+"Collabora Online, permite ler e salvar documentos de forma semelhante ao "
+"LibreOffice para desktop."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:48-1
@@ -109,16 +116,20 @@ msgid ""
 "developing Android support since 2012, with the help of Google Summer of "
 "Code students Andrzej Hunt, Iain Billet and Kaishu Sahu."
 msgstr ""
+"Os engenheiros da Collabora Tor Lillqvist, Tomaž Vajngerl, Michael Meeks, "
+"Miklos Vajna, Jan Holešovský, Mert Tümer, Rashesh Padia e Skyler Grey vêm "
+"desenvolvendo suporte para Android desde 2012, com a ajuda dos estudantes do "
+"Google Summer of Code Andrzej Hunt, Iain Billet e Kaishu Sahu."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:52-1
 msgid "License:"
-msgstr ""
+msgstr "Licença:"
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:56-1
 msgid "Open Source - Mozilla Public License v2 and other"
-msgstr ""
+msgstr "Código Aberto – Mozilla Public License v2 e outras"
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:60-1
