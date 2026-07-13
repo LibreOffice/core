@@ -208,8 +208,11 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipHeaderFooterOmitsHeaderFooterConten
     // Header/footer content must be absent when SkipHeaderFooter is set.
     assertXPath(pDoc, "//div[@title='header']", 0);
     assertXPath(pDoc, "//div[@title='footer']", 0);
-    // Body content must still be present.
-    assertXPathContent(pDoc, "//body//span", u"BODYMARKER");
+    // Body content must still be present. Assert a <p> exists in the body
+    // rather than checking text inside a <span>, because the generic save()
+    // path (unlike ExportPaMToHTML) does not rewrite <p> to <span>, so the
+    // body text may be <p>BODYMARKER</p> or <p><span>BODYMARKER</span></p>.
+    assertXPath(pDoc, "//body//p", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipImagesEmbedded)
