@@ -147,6 +147,19 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableNamedRangeSourceODS)
                                  sheet::DataPilotFieldOrientation_PAGE, nOrient);
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableDatabaseRangeSourceODS)
+{
+    createScDoc("ods/pivot-table-database-range-source.ods");
+    saveAndReload(TestFilter::ODS);
+
+    ScDocument* pDoc = getScDoc();
+    ScDPCollection* pDPs = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPs->GetCount());
+    const ScSheetSourceDesc* pDesc = (*pDPs)[0].GetSheetDesc();
+    CPPUNIT_ASSERT(pDesc);
+    CPPUNIT_ASSERT_EQUAL(u"testdbrange"_ustr, pDesc->GetRangeName());
+}
+
 namespace
 {
 bool checkVisiblePageFieldMember(const ScDPSaveDimension::MemberList& rMembers,

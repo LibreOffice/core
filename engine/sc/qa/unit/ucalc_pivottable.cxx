@@ -17,6 +17,7 @@
 #include <scopetools.hxx>
 #include <stringutil.hxx>
 #include <dbdocfun.hxx>
+#include <dbdata.hxx>
 #include <generalfunction.hxx>
 #include <tabprotection.hxx>
 #include <undomanager.hxx>
@@ -861,6 +862,65 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableNamedSource)
 
     rNames.clear();
     m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDatabaseRangeSource)
+{
+    // A pivot sourced from a named database range resolves to that range's
+    // current area on every refresh, so it follows the range as it grows.
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+
+    static const DPFieldDef aFields[] = {
+        { u"Name",  sheet::DataPilotFieldOrientation_ROW, ScGeneralFunction::NONE, false },
+        { u"Group", sheet::DataPilotFieldOrientation_COLUMN, ScGeneralFunction::NONE, false },
+        { u"Score", sheet::DataPilotFieldOrientation_DATA, ScGeneralFunction::NONE, false }
+    };
+    const char* aData[][3] = {
+        { "Andy",    "A", "30" },
+        { "Bruce",   "A", "20" },
+        { "Charlie", "B", "45" },
+    };
+    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
+    size_t const nDataCount = SAL_N_ELEMENTS(aData);
+
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
+
+    // Define a named database range over the data (no table style).
+    OUString aDBName(u"MyDBRange"_ustr);
+    ScDBData* pDBData = new ScDBData(aDBName, aSrcRange.aStart.Tab(),
+        aSrcRange.aStart.Col(), aSrcRange.aStart.Row(),
+        aSrcRange.aEnd.Col(), aSrcRange.aEnd.Row());
+    bool bInserted
+        = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert the database range.", bInserted);
+
+    // The source description resolves the database-range name to its area.
+    ScSheetSourceDesc aSheetDesc(m_pDoc);
+    aSheetDesc.SetRangeName(aDBName);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Database range name should resolve to its area.",
+        aSrcRange.Format(*m_pDoc, ScRefFlags::RANGE_ABS_3D),
+        aSheetDesc.GetSourceRange().Format(*m_pDoc, ScRefFlags::RANGE_ABS_3D));
+
+    // Growing the range is picked up on the next resolve (dynamic source).
+    ScRange aGrownRange(aSrcRange);
+    aGrownRange.aEnd.SetRow(aGrownRange.aEnd.Row() + 2);
+    pDBData->SetArea(aGrownRange.aStart.Tab(),
+        aGrownRange.aStart.Col(), aGrownRange.aStart.Row(),
+        aGrownRange.aEnd.Col(), aGrownRange.aEnd.Row());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Source range should follow the grown database range.",
+        aGrownRange.Format(*m_pDoc, ScRefFlags::RANGE_ABS_3D),
+        aSheetDesc.GetSourceRange().Format(*m_pDoc, ScRefFlags::RANGE_ABS_3D));
+
+    // A totals row is excluded from the source, while the name stays the source.
+    pDBData->SetTotals(true);
+    ScRange aWithoutTotals(aGrownRange);
+    aWithoutTotals.aEnd.IncRow(-1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Totals row should be excluded from the source.",
+        aWithoutTotals.Format(*m_pDoc, ScRefFlags::RANGE_ABS_3D),
+        aSheetDesc.GetSourceRange().Format(*m_pDoc, ScRefFlags::RANGE_ABS_3D));
+    CPPUNIT_ASSERT_EQUAL(aDBName, aSheetDesc.GetRangeName());
+
     m_pDoc->DeleteTab(0);
 }
 

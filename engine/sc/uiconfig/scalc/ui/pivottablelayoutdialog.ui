@@ -995,7 +995,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="source-radio-named-range">
-                                <property name="label" translatable="yes" context="pivottablelayoutdialog|source-radio-named-range">Named range</property>
+                                <property name="label" translatable="yes" context="pivottablelayoutdialog|source-radio-named-range">Named or database range</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">False</property>

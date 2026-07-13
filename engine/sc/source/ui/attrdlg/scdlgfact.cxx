@@ -232,6 +232,7 @@ public:
     bool IsNamedRange() const override { return m_pDlg->IsNamedRange(); }
     OUString GetSelectedNamedRange() const override { return m_pDlg->GetSelectedNamedRange(); }
     void AppendNamedRange(const OUString& rName) override { m_pDlg->AppendNamedRange(rName); }
+    void SelectNamedRange(const OUString& rName) override { m_pDlg->SelectNamedRange(rName); }
 };
 }
 

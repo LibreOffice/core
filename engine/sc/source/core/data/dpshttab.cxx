@@ -29,6 +29,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <rangenam.hxx>
+#include <dbdata.hxx>
 #include <queryentry.hxx>
 #include <tokenarray.hxx>
 
@@ -260,25 +261,27 @@ const ScRange& ScSheetSourceDesc::GetSourceRange() const
 {
     if (!maRangeName.isEmpty())
     {
-        // Obtain the source range from the range name first.
+        // Obtain the source range from the range name first, then the database ranges.
         maSourceRange = ScRange();
-        ScRangeName& rRangeName = mpDoc->GetRangeName();
-        do
+        OUString aUpper = ScGlobal::getCharClass().uppercase(maRangeName);
+        const ScRangeData* pData = mpDoc->GetRangeName().findByUpperName(aUpper);
+        if (pData)
         {
-            OUString aUpper = ScGlobal::getCharClass().uppercase(maRangeName);
-            const ScRangeData* pData = rRangeName.findByUpperName(aUpper);
-            if (!pData)
-                break;
-
-            // range name found.  Fow now, we only use the first token and
-            // ignore the rest.
+            // For now, we only use the first token and ignore the rest.
             ScRange aRange;
-            if (!pData->IsReference(aRange))
-                break;
-
-            maSourceRange = aRange;
+            if (pData->IsReference(aRange))
+                maSourceRange = aRange;
         }
-        while (false);
+        else if (ScDBCollection* pDBs = mpDoc->GetDBCollection())
+        {
+            if (const ScDBData* pDBData = pDBs->getNamedDBs().findByUpperName(aUpper))
+            {
+                pDBData->GetArea(maSourceRange);
+                // A totals row is a summary, not data - exclude it from the source.
+                if (pDBData->HasTotals() && maSourceRange.aEnd.Row() > maSourceRange.aStart.Row())
+                    maSourceRange.aEnd.IncRow(-1);
+            }
+        }
     }
     return maSourceRange;
 }

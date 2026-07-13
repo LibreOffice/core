@@ -99,6 +99,12 @@ void ScDataPilotSourceTypeDlg::AppendNamedRange(const OUString& rName)
     }
 }
 
+void ScDataPilotSourceTypeDlg::SelectNamedRange(const OUString& rName)
+{
+    m_xLbNamedRange->set_active_text(rName);
+    m_xBtnNamedRange->set_active(true);
+}
+
 IMPL_LINK_NOARG(ScDataPilotSourceTypeDlg, RadioClickHdl, weld::Toggleable&, void)
 {
     m_xLbNamedRange->set_sensitive(m_xBtnNamedRange->get_active());

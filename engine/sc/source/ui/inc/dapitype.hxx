@@ -40,6 +40,7 @@ public:
     bool IsNamedRange() const;
     OUString GetSelectedNamedRange() const;
     void AppendNamedRange(const OUString& rNames);
+    void SelectNamedRange(const OUString& rName);
 
 private:
     DECL_LINK(RadioClickHdl, weld::Toggleable&, void);

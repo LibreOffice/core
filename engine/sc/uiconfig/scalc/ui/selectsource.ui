@@ -94,7 +94,7 @@
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="namedrange">
-                        <property name="label" translatable="yes" context="selectsource|namedrange">_Named range:</property>
+                        <property name="label" translatable="yes" context="selectsource|namedrange">_Named or database range:</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>

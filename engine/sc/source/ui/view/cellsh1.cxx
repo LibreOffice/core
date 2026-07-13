@@ -3760,7 +3760,7 @@ void ScCellShell::ExecuteDataPilotDialog()
     else            // create new table
     {
         // tdf#169108 - create anonymous database range or data
-        pTabViewShell->GetDBData( true, SC_DB_MAKE );
+        ScDBData* pCursorDBData = pTabViewShell->GetDBData( true, SC_DB_MAKE );
         ScMarkData& rMark = GetViewData().GetMarkData();
         if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
             pTabViewShell->MarkDataArea( false );
@@ -3784,6 +3784,21 @@ void ScCellShell::ExecuteDataPilotDialog()
         ScRangeName::const_iterator itr = rRangeName.begin(), itrEnd = rRangeName.end();
         for (; itr != itrEnd; ++itr)
             pTypeDlg->AppendNamedRange(itr->second->GetName());
+
+        // Also offer named database ranges (including styled tables), and note
+        // the one under the cursor (an anonymous range is not named, so it
+        // never matches) to default to it below.
+        OUString aCursorDBName;
+        if (ScDBCollection* pDBs = rDoc.GetDBCollection())
+            for (const auto& rxDB : pDBs->getNamedDBs())
+            {
+                pTypeDlg->AppendNamedRange(rxDB->GetName());
+                if (rxDB.get() == pCursorDBData)
+                    aCursorDBName = rxDB->GetName();
+            }
+
+        if (!aCursorDBName.isEmpty())
+            pTypeDlg->SelectNamedRange(aCursorDBName);
 
         pTypeDlg->StartExecuteAsync([this, pTypeDlg, pTabViewShell,
                                     pScMod, pFact, &rDoc, &rMark, aDestPos](int nResult) mutable {

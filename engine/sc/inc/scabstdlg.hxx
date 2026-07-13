@@ -117,6 +117,7 @@ public:
     virtual bool IsNamedRange() const = 0;
     virtual OUString GetSelectedNamedRange() const = 0;
     virtual void AppendNamedRange(const OUString& rName) = 0;
+    virtual void SelectNamedRange(const OUString& rName) = 0;
 };
 
 class AbstractScDataPilotServiceDlg : public VclAbstractDialog

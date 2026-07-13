@@ -19,6 +19,7 @@
 #include <dbdocfun.hxx>
 #include <dpsave.hxx>
 #include <dpshttab.hxx>
+#include <dbdata.hxx>
 #include <scmod.hxx>
 
 #include <memory>
@@ -242,6 +243,23 @@ void ScPivotLayoutDialog::SetupSource()
             if (aEachRange == aSourceRange)
             {
                 sSourceNamedRangeName = aEachName;
+                bIsNamedRange = true;
+            }
+        }
+    }
+
+    // Also list named database ranges (including styled tables). Match by name,
+    // not area: a totals row makes the DB range's own area differ from the
+    // source range (GetSourceRange excludes the totals row).
+    const OUString aSourceName = maPivotTableObject.GetSheetDesc()->GetRangeName();
+    if (ScDBCollection* pDBs = mrDocument.GetDBCollection())
+    {
+        for (const auto& rxDB : pDBs->getNamedDBs())
+        {
+            mxSourceListBox->append_text(rxDB->GetName());
+            if (!aSourceName.isEmpty() && rxDB->GetName() == aSourceName)
+            {
+                sSourceNamedRangeName = rxDB->GetName();
                 bIsNamedRange = true;
             }
         }
