@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-08 17:01+0000\n"
+"PO-Revision-Date: 2026-07-09 15:01+0000\n"
 "Last-Translator: dukezas <dukezas@gmail.com>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/lt/>\n"
-"Language: \n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/lt/>\n"
+"Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
-"%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.6\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"(n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -65,7 +65,7 @@ msgstr "Būsena"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Detalės"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -444,6 +444,9 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Kai kurie klientai prisijungė naudodami senąją „WebSocket“ URL formą, kurią "
+"planuojama pašalinti. Patikrinkite, ar jūsų tarpinis (proxy) serveris "
+"praleidžia kompaktišką formą."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -453,7 +456,7 @@ msgstr "Klaida"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Sužinoti daugiau"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -552,7 +555,7 @@ msgstr "Rodyti liniuotę"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Rodyti formatavimo žymes"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
@@ -640,11 +643,11 @@ msgstr "Turinys"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:591
 msgid "Display"
-msgstr ""
+msgstr "Parodyti"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Rodyti ribas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560
@@ -862,10 +865,13 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Kai įjungta, „Writer“ pritaiko dokumentą prie atidaryto rodinio srities "
+"pločio. Kai išjungta, dokumentas atidaromas numatytuoju mastelio lygiu, "
+"nustatytu apačioje."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1347
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Nėra galimų nustatymų, skirtų {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1359
 msgid "Select a tab to browser settings."
@@ -942,7 +948,7 @@ msgstr "„Zotero“ paskyros API nustatymai"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2064
 msgid "Zotero Settings"
-msgstr ""
+msgstr "\"Zotero\" nustatymai"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2096
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
@@ -959,7 +965,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2121
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Dokumentų pasirašymo nustatymai"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 #: admin/src/integrator/AdminIntegratorSettings.ts:2176
@@ -1070,7 +1076,7 @@ msgstr "Įkelti Xcu"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3375
 #: admin/src/integrator/AdminIntegratorSettings.ts:3385
 msgid "Enter {0}"
-msgstr ""
+msgstr "Įvesti {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 msgid "Reset"
@@ -1078,15 +1084,15 @@ msgstr "Nustatyti iš naujo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Atkurti numatytuosius nustatymus {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Ar tikrai norite atkurti nustatymus {0}?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
-msgstr ""
+msgstr "Išsaugoti {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -2172,7 +2178,7 @@ msgstr "Daugiau to nerodyti"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "Apdorojant komandą {1} įvyko {0} klaida."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -3082,7 +3088,7 @@ msgstr "Taisyti"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:850
 msgid "Find"
-msgstr ""
+msgstr "Rasti"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -4187,6 +4193,8 @@ msgstr "Įterpti stilizuotą lentelę"
 #: src/control/Control.NotebookbarCalc.js:1815
 msgid "Select an editable cell range to insert a styled table"
 msgstr ""
+"Pasirinkite redaguojamą langelių diapazoną, kad įterptumėte stilizuotą "
+"lentelę"
 
 #: src/control/Control.NotebookbarCalc.js:1824
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4469,7 +4477,7 @@ msgstr "Pasirinkti"
 #: src/control/Control.NotebookbarImpress.js:2235
 #: src/control/Control.NotebookbarWriter.js:2638
 msgid "Distribute"
-msgstr ""
+msgstr "Platinti"
 
 #: src/control/Control.NotebookbarImpress.js:2274
 #: src/control/Control.NotebookbarWriter.js:2677
@@ -4590,7 +4598,7 @@ msgstr "Pašalinti skyrių"
 
 #: src/control/Control.PartsPreview.js:871
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Pašalinti skyrių ir skaidres"
 
 #: src/control/Control.PartsPreview.js:880
 msgid "Move Section Up"
@@ -4610,7 +4618,7 @@ msgstr "Išskleisti visas skiltis"
 
 #: src/control/Control.PartsPreview.js:940
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr ""
+msgstr "Ištrinti skyrių „%1“ ir jo %2 skaidres?"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "Enter new section name:"
@@ -4661,10 +4669,13 @@ msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
+"Prisijungta naudojant senąją „WebSocket“ URL formą, kurią planuojama "
+"pašalinti. Patikrinkite, ar jūsų tarpinis (proxy) serveris praleidžia "
+"kompaktišką formą."
 
 #: src/control/Control.ServerAuditDialog.ts:143
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Prisijungta naudojant kompaktišką „WebSocket“ URL formą"
 
 #: src/control/Control.ServerAuditDialog.ts:152
 msgid "The IsAdminUser property is not set by integration"
@@ -4778,6 +4789,8 @@ msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"Pritaikykite puslapį prie lango pločio. Išmanųjį mastelį atidarant galima "
+"perjungti skirtuko Failas skiltyje Parinktys."
 
 #: src/control/Control.StatusBar.js:271
 msgid "Status Bar Menu"
@@ -4897,23 +4910,23 @@ msgstr "Rodyti meniu"
 
 #: src/control/Control.UIManager.ts:2681
 msgid "Copy error details"
-msgstr ""
+msgstr "Kopijuoti klaidos detales"
 
 #: src/control/Control.UIManager.ts:2728
 msgid "Show technical details"
-msgstr ""
+msgstr "Rodyti technines detales"
 
 #: src/control/Control.UIManager.ts:2742
 msgid "Technical Details:"
-msgstr ""
+msgstr "Techninės detalės:"
 
 #: src/control/Control.UIManager.ts:2746
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Klaidos informacija nukopijuota į iškarpinę"
 
 #: src/control/Control.UIManager.ts:2756
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Nepavyko nukopijuoti klaidos detalių"
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
@@ -5126,17 +5139,18 @@ msgstr ""
 "bibliografijos šiame dokumente."
 
 #: src/control/HRuler.ts:321
-#, fuzzy
 msgid "First line"
-msgstr "Pirma skaidrė"
+msgstr "Pirma eilutė"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "Prieš"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
 msgstr ""
+"Dukart spustelėkite, kad įterptumėte tabuliacijos žingsnį. Dešiniuoju pelės "
+"mygtuku spustelėkite, kad pamatytumėte daugiau parinkčių."
 
 #: src/control/HRuler.ts:785 src/control/HRuler.ts:952
 msgid "Left Margin"
@@ -5297,19 +5311,19 @@ msgstr "Pavadinimas, vertikalus tekstas, iliustracija"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Standartinis pasirinkimas"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Išplečiamas pasirinkimas"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "Pridėti pasirinkimą"
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Blokuoti pasirinkimą"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -5981,7 +5995,7 @@ msgstr ""
 
 #: src/app/Socket.ts:621
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "Ryšys su dokumentu nutrūko."
 
 #: src/app/Socket.ts:622
 msgid "The server has been disconnected."
@@ -6049,7 +6063,7 @@ msgstr "Neteisingas serveris, jungiamasi iš naujo..."
 
 #: src/app/Socket.ts:1905
 msgid "Unsupported version."
-msgstr ""
+msgstr "Nepalaikoma versija."
 
 #: src/app/Socket.ts:1906
 msgid "Unsupported server version."
@@ -6146,7 +6160,7 @@ msgstr "{0} skirtukas pasirinktas"
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "Diske neliko laisvos vietos."
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6505,7 +6519,7 @@ msgstr "Nepavyko atsisiųsti iškarpinės, nukopijuokite dar kartą"
 
 #: src/map/Clipboard.js:372
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Nepavyko įkelti iškarpinės"
 
 #: src/map/Clipboard.js:1450
 msgid ""
@@ -6572,10 +6586,9 @@ msgid "Please send us your feedback"
 msgstr "Prašome atsiųsti mums savo atsiliepimą"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
 msgstr ""
-"Failo, kurio tipas yra {0}, negalima įkelti į serverį, nes yra be pavadinimo"
+"Failo, kurio tipas yra {0}, negalima įterpti į serverį, nes yra be pavadinimo"
 
 #: src/map/handler/Map.FileInserter.js:193
 msgid ""
@@ -6585,9 +6598,8 @@ msgstr ""
 "Failo, kurio tipas yra {0}, negalima įkelti į serverį, nes yra be pavadinimo"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
-msgstr "Failo, kurio tipas yra {0}, negalima įkelti į serverį, nes yra tuščias"
+msgstr "Failo, kurio tipas yra {0}, negalima įterpti į serverį, nes yra tuščias"
 
 #: src/map/handler/Map.FileInserter.js:197
 msgid ""
@@ -6791,9 +6803,8 @@ msgid "Present to all"
 msgstr "Rodyti visiems"
 
 #: src/slideshow/PresenterConsole.js:41
-#, fuzzy
 msgid "Exit"
-msgstr "Redaguoti"
+msgstr "Išeiti"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Go Back"
