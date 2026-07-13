@@ -19,27 +19,27 @@ describe(['tagdesktop'], 'Notebookbar at 400% zoom', function() {
 		});
 	});
 
-	it('what does not fit in the nav can be reached by scrolling', function() {
-		cy.cGet('nav.main-nav.hasnotebookbar').then(function($nav) {
-			const nav = $nav[0];
-			const style = getComputedStyle(nav);
-			const bar = nav.offsetHeight - nav.clientHeight -
+	it('what does not fit in the tab strip can be reached by scrolling', function() {
+		cy.cGet('.ui-tabs.notebookbar').then(function($tabStrip) {
+			const tabStrip = $tabStrip[0];
+			const style = getComputedStyle(tabStrip);
+			const bar = tabStrip.offsetHeight - tabStrip.clientHeight -
 			          parseFloat(style.borderTopWidth) -
 			          parseFloat(style.borderBottomWidth);
 
-			expect(nav.scrollWidth, 'nav holds more than it can show, clientWidth ' +
-			       nav.clientWidth).to.be.greaterThan(nav.clientWidth);
+			expect(tabStrip.scrollWidth, 'tab strip holds more than it can show, clientWidth ' +
+			       tabStrip.clientWidth).to.be.greaterThan(tabStrip.clientWidth);
 
-			expect(style.overflowX, 'nav overflow-x').to.be.oneOf(['scroll', 'auto']);
+			expect(style.overflowX, 'tab strip overflow-x').to.be.oneOf(['scroll', 'auto']);
 
-			expect(style.scrollbarWidth, 'nav scrollbar-width at this viewport')
+			expect(style.scrollbarWidth, 'tab strip scrollbar-width at this viewport')
 				.to.not.equal('none');
 
-			expect(bar, 'nav scrollbar height, offsetHeight ' + nav.offsetHeight +
-			       ' against clientHeight ' + nav.clientHeight).to.be.greaterThan(0);
+			expect(bar, 'tab strip scrollbar height, offsetHeight ' + tabStrip.offsetHeight +
+			       ' against clientHeight ' + tabStrip.clientHeight).to.be.greaterThan(0);
 
-			nav.scrollLeft = nav.scrollWidth;
-			expect(nav.scrollLeft, 'nav scrollLeft after scrolling to the end')
+			tabStrip.scrollLeft = tabStrip.scrollWidth;
+			expect(tabStrip.scrollLeft, 'tab strip scrollLeft after scrolling to the end')
 				.to.be.greaterThan(0);
 		});
 	});

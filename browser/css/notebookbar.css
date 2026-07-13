@@ -52,6 +52,19 @@ span.notebookbar.static-label,
 	display: inline-flex;
 	flex: 0.1 0.1 auto;
 	margin-inline-start: 5px;
+	overflow-x: auto;
+	scrollbar-width: thin;
+	min-width: 0;
+}
+
+.notebookbar-tabs-container::-webkit-scrollbar {
+	height: 3px;
+	background-color: var(--color-background-darker);
+}
+
+.notebookbar-tabs-container::-webkit-scrollbar-thumb {
+	background-color: var(--color-border-darker);
+	border-radius: 2px;
 }
 
 .ui-tabs.notebookbar {
@@ -59,6 +72,23 @@ span.notebookbar.static-label,
 	z-index: 999;
 	padding: 0px;
 	height: 100%;
+	overflow-x: auto;
+	scrollbar-width: thin;
+	max-width: 100%;
+}
+
+.ui-tabs.notebookbar::-webkit-scrollbar {
+	height: 3px;
+	background-color: var(--color-background-darker);
+}
+
+.ui-tabs.notebookbar::-webkit-scrollbar-thumb {
+	background-color: var(--color-border-darker);
+	border-radius: 2px;
+}
+
+.ui-tab.notebookbar {
+	flex-shrink: 0;
 }
 
 .notebookbar#NotebookBar {
@@ -74,6 +104,7 @@ button.ui-tab.notebookbar {
 	padding: 0 clamp(4px, 1vw, 1em);
 	border: 1px solid transparent;
 	background-color: transparent;
+	flex-shrink: 0;
 	/* calc([minimum size]
 	   + ([maximum size] - [minimum size])
 	   * ((100vw - [minimum viewport width]) / ([maximum viewport width] - [minimum viewport width]))); */
@@ -1060,5 +1091,11 @@ label.notebookbar.ui-checkbox-label {
 #context-toolbar .unobutton > img {
 	width: var(--btn-img-size);
 	height: var(--btn-img-size);
+}
+
+@media screen and (max-width: 900px) {
+	[id^='SidebarDeck.PropertyDeck'] {
+		display: none !important;
+	}
 }
 

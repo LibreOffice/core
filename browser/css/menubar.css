@@ -198,7 +198,7 @@ nav.hasnotebookbar [id^='save'].saved::after {
 .main-nav.hasnotebookbar:not(.readonly) {
 	background: var(--color-main-background);
 	padding: 0px;
-	overflow: scroll hidden;
+	overflow: visible;
 	padding-inline-start: 5px;
 }
 
