@@ -447,7 +447,10 @@ class VideoRendererGl extends VideoRenderer {
 		gl.activeTexture(gl.TEXTURE0);
 
 		const video = this.videoRenderInfo;
-		if (!video.ended && video.videoElement.currentTime > 0) {
+		// Keep painting the current decoded frame once playback has started,
+		// including after it ends, so the final frame stays on screen instead
+		// of the slide's own still image showing through underneath.
+		if (video.videoElement.currentTime > 0) {
 			gl.bindVertexArray(video.getVao());
 			gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 			this.updateTexture(video.getTexture(), video.videoElement);
