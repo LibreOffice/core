@@ -69,6 +69,7 @@ class ShortcutDescriptor {
     preventDefault: boolean;
     platform: Platform;
     showViewModeAttention: boolean;
+    condition: (() => boolean) | null;
 
     constructor({
         docType = null,
@@ -83,6 +84,7 @@ class ShortcutDescriptor {
         preventDefault = true,
         platform = null,
         showViewModeAttention = true,
+        condition = null,
     }: {
         /** The type of document to register this keybind in. If omitted, the keybind will be registered for all document types */
         docType?: 'text' | 'presentation' | 'drawing' | 'spreadsheet',
@@ -156,6 +158,12 @@ class ShortcutDescriptor {
 
         @default true */
         showViewModeAttention?: boolean,
+        /** An optional predicate evaluated when the key combination otherwise
+        matches. Return false to make this shortcut not match, so processing
+        falls through to any other handler for the same key.
+
+        If omitted, the shortcut always matches when its key/modifier match. */
+        condition?: () => boolean,
     }) {
         app.console.assert(keyCode !== null || key !== null, 'registering a keyboard shortcut without specifying either a key or a keyCode - this will result in an untriggerable shortcut');
 
@@ -183,6 +191,7 @@ class ShortcutDescriptor {
         this.preventDefault = preventDefault;
         this.platform = platform;
         this.showViewModeAttention = showViewModeAttention;
+        this.condition = condition;
     }
 }
 
@@ -213,7 +222,8 @@ class KeyboardShortcuts {
                 descriptor.modifier === modifier &&
                 (descriptor.viewType === null || descriptor.viewType === viewType) &&
                 (!descriptor.platform || (descriptor.platform & platform)) &&
-                (keyMatches || keyCodeMatches);
+                (keyMatches || keyCodeMatches) &&
+                (!descriptor.condition || descriptor.condition());
         });
 
         if (shortcuts.length > 1) {
