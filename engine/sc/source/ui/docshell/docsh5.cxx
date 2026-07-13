@@ -239,9 +239,12 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             // Do not reset AutoFilter range during temporary operations on
             // other ranges, use the document global temporary anonymous range
             // instead. But, if AutoFilter is to be toggled then do use the
-            // sheet-local DB range.
+            // sheet-local DB range. Also avoid the sheet-local range when the
+            // marked area overlaps an autofiltered named range, so re-fitting
+            // it (DBAreaDeleted below) doesn't drop that range's filter buttons.
             bool bSheetLocal = true;
-            if (eMode != SC_DB_AUTOFILTER && pNoNameData->HasAutoFilter())
+            if (eMode != SC_DB_AUTOFILTER
+                && (pNoNameData->HasAutoFilter() || (pData && pData->HasAutoFilter())))
             {
                 bSheetLocal = false;
                 pNoNameData = m_pDocument->GetAnonymousDBData();

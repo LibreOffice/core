@@ -7714,6 +7714,44 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoFilterFlagsAfterColumnInsertUndoRedo)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testAutoFilterFlagsKeptOnSubRangeMake)
+{
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // Header in A1:F1, one data row.
+    for (SCCOL nCol = 0; nCol <= 5; ++nCol)
+    {
+        m_pDoc->SetString(nCol, 0, 0, "Col" + OUString::number(nCol + 1));
+        m_pDoc->SetString(nCol, 1, 0, OUString::number(nCol));
+    }
+
+    // Named DB range A1:F30 carrying the autofilter, with buttons on A1:F1.
+    ScDBData* pNamed = new ScDBData(u"MyRange"_ustr, 0, 0, 0, 5, 29);
+    pNamed->SetAutoFilter(true);
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(
+        std::unique_ptr<ScDBData>(pNamed)));
+    m_pDoc->ApplyFlagsTab(0, 0, 5, 0, 0, ScMF::Auto);
+
+    // Sheet-local anonymous range over the same area, without autofilter - the
+    // range GetDBData re-fits to the selection.
+    m_pDoc->SetAnonymousDBData(
+        0, std::unique_ptr<ScDBData>(new ScDBData(u"NONAME"_ustr, 0, 0, 0, 5, 29)));
+
+    for (SCCOL nCol = 0; nCol <= 5; ++nCol)
+        CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(nCol, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+
+    // Make an unnamed DB range over the sub-range A1:F20.
+    m_xDocShell->GetDBData(ScRange(0, 0, 0, 5, 19, 0), SC_DB_MAKE, ScGetDBSelection::Keep);
+
+    // The named range's header buttons must survive.
+    for (SCCOL nCol = 0; nCol <= 5; ++nCol)
+        CPPUNIT_ASSERT_MESSAGE(
+            OString("autofilter button dropped on column " + OString::number(nCol)).getStr(),
+            bool(m_pDoc->GetAttr(nCol, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testAutoFilterFlagsAfterColumnDeleteUndoRedo)
 {
     m_pDoc->InsertTab(0, u"Sheet1"_ustr);
