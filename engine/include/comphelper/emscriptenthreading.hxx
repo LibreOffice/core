@@ -14,26 +14,4 @@
 #include <config_emscripten.h>
 #include <config_vclplug.h>
 
-#if defined __EMSCRIPTEN__ && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI                                   \
-    && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
-
-#include <thread>
-
-#include <emscripten/proxying.h>
-
-namespace comphelper::emscriptenthreading
-{
-struct Data
-{
-    emscripten::ProxyingQueue proxyingQueue;
-    std::thread::native_handle_type eventHandlerThread;
-};
-
-Data& getData();
-
-void tearDown();
-}
-
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -973,7 +973,7 @@ IMPL_LINK_NOARG(SalInstanceMenu, SelectMenuHdl, ::Menu*, bool)
        selected id.
 
        without this, while gen menus already have propagated this to its parent
-       in MenuFloatingWindow::EndExecute, SalMenus as used under kf5/macOS
+       in MenuFloatingWindow::EndExecute, SalMenus as used under macOS
        won't propagate the selected id
     */
     return false;

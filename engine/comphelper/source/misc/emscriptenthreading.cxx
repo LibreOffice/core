@@ -12,43 +12,4 @@
 #include <config_emscripten.h>
 #include <config_vclplug.h>
 
-#if defined __EMSCRIPTEN__ && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI                                   \
-    && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
-
-#include <comphelper/emscriptenthreading.hxx>
-
-#include <mutex>
-#include <thread>
-
-namespace
-{
-std::mutex mutex;
-comphelper::emscriptenthreading::Data* data = nullptr;
-}
-
-comphelper::emscriptenthreading::Data& comphelper::emscriptenthreading::getData()
-{
-    std::scoped_lock g(mutex);
-    if (data == nullptr)
-    {
-        data = new Data;
-        std::thread t([] { emscripten_exit_with_live_runtime(); });
-        data->eventHandlerThread = t.native_handle();
-        t.detach();
-    }
-    return *data;
-}
-
-void comphelper::emscriptenthreading::tearDown()
-{
-    std::scoped_lock g(mutex);
-    if (data != nullptr)
-    {
-        delete data;
-        data = nullptr;
-    }
-}
-
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

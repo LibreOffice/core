@@ -4,17 +4,6 @@ excludelist:
     shell/source/sessioninstall/SyncDbusSessionHelper.hxx:
     # No hpp->hdl replacement
     - org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp
-    shell/source/backends/kf5be/kfaccess.cxx:
-    # Keep abstract QT headers
-    - QtCore/QDir
-    - QtCore/QStandardPaths
-    - QtCore/QString
-    - QtCore/QUrl
-    - QtGui/QFont
-    - QtGui/QFontDatabase
-    shell/source/backends/kf5be/kfbackend.cxx:
-    # Keep abstract QT headers
-    - QtWidgets/QApplication
     shell/source/backends/localebe/localebackend.cxx:
     # Needed on WIN for toU
     - o3tl/char16_t2wchar_t.hxx

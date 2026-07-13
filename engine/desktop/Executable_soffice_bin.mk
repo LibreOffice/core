@@ -71,12 +71,6 @@ $(eval $(call gb_Executable_add_ldflags,soffice_bin,\
 	    $(if $(DISABLE_GUI),, \
 	        -sOFFSCREENCANVAS_SUPPORT=1 -sOFFSCREENCANVASES_TO_PTHREAD=\#qtcanvas)) \
 ))
-ifeq ($(ENABLE_QT6),TRUE)
-$(eval $(call gb_Executable_add_ldflags,soffice_bin, \
-    -s MODULARIZE=1 \
-    -s EXPORT_NAME=soffice_entry \
-))
-endif
 
 $(call gb_Executable_get_linktarget_target,soffice_bin): \
     $(if $(ENABLE_EMBIND_UNO),$(gb_CustomTarget_workdir)/static/unoembind/bindings_uno.js) \

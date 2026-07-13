@@ -409,12 +409,10 @@ void Scheduler::CallbackTaskScheduling()
     ImplSVData *pSVData = ImplGetSVData();
     ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
 
-#if !(defined __EMSCRIPTEN__ && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD)
     //TODO: While the special Emscripten Qt6 JSPI/non-PROXY_TO_PTHREAD mode doesn't lock the
     // SolarMutex in QtTimer::timeoutActivated, but only down below when calling pTask->Invoke(),
     // that looks too brittle in general, so treat that special mode specially here.
     DBG_TESTSOLARMUTEX();
-#endif
 
     SchedulerGuard aSchedulerGuard;
     if ( !rSchedCtx.mbActive || InfiniteTimeoutMs == rSchedCtx.mnTimerPeriod )
@@ -593,27 +591,7 @@ void Scheduler::CallbackTaskScheduling()
         {
             // prepare Scheduler object for deletion after handling
             pTask->SetDeletionFlags();
-#if defined __EMSCRIPTEN__ && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
-            if (pTask->DecideTransferredExecution())
-            {
-                auto & data = comphelper::emscriptenthreading::getData();
-                (void) emscripten_proxy_promise(
-                    data.proxyingQueue.queue, data.eventHandlerThread,
-                    [](void * p) {
-                        auto const pTask = static_cast<Task *>(p);
-                        SolarMutexGuard g;
-                        pTask->Invoke();
-                    },
-                    pTask);
-            }
-            else
-            {
-                SolarMutexGuard g;
-                pTask->Invoke();
-            }
-#else
             pTask->Invoke();
-#endif
         }
     }
     catch (css::uno::Exception&)
