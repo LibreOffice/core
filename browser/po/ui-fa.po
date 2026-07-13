@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2025-06-06 13:13+0000\n"
+"PO-Revision-Date: 2026-07-06 08:01+0000\n"
 "Last-Translator: HM <goodlinuxuser@chmail.ir>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/collabora-online/"
-"ui/fa/>\n"
-"Language: \n"
+"collabora-ui/fa/>\n"
+"Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -56,19 +56,19 @@ msgstr "کارنامه"
 #: src/control/Control.ServerAuditDialog.ts:314
 #: src/control/Control.ServerAuditDialog.ts:315
 msgid "Server audit"
-msgstr ""
+msgstr "بازرسی سرور"
 
 #: admin/admin.strings.js:23 src/control/Control.ServerAuditDialog.ts:333
 msgid "Status"
-msgstr ""
+msgstr "وضعیت"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "جزییات"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
-msgstr ""
+msgstr "مشکلی پیدا نشد"
 
 #: admin/admin.strings.js:26
 msgid "Dashboard"
@@ -400,7 +400,7 @@ msgstr "آیا مطمئن هستید که می خواهید این جلسه را
 #: admin/src/AdminSocketServerAudit.js:35
 #: src/control/Control.ServerAuditDialog.ts:58
 msgid "Your WOPI server is not secure: SSL verification failed"
-msgstr ""
+msgstr "سرور WOPI شما امن نیست: اعتبارسنجی SSL شکست خورد"
 
 #: admin/src/AdminSocketServerAudit.js:40
 #: src/control/Control.ServerAuditDialog.ts:72
@@ -2116,7 +2116,7 @@ msgstr ""
 
 #: src/control/Control.AlertDialog.js:88 src/map/Clipboard.js:1429
 msgid "Don’t show this again"
-msgstr ""
+msgstr "این رو دوباره نشان نده"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
@@ -2140,11 +2140,11 @@ msgstr "آغازه"
 #: src/control/Control.NotebookbarImpress.js:873
 #: src/control/Control.NotebookbarImpress.js:1482
 msgid "New"
-msgstr ""
+msgstr "جدید"
 
 #: src/control/Control.BackstageView.ts:112
 msgid "Open"
-msgstr ""
+msgstr "بازکردن"
 
 #: src/control/Control.BackstageView.ts:120
 #: src/control/Control.Notebookbar.js:757
@@ -2163,7 +2163,7 @@ msgstr "اشتراک گذاری"
 
 #: src/control/Control.BackstageView.ts:128
 msgid "Info"
-msgstr ""
+msgstr "اطلاعات"
 
 #: src/control/Control.BackstageView.ts:144
 #: src/control/Control.NotebookbarCalc.js:180
@@ -2177,11 +2177,11 @@ msgstr "ذخیره به عنوان"
 
 #: src/control/Control.BackstageView.ts:160
 msgid "Export"
-msgstr ""
+msgstr "صادرکن"
 
 #: src/control/Control.BackstageView.ts:168
 msgid "Sign"
-msgstr ""
+msgstr "علامت"
 
 #: src/control/Control.BackstageView.ts:182 src/control/Control.Menubar.ts:129
 #: src/control/Control.Menubar.ts:483 src/control/Control.Menubar.ts:670
@@ -2192,11 +2192,11 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:431 src/control/IFrameDialog.js:35
 #: src/map/handler/Map.Settings.ts:78
 msgid "Options"
-msgstr ""
+msgstr "گزینه ها"
 
 #: src/control/Control.BackstageView.ts:240
 msgid "Start a new document from one of the following templates."
-msgstr ""
+msgstr "شروع یک سند بر اساس یکی از الگوهای جاری."
 
 #: src/control/Control.BackstageView.ts:278
 #: src/control/jsdialog/Widget.ColorPicker.ts:441
@@ -2205,38 +2205,38 @@ msgstr "اخیر"
 
 #: src/control/Control.BackstageView.ts:501
 msgid "Document Info"
-msgstr ""
+msgstr "اطلاعات سند"
 
 #: src/control/Control.BackstageView.ts:502
 msgid "View document properties and information"
-msgstr ""
+msgstr "مشاهدهٔ مشخصات و اطلاعات سند"
 
 #: src/control/Control.BackstageView.ts:524
 msgid "Export Document"
-msgstr ""
+msgstr "صادر کردن سند"
 
 #: src/control/Control.BackstageView.ts:525
 msgid "export your documents in different formats"
-msgstr ""
+msgstr "صدور سند به قالب های گوناگون"
 
 #: src/control/Control.BackstageView.ts:557 templates/templates.js:50
 #: templates/templates.js:60 templates/templates.js:70
 msgid "Text Document"
-msgstr ""
+msgstr "سند متنی"
 
 #: src/control/Control.BackstageView.ts:557
 #: src/control/Control.BackstageView.ts:560
 #: src/control/Control.PartsPreview.js:101
 msgid "Pages"
-msgstr ""
+msgstr "صفحات"
 
 #: src/control/Control.BackstageView.ts:558
 msgid "Spreadsheet"
-msgstr ""
+msgstr "صفحه گسترده"
 
 #: src/control/Control.BackstageView.ts:558
 msgid "Sheets"
-msgstr ""
+msgstr "کاربرگ ها"
 
 #: src/control/Control.BackstageView.ts:559
 #: src/control/Control.NavigatorPanel.ts:202
@@ -2244,11 +2244,11 @@ msgstr ""
 #: src/control/Control.PartsPreview.js:101
 #: src/slideshow/PresenterConsole.js:35
 msgid "Slides"
-msgstr ""
+msgstr "پردک ها"
 
 #: src/control/Control.BackstageView.ts:565
 msgid "Parts"
-msgstr ""
+msgstr "بخش ها"
 
 #: src/control/Control.BackstageView.ts:569
 #: src/control/Control.DocumentRepair.js:140
@@ -2257,36 +2257,35 @@ msgstr "نوع"
 
 #: src/control/Control.BackstageView.ts:575
 msgid "Mode"
-msgstr ""
+msgstr "حالت"
 
 #: src/control/Control.BackstageView.ts:576
 msgid "View Only"
-msgstr ""
+msgstr "فقط مشاهده"
 
 #: src/control/Control.BackstageView.ts:583
 msgid "File Name"
-msgstr ""
+msgstr "نام پرونده"
 
 #: src/control/Control.BackstageView.ts:728
 msgid "Blank Spreadsheet"
-msgstr ""
+msgstr "صفحه گسترده خالی"
 
 #: src/control/Control.BackstageView.ts:732
-#, fuzzy
 msgid "Blank Presentation"
-msgstr "پایان ارائه"
+msgstr "ارائه خالی"
 
 #: src/control/Control.BackstageView.ts:737
 msgid "Blank Document"
-msgstr ""
+msgstr "سند خالی"
 
 #: src/control/Control.BackstageView.ts:880
 msgid "Untitled"
-msgstr ""
+msgstr "بدون عنوان"
 
 #: src/control/backstage/Common.tsx:48
 msgid "Loading templates…"
-msgstr ""
+msgstr "بارکردن الگوها…"
 
 #: src/control/backstage/Common.tsx:56
 msgid "Recently opened documents will appear here"
