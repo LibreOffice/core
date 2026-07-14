@@ -14129,6 +14129,15 @@ if test -n "$WSL_ONLY_AS_HELPER"; then
     # TARFILE_LOCATION and JAVAINTERPRETER are used in the validator scripts
     PathFormat "$TARFILE_LOCATION"
     TARFILE_LOCATION="$formatted_path"
+    # The validator scripts (like everything built here) run on the Windows side, so java has to be
+    # the Windows JDK - the Linux java of the helper container cannot be executed there. Prefer the
+    # JDK given via --with-jdk-home, and keep whatever was detected otherwise.
+    if test -n "$with_jdk_home"; then
+        PathFormat "$with_jdk_home/bin/java.exe"
+        if test -e "$formatted_path_unix"; then
+            JAVAINTERPRETER="$formatted_path"
+        fi
+    fi
     PathFormat "$JAVAINTERPRETER"
     JAVAINTERPRETER="$formatted_path"
     # git-bash has (gnu) tar, curl and sha256sum
