@@ -50,6 +50,7 @@
 #include <QMainWindow>
 #include <QObject>
 #include <QScreen>
+#include <QWindow>
 #include <QShortcut>
 #include <QStandardPaths>
 #include <QTemporaryDir>
@@ -326,6 +327,26 @@ private:
     WebView * owner_;
     std::function<void()> closeCallback_;
 };
+
+// Move a window onto a given screen and show it full screen there.
+//
+// On a Wayland move to another output, tear the platform window down first so
+// the reshow builds a fresh wl_surface. This works around QtWayland reusing the
+// surface across hide and show, which the compositor rejects when the surface
+// already had a buffer committed. Elsewhere just show full screen in place.
+void showWindowFullScreenOnScreen(QWidget* pWindow, QScreen* pScreen)
+{
+    const bool bWayland
+        = QGuiApplication::platformName().startsWith(QLatin1String("wayland"));
+    if (bWayland && pWindow->screen() != pScreen)
+    {
+        if (QWindow* pHandle = pWindow->windowHandle())
+            pHandle->destroy();
+    }
+    pWindow->setScreen(pScreen);
+    pWindow->move(pScreen->geometry().topLeft());
+    pWindow->showFullScreen();
+}
 } // namespace
 
 void CODAWebEngineView::connectScreenChanges()
@@ -367,21 +388,15 @@ void CODAWebEngineView::arrangePresentationWindows()
         }
     }
 
-    presenterFSWindow->hide();
     QScreen* presenterScreen = externalScreen ? externalScreen : laptopScreen;
-    presenterFSWindow->setScreen(presenterScreen);
-    presenterFSWindow->move(presenterScreen->geometry().topLeft());
-    presenterFSWindow->showFullScreen();
+    showWindowFullScreenOnScreen(presenterFSWindow, presenterScreen);
 
     Window* consoleWindow = _presenterConsole ? static_cast<Window*>(_presenterConsole->mainWindow()) : nullptr;
     if (consoleWindow)
     {
-        consoleWindow->hide();
-        consoleWindow->setScreen(laptopScreen);
         if (externalScreen)
         {
-            consoleWindow->move(laptopScreen->geometry().topLeft());
-            consoleWindow->showFullScreen();
+            showWindowFullScreenOnScreen(consoleWindow, laptopScreen);
         }
         else
         {
@@ -648,41 +663,27 @@ void CODAWebEngineView::exchangeMonitors()
             origPresentationScreen = i;
     }
 
-    presenterFSWindow->hide();
-
     size_t newPresentationScreen = origPresentationScreen;
+    size_t newConsoleScreen = origConsoleScreen;
 
     if (consoleWindow)
     {
-        consoleWindow->hide();
-
         // Rotate the console screen and rotate the presentation screen
         // every time the console catches up to it for the case there
         // are more than two screens. Typically there's just two screens
         // and they just swap.
-        size_t newConsoleScreen = (origConsoleScreen + 1) % screens.size();
+        newConsoleScreen = (origConsoleScreen + 1) % screens.size();
         if (newConsoleScreen == newPresentationScreen)
             newPresentationScreen = (newPresentationScreen + 1) % screens.size();
-
-        consoleWindow->setScreen(screens[newConsoleScreen]);
-        consoleWindow->move(screens[newConsoleScreen]->geometry().topLeft());
     }
     else
     {
         newPresentationScreen = (newPresentationScreen + 1) % screens.size();
     }
 
-    presenterFSWindow->setScreen(screens[newPresentationScreen]);
-    presenterFSWindow->move(screens[newPresentationScreen]->geometry().topLeft());
-
-    presenterFSWindow->showFullScreen();
-    presenterFSWindow->show();
-
+    showWindowFullScreenOnScreen(presenterFSWindow, screens[newPresentationScreen]);
     if (consoleWindow)
-    {
-        consoleWindow->showFullScreen();
-        consoleWindow->show();
-    }
+        showWindowFullScreenOnScreen(consoleWindow, screens[newConsoleScreen]);
 }
 
 CODAWebEngineView::~CODAWebEngineView()
