@@ -1346,7 +1346,7 @@ IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
         m_pSearchItem->SetWildcard(false);
         m_pSearchItem->SetLevenshtein(false);
         if (GetCheckBoxValue(*m_xRegExpBtn))
-            m_pSearchItem->SetRegExp(true);
+            m_pSearchItem->SetRegExp(m_xRegExpBtn->get_visible());
         else if (GetCheckBoxValue(*m_xWildcardBtn))
             m_pSearchItem->SetWildcard(true);
         else if (GetCheckBoxValue(*m_xSimilarityBox))
