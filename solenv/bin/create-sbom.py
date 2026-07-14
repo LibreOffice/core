@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 import uuid
 
 sbom_data = {}
+root_gids = set()
 timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 productname = os.environ.get("PRODUCTNAME_WITHOUT_SPACES")
 # suffix is hard-coded in makefile :(
@@ -299,7 +300,7 @@ license_cache = {}
 def add_license_relationship(package, from_id, license_expr):
     """Add a license expression element and hasDeclaredLicense relationship."""
 
-    graph = sbom_data[package]["@graph"]
+    graph = sbom_data[package][2]["@graph"]
 
     key = (package, license_expr)
     if key not in license_cache:
@@ -398,11 +399,13 @@ def process_file(file_path):
                     package, pkg_spdx_id, spdx_info["license"])
 
 
-def sbom_skeleton(package, root_spdx_id):
+def sbom_skeleton(package, gid, languages):
+    root_gids.add(gid)
+    root_spdx_id = make_spdx_id(package, f"SPDXRef-{package}")
     package_spdx_id = package_id(package)
     tool_spdx_id = make_spdx_id(package, "SPDXRef-Tool-CustomScript")
 
-    sbom_data[package] = {
+    sbom_data[package] = (gid, languages, {
         "@context": "https://spdx.org/rdf/3.0.1/spdx-context.jsonld",
         "@graph": [
             {
@@ -453,7 +456,7 @@ def sbom_skeleton(package, root_spdx_id):
                 "to": [root_spdx_id]
             }
         ]
-    }
+    })
 
     # Add license for root package
     add_license_relationship(package, root_spdx_id, "MPL-2.0")
@@ -474,20 +477,20 @@ def gen_packages(packinfos, ziplist, languages):
             raise Exception(f"variable used in packinfos not defined in ziplist: {var}")
         return variables[var]
 
-    def gen_package(name):
-        root_spdx_id = make_spdx_id(name, f"SPDXRef-{name}")
+    def gen_package(name, gid, languages):
         if sbom_data.get(name):
             raise Exception(f"duplicate package in packinfos: {name}")
-        sbom_skeleton(name, root_spdx_id)
+        sbom_skeleton(name, gid, languages)
 
     for package in packinfos:
+        gid = package["module"]
         name_pi = package["packagename"]
         name = pattern.sub(replace, name_pi)
         if "%LANGUAGESTRING" in name:
             for lang in languages:
-                gen_package(name.replace("%LANGUAGESTRING", lang))
+                gen_package(name.replace("%LANGUAGESTRING", lang), gid + "_" + lang.replace("-", "_"), lang)
         else:
-            gen_package(name)
+            gen_package(name, gid, "en-US")
 
 
 if __name__ == "__main__":
