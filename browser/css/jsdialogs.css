@@ -3853,7 +3853,7 @@ kbd,
 
 [id^='ColorPage'].jsdialog [id^='iconview_colors'].ui-iconview,
 [id^='colorwindow_iv_colors'].ui-iconview {
-	max-height: 19vh;
+	max-height: 25vh;
 }
 
 [id^='ColorPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview .ui-iconview-entry :is(img, span),
