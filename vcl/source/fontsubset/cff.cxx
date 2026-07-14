@@ -762,6 +762,7 @@ private:
 
     int     seekIndexData( int nIndexBase, int nDataIndex);
     void    seekIndexEnd( int nIndexBase);
+    bool    readIndexCount( int nIndexBase, int& rCount);
 
     CffLocal    maCffLocal[256];
     CffLocal*   mpCffLocal;
@@ -1827,6 +1828,16 @@ void CffSubsetterContext::seekIndexEnd( int nIndexBase)
     assert( mpReadEnd <= mpBaseEnd);
 }
 
+// read the 16-bit entry count at the start of a CFF/CID index table
+bool CffSubsetterContext::readIndexCount( int nIndexBase, int& rCount)
+{
+    if (nIndexBase <= 0 || sal_Int64(nIndexBase) + 2 > mpBaseEnd - mpBasePtr)
+        return false;
+    mpReadPtr = mpBasePtr + nIndexBase;
+    rCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
+    return true;
+}
+
 // initialize FONTDICT specific values
 CffLocal::CffLocal()
 :   mnPrivDictBase( 0)
@@ -1884,7 +1895,9 @@ bool CffSubsetterContext::initialCffRead()
 
     // get the TopDict index
     const sal_Int32 nTopDictBase = getReadOfs();
-    const int nTopDictCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
+    int nTopDictCount;
+    if (!readIndexCount( nTopDictBase, nTopDictCount))
+        return false;
     if( nTopDictCount) {
         for( int i = 0; i < nTopDictCount; ++i) {
             seekIndexData( nTopDictBase, i);
@@ -1900,7 +1913,8 @@ bool CffSubsetterContext::initialCffRead()
 
     // prepare access to the GlobalSubr index
     mnGlobalSubrBase =  getReadOfs();
-    mnGlobalSubrCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
+    if (!readIndexCount( mnGlobalSubrBase, mnGlobalSubrCount))
+        return false;
     mnGlobalSubrBias = (mnGlobalSubrCount<1240)?107:(mnGlobalSubrCount<33900)?1131:32768;
     // skip past the last GlobalSubr entry
 //  seekIndexEnd( mnGlobalSubrBase);
@@ -1912,15 +1926,15 @@ bool CffSubsetterContext::initialCffRead()
     // get/skip FDSelect (CID only) data
 
     // prepare access to the CharStrings index (we got the base from TOPDICT)
-    mpReadPtr = mpBasePtr + mnCharStrBase;
-    mnCharStrCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
+    if (!readIndexCount( mnCharStrBase, mnCharStrCount))
+        return false;
 //  seekIndexEnd( mnCharStrBase);
 
     // read the FDArray index (CID only)
     if( mbCIDFont) {
 //      assert( mnFontDictBase == tellRel());
-        mpReadPtr = mpBasePtr + mnFontDictBase;
-        mnFDAryCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
+        if (!readIndexCount( mnFontDictBase, mnFDAryCount))
+            return false;
         if (o3tl::make_unsigned(mnFDAryCount) >= SAL_N_ELEMENTS(maCffLocal))
         {
             SAL_INFO("vcl.fonts", "CffSubsetterContext: too many CFF in font");
@@ -1957,8 +1971,9 @@ bool CffSubsetterContext::initialCffRead()
         if( mpCffLocal->mnLocalSubrOffs) {
             // read LocalSubrs summary
             mpCffLocal->mnLocalSubrBase = mpCffLocal->mnPrivDictBase + mpCffLocal->mnLocalSubrOffs;
-            mpReadPtr = mpBasePtr + mpCffLocal->mnLocalSubrBase;
-            const int nSubrCount = (mpReadPtr[0] << 8) + mpReadPtr[1];
+            int nSubrCount;
+            if (!readIndexCount( mpCffLocal->mnLocalSubrBase, nSubrCount))
+                return false;
             mpCffLocal->mnLocalSubrBias = (nSubrCount<1240)?107:(nSubrCount<33900)?1131:32768;
 //          seekIndexEnd( mpCffLocal->mnLocalSubrBase);
         }
