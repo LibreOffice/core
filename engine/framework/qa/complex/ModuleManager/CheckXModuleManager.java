@@ -140,9 +140,6 @@ public class CheckXModuleManager
         impl_checkReadOnlyPropsOfModule("com.sun.star.chart.ChartDocument"              );
 
         // other modules
-        impl_checkReadOnlyPropsOfModule("com.sun.star.sdb.RelationDesign"   );
-        impl_checkReadOnlyPropsOfModule("com.sun.star.sdb.QueryDesign"      );
-        impl_checkReadOnlyPropsOfModule("com.sun.star.sdb.TableDesign"      );
         impl_checkReadOnlyPropsOfModule("com.sun.star.sdb.DataSourceBrowser");
         impl_checkReadOnlyPropsOfModule("com.sun.star.frame.Bibliography"   );
         impl_checkReadOnlyPropsOfModule("com.sun.star.script.BasicIDE"      );

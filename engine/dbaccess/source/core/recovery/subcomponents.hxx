@@ -36,8 +36,6 @@ namespace dbaccess
         FORM = css::sdb::application::DatabaseObject::FORM,
         REPORT = css::sdb::application::DatabaseObject::REPORT,
 
-        RELATION_DESIGN = 1000,
-
         UNKNOWN         = 10001
     };
 

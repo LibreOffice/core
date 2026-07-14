@@ -266,7 +266,7 @@ namespace dbaccess
 
         // read the map from sub storages to object names
         MapCompTypeToCompDescs aMapCompDescs;
-        const SubComponentType aKnownTypes[] = { TABLE, QUERY, FORM, REPORT, RELATION_DESIGN };
+        const SubComponentType aKnownTypes[] = { TABLE, QUERY, FORM, REPORT };
         for (SubComponentType aKnownType : aKnownTypes)
         {
             if ( !xRecoveryStorage->hasByName( SubComponentRecovery::getComponentsStorageName( aKnownType ) ) )

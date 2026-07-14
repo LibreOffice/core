@@ -771,9 +771,6 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
                 sApplicationName = "Math";
             else if ( rDocumentService == "com.sun.star.sdb.DatabaseDocument" ||
                  rDocumentService == "com.sun.star.sdb.OfficeDatabaseDocument" ||
-                 rDocumentService == "com.sun.star.sdb.RelationDesign" ||
-                 rDocumentService == "com.sun.star.sdb.QueryDesign" ||
-                 rDocumentService == "com.sun.star.sdb.TableDesign" ||
                  rDocumentService == "com.sun.star.sdb.DataSourceBrowser" )
                 sApplicationName = "Base";
 

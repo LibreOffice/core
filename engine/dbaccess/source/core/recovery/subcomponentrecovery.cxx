@@ -357,8 +357,6 @@ namespace dbaccess
             return u"tables"_ustr;
         case QUERY:
             return u"queries"_ustr;
-        case RELATION_DESIGN:
-            return u"relations"_ustr;
         default:
             break;
         }
@@ -421,42 +419,25 @@ namespace dbaccess
         m_aCompDesc.sName = aComponentIdentity.Second;
 
         // what the controller didn't give us is the information whether this is in edit mode or not ...
-        Reference< XModuleManager2 > xModuleManager( ModuleManager::create(m_rContext) );
-        const OUString sModuleIdentifier = xModuleManager->identify( m_xComponent );
 
         switch ( m_eType )
         {
         case TABLE:
-            m_aCompDesc.bForEditing = sModuleIdentifier == "com.sun.star.sdb.TableDesign";
+            m_aCompDesc.bForEditing = false;
             break;
 
         case QUERY:
-            m_aCompDesc.bForEditing = sModuleIdentifier == "com.sun.star.sdb.QueryDesign";
+            m_aCompDesc.bForEditing = false;
             break;
 
         case REPORT:
-            if ( sModuleIdentifier == "com.sun.star.report.ReportDefinition" )
-            {
-                // it's an SRB report designer
-                m_aCompDesc.bForEditing = true;
-                break;
-            }
             [[fallthrough]];
-
         case FORM:
             m_aCompDesc.bForEditing = !lcl_determineReadOnly( m_xComponent );
             break;
 
         default:
-            if ( sModuleIdentifier == "com.sun.star.sdb.RelationDesign" )
-            {
-                m_eType = RELATION_DESIGN;
-                m_aCompDesc.bForEditing = true;
-            }
-            else
-            {
-                OSL_FAIL( "SubComponentRecovery::impl_identifyComponent_throw: couldn't classify the given sub component!" );
-            }
+            OSL_FAIL( "SubComponentRecovery::impl_identifyComponent_throw: couldn't classify the given sub component!" );
             break;
         }
 
