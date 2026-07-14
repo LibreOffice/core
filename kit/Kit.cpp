@@ -2078,7 +2078,7 @@ std::shared_ptr<kit::Document> Document::load(const std::shared_ptr<ChildSession
         { "EnableMacrosExecution", enableMacrosExecution },
         { "MacroSecurityLevel", macroSecurityLevel },
         { "ClientVisibleArea", clientVisibleArea },
-        { "OriginalDocumentUrl", encodedOriginalDocUrl },
+        { "OriginalDocumentUrl", std::move(encodedOriginalDocUrl) },
         { "Timezone", userTimezone },
     };
 
