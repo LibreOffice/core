@@ -190,9 +190,7 @@ static void initWindow(GtvApplicationWindow* window)
     }
 
     // Fill our comments sidebar
-    gboolean bTiledAnnotations;
-    g_object_get(G_OBJECT(window->kitdocview), "tiled-annotations", &bTiledAnnotations, nullptr);
-    if (!bTiledAnnotations && pDocument)
+    if (pDocument)
     {
         window->commentssidebar = gtv_comments_sidebar_new();
         gtk_container_add(GTK_CONTAINER(priv->scrolledwindowcontainer), window->commentssidebar);
@@ -323,11 +321,9 @@ createRenderingArgsJSON(const GtvRenderingArgs* pRenderingArgs)
 
 static void setupDocView(GtvApplicationWindow* window)
 {
-    GtvApplicationWindowPrivate* priv = getPrivate(window);
     g_object_set(G_OBJECT(window->kitdocview),
                  "doc-password", true,
                  "doc-password-to-modify", true,
-                 "tiled-annotations", priv->m_pRenderingArgs->m_bEnableTiledAnnotations,
                  nullptr);
 
 #if GLIB_CHECK_VERSION(2,40,0)

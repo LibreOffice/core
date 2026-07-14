@@ -74,7 +74,6 @@ gtv_application_init(GtvApplication* app)
         { "lo-path", 0, 0, G_OPTION_ARG_STRING, nullptr, "LO path", nullptr },
         { "unipoll", 0, 0, G_OPTION_ARG_NONE, nullptr, "Enable unified polling loop", nullptr },
         { "user-profile", 0, 0, G_OPTION_ARG_STRING, nullptr, "User profile to use", nullptr },
-        { "enable-tiled-annotations", 0, 0, G_OPTION_ARG_NONE, nullptr, "Whether tiled annotations should be enabled", nullptr },
         { "background-color", 0, 0, G_OPTION_ARG_STRING, nullptr, "Background color", nullptr },
         { "hide-page-shadow", 0, 0, G_OPTION_ARG_NONE, nullptr, "Hide page shadow", nullptr },
         { "hide-whitespace", 0, 0, G_OPTION_ARG_NONE, nullptr, "Hide whitespace", nullptr },
@@ -158,8 +157,6 @@ gtv_application_handle_local_options(GApplication* app, GVariantDict* options)
         }
     }
 
-    if (g_variant_dict_contains(options, "enable-tiled-annotations"))
-        priv->m_pRenderingArgs->m_bEnableTiledAnnotations = true;
     if (g_variant_dict_contains(options, "hide-page-shadow"))
         priv->m_pRenderingArgs->m_bHidePageShadow = true;
     if (g_variant_dict_contains(options, "hide-whitespace"))

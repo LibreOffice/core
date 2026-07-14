@@ -22,7 +22,6 @@ struct GtvRenderingArgs
 {
     std::string m_aLoPath;
     std::string m_aUserProfile;
-    bool m_bEnableTiledAnnotations;
     bool m_bUnipoll;
 
     std::string m_aBackgroundColor;
@@ -30,8 +29,7 @@ struct GtvRenderingArgs
     bool m_bHideWhiteSpace;
 
     GtvRenderingArgs()
-        : m_bEnableTiledAnnotations(false),
-          m_bUnipoll(false),
+        : m_bUnipoll(false),
           m_bHidePageShadow(false),
           m_bHideWhiteSpace(false)
         { }

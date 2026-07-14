@@ -326,7 +326,6 @@ enum
     PROP_CAN_ZOOM_OUT,
     PROP_DOC_PASSWORD,
     PROP_DOC_PASSWORD_TO_MODIFY,
-    PROP_TILED_ANNOTATIONS,
 
     PROP_LAST
 };
@@ -2635,7 +2634,6 @@ static void kit_doc_view_set_property (GObject* object, guint propId, const GVal
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
     bool bDocPasswordEnabled = priv->m_nKitFeatures & KIT_FEATURE_DOCUMENT_PASSWORD;
     bool bDocPasswordToModifyEnabled = priv->m_nKitFeatures & KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
-    bool bTiledAnnotationsEnabled = !(priv->m_nKitFeatures & KIT_FEATURE_NO_TILED_ANNOTATIONS);
 
     switch (propId)
     {
@@ -2682,13 +2680,6 @@ static void kit_doc_view_set_property (GObject* object, guint propId, const GVal
         if ( bool(g_value_get_boolean (value)) != bDocPasswordToModifyEnabled)
         {
             priv->m_nKitFeatures = priv->m_nKitFeatures ^ KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
-            priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nKitFeatures);
-        }
-        break;
-    case PROP_TILED_ANNOTATIONS:
-        if ( bool(g_value_get_boolean (value)) != bTiledAnnotationsEnabled)
-        {
-            priv->m_nKitFeatures = priv->m_nKitFeatures ^ KIT_FEATURE_NO_TILED_ANNOTATIONS;
             priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nKitFeatures);
         }
         break;
@@ -2754,9 +2745,6 @@ static void kit_doc_view_get_property (GObject* object, guint propId, GValue *va
         break;
     case PROP_DOC_PASSWORD_TO_MODIFY:
         g_value_set_boolean (value, (priv->m_nKitFeatures & KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY) != 0);
-        break;
-    case PROP_TILED_ANNOTATIONS:
-        g_value_set_boolean (value, !(priv->m_nKitFeatures & KIT_FEATURE_NO_TILED_ANNOTATIONS));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, propId, pspec);
@@ -3176,20 +3164,6 @@ static void kit_doc_view_class_init (KitDocumentViewClass* pClass)
                              "Edit document password capability",
                              "Whether the client supports providing passwords to edit documents",
                              FALSE,
-                             static_cast<GParamFlags>(G_PARAM_READWRITE
-                                                      | G_PARAM_STATIC_STRINGS));
-
-    /**
-     * KitDocumentView:tiled-annotations-rendering:
-     *
-     * Set it to false if client does not want LO to render comments in tiles and
-     * instead interested in using comments API to access comments
-     */
-    properties[PROP_TILED_ANNOTATIONS] =
-        g_param_spec_boolean("tiled-annotations",
-                             "Render comments in tiles",
-                             "Whether the client wants in tile comment rendering",
-                             true,
                              static_cast<GParamFlags>(G_PARAM_READWRITE
                                                       | G_PARAM_STATIC_STRINGS));
 

@@ -2121,7 +2121,6 @@ std::shared_ptr<kit::Document> Document::load(const std::shared_ptr<ChildSession
         const int flags = KIT_FEATURE_DOCUMENT_PASSWORD
             | KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
             | KIT_FEATURE_PART_IN_INVALIDATION_CALLBACK
-            | KIT_FEATURE_NO_TILED_ANNOTATIONS
             | KIT_FEATURE_RANGE_HEADERS
             | KIT_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK;
         _loKit->setOptionalFeatures(flags);

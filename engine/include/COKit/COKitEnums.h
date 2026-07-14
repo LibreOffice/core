@@ -89,11 +89,6 @@ typedef enum
     KIT_FEATURE_PART_IN_INVALIDATION_CALLBACK = (1ULL << 2),
 
     /**
-     * Turn off tile rendering for annotations
-     */
-    KIT_FEATURE_NO_TILED_ANNOTATIONS = (1ULL << 3),
-
-    /**
      * Enable range based header data
      */
     KIT_FEATURE_RANGE_HEADERS = (1ULL << 4),

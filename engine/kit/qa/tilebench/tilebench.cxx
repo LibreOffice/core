@@ -629,8 +629,6 @@ int main( int argc, char* argv[] )
 
     std::unique_ptr<Document> pDocument;
 
-    pOffice->setOptionalFeatures(KIT_FEATURE_NO_TILED_ANNOTATIONS);
-
     aTimes.emplace_back("load document");
     if (doc_url != nullptr)
         pDocument.reset(pOffice->documentLoad(doc_url));
