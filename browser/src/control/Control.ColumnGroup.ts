@@ -52,6 +52,10 @@ export class ColumnGroup extends GroupBase {
 		this._collectGroupsData(this._sheetGeometry.getColumnGroupsDataInView());
 	}
 
+	onNewDocumentTopLeft(): void {
+		this._refreshGroupsForView();
+	}
+
 	// This returns the required height for the section.
 	_computeSectionHeight(): number {
 		return this._levelSpacing + (this._groupHeadSize + this._levelSpacing) * (this._groups.length + 1);

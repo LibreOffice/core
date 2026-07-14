@@ -51,6 +51,10 @@ export class RowGroup extends GroupBase {
 		this._collectGroupsData(this._sheetGeometry.getRowGroupsDataInView());
 	}
 
+	onNewDocumentTopLeft(): void {
+		this._refreshGroupsForView();
+	}
+
 	// This returns the required width for the section.
 	_computeSectionWidth(): number {
 		return this._levelSpacing + (this._groupHeadSize + this._levelSpacing) * (this._groups.length + 1);

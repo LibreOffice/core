@@ -85,6 +85,24 @@ export abstract class GroupBase extends CanvasSectionObject {
 		this.isRemoved = false;
 	}
 
+	// Align the sheet geometry's view area with the region now on screen and
+	// re-collect the groups for it, so a sheet opened at a scrolled position
+	// still shows its group controls. The viewed rectangle comes from the
+	// layout rather than the map because the map lags during a scroll.
+	protected _refreshGroupsForView(): void {
+		const docLayer = this._map && this._map._docLayer;
+		const activeLayout = app.activeDocument && app.activeDocument.activeLayout;
+		if (!docLayer || !docLayer.sheetGeometry || !activeLayout)
+			return;
+
+		const rectangle = activeLayout.viewedRectangle;
+		docLayer.sheetGeometry.setViewArea(
+			new cool.Point(rectangle.x1, rectangle.y1),
+			new cool.Point(rectangle.width, rectangle.height));
+
+		this.update();
+	}
+
 	// override in subclasses
 	abstract update(): void;
 
