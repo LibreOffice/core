@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_RTL_MATH_HXX
-#define INCLUDED_RTL_MATH_HXX
+#pragma once
 
 #include "rtl/math.h"
 #include "rtl/strbuf.hxx"
@@ -450,7 +448,5 @@ inline double tan(double d)
 }
 
 }
-
-#endif // INCLUDED_RTL_MATH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

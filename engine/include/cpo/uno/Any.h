@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_COM_SUN_STAR_UNO_ANY_H
-#define INCLUDED_COM_SUN_STAR_UNO_ANY_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -391,7 +389,5 @@ template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const css::uno::BaseReference & value );
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

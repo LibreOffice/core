@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SAL_CONFIG_H
-#define INCLUDED_SAL_CONFIG_H
+#pragma once
 
 #if defined ANDROID && defined __cplusplus
 #include <android/compatibility.hxx>
@@ -112,7 +110,5 @@
 #pragma GCC diagnostic ignored "-Wambiguous-reversed-operator"
 #endif
 #endif
-
-#endif // INCLUDED_SAL_CONFIG_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

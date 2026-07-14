@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SAL_MAIN_H
-#define INCLUDED_SAL_MAIN_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -143,7 +141,5 @@ int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nsh
 #ifdef __cplusplus
 }   /* extern "C" */
 #endif
-
-#endif // INCLUDED_SAL_MAIN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_RTL_MATH_H
-#define INCLUDED_RTL_MATH_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -493,7 +491,5 @@ SAL_DLLPUBLIC double SAL_CALL rtl_math_acosh(double fValue) SAL_THROW_EXTERN_C()
 #if defined __cplusplus
 }
 #endif /* __cplusplus */
-
-#endif /* INCLUDED_RTL_MATH_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

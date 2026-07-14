@@ -6,9 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
-#ifndef INCLUDED_SAL_BACKTRACE_HXX
-#define INCLUDED_SAL_BACKTRACE_HXX
+#pragma once
 
 #include "sal/config.h"
 #include "sal/saldllapi.h"
@@ -37,7 +35,5 @@ SAL_DLLPUBLIC std::unique_ptr<BacktraceState> backtrace_get(sal_uInt32 backtrace
 
 SAL_DLLPUBLIC OUString backtrace_to_string(BacktraceState* backtraceState);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SAL_TYPES_H
-#define INCLUDED_SAL_TYPES_H
+#pragma once
 
 #include "sal/config.h"
 
@@ -663,7 +661,5 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #else
 #define SAL_LOPLUGIN_ANNOTATE(id)
 #endif
-
-#endif // INCLUDED_SAL_TYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
