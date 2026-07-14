@@ -431,6 +431,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 
 	_onStatusMsg: function (textMsg) {
 		const statusJSON = JSON.parse(textMsg.replace('partstatus:', '').replace('status:', '').replace('statusupdate:', ''));
+		const isOwnStatus = textMsg.startsWith('status:');
 
 		// Since we have three status commands, remove them so we store and compare payloads only.
 		textMsg = textMsg.replace('partstatus: ', '');
@@ -492,13 +493,16 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			let allPagesResized = !statusJSON.currentpageresized;
 			this._updateMaxBounds(true, allPagesResized);
 
-			this._viewId = statusJSON.viewid;
-			app.activeDocument.setActiveViewID(this._viewId);
-			console.assert(this._viewId >= 0, 'Incorrect viewId received: ' + this._viewId);
-			if (app.socket._reconnecting) {
-				app.socket.sendMessage('setclientpart part=' + this._selectedPart);
-			} else {
-				this._selectedPart = statusJSON.selectedpart;
+			// statusupdate could be a broadcast from another view
+			if (isOwnStatus || statusJSON.viewid === this._viewId) {
+				this._viewId = statusJSON.viewid;
+				app.activeDocument.setActiveViewID(this._viewId);
+				app.console.assert(this._viewId >= 0, 'Incorrect viewId received: ' + this._viewId);
+				if (app.socket._reconnecting) {
+					app.socket.sendMessage('setclientpart part=' + this._selectedPart);
+				} else {
+					this._selectedPart = statusJSON.selectedpart;
+				}
 			}
 
 			RenderManager.resetPreFetching(true);
