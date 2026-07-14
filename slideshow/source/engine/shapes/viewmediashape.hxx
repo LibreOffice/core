@@ -144,6 +144,7 @@ namespace slideshow::internal
         private:
 
             bool implInitialize( const ::basegfx::B2DRectangle& rBounds );
+            bool implMediaLinkAllowed() const;
             void implSetMediaProperties( const css::uno::Reference< css::beans::XPropertySet >& rxProps );
             void implInitializeMediaPlayer( const OUString& rMediaURL, const OUString& rMimeType );
             void implInitializePlayerWindow( const ::basegfx::B2DRectangle& rBounds,
