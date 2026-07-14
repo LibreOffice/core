@@ -1444,6 +1444,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 /* Card button appearance */
 #aichat-chips > [id^='aichat-chip-'] > button.ui-pushbutton {
 	width: 100%;
+	height: auto;
 	display: flex;
 	align-items: center;
 	gap: var(--spacing-m);
