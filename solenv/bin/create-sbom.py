@@ -17,6 +17,7 @@ import uuid
 
 sbom_data = {}
 root_gids = set()
+filelistdirs = []
 timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 productname = os.environ.get("PRODUCTNAME_WITHOUT_SPACES")
 # suffix is hard-coded in makefile :(
@@ -55,6 +56,22 @@ def extract_version_for_dictionary(dict):
         return version_element.attrib['value']
     return None
 
+
+def parse_filelist(filelist):
+    for listdir in filelistdirs:
+        path = os.path.join(listdir, filelist)
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                result = []
+                for line in f.readlines():
+                    line = line.strip()
+                    if len(line) != 0:
+                        result += line.split(" ")
+# at least 3 conditionally empty ones
+#                if len(result) == 0:
+#                    raise Exception(f"filelist does not contain files: {path}")
+                return result
+    raise Exception(f"cannot find filelist: {filelist}")
 
 SCP2TYPES = {"Directory", "File", "Profile", "Module", "WindowsCustomAction", "MergeModule"}
 
@@ -271,6 +288,11 @@ def resolve_ziplist_inheritance(ziplist):
             includes = variables["ADD_INCLUDE_FILES"].split(",")
             for inc in includes:
                 parse_include(variables, os.path.join(SRCDIR, inc))
+
+def init_filelistdirs(ziplist):
+    for path in ziplist[productname]["settings"]["include"].split(","):
+        if path.startswith("{filelistpath}"):
+            filelistdirs.append(path.replace("{filelistpath}", os.environ.get("WORKDIR")))
 
 package_cache = {}
 
@@ -510,6 +532,7 @@ if __name__ == "__main__":
         packinfos += parse_packinfo(sys.argv[9])
         install_script = parse_install_script(sys.argv[10])
         languages = sys.argv[11].split()
+        init_filelistdirs(ziplist)
         gen_packages(packinfos, ziplist, languages)
         #TODO process_file(license_path)
         for package, data in sbom_data.items():
