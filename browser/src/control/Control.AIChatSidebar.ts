@@ -88,19 +88,19 @@ namespace cool {
 		private readonly PROMPT_CARDS: { label: string; prompt: string }[] = [
 			{
 				label: _('Make the following text more concise'),
-				prompt: 'Make it more concise',
+				prompt: _('Make it more concise'),
 			},
 			{
 				label: _('Summarize the key points of this text'),
-				prompt: 'Summarize this text',
+				prompt: _('Summarize this text'),
 			},
 			{
 				label: _('Expand and add more detail to this text'),
-				prompt: 'Expand this text',
+				prompt: _('Expand this text'),
 			},
 			{
 				label: _('Fix grammar, spelling, and punctuation errors'),
-				prompt: 'Fix grammar & spelling',
+				prompt: _('Fix grammar & spelling'),
 			},
 		];
 
@@ -347,19 +347,25 @@ namespace cool {
 			}
 		}
 
-		private static readonly RATING_LABELS: Record<string, string> = {
-			A: 'Best',
-			B: 'Good',
-			C: 'Poor',
-			U: 'Unknown',
-		};
+		private static ratingLabel(letter: string): string {
+			switch (letter) {
+				case 'A':
+					return _('Best');
+				case 'B':
+					return _('Good');
+				case 'C':
+					return _('Poor');
+				default:
+					return _('Unknown');
+			}
+		}
 
 		private applyRatingBadge(): void {
 			const badge = document.getElementById('aichat-rating-badge');
 			if (!badge) return;
 			const letter = app.map.aiEthicalRating || 'U';
 			badge.setAttribute('data-rating', letter);
-			const label = _(AIChatSidebar.RATING_LABELS[letter] || 'Unknown');
+			const label = AIChatSidebar.ratingLabel(letter);
 			const aria = _(
 				'Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, and training data.',
 			)
