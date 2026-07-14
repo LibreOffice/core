@@ -443,19 +443,6 @@ public:
     }
 
     /**
-     * Register a clipboard backend for this document that does the raw platform
-     * clipboard input and output. With a provider installed the engine drives
-     * the format decision: it advertises its own formats on copy and, on an
-     * external paste, pulls only the single format it chose from the platform.
-     * Pass nullptr to remove the provider and fall back to the plain
-     * getClipboard()/setClipboard() handling.
-     */
-    void installClipboardProvider(const COKitClipboardProvider* pProvider)
-    {
-        mpDoc->pClass->installClipboardProvider(mpDoc, pProvider);
-    }
-
-    /**
      * Shares another view's live clipboard transferable into the current view's
      * clipboard by reference, without serializing (same-process only). The caller
      * must have made the destination the current view first.

@@ -585,10 +585,6 @@ struct COKitDocumentClassStruct
     /// @see kit::Document::setAllowManageRedlines().
     void (*setAllowManageRedlines)(COKitDocument* pThis, int nId, bool allow);
 
-    /** @see kit::Document::installClipboardProvider(). */
-    void (*installClipboardProvider) (COKitDocument* pThis,
-                                      const COKitClipboardProvider* pProvider);
-
     /// @see kit::Document::transferClipboardFromView().
     void (*transferClipboardFromView)(COKitDocument* pThis, int nSourceViewId);
 
