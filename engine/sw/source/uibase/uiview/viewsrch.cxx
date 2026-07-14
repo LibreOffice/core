@@ -554,8 +554,10 @@ bool SwView::SearchAndWrap(bool bApi)
         s_bFound = true;
         if(m_pWrtShell->IsSelFrameMode())
         {
+            m_pWrtShell->Push(); // push the 'found' cursor to the stack
             m_pWrtShell->UnSelectFrame();
             m_pWrtShell->LeaveSelFrameMode();
+            m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent); // restore stack cursor
         }
         m_pWrtShell->Pop();
         m_pWrtShell->EndAllAction();
