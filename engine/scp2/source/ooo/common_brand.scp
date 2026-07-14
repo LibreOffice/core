@@ -42,7 +42,6 @@ Module gid_Module_Root_Brand
     Styles = (HIDDEN_ROOT,ROOT_BRAND_PACKAGE,ISUPDATEPACKAGE);
     PackageInfo = "packinfo_brand.txt";
     Dirs = (gid_Brand_Dir_Program,
-            gid_Brand_Dir_Sbom,
             gid_Brand_Dir_Share,
             gid_Brand_Dir_Share_Config,
             gid_Brand_Dir_Share_Extensions,
@@ -86,15 +85,6 @@ Directory gid_Brand_Dir_Program
     ParentID = gid_Dir_Brand_Root;
     DosName = "program";
 #endif
-End
-
-Directory gid_Brand_Dir_Sbom
-#if defined MACOSX
-    ParentID = gid_Dir_Bundle_Contents_Resources;
-#else
-    ParentID = gid_Dir_Brand_Root;
-#endif
-    DosName = "sbom";
 End
 
 Directory gid_Brand_Dir_Share

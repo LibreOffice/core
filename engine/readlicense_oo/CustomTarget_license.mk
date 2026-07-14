@@ -85,6 +85,8 @@ SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_brand.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_extensions.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_office.txt \
+		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_help.txt \
+		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_lang.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_ure.txt \
 		$(call gb_InstallScript_get_target,setup_osl) \
 		$(call gb_Helper_optional,ODK,$(call gb_InstallScript_get_target,sdkoo)) \
@@ -101,9 +103,12 @@ SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
 		$(BUILDDIR)/instsetoo_native/util/openoffice.lst \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_ure.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_office.txt \
+		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_help.txt \
+		$(SRCDIR)/setup_native/source/packinfo/packinfo_office_lang.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_brand.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_extensions.txt \
-		$(call gb_InstallScript_get_target,setup_osl)
+		$(call gb_InstallScript_get_target,setup_osl) \
+		"$(if $(filter en-US,$(gb_WITH_LANG)),,en-US) $(gb_WITH_LANG)"
 	mkdir -p $(SBOM_DIR)
 	cp $(readlicense_oo_DIR)/*sbom.spdx.json $(SBOM_DIR)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PY )

@@ -44,7 +44,7 @@ Module gid_Module_Root_Fonts_OOo_Hidden
 	Sortkey = "2100";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (auto_ooo_fonts_ALL, gid_File_Fonts_Sbom);
+	Files = (auto_ooo_fonts_ALL);
 End
 #endif
 

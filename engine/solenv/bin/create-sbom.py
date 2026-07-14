@@ -17,7 +17,9 @@ import uuid
 
 sbom_data = {}
 timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-productname = os.environ.get("PRODUCTNAME_WITHOUT_SPACES").lower()
+productname = os.environ.get("PRODUCTNAME_WITHOUT_SPACES")
+# suffix is hard-coded in makefile :(
+productname_sdk = os.environ.get("PRODUCTNAME_WITHOUT_SPACES") + "_SDK"
 root_version = (
     os.environ.get("LIBO_VERSION_MAJOR") + "." +
     os.environ.get("LIBO_VERSION_MINOR") + "." +
@@ -457,9 +459,40 @@ def sbom_skeleton(package, root_spdx_id):
     add_license_relationship(package, root_spdx_id, "MPL-2.0")
 
 
+def gen_packages(packinfos, ziplist, languages):
+    """Generate one (empty) SBOM per RPM/DEB package."""
+    variables = ziplist[productname]["settings"]["variables"]
+    pattern = re.compile(r"%([A-Za-z0-9_]+)")
+
+    def replace(match):
+        var = match.group(1)
+        if var == "LANGUAGESTRING":
+            return "%" + var # will be replaced later
+        if var in ["UNIXPACKAGENAME", "UNIXPRODUCTNAME"]:
+            return productname.lower() # this is hardcoded in installer
+        if not var in variables:
+            raise Exception(f"variable used in packinfos not defined in ziplist: {var}")
+        return variables[var]
+
+    def gen_package(name):
+        root_spdx_id = make_spdx_id(name, f"SPDXRef-{name}")
+        if sbom_data.get(name):
+            raise Exception(f"duplicate package in packinfos: {name}")
+        sbom_skeleton(name, root_spdx_id)
+
+    for package in packinfos:
+        name_pi = package["packagename"]
+        name = pattern.sub(replace, name_pi)
+        if "%LANGUAGESTRING" in name:
+            for lang in languages:
+                gen_package(name.replace("%LANGUAGESTRING", lang))
+        else:
+            gen_package(name)
+
+
 if __name__ == "__main__":
-    if len(sys.argv) < 9:
-        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <4 packinfo> <path of install script>")
+    if len(sys.argv) < 12:
+        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <4 packinfo> <path of install script> <languages>")
     else:
         sbom_path = sys.argv[1]
         license_path = sys.argv[2]
@@ -470,8 +503,12 @@ if __name__ == "__main__":
         packinfos += parse_packinfo(sys.argv[5])
         packinfos += parse_packinfo(sys.argv[6])
         packinfos += parse_packinfo(sys.argv[7])
-        install_script = parse_install_script(sys.argv[8])
-        process_file(license_path)
+        packinfos += parse_packinfo(sys.argv[8])
+        packinfos += parse_packinfo(sys.argv[9])
+        install_script = parse_install_script(sys.argv[10])
+        languages = sys.argv[11].split()
+        gen_packages(packinfos, ziplist, languages)
+        #TODO process_file(license_path)
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"
             filepath = os.path.join(sbom_path, filename)

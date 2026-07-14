@@ -257,12 +257,6 @@ File gid_File_Extension_Dictionary_Af
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Af
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-af-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -271,12 +265,6 @@ File gid_File_Extension_Dictionary_An
 	Name = "Dictionary/dict-an.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_An
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-an-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -287,12 +275,6 @@ File gid_File_Extension_Dictionary_Ar
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Ar
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-ar-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -301,12 +283,6 @@ File gid_File_Extension_Dictionary_Be
 	Name = "Dictionary/dict-be.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Be
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-be-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -317,12 +293,6 @@ File gid_File_Extension_Dictionary_Bg
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Bg
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-bg-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -331,12 +301,6 @@ File gid_File_Extension_Dictionary_Bn
 	Name = "Dictionary/dict-bn.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Bn
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-bn-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -347,12 +311,6 @@ File gid_File_Extension_Dictionary_Bo
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Bo
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-bo-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -361,12 +319,6 @@ File gid_File_Extension_Dictionary_Br
 	Name = "Dictionary/dict-br.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Br
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-br-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -377,12 +329,6 @@ File gid_File_Extension_Dictionary_Bs
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Bs
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-bs-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -390,12 +336,6 @@ File gid_File_Extension_Dictionary_Ca
     Dir = FILELIST_DIR;
     Name = "Dictionary/dict-ca.filelist";
     Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-    TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Ca
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-ca-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
     TXT_FILE_BODY;
 End
 #endif
@@ -407,12 +347,6 @@ File gid_File_Extension_Dictionary_Ckb
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Ckb
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-ckb-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -421,12 +355,6 @@ File gid_File_Extension_Dictionary_Cs
 	Name = "Dictionary/dict-cs.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Cs
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-cs-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -437,12 +365,6 @@ File gid_File_Extension_Dictionary_Da
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Da
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-da-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS && (!defined MPL_SUBSET || defined LINUX)
@@ -451,12 +373,6 @@ File gid_File_Extension_Dictionary_De
 	Name = "Dictionary/dict-de.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_De
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-de-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -467,12 +383,6 @@ File gid_File_Extension_Dictionary_En
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_En
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-en-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -481,12 +391,6 @@ File gid_File_Extension_Dictionary_El
 	Name = "Dictionary/dict-el.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_El
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-el-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -497,12 +401,6 @@ File gid_File_Extension_Dictionary_Eo
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Eo
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-eo-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -511,12 +409,6 @@ File gid_File_Extension_Dictionary_Es
 	Name = "Dictionary/dict-es.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Es
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-es-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -527,12 +419,6 @@ File gid_File_Extension_Dictionary_Et
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Et
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-et-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -541,12 +427,6 @@ File gid_File_Extension_Dictionary_Fa
 	Name = "Dictionary/dict-fa.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Fa
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-fa-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -557,12 +437,6 @@ File gid_File_Extension_Dictionary_Fr
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Fr
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-fr-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -571,12 +445,6 @@ File gid_File_Extension_Dictionary_Gd
 	Name = "Dictionary/dict-gd.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Gd
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-gd-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -587,12 +455,6 @@ File gid_File_Extension_Dictionary_Gl
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Gl
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-gl-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -602,12 +464,6 @@ File gid_File_Extension_Dictionary_Gu
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Gu
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-gu-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -615,12 +471,6 @@ File gid_File_Extension_Dictionary_He
     Dir = FILELIST_DIR;
     Name = "Dictionary/dict-he.filelist";
     Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-    TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_He
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-he-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
     TXT_FILE_BODY;
 End
 #endif
@@ -632,12 +482,6 @@ File gid_File_Extension_Dictionary_Hi
     Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
     TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Hi
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-hi-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -646,12 +490,6 @@ File gid_File_Extension_Dictionary_Hu
 	Name = "Dictionary/dict-hu.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Hu
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-hu-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -662,12 +500,6 @@ File gid_File_Extension_Dictionary_Hr
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Hr
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-hr-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -676,12 +508,6 @@ File gid_File_Extension_Dictionary_Id
         Name = "Dictionary/dict-id.filelist";
         Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
         TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Id
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-id-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -692,12 +518,6 @@ File gid_File_Extension_Dictionary_Is
         Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
         TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Is
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-is-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS && (!defined MPL_SUBSET || defined LINUX)
@@ -705,12 +525,6 @@ File gid_File_Extension_Dictionary_It
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-it.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_It
-	Dir = gid_Brand_Dir_Sbom;
-	Name = "dict-it-sbom.spdx.json";
-	Styles = (PACKED, FORCELANGUAGEPACK);
 	TXT_FILE_BODY;
 End
 #endif
@@ -722,12 +536,6 @@ File gid_File_Extension_Dictionary_Kmr_Latn
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Kmr_Latn
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-kmr-Latn-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -736,12 +544,6 @@ File gid_File_Extension_Dictionary_Ko
         Name = "Dictionary/dict-ko.filelist";
         Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
         TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Ko
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-ko-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -752,12 +554,6 @@ File gid_File_Extension_Dictionary_Lo
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Lo
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-lo-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -766,12 +562,6 @@ File gid_File_Extension_Dictionary_Lt
 	Name = "Dictionary/dict-lt.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Lt
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-lt-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -782,12 +572,6 @@ File gid_File_Extension_Dictionary_Lv
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Lv
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-lv-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -796,12 +580,6 @@ File gid_File_Extension_Dictionary_Mn
 	Name = "Dictionary/dict-mn.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Mn
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-mn-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -812,12 +590,6 @@ File gid_File_Extension_Dictionary_Ne
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Ne
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-ne-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -827,12 +599,6 @@ File gid_File_Extension_Dictionary_Nl
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Nl
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-nl-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -840,12 +606,6 @@ File gid_File_Extension_Dictionary_No
     Dir = FILELIST_DIR;
     Name = "Dictionary/dict-no.filelist";
     Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-    TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_No
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-no-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
     TXT_FILE_BODY;
 End
 #endif
@@ -857,12 +617,6 @@ File gid_File_Extension_Dictionary_Oc
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Oc
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-oc-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -871,12 +625,6 @@ File gid_File_Extension_Dictionary_Pl
 	Name = "Dictionary/dict-pl.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Pl
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-pl-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -887,12 +635,6 @@ File gid_File_Extension_Dictionary_Pt_Br
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Pt_Br
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-pt-BR-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -902,12 +644,6 @@ File gid_File_Extension_Dictionary_Pt_Pt
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Pt_Pt
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-pt-PT-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -915,12 +651,6 @@ File gid_File_Extension_Dictionary_Ro
     Dir = FILELIST_DIR;
     Name = "Dictionary/dict-ro.filelist";
     Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-    TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Ro
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-ro-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
     TXT_FILE_BODY;
 End
 #endif
@@ -932,12 +662,6 @@ File gid_File_Extension_Dictionary_Ru
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Ru
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-ru-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -946,12 +670,6 @@ File gid_File_Extension_Dictionary_Si
 	Name = "Dictionary/dict-si.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Si
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-si-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -962,12 +680,6 @@ File gid_File_Extension_Dictionary_Sk
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Sk
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-sk-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -976,12 +688,6 @@ File gid_File_Extension_Dictionary_Sl
 	Name = "Dictionary/dict-sl.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Sl
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-sl-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -992,12 +698,6 @@ File gid_File_Extension_Dictionary_Sq
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Sq
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-sq-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -1006,12 +706,6 @@ File gid_File_Extension_Dictionary_Sr
 	Name = "Dictionary/dict-sr.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Sr
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-sr-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -1022,12 +716,6 @@ File gid_File_Extension_Dictionary_Sv
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Sv
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-sv-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -1036,12 +724,6 @@ File gid_File_Extension_Dictionary_Sw
 	Name = "Dictionary/dict-sw.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Sw
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-sw-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -1052,12 +734,6 @@ File gid_File_Extension_Dictionary_Te
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Te
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-te-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -1066,12 +742,6 @@ File gid_File_Extension_Dictionary_Th
 	Name = "Dictionary/dict-th.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Th
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-th-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -1082,12 +752,6 @@ File gid_File_Extension_Dictionary_Tr
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Tr
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-tr-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -1096,12 +760,6 @@ File gid_File_Extension_Dictionary_Uk
 	Name = "Dictionary/dict-uk.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Uk
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-uk-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
 End
 #endif
 
@@ -1112,12 +770,6 @@ File gid_File_Extension_Dictionary_Vi
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
 End
-File gid_File_Extension_Dictionary_Sbom_Vi
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-vi-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
@@ -1126,20 +778,5 @@ File gid_File_Extension_Dictionary_Zu
 	Name = "Dictionary/dict-zu.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
 	TXT_FILE_BODY;
-End
-File gid_File_Extension_Dictionary_Sbom_Zu
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "dict-zu-sbom.spdx.json";
-    Styles = (PACKED, FORCELANGUAGEPACK);
-    TXT_FILE_BODY;
-End
-#endif
-
-#ifndef WITHOUT_FONTS
-File gid_File_Fonts_Sbom
-    Dir = gid_Brand_Dir_Sbom;
-    Name = "fonts-sbom.spdx.json";
-    Styles = (PACKED);
-    TXT_FILE_BODY;
 End
 #endif

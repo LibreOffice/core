@@ -838,6 +838,18 @@ sub run {
                 next;   # next package, end of loop !
             }
 
+            # every package gets an SBOM
+            {
+                my %sbomfile;
+                $sbomfile{'sourcepath'}  = $pathvariableshashref->{"customtargetpath"} . "/readlicense_oo/license/" . $packagename . "-sbom.spdx.json";
+                my $infoline = "\nAutomatically adding SBOM: $sbomfile{'sourcepath'}\n";
+                push(@installer::globals::logfileinfo, $infoline);
+                $sbomfile{'destination'} = $packagerootpath .
+                   $installer::globals::separator . $packagename . "-sbom.spdx.json";
+                $sbomfile{'UnixRights'}  = "444";
+                push(@{$filesinpackage}, \%sbomfile);
+            }
+
             ###########################################
             # Stripping libraries
             ###########################################
