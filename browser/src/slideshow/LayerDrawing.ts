@@ -292,6 +292,7 @@ class LayerDrawing {
 		videoInfo: VideoInfo,
 	): VideoRenderer {
 		const videoRenderers = this.videoRenderers.get(slideHash);
+		if (!videoRenderers) return null;
 
 		for (const videoRenderer of videoRenderers) {
 			if (videoRenderer.videoInfoId === videoInfo.id) {
