@@ -401,7 +401,9 @@ void AquaSalMenu::unsetMainMenu()
     pCurrentMenuBar = nullptr;
 
     // remove all menus except the app menu
-    NSMenu* pMenu = [NSApp mainMenu];
+    // retain and autorelease the menu so it survives being detached from NSApp
+    NSMenu* pMenu = [[[NSApp mainMenu] retain] autorelease];
+
     [NSApp setMainMenu:nil];
     for( int nItems = [pMenu numberOfItems]; nItems > 1; nItems-- )
         [pMenu removeItemAtIndex: 1];
