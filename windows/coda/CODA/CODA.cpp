@@ -121,6 +121,10 @@ static int appShowMode;
 
 static bool weOwnTheClipboard = false;
 
+// The COKit Office object, captured when the clipboard provider is installed, so a clipboard read
+// can go straight to the process-shared clipboard without needing a particular document.
+static kit::Office* office = nullptr;
+
 const char* user_name = nullptr;
 int coolwsd_server_socket_fd = -1;
 
@@ -143,8 +147,8 @@ static std::thread coolwsdThread;
 // The main window class name.
 static const wchar_t windowClass[] = L"CODA";
 
-// The file open dialog dummy owner window class name.
-static const wchar_t dummyWindowClass[] = L"CODADummyFileDialogOwnerWindow";
+// The hidden file open dialog and clipboard owner window class name.
+static const wchar_t hiddenOwnerWindowClass[] = L"CODAHiddenOwnerWindow";
 // The handle of that dummy window.
 static HWND hiddenOwnerWindow;
 
@@ -165,7 +169,7 @@ static FilenameAndUri fileSaveDialog(const std::string& name,
 
 static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode);
 
-static HANDLE copyEngineClipboardData(int appDocId, UINT format, const std::string& mimeType);
+static HANDLE copyEngineClipboardData(UINT format, const std::string& mimeType);
 
 static std::string MIME_type_for_clipboard_format(UINT format);
 
@@ -996,6 +1000,65 @@ static void arrangePresentationWindows(WindowData& data)
 // tools. The range 0x0000 to 0xBFFF is reserved for application hotkeys.
 static const int HOTKEY_ID_DEVTOOLS = 0x00DA;
 
+// Window procedure for a hidden window used as clipboard owner. It lives for the whole app run, so
+// its delayed-render promise only has to be materialized (WM_RENDERALLFORMATS) once, when the app
+// exits, not when an individual document window closes. Also used as parent window for the file
+// open and save dialogs.
+static LRESULT CALLBACK HiddenOwnerWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message)
+    {
+        case WM_RENDERFORMAT:
+        {
+            UINT format = (UINT)wParam;
+            std::string mimeType = MIME_type_for_clipboard_format(format);
+            if (!mimeType.empty())
+            {
+                HANDLE hData = copyEngineClipboardData(format, mimeType);
+                if (hData)
+                    SetClipboardData(format, hData);
+            }
+            return 0;
+        }
+
+        case WM_RENDERALLFORMATS:
+        {
+            // This window is about to be destroyed (the app is exiting) while it still owns the
+            // clipboard with formats it only promised. Render them all now, so the content outlives
+            // the app. The engine still holds the one shared clipboard, so the bytes are available.
+            if (try_open_clipboard(hWnd))
+            {
+                if (GetClipboardOwner() == hWnd)
+                {
+                    // Collect the promised formats first, then render each. Do not probe with
+                    // GetClipboardData here(): on a still-promised format it would send
+                    // WM_RENDERFORMAT again. Re-setting an already-rendered format is harmless.
+                    std::vector<UINT> formats;
+                    UINT format = 0;
+                    while ((format = EnumClipboardFormats(format)) != 0)
+                        formats.push_back(format);
+                    for (UINT f : formats)
+                    {
+                        std::string mimeType = MIME_type_for_clipboard_format(f);
+                        if (mimeType.empty())
+                            continue;
+                        HANDLE hData = copyEngineClipboardData(f, mimeType);
+                        if (hData)
+                            SetClipboardData(f, hData);
+                    }
+                }
+                CloseClipboard();
+            }
+            return 0;
+        }
+
+        case WM_DESTROYCLIPBOARD:
+            weOwnTheClipboard = false;
+            return 0;
+    }
+    return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -1243,22 +1306,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             break;
         }
 
-        case WM_RENDERFORMAT:
-        {
-            UINT format = (UINT)wParam;
-            std::string mimeType = MIME_type_for_clipboard_format(format);
-            if (mimeType == "")
-                break;
-            HANDLE hData = copyEngineClipboardData(windowData[hWnd].appDocId, format, mimeType);
-            if (!hData)
-                break;
-            SetClipboardData(format, hData);
-            break;
-        }
-
-        case WM_DESTROYCLIPBOARD:
-            weOwnTheClipboard = false;
-            break;
 
         case CODA_WM_EXECUTESCRIPT:
             windowData[hWnd].webView->ExecuteScript(
@@ -2301,27 +2348,19 @@ static void free_getClipboard_results(size_t count, char** mimeTypes, size_t* si
     std::free(streams);
 }
 
-static HANDLE copyEngineClipboardData(int appDocId, UINT format, const std::string& mimeType)
+static HANDLE copyEngineClipboardData(UINT format, const std::string& mimeType)
 {
-    DocumentData* docData = DocumentData::getIfExists(appDocId);
-    if (!docData)
-        return 0;               // Huh?
-
-    kit::Document* loKitDoc = docData->loKitDocument;
-    if (!loKitDoc)
-        return 0;               // Even more huh?
-
-    int nViewId = -1;
-    if (!loKitDoc->getViewIds(&nViewId, 1) || nViewId < 0)
+    // The clipboard is process-global (one shared clipboard for the desktop app), so read it
+    // straight from the engine; no document is involved.
+    if (!office)
         return 0;
-    loKitDoc->setView(nViewId);
 
     const char *filter[] = { mimeType.c_str(), nullptr };
     size_t outCount = 0;
     char **outMimeTypes = nullptr;
     size_t *outSizes = nullptr;
     char **outStreams = nullptr;
-    if (!loKitDoc->getClipboard(filter, &outCount, &outMimeTypes, &outSizes, &outStreams) ||
+    if (!office->getGlobalClipboard(filter, &outCount, &outMimeTypes, &outSizes, &outStreams) ||
         outCount == 0)
         return 0;
 
@@ -2430,17 +2469,20 @@ static std::vector<int> clipboard_formats_for_MIME_type(const char* mimeType)
 }
 
 /**
- * The clipboard provider the engine drives. On copy the engine advertises its
- * formats through advertise; on an external paste it reads the pasteboard one
- * format at a time. pUserData is a retained Document so the callbacks can reuse
- * the document's clipboard helpers.
+ * The clipboard provider the engine drives. On copy the engine advertises its formats through
+ * advertise; on an external paste it reads the pasteboard one format at a time. pUserData is a
+ * retained Document so the callbacks can reuse the document's clipboard helpers.
  */
 
-static void clipboardProviderAdvertise(void* pUserData, const char** pMimeTypes)
+static void clipboardProviderAdvertise(void* /*pUserData*/, const char** pMimeTypes)
 {
-    WindowData& data = *(WindowData*)pUserData;
+    // Delayed rendering needs a live window to own the clipboard and receive WM_RENDERFORMAT. Use
+    // the hidden owner window, which lives for the whole app run. The clipboard is only rendered in
+    // full (WM_RENDERALLFORMATS) when the app exits, not when an individual document window closes.
+    if (!hiddenOwnerWindow)
+        return;
 
-    if (!try_open_clipboard(data.hWnd))
+    if (!try_open_clipboard(hiddenOwnerWindow))
         return;
 
     if (!EmptyClipboard())
@@ -2473,11 +2515,13 @@ static int clipboardProviderOwns(void* /*pUserData*/)
     return weOwnTheClipboard;
 }
 
-static char** clipboardProviderGetMimeTypes(void* pUserData)
+static char** clipboardProviderGetMimeTypes(void* /*pUserData*/)
 {
-    WindowData& data = *(WindowData*)pUserData;
-
-    if (!try_open_clipboard(data.hWnd))
+    // Reading needs no owner window, so open the clipboard for the current "task".
+    //
+    // (Task is an 16-bit Windows term still used in documentation for the clipboard API that is
+    // basically unchanged since then. In current Windows, it means thread, more or less.)
+    if (!try_open_clipboard(NULL))
         return NULL;
 
     UINT format = 0;
@@ -2518,7 +2562,7 @@ static char** clipboardProviderGetMimeTypes(void* pUserData)
     return result;
 }
 
-static int clipboardProviderGetData(void* pUserData, const char* pMimeType, char** pOutData,
+static int clipboardProviderGetData(void* /*pUserData*/, const char* pMimeType, char** pOutData,
                                     size_t* pOutSize)
 {
     auto formats = clipboard_formats_for_MIME_type(pMimeType);
@@ -2526,9 +2570,7 @@ static int clipboardProviderGetData(void* pUserData, const char* pMimeType, char
     if (formats.size() == 0)
         return 0;
 
-    WindowData& data = *(WindowData*)pUserData;
-
-    if (!try_open_clipboard(data.hWnd))
+    if (!try_open_clipboard(NULL))
         return 0;
 
     for (const auto& format : formats)
@@ -2583,37 +2625,24 @@ static int clipboardProviderGetData(void* pUserData, const char* pMimeType, char
 }
 
 
-static void ensureClipboardProviderFor(WindowData& data)
+// Install the process-global clipboard provider (declared in windows.hpp). After this the engine
+// advertises formats on copy and reads the clipboard on paste through the callbacks above, using
+// one shared clipboard for every document.
+void install_clipboard_provider(kit::Office& kitOffice)
 {
-    static std::set<int> registeredDocs;
+    office = &kitOffice;
 
-    if (registeredDocs.count(data.appDocId))
-        return;
-
-    DocumentData* docData = DocumentData::getIfExists(data.appDocId);
-    if (!docData)
-        return;                 // The document is not loaded yet; try again on the next message
-
-    kit::Document* loKitDoc = docData->loKitDocument;
-    if (!loKitDoc)
-        return;                 // Unclear when this could happen
-
-    COKitClipboardProvider provider{};
-    provider.pUserData = &data;
+    static COKitClipboardProvider provider{};
+    provider.pUserData = nullptr; // the callbacks act on the process, not one window
     provider.advertiseToPlatform = clipboardProviderAdvertise;
     provider.ownsClipboard = clipboardProviderOwns;
     provider.getMimeTypes = clipboardProviderGetMimeTypes;
     provider.getDataForMimeType = clipboardProviderGetData;
-
-    loKitDoc->installClipboardProvider(&provider);
-
-    registeredDocs.insert(data.appDocId);
+    kitOffice.installClipboardProvider(&provider);
 }
 
 static void processMessage(WindowData& data, wil::unique_cotaskmem_string& message)
 {
-    ensureClipboardProviderFor(data);
-
     std::wstring s(message.get());
     LOG_TRC(Util::wide_string_to_string(s));
     if (s.starts_with(L"MSG "))
@@ -2641,8 +2670,11 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
         }
         else if (s.starts_with(L"TEXTCLIPBOARD "))
         {
+            // A plain-text copy from the web UI (for example the About dialog), not document
+            // content, so it does not go through the engine's clipboard. Own it with the same
+            // hidden window the provider uses, so no document window ever owns the clipboard.
             std::wstring text = s.substr(14);
-            if (try_open_clipboard(data.hWnd))
+            if (try_open_clipboard(hiddenOwnerWindow))
             {
                 EmptyClipboard();
                 HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, (text.size() + 1) * sizeof(wchar_t));
@@ -3129,7 +3161,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
 
         wcex.cbSize = sizeof(WNDCLASSEXW);
         wcex.style = 0;
-        wcex.lpfnWndProc = DefWindowProc;
+        wcex.lpfnWndProc = HiddenOwnerWndProc;
         wcex.cbClsExtra = 0;
         wcex.cbWndExtra = 0;
         wcex.hInstance = hInstance;
@@ -3137,7 +3169,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
         wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
         wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
         wcex.lpszMenuName = NULL;
-        wcex.lpszClassName = dummyWindowClass;
+        wcex.lpszClassName = hiddenOwnerWindowClass;
         wcex.hIconSm = NULL;
 
         if (!RegisterClassExW(&wcex))
@@ -3146,7 +3178,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
             return 1;
         }
 
-        hiddenOwnerWindow = CreateWindowW(dummyWindowClass, L"CODAHiddenOwnerWindow",
+        hiddenOwnerWindow = CreateWindowW(hiddenOwnerWindowClass, L"CODAHiddenOwnerWindow",
                                           WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
                                           100, 100, NULL, NULL,
                                           hInstance, NULL);

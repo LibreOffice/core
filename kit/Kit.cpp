@@ -3548,10 +3548,10 @@ void startMainLoop(const COKit* kit, const std::shared_ptr<kit::Office>& loKit, 
     loKit->registerRevealInFileManagerCallback(reveal_in_file_manager);
 #endif
 
-    // The desktop app uses one process-shared clipboard, so closing a document
-    // does not have to serialize the clipboard onto the system pasteboard. Qt
-    // keeps its own per-view provider for now, so this is macOS only.
-#if defined(MACOSAPP)
+    // The desktop apps use one process-shared clipboard, so closing a document
+    // does not have to serialize the clipboard onto the system clipboard. Qt
+    // keeps its own per-view provider for now.
+#if defined(MACOSAPP) || defined(_WIN32)
     install_clipboard_provider(*loKit);
 #endif
 

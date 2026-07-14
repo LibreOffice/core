@@ -26,4 +26,8 @@ void output_file_dialog_from_core(const char* suggestedURI, char* result, size_t
 // Open Explorer with the given file: URI's document selected.
 void reveal_in_file_manager(const char* uri);
 
+// Install the process-global clipboard provider so the desktop app uses one shared clipboard for
+// every document. Called once, while the engine's main loop starts.
+void install_clipboard_provider(kit::Office& rOffice);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
