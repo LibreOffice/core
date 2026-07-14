@@ -264,13 +264,11 @@ void install_clipboard_provider(kit::Office &rOffice)
     sOffice = &rOffice;
 
     static COKitClipboardProvider provider{};
-    provider.nSize = sizeof(provider);
     provider.pUserData = nullptr; // the callbacks act on the process, not one document
     provider.advertiseToPlatform = clipboardProviderAdvertise;
     provider.ownsClipboard = clipboardProviderOwns;
     provider.getMimeTypes = clipboardProviderGetMimeTypes;
     provider.getDataForMimeType = clipboardProviderGetData;
-    provider.release = nullptr;
     rOffice.installClipboardProvider(&provider);
 }
 

@@ -52,11 +52,6 @@ typedef struct COKitClipboardProviderStruct COKitClipboardProvider;
 struct COKitClipboardProviderStruct
 {
     /**
-     * sizeof(COKitClipboardProvider), so the struct can grow later.
-     */
-    size_t nSize;
-
-    /**
      * Opaque app data passed to every callback.
      */
     void* pUserData;
@@ -91,12 +86,6 @@ struct COKitClipboardProviderStruct
      */
     int (*getDataForMimeType)(void* pUserData, const char* pMimeType, char** pOutData,
                               size_t* pOutSize);
-
-    /**
-     * The provider is no longer referenced; release pUserData and any platform
-     * snapshot the app held for it. May be null.
-     */
-    void (*release)(void* pUserData);
 };
 
 #ifdef __cplusplus

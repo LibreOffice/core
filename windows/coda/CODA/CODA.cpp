@@ -2582,10 +2582,6 @@ static int clipboardProviderGetData(void* pUserData, const char* pMimeType, char
     return 0;
 }
 
-static void clipboardProviderRelease(void* /* pUserData */)
-{
-    // ???
-}
 
 static void ensureClipboardProviderFor(WindowData& data)
 {
@@ -2603,13 +2599,11 @@ static void ensureClipboardProviderFor(WindowData& data)
         return;                 // Unclear when this could happen
 
     COKitClipboardProvider provider{};
-    provider.nSize = sizeof(provider);
     provider.pUserData = &data;
     provider.advertiseToPlatform = clipboardProviderAdvertise;
     provider.ownsClipboard = clipboardProviderOwns;
     provider.getMimeTypes = clipboardProviderGetMimeTypes;
     provider.getDataForMimeType = clipboardProviderGetData;
-    provider.release = clipboardProviderRelease;
 
     loKitDoc->installClipboardProvider(&provider);
 

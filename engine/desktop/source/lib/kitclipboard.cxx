@@ -10,7 +10,6 @@
 #include "kitclipboard.hxx"
 #include <algorithm>
 #include <cstdlib>
-#include <cstring>
 #include <unordered_map>
 #include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
@@ -196,17 +195,8 @@ KitClipboard::~KitClipboard() { setProvider(nullptr); }
 void KitClipboard::setProvider(const COKitClipboardProvider* pProvider)
 {
     osl::MutexGuard aGuard(m_aMutex);
-    if (m_oProvider && m_oProvider->release)
-        m_oProvider->release(m_oProvider->pUserData);
     if (pProvider)
-    {
-        // Copy only what the caller actually filled in (its nSize), leaving any
-        // fields a future engine adds zeroed. Keeps an older app's smaller struct
-        // safe to read.
-        COKitClipboardProvider aCopy{};
-        std::memcpy(&aCopy, pProvider, std::min(pProvider->nSize, sizeof(aCopy)));
-        m_oProvider = aCopy;
-    }
+        m_oProvider = *pProvider;
     else
         m_oProvider.reset();
 }
