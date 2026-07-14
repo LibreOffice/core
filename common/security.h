@@ -84,7 +84,8 @@ inline int hasCorrectUID([[maybe_unused]] const char* appName)
     if (hasUID(COOL_USER_ID))
         return 1;
     else {
-        fprintf(stderr, "Security: %s incorrect user-name, other than '" COOL_USER_ID "'\n", appName);
+        fprintf(stderr, "Security: %s incorrect user-name, other than '" COOL_USER_ID "'.\n"
+                 "Hint: If you are trying to run Collabora Online locally, you need to be using --enable-debug.\n", appName);
         return 0;
     }
 #endif
