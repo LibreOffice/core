@@ -263,7 +263,7 @@ Reference<css::datatransfer::XTransferable> KitClipboard::getContents()
     if (m_oProvider && m_oProvider->getMimeTypes && m_oProvider->getDataForMimeType)
     {
         const bool bOurs = m_oProvider->ownsClipboard
-                           && m_oProvider->ownsClipboard(m_oProvider->pUserData) != 0;
+                           && m_oProvider->ownsClipboard() != 0;
         if (!bOurs)
             return new KitProviderTransferable(*m_oProvider);
     }
@@ -335,7 +335,7 @@ void KitClipboard::setContents(
         for (const auto& rMime : aMimeTypes)
             aPtrs.push_back(rMime.getStr());
         aPtrs.push_back(nullptr);
-        m_oProvider->advertiseToPlatform(m_oProvider->pUserData, aPtrs.data());
+        m_oProvider->advertiseToPlatform(aPtrs.data());
         return;
     }
 
@@ -468,8 +468,7 @@ KitProviderTransferable::KitProviderTransferable(const COKitClipboardProvider& r
     : m_aProvider(rProvider)
 {
     std::vector<datatransfer::DataFlavor> aFlavors;
-    char** ppMimeTypes = m_aProvider.getMimeTypes ? m_aProvider.getMimeTypes(m_aProvider.pUserData)
-                                                  : nullptr;
+    char** ppMimeTypes = m_aProvider.getMimeTypes ? m_aProvider.getMimeTypes() : nullptr;
     if (ppMimeTypes)
     {
         for (size_t i = 0; ppMimeTypes[i]; ++i)
@@ -516,7 +515,7 @@ cpo::uno::Any SAL_CALL KitProviderTransferable::getTransferData(const datatransf
     char* pData = nullptr;
     size_t nSize = 0;
     const int nOk
-        = m_aProvider.getDataForMimeType(m_aProvider.pUserData, aWireMime.getStr(), &pData, &nSize);
+        = m_aProvider.getDataForMimeType(aWireMime.getStr(), &pData, &nSize);
 
     if (nSavedView >= 0 && KitHelper::getCurrentView() != nSavedView)
         KitHelper::setView(nSavedView);

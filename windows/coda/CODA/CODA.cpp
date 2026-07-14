@@ -2470,11 +2470,12 @@ static std::vector<int> clipboard_formats_for_MIME_type(const char* mimeType)
 
 /**
  * The clipboard provider the engine drives. On copy the engine advertises its formats through
- * advertise; on an external paste it reads the pasteboard one format at a time. pUserData is a
- * retained Document so the callbacks can reuse the document's clipboard helpers.
+ * advertise; on an external paste it reads the clipboard one format at a time. The callbacks
+ * act on the process, not one window, so the one shared clipboard is reached from whichever
+ * document is current.
  */
 
-static void clipboardProviderAdvertise(void* /*pUserData*/, const char** pMimeTypes)
+static void clipboardProviderAdvertise(const char** pMimeTypes)
 {
     // Delayed rendering needs a live window to own the clipboard and receive WM_RENDERFORMAT. Use
     // the hidden owner window, which lives for the whole app run. The clipboard is only rendered in
@@ -2510,12 +2511,12 @@ static void clipboardProviderAdvertise(void* /*pUserData*/, const char** pMimeTy
     CloseClipboard();
 }
 
-static int clipboardProviderOwns(void* /*pUserData*/)
+static int clipboardProviderOwns()
 {
     return weOwnTheClipboard;
 }
 
-static char** clipboardProviderGetMimeTypes(void* /*pUserData*/)
+static char** clipboardProviderGetMimeTypes()
 {
     // Reading needs no owner window, so open the clipboard for the current "task".
     //
@@ -2562,8 +2563,7 @@ static char** clipboardProviderGetMimeTypes(void* /*pUserData*/)
     return result;
 }
 
-static int clipboardProviderGetData(void* /*pUserData*/, const char* pMimeType, char** pOutData,
-                                    size_t* pOutSize)
+static int clipboardProviderGetData(const char* pMimeType, char** pOutData, size_t* pOutSize)
 {
     auto formats = clipboard_formats_for_MIME_type(pMimeType);
 
@@ -2633,7 +2633,6 @@ void install_clipboard_provider(kit::Office& kitOffice)
     office = &kitOffice;
 
     static COKitClipboardProvider provider{};
-    provider.pUserData = nullptr; // the callbacks act on the process, not one window
     provider.advertiseToPlatform = clipboardProviderAdvertise;
     provider.ownsClipboard = clipboardProviderOwns;
     provider.getMimeTypes = clipboardProviderGetMimeTypes;

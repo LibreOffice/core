@@ -218,11 +218,11 @@ static NSData *_Nullable copyEngineClipboardData(const char *mime)
 /**
  * The clipboard provider the engine drives. On copy the engine advertises its
  * formats through advertise; on an external paste it reads the pasteboard one
- * format at a time. pUserData is a retained Document so the callbacks can reuse
- * the document's clipboard helpers.
+ * format at a time. The callbacks act on the process, not one document, so the
+ * one shared clipboard is reached from whichever document is current.
  */
 
-static void clipboardProviderAdvertise(void* /*pUserData*/, const char** pMimeTypes)
+static void clipboardProviderAdvertise(const char** pMimeTypes)
 {
     @autoreleasepool {
         NSMutableArray<NSString*>* mimes = [NSMutableArray array];
@@ -232,20 +232,19 @@ static void clipboardProviderAdvertise(void* /*pUserData*/, const char** pMimeTy
     }
 }
 
-static int clipboardProviderOwns(void* /*pUserData*/)
+static int clipboardProviderOwns()
 {
     return [COWrapper pasteboardOwnedByUs] ? 1 : 0;
 }
 
-static char** clipboardProviderGetMimeTypes(void* /*pUserData*/)
+static char** clipboardProviderGetMimeTypes()
 {
     @autoreleasepool {
         return [COWrapper copyPasteboardMimeTypes];
     }
 }
 
-static int clipboardProviderGetData(void* /*pUserData*/, const char* pMimeType, char** pOutData,
-                                    size_t* pOutSize)
+static int clipboardProviderGetData(const char* pMimeType, char** pOutData, size_t* pOutSize)
 {
     @autoreleasepool {
         return [COWrapper copyPasteboardData:[NSString stringWithUTF8String:pMimeType]
@@ -264,7 +263,6 @@ void install_clipboard_provider(kit::Office &rOffice)
     sOffice = &rOffice;
 
     static COKitClipboardProvider provider{};
-    provider.pUserData = nullptr; // the callbacks act on the process, not one document
     provider.advertiseToPlatform = clipboardProviderAdvertise;
     provider.ownsClipboard = clipboardProviderOwns;
     provider.getMimeTypes = clipboardProviderGetMimeTypes;

@@ -36,8 +36,8 @@ typedef void (*COKitRevealInFileManagerCallback)(const char* pUri);
 typedef struct COKitClipboardProviderStruct COKitClipboardProvider;
 
 /**
- * A clipboard backend the app registers per document to do the raw platform
- * clipboard input and output, in both directions. The engine drives the format
+ * A clipboard backend the app registers to do the raw platform clipboard
+ * input and output, in both directions. The engine drives the format
  * decision: on a paste it asks for the list of available types and then for the
  * bytes of the single format it chose; on a copy it hands over the list of
  * formats it offers so the app can advertise them to the platform clipboard.
@@ -52,40 +52,34 @@ typedef struct COKitClipboardProviderStruct COKitClipboardProvider;
 struct COKitClipboardProviderStruct
 {
     /**
-     * Opaque app data passed to every callback.
-     */
-    void* pUserData;
-
-    /**
      * Copy: advertise the given nullptr-terminated list of mime types on the
      * platform clipboard without serializing any bytes. The app serves the
      * bytes later by pulling a single format from the engine through
      * getClipboard(). May be null.
      */
-    void (*advertiseToPlatform)(void* pUserData, const char** pMimeTypes);
+    void (*advertiseToPlatform)(const char** pMimeTypes);
 
     /**
-     * Return 1 if the platform clipboard still holds the content this document
-     * last advertised, 0 if some other source now owns it. When it still holds
-     * ours, the engine pastes from its own in-memory copy (full fidelity); when
-     * it does not, the engine reads the platform through the calls below.
+     * Return 1 if the platform clipboard still holds the content the app last
+     * advertised, 0 if some other source now owns it. When it still holds ours,
+     * the engine pastes from its own in-memory copy (full fidelity); when it
+     * does not, the engine reads the platform through the calls below.
      */
-    int (*ownsClipboard)(void* pUserData);
+    int (*ownsClipboard)(void);
 
     /**
      * Paste: return a nullptr-terminated, malloc'd array of malloc'd mime-type
      * strings the platform clipboard currently offers. No bytes are read. The
      * engine takes ownership and frees each string and the array.
      */
-    char** (*getMimeTypes)(void* pUserData);
+    char** (*getMimeTypes)(void);
 
     /**
      * Paste: fetch the bytes for one mime type. On success set *pOutData to a
      * malloc'd buffer and *pOutSize to its length and return 1; on failure
      * return 0. The engine frees *pOutData.
      */
-    int (*getDataForMimeType)(void* pUserData, const char* pMimeType, char** pOutData,
-                              size_t* pOutSize);
+    int (*getDataForMimeType)(const char* pMimeType, char** pOutData, size_t* pOutSize);
 };
 
 #ifdef __cplusplus
