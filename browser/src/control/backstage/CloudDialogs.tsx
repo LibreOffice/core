@@ -161,7 +161,9 @@ namespace BackstageTemplates {
       <div class="backstage-modal-provider-row" aria-hidden="true">
         <span
           class="backstage-modal-provider-row-icon"
-          dangerouslySetInnerHTML={svg ? { __html: svg } : undefined}
+          dangerouslySetInnerHTML={
+            svg ? { __html: app.LOUtil.sanitize(svg, 'svg') } : undefined
+          }
         />
         <div class="backstage-modal-provider-row-text">
           <span class="backstage-modal-provider-row-type">
@@ -327,7 +329,7 @@ namespace BackstageTemplates {
 
     const setIconContent = (el: HTMLElement, kind: CloudProviderKind) => {
       const svg = BackstageSVGIcons[iconForKind(kind)];
-      el.innerHTML = svg || '';
+      el.innerHTML = app.LOUtil.sanitize(svg || '', 'svg');
     };
 
     const updateToggle = () => {
@@ -437,7 +439,9 @@ namespace BackstageTemplates {
                 <span
                   class="backstage-modal-dropdown-icon"
                   aria-hidden="true"
-                  dangerouslySetInnerHTML={{ __html: optIconHtml }}
+                  dangerouslySetInnerHTML={{
+                    __html: app.LOUtil.sanitize(optIconHtml, 'svg'),
+                  }}
                 />
                 <span>{k.label}</span>
               </li>

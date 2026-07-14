@@ -98,7 +98,9 @@ namespace BackstageTemplates {
         <span
           class="backstage-open-tile-icon"
           aria-hidden="true"
-          dangerouslySetInnerHTML={svg ? { __html: svg } : undefined}
+          dangerouslySetInnerHTML={
+            svg ? { __html: app.LOUtil.sanitize(svg, 'svg') } : undefined
+          }
         />
         <span class="backstage-open-tile-label">{props.label}</span>
         {props.subtitle ? (
@@ -122,7 +124,9 @@ namespace BackstageTemplates {
         <span
           class="backstage-open-tile-icon"
           aria-hidden="true"
-          dangerouslySetInnerHTML={svg ? { __html: svg } : undefined}
+          dangerouslySetInnerHTML={
+            svg ? { __html: app.LOUtil.sanitize(svg, 'svg') } : undefined
+          }
         />
         <span class="backstage-open-tile-label">{t.typeName}</span>
         <span class="backstage-open-tile-sublabel">{t.userName}</span>
@@ -135,7 +139,11 @@ namespace BackstageTemplates {
             e.stopPropagation();
             t.onEdit();
           }}
-          dangerouslySetInnerHTML={editIcon ? { __html: editIcon } : undefined}
+          dangerouslySetInnerHTML={
+            editIcon
+              ? { __html: app.LOUtil.sanitize(editIcon, 'svg') }
+              : undefined
+          }
         />
       </div>
     );
