@@ -53,7 +53,7 @@ export class ColumnGroup extends GroupBase {
 	}
 
 	onNewDocumentTopLeft(): void {
-		this._refreshGroupsForView();
+		this.update();
 	}
 
 	// This returns the required height for the section.

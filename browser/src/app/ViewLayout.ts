@@ -182,6 +182,11 @@ class ViewLayoutBase {
 		app.sectionContainer.requestReDraw();
 	}
 
+	// Refresh cached geometry that depends on the current viewed rectangle.
+	public refreshViewArea(): void {
+		return;
+	}
+
 	// Lightweight viewedRectangle update used per zoom frame. Unlike the setter
 	// it does not run onNewDocumentTopLeft, requestReDraw or touch
 	// lastViewedRectangle: the zoom RAF already redraws, and the document

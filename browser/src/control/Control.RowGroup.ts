@@ -52,7 +52,7 @@ export class RowGroup extends GroupBase {
 	}
 
 	onNewDocumentTopLeft(): void {
-		this._refreshGroupsForView();
+		this.update();
 	}
 
 	// This returns the required width for the section.

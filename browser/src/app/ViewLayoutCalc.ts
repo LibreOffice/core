@@ -110,6 +110,20 @@ class ViewLayoutCalc extends ViewLayoutNewBase {
 		app.sectionContainer.requestReDraw();
 	}
 
+	// Push the current viewed rectangle into the sheet geometry's view limits,
+	// which feed the in-view row and column range and group collection. The
+	// rectangle is authoritative even mid-scroll, before the map catches up.
+	public override refreshViewArea(): void {
+		const docLayer = app.map && app.map._docLayer;
+		if (!docLayer || !docLayer.sheetGeometry) return;
+
+		const rectangle = this._viewedRectangle;
+		docLayer.sheetGeometry.setViewArea(
+			new cool.Point(rectangle.x1, rectangle.y1),
+			new cool.Point(rectangle.width, rectangle.height),
+		);
+	}
+
 	// Calc needs splitx/splity so the server renders frozen/split panes
 	// correctly, plus the splitter onPositionChange notifications, the
 	// context-toolbar hide, the cache suppression, and the forceUpdate flag.

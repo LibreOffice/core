@@ -1144,6 +1144,10 @@ class CanvasSectionContainer {
 
 	// Called when document position is changed.
 	public onNewDocumentTopLeft() {
+		// Refresh the layout's view-area geometry before any section reacts
+		if (app.activeDocument?.activeLayout)
+			app.activeDocument.activeLayout.refreshViewArea();
+
 		for (var i: number = 0; i < this.sections.length; i++) {
 			var section: CanvasSectionObject = this.sections[i];
 
