@@ -269,13 +269,13 @@ static RenderMethod initRenderMethodToUse()
     }
     if (officecfg::Office::Common::VCL::ForceSkiaRaster::get())
         return RenderRaster;
+    if (officecfg::Office::Common::Misc::ExperimentalMode::get())
 #if defined SK_METAL
-    return RenderMetal;
+        return RenderMetal;
 #elif defined SK_VULKAN
-    return RenderVulkan;
-#else
-    return RenderRaster;
+        return RenderVulkan;
 #endif
+    return RenderRaster;
 }
 
 static std::atomic<RenderMethod>& accessRenderMethodToUse()
