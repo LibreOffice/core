@@ -283,10 +283,8 @@ const Poco::URI HostUtil::getNewLockedUri(const Poco::URI& uri)
 
 void HostUtil::setFirstHost(const Poco::URI& uri)
 {
-    if (Util::iequal(ConfigUtil::getString("storage.wopi.alias_groups[@mode]", "first"), "compat"))
-    {
+    if (!Util::iequal(ConfigUtil::getString("storage.wopi.alias_groups[@mode]", "first"), "first"))
         return;
-    }
 
     if (WopiHosts.empty())
     {

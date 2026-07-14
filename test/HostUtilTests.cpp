@@ -13,7 +13,11 @@
 
 #include <HostUtil.hpp>
 
+#include <common/ConfigUtil.hpp>
 #include <test/lokassert.hpp>
+
+#include <Poco/URI.h>
+#include <Poco/Util/MapConfiguration.h>
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -23,11 +27,50 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST_SUITE(HostUtilTests);
 
     CPPUNIT_TEST(testParseAlias);
+    CPPUNIT_TEST(testFirstHostTrustedOnlyInFirstMode);
 
     CPPUNIT_TEST_SUITE_END();
 
     void testParseAlias();
+    void testFirstHostTrustedOnlyInFirstMode();
+
+public:
+    /// Clear the parsed host state, matching the empty state it starts with, and
+    /// set whether WOPI is enabled.
+    static void resetHostState(bool wopiEnabled);
 };
+
+namespace
+{
+/// Install a config for the duration of a test and put the previous config, plus
+/// an empty and WOPI-disabled host state, back when the scope ends.
+class ScopedHostConfig
+{
+public:
+    explicit ScopedHostConfig(const Poco::Util::AbstractConfiguration* config)
+        : _previous(ConfigUtil::setConfigForTest(config))
+    {
+    }
+
+    ~ScopedHostConfig()
+    {
+        ConfigUtil::setConfigForTest(_previous);
+        HostUtilTests::resetHostState(false);
+    }
+
+private:
+    const Poco::Util::AbstractConfiguration* _previous;
+};
+}
+
+void HostUtilTests::resetHostState(bool wopiEnabled)
+{
+    HostUtil::WopiHosts.clear();
+    HostUtil::AliasHosts.clear();
+    HostUtil::hostList.clear();
+    HostUtil::FirstHost.clear();
+    HostUtil::WopiEnabled = wopiEnabled;
+}
 
 void HostUtilTests::testParseAlias()
 {
@@ -56,6 +99,37 @@ void HostUtilTests::testParseAlias()
     LOK_ASSERT_EQUAL_STR("/my-path", HostUtil::parseAlias("/my-path")); // not a valid url, no hostname
 
     LOK_ASSERT_EQUAL_STR("https://aliasname[0-9]{1}:443", HostUtil::parseAlias("https://aliasname[0-9]{1}:443"));
+}
+
+void HostUtilTests::testFirstHostTrustedOnlyInFirstMode()
+{
+    constexpr std::string_view testname = __func__;
+
+    Poco::AutoPtr<Poco::Util::MapConfiguration> config(new Poco::Util::MapConfiguration);
+    config->setString("storage.wopi[@allow]", "true");
+
+    const ScopedHostConfig scopedConfig(config.get());
+
+    const Poco::URI uri("https://wopi.example.com:8443/");
+
+    // An administrator who selected groups mode but has not added a group yet.
+    config->setString("storage.wopi.alias_groups[@mode]", "groups");
+    resetHostState(true);
+    HostUtil::setFirstHost(uri);
+    LOK_ASSERT_MESSAGE("groups mode with no group must not record a first host",
+                       HostUtil::FirstHost.empty());
+    LOK_ASSERT_MESSAGE("groups mode with no group leaves the host list empty",
+                       HostUtil::isWopiHostsEmpty());
+    LOK_ASSERT_MESSAGE("groups mode with no group denies the connecting host",
+                       !HostUtil::allowedWopiHost(uri.getHost()));
+
+    // The same connection in first mode is adopted as the one trusted host.
+    config->setString("storage.wopi.alias_groups[@mode]", "first");
+    resetHostState(true);
+    HostUtil::setFirstHost(uri);
+    LOK_ASSERT_EQUAL_STR(uri.getAuthority(), HostUtil::FirstHost);
+    LOK_ASSERT_MESSAGE("first mode trusts the connecting host",
+                       HostUtil::allowedWopiHost(uri.getHost()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HostUtilTests);

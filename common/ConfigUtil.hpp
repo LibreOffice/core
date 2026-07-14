@@ -122,6 +122,13 @@ void initializeFromFile(const std::string& filename);
 /// Check if the config has been initialized
 bool isInitialized();
 
+#ifdef BUILDING_TESTS
+/// Point the active config at the given instance and return the one that was
+/// active before, so a test can exercise config-dependent behaviour and then
+/// put the previous config back. The config must outlive its use.
+const Poco::Util::AbstractConfiguration* setConfigForTest(const Poco::Util::AbstractConfiguration* config);
+#endif
+
 /// Returns the default config.
 const Util::UnorderedStringMap<std::string>& getDefaultAppConfig();
 
