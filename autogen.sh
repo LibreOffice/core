@@ -19,7 +19,10 @@ EOF
 if test `uname -s` = Linux -o `uname -s` = FreeBSD; then
     libtoolize || failed "libtool"
 elif test `uname -s` = Darwin; then
-    libtoolize || glibtoolize || failed "Can't find libtoolize or glibtoolize. Use lode or install it yourself."
+    libtoolize 2>/dev/null || glibtoolize 2>/dev/null || {
+        echo "Can't find libtoolize or glibtoolize. Use lode or install it yourself." >&2
+        failed libtoolize
+    }
 fi
 
 aclocal || failed "aclocal"
