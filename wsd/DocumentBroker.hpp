@@ -1546,6 +1546,9 @@ private:
             os << indent << "last upload duration: " << lastUploadDuration();
             os << indent << "min time between uploads: " << minTimeBetweenUploads();
             os << indent << "last modified time (on server): " << getLastModifiedServerTimeString();
+            os << indent << "earlier modified times (on server): ";
+            for (const auto& time : _earlierModifiedServerTimeStrings)
+                os << '[' << time << ']';
             os << indent << "file last modified: "
                << Util::getTimeForLog(now, _lastUploadedFileModifiedLocalTime);
             os << indent << "last upload was successful: " << lastUploadSuccessful();
