@@ -20,7 +20,7 @@
 
 #include <sal/log.hxx>
 
-#include <com/sun/star/uno/genfunc.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <config_options.h>
 #include <uno/data.h>

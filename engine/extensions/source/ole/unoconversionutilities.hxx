@@ -2011,7 +2011,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
         TYPELIB_DANGER_RELEASE( pSeqElemDesc);
 
         uno_Sequence *p_uno_Seq;
-        uno_sequence_construct( &p_uno_Seq, pDesc, nullptr, length, css::uno::cpp_acquire);
+        uno_sequence_construct( &p_uno_Seq, pDesc, nullptr, length, cpo::uno::cpp_acquire);
 
         typelib_TypeClass typeElement= pSeqDesc->pType->eTypeClass;
         char *pArray= p_uno_Seq->elements;
@@ -2058,21 +2058,21 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
                 if( typeElement == typelib_TypeClass_ANY)
                 {
                     // copy the converted VARIANT to the Sequence
-                    uno_type_assignData( pDest, pSeqElemDescRef , &any, pSeqElemDescRef, css::uno::cpp_queryInterface,
-                                         css::uno::cpp_acquire, css::uno::cpp_release);
+                    uno_type_assignData( pDest, pSeqElemDescRef , &any, pSeqElemDescRef, cpo::uno::cpp_queryInterface,
+                                         cpo::uno::cpp_acquire, cpo::uno::cpp_release);
                 }
                 else
                 {
                     // type after conversion must be the element type of the sequence
                     OSL_ENSURE(any.getValueTypeClass() == css::uno::TypeClass(typeElement), "wrong conversion");
                     uno_type_assignData( pDest, pSeqElemDescRef,const_cast<void*>( any.getValue()), any.getValueTypeRef(),
-                                         css::uno::cpp_queryInterface, css::uno::cpp_acquire, css::uno::cpp_release);
+                                         cpo::uno::cpp_queryInterface, cpo::uno::cpp_acquire, cpo::uno::cpp_release);
                 }
             }
         } // else
         result.Clear();
         anySeq.setValue( &p_uno_Seq, pDesc);
-        uno_destructData( &p_uno_Seq, pDesc, css::uno::cpp_release);
+        uno_destructData( &p_uno_Seq, pDesc, cpo::uno::cpp_release);
         typelib_typedescription_release( pDesc);
     }
     catch (const BridgeRuntimeError &)

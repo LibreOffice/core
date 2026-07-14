@@ -21,7 +21,7 @@
 
 #include <typeinfo>
 
-#include <com/sun/star/uno/genfunc.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include <sal/log.hxx>
 #include <typelib/typedescription.hxx>
 #include <uno/data.h>

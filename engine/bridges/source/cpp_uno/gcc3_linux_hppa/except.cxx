@@ -26,7 +26,7 @@
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 
-#include <com/sun/star/uno/genfunc.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
@@ -37,6 +37,7 @@
 using namespace ::std;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::__cxxabiv1;
 
 extern sal_Int32 * pHack;

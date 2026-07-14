@@ -38,9 +38,9 @@ namespace comphelper
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::beans::NamedValue;
     using ::cpo::uno::Type;
-    using ::com::sun::star::uno::cpp_acquire;
-    using ::com::sun::star::uno::cpp_release;
-    using ::com::sun::star::uno::cpp_queryInterface;
+    using ::cpo::uno::cpp_acquire;
+    using ::cpo::uno::cpp_release;
+    using ::cpo::uno::cpp_queryInterface;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
 

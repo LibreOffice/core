@@ -25,7 +25,7 @@
 #include <sal/log.hxx>
 #include <osl/mutex.hxx>
 
-#include <com/sun/star/uno/genfunc.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 
@@ -36,6 +36,7 @@
 using namespace ::std;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::__cxxabiv1;
 
 

@@ -51,7 +51,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/genfunc.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -1601,13 +1601,13 @@ cpo::uno::Any fromJsSequence(JSContext* ctx, cpo::uno::Type const& type, JSValue
     css::uno::TypeDescription elemDesc(
         reinterpret_cast<typelib_IndirectTypeDescription const*>(desc.get())->pType);
     uno_Sequence* seq;
-    uno_sequence_construct(&seq, desc.get(), nullptr, len2, css::uno::cpp_acquire);
+    uno_sequence_construct(&seq, desc.get(), nullptr, len2, cpo::uno::cpp_acquire);
     for (std::int64_t i = 0; i != len2; ++i)
     {
         ValueRef elem(ctx, JS_GetPropertyInt64(ctx, val, i));
         if (JS_IsException(elem))
         {
-            uno_type_sequence_destroy(seq, desc.get()->pWeakRef, css::uno::cpp_release);
+            uno_type_sequence_destroy(seq, desc.get()->pWeakRef, cpo::uno::cpp_release);
             throw JsException();
         }
         auto const any = fromJs(ctx, elemDesc.get()->pWeakRef, elem);
@@ -1616,7 +1616,7 @@ cpo::uno::Any fromJsSequence(JSContext* ctx, cpo::uno::Type const& type, JSValue
             const_cast<void*>(type == cppu::UnoType<cpo::uno::Sequence<cpo::uno::Any>>::get()
                                   ? &any
                                   : any.getValue()),
-            elemDesc.get(), css::uno::cpp_acquire);
+            elemDesc.get(), cpo::uno::cpp_acquire);
     }
     return { &seq, type };
 }
@@ -2043,7 +2043,7 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
                                                            == typelib_TypeClass_ANY
                                                        ? &mems[mem]
                                                        : mems[mem].getValue()),
-                                 memDesc.get(), css::uno::cpp_acquire);
+                                 memDesc.get(), cpo::uno::cpp_acquire);
                     ++mem;
                 }
                 compDesc = compDesc->pBaseTypeDescription;

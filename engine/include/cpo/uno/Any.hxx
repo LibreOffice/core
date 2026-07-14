@@ -32,7 +32,7 @@
 #include "uno/sequence2.h"
 #include "cpo/uno/Type.hxx"
 #include "com/sun/star/uno/Reference.h"
-#include "com/sun/star/uno/genfunc.hxx"
+#include "cpo/uno/genfunc.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "cppu/cppudllapi.h"
 #include "cppu/unotype.hxx"
@@ -47,7 +47,7 @@ namespace cpo::uno
 
 inline Any::Any()
 {
-    ::uno_any_construct( this, NULL, NULL, css::uno::cpp_acquire );
+    ::uno_any_construct( this, NULL, NULL, cpo::uno::cpp_acquire );
 }
 
 
@@ -61,14 +61,14 @@ inline Any::Any( T const & value )
     ::uno_type_any_construct(
         this, const_cast<T *>(&value),
         ::cppu::getTypeFavourUnsigned(&value).getTypeLibType(),
-        css::uno::cpp_acquire );
+        cpo::uno::cpp_acquire );
 }
 
 inline Any::Any( bool value )
 {
     ::uno_type_any_construct(
         this, &value, cppu::UnoType<bool>::get().getTypeLibType(),
-        css::uno::cpp_acquire );
+        cpo::uno::cpp_acquire );
 }
 
 template<typename T1, typename T2>
@@ -82,32 +82,32 @@ Any::Any(const rtl::OUStringLiteral<N>& value): Any(rtl::OUString(value)) {}
 
 inline Any::Any( const Any & rAny )
 {
-    ::uno_type_any_construct( this, rAny.pData, rAny.pType, css::uno::cpp_acquire );
+    ::uno_type_any_construct( this, rAny.pData, rAny.pType, cpo::uno::cpp_acquire );
 }
 
 inline Any::Any( const void * pData_, const cpo::uno::Type & rType )
 {
     ::uno_type_any_construct(
         this, const_cast< void * >( pData_ ), rType.getTypeLibType(),
-        css::uno::cpp_acquire );
+        cpo::uno::cpp_acquire );
 }
 
 inline Any::Any( const void * pData_, typelib_TypeDescription * pTypeDescr )
 {
     ::uno_any_construct(
-        this, const_cast< void * >( pData_ ), pTypeDescr, css::uno::cpp_acquire );
+        this, const_cast< void * >( pData_ ), pTypeDescr, cpo::uno::cpp_acquire );
 }
 
 inline Any::Any( const void * pData_, typelib_TypeDescriptionReference * pType_ )
 {
     ::uno_type_any_construct(
-        this, const_cast< void * >( pData_ ), pType_, css::uno::cpp_acquire );
+        this, const_cast< void * >( pData_ ), pType_, cpo::uno::cpp_acquire );
 }
 
 inline Any::~Any()
 {
     ::uno_any_destruct(
-        this, css::uno::cpp_release );
+        this, cpo::uno::cpp_release );
 }
 
 inline Any & Any::operator = ( const Any & rAny )
@@ -121,7 +121,7 @@ inline Any & Any::operator = ( const Any & rAny )
 
 #if !defined(__COVERITY__) // suppress COPY_INSTEAD_OF_MOVE suggestions
 Any::Any(Any && other) noexcept {
-    uno_any_construct(this, nullptr, nullptr, &css::uno::cpp_acquire);
+    uno_any_construct(this, nullptr, nullptr, &cpo::uno::cpp_acquire);
     std::swap(other.pType, pType);
     std::swap(other.pData, pData);
     std::swap(other.pReserved, pReserved);
@@ -162,27 +162,27 @@ inline void Any::setValue( const void * pData_, typelib_TypeDescriptionReference
 {
     ::uno_type_any_assign(
         this, const_cast< void * >( pData_ ), pType_,
-        css::uno::cpp_acquire, css::uno::cpp_release );
+        cpo::uno::cpp_acquire, cpo::uno::cpp_release );
 }
 
 inline void Any::setValue( const void * pData_, typelib_TypeDescription * pTypeDescr )
 {
     ::uno_any_assign(
         this, const_cast< void * >( pData_ ), pTypeDescr,
-        css::uno::cpp_acquire, css::uno::cpp_release );
+        cpo::uno::cpp_acquire, cpo::uno::cpp_release );
 }
 
 inline void Any::clear()
 {
     ::uno_any_clear(
-        this, css::uno::cpp_release );
+        this, cpo::uno::cpp_release );
 }
 
 inline bool Any::isExtractableTo( const cpo::uno::Type & rType ) const
 {
     return ::uno_type_isAssignableFromData(
         rType.getTypeLibType(), pData, pType,
-        css::uno::cpp_queryInterface, css::uno::cpp_release );
+        cpo::uno::cpp_queryInterface, cpo::uno::cpp_release );
 }
 
 
@@ -198,7 +198,7 @@ inline bool Any::operator == ( const Any & rAny ) const
 {
     return ::uno_type_equalData(
         pData, pType, rAny.pData, rAny.pType,
-        css::uno::cpp_queryInterface, css::uno::cpp_release );
+        cpo::uno::cpp_queryInterface, cpo::uno::cpp_release );
 }
 
 inline bool Any::operator != ( const Any & rAny ) const
@@ -264,8 +264,8 @@ inline bool SAL_CALL operator >>= ( const Any & rAny, C & value )
     return ::uno_type_assignData(
         &value, rType.getTypeLibType(),
         rAny.pData, rAny.pType,
-        css::uno::cpp_queryInterface,
-        css::uno::cpp_acquire, css::uno::cpp_release );
+        cpo::uno::cpp_queryInterface,
+        cpo::uno::cpp_acquire, cpo::uno::cpp_release );
 }
 
 // bool
@@ -565,7 +565,7 @@ inline bool SAL_CALL operator == ( const Any & rAny, const C & value )
     return ::uno_type_equalData(
         rAny.pData, rAny.pType,
         const_cast< C * >( &value ), rType.getTypeLibType(),
-        css::uno::cpp_queryInterface, css::uno::cpp_release );
+        cpo::uno::cpp_queryInterface, cpo::uno::cpp_release );
 }
 // operator to compare to an any.  may use specialized operators ==.
 

@@ -156,7 +156,7 @@ extern "C" void* /*_GLIBCXX_CDTOR_CALLABI*/ deleteException(void* exception)
     typelib_TypeDescription* td = nullptr;
     typelib_typedescription_getByName(&td, unoName.pData);
     assert(td != nullptr);
-    uno_destructData(exception, td, &css::uno::cpp_release);
+    uno_destructData(exception, td, &cpo::uno::cpp_release);
     typelib_typedescription_release(td);
     return exception;
 }
@@ -258,7 +258,7 @@ sal_uInt64 call(bridges::cpp_uno::shared::CppInterfaceProxy* proxy,
             if (parameters[i].bOut)
             {
                 uno_destructData(cppArgs[i], argtds[i],
-                                 reinterpret_cast<uno_ReleaseFunc>(css::uno::cpp_release));
+                                 reinterpret_cast<uno_ReleaseFunc>(cpo::uno::cpp_release));
                 uno_copyAndConvertData(cppArgs[i], args[i], argtds[i],
                                        proxy->getBridge()->getUno2Cpp());
             }
@@ -354,7 +354,7 @@ sal_uInt64 vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, unsigned 
                         {
                             uno_any_construct(
                                 reinterpret_cast<uno_Any*>(indirectRet), &ifc, td,
-                                reinterpret_cast<uno_AcquireFunc>(css::uno::cpp_acquire));
+                                reinterpret_cast<uno_AcquireFunc>(cpo::uno::cpp_acquire));
                             ifc->release();
                             TYPELIB_DANGER_RELEASE(td);
                             return {};

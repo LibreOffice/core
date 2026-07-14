@@ -258,13 +258,13 @@ using namespace ::com::sun::star;
 static void* __cdecl copyConstruct(void* pExcThis, void* pSource,
                                    typelib_TypeDescription* pTD) noexcept
 {
-    ::uno_copyData(pExcThis, pSource, pTD, uno::cpp_acquire);
+    ::uno_copyData(pExcThis, pSource, pTD, cpo::uno::cpp_acquire);
     return pExcThis;
 }
 
 static void* __cdecl destruct(void* pExcThis, typelib_TypeDescription* pTD) noexcept
 {
-    ::uno_destructData(pExcThis, pTD, uno::cpp_release);
+    ::uno_destructData(pExcThis, pTD, cpo::uno::cpp_release);
     return pExcThis;
 }
 

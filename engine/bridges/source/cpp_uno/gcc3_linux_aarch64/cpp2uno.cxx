@@ -29,7 +29,7 @@
 #include <dlfcn.h>
 
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/genfunc.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include <sal/alloca.h>
 #include <sal/types.h>
 #include <typelib/typeclass.h>
@@ -277,7 +277,7 @@ void call(
             if (parameters[i].bOut) {
                 uno_destructData(
                     cppArgs[i], argtds[i],
-                    reinterpret_cast<uno_ReleaseFunc>(css::uno::cpp_release));
+                    reinterpret_cast<uno_ReleaseFunc>(cpo::uno::cpp_release));
                 uno_copyAndConvertData(
                     cppArgs[i], args[i], argtds[i],
                     proxy->getBridge()->getUno2Cpp());
@@ -447,7 +447,7 @@ void vtableCall(
                         uno_any_construct(
                             static_cast<uno_Any *>(indirectRet), &ifc, td,
                             reinterpret_cast<uno_AcquireFunc>(
-                                css::uno::cpp_acquire));
+                                cpo::uno::cpp_acquire));
                         ifc->release();
                         TYPELIB_DANGER_RELEASE(td);
                         break;

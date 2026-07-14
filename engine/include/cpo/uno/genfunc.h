@@ -22,7 +22,7 @@
 
 typedef struct _typelib_TypeDescriptionReference typelib_TypeDescriptionReference;
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 /** Function to acquire a C++ interface.
 

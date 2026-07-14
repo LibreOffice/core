@@ -24,7 +24,7 @@
 
 #include <sal/alloca.h>
 
-#include <com/sun/star/uno/genfunc.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <o3tl/runtimetooustring.hxx>

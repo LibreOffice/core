@@ -22,23 +22,23 @@
 
 #include <cstddef>
 
-#include "com/sun/star/uno/genfunc.h"
+#include "cpo/uno/genfunc.h"
 #include "cpo/uno/Any.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
 
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 
 
 inline void SAL_CALL cpp_acquire( void * pCppI )
 {
-    static_cast< XInterface * >( pCppI )->acquire();
+    static_cast< css::uno::XInterface * >( pCppI )->acquire();
 }
 
 inline void SAL_CALL cpp_release( void * pCppI )
 {
-    static_cast< XInterface * >( pCppI )->release();
+    static_cast< css::uno::XInterface * >( pCppI )->release();
 }
 
 inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescriptionReference * pType )
@@ -47,16 +47,16 @@ inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescription
     {
         try
         {
-            cpo::uno::Any aRet( static_cast< XInterface * >( pCppI )->queryInterface(
+            cpo::uno::Any aRet( static_cast< css::uno::XInterface * >( pCppI )->queryInterface(
                 * reinterpret_cast< const cpo::uno::Type * >( &pType ) ) );
             if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
             {
-                XInterface * pRet = static_cast< XInterface * >( aRet.pReserved );
+                css::uno::XInterface * pRet = static_cast< css::uno::XInterface * >( aRet.pReserved );
                 aRet.pReserved = NULL;
                 return pRet;
             }
         }
-        catch (RuntimeException &)
+        catch (css::uno::RuntimeException &)
         {
         }
     }

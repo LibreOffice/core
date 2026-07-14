@@ -79,7 +79,7 @@
 #include <ooo/vba/XSink.hpp>
 #include <ooo/vba/msforms/XCheckBox.hpp>
 #include <osl/interlck.h>
-#include <com/sun/star/uno/genfunc.h>
+#include <cpo/uno/genfunc.h>
 #include <comphelper/automationinvokedzone.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>

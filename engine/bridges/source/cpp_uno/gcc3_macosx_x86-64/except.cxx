@@ -29,7 +29,7 @@
 #include <dlfcn.h>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/genfunc.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include <sal/log.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/strbuf.hxx>

@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/genfunc.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include <o3tl/unreachable.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -797,7 +797,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             cpo::uno::Type const elemType(elemDesc.get()->pWeakRef);
             uno_Sequence* seq;
             uno_sequence_construct(&seq, desc.get(), nullptr, static_cast<sal_Int32>(elems.size()),
-                                   css::uno::cpp_acquire);
+                                   cpo::uno::cpp_acquire);
             for (std::size_t i = 0; i != elems.size(); ++i)
             {
                 cpo::uno::Any const any = parseJsonToAny(elems[i], elemType);
@@ -805,7 +805,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
                              const_cast<void*>(elemType.getTypeClass() == css::uno::TypeClass_ANY
                                                    ? &any
                                                    : any.getValue()),
-                             elemDesc.get(), css::uno::cpp_acquire);
+                             elemDesc.get(), cpo::uno::cpp_acquire);
             }
             return { &seq, type };
         }
@@ -873,7 +873,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
                                                            == typelib_TypeClass_ANY
                                                        ? &mems[mem]
                                                        : mems[mem].getValue()),
-                                 memDesc.get(), css::uno::cpp_acquire);
+                                 memDesc.get(), cpo::uno::cpp_acquire);
                     ++mem;
                 }
                 compDesc = compDesc->pBaseTypeDescription;

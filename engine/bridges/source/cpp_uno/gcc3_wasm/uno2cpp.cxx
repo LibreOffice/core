@@ -17,7 +17,7 @@
 
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/genfunc.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include <cppu/unotype.hxx>
 #include <o3tl/runtimetooustring.hxx>
 #include <o3tl/temporary.hxx>
@@ -230,7 +230,7 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
             if (cppArgs[i] != nullptr)
             {
                 uno_destructData(cppArgs[i], ptds[i].get(),
-                                 reinterpret_cast<uno_ReleaseFunc>(css::uno::cpp_release));
+                                 reinterpret_cast<uno_ReleaseFunc>(cpo::uno::cpp_release));
             }
         }
         return;
@@ -250,13 +250,13 @@ void call(bridges::cpp_uno::shared::UnoInterfaceProxy* proxy,
                                        proxy->getBridge()->getCpp2Uno());
             }
             uno_destructData(cppArgs[i], ptds[i].get(),
-                             reinterpret_cast<uno_ReleaseFunc>(css::uno::cpp_release));
+                             reinterpret_cast<uno_ReleaseFunc>(cpo::uno::cpp_release));
         }
     }
     if (retConv)
     {
         uno_copyAndConvertData(returnValue, ret, rtd.get(), proxy->getBridge()->getCpp2Uno());
-        uno_destructData(ret, rtd.get(), reinterpret_cast<uno_ReleaseFunc>(css::uno::cpp_release));
+        uno_destructData(ret, rtd.get(), reinterpret_cast<uno_ReleaseFunc>(cpo::uno::cpp_release));
     }
 }
 }

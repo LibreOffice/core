@@ -29,8 +29,8 @@ namespace comphelper
     using ::cpo::uno::Sequence;
     using ::com::sun::star::lang::XTypeProvider;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::cpp_queryInterface;
-    using ::com::sun::star::uno::cpp_release;
+    using ::cpo::uno::cpp_queryInterface;
+    using ::cpo::uno::cpp_release;
     using ::com::sun::star::beans::PropertyState_DEFAULT_VALUE;
     using ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
 

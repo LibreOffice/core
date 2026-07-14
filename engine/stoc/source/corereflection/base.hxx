@@ -344,9 +344,9 @@ inline bool extract(
             return ::uno_type_assignData(
                 &rDest, pTo->aBase.pWeakRef,
                 const_cast< void * >( rObj.getValue() ), rObj.getValueTypeRef(),
-                reinterpret_cast< uno_QueryInterfaceFunc >(css::uno::cpp_queryInterface),
-                reinterpret_cast< uno_AcquireFunc >(css::uno::cpp_acquire),
-                reinterpret_cast< uno_ReleaseFunc >(css::uno::cpp_release) );
+                reinterpret_cast< uno_QueryInterfaceFunc >(cpo::uno::cpp_queryInterface),
+                reinterpret_cast< uno_AcquireFunc >(cpo::uno::cpp_acquire),
+                reinterpret_cast< uno_ReleaseFunc >(cpo::uno::cpp_release) );
         }
         else if (auto t = o3tl::tryAccess<cpo::uno::Type>(rObj))
         {
@@ -380,18 +380,18 @@ inline bool coerce_assign(
         return uno_assignData(
             pDest, pTD,
             const_cast<cpo::uno::Any *>(&rSource), pTD,
-            reinterpret_cast< uno_QueryInterfaceFunc >(css::uno::cpp_queryInterface),
-            reinterpret_cast< uno_AcquireFunc >(css::uno::cpp_acquire),
-            reinterpret_cast< uno_ReleaseFunc >(css::uno::cpp_release) );
+            reinterpret_cast< uno_QueryInterfaceFunc >(cpo::uno::cpp_queryInterface),
+            reinterpret_cast< uno_AcquireFunc >(cpo::uno::cpp_acquire),
+            reinterpret_cast< uno_ReleaseFunc >(cpo::uno::cpp_release) );
     }
     else
     {
         return uno_type_assignData(
             pDest, pTD->pWeakRef,
             const_cast<void *>(rSource.getValue()), rSource.getValueTypeRef(),
-            reinterpret_cast< uno_QueryInterfaceFunc >(css::uno::cpp_queryInterface),
-            reinterpret_cast< uno_AcquireFunc >(css::uno::cpp_acquire),
-            reinterpret_cast< uno_ReleaseFunc >(css::uno::cpp_release) );
+            reinterpret_cast< uno_QueryInterfaceFunc >(cpo::uno::cpp_queryInterface),
+            reinterpret_cast< uno_AcquireFunc >(cpo::uno::cpp_acquire),
+            reinterpret_cast< uno_ReleaseFunc >(cpo::uno::cpp_release) );
     }
 }
 

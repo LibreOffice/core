@@ -28,7 +28,7 @@
 #include <dlfcn.h>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/genfunc.h>
+#include <cpo/uno/genfunc.h>
 #include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -203,7 +203,7 @@ extern "C" void _GLIBCXX_CDTOR_CALLABI deleteException(void * exception) {
     typelib_TypeDescription * td = nullptr;
     typelib_typedescription_getByName(&td, unoName.pData);
     assert(td != nullptr);
-    uno_destructData(exception, td, &css::uno::cpp_release);
+    uno_destructData(exception, td, &cpo::uno::cpp_release);
     typelib_typedescription_release(td);
 }
 

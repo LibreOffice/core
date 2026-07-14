@@ -19,7 +19,7 @@
 
 #include <malloc.h>
 
-#include <com/sun/star/uno/genfunc.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include <sal/log.hxx>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
@@ -175,7 +175,7 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
             if (pParams[nIndex].bOut) // inout/out
             {
                 // convert and assign
-                ::uno_destructData(pCppArgs[nIndex], pParamTD, uno::cpp_release);
+                ::uno_destructData(pCppArgs[nIndex], pParamTD, cpo::uno::cpp_release);
                 ::uno_copyAndConvertData(pCppArgs[nIndex], pUnoArgs[nIndex], pParamTD,
                                          pThis->getBridge()->getUno2Cpp());
             }
@@ -315,7 +315,7 @@ typelib_TypeClass __cdecl cpp_mediate(void** pCallStack, const sal_Int32 nFuncti
                         {
                             const unsigned int nReturnAddrPos = nCppStackPos - 1;
                             ::uno_any_construct(static_cast<uno_Any*>(pCallStack[nReturnAddrPos]),
-                                                &pInterface, pQueryTD, uno::cpp_acquire);
+                                                &pInterface, pQueryTD, cpo::uno::cpp_acquire);
                             pInterface->release();
                             TYPELIB_DANGER_RELEASE(pQueryTD);
 

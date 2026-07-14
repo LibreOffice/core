@@ -4278,7 +4278,7 @@ include/com/sun/star/uno/Reference.h
 include/com/sun/star/uno/Reference.hxx
 include/cpo/uno/Type.h
 include/cpo/uno/Type.hxx
-include/com/sun/star/uno/genfunc.hxx
+include/cpo/uno/genfunc.hxx
 include/comphelper/ChainablePropertySet.hxx
 include/comphelper/ChainablePropertySetInfo.hxx
 include/comphelper/IdPropArrayHelper.hxx

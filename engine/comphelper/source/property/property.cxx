@@ -46,9 +46,9 @@ namespace comphelper
     using ::com::sun::star::uno::Exception;
     using ::cpo::uno::Any;
     using ::cpo::uno::Type;
-    using ::com::sun::star::uno::cpp_queryInterface;
-    using ::com::sun::star::uno::cpp_acquire;
-    using ::com::sun::star::uno::cpp_release;
+    using ::cpo::uno::cpp_queryInterface;
+    using ::cpo::uno::cpp_acquire;
+    using ::cpo::uno::cpp_release;
 #if OSL_DEBUG_LEVEL > 0
     using ::com::sun::star::lang::XServiceInfo;
 #endif

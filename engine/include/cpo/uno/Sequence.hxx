@@ -30,7 +30,7 @@
 #include "cpo/uno/Sequence.h"
 #include "typelib/typedescription.h"
 #include "uno/data.h"
-#include "com/sun/star/uno/genfunc.hxx"
+#include "cpo/uno/genfunc.hxx"
 #include "cppu/unotype.hxx"
 
 namespace cpo::uno
@@ -47,7 +47,7 @@ inline Sequence< E >::Sequence()
     const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
-        NULL, 0, css::uno::cpp_acquire );
+        NULL, 0, cpo::uno::cpp_acquire );
     // no bad_alloc, because empty sequence is statically allocated in cppu
 }
 
@@ -73,7 +73,7 @@ inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
     bool success =
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
-        const_cast< E * >( pElements ), len, css::uno::cpp_acquire );
+        const_cast< E * >( pElements ), len, cpo::uno::cpp_acquire );
     if (! success)
         throw ::std::bad_alloc();
 }
@@ -85,7 +85,7 @@ inline Sequence< E >::Sequence( sal_Int32 len )
     bool success =
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
-        NULL, len, css::uno::cpp_acquire );
+        NULL, len, cpo::uno::cpp_acquire );
     if (! success)
         throw ::std::bad_alloc();
 }
@@ -93,7 +93,7 @@ inline Sequence< E >::Sequence( sal_Int32 len )
 template<typename E> Sequence<E>::Sequence(std::initializer_list<E> init) {
     if (!uno_type_sequence_construct(
             &_pSequence, cppu::getTypeFavourUnsigned(static_cast<Sequence const *>(NULL)).getTypeLibType(),
-            const_cast<E *>(init.begin()), init.size(), css::uno::cpp_acquire))
+            const_cast<E *>(init.begin()), init.size(), cpo::uno::cpp_acquire))
     {
         throw std::bad_alloc();
     }
@@ -106,7 +106,7 @@ inline Sequence< E >::~Sequence()
     {
         const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
         uno_type_sequence_destroy(
-            _pSequence, rType.getTypeLibType(), css::uno::cpp_release );
+            _pSequence, rType.getTypeLibType(), cpo::uno::cpp_release );
     }
 }
 
@@ -115,7 +115,7 @@ inline Sequence< E > & Sequence< E >::operator = ( const Sequence & rSeq )
 {
     const cpo::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     ::uno_type_sequence_assign(
-        &_pSequence, rSeq._pSequence, rType.getTypeLibType(), css::uno::cpp_release );
+        &_pSequence, rSeq._pSequence, rType.getTypeLibType(), cpo::uno::cpp_release );
     return *this;
 }
 
@@ -135,8 +135,8 @@ inline bool Sequence< E >::operator == ( const Sequence & rSeq ) const
     return ::uno_type_equalData(
         const_cast< Sequence * >( this ), rType.getTypeLibType(),
         const_cast< Sequence * >( &rSeq ), rType.getTypeLibType(),
-        css::uno::cpp_queryInterface,
-        css::uno::cpp_release );
+        cpo::uno::cpp_queryInterface,
+        cpo::uno::cpp_release );
 }
 
 template< class E >
@@ -152,7 +152,7 @@ inline E * Sequence< E >::getArray()
     bool success =
     ::uno_type_sequence_reference2One(
         &_pSequence, rType.getTypeLibType(),
-        css::uno::cpp_acquire, css::uno::cpp_release );
+        cpo::uno::cpp_acquire, cpo::uno::cpp_release );
     if (! success)
         throw ::std::bad_alloc();
     return reinterpret_cast< E * >( _pSequence->elements );
@@ -179,7 +179,7 @@ inline void Sequence< E >::realloc( sal_Int32 nSize )
     bool success =
     ::uno_type_sequence_realloc(
         &_pSequence, rType.getTypeLibType(), nSize,
-        css::uno::cpp_acquire, css::uno::cpp_release );
+        cpo::uno::cpp_acquire, cpo::uno::cpp_release );
     if (!success)
         throw ::std::bad_alloc();
 }

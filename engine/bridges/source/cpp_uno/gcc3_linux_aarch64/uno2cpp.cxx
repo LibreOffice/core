@@ -30,7 +30,7 @@
 #include <vtables.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/genfunc.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <sal/alloca.h>
@@ -342,7 +342,7 @@ void call(
             if (cppArgs[i] != nullptr) {
                 uno_destructData(
                     cppArgs[i], ptds[i],
-                    reinterpret_cast<uno_ReleaseFunc>(css::uno::cpp_release));
+                    reinterpret_cast<uno_ReleaseFunc>(cpo::uno::cpp_release));
                 TYPELIB_DANGER_RELEASE(ptds[i]);
             }
         }
@@ -362,7 +362,7 @@ void call(
             }
             uno_destructData(
                 cppArgs[i], ptds[i],
-                reinterpret_cast<uno_ReleaseFunc>(css::uno::cpp_release));
+                reinterpret_cast<uno_ReleaseFunc>(cpo::uno::cpp_release));
             TYPELIB_DANGER_RELEASE(ptds[i]);
         }
     }
@@ -420,7 +420,7 @@ void call(
         uno_copyAndConvertData(
             returnValue, ret, rtd, proxy->getBridge()->getCpp2Uno());
         uno_destructData(
-            ret, rtd, reinterpret_cast<uno_ReleaseFunc>(css::uno::cpp_release));
+            ret, rtd, reinterpret_cast<uno_ReleaseFunc>(cpo::uno::cpp_release));
     }
     TYPELIB_DANGER_RELEASE(rtd);
 }

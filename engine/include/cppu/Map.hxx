@@ -68,7 +68,7 @@ namespace cppu
     {
         css::uno::Mapping curr2outer(css::uno::Environment::getCurrent(), outerEnv);
 
-        uno_any_destruct(res, css::uno::cpp_release);
+        uno_any_destruct(res, cpo::uno::cpp_release);
         uno_type_any_constructAndConvert(
             res,
             const_cast<void *>(any.getValue()),
@@ -87,7 +87,7 @@ namespace cppu
     {
         css::uno::Mapping outer2curr(outerEnv, css::uno::Environment::getCurrent());
 
-        uno_any_destruct(res, css::uno::cpp_release);
+        uno_any_destruct(res, cpo::uno::cpp_release);
         uno_type_any_constructAndConvert(
             res,
             const_cast<void *>(any.getValue()),

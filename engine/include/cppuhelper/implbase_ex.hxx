@@ -23,7 +23,7 @@
 #include "cpo/uno/Any.h"
 #include "cpo/uno/Sequence.h"
 #include "cpo/uno/Type.h"
-#include "com/sun/star/uno/genfunc.h"
+#include "cpo/uno/genfunc.h"
 #include "cppuhelper/cppuhelperdllapi.h"
 #include "sal/types.h"
 

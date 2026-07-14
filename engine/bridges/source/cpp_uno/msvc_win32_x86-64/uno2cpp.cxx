@@ -23,7 +23,7 @@
 
 #include <malloc.h>
 
-#include <com/sun/star/uno/genfunc.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include <uno/data.h>
 
 #include <bridge.hxx>
@@ -234,7 +234,7 @@ bool cpp_call(
             // destroy temp C++ param => C++: every param was constructed
             ::uno_destructData(
                 aCppArgs[nCppIndex].p, pTempParamTD[nTempIndexes],
-                uno::cpp_release );
+                cpo::uno::cpp_release );
             TYPELIB_DANGER_RELEASE( pTempParamTD[nTempIndexes] );
         }
 
@@ -276,7 +276,7 @@ bool cpp_call(
 
         // destroy temp C++ param => C++: every param was constructed
         ::uno_destructData(
-            aCppArgs[nCppIndex].p, pParamTD, uno::cpp_release );
+            aCppArgs[nCppIndex].p, pParamTD, cpo::uno::cpp_release );
 
         TYPELIB_DANGER_RELEASE( pParamTD );
     }
@@ -297,7 +297,7 @@ bool cpp_call(
             pUnoReturn, uRetVal.p, pReturnTD,
             pThis->getBridge()->getCpp2Uno() );
         ::uno_destructData(
-            uRetVal.p, pReturnTD, uno::cpp_release );
+            uRetVal.p, pReturnTD, cpo::uno::cpp_release );
         break;
     }
 
