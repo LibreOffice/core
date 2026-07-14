@@ -9,13 +9,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-class ShapeHandleDiagramSubSection extends CanvasSectionObject {
-	processingOrder: number =
-		app.CSections.DefaultForDocumentObjects.processingOrder;
-	drawingOrder: number =
-		app.CSections.DefaultForDocumentObjects.drawingOrder + 1; // Handle events before the parent section.
-	zIndex: number = app.CSections.DefaultForDocumentObjects.zIndex;
-	documentObject: boolean = true;
+class ShapeHandleDiagramSubSection extends ShapeHandleSubSection {
 	filledCombine: Path2D = new Path2D();
 	filledCombineUsed: boolean = false;
 	fillColor: string = '';
@@ -29,13 +23,8 @@ class ShapeHandleDiagramSubSection extends CanvasSectionObject {
 		documentPosition: cool.SimplePoint,
 		ownInfo: any,
 	) {
-		super(sectionName);
+		super(parentHandlerSection, sectionName, size, documentPosition, ownInfo);
 
-		this.size = size;
-
-		this.sectionProperties.position = documentPosition.clone();
-		this.sectionProperties.parentHandlerSection = parentHandlerSection;
-		this.sectionProperties.ownInfo = ownInfo;
 		this.sectionProperties.cursorStyle = 'pointer';
 
 		app.events.on(
@@ -50,13 +39,6 @@ class ShapeHandleDiagramSubSection extends CanvasSectionObject {
 		} else {
 			this.setShowSection(true);
 		}
-	}
-
-	onInitialize(): void {
-		this.setPosition(
-			this.sectionProperties.position.pX,
-			this.sectionProperties.position.pY,
-		);
 	}
 
 	onMouseEnter(point: cool.SimplePoint, e: MouseEvent): void {
