@@ -984,7 +984,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			app.calc.filterPopupCell = { 'popupId': e.state.popupId, 'row': e.state.row, 'column': e.state.column };
 		}
 		else if (e.commandName === 'TableAutoFillInfo') {
-			this._onTableAutoFillStateChanged(e.state.marks);
+			this._onTableRangeHandleStateChanged(e.state.marks);
 		}
 		else if (e.commandName === 'SparklineGroup') {
 			this._onSparklineGroupMsg(e.state);
@@ -994,20 +994,20 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		}
 	},
 
-	// One marker per mark (one per visible styled table), pooled by name so we
+	// One handle per mark (one per visible styled table), pooled by name so we
 	// grow/shrink and reposition rather than recreating them each message.
-	_onTableAutoFillStateChanged: function (marks) {
+	_onTableRangeHandleStateChanged: function (marks) {
 		if (!Array.isArray(marks))
 			marks = [];
 
-		var baseName = app.CSections.TableFillMarker.name;
+		var baseName = app.CSections.TableRangeHandle.name;
 		var count = this._map.isEditMode() ? marks.length : 0;
 
 		for (var i = 0; i < count; i++) {
 			var name = baseName + ' ' + i;
 			var section = app.sectionContainer.getSectionWithName(name);
 			if (!section) {
-				section = new app.definitions.TableFillMarkerSection(name);
+				section = new app.definitions.TableRangeHandleSection(name);
 				app.sectionContainer.addSection(section);
 			}
 
@@ -1021,13 +1021,13 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			section.calculatePositionViaCellCursor([topLeftPixels.x + offsetPixels.x, topLeftPixels.y + offsetPixels.y]);
 		}
 
-		var prev = this._tableFillMarkerCount || 0;
+		var prev = this._tableRangeHandleCount || 0;
 		for (var j = count; j < prev; j++) {
 			if (app.sectionContainer.getSectionWithName(baseName + ' ' + j))
 				app.sectionContainer.removeSection(baseName + ' ' + j);
 		}
-		this._tableFillMarkerCount = count;
-		this._tableFillMarkersVisible = count > 0;
+		this._tableRangeHandleCount = count;
+		this._tableRangeHandlesVisible = count > 0;
 
 		app.sectionContainer.requestReDraw();
 	},

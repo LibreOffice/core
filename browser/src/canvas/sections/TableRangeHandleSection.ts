@@ -11,12 +11,12 @@
  */
 /* See CanvasSectionContainer.ts for explanations. */
 
-app.definitions.TableFillMarkerSection = class TableFillMarkerSection extends (
+app.definitions.TableRangeHandleSection = class TableRangeHandleSection extends (
 	AutoFillBaseSection
 ) {
-	processingOrder: number = app.CSections.TableFillMarker.processingOrder;
-	drawingOrder: number = app.CSections.TableFillMarker.drawingOrder;
-	zIndex: number = app.CSections.TableFillMarker.zIndex;
+	processingOrder: number = app.CSections.TableRangeHandle.processingOrder;
+	drawingOrder: number = app.CSections.TableRangeHandle.drawingOrder;
+	zIndex: number = app.CSections.TableRangeHandle.zIndex;
 
 	constructor(name: string) {
 		super(name);
@@ -52,7 +52,7 @@ app.definitions.TableFillMarkerSection = class TableFillMarkerSection extends (
 	}
 
 	public calculatePositionViaCellSelection(point: Array<number>) {
-		// not used for TableFillMarkerSection
+		// not used for TableRangeHandleSection
 	}
 
 	// Give bottom-right position of the table's bottom-right cell, in core pixels.
@@ -66,7 +66,7 @@ app.definitions.TableFillMarkerSection = class TableFillMarkerSection extends (
 	}
 
 	protected isFillAreaVisible(): boolean {
-		return !!this.sectionProperties.docLayer._tableFillMarkersVisible;
+		return !!this.sectionProperties.docLayer._tableRangeHandlesVisible;
 	}
 
 	public onMouseEnter() {
@@ -74,6 +74,6 @@ app.definitions.TableFillMarkerSection = class TableFillMarkerSection extends (
 	}
 
 	public onDoubleClick(point: cool.SimplePoint, e: MouseEvent) {
-		// no-op: TableFillMarker does not respond to double-click
+		// no-op: TableRangeHandle does not respond to double-click
 	}
 };
