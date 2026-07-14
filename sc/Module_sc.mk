@@ -141,6 +141,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_datetime_functions_test \
 	CppunitTest_sc_financial_functions_test \
 	CppunitTest_sc_information_functions_test \
+	CppunitTest_sc_lambda_functions_test \
 	CppunitTest_sc_logical_functions_test \
 	CppunitTest_sc_mathematical_functions_test \
 	CppunitTest_sc_spreadsheet_functions_test \

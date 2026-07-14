@@ -10531,10 +10531,14 @@ void ScInterpreter::ScCall( FormulaCallableRef rCallable, sal_uInt8 nArgCount )
     // at this point we're dealing with a built-in function
     // and the stack is set up with the relevant args
     // we just need to dispatch the OpCode
+    auto pOldCur = pCur;
+    auto cOldPar = cPar;
     FormulaTokenRef pTempToken = new FormulaByteToken(eOpCode, nArgCount);
     pCur = pTempToken.get();
     cPar = nArgCount;
     DispatchOpCode( eOpCode );
+    pCur = pOldCur;
+    cPar = cOldPar;
 }
 
 /// If pToken contains one or more relative references, they are converted to absolute references
@@ -11303,6 +11307,12 @@ void ScInterpreter::ScLet()
         aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
         return;
     }
+    else if (GetRawStackType() != svStringName)
+    {
+        PushError(FormulaError::ParameterExpected);
+        aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
+        return;
+    }
 
     std::vector<OUString> aParams;
     std::vector<FormulaConstTokenRef> aArgs;
@@ -11329,7 +11339,14 @@ void ScInterpreter::ScLet()
         aArgs.push_back(PopToken());
         // the param name is one jump before the current one
         const FormulaStringNameToken* pToken = GetStringNameToken(pCode[pJump[nJump - 1] + 1]);
-        aParams.push_back(pToken ? pToken->GetString().getString() : OUString());
+        if (pToken)
+            aParams.push_back(pToken->GetString().getString());
+        else
+        {
+            PushError(FormulaError::ParameterExpected);
+            aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
+            return;
+        }
     }
 
     // the last subformula isn't named
