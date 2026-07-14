@@ -28,7 +28,6 @@ $(eval $(call gb_Module_add_targets,sc,\
 
 $(eval $(call gb_Module_add_l10n_targets,sc,\
 	AllLangMoTarget_sc \
-	AllLangMoTarget_scc \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sc,\

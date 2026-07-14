@@ -956,7 +956,6 @@ $(eval $(call gb_Helper_register_mos,\
 	$(call gb_Helper_optional,SCRIPTING,sb) \
 	sc \
 	sca \
-	scc \
 	sd \
 	sdext \
 	sfx \
