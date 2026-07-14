@@ -238,6 +238,8 @@ window.L.TextInput = window.L.Layer.extend({
 		// the selection is messed up, so we miss the first typed key.
 		// Needed also after a Ctrl+C.
 		if (ev.type === 'focus') {
+			this._a11yFocusTime = Date.now();
+
 			if (!this._isSelectionValid() || this._isCursorAtBeginning()) {
 				if (this.hasAccessibilitySupport()) {
 					this._setSelectionRange(this._lastSelectionStart, this._lastSelectionEnd);
@@ -428,7 +430,6 @@ window.L.TextInput = window.L.Layer.extend({
 
 		this._textAreaLabel = window.L.DomUtil.create('label', 'visuallyhidden', this._container);
 		this._textAreaLabel.id = 'clipboard-area-label';
-		this._textAreaLabel.innerHTML = _('Clipboard area');
 
 		// The textarea allows the keyboard to pop up and so on.
 		// Note that the contents of the textarea are NOT deleted on each composed
@@ -1014,6 +1015,8 @@ window.L.TextInput = window.L.Layer.extend({
 	_onKeyDown: function(ev) {
 		if (this._map.uiManager.isUIBlocked())
 			return;
+
+		this._a11yFocusTime = 0;
 
 		if (ev.keyCode === 8)
 			this._deleteHint = 'backspace';

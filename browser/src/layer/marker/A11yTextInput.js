@@ -208,11 +208,18 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		}
 	},
 
+	A11Y_FOCUS_ANNOUNCEMENT_MS: 500,
+
 	_setDescription: function(text) {
 		this._log('setDescription: ' + text);
 		this._textArea.setAttribute('aria-description', text);
 
 		if (window.L.Browser.mac) {
+			// avoid duplicate cell announcement in Chrome
+			var sinceFocus = Date.now() - (this._a11yFocusTime || 0);
+			if (text && sinceFocus < this.A11Y_FOCUS_ANNOUNCEMENT_MS)
+				return;
+
 			// required on macOS as VoiceOver is not triggered by description change only
 			var region = this._a11yLiveRegion;
 			if (region) {
