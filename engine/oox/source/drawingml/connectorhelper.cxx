@@ -17,6 +17,7 @@
 
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -37,6 +38,92 @@
 #include <vector>
 
 using namespace ::com::sun::star;
+
+namespace
+{
+// Builds the OOXML connector guide points in Hmm, absolute coordinates: the start point, the
+// bend/control points and the end point, computed from the adjustment values and the shape's
+// size, position, rotation and flip. For bent connectors this polygon is the exact rendered path;
+// for curved connectors it is the control polygon the curve follows (which is why the draggable
+// handles sit at the same places for both). Returns an empty polygon for connectors that have no
+// handles (bentConnector2 / curvedConnector2) and for non-connector shapes.
+// This backs both getOOXHandlePositionsHmm() (handles are the inner-segment midpoints) and the
+// authored-path import for connectors that cannot be routed (tdf#154074).
+basegfx::B2DPolygon getOOXConnectorPointsHmm(const oox::drawingml::ShapePtr& pConnector)
+{
+    basegfx::B2DPolygon aPolygon;
+    if (!pConnector)
+        return aPolygon;
+
+    // Convert string attribute to number. Default 50000 (50%, i.e. the bend at the midpoint) if
+    // missing, which is the preset default in presetShapeDefinitions.xml. Unit is 1/100000 of the
+    // shape size.
+    std::vector<sal_Int32> aAdjustmentOOXVec;
+    for (size_t i = 0; i < 3; i++)
+    {
+        if (i < pConnector->getConnectorAdjustments().size())
+            aAdjustmentOOXVec.push_back(pConnector->getConnectorAdjustments()[i].toInt32());
+        else
+            aAdjustmentOOXVec.push_back(50000);
+    }
+
+    const double fWidth = pConnector->getSize().Width; // EMU
+    const double fHeight = pConnector->getSize().Height; // EMU
+    const double fPosX = pConnector->getPosition().X; // EMU
+    const double fPosY = pConnector->getPosition().Y; // EMU
+
+    // Points in the untransformed preset, first segment horizontal, start point at (0|0). These
+    // match the path in presetShapeDefinitions.xml; bent and curved connectors share the same
+    // points.
+    const OUString& rName = pConnector->getConnectorName();
+    if (rName == u"bentConnector3"_ustr || rName == u"curvedConnector3"_ustr)
+    {
+        const double fX1 = aAdjustmentOOXVec[0] / 100000.0 * fWidth;
+        aPolygon.append({ 0.0, 0.0 });
+        aPolygon.append({ fX1, 0.0 });
+        aPolygon.append({ fX1, fHeight });
+        aPolygon.append({ fWidth, fHeight });
+    }
+    else if (rName == u"bentConnector4"_ustr || rName == u"curvedConnector4"_ustr)
+    {
+        const double fX1 = aAdjustmentOOXVec[0] / 100000.0 * fWidth;
+        const double fY2 = aAdjustmentOOXVec[1] / 100000.0 * fHeight;
+        aPolygon.append({ 0.0, 0.0 });
+        aPolygon.append({ fX1, 0.0 });
+        aPolygon.append({ fX1, fY2 });
+        aPolygon.append({ fWidth, fY2 });
+        aPolygon.append({ fWidth, fHeight });
+    }
+    else if (rName == u"bentConnector5"_ustr || rName == u"curvedConnector5"_ustr)
+    {
+        const double fX1 = aAdjustmentOOXVec[0] / 100000.0 * fWidth;
+        const double fY2 = aAdjustmentOOXVec[1] / 100000.0 * fHeight;
+        const double fX3 = aAdjustmentOOXVec[2] / 100000.0 * fWidth;
+        aPolygon.append({ 0.0, 0.0 });
+        aPolygon.append({ fX1, 0.0 });
+        aPolygon.append({ fX1, fY2 });
+        aPolygon.append({ fX3, fY2 });
+        aPolygon.append({ fX3, fHeight });
+        aPolygon.append({ fWidth, fHeight });
+    }
+    else
+        return aPolygon;
+
+    // The preset layout is turned into the actual layout by flipping and rotating around the center.
+    basegfx::B2DHomMatrix aTransform;
+    const basegfx::B2DPoint aB2DCenter(fWidth / 2.0, fHeight / 2.0);
+    aTransform.translate(-aB2DCenter);
+    aTransform *= ConnectorHelper::getConnectorTransformMatrix(pConnector);
+    aTransform.translate(aB2DCenter);
+    aTransform.translate(fPosX, fPosY); // make absolute
+
+    aPolygon.transform(aTransform);
+
+    constexpr double fEmuToHmm = o3tl::convert(1.0, o3tl::Length::emu, o3tl::Length::mm100);
+    aPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(fEmuToHmm, fEmuToHmm));
+    return aPolygon;
+}
+}
 
 // These shapes have no gluepoints defined in their mso_CustomShape struct, thus the gluepoint
 // adaption to default gluepoints will be done. Other shapes having no gluepoint defined in the
@@ -118,86 +205,13 @@ void ConnectorHelper::getOOXHandlePositionsHmm(const oox::drawingml::ShapePtr& p
 {
     rHandlePositions.clear();
 
-    if (!pConnector)
-        return;
-
-    if (pConnector->getConnectorName() == u"bentConnector2"_ustr
-        || pConnector->getConnectorName() == u"curvedConnector2"_ustr)
-        return; // These have no handles.
-
-    // Convert string attribute to number. Set default 50000 if missing.
-    std::vector<sal_Int32> aAdjustmentOOXVec; // 1/100000 of shape size
-    for (size_t i = 0; i < 3; i++)
-    {
-        if (i < pConnector->getConnectorAdjustments().size())
-            aAdjustmentOOXVec.push_back(pConnector->getConnectorAdjustments()[i].toInt32());
-        else
-            aAdjustmentOOXVec.push_back(50000);
-    }
-
-    // Handle positions depend on EdgeKind and ShapeSize. bendConnector and curvedConnector use the
-    // same handle positions. The formulas here correspond to guides in the bendConnector in
-    // presetShapeDefinitions.xml.
-    const double fWidth = pConnector->getSize().Width; // EMU
-    const double fHeight = pConnector->getSize().Height; // EMU
-    const double fPosX = pConnector->getPosition().X; // EMU
-    const double fPosY = pConnector->getPosition().Y; // EMU
-
-    if (pConnector->getConnectorName() == u"bentConnector3"_ustr
-        || pConnector->getConnectorName() == u"curvedConnector3"_ustr)
-    {
-        double fAdj1 = aAdjustmentOOXVec[0];
-        double fX1 = fAdj1 / 100000.0 * fWidth;
-        double fY1 = fHeight / 2.0;
-        rHandlePositions.push_back({ fX1, fY1 });
-    }
-    else if (pConnector->getConnectorName() == u"bentConnector4"_ustr
-             || pConnector->getConnectorName() == u"curvedConnector4"_ustr)
-    {
-        double fAdj1 = aAdjustmentOOXVec[0];
-        double fAdj2 = aAdjustmentOOXVec[1];
-        double fX1 = fAdj1 / 100000.0 * fWidth;
-        double fX2 = (fX1 + fWidth) / 2.0;
-        double fY2 = fAdj2 / 100000.0 * fHeight;
-        double fY1 = fY2 / 2.0;
-        rHandlePositions.push_back({ fX1, fY1 });
-        rHandlePositions.push_back({ fX2, fY2 });
-    }
-    else if (pConnector->getConnectorName() == u"bentConnector5"_ustr
-             || pConnector->getConnectorName() == u"curvedConnector5"_ustr)
-    {
-        double fAdj1 = aAdjustmentOOXVec[0];
-        double fAdj2 = aAdjustmentOOXVec[1];
-        double fAdj3 = aAdjustmentOOXVec[2];
-        double fX1 = fAdj1 / 100000.0 * fWidth;
-        double fX3 = fAdj3 / 100000.0 * fWidth;
-        double fX2 = (fX1 + fX3) / 2.0;
-        double fY2 = fAdj2 / 100000.0 * fHeight;
-        double fY1 = fY2 / 2.0;
-        double fY3 = (fHeight + fY2) / 2.0;
-        rHandlePositions.push_back({ fX1, fY1 });
-        rHandlePositions.push_back({ fX2, fY2 });
-        rHandlePositions.push_back({ fX3, fY3 });
-    }
-
-    // The presetGeometry has the first segment horizontal and start point left/top with
-    // coordinates (0|0). Other layouts are done by flipping and rotating.
-    basegfx::B2DHomMatrix aTransform;
-    const basegfx::B2DPoint aB2DCenter(fWidth / 2.0, fHeight / 2.0);
-    aTransform.translate(-aB2DCenter);
-    aTransform *= getConnectorTransformMatrix(pConnector);
-    aTransform.translate(aB2DCenter);
-
-    // Make coordinates absolute
-    aTransform.translate(fPosX, fPosY);
-
-    // Actually transform the handle coordinates
-    for (auto& rElem : rHandlePositions)
-        rElem *= aTransform;
-
-    // Convert EMU -> Hmm
-    for (auto& rElem : rHandlePositions)
-        rElem /= 360.0;
+    // The draggable handles sit at the midpoints of the connector's inner segments, i.e. every
+    // segment except the first (leaving the start point) and the last (entering the end point).
+    // bentConnector2 / curvedConnector2 have no inner segment and thus no handle. This is the same
+    // relation getLOBentHandlePositionsHmm() uses to read the handles off the svx edge track.
+    const basegfx::B2DPolygon aPoints(getOOXConnectorPointsHmm(pConnector));
+    for (sal_uInt32 i = 1; i + 2 < aPoints.count(); ++i)
+        rHandlePositions.push_back((aPoints.getB2DPoint(i) + aPoints.getB2DPoint(i + 1)) / 2.0);
 }
 
 void ConnectorHelper::getLOBentHandlePositionsHmm(const oox::drawingml::ShapePtr& pConnector,
@@ -383,27 +397,68 @@ void ConnectorHelper::applyBentHandleAdjustments(oox::drawingml::ShapePtr pConne
     if (!xPropSet.is())
         return;
 
-    std::vector<basegfx::B2DPoint> aOOXMLHandles;
-    ConnectorHelper::getOOXHandlePositionsHmm(pConnector, aOOXMLHandles);
-    std::vector<basegfx::B2DPoint> aLODefaultHandles;
-    ConnectorHelper::getLOBentHandlePositionsHmm(pConnector, aLODefaultHandles);
+    // A connector that is glued to a shape at both ends has no independently stored path: its route
+    // follows from the two endpoints, so we let svx route it and transfer the OOXML handle positions
+    // onto that route as EdgeLine deltas.
+    // When a connector is not glued at both ends, the file instead stores its actual drawn path
+    // (preset geometry plus adjustments, in a bounding box that may have been resized by hand). We
+    // must keep that path as authored rather than re-route it: orthogonal routing is heuristic, so
+    // re-routing from the endpoints would produce a different shape - it differs between applications
+    // and changes as the algorithms evolve, and PowerPoint likewise keeps the drawn path and does not
+    // reroute such connectors when they are moved or resized. So we impose the authored OOXML path
+    // directly (tdf#154074).
+    uno::Reference<drawing::XShape> xStartShape;
+    uno::Reference<drawing::XShape> xEndShape;
+    xPropSet->getPropertyValue(u"StartShape"_ustr) >>= xStartShape;
+    xPropSet->getPropertyValue(u"EndShape"_ustr) >>= xEndShape;
 
-    if (aOOXMLHandles.size() == aLODefaultHandles.size())
+    if (xStartShape.is() && xEndShape.is())
     {
-        bool bUseYforHori
-            = basegfx::fTools::equalZero(getConnectorTransformMatrix(pConnector).get(0, 0));
-        for (size_t i = 0; i < aOOXMLHandles.size(); i++)
+        std::vector<basegfx::B2DPoint> aOOXMLHandles;
+        ConnectorHelper::getOOXHandlePositionsHmm(pConnector, aOOXMLHandles);
+        std::vector<basegfx::B2DPoint> aLODefaultHandles;
+        ConnectorHelper::getLOBentHandlePositionsHmm(pConnector, aLODefaultHandles);
+
+        if (aOOXMLHandles.size() == aLODefaultHandles.size())
         {
-            basegfx::B2DVector aDiff(aOOXMLHandles[i] - aLODefaultHandles[i]);
-            sal_Int32 nDiff;
-            if ((i == 1 && !bUseYforHori) || (i != 1 && bUseYforHori))
-                nDiff = basegfx::fround(aDiff.getY());
-            else
-                nDiff = basegfx::fround(aDiff.getX());
-            xPropSet->setPropertyValue("EdgeLine" + OUString::number(i + 1) + "Delta",
-                                       cpo::uno::Any(nDiff));
+            bool bUseYforHori
+                = basegfx::fTools::equalZero(getConnectorTransformMatrix(pConnector).get(0, 0));
+            for (size_t i = 0; i < aOOXMLHandles.size(); i++)
+            {
+                basegfx::B2DVector aDiff(aOOXMLHandles[i] - aLODefaultHandles[i]);
+                sal_Int32 nDiff;
+                if ((i == 1 && !bUseYforHori) || (i != 1 && bUseYforHori))
+                    nDiff = basegfx::fround(aDiff.getY());
+                else
+                    nDiff = basegfx::fround(aDiff.getX());
+                xPropSet->setPropertyValue("EdgeLine" + OUString::number(i + 1) + "Delta",
+                                           cpo::uno::Any(nDiff));
+            }
         }
+        return;
     }
+
+    SdrEdgeObj* pEdgeObj = dynamic_cast<SdrEdgeObj*>(SdrObject::getSdrObjectFromXShape(xConnector));
+    if (!pEdgeObj)
+        return;
+
+    basegfx::B2DPolygon aPolygon(getOOXConnectorPointsHmm(pConnector)); // Hmm
+    if (aPolygon.count() < 2)
+        return;
+
+    // The polygon is in Hmm, but the edge track lives in the model's map unit (e.g. Twips in a text
+    // document). Convert if needed.
+    const MapUnit eMapUnit = pEdgeObj->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
+    if (eMapUnit != MapUnit::Map100thMM)
+    {
+        const auto eTo = MapToO3tlLength(eMapUnit);
+        if (eTo == o3tl::Length::invalid)
+            return;
+        const double fConvert(o3tl::convert(1.0, o3tl::Length::mm100, eTo));
+        aPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(fConvert, fConvert));
+    }
+
+    pEdgeObj->SetEdgeTrackPath(basegfx::B2DPolyPolygon(aPolygon));
 }
 
 void ConnectorHelper::applyCurvedHandleAdjustments(oox::drawingml::ShapePtr pConnector)

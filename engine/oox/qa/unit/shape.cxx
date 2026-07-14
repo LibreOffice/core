@@ -38,6 +38,9 @@
 #include <officecfg/Office/Common.hxx>
 #include <rtl/math.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdoedge.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/color.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
@@ -145,6 +148,55 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testElbowConnectors)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-805), nEdgeLineDelta);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf154074FreeConnector)
+{
+    // Bent connectors that are not connected to a shape at both ends carry a pre-authored path that
+    // must be kept as-is rather than re-routed - re-routing from the endpoints would produce a
+    // different shape. Before this was fixed the free end was re-routed and escaped into the wrong
+    // direction, dropping a corner so the arrow ended in empty space. Now the authored OOXML path
+    // is imposed directly.
+    loadFromFile(u"tdf154074_freeConnector.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // Assert that the connector's edge track is exactly the authored elbow. Checking the point
+    // positions (not just the point count) is essential: for the both-ends-unconnected bentConnector3
+    // the pre-fix path also had 2 corners, just escaping into the wrong direction, so a point count
+    // alone would not detect the bug. The values are in 1/100 mm; the start/end points are the
+    // authored connector ends, the inner points are the bends.
+    auto assertTrack = [&xDrawPage](sal_Int32 nShapeIndex,
+                                    const std::vector<basegfx::B2DPoint>& rExpected) {
+        uno::Reference<drawing::XShape> xConnector(xDrawPage->getByIndex(nShapeIndex),
+                                                   uno::UNO_QUERY);
+        auto* pEdgeObj = dynamic_cast<SdrEdgeObj*>(SdrObject::getSdrObjectFromXShape(xConnector));
+        CPPUNIT_ASSERT(pEdgeObj);
+        const basegfx::B2DPolyPolygon aTrack(pEdgeObj->GetEdgeTrackPath());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aTrack.count());
+        const basegfx::B2DPolygon aPoly(aTrack.getB2DPolygon(0));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(rExpected.size()), aPoly.count());
+        for (size_t i = 0; i < rExpected.size(); ++i)
+        {
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(rExpected[i].getX(), aPoly.getB2DPoint(i).getX(), 2);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(rExpected[i].getY(), aPoly.getB2DPoint(i).getY(), 2);
+        }
+    };
+
+    // Index 0 is the rounded rectangle.
+
+    // Index 1: a bentConnector4 connected to the rectangle at its start only (stCxn, no endCxn). It
+    // draws a 3-corner elbow (5 points); the start point is the top gluepoint of the rectangle.
+    // Without the fix the free end was routed with only 2 corners.
+    assertTrack(
+        1, { { 11382, 9646 }, { 11382, 9011 }, { 5379, 9011 }, { 5379, 14251 }, { 3235, 14251 } });
+
+    // Index 2: a rotated bentConnector3 that is not connected at either end. It draws a 2-corner
+    // elbow (4 points). Without the fix it also had 2 corners, but escaped into the wrong direction,
+    // so these coordinates differ from the pre-fix ones.
+    assertTrack(2, { { 18551, 12062 }, { 18551, 11462 }, { 23442, 11462 }, { 23442, 8957 } });
+}
+
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCurvedConnectors)
 {
     loadFromFile(u"curvedConnectors.pptx");
@@ -179,9 +231,12 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf165180_standardConnectorsECMA)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
 
+    // The two bentConnector3 are not connected to a shape at either end, so their pre-authored path
+    // is kept as-is (imposed directly) rather than re-routed, and no EdgeLine deltas are used
+    // (tdf#154074). The remaining connectors are glued at both ends and keep using EdgeLine deltas.
     sal_Int32 aEdgeValue[] = { -1352, -2457, 2402, // bentConnector5
-                               3977,  0,     0, // bentConnector3
-                               -2899, 0,     0, // bentConnector3
+                               0,     0,     0, // bentConnector3 (free, path imposed)
+                               0,     0,     0, // bentConnector3 (free, path imposed)
                                -1260, 4612,  0, // bentConnector4
                                -1431, -2642, 0, // bentConnector4
                                3831,  3438,  -1578 }; // bentConnector5
@@ -215,9 +270,12 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf165180_standardConnectorsISO29500)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
 
+    // The two bentConnector3 are not connected to a shape at either end, so their pre-authored path
+    // is kept as-is (imposed directly) rather than re-routed, and no EdgeLine deltas are used
+    // (tdf#154074). The remaining connectors are glued at both ends and keep using EdgeLine deltas.
     sal_Int32 aEdgeValue[] = { -1352, -2457, 2402, // bentConnector5
-                               3977,  0,     0, // bentConnector3
-                               -2899, 0,     0, // bentConnector3
+                               0,     0,     0, // bentConnector3 (free, path imposed)
+                               0,     0,     0, // bentConnector3 (free, path imposed)
                                -1260, 4612,  0, // bentConnector4
                                -1431, -2642, 0, // bentConnector4
                                3831,  3438,  -1578 }; // bentConnector5
@@ -255,16 +313,33 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf164623)
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(2), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShapeProps->getPropertySetInfo()->hasPropertyByName(u"EdgeKind"_ustr));
-    xShapeProps->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
 
-    // Without the fix in place, this test would have failed with
-    // - Expected: -662
-    // - Actual  : 3370
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-662), nEdgeLineDelta);
+    // This bentConnector3 is connected to a shape at its end only; its start is free and its adjust
+    // value stretches the elbow beyond the frame. Because it is not glued at both ends, its
+    // pre-authored path is kept as-is (imposed directly) rather than re-routed, and no EdgeLine
+    // deltas are used (tdf#154074). Previously it was approximated via EdgeLine1Delta (tdf#164623).
+    xShapeProps->getPropertyValue(UNO_NAME_EDGELINE1DELTA) >>= nEdgeLineDelta;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nEdgeLineDelta);
     xShapeProps->getPropertyValue(UNO_NAME_EDGELINE2DELTA) >>= nEdgeLineDelta;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nEdgeLineDelta);
     xShapeProps->getPropertyValue(UNO_NAME_EDGELINE3DELTA) >>= nEdgeLineDelta;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nEdgeLineDelta);
+
+    // The authored bentConnector3 draws a 2-corner elbow (4 points). Checking the point positions
+    // (not just the count) ensures the imposed path has the right direction: the pre-fix path also
+    // had 2 corners. The end point is the top gluepoint of the connected rectangle.
+    auto* pEdgeObj = dynamic_cast<SdrEdgeObj*>(SdrObject::getSdrObjectFromXShape(xShape));
+    CPPUNIT_ASSERT(pEdgeObj);
+    const basegfx::B2DPolygon aPoly(pEdgeObj->GetEdgeTrackPath().getB2DPolygon(0));
+    const std::vector<basegfx::B2DPoint> aExpected{
+        { 2754, 11161 }, { 2754, 5084 }, { 4192, 5084 }, { 4192, 5746 }
+    };
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(aExpected.size()), aPoly.count());
+    for (size_t i = 0; i < aExpected.size(); ++i)
+    {
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aExpected[i].getX(), aPoly.getB2DPoint(i).getX(), 2.0);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aExpected[i].getY(), aPoly.getB2DPoint(i).getY(), 2.0);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testGroupTransform)
