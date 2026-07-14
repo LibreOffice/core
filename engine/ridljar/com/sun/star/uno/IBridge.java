@@ -19,6 +19,7 @@
 package com.sun.star.uno;
 
 import java.io.IOException;
+import cpo.uno.Type;
 
 /**
  * This is abstract interface for bridges.

@@ -18,6 +18,8 @@
 
 package com.sun.star.uno;
 
+import cpo.uno.Type;
+
 /**
  * With a mapping objects can be mapped from one environment to another.
  *

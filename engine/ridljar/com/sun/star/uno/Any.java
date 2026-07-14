@@ -19,6 +19,7 @@
 
 package com.sun.star.uno;
 
+import cpo.uno.Type;
 
 /**
  * The UNO IDL type any is mapped to java type <code>java.lang.Object</code>.

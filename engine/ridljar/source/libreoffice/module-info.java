@@ -135,4 +135,5 @@ module org.libreoffice.uno
     exports com.sun.star.xml.xpath;
     exports com.sun.star.xml.xslt;
     exports com.sun.star.xsd;
+    exports cpo.uno;
 }

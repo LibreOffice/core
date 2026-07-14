@@ -19,6 +19,8 @@
 
 package com.sun.star.uno;
 
+import cpo.uno.Type;
+
 /**
  * This class provides static methods which aim at exploring the contents of an
  * Any and extracting its value.

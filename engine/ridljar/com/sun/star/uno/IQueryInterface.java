@@ -18,6 +18,8 @@
 
 package com.sun.star.uno;
 
+import cpo.uno.Type;
+
 /**
  * This is the delegator interface for Java objects implementing interfaces of
  * an underlying UNO object.

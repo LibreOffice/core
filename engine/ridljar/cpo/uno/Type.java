@@ -16,11 +16,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package com.sun.star.uno;
+package cpo.uno;
 
 import java.util.HashMap;
 
 import com.sun.star.lib.uno.typedesc.TypeDescription;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.TypeClass;
+import com.sun.star.uno.XInterface;
 
 /**
  * Represents the UNO built-in type <code>TYPE</code>.

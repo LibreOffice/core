@@ -18,6 +18,8 @@
 
 package com.sun.star.uno;
 
+import cpo.uno.Type;
+
 /**
  * The interface implemented by UNO environments.
  *

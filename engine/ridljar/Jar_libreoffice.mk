@@ -22,7 +22,7 @@ $(eval $(call gb_Jar_use_externals,libreoffice,\
     java_websocket \
 ))
 
-$(eval $(call gb_Jar_set_packageroot,libreoffice,com))
+$(eval $(call gb_Jar_set_packageroot,libreoffice,com cpo))
 
 $(eval $(call gb_Jar_set_manifest,libreoffice,$(SRCDIR)/ridljar/util/manifest))
 
@@ -139,9 +139,9 @@ $(eval $(call gb_Jar_add_sourcefiles,libreoffice,\
     ridljar/com/sun/star/uno/IMapping \
     ridljar/com/sun/star/uno/IQueryInterface \
     ridljar/com/sun/star/uno/MappingException \
-    ridljar/cpo/uno/Type \
     ridljar/com/sun/star/uno/UnoRuntime \
     ridljar/com/sun/star/uno/WeakReference \
+    ridljar/cpo/uno/Type \
 ))
 
 # vim:set noet sw=4 ts=4:

@@ -29,6 +29,7 @@ import java.util.WeakHashMap;
 import com.sun.star.lib.uno.typedesc.FieldDescription;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.lib.util.WeakMap;
+import cpo.uno.Type;
 
 /**
  * The central class needed for implementing or using UNO components in Java.
