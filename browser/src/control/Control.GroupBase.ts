@@ -88,6 +88,23 @@ export abstract class GroupBase extends CanvasSectionObject {
 	// override in subclasses
 	abstract update(): void;
 
+	// Position of a group control head box for the given group, as [startX, startY].
+	// Columns lay the boxes out along X and rows along Y, so each axis computes one
+	// coordinate from the group position and the other from the level.
+	protected _getGroupAnchorPos(group: GroupEntry): [number, number] {
+		return [0, 0];
+	}
+
+	// Top-left position of the level header box for the given level, as [startX, startY].
+	protected _getLevelHeaderPos(level: number): [number, number] {
+		return [0, 0];
+	}
+
+	// The outline direction, "column" or "row", used in the outlinestate message.
+	protected _getOutlineType(): string {
+		return '';
+	}
+
 	// Create font for the group headers. Group headers are on the left side of corner header.
 	_createFont(): void {
 		const baseElem = document.getElementsByTagName('body')[0];
@@ -331,7 +348,21 @@ export abstract class GroupBase extends CanvasSectionObject {
 	}
 
 	drawLevelHeader (level: number): void {
-		return;
+		this.context.beginPath();
+		const ctx = this.context;
+		const ctrlHeadSize = this._groupHeadSize;
+
+		const [startX, startY] = this._getLevelHeaderPos(level);
+
+		ctx.strokeStyle = this.getColors().strokeColor;
+		ctx.lineWidth = 1.0;
+		ctx.strokeRect(this.transformRectX(startX + 0.5, ctrlHeadSize), startY + 0.5, ctrlHeadSize, ctrlHeadSize);
+		// draw level number
+		ctx.fillStyle = this._textColor;
+		ctx.font = this._getFont();
+		ctx.textAlign = 'center';
+		ctx.textBaseline = 'middle';
+		ctx.fillText((level + 1).toString(), this.transformX(startX + (ctrlHeadSize / 2)), startY + (ctrlHeadSize / 1.9));
 	}
 
 	// This function calls drawing function for related to headers of groups. Headers are drawn on the left of corner header.
@@ -369,6 +400,26 @@ export abstract class GroupBase extends CanvasSectionObject {
 	}
 
 	findClickedGroup (point: cool.SimplePoint): GroupEntry {
+		if (!this._groups)
+			return null;
+		const mirrorX = this.isCalcRTL();
+		for (let i = 0; i < this._groups.length; i++) {
+			if (this._groups[i]) {
+				for (const group in this._groups[i]) {
+					if (Object.prototype.hasOwnProperty.call(this._groups[i], group)) {
+						const group_ = this._groups[i][group];
+						const [startX, startY] = this._getGroupAnchorPos(group_);
+						const endX = startX + this._groupHeadSize;
+						const endY = startY + this._groupHeadSize;
+						if (group_.level == 0 && this.isPointInRect(point, startX, startY, endX, endY, mirrorX))
+							return group_;
+						else if (this._isPreviousGroupVisible(group_.level, group_.startPos, group_.endPos, group_.hidden) && this.isPointInRect(point, startX, startY, endX, endY, mirrorX)) {
+							return group_;
+						}
+					}
+				}
+			}
+		}
 		return null;
 	}
 
@@ -385,7 +436,9 @@ export abstract class GroupBase extends CanvasSectionObject {
 	}
 
 	_updateOutlineState(group: Partial<GroupEntry>): void {
-		return;
+		const state = group.hidden ? 'visible' : 'hidden'; // we have to send the new state
+		const payload = 'outlinestate type=' + this._getOutlineType() + ' level=' + group.level + ' index=' + group.index + ' state=' + state;
+		app.socket.sendMessage(payload);
 	}
 
 	onClick (point: cool.SimplePoint): void {

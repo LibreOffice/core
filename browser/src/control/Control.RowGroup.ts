@@ -80,9 +80,20 @@ export class RowGroup extends GroupBase {
 			return Math.max(docPos - app.activeDocument.activeLayout.viewedRectangle.pY1, this._splitPos.y) + this._cornerHeaderHeight;
 	}
 
+	_getGroupAnchorPos (group: GroupEntry): [number, number] {
+		return [this._levelSpacing + (this._groupHeadSize + this._levelSpacing) * group.level, this.getRelativeY(group.startPos)];
+	}
+
+	_getLevelHeaderPos (level: number): [number, number] {
+		return [this._levelSpacing + (this._groupHeadSize + this._levelSpacing) * level, Math.round((this._cornerHeaderHeight - this._groupHeadSize) * 0.5)];
+	}
+
+	_getOutlineType (): string {
+		return 'row';
+	}
+
 	drawGroupControl (group: GroupEntry): void {
-		let startX = this._levelSpacing + (this._groupHeadSize + this._levelSpacing) * group.level;
-		let startY = this.getRelativeY(group.startPos);
+		let [startX, startY] = this._getGroupAnchorPos(group);
 		startX = Math.round(startX);
 		startY = Math.round(startY);
 		const endY = this.getEndPosition(group.endPos);
@@ -110,33 +121,6 @@ export class RowGroup extends GroupBase {
 		}
 	}
 
-	drawLevelHeader (level: number): void {
-		this.context.beginPath();
-		const ctx = this.context;
-		const ctrlHeadSize = this._groupHeadSize;
-		const levelSpacing = this._levelSpacing;
-
-		const startX = levelSpacing + (ctrlHeadSize + levelSpacing) * level;
-		const startY = Math.round((this._cornerHeaderHeight - ctrlHeadSize) * 0.5);
-
-		ctx.strokeStyle = this.getColors().strokeColor;
-		ctx.lineWidth = 1.0;
-		ctx.strokeRect(this.transformRectX(startX + 0.5, ctrlHeadSize), startY + 0.5, ctrlHeadSize, ctrlHeadSize);
-		// draw level number
-		ctx.fillStyle = this._textColor;
-		ctx.font = this._getFont();
-		ctx.textAlign = 'center';
-		ctx.textBaseline = 'middle';
-		ctx.fillText((level + 1).toString(), this.transformX(startX + (ctrlHeadSize / 2)), startY + (ctrlHeadSize / 1.9));
-	}
-
-	// Handle user interaction.
-	_updateOutlineState (group: Partial<GroupEntry>): void {
-		const state = group.hidden ? 'visible' : 'hidden'; // we have to send the new state
-		const payload = 'outlinestate type=row' + ' level=' + group.level + ' index=' + group.index + ' state=' + state;
-		app.socket.sendMessage(payload);
-	}
-
 	// When user clicks somewhere on the section, onMouseClick event is called by CanvasSectionContainer.
 	// Clicked point is also given to handler function. This function finds the clicked header.
 	findClickedLevel (point: cool.SimplePoint): number {
@@ -149,32 +133,8 @@ export class RowGroup extends GroupBase {
 		return -1;
 	}
 
-	findClickedGroup (point: cool.SimplePoint): GroupEntry {
-		const mirrorX = this.isCalcRTL();
-		for (let i = 0; i < this._groups.length; i++) {
-			if (this._groups[i]) {
-				for (const group in this._groups[i]) {
-					if (Object.prototype.hasOwnProperty.call(this._groups[i], group)) {
-						const group_ = this._groups[i][group];
-						const startX = this._levelSpacing + (this._groupHeadSize + this._levelSpacing) * group_.level;
-						const startY = this.getRelativeY(group_.startPos);
-						const endX = startX + this._groupHeadSize;
-						const endY = startY + this._groupHeadSize;
-						if (group_.level == 0 && this.isPointInRect(point, startX, startY, endX, endY, mirrorX))
-							return group_;
-						else if (this._isPreviousGroupVisible(group_.level, group_.startPos, group_.endPos, group_.hidden) && this.isPointInRect(point, startX, startY, endX, endY, mirrorX)) {
-							return group_;
-						}
-					}
-				}
-			}
-		}
-		return null;
-	}
-
 	getTailsGroupRect (group: GroupEntry): number[] {
-		const startX = this._levelSpacing + (this._groupHeadSize + this._levelSpacing) * group.level;
-		const startY = this.getRelativeY(group.startPos);
+		const [startX, startY] = this._getGroupAnchorPos(group);
 		const endX = startX + this._groupHeadSize; // Let's use this as thikcness. User doesn't have to double click on a pixel:)
 		const endY = group.endPos + this._cornerHeaderHeight - app.activeDocument.activeLayout.viewedRectangle.pY1;
 		return [startX, endX, startY, endY];
