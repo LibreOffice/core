@@ -40,7 +40,7 @@ protected:
 private:
     Idle maIdle;
     IControlReferenceHandler* mpAnyRefDlg; // parent dialog
-    std::function<OUString()> maGetLabelTextForShrinkModeFunc;
+    std::function<weld::Widget*()> maGetLabelWidgetFunc;
     ImplSVEvent* mpFocusInEvent;
     ImplSVEvent* mpFocusOutEvent;
 
@@ -89,6 +89,8 @@ public:
     void SetReferences(IControlReferenceHandler* pDlg, weld::Label* pLabel = nullptr);
     void SetReferences(IControlReferenceHandler* pDlg, weld::Frame* pFrame);
 
+    weld::Widget* GetLabelWidget();
+
     void DoModify()
     {
         Modify(*mxEntry);
@@ -120,8 +122,6 @@ public:
         mxEntry->get_selection_bounds(nStartPos, nEndPos);
         return Selection(nStartPos, nEndPos);
     }
-
-    OUString GetLabelTextForShrinkMode();
 
     void SaveValue()
     {
