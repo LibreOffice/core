@@ -6,10 +6,10 @@ Currently the following Collabora Online versions are supported with security up
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 26.04.x   | :white_check_mark: |
 | 25.04.x   | :white_check_mark: |
 | 24.04.x   | :white_check_mark: |
-| 23.05.x   | :white_check_mark: |
-| 22.05.x  or older | :x:        |
+| 23.05.x  or older | :x:        |
 
 
 ## Reporting a Vulnerability
