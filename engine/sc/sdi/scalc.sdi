@@ -6617,6 +6617,23 @@ SfxVoidItem RenameCalcTable SID_RENAME_CALCTABLE
     GroupId = SfxGroupId::Table;
 ]
 
+SfxVoidItem ConvertCalcTableToRange SID_CONVERT_CALCTABLE_TO_RANGE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Table;
+]
+
 
 SfxVoidItem SelectArrayFormula SID_MARKARRAYFORMULA
 ()

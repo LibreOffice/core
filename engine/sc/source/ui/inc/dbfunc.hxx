@@ -57,6 +57,8 @@ public:
                             const ScSortParam* pForceNewSort = nullptr );
 
     void            DeleteCalcTable();
+    // Confirm, then convert the Table at the cursor to a plain range (via ScDBDocFunc).
+    void            ConvertCalcTableToRange();
 
     SC_DLLPUBLIC void ToggleAutoFilter();
     void            HideAutoFilter();

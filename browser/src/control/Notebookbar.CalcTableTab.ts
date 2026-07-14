@@ -110,11 +110,48 @@ class CalcTableTab implements NotebookbarTab {
 				orientation: 'vertical',
 			},
 			{
-				id: 'summarize-with-pivottable',
-				type: 'bigtoolitem',
-				text: _UNO('.uno:DataDataPilotRun', 'spreadsheet'),
-				command: '.uno:DataDataPilotRun',
-				accessibility: { focusBack: true, combination: 'PV' },
+				type: 'overflowgroup',
+				id: 'table-tools',
+				name: _('Tools'),
+				accessibility: { focusBack: true, combination: 'TL' },
+				children: [
+					{
+						type: 'container',
+						children: [
+							{
+								type: 'toolbox',
+								children: [
+									{
+										id: 'summarize-with-pivottable',
+										type: 'toolitem',
+										text: _UNO('.uno:DataDataPilotRun', 'spreadsheet'),
+										command: '.uno:DataDataPilotRun',
+										accessibility: {
+											focusBack: true,
+											combination: 'PV',
+										},
+									},
+								],
+							},
+							{
+								type: 'toolbox',
+								children: [
+									{
+										id: 'convert-calc-table-to-range',
+										type: 'toolitem',
+										text: _UNO('.uno:ConvertCalcTableToRange', 'spreadsheet'),
+										command: '.uno:ConvertCalcTableToRange',
+										accessibility: {
+											focusBack: true,
+											combination: 'CR',
+										},
+									},
+								],
+							},
+						],
+						vertical: 'true',
+					},
+				],
 			},
 			{
 				type: 'separator',

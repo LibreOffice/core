@@ -1964,5 +1964,106 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testRenameTableDuplicateRefused)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testConvertToRangeBakePreservesLayers)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Bake"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    applyThemeToDocument(m_pDoc, pColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    const ScTableStyle* pStyle = m_pDoc->GetTableStyles()->GetTableStyle(u"TableStyleMedium2"_ustr);
+    CPPUNIT_ASSERT(pStyle);
+
+    // A1:D11, header + total + row stripes + first/last column.
+    ScDBData aDBData(u"T"_ustr, 0, 0, 0, 3, 10, true, true, true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    aStyleParam.mbRowStripes = true;
+    aStyleParam.mbColumnStripes = false;
+    aStyleParam.mbFirstColumn = true;
+    aStyleParam.mbLastColumn = true;
+    aDBData.SetTableStyleInfo(aStyleParam);
+
+    // Direct attributes that must survive: a background (fill: direct beats the style) and a
+    // non-black font colour (font: direct beats the style).
+    const Color aDirectBg(0x123456);
+    m_pDoc->ApplyAttr(1, 3, 0, SvxBrushItem(aDirectBg, ATTR_BACKGROUND));
+    const Color aDirectFontColor(0x654321);
+    m_pDoc->ApplyAttr(2, 4, 0, SvxColorItem(aDirectFontColor, ATTR_FONT_COLOR));
+
+    pStyle->BakeInto(*m_pDoc, aDBData);
+
+    // The header is solid in Medium2: it must be baked as a real cell background.
+    const SvxBrushItem* pHeaderFill = pStyle->GetFillItem(aDBData, 1, 0, -1);
+    CPPUNIT_ASSERT(pHeaderFill);
+    CPPUNIT_ASSERT_EQUAL(pHeaderFill->GetColor(),
+                         m_pDoc->GetAttr(1, 0, 0, ATTR_BACKGROUND).GetColor());
+
+    // Elsewhere, wherever the style provides a fill, the baked cell background matches it
+    // (rowIndex mirrors fillinfo: header = -1, first data row = 0, ...). Empty stripes have no
+    // style fill, so those cells stay default - nothing to assert there.
+    auto checkFill = [&](SCCOL nCol, SCROW nRow) {
+        if (const SvxBrushItem* pStyleFill = pStyle->GetFillItem(aDBData, nCol, nRow, nRow - 1))
+            CPPUNIT_ASSERT_EQUAL(pStyleFill->GetColor(),
+                                 m_pDoc->GetAttr(nCol, nRow, 0, ATTR_BACKGROUND).GetColor());
+    };
+    checkFill(1, 2); // data stripe
+    checkFill(1, 10); // total row
+    checkFill(0, 2); // first column
+    checkFill(3, 2); // last column
+
+    // Direct background survives untouched.
+    CPPUNIT_ASSERT_EQUAL(aDirectBg, m_pDoc->GetAttr(1, 3, 0, ATTR_BACKGROUND).GetColor());
+    // Direct (non-black) font colour survives untouched.
+    CPPUNIT_ASSERT_EQUAL(aDirectFontColor, m_pDoc->GetAttr(2, 4, 0, ATTR_FONT_COLOR).getColor());
+
+    // The style's header font weight is baked onto a gap header cell (font beats the cell).
+    const SfxItemSet* pHeaderFont = pStyle->GetFontItemSet(aDBData, 1, 0, -1);
+    CPPUNIT_ASSERT(pHeaderFont);
+    if (const SvxWeightItem* pStyleWeight = pHeaderFont->GetItemIfSet(ATTR_FONT_WEIGHT, false))
+        CPPUNIT_ASSERT_EQUAL(pStyleWeight->GetWeight(),
+                             m_pDoc->GetAttr(1, 0, 0, ATTR_FONT_WEIGHT).GetWeight());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testConvertToRangeUndoRedo)
+{
+    m_pDoc->EnableUndo(true);
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Conv"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    applyThemeToDocument(m_pDoc, pColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 3, 5,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ true);
+    const ScTableStyle* pStyle = m_pDoc->GetTableStyles()->GetTableStyle(u"TableStyleMedium2"_ustr);
+    CPPUNIT_ASSERT(pStyle);
+
+    // The header fill that must appear as a real cell attribute after conversion.
+    const SvxBrushItem* pHeaderFill = pStyle->GetFillItem(*pData, 1, 0, -1);
+    CPPUNIT_ASSERT(pHeaderFill);
+    const Color aHeaderColor = pHeaderFill->GetColor();
+
+    CPPUNIT_ASSERT(ScDBDocFunc(*m_xDocShell).ConvertTableToRange(pData));
+
+    CPPUNIT_ASSERT(!m_pDoc->GetDBCollection()->getNamedDBs().findByName(u"TestTable"_ustr));
+    CPPUNIT_ASSERT_EQUAL(aHeaderColor, m_pDoc->GetAttr(1, 0, 0, ATTR_BACKGROUND).GetColor());
+
+    m_pDoc->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().findByName(u"TestTable"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->GetAttr(1, 0, 0, ATTR_BACKGROUND).GetColor() != aHeaderColor);
+
+    m_pDoc->GetUndoManager()->Redo();
+    CPPUNIT_ASSERT(!m_pDoc->GetDBCollection()->getNamedDBs().findByName(u"TestTable"_ustr));
+    CPPUNIT_ASSERT_EQUAL(aHeaderColor, m_pDoc->GetAttr(1, 0, 0, ATTR_BACKGROUND).GetColor());
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

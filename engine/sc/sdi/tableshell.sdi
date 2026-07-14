@@ -14,6 +14,7 @@ interface Table
     SID_TABLE_TOTALROW    [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
     SID_RESIZE_CALCTABLE  [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
     SID_RENAME_CALCTABLE  [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
+    SID_CONVERT_CALCTABLE_TO_RANGE [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
 }
 
 shell ScTableShell

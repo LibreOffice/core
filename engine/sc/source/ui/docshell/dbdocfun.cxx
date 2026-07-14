@@ -30,6 +30,7 @@
 
 #include <dbdocfun.hxx>
 #include <dbdata.hxx>
+#include <tablestyle.hxx>
 #include <undodat.hxx>
 #include <undocell.hxx>
 #include <viewdata.hxx>
@@ -553,6 +554,71 @@ bool ScDBDocFunc::DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi)
     }
 
     return bDone;
+}
+
+bool ScDBDocFunc::ConvertTableToRange(const ScDBData* pDBObj)
+{
+    ScDocument& rDoc = rDocShell.GetDocument();
+    ScDBCollection* pDocColl = rDoc.GetDBCollection();
+    ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
+    auto const iter = rDBs.findByPointer(pDBObj);
+    if (iter == rDBs.end())
+    {
+        rDocShell.ErrorMessage(STR_TABLE_ERR_DEL);
+        return false;
+    }
+
+    ScRange aRange;
+    pDBObj->GetArea(aRange);
+    const SCTAB nTab = aRange.aStart.Tab();
+    const bool bRecord = rDoc.IsUndoEnabled();
+
+    ScDocShellModificator aModificator(rDocShell);
+
+    // Snapshot the range's attributes before baking (Undo restores this pristine state).
+    ScDocumentUniquePtr pUndoDoc;
+    std::unique_ptr<ScDBCollection> pUndoColl;
+    if (bRecord)
+    {
+        pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+        pUndoDoc->InitUndo(rDoc, nTab, nTab, false, false);
+        rDoc.CopyToDocument(aRange, InsertDeleteFlags::ATTRIB, false, *pUndoDoc);
+        pUndoColl.reset(new ScDBCollection(*pDocColl));
+    }
+
+    // Bake the table style into direct cell attributes so the look survives the range removal.
+    if (const ScTableStyleParam* pStyleInfo = pDBObj->GetTableStyleInfo())
+    {
+        if (const ScTableStyle* pStyle
+            = rDoc.GetTableStyles()->GetTableStyle(pStyleInfo->maStyleID))
+            pStyle->BakeInto(rDoc, *pDBObj);
+    }
+
+    // Erase the database range and clear the header's autofilter dropdown flags; the data,
+    // header text and baked formatting stay.
+    rDoc.PreprocessDBDataUpdate();
+    rDBs.erase(iter);
+    rDoc.CompileHybridFormula();
+    rDoc.RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(),
+                        aRange.aStart.Row(), nTab, ScMF::Auto);
+
+    if (bRecord)
+    {
+        // Snapshot the baked, range-less attributes for Redo.
+        ScDocumentUniquePtr pRedoDoc(new ScDocument(SCDOCMODE_UNDO));
+        pRedoDoc->InitUndo(rDoc, nTab, nTab, false, false);
+        rDoc.CopyToDocument(aRange, InsertDeleteFlags::ATTRIB, false, *pRedoDoc);
+
+        rDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoConvertTableToRange>(
+            rDocShell, aRange, std::move(pUndoDoc), std::move(pRedoDoc), std::move(pUndoColl),
+            std::make_unique<ScDBCollection>(*pDocColl)));
+    }
+
+    rDocShell.PostPaint(aRange, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top
+                                    | PaintPartFlags::Size);
+    aModificator.SetDocumentModified();
+    SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScDbAreasChanged));
+    return true;
 }
 
 bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange )

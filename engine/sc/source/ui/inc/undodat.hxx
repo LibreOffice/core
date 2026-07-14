@@ -229,6 +229,32 @@ private:
     void DoChange(const bool bUndo);
 };
 
+class ScUndoConvertTableToRange : public ScSimpleUndo
+{
+public:
+    ScUndoConvertTableToRange(ScDocShell& rNewDocShell, const ScRange& rRange,
+                              ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc,
+                              std::unique_ptr<ScDBCollection> pNewUndoColl,
+                              std::unique_ptr<ScDBCollection> pNewRedoColl);
+    virtual ~ScUndoConvertTableToRange() override;
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual void Repeat(SfxRepeatTarget& rTarget) override;
+    virtual bool CanRepeat(SfxRepeatTarget& rTarget) const override;
+
+    virtual OUString GetComment() const override;
+
+private:
+    ScRange maRange;
+    ScDocumentUniquePtr mpUndoDoc;
+    ScDocumentUniquePtr mpRedoDoc;
+    std::unique_ptr<ScDBCollection> mpUndoColl;
+    std::unique_ptr<ScDBCollection> mpRedoColl;
+
+    void DoChange(bool bUndo);
+};
+
 class ScUndoTableTotals: public ScDBFuncUndo
 {
 public:

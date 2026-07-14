@@ -14,6 +14,7 @@
 #include <COKit/COKit.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/borderline.hxx>
+#include <svl/itempool.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 #include <patattr.hxx>
@@ -29,14 +30,24 @@ ScTableStyle::ScTableStyle(const OUString& rName, const std::optional<OUString>&
 {
 }
 
+namespace
+{
+// The only font attributes a Table Style can contribute.
+constexpr sal_uInt16 aTableStyleFontWhich[] = {
+    ATTR_FONT,        ATTR_CJK_FONT,        ATTR_CTL_FONT,
+    ATTR_FONT_HEIGHT, ATTR_CJK_FONT_HEIGHT, ATTR_CTL_FONT_HEIGHT,
+    ATTR_FONT_WEIGHT, ATTR_CJK_FONT_WEIGHT, ATTR_CTL_FONT_WEIGHT,
+    ATTR_FONT_COLOR,
+};
+}
+
 bool ScTableStyle::HasFontAttrSet(const ScPatternAttr* pPattern)
 {
-    // TODO: maybe different pPatterns can have different font attributes, and
-    // now we only check if any font attribute is set on a pattern.
-    // e.g.: mpFirstRowStripePattern only has ATTR_FONT_WEIGHT set and we will retirn that one,
-    // but mpTablePattern also can have ATTR_FONT_COLOR set (need to merge them and return that
-    // one for custom styles, but now it is enough for the ooxml default styles).
-    for (sal_Int16 nWhich = ATTR_FONT; nWhich <= ATTR_FONT_RELIEF; nWhich++)
+    // TODO: GetFontItemSet returns the first matching element's whole item set and
+    // does not merge font attributes across elements. Fine for the ooxml defaults
+    // (each element sets font weight and colour together); a custom style that split
+    // them across elements would need a merge.
+    for (sal_uInt16 nWhich : aTableStyleFontWhich)
     {
         if (pPattern->GetItemSet().GetItemState(nWhich) == SfxItemState::SET)
             return true;
@@ -689,6 +700,123 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
     }
 
     return nullptr;
+}
+
+namespace
+{
+// The style's font item to bake for nWhich, or nullptr to keep the cell's own value. The cell
+// wins only when it sets this attribute directly (not through a named cell style) to a
+// non-default value - for fonts the Table Style outranks a cell style. Exception: a direct
+// black font colour counts as unset (black is the Table Style's "no colour" marker), so the
+// style colour shows. See ScPatternAttr::fillFontOnly / fillColor.
+const SfxPoolItem* lcl_fontItemToBake(const SfxItemSet& rCellSet, const SfxItemSet& rStyleSet,
+                                      sal_uInt16 nWhich)
+{
+    const SfxPoolItem* pStyleItem = nullptr;
+    if (rStyleSet.GetItemState(nWhich, false, &pStyleItem) != SfxItemState::SET)
+        return nullptr;
+
+    const SfxPoolItem* pDirect = nullptr;
+    if (rCellSet.GetItemState(nWhich, false, &pDirect) == SfxItemState::SET
+        && *pDirect != rCellSet.GetPool()->GetUserOrPoolDefaultItem(nWhich))
+    {
+        const bool bBlackFontColor
+            = nWhich == ATTR_FONT_COLOR
+              && static_cast<const SvxColorItem*>(pDirect)->getColor() == COL_BLACK;
+        if (!bBlackFontColor)
+            return nullptr; // direct cell font wins - nothing to bake
+    }
+
+    return pStyleItem;
+}
+}
+
+void ScTableStyle::BakeInto(ScDocument& rDoc, const ScDBData& rDBData) const
+{
+    ScRange aRange;
+    rDBData.GetArea(aRange);
+    const SCTAB nTab = aRange.aStart.Tab();
+    const SCROW nFirstRow = aRange.aStart.Row();
+    // Header row = -HasHeader(), first data row = 0. On an unfiltered table (the norm) this
+    // equals fillinfo's non-filtered stripe index exactly; an active filter would re-number
+    // visible stripes on screen, but baking per absolute row keeps the whole range consistent
+    // once the filter is cleared.
+    const SCROW nHeaderOffset = static_cast<SCROW>(rDBData.HasHeader());
+    auto& rHelper = rDoc.getCellAttributeHelper();
+
+    // Column-major with vertical run-coalescing: consecutive rows that bake to the same items
+    // are applied as one merge (ApplyPatternArea only overrides its set items), so a plain or
+    // column-striped column costs a couple of calls instead of one per cell. Banded rows
+    // alternate and so degrade to one merge per cell - still cheaper than per-item apply.
+    for (SCCOL nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); ++nCol)
+    {
+        std::unique_ptr<ScPatternAttr> pRunPattern;
+        SCROW nRunStart = nFirstRow;
+        auto flushRun = [&](SCROW nRunEnd) {
+            if (pRunPattern)
+                rDoc.ApplyPatternAreaTab(nCol, nRunStart, nCol, nRunEnd, nTab, *pRunPattern);
+            pRunPattern.reset();
+        };
+
+        for (SCROW nRow = aRange.aStart.Row(); nRow <= aRange.aEnd.Row(); ++nRow)
+        {
+            const SCROW nRowIndex = nRow - nFirstRow - nHeaderOffset;
+            const SfxItemSet& rCellSet = rDoc.GetPattern(nCol, nRow, nTab)->GetItemSet();
+
+            ScPatternAttr aBake(rHelper);
+            bool bAny = false;
+
+            // Fill: style shows only where the cell sets no background directly or via its
+            // cell style (bSrchInParent), exactly as fillinfo decides.
+            if (!rCellSet.GetItemIfSet(ATTR_BACKGROUND))
+            {
+                if (const SvxBrushItem* pFill = GetFillItem(rDBData, nCol, nRow, nRowIndex))
+                {
+                    aBake.ItemSetPut(*pFill);
+                    bAny = true;
+                }
+            }
+
+            // Border: same, except an "empty" explicit border (no edges) yields to the style.
+            const SvxBoxItem* pCellBox = rCellSet.GetItemIfSet(ATTR_BORDER);
+            const bool bCellBoxNonEmpty = pCellBox
+                                          && (pCellBox->GetTop() || pCellBox->GetBottom()
+                                              || pCellBox->GetLeft() || pCellBox->GetRight());
+            if (!bCellBoxNonEmpty)
+            {
+                if (std::unique_ptr<SvxBoxItem> pBox = GetBoxItem(rDBData, nCol, nRow, nRowIndex))
+                {
+                    aBake.ItemSetPut(*pBox);
+                    bAny = true;
+                }
+            }
+
+            // Font: table style beats the cell style (direct-only test); see lcl_fontItemToBake.
+            if (const SfxItemSet* pFontSet = GetFontItemSet(rDBData, nCol, nRow, nRowIndex))
+            {
+                for (sal_uInt16 nWhich : aTableStyleFontWhich)
+                {
+                    if (const SfxPoolItem* pFont = lcl_fontItemToBake(rCellSet, *pFontSet, nWhich))
+                    {
+                        aBake.ItemSetPut(*pFont);
+                        bAny = true;
+                    }
+                }
+            }
+
+            if (!bAny)
+            {
+                flushRun(nRow - 1);
+                continue;
+            }
+            if (pRunPattern && *pRunPattern == aBake)
+                continue; // extend the open run
+            flushRun(nRow - 1);
+            pRunPattern = std::make_unique<ScPatternAttr>(aBake);
+            nRunStart = nRow;
+        }
+        flushRun(aRange.aEnd.Row());
+    }
 }
 
 void ScTableStyle::SetRowStripeSize(sal_Int32 nFirstRowStripeSize, sal_Int32 nSecondRowStripeSize)

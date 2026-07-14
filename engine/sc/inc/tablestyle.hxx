@@ -84,6 +84,12 @@ public:
     std::unique_ptr<SvxBoxItem> GetBoxItem(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
                                            SCROW nRowIndex) const;
 
+    // Materialize this style's fill/border/font onto the Table's cells as direct cell attributes
+    // (Convert to Range), only where the style is what actually renders; attributes that already
+    // win (direct, cell style, conditional) are left untouched. Precedence details are at the
+    // per-attribute logic in the implementation.
+    void BakeInto(ScDocument& rDoc, const ScDBData& rDBData) const;
+
     void SetRowStripeSize(sal_Int32 nFirstRowStripeSize, sal_Int32 nSecondRowStripeSize);
     void SetColStripeSize(sal_Int32 nFirstColStripeSize, sal_Int32 nSecondColStripeSize);
 

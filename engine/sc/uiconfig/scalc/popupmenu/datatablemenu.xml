@@ -13,4 +13,5 @@
   <menu:menuitem menu:id=".uno:ResizeCalcTable"/>
   <menu:menuitem menu:id=".uno:RenameCalcTable"/>
   <menu:menuitem menu:id=".uno:DataDataPilotRun"/>
+  <menu:menuitem menu:id=".uno:ConvertCalcTableToRange"/>
 </menu:menupopup>

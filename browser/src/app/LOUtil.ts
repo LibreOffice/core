@@ -581,6 +581,8 @@ class LOUtil {
 			// TODO: reusing a similar icon for now; needs a dedicated Resize Table icon
 			resizecalctable: 'tabledesign',
 			renamecalctable: 'renametable',
+			// TODO: reusing a similar icon for now; needs a dedicated Convert to Range icon
+			convertcalctabletorange: 'tabledesign',
 			calculatedfieldrun: 'functiondialog',
 			databasesettings: 'tabledesign',
 			tracechangemode: 'trackchanges',

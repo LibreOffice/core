@@ -134,6 +134,9 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
             case SID_RENAME_CALCTABLE:
                 pTabViewShell->ExecuteRenameCalcTable();
                 break;
+            case SID_CONVERT_CALCTABLE_TO_RANGE:
+                m_pViewShell->ConvertCalcTableToRange();
+                break;
             case SID_TABLE_TOTALROW:
             {
                 // Desired value: SfxBoolItem in args if present, else toggle.
@@ -205,6 +208,7 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
             case SID_REMOVE_CALCTABLE:
             case SID_RESIZE_CALCTABLE:
             case SID_RENAME_CALCTABLE:
+            case SID_CONVERT_CALCTABLE_TO_RANGE:
                 if (bProtected)
                     rSet.DisableItem(nWhich);
                 break;

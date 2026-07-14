@@ -792,6 +792,84 @@ bool ScUndoDBTable::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;    // is not possible
 }
 
+ScUndoConvertTableToRange::ScUndoConvertTableToRange(
+    ScDocShell& rNewDocShell, const ScRange& rRange, ScDocumentUniquePtr pNewUndoDoc,
+    ScDocumentUniquePtr pNewRedoDoc, std::unique_ptr<ScDBCollection> pNewUndoColl,
+    std::unique_ptr<ScDBCollection> pNewRedoColl)
+    : ScSimpleUndo(rNewDocShell)
+    , maRange(rRange)
+    , mpUndoDoc(std::move(pNewUndoDoc))
+    , mpRedoDoc(std::move(pNewRedoDoc))
+    , mpUndoColl(std::move(pNewUndoColl))
+    , mpRedoColl(std::move(pNewRedoColl))
+{
+}
+
+ScUndoConvertTableToRange::~ScUndoConvertTableToRange()
+{
+}
+
+OUString ScUndoConvertTableToRange::GetComment() const
+{
+    return ScResId(STR_UNDO_CONVERT_CALCTABLE_TO_RANGE);
+}
+
+void ScUndoConvertTableToRange::DoChange(bool bUndo)
+{
+    ScDocument& rDoc = rDocShell.GetDocument();
+
+    // Swap the database-range collection first (re-adds the Table on Undo, drops it on Redo).
+    ScDBCollection* pColl = bUndo ? mpUndoColl.get() : mpRedoColl.get();
+    bool bOldAutoCalc = rDoc.GetAutoCalc();
+    rDoc.SetAutoCalc(false);
+    rDoc.PreprocessDBDataUpdate();
+    rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*pColl)), true);
+    rDoc.CompileHybridFormula();
+    rDoc.SetAutoCalc(bOldAutoCalc);
+
+    // Restore the attribute snapshot last, so it wins over any header-flag change SetDBCollection
+    // made above.
+    ScDocument* pSrc = bUndo ? mpUndoDoc.get() : mpRedoDoc.get();
+    rDoc.DeleteAreaTab(maRange, InsertDeleteFlags::ATTRIB);
+    pSrc->CopyToDocument(maRange, InsertDeleteFlags::ATTRIB, false, rDoc);
+
+    if (ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell())
+    {
+        const SCTAB nTab = maRange.aStart.Tab();
+        if (pViewShell->GetViewData().GetTabNumber() != nTab)
+            pViewShell->SetTabNo(nTab);
+    }
+
+    rDocShell.PostPaint(maRange, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top
+                                     | PaintPartFlags::Size);
+    rDocShell.PostDataChanged();
+}
+
+void ScUndoConvertTableToRange::Undo()
+{
+    BeginUndo();
+    DoChange(true);
+    SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScDbAreasChanged));
+    EndUndo();
+}
+
+void ScUndoConvertTableToRange::Redo()
+{
+    BeginRedo();
+    DoChange(false);
+    SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScDbAreasChanged));
+    EndRedo();
+}
+
+void ScUndoConvertTableToRange::Repeat(SfxRepeatTarget& /* rTarget */)
+{
+}
+
+bool ScUndoConvertTableToRange::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+{
+    return false;
+}
+
 void ScUndoDBTable::DoChange(const bool bUndo)
 {
     ScDBCollection* pWorkRefData = bUndo ? pUndoColl.get() : pRedoColl.get();
