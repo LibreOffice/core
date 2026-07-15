@@ -458,42 +458,32 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                         nIdx = nodes.second->GetIndex() + 1;
                     }
 
-                    while (nIdx < GetDoc()->GetNodes().Count()-1)
+                    while (nIdx < GetDoc()->GetNodes().Count())
                     {
                         pNd = GetDoc()->GetNodes()[ nIdx ];
 
-                        if (pNd->IsSectionNode() ||
-                            (pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode()))
+                        if (!pNd->IsTextNode())
                         {
-                            ++nIdx;
+                            --nIdx;
+                            break;
                         }
-                        else if (pNd->IsTextNode())
+
+                        const SwTextNode& rTextNode = *sw::GetParaPropsNode(*GetLayout(), *pNd);
+                        if (pOrig == rTextNode.GetNumRule()
+                            && rTextNode.GetActualListLevel() > nUpperLevel)
                         {
-                            SwTextNode const*const pTextNode =
-                                sw::GetParaPropsNode(*GetLayout(), *pNd);
-                            if (pOrig == pTextNode->GetNumRule()
-                                && pTextNode->GetActualListLevel() > nUpperLevel)
-                            {
-                                std::pair<SwTextNode *, SwTextNode *> nodes(
-                                    sw::GetFirstAndLastNode(*GetLayout(), *pTextNode));
-                                nIdx = nodes.second->GetIndex() + 1;
-                            }
-                            else
-                            {
-                                break;
-                            }
+                            std::pair<SwTextNode*, SwTextNode*> nodes(
+                                sw::GetFirstAndLastNode(*GetLayout(), rTextNode));
+                            nIdx = nodes.second->GetIndex() + 1;
                         }
-                        // #i57856#
                         else
                         {
+                            --nIdx;
                             break;
                         }
                     }
 
-                    if( nStt == nIdx || !GetDoc()->GetNodes()[ nIdx ]->IsTextNode() )
-                        nOffset = SwNodeOffset(1);
-                    else
-                        nOffset = nIdx - nStt;
+                    nOffset = nIdx - nStt + 1;
                 }
                 else
                     nOffset = SwNodeOffset(1);
