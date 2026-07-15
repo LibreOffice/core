@@ -88,8 +88,6 @@ protected:
     // Sensitivity report
     css::sheet::SensitivityReport m_aSensitivityReport;
 
-    static OUString GetResourceString(TranslateId aId);
-
     // Direct cell access through mpDocument.
     void SetValue(const css::table::CellAddress& rPosition, double fValue);
     double GetValue(const css::table::CellAddress& rPosition);

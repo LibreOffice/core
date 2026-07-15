@@ -12,6 +12,8 @@
 #include "SolverComponent.hxx"
 #include "strings.hrc"
 
+#include <scresid.hxx>
+
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
@@ -86,7 +88,7 @@ private:
     }
     virtual OUString SAL_CALL getComponentDescription() override
     {
-        return SolverComponent::GetResourceString(RID_SLP_SOLVER_COMPONENT);
+        return ScResId(RID_SLP_SOLVER_COMPONENT);
     }
 
     void applyPoint(const std::vector<double>& rPoint);
@@ -497,7 +499,7 @@ void SLPSolver::reportSolution(const std::vector<double>& rPoint)
     }
     else
     {
-        maStatus = SolverComponent::GetResourceString(RID_ERROR_INFEASIBLE);
+        maStatus = ScResId(RID_ERROR_INFEASIBLE);
     }
 }
 

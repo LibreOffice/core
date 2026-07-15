@@ -44,6 +44,7 @@
 #include <docuno.hxx>
 #include <document.hxx>
 #include <address.hxx>
+#include <scresid.hxx>
 
 #include "DifferentialEvolution.hxx"
 #include "ParticelSwarmOptimization.hxx"
@@ -177,8 +178,6 @@ private:
     std::unordered_map<CellKey, uno::Reference<table::XCell>, CellKeyHash> maCellCache;
 
 private:
-    static OUString getResourceString(TranslateId aId);
-
     uno::Reference<table::XCell> getCell(const table::CellAddress& rPosition);
     void setValue(const table::CellAddress& rPosition, double fValue);
     double getValue(const table::CellAddress& rPosition);
@@ -270,7 +269,7 @@ public:
     // XSolverDescription
     virtual OUString SAL_CALL getComponentDescription() override
     {
-        return SwarmSolver::getResourceString(RID_SWARM_SOLVER_COMPONENT);
+        return ScResId(RID_SWARM_SOLVER_COMPONENT);
     }
 
     virtual OUString SAL_CALL getStatusDescription() override { return maStatus; }
@@ -295,7 +294,7 @@ public:
             default:
                 break;
         }
-        return SwarmSolver::getResourceString(pResId);
+        return pResId ? ScResId(pResId) : OUString();
     }
 
     // XServiceInfo
@@ -329,14 +328,6 @@ public:
     double clampVariable(size_t nVarIndex, double fValue);
     double boundVariable(size_t nVarIndex, double fValue);
 };
-}
-
-OUString SwarmSolver::getResourceString(TranslateId aId)
-{
-    if (!aId)
-        return OUString();
-
-    return Translate::get(aId, Translate::Create("sc"));
 }
 
 uno::Reference<table::XCell> SwarmSolver::getCell(const table::CellAddress& rPosition)
@@ -842,7 +833,7 @@ void SAL_CALL SwarmSolver::solve()
     else
     {
         maSolution.realloc(0);
-        maStatus = getResourceString(RID_ERROR_INFEASIBLE);
+        maStatus = ScResId(RID_ERROR_INFEASIBLE);
     }
 }
 

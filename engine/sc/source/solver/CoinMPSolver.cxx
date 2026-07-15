@@ -21,6 +21,8 @@
 #include "SolverComponent.hxx"
 #include "strings.hrc"
 
+#include <scresid.hxx>
+
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
@@ -48,7 +50,7 @@ private:
     }
     virtual OUString SAL_CALL getComponentDescription() override
     {
-        return SolverComponent::GetResourceString( RID_COINMP_SOLVER_COMPONENT );
+        return ScResId( RID_COINMP_SOLVER_COMPONENT );
     }
 };
 
@@ -123,7 +125,7 @@ void SAL_CALL CoinMPSolver::solve()
                            rtl::math::approxEqual( fInitial, fTwo - 2.0 * fCoeff );
             // second comparison is needed in case fTwo is zero
             if ( !bLinear )
-                maStatus = SolverComponent::GetResourceString( RID_ERROR_NONLINEAR );
+                maStatus = ScResId( RID_ERROR_NONLINEAR );
         }
 
         SetValue(rVarCell, 0.0); // set back to zero for examining next variable
@@ -180,9 +182,9 @@ void SAL_CALL CoinMPSolver::solve()
     else
     {
         if (aSolveResult.nStatus == 1)
-            maStatus = SolverComponent::GetResourceString( RID_ERROR_INFEASIBLE );
+            maStatus = ScResId( RID_ERROR_INFEASIBLE );
         else if (aSolveResult.nStatus == 2)
-            maStatus = SolverComponent::GetResourceString( RID_ERROR_UNBOUNDED );
+            maStatus = ScResId( RID_ERROR_UNBOUNDED );
         // TODO: detect timeout condition and report as RID_ERROR_TIMEOUT
         // (currently reported as infeasible)
     }
