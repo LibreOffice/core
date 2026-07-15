@@ -515,6 +515,88 @@ def gen_packages(packinfos, ziplist, languages):
             gen_package(name, gid, "en-US")
 
 
+def install_script_value_to_array(value):
+    if len(value) > 1 and value[0] == "(" and value[-1] == ")":
+        value = value[1:-1]
+    return [] if value == "" else value.split(",")
+
+def process_install_script(install_script):
+    """
+    Find all the files in install script, their parent directories, and
+    group the files by the root package to get a dictionary of lists,
+    each list being a file, its parent dir, etc.
+    """
+
+    modules = install_script["Module"]
+
+    def get_root(module):
+        parent = module["ParentID"]
+        if parent in root_gids:
+            return parent
+        return get_root(modules[parent])
+
+    def get_files(module):
+        if "Assigns" in module:
+            templategid = module["Assigns"]
+            template = modules[templategid]
+            if not "TEMPLATEMODULE" in install_script_value_to_array(template["Styles"]):
+                raise Exception(f"Assigns not TEMPLATEMODULE: {templategid}")
+            return get_files(template)
+        else:
+            result = []
+            if not "Files" in module:
+                return result
+            files = install_script_value_to_array(module["Files"])
+            for filegid in files:
+                file = install_script["File"][filegid]
+                file_with_parents = [file]
+                parent = file["Dir"]
+                while parent != "PREDEFINED_PROGDIR":
+                    dir_ = install_script["Directory"][parent]
+                    file_with_parents.append(dir_)
+                    parent = dir_["ParentID"]
+                result.append(file_with_parents)
+            return result
+
+    result = {}
+
+    known_optional_root_gids = (
+        "gid_Module_Libreofficekit",
+        "gid_Module_Optional_Gnome",
+        "gid_Module_Optional_Kde",
+        "gid_Module_Optional_Activexcontrol",
+        "gid_Module_Optional_Onlineupdate",
+        "gid_Module_Optional_Pyuno_LibreLogo",
+        "gid_Module_Optional_PostgresqlSdbc",
+        "gid_Module_Pdfimport",
+        "gid_Module_Optional_Extensions_MEDIAWIKI",
+        "gid_Module_Optional_Extensions_NLPSolver",
+        "gid_Module_Optional_Extensions_Script_Provider_For_BS",
+        "gid_Module_Optional_Extensions_Script_Provider_For_JS")
+
+    for gid in root_gids:
+        if not(gid in modules) and gid in known_optional_root_gids:
+            continue # skip known makefile-disabled gids
+        if gid.startswith("gid_Module_Helppack_Help_") \
+            and "HIDDEN_ROOT" in install_script_value_to_array(modules["gid_Module_Helppack_Helproot"]["Styles"]):
+                continue # skip if help is disabled or "online"
+        module = modules[gid]
+        files = get_files(module)
+        if len(files) == 0:
+            raise Exception(f"unexpected root module with no files: {gid}")
+        result[gid] = files
+
+    for gid in modules:
+        if not(gid in root_gids):
+            module = modules[gid]
+            rootgid = get_root(module)
+            files = get_files(module)
+            if len(files) != 0: # some are empty
+                result[rootgid] += files
+
+    return result
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 12:
         print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <4 packinfo> <path of install script> <languages>")
@@ -534,6 +616,7 @@ if __name__ == "__main__":
         languages = sys.argv[11].split()
         init_filelistdirs(ziplist)
         gen_packages(packinfos, ziplist, languages)
+        files = process_install_script(install_script)
         #TODO process_file(license_path)
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"
