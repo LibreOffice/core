@@ -1024,20 +1024,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf129449_findReplaceParaStyle2)
     rInit.SetSearchString(u"Title"_ustr);
     rInit.SetReplaceString(u"Caption"_ustr);
     rInit.SetPattern(true); // paragraph styles replacement
-    // rInit.SetBackward(true); // find the previous result
+    rInit.SetBackward(true); // find the previous result
     rInit.SetCommand(SvxSearchCmd::FIND);
 
     // Go to the end of document, so we can test finding backwards
-    // dispatchCommand(mxComponent, u".uno:GoToEndOfDoc"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:GoToEndOfDoc"_ustr, {});
 
-    // Execute 'Find' - should find the last paragraph
+    // Execute 'Find' - should find the first paragraph
     SfxItemSet aFn(rView.GetPool(), svl::Items<FN_REPEAT_SEARCH, FN_REPEAT_SEARCH>);
     SfxRequest aRequest(FN_REPEAT_SEARCH, SfxCallMode::SYNCHRON, aFn);
     rView.ExecSearch(aRequest);
 
     // Sanity check - no change requested yet.
-    // CPPUNIT_ASSERT_EQUAL(u"Title"_ustr,
-    //                      getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Title"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
 
     // Find doesn't tell us much. Change it to replace (it replaces what was already found)
     // and moves to the next item
@@ -1046,13 +1046,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf129449_findReplaceParaStyle2)
     rView.ExecSearch(aRequest);
 
     // Test the replacement of the first paragraph. Without the fix, the Title style was not found.
-    // CPPUNIT_ASSERT_EQUAL(u"Caption"_ustr,
-    //                      getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
-    // CPPUNIT_ASSERT_EQUAL(u"Title"_ustr,
-    //                      getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Caption"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Title"_ustr,
+                         getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr));
 
     // Last Paragraph found - now do the actual replace.
-    // rView.ExecSearch(aRequest);
+    rView.ExecSearch(aRequest);
     // Test the replacement of the last paragraph. Without the fix, the Title style was not found.
     CPPUNIT_ASSERT_EQUAL(u"Caption"_ustr,
                          getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr));
