@@ -304,13 +304,26 @@ bool BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(const std::string& jsd
     const std::string jsontype = object->get("jsontype").toString();
 
     std::string action;
-    const bool bClosingDialog =
-        jsontype == "dialog" &&
+    const bool bClosing =
+        (jsontype == "dialog" || jsontype == "navigator") &&
         JsonUtil::findJSONValue(object, "action", action) && action == "close";
+
+    bool bDismissedMenu = false;
+    if (jsontype == "popup")
+    {
+        Poco::JSON::Object::Ptr dataObject = object->getObject("data");
+        std::string actionType, position;
+        bDismissedMenu = dataObject &&
+            JsonUtil::findJSONValue(dataObject, "action_type", actionType) &&
+            actionType == "select" &&
+            JsonUtil::findJSONValue(dataObject, "position", position) &&
+            position == "-1";
+    }
 
     // allow-list of jsdialog messages in bgsave
     return jsontype == "notebookbar" || jsontype == "sidebar" ||
-           jsontype == "formulabar" || jsontype == "quickfind" || bClosingDialog;
+           jsontype == "formulabar" || jsontype == "quickfind" ||
+           bClosing || bDismissedMenu;
 }
 
 void BgSaveParentWebSocketHandler::handleMessage(const std::vector<char>& data)
