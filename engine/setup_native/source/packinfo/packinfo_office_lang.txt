@@ -67,22 +67,6 @@ pkg_list_entry = "%BASISPACKAGEPREFIX-core"
 End
 
 Start
-module = "gid_Module_Langpack_Resource"
-solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-res"
-solarisrequires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
-packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-res"
-provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-res"
-requires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
-vendor = "Collabora Productivity Ltd."
-description = "Language resource module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-pkg_list_entry = "%BASISPACKAGEPREFIX-core"
-End
-
-Start
 module = "gid_Module_Langpack_Writer"
 solarispackagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-writer"
 solarisrequires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"

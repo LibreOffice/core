@@ -57,21 +57,6 @@ provides = "libreoffice-evolution libreoffice-gnome"
 End
 
 Start
-module = "gid_Module_Optional_Tde"
-solarispackagename = "%BASISPACKAGEPREFIX-tde-integration"
-solarisrequires = "%BASISPACKAGEPREFIX-core"
-packagename = "%BASISPACKAGEPREFIX-tde-integration"
-freebsdrequires = "%BASISPACKAGEPREFIX-core"
-requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
-vendor = "Collabora Productivity Ltd."
-description = "TDE integration module for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Optional_Kde"
 solarispackagename = "%BASISPACKAGEPREFIX-kde-integration"
 solarisrequires = "%BASISPACKAGEPREFIX-core"
