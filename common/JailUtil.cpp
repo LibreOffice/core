@@ -35,6 +35,7 @@
 #include <sys/mount.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <sysexits.h>
 #include <unistd.h>
 
@@ -135,26 +136,75 @@ static bool coolmount(const std::string& arg, std::string source, std::string ta
     source = Util::rtrim(source, '/');
     target = Util::rtrim(target, '/');
 
+    const std::string mountExe = Poco::Path(Util::getApplicationPath(), "coolmount").toString();
+
+    // Build the argument vector shared by both the in-process (mount namespaces)
+    // and the external-binary (capabilities) paths. argv is NULL-terminated for execv.
+    const char* argv[6];
+    int argc = 0;
+    argv[argc++] = isMountNamespacesEnabled() ? "notcoolmount" : mountExe.c_str();
+    if (!arg.empty())
+        argv[argc++] = arg.c_str();
+    if (silent)
+        argv[argc++] = "-s";
+    if (!source.empty())
+        argv[argc++] = source.c_str();
+    if (!target.empty())
+        argv[argc++] = target.c_str();
+    argv[argc] = nullptr;
+
     if (isMountNamespacesEnabled())
-    {
-        const char *argv[5];
-        argv[0] = "notcoolmount";
-        int argc = 1;
-        if (!arg.empty())
-            argv[argc++] = arg.c_str();
-        if (silent)
-            argv[argc++] = "-s";
-        if (!source.empty())
-            argv[argc++] = source.c_str();
-        if (!target.empty())
-            argv[argc++] = target.c_str();
         return domount(argc, argv) == EX_OK;
+
+    // Capabilities mode: exec the setcap'd coolmount helper directly.
+    // Do not route this through system()/a shell: the runtime image may not ship
+    // one (distroless), and a shell buys us nothing over a plain exec.
+    LOG_TRC("Executing coolmount: " << mountExe << ' ' << arg << (silent ? " -s " : " ") << source
+                                    << ' ' << target);
+
+    const pid_t pid = fork();
+    if (pid < 0)
+    {
+        LOG_SYS("Failed to fork to run coolmount [" << mountExe << ']');
+        return false;
     }
 
-    const std::string cmd = Poco::Path(Util::getApplicationPath(), "coolmount").toString() + ' '
-                            + arg + (silent ? " -s" : " ") + source + ' ' + target;
-    LOG_TRC("Executing coolmount command: " << cmd);
-    return !system(cmd.c_str());
+    if (pid == 0)
+    {
+        // Child: replace with the mount helper. execv only returns on failure.
+        execv(mountExe.c_str(), const_cast<char* const*>(argv));
+        _exit(EX_OSERR);
+    }
+
+    // Parent: wait for the mount helper to complete.
+    int status = 0;
+    if (waitpid(pid, &status, 0) < 0)
+    {
+        LOG_SYS("Failed to wait for coolmount [" << mountExe << ']');
+        return false;
+    }
+
+    if (!WIFEXITED(status))
+    {
+        LOG_ERR("coolmount [" << mountExe << "] did not exit normally: " << status);
+        return false;
+    }
+
+    const int rc = WEXITSTATUS(status);
+    if (rc == EX_OSERR)
+    {
+        // The child could not exec the helper at all. The most common cause is a
+        // deployment with capabilities but without CAP_SYS_ADMIN in the bounding
+        // set: the kernel refuses to exec coolmount (which needs cap_sys_admin=ep)
+        // with EPERM. Point the operator at the fix rather than a bare failure.
+        LOG_ERR("Failed to exec coolmount ["
+                << mountExe
+                << "]. The helper needs CAP_SYS_ADMIN; ensure the runtime grants it, "
+                   "or set mount_jail_tree config entry in coolwsd.xml to false.");
+        return false;
+    }
+
+    return rc == EX_OK;
 }
 } // namespace
 
