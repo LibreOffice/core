@@ -47,6 +47,15 @@ CollabSocketHandler::CollabSocketHandler(const std::shared_ptr<StreamSocket>& so
 {
 }
 
+CollabSocketHandler::CollabSocketHandler(const std::string& wopiSrc, const std::string& docKey,
+                                         const std::shared_ptr<CollabBroker>& broker)
+    : WebSocketHandler(/*isClient=*/false, /*isMasking=*/false)
+    , _wopiSrc(wopiSrc)
+    , _docKey(docKey)
+    , _broker(broker)
+{
+}
+
 void CollabSocketHandler::handleMessage(const std::vector<char>& payload)
 {
     if (_isValidating)

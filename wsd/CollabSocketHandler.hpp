@@ -69,7 +69,14 @@ public:
                         bool allowedOrigin,
                         const std::string& wopiSrc);
 
+    /// Socket-free constructor for tests.
+    CollabSocketHandler(const std::string& wopiSrc, const std::string& docKey,
+                        const std::shared_ptr<CollabBroker>& broker);
+
     void handleMessage(const std::vector<char>& payload) override;
+
+    /// Handle authenticated messages
+    void handleAuthenticatedMessage(const std::string& msg);
 
     const std::string& getWopiSrc() const { return _wopiSrc; }
     const std::string& getAccessToken() const { return _accessToken; }
@@ -115,9 +122,6 @@ public:
 private:
     void startValidation();
     void onCheckFileInfoFinished(CheckFileInfo& cfi);
-
-    /// Handle authenticated messages
-    void handleAuthenticatedMessage(const std::string& msg);
 
     /// Handle fetch request - downloads a stream and sends result via WebSocket
     void handleFetch(const std::string& stream, const std::string& requestId,

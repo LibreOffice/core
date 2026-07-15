@@ -146,6 +146,7 @@ noinst_PROGRAMS = \
                   admin_fuzzer \
                   clientrequest_fuzzer \
                   clientsession_fuzzer \
+                  collab_fuzzer \
                   httpresponse_fuzzer \
                   httpecho_fuzzer
 
@@ -210,6 +211,15 @@ clientsession_fuzzer_SOURCES = \
 clientsession_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS_COMMON) $(POCO_STATIC_LINKARGS) $(AM_LDFLAGS)
 clientsession_fuzzer_LDADD = ../libsimd.a $(POCO_STATIC_ARCHIVES) $(POCO_LIBS)
 
+collab_fuzzer_CPPFLAGS = \
+				$(AM_CPPFLAGS)
+collab_fuzzer_CXXFLAGS = $(LIBFUZZER_CXXFLAGS_COMMON)
+collab_fuzzer_SOURCES = \
+			       $(common_fuzzer_sources) \
+			       Collab.cpp
+collab_fuzzer_LDFLAGS = $(LIBFUZZER_LDFLAGS_COMMON) $(POCO_STATIC_LINKARGS) $(AM_LDFLAGS)
+collab_fuzzer_LDADD = ../libsimd.a $(POCO_STATIC_ARCHIVES) $(POCO_LIBS)
+
 httpresponse_fuzzer_CPPFLAGS = \
 				$(AM_CPPFLAGS)
 httpresponse_fuzzer_CXXFLAGS = $(LIBFUZZER_CXXFLAGS_COMMON)
@@ -232,7 +242,7 @@ httpecho_fuzzer_LDADD = ../libsimd.a $(POCO_STATIC_ARCHIVES) $(POCO_LIBS)
 if ENABLE_AFL
 # AFL++ multi-variant fuzzer build.
 # 4 static libraries (one per variant) from common sources,
-# then 5 fuzzers x 4 variants. To add a new fuzzer, just add to AFL_FUZZERS.
+# then 6 fuzzers x 4 variants. To add a new fuzzer, just add to AFL_FUZZERS.
 
 AFL_CPPFLAGS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) -I${top_srcdir}/test
 # AFL variants use afl-clang-* instrumentation; strip flags incompatible with
@@ -326,6 +336,7 @@ AFL_FUZZERS = \
 	admin=Admin.cpp \
 	clientrequest=ClientRequestDispatcherFuzz.cpp \
 	clientsession=ClientSession.cpp \
+	collab=Collab.cpp \
 	httpresponse=HttpResponse.cpp \
 	httpecho=HttpEcho.cpp
 

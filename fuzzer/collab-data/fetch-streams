@@ -1,0 +1,4 @@
+{"type":"fetch","stream":"userSettings","requestId":"a"}
+{"type":"fetch","stream":"templateSource","requestId":"b"}
+{"type":"fetch","stream":"fileUrl","requestId":"c"}
+{"type":"fetch","stream":"contents","requestId":"d","ifNoneMatch":"\"etag123\"","ifModifiedSince":"Wed, 21 Oct 2026 07:28:00 GMT"}

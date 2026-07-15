@@ -1,0 +1,6 @@
+{"type":"fetch","stream":"contents","requestId":"init"}
+{"type":"editing_started"}
+{"type":"upload","stream":"contents","requestId":"save-1"}
+{"type":"switch_to_collab"}
+{"type":"saved_and_switching"}
+{"type":"bye"}

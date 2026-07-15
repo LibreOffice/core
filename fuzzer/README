@@ -32,6 +32,12 @@ Run the fuzzers like this:
 ./httpresponse_fuzzer -max_len=16384 fuzzer/httpresponse-data/
 ----
 
+- Collab:
+
+----
+fuzzer/collab_fuzzer -max_len=16384 fuzzer/collab-data/
+----
+
 - HttpEcho:
 
 ----
