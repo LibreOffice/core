@@ -107,6 +107,10 @@ class GraphicSelection {
 		app.map._docLayer._oleCSelections.setPointSet(CPointSet.fromBounds(bounds));
 	}
 
+	static hasDarkOverlay(): boolean {
+		return !app.map._docLayer._oleCSelections.empty();
+	}
+
 	// When a shape is selected, the rectangles of other shapes are also sent from the core side.
 	// They are in twips units.
 	static convertObjectRectangleTwipsToPixels() {

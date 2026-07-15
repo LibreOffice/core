@@ -14,7 +14,7 @@
  * window.L.Control.JSDialog - class which creates and updates dialogs, popups, snackbar
  */
 
-/* global JSDialog Hammer app _ cool AutoCompleteDialogId */
+/* global JSDialog Hammer app _ cool AutoCompleteDialogId GraphicSelection */
 window.L.Control.JSDialog = window.L.Control.extend({
 	options: {},
 	dialogs: {},
@@ -890,6 +890,12 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		else if (app.calc.pivotTableFilterCell) {
 			// This is a pivot table filter dialog. We have the row and column indexes. Get cell rectangle with this info.
 			cellRectangle = app.map._docLayer.sheetGeometry.getCellSimpleRectangle(app.calc.pivotTableFilterCell.column, app.calc.pivotTableFilterCell.row);
+		}
+		else if (GraphicSelection.hasDarkOverlay()) {
+			// Autofilter style menu from Chart edit mode (pivot-chart).
+			cellRectangle = new cool.SimpleRectangle(0, 0, 300, 300);
+			cellRectangle.pX1 += instance.startX;
+			cellRectangle.pY1 += instance.startY;
 		}
 		else {
 			// This is a Cell DropDown. We will use current cell's rectangle.
