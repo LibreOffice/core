@@ -67,22 +67,6 @@ pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core"
 End
 
 Start
-module = "gid_Module_Langpack_Resource"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-%LANGUAGESTRING-res"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-%LANGUAGESTRING"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-%LANGUAGESTRING-res"
-provides = "%BASISPACKAGEPREFIX%PRODUCTVERSION-%LANGUAGESTRING-res"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2025 The Document Foundation"
-solariscopyright = "solariscopyrightfile"
-vendor = "The Document Foundation"
-description = "Language resource module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core"
-End
-
-Start
 module = "gid_Module_Langpack_Writer"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-%LANGUAGESTRING-writer"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-%LANGUAGESTRING"
@@ -176,21 +160,5 @@ description = "Base language module for %PRODUCTNAME %PRODUCTVERSION, language %
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
 pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-base"
-End
-
-Start
-module = "gid_Module_Langpack_Onlineupdate"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-%LANGUAGESTRING-onlineupd"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-%LANGUAGESTRING"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-%LANGUAGESTRING-onlineupd"
-provides = "%BASISPACKAGEPREFIX%PRODUCTVERSION-%LANGUAGESTRING-onlineupd"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-%LANGUAGESTRING %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2025 The Document Foundation"
-solariscopyright = "solariscopyrightfile"
-vendor = "The Document Foundation"
-description = "Online update language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-onlineupdate"
 End
 

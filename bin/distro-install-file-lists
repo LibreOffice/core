@@ -168,7 +168,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         if test "$OOO_VENDOR" = "Mandriva" -o \( "$OOO_VENDOR" = "SUSE" -a "$SPLIT_APP_MODULES" = "TRUE" \) ; then
             test -f gid_Module_Langpack_Basis_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Basis_$lang" || :
             test -f gid_Module_Langpack_Brand_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Brand_$lang" || :
-            test -f gid_Module_Langpack_Resource_$lang  && lang_lists="$lang_lists gid_Module_Langpack_Resource_$lang" || :
             test -f gid_Module_Langpack_Impress_$lang   && lang_lists="$lang_lists gid_Module_Langpack_Impress_$lang" || :
             test -f gid_Module_Langpack_Draw_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Draw_$lang" || :
             test -f gid_Module_Langpack_Math_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Math_$lang" || :
@@ -180,7 +179,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         else
             test -f gid_Module_Langpack_Basis_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Basis_$lang" || :
             test -f gid_Module_Langpack_Brand_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Brand_$lang" || :
-            test -f gid_Module_Langpack_Resource_$lang  && lang_lists="$lang_lists gid_Module_Langpack_Resource_$lang" || :
             test -f gid_Module_Langpack_Impress_$lang   && lang_lists="$lang_lists gid_Module_Langpack_Impress_$lang" || :
             test -f gid_Module_Langpack_Draw_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Draw_$lang" || :
             test -f gid_Module_Langpack_Math_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Math_$lang" || :
@@ -409,7 +407,6 @@ else
         done
         create_package_directory gid_Module_Langpack_Basis_`echo $l | sed -e s/-/_/g`     pkg/libreoffice-l10n-$l
         create_package_directory gid_Module_Langpack_Brand_`echo $l | sed -e s/-/_/g`     pkg/libreoffice-l10n-$l
-        create_package_directory gid_Module_Langpack_Resource_`echo $l | sed -e s/-/_/g`  pkg/libreoffice-l10n-$l
         create_package_directory gid_Module_Helppack_Help_`echo $l | sed -e s/-/_/g`      pkg/libreoffice-help-$l
 
         # some help files are in _Langpack_{Writer,Impress,...}_<lang>
