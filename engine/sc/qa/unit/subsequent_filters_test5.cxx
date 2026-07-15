@@ -951,6 +951,27 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testAutoFontColorTransparentInheritedBg)
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, aComplexColor.getFinalColor());
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testAutoFontColorRedBackground)
+{
+    // A cell with an opaque pure-red fill and automatic font color must
+    // resolve to black text, as other spreadsheet applications render it.
+    // The Display-mode auto-font-color path chooses black or white by the
+    // background contrast; a too-high darkness threshold used to classify
+    // saturated red as dark and returned COL_WHITE (white text on red).
+    createScDoc("fods/auto-font-color-red-bg.fods");
+
+    ScDocument* pDoc = getScDoc();
+    const ScPatternAttr* pPattern = pDoc->GetPattern(0, 0, 0);
+    CPPUNIT_ASSERT(pPattern);
+
+    const SvxBrushItem& rBrush = pPattern->GetItem(ATTR_BACKGROUND);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, rBrush.GetColor());
+
+    model::ComplexColor aComplexColor;
+    pPattern->fillColor(aComplexColor, ScAutoFontColorMode::Display);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, aComplexColor.getFinalColor());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
