@@ -29,6 +29,7 @@
 #include <subtotalparam.hxx>
 
 #include <memory>
+#include <vector>
 
 class ScDocShell;
 class SdrUndoAction;
@@ -235,7 +236,8 @@ public:
     ScUndoConvertTableToRange(ScDocShell& rNewDocShell, const ScRange& rRange,
                               ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc,
                               std::unique_ptr<ScDBCollection> pNewUndoColl,
-                              std::unique_ptr<ScDBCollection> pNewRedoColl);
+                              std::unique_ptr<ScDBCollection> pNewRedoColl,
+                              std::vector<ScAddress> aRefCells);
     virtual ~ScUndoConvertTableToRange() override;
 
     virtual void Undo() override;
@@ -251,6 +253,9 @@ private:
     ScDocumentUniquePtr mpRedoDoc;
     std::unique_ptr<ScDBCollection> mpUndoColl;
     std::unique_ptr<ScDBCollection> mpRedoColl;
+    // The formula cells whose structured references were converted to plain ranges; their
+    // contents are captured in the Undo/Redo docs so the round-trip restores the Table[Col] form.
+    std::vector<ScAddress> maRefCells;
 
     void DoChange(bool bUndo);
 };

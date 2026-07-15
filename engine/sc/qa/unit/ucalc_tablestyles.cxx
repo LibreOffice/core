@@ -8,6 +8,7 @@
  */
 
 #include "helper/qahelper.hxx"
+#include <memory>
 
 #include <TableStyleGenerator.hxx>
 #include <tablestyle.hxx>
@@ -19,6 +20,7 @@
 #include <docfunc.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
+#include <rangenam.hxx>
 #include <scitems.hxx>
 #include <patattr.hxx>
 #include <undomanager.hxx>
@@ -2061,6 +2063,90 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testConvertToRangeUndoRedo)
     m_pDoc->GetUndoManager()->Redo();
     CPPUNIT_ASSERT(!m_pDoc->GetDBCollection()->getNamedDBs().findByName(u"TestTable"_ustr));
     CPPUNIT_ASSERT_EQUAL(aHeaderColor, m_pDoc->GetAttr(1, 0, 0, ATTR_BACKGROUND).GetColor());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testConvertToRangeFlattensStructuredRefs)
+{
+    m_pDoc->EnableUndo(true);
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Conv"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    applyThemeToDocument(m_pDoc, pColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    // Table A1:B5 - header row 0, data rows 1..3, totals row 4; column B is "Val".
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 1, 4,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ true);
+    m_pDoc->SetString(0, 0, 0, u"Name"_ustr);
+    m_pDoc->SetString(1, 0, 0, u"Val"_ustr);
+    m_pDoc->SetValue(1, 1, 0, 10.0);
+    m_pDoc->SetValue(1, 2, 0, 20.0);
+    m_pDoc->SetValue(1, 3, 0, 30.0);
+    pData->RefreshTableColumnNames(m_pDoc);
+
+    // A scalar structured reference (D1) and a multi-cell array formula over D2:D4
+    // ({=TestTable[Val]*2} -> {20, 40, 60}). If Convert-to-Range dropped the array-ness, D2:D4
+    // would collapse to a single value, so distinct per-row values prove the array survived.
+    m_pDoc->SetString(3, 0, 0, u"=SUM(TestTable[Val])"_ustr); // D1
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectTable(0, true);
+    m_pDoc->InsertMatrixFormula(3, 1, 3, 3, aMark, u"=TestTable[Val]*2"_ustr); // D2:D4
+    // A defined name (global) that also references the column via a structured reference. Its
+    // value stays cached even when the stored code dangles, so we check the code (symbol) itself.
+    m_pDoc->GetRangeName().insert(std::make_unique<ScRangeData>(
+        *m_pDoc, u"ValTotal"_ustr, u"SUM(TestTable[Val])"_ustr, ScAddress(0, 0, 0)));
+    auto bNameHasTableRef = [this] {
+        const ScRangeData* p = m_pDoc->GetRangeName().findByUpperName(u"VALTOTAL"_ustr);
+        return p && p->GetSymbol().indexOf(u"TestTable") >= 0;
+    };
+    m_pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(60.0, m_pDoc->GetValue(3, 0, 0));
+    CPPUNIT_ASSERT(m_pDoc->GetFormula(3, 0, 0).indexOf(u"TestTable") >= 0);
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(3, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(3, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(60.0, m_pDoc->GetValue(3, 3, 0));
+    CPPUNIT_ASSERT(bNameHasTableRef());
+
+    CPPUNIT_ASSERT(ScDBDocFunc(*m_xDocShell).ConvertTableToRange(pData));
+    m_pDoc->CalcAll();
+
+    // Table gone; both formulas are flattened to plain ranges with values intact (no #REF!), and
+    // the array stays an array (D2:D4 keep their distinct values).
+    CPPUNIT_ASSERT(!m_pDoc->GetDBCollection()->getNamedDBs().findByName(u"TestTable"_ustr));
+    const OUString aFlat = m_pDoc->GetFormula(3, 0, 0);
+    CPPUNIT_ASSERT(aFlat.indexOf(u"TestTable") < 0);
+    CPPUNIT_ASSERT(aFlat.indexOf(u"$B$2:$B$4") >= 0);
+    CPPUNIT_ASSERT_EQUAL(60.0, m_pDoc->GetValue(3, 0, 0));
+    CPPUNIT_ASSERT(m_pDoc->GetFormula(3, 1, 0).indexOf(u"TestTable") < 0);
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(3, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(3, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(60.0, m_pDoc->GetValue(3, 3, 0));
+    CPPUNIT_ASSERT(!bNameHasTableRef()); // the defined name's stored code is flattened too
+
+    // Undo restores the structured references and the values (array included).
+    m_pDoc->GetUndoManager()->Undo();
+    m_pDoc->CalcAll();
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().findByName(u"TestTable"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->GetFormula(3, 0, 0).indexOf(u"TestTable") >= 0);
+    CPPUNIT_ASSERT_EQUAL(60.0, m_pDoc->GetValue(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(3, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(3, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(60.0, m_pDoc->GetValue(3, 3, 0));
+    CPPUNIT_ASSERT(bNameHasTableRef()); // the defined name is structured again
+
+    // Redo flattens again.
+    m_pDoc->GetUndoManager()->Redo();
+    m_pDoc->CalcAll();
+    CPPUNIT_ASSERT(!m_pDoc->GetDBCollection()->getNamedDBs().findByName(u"TestTable"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->GetFormula(3, 0, 0).indexOf(u"TestTable") < 0);
+    CPPUNIT_ASSERT_EQUAL(60.0, m_pDoc->GetValue(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(3, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(3, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(60.0, m_pDoc->GetValue(3, 3, 0));
+    CPPUNIT_ASSERT(!bNameHasTableRef());
 
     m_pDoc->DeleteTab(0);
 }

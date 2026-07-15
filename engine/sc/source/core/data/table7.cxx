@@ -234,6 +234,12 @@ void ScTable::PreprocessDBDataUpdate(
         aCol[i].PreprocessDBDataUpdate(rEndListenCxt, rCompileCxt);
 }
 
+void ScTable::CollectTableRefFormulas( sal_uInt16 nIndex, std::vector<ScAddress>& rCells )
+{
+    for (SCCOL i = 0; i < aCol.size(); ++i)
+        aCol[i].CollectTableRefFormulas(nIndex, rCells);
+}
+
 void ScTable::CompileHybridFormula(
     sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt )
 {

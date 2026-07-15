@@ -898,6 +898,17 @@ public:
      */
     SC_DLLPUBLIC void CompileHybridFormula();
 
+    /** Collect positions of formula cells with a structured reference to database range nIndex. */
+    SC_DLLPUBLIC void CollectTableRefFormulas( sal_uInt16 nIndex, std::vector<ScAddress>& rCells );
+    /** Flatten structured references to database range nIndex in the given cells to plain ranges. */
+    SC_DLLPUBLIC void ConvertTableRefsToRange( sal_uInt16 nIndex, const std::vector<ScAddress>& rCells );
+    /** True if any named expression holds a structured reference to database range nIndex. */
+    SC_DLLPUBLIC bool HasTableRefInNames( sal_uInt16 nIndex ) const;
+    /** Flattened copy of all range names, resolving structured references to database range nIndex
+        to plain ranges; true if any name changed. */
+    SC_DLLPUBLIC bool ConvertTableRefsToRangeInNames( sal_uInt16 nIndex,
+                                                      std::map<OUString, ScRangeName>& rFlatNames );
+
     /**
      * Insert a new named expression to the global scope.
      *

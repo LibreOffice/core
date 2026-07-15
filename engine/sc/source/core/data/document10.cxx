@@ -34,6 +34,8 @@
 #include <SheetViewManager.hxx>
 #include <SheetView.hxx>
 #include <dbdata.hxx>
+#include <formulacell.hxx>
+#include <rangenam.hxx>
 #include <queryparam.hxx>
 #include <sortparam.hxx>
 #include <editeng/brushitem.hxx>
@@ -343,6 +345,87 @@ void ScDocument::CompileHybridFormula()
     {
         ScTable* p = rxTab.get();
         p->CompileHybridFormula(aStartListenCxt, aCompileCxt);
+    }
+}
+
+void ScDocument::CollectTableRefFormulas( sal_uInt16 nIndex, std::vector<ScAddress>& rCells )
+{
+    for (const auto& rxTab : maTabs)
+    {
+        ScTable* p = rxTab.get();
+        p->CollectTableRefFormulas(nIndex, rCells);
+    }
+}
+
+bool ScDocument::HasTableRefInNames( sal_uInt16 nIndex ) const
+{
+    auto lclScopeHasRef = [nIndex]( const ScRangeName* pNames )
+    {
+        if (!pNames)
+            return false;
+        for (const auto& rEntry : *pNames)
+        {
+            const ScRangeData* pData = rEntry.second.get();
+            const ScTokenArray* pCode = pData ? pData->GetCode() : nullptr;
+            if (pCode && pCode->HasTableRef(nIndex))
+                return true;
+        }
+        return false;
+    };
+
+    if (lclScopeHasRef(&GetRangeName()))
+        return true;
+    for (SCTAB nTab = 0; nTab < GetTableCount(); ++nTab)
+        if (lclScopeHasRef(GetRangeName(nTab)))
+            return true;
+    return false;
+}
+
+bool ScDocument::ConvertTableRefsToRangeInNames( sal_uInt16 nIndex,
+                                                 std::map<OUString, ScRangeName>& rFlatNames )
+{
+    bool bChanged = false;
+    std::map<OUString, ScRangeName*> aAllNames;
+    GetRangeNameMap(aAllNames);
+    for (const auto& rScope : aAllNames)
+    {
+        if (!rScope.second)
+            continue;
+        ScRangeName aFlat(*rScope.second);
+        for (const auto& rEntry : aFlat)
+        {
+            ScRangeData* pData = rEntry.second.get();
+            const ScTokenArray* pCode = pData ? pData->GetCode() : nullptr;
+            if (!pCode)
+                continue;
+            std::unique_ptr<ScTokenArray> pNew = pCode->ConvertTableRefsToRange(nIndex, pData->GetPos());
+            if (pNew)
+            {
+                pData->SetCode(*pNew);
+                bChanged = true;
+            }
+        }
+        rFlatNames.emplace(rScope.first, std::move(aFlat));
+    }
+    return bChanged;
+}
+
+void ScDocument::ConvertTableRefsToRange( sal_uInt16 nIndex, const std::vector<ScAddress>& rCells )
+{
+    for (const ScAddress& rPos : rCells)
+    {
+        ScFormulaCell* pFC = GetFormulaCell(rPos);
+        const ScTokenArray* pCode = pFC ? pFC->GetCode() : nullptr;
+        if (!pCode)
+            continue;
+        std::unique_ptr<ScTokenArray> pNew = pCode->ConvertTableRefsToRange(nIndex, rPos);
+        if (!pNew)
+            continue;
+
+        // Preserve the cell's matrix mode so an array formula stays an array (a default-NONE
+        // rebuild would collapse it).
+        SetFormulaCell(rPos, new ScFormulaCell(*this, rPos, std::move(pNew), GetGrammar(),
+                                               pFC->GetMatrixFlag()));
     }
 }
 

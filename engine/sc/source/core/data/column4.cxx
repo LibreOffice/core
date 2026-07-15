@@ -23,6 +23,7 @@
 #include <conditio.hxx>
 #include <formulagroup.hxx>
 #include <tokenarray.hxx>
+#include <token.hxx>
 #include <scitems.hxx>
 #include <cellform.hxx>
 #include <sharedformula.hxx>
@@ -1106,6 +1107,31 @@ void ScColumn::PreprocessDBDataUpdate(
     aOps.insert(ocTableRef);
     RecompileByOpcodeHandler aFunc(&GetDoc(), aOps, rEndListenCxt, rCompileCxt);
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
+}
+
+void ScColumn::CollectTableRefFormulas( sal_uInt16 nIndex, std::vector<ScAddress>& rCells )
+{
+    // Walk only the formula-cell groups (skipping value/text blocks), like PreprocessDBDataUpdate.
+    for (const sc::FormulaGroupEntry& rEntry : GetFormulaGroupEntries())
+    {
+        const ScFormulaCell* pTop = rEntry.mbShared ? *rEntry.mpCells : rEntry.mpCell;
+        const ScTokenArray* pCode = pTop ? pTop->GetCode() : nullptr;
+        if (!pCode || !pCode->HasOpCode(ocTableRef))
+            continue;
+
+        bool bMatch = false;
+        formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+        for (const formula::FormulaToken* p = aIter.First(); p && !bMatch; p = aIter.Next())
+            bMatch = (p->GetOpCode() == ocTableRef
+                      && static_cast<const ScTableRefToken*>(p)->GetIndex() == nIndex);
+        if (!bMatch)
+            continue;
+
+        // A shared group shares this code, so every cell in it references the table.
+        const size_t nLen = rEntry.mbShared ? rEntry.mnLength : 1;
+        for (size_t i = 0; i < nLen; ++i)
+            rCells.emplace_back(nCol, static_cast<SCROW>(rEntry.mnRow + i), nTab);
+    }
 }
 
 void ScColumn::CompileHybridFormula(

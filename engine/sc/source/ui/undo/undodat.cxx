@@ -795,13 +795,14 @@ bool ScUndoDBTable::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 ScUndoConvertTableToRange::ScUndoConvertTableToRange(
     ScDocShell& rNewDocShell, const ScRange& rRange, ScDocumentUniquePtr pNewUndoDoc,
     ScDocumentUniquePtr pNewRedoDoc, std::unique_ptr<ScDBCollection> pNewUndoColl,
-    std::unique_ptr<ScDBCollection> pNewRedoColl)
+    std::unique_ptr<ScDBCollection> pNewRedoColl, std::vector<ScAddress> aRefCells)
     : ScSimpleUndo(rNewDocShell)
     , maRange(rRange)
     , mpUndoDoc(std::move(pNewUndoDoc))
     , mpRedoDoc(std::move(pNewRedoDoc))
     , mpUndoColl(std::move(pNewUndoColl))
     , mpRedoColl(std::move(pNewRedoColl))
+    , maRefCells(std::move(aRefCells))
 {
 }
 
@@ -817,19 +818,34 @@ OUString ScUndoConvertTableToRange::GetComment() const
 void ScUndoConvertTableToRange::DoChange(bool bUndo)
 {
     ScDocument& rDoc = rDocShell.GetDocument();
-
-    // Swap the database-range collection first (re-adds the Table on Undo, drops it on Redo).
+    ScDocument* pSrc = bUndo ? mpUndoDoc.get() : mpRedoDoc.get();
     ScDBCollection* pColl = bUndo ? mpUndoColl.get() : mpRedoColl.get();
+
     bool bOldAutoCalc = rDoc.GetAutoCalc();
     rDoc.SetAutoCalc(false);
+
+    // Swap the database-range collection first (re-adds the Table on Undo, drops it on Redo).
+    // This must precede restoring the referencing formulas below: cloning a Table[Col] formula
+    // whose database range is absent makes adjustDBRange() recreate the range mid-copy, which
+    // asserts under the delayed formula grouping that CopyToDocument enables.
     rDoc.PreprocessDBDataUpdate();
     rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*pColl)), true);
+
+    // Restore the flattened formula cells (the structured Table[Col] form on Undo, the resolved
+    // range on Redo), then recompile so the restored references resolve against the collection.
+    // (Named expressions are handled by a sibling ScUndoAllRangeNames in the same undo list.)
+    for (const ScAddress& rPos : maRefCells)
+    {
+        const ScRange aCell(rPos);
+        rDoc.DeleteAreaTab(aCell, InsertDeleteFlags::CONTENTS);
+        pSrc->CopyToDocument(aCell, InsertDeleteFlags::CONTENTS, false, rDoc);
+    }
+
     rDoc.CompileHybridFormula();
     rDoc.SetAutoCalc(bOldAutoCalc);
 
     // Restore the attribute snapshot last, so it wins over any header-flag change SetDBCollection
     // made above.
-    ScDocument* pSrc = bUndo ? mpUndoDoc.get() : mpRedoDoc.get();
     rDoc.DeleteAreaTab(maRange, InsertDeleteFlags::ATTRIB);
     pSrc->CopyToDocument(maRange, InsertDeleteFlags::ATTRIB, false, rDoc);
 
@@ -842,6 +858,8 @@ void ScUndoConvertTableToRange::DoChange(bool bUndo)
 
     rDocShell.PostPaint(maRange, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top
                                      | PaintPartFlags::Size);
+    for (const ScAddress& rPos : maRefCells)
+        rDocShell.PostPaint(ScRange(rPos), PaintPartFlags::Grid);
     rDocShell.PostDataChanged();
 }
 

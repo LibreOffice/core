@@ -527,6 +527,9 @@ public:
     void PreprocessDBDataUpdate(
         sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt );
 
+    /** Append positions of this column's formula cells with a structured reference to database range nIndex. */
+    void CollectTableRefFormulas( sal_uInt16 nIndex, std::vector<ScAddress>& rCells );
+
     using ScColumnData::GetAttr;
     using ScColumnData::GetPattern;
     using ScColumnData::GetNumberFormat;

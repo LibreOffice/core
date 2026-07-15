@@ -572,19 +572,67 @@ bool ScDBDocFunc::ConvertTableToRange(const ScDBData* pDBObj)
     pDBObj->GetArea(aRange);
     const SCTAB nTab = aRange.aStart.Tab();
     const bool bRecord = rDoc.IsUndoEnabled();
+    const sal_uInt16 nIndex = pDBObj->GetIndex();
 
     ScDocShellModificator aModificator(rDocShell);
 
-    // Snapshot the range's attributes before baking (Undo restores this pristine state).
+    // Formulas that reference this table through a structured reference (Table[Col]); they must
+    // be flattened to plain ranges before the range is dropped, else they would become #REF!.
+    std::vector<ScAddress> aRefCells;
+    rDoc.CollectTableRefFormulas(nIndex, aRefCells);
+
+    // Named expressions can hold structured references too; a cheap const pre-check decides whether
+    // we take the (copy-all) range-name path, so nothing is copied when no name is affected.
+    const bool bNamesAffected = rDoc.HasTableRefInNames(nIndex);
+
+    // The Undo/Redo docs must span the table's tab plus every tab holding a referencing formula.
+    SCTAB nTab1 = nTab;
+    SCTAB nTab2 = nTab;
+    for (const ScAddress& a : aRefCells)
+    {
+        nTab1 = std::min(nTab1, a.Tab());
+        nTab2 = std::max(nTab2, a.Tab());
+    }
+
+    // When named expressions are also rewritten, group both changes into one "Convert Table to
+    // Range" undo. The range-name child (ScUndoAllRangeNames, added first by ModifyAllRangeNames
+    // below) is undone last, after the table's own child has re-added the database range, so the
+    // restored structured names resolve against it again. Mirrors the grouping in ResizeTable().
+    SfxUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+    const bool bGroup = bRecord && bNamesAffected;
+    if (bGroup)
+    {
+        ViewShellId nViewShellId(-1);
+        if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+            nViewShellId = pViewSh->GetViewShellId();
+        pUndoMgr->EnterListAction(ScResId(STR_UNDO_CONVERT_CALCTABLE_TO_RANGE),
+                                  ScResId(STR_UNDO_CONVERT_CALCTABLE_TO_RANGE), 0, nViewShellId);
+    }
+
+    // Flatten the named expressions first, while GetAreaRefRPN() still resolves against the live
+    // range. ModifyAllRangeNames applies the flattened set and records the ScUndoAllRangeNames
+    // child (capturing the still-structured old names itself).
+    if (bNamesAffected)
+    {
+        std::map<OUString, ScRangeName> aFlatNames;
+        if (rDoc.ConvertTableRefsToRangeInNames(nIndex, aFlatNames))
+            rDocShell.GetDocFunc().ModifyAllRangeNames(aFlatNames);
+    }
+
+    // Snapshot the range's attributes and the still-structured referencing formulas before baking
+    // (Undo restores this pristine state), then flatten the cells while the range still resolves.
     ScDocumentUniquePtr pUndoDoc;
     std::unique_ptr<ScDBCollection> pUndoColl;
     if (bRecord)
     {
         pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        pUndoDoc->InitUndo(rDoc, nTab, nTab, false, false);
+        pUndoDoc->InitUndo(rDoc, nTab1, nTab2, false, false);
         rDoc.CopyToDocument(aRange, InsertDeleteFlags::ATTRIB, false, *pUndoDoc);
+        for (const ScAddress& a : aRefCells)
+            rDoc.CopyToDocument(ScRange(a), InsertDeleteFlags::CONTENTS, false, *pUndoDoc);
         pUndoColl.reset(new ScDBCollection(*pDocColl));
     }
+    rDoc.ConvertTableRefsToRange(nIndex, aRefCells);
 
     // Bake the table style into direct cell attributes so the look survives the range removal.
     if (const ScTableStyleParam* pStyleInfo = pDBObj->GetTableStyleInfo())
@@ -604,18 +652,25 @@ bool ScDBDocFunc::ConvertTableToRange(const ScDBData* pDBObj)
 
     if (bRecord)
     {
-        // Snapshot the baked, range-less attributes for Redo.
+        // Snapshot the baked, range-less attributes and the flattened formulas for Redo.
         ScDocumentUniquePtr pRedoDoc(new ScDocument(SCDOCMODE_UNDO));
-        pRedoDoc->InitUndo(rDoc, nTab, nTab, false, false);
+        pRedoDoc->InitUndo(rDoc, nTab1, nTab2, false, false);
         rDoc.CopyToDocument(aRange, InsertDeleteFlags::ATTRIB, false, *pRedoDoc);
+        for (const ScAddress& a : aRefCells)
+            rDoc.CopyToDocument(ScRange(a), InsertDeleteFlags::CONTENTS, false, *pRedoDoc);
 
-        rDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoConvertTableToRange>(
+        pUndoMgr->AddUndoAction(std::make_unique<ScUndoConvertTableToRange>(
             rDocShell, aRange, std::move(pUndoDoc), std::move(pRedoDoc), std::move(pUndoColl),
-            std::make_unique<ScDBCollection>(*pDocColl)));
+            std::make_unique<ScDBCollection>(*pDocColl), aRefCells));
     }
+
+    if (bGroup)
+        pUndoMgr->LeaveListAction();
 
     rDocShell.PostPaint(aRange, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top
                                     | PaintPartFlags::Size);
+    for (const ScAddress& a : aRefCells)
+        rDocShell.PostPaint(ScRange(a), PaintPartFlags::Grid);
     aModificator.SetDocumentModified();
     SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScDbAreasChanged));
     return true;

@@ -1067,6 +1067,9 @@ public:
     void PreprocessDBDataUpdate(
         sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt );
 
+    /** Append positions of this sheet's formula cells with a structured reference to database range nIndex. */
+    void CollectTableRefFormulas( sal_uInt16 nIndex, std::vector<ScAddress>& rCells );
+
     ScConditionalFormatList* GetCondFormList();
     const ScConditionalFormatList* GetCondFormList() const;
     void SetCondFormList( ScConditionalFormatList* pList );
