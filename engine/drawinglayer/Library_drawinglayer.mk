@@ -231,4 +231,10 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/dumper/EnhancedShapeDumper \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,drawinglayer,\
+	-ldl \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
