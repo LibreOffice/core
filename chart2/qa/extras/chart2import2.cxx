@@ -888,6 +888,33 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testChartDataTableWithMultipleLegendEntr
     CPPUNIT_ASSERT(xDataTableShape.is());
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf159450AxisTitleWithDataTable)
+{
+    // The chart has a vertical axis title and a data table below the plot area.
+    // The axis title must stay centered on the plot area, not on the whole
+    // diagram including the data table below it (which used to shift it down).
+    loadFromFile(u"xlsx/tdf159450.xlsx");
+    auto xDrawPage = getChartDocFromSheet(0, mxComponent)
+                         .queryThrow<drawing::XDrawPageSupplier>()
+                         ->getDrawPage();
+    auto xShapes = xDrawPage->getByIndex(0).queryThrow<drawing::XShapes>();
+
+    // The chart has a data table, drawn below the plot area.
+    CPPUNIT_ASSERT(getShapeByName(xShapes, u"CID/D=0:DataTable="_ustr).is());
+    Reference<drawing::XShape> xPlotArea = getShapeByName(xShapes, u"PlotAreaExcludingAxes"_ustr);
+    CPPUNIT_ASSERT(xPlotArea.is());
+    Reference<drawing::XShape> xAxisTitle
+        = getShapeByName(xShapes, u"CID/D=0:CS=0:Axis=1,0:Title="_ustr);
+    CPPUNIT_ASSERT(xAxisTitle.is());
+
+    // The vertical axis title is centered on the plot area. Before the fix it was
+    // centered on the plot area plus the data table below it, so its center sat
+    // about half the data table height lower.
+    sal_Int32 nTitleCenterY = xAxisTitle->getPosition().Y + xAxisTitle->getSize().Height / 2;
+    sal_Int32 nPlotCenterY = xPlotArea->getPosition().Y + xPlotArea->getSize().Height / 2;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nPlotCenterY, nTitleCenterY, 20);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

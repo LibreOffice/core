@@ -994,7 +994,8 @@ bool getAvailablePosAndSizeForDiagram(
 enum class TitleAlignment { ALIGN_LEFT, ALIGN_TOP, ALIGN_RIGHT, ALIGN_BOTTOM, ALIGN_Z };
 
 void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
-                               , awt::Rectangle const & rDiagramPlusAxesRect, const awt::Size & rPageSize )
+                               , awt::Rectangle const & rDiagramPlusAxesRect, sal_Int32 nDiagramVerticalCenter
+                               , const awt::Size & rPageSize )
 {
     if(!pVTitle)
         return;
@@ -1014,12 +1015,14 @@ void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
                                     , rDiagramPlusAxesRect.Y + rDiagramPlusAxesRect.Height + aTitleSize.Height/2  + nYDistance );
         break;
     case TitleAlignment::ALIGN_LEFT:
+        // Center on the plot area (the axis), not on the plot area plus axes,
+        // so a data table drawn below the plot area does not shift the title down.
         aNewPosition = awt::Point( rDiagramPlusAxesRect.X - aTitleSize.Width/2 - nXDistance
-                                    , rDiagramPlusAxesRect.Y + rDiagramPlusAxesRect.Height/2 );
+                                    , nDiagramVerticalCenter );
         break;
     case TitleAlignment::ALIGN_RIGHT:
         aNewPosition = awt::Point( rDiagramPlusAxesRect.X + rDiagramPlusAxesRect.Width + aTitleSize.Width/2 + nXDistance
-                                    , rDiagramPlusAxesRect.Y + rDiagramPlusAxesRect.Height/2 );
+                                    , nDiagramVerticalCenter );
         break;
     case TitleAlignment::ALIGN_Z:
         aNewPosition = awt::Point( rDiagramPlusAxesRect.X + rDiagramPlusAxesRect.Width + aTitleSize.Width/2 + nXDistance
@@ -1984,16 +1987,20 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
 
         //correct axis title position
         awt::Rectangle aDiagramPlusAxesRect( aUsedOuterRect );
+        // The vertical (left/right) axis titles are centered on the plot area,
+        // which excludes a data table drawn below it.
+        sal_Int32 nDiagramVerticalCenter = m_aResultingDiagramRectangleExcludingAxes.Y
+            + m_aResultingDiagramRectangleExcludingAxes.Height / 2;
         if (aParam.mbAutoPosTitleX)
-            changePositionOfAxisTitle(aParam.mpVTitleX.get(), TitleAlignment::ALIGN_BOTTOM, aDiagramPlusAxesRect, rPageSize);
+            changePositionOfAxisTitle(aParam.mpVTitleX.get(), TitleAlignment::ALIGN_BOTTOM, aDiagramPlusAxesRect, nDiagramVerticalCenter, rPageSize);
         if (aParam.mbAutoPosTitleY)
-            changePositionOfAxisTitle(aParam.mpVTitleY.get(), TitleAlignment::ALIGN_LEFT, aDiagramPlusAxesRect, rPageSize);
+            changePositionOfAxisTitle(aParam.mpVTitleY.get(), TitleAlignment::ALIGN_LEFT, aDiagramPlusAxesRect, nDiagramVerticalCenter, rPageSize);
         if (aParam.mbAutoPosTitleZ)
-            changePositionOfAxisTitle(aParam.mpVTitleZ.get(), TitleAlignment::ALIGN_Z, aDiagramPlusAxesRect, rPageSize);
+            changePositionOfAxisTitle(aParam.mpVTitleZ.get(), TitleAlignment::ALIGN_Z, aDiagramPlusAxesRect, nDiagramVerticalCenter, rPageSize);
         if (aParam.mbAutoPosSecondTitleX)
-            changePositionOfAxisTitle(aParam.mpVTitleSecondX.get(), bIsVertical? TitleAlignment::ALIGN_RIGHT : TitleAlignment::ALIGN_TOP, aDiagramPlusAxesRect, rPageSize);
+            changePositionOfAxisTitle(aParam.mpVTitleSecondX.get(), bIsVertical? TitleAlignment::ALIGN_RIGHT : TitleAlignment::ALIGN_TOP, aDiagramPlusAxesRect, nDiagramVerticalCenter, rPageSize);
         if (aParam.mbAutoPosSecondTitleY)
-            changePositionOfAxisTitle(aParam.mpVTitleSecondY.get(), bIsVertical? TitleAlignment::ALIGN_TOP : TitleAlignment::ALIGN_RIGHT, aDiagramPlusAxesRect, rPageSize);
+            changePositionOfAxisTitle(aParam.mpVTitleSecondY.get(), bIsVertical? TitleAlignment::ALIGN_TOP : TitleAlignment::ALIGN_RIGHT, aDiagramPlusAxesRect, nDiagramVerticalCenter, rPageSize);
     }
 
     //cleanup: remove all empty group shapes to avoid grey border lines:
