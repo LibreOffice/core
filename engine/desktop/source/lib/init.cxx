@@ -5730,6 +5730,29 @@ static bool isCommandAllowed(std::u16string_view command)
     return std::find(std::begin(denyList), std::end(denyList), command) == std::end(denyList);
 }
 
+static void lcl_reportSaveResult(LibLODocument_Impl* pDocument, int nView, const OString& rResult)
+{
+    // Report result to the provided view
+    auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nView);
+    if (handlerIt != pDocument->mpCallbackFlushHandlers.end() && handlerIt->second)
+    {
+        handlerIt->second->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, rResult);
+        return;
+    }
+
+    // Fallback to reporting to at least some view, if possible, of the result
+    for (const auto& rPair : pDocument->mpCallbackFlushHandlers)
+    {
+        if (rPair.second)
+        {
+            rPair.second->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, rResult);
+            return;
+        }
+    }
+
+    SAL_WARN("kit", "Could not report .uno:Save result: no callback handler");
+}
+
 static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
 {
     comphelper::ProfileZone aZone("doc_postUnoCommand");
@@ -5760,7 +5783,16 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
     const int nView = KitHelper::getViewId(pDocument->mnDocumentId);
     SfxViewShell* pViewShell = KitHelper::getViewOfId(nView);
     if (!pViewShell)
+    {
+        if (aCommand == ".uno:Save")
+        {
+            tools::JsonWriter aJson;
+            aJson.put("commandName", pCommand);
+            aJson.put("success", false);
+            lcl_reportSaveResult(pDocument, nView, aJson.finishAndGetAsOString());
+        }
         return;
+    }
     assert(nView == pViewShell->GetViewShellId().get() && "otherwise we couldn't have found it");
     SfxObjectShell* pDocSh = pViewShell->GetObjectShell();
 
@@ -5791,9 +5823,7 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
             tools::JsonWriter aJson;
             aJson.put("commandName", pCommand);
             aJson.put("success", bResult);
-            auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nView);
-            if (handlerIt != pDocument->mpCallbackFlushHandlers.end() && handlerIt->second)
-                handlerIt->second->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+            lcl_reportSaveResult(pDocument, nView, aJson.finishAndGetAsOString());
             return;
         }
 
@@ -5829,9 +5859,7 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
                 aJson.put("type", "string");
                 aJson.put("value", "unmodified");
             }
-            auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nView);
-            if (handlerIt != pDocument->mpCallbackFlushHandlers.end() && handlerIt->second)
-                handlerIt->second->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+            lcl_reportSaveResult(pDocument, nView, aJson.finishAndGetAsOString());
             return;
         }
     }
