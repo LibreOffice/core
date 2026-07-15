@@ -73,6 +73,12 @@ function reportUICoverage(win, hasLinguisticData = true) {
  * Reset document state after each test.
  */
 function resetState() {
+	cy.cGet('body').then($body => {
+		const snackbarDismiss = $body.find('#snackbar-dismiss-button-button');
+		if (snackbarDismiss.length > 0) {
+			cy.wrap(snackbarDismiss).click({ force: true });
+		}
+	});
 	desktopHelper.undoAll();
 	cy.cGet('div.clipboard').as('clipboard');
 	ceHelper.moveCaret('home', 'ctrl');
@@ -124,7 +130,7 @@ function runA11yValidation(win, dispatchCommand) {
  * @returns {Cypress.Chainable} - Chainable that yields the dialog element
  */
 function getActiveDialog(level) {
-	return cy.cGet('.ui-dialog[role="dialog"]')
+	return cy.cGet('.ui-dialog[role="dialog"]:not(.snackbar)')
 		.should('have.length', level)
 		.then($dialogs => cy.wrap($dialogs.last()));
 }
@@ -142,7 +148,7 @@ function closeActiveDialog(level) {
 				.click();
 		});
 
-	cy.cGet('.ui-dialog[role="dialog"]').should('have.length', level - 1);
+	cy.cGet('.ui-dialog[role="dialog"]:not(.snackbar)').should('have.length', level - 1);
 }
 
 /**
@@ -159,7 +165,7 @@ function closeActiveWarningDialog(level, buttonSelector = '#no-button') {
 				.click();
 		});
 
-	cy.cGet('.ui-dialog[role="dialog"]').should('have.length', level - 1);
+	cy.cGet('.ui-dialog[role="dialog"]:not(.snackbar)').should('have.length', level - 1);
 }
 
 /**
@@ -201,7 +207,7 @@ function testNameDialog(win, level) {
 			return helper.processToIdle(win);
 		})
 		.then(() => {
-			cy.cGet('.ui-dialog[role="dialog"]').should('have.length', level);
+			cy.cGet('.ui-dialog[role="dialog"]:not(.snackbar)').should('have.length', level);
 		});
 	/* Then add the same name again so we get the warning subdialog */
 	cy.cGet('button.ui-pushbutton[aria-label="Add"]:visible').should('not.be.disabled').click();

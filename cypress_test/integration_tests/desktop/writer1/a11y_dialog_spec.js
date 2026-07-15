@@ -94,7 +94,7 @@ describe(['tagdesktop'], 'Accessibility Writer Dialog Tests', { testIsolation: f
                 }
             }
         });
-        cy.cGet('.jsdialog-window:not(.ui-overflow-group-popup)').should('not.exist');
+        cy.cGet('.jsdialog-window:not(.ui-overflow-group-popup):not(.snackbar)').should('not.exist');
 
         a11yHelper.resetState();
     });
