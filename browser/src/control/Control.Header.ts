@@ -159,6 +159,24 @@ export class Header extends CanvasSectionObject {
 		if (!this._map.isEditMode())
 			return;
 
+		this._showHeaderContextMenu(this._createMenuPositionElement(evt.clientX, evt.clientY));
+	}
+
+	openContextMenuForCurrentSelection(): void {
+		if (!this._map.isEditMode())
+			return;
+
+		if (!app.calc.cellCursorVisible || !app.calc.cellAddress)
+			return;
+
+		const index = this._isColumn ? app.calc.cellAddress.x : app.calc.cellAddress.y;
+		this._lastMouseOverIndex = index;
+
+		const anchor = this._keyboardMenuAnchor(index);
+		this._showHeaderContextMenu(this._createMenuPositionElement(anchor.x, anchor.y));
+	}
+
+	private _showHeaderContextMenu(posEl: HTMLElement): void {
 		if ((window as any).mode.isSmallScreenDevice()) {
 			(window as any).contextMenuWizard = true;
 			const menuData = Object.assign({}, this._menuData);
@@ -167,7 +185,6 @@ export class Header extends CanvasSectionObject {
 			this._map.fire('mobilewizard', {data: menuData});
 		}
 		else {
-			const posEl = this._createMenuPositionElement(evt);
 			const entries = this._getDropdownEntries();
 			const callback = this._handleDropdownCallback.bind(this);
 			JSDialog.OpenDropdown(
@@ -181,6 +198,21 @@ export class Header extends CanvasSectionObject {
 				true,
 			);
 		}
+	}
+
+	private _keyboardMenuAnchor(index: number): {x: number, y: number} {
+		const rect = this.getHeaderEntryBoundingClientRect(index);
+		if (rect)
+			return this._isColumn
+				? {x: rect.left, y: rect.top + this.size[1] / app.dpiScale}
+				: {x: rect.left + this.size[0] / app.dpiScale, y: rect.top};
+
+		const canvasRect = this.containerObject.getCanvasBoundingClientRect();
+		return {x: canvasRect.left, y: canvasRect.top};
+	}
+
+	getHeaderEntryBoundingClientRect(index?: number): Partial<DOMRect> {
+		return undefined;
 	}
 
 	_updateCanvas(): void {
@@ -552,7 +584,7 @@ export class Header extends CanvasSectionObject {
 		this._hitResizeArea = false;
 	}
 
-	private _createMenuPositionElement(evt: MouseEvent): HTMLElement {
+	private _createMenuPositionElement(clientX: number, clientY: number): HTMLElement {
 		const container = document.getElementById('canvas-container');
 		if (!this._menuPosEl) {
 			this._menuPosEl = document.createElement('div');
@@ -562,8 +594,8 @@ export class Header extends CanvasSectionObject {
 		const rect = container.getBoundingClientRect();
 		this._menuPosEl.style.position = 'absolute';
 		this._menuPosEl.style.zIndex = '1500';
-		this._menuPosEl.style.left = (evt.clientX - rect.left) + 'px';
-		this._menuPosEl.style.top = (evt.clientY - rect.top) + 'px';
+		this._menuPosEl.style.left = (clientX - rect.left) + 'px';
+		this._menuPosEl.style.top = (clientY - rect.top) + 'px';
 		return this._menuPosEl;
 	}
 

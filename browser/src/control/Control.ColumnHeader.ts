@@ -172,7 +172,7 @@ export class ColumnHeader extends Header {
 
 	getHeaderEntryBoundingClientRect (index: number): Partial<DOMRect> {
 		let entry = this._mouseOverEntry;
-		if (index) {
+		if (index !== undefined && index !== null) {
 			entry = this._headerInfo.getColData(index);
 		}
 

@@ -170,7 +170,7 @@ export class RowHeader extends cool.Header {
 	getHeaderEntryBoundingClientRect (index: number): Partial<DOMRect> {
 		let entry = this._mouseOverEntry;
 
-		if (index)
+		if (index !== undefined && index !== null)
 			entry = this._headerInfo.getRowData(index);
 
 		if (!entry)
