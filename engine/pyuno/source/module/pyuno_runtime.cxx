@@ -846,7 +846,7 @@ Any Runtime::pyObject2Any(const PyRef & source) const
 
                         // keep a list of exported objects to ensure object identity !
                         impl->cargo->mappedObjects[ PyRef(o) ] =
-                            css::uno::WeakReference< XInvocation > ( pAdapter );
+                            cpo::uno::WeakReference< XInvocation > ( pAdapter );
                     }
                 } catch (InvocationTargetException const& e) {
                     OUString const msg(lcl_ExceptionMessage(o, &e.Message));

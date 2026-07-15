@@ -154,7 +154,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
             xFactoryMgr->createInstanceWithArgumentsAndContext( aArgs, xContext ),
             uno::UNO_QUERY );
 
-        static uno::WeakReference< frame::XModuleManager2 >  s_xModuleManager;
+        static cpo::uno::WeakReference< frame::XModuleManager2 >  s_xModuleManager;
 
         uno::Reference< frame::XModuleManager2 > xModuleManager( s_xModuleManager );
         if ( !xModuleManager.is() )
@@ -163,7 +163,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
             s_xModuleManager = xModuleManager;
         }
 
-        static uno::WeakReference< container::XNameAccess > s_xWindowStateConfiguration;
+        static cpo::uno::WeakReference< container::XNameAccess > s_xWindowStateConfiguration;
 
         uno::Reference< container::XNameAccess > xWindowStateConfiguration( s_xWindowStateConfiguration );
         if ( !xWindowStateConfiguration.is() )

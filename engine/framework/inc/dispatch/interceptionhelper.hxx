@@ -128,7 +128,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
         /** @short reference to the frame, which uses this instance to implement its own interception.
 
             @descr We hold a weak reference only, to make disposing operations easy. */
-        css::uno::WeakReference< css::frame::XFrame > m_xOwnerWeak;
+        cpo::uno::WeakReference< css::frame::XFrame > m_xOwnerWeak;
 
         /** @short this interception helper implements the top level master of an interceptor list ...
                    but this member is the lowest possible slave! */

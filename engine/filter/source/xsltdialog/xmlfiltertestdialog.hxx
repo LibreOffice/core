@@ -56,7 +56,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext >              mxContext;
     css::uno::Reference< css::document::XDocumentEventBroadcaster > mxGlobalBroadcaster;
     rtl::Reference< GlobalEventListenerImpl >                       mxGlobalEventListener;
-    css::uno::WeakReference< css::lang::XComponent >                mxLastFocusModel;
+    cpo::uno::WeakReference< css::lang::XComponent >                mxLastFocusModel;
 
     OUString m_sImportRecentFile;
     OUString m_sExportRecentFile;

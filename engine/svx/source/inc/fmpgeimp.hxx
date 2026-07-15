@@ -44,7 +44,7 @@ class FmFormPageImpl final
 {
     css::uno::Reference< css::form::XForm >               xCurrentForm;
     css::uno::Reference< css::form::XForms >              m_xForms;
-    css::uno::WeakReference< css::container::XMap >       m_aControlShapeMap;
+    cpo::uno::WeakReference< css::container::XMap >       m_aControlShapeMap;
 
     FmFormPage&     m_rPage;
     Link<FmFormPageImpl&,void>  m_aFormsCreationHdl;

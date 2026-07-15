@@ -32,7 +32,7 @@
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::WeakReference;
+using ::cpo::uno::WeakReference;
 
 #define SC_CHARTLOCKTIMEOUT 660
 

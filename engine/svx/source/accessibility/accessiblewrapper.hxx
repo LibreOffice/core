@@ -303,7 +303,7 @@ class OWrappedAccessibleChildrenManager final : public OWrappedAccessibleChildre
 {
     css::uno::Reference< css::uno::XComponentContext >
                             m_xContext;
-    css::uno::WeakReference< css::accessibility::XAccessible >
+    cpo::uno::WeakReference< css::accessibility::XAccessible >
                             m_aOwningAccessible;    // the XAccessible which belongs to the XAccessibleContext which we work for
     AccessibleMap           m_aChildrenMap;         // for caching children
     bool                    m_bTransientChildren;   // are we prohibited to cache our children?

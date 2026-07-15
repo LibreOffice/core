@@ -41,7 +41,7 @@ public:
     void            AlsoLockThisChart( const css::uno::Reference< css::frame::XModel >& xModel );
 
 private:
-    std::vector< css::uno::WeakReference< css::frame::XModel > > maChartModels;
+    std::vector< cpo::uno::WeakReference< css::frame::XModel > > maChartModels;
 
     ScChartLockGuard( const ScChartLockGuard& ) = delete;
 };

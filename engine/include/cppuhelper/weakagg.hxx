@@ -30,7 +30,7 @@ namespace cppu
 {
 
 /** Base class to implement a UNO object supporting weak references, i.e. the object can be held
-    weakly (by a css::uno::WeakReference) and aggregation, i.e. the object can be
+    weakly (by a cpo::uno::WeakReference) and aggregation, i.e. the object can be
     aggregated by another (delegator).
     This implementation copes with reference counting.  Upon last release(), the virtual dtor
     is called.
@@ -90,7 +90,7 @@ protected:
 
     /** weak reference to delegator.
     */
-    css::uno::WeakReferenceHelper xDelegator;
+    cpo::uno::WeakReferenceHelper xDelegator;
 private:
     OWeakAggObject( const OWeakAggObject & rObj ) SAL_DELETED_FUNCTION;
     OWeakAggObject & operator = ( const OWeakAggObject & rObj )

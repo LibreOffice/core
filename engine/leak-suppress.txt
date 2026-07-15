@@ -81,4 +81,4 @@ leak:PK11_ImportDERPrivateKeyInfoAndReturnKey
 # so they are never the source of the problem.
 # Filter them out to give a clearer picture.
 leak:cppu::OWeakObject::queryAdapter
-leak:com::sun::star::uno::WeakReferenceHelper::operator=
+leak:cpo::uno::WeakReferenceHelper::operator=

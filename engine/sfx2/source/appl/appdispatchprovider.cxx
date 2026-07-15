@@ -50,7 +50,7 @@ class SfxAppDispatchProvider : public ::cppu::WeakImplHelper< css::frame::XAppDi
                                                                css::lang::XServiceInfo,
                                                                css::lang::XInitialization >
 {
-    css::uno::WeakReference < css::frame::XFrame > m_xFrame;
+    cpo::uno::WeakReference < css::frame::XFrame > m_xFrame;
 public:
     SfxAppDispatchProvider() {}
 

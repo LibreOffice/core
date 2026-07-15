@@ -43,7 +43,7 @@ using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::uno::WeakReference;
+using ::cpo::uno::WeakReference;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::container::XEnumeration;

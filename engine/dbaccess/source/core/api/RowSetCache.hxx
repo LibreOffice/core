@@ -45,7 +45,7 @@ namespace dbaccess
 
         std::map<sal_Int32,sal_Int32>                       m_aKeyColumns;
         //the set can be static, bookmarkable or keyset
-        css::uno::WeakReference< css::sdbc::XResultSet>       m_xSet;
+        cpo::uno::WeakReference< css::sdbc::XResultSet>       m_xSet;
         css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
         css::uno::Reference< css::uno::XComponentContext>     m_aContext;
 

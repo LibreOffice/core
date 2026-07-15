@@ -123,8 +123,8 @@ private:
     bool mbListeningToFrame;
     bool mbIsMainViewChangePending;
 
-    css::uno::WeakReference< css::frame::XController> mxControllerWeak;
-    css::uno::WeakReference< css::frame::XFrame> mxFrameWeak;
+    cpo::uno::WeakReference< css::frame::XController> mxControllerWeak;
+    cpo::uno::WeakReference< css::frame::XFrame> mxFrameWeak;
 
     /** This object is used to lock the model between some
         events.  It is references counted in order to cope with events that

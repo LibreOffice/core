@@ -38,7 +38,7 @@ class DispatchInformationProvider final : public  ::cppu::WeakImplHelper< css::f
     private:
 
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
-        css::uno::WeakReference< css::frame::XFrame > m_xFrame;
+        cpo::uno::WeakReference< css::frame::XFrame > m_xFrame;
 
     // interface
     public:

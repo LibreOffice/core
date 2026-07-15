@@ -35,7 +35,7 @@ namespace sdbtools
     {
     private:
         mutable ::osl::Mutex    m_aMutex;
-        css::uno::WeakReference< css::sdbc::XConnection >
+        cpo::uno::WeakReference< css::sdbc::XConnection >
                                 m_aConnection;
         css::uno::Reference< css::uno::XComponentContext >
                                 m_aContext;

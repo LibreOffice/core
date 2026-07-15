@@ -54,7 +54,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) NumberedCollection final :
 
         struct TNumberedItem
         {
-            css::uno::WeakReference< css::uno::XInterface > xItem;
+            cpo::uno::WeakReference< css::uno::XInterface > xItem;
             ::sal_Int32 nNumber;
         };
 
@@ -157,7 +157,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) NumberedCollection final :
         TNumberedItemHash m_lComponents;
 
         /// used as source of broadcasted messages or exceptions (can be null !)
-        css::uno::WeakReference< css::uno::XInterface > m_xOwner;
+        cpo::uno::WeakReference< css::uno::XInterface > m_xOwner;
 
         std::mutex m_aMutex;
 };

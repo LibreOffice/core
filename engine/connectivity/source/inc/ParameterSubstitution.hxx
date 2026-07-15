@@ -36,7 +36,7 @@ namespace connectivity
     {
         ::osl::Mutex                                          m_aMutex;
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
-        css::uno::WeakReference< css::sdbc::XConnection >     m_xConnection;
+        cpo::uno::WeakReference< css::sdbc::XConnection >     m_xConnection;
 
         ParameterSubstitution( const ParameterSubstitution& ) = delete;
         ParameterSubstitution& operator=( const ParameterSubstitution& ) = delete;

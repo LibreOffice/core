@@ -34,7 +34,7 @@ class OleEmbeddedObject;
 class MainThreadNotificationRequest :  public cppu::WeakImplHelper< css::awt::XCallback >
 {
     OleEmbeddedObject* m_pObject;
-    css::uno::WeakReference< css::embed::XEmbeddedObject > m_xObject;
+    cpo::uno::WeakReference< css::embed::XEmbeddedObject > m_xObject;
 
     sal_uInt16 m_nNotificationType;
     sal_uInt32 m_nAspect;

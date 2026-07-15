@@ -110,7 +110,7 @@ private:
     */
     std::vector<css::util::URL> maRegisteredURLList;
 
-    css::uno::WeakReference<css::frame::XDispatchProvider> mxDispatchProviderWeak;
+    cpo::uno::WeakReference<css::frame::XDispatchProvider> mxDispatchProviderWeak;
 
     /** Deregister all currently active state change listeners.
     */

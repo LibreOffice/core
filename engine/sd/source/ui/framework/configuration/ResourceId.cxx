@@ -38,7 +38,7 @@ namespace sd::framework {
 
 //===== ResourceId ============================================================
 
-WeakReference<util::XURLTransformer> ResourceId::mxURLTransformerWeak;
+cpo::uno::WeakReference<util::XURLTransformer> ResourceId::mxURLTransformerWeak;
 
 ResourceId::ResourceId()
     : maResourceURLs(0)

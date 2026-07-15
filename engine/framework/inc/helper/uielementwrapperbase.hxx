@@ -101,7 +101,7 @@ class UIElementWrapperBase : private cppu::BaseMutex,
 
         comphelper::OMultiTypeInterfaceContainerHelper2        m_aListenerContainer;   /// container for ALL Listener
         OUString                                               m_aResourceURL;
-        css::uno::WeakReference< css::frame::XFrame >          m_xWeakFrame;
+        cpo::uno::WeakReference< css::frame::XFrame >          m_xWeakFrame;
         sal_Int16                                              m_nType;
         bool                                                   m_bInitialized : 1,
                                                                m_bDisposed;

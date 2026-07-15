@@ -63,7 +63,7 @@ class PersistentWindowState final : public  ::cppu::WeakImplHelper<
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /// reference to the frame which was created by the office himself
-        css::uno::WeakReference< css::frame::XFrame > m_xFrame;
+        cpo::uno::WeakReference< css::frame::XFrame > m_xFrame;
 
         /// we call SetWindowState one times only for the same frame!
         bool m_bWindowStateAlreadySet;

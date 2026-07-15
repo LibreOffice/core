@@ -41,7 +41,7 @@ namespace dbaccess
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::WeakReference;
+    using ::cpo::uno::WeakReference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::document::XDocumentEventBroadcaster;
     using ::com::sun::star::document::XEventsSupplier;

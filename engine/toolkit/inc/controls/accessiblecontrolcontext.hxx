@@ -113,7 +113,7 @@ private:
     css::uno::Reference<css::beans::XPropertySetInfo>
         m_xModelPropsInfo; // the cached property set info of the model
     // the XControl whose XAccessibleContext this OAccessibleControlContext is
-    css::uno::WeakReference<css::awt::XControl> m_aControl;
+    cpo::uno::WeakReference<css::awt::XControl> m_aControl;
 };
 
 } // namespace toolkit

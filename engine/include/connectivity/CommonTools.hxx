@@ -49,7 +49,7 @@ namespace connectivity
         return match(rWild.getStr(), rStr.getStr(), cEscape);
     }
     // typedefs
-    typedef std::vector< css::uno::WeakReferenceHelper >           OWeakRefArray;
+    typedef std::vector< cpo::uno::WeakReferenceHelper >           OWeakRefArray;
     typedef css::uno::Reference< css::sdbcx::XColumnsSupplier>     OSQLTable;
 
     typedef std::map<OUString,OSQLTable,comphelper::UStringMixLess> OSQLTables;

@@ -95,7 +95,7 @@ private:
 private:
 
     ::osl::Mutex&                                                     m_aSharedMutex;
-    css::uno::WeakReference< css::lang::XConnectionPointContainer >   m_oContainerWeakReference;   // Reference to container-class!. Don't use Reference<...>
+    cpo::uno::WeakReference< css::lang::XConnectionPointContainer >   m_oContainerWeakReference;   // Reference to container-class!. Don't use Reference<...>
                                                                                             // It is a ring-reference => and must be a wekreference!
     OConnectionPointContainerHelper*                                  m_pContainerImplementation;
     cpo::uno::Type                                                    m_aInterfaceType;

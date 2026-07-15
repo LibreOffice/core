@@ -98,7 +98,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
 typedef std::unordered_map
 <
     PyRef,
-    css::uno::WeakReference< css::script::XInvocation >,
+    cpo::uno::WeakReference< css::script::XInvocation >,
     PyRef::Hash
 > PyRef2Adapter;
 

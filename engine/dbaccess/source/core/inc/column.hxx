@@ -130,7 +130,7 @@ namespace dbaccess
 
         // comes from the driver can be null
         css::uno::Reference< css::container::XNameAccess >    m_xDrvColumns;
-        css::uno::WeakReference< css::uno::XInterface >       m_xParent;
+        cpo::uno::WeakReference< css::uno::XInterface >       m_xParent;
         IColumnFactory*                                       m_pColFactoryImpl;
         ::connectivity::sdbcx::IRefreshableColumns*           m_pRefreshColumns;
 

@@ -44,7 +44,7 @@ class OpenFileDropTargetListener final : public cppu::WeakImplHelper< css::datat
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /// weakreference to target frame (Don't use a hard reference. Owner can't delete us then!)
-        css::uno::WeakReference< css::frame::XFrame > m_xTargetFrame;
+        cpo::uno::WeakReference< css::frame::XFrame > m_xTargetFrame;
 
         /// drag/drop info
         DataFlavorExVector m_aFormats;

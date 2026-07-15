@@ -43,7 +43,7 @@ class LoadDispatcher final : public  ::cppu::WeakImplHelper< css::frame::XNotify
         osl::Mutex m_mutex;
 
         /** @short  TODO document me */
-        css::uno::WeakReference< css::frame::XFrame > m_xOwnerFrame;
+        cpo::uno::WeakReference< css::frame::XFrame > m_xOwnerFrame;
 
         /** @short  TODO document me */
         OUString m_sTarget;

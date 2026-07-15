@@ -144,11 +144,11 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
 
         /** points to the frame, where we show the progress (in case
             m_xProgress points to a frame progress. */
-        css::uno::WeakReference< css::frame::XFrame > m_xFrame;
+        cpo::uno::WeakReference< css::frame::XFrame > m_xFrame;
 
         /** points to an outside window, where we show the progress (in case
             we are plugged into such window). */
-        css::uno::WeakReference< css::awt::XWindow > m_xPluggWindow;
+        cpo::uno::WeakReference< css::awt::XWindow > m_xPluggWindow;
 
         /** Notify us if a fix time is over. We use it to implement an
             intelligent "Reschedule" ... */

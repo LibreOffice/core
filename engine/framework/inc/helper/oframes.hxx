@@ -167,7 +167,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
 
         static bool impldbg_checkParameter_queryFrames  (           sal_Int32                                               nSearchFlags    );
 
-        css::uno::WeakReference< css::frame::XFrame >               m_xOwner;   /// reference to owner of this instance (Hold no hard reference!)
+        cpo::uno::WeakReference< css::frame::XFrame >               m_xOwner;   /// reference to owner of this instance (Hold no hard reference!)
         FrameContainer*                                             m_pFrameContainer;   /// with owner shared list to hold all direct children of an XFramesSupplier
         bool                                                        m_bRecursiveSearchProtection;   /// flag to protect against recursive searches of frames at parents
 };

@@ -373,7 +373,7 @@ private:
     /// reference to factory helper to create status indicator objects
     css::uno::Reference< css::task::XStatusIndicatorFactory >               m_xIndicatorFactoryHelper;
     /// points to an external set progress, which should be used instead of the internal one.
-    css::uno::WeakReference< css::task::XStatusIndicator >                  m_xIndicatorInterception;
+    cpo::uno::WeakReference< css::task::XStatusIndicator >                  m_xIndicatorInterception;
     /// helper for XDispatch/Provider and interception interfaces
     rtl::Reference< InterceptionHelper >                                    m_xDispatchHelper;
     /// helper for XFrames, XIndexAccess and XElementAccess interfaces
@@ -3304,7 +3304,7 @@ void XFrameImpl::impl_checkMenuCloser()
     // or must be enabled/disabled at all.
     SolarMutexGuard aGuard;
     // Holds the only frame, which must show the special closer menu item (can be NULL!)
-    static css::uno::WeakReference< css::frame::XFrame2 > s_xCloserFrame;
+    static cpo::uno::WeakReference< css::frame::XFrame2 > s_xCloserFrame;
     css::uno::Reference< css::frame::XFrame2 > xCloserFrame (s_xCloserFrame.get(), css::uno::UNO_QUERY);
     if (xCloserFrame!=xNewCloserFrame)
     {

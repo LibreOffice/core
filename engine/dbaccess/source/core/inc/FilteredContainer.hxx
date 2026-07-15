@@ -43,7 +43,7 @@ namespace dbaccess
 
         // holds the original container which where set in construct but they can be null
         css::uno::Reference< css::container::XNameAccess >    m_xMasterContainer;
-        css::uno::WeakReference< css::sdbc::XConnection >     m_xConnection;
+        cpo::uno::WeakReference< css::sdbc::XConnection >     m_xConnection;
         css::uno::Reference< css::sdbc::XDatabaseMetaData >   m_xMetaData;
 
         /** returns a string denoting the only type of tables allowed in this container, or an empty string

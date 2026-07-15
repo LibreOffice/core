@@ -60,7 +60,7 @@ class DockingAreaDefaultAcceptor final : public ::cppu::WeakImplHelper< css::ui:
 
     private:
 
-        css::uno::WeakReference< css::frame::XFrame >       m_xOwner;   /// weak reference to our frame object!
+        cpo::uno::WeakReference< css::frame::XFrame >       m_xOwner;   /// weak reference to our frame object!
 };
 
 } // namespace framework

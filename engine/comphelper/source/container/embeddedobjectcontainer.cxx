@@ -68,7 +68,7 @@ struct EmbedImpl
     uno::Reference < embed::XStorage > mxStorage;
     std::unique_ptr<EmbeddedObjectContainer> mpTempObjectContainer;
     uno::Reference < embed::XStorage > mxImageStorage;
-    uno::WeakReference < uno::XInterface > m_xModel;
+    cpo::uno::WeakReference < uno::XInterface > m_xModel;
 
     bool mbOwnsStorage : 1;
     bool mbUserAllowsLinkUpdate : 1;

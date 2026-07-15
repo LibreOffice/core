@@ -97,7 +97,7 @@ private: // members
     unotools::WeakReference< ::chart::ChartModel >                  m_xChartModel;
     unotools::WeakReference< ChartView >                            m_xChartView;
     VclPtr<ChartWindow>                                             m_pChartWindow;
-    css::uno::WeakReference< css::accessibility::XAccessible >      m_xParent;
+    cpo::uno::WeakReference< css::accessibility::XAccessible >      m_xParent;
 
     std::shared_ptr< ObjectHierarchy >                              m_spObjectHierarchy;
     AccessibleUniqueId                                              m_aCurrentSelectionOID;

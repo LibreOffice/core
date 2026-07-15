@@ -64,7 +64,7 @@ constexpr OUString lcl_aCategoriesRoleName = u"categories"_ustr;
 const char lcl_aLabelRangePrefix[] = "label ";
 constexpr OUString lcl_aCompleteRange = u"all"_ustr;
 
-typedef std::multimap< OUString, uno::WeakReference< chart2::data::XDataSequence > >
+typedef std::multimap< OUString, cpo::uno::WeakReference< chart2::data::XDataSequence > >
     lcl_tSequenceMap;
 
 std::vector< cpo::uno::Any > lcl_StringToAnyVector( const cpo::uno::Sequence< OUString >& aStringSeq )
@@ -402,7 +402,7 @@ void InternalDataProvider::addDataSequenceToMap(
 {
     m_aSequenceMap.emplace(
             rRangeRepresentation,
-            uno::WeakReference< chart2::data::XDataSequence >( xSequence ));
+            cpo::uno::WeakReference< chart2::data::XDataSequence >( xSequence ));
 }
 
 void InternalDataProvider::deleteMapReferences( const OUString & rRangeRepresentation )

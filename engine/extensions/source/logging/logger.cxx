@@ -46,7 +46,7 @@ namespace logging
     using ::com::sun::star::lang::XServiceInfo;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::WeakReference;
+    using ::cpo::uno::WeakReference;
     using ::com::sun::star::logging::XLogHandler;
     using ::com::sun::star::logging::LogRecord;
 

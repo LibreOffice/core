@@ -40,7 +40,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::WeakReference;
+using ::cpo::uno::WeakReference;
 using osl::MutexGuard;
 
 namespace chart

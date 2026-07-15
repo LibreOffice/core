@@ -181,9 +181,9 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     Controllers                                                                                 m_aControllers;
     ViewMonitor                                                                                 m_aViewMonitor;
 
-    css::uno::WeakReference< css::container::XNameAccess >                                      m_xForms;
-    css::uno::WeakReference< css::container::XNameAccess >                                      m_xReports;
-    css::uno::WeakReference< css::script::provider::XScriptProvider >                           m_xScriptProvider;
+    cpo::uno::WeakReference< css::container::XNameAccess >                                      m_xForms;
+    cpo::uno::WeakReference< css::container::XNameAccess >                                      m_xReports;
+    cpo::uno::WeakReference< css::script::provider::XScriptProvider >                           m_xScriptProvider;
 
     /** @short  such module manager is used to classify new opened documents. */
     css::uno::Reference< css::frame::XModuleManager2 >                                          m_xModuleManager;
@@ -439,7 +439,7 @@ public:
             the container to clear
     */
     static void clearObjectContainer(
-                css::uno::WeakReference< css::container::XNameAccess >& _rxContainer);
+                cpo::uno::WeakReference< css::container::XNameAccess >& _rxContainer);
     static void clearObjectContainer(
                 unotools::WeakReference< OCommandContainer >& _rxContainer);
 
@@ -510,7 +510,7 @@ private:
         Calls XChild::setParent at the given object, which must be one of our impl's or our
         object containers (m_xForms, m_xReports, m_xTableDefinitions, m_xCommandDefinitions)
     */
-    void    impl_reparent_nothrow( const css::uno::WeakReference< css::container::XNameAccess >& _rxContainer );
+    void    impl_reparent_nothrow( const cpo::uno::WeakReference< css::container::XNameAccess >& _rxContainer );
 
     /** retrieves the forms or reports contained, creates and initializes it, if necessary
 

@@ -98,7 +98,7 @@ private:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
-    css::uno::WeakReference< css::beans::XPropertySet >   m_xParentProperties;
+    cpo::uno::WeakReference< css::beans::XPropertySet >   m_xParentProperties;
 
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
     bool m_bNoParentPropAllowed;

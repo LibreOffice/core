@@ -581,7 +581,7 @@ void ODatabaseModelImpl::disposing( const css::lang::EventObject& Source )
             }
             else if ( xCon == xIterConn )
             {
-                *i = css::uno::WeakReference< css::sdbc::XConnection >();
+                *i = cpo::uno::WeakReference< css::sdbc::XConnection >();
                 bStore = true;
                 break;
             } else

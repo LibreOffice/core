@@ -35,7 +35,7 @@ private:
     OUString aName;
 
     // this is a weak reference to a possible living api wrapper for this custom show
-    css::uno::WeakReference<css::uno::XInterface> mxUnoCustomShow;
+    cpo::uno::WeakReference<css::uno::XInterface> mxUnoCustomShow;
 
 public:
     SdCustomShow();

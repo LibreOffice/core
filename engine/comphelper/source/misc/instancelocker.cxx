@@ -189,7 +189,7 @@ cpo::uno::Sequence< OUString > SAL_CALL OInstanceLocker::getSupportedServiceName
 // OLockListener
 
 
-OLockListener::OLockListener( uno::WeakReference< lang::XComponent > xWrapper,
+OLockListener::OLockListener( cpo::uno::WeakReference< lang::XComponent > xWrapper,
                     uno::Reference< uno::XInterface > xInstance,
                     sal_Int32 nMode,
                     uno::Reference< embed::XActionsApproval > xApproval )

@@ -60,7 +60,7 @@ private:
 
     ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > m_xOleAccess;
 
-    css::uno::WeakReference< css::frame::XDispatchProviderInterceptor > m_xInterceptorLocker;
+    cpo::uno::WeakReference< css::frame::XDispatchProviderInterceptor > m_xInterceptorLocker;
     rtl::Reference<Interceptor> m_pInterceptor;
 
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;

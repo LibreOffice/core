@@ -77,7 +77,7 @@ class CloseDispatcher final : public  ::cppu::WeakImplHelper<
 
         /** @short  reference to the target frame, which should be
                     closed by this dispatch. */
-        css::uno::WeakReference< css::frame::XFrame > m_xCloseFrame;
+        cpo::uno::WeakReference< css::frame::XFrame > m_xCloseFrame;
 
         /** @short  used for asynchronous callbacks within the main thread.
             @descr  Internally we work asynchronously. Because our callees

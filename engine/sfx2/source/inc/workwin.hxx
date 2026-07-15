@@ -179,7 +179,7 @@ class LayoutManagerListener final : public ::cppu::WeakImplHelper<
     private:
         bool                                             m_bHasFrame;
         SfxWorkWindow*                                   m_pWrkWin;
-        css::uno::WeakReference< css::frame::XFrame >    m_xFrame;
+        cpo::uno::WeakReference< css::frame::XFrame >    m_xFrame;
 };
 
 class SfxWorkWindow final

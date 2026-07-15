@@ -31,7 +31,7 @@ namespace cppu
 
         Upon disposing objects of this class, sub-classes receive a disposing()
         call.  Objects of this class can be held weakly, i.e. by a
-        css::uno::WeakReference.
+        cpo::uno::WeakReference.
 
         @attention
         The life-cycle of the passed mutex reference has to be longer than objects of this class.
@@ -106,7 +106,7 @@ namespace cppu
 
         Upon disposing objects of this class, sub-classes receive a disposing()
         call.  Objects of this class can be held weakly, i.e. by a
-        css::uno::WeakReference.  Object of this class can be
+        cpo::uno::WeakReference.  Object of this class can be
         aggregated, i.e. incoming queryInterface() calls are delegated.
 
         @attention

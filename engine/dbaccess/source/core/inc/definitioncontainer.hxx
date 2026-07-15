@@ -89,7 +89,7 @@ class ODefinitionContainer
             ,public ODefinitionContainer_Base
 {
 protected:
-    typedef std::map< OUString, css::uno::WeakReference< css::ucb::XContent > > Documents;
+    typedef std::map< OUString, cpo::uno::WeakReference< css::ucb::XContent > > Documents;
 
     enum ContainerOperation
     {

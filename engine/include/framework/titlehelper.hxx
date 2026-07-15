@@ -148,13 +148,13 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
         css::uno::Reference< css::uno::XComponentContext> m_xContext;
 
         /** reference to the outside UNO class using this helper. */
-        css::uno::WeakReference< css::uno::XInterface > m_xOwner;
+        cpo::uno::WeakReference< css::uno::XInterface > m_xOwner;
 
         /** used to know how an "Untitled X" string can be created right :-) */
-        css::uno::WeakReference< css::frame::XUntitledNumbers > m_xUntitledNumbers;
+        cpo::uno::WeakReference< css::frame::XUntitledNumbers > m_xUntitledNumbers;
 
         /** provides parts of our own title and we listen there for changes too. */
-        css::uno::WeakReference< css::frame::XTitle > m_xSubTitle;
+        cpo::uno::WeakReference< css::frame::XTitle > m_xSubTitle;
 
         /** if it's set to true the member m_sTitle has not to be changed internally.
             It was set from outside and so outside code has to make sure it will be

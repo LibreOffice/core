@@ -56,7 +56,7 @@ namespace connectivity::macab
         connectivity::OSQLParseNode*        m_pParseTree;
         MacabConnection*                    m_pConnection;  // The owning Connection object
         MacabHeader*                        m_pHeader;  // The header of the address book on which to run queries (provided by m_pConnection)
-        css::uno::WeakReference< css::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
+        cpo::uno::WeakReference< css::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
 
 
     protected:

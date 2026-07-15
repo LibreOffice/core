@@ -250,7 +250,7 @@ std::unique_ptr<WeldToolbarPopup> SubToolBarController::weldPopupWindow()
     css::uno::Reference< css::frame::XFrame > xFrame ( getFrameInterface() );
 
     // create element with factory
-    static css::uno::WeakReference< css::ui::XUIElementFactoryManager > xWeakUIElementFactory;
+    static cpo::uno::WeakReference< css::ui::XUIElementFactoryManager > xWeakUIElementFactory;
     css::uno::Reference< css::ui::XUIElementFactoryManager > xUIElementFactory = xWeakUIElementFactory;
     if ( !xUIElementFactory.is() )
     {
@@ -290,7 +290,7 @@ VclPtr<vcl::Window> SubToolBarController::createVclPopupWindow(vcl::Window* /*pP
         css::uno::Reference< css::frame::XFrame > xFrame ( getFrameInterface() );
 
         // create element with factory
-        static css::uno::WeakReference< css::ui::XUIElementFactoryManager > xWeakUIElementFactory;
+        static cpo::uno::WeakReference< css::ui::XUIElementFactoryManager > xWeakUIElementFactory;
         css::uno::Reference< css::ui::XUIElement > xUIElement;
         css::uno::Reference< css::ui::XUIElementFactoryManager > xUIElementFactory = xWeakUIElementFactory;
         if ( !xUIElementFactory.is() )

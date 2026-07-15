@@ -115,8 +115,8 @@ private:
     /// Remember whether we are listening to the frame.
     bool mbListeningToFrame;
 
-    css::uno::WeakReference<css::frame::XController> mxControllerWeak;
-    css::uno::WeakReference<css::frame::XFrame> mxFrameWeak;
+    cpo::uno::WeakReference<css::frame::XController> mxControllerWeak;
+    cpo::uno::WeakReference<css::frame::XFrame> mxFrameWeak;
     SdDrawDocument* mpDocument;
     unotools::WeakReference<sd::framework::ConfigurationController>
          mxConfigurationControllerWeak;

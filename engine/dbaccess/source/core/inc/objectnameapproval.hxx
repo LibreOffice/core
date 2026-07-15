@@ -38,7 +38,7 @@ namespace dbaccess
     */
     class ObjectNameApproval : public IContainerApprove
     {
-        css::uno::WeakReference< css::sdbc::XConnection > mxConnection;
+        cpo::uno::WeakReference< css::sdbc::XConnection > mxConnection;
         sal_Int32 mnCommandType;
 
     public:

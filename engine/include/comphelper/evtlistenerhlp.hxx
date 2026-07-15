@@ -36,7 +36,7 @@ namespace comphelper
 
     class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OEventListenerHelper final : public ::cppu::WeakImplHelper< css::lang::XEventListener >
     {
-        css::uno::WeakReference< css::lang::XEventListener> m_xListener;
+        cpo::uno::WeakReference< css::lang::XEventListener> m_xListener;
     public:
         OEventListenerHelper(const css::uno::Reference< css::lang::XEventListener>& _rxListener);
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

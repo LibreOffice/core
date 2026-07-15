@@ -61,7 +61,7 @@ protected:
     }
 
 private:
-    css::uno::WeakReference< css::view::XSelectionChangeListener > m_xListener;
+    cpo::uno::WeakReference< css::view::XSelectionChangeListener > m_xListener;
 };
 
 } //  namespace chart

@@ -63,7 +63,7 @@ template< typename... Ifc >
 class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceImpl : public Ifc...
 {
 protected:
-    css::uno::WeakReference< ov::XHelperInterface > mxParent;
+    cpo::uno::WeakReference< ov::XHelperInterface > mxParent;
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 public:
     InheritedHelperInterfaceImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, css::uno::Reference< css::uno::XComponentContext > xContext ) : mxParent( xParent ), mxContext(std::move( xContext )) {}

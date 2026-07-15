@@ -104,7 +104,7 @@ namespace dbtools
         css::uno::Reference< css::uno::XComponentContext >
                                             m_xContext;
 
-        css::uno::WeakReference< css::beans::XPropertySet >
+        cpo::uno::WeakReference< css::beans::XPropertySet >
                                             m_xComponent;                // the database component whose parameters we're handling
         css::uno::Reference< css::uno::XAggregation >
                                             m_xAggregatedRowSet;    // the aggregated row set - necessary for unwrapped access to some interfaces

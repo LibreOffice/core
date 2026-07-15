@@ -18,7 +18,7 @@ namespace cmis
     class AuthProvider : public libcmis::AuthProvider
     {
         const css::uno::Reference< css::ucb::XCommandEnvironment>& m_xEnv;
-        static css::uno::WeakReference< css::ucb::XCommandEnvironment> sm_xEnv;
+        static cpo::uno::WeakReference< css::ucb::XCommandEnvironment> sm_xEnv;
         OUString m_sUrl;
         OUString m_sBindingUrl;
 

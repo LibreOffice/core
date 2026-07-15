@@ -53,7 +53,7 @@ public:
                 i = m_list.erase(i);
             }
         }
-        m_list.push_back(css::uno::WeakReference< T >(e));
+        m_list.push_back(cpo::uno::WeakReference< T >(e));
     }
 
     /**
@@ -74,7 +74,7 @@ public:
     }
 
 private:
-    std::vector< css::uno::WeakReference< T > > m_list;
+    std::vector< cpo::uno::WeakReference< T > > m_list;
 };
 
 }

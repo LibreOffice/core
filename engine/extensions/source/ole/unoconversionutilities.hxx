@@ -66,7 +66,7 @@ extern std::unordered_map<sal_uIntPtr, sal_uIntPtr> WrapperToAdapterMap;
 // IUnknownWrapperImpl. It is the responsibility of the wrapper to remove the entry when
 // it is being destroyed.
 // Used to ensure that an Automation object is always mapped to the same UNO objects.
-extern std::unordered_map<sal_uIntPtr, css::uno::WeakReference<css::uno::XInterface> > ComPtrToWrapperMap;
+extern std::unordered_map<sal_uIntPtr, cpo::uno::WeakReference<css::uno::XInterface> > ComPtrToWrapperMap;
 
 // Maps XInterface pointers to a weak reference of its wrapper class (i.e.
 // InterfaceOleWrapper). It is the responsibility of the wrapper to remove the entry when
@@ -74,7 +74,7 @@ extern std::unordered_map<sal_uIntPtr, css::uno::WeakReference<css::uno::XInterf
 // is mapped to IDispatch which is kept alive in the COM environment. If the same
 // UNO interface is mapped again to COM then the IDispach of the first mapped instance
 // must be returned.
-extern std::unordered_map<sal_uIntPtr, css::uno::WeakReference<css::uno::XInterface> > UnoObjToWrapperMap;
+extern std::unordered_map<sal_uIntPtr, cpo::uno::WeakReference<css::uno::XInterface> > UnoObjToWrapperMap;
 
 // This function tries to the change the type of a value (contained in the cpo::uno::Any)
 // to the smallest possible that can hold the value. This is actually done only

@@ -316,7 +316,7 @@ private:
     std::unique_ptr<SvxShapeImpl> mpImpl;
     bool mbIsMultiPropertyCall;
 
-    css::uno::WeakReference< css::container::XIndexContainer > mxGluePoints;
+    cpo::uno::WeakReference< css::container::XIndexContainer > mxGluePoints;
     const SvxItemPropertySet* mpPropSet;
     SvxItemPropertySetUsrAnys maUrsAnys;
     std::span<const SfxItemPropertyMapEntry> maPropMapEntries;

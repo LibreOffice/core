@@ -168,8 +168,8 @@ namespace svt::table
         css::style::VerticalAlignment                   m_eVerticalAlign;
         bool                                            bEnabled;
         ModellListeners                                 m_aListeners;
-        css::uno::WeakReference< css::awt::grid::XGridDataModel >                 m_aDataModel;
-        css::uno::WeakReference< css::awt::grid::XGridColumnModel >               m_aColumnModel;
+        cpo::uno::WeakReference< css::awt::grid::XGridDataModel >                 m_aDataModel;
+        cpo::uno::WeakReference< css::awt::grid::XGridColumnModel >               m_aColumnModel;
     };
 
 

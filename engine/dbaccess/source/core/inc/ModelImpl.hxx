@@ -52,7 +52,7 @@ namespace dbaccess
 {
 class OCommandContainer;
 
-typedef std::vector< css::uno::WeakReference< css::sdbc::XConnection > > OWeakConnectionArray;
+typedef std::vector< cpo::uno::WeakReference< css::sdbc::XConnection > > OWeakConnectionArray;
 
 struct DefaultPropertyValue
 {
@@ -218,7 +218,7 @@ public:
     const css::uno::Reference< css::uno::XComponentContext >  m_aContext;
 
 public:
-    css::uno::WeakReference< css::container::XNameAccess >    m_xCommandDefinitions;
+    cpo::uno::WeakReference< css::container::XNameAccess >    m_xCommandDefinitions;
     unotools::WeakReference< ::dbaccess::OCommandContainer > m_xTableDefinitions;
 
     css::uno::Reference< css::util::XNumberFormatsSupplier >

@@ -43,7 +43,7 @@ private:
     {
     }
 
-    MenuAttributes(css::uno::WeakReference<css::frame::XDispatchProvider> _xDispatchProvider)
+    MenuAttributes(cpo::uno::WeakReference<css::frame::XDispatchProvider> _xDispatchProvider)
         : refCount(0)
         , xDispatchProvider(std::move(_xDispatchProvider))
     {
@@ -54,10 +54,10 @@ private:
 public:
     OUString aTargetFrame;
     OUString aImageId;
-    css::uno::WeakReference<css::frame::XDispatchProvider> xDispatchProvider;
+    cpo::uno::WeakReference<css::frame::XDispatchProvider> xDispatchProvider;
 
     static void* CreateAttribute(const OUString& rFrame, const OUString& rImageIdStr);
-    static void* CreateAttribute(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider);
+    static void* CreateAttribute(const cpo::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider);
     static void ReleaseAttribute(void* nAttributePtr);
 
     void acquire()

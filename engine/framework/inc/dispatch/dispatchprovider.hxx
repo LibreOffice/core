@@ -71,7 +71,7 @@ class DispatchProvider final : public ::cppu::WeakImplHelper< css::frame::XDispa
         /// reference to global service manager to create new services
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
         /// weakreference to owner frame (Don't use a hard reference. Owner can't delete us then!)
-        css::uno::WeakReference< css::frame::XFrame > m_xFrame;
+        cpo::uno::WeakReference< css::frame::XFrame > m_xFrame;
         /// cache of some other dispatch provider which are registered inside configuration to handle special URL protocols
         HandlerCache m_aProtocolHandlerCache;
         std::unordered_map<OUString, css::uno::Reference<css::frame::XDispatchProvider>>

@@ -103,7 +103,7 @@ class PopupMenuDispatcher final : public  ::cppu::WeakImplHelper<
 
         void impl_RetrievePopupControllerQuery();
 
-        css::uno::WeakReference< css::frame::XFrame >           m_xWeakFrame;   /// css::uno::WeakReference to frame (Don't use a hard css::uno::Reference. Owner can't delete us then!)
+        cpo::uno::WeakReference< css::frame::XFrame >           m_xWeakFrame;   /// cpo::uno::WeakReference to frame (Don't use a hard css::uno::Reference. Owner can't delete us then!)
         css::uno::Reference< css::container::XNameAccess >      m_xPopupCtrlQuery;   /// reference to query for popup controller
         css::uno::Reference< css::uri::XUriReferenceFactory >   m_xUriRefFactory;   /// reference to the uri reference factory
         css::uno::Reference< css::uno::XComponentContext >      m_xContext;   /// factory shared with our owner to create new services!

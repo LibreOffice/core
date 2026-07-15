@@ -135,7 +135,7 @@ bool containsXInterfaceSubclass(const clang::Type* pType0) {
                 || (dc.Class("Reference").Namespace("uno")
                     .Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace())
                 || (dc.Class("WeakReference").Namespace("uno")
-                    .Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace())
+                    .Namespace("cpo").GlobalNamespace())
                 || (dc.Class("Sequence").Namespace("uno")
                     .Namespace("cpo").GlobalNamespace())
                 || (dc.Class("OAutoRegistration").Namespace("dba")

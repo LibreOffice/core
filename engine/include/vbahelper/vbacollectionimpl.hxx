@@ -129,7 +129,7 @@ private:
 class VBAHELPER_DLLPUBLIC EnumerationHelperImpl : public EnumerationHelper_BASE
 {
 protected:
-    css::uno::WeakReference< ov::XHelperInterface > m_xParent;
+    cpo::uno::WeakReference< ov::XHelperInterface > m_xParent;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::container::XEnumeration > m_xEnumeration;
 public:

@@ -45,7 +45,7 @@ class SfxMacroLoader final : public cppu::WeakImplHelper<
                                        css::frame::XSynchronousDispatch,
                                        css::lang::XServiceInfo>
 {
-    css::uno::WeakReference < css::frame::XFrame > m_xFrame;
+    cpo::uno::WeakReference < css::frame::XFrame > m_xFrame;
     SfxObjectShell* GetObjectShell_Impl();
 
 public:

@@ -173,7 +173,7 @@ protected:
     css::uno::Reference< css::uno::XComponentContext >       mxContext;
     css::uno::Reference< css::ucb::XSimpleFileAccess3 >      mxSFI;
     css::uno::Reference< css::util::XStringSubstitution >    mxStringSubstitution;
-    css::uno::WeakReference< css::frame::XModel >            mxOwnerDocument;
+    cpo::uno::WeakReference< css::frame::XModel >            mxOwnerDocument;
 
     ModifiableHelper    maModifiable;
 

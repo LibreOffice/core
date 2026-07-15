@@ -53,10 +53,10 @@ class WindowCommandDispatch final
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /// knows the frame, where we dispatch our commands as weak reference
-        css::uno::WeakReference< css::frame::XFrame > m_xFrame;
+        cpo::uno::WeakReference< css::frame::XFrame > m_xFrame;
 
         /// knows the VCL window (where the hard coded commands occurred) as weak XWindow reference
-        css::uno::WeakReference< css::awt::XWindow > m_xWindow;
+        cpo::uno::WeakReference< css::awt::XWindow > m_xWindow;
 
     // native interface
 

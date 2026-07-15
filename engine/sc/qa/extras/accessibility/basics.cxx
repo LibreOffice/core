@@ -117,7 +117,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, tdf157568)
 
     uno::Reference<accessibility::XAccessible> xCell = sheet->getAccessibleCellAt(1, 1);
     CPPUNIT_ASSERT(xCell);
-    uno::WeakReference<accessibility::XAccessible> xCellWeak(xCell);
+    cpo::uno::WeakReference<accessibility::XAccessible> xCellWeak(xCell);
     xCell.clear();
     // Verify that there are no reference cycles and that the ScAccessibleCell object dies after we
     // are done with it.

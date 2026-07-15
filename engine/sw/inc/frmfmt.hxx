@@ -77,7 +77,7 @@ class SW_DLLPUBLIC SwFrameFormat
     friend class SwTextBoxHelper;
     friend class SwUndoFlyBase; ///< calls SetOtherTextBoxFormat
 
-    css::uno::WeakReference<css::uno::XInterface> m_wXObject;
+    cpo::uno::WeakReference<css::uno::XInterface> m_wXObject;
 
     // DrawingLayer FillAttributes in a preprocessed form for primitive usage
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
@@ -164,7 +164,7 @@ public:
 
     virtual OUString GetDescription() const;
 
-    SAL_DLLPRIVATE css::uno::WeakReference<css::uno::XInterface> const& GetXObject() const
+    SAL_DLLPRIVATE cpo::uno::WeakReference<css::uno::XInterface> const& GetXObject() const
             { return m_wXObject; }
     SAL_DLLPRIVATE void SetXObject(css::uno::Reference<css::uno::XInterface> const& xObject)
             { m_wXObject = xObject; }

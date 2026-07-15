@@ -168,7 +168,7 @@ private:
     std::unique_ptr<controller::SlideSorterController> mpSlideSorterController;
     std::unique_ptr<model::SlideSorterModel> mpSlideSorterModel;
     std::unique_ptr<view::SlideSorterView> mpSlideSorterView;
-    css::uno::WeakReference<css::frame::XController> mxControllerWeak;
+    cpo::uno::WeakReference<css::frame::XController> mxControllerWeak;
     ViewShell& mrViewShell;
     ViewShellBase* mpViewShellBase;
     VclPtr<sd::Window> mpContentWindow;

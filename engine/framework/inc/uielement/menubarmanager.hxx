@@ -52,7 +52,7 @@ namespace framework
 
 struct PopupControllerEntry
 {
-    css::uno::WeakReference< css::frame::XDispatchProvider > m_xDispatchProvider;
+    cpo::uno::WeakReference< css::frame::XDispatchProvider > m_xDispatchProvider;
 };
 
 typedef std::unordered_map< OUString, PopupControllerEntry > PopupControllerCache;

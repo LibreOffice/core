@@ -59,7 +59,7 @@ namespace connectivity
 
         typedef std::map<
                 css::uno::Reference< css::sdbc::XDriver >,
-                css::uno::WeakReference< css::sdbc::XDriver >>
+                cpo::uno::WeakReference< css::sdbc::XDriver >>
                 MapDriver2DriverRef;
 
         MapDriver2DriverRef                                       m_aDriverProxies;

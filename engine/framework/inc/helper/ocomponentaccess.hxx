@@ -152,7 +152,7 @@ class OComponentAccess final : public ::cppu::WeakImplHelper< css::container::XE
 
         static css::uno::Reference< css::lang::XComponent > impl_getFrameComponent( const css::uno::Reference< css::frame::XFrame >& xFrame );
 
-        css::uno::WeakReference< css::frame::XDesktop >     m_xOwner;   /// weak reference to the desktop object!
+        cpo::uno::WeakReference< css::frame::XDesktop >     m_xOwner;   /// weak reference to the desktop object!
 
 };      //  class OComponentAccess
 

@@ -85,7 +85,7 @@ Reference< XStatement > SAL_CALL ODbaseConnection::createStatement(  )
 
 
     Reference< XStatement > xReturn = new ODbaseStatement(this);
-    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    m_aStatements.push_back(cpo::uno::WeakReferenceHelper(xReturn));
     return xReturn;
 }
 
@@ -96,7 +96,7 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( con
 
     rtl::Reference<ODbasePreparedStatement> pStmt = new ODbasePreparedStatement(this);
     pStmt->construct(sql);
-    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
+    m_aStatements.push_back(cpo::uno::WeakReferenceHelper(*pStmt));
     return pStmt;
 }
 

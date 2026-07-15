@@ -84,7 +84,7 @@ SlidePersist::SlidePersist( XmlFilterBase& rFilter, bool bMaster, bool bNotes,
 }
 
 #if OSL_DEBUG_LEVEL > 0
-css::uno::WeakReference< css::drawing::XDrawPage > SlidePersist::mxDebugPage;
+cpo::uno::WeakReference< css::drawing::XDrawPage > SlidePersist::mxDebugPage;
 #endif
 
 SlidePersist::~SlidePersist()

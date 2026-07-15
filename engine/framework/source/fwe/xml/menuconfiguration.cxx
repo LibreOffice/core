@@ -136,7 +136,7 @@ void* MenuAttributes::CreateAttribute(const OUString& rFrame, const OUString& rI
     return pAttributes;
 }
 
-void* MenuAttributes::CreateAttribute(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider)
+void* MenuAttributes::CreateAttribute(const cpo::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider)
 {
     MenuAttributes* pAttributes = new MenuAttributes(rDispatchProvider);
     pAttributes->acquire();

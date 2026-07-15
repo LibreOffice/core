@@ -202,7 +202,7 @@ private:
     void decreaseMapReferences( sal_Int32 nBegin, sal_Int32 nEnd );
 
     typedef std::multimap< OUString,
-            css::uno::WeakReference< css::chart2::data::XDataSequence > >
+            cpo::uno::WeakReference< css::chart2::data::XDataSequence > >
         tSequenceMap;
     typedef std::pair< tSequenceMap::iterator, tSequenceMap::iterator > tSequenceMapRange;
 

@@ -86,8 +86,8 @@ private:
     /// @throws css::uno::RuntimeException
     void construct( const css::uno::Reference< css::frame::XController >& xController );
 
-    css::uno::WeakReference< css::frame::XController > m_xController;
-    css::uno::WeakReference< css::awt::XWindow > m_xWindow;
+    cpo::uno::WeakReference< css::frame::XController > m_xController;
+    cpo::uno::WeakReference< css::awt::XWindow > m_xWindow;
 };
 
 #endif // INCLUDED_VBAHELPER_VBAWINDOWBASE_HXX

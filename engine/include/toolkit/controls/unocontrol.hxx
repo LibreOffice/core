@@ -92,8 +92,7 @@ protected:
     css::uno::Reference< css::awt::XControlModel >    mxModel;
     css::uno::Reference< css::awt::XGraphics >        mxGraphics;
 
-    css::uno::WeakReferenceHelper
-                                        maAccessibleContext;    /// our most recent XAccessibleContext instance
+    cpo::uno::WeakReferenceHelper   maAccessibleContext;    /// our most recent XAccessibleContext instance
 
     bool                            mbDisposePeer;
     bool                            mbRefreshingPeer;

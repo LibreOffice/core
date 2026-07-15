@@ -41,7 +41,7 @@ bool SinglePropertySetInfoCache::hasProperty(
     // weak reference only; if it is destroyed, then every instance of
     // getPropertySetInfo returns a new object; Such property set infos must not
     // be cached:
-    WeakReference < XPropertySetInfo > xWeakInfo( rPropSetInfo );
+    cpo::uno::WeakReference < XPropertySetInfo > xWeakInfo( rPropSetInfo );
     rPropSetInfo = nullptr;
     rPropSetInfo = xWeakInfo;
     if( rPropSetInfo.is() )

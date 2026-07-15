@@ -48,7 +48,7 @@ public:
 private:
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Reference< css::sheet::XViewPane > m_xViewPane;
-    css::uno::WeakReference< ov::XHelperInterface > m_xParent;
+    cpo::uno::WeakReference< ov::XHelperInterface > m_xParent;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 

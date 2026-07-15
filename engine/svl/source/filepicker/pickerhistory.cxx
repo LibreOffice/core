@@ -27,7 +27,7 @@ namespace svt
 
     namespace
     {
-        typedef ::std::vector< css::uno::WeakReference< XInterface >  >  InterfaceArray;
+        typedef ::std::vector< cpo::uno::WeakReference< XInterface >  >  InterfaceArray;
 
 
         InterfaceArray& getFolderPickerHistory()
@@ -50,7 +50,7 @@ namespace svt
                 return;
 
             // first, check which of the objects we hold in s_aHistory can be removed
-            std::erase_if(_rHistory, [](const css::uno::WeakReference< XInterface > & x) { return !x.get().is(); });
+            std::erase_if(_rHistory, [](const cpo::uno::WeakReference< XInterface > & x) { return !x.get().is(); });
 
             // then push_back the picker
             _rHistory.emplace_back( _rxPicker );

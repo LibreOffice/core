@@ -140,7 +140,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
 class WeakContainerListener final : public ::cppu::WeakImplHelper<css::container::XContainerListener>
 {
     private:
-        css::uno::WeakReference<css::container::XContainerListener> mxOwner;
+        cpo::uno::WeakReference<css::container::XContainerListener> mxOwner;
 
     public:
         WeakContainerListener(css::uno::Reference<css::container::XContainerListener> const & xOwner)
@@ -187,7 +187,7 @@ class WeakContainerListener final : public ::cppu::WeakImplHelper<css::container
 class WeakChangesListener final : public ::cppu::WeakImplHelper<css::util::XChangesListener>
 {
     private:
-        css::uno::WeakReference<css::util::XChangesListener> mxOwner;
+        cpo::uno::WeakReference<css::util::XChangesListener> mxOwner;
 
     public:
         WeakChangesListener(css::uno::Reference<css::util::XChangesListener> const & xOwner)
@@ -218,7 +218,7 @@ class WeakChangesListener final : public ::cppu::WeakImplHelper<css::util::XChan
 class WeakDocumentEventListener final : public ::cppu::WeakImplHelper<css::document::XDocumentEventListener>
 {
     private:
-        css::uno::WeakReference<css::document::XDocumentEventListener> mxOwner;
+        cpo::uno::WeakReference<css::document::XDocumentEventListener> mxOwner;
 
     public:
         WeakDocumentEventListener(css::uno::Reference<css::document::XDocumentEventListener> const & xOwner)

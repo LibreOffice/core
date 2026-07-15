@@ -34,7 +34,7 @@ namespace cppu
 class OWeakConnectionPoint;
 
 /** Base class to implement a UNO object supporting weak references, i.e. the object can be held
-    weakly (by a css::uno::WeakReference).
+    weakly (by a cpo::uno::WeakReference).
     This implementation copes with reference counting.  Upon last release(), the virtual dtor
     is called.
 

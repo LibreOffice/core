@@ -84,7 +84,7 @@ void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
 
     // b2) add component to collection and return its number
     TNumberedItem aItem;
-    aItem.xItem   = css::uno::WeakReference< css::uno::XInterface >(xComponent);
+    aItem.xItem   = cpo::uno::WeakReference< css::uno::XInterface >(xComponent);
     aItem.nNumber = nFreeNumber;
     m_lComponents[pComponent] = std::move(aItem);
 

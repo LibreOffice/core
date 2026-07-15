@@ -151,7 +151,7 @@ namespace cmis
         return false;
     }
 
-    css::uno::WeakReference< css::ucb::XCommandEnvironment> AuthProvider::sm_xEnv;
+    cpo::uno::WeakReference< css::ucb::XCommandEnvironment> AuthProvider::sm_xEnv;
 
     void AuthProvider::setXEnv(const css::uno::Reference< css::ucb::XCommandEnvironment>& xEnv )
     {

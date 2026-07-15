@@ -86,7 +86,7 @@ namespace svxform
         ::osl::Mutex*   m_pMutex;
 
         // the component which's dispatches we're intercepting
-        css::uno::WeakReference< css::frame::XDispatchProviderInterception >
+        cpo::uno::WeakReference< css::frame::XDispatchProviderInterception >
                         m_xIntercepted;
         bool            m_bListening;
 

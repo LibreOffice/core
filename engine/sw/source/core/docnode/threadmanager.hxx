@@ -112,7 +112,7 @@ class ThreadManager final
 
         std::mutex maMutex;
 
-        css::uno::WeakReference< css::util::XJobManager > mrThreadJoiner;
+        cpo::uno::WeakReference< css::util::XJobManager > mrThreadJoiner;
 
         std::shared_ptr< ThreadListener > mpThreadListener;
 

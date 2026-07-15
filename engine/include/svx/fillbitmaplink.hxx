@@ -103,7 +103,7 @@ private:
 // are silently skipped. When updated, ImageURL is set on the control
 // to trigger the fetch.
 SVXCORE_DLLPUBLIC void registerDeferredFormImageLinks(
-    const std::vector<std::pair<css::uno::WeakReference<css::beans::XPropertySet>, OUString>>&
+    const std::vector<std::pair<cpo::uno::WeakReference<css::beans::XPropertySet>, OUString>>&
         rEntries,
     sfx2::LinkManager& rLinkMgr);
 

@@ -41,7 +41,7 @@ class OStorage;
 typedef std::unordered_map< OUString,
                          ::rtl::Reference< OHierarchyElement_Impl > > OHierarchyElementList_Impl;
 
-typedef ::std::vector< css::uno::WeakReference< css::embed::XExtendedStorageStream > >
+typedef ::std::vector< cpo::uno::WeakReference< css::embed::XExtendedStorageStream > >
                         OWeakStorRefVector_Impl;
 
 class OHierarchyElement_Impl : public cppu::WeakImplHelper< css::embed::XTransactionListener >

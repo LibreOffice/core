@@ -130,7 +130,7 @@ private:
 
     ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > m_xOleAccess;
 
-    css::uno::WeakReference< css::uno::XInterface > m_xDocHLocker;
+    cpo::uno::WeakReference< css::uno::XInterface > m_xDocHLocker;
     DocumentHolder*       m_pDocH;
 
     css::uno::Reference< css::frame::XDispatchProvider > m_xSlaveDispatchProvider;

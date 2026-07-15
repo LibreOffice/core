@@ -612,7 +612,7 @@ public:
 
 class CellsEnumeration : public CellsEnumeration_BASE
 {
-    uno::WeakReference< XHelperInterface > mxParent;
+    cpo::uno::WeakReference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;
     uno::Reference< XCollection > m_xAreas;
     vCellPos m_CellPositions;

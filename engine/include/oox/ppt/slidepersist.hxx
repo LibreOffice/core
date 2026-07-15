@@ -71,7 +71,7 @@ public:
     const css::uno::Reference< css::drawing::XDrawPage >& getPage() const { return mxPage; };
 
 #if OSL_DEBUG_LEVEL > 0
-    static css::uno::WeakReference< css::drawing::XDrawPage > mxDebugPage;
+    static cpo::uno::WeakReference< css::drawing::XDrawPage > mxDebugPage;
 #endif
 
     void setMasterPersist(const SlidePersistPtr& pMasterPersistPtr) { mpMasterPagePtr = pMasterPersistPtr; }

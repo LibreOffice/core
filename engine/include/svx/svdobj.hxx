@@ -891,7 +891,7 @@ public:
     /// class (preferably as the first step)!
     virtual void setUnoShape( const css::uno::Reference< css::drawing::XShape >& _rxUnoShape );
 
-    const css::uno::WeakReference< css::drawing::XShape >& getWeakUnoShape() const { return maWeakUnoShape; }
+    const cpo::uno::WeakReference< css::drawing::XShape >& getWeakUnoShape() const { return maWeakUnoShape; }
 
     // return true if a bg was set, false otherwise
     bool setSuitableOutlinerBg(Outliner& rOutliner) const;
@@ -1012,7 +1012,7 @@ private:
     // do not use directly, always use getSvxShape() if you have to, because not all
     // SdrObjects have an associated SvxShape subclass (e.g. ???)
     SvxShape*                   mpSvxShape;
-    css::uno::WeakReference< css::drawing::XShape >
+    cpo::uno::WeakReference< css::drawing::XShape >
                                 maWeakUnoShape;
 
     // Hyperlink for the whole shape

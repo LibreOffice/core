@@ -211,7 +211,7 @@ private:
 
 private:
     css::uno::Reference< css::awt::XWindow >      m_xPeer;   /// The source of the events. Normally this is the peer object.
-    css::uno::WeakReference< css::awt::XWindow >  m_xControl;
+    cpo::uno::WeakReference< css::awt::XWindow >  m_xControl;
 };
 
 }

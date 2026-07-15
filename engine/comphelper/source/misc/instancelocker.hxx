@@ -77,7 +77,7 @@ class OLockListener : public ::cppu::WeakImplHelper< css::util::XCloseListener,
     css::uno::Reference< css::uno::XInterface > m_xInstance;
     css::uno::Reference< css::embed::XActionsApproval > m_xApproval;
 
-    css::uno::WeakReference< css::lang::XComponent > m_xWrapper;
+    cpo::uno::WeakReference< css::lang::XComponent > m_xWrapper;
 
     bool m_bDisposed;
     bool m_bInitialized;
@@ -85,7 +85,7 @@ class OLockListener : public ::cppu::WeakImplHelper< css::util::XCloseListener,
     sal_Int32 m_nMode;
 
 public:
-    OLockListener(  css::uno::WeakReference< css::lang::XComponent > xWrapper,
+    OLockListener(  cpo::uno::WeakReference< css::lang::XComponent > xWrapper,
                     css::uno::Reference< css::uno::XInterface > xInstance,
                     sal_Int32 nMode,
                     css::uno::Reference< css::embed::XActionsApproval > xApproval );

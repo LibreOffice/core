@@ -131,7 +131,7 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
         OUString                                                                                m_aResourceURL;
         css::uno::Reference< css::ui::XUIConfigurationManager >         m_xConfigSource;
         css::uno::Reference< css::container::XIndexAccess >             m_xConfigData;
-        css::uno::WeakReference< css::frame::XFrame >                   m_xWeakFrame;
+        cpo::uno::WeakReference< css::frame::XFrame >                   m_xWeakFrame;
         css::uno::Reference< css::awt::XMenuBar >                       m_xMenuBar;
         comphelper::OMultiTypeInterfaceContainerHelper2                 m_aListenerContainer;   /// container for ALL Listener
 };

@@ -111,7 +111,7 @@ class SfxDispatchController_Impl final
     SfxOfficeDispatch*          pDispatch;
     bool                        bMasterSlave;
     bool                        bVisible;
-    css::uno::WeakReference< css::frame::XFrame > xFrame;
+    cpo::uno::WeakReference< css::frame::XFrame > xFrame;
 
     static void         addParametersToArgs( const css::util::URL& aURL,
                                              cpo::uno::Sequence< css::beans::PropertyValue >& rArgs );

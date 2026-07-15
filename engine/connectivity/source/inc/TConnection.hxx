@@ -49,7 +49,7 @@ namespace connectivity
                                                         //  for this Connection
         OUString                        m_sURL;
         rtl_TextEncoding                m_nTextEncoding; // the encoding which is used for all text conversions
-        css::uno::WeakReference< css::sdbc::XDatabaseMetaData >
+        cpo::uno::WeakReference< css::sdbc::XDatabaseMetaData >
                                         m_xMetaData;
         SharedResources                 m_aResources;
     public:

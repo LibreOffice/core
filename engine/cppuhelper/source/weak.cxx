@@ -318,7 +318,7 @@ void OWeakAggObject::setDelegator( const Reference<XInterface > & rDelegator )
 
 }
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 
 

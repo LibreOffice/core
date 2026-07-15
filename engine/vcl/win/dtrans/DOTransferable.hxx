@@ -77,7 +77,7 @@ private:
                                           const css::datatransfer::DataFlavor& rhs );
 
 private:
-    css::uno::WeakReference<css::datatransfer::clipboard::XClipboard> m_xClipboard;
+    cpo::uno::WeakReference<css::datatransfer::clipboard::XClipboard> m_xClipboard;
     sal::systools::COMReference<IDataObject>                          m_rDataObject;
     cpo::uno::Sequence< css::datatransfer::DataFlavor >               m_FlavorList;
     const css::uno::Reference< css::uno::XComponentContext >          m_xContext;

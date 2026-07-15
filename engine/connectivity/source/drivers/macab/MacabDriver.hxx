@@ -38,7 +38,7 @@ namespace connectivity::macab
 
     typedef void*   (SAL_CALL * ConnectionFactoryFunction)( void* _pDriver );
 
-    typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
+    typedef std::vector< cpo::uno::WeakReferenceHelper > OWeakRefArray;
 
 
     // = MacabImplModule

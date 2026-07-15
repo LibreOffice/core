@@ -31,9 +31,12 @@
 
 namespace com::sun::star::uno
 {
-
-class OWeakRefListener;
 class XWeak;
+}
+
+namespace cpo::uno
+{
+class OWeakRefListener;
 
 /** The WeakReferenceHelper holds a weak reference to an object.
 
@@ -125,7 +128,7 @@ public:
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    SAL_CALL operator Reference< XInterface > () const
+    SAL_CALL operator css::uno::Reference< css::uno::XInterface > () const
         { return get(); }
 
     /** Releases this reference.
@@ -163,7 +166,7 @@ public:
 
         @param rRef another hard ref
     */
-    WeakReference( const Reference< interface_type > & rRef )
+    WeakReference( const css::uno::Reference< interface_type > & rRef )
         : WeakReferenceHelper( rRef )
         {}
 
@@ -191,8 +194,8 @@ public:
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    SAL_CALL operator Reference< interface_type > () const
-        { return Reference< interface_type >::query( get() ); }
+    SAL_CALL operator css::uno::Reference< interface_type > () const
+        { return css::uno::Reference< interface_type >::query( get() ); }
 };
 
 }

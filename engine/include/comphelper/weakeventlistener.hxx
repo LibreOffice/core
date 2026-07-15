@@ -46,7 +46,7 @@ namespace comphelper
     class OWeakListenerAdapterBase
     {
     private:
-        css::uno::WeakReference< css::uno::XInterface >
+        cpo::uno::WeakReference< css::uno::XInterface >
                 m_aListener;
         css::uno::Reference< css::uno::XInterface >
                 m_xBroadcaster;

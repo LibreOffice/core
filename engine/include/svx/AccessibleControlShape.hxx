@@ -178,7 +178,7 @@ private:
     css::uno::Reference< css::awt::XControl >
                     m_xUnoControl;              // our UNO control
 
-    css::uno::WeakReference< css::accessibility::XAccessibleContext >
+    cpo::uno::WeakReference< css::accessibility::XAccessibleContext >
                     m_aControlContext;      // the AccessibleContext of the control
     css::uno::Reference< css::uno::XAggregation >
                     m_xControlContextProxy; // the proxy for "aggregating" the AccessibleContext of the control

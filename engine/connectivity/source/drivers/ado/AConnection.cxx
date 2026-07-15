@@ -455,7 +455,7 @@ void OConnection::disposing()
     OConnection_BASE::disposing();
 
     m_bClosed   = true;
-    m_xMetaData = css::uno::WeakReference< css::sdbc::XDatabaseMetaData>();
+    m_xMetaData = cpo::uno::WeakReference< css::sdbc::XDatabaseMetaData>();
     m_xCatalog.clear();
     m_pDriver   = nullptr;
 

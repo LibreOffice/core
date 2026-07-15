@@ -39,7 +39,7 @@ namespace
 {
 class SharedWakeUpThread final : public salhelper::Thread
 {
-    static std::vector<css::uno::WeakReference<css::util::XUpdatable>> updatables;
+    static std::vector<cpo::uno::WeakReference<css::util::XUpdatable>> updatables;
     std::condition_variable condition;
     bool terminate;
 
@@ -115,7 +115,7 @@ public:
         assert(!wakeupThread);
     }
 
-    static void add(css::uno::WeakReference<css::util::XUpdatable> up)
+    static void add(cpo::uno::WeakReference<css::util::XUpdatable> up)
     {
         std::unique_lock g(getMutex());
         updatables.push_back(up);
@@ -123,7 +123,7 @@ public:
             wakeupThread = new SharedWakeUpThread();
     }
 
-    static void remove(css::uno::WeakReference<css::util::XUpdatable> up)
+    static void remove(cpo::uno::WeakReference<css::util::XUpdatable> up)
     {
         std::unique_lock g(getMutex());
         auto it = updatables.begin();
@@ -151,7 +151,7 @@ public:
 };
 
 rtl::Reference<SharedWakeUpThread> SharedWakeUpThread::wakeupThread;
-std::vector<css::uno::WeakReference<css::util::XUpdatable>> SharedWakeUpThread::updatables;
+std::vector<cpo::uno::WeakReference<css::util::XUpdatable>> SharedWakeUpThread::updatables;
 }
 
 namespace framework

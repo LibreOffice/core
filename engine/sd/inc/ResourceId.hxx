@@ -29,7 +29,7 @@
 #include <memory>
 
 namespace com::sun::star::util { class XURLTransformer; }
-namespace com::sun::star::uno { template <class interface_type> class WeakReference; }
+namespace cpo::uno { template <class interface_type> class WeakReference; }
 
 namespace sd::framework {
 
@@ -187,7 +187,7 @@ private:
 
     std::unique_ptr<css::util::URL> mpURL;
 
-    static css::uno::WeakReference<css::util::XURLTransformer> mxURLTransformerWeak;
+    static cpo::uno::WeakReference<css::util::XURLTransformer> mxURLTransformerWeak;
 
     /** Compare the called ResourceId object to the given ResourceId object.
         This uses the implementation of both objects to speed up the

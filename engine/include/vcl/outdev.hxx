@@ -183,7 +183,7 @@ private:
     std::vector< VCLXGraphics* >*   mpUnoGraphicsList;
     vcl::ExtOutDevData*             mpExtOutDevData;
     // The canvas interface for this output device. Is persistent after the first GetCanvas() call
-    mutable css::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;
+    mutable cpo::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;
 
     /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
     tools::Long                            mnOutOffOrigX;

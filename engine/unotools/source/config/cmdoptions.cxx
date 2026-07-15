@@ -91,7 +91,7 @@ std::mutex& GetOwnStaticMutex()
 
 }
 
-typedef ::std::vector< css::uno::WeakReference< css::frame::XFrame > > SvtFrameVector;
+typedef ::std::vector< cpo::uno::WeakReference< css::frame::XFrame > > SvtFrameVector;
 
 class SvtCommandOptions_Impl : public ConfigItem
 {
@@ -260,7 +260,7 @@ void SvtCommandOptions_Impl::EstablishFrameCallback(const css::uno::Reference< c
     // check if frame already exists inside list
     // ignore double registrations
     // every frame must be notified one times only!
-    css::uno::WeakReference< css::frame::XFrame > xWeak(xFrame);
+    cpo::uno::WeakReference< css::frame::XFrame > xWeak(xFrame);
     SvtFrameVector::const_iterator pIt = ::std::find(m_lFrames.begin(), m_lFrames.end(), xWeak);
     if (pIt == m_lFrames.end())
         m_lFrames.push_back(xWeak);
