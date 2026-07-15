@@ -622,7 +622,7 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
             return false;
     }
 
-    OSX_INST_RUNINMAIN_UNION( AnyInput( nType ), boolean )
+    OSX_SALDATA_RUNINMAIN_UNION(AnyInput(nType), boolean)
 
     if( nType & VclInputFlags::TIMER )
     {
@@ -688,13 +688,13 @@ SalFrame* AquaSalInstance::CreateChildFrame( SystemParentData*, SalFrameStyleFla
 
 SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle )
 {
-    OSX_INST_RUNINMAIN_POINTER( CreateFrame( pParent, nSalFrameStyle ), SalFrame* )
+    OSX_SALDATA_RUNINMAIN_POINTER(CreateFrame(pParent, nSalFrameStyle), SalFrame*)
     return new AquaSalFrame( pParent, nSalFrameStyle );
 }
 
 void AquaSalInstance::DestroyFrame( SalFrame* pFrame )
 {
-    OSX_INST_RUNINMAIN( DestroyFrame( pFrame ) )
+    OSX_SALDATA_RUNINMAIN(DestroyFrame(pFrame))
     delete pFrame;
 }
 
@@ -703,13 +703,13 @@ SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* p
     if ( !pParent )
         return nullptr;
 
-    OSX_INST_RUNINMAIN_POINTER( CreateObject( pParent, pWindowData, false ), SalObject* )
+    OSX_SALDATA_RUNINMAIN_POINTER(CreateObject(pParent, pWindowData, false), SalObject*)
     return new AquaSalObject( static_cast<AquaSalFrame*>(pParent), pWindowData );
 }
 
 void AquaSalInstance::DestroyObject( SalObject* pObject )
 {
-    OSX_INST_RUNINMAIN( DestroyObject( pObject ) )
+    OSX_SALDATA_RUNINMAIN(DestroyObject(pObject))
     delete pObject;
 }
 

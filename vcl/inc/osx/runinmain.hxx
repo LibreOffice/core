@@ -127,19 +127,6 @@
     }
 
 /**
- * convenience macros used from SalInstance
- */
-
-#define OSX_INST_RUNINMAIN( command ) \
-    OSX_RUNINMAIN( this, command )
-
-#define OSX_INST_RUNINMAIN_POINTER( command, type ) \
-    OSX_RUNINMAIN_POINTER( this, command, type )
-
-#define OSX_INST_RUNINMAIN_UNION( command, member ) \
-    OSX_RUNINMAIN_UNION( this, command, member )
-
-/**
  * convenience macros using global ImplSVData
  */
 
