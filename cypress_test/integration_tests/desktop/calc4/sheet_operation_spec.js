@@ -96,6 +96,34 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet Operations.', functi
 		helper.getContextMenuItemList().its('length').should('be.greaterThan', 10);
 	});
 
+	it('Shift+F10 on a whole selected column opens the column header menu', function () {
+		calcHelper.clickOnFirstCell();
+		cy.realPress(['Control', 'Space']);
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.realPress(['Shift', 'F10']);
+
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Insert Columns Before')
+			.should('be.visible');
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Delete selected columns')
+			.should('exist');
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Column Width')
+			.should('exist');
+	});
+
+	it('Shift+F10 on a whole selected row opens the row header menu', function () {
+		calcHelper.clickOnFirstCell();
+		cy.realPress(['Shift', 'Space']);
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.realPress(['Shift', 'F10']);
+
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Insert Rows Above')
+			.should('be.visible');
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Delete Rows')
+			.should('exist');
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Row Height')
+			.should('exist');
+	});
+
 	it('Hide/Show sheet', function () {
 		calcHelper.assertNumberofSheets(1);
 		cy.cGet('#spreadsheet-toolbar #insertsheet').click();
