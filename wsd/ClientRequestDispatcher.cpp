@@ -1331,6 +1331,8 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
 
             FileServerRequestHandler::hstsHeaders(*response);
             response->add("Last-Modified", Util::getHttpTimeNow());
+            // Prevent caching proxies from serving stale metrics
+            response->add("Cache-Control", "no-cache");
             // Ask UAs to block if they detect any XSS attempt
             response->add("X-XSS-Protection", "1; mode=block");
             // No referrer-policy
@@ -1805,6 +1807,8 @@ bool ClientRequestDispatcher::handleWopiDiscoveryRequest(
     httpResponse.setBody(xml, "text/xml");
     httpResponse.set("Last-Modified", Util::getHttpTimeNow());
     httpResponse.set("X-Content-Type-Options", "nosniff");
+    // Discovery XML depends on the request host and config; prevent caching proxies from serving it to other hosts
+    httpResponse.set("Cache-Control", "no-cache");
     if( requestDetails.closeConnection() )
         httpResponse.setConnectionToken(http::Header::ConnectionToken::Close);
     LOG_TRC("Sending back discovery.xml: " << xml);
@@ -3120,6 +3124,8 @@ void sendCapabilities(bool convertToAvailable, bool closeConnection,
     httpResponse.set("Last-Modified", Util::getHttpTimeNow());
     httpResponse.setBody(getCapabilitiesJson(convertToAvailable), "application/json");
     httpResponse.set("X-Content-Type-Options", "nosniff");
+    // Prevent caching proxies from serving stale capabilities
+    httpResponse.set("Cache-Control", "no-cache");
     if( closeConnection )
         socket->sendAndShutdown(httpResponse);
     else
