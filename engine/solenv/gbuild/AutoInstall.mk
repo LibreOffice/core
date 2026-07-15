@@ -37,6 +37,16 @@ $(gb_AutoInstall_targetdir)/% : $(GBUILDDIR)/AutoInstall.mk \
 	&& rm -f $${LIBFILE} $${EXEFILE} $${JARFILE} $${PKGFILE}
 	$(call gb_Trace_EndRange,$*,AIN)
 
+# Explicit rule for the directory marker. The build rule above has a bare "%"
+# target pattern rooted at the target directory, so it also matches the ".dir"
+# marker that lives there; because make prefers the shorter stem (".dir") that
+# rule would otherwise win over the generic $(WORKDIR)/%/.dir rule and both list
+# .dir as its own order-only prerequisite (the "Circular ... .dir dependency
+# dropped" warning) and generate a spurious autoinstall fragment into it. An
+# explicit rule takes precedence over any pattern rule, so this keeps .dir a
+# plain marker.
+$(gb_AutoInstall_targetdir)/.dir :
+	mkdir -p $(@D) && touch $@
 
 $(call gb_AutoInstall_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),AIL,3)
