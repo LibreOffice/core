@@ -24,10 +24,6 @@ $(eval $(call gb_InstallModule_add_defs,scp2/calc,\
 ))
 endif
 
-$(eval $(call gb_InstallModule_add_templates,scp2/calc,\
-    scp2/source/templates/module_langpack_calc \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/calc,\
     scp2/source/calc/file_calc \
     scp2/source/calc/module_calc \

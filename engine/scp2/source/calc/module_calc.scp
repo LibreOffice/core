@@ -57,14 +57,6 @@ Module gid_Module_Brand_Prg_Calc
     Files = (auto_calc_brand_ALL);
 End
 
-Module gid_Module_Langpack_Calc_Template
-    ParentID = gid_Module_Prg_Calc_Bin;
-    Name = "gid_Module_Langpack_Calc_Template";
-    Description = "gid_Module_Langpack_Calc_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = ();
-End
-
 Module gid_Module_Prg_Calc_MSO_Reg
     ParentID = gid_Module_Prg_Calc;
     Name = "gid_Module_Prg_Calc_MSO_Reg";
@@ -81,4 +73,3 @@ Module gid_Module_Prg_Calc_Other_Reg
     Default = YES;
 End
 
-#include "alllangmodules_calc.inc"

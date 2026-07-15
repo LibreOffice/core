@@ -49,14 +49,6 @@ Module gid_Module_Brand_Prg_Draw
     Files = (auto_draw_brand_ALL);
 End
 
-Module gid_Module_Langpack_Draw_Template
-    ParentID = gid_Module_Prg_Draw_Bin;
-    Name = "gid_Module_Langpack_Draw_Template";
-    Description = "gid_Module_Langpack_Draw_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = ();
-End
-
 Module gid_Module_Prg_Draw_MSO_Reg
     ParentID = gid_Module_Prg_Draw;
     Name = "gid_Module_Prg_Draw_MSO_Reg";
@@ -73,4 +65,3 @@ Module gid_Module_Prg_Draw_Other_Reg
     Default = YES;
 End
 
-#include "alllangmodules_draw.inc"

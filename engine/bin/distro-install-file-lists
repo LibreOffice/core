@@ -162,23 +162,11 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         if test "$OOO_VENDOR" = "Mandriva" -o \( "$OOO_VENDOR" = "SUSE" -a "$SPLIT_APP_MODULES" = "TRUE" \) ; then
             test -f gid_Module_Langpack_Basis_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Basis_$lang" || :
             test -f gid_Module_Langpack_Brand_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Brand_$lang" || :
-            test -f gid_Module_Langpack_Impress_$lang   && lang_lists="$lang_lists gid_Module_Langpack_Impress_$lang" || :
-            test -f gid_Module_Langpack_Draw_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Draw_$lang" || :
-            test -f gid_Module_Langpack_Math_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Math_$lang" || :
-            test -f gid_Module_Langpack_Calc_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Calc_$lang" || :
-            test -f gid_Module_Langpack_Base_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Base_$lang" || :
-            test -f gid_Module_Langpack_Writer_$lang    && lang_lists="$lang_lists gid_Module_Langpack_Writer_$lang" || :
             # Place helps on dedicated packages.
             test -f gid_Module_Helppack_Help_$lang      && sort -u gid_Module_Helppack_Help_$lang > $FILELISTSDIR/help_${lang}_list.txt || :
         else
             test -f gid_Module_Langpack_Basis_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Basis_$lang" || :
             test -f gid_Module_Langpack_Brand_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Brand_$lang" || :
-            test -f gid_Module_Langpack_Impress_$lang   && lang_lists="$lang_lists gid_Module_Langpack_Impress_$lang" || :
-            test -f gid_Module_Langpack_Draw_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Draw_$lang" || :
-            test -f gid_Module_Langpack_Math_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Math_$lang" || :
-            test -f gid_Module_Langpack_Calc_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Calc_$lang" || :
-            test -f gid_Module_Langpack_Base_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Base_$lang" || :
-            test -f gid_Module_Langpack_Writer_$lang    && lang_lists="$lang_lists gid_Module_Langpack_Writer_$lang" || :
             test -f gid_Module_Helppack_Help_$lang      && lang_lists="$lang_lists gid_Module_Helppack_Help_$lang" || :
         fi
         if test -n "$lang_lists" ; then

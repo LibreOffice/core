@@ -54,14 +54,6 @@ Module gid_Module_Brand_Prg_Impress
     Files = (auto_impress_brand_ALL);
 End
 
-Module gid_Module_Langpack_Impress_Template
-    ParentID = gid_Module_Prg_Impress_Bin;
-    Name = "gid_Module_Langpack_Impress_Template";
-    Description = "gid_Module_Langpack_Impress_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = ();
-End
-
 Module gid_Module_Prg_Impress_MSO_Reg
     ParentID = gid_Module_Prg_Impress;
     Name = "gid_Module_Prg_Impress_MSO_Reg";
@@ -78,4 +70,3 @@ Module gid_Module_Prg_Impress_Other_Reg
     Default = YES;
 End
 
-#include "alllangmodules_impress.inc"
