@@ -48,8 +48,6 @@ namespace connectivity::firebird
         css::uno::Reference<css::uno::XComponentContext> m_aContext;
         ::utl::TempFileNamed m_firebirdTMPDirectory;
         ::utl::TempFileNamed m_firebirdLockDirectory;
-        ::utl::TempFileNamed m_firebirdDataDirectory;
-        bool m_bConfined;
 
     protected:
         ::osl::Mutex                m_aMutex;       // mutex is need to control member access
@@ -63,11 +61,6 @@ namespace connectivity::firebird
         explicit FirebirdDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
         virtual ~FirebirdDriver() override;
         const css::uno::Reference<css::uno::XComponentContext>& getContext() const { return m_aContext; }
-
-        // The directory that embedded databases are extracted into. Each
-        // connection makes its own subdirectory here, and firebird keeps
-        // associated files it creates for them under this directory as well.
-        OUString getDatabaseDataDirectoryURL() const { return m_firebirdDataDirectory.GetURL(); }
 
         // OComponentHelper
         virtual void SAL_CALL disposing() override;

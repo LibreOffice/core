@@ -155,8 +155,7 @@ bool databaseHeaderHasBackupState(const OUString& rDatabasePath)
 
 }
 
-void Connection::construct(const OUString& url, const Sequence< PropertyValue >& info,
-                           const OUString& rDatabaseDataDirectoryURL)
+void Connection::construct(const OUString& url, const Sequence< PropertyValue >& info)
 {
     ConnectionGuard aGuard(m_refCount);
 
@@ -196,7 +195,7 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
             bIsNewDatabase = !m_xEmbeddedStorage->hasElements();
 
-            m_pDatabaseFileDir.reset(new ::utl::TempFileNamed(&rDatabaseDataDirectoryURL, true));
+            m_pDatabaseFileDir.reset(new ::utl::TempFileNamed(nullptr, true));
             m_pDatabaseFileDir->EnableKillingFile();
             m_sFirebirdURL = m_pDatabaseFileDir->GetFileName() + "/firebird.fdb";
             m_sFBKPath = m_pDatabaseFileDir->GetFileName() + "/firebird.fbk";
