@@ -20,6 +20,11 @@
 #include <ThemeColorChanger.hxx>
 #include <svx/ColorSets.hxx>
 
+#include <comphelper/scopeguard.hxx>
+#include <svtools/colorcfg.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/themecolors.hxx>
+
 using namespace css;
 
 class DocumentThemesTest : public ScUcalcTestBase
@@ -37,6 +42,37 @@ CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testGetTheme)
     CPPUNIT_ASSERT(pDrawLayer);
     auto const& pTheme = pDrawLayer->getTheme();
     CPPUNIT_ASSERT(pTheme);
+}
+
+// In dark mode, dark text colors are mapped to a lighter variant for on-screen
+// readability. That mapping must stay display-only: the Raw (persistence/export)
+// path has to return the stored color unchanged, otherwise saving a document in
+// dark mode would bake the lightened color into the file and the text would look
+// washed out when reopened in light mode.
+CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testDarkModeLightVariantNotPersisted)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // Explicit black font color on a dark cell background.
+    ScPatternAttr aPattern(m_pDoc->getCellAttributeHelper());
+    aPattern.ItemSetPut(SvxColorItem(COL_BLACK, ATTR_FONT_COLOR));
+    aPattern.ItemSetPut(SvxBrushItem(COL_BLACK, ATTR_BACKGROUND));
+
+    const AppearanceMode eOldMode = MiscSettings::GetAppColorMode();
+    MiscSettings::SetAppColorMode(AppearanceMode::DARK);
+    comphelper::ScopeGuard aResetMode([eOldMode] { MiscSettings::SetAppColorMode(eOldMode); });
+    CPPUNIT_ASSERT(svtools::ColorConfig::IsDarkMode());
+
+    // Raw keeps the real color (this guards the export/save path).
+    model::ComplexColor aRawColor;
+    aPattern.fillColor(aRawColor, ScAutoFontColorMode::Raw);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, aRawColor.getFinalColor());
+
+    // Display still lightens it, so the dark-mode readability feature works.
+    model::ComplexColor aDisplayColor;
+    aPattern.fillColor(aDisplayColor, ScAutoFontColorMode::Display);
+    CPPUNIT_ASSERT(COL_BLACK != aDisplayColor.getFinalColor());
+    CPPUNIT_ASSERT(!aDisplayColor.getFinalColor().IsDark());
 }
 
 std::shared_ptr<model::ColorSet> createTestTheme()

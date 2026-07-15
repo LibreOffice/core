@@ -872,7 +872,13 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
             aColor = aSysTextColor;
         }
     }
-    else if (svtools::ColorConfig::IsDarkMode())
+    // Lighten explicit dark colors for a dark background, but only for on-screen
+    // display. Raw returns the stored value unchanged (persistence/export), and
+    // Print keeps the real colors; otherwise the display-only light variant would
+    // be baked into the saved document.
+    else if (svtools::ColorConfig::IsDarkMode()
+             && eAutoMode != ScAutoFontColorMode::Raw
+             && eAutoMode != ScAutoFontColorMode::Print)
     {
         const SvxBrushItem* pItem
             = lcl_populateresult(ATTR_BACKGROUND, rItemSet, pCondSet, pTableSet);

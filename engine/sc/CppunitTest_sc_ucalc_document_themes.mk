@@ -35,6 +35,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc_document_themes, \
     sax \
     sc \
     svl \
+    svt \
     scqahelper \
     sfx \
     svxcore \
