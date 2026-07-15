@@ -59,6 +59,7 @@
 #include "CandleStickChart.hxx"
 #include "BubbleChart.hxx"
 #include "NetChart.hxx"
+#include "FunnelChart.hxx"
 #include "UnsupportedChart.hxx"
 #include <unonames.hxx>
 #include <SpecialCharacters.hxx>
@@ -2901,8 +2902,8 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
         pRet = new NetChart(xChartTypeModel,nDimensionCount,false,std::make_unique<PolarPlottingPositionHelper>());
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
         pRet = new CandleStickChart(xChartTypeModel,nDimensionCount);
-    else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )
-        pRet = new AreaChart(xChartTypeModel,nDimensionCount,false,true);
+    else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL) )
+        pRet = new FunnelChart(xChartTypeModel,nDimensionCount);
     else
         pRet = new UnsupportedChart(xChartTypeModel);
     return pRet;
