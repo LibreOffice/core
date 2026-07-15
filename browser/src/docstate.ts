@@ -45,6 +45,7 @@
 	viewId: null, // Unique view id of the user.
 	isAdminUser: null, // Is admin on the integrator side - used eg. to show update warnings
 	calc: {
+		maxColumnCount: 16384, // Calc MAXCOLCOUNT (sc/inc/address.hxx).
 		cellAddress: null, // To be assigned SimplePoint.
 		cellCursorVisible: false,
 		cellCursorRectangle: null, // To be assigned SimpleRectangle.

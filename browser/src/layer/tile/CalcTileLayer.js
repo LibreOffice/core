@@ -944,7 +944,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			else
 				this._map.wholeColumnSelected = false;
 
-			if (columnCount === 1024)
+			if (columnCount === app.calc.maxColumnCount)
 				this._map.wholeRowSelected = true;
 			else
 				this._map.wholeRowSelected = false;

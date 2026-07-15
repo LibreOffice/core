@@ -150,6 +150,7 @@ interface AppInterface {
 		right: number;
 	};
 	calc: {
+		maxColumnCount: number;
 		cellAddress: null | cool.SimplePoint;
 		cellCursorVisible: boolean;
 		cellCursorRectangle: null | cool.SimpleRectangle;
