@@ -4959,6 +4959,33 @@ printf ("hello world\n");
 fi
 AC_SUBST(ENABLE_GDB_INDEX)
 
+
+dnl Check whether the selected gold/mold/ld/lld linker
+dnl supports -z,pack-relative-relocs
+dnl Which is the upgrade to the combrelocs option.
+dnl ===================================================================
+ENABLE_PACK_RELATIVE_RELOCS=
+dnl Except for android, where the test passes, and then we fail linking
+dnl stuff anyhow.
+if test "$_os" != "Android" ; then
+  AC_MSG_CHECKING([whether $CC_BASE supports Wl,-z,pack-relative-relocs])
+  ldflags_save=$LDFLAGS
+  LDFLAGS="$LDFLAGS -Wl,-z,pack-relative-relocs"
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([
+#include <stdio.h>
+    ],[
+printf ("hello world\n");
+    ])], ENABLE_PACK_RELATIVE_RELOCS=TRUE, [])
+  if test "$ENABLE_PACK_RELATIVE_RELOCS" = "TRUE"; then
+      AC_MSG_RESULT( yes )
+  else
+      AC_MSG_RESULT( no )
+  fi
+  LDFLAGS=$ldflags_save
+fi
+AC_SUBST(ENABLE_PACK_RELATIVE_RELOCS)
+
+
 if test -z "$enable_sal_log" && test "$ENABLE_DEBUG" = TRUE; then
     enable_sal_log=yes
 fi
