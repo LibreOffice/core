@@ -130,6 +130,8 @@ public:
     {
         bool mbAllowEmptySet;
         bool mbRTL;
+        /// Open the popup below the left edge of the anchor rectangle.
+        bool mbBottomLeftAnchor;
         Config();
     };
 

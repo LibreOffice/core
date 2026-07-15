@@ -718,6 +718,17 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 OUString aCID = pObject->GetName();
                 if (aCID.startsWith("FieldButton"))
                 {
+                    // The button is a group whose label and dropdown arrow both
+                    // share the button name, so hit testing returns whichever one
+                    // is under the pointer. Climb to the group and send the whole
+                    // button rectangle, so the popup anchor does not depend on the
+                    // click point.
+                    while (SdrObject* pParent = pObject->getParentSdrObjectFromSdrObject())
+                    {
+                        if (!pParent->GetName().startsWith("FieldButton"))
+                            break;
+                        pObject = pParent;
+                    }
                     sendPopupRequest(aCID, pObject->GetCurrentBoundRect());
                     return;
                 }

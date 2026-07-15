@@ -708,7 +708,7 @@ void ScGridWindow::DPSetupFieldPopup(std::unique_ptr<ScCheckListMenuControl::Ext
     mpDPFieldPopup->initMembers();
 }
 
-void ScGridWindow::DPConfigFieldPopup()
+void ScGridWindow::DPConfigFieldPopup(bool bBottomLeftAnchor)
 {
     if (!mpDPFieldPopup)
         return;
@@ -716,11 +716,13 @@ void ScGridWindow::DPConfigFieldPopup()
     ScCheckListMenuControl::Config aConfig;
     aConfig.mbAllowEmptySet = false;
     aConfig.mbRTL = mrViewData.GetDocument().IsLayoutRTL(mrViewData.CurrentTabForData());
+    aConfig.mbBottomLeftAnchor = bBottomLeftAnchor;
     mpDPFieldPopup->setConfig(aConfig);
 }
 
 void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize,
-                                          tools::Long nDimIndex, ScDPObject* pDPObj)
+                                          tools::Long nDimIndex, ScDPObject* pDPObj,
+                                          bool bBottomLeftAnchor)
 {
     std::unique_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
     bool bDimOrientNotPage = true;
@@ -735,7 +737,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
 
     DPSetupFieldPopup(std::move(pDPData), bDimOrientNotPage, pDPObj);
 
-    DPConfigFieldPopup();
+    DPConfigFieldPopup(bBottomLeftAnchor);
 
     if (IsMouseCaptured())
         ReleaseMouse();

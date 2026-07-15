@@ -263,7 +263,7 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) ScGridWindow : public vcl::DocWindow,
     void DPPopulateFieldMembers(const ScDPLabelData& rLabelData);
     void DPSetupFieldPopup(std::unique_ptr<ScCheckListMenuControl::ExtendedData> pDPData, bool bDimOrientNotPage,
                            ScDPObject* pDPObj, bool bMultiField = false);
-    void DPConfigFieldPopup();
+    void DPConfigFieldPopup(bool bBottomLeftAnchor = false);
     void DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj);
     void DPLaunchMultiFieldPopupMenu(const Point& rScrPos, const Size& rScrSize, ScDPObject* pDPObj,
                                      css::sheet::DataPilotFieldOrientation nOrient);
@@ -465,7 +465,8 @@ public:
     css::sheet::DataPilotFieldOrientation GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const;
 
     void DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize,
-                                tools::Long nDimIndex, ScDPObject* pDPObj);
+                                tools::Long nDimIndex, ScDPObject* pDPObj,
+                                bool bBottomLeftAnchor = false);
 
     void DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev,
                      const ScKitRTLContext* pKitRTLContext);

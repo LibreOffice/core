@@ -519,7 +519,7 @@ void ScCheckListMenuControl::terminateAllPopupMenus()
 }
 
 ScCheckListMenuControl::Config::Config() :
-    mbAllowEmptySet(true), mbRTL(false)
+    mbAllowEmptySet(true), mbRTL(false), mbBottomLeftAnchor(false)
 {
 }
 
@@ -1755,6 +1755,10 @@ void ScCheckListMenuControl::launch(weld::Widget* pWidget, const tools::Rectangl
             // to place the popup next to the (visual) left aligned button.
             aRect.Move(aRect.GetWidth(), 0);
         }
+    }
+    else if (maConfig.mbBottomLeftAnchor)
+    {
+        aRect.Move(mnWndWidth, 0);
     }
     else if (mnWndWidth < aRect.GetWidth())
     {

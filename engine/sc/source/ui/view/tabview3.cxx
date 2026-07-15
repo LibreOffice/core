@@ -3165,7 +3165,8 @@ void ScTabView::DoDPFieldPopup(std::u16string_view rPivotTableName, sal_Int32 nD
     Point aScreenPoint = bLOK ? aPos : pWin->OutputToScreenPixel(aPos);
     Size aScreenSize = pWin->LogicToPixel(aSize);
 
-    pWin->DPLaunchFieldPopupMenu(aScreenPoint, aScreenSize, nDimensionIndex, pDPObject);
+    pWin->DPLaunchFieldPopupMenu(aScreenPoint, aScreenSize, nDimensionIndex, pDPObject,
+                                 /*bBottomLeftAnchor*/ true);
 }
 
 //  PaintGrid - repaint data range
