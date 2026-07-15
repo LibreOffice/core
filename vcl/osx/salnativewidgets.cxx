@@ -28,6 +28,7 @@
 #include <vcl/themecolors.hxx>
 
 #include <quartz/salgdi.h>
+#include <osx/runinmain.hxx>
 #include <osx/salnativewidgets.h>
 #include <osx/saldata.hxx>
 #include <osx/salframe.h>
@@ -506,7 +507,7 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
 {
     bool bOK = false;
     bool bCanUseThemeColors(ThemeColors::VclPluginCanUseThemeColors());
-    AquaSalInstance* pInst = GetSalData()->mpInstance;
+    AquaSalInstance* pInst = GetAquaSalInstance();
     HIRect rc = ImplGetHIRectFromRectangle(rControlRegion);
     switch (nType)
     {

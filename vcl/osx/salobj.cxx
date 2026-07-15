@@ -153,7 +153,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 AquaSalObject::~AquaSalObject()
 {
-    assert( GetSalData()->mpInstance->IsMainThread() );
+    assert(GetAquaSalInstance()->IsMainThread());
 
     if( maSysData.mpNSView )
     {

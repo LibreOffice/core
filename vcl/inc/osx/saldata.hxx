@@ -64,7 +64,6 @@ class VCLPLUG_OSX_PUBLIC SalData
 {
 public:
     SALTIMERPROC                                  mpTimerProc;      // timer callback proc
-    AquaSalInstance                              *mpInstance;
     std::list<AquaSalFrame*>                      maPresentationFrames;  // list of frames in presentation mode
     SalObject                                    *mpFirstObject;    // pointer of first object window
     SalVirtualDevice                             *mpFirstVD;        // first VirDev

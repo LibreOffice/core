@@ -75,9 +75,7 @@ void AquaSalTimer::queueDispatchTimerEvent( bool bAtStart )
 
 void AquaSalTimer::Start( sal_uInt64 nMS )
 {
-    SalData* pSalData = GetSalData();
-
-    if( !pSalData->mpInstance->IsMainThread() )
+    if (!GetAquaSalInstance()->IsMainThread())
     {
         ImplNSAppPostEvent( AquaSalInstance::AppStartTimerEvent, YES, nMS );
         return;
@@ -120,7 +118,7 @@ void AquaSalTimer::Start( sal_uInt64 nMS )
 
 void AquaSalTimer::Stop()
 {
-    assert( GetSalData()->mpInstance->IsMainThread() );
+    assert(GetAquaSalInstance()->IsMainThread());
 
     if( m_pRunningTimer != nil )
     {

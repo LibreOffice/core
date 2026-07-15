@@ -110,7 +110,7 @@ public:
         if (eMode == AppearanceMode::AUTO)
             MiscSettings::SetAppColorMode(eMode);
 
-        AquaSalInstance *pInst = GetSalData()->mpInstance;
+        AquaSalInstance* pInst = GetAquaSalInstance();
         SalFrame *pAnyFrame = pInst->anyFrame();
         if( pAnyFrame )
             pAnyFrame->CallCallback( SalEvent::SettingsChanged, nullptr );
@@ -219,11 +219,7 @@ VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
     [NSApp setDelegate: NSApp];
 
     AquaSalInstance* pInst = new AquaSalInstance;
-    SalData* pSalData = GetSalData();
-    SAL_WARN_IF( pSalData->mpInstance != nullptr, "vcl", "more than one instance created" );
 
-    // init instance (only one instance in this version !!!)
-    pSalData->mpInstance = pInst;
     // this one is for outside AquaSalInstance::Yield
     SalData::ensureThreadAutoreleasePool();
     // no focus rects on NWF
@@ -299,7 +295,7 @@ void AquaSalInstance::ProcessEvent( SalUserEvent aEvent )
 
 bool AquaSalInstance::IsMainThread() const
 {
-    AquaSalInstance *pInst = GetSalData()->mpInstance;
+    AquaSalInstance* pInst = GetAquaSalInstance();
     AquaSalYieldMutex *aMutex = static_cast<AquaSalYieldMutex*>(pInst->GetYieldMutex());
 
     return aMutex->IsMainThread();
@@ -307,7 +303,7 @@ bool AquaSalInstance::IsMainThread() const
 
 void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 {
-    AquaSalInstance *pInst = GetSalData()->mpInstance;
+    AquaSalInstance* pInst = GetAquaSalInstance();
     AquaSalTimer *pTimer = static_cast<AquaSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
 
     switch( [pEvent subtype] )
@@ -564,7 +560,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         ImplGetSVData()->mpWinData->mbIsWaitingForNativeEvent = bOldIsWaitingForNativeEvent;
 
         // collect update rectangles
-        for( auto pSalFrame : GetSalData()->mpInstance->getFrames() )
+        for (auto pSalFrame : GetAquaSalInstance()->getFrames())
         {
             AquaSalFrame* pFrame = static_cast<AquaSalFrame*>( pSalFrame );
             if( pFrame->mbShown && ! pFrame->maInvalidRect.IsEmpty() )

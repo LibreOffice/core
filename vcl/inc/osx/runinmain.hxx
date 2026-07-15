@@ -45,6 +45,7 @@
 
 #include "saltimer.h"
 #include <tools/debug.hxx>
+#include <osx/salinst.h>
 #include <osx/salmutex.hxx>
 
 #define OSX_RUNINMAIN( instance, command ) \
@@ -139,16 +140,16 @@
     OSX_RUNINMAIN_UNION( this, command, member )
 
 /**
- * convenience macros using global SalData
+ * convenience macros using global ImplSVData
  */
 
 #define OSX_SALDATA_RUNINMAIN( command ) \
-    OSX_RUNINMAIN( GetSalData()->mpInstance, command )
+    OSX_RUNINMAIN(GetAquaSalInstance(), command)
 
 #define OSX_SALDATA_RUNINMAIN_POINTER( command, type ) \
-    OSX_RUNINMAIN_POINTER( GetSalData()->mpInstance, command, type )
+    OSX_RUNINMAIN_POINTER(GetAquaSalInstance(), command, type)
 
 #define OSX_SALDATA_RUNINMAIN_UNION( command, member ) \
-    OSX_RUNINMAIN_UNION( GetSalData()->mpInstance, command, member )
+    OSX_RUNINMAIN_UNION(GetAquaSalInstance(), command, member)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

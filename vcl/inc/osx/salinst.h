@@ -31,8 +31,6 @@
 #include <osl/thread.hxx>
 #include <tools/long.hxx>
 
-#include <osx/runinmain.hxx>
-
 #include "MacInstance.hxx"
 
 class AquaSalFrame;
@@ -137,5 +135,9 @@ private:
 CGImageRef CreateCGImage( const Image& );
 NSImage*   CreateNSImage( const Image& );
 
+inline AquaSalInstance* GetAquaSalInstance()
+{
+    return static_cast<AquaSalInstance*>(GetSalInstance());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

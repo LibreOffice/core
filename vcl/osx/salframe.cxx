@@ -94,8 +94,7 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
 
     initWindowAndView();
 
-    SalData* pSalData = GetSalData();
-    pSalData->mpInstance->insertFrame( this );
+    GetAquaSalInstance()->insertFrame(this);
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 
     // tdf#150177 Limit minimum blink cursor rate
@@ -123,7 +122,7 @@ AquaSalFrame::~AquaSalFrame()
     if (mbInternalFullScreen)
         doShowFullScreen(false, maGeometry.screen());
 
-    assert( GetSalData()->mpInstance->IsMainThread() );
+    assert(GetAquaSalInstance()->IsMainThread());
 
     // if the frame is destroyed and has the current menubar
     // set the default menubar
@@ -135,9 +134,8 @@ AquaSalFrame::~AquaSalFrame()
 
     [SalFrameView unsetMouseFrame: this];
 
-    SalData* pSalData = GetSalData();
-    pSalData->mpInstance->eraseFrame( this );
-    pSalData->maPresentationFrames.remove( this );
+    GetAquaSalInstance()->eraseFrame(this);
+    GetSalData()->maPresentationFrames.remove(this);
 
     SAL_WARN_IF( this == s_pCaptureFrame, "vcl", "capture frame destroyed" );
     if( this == s_pCaptureFrame )
@@ -326,7 +324,7 @@ void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 
 bool AquaSalFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 {
-    GetSalData()->mpInstance->PostEvent( this, pData.release(), SalEvent::UserEvent );
+    GetAquaSalInstance()->PostEvent(this, pData.release(), SalEvent::UserEvent);
     return true;
 }
 
@@ -464,7 +462,7 @@ void AquaSalFrame::headlessShow(bool bVisible, bool bNoActivate)
     if (bVisible)
     {
         mbShown = true;
-        GetSalData()->mpInstance->PostEvent(this, nullptr, SalEvent::Resize);
+        GetAquaSalInstance()->PostEvent(this, nullptr, SalEvent::Resize);
         if( ! bNoActivate )
             headlessGetFocus();
     }
@@ -1086,7 +1084,7 @@ void AquaSalFrame::headlessGetFocus()
         if( s_pHeadlessFocusFrame )
             s_pHeadlessFocusFrame->headlessLoseFocus();
         s_pHeadlessFocusFrame = this;
-        GetSalData()->mpInstance->PostEvent(this, nullptr, SalEvent::GetFocus);
+        GetAquaSalInstance()->PostEvent(this, nullptr, SalEvent::GetFocus);
     }
 }
 
@@ -1094,7 +1092,7 @@ void AquaSalFrame::headlessLoseFocus()
 {
     if( s_pHeadlessFocusFrame == this )
     {
-        GetSalData()->mpInstance->PostEvent(this, nullptr, SalEvent::LoseFocus);
+        GetAquaSalInstance()->PostEvent(this, nullptr, SalEvent::LoseFocus);
         s_pHeadlessFocusFrame = nullptr;
     }
 }

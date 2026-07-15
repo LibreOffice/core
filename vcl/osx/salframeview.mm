@@ -43,6 +43,7 @@
 #include <osx/salframe.h>
 #include <osx/salframeview.h>
 #include <osx/salinst.h>
+#include <osx/saltimer.h>
 #include <quartz/salgdi.h>
 #include <quartz/utils.h>
 
@@ -477,7 +478,7 @@ static NSString* getCurrentSelection()
 
 -(void)displayIfNeeded
 {
-    if( GetSalData() && GetSalData()->mpInstance )
+    if (ImplGetSVData() && GetAquaSalInstance())
     {
         SolarMutexGuard aGuard;
         [super displayIfNeeded];
@@ -3238,7 +3239,7 @@ static NSString* getCurrentSelection()
     {
         SolarMutexGuard aGuard;
 
-        GetSalData()->mpInstance->delayedSettingsChanged(true);
+        GetAquaSalInstance()->delayedSettingsChanged(true);
     }
 
     mbInViewDidChangeEffectiveAppearance = NO;

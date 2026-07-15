@@ -248,7 +248,7 @@ private: // data
 
 inline bool AquaSalFrame::isAlive( const AquaSalFrame* pFrame )
 {
-    AquaSalInstance *pInst = GetSalData()->mpInstance;
+    AquaSalInstance* pInst = GetAquaSalInstance();
     return pInst && pInst->isFrameAlive( pFrame );
 }
 

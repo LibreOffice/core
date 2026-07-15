@@ -47,7 +47,6 @@ static void releasePool( void* pPool )
 SalData::SalData()
 :
     mpTimerProc( nullptr ),
-    mpInstance( nullptr ),
     mpFirstObject( nullptr ),
     mpFirstVD( nullptr ),
     mpFirstPrinter( nullptr ),
