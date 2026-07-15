@@ -92,33 +92,33 @@ namespace csscd = css::chart::DataLabelPlacement;
 
 const TypeGroupInfo spTypeInfos[] =
 {
-    // type-id          type-category         service                   varied-point-color   default label pos     polar  area2d 1stvis xcateg swap   stack  picopt
-    { TYPEID_BAR,       TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true,  true  },
-    { TYPEID_HORBAR,    TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  true,  true,  true  },
-    { TYPEID_HISTO,     TYPECATEGORY_HISTO,   SERVICE_CHART2_HISTO,     VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true,  true  },
-    { TYPEID_LINE,      TYPECATEGORY_LINE,    SERVICE_CHART2_LINE,      VARPOINTMODE_SINGLE, csscd::RIGHT,         false, false, false, true,  false, true,  false },
-    { TYPEID_AREA,      TYPECATEGORY_LINE,    SERVICE_CHART2_AREA,      VARPOINTMODE_NONE,   csscd::CENTER,        false, true,  false, true,  false, true,  false },
-    { TYPEID_STOCK,     TYPECATEGORY_LINE,    SERVICE_CHART2_CANDLE,    VARPOINTMODE_NONE,   csscd::RIGHT,         false, false, false, true,  false, true,  false },
-    { TYPEID_RADARLINE, TYPECATEGORY_RADAR,   SERVICE_CHART2_NET,       VARPOINTMODE_SINGLE, csscd::OUTSIDE,       true,  false, false, true,  false, false, false },
-    { TYPEID_RADARAREA, TYPECATEGORY_RADAR,   SERVICE_CHART2_FILLEDNET, VARPOINTMODE_NONE,   csscd::OUTSIDE,       true,  true,  false, true,  false, false, false },
-    { TYPEID_PIE,       TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, true,  true,  true,  true,  false, false, false },
-    { TYPEID_DOUGHNUT,  TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, true,  true,  false, true,  false, false, false },
-    { TYPEID_OFPIE,     TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, true,  true,  true,  true,  false, false, false },
-    { TYPEID_SCATTER,   TYPECATEGORY_SCATTER, SERVICE_CHART2_SCATTER,   VARPOINTMODE_SINGLE, csscd::RIGHT,         false, false, false, false, false, false, false },
-    { TYPEID_BUBBLE,    TYPECATEGORY_SCATTER, SERVICE_CHART2_BUBBLE,    VARPOINTMODE_SINGLE, csscd::RIGHT,         false, true,  false, false, false, false, false },
-    { TYPEID_SURFACE,   TYPECATEGORY_SURFACE, SERVICE_CHART2_SURFACE,   VARPOINTMODE_NONE,   csscd::RIGHT,         false, true,  false, true,  false, false, false },
-    { TYPEID_FUNNEL,    TYPECATEGORY_FUNNEL,  SERVICE_CHART2_FUNNEL,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, false, false },
-    { TYPEID_BOXWHISKER,TYPECATEGORY_BOXWHISKER,  SERVICE_CHART2_BOXWHISKER, VARPOINTMODE_SINGLE, csscd::OUTSIDE,  false, true,  false, true,  false, false, false },
-    { TYPEID_CLUSTEREDCOLUMN,TYPECATEGORY_CLUSTEREDCOLUMN, SERVICE_CHART2_CLUSTEREDCOLUMN, VARPOINTMODE_SINGLE, csscd::OUTSIDE,  false, true,  false, true,  false, false, false },
-    { TYPEID_PARETOLINE,TYPECATEGORY_PARETOLINE,  SERVICE_CHART2_PARETOLINE, VARPOINTMODE_SINGLE, csscd::OUTSIDE,  false, true,  false, true,  false, false, false },
-    { TYPEID_REGIONMAP, TYPECATEGORY_REGIONMAP,   SERVICE_CHART2_REGIONMAP,  VARPOINTMODE_NONE, csscd::OUTSIDE,    false, true,  false, true,  false, false, false },
-    { TYPEID_SUNBURST,  TYPECATEGORY_SUNBURST,    SERVICE_CHART2_SUNBURST,   VARPOINTMODE_MULTI, csscd::OUTSIDE,   false, true,  false, true,  false, false, false },
-    { TYPEID_TREEMAP,   TYPECATEGORY_TREEMAP,     SERVICE_CHART2_TREEMAP,    VARPOINTMODE_MULTI, csscd::OUTSIDE,   false, true,  false, true,  false, false, false },
-    { TYPEID_WATERFALL, TYPECATEGORY_WATERFALL,   SERVICE_CHART2_WATERFALL,  VARPOINTMODE_SINGLE, csscd::OUTSIDE,  false, true,  false, true,  false, false, false }
+    // type-id          type-category         service                   varied-point-color   default label pos     polar  area2d 1stvis xcateg swap   stack  picopt shftcat 3dshftcat
+    { TYPEID_BAR,       TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true,  true,  true,  true },
+    { TYPEID_HORBAR,    TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  true,  true,  true,  true,  true },
+    { TYPEID_HISTO,     TYPECATEGORY_HISTO,   SERVICE_CHART2_HISTO,     VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true,  true,  false, false},
+    { TYPEID_LINE,      TYPECATEGORY_LINE,    SERVICE_CHART2_LINE,      VARPOINTMODE_SINGLE, csscd::RIGHT,         false, false, false, true,  false, true,  false, true,  false},
+    { TYPEID_AREA,      TYPECATEGORY_LINE,    SERVICE_CHART2_AREA,      VARPOINTMODE_NONE,   csscd::CENTER,        false, true,  false, true,  false, true,  false, false, false},
+    { TYPEID_STOCK,     TYPECATEGORY_LINE,    SERVICE_CHART2_CANDLE,    VARPOINTMODE_NONE,   csscd::RIGHT,         false, false, false, true,  false, true,  false, true,  true },
+    { TYPEID_RADARLINE, TYPECATEGORY_RADAR,   SERVICE_CHART2_NET,       VARPOINTMODE_SINGLE, csscd::OUTSIDE,       true,  false, false, true,  false, false, false, false, false},
+    { TYPEID_RADARAREA, TYPECATEGORY_RADAR,   SERVICE_CHART2_FILLEDNET, VARPOINTMODE_NONE,   csscd::OUTSIDE,       true,  true,  false, true,  false, false, false, false, false},
+    { TYPEID_PIE,       TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, true,  true,  true,  true,  false, false, false, false, false},
+    { TYPEID_DOUGHNUT,  TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, true,  true,  false, true,  false, false, false, false, false},
+    { TYPEID_OFPIE,     TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, true,  true,  true,  true,  false, false, false, false, false},
+    { TYPEID_SCATTER,   TYPECATEGORY_SCATTER, SERVICE_CHART2_SCATTER,   VARPOINTMODE_SINGLE, csscd::RIGHT,         false, false, false, false, false, false, false, false, false},
+    { TYPEID_BUBBLE,    TYPECATEGORY_SCATTER, SERVICE_CHART2_BUBBLE,    VARPOINTMODE_SINGLE, csscd::RIGHT,         false, true,  false, false, false, false, false, false, false},
+    { TYPEID_SURFACE,   TYPECATEGORY_SURFACE, SERVICE_CHART2_SURFACE,   VARPOINTMODE_NONE,   csscd::RIGHT,         false, true,  false, true,  false, false, false, false, false},
+    { TYPEID_FUNNEL,    TYPECATEGORY_FUNNEL,  SERVICE_CHART2_FUNNEL, VARPOINTMODE_SINGLE, csscd::OUTSIDE,          false, true,  false, true,  true,  false, false, true,  false},
+    { TYPEID_BOXWHISKER,TYPECATEGORY_BOXWHISKER,  SERVICE_CHART2_BOXWHISKER, VARPOINTMODE_SINGLE, csscd::OUTSIDE,  false, true,  false, true,  false, false, false, false, false},
+    { TYPEID_CLUSTEREDCOLUMN,TYPECATEGORY_CLUSTEREDCOLUMN, SERVICE_CHART2_CLUSTEREDCOLUMN, VARPOINTMODE_SINGLE, csscd::OUTSIDE,  false, true,  false, true,  false, false, false, false, false},
+    { TYPEID_PARETOLINE,TYPECATEGORY_PARETOLINE,  SERVICE_CHART2_PARETOLINE, VARPOINTMODE_SINGLE, csscd::OUTSIDE,  false, true,  false, true,  false, false, false, false, false},
+    { TYPEID_REGIONMAP, TYPECATEGORY_REGIONMAP,   SERVICE_CHART2_REGIONMAP,  VARPOINTMODE_NONE, csscd::OUTSIDE,    false, true,  false, true,  false, false, false, false, false},
+    { TYPEID_SUNBURST,  TYPECATEGORY_SUNBURST,    SERVICE_CHART2_SUNBURST,   VARPOINTMODE_MULTI, csscd::OUTSIDE,   false, true,  false, true,  false, false, false, false, false},
+    { TYPEID_TREEMAP,   TYPECATEGORY_TREEMAP,     SERVICE_CHART2_TREEMAP,    VARPOINTMODE_MULTI, csscd::OUTSIDE,   false, true,  false, true,  false, false, false, false, false},
+    { TYPEID_WATERFALL, TYPECATEGORY_WATERFALL,   SERVICE_CHART2_WATERFALL,  VARPOINTMODE_SINGLE, csscd::OUTSIDE,  false, true,  false, true,  false, false, false, false, false}
 };
 
 const TypeGroupInfo saUnknownTypeInfo =
-    { TYPEID_UNKNOWN,   TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,  VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true, true  };
+    { TYPEID_UNKNOWN,   TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,  VARPOINTMODE_SINGLE, csscd::OUTSIDE,         false, true,  false, true,  false, true,   true, false, false};
 
 const TypeGroupInfo& lclGetTypeInfoFromTypeId( TypeId eTypeId )
 {

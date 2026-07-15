@@ -502,6 +502,19 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testStockChartShiftedCategoryPosition)
     CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testFunnelChartShiftedCategoryPosition)
+{
+    loadFromFile(u"xlsx/color_funnel.xlsx");
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xAxis.is());
+
+    chart2::ScaleData aScaleData = xAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf133376)
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with

@@ -106,6 +106,9 @@ struct TypeGroupInfo
     bool                mbSwappedAxesSet;       /// True = X axis and Y axis are swapped.
     bool                mbSupportsStacking;     /// True = data points can be stacked on each other.
     bool                mbPictureOptions;       /// True = bitmaps support options from c:pictureOptions.
+    bool                mbShiftedCatPos;        /// True = default category axis position is shifted
+                                                /// This can get overridden in AxisConverter::convertFromModel()
+    bool                mb3dShiftedCatPos;      /// True = default category axis position is shifted for 3d charts
 };
 
 const TypeGroupInfo& GetTypeGroupInfo( TypeId eType );

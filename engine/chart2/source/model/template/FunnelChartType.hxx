@@ -8,7 +8,9 @@
  */
 #pragma once
 
+#include <ChartModel.hxx>
 #include <ChartType.hxx>
+#include <Diagram.hxx>
 
 namespace chart
 {
@@ -26,6 +28,9 @@ public:
 
 private:
     explicit FunnelChartType(const FunnelChartType& rOther);
+
+    virtual rtl::Reference<::chart::BaseCoordinateSystem>
+    createCoordinateSystem2(sal_Int32 DimensionCount) override;
 
     // ____ XChartType ____
     virtual OUString getChartType() override;

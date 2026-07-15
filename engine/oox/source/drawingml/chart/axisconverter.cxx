@@ -334,14 +334,14 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                     }
                     /* set default ShiftedCategoryPosition values for some charttype,
                        because the XML can contain wrong CrossBetween value, if came from MSO */
-                    if( rTypeGroups.front()->is3dChart() && (rTypeInfo.meTypeId == TYPEID_BAR || rTypeInfo.meTypeId == TYPEID_HORBAR || rTypeInfo.meTypeId == TYPEID_STOCK) )
-                        aScaleData.ShiftedCategoryPosition = true;
-                    else if( rTypeInfo.meTypeId == TYPEID_RADARLINE || rTypeInfo.meTypeId == TYPEID_RADARAREA )
+                    if( rTypeGroups.front()->is3dChart()) {
+                        aScaleData.ShiftedCategoryPosition = rTypeInfo.mb3dShiftedCatPos;
+                    } else if( rTypeInfo.meTypeId == TYPEID_RADARLINE || rTypeInfo.meTypeId == TYPEID_RADARAREA )
                         aScaleData.ShiftedCategoryPosition = false;
                     else if( pCrossingAxis->mnCrossBetween != -1 ) /*because of backwards compatibility*/
                         aScaleData.ShiftedCategoryPosition = pCrossingAxis->mnCrossBetween == XML_between;
-                    else if( rTypeInfo.meTypeCategory == TYPECATEGORY_BAR || rTypeInfo.meTypeId == TYPEID_LINE || rTypeInfo.meTypeId == TYPEID_STOCK )
-                        aScaleData.ShiftedCategoryPosition = true;
+                    else
+                        aScaleData.ShiftedCategoryPosition = rTypeInfo.mbShiftedCatPos;
                 }
                 else
                 {

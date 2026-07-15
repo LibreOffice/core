@@ -590,6 +590,7 @@ void ChartTypeTemplate::adaptScales(
                                     m_aServiceName.indexOf("Column") != -1 ||
                                     (m_aServiceName.indexOf("Bar") != -1 &&
                                      !m_aServiceName.indexOf("BarOfPie")) ||
+                                    m_aServiceName.indexOf("Funnel") != -1 ||
                                     m_aServiceName.endsWith("Close");
                             }
                             bool bSupportsDates = xChartType.is() ? xChartType->isSupportingDateAxis(nDimensionX) : true;

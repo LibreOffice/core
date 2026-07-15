@@ -913,16 +913,13 @@ void BarChart::doXSlot(
                 }
                 else //m_nDimension!=3
                 {
-                    drawing::Position3D aLeftUpperPoint( fLogicX-fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
-                    drawing::Position3D aRightUpperPoint( fLogicX+fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
                     std::vector<std::vector<css::drawing::Position3D>> aPoly
                     {
                         { // inner vector
-                            drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ),
-                            drawing::Position3D( fLogicX+fLogicBarWidth/2.0,fLowerYValue,fLogicZ),
-                            aRightUpperPoint,
-                            aLeftUpperPoint,
-                            drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ)
+                            drawing::Position3D( fLogicX-fLogicBarWidth/2.0, fLowerYValue, fLogicZ),
+                            drawing::Position3D( fLogicX+fLogicBarWidth/2.0, fLowerYValue, fLogicZ),
+                            drawing::Position3D( fLogicX+fLogicBarWidth/2.0, fUpperYValue, fLogicZ),
+                            drawing::Position3D( fLogicX-fLogicBarWidth/2.0, fUpperYValue, fLogicZ )
                         }
                     };
                     pPosHelper->transformScaledLogicToScene( aPoly );

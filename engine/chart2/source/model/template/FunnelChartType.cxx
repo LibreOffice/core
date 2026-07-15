@@ -9,8 +9,15 @@
 
 #include "FunnelChartType.hxx"
 #include <servicenames_charttypes.hxx>
+#include <Axis.hxx>
+#include <AxisHelper.hxx>
+#include <AxisIndexDefines.hxx>
+#include <CartesianCoordinateSystem.hxx>
 #include <PropertyHelper.hxx>
+
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/chart2/AxisType.hpp>
+
 #include <cppuhelper/supportsservice.hxx>
 
 namespace com::sun::star::uno
@@ -108,6 +115,46 @@ void FunnelChartType::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) co
         rAny.clear();
     else
         rAny = (*aFound).second;
+}
+
+rtl::Reference<::chart::BaseCoordinateSystem>
+FunnelChartType::createCoordinateSystem2(sal_Int32 DimensionCount)
+{
+    rtl::Reference<CartesianCoordinateSystem> xResult
+        = new CartesianCoordinateSystem(DimensionCount);
+
+    for (sal_Int32 i = 0; i < DimensionCount; i++)
+    {
+        rtl::Reference<Axis> xAxis = xResult->getAxisByDimension2(i, MAIN_AXIS_INDEX);
+        if (!xAxis.is())
+            continue;
+
+        chart2::ScaleData aScaleData = xAxis->getScaleData();
+
+        if (i == 0) // X-axis
+        {
+            // Set up X-axis specifically for histogram bins
+            aScaleData.AxisType = chart2::AxisType::CATEGORY;
+            aScaleData.AutoDateAxis = false;
+            aScaleData.ShiftedCategoryPosition = true;
+            aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+
+            // Clear any existing scaling/categories
+            AxisHelper::removeExplicitScaling(aScaleData);
+            aScaleData.Categories.clear();
+        }
+        else if (i == 1) // Y-axis
+        {
+            aScaleData.AxisType = chart2::AxisType::REALNUMBER;
+            aScaleData.ShiftedCategoryPosition = false;
+            aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+            aScaleData.Scaling = AxisHelper::createLinearScaling();
+        }
+
+        xAxis->setScaleData(aScaleData);
+    }
+
+    return xResult;
 }
 
 ::cppu::IPropertyArrayHelper& FunnelChartType::getInfoHelper()
