@@ -161,13 +161,13 @@ static std::string_view vendorAsString(uint32_t vendor)
 }
 
 // returns old value
-static bool setForceSkiaRaster(bool val)
+static bool setForceSkiaGPU(bool val)
 {
-    const bool oldValue = officecfg::Office::Common::VCL::ForceSkiaRaster::get();
-    if (oldValue != val && !officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly())
+    const bool oldValue = officecfg::Office::Common::VCL::ForceSkiaGPU::get();
+    if (oldValue != val && !officecfg::Office::Common::VCL::ForceSkiaGPU::isReadOnly())
     {
         auto batch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::VCL::ForceSkiaRaster::set(val, batch);
+        officecfg::Office::Common::VCL::ForceSkiaGPU::set(val, batch);
         batch->commit();
 
         // make sure the change is written to the configuration
@@ -266,15 +266,15 @@ static RenderMethod initRenderMethodToUse()
         SAL_WARN("vcl.skia", "Unrecognized value of SAL_SKIA");
         abort();
     }
-    if (officecfg::Office::Common::VCL::ForceSkiaRaster::get())
-        return RenderRaster;
+    if (officecfg::Office::Common::VCL::ForceSkiaGPU::get())
+    {
 #if defined SK_METAL
-    return RenderMetal;
+        return RenderMetal;
 #elif defined SK_VULKAN
-    return RenderVulkan;
-#else
-    return RenderRaster;
+        return RenderVulkan;
 #endif
+    }
+    return RenderRaster;
 }
 
 static std::atomic<RenderMethod>& accessRenderMethodToUse()
@@ -304,7 +304,7 @@ static void checkDeviceDenylisted(bool blockDisable)
             // Temporarily change config to force software rendering. If the following HW check
             // crashes, this config change will stay active, and will make sure to avoid use of
             // faulty HW/driver on the nest start
-            const bool oldForceSkiaRasterValue = setForceSkiaRaster(true);
+            const bool oldForceSkiaGPUValue = setForceSkiaGPU(false);
 
             // First try if a GrDirectContext already exists.
             std::unique_ptr<skwindow::WindowContext> temporaryWindowContext;
@@ -340,7 +340,7 @@ static void checkDeviceDenylisted(bool blockDisable)
             }
 
             // The check succeeded; restore the original value
-            setForceSkiaRaster(oldForceSkiaRasterValue);
+            setForceSkiaGPU(oldForceSkiaGPUValue);
 #else
             SAL_WARN("vcl.skia", "Vulkan support not built in");
             (void)blockDisable;

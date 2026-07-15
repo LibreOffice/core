@@ -106,8 +106,8 @@ private:
     std::unique_ptr<weld::Widget> m_xUseAntiAliaseImg;
     std::unique_ptr<weld::CheckButton> m_xUseSkia;
     std::unique_ptr<weld::Widget> m_xUseSkiaImg;
-    std::unique_ptr<weld::CheckButton> m_xForceSkiaRaster;
-    std::unique_ptr<weld::Widget> m_xForceSkiaRasterImg;
+    std::unique_ptr<weld::CheckButton> m_xForceSkiaGPU;
+    std::unique_ptr<weld::Widget> m_xForceSkiaGPUImg;
 
     std::unique_ptr<weld::Label> m_xSkiaStatusEnabled;
     std::unique_ptr<weld::Label> m_xSkiaStatusDisabled;

@@ -195,18 +195,18 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="forceskiaraster">
-                    <property name="label" translatable="yes" context="optviewpage|forceskiaraster">Force Skia software rendering</property>
+                  <object class="GtkCheckButton" id="forceskiagpu">
+                    <property name="label" translatable="yes" context="optviewpage|forceskiagpu">Force Skia hardware acceleration</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes" context="optviewpage|forceskia|tooltip_text">Requires restart. Enabling this will prevent the use of graphics drivers.</property>
+                    <property name="tooltip-text" translatable="yes" context="optviewpage|forceskia|tooltip_text">Requires restart. Enabling this will enable the use of Skia hardware acceleration.</property>
                     <property name="margin-start">18</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="forceskiaraster-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="optviewpage|extended_tips|forceskiaraster">Disables Skia's use of the computer graphics device. This still uses Skia software but with calls for raster framing, reduced and simplified graphics processing unit load.</property>
+                      <object class="AtkObject" id="forceskiagpu-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="optviewpage|extended_tips|forceskiagpu">Enables Skia's use of the computer graphics device. This still uses Skia software but with hardware acceleration enabled.</property>
                       </object>
                     </child>
                   </object>
@@ -297,7 +297,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="lockforceskiaraster">
+                  <object class="GtkImage" id="lockforceskiagpu">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
                     <property name="halign">center</property>

@@ -39,7 +39,7 @@ void SkiaZone::hardDisable()
     // raster mode, which should be safe as it does not use drivers.
     std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
         comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::VCL::ForceSkiaRaster::set(true, xChanges);
+    officecfg::Office::Common::VCL::ForceSkiaGPU::set(false, xChanges);
     xChanges->commit();
 
     // Force synchronous config write

@@ -1888,7 +1888,7 @@ namespace comphelper
         xRootElement->appendChild(lcl_getConfigElement(xDocument, u"/org.openoffice.Office.Common/VCL"_ustr,
                                                        u"ForceSkia"_ustr, u"false"_ustr));
         xRootElement->appendChild(lcl_getConfigElement(xDocument, u"/org.openoffice.Office.Common/VCL"_ustr,
-                                                       u"ForceSkiaRaster"_ustr, u"true"_ustr));
+                                                       u"ForceSkiaGPU"_ustr, u"false"_ustr));
 
         OUString aTempURL;
         {

@@ -273,11 +273,11 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="ForceSkiaRaster" oor:type="xs:boolean" oor:nillable="false">
+      <prop oor:name="ForceSkiaGPU" oor:type="xs:boolean" oor:nillable="false">
         <info>
-           <desc>Specifies if Skia rendering should be used in VCL backends
-               supporting it. This one forces the use of Skia software rendering
-               instead of trying to use the graphics driver.</desc>
+           <desc>Specifies if Skia hardware acceleration should be used in VCL backends
+           supporting it. This one forces the use of Skia hardware acceleration instead of
+           Skia software rendering.</desc>
         </info>
         <value>false</value>
       </prop>
@@ -5241,7 +5241,7 @@
       <prop oor:name="NotebookbarColorTransparency" oor:type="xs:int" oor:nillable="false">
         <!-- UIHints: Tools  Options General View -->
         <info>
-          <desc>Specifies which transparency at which module and dialog color are merged for 
+          <desc>Specifies which transparency at which module and dialog color are merged for
           the notebookbar. Use 0 for full module and 255 for full dialog.</desc>
         </info>
         <value>150</value>

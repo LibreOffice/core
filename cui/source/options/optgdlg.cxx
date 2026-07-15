@@ -545,8 +545,8 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xUseAntiAliaseImg(m_xBuilder->weld_widget(u"lockuseaa"_ustr))
     , m_xUseSkia(m_xBuilder->weld_check_button(u"useskia"_ustr))
     , m_xUseSkiaImg(m_xBuilder->weld_widget(u"lockuseskia"_ustr))
-    , m_xForceSkiaRaster(m_xBuilder->weld_check_button(u"forceskiaraster"_ustr))
-    , m_xForceSkiaRasterImg(m_xBuilder->weld_widget(u"lockforceskiaraster"_ustr))
+    , m_xForceSkiaGPU(m_xBuilder->weld_check_button(u"forceskiagpu"_ustr))
+    , m_xForceSkiaGPUImg(m_xBuilder->weld_widget(u"lockforceskiagpu"_ustr))
     , m_xSkiaStatusEnabled(m_xBuilder->weld_label(u"skiaenabled"_ustr))
     , m_xSkiaStatusDisabled(m_xBuilder->weld_label(u"skiadisabled"_ustr))
     , m_xSkiaLog(m_xBuilder->weld_button(u"btnSkialog"_ustr))
@@ -604,7 +604,7 @@ IMPL_LINK_NOARG(OfaViewTabPage, OnCopySkiaLog, weld::Button&, void)
 void OfaViewTabPage::HideSkiaWidgets()
 {
     m_xUseSkia->hide();
-    m_xForceSkiaRaster->hide();
+    m_xForceSkiaGPU->hide();
     m_xSkiaStatusEnabled->hide();
     m_xSkiaStatusDisabled->hide();
     m_xSkiaLog->hide();
@@ -642,8 +642,8 @@ void OfaViewTabPage::UpdateSkiaStatus()
     m_xUseSkia->set_sensitive(!officecfg::Office::Common::VCL::UseSkia::isReadOnly());
 #endif
     m_xUseSkiaImg->set_visible(officecfg::Office::Common::VCL::UseSkia::isReadOnly());
-    m_xForceSkiaRaster->set_sensitive(m_xUseSkia->get_active() && !officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly());
-    m_xForceSkiaRasterImg->set_visible(officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly());
+    m_xForceSkiaGPU->set_sensitive(m_xUseSkia->get_active() && !officecfg::Office::Common::VCL::ForceSkiaGPU::isReadOnly());
+    m_xForceSkiaGPUImg->set_visible(officecfg::Office::Common::VCL::ForceSkiaGPU::isReadOnly());
     m_xSkiaLog->set_sensitive(bEnabled);
 
     // Technically the 'use hardware acceleration' option could be used to mean !forceSkiaRaster, but the implementation
@@ -673,7 +673,7 @@ OUString OfaViewTabPage::GetAllStrings()
     }
 
     OUString checkButton[]
-        = { u"useaccel"_ustr, u"useaa"_ustr, u"useskia"_ustr, u"forceskiaraster"_ustr, u"showfontpreview"_ustr, u"aafont"_ustr };
+        = { u"useaccel"_ustr, u"useaa"_ustr, u"useskia"_ustr, u"forceskiagpu"_ustr, u"showfontpreview"_ustr, u"aafont"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -750,10 +750,10 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     }
 
     if (m_xUseSkia->get_state_changed_from_saved() ||
-        m_xForceSkiaRaster->get_state_changed_from_saved())
+        m_xForceSkiaGPU->get_state_changed_from_saved())
     {
         officecfg::Office::Common::VCL::UseSkia::set(m_xUseSkia->get_active(), xChanges);
-        officecfg::Office::Common::VCL::ForceSkiaRaster::set(m_xForceSkiaRaster->get_active(), xChanges);
+        officecfg::Office::Common::VCL::ForceSkiaGPU::set(m_xForceSkiaGPU->get_active(), xChanges);
         bModified = true;
     }
 
@@ -777,7 +777,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     }
 
     if (m_xUseSkia->get_state_changed_from_saved() ||
-        m_xForceSkiaRaster->get_state_changed_from_saved())
+        m_xForceSkiaGPU->get_state_changed_from_saved())
     {
         SolarMutexGuard aGuard;
         if( svtools::executeRestartDialog(
@@ -836,9 +836,9 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 #else
     m_xUseSkia->set_active(officecfg::Office::Common::VCL::UseSkia::get());
 #endif
-    m_xForceSkiaRaster->set_active(officecfg::Office::Common::VCL::ForceSkiaRaster::get());
+    m_xForceSkiaGPU->set_active(officecfg::Office::Common::VCL::ForceSkiaGPU::get());
     m_xUseSkia->save_state();
-    m_xForceSkiaRaster->save_state();
+    m_xForceSkiaGPU->save_state();
 
     m_xFontAntiAliasing->save_state();
     m_xAAPointLimit->save_value();
