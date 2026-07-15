@@ -237,7 +237,6 @@ inline constexpr OUString URL_COMPONENT_VIEWDESIGN = u".component:DB/ViewDesign"
 inline constexpr OUString URL_COMPONENT_TABLEDESIGN = u".component:DB/TableDesign"_ustr;
 inline constexpr OUString URL_COMPONENT_FORMGRIDVIEW = u".component:DB/FormGridView"_ustr;
 inline constexpr OUString URL_COMPONENT_DATASOURCEBROWSER = u".component:DB/DataSourceBrowser"_ustr;
-inline constexpr OUString URL_COMPONENT_RELATIONDESIGN = u".component:DB/RelationDesign"_ustr;
 inline constexpr OUString URL_COMPONENT_REPORTDESIGN(u".component:DB/ReportDesign"_ustr);
 
 // other DBU relevant strings
