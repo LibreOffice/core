@@ -1,0 +1,127 @@
+diff -ur afdko.org/c/shared/include/goadb.h afdko/c/shared/include/goadb.h
+--- afdko.org/c/shared/include/goadb.h	2026-07-15 20:04:48
++++ afdko/c/shared/include/goadb.h	2026-07-15 20:06:32
+@@ -133,7 +133,7 @@
+         return scan(s, actionFinal, nextFinal, uvName);
+     }
+ 
+-    void error(const char *msg) {}
++    void error([[maybe_unused]] const char *msg) {}
+ 
+     struct GOADBRec {
+         int32_t order;
+diff -ur afdko.org/c/shared/include/supportfp.h afdko/c/shared/include/supportfp.h
+--- afdko.org/c/shared/include/supportfp.h	2026-07-15 20:04:48
++++ afdko/c/shared/include/supportfp.h	2026-07-15 20:07:07
+@@ -100,7 +100,7 @@
+    according to some consistent rule such as IEEE "round to nearest".
+  */
+ 
+-#if (ARCH_64BIT == 1)
++#if defined(ARCH_64BIT) && (ARCH_64BIT == 1)
+ typedef int /* Fixed, */ Frac, UFrac, *PFrac;
+ #else
+ typedef long int /* Fixed, */ Frac, UFrac, *PFrac;
+@@ -113,7 +113,7 @@
+ 
+ /* Exported Procedures */
+ 
+-#if REGISTER_ARGS && ASM_fixmul
++#if defined(REGISTER_ARGS) && ASM_fixmul
+ extern Fixed FIXEDFUNC fixmul_reg(Fixed x MW_D0, Fixed y MW_D1);
+ #define fixmul(a, b) fixmul_reg(a, b)
+ #else
+@@ -129,7 +129,7 @@
+    Multiplies a Fixed number with a Frac number and returns a Fixed
+    result. The order of the Fixed and Frac arguments does not matter. */
+ 
+-#if REGISTER_ARGS && ASM_fixdiv
++#if defined(REGISTER_ARGS) && ASM_fixdiv
+ extern Fixed FIXEDFUNC fixdiv_reg(Fixed x MW_D0, Fixed y MW_D1);
+ #define fixdiv(a, b) fixdiv_reg(a, b)
+ #else
+diff -ur afdko.org/c/shared/include/tx_shared.h afdko/c/shared/include/tx_shared.h
+--- afdko.org/c/shared/include/tx_shared.h	2026-07-15 20:04:48
++++ afdko/c/shared/include/tx_shared.h	2026-07-15 20:06:32
+@@ -14,7 +14,7 @@
+ #include <stdlib.h>
+ #include <stdbool.h>
+ 
+-#if PLAT_MAC
++#ifdef PLAT_MAC
+ #include <console.h>
+ #include <file_io.h>
+ #endif /* PLAT_MAC */
+@@ -27,7 +27,7 @@
+ #include <sys/stat.h>
+ #include <limits.h>
+ 
+-#if _WIN32
++#ifdef _WIN32
+ #include <fcntl.h>
+ #include <io.h>
+ #define stat _stat
+diff -ur afdko.org/c/shared/include/varsupport.h afdko/c/shared/include/varsupport.h
+--- afdko.org/c/shared/include/varsupport.h	2026-07-15 20:04:48
++++ afdko/c/shared/include/varsupport.h	2026-07-15 20:11:26
+@@ -154,8 +154,8 @@
+ 
+     // avar-related
+     struct axisValueMap {
+-        axisValueMap(Fixed fromCoord, Fixed toCoord) : fromCoord(fromCoord),
+-                                                       toCoord(toCoord) {}
++        axisValueMap(Fixed fromCoord_, Fixed toCoord_) : fromCoord(fromCoord_),
++                                                       toCoord(toCoord_) {}
+         Fixed fromCoord;
+         Fixed toCoord;
+     };
+@@ -229,7 +229,7 @@
+ class VarLocationMap {
+  public:
+     VarLocationMap() = delete;
+-    explicit VarLocationMap(uint16_t axis_count) : axis_count(axis_count) {
++    explicit VarLocationMap(uint16_t axis_count_) : axis_count(axis_count_) {
+         // Store default location first, always has index 0
+         std::vector<var_F2dot14> defaxis(axis_count, 0);
+         auto defloc = std::make_shared<VarLocation>(std::move(defaxis));
+@@ -292,7 +292,7 @@
+         seenDefault = true;
+         defaultValue = value;
+     }
+-#if HOT_DEBUG
++#ifdef HOT_DEBUG
+     void toerr() {
+         if (isVariable()) {
+             std::cerr << '(' << defaultValue;
+@@ -486,7 +486,7 @@
+             s.preWriteOptimize(reorder);
+     }
+ 
+-#if HOT_DEBUG
++#ifdef HOT_DEBUG
+     void toerr() {
+         int i = 0;
+         for (auto &s : subtables) {
+@@ -604,11 +604,11 @@
+     struct itemVariationDataSubtable {
+         itemVariationDataSubtable() {}
+         itemVariationDataSubtable(itemVariationDataSubtable &&s) : regionIndices(std::move(s.regionIndices)), deltaValues(std::move(s.deltaValues)) {}
+-        void toerr(std::vector<VariationRegion> &regions) {
++        void toerr(std::vector<VariationRegion> &regions_) {
+             std::cerr << "Regions:" << std::endl;
+             for (auto ri : regionIndices) {
+                 std::cerr << ri << ":  ";
+-                auto &r = regions[ri];
++                auto &r = regions_[ri];
+                 bool first = true;
+                 for (auto &a : r) {
+                     if (first)
+@@ -666,7 +666,7 @@
+     static std::vector<std::set<var_F2dot14>> getAxisPoints(VarLocationMap &vlm, std::vector<uint32_t> locationList);
+     struct cmpLocation {
+         cmpLocation() = delete;
+-        explicit cmpLocation(VarLocationMap &vlm, std::vector<uint32_t> locationList) : vlm(vlm) {
++        explicit cmpLocation(VarLocationMap &vlm_, std::vector<uint32_t> locationList) : vlm(vlm_) {
+             axisPoints = VarModel::getAxisPoints(vlm, locationList);
+         }
+         bool operator()(uint32_t &a, uint32_t &b);

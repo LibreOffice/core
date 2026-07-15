@@ -15,13 +15,6 @@
 
 #pragma once
 
-// the afdko headers are not warning-clean
-#if defined __GNUC__ || defined __clang__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wundef"
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#pragma GCC diagnostic ignored "-Wshadow"
-#endif
 #if defined _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4100) // goadb.h error() ignores its message parameter
@@ -33,9 +26,6 @@
 #include <hotconv.h>
 #include <cb.h>
 
-#if defined __GNUC__ || defined __clang__
-#pragma GCC diagnostic pop
-#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
