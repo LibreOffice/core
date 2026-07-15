@@ -55,8 +55,9 @@ def fetch_changes(query):
 
 
 def open_non_wip_count():
-    """Number of open Gerrit changes that aren't marked work-in-progress."""
-    return len(fetch_changes("status:open+-is:wip"))
+    """Number of open Gerrit changes on the online project's main branch that
+    aren't marked work-in-progress."""
+    return len(fetch_changes("status:open+-is:wip+project:online+branch:main"))
 
 
 def github_issue_count(query):
@@ -213,7 +214,7 @@ def main():
     top_reviewers = top_reviewers_this_week()
 
     print("# Patch review")
-    print(f"- [All changes]({GERRIT_BASE}/q/status:open+-is:wip)")
+    print(f"- [All changes]({GERRIT_BASE}/q/status:open+-is:wip+project:online+branch:main)")
     print(f"  - Week {week}: {gerrit_str}")
     print(f"- [PRs to migrate from GitHub](https://github.com/{GITHUB_REPO}/pulls)")
     print(f"  - Week {week}: {pr_str}")
