@@ -361,6 +361,19 @@ AC_ARG_WITH([lo-builddir],
                             the core for your ABI without any colons. In this case, providing an armeabi-v7a core
                             is not a requirement.]))
 
+AC_ARG_WITH([node-modules-dir],
+            [AS_HELP_STRING([--with-node-modules-dir=DIR],
+                           [Build the browser node_modules tree under DIR instead of in the
+                            browser build directory, and symlink it into the build directory.
+                            Put DIR on fast local storage when the build tree sits on a slow
+                            filesystem, such as a WSL drvfs mount, where node_modules is slow
+                            to create and to read. The tree is still removed and reinstalled on
+                            every build. DIR must be an absolute path and is the parent: the
+                            tree is created as DIR/node_modules. Default: node_modules is built
+                            in the browser build directory.])],
+            [NODE_MODULES_DIR="$withval"], [NODE_MODULES_DIR=])
+AC_SUBST([NODE_MODULES_DIR])
+
 AC_ARG_WITH([logfile],
             AS_HELP_STRING([--with-logfile=<path>],
                            [Path to the location of the logfile.]))
