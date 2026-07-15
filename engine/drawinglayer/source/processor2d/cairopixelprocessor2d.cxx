@@ -76,7 +76,7 @@ void impl_cairo_set_hairline(cairo_t* pRT,
 {
 #ifndef _WIN32
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 18, 0)
-    void* addr(dlsym(nullptr, "cairo_set_hairline"));
+    static void* addr(dlsym(nullptr, "cairo_set_hairline"));
     if (nullptr != addr)
     {
         cairo_set_hairline(pRT, true);
