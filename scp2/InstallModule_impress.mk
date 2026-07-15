@@ -19,10 +19,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/impress,\
 	ENABLE_MACOSX_SANDBOX \
 ))
 
-$(eval $(call gb_InstallModule_add_templates,scp2/impress,\
-    scp2/source/templates/module_langpack_impress \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/impress,\
     scp2/source/impress/file_impress \
 ))

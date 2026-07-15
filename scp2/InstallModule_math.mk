@@ -18,10 +18,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/math,\
 	ENABLE_MACOSX_SANDBOX \
 ))
 
-$(eval $(call gb_InstallModule_add_templates,scp2/math,\
-    scp2/source/templates/module_langpack_math \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/math,\
     scp2/source/math/file_math \
 ))

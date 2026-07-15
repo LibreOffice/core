@@ -17,10 +17,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/draw,\
 	ENABLE_MACOSX_SANDBOX \
 ))
 
-$(eval $(call gb_InstallModule_add_templates,scp2/draw,\
-    scp2/source/templates/module_langpack_draw \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/draw,\
     scp2/source/draw/file_draw \
 ))

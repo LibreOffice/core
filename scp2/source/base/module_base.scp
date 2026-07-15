@@ -52,12 +52,3 @@ Module gid_Module_Brand_Prg_Base
     Files = (auto_base_brand_ALL);
 End
 
-Module gid_Module_Langpack_Base_Template
-    ParentID = gid_Module_Prg_Base_Bin;
-    Name = "gid_Module_Langpack_Base_Template";
-    Description = "gid_Module_Langpack_Base_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = ();
-End
-
-#include "alllangmodules_base.inc"

@@ -52,14 +52,6 @@ Module gid_Module_Brand_Prg_Wrt
     Files = (auto_writer_brand_ALL);
 End
 
-Module gid_Module_Langpack_Writer_Template
-    ParentID = gid_Module_Prg_Wrt_Bin;
-    Name = "gid_Module_Langpack_Writer_Template";
-    Description = "gid_Module_Langpack_Writer_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = ();
-End
-
 Module gid_Module_Prg_Wrt_MSO_Reg
     ParentID = gid_Module_Prg_Wrt;
     Name = "gid_Module_Prg_Wrt_MSO_Reg";
@@ -75,6 +67,4 @@ Module gid_Module_Prg_Wrt_Other_Reg
     Styles = (HIDDEN_ROOT);
     Default = YES;
 End
-
-#include "alllangmodules_writer.inc"
 

@@ -92,12 +92,4 @@ Module gid_Module_Langpack_Basis_Template
             gid_Dir_Autotext_Language);
 End
 
-Module gid_Module_Langpack_Fonts_Template
-    ParentID = gid_Module_Langpack_Languageroot;
-    Name = "gid_Module_Langpack_Fonts_Template";
-    Description = "gid_Module_Langpack_Fonts_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = ();
-End
-
 #include "alllangmodules_root.inc"

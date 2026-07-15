@@ -53,12 +53,3 @@ Module gid_Module_Brand_Prg_Math
     Files = (auto_math_brand_ALL);
 End
 
-Module gid_Module_Langpack_Math_Template
-    ParentID = gid_Module_Prg_Math_Bin;
-    Name = "gid_Module_Langpack_Math_Template";
-    Description = "gid_Module_Langpack_Math_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = ();
-End
-
-#include "alllangmodules_math.inc"

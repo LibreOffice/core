@@ -18,10 +18,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/writer,\
 	ENABLE_MACOSX_SANDBOX \
 ))
 
-$(eval $(call gb_InstallModule_add_templates,scp2/writer,\
-    scp2/source/templates/module_langpack_writer \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/writer,\
     scp2/source/writer/file_writer \
 ))
