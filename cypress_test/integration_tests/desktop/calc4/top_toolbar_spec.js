@@ -174,6 +174,17 @@ describe(['tagdesktop'], 'Top toolbar tests.', function() {
 		cy.cGet('#copy-paste-container table td font').should('have.attr', 'face', 'Alef');
 	});
 
+	it('Combobox search field: Up Arrow from the first entry returns focus to it.', function() {
+		cy.cGet('#toolbar-up #fontnamecombobox .ui-combobox-button').click();
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.cGet('.ui-combobox-search-input').should('have.focus');
+		cy.realPress('ArrowDown');
+		cy.cGet('.ui-combobox-entry:not(.hidden)').first().should('have.focus');
+		cy.realPress('ArrowUp');
+		cy.cGet('.ui-combobox-search-input').should('have.focus');
+		cy.realPress('Escape');
+	});
+
 	it('Apply font size.', function() {
 		helper.setDummyClipboardForCopy();
 		cy.cGet('#toolbar-up #fontsizecombobox .ui-combobox-button').click();
