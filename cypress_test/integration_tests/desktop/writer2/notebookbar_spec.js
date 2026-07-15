@@ -140,38 +140,49 @@ describe(['tagdesktop'], 'Notebookbar checkbox widgets', function() {
 			expect(left).to.be.finite;
 		});
 
-		// Drag the first-line indentation marker right by 100px.
+		// Drag the first-line indentation marker right by 100px. Body has a
+		// fixed origin, so the move offsets stay correct as the marker moves
+		// during the drag, and holding y at the marker centre keeps the
+		// pointer over the marker the whole time.
 		var marker;
+		var startX;
+		var startY;
+		var startLeft;
 		cy.cGet('#lo-fline-marker').then(function(items) {
 			expect(items).to.have.lengthOf(1);
 			marker = items[0];
 			const boundingRectangle = marker.getBoundingClientRect();
-			const x1 = boundingRectangle.left;
-			const y1 = boundingRectangle.top;
+			startLeft = boundingRectangle.left;
+			startX = boundingRectangle.left + boundingRectangle.width / 2;
+			startY = boundingRectangle.top + boundingRectangle.height / 2;
 
-			cy.wrap(x1).as('x1');
-
-			cy.cGet('#lo-fline-marker').realMouseDown(x1, y1);
+			cy.cGet('body').realMouseDown({ x: startX, y: startY });
 		});
 		helper.processToIdle(this.win);
-		cy.get('@x1').then(function(x1) {
+
+		// A single realMouseMove can be dropped under CI load before the
+		// browser handler runs, so re-send the move each poll until the
+		// marker leaves its start position. The target is a fixed viewport
+		// point, so re-firing it is safe.
+		cy.then(function() {
 			helper.retryUntil(
-				function() { cy.cGet('#lo-fline-marker').realMouseMove(x1 + 100, 0); },
-				function() { return marker.getBoundingClientRect().left !== x1; });
-		});
-		helper.processToIdle(this.win);
-		cy.get('@x1').then(function(x1) {
-			cy.cGet('#lo-fline-marker').realMouseUp(x1 + 100, 0);
+				function() { cy.cGet('body').realMouseMove(startX + 100, startY); },
+				function() { return marker.getBoundingClientRect().left !== startLeft; });
 		});
 		helper.processToIdle(this.win);
 
-		// Re-read the marker position on each retry: the panend round-trips
+		cy.then(function() {
+			cy.cGet('body').realMouseUp({ x: startX + 100, y: startY });
+		});
+		helper.processToIdle(this.win);
+
+		// Re-read the marker position on each retry: the drag end round-trips
 		// .uno:LeftRightParaMargin before the DOM settles, so the post-drag
 		// position can't be frozen into a constant.
-		cy.get('@x1').then(function(x1) {
+		cy.then(function() {
 			cy.cGet('#lo-fline-marker').should(function($items) {
 				expect($items).to.have.lengthOf(1);
-				expect($items[0].getBoundingClientRect().left).to.not.equal(x1);
+				expect($items[0].getBoundingClientRect().left).to.not.equal(startLeft);
 			});
 		});
 
