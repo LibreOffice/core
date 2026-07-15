@@ -644,6 +644,20 @@ class Dispatcher {
 				app.map.tabsControl.openContextMenuForFocusedTab();
 		};
 
+		this.actionsMap['rowcolumnheadermenu'] = function () {
+			const map: any = app.map;
+			let sectionName: string = null;
+			if (map.wholeColumnSelected)
+				sectionName = app.CSections.ColumnHeader.name;
+			else if (map.wholeRowSelected) sectionName = app.CSections.RowHeader.name;
+
+			if (!sectionName) return;
+
+			const section: any = app.sectionContainer.getSectionWithName(sectionName);
+			if (section && section.openContextMenuForCurrentSelection)
+				section.openContextMenuForCurrentSelection();
+		};
+
 		this.actionsMap['acceptformula'] = function () {
 			if (window.mode.isSmallScreenDevice()) {
 				app.map.focus();
