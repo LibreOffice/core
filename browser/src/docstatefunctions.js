@@ -91,7 +91,9 @@ app.isRectangleVisibleInTheDisplayedArea = function (
 
 app.isXOrdinateInFrozenPane = function (pixelX) {
 	if (app.map._docLayer._splitPanesContext) {
-		const splitPos = app.map._docLayer._splitPanesContext.getSplitPos();
+		const splitPos = app.map._docLayer._splitPanesContext
+			.getSplitPos()
+			.multiplyBy(app.dpiScale);
 
 		if (pixelX < splitPos.x && pixelX >= 0) return true;
 		else return false;
@@ -100,7 +102,9 @@ app.isXOrdinateInFrozenPane = function (pixelX) {
 
 app.isYOrdinateInFrozenPane = function (pixelY) {
 	if (app.map._docLayer._splitPanesContext) {
-		const splitPos = app.map._docLayer._splitPanesContext.getSplitPos();
+		const splitPos = app.map._docLayer._splitPanesContext
+			.getSplitPos()
+			.multiplyBy(app.dpiScale);
 
 		if (pixelY < splitPos.y && pixelY >= 0) return true;
 		else return false;

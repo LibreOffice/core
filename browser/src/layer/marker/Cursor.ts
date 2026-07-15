@@ -264,7 +264,6 @@ class Cursor {
 			}
 
 			this.cursor.style.height = this.rectangle.cHeight + 'px';
-			this.container.style.top = '-' + (this.container.clientHeight - this.rectangle.cHeight - 2) / 2 + 'px';
 		});
 	}
 
