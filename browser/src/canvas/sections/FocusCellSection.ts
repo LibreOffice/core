@@ -29,6 +29,7 @@ class FocusCellSection extends CanvasSectionObject {
 	documentObject: boolean = true;
 	interactable: boolean = false;
 	static instance: FocusCellSection = null;
+	position: number[] = [0, 0];
 
 	constructor() {
 		super(app.CSections.FocusCell.name);
@@ -38,19 +39,6 @@ class FocusCellSection extends CanvasSectionObject {
 		this.sectionProperties.maxCol = 268435455;
 		this.sectionProperties.maxRow = 20971124;
 		this.isAlwaysVisible = true;
-	}
-
-	public onCellAddressChanged(): void {
-		this.size[0] = app.calc.cellCursorRectangle.pWidth;
-		this.size[1] = app.calc.cellCursorRectangle.pHeight;
-		this.setPosition(
-			app.calc.cellCursorRectangle.pX1,
-			app.calc.cellCursorRectangle.pY1,
-		);
-	}
-
-	setPosition(x: number, y: number): void {
-		setCalcRTLAwareDocumentObjectPosition(this, x, y);
 	}
 
 	private static addFocusCellSection() {
@@ -78,17 +66,11 @@ class FocusCellSection extends CanvasSectionObject {
 	}
 
 	public onDraw() {
-		const cursor = app.calc.cellCursorRectangle;
-		const adjusted = CellCursorSection.adjustSizePos([
-			cursor.pX1,
-			cursor.pY1,
-			cursor.pWidth,
-			cursor.pHeight,
-		]);
-		const drawColumn = adjusted[2] > 0;
-		const drawRow = adjusted[3] > 0;
+		Util.ensureValue(app.activeDocument);
+		Util.ensureValue(app.calc.splitCoordinate);
 
-		if (!drawColumn && !drawRow) return;
+		this.context.save();
+		this.context.setTransform(1, 0, 0, 1, 0, 0);
 
 		const style = getComputedStyle(document.documentElement).getPropertyValue(
 			'--column-row-highlight',
@@ -96,61 +78,26 @@ class FocusCellSection extends CanvasSectionObject {
 
 		this.context.fillStyle = style;
 		this.context.strokeStyle = style;
-
-		const colX = adjusted[0] - cursor.pX1;
-		const colWidth = adjusted[2];
-		const rowY = adjusted[1] - cursor.pY1;
-		const rowHeight = adjusted[3];
-
-		const colSign = app.map._docLayer.isCalcRTL() ? -1 : 1;
-		const colDrawWidth = colWidth * colSign;
-
 		this.context.globalAlpha = 0.3;
 
-		// In RTL the cell sits on the right of the tile, so -pX1 lands
-		// far past the visible row; anchor the row bar at the tile
-		// section's left edge instead so it spans the row.
-		let rowX = -cursor.pX1;
-		if (app.calc.isRTL()) {
-			rowX = this.containerObject.getDocumentAnchor()[0] - this.myTopLeft[0];
-		}
-		if (drawColumn) {
-			this.context.fillRect(
-				colX,
-				-cursor.pY1,
-				colDrawWidth,
-				this.sectionProperties.maxCol,
-			);
-		}
+		let cursor = app.calc.cellCursorRectangle?.clone();
+		if (!cursor) return;
+		cursor.pX1 =
+			app.calc.splitCoordinate.pX !== 0
+				? 0
+				: app.activeDocument.activeLayout.viewedRectangle.pX1;
+		cursor.pX2 = app.activeDocument.activeLayout.viewedRectangle.pX2;
+		this.drawViewRectangle(cursor, true);
 
-		// LTR anchors the row strip at the cell's visual-left edge and
-		// extends rightward by maxRow, covering everything to the right of
-		// that anchor. In RTL the anchor is the cell's visual-right edge, so
-		// the same one-sided sweep leaves the visual-left half of the row
-		// uncovered. Start the strip maxRow before the anchor and double
-		// its width so both directions get covered; off-canvas pixels are
-		// clipped, so LTR is unaffected.
-		const rowStripX = -cursor.pX1 - this.sectionProperties.maxRow;
-		const rowStripWidth = this.sectionProperties.maxRow * 2;
+		cursor = app.calc.cellCursorRectangle?.clone();
+		if (!cursor) return;
+		cursor.pY1 =
+			app.calc.splitCoordinate.pY !== 0
+				? 0
+				: app.activeDocument.activeLayout.viewedRectangle.pY1;
+		cursor.pY2 = app.activeDocument.activeLayout.viewedRectangle.pY2;
+		this.drawViewRectangle(cursor, true);
 
-		if (drawRow) {
-			this.context.fillRect(rowStripX, rowY, rowStripWidth, rowHeight);
-		}
-
-		this.context.globalAlpha = 1;
-		this.context.lineWidth = 2 * app.dpiScale;
-
-		if (drawColumn) {
-			this.context.strokeRect(
-				colX,
-				-cursor.pY1,
-				colDrawWidth,
-				this.sectionProperties.maxCol,
-			);
-		}
-
-		if (drawRow) {
-			this.context.strokeRect(rowStripX, rowY, rowStripWidth, rowHeight);
-		}
+		this.context.restore();
 	}
 }
