@@ -2120,7 +2120,7 @@ void ScDBData::Notify( const SfxHint& rHint )
     {
         ScDocument& rDoc = mpContainer->GetDocument();
         if (rDoc.IsInInterpreter() || rDoc.IsCalculatingFormulaTree()
-            || rDoc.IsFinalTrackFormulas())
+            || rDoc.IsFinalTrackFormulas() || rDoc.IsCompilingDBFormula())
             return;
 
         const auto& rBulkHint = static_cast<const sc::BulkDataHint&>(rHint);
@@ -2149,7 +2149,8 @@ void ScDBData::Notify( const SfxHint& rHint )
     const bool bIsRecalcHint =
         rDoc.IsInInterpreter()
         || rDoc.IsCalculatingFormulaTree()
-        || rDoc.IsFinalTrackFormulas();
+        || rDoc.IsFinalTrackFormulas()
+        || rDoc.IsCompilingDBFormula();
 
     // Per-cell classification for band hits. If any cell of the hint was
     // classified as a band/overflow hit, skip the header-dirty fallback

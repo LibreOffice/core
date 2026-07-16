@@ -879,6 +879,41 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoExpandRowDown)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testResizeDoesNotAutoExpandOverStructRef)
+{
+    m_pDoc->InsertTab(0, u"ResizeNoAutoExpand"_ustr);
+
+    // Styled table A1:C8 (TestTable): header Name|Number|Column3, data rows 1-7, no Total Row.
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 2, 7,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ false);
+    m_pDoc->SetString(0, 0, 0, u"Name"_ustr);
+    m_pDoc->SetString(1, 0, 0, u"Number"_ustr);
+    m_pDoc->SetString(2, 0, 0, u"Column3"_ustr);
+    for (SCROW nRow = 1; nRow <= 7; ++nRow)
+        m_pDoc->SetValue(1, nRow, 0, static_cast<double>(nRow)); // Number: 1..7 (sum 28)
+    pData->RefreshTableColumnNames(m_pDoc);
+
+    // A structured-ref formula at G9, below-right of the table and OUTSIDE its current bands
+    // (row band A9:D9, col band D1:D9), so placing it flags no expansion.
+    m_pDoc->SetString(6, 8, 0, u"=SUBTOTAL(9;TestTable[Number])"_ustr);
+    m_pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(6, 8, 0));
+    CPPUNIT_ASSERT_MESSAGE("placing the struct ref outside the bands must not flag expansion",
+                           !pData->HasPendingExpansion());
+
+    // Widen by columns only: A1:C8 -> A1:G8. G9 is now in the row band directly below, but a
+    // column resize must NOT grow a row (that stray row would swallow G9 and break it to #REF!).
+    ScDBDocFunc(*m_xDocShell).ResizeTable(*pData, ScRange(0, 0, 0, 6, 7, 0));
+    m_xDocShell->ProcessPendingTableExpansions();
+
+    ScDBData* pNow = findTestTable(m_pDoc);
+    CPPUNIT_ASSERT(pNow);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("column resize must not auto-expand a row over the struct ref",
+                                 ScRange(0, 0, 0, 6, 7, 0), getArea(*pNow));
+
+    m_pDoc->DeleteTab(0);
+}
+
 // Auto-expansion: typing in the column immediately right of a styled named
 // DBData grows the table by one column. Works regardless of Total Row.
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoExpandColumnRight)

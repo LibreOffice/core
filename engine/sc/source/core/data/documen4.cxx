@@ -830,6 +830,8 @@ void ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
 
 void ScDocument::CompileDBFormula()
 {
+    // Flag the recompile so the table auto-expand ignores its SetDirty broadcasts (not user edits).
+    ScCompilingDBFormulaGuard aGuard(*this);
     sc::CompileFormulaContext aCxt(*this);
     for (auto& rxTab : maTabs)
     {

@@ -218,6 +218,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, ScDocShell* pDocShell ) :
         mnImagePreferredDPI(0),
         mbTrackFormulasPending(false),
         mbFinalTrackFormulas(false),
+        mbCompilingDBFormula(false),
         mbDocShellRecalc(false),
         mbLayoutStrings(false),
         mnMutationGuardFlags(0)
