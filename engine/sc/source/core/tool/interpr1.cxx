@@ -10763,18 +10763,31 @@ void ScInterpreter::ScCall( FormulaCallableRef pCallable, const std::vector<Form
     OpCode eOpCode = pCallable->GetOpCode();
     if (eOpCode == ocLambda)
     {
-        auto pLambda = dynamic_cast<const ScFormulaFunction*>(pCallable.get());
-        if ( !pLambda )
+        // How deeply lambda bodies may nest before a call is refused. Each level
+        // runs in a fresh nested interpreter, so a lambda that ends up calling
+        // itself needs a bound. It matches the recursion limit used for ordinary
+        // formula cell evaluation.
+        const sal_Int32 MAX_CALLABLE_INTERPRET_LEVEL = 400;
+
+        // Only ScFormulaFunction reports ocLambda, so cast directly instead of
+        // paying for a type check on every call.
+        assert(dynamic_cast<const ScFormulaFunction*>(pCallable.get()));
+        auto pLambda = static_cast<const ScFormulaFunction*>(pCallable.get());
+
+        // A lambda body runs in a fresh nested interpreter and does not pass
+        // through the per-cell recursion counter, so bound the nesting depth
+        // here. A formula that exceeds the limit yields an error.
+        ScDocument& rLambdaDoc = pLambda->GetDocument();
+        if (rLambdaDoc.GetCallableInterpretLevel() >= MAX_CALLABLE_INTERPRET_LEVEL)
         {
-            SAL_WARN("sc", "Callable is ocLambda, but is not a ScFormulaFunction");
-            SetError(FormulaError::IllegalArgument);
+            SetError(FormulaError::StackOverflow);
             PushError(nGlobalError);
             return;
         }
 
-        short nParamCount = pLambda->GetNumParams();
-        short nRequiredParamCount = pLambda->GetNumRequiredParams();
-        short nArgCount = aArguments.size();
+        sal_Int32 nParamCount = pLambda->GetNumParams();
+        sal_Int32 nRequiredParamCount = pLambda->GetNumRequiredParams();
+        sal_Int32 nArgCount = aArguments.size();
         if (nArgCount > nParamCount || nArgCount < nRequiredParamCount)
         {
             // A call with the wrong number of arguments is a value error,
@@ -10787,7 +10800,7 @@ void ScInterpreter::ScCall( FormulaCallableRef pCallable, const std::vector<Form
         // clone tokens of lambda-body for replacing string name tokens with arguments
         ScTokenArray aNewTokens = pLambda->GetLambdaBody().CloneValue();
 
-        for (short nParam = 0; nParam < nParamCount; ++nParam)
+        for (sal_Int32 nParam = 0; nParam < nParamCount; ++nParam)
         {
             const std::forward_list<short>& rPositions = pLambda->GetReplacementPositions(nParam);
 
@@ -10813,14 +10826,16 @@ void ScInterpreter::ScCall( FormulaCallableRef pCallable, const std::vector<Form
         }
 
         // calculate the final result, in the stored context
-        ScInterpreter aInt(pLambda->GetFormulaCell(), pLambda->GetDocument(), pLambda->GetContext(),
+        ScInterpreter aInt(pLambda->GetFormulaCell(), rLambdaDoc, pLambda->GetContext(),
                            pLambda->GetAddress(), aNewTokens);
         aInt.aCode.Lambda(true);
 
-        sfx2::LinkManager aNewLinkMgr(pLambda->GetDocument().GetDocumentShell());
+        sfx2::LinkManager aNewLinkMgr(rLambdaDoc.GetDocumentShell());
         aInt.SetLinkManager(&aNewLinkMgr);
 
+        rLambdaDoc.IncCallableInterpretLevel();
         formula::StackVar aResultType = aInt.Interpret();
+        rLambdaDoc.DecCallableInterpretLevel();
         formula::FormulaConstTokenRef xLambdaResult( aInt.GetResultToken() );
 
         if (aResultType == formula::svMatrixCell)
@@ -10840,14 +10855,10 @@ void ScInterpreter::ScCall( FormulaCallableRef pCallable, const std::vector<Form
 #if !HAVE_FEATURE_SCRIPTING
         PushNoValue();      // without DocShell no CallBasic
 #else
-        auto pMacro = dynamic_cast<const ScMacroFunction*>(pCallable.get());
-        if ( !pMacro )
-        {
-            SAL_WARN("sc", "Callable is ocMacro, but is not a ScMacroFunction");
-            SetError(FormulaError::IllegalArgument);
-            PushError(nGlobalError);
-            return;
-        }
+        // Only ScMacroFunction reports ocMacro, so cast directly instead of
+        // paying for a type check on every call.
+        assert(dynamic_cast<const ScMacroFunction*>(pCallable.get()));
+        auto pMacro = static_cast<const ScMacroFunction*>(pCallable.get());
 
         if (!pMacro->IsValid())
         {

@@ -2720,17 +2720,9 @@ formula::FormulaCallableRef ScInterpreter::GetCallable()
                 return nullptr;
             }
         }
-/*        case svExternalDoubleRef:
-        {
-            ScMatrixRef pMat;
-            PopExternalDoubleRef(pMat);
-            return GetCallableFromMatrix(pMat); // TODO
-        }
-        case svMatrix:
-        {
-            ScMatrixRef pMat = PopMatrix();
-            return GetCallableFromMatrix(pMat); // TODO
-        }*/
+        // TODO: a matrix or external double reference cannot yet produce a
+        // callable, so such an operand falls through to the illegal-argument
+        // case below.
         default:
         {
             PopError();
@@ -2739,28 +2731,6 @@ formula::FormulaCallableRef ScInterpreter::GetCallable()
         }
     }
 }
-
-/*formula::FormulaCallableRef ScInterpreter::GetCallableFromMatrix(const ScMatrixRef& pMat) // TODO
-{
-    if ( !pMat )
-        ;   // nothing
-    else if ( !pJumpMatrix )
-    {
-        return pMat->GetCallable( mrContext, 0, 0);
-    }
-    else
-    {
-        SCSIZE nCols, nRows, nC, nR;
-        pMat->GetDimensions( nCols, nRows);
-        pJumpMatrix->GetPos( nC, nR);
-        // Use vector replication for single row/column arrays.
-        if ( (nC < nCols || nCols == 1) && (nR < nRows || nRows == 1) )
-            return pMat->GetCallable( mrContext, nC, nR);
-
-        SetError( FormulaError::NoValue);
-    }
-    return nullptr;
-}*/
 
 void ScInterpreter::ScDBGet()
 {

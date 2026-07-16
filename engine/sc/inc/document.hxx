@@ -527,6 +527,7 @@ private:
     sal_uInt64              nXMLImportedFormulaCount;       // progress count during XML import
     sal_uInt16              nInterpretLevel;                // >0 if in interpreter
     sal_uInt16              nMacroInterpretLevel;           // >0 if macro in interpreter
+    sal_uInt16              nCallableInterpretLevel = 0;    // depth of nested callable (LAMBDA) evaluation
     sal_uInt16              nInterpreterTableOpLevel;       // >0 if in interpreter TableOp
 
     ScDocumentThreadSpecific maNonThreaded;
@@ -2691,6 +2692,17 @@ public:
                                 if ( nMacroInterpretLevel )
                                     nMacroInterpretLevel--;
                             }
+    sal_uInt16 GetCallableInterpretLevel() const { return nCallableInterpretLevel; }
+    void IncCallableInterpretLevel()
+    {
+        if (nCallableInterpretLevel < USHRT_MAX)
+            nCallableInterpretLevel++;
+    }
+    void DecCallableInterpretLevel()
+    {
+        if (nCallableInterpretLevel)
+            nCallableInterpretLevel--;
+    }
     bool                IsInInterpreterTableOp() const { return nInterpreterTableOpLevel != 0; }
     void                IncInterpreterTableOpLevel()
                             {

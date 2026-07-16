@@ -260,6 +260,36 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLAMBDA)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testLambdaBoundedRecursion)
+{
+    // A lambda stored in a cell can call itself through a reference to that
+    // cell. A recursion that terminates returns its computed value.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // A1 adds n down to zero by recursing on itself: 5 + 4 + 3 + 2 + 1 + 0.
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=LAMBDA(n; IF(n <= 0; 0; n + A1(n - 1)))"_ustr);
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"=A1(5)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(ScAddress(1, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testLambdaRunawayRecursionIsCapped)
+{
+    // A lambda that always calls itself would recurse without bound. The
+    // interpreter caps the nesting depth and returns error 514 once the limit
+    // is reached.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=LAMBDA(n; 1 + A1(n))"_ustr);
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"=A1(5)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Err:514"_ustr, m_pDoc->GetString(ScAddress(1, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testConcatWithOmittedOptionalParameter)
 {
     // Concatenating an omitted optional lambda parameter yields just the

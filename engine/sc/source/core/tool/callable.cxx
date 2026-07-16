@@ -62,14 +62,11 @@ ScMacroFunction::ScMacroFunction(const ScInterpreter& rInterpreter, const OUStri
         return;
     }
 
-    //  no security queue beforehand (just CheckMacroWarn), moved to  CallBasic
+    // The macro security prompt is not raised here. CallBasic checks it when
+    // the macro actually runs.
 
-    //  If the  Dok was loaded during a Basic-Call,
-    //  is the  Sbx-object created(?)
-    //  pDocSh->GetSbxObject();
-
-    //  search function with the name,
-    //  then assemble  SfxObjectShell::CallBasic from aBasicStr, aMacroStr
+    // Find the Basic method by name, then keep the library and macro name
+    // strings that CallBasic needs to invoke it.
 
     StarBASIC* pRoot;
 
@@ -126,17 +123,24 @@ static void lcl_CloneSubarray(const ScTokenArray& rTokensIn, short nStartPos, sh
                               ScTokenArray& rTokensOut)
 {
     const short nOffset = nStartPos + 1;
+    // An empty or inverted span has no body to clone, so return an empty output
+    // rather than computing a negative length.
+    if (nEndPos <= nOffset)
+        return;
+
     const short nLen = nEndPos - nOffset;
-    formula::FormulaToken** pResult = new formula::FormulaToken*[nLen];
-    formula::FormulaToken** p = pResult;
+    // Start every slot empty so a run that clones fewer tokens than nLen never
+    // hands an uninitialized pointer to the new array.
+    std::vector<formula::FormulaToken*> aResult(nLen, nullptr);
+    short nCount = 0;
     formula::FormulaTokenArrayPlainIterator aIter(rTokensIn);
     aIter.Jump(nOffset);
     for (const formula::FormulaToken* pToken = aIter.NextRPN();
-         aIter.GetIndex() <= nEndPos && pToken; pToken = aIter.NextRPN())
+         aIter.GetIndex() <= nEndPos && pToken && nCount < nLen; pToken = aIter.NextRPN())
     {
         formula::FormulaToken* pNewToken = pToken->Clone();
         pNewToken->IncRef();
-        *(p++) = pNewToken;
+        aResult[nCount++] = pNewToken;
         auto pJumpToken = dynamic_cast<formula::FormulaJumpToken*>(pNewToken);
         if (pJumpToken)
         {
@@ -147,8 +151,8 @@ static void lcl_CloneSubarray(const ScTokenArray& rTokensIn, short nStartPos, sh
                 pJump[nJump] -= nOffset;
         }
     }
-    rTokensOut.CreateNewRPNArrayFromData(pResult, nLen);
-    delete[] pResult;
+    // Hand over only the tokens actually cloned.
+    rTokensOut.CreateNewRPNArrayFromData(aResult.data(), nCount);
 }
 
 /// find all the locations where the specified variable would have to be substituted
@@ -225,8 +229,8 @@ static std::forward_list<short> lcl_FindReplacementPositions(std::u16string_view
                             bool bFound = false;
                             for (short nJump = 1; nJump < nJumpCount - 1; ++nJump)
                             {
-                                auto pSubToken = formula::GetStringNameToken(
-                                    rTokens.GetCode()[pJump[nJump]]);
+                                auto pSubToken
+                                    = formula::GetStringNameToken(rTokens.GetCode()[pJump[nJump]]);
                                 if (pSubToken
                                     && pSubToken->GetString().getString().equalsIgnoreAsciiCase(
                                            aStrName))
