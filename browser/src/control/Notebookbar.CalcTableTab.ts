@@ -29,6 +29,8 @@ class CalcTableTab implements NotebookbarTab {
 			if (eventType === 'activate') {
 				const stylePos = data as number;
 				app.tableStyles.applyStyle(stylePos);
+			} else if (eventType === 'contextmenu') {
+				app.tableStyles.showSetDefaultMenu(data as IconViewContextMenuData);
 			}
 
 			return true;

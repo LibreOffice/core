@@ -82,6 +82,9 @@ class TableStylesService {
 	// Whether the table-style picker is enabled/disabled
 	private enabled = true;
 
+	// Element pinned at the pointer that the context menu is anchored to.
+	private menuAnchor: HTMLElement | null = null;
+
 	private static readonly groupOrder: Record<string, number> = {
 		light: 1,
 		medium: 2,
@@ -330,6 +333,73 @@ class TableStylesService {
 
 		const updated = { ...tableStyle, TableStyleName: tableStyleEntry.Name };
 		app.map.sendUnoCommand('.uno:DatabaseSettings', this.buildArgs(updated));
+	}
+
+	// Show a right-click menu on a gallery entry offering to make that style the
+	// document's default for newly inserted tables. The menu opens at the
+	// pointer: the same gallery entry can be rendered twice (in the notebookbar
+	// strip and in its expanded dropdown), so the pointer position is the one
+	// anchor that always matches the copy the user clicked.
+	public showSetDefaultMenu(data: IconViewContextMenuData) {
+		// A separator carries a string id and the None entry carries -1. Neither
+		// names a style that can become the default.
+		if (typeof data.row !== 'number' || data.row < 0) return;
+		const style = this.styles[data.row];
+		if (!style) return;
+		const styleName = style.Name;
+
+		const entries: Array<ComboBoxEntry> = [
+			{
+				id: 'set-default-table-style',
+				type: 'comboboxentry',
+				text: _('Set as Default'),
+				pos: 0,
+			},
+		];
+
+		const anchor = this.getMenuAnchor();
+		anchor.style.left = data.clientX + 'px';
+		anchor.style.top = data.clientY + 'px';
+
+		const callback: JSDialogMenuCallback = (
+			_objectType,
+			eventType,
+			_object,
+			_entryData,
+			entry,
+		) => {
+			if (eventType !== 'selected') return false;
+			if ((entry as MenuDefinition).id === 'set-default-table-style') {
+				app.map.sendUnoCommand('.uno:SetDefaultTableStyle', {
+					StyleName: { type: 'string', value: styleName },
+				});
+			}
+			JSDialog.CloseAllDropdowns();
+			return true;
+		};
+
+		JSDialog.OpenDropdown(
+			'table-style-context-menu',
+			anchor,
+			entries,
+			callback,
+			'',
+			false,
+			false,
+			true,
+		);
+	}
+
+	// A zero-size element pinned at the pointer position; the context menu is
+	// anchored to it so the popup opens where the user clicked.
+	private getMenuAnchor(): HTMLElement {
+		if (!this.menuAnchor) {
+			this.menuAnchor = document.createElement('div');
+			this.menuAnchor.id = 'table-style-context-menu-anchor';
+			this.menuAnchor.style.position = 'fixed';
+			document.body.appendChild(this.menuAnchor);
+		}
+		return this.menuAnchor;
 	}
 
 	public generateIcon(style: TableStyleEntry): string {

@@ -521,6 +521,13 @@ interface IconViewEntry {
 	ondemand?: boolean; // if true then we ignore image property and request it on demand (when shown)
 }
 
+// Payload of the iconview 'contextmenu' callback.
+interface IconViewContextMenuData {
+	row: number | string; // unique id of the entry under the pointer
+	clientX: number; // pointer position in viewport coordinates
+	clientY: number;
+}
+
 interface IconViewJSON extends WidgetJSON {
 	entries: Array<IconViewEntry>;
 	singleclickactivate: boolean; // activates element on single click instead of just selection

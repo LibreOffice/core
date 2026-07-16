@@ -207,10 +207,15 @@ function _iconViewEntry(
 			entryContainer.classList.add('selected');
 			entryContainer.setAttribute(ariaStateAttr, 'true');
 
+			const contextMenuData: IconViewContextMenuData = {
+				row: entry.row,
+				clientX: (e as MouseEvent).clientX,
+				clientY: (e as MouseEvent).clientY,
+			};
 			parentContainer.builderCallback(
 				'iconview',
 				'contextmenu',
-				entry.row,
+				contextMenuData,
 				builder,
 			);
 			e.preventDefault();
