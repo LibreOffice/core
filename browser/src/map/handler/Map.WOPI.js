@@ -953,6 +953,33 @@ window.L.Map.WOPI = window.L.Handler.extend({
 					this._sendGoToCommentResp(msg.Values.Id, false, 'Unsupported document type');
 			}
 		}
+		else if (msg.MessageId === 'Action_GoToPage') {
+			const goToPageDocLayer = this._map._docLayer;
+			const goToPageIsTextDoc = goToPageDocLayer._docType === 'text';
+			const pageCount = goToPageIsTextDoc ? goToPageDocLayer._pages : goToPageDocLayer._parts;
+
+			if (!msg.Values || msg.Values.Page === undefined) {
+				this._sendGoToPageResp(undefined, false, pageCount, 'Missing Page value');
+				return;
+			}
+			const pageNumber = parseInt(msg.Values.Page, 10);
+			if (isNaN(pageNumber) || pageNumber < 1) {
+				this._sendGoToPageResp(msg.Values.Page, false, pageCount, 'Invalid page number');
+				return;
+			}
+			if (pageNumber > pageCount) {
+				this._sendGoToPageResp(msg.Values.Page, false, pageCount, 'Page out of range');
+				return;
+			}
+			const goToPageIndex = pageNumber - 1;
+
+			if (goToPageIsTextDoc)
+				this._map.goToPage(goToPageIndex);
+			else
+				this._map.setPart(goToPageIndex);
+
+			this._sendGoToPageResp(msg.Values.Page, true, pageCount);
+		}
 		else if (msg.sender === 'EIDEASY_SINGLE_METHOD_SIGNATURE') {
 			// This is produced by the esign popup.
 			const eSignature = this._map.eSignature;
@@ -1137,6 +1164,16 @@ window.L.Map.WOPI = window.L.Handler.extend({
 			args.errorMsg = errorMsg;
 		this._map.fire('postMessage', {
 			msgId: 'Action_GoToComment_Resp',
+			args: args
+		});
+	},
+
+	_sendGoToPageResp: function(page, success, pageCount, errorMsg) {
+		const args = { Page: page, success: success, PageCount: pageCount };
+		if (errorMsg)
+			args.errorMsg = errorMsg;
+		this._map.fire('postMessage', {
+			msgId: 'Action_GoToPage_Resp',
 			args: args
 		});
 	},
