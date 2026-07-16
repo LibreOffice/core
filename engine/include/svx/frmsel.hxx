@@ -173,6 +173,8 @@ public:
     /** Returns the bounding rectangle of the specified frame border (if enabled). */
     tools::Rectangle           GetClickBoundRect( FrameBorderType eBorder ) const;
 
+    DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
+
 private:
     virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual bool        MouseButtonDown( const MouseEvent& rMEvt ) override;

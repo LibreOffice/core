@@ -40,6 +40,10 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
+#include <tools/json_writer.hxx>
+#include <svx/dialmgr.hxx>
+#include <frmsel.hrc>
+
 #include <bitmaps.hlst>
 
 using namespace ::com::sun::star;
@@ -851,6 +855,7 @@ FrameSelector::FrameSelector()
 void FrameSelector::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
+    pDrawingArea->connect_get_property_tree(LINK(this, FrameSelector, DumpAsPropertyTreeHdl));
     mxImpl.reset( new FrameSelectorImpl( *this ) );
     Size aPrefSize = pDrawingArea->get_ref_device().LogicToPixel(Size(61, 65), MapMode(MapUnit::MapAppFont));
     pDrawingArea->set_size_request(aPrefSize.Width(), aPrefSize.Height());
@@ -1314,6 +1319,22 @@ FrameBorderIterBase< Cont, Iter, Pred >& FrameBorderIterBase< Cont, Iter, Pred >
 {
     do { ++maIt; } while( Is() && !maPred( *maIt ) );
     return *this;
+}
+
+IMPL_LINK(FrameSelector, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
+{
+    auto bordersNode = rJsonWriter.startArray("borders");
+    for (sal_Int32 i = 0; i < GetEnabledBorderCount(); ++i)
+    {
+        FrameBorderType eBorder = GetEnabledBorderType(i);
+        auto borderNode = rJsonWriter.startStruct();
+        rJsonWriter.put("type", static_cast<int>(eBorder));
+        rJsonWriter.put("show", GetFrameBorderState(eBorder) == FrameBorderState::Show);
+        rJsonWriter.put("selected", IsBorderSelected(eBorder));
+
+        OUString sName = SvxResId(RID_SVXSTR_FRMSEL_TEXTS[static_cast<sal_uInt32>(eBorder)].first);
+        rJsonWriter.put("name", sName);
+    }
 }
 
 }
