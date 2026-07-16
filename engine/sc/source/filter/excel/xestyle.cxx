@@ -3430,6 +3430,15 @@ XclExpXmlTableStyles::XclExpXmlTableStyles( const XclExpRoot& rRoot):
         }
     }
 
+    // The built-in styles are recreated from code on load, so only their name
+    // needs to survive; custom styles carry their own definition, so write every
+    // custom style even when no table currently uses it.
+    for (const ScTableStyle* pTableStyle : pTableStyles->GetSortedTableStyles())
+    {
+        if (!pTableStyle->IsOOXMLDefault())
+            aTableStyleNames.insert(pTableStyle->GetName());
+    }
+
     for (const OUString& aTableStyleName : aTableStyleNames)
     {
         const ScTableStyle* pTableStyle = pTableStyles->GetTableStyle(aTableStyleName);
