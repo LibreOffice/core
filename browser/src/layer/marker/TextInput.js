@@ -428,9 +428,6 @@ window.L.TextInput = window.L.Layer.extend({
 		this._container = window.L.DomUtil.create('div', 'clipboard-container');
 		this._container.id = 'doc-clipboard-container';
 
-		this._textAreaLabel = window.L.DomUtil.create('label', 'visuallyhidden', this._container);
-		this._textAreaLabel.id = 'clipboard-area-label';
-
 		// The textarea allows the keyboard to pop up and so on.
 		// Note that the contents of the textarea are NOT deleted on each composed
 		// word, in order to make
@@ -442,7 +439,6 @@ window.L.TextInput = window.L.Layer.extend({
 		this._textArea.setAttribute('autocorrect', 'off');
 		this._textArea.setAttribute('autocomplete', 'off');
 		this._textArea.setAttribute('spellcheck', 'false');
-		this._textArea.setAttribute('aria-labelledby', this._textAreaLabel.id);
 
 		if (this.hasAccessibilitySupport()) {
 			this._setSelectionFlag(false);
