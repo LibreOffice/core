@@ -9,7 +9,13 @@
 
 #include "sdmodeltestbase.hxx"
 
+#include <config_folders.h>
+
 #include <COKit/COKit.hxx>
+
+#include <comphelper/scopeguard.hxx>
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -72,6 +78,7 @@
 #include <sdpage.hxx>
 #include <unomodel.hxx>
 #include <osl/thread.hxx>
+#include <tools/json_writer.hxx>
 #include <slideshow.hxx>
 #include <sdresid.hxx>
 #include <strings.hrc>
@@ -407,6 +414,169 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureInsertSlideNotesMaste
     SdPage* pNotesMaster
         = static_cast<SdPage*>(&(pDoc->GetSdPage(1, PageKind::Notes)->TRG_GetMasterPage()));
     CPPUNIT_ASSERT_EQUAL(PageKind::Notes, pNotesMaster->GetPageKind());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureApplyTemplate)
+{
+    // ApplyTemplate gives a generated deck the bundled template's design. Every
+    // slide is themed, including slides inserted after the ApplyTemplate command -
+    // not just the first one. Each slide also gets the master that fits its
+    // layout, so a title slide and a content slide use different template masters.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    const OUString aBeforeMaster
+        = static_cast<SdPage*>(&pDoc->GetSdPage(0, PageKind::Standard)->TRG_GetMasterPage())
+              ->GetName();
+
+    // A title slide, a content slide, and a section divider - three layouts that
+    // the Cobalt template pairs with three different masters.
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"ApplyTemplate": "Cobalt"},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE"},
+            {"InsertMasterSlide": 0},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_CONTENT"},
+            {"InsertMasterSlide": 0},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_ONLY"}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pImpressDocument->getDrawPages()->getCount());
+
+    auto masterName = [&](sal_uInt16 nPage) {
+        return static_cast<SdPage*>(
+                   &pDoc->GetSdPage(nPage, PageKind::Standard)->TRG_GetMasterPage())
+            ->GetName();
+    };
+    // Every slide is on a Cobalt master, not the plain default one...
+    CPPUNIT_ASSERT(masterName(0).startsWith("Cobalt"));
+    CPPUNIT_ASSERT(masterName(1).startsWith("Cobalt"));
+    CPPUNIT_ASSERT(masterName(2).startsWith("Cobalt"));
+    CPPUNIT_ASSERT(aBeforeMaster != masterName(0));
+    // ...and the title, content, and divider slides each use a distinct master,
+    // matching how the template's own example slides pair layouts with masters.
+    CPPUNIT_ASSERT(masterName(0) != masterName(1));
+    CPPUNIT_ASSERT(masterName(1) != masterName(2));
+    CPPUNIT_ASSERT(masterName(0) != masterName(2));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureApplyTemplateUnknownName)
+{
+    // A name that matches no template file is rejected: the deck keeps its
+    // original master rather than the command reaching for an arbitrary file.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    const OUString aBeforeMaster
+        = static_cast<SdPage*>(&pDoc->GetSdPage(0, PageKind::Standard)->TRG_GetMasterPage())
+              ->GetName();
+
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"ApplyTemplate": "NoSuchTemplate"},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE"}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    const OUString aAfterMaster
+        = static_cast<SdPage*>(&pDoc->GetSdPage(0, PageKind::Standard)->TRG_GetMasterPage())
+              ->GetName();
+    CPPUNIT_ASSERT_EQUAL(aBeforeMaster, aAfterMaster);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignTemplateCatalog)
+{
+    // The catalog the picker is built from lists the bundled design templates,
+    // each with a thumbnail the picker can show.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    tools::JsonWriter aJsonWriter;
+    pImpressDocument->getCommandValues(aJsonWriter, ".uno:GetDesignTemplates");
+    const OString aJson = aJsonWriter.finishAndGetAsOString();
+
+    // The client's commandvalues handler reads commandName and commandValues, so
+    // the response must carry both - returning the templates bare would be dropped.
+    CPPUNIT_ASSERT(aJson.indexOf(".uno:GetDesignTemplates") >= 0);
+    CPPUNIT_ASSERT(aJson.indexOf("commandValues") >= 0);
+    // Bundled templates appear by name...
+    CPPUNIT_ASSERT(aJson.indexOf("Cobalt") >= 0);
+    CPPUNIT_ASSERT(aJson.indexOf("Ivory") >= 0);
+    // ...and carry a base64 PNG thumbnail data URL the picker shows. The JSON
+    // writer escapes the slash in the media type, so match a slash-free prefix.
+    CPPUNIT_ASSERT(aJson.indexOf("data:image") >= 0);
+    CPPUNIT_ASSERT(aJson.indexOf("base64") >= 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignTemplateCatalogSkipsInvalidNames)
+{
+    // A template whose file name breaks the naming contract (at most 64 plain
+    // letters, digits, spaces, hyphens, or underscores - here a '!') is not
+    // offered: the server drops such a pick, so listing it would put a dead
+    // entry in the picker.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    OUString aDirUrl = u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/cool-ai-templates/"_ustr;
+    rtl::Bootstrap::expandMacros(aDirUrl);
+    const OUString aBadUrl = aDirUrl + "Bad!name.otp";
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                         osl::File::copy(aDirUrl + "Cobalt.otp", aBadUrl));
+    comphelper::ScopeGuard aCleanup([&aBadUrl] { osl::File::remove(aBadUrl); });
+
+    tools::JsonWriter aJsonWriter;
+    pImpressDocument->getCommandValues(aJsonWriter, ".uno:GetDesignTemplates");
+    const OString aJson = aJsonWriter.finishAndGetAsOString();
+
+    CPPUNIT_ASSERT(aJson.indexOf("Cobalt") >= 0);
+    CPPUNIT_ASSERT(aJson.indexOf("Bad!name") < 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignTemplateLayouts)
+{
+    // Queried with a template name, the catalog command reports the slide
+    // layouts the template's example slides cover. The reply echoes the full
+    // command, parameters included, so it is told apart from a reply that
+    // carries the template list.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    tools::JsonWriter aJsonWriter;
+    // The lowercase name must match too - names resolve ignoring letter case.
+    pImpressDocument->getCommandValues(aJsonWriter, ".uno:GetDesignTemplates?name=cobalt");
+    const OString aJson = aJsonWriter.finishAndGetAsOString();
+
+    CPPUNIT_ASSERT(aJson.indexOf("name=cobalt") >= 0);
+    CPPUNIT_ASSERT(aJson.indexOf("layouts") >= 0);
+    // Cobalt ships example slides, so at least one layout must be reported.
+    CPPUNIT_ASSERT(aJson.indexOf("AUTOLAYOUT_") >= 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUndoImage)

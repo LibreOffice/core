@@ -61,6 +61,12 @@
 
 
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/StorageFactory.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
+#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XStream.hpp>
 #include <cpo/uno/Sequence.hxx>
 
 #include <animations/animationnodehelper.hxx>
@@ -131,6 +137,7 @@
 // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
 #include <xmloff/xmlgrhlp.hxx>
+#include <DesignTemplates.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>
 #include "UnoDocumentSettings.hxx"
@@ -2586,9 +2593,63 @@ private:
 bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
 {
     if (rCommand == u"VectorPrimitives" || rCommand == u"VectorRenderingGraphics"
-        || rCommand == u"VectorRenderingFont" || rCommand == u"ExtractDocumentStructure")
+        || rCommand == u"VectorRenderingFont" || rCommand == u"ExtractDocumentStructure"
+        || rCommand == u"GetDesignTemplates")
         return true;
     return false;
+}
+
+namespace
+{
+// Reads the thumbnail image embedded in a template document and returns it as a
+// base64 PNG data URL. Returns an empty string when the document has no
+// thumbnail or cannot be opened.
+OUString lcl_ReadTemplateThumbnailDataUrl(const OUString& rUrl)
+{
+    try
+    {
+        uno::Reference<lang::XSingleServiceFactory> xFactory
+            = embed::StorageFactory::create(comphelper::getProcessComponentContext());
+        cpo::uno::Sequence<beans::PropertyValue> aDescriptor{ comphelper::makePropertyValue(
+            u"StorageFormat"_ustr, sal_Int32(embed::StorageFormats::PACKAGE)) };
+        cpo::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(rUrl),
+                                                 cpo::uno::Any(embed::ElementModes::READ),
+                                                 cpo::uno::Any(aDescriptor) };
+        uno::Reference<embed::XHierarchicalStorageAccess> xStorage
+            = xFactory->createInstanceWithArguments(aArgs)
+                  .queryThrow<embed::XHierarchicalStorageAccess>();
+
+        uno::Reference<io::XStream> xStream = xStorage->openStreamElementByHierarchicalName(
+            u"Thumbnails/thumbnail.png"_ustr, embed::ElementModes::READ);
+        uno::Reference<io::XInputStream> xInput = xStream.is() ? xStream->getInputStream()
+                                                               : uno::Reference<io::XInputStream>();
+        if (!xInput.is())
+            return OUString();
+
+        std::vector<sal_Int8> aBytes;
+        cpo::uno::Sequence<sal_Int8> aChunk;
+        sal_Int32 nRead = 0;
+        do
+        {
+            nRead = xInput->readBytes(aChunk, 16384);
+            aBytes.insert(aBytes.end(), aChunk.getConstArray(), aChunk.getConstArray() + nRead);
+        } while (nRead > 0);
+        xInput->closeInput();
+
+        if (aBytes.empty())
+            return OUString();
+
+        OUStringBuffer aBase64;
+        comphelper::Base64::encode(
+            aBase64, cpo::uno::Sequence<sal_Int8>(aBytes.data(),
+                                                  static_cast<sal_Int32>(aBytes.size())));
+        return u"data:image/png;base64,"_ustr + aBase64.makeStringAndClear();
+    }
+    catch (const uno::Exception&)
+    {
+        return OUString();
+    }
+}
 }
 
 void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
@@ -2608,6 +2669,62 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
             GetDocStructureSlidesText(rJsonWriter, this);
         else
             GetDocStructureSlides(rJsonWriter, this, aMap);
+    }
+    else if (o3tl::starts_with(rCommand, ".uno:GetDesignTemplates"))
+    {
+        auto itName = aMap.find(u"name"_ustr);
+        if (itName != aMap.end())
+        {
+            // One template's slide layouts, learned from its example slides -
+            // the same read the apply step does to pair layouts with masters.
+            // Deriving them loads the template document, so they are queried
+            // per template on demand instead of for the whole list at once.
+            // The commandName echoes the full command, parameters included, so
+            // the reply matches the request it answers and is told apart from
+            // a reply carrying the template list.
+            rJsonWriter.put("commandName", rCommand);
+            auto aValues = rJsonWriter.startNode("commandValues");
+            auto aLayoutsNode = rJsonWriter.startArray("layouts");
+            for (const auto& [rName, rTemplateUrl] : sd::CollectDesignTemplates())
+            {
+                if (!rName.equalsIgnoreAsciiCase(itName->second))
+                    continue;
+                if (SdDrawDocument* pTemplate
+                    = mpDoc ? mpDoc->OpenBookmarkDoc(rTemplateUrl) : nullptr)
+                {
+                    std::set<AutoLayout> aSeenLayouts;
+                    const sal_uInt16 nSlides = pTemplate->GetSdPageCount(PageKind::Standard);
+                    for (sal_uInt16 i = 0; i < nSlides; ++i)
+                    {
+                        SdPage* pSlide = pTemplate->GetSdPage(i, PageKind::Standard);
+                        if (!pSlide || !aSeenLayouts.insert(pSlide->GetAutoLayout()).second)
+                            continue;
+                        rJsonWriter.putSimpleValue(
+                            SdPage::autoLayoutToString(pSlide->GetAutoLayout()));
+                    }
+                    mpDoc->CloseBookmarkDoc();
+                }
+                break;
+            }
+        }
+        else
+        {
+            // The design templates the user can pick from to style a generated
+            // deck: the bundled set plus any preset templates, each with its
+            // thumbnail as a PNG data URL. Wrapped as commandName plus
+            // commandValues, the shape every commandvalues response carries.
+            rJsonWriter.put("commandName", ".uno:GetDesignTemplates");
+            auto aValues = rJsonWriter.startNode("commandValues");
+            auto aTemplatesNode = rJsonWriter.startArray("templates");
+            for (const auto& [rName, rTemplateUrl] : sd::CollectDesignTemplates())
+            {
+                auto aEntry = rJsonWriter.startStruct();
+                rJsonWriter.put("name", rName);
+                const OUString aThumbnail = lcl_ReadTemplateThumbnailDataUrl(rTemplateUrl);
+                if (!aThumbnail.isEmpty())
+                    rJsonWriter.put("thumbnail", aThumbnail);
+            }
+        }
     }
     else if (o3tl::starts_with(rCommand, ".uno:VectorRenderingGraphics"))
     {

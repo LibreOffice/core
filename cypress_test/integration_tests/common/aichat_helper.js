@@ -80,15 +80,32 @@ function clickSend() {
  * Like enableAIAndStubSocket, but also records every aichat: payload
  * on win.__aichatPayloads so the test can assert on what was actually
  * sent (tone, customToneDescription, emojify, ...).
+ *
+ * With opts.approvalToolName set, an aichatapproval event carrying that
+ * tool name is fired for each request, as if the model had asked to run
+ * that tool. The result then follows the user's approve or reject
+ * answer, like the real server.
  */
 function enableAIWithCaptureSocket(win, opts) {
 	var content = (opts && opts.content) || 'Mock AI response';
 	var success = opts && opts.success !== undefined ? opts.success : true;
 	var error   = (opts && opts.error) || '';
+	var approvalToolName = (opts && opts.approvalToolName) || '';
 
 	win.app.map.isAIConfigured = true;
 	win.__aichatPayloads = [];
 
+	function fireResult(requestId) {
+		var result = { requestId: requestId, success: success };
+		if (success) {
+			result.content = content;
+		} else {
+			result.error = error || 'Mock error';
+		}
+		win.app.map.fire('aichatresult', result);
+	}
+
+	var pendingApprovalId = '';
 	var original = win.app.socket.sendMessage.bind(win.app.socket);
 	cy.stub(win.app.socket, 'sendMessage').callsFake(function(msg) {
 		if (typeof msg === 'string' && msg.startsWith('aichat: ')) {
@@ -96,13 +113,25 @@ function enableAIWithCaptureSocket(win, opts) {
 			win.__aichatPayloads.push(payload);
 			var requestId = payload.requestId;
 			win.app.layoutingService.onDrain(function() {
-				var result = { requestId: requestId, success: success };
-				if (success) {
-					result.content = content;
+				if (approvalToolName) {
+					// The result follows the user's answer to the approval,
+					// like the real server.
+					pendingApprovalId = requestId;
+					win.app.map.fire('aichatapproval', {
+						requestId: requestId,
+						toolName: approvalToolName,
+						summary: 'Mock change',
+					});
 				} else {
-					result.error = error || 'Mock error';
+					fireResult(requestId);
 				}
-				win.app.map.fire('aichatresult', result);
+			});
+		} else if (typeof msg === 'string' && msg.startsWith('aichatapprove: ')) {
+			// Approved or rejected, the request runs to completion and a
+			// result arrives, like the real server.
+			var requestId = pendingApprovalId;
+			win.app.layoutingService.onDrain(function() {
+				fireResult(requestId);
 			});
 		} else if (typeof msg === 'string' && msg.startsWith('aichatcancel: ')) {
 			// swallow cancel messages

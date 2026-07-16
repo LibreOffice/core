@@ -15,9 +15,9 @@
 #
 # The split used here follows the split from the Package_*mk files, but that split is arbitrary/
 # artificial, they are ultimately combined into a single variable.
-# A split only matters on the Package level, but even there only the wizard/desktop files are
-# "special" (they are always created/packaged, while the rests is optional/behind a WITH_TEMPLATES
-# conditional)
+# A split only matters on the Package level, but even there only the wizard/desktop and cool-ai
+# files are "special" (they are always created/packaged, while the rests is optional/behind a
+# WITH_TEMPLATES conditional)
 
 # Specify filenames relative to SRC_ROOT/extras/source/templates
 # mimetype, META-INF/manifest.xml, content.xml, meta.xml and styles.xml are always assumed to be
@@ -106,6 +106,15 @@ extra_files_PRESENTATIONS := \
     presnt/Yellow_Idea/Thumbnails/thumbnail.png \
 
 
+extra_files_AITEMPLATES := \
+    cool-ai/Cobalt/Thumbnails/thumbnail.png \
+    cool-ai/Ivory/Thumbnails/thumbnail.png \
+    cool-ai/Mint/Thumbnails/thumbnail.png \
+    cool-ai/Onyx/Thumbnails/thumbnail.png \
+    cool-ai/Paper/Thumbnails/thumbnail.png \
+    cool-ai/Slate/Thumbnails/thumbnail.png \
+
+
 extra_files_WIZARD := \
     wizard/desktop/html/settings.xml \
     wizard/desktop/idxexample/settings.xml \
@@ -136,6 +145,7 @@ extra_files_WIZDESKTOP := \
 
 
 extra_files_TEMPLATES := \
+    $(extra_files_AITEMPLATES) \
     $(extra_files_COMMON) \
     $(extra_files_PRESENTATIONS) \
     $(extra_files_WIZARD) \

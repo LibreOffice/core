@@ -75,6 +75,9 @@ struct AIToolLoopState
     std::string requestUrl;
     std::string apiKey;
     std::string docType;             // text|spreadsheet|presentation|drawing, or empty
+    // Name of the design template the user picked for this presentation, empty
+    // when none was chosen.
+    std::string designTemplate;
     // Read-verify-insert tasks (e.g. "add a formula for each record") legitimately
     // need several rounds: read the sheet, check functions, evaluate, then insert.
     // Keep a ceiling to prevent runaway loops, but high enough to finish the work.

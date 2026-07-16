@@ -33,6 +33,7 @@ namespace cool {
 		imageData?: string;
 		isApproval?: boolean;
 		approvalType?: 'inspect' | 'modify';
+		isPicker?: boolean;
 	}
 
 	interface CustomTone {
@@ -67,6 +68,28 @@ namespace cool {
 		private selectedTone: string | null = null;
 		private emojify: boolean = false;
 		private tonePickerOpen: boolean = false;
+
+		// Design template the user picked for a generated deck. Null means none
+		// chosen or the user skipped. The picker is offered again on later
+		// requests while the deck stays fresh, until a pick is made or deck
+		// content is built.
+		private designTemplate: string | null = null;
+		private templatePickerShown: boolean = false;
+		private designTemplatePicked: boolean = false;
+		// Slide layouts the picked template designs, fetched from the catalog
+		// when the user picks.
+		private designTemplateLayouts: string[] = [];
+		// The design-template catalog, prefetched when the sidebar opens on a
+		// fresh deck so the picker does not race the fetch timeout at send
+		// time. Null until the first fetch starts.
+		private templateCatalogPromise: Promise<
+			{ name: string; thumbnail?: string }[]
+		> | null = null;
+		// Message index of a picker awaiting a click, -1 when none is pending.
+		private pendingPickerIndex: number = -1;
+		// True once the user approved a document modification in the current
+		// request.
+		private requestHadModifyApproval: boolean = false;
 
 		private customTones: CustomTone[] = [];
 		private recentIcons: string[] = [];
@@ -130,6 +153,7 @@ namespace cool {
 		private readonly COPY_FEEDBACK_DURATION_MS = 1500;
 		private readonly TEXTAREA_MAX_HEIGHT_PX = 120;
 		private readonly FORMULA_FETCH_TIMEOUT_MS = 5000;
+		private readonly TEMPLATE_FETCH_TIMEOUT_MS = 5000;
 		private readonly MAX_API_MESSAGES = 50;
 		private readonly MAX_MESSAGE_LENGTH = 100000; // 100K characters
 
@@ -304,6 +328,16 @@ namespace cool {
 			this.render();
 			this.wrapper.classList.add('visible');
 			this.focusInput();
+
+			// Warm the design-template catalog while the user types, so the
+			// picker is ready by the time the first deck request goes out.
+			if (
+				!this.templateCatalogPromise &&
+				app.map.getDocType() === 'presentation' &&
+				app.map.getNumberOfParts() <= 1
+			) {
+				this.templateCatalogPromise = this.fetchDesignTemplates();
+			}
 		}
 
 		hide(): void {
@@ -777,10 +811,11 @@ namespace cool {
 					});
 				}
 
-				// Action buttons for text assistant messages (skip approval messages).
-				// A reply that reads as a question is not document content, so it
-				// gets Copy but no Insert.
-				if (!isUser && !msg.isError && !msg.isApproval) {
+				// Action buttons for text assistant messages (skip approval
+				// and picker messages, which carry their own controls). A reply
+				// that reads as a question is not document content, so it gets
+				// Copy but no Insert.
+				if (!isUser && !msg.isError && !msg.isApproval && !msg.isPicker) {
 					const showInsert = !this.looksLikeQuestion(displayText);
 					children.push(this.getActionsJSON(index, showInsert));
 				}
@@ -1754,7 +1789,19 @@ namespace cool {
 			const exactActions: Record<string, () => void> = {
 				'aichat-send-btn': () => {
 					if (this.isProcessing) {
-						app.socket.sendMessage('aichatcancel: ' + this.currentRequestId);
+						// While the template picker awaits a click no request is
+						// out yet, so there is nothing to cancel on the server;
+						// abandon the picker and let it offer again next time.
+						if (this.pendingPickerIndex >= 0) {
+							this.updatePickerMessage(
+								this.pendingPickerIndex,
+								_('Design template choice cancelled.'),
+							);
+							this.pendingPickerIndex = -1;
+							this.templatePickerShown = false;
+						} else if (this.currentRequestId) {
+							app.socket.sendMessage('aichatcancel: ' + this.currentRequestId);
+						}
 						this.isProcessing = false;
 						this.currentRequestId = '';
 						this.hintText = '';
@@ -2061,7 +2108,7 @@ namespace cool {
 		private buildApiMessages(): { role: string; content: string }[] {
 			const apiMessages: { role: string; content: string }[] = [];
 			const textMessages = this.messages.filter(
-				(m) => !m.imageData && !m.isError && !m.isApproval,
+				(m) => !m.imageData && !m.isError && !m.isApproval && !m.isPicker,
 			);
 			const recent = textMessages.slice(-this.MAX_API_MESSAGES);
 			for (const msg of recent) {
@@ -2072,6 +2119,7 @@ namespace cool {
 
 		private dispatchRequest(): void {
 			this.currentRequestId = this.generateRequestId();
+			this.requestHadModifyApproval = false;
 
 			const isPreset =
 				this.selectedTone !== null &&
@@ -2087,6 +2135,11 @@ namespace cool {
 				tone: customTone ? 'custom' : this.selectedTone,
 				customToneDescription: customTone ? customTone.description : undefined,
 				emojify: this.emojify,
+				designTemplate: this.designTemplate || undefined,
+				designTemplateLayouts:
+					this.designTemplate && this.designTemplateLayouts.length
+						? this.designTemplateLayouts
+						: undefined,
 			});
 			app.socket.sendMessage('aichat: ' + payload);
 			this.startRequestTimeout(
@@ -2138,6 +2191,17 @@ namespace cool {
 			}
 			this.updateHint();
 
+			// On a fresh presentation deck, let the user pick a design template
+			// before the deck is generated. Offered once per conversation; the
+			// chosen name rides on the request so the backend themes the slides.
+			// The request is dispatched from the picker once the user chooses or
+			// skips, so return here instead of dispatching now.
+			if (this.shouldOfferTemplatePicker()) {
+				this.templatePickerShown = true;
+				this.showTemplatePicker();
+				return;
+			}
+
 			this.dispatchRequest();
 		}
 
@@ -2151,6 +2215,16 @@ namespace cool {
 			this.isProcessing = false;
 			this.hintText = '';
 			this.progressText = '';
+
+			// A request that modified nothing (a question, a rewrite reply, a
+			// change the user rejected) leaves the deck unbuilt: re-arm the
+			// template picker offer so such a request did not use it up. A
+			// recorded pick stays - it rides every later request in this
+			// conversation.
+			if (!this.requestHadModifyApproval && this.designTemplate === null) {
+				this.templatePickerShown = false;
+				this.designTemplatePicked = false;
+			}
 
 			if (data.success) {
 				this.messages.push(buildSuccessMsg(data));
@@ -2296,6 +2370,11 @@ namespace cool {
 				approveBtn.className = 'aichat-approve-btn';
 				approveBtn.setAttribute('aria-label', _('Approve action'));
 				approveBtn.onclick = () => {
+					// Only an approved modify builds deck content; a rejected
+					// one leaves the deck unbuilt and the picker offer stands.
+					if (approvalMsg.approvalType === 'modify') {
+						this.requestHadModifyApproval = true;
+					}
 					this.sendApprovalAction('approve');
 					btnContainer.remove();
 				};
@@ -2433,6 +2512,12 @@ namespace cool {
 			this.emojiPickerOpen = false;
 			this.deleteConfirmOpen = false;
 			this.pendingChoices = null;
+			this.designTemplate = null;
+			this.templatePickerShown = false;
+			this.designTemplatePicked = false;
+			this.designTemplateLayouts = [];
+			this.pendingPickerIndex = -1;
+			this.requestHadModifyApproval = false;
 			this.render();
 		}
 
@@ -2714,6 +2799,224 @@ namespace cool {
 				result = match[1];
 			}
 			return result;
+		}
+
+		// A fresh deck (a presentation with at most one slide, treated as not
+		// yet built) is the case where offering a design up front makes sense.
+		// The offer stands on every request while the deck stays fresh; it ends
+		// when the user picks a template, when deck content is actually built
+		// (see handleAIResponse), or for the rest of a request once the picker
+		// is on screen.
+		private shouldOfferTemplatePicker(): boolean {
+			return (
+				!this.templatePickerShown &&
+				!this.designTemplatePicked &&
+				this.designTemplate === null &&
+				app.map.getDocType() === 'presentation' &&
+				app.map.getNumberOfParts() <= 1
+			);
+		}
+
+		// Fetches the design-template catalog (each entry a name and a thumbnail
+		// data URL) from core through the generic commandvalues channel. Resolves
+		// to an empty array on timeout or error so generation can still proceed.
+		private fetchDesignTemplates(): Promise<
+			{ name: string; thumbnail?: string }[]
+		> {
+			return new Promise((resolve) => {
+				const timeout = setTimeout(() => {
+					app.map.off('commandvalues', handleResponse);
+					resolve([]);
+				}, this.TEMPLATE_FETCH_TIMEOUT_MS);
+
+				const handleResponse = (e: any) => {
+					if (e.commandName !== '.uno:GetDesignTemplates') return;
+					clearTimeout(timeout);
+					app.map.off('commandvalues', handleResponse);
+					const templates =
+						e.commandValues && Array.isArray(e.commandValues.templates)
+							? e.commandValues.templates
+							: [];
+					resolve(templates);
+				};
+
+				app.map.on('commandvalues', handleResponse);
+				app.socket.sendMessage('commandvalues command=.uno:GetDesignTemplates');
+			});
+		}
+
+		// Shows the design-template picker as an assistant message. Each card and
+		// the skip button dispatch the request through finishTemplatePick once the
+		// user chooses. When no templates are available, the request goes out
+		// straight away without one.
+		private showTemplatePicker(): void {
+			// Use the catalog prefetched on open. When that fetch came back
+			// empty - typically because it timed out against a kit still busy
+			// loading the document - try once more before giving up on the
+			// picker for this request.
+			const prefetched =
+				this.templateCatalogPromise || this.fetchDesignTemplates();
+			this.templateCatalogPromise = prefetched;
+			const withRetry = prefetched.then((templates) => {
+				if (templates.length) return templates;
+				const retried = this.fetchDesignTemplates();
+				this.templateCatalogPromise = retried;
+				return retried;
+			});
+			withRetry.then((templates) => {
+				// The user stopped the request while the catalog was loading.
+				if (!this.isProcessing) return;
+				if (!templates.length) {
+					this.dispatchRequest();
+					return;
+				}
+
+				// The send that triggered this picker may still be rebuilding
+				// the chat area (the first message swaps the prompt cards for
+				// the message list). With a prefetched catalog this code runs
+				// in the same tick as that rebuild, which would wipe a picker
+				// appended now - so wait for the layouting queue to settle
+				// before adding the picker message.
+				app.layoutingService.onDrain(() => {
+					if (!this.isProcessing) return;
+
+					const pickerMsg: ChatMessage = {
+						role: 'assistant',
+						content: _('Pick a design for your deck, or continue without one:'),
+						timestamp: Date.now(),
+						isPicker: true,
+					};
+					this.messages.push(pickerMsg);
+					const pickerIndex = this.messages.length - 1;
+					this.pendingPickerIndex = pickerIndex;
+					this.appendMessage(pickerMsg, pickerIndex);
+
+					app.layoutingService.onDrain(() => {
+						const msgEl = document.getElementById('aichat-msg-' + pickerIndex);
+						if (!msgEl) {
+							// The message did not render; fall back to a plain deck.
+							this.finishTemplatePick(null, pickerIndex);
+							return;
+						}
+						msgEl.classList.add('aichat-msg-assistant');
+
+						const grid = document.createElement('div');
+						grid.className = 'aichat-template-picker';
+
+						for (const tpl of templates) {
+							if (!tpl || !tpl.name) continue;
+							const card = document.createElement('button');
+							card.className = 'aichat-template-card';
+							card.title = tpl.name;
+							card.setAttribute('aria-label', tpl.name);
+							if (tpl.thumbnail) {
+								const img = document.createElement('img');
+								img.className = 'aichat-template-thumb';
+								img.src = tpl.thumbnail;
+								img.alt = tpl.name;
+								card.appendChild(img);
+							}
+							const label = document.createElement('span');
+							label.className = 'aichat-template-name';
+							label.textContent = tpl.name;
+							card.appendChild(label);
+							const chosen = tpl.name;
+							card.onclick = () => this.finishTemplatePick(chosen, pickerIndex);
+							grid.appendChild(card);
+						}
+
+						const skip = document.createElement('button');
+						skip.className = 'aichat-template-skip';
+						skip.textContent = _('No template');
+						skip.setAttribute(
+							'aria-label',
+							_('Continue without a design template'),
+						);
+						skip.onclick = () => this.finishTemplatePick(null, pickerIndex);
+						grid.appendChild(skip);
+
+						msgEl.appendChild(grid);
+					});
+				});
+			});
+		}
+
+		// Records the picked template (or none), replaces the picker prompt with
+		// the outcome, and dispatches the deck request. Guarded so a second
+		// click is ignored. For a picked template the request first waits for
+		// the catalog's layout list for that template, so the backend can tell
+		// the model which layouts the design covers; on timeout the request
+		// goes out without the hints.
+		private finishTemplatePick(name: string | null, pickerIndex: number): void {
+			if (this.designTemplatePicked) return;
+			this.designTemplatePicked = true;
+			this.designTemplate = name;
+			this.pendingPickerIndex = -1;
+
+			this.updatePickerMessage(
+				pickerIndex,
+				name
+					? _('Design template: %1').replace('%1', name)
+					: _('Continuing without a design template.'),
+			);
+
+			if (!name) {
+				this.dispatchRequest();
+				return;
+			}
+			this.fetchDesignTemplateLayouts(name).then((layouts) => {
+				// The user stopped the request while the layouts were loading.
+				if (!this.isProcessing) return;
+				this.designTemplateLayouts = layouts;
+				this.dispatchRequest();
+			});
+		}
+
+		// Replaces a picker message's prompt with the outcome and removes the
+		// cards, so the transcript records what was chosen.
+		private updatePickerMessage(pickerIndex: number, text: string): void {
+			const msg = this.messages[pickerIndex];
+			if (msg) msg.content = text;
+
+			const msgEl = document.getElementById('aichat-msg-' + pickerIndex);
+			const grid = msgEl
+				? msgEl.querySelector('.aichat-template-picker')
+				: null;
+			if (grid) grid.remove();
+			const msgBody = document.getElementById('aichat-msg-text-' + pickerIndex);
+			if (msgBody) msgBody.textContent = text;
+		}
+
+		// Fetches the slide layouts a template's example slides cover. Resolves
+		// to an empty array on timeout or error so the request can proceed
+		// without layout hints.
+		private fetchDesignTemplateLayouts(name: string): Promise<string[]> {
+			return new Promise((resolve) => {
+				const command =
+					'.uno:GetDesignTemplates?name=' + encodeURIComponent(name);
+				const timeout = setTimeout(() => {
+					app.map.off('commandvalues', handleResponse);
+					resolve([]);
+				}, this.TEMPLATE_FETCH_TIMEOUT_MS);
+
+				const handleResponse = (e: any) => {
+					// The reply's commandName echoes the full command, parameters
+					// included, so a template-list reply does not match here.
+					if (e.commandName !== command) return;
+					clearTimeout(timeout);
+					app.map.off('commandvalues', handleResponse);
+					const layouts =
+						e.commandValues && Array.isArray(e.commandValues.layouts)
+							? e.commandValues.layouts.filter(
+									(l: any) => typeof l === 'string',
+								)
+							: [];
+					resolve(layouts);
+				};
+
+				app.map.on('commandvalues', handleResponse);
+				app.socket.sendMessage('commandvalues command=' + command);
+			});
 		}
 
 		private fetchFormulaDependencyChain(): Promise<any> {

@@ -110,6 +110,7 @@ interface MapInterface extends Evented {
 
 	loadDocument(socket?: SockInterface): void;
 	getCurrentPartNumber(): number;
+	getNumberOfParts(): number;
 	getZoom(): number;
 	showBusy(label: string, bar: boolean): void;
 	hideBusy(): void;

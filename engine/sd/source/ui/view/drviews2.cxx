@@ -18,6 +18,16 @@
  */
 
 #include <config_features.h>
+#include <config_folders.h>
+
+#include <map>
+#include <optional>
+#include <set>
+#include <utility>
+#include <vector>
+
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 
 #include <avmedia/mediaplayer.hxx>
 
@@ -135,6 +145,7 @@
 #include <strings.hrc>
 
 #include <AnimationChildWindow.hxx>
+#include <DesignTemplates.hxx>
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <LayerTabBar.hxx>
@@ -227,6 +238,85 @@ using namespace cpo::uno;
 #define MIN_ACTIONS_FOR_DIALOG  5000    ///< if there are more meta objects, we show a dialog during the break up
 
 namespace sd {
+
+namespace {
+
+// A design-template name travels from the picker through the chat request into
+// the system prompt, so the naming contract is deliberately narrow: at most 64
+// characters, each a plain letter, digit, space, hyphen, or underscore. A
+// template file whose base name does not fit the contract is not offered at
+// all - offering it would only invite a pick the server then drops.
+bool lcl_IsValidDesignTemplateName(const OUString& rName)
+{
+    if (rName.isEmpty() || rName.getLength() > 64)
+        return false;
+    for (sal_Int32 i = 0; i < rName.getLength(); ++i)
+    {
+        const sal_Unicode cChar = rName[i];
+        const bool bAllowed = (cChar >= 'a' && cChar <= 'z') || (cChar >= 'A' && cChar <= 'Z')
+                              || (cChar >= '0' && cChar <= '9') || cChar == ' ' || cChar == '-'
+                              || cChar == '_';
+        if (!bAllowed)
+            return false;
+    }
+    return true;
+}
+
+}
+
+std::vector<std::pair<OUString, OUString>> CollectDesignTemplates()
+{
+    // The bundled set lives in a dedicated subdirectory, deliberately NOT the
+    // standard presentation template directory: with an integrator the kit mounts
+    // the per-config preset templates over share/template/common/presnt, which
+    // would hide bundled templates placed there. The preset directory is listed
+    // second so an uploaded template is offered as well, and a bundled template
+    // wins when a preset shares its name.
+    const OUString aSearchDirs[] = {
+        u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/cool-ai-templates/"_ustr,
+        u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/template/common/presnt/"_ustr,
+    };
+
+    std::vector<std::pair<OUString, OUString>> aTemplates;
+    std::set<OUString> aSeen;
+    for (const OUString& rSearchDir : aSearchDirs)
+    {
+        OUString aDirUrl = rSearchDir;
+        rtl::Bootstrap::expandMacros(aDirUrl);
+        osl::Directory aDir(aDirUrl);
+        if (aDir.open() != osl::FileBase::E_None)
+            continue;
+
+        osl::DirectoryItem aItem;
+        while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
+        {
+            osl::FileStatus aStatus(osl_FileStatus_Mask_FileName
+                                    | osl_FileStatus_Mask_FileURL);
+            if (aItem.getFileStatus(aStatus) != osl::FileBase::E_None)
+                continue;
+
+            const OUString aFileName = aStatus.getFileName();
+            if (!aFileName.endsWithIgnoreAsciiCase(u".otp"))
+                continue;
+
+            const OUString aName = aFileName.copy(0, aFileName.getLength() - 4);
+            if (!lcl_IsValidDesignTemplateName(aName))
+            {
+                KIT_WARN("sd.transform",
+                         "Design template skipped, the file name must be at most 64 "
+                         "characters of letters, digits, space, hyphen, or underscore: "
+                             << aFileName);
+                continue;
+            }
+            // Keep the first template seen for a name, so the bundled set wins.
+            if (!aSeen.insert(aName.toAsciiLowerCase()).second)
+                continue;
+            aTemplates.emplace_back(aName, aStatus.getFileURL());
+        }
+        aDir.close();
+    }
+    return aTemplates;
+}
 
 namespace {
 
@@ -336,6 +426,38 @@ void lcl_UnoCommand(const std::string& rText)
             lcl_LogWarning("FillApi SlideCmd: uno command not recognized'" + rText + "'");
         }
     }
+}
+
+// Resolves a design-template name to the URL of the template document that
+// carries that look. The appearance - slide background, placeholder text styles,
+// fonts, and theme - lives in the template's master slide and is copied onto the
+// deck through the presentation-layout path. The name is matched against the
+// available templates by base file name, ignoring letter case. Returns an empty
+// optional when no template matches, so the caller can reject the name rather
+// than reach for an arbitrary file.
+std::optional<OUString> lcl_ResolveDesignTemplateUrl(std::string_view rName)
+{
+    const OUString aWanted = OStringToOUString(rName, RTL_TEXTENCODING_UTF8);
+
+    for (const auto& [rTemplateName, rUrl] : CollectDesignTemplates())
+    {
+        if (rTemplateName.equalsIgnoreAsciiCase(aWanted))
+            return rUrl;
+    }
+    return std::nullopt;
+}
+
+// True if the document already has a standard master page with this name.
+bool lcl_DocHasMaster(SdDrawDocument* pDoc, std::u16string_view rName)
+{
+    const sal_uInt16 nCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    for (sal_uInt16 i = 0; i < nCount; ++i)
+    {
+        SdPage* pMaster = pDoc->GetMasterSdPage(i, PageKind::Standard);
+        if (pMaster && pMaster->GetName() == rName)
+            return true;
+    }
+    return false;
 }
 
 bool lcl_ReplaceWithImage(SdDrawDocument* pDoc, SdPage* pPage, int nObjId,
@@ -787,6 +909,11 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
             aVisibleLayers.IsSet(aBgObj)));
     };
 
+    // A design template is applied once, after all commands run, so that slides
+    // inserted after the ApplyTemplate command are themed too. This holds the
+    // resolved template URL; the apply happens after the loop.
+    std::optional<OUString> oApplyTemplateUrl;
+
     // Iterate through the JSON data loaded into a tree structure
     for (const auto& aItem : aTree)
     {
@@ -974,6 +1101,21 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                                 mpDrawView->AddUndo(
                                     SdrUndoFactory::CreateUndoNewPage(*pPageNote));
                             }
+                        }
+                        else if (aItem3.first == "ApplyTemplate")
+                        {
+                            // Record the template; it is applied to every slide
+                            // after all commands run (see after the loop), so
+                            // slides inserted later are themed too, not just the
+                            // slide that is current when this command appears.
+                            std::string aName = aItem3.second.get_value<std::string>();
+                            std::optional<OUString> oUrl
+                                = lcl_ResolveDesignTemplateUrl(aName);
+                            if (!oUrl)
+                                lcl_LogWarning("FillApi SlideCmd: unknown template name '"
+                                               + aItem3.first + ": " + aName + "'");
+                            else
+                                oApplyTemplateUrl = oUrl;
                         }
                         else if (aItem3.first == "DeleteSlide")
                         {
@@ -1506,6 +1648,68 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
         {
             KitHelper::dispatchUnoCommand(aItem.second);
         }
+    }
+
+    // Apply the chosen design template once all slides exist, so slides inserted
+    // after the ApplyTemplate command are themed too - not just the one current
+    // when the command appeared. The template ships several masters, one per slide
+    // role such as title, content, and divider. Rather than assume master names,
+    // learn the layout-to-master pairing from the template's own example slides
+    // below, then put each generated slide on the master the template pairs with
+    // that slide's layout. A generated deck then uses the opening and divider
+    // designs as well as the content design, not one master throughout.
+    if (oApplyTemplateUrl)
+    {
+        SdDrawDocument* pTemplate = GetDoc()->OpenBookmarkDoc(*oApplyTemplateUrl);
+        const sal_uInt16 nStdCount = GetDoc()->GetSdPageCount(PageKind::Standard);
+        if (pTemplate && pTemplate->GetMasterSdPageCount(PageKind::Standard) > 0
+            && nStdCount > 0)
+        {
+            // Learn how the template pairs masters with slide layouts from its
+            // own example slides, so this works for any template - including ones
+            // a user uploads - without relying on master names. The first master
+            // page is the fallback for layouts the template's examples do not
+            // cover, and for templates that ship no example slides at all.
+            const OUString aFallbackMaster
+                = pTemplate->GetMasterSdPage(0, PageKind::Standard)->GetName();
+            std::map<AutoLayout, OUString> aLayoutToMaster;
+            const sal_uInt16 nTemplateSlides
+                = pTemplate->GetSdPageCount(PageKind::Standard);
+            for (sal_uInt16 t = 0; t < nTemplateSlides; ++t)
+            {
+                SdPage* pTemplateSlide = pTemplate->GetSdPage(t, PageKind::Standard);
+                if (!pTemplateSlide)
+                    continue;
+                const OUString aMasterName
+                    = static_cast<SdPage&>(pTemplateSlide->TRG_GetMasterPage()).GetName();
+                // The first example slide for a given layout wins.
+                aLayoutToMaster.emplace(pTemplateSlide->GetAutoLayout(), aMasterName);
+            }
+
+            for (sal_uInt16 i = 0; i < nStdCount; ++i)
+            {
+                SdPage* pPage = GetDoc()->GetSdPage(i, PageKind::Standard);
+                auto it = aLayoutToMaster.find(pPage->GetAutoLayout());
+                const OUString aMaster
+                    = (it != aLayoutToMaster.end()) ? it->second : aFallbackMaster;
+
+                // Import the master from the template the first time it is used;
+                // afterwards take the copy already in this document so the styles
+                // are not re-imported (which would collide on names).
+                SdDrawDocument* pSource
+                    = lcl_DocHasMaster(GetDoc(), aMaster) ? GetDoc() : pTemplate;
+                GetDoc()->SetMasterPage(i, aMaster, pSource, false, false);
+
+                // Re-run the autolayout so the slide's placeholders move to the
+                // new master's positions and sizes - the same step
+                // FuPresentationLayout does after a master change. Without it the
+                // placeholders keep their old geometry and the body text can
+                // shrink to fit a too-small frame.
+                pPage->SetAutoLayout(pPage->GetAutoLayout());
+            }
+        }
+        if (pTemplate)
+            GetDoc()->CloseBookmarkDoc();
     }
 
     // Build a JSON result so the caller knows what happened.

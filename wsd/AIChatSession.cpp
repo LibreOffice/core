@@ -52,6 +52,7 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <cctype>
 #include <cstddef>
 #include <cstring>
 #include <exception>
@@ -495,6 +496,64 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     bool emojify = false;
     JsonUtil::findJSONValue(requestObj, "emojify", emojify);
 
+    // The design template the user picked in the in-chat picker, sent only for a
+    // presentation. The engine rejects a name it cannot resolve, but the name is
+    // also placed in the system prompt, so keep it to plain template-name
+    // characters and a sane length to avoid smuggling instructions through it.
+    std::string designTemplate;
+    if (docType == "presentation")
+    {
+        JsonUtil::findJSONValue(requestObj, "designTemplate", designTemplate);
+        if (designTemplate.size() > 64)
+            designTemplate.clear();
+        for (const char c : designTemplate)
+        {
+            if (!(std::isalnum(static_cast<unsigned char>(c)) || c == ' ' || c == '-'
+                  || c == '_'))
+            {
+                designTemplate.clear();
+                break;
+            }
+        }
+    }
+
+    // The slide layouts the picked template's example slides cover, fetched by
+    // the client from the template catalog. The list rides the chat request,
+    // so accept only names from the documented layout set - nothing
+    // client-supplied reaches the system prompt unvalidated.
+    std::vector<std::string> designTemplateLayouts;
+    if (!designTemplate.empty())
+    {
+        static constexpr std::array<std::string_view, 10> knownLayouts = {
+            "AUTOLAYOUT_TITLE",
+            "AUTOLAYOUT_TITLE_CONTENT",
+            "AUTOLAYOUT_TITLE_2CONTENT",
+            "AUTOLAYOUT_TITLE_CONTENT_2CONTENT",
+            "AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT",
+            "AUTOLAYOUT_TITLE_2CONTENT_CONTENT",
+            "AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT",
+            "AUTOLAYOUT_TITLE_4CONTENT",
+            "AUTOLAYOUT_TITLE_ONLY",
+            "AUTOLAYOUT_NONE",
+        };
+        Poco::JSON::Array::Ptr layouts = requestObj->getArray("designTemplateLayouts");
+        const unsigned size = layouts ? std::min<unsigned>(layouts->size(), 100) : 0;
+        for (unsigned i = 0; i < size; ++i)
+        {
+            const Poco::Dynamic::Var var = layouts->get(i);
+            if (!var.isString())
+                continue;
+            const std::string layout = var.toString();
+            const bool known = std::find(knownLayouts.begin(), knownLayouts.end(), layout)
+                               != knownLayouts.end();
+            const bool seen = std::find(designTemplateLayouts.begin(),
+                                        designTemplateLayouts.end(), layout)
+                              != designTemplateLayouts.end();
+            if (known && !seen)
+                designTemplateLayouts.push_back(layout);
+        }
+    }
+
     Poco::JSON::Array::Ptr messages = requestObj->getArray("messages");
     if (!messages || messages->size() == 0)
     {
@@ -547,17 +606,45 @@ bool AIChatSession::handleAction(const std::string& firstLine)
             " yet and offer to change the cell content or a formula instead.";
 
     if (docType == "presentation")
+    {
         systemPrompt +=
-            " When creating or modifying slides, you MUST format every slide:"
-            " bold every title using EditTextObject with .uno:Bold,"
-            " apply .uno:DefaultBullet to content placeholders that list multiple items,"
-            " and choose the most appropriate layout for each slide's content from the"
-            " Available layouts list in the tool description."
-            " Do not use the same layout for every slide."
-            " Do not prefix lines with '- ' when using DefaultBullet (the bullet marker"
-            " is added automatically)."
-            " In content placeholders, put only the items to be bulleted. Do not add"
-            " sub-headings or blank lines before the bullet items."
+            " When creating or modifying slides, choose the most appropriate layout"
+            " for each slide's content from the Available layouts list in the tool"
+            " description. Do not use the same layout for every slide."
+            " Do not prefix lines with '- ' (any bullet marker is added"
+            " automatically). In content placeholders, put only the items to be"
+            " listed. Do not add sub-headings or blank lines before the items.";
+
+        if (designTemplate.empty())
+            systemPrompt +=
+                " You MUST format every slide: bold every title using EditTextObject"
+                " with .uno:Bold, and apply .uno:DefaultBullet to content placeholders"
+                " that list multiple items.";
+        else
+        {
+            systemPrompt +=
+                " The deck uses the design template '" + designTemplate + "', which"
+                " styles the slides through its master slides. Do not bold titles or"
+                " change fonts, colours, or bullets yourself - the template handles the"
+                " look. Put each slide's content in its placeholders and let the design"
+                " format it.";
+
+            if (!designTemplateLayouts.empty())
+            {
+                std::string joined;
+                for (const std::string& layout : designTemplateLayouts)
+                {
+                    if (!joined.empty())
+                        joined += ", ";
+                    joined += layout;
+                }
+                systemPrompt +=
+                    " The template provides a dedicated design for these layouts: " +
+                    joined + ". Prefer them when they fit the content.";
+            }
+        }
+
+        systemPrompt +=
             " When calling transform_document_structure, include a 'summary' parameter"
             " with a markdown preview of ONLY the slides being created or modified in"
             " this transform call, not pre-existing slides."
@@ -572,6 +659,7 @@ bool AIChatSession::handleAction(const std::string& firstLine)
             " insert, add, create, replace, edit, modify, or delete slides or slide"
             " content. Never emit transform JSON, tool names, or .uno: commands in"
             " your plain-text replies.";
+    }
 
     Poco::JSON::Array::Ptr sanitizedMessages = new Poco::JSON::Array();
 
@@ -744,6 +832,7 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     _toolLoop->requestUrl = std::move(requestUrl);
     _toolLoop->apiKey = apiKey;
     _toolLoop->docType = std::move(docType);
+    _toolLoop->designTemplate = std::move(designTemplate);
 
     callLLMAPI();
     return true;
@@ -1506,6 +1595,69 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
             docBroker->forwardToChild(_session.client_from_this(),
                 "transformdocumentstructure url=interactive transform=" + encodedTransform);
             return true;
+        }
+
+        // The design template is the user's choice alone, including the choice
+        // of none. Drop any ApplyTemplate the model emitted - the engine takes
+        // the last ApplyTemplate in the array, so a model-chosen template would
+        // override the user's pick or theme a deck the user chose to keep
+        // plain. Then prepend the user's pick so the engine maps the slides
+        // this transform produces onto the template's masters. Re-applying it
+        // on a later transform is harmless - the engine reuses the master copy
+        // already in the document.
+        {
+            Poco::JSON::Object::Ptr transforms = transformObj->getObject("Transforms");
+            Poco::JSON::Array::Ptr cmds =
+                transforms ? transforms->getArray("SlideCommands") : nullptr;
+            if (cmds)
+            {
+                bool changed = false;
+                Poco::JSON::Array::Ptr newCmds = new Poco::JSON::Array();
+
+                if (!_toolLoop->designTemplate.empty())
+                {
+                    Poco::JSON::Object::Ptr applyCmd = new Poco::JSON::Object();
+                    applyCmd->set("ApplyTemplate", _toolLoop->designTemplate);
+                    newCmds->add(applyCmd);
+                    changed = true;
+                }
+
+                for (unsigned i = 0; i < cmds->size(); ++i)
+                {
+                    Poco::JSON::Object::Ptr cmd = cmds->getObject(i);
+                    if (cmd)
+                    {
+                        std::vector<std::string> keys;
+                        cmd->getNames(keys);
+                        std::vector<std::string> applyKeys;
+                        for (const std::string& key : keys)
+                        {
+                            if (key.substr(0, key.find('.')) == "ApplyTemplate")
+                                applyKeys.push_back(key);
+                        }
+                        if (!applyKeys.empty())
+                        {
+                            LOG_WRN("AIToolLoop: dropping model-emitted ApplyTemplate; "
+                                    "the design template is the user's choice ["
+                                    << requestId << ']');
+                            changed = true;
+                            for (const std::string& key : applyKeys)
+                                cmd->remove(key);
+                            if (applyKeys.size() == keys.size())
+                                continue;
+                        }
+                    }
+                    newCmds->add(cmds->get(i));
+                }
+
+                if (changed)
+                {
+                    transforms->set("SlideCommands", newCmds);
+                    std::ostringstream oss;
+                    transformObj->stringify(oss);
+                    transform = oss.str();
+                }
+            }
         }
 
         _toolLoop->awaitingApproval = true;

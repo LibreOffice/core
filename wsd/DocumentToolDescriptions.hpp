@@ -77,7 +77,7 @@ inline constexpr const char* TRANSFORM_IMPRESS =
 
 For presentations, use {"Transforms": {"SlideCommands": [...]}} where SlideCommands is an array of operations applied in order. There is always a "current slide" (default: index 0) that most commands act on. All slides must go in a single SlideCommands array - use InsertMasterSlide to add new slides within the same array. Never send multiple JSON objects.
 
-REQUIRED for every slide: use EditTextObject to bold the title (.uno:Bold), and apply .uno:DefaultBullet to content placeholders that list items. Do NOT prefix text lines with "- " when using DefaultBullet (the bullet is automatic). Do NOT put sub-headings or blank lines inside content placeholders - only the items to be bulleted. Choose the layout that fits the content (see Available layouts below).
+Do NOT prefix text lines with "- " (any bullet marker is added automatically). Do NOT put sub-headings or blank lines inside content placeholders - only the items to be listed. Choose the layout that fits the content (see Available layouts below). The instructions for this request say how much formatting to apply yourself; when a design template is in use, its master slides handle the look, so leave styling to them.
 
 Navigation:
 - {"JumpToSlide": N} - jump to 0-based slide index; use "last" for last slide

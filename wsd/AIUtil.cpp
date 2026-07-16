@@ -34,12 +34,12 @@ namespace
 /// ".N"/".X" suffix). Used only for conservative structural validation.
 bool isKnownSlideCommand(const std::string& key)
 {
-    static constexpr std::array<std::string_view, 16> known = {
+    static constexpr std::array<std::string_view, 17> known = {
         "JumpToSlide", "JumpToSlideByName", "InsertMasterSlide",
         "InsertMasterSlideByName", "DeleteSlide", "DuplicateSlide", "MoveSlide",
         "RenameSlide", "ChangeLayoutByName", "ChangeLayout", "SetText",
         "GenerateImage", "MarkObject", "UnMarkObject", "EditTextObject",
-        "UnoCommand"
+        "UnoCommand", "ApplyTemplate"
     };
     const std::string base = key.substr(0, key.find('.'));
     for (const auto& k : known)

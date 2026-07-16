@@ -14,6 +14,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_autotextuser \
 	CustomTarget_gallsystem \
 	CustomTarget_templates \
+	Package_aitemplates \
 	Package_autocorr \
 	Package_autotext \
 	Package_autotextuser \
