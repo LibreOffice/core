@@ -7,10 +7,12 @@
 #include <config.h>
 
 #include <filesystem>
+#include <iostream>
 #include <ranges>
 #include <set>
 #include <string>
 
+#include <Poco/Path.h>
 #include <Poco/URI.h>
 
 #include <COKit/COKit.hxx>
@@ -126,6 +128,7 @@ int main(int argc, char** argv)
     catch (const std::exception& e)
     {
         std::cerr << "Error: COKit exception: " << e.what() << "\n";
+        return 1;
     }
 }
 
