@@ -84,6 +84,12 @@ FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentCo
     OUString sDataDirPath;
     ::osl::FileBase::getSystemPathFromFileURL(m_firebirdDataDirectory.GetURL(), sDataDirPath);
 
+#if defined(_WIN32)
+    // firebird upper-cases the database path before the exact-match
+    // DatabaseAccess check, so match that here.
+    sDataDirPath = sDataDirPath.toAsciiUpperCase();
+#endif
+
     OString sConf = "DatabaseAccess = Restrict "
         + OUStringToOString(sDataDirPath, RTL_TEXTENCODING_UTF8) + "\n";
 
