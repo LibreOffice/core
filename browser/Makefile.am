@@ -714,6 +714,7 @@ COOL_JS_LST =\
 	src/slideshow/LayerDrawing.ts \
 	src/slideshow/LayersCompositor.ts \
 	src/slideshow/RenderContext.ts \
+	src/slideshow/VectorCompositor.ts \
 	src/slideshow/VideoRenderer.ts \
 	src/slideshow/SlideRenderer.ts \
 	src/slideshow/SlideshowMiddleware.ts \

@@ -1540,10 +1540,12 @@ class SlideShowPresenter {
 		}
 
 		if (!this._slideCompositor) {
-			this._slideCompositor = new SlideShow.LayersCompositor(
-				this,
-				this._metaPresentation,
-			);
+			// When the document renders from vector primitives, draw the
+			// slides from the same primitive cache instead of the
+			// server-rendered bitmap layers.
+			this._slideCompositor = RenderManager.isVectorRendering()
+				? new SlideShow.VectorCompositor(this, this._metaPresentation)
+				: new SlideShow.LayersCompositor(this, this._metaPresentation);
 		}
 
 		this._slideCompositor.onUpdatePresentationInfo();

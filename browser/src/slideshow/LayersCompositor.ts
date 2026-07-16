@@ -23,10 +23,10 @@ class LayersCompositor extends SlideCompositor {
 
 	constructor(
 		slideShowPresenter: SlideShowPresenter,
-		metaPres: MetaPresentation,
+		metaPresentation: MetaPresentation,
 	) {
-		super(slideShowPresenter);
-		this.metaPresentation = metaPres;
+		super(slideShowPresenter, metaPresentation);
+		this.metaPresentation = metaPresentation;
 	}
 
 	protected _addHooks() {
@@ -122,20 +122,6 @@ class LayersCompositor extends SlideCompositor {
 			resolutionHeight = 720;
 		}
 		return [resolutionWidth, resolutionHeight];
-	}
-
-	public computeLayerSize(width: number, height: number) {
-		// compute the slide size in pixel with respect to the current resolution
-		const slideWidth = this.metaPresentation.getDocWidth();
-		const slideHeight = this.metaPresentation.getDocHeight();
-		const slideRatio = slideWidth / slideHeight;
-		const resolutionRatio = width / height;
-		if (slideRatio > resolutionRatio) {
-			height = Math.trunc((width * slideHeight) / slideWidth);
-		} else if (slideRatio < resolutionRatio) {
-			width = Math.ceil((height * slideWidth) / slideHeight);
-		}
-		return [width, height];
 	}
 
 	// return [width, height]

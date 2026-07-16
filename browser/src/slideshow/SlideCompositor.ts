@@ -19,12 +19,31 @@ declare var SlideShow: any;
 
 abstract class SlideCompositor {
 	_slideShowPresenter: SlideShowPresenter = null;
+	protected _metaPresentation: MetaPresentation = null;
 	_initialSlideNumber: number = 0;
 	_onGotSlideCallback: VoidFunction = null;
 
-	constructor(slideShowPresenter: SlideShowPresenter) {
+	constructor(
+		slideShowPresenter: SlideShowPresenter,
+		metaPresentation: MetaPresentation,
+	) {
 		this._slideShowPresenter = slideShowPresenter;
+		this._metaPresentation = metaPresentation;
 		this._addHooks();
+	}
+
+	public computeLayerSize(width: number, height: number): [number, number] {
+		// compute the slide size in pixel with respect to the current resolution
+		const slideWidth = this._metaPresentation.getDocWidth();
+		const slideHeight = this._metaPresentation.getDocHeight();
+		const slideRatio = slideWidth / slideHeight;
+		const resolutionRatio = width / height;
+		if (slideRatio > resolutionRatio) {
+			height = Math.trunc((width * slideHeight) / slideWidth);
+		} else if (slideRatio < resolutionRatio) {
+			width = Math.ceil((height * slideWidth) / slideHeight);
+		}
+		return [width, height];
 	}
 
 	protected abstract _addHooks(): void;
