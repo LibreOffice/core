@@ -1,0 +1,75 @@
+Design templates for AI slide generation
+=========================================
+
+Each subdirectory here is the unpacked source of one presentation design
+template. The build packs it into a .otp file and installs it into the
+share/cool-ai-templates directory. The AI slide assistant offers these
+templates in its picker and applies the one the user chooses to a generated
+deck.
+
+
+How templates are discovered
+-----------------------------
+
+At run time the engine looks for templates in two places, in this order:
+
+1. The bundled directory share/cool-ai-templates, where the templates in this
+   source tree end up.
+2. The integrator preset directory share/template/common/presnt.
+
+A template is any file whose name ends in .otp. The base name (the file name
+without the .otp suffix) is the name shown in the picker, so it must be at
+most 64 characters, each one a plain letter, digit, space, hyphen, or
+underscore. A file whose name does not fit is skipped.
+
+When a bundled template and a preset share the same name (compared without
+regard to letter case), the bundled one wins and the preset copy is ignored.
+
+
+How a master slide's role is decided
+-------------------------------------
+
+The assistant places each generated slide on the master that suits its part
+of the deck: an opening, a divider, a body, or a closing. To do that the
+engine has to guess what part each master in the template plays. That guess is
+a best-effort heuristic, not a contract you should design your masters around.
+
+The engine works out a master's role in two steps.
+
+First it reads the master's own name and looks for keywords, checked in a
+fixed order. It stops at the first group that matches:
+
+1. Divider, if the name contains separator, divider, section, topic, chapter,
+   agenda, or transition.
+2. Closing, if the name contains ending, closing, thank, farewell, goodbye,
+   or finale.
+3. Body, if the name contains content, outline, body, or bullet.
+4. Title, if the name contains title.
+
+The match is a plain substring match and ignores letter case. The order
+matters: many real names carry the word "title" next to a stronger word, so
+"Section Title" and "Title and Content Divider" both come out as dividers,
+while a plain "Title" or "Subtitle" falls through to the title group last. A
+name that matches nothing is left undecided for the next step.
+
+Second, for any master the name did not settle, the engine looks at the
+example slides in the template that use that master and reads the layout each
+one uses. A title-and-subtitle layout reads as an opening, a title-only or
+blank layout as a divider, and anything with body content as a body slide.
+
+Because this is only a heuristic, renaming a master or changing its example
+slides can quietly change the role it is given. That is safe: the roles stay
+inside the engine and never travel to the model or the browser, so a
+reclassification changes only which master a slide lands on, never the
+protocol. Do not treat particular master names as a stable way to pin a role.
+
+
+A note on future authoring metadata
+------------------------------------
+
+The name-and-example heuristic exists so a template author does not have to
+declare anything. A later release may add a declared metadata format inside
+the template that states each master's role directly. When that arrives it
+will take precedence and the heuristic will remain only as the fallback for
+templates that carry no such metadata. Please do not entrench on magic master
+names in the meantime.

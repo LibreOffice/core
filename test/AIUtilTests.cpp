@@ -160,6 +160,10 @@ void AIUtilTests::testSlideCommandTable()
     LOK_ASSERT(!AIUtil::isServerOnlySlideCommand("DeleteSlide"));
     LOK_ASSERT(!AIUtil::isServerOnlySlideCommand("BogusCommand"));
 
+    // The model labels a slide's part itself, so SetSlidePart is not
+    // server-only - it is kept when the model emits it.
+    LOK_ASSERT(!AIUtil::isServerOnlySlideCommand("SetSlidePart"));
+
     // A server-only command still validates: the server splices it into
     // transforms, so the vocabulary must keep accepting it.
     auto parse = [](const std::string& s)
@@ -171,6 +175,12 @@ void AIUtilTests::testSlideCommandTable()
     LOK_ASSERT(!AIUtil::validateTransformStructure(
                     parse(R"({"Transforms":{"SlideCommands":[{"ApplyTemplate":"Mint"}]}})"))
                     .has_value());
+
+    // A model-emitted SetSlidePart passes structural validation.
+    LOK_ASSERT(
+        !AIUtil::validateTransformStructure(
+             parse(R"({"Transforms":{"SlideCommands":[{"SetSlidePart":"opening"}]}})"))
+             .has_value());
 
     // The layout set knows its members.
     LOK_ASSERT(AIUtil::isKnownSlideLayout("AUTOLAYOUT_TITLE_CONTENT"));

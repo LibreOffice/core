@@ -2662,7 +2662,7 @@ bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
 {
     if (rCommand == u"VectorPrimitives" || rCommand == u"VectorRenderingGraphics"
         || rCommand == u"VectorRenderingFont" || rCommand == u"ExtractDocumentStructure"
-        || rCommand == u"GetDesignTemplates")
+        || rCommand == u"GetDesignTemplates" || rCommand == u"GetDesignTemplateDesigns")
         return true;
     return false;
 }
@@ -2738,28 +2738,42 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
         else
             GetDocStructureSlides(rJsonWriter, this, aMap);
     }
-    else if (o3tl::starts_with(rCommand, ".uno:GetDesignTemplates"))
+    else if (o3tl::starts_with(rCommand, ".uno:GetDesignTemplateDesigns"))
     {
+        // One template's slide layouts and design masters, read from the
+        // template document. Deriving them loads the document, so they are
+        // queried per template on demand instead of for the whole list at once.
+        // This is a separate command from the template list so the two replies
+        // are told apart by their command name, not by parsing the query. The
+        // layouts are the distinct layouts the example slides cover. The masters
+        // are the designs the deck can be themed with, each with the part it
+        // plays, so the model can put each slide on the design that fits its
+        // role.
         auto itName = aMap.find(u"name"_ustr);
         if (itName != aMap.end())
         {
-            // One template's slide layouts, learned from its example slides -
-            // the same read the apply step does to pair layouts with masters.
-            // Deriving them loads the template document, so they are queried
-            // per template on demand instead of for the whole list at once.
-            // The commandName echoes the full command, parameters included, so
-            // the reply matches the request it answers and is told apart from
-            // a reply carrying the template list.
+            // The command name echoes the query so the reply matches the request
+            // that asked for this particular template.
             rJsonWriter.put("commandName", rCommand);
             auto aValues = rJsonWriter.startNode("commandValues");
-            auto aLayoutsNode = rJsonWriter.startArray("layouts");
-            for (const auto& [rName, rTemplateUrl] : sd::CollectDesignTemplates())
+
+            OUString aTemplateUrl;
+            for (const auto& [rName, rUrl] : sd::CollectDesignTemplates())
             {
-                if (!rName.equalsIgnoreAsciiCase(itName->second))
-                    continue;
-                if (SdDrawDocument* pTemplate
-                    = mpDoc ? mpDoc->OpenBookmarkDoc(rTemplateUrl) : nullptr)
+                if (rName.equalsIgnoreAsciiCase(itName->second))
                 {
+                    aTemplateUrl = rUrl;
+                    break;
+                }
+            }
+
+            SdDrawDocument* pTemplate
+                = (!aTemplateUrl.isEmpty() && mpDoc) ? mpDoc->OpenBookmarkDoc(aTemplateUrl)
+                                                     : nullptr;
+            if (pTemplate)
+            {
+                {
+                    auto aLayoutsNode = rJsonWriter.startArray("layouts");
                     std::set<AutoLayout> aSeenLayouts;
                     const sal_uInt16 nSlides = pTemplate->GetSdPageCount(PageKind::Standard);
                     for (sal_uInt16 i = 0; i < nSlides; ++i)
@@ -2770,28 +2784,38 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
                         rJsonWriter.putSimpleValue(
                             SdPage::autoLayoutToString(pSlide->GetAutoLayout()));
                     }
-                    mpDoc->CloseBookmarkDoc();
                 }
-                break;
+                {
+                    auto aMastersNode = rJsonWriter.startArray("masters");
+                    for (const auto& rMaster : sd::CollectDesignTemplateMasters(*pTemplate))
+                    {
+                        auto aEntry = rJsonWriter.startStruct();
+                        rJsonWriter.put("name", rMaster.maName);
+                        // A master that plays no part reports as "other" and is
+                        // not offered to the model as a part.
+                        rJsonWriter.put("role", sd::DesignRoleToWireName(rMaster.meRole));
+                    }
+                }
+                mpDoc->CloseBookmarkDoc();
             }
         }
-        else
+    }
+    else if (o3tl::starts_with(rCommand, ".uno:GetDesignTemplates"))
+    {
+        // The design templates the user can pick from to style a generated
+        // deck: the bundled set plus any preset templates, each with its
+        // thumbnail as a PNG data URL. Wrapped as commandName plus
+        // commandValues, the shape every commandvalues response carries.
+        rJsonWriter.put("commandName", ".uno:GetDesignTemplates");
+        auto aValues = rJsonWriter.startNode("commandValues");
+        auto aTemplatesNode = rJsonWriter.startArray("templates");
+        for (const auto& [rName, rTemplateUrl] : sd::CollectDesignTemplates())
         {
-            // The design templates the user can pick from to style a generated
-            // deck: the bundled set plus any preset templates, each with its
-            // thumbnail as a PNG data URL. Wrapped as commandName plus
-            // commandValues, the shape every commandvalues response carries.
-            rJsonWriter.put("commandName", ".uno:GetDesignTemplates");
-            auto aValues = rJsonWriter.startNode("commandValues");
-            auto aTemplatesNode = rJsonWriter.startArray("templates");
-            for (const auto& [rName, rTemplateUrl] : sd::CollectDesignTemplates())
-            {
-                auto aEntry = rJsonWriter.startStruct();
-                rJsonWriter.put("name", rName);
-                const OUString aThumbnail = lcl_ReadTemplateThumbnailDataUrl(rTemplateUrl);
-                if (!aThumbnail.isEmpty())
-                    rJsonWriter.put("thumbnail", aThumbnail);
-            }
+            auto aEntry = rJsonWriter.startStruct();
+            rJsonWriter.put("name", rName);
+            const OUString aThumbnail = lcl_ReadTemplateThumbnailDataUrl(rTemplateUrl);
+            if (!aThumbnail.isEmpty())
+                rJsonWriter.put("thumbnail", aThumbnail);
         }
     }
     else if (o3tl::starts_with(rCommand, ".uno:VectorRenderingGraphics"))

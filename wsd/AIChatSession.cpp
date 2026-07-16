@@ -447,11 +447,34 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& do
     return tools;
 }
 
+namespace
+{
+// A template or master name reaches the system prompt, so it must hold only
+// plain name characters and a sane length. The checks use explicit ASCII
+// ranges rather than std::isalnum, which follows the current locale and could
+// admit non-ASCII letters. The engine applies the same rule in
+// lcl_IsValidDesignTemplateName (engine/sd/source/ui/view/drviews2.cxx); the
+// two run on opposite sides of the process boundary and must stay in step so
+// they accept exactly the same names.
+bool isSafeDesignName(const std::string& rName)
+{
+    if (rName.empty() || rName.size() > 64)
+        return false;
+    for (const char c : rName)
+    {
+        const bool bAllowed = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+                              || (c >= '0' && c <= '9') || c == ' ' || c == '-' || c == '_';
+        if (!bAllowed)
+            return false;
+    }
+    return true;
+}
+}
+
 bool AIChatSession::handleAction(const std::string& firstLine)
 {
     static constexpr size_t MAX_AI_PAYLOAD_SIZE = 5 * 1024 * 1024; // 5MB
     static constexpr size_t MAX_AI_MESSAGE_LENGTH = 100 * 1024; // 100KB per message
-    static constexpr unsigned MAX_AI_MESSAGES = 50;
 
     // Extract JSON payload after "aichat: "
     const std::string jsonPayload = firstLine.substr(strlen("aichat: "));
@@ -469,87 +492,194 @@ bool AIChatSession::handleAction(const std::string& firstLine)
         return true;
     }
 
-    std::string requestId;
-    JsonUtil::findJSONValue(requestObj, "requestId", requestId);
+    PendingChatRequest req;
+    JsonUtil::findJSONValue(requestObj, "requestId", req.requestId);
 
-    std::string docType;
-    JsonUtil::findJSONValue(requestObj, "docType", docType);
+    // A design fetch from an earlier request may still be outstanding. That
+    // request never reached the model, so report it as failed to its client
+    // before this new request takes over the single pending-fetch slot.
+    if (_pendingDesignFetch)
+    {
+        sendChatResult(false, "Request superseded by a newer request",
+                       _pendingDesignFetch->requestId);
+        _pendingDesignFetch.reset();
+    }
 
-    if (docType != "text" && docType != "spreadsheet" && docType != "presentation" && docType != "drawing")
-        docType.clear();
+    JsonUtil::findJSONValue(requestObj, "docType", req.docType);
+    if (req.docType != "text" && req.docType != "spreadsheet" && req.docType != "presentation"
+        && req.docType != "drawing")
+        req.docType.clear();
 
-    std::string tone;
-    JsonUtil::findJSONValue(requestObj, "tone", tone);
-    if (tone != "natural" && tone != "formal" && tone != "short" && tone != "friendly" &&
-        tone != "professional" && tone != "casual" && tone != "custom")
-        tone.clear();
+    JsonUtil::findJSONValue(requestObj, "tone", req.tone);
+    if (req.tone != "natural" && req.tone != "formal" && req.tone != "short"
+        && req.tone != "friendly" && req.tone != "professional" && req.tone != "casual"
+        && req.tone != "custom")
+        req.tone.clear();
 
-    std::string customToneDescription;
-    JsonUtil::findJSONValue(requestObj, "customToneDescription", customToneDescription);
-    if (customToneDescription.size() > 1000)
-        customToneDescription.resize(1000);
+    JsonUtil::findJSONValue(requestObj, "customToneDescription", req.customToneDescription);
+    if (req.customToneDescription.size() > 1000)
+        req.customToneDescription.resize(1000);
     // Prevent the description from breaking out of the appended sentence by
     // inserting fake role headers or fence markers. Replace CR/LF/NUL with a
     // single space; the upstream prompt remains a one-line continuation.
-    for (char& c : customToneDescription)
+    for (char& c : req.customToneDescription)
     {
         if (c == '\n' || c == '\r' || c == '\0')
             c = ' ';
     }
 
-    bool emojify = false;
-    JsonUtil::findJSONValue(requestObj, "emojify", emojify);
+    JsonUtil::findJSONValue(requestObj, "emojify", req.emojify);
 
     // The design template the user picked in the in-chat picker, sent only for a
-    // presentation. The engine rejects a name it cannot resolve, but the name is
-    // also placed in the system prompt, so keep it to plain template-name
-    // characters and a sane length to avoid smuggling instructions through it.
-    std::string designTemplate;
-    if (docType == "presentation")
+    // presentation. The engine rejects a name it cannot resolve. The masters and
+    // layouts the template provides are not taken from the request: wsd fetches
+    // them from the kit (see the branch below), so the prompt is built from the
+    // engine's own data rather than anything the client supplied.
+    if (req.docType == "presentation")
     {
-        JsonUtil::findJSONValue(requestObj, "designTemplate", designTemplate);
-        if (designTemplate.size() > 64)
-            designTemplate.clear();
-        for (const char c : designTemplate)
-        {
-            if (!(std::isalnum(static_cast<unsigned char>(c)) || c == ' ' || c == '-'
-                  || c == '_'))
-            {
-                designTemplate.clear();
-                break;
-            }
-        }
-    }
-
-    // The slide layouts the picked template's example slides cover, fetched by
-    // the client from the template catalog. The list rides the chat request,
-    // so accept only names from the documented layout set - nothing
-    // client-supplied reaches the system prompt unvalidated.
-    std::vector<std::string> designTemplateLayouts;
-    if (!designTemplate.empty())
-    {
-        Poco::JSON::Array::Ptr layouts = requestObj->getArray("designTemplateLayouts");
-        const unsigned size = layouts ? std::min<unsigned>(layouts->size(), 100) : 0;
-        for (unsigned i = 0; i < size; ++i)
-        {
-            const Poco::Dynamic::Var var = layouts->get(i);
-            if (!var.isString())
-                continue;
-            const std::string layout = var.toString();
-            const bool seen = std::find(designTemplateLayouts.begin(),
-                                        designTemplateLayouts.end(), layout)
-                              != designTemplateLayouts.end();
-            if (AIUtil::isKnownSlideLayout(layout) && !seen)
-                designTemplateLayouts.push_back(layout);
-        }
+        JsonUtil::findJSONValue(requestObj, "designTemplate", req.designTemplate);
+        if (!isSafeDesignName(req.designTemplate))
+            req.designTemplate.clear();
     }
 
     Poco::JSON::Array::Ptr messages = requestObj->getArray("messages");
     if (!messages || messages->size() == 0)
     {
-        sendChatResult(false, "No messages provided", requestId);
+        sendChatResult(false, "No messages provided", req.requestId);
         return true;
     }
+
+    Poco::JSON::Array::Ptr sanitizedMessages = new Poco::JSON::Array();
+    for (std::size_t i = 0; i < messages->size(); ++i)
+    {
+        auto msg = messages->getObject(i);
+        if (!msg)
+            continue;
+
+        std::string role;
+        JsonUtil::findJSONValue(msg, "role", role);
+
+        // Only allow user and assistant roles
+        if (role != "user" && role != "assistant")
+            continue;
+
+        std::string content;
+        JsonUtil::findJSONValue(msg, "content", content);
+        if (content.size() > MAX_AI_MESSAGE_LENGTH)
+        {
+            sendChatResult(false, "Message too long", req.requestId);
+            return true;
+        }
+
+        sanitizedMessages->add(msg);
+    }
+    req.messages = std::move(sanitizedMessages);
+
+    // Check whether the last user message includes selected text from the document.
+    for (int i = static_cast<int>(messages->size()) - 1; i >= 0; --i)
+    {
+        auto msg = messages->getObject(i);
+        if (!msg)
+            continue;
+        std::string role;
+        JsonUtil::findJSONValue(msg, "role", role);
+        if (role == "user")
+        {
+            std::string content;
+            JsonUtil::findJSONValue(msg, "content", content);
+            if (content.find("[Selected text from document:") != std::string::npos)
+                req.hasSelectedText = true;
+            break;
+        }
+    }
+
+    // Get AI provider settings
+    const std::string apiKey = _session.getAIProviderAPIKey();
+    const std::string model = _session.getAIProviderModel();
+    std::string baseUrl = _session.getAIProviderURL();
+
+#if !MOBILEAPP
+    // The desktop apps have no server-wide admin switch; AI is configured per-user
+    // through the Options dialog, so this gate only applies to the WSD server.
+    if (!ConfigUtil::getConfigValue<bool>("ai.enabled", false))
+    {
+        sendChatResult(false, "AI features are disabled by the administrator", req.requestId);
+        return true;
+    }
+
+    // AI is refused for an anonymous user (for example a public share-link
+    // visitor), so a server-wide provider is not spent on them.
+    if (_session.isAnonymousUser())
+    {
+        sendChatResult(false, "AI is not available for guests", req.requestId);
+        return true;
+    }
+#endif
+
+    if (_session.isDisableAISettings())
+    {
+        sendChatResult(false, "AI features are disabled for this document", req.requestId);
+        return true;
+    }
+
+    // The API key is optional (self-hosted endpoints often need none); a model
+    // and a base URL are the minimum needed to reach the provider.
+    if (model.empty() || baseUrl.empty())
+    {
+        sendChatResult(false, "AI settings not configured", req.requestId);
+        return true;
+    }
+
+    req.model = model;
+    req.apiKey = apiKey;
+    req.requestUrl = AIUtil::normalizeAIBaseUrl(baseUrl);
+    req.requestUrl.append("/v1/chat/completions");
+
+    // A presentation themed with a picked template needs that template's design
+    // masters and layouts in the prompt. Fetch them from the kit, which knows the
+    // template's real masters, instead of trusting the client: stash the request,
+    // ask the kit, and launch once the reply arrives in tryConsumeDesignFetch.
+    // Every other request launches straight away with no designs.
+    if (req.docType == "presentation" && !req.designTemplate.empty())
+    {
+        std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
+        if (docBroker)
+        {
+            std::string encodedName;
+            Poco::URI::encode(req.designTemplate, "", encodedName);
+            req.fetchCommand = ".uno:GetDesignTemplateDesigns?name=" + encodedName;
+            _pendingDesignFetch = std::make_unique<PendingChatRequest>(std::move(req));
+            // Bound the wait for the kit. The fetch is a local query that
+            // normally returns in well under a second; if the reply never
+            // arrives the request would otherwise stall until the browser gives
+            // up. A short cap leaves the rest of the AI request budget for the
+            // model call, and a poll-thread check gives up on the fetch once
+            // this deadline passes.
+            _designFetchDeadline
+                = std::chrono::steady_clock::now() + std::chrono::seconds(15);
+            docBroker->forwardToChild(_session.client_from_this(),
+                "commandvalues command=" + _pendingDesignFetch->fetchCommand);
+            return true;
+        }
+        // No document broker to ask: fall through and launch without designs.
+    }
+
+    launchChatRequest(req, {}, {});
+    return true;
+}
+
+void AIChatSession::launchChatRequest(const PendingChatRequest& req,
+    const std::vector<std::string>& designTemplateParts,
+    const std::vector<std::string>& designTemplateLayouts)
+{
+    static constexpr unsigned MAX_AI_MESSAGES = 50;
+
+    const std::string& docType = req.docType;
+    const std::string& designTemplate = req.designTemplate;
+    const std::string& tone = req.tone;
+    const std::string& customToneDescription = req.customToneDescription;
+    const bool emojify = req.emojify;
+    const bool hasSelectedText = req.hasSelectedText;
 
     // Build system prompt with document-type context
     std::string systemPrompt = AI_SYSTEM_PROMPT;
@@ -619,7 +749,25 @@ bool AIChatSession::handleAction(const std::string& firstLine)
                 " look. Put each slide's content in its placeholders and let the design"
                 " format it.";
 
-            if (!designTemplateLayouts.empty())
+            if (!designTemplateParts.empty())
+            {
+                // List the slide parts this template has a design for, and ask
+                // the model to label every slide with one of them.
+                std::string joined;
+                for (const std::string& part : designTemplateParts)
+                {
+                    if (!joined.empty())
+                        joined += ", ";
+                    joined += part;
+                }
+                systemPrompt +=
+                    " This template provides designs for these slide parts: " + joined
+                    + ". Give every slide a part by adding a {\"SetSlidePart\": \"part\"}"
+                    " command to it, using only a part from that list. Use opening for the"
+                    " first slide, divider for a section-break slide, closing for the final"
+                    " slide, and body for the rest.";
+            }
+            else if (!designTemplateLayouts.empty())
             {
                 std::string joined;
                 for (const std::string& layout : designTemplateLayouts)
@@ -649,51 +797,6 @@ bool AIChatSession::handleAction(const std::string& firstLine)
             " insert, add, create, replace, edit, modify, or delete slides or slide"
             " content. Never emit transform JSON, tool names, or .uno: commands in"
             " your plain-text replies.";
-    }
-
-    Poco::JSON::Array::Ptr sanitizedMessages = new Poco::JSON::Array();
-
-    for (std::size_t i = 0; i < messages->size(); ++i)
-    {
-        auto msg = messages->getObject(i);
-        if (!msg)
-            continue;
-
-        std::string role;
-        JsonUtil::findJSONValue(msg, "role", role);
-
-        // Only allow user and assistant roles
-        if (role != "user" && role != "assistant")
-            continue;
-
-        std::string content;
-        JsonUtil::findJSONValue(msg, "content", content);
-        if (content.size() > MAX_AI_MESSAGE_LENGTH)
-        {
-            sendChatResult(false, "Message too long", requestId);
-            return true;
-        }
-
-        sanitizedMessages->add(msg);
-    }
-
-    // Check whether the last user message includes selected text from the document.
-    bool hasSelectedText = false;
-    for (int i = static_cast<int>(messages->size()) - 1; i >= 0; --i)
-    {
-        auto msg = messages->getObject(i);
-        if (!msg)
-            continue;
-        std::string role;
-        JsonUtil::findJSONValue(msg, "role", role);
-        if (role == "user")
-        {
-            std::string content;
-            JsonUtil::findJSONValue(msg, "content", content);
-            if (content.find("[Selected text from document:") != std::string::npos)
-                hasSelectedText = true;
-            break;
-        }
     }
 
     systemPrompt += " You have tools to inspect and modify the document."
@@ -763,69 +866,27 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     systemMsg->set("role", "system");
     systemMsg->set("content", systemPrompt);
     finalMessages->add(systemMsg);
-    for (std::size_t i = 0; i < sanitizedMessages->size(); ++i)
-        finalMessages->add(sanitizedMessages->get(i));
-    sanitizedMessages = std::move(finalMessages);
+    for (std::size_t i = 0; i < req.messages->size(); ++i)
+        finalMessages->add(req.messages->get(i));
 
     // Trim to most recent messages if over limit (keep system prompt at index 0)
-    while (sanitizedMessages->size() > MAX_AI_MESSAGES + 1)
-        sanitizedMessages->remove(1);
+    while (finalMessages->size() > MAX_AI_MESSAGES + 1)
+        finalMessages->remove(1);
 
-    // Get AI provider settings
-    const std::string apiKey = _session.getAIProviderAPIKey();
-    const std::string model = _session.getAIProviderModel();
-    std::string baseUrl = _session.getAIProviderURL();
-
-#if !MOBILEAPP
-    // The desktop apps have no server-wide admin switch; AI is configured per-user
-    // through the Options dialog, so this gate only applies to the WSD server.
-    if (!ConfigUtil::getConfigValue<bool>("ai.enabled", false))
-    {
-        sendChatResult(false, "AI features are disabled by the administrator", requestId);
-        return true;
-    }
-
-    // AI is refused for an anonymous user (for example a public share-link
-    // visitor), so a server-wide provider is not spent on them.
-    if (_session.isAnonymousUser())
-    {
-        sendChatResult(false, "AI is not available for guests", requestId);
-        return true;
-    }
-#endif
-
-    if (_session.isDisableAISettings())
-    {
-        sendChatResult(false, "AI features are disabled for this document", requestId);
-        return true;
-    }
-
-    // The API key is optional (self-hosted endpoints often need none); a model
-    // and a base URL are the minimum needed to reach the provider.
-    if (model.empty() || baseUrl.empty())
-    {
-        sendChatResult(false, "AI settings not configured", requestId);
-        return true;
-    }
-
-    LOG_DBG("AIChatAction: request [" << requestId << "] with "
-            << sanitizedMessages->size() << " messages, model: " << model);
-
-    std::string requestUrl = AIUtil::normalizeAIBaseUrl(baseUrl);
-    requestUrl.append("/v1/chat/completions");
+    LOG_DBG("AIChatAction: request [" << req.requestId << "] with "
+            << finalMessages->size() << " messages, model: " << req.model);
 
     // Initialize the tool loop state
     _toolLoop = std::make_unique<AIToolLoopState>();
-    _toolLoop->requestId = std::move(requestId);
-    _toolLoop->messages = std::move(sanitizedMessages);
-    _toolLoop->model = model;
-    _toolLoop->requestUrl = std::move(requestUrl);
-    _toolLoop->apiKey = apiKey;
-    _toolLoop->docType = std::move(docType);
-    _toolLoop->designTemplate = std::move(designTemplate);
+    _toolLoop->requestId = req.requestId;
+    _toolLoop->messages = std::move(finalMessages);
+    _toolLoop->model = req.model;
+    _toolLoop->requestUrl = req.requestUrl;
+    _toolLoop->apiKey = req.apiKey;
+    _toolLoop->docType = req.docType;
+    _toolLoop->designTemplate = req.designTemplate;
 
     callLLMAPI();
-    return true;
 }
 
 #if MOBILEAPP
@@ -895,9 +956,7 @@ void AIChatSession::callLLMAPI()
     {
         LOG_WRN("Rejected AI chat request to host not in KIT allowlist ["
                 << Anonymizer::anonymizeUrl(_toolLoop->requestUrl) << ']');
-        sendChatResult(false,
-                       "Target host \"" + uri.getHost() +
-                           "\" is not in the allowed host list, contact your administrator",
+        sendChatResult(false, "Target host is not in the allowed host list, contact your administrator",
                        _toolLoop->requestId);
         _toolLoop.reset();
         return;
@@ -926,8 +985,8 @@ void AIChatSession::callLLMAPI()
     // Shared completion handler, invoked on the document broker's polling thread.
     // statusCode is an HTTP code or an ai::Http* sentinel; body is the response
     // body (empty when there was no response); reason is the HTTP reason phrase.
-    auto onResponse = [clientSessionPtr = std::move(clientSessionPtr), self](
-        int statusCode, const std::string& body, const std::string& reason)
+    auto onResponse = [clientSessionPtr, self](int statusCode, const std::string& body,
+                                               const std::string& reason)
     {
         self->_activeChatSession.reset();
 
@@ -973,11 +1032,8 @@ void AIChatSession::callLLMAPI()
         self->handleLLMResponse(body);
     };
 
-    // Send the Bearer header only when a key is set; a keyless self-hosted
-    // endpoint gets no Authorization header rather than a bare "Bearer ".
-    std::string authHeader;
-    if (!_toolLoop->apiKey.empty())
-        authHeader = "Bearer " + _toolLoop->apiKey;
+    std::string authHeader = "Bearer ";
+    authHeader.append(_toolLoop->apiKey);
 
     LOG_DBG("AIToolLoop: sending request ["
             << _toolLoop->requestId << "] round "
@@ -1011,7 +1067,7 @@ void AIChatSession::callLLMAPI()
                    r->statusLine().reasonPhrase());
     });
     httpSession->setConnectFailHandler(
-        [onResponse = std::move(onResponse)](const std::shared_ptr<http::Session>& /*session*/)
+        [onResponse](const std::shared_ptr<http::Session>& /*session*/)
     {
         onResponse(ai::HttpConnectFailed, std::string(), std::string());
     });
@@ -1019,8 +1075,7 @@ void AIChatSession::callLLMAPI()
     http::Request httpRequest(Poco::URI(_toolLoop->requestUrl).getPathAndQuery());
     httpRequest.setVerb(http::Request::VERB_POST);
     httpRequest.set("Content-Type", "application/json");
-    if (!authHeader.empty())
-        httpRequest.set("Authorization", std::move(authHeader));
+    httpRequest.set("Authorization", authHeader);
     httpRequest.setBody(std::move(payloadStr), "application/json");
 
     _activeChatSession = httpSession;
@@ -1287,7 +1342,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
             _toolLoop->pendingSummary = "";
         else if (!target.empty())
         {
-            std::string name = std::move(target);
+            std::string name = target;
             if (const auto bar = name.rfind('|'); bar != std::string::npos)
                 name = name.substr(0, bar);
             _toolLoop->pendingSummary =
@@ -2025,8 +2080,7 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     if (baseUrl.empty())
         baseUrl = _session.getAIProviderURL();
 
-    // The API key is optional, as for chat; a base URL is the minimum needed.
-    if (baseUrl.empty())
+    if (req.apiKey.empty() || baseUrl.empty())
     {
         req.error = "AI image settings not configured";
         return req;
@@ -2041,8 +2095,7 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     if (!AIUtil::isPreCannedAIProviderHost(uri.getHost()) &&
         HostUtil::isForbiddenKitHost(uri.getHost()))
     {
-        req.error = "Target host \"" + uri.getHost() +
-                    "\" is not in the allowed host list, contact your administrator";
+        req.error = "Target host is not in the allowed host list, contact your administrator";
         return req;
     }
 #endif
@@ -2146,7 +2199,7 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
 
     // Send image result via aichatresult with imageData field
     auto clientSessionPtr = _session.client_from_this();
-    auto sendImageResult = [clientSession = std::move(clientSessionPtr), requestId](
+    auto sendImageResult = [clientSession = clientSessionPtr, requestId](
                                bool success, const std::string& imageData,
                                const std::string& error)
     {
@@ -2166,8 +2219,7 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
     AIChatSession* self = this;
 
     // Shared completion handler, invoked on the document broker's polling thread.
-    auto onResponse = [self, sendImageResult = std::move(sendImageResult)](int statusCode,
-                                                                           const std::string& body)
+    auto onResponse = [self, sendImageResult](int statusCode, const std::string& body)
     {
         self->_activeChatSession.reset();
 
@@ -2186,12 +2238,8 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
 
     std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
 
-    // Send the Bearer header only when a key is set; a keyless self-hosted
-    // endpoint gets no Authorization header rather than a bare "Bearer ".
-    const std::string authHeader = req.apiKey.empty() ? std::string() : "Bearer " + req.apiKey;
-
 #if MOBILEAPP
-    postViaTransport(docBroker, req.requestUrl, authHeader,
+    postViaTransport(docBroker, req.requestUrl, "Bearer " + req.apiKey,
                      req.payloadStr, onResponse);
 #else
     req.httpSession->setFinishedHandler(
@@ -2201,7 +2249,7 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
         onResponse(static_cast<int>(r->statusLine().statusCode()), r->getBody());
     });
     req.httpSession->setConnectFailHandler(
-        [onResponse = std::move(onResponse)](const std::shared_ptr<http::Session>& /*session*/)
+        [onResponse](const std::shared_ptr<http::Session>& /*session*/)
     {
         onResponse(ai::HttpConnectFailed, std::string());
     });
@@ -2209,8 +2257,7 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
     http::Request httpRequest(Poco::URI(req.requestUrl).getPathAndQuery());
     httpRequest.setVerb(http::Request::VERB_POST);
     httpRequest.set("Content-Type", "application/json");
-    if (!authHeader.empty())
-        httpRequest.set("Authorization", authHeader);
+    httpRequest.set("Authorization", "Bearer " + req.apiKey);
     httpRequest.setBody(req.payloadStr, "application/json");
 
     _activeChatSession = req.httpSession;
@@ -2436,8 +2483,8 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
 
         // Shared completion handler, invoked on the document broker's polling thread.
         auto onResponse =
-            [clientSessionPtr = std::move(clientSessionPtr), self, docBroker, idx,
-             onImageFail = std::move(onImageFail)](int statusCode, const std::string& body)
+            [clientSessionPtr, self, docBroker, idx, onImageFail](int statusCode,
+                                                                  const std::string& body)
         {
             self->_activeChatSession.reset();
 
@@ -2510,13 +2557,8 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
         LOG_DBG("TransformImageGen: generating image " << (idx + 1) << " of " << total
                                                        << ", prompt: " << gen.prompt);
 
-        // Send the Bearer header only when a key is set; a keyless self-hosted
-        // endpoint gets no Authorization header rather than a bare "Bearer ".
-        const std::string authHeader =
-            req.apiKey.empty() ? std::string() : "Bearer " + req.apiKey;
-
 #if MOBILEAPP
-        postViaTransport(docBroker, req.requestUrl, authHeader,
+        postViaTransport(docBroker, req.requestUrl, "Bearer " + req.apiKey,
                          req.payloadStr, onResponse);
 #else
         req.httpSession->setFinishedHandler(
@@ -2526,7 +2568,7 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
             onResponse(static_cast<int>(r->statusLine().statusCode()), r->getBody());
         });
         req.httpSession->setConnectFailHandler(
-            [onResponse = std::move(onResponse)](const std::shared_ptr<http::Session>& /*session*/)
+            [onResponse](const std::shared_ptr<http::Session>& /*session*/)
         {
             onResponse(ai::HttpConnectFailed, std::string());
         });
@@ -2534,8 +2576,7 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
         http::Request httpRequest(Poco::URI(req.requestUrl).getPathAndQuery());
         httpRequest.setVerb(http::Request::VERB_POST);
         httpRequest.set("Content-Type", "application/json");
-        if (!authHeader.empty())
-            httpRequest.set("Authorization", authHeader);
+        httpRequest.set("Authorization", "Bearer " + req.apiKey);
         httpRequest.setBody(req.payloadStr, "application/json");
 
         _activeChatSession = req.httpSession;
@@ -2580,6 +2621,84 @@ bool AIChatSession::tryConsumeCommandValues(const std::shared_ptr<Message>& payl
     _toolLoop->awaitingKitResponse = false;
     continueToolLoop(_toolLoop->pendingToolCallId, payload->jsonString());
     return true;
+}
+
+bool AIChatSession::tryConsumeDesignFetch(const std::shared_ptr<Message>& payload)
+{
+    if (!_pendingDesignFetch)
+        return false;
+
+    Poco::JSON::Object::Ptr reply = new Poco::JSON::Object();
+    if (!JsonUtil::parseJSON(payload->jsonString(), reply))
+        return false;
+
+    // Only the reply to the exact GetDesignTemplateDesigns query we sent is
+    // ours; the picker's template-list reply and any other commandvalues fall
+    // through.
+    std::string commandName;
+    JsonUtil::findJSONValue(reply, "commandName", commandName);
+    if (commandName != _pendingDesignFetch->fetchCommand)
+        return false;
+
+    // The reply lists the template's distinct example-slide layouts and its
+    // design masters, each with the part it plays. We keep the layouts and the
+    // distinct parts the masters cover; the master names stay inside the engine.
+    std::vector<std::string> designTemplateLayouts;
+    std::vector<std::string> designTemplateParts;
+    if (Poco::JSON::Object::Ptr values = reply->getObject("commandValues"))
+    {
+        Poco::JSON::Array::Ptr layouts = values->getArray("layouts");
+        const unsigned nLayouts = layouts ? std::min<unsigned>(layouts->size(), 100) : 0;
+        for (unsigned i = 0; i < nLayouts; ++i)
+        {
+            const Poco::Dynamic::Var var = layouts->get(i);
+            if (!var.isString())
+                continue;
+            const std::string layout = var.toString();
+            const bool seen = std::find(designTemplateLayouts.begin(),
+                                        designTemplateLayouts.end(), layout)
+                              != designTemplateLayouts.end();
+            if (AIUtil::isKnownSlideLayout(layout) && !seen)
+                designTemplateLayouts.push_back(layout);
+        }
+
+        // The parts this template has a design for: the distinct master roles,
+        // leaving out "other" (a utility master that plays no part). These parts
+        // are offered to the model; the master names stay inside the engine.
+        Poco::JSON::Array::Ptr masters = values->getArray("masters");
+        const unsigned nMasters = masters ? std::min<unsigned>(masters->size(), 50) : 0;
+        for (unsigned i = 0; i < nMasters; ++i)
+        {
+            Poco::JSON::Object::Ptr master = masters->getObject(i);
+            if (!master)
+                continue;
+            const std::string role = JsonUtil::getJSONValue<std::string>(master, "role");
+            if (role.empty() || role == "other")
+                continue;
+            const bool seen = std::find(designTemplateParts.begin(),
+                                        designTemplateParts.end(), role)
+                              != designTemplateParts.end();
+            if (!seen)
+                designTemplateParts.push_back(role);
+        }
+    }
+
+    const PendingChatRequest req = std::move(*_pendingDesignFetch);
+    _pendingDesignFetch.reset();
+    launchChatRequest(req, designTemplateParts, designTemplateLayouts);
+    return true;
+}
+
+void AIChatSession::checkDesignFetchTimeout(std::chrono::steady_clock::time_point now)
+{
+    if (!_pendingDesignFetch || now < _designFetchDeadline)
+        return;
+
+    LOG_WRN("AIChat: the design template fetch was not answered in time; launching the "
+            "request without design information");
+    const PendingChatRequest req = std::move(*_pendingDesignFetch);
+    _pendingDesignFetch.reset();
+    launchChatRequest(req, {}, {});
 }
 
 bool AIChatSession::tryConsumeExtractedLinkTargets(const std::shared_ptr<Message>& payload)

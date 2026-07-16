@@ -76,9 +76,6 @@ namespace cool {
 		private designTemplate: string | null = null;
 		private templatePickerShown: boolean = false;
 		private designTemplatePicked: boolean = false;
-		// Slide layouts the picked template designs, fetched from the catalog
-		// when the user picks.
-		private designTemplateLayouts: string[] = [];
 		// The design-template catalog, prefetched when the sidebar opens on a
 		// fresh deck so the picker does not race the fetch timeout at send
 		// time. Null until the first fetch starts.
@@ -2136,10 +2133,6 @@ namespace cool {
 				customToneDescription: customTone ? customTone.description : undefined,
 				emojify: this.emojify,
 				designTemplate: this.designTemplate || undefined,
-				designTemplateLayouts:
-					this.designTemplate && this.designTemplateLayouts.length
-						? this.designTemplateLayouts
-						: undefined,
 			});
 			app.socket.sendMessage('aichat: ' + payload);
 			this.startRequestTimeout(
@@ -2664,7 +2657,6 @@ namespace cool {
 			this.designTemplate = null;
 			this.templatePickerShown = false;
 			this.designTemplatePicked = false;
-			this.designTemplateLayouts = [];
 			this.pendingPickerIndex = -1;
 			this.requestHadModifyApproval = false;
 			this.render();
@@ -3092,10 +3084,8 @@ namespace cool {
 
 		// Records the picked template (or none), replaces the picker prompt with
 		// the outcome, and dispatches the deck request. Guarded so a second
-		// click is ignored. For a picked template the request first waits for
-		// the catalog's layout list for that template, so the backend can tell
-		// the model which layouts the design covers; on timeout the request
-		// goes out without the hints.
+		// click is ignored. Only the picked template name is sent; the backend
+		// fetches that template's designs from the document itself.
 		private finishTemplatePick(name: string | null, pickerIndex: number): void {
 			if (this.designTemplatePicked) return;
 			this.designTemplatePicked = true;
@@ -3109,16 +3099,7 @@ namespace cool {
 					: _('Continuing without a design template.'),
 			);
 
-			if (!name) {
-				this.dispatchRequest();
-				return;
-			}
-			this.fetchDesignTemplateLayouts(name).then((layouts) => {
-				// The user stopped the request while the layouts were loading.
-				if (!this.isProcessing) return;
-				this.designTemplateLayouts = layouts;
-				this.dispatchRequest();
-			});
+			this.dispatchRequest();
 		}
 
 		// Replaces a picker message's prompt with the outcome and removes the
@@ -3134,38 +3115,6 @@ namespace cool {
 			if (grid) grid.remove();
 			const msgBody = document.getElementById('aichat-msg-text-' + pickerIndex);
 			if (msgBody) msgBody.textContent = text;
-		}
-
-		// Fetches the slide layouts a template's example slides cover. Resolves
-		// to an empty array on timeout or error so the request can proceed
-		// without layout hints.
-		private fetchDesignTemplateLayouts(name: string): Promise<string[]> {
-			return new Promise((resolve) => {
-				const command =
-					'.uno:GetDesignTemplates?name=' + encodeURIComponent(name);
-				const timeout = setTimeout(() => {
-					app.map.off('commandvalues', handleResponse);
-					resolve([]);
-				}, this.TEMPLATE_FETCH_TIMEOUT_MS);
-
-				const handleResponse = (e: any) => {
-					// The reply's commandName echoes the full command, parameters
-					// included, so a template-list reply does not match here.
-					if (e.commandName !== command) return;
-					clearTimeout(timeout);
-					app.map.off('commandvalues', handleResponse);
-					const layouts =
-						e.commandValues && Array.isArray(e.commandValues.layouts)
-							? e.commandValues.layouts.filter(
-									(l: any) => typeof l === 'string',
-								)
-							: [];
-					resolve(layouts);
-				};
-
-				app.map.on('commandvalues', handleResponse);
-				app.socket.sendMessage('commandvalues command=' + command);
-			});
 		}
 
 		private fetchFormulaDependencyChain(): Promise<any> {

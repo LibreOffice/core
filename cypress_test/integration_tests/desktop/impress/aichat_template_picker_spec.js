@@ -19,7 +19,7 @@ describe(['tagdesktop'], 'AI design-template picker', function() {
 		aichatHelper.clickSend();
 	}
 
-	it('The pick and its layouts ride the deck request', function() {
+	it('The pick rides the deck request', function() {
 		aichatHelper.enableAIWithCaptureSocket(this.win, {});
 		aichatHelper.openAIChat();
 		sendRequest('Create a deck about cats');
@@ -36,16 +36,16 @@ describe(['tagdesktop'], 'AI design-template picker', function() {
 		cy.cGet('#aichat-messages-list').should(
 			'contain.text', 'Design template: Cobalt');
 
-		// The request carries the pick and the layouts the template designs,
-		// fetched from the real catalog.
+		// The request carries the picked template name. The template's designs
+		// are no longer sent: the backend fetches them from the document itself.
 		cy.cGet('#aichat-messages-list').should(
 			'contain.text', 'Mock AI response');
 		cy.then(() => {
 			expect(this.win.__aichatPayloads).to.have.length(1);
 			var payload = this.win.__aichatPayloads[0];
 			expect(payload.designTemplate).to.equal('Cobalt');
-			expect(payload.designTemplateLayouts).to.be.an('array').that.is
-				.not.empty;
+			expect(payload.designTemplateMasters).to.be.undefined;
+			expect(payload.designTemplateLayouts).to.be.undefined;
 		});
 	});
 

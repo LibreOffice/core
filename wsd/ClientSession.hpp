@@ -228,6 +228,12 @@ public:
         return _auth.isTokenRefreshTimedOut(now);
     }
 
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
+    /// Give up on an AI chat design fetch the kit has not answered by its
+    /// deadline, so the request does not stall until the client gives up.
+    void checkAIRequestTimeout(std::chrono::steady_clock::time_point now);
+#endif
+
     /// Set WOPI fileinfo object
     void setWopiFileInfo(std::unique_ptr<WopiStorage::WOPIFileInfo> wopiFileInfo) { _wopiFileInfo = std::move(wopiFileInfo); }
 

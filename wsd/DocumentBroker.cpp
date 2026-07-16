@@ -578,6 +578,9 @@ void DocumentBroker::pollThread()
                 for (const auto& it : _sessions)
                 {
                     const auto& session = it.second;
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
+                    session->checkAIRequestTimeout(now);
+#endif
                     if (session->isTokenRefreshTimedOut(now))
                     {
                         LOG_WRN("Token refresh timed out for session ["

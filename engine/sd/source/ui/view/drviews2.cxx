@@ -20,9 +20,12 @@
 #include <config_features.h>
 #include <config_folders.h>
 
+#include <algorithm>
+#include <initializer_list>
 #include <map>
 #include <optional>
 #include <set>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -245,7 +248,10 @@ namespace {
 // the system prompt, so the naming contract is deliberately narrow: at most 64
 // characters, each a plain letter, digit, space, hyphen, or underscore. A
 // template file whose base name does not fit the contract is not offered at
-// all - offering it would only invite a pick the server then drops.
+// all - offering it would only invite a pick the server then drops. The server
+// enforces the same rule in isSafeDesignName (wsd/AIChatSession.cpp); the two
+// run on opposite sides of the process boundary and must stay in step so they
+// accept exactly the same names.
 bool lcl_IsValidDesignTemplateName(const OUString& rName)
 {
     if (rName.isEmpty() || rName.getLength() > 64)
@@ -316,6 +322,106 @@ std::vector<std::pair<OUString, OUString>> CollectDesignTemplates()
         aDir.close();
     }
     return aTemplates;
+}
+
+DesignMasterRole DesignMasterRoleFromName(std::u16string_view rName)
+{
+    const OUString aLower = OUString(rName).toAsciiLowerCase();
+    auto has = [&aLower](std::u16string_view rKeyword) { return aLower.indexOf(rKeyword) >= 0; };
+
+    // The keyword groups are tested in a fixed order. The divider, closing, and
+    // body groups come before "title" because a name often carries "title"
+    // alongside a stronger keyword: "Section Title" and "Title & Content Divider"
+    // both read as a divider, and a plain "Title" or "Subtitle" falls through to
+    // the title group last.
+    if (has(u"separator") || has(u"divider") || has(u"section") || has(u"topic")
+        || has(u"chapter") || has(u"agenda") || has(u"transition"))
+        return DesignMasterRole::Divider;
+    if (has(u"ending") || has(u"closing") || has(u"thank") || has(u"farewell")
+        || has(u"goodbye") || has(u"finale"))
+        return DesignMasterRole::Closing;
+    if (has(u"content") || has(u"outline") || has(u"body") || has(u"bullet"))
+        return DesignMasterRole::Content;
+    if (has(u"title"))
+        return DesignMasterRole::Title;
+    return DesignMasterRole::Unknown;
+}
+
+// The slide-part vocabulary: each part and the name it travels under between
+// the model and the engine. The prompt built in wsd/AIChatSession.cpp teaches
+// the model the same words from its own copy, so a change here needs the same
+// change there.
+constexpr std::pair<DesignMasterRole, std::u16string_view> aDesignRoleWireNames[] = {
+    { DesignMasterRole::Title, u"opening" },
+    { DesignMasterRole::Divider, u"divider" },
+    { DesignMasterRole::Content, u"body" },
+    { DesignMasterRole::Closing, u"closing" },
+};
+
+OUString DesignRoleToWireName(DesignMasterRole eRole)
+{
+    for (const auto& [ePart, rWireName] : aDesignRoleWireNames)
+    {
+        if (ePart == eRole)
+            return OUString(rWireName);
+    }
+    return u"other"_ustr;
+}
+
+std::optional<DesignMasterRole> WireNameToDesignRole(std::u16string_view rName)
+{
+    for (const auto& [ePart, rWireName] : aDesignRoleWireNames)
+    {
+        if (rName == rWireName)
+            return ePart;
+    }
+    return std::nullopt;
+}
+
+std::vector<DesignTemplateMaster> CollectDesignTemplateMasters(SdDrawDocument& rTemplate)
+{
+    std::vector<DesignTemplateMaster> aMasters;
+    const sal_uInt16 nMasters = rTemplate.GetMasterSdPageCount(PageKind::Standard);
+    std::map<OUString, std::size_t> aIndex;
+    for (sal_uInt16 i = 0; i < nMasters; ++i)
+    {
+        const OUString aName = rTemplate.GetMasterSdPage(i, PageKind::Standard)->GetName();
+        aIndex.emplace(aName, aMasters.size());
+        aMasters.push_back({ aName, DesignMasterRoleFromName(aName), AUTOLAYOUT_NONE, 0 });
+    }
+
+    // Each example slide names a master and shows the layout it pairs with. The
+    // layout fixes the part of a master whose name carried no keyword, and every
+    // example counts towards how heavily a master is used.
+    const sal_uInt16 nSlides = rTemplate.GetSdPageCount(PageKind::Standard);
+    for (sal_uInt16 i = 0; i < nSlides; ++i)
+    {
+        SdPage* pSlide = rTemplate.GetSdPage(i, PageKind::Standard);
+        if (!pSlide)
+            continue;
+        const OUString aMaster = static_cast<SdPage&>(pSlide->TRG_GetMasterPage()).GetName();
+        auto it = aIndex.find(aMaster);
+        if (it == aIndex.end())
+            continue;
+        DesignTemplateMaster& rMaster = aMasters[it->second];
+        ++rMaster.mnExampleUses;
+        const AutoLayout eLayout = pSlide->GetAutoLayout();
+        if (rMaster.meExampleLayout == AUTOLAYOUT_NONE)
+            rMaster.meExampleLayout = eLayout;
+        if (rMaster.meRole == DesignMasterRole::Unknown)
+        {
+            // A title-and-subtitle example reads as an opening, a title-only or
+            // blank example as a section break, anything with body content as a
+            // body slide.
+            if (eLayout == AUTOLAYOUT_TITLE)
+                rMaster.meRole = DesignMasterRole::Title;
+            else if (eLayout == AUTOLAYOUT_TITLE_ONLY || eLayout == AUTOLAYOUT_NONE)
+                rMaster.meRole = DesignMasterRole::Divider;
+            else
+                rMaster.meRole = DesignMasterRole::Content;
+        }
+    }
+    return aMasters;
 }
 
 namespace {
@@ -460,6 +566,132 @@ bool lcl_DocHasMaster(SdDrawDocument* pDoc, std::u16string_view rName)
     return false;
 }
 
+// True for a layout that carries body content (an outline or one of the
+// multi-content arrangements). The title-only, title-and-subtitle, and blank
+// layouts carry none, so a slide using one of them reads as an opening,
+// section break, or closing rather than a body slide.
+bool lcl_LayoutHasBody(AutoLayout eLayout)
+{
+    return eLayout != AUTOLAYOUT_TITLE && eLayout != AUTOLAYOUT_TITLE_ONLY
+           && eLayout != AUTOLAYOUT_NONE;
+}
+
+// Chooses a template master for each generated slide by the part the slide
+// plays - opening, section break, body, or closing - rather than by its
+// placeholder layout alone. A design template carries one master per part, but
+// several of them often share the same layout (an opening and a section break
+// can both be just a title), so the layout cannot tell them apart. The parts
+// come from CollectDesignTemplateMasters. A body slide is matched to a body
+// master of the same layout when the template has one, otherwise to the body
+// master its example slides use most. This is the fallback for a slide the
+// model did not give a design of its own.
+class DesignMasterChooser
+{
+public:
+    explicit DesignMasterChooser(SdDrawDocument& rTemplate)
+    {
+        const sal_uInt16 nMasters = rTemplate.GetMasterSdPageCount(PageKind::Standard);
+        if (nMasters == 0)
+            return;
+        maFallback = rTemplate.GetMasterSdPage(0, PageKind::Standard)->GetName();
+
+        // Keep one master per non-body part, preferring the one a name keyword
+        // named over one decided only by an example layout. Gather the body
+        // masters with their example layout and usage so a body slide can be
+        // matched by layout and, failing that, to the most-used body master.
+        std::map<DesignMasterRole, bool> aRoleByName;
+        for (const DesignTemplateMaster& rMaster : CollectDesignTemplateMasters(rTemplate))
+        {
+            const bool bByName
+                = DesignMasterRoleFromName(rMaster.maName) != DesignMasterRole::Unknown;
+            if (rMaster.meRole == DesignMasterRole::Content)
+            {
+                maBodyMasters.push_back(
+                    { rMaster.maName, rMaster.meExampleLayout, rMaster.mnExampleUses });
+                continue;
+            }
+            if (rMaster.meRole == DesignMasterRole::Unknown)
+                continue;
+            auto it = maRoleMaster.find(rMaster.meRole);
+            if (it == maRoleMaster.end() || (bByName && !aRoleByName[rMaster.meRole]))
+            {
+                maRoleMaster[rMaster.meRole] = rMaster.maName;
+                aRoleByName[rMaster.meRole] = bByName;
+            }
+        }
+
+        std::sort(maBodyMasters.begin(), maBodyMasters.end(),
+                  [](const BodyMaster& rA, const BodyMaster& rB) { return rA.mnUsage > rB.mnUsage; });
+    }
+
+    // The master for a slide whose part the model named. A body slide takes a
+    // body master matching its layout; an opening, divider, or closing takes the
+    // master for that part, falling through to another part and then a body or
+    // the fallback master when the template carries no master for it.
+    OUString masterForPart(DesignMasterRole ePart, AutoLayout eLayout) const
+    {
+        if (ePart == DesignMasterRole::Content)
+            return bodyMaster(eLayout);
+        return pickRole({ ePart, DesignMasterRole::Divider, DesignMasterRole::Title,
+                          DesignMasterRole::Closing });
+    }
+
+    OUString masterForSlide(AutoLayout eLayout, bool bFirst, bool bLast) const
+    {
+        if (lcl_LayoutHasBody(eLayout))
+            return bodyMaster(eLayout);
+
+        // A title-only slide opens the deck, breaks a section, or closes it.
+        // The position decides which part to prefer, and the template may not
+        // carry every part, so fall through a short order of preference.
+        if (bFirst)
+            return pickRole({ DesignMasterRole::Title, DesignMasterRole::Divider,
+                              DesignMasterRole::Closing });
+        if (bLast)
+            return pickRole({ DesignMasterRole::Closing, DesignMasterRole::Divider,
+                              DesignMasterRole::Title });
+        return pickRole(
+            { DesignMasterRole::Divider, DesignMasterRole::Title, DesignMasterRole::Closing });
+    }
+
+private:
+    struct BodyMaster
+    {
+        OUString maName;
+        AutoLayout meLayout;
+        sal_uInt16 mnUsage;
+    };
+
+    OUString pickRole(std::initializer_list<DesignMasterRole> aRoles) const
+    {
+        for (DesignMasterRole eRole : aRoles)
+        {
+            auto it = maRoleMaster.find(eRole);
+            if (it != maRoleMaster.end())
+                return it->second;
+        }
+        if (!maBodyMasters.empty())
+            return maBodyMasters.front().maName;
+        return maFallback;
+    }
+
+    // A body master matching the slide's layout, else the most-used body master,
+    // else the fallback master.
+    OUString bodyMaster(AutoLayout eLayout) const
+    {
+        for (const BodyMaster& rBody : maBodyMasters)
+            if (rBody.meLayout == eLayout)
+                return rBody.maName;
+        if (!maBodyMasters.empty())
+            return maBodyMasters.front().maName;
+        return maFallback;
+    }
+
+    OUString maFallback;
+    std::map<DesignMasterRole, OUString> maRoleMaster;
+    std::vector<BodyMaster> maBodyMasters;
+};
+
 bool lcl_ReplaceWithImage(SdDrawDocument* pDoc, SdPage* pPage, int nObjId,
                                  const std::string& rImageUrl,
                                  SfxViewShell* pViewShell, int nPartId)
@@ -499,7 +731,12 @@ bool lcl_ReplaceWithImage(SdDrawDocument* pDoc, SdPage* pPage, int nObjId,
 // before the first command). mnNextPageId is the slide the next command
 // works on; navigation aligns the two between commands. moApplyTemplateUrl
 // holds the design-template URL resolved by an ApplyTemplate command; the
-// template is applied once, after the whole command sequence.
+// template is applied once, after the whole command sequence. maSlideParts
+// holds the slide part a SetSlidePart command gave a slide, keyed by the slide;
+// the apply step places the slide on the master for that part before falling
+// back to its own choice. maTouchedPages holds the standard slides this
+// transform inserted or modified; a slide the commands left alone is not in
+// it.
 struct SlideCommandContext
 {
     SdDrawDocument* mpDoc;
@@ -513,6 +750,14 @@ struct SlideCommandContext
     int mnActPageId = -1;
     int mnNextPageId = 0;
     std::optional<OUString> moApplyTemplateUrl = std::nullopt;
+    std::map<const SdPage*, DesignMasterRole> maSlideParts = {};
+    std::set<const SdPage*> maTouchedPages = {};
+
+    void touch(const SdPage* pPage)
+    {
+        if (pPage)
+            maTouchedPages.insert(pPage);
+    }
 };
 
 // Undo for a name or autolayout change. ModifyPageUndoAction snapshots the
@@ -634,6 +879,7 @@ void handleInsertMasterSlide(SlideCommandContext& rCtx, const std::string& rKey,
 
     SdPage* pPageStandard = rCtx.mpDoc->GetSdPage(rCtx.mnNextPageId, PageKind::Standard);
     SdPage* pPageNote = rCtx.mpDoc->GetSdPage(rCtx.mnNextPageId, PageKind::Notes);
+    rCtx.touch(pPageStandard);
 
     // Change master value
     pPageStandard->TRG_SetMasterPage(*pMPage);
@@ -692,10 +938,10 @@ void handleDeleteSlide(SlideCommandContext& rCtx, const std::string& rKey,
                            + std::to_string(nPageIdToDel) + "'");
             nPageIdToDel = 0;
         }
+        SdPage* pDelStd = rCtx.mpDoc->GetSdPage(nPageIdToDel, PageKind::Standard);
         if (rCtx.mbUndo)
         {
-            // Capture pages before removal.
-            SdPage* pDelStd = rCtx.mpDoc->GetSdPage(nPageIdToDel, PageKind::Standard);
+            // Capture the notes page before removal.
             SdPage* pDelNotes = rCtx.mpDoc->GetSdPage(nPageIdToDel, PageKind::Notes);
             if (pDelNotes)
                 rCtx.mpDrawView->AddUndo(SdrUndoFactory::CreateUndoDeletePage(*pDelNotes));
@@ -704,6 +950,10 @@ void handleDeleteSlide(SlideCommandContext& rCtx, const std::string& rKey,
         }
         rCtx.mpDoc->RemovePage(nPageIdToDel * 2 + 1);
         rCtx.mpDoc->RemovePage(nPageIdToDel * 2 + 1);
+        // Forget the removed page; its address no longer names a slide of
+        // this document.
+        rCtx.maTouchedPages.erase(pDelStd);
+        rCtx.maSlideParts.erase(pDelStd);
 
         if (nPageIdToDel <= rCtx.mnActPageId)
         {
@@ -809,10 +1059,19 @@ void handleDuplicateSlide(SlideCommandContext& rCtx, const std::string& rKey,
                        + std::to_string(nDupSlideId) + "'");
         nDupSlideId = 0;
     }
+    SdPage* pSourceStd = rCtx.mpDoc->GetSdPage(nDupSlideId, PageKind::Standard);
     rCtx.mpDoc->DuplicatePage(nDupSlideId);
+    SdPage* pDupStd = rCtx.mpDoc->GetSdPage(nDupSlideId + 1, PageKind::Standard);
+    rCtx.touch(pDupStd);
+    // The copy plays the same part as its source.
+    if (pDupStd)
+    {
+        auto itPart = rCtx.maSlideParts.find(pSourceStd);
+        if (itPart != rCtx.maSlideParts.end())
+            rCtx.maSlideParts[pDupStd] = itPart->second;
+    }
     if (rCtx.mbUndo)
     {
-        SdPage* pDupStd = rCtx.mpDoc->GetSdPage(nDupSlideId + 1, PageKind::Standard);
         SdPage* pDupNotes = rCtx.mpDoc->GetSdPage(nDupSlideId + 1, PageKind::Notes);
         if (pDupStd)
             rCtx.mpDrawView->AddUndo(SdrUndoFactory::CreateUndoNewPage(*pDupStd));
@@ -857,6 +1116,7 @@ void handleChangeLayout(SlideCommandContext& rCtx, const std::string& rKey,
     SdPage* pLayoutPage = rCtx.mpDoc->GetSdPage(rCtx.mnActPageId, PageKind::Standard);
     lcl_AddModifyPageUndo(rCtx, pLayoutPage, pLayoutPage->GetName(), nLayoutId);
     pLayoutPage->SetAutoLayout(nLayoutId, true);
+    rCtx.touch(pLayoutPage);
 }
 
 void handleRenameSlide(SlideCommandContext& rCtx, const std::string& /*rKey*/,
@@ -867,6 +1127,7 @@ void handleRenameSlide(SlideCommandContext& rCtx, const std::string& /*rKey*/,
         = OStringToOUString(rValue.get_value<std::string>(), RTL_TEXTENCODING_UTF8);
     lcl_AddModifyPageUndo(rCtx, pPageStandard, aNewName, pPageStandard->GetAutoLayout());
     pPageStandard->SetName(aNewName);
+    rCtx.touch(pPageStandard);
 }
 
 void handleSetText(SlideCommandContext& rCtx, const std::string& rKey,
@@ -894,6 +1155,7 @@ void handleSetText(SlideCommandContext& rCtx, const std::string& rKey,
 
             // Todo: maybe with empty string it should work elseway?
             pSdrObj->SetEmptyPresObj(false);
+            rCtx.touch(pPageStandard);
         }
     }
     else
@@ -932,8 +1194,9 @@ void handleInsertImage(SlideCommandContext& rCtx, const std::string& rKey,
     else
     {
         std::string aImageUrl = rValue.get_value<std::string>();
-        lcl_ReplaceWithImage(rCtx.mpDoc, pPageStandard, nObjId, aImageUrl,
-                             rCtx.mpViewShellBase, rCtx.mnActPageId);
+        if (lcl_ReplaceWithImage(rCtx.mpDoc, pPageStandard, nObjId, aImageUrl,
+                                 rCtx.mpViewShellBase, rCtx.mnActPageId))
+            rCtx.touch(pPageStandard);
     }
 }
 
@@ -982,8 +1245,9 @@ void handleInsertImageAt(SlideCommandContext& rCtx, const std::string& rKey,
     }
 
     std::string aImageUrl = rValue.get_value<std::string>();
-    lcl_ReplaceWithImage(rCtx.mpDoc, pPage, nObjId, aImageUrl, rCtx.mpViewShellBase,
-                         nSlideId);
+    if (lcl_ReplaceWithImage(rCtx.mpDoc, pPage, nObjId, aImageUrl, rCtx.mpViewShellBase,
+                             nSlideId))
+        rCtx.touch(pPage);
 }
 
 void handleMarkObject(SlideCommandContext& rCtx, const std::string& rKey,
@@ -1005,6 +1269,9 @@ void handleMarkObject(SlideCommandContext& rCtx, const std::string& rKey,
     {
         SdrObject* pSdrObj = pPageStandard->GetObj(nObjId);
         rCtx.mpDrawView->MarkObj(pSdrObj, rCtx.mpDrawView->GetSdrPageView(), bUnMark);
+        // A mark precedes an edit of the marked object, so the slide counts
+        // as one this transform works on.
+        rCtx.touch(pPageStandard);
     }
     else
     {
@@ -1041,6 +1308,7 @@ void handleEditTextObject(SlideCommandContext& rCtx, const std::string& rKey,
     }
 
     SdrTextObj* pSdrTxt = static_cast<SdrTextObj*>(pSdrObj);
+    rCtx.touch(pPageStandard);
     SdrView* pView1 = rCtx.mpView;
     pView1->MarkObj(pSdrTxt, pView1->GetSdrPageView());
     pView1->SdrBeginTextEdit(pSdrTxt);
@@ -1117,6 +1385,27 @@ void handleUnoCommand(SlideCommandContext& /*rCtx*/, const std::string& /*rKey*/
     lcl_UnoCommand(aText);
 }
 
+void handleSetSlidePart(SlideCommandContext& rCtx, const std::string& /*rKey*/,
+                        const boost::property_tree::ptree& rValue)
+{
+    if (rCtx.mnActPageId < 0)
+        return;
+    SdPage* pPage
+        = rCtx.mpDoc->GetSdPage(static_cast<sal_uInt16>(rCtx.mnActPageId), PageKind::Standard);
+    if (!pPage)
+        return;
+    // Record the part the model gave this slide. The apply step places the slide
+    // on the template master for that part once the template is open. A word that
+    // is not a known part is dropped, leaving the slide to the fallback chooser.
+    const OUString aPart
+        = OStringToOUString(rValue.get_value<std::string>(), RTL_TEXTENCODING_UTF8);
+    if (std::optional<DesignMasterRole> oRole = WireNameToDesignRole(aPart))
+    {
+        rCtx.maSlideParts[pPage] = *oRole;
+        rCtx.touch(pPage);
+    }
+}
+
 // One entry of the slide-command vocabulary. maName is the command's key in
 // the transform JSON. With mbPrefixMatch the key is matched by prefix because
 // it carries arguments after the name, like the object index in "SetText.0".
@@ -1150,6 +1439,7 @@ constexpr SlideCommand aSlideCommands[] = {
     { "UnMarkObject", false, false, &handleMarkObject },
     { "EditTextObject.", true, false, &handleEditTextObject },
     { "UnoCommand", false, false, &handleUnoCommand },
+    { "SetSlidePart", false, false, &handleSetSlidePart },
 };
 
 // Looks up the slide command a JSON key addresses. Returns null for a key
@@ -1637,12 +1927,14 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
 
     // Apply the chosen design template once all slides exist, so slides inserted
     // after the ApplyTemplate command are themed too - not just the one current
-    // when the command appeared. The template ships several masters, one per slide
-    // role such as title, content, and divider. Rather than assume master names,
-    // learn the layout-to-master pairing from the template's own example slides
-    // below, then put each generated slide on the master the template pairs with
-    // that slide's layout. A generated deck then uses the opening and divider
-    // designs as well as the content design, not one master throughout.
+    // when the command appeared. The template ships several masters, one per
+    // slide part such as opening, section break, body, and closing. Put each
+    // generated slide on the master for the part the model gave it with a
+    // SetSlidePart command, so a deck uses the opening and divider designs as
+    // well as the body design, not one master throughout. A slide the model gave
+    // no part, or one whose part the template has no master for, is placed by
+    // DesignMasterChooser instead; see it for how a master's name and its
+    // example slide decide its part.
     if (aCtx.moApplyTemplateUrl)
     {
         SdDrawDocument* pTemplate = GetDoc()->OpenBookmarkDoc(*aCtx.moApplyTemplateUrl);
@@ -1650,33 +1942,38 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
         if (pTemplate && pTemplate->GetMasterSdPageCount(PageKind::Standard) > 0
             && nStdCount > 0)
         {
-            // Learn how the template pairs masters with slide layouts from its
-            // own example slides, so this works for any template - including ones
-            // a user uploads - without relying on master names. The first master
-            // page is the fallback for layouts the template's examples do not
-            // cover, and for templates that ship no example slides at all.
-            const OUString aFallbackMaster
-                = pTemplate->GetMasterSdPage(0, PageKind::Standard)->GetName();
-            std::map<AutoLayout, OUString> aLayoutToMaster;
-            const sal_uInt16 nTemplateSlides
-                = pTemplate->GetSdPageCount(PageKind::Standard);
-            for (sal_uInt16 t = 0; t < nTemplateSlides; ++t)
+            const DesignMasterChooser aChooser(*pTemplate);
+
+            // The first application of a template - none of its masters are in
+            // the document yet - themes every slide, so a design picked after
+            // the content exists covers the whole deck. A later application of
+            // the same template re-themes only the slides this transform
+            // touched: the other slides keep the geometry and master the user
+            // may have given them by hand since the last turn.
+            bool bFirstApplication = true;
+            const sal_uInt16 nTemplateMasters
+                = pTemplate->GetMasterSdPageCount(PageKind::Standard);
+            for (sal_uInt16 i = 0; bFirstApplication && i < nTemplateMasters; ++i)
             {
-                SdPage* pTemplateSlide = pTemplate->GetSdPage(t, PageKind::Standard);
-                if (!pTemplateSlide)
-                    continue;
-                const OUString aMasterName
-                    = static_cast<SdPage&>(pTemplateSlide->TRG_GetMasterPage()).GetName();
-                // The first example slide for a given layout wins.
-                aLayoutToMaster.emplace(pTemplateSlide->GetAutoLayout(), aMasterName);
+                if (lcl_DocHasMaster(
+                        GetDoc(),
+                        pTemplate->GetMasterSdPage(i, PageKind::Standard)->GetName()))
+                    bFirstApplication = false;
             }
 
             for (sal_uInt16 i = 0; i < nStdCount; ++i)
             {
                 SdPage* pPage = GetDoc()->GetSdPage(i, PageKind::Standard);
-                auto it = aLayoutToMaster.find(pPage->GetAutoLayout());
-                const OUString aMaster
-                    = (it != aLayoutToMaster.end()) ? it->second : aFallbackMaster;
+                if (!bFirstApplication && !aCtx.maTouchedPages.contains(pPage))
+                    continue;
+
+                OUString aMaster;
+                auto itPart = aCtx.maSlideParts.find(pPage);
+                if (itPart != aCtx.maSlideParts.end())
+                    aMaster = aChooser.masterForPart(itPart->second, pPage->GetAutoLayout());
+                if (aMaster.isEmpty())
+                    aMaster = aChooser.masterForSlide(pPage->GetAutoLayout(), i == 0,
+                                                      i + 1 == nStdCount);
 
                 // Import the master from the template the first time it is used;
                 // afterwards take the copy already in this document so the styles
@@ -1685,12 +1982,14 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                     = lcl_DocHasMaster(GetDoc(), aMaster) ? GetDoc() : pTemplate;
                 GetDoc()->SetMasterPage(i, aMaster, pSource, false, false);
 
-                // Re-run the autolayout so the slide's placeholders move to the
-                // new master's positions and sizes - the same step
-                // FuPresentationLayout does after a master change. Without it the
-                // placeholders keep their old geometry and the body text can
-                // shrink to fit a too-small frame.
-                pPage->SetAutoLayout(pPage->GetAutoLayout());
+                // Re-run the autolayout so the slide's placeholders take the new
+                // master's placeholder positions and sizes. The bInit flag
+                // forces the placeholders to be re-arranged onto the master's
+                // geometry, the same as applying the layout from the slide menu.
+                // Without it a placeholder keeps the geometry it had on the old
+                // master and can sit over a master's side band or run off the
+                // designed text area.
+                pPage->SetAutoLayout(pPage->GetAutoLayout(), true);
             }
         }
         if (pTemplate)

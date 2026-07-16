@@ -74,6 +74,7 @@
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
+#include <DesignTemplates.hxx>
 #include <ViewShell.hxx>
 #include <app.hrc>
 #include <sdpage.hxx>
@@ -476,6 +477,201 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureApplyTemplate)
     CPPUNIT_ASSERT(masterName(0) != masterName(2));
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignMasterRoleFromName)
+{
+    // A master's part is read from role keywords in its name, so a real
+    // template whose masters all share one or two layouts still themes a deck
+    // by part. The names here are those a designed template carries.
+    using sd::DesignMasterRole;
+    using sd::DesignMasterRoleFromName;
+
+    CPPUNIT_ASSERT_EQUAL(DesignMasterRole::Title, DesignMasterRoleFromName(u"Title_Slide"));
+    CPPUNIT_ASSERT_EQUAL(DesignMasterRole::Content, DesignMasterRoleFromName(u"Content_Outline_Normal"));
+    CPPUNIT_ASSERT_EQUAL(DesignMasterRole::Divider, DesignMasterRoleFromName(u"Topic_Separator_Purple"));
+    CPPUNIT_ASSERT_EQUAL(DesignMasterRole::Closing, DesignMasterRoleFromName(u"Ending_Slide"));
+
+    // The match ignores letter case.
+    CPPUNIT_ASSERT_EQUAL(DesignMasterRole::Divider, DesignMasterRoleFromName(u"section break"));
+
+    // A name that carries both a divider keyword and "title" reads as a divider,
+    // because the divider group is tested before the title group.
+    CPPUNIT_ASSERT_EQUAL(DesignMasterRole::Divider, DesignMasterRoleFromName(u"Section Title"));
+    CPPUNIT_ASSERT_EQUAL(DesignMasterRole::Divider,
+                         DesignMasterRoleFromName(u"Title & Content Divider"));
+
+    // "title" is a substring match, so a name whose only keyword is part of a
+    // longer word still reads as a title.
+    CPPUNIT_ASSERT_EQUAL(DesignMasterRole::Title, DesignMasterRoleFromName(u"Subtitle"));
+
+    // A name with no part keyword is left Unknown, so the part falls to the
+    // example slide's layout instead - this is how the bundled templates, whose
+    // masters are named Cobalt, Cobalt1, ..., are still placed by layout.
+    CPPUNIT_ASSERT_EQUAL(DesignMasterRole::Unknown, DesignMasterRoleFromName(u"Cobalt1"));
+    CPPUNIT_ASSERT_EQUAL(DesignMasterRole::Unknown, DesignMasterRoleFromName(u"Default"));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureSetSlidePart)
+{
+    // A SetSlidePart command labels a slide's part; the engine places the slide
+    // on the template's master for that part, overriding the slide's own layout.
+    // An unknown part word is dropped, leaving the slide to the part-based
+    // default. Cobalt's masters are Cobalt (body), Cobalt1 (opening), Cobalt2
+    // (divider).
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+
+    // Three content-layout slides, labelled opening, divider, and a word that is
+    // not a part.
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"ApplyTemplate": "Cobalt"},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_CONTENT"},
+            {"SetText.0": "One"},
+            {"SetSlidePart": "opening"},
+            {"InsertMasterSlide": 0},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_CONTENT"},
+            {"SetText.0": "Two"},
+            {"SetSlidePart": "divider"},
+            {"InsertMasterSlide": 0},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_CONTENT"},
+            {"SetText.0": "Three"},
+            {"SetSlidePart": "bogus"}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pImpressDocument->getDrawPages()->getCount());
+
+    auto masterName = [&](sal_uInt16 nPage) {
+        return static_cast<SdPage*>(
+                   &pDoc->GetSdPage(nPage, PageKind::Standard)->TRG_GetMasterPage())
+            ->GetName();
+    };
+    // The opening label lands on the opening master and the divider label on the
+    // divider master, each winning over the content layout. The unknown part is
+    // dropped, so the third slide takes the body master.
+    CPPUNIT_ASSERT_EQUAL(u"Cobalt1"_ustr, masterName(0));
+    CPPUNIT_ASSERT_EQUAL(u"Cobalt2"_ustr, masterName(1));
+    CPPUNIT_ASSERT_EQUAL(u"Cobalt"_ustr, masterName(2));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureDuplicateSlideKeepsPart)
+{
+    // A duplicated slide plays the same part as its source, so the copy of a
+    // divider slide lands on the divider master too, not on the body master
+    // its content layout suggests.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"ApplyTemplate": "Cobalt"},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_CONTENT"},
+            {"SetText.0": "Break"},
+            {"SetSlidePart": "divider"},
+            {"DuplicateSlide": 0}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pImpressDocument->getDrawPages()->getCount());
+
+    auto masterName = [&](sal_uInt16 nPage) {
+        return static_cast<SdPage*>(
+                   &pDoc->GetSdPage(nPage, PageKind::Standard)->TRG_GetMasterPage())
+            ->GetName();
+    };
+    CPPUNIT_ASSERT_EQUAL(u"Cobalt2"_ustr, masterName(0));
+    CPPUNIT_ASSERT_EQUAL(u"Cobalt2"_ustr, masterName(1));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureApplyTemplateKeepsUntouchedSlides)
+{
+    // Re-applying an already applied template re-themes only the slides the
+    // transform touches. A slide the transform leaves alone keeps the
+    // geometry and the master it had, so the user's manual edits between two
+    // AI turns survive the second turn.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+
+    // A themed two-slide deck: an opening slide and a body slide, on two
+    // different Cobalt masters.
+    static constexpr OUString aFirstJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"ApplyTemplate": "Cobalt"},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_CONTENT"},
+            {"SetText.0": "One"},
+            {"SetSlidePart": "opening"},
+            {"InsertMasterSlide": 0},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_CONTENT"},
+            {"SetText.0": "Two"}
+        ]
+    }
+}
+)json"_ustr;
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aFirstJson) });
+
+    auto masterName = [&](sal_uInt16 nPage) {
+        return static_cast<SdPage*>(
+                   &pDoc->GetSdPage(nPage, PageKind::Standard)->TRG_GetMasterPage())
+            ->GetName();
+    };
+    CPPUNIT_ASSERT_EQUAL(u"Cobalt1"_ustr, masterName(0));
+    CPPUNIT_ASSERT_EQUAL(u"Cobalt"_ustr, masterName(1));
+
+    // The user moves slide 1's title by hand.
+    SdPage* pFirstSlide = pDoc->GetSdPage(0, PageKind::Standard);
+    SdrObject* pTitle = pFirstSlide->GetObj(0);
+    tools::Rectangle aMovedRect = pTitle->GetLogicRect();
+    aMovedRect.Move(1000, 1000);
+    pTitle->SetLogicRect(aMovedRect);
+
+    // The next AI turn carries the template again but only edits slide 2.
+    static constexpr OUString aSecondJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"ApplyTemplate": "Cobalt"},
+            {"JumpToSlide": 1},
+            {"SetText.0": "Two updated"}
+        ]
+    }
+}
+)json"_ustr;
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aSecondJson) });
+
+    // Slide 1 keeps the moved title and the opening master, even though this
+    // turn named no part for it; slide 2 stays on a template master.
+    CPPUNIT_ASSERT_EQUAL(aMovedRect, pFirstSlide->GetObj(0)->GetLogicRect());
+    CPPUNIT_ASSERT_EQUAL(u"Cobalt1"_ustr, masterName(0));
+    CPPUNIT_ASSERT(masterName(1).startsWith("Cobalt"));
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureApplyTemplateUnknownName)
 {
     // A name that matches no template file is rejected: the deck keeps its
@@ -564,10 +760,10 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignTemplateCatalogSkipsInvalidNames
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignTemplateLayouts)
 {
-    // Queried with a template name, the catalog command reports the slide
-    // layouts the template's example slides cover. The reply echoes the full
-    // command, parameters included, so it is told apart from a reply that
-    // carries the template list.
+    // The per-name design query reports the slide layouts the template's
+    // example slides cover. It is a separate command from the template list, so
+    // the reply is told apart from the list reply by its command name. The
+    // reply echoes the full command, parameters included.
     createSdImpressDoc();
 
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -575,13 +771,19 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignTemplateLayouts)
 
     tools::JsonWriter aJsonWriter;
     // The lowercase name must match too - names resolve ignoring letter case.
-    pImpressDocument->getCommandValues(aJsonWriter, ".uno:GetDesignTemplates?name=cobalt");
+    pImpressDocument->getCommandValues(aJsonWriter, ".uno:GetDesignTemplateDesigns?name=cobalt");
     const OString aJson = aJsonWriter.finishAndGetAsOString();
 
     CPPUNIT_ASSERT(aJson.indexOf("name=cobalt") >= 0);
     CPPUNIT_ASSERT(aJson.indexOf("layouts") >= 0);
     // Cobalt ships example slides, so at least one layout must be reported.
     CPPUNIT_ASSERT(aJson.indexOf("AUTOLAYOUT_") >= 0);
+
+    // The same reply lists the template's design masters with the part each
+    // plays, so the model can put each slide on the design that fits its role.
+    CPPUNIT_ASSERT(aJson.indexOf("masters") >= 0);
+    CPPUNIT_ASSERT(aJson.indexOf("Cobalt") >= 0);
+    CPPUNIT_ASSERT(aJson.indexOf("role") >= 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUndoImage)

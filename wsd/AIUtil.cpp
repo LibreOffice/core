@@ -170,6 +170,12 @@ const std::vector<SlideCommandInfo>& getSlideCommands()
         // The design template is the user's choice. The server alone
         // splices an ApplyTemplate into a transform.
         { "ApplyTemplate", false, "", "" },
+
+        // Labels a slide's part (opening, divider, body, closing). The parts a
+        // template offers and the instruction to use them are given per request,
+        // when a template is in use, so the command carries no entry in the
+        // static documentation.
+        { "SetSlidePart", true, "", "" },
     };
     return commands;
 }

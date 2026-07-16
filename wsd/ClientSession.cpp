@@ -659,6 +659,14 @@ bool ClientSession::handleSignatureAction(const StringVector& tokens)
 }
 #endif
 
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
+void ClientSession::checkAIRequestTimeout(std::chrono::steady_clock::time_point now)
+{
+    if (_aiChat)
+        _aiChat->checkDesignFetchTimeout(now);
+}
+#endif
+
 bool ClientSession::_handleInput(const char *buffer, int length)
 {
     LOG_TRC("handling incoming [" << getAbbreviatedMessage(buffer, length) << ']');
@@ -3445,6 +3453,12 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
     else if (tokens.equals(0, "commandvalues:"))
     {
 #if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
+        // Offer the reply to the design fetch before the tool loop. A tool loop
+        // left waiting for a commandvalues-based kit response from an earlier
+        // turn would otherwise take the design reply as its own, so the design
+        // fetch must be tried first.
+        if (_aiChat->tryConsumeDesignFetch(payload))
+            return true;
         if (_aiChat->tryConsumeCommandValues(payload))
             return true;
 #endif
