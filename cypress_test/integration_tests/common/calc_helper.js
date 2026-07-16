@@ -283,6 +283,28 @@ function selectFirstColumn() {
 	cy.log('<< selectFirstColumn - end');
 }
 
+// Select first row of a calc document.
+// We try to achieve this by clicking on the top end
+// of the row headers. Of course if the first row
+// has a very small height, then this might fail.
+function selectFirstRow() {
+	cy.log('>> selectFirstRow - start');
+
+	cy.cGet('[id="test-div-row header"]')
+		.then(function(items) {
+			expect(items).to.have.lengthOf(1);
+
+			var bounds = items[0].getBoundingClientRect();
+			var XPos = (bounds.left + bounds.right) / 2;
+			var YPos = bounds.top + 10;
+			cy.cGet('body').click(XPos, YPos);
+		});
+
+	assertAddressInput('A1:{lastCol}1');
+
+	cy.log('<< selectFirstRow - end');
+}
+
 function ensureViewContainsCellCursor() {
 	cy.log('>> ensureViewContainsCellCursor - start');
 
@@ -412,6 +434,7 @@ module.exports.typeIntoFormulabar = typeIntoFormulabar;
 module.exports.removeTextSelection = removeTextSelection;
 module.exports.selectEntireSheet = selectEntireSheet;
 module.exports.selectFirstColumn = selectFirstColumn;
+module.exports.selectFirstRow = selectFirstRow;
 module.exports.assertAddressInput = assertAddressInput;
 module.exports.columnNumberToLabel = columnNumberToLabel;
 module.exports.ensureViewContainsCellCursor = ensureViewContainsCellCursor;
