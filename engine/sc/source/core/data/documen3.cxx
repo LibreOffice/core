@@ -1326,78 +1326,38 @@ void ScDocument::GetSearchAndReplaceStart( const SvxSearchItem& rSearchItem,
     {
         if ( rSearchItem.GetRowDirection() )
         {
-            if ( rSearchItem.GetPattern() )
-            {
+            rRow = MaxRow();
+            if (!bReplace || rSearchItem.GetPattern())
+                rCol = MaxCol() + 1;
+            else // bReplace
                 rCol = MaxCol();
-                rRow = MaxRow()+1;
-            }
-            else if ( bReplace )
-            {
-                rCol = MaxCol();
-                rRow = MaxRow();
-            }
-            else
-            {
-                rCol = MaxCol()+1;
-                rRow = MaxRow();
-            }
         }
         else
         {
-            if ( rSearchItem.GetPattern() )
-            {
-                rCol = MaxCol()+1;
+            rCol = MaxCol();
+            if (!bReplace  || rSearchItem.GetPattern())
+                rRow = MaxRow() + 1;
+            else // bReplace
                 rRow = MaxRow();
-            }
-            else if ( bReplace )
-            {
-                rCol = MaxCol();
-                rRow = MaxRow();
-            }
-            else
-            {
-                rCol = MaxCol();
-                rRow = MaxRow()+1;
-            }
         }
     }
     else
     {
         if ( rSearchItem.GetRowDirection() )
         {
-            if ( rSearchItem.GetPattern() )
-            {
-                rCol = 0;
-                rRow = SCROW(-1);
-            }
-            else if ( bReplace )
-            {
-                rCol = 0;
-                rRow = 0;
-            }
-            else
-            {
+            rRow = 0;
+            if (!bReplace || rSearchItem.GetPattern())
                 rCol = SCCOL(-1);
-                rRow = 0;
-            }
+            else // bReplace
+                rCol = 0;
         }
         else
         {
-            if ( rSearchItem.GetPattern() )
-            {
-                rCol = SCCOL(-1);
-                rRow = 0;
-            }
-            else if ( bReplace )
-            {
-                rCol = 0;
-                rRow = 0;
-            }
-            else
-            {
-                rCol = 0;
+            rCol = 0;
+            if (!bReplace || rSearchItem.GetPattern())
                 rRow = SCROW(-1);
-            }
+            else // bReplace
+                rRow = 0;
         }
     }
 }
