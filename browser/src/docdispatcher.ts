@@ -1049,6 +1049,13 @@ class Dispatcher {
 					? new ViewLayoutWriter()
 					: new ViewLayoutCompareChanges();
 
+				// The tile render mode follows the layout: the normal view uses
+				// the standard mode, the side-by-side view uses the two redline
+				// modes. Set it now so the tiles requested and drawn during the
+				// switch already use the right mode, rather than the stale mode
+				// left over until the server status message updates it.
+				app.activeDocument.activeModes = commandState ? [0] : [1, 2];
+
 				// Do this only if we are switching to Writer normal layout.
 				// Try to handle this in constructor for compare-changes layout.
 				if (commandState) {
@@ -1085,7 +1092,15 @@ class Dispatcher {
 			if (
 				app.activeDocument?.activeLayout?.type === 'ViewLayoutCompareChanges'
 			) {
+				// Leaving side-by-side: bring the core render mode back to
+				// standard. Otherwise the next status message still reports the
+				// side-by-side mode and overwrites the mode set below.
+				app.socket.sendMessage('uno .uno:RedlineRenderMode');
 				app.activeDocument.activeLayout = new ViewLayoutWriter();
+				// The normal view renders tiles in the standard mode. Set it
+				// before requesting tiles so the switch does not keep asking for
+				// the side-by-side redline modes.
+				app.activeDocument.activeModes = [0];
 				RenderManager.redraw();
 				app.map._docLayer._fitWidthZoom(null, null, true);
 				app.activeDocument.activeLayout.sendClientVisibleArea();
@@ -1111,11 +1126,22 @@ class Dispatcher {
 		this.actionsMap['viewchanges-sidebyside'] = function () {
 			if (!app.activeDocument?.activeLayout) return;
 
+			// Already in side-by-side: do nothing. Toggling the core render mode
+			// again here would move it out of the side-by-side mode.
+			if (app.activeDocument.activeLayout.type === 'ViewLayoutCompareChanges')
+				return;
+
 			Util.ensureValue(app.activeDocument);
+			// Entering side-by-side: switch the core render mode to show the
+			// changes side by side.
 			app.socket.sendMessage('uno .uno:RedlineRenderMode');
 
-			if (app.activeDocument.activeLayout.type !== 'ViewLayoutCompareChanges')
-				app.activeDocument.activeLayout = new ViewLayoutCompareChanges();
+			app.activeDocument.activeLayout = new ViewLayoutCompareChanges();
+
+			// The side-by-side view renders tiles in the two redline modes. Set
+			// it before the layout requests tiles so they are not treated as
+			// belonging to an inactive mode and discarded.
+			app.activeDocument.activeModes = [1, 2];
 
 			updateViewChangesState('sidebyside');
 		};

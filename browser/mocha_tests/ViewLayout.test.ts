@@ -956,6 +956,110 @@ describe('View Layout Tests', function () {
 		try { assertRaceProtection(ctx); }
 		finally { ctx.restore(); }
 	});
+
+	// ================================================================
+	// View-changes transitions (docdispatcher)
+	// ================================================================
+
+	// The tile render mode must follow the active layout as soon as the
+	// user switches view, without waiting for the next server status
+	// message. The normal view renders in the standard mode (0); the
+	// side-by-side compare view renders in the two redline modes (1 and
+	// 2). If the mode lagged behind the layout, tiles would be requested
+	// in the wrong mode or dropped as belonging to an inactive mode, so
+	// the view would stay blank until a later status message caught up.
+	it('View-changes transitions set the tile render mode to match the layout', function () {
+		setupAppStubs(7.5);
+
+		// The view-changes actions reach for a few more map hooks than the
+		// pure layout tests need. Provide no-op stand-ins so the actions run
+		// without a live map.
+		const map: any = app.map;
+		map.fire = function () {};
+		map.sendUnoCommand = function () {};
+		map._docLayer._docType = 'text';
+		map._docLayer._fitWidthZoom = function () {};
+		const itemValues: Record<string, string> = {};
+		map.stateChangeHandler = {
+			setItemValue: function (key: string, value: string) {
+				itemValues[key] = value;
+			},
+			getItemValue: function (key: string) {
+				return itemValues[key];
+			},
+		};
+		(app.sectionContainer as any).requestReDraw = function () {};
+
+		const originalWindowMode = (window as any).mode;
+		(window as any).mode = {
+			isSmallScreenDevice: function () { return false; },
+		};
+
+		const activeDocument = new DocumentBase();
+		(activeDocument as any)._fileSize = new cool.SimplePoint(7500, 49000);
+		app.activeDocument = activeDocument;
+		app.activeDocument.activeLayout = new ViewLayoutWriter();
+
+		// Keep the mode bookkeeping isolated from the tile pipeline: neutralise
+		// the redraw that the switch to the normal layout runs, and drop the
+		// deferred task the compare layout queues while being constructed.
+		const tileManager: any = resetRenderManagerState();
+		tileManager.redraw = function () {};
+		const layoutingService: any = app.layoutingService;
+		const originalAppendLayoutingTask =
+			layoutingService.appendLayoutingTask;
+		layoutingService.appendLayoutingTask = function () {};
+
+		const dispatcher: any =
+			new (app.definitions as any)['dispatcher']('text');
+
+		try {
+			// Radio menu: entering side-by-side activates both redline modes.
+			dispatcher.actionsMap['viewchanges-sidebyside']();
+			nodeassert.strictEqual(
+				app.activeDocument.activeLayout.type,
+				'ViewLayoutCompareChanges',
+				'side-by-side must switch to the compare layout',
+			);
+			nodeassert.deepStrictEqual(
+				app.activeDocument.activeModes,
+				[1, 2],
+				'side-by-side must activate the two redline modes',
+			);
+
+			// Radio menu: the inline (normal) view returns to the standard mode.
+			dispatcher.actionsMap['viewchanges-inline']();
+			nodeassert.strictEqual(
+				app.activeDocument.activeLayout.type,
+				'ViewLayoutWriter',
+				'inline must switch back to the normal layout',
+			);
+			nodeassert.deepStrictEqual(
+				app.activeDocument.activeModes,
+				[0],
+				'inline view must activate the standard mode',
+			);
+
+			// Toggle button: normal to side-by-side.
+			dispatcher.actionsMap['comparechanges']();
+			nodeassert.deepStrictEqual(
+				app.activeDocument.activeModes,
+				[1, 2],
+				'compare toggle into side-by-side must activate the redline modes',
+			);
+
+			// Toggle button: side-by-side back to normal.
+			dispatcher.actionsMap['comparechanges']();
+			nodeassert.deepStrictEqual(
+				app.activeDocument.activeModes,
+				[0],
+				'compare toggle back to normal must activate the standard mode',
+			);
+		} finally {
+			layoutingService.appendLayoutingTask = originalAppendLayoutingTask;
+			(window as any).mode = originalWindowMode;
+		}
+	});
 });
 
 });
