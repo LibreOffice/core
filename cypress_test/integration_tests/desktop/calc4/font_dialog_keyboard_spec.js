@@ -6,13 +6,19 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Font dialog keyboard navigation', function() {
 	beforeEach(function() {
 		helper.setupAndLoadDocument('calc/top_toolbar.ods');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	it('Up Arrow from the first font entry focuses the search field', function() {
 		calcHelper.dblClickOnFirstCell();
-		cy.getFrameWindow().then(function(win) {
-			win.app.map.sendUnoCommand('.uno:FontDialog');
+		cy.then(() => {
+			this.win.app.map.sendUnoCommand('.uno:FontDialog');
 		});
+
+		cy.cGet('.ui-dialog[role="dialog"]').should('have.length', 1);
+		helper.processToIdle(this.win);
 
 		// The font-name list is a treeview with its own search field.
 		cy.cGet('#trWestFontName .ui-treeview-search-input').should('exist');
