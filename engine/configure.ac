@@ -1696,7 +1696,7 @@ AC_ARG_ENABLE(avahi,
 AC_ARG_ENABLE(msvc-debug-runtime,
     AS_HELP_STRING([--enable-msvc-debug-runtime],
         [Determines whether to use the Microsoft Visual Studio debugging runtime.
-         Automatically turned on by --enable-dbgutil but not by --enable-debug])
+         Automatically turned on by --enable-dbgutil and --enable-debug])
 )
 
 AC_ARG_ENABLE(msvc-analyze,
@@ -1726,7 +1726,8 @@ libo_FUZZ_ARG_ENABLE(dbgutil,
 libo_FUZZ_ARG_ENABLE(debug,
     AS_HELP_STRING([--enable-debug],
         [Include debugging information, disable compiler optimization and inlining plus
-         extra debugging code like assertions. Extra large build! (enables -g compiler flag).]))
+         extra debugging code like assertions. Extra large build! (enables -g compiler flag).
+         On Windows this is the same as --enable-dbgutil.]))
 
 libo_FUZZ_ARG_ENABLE(split-debug,
     AS_HELP_STRING([--disable-split-debug],
@@ -4586,6 +4587,15 @@ AC_SUBST(GCC_VERSION)
 
 dnl Set the ENABLE_DBGUTIL variable
 dnl ===================================================================
+dnl
+dnl On Windows treat --enable-debug the same as --enable-dbgutil. This matches the CODA Visual
+dnl Studio project better which has only a choice between Debug and Release anyway. Debug in CODA is
+dnl like dbgutil in engine. As we link some static C++ libraries (Poco) built in engine with the
+dnl CODA code they must match in C++ runtime used.
+dnl
+if test "$_os" = "WINNT" -a "$enable_debug" = "yes"; then
+    enable_dbgutil=yes
+fi
 AC_MSG_CHECKING([whether to build with additional debug utilities])
 if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     ENABLE_DBGUTIL="TRUE"
