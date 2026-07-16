@@ -71,7 +71,7 @@ endif
 ifeq (,$(DISABLE_DYNLOADING))
 gb_LinkTarget_LDFLAGS += \
 	-Wl,-rpath-link,$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
-	-Wl,-z,$(if $(ENABLE_PACK_RELATIVE_RELOCS),pack-relative-relocs,combreloc) \
+	-Wl,-z,combreloc \
 	$(if $(ENABLE_HARDENING_FLAGS),$(HARDENING_LDFLAGS)) \
 
 endif
