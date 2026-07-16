@@ -21,6 +21,7 @@
 #include <optional>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace AIUtil
 {
@@ -42,6 +43,57 @@ bool isPreCannedAIProviderHost(std::string_view host);
 /// path such as "/v1/chat/completions" is appended, so a stored value that
 /// already ends in "/v1" does not produce a doubled "/v1/v1/..." path.
 std::string normalizeAIBaseUrl(std::string_view baseUrl);
+
+/// One command of the Impress SlideCommands vocabulary. The table behind
+/// getSlideCommands() is the single source of truth for the vocabulary.
+struct SlideCommandInfo
+{
+    /// Base command name, the part of a command key before any ".N" suffix.
+    std::string_view name;
+    /// True when the model may emit the command itself. False marks a
+    /// command the server alone splices into a transform.
+    bool allowedFromModel;
+    /// Title of the documentation section the command is listed under.
+    /// Commands sharing a title are grouped, in table order. Empty for a
+    /// command with no documentation lines.
+    std::string_view docSection;
+    /// Documentation lines for the command, separated by newlines, without
+    /// a trailing newline. Empty for an undocumented command.
+    std::string_view docLines;
+};
+
+/// The Impress SlideCommands vocabulary, in documentation order.
+const std::vector<SlideCommandInfo>& getSlideCommands();
+
+/// True when the key's base name (before any ".N" suffix) is a SlideCommands
+/// command the server alone may add to a transform.
+bool isServerOnlySlideCommand(const std::string& key);
+
+/// One slide layout in the set offered to the model.
+struct SlideLayoutInfo
+{
+    /// The AUTOLAYOUT_* name.
+    std::string_view name;
+    /// The numeric AutoLayout id matching the name.
+    int id;
+    /// How many placeholder objects the layout puts on a slide, counting the
+    /// title. Placeholders are addressed by index from 0, so the highest index
+    /// a layout offers is one less than this. A layout with no placeholders at
+    /// all has 0.
+    int placeholderCount;
+    /// One-line description for the model-facing documentation.
+    std::string_view description;
+};
+
+/// The slide layouts offered to the model, in documentation order.
+const std::vector<SlideLayoutInfo>& getSlideLayouts();
+
+/// True when the name is one of the layouts in getSlideLayouts().
+bool isKnownSlideLayout(const std::string& name);
+
+/// The SlideCommands and layout portion of the Impress transform
+/// documentation, built from getSlideCommands() and getSlideLayouts().
+const std::string& getSlideCommandDocs();
 
 /// Parse a tool's argument JSON. Most models emit a single object ({...}), but
 /// some emit a JSON array of objects ([{...},{...}]); when that happens, merge

@@ -31,11 +31,15 @@ class AIUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testValidateTransformStructure);
     CPPUNIT_TEST(testParseLenientArgs);
     CPPUNIT_TEST(testNormalizeAIBaseUrl);
+    CPPUNIT_TEST(testSlideCommandTable);
+    CPPUNIT_TEST(testSlideCommandDocs);
     CPPUNIT_TEST_SUITE_END();
 
     void testValidateTransformStructure();
     void testParseLenientArgs();
     void testNormalizeAIBaseUrl();
+    void testSlideCommandTable();
+    void testSlideCommandDocs();
 };
 
 void AIUtilTests::testValidateTransformStructure()
@@ -142,6 +146,78 @@ void AIUtilTests::testNormalizeAIBaseUrl()
 
     // The empty string maps to the empty string.
     LOK_ASSERT_EQUAL(std::string(), AIUtil::normalizeAIBaseUrl(""));
+}
+
+void AIUtilTests::testSlideCommandTable()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A server-only command is recognized with and without an object-index
+    // suffix; commands the model may emit and unknown names are not flagged.
+    LOK_ASSERT(AIUtil::isServerOnlySlideCommand("ApplyTemplate"));
+    LOK_ASSERT(AIUtil::isServerOnlySlideCommand("ApplyTemplate.2"));
+    LOK_ASSERT(!AIUtil::isServerOnlySlideCommand("SetText.0"));
+    LOK_ASSERT(!AIUtil::isServerOnlySlideCommand("DeleteSlide"));
+    LOK_ASSERT(!AIUtil::isServerOnlySlideCommand("BogusCommand"));
+
+    // A server-only command still validates: the server splices it into
+    // transforms, so the vocabulary must keep accepting it.
+    auto parse = [](const std::string& s)
+    {
+        Poco::JSON::Object::Ptr obj;
+        JsonUtil::parseJSON(s, obj);
+        return obj;
+    };
+    LOK_ASSERT(!AIUtil::validateTransformStructure(
+                    parse(R"({"Transforms":{"SlideCommands":[{"ApplyTemplate":"Mint"}]}})"))
+                    .has_value());
+
+    // The layout set knows its members.
+    LOK_ASSERT(AIUtil::isKnownSlideLayout("AUTOLAYOUT_TITLE_CONTENT"));
+    LOK_ASSERT(AIUtil::isKnownSlideLayout("AUTOLAYOUT_ONLY_TEXT"));
+    LOK_ASSERT(!AIUtil::isKnownSlideLayout("AUTOLAYOUT_BOGUS"));
+    LOK_ASSERT(!AIUtil::isKnownSlideLayout(""));
+}
+
+void AIUtilTests::testSlideCommandDocs()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string& docs = AIUtil::getSlideCommandDocs();
+
+    // Every command the model may emit and that carries documentation
+    // appears in the generated text; a server-only command does not.
+    for (const auto& cmd : AIUtil::getSlideCommands())
+    {
+        const std::string token = "{\"" + std::string(cmd.name);
+        if (cmd.allowedFromModel && !cmd.docLines.empty())
+            LOK_ASSERT_MESSAGE("missing from docs: " + std::string(cmd.name),
+                               docs.find(token) != std::string::npos);
+        if (!cmd.allowedFromModel)
+            LOK_ASSERT_MESSAGE("server-only command leaked into docs: " + std::string(cmd.name),
+                               docs.find(std::string(cmd.name)) == std::string::npos);
+    }
+
+    // Every layout offered to the model is documented with its name and id.
+    for (const auto& layout : AIUtil::getSlideLayouts())
+    {
+        const std::string line =
+            "- " + std::string(layout.name) + " (id=" + std::to_string(layout.id) + ")";
+        LOK_ASSERT_MESSAGE("missing layout: " + std::string(layout.name),
+                           docs.find(line) != std::string::npos);
+    }
+
+    // The section grouping survives: each documented section title appears
+    // exactly once, so two commands of one section share one heading.
+    for (const auto& cmd : AIUtil::getSlideCommands())
+    {
+        if (cmd.docSection.empty())
+            continue;
+        const std::string title(cmd.docSection);
+        const std::size_t first = docs.find(title);
+        LOK_ASSERT(first != std::string::npos);
+        LOK_ASSERT(docs.find(title, first + 1) == std::string::npos);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(AIUtilTests);

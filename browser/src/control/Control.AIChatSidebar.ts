@@ -2298,6 +2298,150 @@ namespace cool {
 			return app.map.aiModelName || _('The AI assistant');
 		}
 
+		// Builds a short, deterministic description of what a slide transform
+		// does, counted from the commands themselves. Returns null when the
+		// payload has no slide commands to count (other document types, or a
+		// payload that does not parse).
+		private describeTransform(
+			transformJson: string | undefined,
+		): string | null {
+			if (!transformJson) return null;
+			let cmds: any;
+			try {
+				const obj = JSON.parse(transformJson);
+				cmds = obj && obj.Transforms && obj.Transforms.SlideCommands;
+			} catch (e) {
+				return null;
+			}
+			if (!Array.isArray(cmds) || !cmds.length) return null;
+
+			const counts: { [base: string]: number } = {};
+			let template: string | null = null;
+			for (const cmd of cmds) {
+				if (!cmd || typeof cmd !== 'object') continue;
+				for (const key of Object.keys(cmd)) {
+					const base = key.split('.')[0];
+					if (base === 'ApplyTemplate' && typeof cmd[key] === 'string') {
+						template = cmd[key];
+					}
+					counts[base] = (counts[base] || 0) + 1;
+				}
+			}
+
+			const one = (n: number, singular: string, plural: string): string =>
+				n === 1 ? singular : plural.replace('%1', String(n));
+			const parts: string[] = [];
+
+			const inserts =
+				(counts['InsertMasterSlide'] || 0) +
+				(counts['InsertMasterSlideByName'] || 0);
+			if (inserts)
+				parts.push(one(inserts, _('insert 1 slide'), _('insert %1 slides')));
+			if (counts['DeleteSlide'])
+				parts.push(
+					one(
+						counts['DeleteSlide'],
+						_('delete 1 slide'),
+						_('delete %1 slides'),
+					),
+				);
+			if (counts['DuplicateSlide'])
+				parts.push(
+					one(
+						counts['DuplicateSlide'],
+						_('duplicate 1 slide'),
+						_('duplicate %1 slides'),
+					),
+				);
+			if (counts['MoveSlide'])
+				parts.push(
+					one(counts['MoveSlide'], _('move 1 slide'), _('move %1 slides')),
+				);
+			if (counts['RenameSlide'])
+				parts.push(
+					one(
+						counts['RenameSlide'],
+						_('rename 1 slide'),
+						_('rename %1 slides'),
+					),
+				);
+			const layouts =
+				(counts['ChangeLayout'] || 0) + (counts['ChangeLayoutByName'] || 0);
+			if (layouts)
+				parts.push(one(layouts, _('change 1 layout'), _('change %1 layouts')));
+			if (counts['SetText'])
+				parts.push(
+					one(
+						counts['SetText'],
+						_('set text in 1 place'),
+						_('set text in %1 places'),
+					),
+				);
+			if (counts['EditTextObject'])
+				parts.push(
+					one(
+						counts['EditTextObject'],
+						_('format text in 1 place'),
+						_('format text in %1 places'),
+					),
+				);
+			if (counts['GenerateImage'])
+				parts.push(
+					one(
+						counts['GenerateImage'],
+						_('generate 1 image'),
+						_('generate %1 images'),
+					),
+				);
+			if (counts['UnoCommand'])
+				parts.push(
+					one(
+						counts['UnoCommand'],
+						_('run 1 document command'),
+						_('run %1 document commands'),
+					),
+				);
+			const described = [
+				'InsertMasterSlide',
+				'InsertMasterSlideByName',
+				'DeleteSlide',
+				'DuplicateSlide',
+				'MoveSlide',
+				'RenameSlide',
+				'ChangeLayout',
+				'ChangeLayoutByName',
+				'SetText',
+				'EditTextObject',
+				'GenerateImage',
+				'UnoCommand',
+				'ApplyTemplate',
+				// Navigation and selection do not change the document, so
+				// the badge leaves them out on purpose.
+				'JumpToSlide',
+				'JumpToSlideByName',
+				'MarkObject',
+				'UnMarkObject',
+			];
+			for (const base of Object.keys(counts)) {
+				if (described.indexOf(base) >= 0) continue;
+				// A command these descriptions do not know is reported by its
+				// raw name, so the badge cannot under-describe the change.
+				parts.push(
+					one(
+						counts[base],
+						_('run 1 %2 command'),
+						_('run %1 %2 commands'),
+					).replace('%2', base),
+				);
+			}
+
+			if (template)
+				parts.push(_("apply the design template '%1'").replace('%1', template));
+
+			if (!parts.length) return null;
+			return _('This will: %1.').replace('%1', parts.join(', '));
+		}
+
 		private onAIChatApproval(data: any): void {
 			if (data.requestId !== this.currentRequestId) return;
 			this.hintText = '';
@@ -2316,10 +2460,15 @@ namespace cool {
 				}
 			} else if (data.toolName === 'transform_document_structure') {
 				const summary = data.summary || _('Modify document structure');
+				// The summary above is the model's own description of the
+				// change; the badge below is counted from the commands that
+				// will actually run, so the card cannot under-describe them.
+				const badge = this.describeTransform(data.transformJson);
 				content =
 					_('%1 wants to modify your document:').replace('%1', name) +
 					'\n\n' +
 					summary +
+					(badge ? '\n\n' + badge : '') +
 					'\n\n' +
 					_('Do you want to apply this change?');
 			} else if (data.toolName === 'set_cell_formula') {

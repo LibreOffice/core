@@ -45,6 +45,7 @@
 #include <svl/srchitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdoashp.hxx>
+#include <svx/svdpagv.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svddrgmt.hxx>
@@ -227,60 +228,64 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformExtractSlide
 
     OString aExpectedStr
         = "{ \"DocStructure\": { \"SlideCount\": 7, \"MasterSlideCount\": 8, \"MasterSlides\": { "
-          "\"MasterSlide 0\": { \"Name\": \"Topic_Separator_Purple\"}, \"MasterSlide 1\": { "
-          "\"Name\": \"Content_sidebar_White\"}, \"MasterSlide 2\": { \"Name\": \"Topic Separator "
-          "white\"}, \"MasterSlide 3\": { \"Name\": \"Content_sidebar_White_\"}, \"MasterSlide "
-          "4\": { \"Name\": \"Topic_Separator_Purple_\"}, \"MasterSlide 5\": { \"Name\": "
-          "\"Content_White_Purple_Sidebar\"}, \"MasterSlide 6\": { \"Name\": \"Default 1\"}, "
-          "\"MasterSlide 7\": { \"Name\": \"Default 1_\"}}, \"Slides\": { \"Slide 0\": { "
-          "\"SlideName\": \"Slide3-Renamed\", \"MasterSlideName\": "
-          "\"Content_White_Purple_Sidebar\", \"LayoutId\": 3, \"LayoutName\": "
-          "\"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 4, \"Objects\": { \"Objects 0\": { "
-          "\"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ "
-          "\"Friendly Open Source Project\"]}}}, \"Objects 1\": { }, \"Objects 2\": { "
-          "\"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 9, \"Paragraphs\": [ \"Real "
-          "Open Source\", \"100% open-source code\", \"Built with LibreOffice technology\", "
-          "\"Built with Free Software technology stacks: primarily C++\", \"Runs best on Linux\", "
-          "\"Open Development\", \"Anyone can contribute & participate\", \"Follow commits and "
-          "tickets\", \"Public community calls - forum has details\"]}}}, \"Objects 3\": { "
-          "\"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 5, \"Paragraphs\": [ "
-          "\"Focus:\", \"a non-renewable resource.\", \"Office Productivity & Documents\", "
-          "\"Excited about migrating your\\u0001documents\", \"Grateful to our partners for "
-          "solving\\u0001other problems.\"]}}}}}, \"Slide 1\": { \"SlideName\": \"Slide 2\", "
-          "\"MasterSlideName\": \"Topic_Separator_Purple\", \"LayoutId\": 3, \"LayoutName\": "
-          "\"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 1, \"Objects\": { \"Objects 0\": { "
-          "\"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 3, \"Paragraphs\": [ "
-          "\"Collabora Online\", \"\", \"Powerful Online Collaboration\"]}}}}}, \"Slide 2\": { "
-          "\"SlideName\": \"Slide1-Duplicated\", \"MasterSlideName\": \"Topic_Separator_Purple\", "
-          "\"LayoutId\": 3, \"LayoutName\": \"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 1, "
-          "\"Objects\": { \"Objects 0\": { \"TextCount\": 1, \"Texts\": { \"Text 0\": { "
-          "\"ParaCount\": 3, \"Paragraphs\": [ \"Collabora Online\", \"\", \"Powerful Online "
-          "Collaboration\"]}}}}}, \"Slide 3\": { \"SlideName\": \"SlideInserted-1\", "
-          "\"MasterSlideName\": \"Content_sidebar_White\", \"LayoutId\": 18, \"LayoutName\": "
-          "\"AUTOLAYOUT_TITLE_4CONTENT\", \"ObjectCount\": 5, \"Objects\": { \"Objects 0\": { "
-          "\"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ "
-          "\"Click to add Title\"]}}}, \"Objects 1\": { \"TextCount\": 1, \"Texts\": { \"Text 0\": "
-          "{ \"ParaCount\": 1, \"Paragraphs\": [ \"Click to add Text\"]}}}, \"Objects 2\": { "
-          "\"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ "
-          "\"Click to add Text\"]}}}, \"Objects 3\": { \"TextCount\": 1, \"Texts\": { \"Text 0\": "
-          "{ \"ParaCount\": 1, \"Paragraphs\": [ \"Click to add Text\"]}}}, \"Objects 4\": { "
-          "\"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ "
-          "\"Click to add Text\"]}}}}}, \"Slide 4\": { \"SlideName\": \"Slide 5\", "
-          "\"MasterSlideName\": \"Topic_Separator_Purple\", \"LayoutId\": 3, \"LayoutName\": "
-          "\"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 1, \"Objects\": { \"Objects 0\": { "
-          "\"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ \"With "
-          "thanks to our Partners, Customers & Community !\"]}}}}}, \"Slide 5\": { \"SlideName\": "
-          "\"SlideInserted-Name\", \"MasterSlideName\": \"Topic Separator white\", \"LayoutId\": "
-          "3, \"LayoutName\": \"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 3, \"Objects\": { "
-          "\"Objects 0\": { \"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 1, "
-          "\"Paragraphs\": [ \"first\"]}}}, \"Objects 1\": { \"TextCount\": 1, \"Texts\": { \"Text "
-          "0\": { \"ParaCount\": 1, \"Paragraphs\": [ \"second\"]}}}, \"Objects 2\": { "
-          "\"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ "
-          "\"third\"]}}}}}, \"Slide 6\": { \"SlideName\": \"Slide 7\", \"MasterSlideName\": "
-          "\"Topic_Separator_Purple\", \"LayoutId\": 3, \"LayoutName\": "
-          "\"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 1, \"Objects\": { \"Objects 0\": { "
-          "\"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 3, \"Paragraphs\": [ "
-          "\"Collabora Online\", \"\", \"Powerful Online Collaboration\"]}}}}}}}}"_ostr;
+          "\"MasterSlide 0\": { \"Name\": \"Topic_Separator_Purple\", \"Theme\": \"Office Theme\""
+          "}, \"MasterSlide 1\": { \"Name\": \"Content_sidebar_White\", \"Theme\": \"Office Theme"
+          "\"}, \"MasterSlide 2\": { \"Name\": \"Topic Separator white\", \"Theme\": \"Office The"
+          "me\"}, \"MasterSlide 3\": { \"Name\": \"Content_sidebar_White_\", \"Theme\": \"Office"
+          "\"}, \"MasterSlide 4\": { \"Name\": \"Topic_Separator_Purple_\", \"Theme\": \"Office\""
+          "}, \"MasterSlide 5\": { \"Name\": \"Content_White_Purple_Sidebar\", \"Theme\": \"Offic"
+          "e\"}, \"MasterSlide 6\": { \"Name\": \"Default 1\", \"Theme\": \"Office\"}, \"MasterSl"
+          "ide 7\": { \"Name\": \"Default 1_\", \"Theme\": \"Office\"}}, \"Slides\": { \"Slide 0"
+          "\": { \"SlideName\": \"Slide3-Renamed\", \"MasterSlideName\": \"Content_White_Purple_S"
+          "idebar\", \"LayoutId\": 3, \"LayoutName\": \"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCoun"
+          "t\": 4, \"Objects\": { \"Objects 0\": { \"Kind\": \"Title\", \"TextCount\": 1, \"Texts"
+          "\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ \"Friendly Open Source Project"
+          "\"]}}}, \"Objects 1\": { \"Kind\": \"Graphic\"}, \"Objects 2\": { \"Kind\": \"Outline"
+          "\", \"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 9, \"Paragraphs\": [ "
+          "\"Real Open Source\", \"100% open-source code\", \"Built with LibreOffice technology\""
+          ", \"Built with Free Software technology stacks: primarily C++\", \"Runs best on Linux"
+          "\", \"Open Development\", \"Anyone can contribute & participate\", \"Follow commits an"
+          "d tickets\", \"Public community calls - forum has details\"]}}}, \"Objects 3\": { \"Ki"
+          "nd\": \"Outline\", \"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 5, \"Pa"
+          "ragraphs\": [ \"Focus:\", \"a non-renewable resource.\", \"Office Productivity & Docum"
+          "ents\", \"Excited about migrating your\\u0001documents\", \"Grateful to our partners f"
+          "or solving\\u0001other problems.\"]}}}}}, \"Slide 1\": { \"SlideName\": \"Slide 2\", "
+          "\"MasterSlideName\": \"Topic_Separator_Purple\", \"LayoutId\": 3, \"LayoutName\": \"AU"
+          "TOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 1, \"Objects\": { \"Objects 0\": { \"TextC"
+          "ount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 3, \"Paragraphs\": [ \"Collabora "
+          "Online\", \"\", \"Powerful Online Collaboration\"]}}}}}, \"Slide 2\": { \"SlideName\":"
+          " \"Slide1-Duplicated\", \"MasterSlideName\": \"Topic_Separator_Purple\", \"LayoutId\":"
+          " 3, \"LayoutName\": \"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 1, \"Objects\": { "
+          "\"Objects 0\": { \"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 3, \"Para"
+          "graphs\": [ \"Collabora Online\", \"\", \"Powerful Online Collaboration\"]}}}}}, \"Sli"
+          "de 3\": { \"SlideName\": \"SlideInserted-1\", \"MasterSlideName\": \"Content_sidebar_W"
+          "hite\", \"LayoutId\": 18, \"LayoutName\": \"AUTOLAYOUT_TITLE_4CONTENT\", \"ObjectCount"
+          "\": 5, \"Objects\": { \"Objects 0\": { \"Kind\": \"Title\", \"Empty\": true, \"TextCou"
+          "nt\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ \"Click to add"
+          " Title\"]}}}, \"Objects 1\": { \"Kind\": \"Outline\", \"Empty\": true, \"TextCount\": "
+          "1, \"Texts\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ \"Click to add Text"
+          "\"]}}}, \"Objects 2\": { \"Kind\": \"Outline\", \"Empty\": true, \"TextCount\": 1, \"T"
+          "exts\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ \"Click to add Text\"]}}},"
+          " \"Objects 3\": { \"Kind\": \"Outline\", \"Empty\": true, \"TextCount\": 1, \"Texts\":"
+          " { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ \"Click to add Text\"]}}}, \"Obje"
+          "cts 4\": { \"Kind\": \"Outline\", \"Empty\": true, \"TextCount\": 1, \"Texts\": { \"Te"
+          "xt 0\": { \"ParaCount\": 1, \"Paragraphs\": [ \"Click to add Text\"]}}}}}, \"Slide 4\""
+          ": { \"SlideName\": \"Slide 5\", \"MasterSlideName\": \"Topic_Separator_Purple\", \"Lay"
+          "outId\": 3, \"LayoutName\": \"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 1, \"Objec"
+          "ts\": { \"Objects 0\": { \"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 1"
+          ", \"Paragraphs\": [ \"With thanks to our Partners, Customers & Community !\"]}}}}}, \""
+          "Slide 5\": { \"SlideName\": \"SlideInserted-Name\", \"MasterSlideName\": \"Topic Separ"
+          "ator white\", \"LayoutId\": 3, \"LayoutName\": \"AUTOLAYOUT_TITLE_2CONTENT\", \"Object"
+          "Count\": 3, \"Objects\": { \"Objects 0\": { \"Kind\": \"Title\", \"TextCount\": 1, \"T"
+          "exts\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ \"first\"]}}}, \"Objects 1"
+          "\": { \"Kind\": \"Outline\", \"TextCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount"
+          "\": 1, \"Paragraphs\": [ \"second\"]}}}, \"Objects 2\": { \"Kind\": \"Outline\", \"Tex"
+          "tCount\": 1, \"Texts\": { \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ \"third\"]"
+          "}}}}}, \"Slide 6\": { \"SlideName\": \"Slide 7\", \"MasterSlideName\": \"Topic_Separat"
+          "or_Purple\", \"LayoutId\": 3, \"LayoutName\": \"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectC"
+          "ount\": 1, \"Objects\": { \"Objects 0\": { \"TextCount\": 1, \"Texts\": { \"Text 0\": "
+          "{ \"ParaCount\": 3, \"Paragraphs\": [ \"Collabora Online\", \"\", \"Powerful Online Co"
+          "llaboration\"]}}}}}}}}"_ostr;
 
     CPPUNIT_ASSERT_EQUAL(aExpectedStr, aJsonWriter.finishAndGetAsOString());
 }
@@ -647,6 +652,223 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUnoCommand)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
                          pImpressDocument->getSdDrawPages()->getDrawPageByIndex(0)->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSlideCommandJumpToSlideClamps)
+{
+    // JumpToSlide accepts "last" for the final slide, and an index past the
+    // end is clamped to it, so the commands that follow still land on a real
+    // slide.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    auto getSlideTitle = [&](sal_uInt16 nPage) -> OUString {
+        SdPage* pPage = pImpressDocument->GetDoc()->GetSdPage(nPage, PageKind::Standard);
+        SdrObject* pObj = pPage ? pPage->GetObj(0) : nullptr;
+        if (pObj && pObj->IsSdrTextObj())
+        {
+            SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObj);
+            if (pTextObj->GetOutlinerParaObject())
+                return pTextObj->GetOutlinerParaObject()->GetTextObject().GetText(0);
+        }
+        return OUString();
+    };
+
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"InsertMasterSlide": 0},
+            {"InsertMasterSlide": 0},
+            {"JumpToSlide": 0},
+            {"SetText.0": "first"},
+            {"JumpToSlide": "last"},
+            {"SetText.0": "third"}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pImpressDocument->getDrawPages()->getCount());
+    CPPUNIT_ASSERT_EQUAL(u"first"_ustr, getSlideTitle(0));
+    CPPUNIT_ASSERT_EQUAL(u"third"_ustr, getSlideTitle(2));
+
+    // An index past the end addresses the last slide instead of being dropped.
+    static constexpr OUString aJsonClamp = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"JumpToSlide": 99},
+            {"SetText.0": "clamped"}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJsonClamp) });
+
+    CPPUNIT_ASSERT_EQUAL(u"clamped"_ustr, getSlideTitle(2));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSlideCommandDeleteSlideKeepsOnlySlide)
+{
+    // Deleting is refused when the deck has a single slide, so a transform
+    // cannot leave an empty document behind.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pImpressDocument->getDrawPages()->getCount());
+
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"DeleteSlide": 0}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pImpressDocument->getDrawPages()->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSlideCommandMarkObject)
+{
+    // MarkObject selects a shape on the current slide and UnMarkObject
+    // releases it again.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+
+    static constexpr OUString aJsonMark = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"MarkObject": 0}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJsonMark) });
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+                         pView->GetMarkedObjectList().GetMarkCount());
+
+    static constexpr OUString aJsonUnMark = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"UnMarkObject": 0}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJsonUnMark) });
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+                         pView->GetMarkedObjectList().GetMarkCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSlideCommandEditTextObject)
+{
+    // EditTextObject edits inside a shape's existing text: SelectText picks a
+    // slice and an insert overwrites just that slice, leaving the rest alone.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_CONTENT"},
+            {"SetText.0": "Hello World"},
+            {"EditTextObject.0": [
+                {"SelectText": [0, 0, 0, 5]},
+                {"InsertText": "Howdy"}
+            ]}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    SdPage* pPage = pImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObj);
+    CPPUNIT_ASSERT(pObj->IsSdrTextObj());
+    SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObj);
+    CPPUNIT_ASSERT(pTextObj->GetOutlinerParaObject());
+    // The insert replaces the selected "Hello", not the whole text.
+    CPPUNIT_ASSERT_EQUAL(u"Howdy World"_ustr,
+                         pTextObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSlideCommandInsertImageAtKeepsView)
+{
+    // InsertImageAt addresses slide and object in the command key itself: the
+    // image lands on that slide while the view keeps showing the slide it was
+    // on.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    // A second slide whose content placeholder the image will replace. The
+    // view stays on the first slide because no command after the insert moves
+    // it.
+    static constexpr OUString aJsonInsert = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"InsertMasterSlide": 0}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJsonInsert) });
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pImpressDocument->getDrawPages()->getCount());
+
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    const SdrPage* pShownBefore = pView->GetSdrPageView()->GetPage();
+
+    OUString aImageURL = createFileURL(u"TestImage1.png");
+    OUString aJson = "{ \"Transforms\": { \"SlideCommands\": ["
+                     "{ \"InsertImageAt.1.1\": \""
+                     + aImageURL + "\" } ] } }";
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    SdPage* pPage1 = pImpressDocument->GetDoc()->GetSdPage(1, PageKind::Standard);
+    SdrObject* pObj = pPage1->GetObj(1);
+    CPPUNIT_ASSERT(pObj);
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::Graphic, pObj->GetObjIdentifier());
+    // The view did not navigate to the slide the image was placed on.
+    CPPUNIT_ASSERT_EQUAL(pShownBefore, static_cast<const SdrPage*>(pView->GetSdrPageView()->GetPage()));
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)

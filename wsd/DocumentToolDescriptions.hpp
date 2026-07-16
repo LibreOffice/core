@@ -62,15 +62,18 @@ inline constexpr const char* EXTRACT_CALC =
 inline constexpr const char* EXTRACT_IMPRESS =
     " For a presentation, filter=\"text\" returns the text of every slide as "
     "markdown, one section per slide, for summarizing or answering questions "
-    "about the content. With filter=\"slides\" it returns slide names, per-slide "
-    "object names, and slide text.";
+    "about the content. With filter=\"slides\" it returns each slide's name, "
+    "layout, and master, the master slides with their theme, and each object "
+    "with its placeholder kind (Title, Outline, Graphic, ...), an Empty flag "
+    "for placeholders that still await content, and its text.";
 
 /// Shared intro for the transform parameter, valid for every document type.
 inline constexpr const char* TRANSFORM_INTRO =
     R"(JSON transformation commands. The top-level object can contain "Transforms" and/or "UnoCommand" objects in any order.)";
 
-/// Impress/ODP-specific transform documentation.
-inline constexpr const char* TRANSFORM_IMPRESS =
+/// Impress/ODP-specific transform documentation, the part before the
+/// generated SlideCommands vocabulary (see AIUtil::getSlideCommandDocs()).
+inline constexpr const char* TRANSFORM_IMPRESS_INTRO =
     R"(
 
 --- Impress/ODP Presentations ---
@@ -78,58 +81,12 @@ inline constexpr const char* TRANSFORM_IMPRESS =
 For presentations, use {"Transforms": {"SlideCommands": [...]}} where SlideCommands is an array of operations applied in order. There is always a "current slide" (default: index 0) that most commands act on. All slides must go in a single SlideCommands array - use InsertMasterSlide to add new slides within the same array. Never send multiple JSON objects.
 
 Do NOT prefix text lines with "- " (any bullet marker is added automatically). Do NOT put sub-headings or blank lines inside content placeholders - only the items to be listed. Choose the layout that fits the content (see Available layouts below). The instructions for this request say how much formatting to apply yourself; when a design template is in use, its master slides handle the look, so leave styling to them.
+)";
 
-Navigation:
-- {"JumpToSlide": N} - jump to 0-based slide index; use "last" for last slide
-- {"JumpToSlideByName": "name"} - jump to named slide
-
-Slide management (inserts after current slide and jumps to new slide):
-- {"InsertMasterSlide": N} - insert slide based on master slide at index N
-- {"InsertMasterSlideByName": "name"} - insert slide by master slide name
-- {"DeleteSlide": N} - delete slide at index; use "" for current slide
-- {"DuplicateSlide": N} - duplicate slide at index; use "" for current
-- {"MoveSlide": N} - move current slide to position N
-- {"MoveSlide.X": N} - move slide at index X to position N
-- {"RenameSlide": "name"} - rename current slide (must be unique)
-
-Layout (applied to current slide):
-- {"ChangeLayoutByName": "name"} - set layout by name
-- {"ChangeLayout": N} - set layout by numeric ID
-Available layouts (use ChangeLayoutByName with these names):
-- AUTOLAYOUT_TITLE (id=0) - title + subtitle. Use for opening or closing slides.
-- AUTOLAYOUT_TITLE_CONTENT (id=1) - title + one content area below. The default layout for bullet points, text, or a single diagram.
-- AUTOLAYOUT_TITLE_2CONTENT (id=3) - title + two content areas side by side. Use for comparisons, pros/cons, or before/after.
-- AUTOLAYOUT_TITLE_CONTENT_2CONTENT (id=12) - title + one large content left + two smaller content areas stacked right.
-- AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT (id=14) - title + two content areas stacked vertically. Use when two blocks need equal width.
-- AUTOLAYOUT_TITLE_2CONTENT_CONTENT (id=15) - title + two smaller content areas stacked left + one large content right.
-- AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT (id=16) - title + two content areas side by side over one full-width content area.
-- AUTOLAYOUT_TITLE_4CONTENT (id=18) - title + four content areas in a 2x2 grid. Use for dashboards or quadrant layouts.
-- AUTOLAYOUT_TITLE_ONLY (id=19) - title only, no content placeholders. Use for section dividers or title cards.
-- AUTOLAYOUT_NONE (id=20) - blank slide, no placeholders at all. Use for fully custom or image-only slides.
-- AUTOLAYOUT_ONLY_TEXT (id=32) - one centered text area, no title. Use for quotes, key statements, or transition text.
-- AUTOLAYOUT_TITLE_6CONTENT (id=34) - title + six content areas in a 3x2 grid.
-- AUTOLAYOUT_VTITLE_VCONTENT (id=28) - vertical title + vertical content. For vertical/CJK text.
-- AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT (id=27) - vertical title + two vertical content areas.
-- AUTOLAYOUT_TITLE_VCONTENT (id=29) - horizontal title + vertical content below.
-- AUTOLAYOUT_TITLE_2VTEXT (id=30) - title + two vertical text columns.
-
-Text content:
-- {"SetText.N": "text"} - set text of placeholder N on current slide (0=title, 1=first content, 2=second content, etc.). Use \n for paragraph breaks.
-
-Image generation (inserts AI-generated image into a placeholder):
-- {"GenerateImage.N": "prompt"} - generate an image from the text prompt using the AI image provider and insert it into placeholder N on the current slide, replacing the placeholder content. N is the 0-based object index (same as SetText.N). A loading placeholder is inserted immediately when the transform is applied, then the real image progressively replaces it after generation completes. Use descriptive prompts for best results. Example: {"GenerateImage.1": "A modern office building with glass facade at sunset, professional photography"}
-
-Object selection:
-- {"MarkObject": N} - select object at index on current slide
-- {"UnMarkObject": N} - deselect object at index
-
-Rich text editing:
-- {"EditTextObject.N": [...]} - edit text object N with sub-commands:
-  - {"SelectText": []} - select all text; [para] selects paragraph; [para,startChar,endPara,endChar] selects range; [para,char] positions cursor
-  - {"SelectParagraph": N} - select paragraph N
-  - {"InsertText": "text"} - insert/replace text at selection
-  - {"UnoCommand": "cmd"} - apply UNO command to selection
-
+/// Impress/ODP-specific transform documentation, the part after the
+/// generated SlideCommands vocabulary.
+inline constexpr const char* TRANSFORM_IMPRESS_DETAILS =
+    R"(
 UNO commands for text formatting (use inside EditTextObject):
 Toggle: .uno:Bold, .uno:Italic, .uno:Underline, .uno:Strikeout, .uno:Shadowed, .uno:OutlineFont, .uno:SuperScript, .uno:SubScript
 Lists: .uno:DefaultBullet, .uno:DefaultNumbering (affect whole paragraphs)

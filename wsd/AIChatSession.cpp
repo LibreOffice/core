@@ -192,7 +192,11 @@ std::string transformDescription(const std::string& docType)
     const bool unknownType = docType.empty();
 
     if (isImpress || unknownType)
-        desc += DocumentToolDescriptions::TRANSFORM_IMPRESS;
+    {
+        desc += DocumentToolDescriptions::TRANSFORM_IMPRESS_INTRO;
+        desc += AIUtil::getSlideCommandDocs();
+        desc += DocumentToolDescriptions::TRANSFORM_IMPRESS_DETAILS;
+    }
 
     // Writer (text/drawing) and unknown types use content controls.
     if (!isImpress)
@@ -524,18 +528,6 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     std::vector<std::string> designTemplateLayouts;
     if (!designTemplate.empty())
     {
-        static constexpr std::array<std::string_view, 10> knownLayouts = {
-            "AUTOLAYOUT_TITLE",
-            "AUTOLAYOUT_TITLE_CONTENT",
-            "AUTOLAYOUT_TITLE_2CONTENT",
-            "AUTOLAYOUT_TITLE_CONTENT_2CONTENT",
-            "AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT",
-            "AUTOLAYOUT_TITLE_2CONTENT_CONTENT",
-            "AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT",
-            "AUTOLAYOUT_TITLE_4CONTENT",
-            "AUTOLAYOUT_TITLE_ONLY",
-            "AUTOLAYOUT_NONE",
-        };
         Poco::JSON::Array::Ptr layouts = requestObj->getArray("designTemplateLayouts");
         const unsigned size = layouts ? std::min<unsigned>(layouts->size(), 100) : 0;
         for (unsigned i = 0; i < size; ++i)
@@ -544,12 +536,10 @@ bool AIChatSession::handleAction(const std::string& firstLine)
             if (!var.isString())
                 continue;
             const std::string layout = var.toString();
-            const bool known = std::find(knownLayouts.begin(), knownLayouts.end(), layout)
-                               != knownLayouts.end();
             const bool seen = std::find(designTemplateLayouts.begin(),
                                         designTemplateLayouts.end(), layout)
                               != designTemplateLayouts.end();
-            if (known && !seen)
+            if (AIUtil::isKnownSlideLayout(layout) && !seen)
                 designTemplateLayouts.push_back(layout);
         }
     }
@@ -1597,14 +1587,15 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
             return true;
         }
 
-        // The design template is the user's choice alone, including the choice
-        // of none. Drop any ApplyTemplate the model emitted - the engine takes
-        // the last ApplyTemplate in the array, so a model-chosen template would
-        // override the user's pick or theme a deck the user chose to keep
-        // plain. Then prepend the user's pick so the engine maps the slides
-        // this transform produces onto the template's masters. Re-applying it
-        // on a later transform is harmless - the engine reuses the master copy
-        // already in the document.
+        // Server-only commands are the server's to add, never the model's:
+        // a model-emitted ApplyTemplate would override the user's design
+        // pick, or theme a deck the user chose to keep plain, because the
+        // engine takes the last ApplyTemplate in the array. Drop any
+        // server-only command the model emitted, then prepend the user's
+        // pick so the engine maps the slides this transform produces onto
+        // the template's masters. Re-applying it on a later transform is
+        // harmless - the engine reuses the master copy already in the
+        // document.
         {
             Poco::JSON::Object::Ptr transforms = transformObj->getObject("Transforms");
             Poco::JSON::Array::Ptr cmds =
@@ -1629,21 +1620,20 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
                     {
                         std::vector<std::string> keys;
                         cmd->getNames(keys);
-                        std::vector<std::string> applyKeys;
+                        std::vector<std::string> serverOnlyKeys;
                         for (const std::string& key : keys)
                         {
-                            if (key.substr(0, key.find('.')) == "ApplyTemplate")
-                                applyKeys.push_back(key);
+                            if (AIUtil::isServerOnlySlideCommand(key))
+                                serverOnlyKeys.push_back(key);
                         }
-                        if (!applyKeys.empty())
+                        if (!serverOnlyKeys.empty())
                         {
-                            LOG_WRN("AIToolLoop: dropping model-emitted ApplyTemplate; "
-                                    "the design template is the user's choice ["
-                                    << requestId << ']');
+                            LOG_WRN("AIToolLoop: dropping model-emitted server-only command '"
+                                    << serverOnlyKeys.front() << "' [" << requestId << ']');
                             changed = true;
-                            for (const std::string& key : applyKeys)
+                            for (const std::string& key : serverOnlyKeys)
                                 cmd->remove(key);
-                            if (applyKeys.size() == keys.size())
+                            if (serverOnlyKeys.size() == keys.size())
                                 continue;
                         }
                     }

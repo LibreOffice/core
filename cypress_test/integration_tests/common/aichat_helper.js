@@ -84,7 +84,8 @@ function clickSend() {
  * With opts.approvalToolName set, an aichatapproval event carrying that
  * tool name is fired for each request, as if the model had asked to run
  * that tool. The result then follows the user's approve or reject
- * answer, like the real server.
+ * answer, like the real server. opts.approvalTransformJson rides on the
+ * approval event as the transform the approval is about.
  */
 function enableAIWithCaptureSocket(win, opts) {
 	var content = (opts && opts.content) || 'Mock AI response';
@@ -121,6 +122,7 @@ function enableAIWithCaptureSocket(win, opts) {
 						requestId: requestId,
 						toolName: approvalToolName,
 						summary: 'Mock change',
+						transformJson: (opts && opts.approvalTransformJson) || '',
 					});
 				} else {
 					fireResult(requestId);

@@ -1701,6 +1701,54 @@ std::optional<OutlinerParaObject> getTextParagraphSnapshot(const SdrTextObj* pTe
     return *pStored;
 }
 
+// The placeholder role of an object on a slide, as a stable name for the
+// document-structure JSON. Empty for a plain object with no placeholder role.
+OUString lcl_PresObjKindName(PresObjKind eKind)
+{
+    switch (eKind)
+    {
+        case PresObjKind::Title:
+            return u"Title"_ustr;
+        case PresObjKind::Outline:
+            return u"Outline"_ustr;
+        case PresObjKind::Text:
+            return u"Text"_ustr;
+        case PresObjKind::Graphic:
+            return u"Graphic"_ustr;
+        case PresObjKind::Object:
+            return u"Object"_ustr;
+        case PresObjKind::Chart:
+            return u"Chart"_ustr;
+        case PresObjKind::OrgChart:
+            return u"OrgChart"_ustr;
+        case PresObjKind::Table:
+            return u"Table"_ustr;
+        case PresObjKind::Page:
+            return u"Page"_ustr;
+        case PresObjKind::Handout:
+            return u"Handout"_ustr;
+        case PresObjKind::Notes:
+            return u"Notes"_ustr;
+        case PresObjKind::PagePreview:
+            return u"PagePreview"_ustr;
+        case PresObjKind::Header:
+            return u"Header"_ustr;
+        case PresObjKind::Footer:
+            return u"Footer"_ustr;
+        case PresObjKind::DateTime:
+            return u"DateTime"_ustr;
+        case PresObjKind::SlideNumber:
+            return u"SlideNumber"_ustr;
+        case PresObjKind::Calc:
+            return u"Calc"_ustr;
+        case PresObjKind::Media:
+            return u"Media"_ustr;
+        case PresObjKind::NONE:
+            break;
+    }
+    return OUString();
+}
+
 void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, const SdXImpressDocument* pDoc,
                            const std::map<OUString, OUString>& rArguments)
 {
@@ -1725,9 +1773,13 @@ void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, const SdXImpressDoc
         for (int nMPId = 0; nMPId < nMasterPageCount; nMPId++)
         {
             auto aMasterPageNode = rJsonWriter.startNode("MasterSlide " + std::to_string(nMPId));
-            const OUString& aMName
-                = pDoc->GetDoc()->GetMasterSdPage(nMPId, PageKind::Standard)->GetName();
-            rJsonWriter.put("Name", aMName);
+            SdPage* pMaster = pDoc->GetDoc()->GetMasterSdPage(nMPId, PageKind::Standard);
+            rJsonWriter.put("Name", pMaster->GetName());
+            // The color set and font scheme the master carries, when it has
+            // one. A deck's look follows its masters, so the theme names tell
+            // a reader of this structure about the deck's design.
+            if (auto const& pTheme = pMaster->getSdrPageProperties().getTheme())
+                rJsonWriter.put("Theme", pTheme->GetName());
         }
     }
 
@@ -1768,6 +1820,16 @@ void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, const SdXImpressDoc
                 {
                     auto aObjectNode = rJsonWriter.startNode("Objects " + std::to_string(nOId));
                     SdrObject* pSdrObj = pPageStandard->GetObj(nOId);
+                    // The object's placeholder role, and whether the
+                    // placeholder still shows only its prompt text - together
+                    // they say which layout slots hold content and which are
+                    // still empty.
+                    const OUString aKindName
+                        = lcl_PresObjKindName(pPageStandard->GetPresObjKind(pSdrObj));
+                    if (!aKindName.isEmpty())
+                        rJsonWriter.put("Kind", aKindName);
+                    if (pSdrObj->IsEmptyPresObj())
+                        rJsonWriter.put("Empty", true);
                     SdrTextObj* pSdrTxtObj = DynCastSdrTextObj(pSdrObj);
                     if (pSdrTxtObj && pSdrTxtObj->HasText())
                     {

@@ -493,6 +493,679 @@ bool lcl_ReplaceWithImage(SdDrawDocument* pDoc, SdPage* pPage, int nObjId,
     return true;
 }
 
+// State shared by the slide commands of one transform. The page counts are
+// the document's standard slide and master slide counts, refreshed before
+// each command runs. mnActPageId is the slide the view currently shows (-1
+// before the first command). mnNextPageId is the slide the next command
+// works on; navigation aligns the two between commands. moApplyTemplateUrl
+// holds the design-template URL resolved by an ApplyTemplate command; the
+// template is applied once, after the whole command sequence.
+struct SlideCommandContext
+{
+    SdDrawDocument* mpDoc;
+    DrawView* mpDrawView;
+    ::sd::View* mpView;
+    ViewShellBase* mpViewShellBase;
+    SfxUndoManager* mpUndoManager;
+    bool mbUndo;
+    sal_uInt16 mnPageCount = 0;
+    sal_uInt16 mnMasterPageCount = 0;
+    int mnActPageId = -1;
+    int mnNextPageId = 0;
+    std::optional<OUString> moApplyTemplateUrl = std::nullopt;
+};
+
+// Undo for a name or autolayout change. ModifyPageUndoAction snapshots the
+// page state on construction, so call this before applying the change.
+void lcl_AddModifyPageUndo(const SlideCommandContext& rCtx, SdPage* pPg,
+                           const OUString& rNewName, AutoLayout eNewLayout)
+{
+    if (!rCtx.mbUndo || !pPg)
+        return;
+    SdrLayerAdmin& rLayerAdmin = rCtx.mpDoc->GetLayerAdmin();
+    SdrLayerID aBg = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
+    SdrLayerID aBgObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
+    SdrLayerIDSet aVisibleLayers = pPg->TRG_GetMasterPageVisibleLayers();
+    rCtx.mpUndoManager->AddUndoAction(std::make_unique<ModifyPageUndoAction>(
+        *rCtx.mpDoc, pPg, rNewName, eNewLayout, aVisibleLayers.IsSet(aBg),
+        aVisibleLayers.IsSet(aBgObj)));
+}
+
+void handleJumpToSlide(SlideCommandContext& rCtx, const std::string& rKey,
+                       const boost::property_tree::ptree& rValue)
+{
+    std::string aIndex = rValue.get_value<std::string>();
+    if (aIndex == "last")
+    {
+        rCtx.mnNextPageId = rCtx.mnPageCount - 1;
+    }
+    else
+    {
+        rCtx.mnNextPageId = rValue.get_value<int>();
+        if (rCtx.mnNextPageId >= rCtx.mnPageCount)
+        {
+            lcl_LogWarning("FillApi SlideCmd: Slide idx >= Slide count. '" + rKey + ": "
+                           + aIndex
+                           + "' (Slide count = " + std::to_string(rCtx.mnPageCount));
+            rCtx.mnNextPageId = rCtx.mnPageCount - 1;
+        }
+        else if (rCtx.mnNextPageId < 0)
+        {
+            lcl_LogWarning("FillApi SlideCmd: Slide idx < 0. '" + rKey + ": " + aIndex
+                           + "'");
+            rCtx.mnNextPageId = 0;
+        }
+    }
+}
+
+void handleJumpToSlideByName(SlideCommandContext& rCtx, const std::string& rKey,
+                             const boost::property_tree::ptree& rValue)
+{
+    std::string aPageName = rValue.get_value<std::string>();
+    int nId = 0;
+    while (nId < rCtx.mnPageCount
+           && rCtx.mpDoc->GetSdPage(nId, PageKind::Standard)->GetName()
+                  != OStringToOUString(aPageName, RTL_TEXTENCODING_UTF8))
+    {
+        nId++;
+    }
+    if (nId < rCtx.mnPageCount)
+    {
+        rCtx.mnNextPageId = nId;
+    }
+    else
+    {
+        lcl_LogWarning("FillApi SlideCmd: Slide name not found at: '" + rKey + ": "
+                       + aPageName + "'");
+    }
+}
+
+void handleInsertMasterSlide(SlideCommandContext& rCtx, const std::string& rKey,
+                             const boost::property_tree::ptree& rValue)
+{
+    int nMasterPageId = 0;
+    if (rKey == "InsertMasterSlideByName")
+    {
+        int nMId = 0;
+        std::string aMPageName = rValue.get_value<std::string>();
+        while (nMId < rCtx.mnMasterPageCount
+               && rCtx.mpDoc->GetMasterSdPage(nMId, PageKind::Standard)->GetName()
+                      != OStringToOUString(aMPageName, RTL_TEXTENCODING_UTF8))
+        {
+            nMId++;
+        }
+        if (nMId < rCtx.mnMasterPageCount)
+        {
+            nMasterPageId = nMId;
+        }
+        else
+        {
+            lcl_LogWarning("FillApi SlideCmd: MasterSlide name not found at: '" + rKey
+                           + ": " + aMPageName + "'");
+        }
+    }
+    else
+    {
+        nMasterPageId = rValue.get_value<int>();
+    }
+
+    if (nMasterPageId >= rCtx.mnMasterPageCount)
+    {
+        lcl_LogWarning("FillApi SlideCmd: Slide idx >= MasterSlide count. '" + rKey + ": "
+                       + std::to_string(nMasterPageId)
+                       + "' (Slide count = " + std::to_string(rCtx.mnMasterPageCount));
+        nMasterPageId = rCtx.mnMasterPageCount - 1;
+    }
+    else if (nMasterPageId < 0)
+    {
+        lcl_LogWarning("FillApi SlideCmd: Slide idx < 0. '" + rKey + ": "
+                       + std::to_string(nMasterPageId) + "'");
+        nMasterPageId = 0;
+    }
+
+    SdPage* pMPage = rCtx.mpDoc->GetMasterSdPage(nMasterPageId, PageKind::Standard);
+    SdPage* pPage = rCtx.mpDoc->GetSdPage(rCtx.mnActPageId, PageKind::Standard);
+
+    // It will move to the next slide.
+    rCtx.mnNextPageId
+        = rCtx.mpDoc->CreatePage(pPage, PageKind::Standard, OUString(), OUString(),
+                                 AUTOLAYOUT_TITLE_CONTENT, AUTOLAYOUT_NOTES, true, true,
+                                 pPage->GetPageNum() + 2);
+
+    SdPage* pPageStandard = rCtx.mpDoc->GetSdPage(rCtx.mnNextPageId, PageKind::Standard);
+    SdPage* pPageNote = rCtx.mpDoc->GetSdPage(rCtx.mnNextPageId, PageKind::Notes);
+
+    // Change master value
+    pPageStandard->TRG_SetMasterPage(*pMPage);
+    // A notes page must reference a notes master, not the standard master. Use
+    // the notes master paired with the chosen standard master. If the document
+    // has no notes master at that index, keep the one CreatePage inherited.
+    if (nMasterPageId < rCtx.mpDoc->GetMasterSdPageCount(PageKind::Notes))
+    {
+        SdPage* pNotesMPage = rCtx.mpDoc->GetMasterSdPage(nMasterPageId, PageKind::Notes);
+        pPageNote->TRG_SetMasterPage(*pNotesMPage);
+    }
+
+    if (rCtx.mbUndo)
+    {
+        rCtx.mpDrawView->AddUndo(SdrUndoFactory::CreateUndoNewPage(*pPageStandard));
+        rCtx.mpDrawView->AddUndo(SdrUndoFactory::CreateUndoNewPage(*pPageNote));
+    }
+}
+
+void handleApplyTemplate(SlideCommandContext& rCtx, const std::string& rKey,
+                         const boost::property_tree::ptree& rValue)
+{
+    // Record the template; it is applied to every slide after all commands run,
+    // so slides inserted later are themed too, not just the slide that is
+    // current when this command appears.
+    std::string aName = rValue.get_value<std::string>();
+    std::optional<OUString> oUrl = lcl_ResolveDesignTemplateUrl(aName);
+    if (!oUrl)
+        lcl_LogWarning("FillApi SlideCmd: unknown template name '" + rKey + ": " + aName
+                       + "'");
+    else
+        rCtx.moApplyTemplateUrl = oUrl;
+}
+
+void handleDeleteSlide(SlideCommandContext& rCtx, const std::string& rKey,
+                       const boost::property_tree::ptree& rValue)
+{
+    int nPageIdToDel = rCtx.mnActPageId;
+    if (rValue.get_value<std::string>() != "")
+    {
+        nPageIdToDel = rValue.get_value<int>();
+    }
+
+    if (rCtx.mnPageCount > 1)
+    {
+        if (nPageIdToDel >= rCtx.mnPageCount)
+        {
+            lcl_LogWarning("FillApi SlideCmd: Slide idx >= Slide count. '" + rKey + ": "
+                           + std::to_string(nPageIdToDel)
+                           + "' (Slide count = " + std::to_string(rCtx.mnPageCount));
+            nPageIdToDel = rCtx.mnPageCount - 1;
+        }
+        else if (nPageIdToDel < 0)
+        {
+            lcl_LogWarning("FillApi SlideCmd: Slide idx < 0. '" + rKey + ": "
+                           + std::to_string(nPageIdToDel) + "'");
+            nPageIdToDel = 0;
+        }
+        if (rCtx.mbUndo)
+        {
+            // Capture pages before removal.
+            SdPage* pDelStd = rCtx.mpDoc->GetSdPage(nPageIdToDel, PageKind::Standard);
+            SdPage* pDelNotes = rCtx.mpDoc->GetSdPage(nPageIdToDel, PageKind::Notes);
+            if (pDelNotes)
+                rCtx.mpDrawView->AddUndo(SdrUndoFactory::CreateUndoDeletePage(*pDelNotes));
+            if (pDelStd)
+                rCtx.mpDrawView->AddUndo(SdrUndoFactory::CreateUndoDeletePage(*pDelStd));
+        }
+        rCtx.mpDoc->RemovePage(nPageIdToDel * 2 + 1);
+        rCtx.mpDoc->RemovePage(nPageIdToDel * 2 + 1);
+
+        if (nPageIdToDel <= rCtx.mnActPageId)
+        {
+            rCtx.mnNextPageId--;
+        }
+    }
+    else
+    {
+        lcl_LogWarning("FillApi SlideCmd: Not enough Slide to delete 1. '" + rKey + ": "
+                       + std::to_string(nPageIdToDel));
+    }
+}
+
+void handleMoveSlide(SlideCommandContext& rCtx, const std::string& rKey,
+                     const boost::property_tree::ptree& rValue)
+{
+    int nMoveFrom = rCtx.mnActPageId;
+    if (rKey.starts_with("MoveSlide."))
+    {
+        nMoveFrom = stoi(rKey.substr(10));
+    }
+    int nMoveTo = rValue.get_value<int>();
+
+    if (nMoveFrom == nMoveTo)
+    {
+        lcl_LogWarning("FillApi SlideCmd: Move slide to the same position. '" + rKey + ": "
+                       + std::to_string(nMoveTo));
+    }
+    else if (nMoveFrom >= rCtx.mnPageCount || nMoveTo > rCtx.mnPageCount)
+    {
+        lcl_LogWarning("FillApi SlideCmd: Slide idx >= Slide count. '" + rKey + ": "
+                       + std::to_string(nMoveTo));
+    }
+    else if (nMoveFrom < 0 || nMoveTo < 0)
+    {
+        lcl_LogWarning("FillApi SlideCmd: Slide idx < 0. '" + rKey + ": "
+                       + std::to_string(nMoveTo));
+    }
+    else
+    {
+        // Move both the standard and the Note Page.
+        // First move the page that will not change
+        // the order of the other page.
+        int nFirst = 1;
+        if (nMoveFrom < nMoveTo)
+        {
+            nFirst = 2;
+        }
+        int nSecond = 3 - nFirst;
+
+        if (rCtx.mbUndo)
+        {
+            SdrPage* pMv = rCtx.mpDoc->GetPage(nMoveFrom * 2 + nFirst);
+            if (pMv)
+                rCtx.mpDrawView->AddUndo(SdrUndoFactory::CreateUndoSetPageNum(
+                    *pMv, nMoveFrom * 2 + nFirst, nMoveTo * 2 + nFirst));
+        }
+        rCtx.mpDoc->MovePage(nMoveFrom * 2 + nFirst, nMoveTo * 2 + nFirst);
+        if (rCtx.mbUndo)
+        {
+            SdrPage* pMv = rCtx.mpDoc->GetPage(nMoveFrom * 2 + nSecond);
+            if (pMv)
+                rCtx.mpDrawView->AddUndo(SdrUndoFactory::CreateUndoSetPageNum(
+                    *pMv, nMoveFrom * 2 + nSecond, nMoveTo * 2 + nSecond));
+        }
+        rCtx.mpDoc->MovePage(nMoveFrom * 2 + nSecond, nMoveTo * 2 + nSecond);
+
+        // If the act page is moved, then follow it.
+        if (rCtx.mnActPageId == nMoveFrom)
+        {
+            rCtx.mnNextPageId = nMoveTo;
+        }
+        else if (nMoveFrom < rCtx.mnActPageId && nMoveTo >= rCtx.mnActPageId)
+        {
+            rCtx.mnNextPageId = rCtx.mnActPageId - 1;
+        }
+        else if (nMoveFrom > rCtx.mnActPageId && nMoveTo <= rCtx.mnActPageId)
+        {
+            rCtx.mnNextPageId = rCtx.mnActPageId + 1;
+        }
+    }
+}
+
+void handleDuplicateSlide(SlideCommandContext& rCtx, const std::string& rKey,
+                          const boost::property_tree::ptree& rValue)
+{
+    int nDupSlideId = rCtx.mnActPageId;
+    if (rValue.get_value<std::string>() != "")
+    {
+        nDupSlideId = rValue.get_value<int>();
+    }
+
+    if (nDupSlideId >= rCtx.mnPageCount)
+    {
+        lcl_LogWarning("FillApi SlideCmd: Slide idx >= Slide count. '" + rKey + ": "
+                       + std::to_string(nDupSlideId)
+                       + "' (Slide count = " + std::to_string(rCtx.mnPageCount));
+        nDupSlideId = rCtx.mnPageCount - 1;
+    }
+    else if (nDupSlideId < 0)
+    {
+        lcl_LogWarning("FillApi SlideCmd: Slide idx < 0. '" + rKey + ": "
+                       + std::to_string(nDupSlideId) + "'");
+        nDupSlideId = 0;
+    }
+    rCtx.mpDoc->DuplicatePage(nDupSlideId);
+    if (rCtx.mbUndo)
+    {
+        SdPage* pDupStd = rCtx.mpDoc->GetSdPage(nDupSlideId + 1, PageKind::Standard);
+        SdPage* pDupNotes = rCtx.mpDoc->GetSdPage(nDupSlideId + 1, PageKind::Notes);
+        if (pDupStd)
+            rCtx.mpDrawView->AddUndo(SdrUndoFactory::CreateUndoNewPage(*pDupStd));
+        if (pDupNotes)
+            rCtx.mpDrawView->AddUndo(SdrUndoFactory::CreateUndoNewPage(*pDupNotes));
+    }
+    // Jump to the created page.
+    rCtx.mnNextPageId = nDupSlideId + 1;
+    // Make sure the current page will be set also.
+    rCtx.mnActPageId = nDupSlideId;
+}
+
+void handleChangeLayout(SlideCommandContext& rCtx, const std::string& rKey,
+                        const boost::property_tree::ptree& rValue)
+{
+    AutoLayout nLayoutId;
+    if (rKey == "ChangeLayoutByName")
+    {
+        std::string aLayoutName = rValue.get_value<std::string>();
+
+        nLayoutId = SdPage::stringToAutoLayout(
+            OStringToOUString(aLayoutName, RTL_TEXTENCODING_UTF8));
+        if (nLayoutId == AUTOLAYOUT_END)
+        {
+            lcl_LogWarning("FillApi SlideCmd: Layout name not found at: '" + rKey + ": "
+                           + aLayoutName + "'");
+            nLayoutId = AUTOLAYOUT_TITLE_CONTENT;
+        }
+    }
+    else
+    {
+        nLayoutId = static_cast<AutoLayout>(rValue.get_value<int>());
+        if (nLayoutId < AUTOLAYOUT_START || nLayoutId >= AUTOLAYOUT_END)
+        {
+            lcl_LogWarning("FillApi SlideCmd: Wrong Layout index at: '" + rKey + ": "
+                           + std::to_string(nLayoutId) + "'");
+            nLayoutId = AUTOLAYOUT_TITLE_CONTENT;
+        }
+    }
+
+    // Todo warning:  ... if (nLayoutId >= ???)
+    SdPage* pLayoutPage = rCtx.mpDoc->GetSdPage(rCtx.mnActPageId, PageKind::Standard);
+    lcl_AddModifyPageUndo(rCtx, pLayoutPage, pLayoutPage->GetName(), nLayoutId);
+    pLayoutPage->SetAutoLayout(nLayoutId, true);
+}
+
+void handleRenameSlide(SlideCommandContext& rCtx, const std::string& /*rKey*/,
+                       const boost::property_tree::ptree& rValue)
+{
+    SdPage* pPageStandard = rCtx.mpDoc->GetSdPage(rCtx.mnActPageId, PageKind::Standard);
+    OUString aNewName
+        = OStringToOUString(rValue.get_value<std::string>(), RTL_TEXTENCODING_UTF8);
+    lcl_AddModifyPageUndo(rCtx, pPageStandard, aNewName, pPageStandard->GetAutoLayout());
+    pPageStandard->SetName(aNewName);
+}
+
+void handleSetText(SlideCommandContext& rCtx, const std::string& rKey,
+                   const boost::property_tree::ptree& rValue)
+{
+    int nObjId = stoi(rKey.substr(8));
+
+    SdPage* pPageStandard = rCtx.mpDoc->GetSdPage(rCtx.mnActPageId, PageKind::Standard);
+    int nObjCount = pPageStandard->GetObjCount();
+    if (nObjId < 0)
+    {
+        lcl_LogWarning("FillApi SlideCmd SetText: Object idx < 0. '" + rKey + "'");
+    }
+    else if (nObjId < nObjCount)
+    {
+        SdrObject* pSdrObj = pPageStandard->GetObj(nObjId);
+        if (pSdrObj->IsSdrTextObj())
+        {
+            SdrTextObj* pSdrTxt = static_cast<SdrTextObj*>(pSdrObj);
+            if (rCtx.mbUndo)
+                rCtx.mpDrawView->AddUndo(
+                    rCtx.mpDoc->GetSdrUndoFactory().CreateUndoObjectSetText(*pSdrObj, 0));
+            pSdrTxt->SetText(
+                OStringToOUString(rValue.get_value<std::string>(), RTL_TEXTENCODING_UTF8));
+
+            // Todo: maybe with empty string it should work elseway?
+            pSdrObj->SetEmptyPresObj(false);
+        }
+    }
+    else
+    {
+        lcl_LogWarning("FillApi SlideCmd SetText: Object idx >= Object Count. '" + rKey
+                       + "' (Object Count = " + std::to_string(nObjCount) + ")");
+    }
+}
+
+void handleInsertImage(SlideCommandContext& rCtx, const std::string& rKey,
+                       const boost::property_tree::ptree& rValue)
+{
+    int nObjId;
+    try
+    {
+        nObjId = stoi(rKey.substr(12));
+    }
+    catch (const std::exception&)
+    {
+        lcl_LogWarning("FillApi SlideCmd InsertImage: invalid object index in '" + rKey
+                       + "'");
+        return;
+    }
+
+    SdPage* pPageStandard = rCtx.mpDoc->GetSdPage(rCtx.mnActPageId, PageKind::Standard);
+    int nObjCount = pPageStandard->GetObjCount();
+    if (nObjId < 0)
+    {
+        lcl_LogWarning("FillApi SlideCmd InsertImage: Object idx < 0. '" + rKey + "'");
+    }
+    else if (nObjId >= nObjCount)
+    {
+        lcl_LogWarning("FillApi SlideCmd InsertImage: Object idx >= Object Count. '" + rKey
+                       + "' (Object Count = " + std::to_string(nObjCount) + ")");
+    }
+    else
+    {
+        std::string aImageUrl = rValue.get_value<std::string>();
+        lcl_ReplaceWithImage(rCtx.mpDoc, pPageStandard, nObjId, aImageUrl,
+                             rCtx.mpViewShellBase, rCtx.mnActPageId);
+    }
+}
+
+void handleInsertImageAt(SlideCommandContext& rCtx, const std::string& rKey,
+                         const boost::property_tree::ptree& rValue)
+{
+    // Format: InsertImageAt.SLIDE.OBJ
+    // Inserts image on a specific slide without changing the active page view.
+    std::string aSuffix = rKey.substr(14);
+    auto nDotPos = aSuffix.find('.');
+    if (nDotPos == std::string::npos)
+    {
+        lcl_LogWarning("FillApi SlideCmd InsertImageAt: missing dot separator in '" + rKey
+                       + "'");
+        return;
+    }
+
+    int nSlideId;
+    int nObjId;
+    try
+    {
+        nSlideId = stoi(aSuffix.substr(0, nDotPos));
+        nObjId = stoi(aSuffix.substr(nDotPos + 1));
+    }
+    catch (const std::exception&)
+    {
+        lcl_LogWarning("FillApi SlideCmd InsertImageAt: invalid index in '" + rKey + "'");
+        return;
+    }
+
+    int nPageCnt = rCtx.mpDoc->GetSdPageCount(PageKind::Standard);
+    if (nSlideId < 0 || nSlideId >= nPageCnt)
+    {
+        lcl_LogWarning("FillApi SlideCmd InsertImageAt: slide idx out of range. '" + rKey
+                       + "' (PageCount = " + std::to_string(nPageCnt) + ")");
+        return;
+    }
+
+    SdPage* pPage = rCtx.mpDoc->GetSdPage(nSlideId, PageKind::Standard);
+    int nObjCount = pPage->GetObjCount();
+    if (nObjId < 0 || nObjId >= nObjCount)
+    {
+        lcl_LogWarning("FillApi SlideCmd InsertImageAt: obj idx out of range. '" + rKey
+                       + "' (ObjCount = " + std::to_string(nObjCount) + ")");
+        return;
+    }
+
+    std::string aImageUrl = rValue.get_value<std::string>();
+    lcl_ReplaceWithImage(rCtx.mpDoc, pPage, nObjId, aImageUrl, rCtx.mpViewShellBase,
+                         nSlideId);
+}
+
+void handleMarkObject(SlideCommandContext& rCtx, const std::string& rKey,
+                      const boost::property_tree::ptree& rValue)
+{
+    bool bUnMark = rKey == "UnMarkObject";
+    int nObjId = rValue.get_value<int>();
+
+    SdPage* pPageStandard = rCtx.mpDoc->GetSdPage(rCtx.mnActPageId, PageKind::Standard);
+    int nObjCount = pPageStandard->GetObjCount();
+
+    // Todo: check id vs count
+    if (nObjId < 0)
+    {
+        lcl_LogWarning("FillApi SlideCmd: Object idx < 0 at: '" + rKey
+                       + std::to_string(nObjId) + "'");
+    }
+    if (nObjId < nObjCount)
+    {
+        SdrObject* pSdrObj = pPageStandard->GetObj(nObjId);
+        rCtx.mpDrawView->MarkObj(pSdrObj, rCtx.mpDrawView->GetSdrPageView(), bUnMark);
+    }
+    else
+    {
+        lcl_LogWarning("FillApi SlideCmd: Object idx > Object Count. '" + rKey
+                       + std::to_string(nObjId)
+                       + "' (Object Count = " + std::to_string(nObjId));
+    }
+}
+
+void handleEditTextObject(SlideCommandContext& rCtx, const std::string& rKey,
+                          const boost::property_tree::ptree& rValue)
+{
+    int nObjId = stoi(rKey.substr(15));
+    SdPage* pPageStandard = rCtx.mpDoc->GetSdPage(rCtx.mnActPageId, PageKind::Standard);
+    int nObjCount = pPageStandard->GetObjCount();
+    if (nObjId < 0)
+    {
+        lcl_LogWarning("FillApi SlideCmd EditTextObject: Object idx < 0. '" + rKey + "'");
+        return;
+    }
+    if (nObjId >= nObjCount)
+    {
+        lcl_LogWarning("FillApi SlideCmd EditTextObject: Object idx >= Object Count. '"
+                       + rKey + "' (Object Count = " + std::to_string(nObjCount) + ")");
+        return;
+    }
+
+    SdrObject* pSdrObj = pPageStandard->GetObj(nObjId);
+    if (!pSdrObj->IsSdrTextObj())
+    {
+        lcl_LogWarning("FillApi SlideCmd EditTextObject: Object is not a TextObject. '"
+                       + rKey + "'");
+        return;
+    }
+
+    SdrTextObj* pSdrTxt = static_cast<SdrTextObj*>(pSdrObj);
+    SdrView* pView1 = rCtx.mpView;
+    pView1->MarkObj(pSdrTxt, pView1->GetSdrPageView());
+    pView1->SdrBeginTextEdit(pSdrTxt);
+    EditView& rEditView = pView1->GetTextEditOutlinerView()->GetEditView();
+    for (const auto& aItem4Obj : rValue)
+    {
+        const auto& aItem4
+            = aItem4Obj.first == "" ? *aItem4Obj.second.ordered_begin() : aItem4Obj;
+
+        if (aItem4.first == "SelectText")
+        {
+            std::vector<int> aValues;
+            for (const auto& aItem5 : aItem4.second)
+            {
+                //if == last?
+                aValues.push_back(aItem5.second.get_value<int>());
+            }
+            if (aValues.size() == 0)
+            {
+                //select the whole text
+                aValues.push_back(0);
+                aValues.push_back(0);
+                aValues.push_back(EE_PARA_MAX);
+                aValues.push_back(EE_TEXTPOS_MAX);
+            }
+            else if (aValues.size() == 1)
+            {
+                //select the paragraph
+                aValues.push_back(0);
+                aValues.push_back(aValues[0]);
+                aValues.push_back(EE_TEXTPOS_MAX);
+            }
+            else if (aValues.size() == 2)
+            {
+                // set the cursor without selecting anything
+                aValues.push_back(aValues[0]);
+                aValues.push_back(aValues[1]);
+            }
+            else if (aValues.size() == 3)
+            {
+                aValues.push_back(EE_TEXTPOS_MAX);
+            }
+
+            const ESelection rNewSel(aValues[0], aValues[1], aValues[2], aValues[3]);
+            rEditView.SetSelection(rNewSel);
+        }
+        else if (aItem4.first == "SelectParagraph")
+        {
+            int nParaId = aItem4.second.get_value<int>();
+
+            const ESelection rNewSel(nParaId, 0, nParaId, EE_TEXTPOS_MAX);
+            rEditView.SetSelection(rNewSel);
+        }
+        else if (aItem4.first == "InsertText")
+        {
+            OUString aText = OStringToOUString(aItem4.second.get_value<std::string>(),
+                                               RTL_TEXTENCODING_UTF8);
+            // It select the inserted text also
+            rEditView.InsertText(aText, true);
+        }
+        else if (aItem4.first == "UnoCommand")
+        {
+            std::string aText = aItem4.second.get_value<std::string>();
+            lcl_UnoCommand(aText);
+        }
+    }
+    pView1->SdrEndTextEdit();
+}
+
+void handleUnoCommand(SlideCommandContext& /*rCtx*/, const std::string& /*rKey*/,
+                      const boost::property_tree::ptree& rValue)
+{
+    std::string aText = rValue.get_value<std::string>();
+    lcl_UnoCommand(aText);
+}
+
+// One entry of the slide-command vocabulary. maName is the command's key in
+// the transform JSON. With mbPrefixMatch the key is matched by prefix because
+// it carries arguments after the name, like the object index in "SetText.0".
+// With mbDirectPageTarget the key itself names the slide the command works
+// on, instead of the slide the view currently shows.
+struct SlideCommand
+{
+    std::string_view maName;
+    bool mbPrefixMatch;
+    bool mbDirectPageTarget;
+    void (*mpHandler)(SlideCommandContext& rCtx, const std::string& rKey,
+                      const boost::property_tree::ptree& rValue);
+};
+
+constexpr SlideCommand aSlideCommands[] = {
+    { "JumpToSlide", false, false, &handleJumpToSlide },
+    { "JumpToSlideByName", false, false, &handleJumpToSlideByName },
+    { "InsertMasterSlide", false, false, &handleInsertMasterSlide },
+    { "InsertMasterSlideByName", false, false, &handleInsertMasterSlide },
+    { "ApplyTemplate", false, false, &handleApplyTemplate },
+    { "DeleteSlide", false, false, &handleDeleteSlide },
+    { "MoveSlide", true, false, &handleMoveSlide },
+    { "DuplicateSlide", false, false, &handleDuplicateSlide },
+    { "ChangeLayout", false, false, &handleChangeLayout },
+    { "ChangeLayoutByName", false, false, &handleChangeLayout },
+    { "RenameSlide", false, false, &handleRenameSlide },
+    { "SetText.", true, false, &handleSetText },
+    { "InsertImage.", true, false, &handleInsertImage },
+    { "InsertImageAt.", true, true, &handleInsertImageAt },
+    { "MarkObject", false, false, &handleMarkObject },
+    { "UnMarkObject", false, false, &handleMarkObject },
+    { "EditTextObject.", true, false, &handleEditTextObject },
+    { "UnoCommand", false, false, &handleUnoCommand },
+};
+
+// Looks up the slide command a JSON key addresses. Returns null for a key
+// that is not part of the vocabulary.
+const SlideCommand* lcl_FindSlideCommand(const std::string& rKey)
+{
+    for (const SlideCommand& rCommand : aSlideCommands)
+    {
+        const bool bMatch = rCommand.mbPrefixMatch ? rKey.starts_with(rCommand.maName)
+                                                   : rKey == rCommand.maName;
+        if (bMatch)
+            return &rCommand;
+    }
+    return nullptr;
+}
+
 class ClassificationCommon
 {
 protected:
@@ -894,25 +1567,10 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                 pUndoManager->LeaveListAction();
         });
 
-    // Undo for a name or autolayout change. ModifyPageUndoAction snapshots the
-    // page state on construction, so call this before applying the change.
-    auto addModifyPageUndo = [&](SdPage* pPg, const OUString& rNewName, AutoLayout eNewLayout)
-    {
-        if (!bUndo || !pPg)
-            return;
-        SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-        SdrLayerID aBg = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
-        SdrLayerID aBgObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
-        SdrLayerIDSet aVisibleLayers = pPg->TRG_GetMasterPageVisibleLayers();
-        pUndoManager->AddUndoAction(std::make_unique<ModifyPageUndoAction>(
-            *GetDoc(), pPg, rNewName, eNewLayout, aVisibleLayers.IsSet(aBg),
-            aVisibleLayers.IsSet(aBgObj)));
-    };
-
-    // A design template is applied once, after all commands run, so that slides
-    // inserted after the ApplyTemplate command are themed too. This holds the
-    // resolved template URL; the apply happens after the loop.
-    std::optional<OUString> oApplyTemplateUrl;
+    // The state the slide-command handlers share, including the design-template
+    // URL that is applied after the command loop.
+    SlideCommandContext aCtx{ GetDoc(), mpDrawView.get(), GetView(), &GetViewShellBase(),
+                              pUndoManager, bUndo };
 
     // Iterate through the JSON data loaded into a tree structure
     for (const auto& aItem : aTree)
@@ -927,11 +1585,10 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                 const auto& aItem2
                     = aItem2Obj.first == "" ? *aItem2Obj.second.ordered_begin() : aItem2Obj;
 
-                //jump to slide
                 if (aItem2.first == "SlideCommands")
                 {
-                    int nActPageId = -1;
-                    int nNextPageId = 0;
+                    aCtx.mnActPageId = -1;
+                    aCtx.mnNextPageId = 0;
                     for (const auto& aItem3Obj : aItem2.second)
                     {
                         // It accept direct property, or object as well
@@ -939,707 +1596,35 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                                                  ? *aItem3Obj.second.ordered_begin()
                                                  : aItem3Obj;
 
-                        sal_uInt16 nPageCount
-                            = GetDoc()->GetSdPageCount(PageKind::Standard);
-                        sal_uInt16 nMasterPageCount
+                        aCtx.mnPageCount = GetDoc()->GetSdPageCount(PageKind::Standard);
+                        aCtx.mnMasterPageCount
                             = GetDoc()->GetMasterSdPageCount(PageKind::Standard);
 
-                        // InsertImageAt targets a specific page directly,
-                        // so skip view navigation to avoid jumping away
-                        // from the user's current slide.
-                        bool bDirectPageTarget
-                            = aItem3.first.starts_with("InsertImageAt.");
+                        const SlideCommand* pCommand = lcl_FindSlideCommand(aItem3.first);
 
-                        if (!bDirectPageTarget && nActPageId != nNextPageId)
+                        // A command that names its target slide in its key runs
+                        // without view navigation, to avoid jumping away from
+                        // the user's current slide.
+                        const bool bDirectPageTarget
+                            = pCommand && pCommand->mbDirectPageTarget;
+                        if (!bDirectPageTarget && aCtx.mnActPageId != aCtx.mnNextPageId)
                         {
                             // Make it sure it always point to a real page
-                            if (nNextPageId < 0)
-                                nNextPageId = 0;
-                            if (nNextPageId >= nPageCount)
-                                nNextPageId = nPageCount - 1;
+                            if (aCtx.mnNextPageId < 0)
+                                aCtx.mnNextPageId = 0;
+                            if (aCtx.mnNextPageId >= aCtx.mnPageCount)
+                                aCtx.mnNextPageId = aCtx.mnPageCount - 1;
 
-                            nActPageId = nNextPageId;
-                            // Make sure nActPageId is the current Page
-                            maTabControl->SetCurPageId(nActPageId);
+                            aCtx.mnActPageId = aCtx.mnNextPageId;
+                            // Make the view show the page the command runs on
+                            maTabControl->SetCurPageId(aCtx.mnActPageId);
                             SdPage* pPageStandard
-                                = GetDoc()->GetSdPage(nActPageId, PageKind::Standard);
+                                = GetDoc()->GetSdPage(aCtx.mnActPageId, PageKind::Standard);
                             mpDrawView->ShowSdrPage(pPageStandard);
                         }
 
-                        if (aItem3.first == "JumpToSlide")
-                        {
-                            std::string aIndex = aItem3.second.get_value<std::string>();
-                            if (aIndex == "last")
-                            {
-                                nNextPageId = nPageCount - 1;
-                            }
-                            else
-                            {
-                                nNextPageId = aItem3.second.get_value<int>();
-                                if (nNextPageId >= nPageCount)
-                                {
-                                    lcl_LogWarning(
-                                        "FillApi SlideCmd: Slide idx >= Slide count. '"
-                                        + aItem3.first + ": " + aIndex
-                                        + "' (Slide count = " + std::to_string(nPageCount));
-                                    nNextPageId = nPageCount - 1;
-                                }
-                                else if (nNextPageId < 0)
-                                {
-                                    lcl_LogWarning("FillApi SlideCmd: Slide idx < 0. '"
-                                                   + aItem3.first + ": " + aIndex + "'");
-                                    nNextPageId = 0;
-                                }
-                            }
-                        }
-                        if (aItem3.first == "JumpToSlideByName")
-                        {
-                            std::string aPageName = aItem3.second.get_value<std::string>();
-                            int nId = 0;
-                            while (
-                                nId < nPageCount
-                                && GetDoc()->GetSdPage(nId, PageKind::Standard)->GetName()
-                                       != OStringToOUString(aPageName,
-                                                            RTL_TEXTENCODING_UTF8))
-                            {
-                                nId++;
-                            }
-                            if (nId < nPageCount)
-                            {
-                                nNextPageId = nId;
-                            }
-                            else
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd: Slide name not found at: '"
-                                    + aItem3.first + ": " + aPageName + "'");
-                            }
-                        }
-                        else if (aItem3.first == "InsertMasterSlide"
-                                 || aItem3.first == "InsertMasterSlideByName")
-                        {
-                            int nMasterPageId = 0;
-                            if (aItem3.first == "InsertMasterSlideByName")
-                            {
-                                int nMId = 0;
-                                std::string aMPageName
-                                    = aItem3.second.get_value<std::string>();
-                                while (
-                                    nMId < nMasterPageCount
-                                    && GetDoc()->GetMasterSdPage(nMId, PageKind::Standard)
-                                               ->GetName()
-                                           != OStringToOUString(aMPageName,
-                                               RTL_TEXTENCODING_UTF8))
-                                {
-                                    nMId++;
-                                }
-                                if (nMId < nMasterPageCount)
-                                {
-                                    nMasterPageId = nMId;
-                                }
-                                else
-                                {
-                                    lcl_LogWarning(
-                                        "FillApi SlideCmd: MasterSlide name not found at: '"
-                                        + aItem3.first + ": " + aMPageName + "'");
-                                }
-                            }
-                            else
-                            {
-                                nMasterPageId = aItem3.second.get_value<int>();
-                            }
-
-                            if (nMasterPageId >= nMasterPageCount)
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd: Slide idx >= MasterSlide count. '"
-                                    + aItem3.first + ": " + std::to_string(nMasterPageId)
-                                    + "' (Slide count = " + std::to_string(nMasterPageCount));
-                                nMasterPageId = nMasterPageCount - 1;
-                            }
-                            else if (nMasterPageId < 0)
-                            {
-                                lcl_LogWarning("FillApi SlideCmd: Slide idx < 0. '"
-                                               + aItem3.first + ": "
-                                               + std::to_string(nMasterPageId) + "'");
-                                nMasterPageId = 0;
-                            }
-
-                            SdPage* pMPage = GetDoc()->GetMasterSdPage(nMasterPageId,
-                                                                       PageKind::Standard);
-                            SdPage* pPage
-                                = GetDoc()->GetSdPage(nActPageId, PageKind::Standard);
-
-                            // It will move to the next slide.
-                            nNextPageId = GetDoc()->CreatePage(
-                                pPage, PageKind::Standard, OUString(), OUString(),
-                                AUTOLAYOUT_TITLE_CONTENT, AUTOLAYOUT_NOTES, true, true,
-                                pPage->GetPageNum() + 2);
-
-                            SdPage* pPageStandard
-                                = GetDoc()->GetSdPage(nNextPageId, PageKind::Standard);
-                            SdPage* pPageNote
-                                = GetDoc()->GetSdPage(nNextPageId, PageKind::Notes);
-
-                            // Change master value
-                            pPageStandard->TRG_SetMasterPage(*pMPage);
-                            // A notes page must reference a notes master, not the
-                            // standard master. Use the notes master paired with the
-                            // chosen standard master. If the document has no notes
-                            // master at that index, keep the one CreatePage inherited.
-                            if (nMasterPageId < GetDoc()->GetMasterSdPageCount(PageKind::Notes))
-                            {
-                                SdPage* pNotesMPage
-                                    = GetDoc()->GetMasterSdPage(nMasterPageId, PageKind::Notes);
-                                pPageNote->TRG_SetMasterPage(*pNotesMPage);
-                            }
-
-                            if (bUndo)
-                            {
-                                mpDrawView->AddUndo(
-                                    SdrUndoFactory::CreateUndoNewPage(*pPageStandard));
-                                mpDrawView->AddUndo(
-                                    SdrUndoFactory::CreateUndoNewPage(*pPageNote));
-                            }
-                        }
-                        else if (aItem3.first == "ApplyTemplate")
-                        {
-                            // Record the template; it is applied to every slide
-                            // after all commands run (see after the loop), so
-                            // slides inserted later are themed too, not just the
-                            // slide that is current when this command appears.
-                            std::string aName = aItem3.second.get_value<std::string>();
-                            std::optional<OUString> oUrl
-                                = lcl_ResolveDesignTemplateUrl(aName);
-                            if (!oUrl)
-                                lcl_LogWarning("FillApi SlideCmd: unknown template name '"
-                                               + aItem3.first + ": " + aName + "'");
-                            else
-                                oApplyTemplateUrl = oUrl;
-                        }
-                        else if (aItem3.first == "DeleteSlide")
-                        {
-                            int nPageIdToDel = nActPageId;
-                            if (aItem3.second.get_value<std::string>() != "")
-                            {
-                                nPageIdToDel = aItem3.second.get_value<int>();
-                            }
-
-                            if (nPageCount > 1)
-                            {
-                                if (nPageIdToDel >= nPageCount)
-                                {
-                                    lcl_LogWarning(
-                                        "FillApi SlideCmd: Slide idx >= Slide count. '"
-                                        + aItem3.first + ": " + std::to_string(nPageIdToDel)
-                                        + "' (Slide count = " + std::to_string(nPageCount));
-                                    nPageIdToDel = nPageCount - 1;
-                                }
-                                else if (nPageIdToDel < 0)
-                                {
-                                    lcl_LogWarning("FillApi SlideCmd: Slide idx < 0. '"
-                                                   + aItem3.first + ": "
-                                                   + std::to_string(nPageIdToDel) + "'");
-                                    nPageIdToDel = 0;
-                                }
-                                if (bUndo)
-                                {
-                                    // Capture pages before removal.
-                                    SdPage* pDelStd
-                                        = GetDoc()->GetSdPage(nPageIdToDel, PageKind::Standard);
-                                    SdPage* pDelNotes
-                                        = GetDoc()->GetSdPage(nPageIdToDel, PageKind::Notes);
-                                    if (pDelNotes)
-                                        mpDrawView->AddUndo(
-                                            SdrUndoFactory::CreateUndoDeletePage(*pDelNotes));
-                                    if (pDelStd)
-                                        mpDrawView->AddUndo(
-                                            SdrUndoFactory::CreateUndoDeletePage(*pDelStd));
-                                }
-                                GetDoc()->RemovePage(nPageIdToDel * 2 + 1);
-                                GetDoc()->RemovePage(nPageIdToDel * 2 + 1);
-
-                                if (nPageIdToDel <= nActPageId)
-                                {
-                                    nNextPageId--;
-                                }
-                            }
-                            else
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd: Not enough Slide to delete 1. '"
-                                    + aItem3.first + ": " + std::to_string(nPageIdToDel));
-                            }
-                        }
-                        else if (aItem3.first.starts_with("MoveSlide"))
-                        {
-                            int nMoveFrom = nActPageId;
-                            if (aItem3.first.starts_with("MoveSlide."))
-                            {
-                                nMoveFrom = stoi(aItem3.first.substr(10));
-                            }
-                            int nMoveTo = aItem3.second.get_value<int>();
-
-                            if (nMoveFrom == nMoveTo)
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd: Move slide to the same position. '"
-                                    + aItem3.first + ": " + std::to_string(nMoveTo));
-                            }
-                            else if (nMoveFrom >= nPageCount || nMoveTo > nPageCount)
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd: Slide idx >= Slide count. '"
-                                    + aItem3.first + ": " + std::to_string(nMoveTo));
-                            }
-                            else if (nMoveFrom < 0 || nMoveTo < 0)
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd: Slide idx < 0. '"
-                                    + aItem3.first + ": " + std::to_string(nMoveTo));
-                            }
-                            else
-                            {
-                                // Move both the standard and the Note Page.
-                                // First move the page that will not change
-                                // the order of the other page.
-                                int nFirst = 1;
-                                if (nMoveFrom < nMoveTo)
-                                {
-                                    nFirst = 2;
-                                }
-                                int nSecond = 3 - nFirst;
-
-                                if (bUndo)
-                                {
-                                    SdrPage* pMv = GetDoc()->GetPage(nMoveFrom * 2 + nFirst);
-                                    if (pMv)
-                                        mpDrawView->AddUndo(
-                                            SdrUndoFactory::CreateUndoSetPageNum(
-                                                *pMv, nMoveFrom * 2 + nFirst,
-                                                nMoveTo * 2 + nFirst));
-                                }
-                                GetDoc()->MovePage(nMoveFrom * 2 + nFirst, nMoveTo * 2 + nFirst);
-                                if (bUndo)
-                                {
-                                    SdrPage* pMv = GetDoc()->GetPage(nMoveFrom * 2 + nSecond);
-                                    if (pMv)
-                                        mpDrawView->AddUndo(
-                                            SdrUndoFactory::CreateUndoSetPageNum(
-                                                *pMv, nMoveFrom * 2 + nSecond,
-                                                nMoveTo * 2 + nSecond));
-                                }
-                                GetDoc()->MovePage(nMoveFrom * 2 + nSecond,
-                                                   nMoveTo * 2 + nSecond);
-
-                                // If the act page is moved, then follow it.
-                                if (nActPageId == nMoveFrom)
-                                {
-                                    nNextPageId = nMoveTo;
-                                }
-                                else if (nMoveFrom < nActPageId && nMoveTo >= nActPageId)
-                                {
-                                    nNextPageId = nActPageId - 1;
-                                }
-                                else if (nMoveFrom > nActPageId && nMoveTo <= nActPageId)
-                                {
-                                    nNextPageId = nActPageId + 1;
-                                }
-                            }
-                        }
-                        else if (aItem3.first == "DuplicateSlide")
-                        {
-                            int nDupSlideId = nActPageId;
-                            if (aItem3.second.get_value<std::string>() != "")
-                            {
-                                nDupSlideId = aItem3.second.get_value<int>();
-                            }
-
-                            if (nDupSlideId >= nPageCount)
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd: Slide idx >= Slide count. '"
-                                    + aItem3.first + ": " + std::to_string(nDupSlideId)
-                                    + "' (Slide count = " + std::to_string(nPageCount));
-                                nDupSlideId = nPageCount - 1;
-                            }
-                            else if (nDupSlideId < 0)
-                            {
-                                lcl_LogWarning("FillApi SlideCmd: Slide idx < 0. '"
-                                               + aItem3.first + ": "
-                                               + std::to_string(nDupSlideId) + "'");
-                                nDupSlideId = 0;
-                            }
-                            GetDoc()->DuplicatePage(nDupSlideId);
-                            if (bUndo)
-                            {
-                                SdPage* pDupStd = GetDoc()->GetSdPage(
-                                    nDupSlideId + 1, PageKind::Standard);
-                                SdPage* pDupNotes = GetDoc()->GetSdPage(
-                                    nDupSlideId + 1, PageKind::Notes);
-                                if (pDupStd)
-                                    mpDrawView->AddUndo(
-                                        SdrUndoFactory::CreateUndoNewPage(*pDupStd));
-                                if (pDupNotes)
-                                    mpDrawView->AddUndo(
-                                        SdrUndoFactory::CreateUndoNewPage(*pDupNotes));
-                            }
-                            // Jump to the created page.
-                            nNextPageId = nDupSlideId + 1;
-                            // Make sure the current page will be set also.
-                            nActPageId = nDupSlideId;
-                        }
-                        else if (aItem3.first == "ChangeLayout"
-                                 || aItem3.first == "ChangeLayoutByName")
-                        {
-                            AutoLayout nLayoutId;
-                            if (aItem3.first == "ChangeLayoutByName")
-                            {
-                                std::string aLayoutName
-                                    = aItem3.second.get_value<std::string>();
-
-                                nLayoutId = SdPage::stringToAutoLayout(
-                                    OStringToOUString(aLayoutName, RTL_TEXTENCODING_UTF8));
-                                if (nLayoutId == AUTOLAYOUT_END)
-                                {
-                                    lcl_LogWarning(
-                                        "FillApi SlideCmd: Layout name not found at: '"
-                                        + aItem3.first + ": " + aLayoutName + "'");
-                                    nLayoutId = AUTOLAYOUT_TITLE_CONTENT;
-                                }
-                            }
-                            else
-                            {
-                                nLayoutId = static_cast<AutoLayout>(
-                                    aItem3.second.get_value<int>());
-                                if (nLayoutId < AUTOLAYOUT_START
-                                    || nLayoutId >= AUTOLAYOUT_END)
-                                {
-                                    lcl_LogWarning(
-                                        "FillApi SlideCmd: Wrong Layout index at: '"
-                                        + aItem3.first + ": " + std::to_string(nLayoutId)
-                                        + "'");
-                                    nLayoutId = AUTOLAYOUT_TITLE_CONTENT;
-                                }
-                            }
-
-                            // Todo warning:  ... if (nLayoutId >= ???)
-                            SdPage* pLayoutPage
-                                = GetDoc()->GetSdPage(nActPageId, PageKind::Standard);
-                            addModifyPageUndo(pLayoutPage, pLayoutPage->GetName(),
-                                              nLayoutId);
-                            pLayoutPage->SetAutoLayout(nLayoutId, true);
-                        }
-                        else if (aItem3.first == "RenameSlide")
-                        {
-                            SdPage* pPageStandard
-                                = GetDoc()->GetSdPage(nActPageId, PageKind::Standard);
-                            OUString aNewName = OStringToOUString(
-                                aItem3.second.get_value<std::string>(),
-                                RTL_TEXTENCODING_UTF8);
-                            addModifyPageUndo(pPageStandard, aNewName,
-                                              pPageStandard->GetAutoLayout());
-                            pPageStandard->SetName(aNewName);
-                        }
-                        else if (aItem3.first.starts_with("SetText."))
-                        {
-                            int nObjId = stoi(aItem3.first.substr(8));
-
-                            SdPage* pPageStandard
-                                = GetDoc()->GetSdPage(nActPageId, PageKind::Standard);
-                            int nObjCount = pPageStandard->GetObjCount();
-                            if (nObjId < 0)
-                            {
-                                lcl_LogWarning("FillApi SlideCmd SetText: Object idx < 0. '"
-                                               + aItem3.first + "'");
-                            }
-                            else if (nObjId < nObjCount)
-                            {
-                                SdrObject* pSdrObj = pPageStandard->GetObj(nObjId);
-                                if (pSdrObj->IsSdrTextObj())
-                                {
-                                    SdrTextObj* pSdrTxt = static_cast<SdrTextObj*>(pSdrObj);
-                                    if (bUndo)
-                                        mpDrawView->AddUndo(
-                                            GetDoc()->GetSdrUndoFactory()
-                                                .CreateUndoObjectSetText(*pSdrObj, 0));
-                                    pSdrTxt->SetText(OStringToOUString(
-                                        aItem3.second.get_value<std::string>(),
-                                        RTL_TEXTENCODING_UTF8));
-
-                                    // Todo: maybe with empty string it should work elseway?
-                                    pSdrObj->SetEmptyPresObj(false);
-                                }
-                            }
-                            else
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd SetText: Object idx >= Object Count. '"
-                                    + aItem3.first
-                                    + "' (Object Count = " + std::to_string(nObjCount) + ")");
-                            }
-                        }
-                        else if (aItem3.first.starts_with("InsertImage."))
-                        {
-                            int nObjId;
-                            try
-                            {
-                                nObjId = stoi(aItem3.first.substr(12));
-                            }
-                            catch (const std::exception&)
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd InsertImage: invalid object index in '"
-                                    + aItem3.first + "'");
-                                continue;
-                            }
-
-                            SdPage* pPageStandard
-                                = GetDoc()->GetSdPage(nActPageId, PageKind::Standard);
-                            int nObjCount = pPageStandard->GetObjCount();
-                            if (nObjId < 0)
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd InsertImage: Object idx < 0. '"
-                                    + aItem3.first + "'");
-                            }
-                            else if (nObjId >= nObjCount)
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd InsertImage: Object idx >= "
-                                    "Object Count. '"
-                                    + aItem3.first
-                                    + "' (Object Count = " + std::to_string(nObjCount)
-                                    + ")");
-                            }
-                            else
-                            {
-                                std::string aImageUrl
-                                    = aItem3.second.get_value<std::string>();
-                                lcl_ReplaceWithImage(GetDoc(), pPageStandard,
-                                                     nObjId, aImageUrl,
-                                                     &GetViewShellBase(),
-                                                     nActPageId);
-                            }
-                        }
-                        else if (aItem3.first.starts_with("InsertImageAt."))
-                        {
-                            // Format: InsertImageAt.SLIDE.OBJ
-                            // Inserts image on a specific slide without
-                            // changing the active page view.
-                            std::string suffix = aItem3.first.substr(14);
-                            auto dotPos = suffix.find('.');
-                            if (dotPos == std::string::npos)
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd InsertImageAt: missing "
-                                    "dot separator in '"
-                                    + aItem3.first + "'");
-                            }
-                            else
-                            {
-                                int nSlideId;
-                                int nObjId;
-                                try
-                                {
-                                    nSlideId = stoi(suffix.substr(0, dotPos));
-                                    nObjId = stoi(suffix.substr(dotPos + 1));
-                                }
-                                catch (const std::exception&)
-                                {
-                                    lcl_LogWarning(
-                                        "FillApi SlideCmd InsertImageAt: "
-                                        "invalid index in '"
-                                        + aItem3.first + "'");
-                                    continue;
-                                }
-                                int nPageCnt = GetDoc()->GetSdPageCount(
-                                    PageKind::Standard);
-
-                                if (nSlideId < 0 || nSlideId >= nPageCnt)
-                                {
-                                    lcl_LogWarning(
-                                        "FillApi SlideCmd InsertImageAt: "
-                                        "slide idx out of range. '"
-                                        + aItem3.first + "' (PageCount = "
-                                        + std::to_string(nPageCnt) + ")");
-                                }
-                                else
-                                {
-                                    SdPage* pPage = GetDoc()->GetSdPage(
-                                        nSlideId, PageKind::Standard);
-                                    int nObjCount = pPage->GetObjCount();
-
-                                    if (nObjId < 0 || nObjId >= nObjCount)
-                                    {
-                                        lcl_LogWarning(
-                                            "FillApi SlideCmd InsertImageAt:"
-                                            " obj idx out of range. '"
-                                            + aItem3.first
-                                            + "' (ObjCount = "
-                                            + std::to_string(nObjCount)
-                                            + ")");
-                                    }
-                                    else
-                                    {
-                                        std::string aImageUrl
-                                            = aItem3.second
-                                                  .get_value<std::string>();
-                                        lcl_ReplaceWithImage(
-                                            GetDoc(), pPage, nObjId,
-                                            aImageUrl, &GetViewShellBase(),
-                                            nSlideId);
-                                    }
-                                }
-                            }
-                        }
-                        else if (aItem3.first == "MarkObject"
-                                 || aItem3.first == "UnMarkObject")
-                        {
-                            bool bUnMark = aItem3.first == "UnMarkObject";
-                            int nObjId = aItem3.second.get_value<int>();
-
-                            SdPage* pPageStandard
-                                = GetDoc()->GetSdPage(nActPageId, PageKind::Standard);
-                            int nObjCount = pPageStandard->GetObjCount();
-
-                            // Todo: check id vs count
-                            if (nObjId < 0)
-                            {
-                                lcl_LogWarning("FillApi SlideCmd: Object idx < 0 at: '"
-                                               + aItem3.first + std::to_string(nObjId)
-                                               + "'");
-                            }
-                            if (nObjId < nObjCount)
-                            {
-                                SdrObject* pSdrObj = pPageStandard->GetObj(nObjId);
-                                mpDrawView->MarkObj(pSdrObj, mpDrawView->GetSdrPageView(),
-                                                    bUnMark);
-                            }
-                            else
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd: Object idx > Object Count. '"
-                                    + aItem3.first + std::to_string(nObjId)
-                                    + "' (Object Count = " + std::to_string(nObjId));
-                            }
-                        }
-
-                        else if (aItem3.first.starts_with("EditTextObject."))
-                        {
-                            int nObjId = stoi(aItem3.first.substr(15));
-                            SdPage* pPageStandard
-                                = GetDoc()->GetSdPage(nActPageId, PageKind::Standard);
-                            int nObjCount = pPageStandard->GetObjCount();
-                            if (nObjId < 0)
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd EditTextObject: Object idx < 0. '"
-                                    + aItem3.first + "'");
-                            }
-                            else if (nObjId >= nObjCount)
-                            {
-                                lcl_LogWarning(
-                                    "FillApi SlideCmd EditTextObject: Object idx >= "
-                                    "Object Count. '"
-                                    + aItem3.first
-                                    + "' (Object Count = " + std::to_string(nObjCount) + ")");
-                            }
-                            else
-                            {
-                                SdrObject* pSdrObj = pPageStandard->GetObj(nObjId);
-                                if (!pSdrObj->IsSdrTextObj())
-                                {
-                                    lcl_LogWarning(
-                                        "FillApi SlideCmd EditTextObject: Object is "
-                                        "not a TextObject. '"
-                                        + aItem3.first + "'");
-                                }
-                                else
-                                {
-                                    SdrTextObj* pSdrTxt = static_cast<SdrTextObj*>(pSdrObj);
-                                    SdrView* pView1 = GetView();
-                                    pView1->MarkObj(pSdrTxt, pView1->GetSdrPageView());
-                                    pView1->SdrBeginTextEdit(pSdrTxt);
-                                    EditView& rEditView
-                                        = pView1->GetTextEditOutlinerView()->GetEditView();
-                                    for (const auto& aItem4Obj : aItem3.second)
-                                    {
-                                        const auto& aItem4
-                                            = aItem4Obj.first == ""
-                                                  ? *aItem4Obj.second.ordered_begin()
-                                                  : aItem4Obj;
-
-                                        if (aItem4.first == "SelectText")
-                                        {
-                                            std::vector<int> aValues;
-                                            for (const auto& aItem5 : aItem4.second)
-                                            {
-                                                //if == last?
-                                                aValues.push_back(aItem5.second.get_value<int>());
-                                            }
-                                            if (aValues.size() == 0)
-                                            {
-                                                //select the whole text
-                                                aValues.push_back(0);
-                                                aValues.push_back(0);
-                                                aValues.push_back(EE_PARA_MAX);
-                                                aValues.push_back(EE_TEXTPOS_MAX);
-                                            }
-                                            else if (aValues.size() == 1)
-                                            {
-                                                //select the paragraph
-                                                aValues.push_back(0);
-                                                aValues.push_back(aValues[0]);
-                                                aValues.push_back(EE_TEXTPOS_MAX);
-                                            }
-                                            else if (aValues.size() == 2)
-                                            {
-                                                // set the cursor without selecting anything
-                                                aValues.push_back(aValues[0]);
-                                                aValues.push_back(aValues[1]);
-                                            }
-                                            else if (aValues.size() == 3)
-                                            {
-                                                aValues.push_back(EE_TEXTPOS_MAX);
-                                            }
-
-                                            const ESelection rNewSel(aValues[0], aValues[1],
-                                                                     aValues[2], aValues[3]);
-                                            rEditView.SetSelection(rNewSel);
-                                        }
-                                        else if (aItem4.first == "SelectParagraph")
-                                        {
-                                            int nParaId = aItem4.second.get_value<int>();
-
-                                            const ESelection rNewSel(nParaId, 0, nParaId,
-                                                                     EE_TEXTPOS_MAX);
-                                            rEditView.SetSelection(rNewSel);
-                                        }
-                                        else if (aItem4.first == "InsertText")
-                                        {
-                                            OUString aText = OStringToOUString(
-                                                aItem4.second.get_value<std::string>(),
-                                                RTL_TEXTENCODING_UTF8);
-                                            // It select the inserted text also
-                                            rEditView.InsertText(aText, true);
-                                        }
-                                        else if (aItem4.first == "UnoCommand")
-                                        {
-                                            std::string aText
-                                                = aItem4.second.get_value<std::string>();
-                                            lcl_UnoCommand(aText);
-                                        }
-                                    }
-                                    pView1->SdrEndTextEdit();
-                                }
-                            }
-                        }
-                        else if (aItem3.first == "UnoCommand")
-                        {
-                            std::string aText = aItem3.second.get_value<std::string>();
-                            lcl_UnoCommand(aText);
-                        }
+                        if (pCommand)
+                            pCommand->mpHandler(aCtx, aItem3.first, aItem3.second);
                     }
                 }
             }
@@ -1658,9 +1643,9 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
     // below, then put each generated slide on the master the template pairs with
     // that slide's layout. A generated deck then uses the opening and divider
     // designs as well as the content design, not one master throughout.
-    if (oApplyTemplateUrl)
+    if (aCtx.moApplyTemplateUrl)
     {
-        SdDrawDocument* pTemplate = GetDoc()->OpenBookmarkDoc(*oApplyTemplateUrl);
+        SdDrawDocument* pTemplate = GetDoc()->OpenBookmarkDoc(*aCtx.moApplyTemplateUrl);
         const sal_uInt16 nStdCount = GetDoc()->GetSdPageCount(PageKind::Standard);
         if (pTemplate && pTemplate->GetMasterSdPageCount(PageKind::Standard) > 0
             && nStdCount > 0)
