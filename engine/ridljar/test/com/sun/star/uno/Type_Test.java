@@ -20,6 +20,7 @@ package com.sun.star.uno;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import cpo.uno.Type;
 
 public final class Type_Test {
     @Test public void testZClass() {

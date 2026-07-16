@@ -21,6 +21,7 @@ package com.sun.star.uno;
 import com.sun.star.beans.Optional;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import cpo.uno.Type;
 
 public final class UnoRuntime_Test {
     @Test public void test_generateOid() {
