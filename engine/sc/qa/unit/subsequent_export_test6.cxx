@@ -10,6 +10,8 @@
 // Tests for JSON filter options in CSV import/export (convert-to API)
 
 #include "helper/qahelper.hxx"
+#include <scitems.hxx>
+#include <editeng/brushitem.hxx>
 
 #include <dbdata.hxx>
 #include <docsh.hxx>
@@ -1163,6 +1165,151 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testBuiltInDefaultTableStyleNotExportedXLSX)
     xmlDocUniquePtr pStyles = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pStyles);
     assertXPathNoAttribute(pStyles, "/x:styleSheet/x:tableStyles", "defaultTableStyle");
+}
+
+namespace
+{
+// The background colour a style sets on its whole-table region, or COL_AUTO
+// when the region has none.
+Color wholeTableBackground(const ScTableStyle* pStyle)
+{
+    const std::map<ScTableStyleElement, const ScPatternAttr*> aPatterns = pStyle->GetSetPatterns();
+    const auto it = aPatterns.find(ScTableStyleElement::WholeTable);
+    if (it == aPatterns.end())
+        return COL_AUTO;
+    const SvxBrushItem* pBrush = it->second->GetItemSet().GetItemIfSet(ATTR_BACKGROUND, false);
+    return pBrush ? pBrush->GetColor() : COL_AUTO;
+}
+
+std::unique_ptr<ScTableStyle> makeBackgroundStyle(ScDocument& rDoc, const OUString& rName,
+                                                  const OUString& rUIName, const Color& rColor)
+{
+    auto pPattern = std::make_unique<ScPatternAttr>(rDoc.getCellAttributeHelper());
+    pPattern->GetItemSetWritable().Put(SvxBrushItem(rColor, ATTR_BACKGROUND));
+    auto pStyle = std::make_unique<ScTableStyle>(rName, std::optional<OUString>(rUIName));
+    pStyle->SetPattern(ScTableStyleElement::WholeTable, std::move(pPattern));
+    return pStyle;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testCustomTableStyleUnappliedReloadXLSX)
+{
+    // A custom table style survives a save and reload even when no table uses
+    // it, so a user can create a style before applying it to anything.
+    createScDoc("xlsx/TableStyleTest.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    ScTableStyles* pStyles = pDoc->GetTableStyles();
+    CPPUNIT_ASSERT(pStyles);
+
+    auto pPattern = std::make_unique<ScPatternAttr>(pDoc->getCellAttributeHelper());
+    pPattern->GetItemSetWritable().Put(SvxBrushItem(COL_LIGHTRED, ATTR_BACKGROUND));
+    auto pStyle = std::make_unique<ScTableStyle>(u"TableStyleCustom1"_ustr,
+                                                 std::optional<OUString>(u"My Custom Style"_ustr));
+    pStyle->SetPattern(ScTableStyleElement::WholeTable, std::move(pPattern));
+    pStyles->AddTableStyle(std::move(pStyle));
+
+    saveAndReload(TestFilter::XLSX);
+
+    const ScTableStyle* pReloaded
+        = getScDoc()->GetTableStyles()->GetTableStyle(u"TableStyleCustom1"_ustr);
+    CPPUNIT_ASSERT(pReloaded);
+    const std::map<ScTableStyleElement, const ScPatternAttr*> aPatterns
+        = pReloaded->GetSetPatterns();
+    const auto it = aPatterns.find(ScTableStyleElement::WholeTable);
+    CPPUNIT_ASSERT(it != aPatterns.end());
+    const SvxBrushItem* pBrush = it->second->GetItemSet().GetItemIfSet(ATTR_BACKGROUND, false);
+    CPPUNIT_ASSERT(pBrush);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, pBrush->GetColor());
+
+    // OOXML tableStyle has no display-name, so the friendly name degrades to the
+    // programmatic name across an xlsx round-trip.
+    CPPUNIT_ASSERT_EQUAL(u"TableStyleCustom1"_ustr, pReloaded->GetUIName());
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testCustomTableStyleNoDuplicateExportXLSX)
+{
+    // An unapplied custom style is written to xl/styles.xml exactly once (a
+    // duplicate name makes the file invalid), and its element is present.
+    createScDoc("xlsx/TableStyleTest.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    ScTableStyles* pStyles = pDoc->GetTableStyles();
+    CPPUNIT_ASSERT(pStyles);
+
+    auto pPattern = std::make_unique<ScPatternAttr>(pDoc->getCellAttributeHelper());
+    pPattern->GetItemSetWritable().Put(SvxBrushItem(COL_LIGHTRED, ATTR_BACKGROUND));
+    auto pStyle = std::make_unique<ScTableStyle>(u"TableStyleCustom1"_ustr,
+                                                 std::optional<OUString>(u"My Custom Style"_ustr));
+    pStyle->SetPattern(ScTableStyleElement::WholeTable, std::move(pPattern));
+    pStyles->AddTableStyle(std::move(pStyle));
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pStylesXml = parseExport(u"xl/styles.xml"_ustr);
+    CPPUNIT_ASSERT(pStylesXml);
+    const char* const sCustom
+        = "/x:styleSheet/x:tableStyles/x:tableStyle[@name='TableStyleCustom1']";
+    assertXPath(pStylesXml, sCustom, 1);
+    assertXPath(pStylesXml, OString::Concat(sCustom) + "/x:tableStyleElement[@type='wholeTable']",
+                1);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleExportNoopXLSX)
+{
+    // A document with no custom styles must not gain any tableStyle entries on
+    // export: the built-in styles are standard OOXML and are never written out.
+    createScDoc();
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pStylesXml = parseExport(u"xl/styles.xml"_ustr);
+    CPPUNIT_ASSERT(pStylesXml);
+    assertXPath(pStylesXml, "/x:styleSheet/x:tableStyles/x:tableStyle", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testClearedTableStyleKeepsOptionsXLSX)
+{
+    // A table whose style was cleared keeps its other table options, which travel on the same
+    // element as the style name.
+    createScDoc("xlsx/TableStyleTest.xlsx");
+    ScDocument* pDoc = getScDoc();
+    ScDBCollection::NamedDBs& rDBs = pDoc->GetDBCollection()->getNamedDBs();
+    CPPUNIT_ASSERT(!rDBs.empty());
+
+    ScTableStyleParam aParam;
+    aParam.maStyleID = u"None"_ustr;
+    aParam.mbRowStripes = true;
+    rDBs.begin()->get()->SetTableStyleInfo(aParam);
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pTable = parseExport(u"xl/tables/table1.xml"_ustr);
+    CPPUNIT_ASSERT(pTable);
+    assertXPath(pTable, "/x:table/x:tableStyleInfo", 1);
+    assertXPath(pTable, "/x:table/x:tableStyleInfo", "showRowStripes", u"1");
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testMultipleCustomTableStylesReloadXLSX)
+{
+    // More than one custom style created together all survive an xlsx reload.
+    createScDoc("xlsx/TableStyleTest.xlsx");
+    ScDocument* pDoc = getScDoc();
+    ScTableStyles* pStyles = pDoc->GetTableStyles();
+    CPPUNIT_ASSERT(pStyles);
+
+    pStyles->AddTableStyle(
+        makeBackgroundStyle(*pDoc, u"TableStyleCustom1"_ustr, u"First"_ustr, COL_LIGHTRED));
+    pStyles->AddTableStyle(
+        makeBackgroundStyle(*pDoc, u"TableStyleCustom2"_ustr, u"Second"_ustr, COL_LIGHTBLUE));
+
+    saveAndReload(TestFilter::XLSX);
+
+    const ScTableStyles* pReloaded = getScDoc()->GetTableStyles();
+    const ScTableStyle* pOne = pReloaded->GetTableStyle(u"TableStyleCustom1"_ustr);
+    const ScTableStyle* pTwo = pReloaded->GetTableStyle(u"TableStyleCustom2"_ustr);
+    CPPUNIT_ASSERT(pOne);
+    CPPUNIT_ASSERT(pTwo);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, wholeTableBackground(pOne));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, wholeTableBackground(pTwo));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
