@@ -19,7 +19,12 @@
 
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -603,6 +608,49 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureDuplicateSlideKeepsPa
     CPPUNIT_ASSERT_EQUAL(u"Cobalt2"_ustr, masterName(1));
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureSetNotes)
+{
+    // A SetNotes command writes the speaker notes of the current slide, and one
+    // undo reverts the whole transform including the notes.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+
+    auto notesText = [&]() -> OUString {
+        SdPage* pNotes = pDoc->GetSdPage(0, PageKind::Notes);
+        SdrObject* pObj = pNotes ? pNotes->GetPresObj(PresObjKind::Notes) : nullptr;
+        if (pObj && pObj->IsSdrTextObj())
+        {
+            SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObj);
+            if (pTextObj->GetOutlinerParaObject())
+                return pTextObj->GetOutlinerParaObject()->GetTextObject().GetText(0);
+        }
+        return OUString();
+    };
+
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"SetText.0": "Slide title"},
+            {"SetNotes": "Speak to the roadmap here."}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    CPPUNIT_ASSERT_EQUAL(u"Speak to the roadmap here."_ustr, notesText());
+
+    // One undo clears the notes again.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT(notesText() != u"Speak to the roadmap here."_ustr);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureApplyTemplateKeepsUntouchedSlides)
 {
     // Re-applying an already applied template re-themes only the slides the
@@ -786,6 +834,201 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignTemplateLayouts)
     CPPUNIT_ASSERT(aJson.indexOf("role") >= 0);
 }
 
+namespace
+{
+// Stores a design manifest JSON string in the document's AIDesignManifest
+// user-defined property, the standard ODF carrier a template declares its
+// manifest in.
+void lcl_SetDesignManifest(const uno::Reference<lang::XComponent>& xComponent,
+                           const OUString& rJson)
+{
+    uno::Reference<document::XDocumentPropertiesSupplier> xSupplier(xComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSupplier.is());
+    uno::Reference<beans::XPropertyContainer> xUserProps
+        = xSupplier->getDocumentProperties()->getUserDefinedProperties();
+    CPPUNIT_ASSERT(xUserProps.is());
+    try
+    {
+        xUserProps->removeProperty(u"AIDesignManifest"_ustr);
+    }
+    catch (const uno::Exception&)
+    {
+    }
+    xUserProps->addProperty(u"AIDesignManifest"_ustr, beans::PropertyAttribute::REMOVABLE,
+                            cpo::uno::Any(rJson));
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignManifestDeclaredRoles)
+{
+    // A master a manifest declares takes the declared part and skips the
+    // name-and-example heuristic, so the manifest wins even when the example
+    // layout would suggest a different part.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+
+    const OUString aMasterName
+        = pDoc->GetMasterSdPage(0, PageKind::Standard)->GetName();
+
+    auto roleOf = [&](const OUString& rName) -> sd::DesignTemplateMaster {
+        for (const auto& rMaster : sd::CollectDesignTemplateMasters(*pDoc))
+            if (rMaster.maName == rName)
+                return rMaster;
+        return {};
+    };
+
+    // Without a manifest the part is inferred, not declared. A closing part can
+    // only come from a name keyword, never from an example layout, so the fresh
+    // document does not infer one.
+    CPPUNIT_ASSERT(!roleOf(aMasterName).mbDeclared);
+    CPPUNIT_ASSERT(sd::DesignMasterRole::Closing != roleOf(aMasterName).meRole);
+
+    // Declaring the master a closing overrides whatever the heuristic inferred.
+    lcl_SetDesignManifest(mxComponent, "{\"schemaVersion\":1,\"masters\":{\"" + aMasterName
+                                           + "\":\"closing\"}}");
+    CPPUNIT_ASSERT_EQUAL(sd::DesignMasterRole::Closing, roleOf(aMasterName).meRole);
+    CPPUNIT_ASSERT(roleOf(aMasterName).mbDeclared);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignManifestUnreadable)
+{
+    // A manifest that cannot be parsed, or whose schema version is not
+    // recognised, reads as no manifest at all, so the heuristic runs as before.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+
+    lcl_SetDesignManifest(mxComponent, u"this is not json {{{"_ustr);
+    CPPUNIT_ASSERT(!sd::ReadAIDesignManifest(*pDoc).has_value());
+
+    // A version below 1 is not a schema the reader knows.
+    lcl_SetDesignManifest(mxComponent, u"{\"schemaVersion\":0,\"masters\":{}}"_ustr);
+    CPPUNIT_ASSERT(!sd::ReadAIDesignManifest(*pDoc).has_value());
+
+    // A well-formed version-1 manifest reads back as a manifest.
+    lcl_SetDesignManifest(mxComponent, u"{\"schemaVersion\":1}"_ustr);
+    CPPUNIT_ASSERT(sd::ReadAIDesignManifest(*pDoc).has_value());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureSetSlideIntent)
+{
+    // A manifest can map a slide intent word straight to a master. A slide the
+    // model gives that intent lands on the mapped master, winning over the
+    // part-and-layout choice. An intent the manifest maps nothing for falls back
+    // to the ordinary choice.
+    OUString aDirUrl = u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/cool-ai-templates/"_ustr;
+    rtl::Bootstrap::expandMacros(aDirUrl);
+
+    // Build a template that carries an intent manifest: start from the bundled
+    // Cobalt template, add a manifest mapping the intent "quote" to Cobalt's
+    // opening master, and save it under a fresh name in the template directory.
+    const OUString aIntentTemplateUrl = aDirUrl + "IntentDeck.otp";
+    comphelper::ScopeGuard aCleanup(
+        [&aIntentTemplateUrl] { osl::File::remove(aIntentTemplateUrl); });
+    {
+        loadFromURL(aDirUrl + "Cobalt.otp");
+        lcl_SetDesignManifest(
+            mxComponent, u"{\"schemaVersion\":1,\"intents\":{\"quote\":\"Cobalt1\"}}"_ustr);
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xStorable.is());
+        xStorable->storeToURL(aIntentTemplateUrl,
+                              { comphelper::makePropertyValue(u"FilterName"_ustr,
+                                                              u"impress8_template"_ustr) });
+    }
+
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+
+    // Both slides use the body content layout. The first carries the mapped
+    // intent, the second an intent the manifest maps nothing for.
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"ApplyTemplate": "IntentDeck"},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_CONTENT"},
+            {"SetText.0": "Quote"},
+            {"SetSlideIntent": "quote"},
+            {"InsertMasterSlide": 0},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_CONTENT"},
+            {"SetText.0": "Body"},
+            {"SetSlideIntent": "mystery"}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pImpressDocument->getDrawPages()->getCount());
+
+    auto masterName = [&](sal_uInt16 nPage) {
+        return static_cast<SdPage*>(
+                   &pDoc->GetSdPage(nPage, PageKind::Standard)->TRG_GetMasterPage())
+            ->GetName();
+    };
+    // The mapped intent lands on the opening master; the unknown intent falls
+    // back to the body master its content layout suggests.
+    CPPUNIT_ASSERT_EQUAL(u"Cobalt1"_ustr, masterName(0));
+    CPPUNIT_ASSERT_EQUAL(u"Cobalt"_ustr, masterName(1));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignTemplateDesignsDeclared)
+{
+    // When a template declares a manifest, the per-name design query reports
+    // each master's part as declared, and adds the manifest's image art
+    // direction and content budgets. A template with no manifest leaves those
+    // out.
+    OUString aDirUrl = u"$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/cool-ai-templates/"_ustr;
+    rtl::Bootstrap::expandMacros(aDirUrl);
+
+    const OUString aDesignedTemplateUrl = aDirUrl + "DesignedDeck.otp";
+    comphelper::ScopeGuard aCleanup(
+        [&aDesignedTemplateUrl] { osl::File::remove(aDesignedTemplateUrl); });
+    {
+        loadFromURL(aDirUrl + "Cobalt.otp");
+        lcl_SetDesignManifest(
+            mxComponent,
+            u"{\"schemaVersion\":1,\"masters\":{\"Cobalt1\":\"opening\"},"
+            "\"artDirection\":\"Flat vector deep cobalt blue.\","
+            "\"budgets\":{\"maxSlides\":12,\"maxTitleLength\":80}}"_ustr);
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xStorable.is());
+        xStorable->storeToURL(aDesignedTemplateUrl,
+                              { comphelper::makePropertyValue(u"FilterName"_ustr,
+                                                              u"impress8_template"_ustr) });
+    }
+
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    tools::JsonWriter aJsonWriter;
+    pImpressDocument->getCommandValues(aJsonWriter,
+                                       ".uno:GetDesignTemplateDesigns?name=DesignedDeck");
+    const OString aJson = aJsonWriter.finishAndGetAsOString();
+
+    // The declared master reports its part as declared rather than inferred.
+    CPPUNIT_ASSERT(aJson.indexOf("declared") >= 0);
+    // The art-direction sentence rides the reply.
+    CPPUNIT_ASSERT(aJson.indexOf("artDirection") >= 0);
+    CPPUNIT_ASSERT(aJson.indexOf("Flat vector deep cobalt blue") >= 0);
+    // The declared budgets ride it too, under the exact key names.
+    CPPUNIT_ASSERT(aJson.indexOf("budgets") >= 0);
+    CPPUNIT_ASSERT(aJson.indexOf("maxSlides") >= 0);
+    CPPUNIT_ASSERT(aJson.indexOf("maxTitleLength") >= 0);
+    // A budget the manifest did not state is left out.
+    CPPUNIT_ASSERT(aJson.indexOf("maxItemLength") < 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUndoImage)
 {
     // Inserting an image replaces a placeholder object; undoing the transform
@@ -816,6 +1059,52 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUndoImage)
 
     dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
     CPPUNIT_ASSERT(isObj1Graphic());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureInsertImageAtAlt)
+{
+    // InsertImageAt takes either a plain URL string or an object carrying the
+    // URL and a text alternative. The object form sets the graphic and stores
+    // the alt text as the object title, which is the accessibility text
+    // alternative for an image. The string form still sets the graphic.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+
+    auto obj1 = [&]() {
+        SdPage* pPage = pDoc->GetSdPage(0, PageKind::Standard);
+        return pPage ? pPage->GetObj(1) : nullptr;
+    };
+
+    OUString aImageURL = createFileURL(u"TestImage1.png");
+
+    OUString aObjectJson = "{ \"Transforms\": { \"SlideCommands\": ["
+                           "{ \"ChangeLayoutByName\": \"AUTOLAYOUT_TITLE_CONTENT\" },"
+                           "{ \"InsertImageAt.0.1\": { \"url\": \""
+                           + aImageURL + "\", \"alt\": \"A blue mountain at dawn\" } } ] } }";
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aObjectJson) });
+
+    CPPUNIT_ASSERT(obj1());
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::Graphic, obj1()->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(u"A blue mountain at dawn"_ustr, obj1()->GetTitle());
+
+    // The plain string form still replaces the placeholder with the graphic; it
+    // carries no alt text.
+    createSdImpressDoc();
+    pDoc = dynamic_cast<SdXImpressDocument*>(mxComponent.get())->GetDoc();
+    OUString aStringJson = "{ \"Transforms\": { \"SlideCommands\": ["
+                           "{ \"ChangeLayoutByName\": \"AUTOLAYOUT_TITLE_CONTENT\" },"
+                           "{ \"InsertImageAt.0.1\": \""
+                           + aImageURL + "\" } ] } }";
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aStringJson) });
+
+    CPPUNIT_ASSERT(obj1());
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::Graphic, obj1()->GetObjIdentifier());
+    CPPUNIT_ASSERT(obj1()->GetTitle().isEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUnoCommand)

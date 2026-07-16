@@ -115,23 +115,31 @@ Prefer SlideCommands operations (SetText, ChangeLayout, EditTextObject) over raw
 Example - create a 5-slide presentation from a blank ODP:
 {"Transforms":{"SlideCommands":[{"ChangeLayoutByName":"AUTOLAYOUT_TITLE"},{"SetText.0":"Quarterly Report"},{"SetText.1":"Q1 2026"},{"RenameSlide":"Title"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:CenterPara"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},{"SetText.0":"Revenue"},{"SetText.1":"Revenue grew 15% year over year\nNew markets contributed 30% of growth\nCustomer retention at 95%"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},{"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_2CONTENT"},{"SetText.0":"Strengths & Risks"},{"SetText.1":"Strong brand recognition\nGrowing user base\nHigh retention rate"},{"SetText.2":"Supply chain delays\nRegulatory changes\nCompetitor pricing"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},{"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},{"EditTextObject.2":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},{"SetText.0":"Roadmap"},{"SetText.1":"Phase 1: Research\nPhase 2: Development\nPhase 3: Launch"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},{"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultNumbering"},{"SelectParagraph":0},{"UnoCommand":".uno:Bold"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_ONLY"},{"SetText.0":"Thank You"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:CenterPara"}]},{"JumpToSlide":1},{"EditTextObject.1":[{"SelectParagraph":0},{"InsertText":"Revenue grew 15% YoY"},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:Italic"}]}]}})";
 
-/// The write_slides description in three fragments. The middle fragment,
-/// DECK_SLIDE_SHAPE, describes the shape of one slide and is reused by the
-/// per-slide expansion tool. The macros let the compiler join the three into
-/// one string literal for WRITE_SLIDES_DESCRIPTION, so that description stays
-/// exactly what it was; the macros are undefined right after.
-#define COOL_WRITE_SLIDES_INTRO_TEXT \
+/// The write_slides description in fragments so the caller composes it at run
+/// time. The "Limits:" sentence is not a fragment here: it is built from the
+/// live budgets by DeckSpec::limitsSentence and inserted between DECK_SLIDE_SHAPE
+/// and WRITE_SLIDES_SUMMARY_NOTE, so the numbers the model is told match the
+/// numbers the validator enforces. With default budgets that composition is
+/// byte-identical to the previous single description. DECK_SLIDE_SHAPE is also
+/// reused by the per-slide write_slide expansion tool.
+inline constexpr const char* WRITE_SLIDES_INTRO =
     R"(Create presentation slides from a declarative deck description. The server lays out and styles the slides for you, so describe what each slide is about, not how to format it.
 
-Pass a "deck" object of the form {"slides": [ ... ]}. )"
+Pass a "deck" object of the form {"slides": [ ... ]}. )";
 
-#define COOL_DECK_SLIDE_SHAPE_TEXT \
+/// The shape of one slide in a deck description, without the budget limits (see
+/// DeckSpec::limitsSentence). Shared by the write_slides tool and the per-slide
+/// write_slide expansion tool.
+inline constexpr const char* DECK_SLIDE_SHAPE =
     R"(Each slide is an object with:
 - "part": one of "opening", "divider", "body", "closing" - the slide's role in the deck. Use opening for the first slide, divider for a section break, closing for the last slide, and body for the rest.
 - "intent": one of "title", "agenda", "bullets", "two-column", "comparison", "quote", "big-number", "image", "section", "closing" - what the slide is for. The intent chooses the layout.
 - "title": the slide title (required).
 - "blocks": the content as an array of blocks. A bullets block is {"kind": "bullets", "items": ["...", "..."]}. A text block is {"kind": "text", "text": "..."}.
 - "image": only for the "image" intent, {"brief": "a description to generate an image from", "alt": "short alt text"}.
+- "notes": optional speaker notes for the slide. Put depth in the notes and keep the slide text scannable.
+
+Inside bullet items and text blocks you may emphasise words with **bold** and *italic*. No other markdown is supported.
 
 Which blocks each intent expects:
 - title, closing: no blocks, or a single text block used as a subtitle.
@@ -139,32 +147,20 @@ Which blocks each intent expects:
 - two-column, comparison: exactly two bullets blocks (left and right).
 - quote, big-number: exactly one text block.
 - image: no blocks; supply an "image" instead.
-- section: a title only, no blocks.
+- section: a title only, no blocks.)";
 
-Limits: at most 30 slides, at most 6 items per bullets block, and keep each item short. Do not prefix items with "- "; bullet markers are added for you, so put only the items themselves in each block.)"
-
-#define COOL_WRITE_SLIDES_SUMMARY_TEXT \
+/// The trailing "summary" note appended after the budget limits in the
+/// write_slides description.
+inline constexpr const char* WRITE_SLIDES_SUMMARY_NOTE =
     R"(
 
-Also pass a "summary": a short markdown preview of the slides being created, shown to the user for approval.)"
+Also pass a "summary": a short markdown preview of the slides being created, shown to the user for approval.)";
 
-/// The shape of one slide in a deck description. Shared by the write_slides tool
-/// and the per-slide write_slide expansion tool.
-inline constexpr const char* DECK_SLIDE_SHAPE = COOL_DECK_SLIDE_SHAPE_TEXT;
-
-/// Description for the write_slides tool: the compact deck-spec schema the
-/// model fills in. The server validates it and compiles it into slide commands,
-/// so this stays much smaller than the imperative slide grammar above.
-inline constexpr const char* WRITE_SLIDES_DESCRIPTION =
-    COOL_WRITE_SLIDES_INTRO_TEXT COOL_DECK_SLIDE_SHAPE_TEXT COOL_WRITE_SLIDES_SUMMARY_TEXT;
-
-#undef COOL_WRITE_SLIDES_INTRO_TEXT
-#undef COOL_DECK_SLIDE_SHAPE_TEXT
-#undef COOL_WRITE_SLIDES_SUMMARY_TEXT
-
-/// Description for the propose_outline tool: the model sketches a deck as a list
-/// of slides the user can review and edit before the deck is built.
-inline constexpr const char* PROPOSE_OUTLINE_DESCRIPTION =
+/// The propose_outline description without its trailing slide-count sentence.
+/// The caller appends "Give at most N slides. ..." with N from the live budgets,
+/// so the number matches the validator; with default budgets the composition is
+/// byte-identical to the previous single description.
+inline constexpr const char* PROPOSE_OUTLINE_HEAD =
     R"(Propose a slide-by-slide outline for a new deck for the user to review and edit before the slides are built. Call this instead of write_slides for a deck of more than about three slides. After the user approves the outline, the server builds the slides itself, so do not also call write_slides for a deck you have outlined.
 
 Pass an "outline" object of the form {"title": "deck title", "slides": [ ... ]}. Each slide entry is an object with:
@@ -173,7 +169,12 @@ Pass an "outline" object of the form {"title": "deck title", "slides": [ ... ]}.
 - "title": a short slide title (required).
 - "gist": one or two sentences saying specifically what this slide should cover. This drives the content the server writes for the slide, so make it concrete.
 
-Give at most 30 slides. Open with an opening title slide and end with a closing slide.)";
+)";
+
+/// The propose_outline slide-count sentence, closing the description. The "N"
+/// is substituted from the live budgets at composition time.
+inline constexpr const char* PROPOSE_OUTLINE_TAIL_OPEN_CLOSE =
+    " slides. Open with an opening title slide and end with a closing slide.";
 
 /// Writer content-control transform documentation.
 inline constexpr const char* TRANSFORM_WRITER =

@@ -21,6 +21,8 @@
 
 #include <config.h>
 
+#include "DeckSpec.hpp"
+
 #include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
 
@@ -28,6 +30,7 @@
 #include <cstddef>
 #include <functional>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -64,6 +67,27 @@ struct PendingImageGen
     int objId;             // placeholder object index (N from GenerateImage.N)
     std::string prompt;    // image generation prompt
     std::string filePath;  // filled after generation with file:// URL for kit
+    std::string alt;       // accessibility label for the inserted image, may be empty
+};
+
+/// The design information a picked template contributes to a chat request: the
+/// slide parts and layouts it has designs for, its image art direction, and any
+/// budget limits its manifest tightens. Empty when no template was picked or the
+/// template carries no manifest.
+struct DesignInfo
+{
+    std::vector<std::string> parts;
+    std::vector<std::string> layouts;
+    // The template manifest's one-sentence image style, already sanitized, or
+    // empty when the template declares none.
+    std::string artDirection;
+    // Budget limits the manifest declares. Each is applied as a tighten-only
+    // lower bound against the configured budgets; an absent value leaves the
+    // configured limit in place.
+    std::optional<int> maxSlides;
+    std::optional<int> maxItemsPerBullets;
+    std::optional<int> maxItemLength;
+    std::optional<int> maxTitleLength;
 };
 
 /// State for the AI chat multi-round tool loop.
@@ -84,6 +108,12 @@ struct AIToolLoopState
     // same tone as the initial request.
     std::string tone;
     std::string customToneDescription;
+    // The deck-spec limits this request is validated against, read from
+    // configuration and possibly lowered by the picked template's manifest.
+    DeckSpec::Budgets budgets;
+    // The image style appended to every generated-image prompt: the picked
+    // template's art direction, or a neutral default when none applies.
+    std::string artDirection;
     // Read-verify-insert tasks (e.g. "add a formula for each record") legitimately
     // need several rounds: read the sheet, check functions, evaluate, then insert.
     // Keep a ceiling to prevent runaway loops, but high enough to finish the work.
@@ -201,7 +231,7 @@ private:
                                             const std::string& reasonPhrase,
                                             const std::string& body = "",
                                             const std::string& context = "");
-    static Poco::JSON::Array::Ptr buildToolDefinitions(const std::string& docType);
+    Poco::JSON::Array::Ptr buildToolDefinitions(const std::string& docType) const;
 #if MOBILEAPP
     /// Desktop transport: POST via the registered ai::HttpPostFn and deliver the
     /// result to \p onResponse on \p docBroker's polling thread (statusCode is an
@@ -212,11 +242,10 @@ private:
                           std::function<void(int statusCode, std::string body)> onResponse);
 #endif
     /// Builds the full system prompt and the message list, initialises the
-    /// tool loop, and makes the first LLM call. The masters and layouts are the
-    /// picked template's designs (empty when no template or none were found).
-    void launchChatRequest(const PendingChatRequest& req,
-        const std::vector<std::string>& designTemplateParts,
-        const std::vector<std::string>& designTemplateLayouts);
+    /// tool loop, and makes the first LLM call. The design carries the picked
+    /// template's parts, layouts, art direction, and any tightened budgets;
+    /// pass a default-constructed DesignInfo when no template was picked.
+    void launchChatRequest(const PendingChatRequest& req, const DesignInfo& design);
     void callLLMAPI();
     /// POST a chat-completion payload to the model endpoint. Reads the URL and
     /// key from the current tool loop, sets the active transport, and delivers

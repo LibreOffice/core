@@ -182,6 +182,15 @@ void AIUtilTests::testSlideCommandTable()
              parse(R"({"Transforms":{"SlideCommands":[{"SetSlidePart":"opening"}]}})"))
              .has_value());
 
+    // SetNotes and SetSlideIntent are part of the vocabulary and not server-only,
+    // so a compiled or model-emitted transform carrying them validates.
+    LOK_ASSERT(!AIUtil::isServerOnlySlideCommand("SetNotes"));
+    LOK_ASSERT(!AIUtil::isServerOnlySlideCommand("SetSlideIntent"));
+    LOK_ASSERT(!AIUtil::validateTransformStructure(
+                    parse(R"({"Transforms":{"SlideCommands":[{"SetNotes":"Say this aloud"},)"
+                          R"({"SetSlideIntent":"quote"}]}})"))
+                    .has_value());
+
     // The layout set knows its members.
     LOK_ASSERT(AIUtil::isKnownSlideLayout("AUTOLAYOUT_TITLE_CONTENT"));
     LOK_ASSERT(AIUtil::isKnownSlideLayout("AUTOLAYOUT_ONLY_TEXT"));

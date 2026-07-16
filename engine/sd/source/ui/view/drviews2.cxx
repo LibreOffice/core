@@ -47,6 +47,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -268,6 +269,23 @@ bool lcl_IsValidDesignTemplateName(const OUString& rName)
     return true;
 }
 
+// A slide intent is an opaque word the model sends to pick a master by a
+// template's own mapping. The engine never interprets the word, so the only
+// rule is a narrow shape: one to thirty-two characters, each a lowercase ASCII
+// letter or a hyphen.
+bool lcl_IsValidDesignIntentWord(const OUString& rWord)
+{
+    if (rWord.isEmpty() || rWord.getLength() > 32)
+        return false;
+    for (sal_Int32 i = 0; i < rWord.getLength(); ++i)
+    {
+        const sal_Unicode cChar = rWord[i];
+        if (!((cChar >= 'a' && cChar <= 'z') || cChar == '-'))
+            return false;
+    }
+    return true;
+}
+
 }
 
 std::vector<std::pair<OUString, OUString>> CollectDesignTemplates()
@@ -378,8 +396,142 @@ std::optional<DesignMasterRole> WireNameToDesignRole(std::u16string_view rName)
     return std::nullopt;
 }
 
+std::optional<AIDesignManifest> ReadAIDesignManifest(SdDrawDocument& rTemplate)
+{
+    ::sd::DrawDocShell* pShell = rTemplate.GetDocSh();
+    if (!pShell)
+        return std::nullopt;
+
+    OUString aJson;
+    try
+    {
+        uno::Reference<document::XDocumentProperties> xDocProps = pShell->getDocProperties();
+        if (!xDocProps.is())
+            return std::nullopt;
+        uno::Reference<beans::XPropertySet> xUserProps(xDocProps->getUserDefinedProperties(),
+                                                       uno::UNO_QUERY);
+        if (!xUserProps.is())
+            return std::nullopt;
+        uno::Reference<beans::XPropertySetInfo> xInfo = xUserProps->getPropertySetInfo();
+        if (!xInfo.is() || !xInfo->hasPropertyByName(u"AIDesignManifest"_ustr))
+            return std::nullopt;
+        xUserProps->getPropertyValue(u"AIDesignManifest"_ustr) >>= aJson;
+    }
+    catch (const uno::Exception&)
+    {
+        return std::nullopt;
+    }
+    if (aJson.isEmpty())
+        return std::nullopt;
+
+    boost::property_tree::ptree aTree;
+    try
+    {
+        std::stringstream aStream(std::string(OUStringToOString(aJson, RTL_TEXTENCODING_UTF8)));
+        boost::property_tree::read_json(aStream, aTree);
+    }
+    catch (...)
+    {
+        KIT_WARN("sd.transform", "AIDesignManifest is not valid JSON, ignoring it.");
+        return std::nullopt;
+    }
+
+    // A reader of a later schema reads the fields it knows and ignores the rest,
+    // so version 1 is the lowest the reader accepts. A missing or older version
+    // reads as no manifest and the heuristic runs instead.
+    if (aTree.get("schemaVersion", 0) < 1)
+    {
+        KIT_WARN("sd.transform",
+                 "AIDesignManifest schema version is missing or below 1, ignoring it.");
+        return std::nullopt;
+    }
+
+    // The masters the template actually carries. A manifest entry that names a
+    // master the template does not have is dropped.
+    std::set<OUString> aMasterNames;
+    const sal_uInt16 nMasters = rTemplate.GetMasterSdPageCount(PageKind::Standard);
+    for (sal_uInt16 i = 0; i < nMasters; ++i)
+    {
+        if (SdPage* pMaster = rTemplate.GetMasterSdPage(i, PageKind::Standard))
+            aMasterNames.insert(pMaster->GetName());
+    }
+
+    AIDesignManifest aManifest;
+
+    if (auto oMasters = aTree.get_child_optional("masters"))
+    {
+        for (const auto& [rKey, rChild] : *oMasters)
+        {
+            const OUString aMasterName = OStringToOUString(rKey, RTL_TEXTENCODING_UTF8);
+            const OUString aRoleName
+                = OStringToOUString(rChild.get_value<std::string>(), RTL_TEXTENCODING_UTF8);
+            if (!aMasterNames.contains(aMasterName))
+            {
+                KIT_WARN("sd.transform", "AIDesignManifest names an unknown master '"
+                                             << aMasterName << "', dropping it.");
+                continue;
+            }
+            std::optional<DesignMasterRole> oRole = WireNameToDesignRole(aRoleName);
+            if (!oRole)
+            {
+                KIT_WARN("sd.transform", "AIDesignManifest gives master '"
+                                             << aMasterName << "' an unknown part '" << aRoleName
+                                             << "', dropping it.");
+                continue;
+            }
+            aManifest.maMasterRoles[aMasterName] = *oRole;
+        }
+    }
+
+    if (auto oIntents = aTree.get_child_optional("intents"))
+    {
+        for (const auto& [rKey, rChild] : *oIntents)
+        {
+            const OUString aIntent = OStringToOUString(rKey, RTL_TEXTENCODING_UTF8);
+            const OUString aMasterName
+                = OStringToOUString(rChild.get_value<std::string>(), RTL_TEXTENCODING_UTF8);
+            if (!lcl_IsValidDesignIntentWord(aIntent))
+            {
+                KIT_WARN("sd.transform", "AIDesignManifest has a malformed intent word '"
+                                             << aIntent << "', dropping it.");
+                continue;
+            }
+            if (!aMasterNames.contains(aMasterName))
+            {
+                KIT_WARN("sd.transform", "AIDesignManifest maps intent '"
+                                             << aIntent << "' to an unknown master '"
+                                             << aMasterName << "', dropping it.");
+                continue;
+            }
+            aManifest.maIntentMasters[aIntent] = aMasterName;
+        }
+    }
+
+    aManifest.maArtDirection
+        = OStringToOUString(aTree.get("artDirection", std::string()), RTL_TEXTENCODING_UTF8);
+
+    if (auto oBudgets = aTree.get_child_optional("budgets"))
+    {
+        // Only a budget of one or more is kept.
+        auto readBudget = [&oBudgets](const char* pKey) -> std::optional<sal_Int32> {
+            if (auto oValue = oBudgets->get_optional<sal_Int32>(pKey))
+                if (*oValue >= 1)
+                    return *oValue;
+            return std::nullopt;
+        };
+        aManifest.moMaxSlides = readBudget("maxSlides");
+        aManifest.moMaxItemsPerBullets = readBudget("maxItemsPerBullets");
+        aManifest.moMaxItemLength = readBudget("maxItemLength");
+        aManifest.moMaxTitleLength = readBudget("maxTitleLength");
+    }
+
+    return aManifest;
+}
+
 std::vector<DesignTemplateMaster> CollectDesignTemplateMasters(SdDrawDocument& rTemplate)
 {
+    const std::optional<AIDesignManifest> oManifest = ReadAIDesignManifest(rTemplate);
+
     std::vector<DesignTemplateMaster> aMasters;
     const sal_uInt16 nMasters = rTemplate.GetMasterSdPageCount(PageKind::Standard);
     std::map<OUString, std::size_t> aIndex;
@@ -387,12 +539,29 @@ std::vector<DesignTemplateMaster> CollectDesignTemplateMasters(SdDrawDocument& r
     {
         const OUString aName = rTemplate.GetMasterSdPage(i, PageKind::Standard)->GetName();
         aIndex.emplace(aName, aMasters.size());
-        aMasters.push_back({ aName, DesignMasterRoleFromName(aName), AUTOLAYOUT_NONE, 0 });
+
+        // A master the manifest declares takes the declared part and skips both
+        // heuristic passes, so the manifest wins over the name keyword and the
+        // example layout. A master the manifest does not name falls to the name
+        // heuristic.
+        DesignMasterRole eRole = DesignMasterRoleFromName(aName);
+        bool bDeclared = false;
+        if (oManifest)
+        {
+            auto itRole = oManifest->maMasterRoles.find(aName);
+            if (itRole != oManifest->maMasterRoles.end())
+            {
+                eRole = itRole->second;
+                bDeclared = true;
+            }
+        }
+        aMasters.push_back({ aName, eRole, AUTOLAYOUT_NONE, 0, bDeclared });
     }
 
     // Each example slide names a master and shows the layout it pairs with. The
-    // layout fixes the part of a master whose name carried no keyword, and every
-    // example counts towards how heavily a master is used.
+    // layout fixes the part of a master whose name carried no keyword and the
+    // manifest did not declare, and every example counts towards how heavily a
+    // master is used.
     const sal_uInt16 nSlides = rTemplate.GetSdPageCount(PageKind::Standard);
     for (sal_uInt16 i = 0; i < nSlides; ++i)
     {
@@ -408,7 +577,7 @@ std::vector<DesignTemplateMaster> CollectDesignTemplateMasters(SdDrawDocument& r
         const AutoLayout eLayout = pSlide->GetAutoLayout();
         if (rMaster.meExampleLayout == AUTOLAYOUT_NONE)
             rMaster.meExampleLayout = eLayout;
-        if (rMaster.meRole == DesignMasterRole::Unknown)
+        if (!rMaster.mbDeclared && rMaster.meRole == DesignMasterRole::Unknown)
         {
             // A title-and-subtitle example reads as an opening, a title-only or
             // blank example as a section break, anything with body content as a
@@ -595,15 +764,14 @@ public:
             return;
         maFallback = rTemplate.GetMasterSdPage(0, PageKind::Standard)->GetName();
 
-        // Keep one master per non-body part, preferring the one a name keyword
-        // named over one decided only by an example layout. Gather the body
-        // masters with their example layout and usage so a body slide can be
-        // matched by layout and, failing that, to the most-used body master.
-        std::map<DesignMasterRole, bool> aRoleByName;
+        // Keep one master per non-body part, preferring the strongest source of
+        // its part: a manifest declaration beats a name keyword, which beats a
+        // part decided only by an example layout. Gather the body masters with
+        // their example layout and usage so a body slide can be matched by
+        // layout and, failing that, to the most-used body master.
+        std::map<DesignMasterRole, int> aRolePriority;
         for (const DesignTemplateMaster& rMaster : CollectDesignTemplateMasters(rTemplate))
         {
-            const bool bByName
-                = DesignMasterRoleFromName(rMaster.maName) != DesignMasterRole::Unknown;
             if (rMaster.meRole == DesignMasterRole::Content)
             {
                 maBodyMasters.push_back(
@@ -612,16 +780,36 @@ public:
             }
             if (rMaster.meRole == DesignMasterRole::Unknown)
                 continue;
+            const int nPriority
+                = rMaster.mbDeclared
+                      ? 2
+                      : (DesignMasterRoleFromName(rMaster.maName) != DesignMasterRole::Unknown ? 1
+                                                                                               : 0);
             auto it = maRoleMaster.find(rMaster.meRole);
-            if (it == maRoleMaster.end() || (bByName && !aRoleByName[rMaster.meRole]))
+            if (it == maRoleMaster.end() || nPriority > aRolePriority[rMaster.meRole])
             {
                 maRoleMaster[rMaster.meRole] = rMaster.maName;
-                aRoleByName[rMaster.meRole] = bByName;
+                aRolePriority[rMaster.meRole] = nPriority;
             }
         }
 
         std::sort(maBodyMasters.begin(), maBodyMasters.end(),
                   [](const BodyMaster& rA, const BodyMaster& rB) { return rA.mnUsage > rB.mnUsage; });
+
+        // The manifest can map an intent word straight to a master. The reader
+        // already dropped any entry whose master the template does not have.
+        if (std::optional<AIDesignManifest> oManifest = ReadAIDesignManifest(rTemplate))
+            maIntentMasters = std::move(oManifest->maIntentMasters);
+    }
+
+    // The master the template's manifest maps this intent word to, or no value
+    // when the manifest maps nothing for it.
+    std::optional<OUString> masterForIntent(std::u16string_view rIntent) const
+    {
+        auto it = maIntentMasters.find(OUString(rIntent));
+        if (it != maIntentMasters.end())
+            return it->second;
+        return std::nullopt;
     }
 
     // The master for a slide whose part the model named. A body slide takes a
@@ -689,11 +877,12 @@ private:
 
     OUString maFallback;
     std::map<DesignMasterRole, OUString> maRoleMaster;
+    std::map<OUString, OUString> maIntentMasters;
     std::vector<BodyMaster> maBodyMasters;
 };
 
 bool lcl_ReplaceWithImage(SdDrawDocument* pDoc, SdPage* pPage, int nObjId,
-                                 const std::string& rImageUrl,
+                                 const std::string& rImageUrl, const OUString& rAltText,
                                  SfxViewShell* pViewShell, int nPartId)
 {
     OUString aURL = OStringToOUString(rImageUrl, RTL_TEXTENCODING_UTF8);
@@ -713,6 +902,11 @@ bool lcl_ReplaceWithImage(SdDrawDocument* pDoc, SdPage* pPage, int nObjId,
     pNewGrafObj->AdjustToMaxRect(pPickObj->GetLogicRect());
     pNewGrafObj->SetOutlinerParaObject(std::nullopt);
     pNewGrafObj->SetEmptyPresObj(false);
+    // The image's text alternative for people using a screen reader. Stored as
+    // the object title, which is what the accessibility layer reads for a
+    // graphic and what exports as the svg:title of the shape.
+    if (!rAltText.isEmpty())
+        pNewGrafObj->SetTitle(rAltText);
 
     // Record undo before the replace: the action reads its object list from
     // the old object, which ReplaceObject removes from the page.
@@ -734,7 +928,10 @@ bool lcl_ReplaceWithImage(SdDrawDocument* pDoc, SdPage* pPage, int nObjId,
 // template is applied once, after the whole command sequence. maSlideParts
 // holds the slide part a SetSlidePart command gave a slide, keyed by the slide;
 // the apply step places the slide on the master for that part before falling
-// back to its own choice. maTouchedPages holds the standard slides this
+// back to its own choice. maSlideIntents holds the intent word a SetSlideIntent
+// command gave a slide; when the template's manifest maps that word to a master
+// the apply step prefers it over the part. maTouchedPages holds the standard
+// slides this
 // transform inserted or modified; a slide the commands left alone is not in
 // it.
 struct SlideCommandContext
@@ -751,6 +948,7 @@ struct SlideCommandContext
     int mnNextPageId = 0;
     std::optional<OUString> moApplyTemplateUrl = std::nullopt;
     std::map<const SdPage*, DesignMasterRole> maSlideParts = {};
+    std::map<const SdPage*, OUString> maSlideIntents = {};
     std::set<const SdPage*> maTouchedPages = {};
 
     void touch(const SdPage* pPage)
@@ -954,6 +1152,7 @@ void handleDeleteSlide(SlideCommandContext& rCtx, const std::string& rKey,
         // this document.
         rCtx.maTouchedPages.erase(pDelStd);
         rCtx.maSlideParts.erase(pDelStd);
+        rCtx.maSlideIntents.erase(pDelStd);
 
         if (nPageIdToDel <= rCtx.mnActPageId)
         {
@@ -1063,12 +1262,15 @@ void handleDuplicateSlide(SlideCommandContext& rCtx, const std::string& rKey,
     rCtx.mpDoc->DuplicatePage(nDupSlideId);
     SdPage* pDupStd = rCtx.mpDoc->GetSdPage(nDupSlideId + 1, PageKind::Standard);
     rCtx.touch(pDupStd);
-    // The copy plays the same part as its source.
+    // The copy plays the same part and carries the same intent as its source.
     if (pDupStd)
     {
         auto itPart = rCtx.maSlideParts.find(pSourceStd);
         if (itPart != rCtx.maSlideParts.end())
             rCtx.maSlideParts[pDupStd] = itPart->second;
+        auto itIntent = rCtx.maSlideIntents.find(pSourceStd);
+        if (itIntent != rCtx.maSlideIntents.end())
+            rCtx.maSlideIntents[pDupStd] = itIntent->second;
     }
     if (rCtx.mbUndo)
     {
@@ -1165,6 +1367,47 @@ void handleSetText(SlideCommandContext& rCtx, const std::string& rKey,
     }
 }
 
+void handleSetNotes(SlideCommandContext& rCtx, const std::string& /*rKey*/,
+                    const boost::property_tree::ptree& rValue)
+{
+    if (rCtx.mnActPageId < 0)
+        return;
+    SdPage* pNotesPage
+        = rCtx.mpDoc->GetSdPage(static_cast<sal_uInt16>(rCtx.mnActPageId), PageKind::Notes);
+    if (!pNotesPage)
+        return;
+
+    SdrObject* pObj = pNotesPage->GetPresObj(PresObjKind::Notes);
+    if (!pObj)
+    {
+        // A deck saved before its notes page carried a notes placeholder has
+        // none yet. Re-initialise the notes page to the standard notes layout,
+        // which builds the placeholder, then look again. Slides this transform
+        // inserts already come with the notes layout, so this only matters for
+        // pre-existing decks.
+        pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, true);
+        pObj = pNotesPage->GetPresObj(PresObjKind::Notes);
+    }
+    if (!pObj || !pObj->IsSdrTextObj())
+    {
+        lcl_LogWarning("FillApi SlideCmd SetNotes: no notes placeholder on this slide.");
+        return;
+    }
+
+    SdrTextObj* pSdrTxt = static_cast<SdrTextObj*>(pObj);
+    if (rCtx.mbUndo)
+        rCtx.mpDrawView->AddUndo(
+            rCtx.mpDoc->GetSdrUndoFactory().CreateUndoObjectSetText(*pObj, 0));
+    pSdrTxt->SetText(
+        OStringToOUString(rValue.get_value<std::string>(), RTL_TEXTENCODING_UTF8));
+    pObj->SetEmptyPresObj(false);
+
+    // Re-theming keys on the standard slide, so mark that one rather than the
+    // notes page.
+    rCtx.touch(
+        rCtx.mpDoc->GetSdPage(static_cast<sal_uInt16>(rCtx.mnActPageId), PageKind::Standard));
+}
+
 void handleInsertImage(SlideCommandContext& rCtx, const std::string& rKey,
                        const boost::property_tree::ptree& rValue)
 {
@@ -1194,7 +1437,7 @@ void handleInsertImage(SlideCommandContext& rCtx, const std::string& rKey,
     else
     {
         std::string aImageUrl = rValue.get_value<std::string>();
-        if (lcl_ReplaceWithImage(rCtx.mpDoc, pPageStandard, nObjId, aImageUrl,
+        if (lcl_ReplaceWithImage(rCtx.mpDoc, pPageStandard, nObjId, aImageUrl, OUString(),
                                  rCtx.mpViewShellBase, rCtx.mnActPageId))
             rCtx.touch(pPageStandard);
     }
@@ -1244,9 +1487,22 @@ void handleInsertImageAt(SlideCommandContext& rCtx, const std::string& rKey,
         return;
     }
 
-    std::string aImageUrl = rValue.get_value<std::string>();
-    if (lcl_ReplaceWithImage(rCtx.mpDoc, pPage, nObjId, aImageUrl, rCtx.mpViewShellBase,
-                             nSlideId))
+    // The value is either the image URL as a plain string, or an object that
+    // carries the URL and a text alternative: {"url": "...", "alt": "..."}.
+    std::string aImageUrl;
+    OUString aAltText;
+    if (auto oUrl = rValue.get_child_optional("url"))
+    {
+        aImageUrl = oUrl->get_value<std::string>();
+        aAltText = OStringToOUString(rValue.get("alt", std::string()), RTL_TEXTENCODING_UTF8);
+    }
+    else
+    {
+        aImageUrl = rValue.get_value<std::string>();
+    }
+
+    if (lcl_ReplaceWithImage(rCtx.mpDoc, pPage, nObjId, aImageUrl, aAltText,
+                             rCtx.mpViewShellBase, nSlideId))
         rCtx.touch(pPage);
 }
 
@@ -1406,6 +1662,29 @@ void handleSetSlidePart(SlideCommandContext& rCtx, const std::string& /*rKey*/,
     }
 }
 
+void handleSetSlideIntent(SlideCommandContext& rCtx, const std::string& /*rKey*/,
+                          const boost::property_tree::ptree& rValue)
+{
+    if (rCtx.mnActPageId < 0)
+        return;
+    SdPage* pPage
+        = rCtx.mpDoc->GetSdPage(static_cast<sal_uInt16>(rCtx.mnActPageId), PageKind::Standard);
+    if (!pPage)
+        return;
+    // Record the intent word the model gave this slide. The apply step prefers
+    // the template master the manifest maps the word to over the part-based
+    // choice. The engine does not interpret the word, so a word that does not
+    // fit the narrow shape is dropped and the slide falls to the part and then
+    // the positional choice.
+    const OUString aIntent
+        = OStringToOUString(rValue.get_value<std::string>(), RTL_TEXTENCODING_UTF8);
+    if (lcl_IsValidDesignIntentWord(aIntent))
+    {
+        rCtx.maSlideIntents[pPage] = aIntent;
+        rCtx.touch(pPage);
+    }
+}
+
 // One entry of the slide-command vocabulary. maName is the command's key in
 // the transform JSON. With mbPrefixMatch the key is matched by prefix because
 // it carries arguments after the name, like the object index in "SetText.0".
@@ -1440,6 +1719,8 @@ constexpr SlideCommand aSlideCommands[] = {
     { "EditTextObject.", true, false, &handleEditTextObject },
     { "UnoCommand", false, false, &handleUnoCommand },
     { "SetSlidePart", false, false, &handleSetSlidePart },
+    { "SetSlideIntent", false, false, &handleSetSlideIntent },
+    { "SetNotes", false, false, &handleSetNotes },
 };
 
 // Looks up the slide command a JSON key addresses. Returns null for a key
@@ -1967,10 +2248,21 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                 if (!bFirstApplication && !aCtx.maTouchedPages.contains(pPage))
                     continue;
 
+                // An intent the manifest maps to a master wins; then the part;
+                // then the slide's position in the deck.
                 OUString aMaster;
-                auto itPart = aCtx.maSlideParts.find(pPage);
-                if (itPart != aCtx.maSlideParts.end())
-                    aMaster = aChooser.masterForPart(itPart->second, pPage->GetAutoLayout());
+                auto itIntent = aCtx.maSlideIntents.find(pPage);
+                if (itIntent != aCtx.maSlideIntents.end())
+                {
+                    if (std::optional<OUString> oMaster = aChooser.masterForIntent(itIntent->second))
+                        aMaster = *oMaster;
+                }
+                if (aMaster.isEmpty())
+                {
+                    auto itPart = aCtx.maSlideParts.find(pPage);
+                    if (itPart != aCtx.maSlideParts.end())
+                        aMaster = aChooser.masterForPart(itPart->second, pPage->GetAutoLayout());
+                }
                 if (aMaster.isEmpty())
                     aMaster = aChooser.masterForSlide(pPage->GetAutoLayout(), i == 0,
                                                       i + 1 == nStdCount);

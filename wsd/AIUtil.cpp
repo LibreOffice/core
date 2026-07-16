@@ -148,6 +148,9 @@ const std::vector<SlideCommandInfo>& getSlideCommands()
         { "SetText", true, "Text content:",
           R"(- {"SetText.N": "text"} - set text of placeholder N on current slide (0=title, 1=first content, 2=second content, etc.). Use \n for paragraph breaks.)" },
 
+        { "SetNotes", true, "Text content:",
+          R"(- {"SetNotes": "text"} - set the speaker notes of the current slide)" },
+
         { "GenerateImage", true,
           "Image generation (inserts AI-generated image into a placeholder):",
           R"(- {"GenerateImage.N": "prompt"} - generate an image from the text prompt using the AI image provider and insert it into placeholder N on the current slide, replacing the placeholder content. N is the 0-based object index (same as SetText.N). A loading placeholder is inserted immediately when the transform is applied, then the real image progressively replaces it after generation completes. Use descriptive prompts for best results. Example: {"GenerateImage.1": "A modern office building with glass facade at sunset, professional photography"})" },
@@ -176,6 +179,12 @@ const std::vector<SlideCommandInfo>& getSlideCommands()
         // when a template is in use, so the command carries no entry in the
         // static documentation.
         { "SetSlidePart", true, "", "" },
+
+        // Labels a slide's intent (the kind of slide it is). A template manifest
+        // may map an intent to a specific master. Like SetSlidePart, it carries
+        // no static documentation because the intent list and its use are given
+        // per request.
+        { "SetSlideIntent", true, "", "" },
     };
     return commands;
 }

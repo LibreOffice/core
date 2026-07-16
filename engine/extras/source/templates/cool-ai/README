@@ -64,12 +64,65 @@ reclassification changes only which master a slide lands on, never the
 protocol. Do not treat particular master names as a stable way to pin a role.
 
 
-A note on future authoring metadata
-------------------------------------
+Declaring roles with a manifest
+-------------------------------
 
-The name-and-example heuristic exists so a template author does not have to
-declare anything. A later release may add a declared metadata format inside
-the template that states each master's role directly. When that arrives it
-will take precedence and the heuristic will remain only as the fallback for
-templates that carry no such metadata. Please do not entrench on magic master
-names in the meantime.
+A template can state its master roles directly instead of leaving the engine
+to guess them. It does this with a manifest: a small JSON document stored in a
+standard document property named AIDesignManifest. When a template carries a
+manifest, its declared roles take precedence and the name-and-example heuristic
+runs only for masters the manifest does not name.
+
+The manifest looks like this:
+
+    {
+      "schemaVersion": 1,
+      "masters": {
+        "Opening master name": "opening",
+        "Body master name": "body",
+        "Divider master name": "divider",
+        "Closing master name": "closing"
+      },
+      "intents": {
+        "quote": "Divider master name"
+      },
+      "artDirection": "One sentence describing the image style.",
+      "budgets": {
+        "maxSlides": 20,
+        "maxItemsPerBullets": 6,
+        "maxItemLength": 200,
+        "maxTitleLength": 200
+      }
+    }
+
+Every field except schemaVersion is optional.
+
+- schemaVersion must be 1 or more. A missing version, an older version, or a
+  document that does not parse as JSON is treated as no manifest at all, so the
+  heuristic runs as before.
+- masters maps a master's name to the part it plays: one of opening, body,
+  divider, or closing. A name that does not match a master in the template, or
+  a part that is not one of those four words, is ignored.
+- intents maps a word the assistant may attach to a slide to the master that
+  word should land on. The keys are lowercase letters and hyphens, up to
+  thirty-two characters. A value that does not name a master in the template is
+  ignored. This lets a template send, say, a quote slide to a particular master
+  without the assistant ever learning the master's name.
+- artDirection is one sentence describing the image style. It is used only to
+  compose image-generation prompts, never the chat prompt.
+- budgets are upper limits the assistant keeps within. They may only tighten
+  the server's own limits, never raise them, and a value below one is ignored.
+
+The roles the assistant infers are reported back to you as a source field on
+each master, reading declared when the part came from the manifest and inferred
+when it came from the heuristic. Use it to check your manifest was read.
+
+
+Editing and keeping the manifest
+--------------------------------
+
+The manifest is an ordinary document property, so you edit it in the
+File - Properties dialog, on the Custom Properties tab, in a property named
+AIDesignManifest. It survives an ordinary edit and save round-trip. Note that
+the "Reset Properties" button in that dialog deletes user-defined properties,
+so it removes the manifest as well.

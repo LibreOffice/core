@@ -33,10 +33,17 @@ class DeckSpecTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST_SUITE(DeckSpecTests);
     CPPUNIT_TEST(testValidateAccepts);
     CPPUNIT_TEST(testValidateRejects);
+    CPPUNIT_TEST(testLimitsSentence);
+    CPPUNIT_TEST(testCustomBudgets);
     CPPUNIT_TEST(testValidateOutline);
     CPPUNIT_TEST(testCompileNoTemplate);
     CPPUNIT_TEST(testCompileWithTemplate);
     CPPUNIT_TEST(testCompileImageBrief);
+    CPPUNIT_TEST(testRejectImageAlt);
+    CPPUNIT_TEST(testCompileNotes);
+    CPPUNIT_TEST(testRejectNotes);
+    CPPUNIT_TEST(testCompileEmphasis);
+    CPPUNIT_TEST(testEmphasisVisibleLength);
     CPPUNIT_TEST(testCompiledOutputValidates);
     CPPUNIT_TEST(testCompileSlideSpecFirst);
     CPPUNIT_TEST(testCompileSlideSpecAppend);
@@ -47,10 +54,17 @@ class DeckSpecTests : public CPPUNIT_NS::TestFixture
 
     void testValidateAccepts();
     void testValidateRejects();
+    void testLimitsSentence();
+    void testCustomBudgets();
     void testValidateOutline();
     void testCompileNoTemplate();
     void testCompileWithTemplate();
     void testCompileImageBrief();
+    void testRejectImageAlt();
+    void testCompileNotes();
+    void testRejectNotes();
+    void testCompileEmphasis();
+    void testEmphasisVisibleLength();
     void testCompiledOutputValidates();
     void testCompileSlideSpecFirst();
     void testCompileSlideSpecAppend();
@@ -117,6 +131,24 @@ std::string layoutOfTransform(const Poco::JSON::Object::Ptr& transformObj)
     }
     return std::string();
 }
+
+/// The built-in limits, used by the tests that do not exercise a custom budget.
+const DeckSpec::Budgets kDefaultBudgets;
+
+/// Compile options for the untemplated and the templated path, both without an
+/// image style, used by the tests that do not exercise art direction.
+const DeckSpec::CompileOptions kNoTemplate{ false, {} };
+const DeckSpec::CompileOptions kWithTemplate{ true, {} };
+
+std::optional<std::string> deckError(const std::string& s)
+{
+    return DeckSpec::validateDeckSpec(parse(s), kDefaultBudgets);
+}
+
+std::optional<std::string> outlineError(const std::string& s)
+{
+    return DeckSpec::validateOutline(parse(s), kDefaultBudgets);
+}
 }
 
 void DeckSpecTests::testValidateAccepts()
@@ -124,37 +156,37 @@ void DeckSpecTests::testValidateAccepts()
     constexpr std::string_view testname = __func__;
 
     // A title slide with a subtitle text block, then a bullets slide.
-    LOK_ASSERT(!DeckSpec::validateDeckSpec(parse(
+    LOK_ASSERT(!deckError(
                     R"({"slides":[
                         {"part":"opening","intent":"title","title":"Hello",
                          "blocks":[{"kind":"text","text":"A subtitle"}]},
                         {"part":"body","intent":"bullets","title":"Points",
-                         "blocks":[{"kind":"bullets","items":["One","Two"]}]}]})"))
+                         "blocks":[{"kind":"bullets","items":["One","Two"]}]}]})")
                     .has_value());
 
     // A comparison needs exactly two bullets blocks.
-    LOK_ASSERT(!DeckSpec::validateDeckSpec(parse(
+    LOK_ASSERT(!deckError(
                     R"({"slides":[{"part":"body","intent":"comparison","title":"Us vs Them",
                         "blocks":[{"kind":"bullets","items":["a"]},
-                                  {"kind":"bullets","items":["b"]}]}]})"))
+                                  {"kind":"bullets","items":["b"]}]}]})")
                     .has_value());
 
     // A quote needs exactly one text block.
-    LOK_ASSERT(!DeckSpec::validateDeckSpec(parse(
+    LOK_ASSERT(!deckError(
                     R"({"slides":[{"part":"divider","intent":"quote","title":"Wisdom",
-                        "blocks":[{"kind":"text","text":"Stay curious."}]}]})"))
+                        "blocks":[{"kind":"text","text":"Stay curious."}]}]})")
                     .has_value());
 
     // An image slide needs an image brief and no content blocks.
-    LOK_ASSERT(!DeckSpec::validateDeckSpec(parse(
+    LOK_ASSERT(!deckError(
                     R"({"slides":[{"part":"body","intent":"image","title":"Chart",
-                        "image":{"brief":"a bar chart","alt":"chart"}}]})"))
+                        "image":{"brief":"a bar chart","alt":"chart"}}]})")
                     .has_value());
 
     // A section divider and a closing slide need only a title.
-    LOK_ASSERT(!DeckSpec::validateDeckSpec(parse(
+    LOK_ASSERT(!deckError(
                     R"({"slides":[{"part":"divider","intent":"section","title":"Part Two"},
-                        {"part":"closing","intent":"closing","title":"Thanks"}]})"))
+                        {"part":"closing","intent":"closing","title":"Thanks"}]})")
                     .has_value());
 }
 
@@ -162,8 +194,7 @@ void DeckSpecTests::testValidateRejects()
 {
     constexpr std::string_view testname = __func__;
 
-    auto errorFor = [](const std::string& s)
-    { return DeckSpec::validateDeckSpec(parse(s)); };
+    auto errorFor = [](const std::string& s) { return deckError(s); };
 
     // An empty deck.
     LOK_ASSERT(errorFor(R"({"slides":[]})").has_value());
@@ -230,6 +261,68 @@ void DeckSpecTests::testValidateRejects()
     LOK_ASSERT(errorFor(many).has_value());
 }
 
+void DeckSpecTests::testLimitsSentence()
+{
+    constexpr std::string_view testname = __func__;
+
+    // With default budgets the limits sentence is exactly the wording the tool
+    // description used to carry inline, so the composed description is unchanged
+    // when the flag is on and the budgets are left at their defaults.
+    LOK_ASSERT_EQUAL(
+        std::string("\n\nLimits: at most 30 slides, at most 6 items per bullets block, and keep"
+                    " each item short. Do not prefix items with \"- \"; bullet markers are added"
+                    " for you, so put only the items themselves in each block."),
+        DeckSpec::limitsSentence(DeckSpec::Budgets{}));
+
+    // Lowered budgets are reflected in the numbers the model is told.
+    DeckSpec::Budgets tight;
+    tight.maxSlides = 8;
+    tight.maxItemsPerBullets = 3;
+    const std::string sentence = DeckSpec::limitsSentence(tight);
+    LOK_ASSERT(sentence.find("at most 8 slides") != std::string::npos);
+    LOK_ASSERT(sentence.find("at most 3 items") != std::string::npos);
+}
+
+void DeckSpecTests::testCustomBudgets()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A deck that passes the default budgets but breaks a tightened one: the
+    // tightened budget is what the validator enforces.
+    const std::string deck =
+        R"({"slides":[
+            {"part":"opening","intent":"title","title":"One"},
+            {"part":"body","intent":"section","title":"Two"},
+            {"part":"closing","intent":"closing","title":"Three"}]})";
+
+    LOK_ASSERT(!DeckSpec::validateDeckSpec(parse(deck), kDefaultBudgets).has_value());
+
+    DeckSpec::Budgets fewSlides;
+    fewSlides.maxSlides = 2;
+    auto slidesErr = DeckSpec::validateDeckSpec(parse(deck), fewSlides);
+    LOK_ASSERT(slidesErr.has_value());
+    LOK_ASSERT(slidesErr->find("at most 2 slides") != std::string::npos);
+
+    // A bullets slide within the default item budget but over a tightened one.
+    const std::string bulletsDeck =
+        R"({"slides":[{"part":"body","intent":"bullets","title":"X",
+            "blocks":[{"kind":"bullets","items":["a","b","c","d"]}]}]})";
+    DeckSpec::Budgets fewItems;
+    fewItems.maxItemsPerBullets = 3;
+    auto itemsErr = DeckSpec::validateDeckSpec(parse(bulletsDeck), fewItems);
+    LOK_ASSERT(itemsErr.has_value());
+    LOK_ASSERT(itemsErr->find("at most 3 items") != std::string::npos);
+
+    // A short title accepted by default is rejected by a tightened title budget.
+    const std::string titleDeck =
+        R"({"slides":[{"part":"body","intent":"section","title":"A slightly long title"}]})";
+    DeckSpec::Budgets shortTitle;
+    shortTitle.maxTitleLength = 5;
+    LOK_ASSERT(DeckSpec::validateSlideSpec(parse(titleDeck)->getArray("slides")->getObject(0), 0,
+                                           shortTitle)
+                   .has_value());
+}
+
 void DeckSpecTests::testCompileNoTemplate()
 {
     constexpr std::string_view testname = __func__;
@@ -250,15 +343,17 @@ void DeckSpecTests::testCompileNoTemplate()
         R"({"SetText.1":"A subtitle"},)"
         R"({"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},)"
         R"({"SetSlidePart":"opening"},)"
+        R"({"SetSlideIntent":"title"},)"
         R"({"InsertMasterSlide":0},)"
         R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
         R"({"SetText.0":"Points"},)"
         R"({"SetText.1":"One\nTwo"},)"
         R"({"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},)"
         R"({"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},)"
-        R"({"SetSlidePart":"body"}]}})";
+        R"({"SetSlidePart":"body"},)"
+        R"({"SetSlideIntent":"bullets"}]}})";
 
-    LOK_ASSERT_EQUAL(expected, DeckSpec::compileDeckSpec(parse(deck), false));
+    LOK_ASSERT_EQUAL(expected, DeckSpec::compileDeckSpec(parse(deck), kNoTemplate));
 }
 
 void DeckSpecTests::testCompileWithTemplate()
@@ -280,13 +375,15 @@ void DeckSpecTests::testCompileWithTemplate()
         R"({"SetText.0":"Hello"},)"
         R"({"SetText.1":"A subtitle"},)"
         R"({"SetSlidePart":"opening"},)"
+        R"({"SetSlideIntent":"title"},)"
         R"({"InsertMasterSlide":0},)"
         R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
         R"({"SetText.0":"Points"},)"
         R"({"SetText.1":"One\nTwo"},)"
-        R"({"SetSlidePart":"body"}]}})";
+        R"({"SetSlidePart":"body"},)"
+        R"({"SetSlideIntent":"bullets"}]}})";
 
-    LOK_ASSERT_EQUAL(expected, DeckSpec::compileDeckSpec(parse(deck), true));
+    LOK_ASSERT_EQUAL(expected, DeckSpec::compileDeckSpec(parse(deck), kWithTemplate));
 }
 
 void DeckSpecTests::testCompileImageBrief()
@@ -299,19 +396,221 @@ void DeckSpecTests::testCompileImageBrief()
             {"part":"body","intent":"image","title":"Chart",
              "image":{"brief":"a bar chart","alt":"chart"}}]})";
 
-    // An image slide compiles to a GenerateImage on the content placeholder.
+    // An image slide compiles to a GenerateImage object carrying the prompt and
+    // the alt text. Without an art direction the prompt is the brief alone.
     const std::string expected =
         R"({"Transforms":{"SlideCommands":[)"
         R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE"},)"
         R"({"SetText.0":"Deck"},)"
         R"({"SetSlidePart":"opening"},)"
+        R"({"SetSlideIntent":"title"},)"
         R"({"InsertMasterSlide":0},)"
         R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
         R"({"SetText.0":"Chart"},)"
-        R"({"GenerateImage.1":"a bar chart"},)"
-        R"({"SetSlidePart":"body"}]}})";
+        R"({"GenerateImage.1":{"alt":"chart","prompt":"a bar chart"}},)"
+        R"({"SetSlidePart":"body"},)"
+        R"({"SetSlideIntent":"image"}]}})";
 
-    LOK_ASSERT_EQUAL(expected, DeckSpec::compileDeckSpec(parse(deck), true));
+    LOK_ASSERT_EQUAL(expected, DeckSpec::compileDeckSpec(parse(deck), kWithTemplate));
+
+    // With an art direction the prompt puts the brief first and appends the
+    // style, so the slide's subject stays the leading phrase.
+    const DeckSpec::CompileOptions artDirected{ true, "flat vector, deep blue" };
+    const std::string expectedStyled =
+        R"({"Transforms":{"SlideCommands":[)"
+        R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE"},)"
+        R"({"SetText.0":"Deck"},)"
+        R"({"SetSlidePart":"opening"},)"
+        R"({"SetSlideIntent":"title"},)"
+        R"({"InsertMasterSlide":0},)"
+        R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
+        R"({"SetText.0":"Chart"},)"
+        R"({"GenerateImage.1":{"alt":"chart","prompt":"a bar chart. Style: flat vector, deep blue"}},)"
+        R"({"SetSlidePart":"body"},)"
+        R"({"SetSlideIntent":"image"}]}})";
+
+    LOK_ASSERT_EQUAL(expectedStyled, DeckSpec::compileDeckSpec(parse(deck), artDirected));
+}
+
+void DeckSpecTests::testRejectImageAlt()
+{
+    constexpr std::string_view testname = __func__;
+
+    // An image without alt text is rejected; the error names both required
+    // fields so the model fixes the right one.
+    auto missingAlt = deckError(
+        R"({"slides":[{"part":"body","intent":"image","title":"X",
+            "image":{"brief":"a chart"}}]})");
+    LOK_ASSERT(missingAlt.has_value());
+    LOK_ASSERT(missingAlt->find("brief") != std::string::npos);
+    LOK_ASSERT(missingAlt->find("alt") != std::string::npos);
+
+    // Alt text over the item-length budget is rejected.
+    const std::string longAlt(DeckSpec::MaxItemLength + 1, 'x');
+    auto overLength = deckError(
+        R"({"slides":[{"part":"body","intent":"image","title":"X",
+            "image":{"brief":"a chart","alt":")" + longAlt + R"("}}]})");
+    LOK_ASSERT(overLength.has_value());
+    LOK_ASSERT(overLength->find("alt") != std::string::npos);
+}
+
+void DeckSpecTests::testCompileNotes()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string deck =
+        R"({"slides":[{"part":"body","intent":"bullets","title":"Points",
+            "blocks":[{"kind":"bullets","items":["One","Two"]}],
+            "notes":"Explain each point with an example."}]})";
+
+    // Notes are emitted after the content blocks and before the house-style
+    // formatting, in both template modes.
+    const std::string expectedNoTemplate =
+        R"({"Transforms":{"SlideCommands":[)"
+        R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
+        R"({"SetText.0":"Points"},)"
+        R"({"SetText.1":"One\nTwo"},)"
+        R"({"SetNotes":"Explain each point with an example."},)"
+        R"({"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},)"
+        R"({"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},)"
+        R"({"SetSlidePart":"body"},)"
+        R"({"SetSlideIntent":"bullets"}]}})";
+
+    LOK_ASSERT_EQUAL(expectedNoTemplate, DeckSpec::compileDeckSpec(parse(deck), kNoTemplate));
+
+    // With a template the notes still ride along; only the formatting is gone.
+    const std::string expectedTemplate =
+        R"({"Transforms":{"SlideCommands":[)"
+        R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
+        R"({"SetText.0":"Points"},)"
+        R"({"SetText.1":"One\nTwo"},)"
+        R"({"SetNotes":"Explain each point with an example."},)"
+        R"({"SetSlidePart":"body"},)"
+        R"({"SetSlideIntent":"bullets"}]}})";
+
+    LOK_ASSERT_EQUAL(expectedTemplate, DeckSpec::compileDeckSpec(parse(deck), kWithTemplate));
+}
+
+void DeckSpecTests::testRejectNotes()
+{
+    constexpr std::string_view testname = __func__;
+
+    // Notes within the default budget are accepted; over the budget rejected.
+    const std::string overLength(DeckSpec::MaxNotesLength + 1, 'x');
+    auto lenErr = deckError(
+        R"({"slides":[{"part":"body","intent":"section","title":"X","notes":")" + overLength +
+        R"("}]})");
+    LOK_ASSERT(lenErr.has_value());
+    LOK_ASSERT(lenErr->find("notes") != std::string::npos);
+
+    // A tightened notes budget rejects notes the default budget would accept.
+    const std::string deck =
+        R"({"slides":[{"part":"body","intent":"section","title":"X",
+            "notes":"A sentence of speaker notes."}]})";
+    LOK_ASSERT(!DeckSpec::validateDeckSpec(parse(deck), kDefaultBudgets).has_value());
+
+    DeckSpec::Budgets tightNotes;
+    tightNotes.maxNotesLength = 10;
+    auto tightErr = DeckSpec::validateDeckSpec(parse(deck), tightNotes);
+    LOK_ASSERT(tightErr.has_value());
+    LOK_ASSERT(tightErr->find("10 characters") != std::string::npos);
+}
+
+void DeckSpecTests::testCompileEmphasis()
+{
+    constexpr std::string_view testname = __func__;
+
+    // Bold and italic within one bullet item. With a template no house-style
+    // formatting is emitted, so the only EditTextObject is the emphasis one.
+    const std::string boldItalic =
+        R"({"slides":[{"part":"body","intent":"bullets","title":"T",
+            "blocks":[{"kind":"bullets","items":["**Bold** and *italic*"]}]}]})";
+    const std::string expectedBoldItalic =
+        R"({"Transforms":{"SlideCommands":[)"
+        R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
+        R"({"SetText.0":"T"},)"
+        R"({"SetText.1":"Bold and italic"},)"
+        R"({"EditTextObject.1":[)"
+        R"({"SelectText":[0,0,0,4]},{"UnoCommand":".uno:Bold"},)"
+        R"({"SelectText":[0,9,0,15]},{"UnoCommand":".uno:Italic"}]},)"
+        R"({"SetSlidePart":"body"},)"
+        R"({"SetSlideIntent":"bullets"}]}})";
+    LOK_ASSERT_EQUAL(expectedBoldItalic, DeckSpec::compileDeckSpec(parse(boldItalic), kWithTemplate));
+
+    // Three markers toggle bold and italic together on one run.
+    const std::string both =
+        R"({"slides":[{"part":"body","intent":"bullets","title":"T",
+            "blocks":[{"kind":"bullets","items":["***both***"]}]}]})";
+    const std::string expectedBoth =
+        R"({"Transforms":{"SlideCommands":[)"
+        R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
+        R"({"SetText.0":"T"},)"
+        R"({"SetText.1":"both"},)"
+        R"({"EditTextObject.1":[)"
+        R"({"SelectText":[0,0,0,4]},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:Italic"}]},)"
+        R"({"SetSlidePart":"body"},)"
+        R"({"SetSlideIntent":"bullets"}]}})";
+    LOK_ASSERT_EQUAL(expectedBoth, DeckSpec::compileDeckSpec(parse(both), kWithTemplate));
+
+    // An unbalanced marker stays literal: the asterisk is kept and no emphasis
+    // is emitted.
+    const std::string unbalanced =
+        R"({"slides":[{"part":"body","intent":"bullets","title":"T",
+            "blocks":[{"kind":"bullets","items":["*oops"]}]}]})";
+    const std::string expectedUnbalanced =
+        R"({"Transforms":{"SlideCommands":[)"
+        R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
+        R"({"SetText.0":"T"},)"
+        R"({"SetText.1":"*oops"},)"
+        R"({"SetSlidePart":"body"},)"
+        R"({"SetSlideIntent":"bullets"}]}})";
+    LOK_ASSERT_EQUAL(expectedUnbalanced, DeckSpec::compileDeckSpec(parse(unbalanced), kWithTemplate));
+
+    // A title's markers are stripped but no emphasis EditTextObject is emitted.
+    const std::string titleMarkup =
+        R"({"slides":[{"part":"opening","intent":"title","title":"**Big**"}]})";
+    const std::string expectedTitle =
+        R"({"Transforms":{"SlideCommands":[)"
+        R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE"},)"
+        R"({"SetText.0":"Big"},)"
+        R"({"SetSlidePart":"opening"},)"
+        R"({"SetSlideIntent":"title"}]}})";
+    LOK_ASSERT_EQUAL(expectedTitle, DeckSpec::compileDeckSpec(parse(titleMarkup), kWithTemplate));
+
+    // A non-BMP code point before a marker counts as two UTF-16 units, so the
+    // bold run starts at offset 2, not 1.
+    const std::string emoji =
+        R"({"slides":[{"part":"body","intent":"bullets","title":"T",
+            "blocks":[{"kind":"bullets","items":["😀**x**"]}]}]})";
+    const std::string expectedEmoji =
+        "{\"Transforms\":{\"SlideCommands\":["
+        "{\"ChangeLayoutByName\":\"AUTOLAYOUT_TITLE_CONTENT\"},"
+        "{\"SetText.0\":\"T\"},"
+        "{\"SetText.1\":\"\xF0\x9F\x98\x80x\"},"
+        "{\"EditTextObject.1\":[{\"SelectText\":[0,2,0,3]},{\"UnoCommand\":\".uno:Bold\"}]},"
+        "{\"SetSlidePart\":\"body\"},"
+        "{\"SetSlideIntent\":\"bullets\"}]}}";
+    LOK_ASSERT_EQUAL(expectedEmoji, DeckSpec::compileDeckSpec(parse(emoji), kWithTemplate));
+}
+
+void DeckSpecTests::testEmphasisVisibleLength()
+{
+    constexpr std::string_view testname = __func__;
+
+    // An item whose visible text is exactly at the limit is accepted even when
+    // the emphasis markers push the raw string over it.
+    const std::string atLimit(DeckSpec::MaxItemLength, 'a');
+    LOK_ASSERT(!deckError(
+                    R"({"slides":[{"part":"body","intent":"bullets","title":"X",
+                        "blocks":[{"kind":"bullets","items":["**)" + atLimit + R"(**"]}]}]})")
+                    .has_value());
+
+    // One more visible character than the limit is rejected.
+    const std::string overLimit(DeckSpec::MaxItemLength + 1, 'a');
+    LOK_ASSERT(deckError(
+                   R"({"slides":[{"part":"body","intent":"bullets","title":"X",
+                       "blocks":[{"kind":"bullets","items":["**)" + overLimit + R"(**"]}]}]})")
+                   .has_value());
 }
 
 void DeckSpecTests::testCompiledOutputValidates()
@@ -331,15 +630,15 @@ void DeckSpecTests::testCompiledOutputValidates()
              "blocks":[{"kind":"bullets","items":["x"]},{"kind":"bullets","items":["y"]}]},
             {"part":"divider","intent":"quote","title":"E","blocks":[{"kind":"text","text":"q"}]},
             {"part":"body","intent":"big-number","title":"F","blocks":[{"kind":"text","text":"42"}]},
-            {"part":"body","intent":"image","title":"G","image":{"brief":"pic"}},
+            {"part":"body","intent":"image","title":"G","image":{"brief":"pic","alt":"pic"}},
             {"part":"divider","intent":"section","title":"H"},
             {"part":"closing","intent":"closing","title":"I"}]})";
 
-    LOK_ASSERT(!DeckSpec::validateDeckSpec(parse(deck)).has_value());
+    LOK_ASSERT(!DeckSpec::validateDeckSpec(parse(deck), kDefaultBudgets).has_value());
 
-    for (bool haveTemplate : { false, true })
+    for (const DeckSpec::CompileOptions& options : { kNoTemplate, kWithTemplate })
     {
-        const std::string transform = DeckSpec::compileDeckSpec(parse(deck), haveTemplate);
+        const std::string transform = DeckSpec::compileDeckSpec(parse(deck), options);
         Poco::JSON::Object::Ptr transformObj;
         LOK_ASSERT(JsonUtil::parseJSON(transform, transformObj));
         LOK_ASSERT(!AIUtil::validateTransformStructure(transformObj).has_value());
@@ -351,22 +650,21 @@ void DeckSpecTests::testValidateOutline()
     constexpr std::string_view testname = __func__;
 
     // A well-formed outline with a deck title and per-slide gists.
-    LOK_ASSERT(!DeckSpec::validateOutline(parse(
+    LOK_ASSERT(!outlineError(
                     R"({"title":"My Deck","slides":[
                         {"part":"opening","intent":"title","title":"Welcome",
                          "gist":"Set the scene and introduce the topic."},
                         {"part":"body","intent":"bullets","title":"Key points",
                          "gist":"Three reasons this matters."},
-                        {"part":"closing","intent":"closing","title":"Thanks"}]})"))
+                        {"part":"closing","intent":"closing","title":"Thanks"}]})")
                     .has_value());
 
     // A gist is optional and a deck title is optional.
-    LOK_ASSERT(!DeckSpec::validateOutline(parse(
-                    R"({"slides":[{"part":"body","intent":"section","title":"Only a title"}]})"))
+    LOK_ASSERT(!outlineError(
+                    R"({"slides":[{"part":"body","intent":"section","title":"Only a title"}]})")
                     .has_value());
 
-    auto errorFor = [](const std::string& s)
-    { return DeckSpec::validateOutline(parse(s)); };
+    auto errorFor = [](const std::string& s) { return outlineError(s); };
 
     // An outline with no slides.
     LOK_ASSERT(errorFor(R"({"slides":[]})").has_value());
@@ -427,9 +725,10 @@ void DeckSpecTests::testCompileSlideSpecFirst()
         R"({"SetText.1":"One\nTwo"},)"
         R"({"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},)"
         R"({"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},)"
-        R"({"SetSlidePart":"body"}]}})";
+        R"({"SetSlidePart":"body"},)"
+        R"({"SetSlideIntent":"bullets"}]}})";
 
-    LOK_ASSERT_EQUAL(expected, DeckSpec::compileSlideSpec(parse(slide), 0, false));
+    LOK_ASSERT_EQUAL(expected, DeckSpec::compileSlideSpec(parse(slide), 0, kNoTemplate));
 }
 
 void DeckSpecTests::testCompileSlideSpecAppend()
@@ -449,9 +748,10 @@ void DeckSpecTests::testCompileSlideSpecAppend()
         R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
         R"({"SetText.0":"Points"},)"
         R"({"SetText.1":"One\nTwo"},)"
-        R"({"SetSlidePart":"body"}]}})";
+        R"({"SetSlidePart":"body"},)"
+        R"({"SetSlideIntent":"bullets"}]}})";
 
-    LOK_ASSERT_EQUAL(expected, DeckSpec::compileSlideSpec(parse(slide), 1, true));
+    LOK_ASSERT_EQUAL(expected, DeckSpec::compileSlideSpec(parse(slide), 1, kWithTemplate));
 }
 
 void DeckSpecTests::testCompileSlideSpecImage()
@@ -462,15 +762,18 @@ void DeckSpecTests::testCompileSlideSpecImage()
         R"({"part":"body","intent":"image","title":"Chart",
             "image":{"brief":"a bar chart","alt":"chart"}})";
 
-    // An image slide compiles to a GenerateImage on the content placeholder.
+    // An image slide compiles to a GenerateImage object on the content
+    // placeholder, carrying the composed prompt and the alt text.
+    const DeckSpec::CompileOptions artDirected{ true, "muted editorial style" };
     const std::string expected =
         R"({"Transforms":{"SlideCommands":[)"
         R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
         R"({"SetText.0":"Chart"},)"
-        R"({"GenerateImage.1":"a bar chart"},)"
-        R"({"SetSlidePart":"body"}]}})";
+        R"({"GenerateImage.1":{"alt":"chart","prompt":"a bar chart. Style: muted editorial style"}},)"
+        R"({"SetSlidePart":"body"},)"
+        R"({"SetSlideIntent":"image"}]}})";
 
-    LOK_ASSERT_EQUAL(expected, DeckSpec::compileSlideSpec(parse(slide), 0, true));
+    LOK_ASSERT_EQUAL(expected, DeckSpec::compileSlideSpec(parse(slide), 0, artDirected));
 }
 
 void DeckSpecTests::testCompileSlideSpecValidates()
@@ -489,7 +792,7 @@ void DeckSpecTests::testCompileSlideSpecValidates()
             "blocks":[{"kind":"bullets","items":["x"]},{"kind":"bullets","items":["y"]}]})",
         R"({"part":"divider","intent":"quote","title":"E","blocks":[{"kind":"text","text":"q"}]})",
         R"({"part":"body","intent":"big-number","title":"F","blocks":[{"kind":"text","text":"42"}]})",
-        R"({"part":"body","intent":"image","title":"G","image":{"brief":"pic"}})",
+        R"({"part":"body","intent":"image","title":"G","image":{"brief":"pic","alt":"pic"}})",
         R"({"part":"divider","intent":"section","title":"H"})",
         R"({"part":"closing","intent":"closing","title":"I"})",
     };
@@ -497,13 +800,13 @@ void DeckSpecTests::testCompileSlideSpecValidates()
     // Both the reuse-current-slide and the append case, in both template modes.
     for (const std::string& slide : slides)
     {
-        LOK_ASSERT(!DeckSpec::validateSlideSpec(parse(slide), 0).has_value());
+        LOK_ASSERT(!DeckSpec::validateSlideSpec(parse(slide), 0, kDefaultBudgets).has_value());
         for (int docSlideIndex : { 0, 1 })
         {
-            for (bool haveTemplate : { false, true })
+            for (const DeckSpec::CompileOptions& options : { kNoTemplate, kWithTemplate })
             {
                 const std::string transform =
-                    DeckSpec::compileSlideSpec(parse(slide), docSlideIndex, haveTemplate);
+                    DeckSpec::compileSlideSpec(parse(slide), docSlideIndex, options);
                 Poco::JSON::Object::Ptr transformObj;
                 LOK_ASSERT(JsonUtil::parseJSON(transform, transformObj));
                 LOK_ASSERT(!AIUtil::validateTransformStructure(transformObj).has_value());

@@ -2794,6 +2794,36 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
                         // A master that plays no part reports as "other" and is
                         // not offered to the model as a part.
                         rJsonWriter.put("role", sd::DesignRoleToWireName(rMaster.meRole));
+                        // Whether the part came from the template's declared
+                        // manifest or from the name-and-example heuristic. This
+                        // tells a template author whether their manifest was
+                        // read.
+                        rJsonWriter.put("source",
+                                        rMaster.mbDeclared ? "declared" : "inferred");
+                    }
+                }
+                // A declared manifest may also carry an image art-direction
+                // sentence and content budgets. They are reported only when the
+                // manifest states them, so a template with no manifest leaves
+                // them out and the server keeps its own defaults.
+                if (std::optional<sd::AIDesignManifest> oManifest
+                    = sd::ReadAIDesignManifest(*pTemplate))
+                {
+                    if (!oManifest->maArtDirection.isEmpty())
+                        rJsonWriter.put("artDirection", oManifest->maArtDirection);
+                    if (oManifest->moMaxSlides || oManifest->moMaxItemsPerBullets
+                        || oManifest->moMaxItemLength || oManifest->moMaxTitleLength)
+                    {
+                        auto aBudgets = rJsonWriter.startNode("budgets");
+                        if (oManifest->moMaxSlides)
+                            rJsonWriter.put("maxSlides", *oManifest->moMaxSlides);
+                        if (oManifest->moMaxItemsPerBullets)
+                            rJsonWriter.put("maxItemsPerBullets",
+                                            *oManifest->moMaxItemsPerBullets);
+                        if (oManifest->moMaxItemLength)
+                            rJsonWriter.put("maxItemLength", *oManifest->moMaxItemLength);
+                        if (oManifest->moMaxTitleLength)
+                            rJsonWriter.put("maxTitleLength", *oManifest->moMaxTitleLength);
                     }
                 }
                 mpDoc->CloseBookmarkDoc();

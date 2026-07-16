@@ -138,6 +138,12 @@ const std::string EMOJIFY_PROMPT =
     " Add tasteful emoji throughout your response to reinforce mood and key"
     " points.";
 
+// The image style appended to a generated-image prompt when the picked template
+// declares no art direction, so every deck image still gets a cohesive look.
+const std::string NEUTRAL_ART_DIRECTION =
+    "Clean, minimal presentation illustration with a cohesive colour palette, no text in the "
+    "image";
+
 /// The tone sentence to append to a system prompt for the picked tone, or the
 /// empty string when no tone applies. A "custom" tone uses the user's own
 /// description as the sentence.
@@ -384,7 +390,7 @@ std::string AIChatSession::mapHttpStatusToError(
     }
 }
 
-Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& docType)
+Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& docType) const
 {
     Poco::JSON::Array::Ptr tools = new Poco::JSON::Array();
 
@@ -446,10 +452,16 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& do
     // server compiles it into slide commands.
     const bool deckSpec =
         ConfigUtil::getConfigValue<bool>("ai.experimental_deck_spec", false);
+    // The deck tool descriptions carry the budget limits, so compose them at
+    // call time from the request's live budgets. buildToolDefinitions runs with
+    // the tool loop live; the default budgets are a safe fallback otherwise.
+    const DeckSpec::Budgets budgets = _toolLoop ? _toolLoop->budgets : DeckSpec::Budgets{};
     if (docType == "presentation" && deckSpec)
         tools->add(makeAITool(
             std::string(AIToolNames::WriteSlides),
-            DocumentToolDescriptions::WRITE_SLIDES_DESCRIPTION,
+            std::string(DocumentToolDescriptions::WRITE_SLIDES_INTRO) +
+                DocumentToolDescriptions::DECK_SLIDE_SHAPE + DeckSpec::limitsSentence(budgets) +
+                DocumentToolDescriptions::WRITE_SLIDES_SUMMARY_NOTE,
             makeParamSchema(
                 {{"deck", {"object", "The deck description: an object with a \"slides\" array."}},
                  {"summary", {"string",
@@ -464,7 +476,9 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& do
         ConfigUtil::getConfigValue<bool>("ai.experimental_outline_flow", false))
         tools->add(makeAITool(
             std::string(AIToolNames::ProposeOutline),
-            DocumentToolDescriptions::PROPOSE_OUTLINE_DESCRIPTION,
+            std::string(DocumentToolDescriptions::PROPOSE_OUTLINE_HEAD) + "Give at most " +
+                std::to_string(budgets.maxSlides) +
+                DocumentToolDescriptions::PROPOSE_OUTLINE_TAIL_OPEN_CLOSE,
             makeParamSchema(
                 {{"outline", {"object",
                     "The outline: an object with a \"title\" and a \"slides\" array."}}},
@@ -547,6 +561,50 @@ bool isSafeDesignName(const std::string& rName)
             return false;
     }
     return true;
+}
+
+// Read the deck-spec slide cap from configuration. It defaults to the built-in
+// DeckSpec limit and is clamped to at least 1 so a misconfigured zero or
+// negative cannot make every deck fail validation. The other limits are the
+// built-in DeckSpec constants. A template manifest may lower these further;
+// that tightening is applied by the caller.
+DeckSpec::Budgets budgetsFromConfig()
+{
+    DeckSpec::Budgets budgets;
+    const int maxSlides =
+        ConfigUtil::getConfigValue<int>("ai.deck_budgets.max_slides", budgets.maxSlides);
+    budgets.maxSlides = maxSlides < 1 ? 1 : maxSlides;
+    return budgets;
+}
+
+// The art direction comes from a template file and only ever composes an image
+// prompt, so it must not smuggle control characters or unbounded length into it.
+// Turn every control character into a space, collapse runs of whitespace to one
+// space, trim the ends, and cap the result at 300 characters.
+std::string sanitizeArtDirection(const std::string& raw)
+{
+    std::string out;
+    out.reserve(std::min<size_t>(raw.size(), 300));
+    bool previousSpace = false;
+    for (const char c : raw)
+    {
+        const unsigned char uc = static_cast<unsigned char>(c);
+        const char ch = (uc < 0x20 || uc == 0x7F) ? ' ' : c;
+        if (ch == ' ')
+        {
+            if (out.empty() || previousSpace)
+                continue;
+            previousSpace = true;
+        }
+        else
+            previousSpace = false;
+        out += ch;
+        if (out.size() >= 300)
+            break;
+    }
+    while (!out.empty() && out.back() == ' ')
+        out.pop_back();
+    return out;
 }
 }
 
@@ -743,13 +801,11 @@ bool AIChatSession::handleAction(const std::string& firstLine)
         // No document broker to ask: fall through and launch without designs.
     }
 
-    launchChatRequest(req, {}, {});
+    launchChatRequest(req, DesignInfo{});
     return true;
 }
 
-void AIChatSession::launchChatRequest(const PendingChatRequest& req,
-    const std::vector<std::string>& designTemplateParts,
-    const std::vector<std::string>& designTemplateLayouts)
+void AIChatSession::launchChatRequest(const PendingChatRequest& req, const DesignInfo& design)
 {
     static constexpr unsigned MAX_AI_MESSAGES = 50;
 
@@ -831,7 +887,10 @@ void AIChatSession::launchChatRequest(const PendingChatRequest& req,
             " Choose an intent that"
             " fits each slide and vary it across the deck. Do not prefix list items"
             " with '- ' (bullet markers are added automatically) and put only the"
-            " items themselves in each block. Include a 'summary' parameter with a"
+            " items themselves in each block."
+            " Put spoken detail in each slide's notes and keep the slide text short"
+            " and scannable."
+            " Include a 'summary' parameter with a"
             " short markdown preview of the slides being created."
             " Use transform_document_structure only to edit or rearrange slides that"
             " already exist, not to create new ones."
@@ -865,12 +924,12 @@ void AIChatSession::launchChatRequest(const PendingChatRequest& req,
                 " look. Put each slide's content in its placeholders and let the design"
                 " format it.";
 
-            if (!designTemplateParts.empty())
+            if (!design.parts.empty())
             {
                 // List the slide parts this template has a design for, and ask
                 // the model to label every slide with one of them.
                 std::string joined;
-                for (const std::string& part : designTemplateParts)
+                for (const std::string& part : design.parts)
                 {
                     if (!joined.empty())
                         joined += ", ";
@@ -883,10 +942,10 @@ void AIChatSession::launchChatRequest(const PendingChatRequest& req,
                     " first slide, divider for a section-break slide, closing for the final"
                     " slide, and body for the rest.";
             }
-            else if (!designTemplateLayouts.empty())
+            else if (!design.layouts.empty())
             {
                 std::string joined;
-                for (const std::string& layout : designTemplateLayouts)
+                for (const std::string& layout : design.layouts)
                 {
                     if (!joined.empty())
                         joined += ", ";
@@ -990,6 +1049,25 @@ void AIChatSession::launchChatRequest(const PendingChatRequest& req,
     _toolLoop->designTemplate = req.designTemplate;
     _toolLoop->tone = req.tone;
     _toolLoop->customToneDescription = req.customToneDescription;
+
+    // The configured budgets are the ceiling; a template manifest may only lower
+    // a limit, never raise it, and a value below one is ignored.
+    DeckSpec::Budgets budgets = budgetsFromConfig();
+    auto tighten = [](int& limit, const std::optional<int>& manifest)
+    {
+        if (manifest && *manifest >= 1)
+            limit = std::min(limit, *manifest);
+    };
+    tighten(budgets.maxSlides, design.maxSlides);
+    tighten(budgets.maxItemsPerBullets, design.maxItemsPerBullets);
+    tighten(budgets.maxItemLength, design.maxItemLength);
+    tighten(budgets.maxTitleLength, design.maxTitleLength);
+    _toolLoop->budgets = budgets;
+
+    // Every generated image gets a cohesive style: the template's art direction
+    // when it declares one, otherwise a neutral default.
+    _toolLoop->artDirection =
+        design.artDirection.empty() ? NEUTRAL_ART_DIRECTION : design.artDirection;
 
     callLLMAPI();
 }
@@ -1741,7 +1819,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         // On a schema failure feed the precise error back so the model can
         // self-correct silently, drawing from the same retry budget the other
         // tools use.
-        if (auto outlineErr = DeckSpec::validateOutline(outlineObj))
+        if (auto outlineErr = DeckSpec::validateOutline(outlineObj, _toolLoop->budgets))
         {
             if (_toolLoop->validationRetriesRemaining > 0)
                 --_toolLoop->validationRetriesRemaining;
@@ -1814,7 +1892,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         // Validate before compiling. On a schema failure feed the precise
         // per-slide error back so the model can self-correct silently, drawing
         // from the same retry budget the transform path uses.
-        if (auto specErr = DeckSpec::validateDeckSpec(deckObj))
+        if (auto specErr = DeckSpec::validateDeckSpec(deckObj, _toolLoop->budgets))
         {
             if (_toolLoop->validationRetriesRemaining > 0)
                 --_toolLoop->validationRetriesRemaining;
@@ -1827,8 +1905,9 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
             return true;
         }
 
-        const bool haveDesignTemplate = !_toolLoop->designTemplate.empty();
-        const std::string transform = DeckSpec::compileDeckSpec(deckObj, haveDesignTemplate);
+        const DeckSpec::CompileOptions options{ !_toolLoop->designTemplate.empty(),
+                                                 _toolLoop->artDirection };
+        const std::string transform = DeckSpec::compileDeckSpec(deckObj, options);
 
         Poco::JSON::Object::Ptr transformObj = new Poco::JSON::Object();
         if (!JsonUtil::parseJSON(transform, transformObj))
@@ -2222,7 +2301,7 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
             if (!outline)
                 JsonUtil::parseJSON(_toolLoop->pendingTransformArgs, outline);
 
-            if (auto outlineErr = DeckSpec::validateOutline(outline))
+            if (auto outlineErr = DeckSpec::validateOutline(outline, _toolLoop->budgets))
             {
                 sendChatResult(false, "The edited outline is not valid: " + *outlineErr,
                                _toolLoop->requestId);
@@ -2430,7 +2509,9 @@ void AIChatSession::expandNextSlide()
     systemPrompt += toneSentence(_toolLoop->tone, _toolLoop->customToneDescription);
     systemPrompt +=
         " Write content that fits this slide's place in the deck and does not repeat"
-        " other slides. Do not prefix items with \"- \".";
+        " other slides. Do not prefix items with \"- \"."
+        " Put spoken detail in each slide's notes and keep the slide text short and"
+        " scannable.";
 
     const std::string userMessage = DeckSpec::buildExpansionUserMessage(
         entry, slideNumber, total,
@@ -2452,7 +2533,8 @@ void AIChatSession::expandNextSlide()
     tools->add(makeAITool(
         std::string(AIToolNames::WriteSlide),
         std::string("Write one slide of the deck. Pass a \"slide\" object.\n\n") +
-            DocumentToolDescriptions::DECK_SLIDE_SHAPE,
+            DocumentToolDescriptions::DECK_SLIDE_SHAPE +
+            DeckSpec::limitsSentence(_toolLoop->budgets),
         makeParamSchema({ { "slide", { "object", "The slide description." } } }, { "slide" })));
 
     Poco::JSON::Object::Ptr payload = new Poco::JSON::Object();
@@ -2582,7 +2664,8 @@ void AIChatSession::handleExpansionResponse(int statusCode, const std::string& b
         slide->set("title", value);
     }
 
-    if (auto slideErr = DeckSpec::validateSlideSpec(slide, _deckExpansion->nextIndex))
+    if (auto slideErr =
+            DeckSpec::validateSlideSpec(slide, _deckExpansion->nextIndex, _toolLoop->budgets))
     {
         failCurrentExpansionSlide(*slideErr);
         return;
@@ -2606,9 +2689,10 @@ void AIChatSession::applyExpansionSlide(const Poco::JSON::Object::Ptr& slide)
     // docSlideIndex is the number of slides already built, not the outline
     // index: a skipped slide leaves the next one reusing the deck's current
     // slide instead of inserting after a slide that was never added.
-    const bool haveDesignTemplate = !_toolLoop->designTemplate.empty();
+    const DeckSpec::CompileOptions options{ !_toolLoop->designTemplate.empty(),
+                                            _toolLoop->artDirection };
     const std::string transform =
-        DeckSpec::compileSlideSpec(slide, _deckExpansion->builtCount, haveDesignTemplate);
+        DeckSpec::compileSlideSpec(slide, _deckExpansion->builtCount, options);
 
     Poco::JSON::Object::Ptr transformObj = new Poco::JSON::Object();
     if (!JsonUtil::parseJSON(transform, transformObj))
@@ -3058,9 +3142,25 @@ void AIChatSession::processTransformImageGenerations(
                         continue;
                     }
 
-                    std::string prompt = cmd->getValue<std::string>(key);
+                    // GenerateImage carries either an object {"prompt","alt"} from
+                    // the deck compiler or a plain prompt string from the
+                    // imperative tool. Read both; the alt is empty for the string
+                    // form.
+                    std::string prompt;
+                    std::string alt;
+                    const Poco::Dynamic::Var value = cmd->get(key);
+                    if (value.type() == typeid(Poco::JSON::Object::Ptr))
+                    {
+                        Poco::JSON::Object::Ptr generate =
+                            value.extract<Poco::JSON::Object::Ptr>();
+                        JsonUtil::findJSONValue(generate, "prompt", prompt);
+                        JsonUtil::findJSONValue(generate, "alt", alt);
+                    }
+                    else if (!value.isEmpty())
+                        prompt = value.toString();
+
                     _toolLoop->pendingImageGens.push_back(
-                        {currentSlide, objId, std::move(prompt), std::string()});
+                        {currentSlide, objId, std::move(prompt), std::string(), std::move(alt)});
 
                     // Replace GenerateImage.N with InsertImage.N pointing
                     // to the loading placeholder
@@ -3222,13 +3322,32 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
             LOG_DBG_S("TransformImageGen: wrote image " << (idx + 1) << " to " << filePath);
 
             // Send a transform to replace the loading placeholder with the real
-            // image on the correct slide.
+            // image on the correct slide. When the image carries alt text the
+            // command value is an object {"url","alt"}; otherwise it stays the
+            // plain URL string the engine has always accepted.
             const auto& imgGen = self->_toolLoop->pendingImageGens[idx];
-            std::string miniTransform = "{\"Transforms\":{\"SlideCommands\":["
-                                        "{\"InsertImageAt." +
-                                        std::to_string(imgGen.slideIndex) + "." +
-                                        std::to_string(imgGen.objId) + "\":\"" + jailFileUrl +
-                                        "\"}]}}";
+            const std::string insertKey = "InsertImageAt." +
+                                          std::to_string(imgGen.slideIndex) + "." +
+                                          std::to_string(imgGen.objId);
+            Poco::JSON::Object::Ptr insertCmd = new Poco::JSON::Object();
+            if (imgGen.alt.empty())
+                insertCmd->set(insertKey, jailFileUrl);
+            else
+            {
+                Poco::JSON::Object::Ptr target = new Poco::JSON::Object();
+                target->set("url", jailFileUrl);
+                target->set("alt", imgGen.alt);
+                insertCmd->set(insertKey, target);
+            }
+            Poco::JSON::Array::Ptr insertCmds = new Poco::JSON::Array();
+            insertCmds->add(insertCmd);
+            Poco::JSON::Object::Ptr insertTransforms = new Poco::JSON::Object();
+            insertTransforms->set("SlideCommands", insertCmds);
+            Poco::JSON::Object::Ptr insertRoot = new Poco::JSON::Object();
+            insertRoot->set("Transforms", insertTransforms);
+            std::ostringstream miniStream;
+            insertRoot->stringify(miniStream);
+            const std::string miniTransform = miniStream.str();
 
             std::string encodedMini;
             Poco::URI::encode(miniTransform, "", encodedMini);
@@ -3327,10 +3446,11 @@ bool AIChatSession::tryConsumeDesignFetch(const std::shared_ptr<Message>& payloa
         return false;
 
     // The reply lists the template's distinct example-slide layouts and its
-    // design masters, each with the part it plays. We keep the layouts and the
-    // distinct parts the masters cover; the master names stay inside the engine.
-    std::vector<std::string> designTemplateLayouts;
-    std::vector<std::string> designTemplateParts;
+    // design masters, each with the part it plays, plus the template manifest's
+    // art direction and budget limits when it declares them. We keep the
+    // layouts, the distinct parts the masters cover, and the manifest values;
+    // the master names stay inside the engine.
+    DesignInfo design;
     if (Poco::JSON::Object::Ptr values = reply->getObject("commandValues"))
     {
         Poco::JSON::Array::Ptr layouts = values->getArray("layouts");
@@ -3341,11 +3461,10 @@ bool AIChatSession::tryConsumeDesignFetch(const std::shared_ptr<Message>& payloa
             if (!var.isString())
                 continue;
             const std::string layout = var.toString();
-            const bool seen = std::find(designTemplateLayouts.begin(),
-                                        designTemplateLayouts.end(), layout)
-                              != designTemplateLayouts.end();
+            const bool seen = std::find(design.layouts.begin(), design.layouts.end(), layout)
+                              != design.layouts.end();
             if (AIUtil::isKnownSlideLayout(layout) && !seen)
-                designTemplateLayouts.push_back(layout);
+                design.layouts.push_back(layout);
         }
 
         // The parts this template has a design for: the distinct master roles,
@@ -3361,17 +3480,40 @@ bool AIChatSession::tryConsumeDesignFetch(const std::shared_ptr<Message>& payloa
             const std::string role = JsonUtil::getJSONValue<std::string>(master, "role");
             if (role.empty() || role == "other")
                 continue;
-            const bool seen = std::find(designTemplateParts.begin(),
-                                        designTemplateParts.end(), role)
-                              != designTemplateParts.end();
+            const bool seen = std::find(design.parts.begin(), design.parts.end(), role)
+                              != design.parts.end();
             if (!seen)
-                designTemplateParts.push_back(role);
+                design.parts.push_back(role);
+        }
+
+        // The manifest's image style. It comes from a user-editable template
+        // file and only ever composes image prompts, so sanitize it here at the
+        // trust boundary.
+        std::string artDirection;
+        JsonUtil::findJSONValue(values, "artDirection", artDirection);
+        design.artDirection = sanitizeArtDirection(artDirection);
+
+        // The manifest's budget limits. Only positive integers are kept; the
+        // launch applies them tighten-only against the configured budgets.
+        if (Poco::JSON::Object::Ptr budgets = values->getObject("budgets"))
+        {
+            auto readLimit = [&budgets](const std::string& key) -> std::optional<int>
+            {
+                int value = 0;
+                if (JsonUtil::findJSONValue(budgets, key, value) && value >= 1)
+                    return value;
+                return std::nullopt;
+            };
+            design.maxSlides = readLimit("maxSlides");
+            design.maxItemsPerBullets = readLimit("maxItemsPerBullets");
+            design.maxItemLength = readLimit("maxItemLength");
+            design.maxTitleLength = readLimit("maxTitleLength");
         }
     }
 
     const PendingChatRequest req = std::move(*_pendingDesignFetch);
     _pendingDesignFetch.reset();
-    launchChatRequest(req, designTemplateParts, designTemplateLayouts);
+    launchChatRequest(req, design);
     return true;
 }
 
@@ -3384,7 +3526,7 @@ void AIChatSession::checkDesignFetchTimeout(std::chrono::steady_clock::time_poin
             "request without design information");
     const PendingChatRequest req = std::move(*_pendingDesignFetch);
     _pendingDesignFetch.reset();
-    launchChatRequest(req, {}, {});
+    launchChatRequest(req, DesignInfo{});
 }
 
 bool AIChatSession::tryConsumeExtractedLinkTargets(const std::shared_ptr<Message>& payload)

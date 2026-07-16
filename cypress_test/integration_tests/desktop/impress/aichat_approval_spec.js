@@ -81,7 +81,12 @@ describe(['tagdesktop'], 'AI approval card', function() {
 					{ 'InsertMasterSlide': 0 },
 					{ 'ChangeLayoutByName': 'AUTOLAYOUT_TITLE_CONTENT' },
 					{ 'SetText.0': 'Growth' },
-					{ 'GenerateImage.1': 'a line chart of renewable capacity' },
+					{
+						'GenerateImage.1': {
+							prompt: 'a line chart of renewable capacity',
+							alt: 'Line chart of renewable capacity',
+						},
+					},
 					{ 'SetSlidePart': 'body' },
 				],
 			},
