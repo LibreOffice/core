@@ -63,6 +63,23 @@ sub _do_splitdbg
     }
 }
 
+sub _read_buildid
+{
+    my ( $filename ) = @_;
+
+    my $buildid = "";
+
+    $filename =~ s/'/'\\''/g;
+    open (READELF, "readelf -n '$filename' 2>/dev/null |");
+    while (<READELF>)
+    {
+        if ( /Build ID:\s*([0-9a-fA-F]+)/ ) { $buildid = lc($1); last; }
+    }
+    close (READELF);
+
+    return $buildid;
+}
+
 sub splitdbg_libraries
 {
     my ( $filelist, $languagestringref ) = @_;
@@ -111,6 +128,13 @@ sub splitdbg_libraries
             # split debuginfo from file
 
             _do_splitdbg($destfilename);
+
+            # keep the build id of the split-out debug file. Tools that
+            # resolve debug info by build id look it up under
+            # /usr/lib/debug/.build-id, and that link is created from this.
+
+            my $buildid = _read_buildid("$destfilename.dbg");
+            if ( $buildid ne "" ) { ${$filelist}[$i]->{'buildid'} = $buildid; }
 
             push(@debugfilelist, ${$filelist}[$i]);
         }

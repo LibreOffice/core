@@ -216,6 +216,22 @@ sub put_files_into_dbgepmfile
         my $line = "$filetype $unixrights root $group $destination $sourcepath\n";
 
         push(@{$epmfileref}, $line);
+
+        # Add the build id lookup link. Tools that resolve debug info by
+        # build id search /usr/lib/debug/.build-id/<first two hex>/<rest>.debug,
+        # so point that path at the installed debug file.
+
+        my $buildid = $onefile->{'buildid'} // "";
+        if ( $buildid ne "" )
+        {
+            my $iddir = substr($buildid, 0, 2);
+            my $idfile = substr($buildid, 2);
+            my $linkdestination = "/usr/lib/debug/.build-id/$iddir/$idfile.debug";
+
+            my $linkline = "l 000 root $group $linkdestination $destination\n";
+
+            push(@{$epmfileref}, $linkline);
+        }
     }
 }
 
