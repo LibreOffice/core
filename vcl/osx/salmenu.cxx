@@ -122,7 +122,7 @@ static void initAppMenu()
     static bool bInitialized = false;
     if (bInitialized)
         return;
-    OSX_SALDATA_RUNINMAIN(initAppMenu())
+    OSX_RUNINMAIN(initAppMenu())
     bInitialized = true;
 
     NSMenu* pAppMenu = nil;
@@ -462,7 +462,7 @@ void AquaSalMenu::setMainMenu()
 void AquaSalMenu::setDefaultMenu()
 {
     // tdf#160427 native menu changes can only be done on the main thread
-    OSX_SALDATA_RUNINMAIN(AquaSalMenu::setDefaultMenu())
+    OSX_RUNINMAIN(AquaSalMenu::setDefaultMenu())
 
     NSMenu* pMenu = [NSApp mainMenu];
 
@@ -566,7 +566,7 @@ void AquaSalMenu::SetFrame( const SalFrame *pFrame )
 
 void AquaSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 {
-    OSX_SALDATA_RUNINMAIN(InsertItem(pSalMenuItem, nPos))
+    OSX_RUNINMAIN(InsertItem(pSalMenuItem, nPos))
 
     AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem*>(pSalMenuItem);
 
@@ -595,7 +595,7 @@ void AquaSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 void AquaSalMenu::RemoveItem( unsigned nPos )
 {
     // tdf#160427 native menu changes can only be done on the main thread
-    OSX_SALDATA_RUNINMAIN(RemoveItem(nPos))
+    OSX_RUNINMAIN(RemoveItem(nPos))
 
     AquaSalMenuItem* pRemoveItem = nullptr;
     if( nPos == MENU_APPEND || nPos == (maItems.size()-1) )

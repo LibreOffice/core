@@ -401,7 +401,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 
 bool AquaSalInstance::RunInMainYield( bool bHandleAllCurrentEvents )
 {
-    OSX_SALDATA_RUNINMAIN_UNION( DoYield( false, bHandleAllCurrentEvents), boolean )
+    OSX_RUNINMAIN_UNION(DoYield(false, bHandleAllCurrentEvents), boolean)
 
     // PrinterController::removeTransparencies() calls this frequently on the
     // main thread so reduce the severity from an assert so that printing still
@@ -622,7 +622,7 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
             return false;
     }
 
-    OSX_SALDATA_RUNINMAIN_UNION(AnyInput(nType), boolean)
+    OSX_RUNINMAIN_UNION(AnyInput(nType), boolean)
 
     if( nType & VclInputFlags::TIMER )
     {
@@ -688,13 +688,13 @@ SalFrame* AquaSalInstance::CreateChildFrame( SystemParentData*, SalFrameStyleFla
 
 SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle )
 {
-    OSX_SALDATA_RUNINMAIN_POINTER(CreateFrame(pParent, nSalFrameStyle), SalFrame*)
+    OSX_RUNINMAIN_POINTER(CreateFrame(pParent, nSalFrameStyle), SalFrame*)
     return new AquaSalFrame( pParent, nSalFrameStyle );
 }
 
 void AquaSalInstance::DestroyFrame( SalFrame* pFrame )
 {
-    OSX_SALDATA_RUNINMAIN(DestroyFrame(pFrame))
+    OSX_RUNINMAIN(DestroyFrame(pFrame))
     delete pFrame;
 }
 
@@ -703,13 +703,13 @@ SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* p
     if ( !pParent )
         return nullptr;
 
-    OSX_SALDATA_RUNINMAIN_POINTER(CreateObject(pParent, pWindowData, false), SalObject*)
+    OSX_RUNINMAIN_POINTER(CreateObject(pParent, pWindowData, false), SalObject*)
     return new AquaSalObject( static_cast<AquaSalFrame*>(pParent), pWindowData );
 }
 
 void AquaSalInstance::DestroyObject( SalObject* pObject )
 {
-    OSX_SALDATA_RUNINMAIN(DestroyObject(pObject))
+    OSX_RUNINMAIN(DestroyObject(pObject))
     delete pObject;
 }
 

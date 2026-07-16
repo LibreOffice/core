@@ -48,7 +48,8 @@
 #include <osx/salinst.h>
 #include <osx/salmutex.hxx>
 
-#define OSX_RUNINMAIN( instance, command ) \
+#define OSX_RUNINMAIN(command) \
+    AquaSalInstance* instance = GetAquaSalInstance(); \
     if ( !instance->IsMainThread() ) \
     { \
         DBG_TESTSOLARMUTEX(); \
@@ -74,7 +75,8 @@
         return; \
     }
 
-#define OSX_RUNINMAIN_POINTER( instance, command, type ) \
+#define OSX_RUNINMAIN_POINTER(command, type) \
+    AquaSalInstance* instance = GetAquaSalInstance(); \
     if ( !instance->IsMainThread() ) \
     { \
         DBG_TESTSOLARMUTEX(); \
@@ -100,7 +102,8 @@
         return static_cast<type>( aMutex->m_aResult.pointer ); \
     }
 
-#define OSX_RUNINMAIN_UNION( instance, command, member ) \
+#define OSX_RUNINMAIN_UNION(command, member) \
+    AquaSalInstance* instance = GetAquaSalInstance(); \
     if ( !instance->IsMainThread() ) \
     { \
         DBG_TESTSOLARMUTEX(); \
@@ -125,18 +128,5 @@
         } \
         return std::move( aMutex->m_aResult.member ); \
     }
-
-/**
- * convenience macros using global ImplSVData
- */
-
-#define OSX_SALDATA_RUNINMAIN( command ) \
-    OSX_RUNINMAIN(GetAquaSalInstance(), command)
-
-#define OSX_SALDATA_RUNINMAIN_POINTER( command, type ) \
-    OSX_RUNINMAIN_POINTER(GetAquaSalInstance(), command, type)
-
-#define OSX_SALDATA_RUNINMAIN_UNION( command, member ) \
-    OSX_RUNINMAIN_UNION(GetAquaSalInstance(), command, member)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

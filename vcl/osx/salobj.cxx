@@ -246,7 +246,7 @@ void AquaSalObject::SetPosSize(
 
 void AquaSalObject::setClippedPosSize()
 {
-    OSX_SALDATA_RUNINMAIN( setClippedPosSize() )
+    OSX_RUNINMAIN(setClippedPosSize())
 
     NSRect aViewRect = { NSZeroPoint, NSMakeSize( mnWidth, mnHeight) };
     if( maSysData.mpNSView )
@@ -279,7 +279,7 @@ void AquaSalObject::Show( bool bVisible )
     if( !mpClipView )
         return;
 
-    OSX_SALDATA_RUNINMAIN( Show( bVisible ) )
+    OSX_RUNINMAIN(Show(bVisible))
 
     [mpClipView setHidden: (bVisible ? NO : YES)];
 }
@@ -318,7 +318,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void AquaOpenGLContext::resetCurrent()
 {
-    OSX_SALDATA_RUNINMAIN( resetCurrent() )
+    OSX_RUNINMAIN(resetCurrent())
 
     OpenGLZone aZone;
 
@@ -332,7 +332,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void AquaOpenGLContext::makeCurrent()
 {
-    OSX_SALDATA_RUNINMAIN( makeCurrent() )
+    OSX_RUNINMAIN(makeCurrent())
 
     if (isCurrent())
         return;
@@ -351,7 +351,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void AquaOpenGLContext::swapBuffers()
 {
-    OSX_SALDATA_RUNINMAIN( swapBuffers() )
+    OSX_RUNINMAIN(swapBuffers())
 
     OpenGLZone aZone;
 
@@ -375,7 +375,7 @@ SystemWindowData AquaOpenGLContext::generateWinData(vcl::Window* /*pParent*/, bo
 
 void AquaOpenGLContext::destroyCurrentContext()
 {
-    OSX_SALDATA_RUNINMAIN( destroyCurrentContext() )
+    OSX_RUNINMAIN(destroyCurrentContext())
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
         // "'NSOpenGLContext' is deprecated: first deprecated in macOS 10.14 - Please use Metal or
         // MetalKit."
@@ -385,7 +385,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void AquaOpenGLContext::initWindow()
 {
-    OSX_SALDATA_RUNINMAIN( initWindow() )
+    OSX_RUNINMAIN(initWindow())
 
     if( !m_pChildWindow )
     {
@@ -401,7 +401,7 @@ void AquaOpenGLContext::initWindow()
 
 bool AquaOpenGLContext::ImplInit()
 {
-    OSX_SALDATA_RUNINMAIN_UNION( ImplInit(), boolean )
+    OSX_RUNINMAIN_UNION(ImplInit(), boolean)
 
     OpenGLZone aZone;
 
@@ -433,7 +433,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 OpenGLContext* AquaSalInstance::CreateOpenGLContext()
 {
-    OSX_SALDATA_RUNINMAIN_POINTER( CreateOpenGLContext(), OpenGLContext* )
+    OSX_RUNINMAIN_POINTER(CreateOpenGLContext(), OpenGLContext*)
     return new AquaOpenGLContext;
 }
 

@@ -165,7 +165,7 @@ AquaSalFrame::~AquaSalFrame()
 
 void AquaSalFrame::initWindowAndView()
 {
-    OSX_SALDATA_RUNINMAIN( initWindowAndView() )
+    OSX_RUNINMAIN(initWindowAndView())
 
     // initialize mirroring parameters
     // FIXME: screens changing
@@ -285,7 +285,7 @@ void AquaSalFrame::VCLToCocoa( NSPoint& io_rPoint, bool bRelativeToScreen )
 
 void AquaSalFrame::screenParametersChanged()
 {
-    OSX_SALDATA_RUNINMAIN( screenParametersChanged() )
+    OSX_RUNINMAIN(screenParametersChanged())
 
     sal::aqua::resetTotalScreenBounds();
     sal::aqua::resetWindowScaling();
@@ -333,7 +333,7 @@ void AquaSalFrame::SetTitle(const OUString& rTitle)
     if (mbHeadlessMode)
         return;
 
-    OSX_SALDATA_RUNINMAIN( SetTitle(rTitle) )
+    OSX_RUNINMAIN(SetTitle(rTitle))
 
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
@@ -379,7 +379,7 @@ void AquaSalFrame::SetIcon( sal_uInt16 )
 
 void AquaSalFrame::SetRepresentedURL( const OUString& i_rDocURL )
 {
-    OSX_SALDATA_RUNINMAIN( SetRepresentedURL( i_rDocURL ) )
+    OSX_RUNINMAIN(SetRepresentedURL(i_rDocURL))
 
     if( comphelper::isFileUrl(i_rDocURL) )
     {
@@ -396,7 +396,7 @@ void AquaSalFrame::SetRepresentedURL( const OUString& i_rDocURL )
 
 void AquaSalFrame::initShow()
 {
-    OSX_SALDATA_RUNINMAIN( initShow() )
+    OSX_RUNINMAIN(initShow())
 
     mbInitShow = false;
     if( ! mbPositioned && ! mbInternalFullScreen )
@@ -436,7 +436,7 @@ void AquaSalFrame::initShow()
 
 void AquaSalFrame::SendPaintEvent( const tools::Rectangle* pRect )
 {
-    OSX_SALDATA_RUNINMAIN( SendPaintEvent( pRect ) )
+    OSX_RUNINMAIN(SendPaintEvent(pRect))
 
     SalPaintEvent aPaintEvt(0, 0, maGeometry.width(), maGeometry.height(), true);
     if( pRect )
@@ -481,7 +481,7 @@ void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
         return;
     }
 
-    OSX_SALDATA_RUNINMAIN( Show(bVisible, bNoActivate) )
+    OSX_RUNINMAIN(Show(bVisible, bNoActivate))
 
     // tdf#152173 Don't display tooltip windows when application is inactive
     // Starting with macOS 13 Ventura, inactive applications receive mouse
@@ -591,7 +591,7 @@ void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
 
 void AquaSalFrame::SetMinClientSize( tools::Long nWidth, tools::Long nHeight )
 {
-    OSX_SALDATA_RUNINMAIN( SetMinClientSize( nWidth, nHeight ) )
+    OSX_RUNINMAIN(SetMinClientSize(nWidth, nHeight))
 
     mnMinWidth = nWidth;
     mnMinHeight = nHeight;
@@ -613,7 +613,7 @@ void AquaSalFrame::SetMinClientSize( tools::Long nWidth, tools::Long nHeight )
 
 void AquaSalFrame::SetMaxClientSize( tools::Long nWidth, tools::Long nHeight )
 {
-    OSX_SALDATA_RUNINMAIN( SetMaxClientSize( nWidth, nHeight ) )
+    OSX_RUNINMAIN(SetMaxClientSize(nWidth, nHeight))
 
     mnMaxWidth = nWidth;
     mnMaxHeight = nHeight;
@@ -692,7 +692,7 @@ SalEvent AquaSalFrame::PreparePosSize(tools::Long nX, tools::Long nY, tools::Lon
 
 void AquaSalFrame::SetWindowState(const vcl::WindowData& rState)
 {
-    OSX_SALDATA_RUNINMAIN(SetWindowState(rState))
+    OSX_RUNINMAIN(SetWindowState(rState))
 
     sal_uInt16 nFlags = 0;
     nFlags |= ((rState.mask() & vcl::WindowDataMask::X) ? SAL_FRAME_POSSIZE_X : 0);
@@ -776,7 +776,7 @@ vcl::WindowData AquaSalFrame::GetWindowState()
         return aState;
     }
 
-    OSX_SALDATA_RUNINMAIN_UNION(GetWindowState(), windowData)
+    OSX_RUNINMAIN_UNION(GetWindowState(), windowData)
 
     aState.setMask(vcl::WindowDataMask::PosSizeState);
 
@@ -842,7 +842,7 @@ void AquaSalFrame::SetScreenNumber(unsigned int nScreen)
     if (mbHeadlessMode)
         return;
 
-    OSX_SALDATA_RUNINMAIN( SetScreenNumber( nScreen ) )
+    OSX_RUNINMAIN(SetScreenNumber(nScreen))
 
     NSArray* pScreens = [NSScreen screens];
     NSScreen* pScreen = nil;
@@ -893,7 +893,7 @@ void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
     if( mbInternalFullScreen == bFullScreen )
         return;
 
-    OSX_SALDATA_RUNINMAIN( ShowFullScreen( bFullScreen, nDisplay ) )
+    OSX_RUNINMAIN(ShowFullScreen(bFullScreen, nDisplay))
 
     mbInternalFullScreen = bFullScreen;
 
@@ -1050,7 +1050,7 @@ void AquaSalFrame::StartPresentation( bool bStart )
     if (mbHeadlessMode)
         return;
 
-    OSX_SALDATA_RUNINMAIN( StartPresentation( bStart ) )
+    OSX_RUNINMAIN(StartPresentation(bStart))
 
     if( bStart )
     {
@@ -1114,7 +1114,7 @@ void AquaSalFrame::ToTop(SalFrameToTop nFlags)
         return;
     }
 
-    OSX_SALDATA_RUNINMAIN( ToTop( nFlags ) )
+    OSX_RUNINMAIN(ToTop(nFlags))
 
     if( ! (nFlags & SalFrameToTop::RestoreWhenMin) )
     {
@@ -1129,7 +1129,7 @@ void AquaSalFrame::ToTop(SalFrameToTop nFlags)
 
 NSCursor* AquaSalFrame::getCurrentCursor()
 {
-    OSX_SALDATA_RUNINMAIN_POINTER( getCurrentCursor(), NSCursor* )
+    OSX_RUNINMAIN_POINTER(getCurrentCursor(), NSCursor*)
 
     NSCursor* pCursor = nil;
     switch( mePointerStyle )
@@ -1174,7 +1174,7 @@ void AquaSalFrame::SetPointer( PointerStyle ePointerStyle )
     if( ePointerStyle == mePointerStyle )
         return;
 
-    OSX_SALDATA_RUNINMAIN( SetPointer( ePointerStyle ) )
+    OSX_RUNINMAIN(SetPointer(ePointerStyle))
 
     mePointerStyle = ePointerStyle;
 
@@ -1183,7 +1183,7 @@ void AquaSalFrame::SetPointer( PointerStyle ePointerStyle )
 
 void AquaSalFrame::SetPointerPos( tools::Long nX, tools::Long nY )
 {
-    OSX_SALDATA_RUNINMAIN( SetPointerPos( nX, nY ) )
+    OSX_RUNINMAIN(SetPointerPos(nX, nY))
 
     // FIXME: use Cocoa functions
     // FIXME: multiscreen support
@@ -1197,7 +1197,7 @@ void AquaSalFrame::Flush()
     if( !(mbGraphicsAcquired && mpGraphics && mpNSView && mbShown) )
         return;
 
-    OSX_SALDATA_RUNINMAIN( Flush() )
+    OSX_RUNINMAIN(Flush())
 
     [mpNSView setNeedsDisplay: YES];
 
@@ -1213,7 +1213,7 @@ void AquaSalFrame::Flush( const tools::Rectangle& rRect )
     if( !(mbGraphicsAcquired && mpGraphics && mpNSView && mbShown) )
         return;
 
-    OSX_SALDATA_RUNINMAIN( Flush( rRect ) )
+    OSX_RUNINMAIN(Flush(rRect))
 
     NSRect aNSRect = { { static_cast<CGFloat>(rRect.Left()), static_cast<CGFloat>(rRect.Top()) }, { static_cast<CGFloat>(rRect.GetWidth()), static_cast<CGFloat>(rRect.GetHeight()) } };
     VCLToCocoa( aNSRect, false );
@@ -1488,7 +1488,7 @@ static vcl::Font getFont( NSFont* pFont, sal_Int32 nDPIY, const vcl::Font& rDefa
 
 void AquaSalFrame::getResolution( sal_Int32& o_rDPIX, sal_Int32& o_rDPIY )
 {
-    OSX_SALDATA_RUNINMAIN( getResolution( o_rDPIX, o_rDPIY ) )
+    OSX_RUNINMAIN(getResolution(o_rDPIX, o_rDPIY))
 
     if( ! mpGraphics )
     {
@@ -1611,7 +1611,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     if (mbHeadlessMode)
         return;
 
-    OSX_SALDATA_RUNINMAIN( UpdateSettings( rSettings ) )
+    OSX_RUNINMAIN(UpdateSettings(rSettings))
 
     // tdf#165266 Force NSColor to use current effective appearance
     // +[NSAppearance setCurrentAppearance:] is deprecated and calling
@@ -1854,14 +1854,14 @@ const SystemEnvData& AquaSalFrame::GetSystemData() const
 
 void AquaSalFrame::Beep()
 {
-    OSX_SALDATA_RUNINMAIN( Beep() )
+    OSX_RUNINMAIN(Beep())
     NSBeep();
 }
 
 void AquaSalFrame::SetPosSize(
     tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags)
 {
-    OSX_SALDATA_RUNINMAIN( SetPosSize( nX, nY, nWidth, nHeight, nFlags ) )
+    OSX_RUNINMAIN(SetPosSize(nX, nY, nWidth, nHeight, nFlags))
 
     SalEvent nEvent = PreparePosSize(nX, nY, nWidth, nHeight, nFlags);
     if (mbHeadlessMode)
@@ -1950,7 +1950,7 @@ void AquaSalFrame::GetWorkArea( AbsoluteScreenPixelRectangle& rRect )
         return;
     }
 
-    OSX_SALDATA_RUNINMAIN( GetWorkArea( rRect ) )
+    OSX_RUNINMAIN(GetWorkArea(rRect))
 
     NSScreen* pScreen = [mpNSWindow screen];
     if( pScreen ==  nil )
@@ -1979,7 +1979,7 @@ sal_uInt16 ImplGetModifierMask( unsigned int nMask )
 
 SalFrame::SalPointerState AquaSalFrame::GetPointerState()
 {
-    OSX_SALDATA_RUNINMAIN_UNION( GetPointerState(), state )
+    OSX_RUNINMAIN_UNION(GetPointerState(), state)
 
     SalPointerState state;
     state.mnState = 0;
@@ -2029,7 +2029,7 @@ LanguageType AquaSalFrame::GetInputLanguage()
 
 void AquaSalFrame::SetMenu( SalMenu* pSalMenu )
 {
-    OSX_SALDATA_RUNINMAIN( SetMenu( pSalMenu ) )
+    OSX_RUNINMAIN(SetMenu(pSalMenu))
 
     AquaSalMenu* pMenu = static_cast<AquaSalMenu*>(pSalMenu);
     SAL_WARN_IF( pMenu && !pMenu->mbMenuBar, "vcl", "setting non menubar on frame" );
@@ -2046,7 +2046,7 @@ void AquaSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
         return;
     }
 
-    OSX_SALDATA_RUNINMAIN( SetExtendedFrameStyle( nStyle ) )
+    OSX_RUNINMAIN(SetExtendedFrameStyle(nStyle))
 
     if( (mnExtStyle & SAL_FRAME_EXT_STYLE_DOCMODIFIED) != (nStyle & SAL_FRAME_EXT_STYLE_DOCMODIFIED) )
         [mpNSWindow setDocumentEdited: (nStyle & SAL_FRAME_EXT_STYLE_DOCMODIFIED) ? YES : NO];
@@ -2077,7 +2077,7 @@ void AquaSalFrame::UpdateFrameGeometry()
     if (mbHeadlessMode)
         return;
 
-    OSX_SALDATA_RUNINMAIN( UpdateFrameGeometry() )
+    OSX_RUNINMAIN(UpdateFrameGeometry())
 
     // keep in mind that view and window coordinates are lower left
     // whereas vcl's are upper left
@@ -2177,7 +2177,7 @@ void AquaSalFrame::doResetClipRegion()
     if (mbHeadlessMode)
         return;
 
-    OSX_SALDATA_RUNINMAIN( ResetClipRegion() )
+    OSX_RUNINMAIN(ResetClipRegion())
 
     // release old path and indicate no clipping
     CGPathRelease( mrClippingPath );
@@ -2194,7 +2194,7 @@ void AquaSalFrame::BeginSetClipRegion( sal_uInt32 nRects )
     if (mbHeadlessMode)
         return;
 
-    OSX_SALDATA_RUNINMAIN( BeginSetClipRegion( nRects ) )
+    OSX_RUNINMAIN(BeginSetClipRegion(nRects))
 
     // release old path
     if( mrClippingPath )
@@ -2230,7 +2230,7 @@ void AquaSalFrame::EndSetClipRegion()
     if (mbHeadlessMode)
         return;
 
-    OSX_SALDATA_RUNINMAIN( EndSetClipRegion() )
+    OSX_RUNINMAIN(EndSetClipRegion())
 
     if( ! maClippingRects.empty() )
     {
