@@ -1234,13 +1234,14 @@ adminIntegratorSettings:
 # as above.
 node_modules: package.json npm-shrinkwrap.json node_shrinkpack
 	@if test -z "$(NODE_MODULES_DIR)"; then \
+		cp npm-shrinkwrap.json package-lock.json && \
 		UV_USE_IO_URING=0 $(NPM) ci --offline; \
 	else \
 		rm -rf "$(NODE_MODULES_DIR)/node_modules" && \
 		mkdir -p "$(NODE_MODULES_DIR)" && \
 		cp package.json npm-shrinkwrap.json "$(NODE_MODULES_DIR)"/ && \
 		ln -sfn "$(abs_builddir)/node_shrinkpack" "$(NODE_MODULES_DIR)"/node_shrinkpack && \
-		(cd "$(NODE_MODULES_DIR)" && UV_USE_IO_URING=0 $(NPM) ci --offline) && \
+		(cd "$(NODE_MODULES_DIR)" && cp npm-shrinkwrap.json package-lock.json && UV_USE_IO_URING=0 $(NPM) ci --offline) && \
 		ln -sfn "$(NODE_MODULES_DIR)/node_modules" node_modules; \
 	fi
 	@touch node_modules

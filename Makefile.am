@@ -989,8 +989,8 @@ clean-clangd:
 clean-vscode: clean-clangd
 	cd $(abs_srcdir) && rm -rf .vscode
 
-browser/node_modules: browser/package.json browser/node_shrinkpack
-	@cd browser && UV_USE_IO_URING=0 npm ci --offline
+browser/node_modules: browser/package.json browser/npm-shrinkwrap.json browser/node_shrinkpack
+	@cd browser && cp npm-shrinkwrap.json package-lock.json && UV_USE_IO_URING=0 npm ci --offline
 
 eslint: browser/node_modules
 	@$(MAKE) -C browser eslint

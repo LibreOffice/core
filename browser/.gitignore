@@ -1,5 +1,6 @@
 node_modules
 node_cache
+/package-lock.json
 tmp/**/*
 *.iml
 *.sublime-*
