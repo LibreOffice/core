@@ -1457,10 +1457,16 @@ SwPageFrame *SwFrame::InsertPage( SwPageFrame *pPrevPage, bool bFootnote )
     {
         SwFormatPageDesc &rDesc = const_cast<SwFormatPageDesc&>(GetPageDescItem());
         pDesc = rDesc.GetPageDesc();
+        const IDocumentSettingAccess& rIDSA
+            = pRoot->GetFormat()->GetDoc().getIDocumentSettingAccess();
         if ( rDesc.GetNumOffset() )
         {
-            ::std::optional<sal_uInt16> oNumOffset = rDesc.GetNumOffset();
-            bWishedRightPage = sw::IsRightPageByNumber(*pRoot, *oNumOffset);
+            bool bConsecutiveLeftRightPages = rIDSA.get(DocumentSettingId::ASSIGN_CONSECUTIVE_LEFT_RIGHT_PAGES);
+            if (!bConsecutiveLeftRightPages)
+            {
+                ::std::optional<sal_uInt16> oNumOffset = rDesc.GetNumOffset();
+                bWishedRightPage = sw::IsRightPageByNumber(*pRoot, *oNumOffset);
+            }
             // use the opportunity to set the flag at root
             pRoot->SetVirtPageNum( true );
         }

@@ -1029,7 +1029,9 @@ bool SwFrame::WrongPageDesc( SwPageFrame* pNew )
     // Does the Content bring a Pagedesc or do we need the
     // virtual page number of the new layout leaf?
     // PageDesc isn't allowed with Follows
-    const bool isRightPage = oTmp ? sw::IsRightPageByNumber(*mpRoot, *oTmp) : pNew->OnRightPage();
+    const IDocumentSettingAccess& rIDSA = pNew->GetFormat()->GetDoc().getIDocumentSettingAccess();
+    bool bConsecutiveLeftRightPages = rIDSA.get(DocumentSettingId::ASSIGN_CONSECUTIVE_LEFT_RIGHT_PAGES);
+    const bool isRightPage = !bConsecutiveLeftRightPages && oTmp ? sw::IsRightPageByNumber(*mpRoot, *oTmp) : pNew->OnRightPage();
     if ( !pDesc )
         pDesc = pNew->FindPageDesc();
 

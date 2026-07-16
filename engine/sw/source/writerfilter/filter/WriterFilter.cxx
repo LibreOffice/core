@@ -338,6 +338,8 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     xSettings->setPropertyValue(u"ContinuousEndnotes"_ustr, cpo::uno::Any(true));
     // tdf#161233 pictures with wrap polygon should not be clipped
     xSettings->setPropertyValue(u"NoClippingWithWrapPolygon"_ustr, cpo::uno::Any(true));
+    // left/right pages do not depend on virtual page number in Word
+    xSettings->setPropertyValue(u"AssignConsecutiveLeftRightPages"_ustr, cpo::uno::Any(true));
 }
 
 void WriterFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDoc)

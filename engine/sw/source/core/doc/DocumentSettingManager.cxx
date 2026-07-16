@@ -113,7 +113,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbMsWordCompGridMetrics(false), // tdf#129808
     mbNoClippingWithWrapPolygon(false),
     mbBalanceSpacesAndIdeographicSpaces(false),
-    mbAdjustTableLineHeightsToGridHeight(true) // tdf#167583
+    mbAdjustTableLineHeightsToGridHeight(true), // tdf#167583
+    mbAssignConsecutiveLeftRightPages(false) // tdf#159133
 
     // COMPATIBILITY FLAGS END
 {
@@ -293,6 +294,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
             return mbForceTopAlignmentInCellWithFloatingAnchor;
         case DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT:
             return mbAdjustTableLineHeightsToGridHeight;
+        case DocumentSettingId::ASSIGN_CONSECUTIVE_LEFT_RIGHT_PAGES:
+            return mbAssignConsecutiveLeftRightPages;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -639,6 +642,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT:
             mbAdjustTableLineHeightsToGridHeight = value;
             break;
+        case DocumentSettingId::ASSIGN_CONSECUTIVE_LEFT_RIGHT_PAGES:
+            mbAssignConsecutiveLeftRightPages = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -824,6 +830,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbBalanceSpacesAndIdeographicSpaces = rSource.mbBalanceSpacesAndIdeographicSpaces;
     mbForceTopAlignmentInCellWithFloatingAnchor = rSource.mbForceTopAlignmentInCellWithFloatingAnchor;
     mbAdjustTableLineHeightsToGridHeight = rSource.mbAdjustTableLineHeightsToGridHeight;
+    mbAssignConsecutiveLeftRightPages = rSource.mbAssignConsecutiveLeftRightPages;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
@@ -1248,6 +1255,12 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
         pWriter, BAD_CAST("value"),
         BAD_CAST(OString::boolean(mbAdjustTableLineHeightsToGridHeight).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbAssignConsecutiveLeftRightPages"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbAssignConsecutiveLeftRightPages).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
 
     (void)xmlTextWriterEndElement(pWriter);
 }

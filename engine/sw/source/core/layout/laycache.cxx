@@ -24,6 +24,7 @@
 #include <doc.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <docstat.hxx>
 #include <fmtpdsc.hxx>
 #include <laycache.hxx>
@@ -651,7 +652,10 @@ bool SwLayHelper::CheckInsertPage(
         bool bNextPageRight = !rpPage->OnRightPage();
         bool bInsertEmpty = false;
         assert(rpPage->GetUpper()->GetLower());
-        if (oPgNum && bNextPageRight != IsRightPageByNumber(
+        const IDocumentSettingAccess& rIDSA
+            = rpPage->GetFormat()->GetDoc().getIDocumentSettingAccess();
+        bool bConsecutiveLeftRightPages = rIDSA.get(DocumentSettingId::ASSIGN_CONSECUTIVE_LEFT_RIGHT_PAGES);
+        if (!bConsecutiveLeftRightPages && oPgNum && bNextPageRight != IsRightPageByNumber(
                     *static_cast<SwRootFrame*>(rpPage->GetUpper()), *oPgNum))
         {
             bNextPageRight = !bNextPageRight;

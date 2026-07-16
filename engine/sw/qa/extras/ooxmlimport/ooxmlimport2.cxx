@@ -1477,6 +1477,32 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165348_lockFileOnRepair)
                          ucb::InteractiveAugmentedIOException);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf159133NoBlankPage)
+{
+    // Given a document with a page break from page1 to a new page 1
+    createSwDoc("tdf15933NoBlankPage.docx");
+
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData
+        = { comphelper::makePropertyValue(u"IsSkipEmptyPages"_ustr, false) };
+    // When exporting to PDF:
+    save(TestFilter::PDF_WRITER, {
+                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                                 });
+
+    // Then make sure all the expected text is there on page 2:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    if (!pPdfDocument)
+    {
+        return;
+    }
+    int nPageCount = pPdfDocument->getPageCount();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 3
+    // i.e. not all of header, heading and body text was there on page 2, content was lost.
+    CPPUNIT_ASSERT_EQUAL(2, nPageCount);
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 } // end of anonymous namespace

@@ -150,6 +150,8 @@ enum class DocumentSettingId
     FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR,
     // tdf#167583 optionally apply text grid line height to table contents
     ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT,
+    // tdf#159133 left/right page is not decided by even/odd page number
+    ASSIGN_CONSECUTIVE_LEFT_RIGHT_PAGES
 };
 
 /** Provides access to settings of a document

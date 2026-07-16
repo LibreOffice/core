@@ -53,7 +53,7 @@
 #include <undobj.hxx>
 #include <flyfrms.hxx>
 #include <sectfrm.hxx>
-
+#include <IDocumentSettingAccess.hxx>
 #include <swselectionlist.hxx>
 #include <comphelper/kit.hxx>
 #include <osl/diagnose.h>
@@ -1812,7 +1812,9 @@ bool SwFrame::WannaRightPage() const
     }
     OSL_ENSURE( pDesc, "No pagedescriptor" );
     bool isRightPage;
-    if( oPgNum )
+    const IDocumentSettingAccess& rIDSA = pPage->GetFormat()->GetDoc().getIDocumentSettingAccess();
+    bool bConsecutiveLeftRightPages = rIDSA.get(DocumentSettingId::ASSIGN_CONSECUTIVE_LEFT_RIGHT_PAGES);
+    if( !bConsecutiveLeftRightPages && oPgNum )
         isRightPage = sw::IsRightPageByNumber(*mpRoot, *oPgNum);
     else
     {
