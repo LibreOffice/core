@@ -53,6 +53,8 @@ function _drawingAreaControl (parentContainer, data, builder) {
 
 		if (data.editText) {
 			wrapper.setAttribute('aria-label', data.editText);
+		} else if (data.aria && data.aria.label) {
+			wrapper.setAttribute('aria-label', data.aria.label);
 		}
 
 		if (data.text) {
@@ -73,6 +75,9 @@ function _drawingAreaControl (parentContainer, data, builder) {
 		if (!isNavigating) {
 			if (data.labelledBy) {
 				wrapper.setAttribute('aria-labelledby', data.labelledBy);
+			}
+			if (data.aria && data.aria.label) {
+				wrapper.setAttribute('aria-label', data.aria.label);
 			}
 			_setDescription(wrapper, data, imageId);
 		}
@@ -99,6 +104,9 @@ function _drawingAreaControl (parentContainer, data, builder) {
 			if (data.labelledBy) {
 				wrapper.setAttribute('aria-labelledby', data.labelledBy);
 			}
+			if (data.aria && data.aria.label) {
+				wrapper.setAttribute('aria-label', data.aria.label);
+			}
 			_setDescription(wrapper, data, imageId);
 		}
 	} else {
@@ -114,6 +122,9 @@ function _drawingAreaControl (parentContainer, data, builder) {
 			JSDialog.AddAltAttrOnFocusableImg(image, data, builder);
 			if (data.aria && data.aria.role) {
 				image.setAttribute('role', data.aria.role);
+			}
+			if (data.aria && data.aria.label) {
+				image.setAttribute('aria-label', data.aria.label);
 			}
 		} else {
 			image.alt = '';
