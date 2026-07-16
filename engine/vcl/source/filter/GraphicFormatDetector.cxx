@@ -1287,6 +1287,13 @@ bool GraphicFormatDetector::checkXBM()
 
 bool GraphicFormatDetector::checkSVG()
 {
+    // Bail out if this is a ZIP package, check for header signature "PK\3\4"
+    if (maFirstBytes[0] == 0x50 && maFirstBytes[1] == 0x4B && maFirstBytes[2] == 0x03
+        && maFirstBytes[3] == 0x04)
+    {
+        return false;
+    }
+
     SeekGuard aGuard(mrStream, mnStreamPosition);
     sal_uInt64 nCheckSize = std::min<sal_uInt64>(mnStreamLength, 256);
     sal_uInt8 sExtendedOrDecompressedFirstBytes[SVG_CHECK_SIZE];

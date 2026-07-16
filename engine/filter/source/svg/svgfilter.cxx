@@ -673,6 +673,13 @@ private:
             return;
         }
 
+        // Bail out if this is a ZIP package, check for header signature "PK\3\4"
+        if (mnFirstRead >= 4 && mnFirstBytes[0] == 0x50 && mnFirstBytes[1] == 0x4B
+            && mnFirstBytes[2] == 0x03 && mnFirstBytes[3] == 0x04)
+        {
+            return;
+        }
+
         // check if it is gzipped -> svgz
         if (mnFirstBytes[0] == 0x1F && static_cast<sal_uInt8>(mnFirstBytes[1]) == 0x8B)
         {
