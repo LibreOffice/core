@@ -75,6 +75,7 @@ $(eval $(call gb_Executable_add_generated_exception_objects,coolwsd, \
     wsd/CollabFileProxy \
     wsd/CollabSocketHandler \
     wsd/ContentType \
+    wsd/DeckSpec \
     wsd/DocumentBroker \
     wsd/FileServer \
     wsd/FileServerUtil \

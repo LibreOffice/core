@@ -76,6 +76,7 @@ coolwsd_sources = \
                   ../wsd/CollabFileProxy.cpp \
                   ../wsd/CollabSocketHandler.cpp \
                   ../wsd/ContentType.cpp \
+                  ../wsd/DeckSpec.cpp \
                   ../wsd/DocumentBroker.cpp \
                   ../wsd/FileServer.cpp \
                   ../wsd/FileServerUtil.cpp \

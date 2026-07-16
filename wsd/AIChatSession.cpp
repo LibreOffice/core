@@ -33,6 +33,7 @@
 #include <net/Socket.hpp>
 #include <wsd/AIUtil.hpp>
 #include <wsd/COOLWSD.hpp>
+#include <wsd/DeckSpec.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/DocumentToolDescriptions.hpp>
 #include <wsd/HostUtil.hpp>
@@ -269,6 +270,7 @@ namespace AIToolNames
 constexpr std::string_view GenerateImage              = "generate_image";
 constexpr std::string_view ExtractDocumentStructure   = "extract_document_structure";
 constexpr std::string_view TransformDocumentStructure = "transform_document_structure";
+constexpr std::string_view WriteSlides                = "write_slides";
 constexpr std::string_view ExtractLinkTargets         = "extract_link_targets";
 constexpr std::string_view ListCalcFunctions          = "list_calc_functions";
 constexpr std::string_view EvaluateFormula            = "evaluate_formula";
@@ -390,6 +392,21 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& do
                     "approving. List each slide with its title and "
                     "key content points."}}},
                 {"transform"})));
+
+    // write_slides - declarative deck creation for presentations. Offered only
+    // when the experimental flag is on; the model describes a deck and the
+    // server compiles it into slide commands.
+    if (docType == "presentation" &&
+        ConfigUtil::getConfigValue<bool>("ai.experimental_deck_spec", false))
+        tools->add(makeAITool(
+            std::string(AIToolNames::WriteSlides),
+            DocumentToolDescriptions::WRITE_SLIDES_DESCRIPTION,
+            makeParamSchema(
+                {{"deck", {"object", "The deck description: an object with a \"slides\" array."}},
+                 {"summary", {"string",
+                    "Markdown summary of the slides being created for the user to review "
+                    "before approving."}}},
+                {"deck"})));
 
     // extract_link_targets - Writer/Impress navigation (not relevant to Calc)
     if (!isCalc)
@@ -725,7 +742,26 @@ void AIChatSession::launchChatRequest(const PendingChatRequest& req,
             " If the user asks to format a cell, say briefly that formatting is not supported"
             " yet and offer to change the cell content or a formula instead.";
 
-    if (docType == "presentation")
+    if (docType == "presentation" &&
+        ConfigUtil::getConfigValue<bool>("ai.experimental_deck_spec", false))
+    {
+        systemPrompt +=
+            " To create slides or build a deck, call write_slides and describe each"
+            " slide by its part and intent with a title and content blocks; the"
+            " server lays out and styles the slides for you. Choose an intent that"
+            " fits each slide and vary it across the deck. Do not prefix list items"
+            " with '- ' (bullet markers are added automatically) and put only the"
+            " items themselves in each block. Include a 'summary' parameter with a"
+            " short markdown preview of the slides being created."
+            " Use transform_document_structure only to edit or rearrange slides that"
+            " already exist, not to create new ones."
+            " If the user asks to rewrite, rephrase, shorten, summarise, condense, or"
+            " make text more concise, and they have provided selected text, reply with"
+            " the rewritten text directly in your message. Do NOT call a tool for"
+            " these requests. Never emit transform JSON, tool names, or .uno: commands"
+            " in your plain-text replies.";
+    }
+    else if (docType == "presentation")
     {
         systemPrompt +=
             " When creating or modifying slides, choose the most appropriate layout"
@@ -1032,6 +1068,17 @@ void AIChatSession::callLLMAPI()
         self->handleLLMResponse(body);
     };
 
+    postChatCompletion(std::move(payloadStr), onResponse);
+}
+
+void AIChatSession::postChatCompletion(
+    std::string payloadStr,
+    std::function<void(int statusCode, const std::string& body,
+                       const std::string& reason)> onResponse)
+{
+    if (!_toolLoop)
+        return;
+
     std::string authHeader = "Bearer ";
     authHeader.append(_toolLoop->apiKey);
 
@@ -1263,6 +1310,79 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
 
     sendChatResult(true, result, requestId);
     _toolLoop.reset();
+}
+
+void AIChatSession::spliceSlideCommands(const Poco::JSON::Object::Ptr& transformObj)
+{
+    // Server-only commands are the server's to add, never the model's: a
+    // model-emitted ApplyTemplate would override the user's design pick, or
+    // theme a deck the user chose to keep plain, because the engine takes the
+    // last ApplyTemplate in the array. Drop any server-only command, then
+    // prepend the user's pick so the engine maps the slides this transform
+    // produces onto the template's masters. Re-applying it on a later transform
+    // is harmless - the engine reuses the master copy already in the document.
+    Poco::JSON::Object::Ptr transforms = transformObj->getObject("Transforms");
+    Poco::JSON::Array::Ptr cmds =
+        transforms ? transforms->getArray("SlideCommands") : nullptr;
+    if (!cmds)
+        return;
+
+    Poco::JSON::Array::Ptr newCmds = new Poco::JSON::Array();
+
+    if (!_toolLoop->designTemplate.empty())
+    {
+        Poco::JSON::Object::Ptr applyCmd = new Poco::JSON::Object();
+        applyCmd->set("ApplyTemplate", _toolLoop->designTemplate);
+        newCmds->add(applyCmd);
+    }
+
+    for (unsigned i = 0; i < cmds->size(); ++i)
+    {
+        Poco::JSON::Object::Ptr cmd = cmds->getObject(i);
+        if (cmd)
+        {
+            std::vector<std::string> keys;
+            cmd->getNames(keys);
+            std::vector<std::string> serverOnlyKeys;
+            for (const std::string& key : keys)
+            {
+                if (AIUtil::isServerOnlySlideCommand(key))
+                    serverOnlyKeys.push_back(key);
+            }
+            if (!serverOnlyKeys.empty())
+            {
+                LOG_WRN("AIToolLoop: dropping model-emitted server-only command '"
+                        << serverOnlyKeys.front() << "' [" << _toolLoop->requestId << ']');
+                for (const std::string& key : serverOnlyKeys)
+                    cmd->remove(key);
+                if (serverOnlyKeys.size() == keys.size())
+                    continue;
+            }
+        }
+        newCmds->add(cmds->get(i));
+    }
+
+    transforms->set("SlideCommands", newCmds);
+}
+
+void AIChatSession::sendTransformForApproval(const std::string& toolCallId,
+                                             const std::string& fnName,
+                                             const Poco::JSON::Object::Ptr& transformObj,
+                                             std::string summary)
+{
+    spliceSlideCommands(transformObj);
+
+    std::ostringstream oss;
+    transformObj->stringify(oss);
+    const std::string transform = oss.str();
+
+    _toolLoop->awaitingApproval = true;
+    _toolLoop->pendingToolCallId = toolCallId;
+    _toolLoop->pendingToolName = fnName;
+    _toolLoop->pendingTransformArgs = transform;
+    _toolLoop->pendingSummary = std::move(summary);
+
+    sendToolApproval(fnName, transform);
 }
 
 bool AIChatSession::executeToolCall(const std::string& toolCallId,
@@ -1516,6 +1636,78 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         return true;
     }
 
+    // write_slides - the model describes a deck; the server validates it and
+    // compiles it into a slide-command transform, then routes it through the
+    // same approval path transform_document_structure uses.
+    if (fnName == AIToolNames::WriteSlides)
+    {
+        Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
+        Poco::JSON::Object::Ptr deckObj;
+        std::string summary;
+        if (parseLenientArgs(argsJson, argsObj))
+        {
+            // Accept the deck as a nested object, as a JSON string, or as the
+            // whole argument object when the model skips the "deck" wrapper.
+            if (argsObj->isObject("deck"))
+                deckObj = argsObj->getObject("deck");
+            else
+            {
+                std::string deckStr;
+                JsonUtil::findJSONValue(argsObj, "deck", deckStr);
+                if (!deckStr.empty())
+                    JsonUtil::parseJSON(deckStr, deckObj);
+            }
+            if (!deckObj && argsObj->has("slides"))
+                deckObj = argsObj;
+
+            JsonUtil::findJSONValue(argsObj, "summary", summary);
+            if (summary.empty() && argsObj->has("Summary"))
+                JsonUtil::findJSONValue(argsObj, "Summary", summary);
+        }
+
+        if (!deckObj)
+        {
+            continueToolLoop(toolCallId, "{\"error\":\"No deck parameter provided\"}");
+            return true;
+        }
+
+        // Validate before compiling. On a schema failure feed the precise
+        // per-slide error back so the model can self-correct silently, drawing
+        // from the same retry budget the transform path uses.
+        if (auto specErr = DeckSpec::validateDeckSpec(deckObj))
+        {
+            if (_toolLoop->validationRetriesRemaining > 0)
+                --_toolLoop->validationRetriesRemaining;
+            else
+                LOG_WRN("AIToolLoop: deck spec still invalid after retries [" << requestId
+                        << "]: " << *specErr);
+            Poco::JSON::Object::Ptr err = new Poco::JSON::Object();
+            err->set("error", *specErr);
+            continueToolLoop(toolCallId, JsonUtil::jsonToString(err));
+            return true;
+        }
+
+        const bool haveDesignTemplate = !_toolLoop->designTemplate.empty();
+        const std::string transform = DeckSpec::compileDeckSpec(deckObj, haveDesignTemplate);
+
+        Poco::JSON::Object::Ptr transformObj = new Poco::JSON::Object();
+        if (!JsonUtil::parseJSON(transform, transformObj))
+        {
+            continueToolLoop(toolCallId, "{\"error\":\"Internal error compiling the deck\"}");
+            return true;
+        }
+
+        // Once compiled, the deck is an ordinary slide-command transform.
+        // Present it to the browser as one, so its approval card and
+        // deterministic badge describe it exactly as they do the imperative
+        // tool, with no browser-side awareness of write_slides. The tool
+        // result still carries this call's id so the conversation stays intact.
+        sendTransformForApproval(toolCallId,
+                                 std::string(AIToolNames::TransformDocumentStructure),
+                                 transformObj, std::move(summary));
+        return true;
+    }
+
     // transform_document_structure - requires user approval
     if (fnName == AIToolNames::TransformDocumentStructure)
     {
@@ -1642,76 +1834,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
             return true;
         }
 
-        // Server-only commands are the server's to add, never the model's:
-        // a model-emitted ApplyTemplate would override the user's design
-        // pick, or theme a deck the user chose to keep plain, because the
-        // engine takes the last ApplyTemplate in the array. Drop any
-        // server-only command the model emitted, then prepend the user's
-        // pick so the engine maps the slides this transform produces onto
-        // the template's masters. Re-applying it on a later transform is
-        // harmless - the engine reuses the master copy already in the
-        // document.
-        {
-            Poco::JSON::Object::Ptr transforms = transformObj->getObject("Transforms");
-            Poco::JSON::Array::Ptr cmds =
-                transforms ? transforms->getArray("SlideCommands") : nullptr;
-            if (cmds)
-            {
-                bool changed = false;
-                Poco::JSON::Array::Ptr newCmds = new Poco::JSON::Array();
-
-                if (!_toolLoop->designTemplate.empty())
-                {
-                    Poco::JSON::Object::Ptr applyCmd = new Poco::JSON::Object();
-                    applyCmd->set("ApplyTemplate", _toolLoop->designTemplate);
-                    newCmds->add(applyCmd);
-                    changed = true;
-                }
-
-                for (unsigned i = 0; i < cmds->size(); ++i)
-                {
-                    Poco::JSON::Object::Ptr cmd = cmds->getObject(i);
-                    if (cmd)
-                    {
-                        std::vector<std::string> keys;
-                        cmd->getNames(keys);
-                        std::vector<std::string> serverOnlyKeys;
-                        for (const std::string& key : keys)
-                        {
-                            if (AIUtil::isServerOnlySlideCommand(key))
-                                serverOnlyKeys.push_back(key);
-                        }
-                        if (!serverOnlyKeys.empty())
-                        {
-                            LOG_WRN("AIToolLoop: dropping model-emitted server-only command '"
-                                    << serverOnlyKeys.front() << "' [" << requestId << ']');
-                            changed = true;
-                            for (const std::string& key : serverOnlyKeys)
-                                cmd->remove(key);
-                            if (serverOnlyKeys.size() == keys.size())
-                                continue;
-                        }
-                    }
-                    newCmds->add(cmds->get(i));
-                }
-
-                if (changed)
-                {
-                    transforms->set("SlideCommands", newCmds);
-                    std::ostringstream oss;
-                    transformObj->stringify(oss);
-                    transform = oss.str();
-                }
-            }
-        }
-
-        _toolLoop->awaitingApproval = true;
-        _toolLoop->pendingToolCallId = toolCallId;
-        _toolLoop->pendingToolName = fnName;
-        _toolLoop->pendingTransformArgs = transform;
-        _toolLoop->pendingSummary = std::move(summary);
-
-        sendToolApproval(fnName, transform);
+        sendTransformForApproval(toolCallId, fnName, transformObj, std::move(summary));
         return true;
     }
 

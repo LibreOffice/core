@@ -162,6 +162,7 @@ wsd_sources = \
 	../wsd/CollabFileProxy.cpp \
 	../wsd/CollabSocketHandler.cpp \
 	../wsd/ContentType.cpp \
+	../wsd/DeckSpec.cpp \
 	../wsd/DocumentBroker.cpp \
 	../wsd/FileServer.cpp \
 	../wsd/FileServerUtil.cpp \
@@ -189,6 +190,7 @@ wsd_sources = \
 test_base_sources = \
 	AIUtilTests.cpp \
 	BgSaveWhiteBoxTests.cpp \
+	DeckSpecTests.cpp \
 	DeltaTests.cpp \
 	FileServeWhiteBoxTests.cpp \
 	HexUtilTests.cpp \
@@ -256,6 +258,7 @@ unittest_SOURCES = \
 	$(test_base_sources) \
 	$(kit_sources) \
 	../wsd/AIUtil.cpp \
+	../wsd/DeckSpec.cpp \
 	../wsd/FileServerUtil.cpp \
 	../wsd/HostUtil.cpp \
 	../wsd/ProofKey.cpp \

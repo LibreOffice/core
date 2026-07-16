@@ -225,6 +225,7 @@ coolwsd_sources = \
                   wsd/CollabSocketHandler.cpp \
                   wsd/ClientSession.cpp \
                   wsd/ContentType.cpp \
+                  wsd/DeckSpec.cpp \
                   wsd/DocumentBroker.cpp \
                   wsd/FileServer.cpp \
                   wsd/FileServerUtil.cpp \
@@ -296,6 +297,7 @@ wsd_headers = \
               wsd/ClientSession.hpp \
               wsd/ContentSecurityPolicy.hpp \
               wsd/ContentType.hpp \
+              wsd/DeckSpec.hpp \
               wsd/DocumentToolDescriptions.hpp \
               wsd/DocumentBroker.hpp \
               wsd/Exceptions.hpp \

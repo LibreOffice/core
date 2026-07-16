@@ -58,6 +58,52 @@ describe(['tagdesktop'], 'AI approval card', function() {
 			'This will:');
 	});
 
+	it('A compiler-shaped deck transform is described like any other', function() {
+		// The write_slides tool compiles a deck spec into slide commands on
+		// the server: an ApplyTemplate spliced in front, then a
+		// ChangeLayoutByName, SetText and SetSlidePart run per slide, plus a
+		// GenerateImage for an image slide. The browser never sees the deck
+		// spec, only this transform, so its badge must count it like any
+		// other transform.
+		var transform = JSON.stringify({
+			Transforms: {
+				SlideCommands: [
+					{ 'ApplyTemplate': 'Cobalt' },
+					{ 'ChangeLayoutByName': 'AUTOLAYOUT_TITLE' },
+					{ 'SetText.0': 'Renewable Energy' },
+					{ 'SetText.1': 'An overview' },
+					{ 'SetSlidePart': 'opening' },
+					{ 'InsertMasterSlide': 0 },
+					{ 'ChangeLayoutByName': 'AUTOLAYOUT_TITLE_CONTENT' },
+					{ 'SetText.0': 'Sources' },
+					{ 'SetText.1': 'Solar\nWind\nHydro' },
+					{ 'SetSlidePart': 'body' },
+					{ 'InsertMasterSlide': 0 },
+					{ 'ChangeLayoutByName': 'AUTOLAYOUT_TITLE_CONTENT' },
+					{ 'SetText.0': 'Growth' },
+					{ 'GenerateImage.1': 'a line chart of renewable capacity' },
+					{ 'SetSlidePart': 'body' },
+				],
+			},
+		});
+		// The server presents the compiled deck as an ordinary transform, so
+		// the browser receives a transform_document_structure approval.
+		aichatHelper.enableAIWithCaptureSocket(this.win, {
+			approvalToolName: 'transform_document_structure',
+			approvalTransformJson: transform,
+		});
+		aichatHelper.openAIChat();
+		aichatHelper.typeIntoAIInput('An overview of renewable energy');
+		aichatHelper.clickSend();
+		cy.cGet('.aichat-template-skip').click();
+
+		cy.cGet('#aichat-messages-list').should(
+			'contain.text',
+			'This will: insert 2 slides, change 3 layouts, set text in 5 places, ' +
+				"generate 1 image, run 3 SetSlidePart commands, " +
+				"apply the design template 'Cobalt'.");
+	});
+
 	it('An unknown command is reported by its raw name', function() {
 		// The badge has no description for this command, but it must still
 		// show up - the counted line may never under-describe what runs.

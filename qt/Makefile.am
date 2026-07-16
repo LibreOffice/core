@@ -66,6 +66,7 @@ cmake_list= \
             ../wsd/AIChatSession.cpp \
             ../wsd/AIUtil.cpp \
             ../wsd/ClientSession.cpp \
+            ../wsd/DeckSpec.cpp \
             ../wsd/DocumentBroker.cpp \
             ../wsd/COOLWSD.cpp \
             ../wsd/ClientRequestDispatcher.cpp \

@@ -233,6 +233,7 @@
     <ClCompile Include="..\..\..\wsd\COOLWSD.cpp" />
     <ClCompile Include="..\..\..\wsd\ClientRequestDispatcher.cpp" />
     <ClCompile Include="..\..\..\wsd\ClientSession.cpp" />
+    <ClCompile Include="..\..\..\wsd\DeckSpec.cpp" />
     <ClCompile Include="..\..\..\wsd\DocumentBroker.cpp" />
     <ClCompile Include="..\..\..\wsd\dumpWsdState.cpp" />
     <ClCompile Include="..\..\..\wsd\RequestDetails.cpp" />

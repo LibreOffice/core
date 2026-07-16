@@ -128,6 +128,9 @@
     <ClCompile Include="..\..\..\wsd\ClientSession.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\wsd\DeckSpec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\wsd\DocumentBroker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

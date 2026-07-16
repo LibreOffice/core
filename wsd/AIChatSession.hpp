@@ -196,6 +196,16 @@ private:
         const std::vector<std::string>& designTemplateParts,
         const std::vector<std::string>& designTemplateLayouts);
     void callLLMAPI();
+    /// POST a chat-completion payload to the model endpoint. Reads the URL and
+    /// key from the current tool loop, sets the active transport, and delivers
+    /// the result to onResponse on the document broker's polling thread.
+    /// statusCode is an HTTP code or an ai::Http* sentinel; body is the response
+    /// body (empty when there was no response); reason is the HTTP reason phrase
+    /// (empty on the desktop transport).
+    void postChatCompletion(
+        std::string payloadStr,
+        std::function<void(int statusCode, const std::string& body,
+                           const std::string& reason)> onResponse);
     void handleLLMResponse(const std::string& responseBody);
     bool executeToolCall(const std::string& toolCallId,
                          const std::string& fnName,
@@ -207,6 +217,19 @@ private:
                           const std::string& status);
     void sendToolApproval(const std::string& toolName,
                           const std::string& description);
+    /// Rewrite a slide-command transform in place for forwarding to the kit:
+    /// drop any server-only command the model emitted, and prepend the user's
+    /// design template as an ApplyTemplate command when one is set, so the engine
+    /// maps this transform's slides onto the template's masters.
+    void spliceSlideCommands(const Poco::JSON::Object::Ptr& transformObj);
+    /// Prepare a slide-command transform for user approval: drop any server-only
+    /// command the model emitted, splice in the user's design template when one
+    /// is set, store the result as the pending transform, and send the approval
+    /// message.
+    void sendTransformForApproval(const std::string& toolCallId,
+                                  const std::string& fnName,
+                                  const Poco::JSON::Object::Ptr& transformObj,
+                                  std::string summary);
     /// If the kit's extract_document_structure result describes the
     /// big-document truncation branch (link_targets present in the
     /// BodyText payload with at least one heading or named section),

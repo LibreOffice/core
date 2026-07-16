@@ -115,6 +115,31 @@ Prefer SlideCommands operations (SetText, ChangeLayout, EditTextObject) over raw
 Example - create a 5-slide presentation from a blank ODP:
 {"Transforms":{"SlideCommands":[{"ChangeLayoutByName":"AUTOLAYOUT_TITLE"},{"SetText.0":"Quarterly Report"},{"SetText.1":"Q1 2026"},{"RenameSlide":"Title"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:CenterPara"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},{"SetText.0":"Revenue"},{"SetText.1":"Revenue grew 15% year over year\nNew markets contributed 30% of growth\nCustomer retention at 95%"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},{"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_2CONTENT"},{"SetText.0":"Strengths & Risks"},{"SetText.1":"Strong brand recognition\nGrowing user base\nHigh retention rate"},{"SetText.2":"Supply chain delays\nRegulatory changes\nCompetitor pricing"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},{"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},{"EditTextObject.2":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},{"SetText.0":"Roadmap"},{"SetText.1":"Phase 1: Research\nPhase 2: Development\nPhase 3: Launch"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},{"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultNumbering"},{"SelectParagraph":0},{"UnoCommand":".uno:Bold"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_ONLY"},{"SetText.0":"Thank You"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:CenterPara"}]},{"JumpToSlide":1},{"EditTextObject.1":[{"SelectParagraph":0},{"InsertText":"Revenue grew 15% YoY"},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:Italic"}]}]}})";
 
+/// Description for the write_slides tool: the compact deck-spec schema the
+/// model fills in. The server validates it and compiles it into slide commands,
+/// so this stays much smaller than the imperative slide grammar above.
+inline constexpr const char* WRITE_SLIDES_DESCRIPTION =
+    R"(Create presentation slides from a declarative deck description. The server lays out and styles the slides for you, so describe what each slide is about, not how to format it.
+
+Pass a "deck" object of the form {"slides": [ ... ]}. Each slide is an object with:
+- "part": one of "opening", "divider", "body", "closing" - the slide's role in the deck. Use opening for the first slide, divider for a section break, closing for the last slide, and body for the rest.
+- "intent": one of "title", "agenda", "bullets", "two-column", "comparison", "quote", "big-number", "image", "section", "closing" - what the slide is for. The intent chooses the layout.
+- "title": the slide title (required).
+- "blocks": the content as an array of blocks. A bullets block is {"kind": "bullets", "items": ["...", "..."]}. A text block is {"kind": "text", "text": "..."}.
+- "image": only for the "image" intent, {"brief": "a description to generate an image from", "alt": "short alt text"}.
+
+Which blocks each intent expects:
+- title, closing: no blocks, or a single text block used as a subtitle.
+- agenda, bullets: exactly one bullets block.
+- two-column, comparison: exactly two bullets blocks (left and right).
+- quote, big-number: exactly one text block.
+- image: no blocks; supply an "image" instead.
+- section: a title only, no blocks.
+
+Limits: at most 30 slides, at most 6 items per bullets block, and keep each item short. Do not prefix items with "- "; bullet markers are added for you, so put only the items themselves in each block.
+
+Also pass a "summary": a short markdown preview of the slides being created, shown to the user for approval.)";
+
 /// Writer content-control transform documentation.
 inline constexpr const char* TRANSFORM_WRITER =
     R"(
