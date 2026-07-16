@@ -44,7 +44,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet switching tests', fu
 		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'A2');
 		helper.typeIntoDocument('{shift}{ctrl}{rightArrow}');
 		helper.typeIntoDocument('{shift}{ctrl}{downArrow}');
-		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'A2:XFD1048576');
+		calcHelper.assertAddressInput('A2:{lastCol}{lastRow}');
 		calcHelper.hideSelectedRows();
 		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'A1');
 		cy.wait(500);

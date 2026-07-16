@@ -2,7 +2,7 @@
 
 //warning: after jumbo sheet patch, number of columns become 16000 so if you select whole row and do some operation
 //cypress timeout
-import { addressInputSelector } from "../../common/helper";
+import { assertAddressInput } from "../../common/calc_helper";
 
 function selectFirstRow() {
 	cy.cGet('[id="test-div-row header"]')
@@ -19,12 +19,7 @@ function selectFirstRow() {
 
 	cy.cGet('#test-div-cell_selection_handle_end').should('exist');
 
-	var regex = /^A1:(AMJ|XFD)1$/;
-	cy.cGet(addressInputSelector)
-		.should('have.prop', 'value')
-		.then(function(value) {
-			return regex.test(value);
-		});
+	assertAddressInput('A1:{lastCol}1');
 }
 
 module.exports.selectFirstRow = selectFirstRow;

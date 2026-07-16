@@ -155,32 +155,61 @@ function typeIntoFormulabar(text) {
 	cy.log('<< typeIntoFormulabar - end');
 }
 
+// Converts a 1-based column number to its spreadsheet label
+// (1 -> 'A', 27 -> 'AA', 1024 -> 'AMJ', 16384 -> 'XFD').
+// Inverse of the client-side _columnLabelToNumber in CanvasTileLayer, used to
+// build the expected last-column code from app.calc.maxColumnCount.
+function columnNumberToLabel(columnNumber) {
+	var label = '';
+	while (columnNumber > 0) {
+		var remainder = (columnNumber - 1) % 26;
+		label = String.fromCharCode(65 + remainder) + label; // 'A'.charCodeAt(0) === 65.
+		columnNumber = Math.floor((columnNumber - 1) / 26);
+	}
+	return label;
+}
+
+// Asserts the Calc address input shows the given range. The tokens {lastCol}
+// and {lastRow} are resolved at runtime from app.calc.maxColumnCount /
+// maxRowCount (e.g. 'A1:{lastCol}{lastRow}' -> 'A1:XFD1048576').
+function assertAddressInput(range) {
+	cy.getFrameWindow().then(function(win) {
+		var expected = range
+			.replace('{lastCol}', columnNumberToLabel(win.app.calc.maxColumnCount))
+			.replace('{lastRow}', win.app.calc.maxRowCount);
+		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', expected);
+	});
+}
+
 // Remove exisiting text selection by clicking on
 // row headers at the center position, until a
 // a row is selected (and text seletion is removed).
 function removeTextSelection() {
 	cy.log('>> removeTextSelection - start');
 
-	cy.cGet('[id="test-div-row header"]')
-		.then(function(header) {
-			expect(header).to.have.lengthOf(1);
-			var rect = header[0].getBoundingClientRect();
-			var posX = (rect.right + rect.left) / 2.0;
-			var posY = (rect.top + rect.bottom) / 2.0;
+	cy.getFrameWindow().then(function(win) {
+		var lastColumn = columnNumberToLabel(win.app.calc.maxColumnCount);
+		cy.cGet('[id="test-div-row header"]')
+			.then(function(header) {
+				expect(header).to.have.lengthOf(1);
+				var rect = header[0].getBoundingClientRect();
+				var posX = (rect.right + rect.left) / 2.0;
+				var posY = (rect.top + rect.bottom) / 2.0;
 
-			var moveY = 0.0;
-			cy.waitUntil(function() {
-				cy.cGet('body').click(posX, posY + moveY);
+				var moveY = 0.0;
+				cy.waitUntil(function() {
+					cy.cGet('body').click(posX, posY + moveY);
 
-				moveY += 1.0;
-				var regex = /A([0-9]+):(AMJ|XFD)\1$/;
-				return cy.cGet(helper.addressInputSelector)
-					.should('have.prop', 'value')
-					.then(function(value) {
-						return regex.test(value);
-					});
+					moveY += 1.0;
+					var regex = new RegExp('A([0-9]+):' + lastColumn + '\\1$');
+					return cy.cGet(helper.addressInputSelector)
+						.should('have.prop', 'value')
+						.then(function(value) {
+							return regex.test(value);
+						});
+				});
 			});
-		});
+	});
 
 	cy.log('<< removeTextSelection - end');
 }
@@ -227,12 +256,7 @@ function selectEntireSheet() {
 		cy.cGet('#test-div-cell_selection_handle_start').should('exist');
 	});
 
-	var regex = /^A1:(AMJ|XFD)1048576$/;
-	cy.cGet(helper.addressInputSelector)
-		.should('have.prop', 'value')
-		.then(function(value) {
-			return regex.test(value);
-		});
+	assertAddressInput('A1:{lastCol}{lastRow}');
 
 	cy.log('<< selectEntireSheet - end');
 }
@@ -254,7 +278,7 @@ function selectFirstColumn() {
 			cy.cGet('body').click(XPos, YPos);
 		});
 
-		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'A1:A1048576');
+	assertAddressInput('A1:A{lastRow}');
 
 	cy.log('<< selectFirstColumn - end');
 }
@@ -388,6 +412,8 @@ module.exports.typeIntoFormulabar = typeIntoFormulabar;
 module.exports.removeTextSelection = removeTextSelection;
 module.exports.selectEntireSheet = selectEntireSheet;
 module.exports.selectFirstColumn = selectFirstColumn;
+module.exports.assertAddressInput = assertAddressInput;
+module.exports.columnNumberToLabel = columnNumberToLabel;
 module.exports.ensureViewContainsCellCursor = ensureViewContainsCellCursor;
 module.exports.assertSheetContents = assertSheetContents;
 module.exports.assertDataClipboardTable = assertDataClipboardTable;
