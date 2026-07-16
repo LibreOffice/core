@@ -3819,7 +3819,6 @@ bool ScCompiler::ParseMacro( const OUString& rName )
     {
         return false;
     }
-    maRawToken.sbyte.cByte = 0;
     maRawToken.SetExternal( aName );
     maRawToken.eOp = ocMacro;
     return true;

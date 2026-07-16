@@ -350,6 +350,9 @@ void ScRawToken::SetExternal( const OUString& rStr, OpCode eCode )
 {
     eOp   = eCode;
     eType = svExternal;
+    // set later when a call's arguments are parsed
+    sbyte.cByte = 0;
+    sbyte.eInForceArray = ParamClass::Unknown;
     maExternalName = rStr;
 }
 
