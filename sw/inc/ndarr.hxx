@@ -212,10 +212,12 @@ public:
                                            bool bSkipProtect = true );
     static SwContentNode* GoNextSection( SwPosition *, bool bSkipHidden  = true,
                                            bool bSkipProtect = true );
+    // canCrossBoundary allows moving out of the current global section (fly / header / footer /
+    // footnote / redlines / content).
     SW_DLLPUBLIC static SwContentNode* GoPrevSection( SwNodeIndex *, bool bSkipHidden  = true,
-                                           bool bSkipProtect = true );
+                                           bool bSkipProtect = true, bool canCrossBoundary = false );
     static SwContentNode* GoPrevSection( SwPosition *, bool bSkipHidden  = true,
-                                           bool bSkipProtect = true );
+                                           bool bSkipProtect = true, bool canCrossBoundary = false );
 
     /** Create an empty section of Start- and EndNote. It may be called
        only if a new section with content is to be created,

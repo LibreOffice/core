@@ -1075,7 +1075,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
 
                 pNd = bSrchForward
                         ? SwNodes::GoNextSection( &aPos, true, !bInReadOnly )
-                        : SwNodes::GoPrevSection( &aPos, true, !bInReadOnly );
+                        : SwNodes::GoPrevSection( &aPos, true, !bInReadOnly, /*canCrossBoundary=*/true );
                 if( pNd )
                 {
                     if (!bSrchForward)

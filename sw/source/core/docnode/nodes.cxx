@@ -2037,10 +2037,11 @@ SwContentNode* SwNodes::GoNextSection(SwPosition* pIdx, bool bSkipHidden, bool b
     return pNd;
 }
 
-static SwContentNode* goPrevSection(const SwNode& rNode, bool bSkipHidden, bool bSkipProtect)
+static SwContentNode* goPrevSection(const SwNode& rNode, bool bSkipHidden, bool bSkipProtect,
+                                    bool canCrossBoundary)
 {
     const SwNodes& rNodes = rNode.GetNodes();
-    SwNodeOffset first(startOfGlobalSection(rNode));
+    SwNodeOffset first(canCrossBoundary ? SwNodeOffset(0) : startOfGlobalSection(rNode));
     for (SwNodeOffset i(rNode.GetIndex()); i > first; --i)
     {
         SwNode* pNd = rNodes[i];
@@ -2069,18 +2070,20 @@ static SwContentNode* goPrevSection(const SwNode& rNode, bool bSkipHidden, bool 
 }
 
 ///@see SwNodes::GoNextSection
-SwContentNode* SwNodes::GoPrevSection(SwNodeIndex* pIdx, bool bSkipHidden, bool bSkipProtect)
+SwContentNode* SwNodes::GoPrevSection(SwNodeIndex* pIdx, bool bSkipHidden, bool bSkipProtect,
+                                     bool canCrossBoundary)
 {
-    SwContentNode* pNd = goPrevSection(pIdx->GetNode(), bSkipHidden, bSkipProtect);
+    SwContentNode* pNd = goPrevSection(pIdx->GetNode(), bSkipHidden, bSkipProtect, canCrossBoundary);
     if (pNd)
         *pIdx = *pNd;
     return pNd;
 }
 
 ///@see SwNodes::GoNextSection
-SwContentNode* SwNodes::GoPrevSection(SwPosition* pIdx, bool bSkipHidden, bool bSkipProtect)
+SwContentNode* SwNodes::GoPrevSection(SwPosition* pIdx, bool bSkipHidden, bool bSkipProtect,
+                                     bool canCrossBoundary)
 {
-    SwContentNode* pNd = goPrevSection(pIdx->GetNode(), bSkipHidden, bSkipProtect);
+    SwContentNode* pNd = goPrevSection(pIdx->GetNode(), bSkipHidden, bSkipProtect, canCrossBoundary);
     if (pNd)
         pIdx->AssignStartIndex(*pNd);
     return pNd;

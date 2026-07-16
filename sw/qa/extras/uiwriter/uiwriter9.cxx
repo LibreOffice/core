@@ -9,6 +9,9 @@
 
 #include <config_poppler.h>
 #include <swmodeltestbase.hxx>
+
+#include <set>
+
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
@@ -21,6 +24,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -30,6 +34,8 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
 
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/lok.hxx>
@@ -39,6 +45,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/configuration.hxx>
 #include <swdtflvr.hxx>
+#include <i18nutil/searchopt.hxx>
 #include <o3tl/string_view.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <swacorr.hxx>
@@ -862,6 +869,49 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159565)
     // Without the fix, this would fail - there was no selection
     CPPUNIT_ASSERT_EQUAL(u"" SAL_NEWLINE_STRING SAL_NEWLINE_STRING "ipsum"_ustr,
                          xSelection->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf163949)
+{
+    // Given a document with three text frames, each holding the search term:
+    createSwDoc();
+    auto xMSF(mxComponent.queryThrow<lang::XMultiServiceFactory>());
+    auto xText(mxComponent.queryThrow<text::XTextDocument>()->getText());
+
+    static constexpr OUString texts[] = { u"1 match"_ustr, u"2 match"_ustr, u"3 match"_ustr };
+    for (const OUString& rFrameText : texts)
+    {
+        auto xFrame(xMSF->createInstance(u"com.sun.star.text.TextFrame"_ustr)
+                        .queryThrow<text::XTextFrame>());
+        xFrame.queryThrow<beans::XPropertySet>()->setPropertyValue(
+            u"AnchorType"_ustr, uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+        auto xCursor(xText->createTextCursor());
+        xText->insertTextContent(xCursor, xFrame, false);
+        xFrame->getText()->setString(rFrameText);
+    }
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    i18nutil::SearchOptions2 aSearchOpt;
+    aSearchOpt.searchFlag = css::util::SearchFlags::ALL_IGNORE_CASE;
+    aSearchOpt.searchString = u"match"_ustr;
+    aSearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+
+    // When repeatedly using "Find Previous" through the frames (backward search in the
+    // "other" area, where frames live), collect which frame each hit lands in - the
+    // frames carry distinct text, so the paragraph text identifies the frame:
+    std::set<OUString> aVisitedFrames;
+    for (size_t i = 0; i < std::size(texts); ++i)
+    {
+        if (!pWrtShell->SearchPattern(aSearchOpt, /*bSearchInNotes=*/false, SwDocPositions::Curr,
+                                      SwDocPositions::Start, FindRanges::InOther))
+            break;
+        aVisitedFrames.insert(pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
+    }
+
+    // Then the match in every frame must be reached in turn. Without the fix, only the last frame
+    // was ever highlighted.
+    CPPUNIT_ASSERT_EQUAL(std::size(texts), aVisitedFrames.size());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
