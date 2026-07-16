@@ -91,8 +91,8 @@ public:
     ScFormulaCell* GetFormulaCell() const { return mpCell; }
     ScInterpreterContext& GetContext() const { return *mpContext; }
     const ScTokenArray& GetLambdaBody() const { return maLambdaBody; }
-    short GetNumParams() const { return maReplacementPositions.size(); }
-    const std::forward_list<short>& GetReplacementPositions(short nParam) const
+    sal_Int32 GetNumParams() const { return maReplacementPositions.size(); }
+    const std::forward_list<short>& GetReplacementPositions(sal_Int32 nParam) const
     {
         return maReplacementPositions[nParam];
     }

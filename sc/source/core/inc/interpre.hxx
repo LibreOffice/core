@@ -536,7 +536,6 @@ private:
     ScMatrixRef GetMatrix( short & rParam, size_t & rInRefList );
     sc::RangeMatrix GetRangeMatrix();
     formula::FormulaCallableRef GetCallable();
-    //formula::FormulaCallableRef GetCallableFromMatrix(const ScMatrixRef& pMat);
 
     void ScTableOp();                                       // repeated operations
 
