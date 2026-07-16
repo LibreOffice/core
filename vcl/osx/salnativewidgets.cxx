@@ -1014,44 +1014,36 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                 [pCtrl setSelected: (nState & ControlState::SELECTED) ? YES : NO forSegment: nPaintIndex];
                 [pCtrl setFocusRingType: NSFocusRingTypeExterior];
 
-                // Fix tab item drawing failures on macOS Tahoe
-                // Starting in macOS Tahoe, there are two issues that affect
-                // drawing of tab items:
-                // 1. When compiled and run on macOS Tahoe, the tab item will
-                //    fail to draw if the NSSegmentedControl is not a subview
-                //    of a window whether the window is visible or not.
-                // 2. The selected tab item has the same bright background
-                //    color as the default push button when the tab item is
-                //    in the key window. In previous versions of macOS, the
-                //    same background color is used for the selected tab
-                //    item whether the tab item is enabled or not.
-                // Both issues are fixed by adding the NSSegmentedControl
-                // as a subview of a window. Note that the window must be
-                // a key window to draw the selected tab item with the new
-                // bright background color.
+                // tdf#172399 fix jittery window drawing during live resizing
+                // macOS Tahoe had several problems that caused incorrect
+                // drawing of tab items. To fix these tab item drawing
+                // problems, commit 5b9881108be4168d22ad08d961d767e48dff253f
+                // would add the NSSegmentedControl as a subview of a window.
+                // However, this caused extremely jittery window drawing
+                // during live resizing if a window included any tab items.
+                // Fortunately, as of macOS Tahoe 26.5.1, Apple had changed
+                // tab item drawing so that the NSSegmentedControl now only
+                // needs to be added as a subview when the window is not the
+                // key window (i.e. the selected tab item is drawn disabled).
+                // Since a window in live resizing is normally the key
+                // window, Apple's changes eliminate the jittery window
+                // drawing during live resizing.
                 if (@available(macOS 26, *))
                 {
-                    NSWindow *pKeyWindow = nil;
                     if (mpFrame)
                     {
-                        // Note: use -[NSWindow isKeyWindow] as it may return
-                        // YES even when +[NSApp keyWindow] is nil.
                         NSWindow *pFrameWindow = mpFrame->getNSWindow();
-                        if (pFrameWindow && [pFrameWindow isKindOfClass: [SalFrameWindow class]] && [pFrameWindow isKeyWindow])
-                            pKeyWindow = pFrameWindow;
+                        if (pFrameWindow && [pFrameWindow isKindOfClass: [SalFrameWindow class]])
+                        {
+                            // Note: use -[NSWindow isKeyWindow] as it may
+                            // return YES even when +[NSApp keyWindow] is nil.
+                            if (![pFrameWindow isKeyWindow] || !(nState & ControlState::ENABLED))
+                            {
+                                NSWindow *pControlDrawingWindow = createControlDrawingWindow();
+                                [[pControlDrawingWindow contentView] addSubview: pCtrl positioned: NSWindowBelow relativeTo: nil];
+                            }
+                        }
                     }
-
-                    // Default to adding the NSSegmentedControl to a window
-                    // that is not visible. However, in order to draw selected
-                    // tab items with the new bright background color, the
-                    // window must be visible since only visible windows can
-                    // be the key window. In that case, add the control to
-                    // the key window.
-                    NSWindow *pControlDrawingWindow = pKeyWindow;
-                    if (!pControlDrawingWindow)
-                        pControlDrawingWindow = createControlDrawingWindow();
-                    if (pControlDrawingWindow)
-                        [[pControlDrawingWindow contentView] addSubview: pCtrl positioned: NSWindowBelow relativeTo: nil];
                 }
 
                 NSGraphicsContext* savedContext = [NSGraphicsContext currentContext];
