@@ -1267,7 +1267,7 @@ img.context-menu-icon {
 	max-height: 32px;
 	width: auto;
 	width: stretch;
-	border: 1px solid var(--color-border-dark);
+	border: 1px solid var(--color-border-input-dark);
 	border-radius: var(--border-radius);
 	overflow: hidden;
 	align-self: center;
@@ -1393,7 +1393,7 @@ img.context-menu-icon {
 	margin-inline-end: 5px;
 	min-width: 70px;
 	width: 100%;
-	border: 1px solid var(--color-border-dark);
+	border: 1px solid var(--color-border-input-dark);
 	border-radius: var(--border-radius);
 	background: var(--color-background-dark);
 	color: var(--color-text-dark);
@@ -1402,7 +1402,7 @@ img.context-menu-icon {
 }
 
 .spinfieldcontainer:not([disabled]):hover {
-	border: 1px solid var(--color-border-darker);
+	border: 1px solid var(--color-border-input);
 	color: var(--color-text-darker);
 	background-color: var(--color-background-lighter);
 }
@@ -3015,7 +3015,7 @@ button.has-img img {
 
 /* formulabar */
 #sc_input_window.formulabar {
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--color-border-input);
 	flex-grow: 1;
 	background-color: var(--color-background-lighter);
 	border-radius: var(--border-radius) 0 0 var(--border-radius);
