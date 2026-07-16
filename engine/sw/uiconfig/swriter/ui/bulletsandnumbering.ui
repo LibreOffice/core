@@ -40,7 +40,7 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
-                <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|setdefault|tooltip_text">Save the current bullet character, font and numbering type per level as your personal default for toggling lists from the toolbar. The setting applies only to you and is restored the next time you open a document on this server.</property>
+                <property name="tooltip-text" translatable="yes" context="bulletsandnumbering|setdefault|tooltip_text">Save the current bullet and numbering style as your personal default for new lists.</property>
               </object>
               <packing>
                 <property name="expand">False</property>
