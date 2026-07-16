@@ -58,10 +58,6 @@ namespace sdr::animation
             // list of events, sorted by time
             std::vector<Event*>                             mvEvents;
 
-            // Flag which remembers if this timer is paused. Default
-            // is false.
-            bool                                            mbIsPaused;
-
         public:
             // constructor/destructor
             SAL_DLLPRIVATE Scheduler();
@@ -85,10 +81,6 @@ namespace sdr::animation
             // insert/remove events, wrapper to EventList methods
             void InsertEvent(Event& rNew);
             SAL_DLLPRIVATE void RemoveEvent(Event* pOld);
-
-            // get/set pause
-            SAL_DLLPRIVATE bool IsPaused() const { return mbIsPaused; }
-            SAL_DLLPRIVATE void SetPaused(bool bNew);
         };
 
 } // end of namespace sdr::animation

@@ -113,7 +113,6 @@ public:
 
     /// ODF version, only when exporting
     SvtSaveOptions::ODFSaneDefaultVersion getSaneDefaultVersion() const;
-    void overrideSaneDefaultVersion(SvtSaveOptions::ODFSaneDefaultVersion const);
 
     /** gets XNumberingTypeInfo */
     const css::uno::Reference< css::text::XNumberingTypeInfo >& getNumTypeInfo() const;

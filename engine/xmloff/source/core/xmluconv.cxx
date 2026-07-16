@@ -125,12 +125,6 @@ SvtSaveOptions::ODFSaneDefaultVersion SvXMLUnitConverter::getSaneDefaultVersion(
     return m_pImpl->m_eODFVersion;
 }
 
-void SvXMLUnitConverter::overrideSaneDefaultVersion(
-        SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion)
-{
-    m_pImpl->m_eODFVersion = nODFVersion;
-}
-
 /** constructs a SvXMLUnitConverter. The core measure unit is the
     default unit for numerical measures, the XML measure unit is
     the default unit for textual measures

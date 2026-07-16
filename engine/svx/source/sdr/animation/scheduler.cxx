@@ -47,8 +47,7 @@ namespace sdr::animation
         Scheduler::Scheduler()
         :   Timer("sdr::animation::Scheduler"),
             mnTime(0),
-            mnDeltaTime(0),
-            mbIsPaused(false)
+            mnDeltaTime(0)
         {
             SetPriority(TaskPriority::POST_PAINT);
         }
@@ -98,7 +97,7 @@ namespace sdr::animation
         void Scheduler::checkTimeout()
         {
             // re-start or stop timer according to event list
-            if(!IsPaused() && !mvEvents.empty())
+            if(!mvEvents.empty())
             {
                 mnDeltaTime = mvEvents.front()->GetTime() - mnTime;
 
@@ -131,14 +130,11 @@ namespace sdr::animation
                 rEvent->SetTime(nTime);
             }
 
-            if(!IsPaused())
-            {
-                // without delta time, init events by triggering them. This will invalidate
-                // painted objects and add them to the scheduler again
-                mnDeltaTime = 0;
-                triggerEvents();
-                checkTimeout();
-            }
+            // without delta time, init events by triggering them. This will invalidate
+            // painted objects and add them to the scheduler again
+            mnDeltaTime = 0;
+            triggerEvents();
+            checkTimeout();
         }
 
         void Scheduler::InsertEvent(Event& rNew)
@@ -155,15 +151,6 @@ namespace sdr::animation
             if(!mvEvents.empty())
             {
                 std::erase(mvEvents, pOld);
-                checkTimeout();
-            }
-        }
-
-        void Scheduler::SetPaused(bool bNew)
-        {
-            if(bNew != mbIsPaused)
-            {
-                mbIsPaused = bNew;
                 checkTimeout();
             }
         }
