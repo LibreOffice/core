@@ -34,9 +34,6 @@ describe(['tagdesktop'], 'AI approval card', function() {
 		aichatHelper.typeIntoAIInput('Tidy up my deck');
 		aichatHelper.clickSend();
 
-		// A fresh deck offers the design picker first; continue without one.
-		cy.cGet('.aichat-template-skip').click();
-
 		cy.cGet('#aichat-messages-list').should(
 			'contain.text',
 			'This will: insert 1 slide, delete 1 slide, set text in 2 places, ' +
@@ -50,7 +47,6 @@ describe(['tagdesktop'], 'AI approval card', function() {
 		aichatHelper.openAIChat();
 		aichatHelper.typeIntoAIInput('Tidy up my deck');
 		aichatHelper.clickSend();
-		cy.cGet('.aichat-template-skip').click();
 
 		cy.cGet('#aichat-messages-list').should('contain.text', 'Mock change');
 		cy.cGet('#aichat-messages-list').should(
@@ -59,12 +55,10 @@ describe(['tagdesktop'], 'AI approval card', function() {
 	});
 
 	it('A compiler-shaped deck transform is described like any other', function() {
-		// The write_slides tool compiles a deck spec into slide commands on
-		// the server: an ApplyTemplate spliced in front, then a
-		// ChangeLayoutByName, SetText and SetSlidePart run per slide, plus a
-		// GenerateImage for an image slide. The browser never sees the deck
-		// spec, only this transform, so its badge must count it like any
-		// other transform.
+		// A themed multi-slide transform carries an ApplyTemplate in front,
+		// then a ChangeLayoutByName, SetText and SetSlidePart per slide, plus a
+		// GenerateImage for an image slide. The browser sees only the transform,
+		// so its badge must count it like any other transform.
 		var transform = JSON.stringify({
 			Transforms: {
 				SlideCommands: [
@@ -91,8 +85,8 @@ describe(['tagdesktop'], 'AI approval card', function() {
 				],
 			},
 		});
-		// The server presents the compiled deck as an ordinary transform, so
-		// the browser receives a transform_document_structure approval.
+		// The server presents the transform as an ordinary one, so the browser
+		// receives a transform_document_structure approval.
 		aichatHelper.enableAIWithCaptureSocket(this.win, {
 			approvalToolName: 'transform_document_structure',
 			approvalTransformJson: transform,
@@ -100,7 +94,6 @@ describe(['tagdesktop'], 'AI approval card', function() {
 		aichatHelper.openAIChat();
 		aichatHelper.typeIntoAIInput('An overview of renewable energy');
 		aichatHelper.clickSend();
-		cy.cGet('.aichat-template-skip').click();
 
 		cy.cGet('#aichat-messages-list').should(
 			'contain.text',
@@ -126,7 +119,6 @@ describe(['tagdesktop'], 'AI approval card', function() {
 		aichatHelper.openAIChat();
 		aichatHelper.typeIntoAIInput('Tidy up my deck');
 		aichatHelper.clickSend();
-		cy.cGet('.aichat-template-skip').click();
 
 		cy.cGet('#aichat-messages-list').should(
 			'contain.text',

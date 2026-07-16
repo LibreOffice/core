@@ -164,6 +164,17 @@ struct PendingChatRequest
     std::string fetchCommand;
 };
 
+/// An approved deck build held while wsd fetches the design template picked on
+/// the decision card from the kit. Holds the approved outline for the
+/// slide-by-slide build.
+struct PendingApprovedBuild
+{
+    Poco::JSON::Object::Ptr outline;
+    // The ".uno:GetDesignTemplateDesigns?name=..." command whose reply this
+    // build waits for, matched against the reply's commandName.
+    std::string fetchCommand;
+};
+
 /// State for building a deck one slide at a time after the user approved an
 /// outline. The whole tool loop is parked while this runs: each slide is one
 /// forced write_slide call to the model, validated, compiled, and applied to
@@ -209,9 +220,10 @@ public:
     /// commandName does not match the one we sent.
     bool tryConsumeDesignFetch(const std::shared_ptr<Message>& payload);
     /// Give up on an outstanding design fetch that the kit has not answered by
-    /// its deadline: launch the stashed request without any design information,
-    /// the same as the no-template path, and clear the pending state. Does
-    /// nothing when no fetch is outstanding or the deadline has not passed.
+    /// its deadline: launch the stashed request, or start the stashed approved
+    /// build, without any design information, and clear the pending state.
+    /// Does nothing when no fetch is outstanding or the deadline has not
+    /// passed.
     void checkDesignFetchTimeout(std::chrono::steady_clock::time_point now);
     bool tryConsumeExtractedLinkTargets(const std::shared_ptr<Message>& payload);
     bool tryConsumeExtractedDocumentStructure(const std::shared_ptr<Message>& payload);
@@ -246,6 +258,20 @@ private:
     /// template's parts, layouts, art direction, and any tightened budgets;
     /// pass a default-constructed DesignInfo when no template was picked.
     void launchChatRequest(const PendingChatRequest& req, const DesignInfo& design);
+    /// Sets the tool loop's budgets (the configured ceiling, tightened by the
+    /// design's manifest limits) and its art direction (the design's, or the
+    /// neutral default).
+    void applyDesignToToolLoop(const DesignInfo& design);
+    /// Starts the design fetch for a template picked on a decision card. The
+    /// approved outline is stashed and the build continues when the reply
+    /// arrives or the fetch deadline passes. Returns false, leaving the caller
+    /// to continue the build directly, when the approval carries no usable pick.
+    bool beginDesignFetchForApproval(const Poco::JSON::Object::Ptr& approveObj,
+                                     const Poco::JSON::Object::Ptr& outline);
+    /// Continues the approved build stashed by beginDesignFetchForApproval:
+    /// applies the fetched design, then starts the slide-by-slide expansion of
+    /// the approved outline.
+    void continueApprovedBuild(const DesignInfo& design);
     void callLLMAPI();
     /// POST a chat-completion payload to the model endpoint. Reads the URL and
     /// key from the current tool loop, sets the active transport, and delivers
@@ -297,7 +323,13 @@ private:
     /// exactly one is non-empty. statusCode may be an ai::Http* sentinel.
     static std::pair<std::string, std::string> parseImageGenResponse(
         int statusCode, const std::string& body);
-    void processTransformImageGenerations(const std::shared_ptr<DocumentBroker>& docBroker);
+    /// Rewrite the pending transform's GenerateImage commands into loading
+    /// placeholders, apply it, then fetch and fill in the real images. Each
+    /// image's target slide is worked out from nExistingSlides, the number of
+    /// slides already in the document when the transform runs, so an image on a
+    /// freshly appended slide lands on that slide and not an earlier one.
+    void processTransformImageGenerations(const std::shared_ptr<DocumentBroker>& docBroker,
+                                          int nExistingSlides = 1);
     void generateNextTransformImage(const std::shared_ptr<DocumentBroker>& docBroker);
     std::string appendImageGenFailures(const std::string& result) const;
 
@@ -337,8 +369,12 @@ private:
     // kit, before its prompt is built and the first LLM call is made. Null when
     // no such fetch is outstanding.
     std::unique_ptr<PendingChatRequest> _pendingDesignFetch;
+    // An approved deck build waiting for the designs of the template picked on
+    // the decision card. Null when no such fetch is outstanding.
+    std::unique_ptr<PendingApprovedBuild> _pendingApprovedBuild;
     // The point in time by which the kit must answer the outstanding design
-    // fetch. Only meaningful while _pendingDesignFetch is set.
+    // fetch. Only meaningful while _pendingDesignFetch or _pendingApprovedBuild
+    // is set; the two are never outstanding together.
     std::chrono::steady_clock::time_point _designFetchDeadline;
 };
 

@@ -26,15 +26,12 @@ describe(['tagdesktop'], 'AI deck outline card', function() {
 		],
 	};
 
-	// Send a deck request and skip the design-template picker a fresh deck
-	// offers, so the request goes out and the backend answers with an
-	// outline card.
+	// Send a deck request; the backend answers with an outline card.
 	function requestOutline(win) {
 		aichatHelper.enableAIWithOutlineSocket(win, { outline: outline });
 		aichatHelper.openAIChat();
 		aichatHelper.typeIntoAIInput('Create a deck about renewable energy');
 		aichatHelper.clickSend();
-		cy.cGet('.aichat-template-skip').click();
 		cy.cGet('.aichat-outline-card').should('exist');
 	}
 
@@ -238,5 +235,70 @@ describe(['tagdesktop'], 'AI deck outline card', function() {
 		cy.cGet('.aichat-outline-row').eq(3).find('.aichat-outline-delete').click();
 		cy.cGet('.aichat-outline-row').should('have.length', 3);
 		cy.cGet('.aichat-approve-btn').should('be.enabled');
+	});
+
+	it('The card and its edits come back after the sidebar is reopened', function() {
+		requestOutline(this.win);
+
+		// Edit a title and a description, remove a slide and add one, so the
+		// card carries every kind of change a user can make.
+		cy.cGet('.aichat-outline-row').eq(0).find('.aichat-outline-title')
+			.clear().type('Clean Energy Today');
+		cy.cGet('.aichat-outline-row').eq(0).find('.aichat-outline-gist')
+			.clear().type('Frame why renewables matter now.');
+		cy.cGet('.aichat-outline-row').eq(1).find('.aichat-outline-delete').click();
+		cy.cGet('.aichat-outline-add').click();
+		cy.cGet('.aichat-outline-row').eq(2).find('.aichat-outline-title')
+			.type('Wind Power');
+		cy.cGet('.aichat-outline-row').should('have.length', 3);
+
+		aichatHelper.closeAIChat();
+		aichatHelper.openAIChat();
+
+		// The card is rebuilt with the rows as they were left, renumbered, and
+		// approve is still offered.
+		cy.cGet('.aichat-outline-card').should('exist');
+		cy.cGet('.aichat-outline-row').should('have.length', 3);
+		cy.cGet('.aichat-outline-row').eq(0)
+			.find('.aichat-outline-title').should('have.value', 'Clean Energy Today');
+		cy.cGet('.aichat-outline-row').eq(0)
+			.find('.aichat-outline-gist')
+			.should('have.value', 'Frame why renewables matter now.');
+		cy.cGet('.aichat-outline-row').eq(1)
+			.find('.aichat-outline-title').should('have.value', 'Thank You');
+		cy.cGet('.aichat-outline-row').eq(2)
+			.find('.aichat-outline-title').should('have.value', 'Wind Power');
+		cy.cGet('.aichat-outline-row').eq(2)
+			.find('.aichat-outline-num').should('have.text', '3.');
+		cy.cGet('.aichat-approve-btn').should('be.enabled');
+
+		// Approving after the reopen sends exactly the edited outline.
+		cy.cGet('.aichat-approve-btn').click();
+		cy.wrap(null).should(() => {
+			expect(this.win.__aichatApprovePayloads).to.have.length(1);
+			var decision = this.win.__aichatApprovePayloads[0];
+			expect(decision.action).to.equal('approve');
+			var titles = decision.outline.slides.map((s) => s.title);
+			expect(titles).to.deep.equal(
+				['Clean Energy Today', 'Thank You', 'Wind Power']);
+			expect(decision.outline.slides[0].gist)
+				.to.equal('Frame why renewables matter now.');
+		});
+	});
+
+	it('A decided outline is not offered a second time after a reopen', function() {
+		requestOutline(this.win);
+
+		cy.cGet('.aichat-approve-btn').click();
+		cy.cGet('.aichat-outline-card').should('not.exist');
+
+		aichatHelper.closeAIChat();
+		aichatHelper.openAIChat();
+
+		// The transcript keeps the outcome text and offers no second decision.
+		cy.cGet('#aichat-messages-list').should(
+			'contain.text', 'Outline approved - building 3 slides.');
+		cy.cGet('.aichat-outline-card').should('not.exist');
+		cy.cGet('.aichat-approve-btn').should('not.exist');
 	});
 });

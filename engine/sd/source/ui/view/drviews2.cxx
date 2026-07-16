@@ -247,12 +247,11 @@ namespace {
 
 // A design-template name travels from the picker through the chat request into
 // the system prompt, so the naming contract is deliberately narrow: at most 64
-// characters, each a plain letter, digit, space, hyphen, or underscore. A
+// characters, each a plain letter, digit, space, hyphen, or underscore. Every
+// place a design name crosses the process boundary checks this same contract,
+// so a change here is a change of the wire contract, not of one check. A
 // template file whose base name does not fit the contract is not offered at
-// all - offering it would only invite a pick the server then drops. The server
-// enforces the same rule in isSafeDesignName (wsd/AIChatSession.cpp); the two
-// run on opposite sides of the process boundary and must stay in step so they
-// accept exactly the same names.
+// all - offering it would only invite a pick the server then drops.
 bool lcl_IsValidDesignTemplateName(const OUString& rName)
 {
     if (rName.isEmpty() || rName.getLength() > 64)
@@ -366,9 +365,8 @@ DesignMasterRole DesignMasterRoleFromName(std::u16string_view rName)
 }
 
 // The slide-part vocabulary: each part and the name it travels under between
-// the model and the engine. The prompt built in wsd/AIChatSession.cpp teaches
-// the model the same words from its own copy, so a change here needs the same
-// change there.
+// the model and the engine. The five words are a wire contract, so changing
+// one changes the protocol, not just this table.
 constexpr std::pair<DesignMasterRole, std::u16string_view> aDesignRoleWireNames[] = {
     { DesignMasterRole::Title, u"opening" },
     { DesignMasterRole::Divider, u"divider" },
@@ -860,6 +858,8 @@ private:
         }
         if (!maBodyMasters.empty())
             return maBodyMasters.front().maName;
+        // When the template exposes no classifiable master at all, the
+        // fallback is the first master, which can be a plain utility one.
         return maFallback;
     }
 
@@ -1081,9 +1081,9 @@ void handleInsertMasterSlide(SlideCommandContext& rCtx, const std::string& rKey,
 
     // Change master value
     pPageStandard->TRG_SetMasterPage(*pMPage);
-    // A notes page must reference a notes master, not the standard master. Use
-    // the notes master paired with the chosen standard master. If the document
-    // has no notes master at that index, keep the one CreatePage inherited.
+    // A notes page takes the notes master paired with the chosen standard
+    // master. If the document has no notes master at that index, keep the one
+    // CreatePage inherited.
     if (nMasterPageId < rCtx.mpDoc->GetMasterSdPageCount(PageKind::Notes))
     {
         SdPage* pNotesMPage = rCtx.mpDoc->GetMasterSdPage(nMasterPageId, PageKind::Notes);
@@ -1097,7 +1097,7 @@ void handleInsertMasterSlide(SlideCommandContext& rCtx, const std::string& rKey,
     }
 }
 
-void handleApplyTemplate(SlideCommandContext& rCtx, const std::string& rKey,
+void handleApplyTemplate(SlideCommandContext& rCtx, const std::string& /*rKey*/,
                          const boost::property_tree::ptree& rValue)
 {
     // Record the template; it is applied to every slide after all commands run,
@@ -1106,8 +1106,7 @@ void handleApplyTemplate(SlideCommandContext& rCtx, const std::string& rKey,
     std::string aName = rValue.get_value<std::string>();
     std::optional<OUString> oUrl = lcl_ResolveDesignTemplateUrl(aName);
     if (!oUrl)
-        lcl_LogWarning("FillApi SlideCmd: unknown template name '" + rKey + ": " + aName
-                       + "'");
+        lcl_LogWarning("FillApi SlideCmd ApplyTemplate: unknown template name '" + aName + "'");
     else
         rCtx.moApplyTemplateUrl = oUrl;
 }

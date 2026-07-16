@@ -1432,6 +1432,43 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	outline-offset: 2px;
 }
 
+/* The selected entry of a decision card's design picker. */
+#aichat-messages-list .aichat-template-card[aria-pressed='true'],
+#aichat-messages-list .aichat-template-skip[aria-pressed='true'] {
+	border-color: rgb(var(--aichat-accent));
+	box-shadow: 0 0 0 1px rgb(var(--aichat-accent));
+}
+
+#aichat-messages-list .aichat-design-section {
+	margin-top: var(--spacing-m);
+	padding-top: var(--spacing-m);
+	border-top: 1px solid var(--color-border);
+}
+
+#aichat-messages-list .aichat-design-label {
+	font-size: 12.5px;
+	font-weight: 500;
+	font-family: var(--cool-font);
+}
+
+/* At the top of the outline card the strip stays one row tall: the
+   cards scroll horizontally and the reserved height keeps the rows
+   below from shifting when the catalog arrives. */
+#aichat-messages-list .aichat-outline-card .aichat-design-section {
+	margin-top: 0;
+	margin-bottom: var(--spacing-m);
+	padding-top: 0;
+	padding-bottom: var(--spacing-m);
+	border-top: none;
+	border-bottom: 1px solid var(--color-border);
+}
+
+#aichat-messages-list .aichat-outline-card .aichat-template-picker {
+	white-space: nowrap;
+	overflow-x: auto;
+	min-height: 108px;
+}
+
 /* -- Editable deck outline card shown before the slides are built --
    Every row is a mini slide card that stands for the slide it will become.
    A left edge encodes the slide's structural part; the eyebrow text names

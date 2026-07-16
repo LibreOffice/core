@@ -85,7 +85,8 @@ function clickSend() {
  * tool name is fired for each request, as if the model had asked to run
  * that tool. The result then follows the user's approve or reject
  * answer, like the real server. opts.approvalTransformJson rides on the
- * approval event as the transform the approval is about.
+ * approval event as the transform the approval is about. Every
+ * aichatapprove: payload is recorded on win.__aichatApprovePayloads.
  */
 function enableAIWithCaptureSocket(win, opts) {
 	var content = (opts && opts.content) || 'Mock AI response';
@@ -95,6 +96,7 @@ function enableAIWithCaptureSocket(win, opts) {
 
 	win.app.map.isAIConfigured = true;
 	win.__aichatPayloads = [];
+	win.__aichatApprovePayloads = [];
 
 	function fireResult(requestId) {
 		var result = { requestId: requestId, success: success };
@@ -118,12 +120,13 @@ function enableAIWithCaptureSocket(win, opts) {
 					// The result follows the user's answer to the approval,
 					// like the real server.
 					pendingApprovalId = requestId;
-					win.app.map.fire('aichatapproval', {
+					var approval = {
 						requestId: requestId,
 						toolName: approvalToolName,
 						summary: 'Mock change',
 						transformJson: (opts && opts.approvalTransformJson) || '',
-					});
+					};
+					win.app.map.fire('aichatapproval', approval);
 				} else {
 					fireResult(requestId);
 				}
@@ -131,6 +134,8 @@ function enableAIWithCaptureSocket(win, opts) {
 		} else if (typeof msg === 'string' && msg.startsWith('aichatapprove: ')) {
 			// Approved or rejected, the request runs to completion and a
 			// result arrives, like the real server.
+			win.__aichatApprovePayloads.push(
+				JSON.parse(msg.substring('aichatapprove: '.length)));
 			var requestId = pendingApprovalId;
 			win.app.layoutingService.onDrain(function() {
 				fireResult(requestId);

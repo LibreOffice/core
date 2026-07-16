@@ -13,6 +13,10 @@
 
 #include "DeckSpec.hpp"
 
+#include <common/JsonUtil.hpp>
+#include <common/Log.hpp>
+
+#include <Poco/Dynamic/Var.h>
 #include <Poco/JSON/Array.h>
 
 #include <array>
@@ -89,6 +93,19 @@ std::string getString(const Poco::JSON::Object::Ptr& obj, const std::string& key
     {
         return std::string();
     }
+}
+
+/// The text with every carriage return, line feed and NUL turned into a single
+/// space. A slide title and a gist are each written into the middle of a
+/// one-line sentence in a prompt, and this keeps them on that one line.
+std::string flattenToOneLine(std::string text)
+{
+    for (char& c : text)
+    {
+        if (c == '\n' || c == '\r' || c == '\0')
+            c = ' ';
+    }
+    return text;
 }
 
 /// The UTF-16 code-unit length of a UTF-8 string. A code point at or above
@@ -352,6 +369,13 @@ std::string validateBlocks(const Poco::JSON::Object::Ptr& slide, unsigned index,
             return prefix + "\"blocks\" must be an array.";
     }
 
+    // The block count is checked before the blocks themselves, so an
+    // oversized array is rejected without walking every element.
+    const int maxBlocks = rule.maxBullets + rule.maxText;
+    if (blocks && static_cast<int>(blocks->size()) > maxBlocks)
+        return prefix + "allows at most " + std::to_string(maxBlocks) + " block(s), found " +
+               std::to_string(blocks->size()) + ".";
+
     int bulletsBlocks = 0;
     int textBlocks = 0;
     const unsigned count = blocks ? blocks->size() : 0;
@@ -374,20 +398,19 @@ std::string validateBlocks(const Poco::JSON::Object::Ptr& slide, unsigned index,
                        std::to_string(items->size()) + ".";
             for (unsigned it = 0; it < items->size(); ++it)
             {
-                std::string item;
-                try
-                {
-                    item = items->getElement<std::string>(it);
-                }
-                catch (const std::exception&)
-                {
+                // Extraction converts a number or object element to its text,
+                // so the element type is checked first: only a real JSON
+                // string is a bullet item.
+                const Poco::Dynamic::Var itemVar = items->get(it);
+                if (!itemVar.isString())
                     return prefix + "every bullet item must be a string.";
-                }
+                const std::string item = itemVar.extract<std::string>();
                 if (item.empty())
                     return prefix + "a bullet item must not be empty.";
                 // The emphasis markers are stripped before display, so the
                 // length rule counts only the visible text.
-                if (static_cast<int>(parseEmphasis(item).plain.size()) > budgets.maxItemLength)
+                if (static_cast<int>(utf16Length(parseEmphasis(item).plain)) >
+                    budgets.maxItemLength)
                     return prefix + "a bullet item exceeds " +
                            std::to_string(budgets.maxItemLength) + " characters.";
             }
@@ -398,7 +421,7 @@ std::string validateBlocks(const Poco::JSON::Object::Ptr& slide, unsigned index,
             const std::string text = getString(block, "text");
             if (text.empty())
                 return prefix + "a text block needs a non-empty \"text\" string.";
-            if (static_cast<int>(parseEmphasis(text).plain.size()) > budgets.maxItemLength)
+            if (static_cast<int>(utf16Length(parseEmphasis(text).plain)) > budgets.maxItemLength)
                 return prefix + "a text block exceeds " +
                        std::to_string(budgets.maxItemLength) + " characters.";
         }
@@ -682,7 +705,7 @@ std::optional<std::string> validateSlideSpec(const Poco::JSON::Object::Ptr& slid
     if (title.empty())
         return slidePrefix(index, intent) +
                "\"title\" is required and must be a non-empty string.";
-    if (static_cast<int>(title.size()) > budgets.maxTitleLength)
+    if (static_cast<int>(utf16Length(title)) > budgets.maxTitleLength)
         return slidePrefix(index, intent) + "title exceeds " +
                std::to_string(budgets.maxTitleLength) + " characters.";
 
@@ -697,39 +720,21 @@ std::optional<std::string> validateSlideSpec(const Poco::JSON::Object::Ptr& slid
             return slidePrefix(index, intent) + "an image slide needs an \"image\" object with a"
                                                 " non-empty \"brief\" and \"alt\".";
         const std::string alt = getString(image, "alt");
-        if (static_cast<int>(alt.size()) > budgets.maxItemLength)
+        if (static_cast<int>(utf16Length(alt)) > budgets.maxItemLength)
             return slidePrefix(index, intent) + "image alt text exceeds " +
                    std::to_string(budgets.maxItemLength) + " characters.";
+        // The brief becomes an image-generation prompt, so it gets the roomiest
+        // text budget, the one speaker notes use.
+        const std::string brief = getString(image, "brief");
+        if (static_cast<int>(utf16Length(brief)) > budgets.maxNotesLength)
+            return slidePrefix(index, intent) + "image brief exceeds " +
+                   std::to_string(budgets.maxNotesLength) + " characters.";
     }
 
     const std::string notes = getString(slideObj, "notes");
-    if (static_cast<int>(notes.size()) > budgets.maxNotesLength)
+    if (static_cast<int>(utf16Length(notes)) > budgets.maxNotesLength)
         return slidePrefix(index, intent) + "notes exceed " +
                std::to_string(budgets.maxNotesLength) + " characters.";
-
-    return std::nullopt;
-}
-
-std::optional<std::string> validateDeckSpec(const Poco::JSON::Object::Ptr& deckObj,
-                                            const Budgets& budgets)
-{
-    if (!deckObj)
-        return std::string("Deck spec must be a JSON object with a \"slides\" array.");
-
-    Poco::JSON::Array::Ptr slides = deckObj->getArray("slides");
-    if (!slides)
-        return std::string("Deck spec must have a \"slides\" array.");
-    if (slides->size() == 0)
-        return std::string("A deck needs at least one slide.");
-    if (static_cast<int>(slides->size()) > budgets.maxSlides)
-        return "A deck may have at most " + std::to_string(budgets.maxSlides) + " slides, found " +
-               std::to_string(slides->size()) + ".";
-
-    for (unsigned i = 0; i < slides->size(); ++i)
-    {
-        if (auto slideError = validateSlideSpec(slides->getObject(i), i, budgets))
-            return slideError;
-    }
 
     return std::nullopt;
 }
@@ -741,7 +746,7 @@ std::optional<std::string> validateOutline(const Poco::JSON::Object::Ptr& outlin
         return std::string("Outline must be a JSON object with a \"slides\" array.");
 
     const std::string deckTitle = getString(outlineObj, "title");
-    if (static_cast<int>(deckTitle.size()) > budgets.maxTitleLength)
+    if (static_cast<int>(utf16Length(deckTitle)) > budgets.maxTitleLength)
         return "The deck title exceeds " + std::to_string(budgets.maxTitleLength) + " characters.";
 
     Poco::JSON::Array::Ptr slides = outlineObj->getArray("slides");
@@ -772,12 +777,12 @@ std::optional<std::string> validateOutline(const Poco::JSON::Object::Ptr& outlin
         if (title.empty())
             return slidePrefix(i, intent) +
                    "\"title\" is required and must be a non-empty string.";
-        if (static_cast<int>(title.size()) > budgets.maxTitleLength)
+        if (static_cast<int>(utf16Length(title)) > budgets.maxTitleLength)
             return slidePrefix(i, intent) + "title exceeds " +
                    std::to_string(budgets.maxTitleLength) + " characters.";
 
         const std::string gist = getString(slide, "gist");
-        if (static_cast<int>(gist.size()) > budgets.maxGistLength)
+        if (static_cast<int>(utf16Length(gist)) > budgets.maxGistLength)
             return slidePrefix(i, intent) + "gist exceeds " +
                    std::to_string(budgets.maxGistLength) + " characters.";
     }
@@ -785,26 +790,30 @@ std::optional<std::string> validateOutline(const Poco::JSON::Object::Ptr& outlin
     return std::nullopt;
 }
 
-std::string compileDeckSpec(const Poco::JSON::Object::Ptr& deckObj, const CompileOptions& options)
+Poco::JSON::Object::Ptr sanitizeOutline(const Poco::JSON::Object::Ptr& outlineObj)
 {
-    Poco::JSON::Array::Ptr cmds = new Poco::JSON::Array();
+    Poco::JSON::Object::Ptr clean = new Poco::JSON::Object();
+    Poco::JSON::Array::Ptr cleanSlides = new Poco::JSON::Array();
+    clean->set("title", flattenToOneLine(getString(outlineObj, "title")));
+    clean->set("slides", cleanSlides);
+    if (!outlineObj)
+        return clean;
 
-    Poco::JSON::Array::Ptr slides = deckObj ? deckObj->getArray("slides") : nullptr;
-    if (!slides)
-        return transformString(cmds);
-
-    for (unsigned i = 0; i < slides->size(); ++i)
+    Poco::JSON::Array::Ptr slides = outlineObj->getArray("slides");
+    for (unsigned i = 0; slides && i < slides->size(); ++i)
     {
         Poco::JSON::Object::Ptr slide = slides->getObject(i);
         if (!slide)
             continue;
-
-        // The first slide reuses the current slide of the deck; every later
-        // slide is added after it.
-        emitSlideCommands(cmds, slide, /*reuseCurrentSlide=*/i == 0, options);
+        Poco::JSON::Object::Ptr cleanSlide = new Poco::JSON::Object();
+        cleanSlide->set("part", getString(slide, "part"));
+        cleanSlide->set("intent", getString(slide, "intent"));
+        cleanSlide->set("title", flattenToOneLine(getString(slide, "title")));
+        cleanSlide->set("gist", flattenToOneLine(getString(slide, "gist")));
+        cleanSlides->add(cleanSlide);
     }
 
-    return transformString(cmds);
+    return clean;
 }
 
 std::string compileSlideSpec(const Poco::JSON::Object::Ptr& slideObj, int docSlideIndex,
@@ -825,6 +834,103 @@ std::string compileSlideSpec(const Poco::JSON::Object::Ptr& slideObj, int docSli
     emitSlideCommands(cmds, slideObj, reuseCurrentSlide, options);
 
     return transformString(cmds);
+}
+
+std::vector<ImageInsertion>
+rewriteGenerateImageCommands(const Poco::JSON::Object::Ptr& transformObj, int nExistingSlides,
+                             const std::string& placeholderUrl)
+{
+    std::vector<ImageInsertion> insertions;
+
+    Poco::JSON::Object::Ptr transforms =
+        transformObj ? transformObj->getObject("Transforms") : nullptr;
+    Poco::JSON::Array::Ptr cmds = transforms ? transforms->getArray("SlideCommands") : nullptr;
+    if (!cmds)
+        return insertions;
+
+    // Track the current slide as the commands are scanned. It starts at the
+    // number of slides already in the document so a JumpToSlide "last" resolves
+    // to the real last page and a following InsertMasterSlide lands the new
+    // slide at the same absolute index the engine gives it.
+    int currentSlide = 0;
+    int pageCount = nExistingSlides;
+
+    for (unsigned i = 0; i < cmds->size(); ++i)
+    {
+        Poco::JSON::Object::Ptr cmd = cmds->getObject(i);
+        if (!cmd)
+            continue;
+
+        if (cmd->has("JumpToSlide"))
+        {
+            std::string val = cmd->getValue<std::string>("JumpToSlide");
+            if (val == "last")
+                currentSlide = pageCount - 1;
+            else
+            {
+                try
+                {
+                    currentSlide = std::stoi(val);
+                }
+                catch (const std::exception&)
+                {
+                    LOG_WRN("TransformImageGen: invalid JumpToSlide value: " << val);
+                }
+            }
+        }
+        else if (cmd->has("InsertMasterSlide") || cmd->has("InsertMasterSlideByName"))
+        {
+            currentSlide++;
+            pageCount++;
+        }
+        else if (cmd->has("DeleteSlide"))
+        {
+            if (pageCount > 1)
+                pageCount--;
+        }
+
+        static const std::string kGenerateImagePrefix = "GenerateImage.";
+        for (const auto& key : cmd->getNames())
+        {
+            if (key.substr(0, kGenerateImagePrefix.size()) != kGenerateImagePrefix)
+                continue;
+
+            int objId;
+            try
+            {
+                objId = std::stoi(key.substr(kGenerateImagePrefix.size()));
+            }
+            catch (const std::exception&)
+            {
+                LOG_WRN("TransformImageGen: invalid GenerateImage key: " << key);
+                continue;
+            }
+
+            // GenerateImage carries either an object {"prompt","alt"} from the
+            // deck compiler or a bare prompt string from the imperative tool.
+            // Read both; the alt is empty for the string form.
+            std::string prompt;
+            std::string alt;
+            const Poco::Dynamic::Var value = cmd->get(key);
+            if (value.type() == typeid(Poco::JSON::Object::Ptr))
+            {
+                Poco::JSON::Object::Ptr generate = value.extract<Poco::JSON::Object::Ptr>();
+                JsonUtil::findJSONValue(generate, "prompt", prompt);
+                JsonUtil::findJSONValue(generate, "alt", alt);
+            }
+            else if (!value.isEmpty())
+                prompt = value.toString();
+
+            insertions.push_back({ currentSlide, objId, std::move(prompt), std::move(alt) });
+
+            // Replace GenerateImage.N with an InsertImage.N pointing at the
+            // loading placeholder; the real image is filled in later.
+            cmd->remove(key);
+            cmd->set("InsertImage." + std::to_string(objId), placeholderUrl);
+        }
+    }
+
+    return insertions;
 }
 
 std::string buildExpansionUserMessage(const Poco::JSON::Object::Ptr& slideObj,

@@ -62,9 +62,9 @@ SD_DLLPUBLIC DesignMasterRole DesignMasterRoleFromName(std::u16string_view rName
 
 /** The name a slide part travels under between the model and the engine:
     "opening" for Title, "divider" for Divider, "body" for Content, "closing"
-    for Closing, and "other" for a master that plays no part. The prompt built
-    in wsd/AIChatSession.cpp teaches the model the same words from its own copy
-    of the vocabulary, so a change here needs the same change there. */
+    for Closing, and "other" for a master that plays no part. The words are a
+    wire contract, so changing one changes the protocol, not just this
+    mapping. */
 SD_DLLPUBLIC OUString DesignRoleToWireName(DesignMasterRole eRole);
 
 /** The slide part a wire name stands for, or no value when the word is not one

@@ -27,6 +27,7 @@
 
 #include <optional>
 #include <string>
+#include <vector>
 
 namespace DeckSpec
 {
@@ -49,7 +50,9 @@ inline constexpr int MaxNotesLength = 500;
 /// matching constexpr limit above, so a default-constructed Budgets reproduces
 /// the built-in limits and stays the single source of the default values. A
 /// template manifest may lower these; the alt-text length reuses maxItemLength
-/// rather than adding a separate knob.
+/// rather than adding a separate knob. The length limits count UTF-16 code
+/// units, the unit the engine addresses text in, so a non-ASCII character
+/// still counts as one (or, outside the BMP, two).
 struct Budgets
 {
     int maxSlides = MaxSlides;
@@ -87,13 +90,6 @@ std::string partList();
 /// The comma-separated list of valid intent names, for error messages.
 std::string intentList();
 
-/// Check a deck spec against the schema and the budgets. Returns an actionable
-/// error string that names the offending slide (counted from 1) and the rule it
-/// broke, or std::nullopt when the spec satisfies every rule. The message is
-/// meant to be fed back to the model so it can fix exactly what is wrong.
-std::optional<std::string> validateDeckSpec(const Poco::JSON::Object::Ptr& deckObj,
-                                            const Budgets& budgets);
-
 /// Check one slide of a deck spec against the schema and budgets: its part,
 /// intent, title, content blocks, and image. Returns an actionable error string
 /// or std::nullopt when the slide satisfies every rule. The index is zero-based
@@ -111,13 +107,12 @@ std::optional<std::string> validateSlideSpec(const Poco::JSON::Object::Ptr& slid
 std::optional<std::string> validateOutline(const Poco::JSON::Object::Ptr& outlineObj,
                                            const Budgets& budgets);
 
-/// Compile a deck spec into the SlideCommands transform JSON string
-/// ({"Transforms":{"SlideCommands":[...]}}). The spec is expected to have passed
-/// validateDeckSpec; a structural surprise yields an empty SlideCommands array
-/// rather than a throw. The options decide whether house-style formatting is
-/// emitted and the image style appended to generated-image prompts.
-std::string compileDeckSpec(const Poco::JSON::Object::Ptr& deckObj,
-                            const CompileOptions& options);
+/// A fresh outline object holding only the fields validateOutline checks: the
+/// deck title, and per slide the part, intent, title and gist. Any other key is
+/// left out, and every carriage return, line feed and NUL in a title or a gist
+/// becomes a space, so each stays one line. A null outline gives an outline with
+/// an empty title and no slides.
+Poco::JSON::Object::Ptr sanitizeOutline(const Poco::JSON::Object::Ptr& outlineObj);
 
 /// Compile one slide spec into a SlideCommands transform JSON string. Each such
 /// transform is applied to the deck on its own, so docSlideIndex says where this
@@ -127,6 +122,31 @@ std::string compileDeckSpec(const Poco::JSON::Object::Ptr& deckObj,
 /// emitted and the image style appended to generated-image prompts.
 std::string compileSlideSpec(const Poco::JSON::Object::Ptr& slideObj, int docSlideIndex,
                              const CompileOptions& options);
+
+/// One generated image to insert, with the slide it belongs on. slideIndex is
+/// the absolute zero-based page. objId is the placeholder object index (the N
+/// from GenerateImage.N). prompt is the image description; alt is the text
+/// alternative, empty when none was given.
+struct ImageInsertion
+{
+    int slideIndex;
+    int objId;
+    std::string prompt;
+    std::string alt;
+};
+
+/// Scan a compiled transform for GenerateImage.N commands and rewrite each into
+/// an InsertImage.N that points at placeholderUrl, returning one ImageInsertion
+/// per rewritten command with the slide it targets. The transform object is
+/// modified in place. nExistingSlides is the number of slides already in the
+/// document when this transform runs, the same base index compileSlideSpec was
+/// given, so a JumpToSlide "last" resolves to the real last page and a following
+/// InsertMasterSlide lands the new slide at the right absolute index. The
+/// GenerateImage value is either an object with prompt and alt or a bare prompt
+/// string; both are read.
+std::vector<ImageInsertion>
+rewriteGenerateImageCommands(const Poco::JSON::Object::Ptr& transformObj, int nExistingSlides,
+                             const std::string& placeholderUrl);
 
 /// Compose the user message that asks the model to write one slide during
 /// outline expansion. slideNumber and slideCount are 1-based for display. The

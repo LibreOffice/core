@@ -3,10 +3,10 @@
 var helper = require('../../common/helper');
 var aichatHelper = require('../../common/aichat_helper');
 
-describe(['tagdesktop'], 'AI design-template picker', function() {
+describe(['tagdesktop'], 'AI design picker on the deck decision cards', function() {
 
-	// A single-slide presentation: a fresh deck, the case where the
-	// assistant offers a design template before building anything.
+	// A single-slide presentation: a fresh deck, the case where a deck is
+	// about to be built and a design can still be chosen for it.
 	beforeEach(function() {
 		helper.setupAndLoadDocument('impress/testfile.fodp');
 		cy.getFrameWindow().then((win) => {
@@ -14,127 +14,148 @@ describe(['tagdesktop'], 'AI design-template picker', function() {
 		});
 	});
 
+	var outline = {
+		title: 'Cats',
+		slides: [
+			{ part: 'opening', intent: 'title', title: 'Cats',
+				gist: 'Set the stage.' },
+			{ part: 'closing', intent: 'closing', title: 'Thanks',
+				gist: 'Wrap up.' },
+		],
+	};
+
 	function sendRequest(text) {
 		aichatHelper.typeIntoAIInput(text);
 		aichatHelper.clickSend();
 	}
 
-	it('The pick rides the deck request', function() {
+	it('A question goes out with no design picker in the way', function() {
 		aichatHelper.enableAIWithCaptureSocket(this.win, {});
 		aichatHelper.openAIChat();
-		sendRequest('Create a deck about cats');
+		sendRequest('What does this slide say?');
 
-		// The picker comes first: cards are on screen and no request is out.
-		cy.cGet('.aichat-template-card').should('exist');
-		cy.then(() => {
-			expect(this.win.__aichatPayloads).to.have.length(0);
-		});
-
-		cy.cGet('.aichat-template-card[title="Cobalt"]').click();
-
-		// The transcript records the outcome instead of the dangling prompt.
-		cy.cGet('#aichat-messages-list').should(
-			'contain.text', 'Design template: Cobalt');
-
-		// The request carries the picked template name. The template's designs
-		// are no longer sent: the backend fetches them from the document itself.
-		cy.cGet('#aichat-messages-list').should(
-			'contain.text', 'Mock AI response');
-		cy.then(() => {
-			expect(this.win.__aichatPayloads).to.have.length(1);
-			var payload = this.win.__aichatPayloads[0];
-			expect(payload.designTemplate).to.equal('Cobalt');
-			expect(payload.designTemplateMasters).to.be.undefined;
-			expect(payload.designTemplateLayouts).to.be.undefined;
-		});
-	});
-
-	it('Skipping sends the request with no template', function() {
-		aichatHelper.enableAIWithCaptureSocket(this.win, {});
-		aichatHelper.openAIChat();
-		sendRequest('Create a deck about cats');
-
-		cy.cGet('.aichat-template-card').should('exist');
-		cy.cGet('.aichat-template-skip').click();
-
-		cy.cGet('#aichat-messages-list').should(
-			'contain.text', 'Continuing without a design template.');
+		// The request goes out straight away and is answered; no picker
+		// appears anywhere in the conversation.
 		cy.cGet('#aichat-messages-list').should(
 			'contain.text', 'Mock AI response');
 		cy.then(() => {
 			expect(this.win.__aichatPayloads).to.have.length(1);
 			expect(this.win.__aichatPayloads[0].designTemplate).to.be.undefined;
-			expect(this.win.__aichatPayloads[0].designTemplateLayouts).to.be
-				.undefined;
 		});
+		cy.cGet('.aichat-design-section').should('not.exist');
 	});
 
-	it('A question does not use up the picker offer', function() {
-		aichatHelper.enableAIWithCaptureSocket(this.win, {});
-		aichatHelper.openAIChat();
-		sendRequest('What is on this slide?');
-
-		cy.cGet('.aichat-template-card').should('exist');
-		cy.cGet('.aichat-template-skip').click();
-		cy.cGet('#aichat-messages-list').should(
-			'contain.text', 'Mock AI response');
-
-		// The request modified nothing, so while the deck stays fresh the
-		// next request offers the picker again.
-		sendRequest('Now build a deck about dogs');
-		cy.cGet('.aichat-template-card').should('exist');
-		cy.then(() => {
-			// Only the first request went out; the second awaits the picker.
-			expect(this.win.__aichatPayloads).to.have.length(1);
-		});
-	});
-
-	it('Building deck content ends the picker offer', function() {
-		aichatHelper.enableAIWithCaptureSocket(this.win, {
-			approvalToolName: 'transform_document_structure',
-		});
+	it('The outline card offers the designs and the pick rides the approval', function() {
+		aichatHelper.enableAIWithOutlineSocket(this.win, { outline: outline });
 		aichatHelper.openAIChat();
 		sendRequest('Create a deck about cats');
 
-		cy.cGet('.aichat-template-card').should('exist');
-		cy.cGet('.aichat-template-skip').click();
+		// The outline card carries the design section, with the plain option
+		// preselected and the catalog loaded from the document.
+		cy.cGet('.aichat-outline-card .aichat-design-section').should('exist');
+		cy.cGet('.aichat-outline-card')
+			.children()
+			.first()
+			.should('have.class', 'aichat-design-section');
+		cy.cGet('.aichat-template-skip[aria-pressed="true"]').should('exist');
+		cy.cGet('.aichat-template-card[title="Cobalt"]').should('exist');
 
-		// The model proposes a change and the user approves it, which is
-		// what actually builds deck content.
+		cy.cGet('.aichat-template-card[title="Cobalt"]').click();
+		cy.cGet('.aichat-template-card[title="Cobalt"]')
+			.should('have.attr', 'aria-pressed', 'true');
+		cy.cGet('.aichat-approve-btn').click();
+
+		cy.wrap(null).should(() => {
+			expect(this.win.__aichatApprovePayloads).to.have.length(1);
+			var decision = this.win.__aichatApprovePayloads[0];
+			expect(decision.action).to.equal('approve');
+			expect(decision.designTemplate).to.equal('Cobalt');
+		});
+	});
+
+	it('A design picked before the sidebar is reopened still rides the approval', function() {
+		aichatHelper.enableAIWithOutlineSocket(this.win, { outline: outline });
+		aichatHelper.openAIChat();
+		sendRequest('Create a deck about cats');
+
+		cy.cGet('.aichat-template-card[title="Cobalt"]').click();
+
+		aichatHelper.closeAIChat();
+		aichatHelper.openAIChat();
+
+		// The rebuilt picker shows the chosen design as the pressed chip, and
+		// the plain option is no longer the one selected.
+		cy.cGet('.aichat-template-card[title="Cobalt"]')
+			.should('have.attr', 'aria-pressed', 'true');
+		cy.cGet('.aichat-template-skip')
+			.should('have.attr', 'aria-pressed', 'false');
+
+		cy.cGet('.aichat-approve-btn').click();
+		cy.wrap(null).should(() => {
+			var decision = this.win.__aichatApprovePayloads[0];
+			expect(decision.designTemplate).to.equal('Cobalt');
+		});
+	});
+
+	it('No design is the default and the approval carries none', function() {
+		aichatHelper.enableAIWithOutlineSocket(this.win, { outline: outline });
+		aichatHelper.openAIChat();
+		sendRequest('Create a deck about cats');
+
+		cy.cGet('.aichat-outline-card .aichat-design-section').should('exist');
+		cy.cGet('.aichat-approve-btn').click();
+
+		cy.wrap(null).should(() => {
+			var decision = this.win.__aichatApprovePayloads[0];
+			expect(decision.action).to.equal('approve');
+			expect(decision.designTemplate).to.be.undefined;
+		});
+	});
+
+	it('A recorded pick rides later requests and ends the offer', function() {
+		aichatHelper.enableAIWithOutlineSocket(this.win, { outline: outline });
+		aichatHelper.openAIChat();
+		sendRequest('Create a deck about cats');
+
+		cy.cGet('.aichat-template-card[title="Cobalt"]').click();
 		cy.cGet('.aichat-approve-btn').click();
 		cy.cGet('#aichat-messages-list').should(
-			'contain.text', 'Mock AI response');
+			'contain.text', 'Outline approved');
 
-		// The approved change built deck content, so the offer is spent:
-		// the next request goes straight out with no picker.
-		sendRequest('Add one more slide');
-		cy.wrap(null).should(() => {
-			expect(this.win.__aichatPayloads).to.have.length(2);
+		// Land the build result so the first request finishes.
+		cy.then(() => {
+			this.win.__deliverOutlineResult();
 		});
-		cy.cGet('.aichat-template-card').should('not.exist');
-	});
-
-	it('A rejected change does not use up the picker offer', function() {
-		aichatHelper.enableAIWithCaptureSocket(this.win, {
-			approvalToolName: 'transform_document_structure',
-		});
-		aichatHelper.openAIChat();
-		sendRequest('Create a deck about cats');
-
-		cy.cGet('.aichat-template-card').should('exist');
-		cy.cGet('.aichat-template-skip').click();
-
-		// The user rejects the proposed change: nothing was built.
-		cy.cGet('.aichat-reject-btn').click();
 		cy.cGet('#aichat-messages-list').should(
 			'contain.text', 'Mock AI response');
 
-		// The deck is still fresh, so the next request offers the picker
-		// again and is held until a choice is made.
-		sendRequest('Try a different deck');
-		cy.cGet('.aichat-template-card').should('exist');
-		cy.then(() => {
-			expect(this.win.__aichatPayloads).to.have.length(1);
+		// A later request in the same conversation carries the pick and its
+		// outline card no longer offers the catalog.
+		sendRequest('Add a slide about kittens');
+		cy.cGet('.aichat-outline-card').should('exist');
+		cy.cGet('.aichat-design-section').should('not.exist');
+		cy.wrap(null).should(() => {
+			expect(this.win.__aichatPayloads).to.have.length(2);
+			expect(this.win.__aichatPayloads[1].designTemplate).to.equal('Cobalt');
 		});
+	});
+
+	it('An edit approval offers no designs', function() {
+		var transform = JSON.stringify({
+			Transforms: {
+				SlideCommands: [
+					{ 'DeleteSlide': 1 },
+				],
+			},
+		});
+		aichatHelper.enableAIWithCaptureSocket(this.win, {
+			approvalToolName: 'transform_document_structure',
+			approvalTransformJson: transform,
+		});
+		aichatHelper.openAIChat();
+		sendRequest('Delete the second slide');
+
+		cy.cGet('.aichat-approve-btn').should('exist');
+		cy.cGet('.aichat-design-section').should('not.exist');
 	});
 });

@@ -78,9 +78,9 @@ inline constexpr const char* TRANSFORM_IMPRESS_INTRO =
 
 --- Impress/ODP Presentations ---
 
-For presentations, use {"Transforms": {"SlideCommands": [...]}} where SlideCommands is an array of operations applied in order. There is always a "current slide" (default: index 0) that most commands act on. All slides must go in a single SlideCommands array - use InsertMasterSlide to add new slides within the same array. Never send multiple JSON objects.
+This tool edits a presentation that already has slides: move to the slide you want, then change it. Use {"Transforms": {"SlideCommands": [...]}} where SlideCommands is an array of operations applied in order. There is always a "current slide" (default: index 0) that most commands act on; a JumpToSlide command changes which slide that is. Put every operation in a single SlideCommands array and never send multiple JSON objects. InsertMasterSlide adds one new slide to the deck after the current slide, for when an edit needs an extra slide.
 
-Do NOT prefix text lines with "- " (any bullet marker is added automatically). Do NOT put sub-headings or blank lines inside content placeholders - only the items to be listed. Choose the layout that fits the content (see Available layouts below). The instructions for this request say how much formatting to apply yourself; when a design template is in use, its master slides handle the look, so leave styling to them.
+Choose the layout that fits the content (see Available layouts below). When a design template is in use, its master slides handle the look, so leave styling to them.
 )";
 
 /// Impress/ODP-specific transform documentation, the part after the
@@ -112,24 +112,13 @@ UnoCommand levels - there are three places to use UnoCommand, each for a differe
 
 Prefer SlideCommands operations (SetText, ChangeLayout, EditTextObject) over raw UnoCommand when a dedicated command exists. Use UnoCommand only for formatting and features not covered by SlideCommands.
 
-Example - create a 5-slide presentation from a blank ODP:
-{"Transforms":{"SlideCommands":[{"ChangeLayoutByName":"AUTOLAYOUT_TITLE"},{"SetText.0":"Quarterly Report"},{"SetText.1":"Q1 2026"},{"RenameSlide":"Title"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:CenterPara"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},{"SetText.0":"Revenue"},{"SetText.1":"Revenue grew 15% year over year\nNew markets contributed 30% of growth\nCustomer retention at 95%"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},{"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_2CONTENT"},{"SetText.0":"Strengths & Risks"},{"SetText.1":"Strong brand recognition\nGrowing user base\nHigh retention rate"},{"SetText.2":"Supply chain delays\nRegulatory changes\nCompetitor pricing"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},{"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},{"EditTextObject.2":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},{"SetText.0":"Roadmap"},{"SetText.1":"Phase 1: Research\nPhase 2: Development\nPhase 3: Launch"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},{"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultNumbering"},{"SelectParagraph":0},{"UnoCommand":".uno:Bold"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_ONLY"},{"SetText.0":"Thank You"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:CenterPara"}]},{"JumpToSlide":1},{"EditTextObject.1":[{"SelectParagraph":0},{"InsertText":"Revenue grew 15% YoY"},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:Italic"}]}]}})";
-
-/// The write_slides description in fragments so the caller composes it at run
-/// time. The "Limits:" sentence is not a fragment here: it is built from the
-/// live budgets by DeckSpec::limitsSentence and inserted between DECK_SLIDE_SHAPE
-/// and WRITE_SLIDES_SUMMARY_NOTE, so the numbers the model is told match the
-/// numbers the validator enforces. With default budgets that composition is
-/// byte-identical to the previous single description. DECK_SLIDE_SHAPE is also
-/// reused by the per-slide write_slide expansion tool.
-inline constexpr const char* WRITE_SLIDES_INTRO =
-    R"(Create presentation slides from a declarative deck description. The server lays out and styles the slides for you, so describe what each slide is about, not how to format it.
-
-Pass a "deck" object of the form {"slides": [ ... ]}. )";
+Example - edit existing slides: jump to slide 2, change its layout, rewrite the title, and bold one phrase in the body text:
+{"Transforms":{"SlideCommands":[{"JumpToSlide":2},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},{"SetText.0":"Revised Roadmap"},{"EditTextObject.1":[{"SelectParagraph":0},{"UnoCommand":".uno:Bold"}]}]}})";
 
 /// The shape of one slide in a deck description, without the budget limits (see
-/// DeckSpec::limitsSentence). Shared by the write_slides tool and the per-slide
-/// write_slide expansion tool.
+/// DeckSpec::limitsSentence). Used by the per-slide write_slide expansion tool,
+/// which appends the limits sentence built from the live budgets so the numbers
+/// the model is told match the numbers the validator enforces.
 inline constexpr const char* DECK_SLIDE_SHAPE =
     R"(Each slide is an object with:
 - "part": one of "opening", "divider", "body", "closing" - the slide's role in the deck. Use opening for the first slide, divider for a section break, closing for the last slide, and body for the rest.
@@ -149,19 +138,11 @@ Which blocks each intent expects:
 - image: no blocks; supply an "image" instead.
 - section: a title only, no blocks.)";
 
-/// The trailing "summary" note appended after the budget limits in the
-/// write_slides description.
-inline constexpr const char* WRITE_SLIDES_SUMMARY_NOTE =
-    R"(
-
-Also pass a "summary": a short markdown preview of the slides being created, shown to the user for approval.)";
-
 /// The propose_outline description without its trailing slide-count sentence.
 /// The caller appends "Give at most N slides. ..." with N from the live budgets,
-/// so the number matches the validator; with default budgets the composition is
-/// byte-identical to the previous single description.
+/// so the number matches the validator.
 inline constexpr const char* PROPOSE_OUTLINE_HEAD =
-    R"(Propose a slide-by-slide outline for a new deck for the user to review and edit before the slides are built. Call this instead of write_slides for a deck of more than about three slides. After the user approves the outline, the server builds the slides itself, so do not also call write_slides for a deck you have outlined.
+    R"(Propose a slide-by-slide outline for a new deck for the user to review and edit before the slides are built. Call this to build a new deck of any size. After the user approves the outline, the server builds the slides itself.
 
 Pass an "outline" object of the form {"title": "deck title", "slides": [ ... ]}. Each slide entry is an object with:
 - "part": one of "opening", "divider", "body", "closing" - the slide's role in the deck.
