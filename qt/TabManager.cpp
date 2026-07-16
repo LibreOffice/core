@@ -31,6 +31,7 @@
 
 #include <QApplication>
 #include <QCursor>
+#include <QDropEvent>
 #include <QEvent>
 #include <QFile>
 #include <QJsonArray>
@@ -61,6 +62,29 @@ QString& currentTheme()
             ? QStringLiteral("dark")
             : QStringLiteral("light");
     return theme;
+}
+
+// A release can outrun the strip's acceptance and end as leave + cancel
+// instead of a drop; such a leave precedes the dragend by mere message
+// latency, while a real drag-away is human-scale older.
+constexpr qint64 kReleaseUnwindGraceMs = 250;
+
+// The strip page only makes tabs draggable, so the source view identifies a
+// tab drag. The text/x-coda-tab type is invisible to QMimeData: Chromium
+// pickles custom types into chromium/x-web-custom-data.
+bool isTabStripDrag(const QDropEvent* ev)
+{
+    QObject* src = ev->source();
+    if (!src)
+        return false;
+    for (TabbedWindow* w : TabbedWindow::allWindows())
+    {
+        QWidget* strip = w->manager()->shellWidget();
+        for (QObject* o = src; o; o = o->parent())
+            if (o == strip)
+                return true;
+    }
+    return false;
 }
 } // namespace
 
@@ -146,6 +170,33 @@ bool TabManager::eventFilter(QObject* obj, QEvent* ev)
         QMetaObject::invokeMethod(this, &TabManager::focusActiveDocument,
                                   Qt::QueuedConnection);
     }
+    else if ((obj == _shellView || obj == _stripProxy) &&
+             (ev->type() == QEvent::DragEnter || ev->type() == QEvent::DragMove))
+    {
+        // The != this guard keeps re-registration on moves from clobbering
+        // the slot the page reported (see onTargetDragOver).
+        if (s_dragHoverTarget != this && isTabStripDrag(static_cast<const QDropEvent*>(ev)))
+        {
+            s_dragHoverTarget = this;
+            s_dragHoverInsertAt = tabCount(); // append until the page reports a slot
+            s_lastHoverTarget = nullptr;
+        }
+    }
+    else if ((obj == _shellView || obj == _stripProxy) && ev->type() == QEvent::DragLeave)
+    {
+        // Only the native leave can end the hover: QDragLeaveEvent has no
+        // position, so the page cannot tell this exit from moving between
+        // tabs. Demote rather than forget - a dragend right behind this
+        // leave is an unwound release (see kReleaseUnwindGraceMs).
+        if (s_dragHoverTarget == this)
+        {
+            s_dragHoverTarget = nullptr;
+            s_lastHoverTarget = this;
+            s_lastHoverInsertAt = s_dragHoverInsertAt;
+            s_lastHoverLeftAt.start();
+            emit _shellBridge->dragExited();
+        }
+    }
     return QObject::eventFilter(obj, ev);
 }
 
@@ -177,6 +228,9 @@ std::vector<TabManager::Entry>::const_iterator TabManager::findTab(int tabId) co
 int TabManager::s_nextTabId = 1;
 QPointer<TabManager> TabManager::s_dragHoverTarget;
 int TabManager::s_dragHoverInsertAt = -1;
+QPointer<TabManager> TabManager::s_lastHoverTarget;
+int TabManager::s_lastHoverInsertAt = -1;
+QElapsedTimer TabManager::s_lastHoverLeftAt;
 
 int TabManager::registerTab(std::unique_ptr<WebView> wv, int insertAt)
 {
@@ -291,14 +345,10 @@ int TabManager::adoptFromOtherWindow(int srcTabId, int insertAt)
 
 void TabManager::onTargetDragOver(int insertAt)
 {
-    s_dragHoverTarget = this;
-    s_dragHoverInsertAt = insertAt;
-}
-
-void TabManager::onTargetDragLeave()
-{
+    // This report can trail the native DragLeave that already ended the
+    // hover; never let it re-register a strip the drag has left.
     if (s_dragHoverTarget == this)
-        s_dragHoverTarget = nullptr;
+        s_dragHoverInsertAt = insertAt;
 }
 
 std::unique_ptr<WebView> TabManager::releaseTab(int tabId)
@@ -491,25 +541,43 @@ void TabManager::applyTheme(const QString& theme)
     emit _shellBridge->themeChanged(currentTheme());
 }
 
+void TabManager::onSourceDragStarted(int tabId)
+{
+    // A tabsChanged rebuild can destroy the drag source mid-drag and Chromium
+    // then never fires its dragend, so the previous drag's hover state can
+    // still be set here.
+    LOG_TRC("TabManager::onSourceDragStarted: tab " << tabId << ", clearing hover state");
+    s_dragHoverTarget = nullptr;
+    s_dragHoverInsertAt = -1;
+    s_lastHoverTarget = nullptr;
+    s_lastHoverInsertAt = -1;
+}
+
 void TabManager::onSourceDragEnded(int tabId, bool inStripDropHandled)
 {
-    // Snapshot and clear the hover target so a later drag can't see stale state.
-    TabManager* hoverTarget = s_dragHoverTarget.data();
-    const int hoverInsertAt = s_dragHoverInsertAt;
+    // Snapshot and clear the hover state so the next drag starts clean.
+    TabManager* target = s_dragHoverTarget.data();
+    int insertAt = s_dragHoverInsertAt;
+    if (!target && s_lastHoverTarget && !s_lastHoverLeftAt.hasExpired(kReleaseUnwindGraceMs))
+    {
+        target = s_lastHoverTarget.data();
+        insertAt = s_lastHoverInsertAt;
+    }
     s_dragHoverTarget = nullptr;
+    s_lastHoverTarget = nullptr;
 
     // A target strip's drop, or our own, already handled the move.
     if (findTab(tabId) == _tabs.end() || inStripDropHandled)
         return;
 
-    // No drop arrived (e.g. overlapping windows on Wayland), but a strip's
-    // dragover registered it as the hover target: move the tab there.
-    if (hoverTarget && hoverTarget != this)
+    // The strip's drop never reached its page; complete the move here.
+    if (target && target != this)
     {
-        hoverTarget->adoptFromOtherWindow(tabId, hoverInsertAt);
+        target->adoptFromOtherWindow(tabId, insertAt);
         return;
     }
-    if (hoverTarget == this)
+    // A dropless release on our own strip: keep the current order.
+    if (target == this)
         return;
 
     // Released away from every strip: detach into a new window at the cursor.

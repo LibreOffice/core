@@ -31,16 +31,18 @@ public slots:
     void tabCloseRequested(int tabId);
     void newTabRequested();
     void tabReordered(int fromIndex, int toIndex);
+    void tabDragStarted(int tabId);
     void tabDragEnded(int tabId, bool inStripDropHandled);
     void tabAdoptFromOtherWindow(int srcTabId, int insertAt);
     void targetDragOver(int insertAt);
-    void targetDragLeave();
     void debug(const QString& message);
 
 signals:
     // tabsJson: JSON array of {id, title, docType, modified, active}.
     void tabsChanged(const QString& tabsJson);
     void themeChanged(const QString& theme);
+    // The native drag left the strip's view; the page clears its markers.
+    void dragExited();
 
 private:
     TabManager* _manager;

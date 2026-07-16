@@ -13,6 +13,7 @@
 
 #include <Poco/URI.h>
 
+#include <QElapsedTimer>
 #include <QObject>
 #include <QPointer>
 #include <QString>
@@ -74,14 +75,14 @@ public:
     void reorderTab(int fromIndex, int toIndex);
 
     // Cross-window drag. Wayland freezes the source's cursor and drag coords
-    // during a grab, so the move is driven by the target side: its live
-    // dragover registers it as the hover target, and the source reads that at
-    // dragend. Tab ids are unique process-wide, so a srcTabId not in this
-    // strip's list belongs to another window.
+    // during a grab, so the target side drives the move: native drag events
+    // on each strip's view track the hovered strip (see eventFilter), the
+    // page's dragover refines the insert slot, and the source reads the
+    // result at dragend. Tab ids are unique process-wide.
+    void onSourceDragStarted(int tabId);
     void onSourceDragEnded(int tabId, bool inStripDropHandled);
     int adoptFromOtherWindow(int srcTabId, int insertAt);
     void onTargetDragOver(int insertAt);
-    void onTargetDragLeave();
 
     void onWebViewTitleChanged(WebView* wv, const QString& title);
 
@@ -134,11 +135,14 @@ private:
     // continues with the next one until none remain.
     bool _closingAll = false;
 
-    // The strip currently under a cross-window drag, and the insert index its
-    // last dragover settled on. One drag at a time, so these are process-wide;
-    // the QPointer self-nulls if the target window dies mid-drag.
+    // One drag at a time, so process-wide; the QPointers self-null if a
+    // window dies mid-drag. s_lastHover* hold the strip a DragLeave demoted
+    // (see eventFilter).
     static QPointer<TabManager> s_dragHoverTarget;
     static int s_dragHoverInsertAt;
+    static QPointer<TabManager> s_lastHoverTarget;
+    static int s_lastHoverInsertAt;
+    static QElapsedTimer s_lastHoverLeftAt;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

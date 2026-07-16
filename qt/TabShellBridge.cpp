@@ -33,6 +33,8 @@ void TabShellBridge::tabReordered(int fromIndex, int toIndex)
     _manager->reorderTab(fromIndex, toIndex);
 }
 
+void TabShellBridge::tabDragStarted(int tabId) { _manager->onSourceDragStarted(tabId); }
+
 void TabShellBridge::tabDragEnded(int tabId, bool inStripDropHandled)
 {
     _manager->onSourceDragEnded(tabId, inStripDropHandled);
@@ -44,8 +46,6 @@ void TabShellBridge::tabAdoptFromOtherWindow(int srcTabId, int insertAt)
 }
 
 void TabShellBridge::targetDragOver(int insertAt) { _manager->onTargetDragOver(insertAt); }
-
-void TabShellBridge::targetDragLeave() { _manager->onTargetDragLeave(); }
 
 void TabShellBridge::debug(const QString& message)
 {

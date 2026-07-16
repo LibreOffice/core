@@ -87,26 +87,22 @@
 		return { el: last, before: false, insertAt: tabEls.length };
 	}
 
-	// Only tab drags concern the strip. An OS file or text drag must not
-	// register a hover target with C++: nothing would ever clear it (there is
-	// no source tab whose dragend runs onSourceDragEnded), and the next tab
-	// drag released over empty space would adopt into the stale target
-	// instead of detaching into a new window.
+	// No markers or slot reports for OS file or text drags.
 	function isTabDrag(ev) {
 		return ev.dataTransfer && ev.dataTransfer.types.includes('text/x-coda-tab');
 	}
 
 	// Bound to the whole strip, not per tab, so gaps, padding and the `+`
-	// button all accept a drop and dragleave fires only when the pointer truly
-	// leaves the strip. dragover also registers this strip as the cross-window
-	// hover target the source adopts into at dragend.
+	// button all accept a drop. C++ tracks the hovered strip from native
+	// drag events; dragover only refines the insert slot. No dragleave
+	// handler: its position cannot tell "left the strip" from "moved
+	// between tabs", so C++ signals dragExited from the native leave.
 	function installStripDropTarget(strip) {
 		strip.addEventListener('dragenter', (ev) => {
 			if (!isTabDrag(ev)) return;
 			ev.preventDefault();
-			// Force the next dragover to re-register the hover target; without
-			// this, a drag starting on the previous drag's insert index skips
-			// targetDragOver and the no-drop Wayland path mis-detaches the tab.
+			// C++ reset its slot on the native enter; push the next
+			// dragover past the dedup even if the slot is unchanged.
 			lastOverInsert = -2;
 		});
 		strip.addEventListener('dragover', (ev) => {
@@ -120,20 +116,6 @@
 				lastOverInsert = hit.insertAt;
 				bridge.targetDragOver(hit.insertAt);
 			}
-		});
-		strip.addEventListener('dragleave', (ev) => {
-			if (!isTabDrag(ev)) return;
-			const r = strip.getBoundingClientRect();
-			if (
-				ev.clientX >= r.left &&
-				ev.clientX < r.right &&
-				ev.clientY >= r.top &&
-				ev.clientY < r.bottom
-			)
-				return;
-			clearDropMarkers();
-			lastOverInsert = -2;
-			if (bridge) bridge.targetDragLeave();
 		});
 		strip.addEventListener('drop', (ev) => {
 			if (!isTabDrag(ev)) return;
@@ -213,12 +195,13 @@
 				ev.dataTransfer.setData('text/x-coda-tab', String(t.id));
 				tab.classList.add('dragging');
 				dragState.inStripDropHandled = false;
+				if (bridge) bridge.tabDragStarted(t.id);
 			});
 			tab.addEventListener('dragend', () => {
 				tab.classList.remove('dragging');
 				clearDropMarkers();
-				// C++ decides the cross-window move from the target strip's
-				// dragover; we only report whether our own drop handled it.
+				// C++ decides the cross-window move; we only report whether
+				// our own drop handled it.
 				if (bridge) bridge.tabDragEnded(t.id, dragState.inStripDropHandled);
 				dragState.inStripDropHandled = false;
 			});
@@ -255,12 +238,18 @@
 		document.documentElement.setAttribute('data-theme', theme);
 	}
 
+	function onDragExited() {
+		clearDropMarkers();
+		lastOverInsert = -2;
+	}
+
 	installStripDropTarget(document.getElementById('strip'));
 
 	new QWebChannel(qt.webChannelTransport, function (channel) {
 		bridge = channel.objects.tabBridge;
 		bridge.tabsChanged.connect(onTabsChanged);
 		bridge.themeChanged.connect(onThemeChanged);
+		bridge.dragExited.connect(onDragExited);
 		bridge.debug('tabstrip ready');
 		// Slots are connected now; ask C++ for the current state.
 		bridge.requestSync();
