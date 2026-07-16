@@ -251,6 +251,71 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBorders)
     m_pDoc->DeleteTab(0);
 }
 
+// Test 3b: Single-column table keeps both left and right outer edges (regression)
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBordersSingleColumn)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    applyThemeToDocument(m_pDoc, pColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    // TableStyleMedium2's WholeTable is a full box (top/bottom/left/right), so a
+    // one-column table (A1:A11) must still carry the right edge in every band.
+    ScDBData* pDBData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 0, 10);
+
+    const ScTableStyle* pStyle = m_pDoc->GetTableStyles()->GetTableStyle(u"TableStyleMedium2"_ustr);
+    CPPUNIT_ASSERT(pStyle);
+
+    auto assertOuterLeftRight = [](const std::unique_ptr<SvxBoxItem>& pBox, const char* pWhat) {
+        CPPUNIT_ASSERT_MESSAGE(pWhat, pBox);
+        CPPUNIT_ASSERT_MESSAGE(pWhat, pBox->GetLine(SvxBoxItemLine::LEFT) != nullptr);
+        CPPUNIT_ASSERT_MESSAGE(pWhat, pBox->GetLine(SvxBoxItemLine::RIGHT) != nullptr);
+    };
+
+    assertOuterLeftRight(pStyle->GetBoxItem(*pDBData, 0, 0, 0), "single-column header cell");
+    assertOuterLeftRight(pStyle->GetBoxItem(*pDBData, 0, 5, 4), "single-column data cell");
+    assertOuterLeftRight(pStyle->GetBoxItem(*pDBData, 0, 10, 9), "single-column total cell");
+
+    m_pDoc->DeleteTab(0);
+}
+
+// Test 3c: Style with inner vertical borders — interior cells get them, single column keeps edges
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBordersSingleColumnInnerVertical)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    applyThemeToDocument(m_pDoc, pColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    // TableStyleLight17's WholeTable is a full box plus inner horizontal AND vertical lines.
+    const ScTableStyle* pStyle = m_pDoc->GetTableStyles()->GetTableStyle(u"TableStyleLight17"_ustr);
+    CPPUNIT_ASSERT(pStyle);
+
+    auto assertLeftRight = [](const std::unique_ptr<SvxBoxItem>& pBox, const char* pWhat) {
+        CPPUNIT_ASSERT_MESSAGE(pWhat, pBox);
+        CPPUNIT_ASSERT_MESSAGE(pWhat, pBox->GetLine(SvxBoxItemLine::LEFT) != nullptr);
+        CPPUNIT_ASSERT_MESSAGE(pWhat, pBox->GetLine(SvxBoxItemLine::RIGHT) != nullptr);
+    };
+
+    // An interior cell of a multi-column table (A1:C11) has no outer edge, so left/right
+    // lines there can only come from the inner vertical border.
+    ScDBData* pMulti = createTestDBData(m_pDoc, u"TableStyleLight17"_ustr, 0, 0, 2, 10);
+    assertLeftRight(pStyle->GetBoxItem(*pMulti, 1, 5, 4), "multi-column interior cell");
+
+    // Single-column table (E1:E11) with the same style still shows both edges in every band.
+    ScDBData* pOne = createTestDBData(m_pDoc, u"TableStyleLight17"_ustr, 4, 0, 4, 10, true, true,
+                                      u"OneCol"_ustr);
+    assertLeftRight(pStyle->GetBoxItem(*pOne, 4, 0, 0), "single-column header cell");
+    assertLeftRight(pStyle->GetBoxItem(*pOne, 4, 5, 4), "single-column data cell");
+    assertLeftRight(pStyle->GetBoxItem(*pOne, 4, 10, 9), "single-column total cell");
+
+    m_pDoc->DeleteTab(0);
+}
+
 // Test 4: Verify font properties (bold, color)
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleFonts)
 {

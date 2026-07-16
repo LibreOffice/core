@@ -284,7 +284,10 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
             {
                 const ::editeng::SvxBorderLine* pTLine = pBoxItem->GetLine(SvxBoxItemLine::TOP);
                 const ::editeng::SvxBorderLine* pRLine = pBoxItem->GetLine(SvxBoxItemLine::RIGHT);
-                if (pTLine || pRLine)
+                const ::editeng::SvxBorderLine* pLLine
+                    = nCol == aRange.aStart.Col() ? pBoxItem->GetLine(SvxBoxItemLine::LEFT)
+                                                  : nullptr;
+                if (pTLine || pRLine || pLLine)
                 {
                     std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
                                                                       : nullptr);
@@ -294,6 +297,8 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
                         pNewBoxItem->SetLine(pTLine, SvxBoxItemLine::TOP);
                     if (pRLine)
                         pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
+                    if (pLLine)
+                        pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
 
                     return pNewBoxItem;
                 }
@@ -315,7 +320,10 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
             {
                 const ::editeng::SvxBorderLine* pTLine = pBoxItem->GetLine(SvxBoxItemLine::TOP);
                 const ::editeng::SvxBorderLine* pLLine = pBoxItem->GetLine(SvxBoxItemLine::LEFT);
-                if (pTLine || pLLine)
+                const ::editeng::SvxBorderLine* pRLine
+                    = nCol == aRange.aEnd.Col() ? pBoxItem->GetLine(SvxBoxItemLine::RIGHT)
+                                                : nullptr;
+                if (pTLine || pLLine || pRLine)
                 {
                     std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
                                                                       : nullptr);
@@ -325,6 +333,8 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
                         pNewBoxItem->SetLine(pTLine, SvxBoxItemLine::TOP);
                     if (pLLine)
                         pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
+                    if (pRLine)
+                        pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
 
                     return pNewBoxItem;
                 }
@@ -350,7 +360,10 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
                     const ::editeng::SvxBorderLine* pTLine = pBoxItem->GetLine(SvxBoxItemLine::TOP);
                     const ::editeng::SvxBorderLine* pLLine
                         = pBoxItem->GetLine(SvxBoxItemLine::LEFT);
-                    if (pTLine || pLLine)
+                    const ::editeng::SvxBorderLine* pRLine
+                        = nCol == aRange.aEnd.Col() ? pBoxItem->GetLine(SvxBoxItemLine::RIGHT)
+                                                    : nullptr;
+                    if (pTLine || pLLine || pRLine)
                     {
                         std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
                                                                           : nullptr);
@@ -360,6 +373,8 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
                             pNewBoxItem->SetLine(pTLine, SvxBoxItemLine::TOP);
                         if (pLLine)
                             pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
+                        if (pRLine)
+                            pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
 
                         return pNewBoxItem;
                     }
@@ -433,7 +448,10 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
                         = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
                     const ::editeng::SvxBorderLine* pLLine
                         = pBoxItem->GetLine(SvxBoxItemLine::LEFT);
-                    if (pBLine || pLLine)
+                    const ::editeng::SvxBorderLine* pRLine
+                        = nCol == aRange.aEnd.Col() ? pBoxItem->GetLine(SvxBoxItemLine::RIGHT)
+                                                    : nullptr;
+                    if (pBLine || pLLine || pRLine)
                     {
                         std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
                                                                           : nullptr);
@@ -443,6 +461,8 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
                             pNewBoxItem->SetLine(pBLine, SvxBoxItemLine::BOTTOM);
                         if (pLLine)
                             pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
+                        if (pRLine)
+                            pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
 
                         return pNewBoxItem;
                     }
@@ -542,7 +562,10 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
                         const ::editeng::SvxBorderLine* pBLine = nullptr;
                         if (aRange.aEnd.Row() == nRow)
                             pBLine = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
-                        if (pLLine || pBLine)
+                        const ::editeng::SvxBorderLine* pRLine
+                            = nCol == aRange.aEnd.Col() ? pBoxItem->GetLine(SvxBoxItemLine::RIGHT)
+                                                        : nullptr;
+                        if (pLLine || pBLine || pRLine)
                         {
                             std::unique_ptr<SvxBoxItem> pNewBoxItem(pPoolItem ? pPoolItem->Clone()
                                                                               : nullptr);
@@ -552,6 +575,8 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
                                 pNewBoxItem->SetLine(pBLine, SvxBoxItemLine::BOTTOM);
                             if (pLLine)
                                 pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
+                            if (pRLine)
+                                pNewBoxItem->SetLine(pRLine, SvxBoxItemLine::RIGHT);
 
                             return pNewBoxItem;
                         }
@@ -652,7 +677,7 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
                     pNewBoxItem->SetLine(pLLine, SvxBoxItemLine::LEFT);
                 }
             }
-            else if (pBoxItem && nCol == aRange.aEnd.Col())
+            if (pBoxItem && nCol == aRange.aEnd.Col())
             {
                 const ::editeng::SvxBorderLine* pRLine = pBoxItem->GetLine(SvxBoxItemLine::RIGHT);
                 if (pRLine)
@@ -669,7 +694,7 @@ std::unique_ptr<SvxBoxItem> ScTableStyle::GetBoxItem(const ScDBData& rDBData, SC
                     pNewBoxItem->SetLine(pTLine, SvxBoxItemLine::TOP);
                 }
             }
-            else if (pBoxItem && nRow == aRange.aEnd.Row())
+            if (pBoxItem && nRow == aRange.aEnd.Row())
             {
                 const ::editeng::SvxBorderLine* pBLine = pBoxItem->GetLine(SvxBoxItemLine::BOTTOM);
                 if (pBLine)
