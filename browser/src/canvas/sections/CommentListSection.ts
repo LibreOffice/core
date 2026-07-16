@@ -1997,13 +1997,19 @@ export class CommentSection extends CanvasSectionObject {
 		if (newComment.author !== editCommentData.author
 		|| newComment.dateTime !== editCommentData.dateTime
 		|| newComment.html !== editCommentData.html
-		|| newComment.layoutStatus !== editCommentData.layoutStatus.toString()
+		|| newComment.layoutStatus !== editCommentData.layoutStatus?.toString()
 		|| newComment.parentId !== editCommentData.parentId
 		|| newComment.resolved !== editCommentData.resolved
 		|| newComment.textRange !== editCommentData.textRange)
 			return false;
 
-		if (newComment.anchorPos.replaceAll(" ", '') !== editCommentData.anchorPos.toString())
+		// Writer sends the position in anchorPos, Impress and Draw send the marker
+		// position in rectangle. Compare whichever the message carries.
+		var newAnchorPos = newComment.anchorPos !== undefined ? newComment.anchorPos : newComment.rectangle;
+		if (newAnchorPos === undefined)
+			return false;
+
+		if (newAnchorPos.replaceAll(" ", '') !== editCommentData.anchorPos.toString())
 			return true;
 		return false;
 	}
