@@ -2550,7 +2550,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			return false; // Selection doesn't start at first row.
 
 		var rangeEnd = this._getNumberPart(startEnd[1]);
-		if (rangeEnd === 1048576) // Last row's number.
+		if (rangeEnd === app.calc.maxRowCount) // Last row's number.
 			return true;
 		else
 			return false;
@@ -2569,10 +2569,18 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			return false; // Selection doesn't start at first column.
 
 		var rangeEnd = this._getStringPart(startEnd[1]);
-		if (rangeEnd === 'XFD') // Last column's code.
+		if (this._columnLabelToNumber(rangeEnd) === app.calc.maxColumnCount) // Last column.
 			return true;
 		else
 			return false;
+	},
+
+	// Converts a spreadsheet column label ('A', 'AA', 'XFD'...) to its 1-based number.
+	_columnLabelToNumber: function (label) {
+		var number = 0;
+		for (var i = 0; i < label.length; i++)
+			number = number * 26 + (label.charCodeAt(i) - 64); // 'A'.charCodeAt(0) === 65.
+		return number;
 	},
 
 	_updateScrollOnCellSelection: function (oldSelection, newSelection) {

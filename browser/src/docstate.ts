@@ -46,6 +46,7 @@
 	isAdminUser: null, // Is admin on the integrator side - used eg. to show update warnings
 	calc: {
 		maxColumnCount: 16384, // Calc MAXCOLCOUNT (sc/inc/address.hxx).
+		maxRowCount: 1048576, // Calc MAXROWCOUNT (sc/inc/address.hxx).
 		cellAddress: null, // To be assigned SimplePoint.
 		cellCursorVisible: false,
 		cellCursorRectangle: null, // To be assigned SimpleRectangle.
