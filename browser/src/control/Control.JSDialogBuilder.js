@@ -661,8 +661,10 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				var label = window.L.DomUtil.create('span', 'ui-expander-label ' + builder.options.cssClass, expanderBtn);
 				label.innerText = builder._cleanText(data.children[0].text);
 				label.id = prefix + '-label';
-				if (data.children[0].visible === false)
+				if (data.children[0].visible === false) {
 					window.L.DomUtil.addClass(label, 'hidden');
+					window.L.DomUtil.addClass(expanderBtn, 'hidden');
+				}
 				builder.postProcess(expanderBtn, data.children[0]);
 
 				var state = data.children.length > 1 && expanded;
