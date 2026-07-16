@@ -4017,6 +4017,14 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	onAdd: function (map) {
 		this._initContainer();
 
+		const showSidebarWriter = window.prefs.getBoolean('text.ShowSidebar');
+		if (this.isWriter() && showSidebarWriter) {
+			if (map.sidebar)
+				map.sidebar.showSidebar();
+			else
+				window.app.console.warn('The sidebar is set to be shown but it has not been created.');
+		}
+
 		/*
 			Because of special handling of delete and backspace chars, we need to know which Writer form is focused.
 			When sending removeTextContext event to core side, we send the formID instead of the map id.
