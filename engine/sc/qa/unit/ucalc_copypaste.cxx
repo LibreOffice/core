@@ -27,6 +27,9 @@
 #include <refundo.hxx>
 #include <scitems.hxx>
 #include <scopetools.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <svl/style.hxx>
 
 #include <sfx2/docfile.hxx>
 
@@ -401,6 +404,91 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("GLOBAL2 named range changed", aGlobal2Symbol, aSymbol);
 
     m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteKeepDestProtection)
+{
+    // tdf#123974, tdf#150910: an interactive paste changes a cell's content,
+    // not whether it is locked. Copying a protected cell onto a cell the user
+    // explicitly unprotected must leave it editable, and this must not depend
+    // on whether the source spans a single row (the replicated-single-row fast
+    // path) or several rows (the general path) - the two used to disagree.
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // Source column A: two protected cells carrying values.
+    m_pDoc->SetValue(0, 0, 0, 1.0);
+    m_pDoc->SetValue(0, 1, 0, 2.0);
+    m_pDoc->ApplyAttr(0, 0, 0, ScProtectionAttr(true));
+    m_pDoc->ApplyAttr(0, 1, 0, ScProtectionAttr(true));
+
+    // Targets the user explicitly unprotected by direct formatting: C1 (a
+    // single-row target) and D1:D2 (a multi-row target).
+    m_pDoc->ApplyAttr(2, 0, 0, ScProtectionAttr(false));
+    m_pDoc->ApplyAttr(3, 0, 0, ScProtectionAttr(false));
+    m_pDoc->ApplyAttr(3, 1, 0, ScProtectionAttr(false));
+
+    auto paste = [this](const ScRange& rSrc, const ScRange& rDest, bool bPreserveProtection) {
+        ScDocument aClipDoc(SCDOCMODE_CLIP);
+        copyToClip(m_pDoc, rSrc, &aClipDoc);
+        ScMarkData aMark(m_pDoc->GetSheetLimits());
+        aMark.SetMarkArea(rDest);
+        m_pDoc->CopyFromClip(rDest, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc, true,
+                             false, true, false, nullptr, bPreserveProtection);
+    };
+
+    // Single-row source exercises the replicated-single-row fast path.
+    paste(ScRange(0, 0, 0, 0, 0, 0), ScRange(2, 0, 0, 2, 0, 0), /*bPreserveProtection*/true);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("single-row paste must keep the target unprotected",
+                           !m_pDoc->GetAttr(2, 0, 0, ATTR_PROTECTION).GetProtection());
+
+    // Multi-row source exercises the general path.
+    paste(ScRange(0, 0, 0, 0, 1, 0), ScRange(3, 0, 0, 3, 1, 0), /*bPreserveProtection*/true);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(3, 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("multi-row paste must keep the target unprotected (row 1)",
+                           !m_pDoc->GetAttr(3, 0, 0, ATTR_PROTECTION).GetProtection());
+    CPPUNIT_ASSERT_MESSAGE("multi-row paste must keep the target unprotected (row 2)",
+                           !m_pDoc->GetAttr(3, 1, 0, ATTR_PROTECTION).GetProtection());
+
+    // The whole protection item is preserved, not just its Protected bit: an
+    // unprotected source pasted onto a protected + hidden-formula target keeps
+    // the target's own settings.
+    m_pDoc->SetValue(0, 5, 0, 9.0); // A6, unprotected source
+    m_pDoc->ApplyAttr(0, 5, 0, ScProtectionAttr(false));
+    m_pDoc->ApplyAttr(2, 5, 0, ScProtectionAttr(true, /*bHideFormula*/true)); // C6 target
+    paste(ScRange(0, 5, 0, 0, 5, 0), ScRange(2, 5, 0, 2, 5, 0), /*bPreserveProtection*/true);
+    const ScProtectionAttr& rC6 = m_pDoc->GetAttr(2, 5, 0, ATTR_PROTECTION);
+    CPPUNIT_ASSERT_MESSAGE("paste must keep the target protected", rC6.GetProtection());
+    CPPUNIT_ASSERT_MESSAGE("paste must keep the target's hide-formula flag",
+                           rC6.GetHideFormula());
+
+    // Without the flag (the programmatic copyRange path) attributes are copied
+    // verbatim, so the source's protection is carried over as before.
+    m_pDoc->ApplyAttr(4, 5, 0, ScProtectionAttr(true)); // E6 target, protected
+    paste(ScRange(0, 5, 0, 0, 5, 0), ScRange(4, 5, 0, 4, 5, 0), /*bPreserveProtection*/false);
+    CPPUNIT_ASSERT_MESSAGE("paste without the flag must copy the source's state",
+                           !m_pDoc->GetAttr(4, 5, 0, ATTR_PROTECTION).GetProtection());
+
+    // Protection that comes from a cell style, not from direct formatting, is
+    // not preserved: only direct protection is. Give G6 an unprotected cell
+    // style (no direct protection) and paste the protected A1 onto it - it must
+    // end up protected, following the paste like any other styled attribute.
+    ScStyleSheet& rUnprotectedStyle = static_cast<ScStyleSheet&>(
+        m_pDoc->GetStyleSheetPool()->Make(u"Unprotected"_ustr, SfxStyleFamily::Para));
+    rUnprotectedStyle.GetItemSet().Put(ScProtectionAttr(false));
+    m_pDoc->ApplyStyle(6, 5, 0, rUnprotectedStyle); // G6
+    CPPUNIT_ASSERT_MESSAGE("precondition: the style leaves G6 unprotected",
+                           !m_pDoc->GetAttr(6, 5, 0, ATTR_PROTECTION).GetProtection());
+    CPPUNIT_ASSERT_MESSAGE("precondition: G6 has no direct protection",
+                           SfxItemState::SET
+                               != m_pDoc->GetPattern(6, 5, 0)->GetItemSet().GetItemState(
+                                      ATTR_PROTECTION, false));
+    paste(ScRange(0, 0, 0, 0, 0, 0), ScRange(6, 5, 0, 6, 5, 0), /*bPreserveProtection*/true);
+    CPPUNIT_ASSERT_MESSAGE("style-based protection is not preserved; it follows the paste",
+                           m_pDoc->GetAttr(6, 5, 0, ATTR_PROTECTION).GetProtection());
+
     m_pDoc->DeleteTab(0);
 }
 

@@ -1561,9 +1561,13 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     if (!bAsLink)
     {
         //  copy normally (original range)
+        //  keep the destination cells' own directly applied protection - an
+        //  interactive paste changes their content, not whether the user has
+        //  directly locked them (tdf#123974)
         rDoc.CopyFromClip( aUserRange, aFilteredMark, nNoObjFlags,
                 pRefUndoDoc.get(), pClipDoc, true, false, bIncludeFiltered,
-                bSkipEmptyCells, (bMarkIsFiltered ? &aRangeList : nullptr) );
+                bSkipEmptyCells, (bMarkIsFiltered ? &aRangeList : nullptr),
+                /*bPreserveDestProtection*/true );
 
         // adapt refs manually in case of transpose
         if ( bTranspose && bCutMode && (nFlags & InsertDeleteFlags::CONTENTS) )

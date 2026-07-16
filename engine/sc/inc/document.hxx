@@ -1900,7 +1900,8 @@ public:
         ScDocument* pRefUndoDoc, ScDocument* pClipDoc,
         bool bResetCut = true, bool bAsLink = false,
         bool bIncludeFiltered = true, bool bSkipEmptyCells = false,
-        const ScRangeList* pDestRanges = nullptr );
+        const ScRangeList* pDestRanges = nullptr,
+        bool bPreserveDestProtection = false );
 
     void                CopyMultiRangeFromClip(const ScAddress& rDestPos, const ScMarkData& rMark,
                                                InsertDeleteFlags nInsFlag, ScDocument* pClipDoc,

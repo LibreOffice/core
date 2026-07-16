@@ -3049,7 +3049,7 @@ void ScDocument::CopyFromClip(
     const ScRange& rDestRange, const ScMarkData& rMark, InsertDeleteFlags nInsFlag,
     ScDocument* pRefUndoDoc, ScDocument* pClipDoc, bool bResetCut,
     bool bAsLink, bool bIncludeFiltered, bool bSkipEmptyCells,
-    const ScRangeList * pDestRanges )
+    const ScRangeList * pDestRanges, bool bPreserveDestProtection )
 {
     if (bIsClip)
         return;
@@ -3141,6 +3141,48 @@ void ScDocument::CopyFromClip(
     bInsertingFromOtherDoc = true;  // No Broadcast/Listener created at Insert
 
     sc::ColumnSpanSet aBroadcastSpans;
+
+    // An interactive paste treats a cell's own directly applied protection as
+    // a property of the cell, not of the pasted data: copying a protected cell
+    // onto a cell the user directly unprotected must leave it editable (and
+    // vice versa). Note the directly set protection over the destination now,
+    // and put it back once the pasted attributes have overwritten it below.
+    // Only direct formatting is handled here; protection that instead comes
+    // from a cell style (including a style that conditional formatting applies)
+    // is left to follow the usual paste. A moved cell (cut and paste) keeps its
+    // own protection, so it is excluded.
+    struct KeptProtection
+    {
+        SCTAB nTab;
+        SCCOL nCol;
+        SCROW nRow1;
+        SCROW nRow2;
+        ScProtectionAttr aProtection;
+    };
+    std::vector<KeptProtection> aKeptProtection;
+    const bool bKeepDestProtection = bPreserveDestProtection
+        && (nInsFlag & InsertDeleteFlags::ATTRIB)
+        && !pClipDoc->GetClipParam().mbCutMode;
+    if (bKeepDestProtection)
+    {
+        for (const SCTAB nTab : rMark)
+        {
+            for (const ScRange& rRange : *pDestRanges)
+            {
+                ScDocAttrIterator aIter(*this, nTab, rRange.aStart.Col(), rRange.aStart.Row(),
+                                        rRange.aEnd.Col(), rRange.aEnd.Row());
+                SCCOL nAttrCol;
+                SCROW nAttrRow1, nAttrRow2;
+                while (const ScPatternAttr* pPattern = aIter.GetNext(nAttrCol, nAttrRow1, nAttrRow2))
+                {
+                    if (const ScProtectionAttr* pProtect
+                            = pPattern->GetItemSet().GetItemIfSet(ATTR_PROTECTION, false))
+                        aKeptProtection.push_back(
+                            { nTab, nAttrCol, nAttrRow1, nAttrRow2, *pProtect });
+                }
+            }
+        }
+    }
 
     SCCOL nClipStartCol = aClipRange.aStart.Col();
     SCROW nClipStartRow = aClipRange.aStart.Row();
@@ -3249,6 +3291,15 @@ void ScDocument::CopyFromClip(
     }
 
     bInsertingFromOtherDoc = false;
+
+    // Put back the destination's own direct protection that the paste above
+    // overwrote (see the note where aKeptProtection is filled).
+    for (const KeptProtection& rKept : aKeptProtection)
+    {
+        ScPatternAttr aPattern(getCellAttributeHelper());
+        aPattern.ItemSetPut(rKept.aProtection);
+        ApplyPatternAreaTab(rKept.nCol, rKept.nRow1, rKept.nCol, rKept.nRow2, rKept.nTab, aPattern);
+    }
 
     if (nInsFlag & InsertDeleteFlags::CONTENTS)
     {
