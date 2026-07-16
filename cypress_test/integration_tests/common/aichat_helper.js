@@ -144,6 +144,71 @@ function enableAIWithCaptureSocket(win, opts) {
 }
 
 /**
+ * Like enableAIWithCaptureSocket, but drives the deck-outline flow. On an
+ * aichat: request it fires an aichatoutline event carrying opts.outline
+ * (a title and a slides array), as if the model had proposed a deck
+ * outline for the user to review. Every aichatapprove: payload is recorded
+ * on win.__aichatApprovePayloads so the test can assert the edited outline
+ * that was sent back.
+ *
+ * Approving the outline reports one round of progress (opts.progress) and
+ * arms win.__deliverOutlineResult; the test calls that to land the final
+ * aichatresult, so the progress text can be observed before the result
+ * clears it. Rejecting sends nothing further, matching the server that
+ * keeps the request open for a new outline.
+ */
+function enableAIWithOutlineSocket(win, opts) {
+	var outline = (opts && opts.outline) || { title: '', slides: [] };
+	var content = (opts && opts.content) || 'Mock AI response';
+	var progress = (opts && opts.progress) || 'Building slide 1 of 2...';
+
+	win.app.map.isAIConfigured = true;
+	win.__aichatPayloads = [];
+	win.__aichatApprovePayloads = [];
+	win.__deliverOutlineResult = function() {};
+
+	var pendingRequestId = '';
+	var original = win.app.socket.sendMessage.bind(win.app.socket);
+	cy.stub(win.app.socket, 'sendMessage').callsFake(function(msg) {
+		if (typeof msg === 'string' && msg.startsWith('aichat: ')) {
+			var payload = JSON.parse(msg.substring('aichat: '.length));
+			win.__aichatPayloads.push(payload);
+			pendingRequestId = payload.requestId;
+			win.app.layoutingService.onDrain(function() {
+				win.app.map.fire('aichatoutline', {
+					requestId: pendingRequestId,
+					title: outline.title,
+					slides: outline.slides,
+				});
+			});
+		} else if (typeof msg === 'string' && msg.startsWith('aichatapprove: ')) {
+			var decision = JSON.parse(msg.substring('aichatapprove: '.length));
+			win.__aichatApprovePayloads.push(decision);
+			if (decision.action === 'approve') {
+				var requestId = pendingRequestId;
+				win.app.layoutingService.onDrain(function() {
+					win.app.map.fire('aichatprogress', {
+						requestId: requestId,
+						status: progress,
+					});
+				});
+				win.__deliverOutlineResult = function() {
+					win.app.map.fire('aichatresult', {
+						requestId: requestId,
+						success: true,
+						content: content,
+					});
+				};
+			}
+		} else if (typeof msg === 'string' && msg.startsWith('aichatcancel: ')) {
+			// swallow cancel messages
+		} else {
+			original(msg);
+		}
+	});
+}
+
+/**
  * Open the tone-of-voice picker by clicking the tone chip below the
  * input. Waits for the picker container to gain the open class.
  */
@@ -205,6 +270,7 @@ function resetAIChat(win) {
 module.exports.enableAIAndStubSocket = enableAIAndStubSocket;
 module.exports.resetAIChat = resetAIChat;
 module.exports.enableAIWithCaptureSocket = enableAIWithCaptureSocket;
+module.exports.enableAIWithOutlineSocket = enableAIWithOutlineSocket;
 module.exports.openAIChat = openAIChat;
 module.exports.closeAIChat = closeAIChat;
 module.exports.typeIntoAIInput = typeIntoAIInput;

@@ -75,40 +75,6 @@ const IntentRule* findIntentRule(const std::string& intent)
     return nullptr;
 }
 
-bool isKnownPart(const std::string& part)
-{
-    for (const auto& name : partNames())
-        if (part == name)
-            return true;
-    return false;
-}
-
-/// The comma-separated list of part names, for error messages.
-std::string partList()
-{
-    std::string list;
-    for (const auto& name : partNames())
-    {
-        if (!list.empty())
-            list += ", ";
-        list += name;
-    }
-    return list;
-}
-
-/// The comma-separated list of intent names, for error messages.
-std::string intentList()
-{
-    std::string list;
-    for (const auto& rule : intentRules())
-    {
-        if (!list.empty())
-            list += ", ";
-        list += rule.intent;
-    }
-    return list;
-}
-
 /// Read a string value by key, returning the empty string when it is missing or
 /// not a string.
 std::string getString(const Poco::JSON::Object::Ptr& obj, const std::string& key)
@@ -292,10 +258,155 @@ std::string transformString(const Poco::JSON::Array::Ptr& cmds)
     return oss.str();
 }
 
+/// Emit the slide-command sequence for one slide onto cmds. When reuseCurrentSlide
+/// is false a new slide is added first with InsertMasterSlide; when true the
+/// commands fill the deck's current slide. The rest is the same for both the
+/// whole-deck and the per-slide compiler: set the layout, the title, one SetText
+/// per content block, a GenerateImage for an image slide, the house-style
+/// formatting when no template is in use, and the slide's part.
+void emitSlideCommands(const Poco::JSON::Array::Ptr& cmds,
+                       const Poco::JSON::Object::Ptr& slide, bool reuseCurrentSlide,
+                       bool haveDesignTemplate)
+{
+    const std::string intent = getString(slide, "intent");
+    const IntentRule* rule = findIntentRule(intent);
+    if (!rule)
+        return;
+
+    const std::string part = getString(slide, "part");
+    const std::string title = getString(slide, "title");
+
+    if (!reuseCurrentSlide)
+        pushCommand(cmds, "InsertMasterSlide", 0);
+
+    pushCommand(cmds, "ChangeLayoutByName", std::string(rule->layout));
+    pushCommand(cmds, "SetText.0", title);
+
+    // Blocks fill the content placeholders in order, starting at slot 1.
+    std::vector<int> bulletSlots;
+    int slot = 1;
+    Poco::JSON::Array::Ptr blocks = slide->getArray("blocks");
+    for (unsigned b = 0; blocks && b < blocks->size(); ++b)
+    {
+        Poco::JSON::Object::Ptr block = blocks->getObject(b);
+        if (!block)
+            continue;
+        const std::string kind = getString(block, "kind");
+        if (kind == "bullets")
+        {
+            pushCommand(cmds, "SetText." + std::to_string(slot),
+                        joinItems(block->getArray("items")));
+            bulletSlots.push_back(slot);
+            ++slot;
+        }
+        else if (kind == "text")
+        {
+            pushCommand(cmds, "SetText." + std::to_string(slot), getString(block, "text"));
+            ++slot;
+        }
+    }
+
+    // An image slide fills its content placeholder with a generated image.
+    if (rule->requiresImage)
+    {
+        Poco::JSON::Object::Ptr image = slide->getObject("image");
+        if (image)
+            pushCommand(cmds, "GenerateImage.1", getString(image, "brief"));
+    }
+
+    // Without a template the compiler supplies the house style itself: bold
+    // titles and bulleted content. A template's masters own the look, so with
+    // one the compiler emits no formatting.
+    if (!haveDesignTemplate)
+    {
+        pushEditTextObject(cmds, 0, ".uno:Bold");
+        for (int bulletSlot : bulletSlots)
+            pushEditTextObject(cmds, bulletSlot, ".uno:DefaultBullet");
+    }
+
+    pushCommand(cmds, "SetSlidePart", part);
+}
+
 } // anonymous namespace
 
 namespace DeckSpec
 {
+
+bool isKnownPart(const std::string& part)
+{
+    for (const auto& name : partNames())
+        if (part == name)
+            return true;
+    return false;
+}
+
+bool isKnownIntent(const std::string& intent)
+{
+    return findIntentRule(intent) != nullptr;
+}
+
+std::string partList()
+{
+    std::string list;
+    for (const auto& name : partNames())
+    {
+        if (!list.empty())
+            list += ", ";
+        list += name;
+    }
+    return list;
+}
+
+std::string intentList()
+{
+    std::string list;
+    for (const auto& rule : intentRules())
+    {
+        if (!list.empty())
+            list += ", ";
+        list += rule.intent;
+    }
+    return list;
+}
+
+std::optional<std::string> validateSlideSpec(const Poco::JSON::Object::Ptr& slideObj,
+                                             unsigned index)
+{
+    if (!slideObj)
+        return "Slide " + std::to_string(index + 1) + " must be a JSON object.";
+
+    const std::string part = getString(slideObj, "part");
+    if (!isKnownPart(part))
+        return slidePrefix(index, std::string()) + "\"part\" must be one of " + partList() + ".";
+
+    const std::string intent = getString(slideObj, "intent");
+    const IntentRule* rule = findIntentRule(intent);
+    if (!rule)
+        return slidePrefix(index, std::string()) + "\"intent\" must be one of " + intentList() +
+               ".";
+
+    const std::string title = getString(slideObj, "title");
+    if (title.empty())
+        return slidePrefix(index, intent) +
+               "\"title\" is required and must be a non-empty string.";
+    if (static_cast<int>(title.size()) > MaxTitleLength)
+        return slidePrefix(index, intent) + "title exceeds " + std::to_string(MaxTitleLength) +
+               " characters.";
+
+    const std::string blocksError = validateBlocks(slideObj, index, intent, *rule);
+    if (!blocksError.empty())
+        return blocksError;
+
+    if (rule->requiresImage)
+    {
+        Poco::JSON::Object::Ptr image = slideObj->getObject("image");
+        if (!image || getString(image, "brief").empty())
+            return slidePrefix(index, intent) +
+                   "an image slide needs an \"image\" object with a non-empty \"brief\".";
+    }
+
+    return std::nullopt;
+}
 
 std::optional<std::string> validateDeckSpec(const Poco::JSON::Object::Ptr& deckObj)
 {
@@ -313,6 +424,33 @@ std::optional<std::string> validateDeckSpec(const Poco::JSON::Object::Ptr& deckO
 
     for (unsigned i = 0; i < slides->size(); ++i)
     {
+        if (auto slideError = validateSlideSpec(slides->getObject(i), i))
+            return slideError;
+    }
+
+    return std::nullopt;
+}
+
+std::optional<std::string> validateOutline(const Poco::JSON::Object::Ptr& outlineObj)
+{
+    if (!outlineObj)
+        return std::string("Outline must be a JSON object with a \"slides\" array.");
+
+    const std::string deckTitle = getString(outlineObj, "title");
+    if (static_cast<int>(deckTitle.size()) > MaxTitleLength)
+        return "The deck title exceeds " + std::to_string(MaxTitleLength) + " characters.";
+
+    Poco::JSON::Array::Ptr slides = outlineObj->getArray("slides");
+    if (!slides)
+        return std::string("Outline must have a \"slides\" array.");
+    if (slides->size() == 0)
+        return std::string("An outline needs at least one slide.");
+    if (static_cast<int>(slides->size()) > MaxSlides)
+        return "An outline may have at most " + std::to_string(MaxSlides) + " slides, found " +
+               std::to_string(slides->size()) + ".";
+
+    for (unsigned i = 0; i < slides->size(); ++i)
+    {
         Poco::JSON::Object::Ptr slide = slides->getObject(i);
         if (!slide)
             return "Slide " + std::to_string(i + 1) + " must be a JSON object.";
@@ -322,29 +460,22 @@ std::optional<std::string> validateDeckSpec(const Poco::JSON::Object::Ptr& deckO
             return slidePrefix(i, std::string()) + "\"part\" must be one of " + partList() + ".";
 
         const std::string intent = getString(slide, "intent");
-        const IntentRule* rule = findIntentRule(intent);
-        if (!rule)
+        if (!isKnownIntent(intent))
             return slidePrefix(i, std::string()) + "\"intent\" must be one of " + intentList() +
                    ".";
 
         const std::string title = getString(slide, "title");
         if (title.empty())
-            return slidePrefix(i, intent) + "\"title\" is required and must be a non-empty string.";
+            return slidePrefix(i, intent) +
+                   "\"title\" is required and must be a non-empty string.";
         if (static_cast<int>(title.size()) > MaxTitleLength)
             return slidePrefix(i, intent) + "title exceeds " + std::to_string(MaxTitleLength) +
                    " characters.";
 
-        const std::string blocksError = validateBlocks(slide, i, intent, *rule);
-        if (!blocksError.empty())
-            return blocksError;
-
-        if (rule->requiresImage)
-        {
-            Poco::JSON::Object::Ptr image = slide->getObject("image");
-            if (!image || getString(image, "brief").empty())
-                return slidePrefix(i, intent) +
-                       "an image slide needs an \"image\" object with a non-empty \"brief\".";
-        }
+        const std::string gist = getString(slide, "gist");
+        if (static_cast<int>(gist.size()) > MaxGistLength)
+            return slidePrefix(i, intent) + "gist exceeds " + std::to_string(MaxGistLength) +
+                   " characters.";
     }
 
     return std::nullopt;
@@ -364,67 +495,47 @@ std::string compileDeckSpec(const Poco::JSON::Object::Ptr& deckObj, bool haveDes
         if (!slide)
             continue;
 
-        const std::string intent = getString(slide, "intent");
-        const IntentRule* rule = findIntentRule(intent);
-        if (!rule)
-            continue;
-
-        const std::string part = getString(slide, "part");
-        const std::string title = getString(slide, "title");
-
         // The first slide reuses the current slide of the deck; every later
         // slide is added after it.
-        if (i != 0)
-            pushCommand(cmds, "InsertMasterSlide", 0);
-
-        pushCommand(cmds, "ChangeLayoutByName", std::string(rule->layout));
-        pushCommand(cmds, "SetText.0", title);
-
-        // Blocks fill the content placeholders in order, starting at slot 1.
-        std::vector<int> bulletSlots;
-        int slot = 1;
-        Poco::JSON::Array::Ptr blocks = slide->getArray("blocks");
-        for (unsigned b = 0; blocks && b < blocks->size(); ++b)
-        {
-            Poco::JSON::Object::Ptr block = blocks->getObject(b);
-            if (!block)
-                continue;
-            const std::string kind = getString(block, "kind");
-            if (kind == "bullets")
-            {
-                pushCommand(cmds, "SetText." + std::to_string(slot), joinItems(block->getArray("items")));
-                bulletSlots.push_back(slot);
-                ++slot;
-            }
-            else if (kind == "text")
-            {
-                pushCommand(cmds, "SetText." + std::to_string(slot), getString(block, "text"));
-                ++slot;
-            }
-        }
-
-        // An image slide fills its content placeholder with a generated image.
-        if (rule->requiresImage)
-        {
-            Poco::JSON::Object::Ptr image = slide->getObject("image");
-            if (image)
-                pushCommand(cmds, "GenerateImage.1", getString(image, "brief"));
-        }
-
-        // Without a template the compiler supplies the house style itself:
-        // bold titles and bulleted content. A template's masters own the look,
-        // so with one the compiler emits no formatting.
-        if (!haveDesignTemplate)
-        {
-            pushEditTextObject(cmds, 0, ".uno:Bold");
-            for (int bulletSlot : bulletSlots)
-                pushEditTextObject(cmds, bulletSlot, ".uno:DefaultBullet");
-        }
-
-        pushCommand(cmds, "SetSlidePart", part);
+        emitSlideCommands(cmds, slide, /*reuseCurrentSlide=*/i == 0, haveDesignTemplate);
     }
 
     return transformString(cmds);
+}
+
+std::string compileSlideSpec(const Poco::JSON::Object::Ptr& slideObj, int docSlideIndex,
+                             bool haveDesignTemplate)
+{
+    Poco::JSON::Array::Ptr cmds = new Poco::JSON::Array();
+    if (!slideObj)
+        return transformString(cmds);
+
+    // Each per-slide transform runs in a fresh engine context whose current
+    // slide is index 0. The first built slide reuses the deck's single starting
+    // slide; a later slide first moves to the end of the deck so the new slide
+    // is inserted after the ones already built.
+    const bool reuseCurrentSlide = (docSlideIndex == 0);
+    if (!reuseCurrentSlide)
+        pushCommand(cmds, "JumpToSlide", std::string("last"));
+
+    emitSlideCommands(cmds, slideObj, reuseCurrentSlide, haveDesignTemplate);
+
+    return transformString(cmds);
+}
+
+std::string buildExpansionUserMessage(const Poco::JSON::Object::Ptr& slideObj,
+                                      unsigned slideNumber, unsigned slideCount,
+                                      const std::string& retryError)
+{
+    std::string message = "Write slide " + std::to_string(slideNumber) + " of " +
+                          std::to_string(slideCount) + ". part: " + getString(slideObj, "part") +
+                          "; intent: " + getString(slideObj, "intent") +
+                          "; title: " + getString(slideObj, "title") +
+                          "; gist: " + getString(slideObj, "gist") +
+                          " . Provide the blocks this intent expects.";
+    if (!retryError.empty())
+        message += " Your previous attempt was rejected: " + retryError + ". Fix exactly that.";
+    return message;
 }
 
 } // namespace DeckSpec

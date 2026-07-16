@@ -138,6 +138,52 @@ const std::string EMOJIFY_PROMPT =
     " Add tasteful emoji throughout your response to reinforce mood and key"
     " points.";
 
+/// The tone sentence to append to a system prompt for the picked tone, or the
+/// empty string when no tone applies. A "custom" tone uses the user's own
+/// description as the sentence.
+std::string toneSentence(const std::string& tone, const std::string& customToneDescription)
+{
+    if (tone == "natural")
+        return TONE_NATURAL;
+    if (tone == "formal")
+        return TONE_FORMAL;
+    if (tone == "short")
+        return TONE_SHORT;
+    if (tone == "friendly")
+        return TONE_FRIENDLY;
+    if (tone == "professional")
+        return TONE_PROFESSIONAL;
+    if (tone == "casual")
+        return TONE_CASUAL;
+    if (tone == "custom" && !customToneDescription.empty())
+        return " " + customToneDescription;
+    return std::string();
+}
+
+/// Append a note listing the image prompts that failed to render to a result
+/// string. Returns the result unchanged when no prompts failed.
+std::string appendImageFailureNote(const std::string& result,
+                                   const std::vector<std::string>& prompts)
+{
+    if (prompts.empty())
+        return result;
+
+    std::string augmented = result;
+    augmented += "\n\nNote: ";
+    augmented += std::to_string(prompts.size());
+    augmented += " image(s) failed to generate and still show a loading placeholder."
+                 " Failed prompts: ";
+    for (std::size_t i = 0; i < prompts.size(); ++i)
+    {
+        if (i > 0)
+            augmented += ", ";
+        augmented += "\"";
+        augmented += prompts[i];
+        augmented += "\"";
+    }
+    return augmented;
+}
+
 /// Helper to create an OpenAI function-calling tool object.
 Poco::JSON::Object::Ptr makeAITool(const std::string& name,
                                     const std::string& description,
@@ -271,6 +317,8 @@ constexpr std::string_view GenerateImage              = "generate_image";
 constexpr std::string_view ExtractDocumentStructure   = "extract_document_structure";
 constexpr std::string_view TransformDocumentStructure = "transform_document_structure";
 constexpr std::string_view WriteSlides                = "write_slides";
+constexpr std::string_view ProposeOutline             = "propose_outline";
+constexpr std::string_view WriteSlide                 = "write_slide";
 constexpr std::string_view ExtractLinkTargets         = "extract_link_targets";
 constexpr std::string_view ListCalcFunctions          = "list_calc_functions";
 constexpr std::string_view EvaluateFormula            = "evaluate_formula";
@@ -396,8 +444,9 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& do
     // write_slides - declarative deck creation for presentations. Offered only
     // when the experimental flag is on; the model describes a deck and the
     // server compiles it into slide commands.
-    if (docType == "presentation" &&
-        ConfigUtil::getConfigValue<bool>("ai.experimental_deck_spec", false))
+    const bool deckSpec =
+        ConfigUtil::getConfigValue<bool>("ai.experimental_deck_spec", false);
+    if (docType == "presentation" && deckSpec)
         tools->add(makeAITool(
             std::string(AIToolNames::WriteSlides),
             DocumentToolDescriptions::WRITE_SLIDES_DESCRIPTION,
@@ -407,6 +456,19 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& do
                     "Markdown summary of the slides being created for the user to review "
                     "before approving."}}},
                 {"deck"})));
+
+    // propose_outline - outline-first deck creation. Offered only when both the
+    // deck-spec and the outline-flow flags are on; the model sketches an outline
+    // the user reviews and edits before the server builds the slides from it.
+    if (docType == "presentation" && deckSpec &&
+        ConfigUtil::getConfigValue<bool>("ai.experimental_outline_flow", false))
+        tools->add(makeAITool(
+            std::string(AIToolNames::ProposeOutline),
+            DocumentToolDescriptions::PROPOSE_OUTLINE_DESCRIPTION,
+            makeParamSchema(
+                {{"outline", {"object",
+                    "The outline: an object with a \"title\" and a \"slides\" array."}}},
+                {"outline"})));
 
     // extract_link_targets - Writer/Impress navigation (not relevant to Calc)
     if (!isCalc)
@@ -691,6 +753,10 @@ void AIChatSession::launchChatRequest(const PendingChatRequest& req,
 {
     static constexpr unsigned MAX_AI_MESSAGES = 50;
 
+    // A new request supersedes any deck expansion still parked from an earlier
+    // one; drop it so a late kit reply for it is ignored.
+    _deckExpansion.reset();
+
     const std::string& docType = req.docType;
     const std::string& designTemplate = req.designTemplate;
     const std::string& tone = req.tone;
@@ -745,10 +811,24 @@ void AIChatSession::launchChatRequest(const PendingChatRequest& req,
     if (docType == "presentation" &&
         ConfigUtil::getConfigValue<bool>("ai.experimental_deck_spec", false))
     {
+        // Only the first sentence changes when the outline flow is on; the rest
+        // of the block is shared, so the flag-off prompt is byte-identical.
+        if (ConfigUtil::getConfigValue<bool>("ai.experimental_outline_flow", false))
+            systemPrompt +=
+                " To build a new deck of more than about three slides, first call"
+                " propose_outline with one entry per slide and stop; the user reviews"
+                " and edits the outline, and the slides are built from it after"
+                " approval, so do not call write_slides for a deck you have outlined."
+                " To create three or fewer slides, call write_slides directly. Use"
+                " transform_document_structure only to edit or rearrange slides that"
+                " already exist, not to create new ones.";
+        else
+            systemPrompt +=
+                " To create slides or build a deck, call write_slides and describe each"
+                " slide by its part and intent with a title and content blocks; the"
+                " server lays out and styles the slides for you.";
         systemPrompt +=
-            " To create slides or build a deck, call write_slides and describe each"
-            " slide by its part and intent with a title and content blocks; the"
-            " server lays out and styles the slides for you. Choose an intent that"
+            " Choose an intent that"
             " fits each slide and vary it across the deck. Do not prefix list items"
             " with '- ' (bullet markers are added automatically) and put only the"
             " items themselves in each block. Include a 'summary' parameter with a"
@@ -878,20 +958,7 @@ void AIChatSession::launchChatRequest(const PendingChatRequest& req,
             " When the user asks you to create new content from scratch (like a table"
             " or text), just generate it directly without extracting first.";
 
-    if (tone == "natural")
-        systemPrompt += TONE_NATURAL;
-    else if (tone == "formal")
-        systemPrompt += TONE_FORMAL;
-    else if (tone == "short")
-        systemPrompt += TONE_SHORT;
-    else if (tone == "friendly")
-        systemPrompt += TONE_FRIENDLY;
-    else if (tone == "professional")
-        systemPrompt += TONE_PROFESSIONAL;
-    else if (tone == "casual")
-        systemPrompt += TONE_CASUAL;
-    else if (tone == "custom" && !customToneDescription.empty())
-        systemPrompt += " " + customToneDescription;
+    systemPrompt += toneSentence(tone, customToneDescription);
 
     if (emojify)
         systemPrompt += EMOJIFY_PROMPT;
@@ -921,6 +988,8 @@ void AIChatSession::launchChatRequest(const PendingChatRequest& req,
     _toolLoop->apiKey = req.apiKey;
     _toolLoop->docType = req.docType;
     _toolLoop->designTemplate = req.designTemplate;
+    _toolLoop->tone = req.tone;
+    _toolLoop->customToneDescription = req.customToneDescription;
 
     callLLMAPI();
 }
@@ -1636,6 +1705,77 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         return true;
     }
 
+    // propose_outline - the model sketches an outline for a new deck. The server
+    // validates it, stores it, and sends it to the browser for the user to edit
+    // and approve; the deck is built slide by slide only after approval. Gated on
+    // both experimental flags, so it is inert unless both are on.
+    if (fnName == AIToolNames::ProposeOutline &&
+        ConfigUtil::getConfigValue<bool>("ai.experimental_deck_spec", false) &&
+        ConfigUtil::getConfigValue<bool>("ai.experimental_outline_flow", false))
+    {
+        Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
+        Poco::JSON::Object::Ptr outlineObj;
+        if (parseLenientArgs(argsJson, argsObj))
+        {
+            // Accept the outline nested, as a JSON string, or as the whole
+            // argument object when the model skips the "outline" wrapper.
+            if (argsObj->isObject("outline"))
+                outlineObj = argsObj->getObject("outline");
+            else
+            {
+                std::string outlineStr;
+                JsonUtil::findJSONValue(argsObj, "outline", outlineStr);
+                if (!outlineStr.empty())
+                    JsonUtil::parseJSON(outlineStr, outlineObj);
+            }
+            if (!outlineObj && argsObj->has("slides"))
+                outlineObj = argsObj;
+        }
+
+        if (!outlineObj)
+        {
+            continueToolLoop(toolCallId, "{\"error\":\"No outline parameter provided\"}");
+            return true;
+        }
+
+        // On a schema failure feed the precise error back so the model can
+        // self-correct silently, drawing from the same retry budget the other
+        // tools use.
+        if (auto outlineErr = DeckSpec::validateOutline(outlineObj))
+        {
+            if (_toolLoop->validationRetriesRemaining > 0)
+                --_toolLoop->validationRetriesRemaining;
+            else
+                LOG_WRN("AIToolLoop: outline still invalid after retries [" << requestId
+                        << "]: " << *outlineErr);
+            Poco::JSON::Object::Ptr err = new Poco::JSON::Object();
+            err->set("error", *outlineErr);
+            continueToolLoop(toolCallId, JsonUtil::jsonToString(err));
+            return true;
+        }
+
+        // Store the outline and wait for the user to review it. The outline card
+        // the browser draws is deterministic from the outline, so no model
+        // summary is needed.
+        std::ostringstream stored;
+        outlineObj->stringify(stored);
+        _toolLoop->awaitingApproval = true;
+        _toolLoop->pendingToolCallId = toolCallId;
+        _toolLoop->pendingToolName = std::string(AIToolNames::ProposeOutline);
+        _toolLoop->pendingTransformArgs = stored.str();
+
+        std::string title;
+        JsonUtil::findJSONValue(outlineObj, "title", title);
+        Poco::JSON::Object::Ptr outlineMsg = new Poco::JSON::Object();
+        outlineMsg->set("requestId", _toolLoop->requestId);
+        outlineMsg->set("title", title);
+        outlineMsg->set("slides", outlineObj->getArray("slides"));
+        std::ostringstream frame;
+        outlineMsg->stringify(frame);
+        _session.sendTextFrame("aichatoutline: " + frame.str());
+        return true;
+    }
+
     // write_slides - the model describes a deck; the server validates it and
     // compiles it into a slide-command transform, then routes it through the
     // same approval path transform_document_structure uses.
@@ -1873,6 +2013,16 @@ void AIChatSession::continueToolLoop(const std::string& toolCallId,
     if (!_toolLoop)
         return;
 
+    // While a deck expansion is running the tool loop is parked: a kit reply for
+    // an applied slide (or an error, or an image-patch completion) funnels here.
+    // Route it to the expansion driver and do not append a tool message - the
+    // model conversation is not advancing during the build.
+    if (_deckExpansion)
+    {
+        onExpansionSlideApplied(result);
+        return;
+    }
+
     // Append tool result message to the conversation
     Poco::JSON::Object::Ptr toolResult = new Poco::JSON::Object();
     toolResult->set("role", "tool");
@@ -2058,6 +2208,41 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
 
     const std::string toolCallId = _toolLoop->pendingToolCallId;
 
+    // A proposed outline is answered here too, but it does not flow through the
+    // generic transform dispatch: an approval starts a server-driven slide-by-slide
+    // build, a rejection just nudges the model to propose a different outline.
+    if (_toolLoop->pendingToolName == AIToolNames::ProposeOutline)
+    {
+        if (action == "approve")
+        {
+            // The browser can rename or remove slides before approving, so the
+            // returned outline is untrusted and re-validated. Fall back to the
+            // stored outline when the browser sends none.
+            Poco::JSON::Object::Ptr outline = obj->getObject("outline");
+            if (!outline)
+                JsonUtil::parseJSON(_toolLoop->pendingTransformArgs, outline);
+
+            if (auto outlineErr = DeckSpec::validateOutline(outline))
+            {
+                sendChatResult(false, "The edited outline is not valid: " + *outlineErr,
+                               _toolLoop->requestId);
+                _toolLoop.reset();
+                return true;
+            }
+
+            _toolLoop->awaitingApproval = false;
+            startDeckExpansion(outline);
+        }
+        else
+        {
+            _toolLoop->awaitingApproval = false;
+            continueToolLoop(toolCallId,
+                "{\"error\":\"User rejected the proposed outline. Ask what they would "
+                "like changed and propose a new outline.\"}");
+        }
+        return true;
+    }
+
     if (action == "approve")
     {
         std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
@@ -2186,10 +2371,402 @@ bool AIChatSession::handleCancel(const std::string& firstLine)
 #endif
 
     // Dropping the tool-loop state makes any in-flight response a no-op: the
-    // transport callbacks bail out once _toolLoop is null.
+    // transport callbacks bail out once _toolLoop is null. A deck expansion, if
+    // one is running, shares the same transport, so drop it too.
+    _deckExpansion.reset();
     _toolLoop.reset();
 
     return true;
+}
+
+void AIChatSession::startDeckExpansion(const Poco::JSON::Object::Ptr& outline)
+{
+    if (!_toolLoop || !outline)
+        return;
+
+    _deckExpansion = std::make_unique<DeckExpansionState>();
+    JsonUtil::findJSONValue(outline, "title", _deckExpansion->outlineTitle);
+    _deckExpansion->slides = outline->getArray("slides");
+
+    std::ostringstream oss;
+    outline->stringify(oss);
+    _deckExpansion->outlineJson = oss.str();
+
+    expandNextSlide();
+}
+
+void AIChatSession::expandNextSlide()
+{
+    if (!_deckExpansion || !_toolLoop)
+        return;
+
+    const unsigned total = _deckExpansion->slides ? _deckExpansion->slides->size() : 0;
+    if (_deckExpansion->nextIndex >= total)
+    {
+        finishDeckExpansion();
+        return;
+    }
+
+    const unsigned slideNumber = _deckExpansion->nextIndex + 1;
+    sendToolProgress(std::string(AIToolNames::ProposeOutline),
+                     "Building slide " + std::to_string(slideNumber) + " of " +
+                         std::to_string(total) + "...");
+
+    Poco::JSON::Object::Ptr entry = _deckExpansion->slides->getObject(_deckExpansion->nextIndex);
+
+    // The system prompt fixes the model's job to writing this one slide's
+    // content, and carries the whole approved outline for context.
+    std::string systemPrompt =
+        "You write one slide of a presentation deck whose outline the user has"
+        " approved. Reply by calling write_slide exactly once, never with plain"
+        " text. The approved outline, in order, is: " +
+        _deckExpansion->outlineJson + ".";
+    if (_toolLoop->designTemplate.empty())
+        systemPrompt += " There is no design template, so the deck uses the default look.";
+    else
+        systemPrompt += " The design template '" + _toolLoop->designTemplate +
+                        "' styles the slides, so write the content only and leave the look"
+                        " to it.";
+    systemPrompt += toneSentence(_toolLoop->tone, _toolLoop->customToneDescription);
+    systemPrompt +=
+        " Write content that fits this slide's place in the deck and does not repeat"
+        " other slides. Do not prefix items with \"- \".";
+
+    const std::string userMessage = DeckSpec::buildExpansionUserMessage(
+        entry, slideNumber, total,
+        _deckExpansion->retriedCurrentSlide ? _deckExpansion->lastSlideError : std::string());
+
+    Poco::JSON::Array::Ptr messages = new Poco::JSON::Array();
+    Poco::JSON::Object::Ptr systemMsg = new Poco::JSON::Object();
+    systemMsg->set("role", "system");
+    systemMsg->set("content", systemPrompt);
+    messages->add(systemMsg);
+    Poco::JSON::Object::Ptr userMsg = new Poco::JSON::Object();
+    userMsg->set("role", "user");
+    userMsg->set("content", userMessage);
+    messages->add(userMsg);
+
+    // The one tool the model may call for a slide, with a forced choice so it
+    // must call it rather than reply with prose.
+    Poco::JSON::Array::Ptr tools = new Poco::JSON::Array();
+    tools->add(makeAITool(
+        std::string(AIToolNames::WriteSlide),
+        std::string("Write one slide of the deck. Pass a \"slide\" object.\n\n") +
+            DocumentToolDescriptions::DECK_SLIDE_SHAPE,
+        makeParamSchema({ { "slide", { "object", "The slide description." } } }, { "slide" })));
+
+    Poco::JSON::Object::Ptr payload = new Poco::JSON::Object();
+    payload->set("model", _toolLoop->model);
+    payload->set("messages", messages);
+    payload->set("tools", tools);
+    if (!_toolLoop->retriedWithoutTemperature)
+        payload->set("temperature", 0.1);
+    Poco::JSON::Object::Ptr toolChoice = new Poco::JSON::Object();
+    toolChoice->set("type", "function");
+    Poco::JSON::Object::Ptr toolChoiceFn = new Poco::JSON::Object();
+    toolChoiceFn->set("name", std::string(AIToolNames::WriteSlide));
+    toolChoice->set("function", toolChoiceFn);
+    payload->set("tool_choice", toolChoice);
+
+    std::ostringstream payloadStream;
+    payload->stringify(payloadStream);
+
+    AIChatSession* self = this;
+    postChatCompletion(payloadStream.str(),
+                       [self](int statusCode, const std::string& body, const std::string& reason)
+    {
+        self->_activeChatSession.reset();
+        if (!self->_deckExpansion || !self->_toolLoop)
+            return;
+        self->handleExpansionResponse(statusCode, body, reason);
+    });
+}
+
+void AIChatSession::handleExpansionResponse(int statusCode, const std::string& body,
+                                            const std::string& reason)
+{
+    if (!_deckExpansion || !_toolLoop)
+        return;
+
+    if (statusCode == ai::HttpConnectFailed)
+    {
+        failCurrentExpansionSlide("a network error reaching the model");
+        return;
+    }
+    if (statusCode == ai::HttpNoResponse)
+    {
+        failCurrentExpansionSlide("the model request timed out");
+        return;
+    }
+    if (statusCode == 400 && !_toolLoop->retriedWithoutTemperature &&
+        isUnsupportedTemperatureError(body))
+    {
+        // A reasoning model that rejects an explicit temperature: re-issue the
+        // same slide with it omitted. This is not one of the slide's own retries.
+        _toolLoop->retriedWithoutTemperature = true;
+        expandNextSlide();
+        return;
+    }
+    if (statusCode != 200)
+    {
+        failCurrentExpansionSlide(mapHttpStatusToError(statusCode, reason));
+        return;
+    }
+
+    Poco::JSON::Object::Ptr root;
+    if (!JsonUtil::parseJSON(body, root) || !root)
+    {
+        failCurrentExpansionSlide("the model returned no usable response");
+        return;
+    }
+
+    Poco::JSON::Array::Ptr choices = root->getArray("choices");
+    Poco::JSON::Object::Ptr choice =
+        (choices && choices->size() > 0) ? choices->getObject(0) : nullptr;
+    Poco::JSON::Object::Ptr message = choice ? choice->getObject("message") : nullptr;
+    Poco::JSON::Array::Ptr toolCalls = message ? message->getArray("tool_calls") : nullptr;
+    Poco::JSON::Object::Ptr call =
+        (toolCalls && toolCalls->size() > 0) ? toolCalls->getObject(0) : nullptr;
+    Poco::JSON::Object::Ptr fn = call ? call->getObject("function") : nullptr;
+    if (!fn)
+    {
+        failCurrentExpansionSlide("the model did not call write_slide");
+        return;
+    }
+
+    std::string arguments;
+    const Poco::Dynamic::Var argsVar = fn->get("arguments");
+    if (argsVar.type() == typeid(Poco::JSON::Object::Ptr))
+        arguments = JsonUtil::jsonToString(argsVar.extract<Poco::JSON::Object::Ptr>());
+    else if (!argsVar.isEmpty())
+        arguments = argsVar.toString();
+
+    // Extract the slide leniently: a nested "slide" object, a JSON string, or the
+    // whole argument object when the model skips the wrapper.
+    Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
+    Poco::JSON::Object::Ptr slide;
+    if (parseLenientArgs(arguments, argsObj))
+    {
+        if (argsObj->isObject("slide"))
+            slide = argsObj->getObject("slide");
+        else
+        {
+            std::string slideStr;
+            JsonUtil::findJSONValue(argsObj, "slide", slideStr);
+            if (!slideStr.empty())
+                JsonUtil::parseJSON(slideStr, slide);
+        }
+        if (!slide && (argsObj->has("intent") || argsObj->has("blocks")))
+            slide = argsObj;
+    }
+    if (!slide)
+    {
+        failCurrentExpansionSlide("the model's write_slide call carried no slide object");
+        return;
+    }
+
+    // Kill drift: the part, intent and title come from the approved outline; the
+    // model only contributes the content blocks and any image. Overwrite them
+    // before validating so a wandering model cannot reshape the deck.
+    if (Poco::JSON::Object::Ptr entry =
+            _deckExpansion->slides->getObject(_deckExpansion->nextIndex))
+    {
+        std::string value;
+        JsonUtil::findJSONValue(entry, "part", value);
+        slide->set("part", value);
+        value.clear();
+        JsonUtil::findJSONValue(entry, "intent", value);
+        slide->set("intent", value);
+        value.clear();
+        JsonUtil::findJSONValue(entry, "title", value);
+        slide->set("title", value);
+    }
+
+    if (auto slideErr = DeckSpec::validateSlideSpec(slide, _deckExpansion->nextIndex))
+    {
+        failCurrentExpansionSlide(*slideErr);
+        return;
+    }
+
+    applyExpansionSlide(slide);
+}
+
+void AIChatSession::applyExpansionSlide(const Poco::JSON::Object::Ptr& slide)
+{
+    if (!_deckExpansion || !_toolLoop)
+        return;
+
+    std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
+    if (!docBroker)
+    {
+        failCurrentExpansionSlide("the document is not available");
+        return;
+    }
+
+    // docSlideIndex is the number of slides already built, not the outline
+    // index: a skipped slide leaves the next one reusing the deck's current
+    // slide instead of inserting after a slide that was never added.
+    const bool haveDesignTemplate = !_toolLoop->designTemplate.empty();
+    const std::string transform =
+        DeckSpec::compileSlideSpec(slide, _deckExpansion->builtCount, haveDesignTemplate);
+
+    Poco::JSON::Object::Ptr transformObj = new Poco::JSON::Object();
+    if (!JsonUtil::parseJSON(transform, transformObj))
+    {
+        failCurrentExpansionSlide("the slide could not be compiled");
+        return;
+    }
+
+    // The design template splice rides every per-slide transform so the engine
+    // maps the newly added slide onto the template's master.
+    spliceSlideCommands(transformObj);
+
+    std::ostringstream oss;
+    transformObj->stringify(oss);
+    _toolLoop->pendingTransformArgs = oss.str();
+    _toolLoop->pendingToolName = std::string(AIToolNames::TransformDocumentStructure);
+
+    // Forward through the image-aware transform path: it rewrites any
+    // GenerateImage into a loading placeholder, applies the transform, then fills
+    // in the image. When it finishes it calls continueToolLoop, which routes back
+    // to onExpansionSlideApplied because a deck expansion is running.
+    processTransformImageGenerations(docBroker);
+}
+
+void AIChatSession::onExpansionSlideApplied(const std::string& result)
+{
+    if (!_deckExpansion || !_toolLoop)
+        return;
+
+    // Carry any image briefs that failed to render into the deck-wide tally.
+    for (const std::string& prompt : _toolLoop->failedImagePrompts)
+        _deckExpansion->failedImagePrompts.push_back(prompt);
+    _toolLoop->failedImagePrompts.clear();
+
+    bool applied = false;
+    Poco::JSON::Object::Ptr resultObj;
+    if (JsonUtil::parseJSON(result, resultObj) && resultObj)
+        JsonUtil::findJSONValue(resultObj, "success", applied);
+
+    if (applied)
+        ++_deckExpansion->builtCount;
+    else
+    {
+        // The content passed validation; the kit could not apply it. A model
+        // retry would not change that, so record the slide as skipped.
+        _deckExpansion->skippedSlides.push_back(
+            static_cast<int>(_deckExpansion->nextIndex) + 1);
+        LOG_WRN("AIChat: deck expansion could not apply slide "
+                << (_deckExpansion->nextIndex + 1) << ": " << result);
+    }
+
+    ++_deckExpansion->nextIndex;
+    _deckExpansion->retriedCurrentSlide = false;
+    _deckExpansion->lastSlideError.clear();
+    expandNextSlide();
+}
+
+void AIChatSession::failCurrentExpansionSlide(const std::string& reason)
+{
+    if (!_deckExpansion || !_toolLoop)
+        return;
+
+    const unsigned slideNumber = _deckExpansion->nextIndex + 1;
+
+    if (!_deckExpansion->retriedCurrentSlide)
+    {
+        // First failure: try the same slide once more, telling the model what
+        // went wrong.
+        _deckExpansion->retriedCurrentSlide = true;
+        _deckExpansion->lastSlideError = reason;
+        LOG_WRN("AIChat: deck expansion slide " << slideNumber << " failed, retrying: "
+                                                << reason);
+        expandNextSlide();
+        return;
+    }
+
+    // Second failure: give up on this slide and move on to the next.
+    LOG_WRN("AIChat: deck expansion slide " << slideNumber << " failed again, skipping: "
+                                            << reason);
+    _deckExpansion->skippedSlides.push_back(static_cast<int>(slideNumber));
+    sendToolProgress(std::string(AIToolNames::ProposeOutline),
+                     "Skipping slide " + std::to_string(slideNumber) + "...");
+    ++_deckExpansion->nextIndex;
+    _deckExpansion->retriedCurrentSlide = false;
+    _deckExpansion->lastSlideError.clear();
+    expandNextSlide();
+}
+
+void AIChatSession::finishDeckExpansion()
+{
+    if (!_deckExpansion || !_toolLoop)
+        return;
+
+    const std::string requestId = _toolLoop->requestId;
+
+    if (_deckExpansion->builtCount == 0)
+    {
+        sendChatResult(false, "Could not build any slides from the outline. Please try again.",
+                       requestId);
+        _deckExpansion.reset();
+        _toolLoop.reset();
+        return;
+    }
+
+    const auto isSkipped = [this](unsigned position)
+    {
+        return std::find(_deckExpansion->skippedSlides.begin(),
+                         _deckExpansion->skippedSlides.end(), static_cast<int>(position)) !=
+               _deckExpansion->skippedSlides.end();
+    };
+
+    // Model-facing manifest: a numbered list of the built slides plus a note for
+    // each skipped one. This is what the next turn's conversation carries, so a
+    // follow-up like "make slide 3 punchier" has something to refer to.
+    std::ostringstream content;
+    content << "Built the deck '" << _deckExpansion->outlineTitle
+            << "' from the approved outline with " << _deckExpansion->builtCount << " slides:";
+    const unsigned total = _deckExpansion->slides ? _deckExpansion->slides->size() : 0;
+    int built = 0;
+    std::ostringstream skips;
+    for (unsigned i = 0; i < total; ++i)
+    {
+        Poco::JSON::Object::Ptr entry = _deckExpansion->slides->getObject(i);
+        std::string part, intent, title;
+        if (entry)
+        {
+            JsonUtil::findJSONValue(entry, "part", part);
+            JsonUtil::findJSONValue(entry, "intent", intent);
+            JsonUtil::findJSONValue(entry, "title", title);
+        }
+        if (isSkipped(i + 1))
+        {
+            skips << "\nSlide " << (i + 1) << " '" << title
+                  << "' was skipped because its content could not be generated.";
+            continue;
+        }
+        ++built;
+        content << "\n" << built << ". " << title << " (" << part << ", " << intent << ")";
+    }
+    content << skips.str();
+    const std::string modelContent =
+        appendImageFailureNote(content.str(), _deckExpansion->failedImagePrompts);
+
+    // User-facing message: a short ready line, plus brief notes for anything that
+    // did not come out.
+    std::ostringstream display;
+    display << "Your deck is ready: " << _deckExpansion->builtCount
+            << " slides built from the approved outline.";
+    if (!_deckExpansion->skippedSlides.empty())
+        display << " " << _deckExpansion->skippedSlides.size()
+                << " slide(s) could not be built and were skipped.";
+    if (!_deckExpansion->failedImagePrompts.empty())
+        display << " " << _deckExpansion->failedImagePrompts.size()
+                << " image(s) could not be generated and show a placeholder.";
+
+    sendChatResult(true, modelContent, requestId, display.str());
+    _deckExpansion.reset();
+    _toolLoop.reset();
 }
 
 ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
@@ -2551,23 +3128,9 @@ void AIChatSession::processTransformImageGenerations(
 
 std::string AIChatSession::appendImageGenFailures(const std::string& result) const
 {
-    if (!_toolLoop || _toolLoop->failedImagePrompts.empty())
+    if (!_toolLoop)
         return result;
-
-    std::string augmented = result;
-    augmented += "\n\nNote: ";
-    augmented += std::to_string(_toolLoop->failedImagePrompts.size());
-    augmented += " image(s) failed to generate and still show a loading placeholder."
-                 " Failed prompts: ";
-    for (std::size_t i = 0; i < _toolLoop->failedImagePrompts.size(); ++i)
-    {
-        if (i > 0)
-            augmented += ", ";
-        augmented += "\"";
-        augmented += _toolLoop->failedImagePrompts[i];
-        augmented += "\"";
-    }
-    return augmented;
+    return appendImageFailureNote(result, _toolLoop->failedImagePrompts);
 }
 
 void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBroker>& docBroker)

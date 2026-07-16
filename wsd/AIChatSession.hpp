@@ -79,6 +79,11 @@ struct AIToolLoopState
     // Name of the design template the user picked for this presentation, empty
     // when none was chosen.
     std::string designTemplate;
+    // The reply tone the user picked, and the free-text description when the
+    // tone is "custom". Kept so the per-slide expansion prompts can carry the
+    // same tone as the initial request.
+    std::string tone;
+    std::string customToneDescription;
     // Read-verify-insert tasks (e.g. "add a formula for each record") legitimately
     // need several rounds: read the sheet, check functions, evaluate, then insert.
     // Keep a ceiling to prevent runaway loops, but high enough to finish the work.
@@ -127,6 +132,23 @@ struct PendingChatRequest
     // request waits for, matched against the reply's commandName. Empty when no
     // fetch is outstanding.
     std::string fetchCommand;
+};
+
+/// State for building a deck one slide at a time after the user approved an
+/// outline. The whole tool loop is parked while this runs: each slide is one
+/// forced write_slide call to the model, validated, compiled, and applied to
+/// the kit without a further approval.
+struct DeckExpansionState
+{
+    std::string outlineTitle;        // the deck title from the approved outline
+    Poco::JSON::Array::Ptr slides;   // the approved outline entries, in order
+    std::string outlineJson;         // the compact outline, resent in each prompt
+    unsigned nextIndex = 0;          // outline index of the slide being built
+    int builtCount = 0;              // slides successfully applied to the deck
+    bool retriedCurrentSlide = false; // the current slide already had one retry
+    std::string lastSlideError;      // why the current slide's last attempt failed
+    std::vector<int> skippedSlides;  // 1-based outline positions that were skipped
+    std::vector<std::string> failedImagePrompts; // image briefs that did not render
 };
 
 class AIChatSession
@@ -250,9 +272,38 @@ private:
     void generateNextTransformImage(const std::shared_ptr<DocumentBroker>& docBroker);
     std::string appendImageGenFailures(const std::string& result) const;
 
+    /// Start building the deck from the approved outline: store the outline in
+    /// _deckExpansion and expand the first slide.
+    void startDeckExpansion(const Poco::JSON::Object::Ptr& outline);
+    /// Advance to the next outline slide: send progress, build the per-slide
+    /// system and user prompts, and post one forced write_slide call. When no
+    /// slides remain, finish the deck.
+    void expandNextSlide();
+    /// Handle the model's per-slide reply: on a transport, protocol, or
+    /// validation problem fail the slide; otherwise force the part, intent and
+    /// title back to the approved outline entry and apply the slide.
+    void handleExpansionResponse(int statusCode, const std::string& body,
+                                 const std::string& reason);
+    /// Compile one expanded slide, splice in the design template, and forward it
+    /// to the kit through the image-aware transform path, without an approval.
+    void applyExpansionSlide(const Poco::JSON::Object::Ptr& slide);
+    /// Handle the kit's reply to an applied slide: fold in any image failures,
+    /// count the slide as built or skipped by its success flag, and move on. A
+    /// kit apply failure does not trigger a model retry.
+    void onExpansionSlideApplied(const std::string& result);
+    /// The current slide's attempt failed: retry it once with the error as a
+    /// hint, then skip it and advance if it fails again.
+    void failCurrentExpansionSlide(const std::string& reason);
+    /// End the expansion: send the final result with a numbered deck manifest
+    /// for the model and a short ready message for the user, and clear state.
+    void finishDeckExpansion();
+
     ClientSession& _session;
     std::shared_ptr<http::Session> _activeChatSession; // server transport; unused on the desktop
     std::unique_ptr<AIToolLoopState> _toolLoop;
+    // Deck being built slide by slide from an approved outline. Non-null only
+    // while an expansion is running; the tool loop stays alive but parked.
+    std::unique_ptr<DeckExpansionState> _deckExpansion;
     // A request waiting for its design template's masters and layouts from the
     // kit, before its prompt is built and the first LLM call is made. Null when
     // no such fetch is outstanding.

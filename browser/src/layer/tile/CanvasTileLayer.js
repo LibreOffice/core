@@ -1039,6 +1039,14 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				window.app.console.error('Failed to parse aichatchoices: ' + e);
 			}
 		}
+		else if (textMsg.startsWith('aichatoutline:')) {
+			try {
+				const json = JSON.parse(textMsg.substring('aichatoutline:'.length));
+				this._map.fire('aichatoutline', json);
+			} catch (e) {
+				window.app.console.error('Failed to parse aichatoutline: ' + e);
+			}
+		}
 		else if (textMsg.startsWith('hrulerupdate:')) {
 			this._onRulerUpdate(textMsg);
 		}

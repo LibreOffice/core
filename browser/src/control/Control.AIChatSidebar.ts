@@ -34,6 +34,14 @@ namespace cool {
 		isApproval?: boolean;
 		approvalType?: 'inspect' | 'modify';
 		isPicker?: boolean;
+		isOutline?: boolean;
+	}
+
+	interface OutlineSlide {
+		part: string;
+		intent: string;
+		title: string;
+		gist: string;
 	}
 
 	interface CustomTone {
@@ -292,6 +300,7 @@ namespace cool {
 			app.map.on('aichatprogress', this.onAIChatProgress, this);
 			app.map.on('aichatapproval', this.onAIChatApproval, this);
 			app.map.on('aichatchoices', this.onAIChatChoices, this);
+			app.map.on('aichatoutline', this.onAIChatOutline, this);
 			app.map.on('docloaded', this.onDocLoaded, this);
 			app.map.on('textselectionchange', this.onTextSelectionChange, this);
 		}
@@ -808,11 +817,17 @@ namespace cool {
 					});
 				}
 
-				// Action buttons for text assistant messages (skip approval
-				// and picker messages, which carry their own controls). A reply
-				// that reads as a question is not document content, so it gets
-				// Copy but no Insert.
-				if (!isUser && !msg.isError && !msg.isApproval && !msg.isPicker) {
+				// Action buttons for text assistant messages (skip approval,
+				// picker and outline messages, which carry their own controls).
+				// A reply that reads as a question is not document content, so
+				// it gets Copy but no Insert.
+				if (
+					!isUser &&
+					!msg.isError &&
+					!msg.isApproval &&
+					!msg.isPicker &&
+					!msg.isOutline
+				) {
 					const showInsert = !this.looksLikeQuestion(displayText);
 					children.push(this.getActionsJSON(index, showInsert));
 				}
@@ -2105,7 +2120,12 @@ namespace cool {
 		private buildApiMessages(): { role: string; content: string }[] {
 			const apiMessages: { role: string; content: string }[] = [];
 			const textMessages = this.messages.filter(
-				(m) => !m.imageData && !m.isError && !m.isApproval && !m.isPicker,
+				(m) =>
+					!m.imageData &&
+					!m.isError &&
+					!m.isApproval &&
+					!m.isPicker &&
+					!m.isOutline,
 			);
 			const recent = textMessages.slice(-this.MAX_API_MESSAGES);
 			for (const msg of recent) {
@@ -3114,6 +3134,316 @@ namespace cool {
 				: null;
 			if (grid) grid.remove();
 			const msgBody = document.getElementById('aichat-msg-text-' + pickerIndex);
+			if (msgBody) msgBody.textContent = text;
+		}
+
+		// Shows the server-proposed deck outline as an editable card: one row
+		// per slide with an editable title, the immutable part/intent/gist, and
+		// a delete button, plus approve and reject controls. The card is only
+		// built when the backend sends aichatoutline: for the current request.
+		private onAIChatOutline(data: any): void {
+			if (!data || data.requestId !== this.currentRequestId) return;
+
+			// The outline card inherits the approval card's deliberation-timeout
+			// behaviour: re-arm the request timeout so the user has time to edit.
+			this.startRequestTimeout(
+				this.currentRequestId,
+				this.requestTimeoutMs,
+				(d) => this.onAIChatResult(d),
+			);
+
+			const deckTitle = typeof data.title === 'string' ? data.title : '';
+			const slides: OutlineSlide[] = Array.isArray(data.slides)
+				? data.slides
+				: [];
+
+			const outlineMsg: ChatMessage = {
+				role: 'assistant',
+				content: _(
+					'Here is a proposed outline. Edit the titles or descriptions, remove slides you do not want, then approve to build the deck:',
+				),
+				timestamp: Date.now(),
+				isOutline: true,
+			};
+			this.messages.push(outlineMsg);
+			const outlineIndex = this.messages.length - 1;
+			this.appendMessage(outlineMsg, outlineIndex);
+
+			// The push above may still be settling the message list; wait for the
+			// layouting queue to drain before appending the raw-DOM card, matching
+			// the picker's double-onDrain guard.
+			app.layoutingService.onDrain(() => {
+				app.layoutingService.onDrain(() => {
+					const msgEl = document.getElementById('aichat-msg-' + outlineIndex);
+					if (!msgEl) return;
+					msgEl.classList.add('aichat-msg-assistant');
+
+					const card = document.createElement('div');
+					card.className = 'aichat-outline-card';
+
+					const approveBtn = document.createElement('button');
+					approveBtn.className = 'aichat-approve-btn';
+					approveBtn.textContent = _('Approve');
+					const rejectBtn = document.createElement('button');
+					rejectBtn.className = 'aichat-reject-btn';
+					rejectBtn.textContent = _('Reject');
+					rejectBtn.setAttribute('aria-label', _('Reject outline'));
+
+					// A muted note under the buttons, shown only while approve is
+					// blocked because an added slide still has no title.
+					const hint = document.createElement('div');
+					hint.className = 'aichat-outline-hint';
+					hint.textContent = _('Give every added slide a title to approve.');
+					hint.style.display = 'none';
+
+					// Enable approve only when every row has a title to build from.
+					// A typed title always works, and an empty input falls back to
+					// the proposed title on approve, so only a row with neither - an
+					// added slide the user has not named yet - blocks approve.
+					const updateApproveState = () => {
+						const rows = card.querySelectorAll('.aichat-outline-row');
+						let blocked = rows.length === 0;
+						rows.forEach((row) => {
+							const el = row as HTMLElement;
+							const input = el.querySelector(
+								'.aichat-outline-title',
+							) as HTMLInputElement | null;
+							const typed = input ? input.value.trim() : '';
+							const orig = (el.dataset.origTitle || '').trim();
+							if (!typed && !orig) blocked = true;
+						});
+						approveBtn.disabled = blocked;
+						hint.style.display = blocked && rows.length > 0 ? '' : 'none';
+					};
+
+					// Renumber the visible rows and their labels after a row is
+					// added or removed, then recheck whether approve is allowed.
+					const renumber = () => {
+						const rows = card.querySelectorAll('.aichat-outline-row');
+						rows.forEach((row, i) => {
+							const numberLabel = row.querySelector('.aichat-outline-num');
+							if (numberLabel) numberLabel.textContent = i + 1 + '.';
+							const input = row.querySelector('.aichat-outline-title');
+							if (input)
+								input.setAttribute(
+									'aria-label',
+									_('Slide %1 title').replace('%1', String(i + 1)),
+								);
+							const gist = row.querySelector('.aichat-outline-gist');
+							if (gist)
+								gist.setAttribute(
+									'aria-label',
+									_('Slide %1 description').replace('%1', String(i + 1)),
+								);
+							const del = row.querySelector('.aichat-outline-delete');
+							if (del)
+								del.setAttribute(
+									'aria-label',
+									_('Remove slide %1').replace('%1', String(i + 1)),
+								);
+						});
+						updateApproveState();
+					};
+
+					// Auto-size a gist textarea to the height of its content, so a
+					// description grows from a single line without a fixed tall box.
+					const growGist = (gist: HTMLTextAreaElement) => {
+						gist.style.height = 'auto';
+						gist.style.height = gist.scrollHeight + 'px';
+					};
+
+					// Build one editable slide row. Both the server's proposed
+					// slides and a slide the user adds go through this, so the two
+					// are identical in structure and behaviour.
+					const buildRow = (slide: OutlineSlide): HTMLElement => {
+						const part = slide.part || '';
+						const row = document.createElement('div');
+						row.className = 'aichat-outline-row';
+						if (part) row.classList.add('aichat-outline-part-' + part);
+						row.dataset.part = part;
+						row.dataset.intent = slide.intent || '';
+						row.dataset.gist = slide.gist || '';
+						row.dataset.origTitle = slide.title || '';
+
+						const header = document.createElement('div');
+						header.className = 'aichat-outline-header';
+
+						const numberLabel = document.createElement('span');
+						numberLabel.className = 'aichat-outline-num';
+						header.appendChild(numberLabel);
+
+						// The part and intent as a muted uppercase eyebrow, so the
+						// slide's role is named in text and not only by the edge colour.
+						const eyebrow = document.createElement('span');
+						eyebrow.className = 'aichat-outline-eyebrow';
+						eyebrow.textContent = part + ' - ' + (slide.intent || '');
+						header.appendChild(eyebrow);
+
+						const deleteButton = document.createElement('button');
+						deleteButton.className = 'aichat-outline-delete';
+						deleteButton.textContent = '\u00D7';
+						deleteButton.onclick = () => {
+							row.remove();
+							renumber();
+						};
+						header.appendChild(deleteButton);
+
+						row.appendChild(header);
+
+						const input = document.createElement('input');
+						input.type = 'text';
+						input.className = 'aichat-outline-title';
+						input.value = slide.title || '';
+						input.maxLength = 200;
+						input.placeholder = _('Slide title');
+						input.addEventListener('input', () => updateApproveState());
+						row.appendChild(input);
+
+						const gist = document.createElement('textarea');
+						gist.className = 'aichat-outline-gist';
+						gist.rows = 1;
+						gist.maxLength = 300;
+						gist.value = slide.gist || '';
+						gist.placeholder = _('What this slide should cover');
+						gist.addEventListener('input', () => growGist(gist));
+						row.appendChild(gist);
+
+						return row;
+					};
+
+					for (const slide of slides) {
+						card.appendChild(buildRow(slide));
+					}
+
+					// A ghost button at the end of the list adds a blank slide. New
+					// slides default to a body slide that uses bullet points, the
+					// common case; the user names it and can edit it like any other.
+					const addSlideButton = document.createElement('button');
+					addSlideButton.type = 'button';
+					addSlideButton.className = 'aichat-outline-add';
+					const addIcon = document.createElement('span');
+					addIcon.className = 'aichat-outline-add-icon';
+					addIcon.textContent = '+';
+					addIcon.setAttribute('aria-hidden', 'true');
+					addSlideButton.appendChild(addIcon);
+					addSlideButton.appendChild(document.createTextNode(_('Add slide')));
+					addSlideButton.onclick = () => {
+						const row = buildRow({
+							part: 'body',
+							intent: 'bullets',
+							title: '',
+							gist: '',
+						});
+						card.insertBefore(row, addSlideButton);
+						renumber();
+						growGist(
+							row.querySelector('.aichat-outline-gist') as HTMLTextAreaElement,
+						);
+						(
+							row.querySelector('.aichat-outline-title') as HTMLInputElement
+						).focus();
+					};
+					card.appendChild(addSlideButton);
+
+					approveBtn.onclick = () => {
+						if (approveBtn.disabled) return;
+						const rows = card.querySelectorAll('.aichat-outline-row');
+						const edited: OutlineSlide[] = [];
+						rows.forEach((row) => {
+							const el = row as HTMLElement;
+							const input = el.querySelector(
+								'.aichat-outline-title',
+							) as HTMLInputElement | null;
+							const typed = input ? input.value.trim() : '';
+							const gistEl = el.querySelector(
+								'.aichat-outline-gist',
+							) as HTMLTextAreaElement | null;
+							const typedGist = gistEl ? gistEl.value.trim() : '';
+							edited.push({
+								part: el.dataset.part || '',
+								intent: el.dataset.intent || '',
+								gist: typedGist || el.dataset.gist || '',
+								title: typed || el.dataset.origTitle || '',
+							});
+						});
+						this.sendOutlineDecision('approve', {
+							title: deckTitle,
+							slides: edited,
+						});
+						this.updateOutlineMessage(
+							outlineIndex,
+							_('Outline approved - building %1 slides.').replace(
+								'%1',
+								String(edited.length),
+							),
+						);
+					};
+
+					rejectBtn.onclick = () => {
+						this.sendOutlineDecision('reject');
+						this.updateOutlineMessage(outlineIndex, _('Outline rejected.'));
+					};
+
+					const buttons = document.createElement('div');
+					buttons.className = 'aichat-approval-buttons';
+					buttons.appendChild(approveBtn);
+					buttons.appendChild(rejectBtn);
+					card.appendChild(buttons);
+					card.appendChild(hint);
+
+					renumber();
+					msgEl.appendChild(card);
+
+					// The textareas can only measure their content once they are in
+					// the document, so size each gist after the card is attached.
+					card
+						.querySelectorAll('textarea.aichat-outline-gist')
+						.forEach((ta) => growGist(ta as HTMLTextAreaElement));
+				});
+			});
+		}
+
+		// Sends the outline approve/reject decision. Approve carries the edited
+		// outline and, like a modify approval, arms the build progress and
+		// re-arms the request timeout. Reject sends the plain decision shape and
+		// leaves the request processing so the loop can continue.
+		private sendOutlineDecision(
+			action: string,
+			outline?: { title: string; slides: OutlineSlide[] },
+		): void {
+			const payload: any = {
+				requestId: this.currentRequestId,
+				action: action,
+			};
+			if (action === 'approve' && outline) {
+				payload.outline = outline;
+			}
+			app.socket.sendMessage('aichatapprove: ' + JSON.stringify(payload));
+
+			if (action === 'approve') {
+				this.requestHadModifyApproval = true;
+				this.progressText = _('Building slides...');
+				this.updateLoadingDots();
+				this.startRequestTimeout(
+					this.currentRequestId,
+					this.requestTimeoutMs,
+					(d) => this.onAIChatResult(d),
+				);
+			}
+		}
+
+		// Replaces an outline card with the outcome text and removes the editable
+		// rows and buttons, so the transcript records the decision.
+		private updateOutlineMessage(outlineIndex: number, text: string): void {
+			const msg = this.messages[outlineIndex];
+			if (msg) msg.content = text;
+
+			const msgEl = document.getElementById('aichat-msg-' + outlineIndex);
+			const card = msgEl ? msgEl.querySelector('.aichat-outline-card') : null;
+			if (card) card.remove();
+			const msgBody = document.getElementById(
+				'aichat-msg-text-' + outlineIndex,
+			);
 			if (msgBody) msgBody.textContent = text;
 		}
 

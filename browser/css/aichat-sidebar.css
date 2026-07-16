@@ -1432,6 +1432,208 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	outline-offset: 2px;
 }
 
+/* -- Editable deck outline card shown before the slides are built --
+   Every row is a mini slide card that stands for the slide it will become.
+   A left edge encodes the slide's structural part; the eyebrow text names
+   that part as well, so nothing is carried by colour alone. Scoped under
+   the messages list id, like the template picker, so these rules outrank
+   the generic input and button resets that would otherwise strip the
+   card's layout. */
+
+#aichat-messages-list .aichat-outline-card {
+	margin-top: var(--spacing-m);
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+#aichat-messages-list .aichat-outline-row {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 8px 10px;
+	border: 1px solid var(--color-border);
+	border-left: 3px solid var(--color-border);
+	border-radius: var(--border-radius);
+	background: var(--color-main-background);
+}
+
+/* The opening, divider and closing slides shape the deck, so their edge
+   takes the accent colour; body slides keep the neutral edge. */
+#aichat-messages-list .aichat-outline-part-opening,
+#aichat-messages-list .aichat-outline-part-divider,
+#aichat-messages-list .aichat-outline-part-closing {
+	border-left-color: rgb(var(--aichat-accent));
+}
+
+#aichat-messages-list .aichat-outline-header {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+#aichat-messages-list .aichat-outline-num {
+	flex-shrink: 0;
+	font-size: 12px;
+	color: var(--color-text-light);
+}
+
+#aichat-messages-list .aichat-outline-eyebrow {
+	flex: 1;
+	font-size: 0.7em;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--color-text-lighter);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#aichat-messages-list .aichat-outline-delete {
+	flex-shrink: 0;
+	width: 22px;
+	height: 22px;
+	padding: 0;
+	border: none;
+	border-radius: var(--border-radius);
+	background: transparent;
+	color: var(--color-text-lighter);
+	font-size: 15px;
+	line-height: 1;
+	cursor: pointer;
+	transition: background 0.15s ease,
+		color 0.15s ease;
+}
+
+#aichat-messages-list .aichat-outline-delete:hover,
+#aichat-messages-list .aichat-outline-delete:focus-visible {
+	background: rgba(220, 38, 38, 0.08);
+	color: var(--color-error);
+}
+
+#aichat-messages-list .aichat-outline-delete:focus-visible {
+	outline: 2px solid var(--color-error);
+	outline-offset: 1px;
+}
+
+/* The title reads as the slide's heading; the editable box only appears
+   on hover, with an accent underline on focus. */
+#aichat-messages-list .aichat-outline-title {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 2px 4px;
+	border: none;
+	border-bottom: 1px solid transparent;
+	border-radius: 3px;
+	background: transparent;
+	color: var(--color-main-text);
+	font-family: var(--cool-font);
+	font-size: 0.95em;
+	font-weight: 600;
+}
+
+#aichat-messages-list .aichat-outline-title:hover {
+	background: rgba(var(--aichat-accent), 0.05);
+}
+
+#aichat-messages-list .aichat-outline-title:focus {
+	outline: none;
+	background: transparent;
+	border-bottom-color: rgb(var(--aichat-accent));
+}
+
+/* The gist is an inline, auto-growing description styled like the title
+   but muted; it starts as one line and the box only shows on hover. */
+#aichat-messages-list .aichat-outline-gist {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 2px 4px;
+	border: none;
+	border-bottom: 1px solid transparent;
+	border-radius: 3px;
+	background: transparent;
+	color: var(--color-text-light);
+	font-family: var(--cool-font);
+	font-size: 0.85em;
+	line-height: 1.4;
+	resize: none;
+	overflow: hidden;
+}
+
+#aichat-messages-list .aichat-outline-gist::placeholder {
+	color: var(--color-text-lighter);
+}
+
+#aichat-messages-list .aichat-outline-gist:hover {
+	background: rgba(var(--aichat-accent), 0.05);
+}
+
+#aichat-messages-list .aichat-outline-gist:focus {
+	outline: none;
+	background: transparent;
+	border-bottom-color: rgb(var(--aichat-accent));
+}
+
+/* A ghost, full-width button at the end of the list that adds a blank
+   slide row. The dashed edge and muted text set it apart from a real
+   slide card without competing with the approve button below. */
+#aichat-messages-list .aichat-outline-add {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 8px 10px;
+	border: 1px dashed var(--color-border);
+	border-radius: var(--border-radius);
+	background: transparent;
+	color: var(--color-text-light);
+	font-family: var(--cool-font);
+	font-size: 0.9em;
+	cursor: pointer;
+	transition: background 0.15s ease,
+		border-color 0.15s ease,
+		color 0.15s ease;
+}
+
+#aichat-messages-list .aichat-outline-add:hover {
+	border-color: rgb(var(--aichat-accent));
+	background: rgba(var(--aichat-accent), 0.05);
+	color: rgb(var(--aichat-accent));
+}
+
+#aichat-messages-list .aichat-outline-add:focus-visible {
+	outline: 2px solid rgb(var(--aichat-accent));
+	outline-offset: 2px;
+}
+
+#aichat-messages-list .aichat-outline-add-icon {
+	font-size: 1.1em;
+	line-height: 1;
+}
+
+#aichat-messages-list .aichat-outline-card .aichat-approval-buttons {
+	margin-top: var(--spacing-m);
+}
+
+/* A muted note under the buttons, shown only while approve is blocked. */
+#aichat-messages-list .aichat-outline-hint {
+	margin-top: var(--spacing-s);
+	font-size: 0.8em;
+	color: var(--color-text-lighter);
+}
+
+.aichat-approve-btn:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+
+.aichat-approve-btn:disabled:hover {
+	box-shadow: none;
+	background: rgb(var(--aichat-accent));
+}
+
 /* -- Inline clickable section/range names in an assistant reply -- */
 
 .aichat-choice-link {

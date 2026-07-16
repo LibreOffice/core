@@ -39,6 +39,7 @@
         <image_model desc="Default image-generation model name (e.g. dall-e-3, stable-diffusion-3, flux-schnell)." type="string" default=""></image_model>
         <image_size desc="Default generated image size in WxH pixels (e.g. 1024x1024). Provider-specific - leave empty to let the provider pick." type="string" default=""></image_size>
         <experimental_deck_spec desc="Experimental. When true, the AI assistant offers a write_slides tool for presentations: the model describes a deck as validated JSON and the server compiles it into slide commands, instead of the model driving the slide commands directly. When false, presentations use the existing slide-command tool unchanged." type="bool" default="false">false</experimental_deck_spec>
+        <experimental_outline_flow desc="Experimental. When true (and experimental_deck_spec is also true), large AI deck requests first propose a slide outline the user can edit and approve; the server then builds the slides one by one from the approved outline. When false, deck creation behaves as with experimental_deck_spec alone." type="bool" default="false">false</experimental_outline_flow>
     </ai>
 
     <deepl desc="DeepL API settings for translation service">
