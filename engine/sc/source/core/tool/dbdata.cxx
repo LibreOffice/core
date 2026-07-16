@@ -33,6 +33,7 @@
 #include <dpobject.hxx>
 #include <queryparam.hxx>
 #include <queryentry.hxx>
+#include <refupdatecontext.hxx>
 #include <mid.h>
 #include <globstr.hrc>
 #include <scresid.hxx>
@@ -971,6 +972,63 @@ void ScDBData::CreateTotalRowParam(ScSubTotalParam& rSubTotalParam) const
     }
 }
 
+void ScDBData::AdjustTotalsRowFormulas(SCCOL nDx, SCCOL nColShift, SCCOL nNewCol1, SCCOL nNewCol2,
+                                       const sc::RefUpdateContext* pRefCxt)
+{
+    if (!mpSubTotal)
+        return;
+
+    // Old per-column key -> new column, or -1 when the column was dropped.
+    const auto mapCol = [&](SCCOL nKey) {
+        SCCOL nNew = nKey;
+        if (nKey >= nColShift)
+            nNew = nKey + nDx;
+        else if (nDx < 0 && nKey >= nColShift + nDx)
+            return SCCOL(-1); // inside the deleted column block
+        if (nNew < nNewCol1 || nNew > nNewCol2)
+            return SCCOL(-1); // no longer covered by the table area
+        return nNew;
+    };
+
+    // group 0 holds the styled-table Total Row per-column data (see CreateTotalRowParam).
+    auto& rGroup = mpSubTotal->aGroups[0];
+
+    std::vector<std::pair<SCCOL, std::unique_ptr<ScTokenArray>>> vColFuncs;
+    for (auto& rFunc : rGroup.custfuncs())
+    {
+        const SCCOL nNew = mapCol(rFunc.first);
+        if (nNew < 0)
+            continue;
+        // Reference-update the stashed formula like a live cell: all refs shift or become #REF!.
+        if (pRefCxt && rFunc.second)
+            rFunc.second->AdjustReferenceInName(*pRefCxt, ScAddress(rFunc.first, nEndRow, nTable));
+        vColFuncs.emplace_back(nNew, std::move(rFunc.second));
+    }
+
+    std::vector<std::pair<SCCOL, OUString>> vColLabels;
+    for (const auto& rLabel : rGroup.sublabels())
+    {
+        const SCCOL nNew = mapCol(rLabel.first);
+        if (nNew >= 0)
+            vColLabels.emplace_back(nNew, rLabel.second);
+    }
+
+    std::vector<std::pair<SCCOL, sal_uInt32>> vColNumFmts;
+    for (const auto& rNumFmt : rGroup.numfmts())
+    {
+        const SCCOL nNew = mapCol(rNumFmt.first);
+        if (nNew >= 0)
+            vColNumFmts.emplace_back(nNew, rNumFmt.second);
+    }
+
+    mpSubTotal->SetCustFuncs(static_cast<sal_uInt16>(0), vColFuncs,
+                             static_cast<sal_uInt16>(vColFuncs.size()));
+    mpSubTotal->SetSubLabels(static_cast<sal_uInt16>(0), vColLabels,
+                             static_cast<sal_uInt16>(vColLabels.size()));
+    mpSubTotal->SetNumFmts(static_cast<sal_uInt16>(0), vColNumFmts,
+                           static_cast<sal_uInt16>(vColNumFmts.size()));
+}
+
 bool ScDBData::HasTearRiskAtBand(const ScDocument& rDoc, SCROW nShiftRow) const
 {
     // Pivot tables — reuse the existing helper from Insert Cells.
@@ -1449,6 +1507,17 @@ bool ScDBData::UpdateReference(const ScDocument& rDoc, UpdateRefMode eUpdateRefM
     {
         // MoveTo() invalidates column names via SetArea(); adjust, remember and set new.
         AdjustTableColumnNames( eUpdateRefMode, nDx, nCol1, nOldCol1, nOldCol2, theCol1, theCol2);
+        // Reference-update the stored Total Row formulas on a column insert/delete.
+        if ((theCol1 != nOldCol1 || theCol2 != nOldCol2) && mpContainer)
+        {
+            sc::RefUpdateContext aRefCxt(mpContainer->GetDocument());
+            aRefCxt.meMode = eUpdateRefMode;
+            aRefCxt.maRange = ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+            aRefCxt.mnColDelta = nDx;
+            aRefCxt.mnRowDelta = nDy;
+            aRefCxt.mnTabDelta = nDz;
+            AdjustTotalsRowFormulas(nDx, nCol1, theCol1, theCol2, &aRefCxt);
+        }
         ::std::vector<OUString> aNames( maTableColumnNames);
         bool bTableColumnNamesDirty = mbTableColumnNamesDirty;
         // tdf#48025, tdf#141946: update the column index of the filter criteria,

@@ -644,6 +644,86 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggle)
     CPPUNIT_ASSERT_EQUAL(u" 2.75 Ft "_ustr, pDoc->GetString(ScAddress(2, 9, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowCellShift)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    ScDocShell* pDocSh = getScDocShell();
+    CPPUNIT_ASSERT(pDocSh);
+    ScTabViewShell* pViewShell = getViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+
+    // Styled table Pad1|Pad2|Qty|Price; Price's total is a custom formula referencing Qty.
+    ScDBData* pData = new ScDBData(u"Table2"_ustr, /*nTab*/ 0, 0, 0, 3, 3,
+                                   /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    pDoc->SetString(0, 0, 0, u"Pad1"_ustr);
+    pDoc->SetString(1, 0, 0, u"Pad2"_ustr);
+    pDoc->SetString(2, 0, 0, u"Qty"_ustr);
+    pDoc->SetString(3, 0, 0, u"Price"_ustr);
+    pDoc->SetValue(2, 1, 0, 2.0);
+    pDoc->SetValue(3, 1, 0, 10.0);
+    pDoc->SetValue(2, 2, 0, 3.0);
+    pDoc->SetValue(3, 2, 0, 20.0);
+    pData->RefreshTableColumnNames(pDoc);
+
+    // Price total references Qty: SUBTOTAL(9;Qty) + 100 = (2+3) + 100 = 105.
+    pDoc->SetString(3, 3, 0, u"=SUBTOTAL(9;Table2[Qty])+100"_ustr);
+    pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(105.0, pDoc->GetValue(3, 3, 0));
+
+    ScDocFunc& rDocFunc = pDocSh->GetDocFunc();
+
+    auto findTable = [pDoc]() {
+        return pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE2"_ustr);
+    };
+    // Toggle off, apply a column change, toggle on; return the last column's Total Row cell.
+    const auto lastTotalAfter = [&](auto change) {
+        goToCell(u"A2"_ustr);
+        dispatchDatabaseTotalRow(pViewShell, false);
+        change();
+        goToCell(u"A2"_ustr);
+        dispatchDatabaseTotalRow(pViewShell, true);
+        pDoc->CalcAll();
+        ScDBData* pCur = findTable();
+        CPPUNIT_ASSERT(pCur);
+        ScRange aCur;
+        pCur->GetArea(aCur);
+        return pDoc->GetString(aCur.aEnd.Col(), aCur.aEnd.Row(), 0);
+    };
+
+    // 1) Multi-column delete: drop both Pad columns (A:B) at once -> Qty=A, Price=B.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "custom total must follow a multi-column delete", u"105"_ustr, lastTotalAfter([&] {
+            CPPUNIT_ASSERT(rDocFunc.DeleteCells(ScRange(0, 0, 0, 1, pDoc->MaxRow(), 0), nullptr,
+                                                DelCellCmd::Cols, true));
+        }));
+
+    // 2) Insert a column between Qty and Price -> Price shifts right, the Qty reference stays put.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "custom total must follow a column insert", u"105"_ustr, lastTotalAfter([&] {
+            CPPUNIT_ASSERT(rDocFunc.InsertCells(ScRange(1, 0, 0, 1, pDoc->MaxRow(), 0), nullptr,
+                                                INS_INSCOLS_BEFORE, true, true));
+        }));
+
+    // 3) Resize (a separate code path) dropping Price: its total must not be restored -> empty.
+    const OUString aAfterResize = lastTotalAfter([&] {
+        ScDBData* pCur = findTable();
+        CPPUNIT_ASSERT(pCur);
+        ScRange aArea;
+        pCur->GetArea(aArea);
+        ScDBDocFunc(*pDocSh).ResizeTable(*pCur, ScRange(aArea.aStart.Col(), aArea.aStart.Row(), 0,
+                                                        aArea.aEnd.Col() - 1, aArea.aEnd.Row(), 0));
+    });
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("removed column's custom total must not be restored", OUString(),
+                                 aAfterResize);
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowUndoRedo)
 {
     createScDoc("xlsx/TableStyleTest.xlsx");

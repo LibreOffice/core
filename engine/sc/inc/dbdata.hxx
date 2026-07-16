@@ -38,6 +38,7 @@ struct ScSortParam;
 struct ScQueryParam;
 struct ScSubTotalParam;
 class ScTokenArray;
+namespace sc { struct RefUpdateContext; }
 
 class SC_DLLPUBLIC ScDatabaseSettingItem final : public SfxPoolItem
 {
@@ -346,6 +347,10 @@ public:
                                                 const std::vector<TableColumnAttributes>& rAttributesVector,
                                                 formula::FormulaGrammar::Grammar eGrammar) const;
     SC_DLLPUBLIC void       CreateTotalRowParam(ScSubTotalParam& rSubTotalParam) const;
+    /// Realign the stored (Total Row off) per-column formulas to a column insert/delete/resize.
+    SC_DLLPUBLIC void       AdjustTotalsRowFormulas(SCCOL nDx, SCCOL nColShift,
+                                                    SCCOL nNewCol1, SCCOL nNewCol2,
+                                                    const sc::RefUpdateContext* pRefCxt = nullptr);
 
     /// Returns true if a column-bounded row shift in this table's column range starting
     /// at nShiftRow would tear an adjacent fixed-range structure: a pivot table, another

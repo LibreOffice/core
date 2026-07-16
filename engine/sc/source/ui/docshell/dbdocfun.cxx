@@ -886,6 +886,9 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
             if (pData->IsGeneratedHeaderName(rDoc.GetString(nCol, nRow, nTab)))
                 aClearCols.push_back(nCol);
         }
+
+        // Drop the stored Total Row formulas for the columns the resize removed (no shift here).
+        pData->AdjustTotalsRowFormulas(0, 0, aNewRange.aStart.Col(), aNewRange.aEnd.Col());
     }
 
     // Group the cell writes with the range/setting-change undo so one Undo reverts both.
