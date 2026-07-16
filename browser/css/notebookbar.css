@@ -751,6 +751,41 @@ label.notebookbar.ui-checkbox-label {
 	margin: 5px;
 }
 
+/* The New Table Style and Clear Style entries at the bottom of the */
+/* 'tablestyles_design' gallery dropdown read as menu rows: the icon sits */
+/* left of a full-width label on one line. */
+.jsdialog-container [modelid='new-table-style'].unotoolbutton,
+.jsdialog-container [modelid='clear-table-style'].unotoolbutton {
+	display: block;
+	width: calc(100% - 10px);
+	margin: 2px 5px;
+}
+
+.jsdialog-container [modelid='new-table-style'].unotoolbutton .unobutton,
+.jsdialog-container [modelid='clear-table-style'].unotoolbutton .unobutton {
+	flex-direction: row;
+	justify-content: start;
+	align-items: center;
+	gap: 8px;
+	width: 100%;
+	height: auto;
+	min-height: var(--btn-size);
+	padding: 4px 8px;
+	line-height: normal;
+	white-space: nowrap;
+	text-align: start;
+}
+
+.jsdialog-container [modelid='new-table-style'] .unobutton img,
+.jsdialog-container [modelid='clear-table-style'] .unobutton img {
+	flex: 0 0 auto;
+}
+
+[id^='tablestyles_design'] hr,
+[id^='Tablestyles_design'] hr {
+	margin: 4px 8px;
+}
+
 /* Insert Tab */
 
 /* Layout Tab */

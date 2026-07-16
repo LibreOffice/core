@@ -78,6 +78,45 @@ function _getDropdownContent(data: IconViewListJSON, builder: JSBuilder) {
 		});
 	}
 
+	if (
+		data.children.length === 1 &&
+		data.children[0].id === 'tablestyles_design'
+	) {
+		dropdownContent.push(
+			{
+				id: 'dropdown-entry-tablestyles-separator',
+				type: 'json',
+				content: {
+					type: 'separator',
+					id: 'tablestyles-actions-separator',
+					orientation: 'horizontal',
+				} as SeparatorWidgetJSON,
+			},
+			{
+				id: 'dropdown-entry-new-table-style',
+				type: 'json',
+				content: {
+					id: 'new-table-style',
+					type: 'customtoolitem',
+					text: _('New Table Style...'),
+					command: '.uno:NewTableStyle',
+					icon: 'lc_newtablestyle.svg',
+				} as ToolItemWidgetJSON,
+			},
+			{
+				id: 'dropdown-entry-clear-table-style',
+				type: 'json',
+				content: {
+					id: 'clear-table-style',
+					type: 'customtoolitem',
+					text: _('Clear Style'),
+					command: '.uno:ClearTableStyle',
+					icon: 'lc_cleartablestyle.svg',
+				} as ToolItemWidgetJSON,
+			},
+		);
+	}
+
 	if (data.children.length === 1 && data.children[0].id === 'stylesview') {
 		dropdownContent.push(
 			{
