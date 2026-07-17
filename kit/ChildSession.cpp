@@ -2510,12 +2510,7 @@ bool ChildSession::unoCommand(const StringVector& tokens)
                           tokens.equals(1, ".uno:CopySlide") ||
                           tokens.equals(1, ".uno:OpenHyperlink") ||
                           tokens.startsWith(1, "vnd.sun.star.script:") ||
-                          // The in-process apps (e.g. coda-qt) dismiss their paste
-                          // progress UI on this result; browser online neither
-                          // needs nor expects it, so keep paste out of its path.
-                          (Util::isMobileApp() &&
-                           (tokens.equals(1, ".uno:Paste") ||
-                            tokens.equals(1, ".uno:PasteSpecial"))));
+                          tokens.equals(1, ".uno:Paste"));
 
     const std::string saveArgs = tokens.substrFromToken(2);
     LOG_TRC("uno command " << tokens[1] << " " << saveArgs << " notify: " << notify);

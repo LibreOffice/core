@@ -263,11 +263,12 @@ window.L.Clipboard = window.L.Class.extend({
 	// forClipboard: a boolean telling if we need the "Confirm copy to clipboard" link in the end
 	// completeFn: called on completion - with response.
 	// progressFn: allows splitting the progress bar up.
-	_doAsyncDownload: async function(type,url,optionalFormData,forClipboard,progressFn,) {
+	// keepPopupAlive: if true, this call does not touch the download-progress popup
+	_doAsyncDownload: async function(type,url,optionalFormData,forClipboard,progressFn,keepPopupAlive) {
 		var request = new XMLHttpRequest();
 
 		// avoid to invoke the following code if the download widget depends on user interaction
-		if (!this._downloadProgress || this._downloadProgress.isClosed()) {
+		if (!keepPopupAlive && (!this._downloadProgress || this._downloadProgress.isClosed())) {
 			this._startProgress(false);
 			this._downloadProgress.startProgressMode();
 		}
@@ -279,31 +280,39 @@ window.L.Clipboard = window.L.Class.extend({
 				// size==0, which signifies no response from the server.
 				// So we check the status code instead.
 				if (request.status == 200) {
-					this._downloadProgress._onComplete();
-					if (!forClipboard) {
-						this._downloadProgress._onClose();
+					if (!keepPopupAlive) {
+						this._downloadProgress._onComplete();
+						if (!forClipboard) {
+							this._downloadProgress._onClose();
+						}
 					}
 					resolve(request.response);
 				} else {
 					// Dismiss the notification without the "complete" success
 					// framing, so a failed request doesn't look like it worked.
-					this._downloadProgress._onClose();
+					if (!keepPopupAlive) {
+						this._downloadProgress._onClose();
+					}
 					reject(request.response);
 				}
 			};
 			request.onerror = (error) => {
 				reject(error);
-				this._downloadProgress._onClose();
+				if (!keepPopupAlive) {
+					this._downloadProgress._onClose();
+				}
 			};
 
 			request.ontimeout = () => {
 				this._map.uiManager.showSnackbar(_('warning: copy/paste request timed out'));
-				this._downloadProgress._onClose();
+				if (!keepPopupAlive) {
+					this._downloadProgress._onClose();
+				}
 				reject('request timed out');
 			};
 
 			request.upload.addEventListener('progress', (e) => {
-				if (e.lengthComputable) {
+				if (!keepPopupAlive && e.lengthComputable) {
 					var percent = progressFn(e.loaded / e.total * 100);
 					var progress = { statusType: 'setvalue', value: percent };
 					this._downloadProgress._onUpdateProgress(progress);
@@ -330,48 +339,61 @@ window.L.Clipboard = window.L.Class.extend({
 		// FIXME: add a timestamp in the links (?) ignore old / un-responsive servers (?)
 		let response;
 		const errorMessage = _('Failed to download clipboard, please re-copy');
-		try {
-			response = await this._doAsyncDownload(
-				'GET', src, null, false,
-				function(progress) { return progress/2; },
-			);
-		} catch (_error) {
-			window.app.console.log('failed to download clipboard using fallback html');
 
-			// If it's the stub, avoid pasting.
-			if (this._isStubHtml(fallbackHtml))
-			{
-				// Let the user know they haven't really copied document content.
-				window.app.console.error('Clipboard: failed to download - ' + errorMessage);
-				this._map.uiManager.showInfoModal('data-transfer-warning', '', errorMessage);
+		// Show progress indicator.
+		this._startProgress(false);
+		this._downloadProgress.startProgressMode();
+
+		try {
+			try {
+				response = await this._doAsyncDownload(
+					'GET', src, null, false,
+					function(progress) { return progress/2; },
+					/*keepPopupAlive=*/true,
+				);
+			} catch (_error) {
+				window.app.console.log('failed to download clipboard using fallback html');
+
+				// If it's the stub, avoid pasting.
+				if (this._isStubHtml(fallbackHtml))
+				{
+					// Let the user know they haven't really copied document content.
+					window.app.console.error('Clipboard: failed to download - ' + errorMessage);
+					this._map.uiManager.showInfoModal('data-transfer-warning', '', errorMessage);
+					return;
+				}
+
+				await this.dataTransferToDocumentFallback(null, fallbackHtml);
 				return;
 			}
 
-			await this.dataTransferToDocumentFallback(null, fallbackHtml);
-			return;
-		}
+			window.app.console.log('download done - response ' + response);
+			var formData = new FormData();
+			formData.append('data', response, 'clipboard');
 
-		window.app.console.log('download done - response ' + response);
-		var formData = new FormData();
-		formData.append('data', response, 'clipboard');
+			try {
+				await this._doAsyncDownload(
+					'POST', this.getMetaURL(), formData, false,
+					function(progress) { return 50 + progress/2; },
+					/*keepPopupAlive=*/true,
+				);
 
-		try {
-			await this._doAsyncDownload(
-				'POST', this.getMetaURL(), formData, false,
-				function(progress) { return 50 + progress/2; }
-			);
-
-			if (this._checkAndDisablePasteSpecial()) {
-				window.app.console.log('up-load done, now paste special');
-				app.socket.sendMessage('uno .uno:PasteSpecial');
-			} else {
-				window.app.console.log('up-load done, now paste');
-				app.socket.sendMessage('uno .uno:Paste');
+				if (this._checkAndDisablePasteSpecial()) {
+					window.app.console.log('up-load done, now .uno:PasteSpecial');
+					app.socket.sendMessage('uno .uno:PasteSpecial');
+				} else {
+					window.app.console.log('up-load done, now .uno:Paste');
+					await this._sendCommandAndWaitForCompletion('.uno:Paste');
+				}
+			} catch (_error) {
+				window.app.console.error('Clipboard: failed to download - error');
+				const uploadErrorMessage = _('Failed to upload the clipboard');
+				this._map.uiManager.showInfoModal('data-transfer-warning', '', uploadErrorMessage);
 			}
-		} catch (_error) {
-			window.app.console.error('Clipboard: failed to download - error');
-			const uploadErrorMessage = _('Failed to upload the clipboard');
-			this._map.uiManager.showInfoModal('data-transfer-warning', '', uploadErrorMessage);
+		} finally {
+			// Hide progress indicator.
+			this._downloadProgress._onComplete();
+			this._downloadProgress._onClose();
 		}
 	},
 
@@ -851,7 +873,7 @@ window.L.Clipboard = window.L.Class.extend({
 
 	// Gets status of a copy/paste command from the remote Kit
     _onCommandResult: function(e) {
-        if (e.commandName === '.uno:Copy' || e.commandName === '.uno:Cut' || e.commandName === '.uno:CopyHyperlinkLocation' || e.commandName === '.uno:CopySlide') {
+        if (e.commandName === '.uno:Copy' || e.commandName === '.uno:Cut' || e.commandName === '.uno:CopyHyperlinkLocation' || e.commandName === '.uno:CopySlide' || e.commandName === '.uno:Paste') {
 			window.app.console.log('Resolve clipboard command promise ' + e.commandName
 				+ ' with queue length: ' + this._commandCompletion.length);
 			while (this._commandCompletion.length > 0)
@@ -863,8 +885,8 @@ window.L.Clipboard = window.L.Class.extend({
 	},
 
 	_sendCommandAndWaitForCompletion: function(command, params) {
-		if (command !== '.uno:Copy' && command !== '.uno:Cut' && command !== '.uno:CopyHyperlinkLocation' && command !== '.uno:CopySlide') {
-			console.error(`_sendCommandAndWaitForCompletion was called with '${command}', but anything except Copy or Cut will never complete`);
+		if (command !== '.uno:Copy' && command !== '.uno:Cut' && command !== '.uno:CopyHyperlinkLocation' && command !== '.uno:CopySlide' && command !== '.uno:Paste') {
+			console.error(`_sendCommandAndWaitForCompletion was called with '${command}', but anything except Copy/Cut/Paste will never complete`);
 			return null;
 		}
 

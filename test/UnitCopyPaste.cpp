@@ -18,12 +18,14 @@
 #include <UnitHTTP.hpp>
 #include <WebSocketSession.hpp>
 #include <common/Clipboard.hpp>
+#include <common/JsonUtil.hpp>
 #include <helpers.hpp>
 #include <lokassert.hpp>
 #include <test.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/ClientSession.hpp>
 
+#include <Poco/JSON/Object.h>
 #include <Poco/URI.h>
 #include <Poco/Util/LayeredConfiguration.h>
 
@@ -265,6 +267,27 @@ public:
         TRANSITION_STATE(_phase, Phase::PostCloseTest);
     }
 
+    // Verify that .uno:Paste emits a unocommandresult.
+    void testPasteCompletion(const std::shared_ptr<http::WebSocketSession>& socket)
+    {
+        TST_LOG("Dispatch .uno:Paste and assert unocommandresult");
+        helpers::sendTextFrame(socket, "uno .uno:Paste", testname);
+        while (true)
+        {
+            const std::vector<char> message =
+                socket->waitForMessage("unocommandresult:", std::chrono::seconds(10), testname);
+            // Without the accompanying fix in place, this test would have failed with:
+            // Timed out waiting for unocommandresult
+            // i.e. we didn't know when paste finished to hide the progress indicator.
+            LOK_ASSERT_MESSAGE("Timed out waiting for unocommandresult after .uno:Paste",
+                               !message.empty());
+            Poco::JSON::Object::Ptr object;
+            LOK_ASSERT(JsonUtil::parseJSON(std::string(message.data(), message.size()), object));
+            if (JsonUtil::getJSONValue<std::string>(object, "commandName") == ".uno:Paste")
+                break;
+        }
+    }
+
     void runTest()
     {
         // NOTE: This code has multiple race-conditions!
@@ -378,6 +401,8 @@ public:
         // parse HTML when we expected a list of mimetype-size-bytes entries.
         if (!fetchClipboardAssert(_clipURI, "text/html", html))
             return;
+
+        testPasteCompletion(socket);
 
         // Setup state that will be also asserted in postCloseTest():
         TST_LOG("Setup clipboards:");
