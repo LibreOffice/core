@@ -7,6 +7,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Connector endpoint drag pr
 
 	beforeEach(function() {
 		helper.setupAndLoadDocument('impress/connector_drag.fodp');
+		cy.getFrameWindow().then(function(win) {
+			this.win = win;
+		});
 	});
 
 	function getHandlesSection(win) {
@@ -23,6 +26,11 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Connector endpoint drag pr
 		// The connector crosses the center of the slide.
 		impressHelper.clickCenterOfSlide({});
 
+		// Let the selection settle so the handle geometry is final and the
+		// canvas sub-section that receives the drag is positioned before the
+		// mouse press reads the handle's screen position.
+		helper.processToIdle(this.win);
+
 		// The two endpoints of the connector are poly handles.
 		cy.cGet('#test-div-shape-handle-0').should('exist');
 		cy.cGet('#test-div-shape-handle-1').should('exist');
@@ -30,7 +38,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Connector endpoint drag pr
 		// Connectors have no rectangle handles, so no rotation handle either.
 		cy.cGet('#test-div-shape-handle-rotation').should('not.exist');
 
-		cy.cGet('#test-div-shape-handle-1').then(function($handle) {
+		cy.cGet('#test-div-shape-handle-1').then(($handle) => {
 			var rect = $handle[0].getBoundingClientRect();
 			var startX = rect.left + rect.width / 2;
 			var startY = rect.top + rect.height / 2;
@@ -42,26 +50,22 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Connector endpoint drag pr
 			cy.cGet('body').realMouseMove(endX, endY);
 
 			// While dragging, the preview polyline from core is shown.
-			cy.getFrameWindow().then(function(win) {
-				cy.waitUntil(function() {
-					var section = getHandlesSection(win);
-					var polygons = section && section.sectionProperties.shapeDragPreviewPolygons;
-					return Boolean(polygons && polygons.length > 0 && polygons[0].length > 1);
-				}, {
-					errorMsg: 'The drag preview polyline did not arrive.'
-				});
+			cy.waitUntil(() => {
+				var section = getHandlesSection(this.win);
+				var polygons = section && section.sectionProperties.shapeDragPreviewPolygons;
+				return Boolean(polygons && polygons.length > 0 && polygons[0].length > 1);
+			}, {
+				errorMsg: 'The drag preview polyline did not arrive.'
 			});
 
 			cy.cGet('body').realMouseUp({ x: endX, y: endY });
 
 			// After dropping, the preview is removed.
-			cy.getFrameWindow().then(function(win) {
-				cy.waitUntil(function() {
-					var section = getHandlesSection(win);
-					return Boolean(section && !section.sectionProperties.shapeDragPreviewPolygons);
-				}, {
-					errorMsg: 'The drag preview polyline was not removed after the drop.'
-				});
+			cy.waitUntil(() => {
+				var section = getHandlesSection(this.win);
+				return Boolean(section && !section.sectionProperties.shapeDragPreviewPolygons);
+			}, {
+				errorMsg: 'The drag preview polyline was not removed after the drop.'
 			});
 
 			// The drop has moved the endpoint, so its handle follows.
