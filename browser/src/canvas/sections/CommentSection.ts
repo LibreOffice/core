@@ -401,6 +401,21 @@ export class Comment extends CanvasSectionObject {
 			return this.renderedPosY;
 		}
 
+		// A call without explicit coordinates re-applies the position the layout
+		// gave the container earlier. Until the first layout pass there is none,
+		// so the container keeps its place and its first position comes straight
+		// from the layout. A comment in edit state is the exception: its box is
+		// visible right away, so it takes the clamped placement below even
+		// before a layout pass has run.
+		if (
+			left === undefined &&
+			top === undefined &&
+			this.sectionProperties.container.style.left === '' &&
+			!this.isEdit()
+		) {
+			return this.renderedPosY;
+		}
+
 		if (canvasContainerBounds === undefined) {
 			canvasContainerBounds = this.canvasContainerBounds;
 		}
@@ -1175,7 +1190,7 @@ export class Comment extends CanvasSectionObject {
 			this.hideImpressDraw();
 	}
 
-	private isInsideActivePart() {
+	public isInsideActivePart(): boolean {
 		// Impress and Draw only.
 		return this.sectionProperties.partIndex === app.map._docLayer._selectedPart;
 	}
@@ -2117,6 +2132,22 @@ export class Comment extends CanvasSectionObject {
 
 	public setCollapsed(): void {
 		this.isCollapsed = true;
+
+		// A collapsed comment shows only its avatar bubble, and only on the slide
+		// it belongs to; on any other slide it is fully hidden. In the file-based
+		// view every page is on display at once, so every comment keeps its
+		// bubble. A comment in edit state falls through instead, taking the same
+		// route as on the displayed slide, where the code below closes its box.
+		if (
+			(app.map._docLayer._docType === 'presentation' ||
+				app.map._docLayer._docType === 'drawing') &&
+			!app.file.fileBasedView &&
+			!this.isInsideActivePart() &&
+			!this.isEdit()
+		) {
+			this.hide();
+			return;
+		}
 
 		if (this.sectionProperties.commentListSection.sectionProperties.show != false && !this.isEdit()) {
 			this.show();

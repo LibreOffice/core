@@ -1,4 +1,4 @@
-/* global describe it cy require beforeEach */
+/* global describe it cy require expect beforeEach */
 
 var desktopHelper = require('../../common/desktop_helper');
 var helper = require('../../common/helper');
@@ -363,5 +363,97 @@ describe(['tagmultiuser'], 'Multiuser Annotation Autosave Tests', function() {
 		cy.cSetActiveFrame('#iframe2');
 		cy.cGet('.cool-annotation-edit.reply-annotation').should('be.not.visible');
 		cy.cGet('.cool-annotation-content > div').should('have.text','some text0');
+	});
+});
+
+// The document has two comments on slide 2. The first view stays on slide 1
+// and inserts comments there; the second view watches slide 2. The comments
+// shown on slide 2 must not move or flicker while the other view comments on
+// a different slide.
+describe(['tagmultiuser'], 'Comment inserted on another slide', function() {
+
+	beforeEach(function() {
+		helper.setupAndLoadDocument('impress/annotation_on_other_slide.odp', true);
+		cy.viewport(2600, 800);
+		desktopHelper.switchUIToNotebookbar();
+
+		cy.cSetActiveFrame('#iframe1');
+		desktopHelper.closeNavigatorSidebar();
+		desktopHelper.hideSidebarImpress();
+
+		cy.cSetActiveFrame('#iframe2');
+		desktopHelper.closeNavigatorSidebar();
+		desktopHelper.hideSidebarImpress();
+	});
+
+	function commentPositions(win) {
+		var section = win.app.sectionContainer.getSectionWithName(win.app.CSections.CommentList.name);
+		var positions = {};
+		section.sectionProperties.commentList.forEach(function(c) {
+			positions[c.sectionProperties.data.id] = {
+				part: c.sectionProperties.partIndex,
+				left: c.sectionProperties.container.style.left,
+				top: c.sectionProperties.container.style.top,
+				display: c.sectionProperties.container.style.display
+			};
+		});
+		return positions;
+	}
+
+	it('does not move the comments shown on the current slide', function() {
+		// The second view looks at slide 2, where the document's comments live.
+		cy.cSetActiveFrame('#iframe2');
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.setPart(1);
+			return helper.processToIdle(win);
+		});
+		// Both comments of slide 2 have containers placed by the layout.
+		cy.cGet('.cool-annotation').should('have.length', 2);
+		cy.cGet('.cool-annotation').each(function($el) {
+			expect($el[0].style.left).to.not.equal('');
+		});
+		// Let the layouting task and the position transition settle.
+		cy.wait(1000);
+
+		var baseline = null;
+		cy.getFrameWindow().then(function(win) {
+			baseline = commentPositions(win);
+		});
+
+		// The first view inserts two comments on slide 1, one after the other.
+		// Type through the helper but save by hand: after the save the comment
+		// list can be rebuilt in slide order, which puts the slide 2 comments
+		// after the new one, so the saved comment is found by its text rather
+		// than by the position of its container.
+		for (var round = 0; round < 2; round++) {
+			cy.cSetActiveFrame('#iframe1');
+			var text = 'comment ' + round + ' on slide one';
+			desktopHelper.insertComment(text, false);
+			cy.cGet('.cool-annotation').last({log: false}).find('[value="Save"]').click();
+			cy.cGet('body').contains('.cool-annotation-content', text).should('exist');
+			helper.typeIntoDocument('{esc}');
+			cy.getFrameWindow().then(function(win) {
+				return helper.processToIdle(win);
+			});
+
+			// The new comment reaches the second view but shows nothing there,
+			// and the slide 2 comments stay exactly where they were. The wait
+			// gives a buggy relayout and its position transition time to move
+			// things before the position check.
+			cy.cSetActiveFrame('#iframe2');
+			cy.cGet('.cool-annotation').should('have.length', 3 + round);
+			cy.wait(1000);
+			cy.getFrameWindow().then(function(win) {
+				var current = commentPositions(win);
+				Object.keys(baseline).forEach(function(id) {
+					expect(current[id].left, 'left of comment ' + id).to.equal(baseline[id].left);
+					expect(current[id].top, 'top of comment ' + id).to.equal(baseline[id].top);
+				});
+				Object.keys(current).forEach(function(id) {
+					if (!(id in baseline))
+						expect(current[id].display, 'slide 1 comment stays hidden').to.equal('none');
+				});
+			});
+		}
 	});
 });

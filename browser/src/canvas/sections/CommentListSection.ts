@@ -2114,7 +2114,8 @@ export class CommentSection extends CanvasSectionObject {
 					}
 				}
 			}
-			this.update();
+			if (this.changeAffectsShownComments(annotation))
+				this.update();
 			if (this.sectionProperties.selectedComment && !this.sectionProperties.selectedComment.isEdit()) {
 				this.map.focus();
 			}
@@ -2129,7 +2130,8 @@ export class CommentSection extends CanvasSectionObject {
 				}
 				else {
 					this.removeItem(id);
-					this.update();
+					if (this.changeAffectsShownComments(removed))
+						this.update();
 				}
 			}
 		} else if (action === 'RedlinedDeletion') {
@@ -2173,7 +2175,8 @@ export class CommentSection extends CanvasSectionObject {
 							parentComment.removeChildByIndex(index);
 					}
 				}
-				this.update();
+				if (this.changeAffectsShownComments(modified))
+					this.update();
 
 				if (CommentSection.autoSavedComment) {
 					modified.focusLost();
@@ -2216,7 +2219,8 @@ export class CommentSection extends CanvasSectionObject {
 		}
 		if ((<any>window).mode.isSmallScreenDevice()) {
 			var shouldOpenWizard = false;
-			var wePerformedAction = obj.comment.author === this.map.getViewName(app.map._docLayer._viewId);
+			// Change-tracking messages carry a redline instead of a comment.
+			var wePerformedAction = !changetrack && obj.comment.author === this.map.getViewName(app.map._docLayer._viewId);
 
 			if ((<any>window).commentWizard || (action === 'Add' && wePerformedAction))
 				shouldOpenWizard = true;
@@ -2390,6 +2394,15 @@ export class CommentSection extends CanvasSectionObject {
 		return (app.map._docLayer._docType === 'presentation' || app.map._docLayer._docType === 'drawing') && !app.file.fileBasedView;
 	}
 
+	// Whether a change to the given comment can alter what is on screen. In
+	// Writer and Calc every comment takes part in the visible layout, as does
+	// every comment in the file-based view, where all slides are on display at
+	// once. In Impress and Draw only the comments of the slide on display do.
+	private changeAffectsShownComments(comment: Comment): boolean {
+		if (!comment || !this.mustCheckSelectedPart()) return true;
+		return comment.isInsideActivePart();
+	}
+
 	private layoutUp (subList: Array<Comment>, actualPosition: Array<number>, lastY: number, relayout: boolean = true): number {
 		var height: number;
 		for (var i = 0; i < subList.length; i++) {
@@ -2432,10 +2445,12 @@ export class CommentSection extends CanvasSectionObject {
 
 				startY = this.layoutUp(subList, [x, subList[0].sectionProperties.data.anchorSPoint.vY], startY, relayout);
 				i = i - subList.length;
+				// Only a thread that was laid out gets the inter-thread gap, so
+				// the stack's positions depend only on the threads it shows.
+				startY -= this.sectionProperties.marginY;
 			} else {
 				i = tmpIdx;
 			}
-			startY -= this.sectionProperties.marginY;
 		}
 		return startY;
 	}
@@ -2501,10 +2516,12 @@ export class CommentSection extends CanvasSectionObject {
 
 				startY = this.layoutDown(subList, [x, subList[0].sectionProperties.data.anchorSPoint.vY], startY, relayout);
 				i = i + subList.length;
+				// Only a thread that was laid out gets the inter-thread gap, so
+				// the stack's positions depend only on the threads it shows.
+				startY += this.sectionProperties.marginY;
 			} else {
 				i = tmpIdx;
 			}
-			startY += this.sectionProperties.marginY;
 		}
 		return startY;
 	}
