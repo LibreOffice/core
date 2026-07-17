@@ -331,14 +331,14 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
 	-dynamicbase \
 	-manifest
 
-# link.exe in -LIB mode doesn't understand -debug, use it only for EXEs and DLLs
-ifeq ($(ENABLE_DBGUTIL),TRUE)
-# fastlink is faster but pdb files reference .obj files
-# but don't do that for setup_native DLLs: this produces make error 139 in some configurations
-gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO = $(if $(filter -U_DLL,$(1)),-debug,-debug$(if $(HAVE_LINK_DEBUG_FASTLINK),:fastlink))
-else
-gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO = -debug
-endif
+# link.exe in -LIB mode doesn't understand -debug, use it only for EXEs and DLLs.
+# fastlink is faster but pdb files reference .obj files.
+# Static gate, resolved once at parse time: dbgutil and a linker that supports it.
+gb_Windows_PE_FASTLINK := $(if $(filter TRUE,$(ENABLE_DBGUTIL)),$(HAVE_LINK_DEBUG_FASTLINK))
+# but don't do that for setup_native DLLs: this produces make error 139 in some configurations;
+# same for managed/CLR images. Per-target carve-outs, resolved at link time.
+gb_Windows_PE_use_fastlink = $(if $(gb_Windows_PE_FASTLINK),$(if $(filter -U_DLL,$(1))$(CXXCLROBJECTS)$(GENCXXCLROBJECTS),,:fastlink))
+gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO = -debug$(call gb_Windows_PE_use_fastlink,$(1))
 
 ifeq ($(ENABLE_LTO),TRUE)
 gb_Windows_PE_TARGETTYPEFLAGS += -LTCG
