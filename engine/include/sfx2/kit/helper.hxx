@@ -187,10 +187,10 @@ public:
                              vcl::KitWindowId nWindowId,
                              std::u16string_view rAction,
                              const std::vector<vcl::KitPayloadItem>& rPayload = std::vector<vcl::KitPayloadItem>());
-    /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED - if @bInvalidateAll - first invalidates all parts
-    static void notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
-    /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document - if @bInvalidateAll - first invalidates all parts
-    static void notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
+    /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED - if @bInvalidateAllParts - first invalidates all parts
+    static void notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAllParts = true);
+    /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document - if @bInvalidateAllParts - first invalidates all parts
+    static void notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAllParts = true);
     /// Emits a KIT_CALLBACK_STATE_CHANGED for all views of the same document - with payload ".uno:CurrentPageResize"
     static void notifyCurrentPageSizeChangedAllViews(const vcl::ITiledRenderable* pDoc);
     /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document with the same part

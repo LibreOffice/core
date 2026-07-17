@@ -774,12 +774,12 @@ void KitHelper::notifyInvalidation(SfxViewShell const* pThisView, const int nInP
     pThisView->viewInvalidateTilesCallback(pRect, nPart, nMode);
 }
 
-void KitHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
+void KitHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAllParts)
 {
     if (!pDoc || pDoc->isDisposed() || DisableCallbacks::disabled())
         return;
 
-    if (bInvalidateAll)
+    if (bInvalidateAllParts)
     {
         for (int i = 0; i < pDoc->getParts(); ++i)
         {
@@ -791,7 +791,7 @@ void KitHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const O
     pThisView->viewCallback(KIT_CALLBACK_DOCUMENT_SIZE_CHANGED, rPayload);
 }
 
-void KitHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
+void KitHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAllParts)
 {
     if (DisableCallbacks::disabled())
         return;
@@ -802,8 +802,7 @@ void KitHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, b
     {
         if (lcl_getDocForView(pViewShell) == pDoc)
         {
-            KitHelper::notifyDocumentSizeChanged(pViewShell, ""_ostr, pDoc, bInvalidateAll);
-            bInvalidateAll = false; // Invalidations already go to all views.
+            KitHelper::notifyDocumentSizeChanged(pViewShell, ""_ostr, pDoc, bInvalidateAllParts);
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
