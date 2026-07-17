@@ -248,6 +248,11 @@ bool ScDocShell::HasUpdatableLinks() const
     return pLinkMgr && !pLinkMgr->GetLinks().empty();
 }
 
+bool ScDocShell::HasExternalLinks() const
+{
+    return GetDocument().HasExternalLinks() || !GetDeferredFormControlImages().empty();
+}
+
 namespace
 {
 

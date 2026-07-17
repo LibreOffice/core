@@ -76,7 +76,6 @@
 #include <defaultsoptions.hxx>
 #include <markdata.hxx>
 #include <preview.hxx>
-#include <documentlinkmgr.hxx>
 #include <gridwin.hxx>
 #include <tablestyle.hxx>
 #include <cellsuno.hxx>
@@ -95,7 +94,6 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/fillbitmaplink.hxx>
 #include <docpool.hxx>
 #include <drwlayer.hxx>
 
@@ -1740,27 +1738,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
         if ( pDocSh->GetCreateMode() != SfxObjectCreateMode::INTERNAL &&
              pDocSh->IsUpdateEnabled() )  // #105575#; update only in the first creation of the ViewShell
         {
-            // Check if there are any external data.
-            bool bLink = rDoc.GetExternalRefManager()->hasExternalData();
-            if (!bLink)
-            {
-                // #i100042# sheet links can still exist independently from external formula references
-                SCTAB nTabCount = rDoc.GetTableCount();
-                for (SCTAB i=0; i<nTabCount && !bLink; i++)
-                    if (rDoc.IsLinked(i))
-                        bLink = true;
-            }
-            if (!bLink)
-            {
-                const sc::DocumentLinkManager& rMgr = rDoc.GetDocLinkManager();
-                const ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-                if (rDoc.HasLinkFormulaNeedingCheck() || rDoc.HasAreaLinks()
-                    || rDoc.HasDataProviderMappings() || rMgr.hasExternalLinks()
-                    || (pDrawLayer && hasDeferredFillBitmapLinks(pDrawLayer->GetItemPool()))
-                    || !pDocSh->GetDeferredFormControlImages().empty())
-                    bLink = true;
-            }
-            if (bLink)
+            if (pDocSh->HasExternalLinks())
             {
                 if ( !pFirst )
                     pFirst = &GetViewFrame();
