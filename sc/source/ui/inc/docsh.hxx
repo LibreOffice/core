@@ -305,6 +305,9 @@ public:
     virtual void    ReconnectDdeLink(SfxObjectShell& rServer) override;
     void            UpdateLinks() override;
     void            PerformLinkUpdate() override;
+    /** The document's HasExternalLinks together with the deferred form-control
+        images the shell keeps itself. */
+    bool            HasExternalLinks() const;
     SC_DLLPUBLIC void SetInitialLinkUpdate( const SfxMedium* pMedium );
     void            AllowLinkUpdate();
     SC_DLLPUBLIC void ReloadAllLinks();

@@ -24,6 +24,9 @@
 #include <sal/log.hxx>
 #include <scitems.hxx>
 #include <datamapper.hxx>
+#include <documentlinkmgr.hxx>
+#include <drwlayer.hxx>
+#include <externalrefmgr.hxx>
 #include <docsh.hxx>
 #include <bcaslot.hxx>
 #include <broadcast.hxx>
@@ -34,6 +37,7 @@
 #include <sortparam.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
+#include <svx/fillbitmaplink.hxx>
 
 // Add totally brand-new methods to this source file.
 
@@ -1045,6 +1049,25 @@ sc::ExternalDataMapper& ScDocument::GetExternalDataMapper()
 bool ScDocument::HasDataProviderMappings() const
 {
     return mpDataMapper && !mpDataMapper->getDataSources().empty();
+}
+
+bool ScDocument::HasExternalLinks() const
+{
+    if (ScExternalRefManager* pRefMgr = GetExternalRefManager(); pRefMgr && pRefMgr->hasExternalData())
+        return true;
+
+    // sheet links can exist independently from external formula references (#i100042#)
+    SCTAB nTabCount = GetTableCount();
+    for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
+        if (IsLinked(nTab))
+            return true;
+
+    if (HasLinkFormulaNeedingCheck() || HasDataProviderMappings()
+        || GetDocLinkManager().hasExternalContentLinks())
+        return true;
+
+    const ScDrawLayer* pDrawLayer = GetDrawLayer();
+    return pDrawLayer && hasDeferredFillBitmapLinks(pDrawLayer->GetItemPool());
 }
 
 void ScDocument::StoreTabToCache(SCTAB nTab, SvStream& rStrm) const

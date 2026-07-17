@@ -243,6 +243,11 @@ void ScDocShell::PerformLinkUpdate()
     ReloadAllLinks();
 }
 
+bool ScDocShell::HasExternalLinks() const
+{
+    return GetDocument().HasExternalLinks() || !GetDeferredFormControlImages().empty();
+}
+
 namespace
 {
 
