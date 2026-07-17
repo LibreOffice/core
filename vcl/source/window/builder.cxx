@@ -3171,6 +3171,8 @@ void BuilderBase::handleActionWidget(xmlreader::XmlReader &reader)
         case -11:
             nResponse = RET_HELP;
             break;
+        case RET_RESET:
+            break;
         default:
             assert(nResponse >= 100 && "keep non-canned responses in range 100+ to avoid collision with vcl RET_*");
             break;

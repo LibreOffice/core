@@ -224,7 +224,10 @@ enum VclResponseType
     RET_RETRY   = 4,
     RET_IGNORE  = 5,
     RET_CLOSE   = 7,
-    RET_HELP    = 10
+    // The following responses do not close the dialog, but are used
+    // to identify buttons that need special handling
+    RET_HELP    = 10,
+    RET_RESET   = 11,
 };
 
 enum class VclButtonsType

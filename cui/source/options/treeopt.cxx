@@ -450,7 +450,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, bool fromExten
     : SfxOkDialogController(pParent, u"cui/ui/optionsdialog.ui"_ustr, u"OptionsDialog"_ustr)
     , xOkPB(m_xBuilder->weld_button(u"ok"_ustr))
     , xApplyPB(m_xBuilder->weld_button(u"apply"_ustr))
-    , xBackPB(m_xBuilder->weld_button(u"revert"_ustr))
+    , xBackPB(m_xBuilder->weld_button(u"reset"_ustr))
     , xTreeLB(m_xBuilder->weld_tree_view(u"pages"_ustr))
     , xTabBox(m_xBuilder->weld_container(u"box"_ustr))
     , m_xSearchEdit(m_xBuilder->weld_entry(u"searchEntry"_ustr))

@@ -45,7 +45,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="revert">
+              <object class="GtkButton" id="reset">
                 <property name="label" translatable="yes" context="stock">_Reset</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -239,7 +239,7 @@
     </child>
     <action-widgets>
       <action-widget response="-11">help</action-widget>
-      <action-widget response="101">revert</action-widget>
+      <action-widget response="11">reset</action-widget>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>

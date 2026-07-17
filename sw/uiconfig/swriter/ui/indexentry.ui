@@ -717,7 +717,7 @@
     <action-widgets>
       <action-widget response="-7">close</action-widget>
       <action-widget response="101">delete</action-widget>
-      <action-widget response="103">reset</action-widget>
+      <action-widget response="11">reset</action-widget>
       <action-widget response="102">insert</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>

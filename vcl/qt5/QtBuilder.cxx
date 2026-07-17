@@ -861,6 +861,8 @@ static QMessageBox::ButtonRole getButtonRole(int nResponse)
         case RET_CANCEL:
         case RET_CLOSE:
             return QMessageBox::RejectRole;
+        case RET_RESET:
+            return QMessageBox::ResetRole;
         default:
             return QMessageBox::NoRole;
     }
