@@ -19,7 +19,6 @@
 
 #include <comphelper/doublecheckedinit.hxx>
 #include <documentlinkmgr.hxx>
-#include <arealink.hxx>
 #include <datastream.hxx>
 #include <ddelink.hxx>
 #include <externalrefmgr.hxx>
@@ -139,32 +138,12 @@ bool DocumentLinkManager::hasDdeLinks() const
     return false;
 }
 
-bool DocumentLinkManager::hasExternalContentLinks() const
+bool DocumentLinkManager::hasUpdatableLinks() const
 {
-    // Links that bring content in from outside the document: an area link or
-    // sheet link importing a cell range from a file, a DDE feed, an OLE or
-    // IFrame object, a WebService fetch, or a linked graphic.
+    // Every link in the document's LinkManager can be updated from an external
+    // source, so a non-empty link list means the document has updatable links.
     sfx2::LinkManager* pMgr = mpImpl->mpLinkManager;
-    if (!pMgr)
-        return false;
-
-    const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
-    for (const auto & rLink : rLinks)
-    {
-        sfx2::SvBaseLink* pBase = rLink.get();
-        if (dynamic_cast<ScAreaLink*>(pBase))
-            return true;
-        if (dynamic_cast<ScDdeLink*>(pBase))
-            return true;
-        if (dynamic_cast<SdrEmbedObjectLink*>(pBase) || dynamic_cast<SdrIFrameLink*>(pBase))
-            return true;
-        if (dynamic_cast<ScWebServiceLink*>(pBase))
-            return true;
-        if (pBase && pBase->GetObjType() == sfx2::SvBaseLinkObjectType::ClientGraphic)
-            return true;
-    }
-
-    return false;
+    return pMgr && !pMgr->GetLinks().empty();
 }
 
 bool DocumentLinkManager::hasExternalRefLinks() const
