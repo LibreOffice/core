@@ -1056,7 +1056,7 @@ bool ScDocument::HasExternalLinks() const
             return true;
 
     if (HasLinkFormulaNeedingCheck() || HasDataProviderMappings()
-        || GetDocLinkManager().hasExternalContentLinks())
+        || GetDocLinkManager().hasUpdatableLinks())
         return true;
 
     const ScDrawLayer* pDrawLayer = GetDrawLayer();
