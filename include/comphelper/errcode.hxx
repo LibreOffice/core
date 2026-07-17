@@ -281,86 +281,86 @@ enum class ErrCodeClass {
     Compiler           = 23
 };
 
-#define ERRCODE_NONE                     ErrCode(0)
+constexpr ErrCode ERRCODE_NONE                   {0};
 
-#define ERRCODE_IO_MISPLACEDCHAR         ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 1 )
-#define ERRCODE_IO_NOTEXISTS             ErrCode( ErrCodeArea::Io, ErrCodeClass::NotExists, 2 )
-#define ERRCODE_IO_ALREADYEXISTS         ErrCode( ErrCodeArea::Io, ErrCodeClass::AlreadyExists, 3 )
-#define ERRCODE_IO_NOTADIRECTORY         ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 4 )
-#define ERRCODE_IO_NOTAFILE              ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 5 )
-#define ERRCODE_IO_INVALIDDEVICE         ErrCode( ErrCodeArea::Io, ErrCodeClass::Path, 6 )
-#define ERRCODE_IO_ACCESSDENIED          ErrCode( ErrCodeArea::Io, ErrCodeClass::Access, 7 )
-#define ERRCODE_IO_LOCKVIOLATION         ErrCode( ErrCodeArea::Io, ErrCodeClass::Locking, 8 )
-#define ERRCODE_IO_OUTOFSPACE            ErrCode( ErrCodeArea::Io, ErrCodeClass::Space, 9 )
-#define ERRCODE_IO_ISWILDCARD            ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 11 )
-#define ERRCODE_IO_NOTSUPPORTED          ErrCode( ErrCodeArea::Io, ErrCodeClass::NotSupported, 12 )
-#define ERRCODE_IO_GENERAL               ErrCode( ErrCodeArea::Io, ErrCodeClass::General, 13 )
-#define ERRCODE_IO_TOOMANYOPENFILES      ErrCode( ErrCodeArea::Io, ErrCodeClass::Space, 14 )
-#define ERRCODE_IO_CANTREAD              ErrCode( ErrCodeArea::Io, ErrCodeClass::Read, 15 )
-#define ERRCODE_IO_CANTWRITE             ErrCode( ErrCodeArea::Io, ErrCodeClass::Write, 16 )
-#define ERRCODE_IO_OUTOFMEMORY           ErrCode( ErrCodeArea::Io, ErrCodeClass::Space, 17 )
-#define ERRCODE_IO_CANTSEEK              ErrCode( ErrCodeArea::Io, ErrCodeClass::General, 18 )
-#define ERRCODE_IO_CANTTELL              ErrCode( ErrCodeArea::Io, ErrCodeClass::General, 19 )
-#define ERRCODE_IO_WRONGVERSION          ErrCode( ErrCodeArea::Io, ErrCodeClass::Version, 20 )
-#define ERRCODE_IO_WRONGFORMAT           ErrCode( ErrCodeArea::Io, ErrCodeClass::Format, 21 )
-#define ERRCODE_IO_INVALIDCHAR           ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 22 )
-#define ERRCODE_IO_UNKNOWN               ErrCode( ErrCodeArea::Io, ErrCodeClass::Unknown, 23 )
-#define ERRCODE_IO_INVALIDACCESS         ErrCode( ErrCodeArea::Io, ErrCodeClass::Access, 24 )
-#define ERRCODE_IO_CANTCREATE            ErrCode( ErrCodeArea::Io, ErrCodeClass::Create, 25 )
-#define ERRCODE_IO_INVALIDPARAMETER      ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 26 )
-#define ERRCODE_IO_ABORT                 ErrCode( ErrCodeArea::Io, ErrCodeClass::Abort, 27 )
-#define ERRCODE_IO_NOTEXISTSPATH         ErrCode( ErrCodeArea::Io, ErrCodeClass::NotExists, 28 )
-#define ERRCODE_IO_PENDING               ErrCode( ErrCodeArea::Io, ErrCodeClass::NotExists, 29 )
-#define ERRCODE_IO_RECURSIVE             ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 30 )
-#define ERRCODE_IO_NAMETOOLONG           ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 31 )
-#define ERRCODE_IO_INVALIDLENGTH         ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 32 )
-#define ERRCODE_IO_CURRENTDIR            ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 33 )
-#define ERRCODE_IO_NOTSAMEDEVICE         ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 34 )
-#define ERRCODE_IO_DEVICENOTREADY        ErrCode( ErrCodeArea::Io, ErrCodeClass::Read, 35 )
-#define ERRCODE_IO_BADCRC                ErrCode( ErrCodeArea::Io, ErrCodeClass::Read, 36 )
-#define ERRCODE_IO_WRITEPROTECTED        ErrCode( ErrCodeArea::Io, ErrCodeClass::Access, 37 )
-#define ERRCODE_IO_BROKENPACKAGE         ErrCode( ErrCodeArea::Io, ErrCodeClass::Format, 38 )
-#define ERRCODE_IO_NOTSTORABLEINBINARYFORMAT ErrCode( ErrCodeArea::Io, ErrCodeClass::Format, 39 )
-#define ERRCODE_IO_FILTERDISABLED        ErrCode( ErrCodeArea::Io, ErrCodeClass::Format, 40 )
+constexpr ErrCode ERRCODE_IO_MISPLACEDCHAR       { ErrCodeArea::Io, ErrCodeClass::Parameter, 1 };
+constexpr ErrCode ERRCODE_IO_NOTEXISTS           { ErrCodeArea::Io, ErrCodeClass::NotExists, 2 };
+constexpr ErrCode ERRCODE_IO_ALREADYEXISTS       { ErrCodeArea::Io, ErrCodeClass::AlreadyExists, 3 };
+constexpr ErrCode ERRCODE_IO_NOTADIRECTORY       { ErrCodeArea::Io, ErrCodeClass::Parameter, 4 };
+constexpr ErrCode ERRCODE_IO_NOTAFILE            { ErrCodeArea::Io, ErrCodeClass::Parameter, 5 };
+constexpr ErrCode ERRCODE_IO_INVALIDDEVICE       { ErrCodeArea::Io, ErrCodeClass::Path, 6 };
+constexpr ErrCode ERRCODE_IO_ACCESSDENIED        { ErrCodeArea::Io, ErrCodeClass::Access, 7 };
+constexpr ErrCode ERRCODE_IO_LOCKVIOLATION       { ErrCodeArea::Io, ErrCodeClass::Locking, 8 };
+constexpr ErrCode ERRCODE_IO_OUTOFSPACE          { ErrCodeArea::Io, ErrCodeClass::Space, 9 };
+constexpr ErrCode ERRCODE_IO_ISWILDCARD          { ErrCodeArea::Io, ErrCodeClass::Parameter, 11 };
+constexpr ErrCode ERRCODE_IO_NOTSUPPORTED        { ErrCodeArea::Io, ErrCodeClass::NotSupported, 12 };
+constexpr ErrCode ERRCODE_IO_GENERAL             { ErrCodeArea::Io, ErrCodeClass::General, 13 };
+constexpr ErrCode ERRCODE_IO_TOOMANYOPENFILES    { ErrCodeArea::Io, ErrCodeClass::Space, 14 };
+constexpr ErrCode ERRCODE_IO_CANTREAD            { ErrCodeArea::Io, ErrCodeClass::Read, 15 };
+constexpr ErrCode ERRCODE_IO_CANTWRITE           { ErrCodeArea::Io, ErrCodeClass::Write, 16 };
+constexpr ErrCode ERRCODE_IO_OUTOFMEMORY         { ErrCodeArea::Io, ErrCodeClass::Space, 17 };
+constexpr ErrCode ERRCODE_IO_CANTSEEK            { ErrCodeArea::Io, ErrCodeClass::General, 18 };
+constexpr ErrCode ERRCODE_IO_CANTTELL            { ErrCodeArea::Io, ErrCodeClass::General, 19 };
+constexpr ErrCode ERRCODE_IO_WRONGVERSION        { ErrCodeArea::Io, ErrCodeClass::Version, 20 };
+constexpr ErrCode ERRCODE_IO_WRONGFORMAT         { ErrCodeArea::Io, ErrCodeClass::Format, 21 };
+constexpr ErrCode ERRCODE_IO_INVALIDCHAR         { ErrCodeArea::Io, ErrCodeClass::Parameter, 22 };
+constexpr ErrCode ERRCODE_IO_UNKNOWN             { ErrCodeArea::Io, ErrCodeClass::Unknown, 23 };
+constexpr ErrCode ERRCODE_IO_INVALIDACCESS       { ErrCodeArea::Io, ErrCodeClass::Access, 24 };
+constexpr ErrCode ERRCODE_IO_CANTCREATE          { ErrCodeArea::Io, ErrCodeClass::Create, 25 };
+constexpr ErrCode ERRCODE_IO_INVALIDPARAMETER    { ErrCodeArea::Io, ErrCodeClass::Parameter, 26 };
+constexpr ErrCode ERRCODE_IO_ABORT               { ErrCodeArea::Io, ErrCodeClass::Abort, 27 };
+constexpr ErrCode ERRCODE_IO_NOTEXISTSPATH       { ErrCodeArea::Io, ErrCodeClass::NotExists, 28 };
+constexpr ErrCode ERRCODE_IO_PENDING             { ErrCodeArea::Io, ErrCodeClass::NotExists, 29 };
+constexpr ErrCode ERRCODE_IO_RECURSIVE           { ErrCodeArea::Io, ErrCodeClass::Parameter, 30 };
+constexpr ErrCode ERRCODE_IO_NAMETOOLONG         { ErrCodeArea::Io, ErrCodeClass::Parameter, 31 };
+constexpr ErrCode ERRCODE_IO_INVALIDLENGTH       { ErrCodeArea::Io, ErrCodeClass::Parameter, 32 };
+constexpr ErrCode ERRCODE_IO_CURRENTDIR          { ErrCodeArea::Io, ErrCodeClass::Parameter, 33 };
+constexpr ErrCode ERRCODE_IO_NOTSAMEDEVICE       { ErrCodeArea::Io, ErrCodeClass::Parameter, 34 };
+constexpr ErrCode ERRCODE_IO_DEVICENOTREADY      { ErrCodeArea::Io, ErrCodeClass::Read, 35 };
+constexpr ErrCode ERRCODE_IO_BADCRC              { ErrCodeArea::Io, ErrCodeClass::Read, 36 };
+constexpr ErrCode ERRCODE_IO_WRITEPROTECTED      { ErrCodeArea::Io, ErrCodeClass::Access, 37 };
+constexpr ErrCode ERRCODE_IO_BROKENPACKAGE       { ErrCodeArea::Io, ErrCodeClass::Format, 38 };
+constexpr ErrCode ERRCODE_IO_NOTSTORABLEINBINARYFORMAT { ErrCodeArea::Io, ErrCodeClass::Format, 39 };
+constexpr ErrCode ERRCODE_IO_FILTERDISABLED      { ErrCodeArea::Io, ErrCodeClass::Format, 40 };
 
 // StreamErrorCodes
 
-#define SVSTREAM_GENERALERROR            ERRCODE_IO_GENERAL
-#define SVSTREAM_FILE_NOT_FOUND          ERRCODE_IO_NOTEXISTS
-#define SVSTREAM_PATH_NOT_FOUND          ERRCODE_IO_NOTEXISTSPATH
-#define SVSTREAM_TOO_MANY_OPEN_FILES     ERRCODE_IO_TOOMANYOPENFILES
-#define SVSTREAM_ACCESS_DENIED           ERRCODE_IO_ACCESSDENIED
-#define SVSTREAM_SHARING_VIOLATION       ERRCODE_IO_LOCKVIOLATION
-#define SVSTREAM_LOCKING_VIOLATION       ERRCODE_IO_LOCKVIOLATION
-#define SVSTREAM_SHARE_BUFF_EXCEEDED     ERRCODE_IO_LOCKVIOLATION
+constexpr ErrCode SVSTREAM_GENERALERROR          = ERRCODE_IO_GENERAL;
+constexpr ErrCode SVSTREAM_FILE_NOT_FOUND        = ERRCODE_IO_NOTEXISTS;
+constexpr ErrCode SVSTREAM_PATH_NOT_FOUND        = ERRCODE_IO_NOTEXISTSPATH;
+constexpr ErrCode SVSTREAM_TOO_MANY_OPEN_FILES   = ERRCODE_IO_TOOMANYOPENFILES;
+constexpr ErrCode SVSTREAM_ACCESS_DENIED         = ERRCODE_IO_ACCESSDENIED;
+constexpr ErrCode SVSTREAM_SHARING_VIOLATION     = ERRCODE_IO_LOCKVIOLATION;
+constexpr ErrCode SVSTREAM_LOCKING_VIOLATION     = ERRCODE_IO_LOCKVIOLATION;
+constexpr ErrCode SVSTREAM_SHARE_BUFF_EXCEEDED   = ERRCODE_IO_LOCKVIOLATION;
 
-#define SVSTREAM_INVALID_ACCESS          ERRCODE_IO_INVALIDACCESS
-#define SVSTREAM_INVALID_HANDLE          ERRCODE_IO_GENERAL
-#define SVSTREAM_CANNOT_MAKE             ERRCODE_IO_CANTCREATE
-#define SVSTREAM_INVALID_PARAMETER       ERRCODE_IO_INVALIDPARAMETER
+constexpr ErrCode SVSTREAM_INVALID_ACCESS        = ERRCODE_IO_INVALIDACCESS;
+constexpr ErrCode SVSTREAM_INVALID_HANDLE        = ERRCODE_IO_GENERAL;
+constexpr ErrCode SVSTREAM_CANNOT_MAKE           = ERRCODE_IO_CANTCREATE;
+constexpr ErrCode SVSTREAM_INVALID_PARAMETER     = ERRCODE_IO_INVALIDPARAMETER;
 
-#define SVSTREAM_READ_ERROR              ERRCODE_IO_CANTREAD
-#define SVSTREAM_WRITE_ERROR             ERRCODE_IO_CANTWRITE
-#define SVSTREAM_SEEK_ERROR              ERRCODE_IO_CANTSEEK
+constexpr ErrCode SVSTREAM_READ_ERROR            = ERRCODE_IO_CANTREAD;
+constexpr ErrCode SVSTREAM_WRITE_ERROR           = ERRCODE_IO_CANTWRITE;
+constexpr ErrCode SVSTREAM_SEEK_ERROR            = ERRCODE_IO_CANTSEEK;
 
-#define SVSTREAM_OUTOFMEMORY             ERRCODE_IO_OUTOFMEMORY
+constexpr ErrCode SVSTREAM_OUTOFMEMORY           = ERRCODE_IO_OUTOFMEMORY;
 
-#define SVSTREAM_FILEFORMAT_ERROR        ERRCODE_IO_WRONGFORMAT
-#define SVSTREAM_WRONGVERSION            ERRCODE_IO_WRONGVERSION
+constexpr ErrCode SVSTREAM_FILEFORMAT_ERROR      = ERRCODE_IO_WRONGFORMAT;
+constexpr ErrCode SVSTREAM_WRONGVERSION          = ERRCODE_IO_WRONGVERSION;
 
-#define SVSTREAM_DISK_FULL               ERRCODE_IO_OUTOFSPACE
+constexpr ErrCode SVSTREAM_DISK_FULL             = ERRCODE_IO_OUTOFSPACE;
 
-#define PRINTER_ABORT                    ERRCODE_IO_ABORT
-#define PRINTER_GENERALERROR             ERRCODE_IO_GENERAL
+constexpr ErrCode PRINTER_ABORT                  = ERRCODE_IO_ABORT;
+constexpr ErrCode PRINTER_GENERALERROR           = ERRCODE_IO_GENERAL;
 
-#define ERRCODE_ABORT                    ERRCODE_IO_ABORT
+constexpr ErrCode ERRCODE_ABORT                  = ERRCODE_IO_ABORT;
 
-#define ERRCODE_INET_NAME_RESOLVE        ErrCode(ErrCodeArea::Inet, ErrCodeClass::Read,  1)
-#define ERRCODE_INET_CONNECT             ErrCode(ErrCodeArea::Inet, ErrCodeClass::Read,  2)
-#define ERRCODE_INET_READ                ErrCode(ErrCodeArea::Inet, ErrCodeClass::Read,  3)
-#define ERRCODE_INET_WRITE               ErrCode(ErrCodeArea::Inet, ErrCodeClass::Write, 4)
-#define ERRCODE_INET_GENERAL             ErrCode(ErrCodeArea::Inet, ErrCodeClass::Write, 5)
-#define ERRCODE_INET_OFFLINE             ErrCode(ErrCodeArea::Inet, ErrCodeClass::Read,  6)
-#define ERRCODE_INET_CONNECT_MSG         ErrCode(ErrCodeArea::Inet, ErrCodeClass::Read,  7)
+constexpr ErrCode ERRCODE_INET_NAME_RESOLVE      {ErrCodeArea::Inet, ErrCodeClass::Read,  1};
+constexpr ErrCode ERRCODE_INET_CONNECT           {ErrCodeArea::Inet, ErrCodeClass::Read,  2};
+constexpr ErrCode ERRCODE_INET_READ              {ErrCodeArea::Inet, ErrCodeClass::Read,  3};
+constexpr ErrCode ERRCODE_INET_WRITE             {ErrCodeArea::Inet, ErrCodeClass::Write, 4};
+constexpr ErrCode ERRCODE_INET_GENERAL           {ErrCodeArea::Inet, ErrCodeClass::Write, 5};
+constexpr ErrCode ERRCODE_INET_OFFLINE           {ErrCodeArea::Inet, ErrCodeClass::Read,  6};
+constexpr ErrCode ERRCODE_INET_CONNECT_MSG       {ErrCodeArea::Inet, ErrCodeClass::Read,  7};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
