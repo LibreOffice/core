@@ -9,6 +9,7 @@
 
 #include <jsdialog/jsdialogsender.hxx>
 #include <COKit/COKitEnums.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/json_writer.hxx>
 #include <vcl/dockwin.hxx>
 
@@ -255,40 +256,48 @@ void JSDialogNotifyIdle::Invoke()
         if (m_sTypeOfJSON == "formulabar" && eType != jsdialog::MessageType::Action)
             continue;
 
-        switch (eType)
+        try
         {
-            case jsdialog::MessageType::FullUpdate:
-                send(generateFullUpdate());
-                break;
-
-            case jsdialog::MessageType::WidgetUpdate:
-                send(generateWidgetUpdate(rMessage.m_pWindow));
-                break;
-
-            case jsdialog::MessageType::Close:
-                send(generateCloseMessage());
-                break;
-
-            case jsdialog::MessageType::Action:
-                send(generateActionMessage(rMessage.m_pWindow, std::move(rMessage.m_pData)));
-                break;
-
-            case jsdialog::MessageType::Popup:
-                send(generatePopupMessage(rMessage.m_pWindow,
-                                          (*rMessage.m_pData)[PARENT_ID ""_ostr],
-                                          (*rMessage.m_pData)[CLOSE_ID ""_ostr]));
-                break;
-
-            case jsdialog::MessageType::PopupClose:
-                send(generateClosePopupMessage((*rMessage.m_pData)[WINDOW_ID ""_ostr]));
-                break;
-
-            case jsdialog::MessageType::Menu:
+            switch (eType)
             {
-                send(generateMenuMessage(rMessage.m_pMenu, (*rMessage.m_pData)[PARENT_ID ""_ostr],
-                                         (*rMessage.m_pData)[CLOSE_ID ""_ostr]));
-                break;
+                case jsdialog::MessageType::FullUpdate:
+                    send(generateFullUpdate());
+                    break;
+
+                case jsdialog::MessageType::WidgetUpdate:
+                    send(generateWidgetUpdate(rMessage.m_pWindow));
+                    break;
+
+                case jsdialog::MessageType::Close:
+                    send(generateCloseMessage());
+                    break;
+
+                case jsdialog::MessageType::Action:
+                    send(generateActionMessage(rMessage.m_pWindow, std::move(rMessage.m_pData)));
+                    break;
+
+                case jsdialog::MessageType::Popup:
+                    send(generatePopupMessage(rMessage.m_pWindow,
+                                              (*rMessage.m_pData)[PARENT_ID ""_ostr],
+                                              (*rMessage.m_pData)[CLOSE_ID ""_ostr]));
+                    break;
+
+                case jsdialog::MessageType::PopupClose:
+                    send(generateClosePopupMessage((*rMessage.m_pData)[WINDOW_ID ""_ostr]));
+                    break;
+
+                case jsdialog::MessageType::Menu:
+                {
+                    send(generateMenuMessage(rMessage.m_pMenu,
+                                             (*rMessage.m_pData)[PARENT_ID ""_ostr],
+                                             (*rMessage.m_pData)[CLOSE_ID ""_ostr]));
+                    break;
+                }
             }
+        }
+        catch (const css::uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("vcl", "JSDialogNotifyIdle::Invoke");
         }
     }
 }
