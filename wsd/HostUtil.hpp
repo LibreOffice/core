@@ -26,6 +26,7 @@
 #include <Poco/URI.h>
 #include <Poco/Util/Application.h>
 
+#include <optional>
 #include <set>
 #include <string>
 
@@ -85,6 +86,11 @@ private:
     /// valid my-domain.com
     /// invalid my-domain[1
     static std::string parseAlias(const std::string& aliasPattern);
+
+    /// Parse an alias_groups <host> value into a URI so its host and port can be read. The scheme
+    /// is not used for matching; when it is missing https is assumed. Returns std::nullopt when the
+    /// value cannot be parsed as a URI, for example an IPv6 literal or a regex in the port.
+    static std::optional<Poco::URI> parseHostUri(const std::string& host);
 
     /// add host to WopiHosts
     static void addWopiHost(const std::string& host, bool allow);

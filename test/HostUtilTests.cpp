@@ -27,11 +27,13 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST_SUITE(HostUtilTests);
 
     CPPUNIT_TEST(testParseAlias);
+    CPPUNIT_TEST(testParseHostUri);
     CPPUNIT_TEST(testFirstHostTrustedOnlyInFirstMode);
 
     CPPUNIT_TEST_SUITE_END();
 
     void testParseAlias();
+    void testParseHostUri();
     void testFirstHostTrustedOnlyInFirstMode();
 
 public:
@@ -99,6 +101,57 @@ void HostUtilTests::testParseAlias()
     LOK_ASSERT_EQUAL_STR("/my-path", HostUtil::parseAlias("/my-path")); // not a valid url, no hostname
 
     LOK_ASSERT_EQUAL_STR("https://aliasname[0-9]{1}:443", HostUtil::parseAlias("https://aliasname[0-9]{1}:443"));
+}
+
+void HostUtilTests::testParseHostUri()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A full URI keeps its host and port.
+    {
+        const auto uri = HostUtil::parseHostUri("https://example.com:8080");
+        LOK_ASSERT(uri.has_value());
+        LOK_ASSERT_EQUAL_STR("example.com", uri->getHost());
+        LOK_ASSERT_EQUAL_STR("example.com:8080", uri->getAuthority());
+    }
+
+    // A host given without a scheme is accepted; only the host and port are used.
+    {
+        const auto uri = HostUtil::parseHostUri("example.com");
+        LOK_ASSERT(uri.has_value());
+        LOK_ASSERT_EQUAL_STR("example.com", uri->getHost());
+    }
+
+    // A custom port on a scheme-less host is preserved.
+    {
+        const auto uri = HostUtil::parseHostUri("example.com:8080");
+        LOK_ASSERT(uri.has_value());
+        LOK_ASSERT_EQUAL_STR("example.com:8080", uri->getAuthority());
+    }
+
+    // A regex in the host part is kept, with or without a scheme.
+    {
+        const auto uri = HostUtil::parseHostUri("example.*\\.com");
+        LOK_ASSERT(uri.has_value());
+        LOK_ASSERT_EQUAL_STR("example.*\\.com", uri->getHost());
+    }
+    {
+        const auto uri = HostUtil::parseHostUri("https://example.*\\.com:443");
+        LOK_ASSERT(uri.has_value());
+        LOK_ASSERT_EQUAL_STR("example.*\\.com", uri->getHost());
+    }
+
+    // A scheme-less IPv4 regex, as the shipped configuration uses, parses to that regex.
+    {
+        const auto uri = HostUtil::parseHostUri("192\\.168\\.[0-9]{1,3}\\.[0-9]{1,3}");
+        LOK_ASSERT(uri.has_value());
+        LOK_ASSERT_EQUAL_STR("192\\.168\\.[0-9]{1,3}\\.[0-9]{1,3}", uri->getHost());
+    }
+
+    // Values that are not valid URIs (a regex in the port, an IPv6 literal) are rejected rather
+    // than throwing and stopping the whole configuration from loading.
+    LOK_ASSERT(!HostUtil::parseHostUri("example.com:1.*").has_value());
+    LOK_ASSERT(!HostUtil::parseHostUri("::1").has_value());
 }
 
 void HostUtilTests::testFirstHostTrustedOnlyInFirstMode()

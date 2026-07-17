@@ -27,6 +27,7 @@
 #include <common/RegexUtil.hpp>
 
 #include <map>
+#include <optional>
 #include <regex>
 #include <set>
 #include <string>
@@ -116,6 +117,26 @@ std::string HostUtil::parseAlias(const std::string& aliasPattern)
     return aliasPattern;
 }
 
+std::optional<Poco::URI> HostUtil::parseHostUri(const std::string& host)
+{
+    // The host and port are parsed out with Poco::URI, which needs a scheme to locate them. The
+    // scheme is never used for matching, so a host may be written with or without one; when it is
+    // missing, add a placeholder scheme purely so the value parses.
+    const std::string uri = host.find("://") == std::string::npos ? "https://" + host : host;
+    try
+    {
+        return Poco::URI(uri);
+    }
+    catch (const Poco::Exception& exc)
+    {
+        // Some regex hosts (an IPv6 literal, or a regex in the port) are not valid URIs. Skip such
+        // a group rather than let the exception stop the whole configuration from loading.
+        LOG_WRN("parseAliases: ignoring the alias_groups host ["
+                << host << "] because it cannot be parsed as a URI: " << exc.displayText());
+        return std::nullopt;
+    }
+}
+
 void HostUtil::parseAliases(Poco::Util::LayeredConfiguration& conf)
 {
     WopiEnabled = conf.getBool("storage.wopi[@allow]", false);
@@ -167,7 +188,13 @@ void HostUtil::parseAliases(Poco::Util::LayeredConfiguration& conf)
         }
 
         const bool allow = conf.getBool(path + ".host[@allow]", false);
-        const Poco::URI realUri(uri);
+
+        const std::optional<Poco::URI> parsedHost = parseHostUri(uri);
+        if (!parsedHost)
+        {
+            continue;
+        }
+        const Poco::URI& realUri = *parsedHost;
 
         try
         {
