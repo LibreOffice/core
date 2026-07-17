@@ -62,4 +62,6 @@ class tdf160170(UITestCase):
             paragraphs = writer_doc.Text.createEnumeration()
             para1 = paragraphs.nextElement()
             # This was " pellentesque est orvi.", i.e. too much shrinking
-            self.assertEqual("tra. Fusce pellentesque est orci.", para1.String)
+            # Note: the improved smart justify prefers shrinking to hyphenation
+            # here, so the first line ends with "pharetra." instead of "phare-"
+            self.assertEqual(" Fusce pellentesque est orci.", para1.String)

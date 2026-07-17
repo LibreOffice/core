@@ -181,7 +181,7 @@
  </office:styles>
  <office:automatic-styles>
   <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
-   <style:paragraph-properties fo:text-align="justify" style:justify-single-word="false" loext:word-spacing="750%"/>
+   <style:paragraph-properties fo:text-align="justify" style:justify-single-word="false" loext:word-spacing="750%" loext:word-spacing-maximum="750%"/>
   </style:style>
   <style:page-layout style:name="pm1">
    <style:page-layout-properties fo:page-width="419.56pt" fo:page-height="595.3pt" style:num-format="1" style:print-orientation="portrait" fo:margin-top="21.6pt" fo:margin-bottom="14.4pt" fo:margin-left="36pt" fo:margin-right="36pt" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="31" style:layout-grid-base-height="18pt" style:layout-grid-ruby-height="0pt" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="10.46pt" style:layout-grid-snap-to="true" style:footnote-max-height="0pt" loext:margin-gutter="0pt">

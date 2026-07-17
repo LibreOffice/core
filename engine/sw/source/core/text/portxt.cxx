@@ -543,9 +543,10 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     bool bInteropSmartJustify = bFullJustified &&
             rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
                     DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING);
+    sal_Int16 nSpacingMaximum = aAdjustItem.GetPropWordSpacingMaximum();
     bool bNoWordSpacing = aAdjustItem.GetPropWordSpacing() == 100 &&
                     aAdjustItem.GetPropWordSpacingMinimum() == 100 &&
-                    aAdjustItem.GetPropWordSpacingMaximum() == 100 &&
+                    nSpacingMaximum == 100 &&
                     aAdjustItem.GetPropScaleWidthMinimum() == 100 &&
                     aAdjustItem.GetPropScaleWidthMaximum() == 100 &&
                     aAdjustItem.GetPropLetterSpacingMinimum() == 0 &&
@@ -554,9 +555,11 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     bool bOldInterop = bInteropSmartJustify && bNoWordSpacing;
     bool bWordSpacing = bFullJustified && (!bNoWordSpacing || bOldInterop);
     bool bWordSpacingMaximum = bWordSpacing && !bOldInterop &&
-           aAdjustItem.GetPropWordSpacingMaximum() > aAdjustItem.GetPropWordSpacing();
+           ( nSpacingMaximum > aAdjustItem.GetPropWordSpacing() ||
+           nSpacingMaximum != 100 );
     bool bWordSpacingMinimum = bWordSpacing && ( bOldInterop ||
-           aAdjustItem.GetPropWordSpacingMinimum() < aAdjustItem.GetPropWordSpacing() );
+           aAdjustItem.GetPropWordSpacingMinimum() < aAdjustItem.GetPropWordSpacing() ||
+           aAdjustItem.GetPropWordSpacingMinimum() != 100 );
 
     if ( ( bInteropSmartJustify || bWordSpacing || bWordSpacingMaximum || bWordSpacingMinimum ) &&
          // tdf#164499 no shrinking in tabulated line
@@ -592,41 +595,79 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             // measure ten spaces for higher precision
             sal_Int16 nSpaceWidth = rInf.GetTextSize(u"          "_ustr).Width();
             sal_Int32 nRealSpaces = rInf.GetLineSpaceCount( pGuess->BreakPos() );
-            float fSpaceNormal = (rInf.GetLineWidth() - (rInf.GetBreakWidth() - nRealSpaces * nSpaceWidth/10.0))/nRealSpaces;
 
             bool bOrigHyphenated = pGuess->HyphWord().is() &&
                         pGuess->BreakPos() > rInf.GetLineStart();
+
+            // GetBreakWidth() doesn't contain the length of the hyphen, so
+            // add it in the case of hyphenation
+            // Note: it seems, kerning is missing before the hyphen in the
+            // text layout, so it doesn't need to measure the full line + hyphen
+            static constexpr OUString STR_HYPHEN = u"-"_ustr;
+            const SwTwips nHyphenWidth = rInf.GetTextSize(STR_HYPHEN).Width();
+
+            float fSpaceNormal = ( rInf.GetLineWidth() - ( rInf.GetBreakWidth() -
+                                                            nRealSpaces * nSpaceWidth/10.0 +
+                                                            ( bOrigHyphenated ? nHyphenWidth : 0)
+                                                         ) ) / nRealSpaces;
 
             // calculate available word spacing for letter spacing, and for the word spacing indicator
             SetSpacing(rInf, *pGuess, nRealSpaces, nSpaceWidth);
 
             // calculate line breaking with desired word spacing, also
-            // if the desired word spacing is 100%, but there is a greater
-            // maximum word spacing, and the word is hyphenated at the desired
-            // word spacing: to skip hyphenation, if the maximum word spacing allows it
+            // skip hyphenation, if the maximum word spacing allows it
             if ( bWordSpacing || ( bWordSpacingMaximum && bOrigHyphenated ) )
             {
-                pGuess.emplace();
-                bFull = !pGuess->Guess( *this, rInf, Height(), nSpacesInLine, aAdjustItem.GetPropWordSpacing(), nSpaceWidth );
-                sal_Int32 nSpacesInLine2 = rInf.GetLineSpaceCount( pGuess->BreakPos() );
-                if ( aAdjustItem.GetPropLetterSpacingMinimum() < 0 || rInf.GetBreakWidth() <= rInf.GetLineWidth() )
+                std::optional<SwTextGuess> pGuess2(std::in_place);
+                bool bFull2 = !pGuess2->Guess( *this, rInf, Height(), nSpacesInLine, aAdjustItem.GetPropWordSpacing(), nSpaceWidth );
+
+                bool bOrigHyphenated2 = pGuess2->HyphWord().is() &&
+                        pGuess2->BreakPos() > rInf.GetLineStart();
+
+                if ( !bOrigHyphenated2 &&
+                                ( aAdjustItem.GetPropLetterSpacingMinimum() < 0 ||
+                                        rInf.GetBreakWidth() <= rInf.GetLineWidth() ) )
                 {
-                    fSpaceNormal = (rInf.GetLineWidth() - (rInf.GetBreakWidth() - nSpacesInLine2 * nSpaceWidth/10.0))/nSpacesInLine2;
-                    SetSpacing(rInf, *pGuess, nSpacesInLine2, nSpaceWidth);
+                    sal_Int32 nSpacesInLine2 = rInf.GetLineSpaceCount( pGuess2->BreakPos() );
+                    float fSpaceNormal2 = nSpacesInLine2 > 0
+                            ? ( rInf.GetLineWidth() - ( rInf.GetBreakWidth() -
+                                                             nSpacesInLine2 * nSpaceWidth/10.0
+                                                         ) ) / nSpacesInLine2
+                            // no remaining space, only the space after the single word
+                            : 1;
+                    float z1NotWeighted = ( nSpaceWidth/10.0 +
+                                        ( fSpaceNormal2 - nSpaceWidth/10.0) ) / (nSpaceWidth/10.0);
+                    // skip hyphenation/desired spacing, if spacing doesn't exceed the maximum
+                    // word spacing, except if maximum word spacing is not different from the
+                    // desired one
+                    // FIXME if the desired word spacing is not 100%, and maximum word spacing
+                    // is not the same, but minimum word spacing is, the fallback is still 100%
+                    if ( z1NotWeighted <= nSpacingMaximum/100.0 ||
+                                    aAdjustItem.GetPropWordSpacing() == nSpacingMaximum )
+                    {
+                        pGuess.emplace();
+                        pGuess = std::move(pGuess2);
+                        SetSpacing(rInf, *pGuess, nSpacesInLine2, nSpaceWidth);
+                        fSpaceNormal = fSpaceNormal2;
+                        bOrigHyphenated = bOrigHyphenated2;
+                        bFull = bFull2;
+                    }
                 }
             }
 
             sal_Int32 nSpacesInLineShrink = 0;
-            // TODO if both maximum word spacing or minimum word spacing can disable hyphenation, prefer the last one
+            // shrink the line
             if ( bWordSpacingMinimum )
             {
                 std::optional<SwTextGuess> pGuess2(std::in_place);
                 SwTwips nOldExtraSpace = rInf.GetExtraSpace();
                 // break the line after the hyphenated word, if it's possible
-                // (hyphenation is disabled in Guess(), when called with GetPropWordSpacingMinimum())
                 sal_uInt16 nMinimum = bOldInterop ? 75 : aAdjustItem.GetPropWordSpacingMinimum();
                 bool bFull2 = !pGuess2->Guess( *this, rInf, Height(), nSpacesInLine, nMinimum, nSpaceWidth );
                 nSpacesInLineShrink = rInf.GetLineSpaceCount( pGuess2->BreakPos() );
+                bool bShrunkHyphenated = pGuess2->HyphWord().is() &&
+                                 pGuess2->BreakPos() > rInf.GetLineStart();
+
                 if ( pGuess2->BreakWidth() > nOldWidth )
                 {
                     // instead of the maximum shrinking, break after the word which was hyphenated before
@@ -637,48 +678,88 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                     for (; j > i && rInf.GetText()[i] == CH_BLANK; --j);
                     sal_Int32 nOldBreakTrim = i;
                     sal_Int32 nOldBreak = j - i;
-                    for (; i < j; ++i)
+                    // try to find a better break point, i.e. nearer to the normal space
+                    // * if maximum shrinking adds at least a new word to the line,
+                    // * or it results a different hyphenation in the same word.
+                    // I.e. skip the search, when maximum shrinking removes a hyphenation.
+                    const bool bNewBreak = nSpacesInLineShrink > nSpacesInLine || bShrunkHyphenated;
+                    // check i == j to update maximum shrinking TODO re-use the first result?
+                    // FIXME Greek can hyphenate after the first letter, too. Is first ++i OK?
+                    for (++i; i <= j && bNewBreak; ++i)
                     {
                         sal_Unicode cChar = rInf.GetText()[i];
-                        // first space after the hyphenated word, and it's not the chosen one
-                        if ( cChar == CH_BLANK )
+                        // search for the first space or for the first optimized hyphenation
+                        if ( cChar == CH_BLANK || nSpacesInLineShrink == nSpacesInLine )
                         {
                             // using a weighted word spacing, try to break the line after the hyphenated word
                             sal_Int32 nNewBreak = i - nOldBreakTrim;
                             SwTwips nWeightedSpacing = nMinimum * (1.0 * nNewBreak/nOldBreak) +
                                    aAdjustItem.GetPropWordSpacing() * (1.0 * (nOldBreak - nNewBreak)/nOldBreak);
                             std::optional<SwTextGuess> pGuess3(std::in_place);
-                            pGuess3->Guess( *this, rInf, Height(), nSpacesInLineShrink-1, nWeightedSpacing, nSpaceWidth );
 
-                            sal_Int32 nSpacesInLineShrink2 = rInf.GetLineSpaceCount( pGuess3->BreakPos() );
-                            if ( nSpacesInLineShrink2 == nSpacesInLineShrink )
-                            {
-                                nNewBreak = i - nOldBreakTrim - 1;
-                                nWeightedSpacing = nMinimum * (1.0 * nNewBreak/nOldBreak) +
-                                    aAdjustItem.GetPropWordSpacing() * (1.0 * (nOldBreak - nNewBreak)/nOldBreak);
-                                pGuess3->Guess( *this, rInf, Height(), nSpacesInLineShrink-1, nWeightedSpacing, nSpaceWidth );
-                            }
+                            // more spaces in the line at maximum shrinking -> call with lower space count,
+                            // except at re-calculation of the maximum shrinking
+                            sal_Int32 nLessSpaces =
+                                ( nSpacesInLineShrink > nSpacesInLine && i != j ) ? 1 : 0;
+                            pGuess3->Guess( *this, rInf, Height(),
+                                nSpacesInLineShrink - nLessSpaces, nWeightedSpacing, nSpaceWidth );
+
+                            // the same break yet, skip investigation
+                            if ( pGuess->BreakPos() == pGuess3->BreakPos() )
+                                    continue;
 
                             if ( pGuess3->BreakWidth() > nOldWidth )
                             {
                                 pGuess2.emplace();
                                 pGuess2 = std::move(pGuess3);
+                                // not shrinking and maximal shrinking have the same space count:
+                                // the new break point is a better hyphenation (or maximum
+                                // shrinking again), stop the search, otherwise search for the
+                                // space.
+                                // For example: "lim-itations" (not shrinking), "limitati-ons"
+                                // (maximum shrinking), "limi-tations" (optimized shrinking:
+                                // first break point after normal spacing, maybe it's not optimal,
+                                // but much better, than maximum shrinking or not shrinking at all)
+                                if ( nSpacesInLineShrink == nSpacesInLine )
+                                     break;
                             }
-                            break;
+
+                            // found a better break between words
+                            if ( cChar == CH_BLANK )
+                               break;
                         }
                     }
 
                     nSpacesInLineShrink = rInf.GetLineSpaceCount( pGuess2->BreakPos() );
-                    if ( rInf.GetBreakWidth() > rInf.GetLineWidth() || bIsPortion )
+                    bShrunkHyphenated = pGuess2->HyphWord().is() &&
+                                 pGuess2->BreakPos() > rInf.GetLineStart();
+
+                    if ( rInf.GetBreakWidth() + (bShrunkHyphenated ? nHyphenWidth : 0) > rInf.GetLineWidth() || bIsPortion )
                     {
                         float fExpansionWeight = static_cast<float>(1/1.7);
+
+                        SwTwips nHyphenShrunk = bShrunkHyphenated ? nHyphenWidth : 0;
+
                         float fSpaceShrunk = nSpacesInLineShrink > 0
-                                ? (rInf.GetLineWidth() - (rInf.GetBreakWidth() - nSpacesInLineShrink * nSpaceWidth/10.0))/nSpacesInLineShrink
+                                ? ( rInf.GetLineWidth() - ( rInf.GetBreakWidth() + nHyphenShrunk -
+                                    nSpacesInLineShrink * nSpaceWidth/10.0 ) ) / nSpacesInLineShrink
                                 : 1;
+
+                        // shrunk (z0) and weighted expanded (z1) space ratios
                         float z0 = (nSpaceWidth/10.0)/fSpaceShrunk;
                         float z1 = (nSpaceWidth/10.0+((fSpaceNormal-nSpaceWidth/10.0)*fExpansionWeight))/(nSpaceWidth/10.0);
+                        float z1NotWeighted = ( nSpaceWidth/10.0 +
+                                        ( fSpaceNormal - nSpaceWidth/10.0) ) / (nSpaceWidth/10.0);
+                        bool bRemoveHyphenation = bOrigHyphenated && !bShrunkHyphenated;
+                        // Prefer shrinking, if 1) this is a portion OR,
                         // TODO shrink line portions only if needed
-                        if ( z1 >= z0 || bIsPortion )
+                        if ( bIsPortion ||
+                            // 2) NOT shrinking would result very large spacing ( >150% ) OR
+                            // 3) shrinking removes hyphenation OR ...
+                            z1NotWeighted > nSpacingMaximum/100.0 || bRemoveHyphenation ||
+                            // ... 4) * shrinking results better (weighted) spacing AND
+                            //        * doesn't result in an extra hyphenation
+                            ( z1 >= z0 && !( !bOrigHyphenated && bShrunkHyphenated ) ) )
                         {
                             pGuess = std::move(pGuess2);
                             SetSpacing(rInf, *pGuess, nSpacesInLineShrink, nSpaceWidth);

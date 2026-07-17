@@ -291,10 +291,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         }
     }
 
-    bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud() &&
-            // disable hyphenation at minimum word spacing
-            // (and at weighted word spacing between minimum and desired word spacing)
-            !( nPropWordSpacing < aAdjustItem.GetPropWordSpacing() );
+    bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud();
 
     // disable hyphenation according to hyphenation-keep and hyphenation-keep-type,
     // or modify hyphenation according to hyphenation-zone-column/page/spread (see widorp.cxx)
