@@ -152,7 +152,7 @@ void call(bridges::cpp_uno::shared::CppInterfaceProxy* proxy,
             if (parameters[i].bOut)
             {
                 uno_destructData(cppArgs[i], argtds[i],
-                                 reinterpret_cast<uno_ReleaseFunc>(uno::cpp_release));
+                                 reinterpret_cast<uno_ReleaseFunc>(cpo::uno::cpp_release));
                 uno_copyAndConvertData(cppArgs[i], args[i], argtds[i],
                                        proxy->getBridge()->getUno2Cpp());
             }
@@ -275,7 +275,7 @@ extern "C" void vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, sal_
                         if (ifc != 0)
                         {
                             uno_any_construct(reinterpret_cast<uno_Any*>(indirectRet), &ifc, td,
-                                              reinterpret_cast<uno_AcquireFunc>(uno::cpp_acquire));
+                                              reinterpret_cast<uno_AcquireFunc>(cpo::uno::cpp_acquire));
                             ifc->release();
                             TYPELIB_DANGER_RELEASE(td);
                             gpr[0] = reinterpret_cast<sal_uInt64>(indirectRet);
