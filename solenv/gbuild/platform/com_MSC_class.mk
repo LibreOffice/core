@@ -335,7 +335,7 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
 ifeq ($(ENABLE_DBGUTIL),TRUE)
 # fastlink is faster but pdb files reference .obj files
 # but don't do that for setup_native DLLs: this produces make error 139 in some configurations
-gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO = $(if $(filter -U_DLL,$(1)),-debug,-debug:fastlink)
+gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO = $(if $(filter -U_DLL,$(1)),-debug,-debug$(if $(HAVE_LINK_DEBUG_FASTLINK),:fastlink))
 else
 gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO = -debug
 endif
