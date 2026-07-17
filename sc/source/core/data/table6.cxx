@@ -788,7 +788,11 @@ bool ScTable::ReplaceAllStyle(
             if (pUndoDoc)
                 rDocument.CopyToDocument(0, 0 ,nTab, rDocument.MaxCol(),rDocument.MaxRow(),nTab,
                                           InsertDeleteFlags::ATTRIB, true, *pUndoDoc, &rMark);
-            ApplySelectionStyle( *pReplaceStyle, rMark );
+
+            const ScRange aThisTab(0, 0, nTab, rDocument.MaxCol(), rDocument.MaxRow(), nTab);
+            const ScMarkData aThisMark(rDocument.GetSheetLimits(),
+                                       rMatchedRanges.GetIntersectedRange(aThisTab));
+            ApplySelectionStyle(*pReplaceStyle, aThisMark);
         }
         else
         {
