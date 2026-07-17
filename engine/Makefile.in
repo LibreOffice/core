@@ -98,6 +98,23 @@ export GMAKE_OPTIONS?=-r$(if $(verbose),,s)$(value $(MAKEFLAGS))
 
 PARALLELISM_OPTION := $(if $(filter-out 0,$(PARALLELISM)),-j $(PARALLELISM),)$(if $(LOADLIMIT), -l $(LOADLIMIT),)
 
+# When make runs under mintty, the parallel build's writes to the terminal are
+# not serialized: the announce lines (printed via $(info)) and the child process
+# output tear at sub-line granularity. Even without color this mispositions text
+# (a line can start at the far right of the console); with color it also splits
+# escape sequences into garbage. A pipe gives the recursive make a non-terminal
+# stdout, so output is block-buffered and stays intact. Only stdout is piped
+# (errors stay on the terminal); pipefail keeps the child make's real exit
+# status. mintty sets TERM_PROGRAM; a native Windows console (cmd, Windows
+# Terminal) does not tear this way, so it is left alone. MAKE_TERMOUT limits
+# this to a real terminal, so redirected output (already buffered) is not piped.
+ifeq ($(TERM_PROGRAM),mintty)
+ifneq ($(MAKE_TERMOUT),)
+gb_Top_PIPEFAIL := set -o pipefail;
+gb_Top_PIPE := | cat
+endif
+endif
+
 #
 # Partial Build
 #
@@ -106,19 +123,19 @@ define gb_Top_GbuildModuleRules
 .PHONY: $(1).allbuild $(1).buildall $(1).allcheck $(1).checkall
 
 $(1): bootstrap fetch
-	$(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/$(2)/Makefile
+	$(gb_Top_PIPEFAIL) $(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/$(2)/Makefile $(gb_Top_PIPE)
 
 $(1).build $(1).check $(1).coverage $(foreach target,$(gb_Top_MODULE_CHECK_TARGETS),$(1).$(target)): bootstrap fetch
-	$(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/$(2)/Makefile $$(patsubst $(1).%,%,$$@)
+	$(gb_Top_PIPEFAIL) $(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/$(2)/Makefile $$(patsubst $(1).%,%,$$@) $(gb_Top_PIPE)
 
 $(1).clean $(1).showdeliverables:
-	$$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/$(2)/Makefile $$(patsubst $(1).%,%,$$@)
+	$(gb_Top_PIPEFAIL) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/$(2)/Makefile $$(patsubst $(1).%,%,$$@) $(gb_Top_PIPE)
 
 $(1).allbuild $(1).buildall: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset)
-	$(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1)
+	$(gb_Top_PIPEFAIL) $(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(gb_Top_PIPE)
 
 $(1).allcheck $(1).checkall: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset)
-	$(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)
+	$(gb_Top_PIPEFAIL) $(KEEP_AWAKE_CMD) $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1) $(gb_Top_PIPE)
 
 $(1).all:
 	@echo "'make $(1).all' was renamed to 'make $(1).allcheck' (or use 'make $(1).allbuild' to build without unit tests)"
@@ -187,10 +204,10 @@ gbuild_TARGETS := AllLangHelp \
 
 # build a generic gbuild target
 $(foreach target,$(gbuild_TARGETS),$(target)_% $(foreach module,$(gbuild_modules),$(target)_$(module)/%)) UIConfig_modules/% %.genpatch: bootstrap fetch
-	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+	$(gb_Top_PIPEFAIL) $(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@ $(gb_Top_PIPE)
 
 $(gbuild_TARGETS):
-	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+	$(gb_Top_PIPEFAIL) $(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@ $(gb_Top_PIPE)
 
 #
 # Clean
@@ -298,7 +315,7 @@ bootstrap: check-if-root check-makefile-version compilerplugins
 #
 build: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset,install-gdb-printers) \
     $(if $(filter check,$(MAKECMDGOALS)),$(if $(COMPILER_PLUGINS),$(if $(LODE_HOME),clang-format-check)))
-	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(build_goal)
+	$(gb_Top_PIPEFAIL) $(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(build_goal) $(gb_Top_PIPE)
 ifeq ($(OS),iOS)
 	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
 endif
@@ -313,7 +330,7 @@ cross-toolset: bootstrap fetch install-gdb-printers
 ifneq ($(OS),iOS)
 	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(BUILDDIR)/Makefile fetch
 endif
-	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
+	$(gb_Top_PIPEFAIL) $(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools $(gb_Top_PIPE)
 
 install-gdb-printers:
 ifneq ($(filter-out WNT MACOSX iOS,$(OS)),)
