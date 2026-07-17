@@ -19,6 +19,7 @@
 
 #include <comphelper/doublecheckedinit.hxx>
 #include <documentlinkmgr.hxx>
+#include <arealink.hxx>
 #include <datastream.hxx>
 #include <ddelink.hxx>
 #include <externalrefmgr.hxx>
@@ -126,16 +127,23 @@ bool DocumentLinkManager::idleCheckLinks()
 
 bool DocumentLinkManager::hasDdeLinks() const
 {
-    return hasExternalLinks(true, false, false, false);
+    sfx2::LinkManager* pMgr = mpImpl->mpLinkManager;
+    if (!pMgr)
+        return false;
+
+    const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
+    for (const auto & rLink : rLinks)
+        if (dynamic_cast<ScDdeLink*>(rLink.get()))
+            return true;
+
+    return false;
 }
 
-bool DocumentLinkManager::hasExternalLinks() const
+bool DocumentLinkManager::hasExternalContentLinks() const
 {
-    return hasExternalLinks(true, true, true, true);
-}
-
-bool DocumentLinkManager::hasExternalLinks(bool bDde, bool bOle, bool bWebService, bool bGraphic) const
-{
+    // Links that bring content in from outside the document: an area link or
+    // sheet link importing a cell range from a file, a DDE feed, an OLE or
+    // IFrame object, a WebService fetch, or a linked graphic.
     sfx2::LinkManager* pMgr = mpImpl->mpLinkManager;
     if (!pMgr)
         return false;
@@ -144,13 +152,15 @@ bool DocumentLinkManager::hasExternalLinks(bool bDde, bool bOle, bool bWebServic
     for (const auto & rLink : rLinks)
     {
         sfx2::SvBaseLink* pBase = rLink.get();
-        if (bDde && dynamic_cast<ScDdeLink*>(pBase))
+        if (dynamic_cast<ScAreaLink*>(pBase))
             return true;
-        if (bOle && (dynamic_cast<SdrEmbedObjectLink*>(pBase) || dynamic_cast<SdrIFrameLink*>(pBase)))
+        if (dynamic_cast<ScDdeLink*>(pBase))
             return true;
-        if (bWebService && dynamic_cast<ScWebServiceLink*>(pBase))
+        if (dynamic_cast<SdrEmbedObjectLink*>(pBase) || dynamic_cast<SdrIFrameLink*>(pBase))
             return true;
-        if (bGraphic && pBase && pBase->GetObjType() == sfx2::SvBaseLinkObjectType::ClientGraphic)
+        if (dynamic_cast<ScWebServiceLink*>(pBase))
+            return true;
+        if (pBase && pBase->GetObjType() == sfx2::SvBaseLinkObjectType::ClientGraphic)
             return true;
     }
 
