@@ -267,6 +267,7 @@ noinst_PROGRAMS =
 else
 noinst_PROGRAMS = \
                   clientnb \
+                  coconvert \
                   connect \
                   coolbench \
                   coolmap \
@@ -397,6 +398,10 @@ coolbench_SOURCES = \
 coolbench_LDADD = libsimd.a libglobals.a $(LDADD)
 
 coolconvert_SOURCES = tools/Tool.cpp
+
+# coconvert converts documents in-process: it loads the engine libraries
+# through the COKit header instead of talking to a running server.
+coconvert_SOURCES = tools/coconvert.cpp
 
 coolstress_TDOC_CPPFLAGS = -DTDOC=\"$(abs_top_srcdir)/test/data\"
 coolstress_CPPFLAGS = ${coolstress_TDOC_CPPFLAGS} ${include_paths} \
@@ -912,6 +917,7 @@ all_compiled_sources = $(sort \
 	$(coolsocketdump_SOURCES) \
 	$(coolbench_SOURCES) \
 	$(coolconvert_SOURCES) \
+	$(coconvert_SOURCES) \
 	$(coolmount_SOURCES) \
 	$(coolmap_SOURCES) \
 	$(clientnb_SOURCES) \
