@@ -1305,8 +1305,8 @@ void Admin::sendMetrics(const std::shared_ptr<StreamSocket>& socket,
 
 void Admin::start()
 {
-    startMonitors();
     startThread();
+    startMonitors();
 }
 
 std::vector<std::pair<std::string, int>> Admin::getMonitorList() const
