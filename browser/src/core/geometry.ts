@@ -27,13 +27,16 @@
         * We are using term "core pixels" in many places.
         * Why are there a CSS pixels and core / canvas pixels?
             * Because now many devices have extreme pixel densities.
-            * If you render a page with traditional pixel density using CSS: the buttons, UI, whatever is on the page will be rendered very small. Because pixels or too small.
+            * If you render a page with traditional pixel density using CSS: the buttons, UI, whatever is on the page will be rendered very small. Because pixels are too small.
             * Browsers are solving this issue with "devicePixelRatio" variable. They are rendering the page using this variable. The result is called CSS pixels.
             * This variable is equal to: "device's pixel density" / "traditional pixel density"
             * If devicePixelRatio is different than "1", the device has a bigger pixel density than traditional devices.
             * Canvas HTML elements are using device's pixel density. So we can use high definiton images on our canvas.
 			* app.dpiScale is a *divider* for converting core pixels into CSS pixels. CSS pixels conversion probably will always be used for positioning etc. of HTML elements.
-            * Search "devicePixelRatio" for more info.
+            * See https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio
+            * CSS pixels          - The number of pixels an element would take if it were drawn on a 96 DPI display.
+            * Canvas/Core pixels  - The number of pixels it took to draw an element. This can be the same as CSS pixels, it depends on `devicePixelRatio`.
+            * devicePixelRatio    - The number of pixels used to draw one CSS pixel. Affected by display scaling & browser zoom.
         * We need to convert these 3 types where we need.
         * Every class is initiated with "twips" units. twips is the base unit. Every other type is calculated.
 		* One can use "app.twipsToPixels", "app.pixelsToTwips" and "app.dpiScale" for initiating new classes with non-base units.
