@@ -165,7 +165,8 @@ namespace connectivity::firebird
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
         void construct( const OUString& url,
-                                const css::uno::Sequence< css::beans::PropertyValue >& info);
+                                const css::uno::Sequence< css::beans::PropertyValue >& info,
+                                const OUString& rDatabaseDataDirectoryURL);
 
         const OUString& getConnectionURL()  const   {return m_sConnectionURL;}
         bool            isEmbedded()        const   {return m_bIsEmbedded;}
