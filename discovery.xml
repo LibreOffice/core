@@ -42,6 +42,9 @@
             <action name="edit" default="true" ext="rtf"/>
             <action name="view" ext="rtf"/>
             <action name="editnew" ext="rtf"/>
+            <action name="edit" default="true" ext="md"/>
+            <action name="view" ext="md"/>
+            <action name="editnew" ext="md"/>
             <action name="edit" default="true" ext="txt"/>
             <action name="view" ext="txt"/>
             <action name="editnew" ext="txt"/>
@@ -487,6 +490,10 @@
             <action name="view" default="true" ext=""/>
         </app>
         <app name="text/rtf">
+            <action name="edit" default="true" ext=""/>
+            <action name="view" default="true" ext=""/>
+        </app>
+        <app name="text/markdown">
             <action name="edit" default="true" ext=""/>
             <action name="view" default="true" ext=""/>
         </app>
