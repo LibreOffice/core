@@ -111,7 +111,7 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdsob.hxx>
 #include <svl/whiter.hxx>
-#include <svdobjplusdata.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svdobjuserdatalist.hxx>
 #include <svx/xfillit0.hxx>
 
@@ -207,10 +207,7 @@ struct SdrObject::Impl
 
 bool SdrObject::ObjectNameIsDiagramModelID()
 {
-    if (!m_pPlusData)
-        return false;
-
-    const OUString& rStr(m_pPlusData->aObjName);
+    const OUString& rStr(m_aObjName);
     if (rStr.isEmpty())
         return false;
 
@@ -231,20 +228,6 @@ bool SdrObject::ObjectNameIsDiagramModelID()
     // we could also check for upper-case hex alphabet (0..9, A..F) for
     // the rest of characters, but should be safe enough already
     return true;
-}
-
-void SdrObject::setDiagramDataModelID(const OUString& rID)
-{
-    if (!m_pPlusData)
-        ImpForcePlusData();
-    m_pPlusData->aObjName = rID;
-}
-
-const OUString& SdrObject::getDiagramDataModelID() const
-{
-    if(m_pPlusData)
-        return m_pPlusData->aObjName;
-    return EMPTY_OUSTRING;
 }
 
 bool SdrObject::isDiagramBackgroundShape() const
@@ -552,13 +535,34 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     m_bEmptyPresObj =rSource.m_bEmptyPresObj;
     m_bNotVisibleAsMaster=rSource.m_bNotVisibleAsMaster;
     m_bSnapRectDirty=true;
-    m_pPlusData.reset();
-    if (rSource.m_pPlusData!=nullptr) {
-        m_pPlusData.reset(rSource.m_pPlusData->Clone(this));
+
+    if (rSource.m_pUserDataList)
+    {
+        const sal_uInt16 nCount(rSource.m_pUserDataList->GetUserDataCount());
+
+        if (nCount)
+        {
+            m_pUserDataList.reset(new SdrObjUserDataList);
+
+            for (sal_uInt16 i(0); i < nCount; i++)
+            {
+                std::unique_ptr<SdrObjUserData> pNewUserData = rSource.m_pUserDataList->GetUserData(i).Clone(this);
+                if (pNewUserData)
+                    m_pUserDataList->AppendUserData(std::move(pNewUserData));
+                else {
+                    OSL_FAIL("SdrObject::SdrObject(): UserData.Clone() returns NULL.");
+                }
+            }
+        }
     }
-    if (m_pPlusData!=nullptr && m_pPlusData->pBroadcast!=nullptr) {
-        m_pPlusData->pBroadcast.reset(); // broadcaster isn't copied
-    }
+
+    if (rSource.m_pGluePoints)
+        m_pGluePoints.reset(new SdrGluePointList(*rSource.m_pGluePoints));
+
+    m_aObjName = rSource.m_aObjName;
+    m_aObjTitle = rSource.m_aObjTitle;
+    m_aObjDescription = rSource.m_aObjDescription;
+    m_bDecorative = rSource.m_bDecorative;
 
     m_pGrabBagItem.reset();
     if (rSource.m_pGrabBagItem!=nullptr)
@@ -585,7 +589,7 @@ SdrObject::~SdrObject()
 
     // UserCall
     SendUserCall(SdrUserCallType::Delete, GetLastBoundRect());
-    o3tl::reset_preserve_ptr_during(m_pPlusData);
+    o3tl::reset_preserve_ptr_during(m_pBroadcaster);
 
     m_pGrabBagItem.reset();
     mpProperties.reset();
@@ -757,28 +761,28 @@ void SdrObject::SetLayer(SdrLayerID nLayer)
 
 void SdrObject::AddListener(SfxListener& rListener)
 {
-    ImpForcePlusData();
-    if (m_pPlusData->pBroadcast==nullptr) m_pPlusData->pBroadcast.reset(new SfxBroadcaster);
+    if (nullptr == m_pBroadcaster) m_pBroadcaster.reset(new SfxBroadcaster);
 
     // SdrEdgeObj may be connected to same SdrObject on both ends so allow it
     // to listen twice
     SdrEdgeObj const*const pEdge(dynamic_cast<SdrEdgeObj const*>(&rListener));
-    rListener.StartListening(*m_pPlusData->pBroadcast, pEdge ? DuplicateHandling::Allow : DuplicateHandling::Unexpected);
+    rListener.StartListening(*m_pBroadcaster, pEdge ? DuplicateHandling::Allow : DuplicateHandling::Unexpected);
 }
 
 void SdrObject::RemoveListener(SfxListener& rListener)
 {
-    if (m_pPlusData!=nullptr && m_pPlusData->pBroadcast!=nullptr) {
-        rListener.EndListening(*m_pPlusData->pBroadcast);
-        if (!m_pPlusData->pBroadcast->HasListeners()) {
-            m_pPlusData->pBroadcast.reset();
-        }
+    if (nullptr != m_pBroadcaster)
+    {
+        rListener.EndListening(*m_pBroadcaster);
+
+        if (!m_pBroadcaster->HasListeners())
+            m_pBroadcaster.reset();
     }
 }
 
 SfxBroadcaster* SdrObject::GetBroadcaster() const
 {
-    return m_pPlusData!=nullptr ? m_pPlusData->pBroadcast.get() : nullptr;
+    return m_pBroadcaster.get();
 }
 
 void SdrObject::AddReference(SdrVirtObj& rVrtObj)
@@ -815,12 +819,7 @@ SdrObject* SdrObject::getParentSdrObjectFromSdrObject() const
 
 void SdrObject::SetName(const OUString& rStr, const bool bSetChanged)
 {
-    if (!rStr.isEmpty() && !m_pPlusData)
-    {
-        ImpForcePlusData();
-    }
-
-    if(!(m_pPlusData && m_pPlusData->aObjName != rStr))
+    if (m_aObjName == rStr)
         return;
 
     // Undo/Redo for setting object's name (#i73249#)
@@ -837,7 +836,8 @@ void SdrObject::SetName(const OUString& rStr, const bool bSetChanged)
         getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
         getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
     }
-    m_pPlusData->aObjName = rStr;
+    m_aObjName = rStr;
+
     // Undo/Redo for setting object's name (#i73249#)
     if ( bUndo )
     {
@@ -850,24 +850,9 @@ void SdrObject::SetName(const OUString& rStr, const bool bSetChanged)
     }
 }
 
-const OUString & SdrObject::GetName() const
-{
-    if(m_pPlusData)
-    {
-        return m_pPlusData->aObjName;
-    }
-
-    return EMPTY_OUSTRING;
-}
-
 void SdrObject::SetTitle(const OUString& rStr)
 {
-    if (!rStr.isEmpty() && !m_pPlusData)
-    {
-        ImpForcePlusData();
-    }
-
-    if(!(m_pPlusData && m_pPlusData->aObjTitle != rStr))
+    if (m_aObjTitle == rStr)
         return;
 
     // Undo/Redo for setting object's title (#i73249#)
@@ -884,7 +869,7 @@ void SdrObject::SetTitle(const OUString& rStr)
         getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
         getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
     }
-    m_pPlusData->aObjTitle = rStr;
+    m_aObjTitle = rStr;
     // Undo/Redo for setting object's title (#i73249#)
     if ( bUndo )
     {
@@ -894,24 +879,9 @@ void SdrObject::SetTitle(const OUString& rStr)
     BroadcastObjectChange();
 }
 
-OUString SdrObject::GetTitle() const
-{
-    if(m_pPlusData)
-    {
-        return m_pPlusData->aObjTitle;
-    }
-
-    return OUString();
-}
-
 void SdrObject::SetDescription(const OUString& rStr)
 {
-    if (!rStr.isEmpty() && !m_pPlusData)
-    {
-        ImpForcePlusData();
-    }
-
-    if(!(m_pPlusData && m_pPlusData->aObjDescription != rStr))
+    if (m_aObjDescription == rStr)
         return;
 
     // Undo/Redo for setting object's description (#i73249#)
@@ -928,7 +898,7 @@ void SdrObject::SetDescription(const OUString& rStr)
         getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
         getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
     }
-    m_pPlusData->aObjDescription = rStr;
+    m_aObjDescription = rStr;
     // Undo/Redo for setting object's description (#i73249#)
     if ( bUndo )
     {
@@ -938,21 +908,9 @@ void SdrObject::SetDescription(const OUString& rStr)
     BroadcastObjectChange();
 }
 
-OUString SdrObject::GetDescription() const
-{
-    if(m_pPlusData)
-    {
-        return m_pPlusData->aObjDescription;
-    }
-
-    return OUString();
-}
-
 void SdrObject::SetDecorative(bool const isDecorative)
 {
-    ImpForcePlusData();
-
-    if (m_pPlusData->isDecorative == isDecorative)
+    if (m_bDecorative == isDecorative)
     {
         return;
     }
@@ -961,12 +919,12 @@ void SdrObject::SetDecorative(bool const isDecorative)
     {
         std::unique_ptr<SdrUndoAction> pUndoAction(
             SdrUndoFactory::CreateUndoObjectDecorative(
-                    *this, m_pPlusData->isDecorative));
+                    *this, m_bDecorative));
         getSdrModelFromSdrObject().BegUndo(pUndoAction->GetComment());
         getSdrModelFromSdrObject().AddUndo(std::move(pUndoAction));
     }
 
-    m_pPlusData->isDecorative = isDecorative;
+    m_bDecorative = isDecorative;
 
     if (getSdrModelFromSdrObject().IsUndoEnabled())
     {
@@ -975,11 +933,6 @@ void SdrObject::SetDecorative(bool const isDecorative)
 
     SetChanged();
     BroadcastObjectChange();
-}
-
-bool SdrObject::IsDecorative() const
-{
-    return m_pPlusData == nullptr ? false : m_pPlusData->isDecorative;
 }
 
 void SdrObject::setAsAnnotationObject()
@@ -1141,8 +1094,8 @@ void SdrObject::BroadcastObjectChange() const
     if (getSdrModelFromSdrObject().IsInDestruction() || comphelper::IsFuzzing())
         return;
 
-    bool bPlusDataBroadcast(m_pPlusData && m_pPlusData->pBroadcast);
-    bool bObjectChange(IsInserted());
+    const bool bPlusDataBroadcast(nullptr != m_pBroadcaster);
+    const bool bObjectChange(IsInserted());
 
     if(!(bPlusDataBroadcast || bObjectChange))
         return;
@@ -1158,7 +1111,7 @@ void SdrObject::BroadcastObjectChange() const
 
     if(bPlusDataBroadcast)
     {
-        m_pPlusData->pBroadcast->Broadcast(aHint);
+        m_pBroadcaster->Broadcast(aHint);
     }
 
     if(bObjectChange)
@@ -1261,12 +1214,6 @@ OUString SdrObject::ImpGetDescriptionStr(TranslateId pStrCacheID) const
         // Replace '%2' with the passed value.
         aStr = aStr.replaceAt(nPos, 2, u"0");
     return aStr;
-}
-
-void SdrObject::ImpForcePlusData()
-{
-    if (!m_pPlusData)
-        m_pPlusData.reset( new SdrObjPlusData );
 }
 
 OUString SdrObject::GetMetrStr(tools::Long nVal) const
@@ -2142,8 +2089,8 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
     rGeo.mnLayerID = mnLayerID;
 
     // user-defined gluepoints
-    if (m_pPlusData!=nullptr && m_pPlusData->pGluePoints!=nullptr) {
-        rGeo.moGluePoints = *m_pPlusData->pGluePoints;
+    if (m_pGluePoints!=nullptr) {
+        rGeo.moGluePoints = *m_pGluePoints;
     } else {
         rGeo.moGluePoints.reset();
     }
@@ -2163,16 +2110,13 @@ void SdrObject::RestoreGeoData(const SdrObjGeoData& rGeo)
 
     // user-defined gluepoints
     if (rGeo.moGluePoints) {
-        ImpForcePlusData();
-        if (m_pPlusData->pGluePoints!=nullptr) {
-            *m_pPlusData->pGluePoints=*rGeo.moGluePoints;
+        if (m_pGluePoints!=nullptr) {
+            *m_pGluePoints=*rGeo.moGluePoints;
         } else {
-            m_pPlusData->pGluePoints.reset(new SdrGluePointList(*rGeo.moGluePoints));
+            m_pGluePoints.reset(new SdrGluePointList(*rGeo.moGluePoints));
         }
     } else {
-        if (m_pPlusData!=nullptr && m_pPlusData->pGluePoints!=nullptr) {
-            m_pPlusData->pGluePoints.reset();
-        }
+        m_pGluePoints.reset();
     }
 }
 
@@ -2565,20 +2509,12 @@ SdrGluePoint SdrObject::GetCornerGluePoint(sal_uInt16 nPosNum) const
     return aGP;
 }
 
-const SdrGluePointList* SdrObject::GetGluePointList() const
-{
-    if (m_pPlusData!=nullptr) return m_pPlusData->pGluePoints.get();
-    return nullptr;
-}
-
-
 SdrGluePointList* SdrObject::ForceGluePointList()
 {
-    ImpForcePlusData();
-    if (m_pPlusData->pGluePoints==nullptr) {
-        m_pPlusData->pGluePoints.reset(new SdrGluePointList);
+    if (m_pGluePoints==nullptr) {
+        m_pGluePoints.reset(new SdrGluePointList);
     }
-    return m_pPlusData->pGluePoints.get();
+    return m_pGluePoints.get();
 }
 
 void SdrObject::SetGlueReallyAbsolute(bool bOn)
@@ -2913,10 +2849,10 @@ void SdrObject::InsertedStateChange()
         SendUserCall(SdrUserCallType::Removed, aBoundRect0);
     }
 
-    if(nullptr != m_pPlusData && nullptr != m_pPlusData->pBroadcast)
+    if(nullptr != m_pBroadcaster)
     {
         SdrHint aHint(bIsInserted ? SdrHintKind::ObjectInserted : SdrHintKind::ObjectRemoved, *this);
-        m_pPlusData->pBroadcast->Broadcast(aHint);
+        m_pBroadcaster->Broadcast(aHint);
     }
 }
 
@@ -2993,14 +2929,14 @@ void SdrObject::SetVisible(bool bVisible)
 
 sal_uInt16 SdrObject::GetUserDataCount() const
 {
-    if (m_pPlusData==nullptr || m_pPlusData->pUserDataList==nullptr) return 0;
-    return m_pPlusData->pUserDataList->GetUserDataCount();
+    if (m_pUserDataList==nullptr) return 0;
+    return m_pUserDataList->GetUserDataCount();
 }
 
 SdrObjUserData* SdrObject::GetUserData(sal_uInt16 nNum) const
 {
-    if (m_pPlusData==nullptr || m_pPlusData->pUserDataList==nullptr) return nullptr;
-    return &m_pPlusData->pUserDataList->GetUserData(nNum);
+    if (m_pUserDataList==nullptr) return nullptr;
+    return &m_pUserDataList->GetUserData(nNum);
 }
 
 void SdrObject::AppendUserData(std::unique_ptr<SdrObjUserData> pData)
@@ -3011,20 +2947,19 @@ void SdrObject::AppendUserData(std::unique_ptr<SdrObjUserData> pData)
         return;
     }
 
-    ImpForcePlusData();
-    if (!m_pPlusData->pUserDataList)
-        m_pPlusData->pUserDataList.reset( new SdrObjUserDataList );
+    if (!m_pUserDataList)
+        m_pUserDataList.reset( new SdrObjUserDataList );
 
-    m_pPlusData->pUserDataList->AppendUserData(std::move(pData));
+    m_pUserDataList->AppendUserData(std::move(pData));
 }
 
 void SdrObject::DeleteUserData(sal_uInt16 nNum)
 {
     sal_uInt16 nCount=GetUserDataCount();
     if (nNum<nCount) {
-        m_pPlusData->pUserDataList->DeleteUserData(nNum);
+        m_pUserDataList->DeleteUserData(nNum);
         if (nCount==1)  {
-            m_pPlusData->pUserDataList.reset();
+            m_pUserDataList.reset();
         }
     } else {
         OSL_FAIL("SdrObject::DeleteUserData(): Invalid Index.");

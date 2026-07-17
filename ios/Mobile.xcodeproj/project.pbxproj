@@ -1272,7 +1272,6 @@
 		BECBD3C923D9C98000DA5582 /* svdedtv1.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdedtv1.cxx; path = "../lobuilddir-symlink/svx/source/svdraw/svdedtv1.cxx"; sourceTree = "<group>"; };
 		BECBD3CA23D9C98000DA5582 /* svdotextpathdecomposition.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdotextpathdecomposition.cxx; path = "../lobuilddir-symlink/svx/source/svdraw/svdotextpathdecomposition.cxx"; sourceTree = "<group>"; };
 		BECBD3CB23D9C98000DA5582 /* svdmrkv.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdmrkv.cxx; path = "../lobuilddir-symlink/svx/source/svdraw/svdmrkv.cxx"; sourceTree = "<group>"; };
-		BECBD3CD23D9C98000DA5582 /* svdobjplusdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdobjplusdata.cxx; path = "../lobuilddir-symlink/svx/source/svdraw/svdobjplusdata.cxx"; sourceTree = "<group>"; };
 		BECBD3CE23D9C98000DA5582 /* svdouno.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdouno.cxx; path = "../lobuilddir-symlink/svx/source/svdraw/svdouno.cxx"; sourceTree = "<group>"; };
 		BECBD3CF23D9C98000DA5582 /* svdundo.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdundo.cxx; path = "../lobuilddir-symlink/svx/source/svdraw/svdundo.cxx"; sourceTree = "<group>"; };
 		BECBD3D023D9C98000DA5582 /* svdviter.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdviter.cxx; path = "../lobuilddir-symlink/svx/source/svdraw/svdviter.cxx"; sourceTree = "<group>"; };
@@ -3191,7 +3190,6 @@
 				BECBD3FF23D9C98300DA5582 /* svdoashp.cxx */,
 				BECBD3FC23D9C98300DA5582 /* svdoattr.cxx */,
 				BECBD3E323D9C98100DA5582 /* svdobj.cxx */,
-				BECBD3CD23D9C98000DA5582 /* svdobjplusdata.cxx */,
 				BECBD3E723D9C98200DA5582 /* svdobjuserdatalist.cxx */,
 				BECBD3E123D9C98100DA5582 /* svdocapt.cxx */,
 				BECBD40F23D9C98400DA5582 /* svdocirc.cxx */,

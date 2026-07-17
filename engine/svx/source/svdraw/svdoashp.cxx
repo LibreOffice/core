@@ -83,7 +83,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <svdobjplusdata.hxx>
+#include <svx/svdglue.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <o3tl/string_view.hxx>
@@ -1809,10 +1809,9 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
     // GluePointList should not be set, but we delivered by using GetGluePointList(),
     // maybe on demand. Since the local object is changed here, this is assumed to
     // be a result of GetGluePointList and thus the list is copied
-    if(m_pPlusData)
-    {
-        m_pPlusData->SetGluePoints(aNewList);
-    }
+    if (!m_pGluePoints)
+        m_pGluePoints = std::make_unique<SdrGluePointList>();
+    *m_pGluePoints = aNewList;
 }
 
 // #i38892#

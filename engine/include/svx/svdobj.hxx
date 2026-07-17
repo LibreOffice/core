@@ -59,7 +59,7 @@ class SfxGrabBagItem;
 class SfxStyleSheet;
 class SfxItemPool;
 class SdrVirtObj;
-class SdrObjPlusData;
+class SdrObjUserDataList;
 class SdrGluePoint;
 class SdrGluePointList;
 class SdrLayerIDSet;
@@ -227,8 +227,8 @@ public:
     // Basic DiagramHelper support
     virtual bool isDiagram() const;
     virtual const std::shared_ptr< svx::diagram::DiagramHelper_svx >& getDiagramHelper() const;
-    void setDiagramDataModelID(const OUString& rID);
-    const OUString& getDiagramDataModelID() const;
+    void setDiagramDataModelID(const OUString& rID) { m_aObjName = rID; }
+    const OUString& getDiagramDataModelID() const { return m_aObjName; }
 
     // return DiagramSubSelection if exists. This will always return
     // a valid SdrObject* to allow to use this as a loop-through-call
@@ -362,15 +362,16 @@ public:
     // or SdrOle2Obj.
     // It may also have a Title and a Description for accessibility purposes.
     virtual void SetName(const OUString& rStr, const bool bSetChanged = true);
-    virtual const OUString & GetName() const;
+    virtual const OUString & GetName() const { return m_aObjName; }
+
     void MakeNameUnique();
     void MakeNameUnique(std::unordered_set<OUString>& rNameSet);
     virtual void SetTitle(const OUString& rStr);
-    virtual OUString GetTitle() const;
+    virtual OUString GetTitle() const { return m_aObjTitle; }
     virtual void SetDescription(const OUString& rStr);
-    virtual OUString GetDescription() const;
+    virtual OUString GetDescription() const { return m_aObjDescription; }
     virtual void SetDecorative(bool isDecorative);
-    virtual bool IsDecorative() const;
+    virtual bool IsDecorative() const { return m_bDecorative; }
 
     // Object representing an annotation
     bool isAnnotationObject() const { return bool(mpAnnotationData); }
@@ -691,7 +692,7 @@ public:
     virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const;
 
     // list of all gluepoints, can be NULL
-    virtual const SdrGluePointList* GetGluePointList() const;
+    virtual const SdrGluePointList* GetGluePointList() const { return m_pGluePoints.get(); }
 
     // after changing the GluePointList, one has to call the object's SendRepaintBroadcast!
     virtual SdrGluePointList* ForceGluePointList();
@@ -913,8 +914,21 @@ protected:
     mutable tools::Rectangle m_aOutRect;     // surrounding rectangle for Paint (incl. LineWidth, ...)
     Point                       m_aAnchor;      // anchor position (Writer)
     SdrObjUserCall*             m_pUserCall;
-    std::unique_ptr<SdrObjPlusData>
-                                m_pPlusData;    // Broadcaster, UserData, connectors, ... (this is the Bitsack)
+
+    // set when the object is referenced or has connectors
+    std::unique_ptr<SfxBroadcaster>     m_pBroadcaster;
+
+    // user-defined data
+    std::unique_ptr<SdrObjUserDataList> m_pUserDataList;
+
+    // glue points for connecting object connectors
+    std::unique_ptr<SdrGluePointList>   m_pGluePoints;
+
+    // object name, title and description
+    OUString                    m_aObjName;
+    OUString                    m_aObjTitle;
+    OUString                    m_aObjDescription;
+
     // object is only pointing to another one
     bool                        m_bVirtObj : 1;
     bool                        m_bSnapRectDirty : 1;
@@ -942,6 +956,8 @@ protected:
 
     bool                        mbApplyEffects : 1 = false;
 
+    bool                        m_bDecorative = false;
+
     // custom prompt text for empty presentation object
     OUString                    m_aCustomPromptText;
 
@@ -958,8 +974,6 @@ protected:
 
     // for GetDragComment
     OUString ImpGetDescriptionStr(TranslateId pStrCacheID) const;
-
-    void ImpForcePlusData();
 
     OUString GetMetrStr(tools::Long nVal) const;
 
