@@ -589,6 +589,9 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
 namespace {
 
+// Set while a view paints another view's in-progress cell edit
+bool gbPaintingForeignEditView = false;
+
 class SuppressEditViewMessagesGuard
 {
 public:
@@ -1248,7 +1251,31 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                 SuppressEditViewMessagesGuard aGuard(*pOtherEditView);
 
                 pOtherEditView->SetOutputArea(rDevice.PixelToLogic(aNewOutputArea));
+
+                // Layout the foreign edit text out at this (painting) view's zoom
+                // instead of the editing view's
+                EditEngine& rForeignEditEngine = pOtherEditView->getEditEngine();
+                const MapMode aOrigRefMapMode = rForeignEditEngine.GetRefMapMode();
+                MapMode aPaintRefMapMode(aOrigRefMapMode);
+                aPaintRefMapMode.SetScaleX(mrViewData.GetZoomX());
+                aPaintRefMapMode.SetScaleY(mrViewData.GetZoomY());
+                const bool bRefMapModeChanged = (aPaintRefMapMode != aOrigRefMapMode);
+                const bool bWasPaintingForeignEditView = gbPaintingForeignEditView;
+                if (bRefMapModeChanged)
+                {
+                    gbPaintingForeignEditView = true;
+                    rForeignEditEngine.SetRefMapMode(aPaintRefMapMode);
+                }
+
                 pOtherEditView->DrawText_ToEditView(rDevice.PixelToLogic(aTileRectPx), &rDevice);
+
+                // Reformat back to the editing view's scale
+                if (bRefMapModeChanged)
+                {
+                    rForeignEditEngine.SetRefMapMode(aOrigRefMapMode);
+                    rForeignEditEngine.QuickFormatDoc();
+                    gbPaintingForeignEditView = bWasPaintingForeignEditView;
+                }
 
                 // EditView will do the cursor notifications correctly if we're in
                 // print-twips messaging mode.
@@ -1669,6 +1696,9 @@ void ScGridWindow::LogicInvalidatePart(const tools::Rectangle* pRectangle, int n
 
 void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
+    if (gbPaintingForeignEditView)
+        return;
+
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
     LogicInvalidatePart(pRectangle, pViewShell->getPart());
 }
@@ -1739,6 +1769,11 @@ std::optional<tools::Rectangle> ScGridWindow::GetForeignEditInvalidateRect(EditV
 
 bool ScGridWindow::InvalidateByForeignEditView(EditView* pEditView)
 {
+    // Skip the reformat this view triggers while painting a foreign edit at its
+    // own zoom; the text is unchanged, so no real invalidation is lost.
+    if (gbPaintingForeignEditView)
+        return true;
+
     std::optional<tools::Rectangle> oLogicRect = GetForeignEditInvalidateRect(pEditView);
     if (!oLogicRect)
         return false;
