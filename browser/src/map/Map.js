@@ -809,17 +809,6 @@ window.L.Map = window.L.Evented.extend({
 		return this.setZoom(this._zoom - (delta || 1), options, animate);
 	},
 
-	setZoomAround: function (intern, zoom) {
-		var scale = this.getZoomScale(zoom),
-		    viewHalf = this.getSize().divideBy(2),
-		    containerPoint = intern instanceof cool.Point ? intern : this.internToContainerPointIgnoreSplits(intern),
-
-		    centerOffset = containerPoint.subtract(viewHalf).multiplyBy(1 - 1 / scale),
-		    newCenter = this.containerPointToInternIgnoreSplits(viewHalf.add(centerOffset));
-
-		return this.setView(newCenter, zoom);
-	},
-
 	panTo: function (center) { // (Intern)
 		return this.setView(center, this._zoom);
 	},
