@@ -991,12 +991,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sdb,\
 	DataSettings \
 	DataSource \
 	DataSourceBrowser \
-	DatabaseAccess \
 	DatabaseAccessConnection \
 	DatabaseAccessContext \
 	DatabaseAccessDataSource \
 	DatabaseDocument \
-	DatabaseEnvironment \
 	DatasourceAdministrationDialog \
 	DefinitionContainer \
 	DefinitionContent \
@@ -3001,10 +2999,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdb,\
 	XCompletedConnection \
 	XCompletedExecution \
 	XDataAccessDescriptorFactory \
-	XDatabaseAccess \
-	XDatabaseAccessListener \
 	XDatabaseContext \
-	XDatabaseEnvironment \
 	XDatabaseRegistrations \
 	XDatabaseRegistrationsListener \
 	XDocumentDataSource \

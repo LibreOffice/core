@@ -9913,29 +9913,6 @@ module com {
      interface ::com::sun::star::frame::XDispatchProvider;
      [optional] interface ::com::sun::star::ui::XContextMenuInterception;
     };
-    published interface XDatabaseAccessListener;
-    /** @deprecated */ published interface XDatabaseAccess {
-     interface ::com::sun::star::sdbc::XDataSource;
-     boolean hasConnections();
-     ::com::sun::star::sdbc::XConnection getIsolatedConnection([in] string user, [in] string password) raises (::com::sun::star::sdbc::SQLException);
-     boolean suspendConnections() raises (::com::sun::star::sdbc::SQLException);
-     void addDatabaseAccessListener([in] ::com::sun::star::sdb::XDatabaseAccessListener listener);
-     void removeDatabaseAccessListener([in] ::com::sun::star::sdb::XDatabaseAccessListener listener);
-    };
-    /** @deprecated */ published service DatabaseAccess {
-     interface ::com::sun::star::beans::XPropertySet;
-     interface ::com::sun::star::sdb::XDatabaseAccess;
-     [optional] interface ::com::sun::star::sdb::XCompletedConnection;
-     [property, readonly] string URL;
-     [property] string Title;
-     [property] string ConnectURL;
-     [property] sequence< ::com::sun::star::beans::PropertyValue > ConnectInfo;
-     [property, readonly] boolean IsReadOnly;
-     [property] ::com::sun::star::util::XNumberFormatsSupplier NumberFormatsSupplier;
-     [property, optional] boolean IsPasswordRequired;
-     [property, optional] sequence< string > TableFilter;
-     [property, optional] sequence< string > TableTypeFilter;
-    };
     /** @deprecated */ published service DatabaseAccessConnection {
      service ::com::sun::star::sdbc::Connection;
      service ::com::sun::star::sdbcx::DatabaseDefinition;
@@ -10024,16 +10001,6 @@ module com {
     };
    };
    module sdb {
-    /** @deprecated */ published interface XDatabaseEnvironment {
-     interface ::com::sun::star::sdbc::XDriverManager;
-     ::com::sun::star::sdb::XDatabaseAccess getDatabaseAccess([in] string URL) raises (::com::sun::star::sdbc::SQLException);
-     ::com::sun::star::sdb::XDatabaseAccess createDatabaseAccess([in] string URL, [in] string title) raises (::com::sun::star::sdbc::SQLException);
-    };
-    /** @deprecated */ published service DatabaseEnvironment {
-     interface ::com::sun::star::sdb::XDatabaseEnvironment;
-     interface ::com::sun::star::beans::XPropertySet;
-     [property, readonly] ::com::sun::star::util::XNumberFormatsSupplier NumberFormatsSupplier;
-    };
     published struct DatabaseRegistrationEvent: ::com::sun::star::lang::EventObject {
      string Name;
      string OldLocation;
@@ -10261,12 +10228,6 @@ module com {
     published interface XAlterQuery {
      interface ::com::sun::star::uno::XInterface;
      void alterCommand([in] string command, [in] boolean useEscapeProcessing) raises (::com::sun::star::sdbc::SQLException);
-    };
-    /** @deprecated */ published interface XDatabaseAccessListener {
-     interface ::com::sun::star::lang::XEventListener;
-     void connectionChanged([in] ::com::sun::star::lang::EventObject event);
-     boolean approveConnectionClosing([in] ::com::sun::star::lang::EventObject event);
-     void connectionClosing([in] ::com::sun::star::lang::EventObject event);
     };
     published interface XDatabaseRegistrationsListener {
      interface ::com::sun::star::lang::XEventListener;
