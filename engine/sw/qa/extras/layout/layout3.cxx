@@ -400,6 +400,149 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 4);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_DOCX_smart_hyphenation)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    createSwDoc("tdf119908_smart_hyphenation.docx");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // 2 hyphenations on page 1
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Whereas it is essential to promote the development of friendly relations between na");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Whereas a common understanding of these rights and freedoms is of the greatest im");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 2);
+
+    // delete first page to update hyphenation on the next page
+
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2836, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // 3 hyphenations on page 2
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"No one shall be held in slavery or servitude; slavery and the slave trade shall be pro");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"All are equal before the law and are entitled without any discrimination to equal pro");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[24]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"political crimes or from acts contrary to the purposes and principles of the United Na");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[24]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 3);
+
+    // delete second page to update hyphenation on the next page
+
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2336, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2336, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // 5 hyphenations on page 3
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"The family is the natural and fundamental group unit of society and is entitled to pro");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Everyone has the right to freedom of thought, conscience and religion; this right in");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"cludes freedom to change his religion or belief, and freedom, either alone or in com");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[3]", "portion",
+                u"munity with others and in public or private, to manifest his religion or belief "
+                u"in teach");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[3]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[12]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Everyone has the right to freedom of opinion and expression; this right includes free");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 5);
+
+    // delete second page to update hyphenation on the next page
+
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2646, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2646, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // 4 hyphenations on page 4
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Everyone has the right to form and to join trade unions for the protection of his inter");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"himself and of his family, including food, clothing, housing and medical care and nec");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"and fundamental stages. Elementary education shall be compulsory. Technical and pro");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[18]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"In the exercise of his rights and freedoms, everyone shall be subject only to such limi");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[18]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 4);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158333)
 {
     createSwDoc("tdf130088.docx");
