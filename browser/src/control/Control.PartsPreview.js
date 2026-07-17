@@ -993,6 +993,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				app.socket.sendMessage('uno .uno:MoveSlideSectionDown');
 				break;
 			case 'removeSection':
+				that._map.deselectAll();
 				that._map.setPart(section.startIndex);
 				that._map.selectPart(section.startIndex, 1, false);
 				app.socket.sendMessage('uno .uno:RemoveSlideSection');

@@ -547,6 +547,55 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 			});
 		});
 
+		// Clicking a section header selects every slide in the section. Removing
+		// that section keeps the slides but must drop the selection down to just
+		// the current slide, not leave the removed section's slides selected.
+		it('Removing a section clears its slide selection', function() {
+			helper.processToIdle(this.win);
+
+			// Section-1 (0-3), Section-2 (4-10), Section-3 (11-12).
+			assertSectionHeaders(['Section-1', 'Section-2', 'Section-3']);
+			cy.window().should(function(win) {
+				var s = win['0'].app.impress.sections;
+				expect(s).to.have.length(3);
+				expect(s[0].startIndex).to.equal(0);
+				expect(s[1].startIndex).to.equal(4);
+				expect(s[2].startIndex).to.equal(11);
+				expect(win['0'].app.impress.partList).to.have.length(13);
+			});
+
+			// Click Section-1's header body to select all of its slides (0-3).
+			cy.cGet('.slide-section-header').eq(0)
+				.find('.slide-section-name').click();
+			helper.processToIdle(this.win);
+			cy.window().should(function(win) {
+				var impress = win['0'].app.impress;
+				[0, 1, 2, 3].forEach(function (i) {
+					expect(impress.isSlideSelected(i)).to.be.true;
+				});
+			});
+
+			// Remove the first, selected section. Match the entry exactly so it
+			// does not also hit "Remove Section & Slides".
+			rightClickSectionHeader(0);
+			cy.cGet('[id$="-dropdown"]:visible')
+				.contains('.ui-combobox-entry', /^Remove Section$/).click();
+			helper.processToIdle(this.win);
+
+			assertSectionHeaders(['Section-2', 'Section-3']);
+
+			// Only the current slide stays selected; the other former section
+			// slides are deselected.
+			cy.window().should(function(win) {
+				var impress = win['0'].app.impress;
+				expect(impress.getSelectedSlidesCount()).to.equal(1);
+				expect(impress.isSlideSelected(0)).to.be.true;
+				[1, 2, 3].forEach(function (i) {
+					expect(impress.isSlideSelected(i)).to.be.false;
+				});
+			});
+		});
+
 		it('Remove Section and Slides via context menu in PPTX', function() {
 			helper.processToIdle(this.win);
 
