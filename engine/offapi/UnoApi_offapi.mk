@@ -2694,7 +2694,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/linguistic2,\
 	XConversionDictionaryList \
 	XConversionPropertyType \
 	XDictionary \
-	XDictionary1 \
 	XDictionaryEntry \
 	XDictionaryEventListener \
 	XDictionaryList \

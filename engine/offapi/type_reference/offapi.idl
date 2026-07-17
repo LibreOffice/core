@@ -8777,24 +8777,6 @@ module com {
      interface ::com::sun::star::lang::XComponent;
      interface ::com::sun::star::lang::XServiceDisplayName;
     };
-    /** @deprecated */ published interface XDictionary1 {
-     interface ::com::sun::star::container::XNamed;
-     ::com::sun::star::linguistic2::DictionaryType getDictionaryType();
-     void setActive([in] boolean bActivate);
-     boolean isActive();
-     short getCount();
-     short getLanguage();
-     void setLanguage([in] short nLang);
-     ::com::sun::star::linguistic2::XDictionaryEntry getEntry([in] string aWord);
-     boolean addEntry([in] ::com::sun::star::linguistic2::XDictionaryEntry xDicEntry);
-     boolean add([in] string aWord, [in] boolean bIsNegative, [in] string aRplcText);
-     boolean remove([in] string aWord);
-     boolean isFull();
-     sequence< ::com::sun::star::linguistic2::XDictionaryEntry > getEntries();
-     void clear();
-     boolean addDictionaryEventListener([in] ::com::sun::star::linguistic2::XDictionaryEventListener xListener);
-     boolean removeDictionaryEventListener([in] ::com::sun::star::linguistic2::XDictionaryEventListener xListener);
-    };
     published interface XDictionaryEntry {
      interface ::com::sun::star::uno::XInterface;
      string getDictionaryWord();
