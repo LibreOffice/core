@@ -178,10 +178,13 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportOfImagesWithSkipImagesEnabled)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipHeaderFooterOmitsHeaderFooterContent)
 {
     // Reproduces the translate-path export: ExportPaMToHTML passes
-    // "NoLineLimit,SkipHeaderFooter,NoPrettyPrint" so the HTML writer must
-    // omit page header/footer *content*, not just the trailing </body> tags.
-    // Without the fix, OutHTML_HeaderFooter (wrthtml.cxx:611/:631) runs
-    // unconditionally and emits <div title="header">/<div title="footer">.
+    // "NoLineLimit,SkipHeaderFooter,SkipHeaderFooterContent,NoPrettyPrint"
+    // so the HTML writer must omit page header/footer *content*, not just the
+    // trailing </body> tags. SkipHeaderFooter controls the HTML output
+    // structure (doctype, <style>, <body>/<html> tags); SkipHeaderFooterContent
+    // controls the document page header/footer content. Without the
+    // SkipHeaderFooterContent guard, OutHTML_HeaderFooter (wrthtml.cxx) runs
+    // and emits <div title="header">/<div title="footer">.
 
     // Build a doc with a page header and footer via the page style API.
     createSwDoc();
@@ -200,20 +203,21 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipHeaderFooterOmitsHeaderFooterConten
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     xTextDocument->getText()->setString(u"BODYMARKER"_ustr);
 
-    setFilterOptions(u"NoLineLimit,SkipHeaderFooter,NoPrettyPrint"_ustr);
+    setFilterOptions(u"NoLineLimit,SkipHeaderFooter,SkipHeaderFooterContent,NoPrettyPrint"_ustr);
     save(TestFilter::HTML_WRITER);
 
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
-    // Header/footer content must be absent when SkipHeaderFooter is set.
+    // Header/footer content must be absent when SkipHeaderFooterContent is set.
     assertXPath(pDoc, "//div[@title='header']", 0);
     assertXPath(pDoc, "//div[@title='footer']", 0);
-    // Body content must still be present. Assert a <p> exists in the body
-    // rather than checking text inside a <span>, because the generic save()
-    // path (unlike ExportPaMToHTML) does not rewrite <p> to <span>, so the
-    // body text may be <p>BODYMARKER</p> or <p><span>BODYMARKER</span></p>.
+    // Body content must still be present. Assert a <p> exists in the body and
+    // that its text is BODYMARKER, so skipping header/footer content does not
+    // swallow the body. xmlNodeGetContent() returns the aggregated text, so this
+    // works whether the body is <p>BODYMARKER</p> or <p><span>BODYMARKER</span></p>.
     assertXPath(pDoc, "//body//p", 1);
+    assertXPathContent(pDoc, "//body//p", u"BODYMARKER");
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipImagesEmbedded)

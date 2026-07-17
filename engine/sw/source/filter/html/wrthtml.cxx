@@ -150,6 +150,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, std::u16string_view rFilte
     , m_bCfgNetscape4( false )
     , mbSkipImages(false)
     , mbSkipHeaderFooter(false)
+    , mbSkipHeaderFooterContent(false)
     , mbEmbedImages(false)
     , m_bCfgPrintLayout( false )
     , m_bParaDotLeaders( false )
@@ -204,13 +205,35 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
 void SwHTMLWriter::SetupFilterOptions(std::u16string_view rFilterOptions)
 {
     comphelper::SequenceAsHashMap aStoreMap;
+
+    // Exact, comma-separated token matching for options whose name is a prefix
+    // of another: SkipHeaderFooter is a prefix of SkipHeaderFooterContent, so
+    // substring matching would make the latter also trigger the former.
+    const cpo::uno::Sequence<OUString> aOptionSeq
+        = comphelper::string::convertCommaSeparated(rFilterOptions);
+    for (const auto& rOption : aOptionSeq)
+    {
+        if (rOption == "SkipHeaderFooter")
+        {
+            aStoreMap[u"SkipHeaderFooter"_ustr] <<= true;
+        }
+        else if (rOption == "SkipHeaderFooterContent")
+        {
+            aStoreMap[u"SkipHeaderFooterContent"_ustr] <<= true;
+        }
+        else if (rOption == "XHTML")
+        {
+            aStoreMap[u"XHTML"_ustr] <<= true;
+        }
+        else if (OUString aNamespace; rOption.startsWith("xhtmlns=", &aNamespace))
+        {
+            aStoreMap[u"XhtmlNs"_ustr] <<= aNamespace;
+        }
+    }
+
     if (rFilterOptions.find(u"SkipImages") != std::u16string_view::npos)
     {
         aStoreMap[u"SkipImages"_ustr] <<= true;
-    }
-    else if (rFilterOptions.find(u"SkipHeaderFooter") != std::u16string_view::npos)
-    {
-        aStoreMap[u"SkipHeaderFooter"_ustr] <<= true;
     }
     else if (rFilterOptions.find(u"EmbedImages") != std::u16string_view::npos)
     {
@@ -227,20 +250,6 @@ void SwHTMLWriter::SetupFilterOptions(std::u16string_view rFilterOptions)
     if (rFilterOptions.find(u"NoPrettyPrint") != std::u16string_view::npos)
     {
         aStoreMap[u"NoPrettyPrint"_ustr] <<= true;
-    }
-
-    const cpo::uno::Sequence<OUString> aOptionSeq
-        = comphelper::string::convertCommaSeparated(rFilterOptions);
-    for (const auto& rOption : aOptionSeq)
-    {
-        if (rOption == "XHTML")
-        {
-            aStoreMap[u"XHTML"_ustr] <<= true;
-        }
-        else if (OUString aNamespace; rOption.startsWith("xhtmlns=", &aNamespace))
-        {
-            aStoreMap[u"XhtmlNs"_ustr] <<= aNamespace;
-        }
     }
 
     SetupFilterFromPropertyValues(aStoreMap.getAsConstPropertyValueList());
@@ -292,6 +301,14 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         mbSkipHeaderFooter = bVal;
     }
 
+    it = aStoreMap.find(u"SkipHeaderFooterContent"_ustr);
+    if (it != aStoreMap.end())
+    {
+        bool bVal{};
+        it->second >>= bVal;
+        mbSkipHeaderFooterContent = bVal;
+    }
+
     // this option can be "on" together with any of above
     it = aStoreMap.find(u"NoPrettyPrint"_ustr);
     if (it != aStoreMap.end())
@@ -339,6 +356,8 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
             mbReqIF = true;
             // XHTML is always just a fragment inside ReqIF.
             mbSkipHeaderFooter = true;
+            // A fragment also does not need the document page header/footer content.
+            mbSkipHeaderFooterContent = true;
         }
         if (!maNamespace.isEmpty())
             maNamespace += ":";
@@ -604,7 +623,7 @@ ErrCode SwHTMLWriter::WriteStream()
         if( !m_bWriteClipboardDoc && m_pDoc->GetDocShell() &&
              (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) &&
               !m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)) &&
-            !mbSkipHeaderFooter &&
+            !mbSkipHeaderFooterContent &&
             (pFormatHeader = rPageItemSet.GetItemIfSet( RES_HEADER )) )
         {
             const SwFrameFormat *pHeaderFormat = pFormatHeader->GetHeaderFormat();
@@ -625,7 +644,7 @@ ErrCode SwHTMLWriter::WriteStream()
         const SwFormatFooter* pFormatFooter;
         if( !m_bWriteClipboardDoc && m_pDoc->GetDocShell() &&
             (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE))  &&
-            !mbSkipHeaderFooter &&
+            !mbSkipHeaderFooterContent &&
             (pFormatFooter = rPageItemSet.GetItemIfSet( RES_FOOTER )) )
         {
             const SwFrameFormat *pFooterFormat = pFormatFooter->GetFooterFormat();

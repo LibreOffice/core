@@ -49,7 +49,7 @@ OString ExportPaMToHTML(SwPaM* pCursor)
     SolarMutexGuard gMutex;
     OString aResult;
     WriterRef xWrt;
-    GetHTMLWriter(u"NoLineLimit,SkipHeaderFooter,NoPrettyPrint", OUString(), xWrt);
+    GetHTMLWriter(u"NoLineLimit,SkipHeaderFooter,SkipHeaderFooterContent,NoPrettyPrint", OUString(), xWrt);
     if (pCursor != nullptr)
     {
         SvMemoryStream aMemoryStream;

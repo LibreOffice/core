@@ -408,6 +408,10 @@ public:
     bool mbSkipImages : 1;
     /// If HTML header and footer should be written as well, or just the content itself.
     bool mbSkipHeaderFooter : 1;
+    /// If the Writer document page header/footer content should be written.
+    /// Separate from mbSkipHeaderFooter, which is about the HTML output structure
+    /// (doctype, <style>, <body>/<html> tags), not the document header/footer content.
+    bool mbSkipHeaderFooterContent : 1;
     bool mbEmbedImages : 1;
     /// Temporary base URL for paste of images.
     std::unique_ptr<utl::TempFileNamed> mpTempBaseURL;

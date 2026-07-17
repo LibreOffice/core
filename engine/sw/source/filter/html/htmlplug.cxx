@@ -1049,7 +1049,18 @@ SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFo
                 uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
                 comphelper::SequenceAsHashMap aMediaDescriptor;
                 aMediaDescriptor[u"FilterName"_ustr] <<= aFilter;
-                aMediaDescriptor[u"FilterOptions"_ustr] <<= u"SkipHeaderFooter"_ustr;
+                // Skip the HTML output structure for the fragment. For a Writer
+                // embedded object, also skip the document page header/footer
+                // content. A Calc embedded object is exported by ScHTMLExport,
+                // which parses FilterOptions with exact equality and does not
+                // know SkipHeaderFooterContent, so only SkipHeaderFooter is
+                // passed in that case.
+                OUString aFilterOptions = u"SkipHeaderFooter"_ustr;
+                if (aFilter == u"HTML (StarWriter)"_ustr)
+                {
+                    aFilterOptions = u"SkipHeaderFooter,SkipHeaderFooterContent"_ustr;
+                }
+                aMediaDescriptor[u"FilterOptions"_ustr] <<= aFilterOptions;
                 aMediaDescriptor[u"OutputStream"_ustr] <<= xOutputStream;
                 xStorable->storeToURL(u"private:stream"_ustr, aMediaDescriptor.getAsConstPropertyValueList());
                 SAL_WARN_IF(aStream.GetSize()>=o3tl::make_unsigned(SAL_MAX_INT32), "sw.html", "Stream can't fit in OString");
