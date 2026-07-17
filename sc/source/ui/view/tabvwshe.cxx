@@ -232,6 +232,14 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
     sal_uInt16              nSlot       = rReq.GetSlot();
     const SfxPoolItem*  pItem;
 
+    // auto-accept any in-process input - which could otherwise end up on a different 'found' sheet
+    if (nSlot != SID_SEARCH_ITEM && ScGlobal::GetSearchItem().IsAllTables())
+    {
+        ScModule* pScMod = ScModule::get();
+        if (!pScMod->IsFormulaMode())
+            pScMod->InputEnterHandler();
+    }
+
     switch ( nSlot )
     {
         case FID_SEARCH_NOW:
