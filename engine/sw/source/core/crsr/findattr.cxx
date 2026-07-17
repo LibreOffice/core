@@ -1396,15 +1396,6 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
         {
             SfxItemPool* pPool = pReplSet->GetPool();
             SfxItemSet aSet( *pPool, pReplSet->GetRanges() );
-
-            for (SfxItemIter aIter( *pSet ); !aIter.IsAtEnd(); aIter.Next())
-            {
-                const SfxPoolItem* pItem = aIter.GetCurItem();
-                // reset all that are not set with pool defaults
-                if( !IsInvalidItem( pItem ) && SfxItemState::SET !=
-                    pReplSet->GetItemState( pItem->Which(), false ))
-                    aSet.Put( pPool->GetUserOrPoolDefaultItem( pItem->Which() ));
-            }
             aSet.Put( *pReplSet );
             rCursor.GetDoc().getIDocumentContentOperations().InsertItemSet(
                     rCursor, aSet, SetAttrMode::DEFAULT, m_pLayout);
