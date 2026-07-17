@@ -69,6 +69,8 @@ public:
     OUString        ReadSound( sal_uInt32 nSoundRef ) const;
     OUString        ReadMedia( sal_uInt32 nMediaRef ) const;
 
+    SdDrawDocument& GetDoc() const { return mrDoc; }
+
     ImplSdPPTImport( SdDrawDocument& rDoc, SotStorage& rStorage, SfxMedium& rMed, PowerPointImportParam& );
     virtual ~ImplSdPPTImport() override;
 

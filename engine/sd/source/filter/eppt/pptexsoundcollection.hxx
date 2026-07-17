@@ -27,6 +27,8 @@
 #include <rtl/ustring.hxx>
 
 class SvStream;
+class SdSoundLink;
+class SdDrawDocument;
 
 namespace ppt
 {
@@ -56,7 +58,7 @@ class ExSoundCollection
     public:
 
         void                    SetReferer(const OUString& rReferer) { maReferer = rReferer; }
-        sal_uInt32              GetId(const OUString&);
+        sal_uInt32              GetId(const SdSoundLink&);
 
         /// @return size of a complete SoundCollectionContainer.
         sal_uInt32              GetSize() const;

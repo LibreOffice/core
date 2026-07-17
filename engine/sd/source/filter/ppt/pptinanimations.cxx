@@ -19,6 +19,7 @@
 
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
+#include <xmloff/SoundReference.hxx>
 #include <com/sun/star/animations/AnimationRestart.hpp>
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/Event.hpp>
@@ -66,6 +67,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <animations.hxx>
+#include <drawdoc.hxx>
 #include "pptanimations.hxx"
 #include "pptinanimations.hxx"
 #include "pptatom.hxx"
@@ -1816,7 +1818,18 @@ int AnimationImporter::importAudioContainer( const Atom* pAtom, const Reference<
                 Any aSource;
                 importTargetElementContainer( pChildAtom, aSource, nSubType );
                 if( xAudio.is() ) {
-                    xAudio->setSource( aSource );
+                    // a sound source is a URL, a media object source is a shape
+                    OUString aSoundURL;
+                    if( aSource >>= aSoundURL )
+                    {
+                        xAudio->setSource( xmloff::makeSoundSource( aSoundURL ) );
+                        // a sound outside the document package is a link; note it
+                        // on the document so the slide's sound links get registered
+                        if( !xmloff::isPackageSoundURL( aSoundURL ) )
+                            mpPPTImport->GetDoc().SetMaybeHasAnimationSoundLinks( true );
+                    }
+                    else
+                        xAudio->setSource( aSource );
                     nNodes ++;
                 }
             }

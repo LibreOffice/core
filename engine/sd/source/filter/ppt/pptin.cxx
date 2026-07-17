@@ -2090,8 +2090,10 @@ void ImplSdPPTImport::FillSdAnimationInfo(SdAnimationInfo* pInfo, const PptInter
     // set local information into pInfo
     if( rIAtom.nSoundRef )
     {
-        pInfo->SetBookmark( ReadSound( rIAtom.nSoundRef ) );   // path to sound file in MS DOS notation
+        // set the action before the bookmark, so storing the sound URL registers
+        // it as a click-action sound link
         pInfo->meClickAction = css::presentation::ClickAction_SOUND;           // RunProgramAction
+        pInfo->SetBookmark( ReadSound( rIAtom.nSoundRef ) );   // path to sound file in MS DOS notation
     }
 
     switch ( rIAtom.nAction )

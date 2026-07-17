@@ -27,6 +27,8 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <SdSoundLink.hxx>
+#include <drawdoc.hxx>
 #include <utility>
 
 namespace ppt
@@ -155,22 +157,24 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
     }
 }
 
-sal_uInt32 ExSoundCollection::GetId(const OUString& rString)
+sal_uInt32 ExSoundCollection::GetId(const SdSoundLink& rSound)
 {
     sal_uInt32 nSoundId = 0;
-    if (!rString.isEmpty()
+    const OUString& rURL = rSound.getURL();
+    if (!rSound.isEmpty()
         && !SvtSecurityOptions::isUntrustedReferer(maReferer)
-        && !INetURLObject(rString).IsExoticProtocol())
+        && !INetURLObject(rURL).IsExoticProtocol()
+        && rSound.isAllowed())
     {
         const sal_uInt32 nSoundCount = maEntries.size();
 
         auto iter = std::find_if(maEntries.begin(), maEntries.end(),
-            [&rString](const ExSoundEntry& rEntry) { return rEntry.IsSameURL(rString); });
+            [&rURL](const ExSoundEntry& rEntry) { return rEntry.IsSameURL(rURL); });
         nSoundId = static_cast<sal_uInt32>(std::distance(maEntries.begin(), iter));
 
         if ( nSoundId++ == nSoundCount )
         {
-            ExSoundEntry aEntry( rString );
+            ExSoundEntry aEntry( rURL );
             if ( aEntry.GetFileSize() )
                 maEntries.push_back(aEntry);
             else

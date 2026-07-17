@@ -21,6 +21,7 @@
 
 #include <svx/svdobj.hxx>
 #include <sdpage.hxx>
+#include <xmloff/SoundReference.hxx>
 #include <tools/stream.hxx>
 #include <svx/unoapi.hxx>
 #include <sal/log.hxx>
@@ -604,7 +605,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
 
     // set sound effect
     if( HasSoundEffect() )
-        pEffect->createAudio( cpo::uno::Any( m_aSoundFileUrl ) );
+        pEffect->createAudio( xmloff::makeSoundSource( m_aSoundFileUrl ) );
 
     // text iteration
     pEffect->setIterateType( GetTextAnimationType() );

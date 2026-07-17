@@ -22,6 +22,8 @@
 #include <tools/debug.hxx>
 
 #include <anminfo.hxx>
+#include <drawdoc.hxx>
+#include <SdSoundLink.hxx>
 #include <glob.hxx>
 
 using namespace ::com::sun::star;
@@ -39,6 +41,7 @@ SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
                  mbSoundOn                  (false),
                  mbPlayFull                 (false),
                  meClickAction              (presentation::ClickAction_NONE),
+                 mbClickSoundAllowed        (false),
                  meSecondEffect             (presentation::AnimationEffect_NONE),
                  meSecondSpeed              (presentation::AnimationSpeed_SLOW),
                  mbSecondSoundOn            (false),
@@ -62,10 +65,11 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rOb
                  mbDimHide                  (rAnmInfo.mbDimHide),
                  maBlueScreen               (rAnmInfo.maBlueScreen),
                  maDimColor                 (rAnmInfo.maDimColor),
-                 maSoundFile                (rAnmInfo.maSoundFile),
+                 maSoundLink                (rAnmInfo.maSoundLink),
                  mbSoundOn                  (rAnmInfo.mbSoundOn),
                  mbPlayFull                 (rAnmInfo.mbPlayFull),
                  meClickAction              (rAnmInfo.meClickAction),
+                 mbClickSoundAllowed        (rAnmInfo.mbClickSoundAllowed),
                  meSecondEffect             (rAnmInfo.meSecondEffect),
                  meSecondSpeed              (rAnmInfo.meSecondSpeed),
                  mbSecondSoundOn            (rAnmInfo.mbSecondSoundOn),
@@ -103,6 +107,16 @@ void SdAnimationInfo::SetBookmark( const OUString& rBookmark )
     {
         SvxFieldItem aURLItem( SvxURLField( rBookmark, rBookmark ), EE_FEATURE_FIELD );
         mrObject.SetMergedItem( aURLItem );
+    }
+
+    // A click-action sound pointing outside the document package is a link the
+    // user allows on its own; register it as the URL is set so it joins link
+    // management.
+    if( meClickAction == css::presentation::ClickAction_SOUND
+        && SdSoundLink( rBookmark ).isExternalLink() )
+    {
+        static_cast<SdDrawDocument&>(mrObject.getSdrModelFromSdrObject())
+            .RegisterShapeSoundLink( mrObject );
     }
 }
 

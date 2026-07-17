@@ -25,6 +25,9 @@
 #include "eppt.hxx"
 #include "text.hxx"
 #include "epptdef.hxx"
+#include <SdSoundLink.hxx>
+#include <anminfo.hxx>
+#include <drawdoc.hxx>
 #include "escherex.hxx"
 #include <tools/poly.hxx>
 #include <tools/stream.hxx>
@@ -1402,8 +1405,14 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
         break;
         case css::presentation::ClickAction_SOUND :
         {
-            if ( ImplGetPropertyValue( u"Bookmark"_ustr ) )
-                nSoundRef = maSoundCollection.GetId( *o3tl::doAccess<OUString>(mAny) );
+            // The allowed bit lives on the shape's SdAnimationInfo, not on a
+            // property, so read the click sound from the model to get its URL
+            // and allowed state together.
+            css::uno::Reference<css::drawing::XShape> xShape(mXPropSet, css::uno::UNO_QUERY);
+            SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
+            if ( SdAnimationInfo* pInfo = pObj ? SdDrawDocument::GetShapeUserData(*pObj) : nullptr )
+                nSoundRef = maSoundCollection.GetId(
+                    SdSoundLink(pInfo->GetBookmark(), pInfo->mbClickSoundAllowed) );
         }
         break;
         case css::presentation::ClickAction_PROGRAM :

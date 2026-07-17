@@ -1405,6 +1405,19 @@ OUString SdPage::autoLayoutToString(AutoLayout nLayoutId)
     return enumtoString(nLayoutId);
 }
 
+void SdPage::SetSoundFile(const OUString& rStr)
+{
+    // A fresh source starts out not allowed; setting the same source again keeps
+    // the allowed state it already has.
+    if (maSoundLink.getURL() != rStr)
+        maSoundLink = SdSoundLink(rStr);
+    // A transition sound pointing outside the document package is a link the
+    // user allows on its own; register it as the URL is set so it joins link
+    // management.
+    if (maSoundLink.isExternalLink())
+        static_cast<SdDrawDocument&>(getSdrModelFromSdrPage()).RegisterPageSoundLink(*this);
+}
+
 void SdPage::SetCanvasPage()
 {
     mbIsCanvasPage = true;
