@@ -624,12 +624,6 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	cursor: pointer !important;
 }
 
-/* Sub Tabs: example Format Cells: Font */
-
-.ui-tabs-content .ui-tabs.jsdialog.ui-widget {
-	border-block-start: 1px solid var(--color-border-lighter);
-	padding-block-start: 24px
-}
 
 /* Vertical tab rail: used when a dialog has more tabs than comfortably fit a
    horizontal row. The rail sits on the inline-start side and the panel fills
@@ -648,6 +642,7 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	inset-block: 0;
 	inset-inline-start: 0;
 	width: var(--cool-vertical-rail-width);
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
@@ -657,6 +652,16 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 
 .ui-tabs-root.vertical > .ui-tabs-content.jsdialog {
 	margin-inline-start: var(--cool-vertical-rail-width);
+	padding-left: 16px;
+}
+
+#CharNamePage.jsdialog .ui-treeview.ui-grid-cell {
+	box-sizing: border-box;
+	grid-template-columns: minmax(0, 1fr) !important;
+}
+
+#CharNamePage.jsdialog {
+	grid-template-columns: unset !important;
 }
 
 .ui-tabs.vertical .ui-tab.jsdialog {
