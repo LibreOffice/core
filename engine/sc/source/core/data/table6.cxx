@@ -628,7 +628,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
                                         rDocument.GetStyleSheetPool()->Find(
                                         rSearchItem.GetSearchString(), SfxStyleFamily::Para ));
 
-    SCCOL nCol = rCol;
+    SCCOL nCol = ClampToAllocatedColumns(rCol);
     SCROW nRow = rRow;
     bool bFound = false;
 
