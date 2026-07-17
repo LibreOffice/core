@@ -23,6 +23,9 @@
 #include <Poco/Path.h>
 #include <Poco/URI.h>
 
+#include <filesystem>
+#include <system_error>
+
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDialog>
@@ -259,6 +262,48 @@ void printDocument(unsigned appDocId, QWidget* parent)
     });
 
     customPrintDialog->open();
+}
+
+bool moveOrCopyFile(const std::string& fromPath, const std::string& toPath)
+{
+    // A rename moves the data without a second write and atomically replaces
+    // an existing destination, but only works within one filesystem; across
+    // filesystems it fails and the atomic copy takes over. Either way an
+    // existing destination file is replaced only once the new content is
+    // complete on disk.
+    std::error_code errorCode;
+    std::filesystem::rename(fromPath, toPath, errorCode);
+    if (!errorCode)
+        return true;
+
+    return FileUtil::copyAtomic(fromPath, toPath, /*preserveTimestamps=*/false);
+}
+
+QFileDialog* showSaveFileDialog(QWidget* parent, const QString& title,
+                                const QString& suggestedName, const std::string& srcPath,
+                                std::function<void(bool ok)> onFinished)
+{
+    QFileDialog* dialog = new QFileDialog(parent, title, QDir::home().filePath(suggestedName),
+                                          QObject::tr("All Files (*)"));
+
+    dialog->setAcceptMode(QFileDialog::AcceptSave);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+    QObject::connect(dialog, &QFileDialog::fileSelected,
+                     [srcPath, onFinished = std::move(onFinished)](const QString& destPath)
+                     {
+                         const bool ok = moveOrCopyFile(srcPath, destPath.toStdString());
+                         if (ok)
+                             LOG_INF("export: saved to " << destPath.toStdString());
+                         else
+                             LOG_ERR("export: failed to copy to '" << destPath.toStdString()
+                                                                   << "'");
+                         if (onFinished)
+                             onFinished(ok);
+                     });
+
+    dialog->open();
+    return dialog;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1099,29 +1099,14 @@ QVariant Bridge::cool(const QString& messageStr)
             suggestedName = QStringLiteral("export.") + (ext.isEmpty() ? QStringLiteral("bin") : ext);
         }
 
-        QFileDialog* dialog = new QFileDialog(
-            _webView,
-            QObject::tr("Save File"),
-            QDir::home().filePath(suggestedName),
-            QObject::tr("All Files (*)"));
-
-        dialog->setAcceptMode(QFileDialog::AcceptSave);
-        dialog->setAttribute(Qt::WA_DeleteOnClose);
-
-        QObject::connect(dialog, &QFileDialog::fileSelected,
-                        [srcPath](const QString& destPath) {
-            if (QFile::exists(destPath))
-                QFile::remove(destPath);
-            if (!QFile::copy(srcPath, destPath))
-            {
-                LOG_ERR("exportfile: failed to copy to '" << destPath.toStdString() << "'");
-                return;
-            }
-            LOG_INF("exportfile: saved to " << destPath.toStdString());
-            QFile::remove(srcPath);
-        });
-
-        dialog->open();
+        showSaveFileDialog(_webView, QObject::tr("Save File"), suggestedName,
+                           srcPath.toStdString(),
+                           [srcPath](bool ok)
+                           {
+                               // The source stays behind on failure for another attempt.
+                               if (ok)
+                                   QFile::remove(srcPath);
+                           });
     }
     else if (tokens.equals(0, "HYPERLINK"))
     {

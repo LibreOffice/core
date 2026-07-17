@@ -11,10 +11,14 @@
 
 #pragma once
 
+#include <functional>
+#include <string>
 #include <vector>
 
 #include <QString>
 #include <QWidget>
+
+class QFileDialog;
 
 struct SaveAsFormat
 {
@@ -25,5 +29,21 @@ struct SaveAsFormat
 
 std::vector<SaveAsFormat> getSaveAsFormats(int docType);
 void printDocument(unsigned appDocId, QWidget* parent = nullptr);
+
+// Puts a file at its destination: a rename when the destination is on the
+// same filesystem, otherwise an atomic copy (write to a temporary name
+// beside the destination, then rename over it). An existing destination file
+// stays intact when the operation fails. Returns true on success.
+bool moveOrCopyFile(const std::string& fromPath, const std::string& toPath);
+
+// Asks the user where to save an already-written file and puts it there.
+// Opens a save-file dialog over parent with the given title and suggested
+// filename; picking a destination moves or atomically copies the file at
+// srcPath to it, then runs onFinished with the outcome. A dismissed dialog
+// never calls onFinished. The dialog deletes itself on close; the returned
+// pointer allows connecting further cleanup to its signals.
+QFileDialog* showSaveFileDialog(QWidget* parent, const QString& title,
+                                const QString& suggestedName, const std::string& srcPath,
+                                std::function<void(bool ok)> onFinished);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
