@@ -240,6 +240,11 @@ void ScDocShell::PerformLinkUpdate()
     ReloadAllLinks();
 }
 
+bool ScDocShell::HasExternalLinks() const
+{
+    return GetDocument().HasExternalLinks() || !GetDeferredFormControlImages().empty();
+}
+
 IMPL_LINK_NOARG( ScDocShell, ReloadAllLinksHdl, weld::Button&, void )
 {
     getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);

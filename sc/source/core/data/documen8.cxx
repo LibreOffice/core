@@ -1033,21 +1033,6 @@ bool ScDocument::SetDdeLinkResultMatrix( size_t nDdePos, const ScMatrixRef& pRes
     return false;
 }
 
-bool ScDocument::HasAreaLinks() const
-{
-    const sfx2::LinkManager* pMgr = GetDocLinkManager().getExistingLinkManager();
-    if (!pMgr)
-        return false;
-
-    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
-    sal_uInt16 nCount = rLinks.size();
-    for (sal_uInt16 i=0; i<nCount; i++)
-        if (nullptr != dynamic_cast<const ScAreaLink* >(rLinks[i].get()))
-            return true;
-
-    return false;
-}
-
 void ScDocument::UpdateAreaLinks()
 {
     sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(false);
