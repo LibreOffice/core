@@ -1288,12 +1288,6 @@ void SvxSearchDialog::ClickHdl_Impl(const weld::Widget* pCtrl)
         }
     }
 
-    if (pCtrl == m_xAllSheetsCB.get())
-    {
-        m_bSet = true;
-        ModifyHdl_Impl(*m_xSearchLB);
-    }
-
     if (pCtrl == m_xJapOptionsCB.get())
     {
         bool bEnableJapOpt = m_xJapOptionsCB->get_active();
