@@ -53,7 +53,7 @@ public:
     bool idleCheckLinks();
 
     bool hasDdeLinks() const;
-    bool hasExternalContentLinks() const;
+    bool hasUpdatableLinks() const;
     bool hasExternalRefLinks() const;
 
     bool updateDdeOrOleOrWebServiceLinks(weld::Window* pWin);
