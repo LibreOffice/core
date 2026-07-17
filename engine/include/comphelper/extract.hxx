@@ -24,7 +24,7 @@
 #include <cassert>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 #include <cpo/uno/Type.h>
 #include <cpo/uno/Any.hxx>
 
@@ -39,7 +39,7 @@ namespace cppu
  */
 inline cpo::uno::Any int2enum(sal_Int32 nEnum, const cpo::uno::Type& rType)
 {
-    assert(rType.getTypeClass() == css::uno::TypeClass_ENUM);
+    assert(rType.getTypeClass() == cpo::uno::TypeClass_ENUM);
     return cpo::uno::Any(&nEnum, rType);
 }
 
@@ -53,7 +53,7 @@ inline cpo::uno::Any int2enum(sal_Int32 nEnum, const cpo::uno::Type& rType)
  */
 inline bool enum2int(sal_Int32& rnEnum, const cpo::uno::Any& rAny)
 {
-    if (rAny.getValueTypeClass() == css::uno::TypeClass_ENUM)
+    if (rAny.getValueTypeClass() == cpo::uno::TypeClass_ENUM)
     {
         rnEnum = *static_cast<const sal_Int32*>(rAny.getValue());
         return true;

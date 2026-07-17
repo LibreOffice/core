@@ -52,7 +52,7 @@ using namespace com::sun::star::drawing;
 void EnhancedCustomShape::FillEquationParameter( const EnhancedCustomShapeParameter& rSource, const sal_Int32 nDestPara, EnhancedCustomShapeEquation& rDest )
 {
     sal_Int32 nValue = 0;
-    if ( rSource.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
+    if ( rSource.Value.getValueTypeClass() == cpo::uno::TypeClass_DOUBLE )
     {
         double fValue(0.0);
         if ( rSource.Value >>= fValue )

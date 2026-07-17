@@ -24,7 +24,7 @@ import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.ParameterTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import cpo.uno.Type;
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Field;

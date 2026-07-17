@@ -1373,7 +1373,7 @@ static table::CellRangeAddress getCellRangeAddressForVBARange( const cpo::uno::A
     uno::Reference< table::XCellRange > xRangeParam;
     switch ( aParam.getValueTypeClass() )
     {
-        case uno::TypeClass_STRING:
+        case cpo::uno::TypeClass_STRING:
         {
             OUString rString;
             aParam >>= rString;
@@ -1391,7 +1391,7 @@ static table::CellRangeAddress getCellRangeAddressForVBARange( const cpo::uno::A
         }
         break;
 
-        case uno::TypeClass_INTERFACE:
+        case cpo::uno::TypeClass_INTERFACE:
         {
             uno::Reference< excel::XRange > xRange;
             aParam >>= xRange;
@@ -1553,8 +1553,8 @@ ScVbaRange::getValue2()
 void
 ScVbaRange::setValue( const cpo::uno::Any& aValue, ValueSetter& valueSetter )
 {
-    uno::TypeClass aClass = aValue.getValueTypeClass();
-    if ( aClass == uno::TypeClass_SEQUENCE )
+    cpo::uno::TypeClass aClass = aValue.getValueTypeClass();
+    if ( aClass == cpo::uno::TypeClass_SEQUENCE )
     {
         const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter( mxContext );
         cpo::uno::Any aConverted;
@@ -3347,7 +3347,7 @@ ScVbaRange::Find( const cpo::uno::Any& What, const cpo::uno::Any& After, const c
 static uno::Reference< table::XCellRange > processKey( const cpo::uno::Any& Key, const uno::Reference<  uno::XComponentContext >& xContext, ScDocShell* pDocSh )
 {
     uno::Reference< excel::XRange > xKeyRange;
-    if (Key.getValueTypeClass() == css::uno::TypeClass_INTERFACE)
+    if (Key.getValueTypeClass() == cpo::uno::TypeClass_INTERFACE)
     {
         xKeyRange.set( Key, uno::UNO_QUERY_THROW );
     }

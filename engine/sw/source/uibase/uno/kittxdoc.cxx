@@ -250,7 +250,7 @@ void GetDocumentProperties(tools::JsonWriter& rJsonWriter, const SwDocShell* pDo
             continue;
         }
 
-        if (rUDP.Value.getValueTypeClass() != uno::TypeClass_STRING)
+        if (rUDP.Value.getValueTypeClass() != cpo::uno::TypeClass_STRING)
         {
             continue;
         }

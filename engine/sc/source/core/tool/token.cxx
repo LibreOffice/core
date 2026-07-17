@@ -1035,10 +1035,10 @@ bool ScTokenArray::AddFormulaToken(
         bError = false;
         const OpCode eOpCode = static_cast<OpCode>(rToken.OpCode);      // assuming equal values for the moment
 
-        const uno::TypeClass eClass = rToken.Data.getValueTypeClass();
+        const cpo::uno::TypeClass eClass = rToken.Data.getValueTypeClass();
         switch ( eClass )
         {
-            case uno::TypeClass_STRUCT:
+            case cpo::uno::TypeClass_STRUCT:
                 {
                     cpo::uno::Type aType = rToken.Data.getValueType();
                     if ( aType.equals( cppu::UnoType<sheet::SingleReference>::get() ) )
@@ -1174,7 +1174,7 @@ bool ScTokenArray::AddFormulaToken(
                         bError = true;      // unknown struct
                 }
                 break;
-            case uno::TypeClass_SEQUENCE:
+            case cpo::uno::TypeClass_SEQUENCE:
                 {
                     if ( eOpCode != ocPush )
                         bError = true;      // not an inline array

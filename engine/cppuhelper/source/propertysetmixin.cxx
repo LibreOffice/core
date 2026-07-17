@@ -62,7 +62,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
@@ -151,7 +151,7 @@ void Data::initProperties(
         ifc->getMembers());
     for (const auto & m : members) {
         if (m->getTypeClass()
-            == css::uno::TypeClass_INTERFACE_ATTRIBUTE)
+            == cpo::uno::TypeClass_INTERFACE_ATTRIBUTE)
         {
             css::uno::Reference<
             css::reflection::XInterfaceAttributeTypeDescription2 > attr(
@@ -263,7 +263,7 @@ css::uno::Reference< css::reflection::XTypeDescription > Data::resolveTypedefs(
     css::uno::Reference< css::reflection::XTypeDescription > const & type)
 {
     css::uno::Reference< css::reflection::XTypeDescription > t(type);
-    while (t->getTypeClass() == css::uno::TypeClass_TYPEDEF) {
+    while (t->getTypeClass() == cpo::uno::TypeClass_TYPEDEF) {
         t = css::uno::Reference< css::reflection::XIndirectTypeDescription >(
             t, css::uno::UNO_QUERY_THROW)->getReferencedType();
     }

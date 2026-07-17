@@ -314,9 +314,9 @@ bool getinput_putcall(bs::types::PutCall& pc, std::u16string_view str) {
 
 bool getinput_putcall(bs::types::PutCall& pc, const cpo::uno::Any& anyval) {
     OUString str;
-    if(anyval.getValueTypeClass() == uno::TypeClass_STRING) {
+    if(anyval.getValueTypeClass() == cpo::uno::TypeClass_STRING) {
         anyval >>= str;
-    } else if(anyval.getValueTypeClass() == uno::TypeClass_VOID) {
+    } else if(anyval.getValueTypeClass() == cpo::uno::TypeClass_VOID) {
         str=u"c"_ustr;        // call as default
     } else {
         return false;
@@ -325,9 +325,9 @@ bool getinput_putcall(bs::types::PutCall& pc, const cpo::uno::Any& anyval) {
 }
 
 bool getinput_strike(double& strike, const cpo::uno::Any& anyval) {
-    if(anyval.getValueTypeClass() == uno::TypeClass_DOUBLE) {
+    if(anyval.getValueTypeClass() == cpo::uno::TypeClass_DOUBLE) {
         anyval >>= strike;
-    } else if(anyval.getValueTypeClass() == uno::TypeClass_VOID) {
+    } else if(anyval.getValueTypeClass() == cpo::uno::TypeClass_VOID) {
         strike=-1.0;        // -1 as default (means not set)
     } else {
         return false;
@@ -370,9 +370,9 @@ bool getinput_fordom(bs::types::ForDom& fd, std::u16string_view str) {
 
 bool getinput_greek(bs::types::Greeks& greek, const cpo::uno::Any& anyval) {
     OUString str;
-    if(anyval.getValueTypeClass() == uno::TypeClass_STRING) {
+    if(anyval.getValueTypeClass() == cpo::uno::TypeClass_STRING) {
         anyval >>= str;
-    } else if(anyval.getValueTypeClass() == uno::TypeClass_VOID) {
+    } else if(anyval.getValueTypeClass() == cpo::uno::TypeClass_VOID) {
         str=u"value"_ustr;
     } else {
         return false;

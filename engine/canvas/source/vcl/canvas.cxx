@@ -57,7 +57,7 @@ namespace vclcanvas
         SAL_INFO("canvas.vcl", "VCLCanvas::initialize called" );
 
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 5 &&
-                             maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER,
+                             maArguments[0].getValueTypeClass() == cpo::uno::TypeClass_HYPER,
                              "Canvas::initialize: wrong number of arguments, or wrong types" );
 
         sal_Int64 nPtr = 0;

@@ -43,19 +43,19 @@ static sal_Int8 lcl_toMSOPropType( const cpo::uno::Type& aType )
 
     switch ( aType.getTypeClass() )
     {
-        case uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
             msoType =  office::MsoDocProperties::msoPropertyTypeBoolean;
             break;
-        case uno::TypeClass_FLOAT:
+        case cpo::uno::TypeClass_FLOAT:
             msoType =  office::MsoDocProperties::msoPropertyTypeFloat;
             break;
-        case uno::TypeClass_STRUCT: // Assume date
+        case cpo::uno::TypeClass_STRUCT: // Assume date
             msoType =  office::MsoDocProperties::msoPropertyTypeDate;
             break;
-        case  uno::TypeClass_BYTE:
-        case  uno::TypeClass_SHORT:
-        case  uno::TypeClass_LONG:
-        case  uno::TypeClass_HYPER:
+        case  cpo::uno::TypeClass_BYTE:
+        case  cpo::uno::TypeClass_SHORT:
+        case  cpo::uno::TypeClass_LONG:
+        case  cpo::uno::TypeClass_HYPER:
             msoType =  office::MsoDocProperties::msoPropertyTypeNumber;
             break;
         default:

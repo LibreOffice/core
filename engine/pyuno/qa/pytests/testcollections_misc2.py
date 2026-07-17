@@ -6,8 +6,8 @@ import unittest
 
 from com.sun.star.awt.FontSlant import ITALIC
 from com.sun.star.awt.FontSlant import NONE
-from com.sun.star.uno.TypeClass import STRING
-from com.sun.star.uno.TypeClass import LONG
+from cpo.uno.TypeClass import STRING
+from cpo.uno.TypeClass import LONG
 from com.sun.star.awt import Point
 
 class Test124953(unittest.TestCase):

@@ -28,7 +28,7 @@
     accumulation-based services.</p>
 
     <p>The type class of this type is
-    com::sun::star::uno::TypeClass::SERVICE.
+    cpo::uno::TypeClass::SERVICE.
   */
 published interface XServiceTypeDescription : com::sun::star::reflection::XTypeDescription
 {

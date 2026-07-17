@@ -41,7 +41,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
@@ -382,11 +382,11 @@ css::registry::RegistryValueType RegistryKey::getValueType()
     service_.checkValid();
     cpo::uno::Type t(value_.getValueType());
     switch (t.getTypeClass()) {
-    case css::uno::TypeClass_LONG:
+    case cpo::uno::TypeClass_LONG:
         return css::registry::RegistryValueType_LONG;
-    case css::uno::TypeClass_STRING:
+    case cpo::uno::TypeClass_STRING:
         return css::registry::RegistryValueType_STRING;
-    case css::uno::TypeClass_SEQUENCE:
+    case cpo::uno::TypeClass_SEQUENCE:
         if (t == cppu::UnoType< cpo::uno::Sequence< sal_Int8 > >::get()) {
             return css::registry::RegistryValueType_BINARY;
         } else if (t == cppu::UnoType< cpo::uno::Sequence< sal_Int32 > >::get())

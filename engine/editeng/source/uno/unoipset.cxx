@@ -79,7 +79,7 @@ cpo::uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntr
                     SvxUnoConvertToMM( eMapUnit, aVal );
             }
         }
-        else if (pMap->aType.getTypeClass() == uno::TypeClass_ENUM
+        else if (pMap->aType.getTypeClass() == cpo::uno::TypeClass_ENUM
                  && pMap->aType.getTypeClass() != aVal.getValueTypeClass())
         {
             // convert typeless SfxEnumItem to enum type
@@ -183,7 +183,7 @@ cpo::uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntr
         SvxUnoConvertToMM( eMapUnit, aVal );
     }
 
-    if ( pMap->aType.getTypeClass() == uno::TypeClass_ENUM &&
+    if ( pMap->aType.getTypeClass() == cpo::uno::TypeClass_ENUM &&
           aVal.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
     {
         sal_Int32 nEnum;
@@ -230,19 +230,19 @@ void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, cpo::uno::Any & rMetric ) 
         {
             switch( rMetric.getValueTypeClass() )
             {
-            case uno::TypeClass_BYTE:
+            case cpo::uno::TypeClass_BYTE:
                 rMetric <<= static_cast<sal_Int8>(convertTwipToMm100(*o3tl::forceAccess<sal_Int8>(rMetric)));
                 break;
-            case uno::TypeClass_SHORT:
+            case cpo::uno::TypeClass_SHORT:
                 rMetric <<= static_cast<sal_Int16>(convertTwipToMm100(*o3tl::forceAccess<sal_Int16>(rMetric)));
                 break;
-            case uno::TypeClass_UNSIGNED_SHORT:
+            case cpo::uno::TypeClass_UNSIGNED_SHORT:
                 rMetric <<= static_cast<sal_uInt16>(convertTwipToMm100(*o3tl::forceAccess<sal_uInt16>(rMetric)));
                 break;
-            case uno::TypeClass_LONG:
+            case cpo::uno::TypeClass_LONG:
                 rMetric <<= static_cast<sal_Int32>(convertTwipToMm100(*o3tl::forceAccess<sal_Int32>(rMetric)));
                 break;
-            case uno::TypeClass_UNSIGNED_LONG:
+            case cpo::uno::TypeClass_UNSIGNED_LONG:
                 rMetric <<= static_cast<sal_uInt32>(convertTwipToMm100(*o3tl::forceAccess<sal_uInt32>(rMetric)));
                 break;
             default:
@@ -268,19 +268,19 @@ void SvxUnoConvertFromMM( const MapUnit eDestinationMapUnit, cpo::uno::Any & rMe
         {
             switch( rMetric.getValueTypeClass() )
             {
-                case uno::TypeClass_BYTE:
+                case cpo::uno::TypeClass_BYTE:
                     rMetric <<= static_cast<sal_Int8>(sanitiseMm100ToTwip(*o3tl::forceAccess<sal_Int8>(rMetric)));
                     break;
-                case uno::TypeClass_SHORT:
+                case cpo::uno::TypeClass_SHORT:
                     rMetric <<= static_cast<sal_Int16>(sanitiseMm100ToTwip(*o3tl::forceAccess<sal_Int16>(rMetric)));
                     break;
-                case uno::TypeClass_UNSIGNED_SHORT:
+                case cpo::uno::TypeClass_UNSIGNED_SHORT:
                     rMetric <<= static_cast<sal_uInt16>(sanitiseMm100ToTwip(*o3tl::forceAccess<sal_uInt16>(rMetric)));
                     break;
-                case uno::TypeClass_LONG:
+                case cpo::uno::TypeClass_LONG:
                     rMetric <<= static_cast<sal_Int32>(sanitiseMm100ToTwip(*o3tl::forceAccess<sal_Int32>(rMetric)));
                     break;
-                case uno::TypeClass_UNSIGNED_LONG:
+                case cpo::uno::TypeClass_UNSIGNED_LONG:
                     rMetric <<= static_cast<sal_uInt32>(sanitiseMm100ToTwip(*o3tl::forceAccess<sal_uInt32>(rMetric)));
                     break;
                 default:

@@ -2310,7 +2310,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                         nIntValue = NS_ooxml::LN_EG_RPrBase_smallCaps == nSprmId ?
                             4 : 1;
                     }
-                    else if(aStyleVal.getValueTypeClass() == uno::TypeClass_FLOAT )
+                    else if(aStyleVal.getValueTypeClass() == cpo::uno::TypeClass_FLOAT )
                     {
                         double fDoubleValue = 0;
                         //only in case of awt::FontWeight

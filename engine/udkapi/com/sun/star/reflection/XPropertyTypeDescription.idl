@@ -24,7 +24,7 @@
 /** Reflects a property.
 
     <p>The type class of this type is
-    com::sun::star::uno::TypeClass::PROPERTY.
+    cpo::uno::TypeClass::PROPERTY.
   */
 published interface XPropertyTypeDescription : com::sun::star::reflection::XTypeDescription
 {

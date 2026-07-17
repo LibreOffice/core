@@ -65,14 +65,14 @@ struct DefaultPropertyValue
         ,DefaultValue( _rDefaultValue )
         ,ValueType( _rDefaultValue.getValueType() )
     {
-        OSL_ENSURE( ValueType.getTypeClass() != css::uno::TypeClass_VOID,
+        OSL_ENSURE( ValueType.getTypeClass() != cpo::uno::TypeClass_VOID,
             "AsciiPropertyValue::AsciiPropertyValue: NULL values not allowed here, use the other CTOR for this!" );
     }
     DefaultPropertyValue(const OUString& _aName, const cpo::uno::Type& _rValeType)
         :Name( _aName )
         ,ValueType( _rValeType )
     {
-        OSL_ENSURE( ValueType.getTypeClass() != css::uno::TypeClass_VOID,
+        OSL_ENSURE( ValueType.getTypeClass() != cpo::uno::TypeClass_VOID,
             "AsciiPropertyValue::AsciiPropertyValue: VOID property values not supported!" );
     }
 };

@@ -26,7 +26,7 @@
 
 #include "com/sun/star/bridge/ModelDependent.hpp"
 #include "com/sun/star/bridge/XBridgeSupplier2.hpp"
-#include "com/sun/star/uno/TypeClass.hpp"
+#include "cpo/uno/TypeClass.hpp"
 #include "com/sun/star/script/XInvocation.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"

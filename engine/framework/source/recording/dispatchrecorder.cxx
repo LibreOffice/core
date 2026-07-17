@@ -163,7 +163,7 @@ OUString SAL_CALL DispatchRecorder::getRecordedMacro()
 void DispatchRecorder::AppendToBuffer( const cpo::uno::Any& aValue, OUStringBuffer& aArgumentBuffer )
 {
     // if value == bool
-    if (aValue.getValueTypeClass() == css::uno::TypeClass_STRUCT )
+    if (aValue.getValueTypeClass() == cpo::uno::TypeClass_STRUCT )
     {
         // structs are recorded as arrays, convert to "Sequence of any"
         Sequence< Any > aSeq = make_seq_out_of_struct( aValue );
@@ -178,7 +178,7 @@ void DispatchRecorder::AppendToBuffer( const cpo::uno::Any& aValue, OUStringBuff
 
         aArgumentBuffer.append(")");
     }
-    else if (aValue.getValueTypeClass() == css::uno::TypeClass_SEQUENCE )
+    else if (aValue.getValueTypeClass() == cpo::uno::TypeClass_SEQUENCE )
     {
         // convert to "Sequence of any"
         cpo::uno::Sequence < cpo::uno::Any > aSeq;
@@ -198,7 +198,7 @@ void DispatchRecorder::AppendToBuffer( const cpo::uno::Any& aValue, OUStringBuff
 
         aArgumentBuffer.append(")");
     }
-    else if (aValue.getValueTypeClass() == css::uno::TypeClass_STRING )
+    else if (aValue.getValueTypeClass() == cpo::uno::TypeClass_STRING )
     {
         // strings need \"
         OUString sVal;
@@ -269,14 +269,14 @@ void DispatchRecorder::AppendToBuffer( const cpo::uno::Any& aValue, OUStringBuff
         cpo::uno::Any aNew;
         try
         {
-            aNew = m_xConverter->convertToSimpleType( aValue, css::uno::TypeClass_STRING );
+            aNew = m_xConverter->convertToSimpleType( aValue, cpo::uno::TypeClass_STRING );
         }
         catch (const css::script::CannotConvertException&) {}
         catch (const css::uno::Exception&) {}
         OUString sVal;
         aNew >>= sVal;
 
-        if (aValue.getValueTypeClass() == css::uno::TypeClass_ENUM )
+        if (aValue.getValueTypeClass() == cpo::uno::TypeClass_ENUM )
         {
             OUString aName = aValue.getValueTypeName();
             aArgumentBuffer.append( aName );

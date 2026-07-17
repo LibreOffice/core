@@ -20,7 +20,7 @@ package com.sun.star.lib.uno.helper;
 import cpo.uno.Type;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.Any;

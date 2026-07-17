@@ -27,7 +27,7 @@
 #include "uno/any2.h"
 #include "typelib/typedescription.h"
 #include "cppu/unotype.hxx"
-#include "com/sun/star/uno/TypeClass.hdl"
+#include "cpo/uno/TypeClass.hdl"
 #include "rtl/alloc.h"
 
 namespace com::sun::star::uno
@@ -154,8 +154,8 @@ public:
 
         @return the type class of the set value
      */
-    css::uno::TypeClass SAL_CALL getValueTypeClass() const
-        { return static_cast<css::uno::TypeClass>(pType->eTypeClass); }
+    cpo::uno::TypeClass SAL_CALL getValueTypeClass() const
+        { return static_cast<cpo::uno::TypeClass>(pType->eTypeClass); }
 
     /** Gets the type name of the set value.
 

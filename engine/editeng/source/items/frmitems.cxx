@@ -3356,7 +3356,7 @@ bool SvxBoxItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
         {
             // usual struct
         }
-        else if (rVal.getValueTypeClass() == uno::TypeClass_SEQUENCE )
+        else if (rVal.getValueTypeClass() == cpo::uno::TypeClass_SEQUENCE )
         {
             // serialization for basic macro recording
             uno::Reference < script::XTypeConverter > xConverter
@@ -4025,7 +4025,7 @@ bool SvxBoxInfoItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 // usual struct
             }
-            else if (rVal.getValueTypeClass() == uno::TypeClass_SEQUENCE )
+            else if (rVal.getValueTypeClass() == cpo::uno::TypeClass_SEQUENCE )
             {
                 // serialization for basic macro recording
                 uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(::comphelper::getProcessComponentContext()) );

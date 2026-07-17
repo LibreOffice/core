@@ -195,7 +195,7 @@ ScVbaCommandBars::getCount()
 cpo::uno::Any SAL_CALL
 ScVbaCommandBars::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex2*/ )
 {
-    if( aIndex.getValueTypeClass() == uno::TypeClass_STRING )
+    if( aIndex.getValueTypeClass() == cpo::uno::TypeClass_STRING )
     {
         return createCollectionObject( aIndex );
     }

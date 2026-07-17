@@ -267,7 +267,7 @@ void CandleStickChartType::setFastPropertyValue_NoBroadcast(
             ModifyListenerHelper::removeListener( xBroadcaster, m_xModifyEventForwarder );
         }
 
-        OSL_ASSERT( rValue.getValueTypeClass() == uno::TypeClass_INTERFACE );
+        OSL_ASSERT( rValue.getValueTypeClass() == cpo::uno::TypeClass_INTERFACE );
         if( rValue.hasValue() &&
             (rValue >>= xBroadcaster) &&
             xBroadcaster.is())

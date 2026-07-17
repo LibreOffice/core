@@ -23,7 +23,7 @@
 #include <typelib/typedescription.hxx>
 
 
-using com::sun::star::uno::TypeClass;
+using cpo::uno::TypeClass;
 using cpo::uno::Type;
 using com::sun::star::uno::RuntimeException;
 using cpo::uno::Any;
@@ -36,55 +36,55 @@ const char *typeClassToString( TypeClass t )
     const char * ret = nullptr;
     switch (t)
     {
-    case css::uno::TypeClass_VOID:
+    case cpo::uno::TypeClass_VOID:
         ret = "VOID"; break;
-    case css::uno::TypeClass_CHAR:
+    case cpo::uno::TypeClass_CHAR:
         ret = "CHAR"; break;
-    case css::uno::TypeClass_BOOLEAN:
+    case cpo::uno::TypeClass_BOOLEAN:
         ret = "BOOLEAN"; break;
-    case css::uno::TypeClass_BYTE:
+    case cpo::uno::TypeClass_BYTE:
         ret = "BYTE"; break;
-    case css::uno::TypeClass_SHORT:
+    case cpo::uno::TypeClass_SHORT:
         ret = "SHORT"; break;
-    case css::uno::TypeClass_UNSIGNED_SHORT:
+    case cpo::uno::TypeClass_UNSIGNED_SHORT:
         ret = "UNSIGNED_SHORT"; break;
-    case css::uno::TypeClass_LONG:
+    case cpo::uno::TypeClass_LONG:
         ret = "LONG"; break;
-    case css::uno::TypeClass_UNSIGNED_LONG:
+    case cpo::uno::TypeClass_UNSIGNED_LONG:
         ret = "UNSIGNED_LONG"; break;
-    case css::uno::TypeClass_HYPER:
+    case cpo::uno::TypeClass_HYPER:
         ret = "HYPER"; break;
-    case css::uno::TypeClass_UNSIGNED_HYPER:
+    case cpo::uno::TypeClass_UNSIGNED_HYPER:
         ret = "UNSIGNED_HYPER"; break;
-    case css::uno::TypeClass_FLOAT:
+    case cpo::uno::TypeClass_FLOAT:
         ret = "FLOAT"; break;
-    case css::uno::TypeClass_DOUBLE:
+    case cpo::uno::TypeClass_DOUBLE:
         ret = "DOUBLE"; break;
-    case css::uno::TypeClass_STRING:
+    case cpo::uno::TypeClass_STRING:
         ret = "STRING"; break;
-    case css::uno::TypeClass_TYPE:
+    case cpo::uno::TypeClass_TYPE:
         ret = "TYPE"; break;
-    case css::uno::TypeClass_ANY:
+    case cpo::uno::TypeClass_ANY:
         ret = "ANY";break;
-    case css::uno::TypeClass_ENUM:
+    case cpo::uno::TypeClass_ENUM:
         ret = "ENUM";break;
-    case css::uno::TypeClass_STRUCT:
+    case cpo::uno::TypeClass_STRUCT:
         ret = "STRUCT"; break;
-    case css::uno::TypeClass_EXCEPTION:
+    case cpo::uno::TypeClass_EXCEPTION:
         ret = "EXCEPTION"; break;
-    case css::uno::TypeClass_SEQUENCE:
+    case cpo::uno::TypeClass_SEQUENCE:
         ret = "SEQUENCE"; break;
-    case css::uno::TypeClass_INTERFACE:
+    case cpo::uno::TypeClass_INTERFACE:
         ret = "INTERFACE"; break;
-    case css::uno::TypeClass_TYPEDEF:
+    case cpo::uno::TypeClass_TYPEDEF:
         ret = "TYPEDEF"; break;
-    case css::uno::TypeClass_SERVICE:
+    case cpo::uno::TypeClass_SERVICE:
         ret = "SERVICE"; break;
-    case css::uno::TypeClass_MODULE:
+    case cpo::uno::TypeClass_MODULE:
         ret = "MODULE"; break;
-    case css::uno::TypeClass_INTERFACE_METHOD:
+    case cpo::uno::TypeClass_INTERFACE_METHOD:
         ret = "INTERFACE_METHOD"; break;
-    case css::uno::TypeClass_INTERFACE_ATTRIBUTE:
+    case cpo::uno::TypeClass_INTERFACE_ATTRIBUTE:
         ret = "INTERFACE_ATTRIBUTE"; break;
     default:
         ret = "UNKNOWN"; break;
@@ -165,7 +165,7 @@ Any PyEnum2Enum( PyObject *obj )
     if(desc.get()->eTypeClass != typelib_TypeClass_ENUM )
     {
         throw RuntimeException( "pyuno.checkEnum: " + strTypeName +  "is a " +
-            OUString::createFromAscii(typeClassToString( static_cast<css::uno::TypeClass>(desc.get()->eTypeClass))) +
+            OUString::createFromAscii(typeClassToString( static_cast<cpo::uno::TypeClass>(desc.get()->eTypeClass))) +
             ", expected ENUM" );
     }
 
@@ -210,8 +210,8 @@ Type PyType2Type( PyObject * o )
     {
         throw RuntimeException( "type " + name +  " is unknown" );
     }
-    css::uno::TypeClass tc = *o3tl::doAccess<css::uno::TypeClass>(enumValue);
-    if( static_cast<css::uno::TypeClass>(desc.get()->eTypeClass) != tc )
+    cpo::uno::TypeClass tc = *o3tl::doAccess<cpo::uno::TypeClass>(enumValue);
+    if( static_cast<cpo::uno::TypeClass>(desc.get()->eTypeClass) != tc )
     {
         throw RuntimeException( "pyuno.checkType: " + name + " is a " +
             OUString::createFromAscii( typeClassToString( static_cast<TypeClass>(desc.get()->eTypeClass)) ) +
@@ -253,7 +253,7 @@ PyObject* PyUNO_Type_new (const char *typeName , TypeClass t , const Runtime &r 
     PyRef args(PyTuple_New( 2 ), SAL_NO_ACQUIRE, NOT_NULL);
 
     PyTuple_SetItem( args.get() , 0 , PyUnicode_FromString( typeName ) );
-    PyObject *typeClass = PyUNO_Enum_new( "com.sun.star.uno.TypeClass" , typeClassToString(t), r );
+    PyObject *typeClass = PyUNO_Enum_new( "cpo.uno.TypeClass" , typeClassToString(t), r );
     if( ! typeClass )
         return nullptr;
     PyTuple_SetItem( args.get() , 1 , typeClass);

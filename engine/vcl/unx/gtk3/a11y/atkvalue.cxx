@@ -117,12 +117,12 @@ value_wrapper_set_current_value( AtkValue     *value,
             // If current value has an integer type, also use that for the new value, to make
             // sure underlying implementations expecting that can handle the value properly.
             const cpo::uno::Any aCurrentValue = pValue->getCurrentValue();
-            if (aCurrentValue.getValueTypeClass() == css::uno::TypeClass::TypeClass_LONG)
+            if (aCurrentValue.getValueTypeClass() == cpo::uno::TypeClass::TypeClass_LONG)
             {
                 const sal_Int32 nValue = std::round<sal_Int32>(aDouble);
                 return pValue->setCurrentValue(cpo::uno::Any(nValue));
             }
-            else if (aCurrentValue.getValueTypeClass() == css::uno::TypeClass::TypeClass_HYPER)
+            else if (aCurrentValue.getValueTypeClass() == cpo::uno::TypeClass::TypeClass_HYPER)
             {
                 const sal_Int64 nValue = std::round<sal_Int64>(aDouble);
                 return pValue->setCurrentValue(cpo::uno::Any(nValue));

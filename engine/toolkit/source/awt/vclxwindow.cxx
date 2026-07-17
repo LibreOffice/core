@@ -1366,7 +1366,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const cpo::uno::Any&
     if ( !pWindow )
         return;
 
-    bool bVoid = Value.getValueTypeClass() == css::uno::TypeClass_VOID;
+    bool bVoid = Value.getValueTypeClass() == cpo::uno::TypeClass_VOID;
 
     WindowType eWinType = pWindow->GetType();
     sal_uInt16 nPropType = GetPropertyId( PropertyName );

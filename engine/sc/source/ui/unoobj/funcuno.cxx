@@ -388,18 +388,18 @@ public:
     }
     void visitElem( sal_Int32 nCol, sal_Int32 nRow, const cpo::uno::Any& rElement )
     {
-        uno::TypeClass eElemClass = rElement.getValueTypeClass();
-        if ( eElemClass == uno::TypeClass_VOID )
+        cpo::uno::TypeClass eElemClass = rElement.getValueTypeClass();
+        if ( eElemClass == cpo::uno::TypeClass_VOID )
         {
             // leave empty
         }
-        else if ( eElemClass == uno::TypeClass_BYTE ||
-                    eElemClass == uno::TypeClass_SHORT ||
-                    eElemClass == uno::TypeClass_UNSIGNED_SHORT ||
-                    eElemClass == uno::TypeClass_LONG ||
-                    eElemClass == uno::TypeClass_UNSIGNED_LONG ||
-                    eElemClass == uno::TypeClass_FLOAT ||
-                    eElemClass == uno::TypeClass_DOUBLE )
+        else if ( eElemClass == cpo::uno::TypeClass_BYTE ||
+                    eElemClass == cpo::uno::TypeClass_SHORT ||
+                    eElemClass == cpo::uno::TypeClass_UNSIGNED_SHORT ||
+                    eElemClass == cpo::uno::TypeClass_LONG ||
+                    eElemClass == cpo::uno::TypeClass_UNSIGNED_LONG ||
+                    eElemClass == cpo::uno::TypeClass_FLOAT ||
+                    eElemClass == cpo::uno::TypeClass_DOUBLE )
         {
             //  accept integer types because Basic passes a floating point
             //  variable as byte, short or long if it's an integer number.
@@ -407,7 +407,7 @@ public:
             rElement >>= fVal;
             visitElem( nCol, nRow, fVal );
         }
-        else if ( eElemClass == uno::TypeClass_STRING )
+        else if ( eElemClass == cpo::uno::TypeClass_STRING )
         {
             OUString aUStr;
             rElement >>= aUStr;
@@ -538,16 +538,16 @@ cpo::uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
 
         const cpo::uno::Any& rArg = pArgArr[nPos];
 
-        uno::TypeClass eClass = rArg.getValueTypeClass();
+        cpo::uno::TypeClass eClass = rArg.getValueTypeClass();
         const cpo::uno::Type& aType = rArg.getValueType();
-        if ( eClass == uno::TypeClass_BYTE ||
-             eClass == uno::TypeClass_BOOLEAN ||
-             eClass == uno::TypeClass_SHORT ||
-             eClass == uno::TypeClass_UNSIGNED_SHORT ||
-             eClass == uno::TypeClass_LONG ||
-             eClass == uno::TypeClass_UNSIGNED_LONG ||
-             eClass == uno::TypeClass_FLOAT ||
-             eClass == uno::TypeClass_DOUBLE )
+        if ( eClass == cpo::uno::TypeClass_BYTE ||
+             eClass == cpo::uno::TypeClass_BOOLEAN ||
+             eClass == cpo::uno::TypeClass_SHORT ||
+             eClass == cpo::uno::TypeClass_UNSIGNED_SHORT ||
+             eClass == cpo::uno::TypeClass_LONG ||
+             eClass == cpo::uno::TypeClass_UNSIGNED_LONG ||
+             eClass == cpo::uno::TypeClass_FLOAT ||
+             eClass == cpo::uno::TypeClass_DOUBLE )
         {
             //  accept integer types because Basic passes a floating point
             //  variable as byte, short or long if it's an integer number.
@@ -555,7 +555,7 @@ cpo::uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
             rArg >>= fVal;
             aTokenArr.AddDouble( fVal );
         }
-        else if ( eClass == uno::TypeClass_STRING )
+        else if ( eClass == cpo::uno::TypeClass_STRING )
         {
             OUString aUStr;
             rArg >>= aUStr;

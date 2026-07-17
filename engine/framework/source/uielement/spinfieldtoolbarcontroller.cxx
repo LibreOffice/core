@@ -389,7 +389,7 @@ void SpinfieldToolbarController::executeControlCommand( const css::frame::Contro
 bool SpinfieldToolbarController::impl_getValue(
     const Any& rAny, sal_Int32& nValue, double& fValue, bool& bFloat )
 {
-    using ::com::sun::star::uno::TypeClass;
+    using ::cpo::uno::TypeClass;
 
     bool bValueValid( false );
 

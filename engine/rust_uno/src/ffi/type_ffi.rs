@@ -21,7 +21,7 @@ use crate::ffi::sal_types::*;
 
 // === UNO Type System FFI Declarations ===
 
-/// UNO type class enumeration - binary compatible with the IDL enum com.sun.star.uno.TypeClass
+/// UNO type class enumeration - binary compatible with the IDL enum cpo.uno.TypeClass
 ///
 /// This enumeration defines all possible type categories in the UNO type system.
 /// Each type has a specific class that determines how it's handled in marshalling,

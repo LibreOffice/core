@@ -231,7 +231,7 @@ ScVbaWorkbook::Worksheets( const cpo::uno::Any& aIndex )
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY_THROW );
     uno::Reference<container::XIndexAccess > xSheets( xSpreadDoc->getSheets(), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xWorkSheets(  new ScVbaWorksheets( this, mxContext, xSheets, xModel ) );
-    if (  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
+    if (  aIndex.getValueTypeClass() == cpo::uno::TypeClass_VOID )
     {
         return cpo::uno::Any( xWorkSheets );
     }
@@ -243,7 +243,7 @@ ScVbaWorkbook::Windows( const cpo::uno::Any& aIndex )
 {
 
     uno::Reference< excel::XWindows >  xWindows( new ScVbaWindows( getParent(), mxContext ) );
-    if ( aIndex.getValueTypeClass() == uno::TypeClass_VOID )
+    if ( aIndex.getValueTypeClass() == cpo::uno::TypeClass_VOID )
         return cpo::uno::Any( xWindows );
     return xWindows->Item( aIndex, cpo::uno::Any() );
 }

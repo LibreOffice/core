@@ -22,7 +22,7 @@
 
 #include "cppuhelper/proptypehlp.h"
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
-#include "com/sun/star/uno/TypeClass.hpp"
+#include "cpo/uno/TypeClass.hpp"
 
 namespace cppu
 {
@@ -42,26 +42,26 @@ void convertPropertyValue(bool & b, const cpo::uno::Any & a)
         return;
 
     switch( a.getValueTypeClass() ) {
-    case css::uno::TypeClass_BYTE:
+    case cpo::uno::TypeClass_BYTE:
         b = a.get<sal_Int8>() != 0;
         break;
-    case css::uno::TypeClass_SHORT:
+    case cpo::uno::TypeClass_SHORT:
         b = a.get<sal_Int16>() != 0;
         break;
-    case css::uno::TypeClass_UNSIGNED_SHORT:
+    case cpo::uno::TypeClass_UNSIGNED_SHORT:
         {
             sal_uInt16 i16 = 0;
             a >>= i16;
             b = i16 != 0;
             break;
         }
-    case css::uno::TypeClass_LONG:
+    case cpo::uno::TypeClass_LONG:
         b = a.get<sal_Int32>() != 0;
         break;
-    case css::uno::TypeClass_UNSIGNED_LONG:
+    case cpo::uno::TypeClass_UNSIGNED_LONG:
         b = a.get<sal_uInt32>() != 0;
         break;
-    case css::uno::TypeClass_CHAR:
+    case cpo::uno::TypeClass_CHAR:
         {
             sal_Unicode c = *static_cast<sal_Unicode const *>(a.getValue());
             b = c != 0;
@@ -76,10 +76,10 @@ inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const cpo::uno::Any 
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
-        case css::uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_Int64>(a.get<bool>());
             break;
-        case css::uno::TypeClass_CHAR:
+        case cpo::uno::TypeClass_CHAR:
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
@@ -97,10 +97,10 @@ inline void SAL_CALL convertPropertyValue( sal_uInt64 & i  , const cpo::uno::Any
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
-        case css::uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_uInt64>(a.get<bool>());
             break;
-        case css::uno::TypeClass_CHAR:
+        case cpo::uno::TypeClass_CHAR:
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
@@ -117,10 +117,10 @@ inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const cpo::uno::Any 
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
-        case css::uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_Int32>(a.get<bool>());
             break;
-        case css::uno::TypeClass_CHAR:
+        case cpo::uno::TypeClass_CHAR:
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
@@ -137,10 +137,10 @@ inline void SAL_CALL convertPropertyValue( sal_uInt32 & i  , const cpo::uno::Any
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
-        case css::uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_uInt32>(a.get<bool>());
             break;
-        case css::uno::TypeClass_CHAR:
+        case cpo::uno::TypeClass_CHAR:
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
@@ -157,10 +157,10 @@ inline void SAL_CALL convertPropertyValue( sal_Int16 & i  , const cpo::uno::Any 
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
-        case css::uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_Int16>(a.get<bool>());
             break;
-        case css::uno::TypeClass_CHAR:
+        case cpo::uno::TypeClass_CHAR:
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
@@ -177,10 +177,10 @@ inline void SAL_CALL convertPropertyValue( sal_uInt16 & i  , const cpo::uno::Any
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
-        case css::uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_uInt16>(a.get<bool>());
             break;
-        case css::uno::TypeClass_CHAR:
+        case cpo::uno::TypeClass_CHAR:
             {
                 sal_Unicode c;
                 c = *static_cast<sal_Unicode const *>(a.getValue());
@@ -197,7 +197,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int8 & i  , const cpo::uno::Any &
 {
     if( !(a >>= i) ) {
         switch( a.getValueTypeClass() ) {
-        case css::uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_Int8>(a.get<bool>());
             break;
         default:
@@ -212,25 +212,25 @@ inline void SAL_CALL convertPropertyValue( float &f , const cpo::uno::Any &a )
         return;
 
     switch( a.getValueTypeClass() ) {
-    case css::uno::TypeClass_BOOLEAN:
+    case cpo::uno::TypeClass_BOOLEAN:
         f = static_cast<float>(a.get<bool>());
         break;
-    case css::uno::TypeClass_LONG:
+    case cpo::uno::TypeClass_LONG:
         f = static_cast<float>(a.get<sal_Int32>());
         break;
-    case css::uno::TypeClass_UNSIGNED_LONG:
+    case cpo::uno::TypeClass_UNSIGNED_LONG:
         f = static_cast<float>(a.get<sal_uInt32>());
         break;
-    case css::uno::TypeClass_HYPER:
+    case cpo::uno::TypeClass_HYPER:
         f = static_cast<float>(a.get<sal_Int64>());
         break;
-    case css::uno::TypeClass_UNSIGNED_HYPER:
+    case cpo::uno::TypeClass_UNSIGNED_HYPER:
         f = static_cast<float>(a.get<sal_uInt64>());
         break;
-    case css::uno::TypeClass_DOUBLE:
+    case cpo::uno::TypeClass_DOUBLE:
         f = static_cast<float>(a.get<double>());
         break;
-    case css::uno::TypeClass_CHAR:
+    case cpo::uno::TypeClass_CHAR:
         {
             sal_Unicode c;
             c = *static_cast<sal_Unicode const *>(a.getValue());
@@ -248,16 +248,16 @@ inline void SAL_CALL convertPropertyValue( double &d , const cpo::uno::Any &a )
         return;
 
     switch( a.getValueTypeClass() ) {
-    case css::uno::TypeClass_BOOLEAN:
+    case cpo::uno::TypeClass_BOOLEAN:
         d = static_cast<double>(a.get<bool>());
         break;
-    case css::uno::TypeClass_HYPER:
+    case cpo::uno::TypeClass_HYPER:
         d = static_cast<double>(a.get<sal_Int64>());
         break;
-    case css::uno::TypeClass_UNSIGNED_HYPER:
+    case cpo::uno::TypeClass_UNSIGNED_HYPER:
         d = static_cast<double>(a.get<sal_uInt64>());
         break;
-    case css::uno::TypeClass_CHAR:
+    case cpo::uno::TypeClass_CHAR:
         {
             sal_Unicode c;
             c = *static_cast<sal_Unicode const *>(a.getValue());

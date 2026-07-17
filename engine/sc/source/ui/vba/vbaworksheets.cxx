@@ -425,7 +425,7 @@ ScVbaWorksheets::Copy ( const cpo::uno::Any& Before, const cpo::uno::Any& After)
 cpo::uno::Any SAL_CALL
 ScVbaWorksheets::Item(const cpo::uno::Any& Index, const cpo::uno::Any& Index2)
 {
-    if ( Index.getValueTypeClass() == uno::TypeClass_SEQUENCE )
+    if ( Index.getValueTypeClass() == cpo::uno::TypeClass_SEQUENCE )
     {
         const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter(mxContext);
         cpo::uno::Any aConverted = xConverter->convertTo( Index, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Any >>::get() );

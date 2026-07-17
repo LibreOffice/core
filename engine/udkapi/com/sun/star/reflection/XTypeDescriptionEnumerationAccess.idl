@@ -48,16 +48,16 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
 
             <p>Valid types classes are:
             <ul>
-            <li>com::sun::star::uno::TypeClass::MODULE
-            <li>com::sun::star::uno::TypeClass::INTERFACE
-            <li>com::sun::star::uno::TypeClass::SERVICE
-            <li>com::sun::star::uno::TypeClass::STRUCT
-            <li>com::sun::star::uno::TypeClass::ENUM
-            <li>com::sun::star::uno::TypeClass::EXCEPTION
-            <li>com::sun::star::uno::TypeClass::TYPEDEF
-            <li>com::sun::star::uno::TypeClass::CONSTANT
-            <li>com::sun::star::uno::TypeClass::CONSTANTS
-            <li>com::sun::star::uno::TypeClass::SINGLETON
+            <li>cpo::uno::TypeClass::MODULE
+            <li>cpo::uno::TypeClass::INTERFACE
+            <li>cpo::uno::TypeClass::SERVICE
+            <li>cpo::uno::TypeClass::STRUCT
+            <li>cpo::uno::TypeClass::ENUM
+            <li>cpo::uno::TypeClass::EXCEPTION
+            <li>cpo::uno::TypeClass::TYPEDEF
+            <li>cpo::uno::TypeClass::CONSTANT
+            <li>cpo::uno::TypeClass::CONSTANTS
+            <li>cpo::uno::TypeClass::SINGLETON
             </ul>
 
         @param depth
@@ -139,7 +139,7 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
     XTypeDescriptionEnumeration
     createTypeDescriptionEnumeration(
             [in] string moduleName,
-            [in] sequence< com::sun::star::uno::TypeClass > types,
+            [in] sequence< cpo::uno::TypeClass > types,
             [in] TypeDescriptionSearchDepth depth )
         raises( NoSuchTypeNameException, InvalidTypeNameException );
 };

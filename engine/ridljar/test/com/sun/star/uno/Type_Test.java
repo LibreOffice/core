@@ -20,7 +20,7 @@ package com.sun.star.uno;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import cpo.uno.Type;
+import cpo.uno.*;
 
 public final class Type_Test {
     @Test public void testZClass() {
@@ -53,7 +53,7 @@ public final class Type_Test {
             new Type("[][]com.sun.star.uno.XComponentContext", TypeClass.SEQUENCE).getZClass());
         assertSame(
             "enum TypeClass", TypeClass.class,
-            new Type("com.sun.star.uno.TypeClass", TypeClass.ENUM).getZClass());
+            new Type("cpo.uno.TypeClass", TypeClass.ENUM).getZClass());
         assertSame(
             "exception Exception", com.sun.star.uno.Exception.class,
             new Type("com.sun.star.uno.Exception", TypeClass.EXCEPTION).getZClass());

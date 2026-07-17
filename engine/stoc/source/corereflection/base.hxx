@@ -131,7 +131,7 @@ class IdlClassImpl
                                  m_xReflection;
 
     OUString                    _aName;
-    css::uno::TypeClass         _eTypeClass;
+    cpo::uno::TypeClass         _eTypeClass;
 
     typelib_TypeDescription *   _pTypeDescr;
 
@@ -148,7 +148,7 @@ public:
     virtual ~IdlClassImpl() override;
 
     // XIdlClassImpl default implementation
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override;
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override;
     virtual OUString SAL_CALL getName() override;
     virtual bool SAL_CALL equals( const css::uno::Reference< css::reflection::XIdlClass >& xType ) override;
 
@@ -339,7 +339,7 @@ inline bool extract(
     {
         if (! rObj.hasValue())
             return true;
-        if (rObj.getValueTypeClass() == css::uno::TypeClass_INTERFACE)
+        if (rObj.getValueTypeClass() == cpo::uno::TypeClass_INTERFACE)
         {
             return ::uno_type_assignData(
                 &rDest, pTo->aBase.pWeakRef,

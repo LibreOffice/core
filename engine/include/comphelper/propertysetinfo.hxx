@@ -65,11 +65,11 @@ struct PropertyMapEntry
         // Verify that if METRIC_ITEM is set, we are one of the types supported by
         // SvxUnoConvertToMM.
         assert(!(_nMoreFlags & PropertyMoreFlags::METRIC_ITEM) ||
-            ( (maType.getTypeClass() == css::uno::TypeClass_BYTE)
-              || (maType.getTypeClass() == css::uno::TypeClass_SHORT)
-              || (maType.getTypeClass() == css::uno::TypeClass_UNSIGNED_SHORT)
-              || (maType.getTypeClass() == css::uno::TypeClass_LONG)
-              || (maType.getTypeClass() == css::uno::TypeClass_UNSIGNED_LONG)
+            ( (maType.getTypeClass() == cpo::uno::TypeClass_BYTE)
+              || (maType.getTypeClass() == cpo::uno::TypeClass_SHORT)
+              || (maType.getTypeClass() == cpo::uno::TypeClass_UNSIGNED_SHORT)
+              || (maType.getTypeClass() == cpo::uno::TypeClass_LONG)
+              || (maType.getTypeClass() == cpo::uno::TypeClass_UNSIGNED_LONG)
             ) );
     }
     PropertyMapEntry() = default;

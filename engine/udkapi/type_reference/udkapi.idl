@@ -1,3 +1,41 @@
+module cpo {
+   module uno {
+    published enum TypeClass {
+     VOID = 0,
+     CHAR = 1,
+     BOOLEAN = 2,
+     BYTE = 3,
+     SHORT = 4,
+     UNSIGNED_SHORT = 5,
+     LONG = 6,
+     UNSIGNED_LONG = 7,
+     HYPER = 8,
+     UNSIGNED_HYPER = 9,
+     FLOAT = 10,
+     DOUBLE = 11,
+     STRING = 12,
+     TYPE = 13,
+     ANY = 14,
+     ENUM = 15,
+     TYPEDEF = 16,
+     STRUCT = 17,
+     /** @deprecated */ UNION = 18,
+     EXCEPTION = 19,
+     SEQUENCE = 20,
+     /** @deprecated */ ARRAY = 21,
+     INTERFACE = 22,
+     SERVICE = 23,
+     MODULE = 24,
+     INTERFACE_METHOD = 25,
+     INTERFACE_ATTRIBUTE = 26,
+     UNKNOWN = 27,
+     PROPERTY = 28,
+     CONSTANT = 29,
+     CONSTANTS = 30,
+     SINGLETON = 31
+    };
+   };
+};
 module com {
  module sun {
   module star {
@@ -1133,47 +1171,11 @@ module com {
      ONE = 1
     };
    };
-   module uno {
-    published enum TypeClass {
-     VOID = 0,
-     CHAR = 1,
-     BOOLEAN = 2,
-     BYTE = 3,
-     SHORT = 4,
-     UNSIGNED_SHORT = 5,
-     LONG = 6,
-     UNSIGNED_LONG = 7,
-     HYPER = 8,
-     UNSIGNED_HYPER = 9,
-     FLOAT = 10,
-     DOUBLE = 11,
-     STRING = 12,
-     TYPE = 13,
-     ANY = 14,
-     ENUM = 15,
-     TYPEDEF = 16,
-     STRUCT = 17,
-     /** @deprecated */ UNION = 18,
-     EXCEPTION = 19,
-     SEQUENCE = 20,
-     /** @deprecated */ ARRAY = 21,
-     INTERFACE = 22,
-     SERVICE = 23,
-     MODULE = 24,
-     INTERFACE_METHOD = 25,
-     INTERFACE_ATTRIBUTE = 26,
-     UNKNOWN = 27,
-     PROPERTY = 28,
-     CONSTANT = 29,
-     CONSTANTS = 30,
-     SINGLETON = 31
-    };
-   };
    module reflection {
     published interface XTypeDescriptionEnumeration;
     published interface XTypeDescriptionEnumerationAccess {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::reflection::XTypeDescriptionEnumeration createTypeDescriptionEnumeration([in] string moduleName, [in] sequence< ::com::sun::star::uno::TypeClass > types, [in] ::com::sun::star::reflection::TypeDescriptionSearchDepth depth) raises (::com::sun::star::reflection::NoSuchTypeNameException, ::com::sun::star::reflection::InvalidTypeNameException);
+     ::com::sun::star::reflection::XTypeDescriptionEnumeration createTypeDescriptionEnumeration([in] string moduleName, [in] sequence< ::cpo::uno::TypeClass > types, [in] ::com::sun::star::reflection::TypeDescriptionSearchDepth depth) raises (::com::sun::star::reflection::NoSuchTypeNameException, ::com::sun::star::reflection::InvalidTypeNameException);
     };
     published service TypeDescriptionManager {
      interface ::com::sun::star::container::XHierarchicalNameAccess;
@@ -1188,7 +1190,7 @@ module com {
     };
     published interface XTypeDescription {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::TypeClass getTypeClass();
+     ::cpo::uno::TypeClass getTypeClass();
      string getName();
     };
     /** @deprecated */ published interface XArrayTypeDescription {
@@ -1231,7 +1233,7 @@ module com {
      /** @deprecated */ ::com::sun::star::reflection::XIdlClass getClass([in] string aName);
      boolean equals([in] ::com::sun::star::reflection::XIdlClass Type);
      boolean isAssignableFrom([in] ::com::sun::star::reflection::XIdlClass xType);
-     ::com::sun::star::uno::TypeClass getTypeClass();
+     ::cpo::uno::TypeClass getTypeClass();
      string getName();
      sequence< ::com::sun::star::reflection::XIdlClass > getSuperclasses();
      /** @deprecated */ sequence< ::com::sun::star::reflection::XIdlClass > getInterfaces();
@@ -1444,7 +1446,7 @@ module com {
      string ErrorMessageArgument;
     };
     published exception CannotConvertException: ::com::sun::star::uno::Exception {
-     ::com::sun::star::uno::TypeClass DestinationTypeClass;
+     ::cpo::uno::TypeClass DestinationTypeClass;
      long Reason;
      long ArgumentIndex;
     };
@@ -1453,7 +1455,7 @@ module com {
     published interface XTypeConverter {
      interface ::com::sun::star::uno::XInterface;
      any convertTo([in] any aFrom, [in] type xDestinationType) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException);
-     any convertToSimpleType([in] any aFrom, [in] ::com::sun::star::uno::TypeClass aDestinationType) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException);
+     any convertToSimpleType([in] any aFrom, [in] ::cpo::uno::TypeClass aDestinationType) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException);
     };
     published service Converter: ::com::sun::star::script::XTypeConverter;
     published constants FailReason {

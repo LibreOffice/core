@@ -150,7 +150,7 @@ void SAL_CALL ScVbaPageSetup::setFitToPagesTall( const cpo::uno::Any& fitToPages
     {
         sal_uInt16 scaleToPageY = 0;
         bool aValue;
-        if( fitToPagesTall.getValueTypeClass() != uno::TypeClass_BOOLEAN || (fitToPagesTall >>= aValue))
+        if( fitToPagesTall.getValueTypeClass() != cpo::uno::TypeClass_BOOLEAN || (fitToPagesTall >>= aValue))
         {
             fitToPagesTall >>= scaleToPageY;
         }
@@ -173,7 +173,7 @@ void SAL_CALL ScVbaPageSetup::setFitToPagesWide( const cpo::uno::Any& fitToPages
     {
         sal_uInt16 scaleToPageX = 0;
         bool aValue = false;
-        if( fitToPagesWide.getValueTypeClass() != uno::TypeClass_BOOLEAN || (fitToPagesWide >>= aValue))
+        if( fitToPagesWide.getValueTypeClass() != cpo::uno::TypeClass_BOOLEAN || (fitToPagesWide >>= aValue))
         {
             fitToPagesWide >>= scaleToPageX;
         }
@@ -195,7 +195,7 @@ void SAL_CALL ScVbaPageSetup::setZoom( const cpo::uno::Any& zoom)
     sal_uInt16 pageScale = 0;
     try
     {
-        if( zoom.getValueTypeClass() == uno::TypeClass_BOOLEAN )
+        if( zoom.getValueTypeClass() == cpo::uno::TypeClass_BOOLEAN )
         {
             bool aValue = false;
             zoom >>= aValue;

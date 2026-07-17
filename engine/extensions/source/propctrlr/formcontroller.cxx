@@ -33,8 +33,8 @@ namespace pcr
 
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::TypeClass_INTERFACE;
-    using ::com::sun::star::uno::TypeClass_STRING;
+    using ::cpo::uno::TypeClass_INTERFACE;
+    using ::cpo::uno::TypeClass_STRING;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::inspection::XObjectInspectorModel;
     using ::com::sun::star::uno::UNO_QUERY_THROW;

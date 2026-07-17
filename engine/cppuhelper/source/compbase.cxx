@@ -61,7 +61,7 @@ cpo::uno::Any SAL_CALL WeakComponentImplHelperBase2::queryInterface(cpo::uno::Ty
 
 static void checkInterface(cpo::uno::Type const& rType)
 {
-    if (css::uno::TypeClass_INTERFACE != rType.getTypeClass())
+    if (cpo::uno::TypeClass_INTERFACE != rType.getTypeClass())
     {
         OUString msg("querying for interface \"" + rType.getTypeName() + "\": no interface type!");
         SAL_WARN("cppuhelper", msg);

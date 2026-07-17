@@ -427,34 +427,34 @@ void appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type, void const*
 {
     switch (type.getTypeClass())
     {
-        case css::uno::TypeClass_VOID:
+        case cpo::uno::TypeClass_VOID:
             buf.append("null");
             return;
-        case css::uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
             buf.append(*static_cast<bool const*>(value) ? "true" : "false");
             return;
-        case css::uno::TypeClass_BYTE:
+        case cpo::uno::TypeClass_BYTE:
             buf.append(static_cast<sal_Int32>(*static_cast<sal_Int8 const*>(value)));
             return;
-        case css::uno::TypeClass_SHORT:
+        case cpo::uno::TypeClass_SHORT:
             buf.append(static_cast<sal_Int32>(*static_cast<sal_Int16 const*>(value)));
             return;
-        case css::uno::TypeClass_UNSIGNED_SHORT:
+        case cpo::uno::TypeClass_UNSIGNED_SHORT:
             buf.append(static_cast<sal_Int32>(*static_cast<sal_uInt16 const*>(value)));
             return;
-        case css::uno::TypeClass_LONG:
+        case cpo::uno::TypeClass_LONG:
             buf.append(*static_cast<sal_Int32 const*>(value));
             return;
-        case css::uno::TypeClass_UNSIGNED_LONG:
+        case cpo::uno::TypeClass_UNSIGNED_LONG:
             buf.append(static_cast<sal_Int64>(*static_cast<sal_uInt32 const*>(value)));
             return;
-        case css::uno::TypeClass_HYPER:
+        case cpo::uno::TypeClass_HYPER:
             buf.append(*static_cast<sal_Int64 const*>(value));
             return;
-        case css::uno::TypeClass_UNSIGNED_HYPER:
+        case cpo::uno::TypeClass_UNSIGNED_HYPER:
             buf.append(OString::number(*static_cast<sal_uInt64 const*>(value)));
             return;
-        case css::uno::TypeClass_FLOAT:
+        case cpo::uno::TypeClass_FLOAT:
         {
             auto const v = *static_cast<float const*>(value);
             if (!std::isfinite(v))
@@ -466,7 +466,7 @@ void appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type, void const*
             buf.append(static_cast<double>(v));
             return;
         }
-        case css::uno::TypeClass_DOUBLE:
+        case cpo::uno::TypeClass_DOUBLE:
         {
             auto const v = *static_cast<double const*>(value);
             if (!std::isfinite(v))
@@ -478,28 +478,28 @@ void appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type, void const*
             buf.append(v);
             return;
         }
-        case css::uno::TypeClass_CHAR:
+        case cpo::uno::TypeClass_CHAR:
         {
             sal_Unicode c = *static_cast<sal_Unicode const*>(value);
             appendJsonString(buf, std::u16string_view(&c, 1));
             return;
         }
-        case css::uno::TypeClass_STRING:
+        case cpo::uno::TypeClass_STRING:
             appendJsonString(buf, OUString::unacquired(static_cast<rtl_uString* const*>(value)));
             return;
-        case css::uno::TypeClass_TYPE:
+        case cpo::uno::TypeClass_TYPE:
         {
             auto const& ref = *static_cast<typelib_TypeDescriptionReference* const*>(value);
             appendJsonString(buf, OUString::unacquired(&ref->pTypeName));
             return;
         }
-        case css::uno::TypeClass_ANY:
+        case cpo::uno::TypeClass_ANY:
         {
             auto const any = static_cast<uno_Any const*>(value);
             appendUnoAsJson(buf, *reinterpret_cast<cpo::uno::Type const*>(&any->pType), any->pData);
             return;
         }
-        case css::uno::TypeClass_SEQUENCE:
+        case cpo::uno::TypeClass_SEQUENCE:
         {
             auto const seq = *static_cast<uno_Sequence* const*>(value);
             css::uno::TypeDescription desc(type);
@@ -518,7 +518,7 @@ void appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type, void const*
             buf.append(']');
             return;
         }
-        case css::uno::TypeClass_ENUM:
+        case cpo::uno::TypeClass_ENUM:
         {
             auto const val = *static_cast<sal_Int32 const*>(value);
             css::uno::TypeDescription desc(type);
@@ -535,8 +535,8 @@ void appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type, void const*
                                              + OUString::number(val) + u" for UNO enum "_ustr
                                              + type.getTypeName());
         }
-        case css::uno::TypeClass_STRUCT:
-        case css::uno::TypeClass_EXCEPTION:
+        case cpo::uno::TypeClass_STRUCT:
+        case cpo::uno::TypeClass_EXCEPTION:
         {
             css::uno::TypeDescription desc(type);
             auto compDesc = reinterpret_cast<typelib_CompoundTypeDescription const*>(desc.get());
@@ -566,7 +566,7 @@ void appendUnoAsJson(OStringBuffer& buf, cpo::uno::Type const& type, void const*
             buf.append('}');
             return;
         }
-        case css::uno::TypeClass_INTERFACE:
+        case cpo::uno::TypeClass_INTERFACE:
         {
             auto const ptr = *static_cast<css::uno::XInterface* const*>(value);
             if (ptr == nullptr)
@@ -590,9 +590,9 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
 {
     switch (type.getTypeClass())
     {
-        case css::uno::TypeClass_VOID:
+        case cpo::uno::TypeClass_VOID:
             return {};
-        case css::uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
         {
             if (json == u"true")
             {
@@ -606,7 +606,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
                                              + u" does not parse as UNO type "_ustr
                                              + type.getTypeName());
         }
-        case css::uno::TypeClass_BYTE:
+        case cpo::uno::TypeClass_BYTE:
         {
             auto const v = parseJsonNumberAs<sal_Int8>(json);
             if (!v)
@@ -617,7 +617,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             }
             return cpo::uno::Any(*v);
         }
-        case css::uno::TypeClass_SHORT:
+        case cpo::uno::TypeClass_SHORT:
         {
             auto const v = parseJsonNumberAs<sal_Int16>(json);
             if (!v)
@@ -628,7 +628,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             }
             return cpo::uno::Any(*v);
         }
-        case css::uno::TypeClass_UNSIGNED_SHORT:
+        case cpo::uno::TypeClass_UNSIGNED_SHORT:
         {
             auto const v = parseJsonNumberAs<sal_uInt16>(json);
             if (!v)
@@ -639,7 +639,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             }
             return cpo::uno::Any(*v);
         }
-        case css::uno::TypeClass_LONG:
+        case cpo::uno::TypeClass_LONG:
         {
             auto const v = parseJsonNumberAs<sal_Int32>(json);
             if (!v)
@@ -650,7 +650,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             }
             return cpo::uno::Any(*v);
         }
-        case css::uno::TypeClass_UNSIGNED_LONG:
+        case cpo::uno::TypeClass_UNSIGNED_LONG:
         {
             auto const v = parseJsonNumberAs<sal_uInt32>(json);
             if (!v)
@@ -661,7 +661,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             }
             return cpo::uno::Any(*v);
         }
-        case css::uno::TypeClass_HYPER:
+        case cpo::uno::TypeClass_HYPER:
         {
             auto const v = parseJsonNumberAs<sal_Int64>(json);
             if (!v)
@@ -672,7 +672,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             }
             return cpo::uno::Any(*v);
         }
-        case css::uno::TypeClass_UNSIGNED_HYPER:
+        case cpo::uno::TypeClass_UNSIGNED_HYPER:
         {
             auto const v = parseJsonNumberAs<sal_uInt64>(json);
             if (!v)
@@ -683,7 +683,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             }
             return cpo::uno::Any(*v);
         }
-        case css::uno::TypeClass_FLOAT:
+        case cpo::uno::TypeClass_FLOAT:
         {
             auto const v = parseJsonNumberAs<float>(json);
             if (!v)
@@ -694,7 +694,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             }
             return cpo::uno::Any(*v);
         }
-        case css::uno::TypeClass_DOUBLE:
+        case cpo::uno::TypeClass_DOUBLE:
         {
             auto const v = parseJsonNumberAs<double>(json);
             if (!v)
@@ -705,7 +705,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             }
             return cpo::uno::Any(*v);
         }
-        case css::uno::TypeClass_CHAR:
+        case cpo::uno::TypeClass_CHAR:
         {
             auto const decoded = parseJsonStringValue(json);
             if (!decoded || decoded->getLength() != 1)
@@ -716,7 +716,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             }
             return cpo::uno::Any((*decoded)[0]);
         }
-        case css::uno::TypeClass_STRING:
+        case cpo::uno::TypeClass_STRING:
         {
             auto const decoded = parseJsonStringValue(json);
             if (!decoded)
@@ -727,7 +727,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             }
             return cpo::uno::Any(*decoded);
         }
-        case css::uno::TypeClass_TYPE:
+        case cpo::uno::TypeClass_TYPE:
         {
             auto const name = parseJsonStringValue(json);
             if (!name)
@@ -745,7 +745,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             }
             return cpo::uno::Any(cpo::uno::Type(tdesc.get()->pWeakRef));
         }
-        case css::uno::TypeClass_ANY:
+        case cpo::uno::TypeClass_ANY:
         {
             // Encoded as a JSON object {"type": "<idl-name>", "val": <value>}.  This is
             // asymmetric with fromJs's TypeClass_ANY arm, which infers the UNO type from the
@@ -782,7 +782,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             }
             return parseJsonToAny(itVal->second, cpo::uno::Type(tdesc.get()->pWeakRef));
         }
-        case css::uno::TypeClass_SEQUENCE:
+        case cpo::uno::TypeClass_SEQUENCE:
         {
             std::vector<OUString> elems;
             if (!splitJsonArray(json, elems))
@@ -802,14 +802,14 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             {
                 cpo::uno::Any const any = parseJsonToAny(elems[i], elemType);
                 uno_copyData(seq->elements + (i * elemDesc.get()->nSize),
-                             const_cast<void*>(elemType.getTypeClass() == css::uno::TypeClass_ANY
+                             const_cast<void*>(elemType.getTypeClass() == cpo::uno::TypeClass_ANY
                                                    ? &any
                                                    : any.getValue()),
                              elemDesc.get(), cpo::uno::cpp_acquire);
             }
             return { &seq, type };
         }
-        case css::uno::TypeClass_ENUM:
+        case cpo::uno::TypeClass_ENUM:
         {
             css::uno::TypeDescription desc(type);
             auto const enumDesc = reinterpret_cast<typelib_EnumTypeDescription const*>(desc.get());
@@ -827,8 +827,8 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
                                              + u" does not parse as UNO type "_ustr
                                              + type.getTypeName());
         }
-        case css::uno::TypeClass_STRUCT:
-        case css::uno::TypeClass_EXCEPTION:
+        case cpo::uno::TypeClass_STRUCT:
+        case cpo::uno::TypeClass_EXCEPTION:
         {
             std::map<OUString, OUString> obj;
             if (!splitJsonObject(json, obj))
@@ -887,7 +887,7 @@ cpo::uno::Any parseJsonToAny(OUString const& json, cpo::uno::Type const& type)
             std::free(buf);
             return result;
         }
-        case css::uno::TypeClass_INTERFACE:
+        case cpo::uno::TypeClass_INTERFACE:
         {
             if (json == u"null")
             {

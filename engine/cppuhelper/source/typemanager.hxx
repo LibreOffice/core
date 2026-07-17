@@ -84,7 +84,7 @@ private:
     virtual css::uno::Reference< css::reflection::XTypeDescriptionEnumeration >
     SAL_CALL createTypeDescriptionEnumeration(
         OUString const & moduleName,
-        cpo::uno::Sequence< css::uno::TypeClass > const & types,
+        cpo::uno::Sequence< cpo::uno::TypeClass > const & types,
         css::reflection::TypeDescriptionSearchDepth depth) override;
 
     void readRdbDirectory(std::u16string_view uri, bool optional);

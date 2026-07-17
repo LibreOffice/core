@@ -1089,7 +1089,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 
                 switch( rElement.getValueTypeClass() )
                 {
-                    case uno::TypeClass_VOID:
+                    case cpo::uno::TypeClass_VOID:
                     {
                         // void = "no value"
                         rDoc.SetError( nDocCol, nDocRow, nTab, FormulaError::NotAvailable );
@@ -1098,13 +1098,13 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 
                     //  #87871# accept integer types because Basic passes a floating point
                     //  variable as byte, short or long if it's an integer number.
-                    case uno::TypeClass_BYTE:
-                    case uno::TypeClass_SHORT:
-                    case uno::TypeClass_UNSIGNED_SHORT:
-                    case uno::TypeClass_LONG:
-                    case uno::TypeClass_UNSIGNED_LONG:
-                    case uno::TypeClass_FLOAT:
-                    case uno::TypeClass_DOUBLE:
+                    case cpo::uno::TypeClass_BYTE:
+                    case cpo::uno::TypeClass_SHORT:
+                    case cpo::uno::TypeClass_UNSIGNED_SHORT:
+                    case cpo::uno::TypeClass_LONG:
+                    case cpo::uno::TypeClass_UNSIGNED_LONG:
+                    case cpo::uno::TypeClass_FLOAT:
+                    case cpo::uno::TypeClass_DOUBLE:
                     {
                         double fVal(0.0);
                         rElement >>= fVal;
@@ -1112,7 +1112,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                     }
                     break;
 
-                    case uno::TypeClass_STRING:
+                    case cpo::uno::TypeClass_STRING:
                     {
                         OUString aUStr;
                         rElement >>= aUStr;
@@ -1136,7 +1136,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                     break;
 
                     // accept Sequence<FormulaToken> for formula cells
-                    case uno::TypeClass_SEQUENCE:
+                    case cpo::uno::TypeClass_SEQUENCE:
                     {
                         cpo::uno::Sequence< sheet::FormulaToken > aTokens;
                         if ( rElement >>= aTokens )

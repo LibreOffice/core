@@ -265,10 +265,10 @@ bool FormulaTokenArray::AddFormulaToken(
     bool bError = false;
     const OpCode eOpCode = static_cast<OpCode>(rToken.OpCode);      //! assuming equal values for the moment
 
-    const uno::TypeClass eClass = rToken.Data.getValueTypeClass();
+    const cpo::uno::TypeClass eClass = rToken.Data.getValueTypeClass();
     switch ( eClass )
     {
-        case uno::TypeClass_VOID:
+        case cpo::uno::TypeClass_VOID:
             switch (eOpCode)
             {
                 case ocErrNull:
@@ -298,14 +298,14 @@ bool FormulaTokenArray::AddFormulaToken(
                     break;
             }
             break;
-        case uno::TypeClass_DOUBLE:
+        case cpo::uno::TypeClass_DOUBLE:
             // double is only used for "push"
             if ( eOpCode == ocPush )
                 AddDouble( rToken.Data.get<double>() );
             else
                 bError = true;
             break;
-        case uno::TypeClass_LONG:
+        case cpo::uno::TypeClass_LONG:
             {
                 // long is svIndex, used for name / database area, or "byte" for spaces
                 sal_Int32 nValue = rToken.Data.get<sal_Int32>();
@@ -317,7 +317,7 @@ bool FormulaTokenArray::AddFormulaToken(
                     bError = true;
             }
             break;
-        case uno::TypeClass_STRING:
+        case cpo::uno::TypeClass_STRING:
             {
                 OUString aStrVal( rToken.Data.get<OUString>() );
                 if ( eOpCode == ocPush )

@@ -18,7 +18,7 @@
 
 package com.sun.star.lib.uno.typedesc;
 
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 
 final class MemberDescriptionHelper {
     public static boolean isUnsigned(TypeDescription desc) {

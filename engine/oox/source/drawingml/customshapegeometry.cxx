@@ -99,7 +99,7 @@ static OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParame
     {
         case EnhancedCustomShapeParameterType::NORMAL :
         {
-            if ( rParameter.Value.getValueTypeClass() == TypeClass_DOUBLE )
+            if ( rParameter.Value.getValueTypeClass() == cpo::uno::TypeClass_DOUBLE )
             {
                 double fValue = 0.0;
                 if ( rParameter.Value >>= fValue )
@@ -115,7 +115,7 @@ static OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParame
         break;
         case EnhancedCustomShapeParameterType::EQUATION :
         {
-            if ( rParameter.Value.getValueTypeClass() == TypeClass_LONG )
+            if ( rParameter.Value.getValueTypeClass() == cpo::uno::TypeClass_LONG )
             {
                 sal_Int32 nFormulaIndex;
                 if ( rParameter.Value >>= nFormulaIndex )
@@ -133,7 +133,7 @@ static OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParame
         break;
         case EnhancedCustomShapeParameterType::ADJUSTMENT :
         {
-            if ( rParameter.Value.getValueTypeClass() == TypeClass_LONG )
+            if ( rParameter.Value.getValueTypeClass() == cpo::uno::TypeClass_LONG )
             {
                 sal_Int32 nAdjustmentIndex;
                 if ( rParameter.Value >>= nAdjustmentIndex )

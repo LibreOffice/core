@@ -20,7 +20,7 @@ package ifc.reflection;
 
 import com.sun.star.reflection.XIdlClass;
 import com.sun.star.reflection.XIdlReflection;
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 import lib.MultiMethodTest;
 
 /**
@@ -42,7 +42,7 @@ public class _XIdlReflection extends MultiMethodTest{
     * type and checks it. <p>
     * Has <b> OK </b> status if returned name is equal to the name of the
     * interface that was passed as parameter in the method call and if returned
-    * type is equal to <code>com.sun.star.uno.TypeClass.INTERFACE</code>. <p>
+    * type is equal to <code>cpo.uno.TypeClass.INTERFACE</code>. <p>
     */
     public void _forName() {
         boolean result = true;

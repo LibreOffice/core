@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <config_typesizes.h>
 #include <cppu/unotype.hxx>
@@ -120,31 +120,31 @@ public:
     {
         switch (value.getValueTypeClass())
         {
-            case css::uno::TypeClass_VOID:
+            case cpo::uno::TypeClass_VOID:
                 return u"void"_ustr;
-            case css::uno::TypeClass_BOOLEAN:
+            case cpo::uno::TypeClass_BOOLEAN:
                 return OUString::boolean(value.get<bool>());
-            case css::uno::TypeClass_BYTE:
+            case cpo::uno::TypeClass_BYTE:
                 return OUString::number(value.get<sal_Int8>());
-            case css::uno::TypeClass_SHORT:
+            case cpo::uno::TypeClass_SHORT:
                 return OUString::number(value.get<sal_Int16>());
-            case css::uno::TypeClass_UNSIGNED_SHORT:
+            case cpo::uno::TypeClass_UNSIGNED_SHORT:
                 return OUString::number(value.get<sal_uInt16>());
-            case css::uno::TypeClass_LONG:
+            case cpo::uno::TypeClass_LONG:
                 return OUString::number(value.get<sal_Int32>());
-            case css::uno::TypeClass_UNSIGNED_LONG:
+            case cpo::uno::TypeClass_UNSIGNED_LONG:
                 return OUString::number(value.get<sal_uInt32>());
-            case css::uno::TypeClass_HYPER:
+            case cpo::uno::TypeClass_HYPER:
                 return OUString::number(value.get<sal_Int64>());
-            case css::uno::TypeClass_UNSIGNED_HYPER:
+            case cpo::uno::TypeClass_UNSIGNED_HYPER:
                 return OUString::number(value.get<sal_uInt64>());
-            case css::uno::TypeClass_FLOAT:
+            case cpo::uno::TypeClass_FLOAT:
                 return OUString::number(value.get<float>());
-            case css::uno::TypeClass_DOUBLE:
+            case cpo::uno::TypeClass_DOUBLE:
                 return OUString::number(value.get<double>());
-            case css::uno::TypeClass_CHAR:
+            case cpo::uno::TypeClass_CHAR:
                 return "U+" + hex(value.get<sal_Unicode>(), 16);
-            case css::uno::TypeClass_STRING:
+            case cpo::uno::TypeClass_STRING:
             {
                 auto const s = value.get<OUString>();
                 OUStringBuffer buf;
@@ -170,9 +170,9 @@ public:
                 }
                 return "\"" + buf + "\"";
             }
-            case css::uno::TypeClass_TYPE:
+            case cpo::uno::TypeClass_TYPE:
                 return value.get<cpo::uno::Type>().getTypeName();
-            case css::uno::TypeClass_SEQUENCE:
+            case cpo::uno::TypeClass_SEQUENCE:
             {
                 cpo::uno::Type const t(reinterpret_cast<typelib_IndirectTypeDescription const*>(
                                            getTypeDescription(value.getValueType()).get())
@@ -192,7 +192,7 @@ public:
                 }
                 return "[" + buf + "]";
             }
-            case css::uno::TypeClass_ENUM:
+            case cpo::uno::TypeClass_ENUM:
             {
                 auto const d = getTypeDescription(value.getValueType());
                 auto const ed = reinterpret_cast<typelib_EnumTypeDescription const*>(d.get());
@@ -206,8 +206,8 @@ public:
                 }
                 return OUString::number(e);
             }
-            case css::uno::TypeClass_STRUCT:
-            case css::uno::TypeClass_EXCEPTION:
+            case cpo::uno::TypeClass_STRUCT:
+            case cpo::uno::TypeClass_EXCEPTION:
             {
                 auto const d = getTypeDescription(value.getValueType());
                 OUStringBuffer buf;
@@ -215,7 +215,7 @@ public:
                                  value.getValue(), &buf);
                 return "[" + buf + "]";
             }
-            case css::uno::TypeClass_INTERFACE:
+            case cpo::uno::TypeClass_INTERFACE:
             {
                 auto const p = *static_cast<void* const*>(value.getValue());
                 return p == nullptr ? u"null"_ustr
@@ -261,7 +261,7 @@ public:
         auto const s = g->getConstants();
         switch (value.getValueTypeClass())
         {
-            case css::uno::TypeClass_BOOLEAN:
+            case cpo::uno::TypeClass_BOOLEAN:
                 for (auto const& i : s)
                 {
                     if (i->getConstantValue() == value)
@@ -270,10 +270,10 @@ public:
                     }
                 }
                 return OUString::boolean(value.get<bool>());
-            case css::uno::TypeClass_BYTE:
-            case css::uno::TypeClass_SHORT:
-            case css::uno::TypeClass_LONG:
-            case css::uno::TypeClass_HYPER:
+            case cpo::uno::TypeClass_BYTE:
+            case cpo::uno::TypeClass_SHORT:
+            case cpo::uno::TypeClass_LONG:
+            case cpo::uno::TypeClass_HYPER:
             {
                 auto const v = value.get<sal_Int64>();
                 for (auto const& i : s)
@@ -286,9 +286,9 @@ public:
                 }
                 return v >= 0 ? dumpBitset(s, v) : OUString::number(v);
             }
-            case css::uno::TypeClass_UNSIGNED_SHORT:
-            case css::uno::TypeClass_UNSIGNED_LONG:
-            case css::uno::TypeClass_UNSIGNED_HYPER:
+            case cpo::uno::TypeClass_UNSIGNED_SHORT:
+            case cpo::uno::TypeClass_UNSIGNED_LONG:
+            case cpo::uno::TypeClass_UNSIGNED_HYPER:
             {
                 auto const v = value.get<sal_uInt64>();
                 for (auto const& i : s)
@@ -301,8 +301,8 @@ public:
                 }
                 return dumpBitset(s, v);
             }
-            case css::uno::TypeClass_FLOAT:
-            case css::uno::TypeClass_DOUBLE:
+            case cpo::uno::TypeClass_FLOAT:
+            case cpo::uno::TypeClass_DOUBLE:
             {
                 auto const v = value.get<double>();
                 for (auto const& i : s)

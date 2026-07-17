@@ -45,7 +45,7 @@ published service TypeDescriptionProvider
         rather than a reference to an XConstantTypeDescription
         object.  (It also appears that some implementations return values for
         individual UNO enum members, e.g.
-        <code>"com.sun.star.uno.TypeClass.VOID"</code>, though this is probably
+        <code>"cpo.uno.TypeClass.VOID"</code>, though this is probably
         best treated as an implementation obscurity.)</p>
     */
     interface com::sun::star::container::XHierarchicalNameAccess;

@@ -44,7 +44,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -70,7 +70,7 @@ cpo::uno::Any resolveTypedefs(cpo::uno::Any const & type) {
     for (cpo::uno::Any t(type);;) {
         css::uno::Reference< css::reflection::XIndirectTypeDescription > ind(
             type, css::uno::UNO_QUERY);
-        if (!ind.is() || ind->getTypeClass() != css::uno::TypeClass_TYPEDEF) {
+        if (!ind.is() || ind->getTypeClass() != cpo::uno::TypeClass_TYPEDEF) {
             return t;
         }
         t <<= ind->getReferencedType();
@@ -82,20 +82,20 @@ class SimpleTypeDescription:
 {
 public:
     SimpleTypeDescription(
-        css::uno::TypeClass typeClass, OUString name):
+        cpo::uno::TypeClass typeClass, OUString name):
         typeClass_(typeClass), name_(std::move(name))
     {}
 
 private:
     virtual ~SimpleTypeDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
     { return typeClass_; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
 
-    css::uno::TypeClass typeClass_;
+    cpo::uno::TypeClass typeClass_;
     OUString name_;
 };
 
@@ -112,8 +112,8 @@ public:
 private:
     virtual ~SequenceTypeDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_SEQUENCE; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_SEQUENCE; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -156,8 +156,8 @@ public:
 private:
     virtual ~ModuleDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_MODULE; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_MODULE; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -208,8 +208,8 @@ public:
 private:
     virtual ~EnumTypeDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_ENUM; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_ENUM; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -266,8 +266,8 @@ public:
 private:
     virtual ~PlainStructTypeDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_STRUCT; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_STRUCT; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -340,8 +340,8 @@ public:
 private:
     virtual ~ParameterizedMemberTypeDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_UNKNOWN; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_UNKNOWN; }
 
     virtual OUString SAL_CALL getName() override
     { return typeParameterName_; }
@@ -369,8 +369,8 @@ public:
 private:
     virtual ~PolymorphicStructTypeTemplateDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_STRUCT; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_STRUCT; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -464,8 +464,8 @@ public:
 private:
     virtual ~InstantiatedPolymorphicStructTypeDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_STRUCT; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_STRUCT; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -562,8 +562,8 @@ public:
 private:
     virtual ~ExceptionTypeDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_EXCEPTION; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_EXCEPTION; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -629,8 +629,8 @@ public:
 private:
     virtual ~AttributeDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_INTERFACE_ATTRIBUTE; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_INTERFACE_ATTRIBUTE; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -761,8 +761,8 @@ public:
 private:
     virtual ~MethodDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_INTERFACE_METHOD; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_INTERFACE_METHOD; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -896,8 +896,8 @@ public:
 private:
     virtual ~InterfaceTypeDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_INTERFACE; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_INTERFACE; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -998,8 +998,8 @@ public:
 private:
     virtual ~ConstantDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_CONSTANT; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_CONSTANT; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -1068,8 +1068,8 @@ public:
 private:
     virtual ~ConstantGroupDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_CONSTANTS; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_CONSTANTS; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -1114,8 +1114,8 @@ public:
 private:
     virtual ~TypedefDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_TYPEDEF; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_TYPEDEF; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -1252,8 +1252,8 @@ public:
 private:
     virtual ~SingleInterfaceBasedServiceDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_SERVICE; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_SERVICE; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -1353,8 +1353,8 @@ public:
 private:
     virtual ~PropertyDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_PROPERTY; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_PROPERTY; }
 
     virtual OUString SAL_CALL getName() override
     { return property_.name; }
@@ -1390,8 +1390,8 @@ public:
 private:
     virtual ~AccumulationBasedServiceDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_SERVICE; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_SERVICE; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -1558,8 +1558,8 @@ public:
 private:
     virtual ~InterfaceBasedSingletonDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_SINGLETON; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_SINGLETON; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -1602,8 +1602,8 @@ public:
 private:
     virtual ~ServiceBasedSingletonDescription() override {}
 
-    virtual css::uno::TypeClass SAL_CALL getTypeClass() override
-    { return css::uno::TypeClass_SINGLETON; }
+    virtual cpo::uno::TypeClass SAL_CALL getTypeClass() override
+    { return cpo::uno::TypeClass_SINGLETON; }
 
     virtual OUString SAL_CALL getName() override
     { return name_; }
@@ -1635,7 +1635,7 @@ public:
         rtl::Reference< cppuhelper::TypeManager > const & manager,
         OUString const & prefix,
         rtl::Reference< unoidl::MapCursor > const & cursor,
-        cpo::uno::Sequence< css::uno::TypeClass > const & types, bool deep):
+        cpo::uno::Sequence< cpo::uno::TypeClass > const & types, bool deep):
         manager_(manager), types_(types), deep_(deep)
     {
         assert(manager.is());
@@ -1655,7 +1655,7 @@ private:
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
     nextTypeDescription() override;
 
-    bool matches(css::uno::TypeClass tc) const;
+    bool matches(cpo::uno::TypeClass tc) const;
 
     void findNextMatch();
 
@@ -1691,7 +1691,7 @@ private:
     };
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    cpo::uno::Sequence< css::uno::TypeClass > types_;
+    cpo::uno::Sequence< cpo::uno::TypeClass > types_;
     bool deep_;
 
     std::mutex mutex_;
@@ -1716,7 +1716,7 @@ Enumeration::nextTypeDescription()
     return manager_->resolve(name);
 }
 
-bool Enumeration::matches(css::uno::TypeClass tc) const {
+bool Enumeration::matches(cpo::uno::TypeClass tc) const {
     if (!types_.hasElements()) {
         return true;
     }
@@ -1740,10 +1740,10 @@ void Enumeration::findNextMatch() {
                     continue;
                 }
                 name = positions_.top().prefix + name;
-                css::uno::TypeClass tc;
+                cpo::uno::TypeClass tc;
                 switch (ent->getSort()) {
                 case unoidl::Entity::SORT_MODULE:
-                    tc = css::uno::TypeClass_MODULE;
+                    tc = cpo::uno::TypeClass_MODULE;
                     if (deep_) {
                         positions_.push(
                             Position(
@@ -1753,24 +1753,24 @@ void Enumeration::findNextMatch() {
                     }
                     break;
                 case unoidl::Entity::SORT_ENUM_TYPE:
-                    tc = css::uno::TypeClass_ENUM;
+                    tc = cpo::uno::TypeClass_ENUM;
                     break;
                 case unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
                 case unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
-                    tc = css::uno::TypeClass_STRUCT;
+                    tc = cpo::uno::TypeClass_STRUCT;
                     break;
                 case unoidl::Entity::SORT_EXCEPTION_TYPE:
-                    tc = css::uno::TypeClass_EXCEPTION;
+                    tc = cpo::uno::TypeClass_EXCEPTION;
                     break;
                 case unoidl::Entity::SORT_INTERFACE_TYPE:
-                    tc = css::uno::TypeClass_INTERFACE;
+                    tc = cpo::uno::TypeClass_INTERFACE;
                     break;
                 case unoidl::Entity::SORT_TYPEDEF:
-                    tc = css::uno::TypeClass_TYPEDEF;
+                    tc = cpo::uno::TypeClass_TYPEDEF;
                     break;
                 case unoidl::Entity::SORT_CONSTANT_GROUP:
-                    tc = css::uno::TypeClass_CONSTANTS;
-                    if (deep_ && matches(css::uno::TypeClass_CONSTANT)) {
+                    tc = cpo::uno::TypeClass_CONSTANTS;
+                    if (deep_ && matches(cpo::uno::TypeClass_CONSTANT)) {
                         positions_.push(
                             Position(
                                 makePrefix(name),
@@ -1780,11 +1780,11 @@ void Enumeration::findNextMatch() {
                     break;
                 case unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE:
                 case unoidl::Entity::SORT_ACCUMULATION_BASED_SERVICE:
-                    tc = css::uno::TypeClass_SERVICE;
+                    tc = cpo::uno::TypeClass_SERVICE;
                     break;
                 case unoidl::Entity::SORT_INTERFACE_BASED_SINGLETON:
                 case unoidl::Entity::SORT_SERVICE_BASED_SINGLETON:
-                    tc = css::uno::TypeClass_SINGLETON;
+                    tc = cpo::uno::TypeClass_SINGLETON;
                     break;
                 default:
                     for (;;) { std::abort(); } // this cannot happen
@@ -1823,22 +1823,22 @@ cppuhelper::TypeManager::TypeManager():
 
 cpo::uno::Any cppuhelper::TypeManager::find(OUString const & name) {
     //TODO: caching? (here or in unoidl::Manager?)
-    static constexpr std::pair<std::u16string_view, css::uno::TypeClass> const simple[] = {
-        { u"void", css::uno::TypeClass_VOID },
-        { u"boolean", css::uno::TypeClass_BOOLEAN },
-        { u"byte", css::uno::TypeClass_BYTE },
-        { u"short", css::uno::TypeClass_SHORT },
-        { u"unsigned short", css::uno::TypeClass_UNSIGNED_SHORT },
-        { u"long", css::uno::TypeClass_LONG },
-        { u"unsigned long", css::uno::TypeClass_UNSIGNED_LONG },
-        { u"hyper", css::uno::TypeClass_HYPER },
-        { u"unsigned hyper", css::uno::TypeClass_UNSIGNED_HYPER },
-        { u"float", css::uno::TypeClass_FLOAT },
-        { u"double", css::uno::TypeClass_DOUBLE },
-        { u"char", css::uno::TypeClass_CHAR },
-        { u"string", css::uno::TypeClass_STRING },
-        { u"type", css::uno::TypeClass_TYPE },
-        { u"any", css::uno::TypeClass_ANY } };
+    static constexpr std::pair<std::u16string_view, cpo::uno::TypeClass> const simple[] = {
+        { u"void", cpo::uno::TypeClass_VOID },
+        { u"boolean", cpo::uno::TypeClass_BOOLEAN },
+        { u"byte", cpo::uno::TypeClass_BYTE },
+        { u"short", cpo::uno::TypeClass_SHORT },
+        { u"unsigned short", cpo::uno::TypeClass_UNSIGNED_SHORT },
+        { u"long", cpo::uno::TypeClass_LONG },
+        { u"unsigned long", cpo::uno::TypeClass_UNSIGNED_LONG },
+        { u"hyper", cpo::uno::TypeClass_HYPER },
+        { u"unsigned hyper", cpo::uno::TypeClass_UNSIGNED_HYPER },
+        { u"float", cpo::uno::TypeClass_FLOAT },
+        { u"double", cpo::uno::TypeClass_DOUBLE },
+        { u"char", cpo::uno::TypeClass_CHAR },
+        { u"string", cpo::uno::TypeClass_STRING },
+        { u"type", cpo::uno::TypeClass_TYPE },
+        { u"any", cpo::uno::TypeClass_ANY } };
     for (const auto& [ rName, rTypeClass ] : simple) {
         if (name == rName) {
             return cpo::uno::Any(
@@ -1989,7 +1989,7 @@ void cppuhelper::TypeManager::remove(cpo::uno::Any const & aElement)
 css::uno::Reference< css::reflection::XTypeDescriptionEnumeration >
 cppuhelper::TypeManager::createTypeDescriptionEnumeration(
     OUString const & moduleName,
-    cpo::uno::Sequence< css::uno::TypeClass > const & types,
+    cpo::uno::Sequence< cpo::uno::TypeClass > const & types,
     css::reflection::TypeDescriptionSearchDepth depth)
 {
     rtl::Reference< unoidl::MapCursor > cursor;

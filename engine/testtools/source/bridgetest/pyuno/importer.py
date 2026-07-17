@@ -21,7 +21,7 @@ import unohelper
 
 from com.sun.star.lang import EventObject,IllegalArgumentException,typeOfIllegalArgumentException
 from test.testtools.bridgetest.TestEnum import TWO
-from com.sun.star.uno.TypeClass import UNSIGNED_LONG,EXCEPTION
+from cpo.uno.TypeClass import UNSIGNED_LONG,EXCEPTION
 class ImporterTestCase(unittest.TestCase):
       def __init__(self,method,ctx):
           unittest.TestCase.__init__(self,method)
@@ -36,7 +36,7 @@ class ImporterTestCase(unittest.TestCase):
           self.assertRaises( IllegalArgumentException, self.tobj.raiseException, 1,"foo",self.tobj)
                  
           self.assertTrue( TWO == uno.Enum( "test.testtools.bridgetest.TestEnum","TWO"), "enum" )
-          self.assertTrue( UNSIGNED_LONG == uno.Enum( "com.sun.star.uno.TypeClass", "UNSIGNED_LONG" ) )
+          self.assertTrue( UNSIGNED_LONG == uno.Enum( "cpo.uno.TypeClass", "UNSIGNED_LONG" ) )
           self.assertTrue( typeOfIllegalArgumentException ==
                            uno.Type( "com.sun.star.lang.IllegalArgumentException", EXCEPTION) )
 

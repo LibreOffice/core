@@ -126,7 +126,7 @@ void VCLXContainer::setTabOrder( const cpo::uno::Sequence< css::uno::Reference< 
 
             WinBits nStyle = pWin->GetStyle();
             nStyle &= ~(WB_TABSTOP|WB_NOTABSTOP|WB_GROUP);
-            if ( pTabs[n].getValueTypeClass() == css::uno::TypeClass_BOOLEAN )
+            if ( pTabs[n].getValueTypeClass() == cpo::uno::TypeClass_BOOLEAN )
             {
                 bool bTab = false;
                 pTabs[n] >>= bTab;

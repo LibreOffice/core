@@ -21,7 +21,7 @@ package com.sun.star.lib.uno.helper;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.DisposedException;
 import cpo.uno.Type;
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.XWeak;

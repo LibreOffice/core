@@ -47,7 +47,7 @@ UNOTYPES= com.sun.star.lang.XMultiComponentFactory \
     com.sun.star.lang.XComponent \
     com.sun.star.registry.XImplementationRegistration \
     com.sun.star.lang.XSingleServiceFactory \
-    com.sun.star.uno.TypeClass \
+    cpo.uno.TypeClass \
     com.sun.star.lang.XMultiServiceFactory \
     com.sun.star.uno.XCurrentContext \
     com.sun.star.task.XInteractionHandler \

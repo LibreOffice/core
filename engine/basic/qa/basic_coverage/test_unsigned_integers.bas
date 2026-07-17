@@ -17,7 +17,7 @@ End Function
 Function convertToDouble(n)
     Dim conv As Object
     conv = CreateUnoService("com.sun.star.script.Converter")
-    convertToDouble = conv.convertToSimpleType(n, com.sun.star.uno.TypeClass.DOUBLE)
+    convertToDouble = conv.convertToSimpleType(n, cpo.uno.TypeClass.DOUBLE)
 End Function
 
 Sub verify_testUnsignedIntegers()

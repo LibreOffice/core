@@ -105,7 +105,7 @@ class Type(object):
 
     def __init__(self, typeclass, tag):
         '''Constructs a new Type.
-            @param[in] typeclass value of com::sun::star::uno::TypeClass
+            @param[in] typeclass value of cpo::uno::TypeClass
             @param[in] tag UNO name of the type
         '''
         self.typeclass = typeclass

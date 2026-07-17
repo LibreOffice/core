@@ -685,21 +685,21 @@ static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xC
 
     switch (xClass->getTypeClass())
     {
-        case uno::TypeClass_ANY:                // variable type
-        case uno::TypeClass_ENUM:               //TODO: ???
-        case uno::TypeClass_BOOLEAN:
-        case uno::TypeClass_CHAR:
-        case uno::TypeClass_BYTE:
-        case uno::TypeClass_SHORT:
-        case uno::TypeClass_UNSIGNED_SHORT:
-        case uno::TypeClass_LONG:
-        case uno::TypeClass_UNSIGNED_LONG:
-        case uno::TypeClass_FLOAT:
-        case uno::TypeClass_DOUBLE:
-        case uno::TypeClass_STRING:
+        case cpo::uno::TypeClass_ANY:                // variable type
+        case cpo::uno::TypeClass_ENUM:               //TODO: ???
+        case cpo::uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_CHAR:
+        case cpo::uno::TypeClass_BYTE:
+        case cpo::uno::TypeClass_SHORT:
+        case cpo::uno::TypeClass_UNSIGNED_SHORT:
+        case cpo::uno::TypeClass_LONG:
+        case cpo::uno::TypeClass_UNSIGNED_LONG:
+        case cpo::uno::TypeClass_FLOAT:
+        case cpo::uno::TypeClass_DOUBLE:
+        case cpo::uno::TypeClass_STRING:
             return true;                        // values or string
 
-        case uno::TypeClass_INTERFACE:
+        case cpo::uno::TypeClass_INTERFACE:
             {
                 //  return type XInterface may contain a XVolatileResult
                 //TODO: XIdlClass needs getType() method!
@@ -730,15 +730,15 @@ static ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdl
     if (!xClass.is())
         return SC_ADDINARG_NONE;
 
-    uno::TypeClass eType = xClass->getTypeClass();
+    cpo::uno::TypeClass eType = xClass->getTypeClass();
 
-    if ( eType == uno::TypeClass_LONG )             //TODO: other integer types?
+    if ( eType == cpo::uno::TypeClass_LONG )             //TODO: other integer types?
         return SC_ADDINARG_INTEGER;
 
-    if ( eType == uno::TypeClass_DOUBLE )
+    if ( eType == cpo::uno::TypeClass_DOUBLE )
         return SC_ADDINARG_DOUBLE;
 
-    if ( eType == uno::TypeClass_STRING )
+    if ( eType == cpo::uno::TypeClass_STRING )
         return SC_ADDINARG_STRING;
 
     //TODO: XIdlClass needs getType() method!
@@ -1565,39 +1565,39 @@ void ScUnoAddInCall::SetResult( const cpo::uno::Any& rNewRes )
 
     // Reflection* pRefl = rNewRes.getReflection();
 
-    uno::TypeClass eClass = rNewRes.getValueTypeClass();
+    cpo::uno::TypeClass eClass = rNewRes.getValueTypeClass();
     const cpo::uno::Type& aType = rNewRes.getValueType();
     switch (eClass)
     {
-        case uno::TypeClass_VOID:
+        case cpo::uno::TypeClass_VOID:
             nErrCode = FormulaError::NotAvailable;         // #NA
             break;
 
-        case uno::TypeClass_ENUM:
-        case uno::TypeClass_BOOLEAN:
-        case uno::TypeClass_CHAR:
-        case uno::TypeClass_BYTE:
-        case uno::TypeClass_SHORT:
-        case uno::TypeClass_UNSIGNED_SHORT:
-        case uno::TypeClass_LONG:
-        case uno::TypeClass_UNSIGNED_LONG:
-        case uno::TypeClass_FLOAT:
-        case uno::TypeClass_DOUBLE:
+        case cpo::uno::TypeClass_ENUM:
+        case cpo::uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_CHAR:
+        case cpo::uno::TypeClass_BYTE:
+        case cpo::uno::TypeClass_SHORT:
+        case cpo::uno::TypeClass_UNSIGNED_SHORT:
+        case cpo::uno::TypeClass_LONG:
+        case cpo::uno::TypeClass_UNSIGNED_LONG:
+        case cpo::uno::TypeClass_FLOAT:
+        case cpo::uno::TypeClass_DOUBLE:
             {
-                uno::TypeClass eMyClass;
+                cpo::uno::TypeClass eMyClass;
                 ScApiTypeConversion::ConvertAnyToDouble( fValue, eMyClass, rNewRes);
                 bHasString = false;
             }
             break;
 
-        case uno::TypeClass_STRING:
+        case cpo::uno::TypeClass_STRING:
             {
                 rNewRes >>= aString;
                 bHasString = true;
             }
             break;
 
-        case uno::TypeClass_INTERFACE:
+        case cpo::uno::TypeClass_INTERFACE:
             {
                 //TODO: directly extract XVolatileResult from any?
                 uno::Reference<uno::XInterface> xInterface;

@@ -80,7 +80,7 @@ Module.unoObject = function(interfaces, obj) {
     const walk = function(td, impl) {
         const name = td.getName();
         if (!Object.hasOwn(obj.impl_typemap, name)) {
-            if (td.getTypeClass() != Module.uno.com.sun.star.uno.TypeClass.INTERFACE) {
+            if (td.getTypeClass() != Module.uno.cpo.uno.TypeClass.INTERFACE) {
                 throw new Error('not a UNO interface type: ' + name);
             }
             obj.impl_typemap[name] = impl;

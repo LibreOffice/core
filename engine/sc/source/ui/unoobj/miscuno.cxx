@@ -98,7 +98,7 @@ sal_Int32 ScUnoHelpFunctions::GetEnumPropertyImpl( const uno::Reference<beans::X
         {
             cpo::uno::Any aAny(xProp->getPropertyValue( rName ));
 
-            if ( aAny.getValueTypeClass() == uno::TypeClass_ENUM )
+            if ( aAny.getValueTypeClass() == cpo::uno::TypeClass_ENUM )
             {
                 //! get enum value from any???
                 nRet = *static_cast<sal_Int32 const *>(aAny.getValue());
@@ -161,7 +161,7 @@ sal_Int32 ScUnoHelpFunctions::GetInt32FromAny( const cpo::uno::Any& aAny )
 sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const cpo::uno::Any& aAny )
 {
     sal_Int32 nRet = 0;
-    if ( aAny.getValueTypeClass() == uno::TypeClass_ENUM )
+    if ( aAny.getValueTypeClass() == cpo::uno::TypeClass_ENUM )
         nRet = *static_cast<sal_Int32 const *>(aAny.getValue());
     else
         aAny >>= nRet;

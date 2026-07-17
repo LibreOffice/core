@@ -204,7 +204,7 @@ template <class E> void tryThrow(cpo::uno::Any const& aException)
 
 void lo_mobile_throwException(cpo::uno::Any const& aException)
 {
-    assert(aException.getValueTypeClass() == css::uno::TypeClass_EXCEPTION);
+    assert(aException.getValueTypeClass() == cpo::uno::TypeClass_EXCEPTION);
 
     tryThrow<css::ucb::InteractiveAugmentedIOException>(aException);
     tryThrow<css::ucb::NameClashException>(aException);

@@ -1672,7 +1672,7 @@ void AnimationsExporterImpl::prepareValue( const Any& rValue )
         for( nElement = 0; nElement < nLength; nElement++, pAny++ )
             prepareValue( *pAny );
     }
-    else if( rValue.getValueTypeClass() == css::uno::TypeClass_INTERFACE )
+    else if( rValue.getValueTypeClass() == cpo::uno::TypeClass_INTERFACE )
     {
         Reference< XInterface> xRef( rValue, UNO_QUERY );
         if( xRef.is() )

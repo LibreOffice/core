@@ -50,7 +50,7 @@ published interface XTypeConverter: com::sun::star::uno::XInterface
         Throws a CannotConvertException if the conversion
         failed and a com::sun::star::lang::IllegalArgumentException
         if the destination
-        com::sun::star::uno::TypeClass is not simple,
+        cpo::uno::TypeClass is not simple,
         e.g. not long or byte.
 
         @param aFrom
@@ -62,7 +62,7 @@ published interface XTypeConverter: com::sun::star::uno::XInterface
     */
     any convertToSimpleType(
         [in] any aFrom,
-        [in] com::sun::star::uno::TypeClass aDestinationType )
+        [in] cpo::uno::TypeClass aDestinationType )
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::script::CannotConvertException );
 };

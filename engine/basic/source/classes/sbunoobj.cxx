@@ -2615,7 +2615,7 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
 
                 SbxDataType eRealSbxType = ( ( aProp.Attributes & PropertyAttribute::MAYBEVOID ) ? unoToSbxType( aProp.Type.getTypeClass() ) : eSbxType );
                 // create the property and superimpose it
-                auto pProp = tools::make_ref<SbUnoProperty>( aProp.Name, eSbxType, eRealSbxType, aProp, 0, false, ( aProp.Type.getTypeClass() ==  css::uno::TypeClass_STRUCT  ) );
+                auto pProp = tools::make_ref<SbUnoProperty>( aProp.Name, eSbxType, eRealSbxType, aProp, 0, false, ( aProp.Type.getTypeClass() ==  cpo::uno::TypeClass_STRUCT  ) );
                 QuickInsert( pProp.get() );
                 pRes = pProp.get();
             }
@@ -2793,7 +2793,7 @@ void SbUnoObject::implCreateAll()
 
         SbxDataType eRealSbxType = ( ( rProp.Attributes & PropertyAttribute::MAYBEVOID ) ? unoToSbxType( rProp.Type.getTypeClass() ) : eSbxType );
         // Create property and superimpose it
-        auto xVarRef = tools::make_ref<SbUnoProperty>( rProp.Name, eSbxType, eRealSbxType, rProp, i, false, ( rProp.Type.getTypeClass() == css::uno::TypeClass_STRUCT   ) );
+        auto xVarRef = tools::make_ref<SbUnoProperty>( rProp.Name, eSbxType, eRealSbxType, rProp, i, false, ( rProp.Type.getTypeClass() == cpo::uno::TypeClass_STRUCT   ) );
         QuickInsert( xVarRef.get() );
     }
 
@@ -4661,7 +4661,7 @@ SbxVariable* SbUnoStructRefObject::Find( const OUString& rName, SbxClassType t )
             Property aProp;
             aProp.Name = rName;
             aProp.Type = cpo::uno::Type( it->second->getTypeClass(), it->second->getTypeName() );
-            const bool bIsStruct = aProp.Type.getTypeClass() == css::uno::TypeClass_STRUCT;
+            const bool bIsStruct = aProp.Type.getTypeClass() == cpo::uno::TypeClass_STRUCT;
             SbUnoProperty* pProp = new SbUnoProperty( rName, eSbxType, eRealSbxType, std::move(aProp), 0, false, bIsStruct );
             SbxVariableRef xVarRef = pProp;
             QuickInsert( xVarRef.get() );
@@ -4722,7 +4722,7 @@ void SbUnoStructRefObject::implCreateAll()
         Property aProp;
         aProp.Name = rName;
         aProp.Type = cpo::uno::Type( field.second->getTypeClass(), field.second->getTypeName() );
-        const bool bIsStruct = aProp.Type.getTypeClass() == css::uno::TypeClass_STRUCT;
+        const bool bIsStruct = aProp.Type.getTypeClass() == cpo::uno::TypeClass_STRUCT;
         SbUnoProperty* pProp = new SbUnoProperty( rName, eSbxType, eRealSbxType, std::move(aProp), 0, false, bIsStruct );
         SbxVariableRef xVarRef = pProp;
         QuickInsert( xVarRef.get() );

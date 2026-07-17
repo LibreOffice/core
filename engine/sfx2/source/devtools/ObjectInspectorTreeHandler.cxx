@@ -92,88 +92,88 @@ OUString convertBasicValueToString(const cpo::uno::Any& aValue,
     if (!aValue.hasValue())
         return SfxResId(STR_ANY_VALUE_NULL);
 
-    uno::TypeClass eType = aValue.getValueTypeClass();
+    cpo::uno::TypeClass eType = aValue.getValueTypeClass();
 
     switch (eType)
     {
-        case uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
         {
             bool bBool = aValue.get<bool>();
             aRetStr = bBool ? SfxResId(STR_ANY_VALUE_TRUE) : SfxResId(STR_ANY_VALUE_FALSE);
             break;
         }
-        case uno::TypeClass_CHAR:
+        case cpo::uno::TypeClass_CHAR:
         {
             sal_Unicode aChar = aValue.get<sal_Unicode>();
             aRetStr = OUString::number(aChar);
             break;
         }
-        case uno::TypeClass_STRING:
+        case cpo::uno::TypeClass_STRING:
         {
             aRetStr = u"\"" + aValue.get<OUString>() + u"\"";
             break;
         }
-        case uno::TypeClass_FLOAT:
+        case cpo::uno::TypeClass_FLOAT:
         {
             auto aNumber = aValue.get<float>();
             aRetStr = OUString::number(aNumber);
             break;
         }
-        case uno::TypeClass_DOUBLE:
+        case cpo::uno::TypeClass_DOUBLE:
         {
             auto aNumber = aValue.get<double>();
             aRetStr = OUString::number(aNumber);
             break;
         }
-        case uno::TypeClass_BYTE:
+        case cpo::uno::TypeClass_BYTE:
         {
             auto aNumber = aValue.get<sal_Int8>();
             aRetStr = OUString::number(aNumber);
             break;
         }
-        case uno::TypeClass_SHORT:
+        case cpo::uno::TypeClass_SHORT:
         {
             auto aNumber = aValue.get<sal_Int16>();
             aRetStr = OUString::number(aNumber);
             break;
         }
-        case uno::TypeClass_LONG:
+        case cpo::uno::TypeClass_LONG:
         {
             auto aNumber = aValue.get<sal_Int32>();
             aRetStr = OUString::number(aNumber);
             break;
         }
-        case uno::TypeClass_HYPER:
+        case cpo::uno::TypeClass_HYPER:
         {
             auto aNumber = aValue.get<sal_Int64>();
             aRetStr = OUString::number(aNumber);
             break;
         }
-        case uno::TypeClass_UNSIGNED_SHORT:
+        case cpo::uno::TypeClass_UNSIGNED_SHORT:
         {
             auto aNumber = aValue.get<sal_uInt16>();
             aRetStr = OUString::number(aNumber);
             break;
         }
-        case uno::TypeClass_UNSIGNED_LONG:
+        case cpo::uno::TypeClass_UNSIGNED_LONG:
         {
             auto aNumber = aValue.get<sal_uInt32>();
             aRetStr = OUString::number(aNumber);
             break;
         }
-        case uno::TypeClass_UNSIGNED_HYPER:
+        case cpo::uno::TypeClass_UNSIGNED_HYPER:
         {
             auto aNumber = aValue.get<sal_uInt64>();
             aRetStr = OUString::number(aNumber);
             break;
         }
-        case uno::TypeClass_TYPE:
+        case cpo::uno::TypeClass_TYPE:
         {
             auto aType = aValue.get<cpo::uno::Type>();
             aRetStr = aType.getTypeName();
             break;
         }
-        case uno::TypeClass_ENUM:
+        case cpo::uno::TypeClass_ENUM:
         {
             aRetStr = enumValueToEnumName(aValue, xContext);
             break;
@@ -202,7 +202,7 @@ OUString getInterfaceName(uno::Reference<uno::XInterface> const& xInterface,
         if (xInvocation.is() && xInvocation->hasProperty(u"Name"_ustr))
         {
             cpo::uno::Any aAny = xInvocation->getValue(u"Name"_ustr);
-            if (aAny.hasValue() && aAny.getValueTypeClass() == uno::TypeClass_STRING)
+            if (aAny.hasValue() && aAny.getValueTypeClass() == cpo::uno::TypeClass_STRING)
                 return aAny.get<OUString>();
         }
     }
@@ -218,11 +218,11 @@ OUString convertAnyToString(const cpo::uno::Any& aValue,
 
     OUString aRetStr;
 
-    uno::TypeClass eType = aValue.getValueTypeClass();
+    cpo::uno::TypeClass eType = aValue.getValueTypeClass();
 
     switch (eType)
     {
-        case uno::TypeClass_INTERFACE:
+        case cpo::uno::TypeClass_INTERFACE:
         {
             uno::Reference<uno::XInterface> xInterface(aValue, uno::UNO_QUERY);
             if (!xInterface.is())
@@ -241,7 +241,7 @@ OUString convertAnyToString(const cpo::uno::Any& aValue,
             }
             break;
         }
-        case uno::TypeClass_STRUCT:
+        case cpo::uno::TypeClass_STRUCT:
         {
             aRetStr = SfxResId(STR_PROPERTY_VALUE_STRUCT);
             break;
@@ -264,13 +264,13 @@ OUString convertAnyToShortenedString(const cpo::uno::Any& aValue,
 
     OUString aRetStr;
 
-    uno::TypeClass eType = aValue.getValueTypeClass();
+    cpo::uno::TypeClass eType = aValue.getValueTypeClass();
 
     constexpr const sal_Int32 constMaxStringLength = 60;
 
     switch (eType)
     {
-        case uno::TypeClass_INTERFACE:
+        case cpo::uno::TypeClass_INTERFACE:
         {
             aRetStr = convertAnyToString(aValue, xContext);
 
@@ -278,7 +278,7 @@ OUString convertAnyToShortenedString(const cpo::uno::Any& aValue,
                 aRetStr = OUString::Concat(aRetStr.subView(0, constMaxStringLength)) + u"...";
             break;
         }
-        case uno::TypeClass_STRING:
+        case cpo::uno::TypeClass_STRING:
         {
             OUString aString = convertAnyToString(aValue, xContext);
             if (aString.getLength() > constMaxStringLength + 4)
@@ -418,13 +418,13 @@ public:
     {
         switch (xClass->getTypeClass())
         {
-            case uno::TypeClass_INTERFACE:
+            case cpo::uno::TypeClass_INTERFACE:
                 return SfxResId(STR_METHOD_TYPE_OBJECT);
-            case uno::TypeClass_STRUCT:
+            case cpo::uno::TypeClass_STRUCT:
                 return SfxResId(STR_METHOD_TYPE_STRUCT);
-            case uno::TypeClass_ENUM:
+            case cpo::uno::TypeClass_ENUM:
                 return SfxResId(STR_METHOD_TYPE_ENUM);
-            case uno::TypeClass_SEQUENCE:
+            case cpo::uno::TypeClass_SEQUENCE:
                 return SfxResId(STR_METHOD_TYPE_SEQUENCE);
             default:
                 break;
@@ -555,12 +555,12 @@ public:
         {
             switch (maAny.getValueTypeClass())
             {
-                case uno::TypeClass_INTERFACE:
+                case cpo::uno::TypeClass_INTERFACE:
                 {
                     uno::Reference<uno::XInterface> xInterface(maAny, uno::UNO_QUERY);
                     return xInterface.is();
                 }
-                case uno::TypeClass_SEQUENCE:
+                case cpo::uno::TypeClass_SEQUENCE:
                     return true;
                 default:
                     break;
@@ -871,13 +871,13 @@ ObjectInspectorNodeInterface* BasicValueNode::createNodeObjectForAny(OUString co
 {
     switch (rAny.getValueTypeClass())
     {
-        case uno::TypeClass_INTERFACE:
+        case cpo::uno::TypeClass_INTERFACE:
             return new GenericPropertiesNode(rName, rAny, rInfo, mxContext);
 
-        case uno::TypeClass_SEQUENCE:
+        case cpo::uno::TypeClass_SEQUENCE:
             return new SequenceNode(rName, rAny, rInfo, mxContext);
 
-        case uno::TypeClass_STRUCT:
+        case cpo::uno::TypeClass_STRUCT:
             return new StructNode(rName, rAny, rInfo, mxContext);
 
         default:

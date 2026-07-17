@@ -391,17 +391,17 @@ PyRef Runtime::any2PyObject (const Any &a ) const
 
     switch (a.getValueTypeClass ())
     {
-    case css::uno::TypeClass_VOID:
+    case cpo::uno::TypeClass_VOID:
     {
         Py_INCREF (Py_None);
         return PyRef(Py_None);
     }
-    case css::uno::TypeClass_CHAR:
+    case cpo::uno::TypeClass_CHAR:
     {
         sal_Unicode c = *o3tl::forceAccess<sal_Unicode>(a);
         return PyRef( PyUNO_char_new( c , *this ), SAL_NO_ACQUIRE );
     }
-    case css::uno::TypeClass_BOOLEAN:
+    case cpo::uno::TypeClass_BOOLEAN:
     {
         bool b;
         if ((a >>= b) && b)
@@ -409,52 +409,52 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         else
             return Py_False;
     }
-    case css::uno::TypeClass_BYTE:
-    case css::uno::TypeClass_SHORT:
-    case css::uno::TypeClass_UNSIGNED_SHORT:
-    case css::uno::TypeClass_LONG:
+    case cpo::uno::TypeClass_BYTE:
+    case cpo::uno::TypeClass_SHORT:
+    case cpo::uno::TypeClass_UNSIGNED_SHORT:
+    case cpo::uno::TypeClass_LONG:
     {
         sal_Int32 l = 0;
         a >>= l;
         return PyRef( PyLong_FromLong (l), SAL_NO_ACQUIRE );
     }
-    case css::uno::TypeClass_UNSIGNED_LONG:
+    case cpo::uno::TypeClass_UNSIGNED_LONG:
     {
         sal_uInt32 l = 0;
         a >>= l;
         return PyRef( PyLong_FromUnsignedLong (l), SAL_NO_ACQUIRE );
     }
-    case css::uno::TypeClass_HYPER:
+    case cpo::uno::TypeClass_HYPER:
     {
         sal_Int64 l = 0;
         a >>= l;
         return PyRef( PyLong_FromLongLong (l), SAL_NO_ACQUIRE);
     }
-    case css::uno::TypeClass_UNSIGNED_HYPER:
+    case cpo::uno::TypeClass_UNSIGNED_HYPER:
     {
         sal_uInt64 l = 0;
         a >>= l;
         return PyRef( PyLong_FromUnsignedLongLong (l), SAL_NO_ACQUIRE);
     }
-    case css::uno::TypeClass_FLOAT:
+    case cpo::uno::TypeClass_FLOAT:
     {
         float f = 0.0;
         a >>= f;
         return PyRef(PyFloat_FromDouble (f), SAL_NO_ACQUIRE);
     }
-    case css::uno::TypeClass_DOUBLE:
+    case cpo::uno::TypeClass_DOUBLE:
     {
         double d = 0.0;
         a >>= d;
         return PyRef( PyFloat_FromDouble (d), SAL_NO_ACQUIRE);
     }
-    case css::uno::TypeClass_STRING:
+    case cpo::uno::TypeClass_STRING:
     {
         OUString tmp_ostr;
         a >>= tmp_ostr;
         return ustring2PyUnicode( tmp_ostr );
     }
-    case css::uno::TypeClass_TYPE:
+    case cpo::uno::TypeClass_TYPE:
     {
         Type t;
         a >>= t;
@@ -464,13 +464,13 @@ PyRef Runtime::any2PyObject (const Any &a ) const
                 o.getStr(),  t.getTypeClass(), *this),
             SAL_NO_ACQUIRE);
     }
-    case css::uno::TypeClass_ANY:
+    case cpo::uno::TypeClass_ANY:
     {
         //I don't think this can happen.
         Py_INCREF (Py_None);
         return Py_None;
     }
-    case css::uno::TypeClass_ENUM:
+    case cpo::uno::TypeClass_ENUM:
     {
         sal_Int32 l = *static_cast<sal_Int32 const *>(a.getValue());
         TypeDescription desc( a.getValueType() );
@@ -492,8 +492,8 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         throw RuntimeException( "Any carries enum " + a.getValueTypeName() +
                 " with invalid value " + OUString::number(l) );
     }
-    case css::uno::TypeClass_EXCEPTION:
-    case css::uno::TypeClass_STRUCT:
+    case cpo::uno::TypeClass_EXCEPTION:
+    case cpo::uno::TypeClass_STRUCT:
     {
         PyRef excClass = getClass( a.getValueTypeName(), *this );
         PyRef value = PyUNOStruct_new( a, getImpl()->cargo->xInvocation );
@@ -537,7 +537,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         }
         return ret;
     }
-    case css::uno::TypeClass_SEQUENCE:
+    case cpo::uno::TypeClass_SEQUENCE:
     {
         Sequence<Any> s;
 
@@ -575,7 +575,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             return tuple;
         }
     }
-    case css::uno::TypeClass_INTERFACE:
+    case cpo::uno::TypeClass_INTERFACE:
     {
         Reference<XInterface> tmp_interface;
         a >>= tmp_interface;

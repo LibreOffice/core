@@ -124,14 +124,14 @@ ScVbaNames::Add( const cpo::uno::Any& Name ,
         formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_NATIVE_XL_A1;
         if ( RefersTo.hasValue() )
         {
-            if ( RefersTo.getValueTypeClass() == uno::TypeClass_STRING )
+            if ( RefersTo.getValueTypeClass() == cpo::uno::TypeClass_STRING )
                 RefersTo >>= sFormula;
             else
                 RefersTo >>= xRange;
         }
         if ( RefersToR1C1.hasValue() )
         {
-            if ( RefersToR1C1.getValueTypeClass() == uno::TypeClass_STRING )
+            if ( RefersToR1C1.getValueTypeClass() == cpo::uno::TypeClass_STRING )
             {
                 RefersToR1C1 >>= sFormula;
                 eGram = formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;
@@ -141,7 +141,7 @@ ScVbaNames::Add( const cpo::uno::Any& Name ,
         }
         if ( RefersToR1C1Local.hasValue() )
         {
-            if ( RefersToR1C1Local.getValueTypeClass() == uno::TypeClass_STRING )
+            if ( RefersToR1C1Local.getValueTypeClass() == cpo::uno::TypeClass_STRING )
             {
                 RefersToR1C1Local >>= sFormula;
                 eGram = formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;

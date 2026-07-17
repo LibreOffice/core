@@ -25,7 +25,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.XTypeConverter;
 import com.sun.star.uno.Any;
 import cpo.uno.Type;
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 
 /**
 * Testing <code>com.sun.star.script.XTypeConverter</code>

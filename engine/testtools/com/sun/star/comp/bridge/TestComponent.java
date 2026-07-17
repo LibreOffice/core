@@ -60,6 +60,7 @@ import com.sun.star.registry.XRegistryKey;
 
 import com.sun.star.uno.Any;
 import cpo.uno.Type;
+import cpo.uno.TypeClass;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 

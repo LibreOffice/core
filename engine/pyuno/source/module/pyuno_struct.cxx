@@ -31,7 +31,7 @@ using cpo::uno::Sequence;
 using com::sun::star::uno::Reference;
 using cpo::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::TypeClass;
+using cpo::uno::TypeClass;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Exception;
 using com::sun::star::lang::XSingleServiceFactory;
@@ -74,7 +74,7 @@ static PyObject *PyUNOStruct_repr( PyObject *self )
     PyObject *ret = nullptr;
 
     if( me->members->wrappedObject.getValueTypeClass()
-        == css::uno::TypeClass_EXCEPTION )
+        == cpo::uno::TypeClass_EXCEPTION )
     {
         Reference< XMaterialHolder > rHolder(me->members->xInvocation,UNO_QUERY);
         if( rHolder.is() )
@@ -248,13 +248,13 @@ static PyObject* PyUNOStruct_cmp( PyObject *self, PyObject *that, int op )
 
             PyUNO *me = reinterpret_cast< PyUNO * > ( self );
             PyUNO *other = reinterpret_cast< PyUNO * > ( that );
-            css::uno::TypeClass tcMe = me->members->wrappedObject.getValueTypeClass();
-            css::uno::TypeClass tcOther = other->members->wrappedObject.getValueTypeClass();
+            cpo::uno::TypeClass tcMe = me->members->wrappedObject.getValueTypeClass();
+            cpo::uno::TypeClass tcOther = other->members->wrappedObject.getValueTypeClass();
 
             if( tcMe == tcOther )
             {
-                if( tcMe == css::uno::TypeClass_STRUCT ||
-                    tcMe == css::uno::TypeClass_EXCEPTION )
+                if( tcMe == cpo::uno::TypeClass_STRUCT ||
+                    tcMe == cpo::uno::TypeClass_EXCEPTION )
                 {
                     Reference< XMaterialHolder > xMe( me->members->xInvocation,UNO_QUERY );
                     Reference< XMaterialHolder > xOther( other->members->xInvocation,UNO_QUERY );

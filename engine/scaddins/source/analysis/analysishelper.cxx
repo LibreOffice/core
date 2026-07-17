@@ -1463,7 +1463,7 @@ void SortedIndividualInt32List::InsertHolidayList(
         sal_Int32 nNullDate )
 {
     rAnyConv.init( xOptions );
-    if( rHolAny.getValueTypeClass() == uno::TypeClass_SEQUENCE )
+    if( rHolAny.getValueTypeClass() == cpo::uno::TypeClass_SEQUENCE )
     {
         cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > aAnySeq;
         if( !(rHolAny >>= aAnySeq) )
@@ -1833,8 +1833,8 @@ void ComplexList::Append( const cpo::uno::Sequence< cpo::uno::Any >& aMultPars )
     {
         switch( r.getValueTypeClass() )
         {
-            case uno::TypeClass_VOID:       break;
-            case uno::TypeClass_STRING:
+            case cpo::uno::TypeClass_VOID:       break;
+            case cpo::uno::TypeClass_STRING:
                 {
                 auto       pStr = o3tl::forceAccess<OUString>(r);
 
@@ -1842,10 +1842,10 @@ void ComplexList::Append( const cpo::uno::Sequence< cpo::uno::Any >& aMultPars )
                     Append( Complex( *pStr ) );
                 }
                 break;
-            case uno::TypeClass_DOUBLE:
+            case cpo::uno::TypeClass_DOUBLE:
                 Append( Complex( *o3tl::forceAccess<double>(r), 0.0 ) );
                 break;
-            case uno::TypeClass_SEQUENCE:
+            case cpo::uno::TypeClass_SEQUENCE:
                 {
                 cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >           aValArr;
                 if( !(r >>= aValArr) )
@@ -2529,10 +2529,10 @@ bool ScaAnyConverter::getDouble(
     bool bContainsVal = true;
     switch( rAny.getValueTypeClass() )
     {
-        case uno::TypeClass_VOID:
+        case cpo::uno::TypeClass_VOID:
             bContainsVal = false;
         break;
-        case uno::TypeClass_STRING:
+        case cpo::uno::TypeClass_STRING:
         {
             auto pString = o3tl::forceAccess< OUString >( rAny );
             if( !pString->isEmpty() )
@@ -2541,10 +2541,10 @@ bool ScaAnyConverter::getDouble(
                 bContainsVal = false;
         }
         break;
-        case uno::TypeClass_HYPER:
+        case cpo::uno::TypeClass_HYPER:
             rfResult = rAny.get<sal_Int64>();
         break;
-        case uno::TypeClass_UNSIGNED_HYPER:
+        case cpo::uno::TypeClass_UNSIGNED_HYPER:
             rfResult = rAny.get<sal_uInt64>();
         break;
         default:

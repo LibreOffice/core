@@ -120,8 +120,8 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hdl>
+#include <cpo/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>

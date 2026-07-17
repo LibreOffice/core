@@ -1003,7 +1003,7 @@ OUString SwDocInfoFieldType::Expand( SwDocInfoSubType nSub, sal_uInt32 nFormat,
                 aAny = xSet->getPropertyValue( rName );
 
                 uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(comphelper::getProcessComponentContext()) );
-                cpo::uno::Any aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
+                cpo::uno::Any aNew = xConverter->convertToSimpleType( aAny, cpo::uno::TypeClass_STRING );
                 aNew >>= sVal;
             }
             catch (uno::Exception&) {}
@@ -1176,7 +1176,7 @@ OUString SwDocInfoField::ExpandImpl(SwRootFrame const*const) const
                     else
                     {
                         uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(comphelper::getProcessComponentContext()) );
-                        cpo::uno::Any aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
+                        cpo::uno::Any aNew = xConverter->convertToSimpleType( aAny, cpo::uno::TypeClass_STRING );
                         aNew >>= sVal;
                     }
                     const_cast<SwDocInfoField*>(this)->m_aContent = sVal;

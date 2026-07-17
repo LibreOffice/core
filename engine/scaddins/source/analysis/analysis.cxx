@@ -1016,10 +1016,10 @@ OUString SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const cpo::un
 
     switch( rSuff.getValueTypeClass() )
     {
-        case uno::TypeClass_VOID:
+        case cpo::uno::TypeClass_VOID:
             bi = true;
             break;
-        case uno::TypeClass_STRING:
+        case cpo::uno::TypeClass_STRING:
             {
             auto   pSuff = o3tl::forceAccess<OUString>(rSuff);
             bi = *pSuff == "i" || pSuff->isEmpty();

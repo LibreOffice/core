@@ -22,7 +22,7 @@
 
 #include "sal/types.h"
 
-/** This type class enum is binary compatible with the IDL enum com.sun.star.uno.TypeClass.
+/** This type class enum is binary compatible with the IDL enum cpo.uno.TypeClass.
 */
 typedef enum _typelib_TypeClass {
     /** type class of void */

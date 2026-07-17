@@ -52,7 +52,7 @@ excludelist:
     cppuhelper/source/typemanager.cxx:
     # Actually used
     - com/sun/star/reflection/TypeDescriptionSearchDepth.hpp
-    - com/sun/star/uno/TypeClass.hpp
+    - cpo/uno/TypeClass.hpp
     cppuhelper/source/servicemanager.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp

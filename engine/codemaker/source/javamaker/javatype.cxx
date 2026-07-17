@@ -584,17 +584,17 @@ void TypeInfo::generatePolymorphicUnoTypeCode(
         codemaker::convertString(m_polymorphicUnoType.name));
     if (m_polymorphicUnoType.kind == PolymorphicUnoType::KIND_STRUCT) {
         code.instrGetstatic(
-            "com/sun/star/uno/TypeClass"_ostr, "STRUCT"_ostr,
-            "Lcom/sun/star/uno/TypeClass;"_ostr);
+            "cpo/uno/TypeClass"_ostr, "STRUCT"_ostr,
+            "Lcpo/uno/TypeClass;"_ostr);
     } else {
         code.instrGetstatic(
-            "com/sun/star/uno/TypeClass"_ostr, "SEQUENCE"_ostr,
-            "Lcom/sun/star/uno/TypeClass;"_ostr);
+            "cpo/uno/TypeClass"_ostr, "SEQUENCE"_ostr,
+            "Lcpo/uno/TypeClass;"_ostr);
     }
-    dependencies->insert(u"com.sun.star.uno.TypeClass"_ustr);
+    dependencies->insert(u"cpo.uno.TypeClass"_ustr);
     code.instrInvokespecial(
         "cpo/uno/Type"_ostr, "<init>"_ostr,
-        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
+        "(Ljava/lang/String;Lcpo/uno/TypeClass;)V"_ostr);
 }
 
 void writeClassFile(
@@ -1191,12 +1191,12 @@ sal_uInt16 addLoadLocal(
                         codemaker::convertString(
                             createUnoName(manager, nucleus, rank, args)));
                     code->instrGetstatic(
-                        "com/sun/star/uno/TypeClass"_ostr, "STRUCT"_ostr,
-                        "Lcom/sun/star/uno/TypeClass;"_ostr);
-                    dependencies->insert(u"com.sun.star.uno.TypeClass"_ustr);
+                        "cpo/uno/TypeClass"_ostr, "STRUCT"_ostr,
+                        "Lcpo/uno/TypeClass;"_ostr);
+                    dependencies->insert(u"cpo.uno.TypeClass"_ustr);
                     code->instrInvokespecial(
                         "cpo/uno/Type"_ostr, "<init>"_ostr,
-                        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
+                        "(Ljava/lang/String;Lcpo/uno/TypeClass;)V"_ostr);
                     code->loadLocalReference(*index);
                     code->instrInvokespecial(
                         "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
@@ -1216,12 +1216,12 @@ sal_uInt16 addLoadLocal(
                     code->instrDup();
                     code->loadStringConstant(codemaker::convertString(nucleus));
                     code->instrGetstatic(
-                        "com/sun/star/uno/TypeClass"_ostr, "INTERFACE"_ostr,
-                        "Lcom/sun/star/uno/TypeClass;"_ostr);
-                    dependencies->insert(u"com.sun.star.uno.TypeClass"_ustr);
+                        "cpo/uno/TypeClass"_ostr, "INTERFACE"_ostr,
+                        "Lcpo/uno/TypeClass;"_ostr);
+                    dependencies->insert(u"cpo.uno.TypeClass"_ustr);
                     code->instrInvokespecial(
                         "cpo/uno/Type"_ostr, "<init>"_ostr,
-                        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
+                        "(Ljava/lang/String;Lcpo/uno/TypeClass;)V"_ostr);
                     code->loadLocalReference(*index);
                     code->instrInvokespecial(
                         "com/sun/star/uno/Any"_ostr, "<init>"_ostr,
@@ -2255,7 +2255,7 @@ void handleService(
         dependencies->insert(entity->getBase());
         dependencies->insert(u"com.sun.star.lang.XMultiComponentFactory"_ustr);
         dependencies->insert(u"com.sun.star.uno.DeploymentException"_ustr);
-        dependencies->insert(u"com.sun.star.uno.TypeClass"_ustr);
+        dependencies->insert(u"cpo.uno.TypeClass"_ustr);
         dependencies->insert(u"com.sun.star.uno.XComponentContext"_ustr);
         for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor& cons :
                  entity->getConstructors())
@@ -2274,12 +2274,12 @@ void handleService(
             code->loadStringConstant(realJavaBaseName);
             // stack: type type "..."
             code->instrGetstatic(
-                "com/sun/star/uno/TypeClass"_ostr, "INTERFACE"_ostr,
-                "Lcom/sun/star/uno/TypeClass;"_ostr);
+                "cpo/uno/TypeClass"_ostr, "INTERFACE"_ostr,
+                "Lcpo/uno/TypeClass;"_ostr);
             // stack: type type "..." INTERFACE
             code->instrInvokespecial(
                 "cpo/uno/Type"_ostr, "<init>"_ostr,
-                "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
+                "(Ljava/lang/String;Lcpo/uno/TypeClass;)V"_ostr);
             // stack: type
             code->loadLocalReference(0);
             // stack: type instance
@@ -2340,7 +2340,7 @@ void handleSingleton(
     OString className(
         translateUnoidlEntityNameToJavaFullyQualifiedName(name, "singleton"));
     dependencies->insert(u"com.sun.star.uno.DeploymentException"_ustr);
-    dependencies->insert(u"com.sun.star.uno.TypeClass"_ustr);
+    dependencies->insert(u"cpo.uno.TypeClass"_ustr);
     dependencies->insert(u"com.sun.star.uno.XComponentContext"_ustr);
     std::unique_ptr< ClassFile > cf(
         new ClassFile(
@@ -2374,11 +2374,11 @@ void handleSingleton(
     // stack: value type
     code->instrInvokevirtual(
         "cpo/uno/Type"_ostr, "getTypeClass"_ostr,
-        "()Lcom/sun/star/uno/TypeClass;"_ostr);
+        "()Lcpo/uno/TypeClass;"_ostr);
     // stack: value typeClass
     code->instrGetstatic(
-        "com/sun/star/uno/TypeClass"_ostr, "INTERFACE"_ostr,
-        "Lcom/sun/star/uno/TypeClass;"_ostr);
+        "cpo/uno/TypeClass"_ostr, "INTERFACE"_ostr,
+        "Lcpo/uno/TypeClass;"_ostr);
     // stack: value typeClass INTERFACE
     ClassFile::Code::Branch branch2 = code->instrIfAcmpne();
     // stack: value
@@ -2393,12 +2393,12 @@ void handleSingleton(
     code->loadStringConstant(realJavaBaseName);
     // stack: value type type "..."
     code->instrGetstatic(
-        "com/sun/star/uno/TypeClass"_ostr, "INTERFACE"_ostr,
-        "Lcom/sun/star/uno/TypeClass;"_ostr);
+        "cpo/uno/TypeClass"_ostr, "INTERFACE"_ostr,
+        "Lcpo/uno/TypeClass;"_ostr);
     // stack: value type type "..." INTERFACE
     code->instrInvokespecial(
         "cpo/uno/Type"_ostr, "<init>"_ostr,
-        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V"_ostr);
+        "(Ljava/lang/String;Lcpo/uno/TypeClass;)V"_ostr);
     // stack: value type
     code->instrSwap();
     // stack: type value

@@ -31,7 +31,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -292,7 +292,7 @@ public:
     virtual cpo::uno::Any SAL_CALL Item(const cpo::uno::Any& Index1, const cpo::uno::Any& /*not processed in this base class*/) override
     {
         OUString aStringSheet;
-        if (Index1.getValueTypeClass() == css::uno::TypeClass_DOUBLE)
+        if (Index1.getValueTypeClass() == cpo::uno::TypeClass_DOUBLE)
         {
             // This is needed for ContentControls, where the unique integer ID
             // can be passed as float to simulate a "by name" lookup.
@@ -300,7 +300,7 @@ public:
             Index1 >>= fIndex;
             aStringSheet = OUString::number(fIndex);
         }
-        else if (Index1.getValueTypeClass() != css::uno::TypeClass_STRING)
+        else if (Index1.getValueTypeClass() != cpo::uno::TypeClass_STRING)
         {
             sal_Int32 nIndex = 0;
             if ( !( Index1 >>= nIndex ) )

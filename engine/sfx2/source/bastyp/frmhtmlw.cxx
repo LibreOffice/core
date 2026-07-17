@@ -201,7 +201,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
             OUString name = rProp.Name;
             cpo::uno::Any aStr = xConverter->convertToSimpleType(
                     xUserDefinedProps->getPropertyValue(name),
-                    uno::TypeClass_STRING);
+                    cpo::uno::TypeClass_STRING);
             OUString str;
             aStr >>= str;
             OUString valstr(comphelper::string::stripEnd(str, ' '));

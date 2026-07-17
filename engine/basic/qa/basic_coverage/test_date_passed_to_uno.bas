@@ -29,7 +29,7 @@ Sub verify_DatePassedToUno
     Dim aConvResult
     ' Without the fix, the following line would fail, triggering errorHandler reporting
     ' "91: Object variable not set."
-    aConvResult = aUnoObject.convertToSimpleType(aDate, com.sun.star.uno.TypeClass.STRING)
+    aConvResult = aUnoObject.convertToSimpleType(aDate, cpo.uno.TypeClass.STRING)
     ' If 'Option VBASupport 1' were used, the following line would fail with "Wrong input
     ' type: Date", because the value would be marshalled using oleautomation::Date struct
     TestUtil.AssertEqualStrict(aConvResult, "45680.5", "aConvResult")

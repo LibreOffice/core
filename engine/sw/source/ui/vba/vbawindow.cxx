@@ -150,7 +150,7 @@ cpo::uno::Any SAL_CALL
 SwVbaWindow::Panes( const cpo::uno::Any& aIndex )
 {
     uno::Reference< XCollection > xPanes( new SwVbaPanes( this,  mxContext, m_xModel ) );
-    if(  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
+    if(  aIndex.getValueTypeClass() == cpo::uno::TypeClass_VOID )
         return cpo::uno::Any( xPanes );
 
     return xPanes->Item( aIndex, cpo::uno::Any() );

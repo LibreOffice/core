@@ -54,7 +54,7 @@ UNOTYPES =	com.sun.star.test.XSimpleTest \
         com.sun.star.registry.XImplementationRegistration	\
         com.sun.star.registry.XRegistryKey	\
         com.sun.star.test.XSimpleTest	\
-        com.sun.star.uno.TypeClass	\
+        cpo.uno.TypeClass	\
         com.sun.star.uno.XAggregation	\
         com.sun.star.uno.XWeak
 

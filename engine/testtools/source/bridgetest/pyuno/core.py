@@ -128,9 +128,9 @@ class TestCase( unittest.TestCase):
                   "string roundtrip via any test"  )
            
       def testEnum( self ):
-          e1 = uno.Enum( "com.sun.star.uno.TypeClass" , "LONG" )
-          e2 = uno.Enum( "com.sun.star.uno.TypeClass" , "LONG" )
-          e3 = uno.Enum( "com.sun.star.uno.TypeClass" , "UNSIGNED_LONG" )
+          e1 = uno.Enum( "cpo.uno.TypeClass" , "LONG" )
+          e2 = uno.Enum( "cpo.uno.TypeClass" , "LONG" )
+          e3 = uno.Enum( "cpo.uno.TypeClass" , "UNSIGNED_LONG" )
           e4 = uno.Enum( "test.testtools.bridgetest.TestEnum" , "TWO" )
           self.assertTrue( e1 == e2 , "equal enum test" )
           self.assertTrue( not (e1 == e3) , "different enums test" )
@@ -143,9 +143,9 @@ class TestCase( unittest.TestCase):
           t2 = uno.getTypeByName( "com.sun.star.lang.XComponent" )
           t3 = uno.getTypeByName( "com.sun.star.lang.EventObject" )
           self.assertTrue( t1.typeClass == \
-              uno.Enum( "com.sun.star.uno.TypeClass", "INTERFACE" ), "typeclass of type test" )
+              uno.Enum( "cpo.uno.TypeClass", "INTERFACE" ), "typeclass of type test" )
           self.assertTrue( t3.typeClass == \
-              uno.Enum( "com.sun.star.uno.TypeClass", "STRUCT" ), "typeclass of type test")
+              uno.Enum( "cpo.uno.TypeClass", "STRUCT" ), "typeclass of type test")
           self.assertTrue( t1 == t2 , "equal type test" )
           self.assertTrue( t1 == t2 , "equal type test" )
           self.assertTrue( t1 == self.tobj.transportAny( t1 ), "type roundtrip test" )
@@ -320,13 +320,13 @@ class TestCase( unittest.TestCase):
           self.assertRaises( IllegalArgumentException, self.tobj.transportAny, 42, 43 )
           self.assertRaises( IllegalArgumentException, self.tobj.transportAny )
           self.assertRaises( RuntimeException, uno.getClass, "a.b" )
-          self.assertRaises( RuntimeException, uno.getClass, "com.sun.star.uno.TypeClass" )
+          self.assertRaises( RuntimeException, uno.getClass, "cpo.uno.TypeClass" )
 
           self.assertRaises( RuntimeException, uno.Enum,  "a" , "b" )
-          self.assertRaises( RuntimeException, uno.Enum, "com.sun.star.uno.TypeClass" , "b" )
+          self.assertRaises( RuntimeException, uno.Enum, "cpo.uno.TypeClass" , "b" )
           self.assertRaises( RuntimeException, uno.Enum, "com.sun.star.uno.XInterface" , "b" )
 
-          tcInterface =uno.Enum( "com.sun.star.uno.TypeClass" , "INTERFACE" )
+          tcInterface =uno.Enum( "cpo.uno.TypeClass" , "INTERFACE" )
           self.assertRaises( RuntimeException, uno.Type, "a", tcInterface )
           self.assertRaises( RuntimeException, uno.Type, "com.sun.star.uno.Exception", tcInterface )
 

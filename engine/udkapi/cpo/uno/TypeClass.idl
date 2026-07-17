@@ -19,7 +19,7 @@
 
 
 
- module com {  module sun {  module star {  module uno {
+module cpo { module uno {
 
 
 /** This enum describes all type classes of UNO.  Every specific type has a type
@@ -136,6 +136,6 @@ published enum TypeClass
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

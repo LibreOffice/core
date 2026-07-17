@@ -52,7 +52,7 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.IBridge;
 import com.sun.star.uno.IEnvironment;
 import cpo.uno.Type;
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 

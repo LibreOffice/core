@@ -659,7 +659,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     if( ! aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() ||
                         aScale.IncrementData.SubIncrements[0].IntervalCount != aValue )
                     {
-                        OSL_ASSERT( aValue.getValueTypeClass() == uno::TypeClass_LONG );
+                        OSL_ASSERT( aValue.getValueTypeClass() == cpo::uno::TypeClass_LONG );
                         aScale.IncrementData.SubIncrements.getArray()[0].IntervalCount = aValue;
                         bSetScale = true;
                     }

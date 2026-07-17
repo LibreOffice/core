@@ -357,7 +357,7 @@
 #include <memory>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
@@ -431,7 +431,7 @@ void Test::testBigStruct() {
     CPPUNIT_ASSERT_EQUAL(0.0, guard.p->m10);
     CPPUNIT_ASSERT_EQUAL( u'\0', guard.p->m11);
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), guard.p->m12.getLength());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(css::uno::TypeClass_VOID), static_cast<sal_Int32>(guard.p->m13.getTypeClass()));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(cpo::uno::TypeClass_VOID), static_cast<sal_Int32>(guard.p->m13.getTypeClass()));
     CPPUNIT_ASSERT_EQUAL(false, guard.p->m14.hasValue());
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), guard.p->m15.getLength());
     CPPUNIT_ASSERT_EQUAL(int(test::codemaker::cppumaker::HelperEnum_ZERO), static_cast<int>(guard.p->m16));

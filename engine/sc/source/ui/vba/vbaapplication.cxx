@@ -422,7 +422,7 @@ cpo::uno::Any SAL_CALL
 ScVbaApplication::Workbooks( const cpo::uno::Any& aIndex )
 {
     uno::Reference< XCollection > xWorkBooks( new ScVbaWorkbooks( this, mxContext ) );
-    if (  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
+    if (  aIndex.getValueTypeClass() == cpo::uno::TypeClass_VOID )
     {
         // void then somebody did Workbooks.something in vba
         return cpo::uno::Any( xWorkBooks );
@@ -564,7 +564,7 @@ cpo::uno::Any SAL_CALL
 ScVbaApplication::Windows( const cpo::uno::Any& aIndex  )
 {
     uno::Reference< excel::XWindows >  xWindows( new ScVbaWindows( this, mxContext ) );
-    if ( aIndex.getValueTypeClass() == uno::TypeClass_VOID )
+    if ( aIndex.getValueTypeClass() == cpo::uno::TypeClass_VOID )
         return cpo::uno::Any( xWindows );
     return xWindows->Item( aIndex, cpo::uno::Any() );
 }
@@ -603,7 +603,7 @@ ScVbaApplication::Names( const cpo::uno::Any& aIndex )
         u"NamedRanges"_ustr ), uno::UNO_QUERY_THROW );
 
     css::uno::Reference< excel::XNames > xNames ( new ScVbaNames( this , mxContext , xNamedRanges , xModel ) );
-    if (  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
+    if (  aIndex.getValueTypeClass() == cpo::uno::TypeClass_VOID )
     {
         return cpo::uno::Any( xNames );
     }

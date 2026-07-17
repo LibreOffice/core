@@ -23,7 +23,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -99,30 +99,30 @@ cpo::uno::Type const & mapType(Type type) {
 
 Type getDynamicType(cpo::uno::Any const & value) {
     switch (value.getValueTypeClass()) {
-    case css::uno::TypeClass_VOID:
+    case cpo::uno::TypeClass_VOID:
         return TYPE_NIL;
-    case css::uno::TypeClass_BOOLEAN:
+    case cpo::uno::TypeClass_BOOLEAN:
         return TYPE_BOOLEAN;
-    case css::uno::TypeClass_BYTE:
+    case cpo::uno::TypeClass_BYTE:
         return TYPE_SHORT;
-    case css::uno::TypeClass_SHORT:
+    case cpo::uno::TypeClass_SHORT:
         return TYPE_SHORT;
-    case css::uno::TypeClass_UNSIGNED_SHORT:
+    case cpo::uno::TypeClass_UNSIGNED_SHORT:
         return value.has< sal_Int16 >() ? TYPE_SHORT : TYPE_INT;
-    case css::uno::TypeClass_LONG:
+    case cpo::uno::TypeClass_LONG:
         return TYPE_INT;
-    case css::uno::TypeClass_UNSIGNED_LONG:
+    case cpo::uno::TypeClass_UNSIGNED_LONG:
         return value.has< sal_Int32 >() ? TYPE_INT : TYPE_LONG;
-    case css::uno::TypeClass_HYPER:
+    case cpo::uno::TypeClass_HYPER:
         return TYPE_LONG;
-    case css::uno::TypeClass_UNSIGNED_HYPER:
+    case cpo::uno::TypeClass_UNSIGNED_HYPER:
         return value.has< sal_Int64 >() ? TYPE_LONG : TYPE_ERROR;
-    case css::uno::TypeClass_FLOAT:
-    case css::uno::TypeClass_DOUBLE:
+    case cpo::uno::TypeClass_FLOAT:
+    case cpo::uno::TypeClass_DOUBLE:
         return TYPE_DOUBLE;
-    case css::uno::TypeClass_STRING:
+    case cpo::uno::TypeClass_STRING:
         return TYPE_STRING;
-    case css::uno::TypeClass_SEQUENCE: //TODO
+    case cpo::uno::TypeClass_SEQUENCE: //TODO
         {
             OUString name(value.getValueTypeName());
             if ( name == "[]byte" ) {

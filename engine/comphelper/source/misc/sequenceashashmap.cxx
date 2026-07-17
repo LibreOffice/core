@@ -53,7 +53,7 @@ cpo::uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
               ->forName(OUString::fromUtf8(aType));
     if (xIdlClass.is())
     {
-        uno::TypeClass aTypeClass = xIdlClass->getTypeClass();
+        cpo::uno::TypeClass aTypeClass = xIdlClass->getTypeClass();
         xIdlClass->createObject(aAny);
         aFields = xIdlClass->getFields();
         nFields = aFields.getLength();
@@ -73,25 +73,25 @@ cpo::uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
         }
         else if (!aValueStr.empty())
         {
-            if (aTypeClass == uno::TypeClass_VOID)
+            if (aTypeClass == cpo::uno::TypeClass_VOID)
                 aAny.clear();
-            else if (aTypeClass == uno::TypeClass_BYTE)
+            else if (aTypeClass == cpo::uno::TypeClass_BYTE)
                 aAny <<= static_cast<sal_Int8>(o3tl::toInt32(aValueStr));
-            else if (aTypeClass == uno::TypeClass_BOOLEAN)
+            else if (aTypeClass == cpo::uno::TypeClass_BOOLEAN)
                 aAny <<= rtl_str_toBoolean(aValueStr.c_str());
-            else if (aTypeClass == uno::TypeClass_SHORT)
+            else if (aTypeClass == cpo::uno::TypeClass_SHORT)
                 aAny <<= static_cast<sal_Int16>(o3tl::toInt32(aValueStr));
-            else if (aTypeClass == uno::TypeClass_UNSIGNED_SHORT)
+            else if (aTypeClass == cpo::uno::TypeClass_UNSIGNED_SHORT)
                 aAny <<= static_cast<sal_uInt16>(o3tl::toUInt32(aValueStr));
-            else if (aTypeClass == uno::TypeClass_LONG)
+            else if (aTypeClass == cpo::uno::TypeClass_LONG)
                 aAny <<= o3tl::toInt32(aValueStr);
-            else if (aTypeClass == uno::TypeClass_UNSIGNED_LONG)
+            else if (aTypeClass == cpo::uno::TypeClass_UNSIGNED_LONG)
                 aAny <<= static_cast<sal_uInt32>(o3tl::toInt32(aValueStr));
-            else if (aTypeClass == uno::TypeClass_FLOAT)
+            else if (aTypeClass == cpo::uno::TypeClass_FLOAT)
                 aAny <<= rtl_str_toFloat(aValueStr.c_str());
-            else if (aTypeClass == uno::TypeClass_DOUBLE)
+            else if (aTypeClass == cpo::uno::TypeClass_DOUBLE)
                 aAny <<= o3tl::toDouble(aValueStr);
-            else if (aTypeClass == uno::TypeClass_STRING)
+            else if (aTypeClass == cpo::uno::TypeClass_STRING)
                 aAny <<= OUString::fromUtf8(aValueStr);
         }
     }

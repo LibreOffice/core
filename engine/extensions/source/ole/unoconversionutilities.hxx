@@ -96,7 +96,7 @@ extern std::unordered_map<sal_uIntPtr, cpo::uno::WeakReference<css::uno::XInterf
 
 inline void reduceRange( cpo::uno::Any& any)
 {
-    OSL_ASSERT( any.getValueTypeClass() == css::uno::TypeClass_LONG);
+    OSL_ASSERT( any.getValueTypeClass() == cpo::uno::TypeClass_LONG);
 
     sal_Int32 value= *o3tl::doAccess<sal_Int32>(any);
     if( value <= 0x7f &&  value >= -0x80)
@@ -193,7 +193,7 @@ public:
     cpo::uno::Sequence<cpo::uno::Any> createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type, const cpo::uno::Type& unotype= cpo::uno::Type());
 
 
-    VARTYPE mapTypeClassToVartype( css::uno::TypeClass type);
+    VARTYPE mapTypeClassToVartype( cpo::uno::TypeClass type);
     css::uno::Reference< css::lang::XSingleServiceFactory > getInvocationFactory(const cpo::uno::Any& anyObject);
 
 
@@ -302,7 +302,7 @@ css::uno::Reference< css::lang::XSingleServiceFactory > UnoConversionUtilities<T
 {
     css::uno::Reference< css::lang::XSingleServiceFactory > retVal;
     osl::MutexGuard guard( getBridgeMutex());
-    if( anyObject.getValueTypeClass() != css::uno::TypeClass_STRUCT &&
+    if( anyObject.getValueTypeClass() != cpo::uno::TypeClass_STRUCT &&
         m_smgrRemote.is() )
     {
         if(  ! m_xInvocationFactoryRemote.is() )
@@ -346,7 +346,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
             // type in JavaScript and the script engine determines the type being used.
             switch( ptype.getTypeClass())
             {
-            case css::uno::TypeClass_CHAR: // could be: new Array( 12, 'w', "w")
+            case cpo::uno::TypeClass_CHAR: // could be: new Array( 12, 'w', "w")
                 if( var.vt == VT_BSTR)
                 {
                     if(SUCCEEDED( hr= VariantChangeType( &var, &var, 0, VT_BSTR)))
@@ -366,13 +366,13 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                         bFail = true;
                 }
                 break;
-            case css::uno::TypeClass_INTERFACE: // could also be an IUnknown
-            case css::uno::TypeClass_STRUCT:
+            case cpo::uno::TypeClass_INTERFACE: // could also be an IUnknown
+            case cpo::uno::TypeClass_STRUCT:
             {
                 rAny = createOleObjectWrapper( & var, ptype);
                 break;
             }
-            case css::uno::TypeClass_ENUM:
+            case cpo::uno::TypeClass_ENUM:
                 if(SUCCEEDED(hr = VariantChangeType( & var, &var, 0, VT_I4)))
                     rAny.setValue(& var.lVal, ptype);
                 else if (hr == DISP_E_TYPEMISMATCH)
@@ -380,7 +380,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                 else
                     bFail = true;
                 break;
-            case css::uno::TypeClass_SEQUENCE:
+            case cpo::uno::TypeClass_SEQUENCE:
                 // There are different ways of receiving a sequence:
                 // 1: JScript, VARTYPE: VT_DISPATCH
                 // 2. VBScript simple arraysVT_VARIANT|VT_BYREF the referenced VARIANT contains
@@ -423,10 +423,10 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                     }
                 }
                 break;
-            case css::uno::TypeClass_VOID:
+            case cpo::uno::TypeClass_VOID:
                 rAny.setValue(nullptr,cpo::uno::Type());
                 break;
-            case css::uno::TypeClass_ANY:     //  Any
+            case cpo::uno::TypeClass_ANY:     //  Any
                 // There could be a JScript Array that needs special handling
                 // If an cpo::uno::Any is expected and this cpo::uno::Any must contain a Sequence
                 // then we cannot figure out what element type is required.
@@ -460,7 +460,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                     variantToAny( & var, rAny);
                 }
                 break;
-            case css::uno::TypeClass_BOOLEAN:         // VARIANT could be VARIANT_BOOL or other
+            case cpo::uno::TypeClass_BOOLEAN:         // VARIANT could be VARIANT_BOOL or other
                 if(SUCCEEDED(hr = VariantChangeType( & var, &var, 0, VT_BOOL)))
                     variantToAny( & var, rAny);
                 else if (hr == DISP_E_TYPEMISMATCH)
@@ -468,7 +468,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                 else
                     bFail = true;
                 break;
-            case css::uno::TypeClass_STRING:      // UString
+            case cpo::uno::TypeClass_STRING:      // UString
                 if(var.vt == VT_NULL)
                     var = CComBSTR("");
                 if(SUCCEEDED(hr = VariantChangeType( & var, &var, 0, VT_BSTR)))
@@ -478,7 +478,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                 else
                     bFail = true;
                 break;
-            case css::uno::TypeClass_FLOAT:       // float
+            case cpo::uno::TypeClass_FLOAT:       // float
                 if(SUCCEEDED(hr = VariantChangeType( & var, &var, 0, VT_R4)))
                     variantToAny( & var, rAny);
                 else if (hr == DISP_E_TYPEMISMATCH)
@@ -486,7 +486,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                 else
                     bFail = true;
                 break;
-            case css::uno::TypeClass_DOUBLE:      // double
+            case cpo::uno::TypeClass_DOUBLE:      // double
             if(SUCCEEDED(hr = VariantChangeType( & var, &var, 0, VT_R8)))
                 variantToAny(& var, rAny);
             else if (hr == DISP_E_TYPEMISMATCH)
@@ -494,7 +494,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
             else
                 bFail = true;
             break;
-            case css::uno::TypeClass_BYTE:            // BYTE
+            case cpo::uno::TypeClass_BYTE:            // BYTE
                 if(SUCCEEDED(hr = VariantChangeType( & var, &var, 0, VT_I1)))
                     variantToAny( & var, rAny);
                 else if (hr == DISP_E_TYPEMISMATCH)
@@ -502,7 +502,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                 else
                     bFail = true;
                 break;
-            case css::uno::TypeClass_SHORT:       // INT16
+            case cpo::uno::TypeClass_SHORT:       // INT16
                 if(SUCCEEDED(hr = VariantChangeType( & var, &var, 0, VT_I2)))
                     variantToAny( & var, rAny);
                 else if (hr == DISP_E_TYPEMISMATCH)
@@ -510,7 +510,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                 else
                     bFail = true;
                 break;
-            case css::uno::TypeClass_LONG:
+            case cpo::uno::TypeClass_LONG:
                 if(SUCCEEDED(hr = VariantChangeType(& var, &var, 0, VT_I4)))
                     variantToAny( & var, rAny, bReduceValueRange);
                 else if (hr == DISP_E_TYPEMISMATCH)
@@ -518,7 +518,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                 else
                     bFail = true;
                 break;
-            case css::uno::TypeClass_HYPER:
+            case cpo::uno::TypeClass_HYPER:
                 if(SUCCEEDED(hr = VariantChangeType(& var, &var, 0, VT_DECIMAL)))
                 {
                     if (var.decVal.Lo64 > SAL_CONST_UINT64(0x8000000000000000)
@@ -538,7 +538,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                 else
                     bFail = true;
                 break;
-            case css::uno::TypeClass_UNSIGNED_SHORT:  // UINT16
+            case cpo::uno::TypeClass_UNSIGNED_SHORT:  // UINT16
                 if(SUCCEEDED(hr = VariantChangeType( & var, &var, 0, VT_UI2)))
                     variantToAny( & var, rAny);
                 else if (hr == DISP_E_TYPEMISMATCH)
@@ -546,7 +546,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                 else
                     bFail = true;
                 break;
-            case css::uno::TypeClass_UNSIGNED_LONG:
+            case cpo::uno::TypeClass_UNSIGNED_LONG:
                 if(SUCCEEDED(hr = VariantChangeType( & var, &var, 0, VT_UI4)))
                     variantToAny( & var, rAny, bReduceValueRange);
                 else if (hr == DISP_E_TYPEMISMATCH)
@@ -554,7 +554,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                 else
                     bFail = true;
                 break;
-            case css::uno::TypeClass_UNSIGNED_HYPER:
+            case cpo::uno::TypeClass_UNSIGNED_HYPER:
                 if(SUCCEEDED(hr = VariantChangeType(& var, &var, 0, VT_DECIMAL)))
                 {
                     if (var.decVal.Hi32 > 0 || var.decVal.scale > 0)
@@ -569,7 +569,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                 else
                     bFail = true;
                 break;
-            case css::uno::TypeClass_TYPE:
+            case cpo::uno::TypeClass_TYPE:
                 if(SUCCEEDED(hr = VariantChangeType(& var, &var, 0, VT_UNKNOWN)))
                     variantToAny( & var, rAny);
                 else if (hr == DISP_E_TYPEMISMATCH)
@@ -589,7 +589,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                 OUString::number(static_cast<sal_Int32>(var.vt)) +
                 "\"  to the expected UNO type of type class: " +
                 OUString::number(static_cast<sal_Int32>(ptype.getTypeClass())),
-                nullptr, css::uno::TypeClass_UNKNOWN, css::script::FailReason::TYPE_NOT_SUPPORTED,0);
+                nullptr, cpo::uno::TypeClass_UNKNOWN, css::script::FailReason::TYPE_NOT_SUPPORTED,0);
 
         if (bFail)
             throw css::lang::IllegalArgumentException(
@@ -663,7 +663,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
                         rAny.getValueTypeName() +
                         "\"  to the expected Automation type of VARTYPE: " +
                         OUString::number(static_cast<sal_Int32>(type)),
-                        nullptr, css::uno::TypeClass_UNKNOWN, css::script::FailReason::TYPE_NOT_SUPPORTED,0);
+                        nullptr, cpo::uno::TypeClass_UNKNOWN, css::script::FailReason::TYPE_NOT_SUPPORTED,0);
 
                 throw BridgeRuntimeError(
                     "[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
@@ -715,7 +715,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
         bool bIllegal = false;
         switch (rAny.getValueTypeClass())
         {
-        case css::uno::TypeClass_INTERFACE:
+        case cpo::uno::TypeClass_INTERFACE:
         {
             css::uno::Reference<css::uno::XInterface> xInt;
             if (rAny >>= xInt)
@@ -728,7 +728,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             }
             break;
         }
-        case css::uno::TypeClass_STRUCT:
+        case cpo::uno::TypeClass_STRUCT:
         {
             if (rAny.getValueType() == cppu::UnoType<css::bridge::oleautomation::Date>::get() )
             {
@@ -792,7 +792,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             }
             break;
         }
-        case css::uno::TypeClass_SEQUENCE:        // sequence ??? SafeArray descriptor
+        case cpo::uno::TypeClass_SEQUENCE:        // sequence ??? SafeArray descriptor
         {
             SAFEARRAY* pArray = createUnoSequenceWrapper(rAny);
             if (pArray)
@@ -806,7 +806,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             }
             break;
         }
-        case css::uno::TypeClass_VOID:
+        case cpo::uno::TypeClass_VOID:
         {
             HRESULT hr = S_OK;
             if (FAILED(hr = VariantClear(pVariant)))
@@ -817,7 +817,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             }
             break;
         }
-        case css::uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
         {
             bool value;
             if (rAny >>= value)
@@ -831,7 +831,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             }
             break;
         }
-        case css::uno::TypeClass_CHAR:
+        case cpo::uno::TypeClass_CHAR:
         {
             // Because VT_UI2 does not conform to oleautomation we convert into VT_I2 instead
             sal_uInt16 value = *o3tl::forceAccess<sal_Unicode>(rAny);
@@ -839,7 +839,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             pVariant->iVal = value;
             break;
         }
-        case css::uno::TypeClass_STRING:
+        case cpo::uno::TypeClass_STRING:
         {
             OUString value;
             if (rAny >>= value)
@@ -853,7 +853,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             }
             break;
         }
-        case css::uno::TypeClass_FLOAT:
+        case cpo::uno::TypeClass_FLOAT:
         {
             float value;
             if (rAny >>= value)
@@ -867,7 +867,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             }
             break;
         }
-        case css::uno::TypeClass_DOUBLE:
+        case cpo::uno::TypeClass_DOUBLE:
         {
             double value;
             if (rAny >>= value)
@@ -881,7 +881,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             }
             break;
         }
-        case css::uno::TypeClass_BYTE:
+        case cpo::uno::TypeClass_BYTE:
         {
             // ole automation does not know a signed char but only unsigned char
             sal_Int8 value;
@@ -896,8 +896,8 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             }
             break;
         }
-        case css::uno::TypeClass_SHORT:       // INT16
-        case css::uno::TypeClass_UNSIGNED_SHORT:  // UINT16
+        case cpo::uno::TypeClass_SHORT:       // INT16
+        case cpo::uno::TypeClass_UNSIGNED_SHORT:  // UINT16
         {
             sal_Int16 value;
             if (rAny >>= value)
@@ -911,15 +911,15 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             }
             break;
         }
-        case css::uno::TypeClass_ENUM:
+        case cpo::uno::TypeClass_ENUM:
         {
             sal_Int32 value = *static_cast<sal_Int32 const *>(rAny.getValue());
             pVariant->vt = VT_I4;
             pVariant->lVal= value;
             break;
         }
-        case css::uno::TypeClass_LONG:
-        case css::uno::TypeClass_UNSIGNED_LONG:
+        case cpo::uno::TypeClass_LONG:
+        case cpo::uno::TypeClass_UNSIGNED_LONG:
         {
             sal_Int32 value;
             if (rAny >>= value)
@@ -933,7 +933,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             }
             break;
         }
-        case css::uno::TypeClass_HYPER:
+        case cpo::uno::TypeClass_HYPER:
         {
 
             pVariant->vt = VT_DECIMAL;
@@ -950,7 +950,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             pVariant->decVal.Lo64 = value;
             break;
         }
-        case css::uno::TypeClass_UNSIGNED_HYPER:
+        case cpo::uno::TypeClass_UNSIGNED_HYPER:
         {
             pVariant->vt = VT_DECIMAL;
             pVariant->decVal.scale = 0;
@@ -962,7 +962,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             pVariant->decVal.Lo64 = value;
             break;
         }
-        case css::uno::TypeClass_TYPE:
+        case cpo::uno::TypeClass_TYPE:
         {
             cpo::uno::Type type;
             rAny >>= type;
@@ -1039,7 +1039,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
 template<class T>
 SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const cpo::uno::Any& rSeq, VARTYPE elemtype)
 {
-    if (rSeq.getValueTypeClass() != css::uno::TypeClass_SEQUENCE)
+    if (rSeq.getValueTypeClass() != cpo::uno::TypeClass_SEQUENCE)
         throw css::lang::IllegalArgumentException(
                   "[automation bridge]UnoConversionUtilities<T>::createUnoSequenceWrapper \n"
                   "The any does not contain a sequence!", nullptr, 0);
@@ -1309,7 +1309,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const cpo::uno::
     SAFEARRAY* pArray = nullptr;
     sal_uInt32 n = 0;
 
-    if( rSeq.getValueTypeClass() != css::uno::TypeClass_SEQUENCE )
+    if( rSeq.getValueTypeClass() != cpo::uno::TypeClass_SEQUENCE )
         throw css::lang::IllegalArgumentException(
                   "[automation bridge]UnoConversionUtilities<T>::createUnoSequenceWrapper\n"
                   "The UNO argument is not a sequence", nullptr, -1);
@@ -1373,14 +1373,14 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const cpo::uno::Any & rOb
 
     css::uno::Reference<css::uno::XInterface> xInt;
 
-    css::uno::TypeClass tc = rObj.getValueTypeClass();
-    if (tc != css::uno::TypeClass_INTERFACE && tc != css::uno::TypeClass_STRUCT)
+    cpo::uno::TypeClass tc = rObj.getValueTypeClass();
+    if (tc != cpo::uno::TypeClass_INTERFACE && tc != cpo::uno::TypeClass_STRUCT)
         throw css::lang::IllegalArgumentException(
                   "[automation bridge]UnoConversionUtilities<T>::createUnoObjectWrapper \n"
                   "Cannot create an Automation interface for a UNO type which is not "
                   "a struct or interface!", nullptr, -1);
 
-    if (rObj.getValueTypeClass() == css::uno::TypeClass_INTERFACE)
+    if (rObj.getValueTypeClass() == cpo::uno::TypeClass_INTERFACE)
     {
         if (! (rObj >>= xInt))
             throw css::lang::IllegalArgumentException(
@@ -1560,7 +1560,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, cpo::uno:
                                       OUString::Concat("[automation bridge]UnoConversionUtilities<T>::variantToAny \n"
                                       "A UNO type with the name: ") + o3tl::toU(LPCOLESTR(sName)) +
                                 "does not exist!",
-                                nullptr, css::uno::TypeClass_UNKNOWN, css::script::FailReason::TYPE_NOT_SUPPORTED,0);
+                                nullptr, cpo::uno::TypeClass_UNKNOWN, css::script::FailReason::TYPE_NOT_SUPPORTED,0);
                         }
                         rAny <<= type;
                     }
@@ -1722,9 +1722,9 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
     if (spUnknown == nullptr)
     {
         css::uno::Reference<css::uno::XInterface> xInt;
-        if( aType.getTypeClass() == css::uno::TypeClass_INTERFACE)
+        if( aType.getTypeClass() == cpo::uno::TypeClass_INTERFACE)
             ret.setValue( &xInt, aType);
-        else if( aType.getTypeClass() == css::uno::TypeClass_STRUCT)
+        else if( aType.getTypeClass() == cpo::uno::TypeClass_STRUCT)
             ret.setValue( nullptr, aType);
         else
             ret <<= xInt;
@@ -2064,7 +2064,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
                 else
                 {
                     // type after conversion must be the element type of the sequence
-                    OSL_ENSURE(any.getValueTypeClass() == css::uno::TypeClass(typeElement), "wrong conversion");
+                    OSL_ENSURE(any.getValueTypeClass() == cpo::uno::TypeClass(typeElement), "wrong conversion");
                     uno_type_assignData( pDest, pSeqElemDescRef,const_cast<void*>( any.getValue()), any.getValueTypeRef(),
                                          cpo::uno::cpp_queryInterface, cpo::uno::cpp_acquire, cpo::uno::cpp_release);
                 }
@@ -2185,7 +2185,7 @@ cpo::uno::Sequence<cpo::uno::Any> UnoConversionUtilities<T>::createOleArrayWrapp
                     break;
             }
 
-            if( unotype.getTypeClass() == css::uno::TypeClass_VOID)
+            if( unotype.getTypeClass() == cpo::uno::TypeClass_VOID)
                 // the function was called without specifying the destination type
                 variantToAny(&variant, pUnoArray[index[actDim - 1] - lBound], false);
             else
@@ -2202,9 +2202,9 @@ template<class T>
 cpo::uno::Type UnoConversionUtilities<T>::getElementTypeOfSequence( const cpo::uno::Type& seqType)
 {
     cpo::uno::Type retValue;
-    if( seqType.getTypeClass() != css::uno::TypeClass_VOID)
+    if( seqType.getTypeClass() != cpo::uno::TypeClass_VOID)
     {
-        OSL_ASSERT( seqType.getTypeClass() == css::uno::TypeClass_SEQUENCE);
+        OSL_ASSERT( seqType.getTypeClass() == cpo::uno::TypeClass_SEQUENCE);
         typelib_TypeDescription* pDescSeq= nullptr;
         seqType.getDescription(& pDescSeq);
         retValue = cpo::uno::Type(reinterpret_cast<typelib_IndirectTypeDescription *>(pDescSeq)->pType);
@@ -2262,40 +2262,40 @@ bool UnoConversionUtilities<T>::isJScriptArray(const VARIANT* rvar)
 }
 
 template<class T>
-VARTYPE UnoConversionUtilities<T>::mapTypeClassToVartype( css::uno::TypeClass type)
+VARTYPE UnoConversionUtilities<T>::mapTypeClassToVartype( cpo::uno::TypeClass type)
 {
     VARTYPE ret;
     switch( type)
     {
-    case css::uno::TypeClass_INTERFACE: ret= VT_DISPATCH;
+    case cpo::uno::TypeClass_INTERFACE: ret= VT_DISPATCH;
         break;
-    case css::uno::TypeClass_STRUCT: ret= VT_DISPATCH;
+    case cpo::uno::TypeClass_STRUCT: ret= VT_DISPATCH;
         break;
-    case css::uno::TypeClass_ENUM: ret= VT_I4;
+    case cpo::uno::TypeClass_ENUM: ret= VT_I4;
         break;
-    case css::uno::TypeClass_SEQUENCE: ret= VT_ARRAY;
+    case cpo::uno::TypeClass_SEQUENCE: ret= VT_ARRAY;
         break;
-    case css::uno::TypeClass_ANY: ret= VT_VARIANT;
+    case cpo::uno::TypeClass_ANY: ret= VT_VARIANT;
         break;
-    case css::uno::TypeClass_BOOLEAN: ret= VT_BOOL;
+    case cpo::uno::TypeClass_BOOLEAN: ret= VT_BOOL;
         break;
-    case css::uno::TypeClass_CHAR: ret= VT_I2;
+    case cpo::uno::TypeClass_CHAR: ret= VT_I2;
         break;
-    case css::uno::TypeClass_STRING: ret= VT_BSTR;
+    case cpo::uno::TypeClass_STRING: ret= VT_BSTR;
         break;
-    case css::uno::TypeClass_FLOAT: ret= VT_R4;
+    case cpo::uno::TypeClass_FLOAT: ret= VT_R4;
         break;
-    case css::uno::TypeClass_DOUBLE: ret= VT_R8;
+    case cpo::uno::TypeClass_DOUBLE: ret= VT_R8;
         break;
-    case css::uno::TypeClass_BYTE: ret= VT_UI1;
+    case cpo::uno::TypeClass_BYTE: ret= VT_UI1;
         break;
-    case css::uno::TypeClass_SHORT: ret= VT_I2;
+    case cpo::uno::TypeClass_SHORT: ret= VT_I2;
         break;
-    case css::uno::TypeClass_LONG: ret= VT_I4;
+    case cpo::uno::TypeClass_LONG: ret= VT_I4;
         break;
-    case css::uno::TypeClass_UNSIGNED_SHORT: ret= VT_UI2;
+    case cpo::uno::TypeClass_UNSIGNED_SHORT: ret= VT_UI2;
          break;
-    case css::uno::TypeClass_UNSIGNED_LONG: ret= VT_UI4;
+    case cpo::uno::TypeClass_UNSIGNED_LONG: ret= VT_UI4;
         break;
     default:
         ret= VT_EMPTY;
@@ -2331,7 +2331,7 @@ cpo::uno::Sequence<cpo::uno::Type> UnoConversionUtilities<T>::getImplementedInte
                 {
                     OUString typeName;
                     seqAny[i] >>= typeName;
-                    pseqTypes[i]= cpo::uno::Type( css::uno::TypeClass_INTERFACE, typeName);
+                    pseqTypes[i]= cpo::uno::Type( cpo::uno::TypeClass_INTERFACE, typeName);
                 }
             }
         }

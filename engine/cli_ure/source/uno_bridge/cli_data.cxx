@@ -324,7 +324,7 @@ typelib_TypeDescriptionReference* mapCliType(System::Type^ cliType)
     if (cliType->IsEnum)
     {
         OUString usTypeName= mapCliTypeName(cliType->FullName);
-        cpo::uno::Type unoType(css::uno::TypeClass_ENUM, usTypeName);
+        cpo::uno::Type unoType(cpo::uno::TypeClass_ENUM, usTypeName);
         retVal= unoType.getTypeLibType();
         typelib_typedescriptionreference_acquire(retVal);
     }
@@ -859,38 +859,38 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
             {
                 switch (value_td.getTypeClass())
                 {
-                case css::uno::TypeClass_VOID:
+                case cpo::uno::TypeClass_VOID:
                     pAny->pData = &pAny->pReserved;
                     break;
-                case css::uno::TypeClass_CHAR:
+                case cpo::uno::TypeClass_CHAR:
                     pAny->pData = &pAny->pReserved;
                     *(sal_Unicode*) &pAny->pReserved = *safe_cast<System::Char^>(aAny.Value);
                     break;
-                case css::uno::TypeClass_BOOLEAN:
+                case cpo::uno::TypeClass_BOOLEAN:
                     pAny->pData = &pAny->pReserved;
                     *(bool *) &pAny->pReserved = *safe_cast<System::Boolean^>(aAny.Value);
                     break;
-                case css::uno::TypeClass_BYTE:
+                case cpo::uno::TypeClass_BYTE:
                     pAny->pData = &pAny->pReserved;
                     *(sal_Int8*) &pAny->pReserved =  *safe_cast<System::Byte^>(aAny.Value);
                     break;
-                case css::uno::TypeClass_SHORT:
+                case cpo::uno::TypeClass_SHORT:
                     pAny->pData = &pAny->pReserved;
                     *(sal_Int16*) &pAny->pReserved =  *safe_cast<System::Int16^>(aAny.Value);
                     break;
-                case css::uno::TypeClass_UNSIGNED_SHORT:
+                case cpo::uno::TypeClass_UNSIGNED_SHORT:
                     pAny->pData = &pAny->pReserved;
                     *(sal_uInt16*) &pAny->pReserved =  *safe_cast<System::UInt16^>(aAny.Value);
                     break;
-                case css::uno::TypeClass_LONG:
+                case cpo::uno::TypeClass_LONG:
                     pAny->pData = &pAny->pReserved;
                     *(sal_Int32*) &pAny->pReserved =  *safe_cast<System::Int32^>(aAny.Value);
                     break;
-                case css::uno::TypeClass_UNSIGNED_LONG:
+                case cpo::uno::TypeClass_UNSIGNED_LONG:
                     pAny->pData = &pAny->pReserved;
                     *(sal_uInt32*) &pAny->pReserved =  *safe_cast<System::UInt32^>(aAny.Value);
                     break;
-                case css::uno::TypeClass_HYPER:
+                case cpo::uno::TypeClass_HYPER:
                     if (sizeof (sal_Int64) <= sizeof (void *))
                     {
                         pAny->pData = &pAny->pReserved;
@@ -903,7 +903,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                         pAny->pData = mem.release();
                     }
                     break;
-                case css::uno::TypeClass_UNSIGNED_HYPER:
+                case cpo::uno::TypeClass_UNSIGNED_HYPER:
                     if (sizeof (sal_uInt64) <= sizeof (void *))
                     {
                         pAny->pData = &pAny->pReserved;
@@ -916,7 +916,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                         pAny->pData = mem.release();
                     }
                     break;
-                case css::uno::TypeClass_FLOAT:
+                case cpo::uno::TypeClass_FLOAT:
                     if (sizeof (float) <= sizeof (void *))
                     {
                         pAny->pData = &pAny->pReserved;
@@ -929,7 +929,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                         pAny->pData = mem.release();
                     }
                     break;
-                case css::uno::TypeClass_DOUBLE:
+                case cpo::uno::TypeClass_DOUBLE:
                     if (sizeof (double) <= sizeof (void *))
                     {
                         pAny->pData = &pAny->pReserved;
@@ -942,7 +942,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                         pAny->pData= mem.release();
                     }
                     break;
-                case css::uno::TypeClass_STRING: // anies often contain strings; copy string directly
+                case cpo::uno::TypeClass_STRING: // anies often contain strings; copy string directly
                 {
                     pAny->pData= &pAny->pReserved;
                     OUString _s = mapCliString(static_cast<System::String^>(aAny.Value));
@@ -950,18 +950,18 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     rtl_uString_acquire(_s.pData);
                     break;
                 }
-                case css::uno::TypeClass_TYPE:
-                case css::uno::TypeClass_ENUM:  //ToDo copy enum direct
-                case css::uno::TypeClass_SEQUENCE:
-                case css::uno::TypeClass_INTERFACE:
+                case cpo::uno::TypeClass_TYPE:
+                case cpo::uno::TypeClass_ENUM:  //ToDo copy enum direct
+                case cpo::uno::TypeClass_SEQUENCE:
+                case cpo::uno::TypeClass_INTERFACE:
                     pAny->pData = &pAny->pReserved;
                     pAny->pReserved = 0;
                     map_to_uno(
                         &pAny->pReserved, aAny.Value, value_td.getTypeLibType(),
                                                   false /* no assign */);
                     break;
-                case css::uno::TypeClass_STRUCT:
-                case css::uno::TypeClass_EXCEPTION:
+                case cpo::uno::TypeClass_STRUCT:
+                case cpo::uno::TypeClass_EXCEPTION:
                 {
                     cpo::uno::Type anyType(value_td);
                     typelib_TypeDescription* td= NULL;

@@ -80,7 +80,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
                 u"com.sun.star.uno.RuntimeException"_ustr, typeMgr, generated,
                 options);
             produce(
-                u"com.sun.star.uno.TypeClass"_ustr, typeMgr, generated, options);
+                u"cpo.uno.TypeClass"_ustr, typeMgr, generated, options);
             produce(
                 u"com.sun.star.uno.XInterface"_ustr, typeMgr, generated, options);
         }

@@ -32,7 +32,7 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.Enum;
 import com.sun.star.uno.IBridge;
 import cpo.uno.Type;
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 import com.sun.star.uno.XInterface;
 
 final class Marshal {

@@ -34,7 +34,7 @@ public:
     {
         std::set<OString> interfaceTypes; // UNO interface types (e.g., "com.sun.star.text.XText")
         std::set<OString> structTypes; // UNO struct types (e.g., "com.sun.star.beans.Property")
-        std::set<OString> enumTypes; // UNO enum types (e.g., "com.sun.star.uno.TypeClass")
+        std::set<OString> enumTypes; // UNO enum types (e.g., "cpo.uno.TypeClass")
         std::set<OString>
             constantGroupTypes; // UNO constant groups (e.g., "com.sun.star.awt.FontWeight")
         std::set<OString> namespaces; // Required namespaces (e.g., "com::sun::star::text")

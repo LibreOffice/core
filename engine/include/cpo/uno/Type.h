@@ -19,7 +19,7 @@
 #pragma once
 
 #include "typelib/typedescription.h"
-#include "com/sun/star/uno/TypeClass.hdl"
+#include "cpo/uno/TypeClass.hdl"
 #include "rtl/ustring.hxx"
 #include "rtl/alloc.h"
 
@@ -60,14 +60,14 @@ public:
         @param eTypeClass type class of type
         @param rTypeName name of type
     */
-    inline Type( css::uno::TypeClass eTypeClass, const ::rtl::OUString & rTypeName );
+    inline Type( cpo::uno::TypeClass eTypeClass, const ::rtl::OUString & rTypeName );
 
     /** Constructor: Type is constructed by given name and type class.
 
         @param eTypeClass type class of type
         @param pTypeName name of type
     */
-    inline Type( css::uno::TypeClass eTypeClass, const char * pTypeName );
+    inline Type( cpo::uno::TypeClass eTypeClass, const char * pTypeName );
 
     /** Constructor: Type is (copy) constructed by given C type description reference.
 
@@ -114,8 +114,8 @@ public:
 
         @return type class of set type
     */
-    css::uno::TypeClass SAL_CALL getTypeClass() const
-        { return static_cast<css::uno::TypeClass>(_pType->eTypeClass); }
+    cpo::uno::TypeClass SAL_CALL getTypeClass() const
+        { return static_cast<cpo::uno::TypeClass>(_pType->eTypeClass); }
 
     /** Gets the name of the set type.
 

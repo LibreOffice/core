@@ -175,8 +175,8 @@ namespace comphelper
     public:
         virtual bool isLess( cpo::uno::Any const & _lhs, cpo::uno::Any const & _rhs ) const override
         {
-            if  (   ( _lhs.getValueTypeClass() != css::uno::TypeClass_INTERFACE )
-                ||  ( _rhs.getValueTypeClass() != css::uno::TypeClass_INTERFACE )
+            if  (   ( _lhs.getValueTypeClass() != cpo::uno::TypeClass_INTERFACE )
+                ||  ( _rhs.getValueTypeClass() != cpo::uno::TypeClass_INTERFACE )
                 )
                 throw css::lang::IllegalArgumentException();
 

@@ -75,7 +75,7 @@ cpo::uno::Any WeakComponentImplHelperBase::queryInterface(cpo::uno::Type const& 
 
 static void checkInterface(cpo::uno::Type const& rType)
 {
-    if (css::uno::TypeClass_INTERFACE != rType.getTypeClass())
+    if (cpo::uno::TypeClass_INTERFACE != rType.getTypeClass())
     {
         OUString msg("querying for interface \"" + rType.getTypeName() + "\": no interface type!");
         SAL_WARN("cppuhelper", msg);
@@ -109,12 +109,12 @@ static cppu::type_entry* getTypeEntries(cppu::class_data* cd)
             {
                 cppu::type_entry* pEntry = &pEntries[n];
                 cpo::uno::Type const& rType = (*pEntry->m_type.getCppuType)(nullptr);
-                OSL_ENSURE(rType.getTypeClass() == css::uno::TypeClass_INTERFACE,
+                OSL_ENSURE(rType.getTypeClass() == cpo::uno::TypeClass_INTERFACE,
                            "### wrong helper init: expected interface!");
                 OSL_ENSURE(
                     !isXInterface(rType.getTypeLibType()),
                     "### want to implement XInterface: template argument is XInterface?!?!?!");
-                if (rType.getTypeClass() != css::uno::TypeClass_INTERFACE)
+                if (rType.getTypeClass() != cpo::uno::TypeClass_INTERFACE)
                 {
                     OUString msg("type \"" + rType.getTypeName() + "\" is no interface type!");
                     SAL_WARN("cppuhelper", msg);

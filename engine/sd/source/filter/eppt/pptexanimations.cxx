@@ -1100,10 +1100,10 @@ bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nP
     {
         switch( rAny.getValueTypeClass() )
         {
-            case css::uno::TypeClass_UNSIGNED_SHORT :
-            case css::uno::TypeClass_SHORT :
-            case css::uno::TypeClass_UNSIGNED_LONG :
-            case css::uno::TypeClass_LONG :
+            case cpo::uno::TypeClass_UNSIGNED_SHORT :
+            case cpo::uno::TypeClass_SHORT :
+            case cpo::uno::TypeClass_UNSIGNED_LONG :
+            case cpo::uno::TypeClass_LONG :
             {
                 sal_Int32 nVal = 0;
                 if ( rAny >>= nVal )
@@ -1114,7 +1114,7 @@ bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nP
             }
             break;
 
-            case css::uno::TypeClass_DOUBLE :
+            case cpo::uno::TypeClass_DOUBLE :
             {
                 double fVal = 0.0;
                 if ( rAny >>= fVal )
@@ -1124,7 +1124,7 @@ bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nP
                 }
             }
             break;
-            case css::uno::TypeClass_FLOAT :
+            case cpo::uno::TypeClass_FLOAT :
             {
                 float fVal = 0.0;
                 if ( rAny >>= fVal )
@@ -1142,7 +1142,7 @@ bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nP
                 }
             }
             break;
-            case css::uno::TypeClass_STRING :
+            case cpo::uno::TypeClass_STRING :
             {
                 OUString aStr;
                 if ( rAny >>= aStr )

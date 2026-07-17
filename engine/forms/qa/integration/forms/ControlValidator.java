@@ -35,7 +35,7 @@ public abstract class ControlValidator implements com.sun.star.form.validation.X
         try
         {
             return ( com.sun.star.uno.AnyConverter.getType(Value).getTypeClass()
-                     == com.sun.star.uno.TypeClass.VOID );
+                     == cpo.uno.TypeClass.VOID );
         }
         catch( java.lang.ClassCastException e )
         {

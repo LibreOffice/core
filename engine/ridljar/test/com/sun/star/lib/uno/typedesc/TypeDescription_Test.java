@@ -22,7 +22,7 @@ import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.uno.Any;
 import cpo.uno.Type;
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;
 import org.junit.Test;
@@ -87,7 +87,7 @@ public final class TypeDescription_Test {
             "string", "[Ljava.lang.String;", java.lang.String.class,
             TypeClass.STRING };
         Object[] typeClassData = new Object[] {
-            "com.sun.star.uno.TypeClass", "[Lcom.sun.star.uno.TypeClass;",
+            "cpo.uno.TypeClass", "[Lcpo.uno.TypeClass;",
             TypeClass.class, TypeClass.ENUM };
         Object[] interfaceData = new Object[] {
             "com.sun.star.uno.XInterface", "[Lcom.sun.star.uno.XInterface;",
@@ -107,7 +107,7 @@ public final class TypeDescription_Test {
                           TypeDescription.getTypeDescription("string"));
         emptyTypeSig.test("TypeSignature.test(TypeClass)", typeClassData,
                           TypeDescription.getTypeDescription(
-                              "com.sun.star.uno.TypeClass"));
+                              "cpo.uno.TypeClass"));
         exceptionTypeSig.test("TypeSignature.test(com.sun.star.uno.Exception)",
                               exceptionData,
                               TypeDescription.getTypeDescription(

@@ -35,7 +35,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/factory.hxx>
@@ -171,7 +171,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
         manager->getByHierarchicalName(
             OUString("[][]boolean")),
         css::uno::UNO_QUERY_THROW);
-    assertEqual(css::uno::TypeClass_SEQUENCE, sequence->getTypeClass());
+    assertEqual(cpo::uno::TypeClass_SEQUENCE, sequence->getTypeClass());
     assertEqual(
         OUString("[][]boolean"),
         sequence->getName());
@@ -184,7 +184,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
             OUString( "test.tdmanager.Struct<boolean,test.tdmanager.Struct<"
                     "any,com.sun.star.uno.XInterface>>")),
         css::uno::UNO_QUERY_THROW);
-    assertEqual(css::uno::TypeClass_STRUCT, structure->getTypeClass());
+    assertEqual(cpo::uno::TypeClass_STRUCT, structure->getTypeClass());
     assertEqual(
         OUString( "test.tdmanager.Struct<boolean,test.tdmanager.Struct<"
                 "any,com.sun.star.uno.XInterface>>"),
@@ -212,7 +212,7 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
             manager->getByHierarchicalName(
                 OUString( "com.sun.star.uno.XComponentContext::getValueByName")),
             css::uno::UNO_QUERY_THROW);
-    assertEqual(css::uno::TypeClass_INTERFACE_METHOD, method->getTypeClass());
+    assertEqual(cpo::uno::TypeClass_INTERFACE_METHOD, method->getTypeClass());
     assertEqual(
         OUString( "com.sun.star.uno.XComponentContext::getValueByName"),
         method->getName());

@@ -73,8 +73,8 @@ namespace svxform
     using ::com::sun::star::form::XGridColumnFactory;
     using ::com::sun::star::style::VerticalAlignment_MIDDLE;
     using ::com::sun::star::beans::Property;
-    using ::com::sun::star::uno::TypeClass_DOUBLE;
-    using ::com::sun::star::uno::TypeClass_LONG;
+    using ::cpo::uno::TypeClass_DOUBLE;
+    using ::cpo::uno::TypeClass_LONG;
     using ::com::sun::star::util::XNumberFormats;
     using ::com::sun::star::util::XNumberFormatTypes;
     using ::com::sun::star::lang::XServiceInfo;

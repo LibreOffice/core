@@ -325,7 +325,7 @@ bool ScRangeToSequence::FillMixedArray( cpo::uno::Any& rAny, const ScMatrix* pMa
 }
 
 bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
-        css::uno::TypeClass & o_eClass,
+        cpo::uno::TypeClass & o_eClass,
         const cpo::uno::Any & rAny )
 {
     bool bRet = false;
@@ -333,16 +333,16 @@ bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
     switch (o_eClass)
     {
         //TODO: extract integer values
-        case uno::TypeClass_ENUM:
-        case uno::TypeClass_BOOLEAN:
-        case uno::TypeClass_CHAR:
-        case uno::TypeClass_BYTE:
-        case uno::TypeClass_SHORT:
-        case uno::TypeClass_UNSIGNED_SHORT:
-        case uno::TypeClass_LONG:
-        case uno::TypeClass_UNSIGNED_LONG:
-        case uno::TypeClass_FLOAT:
-        case uno::TypeClass_DOUBLE:
+        case cpo::uno::TypeClass_ENUM:
+        case cpo::uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_CHAR:
+        case cpo::uno::TypeClass_BYTE:
+        case cpo::uno::TypeClass_SHORT:
+        case cpo::uno::TypeClass_UNSIGNED_SHORT:
+        case cpo::uno::TypeClass_LONG:
+        case cpo::uno::TypeClass_UNSIGNED_LONG:
+        case cpo::uno::TypeClass_FLOAT:
+        case cpo::uno::TypeClass_DOUBLE:
             rAny >>= o_fVal;
             bRet = true;
             break;
@@ -390,10 +390,10 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const cpo::uno::Any & rAny )
                 for (sal_Int32 nCol=0; nCol<nColCount; nCol++)
                 {
                     double fVal;
-                    uno::TypeClass eClass;
+                    cpo::uno::TypeClass eClass;
                     if (ScApiTypeConversion::ConvertAnyToDouble( fVal, eClass, pColArr[nCol]))
                     {
-                        if (eClass == uno::TypeClass_BOOLEAN)
+                        if (eClass == cpo::uno::TypeClass_BOOLEAN)
                             xMatrix->PutBoolean( fVal != 0.0,
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );

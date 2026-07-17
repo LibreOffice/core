@@ -3945,7 +3945,7 @@ static void ExportParameter( OUStringBuffer& rStrBuffer, const css::drawing::Enh
 {
     if ( !rStrBuffer.isEmpty() )
         rStrBuffer.append( ' ' );
-    if ( rParameter.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
+    if ( rParameter.Value.getValueTypeClass() == cpo::uno::TypeClass_DOUBLE )
     {
         double fNumber = 0.0;
         rParameter.Value >>= fNumber;
@@ -5075,7 +5075,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                     const css::drawing::EnhancedCustomShapeAdjustmentValue& rAdj = aAdjustmentValues[ i ];
                     if ( rAdj.State == beans::PropertyState_DIRECT_VALUE )
                     {
-                        if ( rAdj.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
+                        if ( rAdj.Value.getValueTypeClass() == cpo::uno::TypeClass_DOUBLE )
                         {
                             double fValue = 0.0;
                             rAdj.Value >>= fValue;

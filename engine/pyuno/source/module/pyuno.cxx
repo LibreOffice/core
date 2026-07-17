@@ -50,7 +50,7 @@ using com::sun::star::uno::XInterface;
 using cpo::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using cpo::uno::Type;
-using com::sun::star::uno::TypeClass;
+using cpo::uno::TypeClass;
 using com::sun::star::uno::TypeDescription;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Exception;
@@ -1502,8 +1502,8 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
 
             PyUNO *me = reinterpret_cast< PyUNO*> ( self );
             PyUNO *other = reinterpret_cast< PyUNO *> (that );
-            css::uno::TypeClass tcMe = me->members->wrappedObject.getValueTypeClass();
-            css::uno::TypeClass tcOther = other->members->wrappedObject.getValueTypeClass();
+            cpo::uno::TypeClass tcMe = me->members->wrappedObject.getValueTypeClass();
+            cpo::uno::TypeClass tcOther = other->members->wrappedObject.getValueTypeClass();
 
             if( tcMe == tcOther )
             {

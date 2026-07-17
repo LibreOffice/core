@@ -35,7 +35,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.util.HashSet;

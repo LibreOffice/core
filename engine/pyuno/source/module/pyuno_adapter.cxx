@@ -238,7 +238,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
             ret = runtime.pyObject2Any( pyRet );
 
             if( ret.hasValue() &&
-                ret.getValueTypeClass() == css::uno::TypeClass_SEQUENCE &&
+                ret.getValueTypeClass() == cpo::uno::TypeClass_SEQUENCE &&
                 aFunctionName != "getTypes" &&  // needed by introspection itself !
                 aFunctionName != "getImplementationId" ) // needed by introspection itself !
             {

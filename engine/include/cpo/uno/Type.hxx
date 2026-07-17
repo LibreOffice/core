@@ -37,13 +37,13 @@ inline Type::Type()
     ::typelib_typedescriptionreference_acquire( _pType );
 }
 
-inline Type::Type( css::uno::TypeClass eTypeClass, const ::rtl::OUString & rTypeName )
+inline Type::Type( cpo::uno::TypeClass eTypeClass, const ::rtl::OUString & rTypeName )
     : _pType( NULL )
 {
     ::typelib_typedescriptionreference_new( &_pType, static_cast<typelib_TypeClass>(eTypeClass), rTypeName.pData );
 }
 
-inline Type::Type( css::uno::TypeClass eTypeClass, const char * pTypeName )
+inline Type::Type( cpo::uno::TypeClass eTypeClass, const char * pTypeName )
     : _pType( NULL )
 {
     ::typelib_typedescriptionreference_newByAsciiName( &_pType, static_cast<typelib_TypeClass>(eTypeClass), pTypeName );

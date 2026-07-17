@@ -23,7 +23,7 @@ import com.sun.star.reflection.TypeDescriptionSearchDepth;
 import com.sun.star.reflection.XTypeDescription;
 import com.sun.star.reflection.XTypeDescriptionEnumeration;
 import com.sun.star.reflection.XTypeDescriptionEnumerationAccess;
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 
 /**
  * Testing <code>com.sun.star.reflection.XTypeDescriptionEnumerationAccess

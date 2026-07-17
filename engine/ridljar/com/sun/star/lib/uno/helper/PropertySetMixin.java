@@ -47,7 +47,7 @@ import com.sun.star.reflection.theCoreReflection;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import cpo.uno.Type;
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;

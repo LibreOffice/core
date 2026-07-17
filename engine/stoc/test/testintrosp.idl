@@ -131,12 +131,12 @@ interface XIntroTest: com::sun::star::uno::XInterface
 
     /** ...
     */
-    com::sun::star::uno::TypeClass getTypeClass( [in] short n );
+    cpo::uno::TypeClass getTypeClass( [in] short n );
 
 
     /** ...
     */
-    void setTypeClass( [in] com::sun::star::uno::TypeClass t,
+    void setTypeClass( [in] cpo::uno::TypeClass t,
              [in] double d1,
              [in] double d2 );
 

@@ -206,7 +206,7 @@
 #include <cpo/uno/Sequence.h>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>
-#include <com/sun/star/uno/TypeClass.hdl>
+#include <cpo/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/Date.hpp>

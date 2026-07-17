@@ -22,7 +22,7 @@
 
 #include <com/sun/star/reflection/XIdlField.hpp>
 #include <com/sun/star/reflection/XIdlField2.hpp>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 
 #include "base.hxx"
 
@@ -111,8 +111,8 @@ FieldAccessMode IdlCompFieldImpl::getAccessMode()
 
 Any IdlCompFieldImpl::get( const Any & rObj )
 {
-    if (rObj.getValueTypeClass() == css::uno::TypeClass_STRUCT ||
-        rObj.getValueTypeClass() == css::uno::TypeClass_EXCEPTION)
+    if (rObj.getValueTypeClass() == cpo::uno::TypeClass_STRUCT ||
+        rObj.getValueTypeClass() == cpo::uno::TypeClass_EXCEPTION)
     {
         typelib_TypeDescription * pObjTD = nullptr;
         TYPELIB_DANGER_GET( &pObjTD, rObj.getValueTypeRef() );
@@ -143,8 +143,8 @@ Any IdlCompFieldImpl::get( const Any & rObj )
 
 void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
 {
-    if (rObj.getValueTypeClass() == css::uno::TypeClass_STRUCT ||
-        rObj.getValueTypeClass() == css::uno::TypeClass_EXCEPTION)
+    if (rObj.getValueTypeClass() == cpo::uno::TypeClass_STRUCT ||
+        rObj.getValueTypeClass() == cpo::uno::TypeClass_EXCEPTION)
     {
         typelib_TypeDescription * pObjTD = nullptr;
         TYPELIB_DANGER_GET( &pObjTD, rObj.getValueTypeRef() );
@@ -176,8 +176,8 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
 
 void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
 {
-    if (rObj.getValueTypeClass() == css::uno::TypeClass_STRUCT ||
-        rObj.getValueTypeClass() == css::uno::TypeClass_EXCEPTION)
+    if (rObj.getValueTypeClass() == cpo::uno::TypeClass_STRUCT ||
+        rObj.getValueTypeClass() == cpo::uno::TypeClass_EXCEPTION)
     {
         typelib_TypeDescription * pObjTD = nullptr;
         TYPELIB_DANGER_GET( &pObjTD, rObj.getValueTypeRef() );

@@ -33,6 +33,7 @@ using namespace css::container;
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::reflection;
+using namespace cpo::uno;
 
 namespace
 {
@@ -195,8 +196,9 @@ void ImplGetMembersOfUnoType(SymbolInfoList& rMembers, const IdeSymbolInfo& rNod
             Reference<XIdlClass> xFieldType = xField->getType();
             if (xFieldType.is())
             {
-                TypeClass eTypeClass = xFieldType->getTypeClass();
-                if (eTypeClass == TypeClass_STRUCT || eTypeClass == TypeClass_INTERFACE)
+                cpo::uno::TypeClass eTypeClass = xFieldType->getTypeClass();
+                if (eTypeClass == cpo::uno::TypeClass_STRUCT
+                    || eTypeClass == cpo::uno::TypeClass_INTERFACE)
                 {
                     IdeSymbolInfo tempFieldNodeAsType(
                         xFieldType->getName(), UnoApiHierarchy::typeClassToSymbolKind(eTypeClass),

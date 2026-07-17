@@ -2404,11 +2404,11 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
 
     switch (rValue.getValueTypeClass())
     {
-        case css::uno::TypeClass_BYTE :
-        case css::uno::TypeClass_SHORT :
-        case css::uno::TypeClass_UNSIGNED_SHORT :
-        case css::uno::TypeClass_LONG :
-        case css::uno::TypeClass_UNSIGNED_LONG :
+        case cpo::uno::TypeClass_BYTE :
+        case cpo::uno::TypeClass_SHORT :
+        case cpo::uno::TypeClass_UNSIGNED_SHORT :
+        case cpo::uno::TypeClass_LONG :
+        case cpo::uno::TypeClass_UNSIGNED_LONG :
             {
                 sal_Int32 nTempValue = 0;
                 if (rValue >>= nTempValue)
@@ -2420,7 +2420,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
             }
             break;
 
-        case css::uno::TypeClass_BOOLEAN :
+        case cpo::uno::TypeClass_BOOLEAN :
             {
                 bool bTempValue = false;
                 if (rValue >>= bTempValue)
@@ -2432,8 +2432,8 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
             }
             break;
 
-        case css::uno::TypeClass_FLOAT :
-        case css::uno::TypeClass_DOUBLE :
+        case cpo::uno::TypeClass_FLOAT :
+        case cpo::uno::TypeClass_DOUBLE :
             {
                 double fTempValue = 0.0;
                 if (rValue >>= fTempValue)
@@ -2445,7 +2445,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
             }
             break;
 
-        case css::uno::TypeClass_STRING :
+        case cpo::uno::TypeClass_STRING :
             {
                 OUString sTempValue;
                 if (rValue >>= sTempValue)
@@ -2457,7 +2457,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
             }
             break;
 
-        case css::uno::TypeClass_STRUCT :
+        case cpo::uno::TypeClass_STRUCT :
             {
                 css::util::Date     aDate    ;
                 css::util::Time     aTime    ;

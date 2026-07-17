@@ -493,7 +493,7 @@ public class ServiceManager implements XMultiServiceFactory,
      *
      * @return  the UNO type of the <code>ServiceManager</code>.
      * @see     com.sun.star.container.XElementAccess
-     * @see     com.sun.star.uno.TypeClass
+     * @see     cpo.uno.TypeClass
      */
     public cpo.uno.Type getElementType()
             throws com.sun.star.uno.RuntimeException

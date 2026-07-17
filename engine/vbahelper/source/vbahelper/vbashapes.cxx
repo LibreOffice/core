@@ -137,7 +137,7 @@ ScVbaShapes::getServiceNames()
 css::uno::Reference< css::container::XIndexAccess >
 ScVbaShapes::getShapesByArrayIndices( const cpo::uno::Any& Index  )
 {
-    if ( Index.getValueTypeClass() != uno::TypeClass_SEQUENCE )
+    if ( Index.getValueTypeClass() != cpo::uno::TypeClass_SEQUENCE )
         throw uno::RuntimeException();
 
     const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter(mxContext);
@@ -149,7 +149,7 @@ ScVbaShapes::getShapesByArrayIndices( const cpo::uno::Any& Index  )
     for (const auto& rIndex : sIndices)
     {
         uno::Reference< drawing::XShape > xShape;
-        if ( rIndex.getValueTypeClass() == uno::TypeClass_STRING )
+        if ( rIndex.getValueTypeClass() == cpo::uno::TypeClass_STRING )
         {
             OUString sName;
             rIndex >>= sName;
@@ -176,7 +176,7 @@ ScVbaShapes::Range( const cpo::uno::Any& shapes )
 {
     // shapes, can be an index or an array of indices
     uno::Reference< container::XIndexAccess > xShapes;
-    if ( shapes.getValueTypeClass() == uno::TypeClass_SEQUENCE )
+    if ( shapes.getValueTypeClass() == cpo::uno::TypeClass_SEQUENCE )
         xShapes = getShapesByArrayIndices( shapes );
     else
     {

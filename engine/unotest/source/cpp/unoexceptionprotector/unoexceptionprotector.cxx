@@ -31,7 +31,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -54,48 +54,48 @@ void printUnoValue(
     cpo::uno::Type const & type, cpo::uno::Any const & value)
 {
     switch (type.getTypeClass()) {
-    case css::uno::TypeClass_VOID:
+    case cpo::uno::TypeClass_VOID:
         out << "void";
         break;
-    case css::uno::TypeClass_BOOLEAN:
+    case cpo::uno::TypeClass_BOOLEAN:
         out << *o3tl::forceAccess<bool>(value);
         break;
-    case css::uno::TypeClass_BYTE:
+    case cpo::uno::TypeClass_BYTE:
         out << int(*o3tl::forceAccess<sal_Int8>(value));
         break;
-    case css::uno::TypeClass_SHORT:
+    case cpo::uno::TypeClass_SHORT:
         out << *o3tl::forceAccess<sal_Int16>(value);
         break;
-    case css::uno::TypeClass_UNSIGNED_SHORT:
+    case cpo::uno::TypeClass_UNSIGNED_SHORT:
         out << *o3tl::forceAccess<sal_uInt16>(value);
         break;
-    case css::uno::TypeClass_LONG:
+    case cpo::uno::TypeClass_LONG:
         out << *o3tl::forceAccess<sal_Int32>(value);
         break;
-    case css::uno::TypeClass_UNSIGNED_LONG:
+    case cpo::uno::TypeClass_UNSIGNED_LONG:
         out << *o3tl::forceAccess<sal_uInt32>(value);
         break;
-    case css::uno::TypeClass_HYPER:
+    case cpo::uno::TypeClass_HYPER:
         out << *o3tl::forceAccess<sal_Int64>(value);
         break;
-    case css::uno::TypeClass_UNSIGNED_HYPER:
+    case cpo::uno::TypeClass_UNSIGNED_HYPER:
         out << *o3tl::forceAccess<sal_uInt64>(value);
         break;
-    case css::uno::TypeClass_FLOAT:
+    case cpo::uno::TypeClass_FLOAT:
     {
         std::ios_base::fmtflags origfmt = out.flags();
         out << std::uppercase << *o3tl::forceAccess<float>(value);
         out.setf(origfmt);
         break;
     }
-    case css::uno::TypeClass_DOUBLE:
+    case cpo::uno::TypeClass_DOUBLE:
     {
         std::ios_base::fmtflags origfmt = out.flags();
         out << std::uppercase << *o3tl::forceAccess<double>(value);
         out.setf(origfmt);
         break;
     }
-    case css::uno::TypeClass_CHAR:
+    case cpo::uno::TypeClass_CHAR:
     {
         std::ios_base::fmtflags origfmt = out.flags();
         out << "\\u" << std::hex << std::uppercase << std::setw(4) << std::setfill('0')
@@ -103,17 +103,17 @@ void printUnoValue(
         out.setf(origfmt);
         break;
     }
-    case css::uno::TypeClass_STRING:
+    case cpo::uno::TypeClass_STRING:
         out << '"' << *o3tl::forceAccess<OUString>(value) << '"'; //TODO: encode content
         break;
-    case css::uno::TypeClass_TYPE:
+    case cpo::uno::TypeClass_TYPE:
         out << o3tl::forceAccess<cpo::uno::Type>(value)->getTypeName();
         break;
-    case css::uno::TypeClass_ANY:
+    case cpo::uno::TypeClass_ANY:
         out << value.getValueTypeName() << ": ";
         printUnoValue(out, reflections, value.getValueType(), value);
         break;
-    case css::uno::TypeClass_SEQUENCE:
+    case cpo::uno::TypeClass_SEQUENCE:
         {
             css::uno::Reference<css::reflection::XIdlClass> const refl(
                 reflections->forName(type.getTypeName()), css::uno::UNO_SET_THROW);
@@ -130,11 +130,11 @@ void printUnoValue(
             out << ']';
             break;
         }
-    case css::uno::TypeClass_ENUM:
+    case cpo::uno::TypeClass_ENUM:
         out << value.getValueTypeName() << ' ' << *static_cast<sal_Int32 const *>(value.getValue());
         break;
-    case css::uno::TypeClass_STRUCT:
-    case css::uno::TypeClass_EXCEPTION:
+    case cpo::uno::TypeClass_STRUCT:
+    case cpo::uno::TypeClass_EXCEPTION:
         {
             out << '{';
             auto first = true;
@@ -153,7 +153,7 @@ void printUnoValue(
             out << '}';
             break;
         }
-    case css::uno::TypeClass_INTERFACE:
+    case cpo::uno::TypeClass_INTERFACE:
         out << '@' << value.getValue();
         break;
     default:

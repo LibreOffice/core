@@ -172,7 +172,7 @@ class Type:
     Use an instance of this class to explicitly pass a type to UNO.
 
     :param typeName: Name of the UNO type
-    :param typeClass: Python Enum of TypeClass, see com/sun/star/uno/TypeClass.idl
+    :param typeClass: Python Enum of TypeClass, see cpo/uno/TypeClass.idl
     """
 
     def __init__(self, typeName, typeClass):
@@ -464,7 +464,7 @@ class _ConstantGroup(object):
 def _impl_getConstantGroupByName(module, group):
     """Gets UNOIDL constant group by name."""
 
-    constants = Enum('com.sun.star.uno.TypeClass', 'CONSTANTS')
+    constants = Enum('cpo.uno.TypeClass', 'CONSTANTS')
     one = Enum('com.sun.star.reflection.TypeDescriptionSearchDepth', 'ONE')
     type_desc_mgr = _component_context.getValueByName('/singletons/com.sun.star.reflection.theTypeDescriptionManager')
     type_descs = type_desc_mgr.createTypeDescriptionEnumeration(module, (constants,), one)

@@ -511,7 +511,7 @@ JNI_info::JNI_info(
     JLocalAutoRef jo_Type(
         jni, find_class( jni, "cpo.uno.Type" ) );
     JLocalAutoRef jo_TypeClass(
-        jni, find_class( jni, "com.sun.star.uno.TypeClass" ) );
+        jni, find_class( jni, "cpo.uno.TypeClass" ) );
     JLocalAutoRef jo_IEnvironment(
         jni, find_class( jni, "com.sun.star.uno.IEnvironment" ) );
     JLocalAutoRef jo_JNI_proxy(
@@ -641,7 +641,7 @@ JNI_info::JNI_info(
     // static method TypeClass.fromInt()
     m_method_TypeClass_fromInt = jni->GetStaticMethodID(
         static_cast<jclass>(jo_TypeClass.get()),
-        "fromInt", "(I)Lcom/sun/star/uno/TypeClass;" );
+        "fromInt", "(I)Lcpo/uno/TypeClass;" );
     jni.ensure_no_exception();
     assert( m_method_TypeClass_fromInt != nullptr );
 
@@ -653,7 +653,7 @@ JNI_info::JNI_info(
     // ctor Type( String, TypeClass )
     m_ctor_Type_with_Name_TypeClass = jni->GetMethodID(
         static_cast<jclass>(jo_Type.get()),
-        "<init>", "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V" );
+        "<init>", "(Ljava/lang/String;Lcpo/uno/TypeClass;)V" );
     jni.ensure_no_exception();
     assert( m_ctor_Type_with_Name_TypeClass != nullptr );
     // field Type._typeName

@@ -30,6 +30,7 @@ import com.sun.star.lib.uno.typedesc.FieldDescription;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.lib.util.WeakMap;
 import cpo.uno.Type;
+import cpo.uno.TypeClass;
 
 /**
  * The central class needed for implementing or using UNO components in Java.
@@ -291,7 +292,7 @@ public class UnoRuntime {
                     && ((IQueryInterface) v2).isSame(v1));
         default:
             throw new java.lang.RuntimeException(
-                "com.sun.star.uno.Any has bad com.sun.star.uno.TypeClass");
+                "com.sun.star.uno.Any has bad cpo.uno.TypeClass");
         }
     }
 

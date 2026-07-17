@@ -17,7 +17,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -283,30 +283,30 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         .class_function("Any", +[]() { return cppu::UnoType<cpo::uno::Any>::get(); })
         .class_function("Sequence",
                         +[](cpo::uno::Type const& type) {
-                            return cpo::uno::Type(css::uno::TypeClass_SEQUENCE,
+                            return cpo::uno::Type(cpo::uno::TypeClass_SEQUENCE,
                                                   "[]" + type.getTypeName());
                         })
         .class_function("Enum",
                         +[](std::u16string const& name) {
-                            return cpo::uno::Type(css::uno::TypeClass_ENUM, OUString(name));
+                            return cpo::uno::Type(cpo::uno::TypeClass_ENUM, OUString(name));
                         })
         .class_function("Struct",
                         +[](std::u16string const& name) {
-                            return cpo::uno::Type(css::uno::TypeClass_STRUCT, OUString(name));
+                            return cpo::uno::Type(cpo::uno::TypeClass_STRUCT, OUString(name));
                         })
         .class_function("Exception",
                         +[](std::u16string const& name) {
-                            return cpo::uno::Type(css::uno::TypeClass_EXCEPTION, OUString(name));
+                            return cpo::uno::Type(cpo::uno::TypeClass_EXCEPTION, OUString(name));
                         })
         .class_function("Interface",
                         +[](std::u16string const& name) {
-                            return cpo::uno::Type(css::uno::TypeClass_INTERFACE, OUString(name));
+                            return cpo::uno::Type(cpo::uno::TypeClass_INTERFACE, OUString(name));
                         })
         .function("getTypeClass", +[](cpo::uno::Type const& self) { return self.getTypeClass(); })
         .function(
             "getSequenceComponentType",
             +[](cpo::uno::Type const& self) {
-                if (self.getTypeClass() != css::uno::TypeClass_SEQUENCE)
+                if (self.getTypeClass() != cpo::uno::TypeClass_SEQUENCE)
                 {
                     throw std::invalid_argument("bad non-sequence type");
                 }
@@ -332,35 +332,35 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         .function("get", +[](cpo::uno::Any const& self) {
             switch (self.getValueTypeClass())
             {
-                case css::uno::TypeClass_VOID:
+                case cpo::uno::TypeClass_VOID:
                     return emscripten::val::undefined();
-                case css::uno::TypeClass_BOOLEAN:
+                case cpo::uno::TypeClass_BOOLEAN:
                     return emscripten::val(*o3tl::forceAccess<bool>(self));
-                case css::uno::TypeClass_BYTE:
+                case cpo::uno::TypeClass_BYTE:
                     return emscripten::val(*o3tl::forceAccess<sal_Int8>(self));
-                case css::uno::TypeClass_SHORT:
+                case cpo::uno::TypeClass_SHORT:
                     return emscripten::val(*o3tl::forceAccess<sal_Int16>(self));
-                case css::uno::TypeClass_UNSIGNED_SHORT:
+                case cpo::uno::TypeClass_UNSIGNED_SHORT:
                     return emscripten::val(*o3tl::forceAccess<sal_uInt16>(self));
-                case css::uno::TypeClass_LONG:
+                case cpo::uno::TypeClass_LONG:
                     return emscripten::val(*o3tl::forceAccess<sal_Int32>(self));
-                case css::uno::TypeClass_UNSIGNED_LONG:
+                case cpo::uno::TypeClass_UNSIGNED_LONG:
                     return emscripten::val(*o3tl::forceAccess<sal_uInt32>(self));
-                case css::uno::TypeClass_HYPER:
+                case cpo::uno::TypeClass_HYPER:
                     return emscripten::val(*o3tl::forceAccess<sal_Int64>(self));
-                case css::uno::TypeClass_UNSIGNED_HYPER:
+                case cpo::uno::TypeClass_UNSIGNED_HYPER:
                     return emscripten::val(*o3tl::forceAccess<sal_uInt64>(self));
-                case css::uno::TypeClass_FLOAT:
+                case cpo::uno::TypeClass_FLOAT:
                     return emscripten::val(*o3tl::forceAccess<float>(self));
-                case css::uno::TypeClass_DOUBLE:
+                case cpo::uno::TypeClass_DOUBLE:
                     return emscripten::val(*o3tl::forceAccess<double>(self));
-                case css::uno::TypeClass_CHAR:
+                case cpo::uno::TypeClass_CHAR:
                     return emscripten::val(*o3tl::forceAccess<sal_Unicode>(self));
-                case css::uno::TypeClass_STRING:
+                case cpo::uno::TypeClass_STRING:
                     return emscripten::val(*o3tl::forceAccess<OUString>(self));
-                case css::uno::TypeClass_TYPE:
+                case cpo::uno::TypeClass_TYPE:
                     return emscripten::val(*o3tl::forceAccess<cpo::uno::Type>(self));
-                case css::uno::TypeClass_SEQUENCE:
+                case cpo::uno::TypeClass_SEQUENCE:
                 {
                     auto const seq = *static_cast<uno_Sequence* const*>(self.getValue());
                     auto const copy = std::malloc(sizeof(uno_Sequence*));
@@ -370,15 +370,15 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                     return emscripten::val::take_ownership(
                         _emval_take_value(getTypeId(self.getValueType()), argv));
                 }
-                case css::uno::TypeClass_ENUM:
+                case cpo::uno::TypeClass_ENUM:
                 {
                     emscripten::internal::WireTypePack argv(
                         std::move(*static_cast<sal_Int32 const*>(self.getValue())));
                     return emscripten::val::take_ownership(
                         _emval_take_value(getTypeId(self.getValueType()), argv));
                 }
-                case css::uno::TypeClass_STRUCT:
-                case css::uno::TypeClass_EXCEPTION:
+                case cpo::uno::TypeClass_STRUCT:
+                case cpo::uno::TypeClass_EXCEPTION:
                 {
                     css::uno::TypeDescription desc(self.getValueType().getTypeLibType());
                     assert(desc.is());
@@ -389,7 +389,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
                     return emscripten::val::take_ownership(
                         _emval_take_value(getTypeId(self.getValueType()), argv));
                 }
-                case css::uno::TypeClass_INTERFACE:
+                case cpo::uno::TypeClass_INTERFACE:
                 {
                     auto const ifc = *static_cast<css::uno::XInterface* const*>(self.getValue());
                     auto const copy = std::malloc(sizeof(css::uno::XInterface*));

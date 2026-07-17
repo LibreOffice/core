@@ -54,7 +54,7 @@ public:
     OUString getTypeName() const;
     cpo::uno::Any& getRootAnyRef() { return maAny; };
 
-    css::uno::TypeClass getTypeClass() const;
+    cpo::uno::TypeClass getTypeClass() const;
 
     void* getInst();
     bool isEmpty() const { return (mnPos == -1); }

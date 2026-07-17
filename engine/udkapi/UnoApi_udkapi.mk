@@ -461,12 +461,14 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/task,\
 	XInteractionRequest \
 	XInteractionRetry \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/uno,\
+	TypeClass \
+))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
 	DeploymentException \
 	Exception \
 	RuntimeException \
 	SecurityException \
-	TypeClass \
 	XAdapter \
 	XAggregation \
 	XComponentContext \

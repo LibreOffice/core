@@ -125,32 +125,32 @@ static bool isSubSet(const cpo::uno::Any& aSubSet,
 
     if (aSubSet.hasValue() && aSet.hasValue())
     {
-        css::uno::TypeClass aTypeClass = aT1.getTypeClass();
+        cpo::uno::TypeClass aTypeClass = aT1.getTypeClass();
         switch(aTypeClass)
         {
 
-            case css::uno::TypeClass_BOOLEAN :
-            case css::uno::TypeClass_BYTE :
-            case css::uno::TypeClass_SHORT :
-            case css::uno::TypeClass_UNSIGNED_SHORT :
-            case css::uno::TypeClass_LONG :
-            case css::uno::TypeClass_UNSIGNED_LONG :
-            case css::uno::TypeClass_HYPER :
-            case css::uno::TypeClass_UNSIGNED_HYPER :
-            case css::uno::TypeClass_FLOAT :
-            case css::uno::TypeClass_DOUBLE :
+            case cpo::uno::TypeClass_BOOLEAN :
+            case cpo::uno::TypeClass_BYTE :
+            case cpo::uno::TypeClass_SHORT :
+            case cpo::uno::TypeClass_UNSIGNED_SHORT :
+            case cpo::uno::TypeClass_LONG :
+            case cpo::uno::TypeClass_UNSIGNED_LONG :
+            case cpo::uno::TypeClass_HYPER :
+            case cpo::uno::TypeClass_UNSIGNED_HYPER :
+            case cpo::uno::TypeClass_FLOAT :
+            case cpo::uno::TypeClass_DOUBLE :
             {
                 bool bIs = (aSubSet == aSet);
                 return bIs;
             }
 
 
-            case css::uno::TypeClass_STRING :
+            case cpo::uno::TypeClass_STRING :
                 return aSubSet == aSet;
             break;
 
 
-            case css::uno::TypeClass_STRUCT :
+            case cpo::uno::TypeClass_STRUCT :
             {
                 css::beans::PropertyValue p1;
                 css::beans::PropertyValue p2;
@@ -179,7 +179,7 @@ static bool isSubSet(const cpo::uno::Any& aSubSet,
             break;
 
 
-            case css::uno::TypeClass_SEQUENCE :
+            case cpo::uno::TypeClass_SEQUENCE :
             {
                 cpo::uno::Sequence< OUString > uno_s1;
                 cpo::uno::Sequence< OUString > uno_s2;

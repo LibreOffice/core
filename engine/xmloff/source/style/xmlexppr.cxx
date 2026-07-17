@@ -862,7 +862,7 @@ void SvXMLExportPropertyMapper::handleSpecialItem(
     // or a null XNameContainer reference means there is nothing to export; this
     // is a normal state, not a missing-handler bug.
     if (!rProperty.maValue.hasValue()
-        || rProperty.maValue.getValueTypeClass() == uno::TypeClass_INTERFACE)
+        || rProperty.maValue.getValueTypeClass() == cpo::uno::TypeClass_INTERFACE)
         return;
     SAL_WARN("xmloff.style",
              "special item not handled in xml export: index=" << rProperty.mnIndex
@@ -889,7 +889,7 @@ void SvXMLExportPropertyMapper::handleElementItem(
     // missing background graphic) means there is no child element to write.
     // Treat that as a normal "nothing to export" state, not a missing-handler bug.
     if (!rProperty.maValue.hasValue()
-        || rProperty.maValue.getValueTypeClass() == uno::TypeClass_INTERFACE)
+        || rProperty.maValue.getValueTypeClass() == cpo::uno::TypeClass_INTERFACE)
         return;
     SAL_WARN("xmloff.style",
              "element item not handled in xml export: index=" << rProperty.mnIndex

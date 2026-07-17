@@ -73,8 +73,8 @@ namespace vclcanvas
            4: SystemGraphicsData as a streamed Any
          */
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 4 &&
-                             maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER &&
-                             maArguments[3].getValueTypeClass() == uno::TypeClass_INTERFACE,
+                             maArguments[0].getValueTypeClass() == cpo::uno::TypeClass_HYPER &&
+                             maArguments[3].getValueTypeClass() == cpo::uno::TypeClass_INTERFACE,
                              "VCLSpriteCanvas::initialize: wrong number of arguments, or wrong types" );
 
         sal_Int64 nPtr = 0;

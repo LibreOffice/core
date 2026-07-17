@@ -185,7 +185,7 @@ PyRef PyUNO_service_constructor_new(
     const css::uno::Reference<css::reflection::XServiceTypeDescription2>& xService,
     const css::uno::Reference<css::reflection::XServiceConstructorDescription>& xConstructor);
 
-PyObject* PyUNO_Type_new (const char *typeName , css::uno::TypeClass t , const Runtime &r );
+PyObject* PyUNO_Type_new (const char *typeName , cpo::uno::TypeClass t , const Runtime &r );
 PyObject* PyUNO_Enum_new( const char *enumBase, const char *enumValue, const Runtime &r );
 PyObject* PyUNO_char_new (sal_Unicode c , const Runtime &r);
 PyObject *PyUNO_ByteSequence_new( const cpo::uno::Sequence< sal_Int8 > &, const Runtime &r );
@@ -208,7 +208,7 @@ sal_Unicode PyChar2Unicode( PyObject *o );
 cpo::uno::Type PyType2Type( PyObject * o );
 
 void raisePyExceptionWithAny( const cpo::uno::Any &a );
-const char *typeClassToString( css::uno::TypeClass t );
+const char *typeClassToString( cpo::uno::TypeClass t );
 
 /// @throws css::uno::RuntimeException
 PyRef getObjectFromUnoModule( const Runtime &runtime, const char * object );

@@ -2339,7 +2339,7 @@ sal_Int32 EscherPropertyContainer::GetValueForEnhancedCustomShapeParameter( cons
                                 const std::vector< sal_Int32 >& rEquationOrder, bool bAdjustTrans )
 {
     sal_Int32 nValue = 0;
-    if ( rParameter.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
+    if ( rParameter.Value.getValueTypeClass() == cpo::uno::TypeClass_DOUBLE )
     {
         double fValue(0.0);
         if ( rParameter.Value >>= fValue )
@@ -2389,7 +2389,7 @@ static bool GetValueForEnhancedCustomShapeHandleParameter( sal_Int32& nRetValue,
 {
     bool bSpecial = false;
     nRetValue = 0;
-    if ( rParameter.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
+    if ( rParameter.Value.getValueTypeClass() == cpo::uno::TypeClass_DOUBLE )
     {
         double fValue(0.0);
         if ( rParameter.Value >>= fValue )
@@ -2560,7 +2560,7 @@ bool EscherPropertyContainer::GetAdjustmentValue( const drawing::EnhancedCustomS
         return false;
 
     bool bUseFixedFloat = ( nAdjustmentsWhichNeedsToBeConverted & ( 1 << nIndex ) ) != 0;
-    if ( rkProp.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
+    if ( rkProp.Value.getValueTypeClass() == cpo::uno::TypeClass_DOUBLE )
     {
         double fValue(0.0);
         rkProp.Value >>= fValue;

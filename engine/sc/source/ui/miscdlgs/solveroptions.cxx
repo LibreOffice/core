@@ -187,11 +187,11 @@ void ScSolverOptionsDialog::FillListBox()
         OUString aVisName = aDescriptions[nPos].aDescription;
 
         cpo::uno::Any aValue = maProperties[nPos].Value;
-        uno::TypeClass eClass = aValue.getValueTypeClass();
+        cpo::uno::TypeClass eClass = aValue.getValueTypeClass();
 
         m_xLbSettings->append();
 
-        if ( eClass == uno::TypeClass_BOOLEAN )
+        if ( eClass == cpo::uno::TypeClass_BOOLEAN )
         {
             // check box entry
             m_xLbSettings->set_toggle(nPos, ScUnoHelpFunctions::GetBoolFromAny(aValue) ? TRISTATE_TRUE : TRISTATE_FALSE);
@@ -202,7 +202,7 @@ void ScSolverOptionsDialog::FillListBox()
             // value entry
             m_xLbSettings->set_text(nPos, aVisName, 0);
             m_aOptions.emplace_back(new ScSolverOptionsString(aVisName));
-            if (eClass == uno::TypeClass_DOUBLE)
+            if (eClass == cpo::uno::TypeClass_DOUBLE)
             {
                 double fDoubleValue = 0.0;
                 if (aValue >>= fDoubleValue)

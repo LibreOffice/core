@@ -126,7 +126,7 @@ bool isBootstrapType(OUString const & name)
         "com.sun.star.registry.XSimpleRegistry",
         "com.sun.star.uno.DeploymentException",
         "com.sun.star.uno.RuntimeException",
-        "com.sun.star.uno.TypeClass",
+        "cpo.uno.TypeClass",
         "com.sun.star.uno.Uik",
         "com.sun.star.uno.XAdapter",
         "com.sun.star.uno.XAggregation",
@@ -617,85 +617,85 @@ OUString CppuType::getTypeClass(OUString const & name, bool cStyle)
     case codemaker::UnoType::Sort::Void:
         return cStyle
                ? u"typelib_TypeClass_VOID"_ustr
-               : u"::css::uno::TypeClass_VOID"_ustr;
+               : u"::cpo::uno::TypeClass_VOID"_ustr;
     case codemaker::UnoType::Sort::Boolean:
         return cStyle
                ? u"typelib_TypeClass_BOOLEAN"_ustr
-               : u"::css::uno::TypeClass_BOOLEAN"_ustr;
+               : u"::cpo::uno::TypeClass_BOOLEAN"_ustr;
     case codemaker::UnoType::Sort::Byte:
         return cStyle
                ? u"typelib_TypeClass_BYTE"_ustr
-               : u"::css::uno::TypeClass_BYTE"_ustr;
+               : u"::cpo::uno::TypeClass_BYTE"_ustr;
     case codemaker::UnoType::Sort::Short:
         return cStyle
                ? u"typelib_TypeClass_SHORT"_ustr
-               : u"::css::uno::TypeClass_SHORT"_ustr;
+               : u"::cpo::uno::TypeClass_SHORT"_ustr;
     case codemaker::UnoType::Sort::UnsignedShort:
         return cStyle
                ? u"typelib_TypeClass_UNSIGNED_SHORT"_ustr
-               : u"::css::uno::TypeClass_UNSIGNED_SHORT"_ustr;
+               : u"::cpo::uno::TypeClass_UNSIGNED_SHORT"_ustr;
     case codemaker::UnoType::Sort::Long:
         return cStyle
                ? u"typelib_TypeClass_LONG"_ustr
-               : u"::css::uno::TypeClass_LONG"_ustr;
+               : u"::cpo::uno::TypeClass_LONG"_ustr;
     case codemaker::UnoType::Sort::UnsignedLong:
         return cStyle
                ? u"typelib_TypeClass_UNSIGNED_LONG"_ustr
-               : u"::css::uno::TypeClass_UNSIGNED_LONG"_ustr;
+               : u"::cpo::uno::TypeClass_UNSIGNED_LONG"_ustr;
     case codemaker::UnoType::Sort::Hyper:
         return cStyle
                ? u"typelib_TypeClass_HYPER"_ustr
-               : u"::css::uno::TypeClass_HYPER"_ustr;
+               : u"::cpo::uno::TypeClass_HYPER"_ustr;
     case codemaker::UnoType::Sort::UnsignedHyper:
         return cStyle
                ? u"typelib_TypeClass_UNSIGNED_HYPER"_ustr
-               : u"::css::uno::TypeClass_UNSIGNED_HYPER"_ustr;
+               : u"::cpo::uno::TypeClass_UNSIGNED_HYPER"_ustr;
     case codemaker::UnoType::Sort::Float:
         return cStyle
                ? u"typelib_TypeClass_FLOAT"_ustr
-               : u"::css::uno::TypeClass_FLOAT"_ustr;
+               : u"::cpo::uno::TypeClass_FLOAT"_ustr;
     case codemaker::UnoType::Sort::Double:
         return cStyle
                ? u"typelib_TypeClass_DOUBLE"_ustr
-               : u"::css::uno::TypeClass_DOUBLE"_ustr;
+               : u"::cpo::uno::TypeClass_DOUBLE"_ustr;
     case codemaker::UnoType::Sort::Char:
         return cStyle
                ? u"typelib_TypeClass_CHAR"_ustr
-               : u"::css::uno::TypeClass_CHAR"_ustr;
+               : u"::cpo::uno::TypeClass_CHAR"_ustr;
     case codemaker::UnoType::Sort::String:
         return cStyle
                ? u"typelib_TypeClass_STRING"_ustr
-               : u"::css::uno::TypeClass_STRING"_ustr;
+               : u"::cpo::uno::TypeClass_STRING"_ustr;
     case codemaker::UnoType::Sort::Type:
         return cStyle
                ? u"typelib_TypeClass_TYPE"_ustr
-               : u"::css::uno::TypeClass_TYPE"_ustr;
+               : u"::cpo::uno::TypeClass_TYPE"_ustr;
     case codemaker::UnoType::Sort::Any:
         return cStyle
                ? u"typelib_TypeClass_ANY"_ustr
-               : u"::css::uno::TypeClass_ANY"_ustr;
+               : u"::cpo::uno::TypeClass_ANY"_ustr;
     case codemaker::UnoType::Sort::Sequence:
         return cStyle
                ? u"typelib_TypeClass_SEQUENCE"_ustr
-               : u"::css::uno::TypeClass_SEQUENCE"_ustr;
+               : u"::cpo::uno::TypeClass_SEQUENCE"_ustr;
     case codemaker::UnoType::Sort::Enum:
         return cStyle
                ? u"typelib_TypeClass_ENUM"_ustr
-               : u"::css::uno::TypeClass_ENUM"_ustr;
+               : u"::cpo::uno::TypeClass_ENUM"_ustr;
     case codemaker::UnoType::Sort::PlainStruct:
     case codemaker::UnoType::Sort::PolymorphicStructTemplate:
     case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
         return cStyle
                ? u"typelib_TypeClass_STRUCT"_ustr
-               : u"::css::uno::TypeClass_STRUCT"_ustr;
+               : u"::cpo::uno::TypeClass_STRUCT"_ustr;
     case codemaker::UnoType::Sort::Exception:
         return cStyle
                ? u"typelib_TypeClass_EXCEPTION"_ustr
-               : u"::css::uno::TypeClass_EXCEPTION"_ustr;
+               : u"::cpo::uno::TypeClass_EXCEPTION"_ustr;
     case codemaker::UnoType::Sort::Interface:
         return cStyle
                ? u"typelib_TypeClass_INTERFACE"_ustr
-               : u"::css::uno::TypeClass_INTERFACE"_ustr;
+               : u"::cpo::uno::TypeClass_INTERFACE"_ustr;
     case codemaker::UnoType::Sort::Typedef:
         return getTypeClass(dynamic_cast<unoidl::TypedefEntity&>(*ent).getType(), cStyle);
     default:
@@ -1371,7 +1371,7 @@ void InterfaceType::dumpCppuAttributeRefs(FileStream & out, sal_uInt32 & index)
             << "],\n";
         inc(38);
         out << indent()
-            << "(typelib_TypeClass)::css::uno::TypeClass_INTERFACE_ATTRIBUTE,\n"
+            << "(typelib_TypeClass)::cpo::uno::TypeClass_INTERFACE_ATTRIBUTE,\n"
             << indent() << "sAttributeName" << n << ".pData );\n";
         dec(38);
         ++n;
@@ -1388,7 +1388,7 @@ void InterfaceType::dumpCppuMethodRefs(FileStream & out, sal_uInt32 & index)
             << "],\n";
         inc(38);
         out << indent()
-            << "(typelib_TypeClass)::css::uno::TypeClass_INTERFACE_METHOD,\n"
+            << "(typelib_TypeClass)::cpo::uno::TypeClass_INTERFACE_METHOD,\n"
             << indent() << "sMethodName" << n << ".pData );\n";
         dec(38);
         ++n;

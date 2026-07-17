@@ -15,7 +15,7 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 
 namespace basctl
 {
@@ -33,8 +33,8 @@ enum class IdeBrowserScope
 struct UnoApiHierarchy
 {
     std::map<OUString, SymbolInfoList> m_hierarchyCache;
-    void addNode(std::u16string_view sQualifiedName, css::uno::TypeClass eTypeClass);
-    static IdeSymbolKind typeClassToSymbolKind(css::uno::TypeClass eTypeClass);
+    void addNode(std::u16string_view sQualifiedName, cpo::uno::TypeClass eTypeClass);
+    static IdeSymbolKind typeClassToSymbolKind(cpo::uno::TypeClass eTypeClass);
 };
 
 class IdeDataProviderInterface

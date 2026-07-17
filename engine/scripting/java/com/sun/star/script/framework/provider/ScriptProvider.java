@@ -67,7 +67,7 @@ import com.sun.star.ucb.XUniversalContentBroker;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import cpo.uno.Type;
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 

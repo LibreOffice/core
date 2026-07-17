@@ -80,17 +80,17 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const cpo::uno::Sequence< 
         {
             switch( rArray.getValueTypeClass()  )
             {
-                case uno::TypeClass_BOOLEAN:
+                case cpo::uno::TypeClass_BOOLEAN:
                     lclConvertBooleanToDouble( rArray );
                     break;
-                case uno::TypeClass_INTERFACE:
+                case cpo::uno::TypeClass_INTERFACE:
                 {
                     uno::Reference< excel::XRange > myRange( rArray, uno::UNO_QUERY );
                     if( myRange.is() )
                         rArray = myRange->getCellRange();
                 }
                     break;
-                case uno::TypeClass_SEQUENCE:
+                case cpo::uno::TypeClass_SEQUENCE:
                 {
                     // the sheet.FunctionAccess service doesn't deal with Sequences, only Sequences of Sequence
                     cpo::uno::Type aType = rArray.getValueType();

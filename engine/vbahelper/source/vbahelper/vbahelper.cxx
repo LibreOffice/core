@@ -419,17 +419,17 @@ bool extractBoolFromAny( const cpo::uno::Any& rAny )
 {
     switch( rAny.getValueTypeClass() )
     {
-        case uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
             return rAny.get< bool >();
-        case uno::TypeClass_FLOAT:
+        case cpo::uno::TypeClass_FLOAT:
             return rAny.get< float >() != 0.0;
-        case uno::TypeClass_DOUBLE:
+        case cpo::uno::TypeClass_DOUBLE:
             return rAny.get< double >() != 0.0;
-        case uno::TypeClass_BYTE:
-        case uno::TypeClass_SHORT:
-        case uno::TypeClass_LONG:
+        case cpo::uno::TypeClass_BYTE:
+        case cpo::uno::TypeClass_SHORT:
+        case cpo::uno::TypeClass_LONG:
             return rAny.get< sal_Int32 >() != 0;
-        case uno::TypeClass_HYPER:
+        case cpo::uno::TypeClass_HYPER:
             return rAny.get< sal_Int64 >() != 0;
         default:;
     }
@@ -440,21 +440,21 @@ OUString extractStringFromAny( const cpo::uno::Any& rAny, bool bUppercaseBool )
 {
     switch( rAny.getValueTypeClass() )
     {
-        case uno::TypeClass_STRING:
+        case cpo::uno::TypeClass_STRING:
             return rAny.get< OUString >();
-        case uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
             return bUppercaseBool ?
                 (rAny.get< bool >() ? u"TRUE"_ustr : u"FALSE"_ustr) :
                 OUString::boolean( rAny.get< bool >() );
-        case uno::TypeClass_FLOAT:
+        case cpo::uno::TypeClass_FLOAT:
             return OUString::number( rAny.get< float >() );
-        case uno::TypeClass_DOUBLE:
+        case cpo::uno::TypeClass_DOUBLE:
             return OUString::number( rAny.get< double >() );
-        case uno::TypeClass_BYTE:
-        case uno::TypeClass_SHORT:
-        case uno::TypeClass_LONG:
+        case cpo::uno::TypeClass_BYTE:
+        case cpo::uno::TypeClass_SHORT:
+        case cpo::uno::TypeClass_LONG:
             return OUString::number( rAny.get< sal_Int32 >() );
-        case uno::TypeClass_HYPER:
+        case cpo::uno::TypeClass_HYPER:
             return OUString::number( rAny.get< sal_Int64 >() );
         default:;
     }

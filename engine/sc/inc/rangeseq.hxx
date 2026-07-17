@@ -20,7 +20,7 @@
 #pragma once
 
 #include "types.hxx"
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 
 namespace cpo::uno { class Any; }
 
@@ -71,7 +71,7 @@ public:
      */
     static  bool        ConvertAnyToDouble(
                             double & o_fVal,
-                            css::uno::TypeClass & o_eClass,
+                            cpo::uno::TypeClass & o_eClass,
                             const cpo::uno::Any & rAny );
 
 };

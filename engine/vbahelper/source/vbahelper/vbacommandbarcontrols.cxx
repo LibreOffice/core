@@ -136,7 +136,7 @@ cpo::uno::Any SAL_CALL
 ScVbaCommandBarControls::Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& /*aIndex*/ )
 {
     sal_Int32 nPosition = -1;
-    if( aIndex.getValueTypeClass() == uno::TypeClass_STRING )
+    if( aIndex.getValueTypeClass() == cpo::uno::TypeClass_STRING )
     {
         OUString sName;
         aIndex >>= sName;

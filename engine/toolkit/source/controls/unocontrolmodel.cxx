@@ -552,7 +552,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
         const cpo::uno::Any* pProp = &(maData[rProp]);
         OutStream->writeShort( rProp );
 
-        bool bVoid = pProp->getValueTypeClass() == css::uno::TypeClass_VOID;
+        bool bVoid = pProp->getValueTypeClass() == cpo::uno::TypeClass_VOID;
 
         OutStream->writeBoolean( bVoid );
 
@@ -1033,7 +1033,7 @@ cpo::uno::Sequence< OUString > UnoControlModel::getSupportedServiceNames(  )
 
 bool UnoControlModel::convertFastPropertyValue( std::unique_lock<std::mutex>& rGuard, Any & rConvertedValue, Any & rOldValue, sal_Int32 nPropId, const Any& rValue )
 {
-    bool bVoid = rValue.getValueTypeClass() == css::uno::TypeClass_VOID;
+    bool bVoid = rValue.getValueTypeClass() == cpo::uno::TypeClass_VOID;
     if ( bVoid )
     {
         rConvertedValue.clear();
@@ -1157,7 +1157,7 @@ void UnoControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mu
     const cpo::uno::Any* pProp = it == maData.end() ? nullptr : &(it->second);
     ENSURE_OR_RETURN_VOID( pProp, "UnoControlModel::setFastPropertyValue_NoBroadcast: invalid property id!" );
 
-    DBG_ASSERT( ( rValue.getValueTypeClass() != css::uno::TypeClass_VOID ) || ( GetPropertyAttribs( static_cast<sal_uInt16>(nPropId) ) & css::beans::PropertyAttribute::MAYBEVOID ), "Property should not be VOID!" );
+    DBG_ASSERT( ( rValue.getValueTypeClass() != cpo::uno::TypeClass_VOID ) || ( GetPropertyAttribs( static_cast<sal_uInt16>(nPropId) ) & css::beans::PropertyAttribute::MAYBEVOID ), "Property should not be VOID!" );
     maData[ nPropId ] = rValue;
 }
 

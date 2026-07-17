@@ -223,7 +223,7 @@ SwVbaDocument::Bookmarks( const cpo::uno::Any& rIndex )
 {
     uno::Reference<container::XIndexAccess > xBookmarks( mxTextDocument->getBookmarks(), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xBookmarksVba( new SwVbaBookmarks( this, mxContext, xBookmarks, mxTextDocument ) );
-    if (  rIndex.getValueTypeClass() == uno::TypeClass_VOID )
+    if (  rIndex.getValueTypeClass() == cpo::uno::TypeClass_VOID )
         return cpo::uno::Any( xBookmarksVba );
 
     return xBookmarksVba->Item( rIndex, cpo::uno::Any() );
@@ -247,7 +247,7 @@ cpo::uno::Any SwVbaDocument::ContentControls(const cpo::uno::Any& index)
             // Hack: Instead of an index, it might be a float that was mistakenly treated as a long,
             // which can happen with any valid positive integer when specified as a double like
             // ActiveDocument.ContentControls(1841581653#).
-            if (index.getValueTypeClass() == css::uno::TypeClass_LONG)
+            if (index.getValueTypeClass() == cpo::uno::TypeClass_LONG)
             {
                 sal_Int32 nLong(0);
                 index >>= nLong;
@@ -289,7 +289,7 @@ SwVbaDocument::Variables( const cpo::uno::Any& rIndex )
     uno::Reference< beans::XPropertyAccess > xUserDefined( xDocumentProperties->getUserDefinedProperties(), uno::UNO_QUERY_THROW );
 
     uno::Reference< XCollection > xVariables( new SwVbaVariables( this, mxContext, xUserDefined ) );
-    if (  rIndex.getValueTypeClass() == uno::TypeClass_VOID )
+    if (  rIndex.getValueTypeClass() == cpo::uno::TypeClass_VOID )
         return cpo::uno::Any( xVariables );
 
     return xVariables->Item( rIndex, cpo::uno::Any() );

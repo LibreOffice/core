@@ -39,7 +39,7 @@ namespace svt::table
     using ::css::uno::Reference;
     using ::css::uno::UNO_QUERY;
     using ::css::uno::XInterface;
-    using ::css::uno::TypeClass_INTERFACE;
+    using ::cpo::uno::TypeClass_INTERFACE;
     using ::css::graphic::XGraphic;
     using ::css::style::HorizontalAlignment;
     using ::css::style::HorizontalAlignment_CENTER;

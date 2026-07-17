@@ -21,7 +21,7 @@ package com.sun.star.lib.uno.protocols.urp;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.uno.Any;
 import cpo.uno.Type;
-import com.sun.star.uno.TypeClass;
+import cpo.uno.TypeClass;
 import com.sun.star.uno.XInterface;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;

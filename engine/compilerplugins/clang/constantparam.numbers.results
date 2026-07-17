@@ -3,7 +3,7 @@ basctl/source/inc/dlged.hxx:76
     enum basctl::DlgEdHint::Kind 
     2
 basic/source/classes/sbunoobj.cxx:3225
-    class com::sun::star::uno::Reference<class com::sun::star::reflection::XTypeDescriptionEnumeration> getTypeDescriptorEnumeration(const class rtl::OUString &,const class cpo::uno::Sequence<enum com::sun::star::uno::TypeClass> &,enum com::sun::star::reflection::TypeDescriptionSearchDepth)
+    class com::sun::star::uno::Reference<class com::sun::star::reflection::XTypeDescriptionEnumeration> getTypeDescriptorEnumeration(const class rtl::OUString &,const class cpo::uno::Sequence<enum cpo::uno::TypeClass> &,enum com::sun::star::reflection::TypeDescriptionSearchDepth)
     enum com::sun::star::reflection::TypeDescriptionSearchDepth depth
     -1
 basic/source/inc/expr.hxx:196

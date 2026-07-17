@@ -56,13 +56,13 @@ published interface XIdlClass: com::sun::star::uno::XInterface
     */
     boolean isAssignableFrom( [in] XIdlClass xType );
 
-    /** Returns the com::sun::star::uno::TypeClass
+    /** Returns the cpo::uno::TypeClass
         of the reflected type.
 
         @returns
                   type class of the reflected type.
     */
-    com::sun::star::uno::TypeClass getTypeClass();
+    cpo::uno::TypeClass getTypeClass();
 
     /** Returns the fully-qualified name of the reflected type.
 

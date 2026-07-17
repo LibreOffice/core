@@ -62,10 +62,10 @@ void XMLSettingsExportHelper::CallTypeFunction(const cpo::uno::Any& rAny,
     cpo::uno::Any aAny( rAny );
     ManipulateSetting( aAny, rName );
 
-    uno::TypeClass eClass = aAny.getValueTypeClass();
+    cpo::uno::TypeClass eClass = aAny.getValueTypeClass();
     switch (eClass)
     {
-        case uno::TypeClass_VOID:
+        case cpo::uno::TypeClass_VOID:
         {
             /*
              * This assertion pops up when exporting values which are set to:
@@ -75,45 +75,45 @@ void XMLSettingsExportHelper::CallTypeFunction(const cpo::uno::Any& rAny,
              */
         }
         break;
-        case uno::TypeClass_BOOLEAN:
+        case cpo::uno::TypeClass_BOOLEAN:
         {
             exportBool(::cppu::any2bool(aAny), rName);
         }
         break;
-        case uno::TypeClass_BYTE:
+        case cpo::uno::TypeClass_BYTE:
         {
             exportByte();
         }
         break;
-        case uno::TypeClass_SHORT:
+        case cpo::uno::TypeClass_SHORT:
         {
             sal_Int16 nInt16 = 0;
             aAny >>= nInt16;
             exportShort(nInt16, rName);
         }
         break;
-        case uno::TypeClass_LONG:
+        case cpo::uno::TypeClass_LONG:
         {
             sal_Int32 nInt32 = 0;
             aAny >>= nInt32;
             exportInt(nInt32, rName);
         }
         break;
-        case uno::TypeClass_HYPER:
+        case cpo::uno::TypeClass_HYPER:
         {
             sal_Int64 nInt64 = 0;
             aAny >>= nInt64;
             exportLong(nInt64, rName);
         }
         break;
-        case uno::TypeClass_DOUBLE:
+        case cpo::uno::TypeClass_DOUBLE:
         {
             double fDouble = 0.0;
             aAny >>= fDouble;
             exportDouble(fDouble, rName);
         }
         break;
-        case uno::TypeClass_STRING:
+        case cpo::uno::TypeClass_STRING:
         {
             OUString sString;
             aAny >>= sString;

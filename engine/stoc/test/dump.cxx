@@ -13,7 +13,7 @@
 #include <com/sun/star/reflection/Dump.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <cpo/uno/TypeClass.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
@@ -51,10 +51,10 @@ public:
     void testEnum()
     {
         CPPUNIT_ASSERT_EQUAL(u"ENUM"_ustr,
-                             dump_->dumpValue(cpo::uno::Any(css::uno::TypeClass_ENUM)));
-        CPPUNIT_ASSERT_EQUAL(u"-1"_ustr, dump_->dumpValue(cpo::uno::Any(css::uno::TypeClass(-1))));
+                             dump_->dumpValue(cpo::uno::Any(cpo::uno::TypeClass_ENUM)));
+        CPPUNIT_ASSERT_EQUAL(u"-1"_ustr, dump_->dumpValue(cpo::uno::Any(cpo::uno::TypeClass(-1))));
         CPPUNIT_ASSERT_EQUAL(u"12345"_ustr,
-                             dump_->dumpValue(cpo::uno::Any(css::uno::TypeClass(12345))));
+                             dump_->dumpValue(cpo::uno::Any(cpo::uno::TypeClass(12345))));
     }
 
     void testStruct()

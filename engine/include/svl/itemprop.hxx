@@ -61,11 +61,11 @@ struct SfxItemPropertyMapEntry
             // Verify that if METRIC_ITEM is set, we are one of the types supported by
             // SvxUnoConvertToMM.
             assert(!(_nMoreFlags & PropertyMoreFlags::METRIC_ITEM) ||
-                ( (aType.getTypeClass() == css::uno::TypeClass_BYTE)
-                  || (aType.getTypeClass() == css::uno::TypeClass_SHORT)
-                  || (aType.getTypeClass() == css::uno::TypeClass_UNSIGNED_SHORT)
-                  || (aType.getTypeClass() == css::uno::TypeClass_LONG)
-                  || (aType.getTypeClass() == css::uno::TypeClass_UNSIGNED_LONG)
+                ( (aType.getTypeClass() == cpo::uno::TypeClass_BYTE)
+                  || (aType.getTypeClass() == cpo::uno::TypeClass_SHORT)
+                  || (aType.getTypeClass() == cpo::uno::TypeClass_UNSIGNED_SHORT)
+                  || (aType.getTypeClass() == cpo::uno::TypeClass_LONG)
+                  || (aType.getTypeClass() == cpo::uno::TypeClass_UNSIGNED_LONG)
                 ) );
         }
 };

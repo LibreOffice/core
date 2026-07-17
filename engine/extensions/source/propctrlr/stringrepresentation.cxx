@@ -118,7 +118,7 @@ private:
     * \param _ePropertyType the type of the property to be converted into
     * \return the converted value
     */
-    cpo::uno::Any convertStringToSimple( const OUString& _rValue,const uno::TypeClass& _ePropertyType );
+    cpo::uno::Any convertStringToSimple( const OUString& _rValue,const cpo::uno::TypeClass& _ePropertyType );
 
     uno::Reference< uno::XComponentContext >                                m_xContext;
     uno::Reference< script::XTypeConverter >                                m_xTypeConverter;
@@ -174,18 +174,18 @@ cpo::uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const OUStri
 {
     cpo::uno::Any aReturn;
 
-    uno::TypeClass ePropertyType = ControlValueType.getTypeClass();
+    cpo::uno::TypeClass ePropertyType = ControlValueType.getTypeClass();
     switch ( ePropertyType )
     {
-    case uno::TypeClass_FLOAT:
-    case uno::TypeClass_DOUBLE:
-    case uno::TypeClass_BYTE:
-    case uno::TypeClass_SHORT:
-    case uno::TypeClass_LONG:
-    case uno::TypeClass_HYPER:
-    case uno::TypeClass_UNSIGNED_SHORT:
-    case uno::TypeClass_UNSIGNED_LONG:
-    case uno::TypeClass_UNSIGNED_HYPER:
+    case cpo::uno::TypeClass_FLOAT:
+    case cpo::uno::TypeClass_DOUBLE:
+    case cpo::uno::TypeClass_BYTE:
+    case cpo::uno::TypeClass_SHORT:
+    case cpo::uno::TypeClass_LONG:
+    case cpo::uno::TypeClass_HYPER:
+    case cpo::uno::TypeClass_UNSIGNED_SHORT:
+    case cpo::uno::TypeClass_UNSIGNED_LONG:
+    case cpo::uno::TypeClass_UNSIGNED_HYPER:
         try
         {
             aReturn = convertStringToSimple(ControlValue, ePropertyType);
@@ -287,7 +287,7 @@ OUString StringRepresentation::convertSimpleToString( const cpo::uno::Any& _rVal
             }
 
             if ( sReturn.isEmpty() )
-                m_xTypeConverter->convertToSimpleType( _rValue, uno::TypeClass_STRING ) >>= sReturn;
+                m_xTypeConverter->convertToSimpleType( _rValue, cpo::uno::TypeClass_STRING ) >>= sReturn;
         }
         catch( const script::CannotConvertException& ) { }
         catch( const lang::IllegalArgumentException& ) { }
@@ -357,11 +357,11 @@ bool StringRepresentation::convertGenericValueToString( const cpo::uno::Any& _rV
 
     switch ( _rValue.getValueTypeClass() )
     {
-    case uno::TypeClass_STRING:
+    case cpo::uno::TypeClass_STRING:
         _rValue >>= _rStringRep;
         break;
 
-    case uno::TypeClass_BOOLEAN:
+    case cpo::uno::TypeClass_BOOLEAN:
     {
         bool bValue = false;
         _rValue >>= bValue;
@@ -371,7 +371,7 @@ bool StringRepresentation::convertGenericValueToString( const cpo::uno::Any& _rV
     break;
 
     // some sequence types
-    case uno::TypeClass_SEQUENCE:
+    case cpo::uno::TypeClass_SEQUENCE:
     {
         Sequence< OUString > aStringValues;
         Sequence< sal_Int8 > aInt8Values;
@@ -414,11 +414,11 @@ bool StringRepresentation::convertGenericValueToString( const cpo::uno::Any& _rV
             bCanConvert = false;
     }
     break;
-    case uno::TypeClass_CONSTANT:
+    case cpo::uno::TypeClass_CONSTANT:
         break;
 
     // some structs
-    case uno::TypeClass_STRUCT:
+    case cpo::uno::TypeClass_STRUCT:
         OSL_FAIL( "StringRepresentation::convertGenericValueToString(STRUCT): this is dead code - isn't it?" );
         if ( _rValue.getValueType().equals( cppu::UnoType< util::Date >::get() ))
         {
@@ -454,7 +454,7 @@ bool StringRepresentation::convertGenericValueToString( const cpo::uno::Any& _rV
     return bCanConvert;
 }
 
-cpo::uno::Any StringRepresentation::convertStringToSimple( const OUString& _rValue,const uno::TypeClass& _ePropertyType )
+cpo::uno::Any StringRepresentation::convertStringToSimple( const OUString& _rValue,const cpo::uno::TypeClass& _ePropertyType )
 {
     cpo::uno::Any aReturn;
     if ( m_xTypeConverter.is() && !_rValue.isEmpty() )
@@ -489,58 +489,58 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
 
     switch ( _rTargetType.getTypeClass() )
     {
-    case uno::TypeClass_STRING:
+    case cpo::uno::TypeClass_STRING:
         _rValue <<= _rStringRep;
         break;
 
-    case uno::TypeClass_BOOLEAN:
+    case cpo::uno::TypeClass_BOOLEAN:
     {
         _rValue <<= PcrRes(RID_RSC_ENUM_YESNO[0]) != _rStringRep;
     }
     break;
 
-    case uno::TypeClass_SEQUENCE:
+    case cpo::uno::TypeClass_SEQUENCE:
     {
         cpo::uno::Type aElementType = ::comphelper::getSequenceElementType( _rTargetType );
 
         switch ( aElementType.getTypeClass() )
         {
-            case uno::TypeClass_STRING:
+            case cpo::uno::TypeClass_STRING:
             {
                 Sequence< OUString > aElements;
                 splitComposedStringToSequence( _rStringRep, aElements, StringIdentity() );
                 _rValue <<= aElements;
             }
             break;
-            case uno::TypeClass_SHORT:
+            case cpo::uno::TypeClass_SHORT:
             {
                 Sequence< sal_Int16 > aElements;
                 splitComposedStringToSequence( _rStringRep, aElements, ConvertIntegerFromAndToString() );
                 _rValue <<= aElements;
             }
             break;
-            case uno::TypeClass_UNSIGNED_SHORT:
+            case cpo::uno::TypeClass_UNSIGNED_SHORT:
             {
                 Sequence< sal_uInt16 > aElements;
                 splitComposedStringToSequence( _rStringRep, aElements, ConvertIntegerFromAndToString() );
                 _rValue <<= aElements;
             }
             break;
-            case uno::TypeClass_LONG:
+            case cpo::uno::TypeClass_LONG:
             {
                 Sequence< sal_Int32 > aElements;
                 splitComposedStringToSequence( _rStringRep, aElements, ConvertIntegerFromAndToString() );
                 _rValue <<= aElements;
             }
             break;
-            case uno::TypeClass_UNSIGNED_LONG:
+            case cpo::uno::TypeClass_UNSIGNED_LONG:
             {
                 Sequence< sal_uInt32 > aElements;
                 splitComposedStringToSequence( _rStringRep, aElements, ConvertIntegerFromAndToString() );
                 _rValue <<= aElements;
             }
             break;
-            case uno::TypeClass_BYTE:
+            case cpo::uno::TypeClass_BYTE:
             {
                 Sequence< sal_Int8 > aElements;
                 splitComposedStringToSequence( _rStringRep, aElements, ConvertIntegerFromAndToString() );
@@ -554,7 +554,7 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
     }
     break;
 
-    case uno::TypeClass_STRUCT:
+    case cpo::uno::TypeClass_STRUCT:
         OSL_FAIL( "StringRepresentation::convertStringToGenericValue(STRUCT): this is dead code - isn't it?" );
         if ( _rTargetType.equals( cppu::UnoType< util::Date >::get() ))
         {

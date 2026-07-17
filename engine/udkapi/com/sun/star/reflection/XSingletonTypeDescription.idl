@@ -28,7 +28,7 @@
     service-based singletons.</p>
 
     <p>The type class of this type is
-    com::sun::star::uno::TypeClass::SINGLETON.
+    cpo::uno::TypeClass::SINGLETON.
   */
 published interface XSingletonTypeDescription : com::sun::star::reflection::XTypeDescription
 {

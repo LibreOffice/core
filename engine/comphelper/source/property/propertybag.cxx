@@ -37,7 +37,7 @@ namespace comphelper
 
     using ::cpo::uno::Any;
     using ::cpo::uno::Type;
-    using ::com::sun::star::uno::TypeClass_VOID;
+    using ::cpo::uno::TypeClass_VOID;
     using ::com::sun::star::beans::IllegalTypeException;
     using ::com::sun::star::beans::PropertyExistException;
     using ::com::sun::star::container::ElementExistException;

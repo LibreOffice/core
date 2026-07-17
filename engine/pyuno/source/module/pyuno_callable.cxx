@@ -76,7 +76,7 @@ static PyObject* PyUNO_callable_call(
         cargo = runtime.getImpl()->cargo;
         any_params = runtime.pyObject2Any (args);
 
-        if (any_params.getValueTypeClass () == css::uno::TypeClass_SEQUENCE)
+        if (any_params.getValueTypeClass () == cpo::uno::TypeClass_SEQUENCE)
         {
             any_params >>= aParams;
         }

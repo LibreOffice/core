@@ -284,7 +284,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             <p> This must be the same type as is already defined in the schema
                 or lower layers, unless the previous type was unspecified
                 (as indicated by
-                com::sun::star::uno::TypeClass::ANY.)
+                cpo::uno::TypeClass::ANY.)
             </p>
             <p> A `VOID` type indicates that the type is unspecified
                 in this layer.
