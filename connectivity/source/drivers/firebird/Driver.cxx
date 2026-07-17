@@ -48,6 +48,7 @@ namespace {
 constexpr OUString our_sFirebirdTmpVar = u"FIREBIRD_TMP"_ustr;
 constexpr OUString our_sFirebirdLockVar = u"FIREBIRD_LOCK"_ustr;
 constexpr OUString our_sFirebirdMsgVar = u"FIREBIRD_MSG"_ustr;
+constexpr OUString our_sFirebirdRootVar = u"FIREBIRD"_ustr;
 #ifdef MACOSX
 constexpr OUString our_sFirebirdLibVar = u"LIBREOFFICE_FIREBIRD_LIB"_ustr;
 #endif
@@ -58,18 +59,56 @@ FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentCo
     , m_aContext(_rxContext)
     , m_firebirdTMPDirectory(nullptr, true)
     , m_firebirdLockDirectory(nullptr, true)
+    , m_firebirdDataDirectory(nullptr, true)
+    , m_bConfined(false)
 {
     // ::utl::TempFile uses a unique temporary directory (subdirectory of
     // /tmp or other user specific tmp directory) per instance in which
     // we can create directories for firebird at will.
     m_firebirdTMPDirectory.EnableKillingFile(true);
     m_firebirdLockDirectory.EnableKillingFile(true);
+    m_firebirdDataDirectory.EnableKillingFile(true);
 
     // Overrides firebird's default of /tmp or c:\temp
     osl_setEnvironment(our_sFirebirdTmpVar.pData, m_firebirdTMPDirectory.GetFileName().pData);
 
     // Overrides firebird's default of /tmp/firebird or c:\temp\firebird
     osl_setEnvironment(our_sFirebirdLockVar.pData, m_firebirdLockDirectory.GetFileName().pData);
+
+    // Keep the files firebird opens or creates together in one directory.
+    // Embedded databases are extracted here, and DatabaseAccess = Restrict
+    // keeps any associated files firebird makes for it under the same
+    // directory. firebird reads this firebird.conf from the directory the
+    // FIREBIRD variable names, once, on its first use, so it has to be set
+    // before the first connection.
+    OUString sDataDirPath;
+    ::osl::FileBase::getSystemPathFromFileURL(m_firebirdDataDirectory.GetURL(), sDataDirPath);
+
+#if defined(_WIN32)
+    // firebird upper-cases the database path before the exact-match
+    // DatabaseAccess check, so match that here.
+    sDataDirPath = sDataDirPath.toAsciiUpperCase();
+#endif
+
+    OString sConf = "DatabaseAccess = Restrict "
+        + OUStringToOString(sDataDirPath, RTL_TEXTENCODING_UTF8) + "\n";
+
+    OUString sConfURL = m_firebirdDataDirectory.GetURL() + "/firebird.conf";
+    ::osl::File aConfFile(sConfURL);
+    if (aConfFile.open(osl_File_OpenFlag_Create | osl_File_OpenFlag_Write) == ::osl::FileBase::E_None)
+    {
+        sal_uInt64 nWritten = 0;
+        if (aConfFile.write(sConf.getStr(), sConf.getLength(), nWritten) == ::osl::FileBase::E_None
+            && nWritten == static_cast<sal_uInt64>(sConf.getLength()))
+        {
+            osl_setEnvironment(our_sFirebirdRootVar.pData, sDataDirPath.pData);
+            m_bConfined = true;
+        }
+        aConfFile.close();
+    }
+
+    SAL_WARN_IF(!m_bConfined, "connectivity.firebird",
+                "could not write " << sConfURL << ", firebird connections will be refused");
 
 #ifndef SYSTEM_FIREBIRD
     // Overrides firebird's hardcoded default of /usr/local/firebird on *nix,
@@ -107,6 +146,7 @@ void FirebirdDriver::disposing()
 
     osl_clearEnvironment(our_sFirebirdTmpVar.pData);
     osl_clearEnvironment(our_sFirebirdLockVar.pData);
+    osl_clearEnvironment(our_sFirebirdRootVar.pData);
 
 #ifndef SYSTEM_FIREBIRD
     osl_clearEnvironment(our_sFirebirdMsgVar.pData);
@@ -148,8 +188,18 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
     if ( ! acceptsURL(url) )
         return nullptr;
 
+    // Without the firebird.conf that keeps firebird inside its own directory
+    // we do not open any database.
+    if (!m_bConfined)
+    {
+        ::connectivity::SharedResources aResources;
+        const OUString sMessage = aResources.getResourceString(STR_COULD_NOT_LOAD_FILE).replaceFirst(
+            "$filename$", u"firebird.conf");
+        ::dbtools::throwGenericSQLException(sMessage, *this);
+    }
+
     rtl::Reference<Connection> pCon = new Connection();
-    pCon->construct(url, info);
+    pCon->construct(url, info, getDatabaseDataDirectoryURL());
 
     m_xConnections.push_back(pCon);
 
