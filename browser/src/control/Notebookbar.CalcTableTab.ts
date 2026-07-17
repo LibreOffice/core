@@ -55,18 +55,6 @@ class CalcTableTab implements NotebookbarTab {
 	public getContent(): NotebookbarTabContent {
 		const content = [
 			{
-				id: 'insert-remove-calc-table',
-				type: 'bigtoolitem',
-				text: _UNO('.uno:RemoveCalcTable', 'spreadsheet'),
-				command: '.uno:RemoveCalcTable',
-				accessibility: { focusBack: true, combination: 'DT' },
-			},
-			{
-				type: 'separator',
-				id: 'table-deletecalctable-break',
-				orientation: 'vertical',
-			},
-			{
 				type: 'overflowgroup',
 				id: 'table-properties',
 				name: _('Properties'),
@@ -116,23 +104,15 @@ class CalcTableTab implements NotebookbarTab {
 				accessibility: { focusBack: true, combination: 'TL' },
 				children: [
 					{
+						id: 'summarize-with-pivottable',
+						type: 'bigtoolitem',
+						text: _UNO('.uno:DataDataPilotRun', 'spreadsheet'),
+						command: '.uno:DataDataPilotRun',
+						accessibility: { focusBack: true, combination: 'PV' },
+					},
+					{
 						type: 'container',
 						children: [
-							{
-								type: 'toolbox',
-								children: [
-									{
-										id: 'summarize-with-pivottable',
-										type: 'toolitem',
-										text: _UNO('.uno:DataDataPilotRun', 'spreadsheet'),
-										command: '.uno:DataDataPilotRun',
-										accessibility: {
-											focusBack: true,
-											combination: 'PV',
-										},
-									},
-								],
-							},
 							{
 								type: 'toolbox',
 								children: [
@@ -144,6 +124,21 @@ class CalcTableTab implements NotebookbarTab {
 										accessibility: {
 											focusBack: true,
 											combination: 'CR',
+										},
+									},
+								],
+							},
+							{
+								type: 'toolbox',
+								children: [
+									{
+										id: 'insert-remove-calc-table',
+										type: 'toolitem',
+										text: _UNO('.uno:RemoveCalcTable', 'spreadsheet'),
+										command: '.uno:RemoveCalcTable',
+										accessibility: {
+											focusBack: true,
+											combination: 'DT',
 										},
 									},
 								],
