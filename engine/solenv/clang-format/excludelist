@@ -34,7 +34,6 @@ avmedia/source/macavf/macavfcommon.hxx
 avmedia/source/macavf/manager.hxx
 avmedia/source/macavf/player.hxx
 avmedia/source/macavf/window.hxx
-avmedia/source/qt6/QtPlayer.hxx
 avmedia/source/viewer/mediaevent_impl.cxx
 avmedia/source/viewer/mediaevent_impl.hxx
 avmedia/source/viewer/mediawindow.cxx
