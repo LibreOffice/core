@@ -399,6 +399,11 @@ public:
 
     bool InvalidateByForeignEditView(EditView* pEditView) override;
 
+    // The logic-coordinate (1/100 mm) area this view must repaint to show a
+    // foreign edit view's in-progress text, already widened to the text. Empty
+    // when the edit view or its cursor cell is not available in this view.
+    std::optional<tools::Rectangle> GetForeignEditInvalidateRect(EditView* pEditView);
+
     // Compute the OutputArea (in painter pixels) for a foreign EditView when the
     // editing view's zoom differs from the painter's. Static for testability.
     SC_DLLPUBLIC static tools::Rectangle ComputeForeignEditOutputArea(
@@ -408,6 +413,12 @@ public:
         const Point& rOriginAbsPx,
         double fZoomThisX, double fZoomThisY,
         double fZoomOtherX, double fZoomOtherY);
+
+    // Widen a foreign edit's cell invalidation rectangle to the in-progress
+    // text's width so every tile the text reaches is repainted. Static for
+    // testability.
+    SC_DLLPUBLIC static tools::Rectangle ExtendEditInvalidateRectForText(
+        const tools::Rectangle& rCellRect, tools::Long nTextWidth);
 
     /// Update the cell selection according to what handles have been dragged.
     /// @see vcl::ITiledRenderable::setTextSelection() for the values of nType.

@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <optional>
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
@@ -1702,14 +1703,23 @@ tools::Rectangle ScGridWindow::ComputeForeignEditOutputArea(
     return aResult;
 }
 
-bool ScGridWindow::InvalidateByForeignEditView(EditView* pEditView)
+tools::Rectangle ScGridWindow::ExtendEditInvalidateRectForText(
+    const tools::Rectangle& rCellRect, tools::Long nTextWidth)
+{
+    tools::Rectangle aResult(rCellRect);
+    aResult.Union(tools::Rectangle(rCellRect.TopLeft(),
+                                   Size(nTextWidth + 1, rCellRect.GetHeight())));
+    return aResult;
+}
+
+std::optional<tools::Rectangle> ScGridWindow::GetForeignEditInvalidateRect(EditView* pEditView)
 {
     if (!pEditView)
-        return false;
+        return std::nullopt;
 
     auto* pGridWin = dynamic_cast<ScGridWindow*>(pEditView->GetWindow());
     if (!pGridWin)
-        return false;
+        return std::nullopt;
 
     const ScViewData& rViewData = pGridWin->getViewData();
     tools::Long nRefTabNo = rViewData.GetRefTabNo();
@@ -1717,11 +1727,23 @@ bool ScGridWindow::InvalidateByForeignEditView(EditView* pEditView)
     tools::Long nY = rViewData.GetCurYForTab(nRefTabNo);
 
     if (nX < 0 || nY < 0)
-        return false;
+        return std::nullopt;
 
     tools::Rectangle aPixRect = getViewData().GetEditArea(eWhich, nX, nY, this, nullptr, true);
     tools::Rectangle aLogicRect = PixelToLogic(aPixRect, getViewData().GetLogicMode());
-    Invalidate(pEditView->IsNegativeX() ? lcl_negateRectX(aLogicRect) : aLogicRect);
+
+    // The in-progress text can reach past the cell into neighbouring tiles
+    return ExtendEditInvalidateRectForText(aLogicRect,
+                                           pEditView->getEditEngine().CalcTextWidth());
+}
+
+bool ScGridWindow::InvalidateByForeignEditView(EditView* pEditView)
+{
+    std::optional<tools::Rectangle> oLogicRect = GetForeignEditInvalidateRect(pEditView);
+    if (!oLogicRect)
+        return false;
+
+    Invalidate(pEditView->IsNegativeX() ? lcl_negateRectX(*oLogicRect) : *oLogicRect);
 
     return true;
 }

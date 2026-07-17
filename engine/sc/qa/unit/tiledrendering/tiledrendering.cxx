@@ -3181,6 +3181,27 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testForeignEditOutputAreaDifferentZoo
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testExtendEditInvalidateRectForText)
+{
+    // A foreign view sees another view's in-progress edit only through tiles, so
+    // its invalidation must cover the whole text. The cell rectangle is widened
+    // to the text width; text that fits the cell leaves it unchanged so a short
+    // edit is not over-invalidated. Before the fix the invalidation stayed at the
+    // cell and grown text was left stale in never-repainted tiles.
+    const tools::Rectangle aCell(100, 200, 1316, 405); // 1217 x 206
+
+    // Text wider than the cell: the rectangle grows rightwards to the text width,
+    // keeping the cell's top, bottom and left.
+    const tools::Rectangle aGrown = ScGridWindow::ExtendEditInvalidateRectForText(aCell, 4000);
+    CPPUNIT_ASSERT_EQUAL(aCell.Left(), aGrown.Left());
+    CPPUNIT_ASSERT_EQUAL(aCell.Top(), aGrown.Top());
+    CPPUNIT_ASSERT_EQUAL(aCell.Bottom(), aGrown.Bottom());
+    CPPUNIT_ASSERT(aGrown.GetWidth() >= 4000);
+
+    // Text that fits inside the cell: the rectangle is left unchanged.
+    CPPUNIT_ASSERT_EQUAL(aCell, ScGridWindow::ExtendEditInvalidateRectForText(aCell, 50));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testOpenURL)
 {
     // Given a document that has 2 views:
