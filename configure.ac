@@ -248,6 +248,13 @@ AC_ARG_ENABLE(fuzzers,
          For best results: --with-sanitizer=address,undefined])
 )
 
+AC_ARG_ENABLE(lto,
+    AS_HELP_STRING([--disable-lto],
+        [Do not use link-time optimization for the fuzzer build. LTO is on by
+         default under --enable-fuzzers; disabling it gives much faster
+         incremental link times at the cost of fuzzing performance.])
+)
+
 AC_ARG_ENABLE([androidapp],
               AS_HELP_STRING([--enable-androidapp],
                              [Use in a tree where the only purpose is to build the Android app that is supposed
@@ -1561,8 +1568,8 @@ case "$enable_fuzzers" in
         AC_MSG_ERROR([unknown fuzzer engine '$enable_fuzzers' (use 'libfuzzer' or 'afl')])
         ;;
 esac
-if test "$LIBFUZZER" = "1"; then
-    # We require LTO for both libFuzzer and AFL. Unfortunately, with ThinLTO,
+if test "$LIBFUZZER" = "1" -a "$enable_lto" != "no"; then
+    # We use LTO for both libFuzzer and AFL. Unfortunately, with ThinLTO,
     # via either ld.bfd's LLVMgold plugin or lld's native ThinLTO, crash on
     # this codebase under clang/lld 18, but full -flto via lld links cleanly.
     # -Wl,--no-gc-sections works around a clang/lld LTO+ASan bug where
@@ -1583,10 +1590,13 @@ if test "$LIBFUZZER" = "1"; then
          AC_MSG_ERROR([the fuzzer build requires a C++ toolchain that links with '-flto -fuse-ld=lld -Wl,--no-gc-sections'; install lld (e.g. apt install lld) and a clang/gcc that supports -flto, or omit --enable-fuzzers])])
     AC_LANG_POP([C++])
     LDFLAGS=$fuzzer_check_saved_LDFLAGS
+elif test "$LIBFUZZER" = "1"; then
+    AC_MSG_NOTICE([LTO disabled for the fuzzer build (--disable-lto); links will be faster but fuzzing slower])
 fi
 AC_DEFINE_UNQUOTED([LIBFUZZER],[$LIBFUZZER],[Define to 1 if this is a fuzzer build.])
 AM_CONDITIONAL([ENABLE_FUZZERS], [test "$LIBFUZZER" = "1"])
 AM_CONDITIONAL([ENABLE_AFL], [test "$FUZZER_ENGINE" = "afl"])
+AM_CONDITIONAL([ENABLE_FUZZER_LTO], [test "$LIBFUZZER" = "1" -a "$enable_lto" != "no"])
 AC_SUBST([FUZZER_ENGINE])
 AC_SUBST([FUZZER_LDFLAGS])
 AC_SUBST([AFL_DRIVER_LIB])

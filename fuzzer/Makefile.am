@@ -158,9 +158,11 @@ noinst_PROGRAMS = \
 CFI_IGNORELIST_FLAGS = -fsanitize-ignorelist=$(srcdir)/cfi-ignore.txt
 
 # CFI for the libFuzzer build (see comment near ENV_san for details).
+if ENABLE_FUZZER_LTO
 LIBFUZZER_CFI_FLAGS = -fsanitize=cfi -fno-sanitize=cfi-derived-cast,cfi-unrelated-cast \
                       -flto -fvisibility=hidden -fno-sanitize-trap=cfi \
                       $(CFI_IGNORELIST_FLAGS)
+endif
 LIBFUZZER_CXXFLAGS_COMMON = $(AM_CXXFLAGS) $(LIBFUZZER_CFI_FLAGS)
 LIBFUZZER_LDFLAGS_COMMON = -fsanitize=fuzzer @FUZZER_LDFLAGS@ $(LIBFUZZER_CFI_FLAGS)
 
