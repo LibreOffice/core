@@ -1,0 +1,62 @@
+From ad0f009a8366860272acb8e05c41a401798f2855 Mon Sep 17 00:00:00 2001
+From: Ariel Schon <ariel.schon12@gmail.com>
+Date: Tue, 14 Apr 2026 21:57:15 +0000
+Subject: [PATCH] parser: Pass userData to SAX text callbacks in
+ xmlParseReference
+
+When replaceEntities is on and the entity's cached tree is reused,
+the first/last text-child optimization in xmlParseReference called
+ctxt->sax->characters / cdataBlock with ctxt as the first argument
+instead of ctxt->userData. Every other SAX callsite in parser.c
+correctly passes ctxt->userData.
+
+With xmlSchemaSAXPlug installed (as set up by
+xmlTextReaderSetSchema / xmlTextReaderSchemaValidate), userData is
+a _xmlSchemaSAXPlug*, so handing over a raw ctxt to the registered
+charactersSplit handler produces a type-confused dereference:
+charactersSplit reads ctxt->myDoc as user_sax and ctxt->myDoc->URL
+as user_sax->characters, then calls that string pointer as code.
+The result is a reliable SIGSEGV on the first entity reference in
+any XSD-validated xmlTextReader stream (and a silent validation
+bypass on the rare targets where the confused call doesn't crash).
+
+Fix by passing ctxt->userData, matching the rest of the file.
+---
+ parser.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/parser.c b/parser.c
+index cdfa90c0..42b4c815 100644
+--- a/parser.c
++++ b/parser.c
+@@ -7497,10 +7497,10 @@ xmlParseReference(xmlParserCtxtPtr ctxt) {
+             if ((cur->type == XML_TEXT_NODE) ||
+                 (ctxt->options & XML_PARSE_NOCDATA)) {
+                 if (ctxt->sax->characters != NULL)
+-                    ctxt->sax->characters(ctxt, cur->content, len);
++                    ctxt->sax->characters(ctxt->userData, cur->content, len);
+             } else {
+                 if (ctxt->sax->cdataBlock != NULL)
+-                    ctxt->sax->cdataBlock(ctxt, cur->content, len);
++                    ctxt->sax->cdataBlock(ctxt->userData, cur->content, len);
+             }
+ 
+             cur = cur->next;
+@@ -7520,10 +7520,12 @@ xmlParseReference(xmlParserCtxtPtr ctxt) {
+                 if ((cur->type == XML_TEXT_NODE) ||
+                     (ctxt->options & XML_PARSE_NOCDATA)) {
+                     if (ctxt->sax->characters != NULL)
+-                        ctxt->sax->characters(ctxt, cur->content, len);
++                        ctxt->sax->characters(ctxt->userData, cur->content,
++                                              len);
+                 } else {
+                     if (ctxt->sax->cdataBlock != NULL)
+-                        ctxt->sax->cdataBlock(ctxt, cur->content, len);
++                        ctxt->sax->cdataBlock(ctxt->userData, cur->content,
++                                              len);
+                 }
+ 
+                 break;
+-- 
+2.55.0
+
