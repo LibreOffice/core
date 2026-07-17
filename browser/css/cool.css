@@ -1137,6 +1137,7 @@ input, button {
 .ui-dialog-title {
 	min-height: 1em;
 	font-size: var(--header-font-size);
+	font-family: var(--cool-font);
 }
 
 .lokdialog_container.ui-dialog.ui-widget-content {
