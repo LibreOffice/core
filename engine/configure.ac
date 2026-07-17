@@ -4829,6 +4829,33 @@ AC_SUBST(LLD_LINK)
 AC_SUBST(USE_LD)
 AC_SUBST(LD)
 
+dnl ===================================================================
+dnl Check whether the linker supports -debug:fastlink, which links debug
+dnl builds faster. MSVC link.exe does; lld-link currently does not and would
+dnl warn on every link, falling back to -debug:full. Probe the selected linker
+dnl rather than hardcoding "lld has no fastlink", so a future lld-link that
+dnl gains support starts using it automatically.
+dnl ===================================================================
+HAVE_LINK_DEBUG_FASTLINK=
+if test "$_os" = "WINNT"; then
+    AC_MSG_CHECKING([whether the linker supports -debug:fastlink])
+    if test -z "$LLD_LINK"; then
+        dnl MSVC link.exe supports it natively
+        HAVE_LINK_DEBUG_FASTLINK=TRUE
+    elif "$LLD_LINK" -debug:fastlink conftest-nonexistent.obj 2>&1 | grep -iq "debug:fastlink.*debug:full"; then
+        dnl the fallback warning means fastlink is not supported
+        HAVE_LINK_DEBUG_FASTLINK=
+    else
+        HAVE_LINK_DEBUG_FASTLINK=TRUE
+    fi
+    if test -n "$HAVE_LINK_DEBUG_FASTLINK"; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+AC_SUBST(HAVE_LINK_DEBUG_FASTLINK)
+
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
 if test "$GCC" = "yes" -a "$_os" != Emscripten ; then
     AC_MSG_CHECKING([for -Bsymbolic-functions linker support])
