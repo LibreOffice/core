@@ -501,6 +501,52 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 			cy.cGet('[id$="-dropdown"]:visible').should('not.contain', 'Expand All Sections');
 		});
 
+		// Removing a section drops only the grouping, not the slides. When the
+		// removed section was collapsed, its slides must not stay hidden.
+		it('Removing a collapsed section keeps its slides visible', function() {
+			helper.processToIdle(this.win);
+
+			// Section-1 (0-3), Section-2 (4-10), Section-3 (11-12).
+			assertSectionHeaders(['Section-1', 'Section-2', 'Section-3']);
+			cy.window().should(function(win) {
+				var s = win['0'].app.impress.sections;
+				expect(s).to.have.length(3);
+				expect(s[0].startIndex).to.equal(0);
+				expect(s[1].startIndex).to.equal(4);
+				expect(s[2].startIndex).to.equal(11);
+				expect(win['0'].app.impress.partList).to.have.length(13);
+			});
+
+			// Collapse Section-1 and Section-2.
+			cy.cGet('.slide-section-header').eq(0).find('.slide-section-toggle').click();
+			cy.cGet('.slide-section-header').eq(1).find('.slide-section-toggle').click();
+			for (var i = 0; i <= 10; i++) {
+				cy.cGet('#preview-frame-part-' + i).should('have.class', 'section-collapsed');
+			}
+
+			// Remove the first, collapsed section. Match the entry exactly so it
+			// does not also hit "Remove Section & Slides".
+			rightClickSectionHeader(0);
+			cy.cGet('[id$="-dropdown"]:visible')
+				.contains('.ui-combobox-entry', /^Remove Section$/).click();
+			helper.processToIdle(this.win);
+
+			assertSectionHeaders(['Section-2', 'Section-3']);
+
+			// Section-1's former slides belong to no section now and must reappear.
+			[0, 1, 2, 3].forEach(function (i) {
+				cy.cGet('#preview-frame-part-' + i).should('not.have.class', 'section-collapsed');
+			});
+			// Section-2 is still collapsed, so its slides stay hidden.
+			[4, 5, 6, 7, 8, 9, 10].forEach(function (i) {
+				cy.cGet('#preview-frame-part-' + i).should('have.class', 'section-collapsed');
+			});
+			// Section-3 was never collapsed.
+			[11, 12].forEach(function (i) {
+				cy.cGet('#preview-frame-part-' + i).should('not.have.class', 'section-collapsed');
+			});
+		});
+
 		it('Remove Section and Slides via context menu in PPTX', function() {
 			helper.processToIdle(this.win);
 

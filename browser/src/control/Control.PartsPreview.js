@@ -610,6 +610,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		if (!sections || sections.length === 0) {
 			this._collapsedSections.clear();
+			this._clearAllSectionCollapse();
+			// Removing the last section un-hides its slides; fetch the
+			// thumbnails for any that were collapsed before they were loaded.
+			this._ensureVisiblePreviews();
 			return;
 		}
 
@@ -642,6 +646,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 
 		this._applyAllSectionsCollapse();
+		// Removing a section can turn its slides back into ungrouped, visible
+		// ones; fetch their thumbnails now that they show again.
+		this._ensureVisiblePreviews();
 
 		this._updateSelectedSection();
 	},
@@ -857,8 +864,22 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 	},
 
-	// Apply collapsed state to every section.
+	// Remove the collapsed marker from every slide frame. Section membership is
+	// recomputed from the current section list, so a slide that dropped out of a
+	// section, for example when a collapsed section was removed, must not keep
+	// the hidden state of the section it used to belong to.
+	_clearAllSectionCollapse: function () {
+		for (let i = 0; i < this._previewTiles.length; i++) {
+			const frame = this._previewTiles[i] && this._previewTiles[i].parentNode;
+			if (frame)
+				frame.classList.remove('section-collapsed');
+		}
+	},
+
+	// Apply collapsed state to every section, starting from a clean slate so
+	// only slides in a section that is currently collapsed stay hidden.
 	_applyAllSectionsCollapse: function () {
+		this._clearAllSectionCollapse();
 		var sections = app.impress.sections || [];
 		for (var s = 0; s < sections.length; s++)
 			this._applySectionCollapse(s);
