@@ -244,8 +244,7 @@ void ScDocShell::PerformLinkUpdate()
 
 bool ScDocShell::HasUpdatableLinks() const
 {
-    const sfx2::LinkManager* pLinkMgr = GetDocument().GetLinkManager();
-    return pLinkMgr && !pLinkMgr->GetLinks().empty();
+    return GetDocument().GetDocLinkManager().hasUpdatableLinks();
 }
 
 bool ScDocShell::HasExternalLinks() const
