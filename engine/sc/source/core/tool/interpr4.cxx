@@ -3801,6 +3801,7 @@ void ScInterpreter::DispatchOpCode( OpCode eOp )
         case ocTextAfter        : ScTextAfter();                break;
         case ocTextBefore       : ScTextBefore();               break;
         case ocTextSplit        : ScTextSplit();                break;
+        case ocArrayToText      : ScArrayToText();              break;
         case ocToCol            : ScToCol();                    break;
         case ocToRow            : ScToRow();                    break;
         case ocUnique           : ScUnique();                   break;

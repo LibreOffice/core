@@ -25,6 +25,8 @@
 #include <svl/broadcast.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/saveopt.hxx>
+#include <unotools/syslocaleoptions.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <cmath>
 #include <memory>
@@ -6822,6 +6824,39 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayIsFormula)
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(5, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(5, 2, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncARRAYTOTEXTBooleanLocale)
+{
+    // A boolean lists as TRUE or FALSE in the current locale, so under a
+    // German locale ARRAYTOTEXT writes WAHR and FALSCH.
+    SvtSysLocaleOptions aLocaleOptions;
+    const OUString aPreviousLocale = aLocaleOptions.GetLanguageTag().getBcp47();
+    aLocaleOptions.SetLocaleConfigString(u"de-DE"_ustr);
+    aLocaleOptions.Commit();
+    comphelper::ScopeGuard aLocaleGuard([&aLocaleOptions, &aPreviousLocale] {
+        aLocaleOptions.SetLocaleConfigString(aPreviousLocale);
+        aLocaleOptions.Commit();
+    });
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // Two boolean source cells.
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=TRUE()"_ustr);
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"=FALSE()"_ustr);
+
+    // A single boolean lists in the locale's words.
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"=ARRAYTOTEXT(A1)"_ustr);
+    m_pDoc->SetString(ScAddress(1, 1, 0), u"=ARRAYTOTEXT(A2)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"WAHR"_ustr, m_pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"FALSCH"_ustr, m_pDoc->GetString(ScAddress(1, 1, 0)));
+
+    // A range lists each boolean, joined in row order with ", ".
+    m_pDoc->SetString(ScAddress(1, 2, 0), u"=ARRAYTOTEXT(A1:A2)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"WAHR, FALSCH"_ustr, m_pDoc->GetString(ScAddress(1, 2, 0)));
 
     m_pDoc->DeleteTab(0);
 }

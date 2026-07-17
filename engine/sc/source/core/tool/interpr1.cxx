@@ -10044,6 +10044,234 @@ void ScInterpreter::ScToRow()
     ScToColOrRow(/*bCol*/ false);
 }
 
+void ScInterpreter::ScArrayToText()
+{
+    sal_uInt8 nParameterCount = GetByte();
+    if (!MustHaveParamCount(nParameterCount, 1, 2))
+        return;
+
+    // 2nd argument optional - Format: 0 = concise (default), 1 = strict
+    sal_Int32 nFormat = 0;
+    if (nParameterCount == 2)
+    {
+        nFormat = GetInt32WithDefault(0);
+        if (nGlobalError != FormulaError::NONE)
+        {
+            PushError(nGlobalError);
+            return;
+        }
+        if (nFormat < 0 || nFormat > 1)
+        {
+            // Any format other than 0 or 1 is rejected with #VALUE!.
+            PushError(FormulaError::NoValue);
+            return;
+        }
+    }
+    const bool bStrict = (nFormat == 1);
+
+    // The concise format joins all values with ", " in row order. The
+    // strict format writes an array constant: braces around the whole
+    // array, "," between columns, ";" between rows, and quoted text.
+    OUStringBuffer aResult;
+
+    auto appendSeparator = [&aResult, bStrict](bool bNewRow)
+    {
+        if (bNewRow)
+            aResult.append(bStrict ? u";" : u", ");
+        else
+            aResult.append(bStrict ? u"," : u", ");
+    };
+    auto appendText = [&aResult, bStrict](const OUString& rStr)
+    {
+        if (bStrict)
+        {
+            // Each double quote inside the text is doubled.
+            aResult.append('"');
+            aResult.append(rStr.replaceAll(u"\"", u"\"\""));
+            aResult.append('"');
+        }
+        else
+            aResult.append(rStr);
+    };
+    // Boolean values format through the LOGICAL key, so their text is
+    // TRUE or FALSE in the current locale.
+    const sal_uInt32 nLogicalKey = mrContext.NFGetStandardFormat( SvNumFormatType::LOGICAL, ScGlobal::eLnge);
+    auto appendLogical = [this, &aResult, nLogicalKey](double fValue)
+    {
+        OUString aString;
+        const Color* pColor = nullptr;
+        mrContext.NFGetOutputString(fValue, nLogicalKey, aString, &pColor);
+        aResult.append(aString);
+    };
+    auto appendNumber = [this, &aResult](double fValue)
+    {
+        aResult.append(GetStringFromDouble(fValue).getString());
+    };
+    // An error value becomes its error text and the other elements are
+    // still written out.
+    auto appendError = [&aResult](FormulaError nError)
+    {
+        aResult.append(ScGlobal::GetErrorString(nError));
+    };
+    if (bStrict)
+        aResult.append('{');
+
+    switch (GetStackType())
+    {
+        case svSingleRef:
+        case svDoubleRef:
+        {
+            // A referenced range reads directly from the document, cell by
+            // cell in row order, so that a number cell formatted as boolean
+            // still lists as TRUE or FALSE.
+            SCCOL nColumn1;
+            SCCOL nColumn2;
+            SCROW nRow1;
+            SCROW nRow2;
+            SCTAB nTable1;
+            SCTAB nTable2;
+            // A single-cell reference is a scalar argument, so an error in
+            // that one cell propagates as the result. In a multi-cell range
+            // an error cell instead lists as its error text.
+            const bool bScalarRef = (GetStackType() == svSingleRef);
+            if (bScalarRef)
+            {
+                ScAddress aAddress;
+                PopSingleRef(aAddress);
+                nColumn1 = nColumn2 = aAddress.Col();
+                nRow1 = nRow2 = aAddress.Row();
+                nTable1 = nTable2 = aAddress.Tab();
+            }
+            else
+            {
+                PopDoubleRef(nColumn1, nRow1, nTable1, nColumn2, nRow2, nTable2);
+            }
+            if (nGlobalError != FormulaError::NONE)
+            {
+                PushError(nGlobalError);
+                return;
+            }
+            if (nTable1 != nTable2)
+            {
+                PushIllegalParameter();
+                return;
+            }
+
+            for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+            {
+                if (nRow > nRow1)
+                    appendSeparator(/*bNewRow*/ true);
+                for (SCCOL nColumn = nColumn1; nColumn <= nColumn2; ++nColumn)
+                {
+                    if (nColumn > nColumn1)
+                        appendSeparator(/*bNewRow*/ false);
+
+                    ScAddress aAddress(nColumn, nRow, nTable1);
+                    ScRefCellValue aCell(mrDoc, aAddress);
+                    if (aCell.isEmpty())
+                    {
+                        // An empty cell adds no text of its own; only the
+                        // separators around it remain.
+                    }
+                    else if (aCell.hasError())
+                    {
+                        const FormulaError nError = aCell.getFormula()->GetErrCode();
+                        if (bScalarRef)
+                        {
+                            PushError(nError);
+                            return;
+                        }
+                        appendError(nError);
+                    }
+                    else if (aCell.hasNumeric())
+                    {
+                        // A formula result carries its own format type, a
+                        // value cell is formatted by its cell attribute.
+                        SvNumFormatType eCellFormat;
+                        if (aCell.getType() == CELLTYPE_FORMULA)
+                            eCellFormat = aCell.getFormula()->GetFormatType();
+                        else
+                            eCellFormat = mrContext.NFGetType(mrDoc.GetNumberFormat(mrContext, aAddress));
+                        if (eCellFormat == SvNumFormatType::LOGICAL)
+                            appendLogical(aCell.getValue());
+                        else
+                            appendNumber(aCell.getValue());
+                    }
+                    else
+                    {
+                        svl::SharedString aSharedString;
+                        GetCellString(aSharedString, aCell);
+                        appendText(aSharedString.getString());
+                    }
+                }
+            }
+            break;
+        }
+        default:
+        {
+            // A scalar behaves like a 1 by 1 array, and a scalar error
+            // becomes an error element inside that array, so it is written
+            // out as text like any other element.
+            ScMatrixRef pMatrix = GetMatrix();
+            if (!pMatrix)
+            {
+                PushIllegalParameter();
+                return;
+            }
+            if (nGlobalError != FormulaError::NONE)
+            {
+                PushError(nGlobalError);
+                return;
+            }
+
+            SCSIZE nColumns = 0;
+            SCSIZE nRows = 0;
+            pMatrix->GetDimensions(nColumns, nRows);
+
+            for (SCSIZE nRow = 0; nRow < nRows; ++nRow)
+            {
+                if (nRow > 0)
+                    appendSeparator(/*bNewRow*/ true);
+                for (SCSIZE nColumn = 0; nColumn < nColumns; ++nColumn)
+                {
+                    if (nColumn > 0)
+                        appendSeparator(/*bNewRow*/ false);
+
+                    const ScMatrixValue aValue = pMatrix->Get(nColumn, nRow);
+                    switch (aValue.nType)
+                    {
+                        case ScMatValType::String:
+                            appendText(aValue.aStr.getString());
+                            break;
+                        case ScMatValType::Boolean:
+                            appendLogical(aValue.fVal);
+                            break;
+                        case ScMatValType::Value:
+                        {
+                            const FormulaError nError = aValue.GetError();
+                            if (nError != FormulaError::NONE)
+                                appendError(nError);
+                            else
+                                appendNumber(aValue.fVal);
+                            break;
+                        }
+                        default:
+                            // An empty element adds no text of its own;
+                            // only the separators around it remain.
+                            break;
+                    }
+                }
+            }
+            break;
+        }
+    }
+
+    if (bStrict)
+        aResult.append('}');
+
+    PushString(aResult.makeStringAndClear());
+}
+
 void ScInterpreter::ScUnique()
 {
     sal_uInt8 nParamCount = GetByte();

@@ -107,6 +107,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocAmpersand,       {{ Array, Array                                         }, 0, Value }},
     { ocAnd,             {{ Reference                                            }, 1, Value }},
     { ocAreas,           {{ Reference                                            }, 0, Value }},
+    { ocArrayToText,     {{ ReferenceOrRefArray, Value                           }, 0, Value }},
     { ocAveDev,          {{ Reference                                            }, 1, Value }},
     { ocAverage,         {{ ReferenceOrRefArray                                  }, 1, Value }},
     { ocAverageA,        {{ ReferenceOrRefArray                                  }, 1, Value }},

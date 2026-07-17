@@ -307,6 +307,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF[] =
     { "COM.MICROSOFT.MAP" , ocMap },
     { "COM.MICROSOFT.REDUCE" , ocReduce },
     { "COM.MICROSOFT.SCAN" , ocScan },
+    { "COM.MICROSOFT.ARRAYTOTEXT" , ocArrayToText },
     { "_xlpm." , ocStringName },
     { "_xlop." , ocStringName },
     { "ORG.OPENOFFICE.MULTIRANGE" , ocMultiArea }, // legacy for range list (union)
@@ -792,6 +793,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
     { "_xlfn.MAP" , ocMap },
     { "_xlfn.REDUCE" , ocReduce },
     { "_xlfn.SCAN" , ocScan },
+    { "_xlfn.ARRAYTOTEXT" , ocArrayToText },
     { "_xlpm." , ocStringName },
     { "_xlop." , ocStringName },
     { "_xlfn.ORG.OPENOFFICE.MULTIRANGE" , ocMultiArea }, // legacy for range list (union)
@@ -1280,6 +1282,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF[] =
     { "MAP" , ocMap },
     { "REDUCE" , ocReduce },
     { "SCAN" , ocScan },
+    { "ARRAYTOTEXT" , ocArrayToText },
     { "MULTIRANGE" , ocMultiArea },    // legacy for range list (union)
     { "OFFSET" , ocOffset },
     { "INDEX" , ocIndex },
@@ -1765,6 +1768,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_API[] =
     { "MAP" , ocMap },
     { "REDUCE" , ocReduce },
     { "SCAN" , ocScan },
+    { "ARRAYTOTEXT" , ocArrayToText },
     { "MULTIRANGE" , ocMultiArea },    // legacy for range list (union)
     { "OFFSET" , ocOffset },
     { "INDEX" , ocIndex },  // ?? first character = I ??
@@ -2248,6 +2252,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH[] =
     { "MAP" , ocMap },
     { "REDUCE" , ocReduce },
     { "SCAN" , ocScan },
+    { "ARRAYTOTEXT" , ocArrayToText },
     { "MULTIRANGE" , ocMultiArea },
     { "OFFSET" , ocOffset },
     { "INDEX" , ocIndex },
@@ -2710,6 +2715,7 @@ const std::pair<TranslateId, int> RID_STRLIST_FUNCTION_NAMES[] =
     { NC_("RID_STRLIST_FUNCTION_NAMES", "MAP") , ocMap },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "REDUCE") , ocReduce },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "SCAN") , ocScan },
+    { NC_("RID_STRLIST_FUNCTION_NAMES", "ARRAYTOTEXT") , ocArrayToText },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "MULTIRANGE") , ocMultiArea }, // legacy for range list (union)
     { NC_("RID_STRLIST_FUNCTION_NAMES", "OFFSET") , ocOffset },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "INDEX") , ocIndex }, // ?? first character = I ??

@@ -623,6 +623,7 @@ inline constexpr OUString HID_FUNC_UNIQUE_MS = u"SC_HID_FUNC_UNIQUE_MS"_ustr;
 inline constexpr OUString HID_FUNC_LET_MS = u"SC_HID_FUNC_LET_MS"_ustr;
 inline constexpr OUString HID_FUNC_WRAPCOLS_MS = u"SC_HID_FUNC_WRAPCOLS_MS"_ustr;
 inline constexpr OUString HID_FUNC_WRAPROWS_MS = u"SC_HID_FUNC_WRAPROWS_MS"_ustr;
+inline constexpr OUString HID_FUNC_ARRAYTOTEXT_MS = u"SC_HID_FUNC_ARRAYTOTEXT_MS"_ustr;
 inline constexpr OUString HID_FUNC_LAMBDA_MS = u"SC_HID_FUNC_LAMBDA_MS"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

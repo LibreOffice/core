@@ -4509,6 +4509,16 @@ const TranslateId ocWRAPROWS_ARY[] =
     NC_("ocWRAPROWS", "The value with which to pad. The default is #N/A.")
 };
 
+// -=*# Resource for function ARRAYTOTEXT #*=-
+const TranslateId ocARRAYTOTEXT_ARY[] =
+{
+    NC_("ocARRAYTOTEXT", "Returns the values of a range or array as one text string."),
+    NC_("ocARRAYTOTEXT", "Array"),
+    NC_("ocARRAYTOTEXT", "The range or array to return as text."),
+    NC_("ocARRAYTOTEXT", "Format"),
+    NC_("ocARRAYTOTEXT", "The format of the returned text. 0 or omitted - concise format, the values separated by commas (default). 1 - strict format, an array constant in braces with quoted text, comma column separators and semicolon row separators.")
+};
+
 // -=*# Resource for function LAMBDA #*=-
 const TranslateId ocLAMBDA_ARY[] =
 {
