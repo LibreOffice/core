@@ -148,9 +148,9 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
 --- poppler/poppler/GlobalParams.cc.orig	2025-01-02 01:28:08.000000000 +0100
 +++ poppler/poppler/GlobalParams.cc	2025-01-09 17:13:51.367905376 +0100
 @@ -366,7 +366,11 @@
-     for (const SysFontInfo *f : fonts) {
-         fi = f;
-         if (fi->match(name2->toStr(), bold, italic, oblique, fixedWidth)) {
+     for (const std::unique_ptr<SysFontInfo> &f : fonts) {
+         fi = f.get();
+         if (fi->match(name2, bold, italic, oblique, fixedWidth)) {
 +#ifndef __clang__
              if (std::ranges::find(filesToIgnore, fi->path->toStr()) == filesToIgnore.end()) {
 +#else
@@ -160,9 +160,9 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
              }
          }
 @@ -377,7 +381,11 @@
-         for (const SysFontInfo *f : fonts) {
-             fi = f;
-             if (fi->match(name2->toStr(), false, italic)) {
+         for (const std::unique_ptr<SysFontInfo> &f : fonts) {
+             fi = f.get();
+             if (fi->match(name2, false, italic)) {
 +#ifndef __clang__
                  if (std::ranges::find(filesToIgnore, fi->path->toStr()) == filesToIgnore.end()) {
 +#else
@@ -172,9 +172,9 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
                  }
              }
 @@ -389,7 +397,11 @@
-         for (const SysFontInfo *f : fonts) {
-             fi = f;
-             if (fi->match(name2->toStr(), false, false)) {
+         for (const std::unique_ptr<SysFontInfo> &f : fonts) {
+             fi = f.get();
+             if (fi->match(name2, false, false)) {
 +#ifndef __clang__
                  if (std::ranges::find(filesToIgnore, fi->path->toStr()) == filesToIgnore.end()) {
 +#else
