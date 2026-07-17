@@ -22,10 +22,10 @@ class OfficeHelperTest(unittest.TestCase):
         # startup times under heavy load on Jenkins.
         # Report processing in console
         ctx = bootstrap(delays=itertools.repeat(1), report=print)
-        if ctx:  # stop soffice as a service
-            desktop = theDesktop.get(ctx)
-            desktop.terminate()
         self.assertTrue(ctx)
+        # stop soffice as a service
+        desktop = theDesktop.get(ctx)
+        desktop.terminate()
 
     def test_exception(self):
         # Raise BootstrapException and stop ALL PRESENT LibreOffice running services
