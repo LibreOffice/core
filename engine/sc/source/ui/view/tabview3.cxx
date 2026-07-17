@@ -76,7 +76,9 @@
 #include <COKit/COKitEnums.h>
 #include <output.hxx>
 
+#include <optional>
 #include <utility>
+#include <vector>
 
 #include <com/sun/star/chart2/data/HighlightedRange.hpp>
 
@@ -2676,7 +2678,45 @@ void ScTabView::KillEditView( bool bNoPaint )
     if (bNotifyAcc && aViewData.GetViewShell()->HasAccessibilityObjects())
         aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccLeaveEditMode));
 
+    // Work out which tiles the other views must repaint to drop this edit. The
+    // edit spans the cell range nCol1..nCol2 x nRow1..nRow2: the edit view is
+    // grown over neighbouring columns as the text widens, so that range covers
+    // everything that was painted, and unlike the edit engine's text (already
+    // emptied here when the input was committed or discarded) it survives until
+    // the teardown.
+    // Each view converts the range with its own GetScrPos; the
+    // rectangle used for this view further down is in this view's coordinates,
+    // and sending it to a view scrolled or zoomed differently would clear the
+    // wrong tiles and leave the grown text behind. The invalidation is sent
+    // after ResetEditView below, so the tiles are refetched with the committed
+    // cell rather than the in-progress edit.
+    std::vector<std::pair<VclPtr<ScGridWindow>, tools::Rectangle>> aForeignInvalidations;
+    if (comphelper::COKit::isActive() && bNotifyAcc)
+    {
+        KitHelper::forEachOtherView(
+            aViewData.GetViewShell(),
+            [nCol1, nRow1, nCol2, nRow2, &aForeignInvalidations](ScTabView* pTabView)
+            {
+                ScViewData& rOtherViewData = pTabView->GetViewData();
+                for (sal_uInt16 i = 0; i < 4; i++)
+                {
+                    const VclPtr<ScGridWindow>& pWin = pTabView->pGridWin[i];
+                    if (!pWin)
+                        continue;
+                    const ScSplitPos eOtherWhich = static_cast<ScSplitPos>(i);
+                    const Point aStart = rOtherViewData.GetScrPos(nCol1, nRow1, eOtherWhich);
+                    const Point aEnd = rOtherViewData.GetScrPos(nCol2 + 1, nRow2 + 1, eOtherWhich);
+                    const tools::Rectangle aLogicRect = pWin->PixelToLogic(
+                        tools::Rectangle(aStart, aEnd), rOtherViewData.GetLogicMode());
+                    aForeignInvalidations.emplace_back(pWin, aLogicRect);
+                }
+            });
+    }
+
     aViewData.ResetEditView();
+
+    for (auto& [pWin, aForeignRect] : aForeignInvalidations)
+        pWin->LogicInvalidatePart(&aForeignRect, nTab);
     for (sal_uInt16 i = 0; i < 4; i++)
     {
         if (pGridWin[i] && bPaint[i] && pGridWin[i]->IsVisible())
@@ -2689,20 +2729,9 @@ void ScTabView::KillEditView( bool bNoPaint )
 
             if (comphelper::COKit::isActive())
             {
+                // The other views were already invalidated above, each in its
+                // own coordinates, before the edit view was reset.
                 pGridWin[i]->LogicInvalidatePart(&rInvRect, nTab);
-
-                // invalidate other views
-                auto lInvalidateWindows =
-                        [nTab, &rInvRect] (ScTabView* pTabView)
-                        {
-                            for (VclPtr<ScGridWindow> const & pWin: pTabView->pGridWin)
-                            {
-                                if (pWin)
-                                    pWin->LogicInvalidatePart(&rInvRect, nTab);
-                            }
-                        };
-
-                KitHelper::forEachOtherView(GetViewData().GetViewShell(), lInvalidateWindows);
             }
             // #i73567# the cell still has to be repainted
             else
