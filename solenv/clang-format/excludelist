@@ -11202,7 +11202,6 @@ svx/source/inc/gridcell.hxx
 svx/source/inc/gridcols.hxx
 svx/source/inc/sdbdatacolumn.hxx
 svx/source/inc/sqlparserclient.hxx
-svx/source/inc/svdobjplusdata.hxx
 svx/source/inc/svdoutlinercache.hxx
 svx/source/inc/svxpixelctlaccessiblecontext.hxx
 svx/source/inc/svxrectctaccessiblecontext.hxx
@@ -11422,7 +11421,6 @@ svx/source/svdraw/svdmrkv.cxx
 svx/source/svdraw/svdmrkv1.cxx
 svx/source/svdraw/svdoashp.cxx
 svx/source/svdraw/svdobj.cxx
-svx/source/svdraw/svdobjplusdata.cxx
 svx/source/svdraw/svdobjuserdatalist.cxx
 svx/source/svdraw/svdocapt.cxx
 svx/source/svdraw/svdocirc.cxx
