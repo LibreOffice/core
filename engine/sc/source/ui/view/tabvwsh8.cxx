@@ -36,13 +36,19 @@ void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine 
 
 bool ScTabViewShell::HasSelection( bool bText ) const
 {
-    bool bHas = false;
     ScViewData& rData = const_cast<ScViewData&>(GetViewData());
+    ScMarkData& rMark = rData.GetMarkData();
+    if (rMark.IsMultiMarked() && rMark.IsMarkNegative())
+        rMark.MarkToMulti(); // update the mark - is it really still marked?
+
+    if (!rMark.IsMarked() && !rMark.IsMultiMarked())
+        return false;
+
+    bool bHas = false;
     if ( bText )
     {
         // Content contained: Count2 >= 1
         ScDocument& rDoc = rData.GetDocument();
-        ScMarkData& rMark = rData.GetMarkData();
         ScAddress aCursor( rData.GetCurX(), rData.GetCurY(), rData.CurrentTabForData() );
         double fVal = 0.0;
         if ( rDoc.GetSelectionFunction( SUBTOTAL_FUNC_CNT2, aCursor, rMark, fVal ) )
