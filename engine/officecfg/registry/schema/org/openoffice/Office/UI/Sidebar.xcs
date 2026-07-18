@@ -224,12 +224,6 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="WantsCanvas" oor:type="xs:boolean">
-        <info>
-          <desc>Experimental: Set to true when panel wants to paint its content via a XCanvas.</desc>
-        </info>
-        <value>false</value>
-      </prop>
       <prop oor:name="IsExperimental" oor:type="xs:boolean">
         <info>
           <desc>This flag controls whether the panel is experimental and is shown only when experimental mode is enabled.</desc>

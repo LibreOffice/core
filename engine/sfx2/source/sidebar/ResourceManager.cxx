@@ -463,7 +463,6 @@ void ResourceManager::ReadPanelList()
         rPanelDescriptor.msImplementationURL = getString(aPanelNode, u"ImplementationURL"_ustr);
         rPanelDescriptor.mnOrderIndex = getInt32(aPanelNode, u"OrderIndex"_ustr);
         rPanelDescriptor.mbShowForReadOnlyDocuments = getBool(aPanelNode, u"ShowForReadOnlyDocument"_ustr);
-        rPanelDescriptor.mbWantsCanvas = getBool(aPanelNode, u"WantsCanvas"_ustr);
         rPanelDescriptor.mbWantsAWT = getBool(aPanelNode, u"WantsAWT"_ustr);
         rPanelDescriptor.mbExperimental = getBool(aPanelNode, u"IsExperimental"_ustr);
         const OUString sDefaultMenuCommand(getString(aPanelNode, u"DefaultMenuCommand"_ustr));
@@ -719,7 +718,6 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxC
         rPanelDescriptor.msImplementationURL = rsNodeName;
         rPanelDescriptor.mnOrderIndex = 100000 + nReadIndex;
         rPanelDescriptor.mbShowForReadOnlyDocuments = false;
-        rPanelDescriptor.mbWantsCanvas = false;
         rPanelDescriptor.mbWantsAWT = true;
         rPanelDescriptor.maContextList.AddContextDescription(Context(sModuleName, u"any"_ustr), true, OUString());
     }
