@@ -41,28 +41,28 @@ namespace connectivity::flat
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
         // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
     public:
         DECLARE_SERVICE_INFO();
 
         OFlatResultSet( file::OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&   _aSQLIterator);
 
         // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+        virtual void acquire() noexcept override;
+        virtual void release() noexcept override;
         //XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
         // XRowLocate
-        virtual cpo::uno::Any SAL_CALL getBookmark(  ) override;
-        virtual bool SAL_CALL moveToBookmark( const cpo::uno::Any& bookmark ) override;
-        virtual bool SAL_CALL moveRelativeToBookmark( const cpo::uno::Any& bookmark, sal_Int32 rows ) override;
-        virtual sal_Int32 SAL_CALL compareBookmarks( const cpo::uno::Any& first, const cpo::uno::Any& second ) override;
-        virtual bool SAL_CALL hasOrderedBookmarks(  ) override;
-        virtual sal_Int32 SAL_CALL hashBookmark( const cpo::uno::Any& bookmark ) override;
+        virtual cpo::uno::Any getBookmark(  ) override;
+        virtual bool moveToBookmark( const cpo::uno::Any& bookmark ) override;
+        virtual bool moveRelativeToBookmark( const cpo::uno::Any& bookmark, sal_Int32 rows ) override;
+        virtual sal_Int32 compareBookmarks( const cpo::uno::Any& first, const cpo::uno::Any& second ) override;
+        virtual bool hasOrderedBookmarks(  ) override;
+        virtual sal_Int32 hashBookmark( const cpo::uno::Any& bookmark ) override;
     };
 
 }

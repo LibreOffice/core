@@ -54,7 +54,7 @@ void OMetaConnection::disposing()
     m_aStatements.clear();
 }
 //XUnoTunnel
-sal_Int64 SAL_CALL OMetaConnection::getSomething( const cpo::uno::Sequence< sal_Int8 >& rId )
+sal_Int64 OMetaConnection::getSomething( const cpo::uno::Sequence< sal_Int8 >& rId )
 {
     return comphelper::getSomethingImpl(rId, this);
 }

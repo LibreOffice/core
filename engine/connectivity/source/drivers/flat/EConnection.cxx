@@ -112,7 +112,7 @@ void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValu
     m_bShowDeleted = true; // we do not supported rows for this type
 }
 
-Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  )
+Reference< XDatabaseMetaData > OFlatConnection::getMetaData(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);
@@ -140,7 +140,7 @@ css::uno::Reference< XTablesSupplier > OFlatConnection::createCatalog()
     return xTab;
 }
 
-Reference< XStatement > SAL_CALL OFlatConnection::createStatement(  )
+Reference< XStatement > OFlatConnection::createStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);
@@ -150,7 +150,7 @@ Reference< XStatement > SAL_CALL OFlatConnection::createStatement(  )
     return pStmt;
 }
 
-Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( const OUString& sql )
+Reference< XPreparedStatement > OFlatConnection::prepareStatement( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);
@@ -161,7 +161,7 @@ Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( cons
     return pStmt;
 }
 
-Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareCall( const OUString& /*sql*/ )
+Reference< XPreparedStatement > OFlatConnection::prepareCall( const OUString& /*sql*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);

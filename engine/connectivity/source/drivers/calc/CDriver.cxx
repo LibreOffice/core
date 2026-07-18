@@ -36,7 +36,7 @@ using namespace ::com::sun::star::lang;
 
 // ServiceInfo
 
-OUString SAL_CALL ODriver::getImplementationName(  )
+OUString ODriver::getImplementationName(  )
 {
     return u"com.sun.star.comp.sdbc.calc.ODriver"_ustr;
 }
@@ -59,7 +59,7 @@ connectivity_calc_ODriver(
 
 
 
-Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url,
+Reference< XConnection > ODriver::connect( const OUString& url,
     const Sequence< PropertyValue >& info )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -76,12 +76,12 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url,
     return pCon;
 }
 
-bool SAL_CALL ODriver::acceptsURL( const OUString& url )
+bool ODriver::acceptsURL( const OUString& url )
 {
     return url.startsWith("sdbc:calc:");
 }
 
-Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ )
+Sequence< DriverPropertyInfo > ODriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ )
 {
     if ( !acceptsURL(url) )
     {

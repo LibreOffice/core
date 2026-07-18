@@ -44,27 +44,27 @@ namespace connectivity
         {
         }
 
-        virtual sal_Int32 SAL_CALL getColumnCount(  ) override;
-        virtual bool SAL_CALL isAutoIncrement( sal_Int32 column ) override;
-        virtual bool SAL_CALL isCaseSensitive( sal_Int32 column ) override;
-        virtual bool SAL_CALL isSearchable( sal_Int32 column ) override;
-        virtual bool SAL_CALL isCurrency( sal_Int32 column ) override;
-        virtual sal_Int32 SAL_CALL isNullable( sal_Int32 column ) override;
-        virtual bool SAL_CALL isSigned( sal_Int32 column ) override;
-        virtual sal_Int32 SAL_CALL getColumnDisplaySize( sal_Int32 column ) override;
-        virtual OUString SAL_CALL getColumnLabel( sal_Int32 column ) override;
-        virtual OUString SAL_CALL getColumnName( sal_Int32 column ) override;
-        virtual OUString SAL_CALL getSchemaName( sal_Int32 column ) override;
-        virtual sal_Int32 SAL_CALL getPrecision( sal_Int32 column ) override;
-        virtual sal_Int32 SAL_CALL getScale( sal_Int32 column ) override;
-        virtual OUString SAL_CALL getTableName( sal_Int32 column ) override;
-        virtual OUString SAL_CALL getCatalogName( sal_Int32 column ) override;
-        virtual sal_Int32 SAL_CALL getColumnType( sal_Int32 column ) override;
-        virtual OUString SAL_CALL getColumnTypeName( sal_Int32 column ) override;
-        virtual bool SAL_CALL isReadOnly( sal_Int32 column ) override;
-        virtual bool SAL_CALL isWritable( sal_Int32 column ) override;
-        virtual bool SAL_CALL isDefinitelyWritable( sal_Int32 column ) override;
-        virtual OUString SAL_CALL getColumnServiceName( sal_Int32 column ) override;
+        virtual sal_Int32 getColumnCount(  ) override;
+        virtual bool isAutoIncrement( sal_Int32 column ) override;
+        virtual bool isCaseSensitive( sal_Int32 column ) override;
+        virtual bool isSearchable( sal_Int32 column ) override;
+        virtual bool isCurrency( sal_Int32 column ) override;
+        virtual sal_Int32 isNullable( sal_Int32 column ) override;
+        virtual bool isSigned( sal_Int32 column ) override;
+        virtual sal_Int32 getColumnDisplaySize( sal_Int32 column ) override;
+        virtual OUString getColumnLabel( sal_Int32 column ) override;
+        virtual OUString getColumnName( sal_Int32 column ) override;
+        virtual OUString getSchemaName( sal_Int32 column ) override;
+        virtual sal_Int32 getPrecision( sal_Int32 column ) override;
+        virtual sal_Int32 getScale( sal_Int32 column ) override;
+        virtual OUString getTableName( sal_Int32 column ) override;
+        virtual OUString getCatalogName( sal_Int32 column ) override;
+        virtual sal_Int32 getColumnType( sal_Int32 column ) override;
+        virtual OUString getColumnTypeName( sal_Int32 column ) override;
+        virtual bool isReadOnly( sal_Int32 column ) override;
+        virtual bool isWritable( sal_Int32 column ) override;
+        virtual bool isDefinitelyWritable( sal_Int32 column ) override;
+        virtual OUString getColumnServiceName( sal_Int32 column ) override;
 
         // methods to set the right column mapping
         void setColumnPrivilegesMap();

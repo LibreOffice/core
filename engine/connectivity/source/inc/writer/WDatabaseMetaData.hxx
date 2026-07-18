@@ -25,11 +25,10 @@ namespace connectivity::writer
 {
 class OWriterDatabaseMetaData : public component::OComponentDatabaseMetaData
 {
-    OUString SAL_CALL getURL() override;
+    OUString getURL() override;
     css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getTables(const cpo::uno::Any& catalog, const OUString& schemaPattern,
-                           const OUString& tableNamePattern,
-                           const cpo::uno::Sequence<OUString>& types) override;
+    getTables(const cpo::uno::Any& catalog, const OUString& schemaPattern,
+              const OUString& tableNamePattern, const cpo::uno::Sequence<OUString>& types) override;
 
 protected:
     ~OWriterDatabaseMetaData() override;

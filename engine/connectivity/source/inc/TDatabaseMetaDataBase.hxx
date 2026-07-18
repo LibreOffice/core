@@ -95,41 +95,41 @@ namespace connectivity
         ODatabaseMetaDataBase(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,const cpo::uno::Sequence< css::beans::PropertyValue >& _rInfo);
 
         // XDatabaseMetaData2
-        virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getConnectionInfo(  ) override;
+        virtual cpo::uno::Sequence< css::beans::PropertyValue > getConnectionInfo(  ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTypeInfo(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getProcedures( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getProcedureColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern, const OUString& columnNamePattern ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getSchemas(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getCatalogs(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumnPrivileges( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, const OUString& columnNamePattern ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTablePrivileges( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getBestRowIdentifier( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, sal_Int32 scope, bool nullable ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getVersionColumns( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getPrimaryKeys( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getImportedKeys( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getExportedKeys( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getCrossReference( const cpo::uno::Any& primaryCatalog, const OUString& primarySchema, const OUString& primaryTable, const cpo::uno::Any& foreignCatalog, const OUString& foreignSchema, const OUString& foreignTable ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getIndexInfo( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, bool unique, bool approximate ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getTypeInfo(  ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getProcedures( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getProcedureColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern, const OUString& columnNamePattern ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getSchemas(  ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getCatalogs(  ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getColumnPrivileges( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, const OUString& columnNamePattern ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getTablePrivileges( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getBestRowIdentifier( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, sal_Int32 scope, bool nullable ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getVersionColumns( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getPrimaryKeys( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getImportedKeys( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getExportedKeys( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getCrossReference( const cpo::uno::Any& primaryCatalog, const OUString& primarySchema, const OUString& primaryTable, const cpo::uno::Any& foreignCatalog, const OUString& foreignSchema, const OUString& foreignTable ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getIndexInfo( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, bool unique, bool approximate ) override;
 
-        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
         // cached database information
-        virtual OUString SAL_CALL getIdentifierQuoteString(  ) override;
-        virtual bool SAL_CALL isCatalogAtStart(  ) override;
-        virtual OUString SAL_CALL getCatalogSeparator(  ) override;
-        virtual bool SAL_CALL supportsCatalogsInTableDefinitions(  ) override;
-        virtual bool SAL_CALL supportsSchemasInTableDefinitions(  ) override;
-        virtual bool SAL_CALL supportsCatalogsInDataManipulation(  ) override;
-        virtual bool SAL_CALL supportsSchemasInDataManipulation(  ) override;
-        virtual bool SAL_CALL supportsMixedCaseQuotedIdentifiers(  ) override;
-        virtual bool SAL_CALL supportsAlterTableWithAddColumn(  ) override;
-        virtual bool SAL_CALL supportsAlterTableWithDropColumn(  ) override;
-        virtual sal_Int32 SAL_CALL getMaxStatements(  ) override;
-        virtual sal_Int32 SAL_CALL getMaxTablesInSelect(  ) override;
-        virtual bool SAL_CALL storesMixedCaseQuotedIdentifiers(  ) override;
+        virtual OUString getIdentifierQuoteString(  ) override;
+        virtual bool isCatalogAtStart(  ) override;
+        virtual OUString getCatalogSeparator(  ) override;
+        virtual bool supportsCatalogsInTableDefinitions(  ) override;
+        virtual bool supportsSchemasInTableDefinitions(  ) override;
+        virtual bool supportsCatalogsInDataManipulation(  ) override;
+        virtual bool supportsSchemasInDataManipulation(  ) override;
+        virtual bool supportsMixedCaseQuotedIdentifiers(  ) override;
+        virtual bool supportsAlterTableWithAddColumn(  ) override;
+        virtual bool supportsAlterTableWithDropColumn(  ) override;
+        virtual sal_Int32 getMaxStatements(  ) override;
+        virtual sal_Int32 getMaxTablesInSelect(  ) override;
+        virtual bool storesMixedCaseQuotedIdentifiers(  ) override;
     };
 }
 

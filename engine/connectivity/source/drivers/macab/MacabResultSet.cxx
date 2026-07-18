@@ -159,7 +159,7 @@ void MacabResultSet::disposing()
     m_xMetaData.clear();
 }
 
-Any SAL_CALL MacabResultSet::queryInterface(const Type & rType)
+Any MacabResultSet::queryInterface(const Type & rType)
 {
     Any aRet = OPropertySetHelper::queryInterface(rType);
     if (!aRet.hasValue())
@@ -167,17 +167,17 @@ Any SAL_CALL MacabResultSet::queryInterface(const Type & rType)
     return aRet;
 }
 
-void SAL_CALL MacabResultSet::acquire() noexcept
+void MacabResultSet::acquire() noexcept
 {
     MacabResultSet_BASE::acquire();
 }
 
-void SAL_CALL MacabResultSet::release() noexcept
+void MacabResultSet::release() noexcept
 {
     MacabResultSet_BASE::release();
 }
 
-Sequence<  Type > SAL_CALL MacabResultSet::getTypes()
+Sequence<  Type > MacabResultSet::getTypes()
 {
     OTypeCollection aTypes(
         cppu::UnoType<css::beans::XMultiPropertySet>::get(),
@@ -187,12 +187,12 @@ Sequence<  Type > SAL_CALL MacabResultSet::getTypes()
     return comphelper::concatSequences(aTypes.getTypes(), MacabResultSet_BASE::getTypes());
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL MacabResultSet::getPropertySetInfo(  )
+css::uno::Reference< css::beans::XPropertySetInfo > MacabResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-sal_Int32 SAL_CALL MacabResultSet::findColumn(const OUString& columnName)
+sal_Int32 MacabResultSet::findColumn(const OUString& columnName)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -214,7 +214,7 @@ sal_Int32 SAL_CALL MacabResultSet::findColumn(const OUString& columnName)
     return 0; // Never reached
 }
 
-OUString SAL_CALL MacabResultSet::getString(sal_Int32 columnIndex)
+OUString MacabResultSet::getString(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -241,7 +241,7 @@ OUString SAL_CALL MacabResultSet::getString(sal_Int32 columnIndex)
     return aRet;
 }
 
-bool SAL_CALL MacabResultSet::getBoolean(sal_Int32)
+bool MacabResultSet::getBoolean(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -251,7 +251,7 @@ bool SAL_CALL MacabResultSet::getBoolean(sal_Int32)
     return false;
 }
 
-sal_Int8 SAL_CALL MacabResultSet::getByte(sal_Int32)
+sal_Int8 MacabResultSet::getByte(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -261,7 +261,7 @@ sal_Int8 SAL_CALL MacabResultSet::getByte(sal_Int32)
     return 0;
 }
 
-sal_Int16 SAL_CALL MacabResultSet::getShort(sal_Int32)
+sal_Int16 MacabResultSet::getShort(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -271,7 +271,7 @@ sal_Int16 SAL_CALL MacabResultSet::getShort(sal_Int32)
     return 0;
 }
 
-sal_Int32 SAL_CALL MacabResultSet::getInt(sal_Int32 columnIndex)
+sal_Int32 MacabResultSet::getInt(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -300,7 +300,7 @@ sal_Int32 SAL_CALL MacabResultSet::getInt(sal_Int32 columnIndex)
     return nRet;
 }
 
-sal_Int64 SAL_CALL MacabResultSet::getLong(sal_Int32 columnIndex)
+sal_Int64 MacabResultSet::getLong(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -329,7 +329,7 @@ sal_Int64 SAL_CALL MacabResultSet::getLong(sal_Int32 columnIndex)
     return nRet;
 }
 
-float SAL_CALL MacabResultSet::getFloat(sal_Int32 columnIndex)
+float MacabResultSet::getFloat(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -358,7 +358,7 @@ float SAL_CALL MacabResultSet::getFloat(sal_Int32 columnIndex)
     return nVal;
 }
 
-double SAL_CALL MacabResultSet::getDouble(sal_Int32 columnIndex)
+double MacabResultSet::getDouble(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -387,7 +387,7 @@ double SAL_CALL MacabResultSet::getDouble(sal_Int32 columnIndex)
     return nVal;
 }
 
-Sequence< sal_Int8 > SAL_CALL MacabResultSet::getBytes(sal_Int32)
+Sequence< sal_Int8 > MacabResultSet::getBytes(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -397,7 +397,7 @@ Sequence< sal_Int8 > SAL_CALL MacabResultSet::getBytes(sal_Int32)
     return Sequence< sal_Int8 >();
 }
 
-Date SAL_CALL MacabResultSet::getDate(sal_Int32)
+Date MacabResultSet::getDate(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -407,7 +407,7 @@ Date SAL_CALL MacabResultSet::getDate(sal_Int32)
     return Date();
 }
 
-Time SAL_CALL MacabResultSet::getTime(sal_Int32)
+Time MacabResultSet::getTime(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -417,7 +417,7 @@ Time SAL_CALL MacabResultSet::getTime(sal_Int32)
     return css::util::Time();
 }
 
-DateTime SAL_CALL MacabResultSet::getTimestamp(sal_Int32 columnIndex)
+DateTime MacabResultSet::getTimestamp(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -444,7 +444,7 @@ DateTime SAL_CALL MacabResultSet::getTimestamp(sal_Int32 columnIndex)
     return nRet;
 }
 
-Reference< XInputStream > SAL_CALL MacabResultSet::getBinaryStream(sal_Int32)
+Reference< XInputStream > MacabResultSet::getBinaryStream(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -454,7 +454,7 @@ Reference< XInputStream > SAL_CALL MacabResultSet::getBinaryStream(sal_Int32)
     return nullptr;
 }
 
-Reference< XInputStream > SAL_CALL MacabResultSet::getCharacterStream(sal_Int32)
+Reference< XInputStream > MacabResultSet::getCharacterStream(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -464,7 +464,7 @@ Reference< XInputStream > SAL_CALL MacabResultSet::getCharacterStream(sal_Int32)
     return nullptr;
 }
 
-Any SAL_CALL MacabResultSet::getObject(sal_Int32, const Reference< css::container::XNameAccess >&)
+Any MacabResultSet::getObject(sal_Int32, const Reference< css::container::XNameAccess >&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -474,7 +474,7 @@ Any SAL_CALL MacabResultSet::getObject(sal_Int32, const Reference< css::containe
     return Any();
 }
 
-Reference< XRef > SAL_CALL MacabResultSet::getRef(sal_Int32)
+Reference< XRef > MacabResultSet::getRef(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -484,7 +484,7 @@ Reference< XRef > SAL_CALL MacabResultSet::getRef(sal_Int32)
     return nullptr;
 }
 
-Reference< XBlob > SAL_CALL MacabResultSet::getBlob(sal_Int32)
+Reference< XBlob > MacabResultSet::getBlob(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -494,7 +494,7 @@ Reference< XBlob > SAL_CALL MacabResultSet::getBlob(sal_Int32)
     return nullptr;
 }
 
-Reference< XClob > SAL_CALL MacabResultSet::getClob(sal_Int32)
+Reference< XClob > MacabResultSet::getClob(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -504,7 +504,7 @@ Reference< XClob > SAL_CALL MacabResultSet::getClob(sal_Int32)
     return nullptr;
 }
 
-Reference< XArray > SAL_CALL MacabResultSet::getArray(sal_Int32)
+Reference< XArray > MacabResultSet::getArray(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -514,7 +514,7 @@ Reference< XArray > SAL_CALL MacabResultSet::getArray(sal_Int32)
     return nullptr;
 }
 
-Reference< XResultSetMetaData > SAL_CALL MacabResultSet::getMetaData()
+Reference< XResultSetMetaData > MacabResultSet::getMetaData()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -526,7 +526,7 @@ Reference< XResultSetMetaData > SAL_CALL MacabResultSet::getMetaData()
     return xMetaData;
 }
 
-bool SAL_CALL MacabResultSet::isBeforeFirst()
+bool MacabResultSet::isBeforeFirst()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -537,7 +537,7 @@ bool SAL_CALL MacabResultSet::isBeforeFirst()
     return false;
 }
 
-bool SAL_CALL MacabResultSet::isAfterLast()
+bool MacabResultSet::isAfterLast()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -549,7 +549,7 @@ bool SAL_CALL MacabResultSet::isAfterLast()
     return false;
 }
 
-bool SAL_CALL MacabResultSet::isFirst()
+bool MacabResultSet::isFirst()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -560,7 +560,7 @@ bool SAL_CALL MacabResultSet::isFirst()
     return false;
 }
 
-bool SAL_CALL MacabResultSet::isLast()
+bool MacabResultSet::isLast()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -572,7 +572,7 @@ bool SAL_CALL MacabResultSet::isLast()
     return false;
 }
 
-void SAL_CALL MacabResultSet::beforeFirst()
+void MacabResultSet::beforeFirst()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -581,7 +581,7 @@ void SAL_CALL MacabResultSet::beforeFirst()
     m_nRowPos = -1;
 }
 
-void SAL_CALL MacabResultSet::afterLast()
+void MacabResultSet::afterLast()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -591,7 +591,7 @@ void SAL_CALL MacabResultSet::afterLast()
     m_nRowPos = nRecords;
 }
 
-void SAL_CALL MacabResultSet::close()
+void MacabResultSet::close()
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -600,7 +600,7 @@ void SAL_CALL MacabResultSet::close()
     dispose();
 }
 
-bool SAL_CALL MacabResultSet::first()
+bool MacabResultSet::first()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -613,7 +613,7 @@ bool SAL_CALL MacabResultSet::first()
     return true;
 }
 
-bool SAL_CALL MacabResultSet::last()
+bool MacabResultSet::last()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -626,7 +626,7 @@ bool SAL_CALL MacabResultSet::last()
     return true;
 }
 
-sal_Int32 SAL_CALL MacabResultSet::getRow()
+sal_Int32 MacabResultSet::getRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -634,7 +634,7 @@ sal_Int32 SAL_CALL MacabResultSet::getRow()
     return m_nRowPos;
 }
 
-bool SAL_CALL MacabResultSet::absolute(sal_Int32 row)
+bool MacabResultSet::absolute(sal_Int32 row)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -648,7 +648,7 @@ bool SAL_CALL MacabResultSet::absolute(sal_Int32 row)
     return true;
 }
 
-bool SAL_CALL MacabResultSet::relative(sal_Int32 row)
+bool MacabResultSet::relative(sal_Int32 row)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -656,7 +656,7 @@ bool SAL_CALL MacabResultSet::relative(sal_Int32 row)
     return absolute(m_nRowPos + row);
 }
 
-bool SAL_CALL MacabResultSet::next()
+bool MacabResultSet::next()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -664,7 +664,7 @@ bool SAL_CALL MacabResultSet::next()
     return absolute(m_nRowPos + 1);
 }
 
-bool SAL_CALL MacabResultSet::previous()
+bool MacabResultSet::previous()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -672,7 +672,7 @@ bool SAL_CALL MacabResultSet::previous()
     return absolute(m_nRowPos - 1);
 }
 
-Reference< XInterface > SAL_CALL MacabResultSet::getStatement()
+Reference< XInterface > MacabResultSet::getStatement()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -681,7 +681,7 @@ Reference< XInterface > SAL_CALL MacabResultSet::getStatement()
     return xStatement;
 }
 
-bool SAL_CALL MacabResultSet::rowDeleted()
+bool MacabResultSet::rowDeleted()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -689,7 +689,7 @@ bool SAL_CALL MacabResultSet::rowDeleted()
     return false;
 }
 
-bool SAL_CALL MacabResultSet::rowInserted()
+bool MacabResultSet::rowInserted()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -697,7 +697,7 @@ bool SAL_CALL MacabResultSet::rowInserted()
     return false;
 }
 
-bool SAL_CALL MacabResultSet::rowUpdated()
+bool MacabResultSet::rowUpdated()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -705,7 +705,7 @@ bool SAL_CALL MacabResultSet::rowUpdated()
     return false;
 }
 
-bool SAL_CALL MacabResultSet::wasNull()
+bool MacabResultSet::wasNull()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -713,22 +713,22 @@ bool SAL_CALL MacabResultSet::wasNull()
     return m_bWasNull;
 }
 
-void SAL_CALL MacabResultSet::cancel()
+void MacabResultSet::cancel()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::clearWarnings()
+void MacabResultSet::clearWarnings()
 {
 }
 
-Any SAL_CALL MacabResultSet::getWarnings()
+Any MacabResultSet::getWarnings()
 {
     return Any();
 }
 
-void SAL_CALL MacabResultSet::insertRow()
+void MacabResultSet::insertRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -736,7 +736,7 @@ void SAL_CALL MacabResultSet::insertRow()
     // you only have to implement this if you want to insert new rows
 }
 
-void SAL_CALL MacabResultSet::updateRow()
+void MacabResultSet::updateRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -744,19 +744,19 @@ void SAL_CALL MacabResultSet::updateRow()
     // only when you allow updates
 }
 
-void SAL_CALL MacabResultSet::deleteRow()
+void MacabResultSet::deleteRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::cancelRowUpdates()
+void MacabResultSet::cancelRowUpdates()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::moveToInsertRow()
+void MacabResultSet::moveToInsertRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -764,122 +764,122 @@ void SAL_CALL MacabResultSet::moveToInsertRow()
     // only when you allow inserts
 }
 
-void SAL_CALL MacabResultSet::moveToCurrentRow()
+void MacabResultSet::moveToCurrentRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateNull(sal_Int32)
+void MacabResultSet::updateNull(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateBoolean(sal_Int32, bool)
+void MacabResultSet::updateBoolean(sal_Int32, bool)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateByte(sal_Int32, sal_Int8)
+void MacabResultSet::updateByte(sal_Int32, sal_Int8)
 {
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 }
 
-void SAL_CALL MacabResultSet::updateShort(sal_Int32, sal_Int16)
+void MacabResultSet::updateShort(sal_Int32, sal_Int16)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateInt(sal_Int32, sal_Int32)
+void MacabResultSet::updateInt(sal_Int32, sal_Int32)
 {
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 }
 
-void SAL_CALL MacabResultSet::updateLong(sal_Int32, sal_Int64)
+void MacabResultSet::updateLong(sal_Int32, sal_Int64)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateFloat(sal_Int32, float)
+void MacabResultSet::updateFloat(sal_Int32, float)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateDouble(sal_Int32, double)
+void MacabResultSet::updateDouble(sal_Int32, double)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateString(sal_Int32, const OUString&)
+void MacabResultSet::updateString(sal_Int32, const OUString&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateBytes(sal_Int32, const Sequence< sal_Int8 >&)
+void MacabResultSet::updateBytes(sal_Int32, const Sequence< sal_Int8 >&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateDate(sal_Int32, const Date&)
+void MacabResultSet::updateDate(sal_Int32, const Date&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateTime(sal_Int32, const css::util::Time&)
+void MacabResultSet::updateTime(sal_Int32, const css::util::Time&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateTimestamp(sal_Int32, const DateTime&)
+void MacabResultSet::updateTimestamp(sal_Int32, const DateTime&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateBinaryStream(sal_Int32, const Reference< XInputStream >&, sal_Int32)
+void MacabResultSet::updateBinaryStream(sal_Int32, const Reference< XInputStream >&, sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateCharacterStream(sal_Int32, const Reference< XInputStream >&, sal_Int32)
+void MacabResultSet::updateCharacterStream(sal_Int32, const Reference< XInputStream >&, sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::refreshRow()
+void MacabResultSet::refreshRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateObject(sal_Int32, const Any&)
+void MacabResultSet::updateObject(sal_Int32, const Any&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateNumericObject(sal_Int32, const Any&, sal_Int32)
+void MacabResultSet::updateNumericObject(sal_Int32, const Any&, sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
 // XRowLocate
-Any SAL_CALL MacabResultSet::getBookmark()
+Any MacabResultSet::getBookmark()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -900,7 +900,7 @@ Any SAL_CALL MacabResultSet::getBookmark()
     return Any();
 }
 
-bool SAL_CALL MacabResultSet::moveToBookmark(const  Any& bookmark)
+bool MacabResultSet::moveToBookmark(const  Any& bookmark)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -927,7 +927,7 @@ bool SAL_CALL MacabResultSet::moveToBookmark(const  Any& bookmark)
     return false;
 }
 
-bool SAL_CALL MacabResultSet::moveRelativeToBookmark(const  Any& bookmark, sal_Int32 rows)
+bool MacabResultSet::moveRelativeToBookmark(const  Any& bookmark, sal_Int32 rows)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -948,7 +948,7 @@ bool SAL_CALL MacabResultSet::moveRelativeToBookmark(const  Any& bookmark, sal_I
     return false;
 }
 
-sal_Int32 SAL_CALL MacabResultSet::compareBookmarks(const  Any& firstItem, const  Any& secondItem)
+sal_Int32 MacabResultSet::compareBookmarks(const  Any& firstItem, const  Any& secondItem)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -963,12 +963,12 @@ sal_Int32 SAL_CALL MacabResultSet::compareBookmarks(const  Any& firstItem, const
     return CompareBookmark::EQUAL;
 }
 
-bool SAL_CALL MacabResultSet::hasOrderedBookmarks()
+bool MacabResultSet::hasOrderedBookmarks()
 {
     return false;
 }
 
-sal_Int32 SAL_CALL MacabResultSet::hashBookmark(const  Any& bookmark)
+sal_Int32 MacabResultSet::hashBookmark(const  Any& bookmark)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -979,7 +979,7 @@ sal_Int32 SAL_CALL MacabResultSet::hashBookmark(const  Any& bookmark)
 }
 
 // XDeleteRows
-Sequence< sal_Int32 > SAL_CALL MacabResultSet::deleteRows(const  Sequence<  Any >&)
+Sequence< sal_Int32 > MacabResultSet::deleteRows(const  Sequence<  Any >&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);

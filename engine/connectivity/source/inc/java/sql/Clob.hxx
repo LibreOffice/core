@@ -43,11 +43,11 @@ namespace connectivity
         java_sql_Clob( JNIEnv * pEnv, jobject myObj );
 
         // XClob
-        virtual sal_Int64 SAL_CALL length(  ) override;
-        virtual OUString SAL_CALL getSubString( sal_Int64 pos, sal_Int32 length ) override;
-        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getCharacterStream(  ) override;
-        virtual sal_Int64 SAL_CALL position( const OUString& searchstr, sal_Int32 start ) override;
-        virtual sal_Int64 SAL_CALL positionOfClob( const css::uno::Reference< css::sdbc::XClob >& pattern, sal_Int64 start ) override;
+        virtual sal_Int64 length(  ) override;
+        virtual OUString getSubString( sal_Int64 pos, sal_Int32 length ) override;
+        virtual css::uno::Reference< css::io::XInputStream > getCharacterStream(  ) override;
+        virtual sal_Int64 position( const OUString& searchstr, sal_Int32 start ) override;
+        virtual sal_Int64 positionOfClob( const css::uno::Reference< css::sdbc::XClob >& pattern, sal_Int64 start ) override;
     };
 }
 

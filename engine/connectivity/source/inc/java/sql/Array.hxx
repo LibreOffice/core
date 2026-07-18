@@ -41,12 +41,12 @@ namespace connectivity
         java_sql_Array( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
         // XArray
-        virtual OUString SAL_CALL getBaseTypeName(  ) override;
-        virtual sal_Int32 SAL_CALL getBaseType(  ) override;
-        virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getArray( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getArrayAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSetAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual OUString getBaseTypeName(  ) override;
+        virtual sal_Int32 getBaseType(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Any > getArray( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Any > getArrayAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getResultSet( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getResultSetAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 
     };
 }

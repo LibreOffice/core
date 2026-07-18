@@ -58,49 +58,49 @@ namespace connectivity::evoab
 
         DECLARE_SERVICE_INFO();
         //XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+        virtual void acquire() noexcept override;
+        virtual void release() noexcept override;
         //XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
         // XPreparedStatement
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery(  ) override;
-        virtual sal_Int32 SAL_CALL executeUpdate(  ) override;
-        virtual bool SAL_CALL execute(  ) override;
-        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > executeQuery(  ) override;
+        virtual sal_Int32 executeUpdate(  ) override;
+        virtual bool execute(  ) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
         // XParameters
-        virtual void SAL_CALL setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) override;
-        virtual void SAL_CALL setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName ) override;
-        virtual void SAL_CALL setBoolean( sal_Int32 parameterIndex, bool x ) override;
-        virtual void SAL_CALL setByte( sal_Int32 parameterIndex, sal_Int8 x ) override;
-        virtual void SAL_CALL setShort( sal_Int32 parameterIndex, sal_Int16 x ) override;
-        virtual void SAL_CALL setInt( sal_Int32 parameterIndex, sal_Int32 x ) override;
-        virtual void SAL_CALL setLong( sal_Int32 parameterIndex, sal_Int64 x ) override;
-        virtual void SAL_CALL setFloat( sal_Int32 parameterIndex, float x ) override;
-        virtual void SAL_CALL setDouble( sal_Int32 parameterIndex, double x ) override;
-        virtual void SAL_CALL setString( sal_Int32 parameterIndex, const OUString& x ) override;
-        virtual void SAL_CALL setBytes( sal_Int32 parameterIndex, const cpo::uno::Sequence< sal_Int8 >& x ) override;
-        virtual void SAL_CALL setDate( sal_Int32 parameterIndex, const css::util::Date& x ) override;
-        virtual void SAL_CALL setTime( sal_Int32 parameterIndex, const css::util::Time& x ) override;
-        virtual void SAL_CALL setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x ) override;
-        virtual void SAL_CALL setBinaryStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void SAL_CALL setCharacterStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void SAL_CALL setObject( sal_Int32 parameterIndex, const cpo::uno::Any& x ) override;
-        virtual void SAL_CALL setObjectWithInfo( sal_Int32 parameterIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale ) override;
-        virtual void SAL_CALL setRef( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XRef >& x ) override;
-        virtual void SAL_CALL setBlob( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XBlob >& x ) override;
-        virtual void SAL_CALL setClob( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XClob >& x ) override;
-        virtual void SAL_CALL setArray( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XArray >& x ) override;
-        virtual void SAL_CALL clearParameters(  ) override;
+        virtual void setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) override;
+        virtual void setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName ) override;
+        virtual void setBoolean( sal_Int32 parameterIndex, bool x ) override;
+        virtual void setByte( sal_Int32 parameterIndex, sal_Int8 x ) override;
+        virtual void setShort( sal_Int32 parameterIndex, sal_Int16 x ) override;
+        virtual void setInt( sal_Int32 parameterIndex, sal_Int32 x ) override;
+        virtual void setLong( sal_Int32 parameterIndex, sal_Int64 x ) override;
+        virtual void setFloat( sal_Int32 parameterIndex, float x ) override;
+        virtual void setDouble( sal_Int32 parameterIndex, double x ) override;
+        virtual void setString( sal_Int32 parameterIndex, const OUString& x ) override;
+        virtual void setBytes( sal_Int32 parameterIndex, const cpo::uno::Sequence< sal_Int8 >& x ) override;
+        virtual void setDate( sal_Int32 parameterIndex, const css::util::Date& x ) override;
+        virtual void setTime( sal_Int32 parameterIndex, const css::util::Time& x ) override;
+        virtual void setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x ) override;
+        virtual void setBinaryStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void setCharacterStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void setObject( sal_Int32 parameterIndex, const cpo::uno::Any& x ) override;
+        virtual void setObjectWithInfo( sal_Int32 parameterIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale ) override;
+        virtual void setRef( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XRef >& x ) override;
+        virtual void setBlob( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XBlob >& x ) override;
+        virtual void setClob( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XClob >& x ) override;
+        virtual void setArray( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XArray >& x ) override;
+        virtual void clearParameters(  ) override;
         // XCloseable
-        virtual void SAL_CALL close(  ) override;
+        virtual void close(  ) override;
         // XResultSetMetaDataSupplier
-        virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
         // XMultipleResults
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet(  ) override;
-        virtual sal_Int32 SAL_CALL getUpdateCount(  ) override;
-        virtual bool SAL_CALL getMoreResults(  ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getResultSet(  ) override;
+        virtual sal_Int32 getUpdateCount(  ) override;
+        virtual bool getMoreResults(  ) override;
     };
 }
 

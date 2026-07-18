@@ -28,7 +28,7 @@ ODatabaseMetaDataResultSetMetaData::~ODatabaseMetaDataResultSetMetaData()
 {
 }
 
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
+sal_Int32 ODatabaseMetaDataResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getColumnDisplaySize();
@@ -36,95 +36,95 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnDisplaySize( sal
     return 0;
 }
 
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnType( sal_Int32 column )
+sal_Int32 ODatabaseMetaDataResultSetMetaData::getColumnType( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getColumnType();
     return 1;
 }
 
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnCount(  )
+sal_Int32 ODatabaseMetaDataResultSetMetaData::getColumnCount(  )
 {
     return m_mColumns.size();
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32 column )
+bool ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isCaseSensitive();
     return true;
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getSchemaName( sal_Int32 /*column*/ )
+OUString ODatabaseMetaDataResultSetMetaData::getSchemaName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnName( sal_Int32 column )
+OUString ODatabaseMetaDataResultSetMetaData::getColumnName( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getColumnName();
     return OUString();
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getTableName( sal_Int32 column )
+OUString ODatabaseMetaDataResultSetMetaData::getTableName( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getTableName();
     return OUString();
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getCatalogName( sal_Int32 /*column*/ )
+OUString ODatabaseMetaDataResultSetMetaData::getCatalogName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnTypeName( sal_Int32 /*column*/ )
+OUString ODatabaseMetaDataResultSetMetaData::getColumnTypeName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnLabel( sal_Int32 column )
+OUString ODatabaseMetaDataResultSetMetaData::getColumnLabel( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getColumnLabel();
     return getColumnName(column);
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ )
+OUString ODatabaseMetaDataResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCurrency( sal_Int32 column )
+bool ODatabaseMetaDataResultSetMetaData::isCurrency( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isCurrency();
     return false;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32 column )
+bool ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isAutoIncrement();
     return false;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSigned( sal_Int32 column )
+bool ODatabaseMetaDataResultSetMetaData::isSigned( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isSigned();
     return false;
 }
 
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getPrecision( sal_Int32 column )
+sal_Int32 ODatabaseMetaDataResultSetMetaData::getPrecision( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getPrecision();
     return 0;
 }
 
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getScale( sal_Int32 column )
+sal_Int32 ODatabaseMetaDataResultSetMetaData::getScale( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getScale();
@@ -132,7 +132,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getScale( sal_Int32 colum
     return 0;
 }
 
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::isNullable( sal_Int32 column )
+sal_Int32 ODatabaseMetaDataResultSetMetaData::isNullable( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isNullable();
@@ -140,24 +140,24 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::isNullable( sal_Int32 col
     return sal_Int32(false);
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSearchable( sal_Int32 column )
+bool ODatabaseMetaDataResultSetMetaData::isSearchable( sal_Int32 column )
 {
     if((m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isSearchable();
     return true;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isReadOnly( sal_Int32 /*column*/ )
+bool ODatabaseMetaDataResultSetMetaData::isReadOnly( sal_Int32 /*column*/ )
 {
     return true;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isDefinitelyWritable( sal_Int32 /*column*/ )
+bool ODatabaseMetaDataResultSetMetaData::isDefinitelyWritable( sal_Int32 /*column*/ )
 {
     return false;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isWritable( sal_Int32 column )
+bool ODatabaseMetaDataResultSetMetaData::isWritable( sal_Int32 column )
 {
     return isDefinitelyWritable(column);
 }

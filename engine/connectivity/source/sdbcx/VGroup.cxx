@@ -49,13 +49,13 @@ OGroup::~OGroup()
 {
 }
 
-Any SAL_CALL OGroup::queryInterface( const Type & rType )
+Any OGroup::queryInterface( const Type & rType )
 {
     Any aRet = ODescriptor::queryInterface( rType);
     return aRet.hasValue() ? aRet : OGroup_BASE::queryInterface( rType);
 }
 
-Sequence< Type > SAL_CALL OGroup::getTypes(  )
+Sequence< Type > OGroup::getTypes(  )
 {
     return ::comphelper::concatSequences(ODescriptor::getTypes(),OGroup_BASE::getTypes());
 }
@@ -82,7 +82,7 @@ void OGroup::disposing()
     return *getArrayHelper();
 }
 
-Reference< XNameAccess > SAL_CALL OGroup::getUsers(  )
+Reference< XNameAccess > OGroup::getUsers(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
@@ -106,7 +106,7 @@ Reference< XNameAccess > SAL_CALL OGroup::getUsers(  )
 }
 
 
-sal_Int32 SAL_CALL OGroup::getPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ )
+sal_Int32 OGroup::getPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
@@ -114,7 +114,7 @@ sal_Int32 SAL_CALL OGroup::getPrivileges( const OUString& /*objName*/, sal_Int32
     return 0;
 }
 
-sal_Int32 SAL_CALL OGroup::getGrantablePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ )
+sal_Int32 OGroup::getGrantablePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
@@ -122,42 +122,42 @@ sal_Int32 SAL_CALL OGroup::getGrantablePrivileges( const OUString& /*objName*/, 
     return 0;
 }
 
-void SAL_CALL OGroup::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ )
+void OGroup::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
     throwFeatureNotImplementedSQLException( u"XAuthorizable::grantPrivileges"_ustr, *this );
 }
 
-void SAL_CALL OGroup::revokePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ )
+void OGroup::revokePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
     throwFeatureNotImplementedSQLException( u"XAuthorizable::revokePrivileges"_ustr, *this );
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OGroup::getPropertySetInfo(  )
+css::uno::Reference< css::beans::XPropertySetInfo > OGroup::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-OUString SAL_CALL OGroup::getName(  )
+OUString OGroup::getName(  )
 {
     return m_Name;
 }
 
-void SAL_CALL OGroup::setName( const OUString& /*aName*/ )
+void OGroup::setName( const OUString& /*aName*/ )
 {
     throwFeatureNotImplementedRuntimeException( u"XNamed::setName"_ustr, *this );
 }
 
 // XInterface
-void SAL_CALL OGroup::acquire() noexcept
+void OGroup::acquire() noexcept
 {
     OGroup_BASE::acquire();
 }
 
-void SAL_CALL OGroup::release() noexcept
+void OGroup::release() noexcept
 {
     OGroup_BASE::release();
 }

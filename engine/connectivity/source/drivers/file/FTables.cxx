@@ -37,7 +37,7 @@ void OTables::impl_refresh(  )
     static_cast<OFileCatalog&>(m_rParent).refreshTables();
 }
 
-Any SAL_CALL OTables::queryInterface( const Type & rType )
+Any OTables::queryInterface( const Type & rType )
 {
     if( rType == cppu::UnoType<XColumnLocate>::get()||
         rType == cppu::UnoType<XDataDescriptorFactory>::get()||

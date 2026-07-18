@@ -57,38 +57,38 @@ void OResultSetMetaData::checkColumnIndex(sal_Int32 column)
         throwInvalidIndexException(*this);
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
+sal_Int32 OResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
 {
     return getPrecision(column);
 }
 
 
-sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column )
+sal_Int32 OResultSetMetaData::getColumnType( sal_Int32 column )
 {
     checkColumnIndex(column);
     return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 }
 
 
-sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  )
+sal_Int32 OResultSetMetaData::getColumnCount(  )
 {
     return m_xColumns->size();
 }
 
 
-bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 /*column*/ )
+bool OResultSetMetaData::isCaseSensitive( sal_Int32 /*column*/ )
 {
     return false;
 }
 
 
-OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 /*column*/ )
+OUString OResultSetMetaData::getSchemaName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
 
-OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column )
+OUString OResultSetMetaData::getColumnName( sal_Int32 column )
 {
     checkColumnIndex(column);
 
@@ -96,77 +96,77 @@ OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column )
     return aName.hasValue() ? getString(aName) : getString((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
 }
 
-OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 /*column*/ )
+OUString OResultSetMetaData::getTableName( sal_Int32 /*column*/ )
 {
     return m_aTableName;
 }
 
-OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 /*column*/ )
+OUString OResultSetMetaData::getCatalogName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column )
+OUString OResultSetMetaData::getColumnTypeName( sal_Int32 column )
 {
     checkColumnIndex(column);
     return getString((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)));
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column )
+OUString OResultSetMetaData::getColumnLabel( sal_Int32 column )
 {
     return getColumnName(column);
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ )
+OUString OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
 
-bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column )
+bool OResultSetMetaData::isCurrency( sal_Int32 column )
 {
     checkColumnIndex(column);
     return getBOOL((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)));
 }
 
 
-bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 /*setCatalogcolumn*/ )
+bool OResultSetMetaData::isAutoIncrement( sal_Int32 /*setCatalogcolumn*/ )
 {
     return false;
 }
 
-bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 /*column*/ )
+bool OResultSetMetaData::isSigned( sal_Int32 /*column*/ )
 {
     return true;
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column )
+sal_Int32 OResultSetMetaData::getPrecision( sal_Int32 column )
 {
     checkColumnIndex(column);
     return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column )
+sal_Int32 OResultSetMetaData::getScale( sal_Int32 column )
 {
     checkColumnIndex(column);
     return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
 }
 
 
-sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column )
+sal_Int32 OResultSetMetaData::isNullable( sal_Int32 column )
 {
     checkColumnIndex(column);
     return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));
 }
 
 
-bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 /*column*/ )
+bool OResultSetMetaData::isSearchable( sal_Int32 /*column*/ )
 {
     return true;
 }
 
 
-bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column )
+bool OResultSetMetaData::isReadOnly( sal_Int32 column )
 {
     checkColumnIndex(column);
     return m_pTable->isReadOnly() || (
@@ -175,12 +175,12 @@ bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column )
 }
 
 
-bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
+bool OResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 {
     return !isReadOnly(column);
 }
 
-bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column )
+bool OResultSetMetaData::isWritable( sal_Int32 column )
 {
     return !isReadOnly(column);
 }

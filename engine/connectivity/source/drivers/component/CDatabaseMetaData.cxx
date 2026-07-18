@@ -115,7 +115,7 @@ Reference< XResultSet > OComponentDatabaseMetaData::impl_getTypeInfo_throw(  )
     return pResult;
 }
 
-Reference< XResultSet > SAL_CALL OComponentDatabaseMetaData::getColumns(
+Reference< XResultSet > OComponentDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
         const OUString& columnNamePattern )
 {
@@ -202,27 +202,27 @@ Reference< XResultSet > SAL_CALL OComponentDatabaseMetaData::getColumns(
     return pResult;
 }
 
-sal_Int32 SAL_CALL OComponentDatabaseMetaData::getMaxBinaryLiteralLength(  )
+sal_Int32 OComponentDatabaseMetaData::getMaxBinaryLiteralLength(  )
 {
     return SAL_MAX_INT32;
 }
 
-sal_Int32 SAL_CALL OComponentDatabaseMetaData::getMaxCharLiteralLength(  )
+sal_Int32 OComponentDatabaseMetaData::getMaxCharLiteralLength(  )
 {
     return SAL_MAX_INT32;
 }
 
-sal_Int32 SAL_CALL OComponentDatabaseMetaData::getMaxColumnNameLength(  )
+sal_Int32 OComponentDatabaseMetaData::getMaxColumnNameLength(  )
 {
     return SAL_MAX_INT32;
 }
 
-sal_Int32 SAL_CALL OComponentDatabaseMetaData::getMaxColumnsInIndex(  )
+sal_Int32 OComponentDatabaseMetaData::getMaxColumnsInIndex(  )
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL OComponentDatabaseMetaData::getMaxColumnsInTable(  )
+sal_Int32 OComponentDatabaseMetaData::getMaxColumnsInTable(  )
 {
     return 256;
 }

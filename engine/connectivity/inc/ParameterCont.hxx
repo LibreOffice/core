@@ -36,7 +36,7 @@ namespace dbtools
         const cpo::uno::Sequence< css::beans::PropertyValue >&   getValues() const { return m_aValues; }
 
         // XInteractionSupplyParameters
-        virtual void SAL_CALL setParameters( const cpo::uno::Sequence< css::beans::PropertyValue >& _rValues ) override;
+        virtual void setParameters( const cpo::uno::Sequence< css::beans::PropertyValue >& _rValues ) override;
 
     private:
         virtual ~OParameterContinuation() override { }

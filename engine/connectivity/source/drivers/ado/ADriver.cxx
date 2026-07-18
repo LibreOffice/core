@@ -84,12 +84,12 @@ Sequence< OUString > ODriver::getSupportedServiceNames( )
     return { "com.sun.star.sdbc.Driver", "com.sun.star.sdbcx.Driver" };
 }
 
-bool SAL_CALL ODriver::supportsService( const OUString& _rServiceName )
+bool ODriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
+Reference< XConnection > ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
 {
     if ( ! acceptsURL(url) )
         return nullptr;
@@ -102,7 +102,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const S
     return pCon;
 }
 
-bool SAL_CALL ODriver::acceptsURL( const OUString& url )
+bool ODriver::acceptsURL( const OUString& url )
 {
     return url.startsWith("sdbc:ado:");
 }
@@ -117,7 +117,7 @@ void ODriver::impl_checkURL_throw(const OUString& _sUrl)
     } // if ( !acceptsURL(_sUrl) )
 }
 
-Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ )
+Sequence< DriverPropertyInfo > ODriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ )
 {
     impl_checkURL_throw(url);
     if ( acceptsURL(url) )
@@ -152,18 +152,18 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
     return Sequence< DriverPropertyInfo >();
 }
 
-sal_Int32 SAL_CALL ODriver::getMajorVersion(  )
+sal_Int32 ODriver::getMajorVersion(  )
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL ODriver::getMinorVersion(  )
+sal_Int32 ODriver::getMinorVersion(  )
 {
     return 0;
 }
 
 // XDataDefinitionSupplier
-Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( const Reference< css::sdbc::XConnection >& connection )
+Reference< XTablesSupplier > ODriver::getDataDefinitionByConnection( const Reference< css::sdbc::XConnection >& connection )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (ODriver_BASE::rBHelper.bDisposed)
@@ -196,7 +196,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
     return xTab;
 }
 
-Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info )
+Reference< XTablesSupplier > ODriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info )
 {
     impl_checkURL_throw(url);
     return getDataDefinitionByConnection(connect(url,info));

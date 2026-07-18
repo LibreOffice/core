@@ -47,35 +47,35 @@ ODbaseResultSet::ODbaseResultSet( OStatement_Base* pStmt,connectivity::OSQLParse
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                cppu::UnoType<bool>::get());
 }
 
-OUString SAL_CALL ODbaseResultSet::getImplementationName(  )
+OUString ODbaseResultSet::getImplementationName(  )
 {
     return u"com.sun.star.sdbcx.dbase.ResultSet"_ustr;
 }
 
-Sequence< OUString > SAL_CALL ODbaseResultSet::getSupportedServiceNames(  )
+Sequence< OUString > ODbaseResultSet::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.sdbc.ResultSet"_ustr, u"com.sun.star.sdbcx.ResultSet"_ustr };
 }
 
-bool SAL_CALL ODbaseResultSet::supportsService( const OUString& _rServiceName )
+bool ODbaseResultSet::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Any SAL_CALL ODbaseResultSet::queryInterface( const Type & rType )
+Any ODbaseResultSet::queryInterface( const Type & rType )
 {
     Any aRet = ODbaseResultSet_BASE::queryInterface(rType);
     return aRet.hasValue() ? aRet : OResultSet::queryInterface(rType);
 }
 
- Sequence<  Type > SAL_CALL ODbaseResultSet::getTypes(  )
+ Sequence<  Type > ODbaseResultSet::getTypes(  )
 {
     return ::comphelper::concatSequences(OResultSet::getTypes(),ODbaseResultSet_BASE::getTypes());
 }
 
 
 // XRowLocate
-Any SAL_CALL ODbaseResultSet::getBookmark(  )
+Any ODbaseResultSet::getBookmark(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -84,7 +84,7 @@ Any SAL_CALL ODbaseResultSet::getBookmark(  )
     return Any((*m_aRow)[0]->getValue().getInt32());
 }
 
-bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark )
+bool ODbaseResultSet::moveToBookmark( const  Any& bookmark )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -95,7 +95,7 @@ bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark )
     return m_pTable.is() && Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),true);
 }
 
-bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows )
+bool ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -109,7 +109,7 @@ bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark, sal
 }
 
 
-sal_Int32 SAL_CALL ODbaseResultSet::compareBookmarks( const Any& lhs, const Any& rhs )
+sal_Int32 ODbaseResultSet::compareBookmarks( const Any& lhs, const Any& rhs )
 {
     sal_Int32 nFirst(0),nSecond(0),nResult(0);
     if ( !( lhs  >>= nFirst ) || !( rhs >>= nSecond ) )
@@ -129,12 +129,12 @@ sal_Int32 SAL_CALL ODbaseResultSet::compareBookmarks( const Any& lhs, const Any&
     return  nResult;
 }
 
-bool SAL_CALL ODbaseResultSet::hasOrderedBookmarks(  )
+bool ODbaseResultSet::hasOrderedBookmarks(  )
 {
     return true;
 }
 
-sal_Int32 SAL_CALL ODbaseResultSet::hashBookmark( const  Any& bookmark )
+sal_Int32 ODbaseResultSet::hashBookmark( const  Any& bookmark )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -144,7 +144,7 @@ sal_Int32 SAL_CALL ODbaseResultSet::hashBookmark( const  Any& bookmark )
 }
 
 // XDeleteRows
-Sequence< sal_Int32 > SAL_CALL ODbaseResultSet::deleteRows( const  Sequence<  Any >& /*rows*/ )
+Sequence< sal_Int32 > ODbaseResultSet::deleteRows( const  Sequence<  Any >& /*rows*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -186,17 +186,17 @@ bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xInde
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-void SAL_CALL ODbaseResultSet::acquire() noexcept
+void ODbaseResultSet::acquire() noexcept
 {
     ODbaseResultSet_BASE2::acquire();
 }
 
-void SAL_CALL ODbaseResultSet::release() noexcept
+void ODbaseResultSet::release() noexcept
 {
     ODbaseResultSet_BASE2::release();
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL ODbaseResultSet::getPropertySetInfo(  )
+css::uno::Reference< css::beans::XPropertySetInfo > ODbaseResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

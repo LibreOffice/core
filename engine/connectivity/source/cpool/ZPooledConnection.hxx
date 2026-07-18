@@ -44,16 +44,16 @@ namespace connectivity
         css::uno::Reference< css::reflection::XProxyFactory >     m_xProxyFactory;
     public:
         // OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         OPooledConnection(const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                           const css::uno::Reference< css::reflection::XProxyFactory >& _rxProxyFactory);
 
         //XPooledConnection
-        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
     };
 
 }

@@ -75,12 +75,12 @@ void OView::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CHECKOPTION),     PROPERTY_ID_CHECKOPTION,nAttrib,&m_CheckOption, ::cppu::UnoType<sal_Int32>::get());
 }
 
-Sequence< Type > SAL_CALL OView::getTypes(  )
+Sequence< Type > OView::getTypes(  )
 {
     return ::comphelper::concatSequences(ODescriptor::getTypes(),OView_BASE::getTypes());
 }
 
-Any SAL_CALL OView::queryInterface( const Type & rType )
+Any OView::queryInterface( const Type & rType )
 {
     Any aRet = OView_BASE::queryInterface( rType);
     return aRet.hasValue() ? aRet : ODescriptor::queryInterface( rType);
@@ -96,7 +96,7 @@ Any SAL_CALL OView::queryInterface( const Type & rType )
     return *getArrayHelper(isNew() ? 1 : 0);
 }
 
-OUString SAL_CALL OView::getName()
+OUString OView::getName()
 {
     OUString sComposedName;
     if(m_xMetaData.is())
@@ -110,21 +110,21 @@ OUString SAL_CALL OView::getName()
     return sComposedName;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OView::getPropertySetInfo(  )
+css::uno::Reference< css::beans::XPropertySetInfo > OView::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-void SAL_CALL OView::setName( const OUString& )
+void OView::setName( const OUString& )
 {
 }
 
-void SAL_CALL OView::acquire() noexcept
+void OView::acquire() noexcept
 {
     OView_BASE::acquire();
 }
 
-void SAL_CALL OView::release() noexcept
+void OView::release() noexcept
 {
     OView_BASE::release();
 }

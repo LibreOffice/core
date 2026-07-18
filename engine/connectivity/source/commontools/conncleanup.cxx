@@ -128,7 +128,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OAutoConnectionDisposer::propertyChange( const PropertyChangeEvent& _rEvent )
+    void OAutoConnectionDisposer::propertyChange( const PropertyChangeEvent& _rEvent )
     {
         if ( _rEvent.PropertyName != ACTIVE_CONNECTION_PROPERTY_NAME )
             return;
@@ -181,7 +181,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OAutoConnectionDisposer::disposing( const EventObject& _rSource )
+    void OAutoConnectionDisposer::disposing( const EventObject& _rSource )
     {
         // the rowset is being disposed, and nobody has set a new ActiveConnection in the meantime
         if ( isRowSetListening() )
@@ -209,15 +209,15 @@ using namespace cpo::uno;
         }
     }
 
-    void SAL_CALL OAutoConnectionDisposer::cursorMoved( const css::lang::EventObject& /*event*/ )
+    void OAutoConnectionDisposer::cursorMoved( const css::lang::EventObject& /*event*/ )
     {
     }
 
-    void SAL_CALL OAutoConnectionDisposer::rowChanged( const css::lang::EventObject& /*event*/ )
+    void OAutoConnectionDisposer::rowChanged( const css::lang::EventObject& /*event*/ )
     {
     }
 
-    void SAL_CALL OAutoConnectionDisposer::rowSetChanged( const css::lang::EventObject& /*event*/ )
+    void OAutoConnectionDisposer::rowSetChanged( const css::lang::EventObject& /*event*/ )
     {
         stopRowSetListening();
         clearConnection();

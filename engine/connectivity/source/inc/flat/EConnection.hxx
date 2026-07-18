@@ -50,11 +50,11 @@ namespace connectivity::flat
         DECLARE_SERVICE_INFO();
 
         // XConnection
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > getMetaData(  ) override;
         virtual css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog() override;
-        virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
+        virtual css::uno::Reference< css::sdbc::XStatement > createStatement(  ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareStatement( const OUString& sql ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareCall( const OUString& sql ) override;
     };
 
 }

@@ -88,28 +88,28 @@ void ODatabaseMetaDataResultSet::disposing()
     m_pConnection.clear();
 }
 
-Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType )
+Any ODatabaseMetaDataResultSet::queryInterface( const Type & rType )
 {
     Any aRet = OPropertySetHelper::queryInterface(rType);
     return aRet.hasValue() ? aRet : ODatabaseMetaDataResultSet_BASE::queryInterface(rType);
 }
 
-Reference< XPropertySetInfo > SAL_CALL ODatabaseMetaDataResultSet::getPropertySetInfo(  )
+Reference< XPropertySetInfo > ODatabaseMetaDataResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-void SAL_CALL ODatabaseMetaDataResultSet::acquire() noexcept
+void ODatabaseMetaDataResultSet::acquire() noexcept
 {
     ODatabaseMetaDataResultSet_BASE::acquire();
 }
 
-void SAL_CALL ODatabaseMetaDataResultSet::release() noexcept
+void ODatabaseMetaDataResultSet::release() noexcept
 {
     ODatabaseMetaDataResultSet_BASE::release();
 }
 
-Sequence< Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  )
+Sequence< Type > ODatabaseMetaDataResultSet::getTypes(  )
 {
     ::cppu::OTypeCollection aTypes( cppu::UnoType<XMultiPropertySet>::get(),
                                     cppu::UnoType<XFastPropertySet>::get(),
@@ -132,7 +132,7 @@ sal_Int32 ODatabaseMetaDataResultSet::mapColumn (sal_Int32  column)
 }
 
 
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& columnName )
+sal_Int32 ODatabaseMetaDataResultSet::findColumn( const OUString& columnName )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -176,17 +176,17 @@ template < typename T, SQLSMALLINT sqlTypeId > T ODatabaseMetaDataResultSet::get
 }
 
 
-Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ )
+Reference< css::io::XInputStream > ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getBinaryStream"_ustr, *this );
 }
 
-Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ )
+Reference< css::io::XInputStream > ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getCharacterStream"_ustr, *this );
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex )
+bool ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -215,13 +215,13 @@ bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex )
 }
 
 
-sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex )
+sal_Int8 ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex )
 {
     return getInteger<sal_Int8, SQL_C_STINYINT>( columnIndex );
 }
 
 
-Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 columnIndex )
+Sequence< sal_Int8 > ODatabaseMetaDataResultSet::getBytes( sal_Int32 columnIndex )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -250,7 +250,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
 }
 
 
-css::util::Date SAL_CALL ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIndex )
+css::util::Date ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIndex )
 {
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -272,7 +272,7 @@ css::util::Date SAL_CALL ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIn
 }
 
 
-double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex )
+double ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -289,7 +289,7 @@ double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex )
 }
 
 
-float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex )
+float ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -306,25 +306,25 @@ float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex )
 }
 
 
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex )
+sal_Int32 ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex )
 {
     return getInteger<sal_Int32, SQL_C_SLONG>( columnIndex );
 }
 
 
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  )
+sal_Int32 ODatabaseMetaDataResultSet::getRow(  )
 {
     return 0;
 }
 
 
-sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex )
+sal_Int64 ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex )
 {
     return getInteger<sal_Int64, SQL_C_SBIGINT>( columnIndex );
 }
 
 
-Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData(  )
+Reference< XResultSetMetaData > ODatabaseMetaDataResultSet::getMetaData(  )
 {
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -333,41 +333,41 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
     return m_xMetaData;
 }
 
-Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ )
+Reference< XArray > ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getArray"_ustr, *this );
 }
 
-Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ )
+Reference< XClob > ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getClob"_ustr, *this );
 }
 
-Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ )
+Reference< XBlob > ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getBlob"_ustr, *this );
 }
 
 
-Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ )
+Reference< XRef > ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getRef"_ustr, *this );
 }
 
 
-Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 /*columnIndex*/, const Reference< css::container::XNameAccess >& /*typeMap*/ )
+Any ODatabaseMetaDataResultSet::getObject( sal_Int32 /*columnIndex*/, const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getObject"_ustr, *this );
 }
 
 
-sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
+sal_Int16 ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 {
     return getInteger<sal_Int16, SQL_C_SSHORT>( columnIndex );
 }
 
 
-OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
+OUString ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -385,7 +385,7 @@ OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
 }
 
 
-css::util::Time SAL_CALL ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex )
+css::util::Time ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -402,7 +402,7 @@ css::util::Time SAL_CALL ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIn
 }
 
 
-css::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex )
+css::util::DateTime ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -420,7 +420,7 @@ css::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32
 }
 
 
-bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  )
+bool ODatabaseMetaDataResultSet::isAfterLast(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -430,7 +430,7 @@ bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  )
     return m_nCurrentFetchState == SQL_NO_DATA;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  )
+bool ODatabaseMetaDataResultSet::isFirst(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -440,7 +440,7 @@ bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  )
     return m_nRowPos == 1;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  )
+bool ODatabaseMetaDataResultSet::isLast(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -450,7 +450,7 @@ bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  )
     return m_bEOF && m_nCurrentFetchState != SQL_NO_DATA;
 }
 
-void SAL_CALL ODatabaseMetaDataResultSet::beforeFirst(  )
+void ODatabaseMetaDataResultSet::beforeFirst(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -462,7 +462,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::beforeFirst(  )
     m_nCurrentFetchState = SQL_SUCCESS;
 }
 
-void SAL_CALL ODatabaseMetaDataResultSet::afterLast(  )
+void ODatabaseMetaDataResultSet::afterLast(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -474,7 +474,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::afterLast(  )
 }
 
 
-void SAL_CALL ODatabaseMetaDataResultSet::close(  )
+void ODatabaseMetaDataResultSet::close(  )
 {
     {
 
@@ -486,7 +486,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::close(  )
 }
 
 
-bool SAL_CALL ODatabaseMetaDataResultSet::first(  )
+bool ODatabaseMetaDataResultSet::first(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -503,7 +503,7 @@ bool SAL_CALL ODatabaseMetaDataResultSet::first(  )
 }
 
 
-bool SAL_CALL ODatabaseMetaDataResultSet::last(  )
+bool ODatabaseMetaDataResultSet::last(  )
 {
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -518,7 +518,7 @@ bool SAL_CALL ODatabaseMetaDataResultSet::last(  )
     return bRet;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row )
+bool ODatabaseMetaDataResultSet::absolute( sal_Int32 row )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -534,7 +534,7 @@ bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row )
     return bRet;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row )
+bool ODatabaseMetaDataResultSet::relative( sal_Int32 row )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -550,7 +550,7 @@ bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row )
     return bRet;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::previous(  )
+bool ODatabaseMetaDataResultSet::previous(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -568,13 +568,13 @@ bool SAL_CALL ODatabaseMetaDataResultSet::previous(  )
     return bRet;
 }
 
-Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  )
+Reference< XInterface > ODatabaseMetaDataResultSet::getStatement(  )
 {
     return nullptr;
 }
 
 
-bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  )
+bool ODatabaseMetaDataResultSet::rowDeleted(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -584,7 +584,7 @@ bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  )
     return m_pRowStatusArray[0] == SQL_ROW_DELETED;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  )
+bool ODatabaseMetaDataResultSet::rowInserted(  )
 {
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -593,7 +593,7 @@ bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  )
     return m_pRowStatusArray[0] == SQL_ROW_ADDED;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  )
+bool ODatabaseMetaDataResultSet::rowUpdated(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -604,7 +604,7 @@ bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  )
 }
 
 
-bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  )
+bool ODatabaseMetaDataResultSet::isBeforeFirst(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -615,7 +615,7 @@ bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  )
 }
 
 
-bool SAL_CALL ODatabaseMetaDataResultSet::next(  )
+bool ODatabaseMetaDataResultSet::next(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -634,7 +634,7 @@ bool SAL_CALL ODatabaseMetaDataResultSet::next(  )
 }
 
 
-bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  )
+bool ODatabaseMetaDataResultSet::wasNull(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -644,7 +644,7 @@ bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  )
     return m_bWasNull;
 }
 
-void SAL_CALL ODatabaseMetaDataResultSet::refreshRow(  )
+void ODatabaseMetaDataResultSet::refreshRow(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -653,7 +653,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::refreshRow(  )
 }
 
 
-void SAL_CALL ODatabaseMetaDataResultSet::cancel(  )
+void ODatabaseMetaDataResultSet::cancel(  )
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -663,11 +663,11 @@ void SAL_CALL ODatabaseMetaDataResultSet::cancel(  )
     functions().Cancel(m_aStatementHandle);
 }
 
-void SAL_CALL ODatabaseMetaDataResultSet::clearWarnings(  )
+void ODatabaseMetaDataResultSet::clearWarnings(  )
 {
 }
 
-Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  )
+Any ODatabaseMetaDataResultSet::getWarnings(  )
 {
     return Any();
 }

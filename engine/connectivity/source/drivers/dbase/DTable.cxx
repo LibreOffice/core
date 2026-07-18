@@ -725,14 +725,14 @@ void ODbaseTable::refreshIndexes()
 }
 
 
-void SAL_CALL ODbaseTable::disposing()
+void ODbaseTable::disposing()
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aColumns = nullptr;
 }
 
-Sequence< Type > SAL_CALL ODbaseTable::getTypes(  )
+Sequence< Type > ODbaseTable::getTypes(  )
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
     std::vector<Type> aOwnTypes;
@@ -751,7 +751,7 @@ Sequence< Type > SAL_CALL ODbaseTable::getTypes(  )
 }
 
 
-Any SAL_CALL ODbaseTable::queryInterface( const Type & rType )
+Any ODbaseTable::queryInterface( const Type & rType )
 {
     if( rType == cppu::UnoType<XKeysSupplier>::get()||
         rType == cppu::UnoType<XDataDescriptorFactory>::get())
@@ -2111,7 +2111,7 @@ void ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr
 
 
 // XAlterTable
-void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor )
+void ODbaseTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -2130,7 +2130,7 @@ void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Ref
     }
 }
 
-void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor )
+void ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -2264,7 +2264,7 @@ Reference< XDatabaseMetaData> ODbaseTable::getMetaData() const
     return getConnection()->getMetaData();
 }
 
-void SAL_CALL ODbaseTable::rename( const OUString& newName )
+void ODbaseTable::rename( const OUString& newName )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);

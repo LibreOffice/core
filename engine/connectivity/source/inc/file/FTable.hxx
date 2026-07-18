@@ -59,9 +59,9 @@ namespace connectivity::file
             );
 
         //XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
         // ::cppu::OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         OConnection* getConnection() const { return m_pConnection;}
         virtual sal_Int32 getCurrentLastPos() const {return -1;}
@@ -78,7 +78,7 @@ namespace connectivity::file
         // refresh the header of file based tables to see changes done by someone
         virtual void refreshHeader();
 
-        OUString SAL_CALL getName() override { return m_Name; }
+        OUString getName() override { return m_Name; }
 
         const OUString& getSchema() const { return m_SchemaName; }
         bool isReadOnly() const { return !m_bWriteable; }

@@ -102,12 +102,12 @@ void OAdoGroup::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 }
 
 
-sal_Int32 SAL_CALL OAdoGroup::getPrivileges( const OUString& objName, sal_Int32 objType )
+sal_Int32 OAdoGroup::getPrivileges( const OUString& objName, sal_Int32 objType )
 {
     return MapRight(m_aGroup.GetPermissions(objName,MapObjectType(objType)));
 }
 
-sal_Int32 SAL_CALL OAdoGroup::getGrantablePrivileges( const OUString& objName, sal_Int32 objType )
+sal_Int32 OAdoGroup::getGrantablePrivileges( const OUString& objName, sal_Int32 objType )
 {
     RightsEnum eNum = m_aGroup.GetPermissions(objName,MapObjectType(objType));
     if(eNum & adRightWithGrant)
@@ -115,12 +115,12 @@ sal_Int32 SAL_CALL OAdoGroup::getGrantablePrivileges( const OUString& objName, s
     return 0;
 }
 
-void SAL_CALL OAdoGroup::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
+void OAdoGroup::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
 {
     m_aGroup.SetPermissions(objName,MapObjectType(objType),adAccessGrant,Map2Right(objPrivileges));
 }
 
-void SAL_CALL OAdoGroup::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
+void OAdoGroup::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
 {
     m_aGroup.SetPermissions(objName,MapObjectType(objType),adAccessDeny,Map2Right(objPrivileges));
 }

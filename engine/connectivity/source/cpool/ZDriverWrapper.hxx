@@ -54,17 +54,17 @@ namespace connectivity
 
 
         // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
 
     private:
         /// dtor
         virtual ~ODriverWrapper() override;
         // XDriver
-        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
-        virtual bool SAL_CALL acceptsURL( const OUString& url ) override;
-        virtual cpo::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
-        virtual sal_Int32 SAL_CALL getMajorVersion(  ) override;
-        virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual bool acceptsURL( const OUString& url ) override;
+        virtual cpo::uno::Sequence< css::sdbc::DriverPropertyInfo > getPropertyInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual sal_Int32 getMajorVersion(  ) override;
+        virtual sal_Int32 getMinorVersion(  ) override;
     };
 
 

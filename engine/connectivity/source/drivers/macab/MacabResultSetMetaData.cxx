@@ -70,13 +70,13 @@ void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity:
 
 }
 
-sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnDisplaySize(sal_Int32 /* column */)
+sal_Int32 MacabResultSetMetaData::getColumnDisplaySize(sal_Int32 /* column */)
 {
     // For now, all columns are the same size.
     return 50;
 }
 
-sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column)
+sal_Int32 MacabResultSetMetaData::getColumnType(sal_Int32 column)
 {
     MacabRecords *aRecords;
     MacabHeader *aHeader;
@@ -102,22 +102,22 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column)
     return ABTypeToDataType(aField->type);
 }
 
-sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnCount()
+sal_Int32 MacabResultSetMetaData::getColumnCount()
 {
     return m_aMacabFields.size();
 }
 
-bool SAL_CALL MacabResultSetMetaData::isCaseSensitive(sal_Int32)
+bool MacabResultSetMetaData::isCaseSensitive(sal_Int32)
 {
     return true;
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getSchemaName(sal_Int32)
+OUString MacabResultSetMetaData::getSchemaName(sal_Int32)
 {
     return OUString();
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getColumnName(sal_Int32 column)
+OUString MacabResultSetMetaData::getColumnName(sal_Int32 column)
 {
     sal_uInt32 nFieldNumber = m_aMacabFields[column - 1];
     MacabRecords *aRecords;
@@ -137,77 +137,77 @@ OUString SAL_CALL MacabResultSetMetaData::getColumnName(sal_Int32 column)
     return aName;
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getTableName(sal_Int32)
+OUString MacabResultSetMetaData::getTableName(sal_Int32)
 {
     return m_sTableName;
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getCatalogName(sal_Int32)
+OUString MacabResultSetMetaData::getCatalogName(sal_Int32)
 {
     return OUString();
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getColumnTypeName(sal_Int32)
+OUString MacabResultSetMetaData::getColumnTypeName(sal_Int32)
 {
     return OUString();
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getColumnLabel(sal_Int32)
+OUString MacabResultSetMetaData::getColumnLabel(sal_Int32)
 {
     return OUString();
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getColumnServiceName(sal_Int32)
+OUString MacabResultSetMetaData::getColumnServiceName(sal_Int32)
 {
     return OUString();
 }
 
-bool SAL_CALL MacabResultSetMetaData::isCurrency(sal_Int32)
+bool MacabResultSetMetaData::isCurrency(sal_Int32)
 {
     return false;
 }
 
-bool SAL_CALL MacabResultSetMetaData::isAutoIncrement(sal_Int32)
+bool MacabResultSetMetaData::isAutoIncrement(sal_Int32)
 {
     return false;
 }
 
-bool SAL_CALL MacabResultSetMetaData::isSigned(sal_Int32)
+bool MacabResultSetMetaData::isSigned(sal_Int32)
 {
     return false;
 }
 
-sal_Int32 SAL_CALL MacabResultSetMetaData::getPrecision(sal_Int32)
+sal_Int32 MacabResultSetMetaData::getPrecision(sal_Int32)
 {
     return 0;
 }
 
-sal_Int32 SAL_CALL MacabResultSetMetaData::getScale(sal_Int32)
+sal_Int32 MacabResultSetMetaData::getScale(sal_Int32)
 {
     return 0;
 }
 
-sal_Int32 SAL_CALL MacabResultSetMetaData::isNullable(sal_Int32)
+sal_Int32 MacabResultSetMetaData::isNullable(sal_Int32)
 {
     return sal_Int32(true);
 }
 
-bool SAL_CALL MacabResultSetMetaData::isSearchable(sal_Int32)
+bool MacabResultSetMetaData::isSearchable(sal_Int32)
 {
     return true;
 }
 
-bool SAL_CALL MacabResultSetMetaData::isReadOnly(sal_Int32)
+bool MacabResultSetMetaData::isReadOnly(sal_Int32)
 {
     return true;
 }
 
-bool SAL_CALL MacabResultSetMetaData::isDefinitelyWritable(sal_Int32)
+bool MacabResultSetMetaData::isDefinitelyWritable(sal_Int32)
 {
     return false;
 }
 
-bool SAL_CALL MacabResultSetMetaData::isWritable(sal_Int32)
+bool MacabResultSetMetaData::isWritable(sal_Int32)
 {
     return false;
 }

@@ -62,19 +62,19 @@ OEvoabPreparedStatement::~OEvoabPreparedStatement()
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::acquire() noexcept
+void OEvoabPreparedStatement::acquire() noexcept
 {
     OCommonStatement::acquire();
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::release() noexcept
+void OEvoabPreparedStatement::release() noexcept
 {
     OCommonStatement::release();
 }
 
 
-Any SAL_CALL OEvoabPreparedStatement::queryInterface( const Type & rType )
+Any OEvoabPreparedStatement::queryInterface( const Type & rType )
 {
     Any aRet = OCommonStatement::queryInterface(rType);
     if(!aRet.hasValue())
@@ -82,13 +82,13 @@ Any SAL_CALL OEvoabPreparedStatement::queryInterface( const Type & rType )
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OEvoabPreparedStatement::getTypes(  )
+Sequence< Type > OEvoabPreparedStatement::getTypes(  )
 {
     return ::comphelper::concatSequences(OPreparedStatement_BASE::getTypes(),OCommonStatement::getTypes());
 }
 
 
-Reference< XResultSetMetaData > SAL_CALL OEvoabPreparedStatement::getMetaData(  )
+Reference< XResultSetMetaData > OEvoabPreparedStatement::getMetaData(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -99,7 +99,7 @@ Reference< XResultSetMetaData > SAL_CALL OEvoabPreparedStatement::getMetaData(  
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::close(  )
+void OEvoabPreparedStatement::close(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -117,7 +117,7 @@ void SAL_CALL OEvoabPreparedStatement::close(  )
 }
 
 
-bool SAL_CALL OEvoabPreparedStatement::execute(  )
+bool OEvoabPreparedStatement::execute(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -127,7 +127,7 @@ bool SAL_CALL OEvoabPreparedStatement::execute(  )
 }
 
 
-sal_Int32 SAL_CALL OEvoabPreparedStatement::executeUpdate(  )
+sal_Int32 OEvoabPreparedStatement::executeUpdate(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -136,13 +136,13 @@ sal_Int32 SAL_CALL OEvoabPreparedStatement::executeUpdate(  )
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setString( sal_Int32 /*parameterIndex*/, const OUString& /*x*/ )
+void OEvoabPreparedStatement::setString( sal_Int32 /*parameterIndex*/, const OUString& /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setString"_ustr, *this );
 }
 
 
-Reference< XConnection > SAL_CALL OEvoabPreparedStatement::getConnection(  )
+Reference< XConnection > OEvoabPreparedStatement::getConnection(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -151,7 +151,7 @@ Reference< XConnection > SAL_CALL OEvoabPreparedStatement::getConnection(  )
 }
 
 
-Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::executeQuery(  )
+Reference< XResultSet > OEvoabPreparedStatement::executeQuery(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -160,103 +160,103 @@ Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::executeQuery(  )
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setBoolean( sal_Int32 /*parameterIndex*/, bool /*x*/ )
+void OEvoabPreparedStatement::setBoolean( sal_Int32 /*parameterIndex*/, bool /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setBoolean"_ustr, *this );
 
 }
 
-void SAL_CALL OEvoabPreparedStatement::setByte( sal_Int32 /*parameterIndex*/, sal_Int8 /*x*/ )
+void OEvoabPreparedStatement::setByte( sal_Int32 /*parameterIndex*/, sal_Int8 /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setByte"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setDate( sal_Int32 /*parameterIndex*/, const css::util::Date& /*aData*/ )
+void OEvoabPreparedStatement::setDate( sal_Int32 /*parameterIndex*/, const css::util::Date& /*aData*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setDate"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, const css::util::Time& /*aVal*/ )
+void OEvoabPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, const css::util::Time& /*aVal*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setTime"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setTimestamp( sal_Int32 /*parameterIndex*/, const css::util::DateTime& /*aVal*/ )
+void OEvoabPreparedStatement::setTimestamp( sal_Int32 /*parameterIndex*/, const css::util::DateTime& /*aVal*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setTimestamp"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setDouble( sal_Int32 /*parameterIndex*/, double /*x*/ )
+void OEvoabPreparedStatement::setDouble( sal_Int32 /*parameterIndex*/, double /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setDouble"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setFloat( sal_Int32 /*parameterIndex*/, float /*x*/ )
+void OEvoabPreparedStatement::setFloat( sal_Int32 /*parameterIndex*/, float /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setFloat"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setInt( sal_Int32 /*parameterIndex*/, sal_Int32 /*x*/ )
+void OEvoabPreparedStatement::setInt( sal_Int32 /*parameterIndex*/, sal_Int32 /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setInt"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setLong( sal_Int32 /*parameterIndex*/, sal_Int64 /*aVal*/ )
+void OEvoabPreparedStatement::setLong( sal_Int32 /*parameterIndex*/, sal_Int64 /*aVal*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setLong"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/ )
+void OEvoabPreparedStatement::setNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setNull"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ )
+void OEvoabPreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setClob"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ )
+void OEvoabPreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setBlob"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ )
+void OEvoabPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setArray"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ )
+void OEvoabPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setRef"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setObjectWithInfo( sal_Int32 /*parameterIndex*/, const Any& /*x*/, sal_Int32 /*sqlType*/, sal_Int32 /*scale*/ )
+void OEvoabPreparedStatement::setObjectWithInfo( sal_Int32 /*parameterIndex*/, const Any& /*x*/, sal_Int32 /*sqlType*/, sal_Int32 /*scale*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setObjectWithInfo"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setObjectNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/, const OUString& /*typeName*/ )
+void OEvoabPreparedStatement::setObjectNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/, const OUString& /*typeName*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setObjectNull"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x )
+void OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x )
 {
     if(!::dbtools::implSetObject(this,parameterIndex,x))
     {
@@ -269,45 +269,45 @@ void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, cons
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setShort( sal_Int32 /*parameterIndex*/, sal_Int16 /*x*/ )
+void OEvoabPreparedStatement::setShort( sal_Int32 /*parameterIndex*/, sal_Int16 /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setShort"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setBytes( sal_Int32 /*parameterIndex*/, const Sequence< sal_Int8 >& /*x*/ )
+void OEvoabPreparedStatement::setBytes( sal_Int32 /*parameterIndex*/, const Sequence< sal_Int8 >& /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setBytes"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< css::io::XInputStream >& /*x*/, sal_Int32 /*length*/ )
+void OEvoabPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< css::io::XInputStream >& /*x*/, sal_Int32 /*length*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setCharacterStream"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setBinaryStream( sal_Int32 /*parameterIndex*/, const Reference< css::io::XInputStream >& /*x*/, sal_Int32 /*length*/ )
+void OEvoabPreparedStatement::setBinaryStream( sal_Int32 /*parameterIndex*/, const Reference< css::io::XInputStream >& /*x*/, sal_Int32 /*length*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setBinaryStream"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::clearParameters(  )
+void OEvoabPreparedStatement::clearParameters(  )
 {
 }
 
-Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::getResultSet(  )
+Reference< XResultSet > OEvoabPreparedStatement::getResultSet(  )
 {
     return nullptr;
 }
 
-sal_Int32 SAL_CALL OEvoabPreparedStatement::getUpdateCount(  )
+sal_Int32 OEvoabPreparedStatement::getUpdateCount(  )
 {
     return 0;
 }
 
-bool SAL_CALL OEvoabPreparedStatement::getMoreResults(  )
+bool OEvoabPreparedStatement::getMoreResults(  )
 {
     return false;
 }

@@ -34,11 +34,11 @@ namespace connectivity::ado
         WpADOUser   m_aUser;
         OCatalog*   m_pCatalog;
 
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+        virtual void setFastPropertyValue_NoBroadcast(
                         sal_Int32 nHandle,
                         const cpo::uno::Any& rValue
                      ) override;
-        virtual void SAL_CALL getFastPropertyValue(
+        virtual void getFastPropertyValue(
                                 cpo::uno::Any& rValue,
                                 sal_Int32 nHandle
                                      ) const override;
@@ -49,12 +49,12 @@ namespace connectivity::ado
         OAdoUser(OCatalog* _pParent,bool _bCase,  const OUString& Name);
 
         // XUser
-        virtual void SAL_CALL changePassword( const OUString& objPassword, const OUString& newPassword ) override;
+        virtual void changePassword( const OUString& objPassword, const OUString& newPassword ) override;
         // XAuthorizable
-        virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) override;
-        virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
-        virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
-        virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+        virtual sal_Int32 getPrivileges( const OUString& objName, sal_Int32 objType ) override;
+        virtual sal_Int32 getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
+        virtual void grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+        virtual void revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
 
         WpADOUser getImpl() const { return m_aUser;}
     };
@@ -70,7 +70,7 @@ namespace connectivity::ado
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
         // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
     public:
         OUserExtend(OCatalog* _pParent,bool _bCase,ADOUser* _pUser=nullptr);
         OUserExtend(OCatalog* _pParent,bool _bCase,const OUString& Name);

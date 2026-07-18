@@ -111,7 +111,7 @@ void MacabPreparedStatement::disposing()
     }
 }
 
-Reference< XResultSetMetaData > SAL_CALL MacabPreparedStatement::getMetaData()
+Reference< XResultSetMetaData > MacabPreparedStatement::getMetaData()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
@@ -136,7 +136,7 @@ Reference< XResultSetMetaData > SAL_CALL MacabPreparedStatement::getMetaData()
     return xMetaData;
 }
 
-void SAL_CALL MacabPreparedStatement::close()
+void MacabPreparedStatement::close()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
@@ -154,7 +154,7 @@ void SAL_CALL MacabPreparedStatement::close()
     // list
 }
 
-bool SAL_CALL MacabPreparedStatement::execute()
+bool MacabPreparedStatement::execute()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
@@ -164,7 +164,7 @@ bool SAL_CALL MacabPreparedStatement::execute()
     return xRS.is();
 }
 
-sal_Int32 SAL_CALL MacabPreparedStatement::executeUpdate()
+sal_Int32 MacabPreparedStatement::executeUpdate()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
@@ -173,7 +173,7 @@ sal_Int32 SAL_CALL MacabPreparedStatement::executeUpdate()
     return 0;
 }
 
-Reference< XConnection > SAL_CALL MacabPreparedStatement::getConnection()
+Reference< XConnection > MacabPreparedStatement::getConnection()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
@@ -181,7 +181,7 @@ Reference< XConnection > SAL_CALL MacabPreparedStatement::getConnection()
     return m_pConnection;
 }
 
-Reference< XResultSet > SAL_CALL MacabPreparedStatement::executeQuery()
+Reference< XResultSet > MacabPreparedStatement::executeQuery()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
@@ -191,7 +191,7 @@ Reference< XResultSet > SAL_CALL MacabPreparedStatement::executeQuery()
     return rs;
 }
 
-void SAL_CALL MacabPreparedStatement::setNull(sal_Int32 parameterIndex, sal_Int32)
+void MacabPreparedStatement::setNull(sal_Int32 parameterIndex, sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
@@ -201,47 +201,47 @@ void SAL_CALL MacabPreparedStatement::setNull(sal_Int32 parameterIndex, sal_Int3
     (*m_aParameterRow)[parameterIndex - 1].setNull();
 }
 
-void SAL_CALL MacabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const OUString&)
+void MacabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const OUString&)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setObjectNull", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setBoolean(sal_Int32, bool)
+void MacabPreparedStatement::setBoolean(sal_Int32, bool)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setBoolean", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setByte(sal_Int32, sal_Int8)
+void MacabPreparedStatement::setByte(sal_Int32, sal_Int8)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setByte", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setShort(sal_Int32, sal_Int16)
+void MacabPreparedStatement::setShort(sal_Int32, sal_Int16)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setShort", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setInt(sal_Int32, sal_Int32)
+void MacabPreparedStatement::setInt(sal_Int32, sal_Int32)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setInt", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setLong(sal_Int32, sal_Int64)
+void MacabPreparedStatement::setLong(sal_Int32, sal_Int64)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setLong", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setFloat(sal_Int32, float)
+void MacabPreparedStatement::setFloat(sal_Int32, float)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setFloat", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setDouble(sal_Int32, double)
+void MacabPreparedStatement::setDouble(sal_Int32, double)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setDouble", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setString(sal_Int32 parameterIndex, const OUString &x)
+void MacabPreparedStatement::setString(sal_Int32 parameterIndex, const OUString &x)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
@@ -251,38 +251,38 @@ void SAL_CALL MacabPreparedStatement::setString(sal_Int32 parameterIndex, const 
     (*m_aParameterRow)[parameterIndex - 1] = x;
 }
 
-void SAL_CALL MacabPreparedStatement::setBytes(sal_Int32, const Sequence< sal_Int8 >&)
+void MacabPreparedStatement::setBytes(sal_Int32, const Sequence< sal_Int8 >&)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setBytes", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setDate(sal_Int32, const Date&)
+void MacabPreparedStatement::setDate(sal_Int32, const Date&)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setDate", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setTime(sal_Int32, const css::util::Time&)
+void MacabPreparedStatement::setTime(sal_Int32, const css::util::Time&)
 {
 
     ::dbtools::throwFunctionNotSupportedSQLException("setTime", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setTimestamp(sal_Int32, const DateTime&)
+void MacabPreparedStatement::setTimestamp(sal_Int32, const DateTime&)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setTimestamp", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setBinaryStream(sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32)
+void MacabPreparedStatement::setBinaryStream(sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setBinaryStream", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setCharacterStream(sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32)
+void MacabPreparedStatement::setCharacterStream(sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setCharacterStream", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setObject(sal_Int32 parameterIndex, const Any& x)
+void MacabPreparedStatement::setObject(sal_Int32 parameterIndex, const Any& x)
 {
     if(!::dbtools::implSetObject(this,parameterIndex,x))
     {
@@ -294,32 +294,32 @@ void SAL_CALL MacabPreparedStatement::setObject(sal_Int32 parameterIndex, const 
     }
 }
 
-void SAL_CALL MacabPreparedStatement::setObjectWithInfo(sal_Int32, const Any&, sal_Int32, sal_Int32)
+void MacabPreparedStatement::setObjectWithInfo(sal_Int32, const Any&, sal_Int32, sal_Int32)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setObjectWithInfo", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setRef(sal_Int32, const Reference< XRef >&)
+void MacabPreparedStatement::setRef(sal_Int32, const Reference< XRef >&)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setRef", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setBlob(sal_Int32, const Reference< XBlob >&)
+void MacabPreparedStatement::setBlob(sal_Int32, const Reference< XBlob >&)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setBlob", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setClob(sal_Int32, const Reference< XClob >&)
+void MacabPreparedStatement::setClob(sal_Int32, const Reference< XClob >&)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setClob", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setArray(sal_Int32, const Reference< XArray >&)
+void MacabPreparedStatement::setArray(sal_Int32, const Reference< XArray >&)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setArray", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::clearParameters()
+void MacabPreparedStatement::clearParameters()
 {
     ::dbtools::throwFunctionNotSupportedSQLException("clearParameters", nullptr);
 }

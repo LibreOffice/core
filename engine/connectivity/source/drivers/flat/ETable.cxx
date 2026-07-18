@@ -505,14 +505,14 @@ void OFlatTable::refreshColumns()
 }
 
 
-void SAL_CALL OFlatTable::disposing()
+void OFlatTable::disposing()
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aColumns = nullptr;
 }
 
-Sequence< Type > SAL_CALL OFlatTable::getTypes(  )
+Sequence< Type > OFlatTable::getTypes(  )
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
     vector<Type> aOwnTypes;
@@ -532,7 +532,7 @@ Sequence< Type > SAL_CALL OFlatTable::getTypes(  )
 }
 
 
-Any SAL_CALL OFlatTable::queryInterface( const Type & rType )
+Any OFlatTable::queryInterface( const Type & rType )
 {
     if( rType == cppu::UnoType<XKeysSupplier>::get()||
         rType == cppu::UnoType<XIndexesSupplier>::get()||

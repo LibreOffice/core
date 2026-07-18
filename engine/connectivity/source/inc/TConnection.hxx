@@ -69,10 +69,10 @@ namespace connectivity
             getConnectionInfo() const { return m_aConnectionInfo; }
 
         // OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         //XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        virtual sal_Int64 getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
         static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     };
 }

@@ -33,7 +33,7 @@ using namespace cpo::uno;
     ParameterSubstitution::ParameterSubstitution(css::uno::Reference< css::uno::XComponentContext > _xContext ) : m_xContext(std::move(_xContext))
     {
     }
-    void SAL_CALL ParameterSubstitution::initialize( const cpo::uno::Sequence< cpo::uno::Any >& _aArguments )
+    void ParameterSubstitution::initialize( const cpo::uno::Sequence< cpo::uno::Any >& _aArguments )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         comphelper::SequenceAsHashMap aArgs(_aArguments);
@@ -42,23 +42,23 @@ using namespace cpo::uno;
         m_xConnection = xConnection;
     }
 
-    OUString SAL_CALL ParameterSubstitution::getImplementationName(  )
+    OUString ParameterSubstitution::getImplementationName(  )
     {
         return u"org.openoffice.comp.helper.ParameterSubstitution"_ustr;
     }
 
-    bool SAL_CALL ParameterSubstitution::supportsService( const OUString& _rServiceName )
+    bool ParameterSubstitution::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL ParameterSubstitution::getSupportedServiceNames(  )
+    Sequence< OUString > ParameterSubstitution::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.sdb.ParameterSubstitution"_ustr };
     }
 
 
-    OUString SAL_CALL ParameterSubstitution::substituteVariables( const OUString& _sText, bool /*bSubstRequired*/ )
+    OUString ParameterSubstitution::substituteVariables( const OUString& _sText, bool /*bSubstRequired*/ )
     {
         OUString sRet = _sText;
         uno::Reference< sdbc::XConnection > xConnection = m_xConnection;
@@ -84,12 +84,12 @@ using namespace cpo::uno;
         return sRet;
     }
 
-    OUString SAL_CALL ParameterSubstitution::reSubstituteVariables( const OUString& _sText )
+    OUString ParameterSubstitution::reSubstituteVariables( const OUString& _sText )
     {
         return _sText;
     }
 
-    OUString SAL_CALL ParameterSubstitution::getSubstituteVariableValue( const OUString& /*variable*/ )
+    OUString ParameterSubstitution::getSubstituteVariableValue( const OUString& /*variable*/ )
     {
         throw container::NoSuchElementException();
     }

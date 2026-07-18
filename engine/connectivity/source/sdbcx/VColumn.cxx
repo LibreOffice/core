@@ -35,19 +35,19 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 
 
-OUString SAL_CALL OColumn::getImplementationName(  )
+OUString OColumn::getImplementationName(  )
 {
     if(isNew())
         return u"com.sun.star.sdbcx.VColumnDescriptor"_ustr;
     return u"com.sun.star.sdbcx.VColumn"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL OColumn::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > OColumn::getSupportedServiceNames(  )
 {
     return { isNew()?u"com.sun.star.sdbcx.ColumnDescriptor"_ustr:u"com.sun.star.sdbcx.Column"_ustr };
 }
 
-bool SAL_CALL OColumn::supportsService( const OUString& _rServiceName )
+bool OColumn::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -111,22 +111,22 @@ OColumn::~OColumn()
     return doCreateArrayHelper();
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL OColumn::getInfoHelper()
+::cppu::IPropertyArrayHelper& OColumn::getInfoHelper()
 {
     return *OColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
 
-void SAL_CALL OColumn::acquire() noexcept
+void OColumn::acquire() noexcept
 {
     OColumnDescriptor_BASE::acquire();
 }
 
-void SAL_CALL OColumn::release() noexcept
+void OColumn::release() noexcept
 {
     OColumnDescriptor_BASE::release();
 }
 
-Any SAL_CALL OColumn::queryInterface( const Type & rType )
+Any OColumn::queryInterface( const Type & rType )
 {
     Any aRet = ODescriptor::queryInterface( rType);
     if(!aRet.hasValue())
@@ -139,7 +139,7 @@ Any SAL_CALL OColumn::queryInterface( const Type & rType )
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OColumn::getTypes(  )
+Sequence< Type > OColumn::getTypes(  )
 {
     if(isNew())
         return ::comphelper::concatSequences(ODescriptor::getTypes(),OColumnDescriptor_BASE::getTypes());
@@ -173,7 +173,7 @@ void OColumn::disposing()
     OPropertySetHelper::disposing();
 }
 
-Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  )
+Reference< XPropertySet > OColumn::createDataDescriptor(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OColumnDescriptor_BASE::rBHelper.bDisposed);
@@ -197,18 +197,18 @@ Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  )
     return pNewColumn;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OColumn::getPropertySetInfo(  )
+css::uno::Reference< css::beans::XPropertySetInfo > OColumn::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
 // XNamed
-OUString SAL_CALL OColumn::getName(  )
+OUString OColumn::getName(  )
 {
     return m_Name;
 }
 
-void SAL_CALL OColumn::setName( const OUString& aName )
+void OColumn::setName( const OUString& aName )
 {
     m_Name = aName;
 }

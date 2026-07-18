@@ -62,7 +62,7 @@ namespace connectivity::calc
 
         virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) override;
 
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         void construct() override;
     };

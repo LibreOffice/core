@@ -110,7 +110,7 @@ namespace dbtools
 
 namespace
 {
-    typedef bool (SAL_CALL XDatabaseMetaData::*FMetaDataSupport)();
+    typedef bool (XDatabaseMetaData::*FMetaDataSupport)();
 }
 
 sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
@@ -1638,24 +1638,24 @@ namespace
             : m_aSet(std::move(_aSet)), m_xSource(_xSource) {}
     private:
         // css::container::XElementAccess
-        virtual Type SAL_CALL getElementType() override
+        virtual Type getElementType() override
         {
             return m_xSource->getElementType();
         }
-        virtual bool SAL_CALL hasElements(  ) override
+        virtual bool hasElements(  ) override
         {
             if ( m_aSet.empty() )
                 return m_xSource->hasElements();
             return std::count(m_aSet.begin(),m_aSet.end(),false) != 0;
         }
         // css::container::XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount(  ) override
+        virtual sal_Int32 getCount(  ) override
         {
             if ( m_aSet.empty() )
                 return m_xSource->getCount();
             return std::count(m_aSet.begin(),m_aSet.end(),false);
         }
-        virtual Any SAL_CALL getByIndex( sal_Int32 Index ) override
+        virtual Any getByIndex( sal_Int32 Index ) override
         {
             if ( m_aSet.empty() )
                 return m_xSource->getByIndex(Index);

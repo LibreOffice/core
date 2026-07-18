@@ -39,7 +39,7 @@ OPooledConnection::OPooledConnection(const Reference< XConnection >& _xConnectio
 }
 
 // OComponentHelper
-void SAL_CALL OPooledConnection::disposing()
+void OPooledConnection::disposing()
 {
     MutexGuard aGuard(m_aMutex);
     if (m_xComponent.is())
@@ -49,7 +49,7 @@ void SAL_CALL OPooledConnection::disposing()
 }
 
 // XEventListener
-void SAL_CALL OPooledConnection::disposing( const EventObject& /*Source*/ )
+void OPooledConnection::disposing( const EventObject& /*Source*/ )
 {
 m_xComponent.clear();
 }

@@ -49,17 +49,17 @@ void MozillaBootstrap::disposing()
     OMozillaBootstrap_BASE::disposing();
 }
 
-OUString SAL_CALL MozillaBootstrap::getImplementationName(  )
+OUString MozillaBootstrap::getImplementationName(  )
 {
     return u"com.sun.star.comp.mozilla.MozillaBootstrap"_ustr;
 }
 
-bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceName )
+bool MozillaBootstrap::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(  )
+Sequence< OUString > MozillaBootstrap::getSupportedServiceNames(  )
 {
     // which service is supported
     // for more information @see com.sun.star.mozilla.MozillaBootstrap
@@ -68,59 +68,59 @@ Sequence< OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(  )
 
 
 // XProfileDiscover
-::sal_Int32 SAL_CALL MozillaBootstrap::getProfileCount( css::mozilla::MozillaProductType product)
+::sal_Int32 MozillaBootstrap::getProfileCount( css::mozilla::MozillaProductType product)
 {
     return m_ProfileAccess->getProfileCount(product);
 }
-::sal_Int32 SAL_CALL MozillaBootstrap::getProfileList( css::mozilla::MozillaProductType product, cpo::uno::Sequence< OUString >& list )
+::sal_Int32 MozillaBootstrap::getProfileList( css::mozilla::MozillaProductType product, cpo::uno::Sequence< OUString >& list )
 {
     return m_ProfileAccess->getProfileList(product,list);
 }
-OUString SAL_CALL MozillaBootstrap::getDefaultProfile( css::mozilla::MozillaProductType product )
+OUString MozillaBootstrap::getDefaultProfile( css::mozilla::MozillaProductType product )
 {
     return m_ProfileAccess->getDefaultProfile(product);
 }
-OUString SAL_CALL MozillaBootstrap::getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName )
+OUString MozillaBootstrap::getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName )
 {
     return m_ProfileAccess->getProfilePath(product,profileName);
 }
-bool SAL_CALL MozillaBootstrap::isProfileLocked( css::mozilla::MozillaProductType /*product*/, const OUString& /*profileName*/ )
+bool MozillaBootstrap::isProfileLocked( css::mozilla::MozillaProductType /*product*/, const OUString& /*profileName*/ )
 {
     return true;
 }
-bool SAL_CALL MozillaBootstrap::getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName )
+bool MozillaBootstrap::getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName )
 {
     return m_ProfileAccess->getProfileExists(product,profileName);
 }
 
 // XProfileManager
-::sal_Int32 SAL_CALL MozillaBootstrap::bootupProfile( css::mozilla::MozillaProductType, const OUString& )
+::sal_Int32 MozillaBootstrap::bootupProfile( css::mozilla::MozillaProductType, const OUString& )
 {
         return -1;
 }
-::sal_Int32 SAL_CALL MozillaBootstrap::shutdownProfile(  )
+::sal_Int32 MozillaBootstrap::shutdownProfile(  )
 {
     return -1;
 }
-css::mozilla::MozillaProductType SAL_CALL MozillaBootstrap::getCurrentProduct(  )
+css::mozilla::MozillaProductType MozillaBootstrap::getCurrentProduct(  )
 {
     return css::mozilla::MozillaProductType_Default;
 }
-OUString SAL_CALL MozillaBootstrap::getCurrentProfile(  )
+OUString MozillaBootstrap::getCurrentProfile(  )
 {
     return OUString();
 }
-bool SAL_CALL MozillaBootstrap::isCurrentProfileLocked(  )
+bool MozillaBootstrap::isCurrentProfileLocked(  )
 {
     return true;
 }
-OUString SAL_CALL MozillaBootstrap::setCurrentProfile( css::mozilla::MozillaProductType, const OUString& )
+OUString MozillaBootstrap::setCurrentProfile( css::mozilla::MozillaProductType, const OUString& )
 {
     return OUString();
 }
 
 // XProxyRunner
-::sal_Int32 SAL_CALL MozillaBootstrap::Run( const css::uno::Reference< css::mozilla::XCodeProxy >& )
+::sal_Int32 MozillaBootstrap::Run( const css::uno::Reference< css::mozilla::XCodeProxy >& )
 {
     return -1;
 }

@@ -196,7 +196,7 @@ void OWriterTable::construct()
     refreshColumns();
 }
 
-void SAL_CALL OWriterTable::disposing()
+void OWriterTable::disposing()
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);

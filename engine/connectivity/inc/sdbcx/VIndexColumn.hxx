@@ -34,7 +34,7 @@ namespace connectivity::sdbcx
         bool    m_IsAscending;
     protected:
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     public:
         OIndexColumn(   bool _bCase);
         OIndexColumn(   bool IsAscending,

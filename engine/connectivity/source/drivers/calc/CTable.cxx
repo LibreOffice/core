@@ -592,7 +592,7 @@ void OCalcTable::construct()
     refreshColumns();
 }
 
-void SAL_CALL OCalcTable::disposing()
+void OCalcTable::disposing()
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);

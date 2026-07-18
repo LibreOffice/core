@@ -43,7 +43,7 @@ OConnectionWeakWrapper::~OConnectionWeakWrapper()
 IMPLEMENT_SERVICE_INFO(OConnectionWeakWrapper, u"com.sun.star.sdbc.drivers.OConnectionWeakWrapper"_ustr, u"com.sun.star.sdbc.Connection"_ustr)
 
 
-Reference< XStatement > SAL_CALL OConnectionWeakWrapper::createStatement(  )
+Reference< XStatement > OConnectionWeakWrapper::createStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -52,7 +52,7 @@ Reference< XStatement > SAL_CALL OConnectionWeakWrapper::createStatement(  )
     return m_xConnection->createStatement();
 }
 
-Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareStatement( const OUString& sql )
+Reference< XPreparedStatement > OConnectionWeakWrapper::prepareStatement( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -61,7 +61,7 @@ Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareStatemen
     return m_xConnection->prepareStatement(sql);
 }
 
-Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareCall( const OUString& sql )
+Reference< XPreparedStatement > OConnectionWeakWrapper::prepareCall( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -70,7 +70,7 @@ Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareCall( co
     return m_xConnection->prepareCall(sql);
 }
 
-OUString SAL_CALL OConnectionWeakWrapper::nativeSQL( const OUString& sql )
+OUString OConnectionWeakWrapper::nativeSQL( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -79,7 +79,7 @@ OUString SAL_CALL OConnectionWeakWrapper::nativeSQL( const OUString& sql )
     return m_xConnection->nativeSQL(sql);
 }
 
-void SAL_CALL OConnectionWeakWrapper::setAutoCommit( bool autoCommit )
+void OConnectionWeakWrapper::setAutoCommit( bool autoCommit )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -87,7 +87,7 @@ void SAL_CALL OConnectionWeakWrapper::setAutoCommit( bool autoCommit )
     m_xConnection->setAutoCommit(autoCommit);
 }
 
-bool SAL_CALL OConnectionWeakWrapper::getAutoCommit(  )
+bool OConnectionWeakWrapper::getAutoCommit(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -96,7 +96,7 @@ bool SAL_CALL OConnectionWeakWrapper::getAutoCommit(  )
     return m_xConnection->getAutoCommit();
 }
 
-void SAL_CALL OConnectionWeakWrapper::commit(  )
+void OConnectionWeakWrapper::commit(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -105,7 +105,7 @@ void SAL_CALL OConnectionWeakWrapper::commit(  )
     m_xConnection->commit();
 }
 
-void SAL_CALL OConnectionWeakWrapper::rollback(  )
+void OConnectionWeakWrapper::rollback(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -114,14 +114,14 @@ void SAL_CALL OConnectionWeakWrapper::rollback(  )
     m_xConnection->rollback();
 }
 
-bool SAL_CALL OConnectionWeakWrapper::isClosed(  )
+bool OConnectionWeakWrapper::isClosed(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_xConnection->isClosed();
 }
 
-Reference< XDatabaseMetaData > SAL_CALL OConnectionWeakWrapper::getMetaData(  )
+Reference< XDatabaseMetaData > OConnectionWeakWrapper::getMetaData(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -130,7 +130,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnectionWeakWrapper::getMetaData(  )
     return m_xConnection->getMetaData();
 }
 
-void SAL_CALL OConnectionWeakWrapper::setReadOnly( bool readOnly )
+void OConnectionWeakWrapper::setReadOnly( bool readOnly )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -139,7 +139,7 @@ void SAL_CALL OConnectionWeakWrapper::setReadOnly( bool readOnly )
     m_xConnection->setReadOnly(readOnly);
 }
 
-bool SAL_CALL OConnectionWeakWrapper::isReadOnly(  )
+bool OConnectionWeakWrapper::isReadOnly(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -148,7 +148,7 @@ bool SAL_CALL OConnectionWeakWrapper::isReadOnly(  )
     return m_xConnection->isReadOnly();
 }
 
-void SAL_CALL OConnectionWeakWrapper::setCatalog( const OUString& catalog )
+void OConnectionWeakWrapper::setCatalog( const OUString& catalog )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -157,7 +157,7 @@ void SAL_CALL OConnectionWeakWrapper::setCatalog( const OUString& catalog )
     m_xConnection->setCatalog(catalog);
 }
 
-OUString SAL_CALL OConnectionWeakWrapper::getCatalog(  )
+OUString OConnectionWeakWrapper::getCatalog(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -166,7 +166,7 @@ OUString SAL_CALL OConnectionWeakWrapper::getCatalog(  )
     return m_xConnection->getCatalog();
 }
 
-void SAL_CALL OConnectionWeakWrapper::setTransactionIsolation( sal_Int32 level )
+void OConnectionWeakWrapper::setTransactionIsolation( sal_Int32 level )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -175,7 +175,7 @@ void SAL_CALL OConnectionWeakWrapper::setTransactionIsolation( sal_Int32 level )
     m_xConnection->setTransactionIsolation(level);
 }
 
-sal_Int32 SAL_CALL OConnectionWeakWrapper::getTransactionIsolation(  )
+sal_Int32 OConnectionWeakWrapper::getTransactionIsolation(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -184,7 +184,7 @@ sal_Int32 SAL_CALL OConnectionWeakWrapper::getTransactionIsolation(  )
     return m_xConnection->getTransactionIsolation();
 }
 
-Reference< css::container::XNameAccess > SAL_CALL OConnectionWeakWrapper::getTypeMap(  )
+Reference< css::container::XNameAccess > OConnectionWeakWrapper::getTypeMap(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -193,7 +193,7 @@ Reference< css::container::XNameAccess > SAL_CALL OConnectionWeakWrapper::getTyp
     return m_xConnection->getTypeMap();
 }
 
-void SAL_CALL OConnectionWeakWrapper::setTypeMap( const Reference< css::container::XNameAccess >& typeMap )
+void OConnectionWeakWrapper::setTypeMap( const Reference< css::container::XNameAccess >& typeMap )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -203,7 +203,7 @@ void SAL_CALL OConnectionWeakWrapper::setTypeMap( const Reference< css::containe
 }
 
 // XCloseable
-void SAL_CALL OConnectionWeakWrapper::close(  )
+void OConnectionWeakWrapper::close(  )
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );

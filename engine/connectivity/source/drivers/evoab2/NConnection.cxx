@@ -91,13 +91,13 @@ void OEvoabConnection::construct(const OUString& url, const Sequence< PropertyVa
 }
 
 
-OUString SAL_CALL OEvoabConnection::nativeSQL( const OUString& _sSql )
+OUString OEvoabConnection::nativeSQL( const OUString& _sSql )
 {
     // when you need to transform SQL92 to you driver specific you can do it here
     return _sSql;
 }
 
-Reference< XDatabaseMetaData > SAL_CALL OEvoabConnection::getMetaData(  )
+Reference< XDatabaseMetaData > OEvoabConnection::getMetaData(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -124,7 +124,7 @@ css::uno::Reference< XTablesSupplier > OEvoabConnection::createCatalog()
     return xTab;
 }
 
-Reference< XStatement > SAL_CALL OEvoabConnection::createStatement(  )
+Reference< XStatement > OEvoabConnection::createStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -134,7 +134,7 @@ Reference< XStatement > SAL_CALL OEvoabConnection::createStatement(  )
     return xStmt;
 }
 
-Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( const OUString& sql )
+Reference< XPreparedStatement > OEvoabConnection::prepareStatement( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -146,12 +146,12 @@ Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( con
     return pStmt;
 }
 
-Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const OUString& /*sql*/ )
+Reference< XPreparedStatement > OEvoabConnection::prepareCall( const OUString& /*sql*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::prepareCall"_ustr, *this );
     return nullptr;
 }
-bool SAL_CALL OEvoabConnection::isClosed(  )
+bool OEvoabConnection::isClosed(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return OConnection_BASE::rBHelper.bDisposed;
@@ -159,7 +159,7 @@ bool SAL_CALL OEvoabConnection::isClosed(  )
 
 
 // XCloseable
-void SAL_CALL OEvoabConnection::close(  )
+void OEvoabConnection::close(  )
 {
     {  // we just dispose us
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -170,11 +170,11 @@ void SAL_CALL OEvoabConnection::close(  )
 
 
 // XWarningsSupplier
-Any SAL_CALL OEvoabConnection::getWarnings(  )
+Any OEvoabConnection::getWarnings(  )
 {
     return m_aWarnings.getWarnings();
 }
-void SAL_CALL OEvoabConnection::clearWarnings(  )
+void OEvoabConnection::clearWarnings(  )
 {
     m_aWarnings.clearWarnings();
 }
@@ -188,53 +188,53 @@ void OEvoabConnection::disposing()
 }
 
 // -------------------------------- stubbed methods ------------------------------------------------
-void SAL_CALL OEvoabConnection::setAutoCommit( bool /*autoCommit*/ )
+void OEvoabConnection::setAutoCommit( bool /*autoCommit*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setAutoCommit"_ustr, *this );
 }
-bool SAL_CALL OEvoabConnection::getAutoCommit(  )
+bool OEvoabConnection::getAutoCommit(  )
 {
     return true;
 }
-void SAL_CALL OEvoabConnection::commit(  )
+void OEvoabConnection::commit(  )
 {
 }
-void SAL_CALL OEvoabConnection::rollback(  )
+void OEvoabConnection::rollback(  )
 {
 }
-void SAL_CALL OEvoabConnection::setReadOnly( bool /*readOnly*/ )
+void OEvoabConnection::setReadOnly( bool /*readOnly*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setReadOnly"_ustr, *this );
 }
-bool SAL_CALL OEvoabConnection::isReadOnly(  )
+bool OEvoabConnection::isReadOnly(  )
 {
     return false;
 }
-void SAL_CALL OEvoabConnection::setCatalog( const OUString& /*catalog*/ )
+void OEvoabConnection::setCatalog( const OUString& /*catalog*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setCatalog"_ustr, *this );
 }
 
-OUString SAL_CALL OEvoabConnection::getCatalog(  )
+OUString OEvoabConnection::getCatalog(  )
 {
     return OUString();
 }
-void SAL_CALL OEvoabConnection::setTransactionIsolation( sal_Int32 /*level*/ )
+void OEvoabConnection::setTransactionIsolation( sal_Int32 /*level*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setTransactionIsolation"_ustr, *this );
 }
 
-sal_Int32 SAL_CALL OEvoabConnection::getTransactionIsolation(  )
+sal_Int32 OEvoabConnection::getTransactionIsolation(  )
 {
     return TransactionIsolation::NONE;
 }
 
-Reference< css::container::XNameAccess > SAL_CALL OEvoabConnection::getTypeMap(  )
+Reference< css::container::XNameAccess > OEvoabConnection::getTypeMap(  )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::getTypeMap"_ustr, *this );
     return nullptr;
 }
-void SAL_CALL OEvoabConnection::setTypeMap( const Reference< css::container::XNameAccess >& /*typeMap*/ )
+void OEvoabConnection::setTypeMap( const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::setTypeMap"_ustr, *this );
 }

@@ -35,19 +35,19 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-OUString SAL_CALL OKey::getImplementationName(  )
+OUString OKey::getImplementationName(  )
 {
     if(isNew())
         return u"com.sun.star.sdbcx.VKeyDescriptor"_ustr;
     return u"com.sun.star.sdbcx.VKey"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL OKey::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > OKey::getSupportedServiceNames(  )
 {
     return { isNew()?u"com.sun.star.sdbcx.KeyDescriptor"_ustr:u"com.sun.star.sdbcx.Key"_ustr };
 }
 
-bool SAL_CALL OKey::supportsService( const OUString& _rServiceName )
+bool OKey::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -85,7 +85,7 @@ OKey::~OKey( )
 {
 }
 
-Any SAL_CALL OKey::queryInterface( const Type & rType )
+Any OKey::queryInterface( const Type & rType )
 {
     Any aRet = ODescriptor::queryInterface( rType);
     if(!aRet.hasValue())
@@ -99,7 +99,7 @@ Any SAL_CALL OKey::queryInterface( const Type & rType )
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OKey::getTypes(  )
+Sequence< Type > OKey::getTypes(  )
 {
     if(isNew())
         return ::comphelper::concatSequences(ODescriptor::getTypes(),ODescriptor_BASE::getTypes());
@@ -119,7 +119,7 @@ void OKey::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE),      PROPERTY_ID_DELETERULE,         nAttrib,&m_aProps->m_DeleteRule,        ::cppu::UnoType<sal_Int32>::get());
 }
 
-void SAL_CALL OKey::disposing()
+void OKey::disposing()
 {
     OPropertySetHelper::disposing();
 
@@ -141,7 +141,7 @@ void SAL_CALL OKey::disposing()
     return *getArrayHelper(isNew() ? 1 : 0);
 }
 
-Reference< css::container::XNameAccess > SAL_CALL OKey::getColumns(  )
+Reference< css::container::XNameAccess > OKey::getColumns(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(ODescriptor_BASE::rBHelper.bDisposed);
@@ -164,7 +164,7 @@ Reference< css::container::XNameAccess > SAL_CALL OKey::getColumns(  )
     return m_pColumns.get();
 }
 
-Reference< XPropertySet > SAL_CALL OKey::createDataDescriptor(  )
+Reference< XPropertySet > OKey::createDataDescriptor(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(ODescriptor_BASE::rBHelper.bDisposed);
@@ -173,27 +173,27 @@ Reference< XPropertySet > SAL_CALL OKey::createDataDescriptor(  )
     return this;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OKey::getPropertySetInfo(  )
+css::uno::Reference< css::beans::XPropertySetInfo > OKey::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-OUString SAL_CALL OKey::getName(  )
+OUString OKey::getName(  )
 {
     return m_Name;
 }
 
-void SAL_CALL OKey::setName( const OUString& /*aName*/ )
+void OKey::setName( const OUString& /*aName*/ )
 {
 }
 
 // XInterface
-void SAL_CALL OKey::acquire() noexcept
+void OKey::acquire() noexcept
 {
     ODescriptor_BASE::acquire();
 }
 
-void SAL_CALL OKey::release() noexcept
+void OKey::release() noexcept
 {
     ODescriptor_BASE::release();
 }

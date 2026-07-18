@@ -44,35 +44,35 @@ OComponentResultSet::OComponentResultSet( OStatement_Base* pStmt,connectivity::O
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                cppu::UnoType<bool>::get());
 }
 
-OUString SAL_CALL OComponentResultSet::getImplementationName(  )
+OUString OComponentResultSet::getImplementationName(  )
 {
     return u"com.sun.star.sdbcx.component.ResultSet"_ustr;
 }
 
-Sequence< OUString > SAL_CALL OComponentResultSet::getSupportedServiceNames(  )
+Sequence< OUString > OComponentResultSet::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.sdbc.ResultSet"_ustr, u"com.sun.star.sdbcx.ResultSet"_ustr };
 }
 
-bool SAL_CALL OComponentResultSet::supportsService( const OUString& _rServiceName )
+bool OComponentResultSet::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Any SAL_CALL OComponentResultSet::queryInterface( const Type & rType )
+Any OComponentResultSet::queryInterface( const Type & rType )
 {
     Any aRet = OResultSet::queryInterface(rType);
     return aRet.hasValue() ? aRet : OComponentResultSet_BASE::queryInterface(rType);
 }
 
- Sequence<  Type > SAL_CALL OComponentResultSet::getTypes(  )
+ Sequence<  Type > OComponentResultSet::getTypes(  )
 {
     return ::comphelper::concatSequences(OResultSet::getTypes(),OComponentResultSet_BASE::getTypes());
 }
 
 
 // XRowLocate
-Any SAL_CALL OComponentResultSet::getBookmark(  )
+Any OComponentResultSet::getBookmark(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -81,7 +81,7 @@ Any SAL_CALL OComponentResultSet::getBookmark(  )
     return Any((*m_aRow)[0]->getValue().getInt32());
 }
 
-bool SAL_CALL OComponentResultSet::moveToBookmark( const  Any& bookmark )
+bool OComponentResultSet::moveToBookmark( const  Any& bookmark )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -92,7 +92,7 @@ bool SAL_CALL OComponentResultSet::moveToBookmark( const  Any& bookmark )
     return Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),true);
 }
 
-bool SAL_CALL OComponentResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows )
+bool OComponentResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -106,17 +106,17 @@ bool SAL_CALL OComponentResultSet::moveRelativeToBookmark( const  Any& bookmark,
 }
 
 
-sal_Int32 SAL_CALL OComponentResultSet::compareBookmarks( const Any& lhs, const  Any& rhs )
+sal_Int32 OComponentResultSet::compareBookmarks( const Any& lhs, const  Any& rhs )
 {
     return (lhs == rhs) ? CompareBookmark::EQUAL : CompareBookmark::NOT_EQUAL;
 }
 
-bool SAL_CALL OComponentResultSet::hasOrderedBookmarks(  )
+bool OComponentResultSet::hasOrderedBookmarks(  )
 {
     return true;
 }
 
-sal_Int32 SAL_CALL OComponentResultSet::hashBookmark( const  Any& bookmark )
+sal_Int32 OComponentResultSet::hashBookmark( const  Any& bookmark )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -126,7 +126,7 @@ sal_Int32 SAL_CALL OComponentResultSet::hashBookmark( const  Any& bookmark )
 }
 
 // XDeleteRows
-Sequence< sal_Int32 > SAL_CALL OComponentResultSet::deleteRows( const  Sequence<  Any >& /*rows*/ )
+Sequence< sal_Int32 > OComponentResultSet::deleteRows( const  Sequence<  Any >& /*rows*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -153,17 +153,17 @@ bool OComponentResultSet::fillIndexValues(const Reference< XColumnsSupplier> &/*
 }
 
 
-void SAL_CALL OComponentResultSet::acquire() noexcept
+void OComponentResultSet::acquire() noexcept
 {
     OComponentResultSet_BASE2::acquire();
 }
 
-void SAL_CALL OComponentResultSet::release() noexcept
+void OComponentResultSet::release() noexcept
 {
     OComponentResultSet_BASE2::release();
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OComponentResultSet::getPropertySetInfo(  )
+css::uno::Reference< css::beans::XPropertySetInfo > OComponentResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

@@ -55,17 +55,17 @@ namespace connectivity
 
         virtual ~OConnectionWrapper();
         void setDelegation(css::uno::Reference< css::uno::XAggregation >& _rxProxyConnection);
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
     public:
         OConnectionWrapper( );
 
         // XServiceInfo
         DECLARE_SERVICE_INFO();
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& _rType ) override;
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type& _rType ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
         // css::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        virtual sal_Int64 getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
         static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
         /** method to create unique ids
             @param  _rURL

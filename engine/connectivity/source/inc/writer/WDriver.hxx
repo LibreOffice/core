@@ -32,15 +32,16 @@ public:
     }
 
     /// @throws css::uno::RuntimeException
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
     // XDriver
     css::uno::Reference<css::sdbc::XConnection>
-        SAL_CALL connect(const OUString& url,
-                         const cpo::uno::Sequence<css::beans::PropertyValue>& info) override;
-    bool SAL_CALL acceptsURL(const OUString& url) override;
-    cpo::uno::Sequence<css::sdbc::DriverPropertyInfo> SAL_CALL getPropertyInfo(
-        const OUString& url, const cpo::uno::Sequence<css::beans::PropertyValue>& info) override;
+    connect(const OUString& url,
+            const cpo::uno::Sequence<css::beans::PropertyValue>& info) override;
+    bool acceptsURL(const OUString& url) override;
+    cpo::uno::Sequence<css::sdbc::DriverPropertyInfo>
+    getPropertyInfo(const OUString& url,
+                    const cpo::uno::Sequence<css::beans::PropertyValue>& info) override;
 };
 }
 

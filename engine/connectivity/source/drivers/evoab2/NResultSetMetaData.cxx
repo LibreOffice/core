@@ -59,111 +59,111 @@ void OEvoabResultSetMetaData::setEvoabFields(const ::rtl::Reference<connectivity
 }
 
 
-sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnDisplaySize( sal_Int32 /*nColumnNum*/ )
+sal_Int32 OEvoabResultSetMetaData::getColumnDisplaySize( sal_Int32 /*nColumnNum*/ )
 {
     return 50;
 }
 
-sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnType( sal_Int32 nColumnNum )
+sal_Int32 OEvoabResultSetMetaData::getColumnType( sal_Int32 nColumnNum )
 {
     sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
     return evoab::getFieldType (nField);
 }
 
-sal_Int32 SAL_CALL OEvoabResultSetMetaData::getColumnCount(  )
+sal_Int32 OEvoabResultSetMetaData::getColumnCount(  )
 {
     return m_aEvoabFields.size();
 }
 
-bool SAL_CALL OEvoabResultSetMetaData::isCaseSensitive( sal_Int32 /*nColumnNum*/ )
+bool OEvoabResultSetMetaData::isCaseSensitive( sal_Int32 /*nColumnNum*/ )
 {
     return true;
 }
 
-OUString SAL_CALL OEvoabResultSetMetaData::getSchemaName( sal_Int32 /*nColumnNum*/ )
+OUString OEvoabResultSetMetaData::getSchemaName( sal_Int32 /*nColumnNum*/ )
 {
     return OUString();
 }
 
-OUString SAL_CALL OEvoabResultSetMetaData::getColumnName( sal_Int32 nColumnNum )
+OUString OEvoabResultSetMetaData::getColumnName( sal_Int32 nColumnNum )
 {
     sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
     return evoab::getFieldName( nField );
 }
 
-OUString SAL_CALL OEvoabResultSetMetaData::getColumnTypeName( sal_Int32 nColumnNum )
+OUString OEvoabResultSetMetaData::getColumnTypeName( sal_Int32 nColumnNum )
 {
     sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
     return evoab::getFieldTypeName( nField );
 }
 
-OUString SAL_CALL OEvoabResultSetMetaData::getColumnLabel( sal_Int32 nColumnNum )
+OUString OEvoabResultSetMetaData::getColumnLabel( sal_Int32 nColumnNum )
 {
     return getColumnName(nColumnNum);
 }
 
-OUString SAL_CALL OEvoabResultSetMetaData::getColumnServiceName( sal_Int32 /*nColumnNum*/ )
+OUString OEvoabResultSetMetaData::getColumnServiceName( sal_Int32 /*nColumnNum*/ )
 {
     return OUString();
 }
 
-OUString SAL_CALL OEvoabResultSetMetaData::getTableName( sal_Int32 /*nColumnNum*/ )
+OUString OEvoabResultSetMetaData::getTableName( sal_Int32 /*nColumnNum*/ )
 {
     return m_aTableName;//OUString("TABLE");
 }
 
-OUString SAL_CALL OEvoabResultSetMetaData::getCatalogName( sal_Int32 /*nColumnNum*/ )
+OUString OEvoabResultSetMetaData::getCatalogName( sal_Int32 /*nColumnNum*/ )
 {
     return OUString();
 }
 
 
-bool SAL_CALL OEvoabResultSetMetaData::isCurrency( sal_Int32 /*nColumnNum*/ )
+bool OEvoabResultSetMetaData::isCurrency( sal_Int32 /*nColumnNum*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabResultSetMetaData::isAutoIncrement( sal_Int32 /*nColumnNum*/ )
+bool OEvoabResultSetMetaData::isAutoIncrement( sal_Int32 /*nColumnNum*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabResultSetMetaData::isSigned( sal_Int32 /*nColumnNum*/ )
+bool OEvoabResultSetMetaData::isSigned( sal_Int32 /*nColumnNum*/ )
 {
     return false;
 }
 
-sal_Int32 SAL_CALL OEvoabResultSetMetaData::getPrecision( sal_Int32 /*nColumnNum*/ )
+sal_Int32 OEvoabResultSetMetaData::getPrecision( sal_Int32 /*nColumnNum*/ )
 {
     return 0;
 }
 
-sal_Int32 SAL_CALL OEvoabResultSetMetaData::getScale( sal_Int32 /*nColumnNum*/ )
+sal_Int32 OEvoabResultSetMetaData::getScale( sal_Int32 /*nColumnNum*/ )
 {
     return 0;
 }
 
-sal_Int32 SAL_CALL OEvoabResultSetMetaData::isNullable( sal_Int32 /*nColumnNum*/ )
+sal_Int32 OEvoabResultSetMetaData::isNullable( sal_Int32 /*nColumnNum*/ )
 {
     return 0;
 }
 
-bool SAL_CALL OEvoabResultSetMetaData::isSearchable( sal_Int32 /*nColumnNum*/ )
+bool OEvoabResultSetMetaData::isSearchable( sal_Int32 /*nColumnNum*/ )
 {
     return true;
 }
 
-bool SAL_CALL OEvoabResultSetMetaData::isReadOnly( sal_Int32 /*nColumnNum*/ )
+bool OEvoabResultSetMetaData::isReadOnly( sal_Int32 /*nColumnNum*/ )
 {
     return true;
 }
 
-bool SAL_CALL OEvoabResultSetMetaData::isDefinitelyWritable( sal_Int32 /*nColumnNum*/ )
+bool OEvoabResultSetMetaData::isDefinitelyWritable( sal_Int32 /*nColumnNum*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabResultSetMetaData::isWritable( sal_Int32 /*nColumnNum*/ )
+bool OEvoabResultSetMetaData::isWritable( sal_Int32 /*nColumnNum*/ )
 {
     return false;
 }

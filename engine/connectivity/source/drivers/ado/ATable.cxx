@@ -71,7 +71,7 @@ OAdoTable::OAdoTable(sdbcx::OCollection* _pTables,bool _bCase,OCatalog* _pCatalo
 
 }
 
-void SAL_CALL OAdoTable::disposing()
+void OAdoTable::disposing()
 {
     OTable_TYPEDEF::disposing();
     m_aTable.clear();
@@ -129,7 +129,7 @@ void OAdoTable::refreshIndexes()
 }
 
 // XRename
-void SAL_CALL OAdoTable::rename( const OUString& newName )
+void OAdoTable::rename( const OUString& newName )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE_TYPEDEF::rBHelper.bDisposed);
@@ -146,7 +146,7 @@ Reference< XDatabaseMetaData> OAdoTable::getMetaData() const
 }
 
 // XAlterTable
-void SAL_CALL OAdoTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor )
+void OAdoTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE_TYPEDEF::rBHelper.bDisposed);
@@ -166,7 +166,7 @@ void SAL_CALL OAdoTable::alterColumnByName( const OUString& colName, const Refer
     refreshColumns();
 }
 
-void SAL_CALL OAdoTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor )
+void OAdoTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE_TYPEDEF::rBHelper.bDisposed);
@@ -209,7 +209,7 @@ void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rV
     OTable_TYPEDEF::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
 
-OUString SAL_CALL OAdoTable::getName()
+OUString OAdoTable::getName()
 {
       return m_aTable.get_Name();
 }

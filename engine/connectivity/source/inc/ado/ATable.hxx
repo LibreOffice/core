@@ -35,7 +35,7 @@ namespace connectivity::ado
 
     protected:
         void fillPropertyValues();
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const cpo::uno::Any& rValue) override;
+        virtual void setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const cpo::uno::Any& rValue) override;
 
     public:
         virtual void refreshColumns() override;
@@ -43,23 +43,23 @@ namespace connectivity::ado
         virtual void refreshIndexes() override;
 
         // ::cppu::OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
     public:
         OAdoTable(sdbcx::OCollection* _pTables,bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable);
         OAdoTable(sdbcx::OCollection* _pTables,bool _bCase,OCatalog* _pCatalog);
 
 
-        virtual OUString SAL_CALL getName() override;
+        virtual OUString getName() override;
         OUString getSchema() const { return m_SchemaName; }
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
 
         // XRename
-        virtual void SAL_CALL rename( const OUString& newName ) override;
+        virtual void rename( const OUString& newName ) override;
 
         // XAlterTable
-        virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
-        virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
 
         WpADOTable getImpl() const { return m_aTable;}
         OCatalog* getCatalog() const { return m_pCatalog; }

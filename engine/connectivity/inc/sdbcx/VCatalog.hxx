@@ -99,15 +99,15 @@ namespace connectivity::sdbcx
         // the other refresh methods come from base classes IRefreshableGroups and IRefreshableUsers
 
         // ::cppu::OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
         // XTablesSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > getTables(  ) override;
         // XViewsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getViews(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > getViews(  ) override;
         // XUsersSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getUsers(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > getUsers(  ) override;
         // XGroupsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getGroups(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > getGroups(  ) override;
 
     };
 

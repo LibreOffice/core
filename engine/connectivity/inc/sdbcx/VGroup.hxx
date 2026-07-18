@@ -56,7 +56,7 @@ namespace connectivity::sdbcx
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
         // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
     public:
         OGroup(bool _bCase);
         OGroup( const OUString& Name, bool _bCase);
@@ -64,29 +64,29 @@ namespace connectivity::sdbcx
         DECLARE_SERVICE_INFO();
 
         // XInterface
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
+        virtual void acquire() noexcept override;
+        virtual void release() noexcept override;
 
         //XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
         //XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
         // ::cppu::OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         // XUsersSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getUsers(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > getUsers(  ) override;
         // XAuthorizable
-        virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) override;
-        virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
-        virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
-        virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+        virtual sal_Int32 getPrivileges( const OUString& objName, sal_Int32 objType ) override;
+        virtual sal_Int32 getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
+        virtual void grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+        virtual void revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
 
         // XNamed
-        virtual OUString SAL_CALL getName(  ) override;
-        virtual void SAL_CALL setName( const OUString& aName ) override;
+        virtual OUString getName(  ) override;
+        virtual void setName( const OUString& aName ) override;
     };
 
 }

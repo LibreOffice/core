@@ -71,19 +71,19 @@ void OEvoabDriver::disposing()
 // static ServiceInfo
 
 
-OUString SAL_CALL OEvoabDriver::getImplementationName(  )
+OUString OEvoabDriver::getImplementationName(  )
 {
     return EVOAB_DRIVER_IMPL_NAME;
     // this name is referenced in the configuration and in the evoab.xml
     // Please take care when changing it.
 }
 
-bool SAL_CALL OEvoabDriver::supportsService( const OUString& _rServiceName )
+bool OEvoabDriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > SAL_CALL OEvoabDriver::getSupportedServiceNames(  )
+Sequence< OUString > OEvoabDriver::getSupportedServiceNames(  )
 {
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
@@ -91,7 +91,7 @@ Sequence< OUString > SAL_CALL OEvoabDriver::getSupportedServiceNames(  )
 }
 
 
-Reference< XConnection > SAL_CALL OEvoabDriver::connect( const OUString& url, const Sequence< css::beans::PropertyValue >& info )
+Reference< XConnection > OEvoabDriver::connect( const OUString& url, const Sequence< css::beans::PropertyValue >& info )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (ODriver_BASE::rBHelper.bDisposed)
@@ -107,13 +107,13 @@ Reference< XConnection > SAL_CALL OEvoabDriver::connect( const OUString& url, co
     return pCon;
 }
 
-bool SAL_CALL OEvoabDriver::acceptsURL( const OUString& url )
+bool OEvoabDriver::acceptsURL( const OUString& url )
 {
     return acceptsURL_Stat(url);
 }
 
 
-Sequence< DriverPropertyInfo > SAL_CALL OEvoabDriver::getPropertyInfo( const OUString& url, const Sequence< css::beans::PropertyValue >& /*info*/ )
+Sequence< DriverPropertyInfo > OEvoabDriver::getPropertyInfo( const OUString& url, const Sequence< css::beans::PropertyValue >& /*info*/ )
 {
     if ( ! acceptsURL(url) )
     {
@@ -127,12 +127,12 @@ Sequence< DriverPropertyInfo > SAL_CALL OEvoabDriver::getPropertyInfo( const OUS
 }
 
 
-sal_Int32 SAL_CALL OEvoabDriver::getMajorVersion(  )
+sal_Int32 OEvoabDriver::getMajorVersion(  )
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL OEvoabDriver::getMinorVersion(  )
+sal_Int32 OEvoabDriver::getMinorVersion(  )
 {
     return 0;
 }

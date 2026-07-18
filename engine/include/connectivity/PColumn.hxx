@@ -51,7 +51,7 @@ namespace connectivity::parse
         bool        m_bIsSearchable;
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
         virtual ~OParseColumn() override;
     public:
@@ -117,7 +117,7 @@ namespace connectivity::parse
         const   bool        m_bAscending;
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
         virtual ~OOrderColumn() override;
     public:
@@ -136,7 +136,7 @@ namespace connectivity::parse
 
         virtual void construct() override;
 
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
     private:
         using OOrderColumn_BASE::createArrayHelper;
     };

@@ -60,15 +60,15 @@ namespace dbtools
 
     private:
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) override;
+        virtual void propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& _rSource ) override;
+        virtual void disposing( const css::lang::EventObject& _rSource ) override;
 
         // XRowSetListener
-        virtual void SAL_CALL cursorMoved( const css::lang::EventObject& event ) override;
-        virtual void SAL_CALL rowChanged( const css::lang::EventObject& event ) override;
-        virtual void SAL_CALL rowSetChanged( const css::lang::EventObject& event ) override;
+        virtual void cursorMoved( const css::lang::EventObject& event ) override;
+        virtual void rowChanged( const css::lang::EventObject& event ) override;
+        virtual void rowSetChanged( const css::lang::EventObject& event ) override;
 
         void clearConnection();
 

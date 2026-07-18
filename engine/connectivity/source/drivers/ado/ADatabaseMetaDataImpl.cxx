@@ -260,44 +260,44 @@ void ODatabaseMetaDataResultSetMetaData::setProceduresMap()
         DataType::VARCHAR);
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSearchable( sal_Int32 column )
+bool ODatabaseMetaDataResultSetMetaData::isSearchable( sal_Int32 column )
 {
     if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isSearchable();
     return true;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32 column )
+bool ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32 column )
 {
     if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isAutoIncrement();
     return false;
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ )
+OUString ODatabaseMetaDataResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getTableName( sal_Int32 column )
+OUString ODatabaseMetaDataResultSetMetaData::getTableName( sal_Int32 column )
 {
     if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getTableName();
     return OUString();
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getCatalogName( sal_Int32 /*column*/ )
+OUString ODatabaseMetaDataResultSetMetaData::getCatalogName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnTypeName( sal_Int32 /*column*/ )
+OUString ODatabaseMetaDataResultSetMetaData::getColumnTypeName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
 
-bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32 column )
+bool ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32 column )
 {
     if(!m_mColumns.empty() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isCaseSensitive();
@@ -305,7 +305,7 @@ bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32 col
 }
 
 
-OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getSchemaName( sal_Int32 /*column*/ )
+OUString ODatabaseMetaDataResultSetMetaData::getSchemaName( sal_Int32 /*column*/ )
 {
     return OUString();
 }

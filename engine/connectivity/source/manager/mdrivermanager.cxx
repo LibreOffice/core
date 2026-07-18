@@ -64,8 +64,8 @@ public:
     explicit ODriverEnumeration(DriverArray&& _rDriverSequence);
 
 // XEnumeration
-    virtual bool SAL_CALL hasMoreElements( ) override;
-    virtual Any SAL_CALL nextElement( ) override;
+    virtual bool hasMoreElements( ) override;
+    virtual Any nextElement( ) override;
 };
 
 
@@ -81,13 +81,13 @@ ODriverEnumeration::~ODriverEnumeration()
 }
 
 
-bool SAL_CALL ODriverEnumeration::hasMoreElements(  )
+bool ODriverEnumeration::hasMoreElements(  )
 {
     return m_aPos != m_aDrivers.end();
 }
 
 
-Any SAL_CALL ODriverEnumeration::nextElement(  )
+Any ODriverEnumeration::nextElement(  )
 {
     if ( !hasMoreElements() )
         throw NoSuchElementException();
@@ -343,7 +343,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
 }
 
 
-Reference< XConnection > SAL_CALL OSDBCDriverManager::getConnection( const OUString& _rURL )
+Reference< XConnection > OSDBCDriverManager::getConnection( const OUString& _rURL )
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -369,7 +369,7 @@ Reference< XConnection > SAL_CALL OSDBCDriverManager::getConnection( const OUStr
 }
 
 
-Reference< XConnection > SAL_CALL OSDBCDriverManager::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo )
+Reference< XConnection > OSDBCDriverManager::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo )
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -395,21 +395,21 @@ Reference< XConnection > SAL_CALL OSDBCDriverManager::getConnectionWithInfo( con
 }
 
 
-void SAL_CALL OSDBCDriverManager::setLoginTimeout( sal_Int32 seconds )
+void OSDBCDriverManager::setLoginTimeout( sal_Int32 seconds )
 {
     MutexGuard aGuard(m_aMutex);
     m_nLoginTimeout = seconds;
 }
 
 
-sal_Int32 SAL_CALL OSDBCDriverManager::getLoginTimeout(  )
+sal_Int32 OSDBCDriverManager::getLoginTimeout(  )
 {
     MutexGuard aGuard(m_aMutex);
     return m_nLoginTimeout;
 }
 
 
-Reference< XEnumeration > SAL_CALL OSDBCDriverManager::createEnumeration(  )
+Reference< XEnumeration > OSDBCDriverManager::createEnumeration(  )
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -438,37 +438,37 @@ Reference< XEnumeration > SAL_CALL OSDBCDriverManager::createEnumeration(  )
 }
 
 
-cpo::uno::Type SAL_CALL OSDBCDriverManager::getElementType(  )
+cpo::uno::Type OSDBCDriverManager::getElementType(  )
 {
     return cppu::UnoType<XDriver>::get();
 }
 
 
-bool SAL_CALL OSDBCDriverManager::hasElements(  )
+bool OSDBCDriverManager::hasElements(  )
 {
     MutexGuard aGuard(m_aMutex);
     return !(m_aDriversBS.empty() && m_aDriversRT.empty());
 }
 
 
-OUString SAL_CALL OSDBCDriverManager::getImplementationName(  )
+OUString OSDBCDriverManager::getImplementationName(  )
 {
     return u"com.sun.star.comp.sdbc.OSDBCDriverManager"_ustr;
 }
 
-bool SAL_CALL OSDBCDriverManager::supportsService( const OUString& _rServiceName )
+bool OSDBCDriverManager::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
 
-Sequence< OUString > SAL_CALL OSDBCDriverManager::getSupportedServiceNames(  )
+Sequence< OUString > OSDBCDriverManager::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.sdbc.DriverManager"_ustr };
 }
 
 
-Reference< XInterface > SAL_CALL OSDBCDriverManager::getRegisteredObject( const OUString& _rName )
+Reference< XInterface > OSDBCDriverManager::getRegisteredObject( const OUString& _rName )
 {
     MutexGuard aGuard(m_aMutex);
     DriverCollection::const_iterator aSearch = m_aDriversRT.find(_rName);
@@ -479,7 +479,7 @@ Reference< XInterface > SAL_CALL OSDBCDriverManager::getRegisteredObject( const 
 }
 
 
-void SAL_CALL OSDBCDriverManager::registerObject( const OUString& _rName, const Reference< XInterface >& _rxObject )
+void OSDBCDriverManager::registerObject( const OUString& _rName, const Reference< XInterface >& _rxObject )
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -504,7 +504,7 @@ void SAL_CALL OSDBCDriverManager::registerObject( const OUString& _rName, const 
 }
 
 
-void SAL_CALL OSDBCDriverManager::revokeObject( const OUString& _rName )
+void OSDBCDriverManager::revokeObject( const OUString& _rName )
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -526,7 +526,7 @@ void SAL_CALL OSDBCDriverManager::revokeObject( const OUString& _rName )
 }
 
 
-Reference< XDriver > SAL_CALL OSDBCDriverManager::getDriverByURL( const OUString& _rURL )
+Reference< XDriver > OSDBCDriverManager::getDriverByURL( const OUString& _rURL )
 {
     m_aEventLogger.log( LogLevel::INFO,
         "driver requested for URL $1$",

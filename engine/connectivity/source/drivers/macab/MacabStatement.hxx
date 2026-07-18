@@ -78,16 +78,16 @@ namespace connectivity::macab
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
         // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-        virtual bool SAL_CALL convertFastPropertyValue(
+        virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
+        virtual bool convertFastPropertyValue(
                 cpo::uno::Any & rConvertedValue,
                 cpo::uno::Any & rOldValue,
                 sal_Int32 nHandle,
                 const cpo::uno::Any& rValue) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+        virtual void setFastPropertyValue_NoBroadcast(
                 sal_Int32 nHandle,
                 const cpo::uno::Any& rValue) override;
-        virtual void SAL_CALL getFastPropertyValue(
+        virtual void getFastPropertyValue(
                 cpo::uno::Any& rValue,
                 sal_Int32 nHandle) const override;
 
@@ -107,42 +107,42 @@ namespace connectivity::macab
         using MacabCommonStatement_BASE::disposing;
 
         // XInterface
-        virtual void SAL_CALL release() noexcept override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual cpo::uno::Any SAL_CALL queryInterface(
+        virtual void release() noexcept override;
+        virtual void acquire() noexcept override;
+        virtual cpo::uno::Any queryInterface(
                 const cpo::uno::Type & rType
                 ) override;
 
         // XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(
                 ) override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(
                 ) override;
 
         // XStatement
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery(
+        virtual css::uno::Reference< css::sdbc::XResultSet > executeQuery(
                 const OUString& sql ) override;
-        virtual sal_Int32 SAL_CALL executeUpdate(
+        virtual sal_Int32 executeUpdate(
                  const OUString& sql ) override;
-        virtual bool SAL_CALL execute(
+        virtual bool execute(
                 const OUString& sql ) override;
-        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(
+        virtual css::uno::Reference< css::sdbc::XConnection > getConnection(
                 ) override;
 
         // XWarningsSupplier
-        virtual cpo::uno::Any SAL_CALL getWarnings(
+        virtual cpo::uno::Any getWarnings(
                 ) override;
-        virtual void SAL_CALL clearWarnings(
+        virtual void clearWarnings(
                 ) override;
 
         // XCancellable
-        virtual void SAL_CALL cancel(
+        virtual void cancel(
                 ) override;
 
         // XCloseable
-        virtual void SAL_CALL close(
+        virtual void close(
                 ) override;
 
         // other methods

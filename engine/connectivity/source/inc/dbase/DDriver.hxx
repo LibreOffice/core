@@ -33,12 +33,12 @@ namespace connectivity::dbase
     public:
         ODriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext) : file::OFileDriver(_rxContext){}
 
-        OUString SAL_CALL getImplementationName(  ) override;
+        OUString getImplementationName(  ) override;
 
         // XDriver
-        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
-        virtual bool SAL_CALL acceptsURL( const OUString& url ) override;
-        virtual cpo::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual bool acceptsURL( const OUString& url ) override;
+        virtual cpo::uno::Sequence< css::sdbc::DriverPropertyInfo > getPropertyInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
     };
 
 }

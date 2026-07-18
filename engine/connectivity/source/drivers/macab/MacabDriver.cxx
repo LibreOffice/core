@@ -214,24 +214,24 @@ void MacabDriver::disposing()
     WeakComponentImplHelperBase::disposing();
 }
 
-OUString SAL_CALL MacabDriver::getImplementationName(  )
+OUString MacabDriver::getImplementationName(  )
 {
     return "com.sun.star.comp.sdbc.macab.Driver";
 }
 
-bool SAL_CALL MacabDriver::supportsService( const OUString& _rServiceName )
+bool MacabDriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > SAL_CALL MacabDriver::getSupportedServiceNames(  )
+Sequence< OUString > MacabDriver::getSupportedServiceNames(  )
 {
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     return { "com.sun.star.sdbc.Driver" };
 }
 
-Reference< XConnection > SAL_CALL MacabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
+Reference< XConnection > MacabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -254,7 +254,7 @@ Reference< XConnection > SAL_CALL MacabDriver::connect( const OUString& url, con
     return xConnection;
 }
 
-bool SAL_CALL MacabDriver::acceptsURL( const OUString& url )
+bool MacabDriver::acceptsURL( const OUString& url )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -265,33 +265,33 @@ bool SAL_CALL MacabDriver::acceptsURL( const OUString& url )
     return url == "sdbc:address:macab";
 }
 
-Sequence< DriverPropertyInfo > SAL_CALL MacabDriver::getPropertyInfo( const OUString&, const Sequence< PropertyValue >& )
+Sequence< DriverPropertyInfo > MacabDriver::getPropertyInfo( const OUString&, const Sequence< PropertyValue >& )
 {
     // if you have something special to say, return it here :-)
     return Sequence< DriverPropertyInfo >();
 }
 
-sal_Int32 SAL_CALL MacabDriver::getMajorVersion(  )
+sal_Int32 MacabDriver::getMajorVersion(  )
 {
     return MACAB_DRIVER_VERSION_MAJOR;
 }
 
-sal_Int32 SAL_CALL MacabDriver::getMinorVersion(  )
+sal_Int32 MacabDriver::getMinorVersion(  )
 {
     return MACAB_DRIVER_VERSION_MINOR;
 }
 
-void SAL_CALL MacabDriver::queryTermination( const EventObject& )
+void MacabDriver::queryTermination( const EventObject& )
 {
     // nothing to do, nothing to veto
 }
 
-void SAL_CALL MacabDriver::notifyTermination( const EventObject& )
+void MacabDriver::notifyTermination( const EventObject& )
 {
     m_aImplModule.shutdown();
 }
 
-void SAL_CALL MacabDriver::disposing( const EventObject& )
+void MacabDriver::disposing( const EventObject& )
 {
     // not interested in (this is the disposing of the desktop, if any)
 }

@@ -27,19 +27,19 @@ using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-OUString SAL_CALL OIndexColumn::getImplementationName(  )
+OUString OIndexColumn::getImplementationName(  )
 {
     if(isNew())
         return u"com.sun.star.sdbcx.VIndexColumnDescriptor"_ustr;
     return u"com.sun.star.sdbcx.VIndexColumn"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL OIndexColumn::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > OIndexColumn::getSupportedServiceNames(  )
 {
     return { isNew()?u"com.sun.star.sdbcx.IndexColumnDescriptor"_ustr:u"com.sun.star.sdbcx.IndexColumn"_ustr };
 }
 
-bool SAL_CALL OIndexColumn::supportsService( const OUString& _rServiceName )
+bool OIndexColumn::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -87,7 +87,7 @@ OIndexColumn::OIndexColumn( bool             IsAscending,
     return doCreateArrayHelper();
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL OIndexColumn::getInfoHelper()
+::cppu::IPropertyArrayHelper& OIndexColumn::getInfoHelper()
 {
     return *OIndexColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }

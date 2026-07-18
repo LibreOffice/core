@@ -116,7 +116,7 @@ void ODatabaseMetaDataResultSet::setRows(ORows&& _rRows)
     m_bEOF = m_aRows.empty();
 }
 
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& columnName )
+sal_Int32 ODatabaseMetaDataResultSet::findColumn( const OUString& columnName )
 {
     std::unique_lock aGuard( m_aMutex );
     throwIfDisposed(aGuard);
@@ -141,72 +141,72 @@ void ODatabaseMetaDataResultSet::checkIndex(std::unique_lock<std::mutex>& /*rGua
         ::dbtools::throwInvalidIndexException(*this);
 }
 
-Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ )
+Reference< css::io::XInputStream > ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ )
 {
     return nullptr;
 }
 
-Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ )
+Reference< css::io::XInputStream > ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ )
 {
     return nullptr;
 }
 
 
-bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex )
+bool ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getBool();
 }
 
 
-sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex )
+sal_Int8 ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getInt8();
 }
 
 
-Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 columnIndex )
+Sequence< sal_Int8 > ODatabaseMetaDataResultSet::getBytes( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getSequence();
 }
 
 
-css::util::Date SAL_CALL ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIndex )
+css::util::Date ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getDate();
 }
 
 
-double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex )
+double ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getDouble();
 }
 
 
-float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex )
+float ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getFloat();
 }
 
 
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex )
+sal_Int32 ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getInt32();
 }
 
 
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  )
+sal_Int32 ODatabaseMetaDataResultSet::getRow(  )
 {
     return 0;
 }
 
 
-sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex )
+sal_Int64 ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getLong();
 }
 
 
-Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData(  )
+Reference< XResultSetMetaData > ODatabaseMetaDataResultSet::getMetaData(  )
 {
     std::unique_lock aGuard( m_aMutex );
     return getMetaData(aGuard);
@@ -222,60 +222,60 @@ Reference< XResultSetMetaData > ODatabaseMetaDataResultSet::getMetaData( std::un
     return m_xMetaData;
 }
 
-Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ )
+Reference< XArray > ODatabaseMetaDataResultSet::getArray( sal_Int32 /*columnIndex*/ )
 {
     return nullptr;
 }
 
 
-Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ )
+Reference< XClob > ODatabaseMetaDataResultSet::getClob( sal_Int32 /*columnIndex*/ )
 {
     return nullptr;
 }
 
-Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ )
-{
-    return nullptr;
-}
-
-
-Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ )
+Reference< XBlob > ODatabaseMetaDataResultSet::getBlob( sal_Int32 /*columnIndex*/ )
 {
     return nullptr;
 }
 
 
-Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& /*typeMap*/ )
+Reference< XRef > ODatabaseMetaDataResultSet::getRef( sal_Int32 /*columnIndex*/ )
+{
+    return nullptr;
+}
+
+
+Any ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
     return getValue(columnIndex).makeAny();
 }
 
 
-sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
+sal_Int16 ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getInt16();
 }
 
 
-OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
+OUString ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getString();
 }
 
 
-css::util::Time SAL_CALL ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex )
+css::util::Time ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getTime();
 }
 
 
-css::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex )
+css::util::DateTime ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex )
 {
     return getValue(columnIndex).getDateTime();
 }
 
 
-bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast()
+bool ODatabaseMetaDataResultSet::isAfterLast()
 {
     return m_bEOF;
 }
@@ -285,28 +285,28 @@ bool ODatabaseMetaDataResultSet::isAfterLast( std::unique_lock<std::mutex>& /*rG
     return m_bEOF;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  )
+bool ODatabaseMetaDataResultSet::isFirst(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  )
+bool ODatabaseMetaDataResultSet::isLast(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-void SAL_CALL ODatabaseMetaDataResultSet::beforeFirst(  )
+void ODatabaseMetaDataResultSet::beforeFirst(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-void SAL_CALL ODatabaseMetaDataResultSet::afterLast(  )
+void ODatabaseMetaDataResultSet::afterLast(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
 
-void SAL_CALL ODatabaseMetaDataResultSet::close(  )
+void ODatabaseMetaDataResultSet::close(  )
 {
     {
         std::unique_lock aGuard( m_aMutex );
@@ -315,52 +315,52 @@ void SAL_CALL ODatabaseMetaDataResultSet::close(  )
     dispose();
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::first(  )
+bool ODatabaseMetaDataResultSet::first(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::last(  )
+bool ODatabaseMetaDataResultSet::last(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 /*row*/ )
+bool ODatabaseMetaDataResultSet::absolute( sal_Int32 /*row*/ )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 /*row*/ )
+bool ODatabaseMetaDataResultSet::relative( sal_Int32 /*row*/ )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::previous(  )
+bool ODatabaseMetaDataResultSet::previous(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  )
+Reference< XInterface > ODatabaseMetaDataResultSet::getStatement(  )
 {
     return nullptr;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  )
+bool ODatabaseMetaDataResultSet::rowDeleted(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  )
+bool ODatabaseMetaDataResultSet::rowInserted(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  )
+bool ODatabaseMetaDataResultSet::rowUpdated(  )
 {
     ::dbtools::throwFunctionSequenceException(*this);
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst()
+bool ODatabaseMetaDataResultSet::isBeforeFirst()
 {
     return m_bBOF;
 }
@@ -370,7 +370,7 @@ bool ODatabaseMetaDataResultSet::isBeforeFirst(std::unique_lock<std::mutex>& /*r
     return m_bBOF;
 }
 
-bool SAL_CALL ODatabaseMetaDataResultSet::next(  )
+bool ODatabaseMetaDataResultSet::next(  )
 {
     std::unique_lock aGuard( m_aMutex );
     return next(aGuard);
@@ -404,7 +404,7 @@ bool ODatabaseMetaDataResultSet::next( std::unique_lock<std::mutex>& rGuard )
 }
 
 
-bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  )
+bool ODatabaseMetaDataResultSet::wasNull(  )
 {
     std::unique_lock aGuard( m_aMutex );
     throwIfDisposed(aGuard);
@@ -415,20 +415,20 @@ bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  )
     return (*m_aRowsIter)[m_nColPos]->getValue().isNull();
 }
 
-void SAL_CALL ODatabaseMetaDataResultSet::refreshRow(  )
+void ODatabaseMetaDataResultSet::refreshRow(  )
 {
 }
 
 
-void SAL_CALL ODatabaseMetaDataResultSet::cancel(  )
+void ODatabaseMetaDataResultSet::cancel(  )
 {
 }
 
-void SAL_CALL ODatabaseMetaDataResultSet::clearWarnings(  )
+void ODatabaseMetaDataResultSet::clearWarnings(  )
 {
 }
 
-Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  )
+Any ODatabaseMetaDataResultSet::getWarnings(  )
 {
     return Any();
 }
@@ -652,7 +652,7 @@ ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getQuoteValue()
     return aValueRef;
 }
 
-void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aArguments )
+void ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aArguments )
 {
     if ( _aArguments.getLength() != 2 )
         return;
@@ -746,17 +746,17 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
 // XServiceInfo
 
 
-    OUString SAL_CALL ODatabaseMetaDataResultSet::getImplementationName(  )
+    OUString ODatabaseMetaDataResultSet::getImplementationName(  )
     {
         return u"org.openoffice.comp.helper.DatabaseMetaDataResultSet"_ustr;
     }
 
-    bool SAL_CALL ODatabaseMetaDataResultSet::supportsService( const OUString& _rServiceName )
+    bool ODatabaseMetaDataResultSet::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL ODatabaseMetaDataResultSet::getSupportedServiceNames(  )
+    Sequence< OUString > ODatabaseMetaDataResultSet::getSupportedServiceNames(  )
     {
         return Sequence<OUString>{ u"com.sun.star.sdbc.ResultSet"_ustr };
     }

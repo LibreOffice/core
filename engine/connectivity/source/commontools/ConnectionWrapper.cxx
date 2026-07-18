@@ -81,13 +81,13 @@ OConnectionWrapper::~OConnectionWrapper()
 
 // XServiceInfo
 
-OUString SAL_CALL OConnectionWrapper::getImplementationName(  )
+OUString OConnectionWrapper::getImplementationName(  )
 {
     return u"com.sun.star.sdbc.drivers.OConnectionWrapper"_ustr;
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > OConnectionWrapper::getSupportedServiceNames(  )
 {
     osl::MutexGuard aGuard(m_aMutex);
     // first collect the services which are supported by our aggregate
@@ -109,20 +109,20 @@ cpo::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceN
 }
 
 
-bool SAL_CALL OConnectionWrapper::supportsService( const OUString& _rServiceName )
+bool OConnectionWrapper::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
 
-Any SAL_CALL OConnectionWrapper::queryInterface( const Type& _rType )
+Any OConnectionWrapper::queryInterface( const Type& _rType )
 {
     osl::MutexGuard aGuard(m_aMutex);
     Any aReturn = OConnection_BASE::queryInterface(_rType);
     return aReturn.hasValue() ? aReturn : (m_xProxyConnection.is() ? m_xProxyConnection->queryAggregation(_rType) : aReturn);
 }
 
-Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  )
+Sequence< Type > OConnectionWrapper::getTypes(  )
 {
     osl::MutexGuard aGuard(m_aMutex);
     return ::comphelper::concatSequences(
@@ -132,7 +132,7 @@ Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  )
 }
 
 // css::lang::XUnoTunnel
-sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >& rId )
+sal_Int64 OConnectionWrapper::getSomething( const Sequence< sal_Int8 >& rId )
 {
     if (comphelper::isUnoTunnelId<OConnectionWrapper>(rId))
         return comphelper::getSomething_cast(this);

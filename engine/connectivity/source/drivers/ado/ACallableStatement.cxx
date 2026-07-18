@@ -40,20 +40,20 @@ OCallableStatement::OCallableStatement( OConnection* _pConnection, const OUStrin
 }
 
 
-Any SAL_CALL OCallableStatement::queryInterface( const Type & rType )
+Any OCallableStatement::queryInterface( const Type & rType )
 {
     Any aRet = OPreparedStatement::queryInterface(rType);
     return aRet.hasValue() ? aRet : ::cppu::queryInterface(rType,static_cast< XRow*>(this));
 }
 
 
-bool SAL_CALL OCallableStatement::wasNull(  )
+bool OCallableStatement::wasNull(  )
 {
     return m_aValue.isNull();
 }
 
 
-bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex )
+bool OCallableStatement::getBoolean( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
@@ -62,7 +62,7 @@ bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex )
     return m_aValue.getBool();
 }
 
-sal_Int8 SAL_CALL OCallableStatement::getByte( sal_Int32 columnIndex )
+sal_Int8 OCallableStatement::getByte( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
@@ -71,7 +71,7 @@ sal_Int8 SAL_CALL OCallableStatement::getByte( sal_Int32 columnIndex )
     return m_aValue.getInt8();
 }
 
-Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnIndex )
+Sequence< sal_Int8 > OCallableStatement::getBytes( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
@@ -80,7 +80,7 @@ Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnInde
     return m_aValue.getByteSequence();
 }
 
-css::util::Date SAL_CALL OCallableStatement::getDate( sal_Int32 columnIndex )
+css::util::Date OCallableStatement::getDate( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
@@ -89,7 +89,7 @@ css::util::Date SAL_CALL OCallableStatement::getDate( sal_Int32 columnIndex )
     return m_aValue.getDate();
 }
 
-double SAL_CALL OCallableStatement::getDouble( sal_Int32 columnIndex )
+double OCallableStatement::getDouble( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
@@ -99,7 +99,7 @@ double SAL_CALL OCallableStatement::getDouble( sal_Int32 columnIndex )
 }
 
 
-float SAL_CALL OCallableStatement::getFloat( sal_Int32 columnIndex )
+float OCallableStatement::getFloat( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
@@ -109,7 +109,7 @@ float SAL_CALL OCallableStatement::getFloat( sal_Int32 columnIndex )
 }
 
 
-sal_Int32 SAL_CALL OCallableStatement::getInt( sal_Int32 columnIndex )
+sal_Int32 OCallableStatement::getInt( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
@@ -118,7 +118,7 @@ sal_Int32 SAL_CALL OCallableStatement::getInt( sal_Int32 columnIndex )
     return m_aValue.getInt32();
 }
 
-sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex )
+sal_Int64 OCallableStatement::getLong( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
@@ -127,12 +127,12 @@ sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex )
     return static_cast<sal_Int64>(m_aValue.getCurrency().int64);
 }
 
-Any SAL_CALL OCallableStatement::getObject( sal_Int32 /*columnIndex*/, const Reference< css::container::XNameAccess >& /*typeMap*/ )
+Any OCallableStatement::getObject( sal_Int32 /*columnIndex*/, const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getObject", *this );
 }
 
-sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex )
+sal_Int16 OCallableStatement::getShort( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
@@ -141,7 +141,7 @@ sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex )
     return m_aValue.getInt16();
 }
 
-OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex )
+OUString OCallableStatement::getString( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
@@ -150,7 +150,7 @@ OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex )
     return m_aValue.getString();
 }
 
-css::util::Time SAL_CALL OCallableStatement::getTime( sal_Int32 columnIndex )
+css::util::Time OCallableStatement::getTime( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
@@ -160,7 +160,7 @@ css::util::Time SAL_CALL OCallableStatement::getTime( sal_Int32 columnIndex )
 }
 
 
- css::util::DateTime SAL_CALL OCallableStatement::getTimestamp( sal_Int32 columnIndex )
+ css::util::DateTime OCallableStatement::getTimestamp( sal_Int32 columnIndex )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);
@@ -170,7 +170,7 @@ css::util::Time SAL_CALL OCallableStatement::getTime( sal_Int32 columnIndex )
 }
 
 
-void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& /*typeName*/ )
+void OCallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& /*typeName*/ )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
@@ -181,7 +181,7 @@ void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex
     }
 }
 
-void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale )
+void OCallableStatement::registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale )
 {
     ADOParameter* pParam = nullptr;
     m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
@@ -194,42 +194,42 @@ void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 paramet
 }
 
 
-Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getBinaryStream( sal_Int32 /*columnIndex*/ )
+Reference< css::io::XInputStream > OCallableStatement::getBinaryStream( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getBinaryStream", *this );
 }
 
-Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getCharacterStream( sal_Int32 /*columnIndex*/ )
+Reference< css::io::XInputStream > OCallableStatement::getCharacterStream( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getCharacterStream", *this );
 }
 
-Reference< XArray > SAL_CALL OCallableStatement::getArray( sal_Int32 /*columnIndex*/ )
+Reference< XArray > OCallableStatement::getArray( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getArray", *this );
 }
 
-Reference< XClob > SAL_CALL OCallableStatement::getClob( sal_Int32 /*columnIndex*/ )
+Reference< XClob > OCallableStatement::getClob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getClob", *this );
 }
 
-Reference< XBlob > SAL_CALL OCallableStatement::getBlob( sal_Int32 /*columnIndex*/ )
+Reference< XBlob > OCallableStatement::getBlob( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getBlob", *this );
 }
 
-Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 /*columnIndex*/)
+Reference< XRef > OCallableStatement::getRef( sal_Int32 /*columnIndex*/)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getRef", *this );
 }
 
-void SAL_CALL OCallableStatement::acquire() noexcept
+void OCallableStatement::acquire() noexcept
 {
     OPreparedStatement::acquire();
 }
 
-void SAL_CALL OCallableStatement::release() noexcept
+void OCallableStatement::release() noexcept
 {
     OPreparedStatement::release();
 }

@@ -347,7 +347,7 @@ void MacabCommonStatement::sortRecords(MacabResultSet *pResult) const
     }
 }
 
-Any SAL_CALL MacabCommonStatement::queryInterface( const Type & rType )
+Any MacabCommonStatement::queryInterface( const Type & rType )
 {
     Any aRet = MacabCommonStatement_BASE::queryInterface(rType);
     if (!aRet.hasValue())
@@ -355,7 +355,7 @@ Any SAL_CALL MacabCommonStatement::queryInterface( const Type & rType )
     return aRet;
 }
 
-Sequence< Type > SAL_CALL MacabCommonStatement::getTypes(  )
+Sequence< Type > MacabCommonStatement::getTypes(  )
 {
     ::cppu::OTypeCollection aTypes( cppu::UnoType<XMultiPropertySet>::get(),
                                     cppu::UnoType<XFastPropertySet>::get(),
@@ -364,7 +364,7 @@ Sequence< Type > SAL_CALL MacabCommonStatement::getTypes(  )
     return comphelper::concatSequences(aTypes.getTypes(),MacabCommonStatement_BASE::getTypes());
 }
 
-void SAL_CALL MacabCommonStatement::cancel(  )
+void MacabCommonStatement::cancel(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -372,7 +372,7 @@ void SAL_CALL MacabCommonStatement::cancel(  )
     // cancel the current sql statement
 }
 
-void SAL_CALL MacabCommonStatement::close(  )
+void MacabCommonStatement::close(  )
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -382,7 +382,7 @@ void SAL_CALL MacabCommonStatement::close(  )
     dispose();
 }
 
-bool SAL_CALL MacabCommonStatement::execute(
+bool MacabCommonStatement::execute(
         const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -393,7 +393,7 @@ bool SAL_CALL MacabCommonStatement::execute(
     return xRS.is();
 }
 
-Reference< XResultSet > SAL_CALL MacabCommonStatement::executeQuery(
+Reference< XResultSet > MacabCommonStatement::executeQuery(
         const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -450,7 +450,7 @@ Reference< XResultSet > SAL_CALL MacabCommonStatement::executeQuery(
     return pResult;
 }
 
-Reference< XConnection > SAL_CALL MacabCommonStatement::getConnection(  )
+Reference< XConnection > MacabCommonStatement::getConnection(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
@@ -459,7 +459,7 @@ Reference< XConnection > SAL_CALL MacabCommonStatement::getConnection(  )
     return m_pConnection;
 }
 
-sal_Int32 SAL_CALL MacabCommonStatement::executeUpdate( const OUString& )
+sal_Int32 MacabCommonStatement::executeUpdate( const OUString& )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
@@ -468,7 +468,7 @@ sal_Int32 SAL_CALL MacabCommonStatement::executeUpdate( const OUString& )
     return 0;
 }
 
-Any SAL_CALL MacabCommonStatement::getWarnings(  )
+Any MacabCommonStatement::getWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
@@ -476,7 +476,7 @@ Any SAL_CALL MacabCommonStatement::getWarnings(  )
     return Any(m_aLastWarning);
 }
 
-void SAL_CALL MacabCommonStatement::clearWarnings(  )
+void MacabCommonStatement::clearWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
@@ -609,17 +609,17 @@ void MacabCommonStatement::getFastPropertyValue(Any&,sal_Int32 nHandle) const
     }
 }
 
-void SAL_CALL MacabCommonStatement::acquire() noexcept
+void MacabCommonStatement::acquire() noexcept
 {
     MacabCommonStatement_BASE::acquire();
 }
 
-void SAL_CALL MacabCommonStatement::release() noexcept
+void MacabCommonStatement::release() noexcept
 {
     MacabCommonStatement_BASE::release();
 }
 
-Reference< css::beans::XPropertySetInfo > SAL_CALL MacabCommonStatement::getPropertySetInfo(  )
+Reference< css::beans::XPropertySetInfo > MacabCommonStatement::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

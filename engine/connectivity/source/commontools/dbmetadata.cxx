@@ -134,7 +134,7 @@ namespace dbtools
 
         const OUString& lcl_getConnectionStringSetting(
             const DatabaseMetaData_Impl& _metaData, ::std::optional< OUString >& _cachedSetting,
-            OUString (SAL_CALL XDatabaseMetaData::*_getter)() )
+            OUString (XDatabaseMetaData::*_getter)() )
         {
             if ( !_cachedSetting )
             {

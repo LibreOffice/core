@@ -38,19 +38,19 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-OUString SAL_CALL OIndex::getImplementationName(  )
+OUString OIndex::getImplementationName(  )
 {
     if(isNew())
         return u"com.sun.star.sdbcx.VIndexDescriptor"_ustr;
     return u"com.sun.star.sdbcx.VIndex"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL OIndex::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > OIndex::getSupportedServiceNames(  )
 {
     return { isNew()?u"com.sun.star.sdbcx.IndexDescriptor"_ustr:u"com.sun.star.sdbcx.Index"_ustr };
 }
 
-bool SAL_CALL OIndex::supportsService( const OUString& _rServiceName )
+bool OIndex::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -87,12 +87,12 @@ OIndex::~OIndex( )
     return doCreateArrayHelper();
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL OIndex::getInfoHelper()
+::cppu::IPropertyArrayHelper& OIndex::getInfoHelper()
 {
     return *OIndex_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
 
-Any SAL_CALL OIndex::queryInterface( const Type & rType )
+Any OIndex::queryInterface( const Type & rType )
 {
     Any aRet = ODescriptor::queryInterface( rType);
     if(!aRet.hasValue())
@@ -105,7 +105,7 @@ Any SAL_CALL OIndex::queryInterface( const Type & rType )
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OIndex::getTypes(  )
+Sequence< Type > OIndex::getTypes(  )
 {
     if(isNew())
         return ::comphelper::concatSequences(ODescriptor::getTypes(),ODescriptor_BASE::getTypes());
@@ -134,7 +134,7 @@ void OIndex::disposing()
         m_pColumns->disposing();
 }
 
-Reference< css::container::XNameAccess > SAL_CALL OIndex::getColumns(  )
+Reference< css::container::XNameAccess > OIndex::getColumns(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(ODescriptor_BASE::rBHelper.bDisposed);
@@ -157,7 +157,7 @@ Reference< css::container::XNameAccess > SAL_CALL OIndex::getColumns(  )
     return m_pColumns.get();
 }
 
-Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  )
+Reference< XPropertySet > OIndex::createDataDescriptor(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(ODescriptor_BASE::rBHelper.bDisposed);
@@ -166,27 +166,27 @@ Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  )
     return this;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OIndex::getPropertySetInfo(  )
+css::uno::Reference< css::beans::XPropertySetInfo > OIndex::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-OUString SAL_CALL OIndex::getName(  )
+OUString OIndex::getName(  )
 {
     return m_Name;
 }
 
-void SAL_CALL OIndex::setName( const OUString& /*aName*/ )
+void OIndex::setName( const OUString& /*aName*/ )
 {
 }
 
 // XInterface
-void SAL_CALL OIndex::acquire() noexcept
+void OIndex::acquire() noexcept
 {
     ODescriptor_BASE::acquire();
 }
 
-void SAL_CALL OIndex::release() noexcept
+void OIndex::release() noexcept
 {
     ODescriptor_BASE::release();
 }

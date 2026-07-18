@@ -97,7 +97,7 @@ void OFileTable::refreshIndexes()
 {
 }
 
-Any SAL_CALL OFileTable::queryInterface( const Type & rType )
+Any OFileTable::queryInterface( const Type & rType )
 {
     if( rType == cppu::UnoType<XKeysSupplier>::get()||
         rType == cppu::UnoType<XRename>::get()||
@@ -109,7 +109,7 @@ Any SAL_CALL OFileTable::queryInterface( const Type & rType )
     return OTable_TYPEDEF::queryInterface(rType);
 }
 
-void SAL_CALL OFileTable::disposing()
+void OFileTable::disposing()
 {
     OTable::disposing();
 

@@ -36,7 +36,7 @@ OFileCatalog::OFileCatalog(OConnection* _pCon) : connectivity::sdbcx::OCatalog(_
 {
 }
 
-void SAL_CALL OFileCatalog::disposing()
+void OFileCatalog::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -65,7 +65,7 @@ void OFileCatalog::refreshTables()
 }
 
 
-Any SAL_CALL OFileCatalog::queryInterface( const Type & rType )
+Any OFileCatalog::queryInterface( const Type & rType )
 {
     if( rType == cppu::UnoType<XGroupsSupplier>::get()||
         rType == cppu::UnoType<XUsersSupplier>::get()||
@@ -77,7 +77,7 @@ Any SAL_CALL OFileCatalog::queryInterface( const Type & rType )
     return OFileCatalog_BASE::queryInterface(rType);
 }
 
-Sequence< Type > SAL_CALL OFileCatalog::getTypes(  )
+Sequence< Type > OFileCatalog::getTypes(  )
 {
     typedef sdbcx::OCatalog OFileCatalog_BASE;
 

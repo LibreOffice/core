@@ -29,19 +29,19 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
 
-OUString SAL_CALL OKeyColumn::getImplementationName(  )
+OUString OKeyColumn::getImplementationName(  )
 {
     if(isNew())
         return u"com.sun.star.sdbcx.VKeyColumnDescriptor"_ustr;
     return u"com.sun.star.sdbcx.VKeyColumn"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL OKeyColumn::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > OKeyColumn::getSupportedServiceNames(  )
 {
     return { isNew()?u"com.sun.star.sdbcx.KeyColumnDescriptor"_ustr:u"com.sun.star.sdbcx.KeyColumn"_ustr };
 }
 
-bool SAL_CALL OKeyColumn::supportsService( const OUString& _rServiceName )
+bool OKeyColumn::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -92,7 +92,7 @@ OKeyColumn::~OKeyColumn()
     return doCreateArrayHelper();
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL OKeyColumn::getInfoHelper()
+::cppu::IPropertyArrayHelper& OKeyColumn::getInfoHelper()
 {
     return *OKeyColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }

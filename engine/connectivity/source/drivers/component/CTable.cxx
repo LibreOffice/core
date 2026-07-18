@@ -69,7 +69,7 @@ void OComponentTable::refreshIndexes()
 }
 
 
-Sequence< Type > SAL_CALL OComponentTable::getTypes(  )
+Sequence< Type > OComponentTable::getTypes(  )
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
     std::vector<Type> aOwnTypes;
@@ -90,7 +90,7 @@ Sequence< Type > SAL_CALL OComponentTable::getTypes(  )
 }
 
 
-Any SAL_CALL OComponentTable::queryInterface( const Type & rType )
+Any OComponentTable::queryInterface( const Type & rType )
 {
     if( rType == cppu::UnoType<XKeysSupplier>::get()||
         rType == cppu::UnoType<XIndexesSupplier>::get()||

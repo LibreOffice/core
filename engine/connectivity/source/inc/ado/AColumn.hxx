@@ -35,7 +35,7 @@ namespace connectivity::ado
 
         void fillPropertyValues();
     protected:
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+        virtual void setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const cpo::uno::Any& rValue
                                  ) override;

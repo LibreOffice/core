@@ -121,7 +121,7 @@ namespace connectivity::file
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
         // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
         virtual ~OStatement_Base() override;
     public:
         connectivity::OSQLParseNode* getParseTree() const { return m_pParseTree;}
@@ -137,24 +137,24 @@ namespace connectivity::file
         virtual void construct(const OUString& sql);
 
         // OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
         // XInterface
-        //      virtual void SAL_CALL release() throw(css::uno::RuntimeException) = 0;
-        virtual void SAL_CALL acquire() noexcept override;
+        //      virtual void release() throw(css::uno::RuntimeException) = 0;
+        virtual void acquire() noexcept override;
         // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
         //XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         // XWarningsSupplier
-        virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
-        virtual void SAL_CALL clearWarnings(  ) override;
+        virtual cpo::uno::Any getWarnings(  ) override;
+        virtual void clearWarnings(  ) override;
         // XCancellable
-        virtual void SAL_CALL cancel(  ) override;
+        virtual void cancel(  ) override;
         // XCloseable
-        virtual void SAL_CALL close(  ) override;
+        virtual void close(  ) override;
     };
 
     class OOO_DLLPUBLIC_FILE OStatement_BASE2 : public OStatement_Base
@@ -163,9 +163,9 @@ namespace connectivity::file
     public:
         OStatement_BASE2(OConnection* _pConnection ) : OStatement_Base(_pConnection ) {}
         // OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
         // XInterface
-        virtual void SAL_CALL release() noexcept override;
+        virtual void release() noexcept override;
     };
 
     typedef ::cppu::ImplHelper2< css::sdbc::XStatement,css::lang::XServiceInfo > OStatement_XStatement;
@@ -181,15 +181,15 @@ namespace connectivity::file
         OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}
         DECLARE_SERVICE_INFO();
 
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+        virtual void acquire() noexcept override;
+        virtual void release() noexcept override;
 
         // XStatement
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) override ;
-        virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) override ;
-        virtual bool SAL_CALL execute( const OUString& sql ) override ;
-        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override ;
+        virtual css::uno::Reference< css::sdbc::XResultSet > executeQuery( const OUString& sql ) override ;
+        virtual sal_Int32 executeUpdate( const OUString& sql ) override ;
+        virtual bool execute( const OUString& sql ) override ;
+        virtual css::uno::Reference< css::sdbc::XConnection > getConnection(  ) override ;
     };
 
 }

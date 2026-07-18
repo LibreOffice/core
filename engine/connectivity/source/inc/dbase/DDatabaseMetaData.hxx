@@ -30,19 +30,19 @@ namespace connectivity::dbase
     class ODbaseDatabaseMetaData :  public file::ODatabaseMetaData
     {
         virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
-        virtual bool SAL_CALL isReadOnly(  ) override;
-        virtual OUString SAL_CALL getURL(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getIndexInfo( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, bool unique, bool approximate ) override;
+        virtual bool isReadOnly(  ) override;
+        virtual OUString getURL(  ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > getIndexInfo( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, bool unique, bool approximate ) override;
 
-        virtual sal_Int32 SAL_CALL getMaxBinaryLiteralLength(  ) override;
-        virtual sal_Int32 SAL_CALL getMaxCharLiteralLength(  ) override;
-        virtual sal_Int32 SAL_CALL getMaxColumnNameLength(  ) override;
-        virtual sal_Int32 SAL_CALL getMaxColumnsInIndex(  ) override;
-        virtual sal_Int32 SAL_CALL getMaxColumnsInTable(  ) override;
+        virtual sal_Int32 getMaxBinaryLiteralLength(  ) override;
+        virtual sal_Int32 getMaxCharLiteralLength(  ) override;
+        virtual sal_Int32 getMaxColumnNameLength(  ) override;
+        virtual sal_Int32 getMaxColumnsInIndex(  ) override;
+        virtual sal_Int32 getMaxColumnsInTable(  ) override;
 
-        virtual bool SAL_CALL supportsAlterTableWithAddColumn(  ) override;
-        virtual bool SAL_CALL supportsAlterTableWithDropColumn(  ) override;
+        virtual bool supportsAlterTableWithAddColumn(  ) override;
+        virtual bool supportsAlterTableWithDropColumn(  ) override;
 
         virtual bool        impl_storesMixedCaseQuotedIdentifiers_throw(  ) override;
         virtual bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  ) override;

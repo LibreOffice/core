@@ -75,13 +75,13 @@ Sequence< OUString > ODBCDriver::getSupportedServiceNames(  )
 }
 
 
-bool SAL_CALL ODBCDriver::supportsService( const OUString& _rServiceName )
+bool ODBCDriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
 
-Reference< XConnection > SAL_CALL ODBCDriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
+Reference< XConnection > ODBCDriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
 {
     if ( ! acceptsURL(url) )
         return nullptr;
@@ -93,12 +93,12 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const OUString& url, cons
     return pCon;
 }
 
-bool SAL_CALL ODBCDriver::acceptsURL( const OUString& url )
+bool ODBCDriver::acceptsURL( const OUString& url )
 {
     return url.startsWith("sdbc:odbc:");
 }
 
-Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ )
+Sequence< DriverPropertyInfo > ODBCDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ )
 {
     if ( acceptsURL(url) )
     {
@@ -176,12 +176,12 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const OUStr
     ::dbtools::throwGenericSQLException(sMessage ,*this);
 }
 
-sal_Int32 SAL_CALL ODBCDriver::getMajorVersion(  )
+sal_Int32 ODBCDriver::getMajorVersion(  )
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL ODBCDriver::getMinorVersion(  )
+sal_Int32 ODBCDriver::getMinorVersion(  )
 {
     return 0;
 }

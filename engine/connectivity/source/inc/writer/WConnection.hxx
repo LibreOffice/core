@@ -77,20 +77,17 @@ class OWriterConnection : public file::OConnection
         }
 
         // XTerminateListener
-        void SAL_CALL queryTermination(const css::lang::EventObject& /*rEvent*/) override {}
+        void queryTermination(const css::lang::EventObject& /*rEvent*/) override {}
 
-        void SAL_CALL notifyTermination(const css::lang::EventObject& /*rEvent*/) override
-        {
-            stop();
-        }
+        void notifyTermination(const css::lang::EventObject& /*rEvent*/) override { stop(); }
 
-        void SAL_CALL disposing() override
+        void disposing() override
         {
             stop();
             cppu::WeakComponentImplHelperBase::disposing();
         }
 
-        void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
+        void disposing(const css::lang::EventObject& rEvent) override
         {
             const bool bShutDown = (rEvent.Source == m_xDesktop);
             if (bShutDown)
@@ -111,16 +108,15 @@ public:
     DECLARE_SERVICE_INFO();
 
     // OComponentHelper
-    void SAL_CALL disposing() override;
+    void disposing() override;
 
     // XConnection
-    css::uno::Reference<css::sdbc::XDatabaseMetaData> SAL_CALL getMetaData() override;
+    css::uno::Reference<css::sdbc::XDatabaseMetaData> getMetaData() override;
     css::uno::Reference<css::sdbcx::XTablesSupplier> createCatalog() override;
-    css::uno::Reference<css::sdbc::XStatement> SAL_CALL createStatement() override;
+    css::uno::Reference<css::sdbc::XStatement> createStatement() override;
     css::uno::Reference<css::sdbc::XPreparedStatement>
-        SAL_CALL prepareStatement(const OUString& sql) override;
-    css::uno::Reference<css::sdbc::XPreparedStatement>
-        SAL_CALL prepareCall(const OUString& sql) override;
+    prepareStatement(const OUString& sql) override;
+    css::uno::Reference<css::sdbc::XPreparedStatement> prepareCall(const OUString& sql) override;
 
     // no interface methods
     css::uno::Reference<css::text::XTextDocument> const& acquireDoc();

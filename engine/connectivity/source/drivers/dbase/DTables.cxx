@@ -114,7 +114,7 @@ void ODbaseTables::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     }
 }
 
-Any SAL_CALL ODbaseTables::queryInterface( const Type & rType )
+Any ODbaseTables::queryInterface( const Type & rType )
 {
     typedef sdbcx::OCollection OTables_BASE;
     return OTables_BASE::queryInterface(rType);

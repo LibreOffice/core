@@ -62,14 +62,14 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL ODriverWrapper::queryInterface( const Type& _rType )
+    Any ODriverWrapper::queryInterface( const Type& _rType )
     {
         Any aReturn = ODriverWrapper_BASE::queryInterface(_rType);
         return aReturn.hasValue() ? aReturn : (m_xDriverAggregate.is() ? m_xDriverAggregate->queryAggregation(_rType) : aReturn);
     }
 
 
-    Reference< XConnection > SAL_CALL ODriverWrapper::connect( const OUString& url, const Sequence< PropertyValue >& info )
+    Reference< XConnection > ODriverWrapper::connect( const OUString& url, const Sequence< PropertyValue >& info )
     {
         Reference< XConnection > xConnection;
         if (m_pConnectionPool.is())
@@ -82,13 +82,13 @@ using namespace cpo::uno;
     }
 
 
-    bool SAL_CALL ODriverWrapper::acceptsURL( const OUString& url )
+    bool ODriverWrapper::acceptsURL( const OUString& url )
     {
         return m_xDriver.is() && m_xDriver->acceptsURL(url);
     }
 
 
-    Sequence< DriverPropertyInfo > SAL_CALL ODriverWrapper::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& info )
+    Sequence< DriverPropertyInfo > ODriverWrapper::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& info )
     {
         Sequence< DriverPropertyInfo > aInfo;
         if (m_xDriver.is())
@@ -97,13 +97,13 @@ using namespace cpo::uno;
     }
 
 
-    sal_Int32 SAL_CALL ODriverWrapper::getMajorVersion(  )
+    sal_Int32 ODriverWrapper::getMajorVersion(  )
     {
         return m_xDriver.is() ? m_xDriver->getMajorVersion() : 0;
     }
 
 
-    sal_Int32 SAL_CALL ODriverWrapper::getMinorVersion(  )
+    sal_Int32 ODriverWrapper::getMinorVersion(  )
     {
         return m_xDriver.is() ? m_xDriver->getMinorVersion() : 0;
     }

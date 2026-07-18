@@ -42,7 +42,7 @@ namespace connectivity
         java_sql_Ref( JNIEnv * pEnv, jobject myObj );
 
         // XRef
-        virtual OUString SAL_CALL getBaseTypeName(  ) override;
+        virtual OUString getBaseTypeName(  ) override;
     };
 }
 

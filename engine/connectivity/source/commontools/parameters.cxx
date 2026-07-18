@@ -1199,7 +1199,7 @@ using namespace cpo::uno;
             m_xInnerParamUpdate->clearParameters( );
     }
 
-    void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues )
+    void OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues )
     {
         m_aValues = _rValues;
     }

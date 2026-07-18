@@ -48,7 +48,7 @@ namespace connectivity
             ,m_pPool(_pPool)
         {}
     protected:
-        virtual void SAL_CALL onShot() override;
+        virtual void onShot() override;
     };
 
 
@@ -135,9 +135,9 @@ namespace connectivity
         /// @throws css::uno::RuntimeException
         css::uno::Reference< css::sdbc::XConnection > getConnectionWithInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info );
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
+        virtual void propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
         void invalidatePooledConnections();
     };

@@ -34,14 +34,14 @@ OWriterDatabaseMetaData::OWriterDatabaseMetaData(file::OConnection* pConnection)
 
 OWriterDatabaseMetaData::~OWriterDatabaseMetaData() = default;
 
-OUString SAL_CALL OWriterDatabaseMetaData::getURL()
+OUString OWriterDatabaseMetaData::getURL()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     return "sdbc:writer:" + m_pConnection->getURL();
 }
 
-uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
+uno::Reference<sdbc::XResultSet> OWriterDatabaseMetaData::getTables(
     const cpo::uno::Any& /*catalog*/, const OUString& /*schemaPattern*/,
     const OUString& tableNamePattern, const cpo::uno::Sequence<OUString>& types)
 {

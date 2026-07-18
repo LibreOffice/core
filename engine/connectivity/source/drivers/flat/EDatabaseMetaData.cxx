@@ -144,7 +144,7 @@ Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
     return pResult;
 }
 
-Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
+Reference< XResultSet > OFlatDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
         const OUString& columnNamePattern )
 {
@@ -225,7 +225,7 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
     return pResult;
 }
 
-OUString SAL_CALL OFlatDatabaseMetaData::getURL(  )
+OUString OFlatDatabaseMetaData::getURL(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return "sdbc:flat:" + m_pConnection->getURL();

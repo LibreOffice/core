@@ -73,20 +73,20 @@ ODatabaseMetaDataBase::~ODatabaseMetaDataBase()
 }
 
 
-Sequence< PropertyValue > SAL_CALL ODatabaseMetaDataBase::getConnectionInfo(  )
+Sequence< PropertyValue > ODatabaseMetaDataBase::getConnectionInfo(  )
 {
     return m_aConnectionInfo;
 }
 
 
-void SAL_CALL ODatabaseMetaDataBase::disposing( const EventObject& /*Source*/ )
+void ODatabaseMetaDataBase::disposing( const EventObject& /*Source*/ )
 {
     // cut off all references to the connection
 m_xConnection.clear();
 m_xListenerHelper.clear();
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  )
+Reference< XResultSet > ODatabaseMetaDataBase::getTypeInfo(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_aTypeInfoRows.empty() )
@@ -170,39 +170,39 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  )
     return pResult;
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getExportedKeys(
+Reference< XResultSet > ODatabaseMetaDataBase::getExportedKeys(
         const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/ )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eExportedKeys );
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getImportedKeys(
+Reference< XResultSet > ODatabaseMetaDataBase::getImportedKeys(
         const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/ )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eImportedKeys );
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getPrimaryKeys(
+Reference< XResultSet > ODatabaseMetaDataBase::getPrimaryKeys(
         const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/ )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::ePrimaryKeys );
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getIndexInfo(
+Reference< XResultSet > ODatabaseMetaDataBase::getIndexInfo(
         const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/,
         bool /*unique*/, bool /*approximate*/ )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eIndexInfo );
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getBestRowIdentifier(
+Reference< XResultSet > ODatabaseMetaDataBase::getBestRowIdentifier(
         const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/, sal_Int32 /*scope*/,
         bool /*nullable*/ )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eBestRowIdentifier );
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getCrossReference(
+Reference< XResultSet > ODatabaseMetaDataBase::getCrossReference(
         const Any& /*primaryCatalog*/, const OUString& /*primarySchema*/,
         const OUString& /*primaryTable*/, const Any& /*foreignCatalog*/,
         const OUString& /*foreignSchema*/, const OUString& /*foreignTable*/ )
@@ -210,115 +210,115 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getCrossReference(
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCrossReference );
 }
 
-Reference< XConnection > SAL_CALL ODatabaseMetaDataBase::getConnection(  )
+Reference< XConnection > ODatabaseMetaDataBase::getConnection(  )
 {
     return m_xConnection;
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getProcedureColumns(
+Reference< XResultSet > ODatabaseMetaDataBase::getProcedureColumns(
         const Any& /*catalog*/, const OUString& /*schemaPattern*/,
         const OUString& /*procedureNamePattern*/, const OUString& /*columnNamePattern*/ )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedureColumns );
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getProcedures(
+Reference< XResultSet > ODatabaseMetaDataBase::getProcedures(
         const Any& /*catalog*/, const OUString& /*schemaPattern*/,
         const OUString& /*procedureNamePattern*/ )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedures );
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getVersionColumns(
+Reference< XResultSet > ODatabaseMetaDataBase::getVersionColumns(
         const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/ )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eVersionColumns );
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getSchemas(  )
+Reference< XResultSet > ODatabaseMetaDataBase::getSchemas(  )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eSchemas );
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getColumnPrivileges(
+Reference< XResultSet > ODatabaseMetaDataBase::getColumnPrivileges(
         const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/,
         const OUString& /*columnNamePattern*/ )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumnPrivileges );
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTablePrivileges(
+Reference< XResultSet > ODatabaseMetaDataBase::getTablePrivileges(
         const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
 }
 
-Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getCatalogs(  )
+Reference< XResultSet > ODatabaseMetaDataBase::getCatalogs(  )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCatalogs );
 }
 
-OUString SAL_CALL ODatabaseMetaDataBase::getIdentifierQuoteString(  )
+OUString ODatabaseMetaDataBase::getIdentifierQuoteString(  )
 {
     return callImplMethod(m_sIdentifierQuoteString,std::function<OUString(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_getIdentifierQuoteString_throw));
 }
 
-bool SAL_CALL ODatabaseMetaDataBase::isCatalogAtStart(  )
+bool ODatabaseMetaDataBase::isCatalogAtStart(  )
 {
     return callImplMethod(m_isCatalogAtStart,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_isCatalogAtStart_throw));
 }
 
-OUString SAL_CALL ODatabaseMetaDataBase::getCatalogSeparator(  )
+OUString ODatabaseMetaDataBase::getCatalogSeparator(  )
 {
     return callImplMethod(m_sCatalogSeparator,std::function<OUString(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_getCatalogSeparator_throw));
 }
 
-bool SAL_CALL ODatabaseMetaDataBase::supportsCatalogsInTableDefinitions(  )
+bool ODatabaseMetaDataBase::supportsCatalogsInTableDefinitions(  )
 {
     return callImplMethod(m_supportsCatalogsInTableDefinitions,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsCatalogsInTableDefinitions_throw));
 }
 
-bool SAL_CALL ODatabaseMetaDataBase::supportsSchemasInTableDefinitions(  )
+bool ODatabaseMetaDataBase::supportsSchemasInTableDefinitions(  )
 {
     return callImplMethod(m_supportsSchemasInTableDefinitions,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsSchemasInTableDefinitions_throw));
 }
 
-bool SAL_CALL ODatabaseMetaDataBase::supportsCatalogsInDataManipulation(  )
+bool ODatabaseMetaDataBase::supportsCatalogsInDataManipulation(  )
 {
     return callImplMethod(m_supportsCatalogsInDataManipulation,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsCatalogsInDataManipulation_throw));
 }
 
-bool SAL_CALL ODatabaseMetaDataBase::supportsSchemasInDataManipulation(  )
+bool ODatabaseMetaDataBase::supportsSchemasInDataManipulation(  )
 {
     return callImplMethod(m_supportsSchemasInDataManipulation,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsSchemasInDataManipulation_throw));
 }
 
-bool SAL_CALL ODatabaseMetaDataBase::supportsMixedCaseQuotedIdentifiers(  )
+bool ODatabaseMetaDataBase::supportsMixedCaseQuotedIdentifiers(  )
 {
     return callImplMethod(m_supportsMixedCaseQuotedIdentifiers,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsMixedCaseQuotedIdentifiers_throw));
 }
 
-bool SAL_CALL ODatabaseMetaDataBase::supportsAlterTableWithAddColumn(  )
+bool ODatabaseMetaDataBase::supportsAlterTableWithAddColumn(  )
 {
     return callImplMethod(m_supportsAlterTableWithAddColumn,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsAlterTableWithAddColumn_throw));
 }
 
-bool SAL_CALL ODatabaseMetaDataBase::supportsAlterTableWithDropColumn(  )
+bool ODatabaseMetaDataBase::supportsAlterTableWithDropColumn(  )
 {
     return callImplMethod(m_supportsAlterTableWithDropColumn,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_supportsAlterTableWithDropColumn_throw));
 }
 
-sal_Int32 SAL_CALL ODatabaseMetaDataBase::getMaxStatements(  )
+sal_Int32 ODatabaseMetaDataBase::getMaxStatements(  )
 {
     return callImplMethod(m_MaxStatements,std::function<sal_Int32(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_getMaxStatements_throw));
 }
 
-sal_Int32 SAL_CALL ODatabaseMetaDataBase::getMaxTablesInSelect(  )
+sal_Int32 ODatabaseMetaDataBase::getMaxTablesInSelect(  )
 {
     return callImplMethod(m_MaxTablesInSelect,std::function<sal_Int32(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_getMaxTablesInSelect_throw));
 }
 
-bool SAL_CALL ODatabaseMetaDataBase::storesMixedCaseQuotedIdentifiers(  )
+bool ODatabaseMetaDataBase::storesMixedCaseQuotedIdentifiers(  )
 {
     return callImplMethod(m_storesMixedCaseQuotedIdentifiers,std::function<bool(ODatabaseMetaDataBase *)>(&ODatabaseMetaDataBase::impl_storesMixedCaseQuotedIdentifiers_throw));
 }

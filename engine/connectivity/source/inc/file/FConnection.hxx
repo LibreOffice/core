@@ -69,37 +69,37 @@ namespace connectivity::file
         virtual void construct(const OUString& _rUrl, const cpo::uno::Sequence< css::beans::PropertyValue >& _rInfo );
 
         // OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         // XServiceInfo
         DECLARE_SERVICE_INFO();
 
         // XConnection
-        virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
-        virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
-        virtual void SAL_CALL setAutoCommit( bool autoCommit ) override;
-        virtual bool SAL_CALL getAutoCommit(  ) override;
-        virtual void SAL_CALL commit(  ) override;
-        virtual void SAL_CALL rollback(  ) override;
-        virtual bool SAL_CALL isClosed(  ) override final;
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
-        virtual void SAL_CALL setReadOnly( bool readOnly ) override;
-        virtual bool SAL_CALL isReadOnly(  ) override;
-        virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
-        virtual OUString SAL_CALL getCatalog(  ) override;
-        virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
-        virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
-        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
-        virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual css::uno::Reference< css::sdbc::XStatement > createStatement(  ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareStatement( const OUString& sql ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareCall( const OUString& sql ) override;
+        virtual OUString nativeSQL( const OUString& sql ) override;
+        virtual void setAutoCommit( bool autoCommit ) override;
+        virtual bool getAutoCommit(  ) override;
+        virtual void commit(  ) override;
+        virtual void rollback(  ) override;
+        virtual bool isClosed(  ) override final;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > getMetaData(  ) override;
+        virtual void setReadOnly( bool readOnly ) override;
+        virtual bool isReadOnly(  ) override;
+        virtual void setCatalog( const OUString& catalog ) override;
+        virtual OUString getCatalog(  ) override;
+        virtual void setTransactionIsolation( sal_Int32 level ) override;
+        virtual sal_Int32 getTransactionIsolation(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > getTypeMap(  ) override;
+        virtual void setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
         // XCloseable
-        virtual void SAL_CALL close(  ) override final;
+        virtual void close(  ) override final;
         // XWarningsSupplier
-        virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
-        virtual void SAL_CALL clearWarnings(  ) override;
+        virtual cpo::uno::Any getWarnings(  ) override;
+        virtual void clearWarnings(  ) override;
         //XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        virtual sal_Int64 getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
         static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
         // no interface methods

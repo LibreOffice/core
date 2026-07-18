@@ -53,7 +53,7 @@ OCatalog::~OCatalog()
 {
 }
 
-void SAL_CALL OCatalog::disposing()
+void OCatalog::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -70,7 +70,7 @@ void SAL_CALL OCatalog::disposing()
 }
 
 // XTablesSupplier
-Reference< XNameAccess > SAL_CALL OCatalog::getTables(  )
+Reference< XNameAccess > OCatalog::getTables(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
@@ -94,7 +94,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getTables(  )
 }
 
 // XViewsSupplier
-Reference< XNameAccess > SAL_CALL OCatalog::getViews(  )
+Reference< XNameAccess > OCatalog::getViews(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
@@ -118,7 +118,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getViews(  )
 }
 
 // XUsersSupplier
-Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  )
+Reference< XNameAccess > OCatalog::getUsers(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
@@ -142,7 +142,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  )
 }
 
 // XGroupsSupplier
-Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  )
+Reference< XNameAccess > OCatalog::getGroups(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);

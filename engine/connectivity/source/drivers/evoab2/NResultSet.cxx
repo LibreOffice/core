@@ -56,17 +56,17 @@ using namespace com::sun::star::io;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
 
-OUString SAL_CALL OEvoabResultSet::getImplementationName(  )
+OUString OEvoabResultSet::getImplementationName(  )
 {
     return u"com.sun.star.sdbcx.evoab.ResultSet"_ustr;
 }
 
- Sequence< OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  )
+ Sequence< OUString > OEvoabResultSet::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.sdbc.ResultSet"_ustr };
 }
 
-bool SAL_CALL OEvoabResultSet::supportsService( const OUString& _rServiceName )
+bool OEvoabResultSet::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -598,7 +598,7 @@ void OEvoabResultSet::disposing()
     m_xMetaData.clear();
 }
 
-Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType )
+Any OEvoabResultSet::queryInterface( const Type & rType )
 {
     Any aRet = ::comphelper::OPropertyContainer::queryInterface(rType);
     if(!aRet.hasValue())
@@ -606,7 +606,7 @@ Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType )
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OEvoabResultSet::getTypes(  )
+Sequence< Type > OEvoabResultSet::getTypes(  )
 {
     return ::comphelper::concatSequences(
         OResultSet_BASE::getTypes(),
@@ -624,7 +624,7 @@ Sequence< Type > SAL_CALL OEvoabResultSet::getTypes(  )
  * If the equivalent NResultSetMetaData.cxx marks the columntype of
  * nColumnNum as DataType::VARCHAR this accessor is used.
  */
-OUString SAL_CALL OEvoabResultSet::getString( sal_Int32 nColumnNum )
+OUString OEvoabResultSet::getString( sal_Int32 nColumnNum )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -639,7 +639,7 @@ OUString SAL_CALL OEvoabResultSet::getString( sal_Int32 nColumnNum )
     return aResult;
 }
 
-bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum )
+bool OEvoabResultSet::getBoolean( sal_Int32 nColumnNum )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -655,103 +655,103 @@ bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum )
     return bResult;
 }
 
-sal_Int64 SAL_CALL OEvoabResultSet::getLong( sal_Int32 /*nColumnNum*/ )
+sal_Int64 OEvoabResultSet::getLong( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getLong"_ustr, *this );
     return sal_Int64();
 }
 
-Reference< XArray > SAL_CALL OEvoabResultSet::getArray( sal_Int32 /*nColumnNum*/ )
+Reference< XArray > OEvoabResultSet::getArray( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getArray"_ustr, *this );
     return nullptr;
 }
 
-Reference< XClob > SAL_CALL OEvoabResultSet::getClob( sal_Int32 /*nColumnNum*/ )
+Reference< XClob > OEvoabResultSet::getClob( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getClob"_ustr, *this );
     return nullptr;
 }
 
-Reference< XBlob > SAL_CALL OEvoabResultSet::getBlob( sal_Int32 /*nColumnNum*/ )
+Reference< XBlob > OEvoabResultSet::getBlob( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getBlob"_ustr, *this );
     return nullptr;
 }
 
-Reference< XRef > SAL_CALL OEvoabResultSet::getRef( sal_Int32 /*nColumnNum*/ )
+Reference< XRef > OEvoabResultSet::getRef( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getRef"_ustr, *this );
     return nullptr;
 }
 
-Any SAL_CALL OEvoabResultSet::getObject( sal_Int32 /*nColumnNum*/, const Reference< css::container::XNameAccess >& /*typeMap*/ )
+Any OEvoabResultSet::getObject( sal_Int32 /*nColumnNum*/, const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getObject"_ustr, *this );
     return Any();
 }
 
-sal_Int16 SAL_CALL OEvoabResultSet::getShort( sal_Int32 /*nColumnNum*/ )
+sal_Int16 OEvoabResultSet::getShort( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getShort"_ustr, *this );
     return 0;
 }
 
-css::util::Time SAL_CALL OEvoabResultSet::getTime( sal_Int32 /*nColumnNum*/ )
+css::util::Time OEvoabResultSet::getTime( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getTime"_ustr, *this );
     return css::util::Time();
 }
 
-util::DateTime SAL_CALL OEvoabResultSet::getTimestamp( sal_Int32 /*nColumnNum*/ )
+util::DateTime OEvoabResultSet::getTimestamp( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getTimestamp"_ustr, *this );
     return css::util::DateTime();
 }
 
-Reference< XInputStream > SAL_CALL OEvoabResultSet::getBinaryStream( sal_Int32 /*nColumnNum*/ )
+Reference< XInputStream > OEvoabResultSet::getBinaryStream( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getBinaryStream"_ustr, *this );
     return nullptr;
 }
 
-Reference< XInputStream > SAL_CALL OEvoabResultSet::getCharacterStream( sal_Int32 /*nColumnNum*/ )
+Reference< XInputStream > OEvoabResultSet::getCharacterStream( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getCharacterStream"_ustr, *this );
     return nullptr;
 }
 
-sal_Int8 SAL_CALL OEvoabResultSet::getByte( sal_Int32 /*nColumnNum*/ )
+sal_Int8 OEvoabResultSet::getByte( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getByte"_ustr, *this );
     return 0;
 }
 
-Sequence< sal_Int8 > SAL_CALL OEvoabResultSet::getBytes( sal_Int32 /*nColumnNum*/ )
+Sequence< sal_Int8 > OEvoabResultSet::getBytes( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getBytes"_ustr, *this );
     return Sequence< sal_Int8 >();
 }
 
-css::util::Date SAL_CALL OEvoabResultSet::getDate( sal_Int32 /*nColumnNum*/ )
+css::util::Date OEvoabResultSet::getDate( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getDate"_ustr, *this );
     return css::util::Date();
 }
 
-double SAL_CALL OEvoabResultSet::getDouble( sal_Int32 /*nColumnNum*/ )
+double OEvoabResultSet::getDouble( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getDouble"_ustr, *this );
     return 0;
 }
 
-float SAL_CALL OEvoabResultSet::getFloat( sal_Int32 /*nColumnNum*/ )
+float OEvoabResultSet::getFloat( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getFloat"_ustr, *this );
     return 0;
 }
 
-sal_Int32 SAL_CALL OEvoabResultSet::getInt( sal_Int32 /*nColumnNum*/ )
+sal_Int32 OEvoabResultSet::getInt( sal_Int32 /*nColumnNum*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XRow::getInt"_ustr, *this );
     return 0;
@@ -760,7 +760,7 @@ sal_Int32 SAL_CALL OEvoabResultSet::getInt( sal_Int32 /*nColumnNum*/ )
 
 
 // XResultSetMetaDataSupplier Interface
-Reference< XResultSetMetaData > SAL_CALL OEvoabResultSet::getMetaData(  )
+Reference< XResultSetMetaData > OEvoabResultSet::getMetaData(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -773,7 +773,7 @@ Reference< XResultSetMetaData > SAL_CALL OEvoabResultSet::getMetaData(  )
 
 
 // XResultSet Interface
-bool SAL_CALL OEvoabResultSet::next(  )
+bool OEvoabResultSet::next(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -785,7 +785,7 @@ bool SAL_CALL OEvoabResultSet::next(  )
         return false;
 }
 
-bool SAL_CALL OEvoabResultSet::wasNull(  )
+bool OEvoabResultSet::wasNull(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -793,7 +793,7 @@ bool SAL_CALL OEvoabResultSet::wasNull(  )
     return m_bWasNull;
 }
 
-bool SAL_CALL OEvoabResultSet::isBeforeFirst(  )
+bool OEvoabResultSet::isBeforeFirst(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -801,7 +801,7 @@ bool SAL_CALL OEvoabResultSet::isBeforeFirst(  )
     return m_nIndex < 0;
 }
 
-sal_Int32 SAL_CALL OEvoabResultSet::getRow(  )
+sal_Int32 OEvoabResultSet::getRow(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -809,7 +809,7 @@ sal_Int32 SAL_CALL OEvoabResultSet::getRow(  )
     return m_nIndex;
 }
 
-bool SAL_CALL OEvoabResultSet::isAfterLast(  )
+bool OEvoabResultSet::isAfterLast(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -817,7 +817,7 @@ bool SAL_CALL OEvoabResultSet::isAfterLast(  )
     return m_nIndex >= m_nLength;
 }
 
-bool SAL_CALL OEvoabResultSet::isFirst(  )
+bool OEvoabResultSet::isFirst(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -825,7 +825,7 @@ bool SAL_CALL OEvoabResultSet::isFirst(  )
     return m_nIndex == 0;
 }
 
-bool SAL_CALL OEvoabResultSet::isLast(  )
+bool OEvoabResultSet::isLast(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -833,7 +833,7 @@ bool SAL_CALL OEvoabResultSet::isLast(  )
     return m_nIndex == m_nLength - 1;
 }
 
-void SAL_CALL OEvoabResultSet::beforeFirst(  )
+void OEvoabResultSet::beforeFirst(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -841,7 +841,7 @@ void SAL_CALL OEvoabResultSet::beforeFirst(  )
     m_nIndex = -1;
 }
 
-void SAL_CALL OEvoabResultSet::afterLast(  )
+void OEvoabResultSet::afterLast(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -850,7 +850,7 @@ void SAL_CALL OEvoabResultSet::afterLast(  )
 }
 
 
-bool SAL_CALL OEvoabResultSet::first(  )
+bool OEvoabResultSet::first(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -860,7 +860,7 @@ bool SAL_CALL OEvoabResultSet::first(  )
 }
 
 
-bool SAL_CALL OEvoabResultSet::last(  )
+bool OEvoabResultSet::last(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -869,7 +869,7 @@ bool SAL_CALL OEvoabResultSet::last(  )
     return true;
 }
 
-bool SAL_CALL OEvoabResultSet::absolute( sal_Int32 row )
+bool OEvoabResultSet::absolute( sal_Int32 row )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -881,7 +881,7 @@ bool SAL_CALL OEvoabResultSet::absolute( sal_Int32 row )
         return false;
 }
 
-bool SAL_CALL OEvoabResultSet::relative( sal_Int32 row )
+bool OEvoabResultSet::relative( sal_Int32 row )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -894,7 +894,7 @@ bool SAL_CALL OEvoabResultSet::relative( sal_Int32 row )
         return false;
 }
 
-bool SAL_CALL OEvoabResultSet::previous(  )
+bool OEvoabResultSet::previous(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -907,7 +907,7 @@ bool SAL_CALL OEvoabResultSet::previous(  )
         return false;
 }
 
-Reference< XInterface > SAL_CALL OEvoabResultSet::getStatement(  )
+Reference< XInterface > OEvoabResultSet::getStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -915,7 +915,7 @@ Reference< XInterface > SAL_CALL OEvoabResultSet::getStatement(  )
 }
 
 
-bool SAL_CALL OEvoabResultSet::rowDeleted(  )
+bool OEvoabResultSet::rowDeleted(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -923,7 +923,7 @@ bool SAL_CALL OEvoabResultSet::rowDeleted(  )
     return false;
 }
 
-bool SAL_CALL OEvoabResultSet::rowInserted(  )
+bool OEvoabResultSet::rowInserted(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -931,7 +931,7 @@ bool SAL_CALL OEvoabResultSet::rowInserted(  )
     return false;
 }
 
-bool SAL_CALL OEvoabResultSet::rowUpdated(  )
+bool OEvoabResultSet::rowUpdated(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -939,7 +939,7 @@ bool SAL_CALL OEvoabResultSet::rowUpdated(  )
     return false;
 }
 
-void SAL_CALL OEvoabResultSet::refreshRow(  )
+void OEvoabResultSet::refreshRow(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -948,14 +948,14 @@ void SAL_CALL OEvoabResultSet::refreshRow(  )
 
 // XCancellable
 
-void SAL_CALL OEvoabResultSet::cancel(  )
+void OEvoabResultSet::cancel(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 }
 
 //XCloseable
-void SAL_CALL OEvoabResultSet::close(  )
+void OEvoabResultSet::close(  )
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -966,18 +966,18 @@ void SAL_CALL OEvoabResultSet::close(  )
 
 // XWarningsSupplier
 
-void SAL_CALL OEvoabResultSet::clearWarnings(  )
+void OEvoabResultSet::clearWarnings(  )
 {
     m_aWarnings.clearWarnings();
 }
 
-Any SAL_CALL OEvoabResultSet::getWarnings(  )
+Any OEvoabResultSet::getWarnings(  )
 {
     return m_aWarnings.getWarnings();
 }
 
 //XColumnLocate Interface
-sal_Int32 SAL_CALL OEvoabResultSet::findColumn( const OUString& columnName )
+sal_Int32 OEvoabResultSet::findColumn( const OUString& columnName )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1013,17 +1013,17 @@ sal_Int32 SAL_CALL OEvoabResultSet::findColumn( const OUString& columnName )
     return *getArrayHelper();
 }
 
-void SAL_CALL OEvoabResultSet::acquire() noexcept
+void OEvoabResultSet::acquire() noexcept
 {
     OResultSet_BASE::acquire();
 }
 
-void SAL_CALL OEvoabResultSet::release() noexcept
+void OEvoabResultSet::release() noexcept
 {
     OResultSet_BASE::release();
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+css::uno::Reference< css::beans::XPropertySetInfo >
 OEvoabResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());

@@ -68,10 +68,10 @@ public:
     // noncopyable
     OTableContainerListener(const OTableContainerListener&) = delete;
     const OTableContainerListener& operator=(const OTableContainerListener&) = delete;
-    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& /*Event*/ ) override
+    virtual void elementInserted( const css::container::ContainerEvent& /*Event*/ ) override
     {
     }
-    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override
+    virtual void elementRemoved( const css::container::ContainerEvent& Event ) override
     {
         // tdf#137745, perhaps connectivity::OTableHelper::disposing() has been called
         // which called OTableContainerListener::clear(), so m_pComponent may be null
@@ -83,7 +83,7 @@ public:
         if ( m_aRefNames.find(sName) != m_aRefNames.end() )
             m_pComponent->refreshKeys();
     }
-    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override
+    virtual void elementReplaced( const css::container::ContainerEvent& Event ) override
     {
         OUString sOldComposedName,sNewComposedName;
         Event.ReplacedElement   >>= sOldComposedName;
@@ -92,7 +92,7 @@ public:
             m_pComponent->refreshKeys();
     }
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) override
+    virtual void disposing( const EventObject& /*_rSource*/ ) override
     {
     }
     void clear() { m_pComponent = nullptr; }
@@ -177,7 +177,7 @@ OTableHelper::~OTableHelper()
 {
 }
 
-void SAL_CALL OTableHelper::disposing()
+void OTableHelper::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_pImpl->m_xTablePropertyListener.is() )
@@ -481,7 +481,7 @@ OUString OTableHelper::getRenameStart() const
 }
 
 // XRename
-void SAL_CALL OTableHelper::rename( const OUString& newName )
+void OTableHelper::rename( const OUString& newName )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
@@ -531,7 +531,7 @@ Reference< XDatabaseMetaData> OTableHelper::getMetaData() const
     return m_pImpl->m_xMetaData;
 }
 
-void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor )
+void OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
@@ -549,7 +549,7 @@ void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference
 }
 
 
-OUString SAL_CALL OTableHelper::getName()
+OUString OTableHelper::getName()
 {
     OUString sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,false,::dbtools::EComposeRule::InDataManipulation);
     return sComposedName;

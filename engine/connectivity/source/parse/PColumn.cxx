@@ -184,7 +184,7 @@ void OParseColumn::construct()
     return doCreateArrayHelper();
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL OParseColumn::getInfoHelper()
+::cppu::IPropertyArrayHelper & OParseColumn::getInfoHelper()
 {
     OSL_ENSURE( !isNew(), "OParseColumn::getInfoHelper: a *new* ParseColumn?" );
     return *OParseColumn_PROP::getArrayHelper();
@@ -256,13 +256,13 @@ void OOrderColumn::construct()
     return doCreateArrayHelper();
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL OOrderColumn::getInfoHelper()
+::cppu::IPropertyArrayHelper & OOrderColumn::getInfoHelper()
 {
     OSL_ENSURE( !isNew(), "OOrderColumn::getInfoHelper: a *new* OrderColumn?" );
     return *OOrderColumn_PROP::getArrayHelper();
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > OOrderColumn::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.sdb.OrderColumn"_ustr };
 }

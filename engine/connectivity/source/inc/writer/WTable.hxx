@@ -48,7 +48,7 @@ public:
 
     bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) override;
 
-    void SAL_CALL disposing() override;
+    void disposing() override;
 
     void construct() override;
 };

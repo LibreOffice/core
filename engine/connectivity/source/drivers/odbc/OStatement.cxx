@@ -90,7 +90,7 @@ void OStatement_Base::disposeResultSet()
     }
 }
 
-void SAL_CALL OStatement_Base::disposing()
+void OStatement_Base::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -114,7 +114,7 @@ void OStatement_BASE2::disposing()
     OStatement_Base::disposing();
 }
 
-Any SAL_CALL OStatement_Base::queryInterface( const Type & rType )
+Any OStatement_Base::queryInterface( const Type & rType )
 {
     if ( m_pConnection.is() && !m_pConnection->isAutoRetrievingEnabled() && rType == cppu::UnoType<XGeneratedResultSet>::get())
         return Any();
@@ -122,7 +122,7 @@ Any SAL_CALL OStatement_Base::queryInterface( const Type & rType )
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
 
-Sequence< Type > SAL_CALL OStatement_Base::getTypes(  )
+Sequence< Type > OStatement_Base::getTypes(  )
 {
     ::cppu::OTypeCollection aTypes( cppu::UnoType<XMultiPropertySet>::get(),
                                     cppu::UnoType<XFastPropertySet>::get(),
@@ -139,7 +139,7 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  )
     return ::comphelper::concatSequences(aTypes.getTypes(),aOldTypes);
 }
 
-Reference< XResultSet > SAL_CALL OStatement_Base::getGeneratedValues(  )
+Reference< XResultSet > OStatement_Base::getGeneratedValues(  )
 {
     OSL_ENSURE( m_pConnection.is() && m_pConnection->isAutoRetrievingEnabled(),"Illegal call here. isAutoRetrievingEnabled is false!");
     Reference< XResultSet > xRes;
@@ -156,7 +156,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::getGeneratedValues(  )
     return xRes;
 }
 
-void SAL_CALL OStatement_Base::cancel(  )
+void OStatement_Base::cancel(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -166,7 +166,7 @@ void SAL_CALL OStatement_Base::cancel(  )
 }
 
 
-void SAL_CALL OStatement_Base::close(  )
+void OStatement_Base::close(  )
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -177,7 +177,7 @@ void SAL_CALL OStatement_Base::close(  )
 }
 
 
-void SAL_CALL OStatement::clearBatch(  )
+void OStatement::clearBatch(  )
 {
 
 }
@@ -308,7 +308,7 @@ sal_Int32 OStatement_Base::getColumnCount()
 }
 
 
-bool SAL_CALL OStatement_Base::execute( const OUString& sql )
+bool OStatement_Base::execute( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -421,7 +421,7 @@ template < typename T, SQLINTEGER BufferLength > SQLRETURN OStatement_Base::setS
 }
 
 
-Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const OUString& sql )
+Reference< XResultSet > OStatement_Base::executeQuery( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -446,7 +446,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const OUString& 
 }
 
 
-Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  )
+Reference< XConnection > OStatement_Base::getConnection(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -455,14 +455,14 @@ Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  )
 }
 
 
-Any SAL_CALL OStatement::queryInterface( const Type & rType )
+Any OStatement::queryInterface( const Type & rType )
 {
     Any aRet = ::cppu::queryInterface(rType,static_cast< XBatchExecution*> (this));
     return aRet.hasValue() ? aRet : OStatement_Base::queryInterface(rType);
 }
 
 
-void SAL_CALL OStatement::addBatch( const OUString& sql )
+void OStatement::addBatch( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -471,7 +471,7 @@ void SAL_CALL OStatement::addBatch( const OUString& sql )
     m_aBatchVector.push_back(sql);
 }
 
-Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  )
+Sequence< sal_Int32 > OStatement::executeBatch(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -508,7 +508,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  )
 }
 
 
-sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const OUString& sql )
+sal_Int32 OStatement_Base::executeUpdate( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -536,7 +536,7 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const OUString& sql )
 }
 
 
-Reference< XResultSet > SAL_CALL OStatement_Base::getResultSet(  )
+Reference< XResultSet > OStatement_Base::getResultSet(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -548,7 +548,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::getResultSet(  )
 }
 
 
-sal_Int32 SAL_CALL OStatement_Base::getUpdateCount(  )
+sal_Int32 OStatement_Base::getUpdateCount(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -566,7 +566,7 @@ sal_Int32 SAL_CALL OStatement_Base::getUpdateCount(  )
 }
 
 
-bool SAL_CALL OStatement_Base::getMoreResults(  )
+bool OStatement_Base::getMoreResults(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -617,7 +617,7 @@ bool SAL_CALL OStatement_Base::getMoreResults(  )
 }
 
 
-Any SAL_CALL OStatement_Base::getWarnings(  )
+Any OStatement_Base::getWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -627,7 +627,7 @@ Any SAL_CALL OStatement_Base::getWarnings(  )
 }
 
 
-void SAL_CALL OStatement_Base::clearWarnings(  )
+void OStatement_Base::clearWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -1106,22 +1106,22 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 
 IMPLEMENT_SERVICE_INFO(OStatement,u"com.sun.star.sdbcx.OStatement"_ustr,u"com.sun.star.sdbc.Statement"_ustr);
 
-void SAL_CALL OStatement_Base::acquire() noexcept
+void OStatement_Base::acquire() noexcept
 {
     OStatement_BASE::acquire();
 }
 
-void SAL_CALL OStatement_Base::release() noexcept
+void OStatement_Base::release() noexcept
 {
     OStatement_BASE::release();
 }
 
-void SAL_CALL OStatement::acquire() noexcept
+void OStatement::acquire() noexcept
 {
     OStatement_BASE2::acquire();
 }
 
-void SAL_CALL OStatement::release() noexcept
+void OStatement::release() noexcept
 {
     OStatement_BASE2::release();
 }
@@ -1131,7 +1131,7 @@ rtl::Reference<OResultSet> OStatement_Base::createResultSet()
     return new OResultSet(m_aStatementHandle,this);
 }
 
-Reference< css::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  )
+Reference< css::beans::XPropertySetInfo > OStatement_Base::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

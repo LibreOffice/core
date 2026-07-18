@@ -107,7 +107,7 @@ namespace connectivity
 
         /** this function is called upon disposing the component
         */
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         /** The default returns "RENAME TABLE " or "RENAME VIEW " depending on the type.
         *
@@ -142,12 +142,12 @@ namespace connectivity
         css::uno::Reference< css::sdbc::XConnection> const & getConnection() const;
 
         // XRename
-        virtual void SAL_CALL rename( const OUString& newName ) override;
+        virtual void rename( const OUString& newName ) override;
 
         // XAlterTable
-        virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         // XNamed
-        virtual OUString SAL_CALL getName() override;
+        virtual OUString getName() override;
 
         // To retrieve the table name only without the schema
         const OUString & getTableName();

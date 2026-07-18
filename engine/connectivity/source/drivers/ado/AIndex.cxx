@@ -71,7 +71,7 @@ void OAdoIndex::refreshColumns()
 }
 
 
-void SAL_CALL OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)
+void OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)
 {
     if(m_aIndex.IsValid())
     {

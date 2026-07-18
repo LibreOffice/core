@@ -146,7 +146,7 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
     return pResult;
 }
 
-Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
+Reference< XResultSet > ODbaseDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
         const OUString& columnNamePattern )
 {
@@ -238,7 +238,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
     return pResult;
 }
 
-Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
+Reference< XResultSet > ODbaseDatabaseMetaData::getIndexInfo(
     const Any& /*catalog*/, const OUString& /*schema*/, const OUString& table,
         bool unique, bool /*approximate*/ )
 {
@@ -302,48 +302,48 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     return pResult;
 }
 
-OUString SAL_CALL ODbaseDatabaseMetaData::getURL(  )
+OUString ODbaseDatabaseMetaData::getURL(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return "sdbc:dbase:" + m_pConnection->getURL();
 }
 
-sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxBinaryLiteralLength(  )
+sal_Int32 ODbaseDatabaseMetaData::getMaxBinaryLiteralLength(  )
 {
     return SAL_MAX_INT32;
 }
 
-sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxCharLiteralLength(  )
+sal_Int32 ODbaseDatabaseMetaData::getMaxCharLiteralLength(  )
 {
     return 254;
 }
 
-sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnNameLength(  )
+sal_Int32 ODbaseDatabaseMetaData::getMaxColumnNameLength(  )
 {
     return 10;
 }
 
-sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInIndex(  )
+sal_Int32 ODbaseDatabaseMetaData::getMaxColumnsInIndex(  )
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInTable(  )
+sal_Int32 ODbaseDatabaseMetaData::getMaxColumnsInTable(  )
 {
     return 128;
 }
 
-bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn(  )
+bool ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn(  )
 {
     return true;
 }
 
-bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithDropColumn(  )
+bool ODbaseDatabaseMetaData::supportsAlterTableWithDropColumn(  )
 {
     return false;
 }
 
-bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  )
+bool ODbaseDatabaseMetaData::isReadOnly(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

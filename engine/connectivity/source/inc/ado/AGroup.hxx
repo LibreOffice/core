@@ -36,8 +36,8 @@ namespace connectivity::ado
         static RightsEnum Map2Right(sal_Int32 _eNum);
         static ObjectTypeEnum MapObjectType(sal_Int32 ObjType);
     protected:
-        virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue,sal_Int32 nHandle) const override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const cpo::uno::Any& rValue) override;
+        virtual void getFastPropertyValue(cpo::uno::Any& rValue,sal_Int32 nHandle) const override;
+        virtual void setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const cpo::uno::Any& rValue) override;
 
     public:
         virtual void refreshUsers() override;
@@ -46,10 +46,10 @@ namespace connectivity::ado
         OAdoGroup(OCatalog* _pParent,bool _bCase, const OUString& Name);
 
         // XAuthorizable
-        virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) override;
-        virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
-        virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
-        virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+        virtual sal_Int32 getPrivileges( const OUString& objName, sal_Int32 objType ) override;
+        virtual sal_Int32 getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
+        virtual void grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+        virtual void revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
 
         WpADOGroup getImpl() const { return m_aGroup; }
     };

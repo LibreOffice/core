@@ -106,26 +106,26 @@ namespace connectivity
                                                         const css::uno::Reference< css::uno::XInterface>& _xTreeNode)noexcept;
 
     // XDriverManager
-        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& url ) override;
-        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
-        virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) override;
-        virtual sal_Int32 SAL_CALL getLoginTimeout(  ) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > getConnection( const OUString& url ) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > getConnectionWithInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual void setLoginTimeout( sal_Int32 seconds ) override;
+        virtual sal_Int32 getLoginTimeout(  ) override;
 
     //XDriverAccess
-        virtual css::uno::Reference< css::sdbc::XDriver > SAL_CALL getDriverByURL( const OUString& url ) override;
+        virtual css::uno::Reference< css::sdbc::XDriver > getDriverByURL( const OUString& url ) override;
     // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
+        virtual void propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) override;
-        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) override;
+        virtual void queryTermination( const css::lang::EventObject& Event ) override;
+        virtual void notifyTermination( const css::lang::EventObject& Event ) override;
     };
 }
 

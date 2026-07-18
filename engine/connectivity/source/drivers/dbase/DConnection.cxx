@@ -50,7 +50,7 @@ ODbaseConnection::~ODbaseConnection()
 IMPLEMENT_SERVICE_INFO(ODbaseConnection, u"com.sun.star.sdbc.drivers.dbase.Connection"_ustr, u"com.sun.star.sdbc.Connection"_ustr)
 
 
-Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  )
+Reference< XDatabaseMetaData > ODbaseConnection::getMetaData(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -78,7 +78,7 @@ css::uno::Reference< XTablesSupplier > ODbaseConnection::createCatalog()
     return xTab;
 }
 
-Reference< XStatement > SAL_CALL ODbaseConnection::createStatement(  )
+Reference< XStatement > ODbaseConnection::createStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -89,7 +89,7 @@ Reference< XStatement > SAL_CALL ODbaseConnection::createStatement(  )
     return xReturn;
 }
 
-Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( const OUString& sql )
+Reference< XPreparedStatement > ODbaseConnection::prepareStatement( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -100,7 +100,7 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( con
     return pStmt;
 }
 
-Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareCall( const OUString& /*sql*/ )
+Reference< XPreparedStatement > ODbaseConnection::prepareCall( const OUString& /*sql*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XConnection::prepareCall"_ustr, *this );
 }

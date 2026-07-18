@@ -251,7 +251,7 @@ OEvoabDatabaseMetaData::~OEvoabDatabaseMetaData()
 }
 
 
-Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
+Reference< XResultSet > OEvoabDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*tableNamePattern*/,
     const OUString& columnNamePattern )
 {
@@ -323,47 +323,47 @@ OUString OEvoabDatabaseMetaData::impl_getCatalogSeparator_throw(  )
     return OUString();
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxBinaryLiteralLength(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxBinaryLiteralLength(  )
 {
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxRowSize(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxRowSize(  )
 {
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxCatalogNameLength(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxCatalogNameLength(  )
 {
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxCharLiteralLength(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxCharLiteralLength(  )
 {
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnNameLength(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxColumnNameLength(  )
 {
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInIndex(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxColumnsInIndex(  )
 {
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxCursorNameLength(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxCursorNameLength(  )
 {
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxConnections(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxConnections(  )
 {
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInTable(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxColumnsInTable(  )
 {
     return 0;// 0 means no limit
 }
@@ -373,7 +373,7 @@ sal_Int32 OEvoabDatabaseMetaData::impl_getMaxStatements_throw(  )
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxTableNameLength(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxTableNameLength(  )
 {
     return 0;// 0 means no limit
 }
@@ -385,17 +385,17 @@ sal_Int32 OEvoabDatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 }
 
 
-bool SAL_CALL OEvoabDatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )
+bool OEvoabDatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::storesLowerCaseQuotedIdentifiers(  )
+bool OEvoabDatabaseMetaData::storesLowerCaseQuotedIdentifiers(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::storesLowerCaseIdentifiers(  )
+bool OEvoabDatabaseMetaData::storesLowerCaseIdentifiers(  )
 {
     return false;
 }
@@ -405,17 +405,17 @@ bool OEvoabDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::storesMixedCaseIdentifiers(  )
+bool OEvoabDatabaseMetaData::storesMixedCaseIdentifiers(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::storesUpperCaseQuotedIdentifiers(  )
+bool OEvoabDatabaseMetaData::storesUpperCaseQuotedIdentifiers(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::storesUpperCaseIdentifiers(  )
+bool OEvoabDatabaseMetaData::storesUpperCaseIdentifiers(  )
 {
     return false;
 }
@@ -430,17 +430,17 @@ bool OEvoabDatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
     return false;
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxIndexLength(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxIndexLength(  )
 {
     return 0;// 0 means no limit
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsNonNullableColumns(  )
+bool OEvoabDatabaseMetaData::supportsNonNullableColumns(  )
 {
     return false;
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getCatalogTerm(  )
+OUString OEvoabDatabaseMetaData::getCatalogTerm(  )
 {
     return OUString();
 }
@@ -451,12 +451,12 @@ OUString OEvoabDatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
     return u"\""_ustr;
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getExtraNameCharacters(  )
+OUString OEvoabDatabaseMetaData::getExtraNameCharacters(  )
 {
     return OUString();
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsDifferentTableCorrelationNames(  )
+bool OEvoabDatabaseMetaData::supportsDifferentTableCorrelationNames(  )
 {
     return false;
 }
@@ -466,57 +466,57 @@ bool OEvoabDatabaseMetaData::impl_isCatalogAtStart_throw(  )
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::dataDefinitionIgnoredInTransactions(  )
+bool OEvoabDatabaseMetaData::dataDefinitionIgnoredInTransactions(  )
 {
     return true;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::dataDefinitionCausesTransactionCommit(  )
+bool OEvoabDatabaseMetaData::dataDefinitionCausesTransactionCommit(  )
 {
     return true;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsDataManipulationTransactionsOnly(  )
+bool OEvoabDatabaseMetaData::supportsDataManipulationTransactionsOnly(  )
 {
     return true;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  )
+bool OEvoabDatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  )
 {
     return true;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsPositionedDelete(  )
+bool OEvoabDatabaseMetaData::supportsPositionedDelete(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsPositionedUpdate(  )
+bool OEvoabDatabaseMetaData::supportsPositionedUpdate(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsOpenStatementsAcrossRollback(  )
+bool OEvoabDatabaseMetaData::supportsOpenStatementsAcrossRollback(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsOpenStatementsAcrossCommit(  )
+bool OEvoabDatabaseMetaData::supportsOpenStatementsAcrossCommit(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsOpenCursorsAcrossCommit(  )
+bool OEvoabDatabaseMetaData::supportsOpenCursorsAcrossCommit(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsOpenCursorsAcrossRollback(  )
+bool OEvoabDatabaseMetaData::supportsOpenCursorsAcrossRollback(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 /*level*/ )
+bool OEvoabDatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 /*level*/ )
 {
     return false;
 }
@@ -526,22 +526,22 @@ bool OEvoabDatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsANSI92FullSQL(  )
+bool OEvoabDatabaseMetaData::supportsANSI92FullSQL(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsANSI92EntryLevelSQL(  )
+bool OEvoabDatabaseMetaData::supportsANSI92EntryLevelSQL(  )
 {
     return true; // should be supported at least
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsIntegrityEnhancementFacility(  )
+bool OEvoabDatabaseMetaData::supportsIntegrityEnhancementFacility(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsSchemasInIndexDefinitions(  )
+bool OEvoabDatabaseMetaData::supportsSchemasInIndexDefinitions(  )
 {
     return false;
 }
@@ -556,7 +556,7 @@ bool OEvoabDatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsCatalogsInIndexDefinitions(  )
+bool OEvoabDatabaseMetaData::supportsCatalogsInIndexDefinitions(  )
 {
     return false;
 }
@@ -566,145 +566,145 @@ bool OEvoabDatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsOuterJoins(  )
+bool OEvoabDatabaseMetaData::supportsOuterJoins(  )
 {
     return false;
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxStatementLength(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxStatementLength(  )
 {
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxProcedureNameLength(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxProcedureNameLength(  )
 {
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxSchemaNameLength(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxSchemaNameLength(  )
 {
     return 0;// 0 means no limit
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsTransactions(  )
+bool OEvoabDatabaseMetaData::supportsTransactions(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::allProceduresAreCallable(  )
+bool OEvoabDatabaseMetaData::allProceduresAreCallable(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsStoredProcedures(  )
+bool OEvoabDatabaseMetaData::supportsStoredProcedures(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsSelectForUpdate(  )
+bool OEvoabDatabaseMetaData::supportsSelectForUpdate(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::allTablesAreSelectable(  )
+bool OEvoabDatabaseMetaData::allTablesAreSelectable(  )
 {
     // We allow you to select from any table.
     return true;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::isReadOnly(  )
+bool OEvoabDatabaseMetaData::isReadOnly(  )
 {
     // For now definitely read-only, no support for update/delete
     return true;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::usesLocalFiles(  )
+bool OEvoabDatabaseMetaData::usesLocalFiles(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::usesLocalFilePerTable(  )
+bool OEvoabDatabaseMetaData::usesLocalFilePerTable(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsTypeConversion(  )
+bool OEvoabDatabaseMetaData::supportsTypeConversion(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::nullPlusNonNullIsNull(  )
+bool OEvoabDatabaseMetaData::nullPlusNonNullIsNull(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsColumnAliasing(  )
+bool OEvoabDatabaseMetaData::supportsColumnAliasing(  )
 {
     // todo add Support for this.
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsTableCorrelationNames(  )
+bool OEvoabDatabaseMetaData::supportsTableCorrelationNames(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsConvert( sal_Int32 /*fromType*/, sal_Int32 /*toType*/ )
+bool OEvoabDatabaseMetaData::supportsConvert( sal_Int32 /*fromType*/, sal_Int32 /*toType*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsExpressionsInOrderBy(  )
+bool OEvoabDatabaseMetaData::supportsExpressionsInOrderBy(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsGroupBy(  )
+bool OEvoabDatabaseMetaData::supportsGroupBy(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsGroupByBeyondSelect(  )
+bool OEvoabDatabaseMetaData::supportsGroupByBeyondSelect(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsGroupByUnrelated(  )
+bool OEvoabDatabaseMetaData::supportsGroupByUnrelated(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsMultipleTransactions(  )
+bool OEvoabDatabaseMetaData::supportsMultipleTransactions(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsMultipleResultSets(  )
+bool OEvoabDatabaseMetaData::supportsMultipleResultSets(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsLikeEscapeClause(  )
+bool OEvoabDatabaseMetaData::supportsLikeEscapeClause(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsOrderByUnrelated(  )
+bool OEvoabDatabaseMetaData::supportsOrderByUnrelated(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsUnion(  )
+bool OEvoabDatabaseMetaData::supportsUnion(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsUnionAll(  )
+bool OEvoabDatabaseMetaData::supportsUnionAll(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsMixedCaseIdentifiers(  )
+bool OEvoabDatabaseMetaData::supportsMixedCaseIdentifiers(  )
 {
     return false;
 }
@@ -715,264 +715,264 @@ bool OEvoabDatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
     return true;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::nullsAreSortedAtEnd(  )
+bool OEvoabDatabaseMetaData::nullsAreSortedAtEnd(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::nullsAreSortedAtStart(  )
+bool OEvoabDatabaseMetaData::nullsAreSortedAtStart(  )
 {
     return true;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::nullsAreSortedHigh(  )
+bool OEvoabDatabaseMetaData::nullsAreSortedHigh(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::nullsAreSortedLow(  )
+bool OEvoabDatabaseMetaData::nullsAreSortedLow(  )
 {
     return true;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsSchemasInProcedureCalls(  )
+bool OEvoabDatabaseMetaData::supportsSchemasInProcedureCalls(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  )
+bool OEvoabDatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsCatalogsInProcedureCalls(  )
+bool OEvoabDatabaseMetaData::supportsCatalogsInProcedureCalls(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
+bool OEvoabDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsCorrelatedSubqueries(  )
+bool OEvoabDatabaseMetaData::supportsCorrelatedSubqueries(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsSubqueriesInComparisons(  )
+bool OEvoabDatabaseMetaData::supportsSubqueriesInComparisons(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsSubqueriesInExists(  )
+bool OEvoabDatabaseMetaData::supportsSubqueriesInExists(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsSubqueriesInIns(  )
+bool OEvoabDatabaseMetaData::supportsSubqueriesInIns(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsSubqueriesInQuantifieds(  )
+bool OEvoabDatabaseMetaData::supportsSubqueriesInQuantifieds(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsANSI92IntermediateSQL(  )
+bool OEvoabDatabaseMetaData::supportsANSI92IntermediateSQL(  )
 {
     return false;
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getURL(  )
+OUString OEvoabDatabaseMetaData::getURL(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_pConnection->getURL();
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getUserName(  )
+OUString OEvoabDatabaseMetaData::getUserName(  )
 {
     return OUString();
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getDriverName(  )
+OUString OEvoabDatabaseMetaData::getDriverName(  )
 {
     return OUString();
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getDriverVersion()
+OUString OEvoabDatabaseMetaData::getDriverVersion()
 {
     return u"1"_ustr;
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductVersion(  )
+OUString OEvoabDatabaseMetaData::getDatabaseProductVersion(  )
 {
     return u"0"_ustr;
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductName(  )
+OUString OEvoabDatabaseMetaData::getDatabaseProductName(  )
 {
     return OUString();
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getProcedureTerm(  )
+OUString OEvoabDatabaseMetaData::getProcedureTerm(  )
 {
     return OUString();
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getSchemaTerm(  )
+OUString OEvoabDatabaseMetaData::getSchemaTerm(  )
 {
     return OUString();
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getDriverMajorVersion(  )
+sal_Int32 OEvoabDatabaseMetaData::getDriverMajorVersion(  )
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getDefaultTransactionIsolation(  )
+sal_Int32 OEvoabDatabaseMetaData::getDefaultTransactionIsolation(  )
 {
     return TransactionIsolation::NONE;
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getDriverMinorVersion(  )
+sal_Int32 OEvoabDatabaseMetaData::getDriverMinorVersion(  )
 {
     return 0;
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getSQLKeywords(  )
+OUString OEvoabDatabaseMetaData::getSQLKeywords(  )
 {
     return OUString();
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getSearchStringEscape(  )
+OUString OEvoabDatabaseMetaData::getSearchStringEscape(  )
 {
     return OUString();
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getStringFunctions(  )
+OUString OEvoabDatabaseMetaData::getStringFunctions(  )
 {
     return OUString();
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getTimeDateFunctions(  )
+OUString OEvoabDatabaseMetaData::getTimeDateFunctions(  )
 {
     return OUString();
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getSystemFunctions(  )
+OUString OEvoabDatabaseMetaData::getSystemFunctions(  )
 {
     return OUString();
 }
 
-OUString SAL_CALL OEvoabDatabaseMetaData::getNumericFunctions(  )
+OUString OEvoabDatabaseMetaData::getNumericFunctions(  )
 {
     return OUString();
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsExtendedSQLGrammar(  )
+bool OEvoabDatabaseMetaData::supportsExtendedSQLGrammar(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsCoreSQLGrammar(  )
+bool OEvoabDatabaseMetaData::supportsCoreSQLGrammar(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsMinimumSQLGrammar(  )
+bool OEvoabDatabaseMetaData::supportsMinimumSQLGrammar(  )
 {
     return true;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsFullOuterJoins(  )
+bool OEvoabDatabaseMetaData::supportsFullOuterJoins(  )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsLimitedOuterJoins(  )
+bool OEvoabDatabaseMetaData::supportsLimitedOuterJoins(  )
 {
     return false;
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInGroupBy(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxColumnsInGroupBy(  )
 {
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInOrderBy(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxColumnsInOrderBy(  )
 {
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInSelect(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxColumnsInSelect(  )
 {
     return 0;// 0 means no limit
 }
 
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxUserNameLength(  )
+sal_Int32 OEvoabDatabaseMetaData::getMaxUserNameLength(  )
 {
     return 0;// 0 means no limit
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsResultSetType( sal_Int32 /*setType*/ )
+bool OEvoabDatabaseMetaData::supportsResultSetType( sal_Int32 /*setType*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 /*setType*/, sal_Int32 /*concurrency*/ )
+bool OEvoabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 /*setType*/, sal_Int32 /*concurrency*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::ownUpdatesAreVisible( sal_Int32 /*setType*/ )
+bool OEvoabDatabaseMetaData::ownUpdatesAreVisible( sal_Int32 /*setType*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::ownDeletesAreVisible( sal_Int32 /*setType*/ )
+bool OEvoabDatabaseMetaData::ownDeletesAreVisible( sal_Int32 /*setType*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::ownInsertsAreVisible( sal_Int32 /*setType*/ )
+bool OEvoabDatabaseMetaData::ownInsertsAreVisible( sal_Int32 /*setType*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::othersUpdatesAreVisible( sal_Int32 /*setType*/ )
+bool OEvoabDatabaseMetaData::othersUpdatesAreVisible( sal_Int32 /*setType*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::othersDeletesAreVisible( sal_Int32 /*setType*/ )
+bool OEvoabDatabaseMetaData::othersDeletesAreVisible( sal_Int32 /*setType*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::othersInsertsAreVisible( sal_Int32 /*setType*/ )
+bool OEvoabDatabaseMetaData::othersInsertsAreVisible( sal_Int32 /*setType*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::updatesAreDetected( sal_Int32 /*setType*/ )
+bool OEvoabDatabaseMetaData::updatesAreDetected( sal_Int32 /*setType*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::deletesAreDetected( sal_Int32 /*setType*/ )
+bool OEvoabDatabaseMetaData::deletesAreDetected( sal_Int32 /*setType*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::insertsAreDetected( sal_Int32 /*setType*/ )
+bool OEvoabDatabaseMetaData::insertsAreDetected( sal_Int32 /*setType*/ )
 {
     return false;
 }
 
-bool SAL_CALL OEvoabDatabaseMetaData::supportsBatchUpdates(  )
+bool OEvoabDatabaseMetaData::supportsBatchUpdates(  )
 {
     return false;
 }
@@ -982,7 +982,7 @@ bool SAL_CALL OEvoabDatabaseMetaData::supportsBatchUpdates(  )
 // of course you could implement it on your and you should do this because
 // the general way is more memory expensive
 
-Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  )
+Reference< XResultSet > OEvoabDatabaseMetaData::getTableTypes(  )
 {
     /* Don't need to change as evoab driver supports only table */
 
@@ -1061,7 +1061,7 @@ bool isSourceBackend(ESource *pSource, const char *backendname)
     return extension && equal(e_source_backend_get_backend_name (extension), backendname);
 }
 
-Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
+Reference< XResultSet > OEvoabDatabaseMetaData::getTables(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/,
     const OUString& /*tableNamePattern*/, const Sequence< OUString >& types )
 {
@@ -1144,7 +1144,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
     return pResult;
 }
 
-Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getUDTs( const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ )
+Reference< XResultSet > OEvoabDatabaseMetaData::getUDTs( const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XDatabaseMetaDaza::getUDTs"_ustr, *this );
     return nullptr;

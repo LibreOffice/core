@@ -45,22 +45,22 @@ OFlatResultSet::OFlatResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTr
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                cppu::UnoType<bool>::get());
 }
 
-OUString SAL_CALL OFlatResultSet::getImplementationName(  )
+OUString OFlatResultSet::getImplementationName(  )
 {
     return u"com.sun.star.sdbcx.flat.ResultSet"_ustr;
 }
 
-Sequence< OUString > SAL_CALL OFlatResultSet::getSupportedServiceNames(  )
+Sequence< OUString > OFlatResultSet::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.sdbc.ResultSet"_ustr, u"com.sun.star.sdbcx.ResultSet"_ustr };
 }
 
-bool SAL_CALL OFlatResultSet::supportsService( const OUString& _rServiceName )
+bool OFlatResultSet::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Any SAL_CALL OFlatResultSet::queryInterface( const Type & rType )
+Any OFlatResultSet::queryInterface( const Type & rType )
 {
     if(rType == cppu::UnoType<XDeleteRows>::get()|| rType == cppu::UnoType<XResultSetUpdate>::get()
         || rType == cppu::UnoType<XRowUpdate>::get())
@@ -70,7 +70,7 @@ Any SAL_CALL OFlatResultSet::queryInterface( const Type & rType )
     return aRet.hasValue() ? aRet : OFlatResultSet_BASE::queryInterface(rType);
 }
 
-Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  )
+Sequence<  Type > OFlatResultSet::getTypes(  )
 {
     Sequence< Type > aTypes = OResultSet::getTypes();
     std::vector<Type> aOwnTypes;
@@ -90,7 +90,7 @@ Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  )
 
 
 // XRowLocate
-Any SAL_CALL OFlatResultSet::getBookmark(  )
+Any OFlatResultSet::getBookmark(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -98,7 +98,7 @@ Any SAL_CALL OFlatResultSet::getBookmark(  )
     return Any((*m_aRow)[0]->getValue().getInt32());
 }
 
-bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark )
+bool OFlatResultSet::moveToBookmark( const  Any& bookmark )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -109,7 +109,7 @@ bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark )
     return Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),true);
 }
 
-bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows )
+bool OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -122,17 +122,17 @@ bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_
 }
 
 
-sal_Int32 SAL_CALL OFlatResultSet::compareBookmarks( const Any& lhs, const  Any& rhs )
+sal_Int32 OFlatResultSet::compareBookmarks( const Any& lhs, const  Any& rhs )
 {
     return (lhs == rhs) ? CompareBookmark::EQUAL : CompareBookmark::NOT_EQUAL;
 }
 
-bool SAL_CALL OFlatResultSet::hasOrderedBookmarks(  )
+bool OFlatResultSet::hasOrderedBookmarks(  )
 {
     return true;
 }
 
-sal_Int32 SAL_CALL OFlatResultSet::hashBookmark( const  Any& bookmark )
+sal_Int32 OFlatResultSet::hashBookmark( const  Any& bookmark )
 {
     return comphelper::getINT32(bookmark);
 }
@@ -149,17 +149,17 @@ IPropertyArrayHelper & OFlatResultSet::getInfoHelper()
     return *OFlatResultSet_BASE3::getArrayHelper();
 }
 
-void SAL_CALL OFlatResultSet::acquire() noexcept
+void OFlatResultSet::acquire() noexcept
 {
     OFlatResultSet_BASE2::acquire();
 }
 
-void SAL_CALL OFlatResultSet::release() noexcept
+void OFlatResultSet::release() noexcept
 {
     OFlatResultSet_BASE2::release();
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OFlatResultSet::getPropertySetInfo(  )
+css::uno::Reference< css::beans::XPropertySetInfo > OFlatResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

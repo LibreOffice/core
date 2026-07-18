@@ -142,21 +142,21 @@ namespace connectivity
 }
 
 #define DECLARE_SERVICE_INFO()  \
-    virtual OUString SAL_CALL getImplementationName(  ) override; \
-    virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override; \
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override \
+    virtual OUString getImplementationName(  ) override; \
+    virtual bool supportsService( const OUString& rServiceName ) override; \
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override \
 
 #define IMPLEMENT_SERVICE_INFO(classname, implasciiname, serviceasciiname)  \
-    OUString SAL_CALL classname::getImplementationName(  )   \
+    OUString classname::getImplementationName(  )   \
     {   \
         return implasciiname; \
     }   \
-    cpo::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  )  \
+    cpo::uno::Sequence< OUString > classname::getSupportedServiceNames(  )  \
     {   \
         cpo::uno::Sequence< OUString > aSupported { serviceasciiname }; \
         return aSupported;  \
     }   \
-    bool SAL_CALL classname::supportsService( const OUString& rServiceName ) \
+    bool classname::supportsService( const OUString& rServiceName ) \
     {   \
         return cppu::supportsService(this, rServiceName); \
     }   \

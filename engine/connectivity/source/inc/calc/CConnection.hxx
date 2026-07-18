@@ -75,22 +75,22 @@ namespace connectivity::calc
             }
 
             // XTerminateListener
-            virtual void SAL_CALL queryTermination(const css::lang::EventObject& /*rEvent*/) override
+            virtual void queryTermination(const css::lang::EventObject& /*rEvent*/) override
             {
             }
 
-            virtual void SAL_CALL notifyTermination(const css::lang::EventObject& /*rEvent*/) override
+            virtual void notifyTermination(const css::lang::EventObject& /*rEvent*/) override
             {
                 stop();
             }
 
-            virtual void SAL_CALL disposing() override
+            virtual void disposing() override
             {
                 stop();
                 cppu::WeakComponentImplHelperBase::disposing();
             }
 
-            virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
+            virtual void disposing(const css::lang::EventObject& rEvent) override
             {
                 const bool bShutDown = (rEvent.Source == m_xDesktop);
                 if (bShutDown)
@@ -111,14 +111,14 @@ namespace connectivity::calc
         DECLARE_SERVICE_INFO();
 
         // OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
         // XConnection
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > getMetaData(  ) override;
         virtual css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog() override;
-        virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
+        virtual css::uno::Reference< css::sdbc::XStatement > createStatement(  ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareStatement( const OUString& sql ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareCall( const OUString& sql ) override;
 
         // no interface methods
         css::uno::Reference< css::sheet::XSpreadsheetDocument> const & acquireDoc();

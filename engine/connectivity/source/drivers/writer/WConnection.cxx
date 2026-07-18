@@ -180,7 +180,7 @@ void OWriterConnection::disposing()
 IMPLEMENT_SERVICE_INFO(OWriterConnection, u"com.sun.star.sdbc.drivers.writer.Connection"_ustr,
                        u"com.sun.star.sdbc.Connection"_ustr)
 
-uno::Reference<sdbc::XDatabaseMetaData> SAL_CALL OWriterConnection::getMetaData()
+uno::Reference<sdbc::XDatabaseMetaData> OWriterConnection::getMetaData()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -207,7 +207,7 @@ css::uno::Reference<css::sdbcx::XTablesSupplier> OWriterConnection::createCatalo
     return xTab;
 }
 
-uno::Reference<sdbc::XStatement> SAL_CALL OWriterConnection::createStatement()
+uno::Reference<sdbc::XStatement> OWriterConnection::createStatement()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -217,8 +217,7 @@ uno::Reference<sdbc::XStatement> SAL_CALL OWriterConnection::createStatement()
     return xReturn;
 }
 
-uno::Reference<sdbc::XPreparedStatement>
-    SAL_CALL OWriterConnection::prepareStatement(const OUString& sql)
+uno::Reference<sdbc::XPreparedStatement> OWriterConnection::prepareStatement(const OUString& sql)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -230,8 +229,7 @@ uno::Reference<sdbc::XPreparedStatement>
     return pStmt;
 }
 
-uno::Reference<sdbc::XPreparedStatement>
-    SAL_CALL OWriterConnection::prepareCall(const OUString& /*sql*/)
+uno::Reference<sdbc::XPreparedStatement> OWriterConnection::prepareCall(const OUString& /*sql*/)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);

@@ -194,7 +194,7 @@ void OCalcConnection::disposing()
 IMPLEMENT_SERVICE_INFO(OCalcConnection, u"com.sun.star.sdbc.drivers.calc.Connection"_ustr, u"com.sun.star.sdbc.Connection"_ustr)
 
 
-Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  )
+Reference< XDatabaseMetaData > OCalcConnection::getMetaData(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -224,7 +224,7 @@ css::uno::Reference< XTablesSupplier > OCalcConnection::createCatalog()
 }
 
 
-Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  )
+Reference< XStatement > OCalcConnection::createStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -236,7 +236,7 @@ Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  )
 }
 
 
-Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( const OUString& sql )
+Reference< XPreparedStatement > OCalcConnection::prepareStatement( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -249,7 +249,7 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( cons
 }
 
 
-Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const OUString& /*sql*/ )
+Reference< XPreparedStatement > OCalcConnection::prepareCall( const OUString& /*sql*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);

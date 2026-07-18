@@ -171,42 +171,42 @@ namespace connectivity::sdbcx
         // only the name is identical to ::cppu::OComponentHelper
         virtual void disposing();
         // dispatch the refcounting to the parent
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
+        virtual void acquire() noexcept override;
+        virtual void release() noexcept override;
 
         // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
         // css::container::XElementAccess
-        virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-        virtual bool SAL_CALL hasElements(  ) override;
+        virtual cpo::uno::Type getElementType(  ) override;
+        virtual bool hasElements(  ) override;
         // css::container::XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount(  ) override;
-        virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+        virtual sal_Int32 getCount(  ) override;
+        virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
             // css::container::XNameAccess
-        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual cpo::uno::Any getByName( const OUString& aName ) override;
+        virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
+        virtual bool hasByName( const OUString& aName ) override;
         // XEnumerationAccess
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
+        virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
                     // css::util::XRefreshable
-        virtual void SAL_CALL refresh(  ) override;
-        virtual void SAL_CALL addRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l ) override;
-        virtual void SAL_CALL removeRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l ) override;
+        virtual void refresh(  ) override;
+        virtual void addRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l ) override;
+        virtual void removeRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l ) override;
         // XDataDescriptorFactory
-        virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDataDescriptor(  ) override;
         // XAppend
-        virtual void SAL_CALL appendByDescriptor( const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void appendByDescriptor( const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         // XDrop
-        virtual void SAL_CALL dropByName( const OUString& elementName ) override;
-        virtual void SAL_CALL dropByIndex( sal_Int32 index ) override;
+        virtual void dropByName( const OUString& elementName ) override;
+        virtual void dropByIndex( sal_Int32 index ) override;
         // XColumnLocate
-        virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) override;
+        virtual sal_Int32 findColumn( const OUString& columnName ) override;
         // css::container::XContainer
-        virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
-        virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+        virtual void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+        virtual void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
     private:
         void notifyElementRemoved(const OUString& _sName);
         void disposeElements();

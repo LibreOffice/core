@@ -58,7 +58,7 @@ namespace connectivity::sdbcx
         virtual void refreshColumns() override;
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     public:
         OIndex(bool _bCase);
         OIndex( const OUString& Name,
@@ -73,25 +73,25 @@ namespace connectivity::sdbcx
         DECLARE_SERVICE_INFO();
 
         //XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+        virtual void acquire() noexcept override;
+        virtual void release() noexcept override;
         //XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
         // ODescriptor
         virtual void construct() override;
         // ::cppu::OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         // XColumnsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
 
         // XNamed
-        virtual OUString SAL_CALL getName(  ) override;
-        virtual void SAL_CALL setName( const OUString& aName ) override;
+        virtual OUString getName(  ) override;
+        virtual void setName( const OUString& aName ) override;
         // XDataDescriptorFactory
-        virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDataDescriptor(  ) override;
     };
 
 }

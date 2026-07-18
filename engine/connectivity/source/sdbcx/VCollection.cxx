@@ -244,7 +244,7 @@ OCollection::~OCollection()
 {
 }
 
-Any SAL_CALL OCollection::queryInterface( const Type & rType )
+Any OCollection::queryInterface( const Type & rType )
 {
     if ( m_bUseIndexOnly && rType == cppu::UnoType<XNameAccess>::get() )
     {
@@ -253,7 +253,7 @@ Any SAL_CALL OCollection::queryInterface( const Type & rType )
     return OCollectionBase::queryInterface( rType );
 }
 
-Sequence< Type > SAL_CALL OCollection::getTypes()
+Sequence< Type > OCollection::getTypes()
 {
     if ( m_bUseIndexOnly )
     {
@@ -295,7 +295,7 @@ void OCollection::disposing()
     m_pElements->swap();
 }
 
-Any SAL_CALL OCollection::getByIndex( sal_Int32 Index )
+Any OCollection::getByIndex( sal_Int32 Index )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (Index < 0 || Index >= m_pElements->size() )
@@ -304,7 +304,7 @@ Any SAL_CALL OCollection::getByIndex( sal_Int32 Index )
     return Any(getObject(Index));
 }
 
-Any SAL_CALL OCollection::getByName( const OUString& aName )
+Any OCollection::getByName( const OUString& aName )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
@@ -321,13 +321,13 @@ Any SAL_CALL OCollection::getByName( const OUString& aName )
     return Any(getObject(m_pElements->findColumn(aName)));
 }
 
-Sequence< OUString > SAL_CALL OCollection::getElementNames(  )
+Sequence< OUString > OCollection::getElementNames(  )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return m_pElements->getElementNames();
 }
 
-void SAL_CALL OCollection::refresh(  )
+void OCollection::refresh(  )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
@@ -344,7 +344,7 @@ void OCollection::reFill(const ::std::vector< OUString> &_rVector)
 }
 
 // XDataDescriptorFactory
-Reference< XPropertySet > SAL_CALL OCollection::createDataDescriptor(  )
+Reference< XPropertySet > OCollection::createDataDescriptor(  )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
@@ -360,7 +360,7 @@ OUString OCollection::getNameForObject(const css::uno::Reference< css::beans::XP
 }
 
 // XAppend
-void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& descriptor )
+void OCollection::appendByDescriptor( const Reference< XPropertySet >& descriptor )
 {
     ::osl::ClearableMutexGuard aGuard(m_rMutex);
 
@@ -388,7 +388,7 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
 }
 
 // XDrop
-void SAL_CALL OCollection::dropByName( const OUString& elementName )
+void OCollection::dropByName( const OUString& elementName )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
@@ -398,7 +398,7 @@ void SAL_CALL OCollection::dropByName( const OUString& elementName )
     dropImpl(m_pElements->findColumn(elementName));
 }
 
-void SAL_CALL OCollection::dropByIndex( sal_Int32 index )
+void OCollection::dropByIndex( sal_Int32 index )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if(index <0 || index >= getCount())
@@ -429,7 +429,7 @@ void OCollection::notifyElementRemoved(const OUString& _sName)
         aListenerLoop.next()->elementRemoved(aEvent);
 }
 
-sal_Int32 SAL_CALL OCollection::findColumn( const OUString& columnName )
+sal_Int32 OCollection::findColumn( const OUString& columnName )
 {
     if ( !m_pElements->exists(columnName) )
         ::dbtools::throwInvalidColumnException( columnName, static_cast< XIndexAccess*>(this) );
@@ -437,62 +437,62 @@ sal_Int32 SAL_CALL OCollection::findColumn( const OUString& columnName )
     return m_pElements->findColumn(columnName) + 1; // because columns start at one
 }
 
-Reference< XEnumeration > SAL_CALL OCollection::createEnumeration(  )
+Reference< XEnumeration > OCollection::createEnumeration(  )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return new OEnumerationByIndex( static_cast< XIndexAccess*>(this));
 }
 
-void SAL_CALL OCollection::addContainerListener( const Reference< XContainerListener >& _rxListener )
+void OCollection::addContainerListener( const Reference< XContainerListener >& _rxListener )
 {
     m_aContainerListeners.addInterface(_rxListener);
 }
 
 
-void SAL_CALL OCollection::removeContainerListener( const Reference< XContainerListener >& _rxListener )
+void OCollection::removeContainerListener( const Reference< XContainerListener >& _rxListener )
 {
     m_aContainerListeners.removeInterface(_rxListener);
 }
 
-void SAL_CALL OCollection::acquire() noexcept
+void OCollection::acquire() noexcept
 {
     m_rParent.acquire();
 }
 
-void SAL_CALL OCollection::release() noexcept
+void OCollection::release() noexcept
 {
     m_rParent.release();
 }
 
-Type SAL_CALL OCollection::getElementType(  )
+Type OCollection::getElementType(  )
 {
     return cppu::UnoType<XPropertySet>::get();
 }
 
-bool SAL_CALL OCollection::hasElements(  )
+bool OCollection::hasElements(  )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return !m_pElements->empty();
 }
 
-sal_Int32 SAL_CALL OCollection::getCount(  )
+sal_Int32 OCollection::getCount(  )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return m_pElements->size();
 }
 
-bool SAL_CALL OCollection::hasByName( const OUString& aName )
+bool OCollection::hasByName( const OUString& aName )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return m_pElements->exists(aName);
 }
 
-void SAL_CALL OCollection::addRefreshListener( const Reference< XRefreshListener >& l )
+void OCollection::addRefreshListener( const Reference< XRefreshListener >& l )
 {
     m_aRefreshListeners.addInterface(l);
 }
 
-void SAL_CALL OCollection::removeRefreshListener( const Reference< XRefreshListener >& l )
+void OCollection::removeRefreshListener( const Reference< XRefreshListener >& l )
 {
     m_aRefreshListeners.removeInterface(l);
 }

@@ -113,7 +113,7 @@ namespace dbtools::param
     }
 
 
-    Sequence< Type > SAL_CALL ParameterWrapper::getTypes(   )
+    Sequence< Type > ParameterWrapper::getTypes(   )
     {
         return Sequence< Type > {
                 cppu::UnoType<XWeak>::get(),
@@ -276,7 +276,7 @@ namespace dbtools::param
     }
 
 
-    Type SAL_CALL ParameterWrapperContainer::getElementType()
+    Type ParameterWrapperContainer::getElementType()
     {
         std::unique_lock aGuard( m_aMutex );
         impl_checkDisposed_throw();
@@ -284,7 +284,7 @@ namespace dbtools::param
     }
 
 
-    bool SAL_CALL ParameterWrapperContainer::hasElements()
+    bool ParameterWrapperContainer::hasElements()
     {
         std::unique_lock aGuard( m_aMutex );
         impl_checkDisposed_throw();
@@ -292,7 +292,7 @@ namespace dbtools::param
     }
 
 
-    sal_Int32 SAL_CALL ParameterWrapperContainer::getCount()
+    sal_Int32 ParameterWrapperContainer::getCount()
     {
         std::unique_lock aGuard( m_aMutex );
         impl_checkDisposed_throw();
@@ -300,7 +300,7 @@ namespace dbtools::param
     }
 
 
-    Any SAL_CALL ParameterWrapperContainer::getByIndex( sal_Int32 _nIndex )
+    Any ParameterWrapperContainer::getByIndex( sal_Int32 _nIndex )
     {
         std::unique_lock aGuard( m_aMutex );
         impl_checkDisposed_throw();

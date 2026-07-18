@@ -61,24 +61,24 @@ void OFileDriver::disposing()
 
 // XServiceInfo
 
-OUString SAL_CALL OFileDriver::getImplementationName(  )
+OUString OFileDriver::getImplementationName(  )
 {
     return u"com.sun.star.sdbc.driver.file.Driver"_ustr;
 }
 
-bool SAL_CALL OFileDriver::supportsService( const OUString& _rServiceName )
+bool OFileDriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
 
-Sequence< OUString > SAL_CALL OFileDriver::getSupportedServiceNames(  )
+Sequence< OUString > OFileDriver::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.sdbc.Driver"_ustr, u"com.sun.star.sdbcx.Driver"_ustr };
 }
 
 
-Reference< XConnection > SAL_CALL OFileDriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
+Reference< XConnection > OFileDriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODriver_BASE::rBHelper.bDisposed);
@@ -90,12 +90,12 @@ Reference< XConnection > SAL_CALL OFileDriver::connect( const OUString& url, con
     return pCon;
 }
 
-bool SAL_CALL OFileDriver::acceptsURL( const OUString& url )
+bool OFileDriver::acceptsURL( const OUString& url )
 {
     return url.startsWith("sdbc:file:");
 }
 
-Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ )
+Sequence< DriverPropertyInfo > OFileDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ )
 {
     if ( acceptsURL(url) )
     {
@@ -155,19 +155,19 @@ Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUSt
     } // if ( ! acceptsURL(url) )
 }
 
-sal_Int32 SAL_CALL OFileDriver::getMajorVersion(  )
+sal_Int32 OFileDriver::getMajorVersion(  )
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL OFileDriver::getMinorVersion(  )
+sal_Int32 OFileDriver::getMinorVersion(  )
 {
     return 0;
 }
 
 
 // XDataDefinitionSupplier
-Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection( const Reference< css::sdbc::XConnection >& connection )
+Reference< XTablesSupplier > OFileDriver::getDataDefinitionByConnection( const Reference< css::sdbc::XConnection >& connection )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODriver_BASE::rBHelper.bDisposed);
@@ -184,7 +184,7 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
 }
 
 
-Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info )
+Reference< XTablesSupplier > OFileDriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info )
 {
     if ( ! acceptsURL(url) )
     {

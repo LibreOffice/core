@@ -33,7 +33,7 @@ namespace connectivity::ado
 
     protected:
         // OPropertySetHelper
-        virtual void SAL_CALL getFastPropertyValue(
+        virtual void getFastPropertyValue(
                             cpo::uno::Any& rValue,
                             sal_Int32 nHandle
                                      ) const override;

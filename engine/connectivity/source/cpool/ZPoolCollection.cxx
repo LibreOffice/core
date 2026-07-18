@@ -77,12 +77,12 @@ OPoolCollection::~OPoolCollection()
     clearConnectionPools(false);
 }
 
-Reference< XConnection > SAL_CALL OPoolCollection::getConnection( const OUString& _rURL )
+Reference< XConnection > OPoolCollection::getConnection( const OUString& _rURL )
 {
     return getConnectionWithInfo(_rURL,Sequence< PropertyValue >());
 }
 
-Reference< XConnection > SAL_CALL OPoolCollection::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo )
+Reference< XConnection > OPoolCollection::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo )
 {
     MutexGuard aGuard(m_aMutex);
     Reference< XConnection > xConnection;
@@ -102,35 +102,35 @@ Reference< XConnection > SAL_CALL OPoolCollection::getConnectionWithInfo( const 
     return xConnection;
 }
 
-void SAL_CALL OPoolCollection::setLoginTimeout( sal_Int32 seconds )
+void OPoolCollection::setLoginTimeout( sal_Int32 seconds )
 {
     MutexGuard aGuard(m_aMutex);
     m_xManager->setLoginTimeout(seconds);
 }
 
-sal_Int32 SAL_CALL OPoolCollection::getLoginTimeout(  )
+sal_Int32 OPoolCollection::getLoginTimeout(  )
 {
     MutexGuard aGuard(m_aMutex);
     return m_xManager->getLoginTimeout();
 }
 
-OUString SAL_CALL OPoolCollection::getImplementationName(  )
+OUString OPoolCollection::getImplementationName(  )
 {
     return u"com.sun.star.sdbc.OConnectionPool"_ustr;
 }
 
-bool SAL_CALL OPoolCollection::supportsService( const OUString& _rServiceName )
+bool OPoolCollection::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
 
-Sequence< OUString > SAL_CALL OPoolCollection::getSupportedServiceNames(  )
+Sequence< OUString > OPoolCollection::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.sdbc.ConnectionPool"_ustr };
 }
 
-Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const OUString& _rURL )
+Reference< XDriver > OPoolCollection::getDriverByURL( const OUString& _rURL )
 {
     // returns the original driver when no connection pooling is enabled else it returns the proxy
     MutexGuard aGuard(m_aMutex);
@@ -345,16 +345,16 @@ Any OPoolCollection::getNodeValue(const OUString& _rPath,const Reference<XInterf
     return aReturn;
 }
 
-void SAL_CALL OPoolCollection::queryTermination( const EventObject& /*Event*/ )
+void OPoolCollection::queryTermination( const EventObject& /*Event*/ )
 {
 }
 
-void SAL_CALL OPoolCollection::notifyTermination( const EventObject& Event )
+void OPoolCollection::notifyTermination( const EventObject& Event )
 {
     disposing(Event);
 }
 
-void SAL_CALL OPoolCollection::disposing( const EventObject& Source )
+void OPoolCollection::disposing( const EventObject& Source )
 {
     MutexGuard aGuard(m_aMutex);
     if ( m_xDesktop == Source.Source )
@@ -386,7 +386,7 @@ void SAL_CALL OPoolCollection::disposing( const EventObject& Source )
     m_xContext.clear();
 }
 
-void SAL_CALL OPoolCollection::propertyChange( const css::beans::PropertyChangeEvent& evt )
+void OPoolCollection::propertyChange( const css::beans::PropertyChangeEvent& evt )
 {
     MutexGuard aGuard(m_aMutex);
     if(evt.Source == m_xConfigNode)

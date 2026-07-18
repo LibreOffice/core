@@ -91,17 +91,17 @@ namespace dbtools::param
 
         DECLARE_XINTERFACE()
 
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
         // OPropertySetHelper
-        virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual bool convertFastPropertyValue( cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue) override;
+        virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+        virtual void getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
         // pseudo-XComponent
         void dispose();
@@ -149,15 +149,15 @@ namespace dbtools::param
         ParameterWrapperContainer( const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _rxComposer );
 
         // css::container::XElementAccess
-        virtual cpo::uno::Type SAL_CALL getElementType() override;
-        virtual bool SAL_CALL hasElements() override;
+        virtual cpo::uno::Type getElementType() override;
+        virtual bool hasElements() override;
 
         // css::container::XEnumerationAccess
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+        virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override;
 
         // css::container::XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount() override;
-        virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) override;
+        virtual sal_Int32 getCount() override;
+        virtual cpo::uno::Any getByIndex(sal_Int32 _rIndex) override;
 
     public:
         const Parameters& getParameters() const { return m_aParameters; }

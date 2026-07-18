@@ -47,7 +47,7 @@ OCalcDatabaseMetaData::~OCalcDatabaseMetaData()
 {
 }
 
-OUString SAL_CALL OCalcDatabaseMetaData::getURL(  )
+OUString OCalcDatabaseMetaData::getURL(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -123,7 +123,7 @@ static bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const OUSt
     return bUnnamed;
 }
 
-Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
+Reference< XResultSet > OCalcDatabaseMetaData::getTables(
         const Any& /*catalog*/, const OUString& /*schemaPattern*/,
         const OUString& tableNamePattern, const Sequence< OUString >& types )
 {

@@ -36,7 +36,7 @@ using namespace ::cpo::uno;
 using namespace connectivity;
 
 
-void SAL_CALL OPoolTimer::onShot()
+void OPoolTimer::onShot()
 {
     m_pPool->invalidatePooledConnections();
 }
@@ -172,7 +172,7 @@ Reference< XConnection > OConnectionPool::getConnectionWithInfo( const OUString&
     return xConnection;
 }
 
-void SAL_CALL OConnectionPool::disposing( const css::lang::EventObject& Source )
+void OConnectionPool::disposing( const css::lang::EventObject& Source )
 {
     Reference<XConnection> xConnection(Source.Source,UNO_QUERY);
     if(xConnection.is())
@@ -278,7 +278,7 @@ Reference< XConnection> OConnectionPool::getPooledConnection(TConnectionMap::ite
     return xConnection;
 }
 
-void SAL_CALL OConnectionPool::propertyChange( const PropertyChangeEvent& evt )
+void OConnectionPool::propertyChange( const PropertyChangeEvent& evt )
 {
     if(TIMEOUT_NODENAME == evt.PropertyName)
     {

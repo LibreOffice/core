@@ -130,23 +130,23 @@ void OStatement_BASE2::disposing()
     OStatement_Base::disposing();
 }
 
-void SAL_CALL OStatement_Base::acquire() noexcept
+void OStatement_Base::acquire() noexcept
 {
     OStatement_BASE::acquire();
 }
 
-void SAL_CALL OStatement_BASE2::release() noexcept
+void OStatement_BASE2::release() noexcept
 {
     OStatement_BASE::release();
 }
 
-Any SAL_CALL OStatement_Base::queryInterface( const Type & rType )
+Any OStatement_Base::queryInterface( const Type & rType )
 {
     const Any aRet = OStatement_BASE::queryInterface(rType);
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
 
-Sequence< Type > SAL_CALL OStatement_Base::getTypes(  )
+Sequence< Type > OStatement_Base::getTypes(  )
 {
     ::cppu::OTypeCollection aTypes( cppu::UnoType<css::beans::XMultiPropertySet>::get(),
                                     cppu::UnoType<css::beans::XFastPropertySet>::get(),
@@ -156,11 +156,11 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  )
 }
 
 
-void SAL_CALL OStatement_Base::cancel(  )
+void OStatement_Base::cancel(  )
 {
 }
 
-void SAL_CALL OStatement_Base::close()
+void OStatement_Base::close()
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -189,7 +189,7 @@ void OStatement_Base::closeResultSet()
     m_xResultSet.clear();
 }
 
-Any SAL_CALL OStatement_Base::getWarnings(  )
+Any OStatement_Base::getWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -197,7 +197,7 @@ Any SAL_CALL OStatement_Base::getWarnings(  )
     return Any(m_aLastWarning);
 }
 
-void SAL_CALL OStatement_Base::clearWarnings(  )
+void OStatement_Base::clearWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -225,18 +225,18 @@ rtl::Reference<OResultSet> OStatement::createResultSet()
 
 IMPLEMENT_SERVICE_INFO(OStatement,u"com.sun.star.sdbc.driver.file.Statement"_ustr,u"com.sun.star.sdbc.Statement"_ustr);
 
-void SAL_CALL OStatement::acquire() noexcept
+void OStatement::acquire() noexcept
 {
     OStatement_BASE2::acquire();
 }
 
-void SAL_CALL OStatement::release() noexcept
+void OStatement::release() noexcept
 {
     OStatement_BASE2::release();
 }
 
 
-bool SAL_CALL OStatement::execute( const OUString& sql )
+bool OStatement::execute( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -246,7 +246,7 @@ bool SAL_CALL OStatement::execute( const OUString& sql )
 }
 
 
-Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql )
+Reference< XResultSet > OStatement::executeQuery( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -261,12 +261,12 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql )
     return pResult;
 }
 
-Reference< XConnection > SAL_CALL OStatement::getConnection(  )
+Reference< XConnection > OStatement::getConnection(  )
 {
     return m_pConnection;
 }
 
-sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& sql )
+sal_Int32 OStatement::executeUpdate( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -281,7 +281,7 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& sql )
 }
 
 
-void SAL_CALL OStatement_Base::disposing()
+void OStatement_Base::disposing()
 {
     if(m_aEvaluateRow.is())
     {
@@ -291,12 +291,12 @@ void SAL_CALL OStatement_Base::disposing()
     OStatement_BASE::disposing();
 }
 
-Reference< css::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  )
+Reference< css::beans::XPropertySetInfo > OStatement_Base::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-Any SAL_CALL OStatement::queryInterface( const Type & rType )
+Any OStatement::queryInterface( const Type & rType )
 {
     Any aRet = OStatement_XStatement::queryInterface( rType);
     return aRet.hasValue() ? aRet : OStatement_BASE2::queryInterface( rType);
