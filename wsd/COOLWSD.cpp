@@ -2644,9 +2644,9 @@ void COOLWSD::defineOptions(Poco::Util::OptionSet& optionSet)
                                "https://sdk.collaboraonline.com/docs/installation/"
                                "CODE_Docker_image.html#setting-the-application-configuration-"
                                "dynamically-via-environment-variables to set options. "
-                               "'extra_params' is ignored by this option; 'DONT_GEN_SSL_CERT' "
-                               "and 'cert_domain' control certificate generation independently "
-                               "of this option.")
+                               "'extra_params' is appended to the command line by this option; "
+                               "'DONT_GEN_SSL_CERT' and 'cert_domain' control certificate "
+                               "generation independently of this option.")
                             .required(false)
                             .repeatable(false));
 
@@ -4683,10 +4683,50 @@ void forwardSignal(const int signum)
 // Avoid this in the Util::isFuzzing() case because libfuzzer defines its own main().
 #if !MOBILEAPP && !LIBFUZZER && !defined(STANDALONE_CPPUNIT)
 
+// Split a string into whitespace-separated tokens, matching the unquoted shell
+// word-splitting that the old start script relied on for 'extra_params'.
+static std::vector<std::string> tokenizeOnWhitespace(const std::string& s)
+{
+    std::vector<std::string> tokens;
+    std::istringstream iss(s);
+    for (std::string tok; iss >> tok;)
+        tokens.push_back(tok);
+    return tokens;
+}
+
 int main(int argc, char** argv)
 {
     SigUtil::setUserSignals();
     SigUtil::setFatalSignals("wsd " + Util::getCoolVersion() + ' ' + Util::getCoolVersionHash());
+
+    // The container start script used to append the 'extra_params' environment
+    // variable to the coolwsd command line (exec ... ${extra_params}). With the
+    // shell-less, exec-form ENTRYPOINT there is nothing left to expand it, so
+    // honour it here when --use-env-vars is in effect: tokenize it and append
+    // the tokens to argv so they are parsed exactly like command-line options
+    // (--o:ssl.enable=false, --disable-ssl, ...). This keeps the container's
+    // configuration interface unchanged.
+    std::vector<std::string> argStore;
+    std::vector<char*> argPtrs;
+    const char* extraParams = std::getenv("extra_params");
+    const bool useEnvVars =
+        std::any_of(argv, argv + argc,
+                    [](const char* a) { return std::strcmp(a, "--use-env-vars") == 0; });
+    if (useEnvVars && extraParams && *extraParams)
+    {
+        for (int i = 0; i < argc; ++i)
+            argStore.emplace_back(argv[i]);
+        for (auto& tok : tokenizeOnWhitespace(extraParams))
+            argStore.push_back(std::move(tok));
+
+        argPtrs.reserve(argStore.size() + 1);
+        for (auto& a : argStore)
+            argPtrs.push_back(a.data());
+        argPtrs.push_back(nullptr);
+
+        argc = static_cast<int>(argStore.size());
+        argv = argPtrs.data();
+    }
 
     try
     {
