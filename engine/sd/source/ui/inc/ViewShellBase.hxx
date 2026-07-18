@@ -113,7 +113,7 @@ public:
 
     /* override these from SfxViewShell */
     virtual OUString GetSelectionText(bool = false, bool bOnlyASample = false) override;
-    virtual bool HasSelection(bool = true ) const override;
+    virtual bool HasSelection(bool bMustHaveText) const override;
 
     SvBorder GetBorder (bool bOuterResize);
     virtual void InnerResizePixel (const Point& rOrigin, const Size& rSize, bool inplaceEditModeChange) override;

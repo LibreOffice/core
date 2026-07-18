@@ -447,14 +447,14 @@ OUString ViewShellBase::GetSelectionText(bool bCompleteWords, bool /*bOnlyASampl
         :   SfxViewShell::GetSelectionText(bCompleteWords);
 }
 
-bool ViewShellBase::HasSelection(bool bText) const
+bool ViewShellBase::HasSelection(bool bMustHaveText) const
 {
     std::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
     DrawViewShell *const pDrawViewShell(
             dynamic_cast<DrawViewShell*>(pMainShell.get()));
     return pDrawViewShell
-        ?   pDrawViewShell->HasSelection(bText)
-        :   SfxViewShell::HasSelection(bText);
+        ?   pDrawViewShell->HasSelection(bMustHaveText)
+        :   SfxViewShell::HasSelection(bMustHaveText);
 }
 
 void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize, bool)

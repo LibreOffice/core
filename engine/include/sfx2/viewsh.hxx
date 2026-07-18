@@ -271,7 +271,7 @@ public:
      */
     virtual bool                PrepareClose( bool bUI = true );
     virtual OUString            GetSelectionText( bool bCompleteWords = false, bool bOnlyASample = false );
-    virtual bool                HasSelection( bool bText = true ) const;
+    virtual bool HasSelection(bool bMustHaveText) const;
     virtual SdrView*            GetDrawView() const;
 
     void                        AddSubShell( SfxShell& rShell );

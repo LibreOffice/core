@@ -249,7 +249,7 @@ protected:
     virtual void    QueryObjAreaPixel( tools::Rectangle& rRect ) const override;
 
     virtual OUString GetSelectionText( bool bWholeWord = false, bool bOnlyASample = false ) override;
-    virtual bool     HasSelection( bool bText = true ) const override;
+    virtual bool HasSelection(bool bMustHaveText) const override;
 
     virtual void    WriteUserData(OUString &, bool bBrowse = false) override;
     virtual void    ReadUserData(const OUString &, bool bBrowse = false) override;
