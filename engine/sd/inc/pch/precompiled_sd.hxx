@@ -289,7 +289,6 @@
 #include <controller/SlsSelectionObserver.hxx>
 #include <controller/SlsSlotManager.hxx>
 #include <controller/SlsVisibleAreaManager.hxx>
-#include <cppcanvas/vclfactory.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>

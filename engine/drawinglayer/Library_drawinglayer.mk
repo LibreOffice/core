@@ -33,7 +33,6 @@ $(eval $(call gb_Library_use_externals,drawinglayer,\
 ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
 $(eval $(call gb_Library_use_libraries,drawinglayer,\
     canvastools \
-    cppcanvas \
 ))
 endif
 

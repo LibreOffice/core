@@ -23,7 +23,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
     basegfx \
     canvastools \
     comphelper \
-    cppcanvas \
     cppu \
     cppuhelper \
     docmodel \

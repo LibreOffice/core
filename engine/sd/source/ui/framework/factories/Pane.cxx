@@ -24,8 +24,6 @@
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <cppcanvas/vclfactory.hxx>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
