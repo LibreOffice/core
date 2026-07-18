@@ -59,12 +59,9 @@ namespace cppcanvas
     }
 
     RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,
-                                                  const ::GDIMetaFile&          rMtf,
-                                                  const Renderer::Parameters&   rParms )
+                                                  const ::GDIMetaFile&          rMtf )
     {
-        return std::make_shared<internal::ImplRenderer>( rCanvas,
-                                                              rMtf,
-                                                              rParms );
+        return std::make_shared<internal::ImplRenderer>( rCanvas, rMtf );
     }
 }
 

@@ -39,43 +39,6 @@ namespace cppcanvas
 
     class Renderer : public virtual CanvasGraphic
     {
-    public:
-
-        /** Parameters for the Renderer
-         */
-        struct Parameters
-        {
-            /// Optionally forces the fill color attribute for all actions
-            ::std::optional< IntSRGBA >                  maFillColor;
-
-            /// Optionally forces the line color attribute for all actions
-            ::std::optional< IntSRGBA >                 maLineColor;
-
-            /// Optionally forces the text color attribute for all actions
-            ::std::optional< IntSRGBA >                  maTextColor;
-
-            /// Optionally forces the given fontname for all text actions
-            ::std::optional< OUString >                  maFontName;
-
-            /** Optionally transforms all text output actions with the
-                given matrix (in addition to the overall canvas
-                transformation).
-
-                Note that the matrix given here is applied to the unit
-                rect coordinate system, i.e. the metafile is assumed
-                to be contained in the unit rect.
-             */
-            ::std::optional< ::basegfx::B2DHomMatrix >    maTextTransformation;
-
-            /// Optionally forces the given font weight for all text actions
-            ::std::optional< sal_Int8 >                   maFontWeight;
-
-            /// Optionally forces the given font letter form (italics etc.) for all text actions
-            ::std::optional< sal_Int8 >                   maFontLetterForm;
-
-            /// Optionally forces underlining for all text actions
-            ::std::optional< bool >                       maFontUnderline;
-        };
     };
 
     typedef std::shared_ptr< ::cppcanvas::Renderer > RendererSharedPtr;

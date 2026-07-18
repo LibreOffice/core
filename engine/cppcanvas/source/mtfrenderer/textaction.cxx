@@ -83,25 +83,6 @@ namespace cppcanvas::internal
                 o_rRenderState.DeviceColor = rState.textColor;
             }
 
-            void init( rendering::RenderState&                  o_rRenderState,
-                       const ::basegfx::B2DPoint&               rStartPoint,
-                       const OutDevState&                       rState,
-                       const CanvasSharedPtr&                   rCanvas,
-                       const ::basegfx::B2DHomMatrix&           rTextTransform  )
-            {
-                init( o_rRenderState, rStartPoint, rState, rCanvas );
-
-                // TODO(F2): Also inversely-transform clip with
-                // rTextTransform (which is actually rather hard, as the
-                // text transform is _prepended_ to the render state)!
-
-                // prepend extra font transform to render state
-                // (prepend it, because it's interpreted in the unit
-                // rect coordinate space)
-                ::canvastools::prependToRenderState( o_rRenderState,
-                                                       rTextTransform );
-            }
-
             void init( rendering::RenderState&                      o_rRenderState,
                        uno::Reference< rendering::XCanvasFont >&    o_rFont,
                        const ::basegfx::B2DPoint&                   rStartPoint,
@@ -574,14 +555,6 @@ namespace cppcanvas::internal
                             const CanvasSharedPtr&      rCanvas,
                             const OutDevState&          rState );
 
-                TextAction( const ::basegfx::B2DPoint&      rStartPoint,
-                            const OUString&          rString,
-                            sal_Int32                       nStartPos,
-                            sal_Int32                       nLen,
-                            const CanvasSharedPtr&          rCanvas,
-                            const OutDevState&              rState,
-                            const ::basegfx::B2DHomMatrix&  rTextTransform );
-
                 TextAction(const TextAction&) = delete;
                 const TextAction& operator=(const TextAction&) = delete;
 
@@ -620,26 +593,6 @@ namespace cppcanvas::internal
                 init( maState, mxFont,
                       rStartPoint,
                       rState, rCanvas );
-
-                ENSURE_OR_THROW( mxFont.is(),
-                                  "::cppcanvas::internal::TextAction(): Invalid font" );
-            }
-
-            TextAction::TextAction( const ::basegfx::B2DPoint&      rStartPoint,
-                                    const OUString&          rString,
-                                    sal_Int32                       nStartPos,
-                                    sal_Int32                       nLen,
-                                    const CanvasSharedPtr&          rCanvas,
-                                    const OutDevState&              rState,
-                                    const ::basegfx::B2DHomMatrix&  rTextTransform ) :
-                mxFont( rState.xFont ),
-                maStringContext( rString, nStartPos, nLen ),
-                mpCanvas( rCanvas ),
-                maTextDirection( rState.textDirection )
-            {
-                init( maState, mxFont,
-                      rStartPoint,
-                      rState, rCanvas, rTextTransform );
 
                 ENSURE_OR_THROW( mxFont.is(),
                                   "::cppcanvas::internal::TextAction(): Invalid font" );
@@ -698,20 +651,6 @@ namespace cppcanvas::internal
                                   VirtualDevice const &      rVDev,
                                   const CanvasSharedPtr&     rCanvas,
                                   const OutDevState&         rState );
-
-                EffectTextAction( const ::basegfx::B2DPoint&        rStartPoint,
-                                  const ::basegfx::B2DSize&         rReliefOffset,
-                                  const ::Color&                    rReliefColor,
-                                  const ::basegfx::B2DSize&         rShadowOffset,
-                                  const ::Color&                    rShadowColor,
-                                  const ::Color&                    rTextFillColor,
-                                  const OUString&            rText,
-                                  sal_Int32                         nStartPos,
-                                  sal_Int32                         nLen,
-                                  VirtualDevice const &             rVDev,
-                                  const CanvasSharedPtr&            rCanvas,
-                                  const OutDevState&                rState,
-                                  const ::basegfx::B2DHomMatrix&    rTextTransform );
 
                 EffectTextAction(const EffectTextAction&) = delete;
                 const EffectTextAction& operator=(const EffectTextAction&) = delete;
@@ -784,45 +723,6 @@ namespace cppcanvas::internal
                 init( maState, mxFont,
                       rStartPoint,
                       rState, rCanvas );
-
-                ENSURE_OR_THROW( mxFont.is() && mxTextLines.is(),
-                                  "::cppcanvas::internal::EffectTextAction(): Invalid font or lines" );
-            }
-
-            EffectTextAction::EffectTextAction( const ::basegfx::B2DPoint&      rStartPoint,
-                                                const ::basegfx::B2DSize&       rReliefOffset,
-                                                const ::Color&                  rReliefColor,
-                                                const ::basegfx::B2DSize&       rShadowOffset,
-                                                const ::Color&                  rShadowColor,
-                                                const ::Color&                  rTextFillColor,
-                                                const OUString&          rText,
-                                                sal_Int32                       nStartPos,
-                                                sal_Int32                       nLen,
-                                                VirtualDevice const &           rVDev,
-                                                const CanvasSharedPtr&          rCanvas,
-                                                const OutDevState&              rState,
-                                                const ::basegfx::B2DHomMatrix&  rTextTransform ) :
-                mxFont( rState.xFont ),
-                maStringContext( rText, nStartPos, nLen ),
-                mpCanvas( rCanvas ),
-                maTextLineInfo( cppcanvastools::createTextLineInfo( rVDev, rState ) ),
-                maReliefOffset( rReliefOffset ),
-                maReliefColor( rReliefColor ),
-                maShadowOffset( rShadowOffset ),
-                maShadowColor( rShadowColor ),
-                maTextFillColor( rTextFillColor ),
-                maTextDirection( rState.textDirection )
-            {
-                const double nLineWidth( getLineWidth( rVDev, rState, maStringContext ) );
-                initEffectLinePolyPolygon( maLinesOverallSize,
-                                           mxTextLines,
-                                           rCanvas,
-                                           nLineWidth,
-                                           maTextLineInfo );
-
-                init( maState, mxFont,
-                      rStartPoint,
-                      rState, rCanvas, rTextTransform );
 
                 ENSURE_OR_THROW( mxFont.is() && mxTextLines.is(),
                                   "::cppcanvas::internal::EffectTextAction(): Invalid font or lines" );
@@ -930,16 +830,6 @@ namespace cppcanvas::internal
                                  const CanvasSharedPtr&         rCanvas,
                                  const OutDevState&             rState );
 
-                TextArrayAction( const ::basegfx::B2DPoint&     rStartPoint,
-                                 const OUString&         rString,
-                                 sal_Int32                      nStartPos,
-                                 sal_Int32                      nLen,
-                                 const cpo::uno::Sequence< double >& rOffsets,
-                                 const cpo::uno::Sequence< bool >& rKashidas,
-                                 const CanvasSharedPtr&         rCanvas,
-                                 const OutDevState&             rState,
-                                 const ::basegfx::B2DHomMatrix& rTextTransform );
-
                 TextArrayAction(const TextArrayAction&) = delete;
                 const TextArrayAction& operator=(const TextArrayAction&) = delete;
 
@@ -985,32 +875,6 @@ namespace cppcanvas::internal
                                  rKashidas,
                                  rCanvas,
                                  rState, nullptr );
-            }
-
-            TextArrayAction::TextArrayAction( const ::basegfx::B2DPoint&        rStartPoint,
-                                              const OUString&            rString,
-                                              sal_Int32                         nStartPos,
-                                              sal_Int32                         nLen,
-                                              const cpo::uno::Sequence< double >&    rOffsets,
-                                              const cpo::uno::Sequence< bool >&  rKashidas,
-                                              const CanvasSharedPtr&            rCanvas,
-                                              const OutDevState&                rState,
-                                              const ::basegfx::B2DHomMatrix&    rTextTransform ) :
-                mpCanvas( rCanvas )
-            {
-                initLayoutWidth(mnLayoutWidth, rOffsets);
-
-                initArrayAction( maState,
-                                 mxTextLayout,
-                                 rStartPoint,
-                                 rString,
-                                 nStartPos,
-                                 nLen,
-                                 rOffsets,
-                                 rKashidas,
-                                 rCanvas,
-                                 rState,
-                                 &rTextTransform );
             }
 
             bool TextArrayAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
@@ -1083,21 +947,6 @@ namespace cppcanvas::internal
                                        VirtualDevice const &            rVDev,
                                        const CanvasSharedPtr&           rCanvas,
                                        const OutDevState&               rState  );
-                EffectTextArrayAction( const ::basegfx::B2DPoint&       rStartPoint,
-                                       const ::basegfx::B2DSize&        rReliefOffset,
-                                       const ::Color&                   rReliefColor,
-                                       const ::basegfx::B2DSize&        rShadowOffset,
-                                       const ::Color&                   rShadowColor,
-                                       const ::Color&                   rTextFillColor,
-                                       const OUString&           rText,
-                                       sal_Int32                        nStartPos,
-                                       sal_Int32                        nLen,
-                                       const cpo::uno::Sequence< double >&   rOffsets,
-                                       const cpo::uno::Sequence< bool >& rKashidas,
-                                       VirtualDevice const &            rVDev,
-                                       const CanvasSharedPtr&           rCanvas,
-                                       const OutDevState&               rState,
-                                       const ::basegfx::B2DHomMatrix&   rTextTransform );
 
                 EffectTextArrayAction(const EffectTextArrayAction&) = delete;
                 const EffectTextArrayAction& operator=(const EffectTextArrayAction&) = delete;
@@ -1171,47 +1020,6 @@ namespace cppcanvas::internal
                                  rKashidas,
                                  rCanvas,
                                  rState, nullptr );
-            }
-
-            EffectTextArrayAction::EffectTextArrayAction( const ::basegfx::B2DPoint&        rStartPoint,
-                                                          const ::basegfx::B2DSize&         rReliefOffset,
-                                                          const ::Color&                    rReliefColor,
-                                                          const ::basegfx::B2DSize&         rShadowOffset,
-                                                          const ::Color&                    rShadowColor,
-                                                          const ::Color&                    rTextFillColor,
-                                                          const OUString&            rText,
-                                                          sal_Int32                         nStartPos,
-                                                          sal_Int32                         nLen,
-                                                          const cpo::uno::Sequence< double >&    rOffsets,
-                                                          const cpo::uno::Sequence< bool >&  rKashidas,
-                                                          VirtualDevice const &             rVDev,
-                                                          const CanvasSharedPtr&            rCanvas,
-                                                          const OutDevState&                rState,
-                                                          const ::basegfx::B2DHomMatrix&    rTextTransform ) :
-                mpCanvas( rCanvas ),
-                maTextLineInfo( cppcanvastools::createTextLineInfo( rVDev, rState ) ),
-                maTextLinesHelper(mpCanvas, rState),
-                maReliefOffset( rReliefOffset ),
-                maReliefColor( rReliefColor ),
-                maShadowOffset( rShadowOffset ),
-                maShadowColor( rShadowColor ),
-                maTextFillColor( rTextFillColor )
-            {
-                initLayoutWidth(mnLayoutWidth, rOffsets);
-
-                maTextLinesHelper.init(mnLayoutWidth, maTextLineInfo);
-
-                initArrayAction( maState,
-                                 mxTextLayout,
-                                 rStartPoint,
-                                 rText,
-                                 nStartPos,
-                                 nLen,
-                                 rOffsets,
-                                 rKashidas,
-                                 rCanvas,
-                                 rState,
-                                 &rTextTransform );
             }
 
             css::uno::Reference<css::rendering::XPolyPolygon2D> EffectTextArrayAction::queryTextBounds(const uno::Reference<rendering::XCanvas>& rCanvas) const
@@ -1396,19 +1204,6 @@ namespace cppcanvas::internal
                                VirtualDevice const &                                rVDev,
                                const CanvasSharedPtr&                               rCanvas,
                                const OutDevState&                                   rState  );
-                OutlineAction( const ::basegfx::B2DPoint&                           rStartPoint,
-                               const ::basegfx::B2DSize&                            rReliefOffset,
-                               const ::Color&                                       rReliefColor,
-                               const ::basegfx::B2DSize&                            rShadowOffset,
-                               const ::Color&                                       rShadowColor,
-                               const ::Color&                                       rFillColor,
-                               uno::Reference< rendering::XPolyPolygon2D >          xFillPoly,
-                               uno::Reference< rendering::XPolyPolygon2D >          xTextPoly,
-                               const cpo::uno::Sequence< double >&                       rOffsets,
-                               VirtualDevice const &                                rVDev,
-                               const CanvasSharedPtr&                               rCanvas,
-                               const OutDevState&                                   rState,
-                               const ::basegfx::B2DHomMatrix&                       rTextTransform );
 
                 OutlineAction(const OutlineAction&) = delete;
                 const OutlineAction& operator=(const OutlineAction&) = delete;
@@ -1503,51 +1298,6 @@ namespace cppcanvas::internal
                       rStartPoint,
                       rState,
                       rCanvas );
-            }
-
-            OutlineAction::OutlineAction( const ::basegfx::B2DPoint&                            rStartPoint,
-                                          const ::basegfx::B2DSize&                             rReliefOffset,
-                                          const ::Color&                                        rReliefColor,
-                                          const ::basegfx::B2DSize&                             rShadowOffset,
-                                          const ::Color&                                        rShadowColor,
-                                          const ::Color&                                        rFillColor,
-                                          uno::Reference< rendering::XPolyPolygon2D >           xFillPoly,
-                                          uno::Reference< rendering::XPolyPolygon2D >           xTextPoly,
-                                          const cpo::uno::Sequence< double >&                        rOffsets,
-                                          VirtualDevice const &                                 rVDev,
-                                          const CanvasSharedPtr&                                rCanvas,
-                                          const OutDevState&                                    rState,
-                                          const ::basegfx::B2DHomMatrix&                        rTextTransform ) :
-                mxTextPoly(std::move( xTextPoly )),
-                maOffsets( rOffsets ),
-                mpCanvas( rCanvas ),
-                mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),
-                maFillColor(
-                    vcl::unotools::colorToDoubleSequence(
-                        COL_WHITE,
-                        rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() )),
-                mxBackgroundFillPoly(std::move( xFillPoly )),
-                maTextLineInfo( cppcanvastools::createTextLineInfo( rVDev, rState ) ),
-                maReliefOffset( rReliefOffset ),
-                maReliefColor( rReliefColor ),
-                maShadowOffset( rShadowOffset ),
-                maShadowColor( rShadowColor ),
-                maBackgroundFillColor( rFillColor )
-            {
-                double nLayoutWidth = 0.0;
-                initLayoutWidth(nLayoutWidth, rOffsets);
-
-                initEffectLinePolyPolygon( maLinesOverallSize,
-                                           mxTextLines,
-                                           rCanvas,
-                                           nLayoutWidth,
-                                           maTextLineInfo );
-
-                init( maState,
-                      rStartPoint,
-                      rState,
-                      rCanvas,
-                      rTextTransform );
             }
 
             bool OutlineAction::operator()( const rendering::RenderState& rRenderState, const ::Color& /*rTextFillColor*/, bool /*bNormalText*/ ) const
@@ -1774,8 +1524,7 @@ namespace cppcanvas::internal
                                                    std::span<const bool>            pKashidaArray,
                                                    VirtualDevice&                   rVDev,
                                                    const CanvasSharedPtr&           rCanvas,
-                                                   const OutDevState&               rState,
-                                                   const Renderer::Parameters&      rParms  )
+                                                   const OutDevState&               rState  )
             {
                 // operate on raw DX array here (in logical coordinate
                 // system), to have a higher resolution
@@ -1875,39 +1624,19 @@ namespace cppcanvas::internal
                         aTextBoundsPoly);
                 }
 
-                if( rParms.maTextTransformation )
-                {
-                    return std::make_shared<OutlineAction>(
-                            rStartPoint,
-                            rReliefOffset,
-                            rReliefColor,
-                            rShadowOffset,
-                            rShadowColor,
-                            rTextFillColor,
-                            xTextBoundsPoly,
-                            xTextPoly,
-                            aCharWidthSeq,
-                            rVDev,
-                            rCanvas,
-                            rState,
-                            *rParms.maTextTransformation );
-                }
-                else
-                {
-                    return std::make_shared<OutlineAction>(
-                            rStartPoint,
-                            rReliefOffset,
-                            rReliefColor,
-                            rShadowOffset,
-                            rShadowColor,
-                            rTextFillColor,
-                            xTextBoundsPoly,
-                            xTextPoly,
-                            aCharWidthSeq,
-                            rVDev,
-                            rCanvas,
-                            rState  );
-                }
+                return std::make_shared<OutlineAction>(
+                        rStartPoint,
+                        rReliefOffset,
+                        rReliefColor,
+                        rShadowOffset,
+                        rShadowColor,
+                        rTextFillColor,
+                        xTextBoundsPoly,
+                        xTextPoly,
+                        aCharWidthSeq,
+                        rVDev,
+                        rCanvas,
+                        rState  );
             }
 
         } // namespace
@@ -1927,7 +1656,6 @@ namespace cppcanvas::internal
                                                              VirtualDevice&                 rVDev,
                                                              const CanvasSharedPtr&         rCanvas,
                                                              const OutDevState&             rState,
-                                                             const Renderer::Parameters&    rParms,
                                                              bool                           bSubsettable    )
         {
             const ::Size  aBaselineOffset( cppcanvastools::getBaselineOffset( rState,
@@ -1960,8 +1688,7 @@ namespace cppcanvas::internal
                             pKashidaArray,
                             rVDev,
                             rCanvas,
-                            rState,
-                            rParms );
+                            rState );
             }
 
             // convert DX array to device coordinate system (and
@@ -1997,60 +1724,30 @@ namespace cppcanvas::internal
                     rTextFillColor == aEmptyColor )
                 {
                     // nope
-                    if( rParms.maTextTransformation )
-                    {
-                        ret = std::make_shared<TextAction>(
-                                                    aStartPoint,
-                                                    rText,
-                                                    nStartPos,
-                                                    nLen,
-                                                    rCanvas,
-                                                    rState,
-                                                    *rParms.maTextTransformation );
-                    }
-                    else
-                    {
-                        ret = std::make_shared<TextAction>(
-                                                    aStartPoint,
-                                                    rText,
-                                                    nStartPos,
-                                                    nLen,
-                                                    rCanvas,
-                                                    rState );
-                    }
+                    ret = std::make_shared<TextAction>(
+                                                aStartPoint,
+                                                rText,
+                                                nStartPos,
+                                                nLen,
+                                                rCanvas,
+                                                rState );
                 }
                 else
                 {
                     // at least one of the effects requested
-                    if( rParms.maTextTransformation )
-                        ret = std::make_shared<EffectTextAction>(
-                                                    aStartPoint,
-                                                    aReliefOffset,
-                                                    rReliefColor,
-                                                    aShadowOffset,
-                                                    rShadowColor,
-                                                    rTextFillColor,
-                                                    rText,
-                                                    nStartPos,
-                                                    nLen,
-                                                    rVDev,
-                                                    rCanvas,
-                                                    rState,
-                                                    *rParms.maTextTransformation );
-                    else
-                        ret = std::make_shared<EffectTextAction>(
-                                                    aStartPoint,
-                                                    aReliefOffset,
-                                                    rReliefColor,
-                                                    aShadowOffset,
-                                                    rShadowColor,
-                                                    rTextFillColor,
-                                                    rText,
-                                                    nStartPos,
-                                                    nLen,
-                                                    rVDev,
-                                                    rCanvas,
-                                                    rState );
+                    ret = std::make_shared<EffectTextAction>(
+                                                aStartPoint,
+                                                aReliefOffset,
+                                                rReliefColor,
+                                                aShadowOffset,
+                                                rShadowColor,
+                                                rTextFillColor,
+                                                rText,
+                                                nStartPos,
+                                                nLen,
+                                                rVDev,
+                                                rCanvas,
+                                                rState );
                 }
             }
             else
@@ -2064,64 +1761,34 @@ namespace cppcanvas::internal
                     rTextFillColor == aEmptyColor )
                 {
                     // nope
-                    if( rParms.maTextTransformation )
-                        ret = std::make_shared<TextArrayAction>(
-                                                    aStartPoint,
-                                                    rText,
-                                                    nStartPos,
-                                                    nLen,
-                                                    aCharWidths,
-                                                    aKashidas,
-                                                    rCanvas,
-                                                    rState,
-                                                    *rParms.maTextTransformation );
-                    else
-                        ret = std::make_shared<TextArrayAction>(
-                                                    aStartPoint,
-                                                    rText,
-                                                    nStartPos,
-                                                    nLen,
-                                                    aCharWidths,
-                                                    aKashidas,
-                                                    rCanvas,
-                                                    rState );
+                    ret = std::make_shared<TextArrayAction>(
+                                                aStartPoint,
+                                                rText,
+                                                nStartPos,
+                                                nLen,
+                                                aCharWidths,
+                                                aKashidas,
+                                                rCanvas,
+                                                rState );
                 }
                 else
                 {
                     // at least one of the effects requested
-                    if( rParms.maTextTransformation )
-                        ret = std::make_shared<EffectTextArrayAction>(
-                                                    aStartPoint,
-                                                    aReliefOffset,
-                                                    rReliefColor,
-                                                    aShadowOffset,
-                                                    rShadowColor,
-                                                    rTextFillColor,
-                                                    rText,
-                                                    nStartPos,
-                                                    nLen,
-                                                    aCharWidths,
-                                                    aKashidas,
-                                                    rVDev,
-                                                    rCanvas,
-                                                    rState,
-                                                    *rParms.maTextTransformation );
-                    else
-                        ret = std::make_shared<EffectTextArrayAction>(
-                                                    aStartPoint,
-                                                    aReliefOffset,
-                                                    rReliefColor,
-                                                    aShadowOffset,
-                                                    rShadowColor,
-                                                    rTextFillColor,
-                                                    rText,
-                                                    nStartPos,
-                                                    nLen,
-                                                    aCharWidths,
-                                                    aKashidas,
-                                                    rVDev,
-                                                    rCanvas,
-                                                    rState );
+                    ret = std::make_shared<EffectTextArrayAction>(
+                                                aStartPoint,
+                                                aReliefOffset,
+                                                rReliefColor,
+                                                aShadowOffset,
+                                                rShadowColor,
+                                                rTextFillColor,
+                                                rText,
+                                                nStartPos,
+                                                nLen,
+                                                aCharWidths,
+                                                aKashidas,
+                                                rVDev,
+                                                rCanvas,
+                                                rState );
                 }
             }
             return ret;

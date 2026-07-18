@@ -77,7 +77,6 @@ namespace cppcanvas::internal
                                                      VirtualDevice&                 rVDev,
                                                      const CanvasSharedPtr&         rCanvas,
                                                      const OutDevState&             rState,
-                                                     const Renderer::Parameters&    rParms,
                                                      bool                           bSubsettable );
         }
 }

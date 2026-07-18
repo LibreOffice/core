@@ -127,8 +127,8 @@ public:
         // the stack to the canvas code.
         cppCanvas->setTransformation(
             basegfx::B2DHomMatrix(0.056662828121770453, 0, 0, 0, 0.056640419947506564, 0));
-        cppcanvas::RendererSharedPtr renderer = cppcanvas::VCLFactory::createRenderer(
-            cppCanvas, metafile, cppcanvas::Renderer::Parameters());
+        cppcanvas::RendererSharedPtr renderer
+            = cppcanvas::VCLFactory::createRenderer(cppCanvas, metafile);
         renderer->setTransformation(basegfx::B2DHomMatrix(14548, 0, -2, 0, 3350, 3431));
         CPPUNIT_ASSERT(renderer->draw());
         exportDevice(u"test-tdf136957"_ustr, mVclDevice);

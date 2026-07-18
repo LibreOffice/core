@@ -120,8 +120,7 @@ namespace cppcanvas::internal
         {
         public:
             ImplRenderer( const CanvasSharedPtr&    rCanvas,
-                          const GDIMetaFile&        rMtf,
-                          const Parameters&         rParms );
+                          const GDIMetaFile&        rMtf );
 
             virtual ~ImplRenderer() override;
 
@@ -212,19 +211,16 @@ namespace cppcanvas::internal
             ActionFactoryParameters( VectorOfOutDevStates&       rStates,
                                      const CanvasSharedPtr&      rCanvas,
                                      ::VirtualDevice&            rVDev,
-                                     const Renderer::Parameters& rParms,
                                      sal_Int32&                  io_rCurrActionIndex ) :
                 mrStates(rStates),
                 mrCanvas(rCanvas),
                 mrVDev(rVDev),
-                mrParms(rParms),
                 mrCurrActionIndex(io_rCurrActionIndex)
             {}
 
             VectorOfOutDevStates&       mrStates;
             const CanvasSharedPtr&      mrCanvas;
             ::VirtualDevice&            mrVDev;
-            const Renderer::Parameters& mrParms;
             sal_Int32&                  mrCurrActionIndex;
         };
 

@@ -66,8 +66,7 @@ namespace cppcanvas
             one-by-one units large, in user coordinate space
          */
         static RendererSharedPtr createRenderer( const CanvasSharedPtr&          rCanvas,
-                                                const ::GDIMetaFile&            rMtf,
-                                                const Renderer::Parameters&     rParms );
+                                                const ::GDIMetaFile&            rMtf );
 
     private:
         VCLFactory() = delete;

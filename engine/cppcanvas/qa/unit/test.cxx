@@ -145,7 +145,7 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testTdf155810)
         CPPUNIT_ASSERT(xCanvas.is());
         auto pCanvas = cppcanvas::VCLFactory::createCanvas(xCanvas);
 
-        auto pRenderer = cppcanvas::VCLFactory::createRenderer(pCanvas, aInputMetaFile, {});
+        auto pRenderer = cppcanvas::VCLFactory::createRenderer(pCanvas, aInputMetaFile);
         pRenderer->draw();
 
         aOutputMetaFile.Stop();
