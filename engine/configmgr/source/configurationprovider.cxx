@@ -107,17 +107,17 @@ private:
 
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return default_
             ? default_provider::getImplementationName()
             : u"com.sun.star.comp.configuration.ConfigurationProvider"_ustr;
     }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override
     {
         return default_
@@ -125,36 +125,36 @@ private:
             : cpo::uno::Sequence<OUString> { u"com.sun.star.configuration.ConfigurationProvider"_ustr };
     }
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
+    virtual css::uno::Reference< css::uno::XInterface > createInstance(
         OUString const & aServiceSpecifier) override;
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< css::uno::XInterface >
     createInstanceWithArguments(
         OUString const & ServiceSpecifier,
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getAvailableServiceNames() override;
 
-    virtual void SAL_CALL refresh() override;
+    virtual void refresh() override;
 
-    virtual void SAL_CALL addRefreshListener(
+    virtual void addRefreshListener(
         css::uno::Reference< css::util::XRefreshListener > const & l) override;
 
-    virtual void SAL_CALL removeRefreshListener(
+    virtual void removeRefreshListener(
         css::uno::Reference< css::util::XRefreshListener > const & l) override;
 
-    virtual void SAL_CALL flush() override;
+    virtual void flush() override;
 
-    virtual void SAL_CALL addFlushListener(
+    virtual void addFlushListener(
         css::uno::Reference< css::util::XFlushListener > const & l) override;
 
-    virtual void SAL_CALL removeFlushListener(
+    virtual void removeFlushListener(
         css::uno::Reference< css::util::XFlushListener > const & l) override;
 
-    virtual void SAL_CALL setLocale(css::lang::Locale const & eLocale) override;
+    virtual void setLocale(css::lang::Locale const & eLocale) override;
 
-    virtual css::lang::Locale SAL_CALL getLocale() override;
+    virtual css::lang::Locale getLocale() override;
 
     void flushModifications() const;
 

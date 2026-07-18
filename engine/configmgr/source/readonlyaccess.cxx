@@ -52,24 +52,24 @@ private:
 
     virtual ~Service() override {}
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     { return u"com.sun.star.comp.configuration.ReadOnlyAccess"_ustr; }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override
     { return { u"com.sun.star.configuration.ReadOnlyAccess"_ustr }; }
 
-    virtual void SAL_CALL initialize(
+    virtual void initialize(
         cpo::uno::Sequence< cpo::uno::Any > const & aArguments) override;
 
-    virtual cpo::uno::Any SAL_CALL getByHierarchicalName(
+    virtual cpo::uno::Any getByHierarchicalName(
         OUString const & aName) override
     { return getRoot()->getByHierarchicalName(aName); }
 
-    virtual bool SAL_CALL hasByHierarchicalName(OUString const & aName) override
+    virtual bool hasByHierarchicalName(OUString const & aName) override
     { return getRoot()->hasByHierarchicalName(aName); }
 
     rtl::Reference< RootAccess > getRoot();

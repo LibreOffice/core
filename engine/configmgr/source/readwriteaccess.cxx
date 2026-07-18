@@ -52,45 +52,45 @@ private:
 
     virtual ~Service() override {}
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     { return u"com.sun.star.comp.configuration.ReadWriteAccess"_ustr; }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override
     { return { u"com.sun.star.configuration.ReadWriteAccess"_ustr }; }
 
-    virtual void SAL_CALL initialize(
+    virtual void initialize(
         cpo::uno::Sequence< cpo::uno::Any > const & aArguments) override;
 
-    virtual cpo::uno::Any SAL_CALL getByHierarchicalName(
+    virtual cpo::uno::Any getByHierarchicalName(
         OUString const & aName) override
     { return getRoot()->getByHierarchicalName(aName); }
 
-    virtual bool SAL_CALL hasByHierarchicalName(OUString const & aName) override
+    virtual bool hasByHierarchicalName(OUString const & aName) override
     { return getRoot()->hasByHierarchicalName(aName); }
 
-    virtual void SAL_CALL replaceByHierarchicalName(
+    virtual void replaceByHierarchicalName(
         OUString const & aName, cpo::uno::Any const & aElement) override
     { getRoot()->replaceByHierarchicalName(aName, aElement); }
 
-    virtual void SAL_CALL commitChanges() override
+    virtual void commitChanges() override
     { getRoot()->commitChanges(); }
 
-    virtual bool SAL_CALL hasPendingChanges() override
+    virtual bool hasPendingChanges() override
     { return getRoot()->hasPendingChanges(); }
 
-    virtual cpo::uno::Sequence< ::css::util::ElementChange > SAL_CALL getPendingChanges() override
+    virtual cpo::uno::Sequence< ::css::util::ElementChange > getPendingChanges() override
     { return getRoot()->getPendingChanges(); }
 
-    css::beans::Property SAL_CALL getPropertyByHierarchicalName(
+    css::beans::Property getPropertyByHierarchicalName(
         OUString const & aHierarchicalName)
         override
     { return getRoot()->getPropertyByHierarchicalName(aHierarchicalName); }
 
-    bool SAL_CALL hasPropertyByHierarchicalName(
+    bool hasPropertyByHierarchicalName(
         OUString const & aHierarchicalName) override
     { return getRoot()->hasPropertyByHierarchicalName(aHierarchicalName); }
 

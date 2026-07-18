@@ -73,40 +73,40 @@ private:
 
     virtual ~Service() override {}
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     { return u"com.sun.star.comp.configuration.ConfigurationRegistry"_ustr; }
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual bool supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override
     { return { u"com.sun.star.configuration.ConfigurationRegistry"_ustr }; }
 
-    virtual OUString SAL_CALL getURL() override;
+    virtual OUString getURL() override;
 
-    virtual void SAL_CALL open(
+    virtual void open(
         OUString const & rURL, bool bReadOnly, bool) override;
 
-    virtual bool SAL_CALL isValid() override;
+    virtual bool isValid() override;
 
-    virtual void SAL_CALL close() override;
+    virtual void close() override;
 
-    virtual void SAL_CALL destroy() override;
+    virtual void destroy() override;
 
-    virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL
+    virtual css::uno::Reference< css::registry::XRegistryKey >
     getRootKey() override;
 
-    virtual bool SAL_CALL isReadOnly() override;
+    virtual bool isReadOnly() override;
 
-    virtual void SAL_CALL mergeKey(OUString const &, OUString const &) override;
+    virtual void mergeKey(OUString const &, OUString const &) override;
 
-    virtual void SAL_CALL flush() override;
+    virtual void flush() override;
 
-    virtual void SAL_CALL addFlushListener(
+    virtual void addFlushListener(
         css::uno::Reference< css::util::XFlushListener > const &) override;
 
-    virtual void SAL_CALL removeFlushListener(
+    virtual void removeFlushListener(
         css::uno::Reference< css::util::XFlushListener > const &) override;
 
     void checkValid();
@@ -137,72 +137,72 @@ private:
 
     virtual ~RegistryKey() override {}
 
-    virtual OUString SAL_CALL getKeyName() override;
+    virtual OUString getKeyName() override;
 
-    virtual bool SAL_CALL isReadOnly() override;
+    virtual bool isReadOnly() override;
 
-    virtual bool SAL_CALL isValid() override;
+    virtual bool isValid() override;
 
-    virtual css::registry::RegistryKeyType SAL_CALL getKeyType(
+    virtual css::registry::RegistryKeyType getKeyType(
         OUString const &) override;
 
-    virtual css::registry::RegistryValueType SAL_CALL getValueType() override;
+    virtual css::registry::RegistryValueType getValueType() override;
 
-    virtual sal_Int32 SAL_CALL getLongValue() override;
+    virtual sal_Int32 getLongValue() override;
 
-    virtual void SAL_CALL setLongValue(sal_Int32) override;
+    virtual void setLongValue(sal_Int32) override;
 
-    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getLongListValue() override;
+    virtual cpo::uno::Sequence< sal_Int32 > getLongListValue() override;
 
-    virtual void SAL_CALL setLongListValue(
+    virtual void setLongListValue(
         cpo::uno::Sequence< sal_Int32 > const &) override;
 
-    virtual OUString SAL_CALL getAsciiValue() override;
+    virtual OUString getAsciiValue() override;
 
-    virtual void SAL_CALL setAsciiValue(OUString const &) override;
+    virtual void setAsciiValue(OUString const &) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getAsciiListValue() override;
+    virtual cpo::uno::Sequence< OUString > getAsciiListValue() override;
 
-    virtual void SAL_CALL setAsciiListValue(
+    virtual void setAsciiListValue(
         cpo::uno::Sequence< OUString > const &) override;
 
-    virtual OUString SAL_CALL getStringValue() override;
+    virtual OUString getStringValue() override;
 
-    virtual void SAL_CALL setStringValue(OUString const &) override;
+    virtual void setStringValue(OUString const &) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getStringListValue() override;
+    virtual cpo::uno::Sequence< OUString > getStringListValue() override;
 
-    virtual void SAL_CALL setStringListValue(
+    virtual void setStringListValue(
         cpo::uno::Sequence< OUString > const &) override;
 
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getBinaryValue() override;
+    virtual cpo::uno::Sequence< sal_Int8 > getBinaryValue() override;
 
-    virtual void SAL_CALL setBinaryValue(cpo::uno::Sequence< sal_Int8 > const &) override;
+    virtual void setBinaryValue(cpo::uno::Sequence< sal_Int8 > const &) override;
 
-    virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL openKey(
+    virtual css::uno::Reference< css::registry::XRegistryKey > openKey(
         OUString const & aKeyName) override;
 
-    virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL
+    virtual css::uno::Reference< css::registry::XRegistryKey >
     createKey(OUString const &) override;
 
-    virtual void SAL_CALL closeKey() override;
+    virtual void closeKey() override;
 
-    virtual void SAL_CALL deleteKey(OUString const &) override;
+    virtual void deleteKey(OUString const &) override;
 
     virtual
     cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
-    SAL_CALL openKeys() override;
+    openKeys() override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getKeyNames() override;
+    virtual cpo::uno::Sequence< OUString > getKeyNames() override;
 
-    virtual bool SAL_CALL createLink(
+    virtual bool createLink(
         OUString const &, OUString const &) override;
 
-    virtual void SAL_CALL deleteLink(OUString const &) override;
+    virtual void deleteLink(OUString const &) override;
 
-    virtual OUString SAL_CALL getLinkTarget(OUString const &) override;
+    virtual OUString getLinkTarget(OUString const &) override;
 
-    virtual OUString SAL_CALL getResolvedName(
+    virtual OUString getResolvedName(
         OUString const & aKeyName) override;
 
     Service & service_;

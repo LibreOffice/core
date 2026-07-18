@@ -56,9 +56,9 @@ public:
     virtual void initBroadcaster(
         Modifications::Node const & modifications, Broadcaster * broadcaster) override;
 
-    virtual void SAL_CALL acquire() noexcept override;
+    virtual void acquire() noexcept override;
 
-    virtual void SAL_CALL release() noexcept override;
+    virtual void release() noexcept override;
 
     OUString const & getAbsolutePathRepresentation();
 
@@ -68,19 +68,19 @@ public:
 
     void setAlive(bool b);
 
-    virtual void SAL_CALL addChangesListener(
+    virtual void addChangesListener(
         css::uno::Reference< css::util::XChangesListener >
             const & aListener) override;
 
-    virtual void SAL_CALL removeChangesListener(
+    virtual void removeChangesListener(
         css::uno::Reference< css::util::XChangesListener >
             const & aListener) override;
 
-    virtual void SAL_CALL commitChanges() override;
+    virtual void commitChanges() override;
 
-    virtual bool SAL_CALL hasPendingChanges() override;
+    virtual bool hasPendingChanges() override;
 
-    virtual cpo::uno::Sequence< ::css::util::ElementChange > SAL_CALL getPendingChanges() override;
+    virtual cpo::uno::Sequence< ::css::util::ElementChange > getPendingChanges() override;
 
 private:
     virtual ~RootAccess() override;
@@ -109,10 +109,10 @@ private:
 
     virtual void clearListeners() noexcept override;
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any queryInterface(
         cpo::uno::Type const & aType) override;
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
     typedef
         std::multiset<

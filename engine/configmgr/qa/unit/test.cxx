@@ -123,9 +123,9 @@ protected:
     Test const & test_;
 
 private:
-    virtual void SAL_CALL disposing(css::lang::EventObject const &) override;
+    virtual void disposing(css::lang::EventObject const &) override;
 
-    virtual void SAL_CALL propertyChange(
+    virtual void propertyChange(
         css::beans::PropertyChangeEvent const &) override;
 
     int count_;

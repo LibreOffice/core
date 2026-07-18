@@ -61,30 +61,30 @@ private:
 
     virtual ~Service() override {}
 
-    virtual void SAL_CALL insertExtensionXcsFile(
+    virtual void insertExtensionXcsFile(
         bool shared, OUString const & fileUri) override;
 
-    virtual void SAL_CALL insertExtensionXcuFile(
+    virtual void insertExtensionXcuFile(
         bool shared, OUString const & fileUri) override;
 
-    virtual void SAL_CALL removeExtensionXcuFile(OUString const & fileUri) override;
+    virtual void removeExtensionXcuFile(OUString const & fileUri) override;
 
-    virtual void SAL_CALL insertModificationXcuFile(
+    virtual void insertModificationXcuFile(
         OUString const & fileUri,
         cpo::uno::Sequence< OUString > const & includedPaths,
         cpo::uno::Sequence< OUString > const & excludedPaths) override;
 
-    virtual void SAL_CALL writeModifications(OUString const & fileUri) override;
+    virtual void writeModifications(OUString const & fileUri) override;
 
-    OUString SAL_CALL getImplementationName() override {
+    OUString getImplementationName() override {
         return u"com.sun.star.comp.configuration.Update"_ustr;
     }
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override {
+    bool supportsService(OUString const & ServiceName) override {
         return cppu::supportsService(this, ServiceName);
     }
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override {
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override {
         return {u"com.sun.star.configuration.Update_Service"_ustr};
     }
 

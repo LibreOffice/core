@@ -64,13 +64,13 @@ public:
     virtual rtl::Reference< RootAccess > getRootAccess() override;
     virtual rtl::Reference< Access > getParentAccess() override;
 
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
     virtual css::uno::Reference< css::uno::XInterface >
-    SAL_CALL getParent() override;
+    getParent() override;
 
-    virtual void SAL_CALL setParent(
+    virtual void setParent(
         css::uno::Reference< css::uno::XInterface > const &) override;
 
     void bind(
@@ -104,7 +104,7 @@ private:
     virtual void addSupportedServiceNames(
         std::vector<OUString> * services) override;
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any queryInterface(
         cpo::uno::Type const & aType) override;
 
     rtl::Reference< RootAccess > root_;
