@@ -24,6 +24,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
 ))
 endif
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
+	external/fontconfig/fontconfig_deprecated.new.patch.1 \
+))
+endif
+
 ifeq ($(OS)-$(ENABLE_HEADLESS),WNT-TRUE)
 
 $(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\

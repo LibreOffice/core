@@ -1,0 +1,64 @@
+diff -ur fontconfig.org/fc-const/fc-const.py fontconfig/fc-const/fc-const.py
+--- fontconfig.org/fc-const/fc-const.py	2026-07-18 17:05:54.507214565 +0200
++++ fontconfig/fc-const/fc-const.py	2026-07-18 18:06:37.278327797 +0200
+@@ -155,7 +155,6 @@
+         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+     )
+     parser.add_argument('-o', '--output',
+-                        type=argparse.FileType('w'),
+                         default='-',
+                         help='Output file')
+     parser.add_argument('-t', '--test',
+@@ -167,12 +166,18 @@
+                         help='fcobjs.h file')
+ 
+     args = parser.parse_args()
+-    with args.output:
+-        args.output.write(gen_header())
++
++    if args.output == '-':
++        output = sys.stdout
++    else:
++        output = open(args.output, 'w')
++
++    with output:
++        output.write(gen_header())
+         if args.test:
+-            args.output.write(gen_test_body(args.list, args.header))
++            output.write(gen_test_body(args.list, args.header))
+         else:
+-            args.output.write(gen_body(args.list, args.header))
++            output.write(gen_body(args.list, args.header))
+ 
+     sys.exit(0)
+ 
+diff -ur fontconfig.org/fc-genericfamily/fc-genericfamily.py fontconfig/fc-genericfamily/fc-genericfamily.py
+--- fontconfig.org/fc-genericfamily/fc-genericfamily.py	2026-07-18 17:05:54.508715805 +0200
++++ fontconfig/fc-genericfamily/fc-genericfamily.py	2026-07-18 18:20:37.049930484 +0200
+@@ -153,7 +153,6 @@
+     parser.add_argument(
+         "-o",
+         "--output",
+-        type=argparse.FileType("w", encoding="utf-8"),
+         default=sys.stdout,
+         help="Output file (default: stdout)",
+     )
+@@ -177,10 +176,15 @@
+         )
+         sys.exit(1)
+ 
++    if args.output == '-': 
++        output = sys.stdout
++    else:   
++        output = open(args.output, 'w')
++
+     # Generate output
+-    with args.output:
+-        args.output.write(gen_header())
+-        args.output.write(gen_gperf_code(family_map))
++    with output:
++        output.write(gen_header())
++        output.write(gen_gperf_code(family_map))
+ 
+     return 0
+ 
