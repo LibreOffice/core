@@ -991,7 +991,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sdb,\
 	DataSettings \
 	DataSource \
 	DataSourceBrowser \
-	DatabaseAccessConnection \
 	DatabaseAccessContext \
 	DatabaseAccessDataSource \
 	DatabaseDocument \

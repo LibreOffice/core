@@ -9913,13 +9913,6 @@ module com {
      interface ::com::sun::star::frame::XDispatchProvider;
      [optional] interface ::com::sun::star::ui::XContextMenuInterception;
     };
-    /** @deprecated */ published service DatabaseAccessConnection {
-     service ::com::sun::star::sdbc::Connection;
-     service ::com::sun::star::sdbcx::DatabaseDefinition;
-     interface ::com::sun::star::container::XChild;
-     interface ::com::sun::star::sdb::XSQLQueryComposerFactory;
-     interface ::com::sun::star::sdb::XQueriesSupplier;
-    };
    };
    module util {
     published struct AliasProgrammaticPair {
