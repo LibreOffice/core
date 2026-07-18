@@ -33,7 +33,7 @@ namespace comphelper
 
 // XRestartManager
 
-void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task::XInteractionHandler >& /* xInteractionHandler */ )
+void OOfficeRestartManager::requestRestart( const uno::Reference< task::XInteractionHandler >& /* xInteractionHandler */ )
 {
     if ( !m_xContext.is() )
         throw uno::RuntimeException(u"no component context"_ustr);
@@ -74,7 +74,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
 }
 
 
-bool SAL_CALL OOfficeRestartManager::isRestartRequested( bool bOfficeInitialized )
+bool OOfficeRestartManager::isRestartRequested( bool bOfficeInitialized )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -86,7 +86,7 @@ bool SAL_CALL OOfficeRestartManager::isRestartRequested( bool bOfficeInitialized
 
 // XCallback
 
-void SAL_CALL OOfficeRestartManager::notify( const cpo::uno::Any& /* aData */ )
+void OOfficeRestartManager::notify( const cpo::uno::Any& /* aData */ )
 {
     try
     {
@@ -128,17 +128,17 @@ void SAL_CALL OOfficeRestartManager::notify( const cpo::uno::Any& /* aData */ )
 
 // XServiceInfo
 
-OUString SAL_CALL OOfficeRestartManager::getImplementationName()
+OUString OOfficeRestartManager::getImplementationName()
 {
     return u"com.sun.star.comp.task.OfficeRestartManager"_ustr;
 }
 
-bool SAL_CALL OOfficeRestartManager::supportsService( const OUString& aServiceName )
+bool OOfficeRestartManager::supportsService( const OUString& aServiceName )
 {
     return cppu::supportsService(this, aServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > OOfficeRestartManager::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.task.OfficeRestartManager"_ustr };
 }

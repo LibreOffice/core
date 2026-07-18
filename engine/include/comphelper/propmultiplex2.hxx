@@ -91,10 +91,10 @@ public:
                                 const css::uno::Reference<css::beans::XPropertySet>& _rxSet);
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
+    virtual void propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 
     /// incremental lock
     void lock();

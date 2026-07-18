@@ -27,7 +27,7 @@ using namespace com::sun::star;
 
 namespace comphelper {
 
-OUString SAL_CALL AttributeList::getValueByName(const OUString& sName)
+OUString AttributeList::getValueByName(const OUString& sName)
 {
     for (auto const& attribute : mAttributes)
     {

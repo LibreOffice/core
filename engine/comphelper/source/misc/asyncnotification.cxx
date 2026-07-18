@@ -94,7 +94,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL AsyncEventNotifierBase::terminate()
+    void AsyncEventNotifierBase::terminate()
     {
         std::scoped_lock aGuard( m_xImpl->aMutex );
 

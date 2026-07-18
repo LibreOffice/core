@@ -44,7 +44,7 @@ namespace comphelper {
 class AbortContinuation : public ::cppu::WeakImplHelper< XInteractionAbort >
 {
 public:
-    virtual void SAL_CALL select() override {}
+    virtual void select() override {}
 };
 
 class PasswordContinuation : public ::cppu::WeakImplHelper< XInteractionPassword2 >
@@ -54,16 +54,16 @@ public:
 
     bool     isSelected() const { return mbSelected; }
 
-    virtual void SAL_CALL select() override { mbSelected = true; }
+    virtual void select() override { mbSelected = true; }
 
-    virtual void SAL_CALL setPassword( const OUString& rPass ) override { maPassword = rPass; }
-    virtual OUString SAL_CALL getPassword() override { return maPassword; }
+    virtual void setPassword( const OUString& rPass ) override { maPassword = rPass; }
+    virtual OUString getPassword() override { return maPassword; }
 
-    virtual void SAL_CALL setPasswordToModify( const OUString& rPass ) override { maModifyPassword = rPass; }
-    virtual OUString SAL_CALL getPasswordToModify() override { return maModifyPassword; }
+    virtual void setPasswordToModify( const OUString& rPass ) override { maModifyPassword = rPass; }
+    virtual OUString getPasswordToModify() override { return maModifyPassword; }
 
-    virtual void SAL_CALL setRecommendReadOnly( bool bReadOnly ) override { mbReadOnly = bReadOnly; }
-    virtual bool SAL_CALL getRecommendReadOnly() override { return mbReadOnly; }
+    virtual void setRecommendReadOnly( bool bReadOnly ) override { mbReadOnly = bReadOnly; }
+    virtual bool getRecommendReadOnly() override { return mbReadOnly; }
 
 private:
     OUString            maPassword;
@@ -97,12 +97,12 @@ OUString SimplePasswordRequest::getPassword() const
     return mxPassword->getPassword();
 }
 
-Any SAL_CALL SimplePasswordRequest::getRequest()
+Any SimplePasswordRequest::getRequest()
 {
     return maRequest;
 }
 
-Sequence< Reference< XInteractionContinuation > > SAL_CALL SimplePasswordRequest::getContinuations()
+Sequence< Reference< XInteractionContinuation > > SimplePasswordRequest::getContinuations()
 {
     return { mxAbort, mxPassword };
 }
@@ -159,12 +159,12 @@ bool DocPasswordRequest::getRecommendReadOnly() const
     return mxPassword->getRecommendReadOnly();
 }
 
-Any SAL_CALL DocPasswordRequest::getRequest()
+Any DocPasswordRequest::getRequest()
 {
     return maRequest;
 }
 
-Sequence< Reference< XInteractionContinuation > > SAL_CALL DocPasswordRequest::getContinuations()
+Sequence< Reference< XInteractionContinuation > > DocPasswordRequest::getContinuations()
 {
     return { mxAbort, mxPassword };
 }

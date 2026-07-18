@@ -44,12 +44,12 @@ ChainablePropertySet::~ChainablePropertySet()
 }
 
 // XPropertySet
-Reference< XPropertySetInfo > SAL_CALL ChainablePropertySet::getPropertySetInfo(  )
+Reference< XPropertySetInfo > ChainablePropertySet::getPropertySetInfo(  )
 {
     return mxInfo;
 }
 
-void SAL_CALL ChainablePropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
+void ChainablePropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::optional< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
@@ -66,7 +66,7 @@ void SAL_CALL ChainablePropertySet::setPropertyValue( const OUString& rPropertyN
     _postSetValues();
 }
 
-Any SAL_CALL ChainablePropertySet::getPropertyValue( const OUString& rPropertyName )
+Any ChainablePropertySet::getPropertyValue( const OUString& rPropertyName )
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::optional< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
@@ -86,28 +86,28 @@ Any SAL_CALL ChainablePropertySet::getPropertyValue( const OUString& rPropertyNa
     return aAny;
 }
 
-void SAL_CALL ChainablePropertySet::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
+void ChainablePropertySet::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL ChainablePropertySet::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
+void ChainablePropertySet::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL ChainablePropertySet::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
+void ChainablePropertySet::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL ChainablePropertySet::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
+void ChainablePropertySet::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
 {
     // todo
 }
 
 // XMultiPropertySet
-void SAL_CALL ChainablePropertySet::setPropertyValues(const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rValues)
+void ChainablePropertySet::setPropertyValues(const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rValues)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::optional< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
@@ -136,7 +136,7 @@ void SAL_CALL ChainablePropertySet::setPropertyValues(const Sequence< OUString >
     _postSetValues();
 }
 
-Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues(const Sequence< OUString >& rPropertyNames)
+Sequence< Any > ChainablePropertySet::getPropertyValues(const Sequence< OUString >& rPropertyNames)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::optional< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
@@ -166,23 +166,23 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues(const Sequence<
     return aValues;
 }
 
-void SAL_CALL ChainablePropertySet::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
+void ChainablePropertySet::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL ChainablePropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
+void ChainablePropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL ChainablePropertySet::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
+void ChainablePropertySet::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
 {
     // todo
 }
 
 // XPropertyState
-PropertyState SAL_CALL ChainablePropertySet::getPropertyState( const OUString& PropertyName )
+PropertyState ChainablePropertySet::getPropertyState( const OUString& PropertyName )
 {
     PropertyInfoHash::const_iterator aIter =  mxInfo->maMap.find( PropertyName );
     if( aIter == mxInfo->maMap.end())
@@ -191,7 +191,7 @@ PropertyState SAL_CALL ChainablePropertySet::getPropertyState( const OUString& P
     return PropertyState_AMBIGUOUS_VALUE;
 }
 
-Sequence< PropertyState > SAL_CALL ChainablePropertySet::getPropertyStates( const Sequence< OUString >& rPropertyNames )
+Sequence< PropertyState > ChainablePropertySet::getPropertyStates( const Sequence< OUString >& rPropertyNames )
 {
     const sal_Int32 nCount = rPropertyNames.getLength();
 
@@ -213,7 +213,7 @@ Sequence< PropertyState > SAL_CALL ChainablePropertySet::getPropertyStates( cons
     return aStates;
 }
 
-void SAL_CALL ChainablePropertySet::setPropertyToDefault( const OUString& rPropertyName )
+void ChainablePropertySet::setPropertyToDefault( const OUString& rPropertyName )
 {
     PropertyInfoHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
 
@@ -221,7 +221,7 @@ void SAL_CALL ChainablePropertySet::setPropertyToDefault( const OUString& rPrope
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
 }
 
-Any SAL_CALL ChainablePropertySet::getPropertyDefault( const OUString& rPropertyName )
+Any ChainablePropertySet::getPropertyDefault( const OUString& rPropertyName )
 {
     PropertyInfoHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
 

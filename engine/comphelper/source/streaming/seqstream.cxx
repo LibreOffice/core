@@ -56,7 +56,7 @@ inline sal_Int32 MemoryInputStream::avail()
 
 // css::io::XInputStream
 
-sal_Int32 SAL_CALL MemoryInputStream::readBytes( Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
+sal_Int32 MemoryInputStream::readBytes( Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
 {
     if (nBytesToRead < 0)
         throw BufferSizeExceededException(OUString(),*this);
@@ -93,14 +93,14 @@ sal_Int32 MemoryInputStream::readSomeBytes( sal_Int8* pData, sal_Int32 nBytesToR
     return nBytesToRead;
 }
 
-sal_Int32 SAL_CALL MemoryInputStream::readSomeBytes( Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 MemoryInputStream::readSomeBytes( Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead )
 {
     // all data is available at once
     return readBytes(aData, nMaxBytesToRead);
 }
 
 
-void SAL_CALL MemoryInputStream::skipBytes( sal_Int32 nBytesToSkip )
+void MemoryInputStream::skipBytes( sal_Int32 nBytesToSkip )
 {
     if (nBytesToSkip < 0)
         throw BufferSizeExceededException(OUString(),*this);
@@ -116,7 +116,7 @@ void SAL_CALL MemoryInputStream::skipBytes( sal_Int32 nBytesToSkip )
 }
 
 
-sal_Int32 SAL_CALL MemoryInputStream::available(  )
+sal_Int32 MemoryInputStream::available(  )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -124,7 +124,7 @@ sal_Int32 SAL_CALL MemoryInputStream::available(  )
 }
 
 
-void SAL_CALL MemoryInputStream::closeInput(  )
+void MemoryInputStream::closeInput(  )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -134,7 +134,7 @@ void SAL_CALL MemoryInputStream::closeInput(  )
     m_nPos = -1;
 }
 
-void SAL_CALL MemoryInputStream::seek( sal_Int64 location )
+void MemoryInputStream::seek( sal_Int64 location )
 {
     if ( location > m_nMemoryDataLength || location < 0 || location > SAL_MAX_INT32 )
         throw IllegalArgumentException(u"bad location"_ustr, static_cast<cppu::OWeakObject*>(this), 1);
@@ -142,13 +142,13 @@ void SAL_CALL MemoryInputStream::seek( sal_Int64 location )
     m_nPos = static_cast<sal_Int32>(location);
 }
 
-sal_Int64 SAL_CALL MemoryInputStream::getPosition()
+sal_Int64 MemoryInputStream::getPosition()
 {
     std::scoped_lock aGuard( m_aMutex );
     return m_nPos;
 }
 
-sal_Int64 SAL_CALL MemoryInputStream::getLength(  )
+sal_Int64 MemoryInputStream::getLength(  )
 {
     return m_nMemoryDataLength;
 }
@@ -176,7 +176,7 @@ OSequenceOutputStream::OSequenceOutputStream(Sequence< sal_Int8 >& _rSeq, double
 }
 
 
-void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rData )
+void OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rData )
 {
     std::scoped_lock aGuard(m_aMutex);
     if (!m_bConnected)
@@ -216,7 +216,7 @@ void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rD
 }
 
 
-void SAL_CALL OSequenceOutputStream::flush(  )
+void OSequenceOutputStream::flush(  )
 {
     std::scoped_lock aGuard(m_aMutex);
     if (!m_bConnected)
@@ -234,7 +234,7 @@ void OSequenceOutputStream::finalizeOutput()
     m_bConnected = false;
 }
 
-void SAL_CALL OSequenceOutputStream::closeOutput()
+void OSequenceOutputStream::closeOutput()
 {
     std::scoped_lock aGuard(m_aMutex);
     if (!m_bConnected)

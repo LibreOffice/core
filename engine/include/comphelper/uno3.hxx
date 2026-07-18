@@ -29,16 +29,16 @@ namespace comphelper
     /** used for declaring UNO3-Defaults, i.e. acquire/release
     */
     #define DECLARE_UNO3_DEFAULTS(classname, baseclass) \
-        virtual void    SAL_CALL acquire() noexcept override { baseclass::acquire(); }    \
-        virtual void    SAL_CALL release() noexcept override { baseclass::release(); }
+        virtual void    acquire() noexcept override { baseclass::acquire(); }    \
+        virtual void    release() noexcept override { baseclass::release(); }
 
     /** used for declaring UNO3-Defaults, i.e. acquire/release if you want to forward all queryInterfaces to the base class,
         (e.g. if you override queryAggregation)
     */
     #define DECLARE_UNO3_AGG_DEFAULTS(classname, baseclass) \
-        virtual void            SAL_CALL acquire() noexcept override { baseclass::acquire(); } \
-        virtual void            SAL_CALL release() noexcept override { baseclass::release(); }    \
-        virtual cpo::uno::Any  SAL_CALL queryInterface(const cpo::uno::Type& _rType) override \
+        virtual void            acquire() noexcept override { baseclass::acquire(); } \
+        virtual void            release() noexcept override { baseclass::release(); }    \
+        virtual cpo::uno::Any  queryInterface(const cpo::uno::Type& _rType) override \
             { return baseclass::queryInterface(_rType); }
 
     /** Use this macro to forward XComponent methods to base class
@@ -64,20 +64,20 @@ namespace comphelper
         that would be ::cppu::WeakComponentImplHelperBase
     */
     #define DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS(classname, baseclass, implhelper) \
-        virtual void SAL_CALL acquire() noexcept override { baseclass::acquire(); }   \
-        virtual void SAL_CALL release() noexcept override { baseclass::release(); }   \
-        virtual cpo::uno::Any  SAL_CALL queryInterface(const cpo::uno::Type& _rType) override \
+        virtual void acquire() noexcept override { baseclass::acquire(); }   \
+        virtual void release() noexcept override { baseclass::release(); }   \
+        virtual cpo::uno::Any  queryInterface(const cpo::uno::Type& _rType) override \
             { return baseclass::queryInterface(_rType); }                               \
-        virtual void SAL_CALL dispose() override \
+        virtual void dispose() override \
         {                                                                               \
             implhelper::dispose();                                                      \
         }                                                                               \
-        virtual void SAL_CALL addEventListener(                                         \
+        virtual void addEventListener(                                         \
             css::uno::Reference< css::lang::XEventListener > const & xListener ) override \
         {                                                                               \
             implhelper::addEventListener(xListener);                                        \
         }                                                                               \
-        virtual void SAL_CALL removeEventListener(                                      \
+        virtual void removeEventListener(                                      \
             css::uno::Reference< css::lang::XEventListener > const & xListener ) override \
         {                                                                               \
             implhelper::removeEventListener(xListener);                                 \
@@ -88,17 +88,17 @@ namespace comphelper
     //= forwarding/merging XInterface functionality
 
     #define DECLARE_XINTERFACE( )   \
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override; \
-        virtual void SAL_CALL acquire() noexcept override; \
-        virtual void SAL_CALL release() noexcept override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override; \
+        virtual void acquire() noexcept override; \
+        virtual void release() noexcept override;
 
     #define IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
-        void SAL_CALL classname::acquire() noexcept { refcountbase::acquire(); } \
-        void SAL_CALL classname::release() noexcept { refcountbase::release(); }
+        void classname::acquire() noexcept { refcountbase::acquire(); } \
+        void classname::release() noexcept { refcountbase::release(); }
 
     #define IMPLEMENT_FORWARD_XINTERFACE2( classname, refcountbase, baseclass2 ) \
         IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
-        cpo::uno::Any SAL_CALL classname::queryInterface( const cpo::uno::Type& _rType ) \
+        cpo::uno::Any classname::queryInterface( const cpo::uno::Type& _rType ) \
         { \
             cpo::uno::Any aReturn = refcountbase::queryInterface( _rType ); \
             if ( !aReturn.hasValue() ) \
@@ -108,7 +108,7 @@ namespace comphelper
 
     #define IMPLEMENT_FORWARD_XINTERFACE3( classname, refcountbase, baseclass2, baseclass3 ) \
         IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
-        cpo::uno::Any SAL_CALL classname::queryInterface( const cpo::uno::Type& _rType ) \
+        cpo::uno::Any classname::queryInterface( const cpo::uno::Type& _rType ) \
         { \
             cpo::uno::Any aReturn = refcountbase::queryInterface( _rType ); \
             if ( !aReturn.hasValue() ) \
@@ -124,17 +124,17 @@ namespace comphelper
     //= forwarding/merging XTypeProvider functionality
 
     #define DECLARE_XTYPEPROVIDER( )    \
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override; \
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override; \
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
     #define IMPLEMENT_GET_IMPLEMENTATION_ID( classname ) \
-        cpo::uno::Sequence< sal_Int8 > SAL_CALL classname::getImplementationId(  ) \
+        cpo::uno::Sequence< sal_Int8 > classname::getImplementationId(  ) \
         { \
             return cpo::uno::Sequence<sal_Int8>(); \
         }
 
     #define IMPLEMENT_FORWARD_XTYPEPROVIDER2( classname, baseclass1, baseclass2 ) \
-        cpo::uno::Sequence< cpo::uno::Type > SAL_CALL classname::getTypes(  ) \
+        cpo::uno::Sequence< cpo::uno::Type > classname::getTypes(  ) \
         { \
             return ::comphelper::concatSequences( \
                 baseclass1::getTypes(), \

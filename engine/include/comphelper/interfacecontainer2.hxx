@@ -217,7 +217,7 @@ public:
 @endcode
     */
     template< typename ListenerT, typename EventT >
-    inline void notifyEach( void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event );
+    inline void notifyEach( void ( ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event );
 
 private:
 friend class OInterfaceIteratorHelper2;
@@ -246,7 +246,7 @@ private:
     class NotifySingleListener
     {
     private:
-        typedef void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& );
+        typedef void ( ListenerT::*NotificationMethod )( const EventT& );
         NotificationMethod const m_pMethod;
         const EventT&            m_rEvent;
     public:
@@ -278,7 +278,7 @@ inline void OInterfaceContainerHelper2::forEach( FuncT const& func )
 }
 
 template< typename ListenerT, typename EventT >
-inline void OInterfaceContainerHelper2::notifyEach( void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event )
+inline void OInterfaceContainerHelper2::notifyEach( void ( ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event )
 {
     forEach< ListenerT, NotifySingleListener< ListenerT, EventT > >( NotifySingleListener< ListenerT, EventT >( NotificationMethod, Event ) );
 }

@@ -49,16 +49,16 @@ public:
     {}
 
 // XRestartManager
-    virtual void SAL_CALL requestRestart( const css::uno::Reference< css::task::XInteractionHandler >& xInteractionHandler ) override;
-    virtual bool SAL_CALL isRestartRequested( bool bInitialized ) override;
+    virtual void requestRestart( const css::uno::Reference< css::task::XInteractionHandler >& xInteractionHandler ) override;
+    virtual bool isRestartRequested( bool bInitialized ) override;
 
 // XCallback
-    virtual void SAL_CALL notify( const cpo::uno::Any& aData ) override;
+    virtual void notify( const cpo::uno::Any& aData ) override;
 
 // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 };
 

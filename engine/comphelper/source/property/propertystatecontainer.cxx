@@ -50,7 +50,7 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL OPropertyStateContainer::queryInterface( const Type& _rType )
+    Any OPropertyStateContainer::queryInterface( const Type& _rType )
     {
         Any aReturn = OPropertyContainer::queryInterface( _rType );
         if ( !aReturn.hasValue() )
@@ -75,13 +75,13 @@ using namespace cpo::uno;
     }
 
 
-    PropertyState SAL_CALL OPropertyStateContainer::getPropertyState( const OUString& _rPropertyName )
+    PropertyState OPropertyStateContainer::getPropertyState( const OUString& _rPropertyName )
     {
         return getPropertyStateByHandle( getHandleForName( _rPropertyName ) );
     }
 
 
-    Sequence< PropertyState > SAL_CALL OPropertyStateContainer::getPropertyStates( const Sequence< OUString >& _rPropertyNames )
+    Sequence< PropertyState > OPropertyStateContainer::getPropertyStates( const Sequence< OUString >& _rPropertyNames )
     {
         sal_Int32 nProperties = _rPropertyNames.getLength();
         Sequence< PropertyState> aStates( nProperties );
@@ -122,13 +122,13 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OPropertyStateContainer::setPropertyToDefault( const OUString& _rPropertyName )
+    void OPropertyStateContainer::setPropertyToDefault( const OUString& _rPropertyName )
     {
         setPropertyToDefaultByHandle( getHandleForName( _rPropertyName ) );
     }
 
 
-    Any SAL_CALL OPropertyStateContainer::getPropertyDefault( const OUString& _rPropertyName )
+    Any OPropertyStateContainer::getPropertyDefault( const OUString& _rPropertyName )
     {
         Any aDefault;
         getPropertyDefaultByHandle( getHandleForName( _rPropertyName ), aDefault );

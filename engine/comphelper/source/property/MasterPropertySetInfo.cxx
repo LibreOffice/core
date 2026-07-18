@@ -58,7 +58,7 @@ void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
     }
 }
 
-Sequence< ::Property > SAL_CALL MasterPropertySetInfo::getProperties()
+Sequence< ::Property > MasterPropertySetInfo::getProperties()
 {
     sal_Int32 nSize = maMap.size();
     if( maProperties.getLength() != nSize )
@@ -80,7 +80,7 @@ Sequence< ::Property > SAL_CALL MasterPropertySetInfo::getProperties()
     return maProperties;
 }
 
-Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const OUString& rName )
+Property MasterPropertySetInfo::getPropertyByName( const OUString& rName )
 {
     PropertyDataHash::iterator aIter = maMap.find( rName );
 
@@ -97,7 +97,7 @@ Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const OUString& rNam
     return aProperty;
 }
 
-bool SAL_CALL MasterPropertySetInfo::hasPropertyByName( const OUString& rName )
+bool MasterPropertySetInfo::hasPropertyByName( const OUString& rName )
 {
     return maMap.contains( rName );
 }

@@ -75,7 +75,7 @@ public:
        Only returns a reference to XMultiPropertySet, XFastPropertySet, XPropertySet and
        XEventListener.
      */
-    virtual cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& rType) override;
+    virtual cpo::uno::Any queryInterface(const cpo::uno::Type& rType) override;
 
     /** eases implementing XTypeProvider::getTypes, returns the types of XMultiPropertySet, XFastPropertySet, XPropertySet
 
@@ -95,31 +95,31 @@ public:
        rPropertyName does not exist or is readonly. Otherwise rPropertyName is changed to its handle
        value and setFastPropertyValue is called.
      */
-    virtual void SAL_CALL setPropertyValue(const ::rtl::OUString& rPropertyName,
-                                           const cpo::uno::Any& aValue) override;
+    virtual void setPropertyValue(const ::rtl::OUString& rPropertyName,
+                                  const cpo::uno::Any& aValue) override;
     /**
        Throw UnknownPropertyException if the property with the name
        rPropertyName does not exist.
      */
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(const ::rtl::OUString& aPropertyName) override;
+    virtual cpo::uno::Any getPropertyValue(const ::rtl::OUString& aPropertyName) override;
 
     /** Ignored if the property is not bound. */
-    virtual void SAL_CALL addPropertyChangeListener(
+    virtual void addPropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
 
     /** Ignored if the property is not bound. */
-    virtual void SAL_CALL removePropertyChangeListener(
+    virtual void removePropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
 
     /** Ignored if the property is not constrained. */
-    virtual void SAL_CALL addVetoableChangeListener(
+    virtual void addVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
         const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
 
     /** Ignored if the property is not constrained. */
-    virtual void SAL_CALL removeVetoableChangeListener(
+    virtual void removeVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
         const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
 
@@ -130,31 +130,30 @@ public:
        is changed with the setFastPropertyValue_NoBroadcast method and the bound listeners are
        notified.
       */
-    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle,
-                                               const cpo::uno::Any& rValue) override final;
+    virtual void setFastPropertyValue(sal_Int32 nHandle,
+                                      const cpo::uno::Any& rValue) override final;
 
     /**
        @exception css::beans::UnknownPropertyException
          if the property with the handle nHandle does not exist.
      */
-    virtual cpo::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override final;
+    virtual cpo::uno::Any getFastPropertyValue(sal_Int32 nHandle) override final;
 
     // XMultiPropertySet
-    virtual void SAL_CALL
-    setPropertyValues(const cpo::uno::Sequence<::rtl::OUString>& PropertyNames,
-                      const cpo::uno::Sequence<cpo::uno::Any>& Values) override;
+    virtual void setPropertyValues(const cpo::uno::Sequence<::rtl::OUString>& PropertyNames,
+                                   const cpo::uno::Sequence<cpo::uno::Any>& Values) override;
 
-    virtual cpo::uno::Sequence<cpo::uno::Any> SAL_CALL
+    virtual cpo::uno::Sequence<cpo::uno::Any>
     getPropertyValues(const cpo::uno::Sequence<::rtl::OUString>& PropertyNames) override final;
 
-    virtual void SAL_CALL addPropertiesChangeListener(
+    virtual void addPropertiesChangeListener(
         const cpo::uno::Sequence<::rtl::OUString>& PropertyNames,
         const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
-    virtual void SAL_CALL removePropertiesChangeListener(
+    virtual void removePropertiesChangeListener(
         const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
-    virtual void SAL_CALL firePropertiesChangeEvent(
+    virtual void firePropertiesChangeEvent(
         const cpo::uno::Sequence<::rtl::OUString>& PropertyNames,
         const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 

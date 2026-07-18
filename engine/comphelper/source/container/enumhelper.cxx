@@ -54,7 +54,7 @@ OEnumerationByName::~OEnumerationByName()
 }
 
 
-bool SAL_CALL OEnumerationByName::hasMoreElements(  )
+bool OEnumerationByName::hasMoreElements(  )
 {
     std::lock_guard aLock(m_aLock);
 
@@ -71,7 +71,7 @@ bool SAL_CALL OEnumerationByName::hasMoreElements(  )
 }
 
 
-cpo::uno::Any SAL_CALL OEnumerationByName::nextElement(  )
+cpo::uno::Any OEnumerationByName::nextElement(  )
 {
     std::lock_guard aLock(m_aLock);
 
@@ -91,7 +91,7 @@ cpo::uno::Any SAL_CALL OEnumerationByName::nextElement(  )
     return aRes;
 }
 
-void SAL_CALL OEnumerationByName::disposing(const css::lang::EventObject& aEvent)
+void OEnumerationByName::disposing(const css::lang::EventObject& aEvent)
 {
     std::lock_guard aLock(m_aLock);
 
@@ -165,7 +165,7 @@ OEnumerationByIndex::~OEnumerationByIndex()
 }
 
 
-bool SAL_CALL OEnumerationByIndex::hasMoreElements(  )
+bool OEnumerationByIndex::hasMoreElements(  )
 {
     std::lock_guard aLock(m_aLock);
 
@@ -182,7 +182,7 @@ bool SAL_CALL OEnumerationByIndex::hasMoreElements(  )
 }
 
 
-cpo::uno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
+cpo::uno::Any OEnumerationByIndex::nextElement(  )
 {
     std::lock_guard aLock(m_aLock);
 
@@ -202,7 +202,7 @@ cpo::uno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
 }
 
 
-void SAL_CALL OEnumerationByIndex::disposing(const css::lang::EventObject& aEvent)
+void OEnumerationByIndex::disposing(const css::lang::EventObject& aEvent)
 {
     std::lock_guard aLock(m_aLock);
 
@@ -254,7 +254,7 @@ OAnyEnumeration::~OAnyEnumeration()
 }
 
 
-bool SAL_CALL OAnyEnumeration::hasMoreElements(  )
+bool OAnyEnumeration::hasMoreElements(  )
 {
     std::lock_guard aLock(m_aLock);
 
@@ -262,7 +262,7 @@ bool SAL_CALL OAnyEnumeration::hasMoreElements(  )
 }
 
 
-cpo::uno::Any SAL_CALL OAnyEnumeration::nextElement(  )
+cpo::uno::Any OAnyEnumeration::nextElement(  )
 {
     if ( ! hasMoreElements())
         throw css::container::NoSuchElementException();

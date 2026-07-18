@@ -98,7 +98,7 @@ void OPropertyChangeMultiplexer2::onListenerDestruction()
 
 // XEventListener
 
-void SAL_CALL OPropertyChangeMultiplexer2::disposing(const EventObject& /*_rSource*/)
+void OPropertyChangeMultiplexer2::disposing(const EventObject& /*_rSource*/)
 {
     std::unique_lock g(m_rMutex);
     // disconnect the listener
@@ -113,7 +113,7 @@ void SAL_CALL OPropertyChangeMultiplexer2::disposing(const EventObject& /*_rSour
 
 // XPropertyChangeListener
 
-void SAL_CALL OPropertyChangeMultiplexer2::propertyChange(const PropertyChangeEvent& _rEvent)
+void OPropertyChangeMultiplexer2::propertyChange(const PropertyChangeEvent& _rEvent)
 {
     if (m_pListener && !locked())
         m_pListener->_propertyChanged(_rEvent);

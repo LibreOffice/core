@@ -96,7 +96,7 @@ OfficeInstallationDirectories::~OfficeInstallationDirectories()
 
 
 // virtual
-OUString SAL_CALL
+OUString
 OfficeInstallationDirectories::getOfficeInstallationDirectoryURL()
 {
     initDirs();
@@ -105,7 +105,7 @@ OfficeInstallationDirectories::getOfficeInstallationDirectoryURL()
 
 
 // virtual
-OUString SAL_CALL
+OUString
 OfficeInstallationDirectories::getOfficeUserDataDirectoryURL()
 {
     initDirs();
@@ -115,7 +115,7 @@ OfficeInstallationDirectories::getOfficeUserDataDirectoryURL()
 
 
 // virtual
-OUString SAL_CALL
+OUString
 OfficeInstallationDirectories::makeRelocatableURL( const OUString& URL )
 {
     if ( !URL.isEmpty() )
@@ -150,7 +150,7 @@ OfficeInstallationDirectories::makeRelocatableURL( const OUString& URL )
 
 
 // virtual
-OUString SAL_CALL
+OUString
 OfficeInstallationDirectories::makeAbsoluteURL( const OUString& URL )
 {
     if ( !URL.isEmpty() )
@@ -187,21 +187,21 @@ OfficeInstallationDirectories::makeAbsoluteURL( const OUString& URL )
 
 
 // virtual
-OUString SAL_CALL
+OUString
 OfficeInstallationDirectories::getImplementationName()
 {
     return u"com.sun.star.comp.util.OfficeInstallationDirectories"_ustr;
 }
 
 // virtual
-bool SAL_CALL
+bool
 OfficeInstallationDirectories::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // virtual
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
 OfficeInstallationDirectories::getSupportedServiceNames()
 {
     return { u"com.sun.star.util.OfficeInstallationDirectories"_ustr };

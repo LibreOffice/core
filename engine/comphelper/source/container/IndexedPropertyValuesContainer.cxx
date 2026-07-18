@@ -36,7 +36,7 @@ IndexedPropertyValuesContainer::IndexedPropertyValuesContainer() noexcept
 }
 
 // XIndexContainer
-void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, const cpo::uno::Any& aElement )
+void IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, const cpo::uno::Any& aElement )
 {
     sal_Int32 nSize(maProperties.size());
     if ((nSize < nIndex) || (nIndex < 0))
@@ -51,7 +51,7 @@ void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, c
         maProperties.insert(maProperties.begin() + nIndex, aProps);
 }
 
-void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
+void IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
 {
     if ((nIndex < 0) || (o3tl::make_unsigned(nIndex) >= maProperties.size()))
         throw lang::IndexOutOfBoundsException();
@@ -60,7 +60,7 @@ void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
 }
 
 // XIndexReplace
-void SAL_CALL IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, const cpo::uno::Any& aElement )
+void IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, const cpo::uno::Any& aElement )
 {
     sal_Int32 nSize(maProperties.size());
     if ((nIndex >= nSize) || (nIndex < 0))
@@ -73,12 +73,12 @@ void SAL_CALL IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, 
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL IndexedPropertyValuesContainer::getCount(  )
+sal_Int32 IndexedPropertyValuesContainer::getCount(  )
 {
     return maProperties.size();
 }
 
-cpo::uno::Any SAL_CALL IndexedPropertyValuesContainer::getByIndex( sal_Int32 nIndex )
+cpo::uno::Any IndexedPropertyValuesContainer::getByIndex( sal_Int32 nIndex )
 {
     sal_Int32 nSize(maProperties.size());
     if ((nIndex >= nSize) || (nIndex < 0))
@@ -88,28 +88,28 @@ cpo::uno::Any SAL_CALL IndexedPropertyValuesContainer::getByIndex( sal_Int32 nIn
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL IndexedPropertyValuesContainer::getElementType(  )
+cpo::uno::Type IndexedPropertyValuesContainer::getElementType(  )
 {
     return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }
 
-bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )
+bool IndexedPropertyValuesContainer::hasElements(  )
 {
     return !maProperties.empty();
 }
 
 //XServiceInfo
-OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName(  )
+OUString IndexedPropertyValuesContainer::getImplementationName(  )
 {
     return u"IndexedPropertyValuesContainer"_ustr;
 }
 
-bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const OUString& ServiceName )
+bool IndexedPropertyValuesContainer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > IndexedPropertyValuesContainer::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.document.IndexedPropertyValues"_ustr };
 }

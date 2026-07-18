@@ -90,10 +90,10 @@ public:
     void dispose();
 
     // XPropertyChangeListener implementation
-    virtual void SAL_CALL disposing(css::lang::EventObject const &) override;
+    virtual void disposing(css::lang::EventObject const &) override;
 
     /// Notify of the property change
-    virtual void SAL_CALL propertyChange(
+    virtual void propertyChange(
         css::beans::PropertyChangeEvent const &rEvt ) override;
 };
 

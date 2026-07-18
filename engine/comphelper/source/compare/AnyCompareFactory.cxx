@@ -47,7 +47,7 @@ public:
                                           0 ); //???
     }
 
-    virtual sal_Int16 SAL_CALL compare( const Any& any1, const Any& any2 ) override;
+    virtual sal_Int16 compare( const Any& any1, const Any& any2 ) override;
 };
 
 class AnyCompareFactory : public cppu::WeakImplHelper< XAnyCompareFactory, XInitialization, XServiceInfo >
@@ -61,20 +61,20 @@ public:
     {}
 
     // XAnyCompareFactory
-    virtual Reference< XAnyCompare > SAL_CALL createAnyCompareByName ( const OUString& aPropertyName ) override;
+    virtual Reference< XAnyCompare > createAnyCompareByName ( const OUString& aPropertyName ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+    virtual void initialize( const Sequence< Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames(  ) override;
 };
 
 }
 
-sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 )
+sal_Int16 AnyCompare::compare( const Any& any1, const Any& any2 )
 {
     sal_Int16 aResult = 0;
 
@@ -89,7 +89,7 @@ sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 )
     return aResult;
 }
 
-Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( const OUString& aPropertyName )
+Reference< XAnyCompare > AnyCompareFactory::createAnyCompareByName( const OUString& aPropertyName )
 {
     // for now only OUString properties compare is implemented
     // so no check for the property name is done
@@ -100,7 +100,7 @@ Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( con
     return Reference< XAnyCompare >();
 }
 
-void SAL_CALL AnyCompareFactory::initialize( const Sequence< Any >& aArguments )
+void AnyCompareFactory::initialize( const Sequence< Any >& aArguments )
 {
     if( aArguments.hasElements() )
     {
@@ -112,17 +112,17 @@ void SAL_CALL AnyCompareFactory::initialize( const Sequence< Any >& aArguments )
     }
 }
 
-OUString SAL_CALL AnyCompareFactory::getImplementationName(  )
+OUString AnyCompareFactory::getImplementationName(  )
 {
     return u"AnyCompareFactory"_ustr;
 }
 
-bool SAL_CALL AnyCompareFactory::supportsService( const OUString& ServiceName )
+bool AnyCompareFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames(  )
+Sequence< OUString > AnyCompareFactory::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.ucb.AnyCompareFactory"_ustr };
 }

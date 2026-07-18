@@ -122,20 +122,20 @@ public:
 
 
     /// inherited from IPropertyArrayHelper
-    virtual bool SAL_CALL fillPropertyMembersByHandle( OUString* _pPropName, sal_Int16* _pAttributes,
+    virtual bool fillPropertyMembersByHandle( OUString* _pPropName, sal_Int16* _pAttributes,
                                             sal_Int32 _nHandle) override ;
 
     /// inherited from IPropertyArrayHelper
-    virtual cpo::uno::Sequence< css::beans::Property> SAL_CALL getProperties() override;
+    virtual cpo::uno::Sequence< css::beans::Property> getProperties() override;
     /// inherited from IPropertyArrayHelper
-    virtual css::beans::Property SAL_CALL getPropertyByName(const OUString& _rPropertyName) override;
+    virtual css::beans::Property getPropertyByName(const OUString& _rPropertyName) override;
 
     /// inherited from IPropertyArrayHelper
-    virtual bool  SAL_CALL hasPropertyByName(const OUString& _rPropertyName) override ;
+    virtual bool  hasPropertyByName(const OUString& _rPropertyName) override ;
     /// inherited from IPropertyArrayHelper
-    virtual sal_Int32 SAL_CALL getHandleByName(const OUString & _rPropertyName) override;
+    virtual sal_Int32 getHandleByName(const OUString & _rPropertyName) override;
     /// inherited from IPropertyArrayHelper
-    virtual sal_Int32 SAL_CALL fillHandles( /*out*/sal_Int32* _pHandles, const cpo::uno::Sequence< OUString >& _rPropNames ) override;
+    virtual sal_Int32 fillHandles( /*out*/sal_Int32* _pHandles, const cpo::uno::Sequence< OUString >& _rPropNames ) override;
 
     /** returns information about a property of the aggregate.
         @param  _pPropName          points to a string to receive the property name. No name is returned if this is NULL.
@@ -207,54 +207,54 @@ protected:
 public:
     OPropertySetAggregationHelper( ::cppu::OBroadcastHelper& rBHelper );
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& aType) override;
+    virtual cpo::uno::Any queryInterface(const cpo::uno::Type& aType) override;
 
 // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
 // XFastPropertySet
-    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const cpo::uno::Any& aValue) override;
-    virtual cpo::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
+    virtual void setFastPropertyValue(sal_Int32 nHandle, const cpo::uno::Any& aValue) override;
+    virtual cpo::uno::Any getFastPropertyValue(sal_Int32 nHandle) override;
 
 // XPropertySet
-    virtual void SAL_CALL           addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
-    virtual void SAL_CALL           addVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener) override;
+    virtual void           addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
+    virtual void           addVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener) override;
 
 // XPropertiesChangeListener
-    virtual void SAL_CALL propertiesChange(const cpo::uno::Sequence< css::beans::PropertyChangeEvent >& evt) override;
+    virtual void propertiesChange(const cpo::uno::Sequence< css::beans::PropertyChangeEvent >& evt) override;
 
 // XVetoableChangeListener
-    virtual void SAL_CALL vetoableChange(const css::beans::PropertyChangeEvent& aEvent) override;
+    virtual void vetoableChange(const css::beans::PropertyChangeEvent& aEvent) override;
 
 // XMultiPropertySet
-    virtual void SAL_CALL   setPropertyValues(const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values) override;
-    virtual void SAL_CALL   addPropertiesChangeListener(const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener) override;
+    virtual void   setPropertyValues(const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values) override;
+    virtual void   addPropertiesChangeListener(const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener) override;
 
 // XPropertyState
-    virtual css::beans::PropertyState SAL_CALL getPropertyState(const OUString& PropertyName) override;
-    virtual void SAL_CALL                                   setPropertyToDefault(const OUString& PropertyName) override;
-    virtual cpo::uno::Any SAL_CALL             getPropertyDefault(const OUString& aPropertyName) override;
+    virtual css::beans::PropertyState getPropertyState(const OUString& PropertyName) override;
+    virtual void                                   setPropertyToDefault(const OUString& PropertyName) override;
+    virtual cpo::uno::Any             getPropertyDefault(const OUString& aPropertyName) override;
 
 // OPropertySetHelper
     /** still waiting to be overwritten ...
         you <B>must<B/> use an OPropertyArrayAggregationHelper here, as the implementation strongly relies on this.
     */
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override = 0;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override = 0;
 
     /** only implemented for "forwarded" properties, every other property must be handled
         in the derivee, and will assert if passed herein
     */
-    virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
+    virtual bool convertFastPropertyValue( cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
 
     /** only implemented for "forwarded" properties, every other property must be handled
         in the derivee, and will assert if passed herein
     */
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
+    virtual void setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
 
 protected:
     virtual ~OPropertySetAggregationHelper() override;
 
-    virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+    virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
     void disposing();
 
     sal_Int32       getOriginalHandle( sal_Int32 _nHandle ) const;

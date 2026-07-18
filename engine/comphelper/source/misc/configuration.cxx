@@ -254,12 +254,12 @@ void comphelper::ConfigurationListener::dispose()
     mbDisposed = true;
 }
 
-void SAL_CALL comphelper::ConfigurationListener::disposing(css::lang::EventObject const &)
+void comphelper::ConfigurationListener::disposing(css::lang::EventObject const &)
 {
     dispose();
 }
 
-void SAL_CALL comphelper::ConfigurationListener::propertyChange(
+void comphelper::ConfigurationListener::propertyChange(
     css::beans::PropertyChangeEvent const &rEvt )
 {
     // Code is commonly used inside the SolarMutexGuard

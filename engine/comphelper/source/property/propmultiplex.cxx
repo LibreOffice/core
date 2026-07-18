@@ -118,7 +118,7 @@ void OPropertyChangeMultiplexer::dispose()
 
 // XEventListener
 
-void SAL_CALL OPropertyChangeMultiplexer::disposing( const  EventObject& _rSource)
+void OPropertyChangeMultiplexer::disposing( const  EventObject& _rSource)
 {
     if (m_pListener)
     {
@@ -139,7 +139,7 @@ void SAL_CALL OPropertyChangeMultiplexer::disposing( const  EventObject& _rSourc
 
 // XPropertyChangeListener
 
-void SAL_CALL OPropertyChangeMultiplexer::propertyChange( const  PropertyChangeEvent& _rEvent )
+void OPropertyChangeMultiplexer::propertyChange( const  PropertyChangeEvent& _rEvent )
 {
     if (m_pListener && !locked())
         m_pListener->_propertyChanged(_rEvent);

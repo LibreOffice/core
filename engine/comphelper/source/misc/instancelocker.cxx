@@ -64,7 +64,7 @@ OInstanceLocker::~OInstanceLocker()
 
 // XComponent
 
-void SAL_CALL OInstanceLocker::dispose()
+void OInstanceLocker::dispose()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -85,7 +85,7 @@ void SAL_CALL OInstanceLocker::dispose()
 }
 
 
-void SAL_CALL OInstanceLocker::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void OInstanceLocker::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -95,7 +95,7 @@ void SAL_CALL OInstanceLocker::addEventListener( const uno::Reference< lang::XEv
 }
 
 
-void SAL_CALL OInstanceLocker::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void OInstanceLocker::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
     m_aListenersContainer.removeInterface( aGuard, xListener );
@@ -103,7 +103,7 @@ void SAL_CALL OInstanceLocker::removeEventListener( const uno::Reference< lang::
 
 // XInitialization
 
-void SAL_CALL OInstanceLocker::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void OInstanceLocker::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     std::unique_lock aGuard( m_aMutex );
     if ( m_bInitialized )
@@ -171,17 +171,17 @@ void SAL_CALL OInstanceLocker::initialize( const cpo::uno::Sequence< cpo::uno::A
 }
 
 // XServiceInfo
-OUString SAL_CALL OInstanceLocker::getImplementationName(  )
+OUString OInstanceLocker::getImplementationName(  )
 {
     return u"com.sun.star.comp.embed.InstanceLocker"_ustr;
 }
 
-bool SAL_CALL OInstanceLocker::supportsService( const OUString& ServiceName )
+bool OInstanceLocker::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > OInstanceLocker::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.InstanceLocker"_ustr };
 }
@@ -252,7 +252,7 @@ void OLockListener::Dispose()
 
 // XEventListener
 
-void SAL_CALL OLockListener::disposing( const lang::EventObject& aEvent )
+void OLockListener::disposing( const lang::EventObject& aEvent )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -276,7 +276,7 @@ void SAL_CALL OLockListener::disposing( const lang::EventObject& aEvent )
 
 // XCloseListener
 
-void SAL_CALL OLockListener::queryClosing( const lang::EventObject& aEvent, bool )
+void OLockListener::queryClosing( const lang::EventObject& aEvent, bool )
 {
     // GetsOwnership parameter is always ignored, the user of the service must close the object always
     std::unique_lock aGuard( m_aMutex );
@@ -305,7 +305,7 @@ void SAL_CALL OLockListener::queryClosing( const lang::EventObject& aEvent, bool
 }
 
 
-void SAL_CALL OLockListener::notifyClosing( const lang::EventObject& aEvent )
+void OLockListener::notifyClosing( const lang::EventObject& aEvent )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -335,7 +335,7 @@ void SAL_CALL OLockListener::notifyClosing( const lang::EventObject& aEvent )
 
 // XTerminateListener
 
-void SAL_CALL OLockListener::queryTermination( const lang::EventObject& aEvent )
+void OLockListener::queryTermination( const lang::EventObject& aEvent )
 {
     std::unique_lock aGuard( m_aMutex );
     if ( !(aEvent.Source == m_xInstance && ( m_nMode & embed::Actions::PREVENT_TERMINATION )) )
@@ -363,7 +363,7 @@ void SAL_CALL OLockListener::queryTermination( const lang::EventObject& aEvent )
 }
 
 
-void SAL_CALL OLockListener::notifyTermination( const lang::EventObject& aEvent )
+void OLockListener::notifyTermination( const lang::EventObject& aEvent )
 {
     std::unique_lock aGuard( m_aMutex );
 

@@ -97,59 +97,59 @@ namespace comphelper
 
         /** === begin UNO interface implementations == **/
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XModifiable:
-        virtual bool SAL_CALL isModified(  ) override;
-        virtual void SAL_CALL setModified( bool bModified ) override;
+        virtual bool isModified(  ) override;
+        virtual void setModified( bool bModified ) override;
 
         // XModifyBroadcaster
-        virtual void SAL_CALL addModifyListener(
+        virtual void addModifyListener(
             const css::uno::Reference<
                     css::util::XModifyListener > & xListener) override;
-        virtual void SAL_CALL removeModifyListener(
+        virtual void removeModifyListener(
             const css::uno::Reference<
                     css::util::XModifyListener > & xListener) override;
 
         // XPropertyContainer
-        virtual void SAL_CALL addProperty( const OUString& Name, ::sal_Int16 Attributes, const cpo::uno::Any& DefaultValue ) override;
-        virtual void SAL_CALL removeProperty( const OUString& Name ) override;
+        virtual void addProperty( const OUString& Name, ::sal_Int16 Attributes, const cpo::uno::Any& DefaultValue ) override;
+        virtual void removeProperty( const OUString& Name ) override;
 
         // XPropertyAccess
-        virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues(  ) override;
-        virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
+        virtual cpo::uno::Sequence< css::beans::PropertyValue > getPropertyValues(  ) override;
+        virtual void setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-        virtual void SAL_CALL setPropertyValue(const OUString& p1, const cpo::uno::Any& p2) override
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual void setPropertyValue(const OUString& p1, const cpo::uno::Any& p2) override
            { OPropertyBag_PBase::setPropertyValue(p1, p2); }
-        virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& p1) override
+        virtual cpo::uno::Any getPropertyValue(const OUString& p1) override
            { return OPropertyBag_PBase::getPropertyValue(p1); }
-        virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+        virtual void addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
            { OPropertyBag_PBase::addPropertyChangeListener(p1, p2); }
-        virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+        virtual void removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
            { OPropertyBag_PBase::removePropertyChangeListener(p1, p2); }
-        virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+        virtual void addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
            { OPropertyBag_PBase::addVetoableChangeListener(p1, p2); }
-        virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+        virtual void removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
            { OPropertyBag_PBase::removeVetoableChangeListener(p1, p2); }
 
         // XSet
-        virtual bool SAL_CALL has( const cpo::uno::Any& aElement ) override;
-        virtual void SAL_CALL insert( const cpo::uno::Any& aElement ) override;
-        virtual void SAL_CALL remove( const cpo::uno::Any& aElement ) override;
+        virtual bool has( const cpo::uno::Any& aElement ) override;
+        virtual void insert( const cpo::uno::Any& aElement ) override;
+        virtual void remove( const cpo::uno::Any& aElement ) override;
 
         // XEnumerationAccess (base of XSet)
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
+        virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
 
         // XElementAccess (base of XEnumerationAccess)
-        virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-        virtual bool SAL_CALL hasElements(  ) override;
+        virtual cpo::uno::Type getElementType(  ) override;
+        virtual bool hasElements(  ) override;
         // UNO interface implementations
 
         // XPropertyState
@@ -159,10 +159,10 @@ namespace comphelper
         virtual css::beans::PropertyState  getPropertyStateByHandle( sal_Int32 _nHandle ) override;
 
         // OPropertySetHelper
-        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
-        virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any & rConvertedValue, cpo::uno::Any & rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual void getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual bool convertFastPropertyValue( cpo::uno::Any & rConvertedValue, cpo::uno::Any & rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+        virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
         // IEventNotificationHook
         virtual void fireEvents(

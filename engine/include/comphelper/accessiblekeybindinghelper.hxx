@@ -56,8 +56,8 @@ namespace comphelper
         void AddKeyBinding( const css::awt::KeyStroke& rKeyStroke );
 
         // XAccessibleKeyBinding
-        virtual sal_Int32 SAL_CALL getAccessibleKeyBindingCount() override;
-        virtual cpo::uno::Sequence< css::awt::KeyStroke > SAL_CALL getAccessibleKeyBinding( sal_Int32 nIndex ) override;
+        virtual sal_Int32 getAccessibleKeyBindingCount() override;
+        virtual cpo::uno::Sequence< css::awt::KeyStroke > getAccessibleKeyBinding( sal_Int32 nIndex ) override;
     };
 
 

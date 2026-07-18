@@ -50,16 +50,16 @@ namespace comphelper
         OPropertyStateHelper(::cppu::OBroadcastHelper& rBHlp,
                              ::cppu::IEventNotificationHook *i_pFireEvents);
 
-        virtual cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& aType) override;
+        virtual cpo::uno::Any queryInterface(const cpo::uno::Type& aType) override;
 
     // XPropertyState
-        virtual css::beans::PropertyState SAL_CALL
+        virtual css::beans::PropertyState
             getPropertyState(const OUString& PropertyName) override;
-        virtual cpo::uno::Sequence< css::beans::PropertyState> SAL_CALL
+        virtual cpo::uno::Sequence< css::beans::PropertyState>
             getPropertyStates(const cpo::uno::Sequence< OUString >& aPropertyName) override final;
-        virtual void SAL_CALL
+        virtual void
             setPropertyToDefault(const OUString& PropertyName) override;
-        virtual cpo::uno::Any SAL_CALL
+        virtual cpo::uno::Any
             getPropertyDefault(const OUString& aPropertyName) override;
 
     // access via handle

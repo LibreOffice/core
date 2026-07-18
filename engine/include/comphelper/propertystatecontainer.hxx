@@ -56,10 +56,10 @@ namespace comphelper
 
 
         // XPropertyState
-        virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override final;
-        virtual cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override;
-        virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override final;
-        virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override final;
+        virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override final;
+        virtual cpo::uno::Sequence< css::beans::PropertyState > getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override;
+        virtual void setPropertyToDefault( const OUString& PropertyName ) override final;
+        virtual cpo::uno::Any getPropertyDefault( const OUString& aPropertyName ) override final;
 
 
         // own overridables
@@ -90,7 +90,7 @@ namespace comphelper
 
     protected:
         // XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& _rType ) override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type& _rType ) override;
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )
 

@@ -40,25 +40,25 @@ public:
     NamedPropertyValuesContainer() noexcept;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const OUString& Name ) override;
+    virtual void insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void removeByName( const OUString& Name ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 private:
     NamedPropertyValues maProperties;
@@ -71,7 +71,7 @@ NamedPropertyValuesContainer::NamedPropertyValuesContainer() noexcept
 }
 
 // XNameContainer
-void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
+void NamedPropertyValuesContainer::insertByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     if( maProperties.find( aName ) != maProperties.end() )
         throw container::ElementExistException();
@@ -83,7 +83,7 @@ void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName,
     maProperties.emplace( aName, aProps );
 }
 
-void SAL_CALL NamedPropertyValuesContainer::removeByName( const OUString& Name )
+void NamedPropertyValuesContainer::removeByName( const OUString& Name )
 {
     NamedPropertyValues::iterator aIter = maProperties.find( Name );
     if( aIter == maProperties.end() )
@@ -93,7 +93,7 @@ void SAL_CALL NamedPropertyValuesContainer::removeByName( const OUString& Name )
 }
 
 // XNameReplace
-void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
+void NamedPropertyValuesContainer::replaceByName( const OUString& aName, const cpo::uno::Any& aElement )
 {
     NamedPropertyValues::iterator aIter = maProperties.find( aName );
     if( aIter == maProperties.end() )
@@ -106,7 +106,7 @@ void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName
 }
 
 // XNameAccess
-cpo::uno::Any SAL_CALL NamedPropertyValuesContainer::getByName( const OUString& aName )
+cpo::uno::Any NamedPropertyValuesContainer::getByName( const OUString& aName )
 {
     NamedPropertyValues::iterator aIter = maProperties.find( aName );
     if( aIter == maProperties.end() )
@@ -119,40 +119,40 @@ cpo::uno::Any SAL_CALL NamedPropertyValuesContainer::getByName( const OUString& 
     return aElement;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getElementNames(  )
+cpo::uno::Sequence< OUString > NamedPropertyValuesContainer::getElementNames(  )
 {
     return comphelper::mapKeysToSequence(maProperties);
 }
 
-bool SAL_CALL NamedPropertyValuesContainer::hasByName( const OUString& aName )
+bool NamedPropertyValuesContainer::hasByName( const OUString& aName )
 {
     NamedPropertyValues::iterator aIter = maProperties.find( aName );
     return aIter != maProperties.end();
 }
 
 // XElementAccess
-cpo::uno::Type SAL_CALL NamedPropertyValuesContainer::getElementType(  )
+cpo::uno::Type NamedPropertyValuesContainer::getElementType(  )
 {
     return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }
 
-bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )
+bool NamedPropertyValuesContainer::hasElements(  )
 {
     return !maProperties.empty();
 }
 
 //XServiceInfo
-OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName(  )
+OUString NamedPropertyValuesContainer::getImplementationName(  )
 {
     return u"NamedPropertyValuesContainer"_ustr;
 }
 
-bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString& ServiceName )
+bool NamedPropertyValuesContainer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > NamedPropertyValuesContainer::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.document.NamedPropertyValues"_ustr };
 }

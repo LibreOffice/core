@@ -117,7 +117,7 @@ namespace comphelper
         }
 
         // XEventListener overridables
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override final;
+        virtual void disposing( const css::lang::EventObject& Source ) override final;
 
     protected:
         // OComponentHelper overridables
@@ -164,7 +164,7 @@ namespace comphelper
 
 
     template< class BROADCASTER, class LISTENER >
-    void SAL_CALL OWeakListenerAdapter< BROADCASTER, LISTENER >::disposing( const css::lang::EventObject& _rSource )
+    void OWeakListenerAdapter< BROADCASTER, LISTENER >::disposing( const css::lang::EventObject& _rSource )
     {
         css::uno::Reference< LISTENER > xListener( getListener() );
         if ( xListener.is() )

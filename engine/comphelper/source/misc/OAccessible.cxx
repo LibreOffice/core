@@ -48,7 +48,7 @@ OAccessible::~OAccessible()
     ensureDisposed();
 }
 
-void SAL_CALL OAccessible::disposing()
+void OAccessible::disposing()
 {
     // rhbz#1001768: de facto this class is locked by SolarMutex;
     // do not lock m_Mutex because it may cause deadlock
@@ -68,7 +68,7 @@ OAccessible::getAccessibleContext()
     return this;
 }
 
-void SAL_CALL
+void
 OAccessible::addAccessibleEventListener(const Reference<XAccessibleEventListener>& _rxListener)
 {
     osl::Guard<SolarMutex> aGuard(SolarMutex::get());
@@ -91,7 +91,7 @@ OAccessible::addAccessibleEventListener(const Reference<XAccessibleEventListener
     AccessibleEventNotifier::addEventListener(m_nClientId, _rxListener);
 }
 
-void SAL_CALL
+void
 OAccessible::removeAccessibleEventListener(const Reference<XAccessibleEventListener>& _rxListener)
 {
     osl::Guard<SolarMutex> aGuard(SolarMutex::get());
@@ -152,9 +152,9 @@ void OAccessible::ensureDisposed()
     }
 }
 
-OUString SAL_CALL OAccessible::getAccessibleId() { return OUString(); }
+OUString OAccessible::getAccessibleId() { return OUString(); }
 
-sal_Int64 SAL_CALL OAccessible::getAccessibleIndexInParent()
+sal_Int64 OAccessible::getAccessibleIndexInParent()
 {
     OExternalLockGuard aGuard( this );
 
@@ -181,7 +181,7 @@ sal_Int64 SAL_CALL OAccessible::getAccessibleIndexInParent()
     return -1;
 }
 
-Locale SAL_CALL OAccessible::getLocale()
+Locale OAccessible::getLocale()
 {
     // simply ask the parent
     Reference< XAccessible > xParent = getAccessibleParent();
@@ -204,7 +204,7 @@ Reference<XAccessibleContext> OAccessible::implGetParentContext()
     return xParentContext;
 }
 
-bool SAL_CALL OAccessible::containsPoint(const awt::Point& _rPoint)
+bool OAccessible::containsPoint(const awt::Point& _rPoint)
 {
     OExternalLockGuard aGuard( this );
     awt::Rectangle aBounds( implGetBounds() );
@@ -214,14 +214,14 @@ bool SAL_CALL OAccessible::containsPoint(const awt::Point& _rPoint)
         &&  ( _rPoint.Y < aBounds.Height );
 }
 
-awt::Point SAL_CALL OAccessible::getLocation()
+awt::Point OAccessible::getLocation()
 {
     OExternalLockGuard aGuard( this );
     awt::Rectangle aBounds( implGetBounds() );
     return awt::Point( aBounds.X, aBounds.Y );
 }
 
-awt::Point SAL_CALL OAccessible::getLocationOnScreen()
+awt::Point OAccessible::getLocationOnScreen()
 {
     OExternalLockGuard aGuard( this );
 
@@ -240,26 +240,26 @@ awt::Point SAL_CALL OAccessible::getLocationOnScreen()
     return aScreenLoc;
 }
 
-awt::Size SAL_CALL OAccessible::getSize()
+awt::Size OAccessible::getSize()
 {
     OExternalLockGuard aGuard( this );
     awt::Rectangle aBounds( implGetBounds() );
     return awt::Size( aBounds.Width, aBounds.Height );
 }
 
-awt::Rectangle SAL_CALL OAccessible::getBounds()
+awt::Rectangle OAccessible::getBounds()
 {
     OExternalLockGuard aGuard( this );
     return implGetBounds();
 }
 
-OUString SAL_CALL OAccessible::getTitledBorderText()
+OUString OAccessible::getTitledBorderText()
 {
     OExternalLockGuard aGuard(this);
     return OUString();
 }
 
-OUString SAL_CALL OAccessible::getToolTipText()
+OUString OAccessible::getToolTipText()
 {
     OExternalLockGuard aGuard(this);
     return OUString();

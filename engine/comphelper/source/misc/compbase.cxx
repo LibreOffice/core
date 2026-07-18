@@ -17,7 +17,7 @@ namespace comphelper
 WeakComponentImplHelperBase::~WeakComponentImplHelperBase() {}
 
 // css::lang::XComponent
-void SAL_CALL WeakComponentImplHelperBase::dispose()
+void WeakComponentImplHelperBase::dispose()
 {
     std::unique_lock aGuard(m_aMutex);
     if (m_bDisposed)
@@ -48,7 +48,7 @@ void WeakComponentImplHelperBase::disposeOnDestruct()
 
 void WeakComponentImplHelperBase::disposing(std::unique_lock<std::mutex>&) {}
 
-void SAL_CALL WeakComponentImplHelperBase::addEventListener(
+void WeakComponentImplHelperBase::addEventListener(
     css::uno::Reference<css::lang::XEventListener> const& rxListener)
 {
     std::unique_lock aGuard(m_aMutex);
@@ -57,14 +57,14 @@ void SAL_CALL WeakComponentImplHelperBase::addEventListener(
     maEventListeners.addInterface(aGuard, rxListener);
 }
 
-void SAL_CALL WeakComponentImplHelperBase::removeEventListener(
+void WeakComponentImplHelperBase::removeEventListener(
     css::uno::Reference<css::lang::XEventListener> const& rxListener)
 {
     std::unique_lock aGuard(m_aMutex);
     maEventListeners.removeInterface(aGuard, rxListener);
 }
 
-cpo::uno::Any SAL_CALL WeakComponentImplHelperBase::queryInterface(cpo::uno::Type const& rType)
+cpo::uno::Any WeakComponentImplHelperBase::queryInterface(cpo::uno::Type const& rType)
 {
     cpo::uno::Any aReturn = ::cppu::queryInterface(rType, static_cast<css::uno::XWeak*>(this),
                                                    static_cast<css::lang::XComponent*>(this));

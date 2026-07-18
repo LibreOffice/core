@@ -54,10 +54,10 @@ public:
                        std::vector<OUString>             _aNames  );
     virtual ~OEnumerationByName() override;
 
-    virtual bool SAL_CALL hasMoreElements(  ) override;
-    virtual cpo::uno::Any SAL_CALL nextElement(  ) override;
+    virtual bool hasMoreElements(  ) override;
+    virtual cpo::uno::Any nextElement(  ) override;
 
-    virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+    virtual void disposing(const css::lang::EventObject& aEvent) override;
 
 private:
     sal_Int32 getLength() const;
@@ -82,10 +82,10 @@ public:
     OEnumerationByIndex(css::uno::Reference< css::container::XIndexAccess > _xAccess);
     virtual ~OEnumerationByIndex() override;
 
-    virtual bool SAL_CALL hasMoreElements(  ) override;
-    virtual cpo::uno::Any SAL_CALL nextElement(  ) override;
+    virtual bool hasMoreElements(  ) override;
+    virtual cpo::uno::Any nextElement(  ) override;
 
-    virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
+    virtual void disposing(const css::lang::EventObject& aEvent) override;
 
 private:
     COMPHELPER_DLLPRIVATE void impl_startDisposeListening();
@@ -111,8 +111,8 @@ public:
     OAnyEnumeration(const cpo::uno::Sequence< cpo::uno::Any >& lItems);
     virtual ~OAnyEnumeration() override;
 
-    virtual bool SAL_CALL hasMoreElements(  ) override;
-    virtual cpo::uno::Any SAL_CALL nextElement(  ) override;
+    virtual bool hasMoreElements(  ) override;
+    virtual cpo::uno::Any nextElement(  ) override;
 
 };
 

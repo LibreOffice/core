@@ -50,14 +50,14 @@ namespace comphelper
         bool    wasSelected() const { return m_bSelected; }
 
         // XInteractionContinuation
-        virtual void SAL_CALL select() override;
+        virtual void select() override;
     private:
         bool    m_bSelected : 1;    /// indicates if the select event occurred
     };
 
 
     template <class INTERACTION>
-    void SAL_CALL OInteraction< INTERACTION >::select(  )
+    void OInteraction< INTERACTION >::select(  )
     {
         m_bSelected = true;
     }
@@ -106,8 +106,8 @@ namespace comphelper
         void addContinuation(const css::uno::Reference< css::task::XInteractionContinuation >& _rxContinuation);
 
     // XInteractionRequest
-        virtual cpo::uno::Any SAL_CALL getRequest(  ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations(  ) override;
+        virtual cpo::uno::Any getRequest(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > getContinuations(  ) override;
     };
 
 }   // namespace comphelper

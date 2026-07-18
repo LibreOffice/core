@@ -77,12 +77,9 @@ public:
     {
     }
 
-    cpo::uno::Sequence<css::beans::Property> SAL_CALL getProperties() override
-    {
-        return m_aProperties;
-    }
+    cpo::uno::Sequence<css::beans::Property> getProperties() override { return m_aProperties; }
 
-    css::beans::Property SAL_CALL getPropertyByName(const OUString& rName) override
+    css::beans::Property getPropertyByName(const OUString& rName) override
     {
         auto it = findByName(rName);
         if (it == m_aProperties.end() || it->Name != rName)
@@ -90,7 +87,7 @@ public:
         return *it;
     }
 
-    bool SAL_CALL hasPropertyByName(const OUString& rName) override
+    bool hasPropertyByName(const OUString& rName) override
     {
         auto it = findByName(rName);
         return it != m_aProperties.end() && it->Name == rName;
@@ -121,7 +118,7 @@ private:
    class MyService : public comphelper::WeakComponentImplHelper<XFoo, XBar>,
                      public comphelper::OPropertySetHelper
    {
-       cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& rType) override
+       cpo::uno::Any queryInterface(const cpo::uno::Type& rType) override
        {
            auto ret = WeakComponentImplHelper::queryInterface(rType);
            if (!ret.hasValue())
@@ -170,8 +167,7 @@ public:
 
     // XPropertySet
 
-    void SAL_CALL setPropertyValue(const OUString& rPropertyName,
-                                   const cpo::uno::Any& aValue) override
+    void setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& aValue) override
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(rPropertyName);
@@ -179,53 +175,52 @@ public:
         setFastPropertyValueImpl(aGuard, nHandle, aValue);
     }
 
-    cpo::uno::Any SAL_CALL getPropertyValue(const OUString& aPropertyName) override
+    cpo::uno::Any getPropertyValue(const OUString& aPropertyName) override
     {
         std::unique_lock aGuard(this->m_aMutex);
         return getPropertyValueImpl(aGuard, aPropertyName);
     }
 
-    css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override
+    css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override
     {
         return createPropertySetInfo(getInfoHelper());
     }
 
-    void SAL_CALL addPropertyChangeListener(
+    void addPropertyChangeListener(
         const OUString& rPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
 
-    void SAL_CALL removePropertyChangeListener(
+    void removePropertyChangeListener(
         const OUString& rPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
 
-    void SAL_CALL addVetoableChangeListener(
+    void addVetoableChangeListener(
         const OUString& rPropertyName,
         const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
 
-    void SAL_CALL removeVetoableChangeListener(
+    void removeVetoableChangeListener(
         const OUString& rPropertyName,
         const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
 
     // XFastPropertySet
 
-    void SAL_CALL setFastPropertyValue(sal_Int32 nHandle,
-                                       const cpo::uno::Any& rValue) override final
+    void setFastPropertyValue(sal_Int32 nHandle, const cpo::uno::Any& rValue) override final
     {
         std::unique_lock aGuard(this->m_aMutex);
         setFastPropertyValueImpl(aGuard, nHandle, rValue);
     }
 
-    cpo::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override final;
+    cpo::uno::Any getFastPropertyValue(sal_Int32 nHandle) override final;
 
     // XMultiPropertySet
 
-    void SAL_CALL setPropertyValues(const cpo::uno::Sequence<OUString>& PropertyNames,
-                                    const cpo::uno::Sequence<cpo::uno::Any>& Values) override;
+    void setPropertyValues(const cpo::uno::Sequence<OUString>& PropertyNames,
+                           const cpo::uno::Sequence<cpo::uno::Any>& Values) override;
 
-    cpo::uno::Sequence<cpo::uno::Any> SAL_CALL
+    cpo::uno::Sequence<cpo::uno::Any>
     getPropertyValues(const cpo::uno::Sequence<OUString>& PropertyNames) override final;
 
-    void SAL_CALL addPropertiesChangeListener(
+    void addPropertiesChangeListener(
         const cpo::uno::Sequence<OUString>&,
         const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final
     {
@@ -233,14 +228,14 @@ public:
         m_aPropertiesChangeListeners.addInterface(aGuard, Listener);
     }
 
-    void SAL_CALL removePropertiesChangeListener(
+    void removePropertiesChangeListener(
         const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final
     {
         std::unique_lock aGuard(this->m_aMutex);
         m_aPropertiesChangeListeners.removeInterface(aGuard, Listener);
     }
 
-    void SAL_CALL firePropertiesChangeEvent(
+    void firePropertiesChangeEvent(
         const cpo::uno::Sequence<OUString>& PropertyNames,
         const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
@@ -492,8 +487,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::callNoBroadcast(Func&& fn)
 // XFastPropertySet
 
 template <IsUnoImplBase BaseClass, typename... Ifc>
-cpo::uno::Any SAL_CALL
-OPropertyImplHelper<BaseClass, Ifc...>::getFastPropertyValue(sal_Int32 nHandle)
+cpo::uno::Any OPropertyImplHelper<BaseClass, Ifc...>::getFastPropertyValue(sal_Int32 nHandle)
 {
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();
     if (!rPH.fillPropertyMembersByHandle(nullptr, nullptr, nHandle))

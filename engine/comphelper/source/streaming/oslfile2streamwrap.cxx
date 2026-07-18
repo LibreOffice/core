@@ -43,7 +43,7 @@ OSLInputStreamWrapper::~OSLInputStreamWrapper()
 }
 
 
-sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
+sal_Int32 OSLInputStreamWrapper::readBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
 {
     if (!m_pFile)
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
@@ -67,7 +67,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(cpo::uno::Sequence< sal_Int8
     return sal::static_int_cast< sal_Int32 >(nRead);
 }
 
-sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
+sal_Int32 OSLInputStreamWrapper::readSomeBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
 {
     if (!m_pFile)
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
@@ -78,7 +78,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(cpo::uno::Sequence< sal_
     return readBytes(aData, nMaxBytesToRead);
 }
 
-void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
+void OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
 {
     std::scoped_lock aGuard( m_aMutex );
     if (!m_pFile)
@@ -95,7 +95,7 @@ void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 }
 
-sal_Int32 SAL_CALL OSLInputStreamWrapper::available()
+sal_Int32 OSLInputStreamWrapper::available()
 {
     std::scoped_lock aGuard( m_aMutex );
     if (!m_pFile)
@@ -123,7 +123,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::available()
 }
 
 
-void SAL_CALL OSLInputStreamWrapper::closeInput()
+void OSLInputStreamWrapper::closeInput()
 {
     if (!m_pFile)
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
@@ -143,7 +143,7 @@ OSLOutputStreamWrapper::OSLOutputStreamWrapper(osl::File & _rFile):
 
 OSLOutputStreamWrapper::~OSLOutputStreamWrapper() {}
 
-void SAL_CALL OSLOutputStreamWrapper::writeBytes(const cpo::uno::Sequence< sal_Int8 >& aData)
+void OSLOutputStreamWrapper::writeBytes(const cpo::uno::Sequence< sal_Int8 >& aData)
 {
     sal_uInt64 nWritten;
     FileBase::RC eError = rFile.write(aData.getConstArray(),aData.getLength(), nWritten);
@@ -155,12 +155,12 @@ void SAL_CALL OSLOutputStreamWrapper::writeBytes(const cpo::uno::Sequence< sal_I
 }
 
 
-void SAL_CALL OSLOutputStreamWrapper::flush()
+void OSLOutputStreamWrapper::flush()
 {
 }
 
 
-void SAL_CALL OSLOutputStreamWrapper::closeOutput()
+void OSLOutputStreamWrapper::closeOutput()
 {
     rFile.close();
 }

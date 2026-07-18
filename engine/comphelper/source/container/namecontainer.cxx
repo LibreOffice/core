@@ -40,20 +40,20 @@ namespace comphelper
         explicit NameContainer( const cpo::uno::Type& aType );
 
         // XNameContainer
-        virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
-        virtual void SAL_CALL removeByName( const OUString& Name ) override;
+        virtual void insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+        virtual void removeByName( const OUString& Name ) override;
 
         // XNameReplace
-        virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+        virtual void replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
         // XNameAccess
-        virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-        virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+        virtual cpo::uno::Any getByName( const OUString& aName ) override;
+        virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
+        virtual bool hasByName( const OUString& aName ) override;
 
         // XElementAccess
-        virtual bool SAL_CALL hasElements(  ) override;
-        virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
+        virtual bool hasElements(  ) override;
+        virtual cpo::uno::Type getElementType(  ) override;
 
     private:
         SvGenericNameContainerMapImpl maProperties;
@@ -77,7 +77,7 @@ NameContainer::NameContainer( const cpo::uno::Type& aType )
 }
 
 // XNameContainer
-void SAL_CALL NameContainer::insertByName( const OUString& aName, const Any& aElement )
+void NameContainer::insertByName( const OUString& aName, const Any& aElement )
 {
     std::scoped_lock aGuard( maMutex );
 
@@ -90,7 +90,7 @@ void SAL_CALL NameContainer::insertByName( const OUString& aName, const Any& aEl
     maProperties.emplace(aName,aElement);
 }
 
-void SAL_CALL NameContainer::removeByName( const OUString& Name )
+void NameContainer::removeByName( const OUString& Name )
 {
     std::scoped_lock aGuard( maMutex );
 
@@ -103,7 +103,7 @@ void SAL_CALL NameContainer::removeByName( const OUString& Name )
 
 // XNameReplace
 
-void SAL_CALL NameContainer::replaceByName( const OUString& aName, const Any& aElement )
+void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
 {
     std::scoped_lock aGuard( maMutex );
 
@@ -119,7 +119,7 @@ void SAL_CALL NameContainer::replaceByName( const OUString& aName, const Any& aE
 
 // XNameAccess
 
-Any SAL_CALL NameContainer::getByName( const OUString& aName )
+Any NameContainer::getByName( const OUString& aName )
 {
     std::scoped_lock aGuard( maMutex );
 
@@ -130,14 +130,14 @@ Any SAL_CALL NameContainer::getByName( const OUString& aName )
     return (*aIter).second;
 }
 
-Sequence< OUString > SAL_CALL NameContainer::getElementNames(  )
+Sequence< OUString > NameContainer::getElementNames(  )
 {
     std::scoped_lock aGuard( maMutex );
 
     return comphelper::mapKeysToSequence(maProperties);
 }
 
-bool SAL_CALL NameContainer::hasByName( const OUString& aName )
+bool NameContainer::hasByName( const OUString& aName )
 {
     std::scoped_lock aGuard( maMutex );
 
@@ -145,14 +145,14 @@ bool SAL_CALL NameContainer::hasByName( const OUString& aName )
     return aIter != maProperties.end();
 }
 
-bool SAL_CALL NameContainer::hasElements(  )
+bool NameContainer::hasElements(  )
 {
     std::scoped_lock aGuard( maMutex );
 
     return !maProperties.empty();
 }
 
-Type SAL_CALL NameContainer::getElementType()
+Type NameContainer::getElementType()
 {
     return maType;
 }

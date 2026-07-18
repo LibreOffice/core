@@ -74,7 +74,7 @@ void PropertySetInfo::remove( const OUString& aName ) noexcept
     maProperties.realloc(0);
 }
 
-Sequence< css::beans::Property > SAL_CALL PropertySetInfo::getProperties()
+Sequence< css::beans::Property > PropertySetInfo::getProperties()
 {
     // maybe we have to generate the properties after
     // a change in the property map or at first call
@@ -99,7 +99,7 @@ Sequence< css::beans::Property > SAL_CALL PropertySetInfo::getProperties()
     return maProperties;
 }
 
-Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName )
+Property PropertySetInfo::getPropertyByName( const OUString& aName )
 {
     PropertyMap::iterator aIter = maPropertyMap.find( aName );
 
@@ -111,7 +111,7 @@ Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName )
     return Property( aName, pEntry->mnHandle, pEntry->maType, pEntry->mnAttributes );
 }
 
-bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& aName )
+bool PropertySetInfo::hasPropertyByName( const OUString& aName )
 {
     return maPropertyMap.contains( aName );
 }

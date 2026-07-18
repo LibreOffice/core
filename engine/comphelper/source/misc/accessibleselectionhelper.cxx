@@ -100,44 +100,44 @@ Reference<XAccessibleContext> OAccessibleSelectionHelper::implGetAccessibleConte
     return this;
 }
 
-void SAL_CALL OAccessibleSelectionHelper::selectAccessibleChild(sal_Int64 nChildIndex)
+void OAccessibleSelectionHelper::selectAccessibleChild(sal_Int64 nChildIndex)
 {
     OExternalLockGuard aGuard(this);
     OCommonAccessibleSelection::selectAccessibleChild(nChildIndex);
 }
 
-bool SAL_CALL OAccessibleSelectionHelper::isAccessibleChildSelected(sal_Int64 nChildIndex)
+bool OAccessibleSelectionHelper::isAccessibleChildSelected(sal_Int64 nChildIndex)
 {
     OExternalLockGuard aGuard(this);
     return OCommonAccessibleSelection::isAccessibleChildSelected(nChildIndex);
 }
 
-void SAL_CALL OAccessibleSelectionHelper::clearAccessibleSelection()
+void OAccessibleSelectionHelper::clearAccessibleSelection()
 {
     OExternalLockGuard aGuard(this);
     OCommonAccessibleSelection::clearAccessibleSelection();
 }
 
-void SAL_CALL OAccessibleSelectionHelper::selectAllAccessibleChildren()
+void OAccessibleSelectionHelper::selectAllAccessibleChildren()
 {
     OExternalLockGuard aGuard(this);
     OCommonAccessibleSelection::selectAllAccessibleChildren();
 }
 
-sal_Int64 SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChildCount()
+sal_Int64 OAccessibleSelectionHelper::getSelectedAccessibleChildCount()
 {
     OExternalLockGuard aGuard(this);
     return OCommonAccessibleSelection::getSelectedAccessibleChildCount();
 }
 
 Reference<XAccessible>
-    SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChild(sal_Int64 nSelectedChildIndex)
+OAccessibleSelectionHelper::getSelectedAccessibleChild(sal_Int64 nSelectedChildIndex)
 {
     OExternalLockGuard aGuard(this);
     return OCommonAccessibleSelection::getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
-void SAL_CALL OAccessibleSelectionHelper::deselectAccessibleChild(sal_Int64 nSelectedChildIndex)
+void OAccessibleSelectionHelper::deselectAccessibleChild(sal_Int64 nSelectedChildIndex)
 {
     OExternalLockGuard aGuard(this);
     OCommonAccessibleSelection::deselectAccessibleChild(nSelectedChildIndex);

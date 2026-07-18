@@ -45,17 +45,17 @@ public:
     const SequenceOutputStreamService& operator=(const SequenceOutputStreamService&) = delete;
 
     // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString & ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString & ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // css::io::XOutputStream:
-    virtual void SAL_CALL writeBytes( const cpo::uno::Sequence< ::sal_Int8 > & aData ) override;
-    virtual void SAL_CALL flush() override;
-    virtual void SAL_CALL closeOutput() override;
+    virtual void writeBytes( const cpo::uno::Sequence< ::sal_Int8 > & aData ) override;
+    virtual void flush() override;
+    virtual void closeOutput() override;
 
     // css::io::XSequenceOutputStream:
-    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getWrittenBytes(  ) override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > getWrittenBytes(  ) override;
 
 private:
     virtual ~SequenceOutputStreamService() override {};
@@ -72,23 +72,23 @@ SequenceOutputStreamService::SequenceOutputStreamService()
 }
 
 // com.sun.star.uno.XServiceInfo:
-OUString SAL_CALL SequenceOutputStreamService::getImplementationName()
+OUString SequenceOutputStreamService::getImplementationName()
 {
     return u"com.sun.star.comp.SequenceOutputStreamService"_ustr;
 }
 
-bool SAL_CALL SequenceOutputStreamService::supportsService( OUString const & serviceName )
+bool SequenceOutputStreamService::supportsService( OUString const & serviceName )
 {
     return cppu::supportsService(this, serviceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SequenceOutputStreamService::getSupportedServiceNames()
 {
     return { u"com.sun.star.io.SequenceOutputStream"_ustr };
 }
 
 // css::io::XOutputStream:
-void SAL_CALL SequenceOutputStreamService::writeBytes( const cpo::uno::Sequence< ::sal_Int8 > & aData )
+void SequenceOutputStreamService::writeBytes( const cpo::uno::Sequence< ::sal_Int8 > & aData )
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xOutputStream.is() )
@@ -97,7 +97,7 @@ void SAL_CALL SequenceOutputStreamService::writeBytes( const cpo::uno::Sequence<
     m_xOutputStream->writeBytes( aData );
 }
 
-void SAL_CALL SequenceOutputStreamService::flush()
+void SequenceOutputStreamService::flush()
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xOutputStream.is() )
@@ -106,7 +106,7 @@ void SAL_CALL SequenceOutputStreamService::flush()
     m_xOutputStream->flush();
 };
 
-void SAL_CALL SequenceOutputStreamService::closeOutput()
+void SequenceOutputStreamService::closeOutput()
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xOutputStream.is() )
@@ -118,7 +118,7 @@ void SAL_CALL SequenceOutputStreamService::closeOutput()
 }
 
 // css::io::XSequenceOutputStream:
-cpo::uno::Sequence< ::sal_Int8 > SAL_CALL SequenceOutputStreamService::getWrittenBytes()
+cpo::uno::Sequence< ::sal_Int8 > SequenceOutputStreamService::getWrittenBytes()
 {
     std::scoped_lock aGuard( m_aMutex );
 

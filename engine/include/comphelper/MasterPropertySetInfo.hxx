@@ -41,9 +41,9 @@ namespace comphelper
         void add( PropertyInfoHash &rHash, sal_uInt8 nMapId );
 
         // XPropertySetInfo
-        virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
-        virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
-        virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+        virtual cpo::uno::Sequence< css::beans::Property > getProperties() override;
+        virtual css::beans::Property getPropertyByName( const OUString& aName ) override;
+        virtual bool hasPropertyByName( const OUString& Name ) override;
 
         PropertyDataHash                            maMap;
         cpo::uno::Sequence < css::beans::Property > maProperties;

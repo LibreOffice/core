@@ -54,13 +54,13 @@ using namespace cpo::uno;
     }
 
 
-    Any SAL_CALL OInteractionRequest::getRequest(  )
+    Any OInteractionRequest::getRequest(  )
     {
         return m_aRequest;
     }
 
 
-    Sequence< Reference< XInteractionContinuation > > SAL_CALL OInteractionRequest::getContinuations(  )
+    Sequence< Reference< XInteractionContinuation > > OInteractionRequest::getContinuations(  )
     {
         return comphelper::containerToSequence(m_aContinuations);
     }

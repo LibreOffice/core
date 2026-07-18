@@ -46,7 +46,7 @@ public:
     explicit ContainerListener(ContainerStats *pStats)
         : m_pStats(pStats) { m_pStats->m_nAlive++; }
     virtual ~ContainerListener() override { m_pStats->m_nAlive--; }
-    virtual void SAL_CALL disposing( const EventObject& ) override
+    virtual void disposing( const EventObject& ) override
     {
         m_pStats->m_nDisposed++;
     }

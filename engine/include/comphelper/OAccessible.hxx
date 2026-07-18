@@ -58,24 +58,24 @@ private:
 public:
     // XAccessible
     virtual css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override final;
+        getAccessibleContext() override final;
 
     // XAccessibleEventBroadcaster
-    virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-    virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
+    virtual void addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
+    virtual void removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
 
     // XAccessibleContext - still waiting to be overwritten
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override = 0;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override = 0;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override = 0;
-    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override = 0;
-    virtual OUString SAL_CALL getAccessibleDescription(  ) override = 0;
-    virtual OUString SAL_CALL getAccessibleName(  ) override = 0;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override = 0;
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override = 0;
+    virtual sal_Int64 getAccessibleChildCount(  ) override = 0;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override = 0;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override = 0;
+    virtual sal_Int16 getAccessibleRole(  ) override = 0;
+    virtual OUString getAccessibleDescription(  ) override = 0;
+    virtual OUString getAccessibleName(  ) override = 0;
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override = 0;
+    virtual sal_Int64 getAccessibleStateSet(  ) override = 0;
 
     // XAccessibleContext2 - default implementation
-    virtual OUString SAL_CALL getAccessibleId(  ) override;
+    virtual OUString getAccessibleId(  ) override;
 
     // XAccessibleContext - default implementations
     /** default implementation for retrieving the index of this object within the parent
@@ -83,16 +83,16 @@ public:
             <code>&lt;parent&gt;.getAccessibleChild(i).getAccessibleContext()</code> returns
             a reference to this OAccessible object.</p>
     */
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
+    virtual sal_Int64 getAccessibleIndexInParent(  ) override;
     /** default implementation for retrieving the locale
         <p>This basic implementation returns the locale of the parent context,
         as retrieved via getAccessibleParent()->getAccessibleContext.</p>
     */
-    virtual css::lang::Locale SAL_CALL getLocale(  ) override;
+    virtual css::lang::Locale getLocale(  ) override;
 
 protected:
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 protected:
     // helper
@@ -145,20 +145,20 @@ protected:
 
 public:
     // XAccessibleComponent - default implementations which can be implemented using <method>implGetBounds</method>
-    virtual bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override final;
-    virtual css::awt::Point SAL_CALL getLocation(  ) override final;
+    virtual bool containsPoint( const css::awt::Point& aPoint ) override final;
+    virtual css::awt::Point getLocation(  ) override final;
     /* note: getLocationOnScreen relies on a valid parent (XAccessibleContext::getParent()->getAccessibleContext()),
        which itself implements XAccessibleComponent
 
         @throws css::uno::RuntimeException
     */
-    virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-    virtual css::awt::Size SAL_CALL getSize(  ) override final;
-    virtual css::awt::Rectangle SAL_CALL getBounds(  ) override final;
+    virtual css::awt::Point getLocationOnScreen(  ) override;
+    virtual css::awt::Size getSize(  ) override final;
+    virtual css::awt::Rectangle getBounds(  ) override final;
 
     // XAccessibleExtendedComponent - default implementations returning empty strings
-    virtual OUString SAL_CALL getTitledBorderText() override;
-    virtual OUString SAL_CALL getToolTipText() override;
+    virtual OUString getTitledBorderText() override;
+    virtual OUString getToolTipText() override;
 };
 
 }   // namespace comphelper

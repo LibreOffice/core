@@ -77,7 +77,7 @@ MasterPropertySet::~MasterPropertySet()
 }
 
 // XPropertySet
-Reference< XPropertySetInfo > SAL_CALL MasterPropertySet::getPropertySetInfo(  )
+Reference< XPropertySetInfo > MasterPropertySet::getPropertySetInfo(  )
 {
     return mxInfo;
 }
@@ -89,7 +89,7 @@ void MasterPropertySet::registerSlave ( ChainablePropertySet *pNewSet )
     mxInfo->add ( pNewSet->mxInfo->maMap, mnLastId );
 }
 
-void SAL_CALL MasterPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
+void MasterPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::optional< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
@@ -122,7 +122,7 @@ void SAL_CALL MasterPropertySet::setPropertyValue( const OUString& rPropertyName
     }
 }
 
-Any SAL_CALL MasterPropertySet::getPropertyValue( const OUString& rPropertyName )
+Any MasterPropertySet::getPropertyValue( const OUString& rPropertyName )
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::optional< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
@@ -157,28 +157,28 @@ Any SAL_CALL MasterPropertySet::getPropertyValue( const OUString& rPropertyName 
     return aAny;
 }
 
-void SAL_CALL MasterPropertySet::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
+void MasterPropertySet::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL MasterPropertySet::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
+void MasterPropertySet::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL MasterPropertySet::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
+void MasterPropertySet::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL MasterPropertySet::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
+void MasterPropertySet::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
 {
     // todo
 }
 
 // XMultiPropertySet
-void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
+void MasterPropertySet::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::optional< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
@@ -239,7 +239,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
     }
 }
 
-Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< OUString >& aPropertyNames )
+Sequence< Any > MasterPropertySet::getPropertyValues( const Sequence< OUString >& aPropertyNames )
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::optional< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
@@ -301,23 +301,23 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
     return aValues;
 }
 
-void SAL_CALL MasterPropertySet::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
+void MasterPropertySet::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL MasterPropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
+void MasterPropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL MasterPropertySet::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
+void MasterPropertySet::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
 {
     // todo
 }
 
 // XPropertyState
-PropertyState SAL_CALL MasterPropertySet::getPropertyState( const OUString& PropertyName )
+PropertyState MasterPropertySet::getPropertyState( const OUString& PropertyName )
 {
     PropertyDataHash::const_iterator aIter =  mxInfo->maMap.find( PropertyName );
     if( aIter == mxInfo->maMap.end())
@@ -337,7 +337,7 @@ PropertyState SAL_CALL MasterPropertySet::getPropertyState( const OUString& Prop
     return PropertyState_AMBIGUOUS_VALUE;
 }
 
-Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const Sequence< OUString >& rPropertyNames )
+Sequence< PropertyState > MasterPropertySet::getPropertyStates( const Sequence< OUString >& rPropertyNames )
 {
     const sal_Int32 nCount = rPropertyNames.getLength();
 
@@ -376,7 +376,7 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
     return aStates;
 }
 
-void SAL_CALL MasterPropertySet::setPropertyToDefault( const OUString& rPropertyName )
+void MasterPropertySet::setPropertyToDefault( const OUString& rPropertyName )
 {
     PropertyDataHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
 
@@ -384,7 +384,7 @@ void SAL_CALL MasterPropertySet::setPropertyToDefault( const OUString& rProperty
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
 }
 
-Any SAL_CALL MasterPropertySet::getPropertyDefault( const OUString& rPropertyName )
+Any MasterPropertySet::getPropertyDefault( const OUString& rPropertyName )
 {
     PropertyDataHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
 

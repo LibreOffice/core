@@ -58,14 +58,14 @@ public:
     explicit OFOPXMLHelper_Impl( sal_uInt16 nFormat ); // must not be created directly
 
     // XDocumentHandler
-    virtual void SAL_CALL startDocument() override;
-    virtual void SAL_CALL endDocument() override;
-    virtual void SAL_CALL startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
-    virtual void SAL_CALL endElement( const OUString& aName ) override;
-    virtual void SAL_CALL characters( const OUString& aChars ) override;
-    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
-    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
-    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
+    virtual void startDocument() override;
+    virtual void endDocument() override;
+    virtual void startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
+    virtual void endElement( const OUString& aName ) override;
+    virtual void characters( const OUString& aChars ) override;
+    virtual void ignorableWhitespace( const OUString& aWhitespaces ) override;
+    virtual void processingInstruction( const OUString& aTarget, const OUString& aData ) override;
+    virtual void setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 };
 
 }
@@ -283,17 +283,17 @@ cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > const & OFOPXMLHel
 }
 
 
-void SAL_CALL OFOPXMLHelper_Impl::startDocument()
+void OFOPXMLHelper_Impl::startDocument()
 {
 }
 
 
-void SAL_CALL OFOPXMLHelper_Impl::endDocument()
+void OFOPXMLHelper_Impl::endDocument()
 {
 }
 
 
-void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
+void OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
 {
     if ( m_nFormat == RELATIONINFO_FORMAT )
     {
@@ -443,7 +443,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
 }
 
 
-void SAL_CALL OFOPXMLHelper_Impl::endElement( const OUString& aName )
+void OFOPXMLHelper_Impl::endElement( const OUString& aName )
 {
     if ( m_nFormat == RELATIONINFO_FORMAT || m_nFormat == CONTENTTYPE_FORMAT )
     {
@@ -459,22 +459,22 @@ void SAL_CALL OFOPXMLHelper_Impl::endElement( const OUString& aName )
 }
 
 
-void SAL_CALL OFOPXMLHelper_Impl::characters( const OUString& /*aChars*/ )
+void OFOPXMLHelper_Impl::characters( const OUString& /*aChars*/ )
 {
 }
 
 
-void SAL_CALL OFOPXMLHelper_Impl::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
+void OFOPXMLHelper_Impl::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
 {
 }
 
 
-void SAL_CALL OFOPXMLHelper_Impl::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
+void OFOPXMLHelper_Impl::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
 {
 }
 
 
-void SAL_CALL OFOPXMLHelper_Impl::setDocumentLocator( const uno::Reference< css::xml::sax::XLocator >& /*xLocator*/ )
+void OFOPXMLHelper_Impl::setDocumentLocator( const uno::Reference< css::xml::sax::XLocator >& /*xLocator*/ )
 {
 }
 

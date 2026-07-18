@@ -73,7 +73,7 @@ using namespace cpo::uno;
     IMPLEMENT_FORWARD_XINTERFACE2( OPropertyBag, OPropertyBag_Base, OPropertyBag_PBase )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OPropertyBag, OPropertyBag_Base, OPropertyBag_PBase )
 
-    void SAL_CALL OPropertyBag::initialize( const Sequence< Any >& _rArguments )
+    void OPropertyBag::initialize( const Sequence< Any >& _rArguments )
     {
         Sequence< Type > aTypes;
         bool AllowEmptyPropertyName(false);
@@ -103,17 +103,17 @@ using namespace cpo::uno;
         }
     }
 
-    OUString SAL_CALL OPropertyBag::getImplementationName()
+    OUString OPropertyBag::getImplementationName()
     {
         return u"com.sun.star.comp.comphelper.OPropertyBag"_ustr;
     }
 
-    bool SAL_CALL OPropertyBag::supportsService( const OUString& rServiceName )
+    bool OPropertyBag::supportsService( const OUString& rServiceName )
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL OPropertyBag::getSupportedServiceNames(  )
+    Sequence< OUString > OPropertyBag::getSupportedServiceNames(  )
     {
          return { u"com.sun.star.beans.PropertyBag"_ustr };
     }
@@ -154,37 +154,37 @@ using namespace cpo::uno;
     }
 
 
-    bool SAL_CALL OPropertyBag::isModified()
+    bool OPropertyBag::isModified()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_isModified;
     }
 
-    void SAL_CALL OPropertyBag::setModified( bool bModified )
+    void OPropertyBag::setModified( bool bModified )
     {
         setModifiedImpl(bModified, false);
     }
 
-    void SAL_CALL OPropertyBag::addModifyListener(
+    void OPropertyBag::addModifyListener(
         const Reference< XModifyListener > & xListener)
     {
         m_NotifyListeners.addInterface(xListener);
     }
 
-    void SAL_CALL OPropertyBag::removeModifyListener(
+    void OPropertyBag::removeModifyListener(
         const Reference< XModifyListener > & xListener)
     {
         m_NotifyListeners.removeInterface(xListener);
     }
 
 
-    Reference< XPropertySetInfo > SAL_CALL OPropertyBag::getPropertySetInfo(  )
+    Reference< XPropertySetInfo > OPropertyBag::getPropertySetInfo(  )
     {
         return createPropertySetInfo( getInfoHelper() );
     }
 
 
-    bool SAL_CALL OPropertyBag::has( const Any& /*aElement*/ )
+    bool OPropertyBag::has( const Any& /*aElement*/ )
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
         // So, everything of XSet except insert is implemented empty
@@ -192,7 +192,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OPropertyBag::insert( const Any& _element )
+    void OPropertyBag::insert( const Any& _element )
     {
         // This is a workaround for addProperty not being able to add default-void properties.
         // If we ever have a smarter XPropertyContainer::addProperty interface, we can remove this, ehm, well, hack.
@@ -219,7 +219,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OPropertyBag::remove( const Any& /*aElement*/ )
+    void OPropertyBag::remove( const Any& /*aElement*/ )
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
         // So, everything of XSet except insert is implemented empty
@@ -227,7 +227,7 @@ using namespace cpo::uno;
     }
 
 
-    Reference< XEnumeration > SAL_CALL OPropertyBag::createEnumeration(  )
+    Reference< XEnumeration > OPropertyBag::createEnumeration(  )
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
         // So, everything of XSet except insert is implemented empty
@@ -235,7 +235,7 @@ using namespace cpo::uno;
     }
 
 
-    Type SAL_CALL OPropertyBag::getElementType(  )
+    Type OPropertyBag::getElementType(  )
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
         // So, everything of XSet except insert is implemented empty
@@ -243,7 +243,7 @@ using namespace cpo::uno;
     }
 
 
-    bool SAL_CALL OPropertyBag::hasElements(  )
+    bool OPropertyBag::hasElements(  )
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
         // So, everything of XSet except insert is implemented empty
@@ -251,23 +251,23 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OPropertyBag::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
+    void OPropertyBag::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         m_aDynamicProperties.getFastPropertyValue( _nHandle, _rValue );
     }
 
-    bool SAL_CALL OPropertyBag::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
+    bool OPropertyBag::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
     {
         return m_aDynamicProperties.convertFastPropertyValue( _nHandle, _rValue, _rConvertedValue, _rOldValue );
     }
 
-    void SAL_CALL OPropertyBag::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
+    void OPropertyBag::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
     {
         m_aDynamicProperties.setFastPropertyValue( nHandle, rValue );
     }
 
 
-    ::cppu::IPropertyArrayHelper& SAL_CALL OPropertyBag::getInfoHelper()
+    ::cppu::IPropertyArrayHelper& OPropertyBag::getInfoHelper()
     {
         if (!m_pArrayHelper)
         {
@@ -302,7 +302,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OPropertyBag::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue )
+    void OPropertyBag::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue )
     {
         {
             osl::MutexGuard g(m_aMutex);
@@ -324,7 +324,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OPropertyBag::removeProperty( const OUString& _rName )
+    void OPropertyBag::removeProperty( const OUString& _rName )
     {
         {
             osl::MutexGuard g(m_aMutex);
@@ -367,7 +367,7 @@ using namespace cpo::uno;
     }
 
 
-    Sequence< PropertyValue > SAL_CALL OPropertyBag::getPropertyValues(  )
+    Sequence< PropertyValue > OPropertyBag::getPropertyValues(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -494,7 +494,7 @@ using namespace cpo::uno;
     }
 
 
-    void SAL_CALL OPropertyBag::setPropertyValues( const Sequence< PropertyValue >& _rProps )
+    void OPropertyBag::setPropertyValues( const Sequence< PropertyValue >& _rProps )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_setPropertyValues_throw( _rProps );

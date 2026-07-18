@@ -53,12 +53,12 @@ PropertySetHelper::~PropertySetHelper() noexcept
 }
 
 // XPropertySet
-Reference< XPropertySetInfo > SAL_CALL PropertySetHelper::getPropertySetInfo(  )
+Reference< XPropertySetInfo > PropertySetHelper::getPropertySetInfo(  )
 {
     return mxInfo;
 }
 
-void SAL_CALL PropertySetHelper::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+void PropertySetHelper::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
 {
     PropertyMapEntry const * aEntries[2];
     aEntries[0] = find( mxInfo, aPropertyName );
@@ -71,7 +71,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue( const OUString& aPropertyName
     _setPropertyValues( aEntries, &aValue );
 }
 
-Any SAL_CALL PropertySetHelper::getPropertyValue( const OUString& PropertyName )
+Any PropertySetHelper::getPropertyValue( const OUString& PropertyName )
 {
     PropertyMapEntry const * aEntries[2];
     aEntries[0] = find( mxInfo, PropertyName );
@@ -87,28 +87,28 @@ Any SAL_CALL PropertySetHelper::getPropertyValue( const OUString& PropertyName )
     return aAny;
 }
 
-void SAL_CALL PropertySetHelper::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
+void PropertySetHelper::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL PropertySetHelper::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
+void PropertySetHelper::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL PropertySetHelper::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
+void PropertySetHelper::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL PropertySetHelper::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
+void PropertySetHelper::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
 {
     // todo
 }
 
 // XMultiPropertySet
-void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rValues )
+void PropertySetHelper::setPropertyValues( const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rValues )
 {
     const sal_Int32 nCount = rPropertyNames.getLength();
 
@@ -131,7 +131,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
     _setPropertyValues(pEntries.get(), rValues.getConstArray());
 }
 
-Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues(const Sequence< OUString >& rPropertyNames)
+Sequence< Any > PropertySetHelper::getPropertyValues(const Sequence< OUString >& rPropertyNames)
 {
     const sal_Int32 nCount = rPropertyNames.getLength();
 
@@ -154,23 +154,23 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues(const Sequence< OU
 
 }
 
-void SAL_CALL PropertySetHelper::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
+void PropertySetHelper::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL PropertySetHelper::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
+void PropertySetHelper::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL PropertySetHelper::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
+void PropertySetHelper::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
 {
     // todo
 }
 
 // XPropertyState
-PropertyState SAL_CALL PropertySetHelper::getPropertyState( const OUString& PropertyName )
+PropertyState PropertySetHelper::getPropertyState( const OUString& PropertyName )
 {
     PropertyMapEntry const * aEntries[2];
 
@@ -186,7 +186,7 @@ PropertyState SAL_CALL PropertySetHelper::getPropertyState( const OUString& Prop
     return aState;
 }
 
-Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const Sequence< OUString >& aPropertyName )
+Sequence< PropertyState > PropertySetHelper::getPropertyStates( const Sequence< OUString >& aPropertyName )
 {
     const sal_Int32 nCount = aPropertyName.getLength();
 
@@ -212,7 +212,7 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
     return aStates;
 }
 
-void SAL_CALL PropertySetHelper::setPropertyToDefault( const OUString& PropertyName )
+void PropertySetHelper::setPropertyToDefault( const OUString& PropertyName )
 {
     PropertyMapEntry const *pEntry  = find(mxInfo, PropertyName );
     if( nullptr == pEntry )
@@ -221,7 +221,7 @@ void SAL_CALL PropertySetHelper::setPropertyToDefault( const OUString& PropertyN
     _setPropertyToDefault( pEntry );
 }
 
-Any SAL_CALL PropertySetHelper::getPropertyDefault( const OUString& aPropertyName )
+Any PropertySetHelper::getPropertyDefault( const OUString& aPropertyName )
 {
     PropertyMapEntry const * pEntry = find(mxInfo, aPropertyName );
     if( nullptr == pEntry )

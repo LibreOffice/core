@@ -158,31 +158,31 @@ namespace comphelper
         virtual ~EnumerableMap() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+        virtual void initialize( const Sequence< Any >& aArguments ) override;
 
         // XEnumerableMap
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createKeyEnumeration( bool Isolated ) override;
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createValueEnumeration( bool Isolated ) override;
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createElementEnumeration( bool Isolated ) override;
+        virtual css::uno::Reference< css::container::XEnumeration > createKeyEnumeration( bool Isolated ) override;
+        virtual css::uno::Reference< css::container::XEnumeration > createValueEnumeration( bool Isolated ) override;
+        virtual css::uno::Reference< css::container::XEnumeration > createElementEnumeration( bool Isolated ) override;
 
         // XMap
-        virtual Type SAL_CALL getKeyType() override;
-        virtual Type SAL_CALL getValueType() override;
-        virtual void SAL_CALL clear(  ) override;
-        virtual bool SAL_CALL containsKey( const Any& _key ) override;
-        virtual bool SAL_CALL containsValue( const Any& _value ) override;
-        virtual Any SAL_CALL get( const Any& _key ) override;
-        virtual Any SAL_CALL put( const Any& _key, const Any& _value ) override;
-        virtual Any SAL_CALL remove( const Any& _key ) override;
+        virtual Type getKeyType() override;
+        virtual Type getValueType() override;
+        virtual void clear(  ) override;
+        virtual bool containsKey( const Any& _key ) override;
+        virtual bool containsValue( const Any& _value ) override;
+        virtual Any get( const Any& _key ) override;
+        virtual Any put( const Any& _key, const Any& _value ) override;
+        virtual Any remove( const Any& _key ) override;
 
         // XElementAccess (base of XMap)
-        virtual Type SAL_CALL getElementType() override;
-        virtual bool SAL_CALL hasElements() override;
+        virtual Type getElementType() override;
+        virtual bool hasElements() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual Sequence< OUString > getSupportedServiceNames(  ) override;
 
     private:
         void    impl_initValues_throw( const Sequence< Pair< Any, Any > >& _initialValues );
@@ -278,8 +278,8 @@ namespace comphelper
         }
 
         // XEnumeration
-        virtual bool SAL_CALL hasMoreElements(  ) override;
-        virtual Any SAL_CALL nextElement(  ) override;
+        virtual bool hasMoreElements(  ) override;
+        virtual Any nextElement(  ) override;
 
     protected:
         virtual ~MapEnumeration() override
@@ -318,7 +318,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL EnumerableMap::initialize( const Sequence< Any >& _arguments )
+    void EnumerableMap::initialize( const Sequence< Any >& _arguments )
     {
         ComponentMethodGuard aGuard( *this, ComponentMethodGuard::MethodType::WithoutInit );
         if ( impl_isInitialized_nothrow() )
@@ -493,42 +493,42 @@ namespace comphelper
     }
 
 
-    Reference< XEnumeration > SAL_CALL EnumerableMap::createKeyEnumeration( bool Isolated )
+    Reference< XEnumeration > EnumerableMap::createKeyEnumeration( bool Isolated )
     {
         ComponentMethodGuard aGuard( *this );
         return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eKeys, Isolated );
     }
 
 
-    Reference< XEnumeration > SAL_CALL EnumerableMap::createValueEnumeration( bool Isolated )
+    Reference< XEnumeration > EnumerableMap::createValueEnumeration( bool Isolated )
     {
         ComponentMethodGuard aGuard( *this );
         return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eValues, Isolated );
     }
 
 
-    Reference< XEnumeration > SAL_CALL EnumerableMap::createElementEnumeration( bool Isolated )
+    Reference< XEnumeration > EnumerableMap::createElementEnumeration( bool Isolated )
     {
         ComponentMethodGuard aGuard( *this );
         return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eBoth, Isolated );
     }
 
 
-    Type SAL_CALL EnumerableMap::getKeyType()
+    Type EnumerableMap::getKeyType()
     {
         ComponentMethodGuard aGuard( *this );
         return m_aData.m_aKeyType;
     }
 
 
-    Type SAL_CALL EnumerableMap::getValueType()
+    Type EnumerableMap::getValueType()
     {
         ComponentMethodGuard aGuard( *this );
         return m_aData.m_aValueType;
     }
 
 
-    void SAL_CALL EnumerableMap::clear(  )
+    void EnumerableMap::clear(  )
     {
         ComponentMethodGuard aGuard( *this );
         impl_checkMutable_throw();
@@ -539,7 +539,7 @@ namespace comphelper
     }
 
 
-    bool SAL_CALL EnumerableMap::containsKey( const Any& _key )
+    bool EnumerableMap::containsKey( const Any& _key )
     {
         ComponentMethodGuard aGuard( *this );
         impl_checkKey_throw( _key );
@@ -549,7 +549,7 @@ namespace comphelper
     }
 
 
-    bool SAL_CALL EnumerableMap::containsValue( const Any& _value )
+    bool EnumerableMap::containsValue( const Any& _value )
     {
         ComponentMethodGuard aGuard( *this );
         impl_checkValue_throw( _value );
@@ -562,7 +562,7 @@ namespace comphelper
     }
 
 
-    Any SAL_CALL EnumerableMap::get( const Any& _key )
+    Any EnumerableMap::get( const Any& _key )
     {
         ComponentMethodGuard aGuard( *this );
         impl_checkKey_throw( _key );
@@ -575,7 +575,7 @@ namespace comphelper
     }
 
 
-    Any SAL_CALL EnumerableMap::put( const Any& _key, const Any& _value )
+    Any EnumerableMap::put( const Any& _key, const Any& _value )
     {
         ComponentMethodGuard aGuard( *this );
         impl_checkMutable_throw();
@@ -601,7 +601,7 @@ namespace comphelper
     }
 
 
-    Any SAL_CALL EnumerableMap::remove( const Any& _key )
+    Any EnumerableMap::remove( const Any& _key )
     {
         ComponentMethodGuard aGuard( *this );
         impl_checkMutable_throw();
@@ -622,31 +622,31 @@ namespace comphelper
     }
 
 
-    Type SAL_CALL EnumerableMap::getElementType()
+    Type EnumerableMap::getElementType()
     {
         return ::cppu::UnoType< Pair< Any, Any > >::get();
     }
 
 
-    bool SAL_CALL EnumerableMap::hasElements()
+    bool EnumerableMap::hasElements()
     {
         ComponentMethodGuard aGuard( *this );
         return m_aData.m_pValues->empty();
     }
 
 
-    OUString SAL_CALL EnumerableMap::getImplementationName(  )
+    OUString EnumerableMap::getImplementationName(  )
     {
         return u"org.openoffice.comp.comphelper.EnumerableMap"_ustr;
     }
 
-    bool SAL_CALL EnumerableMap::supportsService( const OUString& _serviceName )
+    bool EnumerableMap::supportsService( const OUString& _serviceName )
     {
         return cppu::supportsService(this, _serviceName);
     }
 
 
-    Sequence< OUString > SAL_CALL EnumerableMap::getSupportedServiceNames(  )
+    Sequence< OUString > EnumerableMap::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.container.EnumerableMap"_ustr };
     }
@@ -684,14 +684,14 @@ namespace comphelper
     }
 
 
-    bool SAL_CALL MapEnumeration::hasMoreElements(  )
+    bool MapEnumeration::hasMoreElements(  )
     {
         ComponentMethodGuard aGuard( *this );
         return m_aEnumerator.hasMoreElements();
     }
 
 
-    Any SAL_CALL MapEnumeration::nextElement(  )
+    Any MapEnumeration::nextElement(  )
     {
         ComponentMethodGuard aGuard( *this );
         return m_aEnumerator.nextElement();

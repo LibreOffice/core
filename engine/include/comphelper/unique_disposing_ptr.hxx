@@ -106,7 +106,7 @@ private:
         }
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& rEvt ) override
+        virtual void disposing( const css::lang::EventObject& rEvt ) override
         {
             bool shutDown = (rEvt.Source == m_xComponent);
 
@@ -125,16 +125,16 @@ private:
         }
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination( const css::lang::EventObject& ) override
+        virtual void queryTermination( const css::lang::EventObject& ) override
         {
         }
 
-        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& rEvt ) override
+        virtual void notifyTermination( const css::lang::EventObject& rEvt ) override
         {
             disposing(rEvt);
         }
 
-        virtual OUString SAL_CALL getImplementationName() override
+        virtual OUString getImplementationName() override
         {
             if (mbComponentDLL)
                 return u"com.sun.star.comp.ComponentDLLListener"_ustr;
@@ -142,12 +142,12 @@ private:
                 return u"com.sun.star.comp.DisposingTerminateListener"_ustr;
         }
 
-        virtual bool SAL_CALL supportsService(const OUString& /*rName*/) override
+        virtual bool supportsService(const OUString& /*rName*/) override
         {
             return false;
         }
 
-        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+        virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
         {
             return cpo::uno::Sequence<OUString>();
         }

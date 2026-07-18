@@ -50,34 +50,34 @@ UNOMemoryStream::UNOMemoryStream()
 }
 
 // XServiceInfo
-OUString SAL_CALL UNOMemoryStream::getImplementationName()
+OUString UNOMemoryStream::getImplementationName()
 {
     return u"com.sun.star.comp.MemoryStream"_ustr;
 }
 
-bool SAL_CALL UNOMemoryStream::supportsService(const OUString& ServiceName)
+bool UNOMemoryStream::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL UNOMemoryStream::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UNOMemoryStream::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.MemoryStream"_ustr };
 }
 
 // XStream
-Reference< XInputStream > SAL_CALL UNOMemoryStream::getInputStream(  )
+Reference< XInputStream > UNOMemoryStream::getInputStream(  )
 {
     return this;
 }
 
-Reference< XOutputStream > SAL_CALL UNOMemoryStream::getOutputStream(  )
+Reference< XOutputStream > UNOMemoryStream::getOutputStream(  )
 {
     return this;
 }
 
 // XInputStream
-sal_Int32 SAL_CALL UNOMemoryStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 UNOMemoryStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     if( nBytesToRead < 0 )
         throw IOException(u"nBytesToRead < 0"_ustr);
@@ -117,12 +117,12 @@ sal_Int32 UNOMemoryStream::readSomeBytes( sal_Int8* aData, sal_Int32 nBytesToRea
     return nBytesToRead;
 }
 
-sal_Int32 SAL_CALL UNOMemoryStream::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 UNOMemoryStream::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     return readBytes( aData, nMaxBytesToRead );
 }
 
-void SAL_CALL UNOMemoryStream::skipBytes( sal_Int32 nBytesToSkip )
+void UNOMemoryStream::skipBytes( sal_Int32 nBytesToSkip )
 {
     if( nBytesToSkip < 0 )
         throw IOException(u"nBytesToSkip < 0"_ustr);
@@ -130,18 +130,18 @@ void SAL_CALL UNOMemoryStream::skipBytes( sal_Int32 nBytesToSkip )
     mnCursor += std::min( nBytesToSkip, available() );
 }
 
-sal_Int32 SAL_CALL UNOMemoryStream::available()
+sal_Int32 UNOMemoryStream::available()
 {
     return std::min<sal_Int64>( SAL_MAX_INT32, maData.size() - mnCursor);
 }
 
-void SAL_CALL UNOMemoryStream::closeInput()
+void UNOMemoryStream::closeInput()
 {
     mnCursor = 0;
 }
 
 // XSeekable
-void SAL_CALL UNOMemoryStream::seek( sal_Int64 location )
+void UNOMemoryStream::seek( sal_Int64 location )
 {
     if( (location < 0) || (location > SAL_MAX_INT32) )
         throw IllegalArgumentException(u"this implementation does not support more than 2GB!"_ustr, static_cast<OWeakObject*>(this), 0 );
@@ -153,18 +153,18 @@ void SAL_CALL UNOMemoryStream::seek( sal_Int64 location )
     mnCursor = static_cast< sal_Int32 >( location );
 }
 
-sal_Int64 SAL_CALL UNOMemoryStream::getPosition()
+sal_Int64 UNOMemoryStream::getPosition()
 {
     return static_cast< sal_Int64 >( mnCursor );
 }
 
-sal_Int64 SAL_CALL UNOMemoryStream::getLength()
+sal_Int64 UNOMemoryStream::getLength()
 {
     return static_cast< sal_Int64 >( maData.size() );
 }
 
 // XOutputStream
-void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData )
+void UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData )
 {
     writeBytes(aData.getConstArray(), aData.getLength());
 }
@@ -192,17 +192,17 @@ void UNOMemoryStream::writeBytes( const sal_Int8* pInData, sal_Int32 nBytesToWri
     mnCursor += nBytesToWrite;
 }
 
-void SAL_CALL UNOMemoryStream::flush()
+void UNOMemoryStream::flush()
 {
 }
 
-void SAL_CALL UNOMemoryStream::closeOutput()
+void UNOMemoryStream::closeOutput()
 {
     mnCursor = 0;
 }
 
 //XTruncate
-void SAL_CALL UNOMemoryStream::truncate()
+void UNOMemoryStream::truncate()
 {
     maData.clear();
     mnCursor = 0;

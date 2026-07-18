@@ -29,7 +29,7 @@ inline css::uno::Reference<css::uno::XCurrentContext> NewFlagContext(const OUStr
         {
         }
 
-        virtual cpo::uno::Any SAL_CALL getValueByName(const OUString& Name) override
+        virtual cpo::uno::Any getValueByName(const OUString& Name) override
         {
             if (Name == msName)
                 return cpo::uno::Any(mbValue);

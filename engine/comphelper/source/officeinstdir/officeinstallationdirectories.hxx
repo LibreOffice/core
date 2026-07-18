@@ -45,21 +45,21 @@ public:
     virtual ~OfficeInstallationDirectories() override;
 
     // XOfficeInstallationDirectories
-    virtual OUString SAL_CALL
+    virtual OUString
     getOfficeInstallationDirectoryURL() override;
-    virtual OUString SAL_CALL
+    virtual OUString
     getOfficeUserDataDirectoryURL() override;
-    virtual OUString SAL_CALL
+    virtual OUString
     makeRelocatableURL( const OUString& URL ) override;
-    virtual OUString SAL_CALL
+    virtual OUString
     makeAbsoluteURL( const OUString& URL ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL
+    virtual OUString
     getImplementationName() override;
-    virtual bool SAL_CALL
+    virtual bool
     supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override;
 
 private:

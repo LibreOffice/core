@@ -251,7 +251,7 @@ public:
     */
     template <typename EventT>
     inline void notifyEach(std::unique_lock<std::mutex>& rGuard,
-                           void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&),
+                           void (ListenerT::*NotificationMethod)(const EventT&),
                            const EventT& Event) const;
 
     /** Calls a UNO listener method for each contained listener.
@@ -276,7 +276,7 @@ public:
     */
     template <typename EventT, typename ExceptionFuncT>
     inline void notifyEach(std::unique_lock<std::mutex>& rGuard,
-                           void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&),
+                           void (ListenerT::*NotificationMethod)(const EventT&),
                            const EventT& Event, const ExceptionFuncT& exceptionFunc) const;
 
     // this is moveable, but not copyable
@@ -305,7 +305,7 @@ private:
     template <typename EventT> class NotifySingleListener
     {
     private:
-        typedef void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&);
+        typedef void (ListenerT::*NotificationMethod)(const EventT&);
         NotificationMethod const m_pMethod;
         const EventT& m_rEvent;
 
@@ -406,8 +406,8 @@ inline void OInterfaceContainerHelper4<T>::forEach(std::unique_lock<std::mutex>&
 template <class ListenerT>
 template <typename EventT>
 inline void OInterfaceContainerHelper4<ListenerT>::notifyEach(
-    std::unique_lock<std::mutex>& rGuard,
-    void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&), const EventT& Event) const
+    std::unique_lock<std::mutex>& rGuard, void (ListenerT::*NotificationMethod)(const EventT&),
+    const EventT& Event) const
 {
     forEach<NotifySingleListener<EventT>>(rGuard,
                                           NotifySingleListener<EventT>(NotificationMethod, Event));
@@ -416,9 +416,8 @@ inline void OInterfaceContainerHelper4<ListenerT>::notifyEach(
 template <class ListenerT>
 template <typename EventT, typename ExceptionFuncT>
 inline void OInterfaceContainerHelper4<ListenerT>::notifyEach(
-    std::unique_lock<std::mutex>& rGuard,
-    void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&), const EventT& Event,
-    const ExceptionFuncT& exceptionFunc) const
+    std::unique_lock<std::mutex>& rGuard, void (ListenerT::*NotificationMethod)(const EventT&),
+    const EventT& Event, const ExceptionFuncT& exceptionFunc) const
 {
     forEach<NotifySingleListener<EventT>>(
         rGuard, NotifySingleListener<EventT>(NotificationMethod, Event), exceptionFunc);

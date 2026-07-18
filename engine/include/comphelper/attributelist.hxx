@@ -63,24 +63,24 @@ public:
     sal_Int16 GetIndexByName(const OUString& rName) const;
 
     // css::xml::sax::XAttributeList
-    virtual sal_Int16 SAL_CALL getLength() override
+    virtual sal_Int16 getLength() override
     {
         return static_cast<sal_Int16>(mAttributes.size());
     }
-    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) override
+    virtual OUString getNameByIndex(sal_Int16 i) override
     {
         return mAttributes[i].sName;
     }
-    virtual OUString SAL_CALL getTypeByIndex(sal_Int16) override { return u"CDATA"_ustr; }
-    virtual OUString SAL_CALL getTypeByName(const OUString&) override { return u"CDATA"_ustr; }
-    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) override
+    virtual OUString getTypeByIndex(sal_Int16) override { return u"CDATA"_ustr; }
+    virtual OUString getTypeByName(const OUString&) override { return u"CDATA"_ustr; }
+    virtual OUString getValueByIndex(sal_Int16 i) override
     {
         return mAttributes[i].sValue;
     }
-    virtual OUString SAL_CALL getValueByName(const OUString& aName) override;
+    virtual OUString getValueByName(const OUString& aName) override;
 
     // css::util::XCloneable
-    virtual css::uno::Reference< XCloneable > SAL_CALL
+    virtual css::uno::Reference< XCloneable >
         createClone() override;
 };
 

@@ -38,7 +38,7 @@ namespace comphelper
     // OPropertyStateHelper
 
 
-    cpo::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  cpo::uno::Type& _rType)
+    cpo::uno::Any OPropertyStateHelper::queryInterface(const  cpo::uno::Type& _rType)
     {
         cpo::uno::Any aReturn = OPropertySetHelper2::queryInterface(_rType);
         // our own ifaces
@@ -74,7 +74,7 @@ namespace comphelper
 
     // XPropertyState
 
-    css::beans::PropertyState SAL_CALL OPropertyStateHelper::getPropertyState(const OUString& _rsName)
+    css::beans::PropertyState OPropertyStateHelper::getPropertyState(const OUString& _rsName)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
@@ -86,7 +86,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OPropertyStateHelper::setPropertyToDefault(const OUString& _rsName)
+    void OPropertyStateHelper::setPropertyToDefault(const OUString& _rsName)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
@@ -98,7 +98,7 @@ namespace comphelper
     }
 
 
-    cpo::uno::Any SAL_CALL OPropertyStateHelper::getPropertyDefault(const OUString& _rsName)
+    cpo::uno::Any OPropertyStateHelper::getPropertyDefault(const OUString& _rsName)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
@@ -110,7 +110,7 @@ namespace comphelper
     }
 
 
-    cpo::uno::Sequence< css::beans::PropertyState> SAL_CALL OPropertyStateHelper::getPropertyStates(const  cpo::uno::Sequence< OUString >& _rPropertyNames)
+    cpo::uno::Sequence< css::beans::PropertyState> OPropertyStateHelper::getPropertyStates(const  cpo::uno::Sequence< OUString >& _rPropertyNames)
     {
         sal_Int32 nLen = _rPropertyNames.getLength();
         cpo::uno::Sequence< css::beans::PropertyState> aRet(nLen);
@@ -180,7 +180,7 @@ namespace comphelper
     }
 
 
-    Sequence< Type > SAL_CALL OStatefulPropertySet::getTypes()
+    Sequence< Type > OStatefulPropertySet::getTypes()
     {
         return concatSequences(
             Sequence {
@@ -190,13 +190,13 @@ namespace comphelper
         );
     }
 
-    Sequence< sal_Int8 > SAL_CALL OStatefulPropertySet::getImplementationId()
+    Sequence< sal_Int8 > OStatefulPropertySet::getImplementationId()
     {
         return cpo::uno::Sequence<sal_Int8>();
     }
 
 
-    Any SAL_CALL OStatefulPropertySet::queryInterface( const Type& _rType )
+    Any OStatefulPropertySet::queryInterface( const Type& _rType )
     {
         Any aReturn = OWeakObject::queryInterface( _rType );
         if ( !aReturn.hasValue() )
@@ -207,13 +207,13 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OStatefulPropertySet::acquire() noexcept
+    void OStatefulPropertySet::acquire() noexcept
     {
         ::cppu::OWeakObject::acquire();
     }
 
 
-    void SAL_CALL OStatefulPropertySet::release() noexcept
+    void OStatefulPropertySet::release() noexcept
     {
         ::cppu::OWeakObject::release();
     }

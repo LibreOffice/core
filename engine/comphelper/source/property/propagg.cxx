@@ -337,7 +337,7 @@ OPropertySetAggregationHelper::~OPropertySetAggregationHelper()
 }
 
 
-cpo::uno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const  cpo::uno::Type& _rType)
+cpo::uno::Any OPropertySetAggregationHelper::queryInterface(const  cpo::uno::Type& _rType)
 {
     cpo::uno::Any aReturn = OPropertyStateHelper::queryInterface(_rType);
 
@@ -368,7 +368,7 @@ void OPropertySetAggregationHelper::disposing()
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::disposing(const css::lang::EventObject& _rSource)
+void OPropertySetAggregationHelper::disposing(const css::lang::EventObject& _rSource)
 {
     OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::disposing : don't have an aggregate anymore !");
     if (_rSource.Source == m_xAggregateSet)
@@ -376,7 +376,7 @@ void SAL_CALL OPropertySetAggregationHelper::disposing(const css::lang::EventObj
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const cpo::uno::Sequence< css::beans::PropertyChangeEvent>& _rEvents)
+void OPropertySetAggregationHelper::propertiesChange(const cpo::uno::Sequence< css::beans::PropertyChangeEvent>& _rEvents)
 {
     OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::propertiesChange : have no aggregate !");
 
@@ -423,7 +423,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const cpo::uno::Se
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::vetoableChange(const css::beans::PropertyChangeEvent& _rEvent)
+void OPropertySetAggregationHelper::vetoableChange(const css::beans::PropertyChangeEvent& _rEvent)
 {
     OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::vetoableChange : have no aggregate !");
 
@@ -472,7 +472,7 @@ void OPropertySetAggregationHelper::startListening()
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::addVetoableChangeListener(const OUString& _rPropertyName,
+void OPropertySetAggregationHelper::addVetoableChangeListener(const OUString& _rPropertyName,
                                                                        const  css::uno::Reference< css::beans::XVetoableChangeListener>& _rxListener)
 {
     OPropertySetHelper::addVetoableChangeListener(_rPropertyName, _rxListener);
@@ -481,7 +481,7 @@ void SAL_CALL OPropertySetAggregationHelper::addVetoableChangeListener(const OUS
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::addPropertyChangeListener(const OUString& _rPropertyName,
+void OPropertySetAggregationHelper::addPropertyChangeListener(const OUString& _rPropertyName,
                                                                        const css::uno::Reference< css::beans::XPropertyChangeListener>& _rxListener)
 {
     OPropertySetHelper::addPropertyChangeListener(_rPropertyName, _rxListener);
@@ -490,7 +490,7 @@ void SAL_CALL OPropertySetAggregationHelper::addPropertyChangeListener(const OUS
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::addPropertiesChangeListener(const cpo::uno::Sequence< OUString >& _rPropertyNames,
+void OPropertySetAggregationHelper::addPropertiesChangeListener(const cpo::uno::Sequence< OUString >& _rPropertyNames,
                                                                          const css::uno::Reference< css::beans::XPropertiesChangeListener>& _rxListener)
 {
     OPropertySetHelper::addPropertiesChangeListener(_rPropertyNames, _rxListener);
@@ -517,7 +517,7 @@ OUString OPropertySetAggregationHelper::getPropertyName( sal_Int32 _nHandle ) co
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHandle, const  cpo::uno::Any& _rValue)
+void OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHandle, const  cpo::uno::Any& _rValue)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     OUString aPropName;
@@ -556,7 +556,7 @@ void OPropertySetAggregationHelper::getFastPropertyValue( cpo::uno::Any& rValue,
 }
 
 
-cpo::uno::Any SAL_CALL OPropertySetAggregationHelper::getFastPropertyValue(sal_Int32 nHandle)
+cpo::uno::Any OPropertySetAggregationHelper::getFastPropertyValue(sal_Int32 nHandle)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     OUString aPropName;
@@ -577,7 +577,7 @@ cpo::uno::Any SAL_CALL OPropertySetAggregationHelper::getFastPropertyValue(sal_I
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
+void OPropertySetAggregationHelper::setPropertyValues(
         const Sequence< OUString >& _rPropertyNames, const Sequence< Any >& _rValues )
 {
     OSL_ENSURE( !rBHelper.bInDispose, "OPropertySetAggregationHelper::setPropertyValues : do not use within the dispose call !");
@@ -733,7 +733,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
 
 // XPropertyState
 
-css::beans::PropertyState SAL_CALL OPropertySetAggregationHelper::getPropertyState(const OUString& _rPropertyName)
+css::beans::PropertyState OPropertySetAggregationHelper::getPropertyState(const OUString& _rPropertyName)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     sal_Int32 nHandle = rPH.getHandleByName( _rPropertyName );
@@ -757,7 +757,7 @@ css::beans::PropertyState SAL_CALL OPropertySetAggregationHelper::getPropertySta
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const OUString& _rPropertyName)
+void OPropertySetAggregationHelper::setPropertyToDefault(const OUString& _rPropertyName)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     sal_Int32 nHandle = rPH.getHandleByName(_rPropertyName);
@@ -789,7 +789,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const OUString
 }
 
 
-cpo::uno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const OUString& aPropertyName)
+cpo::uno::Any OPropertySetAggregationHelper::getPropertyDefault(const OUString& aPropertyName)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
@@ -810,7 +810,7 @@ cpo::uno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const O
         return getPropertyDefaultByHandle(nHandle);
 }
 
-bool SAL_CALL OPropertySetAggregationHelper::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
+bool OPropertySetAggregationHelper::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
 {
     bool bModified = false;
 
@@ -830,7 +830,7 @@ bool SAL_CALL OPropertySetAggregationHelper::convertFastPropertyValue( Any& _rCo
     return bModified;
 }
 
-void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
+void OPropertySetAggregationHelper::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
 {
     OSL_ENSURE( m_pForwarder->isResponsibleFor( _nHandle ), "OPropertySetAggregationHelper::setFastPropertyValue_NoBroadcast: this is no forwarded property - did you use declareForwardedProperty for it?" );
     if ( m_pForwarder->isResponsibleFor( _nHandle ) )

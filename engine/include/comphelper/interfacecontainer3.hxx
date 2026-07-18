@@ -210,7 +210,7 @@ public:
 @endcode
     */
     template <typename EventT>
-    inline void notifyEach(void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&),
+    inline void notifyEach(void (ListenerT::*NotificationMethod)(const EventT&),
                            const EventT& Event);
 
 private:
@@ -236,7 +236,7 @@ private:
     template <typename EventT> class NotifySingleListener
     {
     private:
-        typedef void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&);
+        typedef void (ListenerT::*NotificationMethod)(const EventT&);
         NotificationMethod const m_pMethod;
         const EventT& m_rEvent;
 
@@ -288,7 +288,7 @@ inline void OInterfaceContainerHelper3<T>::forEach(FuncT const& func)
 template <class ListenerT>
 template <typename EventT>
 inline void OInterfaceContainerHelper3<ListenerT>::notifyEach(
-    void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&), const EventT& Event)
+    void (ListenerT::*NotificationMethod)(const EventT&), const EventT& Event)
 {
     forEach<NotifySingleListener<EventT>>(NotifySingleListener<EventT>(NotificationMethod, Event));
 }

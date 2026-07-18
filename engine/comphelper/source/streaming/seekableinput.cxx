@@ -121,7 +121,7 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
 
 // XInputStream
 
-sal_Int32 SAL_CALL OSeekableInputWrapper::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 OSeekableInputWrapper::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -134,7 +134,7 @@ sal_Int32 SAL_CALL OSeekableInputWrapper::readBytes( cpo::uno::Sequence< sal_Int
 }
 
 
-sal_Int32 SAL_CALL OSeekableInputWrapper::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 OSeekableInputWrapper::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -159,7 +159,7 @@ sal_Int32 OSeekableInputWrapper::readSomeBytes( sal_Int8* aData, sal_Int32 nMaxB
 }
 
 
-void SAL_CALL OSeekableInputWrapper::skipBytes( sal_Int32 nBytesToSkip )
+void OSeekableInputWrapper::skipBytes( sal_Int32 nBytesToSkip )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -172,7 +172,7 @@ void SAL_CALL OSeekableInputWrapper::skipBytes( sal_Int32 nBytesToSkip )
 }
 
 
-sal_Int32 SAL_CALL OSeekableInputWrapper::available()
+sal_Int32 OSeekableInputWrapper::available()
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -185,7 +185,7 @@ sal_Int32 SAL_CALL OSeekableInputWrapper::available()
 }
 
 
-void SAL_CALL OSeekableInputWrapper::closeInput()
+void OSeekableInputWrapper::closeInput()
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -208,7 +208,7 @@ void SAL_CALL OSeekableInputWrapper::closeInput()
 
 // XSeekable
 
-void SAL_CALL OSeekableInputWrapper::seek( sal_Int64 location )
+void OSeekableInputWrapper::seek( sal_Int64 location )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -221,7 +221,7 @@ void SAL_CALL OSeekableInputWrapper::seek( sal_Int64 location )
 }
 
 
-sal_Int64 SAL_CALL OSeekableInputWrapper::getPosition()
+sal_Int64 OSeekableInputWrapper::getPosition()
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -234,7 +234,7 @@ sal_Int64 SAL_CALL OSeekableInputWrapper::getPosition()
 }
 
 
-sal_Int64 SAL_CALL OSeekableInputWrapper::getLength()
+sal_Int64 OSeekableInputWrapper::getLength()
 {
     std::scoped_lock aGuard( m_aMutex );
 

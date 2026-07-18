@@ -49,7 +49,7 @@ void ChainablePropertySetInfo::remove( const OUString& aName )
          maProperties.realloc( 0 );
 }
 
-Sequence< ::Property > SAL_CALL ChainablePropertySetInfo::getProperties()
+Sequence< ::Property > ChainablePropertySetInfo::getProperties()
 {
     sal_Int32 nSize = maMap.size();
     if( maProperties.getLength() != nSize )
@@ -71,7 +71,7 @@ Sequence< ::Property > SAL_CALL ChainablePropertySetInfo::getProperties()
     return maProperties;
 }
 
-Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const OUString& rName )
+Property ChainablePropertySetInfo::getPropertyByName( const OUString& rName )
 {
     PropertyInfoHash::iterator aIter = maMap.find( rName );
 
@@ -87,7 +87,7 @@ Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const OUString& r
     return aProperty;
 }
 
-bool SAL_CALL ChainablePropertySetInfo::hasPropertyByName( const OUString& rName )
+bool ChainablePropertySetInfo::hasPropertyByName( const OUString& rName )
 {
     return maMap.contains( rName );
 }

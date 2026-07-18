@@ -69,8 +69,8 @@ namespace comphelper
         */
         virtual void processEvent( const AnyEvent& _rEvent ) = 0;
 
-        virtual void SAL_CALL acquire() noexcept = 0;
-        virtual void SAL_CALL release() noexcept = 0;
+        virtual void acquire() noexcept = 0;
+        virtual void release() noexcept = 0;
 
     protected:
         ~IEventProcessor() {}
@@ -120,7 +120,7 @@ namespace comphelper
             itself, it will return immediately, and the thread will be terminated as soon as
             the current notification is finished.
         */
-        virtual void SAL_CALL terminate();
+        virtual void terminate();
 
         /** adds an event to the queue, together with the instance which is responsible for
             processing it
@@ -161,7 +161,7 @@ namespace comphelper
         */
         AsyncEventNotifier(char const* name);
 
-        virtual void SAL_CALL terminate() override;
+        virtual void terminate() override;
     };
 
     /** This is a hack (when proper joining is not possible), use of which
@@ -175,8 +175,8 @@ namespace comphelper
     private:
         SAL_DLLPRIVATE AsyncEventNotifierAutoJoin(char const* name);
 
-        SAL_DLLPRIVATE virtual void SAL_CALL run() override;
-        SAL_DLLPRIVATE virtual void SAL_CALL onTerminated() override;
+        SAL_DLLPRIVATE virtual void run() override;
+        SAL_DLLPRIVATE virtual void onTerminated() override;
 
     public:
         // only public so shared_ptr finds it
@@ -185,7 +185,7 @@ namespace comphelper
         static std::shared_ptr<AsyncEventNotifierAutoJoin>
             newAsyncEventNotifierAutoJoin(char const* name);
 
-        virtual void SAL_CALL terminate() override;
+        virtual void terminate() override;
 
         using osl::Thread::join;
 

@@ -59,7 +59,7 @@ void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
 }
 
 
-::sal_Int32 SAL_CALL NumberedCollection::leaseNumber(const css::uno::Reference< css::uno::XInterface >& xComponent)
+::sal_Int32 NumberedCollection::leaseNumber(const css::uno::Reference< css::uno::XInterface >& xComponent)
 {
     // SYNCHRONIZED ->
     std::scoped_lock aLock(m_aMutex);
@@ -94,7 +94,7 @@ void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
 }
 
 
-void SAL_CALL NumberedCollection::releaseNumber(::sal_Int32 nNumber)
+void NumberedCollection::releaseNumber(::sal_Int32 nNumber)
 {
     // SYNCHRONIZED ->
     std::scoped_lock aLock(m_aMutex);
@@ -131,7 +131,7 @@ void SAL_CALL NumberedCollection::releaseNumber(::sal_Int32 nNumber)
 }
 
 
-void SAL_CALL NumberedCollection::releaseNumberForComponent(const css::uno::Reference< css::uno::XInterface >& xComponent)
+void NumberedCollection::releaseNumberForComponent(const css::uno::Reference< css::uno::XInterface >& xComponent)
 {
     // SYNCHRONIZED ->
     std::scoped_lock aLock(m_aMutex);
@@ -153,7 +153,7 @@ void SAL_CALL NumberedCollection::releaseNumberForComponent(const css::uno::Refe
 }
 
 
-OUString SAL_CALL NumberedCollection::getUntitledPrefix()
+OUString NumberedCollection::getUntitledPrefix()
 {
     // SYNCHRONIZED ->
     std::scoped_lock aLock(m_aMutex);

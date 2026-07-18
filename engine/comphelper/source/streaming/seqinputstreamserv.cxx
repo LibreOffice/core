@@ -53,24 +53,24 @@ public:
     const SequenceInputStreamService& operator=(const SequenceInputStreamService&) = delete;
 
     // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString & ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString & ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // css::io::XInputStream:
-    virtual ::sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nBytesToRead ) override;
-    virtual ::sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nMaxBytesToRead ) override;
-    virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) override;
-    virtual ::sal_Int32 SAL_CALL available() override;
-    virtual void SAL_CALL closeInput() override;
+    virtual ::sal_Int32 readBytes( cpo::uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nBytesToRead ) override;
+    virtual ::sal_Int32 readSomeBytes( cpo::uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nMaxBytesToRead ) override;
+    virtual void skipBytes( ::sal_Int32 nBytesToSkip ) override;
+    virtual ::sal_Int32 available() override;
+    virtual void closeInput() override;
 
     // css::io::XSeekable:
-    virtual void SAL_CALL seek( ::sal_Int64 location ) override;
-    virtual ::sal_Int64 SAL_CALL getPosition() override;
-    virtual ::sal_Int64 SAL_CALL getLength() override;
+    virtual void seek( ::sal_Int64 location ) override;
+    virtual ::sal_Int64 getPosition() override;
+    virtual ::sal_Int64 getLength() override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any > & aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any > & aArguments ) override;
 
     // comphelper::ByteReader
     virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
@@ -89,23 +89,23 @@ SequenceInputStreamService::SequenceInputStreamService()
 {}
 
 // com.sun.star.uno.XServiceInfo:
-OUString SAL_CALL SequenceInputStreamService::getImplementationName()
+OUString SequenceInputStreamService::getImplementationName()
 {
     return u"com.sun.star.comp.SequenceInputStreamService"_ustr;
 }
 
-bool SAL_CALL SequenceInputStreamService::supportsService( OUString const & serviceName )
+bool SequenceInputStreamService::supportsService( OUString const & serviceName )
 {
     return cppu::supportsService(this, serviceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SequenceInputStreamService::getSupportedServiceNames()
 {
     return { u"com.sun.star.io.SequenceInputStream"_ustr };
 }
 
 // css::io::XInputStream:
-::sal_Int32 SAL_CALL SequenceInputStreamService::readBytes( cpo::uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nBytesToRead )
+::sal_Int32 SequenceInputStreamService::readBytes( cpo::uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
@@ -114,7 +114,7 @@ cpo::uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupported
     return m_xInputStream->readBytes( aData, nBytesToRead );
 }
 
-::sal_Int32 SAL_CALL SequenceInputStreamService::readSomeBytes( cpo::uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nMaxBytesToRead )
+::sal_Int32 SequenceInputStreamService::readSomeBytes( cpo::uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nMaxBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
@@ -132,7 +132,7 @@ cpo::uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupported
     return m_xInputStream->readSomeBytes( aData, nMaxBytesToRead );
 }
 
-void SAL_CALL SequenceInputStreamService::skipBytes( ::sal_Int32 nBytesToSkip )
+void SequenceInputStreamService::skipBytes( ::sal_Int32 nBytesToSkip )
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
@@ -141,7 +141,7 @@ void SAL_CALL SequenceInputStreamService::skipBytes( ::sal_Int32 nBytesToSkip )
     return m_xInputStream->skipBytes( nBytesToSkip );
 }
 
-::sal_Int32 SAL_CALL SequenceInputStreamService::available()
+::sal_Int32 SequenceInputStreamService::available()
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
@@ -150,7 +150,7 @@ void SAL_CALL SequenceInputStreamService::skipBytes( ::sal_Int32 nBytesToSkip )
     return m_xInputStream->available();
 }
 
-void SAL_CALL SequenceInputStreamService::closeInput()
+void SequenceInputStreamService::closeInput()
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
@@ -161,7 +161,7 @@ void SAL_CALL SequenceInputStreamService::closeInput()
 }
 
 // css::io::XSeekable:
-void SAL_CALL SequenceInputStreamService::seek( ::sal_Int64 location )
+void SequenceInputStreamService::seek( ::sal_Int64 location )
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
@@ -170,7 +170,7 @@ void SAL_CALL SequenceInputStreamService::seek( ::sal_Int64 location )
     m_xInputStream->seek( location );
 }
 
-::sal_Int64 SAL_CALL SequenceInputStreamService::getPosition()
+::sal_Int64 SequenceInputStreamService::getPosition()
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
@@ -179,7 +179,7 @@ void SAL_CALL SequenceInputStreamService::seek( ::sal_Int64 location )
     return m_xInputStream->getPosition();
 }
 
-::sal_Int64 SAL_CALL SequenceInputStreamService::getLength()
+::sal_Int64 SequenceInputStreamService::getLength()
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
@@ -189,7 +189,7 @@ void SAL_CALL SequenceInputStreamService::seek( ::sal_Int64 location )
 }
 
 // css::lang::XInitialization:
-void SAL_CALL SequenceInputStreamService::initialize( const cpo::uno::Sequence< cpo::uno::Any > & aArguments )
+void SequenceInputStreamService::initialize( const cpo::uno::Sequence< cpo::uno::Any > & aArguments )
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( m_bInitialized )

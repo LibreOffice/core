@@ -55,19 +55,19 @@ protected:
     cpo::uno::Sequence< cpo::uno::Type > getBaseTypes();
 
 // OPropertySetHelper overridables
-    virtual bool SAL_CALL convertFastPropertyValue(
+    virtual bool convertFastPropertyValue(
                             cpo::uno::Any & rConvertedValue,
                             cpo::uno::Any & rOldValue,
                             sal_Int32 nHandle,
                             const cpo::uno::Any& rValue ) override;
 
-    virtual void SAL_CALL   setFastPropertyValue_NoBroadcast(
+    virtual void   setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const cpo::uno::Any& rValue
                             ) override;
 
     using OPropertySetHelper::getFastPropertyValue;
-    virtual void SAL_CALL getFastPropertyValue(
+    virtual void getFastPropertyValue(
                                 cpo::uno::Any& rValue,
                                 sal_Int32 nHandle
                                      ) const override;

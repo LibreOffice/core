@@ -56,8 +56,8 @@ private:
     SimplePasswordRequest& operator=(SimplePasswordRequest const&) = delete;
 
     // XInteractionRequest
-    virtual cpo::uno::Any SAL_CALL getRequest() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() override;
+    virtual cpo::uno::Any getRequest() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > getContinuations() override;
 
 private:
     cpo::uno::Any                         maRequest;
@@ -92,8 +92,8 @@ private:
     DocPasswordRequest& operator=(DocPasswordRequest const&) = delete;
 
     // XInteractionRequest
-    virtual cpo::uno::Any SAL_CALL getRequest() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() override;
+    virtual cpo::uno::Any getRequest() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > getContinuations() override;
 
 private:
     cpo::uno::Any                         maRequest;

@@ -62,22 +62,22 @@ namespace comphelper
         explicit GenericPropertySet( PropertySetInfo* pInfo ) noexcept;
 
         // XInterface
-        virtual  Any SAL_CALL queryInterface( const  Type & rType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
+        virtual  Any queryInterface( const  Type & rType ) override;
+        virtual void acquire() noexcept override;
+        virtual void release() noexcept override;
 
         // XTypeProvider
-        virtual  Sequence<  Type > SAL_CALL getTypes(  ) override;
-        virtual  Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+        virtual  Sequence<  Type > getTypes(  ) override;
+        virtual  Sequence< sal_Int8 > getImplementationId(  ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual  Sequence< OUString > getSupportedServiceNames() override;
 
         // XPropertySet
-        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+        virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+        virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     };
 
     }
@@ -89,7 +89,7 @@ GenericPropertySet::GenericPropertySet( PropertySetInfo* pInfo ) noexcept
 {
 }
 
-void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
+void GenericPropertySet::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
 {
     Reference < XPropertySetInfo > xInfo = getPropertySetInfo(  );
     if ( !xInfo.is() )
@@ -109,7 +109,7 @@ void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& aPr
         throw UnknownPropertyException( aPropertyName, *this );
 }
 
-void SAL_CALL GenericPropertySet::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
+void GenericPropertySet::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
 {
     Reference < XPropertySetInfo > xInfo = getPropertySetInfo(  );
     if ( !xInfo.is() )
@@ -167,7 +167,7 @@ void GenericPropertySet::_getPropertyValues( const comphelper::PropertyMapEntry*
 
 // XInterface
 
-Any SAL_CALL GenericPropertySet::queryInterface( const Type & rType )
+Any GenericPropertySet::queryInterface( const Type & rType )
 {
     Any aAny;
 
@@ -185,17 +185,17 @@ Any SAL_CALL GenericPropertySet::queryInterface( const Type & rType )
     return aAny;
 }
 
-void SAL_CALL GenericPropertySet::acquire() noexcept
+void GenericPropertySet::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL GenericPropertySet::release() noexcept
+void GenericPropertySet::release() noexcept
 {
     OWeakObject::release();
 }
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GenericPropertySet::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > GenericPropertySet::getTypes()
 {
     return cpo::uno::Sequence {
         cppu::UnoType<XAggregation>::get(),
@@ -205,23 +205,23 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GenericPropertySet::getTypes()
         cppu::UnoType<XMultiPropertySet>::get() };
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL GenericPropertySet::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > GenericPropertySet::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo
-bool SAL_CALL GenericPropertySet::supportsService( const  OUString& ServiceName )
+bool GenericPropertySet::supportsService( const  OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-OUString SAL_CALL GenericPropertySet::getImplementationName()
+OUString GenericPropertySet::getImplementationName()
 {
     return u"com.sun.star.comp.comphelper.GenericPropertySet"_ustr;
 }
 
-Sequence< OUString > SAL_CALL GenericPropertySet::getSupportedServiceNames(  )
+Sequence< OUString > GenericPropertySet::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.beans.XPropertySet"_ustr };
 }

@@ -46,11 +46,9 @@ class TestListener : public cppu::WeakImplHelper<XVetoableChangeListener>
 {
 public:
     // Methods
-    virtual void SAL_CALL disposing(const css::lang::EventObject& /*Source*/) override {}
+    virtual void disposing(const css::lang::EventObject& /*Source*/) override {}
 
-    virtual void SAL_CALL vetoableChange(const css::beans::PropertyChangeEvent& /*aEvent*/) override
-    {
-    }
+    virtual void vetoableChange(const css::beans::PropertyChangeEvent& /*aEvent*/) override {}
 };
 
 void TestInterfaceContainer3::test1()

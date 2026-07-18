@@ -46,19 +46,19 @@ public:
     MemoryInputStream(const sal_Int8* pData, sal_Int32 nDataLength);
 
 // css::io::XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead ) override final;
+    virtual sal_Int32 readBytes( cpo::uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead ) override final;
 
-    virtual sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead ) override final;
+    virtual sal_Int32 readSomeBytes( cpo::uno::Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead ) override final;
 
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override final;
+    virtual void skipBytes( sal_Int32 nBytesToSkip ) override final;
 
-    virtual sal_Int32 SAL_CALL available(  ) override final;
+    virtual sal_Int32 available(  ) override final;
 
-    virtual void SAL_CALL closeInput(  ) override final;
+    virtual void closeInput(  ) override final;
 
-    virtual void SAL_CALL seek( sal_Int64 location ) override final;
-    virtual sal_Int64 SAL_CALL getPosition(  ) override final;
-    virtual sal_Int64 SAL_CALL getLength(  ) override final;
+    virtual void seek( sal_Int64 location ) override final;
+    virtual sal_Int64 getPosition(  ) override final;
+    virtual sal_Int64 getLength(  ) override final;
 
 // comphelper::ByteReader
     virtual sal_Int32 readSomeBytes( sal_Int8* pData, sal_Int32 nBytesToRead ) override final;
@@ -121,14 +121,14 @@ public:
         );
 
     /// same as XOutputStream::writeBytes (as expected :)
-    virtual void SAL_CALL writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
+    virtual void writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
     /// this is a dummy in this implementation, no buffering is used
-    virtual void SAL_CALL flush(  ) override;
+    virtual void flush(  ) override;
     /** closes the output stream. In the case of this class, this means that the sequence used for writing is
         resized to the really used size and not used any further, every subsequent call to one of the XOutputStream
         methods will throw a <code>NotConnectedException</code>.
     */
-    virtual void SAL_CALL closeOutput(  ) override;
+    virtual void closeOutput(  ) override;
 };
 
 } // namespace comphelper
