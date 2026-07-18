@@ -143,6 +143,8 @@
 #define STR_GOTO_SLIDE_DLG_TITLE                        NC_("STR_GOTO_SLIDE_DLG_TITLE", "Go to Slide")
 #define STR_CLICK_ACTION_BOOKMARK                       NC_("STR_CLICK_ACTION_BOOKMARK", "Go to page or object")
 #define STR_CLICK_ACTION_DOCUMENT                       NC_("STR_CLICK_ACTION_DOCUMENT", "Go to document")
+#define STR_CLICK_ACTION_INVISIBLE                      NC_("STR_CLICK_ACTION_INVISIBLE", "Hide object")
+#define STR_CLICK_ACTION_VANISH                         NC_("STR_CLICK_ACTION_VANISH", "Hide object with effect")
 #define STR_CLICK_ACTION_SOUND                          NC_("STR_CLICK_ACTION_SOUND", "Play audio")
 #define STR_CLICK_ACTION_VERB                           NC_("STR_CLICK_ACTION_VERB", "Start object action")
 #define STR_CLICK_ACTION_PROGRAM                        NC_("STR_CLICK_ACTION_PROGRAM", "Run program")
