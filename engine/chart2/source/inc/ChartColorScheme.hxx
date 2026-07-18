@@ -29,11 +29,11 @@ public:
     explicit ChartColorScheme(const ChartColorPalette& rPalette);
 
     /// declare XServiceInfo methods
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
 protected:
     // ____ XColorScheme ____
-    ::sal_Int32 SAL_CALL getColorByIndex(::sal_Int32 nIndex) override;
+    ::sal_Int32 getColorByIndex(::sal_Int32 nIndex) override;
 };
 } // namespace chart
 

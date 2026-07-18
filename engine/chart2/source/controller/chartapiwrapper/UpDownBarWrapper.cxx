@@ -82,21 +82,21 @@ UpDownBarWrapper::~UpDownBarWrapper()
 }
 
 // ____ XComponent ____
-void SAL_CALL UpDownBarWrapper::dispose()
+void UpDownBarWrapper::dispose()
 {
     std::unique_lock g(m_aMutex);
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( xSource ) );
 }
 
-void SAL_CALL UpDownBarWrapper::addEventListener(
+void UpDownBarWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock g(m_aMutex);
     m_aEventListenerContainer.addInterface( g, xListener );
 }
 
-void SAL_CALL UpDownBarWrapper::removeEventListener(
+void UpDownBarWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
@@ -104,14 +104,14 @@ void SAL_CALL UpDownBarWrapper::removeEventListener(
 }
 
 //XPropertySet
-uno::Reference< beans::XPropertySetInfo > SAL_CALL UpDownBarWrapper::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > UpDownBarWrapper::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticUpDownBarWrapperInfoHelper() ) );
     return xPropertySetInfo;
 }
 
-void SAL_CALL UpDownBarWrapper::setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& rValue )
+void UpDownBarWrapper::setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& rValue )
 {
     Reference< beans::XPropertySet > xPropSet;
 
@@ -127,7 +127,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValue( const OUString& rPropertyName,
     if(xPropSet.is())
         xPropSet->setPropertyValue( rPropertyName, rValue );
 }
-cpo::uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const OUString& rPropertyName )
+cpo::uno::Any UpDownBarWrapper::getPropertyValue( const OUString& rPropertyName )
 {
     Any aRet;
 
@@ -147,26 +147,26 @@ cpo::uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const OUString& rProp
     return aRet;
 }
 
-void SAL_CALL UpDownBarWrapper::addPropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
+void UpDownBarWrapper::addPropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL UpDownBarWrapper::removePropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
+void UpDownBarWrapper::removePropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL UpDownBarWrapper::addVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
+void UpDownBarWrapper::addVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL UpDownBarWrapper::removeVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
+void UpDownBarWrapper::removeVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
 {
     OSL_FAIL("not implemented");
 }
 
 //XMultiPropertySet
 //getPropertySetInfo() already declared in XPropertySet
-void SAL_CALL UpDownBarWrapper::setPropertyValues( const cpo::uno::Sequence< OUString >& rNameSeq, const cpo::uno::Sequence< cpo::uno::Any >& rValueSeq )
+void UpDownBarWrapper::setPropertyValues( const cpo::uno::Sequence< OUString >& rNameSeq, const cpo::uno::Sequence< cpo::uno::Any >& rValueSeq )
 {
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
@@ -183,7 +183,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValues( const cpo::uno::Sequence< OUS
     }
     //todo: store unknown properties elsewhere
 }
-cpo::uno::Sequence< cpo::uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const cpo::uno::Sequence< OUString >& rNameSeq )
+cpo::uno::Sequence< cpo::uno::Any > UpDownBarWrapper::getPropertyValues( const cpo::uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.hasElements() )
@@ -198,21 +198,21 @@ cpo::uno::Sequence< cpo::uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues
     }
     return aRetSeq;
 }
-void SAL_CALL UpDownBarWrapper::addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
+void UpDownBarWrapper::addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL UpDownBarWrapper::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
+void UpDownBarWrapper::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL UpDownBarWrapper::firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
+void UpDownBarWrapper::firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented");
 }
 
 //XPropertyState
-beans::PropertyState SAL_CALL UpDownBarWrapper::getPropertyState( const OUString& rPropertyName )
+beans::PropertyState UpDownBarWrapper::getPropertyState( const OUString& rPropertyName )
 {
     cpo::uno::Any aDefault( getPropertyDefault( rPropertyName ) );
     cpo::uno::Any aValue( getPropertyValue( rPropertyName ) );
@@ -222,7 +222,7 @@ beans::PropertyState SAL_CALL UpDownBarWrapper::getPropertyState( const OUString
 
     return beans::PropertyState_DIRECT_VALUE;
 }
-cpo::uno::Sequence< beans::PropertyState > SAL_CALL UpDownBarWrapper::getPropertyStates( const cpo::uno::Sequence< OUString >& rNameSeq )
+cpo::uno::Sequence< beans::PropertyState > UpDownBarWrapper::getPropertyStates( const cpo::uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< beans::PropertyState > aRetSeq;
     if( rNameSeq.hasElements() )
@@ -237,12 +237,12 @@ cpo::uno::Sequence< beans::PropertyState > SAL_CALL UpDownBarWrapper::getPropert
     }
     return aRetSeq;
 }
-void SAL_CALL UpDownBarWrapper::setPropertyToDefault( const OUString& rPropertyName )
+void UpDownBarWrapper::setPropertyToDefault( const OUString& rPropertyName )
 {
     setPropertyValue( rPropertyName, getPropertyDefault(rPropertyName) );
 }
 
-cpo::uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const OUString& rPropertyName )
+cpo::uno::Any UpDownBarWrapper::getPropertyDefault( const OUString& rPropertyName )
 {
     static const ::chart::tPropertyValueMap aStaticDefaults = []()
         {
@@ -259,7 +259,7 @@ cpo::uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const OUString& rPr
 
 //XMultiPropertyStates
 //getPropertyStates() already declared in XPropertyState
-void SAL_CALL UpDownBarWrapper::setAllPropertiesToDefault(  )
+void UpDownBarWrapper::setAllPropertiesToDefault(  )
 {
     const Sequence< beans::Property >& rPropSeq = StaticUpDownBarWrapperPropertyArray();
     for(beans::Property const & prop : rPropSeq)
@@ -267,14 +267,14 @@ void SAL_CALL UpDownBarWrapper::setAllPropertiesToDefault(  )
         setPropertyToDefault( prop.Name );
     }
 }
-void SAL_CALL UpDownBarWrapper::setPropertiesToDefault( const cpo::uno::Sequence< OUString >& rNameSeq )
+void UpDownBarWrapper::setPropertiesToDefault( const cpo::uno::Sequence< OUString >& rNameSeq )
 {
     for(OUString const & s : rNameSeq)
     {
         setPropertyToDefault( s );
     }
 }
-cpo::uno::Sequence< cpo::uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const cpo::uno::Sequence< OUString >& rNameSeq )
+cpo::uno::Sequence< cpo::uno::Any > UpDownBarWrapper::getPropertyDefaults( const cpo::uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.hasElements() )
@@ -290,17 +290,17 @@ cpo::uno::Sequence< cpo::uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaul
     return aRetSeq;
 }
 
-OUString SAL_CALL UpDownBarWrapper::getImplementationName()
+OUString UpDownBarWrapper::getImplementationName()
 {
     return u"com.sun.star.comp.chart.ChartArea"_ustr;
 }
 
-bool SAL_CALL UpDownBarWrapper::supportsService( const OUString& rServiceName )
+bool UpDownBarWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL UpDownBarWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > UpDownBarWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.ChartArea"_ustr,

@@ -193,7 +193,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
 
 // frame::XStorable2
 
-void SAL_CALL ChartModel::storeSelf( const Sequence< beans::PropertyValue >& rMediaDescriptor )
+void ChartModel::storeSelf( const Sequence< beans::PropertyValue >& rMediaDescriptor )
 {
     // only some parameters are allowed (see also SfxBaseModel)
     // "VersionComment", "Author", "InteractionHandler", "StatusIndicator"
@@ -203,24 +203,24 @@ void SAL_CALL ChartModel::storeSelf( const Sequence< beans::PropertyValue >& rMe
 }
 
 // frame::XStorable (base of XStorable2)
-bool SAL_CALL ChartModel::hasLocation()
+bool ChartModel::hasLocation()
 {
     std::unique_lock aGuard(m_aLifeTimeManager.m_aAccessMutex);
     return !m_aResource.isEmpty();
 }
 
-OUString SAL_CALL ChartModel::getLocation()
+OUString ChartModel::getLocation()
 {
     return impl_g_getLocation();
 }
 
-bool SAL_CALL ChartModel::isReadonly()
+bool ChartModel::isReadonly()
 {
     //@todo guard
     return m_bReadOnly;
 }
 
-void SAL_CALL ChartModel::store()
+void ChartModel::store()
 {
     apphelper::LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall(true)) //start LongLastingCall
@@ -240,7 +240,7 @@ void SAL_CALL ChartModel::store()
     impl_store( m_aMediaDescriptor, m_xStorage );
 }
 
-void SAL_CALL ChartModel::storeAsURL(
+void ChartModel::storeAsURL(
     const OUString& rURL,
     const cpo::uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
 {
@@ -265,7 +265,7 @@ void SAL_CALL ChartModel::storeAsURL(
     }
 }
 
-void SAL_CALL ChartModel::storeToURL(
+void ChartModel::storeToURL(
     const OUString& rURL,
     const cpo::uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
 {
@@ -447,11 +447,11 @@ void ChartModel::insertDefaultChart()
 }
 
 // frame::XLoadable
-void SAL_CALL ChartModel::initNew()
+void ChartModel::initNew()
 {
 }
 
-void SAL_CALL ChartModel::load(
+void ChartModel::load(
     const Sequence< beans::PropertyValue >& rMediaDescriptor )
 {
     Reference< embed::XStorage > xStorage;
@@ -624,13 +624,13 @@ void ChartModel::impl_notifyModifiedListeners()
     }
 }
 
-bool SAL_CALL ChartModel::isModified()
+bool ChartModel::isModified()
 {
     //@todo guard
     return m_bModified;
 }
 
-void SAL_CALL ChartModel::setModified( bool bModified )
+void ChartModel::setModified( bool bModified )
 {
     // tdf#141914: allow to set *unmodified* when parent does not allow to set modified
     if (bModified)
@@ -660,7 +660,7 @@ void SAL_CALL ChartModel::setModified( bool bModified )
 }
 
 // util::XModifyBroadcaster (base of XModifiable)
-void SAL_CALL ChartModel::addModifyListener(
+void ChartModel::addModifyListener(
     const uno::Reference< util::XModifyListener >& xListener )
 {
     if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
@@ -670,7 +670,7 @@ void SAL_CALL ChartModel::addModifyListener(
     m_aLifeTimeManager.m_aModifyListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL ChartModel::removeModifyListener(
+void ChartModel::removeModifyListener(
     const uno::Reference< util::XModifyListener >& xListener )
 {
     if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
@@ -681,7 +681,7 @@ void SAL_CALL ChartModel::removeModifyListener(
 }
 
 // util::XModifyListener
-void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
+void ChartModel::modified( const lang::EventObject& rEvenObject)
 {
     chart2api::AbstractPivotTableDataProvider* pPivotTableDataProvider =
         dynamic_cast<chart2api::AbstractPivotTableDataProvider*>(rEvenObject.Source.get());
@@ -713,13 +713,13 @@ void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
 }
 
 // lang::XEventListener (base of util::XModifyListener)
-void SAL_CALL ChartModel::disposing( const lang::EventObject& )
+void ChartModel::disposing( const lang::EventObject& )
 {
     // child was disposed -- should not happen from outside
 }
 
 // document::XStorageBasedDocument
-void SAL_CALL ChartModel::loadFromStorage(
+void ChartModel::loadFromStorage(
     const Reference< embed::XStorage >& xStorage,
     const Sequence< beans::PropertyValue >& rMediaDescriptor )
 {
@@ -727,20 +727,20 @@ void SAL_CALL ChartModel::loadFromStorage(
     impl_load( rMediaDescriptor, xStorage );
 }
 
-void SAL_CALL ChartModel::storeToStorage(
+void ChartModel::storeToStorage(
     const Reference< embed::XStorage >& xStorage,
     const Sequence< beans::PropertyValue >& rMediaDescriptor )
 {
     impl_store( rMediaDescriptor, xStorage );
 }
 
-void SAL_CALL ChartModel::switchToStorage( const Reference< embed::XStorage >& xStorage )
+void ChartModel::switchToStorage( const Reference< embed::XStorage >& xStorage )
 {
     m_xStorage = xStorage;
     impl_notifyStorageChangeListeners();
 }
 
-Reference< embed::XStorage > SAL_CALL ChartModel::getDocumentStorage()
+Reference< embed::XStorage > ChartModel::getDocumentStorage()
 {
     return m_xStorage;
 }
@@ -758,7 +758,7 @@ void ChartModel::impl_notifyStorageChangeListeners()
     }
 }
 
-void SAL_CALL ChartModel::addStorageChangeListener( const Reference< document::XStorageChangeListener >& xListener )
+void ChartModel::addStorageChangeListener( const Reference< document::XStorageChangeListener >& xListener )
 {
     if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
         return; //behave passive if already disposed or closed
@@ -767,7 +767,7 @@ void SAL_CALL ChartModel::addStorageChangeListener( const Reference< document::X
     m_aLifeTimeManager.m_aStorageChangeListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL ChartModel::removeStorageChangeListener( const Reference< document::XStorageChangeListener >& xListener )
+void ChartModel::removeStorageChangeListener( const Reference< document::XStorageChangeListener >& xListener )
 {
     if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
         return; //behave passive if already disposed or closed

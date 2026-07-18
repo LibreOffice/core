@@ -40,7 +40,7 @@ BarChartType::~BarChartType()
 {}
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL BarChartType::createClone()
+uno::Reference< util::XCloneable > BarChartType::createClone()
 {
     return uno::Reference< util::XCloneable >( new BarChartType( *this ));
 }
@@ -51,7 +51,7 @@ rtl::Reference< ChartType > BarChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL BarChartType::getChartType()
+OUString BarChartType::getChartType()
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_BAR;
 }
@@ -61,17 +61,17 @@ cpo::uno::Sequence< OUString > BarChartType::getSupportedPropertyRoles()
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
-OUString SAL_CALL BarChartType::getImplementationName()
+OUString BarChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.BarChartType"_ustr;
 }
 
-bool SAL_CALL BarChartType::supportsService( const OUString& rServiceName )
+bool BarChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL BarChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > BarChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_BAR,

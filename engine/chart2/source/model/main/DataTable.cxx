@@ -117,31 +117,30 @@ DataTable::DataTable(const DataTable& rOther)
 DataTable::~DataTable() = default;
 
 // ____ XCloneable ____
-uno::Reference<util::XCloneable> SAL_CALL DataTable::createClone()
+uno::Reference<util::XCloneable> DataTable::createClone()
 {
     return uno::Reference<util::XCloneable>(new DataTable(*this));
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL DataTable::addModifyListener(const uno::Reference<util::XModifyListener>& aListener)
+void DataTable::addModifyListener(const uno::Reference<util::XModifyListener>& aListener)
 {
     m_xModifyEventForwarder->addModifyListener(aListener);
 }
 
-void SAL_CALL
-DataTable::removeModifyListener(const uno::Reference<util::XModifyListener>& aListener)
+void DataTable::removeModifyListener(const uno::Reference<util::XModifyListener>& aListener)
 {
     m_xModifyEventForwarder->removeModifyListener(aListener);
 }
 
 // ____ XModifyListener ____
-void SAL_CALL DataTable::modified(const lang::EventObject& aEvent)
+void DataTable::modified(const lang::EventObject& aEvent)
 {
     m_xModifyEventForwarder->modified(aEvent);
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL DataTable::disposing(const lang::EventObject& /* Source */)
+void DataTable::disposing(const lang::EventObject& /* Source */)
 {
     // nothing
 }
@@ -163,13 +162,10 @@ void DataTable::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) const
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL DataTable::getInfoHelper()
-{
-    return StaticDataTableInfoHelper();
-}
+::cppu::IPropertyArrayHelper& DataTable::getInfoHelper() { return StaticDataTableInfoHelper(); }
 
 // ____ XPropertySet ____
-uno::Reference<beans::XPropertySetInfo> SAL_CALL DataTable::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> DataTable::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticDataTableInfoHelper()));
@@ -177,17 +173,14 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL DataTable::getPropertySetInfo()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-OUString SAL_CALL DataTable::getImplementationName()
-{
-    return u"com.sun.star.comp.chart2.DataTable"_ustr;
-}
+OUString DataTable::getImplementationName() { return u"com.sun.star.comp.chart2.DataTable"_ustr; }
 
-bool SAL_CALL DataTable::supportsService(const OUString& rServiceName)
+bool DataTable::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL DataTable::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> DataTable::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.DataTable"_ustr, u"com.sun.star.beans.PropertySet"_ustr,
              u"com.sun.star.drawing.FillProperties"_ustr,

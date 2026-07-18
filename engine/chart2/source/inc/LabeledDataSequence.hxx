@@ -52,25 +52,25 @@ public:
     virtual ~LabeledDataSequence() override;
 
     /// declare XServiceInfo methods
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // ____ XLabeledDataSequence ____
-    virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL getValues() override;
-    virtual void SAL_CALL setValues(
+    virtual css::uno::Reference< css::chart2::data::XDataSequence > getValues() override;
+    virtual void setValues(
         const css::uno::Reference< css::chart2::data::XDataSequence >& xSequence ) override;
-    virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL getLabel() override;
-    virtual void SAL_CALL setLabel(
+    virtual css::uno::Reference< css::chart2::data::XDataSequence > getLabel() override;
+    virtual void setLabel(
         const css::uno::Reference< css::chart2::data::XDataSequence >& xSequence ) override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XModifyBroadcaster ____
-    virtual void SAL_CALL addModifyListener(
+    virtual void addModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener(
+    virtual void removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
 private:

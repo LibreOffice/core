@@ -76,19 +76,19 @@ public:
     virtual ~ElementSelectorToolbarController() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XInterface
-     virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
-     virtual void SAL_CALL acquire() noexcept override;
-     virtual void SAL_CALL release() noexcept override;
+     virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
+     virtual void acquire() noexcept override;
+     virtual void release() noexcept override;
 
      // XStatusListener
-     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
      // XToolbarController
-     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
+     virtual css::uno::Reference< css::awt::XWindow > createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
 
 private:
     VclPtr< SelectorListBox > m_apSelectorListBox;

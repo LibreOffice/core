@@ -42,16 +42,16 @@ ChartTypeUnoDlg::~ChartTypeUnoDlg()
     }
 }
 // lang::XServiceInfo
-OUString SAL_CALL ChartTypeUnoDlg::getImplementationName()
+OUString ChartTypeUnoDlg::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.ChartTypeDialog"_ustr;
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ChartTypeUnoDlg::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ChartTypeUnoDlg::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.ChartTypeDialog"_ustr };
 }
-cpo::uno::Sequence< sal_Int8 > SAL_CALL ChartTypeUnoDlg::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > ChartTypeUnoDlg::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
@@ -81,7 +81,7 @@ std::unique_ptr<weld::DialogController> ChartTypeUnoDlg::createDialog(const css:
     return std::make_unique<ChartTypeDialog>(Application::GetFrameWeld(rParent), pChartModel);
 }
 
-uno::Reference<beans::XPropertySetInfo>  SAL_CALL ChartTypeUnoDlg::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo>  ChartTypeUnoDlg::getPropertySetInfo()
 {
     return createPropertySetInfo( getInfoHelper() );
 }

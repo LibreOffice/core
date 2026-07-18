@@ -53,45 +53,45 @@ public:
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
     explicit DataPoint( const DataPoint & rOther );
 
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
+    virtual void setFastPropertyValue_NoBroadcast
         ( sal_Int32 nHandle,
           const cpo::uno::Any& rValue ) override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // ____ XCloneable ____
     // Note: m_xParentProperties are not cloned!
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XChild ____
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent() override;
-    virtual void SAL_CALL setParent(
+    virtual css::uno::Reference< css::uno::XInterface > getParent() override;
+    virtual void setParent(
         const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
     // ____ XModifyBroadcaster ____
-    virtual void SAL_CALL addModifyListener(
+    virtual void addModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener(
+    virtual void removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // ____ XModifyListener ____
-    virtual void SAL_CALL modified(
+    virtual void modified(
         const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
-    virtual void SAL_CALL disposing(
+    virtual void disposing(
         const css::lang::EventObject& Source ) override;
 
     // ____ OPropertySet ____

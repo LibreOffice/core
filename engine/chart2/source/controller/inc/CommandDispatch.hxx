@@ -91,13 +91,13 @@ protected:
         const css::uno::Reference< css::frame::XStatusListener > & xSingleListener );
 
     // ____ XDispatch ____
-    virtual void SAL_CALL dispatch(
+    virtual void dispatch(
         const css::util::URL& URL,
         const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
-    virtual void SAL_CALL addStatusListener(
+    virtual void addStatusListener(
         const css::uno::Reference< css::frame::XStatusListener >& Control,
         const css::util::URL& URL ) override;
-    virtual void SAL_CALL removeStatusListener(
+    virtual void removeStatusListener(
         const css::uno::Reference< css::frame::XStatusListener >& Control,
         const css::util::URL& URL ) override;
 
@@ -106,11 +106,11 @@ protected:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // ____ XModifyListener ____
-    virtual void SAL_CALL modified(
+    virtual void modified(
         const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
-    virtual void SAL_CALL disposing(
+    virtual void disposing(
         const css::lang::EventObject& Source ) override;
 
 private:

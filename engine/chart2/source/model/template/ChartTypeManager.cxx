@@ -253,7 +253,7 @@ ChartTypeManager::~ChartTypeManager()
 {}
 
 // ____ XMultiServiceFactory ____
-uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
+uno::Reference< uno::XInterface > ChartTypeManager::createInstance(
     const OUString& aServiceSpecifier )
 {
     return static_cast<cppu::OWeakObject*>(createTemplate(aServiceSpecifier).get());
@@ -603,7 +603,7 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
     return xTemplate;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstanceWithArguments(
+uno::Reference< uno::XInterface > ChartTypeManager::createInstanceWithArguments(
     const OUString& ServiceSpecifier,
     const cpo::uno::Sequence< cpo::uno::Any >& /* Arguments */ )
 {
@@ -611,7 +611,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstanceWithA
     return createInstance( ServiceSpecifier );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
+cpo::uno::Sequence< OUString > ChartTypeManager::getAvailableServiceNames()
 {
     std::vector< OUString > aServices;
     const tTemplateMapType & rMap = lcl_DefaultChartTypeMap();
@@ -648,17 +648,17 @@ cpo::uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNam
 }
 
 // ____ XServiceInfo ____
-OUString SAL_CALL ChartTypeManager::getImplementationName()
+OUString ChartTypeManager::getImplementationName()
 {
     return u"com.sun.star.comp.chart.ChartTypeManager"_ustr;
 }
 
-bool SAL_CALL ChartTypeManager::supportsService( const OUString& rServiceName )
+bool ChartTypeManager::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ChartTypeManager::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ChartTypeManager::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.ChartTypeManager"_ustr,

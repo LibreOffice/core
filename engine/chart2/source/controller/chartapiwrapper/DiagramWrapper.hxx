@@ -70,116 +70,116 @@ public:
     virtual ~DiagramWrapper() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // ____ XComponent ____
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference<
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference<
                                             css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference<
+    virtual void removeEventListener( const css::uno::Reference<
                                                css::lang::XEventListener >& aListener ) override;
 
     // ____ XDiagram ____
-    virtual OUString SAL_CALL getDiagramType() override;
+    virtual OUString getDiagramType() override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getDataRowProperties( sal_Int32 nRow ) override;
+        css::beans::XPropertySet > getDataRowProperties( sal_Int32 nRow ) override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getDataPointProperties( sal_Int32 nCol, sal_Int32 nRow ) override;
+        css::beans::XPropertySet > getDataPointProperties( sal_Int32 nCol, sal_Int32 nRow ) override;
 
     // ____ XShape (base of XDiagram) ____
-    virtual css::awt::Point SAL_CALL getPosition() override;
-    virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) override;
-    virtual css::awt::Size SAL_CALL getSize() override;
-    virtual void SAL_CALL setSize( const css::awt::Size& aSize ) override;
+    virtual css::awt::Point getPosition() override;
+    virtual void setPosition( const css::awt::Point& aPosition ) override;
+    virtual css::awt::Size getSize() override;
+    virtual void setSize( const css::awt::Size& aSize ) override;
 
     // ____ XShapeDescriptor (base of XShape) ____
-    virtual OUString SAL_CALL getShapeType() override;
+    virtual OUString getShapeType() override;
 
     // ____ XAxisSupplier ____
     virtual css::uno::Reference<
-        css::chart::XAxis > SAL_CALL getAxis( sal_Int32 nDimensionIndex ) override;
+        css::chart::XAxis > getAxis( sal_Int32 nDimensionIndex ) override;
     virtual css::uno::Reference<
-        css::chart::XAxis > SAL_CALL getSecondaryAxis( sal_Int32 nDimensionIndex ) override;
+        css::chart::XAxis > getSecondaryAxis( sal_Int32 nDimensionIndex ) override;
 
     // ____ XAxisZSupplier ____
     virtual css::uno::Reference<
-        css::drawing::XShape > SAL_CALL getZAxisTitle() override;
+        css::drawing::XShape > getZAxisTitle() override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getZMainGrid() override;
+        css::beans::XPropertySet > getZMainGrid() override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getZHelpGrid() override;
+        css::beans::XPropertySet > getZHelpGrid() override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getZAxis() override;
+        css::beans::XPropertySet > getZAxis() override;
 
     // ____ XTwoAxisXSupplier ____
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getSecondaryXAxis() override;
+        css::beans::XPropertySet > getSecondaryXAxis() override;
 
     // ____ XAxisXSupplier (base of XTwoAxisXSupplier) ____
     virtual css::uno::Reference<
-        css::drawing::XShape > SAL_CALL getXAxisTitle() override;
+        css::drawing::XShape > getXAxisTitle() override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getXAxis() override;
+        css::beans::XPropertySet > getXAxis() override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getXMainGrid() override;
+        css::beans::XPropertySet > getXMainGrid() override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getXHelpGrid() override;
+        css::beans::XPropertySet > getXHelpGrid() override;
 
     // ____ XTwoAxisYSupplier ____
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getSecondaryYAxis() override;
+        css::beans::XPropertySet > getSecondaryYAxis() override;
 
     // ____ XAxisYSupplier (base of XTwoAxisYSupplier) ____
     virtual css::uno::Reference<
-        css::drawing::XShape > SAL_CALL getYAxisTitle() override;
+        css::drawing::XShape > getYAxisTitle() override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getYAxis() override;
+        css::beans::XPropertySet > getYAxis() override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getYHelpGrid() override;
+        css::beans::XPropertySet > getYHelpGrid() override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getYMainGrid() override;
+        css::beans::XPropertySet > getYMainGrid() override;
 
    // ____ XSecondAxisTitleSupplier ____
     virtual css::uno::Reference<
-        css::drawing::XShape > SAL_CALL getSecondXAxisTitle() override;
+        css::drawing::XShape > getSecondXAxisTitle() override;
     virtual css::uno::Reference<
-        css::drawing::XShape > SAL_CALL getSecondYAxisTitle() override;
+        css::drawing::XShape > getSecondYAxisTitle() override;
 
     // ____ XStatisticDisplay ____
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getUpBar() override;
+        css::beans::XPropertySet > getUpBar() override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getDownBar() override;
+        css::beans::XPropertySet > getDownBar() override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getMinMaxLine() override;
+        css::beans::XPropertySet > getMinMaxLine() override;
 
     // ____ X3DDisplay ____
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getWall() override;
+        css::beans::XPropertySet > getWall() override;
     virtual css::uno::Reference<
-        css::beans::XPropertySet > SAL_CALL getFloor() override;
+        css::beans::XPropertySet > getFloor() override;
 
     // ____ X3DDefaultSetter ____
-    virtual void SAL_CALL set3DSettingsToDefault() override;
-    virtual void SAL_CALL setDefaultRotation() override;
-    virtual void SAL_CALL setDefaultIllumination() override;
+    virtual void set3DSettingsToDefault() override;
+    virtual void setDefaultRotation() override;
+    virtual void setDefaultIllumination() override;
 
     // ____ XDiagramPositioning ____
-    virtual void SAL_CALL setAutomaticDiagramPositioning(  ) override;
-    virtual bool SAL_CALL isAutomaticDiagramPositioning(  ) override;
-    virtual void SAL_CALL setDiagramPositionExcludingAxes( const css::awt::Rectangle& PositionRect ) override;
-    virtual bool SAL_CALL isExcludingDiagramPositioning(  ) override;
-    virtual css::awt::Rectangle SAL_CALL calculateDiagramPositionExcludingAxes(  ) override;
-    virtual void SAL_CALL setDiagramPositionIncludingAxes( const css::awt::Rectangle& PositionRect ) override;
-    virtual css::awt::Rectangle SAL_CALL calculateDiagramPositionIncludingAxes(  ) override;
-    virtual void SAL_CALL setDiagramPositionIncludingAxesAndAxisTitles( const css::awt::Rectangle& PositionRect ) override;
-    virtual css::awt::Rectangle SAL_CALL calculateDiagramPositionIncludingAxesAndAxisTitles(  ) override;
+    virtual void setAutomaticDiagramPositioning(  ) override;
+    virtual bool isAutomaticDiagramPositioning(  ) override;
+    virtual void setDiagramPositionExcludingAxes( const css::awt::Rectangle& PositionRect ) override;
+    virtual bool isExcludingDiagramPositioning(  ) override;
+    virtual css::awt::Rectangle calculateDiagramPositionExcludingAxes(  ) override;
+    virtual void setDiagramPositionIncludingAxes( const css::awt::Rectangle& PositionRect ) override;
+    virtual css::awt::Rectangle calculateDiagramPositionIncludingAxes(  ) override;
+    virtual void setDiagramPositionIncludingAxesAndAxisTitles( const css::awt::Rectangle& PositionRect ) override;
+    virtual css::awt::Rectangle calculateDiagramPositionIncludingAxesAndAxisTitles(  ) override;
 
     // ____ XDiagramProvider ____
-    virtual css::uno::Reference< css::chart2::XDiagram > SAL_CALL getDiagram() override;
-    virtual void SAL_CALL setDiagram( const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
+    virtual css::uno::Reference< css::chart2::XDiagram > getDiagram() override;
+    virtual void setDiagram( const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
 
     rtl::Reference< ::chart::Diagram > getUnderlyingDiagram();
 

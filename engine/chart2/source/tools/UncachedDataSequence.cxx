@@ -143,17 +143,17 @@ void UncachedDataSequence::registerProperties()
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-OUString SAL_CALL UncachedDataSequence::getImplementationName()
+OUString UncachedDataSequence::getImplementationName()
 {
     return lcl_aServiceName;
 }
 
-bool SAL_CALL UncachedDataSequence::supportsService( const OUString& rServiceName )
+bool UncachedDataSequence::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL UncachedDataSequence::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > UncachedDataSequence::getSupportedServiceNames()
 {
     return {
         lcl_aServiceName,
@@ -164,7 +164,7 @@ cpo::uno::Sequence< OUString > SAL_CALL UncachedDataSequence::getSupportedServic
 }
 
 // ________ XNumericalDataSequence ________
-Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
+Sequence< double > UncachedDataSequence::getNumericalData()
 {
     std::unique_lock<std::mutex> aGuard;
     if( m_xDataProvider.is())
@@ -176,7 +176,7 @@ Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
 }
 
 // ________ XTextualDataSequence ________
-Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
+Sequence< OUString > UncachedDataSequence::getTextualData()
 {
     std::unique_lock<std::mutex> aGuard;
     if( m_xDataProvider.is())
@@ -188,7 +188,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
 }
 
 // ________ XDataSequence  ________
-Sequence< Any > SAL_CALL UncachedDataSequence::getData()
+Sequence< Any > UncachedDataSequence::getData()
 {
     std::unique_lock<std::mutex> aGuard;
     if( m_xDataProvider.is())
@@ -196,12 +196,12 @@ Sequence< Any > SAL_CALL UncachedDataSequence::getData()
     return Sequence< Any >();
 }
 
-OUString SAL_CALL UncachedDataSequence::getSourceRangeRepresentation()
+OUString UncachedDataSequence::getSourceRangeRepresentation()
 {
     return getName();
 }
 
-Sequence< OUString > SAL_CALL UncachedDataSequence::generateLabel( chart2::data::LabelOrigin )
+Sequence< OUString > UncachedDataSequence::generateLabel( chart2::data::LabelOrigin )
 {
     // auto-generated label
     sal_Int32 nSeries = m_aSourceRepresentation.toInt32() + 1;
@@ -214,13 +214,13 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::generateLabel( chart2::data:
     return Sequence< OUString >( &aName, 1 );
 }
 
-::sal_Int32 SAL_CALL UncachedDataSequence::getNumberFormatKeyByIndex( ::sal_Int32 )
+::sal_Int32 UncachedDataSequence::getNumberFormatKeyByIndex( ::sal_Int32 )
 {
     return m_nNumberFormatKey;
 }
 
 // ____ XIndexReplace ____
-void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const cpo::uno::Any& Element )
+void UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const cpo::uno::Any& Element )
 {
     std::unique_lock<std::mutex> aGuard;
     Sequence< Any > aData( getData());
@@ -234,25 +234,25 @@ void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const cpo
 }
 
 // ____ XIndexAccess (base of XIndexReplace) ____
-::sal_Int32 SAL_CALL UncachedDataSequence::getCount()
+::sal_Int32 UncachedDataSequence::getCount()
 {
     OSL_FAIL( "Implement!" );
     return 0;
 }
 
-cpo::uno::Any SAL_CALL UncachedDataSequence::getByIndex( ::sal_Int32 )
+cpo::uno::Any UncachedDataSequence::getByIndex( ::sal_Int32 )
 {
     OSL_FAIL( "Implement!" );
     return cpo::uno::Any();
 }
 
 // ____ XElementAccess (base of XIndexAccess) ____
-cpo::uno::Type SAL_CALL UncachedDataSequence::getElementType()
+cpo::uno::Type UncachedDataSequence::getElementType()
 {
     return cppu::UnoType<cpo::uno::Any>::get();
 }
 
-bool SAL_CALL UncachedDataSequence::hasElements()
+bool UncachedDataSequence::hasElements()
 {
     if( ! m_xDataProvider.is())
         return false;
@@ -260,41 +260,41 @@ bool SAL_CALL UncachedDataSequence::hasElements()
 }
 
 // ____ XNamed ____
-OUString SAL_CALL UncachedDataSequence::getName()
+OUString UncachedDataSequence::getName()
 {
     return m_aSourceRepresentation;
 }
 
-void SAL_CALL UncachedDataSequence::setName( const OUString& aName )
+void UncachedDataSequence::setName( const OUString& aName )
 {
     m_aSourceRepresentation = aName;
     fireModifyEvent();
 }
 
-Reference< util::XCloneable > SAL_CALL UncachedDataSequence::createClone()
+Reference< util::XCloneable > UncachedDataSequence::createClone()
 {
     return new UncachedDataSequence( *this );
 }
 
 // ____ XModifiable ____
-bool SAL_CALL UncachedDataSequence::isModified()
+bool UncachedDataSequence::isModified()
 {
     return false;
 }
 
-void SAL_CALL UncachedDataSequence::setModified( bool bModified )
+void UncachedDataSequence::setModified( bool bModified )
 {
     if( bModified )
         fireModifyEvent();
 }
 
 // ____ XModifyBroadcaster (base of XModifiable) ____
-void SAL_CALL UncachedDataSequence::addModifyListener( const Reference< util::XModifyListener >& aListener )
+void UncachedDataSequence::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL UncachedDataSequence::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+void UncachedDataSequence::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }

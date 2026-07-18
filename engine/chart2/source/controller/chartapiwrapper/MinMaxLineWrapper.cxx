@@ -87,21 +87,21 @@ MinMaxLineWrapper::~MinMaxLineWrapper()
 }
 
 // ____ XComponent ____
-void SAL_CALL MinMaxLineWrapper::dispose()
+void MinMaxLineWrapper::dispose()
 {
     std::unique_lock g(m_aMutex);
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( xSource ) );
 }
 
-void SAL_CALL MinMaxLineWrapper::addEventListener(
+void MinMaxLineWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock g(m_aMutex);
     m_aEventListenerContainer.addInterface( g, xListener );
 }
 
-void SAL_CALL MinMaxLineWrapper::removeEventListener(
+void MinMaxLineWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
@@ -109,12 +109,12 @@ void SAL_CALL MinMaxLineWrapper::removeEventListener(
 }
 
 //XPropertySet
-uno::Reference< beans::XPropertySetInfo > SAL_CALL MinMaxLineWrapper::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > MinMaxLineWrapper::getPropertySetInfo()
 {
     return StaticMinMaxLineWrapperInfo();
 }
 
-void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& rValue )
+void MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& rValue )
 {
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     const std::vector< rtl::Reference< ChartType > > aTypes = xDiagram->getChartTypes();
@@ -141,7 +141,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName
         }
     }
 }
-cpo::uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rPropertyName )
+cpo::uno::Any MinMaxLineWrapper::getPropertyValue( const OUString& rPropertyName )
 {
     Any aRet;
 
@@ -176,26 +176,26 @@ cpo::uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rPro
     return aRet;
 }
 
-void SAL_CALL MinMaxLineWrapper::addPropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
+void MinMaxLineWrapper::addPropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL MinMaxLineWrapper::removePropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
+void MinMaxLineWrapper::removePropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL MinMaxLineWrapper::addVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
+void MinMaxLineWrapper::addVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL MinMaxLineWrapper::removeVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
+void MinMaxLineWrapper::removeVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
 {
     OSL_FAIL("not implemented");
 }
 
 //XMultiPropertySet
 //getPropertySetInfo() already declared in XPropertySet
-void SAL_CALL MinMaxLineWrapper::setPropertyValues( const cpo::uno::Sequence< OUString >& rNameSeq, const cpo::uno::Sequence< cpo::uno::Any >& rValueSeq )
+void MinMaxLineWrapper::setPropertyValues( const cpo::uno::Sequence< OUString >& rNameSeq, const cpo::uno::Sequence< cpo::uno::Any >& rValueSeq )
 {
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
@@ -212,7 +212,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValues( const cpo::uno::Sequence< OU
     }
     //todo: store unknown properties elsewhere
 }
-cpo::uno::Sequence< cpo::uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyValues( const cpo::uno::Sequence< OUString >& rNameSeq )
+cpo::uno::Sequence< cpo::uno::Any > MinMaxLineWrapper::getPropertyValues( const cpo::uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.hasElements() )
@@ -227,18 +227,18 @@ cpo::uno::Sequence< cpo::uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyValue
     }
     return aRetSeq;
 }
-void SAL_CALL MinMaxLineWrapper::addPropertiesChangeListener(
+void MinMaxLineWrapper::addPropertiesChangeListener(
     const cpo::uno::Sequence< OUString >& /* aPropertyNames */,
     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL MinMaxLineWrapper::removePropertiesChangeListener(
+void MinMaxLineWrapper::removePropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL MinMaxLineWrapper::firePropertiesChangeEvent(
+void MinMaxLineWrapper::firePropertiesChangeEvent(
     const cpo::uno::Sequence< OUString >& /* aPropertyNames */,
     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
 {
@@ -246,7 +246,7 @@ void SAL_CALL MinMaxLineWrapper::firePropertiesChangeEvent(
 }
 
 //XPropertyState
-beans::PropertyState SAL_CALL MinMaxLineWrapper::getPropertyState( const OUString& rPropertyName )
+beans::PropertyState MinMaxLineWrapper::getPropertyState( const OUString& rPropertyName )
 {
     if( rPropertyName == m_aWrappedLineJointProperty.getOuterName() )
         return beans::PropertyState_DEFAULT_VALUE;
@@ -259,7 +259,7 @@ beans::PropertyState SAL_CALL MinMaxLineWrapper::getPropertyState( const OUStrin
 
     return beans::PropertyState_DIRECT_VALUE;
 }
-cpo::uno::Sequence< beans::PropertyState > SAL_CALL MinMaxLineWrapper::getPropertyStates( const cpo::uno::Sequence< OUString >& rNameSeq )
+cpo::uno::Sequence< beans::PropertyState > MinMaxLineWrapper::getPropertyStates( const cpo::uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< beans::PropertyState > aRetSeq;
     if( rNameSeq.hasElements() )
@@ -274,12 +274,12 @@ cpo::uno::Sequence< beans::PropertyState > SAL_CALL MinMaxLineWrapper::getProper
     }
     return aRetSeq;
 }
-void SAL_CALL MinMaxLineWrapper::setPropertyToDefault( const OUString& rPropertyName )
+void MinMaxLineWrapper::setPropertyToDefault( const OUString& rPropertyName )
 {
     setPropertyValue( rPropertyName, getPropertyDefault(rPropertyName) );
 }
 
-cpo::uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const OUString& rPropertyName )
+cpo::uno::Any MinMaxLineWrapper::getPropertyDefault( const OUString& rPropertyName )
 {
     static const ::chart::tPropertyValueMap aStaticDefaults = []
         {
@@ -295,7 +295,7 @@ cpo::uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const OUString& rP
 
 //XMultiPropertyStates
 //getPropertyStates() already declared in XPropertyState
-void SAL_CALL MinMaxLineWrapper::setAllPropertiesToDefault(  )
+void MinMaxLineWrapper::setAllPropertiesToDefault(  )
 {
     const Sequence< beans::Property >& rPropSeq = StaticMinMaxLineWrapperPropertyArray();
     for(beans::Property const & prop : rPropSeq)
@@ -303,14 +303,14 @@ void SAL_CALL MinMaxLineWrapper::setAllPropertiesToDefault(  )
         setPropertyToDefault( prop.Name );
     }
 }
-void SAL_CALL MinMaxLineWrapper::setPropertiesToDefault( const cpo::uno::Sequence< OUString >& rNameSeq )
+void MinMaxLineWrapper::setPropertiesToDefault( const cpo::uno::Sequence< OUString >& rNameSeq )
 {
     for(OUString const & s : rNameSeq)
     {
         setPropertyToDefault( s );
     }
 }
-cpo::uno::Sequence< cpo::uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefaults( const cpo::uno::Sequence< OUString >& rNameSeq )
+cpo::uno::Sequence< cpo::uno::Any > MinMaxLineWrapper::getPropertyDefaults( const cpo::uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.hasElements() )
@@ -326,17 +326,17 @@ cpo::uno::Sequence< cpo::uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefau
     return aRetSeq;
 }
 
-OUString SAL_CALL MinMaxLineWrapper::getImplementationName()
+OUString MinMaxLineWrapper::getImplementationName()
 {
     return u"com.sun.star.comp.chart.ChartLine"_ustr;
 }
 
-bool SAL_CALL MinMaxLineWrapper::supportsService( const OUString& rServiceName )
+bool MinMaxLineWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL MinMaxLineWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > MinMaxLineWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.ChartLine"_ustr,

@@ -110,7 +110,7 @@ PieChartType::~PieChartType()
 {}
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL PieChartType::createClone()
+uno::Reference< util::XCloneable > PieChartType::createClone()
 {
     return uno::Reference< util::XCloneable >( new PieChartType( *this ));
 }
@@ -121,7 +121,7 @@ rtl::Reference< ChartType > PieChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL PieChartType::getChartType()
+OUString PieChartType::getChartType()
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_PIE;
 }
@@ -178,28 +178,28 @@ void PieChartType::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) con
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL PieChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & PieChartType::getInfoHelper()
 {
     return StaticPieChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartType::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > PieChartType::getPropertySetInfo()
 {
     return StaticPieChartTypeInfo();
 }
 
-OUString SAL_CALL PieChartType::getImplementationName()
+OUString PieChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.PieChartType"_ustr;
 }
 
-bool SAL_CALL PieChartType::supportsService( const OUString& rServiceName )
+bool PieChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL PieChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > PieChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_PIE,

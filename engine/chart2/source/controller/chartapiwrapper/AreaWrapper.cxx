@@ -47,34 +47,34 @@ AreaWrapper::~AreaWrapper()
 {}
 
 // ____ XShape ____
-awt::Point SAL_CALL AreaWrapper::getPosition()
+awt::Point AreaWrapper::getPosition()
 {
     return awt::Point(0,0);
 }
 
-void SAL_CALL AreaWrapper::setPosition( const awt::Point& /*aPosition*/ )
+void AreaWrapper::setPosition( const awt::Point& /*aPosition*/ )
 {
     OSL_FAIL( "trying to set position of chart area" );
 }
 
-awt::Size SAL_CALL AreaWrapper::getSize()
+awt::Size AreaWrapper::getSize()
 {
     return m_spChart2ModelContact->GetPageSize();
 }
 
-void SAL_CALL AreaWrapper::setSize( const awt::Size& /*aSize*/ )
+void AreaWrapper::setSize( const awt::Size& /*aSize*/ )
 {
     OSL_FAIL( "trying to set size of chart area" );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
-OUString SAL_CALL AreaWrapper::getShapeType()
+OUString AreaWrapper::getShapeType()
 {
     return u"com.sun.star.chart.ChartArea"_ustr;
 }
 
 // ____ XComponent ____
-void SAL_CALL AreaWrapper::dispose()
+void AreaWrapper::dispose()
 {
     std::unique_lock g(m_aMutex);
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
@@ -83,14 +83,14 @@ void SAL_CALL AreaWrapper::dispose()
     clearWrappedPropertySet(g);
 }
 
-void SAL_CALL AreaWrapper::addEventListener(
+void AreaWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock g(m_aMutex);
     m_aEventListenerContainer.addInterface( g, xListener );
 }
 
-void SAL_CALL AreaWrapper::removeEventListener(
+void AreaWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
@@ -133,17 +133,17 @@ std::vector< std::unique_ptr<WrappedProperty> > AreaWrapper::createWrappedProper
     return aWrappedProperties;
 }
 
-OUString SAL_CALL AreaWrapper::getImplementationName()
+OUString AreaWrapper::getImplementationName()
 {
     return u"com.sun.star.comp.chart.Area"_ustr;
 }
 
-bool SAL_CALL AreaWrapper::supportsService( const OUString& rServiceName )
+bool AreaWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL AreaWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > AreaWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.xml.UserDefinedAttributesSupplier"_ustr,

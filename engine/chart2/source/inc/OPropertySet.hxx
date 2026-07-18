@@ -76,7 +76,7 @@ protected:
 
         @see ::cppu::OPropertySetHelper
      */
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override = 0;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override = 0;
 
     /** Try to convert the value <code>rValue</code> to the type required by the
         property associated with <code>nHandle</code>.
@@ -102,7 +102,7 @@ protected:
 
         @see ::cppu::OPropertySetHelper
      */
-    virtual bool SAL_CALL convertFastPropertyValue
+    virtual bool convertFastPropertyValue
         ( cpo::uno::Any & rConvertedValue,
           cpo::uno::Any & rOldValue,
           sal_Int32 nHandle,
@@ -125,7 +125,7 @@ protected:
 
         @see ::cppu::OPropertySetHelper
     */
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast
+    virtual void setFastPropertyValue_NoBroadcast
         ( sal_Int32 nHandle,
           const cpo::uno::Any& rValue ) override;
 
@@ -135,7 +135,7 @@ protected:
 
         @see ::cppu::OPropertySetHelper
      */
-    virtual void SAL_CALL getFastPropertyValue
+    virtual void getFastPropertyValue
         ( cpo::uno::Any& rValue,
           sal_Int32 nHandle ) const override;
 
@@ -151,45 +151,45 @@ public:
     // Interfaces
 
     // ____ XInterface ____
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
 
     // ____ XTypeProvider ____
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Type >
         getTypes() override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 >
         getImplementationId() override;
 
     // ____ XPropertyState ____
-    virtual css::beans::PropertyState SAL_CALL
+    virtual css::beans::PropertyState
         getPropertyState( const OUString& PropertyName ) override final;
-    virtual cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::PropertyState >
         getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override final;
-    virtual void SAL_CALL
+    virtual void
         setPropertyToDefault( const OUString& PropertyName ) override final;
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
         getPropertyDefault( const OUString& aPropertyName ) override final;
 
     // ____ XMultiPropertyStates ____
     // Note: getPropertyStates() is already implemented in XPropertyState with the
     // same signature
-    virtual void SAL_CALL
+    virtual void
         setAllPropertiesToDefault() override final;
-    virtual void SAL_CALL
+    virtual void
         setPropertiesToDefault( const cpo::uno::Sequence< OUString >& aPropertyNames ) override final;
-    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Any >
         getPropertyDefaults( const cpo::uno::Sequence< OUString >& aPropertyNames ) override final;
 
     // ____ XStyleSupplier ____
-    virtual css::uno::Reference< css::style::XStyle > SAL_CALL getStyle() override final;
-    virtual void SAL_CALL setStyle( const css::uno::Reference< css::style::XStyle >& xStyle ) override final;
+    virtual css::uno::Reference< css::style::XStyle > getStyle() override final;
+    virtual void setStyle( const css::uno::Reference< css::style::XStyle >& xStyle ) override final;
 
     // ____ XMultiPropertySet ____
-    virtual void SAL_CALL setPropertyValues(
+    virtual void setPropertyValues(
         const cpo::uno::Sequence< OUString >& PropertyNames,
         const cpo::uno::Sequence< cpo::uno::Any >& Values ) override final;
 
     // ____ XFastPropertySet ____
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override final;
+    virtual void setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override final;
 
     // Note: it is assumed that the base class implements setPropertyValue by
     // using setFastPropertyValue

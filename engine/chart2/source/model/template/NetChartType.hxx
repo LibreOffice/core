@@ -35,10 +35,10 @@ protected:
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
 
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     virtual rtl::Reference< ::chart::BaseCoordinateSystem >
@@ -51,11 +51,11 @@ public:
     explicit NetChartType();
     virtual ~NetChartType() override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName() override;
-    virtual bool SAL_CALL
+    virtual bool
         supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
         getSupportedServiceNames() override;
 
     virtual rtl::Reference<ChartType> cloneChartType() const override;
@@ -64,10 +64,10 @@ private:
     explicit NetChartType( const NetChartType & rOther );
 
     // ____ XChartType ____
-    virtual OUString SAL_CALL getChartType() override;
+    virtual OUString getChartType() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 };
 
 } //  namespace chart

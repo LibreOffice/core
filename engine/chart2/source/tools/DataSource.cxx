@@ -50,28 +50,28 @@ DataSource::~DataSource()
 {}
 
 // ____ XDataSource ____
-Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSource::getDataSequences()
+Sequence< Reference< chart2::data::XLabeledDataSequence > > DataSource::getDataSequences()
 {
     return m_aDataSeq;
 }
 
 // ____ XDataSink ____
-void SAL_CALL DataSource::setData( const Sequence< Reference< chart2::data::XLabeledDataSequence > >& aData )
+void DataSource::setData( const Sequence< Reference< chart2::data::XLabeledDataSequence > >& aData )
 {
     m_aDataSeq = aData;
 }
 
-OUString SAL_CALL DataSource::getImplementationName()
+OUString DataSource::getImplementationName()
 {
     return u"com.sun.star.comp.chart.DataSource"_ustr;
 }
 
-bool SAL_CALL DataSource::supportsService( const OUString& rServiceName )
+bool DataSource::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DataSource::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > DataSource::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.data.DataSource"_ustr };
 }

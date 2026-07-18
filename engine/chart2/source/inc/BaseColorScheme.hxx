@@ -31,8 +31,8 @@ public:
     explicit BaseColorScheme();
 
     /// declare XServiceInfo methods
-    bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    bool supportsService(const OUString& ServiceName) override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 protected:
     // member variables

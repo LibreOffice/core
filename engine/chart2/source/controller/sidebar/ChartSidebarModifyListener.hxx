@@ -30,9 +30,9 @@ public:
     explicit ChartSidebarModifyListener(ChartSidebarModifyListenerParent* pParent);
     virtual ~ChartSidebarModifyListener() override;
 
-    virtual void SAL_CALL modified(const css::lang::EventObject& rEvent) override;
+    virtual void modified(const css::lang::EventObject& rEvent) override;
 
-    virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override;
+    virtual void disposing(const css::lang::EventObject& rEvent) override;
 
 private:
     ChartSidebarModifyListenerParent* mpParent;

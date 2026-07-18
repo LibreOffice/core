@@ -50,9 +50,9 @@ public:
     virtual ~Legend() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
@@ -66,29 +66,29 @@ private:
     virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
 
     // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
 public:
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XModifyBroadcaster ____
-    virtual void SAL_CALL addModifyListener(
+    virtual void addModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener(
+    virtual void removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
 private:
     // ____ XModifyListener ____
-    virtual void SAL_CALL modified(
+    virtual void modified(
         const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
-    virtual void SAL_CALL disposing(
+    virtual void disposing(
         const css::lang::EventObject& Source ) override;
 
     // ____ OPropertySet ____

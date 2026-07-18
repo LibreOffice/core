@@ -260,12 +260,12 @@ TitleWrapper::~TitleWrapper()
 }
 
 // ____ XShape ____
-awt::Point SAL_CALL TitleWrapper::getPosition()
+awt::Point TitleWrapper::getPosition()
 {
     return m_spChart2ModelContact->GetTitlePosition( getTitleObject() );
 }
 
-void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
+void TitleWrapper::setPosition( const awt::Point& aPosition )
 {
     Reference< beans::XPropertySet > xPropertySet( getInnerPropertySet() );
     if(xPropertySet.is())
@@ -280,24 +280,24 @@ void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
     }
 }
 
-awt::Size SAL_CALL TitleWrapper::getSize()
+awt::Size TitleWrapper::getSize()
 {
     return m_spChart2ModelContact->GetTitleSize( getTitleObject() );
 }
 
-void SAL_CALL TitleWrapper::setSize( const awt::Size& /*aSize*/ )
+void TitleWrapper::setSize( const awt::Size& /*aSize*/ )
 {
     OSL_FAIL( "trying to set size of title" );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
-OUString SAL_CALL TitleWrapper::getShapeType()
+OUString TitleWrapper::getShapeType()
 {
     return u"com.sun.star.chart.ChartTitle"_ustr;
 }
 
 // ____ XComponent ____
-void SAL_CALL TitleWrapper::dispose()
+void TitleWrapper::dispose()
 {
     std::unique_lock g(m_aMutex);
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
@@ -306,14 +306,14 @@ void SAL_CALL TitleWrapper::dispose()
     clearWrappedPropertySet(g);
 }
 
-void SAL_CALL TitleWrapper::addEventListener(
+void TitleWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock g(m_aMutex);
     m_aEventListenerContainer.addInterface( g, xListener );
 }
 
-void SAL_CALL TitleWrapper::removeEventListener(
+void TitleWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
@@ -379,7 +379,7 @@ void TitleWrapper::setFastCharacterPropertyValue(
 
 // WrappedPropertySet
 
-void SAL_CALL TitleWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
+void TitleWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
     std::unique_lock aGuard(m_aMutex);
     sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
@@ -391,7 +391,7 @@ void SAL_CALL TitleWrapper::setPropertyValue( const OUString& rPropertyName, con
         WrappedPropertySet::setPropertyValue( aGuard, rPropertyName, rValue );
 }
 
-Any SAL_CALL TitleWrapper::getPropertyValue( const OUString& rPropertyName )
+Any TitleWrapper::getPropertyValue( const OUString& rPropertyName )
 {
     std::unique_lock aGuard(m_aMutex);
     Any aRet;
@@ -403,7 +403,7 @@ Any SAL_CALL TitleWrapper::getPropertyValue( const OUString& rPropertyName )
     return aRet;
 }
 
-beans::PropertyState SAL_CALL TitleWrapper::getPropertyState( const OUString& rPropertyName )
+beans::PropertyState TitleWrapper::getPropertyState( const OUString& rPropertyName )
 {
     std::unique_lock aGuard(m_aMutex);
     beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
@@ -426,7 +426,7 @@ beans::PropertyState SAL_CALL TitleWrapper::getPropertyState( const OUString& rP
 
     return aState;
 }
-void SAL_CALL TitleWrapper::setPropertyToDefault( const OUString& rPropertyName )
+void TitleWrapper::setPropertyToDefault( const OUString& rPropertyName )
 {
     std::unique_lock aGuard(m_aMutex);
     sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
@@ -438,7 +438,7 @@ void SAL_CALL TitleWrapper::setPropertyToDefault( const OUString& rPropertyName 
     else
         WrappedPropertySet::setPropertyToDefault( rPropertyName );
 }
-Any SAL_CALL TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
+Any TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
 {
     std::unique_lock aGuard(m_aMutex);
     Any aRet;
@@ -462,7 +462,7 @@ Any SAL_CALL TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
     return aRet;
 }
 
-void SAL_CALL TitleWrapper::addPropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
+void TitleWrapper::addPropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
 {
     std::unique_lock aGuard(m_aMutex);
     sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
@@ -475,7 +475,7 @@ void SAL_CALL TitleWrapper::addPropertyChangeListener( const OUString& rProperty
     else
         WrappedPropertySet::addPropertyChangeListener( aGuard, rPropertyName, xListener );
 }
-void SAL_CALL TitleWrapper::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
+void TitleWrapper::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
 {
     std::unique_lock aGuard(m_aMutex);
     sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
@@ -546,17 +546,17 @@ std::vector< std::unique_ptr<WrappedProperty> > TitleWrapper::createWrappedPrope
     return aWrappedProperties;
 }
 
-OUString SAL_CALL TitleWrapper::getImplementationName()
+OUString TitleWrapper::getImplementationName()
 {
     return u"com.sun.star.comp.chart.Title"_ustr;
 }
 
-bool SAL_CALL TitleWrapper::supportsService( const OUString& rServiceName )
+bool TitleWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL TitleWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > TitleWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.ChartTitle"_ustr,

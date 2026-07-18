@@ -191,7 +191,7 @@ void ChartView::init()
     }
 }
 
-void SAL_CALL ChartView::initialize( const cpo::uno::Sequence< cpo::uno::Any >& )
+void ChartView::initialize( const cpo::uno::Sequence< cpo::uno::Any >& )
 {
     init();
 }
@@ -268,7 +268,7 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
     }
 }
 
-cpo::uno::Any SAL_CALL ChartView::getTransferData( const datatransfer::DataFlavor& aFlavor )
+cpo::uno::Any ChartView::getTransferData( const datatransfer::DataFlavor& aFlavor )
 {
     bool bHighContrastMetaFile( aFlavor.MimeType == lcl_aGDIMetaFileMIMETypeHighContrast);
     cpo::uno::Any aRet;
@@ -291,7 +291,7 @@ cpo::uno::Any SAL_CALL ChartView::getTransferData( const datatransfer::DataFlavo
 
     return aRet;
 }
-cpo::uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFlavors()
+cpo::uno::Sequence< datatransfer::DataFlavor > ChartView::getTransferDataFlavors()
 {
     return
     {
@@ -299,7 +299,7 @@ cpo::uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDa
         { lcl_aGDIMetaFileMIMETypeHighContrast, u"GDIMetaFile"_ustr, cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() }
     };
 }
-bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
+bool ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
 {
     return ( aFlavor.MimeType == lcl_aGDIMetaFileMIMEType ||
              aFlavor.MimeType == lcl_aGDIMetaFileMIMETypeHighContrast );
@@ -307,17 +307,17 @@ bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& 
 
 // lang::XServiceInfo
 
-OUString SAL_CALL ChartView::getImplementationName()
+OUString ChartView::getImplementationName()
 {
     return CHART_VIEW_SERVICE_IMPLEMENTATION_NAME;
 }
 
-bool SAL_CALL ChartView::supportsService( const OUString& rServiceName )
+bool ChartView::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ChartView::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ChartView::getSupportedServiceNames()
 {
     return { CHART_VIEW_SERVICE_NAME };
 }
@@ -1424,7 +1424,7 @@ void ChartView::createShapes()
 }
 
 // util::XEventListener (base of XCloseListener)
-void SAL_CALL ChartView::disposing( const lang::EventObject& /* rSource */ )
+void ChartView::disposing( const lang::EventObject& /* rSource */ )
 {
 }
 
@@ -1538,7 +1538,7 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
 }
 
 // ____ XModifyListener ____
-void SAL_CALL ChartView::modified( const lang::EventObject& /* aEvent */ )
+void ChartView::modified( const lang::EventObject& /* aEvent */ )
 {
     m_bViewDirty = true;
     if( m_bInViewUpdate )
@@ -1628,27 +1628,27 @@ void ChartView::impl_notifyModeChangeListener( const OUString& rNewMode )
 
 // ____ XModeChangeBroadcaster ____
 
-void SAL_CALL ChartView::addModeChangeListener( const uno::Reference< util::XModeChangeListener >& xListener )
+void ChartView::addModeChangeListener( const uno::Reference< util::XModeChangeListener >& xListener )
 {
     std::unique_lock g(m_aMutex);
     m_aModeChangeListeners.addInterface(g, xListener );
 }
-void SAL_CALL ChartView::removeModeChangeListener( const uno::Reference< util::XModeChangeListener >& xListener )
+void ChartView::removeModeChangeListener( const uno::Reference< util::XModeChangeListener >& xListener )
 {
     std::unique_lock g(m_aMutex);
     m_aModeChangeListeners.removeInterface(g, xListener );
 }
-void SAL_CALL ChartView::addModeChangeApproveListener( const uno::Reference< util::XModeChangeApproveListener >& /* _rxListener */ )
+void ChartView::addModeChangeApproveListener( const uno::Reference< util::XModeChangeApproveListener >& /* _rxListener */ )
 {
 
 }
-void SAL_CALL ChartView::removeModeChangeApproveListener( const uno::Reference< util::XModeChangeApproveListener >& /* _rxListener */ )
+void ChartView::removeModeChangeApproveListener( const uno::Reference< util::XModeChangeApproveListener >& /* _rxListener */ )
 {
 
 }
 
 // ____ XUpdatable ____
-void SAL_CALL ChartView::update()
+void ChartView::update()
 {
     impl_updateView();
 
@@ -1661,24 +1661,24 @@ void SAL_CALL ChartView::update()
         impl_updateView();
 }
 
-void SAL_CALL ChartView::updateSoft()
+void ChartView::updateSoft()
 {
     update();
 }
 
-void SAL_CALL ChartView::updateHard()
+void ChartView::updateHard()
 {
     impl_updateView(false);
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL ChartView::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > ChartView::getPropertySetInfo()
 {
     OSL_FAIL("not implemented");
     return nullptr;
 }
 
-void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
+void ChartView::setPropertyValue( const OUString& rPropertyName
                                                      , const Any& rValue )
 {
     if( rPropertyName == "Resolution" )
@@ -1727,7 +1727,7 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
         throw beans::UnknownPropertyException( "unknown property was tried to set to chart wizard " + rPropertyName, nullptr );
 }
 
-Any SAL_CALL ChartView::getPropertyValue( const OUString& rPropertyName )
+Any ChartView::getPropertyValue( const OUString& rPropertyName )
 {
     if( rPropertyName != "Resolution" )
         throw beans::UnknownPropertyException( "unknown property was tried to get from chart wizard " + rPropertyName, nullptr );
@@ -1735,23 +1735,23 @@ Any SAL_CALL ChartView::getPropertyValue( const OUString& rPropertyName )
     return Any(m_aPageResolution);
 }
 
-void SAL_CALL ChartView::addPropertyChangeListener(
+void ChartView::addPropertyChangeListener(
     const OUString& /* aPropertyName */, const Reference< beans::XPropertyChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL ChartView::removePropertyChangeListener(
+void ChartView::removePropertyChangeListener(
     const OUString& /* aPropertyName */, const Reference< beans::XPropertyChangeListener >& /* aListener */ )
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL ChartView::addVetoableChangeListener( const OUString& /* PropertyName */, const Reference< beans::XVetoableChangeListener >& /* aListener */ )
+void ChartView::addVetoableChangeListener( const OUString& /* PropertyName */, const Reference< beans::XVetoableChangeListener >& /* aListener */ )
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL ChartView::removeVetoableChangeListener( const OUString& /* PropertyName */, const Reference< beans::XVetoableChangeListener >& /* aListener */ )
+void ChartView::removeVetoableChangeListener( const OUString& /* PropertyName */, const Reference< beans::XVetoableChangeListener >& /* aListener */ )
 {
     OSL_FAIL("not implemented");
 }

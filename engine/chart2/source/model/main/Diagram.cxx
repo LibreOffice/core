@@ -330,7 +330,7 @@ Diagram::~Diagram()
 }
 
 // ____ XDiagram ____
-uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getWall()
+uno::Reference< beans::XPropertySet > Diagram::getWall()
 {
     rtl::Reference< Wall > xRet;
     bool bAddListener = false;
@@ -348,7 +348,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getWall()
     return xRet;
 }
 
-uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getFloor()
+uno::Reference< beans::XPropertySet > Diagram::getFloor()
 {
     rtl::Reference< Wall > xRet;
     bool bAddListener = false;
@@ -366,7 +366,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getFloor()
     return xRet;
 }
 
-uno::Reference< chart2::XLegend > SAL_CALL Diagram::getLegend()
+uno::Reference< chart2::XLegend > Diagram::getLegend()
 {
     MutexGuard aGuard( m_aMutex );
     return m_xLegend;
@@ -378,7 +378,7 @@ rtl::Reference< ::chart::Legend > Diagram::getLegend2() const
     return m_xLegend;
 }
 
-void SAL_CALL Diagram::setLegend( const uno::Reference< chart2::XLegend >& xNewLegend )
+void Diagram::setLegend( const uno::Reference< chart2::XLegend >& xNewLegend )
 {
     auto pLegend = dynamic_cast<Legend*>(xNewLegend.get());
     assert(!xNewLegend || pLegend);
@@ -402,7 +402,7 @@ void Diagram::setLegend( const rtl::Reference< Legend >& xNewLegend )
     fireModifyEvent();
 }
 
-Reference< chart2::XColorScheme > SAL_CALL Diagram::getDefaultColorScheme()
+Reference< chart2::XColorScheme > Diagram::getDefaultColorScheme()
 {
     Reference< chart2::XColorScheme > xRet;
     {
@@ -419,7 +419,7 @@ Reference< chart2::XColorScheme > SAL_CALL Diagram::getDefaultColorScheme()
     return xRet;
 }
 
-void SAL_CALL Diagram::setDefaultColorScheme( const Reference< chart2::XColorScheme >& xColorScheme )
+void Diagram::setDefaultColorScheme( const Reference< chart2::XColorScheme >& xColorScheme )
 {
     {
         MutexGuard aGuard( m_aMutex );
@@ -428,7 +428,7 @@ void SAL_CALL Diagram::setDefaultColorScheme( const Reference< chart2::XColorSch
     fireModifyEvent();
 }
 
-void SAL_CALL Diagram::setDiagramData(
+void Diagram::setDiagramData(
     const Reference< chart2::data::XDataSource >& xDataSource,
     const Sequence< beans::PropertyValue >& aArguments )
 {
@@ -443,13 +443,13 @@ void SAL_CALL Diagram::setDiagramData(
 }
 
 // ____ XTitled ____
-uno::Reference< chart2::XTitle > SAL_CALL Diagram::getTitleObject()
+uno::Reference< chart2::XTitle > Diagram::getTitleObject()
 {
     MutexGuard aGuard( m_aMutex );
     return m_xTitle;
 }
 
-void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& xNewTitle )
+void Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& xNewTitle )
 {
     Reference< chart2::XTitle > xOldTitle;
     {
@@ -467,7 +467,7 @@ void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& x
 }
 
 // ____ X3DDefaultSetter ____
-void SAL_CALL Diagram::set3DSettingsToDefault()
+void Diagram::set3DSettingsToDefault()
 {
     setPropertyToDefault( u"D3DSceneDistance"_ustr);
     setPropertyToDefault( u"D3DSceneFocalLength"_ustr);
@@ -475,7 +475,7 @@ void SAL_CALL Diagram::set3DSettingsToDefault()
     setDefaultIllumination();
 }
 
-void SAL_CALL Diagram::setDefaultRotation()
+void Diagram::setDefaultRotation()
 {
     bool bPieOrDonut( isPieOrDonutChart() );
     setDefaultRotation( bPieOrDonut );
@@ -556,7 +556,7 @@ static void lcl_setLightsForScheme( Diagram& rDiagram, const ThreeDLookScheme& r
     rDiagram.setFastPropertyValue( PROP_SCENE_AMBIENT_COLOR, cpo::uno::Any( nAmbientColor ) );
 }
 
-void SAL_CALL Diagram::setDefaultIllumination()
+void Diagram::setDefaultIllumination()
 {
     drawing::ShadeMode aShadeMode( drawing::ShadeMode_SMOOTH );
     try
@@ -584,7 +584,7 @@ void SAL_CALL Diagram::setDefaultIllumination()
 }
 
 // ____ XCoordinateSystemContainer ____
-void SAL_CALL Diagram::addCoordinateSystem(
+void Diagram::addCoordinateSystem(
     const uno::Reference< chart2::XCoordinateSystem >& aCoordSys )
 {
     ::chart::BaseCoordinateSystem* pCoordSys = dynamic_cast<::chart::BaseCoordinateSystem*>(aCoordSys.get());
@@ -606,7 +606,7 @@ void SAL_CALL Diagram::addCoordinateSystem(
     fireModifyEvent();
 }
 
-void SAL_CALL Diagram::removeCoordinateSystem(
+void Diagram::removeCoordinateSystem(
     const uno::Reference< chart2::XCoordinateSystem >& aCoordSys )
 {
     ::chart::BaseCoordinateSystem* pCoordSys = dynamic_cast<::chart::BaseCoordinateSystem*>(aCoordSys.get());
@@ -624,7 +624,7 @@ void SAL_CALL Diagram::removeCoordinateSystem(
     fireModifyEvent();
 }
 
-cpo::uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > SAL_CALL Diagram::getCoordinateSystems()
+cpo::uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > Diagram::getCoordinateSystems()
 {
     MutexGuard aGuard( m_aMutex );
     return comphelper::containerToSequence<uno::Reference< chart2::XCoordinateSystem >>( m_aCoordSystems );
@@ -636,7 +636,7 @@ Diagram::tCoordinateSystemContainerType Diagram::getBaseCoordinateSystems() cons
     return m_aCoordSystems;
 }
 
-void SAL_CALL Diagram::setCoordinateSystems(
+void Diagram::setCoordinateSystems(
     const Sequence< Reference< chart2::XCoordinateSystem > >& aCoordinateSystems )
 {
     tCoordinateSystemContainerType aNew;
@@ -683,31 +683,31 @@ void Diagram::setCoordinateSystems(
 }
 
 // ____ XCloneable ____
-Reference< util::XCloneable > SAL_CALL Diagram::createClone()
+Reference< util::XCloneable > Diagram::createClone()
 {
     MutexGuard aGuard( m_aMutex );
     return Reference< util::XCloneable >( new Diagram( *this ));
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL Diagram::addModifyListener( const Reference< util::XModifyListener >& aListener )
+void Diagram::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL Diagram::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+void Diagram::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL Diagram::modified( const lang::EventObject& aEvent )
+void Diagram::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL Diagram::disposing( const lang::EventObject& /* Source */ )
+void Diagram::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }
@@ -735,19 +735,19 @@ void Diagram::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL Diagram::getInfoHelper()
+::cppu::IPropertyArrayHelper & Diagram::getInfoHelper()
 {
     return StaticDiagramInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL Diagram::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > Diagram::getPropertySetInfo()
 {
     return StaticDiagramInfo();
 }
 
 // ____ XFastPropertySet ____
-void SAL_CALL Diagram::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
+void Diagram::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
 {
     //special treatment for some 3D properties
     if( nHandle == PROP_DIAGRAM_PERSPECTIVE )
@@ -775,7 +775,7 @@ void SAL_CALL Diagram::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, cons
         ::property::OPropertySet::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
 
-void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
+void Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     //special treatment for some 3D properties
     if( nHandle == PROP_DIAGRAM_PERSPECTIVE )
@@ -800,7 +800,7 @@ void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) co
         ::property::OPropertySet::getFastPropertyValue( rValue,nHandle );
 }
 
-uno::Reference<chart2::XDataTable> SAL_CALL Diagram::getDataTable()
+uno::Reference<chart2::XDataTable> Diagram::getDataTable()
 {
     MutexGuard aGuard( m_aMutex );
     return m_xDataTable;
@@ -812,7 +812,7 @@ rtl::Reference<::chart::DataTable> Diagram::getDataTableRef() const
     return m_xDataTable;
 }
 
-void SAL_CALL Diagram::setDataTable(const uno::Reference<chart2::XDataTable>& xDataTable)
+void Diagram::setDataTable(const uno::Reference<chart2::XDataTable>& xDataTable)
 {
     auto* pDataTable = dynamic_cast<DataTable*>(xDataTable.get());
     assert(!xDataTable || pDataTable);
@@ -842,17 +842,17 @@ IMPLEMENT_FORWARD_XINTERFACE2( Diagram, Diagram_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( Diagram, Diagram_Base, ::property::OPropertySet )
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-OUString SAL_CALL Diagram::getImplementationName()
+OUString Diagram::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.Diagram"_ustr;
 }
 
-bool SAL_CALL Diagram::supportsService( const OUString& rServiceName )
+bool Diagram::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL Diagram::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Diagram::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.Diagram"_ustr,

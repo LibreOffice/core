@@ -231,7 +231,7 @@ OUString lcl_getFormatCommandForObjectCID( std::u16string_view rCID )
 } // anonymous namespace
 
 // awt::XWindow
-void SAL_CALL ChartController::setPosSize(
+void ChartController::setPosSize(
     sal_Int32 X,
     sal_Int32 Y,
     sal_Int32 Width,
@@ -282,7 +282,7 @@ void SAL_CALL ChartController::setPosSize(
     pChartWindow->Invalidate();
 }
 
-awt::Rectangle SAL_CALL ChartController::getPosSize()
+awt::Rectangle ChartController::getPosSize()
 {
     awt::Rectangle aRet(0, 0, 0, 0);
 
@@ -292,102 +292,102 @@ awt::Rectangle SAL_CALL ChartController::getPosSize()
     return aRet;
 }
 
-void SAL_CALL ChartController::setVisible( bool Visible )
+void ChartController::setVisible( bool Visible )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->setVisible(Visible);
 }
 
-void SAL_CALL ChartController::setEnable( bool Enable )
+void ChartController::setEnable( bool Enable )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->setEnable(Enable);
 }
 
-void SAL_CALL ChartController::setFocus()
+void ChartController::setFocus()
 {
     if (m_xViewWindow.is())
         m_xViewWindow->setFocus();
 }
 
-void SAL_CALL ChartController::addWindowListener(
+void ChartController::addWindowListener(
     const uno::Reference< awt::XWindowListener >& xListener )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->addWindowListener(xListener);
 }
 
-void SAL_CALL ChartController::removeWindowListener(
+void ChartController::removeWindowListener(
     const uno::Reference< awt::XWindowListener >& xListener )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->removeWindowListener(xListener);
 }
 
-void SAL_CALL ChartController::addFocusListener(
+void ChartController::addFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->addFocusListener(xListener);
 }
 
-void SAL_CALL ChartController::removeFocusListener(
+void ChartController::removeFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->removeFocusListener(xListener);
 }
 
-void SAL_CALL ChartController::addKeyListener(
+void ChartController::addKeyListener(
     const uno::Reference< awt::XKeyListener >& xListener )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->addKeyListener(xListener);
 }
 
-void SAL_CALL ChartController::removeKeyListener(
+void ChartController::removeKeyListener(
     const uno::Reference< awt::XKeyListener >& xListener )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->removeKeyListener(xListener);
 }
 
-void SAL_CALL ChartController::addMouseListener(
+void ChartController::addMouseListener(
     const uno::Reference< awt::XMouseListener >& xListener )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->addMouseListener(xListener);
 }
 
-void SAL_CALL ChartController::removeMouseListener(
+void ChartController::removeMouseListener(
     const uno::Reference< awt::XMouseListener >& xListener )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->removeMouseListener(xListener);
 }
 
-void SAL_CALL ChartController::addMouseMotionListener(
+void ChartController::addMouseMotionListener(
     const uno::Reference< awt::XMouseMotionListener >& xListener )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->addMouseMotionListener(xListener);
 }
 
-void SAL_CALL ChartController::removeMouseMotionListener(
+void ChartController::removeMouseMotionListener(
     const uno::Reference< awt::XMouseMotionListener >& xListener )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->removeMouseMotionListener(xListener);
 }
 
-void SAL_CALL ChartController::addPaintListener(
+void ChartController::addPaintListener(
     const uno::Reference< awt::XPaintListener >& xListener )
 {
     if (m_xViewWindow.is())
         m_xViewWindow->addPaintListener(xListener);
 }
 
-void SAL_CALL ChartController::removePaintListener(
+void ChartController::removePaintListener(
     const uno::Reference< awt::XPaintListener >& xListener )
 {
     if (m_xViewWindow.is())
@@ -1609,7 +1609,7 @@ bool ChartController::requestQuickHelp(
 }
 
 // XSelectionSupplier (optional interface)
-bool SAL_CALL ChartController::select( const cpo::uno::Any& rSelection )
+bool ChartController::select( const cpo::uno::Any& rSelection )
 {
     bool bSuccess = false;
 
@@ -1659,7 +1659,7 @@ bool SAL_CALL ChartController::select( const cpo::uno::Any& rSelection )
     return false;
 }
 
-cpo::uno::Any SAL_CALL ChartController::getSelection()
+cpo::uno::Any ChartController::getSelection()
 {
     cpo::uno::Any aReturn;
     if ( m_aSelection.hasSelection() )
@@ -1678,7 +1678,7 @@ cpo::uno::Any SAL_CALL ChartController::getSelection()
     return aReturn;
 }
 
-void SAL_CALL ChartController::addSelectionChangeListener( const uno::Reference<view::XSelectionChangeListener> & xListener )
+void ChartController::addSelectionChangeListener( const uno::Reference<view::XSelectionChangeListener> & xListener )
 {
     SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() )//@todo? allow adding of listeners in suspend mode?
@@ -1689,7 +1689,7 @@ void SAL_CALL ChartController::addSelectionChangeListener( const uno::Reference<
     m_aLifeTimeManager.m_aSelectionChangeListeners.addInterface( aGuard2, xListener );
 }
 
-void SAL_CALL ChartController::removeSelectionChangeListener( const uno::Reference<view::XSelectionChangeListener> & xListener )
+void ChartController::removeSelectionChangeListener( const uno::Reference<view::XSelectionChangeListener> & xListener )
 {
     SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() ) //@todo? allow removing of listeners in suspend mode?

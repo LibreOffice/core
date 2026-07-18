@@ -58,11 +58,11 @@ public:
 
 protected:
     // ____ XRangeSelectionListener ____
-    virtual void SAL_CALL done(const css::sheet::RangeSelectionEvent& aEvent) override;
-    virtual void SAL_CALL aborted(const css::sheet::RangeSelectionEvent& aEvent) override;
+    virtual void done(const css::sheet::RangeSelectionEvent& aEvent) override;
+    virtual void aborted(const css::sheet::RangeSelectionEvent& aEvent) override;
 
     // ____ XEventListener ____
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
 private:
     RangeSelectionListenerParent& m_rParent;

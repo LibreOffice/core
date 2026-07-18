@@ -59,9 +59,9 @@ public:
     virtual ~HistogramDataSequence() override;
 
     /// declare XServiceInfo methods
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     /// declare XInterface methods
     DECLARE_XINTERFACE()
@@ -71,38 +71,37 @@ public:
 
     /// declare property methods
     /// @see css::beans::XPropertySet
-    virtual css::uno::Reference<css::beans::XPropertySetInfo>
-        SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
     // XDataSequence
-    cpo::uno::Sequence<cpo::uno::Any> SAL_CALL getData() override;
-    OUString SAL_CALL getSourceRangeRepresentation() override;
+    cpo::uno::Sequence<cpo::uno::Any> getData() override;
+    OUString getSourceRangeRepresentation() override;
     cpo::uno::Sequence<OUString>
-        SAL_CALL generateLabel(css::chart2::data::LabelOrigin nLabelOrigin) override;
-    sal_Int32 SAL_CALL getNumberFormatKeyByIndex(sal_Int32 nIndex) override;
+    generateLabel(css::chart2::data::LabelOrigin nLabelOrigin) override;
+    sal_Int32 getNumberFormatKeyByIndex(sal_Int32 nIndex) override;
 
     // XNumericalDataSequence
     /// @see css::chart::data::XNumericalDataSequence
-    virtual cpo::uno::Sequence<double> SAL_CALL getNumericalData() override;
+    virtual cpo::uno::Sequence<double> getNumericalData() override;
 
     // XTextualDataSequence
     /// @see css::chart::data::XTextualDataSequence
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getTextualData() override;
+    virtual cpo::uno::Sequence<OUString> getTextualData() override;
 
     // XCloneable
     /// @see css::util::XCloneable
-    virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
+    virtual css::uno::Reference<css::util::XCloneable> createClone() override;
 
     // XModifyListener
     /// @see css::util::XModifyListener
-    virtual void SAL_CALL
+    virtual void
     addModifyListener(const css::uno::Reference<css::util::XModifyListener>& aListener) override;
-    virtual void SAL_CALL
+    virtual void
     removeModifyListener(const css::uno::Reference<css::util::XModifyListener>& aListener) override;
-    virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) override;
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void modified(const css::lang::EventObject& aEvent) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
 private:
     void ensureCalculated();

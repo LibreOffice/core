@@ -128,13 +128,13 @@ void RegionMapChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, cpo::uno::An
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL RegionMapChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper& RegionMapChartTypeTemplate::getInfoHelper()
 {
     return StaticRegionMapChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference<beans::XPropertySetInfo> SAL_CALL RegionMapChartTypeTemplate::getPropertySetInfo()
+Reference<beans::XPropertySetInfo> RegionMapChartTypeTemplate::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(

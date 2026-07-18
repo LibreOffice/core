@@ -36,35 +36,35 @@ public:
     const ChartToolbarController& operator=(const ChartToolbarController&) = delete;
 
     // XToolbarController
-    virtual void SAL_CALL execute(sal_Int16 nKeyModifier) override;
+    virtual void execute(sal_Int16 nKeyModifier) override;
 
-    virtual void SAL_CALL click() override;
+    virtual void click() override;
 
-    virtual void SAL_CALL doubleClick() override;
+    virtual void doubleClick() override;
 
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createPopupWindow() override;
+    virtual css::uno::Reference<css::awt::XWindow> createPopupWindow() override;
 
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL
+    virtual css::uno::Reference<css::awt::XWindow>
         createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool supportsService(OUString const & ServiceName) override;
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+    virtual void statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& rSource) override;
+    virtual void disposing(const css::lang::EventObject& rSource) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rAny) override;
+    virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rAny) override;
 
     // XUpdatable
-    virtual void SAL_CALL update() override;
+    virtual void update() override;
 
     using comphelper::WeakComponentImplHelperBase::disposing;
 

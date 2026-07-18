@@ -89,12 +89,12 @@ LabeledDataSequence::~LabeledDataSequence()
 }
 
 // ____ XLabeledDataSequence ____
-uno::Reference< chart2::data::XDataSequence > SAL_CALL LabeledDataSequence::getValues()
+uno::Reference< chart2::data::XDataSequence > LabeledDataSequence::getValues()
 {
     return m_xData;
 }
 
-void SAL_CALL LabeledDataSequence::setValues(
+void LabeledDataSequence::setValues(
     const uno::Reference< chart2::data::XDataSequence >& xSequence )
 {
     if( m_xData != xSequence )
@@ -105,12 +105,12 @@ void SAL_CALL LabeledDataSequence::setValues(
     }
 }
 
-uno::Reference< chart2::data::XDataSequence > SAL_CALL LabeledDataSequence::getLabel()
+uno::Reference< chart2::data::XDataSequence > LabeledDataSequence::getLabel()
 {
     return m_xLabel;
 }
 
-void SAL_CALL LabeledDataSequence::setLabel(
+void LabeledDataSequence::setLabel(
     const uno::Reference< chart2::data::XDataSequence >& xSequence )
 {
     if( m_xLabel != xSequence )
@@ -122,7 +122,7 @@ void SAL_CALL LabeledDataSequence::setLabel(
 }
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL LabeledDataSequence::createClone()
+uno::Reference< util::XCloneable > LabeledDataSequence::createClone()
 {
     uno::Reference< chart2::data::XDataSequence > xNewValues( m_xData );
     uno::Reference< chart2::data::XDataSequence > xNewLabel( m_xLabel );
@@ -140,27 +140,27 @@ uno::Reference< util::XCloneable > SAL_CALL LabeledDataSequence::createClone()
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL LabeledDataSequence::addModifyListener( const Reference< util::XModifyListener >& aListener )
+void LabeledDataSequence::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL LabeledDataSequence::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+void LabeledDataSequence::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
-OUString SAL_CALL LabeledDataSequence::getImplementationName()
+OUString LabeledDataSequence::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.LabeledDataSequence"_ustr;
 }
 
-bool SAL_CALL LabeledDataSequence::supportsService( const OUString& rServiceName )
+bool LabeledDataSequence::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL LabeledDataSequence::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > LabeledDataSequence::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.data.LabeledDataSequence"_ustr };
 }

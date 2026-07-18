@@ -37,24 +37,24 @@ public:
     virtual ~AccessibleChartShape() override;
 
     // ________ XAccessibleContext ________
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual sal_Int64 getAccessibleChildCount() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getAccessibleChild( sal_Int64 i ) override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
-    virtual OUString SAL_CALL getAccessibleDescription() override;
-    virtual OUString SAL_CALL getAccessibleName() override;
+    virtual sal_Int16 getAccessibleRole() override;
+    virtual OUString getAccessibleDescription() override;
+    virtual OUString getAccessibleName() override;
 
     // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     // ________ XAccessibleComponent ________
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual sal_Int32 SAL_CALL getForeground() override;
-    virtual sal_Int32 SAL_CALL getBackground() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual sal_Int32 getForeground() override;
+    virtual sal_Int32 getBackground() override;
 
     // ________ XAccessibleExtendedComponent ________
-    virtual OUString SAL_CALL getTitledBorderText() override;
-    virtual OUString SAL_CALL getToolTipText() override;
+    virtual OUString getTitledBorderText() override;
+    virtual OUString getToolTipText() override;
 
 private:
     rtl::Reference<accessibility::AccessibleShape> m_pAccShape;

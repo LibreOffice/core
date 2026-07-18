@@ -40,15 +40,15 @@ public:
     const ChartPanelFactory& operator=(const ChartPanelFactory&) = delete;
 
     // XUIElementFactory
-    virtual css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement(
+    virtual css::uno::Reference<css::ui::XUIElement> createUIElement(
         const OUString& rsResourceURL,
         const ::cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool supportsService(OUString const & ServiceName) override;
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 } // end of namespace chart::sidebar

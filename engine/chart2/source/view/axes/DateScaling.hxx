@@ -39,19 +39,19 @@ public:
     virtual ~DateScaling() override;
 
     /// declare XServiceInfo methods
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // ____ XScaling ____
-    virtual double SAL_CALL doScaling( double value ) override;
+    virtual double doScaling( double value ) override;
 
     virtual css::uno::Reference<
-        css::chart2::XScaling > SAL_CALL
+        css::chart2::XScaling >
         getInverseScaling() override;
 
     // ____ XServiceName ____
-    virtual OUString SAL_CALL getServiceName() override;
+    virtual OUString getServiceName() override;
 
 private:
     const Date m_aNullDate;
@@ -71,18 +71,18 @@ public:
     virtual ~InverseDateScaling() override;
 
     /// declare XServiceInfo methods
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // ____ XScaling ____
-    virtual double SAL_CALL doScaling( double value ) override;
+    virtual double doScaling( double value ) override;
 
-    virtual css::uno::Reference< css::chart2::XScaling > SAL_CALL
+    virtual css::uno::Reference< css::chart2::XScaling >
         getInverseScaling() override;
 
     // ____ XServiceName ____
-    virtual OUString SAL_CALL getServiceName() override;
+    virtual OUString getServiceName() override;
 
 private:
     const Date m_aNullDate;

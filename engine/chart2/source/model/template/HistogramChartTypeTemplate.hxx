@@ -31,17 +31,16 @@ public:
 protected:
     // ____ OPropertySet ____
     virtual void GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) const override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference<css::beans::XPropertySetInfo>
-        SAL_CALL getPropertySetInfo() override;
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
 
     // ____ ChartTypeTemplate ____
     virtual rtl::Reference<::chart::ChartType> getChartTypeForNewSeries2(
         const std::vector<rtl::Reference<::chart::ChartType>>& aFormerlyUsedChartTypes) override;
 
-    virtual bool SAL_CALL supportsCategories() override { return true; }
+    virtual bool supportsCategories() override { return true; }
 
     virtual void applyStyle2(const rtl::Reference<::chart::DataSeries>& xSeries,
                              ::sal_Int32 nChartTypeGroupIndex, ::sal_Int32 nSeriesIndex,

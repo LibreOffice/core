@@ -31,14 +31,14 @@ ModifyEventForwarder::ModifyEventForwarder()
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL ModifyEventForwarder::addModifyListener( const Reference< util::XModifyListener >& aListener )
+void ModifyEventForwarder::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     std::unique_lock aGuard(m_aMutex);
 
     m_aModifyListeners.addInterface( aGuard, aListener );
 }
 
-void SAL_CALL ModifyEventForwarder::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+void ModifyEventForwarder::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     std::unique_lock aGuard(m_aMutex);
 
@@ -46,7 +46,7 @@ void SAL_CALL ModifyEventForwarder::removeModifyListener( const Reference< util:
 }
 
 // ____ XModifyListener ____
-void SAL_CALL ModifyEventForwarder::modified( const lang::EventObject& aEvent )
+void ModifyEventForwarder::modified( const lang::EventObject& aEvent )
 {
     std::unique_lock aGuard(m_aMutex);
 
@@ -57,7 +57,7 @@ void SAL_CALL ModifyEventForwarder::modified( const lang::EventObject& aEvent )
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL ModifyEventForwarder::disposing( const lang::EventObject& /* Source */ )
+void ModifyEventForwarder::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }

@@ -53,34 +53,34 @@ PolarCoordinateSystem::~PolarCoordinateSystem()
 {}
 
 // ____ XCoordinateSystem ____
-OUString SAL_CALL PolarCoordinateSystem::getCoordinateSystemType()
+OUString PolarCoordinateSystem::getCoordinateSystemType()
 {
     return CHART2_COOSYSTEM_POLAR_SERVICE_NAME;
 }
 
-OUString SAL_CALL PolarCoordinateSystem::getViewServiceName()
+OUString PolarCoordinateSystem::getViewServiceName()
 {
     return CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME;
 }
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL PolarCoordinateSystem::createClone()
+uno::Reference< util::XCloneable > PolarCoordinateSystem::createClone()
 {
     return Reference< util::XCloneable >( new PolarCoordinateSystem( *this ));
 }
 
 // ____ XServiceInfo ____
-OUString SAL_CALL PolarCoordinateSystem::getImplementationName()
+OUString PolarCoordinateSystem::getImplementationName()
 {
     return u"com.sun.star.comp.chart.PolarCoordinateSystem"_ustr;
 }
 
-bool SAL_CALL PolarCoordinateSystem::supportsService( const OUString& rServiceName )
+bool PolarCoordinateSystem::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > PolarCoordinateSystem::getSupportedServiceNames()
 {
     return { CHART2_COOSYSTEM_POLAR_SERVICE_NAME };
 }
@@ -95,17 +95,17 @@ PolarCoordinateSystem2d::~PolarCoordinateSystem2d()
 {}
 
 // ____ XServiceInfo ____
-OUString SAL_CALL PolarCoordinateSystem2d::getImplementationName()
+OUString PolarCoordinateSystem2d::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.PolarCoordinateSystem2d"_ustr ;
 }
 
-bool SAL_CALL PolarCoordinateSystem2d::supportsService( const OUString& rServiceName )
+bool PolarCoordinateSystem2d::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem2d::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > PolarCoordinateSystem2d::getSupportedServiceNames()
 {
     return {
         CHART2_COOSYSTEM_POLAR_SERVICE_NAME,
@@ -122,17 +122,17 @@ PolarCoordinateSystem3d::~PolarCoordinateSystem3d()
 {}
 
 // ____ XServiceInfo ____
-OUString SAL_CALL PolarCoordinateSystem3d::getImplementationName()
+OUString PolarCoordinateSystem3d::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.PolarCoordinateSystem3d"_ustr;
 }
 
-bool SAL_CALL PolarCoordinateSystem3d::supportsService( const OUString& rServiceName )
+bool PolarCoordinateSystem3d::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem3d::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > PolarCoordinateSystem3d::getSupportedServiceNames()
 {
     return {
         CHART2_COOSYSTEM_POLAR_SERVICE_NAME,

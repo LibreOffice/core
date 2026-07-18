@@ -81,7 +81,7 @@ RangeHighlighter::~RangeHighlighter()
 {}
 
 // ____ XRangeHighlighter ____
-Sequence< chart2::data::HighlightedRange > SAL_CALL RangeHighlighter::getSelectedRanges()
+Sequence< chart2::data::HighlightedRange > RangeHighlighter::getSelectedRanges()
 {
     return m_aSelectedRanges;
 }
@@ -290,7 +290,7 @@ void RangeHighlighter::fillRangesForDataPoint( const rtl::Reference< DataSeries 
     m_aSelectedRanges = comphelper::containerToSequence( aHilightedRanges );
 }
 
-void SAL_CALL RangeHighlighter::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener )
+void RangeHighlighter::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener )
 {
     if(!xListener.is())
         return;
@@ -306,7 +306,7 @@ void SAL_CALL RangeHighlighter::addSelectionChangeListener( const Reference< vie
     xListener->selectionChanged( aEvent );
 }
 
-void SAL_CALL RangeHighlighter::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener )
+void RangeHighlighter::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener )
 {
     std::unique_lock g(m_aMutex);
     maSelectionChangeListeners.removeInterface( g, xListener );
@@ -316,7 +316,7 @@ void SAL_CALL RangeHighlighter::removeSelectionChangeListener( const Reference< 
 }
 
 // ____ XSelectionChangeListener ____
-void SAL_CALL RangeHighlighter::selectionChanged( const lang::EventObject& /*aEvent*/ )
+void RangeHighlighter::selectionChanged( const lang::EventObject& /*aEvent*/ )
 {
     determineRanges();
 
@@ -340,7 +340,7 @@ void RangeHighlighter::fireSelectionEvent()
     }
 }
 
-void SAL_CALL RangeHighlighter::disposing( const lang::EventObject& Source )
+void RangeHighlighter::disposing( const lang::EventObject& Source )
 {
     if( Source.Source == m_xSelectionSupplier )
     {

@@ -78,37 +78,37 @@ protected:
     virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
 
     // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
 public:
     // ____ XRegressionCurve ____
-    virtual css::uno::Reference< css::chart2::XRegressionCurveCalculator > SAL_CALL getCalculator() override;
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getEquationProperties() override;
-    virtual void SAL_CALL setEquationProperties(
+    virtual css::uno::Reference< css::chart2::XRegressionCurveCalculator > getCalculator() override;
+    virtual css::uno::Reference< css::beans::XPropertySet > getEquationProperties() override;
+    virtual void setEquationProperties(
         const css::uno::Reference< css::beans::XPropertySet >& xEquationProperties ) override;
 
     // ____ XServiceName ____
-    virtual OUString SAL_CALL getServiceName() override;
+    virtual OUString getServiceName() override;
 
     // ____ XModifyBroadcaster ____
-    virtual void SAL_CALL addModifyListener(
+    virtual void addModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener(
+    virtual void removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     rtl::Reference< RegressionCurveCalculator > getCurveCalculator();
 
 protected:
     // ____ XModifyListener ____
-    virtual void SAL_CALL modified(
+    virtual void modified(
         const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
-    virtual void SAL_CALL disposing(
+    virtual void disposing(
         const css::lang::EventObject& Source ) override;
 
     using ::cppu::OPropertySetHelper::disposing;
@@ -137,12 +137,12 @@ public:
     virtual ~MeanValueRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 class LinearRegressionCurve final : public RegressionCurveModel
@@ -153,12 +153,12 @@ public:
     virtual ~LinearRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 class LogarithmicRegressionCurve final : public RegressionCurveModel
@@ -169,12 +169,12 @@ public:
     virtual ~LogarithmicRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 class ExponentialRegressionCurve final : public RegressionCurveModel
@@ -185,12 +185,12 @@ public:
     virtual ~ExponentialRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 class PotentialRegressionCurve final : public RegressionCurveModel
@@ -201,12 +201,12 @@ public:
     virtual ~PotentialRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 class PolynomialRegressionCurve final : public RegressionCurveModel
@@ -217,12 +217,12 @@ public:
     virtual ~PolynomialRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 class MovingAverageRegressionCurve final : public RegressionCurveModel
@@ -233,12 +233,12 @@ public:
     virtual ~MovingAverageRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 } //  namespace chart

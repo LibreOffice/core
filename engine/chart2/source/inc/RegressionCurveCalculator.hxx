@@ -42,20 +42,20 @@ public:
         const css::uno::Reference< css::chart2::XScaling >& xScaling );
 
     // ____ XRegressionCurveCalculator ____
-    virtual void SAL_CALL setRegressionProperties(
+    virtual void setRegressionProperties(
         sal_Int32 aDegree,
         bool  aForceIntercept,
         double    aInterceptValue,
         sal_Int32 aPeriod,
         sal_Int32 nMovingType) override;
 
-    virtual void SAL_CALL recalculateRegression(
+    virtual void recalculateRegression(
         const cpo::uno::Sequence< double >& aXValues,
         const cpo::uno::Sequence< double >& aYValues ) override = 0;
 
-    virtual double SAL_CALL getCurveValue( double x ) override = 0;
+    virtual double getCurveValue( double x ) override = 0;
 
-    virtual cpo::uno::Sequence< css::geometry::RealPoint2D > SAL_CALL getCurveValues(
+    virtual cpo::uno::Sequence< css::geometry::RealPoint2D > getCurveValues(
         double min,
         double max,
         sal_Int32 nPointCount,
@@ -63,15 +63,15 @@ public:
         const css::uno::Reference< css::chart2::XScaling >& xScalingY,
         bool bMaySkipPointsInCalculation ) override;
 
-    virtual double SAL_CALL getCorrelationCoefficient() override;
+    virtual double getCorrelationCoefficient() override;
 
-    virtual OUString SAL_CALL getRepresentation() override;
+    virtual OUString getRepresentation() override;
 
-    virtual OUString SAL_CALL getFormattedRepresentation(
+    virtual OUString getFormattedRepresentation(
         const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumFmtSupplier,
         sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength ) override;
 
-    virtual void SAL_CALL setXYNames(
+    virtual void setXYNames(
         const OUString& aXName, const OUString& aYName ) override;
 
 protected:

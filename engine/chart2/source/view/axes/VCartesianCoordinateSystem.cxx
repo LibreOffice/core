@@ -49,7 +49,7 @@ public:
     }
 
     //XTextualDataSequence
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getTextualData() override
+    virtual cpo::uno::Sequence< OUString > getTextualData() override
     {
         return m_aTextSequence;
     }

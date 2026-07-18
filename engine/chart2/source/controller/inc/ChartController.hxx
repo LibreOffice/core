@@ -105,163 +105,163 @@ public:
     OUString GetContextName();
 
     // css::frame::XController (required interface)
-    virtual void SAL_CALL
+    virtual void
         attachFrame( const css::uno::Reference< css::frame::XFrame > & xFrame ) override;
 
-    virtual bool SAL_CALL
+    virtual bool
         attachModel( const css::uno::Reference< css::frame::XModel > & xModel ) override;
 
-    virtual css::uno::Reference< css::frame::XFrame > SAL_CALL
+    virtual css::uno::Reference< css::frame::XFrame >
         getFrame() override;
 
-    virtual css::uno::Reference< css::frame::XModel > SAL_CALL
+    virtual css::uno::Reference< css::frame::XModel >
         getModel() override;
 
-    virtual cpo::uno::Any SAL_CALL
+    virtual cpo::uno::Any
         getViewData() override;
 
-    virtual void SAL_CALL
+    virtual void
         restoreViewData( const cpo::uno::Any& rValue ) override;
 
-    virtual bool SAL_CALL
+    virtual bool
         suspend( bool bSuspend ) override;
 
     // css::frame::XController2
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getComponentWindow() override;
-    virtual OUString SAL_CALL getViewControllerName() override;
-    virtual cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL getCreationArguments() override;
-    virtual css::uno::Reference<css::ui::XSidebarProvider> SAL_CALL getSidebar() override;
+    virtual css::uno::Reference<css::awt::XWindow> getComponentWindow() override;
+    virtual OUString getViewControllerName() override;
+    virtual cpo::uno::Sequence<css::beans::PropertyValue> getCreationArguments() override;
+    virtual css::uno::Reference<css::ui::XSidebarProvider> getSidebar() override;
 
     // css::lang::XComponent (base of XController)
-    virtual void SAL_CALL
+    virtual void
         dispose() override;
 
-    virtual void SAL_CALL
+    virtual void
         addEventListener( const css::uno::Reference< css::lang::XEventListener > & xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
         removeEventListener( const css::uno::Reference< css::lang::XEventListener > & xListener ) override;
 
     // css::frame::XDispatchProvider (required interface)
-    virtual css::uno::Reference< css::frame::XDispatch> SAL_CALL
+    virtual css::uno::Reference< css::frame::XDispatch>
         queryDispatch( const css::util::URL& rURL
                             , const OUString& rTargetFrameName
                             , sal_Int32 nSearchFlags) override;
 
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
         queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor > & xDescripts) override;
 
     // css::view::XSelectionSupplier (optional interface)
-    virtual bool SAL_CALL
+    virtual bool
         select( const cpo::uno::Any& rSelection ) override;
 
-    virtual cpo::uno::Any  SAL_CALL
+    virtual cpo::uno::Any
         getSelection() override;
 
-    virtual void SAL_CALL
+    virtual void
         addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener > & xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
         removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener > & xListener ) override;
 
     // css::ui::XContextMenuInterception (optional interface)
-    virtual void SAL_CALL
+    virtual void
         registerContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor > & xInterceptor) override;
 
-    virtual void SAL_CALL
+    virtual void
         releaseContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor > & xInterceptor) override;
 
     //additional interfaces
 
     // css::util::XCloseListener
-    virtual void SAL_CALL
+    virtual void
         queryClosing( const css::lang::EventObject& Source
                             , bool GetsOwnership ) override;
 
-    virtual void SAL_CALL
+    virtual void
         notifyClosing( const css::lang::EventObject& Source ) override;
 
     // css::util::XEventListener (base of XCloseListener and XModifyListener)
-    virtual void SAL_CALL
+    virtual void
         disposing( const css::lang::EventObject& Source ) override;
 
     // css::frame::XDispatch
 
-    virtual void SAL_CALL
+    virtual void
         dispatch( const css::util::URL& aURL
                     , const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
 
-    virtual void SAL_CALL
+    virtual void
         addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl
                     , const css::util::URL& aURL ) override;
 
-    virtual void SAL_CALL
+    virtual void
         removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl
                     , const css::util::URL& aURL ) override;
 
     // css::awt::XWindow
-    virtual void SAL_CALL
+    virtual void
         setPosSize( sal_Int32 X, sal_Int32 Y
                     , sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) override;
 
-    virtual css::awt::Rectangle SAL_CALL
+    virtual css::awt::Rectangle
         getPosSize() override;
 
-    virtual void SAL_CALL
+    virtual void
         setVisible( bool Visible ) override;
 
-    virtual void SAL_CALL
+    virtual void
         setEnable( bool Enable ) override;
 
-    virtual void SAL_CALL
+    virtual void
         setFocus() override;
 
-    virtual void SAL_CALL
+    virtual void
         addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
         removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
         addFocusListener( const css::uno::Reference< css::awt::XFocusListener >& xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
         removeFocusListener( const css::uno::Reference< css::awt::XFocusListener >& xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
         addKeyListener( const css::uno::Reference< css::awt::XKeyListener >& xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
         removeKeyListener( const css::uno::Reference< css::awt::XKeyListener >& xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
         addMouseListener( const css::uno::Reference< css::awt::XMouseListener >& xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
         removeMouseListener( const css::uno::Reference< css::awt::XMouseListener >& xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
         addMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
         removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
         addPaintListener( const css::uno::Reference< css::awt::XPaintListener >& xListener ) override;
 
-    virtual void SAL_CALL
+    virtual void
         removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& xListener ) override;
 
     // css::util::XModifyListener
-    virtual void SAL_CALL modified(
+    virtual void modified(
         const css::lang::EventObject& aEvent ) override;
 
     // css::util::XModeChangeListener
-    virtual void SAL_CALL modeChanged(
+    virtual void modeChanged(
         const css::util::ModeChangeEvent& _rSource ) override;
 
     // css::frame::XLayoutManagerListener
-    virtual void SAL_CALL layoutEvent(
+    virtual void layoutEvent(
         const css::lang::EventObject& aSource,
         ::sal_Int16 eLayoutEvent,
         const cpo::uno::Any& aInfo ) override;

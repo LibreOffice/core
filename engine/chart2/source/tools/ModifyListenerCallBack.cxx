@@ -38,10 +38,10 @@ public:
     void stopListening();
 
     //XModifyListener
-    virtual void SAL_CALL modified( const lang::EventObject& aEvent ) override;
+    virtual void modified( const lang::EventObject& aEvent ) override;
 
     //XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
+    virtual void disposing( const lang::EventObject& Source ) override;
 
     using ::comphelper::WeakComponentImplHelperBase::disposing;
 
@@ -56,13 +56,13 @@ ModifyListenerCallBack_impl::ModifyListenerCallBack_impl( const Link<void*,void>
 }
 
 //XModifyListener
-void SAL_CALL ModifyListenerCallBack_impl::modified( const lang::EventObject& /*aEvent*/ )
+void ModifyListenerCallBack_impl::modified( const lang::EventObject& /*aEvent*/ )
 {
     m_aLink.Call(nullptr);
 }
 
 //XEventListener
-void SAL_CALL ModifyListenerCallBack_impl::disposing( const lang::EventObject& /*Source*/ )
+void ModifyListenerCallBack_impl::disposing( const lang::EventObject& /*Source*/ )
 {
     m_xBroadcaster.clear();
 }

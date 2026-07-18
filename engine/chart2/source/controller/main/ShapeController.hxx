@@ -44,7 +44,7 @@ protected:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     // state of a feature
     virtual FeatureState getState( const OUString& rCommand ) override;

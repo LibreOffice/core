@@ -39,7 +39,7 @@ AreaChartType::~AreaChartType()
 {}
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL AreaChartType::createClone()
+uno::Reference< util::XCloneable > AreaChartType::createClone()
 {
     return uno::Reference< util::XCloneable >( new AreaChartType( *this ));
 }
@@ -50,22 +50,22 @@ rtl::Reference< ChartType > AreaChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL AreaChartType::getChartType()
+OUString AreaChartType::getChartType()
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_AREA;
 }
 
-OUString SAL_CALL AreaChartType::getImplementationName()
+OUString AreaChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.AreaChartType"_ustr;
 }
 
-bool SAL_CALL AreaChartType::supportsService( const OUString& rServiceName )
+bool AreaChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL AreaChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > AreaChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_AREA,

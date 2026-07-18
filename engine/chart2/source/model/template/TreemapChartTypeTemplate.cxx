@@ -128,13 +128,13 @@ void TreemapChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any&
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL TreemapChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper& TreemapChartTypeTemplate::getInfoHelper()
 {
     return StaticTreemapChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference<beans::XPropertySetInfo> SAL_CALL TreemapChartTypeTemplate::getPropertySetInfo()
+Reference<beans::XPropertySetInfo> TreemapChartTypeTemplate::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(

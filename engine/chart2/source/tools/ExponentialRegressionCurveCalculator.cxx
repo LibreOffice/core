@@ -45,7 +45,7 @@ ExponentialRegressionCurveCalculator::~ExponentialRegressionCurveCalculator()
 {}
 
 // ____ XRegressionCurveCalculator ____
-void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
+void ExponentialRegressionCurveCalculator::recalculateRegression(
     const cpo::uno::Sequence< double >& aXValues,
     const cpo::uno::Sequence< double >& aYValues )
 {
@@ -113,7 +113,7 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
     m_fCorrelationCoefficient = fQxy / sqrt( fQx * fQy );
 }
 
-double SAL_CALL ExponentialRegressionCurveCalculator::getCurveValue( double x )
+double ExponentialRegressionCurveCalculator::getCurveValue( double x )
 {
     if( ! ( std::isnan( m_fLogSlope ) ||
             std::isnan( m_fLogIntercept )))
@@ -124,7 +124,7 @@ double SAL_CALL ExponentialRegressionCurveCalculator::getCurveValue( double x )
     return std::numeric_limits<double>::quiet_NaN();
 }
 
-cpo::uno::Sequence< geometry::RealPoint2D > SAL_CALL ExponentialRegressionCurveCalculator::getCurveValues(
+cpo::uno::Sequence< geometry::RealPoint2D > ExponentialRegressionCurveCalculator::getCurveValues(
     double min, double max, ::sal_Int32 nPointCount,
     const uno::Reference< chart2::XScaling >& xScalingX,
     const uno::Reference< chart2::XScaling >& xScalingY,

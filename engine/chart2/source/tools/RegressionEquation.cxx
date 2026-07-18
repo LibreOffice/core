@@ -185,7 +185,7 @@ RegressionEquation::~RegressionEquation()
 {}
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL RegressionEquation::createClone()
+uno::Reference< util::XCloneable > RegressionEquation::createClone()
 {
     return uno::Reference< util::XCloneable >( new RegressionEquation( *this ));
 }
@@ -201,36 +201,36 @@ void RegressionEquation::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL RegressionEquation::getInfoHelper()
+::cppu::IPropertyArrayHelper & RegressionEquation::getInfoHelper()
 {
     return GetStaticRegressionEquationInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL RegressionEquation::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > RegressionEquation::getPropertySetInfo()
 {
     return GetStaticRegressionEquationInfo();
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL RegressionEquation::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void RegressionEquation::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL RegressionEquation::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void RegressionEquation::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL RegressionEquation::modified( const lang::EventObject& aEvent )
+void RegressionEquation::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL RegressionEquation::disposing( const lang::EventObject& /* Source */ )
+void RegressionEquation::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }
@@ -247,13 +247,13 @@ void RegressionEquation::fireModifyEvent()
 }
 
 // ____ XTitle ____
-cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL RegressionEquation::getText()
+cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > RegressionEquation::getText()
 {
     MutexGuard aGuard( m_aMutex );
     return m_aStrings;
 }
 
-void SAL_CALL RegressionEquation::setText( const cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > >& Strings )
+void RegressionEquation::setText( const cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > >& Strings )
 {
     MutexGuard aGuard( m_aMutex );
     ModifyListenerHelper::removeListenerFromAllElements(
@@ -266,17 +266,17 @@ void SAL_CALL RegressionEquation::setText( const cpo::uno::Sequence< uno::Refere
     fireModifyEvent();
 }
 
-OUString SAL_CALL RegressionEquation::getImplementationName()
+OUString RegressionEquation::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.RegressionEquation"_ustr;
 }
 
-bool SAL_CALL RegressionEquation::supportsService( const OUString& rServiceName )
+bool RegressionEquation::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL RegressionEquation::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > RegressionEquation::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.RegressionEquation"_ustr,
              u"com.sun.star.beans.PropertySet"_ustr,

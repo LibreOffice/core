@@ -18,9 +18,9 @@ public:
     explicit RegionMapChartType();
     virtual ~RegionMapChartType() override;
 
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     virtual rtl::Reference<ChartType> cloneChartType() const override;
 
@@ -28,11 +28,11 @@ private:
     explicit RegionMapChartType(const RegionMapChartType& rOther);
 
     // ____ XChartType ____
-    virtual OUString SAL_CALL getChartType() override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedPropertyRoles() override;
+    virtual OUString getChartType() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedPropertyRoles() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
+    virtual css::uno::Reference<css::util::XCloneable> createClone() override;
 };
 
 } //  namespace chart

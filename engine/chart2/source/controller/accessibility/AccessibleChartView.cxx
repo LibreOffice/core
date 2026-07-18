@@ -91,28 +91,28 @@ awt::Point AccessibleChartView::GetUpperLeftOnScreen() const
 }
 
 // ________ XAccessibleContext ________
-OUString SAL_CALL AccessibleChartView::getAccessibleName()
+OUString AccessibleChartView::getAccessibleName()
 {
     return SchResId(STR_OBJECT_DIAGRAM);
 }
 
-OUString SAL_CALL AccessibleChartView::getAccessibleDescription()
+OUString AccessibleChartView::getAccessibleDescription()
 {
     return getAccessibleName();
 }
 
-Reference< XAccessible > SAL_CALL AccessibleChartView::getAccessibleParent()
+Reference< XAccessible > AccessibleChartView::getAccessibleParent()
 {
     return Reference< XAccessible >( m_xParent );
 }
 
-sal_Int64 SAL_CALL AccessibleChartView::getAccessibleIndexInParent()
+sal_Int64 AccessibleChartView::getAccessibleIndexInParent()
 {
     // the document is always the only child of the window
     return 0;
 }
 
-sal_Int16 SAL_CALL AccessibleChartView::getAccessibleRole()
+sal_Int16 AccessibleChartView::getAccessibleRole()
 {
     return AccessibleRole::DOCUMENT;
 }
@@ -135,7 +135,7 @@ awt::Rectangle AccessibleChartView::implGetBounds()
 }
 
 
-void SAL_CALL AccessibleChartView::disposing()
+void AccessibleChartView::disposing()
 {
     m_pChartWindow.reset();
 
@@ -356,7 +356,7 @@ void AccessibleChartView::initialize()
 
 // view::XSelectionChangeListener
 
-void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*rEvent*/ )
+void AccessibleChartView::selectionChanged( const lang::EventObject& /*rEvent*/ )
 {
     rtl::Reference< ::chart::ChartController > xChartController;
     {
@@ -380,7 +380,7 @@ void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*
 }
 
 // XEventListener
-void SAL_CALL AccessibleChartView::disposing( const lang::EventObject& /*Source*/ )
+void AccessibleChartView::disposing( const lang::EventObject& /*Source*/ )
 {
 }
 

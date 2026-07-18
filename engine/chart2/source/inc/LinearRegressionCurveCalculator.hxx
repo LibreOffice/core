@@ -30,14 +30,14 @@ public:
     virtual ~LinearRegressionCurveCalculator() override;
 
 private:
-    virtual void SAL_CALL setRegressionProperties(
+    virtual void setRegressionProperties(
         sal_Int32 aDegree,
         bool  aForceIntercept,
         double    aInterceptValue,
         sal_Int32 aPeriod,
         sal_Int32 nMovingType) override;
 
-    virtual cpo::uno::Sequence<css::geometry::RealPoint2D> SAL_CALL getCurveValues(
+    virtual cpo::uno::Sequence<css::geometry::RealPoint2D> getCurveValues(
         double min,
         double max,
         sal_Int32 nPointCount,

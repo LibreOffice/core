@@ -58,7 +58,7 @@ public:
 
 protected:
     // ____ XDispatch ____
-    virtual void SAL_CALL dispatch(
+    virtual void dispatch(
         const css::util::URL& URL,
         const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
@@ -67,11 +67,11 @@ protected:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // ____ XModifyListener (override from CommandDispatch) ____
-    virtual void SAL_CALL modified(
+    virtual void modified(
         const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
-    virtual void SAL_CALL disposing(
+    virtual void disposing(
         const css::lang::EventObject& Source ) override;
 
     virtual void fireStatusEvent(
@@ -79,7 +79,7 @@ protected:
         const css::uno::Reference< css::frame::XStatusListener > & xSingleListener ) override;
 
     // ____ XSelectionChangeListener ____
-    virtual void SAL_CALL selectionChanged(
+    virtual void selectionChanged(
         const css::lang::EventObject& aEvent ) override;
 
 private:

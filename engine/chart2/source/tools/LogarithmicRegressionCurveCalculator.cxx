@@ -39,7 +39,7 @@ LogarithmicRegressionCurveCalculator::~LogarithmicRegressionCurveCalculator()
 {}
 
 // ____ XRegressionCurve ____
-void SAL_CALL LogarithmicRegressionCurveCalculator::recalculateRegression(
+void LogarithmicRegressionCurveCalculator::recalculateRegression(
     const cpo::uno::Sequence< double >& aXValues,
     const cpo::uno::Sequence< double >& aYValues )
 {
@@ -85,7 +85,7 @@ void SAL_CALL LogarithmicRegressionCurveCalculator::recalculateRegression(
     m_fCorrelationCoefficient = fQxy / sqrt( fQx * fQy );
 }
 
-double SAL_CALL LogarithmicRegressionCurveCalculator::getCurveValue( double x )
+double LogarithmicRegressionCurveCalculator::getCurveValue( double x )
 {
     if( ! ( std::isnan( m_fSlope ) ||
             std::isnan( m_fIntercept )))
@@ -96,7 +96,7 @@ double SAL_CALL LogarithmicRegressionCurveCalculator::getCurveValue( double x )
     return std::numeric_limits<double>::quiet_NaN();
 }
 
-cpo::uno::Sequence< geometry::RealPoint2D > SAL_CALL LogarithmicRegressionCurveCalculator::getCurveValues(
+cpo::uno::Sequence< geometry::RealPoint2D > LogarithmicRegressionCurveCalculator::getCurveValues(
     double min, double max, ::sal_Int32 nPointCount,
     const uno::Reference< chart2::XScaling >& xScalingX,
     const uno::Reference< chart2::XScaling >& xScalingY,

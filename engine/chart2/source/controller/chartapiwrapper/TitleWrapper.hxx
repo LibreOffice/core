@@ -49,9 +49,9 @@ public:
     virtual ~TitleWrapper() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     //ReferenceSizePropertyProvider
     virtual void updateReferenceSize() override;
@@ -59,18 +59,18 @@ public:
     virtual css::awt::Size getCurrentSizeForReference() override;
 
     // ____ XShape ____
-    virtual css::awt::Point SAL_CALL getPosition() override;
-    virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) override;
-    virtual css::awt::Size SAL_CALL getSize() override;
-    virtual void SAL_CALL setSize( const css::awt::Size& aSize ) override;
+    virtual css::awt::Point getPosition() override;
+    virtual void setPosition( const css::awt::Point& aPosition ) override;
+    virtual css::awt::Size getSize() override;
+    virtual void setSize( const css::awt::Size& aSize ) override;
 
     // ____ XShapeDescriptor (base of XShape) ____
-    virtual OUString SAL_CALL getShapeType() override;
+    virtual OUString getShapeType() override;
 
     // ____ XComponent ____
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // character properties have to be handled differently (via the XFormattedString elements)
     void getFastCharacterPropertyValue( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, cpo::uno::Any& rValue );
@@ -78,16 +78,16 @@ public:
     void setFastCharacterPropertyValue( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue );
 
     // ____ WrappedPropertySet ____
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
 
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
 
-    virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
+    virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;
 
-    virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
+    virtual void setPropertyToDefault( const OUString& PropertyName ) override;
+    virtual cpo::uno::Any getPropertyDefault( const OUString& aPropertyName ) override;
 
     virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
 

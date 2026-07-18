@@ -181,37 +181,37 @@ protected:
     const AccessibleUniqueId& GetId() const { return m_aAccInfo.m_aOID;}
 
     // ________ WeakComponentImplHelper (XComponent::dispose) ________
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // ________ XAccessibleContext ________
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual sal_Int64 getAccessibleChildCount() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getAccessibleParent() override;
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
+    virtual sal_Int64 getAccessibleIndexInParent() override;
     /// @return AccessibleRole.SHAPE
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
+    virtual sal_Int16 getAccessibleRole() override;
     // has to be implemented by derived classes
-//     virtual OUString SAL_CALL getAccessibleName()
+//     virtual OUString getAccessibleName()
 //         throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet >
         getAccessibleRelationSet() override;
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
-    virtual css::lang::Locale SAL_CALL getLocale() override;
+    virtual sal_Int64 getAccessibleStateSet() override;
+    virtual css::lang::Locale getLocale() override;
     // has to be implemented by derived classes
-//     virtual OUString SAL_CALL getAccessibleDescription()
+//     virtual OUString getAccessibleDescription()
 //         throw (css::uno::RuntimeException);
 
     // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
 
     // ________ XAccessibleComponent ________
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual void SAL_CALL grabFocus() override;
-    virtual sal_Int32 SAL_CALL getForeground() override;
-    virtual sal_Int32 SAL_CALL getBackground() override;
+    virtual void grabFocus() override;
+    virtual sal_Int32 getForeground() override;
+    virtual sal_Int32 getBackground() override;
 
 private:
     enum eColorType

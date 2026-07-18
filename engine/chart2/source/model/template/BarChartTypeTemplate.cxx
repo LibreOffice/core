@@ -180,13 +180,13 @@ void BarChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rA
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL BarChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & BarChartTypeTemplate::getInfoHelper()
 {
     return StaticBarChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL BarChartTypeTemplate::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > BarChartTypeTemplate::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticBarChartTypeTemplateInfoHelper() ) );

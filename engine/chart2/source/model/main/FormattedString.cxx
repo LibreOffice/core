@@ -89,19 +89,19 @@ FormattedString::~FormattedString()
 {}
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL FormattedString::createClone()
+uno::Reference< util::XCloneable > FormattedString::createClone()
 {
     return uno::Reference< util::XCloneable >( new FormattedString( *this ));
 }
 
 // ____ XFormattedString ____
-OUString SAL_CALL FormattedString::getString()
+OUString FormattedString::getString()
 {
     MutexGuard aGuard( m_aMutex);
     return m_aString;
 }
 
-void SAL_CALL FormattedString::setString( const OUString& String )
+void FormattedString::setString( const OUString& String )
 {
     {
         MutexGuard aGuard( m_aMutex);
@@ -113,13 +113,13 @@ void SAL_CALL FormattedString::setString( const OUString& String )
 }
 
 // ____ XDataPointCustomLabelField ____
-css::chart2::DataPointCustomLabelFieldType SAL_CALL FormattedString::getFieldType()
+css::chart2::DataPointCustomLabelFieldType FormattedString::getFieldType()
 {
     MutexGuard aGuard(m_aMutex);
     return m_aType;
 }
 
-void SAL_CALL
+void
 FormattedString::setFieldType(const css::chart2::DataPointCustomLabelFieldType Type)
 {
     {
@@ -130,13 +130,13 @@ FormattedString::setFieldType(const css::chart2::DataPointCustomLabelFieldType T
     fireModifyEvent();
 }
 
-OUString SAL_CALL FormattedString::getGuid()
+OUString FormattedString::getGuid()
 {
     MutexGuard aGuard( m_aMutex);
     return m_aGuid;
 }
 
-void SAL_CALL FormattedString::setGuid( const OUString& guid )
+void FormattedString::setGuid( const OUString& guid )
 {
     {
         MutexGuard aGuard( m_aMutex);
@@ -147,13 +147,13 @@ void SAL_CALL FormattedString::setGuid( const OUString& guid )
 
 }
 
-bool SAL_CALL FormattedString::getDataLabelsRange()
+bool FormattedString::getDataLabelsRange()
 {
     MutexGuard aGuard( m_aMutex);
     return m_bDataLabelsRange;
 }
 
-void SAL_CALL FormattedString::setDataLabelsRange( bool dataLabelsRange )
+void FormattedString::setDataLabelsRange( bool dataLabelsRange )
 {
     {
         MutexGuard aGuard( m_aMutex);
@@ -163,13 +163,13 @@ void SAL_CALL FormattedString::setDataLabelsRange( bool dataLabelsRange )
     fireModifyEvent();
 }
 
-OUString SAL_CALL FormattedString::getCellRange()
+OUString FormattedString::getCellRange()
 {
     MutexGuard aGuard( m_aMutex);
     return m_aCellRange;
 }
 
-void SAL_CALL FormattedString::setCellRange( const OUString& cellRange )
+void FormattedString::setCellRange( const OUString& cellRange )
 {
     {
         MutexGuard aGuard( m_aMutex);
@@ -180,24 +180,24 @@ void SAL_CALL FormattedString::setCellRange( const OUString& cellRange )
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL FormattedString::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void FormattedString::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL FormattedString::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void FormattedString::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL FormattedString::modified( const lang::EventObject& aEvent )
+void FormattedString::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL FormattedString::disposing( const lang::EventObject& /* Source */ )
+void FormattedString::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }
@@ -225,13 +225,13 @@ void FormattedString::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) 
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL FormattedString::getInfoHelper()
+::cppu::IPropertyArrayHelper & FormattedString::getInfoHelper()
 {
     return StaticFormattedStringInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL FormattedString::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > FormattedString::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticFormattedStringInfoHelper() ) );
@@ -246,17 +246,17 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( FormattedString, FormattedString_Base, ::prope
 // do this in derived classes!
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-OUString SAL_CALL FormattedString::getImplementationName()
+OUString FormattedString::getImplementationName()
 {
     return u"com.sun.star.comp.chart.FormattedString"_ustr;
 }
 
-bool SAL_CALL FormattedString::supportsService( const OUString& rServiceName )
+bool FormattedString::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL FormattedString::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > FormattedString::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.DataPointCustomLabelField"_ustr,

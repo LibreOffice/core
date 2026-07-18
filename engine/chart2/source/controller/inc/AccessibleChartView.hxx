@@ -47,7 +47,7 @@ public:
 
     AccessibleChartView() = delete;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // 0: view::XSelectionSupplier offers notifications for selection changes and access to the selection itself
     // 1: frame::XModel representing the chart model - offers access to object data
@@ -64,17 +64,17 @@ public:
     void initialize();
 
     // ____ view::XSelectionChangeListener ____
-    virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) override;
+    virtual void selectionChanged( const css::lang::EventObject& aEvent ) override;
 
     // ________ XEventListener ________
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     // ________ XAccessibleContext ________
-    virtual OUString SAL_CALL getAccessibleDescription() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent() override;
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
-    virtual OUString SAL_CALL getAccessibleName() override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
+    virtual OUString getAccessibleDescription() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent() override;
+    virtual sal_Int64 getAccessibleIndexInParent() override;
+    virtual OUString getAccessibleName() override;
+    virtual sal_Int16 getAccessibleRole() override;
 
     // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;

@@ -41,7 +41,7 @@ PotentialRegressionCurveCalculator::~PotentialRegressionCurveCalculator()
 {}
 
 // ____ XRegressionCurveCalculator ____
-void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
+void PotentialRegressionCurveCalculator::recalculateRegression(
     const cpo::uno::Sequence< double >& aXValues,
     const cpo::uno::Sequence< double >& aYValues )
 {
@@ -98,7 +98,7 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
     m_fIntercept = m_fSign * exp( m_fIntercept );
 }
 
-double SAL_CALL PotentialRegressionCurveCalculator::getCurveValue( double x )
+double PotentialRegressionCurveCalculator::getCurveValue( double x )
 {
     if( ! ( std::isnan( m_fSlope ) ||
             std::isnan( m_fIntercept )))
@@ -109,7 +109,7 @@ double SAL_CALL PotentialRegressionCurveCalculator::getCurveValue( double x )
     return std::numeric_limits<double>::quiet_NaN();
 }
 
-cpo::uno::Sequence< geometry::RealPoint2D > SAL_CALL PotentialRegressionCurveCalculator::getCurveValues(
+cpo::uno::Sequence< geometry::RealPoint2D > PotentialRegressionCurveCalculator::getCurveValues(
     double min, double max, ::sal_Int32 nPointCount,
     const uno::Reference< chart2::XScaling >& xScalingX,
     const uno::Reference< chart2::XScaling >& xScalingY,

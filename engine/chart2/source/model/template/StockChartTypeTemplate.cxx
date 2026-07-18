@@ -156,13 +156,13 @@ void StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& 
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL StockChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & StockChartTypeTemplate::getInfoHelper()
 {
     return GetStaticStockChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL StockChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > StockChartTypeTemplate::getPropertySetInfo()
 {
     return GetStaticStockChartTypeTemplateInfo();
 }

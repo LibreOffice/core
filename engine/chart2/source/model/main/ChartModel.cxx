@@ -248,7 +248,7 @@ ChartModel::~ChartModel()
         m_xOldModelAgg->setDelegator( nullptr );
 }
 
-void SAL_CALL ChartModel::initialize( const Sequence< Any >& /*rArguments*/ )
+void ChartModel::initialize( const Sequence< Any >& /*rArguments*/ )
 {
     //#i113722# avoid duplicate creation
 
@@ -360,17 +360,17 @@ void ChartModel::impl_adjustAdditionalShapesPositionAndSize( const awt::Size& aV
 
 // lang::XServiceInfo
 
-OUString SAL_CALL ChartModel::getImplementationName()
+OUString ChartModel::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.ChartModel"_ustr;
 }
 
-bool SAL_CALL ChartModel::supportsService( const OUString& rServiceName )
+bool ChartModel::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ChartModel::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ChartModel::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.ChartDocument"_ustr,
@@ -381,7 +381,7 @@ cpo::uno::Sequence< OUString > SAL_CALL ChartModel::getSupportedServiceNames()
 
 // frame::XModel (required interface)
 
-bool SAL_CALL ChartModel::attachResource( const OUString& rURL
+bool ChartModel::attachResource( const OUString& rURL
         , const cpo::uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
 {
     /*
@@ -406,12 +406,12 @@ bool SAL_CALL ChartModel::attachResource( const OUString& rURL
     return true;
 }
 
-OUString SAL_CALL ChartModel::getURL()
+OUString ChartModel::getURL()
 {
     return impl_g_getLocation();
 }
 
-cpo::uno::Sequence< beans::PropertyValue > SAL_CALL ChartModel::getArgs()
+cpo::uno::Sequence< beans::PropertyValue > ChartModel::getArgs()
 {
     /*
     The method getArgs() returns a sequence of property values
@@ -427,7 +427,7 @@ cpo::uno::Sequence< beans::PropertyValue > SAL_CALL ChartModel::getArgs()
     return m_aMediaDescriptor;
 }
 
-void SAL_CALL ChartModel::connectController( const uno::Reference< frame::XController >& xController )
+void ChartModel::connectController( const uno::Reference< frame::XController >& xController )
 {
     //@todo? this method is declared as oneway -> ...?
 
@@ -440,7 +440,7 @@ void SAL_CALL ChartModel::connectController( const uno::Reference< frame::XContr
     m_aControllers.addInterface(xController);
 }
 
-void SAL_CALL ChartModel::disconnectController( const uno::Reference< frame::XController >& xController )
+void ChartModel::disconnectController( const uno::Reference< frame::XController >& xController )
 {
     //@todo? this method is declared as oneway -> ...?
 
@@ -463,7 +463,7 @@ void SAL_CALL ChartModel::disconnectController( const uno::Reference< frame::XCo
     DisposeHelper::DisposeAndClear(m_xPopupRequest);
 }
 
-void SAL_CALL ChartModel::lockControllers()
+void ChartModel::lockControllers()
 {
     /*
     suspends some notifications to the controllers which are used for display updates.
@@ -481,7 +481,7 @@ void SAL_CALL ChartModel::lockControllers()
     ++m_nControllerLockCount;
 }
 
-void SAL_CALL ChartModel::unlockControllers()
+void ChartModel::unlockControllers()
 {
     /*
     resumes the notifications which were suspended by lockControllers() .
@@ -509,7 +509,7 @@ void SAL_CALL ChartModel::unlockControllers()
     }
 }
 
-bool SAL_CALL ChartModel::hasControllersLocked()
+bool ChartModel::hasControllersLocked()
 {
     LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall())
@@ -517,7 +517,7 @@ bool SAL_CALL ChartModel::hasControllersLocked()
     return ( m_nControllerLockCount != 0 ) ;
 }
 
-uno::Reference< frame::XController > SAL_CALL ChartModel::getCurrentController()
+uno::Reference< frame::XController > ChartModel::getCurrentController()
 {
     LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall())
@@ -528,7 +528,7 @@ uno::Reference< frame::XController > SAL_CALL ChartModel::getCurrentController()
     return impl_getCurrentController();
 }
 
-void SAL_CALL ChartModel::setCurrentController( const uno::Reference< frame::XController >& xController )
+void ChartModel::setCurrentController( const uno::Reference< frame::XController >& xController )
 {
     LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall())
@@ -552,7 +552,7 @@ void SAL_CALL ChartModel::setCurrentController( const uno::Reference< frame::XCo
     DisposeHelper::DisposeAndClear(m_xPopupRequest);
 }
 
-uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection()
+uno::Reference< uno::XInterface > ChartModel::getCurrentSelection()
 {
     LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall())
@@ -579,7 +579,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection()
 }
 
 // lang::XComponent (base of XModel)
-void SAL_CALL ChartModel::dispose()
+void ChartModel::dispose()
 {
     Reference< XInterface > xKeepAlive( *this );
 
@@ -642,7 +642,7 @@ void SAL_CALL ChartModel::dispose()
         m_xOldModelAgg->setDelegator( nullptr );
 }
 
-void SAL_CALL ChartModel::addEventListener( const uno::Reference< lang::XEventListener > & xListener )
+void ChartModel::addEventListener( const uno::Reference< lang::XEventListener > & xListener )
 {
     if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
         return; //behave passive if already disposed or closed
@@ -651,7 +651,7 @@ void SAL_CALL ChartModel::addEventListener( const uno::Reference< lang::XEventLi
     m_aLifeTimeManager.m_aEventListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL ChartModel::removeEventListener( const uno::Reference< lang::XEventListener > & xListener )
+void ChartModel::removeEventListener( const uno::Reference< lang::XEventListener > & xListener )
 {
     if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
         return; //behave passive if already disposed or closed
@@ -661,12 +661,12 @@ void SAL_CALL ChartModel::removeEventListener( const uno::Reference< lang::XEven
 }
 
 // util::XCloseBroadcaster (base of XCloseable)
-void SAL_CALL ChartModel::addCloseListener( const uno::Reference<   util::XCloseListener > & xListener )
+void ChartModel::addCloseListener( const uno::Reference<   util::XCloseListener > & xListener )
 {
     m_aLifeTimeManager.g_addCloseListener( xListener );
 }
 
-void SAL_CALL ChartModel::removeCloseListener( const uno::Reference< util::XCloseListener > & xListener )
+void ChartModel::removeCloseListener( const uno::Reference< util::XCloseListener > & xListener )
 {
     if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
         return; //behave passive if already disposed or closed
@@ -676,7 +676,7 @@ void SAL_CALL ChartModel::removeCloseListener( const uno::Reference< util::XClos
 }
 
 // util::XCloseable
-void SAL_CALL ChartModel::close( bool bDeliverOwnership )
+void ChartModel::close( bool bDeliverOwnership )
 {
     //hold no mutex
 
@@ -705,7 +705,7 @@ void SAL_CALL ChartModel::close( bool bDeliverOwnership )
 }
 
 // lang::XTypeProvider
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL ChartModel::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > ChartModel::getTypes()
 {
     uno::Reference< lang::XTypeProvider > xAggTypeProvider;
     if( (m_xOldModelAgg->queryAggregation( cppu::UnoType<decltype(xAggTypeProvider)>::get()) >>= xAggTypeProvider)
@@ -720,7 +720,7 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL ChartModel::getTypes()
 }
 
 // document::XDocumentPropertiesSupplier
-uno::Reference< document::XDocumentProperties > SAL_CALL
+uno::Reference< document::XDocumentProperties >
         ChartModel::getDocumentProperties()
 {
     ::osl::MutexGuard aGuard( m_aModelMutex );
@@ -732,7 +732,7 @@ uno::Reference< document::XDocumentProperties > SAL_CALL
 }
 
 // document::XDocumentPropertiesSupplier
-Reference< document::XUndoManager > SAL_CALL ChartModel::getUndoManager(  )
+Reference< document::XUndoManager > ChartModel::getUndoManager(  )
 {
     ::osl::MutexGuard aGuard( m_aModelMutex );
     if ( !m_pUndoManager.is() )
@@ -742,13 +742,13 @@ Reference< document::XUndoManager > SAL_CALL ChartModel::getUndoManager(  )
 
 // chart2::XChartDocument
 
-uno::Reference< chart2::XDiagram > SAL_CALL ChartModel::getFirstDiagram()
+uno::Reference< chart2::XDiagram > ChartModel::getFirstDiagram()
 {
     MutexGuard aGuard( m_aModelMutex );
     return m_xDiagram;
 }
 
-void SAL_CALL ChartModel::setFirstDiagram( const uno::Reference< chart2::XDiagram >& xDiagram )
+void ChartModel::setFirstDiagram( const uno::Reference< chart2::XDiagram >& xDiagram )
 {
     rtl::Reference< ::chart::Diagram > xOldDiagram;
     Reference< util::XModifyListener > xListener;
@@ -791,7 +791,7 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
     return xDataSource;
 }
 
-void SAL_CALL ChartModel::createInternalDataProvider( bool bCloneExistingData )
+void ChartModel::createInternalDataProvider( bool bCloneExistingData )
 {
     // don't lock the mutex, because this call calls out to code that tries to
     // lock the solar mutex. On the other hand, a paint locks the solar mutex
@@ -832,24 +832,24 @@ void ChartModel::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-bool SAL_CALL ChartModel::hasInternalDataProvider()
+bool ChartModel::hasInternalDataProvider()
 {
     return m_xDataProvider.is() && m_xInternalDataProvider.is();
 }
 
-uno::Reference< chart2::data::XDataProvider > SAL_CALL ChartModel::getDataProvider()
+uno::Reference< chart2::data::XDataProvider > ChartModel::getDataProvider()
 {
     MutexGuard aGuard( m_aModelMutex );
     return m_xDataProvider;
 }
 
-uno::Reference< chart2::XChartStyle > SAL_CALL ChartModel::getStyles()
+uno::Reference< chart2::XChartStyle > ChartModel::getStyles()
 {
     MutexGuard aGuard( m_aModelMutex );
     return m_aStyles;
 }
 
-uno::Reference< chart2::XChartColorStyle > SAL_CALL ChartModel::getColorStyles()
+uno::Reference< chart2::XChartColorStyle > ChartModel::getColorStyles()
 {
     MutexGuard aGuard( m_aModelMutex );
     return m_aColorStyles;
@@ -857,7 +857,7 @@ uno::Reference< chart2::XChartColorStyle > SAL_CALL ChartModel::getColorStyles()
 
 // ____ XDataReceiver ____
 
-void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data::XDataProvider >& xDataProvider )
+void ChartModel::attachDataProvider( const uno::Reference< chart2::data::XDataProvider >& xDataProvider )
 {
     {
         MutexGuard aGuard( m_aModelMutex );
@@ -888,7 +888,7 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
     setModified( true );
 }
 
-void SAL_CALL ChartModel::attachNumberFormatsSupplier( const uno::Reference< util::XNumberFormatsSupplier >& xNewSupplier )
+void ChartModel::attachNumberFormatsSupplier( const uno::Reference< util::XNumberFormatsSupplier >& xNewSupplier )
 {
     {
         // Mostly the supplier is SvNumberFormatsSupplierObj, but sometimes it is reportdesign::OReportDefinition
@@ -918,7 +918,7 @@ void SAL_CALL ChartModel::attachNumberFormatsSupplier( const uno::Reference< uti
     setModified( true );
 }
 
-void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& aArguments )
+void ChartModel::setArguments( const Sequence< beans::PropertyValue >& aArguments )
 {
     {
         MutexGuard aGuard( m_aModelMutex );
@@ -955,24 +955,24 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
     setModified( true );
 }
 
-Sequence< OUString > SAL_CALL ChartModel::getUsedRangeRepresentations()
+Sequence< OUString > ChartModel::getUsedRangeRepresentations()
 {
     return comphelper::containerToSequence(DataSourceHelper::getUsedDataRanges( this ));
 }
 
-Reference< chart2::data::XDataSource > SAL_CALL ChartModel::getUsedData()
+Reference< chart2::data::XDataSource > ChartModel::getUsedData()
 {
     return DataSourceHelper::getUsedData( *this );
 }
 
-Reference< chart2::data::XRangeHighlighter > SAL_CALL ChartModel::getRangeHighlighter()
+Reference< chart2::data::XRangeHighlighter > ChartModel::getRangeHighlighter()
 {
     if( ! m_xRangeHighlighter.is())
         m_xRangeHighlighter = new RangeHighlighter( this );
     return m_xRangeHighlighter;
 }
 
-Reference<awt::XRequestCallback> SAL_CALL ChartModel::getPopupRequest()
+Reference<awt::XRequestCallback> ChartModel::getPopupRequest()
 {
     if (!m_xPopupRequest.is())
         m_xPopupRequest.set(new PopupRequest);
@@ -987,7 +987,7 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartModel::impl_createDefaultChart
     return xTemplate;
 }
 
-void SAL_CALL ChartModel::setChartTypeManager( const uno::Reference< chart2::XChartTypeManager >& xNewManager )
+void ChartModel::setChartTypeManager( const uno::Reference< chart2::XChartTypeManager >& xNewManager )
 {
     {
         MutexGuard aGuard( m_aModelMutex );
@@ -997,25 +997,25 @@ void SAL_CALL ChartModel::setChartTypeManager( const uno::Reference< chart2::XCh
     setModified( true );
 }
 
-uno::Reference< chart2::XChartTypeManager > SAL_CALL ChartModel::getChartTypeManager()
+uno::Reference< chart2::XChartTypeManager > ChartModel::getChartTypeManager()
 {
     MutexGuard aGuard( m_aModelMutex );
     return m_xChartTypeManager;
 }
 
-uno::Reference< beans::XPropertySet > SAL_CALL ChartModel::getPageBackground()
+uno::Reference< beans::XPropertySet > ChartModel::getPageBackground()
 {
     MutexGuard aGuard( m_aModelMutex );
     return m_xPageBackground;
 }
 
-void SAL_CALL ChartModel::createDefaultChart()
+void ChartModel::createDefaultChart()
 {
     insertDefaultChart();
 }
 
 // ____ XTitled ____
-uno::Reference< chart2::XTitle > SAL_CALL ChartModel::getTitleObject()
+uno::Reference< chart2::XTitle > ChartModel::getTitleObject()
 {
     MutexGuard aGuard( m_aModelMutex );
     return m_xTitle;
@@ -1027,7 +1027,7 @@ rtl::Reference< Title > ChartModel::getTitleObject2() const
     return m_xTitle;
 }
 
-void SAL_CALL ChartModel::setTitleObject( const uno::Reference< chart2::XTitle >& xNewTitle )
+void ChartModel::setTitleObject( const uno::Reference< chart2::XTitle >& xNewTitle )
 {
     rtl::Reference<Title> xTitle = dynamic_cast<Title*>(xNewTitle.get());
     assert(!xNewTitle || xTitle);
@@ -1047,7 +1047,7 @@ void ChartModel::setTitleObject( const rtl::Reference< Title >& xTitle )
 }
 
 // ____ XInterface (for old API wrapper) ____
-cpo::uno::Any SAL_CALL ChartModel::queryInterface( const cpo::uno::Type& aType )
+cpo::uno::Any ChartModel::queryInterface( const cpo::uno::Type& aType )
 {
     cpo::uno::Any aResult( impl::ChartModel_Base::queryInterface( aType ));
 
@@ -1069,14 +1069,14 @@ cpo::uno::Any SAL_CALL ChartModel::queryInterface( const cpo::uno::Type& aType )
 }
 
 // ____ XCloneable ____
-Reference< util::XCloneable > SAL_CALL ChartModel::createClone()
+Reference< util::XCloneable > ChartModel::createClone()
 {
     std::unique_lock aGuard(m_aLifeTimeManager.m_aAccessMutex);
     return Reference< util::XCloneable >( new ChartModel( *this ));
 }
 
 // ____ XVisualObject ____
-void SAL_CALL ChartModel::setVisualAreaSize( ::sal_Int64 nAspect, const awt::Size& aSize )
+void ChartModel::setVisualAreaSize( ::sal_Int64 nAspect, const awt::Size& aSize )
 {
     if( nAspect == embed::Aspects::MSOLE_CONTENT )
     {
@@ -1101,7 +1101,7 @@ void SAL_CALL ChartModel::setVisualAreaSize( ::sal_Int64 nAspect, const awt::Siz
     }
 }
 
-awt::Size SAL_CALL ChartModel::getVisualAreaSize( ::sal_Int64 nAspect )
+awt::Size ChartModel::getVisualAreaSize( ::sal_Int64 nAspect )
 {
     OSL_ENSURE( nAspect == embed::Aspects::MSOLE_CONTENT,
                 "No aspects other than content are supported" );
@@ -1110,7 +1110,7 @@ awt::Size SAL_CALL ChartModel::getVisualAreaSize( ::sal_Int64 nAspect )
     return m_aVisualAreaSize;
 }
 
-embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentation( ::sal_Int64 nAspect )
+embed::VisualRepresentation ChartModel::getPreferredVisualRepresentation( ::sal_Int64 nAspect )
 {
     OSL_ENSURE( nAspect == embed::Aspects::MSOLE_CONTENT,
                 "No aspects other than content are supported" );
@@ -1146,7 +1146,7 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
     return aResult;
 }
 
-::sal_Int32 SAL_CALL ChartModel::getMapUnit( ::sal_Int64 nAspect )
+::sal_Int32 ChartModel::getMapUnit( ::sal_Int64 nAspect )
 {
     OSL_ENSURE( nAspect == embed::Aspects::MSOLE_CONTENT,
                 "No aspects other than content are supported" );
@@ -1154,7 +1154,7 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
 }
 
 // ____ datatransfer::XTransferable ____
-cpo::uno::Any SAL_CALL ChartModel::getTransferData( const datatransfer::DataFlavor& aFlavor )
+cpo::uno::Any ChartModel::getTransferData( const datatransfer::DataFlavor& aFlavor )
 {
     cpo::uno::Any aResult;
     if( !isDataFlavorSupported( aFlavor ) )
@@ -1179,14 +1179,14 @@ cpo::uno::Any SAL_CALL ChartModel::getTransferData( const datatransfer::DataFlav
     return aResult;
 }
 
-Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors()
+Sequence< datatransfer::DataFlavor > ChartModel::getTransferDataFlavors()
 {
     return { datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
         u"GDIMetaFile"_ustr,
         cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() ) };
 }
 
-bool SAL_CALL ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
+bool ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
 {
     return aFlavor.MimeType == lcl_aGDIMetaFileMIMETypeHighContrast;
 }
@@ -1220,7 +1220,7 @@ const tServiceNameMap & lcl_getStaticServiceNameMap()
 }
 }
 // ____ XMultiServiceFactory ____
-Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString& rServiceSpecifier )
+Reference< uno::XInterface > ChartModel::createInstance( const OUString& rServiceSpecifier )
 {
     const tServiceNameMap & rMap = lcl_getStaticServiceNameMap();
 
@@ -1273,14 +1273,14 @@ const rtl::Reference<ChartView>& ChartModel::createChartView()
     return mxChartView;
 }
 
-Reference< uno::XInterface > SAL_CALL ChartModel::createInstanceWithArguments(
+Reference< uno::XInterface > ChartModel::createInstanceWithArguments(
             const OUString& rServiceSpecifier , const Sequence< Any >& Arguments )
 {
     OSL_ENSURE( Arguments.hasElements(), "createInstanceWithArguments: Warning: Arguments are ignored" );
     return createInstance( rServiceSpecifier );
 }
 
-Sequence< OUString > SAL_CALL ChartModel::getAvailableServiceNames()
+Sequence< OUString > ChartModel::getAvailableServiceNames()
 {
     cpo::uno::Sequence< OUString > aResult;
 
@@ -1316,7 +1316,7 @@ Reference< util::XNumberFormatsSupplier > const & ChartModel::getNumberFormatsSu
 }
 
 // ____ XUnoTunnel ___
-::sal_Int64 SAL_CALL ChartModel::getSomething( const Sequence< ::sal_Int8 >& aIdentifier )
+::sal_Int64 ChartModel::getSomething( const Sequence< ::sal_Int8 >& aIdentifier )
 {
     if( comphelper::isUnoTunnelId<SvNumberFormatsSupplierObj>(aIdentifier) )
     {
@@ -1328,7 +1328,7 @@ Reference< util::XNumberFormatsSupplier > const & ChartModel::getNumberFormatsSu
 }
 
 // ____ XNumberFormatsSupplier ____
-uno::Reference< beans::XPropertySet > SAL_CALL ChartModel::getNumberFormatSettings()
+uno::Reference< beans::XPropertySet > ChartModel::getNumberFormatSettings()
 {
     Reference< util::XNumberFormatsSupplier > xSupplier( getNumberFormatsSupplier() );
     if( xSupplier.is() )
@@ -1336,7 +1336,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL ChartModel::getNumberFormatSettin
     return uno::Reference< beans::XPropertySet >();
 }
 
-uno::Reference< util::XNumberFormats > SAL_CALL ChartModel::getNumberFormats()
+uno::Reference< util::XNumberFormats > ChartModel::getNumberFormats()
 {
     Reference< util::XNumberFormatsSupplier > xSupplier( getNumberFormatsSupplier() );
     if( xSupplier.is() )
@@ -1345,12 +1345,12 @@ uno::Reference< util::XNumberFormats > SAL_CALL ChartModel::getNumberFormats()
 }
 
 // ____ XChild ____
-Reference< uno::XInterface > SAL_CALL ChartModel::getParent()
+Reference< uno::XInterface > ChartModel::getParent()
 {
     return Reference< uno::XInterface >(m_xParent,uno::UNO_QUERY);
 }
 
-void SAL_CALL ChartModel::setParent( const Reference< uno::XInterface >& Parent )
+void ChartModel::setParent( const Reference< uno::XInterface >& Parent )
 {
     if( Parent != m_xParent )
     {
@@ -1363,7 +1363,7 @@ void SAL_CALL ChartModel::setParent( const Reference< uno::XInterface >& Parent 
 }
 
 // ____ XDataSource ____
-cpo::uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartModel::getDataSequences()
+cpo::uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > ChartModel::getDataSequences()
 {
     rtl::Reference< DataSource > xSource = DataSourceHelper::getUsedData( *this );
     if( xSource.is())
@@ -1373,7 +1373,7 @@ cpo::uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL C
 }
 
 //XDumper
-OUString SAL_CALL ChartModel::dump(OUString const & kind)
+OUString ChartModel::dump(OUString const & kind)
 {
     if (kind.isEmpty()) {
         return comphelper::dumpXmlToString([this](auto writer) { return dumpAsXml(writer); });

@@ -53,7 +53,7 @@ ChartPanelFactory::~ChartPanelFactory()
 {
 }
 
-Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
+Reference<css::ui::XUIElement> ChartPanelFactory::createUIElement (
     const OUString& rsResourceURL,
     const ::cpo::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {

@@ -81,7 +81,7 @@ void StatusBarCommandDispatch::fireStatusEvent(
 }
 
 // ____ XDispatch ____
-void SAL_CALL StatusBarCommandDispatch::dispatch(
+void StatusBarCommandDispatch::dispatch(
     const util::URL& /* URL */,
     const Sequence< beans::PropertyValue >& /* Arguments */ )
 {
@@ -97,14 +97,14 @@ void StatusBarCommandDispatch::disposing(std::unique_lock<std::mutex>& /*rGuard*
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL StatusBarCommandDispatch::disposing( const lang::EventObject& /* Source */ )
+void StatusBarCommandDispatch::disposing( const lang::EventObject& /* Source */ )
 {
     m_xChartModel.clear();
     m_xSelectionSupplier.clear();
 }
 
 // ____ XModifyListener ____
-void SAL_CALL StatusBarCommandDispatch::modified( const lang::EventObject& aEvent )
+void StatusBarCommandDispatch::modified( const lang::EventObject& aEvent )
 {
     if( m_xChartModel.is())
         m_bIsModified = m_xChartModel->isModified();
@@ -113,7 +113,7 @@ void SAL_CALL StatusBarCommandDispatch::modified( const lang::EventObject& aEven
 }
 
 // ____ XSelectionChangeListener ____
-void SAL_CALL StatusBarCommandDispatch::selectionChanged( const lang::EventObject& /* aEvent */ )
+void StatusBarCommandDispatch::selectionChanged( const lang::EventObject& /* aEvent */ )
 {
     if( m_xSelectionSupplier.is())
         m_aSelectedOID = ObjectIdentifier( m_xSelectionSupplier->getSelection() );

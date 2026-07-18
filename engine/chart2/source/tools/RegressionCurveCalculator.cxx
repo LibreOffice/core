@@ -124,7 +124,7 @@ OUString RegressionCurveCalculator::getFormattedString(
     return aResult;
 }
 
-Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveValues(
+Sequence< geometry::RealPoint2D > RegressionCurveCalculator::getCurveValues(
     double min, double max, ::sal_Int32 nPointCount,
     const Reference< chart2::XScaling >& xScalingX,
     const Reference< chart2::XScaling >& /* xScalingY */,
@@ -164,17 +164,17 @@ Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveVa
     return aResult;
 }
 
-double SAL_CALL RegressionCurveCalculator::getCorrelationCoefficient()
+double RegressionCurveCalculator::getCorrelationCoefficient()
 {
     return m_fCorrelationCoefficient;
 }
 
-OUString SAL_CALL RegressionCurveCalculator::getRepresentation()
+OUString RegressionCurveCalculator::getRepresentation()
 {
     return ImplGetRepresentation( Reference< util::XNumberFormatter >(), 0 );
 }
 
-OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentation(
+OUString RegressionCurveCalculator::getFormattedRepresentation(
     const Reference< util::XNumberFormatsSupplier > & xNumFmtSupplier,
     sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength )
 {
@@ -202,7 +202,7 @@ void RegressionCurveCalculator::addStringToEquation(
     nLineLength += aAddString.getLength();
 }
 
-void SAL_CALL RegressionCurveCalculator::setXYNames( const OUString& aXName, const OUString& aYName )
+void RegressionCurveCalculator::setXYNames( const OUString& aXName, const OUString& aYName )
 {
     if ( aXName.isEmpty() )
         mXName = u"x"_ustr;

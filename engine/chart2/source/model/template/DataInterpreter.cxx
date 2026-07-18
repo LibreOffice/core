@@ -360,17 +360,17 @@ bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > &
     return bUseCategoriesAsX;
 }
 
-OUString SAL_CALL DataInterpreter::getImplementationName()
+OUString DataInterpreter::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.DataInterpreter"_ustr;
 }
 
-bool SAL_CALL DataInterpreter::supportsService( const OUString& rServiceName )
+bool DataInterpreter::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DataInterpreter::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > DataInterpreter::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.DataInterpreter"_ustr };
 }

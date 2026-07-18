@@ -54,35 +54,35 @@ CreationWizardUnoDlg::~CreationWizardUnoDlg()
 }
 
 // lang::XServiceInfo
-OUString SAL_CALL CreationWizardUnoDlg::getImplementationName()
+OUString CreationWizardUnoDlg::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.WizardDialog"_ustr;
 }
 
-bool SAL_CALL CreationWizardUnoDlg::supportsService( const OUString& rServiceName )
+bool CreationWizardUnoDlg::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CreationWizardUnoDlg::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > CreationWizardUnoDlg::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.WizardDialog"_ustr };
 }
 
 // XInterface
-cpo::uno::Any SAL_CALL CreationWizardUnoDlg::queryInterface( const cpo::uno::Type& aType )
+cpo::uno::Any CreationWizardUnoDlg::queryInterface( const cpo::uno::Type& aType )
 {
     return OComponentHelper::queryInterface( aType );
 }
-void SAL_CALL CreationWizardUnoDlg::acquire() noexcept
+void CreationWizardUnoDlg::acquire() noexcept
 {
     OComponentHelper::acquire();
 }
-void SAL_CALL CreationWizardUnoDlg::release() noexcept
+void CreationWizardUnoDlg::release() noexcept
 {
     OComponentHelper::release();
 }
-cpo::uno::Any SAL_CALL CreationWizardUnoDlg::queryAggregation( cpo::uno::Type const & rType )
+cpo::uno::Any CreationWizardUnoDlg::queryAggregation( cpo::uno::Type const & rType )
 {
     if (rType == cppu::UnoType<ui::dialogs::XAsynchronousExecutableDialog>::get())
     {
@@ -126,28 +126,28 @@ cpo::uno::Sequence< cpo::uno::Type > CreationWizardUnoDlg::getTypes()
     return aTypeList;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > CreationWizardUnoDlg::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XTerminateListener
-void SAL_CALL CreationWizardUnoDlg::queryTermination( const lang::EventObject& /*Event*/ )
+void CreationWizardUnoDlg::queryTermination( const lang::EventObject& /*Event*/ )
 {
 }
 
-void SAL_CALL CreationWizardUnoDlg::notifyTermination( const lang::EventObject& /*Event*/ )
+void CreationWizardUnoDlg::notifyTermination( const lang::EventObject& /*Event*/ )
 {
     // we are going down, so dispose us!
     dispose();
 }
 
-void SAL_CALL CreationWizardUnoDlg::disposing( const lang::EventObject& /*Source*/ )
+void CreationWizardUnoDlg::disposing( const lang::EventObject& /*Source*/ )
 {
     //Listener should deregister himself and release all references to the closing object.
 }
 
-void SAL_CALL CreationWizardUnoDlg::setDialogTitle( const OUString& /*rTitle*/ )
+void CreationWizardUnoDlg::setDialogTitle( const OUString& /*rTitle*/ )
 {
 }
 void CreationWizardUnoDlg::createDialogOnDemand()
@@ -188,7 +188,7 @@ IMPL_STATIC_LINK_NOARG(CreationWizardUnoDlg, InstallKitNotifierHdl, void*, vcl::
     return SfxViewShell::Current();
 }
 
-void SAL_CALL CreationWizardUnoDlg::startExecuteModal( const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener )
+void CreationWizardUnoDlg::startExecuteModal( const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener )
 {
     SolarMutexGuard aSolarGuard;
     createDialogOnDemand();
@@ -216,7 +216,7 @@ void SAL_CALL CreationWizardUnoDlg::startExecuteModal( const css::uno::Reference
         });
 }
 
-void SAL_CALL CreationWizardUnoDlg::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void CreationWizardUnoDlg::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     for(const cpo::uno::Any& rArgument : aArguments)
     {
@@ -240,7 +240,7 @@ void SAL_CALL CreationWizardUnoDlg::initialize( const cpo::uno::Sequence< cpo::u
 
 // ____ OComponentHelper ____
 /// Called in dispose method after the listeners were notified.
-void SAL_CALL CreationWizardUnoDlg::disposing()
+void CreationWizardUnoDlg::disposing()
 {
     m_xChartModel.clear();
     m_xParentWindow.clear();
@@ -261,13 +261,13 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
 }
 
 //XPropertySet
-uno::Reference< beans::XPropertySetInfo > SAL_CALL CreationWizardUnoDlg::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > CreationWizardUnoDlg::getPropertySetInfo()
 {
     OSL_FAIL("not implemented");
     return nullptr;
 }
 
-void SAL_CALL CreationWizardUnoDlg::setPropertyValue(const OUString& rPropertyName,
+void CreationWizardUnoDlg::setPropertyValue(const OUString& rPropertyName,
                                                      const cpo::uno::Any& rValue)
 {
     if( rPropertyName == "Position" )
@@ -290,7 +290,7 @@ void SAL_CALL CreationWizardUnoDlg::setPropertyValue(const OUString& rPropertyNa
         throw beans::UnknownPropertyException( u"unknown property was tried to set to chart wizard"_ustr , nullptr );
 }
 
-cpo::uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPropertyName )
+cpo::uno::Any CreationWizardUnoDlg::getPropertyValue( const OUString& rPropertyName )
 {
     cpo::uno::Any aRet;
     if( rPropertyName == "Position" )
@@ -328,23 +328,23 @@ cpo::uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& r
     return aRet;
 }
 
-void SAL_CALL CreationWizardUnoDlg::addPropertyChangeListener(
+void CreationWizardUnoDlg::addPropertyChangeListener(
         const OUString& /* aPropertyName */, const uno::Reference< beans::XPropertyChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL CreationWizardUnoDlg::removePropertyChangeListener(
+void CreationWizardUnoDlg::removePropertyChangeListener(
     const OUString& /* aPropertyName */, const uno::Reference< beans::XPropertyChangeListener >& /* aListener */ )
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL CreationWizardUnoDlg::addVetoableChangeListener( const OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
+void CreationWizardUnoDlg::addVetoableChangeListener( const OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL CreationWizardUnoDlg::removeVetoableChangeListener( const OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
+void CreationWizardUnoDlg::removeVetoableChangeListener( const OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
 {
     OSL_FAIL("not implemented");
 }

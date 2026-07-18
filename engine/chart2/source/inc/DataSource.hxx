@@ -43,16 +43,16 @@ public:
     virtual ~DataSource() override;
 
     /// declare XServiceInfo methods
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // ____ XDataSource ____
-    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
         getDataSequences() override;
 
     // ____ XDataSink ____
-    virtual void SAL_CALL setData( const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData ) override;
+    virtual void setData( const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData ) override;
 
 private:
     cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >

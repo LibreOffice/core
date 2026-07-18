@@ -260,12 +260,12 @@ LegendWrapper::~LegendWrapper()
 }
 
 // ____ XShape ____
-awt::Point SAL_CALL LegendWrapper::getPosition()
+awt::Point LegendWrapper::getPosition()
 {
     return m_spChart2ModelContact->GetLegendPosition();
 }
 
-void SAL_CALL LegendWrapper::setPosition( const awt::Point& aPosition )
+void LegendWrapper::setPosition( const awt::Point& aPosition )
 {
     Reference< beans::XPropertySet > xProp( getInnerPropertySet() );
     if( xProp.is() )
@@ -280,12 +280,12 @@ void SAL_CALL LegendWrapper::setPosition( const awt::Point& aPosition )
     }
 }
 
-awt::Size SAL_CALL LegendWrapper::getSize()
+awt::Size LegendWrapper::getSize()
 {
     return m_spChart2ModelContact->GetLegendSize();
 }
 
-void SAL_CALL LegendWrapper::setSize( const awt::Size& aSize )
+void LegendWrapper::setSize( const awt::Size& aSize )
 {
     Reference< beans::XPropertySet > xProp( getInnerPropertySet() );
     if( xProp.is() )
@@ -302,13 +302,13 @@ void SAL_CALL LegendWrapper::setSize( const awt::Size& aSize )
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
-OUString SAL_CALL LegendWrapper::getShapeType()
+OUString LegendWrapper::getShapeType()
 {
     return u"com.sun.star.chart.ChartLegend"_ustr;
 }
 
 // ____ XComponent ____
-void SAL_CALL LegendWrapper::dispose()
+void LegendWrapper::dispose()
 {
     std::unique_lock g(m_aMutex);
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
@@ -317,14 +317,14 @@ void SAL_CALL LegendWrapper::dispose()
     clearWrappedPropertySet(g);
 }
 
-void SAL_CALL LegendWrapper::addEventListener(
+void LegendWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock g(m_aMutex);
     m_aEventListenerContainer.addInterface( g, xListener );
 }
 
-void SAL_CALL LegendWrapper::removeEventListener(
+void LegendWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
@@ -388,17 +388,17 @@ std::vector< std::unique_ptr<WrappedProperty> > LegendWrapper::createWrappedProp
     return aWrappedProperties;
 }
 
-OUString SAL_CALL LegendWrapper::getImplementationName()
+OUString LegendWrapper::getImplementationName()
 {
     return u"com.sun.star.comp.chart.Legend"_ustr;
 }
 
-bool SAL_CALL LegendWrapper::supportsService( const OUString& rServiceName )
+bool LegendWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL LegendWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > LegendWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.ChartLegend"_ustr,

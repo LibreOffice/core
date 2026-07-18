@@ -343,7 +343,7 @@ void AccessibleBase::SetInfo( const AccessibleElementInfo & rNewInfo )
 }
 
 // ________ (XComponent::dispose) ________
-void SAL_CALL AccessibleBase::disposing()
+void AccessibleBase::disposing()
 {
     {
         MutexGuard aGuard(m_aMutex);
@@ -369,7 +369,7 @@ void SAL_CALL AccessibleBase::disposing()
 }
 
 // ________ AccessibleBase::XAccessibleContext ________
-sal_Int64 SAL_CALL AccessibleBase::getAccessibleChildCount()
+sal_Int64 AccessibleBase::getAccessibleChildCount()
 {
     ClearableMutexGuard aGuard( m_aMutex );
     if (!m_bMayHaveChildren || !isAlive())
@@ -392,7 +392,7 @@ sal_Int64 AccessibleBase::ImplGetAccessibleChildCount() const
     return m_aChildList.size();
 }
 
-Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int64 i )
+Reference< XAccessible > AccessibleBase::getAccessibleChild( sal_Int64 i )
 {
     ensureAlive();
     Reference< XAccessible > xResult;
@@ -434,7 +434,7 @@ Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int64 i
     return xResult;
 }
 
-Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleParent()
+Reference< XAccessible > AccessibleBase::getAccessibleParent()
 {
     ensureAlive();
     Reference< XAccessible > aResult;
@@ -444,7 +444,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleParent()
     return aResult;
 }
 
-sal_Int64 SAL_CALL AccessibleBase::getAccessibleIndexInParent()
+sal_Int64 AccessibleBase::getAccessibleIndexInParent()
 {
     ensureAlive();
 
@@ -453,18 +453,18 @@ sal_Int64 SAL_CALL AccessibleBase::getAccessibleIndexInParent()
     return -1;
 }
 
-sal_Int16 SAL_CALL AccessibleBase::getAccessibleRole()
+sal_Int16 AccessibleBase::getAccessibleRole()
 {
     return AccessibleRole::SHAPE;
 }
 
-Reference< XAccessibleRelationSet > SAL_CALL AccessibleBase::getAccessibleRelationSet()
+Reference< XAccessibleRelationSet > AccessibleBase::getAccessibleRelationSet()
 {
     Reference< XAccessibleRelationSet > aResult;
     return aResult;
 }
 
-sal_Int64 SAL_CALL AccessibleBase::getAccessibleStateSet()
+sal_Int64 AccessibleBase::getAccessibleStateSet()
 {
     if( ! m_bStateSetInitialized )
     {
@@ -484,7 +484,7 @@ sal_Int64 SAL_CALL AccessibleBase::getAccessibleStateSet()
     return m_nStateSet;
 }
 
-lang::Locale SAL_CALL AccessibleBase::getLocale()
+lang::Locale AccessibleBase::getLocale()
 {
     ensureAlive();
 
@@ -493,7 +493,7 @@ lang::Locale SAL_CALL AccessibleBase::getLocale()
 
 // ________ AccessibleBase::XAccessibleComponent ________
 
-Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const awt::Point& aPoint )
+Reference< XAccessible > AccessibleBase::getAccessibleAtPoint( const awt::Point& aPoint )
 {
     ensureAlive();
     rtl::Reference< AccessibleBase > aResult;
@@ -563,7 +563,7 @@ css::awt::Rectangle AccessibleBase::implGetBounds()
     return awt::Rectangle();
 }
 
-void SAL_CALL AccessibleBase::grabFocus()
+void AccessibleBase::grabFocus()
 {
     ensureAlive();
 
@@ -574,12 +574,12 @@ void SAL_CALL AccessibleBase::grabFocus()
     }
 }
 
-sal_Int32 SAL_CALL AccessibleBase::getForeground()
+sal_Int32 AccessibleBase::getForeground()
 {
     return sal_Int32(getColor( ACC_BASE_FOREGROUND ));
 }
 
-sal_Int32 SAL_CALL AccessibleBase::getBackground()
+sal_Int32 AccessibleBase::getBackground()
 {
     return sal_Int32(getColor( ACC_BASE_BACKGROUND ));
 }

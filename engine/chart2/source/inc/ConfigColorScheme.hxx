@@ -45,11 +45,11 @@ public:
     void notify();
 
     /// declare XServiceInfo methods
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
 protected:
     // ____ XColorScheme ____
-    virtual ::sal_Int32 SAL_CALL getColorByIndex( ::sal_Int32 nIndex ) override;
+    virtual ::sal_Int32 getColorByIndex( ::sal_Int32 nIndex ) override;
 
 private:
     void retrieveConfigColors();

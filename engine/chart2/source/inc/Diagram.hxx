@@ -78,9 +78,9 @@ public:
     virtual ~Diagram() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
@@ -93,64 +93,64 @@ public:
     virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
 
     // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // ____ XFastPropertySet ____
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+    virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
     /// make original interface function visible again
     using ::com::sun::star::beans::XFastPropertySet::getFastPropertyValue;
 
-    virtual void SAL_CALL getFastPropertyValue(
+    virtual void getFastPropertyValue(
         cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // ____ XDiagram ____
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getWall() override;
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getFloor() override;
-    virtual css::uno::Reference< css::chart2::XLegend > SAL_CALL getLegend() override;
-    virtual void SAL_CALL setLegend( const css::uno::Reference<
+    virtual css::uno::Reference< css::beans::XPropertySet > getWall() override;
+    virtual css::uno::Reference< css::beans::XPropertySet > getFloor() override;
+    virtual css::uno::Reference< css::chart2::XLegend > getLegend() override;
+    virtual void setLegend( const css::uno::Reference<
                                      css::chart2::XLegend >& xLegend ) override;
-    virtual css::uno::Reference< css::chart2::XColorScheme > SAL_CALL getDefaultColorScheme() override;
-    virtual void SAL_CALL setDefaultColorScheme(
+    virtual css::uno::Reference< css::chart2::XColorScheme > getDefaultColorScheme() override;
+    virtual void setDefaultColorScheme(
         const css::uno::Reference< css::chart2::XColorScheme >& xColorScheme ) override;
-    virtual void SAL_CALL setDiagramData(
+    virtual void setDiagramData(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
 
-    virtual css::uno::Reference<css::chart2::XDataTable> SAL_CALL getDataTable() override;
-    virtual void SAL_CALL setDataTable(const css::uno::Reference<css::chart2::XDataTable>& xDataTable) override;
+    virtual css::uno::Reference<css::chart2::XDataTable> getDataTable() override;
+    virtual void setDataTable(const css::uno::Reference<css::chart2::XDataTable>& xDataTable) override;
 
     // ____ XCoordinateSystemContainer ____
-    virtual void SAL_CALL addCoordinateSystem(
+    virtual void addCoordinateSystem(
         const css::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys ) override;
-    virtual void SAL_CALL removeCoordinateSystem(
+    virtual void removeCoordinateSystem(
         const css::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > SAL_CALL getCoordinateSystems() override;
-    virtual void SAL_CALL setCoordinateSystems(
+    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > getCoordinateSystems() override;
+    virtual void setCoordinateSystems(
         const cpo::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > >& aCoordinateSystems ) override;
 
     // ____ XTitled ____
     virtual css::uno::Reference<
-        css::chart2::XTitle > SAL_CALL getTitleObject() override;
-    virtual void SAL_CALL setTitleObject( const css::uno::Reference<
+        css::chart2::XTitle > getTitleObject() override;
+    virtual void setTitleObject( const css::uno::Reference<
                                           css::chart2::XTitle >& Title ) override;
 
     // ____ X3DDefaultSetter ____
-    virtual void SAL_CALL set3DSettingsToDefault() override;
-    virtual void SAL_CALL setDefaultRotation() override;
-    virtual void SAL_CALL setDefaultIllumination() override;
+    virtual void set3DSettingsToDefault() override;
+    virtual void setDefaultRotation() override;
+    virtual void setDefaultIllumination() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XModifyBroadcaster ____
-    virtual void SAL_CALL addModifyListener(
+    virtual void addModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener(
+    virtual void removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     typedef
@@ -344,11 +344,11 @@ public:
 
 private:
     // ____ XModifyListener ____
-    virtual void SAL_CALL modified(
+    virtual void modified(
         const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
-    virtual void SAL_CALL disposing(
+    virtual void disposing(
         const css::lang::EventObject& Source ) override;
 
     // ____ OPropertySet ____

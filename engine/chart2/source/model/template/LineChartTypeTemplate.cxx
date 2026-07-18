@@ -143,13 +143,13 @@ void LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& r
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL LineChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & LineChartTypeTemplate::getInfoHelper()
 {
     return StaticLineChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL LineChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > LineChartTypeTemplate::getPropertySetInfo()
 {
     return StaticLineChartTypeTemplateInfo();
 }

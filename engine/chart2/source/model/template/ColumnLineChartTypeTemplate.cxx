@@ -120,13 +120,13 @@ void ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL ColumnLineChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & ColumnLineChartTypeTemplate::getInfoHelper()
 {
     return StaticColumnLineChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnLineChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > ColumnLineChartTypeTemplate::getPropertySetInfo()
 {
     return StaticColumnLineChartTypeTemplateInfo();
 }

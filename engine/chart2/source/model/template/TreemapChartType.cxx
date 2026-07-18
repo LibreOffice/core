@@ -30,7 +30,7 @@ TreemapChartType::TreemapChartType(const TreemapChartType& rOther)
 TreemapChartType::~TreemapChartType() {}
 
 // ____ XCloneable ____
-uno::Reference<util::XCloneable> SAL_CALL TreemapChartType::createClone()
+uno::Reference<util::XCloneable> TreemapChartType::createClone()
 {
     return uno::Reference<util::XCloneable>(new TreemapChartType(*this));
 }
@@ -41,24 +41,24 @@ rtl::Reference<ChartType> TreemapChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL TreemapChartType::getChartType() { return CHART2_SERVICE_NAME_CHARTTYPE_TREEMAP; }
+OUString TreemapChartType::getChartType() { return CHART2_SERVICE_NAME_CHARTTYPE_TREEMAP; }
 
 cpo::uno::Sequence<OUString> TreemapChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
-OUString SAL_CALL TreemapChartType::getImplementationName()
+OUString TreemapChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.TreemapChartType"_ustr;
 }
 
-bool SAL_CALL TreemapChartType::supportsService(const OUString& rServiceName)
+bool TreemapChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL TreemapChartType::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> TreemapChartType::getSupportedServiceNames()
 {
     return { CHART2_SERVICE_NAME_CHARTTYPE_TREEMAP, u"com.sun.star.chart2.ChartType"_ustr };
 }

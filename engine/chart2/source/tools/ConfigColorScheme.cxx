@@ -123,7 +123,7 @@ void ConfigColorScheme::retrieveConfigColors()
 }
 
 // ____ XColorScheme ____
-::sal_Int32 SAL_CALL ConfigColorScheme::getColorByIndex( ::sal_Int32 nIndex )
+::sal_Int32 ConfigColorScheme::getColorByIndex( ::sal_Int32 nIndex )
 {
     if( m_bNeedsUpdate )
         retrieveConfigColors();
@@ -148,7 +148,7 @@ void ConfigColorScheme::notify()
     m_bNeedsUpdate = true;
 }
 
-OUString SAL_CALL ConfigColorScheme::getImplementationName()
+OUString ConfigColorScheme::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.ConfigDefaultColorScheme"_ustr ;
 }

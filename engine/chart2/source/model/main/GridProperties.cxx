@@ -116,13 +116,13 @@ void GridProperties::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) c
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL GridProperties::getInfoHelper()
+::cppu::IPropertyArrayHelper & GridProperties::getInfoHelper()
 {
     return StaticGridInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL GridProperties::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > GridProperties::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticGridInfoHelper() ) );
@@ -130,30 +130,30 @@ Reference< beans::XPropertySetInfo > SAL_CALL GridProperties::getPropertySetInfo
 }
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL GridProperties::createClone()
+uno::Reference< util::XCloneable > GridProperties::createClone()
 {
     return uno::Reference< util::XCloneable >( new GridProperties( *this ));
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL GridProperties::addModifyListener( const Reference< util::XModifyListener >& aListener )
+void GridProperties::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL GridProperties::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+void GridProperties::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL GridProperties::modified( const lang::EventObject& aEvent )
+void GridProperties::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL GridProperties::disposing( const lang::EventObject& /* Source */ )
+void GridProperties::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }
@@ -165,17 +165,17 @@ void GridProperties::firePropertyChangeEvent()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-OUString SAL_CALL GridProperties::getImplementationName()
+OUString GridProperties::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.GridProperties"_ustr;
 }
 
-bool SAL_CALL GridProperties::supportsService( const OUString& rServiceName )
+bool GridProperties::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL GridProperties::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > GridProperties::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.GridProperties"_ustr,

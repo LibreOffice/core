@@ -133,13 +133,13 @@ void FunnelChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& 
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL FunnelChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper& FunnelChartTypeTemplate::getInfoHelper()
 {
     return StaticFunnelChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference<beans::XPropertySetInfo> SAL_CALL FunnelChartTypeTemplate::getPropertySetInfo()
+Reference<beans::XPropertySetInfo> FunnelChartTypeTemplate::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(

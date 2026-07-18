@@ -40,19 +40,19 @@ RangeSelectionListener::~RangeSelectionListener()
 {}
 
 // ____ XRangeSelectionListener ____
-void SAL_CALL RangeSelectionListener::done( const sheet::RangeSelectionEvent& aEvent )
+void RangeSelectionListener::done( const sheet::RangeSelectionEvent& aEvent )
 {
     m_aRange = aEvent.RangeDescriptor;
     m_rParent.listeningFinished( m_aRange );
 }
 
-void SAL_CALL RangeSelectionListener::aborted( const sheet::RangeSelectionEvent& /*aEvent*/ )
+void RangeSelectionListener::aborted( const sheet::RangeSelectionEvent& /*aEvent*/ )
 {
     m_rParent.listeningFinished( m_aRange );
 }
 
 // ____ XEventListener ____
-void SAL_CALL RangeSelectionListener::disposing( const lang::EventObject& /*Source*/ )
+void RangeSelectionListener::disposing( const lang::EventObject& /*Source*/ )
 {
     m_rParent.disposingRangeSelection();
 }

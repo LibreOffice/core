@@ -133,13 +133,13 @@ void BoxWhiskerChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, cpo::uno::A
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL BoxWhiskerChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper& BoxWhiskerChartTypeTemplate::getInfoHelper()
 {
     return StaticBoxWhiskerChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference<beans::XPropertySetInfo> SAL_CALL BoxWhiskerChartTypeTemplate::getPropertySetInfo()
+Reference<beans::XPropertySetInfo> BoxWhiskerChartTypeTemplate::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(

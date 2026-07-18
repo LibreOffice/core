@@ -56,22 +56,22 @@ public:
     virtual ~XMLFilter() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 protected:
     // ____ XFilter ____
-    virtual bool SAL_CALL filter(
+    virtual bool filter(
         const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
-    virtual void SAL_CALL cancel() override;
+    virtual void cancel() override;
 
     // ____ XImporter ____
-    virtual void SAL_CALL setTargetDocument(
+    virtual void setTargetDocument(
         const css::uno::Reference< css::lang::XComponent >& Document ) override;
 
     // ____ XExporter ____
-    virtual void SAL_CALL setSourceDocument(
+    virtual void setSourceDocument(
         const css::uno::Reference< css::lang::XComponent >& Document ) override;
 
     void setDocumentHandler(const OUString& _sDocumentHandler) { m_sDocumentHandler = _sDocumentHandler; }
@@ -132,13 +132,13 @@ public:
                             :XMLFilter(_xContext)
     {}
 protected:
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName() override
     {
         return u"com.sun.star.comp.chart2.report.XMLFilter"_ustr;
     }
     // ____ XImporter ____
-    virtual void SAL_CALL setTargetDocument(
+    virtual void setTargetDocument(
         const css::uno::Reference< css::lang::XComponent >& Document ) override
     {
         setDocumentHandler( u"com.sun.star.comp.report.ImportDocumentHandler"_ustr );
@@ -146,7 +146,7 @@ protected:
     }
 
     // ____ XExporter ____
-    virtual void SAL_CALL setSourceDocument(
+    virtual void setSourceDocument(
         const css::uno::Reference< css::lang::XComponent >& Document ) override
     {
         setDocumentHandler( u"com.sun.star.comp.report.ExportDocumentHandler"_ustr );

@@ -44,24 +44,24 @@ public:
     virtual ~AreaWrapper() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // ____ XShape ____
-    virtual css::awt::Point SAL_CALL getPosition() override;
-    virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) override;
-    virtual css::awt::Size SAL_CALL getSize() override;
-    virtual void SAL_CALL setSize( const css::awt::Size& aSize ) override;
+    virtual css::awt::Point getPosition() override;
+    virtual void setPosition( const css::awt::Point& aPosition ) override;
+    virtual css::awt::Size getSize() override;
+    virtual void setSize( const css::awt::Size& aSize ) override;
 
     // ____ XShapeDescriptor (base of XShape) ____
-    virtual OUString SAL_CALL getShapeType() override;
+    virtual OUString getShapeType() override;
 
     // ____ XComponent ____
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference<
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference<
                                             css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference<
+    virtual void removeEventListener( const css::uno::Reference<
                                                css::lang::XEventListener >& aListener ) override;
 
 protected:

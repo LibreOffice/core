@@ -188,7 +188,7 @@ XMLFilter::~XMLFilter()
 {}
 
 // ____ XFilter ____
-bool SAL_CALL XMLFilter::filter(
+bool XMLFilter::filter(
     const Sequence< beans::PropertyValue >& aDescriptor )
 {
     bool bResult = false;
@@ -222,12 +222,12 @@ bool SAL_CALL XMLFilter::filter(
     return bResult;
 }
 
-void SAL_CALL XMLFilter::cancel()
+void XMLFilter::cancel()
 {
 }
 
 // ____ XImporter ____
-void SAL_CALL XMLFilter::setTargetDocument(
+void XMLFilter::setTargetDocument(
     const Reference< lang::XComponent >& Document )
 {
     MutexGuard aGuard( m_aMutex );
@@ -237,7 +237,7 @@ void SAL_CALL XMLFilter::setTargetDocument(
 }
 
 // ____ XExporter ____
-void SAL_CALL XMLFilter::setSourceDocument(
+void XMLFilter::setSourceDocument(
     const Reference< lang::XComponent >& Document )
 {
     MutexGuard aGuard( m_aMutex );
@@ -706,17 +706,17 @@ OUString XMLFilter::getMediaType(bool _bOasis)
     return _bOasis ? MIMETYPE_OASIS_OPENDOCUMENT_CHART : MIMETYPE_VND_SUN_XML_CHART;
 }
 
-OUString SAL_CALL XMLFilter::getImplementationName()
+OUString XMLFilter::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.XMLFilter"_ustr;
 }
 
-bool SAL_CALL XMLFilter::supportsService( const OUString& rServiceName )
+bool XMLFilter::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL XMLFilter::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > XMLFilter::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.document.ImportFilter"_ustr,

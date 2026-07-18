@@ -231,7 +231,7 @@ DataSeries::~DataSeries()
 }
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL DataSeries::createClone()
+uno::Reference< util::XCloneable > DataSeries::createClone()
 {
     rtl::Reference<DataSeries> pNewSeries( new DataSeries( *this ));
     // do initialization that uses uno references to the clone
@@ -252,20 +252,20 @@ void DataSeries::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rDest ) cons
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL DataSeries::getInfoHelper()
+::cppu::IPropertyArrayHelper & DataSeries::getInfoHelper()
 {
     return StaticDataSeriesInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL DataSeries::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > DataSeries::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticDataSeriesInfoHelper() );
     return xPropSetInfo;
 }
 
-void SAL_CALL DataSeries::getFastPropertyValue
+void DataSeries::getFastPropertyValue
     ( cpo::uno::Any& rValue,
       sal_Int32 nHandle ) const
 {
@@ -280,7 +280,7 @@ void SAL_CALL DataSeries::getFastPropertyValue
         OPropertySet::getFastPropertyValue( rValue, nHandle );
 }
 
-void SAL_CALL DataSeries::setFastPropertyValue_NoBroadcast(
+void DataSeries::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const cpo::uno::Any& rValue )
 {
     if(    nHandle == DataPointProperties::PROP_DATAPOINT_ERROR_BAR_Y
@@ -309,7 +309,7 @@ void SAL_CALL DataSeries::setFastPropertyValue_NoBroadcast(
 }
 
 Reference< beans::XPropertySet >
-    SAL_CALL DataSeries::getDataPointByIndex( sal_Int32 nIndex )
+    DataSeries::getDataPointByIndex( sal_Int32 nIndex )
 {
     Reference< beans::XPropertySet > xResult;
 
@@ -357,7 +357,7 @@ Reference< beans::XPropertySet >
     return xResult;
 }
 
-void SAL_CALL DataSeries::resetDataPoint( sal_Int32 nIndex )
+void DataSeries::resetDataPoint( sal_Int32 nIndex )
 {
     Reference< beans::XPropertySet > xDataPointProp;
     rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
@@ -381,7 +381,7 @@ void SAL_CALL DataSeries::resetDataPoint( sal_Int32 nIndex )
     }
 }
 
-void SAL_CALL DataSeries::resetAllDataPoints()
+void DataSeries::resetAllDataPoints()
 {
     tDataPointAttributeContainer  aOldAttributedDataPoints;
     rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
@@ -396,7 +396,7 @@ void SAL_CALL DataSeries::resetAllDataPoints()
 }
 
 // ____ XDataSink ____
-void SAL_CALL DataSeries::setData( const cpo::uno::Sequence< Reference< chart2::data::XLabeledDataSequence > >& aData )
+void DataSeries::setData( const cpo::uno::Sequence< Reference< chart2::data::XLabeledDataSequence > >& aData )
 {
     tDataSequenceContainer aOldDataSequences;
     tDataSequenceContainer aNewDataSequences;
@@ -434,14 +434,14 @@ void DataSeries::setData( const std::vector< uno::Reference< chart2::data::XLabe
 }
 
 // ____ XDataSource ____
-Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSeries::getDataSequences()
+Sequence< Reference< chart2::data::XLabeledDataSequence > > DataSeries::getDataSequences()
 {
     MutexGuard aGuard( m_aMutex );
     return comphelper::containerToSequence<Reference< chart2::data::XLabeledDataSequence >>( m_aDataSequences );
 }
 
 // ____ XRegressionCurveContainer ____
-void SAL_CALL DataSeries::addRegressionCurve(
+void DataSeries::addRegressionCurve(
     const uno::Reference< chart2::XRegressionCurve >& xRegressionCurve )
 {
     auto pRegressionCurve = dynamic_cast<RegressionCurveModel*>(xRegressionCurve.get());
@@ -459,7 +459,7 @@ void SAL_CALL DataSeries::addRegressionCurve(
     fireModifyEvent();
 }
 
-void SAL_CALL DataSeries::removeRegressionCurve(
+void DataSeries::removeRegressionCurve(
     const uno::Reference< chart2::XRegressionCurve >& xRegressionCurve )
 {
     if( !xRegressionCurve.is() )
@@ -484,13 +484,13 @@ void SAL_CALL DataSeries::removeRegressionCurve(
     fireModifyEvent();
 }
 
-cpo::uno::Sequence< uno::Reference< chart2::XRegressionCurve > > SAL_CALL DataSeries::getRegressionCurves()
+cpo::uno::Sequence< uno::Reference< chart2::XRegressionCurve > > DataSeries::getRegressionCurves()
 {
     MutexGuard aGuard( m_aMutex );
     return comphelper::containerToSequence<uno::Reference< chart2::XRegressionCurve >>( m_aRegressionCurves );
 }
 
-void SAL_CALL DataSeries::setRegressionCurves(
+void DataSeries::setRegressionCurves(
     const Sequence< Reference< chart2::XRegressionCurve > >& aRegressionCurves )
 {
     tRegressionCurveContainerType aOldCurves;
@@ -514,24 +514,24 @@ void SAL_CALL DataSeries::setRegressionCurves(
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL DataSeries::addModifyListener( const Reference< util::XModifyListener >& aListener )
+void DataSeries::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL DataSeries::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+void DataSeries::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL DataSeries::modified( const lang::EventObject& aEvent )
+void DataSeries::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL DataSeries::disposing( const lang::EventObject& )
+void DataSeries::disposing( const lang::EventObject& )
 {
 }
 
@@ -553,17 +553,17 @@ IMPLEMENT_FORWARD_XINTERFACE2( DataSeries, DataSeries_Base, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( DataSeries, DataSeries_Base, OPropertySet )
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-OUString SAL_CALL DataSeries::getImplementationName()
+OUString DataSeries::getImplementationName()
 {
     return u"com.sun.star.comp.chart.DataSeries"_ustr;
 }
 
-bool SAL_CALL DataSeries::supportsService( const OUString& rServiceName )
+bool DataSeries::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DataSeries::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > DataSeries::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.DataSeries"_ustr,

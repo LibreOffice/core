@@ -59,10 +59,10 @@ public:
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
 
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     /// merge XInterface implementations
@@ -71,28 +71,28 @@ public:
      DECLARE_XTYPEPROVIDER()
 
     // ____ XCoordinateSystem ____
-    virtual ::sal_Int32 SAL_CALL getDimension() override;
-    virtual void SAL_CALL setAxisByDimension(
+    virtual ::sal_Int32 getDimension() override;
+    virtual void setAxisByDimension(
         ::sal_Int32 nDimension,
         const css::uno::Reference< css::chart2::XAxis >& xAxis,
         ::sal_Int32 nIndex ) override;
-    virtual css::uno::Reference< css::chart2::XAxis > SAL_CALL getAxisByDimension(
+    virtual css::uno::Reference< css::chart2::XAxis > getAxisByDimension(
         ::sal_Int32 nDimension, ::sal_Int32 nIndex ) override;
-    virtual ::sal_Int32 SAL_CALL getMaximumAxisIndexByDimension( ::sal_Int32 nDimension ) override;
+    virtual ::sal_Int32 getMaximumAxisIndexByDimension( ::sal_Int32 nDimension ) override;
 
     // ____ XChartTypeContainer ____
-    virtual void SAL_CALL addChartType(
+    virtual void addChartType(
         const css::uno::Reference< css::chart2::XChartType >& aChartType ) override;
-    virtual void SAL_CALL removeChartType(
+    virtual void removeChartType(
         const css::uno::Reference< css::chart2::XChartType >& aChartType ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > SAL_CALL getChartTypes() override;
-    virtual void SAL_CALL setChartTypes(
+    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > getChartTypes() override;
+    virtual void setChartTypes(
         const cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aChartTypes ) final override;
 
     // ____ XModifyBroadcaster ____
-    virtual void SAL_CALL addModifyListener(
+    virtual void addModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener(
+    virtual void removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     void setAxisByDimension( sal_Int32 nDimension, const rtl::Reference< ::chart::Axis >& xAxis, sal_Int32 nIndex );
@@ -104,11 +104,11 @@ public:
 protected:
 
     // ____ XModifyListener ____
-    virtual void SAL_CALL modified(
+    virtual void modified(
         const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
-    virtual void SAL_CALL disposing(
+    virtual void disposing(
         const css::lang::EventObject& Source ) override;
 
     // ____ OPropertySet ____

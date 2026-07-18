@@ -354,7 +354,7 @@ uno::Reference<ui::XSidebar> getSidebarFromModel(const uno::Reference<frame::XMo
 
 // XController
 
-void SAL_CALL ChartController::attachFrame(
+void ChartController::attachFrame(
     const uno::Reference<frame::XFrame>& xFrame )
 {
     SolarMutexGuard aGuard;
@@ -464,7 +464,7 @@ void SAL_CALL ChartController::attachFrame(
 }
 
 //XModeChangeListener
-void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent )
+void ChartController::modeChanged( const util::ModeChangeEvent& rEvent )
 {
     SolarMutexGuard aGuard;
     auto pChartWindow(GetChartWindow());
@@ -520,7 +520,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     }
 }
 
-bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XModel > & xModel )
+bool ChartController::attachModel( const uno::Reference< frame::XModel > & xModel )
 {
     impl_invalidateAccessible();
 
@@ -606,7 +606,7 @@ bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XModel 
     return true;
 }
 
-uno::Reference< frame::XFrame > SAL_CALL ChartController::getFrame()
+uno::Reference< frame::XFrame > ChartController::getFrame()
 {
     //provides access to owner frame of this controller
     //return the frame containing this controller
@@ -614,7 +614,7 @@ uno::Reference< frame::XFrame > SAL_CALL ChartController::getFrame()
     return m_xFrame;
 }
 
-uno::Reference< frame::XModel > SAL_CALL ChartController::getModel()
+uno::Reference< frame::XModel > ChartController::getModel()
 {
     return getChartModel();
 }
@@ -640,7 +640,7 @@ rtl::Reference<::chart::Diagram> ChartController::getFirstDiagram()
     return xModel->getFirstChartDiagram();
 }
 
-cpo::uno::Any SAL_CALL ChartController::getViewData()
+cpo::uno::Any ChartController::getViewData()
 {
     //provides access to current view status
     //set of data that can be used to restore the current view status at later time
@@ -657,7 +657,7 @@ cpo::uno::Any SAL_CALL ChartController::getViewData()
     return aRet;
 }
 
-void SAL_CALL ChartController::restoreViewData(
+void ChartController::restoreViewData(
     const cpo::uno::Any& /* Value */ )
 {
     //restores the view status using the data gotten from a previous call to XController::getViewData()
@@ -669,7 +669,7 @@ void SAL_CALL ChartController::restoreViewData(
     //// @todo integrate specialized implementation
 }
 
-bool SAL_CALL ChartController::suspend( bool bSuspend )
+bool ChartController::suspend( bool bSuspend )
 {
     //is called to prepare the controller for closing the view
     //bSuspend==true: force the controller to suspend his work
@@ -695,21 +695,21 @@ bool SAL_CALL ChartController::suspend( bool bSuspend )
 
 // css::frame::XController2
 
-css::uno::Reference<css::awt::XWindow> SAL_CALL ChartController::getComponentWindow()
+css::uno::Reference<css::awt::XWindow> ChartController::getComponentWindow()
 {
     // it is a special characteristic of ChartController
     // that it simultaneously provides the XWindow functionality
     return this;
 }
 
-OUString SAL_CALL ChartController::getViewControllerName() { return {}; }
+OUString ChartController::getViewControllerName() { return {}; }
 
-cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL ChartController::getCreationArguments()
+cpo::uno::Sequence<css::beans::PropertyValue> ChartController::getCreationArguments()
 {
     return {};
 }
 
-css::uno::Reference<css::ui::XSidebarProvider> SAL_CALL ChartController::getSidebar() { return {}; }
+css::uno::Reference<css::ui::XSidebarProvider> ChartController::getSidebar() { return {}; }
 
 void ChartController::impl_createDrawViewController()
 {
@@ -750,7 +750,7 @@ void ChartController::impl_deleteDrawViewController()
 
 // XComponent (base of XController)
 
-void SAL_CALL ChartController::dispose()
+void ChartController::dispose()
 {
     m_bDisposed = true;
 
@@ -861,7 +861,7 @@ void SAL_CALL ChartController::dispose()
     }
  }
 
-void SAL_CALL ChartController::addEventListener(
+void ChartController::addEventListener(
     const uno::Reference<lang::XEventListener>& xListener )
 {
     if( impl_isDisposedOrSuspended() )//@todo? allow adding of listeners in suspend mode?
@@ -872,7 +872,7 @@ void SAL_CALL ChartController::addEventListener(
     m_aLifeTimeManager.m_aEventListeners.addInterface( aGuard2, xListener );
 }
 
-void SAL_CALL ChartController::removeEventListener(
+void ChartController::removeEventListener(
     const uno::Reference<lang::XEventListener>& xListener )
 {
     SolarMutexGuard aGuard;
@@ -885,7 +885,7 @@ void SAL_CALL ChartController::removeEventListener(
 }
 
 // util::XCloseListener
-void SAL_CALL ChartController::queryClosing(
+void ChartController::queryClosing(
     const lang::EventObject& rSource,
     bool /*bGetsOwnership*/ )
 {
@@ -905,7 +905,7 @@ void SAL_CALL ChartController::queryClosing(
     //@ todo prepare to closing model -> don't start any further hindering actions
 }
 
-void SAL_CALL ChartController::notifyClosing(
+void ChartController::notifyClosing(
     const lang::EventObject& rSource )
 {
     //Listener should deregister himself and release all references to the closing object.
@@ -956,7 +956,7 @@ bool ChartController::impl_releaseThisModel(
 }
 
 // util::XEventListener (base of XCloseListener)
-void SAL_CALL ChartController::disposing(
+void ChartController::disposing(
     const lang::EventObject& rSource )
 {
     if( !impl_releaseThisModel( rSource.Source ))
@@ -966,7 +966,7 @@ void SAL_CALL ChartController::disposing(
     }
 }
 
-void SAL_CALL ChartController::layoutEvent(
+void ChartController::layoutEvent(
     const lang::EventObject& aSource,
     sal_Int16 eLayoutEvent,
     const cpo::uno::Any& /* aInfo */ )
@@ -1040,7 +1040,7 @@ bool lcl_isFormatObjectCommand( std::u16string_view aCommand )
 
 } // anonymous namespace
 
-uno::Reference<frame::XDispatch> SAL_CALL
+uno::Reference<frame::XDispatch>
     ChartController::queryDispatch(
         const util::URL& rURL,
         const OUString& rTargetFrameName,
@@ -1071,7 +1071,7 @@ cpo::uno::Sequence<uno::Reference<frame::XDispatch > >
 
 // frame::XDispatch
 
-void SAL_CALL ChartController::dispatch(
+void ChartController::dispatch(
     const util::URL& rURL,
     const cpo::uno::Sequence< beans::PropertyValue >& rArgs )
 {
@@ -1580,14 +1580,14 @@ void SAL_CALL ChartController::dispatch(
     }
 }
 
-void SAL_CALL ChartController::addStatusListener(
+void ChartController::addStatusListener(
     const uno::Reference<frame::XStatusListener >& /* xControl */,
     const util::URL& /* aURL */ )
 {
     //@todo
 }
 
-void SAL_CALL ChartController::removeStatusListener(
+void ChartController::removeStatusListener(
     const uno::Reference<frame::XStatusListener >& /* xControl */,
     const util::URL& /* aURL */ )
 {
@@ -1595,13 +1595,13 @@ void SAL_CALL ChartController::removeStatusListener(
 }
 
 // XContextMenuInterception (optional interface)
-void SAL_CALL ChartController::registerContextMenuInterceptor(
+void ChartController::registerContextMenuInterceptor(
     const uno::Reference< ui::XContextMenuInterceptor >& /* xInterceptor */)
 {
     //@todo
 }
 
-void SAL_CALL ChartController::releaseContextMenuInterceptor(
+void ChartController::releaseContextMenuInterceptor(
     const uno::Reference< ui::XContextMenuInterceptor > & /* xInterceptor */)
 {
     //@todo
@@ -1742,7 +1742,7 @@ void ChartController::executeDispatch_MoveSeries( bool bForward )
 }
 
 // ____ XModifyListener ____
-void SAL_CALL ChartController::modified(
+void ChartController::modified(
     const lang::EventObject& /* aEvent */ )
 {
     // the source can also be a subobject of the ChartModel

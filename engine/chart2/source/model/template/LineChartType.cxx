@@ -115,7 +115,7 @@ LineChartType::~LineChartType()
 {}
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL LineChartType::createClone()
+uno::Reference< util::XCloneable > LineChartType::createClone()
 {
     return uno::Reference< util::XCloneable >( new LineChartType( *this ));
 }
@@ -126,7 +126,7 @@ rtl::Reference< ChartType > LineChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL LineChartType::getChartType()
+OUString LineChartType::getChartType()
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_LINE;
 }
@@ -142,28 +142,28 @@ void LineChartType::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) co
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL LineChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & LineChartType::getInfoHelper()
 {
     return StaticLineChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL LineChartType::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > LineChartType::getPropertySetInfo()
 {
     return StaticLineChartTypeInfo();
 }
 
-OUString SAL_CALL LineChartType::getImplementationName()
+OUString LineChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.LineChartType"_ustr;
 }
 
-bool SAL_CALL LineChartType::supportsService( const OUString& rServiceName )
+bool LineChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL LineChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > LineChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_LINE,

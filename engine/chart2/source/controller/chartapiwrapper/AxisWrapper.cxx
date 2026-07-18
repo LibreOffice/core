@@ -371,7 +371,7 @@ AxisWrapper::~AxisWrapper()
 }
 
 // ____ chart::XAxis ____
-Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getAxisTitle()
+Reference< beans::XPropertySet > AxisWrapper::getAxisTitle()
 {
     if( !m_xAxisTitle.is() )
     {
@@ -400,7 +400,7 @@ Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getAxisTitle()
     }
     return m_xAxisTitle;
 }
-Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getMajorGrid()
+Reference< beans::XPropertySet > AxisWrapper::getMajorGrid()
 {
     if( !m_xMajorGrid.is() )
     {
@@ -423,7 +423,7 @@ Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getMajorGrid()
     }
     return m_xMajorGrid;
 }
-Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getMinorGrid()
+Reference< beans::XPropertySet > AxisWrapper::getMinorGrid()
 {
     if( !m_xMinorGrid.is() )
     {
@@ -448,36 +448,36 @@ Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getMinorGrid()
 }
 
 // ____ XShape ____
-awt::Point SAL_CALL AxisWrapper::getPosition()
+awt::Point AxisWrapper::getPosition()
 {
     awt::Point aResult( m_spChart2ModelContact->GetAxisPosition( getAxis() ) );
     return aResult;
 }
 
-void SAL_CALL AxisWrapper::setPosition( const awt::Point& /*aPosition*/ )
+void AxisWrapper::setPosition( const awt::Point& /*aPosition*/ )
 {
     OSL_FAIL( "trying to set position of Axis" );
 }
 
-awt::Size SAL_CALL AxisWrapper::getSize()
+awt::Size AxisWrapper::getSize()
 {
     awt::Size aSize( m_spChart2ModelContact->GetAxisSize( getAxis() ) );
     return aSize;
 }
 
-void SAL_CALL AxisWrapper::setSize( const awt::Size& /*aSize*/ )
+void AxisWrapper::setSize( const awt::Size& /*aSize*/ )
 {
     OSL_FAIL( "trying to set size of Axis" );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
-OUString SAL_CALL AxisWrapper::getShapeType()
+OUString AxisWrapper::getShapeType()
 {
     return u"com.sun.star.chart.ChartAxis"_ustr;
 }
 
 // ____ XNumberFormatsSupplier ____
-uno::Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getNumberFormatSettings()
+uno::Reference< beans::XPropertySet > AxisWrapper::getNumberFormatSettings()
 {
     rtl::Reference<ChartModel> xChartModel( m_spChart2ModelContact->getDocumentModel() );
     if( xChartModel )
@@ -486,7 +486,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getNumberFormatSetti
     return uno::Reference< beans::XPropertySet >();
 }
 
-uno::Reference< util::XNumberFormats > SAL_CALL AxisWrapper::getNumberFormats()
+uno::Reference< util::XNumberFormats > AxisWrapper::getNumberFormats()
 {
     rtl::Reference<ChartModel> xChartModel( m_spChart2ModelContact->getDocumentModel() );
     if( xChartModel )
@@ -513,7 +513,7 @@ void AxisWrapper::getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDim
 }
 
 // ____ XComponent ____
-void SAL_CALL AxisWrapper::dispose()
+void AxisWrapper::dispose()
 {
     std::unique_lock g(m_aMutex);
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
@@ -526,14 +526,14 @@ void SAL_CALL AxisWrapper::dispose()
     clearWrappedPropertySet(g);
 }
 
-void SAL_CALL AxisWrapper::addEventListener(
+void AxisWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock g(m_aMutex);
     m_aEventListenerContainer.addInterface( g, xListener );
 }
 
-void SAL_CALL AxisWrapper::removeEventListener(
+void AxisWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
@@ -641,17 +641,17 @@ std::vector< std::unique_ptr<WrappedProperty> > AxisWrapper::createWrappedProper
     return aWrappedProperties;
 }
 
-OUString SAL_CALL AxisWrapper::getImplementationName()
+OUString AxisWrapper::getImplementationName()
 {
     return u"com.sun.star.comp.chart.Axis"_ustr;
 }
 
-bool SAL_CALL AxisWrapper::supportsService( const OUString& rServiceName )
+bool AxisWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL AxisWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > AxisWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.ChartAxis"_ustr,

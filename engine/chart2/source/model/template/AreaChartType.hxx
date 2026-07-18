@@ -29,11 +29,11 @@ public:
     explicit AreaChartType();
     virtual ~AreaChartType() override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName() override;
-    virtual bool SAL_CALL
+    virtual bool
         supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
         getSupportedServiceNames() override;
 
     virtual rtl::Reference<ChartType> cloneChartType() const override;
@@ -42,10 +42,10 @@ private:
     explicit AreaChartType( const AreaChartType & rOther );
 
     // ____ XChartType ____
-    virtual OUString SAL_CALL getChartType() override;
+    virtual OUString getChartType() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 };
 
 } //  namespace chart

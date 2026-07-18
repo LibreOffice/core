@@ -29,11 +29,11 @@ public:
     explicit CandleStickChartType();
     virtual ~CandleStickChartType() override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName() override;
-    virtual bool SAL_CALL
+    virtual bool
         supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
         getSupportedServiceNames() override;
 
     virtual rtl::Reference<ChartType> cloneChartType() const override;
@@ -42,30 +42,30 @@ private:
     explicit CandleStickChartType( const CandleStickChartType & rOther );
 
     // ____ XChartType ____
-    virtual OUString SAL_CALL getChartType() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual OUString getChartType() override;
+    virtual cpo::uno::Sequence< OUString >
         getSupportedMandatoryRoles() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
         getSupportedOptionalRoles() override;
-    virtual OUString SAL_CALL getRoleOfSequenceForSeriesLabel() override;
+    virtual OUString getRoleOfSequenceForSeriesLabel() override;
 
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
 
     // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ OPropertySet ____
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast
+    virtual void setFastPropertyValue_NoBroadcast
         ( sal_Int32 nHandle,
           const cpo::uno::Any& rValue ) override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 };
 
 } //  namespace chart

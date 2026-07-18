@@ -157,12 +157,12 @@ BaseCoordinateSystem::~BaseCoordinateSystem()
 }
 
 // ____ XCoordinateSystem ____
-sal_Int32 SAL_CALL BaseCoordinateSystem::getDimension()
+sal_Int32 BaseCoordinateSystem::getDimension()
 {
     return m_nDimensionCount;
 }
 
-void SAL_CALL BaseCoordinateSystem::setAxisByDimension(
+void BaseCoordinateSystem::setAxisByDimension(
     sal_Int32 nDimensionIndex,
     const Reference< chart2::XAxis >& xAxis,
     sal_Int32 nIndex )
@@ -216,7 +216,7 @@ void BaseCoordinateSystem::setAxisByDimension(
     fireModifyEvent();
 }
 
-Reference< chart2::XAxis > SAL_CALL BaseCoordinateSystem::getAxisByDimension(
+Reference< chart2::XAxis > BaseCoordinateSystem::getAxisByDimension(
             sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
 {
     if( nDimensionIndex < 0 || nDimensionIndex >= getDimension() )
@@ -244,7 +244,7 @@ const rtl::Reference< Axis > & BaseCoordinateSystem::getAxisByDimension2(
     return m_aAllAxis[ nDimensionIndex ][nAxisIndex];
 }
 
-sal_Int32 SAL_CALL BaseCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int32 nDimensionIndex )
+sal_Int32 BaseCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int32 nDimensionIndex )
 {
     if( nDimensionIndex < 0 || nDimensionIndex >= getDimension() )
         throw lang::IndexOutOfBoundsException();
@@ -259,7 +259,7 @@ sal_Int32 SAL_CALL BaseCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int
 }
 
 // ____ XChartTypeContainer ____
-void SAL_CALL BaseCoordinateSystem::addChartType( const Reference< chart2::XChartType >& aChartType )
+void BaseCoordinateSystem::addChartType( const Reference< chart2::XChartType >& aChartType )
 {
     auto pChartType = dynamic_cast<ChartType*>(aChartType.get());
     assert(pChartType);
@@ -273,7 +273,7 @@ void SAL_CALL BaseCoordinateSystem::addChartType( const Reference< chart2::XChar
     fireModifyEvent();
 }
 
-void SAL_CALL BaseCoordinateSystem::removeChartType( const Reference< chart2::XChartType >& aChartType )
+void BaseCoordinateSystem::removeChartType( const Reference< chart2::XChartType >& aChartType )
 {
     auto pChartType = dynamic_cast<ChartType*>(aChartType.get());
     assert(pChartType);
@@ -288,12 +288,12 @@ void SAL_CALL BaseCoordinateSystem::removeChartType( const Reference< chart2::XC
     fireModifyEvent();
 }
 
-Sequence< Reference< chart2::XChartType > > SAL_CALL BaseCoordinateSystem::getChartTypes()
+Sequence< Reference< chart2::XChartType > > BaseCoordinateSystem::getChartTypes()
 {
     return comphelper::containerToSequence< Reference< chart2::XChartType > >( m_aChartTypes );
 }
 
-void SAL_CALL BaseCoordinateSystem::setChartTypes( const Sequence< Reference< chart2::XChartType > >& aChartTypes )
+void BaseCoordinateSystem::setChartTypes( const Sequence< Reference< chart2::XChartType > >& aChartTypes )
 {
     for (auto const & aChartType : m_aChartTypes)
         aChartType->removeModifyListener( m_xModifyEventForwarder );
@@ -319,24 +319,24 @@ void BaseCoordinateSystem::setChartTypes( const std::vector< rtl::Reference< Cha
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL BaseCoordinateSystem::addModifyListener( const Reference< util::XModifyListener >& aListener )
+void BaseCoordinateSystem::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL BaseCoordinateSystem::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+void BaseCoordinateSystem::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL BaseCoordinateSystem::modified( const lang::EventObject& aEvent )
+void BaseCoordinateSystem::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL BaseCoordinateSystem::disposing( const lang::EventObject& /* Source */ )
+void BaseCoordinateSystem::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }
@@ -364,13 +364,13 @@ void BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rA
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL BaseCoordinateSystem::getInfoHelper()
+::cppu::IPropertyArrayHelper & BaseCoordinateSystem::getInfoHelper()
 {
     return StaticCooSysInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL BaseCoordinateSystem::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > BaseCoordinateSystem::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticCooSysInfoHelper() ) );

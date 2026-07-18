@@ -124,13 +124,13 @@ ErrorBar::ErrorBar( const ErrorBar & rOther ) :
 ErrorBar::~ErrorBar()
 {}
 
-uno::Reference< util::XCloneable > SAL_CALL ErrorBar::createClone()
+uno::Reference< util::XCloneable > ErrorBar::createClone()
 {
     return uno::Reference< util::XCloneable >( new ErrorBar( *this ));
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL ErrorBar::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > ErrorBar::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > aRef (
             new SfxItemPropertySetInfo( GetErrorBarPropertySet()->getPropertyMap() ) );
@@ -398,30 +398,30 @@ void ErrorBar::removeVetoableChangeListener( const OUString&, const css::uno::Re
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL ErrorBar::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void ErrorBar::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL ErrorBar::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void ErrorBar::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL ErrorBar::modified( const lang::EventObject& aEvent )
+void ErrorBar::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL ErrorBar::disposing( const lang::EventObject& /* Source */ )
+void ErrorBar::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }
 
 // ____ XDataSink ____
-void SAL_CALL ErrorBar::setData( const cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aData )
+void ErrorBar::setData( const cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aData )
 {
     ModifyListenerHelper::removeListenerFromAllElements( m_aDataSequences, m_xModifyEventForwarder );
     EventListenerHelper::removeListenerFromAllElements( m_aDataSequences, this );
@@ -431,22 +431,22 @@ void SAL_CALL ErrorBar::setData( const cpo::uno::Sequence< uno::Reference< chart
 }
 
 // ____ XDataSource ____
-cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ErrorBar::getDataSequences()
+cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > ErrorBar::getDataSequences()
 {
     return comphelper::containerToSequence( m_aDataSequences );
 }
 
-OUString SAL_CALL ErrorBar::getImplementationName()
+OUString ErrorBar::getImplementationName()
 {
     return lcl_aServiceName;
 }
 
-bool SAL_CALL ErrorBar::supportsService( const OUString& rServiceName )
+bool ErrorBar::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ErrorBar::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ErrorBar::getSupportedServiceNames()
 {
     return {
         lcl_aServiceName,

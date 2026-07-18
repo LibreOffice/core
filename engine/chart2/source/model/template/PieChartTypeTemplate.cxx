@@ -166,13 +166,13 @@ void PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rA
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL PieChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & PieChartTypeTemplate::getInfoHelper()
 {
     return StaticPieChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > PieChartTypeTemplate::getPropertySetInfo()
 {
     return StaticPieChartTypeTemplateInfo();
 }

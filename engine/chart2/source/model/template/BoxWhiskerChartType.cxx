@@ -72,7 +72,7 @@ BoxWhiskerChartType::BoxWhiskerChartType(const BoxWhiskerChartType& rOther)
 BoxWhiskerChartType::~BoxWhiskerChartType() {}
 
 // ____ XCloneable ____
-uno::Reference<util::XCloneable> SAL_CALL BoxWhiskerChartType::createClone()
+uno::Reference<util::XCloneable> BoxWhiskerChartType::createClone()
 {
     return uno::Reference<util::XCloneable>(new BoxWhiskerChartType(*this));
 }
@@ -83,10 +83,7 @@ rtl::Reference<ChartType> BoxWhiskerChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL BoxWhiskerChartType::getChartType()
-{
-    return CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER;
-}
+OUString BoxWhiskerChartType::getChartType() { return CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER; }
 
 cpo::uno::Sequence<OUString> BoxWhiskerChartType::getSupportedPropertyRoles()
 {
@@ -113,30 +110,30 @@ void BoxWhiskerChartType::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL BoxWhiskerChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper& BoxWhiskerChartType::getInfoHelper()
 {
     return StaticBoxWhiskerChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference<beans::XPropertySetInfo> SAL_CALL BoxWhiskerChartType::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> BoxWhiskerChartType::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticBoxWhiskerChartTypeInfoHelper()));
     return xPropertySetInfo;
 }
 
-OUString SAL_CALL BoxWhiskerChartType::getImplementationName()
+OUString BoxWhiskerChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.BoxWhiskerChartType"_ustr;
 }
 
-bool SAL_CALL BoxWhiskerChartType::supportsService(const OUString& rServiceName)
+bool BoxWhiskerChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL BoxWhiskerChartType::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> BoxWhiskerChartType::getSupportedServiceNames()
 {
     return { CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER, u"com.sun.star.chart2.ChartType"_ustr };
 }

@@ -66,7 +66,7 @@ BubbleChartType::~BubbleChartType()
 {}
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL BubbleChartType::createClone()
+uno::Reference< util::XCloneable > BubbleChartType::createClone()
 {
     return uno::Reference< util::XCloneable >( new BubbleChartType( *this ));
 }
@@ -107,22 +107,22 @@ rtl::Reference< ::chart::BaseCoordinateSystem >
     return xResult;
 }
 
-OUString SAL_CALL BubbleChartType::getChartType()
+OUString BubbleChartType::getChartType()
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedMandatoryRoles()
+cpo::uno::Sequence< OUString > BubbleChartType::getSupportedMandatoryRoles()
 {
     return { u"label"_ustr, u"values-x"_ustr, u"values-y"_ustr, u"values-size"_ustr };
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedPropertyRoles()
+cpo::uno::Sequence< OUString > BubbleChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
-OUString SAL_CALL BubbleChartType::getRoleOfSequenceForSeriesLabel()
+OUString BubbleChartType::getRoleOfSequenceForSeriesLabel()
 {
     return u"values-size"_ustr;
 }
@@ -139,30 +139,30 @@ void BubbleChartType::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) 
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL BubbleChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & BubbleChartType::getInfoHelper()
 {
     return StaticBubbleChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL BubbleChartType::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > BubbleChartType::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticBubbleChartTypeInfoHelper() ) );
     return xPropertySetInfo;
 }
 
-OUString SAL_CALL BubbleChartType::getImplementationName()
+OUString BubbleChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.BubbleChartType"_ustr;
 }
 
-bool SAL_CALL BubbleChartType::supportsService( const OUString& rServiceName )
+bool BubbleChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > BubbleChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE,

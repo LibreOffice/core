@@ -57,34 +57,34 @@ LogarithmicScaling::~LogarithmicScaling()
 {
 }
 
-double SAL_CALL LogarithmicScaling::doScaling( double value )
+double LogarithmicScaling::doScaling( double value )
 {
     if( std::isnan( value ) || std::isinf( value ) )
         return std::numeric_limits<double>::quiet_NaN();
     return std::log( value ) / m_fLogOfBase;
 }
 
-uno::Reference< XScaling > SAL_CALL LogarithmicScaling::getInverseScaling()
+uno::Reference< XScaling > LogarithmicScaling::getInverseScaling()
 {
     return new ExponentialScaling( m_fBase );
 }
 
-OUString SAL_CALL LogarithmicScaling::getServiceName()
+OUString LogarithmicScaling::getServiceName()
 {
     return lcl_aServiceName_Logarithmic;
 }
 
-OUString SAL_CALL LogarithmicScaling::getImplementationName()
+OUString LogarithmicScaling::getImplementationName()
 {
     return lcl_aServiceName_Logarithmic;
 }
 
-bool SAL_CALL LogarithmicScaling::supportsService( const OUString& rServiceName )
+bool LogarithmicScaling::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL LogarithmicScaling::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > LogarithmicScaling::getSupportedServiceNames()
 {
     return { lcl_aServiceName_Logarithmic };
 }
@@ -103,34 +103,34 @@ ExponentialScaling::~ExponentialScaling()
 {
 }
 
-double SAL_CALL ExponentialScaling::doScaling( double value )
+double ExponentialScaling::doScaling( double value )
 {
     if( std::isnan( value ) || std::isinf( value ) )
         return std::numeric_limits<double>::quiet_NaN();
     return std::pow( m_fBase, value );
 }
 
-uno::Reference< XScaling > SAL_CALL ExponentialScaling::getInverseScaling()
+uno::Reference< XScaling > ExponentialScaling::getInverseScaling()
 {
     return new LogarithmicScaling( m_fBase );
 }
 
-OUString SAL_CALL ExponentialScaling::getServiceName()
+OUString ExponentialScaling::getServiceName()
 {
     return lcl_aServiceName_Exponential;
 }
 
-OUString SAL_CALL ExponentialScaling::getImplementationName()
+OUString ExponentialScaling::getImplementationName()
 {
     return lcl_aServiceName_Exponential;
 }
 
-bool SAL_CALL ExponentialScaling::supportsService( const OUString& rServiceName )
+bool ExponentialScaling::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ExponentialScaling::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ExponentialScaling::getSupportedServiceNames()
 {
     return { lcl_aServiceName_Exponential };
 }
@@ -148,14 +148,14 @@ LinearScaling::LinearScaling( double fSlope, double fOffset ) :
 LinearScaling::~LinearScaling()
 {}
 
-double SAL_CALL LinearScaling::doScaling( double value )
+double LinearScaling::doScaling( double value )
 {
     if( std::isnan( value ) || std::isinf( value ) )
         return std::numeric_limits<double>::quiet_NaN();
     return m_fOffset + m_fSlope * value;
 }
 
-uno::Reference< XScaling > SAL_CALL
+uno::Reference< XScaling >
     LinearScaling::getInverseScaling()
 {
     // ToDo: ApproxEqual ?
@@ -165,22 +165,22 @@ uno::Reference< XScaling > SAL_CALL
     return new LinearScaling( 1.0 / m_fSlope, m_fOffset / m_fSlope );
 }
 
-OUString SAL_CALL LinearScaling::getServiceName()
+OUString LinearScaling::getServiceName()
 {
     return lcl_aServiceName_Linear;
 }
 
-OUString SAL_CALL LinearScaling::getImplementationName()
+OUString LinearScaling::getImplementationName()
 {
     return lcl_aServiceName_Linear ;
 }
 
-bool SAL_CALL LinearScaling::supportsService( const OUString& rServiceName )
+bool LinearScaling::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL LinearScaling::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > LinearScaling::getSupportedServiceNames()
 {
     return { lcl_aServiceName_Linear };
 }
@@ -196,14 +196,14 @@ PowerScaling::PowerScaling( double fExponent ) :
 PowerScaling::~PowerScaling()
 {}
 
-double SAL_CALL PowerScaling::doScaling( double value )
+double PowerScaling::doScaling( double value )
 {
     if( std::isnan( value ) || std::isinf( value ) )
         return std::numeric_limits<double>::quiet_NaN();
     return std::pow( value, m_fExponent );
 }
 
-uno::Reference< XScaling > SAL_CALL
+uno::Reference< XScaling >
     PowerScaling::getInverseScaling()
 {
     // ToDo: ApproxEqual ?
@@ -213,23 +213,23 @@ uno::Reference< XScaling > SAL_CALL
     return new PowerScaling( 1.0 / m_fExponent );
 }
 
-    OUString SAL_CALL
+    OUString
 PowerScaling::getServiceName()
 {
     return lcl_aServiceName_Power;
 }
 
-OUString SAL_CALL PowerScaling::getImplementationName()
+OUString PowerScaling::getImplementationName()
 {
     return lcl_aServiceName_Power;
 }
 
-bool SAL_CALL PowerScaling::supportsService( const OUString& rServiceName )
+bool PowerScaling::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL PowerScaling::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > PowerScaling::getSupportedServiceNames()
 {
     return { lcl_aServiceName_Power };
 }

@@ -128,13 +128,13 @@ void WaterfallChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, cpo::uno::An
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL WaterfallChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper& WaterfallChartTypeTemplate::getInfoHelper()
 {
     return StaticWaterfallChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference<beans::XPropertySetInfo> SAL_CALL WaterfallChartTypeTemplate::getPropertySetInfo()
+Reference<beans::XPropertySetInfo> WaterfallChartTypeTemplate::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(

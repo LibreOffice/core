@@ -45,43 +45,43 @@ class ChartModel;
         virtual ~UndoManager();
 
         // XInterface
-        virtual void SAL_CALL acquire(  ) noexcept override;
-        virtual void SAL_CALL release(  ) noexcept override;
+        virtual void acquire(  ) noexcept override;
+        virtual void release(  ) noexcept override;
 
         // XComponent equivalents
         void disposing();
 
         // XUndoManager
-        virtual void SAL_CALL enterUndoContext( const OUString& i_title ) override;
-        virtual void SAL_CALL enterHiddenUndoContext(  ) override;
-        virtual void SAL_CALL leaveUndoContext(  ) override;
-        virtual void SAL_CALL addUndoAction( const css::uno::Reference< css::document::XUndoAction >& i_action ) override;
-        virtual void SAL_CALL undo(  ) override;
-        virtual void SAL_CALL redo(  ) override;
-        virtual bool SAL_CALL isUndoPossible(  ) override;
-        virtual bool SAL_CALL isRedoPossible(  ) override;
-        virtual OUString SAL_CALL getCurrentUndoActionTitle(  ) override;
-        virtual OUString SAL_CALL getCurrentRedoActionTitle(  ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getAllUndoActionTitles(  ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getAllRedoActionTitles(  ) override;
-        virtual void SAL_CALL clear(  ) override;
-        virtual void SAL_CALL clearRedo(  ) override;
-        virtual void SAL_CALL reset(  ) override;
-        virtual void SAL_CALL addUndoManagerListener( const css::uno::Reference< css::document::XUndoManagerListener >& i_listener ) override;
-        virtual void SAL_CALL removeUndoManagerListener( const css::uno::Reference< css::document::XUndoManagerListener >& i_listener ) override;
+        virtual void enterUndoContext( const OUString& i_title ) override;
+        virtual void enterHiddenUndoContext(  ) override;
+        virtual void leaveUndoContext(  ) override;
+        virtual void addUndoAction( const css::uno::Reference< css::document::XUndoAction >& i_action ) override;
+        virtual void undo(  ) override;
+        virtual void redo(  ) override;
+        virtual bool isUndoPossible(  ) override;
+        virtual bool isRedoPossible(  ) override;
+        virtual OUString getCurrentUndoActionTitle(  ) override;
+        virtual OUString getCurrentRedoActionTitle(  ) override;
+        virtual cpo::uno::Sequence< OUString > getAllUndoActionTitles(  ) override;
+        virtual cpo::uno::Sequence< OUString > getAllRedoActionTitles(  ) override;
+        virtual void clear(  ) override;
+        virtual void clearRedo(  ) override;
+        virtual void reset(  ) override;
+        virtual void addUndoManagerListener( const css::uno::Reference< css::document::XUndoManagerListener >& i_listener ) override;
+        virtual void removeUndoManagerListener( const css::uno::Reference< css::document::XUndoManagerListener >& i_listener ) override;
 
         // XLockable (base of XUndoManager)
-        virtual void SAL_CALL lock(  ) override;
-        virtual void SAL_CALL unlock(  ) override;
-        virtual bool SAL_CALL isLocked(  ) override;
+        virtual void lock(  ) override;
+        virtual void unlock(  ) override;
+        virtual bool isLocked(  ) override;
 
         // XChild (base of XUndoManager)
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
-        virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+        virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
+        virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
         // XModifyBroadcaster
-        virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-        virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        virtual void addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        virtual void removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     private:
         std::unique_ptr< impl::UndoManager_Impl >   m_pImpl;

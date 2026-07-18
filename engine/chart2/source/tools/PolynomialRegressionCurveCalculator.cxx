@@ -88,7 +88,7 @@ void PolynomialRegressionCurveCalculator::computeCorrelationCoefficient(
 }
 
 // ____ XRegressionCurveCalculator ____
-void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
+void PolynomialRegressionCurveCalculator::recalculateRegression(
     const cpo::uno::Sequence< double >& aXValues,
     const cpo::uno::Sequence< double >& aYValues )
 {
@@ -269,7 +269,7 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
     computeCorrelationCoefficient(aValues, aNoValues, yAverage);
 }
 
-double SAL_CALL PolynomialRegressionCurveCalculator::getCurveValue( double x )
+double PolynomialRegressionCurveCalculator::getCurveValue( double x )
 {
     if (mCoefficients.empty())
         return std::numeric_limits<double>::quiet_NaN();

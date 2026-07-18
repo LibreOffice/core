@@ -454,7 +454,7 @@ DataSeriesPointWrapper::DataSeriesPointWrapper( std::shared_ptr<Chart2ModelConta
     //need initialize call afterwards
 }
 
-void SAL_CALL DataSeriesPointWrapper::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void DataSeriesPointWrapper::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     OSL_PRECOND(aArguments.hasElements(),"need at least 1 argument to initialize the DataSeriesPointWrapper: series reference + optional datapoint index");
 
@@ -500,7 +500,7 @@ DataSeriesPointWrapper::~DataSeriesPointWrapper()
 }
 
 // ____ XComponent ____
-void SAL_CALL DataSeriesPointWrapper::dispose()
+void DataSeriesPointWrapper::dispose()
 {
     std::unique_lock g(m_aMutex);
     uno::Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
@@ -510,14 +510,14 @@ void SAL_CALL DataSeriesPointWrapper::dispose()
     clearWrappedPropertySet(g);
 }
 
-void SAL_CALL DataSeriesPointWrapper::addEventListener(
+void DataSeriesPointWrapper::addEventListener(
     const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock g(m_aMutex);
     m_aEventListenerContainer.addInterface( g, xListener );
 }
 
-void SAL_CALL DataSeriesPointWrapper::removeEventListener(
+void DataSeriesPointWrapper::removeEventListener(
     const uno::Reference< lang::XEventListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
@@ -525,7 +525,7 @@ void SAL_CALL DataSeriesPointWrapper::removeEventListener(
 }
 
 // ____ XEventListener ____
-void SAL_CALL DataSeriesPointWrapper::disposing( const lang::EventObject& /*Source*/ )
+void DataSeriesPointWrapper::disposing( const lang::EventObject& /*Source*/ )
 {
 }
 
@@ -596,7 +596,7 @@ awt::Size DataSeriesPointWrapper::getCurrentSizeForReference()
 // WrappedPropertySet
 
 //XPropertyState
-beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OUString& rPropertyName )
+beans::PropertyState DataSeriesPointWrapper::getPropertyState( const OUString& rPropertyName )
 {
     beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
     try
@@ -661,7 +661,7 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OU
     return aState;
 }
 
-void SAL_CALL DataSeriesPointWrapper::setPropertyToDefault( const OUString& rPropertyName )
+void DataSeriesPointWrapper::setPropertyToDefault( const OUString& rPropertyName )
 {
     if( m_eType == DATA_SERIES )
         WrappedPropertySet::setPropertyToDefault( rPropertyName );
@@ -671,7 +671,7 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyToDefault( const OUString& rPro
         setPropertyValue( rPropertyName, getPropertyDefault( rPropertyName ) );
     }
 }
-Any SAL_CALL DataSeriesPointWrapper::getPropertyDefault( const OUString& rPropertyName )
+Any DataSeriesPointWrapper::getPropertyDefault( const OUString& rPropertyName )
 {
     std::unique_lock aGuard(m_aMutex);
     Any aRet;
@@ -779,7 +779,7 @@ std::vector< std::unique_ptr<WrappedProperty> > DataSeriesPointWrapper::createWr
     return aWrappedProperties;
 }
 
-void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
+void DataSeriesPointWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
     std::unique_lock aGuard(m_aMutex);
     if(rPropertyName == "Lines")
@@ -840,7 +840,7 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
         WrappedPropertySet::setPropertyValue( aGuard, rPropertyName, rValue );
 }
 
-Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rPropertyName )
+Any DataSeriesPointWrapper::getPropertyValue( const OUString& rPropertyName )
 {
     if( m_eType == DATA_POINT )
     {
@@ -869,17 +869,17 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rProperty
     return WrappedPropertySet::getPropertyValue( rPropertyName );
 }
 
-OUString SAL_CALL DataSeriesPointWrapper::getImplementationName()
+OUString DataSeriesPointWrapper::getImplementationName()
 {
     return u"com.sun.star.comp.chart.DataSeries"_ustr;
 }
 
-bool SAL_CALL DataSeriesPointWrapper::supportsService( const OUString& rServiceName )
+bool DataSeriesPointWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DataSeriesPointWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > DataSeriesPointWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.ChartDataRowProperties"_ustr,

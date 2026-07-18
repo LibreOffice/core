@@ -664,7 +664,7 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenc
 }
 
 // ____ XDataProvider ____
-bool SAL_CALL InternalDataProvider::createDataSourcePossible( const Sequence< beans::PropertyValue >& /* aArguments */ )
+bool InternalDataProvider::createDataSourcePossible( const Sequence< beans::PropertyValue >& /* aArguments */ )
 {
     return true;
 }
@@ -684,7 +684,7 @@ sal_Int32 lcl_getInnerLevelCount( const std::vector< std::vector< cpo::uno::Any 
 
 }//end anonymous namespace
 
-Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createDataSource(
+Reference< chart2::data::XDataSource > InternalDataProvider::createDataSource(
     const Sequence< beans::PropertyValue >& aArguments )
 {
     OUString aRangeRepresentation;
@@ -772,7 +772,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     return new DataSource( comphelper::containerToSequence(aResultLSeqVec) );
 }
 
-Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
+Sequence< beans::PropertyValue > InternalDataProvider::detectArguments(
     const Reference< chart2::data::XDataSource >& /* xDataSource */ )
 {
     Sequence< beans::PropertyValue > aArguments{
@@ -797,12 +797,12 @@ Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
     return aArguments;
 }
 
-bool SAL_CALL InternalDataProvider::createDataSequenceByRangeRepresentationPossible( const OUString& /* aRangeRepresentation */ )
+bool InternalDataProvider::createDataSequenceByRangeRepresentationPossible( const OUString& /* aRangeRepresentation */ )
 {
     return true;
 }
 
-Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDataSequenceByRangeRepresentation(
+Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenceByRangeRepresentation(
     const OUString& aRangeRepresentation )
 {
     if( aRangeRepresentation.match( lcl_aCategoriesRangeName ))
@@ -834,21 +834,21 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
     return Reference< chart2::data::XDataSequence >();
 }
 
-Reference<chart2::data::XDataSequence> SAL_CALL
+Reference<chart2::data::XDataSequence>
 InternalDataProvider::createDataSequenceByValueArray(
     const OUString& aRole, const OUString& aRangeRepresentation, const OUString& aRoleQualifier )
 {
     return createDataSequenceFromArray(aRangeRepresentation, aRole, aRoleQualifier);
 }
 
-Reference< sheet::XRangeSelection > SAL_CALL InternalDataProvider::getRangeSelection()
+Reference< sheet::XRangeSelection > InternalDataProvider::getRangeSelection()
 {
     // there is no range selection component
     return Reference< sheet::XRangeSelection >();
 }
 
 // ____ XInternalDataProvider ____
-bool SAL_CALL InternalDataProvider::hasDataByRangeRepresentation( const OUString& aRange )
+bool InternalDataProvider::hasDataByRangeRepresentation( const OUString& aRange )
 {
     bool bResult = false;
 
@@ -871,7 +871,7 @@ bool SAL_CALL InternalDataProvider::hasDataByRangeRepresentation( const OUString
     return bResult;
 }
 
-Sequence< cpo::uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation( const OUString& aRange )
+Sequence< cpo::uno::Any > InternalDataProvider::getDataByRangeRepresentation( const OUString& aRange )
 {
     Sequence< cpo::uno::Any > aResult;
 
@@ -931,7 +931,7 @@ Sequence< cpo::uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresent
     return aResult;
 }
 
-void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
+void InternalDataProvider::setDataByRangeRepresentation(
     const OUString& aRange, const Sequence< cpo::uno::Any >& aNewData )
 {
     auto aNewVector( comphelper::sequenceToContainer<std::vector< cpo::uno::Any >>(aNewData) );
@@ -998,7 +998,7 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     }
 }
 
-void SAL_CALL InternalDataProvider::insertSequence( ::sal_Int32 nAfterIndex )
+void InternalDataProvider::insertSequence( ::sal_Int32 nAfterIndex )
 {
     if( m_bDataInColumns )
     {
@@ -1012,7 +1012,7 @@ void SAL_CALL InternalDataProvider::insertSequence( ::sal_Int32 nAfterIndex )
     }
 }
 
-void SAL_CALL InternalDataProvider::deleteSequence( ::sal_Int32 nAtIndex )
+void InternalDataProvider::deleteSequence( ::sal_Int32 nAtIndex )
 {
     deleteMapReferences( OUString::number( nAtIndex ));
     deleteMapReferences( lcl_aLabelRangePrefix + OUString::number( nAtIndex ));
@@ -1028,7 +1028,7 @@ void SAL_CALL InternalDataProvider::deleteSequence( ::sal_Int32 nAtIndex )
     }
 }
 
-void SAL_CALL InternalDataProvider::appendSequence()
+void InternalDataProvider::appendSequence()
 {
     if( m_bDataInColumns )
         m_aInternalData.appendColumn();
@@ -1036,7 +1036,7 @@ void SAL_CALL InternalDataProvider::appendSequence()
         m_aInternalData.appendRow();
 }
 
-void SAL_CALL InternalDataProvider::insertComplexCategoryLevel( sal_Int32 nLevel )
+void InternalDataProvider::insertComplexCategoryLevel( sal_Int32 nLevel )
 {
     OSL_ENSURE( nLevel> 0, "you can only insert category levels > 0" );//the first categories level cannot be deleted, check the calling code for error
     if( nLevel>0 )
@@ -1052,7 +1052,7 @@ void SAL_CALL InternalDataProvider::insertComplexCategoryLevel( sal_Int32 nLevel
         std::for_each( aRange.first, aRange.second, lcl_setModified());
     }
 }
-void SAL_CALL InternalDataProvider::deleteComplexCategoryLevel( sal_Int32 nLevel )
+void InternalDataProvider::deleteComplexCategoryLevel( sal_Int32 nLevel )
 {
     OSL_ENSURE( nLevel>0, "you can only delete category levels > 0" );//the first categories level cannot be deleted, check the calling code for error
     if( nLevel>0 )
@@ -1069,7 +1069,7 @@ void SAL_CALL InternalDataProvider::deleteComplexCategoryLevel( sal_Int32 nLevel
     }
 }
 
-void SAL_CALL InternalDataProvider::insertDataPointForAllSequences( ::sal_Int32 nAfterIndex )
+void InternalDataProvider::insertDataPointForAllSequences( ::sal_Int32 nAfterIndex )
 {
     sal_Int32 nMaxRep = 0;
     if( m_bDataInColumns )
@@ -1092,7 +1092,7 @@ void SAL_CALL InternalDataProvider::insertDataPointForAllSequences( ::sal_Int32 
     std::for_each( aRange.first, aRange.second, lcl_setModified());
 }
 
-void SAL_CALL InternalDataProvider::deleteDataPointForAllSequences( ::sal_Int32 nAtIndex )
+void InternalDataProvider::deleteDataPointForAllSequences( ::sal_Int32 nAtIndex )
 {
     sal_Int32 nMaxRep = 0;
     if( m_bDataInColumns )
@@ -1115,7 +1115,7 @@ void SAL_CALL InternalDataProvider::deleteDataPointForAllSequences( ::sal_Int32 
     std::for_each( aRange.first, aRange.second, lcl_setModified());
 }
 
-void SAL_CALL InternalDataProvider::swapDataPointWithNextOneForAllSequences( ::sal_Int32 nAtIndex )
+void InternalDataProvider::swapDataPointWithNextOneForAllSequences( ::sal_Int32 nAtIndex )
 {
     if( m_bDataInColumns )
         m_aInternalData.swapRowWithNext( nAtIndex );
@@ -1134,13 +1134,13 @@ void SAL_CALL InternalDataProvider::swapDataPointWithNextOneForAllSequences( ::s
     std::for_each( aRange.first, aRange.second, lcl_setModified());
 }
 
-void SAL_CALL InternalDataProvider::registerDataSequenceForChanges( const Reference< chart2::data::XDataSequence >& xSeq )
+void InternalDataProvider::registerDataSequenceForChanges( const Reference< chart2::data::XDataSequence >& xSeq )
 {
     if( xSeq.is())
         addDataSequenceToMap( xSeq->getSourceRangeRepresentation(), xSeq );
 }
 
-void SAL_CALL InternalDataProvider::insertDataSeries(::sal_Int32 nAfterIndex)
+void InternalDataProvider::insertDataSeries(::sal_Int32 nAfterIndex)
 {
     // call the dialog insertion
     DataBrowserModel aDBM(m_xChartModel);
@@ -1148,7 +1148,7 @@ void SAL_CALL InternalDataProvider::insertDataSeries(::sal_Int32 nAfterIndex)
 }
 
 // ____ XRangeXMLConversion ____
-OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRangeRepresentation )
+OUString InternalDataProvider::convertRangeToXML( const OUString& aRangeRepresentation )
 {
     XMLRangeHelper::CellRange aRange;
     aRange.aTableName = u"local-table"_ustr;
@@ -1224,7 +1224,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRang
     return XMLRangeHelper::getXMLStringFromCellRange( aRange );
 }
 
-OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXMLRange )
+OUString InternalDataProvider::convertRangeFromXML( const OUString& aXMLRange )
 {
     // Handle non-standards-conforming table:cell-range-address="PivotChart", see
     // <https://bugs.documentfoundation.org/show_bug.cgi?id=112783> "PIVOT CHARTS: Save produces
@@ -1340,7 +1340,7 @@ cpo::uno::Sequence< OUString > SplitCategoriesProvider_ForComplexDescriptions::g
 }//anonymous namespace
 
 // ____ XDateCategories ____
-Sequence< double > SAL_CALL InternalDataProvider::getDateCategories()
+Sequence< double > InternalDataProvider::getDateCategories()
 {
     const std::vector< std::vector< cpo::uno::Any > > & aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
     sal_Int32 nCount = aCategories.size();
@@ -1357,7 +1357,7 @@ Sequence< double > SAL_CALL InternalDataProvider::getDateCategories()
     return aDoubles;
 }
 
-void SAL_CALL InternalDataProvider::setDateCategories( const Sequence< double >& rDates )
+void InternalDataProvider::setDateCategories( const Sequence< double >& rDates )
 {
     sal_Int32 nCount = rDates.getLength();
     std::vector< std::vector< cpo::uno::Any > > aNewCategories;
@@ -1377,53 +1377,53 @@ void SAL_CALL InternalDataProvider::setDateCategories( const Sequence< double >&
 }
 
 // ____ XAnyDescriptionAccess ____
-Sequence< Sequence< cpo::uno::Any > > SAL_CALL InternalDataProvider::getAnyRowDescriptions()
+Sequence< Sequence< cpo::uno::Any > > InternalDataProvider::getAnyRowDescriptions()
 {
     return lcl_convertVectorVectorToSequenceSequence( m_aInternalData.getComplexRowLabels() );
 }
-void SAL_CALL InternalDataProvider::setAnyRowDescriptions( const Sequence< Sequence< cpo::uno::Any > >& aRowDescriptions )
+void InternalDataProvider::setAnyRowDescriptions( const Sequence< Sequence< cpo::uno::Any > >& aRowDescriptions )
 {
     m_aInternalData.setComplexRowLabels( lcl_convertSequenceSequenceToVectorVector( aRowDescriptions ) );
 }
-Sequence< Sequence< cpo::uno::Any > > SAL_CALL InternalDataProvider::getAnyColumnDescriptions()
+Sequence< Sequence< cpo::uno::Any > > InternalDataProvider::getAnyColumnDescriptions()
 {
     return lcl_convertVectorVectorToSequenceSequence( m_aInternalData.getComplexColumnLabels() );
 }
-void SAL_CALL InternalDataProvider::setAnyColumnDescriptions( const Sequence< Sequence< cpo::uno::Any > >& aColumnDescriptions )
+void InternalDataProvider::setAnyColumnDescriptions( const Sequence< Sequence< cpo::uno::Any > >& aColumnDescriptions )
 {
     m_aInternalData.setComplexColumnLabels( lcl_convertSequenceSequenceToVectorVector( aColumnDescriptions ) );
 }
 
 // ____ XComplexDescriptionAccess ____
-Sequence< Sequence< OUString > > SAL_CALL InternalDataProvider::getComplexRowDescriptions()
+Sequence< Sequence< OUString > > InternalDataProvider::getComplexRowDescriptions()
 {
     return lcl_convertComplexAnyVectorToStringSequence( m_aInternalData.getComplexRowLabels() );
 }
-void SAL_CALL InternalDataProvider::setComplexRowDescriptions( const Sequence< Sequence< OUString > >& aRowDescriptions )
+void InternalDataProvider::setComplexRowDescriptions( const Sequence< Sequence< OUString > >& aRowDescriptions )
 {
     m_aInternalData.setComplexRowLabels( lcl_convertComplexStringSequenceToAnyVector(aRowDescriptions) );
 }
-Sequence< Sequence< OUString > > SAL_CALL InternalDataProvider::getComplexColumnDescriptions()
+Sequence< Sequence< OUString > > InternalDataProvider::getComplexColumnDescriptions()
 {
     return lcl_convertComplexAnyVectorToStringSequence( m_aInternalData.getComplexColumnLabels() );
 }
-void SAL_CALL InternalDataProvider::setComplexColumnDescriptions( const Sequence< Sequence< OUString > >& aColumnDescriptions )
+void InternalDataProvider::setComplexColumnDescriptions( const Sequence< Sequence< OUString > >& aColumnDescriptions )
 {
     m_aInternalData.setComplexColumnLabels( lcl_convertComplexStringSequenceToAnyVector(aColumnDescriptions) );
 }
 
 // ____ XChartDataArray ____
-Sequence< Sequence< double > > SAL_CALL InternalDataProvider::getData()
+Sequence< Sequence< double > > InternalDataProvider::getData()
 {
     return m_aInternalData.getData();
 }
 
-void SAL_CALL InternalDataProvider::setData( const Sequence< Sequence< double > >& rDataInRows )
+void InternalDataProvider::setData( const Sequence< Sequence< double > >& rDataInRows )
 {
     return m_aInternalData.setData( rDataInRows );
 }
 
-void SAL_CALL InternalDataProvider::setRowDescriptions( const Sequence< OUString >& aRowDescriptions )
+void InternalDataProvider::setRowDescriptions( const Sequence< OUString >& aRowDescriptions )
 {
     std::vector< std::vector< cpo::uno::Any > > aComplexDescriptions( aRowDescriptions.getLength() );
     transform( aComplexDescriptions.begin(), aComplexDescriptions.end(), aRowDescriptions.begin(),
@@ -1431,7 +1431,7 @@ void SAL_CALL InternalDataProvider::setRowDescriptions( const Sequence< OUString
     m_aInternalData.setComplexRowLabels( std::move(aComplexDescriptions) );
 }
 
-void SAL_CALL InternalDataProvider::setColumnDescriptions( const Sequence< OUString >& aColumnDescriptions )
+void InternalDataProvider::setColumnDescriptions( const Sequence< OUString >& aColumnDescriptions )
 {
     std::vector< std::vector< cpo::uno::Any > > aComplexDescriptions( aColumnDescriptions.getLength() );
     transform( aComplexDescriptions.begin(), aComplexDescriptions.end(), aColumnDescriptions.begin(),
@@ -1439,14 +1439,14 @@ void SAL_CALL InternalDataProvider::setColumnDescriptions( const Sequence< OUStr
     m_aInternalData.setComplexColumnLabels( std::move(aComplexDescriptions) );
 }
 
-Sequence< OUString > SAL_CALL InternalDataProvider::getRowDescriptions()
+Sequence< OUString > InternalDataProvider::getRowDescriptions()
 {
     const std::vector< std::vector< cpo::uno::Any > > & aComplexLabels( m_aInternalData.getComplexRowLabels() );
     SplitCategoriesProvider_ForComplexDescriptions aProvider( aComplexLabels );
     return ExplicitCategoriesProvider::getExplicitSimpleCategories( aProvider );
 }
 
-Sequence< OUString > SAL_CALL InternalDataProvider::getColumnDescriptions()
+Sequence< OUString > InternalDataProvider::getColumnDescriptions()
 {
     const std::vector< std::vector< cpo::uno::Any > > & aComplexLabels( m_aInternalData.getComplexColumnLabels() );
     SplitCategoriesProvider_ForComplexDescriptions aProvider( aComplexLabels );
@@ -1454,28 +1454,28 @@ Sequence< OUString > SAL_CALL InternalDataProvider::getColumnDescriptions()
 }
 
 // ____ XChartData (base of XChartDataArray) ____
-void SAL_CALL InternalDataProvider::addChartDataChangeEventListener(
+void InternalDataProvider::addChartDataChangeEventListener(
     const Reference< css::chart::XChartDataChangeEventListener >& )
 {
 }
 
-void SAL_CALL InternalDataProvider::removeChartDataChangeEventListener(
+void InternalDataProvider::removeChartDataChangeEventListener(
     const Reference< css::chart::XChartDataChangeEventListener >& )
 {
 }
 
-double SAL_CALL InternalDataProvider::getNotANumber()
+double InternalDataProvider::getNotANumber()
 {
     return std::numeric_limits<double>::quiet_NaN();
 }
 
-bool SAL_CALL InternalDataProvider::isNotANumber( double nNumber )
+bool InternalDataProvider::isNotANumber( double nNumber )
 {
     return std::isnan( nNumber )
         || std::isinf( nNumber );
 }
 // lang::XInitialization:
-void SAL_CALL InternalDataProvider::initialize(const cpo::uno::Sequence< cpo::uno::Any > & _aArguments)
+void InternalDataProvider::initialize(const cpo::uno::Sequence< cpo::uno::Any > & _aArguments)
 {
     comphelper::SequenceAsHashMap aArgs(_aArguments);
     if ( aArgs.getUnpackedValueOrDefault( u"CreateDefaultData"_ustr, false ) )
@@ -1483,23 +1483,23 @@ void SAL_CALL InternalDataProvider::initialize(const cpo::uno::Sequence< cpo::un
 }
 
 // ____ XCloneable ____
-Reference< util::XCloneable > SAL_CALL InternalDataProvider::createClone()
+Reference< util::XCloneable > InternalDataProvider::createClone()
 {
     return Reference< util::XCloneable >( new InternalDataProvider( *this ));
 }
 
-OUString SAL_CALL InternalDataProvider::getImplementationName()
+OUString InternalDataProvider::getImplementationName()
 {
     // note: in xmloff this name is used to indicate usage of own data
     return u"com.sun.star.comp.chart.InternalDataProvider"_ustr;
 }
 
-bool SAL_CALL InternalDataProvider::supportsService( const OUString& rServiceName )
+bool InternalDataProvider::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL InternalDataProvider::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > InternalDataProvider::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.data.DataProvider"_ustr };
 }

@@ -54,46 +54,46 @@ public:
     virtual ~CreationWizardUnoDlg() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
-    virtual cpo::uno::Any SAL_CALL queryAggregation( cpo::uno::Type const & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
+    virtual cpo::uno::Any queryAggregation( cpo::uno::Type const & rType ) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
     // XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XAsynchronousExecutableDialog
-    virtual void SAL_CALL setDialogTitle( const OUString& aTitle ) override;
-    virtual void SAL_CALL startExecuteModal( const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener ) override;
+    virtual void setDialogTitle( const OUString& aTitle ) override;
+    virtual void startExecuteModal( const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) override;
-    virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) override;
+    virtual void queryTermination( const css::lang::EventObject& Event ) override;
+    virtual void notifyTermination( const css::lang::EventObject& Event ) override;
 
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     //XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
 protected:
     // ____ OComponentHelper ____
     /// Called in dispose method after the listeners were notified.
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 private:
     void createDialogOnDemand();

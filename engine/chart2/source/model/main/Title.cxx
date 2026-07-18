@@ -221,19 +221,19 @@ Title::~Title()
 }
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL Title::createClone()
+uno::Reference< util::XCloneable > Title::createClone()
 {
     return uno::Reference< util::XCloneable >( new Title( *this ));
 }
 
 // ____ XTitle ____
-cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL Title::getText()
+cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > Title::getText()
 {
     MutexGuard aGuard( m_aMutex );
     return m_aStrings;
 }
 
-void SAL_CALL Title::setText( const cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > >& rNewStrings )
+void Title::setText( const cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > >& rNewStrings )
 {
     cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > aOldStrings;
     {
@@ -262,13 +262,13 @@ void Title::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL Title::getInfoHelper()
+::cppu::IPropertyArrayHelper & Title::getInfoHelper()
 {
     return StaticTitleInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL Title::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > Title::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticTitleInfoHelper() ) );
@@ -276,24 +276,24 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL Title::getPropertySetInfo()
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL Title::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void Title::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL Title::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void Title::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL Title::modified( const lang::EventObject& aEvent )
+void Title::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL Title::disposing( const lang::EventObject& /* Source */ )
+void Title::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }
@@ -309,17 +309,17 @@ void Title::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-OUString SAL_CALL Title::getImplementationName()
+OUString Title::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.Title"_ustr;
 }
 
-bool SAL_CALL Title::supportsService( const OUString& rServiceName )
+bool Title::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL Title::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Title::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.Title"_ustr,

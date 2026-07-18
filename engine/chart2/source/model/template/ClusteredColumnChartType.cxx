@@ -72,7 +72,7 @@ ClusteredColumnChartType::ClusteredColumnChartType(const ClusteredColumnChartTyp
 ClusteredColumnChartType::~ClusteredColumnChartType() {}
 
 // ____ XCloneable ____
-uno::Reference<util::XCloneable> SAL_CALL ClusteredColumnChartType::createClone()
+uno::Reference<util::XCloneable> ClusteredColumnChartType::createClone()
 {
     return uno::Reference<util::XCloneable>(new ClusteredColumnChartType(*this));
 }
@@ -83,7 +83,7 @@ rtl::Reference<ChartType> ClusteredColumnChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL ClusteredColumnChartType::getChartType()
+OUString ClusteredColumnChartType::getChartType()
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_CLUSTEREDCOLUMN;
 }
@@ -113,13 +113,13 @@ void ClusteredColumnChartType::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any&
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL ClusteredColumnChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper& ClusteredColumnChartType::getInfoHelper()
 {
     return StaticClusteredColumnChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference<beans::XPropertySetInfo> SAL_CALL ClusteredColumnChartType::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> ClusteredColumnChartType::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(
@@ -127,17 +127,17 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ClusteredColumnChartType::getPr
     return xPropertySetInfo;
 }
 
-OUString SAL_CALL ClusteredColumnChartType::getImplementationName()
+OUString ClusteredColumnChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.ClusteredColumnChartType"_ustr;
 }
 
-bool SAL_CALL ClusteredColumnChartType::supportsService(const OUString& rServiceName)
+bool ClusteredColumnChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ClusteredColumnChartType::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ClusteredColumnChartType::getSupportedServiceNames()
 {
     return { CHART2_SERVICE_NAME_CHARTTYPE_CLUSTEREDCOLUMN, u"com.sun.star.chart2.ChartType"_ustr };
 }

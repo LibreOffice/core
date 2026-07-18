@@ -85,7 +85,7 @@ void UndoCommandDispatch::fireStatusEvent(
 }
 
 // ____ XDispatch ____
-void SAL_CALL UndoCommandDispatch::dispatch(
+void UndoCommandDispatch::dispatch(
     const util::URL& URL,
     const Sequence< beans::PropertyValue >& Arguments )
 {
@@ -135,7 +135,7 @@ void UndoCommandDispatch::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL UndoCommandDispatch::disposing( const lang::EventObject& /* Source */ )
+void UndoCommandDispatch::disposing( const lang::EventObject& /* Source */ )
 {
     m_xUndoManager.clear();
     m_xModel.clear();

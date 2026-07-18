@@ -52,7 +52,7 @@ WallFloorWrapper::~WallFloorWrapper()
 }
 
 // ____ XComponent ____
-void SAL_CALL WallFloorWrapper::dispose()
+void WallFloorWrapper::dispose()
 {
     std::unique_lock g(m_aMutex);
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
@@ -61,14 +61,14 @@ void SAL_CALL WallFloorWrapper::dispose()
     clearWrappedPropertySet(g);
 }
 
-void SAL_CALL WallFloorWrapper::addEventListener(
+void WallFloorWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock g(m_aMutex);
     m_aEventListenerContainer.addInterface( g, xListener );
 }
 
-void SAL_CALL WallFloorWrapper::removeEventListener(
+void WallFloorWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
@@ -123,17 +123,17 @@ std::vector< std::unique_ptr<WrappedProperty> > WallFloorWrapper::createWrappedP
     return aWrappedProperties;
 }
 
-OUString SAL_CALL WallFloorWrapper::getImplementationName()
+OUString WallFloorWrapper::getImplementationName()
 {
     return u"com.sun.star.comp.chart.WallOrFloor"_ustr;
 }
 
-bool SAL_CALL WallFloorWrapper::supportsService( const OUString& rServiceName )
+bool WallFloorWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL WallFloorWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > WallFloorWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.xml.UserDefinedAttributesSupplier"_ustr,

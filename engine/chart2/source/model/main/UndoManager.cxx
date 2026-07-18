@@ -179,12 +179,12 @@ namespace chart
     {
     }
 
-    void SAL_CALL UndoManager::acquire() noexcept
+    void UndoManager::acquire() noexcept
     {
         m_pImpl->getParent().acquire();
     }
 
-    void SAL_CALL UndoManager::release() noexcept
+    void UndoManager::release() noexcept
     {
         m_pImpl->getParent().release();
     }
@@ -194,31 +194,31 @@ namespace chart
         m_pImpl->disposing();
     }
 
-    void SAL_CALL UndoManager::enterUndoContext( const OUString& i_title )
+    void UndoManager::enterUndoContext( const OUString& i_title )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().enterUndoContext( i_title, aGuard );
     }
 
-    void SAL_CALL UndoManager::enterHiddenUndoContext(  )
+    void UndoManager::enterHiddenUndoContext(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().enterHiddenUndoContext( aGuard );
     }
 
-    void SAL_CALL UndoManager::leaveUndoContext(  )
+    void UndoManager::leaveUndoContext(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().leaveUndoContext( aGuard );
     }
 
-    void SAL_CALL UndoManager::addUndoAction( const Reference< XUndoAction >& i_action )
+    void UndoManager::addUndoAction( const Reference< XUndoAction >& i_action )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().addUndoAction( i_action, aGuard );
     }
 
-    void SAL_CALL UndoManager::undo(  )
+    void UndoManager::undo(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().undo( aGuard );
@@ -226,7 +226,7 @@ namespace chart
         ChartViewHelper::setViewToDirtyState( &m_pImpl->getParent() );
     }
 
-    void SAL_CALL UndoManager::redo(  )
+    void UndoManager::redo(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().redo( aGuard );
@@ -234,109 +234,109 @@ namespace chart
         ChartViewHelper::setViewToDirtyState( &m_pImpl->getParent() );
     }
 
-    bool SAL_CALL UndoManager::isUndoPossible(  )
+    bool UndoManager::isUndoPossible(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().isUndoPossible();
     }
 
-    bool SAL_CALL UndoManager::isRedoPossible(  )
+    bool UndoManager::isRedoPossible(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().isRedoPossible();
     }
 
-    OUString SAL_CALL UndoManager::getCurrentUndoActionTitle(  )
+    OUString UndoManager::getCurrentUndoActionTitle(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().getCurrentUndoActionTitle();
     }
 
-    OUString SAL_CALL UndoManager::getCurrentRedoActionTitle(  )
+    OUString UndoManager::getCurrentRedoActionTitle(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().getCurrentRedoActionTitle();
     }
 
-    Sequence< OUString > SAL_CALL UndoManager::getAllUndoActionTitles(  )
+    Sequence< OUString > UndoManager::getAllUndoActionTitles(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().getAllUndoActionTitles();
     }
 
-    Sequence< OUString > SAL_CALL UndoManager::getAllRedoActionTitles(  )
+    Sequence< OUString > UndoManager::getAllRedoActionTitles(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().getAllRedoActionTitles();
     }
 
-    void SAL_CALL UndoManager::clear(  )
+    void UndoManager::clear(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().clear( aGuard );
     }
 
-    void SAL_CALL UndoManager::clearRedo(  )
+    void UndoManager::clearRedo(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().clearRedo( aGuard );
     }
 
-    void SAL_CALL UndoManager::reset(  )
+    void UndoManager::reset(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().reset( aGuard );
     }
 
-    void SAL_CALL UndoManager::addUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
+    void UndoManager::addUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().addUndoManagerListener( i_listener );
     }
 
-    void SAL_CALL UndoManager::removeUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
+    void UndoManager::removeUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().removeUndoManagerListener( i_listener );
     }
 
-    void SAL_CALL UndoManager::lock(  )
+    void UndoManager::lock(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().lock();
     }
 
-    void SAL_CALL UndoManager::unlock(  )
+    void UndoManager::unlock(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().unlock();
     }
 
-    bool SAL_CALL UndoManager::isLocked(  )
+    bool UndoManager::isLocked(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().isLocked();
     }
 
-    Reference< XInterface > SAL_CALL UndoManager::getParent(  )
+    Reference< XInterface > UndoManager::getParent(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getParent();
     }
 
-    void SAL_CALL UndoManager::setParent( const Reference< XInterface >& )
+    void UndoManager::setParent( const Reference< XInterface >& )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         throw NoSupportException( OUString(), m_pImpl->getThis() );
     }
 
-    void SAL_CALL UndoManager::addModifyListener( const Reference< XModifyListener >& i_listener )
+    void UndoManager::addModifyListener( const Reference< XModifyListener >& i_listener )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().addModifyListener( i_listener );
     }
 
-    void SAL_CALL UndoManager::removeModifyListener( const Reference< XModifyListener >& i_listener )
+    void UndoManager::removeModifyListener( const Reference< XModifyListener >& i_listener )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().removeModifyListener( i_listener );

@@ -95,7 +95,7 @@ StockBar::~StockBar()
 {}
 
 // ____ XTypeProvider ____
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL StockBar::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > StockBar::getTypes()
 {
     return ::comphelper::concatSequences(
         impl::StockBar_Base::getTypes(),
@@ -103,7 +103,7 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL StockBar::getTypes()
 }
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL StockBar::createClone()
+uno::Reference< util::XCloneable > StockBar::createClone()
 {
     return uno::Reference< util::XCloneable >( new StockBar( *this ));
 }
@@ -119,13 +119,13 @@ void StockBar::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL StockBar::getInfoHelper()
+::cppu::IPropertyArrayHelper & StockBar::getInfoHelper()
 {
     return StaticStockBarInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL StockBar::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > StockBar::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticStockBarInfoHelper() ) );
@@ -133,24 +133,24 @@ Reference< beans::XPropertySetInfo > SAL_CALL StockBar::getPropertySetInfo()
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL StockBar::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void StockBar::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL StockBar::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void StockBar::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL StockBar::modified( const lang::EventObject& aEvent )
+void StockBar::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL StockBar::disposing( const lang::EventObject& /* Source */ )
+void StockBar::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }

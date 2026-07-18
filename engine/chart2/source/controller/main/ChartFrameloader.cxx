@@ -58,24 +58,24 @@ bool ChartFrameLoader::impl_checkCancel()
 
 // lang::XServiceInfo
 
-OUString SAL_CALL ChartFrameLoader::getImplementationName()
+OUString ChartFrameLoader::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.ChartFrameLoader"_ustr;
 }
 
-bool SAL_CALL ChartFrameLoader::supportsService( const OUString& rServiceName )
+bool ChartFrameLoader::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ChartFrameLoader::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ChartFrameLoader::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.SynchronousFrameLoader"_ustr };
 }
 
 // frame::XFrameLoader
 
-bool SAL_CALL ChartFrameLoader::load( const cpo::uno::Sequence< beans::PropertyValue >& rMediaDescriptor, const uno::Reference<frame::XFrame >& xFrame )
+bool ChartFrameLoader::load( const cpo::uno::Sequence< beans::PropertyValue >& rMediaDescriptor, const uno::Reference<frame::XFrame >& xFrame )
 {
     //@todo ? need to add as terminate listener to desktop?
 
@@ -165,7 +165,7 @@ bool SAL_CALL ChartFrameLoader::load( const cpo::uno::Sequence< beans::PropertyV
     return true;
 }
 
-void SAL_CALL ChartFrameLoader::cancel()
+void ChartFrameLoader::cancel()
 {
     m_oCancelFinished.reset();
     m_bCancelRequired = true;

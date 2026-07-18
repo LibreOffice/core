@@ -86,29 +86,29 @@ public:
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments );
 
     // ____ XChartTypeTemplate ____
-    virtual css::uno::Reference< css::chart2::XDiagram > SAL_CALL createDiagramByDataSource(
+    virtual css::uno::Reference< css::chart2::XDiagram > createDiagramByDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override final;
     /// denotes if the chart needs categories at the first scale
-    virtual bool SAL_CALL supportsCategories() override;
-    virtual void SAL_CALL changeDiagram(
+    virtual bool supportsCategories() override;
+    virtual void changeDiagram(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override final;
-    virtual void SAL_CALL changeDiagramData(
+    virtual void changeDiagramData(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override final;
-    virtual bool SAL_CALL matchesTemplate(
+    virtual bool matchesTemplate(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
         bool bAdaptProperties ) override final;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getDataInterpreter() override final;
-    virtual css::uno::Reference< ::css::chart2::XChartType > SAL_CALL getChartTypeForNewSeries(
+    virtual css::uno::Reference< css::uno::XInterface > getDataInterpreter() override final;
+    virtual css::uno::Reference< ::css::chart2::XChartType > getChartTypeForNewSeries(
         const cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override final;
-    virtual void SAL_CALL applyStyle(
+    virtual void applyStyle(
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeIndex,
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount ) override final;
-    virtual void SAL_CALL resetStyles(
+    virtual void resetStyles(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override final;
 
     void changeDiagram(
@@ -137,7 +137,7 @@ public:
         const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     // ____ XServiceName ____
-    virtual OUString SAL_CALL getServiceName() override;
+    virtual OUString getServiceName() override;
 
     // Methods to override for automatic creation
 

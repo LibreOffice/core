@@ -128,13 +128,13 @@ void ParetoLineChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, cpo::uno::A
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL ParetoLineChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper& ParetoLineChartTypeTemplate::getInfoHelper()
 {
     return StaticParetoLineChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference<beans::XPropertySetInfo> SAL_CALL ParetoLineChartTypeTemplate::getPropertySetInfo()
+Reference<beans::XPropertySetInfo> ParetoLineChartTypeTemplate::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(

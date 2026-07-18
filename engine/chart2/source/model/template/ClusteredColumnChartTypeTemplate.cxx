@@ -133,13 +133,13 @@ void ClusteredColumnChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, cpo::u
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL ClusteredColumnChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper& ClusteredColumnChartTypeTemplate::getInfoHelper()
 {
     return StaticClusteredColumnChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference<beans::XPropertySetInfo> SAL_CALL ClusteredColumnChartTypeTemplate::getPropertySetInfo()
+Reference<beans::XPropertySetInfo> ClusteredColumnChartTypeTemplate::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(

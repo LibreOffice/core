@@ -152,17 +152,17 @@ Sequence< Any > CachedDataSequence::Impl_getMixedData() const
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-OUString SAL_CALL CachedDataSequence::getImplementationName()
+OUString CachedDataSequence::getImplementationName()
 {
     return lcl_aServiceName;
 }
 
-bool SAL_CALL CachedDataSequence::supportsService( const OUString& rServiceName )
+bool CachedDataSequence::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CachedDataSequence::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > CachedDataSequence::getSupportedServiceNames()
 {
     return {
         lcl_aServiceName,
@@ -173,7 +173,7 @@ cpo::uno::Sequence< OUString > SAL_CALL CachedDataSequence::getSupportedServiceN
 }
 
 // ________ XNumericalDataSequence ________
-Sequence< double > SAL_CALL CachedDataSequence::getNumericalData()
+Sequence< double > CachedDataSequence::getNumericalData()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -184,7 +184,7 @@ Sequence< double > SAL_CALL CachedDataSequence::getNumericalData()
 }
 
 // ________ XTextualDataSequence ________
-Sequence< OUString > SAL_CALL CachedDataSequence::getTextualData()
+Sequence< OUString > CachedDataSequence::getTextualData()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -195,45 +195,45 @@ Sequence< OUString > SAL_CALL CachedDataSequence::getTextualData()
 }
 
 // ________ XDataSequence  ________
-Sequence< Any > SAL_CALL CachedDataSequence::getData()
+Sequence< Any > CachedDataSequence::getData()
 {
     std::unique_lock aGuard( m_aMutex );
     return Impl_getMixedData();
 }
 
-OUString SAL_CALL CachedDataSequence::getSourceRangeRepresentation()
+OUString CachedDataSequence::getSourceRangeRepresentation()
 {
     return m_sRole;
 }
 
-Sequence< OUString > SAL_CALL CachedDataSequence::generateLabel( chart2::data::LabelOrigin  /*eLabelOrigin*/ )
+Sequence< OUString > CachedDataSequence::generateLabel( chart2::data::LabelOrigin  /*eLabelOrigin*/ )
 {
     // return empty label, as we have no range representations to determine something useful
     return Sequence< OUString >();
 }
 
-::sal_Int32 SAL_CALL CachedDataSequence::getNumberFormatKeyByIndex( ::sal_Int32 /*nIndex*/ )
+::sal_Int32 CachedDataSequence::getNumberFormatKeyByIndex( ::sal_Int32 /*nIndex*/ )
 {
     return 0;
 }
 
-Reference< util::XCloneable > SAL_CALL CachedDataSequence::createClone()
+Reference< util::XCloneable > CachedDataSequence::createClone()
 {
     return new CachedDataSequence( *this );
 }
 
-void SAL_CALL CachedDataSequence::addModifyListener( const Reference< util::XModifyListener >& aListener )
+void CachedDataSequence::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL CachedDataSequence::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+void CachedDataSequence::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // lang::XInitialization:
-void SAL_CALL CachedDataSequence::initialize(const cpo::uno::Sequence< cpo::uno::Any > & _aArguments)
+void CachedDataSequence::initialize(const cpo::uno::Sequence< cpo::uno::Any > & _aArguments)
 {
     ::comphelper::SequenceAsHashMap aMap(_aArguments);
     m_aNumericalSequence = aMap.getUnpackedValueOrDefault( u"DataSequence"_ustr ,m_aNumericalSequence);

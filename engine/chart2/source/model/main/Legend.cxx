@@ -176,30 +176,30 @@ Legend::~Legend()
 }
 
 // ____ XCloneable ____
-Reference< util::XCloneable > SAL_CALL Legend::createClone()
+Reference< util::XCloneable > Legend::createClone()
 {
     return Reference< util::XCloneable >( new Legend( *this ));
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL Legend::addModifyListener( const Reference< util::XModifyListener >& aListener )
+void Legend::addModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL Legend::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+void Legend::removeModifyListener( const Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL Legend::modified( const lang::EventObject& aEvent )
+void Legend::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL Legend::disposing( const lang::EventObject& /* Source */ )
+void Legend::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }
@@ -221,13 +221,13 @@ void Legend::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL Legend::getInfoHelper()
+::cppu::IPropertyArrayHelper & Legend::getInfoHelper()
 {
     return StaticLegendInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > Legend::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticLegendInfoHelper() ) );
@@ -235,17 +235,17 @@ Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-OUString SAL_CALL Legend::getImplementationName()
+OUString Legend::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.Legend"_ustr;
 }
 
-bool SAL_CALL Legend::supportsService( const OUString& rServiceName )
+bool Legend::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL Legend::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Legend::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.Legend"_ustr,

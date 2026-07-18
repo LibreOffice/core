@@ -47,30 +47,30 @@ NameContainer::~NameContainer()
 }
 
 //XServiceInfo
-OUString SAL_CALL NameContainer::getImplementationName()
+OUString NameContainer::getImplementationName()
 {
     return u"com.sun.star.comp.chart.XMLNameSpaceMap"_ustr;
 }
 
-bool SAL_CALL NameContainer::supportsService( const OUString& ServiceName )
+bool NameContainer::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL NameContainer::getSupportedServiceNames()
+Sequence< OUString > NameContainer::getSupportedServiceNames()
 {
     return { u"com.sun.star.xml.NamespaceMap"_ustr };
 }
 
 // XNameContainer
-void SAL_CALL NameContainer::insertByName( const OUString& rName, const Any& rElement )
+void NameContainer::insertByName( const OUString& rName, const Any& rElement )
 {
     if( m_aMap.contains( rName ))
         throw container::ElementExistException();
     m_aMap.emplace( rName, rElement );
 }
 
-void SAL_CALL NameContainer::removeByName( const OUString& Name )
+void NameContainer::removeByName( const OUString& Name )
 {
     tContentMap::iterator aIt( m_aMap.find( Name ));
     if( aIt == m_aMap.end())
@@ -79,7 +79,7 @@ void SAL_CALL NameContainer::removeByName( const OUString& Name )
 }
 
 // XNameReplace
-void SAL_CALL NameContainer::replaceByName( const OUString& rName, const Any& rElement )
+void NameContainer::replaceByName( const OUString& rName, const Any& rElement )
 {
     tContentMap::iterator aIt( m_aMap.find( rName ));
     if( aIt == m_aMap.end() )
@@ -88,7 +88,7 @@ void SAL_CALL NameContainer::replaceByName( const OUString& rName, const Any& rE
 }
 
 // XNameAccess
-Any SAL_CALL NameContainer::getByName( const OUString& rName )
+Any NameContainer::getByName( const OUString& rName )
 {
     tContentMap::iterator aIter( m_aMap.find( rName ) );
     if( aIter == m_aMap.end() )
@@ -96,29 +96,29 @@ Any SAL_CALL NameContainer::getByName( const OUString& rName )
     return aIter->second;
 }
 
-Sequence< OUString > SAL_CALL NameContainer::getElementNames()
+Sequence< OUString > NameContainer::getElementNames()
 {
     return comphelper::mapKeysToSequence(m_aMap);
 }
 
-bool SAL_CALL NameContainer::hasByName( const OUString& rName )
+bool NameContainer::hasByName( const OUString& rName )
 {
     return m_aMap.contains( rName );
 }
 
 // XElementAccess
-bool SAL_CALL NameContainer::hasElements()
+bool NameContainer::hasElements()
 {
     return ! m_aMap.empty();
 }
 
-cpo::uno::Type SAL_CALL NameContainer::getElementType()
+cpo::uno::Type NameContainer::getElementType()
 {
     return ::cppu::UnoType<OUString>::get();
 }
 
 // XCloneable
-uno::Reference< util::XCloneable > SAL_CALL NameContainer::createClone()
+uno::Reference< util::XCloneable > NameContainer::createClone()
 {
     return uno::Reference< util::XCloneable >( new NameContainer( *this ));
 }

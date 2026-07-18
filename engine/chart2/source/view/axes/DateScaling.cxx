@@ -53,7 +53,7 @@ DateScaling::~DateScaling()
 {
 }
 
-double SAL_CALL DateScaling::doScaling( double value )
+double DateScaling::doScaling( double value )
 {
     double fResult(value);
     if( std::isnan( value ) || std::isinf( value ) )
@@ -92,27 +92,27 @@ double SAL_CALL DateScaling::doScaling( double value )
     return fResult;
 }
 
-uno::Reference< XScaling > SAL_CALL DateScaling::getInverseScaling()
+uno::Reference< XScaling > DateScaling::getInverseScaling()
 {
     return new InverseDateScaling( m_aNullDate, m_nTimeUnit, m_bShifted );
 }
 
-OUString SAL_CALL DateScaling::getServiceName()
+OUString DateScaling::getServiceName()
 {
     return lcl_aServiceName_DateScaling;
 }
 
-OUString SAL_CALL DateScaling::getImplementationName()
+OUString DateScaling::getImplementationName()
 {
     return lcl_aServiceName_DateScaling;
 }
 
-bool SAL_CALL DateScaling::supportsService( const OUString& rServiceName )
+bool DateScaling::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DateScaling::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > DateScaling::getSupportedServiceNames()
 {
     return { lcl_aServiceName_DateScaling };
 }
@@ -128,7 +128,7 @@ InverseDateScaling::~InverseDateScaling()
 {
 }
 
-double SAL_CALL InverseDateScaling::doScaling( double value )
+double InverseDateScaling::doScaling( double value )
 {
     double fResult(value);
     if( std::isnan( value ) || std::isinf( value ) )
@@ -175,27 +175,27 @@ double SAL_CALL InverseDateScaling::doScaling( double value )
     return fResult;
 }
 
-uno::Reference< XScaling > SAL_CALL InverseDateScaling::getInverseScaling()
+uno::Reference< XScaling > InverseDateScaling::getInverseScaling()
 {
     return new DateScaling( m_aNullDate, m_nTimeUnit, m_bShifted );
 }
 
-OUString SAL_CALL InverseDateScaling::getServiceName()
+OUString InverseDateScaling::getServiceName()
 {
     return lcl_aServiceName_InverseDateScaling;
 }
 
-OUString SAL_CALL InverseDateScaling::getImplementationName()
+OUString InverseDateScaling::getImplementationName()
 {
     return lcl_aServiceName_InverseDateScaling;
 }
 
-bool SAL_CALL InverseDateScaling::supportsService( const OUString& rServiceName )
+bool InverseDateScaling::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL InverseDateScaling::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > InverseDateScaling::getSupportedServiceNames()
 {
     return { lcl_aServiceName_InverseDateScaling };
 }

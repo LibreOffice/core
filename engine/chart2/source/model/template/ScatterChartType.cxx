@@ -117,7 +117,7 @@ ScatterChartType::~ScatterChartType()
 {}
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL ScatterChartType::createClone()
+uno::Reference< util::XCloneable > ScatterChartType::createClone()
 {
     return uno::Reference< util::XCloneable >( new ScatterChartType( *this ));
 }
@@ -158,12 +158,12 @@ rtl::Reference< ::chart::BaseCoordinateSystem >
     return xResult;
 }
 
-OUString SAL_CALL ScatterChartType::getChartType()
+OUString ScatterChartType::getChartType()
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_SCATTER;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles()
+cpo::uno::Sequence< OUString > ScatterChartType::getSupportedMandatoryRoles()
 {
     return { u"label"_ustr, u"values-x"_ustr, u"values-y"_ustr };
 }
@@ -180,28 +180,28 @@ void ScatterChartType::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny )
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL ScatterChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & ScatterChartType::getInfoHelper()
 {
     return StaticScatterChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartType::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > ScatterChartType::getPropertySetInfo()
 {
     return StaticScatterChartTypeInfo();
 }
 
-OUString SAL_CALL ScatterChartType::getImplementationName()
+OUString ScatterChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.ScatterChartType"_ustr;
 }
 
-bool SAL_CALL ScatterChartType::supportsService( const OUString& rServiceName )
+bool ScatterChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ScatterChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_SCATTER,

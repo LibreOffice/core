@@ -105,13 +105,13 @@ void AreaChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& r
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL AreaChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & AreaChartTypeTemplate::getInfoHelper()
 {
     return StaticAreaChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL AreaChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > AreaChartTypeTemplate::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticAreaChartTypeTemplateInfoHelper() ) );

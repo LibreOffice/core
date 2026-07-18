@@ -127,7 +127,7 @@ HistogramChartType::HistogramChartType(const HistogramChartType& rOther)
 HistogramChartType::~HistogramChartType() {}
 
 // ____ XCloneable ____
-uno::Reference<util::XCloneable> SAL_CALL HistogramChartType::createClone()
+uno::Reference<util::XCloneable> HistogramChartType::createClone()
 {
     return uno::Reference<util::XCloneable>(new HistogramChartType(*this));
 }
@@ -277,24 +277,21 @@ void HistogramChartType::createCalculatedDataSeries()
     }
 }
 
-OUString SAL_CALL HistogramChartType::getChartType()
-{
-    return CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM;
-}
+OUString HistogramChartType::getChartType() { return CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM; }
 
-cpo::uno::Sequence<OUString> SAL_CALL HistogramChartType::getSupportedMandatoryRoles()
+cpo::uno::Sequence<OUString> HistogramChartType::getSupportedMandatoryRoles()
 {
     return { u"label"_ustr, u"values-y"_ustr };
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL HistogramChartType::getSupportedOptionalRoles() { return {}; }
+cpo::uno::Sequence<OUString> HistogramChartType::getSupportedOptionalRoles() { return {}; }
 
 cpo::uno::Sequence<OUString> HistogramChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL HistogramChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper& HistogramChartType::getInfoHelper()
 {
     return StaticHistogramChartTypeInfoHelper();
 }
@@ -344,24 +341,24 @@ void HistogramChartType::firePropertyChangeEvent()
 }
 
 // ____ XPropertySet ____
-uno::Reference<beans::XPropertySetInfo> SAL_CALL HistogramChartType::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> HistogramChartType::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticHistogramChartTypeInfoHelper()));
     return xPropertySetInfo;
 }
 
-OUString SAL_CALL HistogramChartType::getImplementationName()
+OUString HistogramChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.HistogramChartType"_ustr;
 }
 
-bool SAL_CALL HistogramChartType::supportsService(const OUString& rServiceName)
+bool HistogramChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL HistogramChartType::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> HistogramChartType::getSupportedServiceNames()
 {
     return { CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM, u"com.sun.star.chart2.ChartType"_ustr };
 }

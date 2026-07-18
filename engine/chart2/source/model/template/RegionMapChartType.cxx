@@ -30,7 +30,7 @@ RegionMapChartType::RegionMapChartType(const RegionMapChartType& rOther)
 RegionMapChartType::~RegionMapChartType() {}
 
 // ____ XCloneable ____
-uno::Reference<util::XCloneable> SAL_CALL RegionMapChartType::createClone()
+uno::Reference<util::XCloneable> RegionMapChartType::createClone()
 {
     return uno::Reference<util::XCloneable>(new RegionMapChartType(*this));
 }
@@ -41,27 +41,24 @@ rtl::Reference<ChartType> RegionMapChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL RegionMapChartType::getChartType()
-{
-    return CHART2_SERVICE_NAME_CHARTTYPE_REGIONMAP;
-}
+OUString RegionMapChartType::getChartType() { return CHART2_SERVICE_NAME_CHARTTYPE_REGIONMAP; }
 
 cpo::uno::Sequence<OUString> RegionMapChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
-OUString SAL_CALL RegionMapChartType::getImplementationName()
+OUString RegionMapChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.RegionMapChartType"_ustr;
 }
 
-bool SAL_CALL RegionMapChartType::supportsService(const OUString& rServiceName)
+bool RegionMapChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL RegionMapChartType::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> RegionMapChartType::getSupportedServiceNames()
 {
     return { CHART2_SERVICE_NAME_CHARTTYPE_REGIONMAP, u"com.sun.star.chart2.ChartType"_ustr };
 }

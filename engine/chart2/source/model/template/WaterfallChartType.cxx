@@ -30,7 +30,7 @@ WaterfallChartType::WaterfallChartType(const WaterfallChartType& rOther)
 WaterfallChartType::~WaterfallChartType() {}
 
 // ____ XCloneable ____
-uno::Reference<util::XCloneable> SAL_CALL WaterfallChartType::createClone()
+uno::Reference<util::XCloneable> WaterfallChartType::createClone()
 {
     return uno::Reference<util::XCloneable>(new WaterfallChartType(*this));
 }
@@ -41,27 +41,24 @@ rtl::Reference<ChartType> WaterfallChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL WaterfallChartType::getChartType()
-{
-    return CHART2_SERVICE_NAME_CHARTTYPE_WATERFALL;
-}
+OUString WaterfallChartType::getChartType() { return CHART2_SERVICE_NAME_CHARTTYPE_WATERFALL; }
 
 cpo::uno::Sequence<OUString> WaterfallChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
-OUString SAL_CALL WaterfallChartType::getImplementationName()
+OUString WaterfallChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.WaterfallChartType"_ustr;
 }
 
-bool SAL_CALL WaterfallChartType::supportsService(const OUString& rServiceName)
+bool WaterfallChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL WaterfallChartType::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> WaterfallChartType::getSupportedServiceNames()
 {
     return { CHART2_SERVICE_NAME_CHARTTYPE_WATERFALL, u"com.sun.star.chart2.ChartType"_ustr };
 }

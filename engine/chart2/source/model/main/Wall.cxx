@@ -71,7 +71,7 @@ Wall::~Wall()
 {}
 
 // ____ XTypeProvider ____
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Wall::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > Wall::getTypes()
 {
     return ::comphelper::concatSequences(
         impl::Wall_Base::getTypes(),
@@ -79,7 +79,7 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL Wall::getTypes()
 }
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL Wall::createClone()
+uno::Reference< util::XCloneable > Wall::createClone()
 {
     return uno::Reference< util::XCloneable >( new Wall( *this ));
 }
@@ -104,13 +104,13 @@ void Wall::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL Wall::getInfoHelper()
+::cppu::IPropertyArrayHelper & Wall::getInfoHelper()
 {
     return StaticWallInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL Wall::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > Wall::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticWallInfoHelper() ) );
@@ -118,24 +118,24 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL Wall::getPropertySetInfo()
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL Wall::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void Wall::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL Wall::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void Wall::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL Wall::modified( const lang::EventObject& aEvent )
+void Wall::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL Wall::disposing( const lang::EventObject& /* Source */ )
+void Wall::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }

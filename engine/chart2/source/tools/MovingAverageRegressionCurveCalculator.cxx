@@ -40,7 +40,7 @@ MovingAverageRegressionCurveCalculator::~MovingAverageRegressionCurveCalculator(
 {}
 
 // ____ XRegressionCurveCalculator ____
-void SAL_CALL MovingAverageRegressionCurveCalculator::recalculateRegression(
+void MovingAverageRegressionCurveCalculator::recalculateRegression(
     const cpo::uno::Sequence< double >& aXValues,
     const cpo::uno::Sequence< double >& aYValues )
 {
@@ -135,12 +135,12 @@ void MovingAverageRegressionCurveCalculator::calculateValues(
     }
 }
 
-double SAL_CALL MovingAverageRegressionCurveCalculator::getCurveValue( double /*x*/ )
+double MovingAverageRegressionCurveCalculator::getCurveValue( double /*x*/ )
 {
     return std::numeric_limits<double>::quiet_NaN();
 }
 
-cpo::uno::Sequence< geometry::RealPoint2D > SAL_CALL MovingAverageRegressionCurveCalculator::getCurveValues(
+cpo::uno::Sequence< geometry::RealPoint2D > MovingAverageRegressionCurveCalculator::getCurveValues(
     double /*min*/, double /*max*/, sal_Int32 /*nPointCount*/,
     const uno::Reference< chart2::XScaling >& /*xScalingX*/,
     const uno::Reference< chart2::XScaling >& /*xScalingY*/,

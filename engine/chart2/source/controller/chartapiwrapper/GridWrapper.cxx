@@ -74,7 +74,7 @@ void GridWrapper::getDimensionAndSubGridBool( tGridType eType, sal_Int32& rnDime
 }
 
 // ____ XComponent ____
-void SAL_CALL GridWrapper::dispose()
+void GridWrapper::dispose()
 {
     std::unique_lock g(m_aMutex);
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
@@ -83,14 +83,14 @@ void SAL_CALL GridWrapper::dispose()
     clearWrappedPropertySet(g);
 }
 
-void SAL_CALL GridWrapper::addEventListener(
+void GridWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock g(m_aMutex);
     m_aEventListenerContainer.addInterface( g, xListener );
 }
 
-void SAL_CALL GridWrapper::removeEventListener(
+void GridWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
@@ -146,17 +146,17 @@ std::vector< std::unique_ptr<WrappedProperty> > GridWrapper::createWrappedProper
     return aWrappedProperties;
 }
 
-OUString SAL_CALL GridWrapper::getImplementationName()
+OUString GridWrapper::getImplementationName()
 {
     return u"com.sun.star.comp.chart.Grid"_ustr;
 }
 
-bool SAL_CALL GridWrapper::supportsService( const OUString& rServiceName )
+bool GridWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL GridWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > GridWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.ChartGrid"_ustr,

@@ -29,7 +29,7 @@ namespace chart
 WeakSelectionChangeListenerAdapter::~WeakSelectionChangeListenerAdapter()
 {}
 
-void SAL_CALL WeakSelectionChangeListenerAdapter::selectionChanged( const lang::EventObject& aEvent )
+void WeakSelectionChangeListenerAdapter::selectionChanged( const lang::EventObject& aEvent )
 {
     Reference< view::XSelectionChangeListener > xSelChgListener( m_xListener );
     if( xSelChgListener.is())

@@ -102,7 +102,7 @@ public:
 
 protected:
     // XDispatch
-    virtual void SAL_CALL dispatch( const css::util::URL& URL,
+    virtual void dispatch( const css::util::URL& URL,
         const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
     virtual void fireStatusEvent( const OUString& rURL,

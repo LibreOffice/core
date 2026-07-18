@@ -103,13 +103,13 @@ void HistogramChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, cpo::uno::An
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL HistogramChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper& HistogramChartTypeTemplate::getInfoHelper()
 {
     return StaticHistogramChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference<beans::XPropertySetInfo> SAL_CALL HistogramChartTypeTemplate::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> HistogramChartTypeTemplate::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(

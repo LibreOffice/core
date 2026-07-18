@@ -42,7 +42,7 @@ FilledNetChartType::~FilledNetChartType()
 {}
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL FilledNetChartType::createClone()
+uno::Reference< util::XCloneable > FilledNetChartType::createClone()
 {
     return uno::Reference< util::XCloneable >( new FilledNetChartType( *this ));
 }
@@ -53,22 +53,22 @@ rtl::Reference< ChartType > FilledNetChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL FilledNetChartType::getChartType()
+OUString FilledNetChartType::getChartType()
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET;
 }
 
-OUString SAL_CALL FilledNetChartType::getImplementationName()
+OUString FilledNetChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.FilledNetChartType"_ustr;
 }
 
-bool SAL_CALL FilledNetChartType::supportsService( const OUString& rServiceName )
+bool FilledNetChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL FilledNetChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > FilledNetChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET,

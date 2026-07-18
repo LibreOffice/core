@@ -30,7 +30,7 @@ SunburstChartType::SunburstChartType(const SunburstChartType& rOther)
 SunburstChartType::~SunburstChartType() {}
 
 // ____ XCloneable ____
-uno::Reference<util::XCloneable> SAL_CALL SunburstChartType::createClone()
+uno::Reference<util::XCloneable> SunburstChartType::createClone()
 {
     return uno::Reference<util::XCloneable>(new SunburstChartType(*this));
 }
@@ -41,27 +41,24 @@ rtl::Reference<ChartType> SunburstChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL SunburstChartType::getChartType()
-{
-    return CHART2_SERVICE_NAME_CHARTTYPE_SUNBURST;
-}
+OUString SunburstChartType::getChartType() { return CHART2_SERVICE_NAME_CHARTTYPE_SUNBURST; }
 
 cpo::uno::Sequence<OUString> SunburstChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
-OUString SAL_CALL SunburstChartType::getImplementationName()
+OUString SunburstChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.SunburstChartType"_ustr;
 }
 
-bool SAL_CALL SunburstChartType::supportsService(const OUString& rServiceName)
+bool SunburstChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SunburstChartType::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SunburstChartType::getSupportedServiceNames()
 {
     return { CHART2_SERVICE_NAME_CHARTTYPE_SUNBURST, u"com.sun.star.chart2.ChartType"_ustr };
 }

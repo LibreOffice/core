@@ -727,7 +727,7 @@ ChartDocumentWrapper::~ChartDocumentWrapper()
 
 // ____ XInterface (for new interfaces) ____
 // [-loplugin:unoaggregation]
-cpo::uno::Any SAL_CALL ChartDocumentWrapper::queryInterface( const cpo::uno::Type& aType )
+cpo::uno::Any ChartDocumentWrapper::queryInterface( const cpo::uno::Type& aType )
 {
     if( m_xDelegator.is())
         // calls queryAggregation if the delegator doesn't know aType
@@ -737,7 +737,7 @@ cpo::uno::Any SAL_CALL ChartDocumentWrapper::queryInterface( const cpo::uno::Typ
 }
 
 // ____ chart::XChartDocument (old API wrapper) ____
-Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getTitle()
+Reference< drawing::XShape > ChartDocumentWrapper::getTitle()
 {
     if( !m_xTitle.is()  )
     {
@@ -753,7 +753,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getTitle()
     return m_xTitle;
 }
 
-Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getSubTitle()
+Reference< drawing::XShape > ChartDocumentWrapper::getSubTitle()
 {
     if( !m_xSubTitle.is() )
     {
@@ -769,7 +769,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getSubTitle()
     return m_xSubTitle;
 }
 
-Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getLegend()
+Reference< drawing::XShape > ChartDocumentWrapper::getLegend()
 {
     if( ! m_xLegend.is())
     {
@@ -779,7 +779,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getLegend()
     return m_xLegend;
 }
 
-Reference< beans::XPropertySet > SAL_CALL ChartDocumentWrapper::getArea()
+Reference< beans::XPropertySet > ChartDocumentWrapper::getArea()
 {
     if( ! m_xArea.is())
     {
@@ -789,7 +789,7 @@ Reference< beans::XPropertySet > SAL_CALL ChartDocumentWrapper::getArea()
     return m_xArea;
 }
 
-Reference< XDiagram > SAL_CALL ChartDocumentWrapper::getDiagram()
+Reference< XDiagram > ChartDocumentWrapper::getDiagram()
 {
     if( !m_xDiagram.is()  )
     {
@@ -806,7 +806,7 @@ Reference< XDiagram > SAL_CALL ChartDocumentWrapper::getDiagram()
     return m_xDiagram;
 }
 
-void SAL_CALL ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& _xDiagram )
+void ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& _xDiagram )
 {
     if (!_xDiagram.is())
         return;
@@ -836,7 +836,7 @@ void SAL_CALL ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& _xD
     }
 }
 
-Reference< XChartData > SAL_CALL ChartDocumentWrapper::getData()
+Reference< XChartData > ChartDocumentWrapper::getData()
 {
     if( !m_xChartData.is() )
     {
@@ -847,7 +847,7 @@ Reference< XChartData > SAL_CALL ChartDocumentWrapper::getData()
     return m_xChartData;
 }
 
-void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& xNewData )
+void ChartDocumentWrapper::attachData( const Reference< XChartData >& xNewData )
 {
     if( !xNewData.is() )
         return;
@@ -863,7 +863,7 @@ void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& x
 }
 
 // ____ XModel ____
-bool SAL_CALL ChartDocumentWrapper::attachResource(
+bool ChartDocumentWrapper::attachResource(
     const OUString& URL,
     const Sequence< beans::PropertyValue >& Arguments )
 {
@@ -873,7 +873,7 @@ bool SAL_CALL ChartDocumentWrapper::attachResource(
     return false;
 }
 
-OUString SAL_CALL ChartDocumentWrapper::getURL()
+OUString ChartDocumentWrapper::getURL()
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
@@ -881,7 +881,7 @@ OUString SAL_CALL ChartDocumentWrapper::getURL()
     return OUString();
 }
 
-Sequence< beans::PropertyValue > SAL_CALL ChartDocumentWrapper::getArgs()
+Sequence< beans::PropertyValue > ChartDocumentWrapper::getArgs()
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
@@ -889,14 +889,14 @@ Sequence< beans::PropertyValue > SAL_CALL ChartDocumentWrapper::getArgs()
     return Sequence< beans::PropertyValue >();
 }
 
-void SAL_CALL ChartDocumentWrapper::connectController( const Reference< frame::XController >& Controller )
+void ChartDocumentWrapper::connectController( const Reference< frame::XController >& Controller )
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         xModel->connectController( Controller );
 }
 
-void SAL_CALL ChartDocumentWrapper::disconnectController(
+void ChartDocumentWrapper::disconnectController(
     const Reference< frame::XController >& Controller )
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
@@ -904,21 +904,21 @@ void SAL_CALL ChartDocumentWrapper::disconnectController(
         xModel->disconnectController( Controller );
 }
 
-void SAL_CALL ChartDocumentWrapper::lockControllers()
+void ChartDocumentWrapper::lockControllers()
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         xModel->lockControllers();
 }
 
-void SAL_CALL ChartDocumentWrapper::unlockControllers()
+void ChartDocumentWrapper::unlockControllers()
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         xModel->unlockControllers();
 }
 
-bool SAL_CALL ChartDocumentWrapper::hasControllersLocked()
+bool ChartDocumentWrapper::hasControllersLocked()
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
@@ -926,7 +926,7 @@ bool SAL_CALL ChartDocumentWrapper::hasControllersLocked()
     return false;
 }
 
-Reference< frame::XController > SAL_CALL ChartDocumentWrapper::getCurrentController()
+Reference< frame::XController > ChartDocumentWrapper::getCurrentController()
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
@@ -934,7 +934,7 @@ Reference< frame::XController > SAL_CALL ChartDocumentWrapper::getCurrentControl
     return nullptr;
 }
 
-void SAL_CALL ChartDocumentWrapper::setCurrentController(
+void ChartDocumentWrapper::setCurrentController(
     const Reference< frame::XController >& Controller )
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
@@ -942,7 +942,7 @@ void SAL_CALL ChartDocumentWrapper::setCurrentController(
         xModel->setCurrentController( Controller );
 }
 
-Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::getCurrentSelection()
+Reference< uno::XInterface > ChartDocumentWrapper::getCurrentSelection()
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
@@ -951,7 +951,7 @@ Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::getCurrentSelection(
 }
 
 // ____ XComponent ____
-void SAL_CALL ChartDocumentWrapper::dispose()
+void ChartDocumentWrapper::dispose()
 {
     if( m_bIsDisposed )
         return;
@@ -1123,14 +1123,14 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
     return xFoundShapes;
 }
 
-void SAL_CALL ChartDocumentWrapper::addEventListener( const Reference< lang::XEventListener >& xListener )
+void ChartDocumentWrapper::addEventListener( const Reference< lang::XEventListener >& xListener )
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
         xModel->addEventListener( xListener );
 }
 
-void SAL_CALL ChartDocumentWrapper::removeEventListener( const Reference< lang::XEventListener >& aListener )
+void ChartDocumentWrapper::removeEventListener( const Reference< lang::XEventListener >& aListener )
 {
     rtl::Reference< ChartModel > xModel( m_spChart2ModelContact->getDocumentModel() );
     if( xModel.is() )
@@ -1138,7 +1138,7 @@ void SAL_CALL ChartDocumentWrapper::removeEventListener( const Reference< lang::
 }
 
 // ____ XDrawPageSupplier ____
-uno::Reference< drawing::XDrawPage > SAL_CALL ChartDocumentWrapper::getDrawPage()
+uno::Reference< drawing::XDrawPage > ChartDocumentWrapper::getDrawPage()
 {
     return impl_getDrawPage();
 }
@@ -1161,7 +1161,7 @@ uno::Reference< lang::XMultiServiceFactory > getShapeFactory(const rtl::Referenc
 }
 
 // ____ XMultiServiceFactory ____
-uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
+uno::Reference< uno::XInterface > ChartDocumentWrapper::createInstance(
     const OUString& aServiceSpecifier )
 {
     uno::Reference< uno::XInterface > xResult;
@@ -1415,7 +1415,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
     return xResult;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstanceWithArguments(
+uno::Reference< uno::XInterface > ChartDocumentWrapper::createInstanceWithArguments(
     const OUString& ServiceSpecifier,
     const cpo::uno::Sequence< cpo::uno::Any >& Arguments )
 {
@@ -1424,13 +1424,13 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstanceW
     return createInstance( ServiceSpecifier );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getAvailableServiceNames()
+cpo::uno::Sequence< OUString > ChartDocumentWrapper::getAvailableServiceNames()
 {
     return comphelper::mapKeysToSequence( lcl_getStaticServiceNameMap() );
 }
 
 // ____ XAggregation ____
-void SAL_CALL ChartDocumentWrapper::setDelegator(
+void ChartDocumentWrapper::setDelegator(
     const uno::Reference< uno::XInterface >& rDelegator )
 {
     if( m_bIsDisposed )
@@ -1462,7 +1462,7 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
     }
 }
 
-cpo::uno::Any SAL_CALL ChartDocumentWrapper::queryAggregation( const cpo::uno::Type& rType )
+cpo::uno::Any ChartDocumentWrapper::queryAggregation( const cpo::uno::Type& rType )
 {
     return ChartDocumentWrapper_Base::queryInterface( rType );
 }
@@ -1489,7 +1489,7 @@ void ChartDocumentWrapper::_disposing( const lang::EventObject& rSource )
 }
 
 // ____ XPropertySet ____
-void SAL_CALL ChartDocumentWrapper::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& rValue)
+void ChartDocumentWrapper::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     if (rPropertyName == u"ODFImport_UpdateView")
     {
@@ -1532,17 +1532,17 @@ std::vector< std::unique_ptr<WrappedProperty> > ChartDocumentWrapper::createWrap
     return aWrappedProperties;
 }
 
-OUString SAL_CALL ChartDocumentWrapper::getImplementationName()
+OUString ChartDocumentWrapper::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.ChartDocumentWrapper"_ustr;
 }
 
-bool SAL_CALL ChartDocumentWrapper::supportsService( const OUString& rServiceName )
+bool ChartDocumentWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ChartDocumentWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.ChartDocument"_ustr,

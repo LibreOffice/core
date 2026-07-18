@@ -61,17 +61,17 @@ public:
                     vcl::Window* pWindow);
 
     // ____ XAccessibleContext ____
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild(
+    virtual sal_Int64 getAccessibleChildCount() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild(
         sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent() override;
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
-    virtual ::sal_Int16 SAL_CALL getAccessibleRole() override;
-    virtual OUString SAL_CALL getAccessibleDescription() override;
-    virtual OUString SAL_CALL getAccessibleName() override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
-    virtual css::lang::Locale SAL_CALL getLocale() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent() override;
+    virtual sal_Int64 getAccessibleIndexInParent() override;
+    virtual ::sal_Int16 getAccessibleRole() override;
+    virtual OUString getAccessibleDescription() override;
+    virtual OUString getAccessibleName() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
+    virtual sal_Int64 getAccessibleStateSet() override;
+    virtual css::lang::Locale getLocale() override;
 
 private:
     std::optional<::accessibility::AccessibleTextHelper>   m_oTextHelper;

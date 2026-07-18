@@ -77,13 +77,13 @@ void BubbleChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any&
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL BubbleChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & BubbleChartTypeTemplate::getInfoHelper()
 {
     return StaticBubbleChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL BubbleChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > BubbleChartTypeTemplate::getPropertySetInfo()
 {
     static const uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticBubbleChartTypeTemplateInfoHelper() ) );
@@ -111,7 +111,7 @@ void BubbleChartTypeTemplate::applyStyle2(
 }
 
 // ____ XChartTypeTemplate ____
-bool SAL_CALL BubbleChartTypeTemplate::supportsCategories()
+bool BubbleChartTypeTemplate::supportsCategories()
 {
     return false;
 }

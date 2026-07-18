@@ -171,7 +171,7 @@ rtl::Reference< Diagram > ChartTypeTemplate::createDiagramByDataSource2(
     return xDia;
 }
 
-bool SAL_CALL ChartTypeTemplate::supportsCategories()
+bool ChartTypeTemplate::supportsCategories()
 {
     return true;
 }
@@ -469,7 +469,7 @@ void ChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram >& 
 }
 
 // ____ XServiceName ____
-    OUString SAL_CALL ChartTypeTemplate::getServiceName()
+    OUString ChartTypeTemplate::getServiceName()
 {
     return m_aServiceName;
 }

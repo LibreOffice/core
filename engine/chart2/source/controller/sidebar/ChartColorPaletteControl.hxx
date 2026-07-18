@@ -45,14 +45,14 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rContext);
 
     // XInitialization
-    void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    OUString getImplementationName() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
-    void SAL_CALL execute(sal_Int16 nKeyModifier) override;
-    void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+    void execute(sal_Int16 nKeyModifier) override;
+    void statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     ~ChartColorPaletteControl() override;
 

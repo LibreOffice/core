@@ -58,18 +58,18 @@ public:
 
 protected:
     // ____ XRangeHighlighter ____
-    virtual cpo::uno::Sequence< css::chart2::data::HighlightedRange > SAL_CALL getSelectedRanges() override;
-    virtual void SAL_CALL addSelectionChangeListener(
+    virtual cpo::uno::Sequence< css::chart2::data::HighlightedRange > getSelectedRanges() override;
+    virtual void addSelectionChangeListener(
         const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-    virtual void SAL_CALL removeSelectionChangeListener(
+    virtual void removeSelectionChangeListener(
         const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // ____ XSelectionChangeListener ____
-    virtual void SAL_CALL selectionChanged(
+    virtual void selectionChanged(
         const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XSelectionChangeListener) ____
-    virtual void SAL_CALL disposing(
+    virtual void disposing(
         const css::lang::EventObject& Source ) override;
 
     // ____ WeakComponentImplHelperBase ____

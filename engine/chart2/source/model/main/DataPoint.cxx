@@ -122,18 +122,18 @@ DataPoint::~DataPoint()
 }
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL DataPoint::createClone()
+uno::Reference< util::XCloneable > DataPoint::createClone()
 {
     return uno::Reference< util::XCloneable >( new DataPoint( *this ));
 }
 
 // ____ XChild ____
-Reference< uno::XInterface > SAL_CALL DataPoint::getParent()
+Reference< uno::XInterface > DataPoint::getParent()
 {
     return Reference< uno::XInterface >( m_xParentProperties.get(), uno::UNO_QUERY );
 }
 
-void SAL_CALL DataPoint::setParent(
+void DataPoint::setParent(
     const Reference< uno::XInterface >& Parent )
 {
     m_xParentProperties = Reference< beans::XPropertySet >( Parent, uno::UNO_QUERY );
@@ -154,7 +154,7 @@ void DataPoint::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const
     rAny = xFast->getFastPropertyValue( nHandle );
 }
 
-void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(
+void DataPoint::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const cpo::uno::Any& rValue )
 {
     if(    nHandle == DataPointProperties::PROP_DATAPOINT_ERROR_BAR_Y
@@ -182,13 +182,13 @@ void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(
     ::property::OPropertySet::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL DataPoint::getInfoHelper()
+::cppu::IPropertyArrayHelper & DataPoint::getInfoHelper()
 {
     return StaticDataPointInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL DataPoint::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > DataPoint::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticDataPointInfoHelper() ) );
@@ -196,24 +196,24 @@ Reference< beans::XPropertySetInfo > SAL_CALL DataPoint::getPropertySetInfo()
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL DataPoint::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void DataPoint::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL DataPoint::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void DataPoint::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL DataPoint::modified( const lang::EventObject& aEvent )
+void DataPoint::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL DataPoint::disposing( const lang::EventObject& )
+void DataPoint::disposing( const lang::EventObject& )
 {
     // nothing
 }
@@ -230,17 +230,17 @@ using impl::DataPoint_Base;
 IMPLEMENT_FORWARD_XINTERFACE2( DataPoint, DataPoint_Base, ::property::OPropertySet )
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-OUString SAL_CALL DataPoint::getImplementationName()
+OUString DataPoint::getImplementationName()
 {
     return u"com.sun.star.comp.chart.DataPoint"_ustr ;
 }
 
-bool SAL_CALL DataPoint::supportsService( const OUString& rServiceName )
+bool DataPoint::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DataPoint::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > DataPoint::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.drawing.FillProperties"_ustr,

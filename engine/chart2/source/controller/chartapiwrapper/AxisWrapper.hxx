@@ -64,9 +64,9 @@ public:
     static void getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDimensionIndex, bool& rbMainAxis );
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     //ReferenceSizePropertyProvider
     virtual void updateReferenceSize() override;
@@ -74,31 +74,31 @@ public:
     virtual css::awt::Size getCurrentSizeForReference() override;
 
     // ____ XComponent ____
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference<
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference<
                                             css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference<
+    virtual void removeEventListener( const css::uno::Reference<
                                                css::lang::XEventListener >& aListener ) override;
 
     // ____ chart::XAxis ____
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getAxisTitle(  ) override;
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getMajorGrid(  ) override;
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getMinorGrid(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > getAxisTitle(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > getMajorGrid(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > getMinorGrid(  ) override;
 
     // ____ XShape ____
-    virtual css::awt::Point SAL_CALL getPosition() override;
-    virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) override;
-    virtual css::awt::Size SAL_CALL getSize() override;
-    virtual void SAL_CALL setSize( const css::awt::Size& aSize ) override;
+    virtual css::awt::Point getPosition() override;
+    virtual void setPosition( const css::awt::Point& aPosition ) override;
+    virtual css::awt::Size getSize() override;
+    virtual void setSize( const css::awt::Size& aSize ) override;
 
     // ____ XShapeDescriptor (base of XShape) ____
-    virtual OUString SAL_CALL getShapeType() override;
+    virtual OUString getShapeType() override;
 
     // ____ XNumberFormatsSupplier ____
     virtual css::uno::Reference<
-                css::beans::XPropertySet > SAL_CALL getNumberFormatSettings() override;
+                css::beans::XPropertySet > getNumberFormatSettings() override;
     virtual css::uno::Reference<
-                css::util::XNumberFormats > SAL_CALL getNumberFormats() override;
+                css::util::XNumberFormats > getNumberFormats() override;
 
 protected:
     // ____ WrappedPropertySet ____

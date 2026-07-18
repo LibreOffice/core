@@ -50,13 +50,13 @@ public:
     explicit RegressionEquation();
     virtual ~RegressionEquation() override;
 
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName()
         override;
-    virtual bool SAL_CALL
+    virtual bool
         supportsService( const OUString& ServiceName )
         override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
         getSupportedServiceNames()
         override;
 
@@ -69,33 +69,33 @@ private:
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
 
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XModifyBroadcaster ____
-    virtual void SAL_CALL addModifyListener(
+    virtual void addModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener(
+    virtual void removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // ____ XModifyListener ____
-    virtual void SAL_CALL modified(
+    virtual void modified(
         const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
-    virtual void SAL_CALL disposing(
+    virtual void disposing(
         const css::lang::EventObject& Source ) override;
 
     // ____ XTitle ____
     virtual cpo::uno::Sequence<
-        css::uno::Reference< css::chart2::XFormattedString > > SAL_CALL getText() override;
-    virtual void SAL_CALL setText( const cpo::uno::Sequence<
+        css::uno::Reference< css::chart2::XFormattedString > > getText() override;
+    virtual void setText( const cpo::uno::Sequence<
                                    css::uno::Reference<
                                    css::chart2::XFormattedString > >& Strings ) override;
 

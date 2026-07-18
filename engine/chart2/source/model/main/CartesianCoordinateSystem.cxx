@@ -53,34 +53,34 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem()
 {}
 
 // ____ XCoordinateSystem ____
-OUString SAL_CALL CartesianCoordinateSystem::getCoordinateSystemType()
+OUString CartesianCoordinateSystem::getCoordinateSystemType()
 {
     return CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
 }
 
-OUString SAL_CALL CartesianCoordinateSystem::getViewServiceName()
+OUString CartesianCoordinateSystem::getViewServiceName()
 {
     return CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME;
 }
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL CartesianCoordinateSystem::createClone()
+uno::Reference< util::XCloneable > CartesianCoordinateSystem::createClone()
 {
     return Reference< util::XCloneable >( new CartesianCoordinateSystem( *this ));
 }
 
 // ____ XServiceInfo ____
-OUString SAL_CALL CartesianCoordinateSystem::getImplementationName()
+OUString CartesianCoordinateSystem::getImplementationName()
 {
     return u"com.sun.star.comp.chart.CartesianCoordinateSystem"_ustr;
 }
 
-bool SAL_CALL CartesianCoordinateSystem::supportsService( const OUString& rServiceName )
+bool CartesianCoordinateSystem::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > CartesianCoordinateSystem::getSupportedServiceNames()
 {
     return { CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME };
 }
@@ -95,17 +95,17 @@ CartesianCoordinateSystem2d::~CartesianCoordinateSystem2d()
 {}
 
 // ____ XServiceInfo ____
-OUString SAL_CALL CartesianCoordinateSystem2d::getImplementationName()
+OUString CartesianCoordinateSystem2d::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.CartesianCoordinateSystem2d"_ustr;
 }
 
-bool SAL_CALL CartesianCoordinateSystem2d::supportsService( const OUString& rServiceName )
+bool CartesianCoordinateSystem2d::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem2d::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > CartesianCoordinateSystem2d::getSupportedServiceNames()
 {
     return {
         CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME,
@@ -123,17 +123,17 @@ CartesianCoordinateSystem3d::~CartesianCoordinateSystem3d()
 {}
 
 // ____ XServiceInfo ____
-OUString SAL_CALL CartesianCoordinateSystem3d::getImplementationName()
+OUString CartesianCoordinateSystem3d::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.CartesianCoordinateSystem3d"_ustr;
 }
 
-bool SAL_CALL CartesianCoordinateSystem3d::supportsService( const OUString& rServiceName )
+bool CartesianCoordinateSystem3d::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem3d::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > CartesianCoordinateSystem3d::getSupportedServiceNames()
 {
     return {
         CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME,

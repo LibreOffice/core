@@ -34,7 +34,7 @@ using namespace com::sun::star;
 
 extern "C" {
 
-bool SAL_CALL component_writeInfo(
+bool component_writeInfo(
     void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
 {
     if( pRegistryKey )
@@ -61,7 +61,7 @@ bool SAL_CALL component_writeInfo(
     return false;
 }
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * component_getFactory(
     const char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void* pRet = 0;
@@ -165,7 +165,7 @@ cpo::uno::Sequence< OUString > SampleAddIn::getSupportedServiceNames_Static()
     };
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SampleAddIn_CreateInstance(
+uno::Reference< uno::XInterface > SampleAddIn_CreateInstance(
     const uno::Reference< lang::XMultiServiceFactory >& )
 {
     uno::Reference< uno::XInterface > xInst = (cppu::OWeakObject*)new SampleAddIn();
@@ -176,7 +176,7 @@ uno::Reference< uno::XInterface > SAL_CALL SampleAddIn_CreateInstance(
 // implementation of interface methods
 
 // XInitialization
-void SAL_CALL SampleAddIn::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+void SampleAddIn::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
     throw( uno::Exception, uno::RuntimeException )
 {
     // first argument should be the XChartDocument
@@ -229,7 +229,7 @@ void SAL_CALL SampleAddIn::initialize( const cpo::uno::Sequence< cpo::uno::Any >
  * routine - all old objects are deleted beforehand
  *
  ********************************************************************************/
-void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
+void SampleAddIn::refresh() throw( uno::RuntimeException )
 {
     if( ! mxChartDoc.is())
         return;
@@ -361,14 +361,14 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
     }
 }
 
-void SAL_CALL SampleAddIn::addRefreshListener( const uno::Reference< util::XRefreshListener >&  )
+void SampleAddIn::addRefreshListener( const uno::Reference< util::XRefreshListener >&  )
     throw( uno::RuntimeException )
 {
     // not implemented - this is not necessary
     // (this method exists just because the interface requires it)
 }
 
-void SAL_CALL SampleAddIn::removeRefreshListener( const uno::Reference< util::XRefreshListener >&  )
+void SampleAddIn::removeRefreshListener( const uno::Reference< util::XRefreshListener >&  )
     throw( uno::RuntimeException )
 {
     // not implemented - this is not necessary
@@ -376,14 +376,14 @@ void SAL_CALL SampleAddIn::removeRefreshListener( const uno::Reference< util::XR
 }
 
 // XDiagram
-OUString SAL_CALL SampleAddIn::getDiagramType() throw( uno::RuntimeException )
+OUString SampleAddIn::getDiagramType() throw( uno::RuntimeException )
 {
     return "com.sun.star.chart.SampleDiagram";
 }
 
 // the following methods just delegate to the "parent diagram" (which in the future might no longer exist)
 
-uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getDataRowProperties( sal_Int32 nRow )
+uno::Reference< beans::XPropertySet > SampleAddIn::getDataRowProperties( sal_Int32 nRow )
     throw( lang::IndexOutOfBoundsException,
            uno::RuntimeException )
 {
@@ -397,7 +397,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getDataRowProperties
     return uno::Reference< beans::XPropertySet >();
 }
 
-uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getDataPointProperties( sal_Int32 nCol, sal_Int32 nRow )
+uno::Reference< beans::XPropertySet > SampleAddIn::getDataPointProperties( sal_Int32 nCol, sal_Int32 nRow )
     throw( lang::IndexOutOfBoundsException,
            uno::RuntimeException )
 {
@@ -412,7 +412,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getDataPointProperti
 }
 
 // XShape ( ::XDiagram )
-awt::Size SAL_CALL SampleAddIn::getSize()
+awt::Size SampleAddIn::getSize()
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -425,7 +425,7 @@ awt::Size SAL_CALL SampleAddIn::getSize()
     return awt::Size();
 }
 
-void SAL_CALL SampleAddIn::setSize( const awt::Size& aSize )
+void SampleAddIn::setSize( const awt::Size& aSize )
     throw( beans::PropertyVetoException, uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -436,7 +436,7 @@ void SAL_CALL SampleAddIn::setSize( const awt::Size& aSize )
     }
 }
 
-awt::Point SAL_CALL SampleAddIn::getPosition()
+awt::Point SampleAddIn::getPosition()
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -449,7 +449,7 @@ awt::Point SAL_CALL SampleAddIn::getPosition()
     return awt::Point();
 }
 
-void SAL_CALL SampleAddIn::setPosition( const awt::Point& aPos )
+void SampleAddIn::setPosition( const awt::Point& aPos )
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -461,13 +461,13 @@ void SAL_CALL SampleAddIn::setPosition( const awt::Point& aPos )
 }
 
 // XShapeDescriptor ( ::XShape ::XDiagram )
-OUString SAL_CALL SampleAddIn::getShapeType() throw( css::uno::RuntimeException )
+OUString SampleAddIn::getShapeType() throw( css::uno::RuntimeException )
 {
     return "com.sun.star.chart.SampleAddinShape";
 }
 
 // XAxisXSupplier
-uno::Reference< drawing::XShape > SAL_CALL SampleAddIn::getXAxisTitle()
+uno::Reference< drawing::XShape > SampleAddIn::getXAxisTitle()
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -480,7 +480,7 @@ uno::Reference< drawing::XShape > SAL_CALL SampleAddIn::getXAxisTitle()
     return uno::Reference< drawing::XShape >();
 }
 
-uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getXAxis()
+uno::Reference< beans::XPropertySet > SampleAddIn::getXAxis()
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -493,7 +493,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getXAxis()
     return uno::Reference< beans::XPropertySet >();
 }
 
-uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getXMainGrid()
+uno::Reference< beans::XPropertySet > SampleAddIn::getXMainGrid()
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -506,7 +506,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getXMainGrid()
     return uno::Reference< beans::XPropertySet >();
 }
 
-uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getXHelpGrid()
+uno::Reference< beans::XPropertySet > SampleAddIn::getXHelpGrid()
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -520,7 +520,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getXHelpGrid()
 }
 
 // XAxisYSupplier
-uno::Reference< drawing::XShape > SAL_CALL SampleAddIn::getYAxisTitle()
+uno::Reference< drawing::XShape > SampleAddIn::getYAxisTitle()
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -533,7 +533,7 @@ uno::Reference< drawing::XShape > SAL_CALL SampleAddIn::getYAxisTitle()
     return uno::Reference< drawing::XShape >();
 }
 
-uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getYAxis()
+uno::Reference< beans::XPropertySet > SampleAddIn::getYAxis()
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -546,7 +546,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getYAxis()
     return uno::Reference< beans::XPropertySet >();
 }
 
-uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getYMainGrid()
+uno::Reference< beans::XPropertySet > SampleAddIn::getYMainGrid()
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -559,7 +559,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getYMainGrid()
     return uno::Reference< beans::XPropertySet >();
 }
 
-uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getYHelpGrid()
+uno::Reference< beans::XPropertySet > SampleAddIn::getYHelpGrid()
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -573,7 +573,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getYHelpGrid()
 }
 
 // XStatisticDisplay
-uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getUpBar()
+uno::Reference< beans::XPropertySet > SampleAddIn::getUpBar()
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -586,7 +586,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getUpBar()
     return uno::Reference< beans::XPropertySet >();
 }
 
-uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getDownBar()
+uno::Reference< beans::XPropertySet > SampleAddIn::getDownBar()
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -599,7 +599,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getDownBar()
     return uno::Reference< beans::XPropertySet >();
 }
 
-uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getMinMaxLine()
+uno::Reference< beans::XPropertySet > SampleAddIn::getMinMaxLine()
     throw( uno::RuntimeException )
 {
     if( mxChartDoc.is())
@@ -613,37 +613,37 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getMinMaxLine()
 }
 
 // XServiceName
-OUString SAL_CALL SampleAddIn::getServiceName() throw( uno::RuntimeException )
+OUString SampleAddIn::getServiceName() throw( uno::RuntimeException )
 {
     return "com.sun.star.chart.SampleAddIn";
 }
 
 // XServiceInfo
-OUString SAL_CALL SampleAddIn::getImplementationName() throw( uno::RuntimeException )
+OUString SampleAddIn::getImplementationName() throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-bool SAL_CALL SampleAddIn::supportsService( const OUString& ServiceName )
+bool SampleAddIn::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SampleAddIn::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SampleAddIn::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
 }
 
 // XLocalizable
-void SAL_CALL SampleAddIn::setLocale( const lang::Locale& eLocale )
+void SampleAddIn::setLocale( const lang::Locale& eLocale )
     throw( uno::RuntimeException )
 {
     maLocale = eLocale;
 }
 
-lang::Locale SAL_CALL SampleAddIn::getLocale()
+lang::Locale SampleAddIn::getLocale()
     throw( uno::RuntimeException )
 {
     return maLocale;

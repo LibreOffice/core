@@ -637,7 +637,7 @@ DiagramWrapper::~DiagramWrapper()
 {}
 
 // ____ XDiagram ____
-OUString SAL_CALL DiagramWrapper::getDiagramType()
+OUString DiagramWrapper::getDiagramType()
 {
     OUString aRet;
 
@@ -686,7 +686,7 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
 }
 
 Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getDataRowProperties( sal_Int32 nRow )
+    beans::XPropertySet > DiagramWrapper::getDataRowProperties( sal_Int32 nRow )
 {
     if( nRow < 0 )
         throw lang::IndexOutOfBoundsException(u"DataSeries index invalid"_ustr,
@@ -703,7 +703,7 @@ Reference<
 }
 
 Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getDataPointProperties( sal_Int32 nCol, sal_Int32 nRow )
+    beans::XPropertySet > DiagramWrapper::getDataPointProperties( sal_Int32 nCol, sal_Int32 nRow )
 {
     if( nCol < 0 || nRow < 0 )
         throw lang::IndexOutOfBoundsException(u"DataSeries index invalid"_ustr,
@@ -723,13 +723,13 @@ Reference<
 }
 
 // ____ XShape (base of XDiagram) ____
-awt::Point SAL_CALL DiagramWrapper::getPosition()
+awt::Point DiagramWrapper::getPosition()
 {
     awt::Point aPosition = ToPoint( m_spChart2ModelContact->GetDiagramRectangleIncludingAxes() );
     return aPosition;
 }
 
-void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
+void DiagramWrapper::setPosition( const awt::Point& aPosition )
 {
     rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
     if( !xModel )
@@ -759,13 +759,13 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
     xProp->setPropertyValue( u"PosSizeExcludeAxes"_ustr, cpo::uno::Any(false) );
 }
 
-awt::Size SAL_CALL DiagramWrapper::getSize()
+awt::Size DiagramWrapper::getSize()
 {
     awt::Size aSize = ToSize( m_spChart2ModelContact->GetDiagramRectangleIncludingAxes() );
     return aSize;
 }
 
-void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
+void DiagramWrapper::setSize( const awt::Size& aSize )
 {
     rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
     if( !xModel )
@@ -797,14 +797,14 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
-OUString SAL_CALL DiagramWrapper::getShapeType()
+OUString DiagramWrapper::getShapeType()
 {
     return u"com.sun.star.chart.Diagram"_ustr;
 }
 
 // ____ XDiagramPositioning ____
 
-void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning()
+void DiagramWrapper::setAutomaticDiagramPositioning()
 {
     rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
     if( !xModel )
@@ -820,7 +820,7 @@ void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning()
         xDiaProps->setPropertyValue( u"RelativePosition"_ustr, Any() );
     }
 }
-bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  )
+bool DiagramWrapper::isAutomaticDiagramPositioning(  )
 {
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
@@ -832,7 +832,7 @@ bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  )
     }
     return true;
 }
-void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectangle& rPositionRect )
+void DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectangle& rPositionRect )
 {
     rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
     if( !xModel )
@@ -846,7 +846,7 @@ void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectan
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue(u"PosSizeExcludeAxes"_ustr, cpo::uno::Any(true) );
 }
-bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning()
+bool DiagramWrapper::isExcludingDiagramPositioning()
 {
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
@@ -862,11 +862,11 @@ bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning()
     }
     return false;
 }
-awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionExcludingAxes(  )
+awt::Rectangle DiagramWrapper::calculateDiagramPositionExcludingAxes(  )
 {
     return m_spChart2ModelContact->GetDiagramRectangleExcludingAxes();
 }
-void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectangle& rPositionRect )
+void DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectangle& rPositionRect )
 {
     rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
     if( !xModel )
@@ -880,11 +880,11 @@ void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectan
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue(u"PosSizeExcludeAxes"_ustr, cpo::uno::Any(false) );
 }
-awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  )
+awt::Rectangle DiagramWrapper::calculateDiagramPositionIncludingAxes(  )
 {
     return m_spChart2ModelContact->GetDiagramRectangleIncludingAxes();
 }
-void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( const awt::Rectangle& rPositionRect )
+void DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( const awt::Rectangle& rPositionRect )
 {
     rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
     if( !xModel )
@@ -896,13 +896,13 @@ void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( cons
     awt::Rectangle aRect( m_spChart2ModelContact->SubstractAxisTitleSizes(rPositionRect) );
     DiagramWrapper::setDiagramPositionIncludingAxes( aRect );
 }
-css::awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxesAndAxisTitles(  )
+css::awt::Rectangle DiagramWrapper::calculateDiagramPositionIncludingAxesAndAxisTitles(  )
 {
     return m_spChart2ModelContact->GetDiagramRectangleIncludingTitle();
 }
 
 // ____ XAxisSupplier ____
-Reference< XAxis > SAL_CALL DiagramWrapper::getAxis( sal_Int32 nDimensionIndex )
+Reference< XAxis > DiagramWrapper::getAxis( sal_Int32 nDimensionIndex )
 {
     rtl::Reference< AxisWrapper > xAxis;
     if(!nDimensionIndex)
@@ -926,7 +926,7 @@ Reference< XAxis > SAL_CALL DiagramWrapper::getAxis( sal_Int32 nDimensionIndex )
     return xAxis;
 }
 
-Reference< XAxis > SAL_CALL DiagramWrapper::getSecondaryAxis( sal_Int32 nDimensionIndex )
+Reference< XAxis > DiagramWrapper::getSecondaryAxis( sal_Int32 nDimensionIndex )
 {
     rtl::Reference< AxisWrapper > xAxis;
     if(!nDimensionIndex)
@@ -945,7 +945,7 @@ Reference< XAxis > SAL_CALL DiagramWrapper::getSecondaryAxis( sal_Int32 nDimensi
 }
 
 // ____ XAxisZSupplier ____
-Reference< drawing::XShape > SAL_CALL DiagramWrapper::getZAxisTitle()
+Reference< drawing::XShape > DiagramWrapper::getZAxisTitle()
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getAxis(2) );
@@ -954,7 +954,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getZAxisTitle()
     return xRet;
 }
 
-Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZMainGrid()
+Reference< beans::XPropertySet > DiagramWrapper::getZMainGrid()
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(2) );
@@ -963,7 +963,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZMainGrid()
     return xRet;
 }
 
-Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZHelpGrid()
+Reference< beans::XPropertySet > DiagramWrapper::getZHelpGrid()
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(2) );
@@ -972,7 +972,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZHelpGrid()
     return xRet;
 }
 
-Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZAxis()
+Reference< beans::XPropertySet > DiagramWrapper::getZAxis()
 {
     if( ! m_xZAxis.is())
         m_xZAxis = new AxisWrapper( AxisWrapper::Z_AXIS, m_spChart2ModelContact );
@@ -980,7 +980,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZAxis()
 }
 
 // ____ XTwoAxisXSupplier ____
-Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryXAxis()
+Reference< beans::XPropertySet > DiagramWrapper::getSecondaryXAxis()
 {
     if( ! m_xSecondXAxis.is())
         m_xSecondXAxis = new AxisWrapper( AxisWrapper::SECOND_X_AXIS, m_spChart2ModelContact );
@@ -988,7 +988,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryXAxis()
 }
 
 // ____ XAxisXSupplier (base of XTwoAxisXSupplier) ____
-Reference< drawing::XShape > SAL_CALL DiagramWrapper::getXAxisTitle()
+Reference< drawing::XShape > DiagramWrapper::getXAxisTitle()
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getAxis(0) );
@@ -997,14 +997,14 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getXAxisTitle()
     return xRet;
 }
 
-Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXAxis()
+Reference< beans::XPropertySet > DiagramWrapper::getXAxis()
 {
     if( ! m_xXAxis.is())
         m_xXAxis = new AxisWrapper( AxisWrapper::X_AXIS, m_spChart2ModelContact );
     return m_xXAxis;
 }
 
-Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXMainGrid()
+Reference< beans::XPropertySet > DiagramWrapper::getXMainGrid()
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(0) );
@@ -1013,7 +1013,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXMainGrid()
     return xRet;
 }
 
-Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXHelpGrid()
+Reference< beans::XPropertySet > DiagramWrapper::getXHelpGrid()
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(0) );
@@ -1023,7 +1023,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXHelpGrid()
 }
 
 // ____ XTwoAxisYSupplier ____
-Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryYAxis()
+Reference< beans::XPropertySet > DiagramWrapper::getSecondaryYAxis()
 {
     if( ! m_xSecondYAxis.is())
         m_xSecondYAxis = new AxisWrapper( AxisWrapper::SECOND_Y_AXIS, m_spChart2ModelContact );
@@ -1031,7 +1031,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryYAxis()
 }
 
 // ____ XAxisYSupplier (base of XTwoAxisYSupplier) ____
-Reference< drawing::XShape > SAL_CALL DiagramWrapper::getYAxisTitle()
+Reference< drawing::XShape > DiagramWrapper::getYAxisTitle()
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getAxis(1) );
@@ -1040,14 +1040,14 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getYAxisTitle()
     return xRet;
 }
 
-Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYAxis()
+Reference< beans::XPropertySet > DiagramWrapper::getYAxis()
 {
     if( ! m_xYAxis.is())
         m_xYAxis = new AxisWrapper( AxisWrapper::Y_AXIS, m_spChart2ModelContact );
     return m_xYAxis;
 }
 
-Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYMainGrid()
+Reference< beans::XPropertySet > DiagramWrapper::getYMainGrid()
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(1) );
@@ -1056,7 +1056,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYMainGrid()
     return xRet;
 }
 
-Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYHelpGrid()
+Reference< beans::XPropertySet > DiagramWrapper::getYHelpGrid()
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(1) );
@@ -1066,7 +1066,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYHelpGrid()
 }
 
 // ____ XSecondAxisTitleSupplier ____
-Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondXAxisTitle()
+Reference< drawing::XShape > DiagramWrapper::getSecondXAxisTitle()
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getSecondaryAxis(0) );
@@ -1075,7 +1075,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondXAxisTitle()
     return xRet;
 }
 
-Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondYAxisTitle()
+Reference< drawing::XShape > DiagramWrapper::getSecondYAxisTitle()
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getSecondaryAxis(1) );
@@ -1086,7 +1086,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondYAxisTitle()
 
 // ____ XStatisticDisplay ____
 Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getUpBar()
+    beans::XPropertySet > DiagramWrapper::getUpBar()
 {
     if( !m_xUpBarWrapper.is() )
     {
@@ -1096,7 +1096,7 @@ Reference<
 }
 
 Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getDownBar()
+    beans::XPropertySet > DiagramWrapper::getDownBar()
 {
     if( !m_xDownBarWrapper.is() )
     {
@@ -1106,7 +1106,7 @@ Reference<
 }
 
 Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getMinMaxLine()
+    beans::XPropertySet > DiagramWrapper::getMinMaxLine()
 {
     if( !m_xMinMaxLineWrapper.is() )
     {
@@ -1116,7 +1116,7 @@ Reference<
 }
 
 // ____ X3DDisplay ____
-Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getWall()
+Reference< beans::XPropertySet > DiagramWrapper::getWall()
 {
     if( !m_xWall.is() )
     {
@@ -1126,7 +1126,7 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getWall()
 }
 
 Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getFloor()
+    beans::XPropertySet > DiagramWrapper::getFloor()
 {
     if( !m_xFloor.is() )
     {
@@ -1136,21 +1136,21 @@ Reference<
 }
 
 // ____ X3DDefaultSetter ____
-void SAL_CALL DiagramWrapper::set3DSettingsToDefault()
+void DiagramWrapper::set3DSettingsToDefault()
 {
     rtl::Reference< ::chart::Diagram > x3DDefaultSetter( m_spChart2ModelContact->getDiagram() );
     if( x3DDefaultSetter.is() )
         x3DDefaultSetter->set3DSettingsToDefault();
 }
 
-void SAL_CALL DiagramWrapper::setDefaultRotation()
+void DiagramWrapper::setDefaultRotation()
 {
     rtl::Reference< ::chart::Diagram > x3DDefaultSetter( m_spChart2ModelContact->getDiagram() );
     if( x3DDefaultSetter.is() )
         x3DDefaultSetter->setDefaultRotation();
 }
 
-void SAL_CALL DiagramWrapper::setDefaultIllumination()
+void DiagramWrapper::setDefaultIllumination()
 {
     rtl::Reference< ::chart::Diagram > x3DDefaultSetter( m_spChart2ModelContact->getDiagram() );
     if( x3DDefaultSetter.is() )
@@ -1158,7 +1158,7 @@ void SAL_CALL DiagramWrapper::setDefaultIllumination()
 }
 
 // ____ XComponent ____
-void SAL_CALL DiagramWrapper::dispose()
+void DiagramWrapper::dispose()
 {
     std::unique_lock g(m_aMutex);
     m_aEventListenerContainer.disposeAndClear( g, lang::EventObject( static_cast< ::cppu::OWeakObject* >( this )));
@@ -1177,14 +1177,14 @@ void SAL_CALL DiagramWrapper::dispose()
     clearWrappedPropertySet(g);
 }
 
-void SAL_CALL DiagramWrapper::addEventListener(
+void DiagramWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock g(m_aMutex);
     m_aEventListenerContainer.addInterface( g, xListener );
 }
 
-void SAL_CALL DiagramWrapper::removeEventListener(
+void DiagramWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
@@ -1991,7 +1991,7 @@ private:
 }
 
 // ____ XDiagramProvider ____
-Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
+Reference< chart2::XDiagram > DiagramWrapper::getDiagram()
 {
     return m_spChart2ModelContact->getDiagram();
 }
@@ -2001,7 +2001,7 @@ rtl::Reference< ::chart::Diagram > DiagramWrapper::getUnderlyingDiagram()
     return m_spChart2ModelContact->getDiagram();
 }
 
-void SAL_CALL DiagramWrapper::setDiagram(
+void DiagramWrapper::setDiagram(
     const Reference< chart2::XDiagram >& /*xDiagram*/ )
 {
     //@todo: remove this method from interface
@@ -2066,17 +2066,17 @@ std::vector< std::unique_ptr<WrappedProperty> > DiagramWrapper::createWrappedPro
     return aWrappedProperties;
 }
 
-OUString SAL_CALL DiagramWrapper::getImplementationName()
+OUString DiagramWrapper::getImplementationName()
 {
     return u"com.sun.star.comp.chart.Diagram"_ustr;
 }
 
-bool SAL_CALL DiagramWrapper::supportsService( const OUString& rServiceName )
+bool DiagramWrapper::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DiagramWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > DiagramWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.Diagram"_ustr,

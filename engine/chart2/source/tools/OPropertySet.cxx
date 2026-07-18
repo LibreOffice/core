@@ -85,7 +85,7 @@ void OPropertySet::SetNewValuesExplicitlyEvenIfTheyEqualDefault()
 OPropertySet::~OPropertySet()
 {}
 
-Any SAL_CALL OPropertySet::queryInterface( const cpo::uno::Type& aType )
+Any OPropertySet::queryInterface( const cpo::uno::Type& aType )
 {
     return ::cppu::queryInterface(
         aType,
@@ -99,7 +99,7 @@ Any SAL_CALL OPropertySet::queryInterface( const cpo::uno::Type& aType )
 }
 
 //  ____ XTypeProvider ____
-Sequence< cpo::uno::Type > SAL_CALL
+Sequence< cpo::uno::Type >
     OPropertySet::getTypes()
 {
     static const Sequence< cpo::uno::Type > aTypeList{
@@ -114,14 +114,14 @@ Sequence< cpo::uno::Type > SAL_CALL
     return aTypeList;
 }
 
-Sequence< sal_Int8 > SAL_CALL
+Sequence< sal_Int8 >
     OPropertySet::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 // ____ XPropertyState ____
-beans::PropertyState SAL_CALL
+beans::PropertyState
     OPropertySet::getPropertyState( const OUString& PropertyName )
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
@@ -130,7 +130,7 @@ beans::PropertyState SAL_CALL
         rPH.getHandleByName( PropertyName ));
 }
 
-Sequence< beans::PropertyState > SAL_CALL
+Sequence< beans::PropertyState >
     OPropertySet::getPropertyStates( const Sequence< OUString >& aPropertyName )
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
@@ -144,7 +144,7 @@ Sequence< beans::PropertyState > SAL_CALL
     return GetPropertyStatesByHandle( aHandles );
 }
 
-void SAL_CALL
+void
     OPropertySet::setPropertyToDefault( const OUString& PropertyName )
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
@@ -153,7 +153,7 @@ void SAL_CALL
     firePropertyChangeEvent();
 }
 
-Any SAL_CALL
+Any
     OPropertySet::getPropertyDefault( const OUString& aPropertyName )
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
@@ -168,14 +168,14 @@ Any SAL_CALL
 // Note: getPropertyStates() is already implemented in XPropertyState with the
 // same signature
 
-void SAL_CALL
+void
     OPropertySet::setAllPropertiesToDefault()
 {
     SetAllPropertiesToDefault();
     firePropertyChangeEvent();
 }
 
-void SAL_CALL
+void
     OPropertySet::setPropertiesToDefault( const Sequence< OUString >& aPropertyNames )
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
@@ -189,7 +189,7 @@ void SAL_CALL
     SetPropertiesToDefault( aHandles );
 }
 
-Sequence< Any > SAL_CALL
+Sequence< Any >
     OPropertySet::getPropertyDefaults( const Sequence< OUString >& aPropertyNames )
 {
     ::cppu::IPropertyArrayHelper & rPH = getInfoHelper();
@@ -209,7 +209,7 @@ Sequence< Any > SAL_CALL
     return aResult;
 }
 
-bool SAL_CALL OPropertySet::convertFastPropertyValue
+bool OPropertySet::convertFastPropertyValue
     ( Any & rConvertedValue,
       Any & rOldValue,
       sal_Int32 nHandle,
@@ -242,7 +242,7 @@ bool SAL_CALL OPropertySet::convertFastPropertyValue
     return true;
 }
 
-void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
+void OPropertySet::setFastPropertyValue_NoBroadcast
     ( sal_Int32 nHandle,
       const Any& rValue )
 {
@@ -272,7 +272,7 @@ void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
         SetPropertyValueByHandle( nHandle, rValue );
 }
 
-void SAL_CALL OPropertySet::getFastPropertyValue
+void OPropertySet::getFastPropertyValue
     ( Any& rValue,
       sal_Int32 nHandle ) const
 {
@@ -355,12 +355,12 @@ void OPropertySet::firePropertyChangeEvent()
 }
 
 // ____ XStyleSupplier ____
-Reference< style::XStyle > SAL_CALL OPropertySet::getStyle()
+Reference< style::XStyle > OPropertySet::getStyle()
 {
     return m_xStyle;
 }
 
-void SAL_CALL OPropertySet::setStyle( const Reference< style::XStyle >& xStyle )
+void OPropertySet::setStyle( const Reference< style::XStyle >& xStyle )
 {
     if( ! SetStyle( xStyle ))
         throw lang::IllegalArgumentException(
@@ -370,7 +370,7 @@ void SAL_CALL OPropertySet::setStyle( const Reference< style::XStyle >& xStyle )
 }
 
 // ____ XMultiPropertySet ____
-void SAL_CALL OPropertySet::setPropertyValues(
+void OPropertySet::setPropertyValues(
     const Sequence< OUString >& PropertyNames, const Sequence< Any >& Values )
 {
     ::cppu::OPropertySetHelper::setPropertyValues( PropertyNames, Values );
@@ -379,7 +379,7 @@ void SAL_CALL OPropertySet::setPropertyValues(
 }
 
 // ____ XFastPropertySet ____
-void SAL_CALL OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
+void OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
 {
     ::cppu::OPropertySetHelper::setFastPropertyValue( nHandle, rValue );
 

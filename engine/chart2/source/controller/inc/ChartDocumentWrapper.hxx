@@ -60,9 +60,9 @@ public:
     virtual ~ChartDocumentWrapper() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     void setAddIn( const css::uno::Reference< css::util::XRefreshable >& xAddIn );
     const css::uno::Reference< css::util::XRefreshable >& getAddIn() const { return m_xAddIn;}
@@ -79,60 +79,60 @@ public:
     rtl::Reference<SvxDrawPage> impl_getDrawPage() const;
 
     // ____ chart::XChartDocument ____
-    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getTitle() override;
-    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getSubTitle() override;
-    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getLegend() override;
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getArea() override;
-    virtual css::uno::Reference< css::chart::XDiagram > SAL_CALL getDiagram() override;
-    virtual void SAL_CALL setDiagram( const css::uno::Reference<
+    virtual css::uno::Reference< css::drawing::XShape > getTitle() override;
+    virtual css::uno::Reference< css::drawing::XShape > getSubTitle() override;
+    virtual css::uno::Reference< css::drawing::XShape > getLegend() override;
+    virtual css::uno::Reference< css::beans::XPropertySet > getArea() override;
+    virtual css::uno::Reference< css::chart::XDiagram > getDiagram() override;
+    virtual void setDiagram( const css::uno::Reference<
                                       css::chart::XDiagram >& xDiagram ) override;
-    virtual css::uno::Reference< css::chart::XChartData > SAL_CALL getData() override;
-    virtual void SAL_CALL attachData( const css::uno::Reference<
+    virtual css::uno::Reference< css::chart::XChartData > getData() override;
+    virtual void attachData( const css::uno::Reference<
                                       css::chart::XChartData >& xData ) override;
 
     // ____ XModel ____
-    virtual bool SAL_CALL attachResource( const OUString& URL,
+    virtual bool attachResource( const OUString& URL,
                                               const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
-    virtual OUString SAL_CALL getURL() override;
+    virtual OUString getURL() override;
     virtual cpo::uno::Sequence<
-        css::beans::PropertyValue > SAL_CALL getArgs() override;
-    virtual void SAL_CALL connectController( const css::uno::Reference<
+        css::beans::PropertyValue > getArgs() override;
+    virtual void connectController( const css::uno::Reference<
                                              css::frame::XController >& Controller ) override;
-    virtual void SAL_CALL disconnectController( const css::uno::Reference<
+    virtual void disconnectController( const css::uno::Reference<
                                                 css::frame::XController >& Controller ) override;
-    virtual void SAL_CALL lockControllers() override;
-    virtual void SAL_CALL unlockControllers() override;
-    virtual bool SAL_CALL hasControllersLocked() override;
+    virtual void lockControllers() override;
+    virtual void unlockControllers() override;
+    virtual bool hasControllersLocked() override;
     virtual css::uno::Reference<
-        css::frame::XController > SAL_CALL getCurrentController() override;
-    virtual void SAL_CALL setCurrentController( const css::uno::Reference< css::frame::XController >& Controller ) override;
-    virtual css::uno::Reference<css::uno::XInterface > SAL_CALL getCurrentSelection() override;
+        css::frame::XController > getCurrentController() override;
+    virtual void setCurrentController( const css::uno::Reference< css::frame::XController >& Controller ) override;
+    virtual css::uno::Reference<css::uno::XInterface > getCurrentSelection() override;
 
     // ____ XComponent ____
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // ____ XInterface (for new interfaces) ____
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
 
     // ____ ::utl::OEventListenerAdapter ____
     virtual void _disposing( const css::lang::EventObject& rSource ) override;
 
     // ____ XDrawPageSupplier ____
-    virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getDrawPage() override;
+    virtual css::uno::Reference< css::drawing::XDrawPage > getDrawPage() override;
 
     // ____ XMultiServiceFactory ____
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(
+    virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments(
                 const OUString& ServiceSpecifier,
                 const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;
 
     // ____ XAggregation ____
-    virtual void SAL_CALL setDelegator(
+    virtual void setDelegator(
         const css::uno::Reference< css::uno::XInterface >& rDelegator ) override;
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type& aType ) override;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& aType ) override;
 
     // ____ WrappedPropertySet ____
     virtual const cpo::uno::Sequence< css::beans::Property >& getPropertySequence() override;
@@ -140,7 +140,7 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
 
     // ____ XPropertySet ____
-    virtual void SAL_CALL setPropertyValue(const OUString& rPropertyName,
+    virtual void setPropertyValue(const OUString& rPropertyName,
                                            const cpo::uno::Any& rValue) override;
 
 private: //methods

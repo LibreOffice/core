@@ -62,7 +62,7 @@ void WrappedPropertySet::clearWrappedPropertySet(std::unique_lock<std::mutex>& r
 }
 
 //XPropertySet
-Reference< beans::XPropertySetInfo > SAL_CALL WrappedPropertySet::getPropertySetInfo(  )
+Reference< beans::XPropertySetInfo > WrappedPropertySet::getPropertySetInfo(  )
 {
     Reference< beans::XPropertySetInfo > xInfo = m_xInfo;
     if( !xInfo.is() )
@@ -83,7 +83,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL WrappedPropertySet::getPropertySet
     return m_xInfo;
 }
 
-void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
+void WrappedPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
     std::unique_lock aGuard(m_aMutex);
     setPropertyValue(aGuard, rPropertyName, rValue);
@@ -138,7 +138,7 @@ void WrappedPropertySet::setPropertyValue( std::unique_lock<std::mutex>& rGuard,
     }
 }
 
-Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName )
+Any WrappedPropertySet::getPropertyValue( const OUString& rPropertyName )
 {
     std::unique_lock aGuard(m_aMutex);
     return getPropertyValue(aGuard, rPropertyName);
@@ -184,7 +184,7 @@ Any WrappedPropertySet::getPropertyValue( std::unique_lock<std::mutex>& rGuard, 
     return aRet;
 }
 
-void SAL_CALL WrappedPropertySet::addPropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
+void WrappedPropertySet::addPropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
 {
     std::unique_lock aGuard(m_aMutex);
     addPropertyChangeListener(aGuard, rPropertyName, xListener);
@@ -203,7 +203,7 @@ void WrappedPropertySet::addPropertyChangeListener( std::unique_lock<std::mutex>
     }
 }
 
-void SAL_CALL WrappedPropertySet::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& aListener )
+void WrappedPropertySet::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& aListener )
 {
     std::unique_lock aGuard(m_aMutex);
     removePropertyChangeListener(aGuard, rPropertyName, aListener);
@@ -221,7 +221,7 @@ void WrappedPropertySet::removePropertyChangeListener( std::unique_lock<std::mut
             xInnerPropertySet->removePropertyChangeListener( rPropertyName, aListener );
     }
 }
-void SAL_CALL WrappedPropertySet::addVetoableChangeListener( const OUString& rPropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
+void WrappedPropertySet::addVetoableChangeListener( const OUString& rPropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
 {
     std::unique_lock aGuard(m_aMutex);
     Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
@@ -234,7 +234,7 @@ void SAL_CALL WrappedPropertySet::addVetoableChangeListener( const OUString& rPr
             xInnerPropertySet->addVetoableChangeListener( rPropertyName, aListener );
     }
 }
-void SAL_CALL WrappedPropertySet::removeVetoableChangeListener( const OUString& rPropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
+void WrappedPropertySet::removeVetoableChangeListener( const OUString& rPropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
 {
     std::unique_lock aGuard(m_aMutex);
     Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
@@ -249,7 +249,7 @@ void SAL_CALL WrappedPropertySet::removeVetoableChangeListener( const OUString& 
 }
 
 //XMultiPropertySet
-void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >& rNameSeq, const Sequence< Any >& rValueSeq )
+void WrappedPropertySet::setPropertyValues( const Sequence< OUString >& rNameSeq, const Sequence< Any >& rValueSeq )
 {
     bool bUnknownProperty = false;
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
@@ -270,7 +270,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >&
 //    if( bUnknownProperty )
 //        throw beans::UnknownPropertyException();
 }
-Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< OUString >& rNameSeq )
+Sequence< Any > WrappedPropertySet::getPropertyValues( const Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.hasElements() )
@@ -295,24 +295,24 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< 
     }
     return aRetSeq;
 }
-void SAL_CALL WrappedPropertySet::addPropertiesChangeListener( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
+void WrappedPropertySet::addPropertiesChangeListener( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented yet");
     //todo
 }
-void SAL_CALL WrappedPropertySet::removePropertiesChangeListener( const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
+void WrappedPropertySet::removePropertiesChangeListener( const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented yet");
     //todo
 }
-void SAL_CALL WrappedPropertySet::firePropertiesChangeEvent( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
+void WrappedPropertySet::firePropertiesChangeEvent( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented yet");
     //todo
 }
 
 //XPropertyState
-beans::PropertyState SAL_CALL WrappedPropertySet::getPropertyState( const OUString& rPropertyName )
+beans::PropertyState WrappedPropertySet::getPropertyState( const OUString& rPropertyName )
 {
     std::unique_lock aGuard(m_aMutex);
     return getPropertyState(aGuard, rPropertyName);
@@ -348,7 +348,7 @@ const WrappedProperty* WrappedPropertySet::getWrappedProperty( std::unique_lock<
     return nullptr;
 }
 
-Sequence< beans::PropertyState > SAL_CALL WrappedPropertySet::getPropertyStates( const Sequence< OUString >& rNameSeq )
+Sequence< beans::PropertyState > WrappedPropertySet::getPropertyStates( const Sequence< OUString >& rNameSeq )
 {
     Sequence< beans::PropertyState > aRetSeq;
     if( rNameSeq.hasElements() )
@@ -363,7 +363,7 @@ Sequence< beans::PropertyState > SAL_CALL WrappedPropertySet::getPropertyStates(
     return aRetSeq;
 }
 
-void SAL_CALL WrappedPropertySet::setPropertyToDefault( const OUString& rPropertyName )
+void WrappedPropertySet::setPropertyToDefault( const OUString& rPropertyName )
 {
     std::unique_lock aGuard(m_aMutex);
     Reference< beans::XPropertyState > xInnerPropertyState( getInnerPropertyState() );
@@ -376,7 +376,7 @@ void SAL_CALL WrappedPropertySet::setPropertyToDefault( const OUString& rPropert
             xInnerPropertyState->setPropertyToDefault( rPropertyName );
     }
 }
-Any SAL_CALL WrappedPropertySet::getPropertyDefault( const OUString& rPropertyName )
+Any WrappedPropertySet::getPropertyDefault( const OUString& rPropertyName )
 {
     std::unique_lock aGuard(m_aMutex);
     Any aRet;
@@ -393,7 +393,7 @@ Any SAL_CALL WrappedPropertySet::getPropertyDefault( const OUString& rPropertyNa
 }
 
 //XMultiPropertyStates
-void SAL_CALL WrappedPropertySet::setAllPropertiesToDefault(  )
+void WrappedPropertySet::setAllPropertiesToDefault(  )
 {
     const Sequence< beans::Property >&  rPropSeq = getPropertySequence();
     for(beans::Property const & prop : rPropSeq)
@@ -401,14 +401,14 @@ void SAL_CALL WrappedPropertySet::setAllPropertiesToDefault(  )
         setPropertyToDefault( prop.Name );
     }
 }
-void SAL_CALL WrappedPropertySet::setPropertiesToDefault( const Sequence< OUString >& rNameSeq )
+void WrappedPropertySet::setPropertiesToDefault( const Sequence< OUString >& rNameSeq )
 {
     for(OUString const & s : rNameSeq)
     {
         setPropertyToDefault( s );
     }
 }
-Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence< OUString >& rNameSeq )
+Sequence< Any > WrappedPropertySet::getPropertyDefaults( const Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.hasElements() )

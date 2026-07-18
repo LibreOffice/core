@@ -30,11 +30,10 @@ public:
 protected:
     // ____ OPropertySet ____
     virtual void GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) const override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference<css::beans::XPropertySetInfo>
-        SAL_CALL getPropertySetInfo() override;
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
 
     // ____ ChartTypeTemplate ____
     virtual bool matchesTemplate2(const rtl::Reference<::chart::Diagram>& xDiagram,

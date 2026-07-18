@@ -34,13 +34,13 @@ ChartColorScheme::ChartColorScheme(const ChartColorPalette& rPalette)
     }
 }
 
-::sal_Int32 SAL_CALL ChartColorScheme::getColorByIndex(::sal_Int32 nIndex)
+::sal_Int32 ChartColorScheme::getColorByIndex(::sal_Int32 nIndex)
 {
     assert(m_nNumberOfColors > 0);
     return static_cast<sal_Int32>(m_aColorSequence[nIndex % m_nNumberOfColors]);
 }
 
-OUString SAL_CALL ChartColorScheme::getImplementationName()
+OUString ChartColorScheme::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.ChartColorScheme"_ustr;
 }

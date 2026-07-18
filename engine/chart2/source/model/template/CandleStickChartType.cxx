@@ -152,7 +152,7 @@ CandleStickChartType::~CandleStickChartType()
 }
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL CandleStickChartType::createClone()
+uno::Reference< util::XCloneable > CandleStickChartType::createClone()
 {
     return uno::Reference< util::XCloneable >( new CandleStickChartType( *this ));
 }
@@ -163,12 +163,12 @@ rtl::Reference< ChartType > CandleStickChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL CandleStickChartType::getChartType()
+OUString CandleStickChartType::getChartType()
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedMandatoryRoles()
+cpo::uno::Sequence< OUString > CandleStickChartType::getSupportedMandatoryRoles()
 {
     bool bShowFirst = true;
     bool bShowHiLow = false;
@@ -192,7 +192,7 @@ cpo::uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedMandat
     return comphelper::containerToSequence( aMandRoles );
 }
 
-Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedOptionalRoles()
+Sequence< OUString > CandleStickChartType::getSupportedOptionalRoles()
 {
     bool bShowFirst = true;
     bool bShowHiLow = false;
@@ -213,7 +213,7 @@ Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedOptionalRoles()
     return comphelper::containerToSequence( aOptRoles );
 }
 
-OUString SAL_CALL CandleStickChartType::getRoleOfSequenceForSeriesLabel()
+OUString CandleStickChartType::getRoleOfSequenceForSeriesLabel()
 {
     return u"values-last"_ustr;
 }
@@ -238,20 +238,20 @@ void CandleStickChartType::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rA
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL CandleStickChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & CandleStickChartType::getInfoHelper()
 {
     return StaticCandleStickChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL CandleStickChartType::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > CandleStickChartType::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticCandleStickChartTypeInfoHelper() ) );
     return xPropertySetInfo;
 }
 
-void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(
+void CandleStickChartType::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const cpo::uno::Any& rValue )
 {
     if(    nHandle == PROP_CANDLESTICKCHARTTYPE_WHITE_DAY
@@ -279,17 +279,17 @@ void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(
     ::property::OPropertySet::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
 
-OUString SAL_CALL CandleStickChartType::getImplementationName()
+OUString CandleStickChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.CandleStickChartType"_ustr ;
 }
 
-bool SAL_CALL CandleStickChartType::supportsService( const OUString& rServiceName )
+bool CandleStickChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > CandleStickChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK,

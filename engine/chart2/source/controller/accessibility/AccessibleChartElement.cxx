@@ -116,21 +116,21 @@ sal_Int64 AccessibleChartElement::ImplGetAccessibleChildCount() const
 }
 
 // ________ AccessibleChartElement::XAccessibleContext (override) ________
-OUString SAL_CALL AccessibleChartElement::getAccessibleName()
+OUString AccessibleChartElement::getAccessibleName()
 {
     return ObjectNameProvider::getNameForCID(
         GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument );
 }
 
 // ________ AccessibleChartElement::XAccessibleContext (override) ________
-OUString SAL_CALL AccessibleChartElement::getAccessibleDescription()
+OUString AccessibleChartElement::getAccessibleDescription()
 {
     return getToolTipText();
 }
 
 // ________ AccessibleChartElement::XAccessibleExtendedComponent ________
 
-OUString SAL_CALL AccessibleChartElement::getToolTipText()
+OUString AccessibleChartElement::getToolTipText()
 {
     ensureAlive();
 

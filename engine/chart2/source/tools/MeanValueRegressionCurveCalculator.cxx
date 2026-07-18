@@ -38,7 +38,7 @@ MeanValueRegressionCurveCalculator::~MeanValueRegressionCurveCalculator()
 {}
 
 // ____ XRegressionCurveCalculator ____
-void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
+void MeanValueRegressionCurveCalculator::recalculateRegression(
     const cpo::uno::Sequence< double >& /*aXValues*/,
     const cpo::uno::Sequence< double >& aYValues )
 {
@@ -81,12 +81,12 @@ void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
     }
 }
 
-double SAL_CALL MeanValueRegressionCurveCalculator::getCurveValue( double /*x*/ )
+double MeanValueRegressionCurveCalculator::getCurveValue( double /*x*/ )
 {
     return m_fMeanValue;
 }
 
-cpo::uno::Sequence< geometry::RealPoint2D > SAL_CALL MeanValueRegressionCurveCalculator::getCurveValues(
+cpo::uno::Sequence< geometry::RealPoint2D > MeanValueRegressionCurveCalculator::getCurveValues(
     double min, double max, ::sal_Int32 nPointCount,
     const uno::Reference< chart2::XScaling >& xScalingX,
     const uno::Reference< chart2::XScaling >& xScalingY,

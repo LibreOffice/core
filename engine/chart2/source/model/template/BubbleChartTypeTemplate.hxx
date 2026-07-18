@@ -43,14 +43,14 @@ public:
 protected:
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // ____ ChartTypeTemplate ____
-    virtual bool SAL_CALL supportsCategories() override;
+    virtual bool supportsCategories() override;
     virtual rtl::Reference< ::chart::ChartType >
         getChartTypeForNewSeries2( const std::vector<
             rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) override;

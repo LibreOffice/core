@@ -104,7 +104,7 @@ PageBackground::~PageBackground()
 {}
 
 // ____ XTypeProvider ____
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL PageBackground::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > PageBackground::getTypes()
 {
     return ::comphelper::concatSequences(
         impl::PageBackground_Base::getTypes(),
@@ -112,7 +112,7 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL PageBackground::getTypes()
 }
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL PageBackground::createClone()
+uno::Reference< util::XCloneable > PageBackground::createClone()
 {
     return uno::Reference< util::XCloneable >( new PageBackground( *this ));
 }
@@ -128,13 +128,13 @@ void PageBackground::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) c
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL PageBackground::getInfoHelper()
+::cppu::IPropertyArrayHelper & PageBackground::getInfoHelper()
 {
     return StaticPageBackgroundInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL PageBackground::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > PageBackground::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticPageBackgroundInfoHelper() ) );
@@ -142,24 +142,24 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL PageBackground::getPropertySe
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL PageBackground::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void PageBackground::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL PageBackground::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void PageBackground::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL PageBackground::modified( const lang::EventObject& aEvent )
+void PageBackground::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL PageBackground::disposing( const lang::EventObject& /* Source */ )
+void PageBackground::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }
@@ -170,17 +170,17 @@ void PageBackground::firePropertyChangeEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-OUString SAL_CALL PageBackground::getImplementationName()
+OUString PageBackground::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.PageBackground"_ustr;
 }
 
-bool SAL_CALL PageBackground::supportsService( const OUString& rServiceName )
+bool PageBackground::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL PageBackground::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > PageBackground::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.PageBackground"_ustr,

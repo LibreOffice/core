@@ -86,7 +86,7 @@ ColumnChartType::~ColumnChartType()
 {}
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL ColumnChartType::createClone()
+uno::Reference< util::XCloneable > ColumnChartType::createClone()
 {
     return uno::Reference< util::XCloneable >( new ColumnChartType( *this ));
 }
@@ -97,7 +97,7 @@ rtl::Reference< ChartType > ColumnChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL ColumnChartType::getChartType()
+OUString ColumnChartType::getChartType()
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_COLUMN;
 }
@@ -126,30 +126,30 @@ void ColumnChartType::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) 
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL ColumnChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & ColumnChartType::getInfoHelper()
 {
     return StaticColumnChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnChartType::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > ColumnChartType::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticColumnChartTypeInfoHelper() ) );
     return xPropertySetInfo;
 }
 
-OUString SAL_CALL ColumnChartType::getImplementationName()
+OUString ColumnChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.ColumnChartType"_ustr;
 }
 
-bool SAL_CALL ColumnChartType::supportsService( const OUString& rServiceName )
+bool ColumnChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ColumnChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ColumnChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_COLUMN,

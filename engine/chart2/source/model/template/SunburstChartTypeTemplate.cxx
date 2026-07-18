@@ -128,13 +128,13 @@ void SunburstChartTypeTemplate::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL SunburstChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper& SunburstChartTypeTemplate::getInfoHelper()
 {
     return StaticSunburstChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-Reference<beans::XPropertySetInfo> SAL_CALL SunburstChartTypeTemplate::getPropertySetInfo()
+Reference<beans::XPropertySetInfo> SunburstChartTypeTemplate::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(

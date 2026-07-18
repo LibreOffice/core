@@ -164,7 +164,7 @@ RegressionCurveModel::~RegressionCurveModel()
 {}
 
 // ____ XRegressionCurve ____
-uno::Reference< chart2::XRegressionCurveCalculator > SAL_CALL
+uno::Reference< chart2::XRegressionCurveCalculator >
     RegressionCurveModel::getCalculator()
 {
     return RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( getServiceName());
@@ -176,12 +176,12 @@ rtl::Reference< RegressionCurveCalculator >
     return RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( getServiceName());
 }
 
-uno::Reference< beans::XPropertySet > SAL_CALL RegressionCurveModel::getEquationProperties()
+uno::Reference< beans::XPropertySet > RegressionCurveModel::getEquationProperties()
 {
     return m_xEquationProperties;
 }
 
-void SAL_CALL RegressionCurveModel::setEquationProperties( const uno::Reference< beans::XPropertySet >& xEquationProperties )
+void RegressionCurveModel::setEquationProperties( const uno::Reference< beans::XPropertySet >& xEquationProperties )
 {
     if( xEquationProperties.is())
     {
@@ -204,7 +204,7 @@ void RegressionCurveModel::setPropertyMayHaveR2()
 }
 
 // ____ XServiceName ____
-OUString SAL_CALL RegressionCurveModel::getServiceName()
+OUString RegressionCurveModel::getServiceName()
 {
     switch( m_eRegressionCurveType )
     {
@@ -228,24 +228,24 @@ OUString SAL_CALL RegressionCurveModel::getServiceName()
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL RegressionCurveModel::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void RegressionCurveModel::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->addModifyListener( aListener );
 }
 
-void SAL_CALL RegressionCurveModel::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void RegressionCurveModel::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     m_xModifyEventForwarder->removeModifyListener( aListener );
 }
 
 // ____ XModifyListener ____
-void SAL_CALL RegressionCurveModel::modified( const lang::EventObject& aEvent )
+void RegressionCurveModel::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL RegressionCurveModel::disposing( const lang::EventObject& /* Source */ )
+void RegressionCurveModel::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }
@@ -273,13 +273,13 @@ void RegressionCurveModel::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rA
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL RegressionCurveModel::getInfoHelper()
+::cppu::IPropertyArrayHelper & RegressionCurveModel::getInfoHelper()
 {
     return GetStaticRegressionCurveInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL RegressionCurveModel::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > RegressionCurveModel::getPropertySetInfo()
 {
     return GetStaticRegressionCurveInfo();
 }
@@ -302,22 +302,22 @@ MeanValueRegressionCurve::MeanValueRegressionCurve(
 MeanValueRegressionCurve::~MeanValueRegressionCurve()
 {}
 
-OUString SAL_CALL MeanValueRegressionCurve::getImplementationName()
+OUString MeanValueRegressionCurve::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.MeanValueRegressionCurve"_ustr;
 }
 
-bool SAL_CALL MeanValueRegressionCurve::supportsService( const OUString& rServiceName )
+bool MeanValueRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL MeanValueRegressionCurve::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > MeanValueRegressionCurve::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.RegressionCurve"_ustr, u"com.sun.star.chart2.MeanValueRegressionCurve"_ustr };
 }
 
-uno::Reference< util::XCloneable > SAL_CALL MeanValueRegressionCurve::createClone()
+uno::Reference< util::XCloneable > MeanValueRegressionCurve::createClone()
 {
     return uno::Reference< util::XCloneable >( new MeanValueRegressionCurve( *this ));
 }
@@ -332,22 +332,22 @@ LinearRegressionCurve::LinearRegressionCurve(
 LinearRegressionCurve::~LinearRegressionCurve()
 {}
 
-OUString SAL_CALL LinearRegressionCurve::getImplementationName()
+OUString LinearRegressionCurve::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.LinearRegressionCurve"_ustr;
 }
 
-bool SAL_CALL LinearRegressionCurve::supportsService( const OUString& rServiceName )
+bool LinearRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL LinearRegressionCurve::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > LinearRegressionCurve::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.RegressionCurve"_ustr, u"com.sun.star.chart2.LinearRegressionCurve"_ustr };
 }
 
-uno::Reference< util::XCloneable > SAL_CALL LinearRegressionCurve::createClone()
+uno::Reference< util::XCloneable > LinearRegressionCurve::createClone()
 {
     return uno::Reference< util::XCloneable >( new LinearRegressionCurve( *this ));
 }
@@ -362,22 +362,22 @@ LogarithmicRegressionCurve::LogarithmicRegressionCurve(
 LogarithmicRegressionCurve::~LogarithmicRegressionCurve()
 {}
 
-OUString SAL_CALL LogarithmicRegressionCurve::getImplementationName()
+OUString LogarithmicRegressionCurve::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.LogarithmicRegressionCurve"_ustr;
 }
 
-bool SAL_CALL LogarithmicRegressionCurve::supportsService( const OUString& rServiceName )
+bool LogarithmicRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL LogarithmicRegressionCurve::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > LogarithmicRegressionCurve::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.RegressionCurve"_ustr, u"com.sun.star.chart2.LogarithmicRegressionCurve"_ustr };
 }
 
-uno::Reference< util::XCloneable > SAL_CALL LogarithmicRegressionCurve::createClone()
+uno::Reference< util::XCloneable > LogarithmicRegressionCurve::createClone()
 {
     return uno::Reference< util::XCloneable >( new LogarithmicRegressionCurve( *this ));
 }
@@ -392,22 +392,22 @@ ExponentialRegressionCurve::ExponentialRegressionCurve(
 ExponentialRegressionCurve::~ExponentialRegressionCurve()
 {}
 
-OUString SAL_CALL ExponentialRegressionCurve::getImplementationName()
+OUString ExponentialRegressionCurve::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.ExponentialRegressionCurve"_ustr;
 }
 
-bool SAL_CALL ExponentialRegressionCurve::supportsService( const OUString& rServiceName )
+bool ExponentialRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ExponentialRegressionCurve::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ExponentialRegressionCurve::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.RegressionCurve"_ustr, u"com.sun.star.chart2.ExponentialRegressionCurve"_ustr };
 }
 
-uno::Reference< util::XCloneable > SAL_CALL ExponentialRegressionCurve::createClone()
+uno::Reference< util::XCloneable > ExponentialRegressionCurve::createClone()
 {
     return uno::Reference< util::XCloneable >( new ExponentialRegressionCurve( *this ));
 }
@@ -422,22 +422,22 @@ PotentialRegressionCurve::PotentialRegressionCurve(
 PotentialRegressionCurve::~PotentialRegressionCurve()
 {}
 
-OUString SAL_CALL PotentialRegressionCurve::getImplementationName()
+OUString PotentialRegressionCurve::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.PotentialRegressionCurve"_ustr;
 }
 
-bool SAL_CALL PotentialRegressionCurve::supportsService( const OUString& rServiceName )
+bool PotentialRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL PotentialRegressionCurve::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > PotentialRegressionCurve::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.RegressionCurve"_ustr, u"com.sun.star.chart2.PotentialRegressionCurve"_ustr };
 }
 
-uno::Reference< util::XCloneable > SAL_CALL PotentialRegressionCurve::createClone()
+uno::Reference< util::XCloneable > PotentialRegressionCurve::createClone()
 {
     return uno::Reference< util::XCloneable >( new PotentialRegressionCurve( *this ));
 }
@@ -452,22 +452,22 @@ PolynomialRegressionCurve::PolynomialRegressionCurve(
 PolynomialRegressionCurve::~PolynomialRegressionCurve()
 {}
 
-OUString SAL_CALL PolynomialRegressionCurve::getImplementationName()
+OUString PolynomialRegressionCurve::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.PolynomialRegressionCurve"_ustr;
 }
 
-bool SAL_CALL PolynomialRegressionCurve::supportsService( const OUString& rServiceName )
+bool PolynomialRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL PolynomialRegressionCurve::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > PolynomialRegressionCurve::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.RegressionCurve"_ustr, u"com.sun.star.chart2.PolynomialRegressionCurve"_ustr };
 }
 
-uno::Reference< util::XCloneable > SAL_CALL PolynomialRegressionCurve::createClone()
+uno::Reference< util::XCloneable > PolynomialRegressionCurve::createClone()
 {
     return uno::Reference< util::XCloneable >( new PolynomialRegressionCurve( *this ));
 }
@@ -482,22 +482,22 @@ MovingAverageRegressionCurve::MovingAverageRegressionCurve(
 MovingAverageRegressionCurve::~MovingAverageRegressionCurve()
 {}
 
-OUString SAL_CALL MovingAverageRegressionCurve::getImplementationName()
+OUString MovingAverageRegressionCurve::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.MovingAverageRegressionCurve"_ustr;
 }
 
-bool SAL_CALL MovingAverageRegressionCurve::supportsService( const OUString& rServiceName )
+bool MovingAverageRegressionCurve::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL MovingAverageRegressionCurve::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > MovingAverageRegressionCurve::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.RegressionCurve"_ustr, u"com.sun.star.chart2.MovingAverageRegressionCurve"_ustr };
 }
 
-uno::Reference< util::XCloneable > SAL_CALL MovingAverageRegressionCurve::createClone()
+uno::Reference< util::XCloneable > MovingAverageRegressionCurve::createClone()
 {
     return uno::Reference< util::XCloneable >( new MovingAverageRegressionCurve( *this ));
 }

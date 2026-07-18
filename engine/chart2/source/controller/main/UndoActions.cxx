@@ -53,7 +53,7 @@ void UndoElement::disposing(std::unique_lock<std::mutex>&)
     m_xDocumentModel.clear();
 }
 
-OUString SAL_CALL UndoElement::getTitle()
+OUString UndoElement::getTitle()
 {
     return m_sActionString;
 }
@@ -68,12 +68,12 @@ void UndoElement::impl_toggleModelState()
     m_pModelClone = std::move(pNewClone);
 }
 
-void SAL_CALL UndoElement::undo(  )
+void UndoElement::undo(  )
 {
     impl_toggleModelState();
 }
 
-void SAL_CALL UndoElement::redo(  )
+void UndoElement::redo(  )
 {
     impl_toggleModelState();
 }
@@ -89,21 +89,21 @@ ShapeUndoElement::~ShapeUndoElement()
 {
 }
 
-OUString SAL_CALL ShapeUndoElement::getTitle()
+OUString ShapeUndoElement::getTitle()
 {
     if ( !m_xAction )
         throw DisposedException( OUString(), *this );
     return m_xAction->GetComment();
 }
 
-void SAL_CALL ShapeUndoElement::undo(  )
+void ShapeUndoElement::undo(  )
 {
     if ( !m_xAction )
         throw DisposedException( OUString(), *this );
     m_xAction->Undo();
 }
 
-void SAL_CALL ShapeUndoElement::redo(  )
+void ShapeUndoElement::redo(  )
 {
     if ( !m_xAction )
         throw DisposedException( OUString(), *this );

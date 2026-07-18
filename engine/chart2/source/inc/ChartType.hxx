@@ -74,30 +74,30 @@ public:
 
     // ____ XChartType ____
     // still abstract ! implement !
-    virtual OUString SAL_CALL getChartType() override = 0;
-    virtual css::uno::Reference< css::chart2::XCoordinateSystem > SAL_CALL
+    virtual OUString getChartType() override = 0;
+    virtual css::uno::Reference< css::chart2::XCoordinateSystem >
         createCoordinateSystem( ::sal_Int32 DimensionCount ) final override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
         getSupportedMandatoryRoles() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
         getSupportedOptionalRoles() override;
-    virtual OUString SAL_CALL getRoleOfSequenceForSeriesLabel() override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual OUString getRoleOfSequenceForSeriesLabel() override;
+    virtual cpo::uno::Sequence< OUString >
         getSupportedPropertyRoles() override;
 
     // ____ XDataSeriesContainer ____
-    virtual void SAL_CALL addDataSeries(
+    virtual void addDataSeries(
         const css::uno::Reference< css::chart2::XDataSeries >& aDataSeries ) override;
-    virtual void SAL_CALL removeDataSeries(
+    virtual void removeDataSeries(
         const css::uno::Reference< css::chart2::XDataSeries >& aDataSeries ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > SAL_CALL getDataSeries() override;
-    virtual void SAL_CALL setDataSeries(
+    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > getDataSeries() override;
+    virtual void setDataSeries(
         const cpo::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aDataSeries ) override;
 
     // ____ XModifyBroadcaster ____
-    virtual void SAL_CALL addModifyListener(
+    virtual void addModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener(
+    virtual void removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     virtual rtl::Reference<ChartType> cloneChartType() const = 0;
@@ -144,24 +144,24 @@ public:
 protected:
 
     // ____ XModifyListener ____
-    virtual void SAL_CALL modified(
+    virtual void modified(
         const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
-    virtual void SAL_CALL disposing(
+    virtual void disposing(
         const css::lang::EventObject& Source ) override;
 
     void fireModifyEvent();
 
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     /// merge XTypeProvider implementations

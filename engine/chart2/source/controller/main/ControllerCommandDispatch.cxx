@@ -981,7 +981,7 @@ void ControllerCommandDispatch::fireStatusEvent(
 }
 
 // ____ XDispatch ____
-void SAL_CALL ControllerCommandDispatch::dispatch(
+void ControllerCommandDispatch::dispatch(
     const util::URL& URL,
     const Sequence< beans::PropertyValue >& Arguments )
 {
@@ -999,7 +999,7 @@ void ControllerCommandDispatch::disposing(std::unique_lock<std::mutex>& /*rGuard
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL ControllerCommandDispatch::disposing( const lang::EventObject& /* Source */ )
+void ControllerCommandDispatch::disposing( const lang::EventObject& /* Source */ )
 {
     m_xChartController.clear();
     m_xDispatch.clear();
@@ -1007,7 +1007,7 @@ void SAL_CALL ControllerCommandDispatch::disposing( const lang::EventObject& /* 
 }
 
 // ____ XModifyListener ____
-void SAL_CALL ControllerCommandDispatch::modified( const lang::EventObject& aEvent )
+void ControllerCommandDispatch::modified( const lang::EventObject& aEvent )
 {
     bool bUpdateCommandAvailability = false;
 
@@ -1039,7 +1039,7 @@ void SAL_CALL ControllerCommandDispatch::modified( const lang::EventObject& aEve
 }
 
 // ____ XSelectionChangeListener ____
-void SAL_CALL ControllerCommandDispatch::selectionChanged( const lang::EventObject& aEvent )
+void ControllerCommandDispatch::selectionChanged( const lang::EventObject& aEvent )
 {
     // Update the "ControllerState" Struct.
     if( m_apControllerState && m_xChartController.is())

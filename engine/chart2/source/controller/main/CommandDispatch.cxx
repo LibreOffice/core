@@ -56,10 +56,10 @@ void CommandDispatch::disposing(std::unique_lock<std::mutex>& rGuard)
 }
 
 // ____ XDispatch ____
-void SAL_CALL CommandDispatch::dispatch( const util::URL& /* URL */, const Sequence< beans::PropertyValue >& /* Arguments */ )
+void CommandDispatch::dispatch( const util::URL& /* URL */, const Sequence< beans::PropertyValue >& /* Arguments */ )
 {}
 
-void SAL_CALL CommandDispatch::addStatusListener( const Reference< frame::XStatusListener >& Control, const util::URL& URL )
+void CommandDispatch::addStatusListener( const Reference< frame::XStatusListener >& Control, const util::URL& URL )
 {
     {
         std::unique_lock g(m_aMutex);
@@ -78,7 +78,7 @@ void SAL_CALL CommandDispatch::addStatusListener( const Reference< frame::XStatu
     fireStatusEvent( URL.Complete, Control );
 }
 
-void SAL_CALL CommandDispatch::removeStatusListener( const Reference< frame::XStatusListener >& Control, const util::URL& URL )
+void CommandDispatch::removeStatusListener( const Reference< frame::XStatusListener >& Control, const util::URL& URL )
 {
     std::unique_lock g(m_aMutex);
     tListenerMap::iterator aIt( m_aListeners.find( URL.Complete ));
@@ -87,13 +87,13 @@ void SAL_CALL CommandDispatch::removeStatusListener( const Reference< frame::XSt
 }
 
 // ____ XModifyListener ____
-void SAL_CALL CommandDispatch::modified( const lang::EventObject& /* aEvent */ )
+void CommandDispatch::modified( const lang::EventObject& /* aEvent */ )
 {
     fireAllStatusEvents( nullptr );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL CommandDispatch::disposing( const lang::EventObject& /* Source */ )
+void CommandDispatch::disposing( const lang::EventObject& /* Source */ )
 {}
 
 void CommandDispatch::fireAllStatusEvents(

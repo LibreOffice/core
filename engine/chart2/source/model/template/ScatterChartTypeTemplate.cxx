@@ -142,13 +142,13 @@ void ScatterChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL ScatterChartTypeTemplate::getInfoHelper()
+::cppu::IPropertyArrayHelper & ScatterChartTypeTemplate::getInfoHelper()
 {
     return StaticScatterChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > ScatterChartTypeTemplate::getPropertySetInfo()
 {
     return StaticScatterChartTypeTemplateInfo();
 }
@@ -188,7 +188,7 @@ void ScatterChartTypeTemplate::applyStyle2(
 }
 
 // ____ XChartTypeTemplate ____
-bool SAL_CALL ScatterChartTypeTemplate::supportsCategories()
+bool ScatterChartTypeTemplate::supportsCategories()
 {
     return false;
 }

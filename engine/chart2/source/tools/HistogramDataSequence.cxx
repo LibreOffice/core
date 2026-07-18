@@ -88,15 +88,12 @@ IMPLEMENT_FORWARD_XINTERFACE2(HistogramDataSequence, HistogramDataSequence_Base,
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(HistogramDataSequence, HistogramDataSequence_Base,
                                  ::comphelper::OPropertyContainer)
 
-uno::Reference<beans::XPropertySetInfo> SAL_CALL HistogramDataSequence::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> HistogramDataSequence::getPropertySetInfo()
 {
     return comphelper::OPropertyStateHelper::createPropertySetInfo(getInfoHelper());
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL HistogramDataSequence::getInfoHelper()
-{
-    return *getArrayHelper();
-}
+::cppu::IPropertyArrayHelper& HistogramDataSequence::getInfoHelper() { return *getArrayHelper(); }
 
 ::cppu::IPropertyArrayHelper* HistogramDataSequence::createArrayHelper() const
 {
@@ -105,72 +102,71 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL HistogramDataSequence::getPrope
     return new ::cppu::OPropertyArrayHelper(aProperties);
 }
 
-OUString SAL_CALL HistogramDataSequence::getImplementationName() { return lcl_aServiceName; }
+OUString HistogramDataSequence::getImplementationName() { return lcl_aServiceName; }
 
-bool SAL_CALL HistogramDataSequence::supportsService(const OUString& rServiceName)
+bool HistogramDataSequence::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL HistogramDataSequence::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> HistogramDataSequence::getSupportedServiceNames()
 {
     return { lcl_aServiceName, u"com.sun.star.chart2.data.DataSequence"_ustr,
              u"com.sun.star.chart2.data.NumericalDataSequence"_ustr,
              u"com.sun.star.chart2.data.TextualDataSequence"_ustr };
 }
 
-cpo::uno::Sequence<double> SAL_CALL HistogramDataSequence::getNumericalData()
+cpo::uno::Sequence<double> HistogramDataSequence::getNumericalData()
 {
     ::osl::MutexGuard aGuard(GetMutex());
     ensureCalculated();
     return CommonFunctors::convertToSequence(mxValues, CommonFunctors::ToDouble());
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL HistogramDataSequence::getTextualData()
+cpo::uno::Sequence<OUString> HistogramDataSequence::getTextualData()
 {
     ::osl::MutexGuard aGuard(GetMutex());
     ensureCalculated();
     return CommonFunctors::convertToSequence(mxValues, CommonFunctors::ToString());
 }
 
-cpo::uno::Sequence<cpo::uno::Any> SAL_CALL HistogramDataSequence::getData()
+cpo::uno::Sequence<cpo::uno::Any> HistogramDataSequence::getData()
 {
     ::osl::MutexGuard aGuard(GetMutex());
     ensureCalculated();
     return mxValues;
 }
 
-OUString SAL_CALL HistogramDataSequence::getSourceRangeRepresentation()
+OUString HistogramDataSequence::getSourceRangeRepresentation()
 {
     // synthesized sequence — no underlying cell range
     return OUString();
 }
 
-cpo::uno::Sequence<OUString>
-    SAL_CALL HistogramDataSequence::generateLabel(css::chart2::data::LabelOrigin)
+cpo::uno::Sequence<OUString> HistogramDataSequence::generateLabel(css::chart2::data::LabelOrigin)
 {
     ::osl::MutexGuard aGuard(GetMutex());
     return mxLabels;
 }
 
-sal_Int32 SAL_CALL HistogramDataSequence::getNumberFormatKeyByIndex(sal_Int32)
+sal_Int32 HistogramDataSequence::getNumberFormatKeyByIndex(sal_Int32)
 {
     return 0; // TODO - NumberFormat support
 }
 
-void SAL_CALL
-HistogramDataSequence::addModifyListener(const uno::Reference<util::XModifyListener>& aListener)
+void HistogramDataSequence::addModifyListener(
+    const uno::Reference<util::XModifyListener>& aListener)
 {
     m_xModifyEventForwarder->addModifyListener(aListener);
 }
 
-void SAL_CALL
-HistogramDataSequence::removeModifyListener(const uno::Reference<util::XModifyListener>& aListener)
+void HistogramDataSequence::removeModifyListener(
+    const uno::Reference<util::XModifyListener>& aListener)
 {
     m_xModifyEventForwarder->removeModifyListener(aListener);
 }
 
-void SAL_CALL HistogramDataSequence::modified(const lang::EventObject& /* aEvent */)
+void HistogramDataSequence::modified(const lang::EventObject& /* aEvent */)
 {
     // The raw data changed! Mark ourselves dirty and tell the chart to redraw
     {
@@ -180,12 +176,9 @@ void SAL_CALL HistogramDataSequence::modified(const lang::EventObject& /* aEvent
     m_xModifyEventForwarder->modified(lang::EventObject(static_cast<cppu::OWeakObject*>(this)));
 }
 
-void SAL_CALL HistogramDataSequence::disposing(const lang::EventObject& /* Source */)
-{
-    m_xRawData.clear();
-}
+void HistogramDataSequence::disposing(const lang::EventObject& /* Source */) { m_xRawData.clear(); }
 
-uno::Reference<util::XCloneable> SAL_CALL HistogramDataSequence::createClone()
+uno::Reference<util::XCloneable> HistogramDataSequence::createClone()
 {
     rtl::Reference<HistogramDataSequence> pClone(new HistogramDataSequence(
         m_xRawData, m_bIsCategory, m_nFrequencyType, m_fBinWidth, m_nBinCount, m_bUseUnderflowBin,

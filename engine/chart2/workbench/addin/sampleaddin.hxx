@@ -34,7 +34,7 @@
 
 #include <com/sun/star/chart/XChartDocument.hpp>
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL
+css::uno::Reference< css::uno::XInterface >
     SampleAddIn_CreateInstance(
         const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 
@@ -70,82 +70,82 @@ public:
                                  css::awt::Point& aOutPosition );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
         throw( css::uno::Exception,
                css::uno::RuntimeException );
 
     // XDiagram
-    virtual OUString SAL_CALL getDiagramType() throw( css::uno::RuntimeException );
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getDataRowProperties( sal_Int32 nRow )
+    virtual OUString getDiagramType() throw( css::uno::RuntimeException );
+    virtual css::uno::Reference< css::beans::XPropertySet > getDataRowProperties( sal_Int32 nRow )
         throw( css::lang::IndexOutOfBoundsException,
                css::uno::RuntimeException );
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getDataPointProperties( sal_Int32 nCol, sal_Int32 nRow )
+    virtual css::uno::Reference< css::beans::XPropertySet > getDataPointProperties( sal_Int32 nCol, sal_Int32 nRow )
         throw( css::lang::IndexOutOfBoundsException,
                css::uno::RuntimeException );
 
     // XShape ( ::XDiagram )
-    virtual css::awt::Size SAL_CALL getSize()
+    virtual css::awt::Size getSize()
         throw( css::uno::RuntimeException );
-    virtual void SAL_CALL setSize( const css::awt::Size& )
+    virtual void setSize( const css::awt::Size& )
         throw( css::beans::PropertyVetoException,
                css::uno::RuntimeException );
-    virtual css::awt::Point SAL_CALL getPosition()
+    virtual css::awt::Point getPosition()
         throw( css::uno::RuntimeException );
-    virtual void SAL_CALL setPosition( const css::awt::Point& )
+    virtual void setPosition( const css::awt::Point& )
         throw( css::uno::RuntimeException );
 
     // XShapeDescriptor ( ::XShape ::XDiagram )
-    virtual OUString SAL_CALL getShapeType() throw( css::uno::RuntimeException );
+    virtual OUString getShapeType() throw( css::uno::RuntimeException );
 
     // XAxisXSupplier
-    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getXAxisTitle()
+    virtual css::uno::Reference< css::drawing::XShape > getXAxisTitle()
         throw( css::uno::RuntimeException );
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getXAxis()
+    virtual css::uno::Reference< css::beans::XPropertySet > getXAxis()
         throw( css::uno::RuntimeException );
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getXMainGrid()
+    virtual css::uno::Reference< css::beans::XPropertySet > getXMainGrid()
         throw( css::uno::RuntimeException );
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getXHelpGrid()
+    virtual css::uno::Reference< css::beans::XPropertySet > getXHelpGrid()
         throw( css::uno::RuntimeException );
 
     // XAxisYSupplier
-    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getYAxisTitle()
+    virtual css::uno::Reference< css::drawing::XShape > getYAxisTitle()
         throw( css::uno::RuntimeException );
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getYAxis()
+    virtual css::uno::Reference< css::beans::XPropertySet > getYAxis()
         throw( css::uno::RuntimeException );
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getYHelpGrid()
+    virtual css::uno::Reference< css::beans::XPropertySet > getYHelpGrid()
         throw( css::uno::RuntimeException );
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getYMainGrid()
+    virtual css::uno::Reference< css::beans::XPropertySet > getYMainGrid()
         throw( css::uno::RuntimeException );
 
     // XStatisticDisplay
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getUpBar()
+    virtual css::uno::Reference< css::beans::XPropertySet > getUpBar()
         throw( css::uno::RuntimeException );
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getDownBar()
+    virtual css::uno::Reference< css::beans::XPropertySet > getDownBar()
         throw( css::uno::RuntimeException );
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getMinMaxLine()
+    virtual css::uno::Reference< css::beans::XPropertySet > getMinMaxLine()
         throw( css::uno::RuntimeException );
 
     // XServiceName
-    virtual OUString SAL_CALL getServiceName() throw( css::uno::RuntimeException );
+    virtual OUString getServiceName() throw( css::uno::RuntimeException );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException );
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName )
+    virtual OUString getImplementationName() throw( css::uno::RuntimeException );
+    virtual bool supportsService( const OUString& ServiceName )
         throw( css::uno::RuntimeException );
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames()
         throw( css::uno::RuntimeException );
 
     // XRefreshable
-    virtual void SAL_CALL refresh() throw( css::uno::RuntimeException );
-    virtual void SAL_CALL addRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l )
+    virtual void refresh() throw( css::uno::RuntimeException );
+    virtual void addRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l )
         throw( css::uno::RuntimeException );
-    virtual void SAL_CALL removeRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l )
+    virtual void removeRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l )
         throw( css::uno::RuntimeException );
 
     // XLocalizable
-    virtual void SAL_CALL setLocale( const css::lang::Locale& eLocale )
+    virtual void setLocale( const css::lang::Locale& eLocale )
         throw( css::uno::RuntimeException );
-    virtual css::lang::Locale SAL_CALL getLocale()
+    virtual css::lang::Locale getLocale()
         throw( css::uno::RuntimeException );
 };
 

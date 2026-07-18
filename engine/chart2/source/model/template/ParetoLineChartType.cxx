@@ -30,7 +30,7 @@ ParetoLineChartType::ParetoLineChartType(const ParetoLineChartType& rOther)
 ParetoLineChartType::~ParetoLineChartType() {}
 
 // ____ XCloneable ____
-uno::Reference<util::XCloneable> SAL_CALL ParetoLineChartType::createClone()
+uno::Reference<util::XCloneable> ParetoLineChartType::createClone()
 {
     return uno::Reference<util::XCloneable>(new ParetoLineChartType(*this));
 }
@@ -41,27 +41,24 @@ rtl::Reference<ChartType> ParetoLineChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL ParetoLineChartType::getChartType()
-{
-    return CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE;
-}
+OUString ParetoLineChartType::getChartType() { return CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE; }
 
 cpo::uno::Sequence<OUString> ParetoLineChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
 
-OUString SAL_CALL ParetoLineChartType::getImplementationName()
+OUString ParetoLineChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.ParetoLineChartType"_ustr;
 }
 
-bool SAL_CALL ParetoLineChartType::supportsService(const OUString& rServiceName)
+bool ParetoLineChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ParetoLineChartType::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ParetoLineChartType::getSupportedServiceNames()
 {
     return { CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE, u"com.sun.star.chart2.ChartType"_ustr };
 }

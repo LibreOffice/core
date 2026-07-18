@@ -42,14 +42,14 @@ public:
     virtual ~WallFloorWrapper() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // ____ XComponent ____
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 protected:
     // ____ WrappedPropertySet ____

@@ -68,7 +68,7 @@ ChartType::~ChartType()
 }
 
 // ____ XChartType ____
-Reference< chart2::XCoordinateSystem > SAL_CALL
+Reference< chart2::XCoordinateSystem >
     ChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
 {
     return createCoordinateSystem2(DimensionCount);
@@ -106,22 +106,22 @@ rtl::Reference< BaseCoordinateSystem >
     return xResult;
 }
 
-Sequence< OUString > SAL_CALL ChartType::getSupportedMandatoryRoles()
+Sequence< OUString > ChartType::getSupportedMandatoryRoles()
 {
     return { u"label"_ustr, u"values-y"_ustr };
 }
 
-Sequence< OUString > SAL_CALL ChartType::getSupportedOptionalRoles()
+Sequence< OUString > ChartType::getSupportedOptionalRoles()
 {
     return Sequence< OUString >();
 }
 
-Sequence< OUString > SAL_CALL ChartType::getSupportedPropertyRoles()
+Sequence< OUString > ChartType::getSupportedPropertyRoles()
 {
     return Sequence< OUString >();
 }
 
-OUString SAL_CALL ChartType::getRoleOfSequenceForSeriesLabel()
+OUString ChartType::getRoleOfSequenceForSeriesLabel()
 {
     return u"values-y"_ustr;
 }
@@ -138,7 +138,7 @@ void ChartType::impl_addDataSeriesWithoutNotification(
 }
 
 // ____ XDataSeriesContainer ____
-void SAL_CALL ChartType::addDataSeries( const Reference< chart2::XDataSeries >& xDataSeries )
+void ChartType::addDataSeries( const Reference< chart2::XDataSeries >& xDataSeries )
 {
     rtl::Reference<DataSeries> xTmp = dynamic_cast<DataSeries*>(xDataSeries.get());
     assert(xTmp);
@@ -154,7 +154,7 @@ void ChartType::addDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
     fireModifyEvent();
 }
 
-void SAL_CALL ChartType::removeDataSeries( const Reference< chart2::XDataSeries >& xDataSeries )
+void ChartType::removeDataSeries( const Reference< chart2::XDataSeries >& xDataSeries )
 {
     rtl::Reference<DataSeries> xTmp = dynamic_cast<DataSeries*>(xDataSeries.get());
     assert(xTmp);
@@ -180,7 +180,7 @@ void ChartType::removeDataSeries( const rtl::Reference< DataSeries >& xDataSerie
     fireModifyEvent();
 }
 
-Sequence< Reference< chart2::XDataSeries > > SAL_CALL ChartType::getDataSeries()
+Sequence< Reference< chart2::XDataSeries > > ChartType::getDataSeries()
 {
     SolarMutexGuard g;
 
@@ -192,7 +192,7 @@ const std::vector<rtl::Reference<::chart::DataSeries>>& ChartType::getDataSeries
     return m_aDataSeries;
 }
 
-void SAL_CALL ChartType::setDataSeries( const Sequence< Reference< chart2::XDataSeries > >& aDataSeries )
+void ChartType::setDataSeries( const Sequence< Reference< chart2::XDataSeries > >& aDataSeries )
 {
     std::vector< rtl::Reference<DataSeries> > aTmp;
     for (auto const & i : aDataSeries)
@@ -251,13 +251,13 @@ namespace
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL ChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & ChartType::getInfoHelper()
 {
     return StaticChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL ChartType::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > ChartType::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo( StaticChartTypeInfoHelper() ) );
@@ -265,7 +265,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ChartType::getPropertySetInfo
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL ChartType::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void ChartType::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     try
     {
@@ -277,7 +277,7 @@ void SAL_CALL ChartType::addModifyListener( const uno::Reference< util::XModifyL
     }
 }
 
-void SAL_CALL ChartType::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
+void ChartType::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
 {
     try
     {
@@ -290,13 +290,13 @@ void SAL_CALL ChartType::removeModifyListener( const uno::Reference< util::XModi
 }
 
 // ____ XModifyListener ____
-void SAL_CALL ChartType::modified( const lang::EventObject& aEvent )
+void ChartType::modified( const lang::EventObject& aEvent )
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL ChartType::disposing( const lang::EventObject& /* Source */ )
+void ChartType::disposing( const lang::EventObject& /* Source */ )
 {
     // nothing
 }

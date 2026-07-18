@@ -52,11 +52,11 @@ public:
     virtual sal_Int64 ImplGetAccessibleChildCount() const override;
 
     // ________ XAccessibleContext ________
-    virtual OUString SAL_CALL getAccessibleName() override;
-    virtual OUString SAL_CALL getAccessibleDescription() override;
+    virtual OUString getAccessibleName() override;
+    virtual OUString getAccessibleDescription() override;
 
     // ________ XAccessibleExtendedComponent ________
-    virtual OUString SAL_CALL getToolTipText() override;
+    virtual OUString getToolTipText() override;
 
 private:
     bool                m_bHasText;

@@ -72,7 +72,7 @@ FunnelChartType::FunnelChartType(const FunnelChartType& rOther)
 FunnelChartType::~FunnelChartType() {}
 
 // ____ XCloneable ____
-uno::Reference<util::XCloneable> SAL_CALL FunnelChartType::createClone()
+uno::Reference<util::XCloneable> FunnelChartType::createClone()
 {
     return uno::Reference<util::XCloneable>(new FunnelChartType(*this));
 }
@@ -83,7 +83,7 @@ rtl::Reference<ChartType> FunnelChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL FunnelChartType::getChartType() { return CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL; }
+OUString FunnelChartType::getChartType() { return CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL; }
 
 cpo::uno::Sequence<OUString> FunnelChartType::getSupportedPropertyRoles()
 {
@@ -110,30 +110,30 @@ void FunnelChartType::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) co
         rAny = (*aFound).second;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL FunnelChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper& FunnelChartType::getInfoHelper()
 {
     return StaticFunnelChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference<beans::XPropertySetInfo> SAL_CALL FunnelChartType::getPropertySetInfo()
+uno::Reference<beans::XPropertySetInfo> FunnelChartType::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo(StaticFunnelChartTypeInfoHelper()));
     return xPropertySetInfo;
 }
 
-OUString SAL_CALL FunnelChartType::getImplementationName()
+OUString FunnelChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.FunnelChartType"_ustr;
 }
 
-bool SAL_CALL FunnelChartType::supportsService(const OUString& rServiceName)
+bool FunnelChartType::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL FunnelChartType::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> FunnelChartType::getSupportedServiceNames()
 {
     return { CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL, u"com.sun.star.chart2.ChartType"_ustr };
 }

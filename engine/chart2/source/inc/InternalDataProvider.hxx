@@ -79,101 +79,101 @@ public:
     virtual ~InternalDataProvider() override;
 
     /// declare XServiceInfo methods
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // ____ XInternalDataProvider ____
-    virtual bool SAL_CALL hasDataByRangeRepresentation( const OUString& aRange ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL
+    virtual bool hasDataByRangeRepresentation( const OUString& aRange ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any >
         getDataByRangeRepresentation( const OUString& aRange ) override;
-    virtual void SAL_CALL setDataByRangeRepresentation(
+    virtual void setDataByRangeRepresentation(
         const OUString& aRange,
         const cpo::uno::Sequence< cpo::uno::Any >& aNewData ) override;
-    virtual void SAL_CALL insertSequence( ::sal_Int32 nAfterIndex ) override;
-    virtual void SAL_CALL deleteSequence( ::sal_Int32 nAtIndex ) override;
-    virtual void SAL_CALL appendSequence() override;
-    virtual void SAL_CALL insertComplexCategoryLevel( ::sal_Int32 nLevel ) override;
-    virtual void SAL_CALL deleteComplexCategoryLevel( ::sal_Int32 nLevel ) override;
-    virtual void SAL_CALL insertDataPointForAllSequences( ::sal_Int32 nAfterIndex ) override;
-    virtual void SAL_CALL deleteDataPointForAllSequences( ::sal_Int32 nAtIndex ) override;
-    virtual void SAL_CALL swapDataPointWithNextOneForAllSequences( ::sal_Int32 nAtIndex ) override;
-    virtual void SAL_CALL registerDataSequenceForChanges(
+    virtual void insertSequence( ::sal_Int32 nAfterIndex ) override;
+    virtual void deleteSequence( ::sal_Int32 nAtIndex ) override;
+    virtual void appendSequence() override;
+    virtual void insertComplexCategoryLevel( ::sal_Int32 nLevel ) override;
+    virtual void deleteComplexCategoryLevel( ::sal_Int32 nLevel ) override;
+    virtual void insertDataPointForAllSequences( ::sal_Int32 nAfterIndex ) override;
+    virtual void deleteDataPointForAllSequences( ::sal_Int32 nAtIndex ) override;
+    virtual void swapDataPointWithNextOneForAllSequences( ::sal_Int32 nAtIndex ) override;
+    virtual void registerDataSequenceForChanges(
         const css::uno::Reference< css::chart2::data::XDataSequence >& xSeq ) override;
-    virtual void SAL_CALL insertDataSeries( ::sal_Int32 nAfterIndex ) override;
+    virtual void insertDataSeries( ::sal_Int32 nAfterIndex ) override;
 
     // ____ XDataProvider (base of XInternalDataProvider) ____
-    virtual bool SAL_CALL createDataSourcePossible(
+    virtual bool createDataSourcePossible(
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
-    virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL createDataSource(
+    virtual css::uno::Reference< css::chart2::data::XDataSource > createDataSource(
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL detectArguments(
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > detectArguments(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource ) override;
-    virtual bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
+    virtual bool createDataSequenceByRangeRepresentationPossible(
         const OUString& aRangeRepresentation ) override;
-    virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(
+    virtual css::uno::Reference< css::chart2::data::XDataSequence > createDataSequenceByRangeRepresentation(
         const OUString& aRangeRepresentation ) override;
 
-    virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+    virtual css::uno::Reference<css::chart2::data::XDataSequence>
         createDataSequenceByValueArray( const OUString& aRole, const OUString& aRangeRepresentation,
             const OUString& aRoleQualifier ) override;
 
-    virtual css::uno::Reference< css::sheet::XRangeSelection > SAL_CALL getRangeSelection() override;
+    virtual css::uno::Reference< css::sheet::XRangeSelection > getRangeSelection() override;
 
     // ____ XRangeXMLConversion ____
-    virtual OUString SAL_CALL convertRangeToXML(
+    virtual OUString convertRangeToXML(
         const OUString& aRangeRepresentation ) override;
-    virtual OUString SAL_CALL convertRangeFromXML(
+    virtual OUString convertRangeFromXML(
         const OUString& aXMLRange ) override;
 
     // ____ XDateCategories ____
-    virtual cpo::uno::Sequence< double > SAL_CALL getDateCategories() override;
-    virtual void SAL_CALL setDateCategories( const cpo::uno::Sequence< double >& rDates ) override;
+    virtual cpo::uno::Sequence< double > getDateCategories() override;
+    virtual void setDateCategories( const cpo::uno::Sequence< double >& rDates ) override;
 
     // ____ XAnyDescriptionAccess ____
-    virtual cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >
         getAnyRowDescriptions() override;
-    virtual void SAL_CALL setAnyRowDescriptions(
+    virtual void setAnyRowDescriptions(
         const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& aRowDescriptions ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >
         getAnyColumnDescriptions() override;
-    virtual void SAL_CALL setAnyColumnDescriptions(
+    virtual void setAnyColumnDescriptions(
         const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& aColumnDescriptions ) override;
 
     // ____ XComplexDescriptionAccess (base of XAnyDescriptionAccess) ____
-    virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > >
         getComplexRowDescriptions() override;
-    virtual void SAL_CALL setComplexRowDescriptions(
+    virtual void setComplexRowDescriptions(
         const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aRowDescriptions ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > >
         getComplexColumnDescriptions() override;
-    virtual void SAL_CALL setComplexColumnDescriptions(
+    virtual void setComplexColumnDescriptions(
         const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aColumnDescriptions ) override;
 
     // ____ XChartDataArray (base of XComplexDescriptionAccess) ____
-    virtual cpo::uno::Sequence< cpo::uno::Sequence< double > > SAL_CALL getData() override;
-    virtual void SAL_CALL setData(
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< double > > getData() override;
+    virtual void setData(
         const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aData ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getRowDescriptions() override;
-    virtual void SAL_CALL setRowDescriptions(
+    virtual cpo::uno::Sequence< OUString > getRowDescriptions() override;
+    virtual void setRowDescriptions(
         const cpo::uno::Sequence< OUString >& aRowDescriptions ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getColumnDescriptions() override;
-    virtual void SAL_CALL setColumnDescriptions(
+    virtual cpo::uno::Sequence< OUString > getColumnDescriptions() override;
+    virtual void setColumnDescriptions(
         const cpo::uno::Sequence< OUString >& aColumnDescriptions ) override;
 
     // ____ XChartData (base of XChartDataArray) ____
-    virtual void SAL_CALL addChartDataChangeEventListener(
+    virtual void addChartDataChangeEventListener(
         const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
-    virtual void SAL_CALL removeChartDataChangeEventListener(
+    virtual void removeChartDataChangeEventListener(
         const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
-    virtual double SAL_CALL getNotANumber() override;
-    virtual bool SAL_CALL isNotANumber(
+    virtual double getNotANumber() override;
+    virtual bool isNotANumber(
         double nNumber ) override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
+    virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     void setChartModel(ChartModel* pChartModel);
 

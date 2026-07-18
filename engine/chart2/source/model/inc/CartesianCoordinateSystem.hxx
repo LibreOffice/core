@@ -30,16 +30,16 @@ public:
     virtual ~CartesianCoordinateSystem() override;
 
     // ____ XCoordinateSystem ____
-    virtual OUString SAL_CALL getCoordinateSystemType() override;
-    virtual OUString SAL_CALL getViewServiceName() override;
+    virtual OUString getCoordinateSystemType() override;
+    virtual OUString getViewServiceName() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
+    virtual css::uno::Reference<css::util::XCloneable> createClone() override;
 
     // ____ XServiceInfo ____
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 class CartesianCoordinateSystem2d final : public CartesianCoordinateSystem
@@ -49,9 +49,9 @@ public:
     virtual ~CartesianCoordinateSystem2d() override;
 
     // ____ XServiceInfo ____
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 class CartesianCoordinateSystem3d final : public CartesianCoordinateSystem
@@ -61,9 +61,9 @@ public:
     virtual ~CartesianCoordinateSystem3d() override;
 
     // ____ XServiceInfo ____
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 } // namespace chart

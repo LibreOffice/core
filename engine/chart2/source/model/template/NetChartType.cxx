@@ -106,13 +106,13 @@ uno::Reference< beans::XPropertySetInfo >& StaticNetChartTypeInfo()
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL NetChartType_Base::getInfoHelper()
+::cppu::IPropertyArrayHelper & NetChartType_Base::getInfoHelper()
 {
     return StaticNetChartTypeInfoHelper();
 }
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL NetChartType_Base::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > NetChartType_Base::getPropertySetInfo()
 {
     return StaticNetChartTypeInfo();
 }
@@ -129,7 +129,7 @@ NetChartType::~NetChartType()
 {}
 
 // ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL NetChartType::createClone()
+uno::Reference< util::XCloneable > NetChartType::createClone()
 {
     return uno::Reference< util::XCloneable >( new NetChartType( *this ));
 }
@@ -140,22 +140,22 @@ rtl::Reference< ChartType > NetChartType::cloneChartType() const
 }
 
 // ____ XChartType ____
-OUString SAL_CALL NetChartType::getChartType()
+OUString NetChartType::getChartType()
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_NET;
 }
 
-OUString SAL_CALL NetChartType::getImplementationName()
+OUString NetChartType::getImplementationName()
 {
     return u"com.sun.star.comp.chart.NetChartType"_ustr;
 }
 
-bool SAL_CALL NetChartType::supportsService( const OUString& rServiceName )
+bool NetChartType::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL NetChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > NetChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_NET,

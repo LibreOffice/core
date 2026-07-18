@@ -80,7 +80,7 @@ void AccessibleTextHelper::initialize(const OUString& aCID,
 }
 
 // ____ XAccessibleContext ____
-sal_Int64 SAL_CALL AccessibleTextHelper::getAccessibleChildCount()
+sal_Int64 AccessibleTextHelper::getAccessibleChildCount()
 {
     if( m_oTextHelper )
     {
@@ -90,7 +90,7 @@ sal_Int64 SAL_CALL AccessibleTextHelper::getAccessibleChildCount()
     return 0;
 }
 
-Reference< XAccessible > SAL_CALL AccessibleTextHelper::getAccessibleChild( sal_Int64 i )
+Reference< XAccessible > AccessibleTextHelper::getAccessibleChild( sal_Int64 i )
 {
     if( m_oTextHelper )
     {
@@ -100,49 +100,49 @@ Reference< XAccessible > SAL_CALL AccessibleTextHelper::getAccessibleChild( sal_
     return Reference< XAccessible >();
 }
 
-Reference< XAccessible > SAL_CALL AccessibleTextHelper::getAccessibleParent()
+Reference< XAccessible > AccessibleTextHelper::getAccessibleParent()
 {
     OSL_FAIL( "Not implemented in this helper" );
     return Reference< XAccessible >();
 }
 
-sal_Int64 SAL_CALL AccessibleTextHelper::getAccessibleIndexInParent()
+sal_Int64 AccessibleTextHelper::getAccessibleIndexInParent()
 {
     OSL_FAIL( "Not implemented in this helper" );
     return -1;
 }
 
-::sal_Int16 SAL_CALL AccessibleTextHelper::getAccessibleRole()
+::sal_Int16 AccessibleTextHelper::getAccessibleRole()
 {
     OSL_FAIL( "Not implemented in this helper" );
     return AccessibleRole::UNKNOWN;
 }
 
-OUString SAL_CALL AccessibleTextHelper::getAccessibleDescription()
+OUString AccessibleTextHelper::getAccessibleDescription()
 {
     OSL_FAIL( "Not implemented in this helper" );
     return OUString();
 }
 
-OUString SAL_CALL AccessibleTextHelper::getAccessibleName()
+OUString AccessibleTextHelper::getAccessibleName()
 {
     OSL_FAIL( "Not implemented in this helper" );
     return OUString();
 }
 
-Reference< XAccessibleRelationSet > SAL_CALL AccessibleTextHelper::getAccessibleRelationSet()
+Reference< XAccessibleRelationSet > AccessibleTextHelper::getAccessibleRelationSet()
 {
     OSL_FAIL( "Not implemented in this helper" );
     return Reference< XAccessibleRelationSet >();
 }
 
-sal_Int64 SAL_CALL AccessibleTextHelper::getAccessibleStateSet()
+sal_Int64 AccessibleTextHelper::getAccessibleStateSet()
 {
     OSL_FAIL( "Not implemented in this helper" );
     return 0;
 }
 
-lang::Locale SAL_CALL AccessibleTextHelper::getLocale()
+lang::Locale AccessibleTextHelper::getLocale()
 {
     OSL_FAIL( "Not implemented in this helper" );
     return lang::Locale();

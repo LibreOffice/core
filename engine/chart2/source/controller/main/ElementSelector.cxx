@@ -232,17 +232,17 @@ IMPL_LINK_NOARG(SelectorListBox, FocusOutHdl, weld::Widget&, void)
         m_xWidget->set_active_text(m_xWidget->get_saved_value());
 }
 
-OUString SAL_CALL ElementSelectorToolbarController::getImplementationName()
+OUString ElementSelectorToolbarController::getImplementationName()
 {
     return u"com.sun.star.comp.chart.ElementSelectorToolbarController"_ustr;
 }
 
-bool SAL_CALL ElementSelectorToolbarController::supportsService( const OUString& rServiceName )
+bool ElementSelectorToolbarController::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL ElementSelectorToolbarController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ElementSelectorToolbarController::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -253,22 +253,22 @@ ElementSelectorToolbarController::~ElementSelectorToolbarController()
 {
 }
 // XInterface
-Any SAL_CALL ElementSelectorToolbarController::queryInterface( const Type& _rType )
+Any ElementSelectorToolbarController::queryInterface( const Type& _rType )
 {
     Any aReturn = ToolboxController::queryInterface(_rType);
     if (!aReturn.hasValue())
         aReturn = ElementSelectorToolbarController_BASE::queryInterface(_rType);
     return aReturn;
 }
-void SAL_CALL ElementSelectorToolbarController::acquire() noexcept
+void ElementSelectorToolbarController::acquire() noexcept
 {
     ToolboxController::acquire();
 }
-void SAL_CALL ElementSelectorToolbarController::release() noexcept
+void ElementSelectorToolbarController::release() noexcept
 {
     ToolboxController::release();
 }
-void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::FeatureStateEvent& rEvent )
+void ElementSelectorToolbarController::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
     if( m_apSelectorListBox )
     {
@@ -284,7 +284,7 @@ void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::Feat
         }
     }
 }
-uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::createItemWindow( const uno::Reference< awt::XWindow >& xParent )
+uno::Reference< awt::XWindow > ElementSelectorToolbarController::createItemWindow( const uno::Reference< awt::XWindow >& xParent )
 {
     uno::Reference< awt::XWindow > xItemWindow;
     if( !m_apSelectorListBox )

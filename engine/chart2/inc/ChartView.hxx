@@ -108,12 +108,12 @@ public:
     virtual ~ChartView() override;
 
     // ___lang::XServiceInfo___
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // ___lang::XInitialization___
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     /** Gives calculated scale and increment values for a given xAxis in the current view.
         In contrast to the model data these explicit values are always complete as missing auto properties are calculated.
@@ -136,16 +136,16 @@ public:
     const std::shared_ptr< DrawModelWrapper > & getDrawModelWrapper();
 
     // ___XTransferable___
-    virtual cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
-    virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
-    virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
+    virtual cpo::uno::Any getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
+    virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > getTransferDataFlavors(  ) override;
+    virtual bool isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 
     // css::util::XEventListener (base of XCloseListener and XModifyListener)
-    virtual void SAL_CALL
+    virtual void
         disposing( const css::lang::EventObject& Source ) override;
 
     // css::util::XModifyListener
-    virtual void SAL_CALL modified(
+    virtual void modified(
         const css::lang::EventObject& aEvent ) override;
 
     //SfxListener
@@ -153,35 +153,35 @@ public:
 
     // css::util::XModeChangeBroadcaster
 
-    virtual void SAL_CALL addModeChangeListener( const css::uno::Reference< css::util::XModeChangeListener >& _rxListener ) override;
-    virtual void SAL_CALL removeModeChangeListener( const css::uno::Reference< css::util::XModeChangeListener >& _rxListener ) override;
-    virtual void SAL_CALL addModeChangeApproveListener( const css::uno::Reference< css::util::XModeChangeApproveListener >& _rxListener ) override;
-    virtual void SAL_CALL removeModeChangeApproveListener( const css::uno::Reference< css::util::XModeChangeApproveListener >& _rxListener ) override;
+    virtual void addModeChangeListener( const css::uno::Reference< css::util::XModeChangeListener >& _rxListener ) override;
+    virtual void removeModeChangeListener( const css::uno::Reference< css::util::XModeChangeListener >& _rxListener ) override;
+    virtual void addModeChangeApproveListener( const css::uno::Reference< css::util::XModeChangeApproveListener >& _rxListener ) override;
+    virtual void removeModeChangeApproveListener( const css::uno::Reference< css::util::XModeChangeApproveListener >& _rxListener ) override;
 
     // css::util::XUpdatable
-    virtual void SAL_CALL update() override;
+    virtual void update() override;
 
     // util::XUpdatable2
-    virtual void SAL_CALL updateSoft() override;
-    virtual void SAL_CALL updateHard() override;
+    virtual void updateSoft() override;
+    virtual void updateHard() override;
 
     // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
+    virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // css::lang::XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(
+    virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments(
         const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;
 
     // XDumper
-    virtual OUString SAL_CALL dump(OUString const & kind) override;
+    virtual OUString dump(OUString const & kind) override;
 
     void setViewDirty();
 

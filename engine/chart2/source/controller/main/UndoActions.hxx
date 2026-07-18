@@ -61,9 +61,9 @@ public:
     const UndoElement& operator=(const UndoElement&) = delete;
 
     // XUndoAction
-    virtual OUString SAL_CALL getTitle() override;
-    virtual void SAL_CALL undo(  ) override;
-    virtual void SAL_CALL redo(  ) override;
+    virtual OUString getTitle() override;
+    virtual void undo(  ) override;
+    virtual void redo(  ) override;
 
     // WeakComponentImplHelper
     virtual void disposing(std::unique_lock<std::mutex>&) override;
@@ -85,9 +85,9 @@ public:
     virtual ~ShapeUndoElement() override;
 
     // XUndoAction
-    virtual OUString SAL_CALL getTitle() override;
-    virtual void SAL_CALL undo(  ) override;
-    virtual void SAL_CALL redo(  ) override;
+    virtual OUString getTitle() override;
+    virtual void undo(  ) override;
+    virtual void redo(  ) override;
 
 private:
     std::unique_ptr<SdrUndoAction> m_xAction;
