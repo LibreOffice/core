@@ -2566,7 +2566,10 @@ class TreeViewControl {
 
 	showSearchBar(parent: HTMLElement) {
 		const searchBox = document.createElement('input');
-		searchBox.id = JSDialog.MakeIdUnique('ui-treeview-search-input'); // Form fields should have either a name or an ID - using this instead of a class
+		// A form field needs its own id. Derive it from the treeview id, the
+		// way the row and header ids are, so it stays the same when the
+		// treeview is rebuilt.
+		searchBox.id = this._container.id + '-search-input';
 		searchBox.type = 'search';
 		searchBox.setAttribute(
 			'class',
