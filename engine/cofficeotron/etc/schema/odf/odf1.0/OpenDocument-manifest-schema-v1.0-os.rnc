@@ -1,0 +1,39 @@
+# OASIS OpenDocument v1.0
+# OASIS standard, 1 May 2005
+# Relax-NG Manifest Schema
+# 
+# $Id$
+# 
+# © 2002-2005 OASIS Open
+# © 1999-2005 Sun Microsystems, Inc.
+
+namespace manifest =
+  "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"
+
+manifest = element manifest:manifest { file-entry+ }
+start = manifest
+file-entry =
+  element manifest:file-entry { file-entry-attlist, encryption-data? }
+file-entry-attlist &= attribute manifest:full-path { xsd:string }
+file-entry-attlist &=
+  attribute manifest:size { xsd:nonNegativeInteger }?
+file-entry-attlist &= attribute manifest:media-type { xsd:string }
+encryption-data =
+  element manifest:encryption-data {
+    encryption-data-attlist, algorithm, key-derivation
+  }
+encryption-data-attlist &=
+  attribute manifest:checksum-type { xsd:string }
+encryption-data-attlist &=
+  attribute manifest:checksum { xsd:base64Binary }
+algorithm = element manifest:algorithm { algorithm-attlist, empty }
+algorithm-attlist &= attribute manifest:algorithm-name { xsd:string }
+algorithm-attlist &=
+  attribute manifest:initialisation-vector { xsd:base64Binary }
+key-derivation =
+  element manifest:key-derivation { key-derivation-attlist, empty }
+key-derivation-attlist &=
+  attribute manifest:key-derivation-name { xsd:string }
+key-derivation-attlist &= attribute manifest:salt { xsd:base64Binary }
+key-derivation-attlist &=
+  attribute manifest:iteration-count { xsd:nonNegativeInteger }

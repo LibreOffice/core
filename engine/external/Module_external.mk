@@ -10,6 +10,8 @@
 $(eval $(call gb_Module_Module,external))
 
 $(eval $(call gb_Module_add_moduledirs,external,\
+	$(call gb_Helper_optional,RNV,rnv) \
+	$(call gb_Helper_optional,COFFICEOTRON,ecma376) \
 	$(call gb_Helper_optional,XMLSEC,xmlsec) \
 	$(call gb_Helper_optional,ABW,libabw) \
 	$(call gb_Helper_optional,AFDKO,afdko) \

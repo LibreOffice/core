@@ -30,6 +30,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     ) \
 	bestreversemap \
 	cfgex \
+	cofficeotron \
 	concat-deps \
 	cpp \
 	cppunittester \

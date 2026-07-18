@@ -64,6 +64,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	bridges \
 	cli_ure \
     codemaker \
+	$(call gb_Helper_optional,COFFICEOTRON,cofficeotron) \
 	comphelper \
 	configmgr \
 	connectivity \

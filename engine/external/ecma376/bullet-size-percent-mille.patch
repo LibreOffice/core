@@ -1,0 +1,17 @@
+Let bullet sizes take the percent-mille integers that the first
+edition of ECMA-376 defined, as the Java officeotron 0.8.8 release
+patched its copy of this schema. Presentations in the wild carry
+such values.
+
+--- a/dml-main.rnc
++++ b/dml-main.rnc
+@@ -2147,8 +2147,7 @@
+ a_ST_TextBulletSizeDecimal =
+   xsd:int { minInclusive = "25000" maxInclusive = "400000" }
+ a_CT_TextBulletSizeFollowText = empty
+-a_CT_TextBulletSizePercent =
+-  attribute val { a_ST_TextBulletSizePercent }
++a_CT_TextBulletSizePercent = attribute val { a_ST_TextBulletSize }
+ a_CT_TextBulletSizePoint = attribute val { a_ST_TextFontSize }
+ a_EG_TextBulletSize =
+   element buSzTx { a_CT_TextBulletSizeFollowText }

@@ -228,6 +228,13 @@ fetch_SRC_TARBALLS := \
 	$(call fetch_Optional,ZSTD,ZSTD_TARBALL) \
 	$(call fetch_Optional,ZMF,ZMF_TARBALL)
 
+fetch_RNV_TARBALLS := \
+	$(call fetch_Optional,RNV,RNV_TARBALL)
+
+fetch_ECMA376_TARBALLS := \
+	$(call fetch_Optional,COFFICEOTRON,ECMA376_OPC_TARBALL) \
+	$(call fetch_Optional,COFFICEOTRON,ECMA376_TRANSITIONAL_TARBALL)
+
 fetch_EXTERN_TARBALLS := \
 	$(call fetch_Optional,OPENSYMBOL,OPENSYMBOL_TTF) \
 	$(call fetch_Optional,ODFVALIDATOR,ODFVALIDATOR_JAR) \
@@ -264,6 +271,8 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 	@date >> $(fetch_LOGFILE)
 	$(foreach item,$(fetch_SRC_TARBALLS),$(call fetch_Download_item,https://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item,$(fetch_EXTERN_TARBALLS),$(call fetch_Download_item,https://dev-www.libreoffice.org/extern,$(item)))
+	$(foreach item,$(fetch_RNV_TARBALLS),$(call fetch_Download_item,https://downloads.sourceforge.net/project/rnv/Sources/1.7.10,$(item)))
+	$(foreach item,$(fetch_ECMA376_TARBALLS),$(call fetch_Download_item,https://ecma-international.org/wp-content/uploads,$(item)))
 	$(foreach item,$(fetch_NOTO_TARBALLS),$(call fetch_Download_item,https://github.com/CollaboraOnline/online/releases/download/for-code-assets/,$(item)))
 	$(foreach item,$(fetch_OPENDYSLEXIC_TARBALLS),$(call fetch_Download_item,https://github.com/antijingoist/opendyslexic/releases/download/v0.91.12,$(item)))
 	$(foreach item,$(fetch_POCO_TARBALLS),$(call fetch_Download_item,https://pocoproject.org/releases/poco-1.15.3,$(item)))

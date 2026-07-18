@@ -1,0 +1,21 @@
+RELAX NG schemas for OOXML, from the published ECMA-376 standard.
+
+The two archives are the standard as Ecma International publishes it:
+part 4 (Transitional Migration Features, 5th edition, December 2016)
+and part 2 (Open Packaging Conventions, 5th edition, December 2021).
+Each archive holds the specification text and two electronic annexes;
+the RELAX NG annex is the one unpacked here. The cofficeotron document
+validator reads the schemas at run time.
+
+The schemas are downloaded rather than kept in the source tree because
+Ecma International publishes them under its own copyright terms, not
+under an open source license.
+
+Two patches relax the transitional markup schemas the same way the
+Java officeotron 0.8.8 release patched its schema copies, to accept
+constructs that documents in the wild contain:
+
+- spreadsheet-text-xml-space.patch: spreadsheet text elements accept
+  the xml:space attribute.
+- bullet-size-percent-mille.patch: bullet sizes accept the
+  percent-mille integers that the first edition of ECMA-376 defined.

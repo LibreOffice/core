@@ -1,2 +1,11 @@
 #!/usr/bin/env bash
-@JAVAINTERPRETER@ -Xmx64m -jar @TARFILE_LOCATION@/@OFFICEOTRON_JAR@ "$@"
+# Runs the officeotron validator that configure selected: the downloaded
+# Java officeotron jar by default, or, when the jar name is empty because
+# the build was configured with --enable-cofficeotron, the native
+# cofficeotron that the COFFICEOTRON build module produces.
+if test -n "@OFFICEOTRON_JAR@"; then
+    exec @JAVAINTERPRETER@ -Xmx64m -jar "@TARFILE_LOCATION@/@OFFICEOTRON_JAR@" "$@"
+fi
+export LD_LIBRARY_PATH="@BUILDDIR@/instdir/program${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+exec "@WORKDIR@/LinkTarget/Executable/cofficeotron" \
+    --schema-dir "@WORKDIR@/CustomTarget/cofficeotron/schema" "$@"

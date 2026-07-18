@@ -1,0 +1,21 @@
+INFO - Inspecting ZIP ...
+INFO      - 6 central records found
+INFO - Processing manifest entry: content.xml
+INFO      - It has root element named &lt;document-content> in the namespace <tt>urn:oasis:names:tc:opendocument:xmlns:office:1.0</tt>
+WARN      - It has no version attribute! (assuming ODF v1.1)
+INFO      - The document is valid
+INFO - Processing manifest entry: settings.xml
+INFO      - It has root element named &lt;document-settings> in the namespace <tt>urn:oasis:names:tc:opendocument:xmlns:office:1.0</tt>
+INFO      - It claims to be ODF version 1.1
+INFO      - The document is valid
+INFO - Processing manifest entry: styles.xml
+INFO      - It has root element named &lt;document-styles> in the namespace <tt>urn:oasis:names:tc:opendocument:xmlns:office:1.0</tt>
+WARN      - It has no version attribute! (assuming ODF v1.1)
+INFO      - The document is valid
+INFO - Processing manifest entry: META-INF/manifest.xml
+INFO - Processing manifest entry: meta.xml
+INFO      - It has root element named &lt;document-meta> in the namespace <tt>urn:oasis:names:tc:opendocument:xmlns:office:1.0</tt>
+INFO      - It claims to be ODF version 1.1
+INFO      - The document is valid
+INFO      - The generator value is: "<b>MicrosoftOffice/14.0 MicrosoftWord</b>"
+INFO - Grand total count of validity errors: 0

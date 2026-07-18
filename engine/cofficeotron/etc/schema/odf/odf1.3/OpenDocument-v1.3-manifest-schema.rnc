@@ -1,0 +1,94 @@
+# Open Document Format for Office Applications (OpenDocument) Version 1.3
+# OASIS Standard
+# 27 April 2021
+# Copyright (c) OASIS Open 2021. All Rights Reserved.
+# Source: https://docs.oasis-open.org/office/OpenDocument/v1.3/os/schemas/
+# Latest stage of specification: https://docs.oasis-open.org/office/OpenDocument/v1.3/OpenDocument-v1.3-part1-introduction.html
+# TC IPR Statement: https://www.oasis-open.org/committees/office/ipr.php 
+# 
+#    Open Document Format for Office Applications (OpenDocument) Version 1.3
+#    Manifest Relax-NG Schema
+#    OpenDocument-v1.3-manifest-schema.rng
+
+# https://issues.oasis-open.org/browse/OFFICE-2153
+
+namespace manifest =
+  "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"
+namespace rng = "http://relaxng.org/ns/structure/1.0"
+
+start = manifest
+algorithm =
+  element manifest:algorithm { algorithm-attlist, anyElements }
+algorithm-attlist =
+  attribute manifest:algorithm-name { "Blowfish CFB" | anyURI }
+  & attribute manifest:initialisation-vector { base64Binary }
+anyAttListOrElements =
+  attribute * { text }*,
+  anyElements
+anyElements =
+  element * {
+    mixed { anyAttListOrElements }
+  }*
+anyURI = xsd:anyURI
+base64Binary = xsd:base64Binary
+encrypted-key =
+  element manifest:encrypted-key {
+    element manifest:encryption-method {
+      attribute manifest:PGPAlgorithm { anyURI }
+    }?,
+    element manifest:keyinfo {
+      element manifest:PGPData {
+        element manifest:PGPKeyID { base64Binary },
+        element manifest:PGPKeyPacket { base64Binary }?
+      }
+    },
+    element manifest:CipherData {
+      element manifest:CipherValue { base64Binary }
+    }
+  }
+encryption-data =
+  element manifest:encryption-data {
+    encryption-data-attlist,
+    algorithm,
+    start-key-generation?,
+    key-derivation
+  }
+encryption-data-attlist =
+  attribute manifest:checksum-type { "SHA1/1K" | anyURI }
+  & attribute manifest:checksum { base64Binary }
+file-entry =
+  element manifest:file-entry { file-entry-attlist, encryption-data? }
+file-entry-attlist =
+  attribute manifest:full-path { \string }
+  & attribute manifest:size { nonNegativeInteger }?
+  & attribute manifest:media-type { \string }
+  & attribute manifest:preferred-view-mode {
+      "edit" | "presentation-slide-show" | "read-only" | namespacedToken
+    }?
+  & attribute manifest:version { \string }?
+key-derivation =
+  element manifest:key-derivation { key-derivation-attlist, empty }
+key-derivation-attlist =
+  attribute manifest:key-derivation-name { "PGP" }
+  | (attribute manifest:key-derivation-name { "PBKDF2" | anyURI }
+     & attribute manifest:salt { base64Binary }
+     & attribute manifest:iteration-count { nonNegativeInteger }
+     & attribute manifest:key-size { nonNegativeInteger }?)
+manifest =
+  element manifest:manifest {
+    manifest-attlist,
+    encrypted-key*,
+    # https://issues.oasis-open.org/browse/OFFICE-3940
+    file-entry+
+  }
+manifest-attlist = attribute manifest:version { "1.3" }
+namespacedToken = xsd:QName { pattern = "[^:]+:[^:]+" }
+nonNegativeInteger = xsd:nonNegativeInteger
+start-key-generation =
+  element manifest:start-key-generation {
+    start-key-generation-attlist, empty
+  }
+start-key-generation-attlist =
+  attribute manifest:start-key-generation-name { "SHA1" | anyURI }
+  & attribute manifest:key-size { nonNegativeInteger }?
+\string = xsd:string

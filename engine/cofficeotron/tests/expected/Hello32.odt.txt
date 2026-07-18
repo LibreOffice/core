@@ -1,0 +1,28 @@
+INFO - Inspecting ZIP ...
+INFO      - 16 central records found
+WARN - Manifest entry for "Configurations2/accelerator/current.xml" should have a MIME type, but has an empty string
+INFO - Processing manifest entry: Configurations2/accelerator/current.xml
+WARN      - Referenced resource in manifest cannot be found/processed
+INFO - Processing manifest entry: content.xml
+INFO      - It has root element named &lt;document-content> in the namespace <tt>urn:oasis:names:tc:opendocument:xmlns:office:1.0</tt>
+INFO      - It claims to be ODF version 1.2
+INFO      - The document is valid
+INFO - Processing manifest entry: manifest.rdf
+INFO - Processing manifest entry: styles.xml
+INFO      - It has root element named &lt;document-styles> in the namespace <tt>urn:oasis:names:tc:opendocument:xmlns:office:1.0</tt>
+INFO      - It claims to be ODF version 1.2
+INFO      - The document is valid
+INFO - Processing manifest entry: meta.xml
+INFO      - It has root element named &lt;document-meta> in the namespace <tt>urn:oasis:names:tc:opendocument:xmlns:office:1.0</tt>
+INFO      - It claims to be ODF version 1.2
+INFO      - The document is valid
+INFO      - The generator value is: "<b>OpenOffice.org/3.2$Win32 OpenOffice.org_project/320m12$Build-9483</b>"
+WARN - Manifest entry for "Thumbnails/thumbnail.png" should have a MIME type, but has an empty string
+INFO - Processing manifest entry: settings.xml
+INFO      - It has root element named &lt;document-settings> in the namespace <tt>urn:oasis:names:tc:opendocument:xmlns:office:1.0</tt>
+INFO      - It claims to be ODF version 1.2
+INFO      - The document is valid
+INFO - Validating manifest
+ERROR      - (META-INF/manifest.xml:2 col:0) missing attributes of urn:oasis:names:tc:opendocument:xmlns:manifest:1.0^manifest
+ERROR      - Manifest is invalid
+INFO - Grand total count of validity errors: 1

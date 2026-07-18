@@ -2553,6 +2553,12 @@ AC_ARG_WITH(export-validation,
         [Disable validating OOXML and ODF files as exported from in-tree tests.]),
 ,with_export_validation=auto)
 
+AC_ARG_ENABLE(cofficeotron,
+    AS_HELP_STRING([--enable-cofficeotron],
+        [Build the native cofficeotron document validator, and use it in
+         place of the Java officeotron when export validation runs.]),
+,enable_cofficeotron=no)
+
 AC_ARG_WITH(bffvalidator,
     AS_HELP_STRING([--with-bffvalidator=<absolute path to BFFValidator>],
         [Enables export validation for Microsoft Binary formats (doc, xls, ppt).
@@ -9248,6 +9254,17 @@ AC_SUBST(MODULAR_JAVA)
 
 
 dnl ===================================================================
+dnl cofficeotron document validator
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build the native cofficeotron validator])
+if test "$enable_cofficeotron" = "yes"; then
+    AC_MSG_RESULT([yes])
+    BUILD_TYPE="$BUILD_TYPE COFFICEOTRON RNV"
+else
+    AC_MSG_RESULT([no])
+fi
+
+dnl ===================================================================
 dnl Export file validation
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable export file validation])
@@ -9307,27 +9324,32 @@ if test "$with_export_validation" != "no"; then
             AC_SUBST(ODFVALIDATOR)
 
 
-            AC_PATH_PROGS(OFFICEOTRON, officeotron)
-            if test -z "$OFFICEOTRON"; then
-                # remember to download the officeotron with validator later
-                AC_MSG_NOTICE([no officeotron found, will download it])
-                BUILD_TYPE="$BUILD_TYPE OFFICEOTRON"
+            if test "$enable_cofficeotron" = "yes"; then
+                dnl The native cofficeotron validates the OOXML exports; an
+                dnl empty OFFICEOTRON_JAR makes bin/officeotron.sh run it.
                 OFFICEOTRON="$BUILDDIR/bin/officeotron.sh"
-
-                # and fetch name of officeotron jar name from download.lst
-                OFFICEOTRON_JAR=`$SED -n -e "s/^OFFICEOTRON_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
-                AC_SUBST(OFFICEOTRON_JAR)
-
-                if test -z "$OFFICEOTRON_JAR"; then
-                    AC_MSG_ERROR([cannot determine officeotron jar location (--with-export-validation)])
-                fi
             else
-                # check version of existing officeotron
-                OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-                if test 0"$OFFICEOTRON_VER" -lt 704; then
-                    AC_MSG_ERROR([officeotron too old])
+                AC_PATH_PROGS(OFFICEOTRON, officeotron)
+                if test -z "$OFFICEOTRON"; then
+                    # remember to download the officeotron with validator later
+                    AC_MSG_NOTICE([no officeotron found, will download it])
+                    BUILD_TYPE="$BUILD_TYPE OFFICEOTRON"
+                    OFFICEOTRON="$BUILDDIR/bin/officeotron.sh"
+
+                    # and fetch name of officeotron jar name from download.lst
+                    OFFICEOTRON_JAR=`$SED -n -e "s/^OFFICEOTRON_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
+                    if test -z "$OFFICEOTRON_JAR"; then
+                        AC_MSG_ERROR([cannot determine officeotron jar location (--with-export-validation)])
+                    fi
+                else
+                    # check version of existing officeotron
+                    OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+                    if test 0"$OFFICEOTRON_VER" -lt 704; then
+                        AC_MSG_ERROR([officeotron too old])
+                    fi
                 fi
             fi
+            AC_SUBST(OFFICEOTRON_JAR)
             if test "$build_os" = "cygwin"; then
                 # In case of Cygwin it will be executed from Windows,
                 # so we need to run bash and absolute path to validator

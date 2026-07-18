@@ -1,0 +1,5 @@
+RNV is a lightweight validator for RELAX NG compact syntax, written in
+ANSI C by David Tolpin. The cofficeotron document validator links its
+schema loading and validation code.
+
+From https://sourceforge.net/projects/rnv/ (BSD license).

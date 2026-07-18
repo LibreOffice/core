@@ -420,6 +420,24 @@ endef
 endif # SYSTEM_MYTHES
 
 
+# RNV, the RELAX NG compact syntax validator; always the bundled copy,
+# built as a static library.
+ifneq ($(filter RNV,$(BUILD_TYPE)),)
+
+define gb_LinkTarget__use_rnv
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(gb_UnpackedTarball_workdir)/rnv \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	rnv \
+)
+
+endef
+
+endif # RNV
+
 ifneq ($(SYSTEM_EXPAT),)
 
 define gb_LinkTarget__use_expat_impl

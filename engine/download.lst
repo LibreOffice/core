@@ -75,6 +75,16 @@ EBOOK_TARBALL := libe-book-0.1.4.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+ECMA376_OPC_SHA256SUM := 1d489dc491168ea1f9e9a59063acc8dd5f02b4ad1d21aa7ec19ba9a58d020c70
+ECMA376_OPC_TARBALL := ECMA-376-2_5th_edition_december_2021.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+ECMA376_TRANSITIONAL_SHA256SUM := bd25da1109f73762356596918bf5ff8b74a1331642dba5f1c1d1dfc6bed34ecd
+ECMA376_TRANSITIONAL_TARBALL := ECMA-376-4_5th_edition_december_2016.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 EPM_SHA256SUM := b3fc4c5445de6c9a801504a3ea3efb2d4ea9d5a622c9427e716736e7713ddb91
 EPM_TARBALL := 3ade8cfe7e59ca8e65052644fed9fca4-epm-3.7.tar.gz
 # three static lines
@@ -631,6 +641,11 @@ REVENGE_TARBALL := librevenge-0.0.$(REVENGE_VERSION_MICRO).tar.bz2
 # will not run into conflicts
 MD4C_SHA256SUM := 353c346f376b87c954a13f3415ede2d51264cc61dc5abcd38ff1d2aa0d059b9e
 MD4C_TARBALL := md4c-release-0.5.3.tar.gz
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+RNV_SHA256SUM := 0840ce00ebd2a2ce72f92dd7d5abcd9695204c6b21b0668502cedc84695b6b8b
+RNV_TARBALL := rnv-1.7.10.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

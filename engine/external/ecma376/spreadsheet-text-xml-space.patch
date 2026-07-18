@@ -1,0 +1,37 @@
+Let spreadsheet text elements take the xml:space attribute, as the
+Java officeotron 0.8.8 release patched its copy of this schema.
+Spreadsheets in the wild carry the attribute on shared string and
+inline string text.
+
+--- a/sml.rnc
++++ b/sml.rnc
+@@ -11,6 +11,7 @@
+ namespace xdr =
+   "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"
+ 
++include "xml.rnc"
+ sml_CT_AutoFilter =
+   attribute ref { sml_ST_Ref }?,
+   element filterColumn { sml_CT_FilterColumn }*,
+@@ -1982,10 +1983,10 @@
+ sml_CT_PhoneticRun =
+   attribute sb { xsd:unsignedInt },
+   attribute eb { xsd:unsignedInt },
+-  element t { s_ST_Xstring }
++  element t { xml_space?, s_ST_Xstring }
+ sml_CT_RElt =
+   element rPr { sml_CT_RPrElt }?,
+-  element t { s_ST_Xstring }
++  element t { xml_space?, s_ST_Xstring }
+ sml_CT_RPrElt =
+   (element rFont { sml_CT_FontName }?
+    | element charset { sml_CT_IntProperty }?
+@@ -2003,7 +2004,7 @@
+    | element vertAlign { sml_CT_VerticalAlignFontProperty }?
+    | element scheme { sml_CT_FontScheme }?)+
+ sml_CT_Rst =
+-  element t { s_ST_Xstring }?,
++  element t { xml_space?, s_ST_Xstring }?,
+   element r { sml_CT_RElt }*,
+   element rPh { sml_CT_PhoneticRun }*,
+   element phoneticPr { sml_CT_PhoneticPr }?
