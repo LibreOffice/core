@@ -35,7 +35,7 @@ public:
             , std::vector<std::vector<css::drawing::Position3D>>& rResult
             , sal_uInt32 nGranularity );
 
-    static void CalculateBSplines(
+    SAL_DLLPUBLIC_EXPORT static void CalculateBSplines(
             const std::vector<std::vector<css::drawing::Position3D>>& rPoints
             , std::vector<std::vector<css::drawing::Position3D>>& rResult
             , sal_uInt32 nGranularity
