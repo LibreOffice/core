@@ -251,12 +251,17 @@ if [ -n "${HARDENED_ROOT:-}" ]; then
             i=$((i + 1))
         done
         [ -f "$HARDENED_ROOT$p" ] && printf '%s\n' "$HARDENED_ROOT$p"
+        return 0
     }
+
+    # Multiarch triple of the image being built (x86_64-linux-gnu,
+    # aarch64-linux-gnu, ...), so the overlay works on every architecture.
+    triple="$(uname -m)-linux-gnu"
 
     overlay_from_target() {  # $1 = file in the template to replace
         _b=$(basename "$1")
-        _src=$(resolve_in_target "/usr/lib/x86_64-linux-gnu/$_b")
-        [ -z "$_src" ] && _src=$(resolve_in_target "/lib/x86_64-linux-gnu/$_b")
+        _src=$(resolve_in_target "/usr/lib/$triple/$_b")
+        [ -z "$_src" ] && _src=$(resolve_in_target "/lib/$triple/$_b")
         [ -z "$_src" ] && _src=$(resolve_in_target "/lib64/$_b")
         if [ -n "$_src" ]; then
             cp -f --preserve=mode,timestamps "$_src" "$1"
