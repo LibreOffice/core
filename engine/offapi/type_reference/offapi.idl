@@ -12899,10 +12899,6 @@ module com {
      interface ::com::sun::star::lang::XEventListener;
      void activeSpreadsheetChanged([in] ::com::sun::star::sheet::ActivationEvent aEvent);
     };
-    /** @deprecated */ published interface XFillAcrossSheet {
-     interface ::com::sun::star::uno::XInterface;
-     void fillAcrossSheets([in] long nContentFlags);
-    };
     published interface XRangeSelectionChangeListener {
      interface ::com::sun::star::lang::XEventListener;
      void descriptorChanged([in] ::com::sun::star::sheet::RangeSelectionEvent aEvent);

@@ -3321,7 +3321,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	XExternalDocLinks \
 	XExternalSheetCache \
 	XExternalSheetName \
-	XFillAcrossSheet \
 	XFilterFormulaParser \
 	XFormulaOpCodeMapper \
 	XFormulaParser \
