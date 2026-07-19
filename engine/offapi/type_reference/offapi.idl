@@ -10236,16 +10236,6 @@ module com {
      const long PSEUDO = 2;
      const long UNKNOWN = 0;
     };
-    /** @deprecated */ published constants ChangeAction {
-     const long DELETE = 3;
-     const long INSERT = 1;
-     const long UNDO = 4;
-     const long UPDATE = 2;
-    };
-    /** @deprecated */ published struct ChangeEvent: ::com::sun::star::lang::EventObject {
-     long Action;
-     long Rows;
-    };
     published constants ColumnSearch {
      const long BASIC = 2;
      const long CHAR = 1;
