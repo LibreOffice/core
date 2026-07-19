@@ -100,6 +100,10 @@ public:
 
     sal_uInt32 GetLow() const ;
     sal_uInt16 GetHigh() const ;
+    sal_uInt64 GetIdentity() const
+    {
+        return (static_cast<sal_uInt64>(m_nHigh) << 32) | m_nLow;
+    }
 
     bool operator == (const LwpObjectID &Other) const;
     bool operator != (const LwpObjectID &Other) const;

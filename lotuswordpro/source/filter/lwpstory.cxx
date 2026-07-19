@@ -127,8 +127,11 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
     //Release Lwp Objects
     rtl::Reference<LwpPara> xCur(dynamic_cast<LwpPara*>(GetFirstPara().obj().get()));
     rtl::Reference<LwpPara> xNext;
+    o3tl::sorted_vector<sal_uInt64> aReleased;
     while (xCur.is())
     {
+        if (!aReleased.insert(xCur->GetObjectID().GetIdentity()).second)
+            break;
         xNext.set(dynamic_cast<LwpPara*>(xCur->GetNext().obj().get()));
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pObjMgr = pGlobal->GetLwpObjFactory();
