@@ -42,6 +42,8 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <svl/intitem.hxx>
 
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -2308,7 +2310,15 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
         pLeft->SetStyleSheet( pRight->GetStyleSheet() );
         // it feels wrong to set pLeft's attribs if pRight is empty, tdf#128046
         if ( pRight->Len() )
-            pLeft->GetContentAttribs().GetItems().Set( pRight->GetContentAttribs().GetItems() );
+        {
+            // The outline level is a structural property of the surviving (left) paragraph,
+            // so keep it rather than letting the merged-in paragraph's level win (tdf#167029).
+            SfxItemSet aItems(pRight->GetContentAttribs().GetItems());
+            if (auto p = pLeft->GetContentAttribs().GetItems().GetItemIfSet(EE_PARA_OUTLLEVEL))
+                if (p->GetValue() >= 0)
+                    aItems.Put(*p);
+            pLeft->GetContentAttribs().GetItems().Set(aItems);
+        }
         pLeft->GetCharAttribs().GetDefFont() = pRight->GetCharAttribs().GetDefFont();
     }
 
