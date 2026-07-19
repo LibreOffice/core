@@ -5,7 +5,7 @@
 	background: var(--color-background-lighter);
 }
 
-.jsdialog *[disabled]:not(label):not(.ui-frame-container):not(.checkbutton):not(.spinfieldcontainer):not(.ui-grid):not(.ui-content):not(.ui-listbox-container):not(.ui-pushbutton-wrapper):not(.spinfieldbutton-up):not(.spinfieldbutton-down):not(.spinfield) {
+.jsdialog *[disabled]:not(label):not(.ui-frame-container):not(.ui-edit-container):not(.checkbutton):not(.spinfieldcontainer):not(.ui-grid):not(.ui-content):not(.ui-listbox-container):not(.ui-pushbutton-wrapper):not(.spinfieldbutton-up):not(.spinfieldbutton-down):not(.spinfield) {
 	border: 1px solid var(--color-border-lighter);
 }
 
