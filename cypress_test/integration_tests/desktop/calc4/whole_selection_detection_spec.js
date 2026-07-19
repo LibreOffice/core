@@ -79,8 +79,10 @@ describe(['tagdesktop'], 'Whole selection detection when maxVisible index is bel
 		// Hide columns D..last, leaving only A-C visible.
 		selectViaNameBox(win, 'D1:' + calcHelper.columnNumberToLabel(sheetGeometry.maxVisibleColumnIndex + 1) + '1');
 		sendUno(win, '.uno:HideColumn');
-		cy.then(function() {
-			expect(sheetGeometry.maxVisibleColumnIndex, 'trailing columns hidden')
+		// The geometry update from HideColumn arrives after processToIdle
+		// returns, so retry the read against the live object until it lands.
+		cy.wrap(sheetGeometry).should(function(sg) {
+			expect(sg.maxVisibleColumnIndex, 'trailing columns hidden')
 				.to.be.lessThan(win.app.calc.maxColumnCount - 1);
 		});
 		// A whole-row selection still spans every column (including the hidden ones).
@@ -94,8 +96,10 @@ describe(['tagdesktop'], 'Whole selection detection when maxVisible index is bel
 		// Hide rows 4..last, leaving only rows 1-3 visible.
 		selectViaNameBox(win, 'A4:A' + (sheetGeometry.maxVisibleRowIndex + 1));
 		sendUno(win, '.uno:HideRow');
-		cy.then(function() {
-			expect(sheetGeometry.maxVisibleRowIndex, 'trailing rows hidden')
+		// The geometry update from HideRow arrives after processToIdle
+		// returns, so retry the read against the live object until it lands.
+		cy.wrap(sheetGeometry).should(function(sg) {
+			expect(sg.maxVisibleRowIndex, 'trailing rows hidden')
 				.to.be.lessThan(win.app.calc.maxRowCount - 1);
 		});
 		// A whole-column selection still spans every row (including the hidden ones).
