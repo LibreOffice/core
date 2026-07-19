@@ -79,6 +79,7 @@
 #include <editeng/outlobj.hxx>
 #include <sdmod.hxx>
 #include <svx/svdotext.hxx>
+#include <xmloff/autolayout.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1521,6 +1522,132 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126605)
 
     xPropSet->getPropertyValue(u"WritingMode"_ustr) >>= nWritingMode;
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nWritingMode);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf167029PasteKeepsOutlineLevel)
+{
+    // Copy a level-1 (depth 0) list paragraph and paste it into a level-2
+    // (depth 1) paragraph in various ways. Pasting into a list paragraph must
+    // keep that paragraph's own outline level, whatever the paste position and
+    // whether the destination is empty. bRtf forces the RTF clipboard flavour
+    // instead of the default flat-XML one, since both go through the same
+    // paragraph-merge code.
+    enum class PastePos
+    {
+        AfterBullet, // caret right after the bullet (start of the text)
+        InMiddle,    // caret in the middle of the text
+        AtEnd,       // caret at the end of the line
+        IntoEmpty,   // caret in an empty destination paragraph
+    };
+    auto posName = [](PastePos ePos) -> std::string {
+        switch (ePos)
+        {
+            case PastePos::AfterBullet: return "AfterBullet";
+            case PastePos::InMiddle: return "InMiddle";
+            case PastePos::AtEnd: return "AtEnd";
+            case PastePos::IntoEmpty: return "IntoEmpty";
+        }
+        return "?";
+    };
+    auto checkCase = [this, &posName](PastePos ePos, bool bRtf) {
+        createSdImpressDoc();
+        auto pDoc = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        sd::ViewShell* pViewShell = pDoc->GetDocShell()->GetViewShell();
+        pViewShell->GetActualPage()->SetAutoLayout(AUTOLAYOUT_TITLE_CONTENT, true);
+        SdrView* pView = pViewShell->GetView();
+
+        insertStringToObject(1, u"AAA", /*bUseEscape*/ false); // para 0, depth 0
+        typeKey(pDoc, KEY_RETURN);
+        typeKey(pDoc, KEY_TAB);                                // demote -> depth 1
+        if (ePos != PastePos::IntoEmpty)
+            typeString(pDoc, u"BBB");                          // para 1, depth 1
+
+        OutlinerView* pOlView = pView->GetTextEditOutlinerView();
+        CPPUNIT_ASSERT(pOlView);
+        Outliner& rOut = pOlView->GetOutliner();
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), rOut.GetDepth(0));
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1), rOut.GetDepth(1));
+
+        pOlView->SetSelection(ESelection(0, 0, 0, 3));         // select "AAA"
+        pOlView->Copy();
+
+        const sal_Int32 nLen = rOut.GetText(rOut.GetParagraph(1)).getLength();
+        ESelection aDest(1, 0, 1, 0);
+        switch (ePos)
+        {
+            case PastePos::AfterBullet: aDest = ESelection(1, 0, 1, 0); break;
+            case PastePos::InMiddle: aDest = ESelection(1, nLen / 2, 1, nLen / 2); break;
+            case PastePos::AtEnd: aDest = ESelection(1, nLen, 1, nLen); break;
+            case PastePos::IntoEmpty: aDest = ESelection(1, 0, 1, 0); break;
+        }
+        pOlView->SetSelection(aDest);
+        // Force the clipboard flavour: a plain OutlinerView::Paste() would paste
+        // unformatted text and never exercise the paragraph-merge under test.
+        pOlView->PasteSpecial(bRtf ? SotClipboardFormatId::RTF
+                                   : SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT);
+
+        const std::string aCase = posName(ePos) + (bRtf ? " (RTF)" : " (flat-XML)");
+
+        // Make sure the copied text was actually pasted into the paragraph, so
+        // the depth check below is meaningful (and not a no-op paste).
+        CPPUNIT_ASSERT_MESSAGE("copied text was not pasted; " + aCase,
+                               rOut.GetText(rOut.GetParagraph(1)).indexOf(u"AAA") >= 0);
+
+        // The destination paragraph keeps its own level 2 (depth 1). Without the
+        // fix, pasting at the end of the line dropped it to depth 0 (the copied
+        // paragraph's level).
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aCase, sal_Int16(1), rOut.GetDepth(1));
+    };
+    for (bool bRtf : { false, true }) // flat-XML and RTF clipboard flavours
+    {
+        checkCase(PastePos::AfterBullet, bRtf);
+        checkCase(PastePos::InMiddle, bRtf);
+        checkCase(PastePos::AtEnd, bRtf);
+        checkCase(PastePos::IntoEmpty, bRtf);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf167029PasteIntoNonOutline)
+{
+    // Complement to testTdf167029PasteKeepsOutlineLevel: when the destination
+    // paragraph is not part of an outline (it has no outline level of its own,
+    // depth -1), pasting a leveled paragraph applies the pasted (source) level
+    // instead of forcing the destination's "no level" onto the merged text.
+    createSdImpressDoc();
+    auto pDoc = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pDoc->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    pPage->SetAutoLayout(AUTOLAYOUT_TITLE_CONTENT, true);
+    SdrView* pView = pViewShell->GetView();
+
+    // Copy a level-1 (depth 0) paragraph from the outline placeholder.
+    insertStringToObject(1, u"AAA", /*bUseEscape*/ false);
+    OutlinerView* pOlView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), pOlView->GetOutliner().GetDepth(0));
+    pOlView->SetSelection(ESelection(0, 0, 0, 3));
+    pOlView->Copy();
+    pView->SdrEndTextEdit();
+
+    // A plain text box: its paragraph is not part of an outline (depth -1).
+    rtl::Reference<SdrRectObj> pRect
+        = new SdrRectObj(pView->getSdrModelFromSdrView(), tools::Rectangle(1000, 1000, 9000, 5000));
+    pPage->NbcInsertObject(pRect.get());
+    pView->MarkObj(pRect.get(), pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pRect.get());
+    typeString(pDoc, u"BBB");
+    OutlinerView* pBoxView = pView->GetTextEditOutlinerView();
+    Outliner& rBoxOut = pBoxView->GetOutliner();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(-1), rBoxOut.GetDepth(0));
+
+    // Paste the copied outline paragraph at the end of the text box paragraph.
+    const sal_Int32 nLen = rBoxOut.GetText(rBoxOut.GetParagraph(0)).getLength();
+    pBoxView->SetSelection(ESelection(0, nLen, 0, nLen));
+    pBoxView->PasteSpecial(SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT);
+    CPPUNIT_ASSERT_EQUAL(u"BBBAAA"_ustr, rBoxOut.GetText(rBoxOut.GetParagraph(0)));
+
+    // Without an outline level of its own, the destination takes the pasted
+    // (source) level 0 rather than keeping its "no level" (-1).
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), rBoxOut.GetDepth(0));
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, tdf139269_prevent_pasting_into_readonly_master_objects)
