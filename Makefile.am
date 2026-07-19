@@ -9,10 +9,15 @@
 #
 ETAGS=ctags -e
 
-# Default to one make job per CPU. An explicit -j on the command line
-# wins. On platforms without nproc leave MAKEFLAGS alone.
-NPROC := $(if $(findstring j,$(MAKEFLAGS)),,$(shell nproc 2>/dev/null))
-MAKEFLAGS := $(MAKEFLAGS) $(if $(NPROC),-j$(NPROC))
+# Default to one make job per CPU, plus a load-average limit of the same
+# number so make does not pile on new jobs while the machine is already busy.
+# On a host shared by several builds each one backs off instead of all running
+# a full set of jobs at once. An explicit -j or -l wins. Without nproc, no
+# change.
+NPROC := $(shell nproc 2>/dev/null)
+MAKEFLAGS := $(MAKEFLAGS) \
+	$(if $(findstring j,$(MAKEFLAGS)),,$(if $(NPROC),-j$(NPROC))) \
+	$(if $(findstring l,$(MAKEFLAGS)),,$(if $(NPROC),-l$(NPROC)))
 
 build-samples:
 	$(QUIET_MKDIRP) mkdir -p $(abs_top_builddir)/test/samples

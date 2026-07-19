@@ -2776,7 +2776,8 @@ AC_ARG_WITH(load-limit,
     AS_HELP_STRING([--with-load-limit=N],
         [Pass -l N to make so that no new job is started if the system load
         average is >= N. Useful on shared CI hosts where multiple builds
-        compete for cores. No load limit by default.]),
+        compete for cores. Defaults to the parallelism (the CPU count). Pass
+        --with-load-limit=no to build without any load limit.]),
 ,)
 
 AC_ARG_WITH(all-tarballs,
@@ -13600,9 +13601,15 @@ fi
 AC_SUBST(PARALLELISM)
 
 AC_MSG_CHECKING([for make load limit])
-if test -n "$with_load_limit" -a "$with_load_limit" != "no" -a "$with_load_limit" != "yes"; then
+if test "$with_load_limit" = "no"; then
+    LOADLIMIT=
+    AC_MSG_RESULT([none])
+elif test -n "$with_load_limit" -a "$with_load_limit" != "yes"; then
     LOADLIMIT=$with_load_limit
     AC_MSG_RESULT([$LOADLIMIT])
+elif test $PARALLELISM -ne 0; then
+    LOADLIMIT=$PARALLELISM
+    AC_MSG_RESULT([$LOADLIMIT (default, same as parallelism)])
 else
     LOADLIMIT=
     AC_MSG_RESULT([none])
