@@ -1,0 +1,10 @@
+--- src/hb.hh
++++ src/hb.hh
+@@ -115,6 +115,7 @@
+ #pragma GCC diagnostic warning "-Wunsafe-loop-optimizations"
+ #pragma GCC diagnostic warning "-Wunused-but-set-variable"
+ #ifdef __clang__
++#pragma clang diagnostic warning "-Wunused-template"
+ // The following are too buggy on gcc
+ // https://github.com/harfbuzz/harfbuzz/issues/5589
+ // https://github.com/harfbuzz/harfbuzz/pull/5367
