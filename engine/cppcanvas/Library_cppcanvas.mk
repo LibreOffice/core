@@ -19,6 +19,8 @@
 
 $(eval $(call gb_Library_Library,cppcanvas))
 
+$(eval $(call gb_Library_set_componentfile,cppcanvas,cppcanvas/source/uno/mtfrenderer,services))
+
 $(eval $(call gb_Library_set_include,cppcanvas,\
 	-I$(SRCDIR)/cppcanvas/source/inc \
 	$$(INCLUDE) \
@@ -60,6 +62,7 @@ $(eval $(call gb_Library_add_exception_objects,cppcanvas,\
 	cppcanvas/source/mtfrenderer/transparencygroupaction \
 	cppcanvas/source/tools/canvasgraphichelper \
 	cppcanvas/source/tools/tools \
+	cppcanvas/source/uno/uno_mtfrenderer \
 	cppcanvas/source/wrapper/implcanvas \
 	cppcanvas/source/wrapper/vclfactory \
 ))

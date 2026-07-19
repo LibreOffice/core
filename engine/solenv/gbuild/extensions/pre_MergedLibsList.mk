@@ -104,7 +104,6 @@ gb_MERGE_LIBRARY_LIST := \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mozbootstrap) \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	msfilter \
-	mtfrenderer \
 	numbertext \
 	$(call gb_Helper_optional,DBCONNECTIVITY,odbc) \
 	odfflatxml \

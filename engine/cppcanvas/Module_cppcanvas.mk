@@ -21,7 +21,6 @@ $(eval $(call gb_Module_Module,cppcanvas))
 
 $(eval $(call gb_Module_add_targets,cppcanvas,\
 	Library_cppcanvas \
-	Library_mtfrenderer \
 ))
 
 # FIXME: should generalize these ...

@@ -376,7 +376,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mozbootstrap) \
 	msfilter \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \
-	mtfrenderer \
 	numbertext \
 	$(call gb_Helper_optional,DBCONNECTIVITY,odbc) \
 	odfflatxml \
