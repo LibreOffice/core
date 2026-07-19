@@ -678,12 +678,13 @@ bool updateDynamicFilesImpl(const std::string& sysTemplate)
         if (checkWritableSysTemplate && !FileUtil::isWritable(sysTemplate))
         {
             LinkDynamicFiles = false;
-            LOG_WRN("The systemplate directory ["
-                    << sysTemplate << "] is read-only, and at least [" << dstFilename
-                    << "] is out-of-date. Will have to clone dynamic elements of "
-                    << "systemplate to the jails. To restore optimal performance, "
-                    << "make sure the files in [" << sysTemplate << "/etc] "
-                    << "are up-to-date.");
+            // A read-only systemplate is an expected, supported configuration
+            // (e.g. a hardened/immutable image): we clone the dynamic /etc files
+            // into each jail instead of updating them in place. Informational,
+            // not a problem to fix.
+            LOG_INF("The systemplate directory ["
+                    << sysTemplate << "] is read-only; cloning the dynamic /etc "
+                    << "files (e.g. [" << dstFilename << "]) into each jail.");
             return false;
         }
 
@@ -752,10 +753,14 @@ void setupDynamicFiles(const std::string& sysTemplate)
     const bool uptodate = updateDynamicFilesImpl(sysTemplate);
     if (!uptodate)
     {
-        // Can't copy!
-        LOG_WRN("Failed to update the dynamic files in ["
-                << sysTemplate << "]. Will clone dynamic elements of systemplate to the jails.");
         LinkDynamicFiles = false;
+        // A read-only systemplate is expected and already logged by
+        // updateDynamicFilesImpl(); only warn when we could have written the
+        // files but still failed (a genuine problem).
+        if (FileUtil::isWritable(sysTemplate))
+            LOG_WRN("Failed to update the dynamic files in ["
+                    << sysTemplate
+                    << "]. Will clone dynamic elements of systemplate to the jails.");
     }
 
     FileUtil::Stat copiedFileStat(Poco::Path(sysTemplate, "etc/copied").toString());
