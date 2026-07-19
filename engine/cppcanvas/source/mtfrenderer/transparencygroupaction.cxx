@@ -33,6 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/canvastools.hxx>
 
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -376,12 +377,9 @@ namespace cppcanvas::internal
 
 
                     // update buffered bitmap and transformation
-                    BitmapSharedPtr aBmp( VCLFactory::createBitmap(
-                                              mpCanvas,
-                                              aVDev->GetBitmap(
+                    mxBufferBitmap =  vcl::unotools::xBitmapFromBitmap(aVDev->GetBitmap(
                                                   aBitmapPoint,
-                                                  aBitmapSizePixel ) ) );
-                    mxBufferBitmap = aBmp->getUNOBitmap();
+                                                  aBitmapSizePixel ) );
                     maLastTransformation = aTotalTransform;
                     maLastSubset = rSubset;
                 }

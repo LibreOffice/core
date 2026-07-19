@@ -24,7 +24,6 @@
 #include <cppcanvas/vclfactory.hxx>
 
 #include "implbitmapcanvas.hxx"
-#include "implbitmap.hxx"
 #include <implrenderer.hxx>
 
 using namespace ::com::sun::star;
@@ -39,23 +38,6 @@ namespace cppcanvas
     BitmapCanvasSharedPtr VCLFactory::createBitmapCanvas( const uno::Reference< rendering::XBitmapCanvas >& xCanvas )
     {
         return std::make_shared<internal::ImplBitmapCanvas>( xCanvas );
-    }
-
-    BitmapSharedPtr VCLFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
-                                              const ::Bitmap&         rBmp )
-    {
-        OSL_ENSURE( rCanvas && rCanvas->getUNOCanvas().is(),
-                    "VCLFactory::createBitmap(): Invalid canvas" );
-
-        if( !rCanvas )
-            return BitmapSharedPtr();
-
-        uno::Reference< rendering::XCanvas > xCanvas( rCanvas->getUNOCanvas() );
-        if( !xCanvas.is() )
-            return BitmapSharedPtr();
-
-        return std::make_shared<internal::ImplBitmap>( rCanvas,
-                                                          vcl::unotools::xBitmapFromBitmap(rBmp) );
     }
 
     RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,
