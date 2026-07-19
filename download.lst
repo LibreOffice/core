@@ -85,8 +85,8 @@ CURL_TARBALL := curl-8.21.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-EBOOK_SHA256SUM := 7e8d8ff34f27831aca3bc6f9cc532c2f90d2057c778963b884ff3d1e34dfe1f9
-EBOOK_TARBALL := libe-book-0.1.3.tar.xz
+EBOOK_SHA256SUM := 104b7e791b6632745898e9b6a0037b7540235771a4d8c3bde2c764466ad912f1
+EBOOK_TARBALL := libe-book-0.1.4.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
