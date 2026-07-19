@@ -27,6 +27,7 @@
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #pragma GCC diagnostic ignored "-Wunused-macros"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-template"
 #pragma GCC diagnostic ignored "-Wunused-variable"
 #include_next <boost/spirit/include/classic_file_iterator.hpp>
 #pragma GCC diagnostic pop

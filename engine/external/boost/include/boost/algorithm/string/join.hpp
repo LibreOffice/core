@@ -27,6 +27,7 @@
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #pragma GCC diagnostic ignored "-Wunused-macros"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-template"
 #pragma GCC diagnostic ignored "-Wunused-variable"
 #include_next <boost/algorithm/string/join.hpp>
 #pragma GCC diagnostic pop

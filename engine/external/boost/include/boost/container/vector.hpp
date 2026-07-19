@@ -29,5 +29,5 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-template"
 #pragma GCC diagnostic ignored "-Wunused-variable"
-#include_next <boost/core/noinit_adaptor.hpp>
+#include_next <boost/container/vector.hpp>
 #pragma GCC diagnostic pop
