@@ -12912,12 +12912,6 @@ module com {
      interface ::com::sun::star::lang::XEventListener;
      void modified([in] ::com::sun::star::sheet::ResultEvent aEvent);
     };
-    /** @deprecated */ published interface XSheetPastable {
-     interface ::com::sun::star::uno::XInterface;
-     void paste([in] ::com::sun::star::table::CellAddress aDestination);
-     void pasteFormat([in] ::com::sun::star::table::CellAddress aDestination, [in] string aFormat);
-     void pasteCellRange([in] ::com::sun::star::table::CellRangeAddress aDestination, [in] ::com::sun::star::sheet::PasteOperation nOperation, [in] short nContents, [in] boolean bSkipEmpty, [in] boolean bTranspose, [in] boolean bAsLink, [in] ::com::sun::star::sheet::CellInsertMode nInsert);
-    };
     /** @deprecated */ published interface XViewPanesSupplier {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::container::XIndexAccess getViewPanes();

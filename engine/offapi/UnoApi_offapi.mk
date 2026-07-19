@@ -3377,7 +3377,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	XSheetOperation \
 	XSheetOutline \
 	XSheetPageBreak \
-	XSheetPastable \
 	XSolver \
 	XSolverDescription \
 	XSolverSettings \
