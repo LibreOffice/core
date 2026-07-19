@@ -33,10 +33,6 @@ namespace basegfx
 
 namespace cppcanvas
 {
-    // forward declaration, since tools::PolyPolygon also derives from CanvasGraphic
-    typedef std::shared_ptr< class PolyPolygon > PolyPolygonSharedPtr;
-
-
     /** This interface defines basic properties of
         objects that can be painted on a Canvas
      */

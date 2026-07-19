@@ -40,11 +40,7 @@ namespace com::sun::star::uno { template <class interface_type> class Reference;
 
 namespace cppcanvas
 {
-    class PolyPolygon;
     class Canvas;
-
-    // forward declaration, since tools::PolyPolygon also references Canvas
-    typedef std::shared_ptr< PolyPolygon > PolyPolygonSharedPtr;
 
     // forward declaration, since cloneCanvas() also references Canvas
     typedef std::shared_ptr< Canvas > CanvasSharedPtr;

@@ -4408,10 +4408,7 @@ include/cppcanvas/bitmap.hxx
 include/cppcanvas/canvas.hxx
 include/cppcanvas/canvasgraphic.hxx
 include/cppcanvas/color.hxx
-include/cppcanvas/customsprite.hxx
-include/cppcanvas/polypolygon.hxx
 include/cppcanvas/renderer.hxx
-include/cppcanvas/sprite.hxx
 include/cppcanvas/vclfactory.hxx
 include/cppu/Enterable.hxx
 include/cppu/EnvGuards.hxx
