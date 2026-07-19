@@ -2018,14 +2018,20 @@ int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
         return 0;
 
     const U8* pReadPtr = mpBasePtr + mnFDSelectBase;
+    if( pReadPtr < mpBasePtr || pReadPtr >= mpBaseEnd)
+        return -1;
     const U8 nFDSelFormat = *(pReadPtr++);
     switch( nFDSelFormat) {
         case 0: { // FDSELECT format 0
+                if( pReadPtr + nGlyphIndex >= mpBaseEnd)
+                    return -1;
                 pReadPtr += nGlyphIndex;
                 const U8 nFDIdx = *(pReadPtr++);
                 return nFDIdx;
             } //break;
         case 3: { // FDSELECT format 3
+                if( pReadPtr + 4 > mpBaseEnd)
+                    return -1;
                 const U16 nRangeCount = (pReadPtr[0]<<8) + pReadPtr[1];
                 assert( nRangeCount > 0);
                 assert( nRangeCount <= mnCharStrCount);
@@ -2035,6 +2041,8 @@ int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
                 pReadPtr += 4;
                 // TODO? binary search
                 for( int i = 0; i < nRangeCount; ++i) {
+                    if( pReadPtr + 3 > mpBaseEnd)
+                        return -1;
                     const U8 nFDIdx = pReadPtr[0];
                     const U16 nNext = (pReadPtr[1]<<8) + pReadPtr[2];
                     assert( nPrev < nNext);
@@ -2064,6 +2072,8 @@ int CffSubsetterContext::getGlyphSID( int nGlyphIndex) const
 
     // get the SID/CID from the Charset table
     const U8* pReadPtr = mpBasePtr + mnCharsetBase;
+    if( pReadPtr < mpBasePtr || pReadPtr >= mpBaseEnd)
+        return -1;
     const U8 nCSetFormat = *(pReadPtr++);
     int nGlyphsToSkip = nGlyphIndex - 1;
     switch( nCSetFormat) {
@@ -2073,6 +2083,8 @@ int CffSubsetterContext::getGlyphSID( int nGlyphIndex) const
             break;
         case 1: // charset format 1
             while( nGlyphsToSkip >= 0) {
+                if( pReadPtr + 3 > mpBaseEnd)
+                    return -1;
                 const int nLeft = pReadPtr[2];
                 if( nGlyphsToSkip <= nLeft)
                     break;
@@ -2082,6 +2094,8 @@ int CffSubsetterContext::getGlyphSID( int nGlyphIndex) const
             break;
         case 2: // charset format 2
             while( nGlyphsToSkip >= 0) {
+                if( pReadPtr + 4 > mpBaseEnd)
+                    return -1;
                 const int nLeft = (pReadPtr[2]<<8) + pReadPtr[3];
                 if( nGlyphsToSkip <= nLeft)
                     break;
@@ -2094,6 +2108,8 @@ int CffSubsetterContext::getGlyphSID( int nGlyphIndex) const
             return -2;
     }
 
+    if( pReadPtr + 2 > mpBaseEnd)
+        return -1;
     int nSID = (pReadPtr[0]<<8) + pReadPtr[1];
     nSID += nGlyphsToSkip;
     // NOTE: for CID-fonts the resulting SID is interpreted as CID
