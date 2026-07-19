@@ -9928,13 +9928,6 @@ module com {
     };
    };
    module sdb {
-    /** @deprecated */ published service DatabaseAccessDataSource {
-     interface ::com::sun::star::beans::XPropertySet;
-     interface ::com::sun::star::sdbc::XDataSource;
-     [optional] interface ::com::sun::star::sdb::XCompletedConnection;
-     [property] string URL;
-     [property, optional] ::com::sun::star::ucb::RememberAuthentication PasswordMode;
-    };
     published interface XDatabaseRegistrationsListener;
     published interface XDatabaseRegistrations {
      interface ::com::sun::star::uno::XInterface;
