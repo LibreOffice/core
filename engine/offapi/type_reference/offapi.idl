@@ -12912,10 +12912,6 @@ module com {
      interface ::com::sun::star::lang::XEventListener;
      void modified([in] ::com::sun::star::sheet::ResultEvent aEvent);
     };
-    /** @deprecated */ published interface XViewPanesSupplier {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::container::XIndexAccess getViewPanes();
-    };
    };
    module style {
     published constants CaseMap {
