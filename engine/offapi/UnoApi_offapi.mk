@@ -3431,7 +3431,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/style,\
 	XStyleSupplier \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/svg,\
-	XSVGPrinter \
 	XSVGWriter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/system,\

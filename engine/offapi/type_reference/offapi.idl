@@ -13099,12 +13099,6 @@ module com {
     };
    };
    module svg {
-    /** @deprecated */ published interface XSVGPrinter {
-     interface ::com::sun::star::uno::XInterface;
-     boolean startJob([in] ::com::sun::star::xml::sax::XDocumentHandler aHandler, [in] sequence< byte > aJobSetup, [in] string aJobName, [in] unsigned long nCopies, [in] boolean bCollate);
-     void printPage([in] sequence< byte > aPrintPage);
-     void endJob();
-    };
     /** @deprecated */ published interface XSVGWriter {
      interface ::com::sun::star::uno::XInterface;
      void write([in] ::com::sun::star::xml::sax::XDocumentHandler aHandler, [in] sequence< byte > aMtf);
