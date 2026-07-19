@@ -47,6 +47,10 @@ class Socket {
 	private _accessTokenExpireTimeout: TimeoutHdl | undefined;
 	private _accessTokenExpireWarningCount: number = 0;
 	private _reconnecting: boolean;
+	// External-content (linked graphics etc.) held back pending consent.
+	private _externalLinksDisabled: boolean = false;
+	private _externalLinksListening: boolean = false;
+	private _externalLinksShown: boolean = false;
 	private _slurpTimer: TimeoutHdl | undefined;
 	private _renderEventTimer: TimeoutHdl | undefined;
 	private _renderEventTimerStart: DOMHighResTimeStamp | undefined;
@@ -1143,7 +1147,26 @@ class Socket {
 	// Let the user agree to load this document's disabled external links.
 	// Editors only; the choice lasts the session.
 	private _maybeOfferExternalLinks(command: ServerCommand): void {
-		if (!command.externallinksdisabled || this._map.isReadOnlyMode()) return;
+		this._externalLinksDisabled = !!command.externallinksdisabled;
+		if (!this._externalLinksDisabled) return;
+
+		// The document loads read-only first, and this prompt is editors-only,
+		// so also offer once the permission changes to edit.
+		if (!this._externalLinksListening) {
+			this._externalLinksListening = true;
+			app.events.on('updatepermission', this._offerExternalLinks.bind(this));
+		}
+		this._offerExternalLinks();
+	}
+
+	private _offerExternalLinks(): void {
+		if (
+			this._externalLinksShown ||
+			!this._externalLinksDisabled ||
+			this._map.isReadOnlyMode()
+		)
+			return;
+		this._externalLinksShown = true;
 
 		this._map.uiManager.showSnackbar(
 			_('This document has links to external content.'),
