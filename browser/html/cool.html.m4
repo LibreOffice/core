@@ -27,7 +27,7 @@ m4_ifelse(IOSAPP,[true],
 <!-- Related to issue #5841: the iOS app sets the base text direction via the "dir" parameter -->
 <html dir=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" data-theme="%UI_THEME%">
 ,
-<html %UI_RTL_SETTINGS%><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html %UI_RTL_SETTINGS%m4_ifelse(MOBILEAPP,[],[%DARK_THEME_ATTR%])><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 )m4_dnl
 <!--
   SPDX-License-Identifier: MPL-2.0
@@ -115,19 +115,26 @@ m4_ifelse(MOBILEAPP,[true],
    <link rel="localizations" href="%SERVICE_ROOT%/browser/%VERSION%/l10n/help-localizations.json" type="application/vnd.oftn.l10n+json"/>
    <link rel="localizations" href="%SERVICE_ROOT%/browser/%VERSION%/l10n/uno-localizations.json" type="application/vnd.oftn.l10n+json"/>]
 )m4_dnl
-<script>
+m4_dnl# In the browser the loading screen theme is applied server-side (see the
+m4_dnl# %DARK_THEME_ATTR% attribute and the %DARK_THEME_CSS% placeholder below) so
+m4_dnl# that no inline <script> is needed - an inline script would violate the
+m4_dnl# Content-Security-Policy. The apps load cool.html from a local file with no
+m4_dnl# CSP, so there the theme is applied by this script.
+m4_ifelse(MOBILEAPP, [true],
+[<script>
 // Apply dark theme immediately if darkTheme query parameter is present
 (function() {
-	var params = new URLSearchParams(window.location.search);
+	const params = new URLSearchParams(window.location.search);
 	if (params.get('darkTheme') === 'true') {
 		document.documentElement.setAttribute('data-theme', 'dark');
-		var link = document.createElement('link');
+		const link = document.createElement('link');
 		link.setAttribute('rel', 'stylesheet');
-		link.setAttribute('href', 'm4_ifelse(MOBILEAPP,[],[%SERVICE_ROOT%/browser/%VERSION%/])color-palette-dark.css');
+		link.setAttribute('href', 'color-palette-dark.css');
 		document.head.appendChild(link);
 	}
 })();
-</script>
+</script>],
+[<!--%DARK_THEME_CSS%-->])
 </head>
 
   <body>

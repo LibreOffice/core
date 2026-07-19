@@ -1601,6 +1601,19 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
         uiRtlSettings = " dir=\"rtl\" ";
     Poco::replaceInPlace(preprocess, std::string("%UI_RTL_SETTINGS%"), uiRtlSettings);
 
+    // Apply the darkTheme query parameter server-side, rather than with an inline
+    // <script> that the Content-Security-Policy forbids, so that the loading screen
+    // already renders in dark mode. cool.html.m4 provides the %DARK_THEME_ATTR%
+    // attribute on <html> and the %DARK_THEME_CSS% placeholder in <head>.
+    const bool darkTheme = requestDetails.getParam("darkTheme") == "true";
+    Poco::replaceInPlace(preprocess, std::string("%DARK_THEME_ATTR%"),
+                         darkTheme ? std::string(" data-theme=\"dark\"") : std::string());
+    Poco::replaceInPlace(preprocess, std::string("<!--%DARK_THEME_CSS%-->"),
+                         darkTheme ? "<link rel=\"stylesheet\" href=\"" + responseRoot +
+                                         "/browser/" + Util::getCoolVersionHash() +
+                                         "/color-palette-dark.css\" />"
+                                   : std::string());
+
     std::string enableMacrosExecution = stringifyBoolFromConfig(config, "security.enable_macros_execution", false);
     Poco::replaceInPlace(preprocess, std::string("%ENABLE_MACROS_EXECUTION%"), enableMacrosExecution);
 
