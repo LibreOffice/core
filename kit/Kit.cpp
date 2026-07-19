@@ -3880,7 +3880,15 @@ void lokit_main(
                     return false;
                 }
 
-                if (FileUtil::Stat("/nix/store").exists()) {
+                // Only relevant for a real Nix/NixOS build, where the engine
+                // (loTemplate) resolves its libraries through /nix/store. An
+                // FHS-packaged engine (e.g. /opt/collaboraoffice) is
+                // self-contained and preloaded before the chroot, so the jail
+                // does not need /nix/store even when the host/base image happens
+                // to be Nix-built. Skipping it there avoids a misleading failure
+                // log and keeps the base store out of the sandbox.
+                if (loTemplate.starts_with("/nix/store") &&
+                    FileUtil::Stat("/nix/store").exists()) {
                     // Bind-mount /nix/store to the jail as otherwise we will likely get missing fonts/etc.
                     // We won't quit if we fail (e.g. the non-nixos case could work) but unless we're doing something special COOLWSD is unlikely to work without this on nixos
                     const std::string jailNixDir = Poco::Path(jailPath, "nix/store").toString();
