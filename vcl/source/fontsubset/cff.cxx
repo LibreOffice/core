@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <cstdio>
 #include <cstring>
 #include <vector>
@@ -3243,7 +3244,8 @@ bool CffContext::convertCharStrings(std::vector<CharString>& rCharStrings, int n
     // If we are doing extra glyphs used for seac operator, check for already
     // converted glyphs.
     bool bCheckDuplicates = !rCharStrings.empty();
-    rCharStrings.reserve(rCharStrings.size() + nGlyphCount);
+    rCharStrings.reserve(rCharStrings.size()
+                         + std::min<size_t>(nGlyphCount, mpBaseEnd - mpBasePtr));
     for (int i = 0; i < nGlyphCount; ++i)
     {
         const int nCffGlyphId = pGlyphIds ? pGlyphIds[i] : i;
