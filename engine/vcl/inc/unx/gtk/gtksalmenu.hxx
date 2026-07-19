@@ -32,7 +32,6 @@ class GtkSalMenu final : public SalMenu
 {
 private:
     std::vector< GtkSalMenuItem* >  maItems;
-    std::vector<std::pair<sal_uInt16, GtkWidget*>> maExtraButtons;
     Idle                            maUpdateMenuBarIdle;
 
     bool                            mbInActivateCallback;

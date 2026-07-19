@@ -150,10 +150,6 @@ protected:
     bool mbSwapAsynchron : 1;
     bool mbPrintPreview : 1;
 
-    // These bools manage, the status that is displayed
-    //
-    bool mbAnimationPause : 1;
-
     // Flag which decides if buffered output for this view is allowed. When
     // set, PreRendering for PageView rendering will be used. Default is false
     bool mbBufferedOutputAllowed : 1;
