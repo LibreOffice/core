@@ -85,13 +85,6 @@ std::basic_ostream<charT, traits> & operator <<(
 
 template< typename charT, typename traits >
 std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const Idle& idle )
-{
-    return stream << static_cast<const Timer*>( &idle );
-}
-
-template< typename charT, typename traits >
-std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const ImplSchedulerData& data )
 {
     stream << " i: " << data.mbInScheduler;
