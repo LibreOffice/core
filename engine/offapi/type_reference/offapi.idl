@@ -15834,9 +15834,6 @@ module com {
     };
     published exception InteractiveBadTransferURLException: ::com::sun::star::uno::Exception {
     };
-    /** @deprecated */ published exception InteractiveFileIOException: ::com::sun::star::ucb::InteractiveIOException {
-     string FileName;
-    };
     published exception InteractiveNetworkException: ::com::sun::star::task::ClassifiedInteractionRequest {
     };
     published exception InteractiveNetworkConnectException: ::com::sun::star::ucb::InteractiveNetworkException {

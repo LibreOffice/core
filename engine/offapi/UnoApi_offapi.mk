@@ -3719,7 +3719,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	InteractiveAppException \
 	InteractiveAugmentedIOException \
 	InteractiveBadTransferURLException \
-	InteractiveFileIOException \
 	InteractiveIOException \
 	InteractiveLockingException \
 	InteractiveLockingLockExpiredException \
