@@ -1373,7 +1373,10 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		if (dialogs.length) {
 			var lastKey = dialogs[dialogs.length - 1];
 			var dialogInfo = this.dialogs[lastKey];
-			if (dialogInfo.isPopup) {
+			// The snackbar is a fixed notification, not anchored to document
+			// content, so it must survive a zoom (e.g. the fit-width zoom during
+			// load); only content-anchored popups need closing here.
+			if (dialogInfo.isPopup && !dialogInfo.isSnackbar) {
 				// online-only must remove the DOM here
 				// instead of waiting for a server round-trip that never comes
 				// TODO: use helpers here
