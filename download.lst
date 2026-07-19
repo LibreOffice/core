@@ -512,8 +512,8 @@ MSPUB_TARBALL := libmspub-0.1.5.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-MWAW_SHA256SUM := a1a39ffcea3ff2a7a7aae0c23877ddf4918b554bf82b0de5d7ce8e7f61ea8e32
-MWAW_VERSION_MICRO := 22
+MWAW_SHA256SUM := ac3590f691a2904eb8c7dc8b757b8a29f125f592449e421459ae8fa928b399eb
+MWAW_VERSION_MICRO := 23
 MWAW_TARBALL := libmwaw-0.3.$(MWAW_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
