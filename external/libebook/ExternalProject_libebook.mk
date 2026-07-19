@@ -27,7 +27,7 @@ $(eval $(call gb_ExternalProject_use_externals,libebook,\
 $(call gb_ExternalProject_get_state_target,libebook,build) :
 	$(call gb_Trace_StartRange,libebook,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		export PKG_CONFIG="" \
+		export PKG_CONFIG=true \
 		&& unset MSYS_NO_PATHCONV && MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--with-pic \
 			--enable-static \
