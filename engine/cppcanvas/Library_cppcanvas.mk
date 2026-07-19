@@ -60,7 +60,6 @@ $(eval $(call gb_Library_add_exception_objects,cppcanvas,\
 	cppcanvas/source/mtfrenderer/transparencygroupaction \
 	cppcanvas/source/tools/canvasgraphichelper \
 	cppcanvas/source/tools/tools \
-	cppcanvas/source/wrapper/implbitmapcanvas \
 	cppcanvas/source/wrapper/implcanvas \
 	cppcanvas/source/wrapper/vclfactory \
 ))

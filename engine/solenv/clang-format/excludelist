@@ -1786,8 +1786,6 @@ cppcanvas/source/tools/tools.cxx
 cppcanvas/source/uno/uno_mtfrenderer.cxx
 cppcanvas/source/wrapper/implbitmap.cxx
 cppcanvas/source/wrapper/implbitmap.hxx
-cppcanvas/source/wrapper/implbitmapcanvas.cxx
-cppcanvas/source/wrapper/implbitmapcanvas.hxx
 cppcanvas/source/wrapper/implcanvas.cxx
 cppcanvas/source/wrapper/implcanvas.hxx
 cppcanvas/source/wrapper/implcustomsprite.cxx
@@ -4407,7 +4405,6 @@ include/cpo/uno/Any.hxx
 include/cpo/uno/Sequence.h
 include/cpo/uno/Sequence.hxx
 include/cppcanvas/bitmap.hxx
-include/cppcanvas/bitmapcanvas.hxx
 include/cppcanvas/canvas.hxx
 include/cppcanvas/canvasgraphic.hxx
 include/cppcanvas/color.hxx

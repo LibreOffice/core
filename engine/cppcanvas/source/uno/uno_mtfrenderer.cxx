@@ -50,7 +50,7 @@ void MtfRenderer::setMetafile (const cpo::uno::Sequence< sal_Int8 >& /*rMtf*/)
 void MtfRenderer::draw (double fScaleX, double fScaleY)
 {
     if (mpMetafile && mxCanvas) {
-        cppcanvas::BitmapCanvasSharedPtr canvas = cppcanvas::VCLFactory::createBitmapCanvas (mxCanvas);
+        cppcanvas::CanvasSharedPtr canvas = cppcanvas::VCLFactory::createBitmapCanvas (mxCanvas);
         cppcanvas::RendererSharedPtr renderer = cppcanvas::VCLFactory::createRenderer (canvas, *mpMetafile);
         ::basegfx::B2DHomMatrix aMatrix;
         aMatrix.scale( fScaleX, fScaleY );

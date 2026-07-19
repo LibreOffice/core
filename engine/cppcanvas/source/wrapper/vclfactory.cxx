@@ -17,13 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <osl/diagnose.h>
 #include <vcl/window.hxx>
 #include <vcl/canvastools.hxx>
 
 #include <cppcanvas/vclfactory.hxx>
 
-#include "implbitmapcanvas.hxx"
+#include "implcanvas.hxx"
 #include <implrenderer.hxx>
 
 using namespace ::com::sun::star;
@@ -35,9 +36,9 @@ namespace cppcanvas
         return std::make_shared<internal::ImplCanvas>( xCanvas );
     }
 
-    BitmapCanvasSharedPtr VCLFactory::createBitmapCanvas( const uno::Reference< rendering::XBitmapCanvas >& xCanvas )
+    CanvasSharedPtr VCLFactory::createBitmapCanvas( const uno::Reference< rendering::XBitmapCanvas >& xCanvas )
     {
-        return std::make_shared<internal::ImplBitmapCanvas>( xCanvas );
+        return std::make_shared<internal::ImplCanvas>( uno::Reference< rendering::XCanvas >(xCanvas) );
     }
 
     RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,
