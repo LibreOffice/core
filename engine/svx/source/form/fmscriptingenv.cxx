@@ -615,7 +615,6 @@ namespace svxform
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.ucb.XContent",u"addContentEventListener"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.ucb.XContent",u"removeContentEventListener"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.ucb.XContentProviderManager",u"deregisterContentProvider"),
-            pair<std::u16string_view,std::u16string_view>(u"com.sun.star.ucb.XContentTransmitter",u"transmit"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.ucb.XPropertySetRegistry",u"removePropertySet"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.ui.XUIConfigurationListener",u"elementInserted"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.ui.XUIConfigurationListener",u"elementRemoved"),

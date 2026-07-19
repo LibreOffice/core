@@ -15549,13 +15549,6 @@ module com {
     published constants ContentResultSetCapability {
      const short SORTED = 1;
     };
-    /** @deprecated */ published interface XContentTransmitter {
-     interface ::com::sun::star::uno::XInterface;
-     void transmit([in] string Source, [in] string Destination, [in] long Flags);
-    };
-    /** @deprecated */ published service ContentTransmitter {
-     interface ::com::sun::star::ucb::XContentTransmitter;
-    };
     published struct CrossReference {
      string Group;
      long Id;

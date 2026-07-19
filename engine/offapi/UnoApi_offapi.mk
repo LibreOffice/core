@@ -1393,7 +1393,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/ucb,\
 	ContentProvider \
 	ContentProviderProxy \
 	ContentResultSet \
-	ContentTransmitter \
 	DefaultHierarchyDataSource \
 	DynamicResultSet \
 	ExpandContentProvider \
@@ -3814,7 +3813,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	XContentProviderFactory \
 	XContentProviderManager \
 	XContentProviderSupplier \
-	XContentTransmitter \
 	XDataContainer \
 	XDynamicResultSet \
 	XDynamicResultSetListener \
