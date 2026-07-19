@@ -9919,25 +9919,6 @@ module com {
      string Alias;
      string ProgrammaticName;
     };
-    published interface XLocalizedAliases {
-     interface ::com::sun::star::uno::XInterface;
-     void bindAlias([in] string programmaticName, [in] ::com::sun::star::lang::Locale locale, [in] string alias) raises (::com::sun::star::container::ElementExistException);
-     void unbindAlias([in] ::com::sun::star::lang::Locale locale, [in] string alias) raises (::com::sun::star::container::NoSuchElementException);
-     string lookupAlias([in] ::com::sun::star::lang::Locale locale, [in] string Alias) raises (::com::sun::star::container::NoSuchElementException);
-     string lookupProgrammatic([in] ::com::sun::star::lang::Locale locale, [in] string programmatic) raises (::com::sun::star::container::NoSuchElementException);
-     void unbindAliases([in] string programmaticName) raises (::com::sun::star::container::NoSuchElementException);
-     void rebindAliases([in] string currentProgrammatic, [in] string newProgrammatic) raises (::com::sun::star::container::NoSuchElementException, ::com::sun::star::container::ElementExistException);
-     void renameAlias([in] ::com::sun::star::lang::Locale locale, [in] string oldName, [in] string aNewName) raises (::com::sun::star::container::NoSuchElementException, ::com::sun::star::container::ElementExistException);
-     sequence< ::com::sun::star::util::AliasProgrammaticPair > listAliases([in] ::com::sun::star::lang::Locale locale);
-    };
-   };
-   module sdb {
-    /** @deprecated */ published service DatabaseAccessContext {
-     interface ::com::sun::star::container::XEnumerationAccess;
-     interface ::com::sun::star::container::XNameAccess;
-     interface ::com::sun::star::util::XLocalizedAliases;
-     interface ::com::sun::star::lang::XLocalizable;
-    };
    };
    module ucb {
     published enum RememberAuthentication {

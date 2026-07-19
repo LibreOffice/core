@@ -991,7 +991,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sdb,\
 	DataSettings \
 	DataSource \
 	DataSourceBrowser \
-	DatabaseAccessContext \
 	DatabaseAccessDataSource \
 	DatabaseDocument \
 	DatasourceAdministrationDialog \
@@ -4010,7 +4009,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/util,\
 	XIndent \
 	XJobManager \
 	XLinkUpdate \
-	XLocalizedAliases \
 	XLockable \
 	XMergeable \
 	XModeChangeApproveListener \
