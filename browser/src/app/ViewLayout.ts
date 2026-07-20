@@ -344,20 +344,6 @@ class ViewLayoutBase {
 		this.scrollProperties.horizontalScrollStep = documentAnchor.size[0] / 2;
 	}
 
-	// This function doesn't do well. It seems we don't need this function.
-	// Tiles middleware seems to manage redraw requests when tiles are ready.
-	public areViewTilesReady(): boolean {
-		let allReady = true;
-
-		for (let i = 0; i < this.currentCoordList.length; i++) {
-			const tempTile = RenderManager.get(this.currentCoordList[i]);
-
-			if (!tempTile || !tempTile.isReady()) allReady = false;
-		}
-
-		return allReady;
-	}
-
 	protected refreshCurrentCoordList() {
 		this.currentCoordList.length = 0;
 		const zoom = Math.round(app.map.getZoom());
