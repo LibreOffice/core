@@ -5007,30 +5007,6 @@ printf ("hello world\n");
 fi
 AC_SUBST(ENABLE_GDB_INDEX)
 
-
-dnl Check whether the selected gold/mold/ld/lld linker
-dnl supports -z,pack-relative-relocs
-dnl Which is the upgrade to the combrelocs option.
-dnl Except for the host part part of the android cross-build, where the
-dnl test succeeds, and then bestreversemap fails to load.
-dnl ===================================================================
-if test -z "$with_android_sdk"; then
-  AC_MSG_CHECKING([whether $CC_BASE supports Wl,-z,pack-relative-relocs and the runtime loader honors it])
-  ldflags_save=$LDFLAGS
-  LDFLAGS="$LDFLAGS -Wl,-z,pack-relative-relocs"
-  AC_RUN_IFELSE(
-    [AC_LANG_PROGRAM([[#include <stdio.h>]],
-                     [[printf("hello world\n");]])],
-    [ENABLE_PACK_RELATIVE_RELOCS=TRUE
-     AC_MSG_RESULT([yes])],
-    [ENABLE_PACK_RELATIVE_RELOCS=
-     AC_MSG_RESULT([no])],
-    [ENABLE_PACK_RELATIVE_RELOCS=
-     AC_MSG_RESULT([no (cross-compiling, assumed no)])])
-  LDFLAGS=$ldflags_save
-fi
-AC_SUBST(ENABLE_PACK_RELATIVE_RELOCS)
-
 if test -z "$enable_sal_log" && test "$ENABLE_DEBUG" = TRUE; then
     enable_sal_log=yes
 fi
