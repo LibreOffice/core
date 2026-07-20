@@ -313,6 +313,7 @@ public:
     bool equals(std::size_t index, const StringVector& other, std::size_t otherIndex);
 
     bool getUInt32(std::size_t index, const std::string& key, uint32_t& value) const;
+    bool getUInt64(std::size_t index, const std::string& key, uint64_t& value) const;
     bool getNameIntegerPair(std::size_t index, std::string& name, int& value) const;
 };
 

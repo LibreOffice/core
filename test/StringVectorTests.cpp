@@ -281,6 +281,33 @@ void StringVectorTests::testStringVector()
 
     {
         StringVector tokens;
+        // A value too large for 32 bits is returned whole.
+        tokens.push_back("a=5000000000");
+        uint64_t value{};
+        LOK_ASSERT(tokens.getUInt64(0, "a", value));
+        LOK_ASSERT_EQUAL(static_cast<uint64_t>(5000000000), value);
+
+        // Prefix does not match.
+        LOK_ASSERT(!tokens.getUInt64(0, "b", value));
+
+        // Index is out of bounds.
+        LOK_ASSERT(!tokens.getUInt64(1, "a", value));
+
+        // Expected key is prefix of actual key.
+        tokens.push_back("bb=1");
+        LOK_ASSERT(!tokens.getUInt64(1, "b", value));
+
+        // Actual key is prefix of expected key.
+        tokens.push_back("c=1");
+        LOK_ASSERT(!tokens.getUInt64(1, "cc", value));
+
+        // A key with nothing after the equals sign has no value.
+        tokens.push_back("d=");
+        LOK_ASSERT(!tokens.getUInt64(3, "d", value));
+    }
+
+    {
+        StringVector tokens;
         tokens.push_back("a=1");
         std::string name;
         int value{};

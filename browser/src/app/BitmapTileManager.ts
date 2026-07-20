@@ -1745,6 +1745,7 @@ class BitmapTileManager extends RenderManagerBase {
 				height: tileMsgObj.height,
 				part: tileMsgObj.part,
 				mode: tileMsgObj.mode !== undefined ? tileMsgObj.mode : 0,
+				uniqueId: tileMsgObj.uniqueId,
 				docType: app.map._docLayer._docType,
 			});
 			this.queueAcknowledgement(tileMsgObj);

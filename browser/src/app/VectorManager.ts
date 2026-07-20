@@ -388,6 +388,10 @@ class VectorManager extends RenderManagerBase {
 			height: maxHeight,
 			part: part,
 			mode: 0,
+			// A vector preview renders locally at fire time, so the slide now
+			// at this index is the one the image shows. The slide list
+			// carries each slide's unique id under its legacy name, hash.
+			uniqueId: app.impress.partList?.[part]?.hash,
 			docType: this._docLayer._docType,
 		});
 	}

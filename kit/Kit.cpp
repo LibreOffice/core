@@ -1044,6 +1044,36 @@ void Document::renderTiles(TileCombined &tileCombined)
     if (tileCombined.getCanonicalViewId() != CanonicalViewId::None)
         _loKitDocument->setView(session->getViewId());
 
+    // Tag each preview tile with the unique id of the slide it renders, so the
+    // response names the slide and not only its index. The id is the "hash"
+    // member of the part info, a monotonic integer the core assigns to the
+    // slide for its whole lifetime.
+    const auto docType = _loKitDocument->getDocumentType();
+    if (docType == KIT_DOCTYPE_PRESENTATION || docType == KIT_DOCTYPE_DRAWING)
+    {
+        for (auto& tile : tileCombined.getTiles())
+        {
+            if (!tile.isPreview())
+                continue;
+            LOKitHelper::ScopedString partInfo(
+                _loKitDocument->get()->pClass->getPartInfo(_loKitDocument->get(), tile.getPart()));
+            if (!partInfo.get())
+                continue;
+            try
+            {
+                const auto var = Poco::JSON::Parser().parse(std::string(partInfo.get()));
+                const auto& obj = var.extract<Poco::JSON::Object::Ptr>();
+                if (obj && obj->has("hash"))
+                    tile.setUniqueId(obj->getValue<uint64_t>("hash"));
+            }
+            catch (const std::exception& exc)
+            {
+                LOG_DBG("Failed to read part info for a preview tile of part "
+                        << tile.getPart() << ": " << exc.what());
+            }
+        }
+    }
+
     const auto blenderFunc = [&](unsigned char* data, int offsetX, int offsetY,
                                  std::size_t pixmapWidth, std::size_t pixmapHeight,
                                  int pixelWidth, int pixelHeight, COKitTileMode mode) {

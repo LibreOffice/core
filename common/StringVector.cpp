@@ -60,6 +60,29 @@ bool StringVector::getUInt32(std::size_t index, const std::string& key, uint32_t
     return false;
 }
 
+bool StringVector::getUInt64(std::size_t index, const std::string& key, uint64_t& value) const
+{
+    if (index >= _tokens.size())
+    {
+        return false;
+    }
+
+    const StringToken& token = _tokens[index];
+
+    size_t offset = key.size() + 1;
+    if (token._length > offset &&
+            _string.compare(token._index, key.size(), key, 0, key.size()) == 0 &&
+            _string[token._index + key.size()] == '=')
+    {
+        bool res = false;
+        std::tie(value, res) = NumUtil::u64FromString(
+            std::string_view(&_string[token._index + offset], token._length - offset));
+        return res;
+    }
+
+    return false;
+}
+
 bool StringVector::getNameIntegerPair(std::size_t index, std::string& name, int& value) const
 {
     if (index >= _tokens.size())

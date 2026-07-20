@@ -161,6 +161,9 @@ struct TileData
     std::vector<size_t> _offsets; // offset of the start of data
     BlobData _deltas; // first item is a key-frame, followed by deltas at _offsets
     bool _valid; // not true - waiting for a new tile if in view.
+    // The stable unique id of the slide a preview tile shows. Zero for
+    // ordinary document tiles.
+    uint64_t _uniqueId = 0;
 
     size_t size() const
     {
@@ -224,6 +227,8 @@ struct TileData
             }
             os << (tooLarge() ? "too-large " : "");
         }
+        if (_uniqueId != 0)
+            os << " uniqueid=" << _uniqueId;
     }
 };
 using Tile = std::shared_ptr<TileData>;

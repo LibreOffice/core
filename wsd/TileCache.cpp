@@ -319,6 +319,8 @@ void TileCache::saveTileAndNotify(const TileDesc& desc, const char *data, const 
     // Ignore if we can't save the tile, things will work anyway, but slower.
     // An error indication is supposed to be sent to all users in that case.
     Tile tile = saveDataToCache(desc, data, size);
+    if (tile && desc.getUniqueId() != 0)
+        tile->_uniqueId = desc.getUniqueId();
     if (!_dontCache)
         LOG_TRC("Saved cache tile: " << cacheFileName(desc) << " of size " << size << " bytes");
     else

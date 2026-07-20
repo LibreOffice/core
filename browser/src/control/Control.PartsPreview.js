@@ -49,9 +49,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._menuPosEl = null;
 		this.partsFocusedApplied = false;
 		this._dragState = null;
-		// Part hashes of the preview requests that are under way, keyed by
-		// the part index the request was made with.
-		this._pendingPreviewHashes = {};
 
 		// A click clears the slide sorter focus mode, unless that same click
 		// re-focused a preview.
@@ -266,6 +263,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		img.setAttribute('tabindex', '-1');
 		window.L.control.attachTooltipEventListener(img, this._map);
 		img.id = 'preview-img-part-' + this._idNum;
+		// The unique id of the slide this preview shows. The slide list
+		// carries that id under its legacy name, hash, and this property
+		// keeps the name it is seeded from.
 		img.hash = hashCode;
 		img.src = document.querySelector('meta[name="previewSmile"]').content;
 		img.fetched = false;
@@ -1388,10 +1388,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 	_beforeRequestPreview: function (e) {
 		if (e.part !== undefined && e.part >= 0 && e.part < this._previewTiles.length) {
-			// The response comes back carrying this part index; the hash
-			// remembers which slide that index held when the request went
-			// out, in case the previews get reordered in the meantime.
-			this._pendingPreviewHashes[e.part] = this._previewTiles[e.part].hash;
 			if (this._previewTiles[e.part].src === document.querySelector('meta[name="previewSmile"]').content)
 				this._previewTiles[e.part].src = document.querySelector('meta[name="previewImg"]').content;
 		}
@@ -1407,23 +1403,19 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			this._map._processPreviewQueue();
 			if (!this._previewInitialized)
 				return;
-			const partId = parseInt(e.id);
-			let tile = this._previewTiles[partId];
-			const requestHash = this._pendingPreviewHashes[partId];
-			delete this._pendingPreviewHashes[partId];
-			if (requestHash && (!tile || tile.hash !== requestHash)) {
-				// The previews were reordered while the request was under
-				// way; the image belongs to the slide that held this index
-				// when the request went out. Without that slide the image
-				// has no preview to go to.
-				tile = this._previewTiles.find(function (candidate) {
-					return candidate.hash === requestHash;
-				});
-			}
+			if (e.uniqueId === undefined)
+				return;
+			// The response names the slide it rendered, so the image lands on
+			// that slide wherever it now sits, even if the parts were
+			// renumbered while the request was under way. A slide deleted in
+			// the meantime has no preview left, so its image is dropped.
+			const tile = this._previewTiles.find(function (candidate) {
+				return candidate.hash === e.uniqueId;
+			});
 			if (tile) {
 				tile.src = e.tile.src;
 				tile.fetched = true;
-				window.app.console.debug('PREVIEW: part fetched : ' + partId);
+				window.app.console.debug('PREVIEW: part fetched : ' + parseInt(e.id));
 			}
 		}
 	},

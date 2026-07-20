@@ -581,6 +581,13 @@ void WhiteBoxTests::testTileDesc()
     TileDesc desc = TileDesc::parse(
         "tile nviewid=0 part=5 width=256 height=256 tileposx=0 tileposy=12288 tilewidth=3072 tileheight=3072 oldwid=0 wid=0 ver=33");
     (void)desc; // exception in parse if we have problems.
+
+    // A preview tile names the slide it shows. The unique id survives a parse
+    // and serialize round trip.
+    TileDesc preview = TileDesc::parse(
+        "tile nviewid=0 part=5 width=256 height=256 tileposx=0 tileposy=12288 tilewidth=3072 tileheight=3072 ver=33 id=3 uniqueid=42");
+    LOK_ASSERT_EQUAL(static_cast<uint64_t>(42), preview.getUniqueId());
+    LOK_ASSERT(preview.serialize().find(" uniqueid=42") != std::string::npos);
     TileCombined combined = TileCombined::parse(
         "tilecombine nviewid=0 part=5 width=256 height=256 tileposx=0,3072,6144,9216,12288,15360,18432,21504,0,3072,6144,9216,12288,15360,18432,21504,0,3072,6144,9216,12288,15360,18432,21504,0,3072,6144,9216,12288,15360,18432,21504,0,3072,6144,9216,12288,15360,18432,21504,0,3072,6144,9216,12288,15360,18432,21504,0,3072,6144,9216,12288,15360,18432,21504 tileposy=0,0,0,0,0,0,0,0,3072,3072,3072,3072,3072,3072,3072,3072,6144,6144,6144,6144,6144,6144,6144,6144,9216,9216,9216,9216,9216,9216,9216,9216,12288,12288,12288,12288,12288,12288,12288,12288,15360,15360,15360,15360,15360,15360,15360,15360,18432,18432,18432,18432,18432,18432,18432,18432 oldwid=2,3,4,5,6,7,8,8,9,10,11,12,13,14,15,16,17,18,19,20,21,0,0,0,24,25,26,27,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 tilewidth=3072 tileheight=3072");
     (void)combined; // exception in parse if we have problems.

@@ -5339,6 +5339,10 @@ void DocumentBroker::handleTileRequest(const StringVector &tokens, bool forceKey
     TileDesc tile = TileDesc::parse(tokens);
     tile.setCanonicalViewId(session->getCanonicalViewId());
 
+    // The slide's unique id originates in the kit when it renders a preview.
+    // A value arriving in a request is discarded.
+    tile.setUniqueId(0);
+
     tile.setVersion(++_tileVersion);
     const std::string tileMsg = tile.serialize();
     LOG_TRC("Tile request for " << tileMsg);
@@ -5360,6 +5364,8 @@ void DocumentBroker::handleTileRequest(const StringVector &tokens, bool forceKey
     {
         if (tile.getWireId() == 0)
             tile.setWireId(cachedTile->_wids.back());
+
+        tile.setUniqueId(cachedTile->_uniqueId);
 
         session->sendTileNow(tile, cachedTile);
         recordFirstTileSent();
@@ -5723,6 +5729,8 @@ void DocumentBroker::sendRequestedTiles(const std::shared_ptr<ClientSession>& se
                 // for needsFetch and is wasted.
                 if (tile.getWireId() == 0)
                     tile.setWireId(cachedTile->_wids.back());
+
+                tile.setUniqueId(cachedTile->_uniqueId);
 
                 // TODO: Combine the response to reduce latency.
                 session->sendTileNow(tile, cachedTile);
