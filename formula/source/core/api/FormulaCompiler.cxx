@@ -3123,7 +3123,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
     }
     else if (eOp == ocUDExternal)
     {
-        if (t->GetType() == svByte)
+        if (t->GetType() == svExternal && static_cast<const FormulaExternalToken*>(t)->GetExternal().isEmpty())
             rBuffer.append(mxSymbols->getSymbol(ocErrRef));
         else if (maArrIterator.PeekNext() && maArrIterator.PeekNext()->GetOpCode() == ocOpen)
             rBuffer.append(mxSymbols->getSymbol(eOp));
