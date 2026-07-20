@@ -250,6 +250,7 @@ class Cursor {
 			this.container.style.top = y + 'px';
 			this.container.style.left = this.transformX(x) + 'px';
 			this.container.style.zIndex = this.zIndex + '';
+			this.cursor.style.height = this.rectangle.cHeight + 'px';
 			// Suspend blinking animation during cursor movement
 			if (this.blink) {
 				window.L.DomUtil.addClass(this.cursor, 'blinking-suspended');
@@ -262,8 +263,6 @@ class Cursor {
 					});
 				}, 500);
 			}
-
-			this.cursor.style.height = this.rectangle.cHeight + 'px';
 		});
 	}
 
