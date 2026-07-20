@@ -14,7 +14,7 @@
 final class DocumentController: NSDocumentController {
 
     /// Whether UI testing mode is active.
-    private static let isUITesting = ProcessInfo.processInfo.arguments.contains("--uitesting")
+    static let isUITesting = ProcessInfo.processInfo.arguments.contains("--uitesting")
 
     /**
      * The current, live NSOpenPanel instance that was open during the app startup.

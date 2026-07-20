@@ -225,6 +225,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // ask every open document to close; the delegate callback will run
         for doc in NSDocumentController.shared.documents {
+            // In UI testing mode the quit comes from the test harness and
+            // there is no user to answer a save sheet, so discard unsaved
+            // changes: clearing the change count makes canClose proceed
+            // without asking.
+            if DocumentController.isUITesting {
+                doc.updateChangeCount(.changeCleared)
+            }
             doc.canClose(withDelegate: self,
                          shouldClose: #selector(document(_:shouldClose:context:)),
                          contextInfo: nil)
