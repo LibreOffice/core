@@ -40,7 +40,6 @@
 #include <comphelper/extract.hxx>
 
 #include <FrameView.hxx>
-#include <createpresentation.hxx>
 #include <unomodel.hxx>
 #include <slideshow.hxx>
 #include <sdattr.hrc>
@@ -111,31 +110,9 @@ void SlideShow::ThrowIfDisposed() const
         throw DisposedException();
 }
 
-/// used by the model to create a slideshow for it
-rtl::Reference< SlideShow > SlideShow::Create( SdDrawDocument* pDoc )
-{
-    return new SlideShow( pDoc );
-}
-
-rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument const * pDocument )
-{
-    rtl::Reference< SlideShow > xRet;
-
-    if( pDocument )
-        xRet = GetSlideShow( *pDocument );
-
-    return xRet;
-}
-
-rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument const & rDocument )
-{
-    return rtl::Reference< SlideShow >(
-        dynamic_cast< SlideShow* >( rDocument.getPresentation().get() ) );
-}
-
 rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase const & rBase )
 {
-    return GetSlideShow( rBase.GetDocument() );
+    return rBase.GetDocument()->getSlideShow();
 }
 
 // XServiceInfo
@@ -508,11 +485,6 @@ void SlideShow::disposing(std::unique_lock<std::mutex>&)
     SolarMutexGuard aGuard;
 
     mpDoc = nullptr;
-}
-
-Reference< presentation::XPresentation2 > CreatePresentation( const SdDrawDocument& rDocument )
-{
-    return Reference< presentation::XPresentation2 >( SlideShow::Create( const_cast< SdDrawDocument* >( &rDocument ) ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

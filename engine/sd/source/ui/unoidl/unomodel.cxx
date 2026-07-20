@@ -196,6 +196,7 @@
 #include <controller/SlsPageSelector.hxx>
 
 #include <app.hrc>
+#include <slideshow.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -2756,12 +2757,17 @@ uno::Reference< container::XNameContainer > SAL_CALL SdXImpressDocument::getCust
 // XPresentationSupplier
 uno::Reference< presentation::XPresentation > SAL_CALL SdXImpressDocument::getPresentation()
 {
+    return getSlideShow();
+}
+
+rtl::Reference< sd::SlideShow > SdXImpressDocument::getSlideShow()
+{
     ::SolarMutexGuard aGuard;
 
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    return mpDoc->getPresentation();
+    return mpDoc->getSlideShow();
 }
 
 // XHandoutMasterSupplier

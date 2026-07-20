@@ -106,6 +106,7 @@
 #include <vcl/svapp.hxx>
 #include <unokywds.hxx>
 #include <unomodel.hxx>
+#include <slideshow.hxx>
 
 namespace com::sun::star::linguistic2 { class XHyphenator; }
 namespace com::sun::star::linguistic2 { class XSpellChecker; }

@@ -69,6 +69,7 @@ namespace sd {
 class DrawDocShell;
 class DrawViewShell;
 class SlideshowLayerRenderer;
+class SlideShow;
 }
 
 extern OUString getPageApiName( SdPage const * pPage );
@@ -242,6 +243,8 @@ public:
     virtual sal_Int32 SAL_CALL getRendererCount( const cpo::uno::Any& aSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
     virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const cpo::uno::Any& aSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
     virtual void SAL_CALL render( sal_Int32 nRenderer, const cpo::uno::Any& aSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
+
+    rtl::Reference< sd::SlideShow > getSlideShow();
 
     // ITiledRenderable
     SD_DLLPUBLIC virtual void paintTile( VirtualDevice& rDevice,

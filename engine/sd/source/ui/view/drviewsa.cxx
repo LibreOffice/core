@@ -578,7 +578,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     }
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )
     {
-        rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );
+        rtl::Reference< sd::SlideShow > xSlideshow( GetDoc()->getSlideShow() );
         if (GetDocSh()->IsUIActive()
             || !GetActiveWindow() )
         {

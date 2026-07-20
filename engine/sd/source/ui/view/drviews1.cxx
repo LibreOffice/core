@@ -1034,7 +1034,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             }
         }
 
-        rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );
+        rtl::Reference< sd::SlideShow > xSlideshow( GetDoc()->getSlideShow() );
         if( !xSlideshow.is() )
         {
             // tighten VisArea, to possibly deactivate objects

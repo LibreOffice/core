@@ -77,13 +77,10 @@ typedef comphelper::WeakComponentImplHelper< css::presentation::XPresentation2, 
 class SlideShow final : public SlideshowBase
 {
 public:
-    /// used by the model to create a slideshow for it
-    static rtl::Reference< SlideShow > Create( SdDrawDocument* pDoc );
-
     // static helper api
-    static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument const * pDocument );
-    static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument const & rDocument );
     static rtl::Reference< SlideShow > GetSlideShow( ViewShellBase const & rBase );
+
+    SlideShow( SdDrawDocument* pDoc );
 
     // uno api
 
@@ -104,8 +101,6 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
 private:
-    SlideShow( SdDrawDocument* pDoc );
-
     /// @throws css::uno::RuntimeException
     void ThrowIfDisposed() const;
 
