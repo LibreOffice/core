@@ -21,6 +21,8 @@
 
 #include <osl/diagnose.h>
 #include <oox/helper/binaryinputstream.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include <limits>
 
@@ -89,6 +91,17 @@ const sal_Int32 BIFF_RK_VALUEMASK           = 0xFFFFFFFC;
             // SequenceInputStream always supports getRemaining()
             nCharCount = ::std::min( nCharCount, static_cast< sal_Int32 >( rStrm.getRemaining() / 2 ) );
             aString = rStrm.readUnicodeArray( nCharCount );
+
+            OString aUtf8Check;
+            if( !aString.convertToString(
+                        &aUtf8Check, RTL_TEXTENCODING_UTF8,
+                        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                            | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR ) )
+            {
+                SAL_WARN( "sc", "invalid utf8 string, doing best-effort fix" );
+                aString.convertToString( &aUtf8Check, RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS );
+                aString = OStringToOUString( aUtf8Check, RTL_TEXTENCODING_UTF8 );
+            }
         }
     }
     return aString;
