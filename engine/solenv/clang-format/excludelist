@@ -1763,7 +1763,6 @@ cppcanvas/source/inc/action.hxx
 cppcanvas/source/inc/bitmap.hxx
 cppcanvas/source/inc/canvas.hxx
 cppcanvas/source/inc/canvasgraphic.hxx
-cppcanvas/source/inc/canvasgraphichelper.hxx
 cppcanvas/source/inc/color.hxx
 cppcanvas/source/inc/outdevstate.hxx
 cppcanvas/source/inc/renderer.hxx
@@ -1786,7 +1785,6 @@ cppcanvas/source/mtfrenderer/textaction.cxx
 cppcanvas/source/mtfrenderer/textaction.hxx
 cppcanvas/source/mtfrenderer/transparencygroupaction.cxx
 cppcanvas/source/mtfrenderer/transparencygroupaction.hxx
-cppcanvas/source/tools/canvasgraphichelper.cxx
 cppcanvas/source/tools/tools.cxx
 cppcanvas/source/uno/uno_mtfrenderer.cxx
 cppcanvas/source/wrapper/implbitmap.cxx

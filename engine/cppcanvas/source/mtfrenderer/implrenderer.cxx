@@ -2484,7 +2484,7 @@ namespace cppcanvas
 
         Renderer::Renderer( const CanvasSharedPtr&  rCanvas,
                                     const GDIMetaFile&      rMtf )
-            : CanvasGraphicHelper(rCanvas)
+            : mpCanvas(rCanvas)
             , nFrameLeft(0)
             , nFrameTop(0)
             , nFrameRight(0)
@@ -2500,6 +2500,8 @@ namespace cppcanvas
                         "Renderer::Renderer(): Invalid canvas" );
             OSL_ENSURE( rCanvas->getUNOCanvas()->getDevice().is(),
                         "Renderer::Renderer(): Invalid graphic device" );
+
+            ::canvastools::initRenderState( maRenderState );
 
             // make sure canvas and graphic device are valid; action
             // creation don't check that every time
@@ -2576,12 +2578,17 @@ namespace cppcanvas
         {
         }
 
+        void Renderer::setTransformation( const ::basegfx::B2DHomMatrix& rMatrix )
+        {
+            ::canvastools::setRenderStateTransform( maRenderState, rMatrix );
+        }
+
         bool Renderer::draw() const
         {
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::Renderer::draw()" );
 
             const ::basegfx::B2DHomMatrix aMatrix = ::canvastools::getRenderStateTransform(
-                                                      getRenderState() );
+                                                      maRenderState );
 
             try
             {

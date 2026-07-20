@@ -23,15 +23,16 @@
 
 #include <sal/types.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/stream.hxx>
 #include <utility>
 #include <vcl/kernarray.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include "renderer.hxx"
 #include "canvas.hxx"
+#include <com/sun/star/rendering/RenderState.hpp>
 
 #include "canvasgraphic.hxx"
-#include "canvasgraphichelper.hxx"
 #include "action.hxx"
 #include "color.hxx"
 #include "outdevstate.hxx"
@@ -121,7 +122,7 @@ namespace cppcanvas
 
         // EMF+
 
-        class Renderer : public virtual CanvasGraphicHelper
+        class Renderer : public virtual CanvasGraphic
         {
         public:
             Renderer( const CanvasSharedPtr&    rCanvas,
@@ -129,8 +130,10 @@ namespace cppcanvas
 
             virtual ~Renderer() override;
 
-            virtual bool                draw() const override;
+            // CanvasGraphic implementation
+            virtual void                setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) override;
 
+            virtual bool                draw() const override;
 
             // element of the Renderer's action vector. Need to be
             // public, since some functors need it, too.
@@ -194,6 +197,8 @@ namespace cppcanvas
                                    const ActionFactoryParameters& rParms,
                                    bool                           bSubsettable );
 
+            mutable css::rendering::RenderState maRenderState;
+            CanvasSharedPtr mpCanvas;
             ActionVector maActions;
 
             /* EMF+ */
