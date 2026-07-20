@@ -2776,8 +2776,9 @@ AC_ARG_WITH(load-limit,
     AS_HELP_STRING([--with-load-limit=N],
         [Pass -l N to make so that no new job is started if the system load
         average is >= N. Useful on shared CI hosts where multiple builds
-        compete for cores. Defaults to the parallelism (the CPU count). Pass
-        --with-load-limit=no to build without any load limit.]),
+        compete for cores. Defaults to the number of processors on the build
+        host, so the limit tracks the machine rather than this build's own job
+        count. Pass --with-load-limit=no to build without any load limit.]),
 ,)
 
 AC_ARG_WITH(all-tarballs,
@@ -13547,6 +13548,26 @@ AC_SUBST([DEPS_SYSINCLUDES])
 dnl ===================================================================
 dnl Number of CPUs to use during the build
 dnl ===================================================================
+dnl Count the online processors on the build host once. This sets both the
+dnl default job count (-j) and, further down, the default load limit (-l).
+case `uname -s` in
+
+Darwin|FreeBSD|NetBSD|OpenBSD)
+    NPROC=`sysctl -n hw.ncpu`
+    ;;
+
+Linux)
+    NPROC=`getconf _NPROCESSORS_ONLN`
+    ;;
+# what else than above does profit here *and* has /proc?
+*)
+    NPROC=`grep '^processor[[[:space:]]]*:' /proc/cpuinfo | wc -l`
+    ;;
+esac
+
+# If we hit the catch-all case, but /proc/cpuinfo doesn't exist or has an
+# unexpected format, 'wc -l' will have returned 0 (and we won't use -j at all).
+
 AC_MSG_CHECKING([for number of processors to use])
 # plain --with-parallelism is just the default
 if test -n "$with_parallelism" -a "$with_parallelism" != "yes"; then
@@ -13555,28 +13576,10 @@ if test -n "$with_parallelism" -a "$with_parallelism" != "yes"; then
     else
         PARALLELISM=$with_parallelism
     fi
+elif test "$enable_icecream" = "yes"; then
+    PARALLELISM="40"
 else
-    if test "$enable_icecream" = "yes"; then
-        PARALLELISM="40"
-    else
-        case `uname -s` in
-
-        Darwin|FreeBSD|NetBSD|OpenBSD)
-            PARALLELISM=`sysctl -n hw.ncpu`
-            ;;
-
-        Linux)
-            PARALLELISM=`getconf _NPROCESSORS_ONLN`
-        ;;
-        # what else than above does profit here *and* has /proc?
-        *)
-            PARALLELISM=`grep '^processor[[[:space:]]]*:' /proc/cpuinfo | wc -l`
-            ;;
-        esac
-
-        # If we hit the catch-all case, but /proc/cpuinfo doesn't exist or has an
-        # unexpected format, 'wc -l' will have returned 0 (and we won't use -j at all).
-    fi
+    PARALLELISM=$NPROC
 fi
 
 if test $PARALLELISM -eq 0; then
@@ -13593,9 +13596,9 @@ if test "$with_load_limit" = "no"; then
 elif test -n "$with_load_limit" -a "$with_load_limit" != "yes"; then
     LOADLIMIT=$with_load_limit
     AC_MSG_RESULT([$LOADLIMIT])
-elif test $PARALLELISM -ne 0; then
-    LOADLIMIT=$PARALLELISM
-    AC_MSG_RESULT([$LOADLIMIT (default, same as parallelism)])
+elif test -n "$NPROC" -a "$NPROC" != "0" -a "$PARALLELISM" != "0"; then
+    LOADLIMIT=$NPROC
+    AC_MSG_RESULT([$LOADLIMIT (default, one per processor)])
 else
     LOADLIMIT=
     AC_MSG_RESULT([none])
