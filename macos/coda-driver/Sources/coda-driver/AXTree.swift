@@ -290,8 +290,8 @@ final class AXTree {
 
     // MARK: - Tree dump
 
-    /// Return an indented dump of the AX tree (used in 'no such
-    /// element' error messages and by GET /session/{id}/source).
+    /// Return an indented plain-text dump of the AX tree, one line per
+    /// element with its role, identifier and title.
     func dumpTree() -> String {
         var out = ""
         for window in orderedWindows() {
@@ -309,6 +309,130 @@ final class AXTree {
         for child in arrayAttr(elem, kAXChildrenAttribute as String) ?? [] {
             dump(child, depth: depth + 1, into: &out)
         }
+    }
+
+    // MARK: - Page source (XML)
+
+    /// Serialize the AX tree as XML in the shape the AT-SPI WebDriver
+    /// uses for its page source, so one tree format works across
+    /// platforms.  Each element's tag is the AT-SPI role name with
+    /// spaces replaced by underscores (push_button, label, frame, ...),
+    /// carrying name, role, description, accessibility-id and path
+    /// attributes.  The role attribute keeps the raw macOS AX role
+    /// string (AXButton, ...).  The path attribute is the list of
+    /// child indexes from the root, joined with spaces.  A synthetic
+    /// desktop_frame root element wraps the target application's node,
+    /// mirroring the AT-SPI desktop that contains the running
+    /// applications.
+    func pageSourceXML() -> String {
+        var out = "<desktop_frame name=\"main\" role=\"\" description=\"\" path=\"\">\n"
+        serialize(appElement, path: [0], depth: 1, into: &out)
+        out += "</desktop_frame>\n"
+        return out
+    }
+
+    private func serialize(_ elem: AXUIElement, path: [Int], depth: Int,
+                           into out: inout String) {
+        let axRole = stringAttr(elem, kAXRoleAttribute as String) ?? ""
+        let subrole = stringAttr(elem, kAXSubroleAttribute as String)
+        let tag = AXTree.tagName(forAXRole: axRole, subrole: subrole)
+        let name = stringAttr(elem, kAXTitleAttribute as String) ?? ""
+        let description = stringAttr(elem, kAXDescriptionAttribute as String) ?? ""
+        let id = stringAttr(elem, kAXIdentifierAttribute as String) ?? ""
+
+        let indent = String(repeating: "  ", count: depth)
+        out += "\(indent)<\(tag)"
+        out += " name=\"\(xmlEscape(name))\""
+        out += " role=\"\(xmlEscape(axRole))\""
+        out += " description=\"\(xmlEscape(description))\""
+        if !id.isEmpty {
+            out += " accessibility-id=\"\(xmlEscape(id))\""
+        }
+        out += " path=\"\(path.map(String.init).joined(separator: " "))\""
+
+        let children = arrayAttr(elem, kAXChildrenAttribute as String) ?? []
+        if children.isEmpty {
+            out += "/>\n"
+            return
+        }
+        out += ">\n"
+        for (index, child) in children.enumerated() {
+            serialize(child, path: path + [index], depth: depth + 1, into: &out)
+        }
+        out += "\(indent)</\(tag)>\n"
+    }
+
+    /// macOS AX roles that translate to a differently-named AT-SPI
+    /// role.  Roles not listed here fall back to the generic
+    /// camel-case-to-snake-case conversion in tagName.
+    private static let axRoleToTag: [String: String] = [
+        "AXApplication": "application",
+        "AXButton": "push_button",
+        "AXCell": "table_cell",
+        "AXCheckBox": "check_box",
+        "AXComboBox": "combo_box",
+        "AXGroup": "panel",
+        "AXOutline": "tree_table",
+        "AXPopUpButton": "combo_box",
+        "AXProgressIndicator": "progress_bar",
+        "AXScrollArea": "scroll_pane",
+        "AXSecureTextField": "password_text",
+        "AXSheet": "dialog",
+        "AXSplitGroup": "split_pane",
+        "AXStaticText": "label",
+        "AXTabGroup": "page_tab_list",
+        "AXTextArea": "text",
+        "AXTextField": "text",
+        "AXToolbar": "tool_bar",
+        "AXWebArea": "document_web",
+    ]
+
+    private static func tagName(forAXRole axRole: String, subrole: String?) -> String {
+        // A window's tag depends on its subrole: plain windows map to
+        // the AT-SPI frame role, dialog-like windows to dialog.
+        if axRole == "AXWindow" {
+            switch subrole {
+            case "AXDialog", "AXSystemDialog", "AXSheet":
+                return "dialog"
+            default:
+                return "frame"
+            }
+        }
+        if let mapped = axRoleToTag[axRole] {
+            return mapped
+        }
+        // Generic fallback: drop the AX prefix and convert the
+        // remaining camel case to snake case, so for example
+        // AXMenuItem becomes menu_item.
+        guard axRole.hasPrefix("AX") && axRole.count > 2 else {
+            return "accessible"
+        }
+        var tag = ""
+        for character in axRole.dropFirst(2) {
+            if character.isUppercase {
+                if !tag.isEmpty {
+                    tag += "_"
+                }
+                tag += character.lowercased()
+            } else {
+                tag.append(character)
+            }
+        }
+        return tag.isEmpty ? "accessible" : tag
+    }
+
+    private func xmlEscape(_ text: String) -> String {
+        var out = ""
+        for character in text {
+            switch character {
+            case "&": out += "&amp;"
+            case "<": out += "&lt;"
+            case ">": out += "&gt;"
+            case "\"": out += "&quot;"
+            default: out.append(character)
+            }
+        }
+        return out
     }
 
     // MARK: - AXUIElement attribute helpers

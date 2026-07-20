@@ -127,7 +127,7 @@ final class NativeUIServer: WebDriverHTTPServerBase {
         }
         if request.method == "GET" && subpath == ["source"] {
             DispatchQueue.main.async { [weak self] in
-                self?.sendW3C(connection: connection, value: self?.ax.dumpTree() ?? "")
+                self?.sendW3C(connection: connection, value: self?.ax.pageSourceXML() ?? "")
             }
             return
         }

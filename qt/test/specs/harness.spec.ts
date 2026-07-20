@@ -39,10 +39,21 @@ describe('Test harness', () => {
 		it('should return an accessibility tree', async function () {
 			const source = await browser.native.getPageSource();
 			expect(source).toMatch(/^<desktop_frame\b/);
-			expect(source).toContain('accessibility-id="QApplication"');
-			expect(source).toContain(
-				'accessibility-id="QApplication.QMainWindow.QWebEngineView"',
-			);
+			// The main window and its web view carry platform-specific
+			// accessibility ids.
+			if (process.env.CODA_PLATFORM === 'macos') {
+				expect(source).toContain(
+					'accessibility-id="CODA.BackstageWindow"',
+				);
+				expect(source).toContain(
+					'accessibility-id="CODA.BackstageWindow.WebView"',
+				);
+			} else {
+				expect(source).toContain('accessibility-id="QApplication"');
+				expect(source).toContain(
+					'accessibility-id="QApplication.QMainWindow.QWebEngineView"',
+				);
+			}
 		});
 	});
 });
