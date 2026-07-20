@@ -1203,7 +1203,8 @@ bool ScViewFunc::TestMergeCells()           // pre-test (for menu)
         ScRange aRange;
         bool bMergeable = ( GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE );
         bMergeable = bMergeable && ( aRange.aStart.Col() != aRange.aEnd.Col() ||
-                                   aRange.aStart.Row() != aRange.aEnd.Row() );
+                                   aRange.aStart.Row() != aRange.aEnd.Row() ) &&
+                                   GetViewData().GetDocument().GetAllNamedDBsInArea(aRange).empty();
         return bMergeable;
     }
     else
