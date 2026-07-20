@@ -69,12 +69,19 @@ echo "Shipping the files of these packages:"
 sed 's/^/  /' "$PKGS_ADDED"
 
 echo "=== Building the file list ==="
-# dpkg -L lists files, symlinks and directories; keep only files and symlinks.
+# dpkg -L lists files, symlinks and directories; keep files and symlinks, plus
+# package-owned empty directories (populated dirs are recreated by tar from the
+# files they contain).
 while read -r pkg; do
     dpkg-query -L "$pkg"
 done < "$PKGS_ADDED" \
     | while read -r path; do
         if [ -f "$path" ] || [ -L "$path" ]; then
+            printf '%s\n' "$path"
+        elif [ -d "$path" ] && [ -z "$(ls -A "$path" 2>/dev/null)" ]; then
+            # keep package-owned empty dirs (deliberate placeholders such as
+            # the shared-preset buckets share/autotext/common and
+            # share/template/common/presnt); a files-only list would drop them
             printf '%s\n' "$path"
         fi
       done | sort -u > "$FILELIST"
