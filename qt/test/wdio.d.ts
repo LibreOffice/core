@@ -81,5 +81,9 @@ declare const app: {
 	};
 	layoutingService: {
 		hasTasksPending(): boolean;
+		cancelFrame(): void;
+		// Runs the oldest queued task; false when the queue is empty.
+		runTheTopTask(): boolean;
+		triggerDrainCallbacks(): void;
 	};
 };

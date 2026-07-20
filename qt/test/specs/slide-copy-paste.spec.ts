@@ -70,15 +70,27 @@ async function enterEditMode(): Promise<void> {
 // object copy. A momentary idle is not enough (preview generation drains and
 // refills), so wait for the layouting service to stay idle for several
 // consecutive polls.
+//
+// The layouting queue normally drains from a requestAnimationFrame callback,
+// and a document window occluded by another window gets no frames, so its
+// queue would stay full no matter how long we poll. Each poll therefore runs
+// the queued tasks synchronously (the way the canvas code flushes them
+// before a resize) and idle means the queue stayed empty across the polls,
+// i.e. the pipeline stopped refilling it.
 async function waitForIdle(): Promise<void> {
 	let stableIdlePolls = 0;
 	try {
 		await we().waitUntil(
 			async () => {
-				const idle = await we().execute(
-					() => !app.layoutingService.hasTasksPending(),
-				);
-				stableIdlePolls = idle ? stableIdlePolls + 1 : 0;
+				const wasIdle = await we().execute(() => {
+					const service = app.layoutingService;
+					if (!service.hasTasksPending()) return true;
+					service.cancelFrame();
+					while (service.runTheTopTask());
+					service.triggerDrainCallbacks();
+					return false;
+				});
+				stableIdlePolls = wasIdle ? stableIdlePolls + 1 : 0;
 				return stableIdlePolls >= 5;
 			},
 			{ timeout: 30000, interval: 200 },
@@ -86,7 +98,7 @@ async function waitForIdle(): Promise<void> {
 	} catch {
 		// Best effort: proceed even if tasks never fully drain.
 		console.warn(
-			'waitForIdle: layouting tasks did not drain within 30s; proceeding anyway',
+			'waitForIdle: layouting tasks kept refilling for 30s; proceeding anyway',
 		);
 	}
 }
