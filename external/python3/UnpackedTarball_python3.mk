@@ -44,6 +44,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/setuptools.patch.1 \
 	external/python3/sqlite3.patch.1 \
 	external/python3/lzma.patch.1 \
+	external/python3/0001-gh-145599-CVE-2026-3644-Reject-control-characters-in.patch.1 \
+	external/python3/0001-3.12-gh-141707-Skip-TarInfo-DIRTYPE-normalization-du.patch.1 \
+	external/python3/0001-3.12-gh-143930-Reject-leading-dashes-in-webbrowser-U.patch.1 \
+	external/python3/0001-gh-146581-Fix-vulnerability-in-shutil.unpack_archive.patch.1 \
 ))
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)
