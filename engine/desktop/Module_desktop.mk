@@ -46,43 +46,21 @@ $(eval $(call gb_Module_add_targets,desktop,\
 ))
 endif
 
-ifeq ($(USING_X11), TRUE)
-$(eval $(call gb_Module_add_targets,desktop,\
-    Package_scalc_sh \
-    Package_sdraw_sh \
-    Package_simpress_sh \
-    Package_smath_sh \
-    Package_swriter_sh \
-))
-endif
 endif # DESKTOP
 
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,desktop,\
     StaticLibrary_winloader \
-    StaticLibrary_winlauncher \
-    Executable_scalc \
-    Executable_sdraw \
-    Executable_simpress \
-    Executable_smath \
     Executable_soffice_exe \
     Executable_soffice_com \
-    Executable_sweb \
-    Executable_swriter \
     Executable_unoinfo \
     $(call gb_CondExeUnopkg, \
         Executable_unopkg \
         Executable_unopkg_com \
     ) \
-    WinResTarget_scalc \
-    WinResTarget_sdraw \
-    WinResTarget_simpress \
     WinResTarget_soffice \
     WinResTarget_sofficebin \
-    WinResTarget_smath \
-    WinResTarget_sweb \
-    WinResTarget_swriter \
 ))
 
 else ifeq (,$(filter MACOSX ANDROID iOS HAIKU EMSCRIPTEN,$(OS)))

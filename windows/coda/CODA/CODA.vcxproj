@@ -176,16 +176,9 @@
         del $(OutDir)*.com
         del $(OutDir)..\..\Release\program\gengal.exe
         del $(OutDir)..\..\Release\program\regview.exe
-        del $(OutDir)..\..\Release\program\sbase.exe
-        del $(OutDir)..\..\Release\program\scalc.exe
-        del $(OutDir)..\..\Release\program\sdraw.exe
         del $(OutDir)..\..\Release\program\senddoc.exe
-        del $(OutDir)..\..\Release\program\simpress.exe
-        del $(OutDir)..\..\Release\program\smath.exe
         del $(OutDir)..\..\Release\program\soffice.exe
         del $(OutDir)..\..\Release\program\soffice_safe.exe
-        del $(OutDir)..\..\Release\program\sweb.exe
-        del $(OutDir)..\..\Release\program\swriter.exe
         del $(OutDir)..\..\Release\program\twain32shim.exe
         del $(OutDir)..\..\Release\program\uno.exe
         del $(OutDir)..\..\Release\program\unoinfo.exe
