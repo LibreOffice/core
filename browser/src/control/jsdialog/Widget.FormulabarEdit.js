@@ -452,19 +452,33 @@ function _formulabarEditControl(parentContainer, data, builder) {
 		if (cursor) cursor.style.display = readOnly ? 'none' : '';
 	};
 
-	var textSelectionHandler = function(event) {
-		// A read-only formula bar is display only, so ignore clicks like the disabled case.
-		if (window.L.DomUtil.hasClass(container, 'disabled') || container._readOnly) {
-			event.preventDefault();
-			return;
-		}
+	var pointerFocus = false;
 
+	// A read-only formula bar is display only, so ignore it like the disabled case.
+	var isInactive = function() {
+		return window.L.DomUtil.hasClass(container, 'disabled') || container._readOnly;
+	};
+
+	var grabEditFocus = function(sendSelection) {
 		builder.callback('edit', 'grab_focus', container, null, builder);
-		_sendSelection(textLayer, builder, container.id);
+
+		if (sendSelection)
+			_sendSelection(textLayer, builder, container.id);
 
 		builder.map.setWinId(0);
 		builder.map._textInput._emptyArea();
 		builder.map._textInput.focus(true);
+	};
+
+	var textSelectionHandler = function(event) {
+		pointerFocus = false;
+
+		if (isInactive()) {
+			event.preventDefault();
+			return;
+		}
+
+		grabEditFocus(true);
 
 		event.preventDefault();
 	};
@@ -475,6 +489,7 @@ function _formulabarEditControl(parentContainer, data, builder) {
 
 	// hide old selection when user starts to select something else
 	textLayer.addEventListener('mousedown', function() {
+		pointerFocus = true;
 		textLayer.addEventListener('mouseup', textSelectionHandler, {once: true});
 		builder.callback('edit', 'grab_focus', container, null, builder);
 
@@ -485,6 +500,18 @@ function _formulabarEditControl(parentContainer, data, builder) {
 		var cursor = cursorLayer.querySelector('.cursor');
 		if (cursor)
 			window.L.DomUtil.addClass(cursor, 'hidden');
+	});
+
+	textLayer.addEventListener('focus', function() {
+		if (pointerFocus) {
+			pointerFocus = false;
+			return;
+		}
+
+		if (isInactive())
+			return;
+
+		grabEditFocus(false);
 	});
 
 	var text = builder._cleanText(data.text);
