@@ -31,8 +31,8 @@
 #include "renderer.hxx"
 #include "canvas.hxx"
 #include <com/sun/star/rendering/RenderState.hpp>
+#include <cppcanvas/cppcanvasdllapi.h>
 
-#include "canvasgraphic.hxx"
 #include "action.hxx"
 #include "color.hxx"
 #include "outdevstate.hxx"
@@ -122,18 +122,26 @@ namespace cppcanvas
 
         // EMF+
 
-        class Renderer : public virtual CanvasGraphic
+        class CPPCANVAS_DLLPUBLIC Renderer
         {
         public:
             Renderer( const CanvasSharedPtr&    rCanvas,
                           const GDIMetaFile&        rMtf );
 
-            virtual ~Renderer() override;
+            ~Renderer();
 
-            // CanvasGraphic implementation
-            virtual void                setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) override;
+            /** Set object transformation matrix
+             */
+            void                setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
 
-            virtual bool                draw() const override;
+            /** Render to parent canvas
+
+                This method renders the content to the parent canvas,
+                i.e. the canvas this object was constructed for.
+
+                @return whether the rendering finished successfully.
+             */
+            bool                draw() const;
 
             // element of the Renderer's action vector. Need to be
             // public, since some functors need it, too.

@@ -1762,7 +1762,6 @@ connectivity/workben/skeleton/SResultSet.hxx
 cppcanvas/source/inc/action.hxx
 cppcanvas/source/inc/bitmap.hxx
 cppcanvas/source/inc/canvas.hxx
-cppcanvas/source/inc/canvasgraphic.hxx
 cppcanvas/source/inc/color.hxx
 cppcanvas/source/inc/outdevstate.hxx
 cppcanvas/source/inc/renderer.hxx
