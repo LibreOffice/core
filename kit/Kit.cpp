@@ -3910,6 +3910,37 @@ void lokit_main(
                     // skipped. It must never fail the whole jail mount: that
                     // disables bind-mounting for the entire forkit and pushes
                     // every document onto the slow copy path.
+
+                    // The shared wordbook is overlaid onto the engine's own
+                    // share/wordbook, whose bundled dictionaries a bind mount
+                    // would hide - unlike the copy path, which merges into the
+                    // already-populated dir. Seed the shared wordbook with the
+                    // bundled dictionaries first so the overlay stays additive
+                    // and both jail-setup modes behave the same. A name the
+                    // host already provides is left untouched.
+                    if (!FileUtil::isEmptyDirectory(sharedWordbook))
+                    {
+                        const std::string bundledWordbook =
+                            Poco::Path(loTemplate, "share/wordbook").toString();
+                        try
+                        {
+                            std::vector<std::string> names;
+                            Poco::File(bundledWordbook).list(names);
+                            for (const auto& name : names)
+                            {
+                                const std::string src = Poco::Path(bundledWordbook, name).toString();
+                                const std::string dst = Poco::Path(sharedWordbook, name).toString();
+                                if (Poco::File(src).isFile() && !FileUtil::Stat(dst).exists())
+                                    FileUtil::copy(src, dst, /*log=*/false, /*throw_on_error=*/false);
+                            }
+                        }
+                        catch (const Poco::Exception& e)
+                        {
+                            LOG_WRN("Could not seed shared wordbook with bundled "
+                                    "dictionaries: " << e.displayText());
+                        }
+                    }
+
                     const std::pair<std::string, std::string> presets[] = {
                         { sharedAutotext, loJailDestAutotextPath },
                         { sharedWordbook, loJailDestWordbookPath },
