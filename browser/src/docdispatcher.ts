@@ -1008,6 +1008,11 @@ class Dispatcher {
 				let commandState = false;
 				if (app.activeDocument.activeLayout.type === 'ViewLayoutMultiPage') {
 					app.activeDocument.activeLayout = new ViewLayoutWriter();
+					// A fresh normal-view layout starts with an empty scrollable
+					// size. Seed it from the document size.
+					app.activeDocument.activeLayout.viewSize =
+						app.activeDocument.fileSize.clone();
+					app.map._docLayer._updateMaxBounds(true);
 					app.activeDocument.activeLayout.adjustViewZoomLevel();
 				} else {
 					app.activeDocument.activeLayout = new ViewLayoutMultiPage();

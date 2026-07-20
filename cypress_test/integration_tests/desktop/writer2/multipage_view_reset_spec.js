@@ -104,3 +104,62 @@ describe(['tagdesktop'], 'Writer remembers the last used view mode.', function()
 			.should('equal', 'ViewLayoutWriter');
 	});
 });
+
+describe(['tagdesktop'], 'Writer multi-page to normal view keeps the page centered.', function() {
+
+	beforeEach(function() {
+		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		cy.viewport(1920, 1080);
+	});
+
+	// The page's left edge on the canvas, and the empty space to its left and
+	// right within the document drawing area. Equal left and right space means
+	// the page sits in the middle. All values are canvas (core) pixels.
+	function pageMargins(win) {
+		var layout = win.app.activeDocument.activeLayout;
+		var anchor = win.app.sectionContainer.getDocumentAnchorSection();
+		var pageRect = win.app.file.writer.pageRectangleList[0];
+
+		var leftEdge = layout.documentToViewX(
+			new win.cool.SimplePoint(pageRect[0], pageRect[1]));
+		var rightEdge = layout.documentToViewX(
+			new win.cool.SimplePoint(pageRect[0] + pageRect[2], pageRect[1]));
+
+		return {
+			left: leftEdge - anchor.myTopLeft[0],
+			right: anchor.myTopLeft[0] + anchor.size[0] - rightEdge,
+		};
+	}
+
+	// Regression test: returning from multi-page view to normal view must seed
+	// the new normal-view layout with the document size again, so the page is
+	// centered instead of drifting to the left with a spurious horizontal scroll
+	// bar.
+	it('Switching multi-page then back centers the page.', function() {
+		// Enter multi-page view.
+		cy.getFrameWindow().then(function(win) {
+			win.app.dispatcher.dispatch('multipageview');
+			return helper.processToIdle(win);
+		});
+		cy.getFrameWindow().its('app.activeDocument.activeLayout.type')
+			.should('equal', 'ViewLayoutMultiPage');
+
+		// Return to normal view.
+		cy.getFrameWindow().then(function(win) {
+			win.app.dispatcher.dispatch('multipageview');
+			return helper.processToIdle(win);
+		});
+
+		// The page sits in the middle: equal space on its left and right. Read
+		// through a retried assertion so the check waits for the layout to settle
+		// rather than sampling a single mid-relayout frame.
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.activeDocument.activeLayout.type)
+				.to.equal('ViewLayoutWriter');
+
+			var margins = pageMargins(win);
+			expect(Math.abs(margins.left - margins.right), 'left vs right spacing')
+				.to.be.lessThan(6);
+		});
+	});
+});
