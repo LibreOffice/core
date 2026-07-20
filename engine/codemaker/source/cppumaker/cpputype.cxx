@@ -1126,7 +1126,7 @@ void InterfaceType::dumpDeclaration(FileStream & out)
     dumpAttributes(out);
     dumpMethods(out);
     out << "\n" << indent()
-        << ("static inline ::cpo::uno::Type const & static_type(void * = 0);\n\n");
+        << "static inline ::cpo::uno::Type const & static_type(void * = 0);\n\n";
     dec();
     out << "protected:\n";
     inc();
