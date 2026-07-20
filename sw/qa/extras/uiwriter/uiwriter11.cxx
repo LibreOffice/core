@@ -1105,6 +1105,68 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testRedlineAutoCorrectInsertOverlap)
     CPPUNIT_ASSERT_EQUAL(u"tsettest "_ustr, getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf124442)
+{
+    // Create a new empty Writer document
+    createSwDoc();
+
+    SwDoc* pDoc = getSwDoc();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
+    IDocumentContentOperations& rIDCO(pDoc->getIDocumentContentOperations());
+    rIDCO.InsertString(*pCursor, u"Test search not found bug"_ustr);
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwView& rView = pWrtShell->GetView();
+
+    SfxItemSet aSet(rView.GetPool(), svl::Items<SID_SEARCH_ITEM, SID_SEARCH_ITEM>);
+    rView.StateSearch(aSet); // initializes SwView::GetSearchItem
+    SvxSearchItem& rSearchItem = *SwView::GetSearchItem();
+    rSearchItem.SetCommand(SvxSearchCmd::FIND);
+
+    SfxItemSet aFn(rView.GetPool(), svl::Items<FN_REPEAT_SEARCH, FN_REPEAT_SEARCH>);
+    SfxRequest aRequest(FN_REPEAT_SEARCH, SfxCallMode::SYNCHRON, aFn);
+    OUString sText;
+    OUString sSearchString;
+
+    // Test when a forward search finds a unique match at the end of the document followed by a
+    // backward search.
+    sSearchString = "bug";
+    rSearchItem.SetSearchString(sSearchString);
+
+    rSearchItem.SetBackward(false);
+    rView.ExecSearch(aRequest);
+    rSearchItem.SetBackward(true);
+    rView.ExecSearch(aRequest);
+
+    pWrtShell->GetSelectedText(sText);
+
+    // Without the patch in place assert failed with:
+    // equality assertion failed
+    // - Expected: bug
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(sSearchString, sText);
+
+    // Test when a backward search finds a unique match at the start of the document followed by a
+    // forward search.
+    sSearchString = "Test";
+    rSearchItem.SetSearchString(sSearchString);
+
+    rSearchItem.SetBackward(true);
+    rView.ExecSearch(aRequest);
+    rSearchItem.SetBackward(false);
+    rView.ExecSearch(aRequest);
+
+    pWrtShell->GetSelectedText(sText);
+
+    // Without the patch in place assert failed with:
+    // equality assertion failed
+    // - Expected: Test
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(sSearchString, sText);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

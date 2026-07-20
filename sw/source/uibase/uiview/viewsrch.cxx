@@ -475,6 +475,19 @@ void SwView::ExecSearch(SfxRequest& rReq)
 
 bool SwView::SearchAndWrap(bool bApi)
 {
+    // tdf#124442 moved m_pWrtShell->GetCursor()->Normalize to before SwSearchOptions aOpts is
+    // constructed to fix search key not found when a forward search (Find Next) results in a
+    // unique find selection to the end of the document followed by a backward search (Find
+    // Previous) or when a backward search results in a unique find selection to the start of the
+    // document followed by a forward search search. Unique find selection meaning the document
+    // contains only one match of the search key.
+
+    // fdo#65014 : Ensure that the point of the cursor is at the extremity of the
+    // selection closest to the end being searched to as to exclude the selected
+    // region from the search. (This doesn't work in the case of multiple
+    // selected regions as the cursor doesn't mark the selection in that case.)
+    m_pWrtShell->GetCursor()->Normalize( s_pSrchItem->GetBackward() );
+
     SwSearchOptions aOpts( m_pWrtShell.get(), s_pSrchItem->GetBackward() );
 
         // Remember starting position of the search for wraparound
@@ -492,12 +505,6 @@ bool SwView::SearchAndWrap(bool bApi)
         else
             m_pWrtShell->StartOfSection();
     }
-
-    // fdo#65014 : Ensure that the point of the cursor is at the extremity of the
-    // selection closest to the end being searched to as to exclude the selected
-    // region from the search. (This doesn't work in the case of multiple
-    // selected regions as the cursor doesn't mark the selection in that case.)
-    m_pWrtShell->GetCursor()->Normalize( s_pSrchItem->GetBackward() );
 
     if (!m_pWrtShell->HasSelection() && (s_pSrchItem->HasStartPoint()))
     {
