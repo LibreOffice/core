@@ -208,9 +208,15 @@ void ScTransferObj::AddSupportedFormats()
     //  same formats as in ScSelectionTransferObj::AddSupportedFormats
     AddFormat( SotClipboardFormatId::EMBED_SOURCE );
     AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
-    AddFormat( SotClipboardFormatId::GDIMETAFILE );
-    AddFormat( SotClipboardFormatId::PNG );
-    AddFormat( SotClipboardFormatId::BITMAP );
+
+    // Skip images for cell selections under COKit, they are rendered
+    // incorrectly as `ScViewData::GetPosX/GetPosY` returns 0 under COKit.
+    if (!comphelper::COKit::isActive())
+    {
+        AddFormat(SotClipboardFormatId::GDIMETAFILE);
+        AddFormat(SotClipboardFormatId::PNG);
+        AddFormat(SotClipboardFormatId::BITMAP);
+    }
 
     // ScImportExport formats
     AddFormat( SotClipboardFormatId::HTML );
