@@ -132,7 +132,7 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
                  * So make sure libgtk+ & co are still mapped into memory when
                  * atk-bridge's atexit handler gets called.
                  */
-                if (aUsedModuleBase == "gtk4" || aUsedModuleBase == "gtk3" ||
+                if (aUsedModuleBase == "gtk3" ||
                     aUsedModuleBase == "win")
                 {
                     pCloseModule = nullptr;

@@ -1377,7 +1377,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
 
     // for popups, don't draw part of the frame
     const bool bShowJunctionToLauncher = !(pData->mnTitleType & (BorderWindowTitleType::Normal | BorderWindowTitleType::Small));
-    if (bShowJunctionToLauncher && !ImplGetSVData()->maNWFData.mbNoFrameJunctionForPopups)
+    if (bShowJunctionToLauncher)
     {
         FloatingWindow* pWin = dynamic_cast<FloatingWindow*>(pData->mpBorderWindow->GetWindow(GetWindowType::Client));
         if (pWin)

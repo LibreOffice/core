@@ -211,14 +211,7 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
                 // avmedia/source/gtk/gtkplayer.hxx
             && s != "_GtkWidget"
                 // avmedia/source/gtk/gtkplayer.hxx
-            && s != "_Module" // extensions/source/activex/StdAfx2.h, CComModule
-            && s != "_NotifyingLayout" // vcl/unx/gtk4/notifyinglayout.cxx
-            && s != "_SurfacePaintable" // vcl/unx/gtk3/gtkinst.cxx
-            && s != "_SurfacePaintableClass" // vcl/unx/gtk3/gtkinst.cxx
-            && s != "_SurfaceCellRenderer" // vcl/unx/gtk4/surfacecellrenderer.cxx
-            && s != "_SurfaceCellRendererClass" // vcl/unx/gtk4/surfacecellrenderer.cxx
-            && s != "_TransferableContent" // vcl/unx/gtk4/transferableprovider.cxx
-            && s != "_TransferableContentClass") // vcl/unx/gtk4/transferableprovider.cxx
+            && s != "_Module") // extensions/source/activex/StdAfx2.h, CComModule
         {
             report(
                 DiagnosticsEngine::Warning,

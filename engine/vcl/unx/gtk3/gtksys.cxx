@@ -38,9 +38,7 @@ SalSystem *GtkInstance::CreateSalSystem()
 GtkSalSystem::GtkSalSystem()
 {
     mpDisplay = gdk_display_get_default();
-#if !GTK_CHECK_VERSION(4, 0, 0)
     countScreenMonitors();
-#endif
     // rhbz#1285356, native look will be gtk2, which crashes
     // when gtk3 is already loaded. Until there is a solution
     // java-side force look and feel to something that doesn't
@@ -80,7 +78,6 @@ struct GdkRectangleCoincident
 
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 /**
  * GtkSalSystem::countScreenMonitors()
  *
@@ -116,7 +113,6 @@ GtkSalSystem::countScreenMonitors()
         maScreenMonitors.emplace_back(pScreen, nMonitors);
     }
 }
-#endif
 
 SalX11Screen
 GtkSalSystem::getXScreenFromDisplayScreen(unsigned int nScreen)
@@ -124,19 +120,13 @@ GtkSalSystem::getXScreenFromDisplayScreen(unsigned int nScreen)
     if (!DLSYM_GDK_IS_X11_DISPLAY(mpDisplay))
         return SalX11Screen (0);
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    GdkX11Screen *pScreen = gdk_x11_display_get_screen(mpDisplay);
-    (void)nScreen;
-#else
     gint nMonitor;
     GdkScreen *pScreen = getScreenMonitorFromIdx (nScreen, nMonitor);
     if (!pScreen)
         return SalX11Screen (0);
-#endif
     return SalX11Screen(gdk_x11_screen_get_screen_number(pScreen));
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 GdkScreen *
 GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)
 {
@@ -184,62 +174,30 @@ int GtkSalSystem::getScreenMonitorIdx (GdkScreen *pScreen,
     return getScreenIdxFromPtr (pScreen) +
         gdk_screen_get_monitor_at_point (pScreen, nX, nY);
 }
-#endif
 
 unsigned int GtkSalSystem::GetDisplayScreenCount()
 {
-#if GTK_CHECK_VERSION(4, 0, 0)
-    return g_list_model_get_n_items(gdk_display_get_monitors(mpDisplay));
-#else
     gint nMonitor;
     (void)getScreenMonitorFromIdx (G_MAXINT, nMonitor);
     return G_MAXINT - nMonitor;
-#endif
 }
 
 unsigned int GtkSalSystem::GetDisplayBuiltInScreen()
 {
-#if GTK_CHECK_VERSION(4, 0, 0)
-#if defined(GDK_WINDOWING_X11)
-    if (DLSYM_GDK_IS_X11_DISPLAY(mpDisplay))
-    {
-        GdkMonitor* pPrimary = gdk_x11_display_get_primary_monitor(mpDisplay);
-        GListModel* pList = gdk_display_get_monitors(mpDisplay);
-        int nIndex = 0;
-        while (gpointer pElem = g_list_model_get_item(pList, nIndex))
-        {
-            if (pElem == pPrimary)
-                return nIndex;
-            ++nIndex;
-        }
-    }
-#endif
-    // nothing for wayland ?, hope for the best that its at index 0
-    return 0;
-#else // !GTK_CHECK_VERSION(4, 0, 0)
     GdkScreen *pDefault = gdk_display_get_default_screen (mpDisplay);
     int idx = getScreenIdxFromPtr (pDefault);
     return idx + gdk_screen_get_primary_monitor(pDefault);
-#endif
 }
 
 AbsoluteScreenPixelRectangle GtkSalSystem::GetDisplayScreenPosSizePixel(unsigned int nScreen)
 {
     GdkRectangle aRect;
-#if GTK_CHECK_VERSION(4, 0, 0)
-    GListModel* pList = gdk_display_get_monitors(mpDisplay);
-    GdkMonitor* pMonitor = static_cast<GdkMonitor*>(g_list_model_get_item(pList, nScreen));
-    if (!pMonitor)
-        return AbsoluteScreenPixelRectangle();
-    gdk_monitor_get_geometry(pMonitor, &aRect);
-#else
     gint nMonitor;
     GdkScreen *pScreen;
     pScreen = getScreenMonitorFromIdx (nScreen, nMonitor);
     if (!pScreen)
         return AbsoluteScreenPixelRectangle();
     gdk_screen_get_monitor_geometry (pScreen, nMonitor, &aRect);
-#endif
     return AbsoluteScreenPixelRectangle(AbsoluteScreenPixelPoint(aRect.x, aRect.y), AbsoluteScreenPixelSize(aRect.width, aRect.height));
 }
 
@@ -249,53 +207,6 @@ static OString MapToGtkAccelerator(const OUString &rStr)
     return OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);
 }
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-
-namespace
-{
-    struct DialogLoop
-    {
-        GMainLoop* pLoop = nullptr;
-        gint nResponseId = GTK_RESPONSE_NONE;
-        gulong nSignalResponseId = 0;
-        gulong nSignalCloseRequestId= 0;
-
-        static gboolean DialogClose(GtkWindow* pDialog, gpointer /*data*/)
-        {
-            gtk_dialog_response(GTK_DIALOG(pDialog), GTK_RESPONSE_CANCEL);
-            return true;
-        }
-
-        static void DialogResponse(GtkDialog* pDialog, gint nResponseId, gpointer data)
-        {
-            DialogLoop* pDialogLoop = static_cast<DialogLoop*>(data);
-            g_signal_handler_disconnect(pDialog, pDialogLoop->nSignalResponseId);
-            g_signal_handler_disconnect(pDialog, pDialogLoop->nSignalCloseRequestId);
-            pDialogLoop->nResponseId = nResponseId;
-            g_main_loop_quit(pDialogLoop->pLoop);
-        }
-
-        int run(GtkDialog *pDialog)
-        {
-            nSignalResponseId = g_signal_connect(pDialog, "response", G_CALLBACK(DialogResponse), this);
-            nSignalCloseRequestId = g_signal_connect(pDialog, "close-request", G_CALLBACK(DialogClose), this);
-            gtk_window_present(GTK_WINDOW(pDialog));
-            pLoop = g_main_loop_new(nullptr, false);
-            main_loop_run(pLoop);
-            g_main_loop_unref(pLoop);
-            return nResponseId;
-        }
-
-    };
-}
-
-gint gtk_dialog_run(GtkDialog* pDialog)
-{
-    DialogLoop aDialogLoop;
-    return aDialogLoop.run(pDialog);
-}
-
-#endif
 
 int GtkSalSystem::ShowNativeDialog (const OUString& rTitle, const OUString& rMessage,
                                     const std::vector< OUString >& rButtonNames)
@@ -318,11 +229,7 @@ int GtkSalSystem::ShowNativeDialog (const OUString& rTitle, const OUString& rMes
     if (nButton < 0)
         nButton = -1;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_widget_destroy(GTK_WIDGET(pDialog));
-#else
-    gtk_window_destroy(GTK_WINDOW(pDialog));
-#endif
 
     return nButton;
 }

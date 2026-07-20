@@ -9,9 +9,7 @@
 
 #include <vcl/svapp.hxx>
 #include "customcellrenderer.hxx"
-#if !GTK_CHECK_VERSION(4, 0, 0)
 #include <gtk/gtk-a11y.h>
-#endif
 
 namespace
 {
@@ -91,12 +89,6 @@ static bool custom_cell_renderer_get_preferred_size(GtkCellRenderer* cell,
                                                     GtkOrientation orientation, gint* minimum_size,
                                                     gint* natural_size);
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-static void custom_cell_renderer_snapshot(GtkCellRenderer* cell, GtkSnapshot* snapshot,
-                                          GtkWidget* widget, const GdkRectangle* background_area,
-                                          const GdkRectangle* cell_area,
-                                          GtkCellRendererState flags);
-#endif
 
 static void custom_cell_renderer_render(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* widget,
                                         const GdkRectangle* background_area,
@@ -176,11 +168,7 @@ void custom_cell_renderer_class_init(CustomCellRendererClass* klass)
     cell_class->get_preferred_height_for_width
         = custom_cell_renderer_get_preferred_height_for_width;
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    cell_class->snapshot = custom_cell_renderer_snapshot;
-#else
     cell_class->render = custom_cell_renderer_render;
-#endif
 
     g_object_class_install_property(
         object_class, PROP_ID,
@@ -190,9 +178,7 @@ void custom_cell_renderer_class_init(CustomCellRendererClass* klass)
         object_class, PROP_INSTANCE_TREE_VIEW,
         g_param_spec_pointer("instance", "Instance", "The GtkInstanceTreeView", G_PARAM_READWRITE));
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_cell_renderer_class_set_accessible_type(cell_class, GTK_TYPE_TEXT_CELL_ACCESSIBLE);
-#endif
 }
 
 GtkCellRenderer* custom_cell_renderer_new()
@@ -298,19 +284,5 @@ void custom_cell_renderer_render(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* 
     cairo_paint(cr);
 }
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-static void custom_cell_renderer_snapshot(GtkCellRenderer* cell, GtkSnapshot* snapshot,
-                                          GtkWidget* widget, const GdkRectangle* background_area,
-                                          const GdkRectangle* cell_area, GtkCellRendererState flags)
-{
-    graphene_rect_t rect = GRAPHENE_RECT_INIT(
-        static_cast<float>(cell_area->x), static_cast<float>(cell_area->y),
-        static_cast<float>(cell_area->width), static_cast<float>(cell_area->height));
-    cairo_t* cr = gtk_snapshot_append_cairo(GTK_SNAPSHOT(snapshot), &rect);
-    custom_cell_renderer_render(cell, cr, widget, background_area, cell_area, flags);
-    cairo_destroy(cr);
-}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

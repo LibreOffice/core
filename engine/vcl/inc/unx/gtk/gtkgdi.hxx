@@ -94,7 +94,6 @@ class GtkSalGraphics final : public SvpSalGraphics
 {
     GtkSalFrame * const mpFrame;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     bool isNativeControlSupported(ControlType, ControlPart) override;
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart,
                                                const tools::Rectangle& rControlRegion,
@@ -108,7 +107,6 @@ class GtkSalGraphics final : public SvpSalGraphics
                                                     const OUString& rCaption,
                                                     tools::Rectangle &rNativeBoundingRegion,
                                                     tools::Rectangle &rNativeContentRegion ) override;
-#endif
     bool updateSettings(AllSettings&) override;
     void handleDamage(const tools::Rectangle&) override;
 
@@ -120,9 +118,7 @@ public:
     virtual OUString getRenderBackendName() const override { return u"gtk3svp"_ustr; }
 
     GtkStyleContext* createStyleContext(GtkControlPart ePart);
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkStyleContext* makeContext(GtkWidgetPath *pPath, GtkStyleContext *pParent);
-#endif
 private:
     GtkWidget              *mpWindow;
     static GtkCssProvider  *mpCustomThemeProvider;
@@ -193,7 +189,6 @@ private:
     static GtkStyleContext *mpSeparatorMenuItemSeparatorStyle;
     static gint mnVerticalSeparatorMinWidth;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     static tools::Rectangle NWGetScrollButtonRect( ControlPart nPart, tools::Rectangle aAreaRect );
     static tools::Rectangle NWGetSpinButtonRect( ControlPart nPart, tools::Rectangle aAreaRect);
     static tools::Rectangle NWGetComboBoxButtonRect(ControlType nType, ControlPart nPart, tools::Rectangle aAreaRect);
@@ -227,7 +222,6 @@ private:
 
     static void PaintRadio(cairo_t *cr, GtkStyleContext *context,
                            const tools::Rectangle& rControlRectangle, bool bInMenu);
-#endif
 
     static bool style_loaded;
 };

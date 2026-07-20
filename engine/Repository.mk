@@ -247,7 +247,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,gnome, \
 
 $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,gnome, \
     $(if $(ENABLE_GTK3),vclplug_gtk3) \
-    $(if $(ENABLE_GTK4),vclplug_gtk4) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \

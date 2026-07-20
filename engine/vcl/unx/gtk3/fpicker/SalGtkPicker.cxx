@@ -232,11 +232,7 @@ SalGtkPicker::~SalGtkPicker()
 
     if (m_pDialog)
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_destroy(m_pDialog);
-#else
-        gtk_window_destroy(GTK_WINDOW(m_pDialog));
-#endif
     }
 }
 
@@ -254,28 +250,15 @@ void SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory )
 
     SAL_INFO( "vcl", "setting path to " << aTxt );
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    GFile* pPath = g_file_new_for_uri(aTxt.getStr());
-    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_pDialog), pPath, nullptr);
-    g_object_unref(pPath);
-#else
     gtk_file_chooser_set_current_folder_uri(GTK_FILE_CHOOSER(m_pDialog), aTxt.getStr());
-#endif
 }
 
 OUString SalGtkPicker::implgetDisplayDirectory()
 {
     OSL_ASSERT( m_pDialog != nullptr );
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    GFile* pPath =
-        gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(m_pDialog));
-    gchar* pCurrentFolder = g_file_get_uri(pPath);
-    g_object_unref(pPath);
-#else
     gchar* pCurrentFolder =
         gtk_file_chooser_get_current_folder_uri(GTK_FILE_CHOOSER(m_pDialog));
-#endif
     OUString aCurrentFolderName = uritounicode(pCurrentFolder);
     g_free( pCurrentFolder );
 

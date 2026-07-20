@@ -403,15 +403,10 @@ sal_uInt16 VclBox::getDefaultAccessibleRole() const
 {
     // fdo#74284 call Boxes Panels, keep them as "Filler" under
     // at least Linux seeing as that's what Gtk3 did for GtkBoxes.
-    // Though now with Gtk4 that uses GTK_ACCESSIBLE_ROLE_GROUP
-    // which maps to ATSPI_ROLE_PANEL
 #if defined(_WIN32)
     return css::accessibility::AccessibleRole::PANEL;
 #else
-    static sal_uInt16 eRole = Application::GetToolkitName() == "gtk4" ?
-                              css::accessibility::AccessibleRole::PANEL :
-                              css::accessibility::AccessibleRole::FILLER;
-    return eRole;
+    return css::accessibility::AccessibleRole::FILLER;
 #endif
 }
 

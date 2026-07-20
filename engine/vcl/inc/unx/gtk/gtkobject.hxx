@@ -47,10 +47,8 @@ public:
 
 private:
     // signals
-#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
-#endif
 };
 
 // this attempts to clip the hosted native window using gdk_window_shape_combine_region
@@ -83,18 +81,10 @@ class GtkSalObjectWidgetClip final : public GtkSalObjectBase
     GtkCssProvider* m_pBgCssProvider;
 
     // signals
-#if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalScroll(GtkWidget*, GdkEvent*, gpointer);
-#else
-    static gboolean     signalScroll(GtkEventControllerScroll* pController, double delta_x, double delta_y, gpointer object);
-#endif
     static void         signalDestroy( GtkWidget*, gpointer );
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     bool signal_scroll(GtkWidget* pScrolledWindow, GdkEvent* pEvent);
-#else
-    bool signal_scroll(GtkEventControllerScroll* pController, double delta_x, double delta_y);
-#endif
 
     void ApplyClipRegion();
 

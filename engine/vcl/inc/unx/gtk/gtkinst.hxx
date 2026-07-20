@@ -53,68 +53,23 @@ public:
 
 class GtkSalFrame;
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-gint gtk_dialog_run(GtkDialog *dialog);
-
-struct read_transfer_result
-{
-    enum { BlockSize = 8192 };
-    size_t nRead = 0;
-    bool bDone = false;
-
-    std::vector<sal_Int8> aVector;
-
-    static void read_block_async_completed(GObject* source, GAsyncResult* res, gpointer user_data);
-
-    OUString get_as_string() const;
-    cpo::uno::Sequence<sal_Int8> get_as_sequence() const;
-};
-
-#endif
 
 struct VclToGtkHelper
 {
     std::vector<css::datatransfer::DataFlavor> aInfoToFlavor;
-#if GTK_CHECK_VERSION(4, 0, 0)
-    std::vector<OString> FormatsToGtk(const cpo::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
-#else
     std::vector<GtkTargetEntry> FormatsToGtk(const cpo::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
-#endif
-#if GTK_CHECK_VERSION(4, 0, 0)
-    void setSelectionData(const css::uno::Reference<css::datatransfer::XTransferable> &rTrans,
-                          GdkContentProvider* provider,
-                          const char* mime_type,
-                          GOutputStream* stream,
-                          int io_priority,
-                          GCancellable* cancellable,
-                          GAsyncReadyCallback callback,
-                          gpointer user_data);
-#else
     void setSelectionData(const css::uno::Reference<css::datatransfer::XTransferable> &rTrans,
                           GtkSelectionData *selection_data, guint info);
-#endif
 private:
-#if GTK_CHECK_VERSION(4, 0, 0)
-    OString makeGtkTargetEntry(const css::datatransfer::DataFlavor& rFlavor);
-#else
     GtkTargetEntry makeGtkTargetEntry(const css::datatransfer::DataFlavor& rFlavor);
-#endif
 };
 
 class GtkTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
 protected:
-#if GTK_CHECK_VERSION(4, 0, 0)
-    std::map<OUString, OString> m_aMimeTypeToGtkType;
-#else
     std::map<OUString, GdkAtom> m_aMimeTypeToGtkType;
-#endif
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector(const char * const *targets, gint n_targets);
-#else
     std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector(GdkAtom *targets, gint n_targets);
-#endif
 
 public:
     virtual cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override = 0;
@@ -150,19 +105,12 @@ public:
         m_pFormatConversionRequest = pRequest;
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     gboolean signalDragMotion(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time);
     gboolean signalDragDrop(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, guint time);
-#else
-    GdkDragAction signalDragMotion(GtkDropTargetAsync *context, GdkDrop *drop, double x, double y);
-    gboolean signalDragDrop(GtkDropTargetAsync *context, GdkDrop *drop, double x, double y);
-#endif
 
     void signalDragLeave(GtkWidget* pWidget);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     void signalDragDropReceived(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, GtkSelectionData* data, guint ttype, guint time);
-#endif
 };
 
 class GtkInstDragSource final
@@ -185,9 +133,7 @@ public:
     void set_datatransfer(const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
                           const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     std::vector<GtkTargetEntry> FormatsToGtk(const cpo::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
-#endif
 
     void setActiveDragSource();
 
@@ -211,12 +157,8 @@ public:
 
     void dragFailed();
     void dragDelete();
-#if GTK_CHECK_VERSION(4, 0, 0)
-    void dragEnd(GdkDrag* drag);
-#else
     void dragEnd(GdkDragContext* context);
     void dragDataGet(GtkSelectionData *data, guint info);
-#endif
 
     // For LibreOffice internal D&D we provide the Transferable without Gtk
     // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this

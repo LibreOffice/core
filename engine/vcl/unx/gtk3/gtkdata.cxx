@@ -63,25 +63,14 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
 
 GtkSalDisplay::~GtkSalDisplay()
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     if( !m_bStartupCompleted )
         gdk_notify_startup_complete();
 
     for(GdkCursor* & rpCsr : m_aCursors)
         if( rpCsr )
             g_object_unref(rpCsr);
-#endif
 }
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-
-static void signalMonitorsChanged(GListModel*, gpointer data)
-{
-    GtkSalDisplay* pDisp = static_cast<GtkSalDisplay*>(data);
-    pDisp->emitDisplayChanged();
-}
-
-#else
 
 static void signalScreenSizeChanged( GdkScreen* pScreen, gpointer data )
 {
@@ -108,7 +97,6 @@ void GtkSalDisplay::monitorsChanged( GdkScreen const * pScreen )
     if (pScreen)
         emitDisplayChanged();
 }
-#endif
 
 GdkCursor* GtkSalDisplay::getFromSvg(OUString const & name, int nXHot, int nYHot)
 {
@@ -117,7 +105,6 @@ GdkCursor* GtkSalDisplay::getFromSvg(OUString const & name, int nXHot, int nYHot
     if (!pPixBuf)
         return nullptr;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     guint nDefaultCursorSize = gdk_display_get_default_cursor_size( m_pGdkDisplay );
     int nPixWidth = gdk_pixbuf_get_width(pPixBuf);
     int nPixHeight = gdk_pixbuf_get_height(pPixBuf);
@@ -129,11 +116,6 @@ GdkCursor* GtkSalDisplay::getFromSvg(OUString const & name, int nXHot, int nYHot
     g_object_unref(pPixBuf);
     return gdk_cursor_new_from_pixbuf(m_pGdkDisplay, pScaledPixBuf,
                                       nXHot * fScalefactor, nYHot * fScalefactor);
-#else
-    GdkTexture* pTexture = gdk_texture_new_for_pixbuf(pPixBuf);
-    g_object_unref(pPixBuf);
-    return gdk_cursor_new_from_texture(pTexture, nXHot, nYHot, nullptr);
-#endif
 }
 
 #define MAKE_CURSOR( vcl_name, name, name2 ) \
@@ -141,17 +123,10 @@ GdkCursor* GtkSalDisplay::getFromSvg(OUString const & name, int nXHot, int nYHot
         pCursor = getFromSvg(name2, name##curs_x_hot, name##curs_y_hot); \
         break
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 #define MAP_BUILTIN( vcl_name, gdk3_name, css_name ) \
     case vcl_name: \
         pCursor = gdk_cursor_new_for_display( m_pGdkDisplay, gdk3_name ); \
         break
-#else
-#define MAP_BUILTIN( vcl_name, gdk3_name, css_name ) \
-    case vcl_name: \
-        pCursor = gdk_cursor_new_from_name(css_name, nullptr); \
-        break
-#endif
 
 GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
 {
@@ -193,22 +168,14 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAP_BUILTIN( PointerStyle::RefHand, GDK_HAND2, "grab" );
             MAP_BUILTIN( PointerStyle::Hand, GDK_HAND2, "grab" );
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
             MAP_BUILTIN( PointerStyle::Pen, GDK_PENCIL, "" );
-#else
-            MAKE_CURSOR( PointerStyle::Pen, pen_, u"" RID_CURSOR_PEN ""_ustr );
-#endif
 
             MAP_BUILTIN( PointerStyle::HSplit, GDK_SB_H_DOUBLE_ARROW, "col-resize" );
             MAP_BUILTIN( PointerStyle::VSplit, GDK_SB_V_DOUBLE_ARROW, "row-resize" );
 
             MAP_BUILTIN( PointerStyle::Move, GDK_FLEUR, "move" );
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
             MAKE_CURSOR( PointerStyle::Null, null, RID_CURSOR_NULL );
-#else
-            MAP_BUILTIN( PointerStyle::Null, 0, "none" );
-#endif
 
             MAKE_CURSOR( PointerStyle::Magnify, magnify_, RID_CURSOR_MAGNIFY );
             MAKE_CURSOR( PointerStyle::Fill, fill_, RID_CURSOR_FILL );
@@ -219,11 +186,7 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAKE_CURSOR( PointerStyle::MoveFiles, movefiles_, RID_CURSOR_MOVE_FILES );
             MAKE_CURSOR( PointerStyle::CopyFiles, copyfiles_, RID_CURSOR_COPY_FILES );
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
             MAKE_CURSOR( PointerStyle::NotAllowed, nodrop_, RID_CURSOR_NOT_ALLOWED );
-#else
-            MAP_BUILTIN( PointerStyle::NotAllowed, 0, "not-allowed" );
-#endif
 
             MAKE_CURSOR( PointerStyle::Rotate, rotate_, RID_CURSOR_ROTATE );
             MAKE_CURSOR( PointerStyle::HShear, hshear_, RID_CURSOR_H_SHEAR );
@@ -289,11 +252,7 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
         }
         if( !pCursor )
         {
-#if !GTK_CHECK_VERSION(4, 0, 0)
             pCursor = gdk_cursor_new_for_display( m_pGdkDisplay, GDK_LEFT_PTR );
-#else
-            pCursor = gdk_cursor_new_from_name("normal", nullptr);
-#endif
         }
 
         m_aCursors[ ePointerStyle ] = pCursor;
@@ -460,11 +419,6 @@ static GtkStyleProvider* CreateStyleProvider()
       // tdf#161662 the bullet list is too tall with the Arabic text in it, remove its vert padding
       "combobox.novertpad *.combo, box#combobox.novertpad *.combo { "
       "padding-top: 0; padding-bottom: 0; }"
-#if GTK_CHECK_VERSION(4, 0, 0)
-      // we basically assumed during dialog design that the frame's were invisible, because
-      // they used to be in the default theme during gtk3
-      "frame { border-style: none; }"
-#endif
       "notebook.overflow > header.top > tabs > tab:checked { "
       "box-shadow: none; padding: 0 0 0 0; margin: 0 0 0 0;"
       "border-image: none; border-image-width: 0 0 0 0;"
@@ -539,11 +493,7 @@ void GtkSalData::Init()
     }
 
     // init gtk/gdk
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gtk_init_check();
-#else
     gtk_init_check( &nParams, &pCmdLineAry );
-#endif
 
     for (int i = 0; i < nParams; ++i)
         g_free( pCmdLineAry[i] );
@@ -583,14 +533,6 @@ void GtkSalData::Init()
     GtkSalDisplay *pDisplay = new GtkSalDisplay( pGdkDisp );
     SetDisplay( pDisplay );
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    pDisplay->emitDisplayChanged();
-    GListModel *pMonitors = gdk_display_get_monitors(pGdkDisp);
-    g_signal_connect(pMonitors, "items-changed", G_CALLBACK(signalMonitorsChanged), pDisplay);
-
-    gtk_style_context_add_provider_for_display(pGdkDisp, CreateStyleProvider(),
-            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-#else
     int nScreens = gdk_display_get_n_screens( pGdkDisp );
     for( int n = 0; n < nScreens; n++ )
     {
@@ -609,46 +551,21 @@ void GtkSalData::Init()
         gtk_style_context_add_provider_for_screen(pScreen, CreateStyleProvider(),
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
-#endif
 }
 
 void GtkSalData::ErrorTrapPush()
 {
-#if GTK_CHECK_VERSION(4, 0, 0)
-# if defined(GDK_WINDOWING_X11)
-    GdkDisplay* pGdkDisp = gdk_display_get_default();
-    if (DLSYM_GDK_IS_X11_DISPLAY(pGdkDisp))
-        gdk_x11_display_error_trap_push(pGdkDisp);
-# endif
-#else
     gdk_error_trap_push();
-#endif
 }
 
 bool GtkSalData::ErrorTrapPop( bool bIgnoreError )
 {
-#if GTK_CHECK_VERSION(4, 0, 0)
-# if defined(GDK_WINDOWING_X11)
-    GdkDisplay* pGdkDisp = gdk_display_get_default();
-    if (DLSYM_GDK_IS_X11_DISPLAY(pGdkDisp))
-    {
-        if (bIgnoreError)
-        {
-            gdk_x11_display_error_trap_pop_ignored(pGdkDisp); // faster
-            return false;
-        }
-        return gdk_x11_display_error_trap_pop(pGdkDisp) != 0;
-    }
-# endif
-    return false;
-#else
     if (bIgnoreError)
     {
         gdk_error_trap_pop_ignored (); // faster
         return false;
     }
     return gdk_error_trap_pop () != 0;
-#endif
 }
 
 #if !GLIB_CHECK_VERSION(2,32,0)
@@ -949,42 +866,12 @@ int getButtonPriority(std::u16string_view rType)
 
 void container_remove(GtkWidget* pContainer, GtkWidget* pChild)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_container_remove(GTK_CONTAINER(pContainer), pChild);
-#else
-    assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer) || GTK_IS_POPOVER(pContainer) ||
-           GTK_IS_FIXED(pContainer) || GTK_IS_WINDOW(pContainer));
-    if (GTK_IS_BOX(pContainer))
-        gtk_box_remove(GTK_BOX(pContainer), pChild);
-    else if (GTK_IS_GRID(pContainer))
-        gtk_grid_remove(GTK_GRID(pContainer), pChild);
-    else if (GTK_IS_POPOVER(pContainer))
-        gtk_popover_set_child(GTK_POPOVER(pContainer), nullptr);
-    else if (GTK_IS_WINDOW(pContainer))
-        gtk_window_set_child(GTK_WINDOW(pContainer), nullptr);
-    else if (GTK_IS_FIXED(pContainer))
-        gtk_fixed_remove(GTK_FIXED(pContainer), pChild);
-#endif
 }
 
 void container_add(GtkWidget* pContainer, GtkWidget* pChild)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_container_add(GTK_CONTAINER(pContainer), pChild);
-#else
-    assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer) || GTK_IS_POPOVER(pContainer) ||
-           GTK_IS_FIXED(pContainer) || GTK_IS_WINDOW(pContainer));
-    if (GTK_IS_BOX(pContainer))
-        gtk_box_append(GTK_BOX(pContainer), pChild);
-    else if (GTK_IS_GRID(pContainer))
-        gtk_grid_attach(GTK_GRID(pContainer), pChild, 0, 0, 1, 1);
-    else if (GTK_IS_POPOVER(pContainer))
-        gtk_popover_set_child(GTK_POPOVER(pContainer), pChild);
-    else if (GTK_IS_WINDOW(pContainer))
-        gtk_window_set_child(GTK_WINDOW(pContainer), pChild);
-    else if (GTK_IS_FIXED(pContainer))
-        gtk_fixed_put(GTK_FIXED(pContainer), pChild, 0, 0);
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

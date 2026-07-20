@@ -95,44 +95,25 @@ GtkStyleContext* GtkSalGraphics::mpSeparatorMenuItemStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSeparatorMenuItemSeparatorStyle = nullptr;
 gint GtkSalGraphics::mnVerticalSeparatorMinWidth = 0;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 static void style_context_get_margin(GtkStyleContext *pContext, GtkBorder *pMargin)
 {
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gtk_style_context_get_margin(pContext, pMargin);
-#else
     gtk_style_context_get_margin(pContext, gtk_style_context_get_state(pContext), pMargin);
-#endif
 }
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 static void style_context_get_border(GtkStyleContext* pContext, GtkBorder* pBorder)
 {
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gtk_style_context_get_border(pContext, pBorder);
-#else
     gtk_style_context_get_border(pContext, gtk_style_context_get_state(pContext), pBorder);
-#endif
 }
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 static void style_context_get_padding(GtkStyleContext* pContext, GtkBorder* pPadding)
 {
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gtk_style_context_get_padding(pContext, pPadding);
-#else
     gtk_style_context_get_padding(pContext, gtk_style_context_get_state(pContext), pPadding);
-#endif
 }
-#endif
 
 bool GtkSalGraphics::style_loaded = false;
 /************************************************************************
  * State conversion
  ************************************************************************/
-#if !GTK_CHECK_VERSION(4, 0, 0)
 static GtkStateFlags NWConvertVCLStateToGTKState(ControlState nVCLState)
 {
     GtkStateFlags nGTKState = GTK_STATE_FLAG_NORMAL;
@@ -253,9 +234,7 @@ tools::Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, tools::
 
     return partRect;
 }
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 namespace
 {
     void QuerySize(GtkStyleContext *pContext, Size &rSize)
@@ -276,9 +255,7 @@ namespace
         rSize = Size(std::max<tools::Long>(rSize.Width(), nMinWidth), std::max<tools::Long>(rSize.Height(), nMinHeight));
     }
 }
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 tools::Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, tools::Rectangle aAreaRect )
 {
     tools::Rectangle  buttonRect;
@@ -351,19 +328,13 @@ tools::Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, tools
 
     return buttonRect;
 }
-#endif
 
 static GtkWidget* gCacheWindow;
 static GtkWidget* gDumbContainer;
-#if GTK_CHECK_VERSION(4, 0, 0)
-static GtkWidget* gVScrollbar;
-static GtkWidget* gTextView;
-#else
 static GtkWidget* gComboBox;
 static GtkWidget* gListBox;
 static GtkWidget* gSpinBox;
 static GtkWidget* gTreeViewWidget;
-#endif
 static GtkWidget* gHScrollbar;
 static GtkWidget* gEntryBox;
 
@@ -371,15 +342,11 @@ namespace
 {
     void style_context_set_state(GtkStyleContext* context, GtkStateFlags flags)
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         do
         {
             gtk_style_context_set_state(context, flags);
         }
         while ((context = gtk_style_context_get_parent(context)));
-#else
-        gtk_style_context_set_state(context, flags);
-#endif
     }
 
     class StyleContextSave
@@ -389,15 +356,11 @@ namespace
     public:
         void save(GtkStyleContext* context)
         {
-#if !GTK_CHECK_VERSION(4, 0, 0)
             do
             {
                 m_aStates.emplace_back(context, gtk_style_context_get_state(context));
             }
             while ((context = gtk_style_context_get_parent(context)));
-#else
-            m_aStates.emplace_back(context, gtk_style_context_get_state(context));
-#endif
         }
         void restore()
         {
@@ -409,7 +372,6 @@ namespace
         }
     };
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     tools::Rectangle render_common(GtkStyleContext *pContext, cairo_t *cr, const tools::Rectangle &rIn, GtkStateFlags flags)
     {
         if (!pContext)
@@ -442,10 +404,8 @@ namespace
 
         return aRect;
     }
-#endif
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                     cairo_t *cr,
                                     const tools::Rectangle& rControlRectangle,
@@ -1573,7 +1533,6 @@ namespace
         gtk_render_frame(context, cr, nX, nY, nWidth, nSeparatorHeight);
     }
 }
-#endif
 
 void GtkSalGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
 {
@@ -1582,7 +1541,6 @@ void GtkSalGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
     mpFrame->damaged(rDamagedRegion.Left(), rDamagedRegion.Top(), rDamagedRegion.GetWidth(), rDamagedRegion.GetHeight());
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                             ControlState nState, const ImplControlValue& rValue,
                                             const OUString&, const Color& rBackgroundColor)
@@ -2171,7 +2129,6 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
     return true;
 }
-#endif
 
 /************************************************************************
  * helper for GtkSalFrame
@@ -2183,37 +2140,16 @@ static ::Color getColor( const GdkRGBA& rCol )
 
 static ::Color style_context_get_background_color(GtkStyleContext* pStyle)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkRGBA background_color;
     gtk_style_context_get_background_color(pStyle, gtk_style_context_get_state(pStyle), &background_color);
     return getColor(background_color);
-#else
-    cairo_surface_t *target = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
-    cairo_t* cr = cairo_create(target);
-    gtk_render_background(pStyle, cr, 0, 0, 1, 1);
-    cairo_destroy(cr);
-
-    cairo_surface_flush(target);
-    vcl::bitmap::lookup_table const & unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
-    unsigned char *data = cairo_image_surface_get_data(target);
-    sal_uInt8 a = data[SVP_CAIRO_ALPHA];
-    sal_uInt8 b = unpremultiply_table[a][data[SVP_CAIRO_BLUE]];
-    sal_uInt8 g = unpremultiply_table[a][data[SVP_CAIRO_GREEN]];
-    sal_uInt8 r = unpremultiply_table[a][data[SVP_CAIRO_RED]];
-    Color aColor(r, g, b);
-    cairo_surface_destroy(target);
-
-    return aColor;
-#endif
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 static vcl::Font getFont(GtkStyleContext* pStyle, const css::lang::Locale& rLocale)
 {
     const PangoFontDescription* font = gtk_style_context_get_font(pStyle, gtk_style_context_get_state(pStyle));
     return pango_to_vcl(font, rLocale);
 }
-#endif
 
 vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale& rLocale)
 {
@@ -2310,11 +2246,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     GtkSettings* pSettings = gtk_widget_get_settings(pTopLevel);
     StyleSettings aStyleSet = rSettings.GetStyleSettings();
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    CustomTheme::ApplyCustomTheme(gtk_widget_get_display(pTopLevel), &mpCustomThemeProvider);
-#else
     CustomTheme::ApplyCustomTheme(gtk_widget_get_screen(pTopLevel), &mpCustomThemeProvider);
-#endif
 
     // text colors
     GdkRGBA text_color;
@@ -2338,16 +2270,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aStyleSet.SetWindowColor(aBackColor);
 
     // UI font
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gchar* pFontname = nullptr;
-    g_object_get(pSettings, "gtk-font-name", &pFontname, nullptr);
-    PangoFontDescription* pFontDesc = pango_font_description_from_string(pFontname);
-    g_free(pFontname);
-    vcl::Font aFont(pango_to_vcl(pFontDesc, rSettings.GetUILanguageTag().getLocale()));
-    pango_font_description_free(pFontDesc);
-#else
     vcl::Font aFont(getFont(pStyle, rSettings.GetUILanguageTag().getLocale()));
-#endif
 
     aStyleSet.BatchSetFonts( aFont, aFont);
 
@@ -2390,7 +2313,6 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         aContextState.restore();
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     // tooltip colors
     {
         GtkWidgetPath *pCPath = gtk_widget_path_new();
@@ -2412,19 +2334,14 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         aStyleSet.SetHelpColor(aTooltipBgColor);
         aStyleSet.SetHelpTextColor( getColor( tooltip_fg_color ));
     }
-#endif
 
     GdkRGBA color;
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         // construct style context for text view
         GtkWidgetPath *pCPath = gtk_widget_path_new();
         gtk_widget_path_append_type( pCPath, GTK_TYPE_TEXT_VIEW );
         gtk_widget_path_iter_add_class( pCPath, -1, GTK_STYLE_CLASS_VIEW );
         GtkStyleContext *pCStyle = makeContext( pCPath, nullptr );
-#else
-        GtkStyleContext *pCStyle = gtk_widget_get_style_context(gTextView);
-#endif
         aContextState.save(pCStyle);
 
         // highlighting colors
@@ -2452,14 +2369,9 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         // listbox background color
         aStyleSet.SetListBoxWindowBackgroundColor( aBackFieldColor );
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-        double caretAspectRatio = 0.04f;
-        g_object_get(pSettings, "gtk-cursor-aspect-ratio", &caretAspectRatio, nullptr);
-#else
         // Cursor width
         gfloat caretAspectRatio = 0.04f;
         gtk_style_context_get_style( pCStyle, "cursor-aspect-ratio", &caretAspectRatio, nullptr );
-#endif
         // Assume 20px tall for the ratio computation, which should give reasonable results
         aStyleSet.SetCursorSize(20 * caretAspectRatio + 1);
 
@@ -2484,9 +2396,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         aStyleSet.SetDisableColor(aDisabledColor);
 
         aContextState.restore();
-#if !GTK_CHECK_VERSION(4, 0, 0)
         g_object_unref( pCStyle );
-#endif
 
         // Tab colors
         aStyleSet.SetActiveTabColor( aBackFieldColor ); // same as the window color.
@@ -2497,7 +2407,6 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aStyleSet.SetSkipDisabledInMenus( true );
     aStyleSet.SetPreferredContextMenuShortcuts( false );
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     aContextState.save(mpMenuItemLabelStyle);
 
     // menu colors
@@ -2537,7 +2446,6 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
 
     aContextState.restore();
-#endif
 
     // hyperlink colors
     aContextState.save(mpLinkButtonStyle);
@@ -2549,7 +2457,6 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aStyleSet.SetVisitedLinkColor(getColor(text_color));
     aContextState.restore();
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     {
         GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabLabelStyle;
         aContextState.save(pCStyle);
@@ -2592,7 +2499,6 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         aStyleSet.SetTabHighlightTextColor(aTextColor);
         aContextState.restore();
     }
-#endif
 
     // match native GtkComboBox behavior of putting text cursor to start of text
     // without text selection when combobox entry is selected
@@ -2643,9 +2549,6 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     GtkRequisition natural_horz_scroll_size;
     gtk_widget_get_preferred_size(gHScrollbar, nullptr, &natural_horz_scroll_size);
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    aStyleSet.SetScrollBarSize(natural_horz_scroll_size.height);
-#else
     // Grab some button style attributes
     Size aSize;
     QuerySize(mpHScrollbarStyle, aSize);
@@ -2671,7 +2574,6 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     gtk_style_context_get(mpVScrollbarSliderStyle, gtk_style_context_get_state(mpVScrollbarSliderStyle),
                           "min-height", &min_slider_length,
                           nullptr);
-#endif
     aStyleSet.SetMinThumbSize(min_slider_length);
 
     // preferred icon style
@@ -2710,7 +2612,6 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     return true;
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 bool GtkSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     switch(nType)
@@ -2818,17 +2719,12 @@ bool GtkSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nP
     SAL_INFO("vcl.gtk", "Unhandled is native supported for Type:" << static_cast<int>(nType) << ", Part" << static_cast<int>(nPart));
     return false;
 }
-#endif
 
 namespace {
 
 void getStyleContext(GtkStyleContext** style, GtkWidget* widget)
 {
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gtk_fixed_put(GTK_FIXED(gDumbContainer), widget, 0, 0);
-#else
     gtk_container_add(GTK_CONTAINER(gDumbContainer), widget);
-#endif
     *style = gtk_widget_get_style_context(widget);
     g_object_ref(*style);
 }
@@ -2845,9 +2741,6 @@ void GtkSalData::initNWF()
     pSVData->maNWFData.mbNoFocusRects = true;
     pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
     pSVData->maNWFData.mbAutoAccel = true;
-#if GTK_CHECK_VERSION(4, 0, 0)
-    pSVData->maNWFData.mbNoFrameJunctionForPopups = true;
-#endif
 
 #if defined(GDK_WINDOWING_WAYLAND)
     //gnome#768128 for the car crash that is wayland
@@ -2860,10 +2753,8 @@ void GtkSalData::initNWF()
 
 void GtkSalData::deInitNWF()
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     if (gCacheWindow)
         gtk_widget_destroy(gCacheWindow);
-#endif
 }
 
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
@@ -2879,46 +2770,23 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
      * gtk apps create a lot of widgets at startup, so, it shouldn't be
      * too slow */
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gCacheWindow = gtk_window_new();
-#else
     gCacheWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-#endif
     gDumbContainer = gtk_fixed_new();
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gtk_window_set_child(GTK_WINDOW(gCacheWindow), gDumbContainer);
-#else
     gtk_container_add(GTK_CONTAINER(gCacheWindow), gDumbContainer);
-#endif
     gtk_widget_realize(gDumbContainer);
     gtk_widget_realize(gCacheWindow);
 
     gEntryBox = gtk_entry_new();
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gtk_fixed_put(GTK_FIXED(gDumbContainer), gEntryBox, 0, 0);
-#else
     gtk_container_add(GTK_CONTAINER(gDumbContainer), gEntryBox);
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     mpWindowStyle = createStyleContext(GtkControlPart::ToplevelWindow);
     mpEntryStyle = createStyleContext(GtkControlPart::Entry);
-#else
-    mpWindowStyle = gtk_widget_get_style_context(gCacheWindow);
-    getStyleContext(&mpEntryStyle, gtk_entry_new());
-#endif
 
     getStyleContext(&mpTextViewStyle, gtk_text_view_new());
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     mpButtonStyle = createStyleContext(GtkControlPart::Button);
     mpLinkButtonStyle = createStyleContext(GtkControlPart::LinkButton);
-#else
-    getStyleContext(&mpButtonStyle, gtk_button_new());
-    getStyleContext(&mpLinkButtonStyle, gtk_link_button_new("https://www.libreoffice.org"));
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkWidget* pToolbar = gtk_toolbar_new();
     mpToolbarStyle = gtk_widget_get_style_context(pToolbar);
     gtk_style_context_add_class(mpToolbarStyle, GTK_STYLE_CLASS_TOOLBAR);
@@ -2934,24 +2802,11 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     item = gtk_tool_button_new(pButton, nullptr);
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), item, -1);
     mpToolButtonStyle = gtk_widget_get_style_context(GTK_WIDGET(pButton));
-#endif
 
     gHScrollbar = gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, nullptr);
     gtk_fixed_put(GTK_FIXED(gDumbContainer), gHScrollbar, 0, 0);
     gtk_widget_set_visible(gHScrollbar, true);
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    gVScrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, nullptr);
-    gtk_fixed_put(GTK_FIXED(gDumbContainer), gVScrollbar, 0, 0);
-    gtk_widget_set_visible(gVScrollbar, true);
-    mpVScrollbarStyle = gtk_widget_get_style_context(gVScrollbar);
-
-    mpHScrollbarStyle = gtk_widget_get_style_context(gHScrollbar);
-
-    gTextView = gtk_text_view_new();
-    gtk_fixed_put(GTK_FIXED(gDumbContainer), gTextView, 0, 0);
-    gtk_widget_set_visible(gTextView, true);
-#else
     mpVScrollbarStyle = createStyleContext(GtkControlPart::ScrollbarVertical);
     mpVScrollbarContentsStyle = createStyleContext(GtkControlPart::ScrollbarVerticalContents);
     mpVScrollbarTroughStyle = createStyleContext(GtkControlPart::ScrollbarVerticalTrough);
@@ -2962,9 +2817,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpHScrollbarTroughStyle = createStyleContext(GtkControlPart::ScrollbarHorizontalTrough);
     mpHScrollbarSliderStyle = createStyleContext(GtkControlPart::ScrollbarHorizontalSlider);
     mpHScrollbarButtonStyle = createStyleContext(GtkControlPart::ScrollbarHorizontalButton);
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     mpCheckButtonStyle = createStyleContext(GtkControlPart::CheckButton);
     mpCheckButtonCheckStyle = createStyleContext(GtkControlPart::CheckButtonCheck);
 
@@ -3058,7 +2911,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpProgressBarProgressStyle = createStyleContext(GtkControlPart::ProgressBarProgress);
 
     gtk_widget_show_all(gDumbContainer);
-#endif
 }
 
 void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
@@ -3070,7 +2922,6 @@ void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
         return;
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkScreen* pScreen = gtk_widget_get_screen(mpWindow);
     double fResolution = -1.0;
     g_object_get(pScreen, "resolution", &fResolution, nullptr);
@@ -3079,9 +2930,6 @@ void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
         rDPIX = rDPIY = sal_Int32(fResolution);
     else
         rDPIX = rDPIY = 96;
-#else
-    rDPIX = rDPIY = 96;
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

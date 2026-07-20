@@ -35,8 +35,6 @@ VCL provides a graphical toolkit similar to gtk+, Qt, SWING etc.
 	+ X11 backend and its sub-platforms
 		+ gtk3/
 			+ GTK3 support
-		+ gtk4/
-			+ GTK4 support (experimental)
 		+ generic/
 			+ raw X11 support
 

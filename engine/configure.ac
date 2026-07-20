@@ -1284,7 +1284,6 @@ test "${test_cups+set}" = set || test_cups="$using_x11"
 test "${test_dbus+set}" = set || test_dbus="$using_x11"
 test "${test_gen+set}" = set || test_gen="$using_x11"
 test "${test_gtk3+set}" = set || test_gtk3="$using_x11"
-test "${test_gtk4+set}" = set || test_gtk4="$using_x11"
 test "${test_randr+set}" = set || test_randr="$using_x11"
 test "${test_xrender+set}" = set || test_xrender="$using_x11"
 test "${using_headless_plugin+set}" = set || using_headless_plugin="$using_freetype_fontconfig"
@@ -1307,7 +1306,6 @@ disable_x11_tests()
     test_dbus=no
     test_gen=no
     test_gtk3=no
-    test_gtk4=no
     test_randr=no
     test_xrender=no
 }
@@ -1823,10 +1821,6 @@ libo_FUZZ_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--disable-gtk3],
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.]),
 ,test "${test_gtk3}" = no -o "${enable_gtk3+set}" = set || enable_gtk3=yes)
-
-AC_ARG_ENABLE(gtk4,
-    AS_HELP_STRING([--enable-gtk4],
-        [Determines whether to use Gtk+ 4.0 vclplug on platforms where Gtk+ 4.0 is available.]))
 
 AC_ARG_ENABLE(introspection,
     AS_HELP_STRING([--enable-introspection],
@@ -6001,7 +5995,6 @@ if test "$cross_compiling" = "yes"; then
         --disable-cups \
         --disable-customtarget-components \
         --disable-gtk3 \
-        --disable-gtk4 \
         --disable-libcmis \
         --disable-nss \
         --disable-online-update \
@@ -11571,7 +11564,6 @@ R=""
 
 libo_ENABLE_VCLPLUG([gen])
 libo_ENABLE_VCLPLUG([gtk3])
-libo_ENABLE_VCLPLUG([gtk4])
 
 if test "$_os" = "WINNT"; then
     R="$R win"
@@ -11637,36 +11629,13 @@ AC_SUBST(GTK3_LIBS)
 AC_SUBST(GTK3_CFLAGS)
 AC_SUBST(ENABLE_GTKTILEDVIEWER)
 
-GTK4_CFLAGS=""
-GTK4_LIBS=""
-if test "$test_gtk4" = yes -a "x$enable_gtk4" = "xyes"; then
-    if test "$with_system_cairo" = no; then
-        add_warning 'Non-system cairo combined with gtk4 is assumed to cause trouble; proceed at your own risk.'
-    fi
-    : ${with_system_cairo:=yes}
-    PKG_CHECK_MODULES(GTK4, gtk4 >= 4.10 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo)
-    GTK4_CFLAGS=$(printf '%s' "$GTK4_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-    GTK4_CFLAGS="$GTK4_CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
-    FilterLibs "${GTK4_LIBS}"
-    GTK4_LIBS="${filteredlibs}"
-
-    dnl We require egl only for the gtk4 plugin. Otherwise we use glx.
-    if test "$with_system_epoxy" != "yes"; then
-        AC_CHECK_LIB(EGL, eglMakeCurrent, [:], AC_MSG_ERROR([libEGL required.]))
-        AC_CHECK_HEADER(EGL/eglplatform.h, [],
-                        [AC_MSG_ERROR(EGL headers not found. install mesa-libEGL-devel)], [])
-    fi
-fi
-AC_SUBST(GTK4_LIBS)
-AC_SUBST(GTK4_CFLAGS)
-
 # libintl is only needed to register .mo files with bindtextdomain so that GTK
 # dialogs can find translations. Without GTK there is no point.
 # On musl, <libintl.h> from gettext-dev redefines bindtextdomain to
 # libintl_bindtextdomain which requires linking -lintl; on glibc it is in libc.
 LIBINTL_LIBS=
 USE_LIBINTL=
-if test "$ENABLE_GTK3" = "TRUE" -o "$ENABLE_GTK4" = "TRUE"; then
+if test "$ENABLE_GTK3" = "TRUE"; then
     USE_LIBINTL=TRUE
     save_LIBS="$LIBS"
     AC_SEARCH_LIBS([libintl_bindtextdomain], [intl],
@@ -11808,7 +11777,7 @@ AC_SUBST(SYSTEM_BLUEZ)
 dnl ===================================================================
 dnl Check whether to enable GIO support
 dnl ===================================================================
-if test "$ENABLE_GTK4" = "TRUE" -o "$ENABLE_GTK3" = "TRUE"; then
+if test "$ENABLE_GTK3" = "TRUE"; then
     AC_MSG_CHECKING([whether to enable GIO support])
     if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gio" = "yes"; then
         dnl Need at least 2.26 for the dbus support.

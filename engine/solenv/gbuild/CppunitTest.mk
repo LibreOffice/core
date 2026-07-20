@@ -254,7 +254,6 @@ ifeq ($(USING_X11),TRUE)
 $(call gb_CppunitTest_get_target,$(1)) : $(if $(filter $(2),$(true)),, \
     $(call gb_Library_get_target,vclplug_gen) \
         $(if $(ENABLE_GTK3),$(call gb_Library_get_target,vclplug_gtk3)) \
-        $(if $(ENABLE_GTK4),$(call gb_Library_get_target,vclplug_gtk4)) \
 	 )
 else ifeq ($(OS)-$(USE_HEADLESS_CODE),MACOSX-)
 $(call gb_CppunitTest_get_target,$(1)): $(call gb_Library_get_target,vclplug_osx)

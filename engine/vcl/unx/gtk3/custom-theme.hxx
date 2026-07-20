@@ -14,11 +14,7 @@
 
 namespace CustomTheme
 {
-#if GTK_CHECK_VERSION(4, 0, 0)
-void ApplyCustomTheme(GdkDisplay* pGdkDisplay, GtkCssProvider** pCustomThemeProvider);
-#else
 void ApplyCustomTheme(GdkScreen* pScreen, GtkCssProvider** pCustomThemeProvider);
-#endif
 
 OString CreateStyleString();
 }

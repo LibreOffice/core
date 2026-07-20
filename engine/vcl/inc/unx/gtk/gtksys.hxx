@@ -17,10 +17,8 @@
 class GtkSalSystem final : public SalGenericSystem
 {
     GdkDisplay *mpDisplay;
-#if !GTK_CHECK_VERSION(4,0,0)
     // Number of monitors for every active screen.
     std::deque<std::pair<GdkScreen*, int> > maScreenMonitors;
-#endif
 public:
              GtkSalSystem();
     virtual ~GtkSalSystem() override;
@@ -35,13 +33,11 @@ public:
     SalX11Screen      GetDisplayDefaultXScreen()
             { return getXScreenFromDisplayScreen( GetDisplayBuiltInScreen() ); }
     SalX11Screen      getXScreenFromDisplayScreen(unsigned int nDisplayScreen);
-#if !GTK_CHECK_VERSION(4,0,0)
     void              countScreenMonitors();
     // We have a 'screen' number that is combined from screen-idx + monitor-idx
     int        getScreenIdxFromPtr     (GdkScreen *pScreen);
     int        getScreenMonitorIdx     (GdkScreen *pScreen, int nX, int nY);
     GdkScreen *getScreenMonitorFromIdx (int nIdx, gint &nMonitor);
-#endif
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

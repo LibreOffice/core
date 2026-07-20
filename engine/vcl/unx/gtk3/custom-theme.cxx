@@ -15,11 +15,7 @@
 
 namespace CustomTheme
 {
-#if GTK_CHECK_VERSION(4, 0, 0)
-void ApplyCustomTheme(GdkDisplay* pGdkDisplay, GtkCssProvider** pCustomThemeProvider)
-#else
 void ApplyCustomTheme(GdkScreen* pScreen, GtkCssProvider** pCustomThemeProvider)
-#endif
 {
     if (!ThemeColors::VclPluginCanUseThemeColors())
         return;
@@ -32,15 +28,9 @@ void ApplyCustomTheme(GdkScreen* pScreen, GtkCssProvider** pCustomThemeProvider)
         css_provider_load_from_data(*pCustomThemeProvider, aStyleString.getStr(),
                                     aStyleString.getLength());
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_style_context_add_provider_for_display(pGdkDisplay,
-                                                   GTK_STYLE_PROVIDER(*pCustomThemeProvider),
-                                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-#else
         gtk_style_context_add_provider_for_screen(pScreen,
                                                   GTK_STYLE_PROVIDER(*pCustomThemeProvider),
                                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-#endif
     }
 }
 

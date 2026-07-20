@@ -73,12 +73,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
 
 endif
 
-ifneq ($(ENABLE_GTK4),)
-$(eval $(call gb_Module_add_targets,vcl,\
-    Library_vclplug_gtk4 \
-))
-endif
-
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,vcl,\
     Package_osxres \
