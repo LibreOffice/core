@@ -1225,6 +1225,12 @@ bool DocumentBroker::download(
                         << "] is an earlier one the document is known to have had, "
                            "so ignoring inconsistent timestamp. Expected: "
                         << _storageManager.getLastModifiedServerTimeString());
+
+                // The prefetched CheckFileInfo has already overwritten the storage's own
+                // last-modified time with this earlier value. That is the value sent as the
+                // precondition on the next upload, so leaving it in place makes the next save
+                // fail with a spurious conflict from storage. Put our known-current time back.
+                _storage->setLastModifiedTime(_storageManager.getLastModifiedServerTimeString());
             }
 #if !MOBILEAPP
             else if (findCollabBroker(_docKey)) {

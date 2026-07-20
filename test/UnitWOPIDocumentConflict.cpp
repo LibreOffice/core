@@ -567,10 +567,12 @@ public:
 };
 
 /// A CheckFileInfo prefetched before our own save carries the older pre-save time.
-/// A joining view served that time must load without a spurious document conflict.
+/// A joining view served that time must load without a spurious document conflict, and a
+/// later save must still upload rather than being rejected by storage as a stale timestamp.
 class UnitWOPIStaleCheckFileInfo : public WopiTestServer
 {
-    STATE_ENUM(Phase, Load, WaitViewLoaded, WaitModified, WaitUpload, WaitSecondView, Done)
+    STATE_ENUM(Phase, Load, WaitViewLoaded, WaitModified, WaitUpload, WaitSecondView,
+               WaitSecondModified, WaitSecondUpload, Done)
     _phase;
 
     /// The last-modified time reported before the upload, replayed as a stale prefetch.
@@ -619,16 +621,39 @@ public:
     bool onDocumentModified(const std::string& message) override
     {
         TST_LOG("onDocumentModified: [" << message << ']');
-        LOK_ASSERT_STATE(_phase, Phase::WaitModified);
-        TRANSITION_STATE(_phase, Phase::WaitUpload);
 
-        WSD_CMD_BY_CONNECTION_INDEX(0, "save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        if (_phase == Phase::WaitModified)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitUpload);
+            WSD_CMD_BY_CONNECTION_INDEX(0, "save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        }
+        else if (_phase == Phase::WaitSecondModified)
+        {
+            // The second modification, after the stale view has joined.
+            TRANSITION_STATE(_phase, Phase::WaitSecondUpload);
+            WSD_CMD_BY_CONNECTION_INDEX(0, "save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        }
+
+        // A modified notification reaches every joined view, so this fires more than once
+        // after the second view arrives. Only the first one for each phase does the work.
         return true;
     }
 
     void onDocumentUploaded(bool success) override
     {
         TST_LOG("onDocumentUploaded: success=" << success);
+
+        if (_phase == Phase::WaitSecondUpload)
+        {
+            // The save after the stale join must reach storage. If the stale prefetch time is
+            // still held as the storage timestamp, it is sent as the precondition and storage
+            // rejects the upload with COOLStatusCode 1010.
+            LOK_ASSERT_MESSAGE("A save after a stale prefetch must still upload", success);
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("Second view joined and a later save still uploaded");
+            return;
+        }
+
         LOK_ASSERT_STATE(_phase, Phase::WaitUpload);
         LOK_ASSERT_MESSAGE("Expected the first view's save to upload", success);
         TRANSITION_STATE(_phase, Phase::WaitSecondView);
@@ -659,14 +684,17 @@ public:
         if (_phase != Phase::WaitSecondView)
             return false;
 
-        TRANSITION_STATE(_phase, Phase::Done);
+        TRANSITION_STATE(_phase, Phase::WaitSecondModified);
 
         // The stale prefetch is accepted as an earlier time of our own document, so the join
         // makes only the one prefetch CheckFileInfo request and no second fetch.
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(1),
                          getCountCheckFileInfo() - _checkFileInfoBeforeSecondView);
 
-        passTest("Second view loaded without a spurious conflict");
+        // Modify the first view again. The following save must still upload; it fails if the
+        // stale prefetch time is still held as the precondition for the next upload.
+        WSD_CMD_BY_CONNECTION_INDEX(0, "key type=input char=98 key=0");
+        WSD_CMD_BY_CONNECTION_INDEX(0, "key type=up char=0 key=512");
         return true;
     }
 
