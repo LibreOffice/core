@@ -1252,6 +1252,205 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentSizeWithTwoViews)
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowHeightChangeRendersFreshAfterUndo)
+{
+    // A row height change made outside the interactive resize path, like undo or
+    // redo of typing that auto-grew the row, shifts every row below it. A view
+    // that already resolved row positions for that area must render tiles with
+    // the rows at their new places, the same as a freshly created view does.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument& rDoc = pViewData->GetDocument();
+
+    // A distant row lets a stale cached row position show up as a big offset.
+    // The neighbouring rows carry text so a shifted render differs in pixels.
+    const SCCOL nCol = 8;
+    const SCROW nRow = 9864;
+    for (SCROW nR = nRow - 3; nR <= nRow + 3; ++nR)
+        if (nR != nRow)
+            rDoc.SetString(ScAddress(nCol, nR, 0), "row " + OUString::number(nR + 1));
+
+    const tools::Long nRowOffsetTw = rDoc.GetRowHeight(0, nRow - 1, 0);
+    const tools::Rectangle aVisArea(0, nRowOffsetTw - 2000, 20000, nRowOffsetTw + 8000);
+    pModelObj->setClientVisibleArea(aVisArea);
+
+    // The header request is how a client viewport makes the view record row
+    // position anchors for this area.
+    {
+        tools::JsonWriter aJsonWriter;
+        pModelObj->getRowColumnHeaders(aVisArea, aJsonWriter);
+        aJsonWriter.finishAndGetAsOString();
+    }
+    Scheduler::ProcessEventsToIdle();
+
+    // Grow the row the way undo and redo of a data entry do: write the cell and
+    // recompute the optimal height through the document shell.
+    ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
+    rEngine.SetTextCurrentDefaults(u"one\ntwo\nthree\nfour\nfive"_ustr);
+    rDoc.SetEditText(ScAddress(nCol, nRow, 0), rEngine.CreateTextObject());
+    const sal_uInt16 nOldHeight = rDoc.GetRowHeight(nRow, 0);
+    CPPUNIT_ASSERT(pDocSh->AdjustRowHeight(nRow, nRow, 0));
+    CPPUNIT_ASSERT(rDoc.GetRowHeight(nRow, 0) > nOldHeight);
+    Scheduler::ProcessEventsToIdle();
+
+    // Render the rows below the grown one from the view that held old anchors.
+    const int nCanvasWidth = 512;
+    const int nCanvasHeight = 512;
+    const tools::Long nTilePosX = 9000;
+    const tools::Long nTilePosY = nRowOffsetTw + 1000;
+    std::vector<unsigned char> aBuffer1(nCanvasWidth * nCanvasHeight * 4);
+    ScopedVclPtrInstance<VirtualDevice> pDevice1(DeviceFormat::WITHOUT_ALPHA);
+    pDevice1->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nCanvasWidth, nCanvasHeight), 1.0,
+                                                        Point(), aBuffer1.data());
+    pModelObj->paintTile(*pDevice1, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY,
+                         /*nTileWidth=*/7680, /*nTileHeight=*/7680);
+    Scheduler::ProcessEventsToIdle();
+
+    // A freshly created view resolves the row positions from the document.
+    int nView1 = KitHelper::getCurrentView();
+    KitHelper::createView();
+    pModelObj->setClientVisibleArea(aVisArea);
+    {
+        tools::JsonWriter aJsonWriter;
+        pModelObj->getRowColumnHeaders(aVisArea, aJsonWriter);
+        aJsonWriter.finishAndGetAsOString();
+    }
+    Scheduler::ProcessEventsToIdle();
+
+    std::vector<unsigned char> aBuffer2(nCanvasWidth * nCanvasHeight * 4);
+    ScopedVclPtrInstance<VirtualDevice> pDevice2(DeviceFormat::WITHOUT_ALPHA);
+    pDevice2->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nCanvasWidth, nCanvasHeight), 1.0,
+                                                        Point(), aBuffer2.data());
+    pModelObj->paintTile(*pDevice2, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY,
+                         /*nTileWidth=*/7680, /*nTileHeight=*/7680);
+    Scheduler::ProcessEventsToIdle();
+
+    bool bAreBuffersMatching = aBuffer1 == aBuffer2;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Buffers should match", true, bAreBuffersMatching);
+
+    SfxViewShell::Current()->setCOKitViewCallback(nullptr);
+    KitHelper::setView(nView1);
+    SfxViewShell::Current()->setCOKitViewCallback(nullptr);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowsBelowKeepPositionAfterRowHeightChange)
+{
+    // A row height change made through the document shell, the path undo and
+    // redo of a data entry take, shifts every row below it. A view that already
+    // resolved row positions for that area must place those rows at their new
+    // positions: both in the coordinates it reports and in the tiles it paints.
+    // When it does not, tiles below the grown row show the neighbouring rows
+    // shifted by the height delta, with text cut in half at the tile boundary.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument& rDoc = pViewData->GetDocument();
+
+    // A distant row makes a stale cached position visible as a large offset;
+    // the rows around the grown one carry text so a shifted render differs in
+    // pixels and shows the artifact.
+    const SCCOL nCol = 8;
+    const SCROW nRow = 9864;
+    for (SCROW nR = nRow - 3; nR <= nRow + 3; ++nR)
+        if (nR != nRow)
+            rDoc.SetString(ScAddress(nCol, nR, 0), "row " + OUString::number(nR + 1));
+
+    const tools::Long nRowOffsetTw = rDoc.GetRowHeight(0, nRow - 1, 0);
+    const tools::Rectangle aVisArea(0, nRowOffsetTw - 2000, 20000, nRowOffsetTw + 8000);
+    pModelObj->setClientVisibleArea(aVisArea);
+
+    // The header request is how a client viewport makes the view record row
+    // position anchors for this area.
+    {
+        tools::JsonWriter aJsonWriter;
+        pModelObj->getRowColumnHeaders(aVisArea, aJsonWriter);
+        aJsonWriter.finishAndGetAsOString();
+    }
+    Scheduler::ProcessEventsToIdle();
+
+    // Grow the row the way ScUndoEnterData::DoChange does: write the multiline
+    // cell, then recompute the optimal height through the document shell.
+    ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
+    rEngine.SetTextCurrentDefaults(u"one\ntwo\nthree\nfour\nfive"_ustr);
+    rDoc.SetEditText(ScAddress(nCol, nRow, 0), rEngine.CreateTextObject());
+    const sal_uInt16 nOldHeight = rDoc.GetRowHeight(nRow, 0);
+    CPPUNIT_ASSERT(pDocSh->AdjustRowHeight(nRow, nRow, 0));
+    CPPUNIT_ASSERT(rDoc.GetRowHeight(nRow, 0) > nOldHeight);
+    Scheduler::ProcessEventsToIdle();
+
+    // The view's position for a row below the grown one has to match the
+    // position accumulated from the document row heights.
+    const double fPPTY = pViewData->GetPPTY();
+    tools::Long nExpectedPixels = 0;
+    for (SCROW nR = 0; nR < nRow + 2; ++nR)
+        if (sal_uInt16 nSize = rDoc.GetRowHeight(nR, 0))
+            nExpectedPixels += ScViewData::ToPixel(nSize, fPPTY);
+    const Point aScrPos = pViewData->GetScrPos(nCol, nRow + 2, pViewData->GetActivePart());
+    CPPUNIT_ASSERT_EQUAL(nExpectedPixels, aScrPos.Y());
+
+    // Two stacked tiles have to show the same pixels as one tile covering both:
+    // a stale position shifts the lower tile's content but not the lower half
+    // of the taller render, which is the text-cut-in-half seam.
+    const tools::Long nTileTw = 3840;
+    const tools::Long nTilePosY = (nRowOffsetTw / nTileTw) * nTileTw;
+    tools::Long nColOffsetTw = 0;
+    for (SCCOL nC = 0; nC < nCol; ++nC)
+        nColOffsetTw += rDoc.GetColWidth(nC, 0);
+    const tools::Long nTilePosX = (nColOffsetTw / nTileTw) * nTileTw;
+    const int nCanvasSize = 256;
+
+    auto paintArea = [&](tools::Long nPosY, int nHeightPx,
+                         tools::Long nHeightTw) -> std::vector<unsigned char>
+    {
+        std::vector<unsigned char> aBuffer(nCanvasSize * nHeightPx * 4);
+        ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+        pDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nCanvasSize, nHeightPx), 1.0,
+                                                           Point(), aBuffer.data());
+        pModelObj->paintTile(*pDevice, nCanvasSize, nHeightPx, nTilePosX, nPosY,
+                             /*nTileWidth=*/nTileTw, /*nTileHeight=*/nHeightTw);
+        Scheduler::ProcessEventsToIdle();
+        return aBuffer;
+    };
+
+    const std::vector<unsigned char> aUpperTile = paintArea(nTilePosY, nCanvasSize, nTileTw);
+    const std::vector<unsigned char> aLowerTile
+        = paintArea(nTilePosY + nTileTw, nCanvasSize, nTileTw);
+    const std::vector<unsigned char> aBothTiles
+        = paintArea(nTilePosY, 2 * nCanvasSize, 2 * nTileTw);
+    const std::vector<unsigned char> aUpperRepaint = paintArea(nTilePosY, nCanvasSize, nTileTw);
+
+    auto firstDiffPixelRow = [](const std::vector<unsigned char>& rTile,
+                                 const unsigned char* pReference) -> int
+    {
+        for (size_t i = 0; i < rTile.size(); ++i)
+            if (rTile[i] != pReference[i])
+                return static_cast<int>(i / (nCanvasSize * 4));
+        return -1;
+    };
+    const OString aDiffInfo = "first differing pixel row: upper vs big "
+        + OString::number(firstDiffPixelRow(aUpperTile, aBothTiles.data()))
+        + ", lower vs big "
+        + OString::number(firstDiffPixelRow(aLowerTile, aBothTiles.data() + aUpperTile.size()))
+        + ", upper repaint vs upper "
+        + OString::number(firstDiffPixelRow(aUpperTile, aUpperRepaint.data()));
+
+    // The bottommost pixel row of the upper tile carries the tile's own edge of
+    // the boundary grid line; in the taller render the same y is interior, so
+    // the comparison covers the rows above it.
+    const size_t nUpperComparable = (nCanvasSize - 1) * nCanvasSize * 4;
+    CPPUNIT_ASSERT_MESSAGE(aDiffInfo.getStr(),
+        std::equal(aUpperTile.begin(), aUpperTile.begin() + nUpperComparable,
+                   aBothTiles.begin()));
+    CPPUNIT_ASSERT_MESSAGE(aDiffInfo.getStr(),
+        std::equal(aLowerTile.begin(), aLowerTile.end(),
+                   aBothTiles.begin() + aUpperTile.size()));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDisableUndoRepair)
 {
     ScModelObj* pModelObj = createDoc("cursor-away.ods");

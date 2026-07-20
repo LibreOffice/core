@@ -271,7 +271,7 @@ public:
 
     /// check config if on file-open optimal row heights should run, or if the user should be asked
     SC_DLLPUBLIC bool GetRecalcRowHeightsMode();
-    bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
+    SC_DLLPUBLIC bool AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
     SC_DLLPUBLIC void UpdateAllRowHeights( const ScMarkData* pTabMark = nullptr );
     SC_DLLPUBLIC void UpdateAllRowHeights(const bool bOnlyUsedRows);
     void            UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore = false );

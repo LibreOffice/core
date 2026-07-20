@@ -59,6 +59,8 @@
 #include <clipparam.hxx>
 #include <rowheightcontext.hxx>
 #include <refupdatecontext.hxx>
+#include <tabvwsh.hxx>
+#include <comphelper/kit.hxx>
 
 using com::sun::star::script::XLibraryContainer;
 using com::sun::star::script::vba::XVBACompatibility;
@@ -422,6 +424,28 @@ bool ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
 
     if (bChange)
     {
+        if (comphelper::COKit::isActive())
+        {
+            // Every view of this document caches cumulative row positions for
+            // tiled rendering; the changed heights make the cached values from
+            // the first changed row on wrong, so drop them and the next lookup
+            // recomputes them from the document.
+            SfxViewShell* pSomeViewForThisDoc = GetBestViewShell(false);
+            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+            while (pViewShell)
+            {
+                ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+                if (pTabViewShell && pSomeViewForThisDoc
+                    && pTabViewShell->GetDocId() == pSomeViewForThisDoc->GetDocId())
+                {
+                    if (ScPositionHelper* pPosHelper
+                        = pTabViewShell->GetViewData().GetKitHeightHelper(nTab))
+                        pPosHelper->invalidateByIndex(nStartRow);
+                }
+                pViewShell = SfxViewShell::GetNext(*pViewShell);
+            }
+        }
+
         // tdf#76183: recalculate objects' positions
         m_pDocument->SetDrawPageSize(nTab);
 
