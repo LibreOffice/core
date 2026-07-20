@@ -1120,7 +1120,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testImportCrashes)
     testImportCrash("xlsm/tdf111974.xlsm");
     testImportCrash("ods/tdf149679.ods");
     testImportCrash("xlsx/tdf124525.xlsx");
-    testImportCrash("xls/forum-mso-de-49320.xls");
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf129681)

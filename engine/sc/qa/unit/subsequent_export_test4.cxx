@@ -1236,6 +1236,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testEmptyExternalDefinedNames)
                        u"TRIM([2]!_xludf.SplitsItems($A1,\",\",COLUMN()-1))");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testCool16026_InvalidUserDefinedFun)
+{
+    createScDoc("xls/forum-mso-de-49320.xls");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // without the fix this would fail with the following result, which produces invalid XLSX:
+    // - Expected: #REF!(SUM(A1:A2))
+    // - Actual  : _xludf.(SUM(A1:A2))
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[1]/x:f",
+                       u"#REF!(SUM(A1:A2))");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testLocalePrefix)
 {
     createScDoc("ods/fdo67682-2.ods");
