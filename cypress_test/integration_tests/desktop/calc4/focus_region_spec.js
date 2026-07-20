@@ -35,8 +35,9 @@ describe(['tagdesktop'], 'Calc F6 region navigation', function () {
 		helper.assertFocus('className', 'clipboard');
 	}
 
+	// F6 lands on the first control of the formula bar row, the Name Box.
 	function assertFormulaBarFocused() {
-		cy.cGet('#sc_input_window').should('have.class', 'focused');
+		a11yHelper.assertFocusWithin('#formulabar-row');
 	}
 
 	function assertSheetTabFocused() {

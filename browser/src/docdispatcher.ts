@@ -461,8 +461,26 @@ class Dispatcher {
 			available: () =>
 				!app.isReadOnly() &&
 				isVisible(document.getElementById('sc_input_window')),
-			hasFocus: () => app.map.calcInputBarHasFocus(),
-			focus: () => app.map.formulabar.focus(),
+			hasFocus: () =>
+				contains(document.getElementById('formulabar-row')) ||
+				app.map.calcInputBarHasFocus(),
+			focus: () => {
+				const row = document.getElementById('formulabar-row');
+				const focusables = row
+					? Array.from(
+							row.querySelectorAll<HTMLElement>(
+								'input:not([disabled]), button:not([disabled]), [tabindex="0"]',
+							),
+						)
+					: [];
+				for (const element of focusables) {
+					if (element.offsetParent !== null) {
+						element.focus();
+						return true;
+					}
+				}
+				return false;
+			},
 			blur: () => {
 				if (app.map.formulabar) app.map.onFormulaBarBlur();
 			},
