@@ -25,6 +25,10 @@
 #include <osl/process.h>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/report/XReportDefinition.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/sdb/XSubDocument.hpp>
+#include <comphelper/scopeguard.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -173,6 +177,45 @@ CPPUNIT_TEST_FIXTURE(RptBasicTest, nestedGroupBoundary)
         nPentahoHeaders, nCppHeaders);
 }
 
+CPPUNIT_TEST_FIXTURE(RptBasicTest, emptyCommandNoCrash)
+{
+    // Executing a report with no Command (query/table) set must fail cleanly
+    // (IllegalArgumentException) under the C++ ReportBuilder path, same as the
+    // Pentaho path already does - not reach the undefined behavior that used to
+    // sit behind an unguarded empty-column-list access in getColumnNameString().
+    loadURLCopy(u"nested_group_boundary.odb");
+
+    Reference<frame::XModel> xModel(mxComponent, UNO_QUERY_THROW);
+    Reference<frame::XController> xController(xModel->getCurrentController());
+    Reference<sdb::application::XDatabaseDocumentUI> xUI(xController, UNO_QUERY_THROW);
+
+    xUI->connect();
+    Reference<XConnection> xActiveConnection = xUI->getActiveConnection();
+
+    Reference<XReportDocumentsSupplier> xSupp(xModel, UNO_QUERY_THROW);
+    Reference<container::XNameAccess> xNameAccess = xSupp->getReportDocuments();
+    const Sequence<OUString> aReportNames(xNameAccess->getElementNames());
+    CPPUNIT_ASSERT(aReportNames.hasElements());
+
+    Reference<sdb::XSubDocument> xSubDoc(xNameAccess->getByName(aReportNames[0]), UNO_QUERY_THROW);
+    Reference<report::XReportDefinition> xReportDef(xSubDoc->openDesign(), UNO_QUERY_THROW);
+    xReportDef->setCommand(u""_ustr);
+    xSubDoc->store();
+    xSubDoc->close();
+
+    const OUString sVarName(u"SAL_ENABLE_PENTAHO_FREE_REPORTBUILDER"_ustr);
+    osl_setEnvironment(sVarName.pData, u"1"_ustr.pData);
+    comphelper::ScopeGuard aEnvGuard([&sVarName] { osl_clearEnvironment(sVarName.pData); });
+
+    ::comphelper::NamedValueCollection aLoadArgs;
+    aLoadArgs.put(u"ActiveConnection"_ustr, xActiveConnection);
+    Reference<frame::XComponentLoader> xComponentLoader(xNameAccess, UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_THROW(xComponentLoader->loadComponentFromURL(aReportNames[0], u"_blank"_ustr, 0,
+                                                                aLoadArgs.getPropertyValues()),
+                         lang::IllegalArgumentException);
+}
+
 OUString RptBasicTest::renderReportText(const OUString& rReportName,
                                         const Reference<frame::XComponentLoader>& xComponentLoader,
                                         const Reference<XConnection>& xActiveConnection,
@@ -183,14 +226,13 @@ OUString RptBasicTest::renderReportText(const OUString& rReportName,
         osl_setEnvironment(sVarName.pData, u"1"_ustr.pData);
     else
         osl_clearEnvironment(sVarName.pData);
+    comphelper::ScopeGuard aEnvGuard([&sVarName] { osl_clearEnvironment(sVarName.pData); });
 
     ::comphelper::NamedValueCollection aLoadArgs;
     aLoadArgs.put(u"ActiveConnection"_ustr, xActiveConnection);
 
     Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL(
         rReportName, u"_blank"_ustr, 0, aLoadArgs.getPropertyValues());
-
-    osl_clearEnvironment(sVarName.pData);
 
     Reference<text::XTextDocument> xTextDoc(xComponent, UNO_QUERY_THROW);
     OUStringBuffer sText(xTextDoc->getText()->getString());

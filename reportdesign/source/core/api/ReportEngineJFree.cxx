@@ -21,6 +21,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -199,11 +200,15 @@ OUString OReportEngineJFree::getNewOutputName()
     if (bCppReportBuilder)
     {
         // C++ ReportBuilder path: uses ORptExecuteExport for direct export with data
-        m_pReport->setUseRPTTags(false);
-        m_pReport->storeToStorage(xOut, aEmpty);
-        m_pReport->setUseRPTTags(true);
-        if ( xStorageProp.is() )
-            sOutputName = sFileURL;
+        if (!m_pReport->getCommand().isEmpty())
+        {
+            m_pReport->setUseRPTTags(false);
+            comphelper::ScopeGuard aRestoreRPTTags(
+                [this]() { m_pReport->setUseRPTTags(true); });
+            m_pReport->storeToStorage(xOut, aEmpty);
+            if ( xStorageProp.is() )
+                sOutputName = sFileURL;
+        }
     }
     else
     {

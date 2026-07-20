@@ -654,6 +654,8 @@ ORptExecuteExport::getColumnNameString(const Reference<XReportDefinition>& _xRep
                                                      _xReportDefinition->getCommand(), xHoldAlive);
     OUString sColumnNameList;
     Sequence<OUString> sColumnNames = xColumns->getElementNames();
+    if (!sColumnNames.hasElements())
+        return sColumnNameList;
 
     for (sal_Int32 i = 0; i < sColumnNames.getLength() - 1; i++)
     {
