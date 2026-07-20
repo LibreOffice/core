@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas::internal
+namespace cppcanvas
 {
         namespace
         {
@@ -93,8 +93,8 @@ namespace cppcanvas::internal
 
             bool PointAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PointAction::render()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PointAction: 0x" << std::hex << this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::PointAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::PointAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);

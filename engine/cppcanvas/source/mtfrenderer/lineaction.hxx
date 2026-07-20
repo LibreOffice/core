@@ -27,9 +27,9 @@ namespace basegfx {
 }
 
 
-/* Definition of internal::LineActionFactory */
+/* Definition of LineActionFactory */
 
-namespace cppcanvas::internal
+namespace cppcanvas
     {
         struct OutDevState;
 

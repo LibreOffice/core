@@ -37,7 +37,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas::internal
+namespace cppcanvas
 {
         namespace
         {
@@ -130,8 +130,8 @@ namespace cppcanvas::internal
             bool BitmapAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
                                                 const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::BitmapAction::renderPrimitive()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::BitmapAction: 0x" << std::hex << this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::BitmapAction::renderPrimitive()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::BitmapAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);

@@ -32,7 +32,7 @@
 #include <vcl/fntstyle.hxx>
 #include <vcl/rendercontext/State.hxx>
 
-namespace cppcanvas::internal
+namespace cppcanvas
     {
         struct OutDevState
         {

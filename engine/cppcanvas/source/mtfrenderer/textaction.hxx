@@ -34,9 +34,9 @@ class Size;
 class Color;
 
 
-/* Definition of internal::TextActionFactory */
+/* Definition of TextActionFactory */
 
-namespace cppcanvas::internal
+namespace cppcanvas
     {
         struct OutDevState;
 

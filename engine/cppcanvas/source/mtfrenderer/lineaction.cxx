@@ -37,7 +37,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas::internal
+namespace cppcanvas
 {
         namespace
         {
@@ -79,8 +79,8 @@ namespace cppcanvas::internal
 
             bool LineAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::LineAction::render()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::LineAction: 0x" << std::hex << this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::LineAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::LineAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);

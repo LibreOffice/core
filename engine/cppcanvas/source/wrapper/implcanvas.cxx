@@ -33,7 +33,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas::internal
+namespace cppcanvas
 {
 
         ImplCanvas::ImplCanvas( uno::Reference< rendering::XCanvas > xCanvas ) :

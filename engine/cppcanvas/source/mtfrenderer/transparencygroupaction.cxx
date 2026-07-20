@@ -56,7 +56,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas::internal
+namespace cppcanvas
 {
         // free support functions
         // ======================
@@ -167,8 +167,8 @@ namespace cppcanvas::internal
             bool TransparencyGroupAction::renderSubset( const ::basegfx::B2DHomMatrix&    rTransformation,
                                                         const Subset&                     rSubset ) const
             {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TransparencyGroupAction::renderSubset()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TransparencyGroupAction: 0x" << std::hex << this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::TransparencyGroupAction::renderSubset()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::TransparencyGroupAction: 0x" << std::hex << this );
 
                 // determine overall transformation matrix (render, view,
                 // and passed transformation)

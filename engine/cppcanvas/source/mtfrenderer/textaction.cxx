@@ -50,7 +50,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas::internal
+namespace cppcanvas
 {
         namespace
         {
@@ -135,7 +135,7 @@ namespace cppcanvas::internal
             void initLayoutWidth(double& rLayoutWidth, const cpo::uno::Sequence<double>& rOffsets)
             {
                 ENSURE_OR_THROW(rOffsets.hasElements(),
-                                  "::cppcanvas::internal::initLayoutWidth(): zero-length array" );
+                                  "::cppcanvas::initLayoutWidth(): zero-length array" );
                 rLayoutWidth = *(std::max_element(rOffsets.begin(), rOffsets.end()));
             }
 
@@ -216,7 +216,7 @@ namespace cppcanvas::internal
                                   const ::basegfx::B2DHomMatrix*            pTextTransform )
             {
                 ENSURE_OR_THROW( rOffsets.hasElements(),
-                                  "::cppcanvas::internal::initArrayAction(): zero-length DX array" );
+                                  "::cppcanvas::initArrayAction(): zero-length DX array" );
 
                 const ::basegfx::B2DPoint aLocalStartPoint(
                     adaptStartPoint( rStartPoint, rState, rOffsets ) );
@@ -234,7 +234,7 @@ namespace cppcanvas::internal
                     0 );
 
                 ENSURE_OR_THROW( o_rTextLayout.is(),
-                                  "::cppcanvas::internal::initArrayAction(): Invalid font" );
+                                  "::cppcanvas::initArrayAction(): Invalid font" );
 
                 o_rTextLayout->applyLogicalAdvancements( rOffsets );
                 o_rTextLayout->applyKashidaPositions( rKashidas );
@@ -260,16 +260,16 @@ namespace cppcanvas::internal
                                    double&                                          o_rMaxPos,
                                    const uno::Reference< rendering::XTextLayout >&  rOrigTextLayout,
                                    double                                           nLayoutWidth,
-                                   const ::cppcanvas::internal::Action::Subset&     rSubset )
+                                   const ::cppcanvas::Action::Subset&     rSubset )
             {
                 ENSURE_OR_THROW( rSubset.mnSubsetEnd > rSubset.mnSubsetBegin,
-                                  "::cppcanvas::internal::calcSubsetOffsets(): invalid subset range range" );
+                                  "::cppcanvas::calcSubsetOffsets(): invalid subset range range" );
 
                 cpo::uno::Sequence< double > aOrigOffsets( rOrigTextLayout->queryLogicalAdvancements() );
                 const double*           pOffsets( aOrigOffsets.getConstArray() );
 
                 ENSURE_OR_THROW( aOrigOffsets.getLength() >= rSubset.mnSubsetEnd,
-                                  "::cppcanvas::internal::calcSubsetOffsets(): invalid subset range range" );
+                                  "::cppcanvas::calcSubsetOffsets(): invalid subset range range" );
 
 
                 // determine leftmost position in given subset range -
@@ -352,7 +352,7 @@ namespace cppcanvas::internal
 
             uno::Reference< rendering::XTextLayout >
                 createSubsetLayout( const rendering::StringContext&                 rOrigContext,
-                                    const ::cppcanvas::internal::Action::Subset&    rSubset,
+                                    const ::cppcanvas::Action::Subset&    rSubset,
                                     const uno::Reference< rendering::XTextLayout >& rOrigTextLayout )
             {
                 // create temporary new text layout with subset string
@@ -595,13 +595,13 @@ namespace cppcanvas::internal
                       rState, rCanvas );
 
                 ENSURE_OR_THROW( mxFont.is(),
-                                  "::cppcanvas::internal::TextAction(): Invalid font" );
+                                  "::cppcanvas::TextAction(): Invalid font" );
             }
 
             bool TextAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextAction::render()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextAction: 0x" << std::hex << this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
@@ -725,7 +725,7 @@ namespace cppcanvas::internal
                       rState, rCanvas );
 
                 ENSURE_OR_THROW( mxFont.is() && mxTextLines.is(),
-                                  "::cppcanvas::internal::EffectTextAction(): Invalid font or lines" );
+                                  "::cppcanvas::EffectTextAction(): Invalid font or lines" );
             }
 
             bool EffectTextAction::operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool /*bNormalText*/ ) const
@@ -759,8 +759,8 @@ namespace cppcanvas::internal
 
             bool EffectTextAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextAction::render()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextAction: 0x" << std::hex << this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
@@ -879,8 +879,8 @@ namespace cppcanvas::internal
 
             bool TextArrayAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextArrayAction::render()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextArrayAction: 0x" << std::hex << this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextArrayAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextArrayAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
@@ -895,8 +895,8 @@ namespace cppcanvas::internal
             bool TextArrayAction::renderSubset( const ::basegfx::B2DHomMatrix&    rTransformation,
                                                 const Subset&                     rSubset ) const
             {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextArrayAction::renderSubset()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextArrayAction: 0x" << std::hex << this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextArrayAction::renderSubset()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextArrayAction: 0x" << std::hex << this );
 
                 rendering::RenderState                      aLocalState( maState );
                 uno::Reference< rendering::XTextLayout >    xTextLayout( mxTextLayout );
@@ -1058,8 +1058,8 @@ namespace cppcanvas::internal
 
             bool EffectTextArrayAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction::render()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction: 0x" << std::hex << this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
@@ -1130,8 +1130,8 @@ namespace cppcanvas::internal
             bool EffectTextArrayAction::renderSubset( const ::basegfx::B2DHomMatrix&  rTransformation,
                                                       const Subset&                   rSubset ) const
             {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction::renderSubset()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction: 0x" << std::hex << this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction::renderSubset()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction: 0x" << std::hex << this );
 
                 rendering::RenderState                   aLocalState( maState );
                 uno::Reference< rendering::XTextLayout > xTextLayout( mxTextLayout );
@@ -1352,8 +1352,8 @@ namespace cppcanvas::internal
 
             bool OutlineAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction::render()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction: 0x" << std::hex << this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
@@ -1442,8 +1442,8 @@ namespace cppcanvas::internal
             bool OutlineAction::renderSubset( const ::basegfx::B2DHomMatrix&  rTransformation,
                                               const Subset&                   rSubset ) const
             {
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::OutlineAction::renderSubset()" );
-                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::OutlineAction: 0x" << std::hex << this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::OutlineAction::renderSubset()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::OutlineAction: 0x" << std::hex << this );
 
                 if( rSubset.mnSubsetBegin == rSubset.mnSubsetEnd )
                     return true; // empty range, render nothing

@@ -52,7 +52,7 @@ namespace basegfx {
     class B2DPolygon;
 }
 
-namespace cppcanvas::internal
+namespace cppcanvas
     {
         struct ActionFactoryParameters;
 

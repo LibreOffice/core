@@ -30,7 +30,7 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas::internal
+namespace cppcanvas
 {
         CachedPrimitiveBase::CachedPrimitiveBase( CanvasSharedPtr        xCanvas,
                                                   bool                   bOnlyRedrawWithSameTransform ) :
@@ -43,8 +43,8 @@ namespace cppcanvas::internal
 
         bool CachedPrimitiveBase::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
         {
-            SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::CachedPrimitiveBase::render()" );
-            SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::CachedPrimitiveBase: 0x" << std::hex << this );
+            SAL_INFO( "cppcanvas.emf", "::cppcanvas::CachedPrimitiveBase::render()" );
+            SAL_INFO( "cppcanvas.emf", "::cppcanvas::CachedPrimitiveBase: 0x" << std::hex << this );
 
             const rendering::ViewState  aViewState( mpCanvas->getViewState() );
             ::basegfx::B2DHomMatrix     aTotalTransform = ::canvastools::getViewStateTransform(

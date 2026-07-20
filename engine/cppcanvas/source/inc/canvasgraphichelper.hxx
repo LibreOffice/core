@@ -30,7 +30,7 @@
 
 /* Definition of CanvasGraphicHelper class */
 
-namespace cppcanvas::internal
+namespace cppcanvas
     {
 
         class CanvasGraphicHelper : public virtual CanvasGraphic

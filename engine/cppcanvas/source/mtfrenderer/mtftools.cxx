@@ -40,7 +40,7 @@ using namespace ::com::sun::star;
 namespace cppcanvastools
 {
         void initRenderState( rendering::RenderState&                   renderState,
-                              const ::cppcanvas::internal::OutDevState& outdevState )
+                              const ::cppcanvas::OutDevState& outdevState )
         {
             ::canvastools::initRenderState( renderState );
             ::canvastools::setRenderStateTransform( renderState,
@@ -48,7 +48,7 @@ namespace cppcanvastools
             renderState.Clip = outdevState.xClipPoly;
         }
 
-        ::Size getBaselineOffset( const ::cppcanvas::internal::OutDevState& outdevState,
+        ::Size getBaselineOffset( const ::cppcanvas::OutDevState& outdevState,
                                   const VirtualDevice&                      rVDev )
         {
             const ::FontMetric aMetric = rVDev.GetFontMetric();
@@ -110,7 +110,7 @@ namespace cppcanvastools
         }
 
         bool modifyClip( rendering::RenderState&                            o_rRenderState,
-                         const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
+                         const struct ::cppcanvas::OutDevState&   rOutdevState,
                          const ::cppcanvas::CanvasSharedPtr&                rCanvas,
                          const ::basegfx::B2DPoint&                         rOffset,
                          const ::basegfx::B2DVector*                        pScaling,
@@ -216,7 +216,7 @@ namespace cppcanvastools
 
         // create overline/underline/strikeout line info struct
         TextLineInfo createTextLineInfo( const ::VirtualDevice&                     rVDev,
-                                         const ::cppcanvas::internal::OutDevState&  rState )
+                                         const ::cppcanvas::OutDevState&  rState )
         {
             const bool bOldMode( rVDev.IsMapModeEnabled() );
 
@@ -469,7 +469,7 @@ namespace cppcanvastools
                             true))
                         {
                             ENSURE_OR_THROW( false,
-                                          "::cppcanvas::internal::createTextLinesPolyPolygon(): Unexpected overline case" );
+                                          "::cppcanvas::createTextLinesPolyPolygon(): Unexpected overline case" );
                         }
                 }
             }
@@ -547,7 +547,7 @@ namespace cppcanvastools
                             false))
                         {
                             ENSURE_OR_THROW( false,
-                                          "::cppcanvas::internal::createTextLinesPolyPolygon(): Unexpected underline case" );
+                                          "::cppcanvas::createTextLinesPolyPolygon(): Unexpected underline case" );
                         }
                 }
             }
@@ -607,7 +607,7 @@ namespace cppcanvastools
 
                     default:
                         ENSURE_OR_THROW( false,
-                                          "::cppcanvas::internal::createTextLinesPolyPolygon(): Unexpected strikeout case" );
+                                          "::cppcanvas::createTextLinesPolyPolygon(): Unexpected strikeout case" );
                 }
             }
         }

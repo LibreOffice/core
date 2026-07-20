@@ -30,7 +30,7 @@ namespace basegfx
 
 /* Definition of Action interface */
 
-namespace cppcanvas::internal
+namespace cppcanvas
     {
         /** Interface for internal render actions
 

@@ -35,7 +35,7 @@ namespace com::sun::star::rendering
 
 /* Definition of ImplCanvas */
 
-namespace cppcanvas::internal
+namespace cppcanvas
 {
 
         class ImplCanvas : public virtual Canvas

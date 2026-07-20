@@ -34,18 +34,18 @@ namespace cppcanvas
 {
     CanvasSharedPtr VCLFactory::createCanvas( const uno::Reference< rendering::XCanvas >& xCanvas )
     {
-        return std::make_shared<internal::ImplCanvas>( xCanvas );
+        return std::make_shared<ImplCanvas>( xCanvas );
     }
 
     CanvasSharedPtr VCLFactory::createBitmapCanvas( const uno::Reference< rendering::XBitmapCanvas >& xCanvas )
     {
-        return std::make_shared<internal::ImplCanvas>( uno::Reference< rendering::XCanvas >(xCanvas) );
+        return std::make_shared<ImplCanvas>( uno::Reference< rendering::XCanvas >(xCanvas) );
     }
 
     RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,
                                                   const ::GDIMetaFile&          rMtf )
     {
-        return std::make_shared<internal::ImplRenderer>( rCanvas, rMtf );
+        return std::make_shared<ImplRenderer>( rCanvas, rMtf );
     }
 
     // only here so we can do a unit test from drawinglayer/qa/unit/vclmetafileprocessor2d.cxx

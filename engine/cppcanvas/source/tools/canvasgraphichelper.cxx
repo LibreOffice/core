@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 
 /* Implementation of CanvasGraphicHelper class */
 
-namespace cppcanvas::internal
+namespace cppcanvas
 {
         CanvasGraphicHelper::CanvasGraphicHelper( CanvasSharedPtr xParentCanvas ) :
             mpCanvas(std::move( xParentCanvas ))

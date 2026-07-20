@@ -39,10 +39,7 @@ namespace com::sun::star::rendering
 
 namespace cppcanvas
 {
-    namespace internal
-    {
-        struct OutDevState;
-    }
+    struct OutDevState;
 }
 
 namespace cppcanvastools
@@ -54,7 +51,7 @@ namespace cppcanvastools
             OutDevState.
          */
         void initRenderState( css::rendering::RenderState&              renderState,
-                              const ::cppcanvas::internal::OutDevState& outdevState );
+                              const ::cppcanvas::OutDevState& outdevState );
 
         /** Calc output offset relative to baseline
 
@@ -70,7 +67,7 @@ namespace cppcanvastools
             @param rVDev
             VDev to obtain font metrics from.
          */
-        ::Size getBaselineOffset( const ::cppcanvas::internal::OutDevState& outdevState,
+        ::Size getBaselineOffset( const ::cppcanvas::OutDevState& outdevState,
                                   const VirtualDevice&                      rVDev );
 
         /** Construct a matrix that converts from logical to pixel
@@ -131,7 +128,7 @@ namespace cppcanvastools
             @return true, if the clip has changed, false if not
          */
         bool modifyClip( css::rendering::RenderState&                       o_rRenderState,
-                         const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
+                         const struct ::cppcanvas::OutDevState&   rOutdevState,
                          const ::cppcanvas::CanvasSharedPtr&                rCanvas,
                          const ::basegfx::B2DPoint&                         rOffset,
                          const ::basegfx::B2DVector*                        pScaling,
@@ -172,7 +169,7 @@ namespace cppcanvastools
             state.
          */
         TextLineInfo createTextLineInfo( const ::VirtualDevice&                     rVDev,
-                                         const ::cppcanvas::internal::OutDevState&  rState );
+                                         const ::cppcanvas::OutDevState&  rState );
 
         /** Create a poly-polygon representing the given combination
             of overline, strikeout and underline.

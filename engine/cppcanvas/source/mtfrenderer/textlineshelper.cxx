@@ -29,7 +29,7 @@ void initLineStyleWaveline(sal_uInt32 nLineStyle, bool& bIsWaveline, bool& bIsBo
 }
 }
 
-namespace cppcanvas::internal
+namespace cppcanvas
 {
 TextLinesHelper::TextLinesHelper(CanvasSharedPtr xCanvas, const OutDevState& rState)
     : mpCanvas(std::move(xCanvas))

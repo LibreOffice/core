@@ -33,9 +33,9 @@ namespace basegfx {
 class GDIMetaFile;
 
 
-/* Definition of internal::TransparencyGroupActionFactory */
+/* Definition of TransparencyGroupActionFactory */
 
-namespace cppcanvas::internal
+namespace cppcanvas
     {
         struct OutDevState;
 
