@@ -1928,7 +1928,15 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc& rDoc,
                 assert(pActualSection->GetSectionNode() == pNd->StartOfSectionNode());
                 pActualSection.reset(pActualSection->GetUpper());
             }
-            pLay = pLay->FindSctFrame();
+            // pLay->FindSctFrame() may return nullptr here: while both the section's start and
+            // end nodes create frames (checked above), the current pLay is not necessarily inside
+            // a section frame (seen with tracked changes inside a table during the layout rebuild
+            // on export / AutoRecovery). There is nothing to close then, and pLay must not be
+            // overwritten with nullptr, as the following nodes reuse it.
+            SwSectionFrame *const pSectFrame = pLay->FindSctFrame();
+            if (!pSectFrame)
+                continue;
+            pLay = pSectFrame;
             if ( pActualSection )
             {
                 //Could be, that the last SectionFrame remains empty.
