@@ -463,6 +463,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/task,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/uno,\
 	TypeClass \
+	XUnloadingPreference \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
 	DeploymentException \
@@ -476,7 +477,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
 	XInterface \
 	XNamingService \
 	XReference \
-	XUnloadingPreference \
 	XWeak \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uri,\

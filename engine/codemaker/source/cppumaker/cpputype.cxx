@@ -134,7 +134,7 @@ bool isBootstrapType(OUString const & name)
         "com.sun.star.uno.XCurrentContext",
         "com.sun.star.uno.XInterface",
         "com.sun.star.uno.XReference",
-        "com.sun.star.uno.XUnloadingPreference",
+        "cpo.uno.XUnloadingPreference",
         "com.sun.star.uno.XWeak",
         "com.sun.star.util.XMacroExpander" };
         // cf. cppuhelper/unotypes/Makefile UNOTYPES (plus missing dependencies)

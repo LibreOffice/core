@@ -1660,10 +1660,6 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      void dispose();
     };
-    /** @deprecated */ published interface XUnloadingPreference {
-     interface ::com::sun::star::uno::XInterface;
-     boolean releaseOnNotification();
-    };
     published interface XWeak {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::uno::XAdapter queryAdapter();
@@ -1765,4 +1761,12 @@ module com {
    };
   };
  };
+};
+module cpo {
+   module uno {
+    /** @deprecated */ published interface XUnloadingPreference {
+     interface ::com::sun::star::uno::XInterface;
+     boolean releaseOnNotification();
+    };
+   };
 };

@@ -39,7 +39,7 @@
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/XUnloadingPreference.hpp>
+#include <cpo/uno/XUnloadingPreference.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <memory>
