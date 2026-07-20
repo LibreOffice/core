@@ -331,6 +331,10 @@ m4_ifelse(MOBILEAPP, [true],
       />
     ])
 
+m4_dnl The branding script declares the branded product name and URL globals, so in app builds it
+m4_dnl has to run before global.js reads them.
+m4_ifelse(MOBILEAPP, [true], [<script src="m4_ifelse(IOSAPP, [true], [Branding/])branding.js"></script>])
+
 m4_dnl This is GLOBAL_JS:
 m4_ifelse(MOBILEAPP, [true],
   [<script type="text/javascript" src="global.js"></script>],
@@ -356,6 +360,5 @@ m4_ifelse(MOBILEAPP,[true],
         ])
 )m4_dnl
 
-m4_ifelse(MOBILEAPP, [true], [<script src="m4_ifelse(IOSAPP, [true], [Branding/])branding.js"></script>],
-        [<!--%BRANDING_JS%--> <!-- logo onclick handler -->])
+m4_ifelse(MOBILEAPP, [], [<!--%BRANDING_JS%--> <!-- logo onclick handler -->])
 </body></html>
