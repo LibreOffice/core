@@ -331,6 +331,13 @@ ScTableStyleParam::ScTableStyleParam():
 {
 }
 
+bool ScTableStyleParam::IsUnstyled() const
+{
+    // A gallery entry for the unstyled choice carries the name "None", while the
+    // OOXML filter writes and reads "none", so accept the name in any spelling.
+    return maStyleID.isEmpty() || maStyleID.equalsIgnoreAsciiCase(u"none");
+}
+
 bool ScTableStyleParam::operator==(const ScTableStyleParam& rParam) const
 {
     if(maStyleID != rParam.maStyleID)

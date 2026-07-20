@@ -181,6 +181,21 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
                 aFunc.ModifyDBData(aNewDBData);
             }
             break;
+            case SID_CLEAR_TABLE_STYLE:
+            {
+                // Reset the table to the unstyled "None" entry, keeping the
+                // other table options as they are.
+                ScDBData aNewDBData(*pDBData);
+                ScTableStyleParam aNewParam = pDBData->GetTableStyleInfo()
+                                                  ? *pDBData->GetTableStyleInfo()
+                                                  : ScTableStyleParam();
+                aNewParam.maStyleID = u"None"_ustr;
+                aNewDBData.SetTableStyleInfo(aNewParam);
+
+                ScDBDocFunc aFunc(*rViewData.GetDocShell());
+                aFunc.ModifyDBData(aNewDBData);
+            }
+            break;
             case SID_REMOVE_CALCTABLE:
                 m_pViewShell->DeleteCalcTable();
                 break;
@@ -317,9 +332,10 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
             }
             break;
             case SID_NEW_TABLE_STYLE:
+            case SID_CLEAR_TABLE_STYLE:
             {
-                // Creating a style applies it to the table at the cursor, so it
-                // needs an editable table to be there.
+                // Creating or clearing a style acts on the table at the cursor,
+                // so both need an editable table to be there.
                 ScDocument& rDoc = m_pViewShell->GetViewData().GetDocument();
                 if (!pDBData || bProtected || !rDoc.GetTableStyles())
                     rSet.DisableItem(nWhich);

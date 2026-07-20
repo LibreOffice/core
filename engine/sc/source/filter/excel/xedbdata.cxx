@@ -346,10 +346,10 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
     {
         if (const ScTableStyles* pTableStyles = rStrm.GetRoot().GetDoc().GetTableStyles())
         {
-            if (pParam->maStyleID == u"none" || pTableStyles->GetTableStyle(pParam->maStyleID))
+            if (pParam->IsUnstyled() || pTableStyles->GetTableStyle(pParam->maStyleID))
             {
                 std::optional<OString> aNameAttr
-                    = (pParam->maStyleID == u"none") ? std::nullopt
+                    = pParam->IsUnstyled() ? std::nullopt
                           : std::make_optional(pParam->maStyleID.toUtf8());
                 pTableStrm->singleElement(XML_tableStyleInfo, XML_name, aNameAttr,
                                           XML_showFirstColumn, ToPsz10(pParam->mbFirstColumn),

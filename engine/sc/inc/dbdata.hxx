@@ -130,7 +130,13 @@ protected:
 
 struct SAL_DLLPUBLIC_RTTI ScTableStyleParam
 {
+    // The style applied to the table. The name of a table style, or one of the
+    // names that stand for no style at all: an empty string, or "none" in any
+    // spelling, which is what a gallery entry for the unstyled choice carries.
     OUString maStyleID;
+
+    // True when maStyleID names no style, so the table is drawn unstyled.
+    SC_DLLPUBLIC bool IsUnstyled() const;
     bool mbRowStripes;
     bool mbColumnStripes;
     bool mbFirstColumn;
