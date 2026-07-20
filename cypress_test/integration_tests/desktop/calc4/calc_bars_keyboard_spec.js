@@ -98,4 +98,13 @@ describe(['tagdesktop'], 'Calc keyboard access for the bars', function () {
 		focusRegionWithF6('#toolbar-down', 10);
 		assertTabVisitsFocusables('#toolbar-down');
 	});
+
+	// The sheet-name tabs are a roving-tabindex tablist (only the selected tab is
+	// a tab stop; Arrow keys move between tabs), so Tab visits the bar's tab stops
+	// - the insert-sheet button and the selected tab - not every sheet tab.
+	it('F6 then Tab visits every focusable item of the sheet-name tabs bar', function () {
+		calcHelper.clickOnFirstCell();
+		focusRegionWithF6('#spreadsheet-toolbar', 10);
+		assertTabVisitsFocusables('#spreadsheet-toolbar');
+	});
 });
