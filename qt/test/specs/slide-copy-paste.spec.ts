@@ -11,12 +11,11 @@
 import { openFixture } from '../lib/file-dialog.js';
 
 // Cross-window slide copy/paste between two in-process Impress documents (one
-// kit). Cases drive copy/paste via the bridge messages and the slide-sorter
-// context-menu callbacks, so they run headless under weston. Oracle: a paste must
-// increment the target's slide count (app.map._docLayer._parts), so every wait
-// polls that rather than sleeping a fixed time.
-
-type Mechanism = 'contextmenu' | 'bridge';
+// kit). Cases drive copy and paste through the slide-sorter context-menu
+// callbacks, the same user-level entry points on every platform; each
+// platform's clipboard transport is chosen underneath them. Oracle: a paste
+// must increment the target's slide count (app.map._docLayer._parts), so
+// every wait polls that rather than sleeping a fixed time.
 
 const we = (): WebdriverIO.Browser & {
 	waitForCondition(
@@ -51,7 +50,9 @@ async function selectedSlidesCount(): Promise<number> {
 	return we().execute(() => app.impress.getSelectedSlidesCount());
 }
 
-// Leave coda-qt's read-only view mode so editing commands are enabled.
+// Existing documents open in the read-only view mode (the app loads them
+// with startreadonly=true); switch to edit mode so editing commands are
+// enabled.
 async function enterEditMode(): Promise<void> {
 	await we().execute(() => {
 		if (!app.map.isEditMode()) app.map._enterEditMode('edit');
@@ -119,70 +120,47 @@ async function prepareTargetSelection(): Promise<void> {
 	});
 }
 
-// Proxy for the copy's COMMANDRESULT: the bridge shows an infinite progress
-// snackbar on COPYSLIDE and closes it the moment the copy command completes -
-// copy is lazy, so this is near-instant and serialises nothing here. Wait for it
-// to appear (best effort - a fast copy may close it before we observe it), then
-// wait for it to close. Deliberately does NOT also wait for the unsynchronised
-// CLIPBOARDMIMETYPES (installing the lazy clipboard) - racing that is part of
-// what we want to catch.
-async function waitCopyAcknowledged(): Promise<void> {
-	const snackbarPresent = () =>
-		!!document.querySelector(
-			'#snackbar-container-progress, #snackbar-container, .snackbar',
-		);
-	try {
-		await we().waitUntil(async () => we().execute(snackbarPresent), {
-			timeout: 5000,
-			interval: 100,
-		});
-	} catch {
-		// Copy completed before the snackbar was observable; fall through.
-	}
-	await we().waitUntil(async () => !(await we().execute(snackbarPresent)), {
-		timeout: 30000,
-		interval: 200,
-		timeoutMsg: 'copy progress snackbar did not close (no COMMANDRESULT)',
+// Copy the selected slides through the exact slide-sorter context-menu
+// "Copy" callback, then wait for the copy command to complete. The kit
+// always answers .uno:CopySlide with a unocommandresult message, surfaced
+// in the page as the map's 'commandresult' event, so a flag armed on that
+// event before the copy is a platform-neutral completion signal - copy is
+// lazy, so it is near-instant and serialises nothing here. Deliberately
+// does NOT also wait for the clipboard advertise that follows the copy
+// (installing the lazy clipboard) - racing that is part of what we want to
+// catch.
+async function copySlides(): Promise<void> {
+	await we().execute(() => {
+		window.__slideCopyResultSeen = false;
+		const handler = (e: { commandName: string }) => {
+			if (e.commandName !== '.uno:CopySlide') return;
+			app.map.off('commandresult', handler);
+			window.__slideCopyResultSeen = true;
+		};
+		app.map.on('commandresult', handler);
+
+		app.map._clip.clearSelection();
+		app.map._clip.setTextSelectionType('slide');
+		app.map._clip._execCopyCutPaste('copy', '.uno:CopySlide');
 	});
+	await we().waitUntil(
+		async () => we().execute(() => window.__slideCopyResultSeen === true),
+		{
+			timeout: 30000,
+			interval: 200,
+			timeoutMsg: 'copy did not complete (no .uno:CopySlide commandresult)',
+		},
+	);
 }
 
-async function copySlides(mechanism: Mechanism): Promise<void> {
-	switch (mechanism) {
-		case 'contextmenu':
-			// The exact slide-sorter context-menu "Copy" callback.
-			await we().execute(() => {
-				app.map._clip.setTextSelectionType('slide');
-				app.map._clip._execCopyCutPaste('copy', '.uno:CopySlide');
-			});
-			break;
-		case 'bridge':
-			await we().execute(() => {
-				window.postMobileMessage('COPYSLIDE');
-			});
-			break;
-	}
-}
-
-async function pasteSlides(
-	mechanism: Mechanism,
-	anchorParts: number,
-): Promise<void> {
-	switch (mechanism) {
-		case 'contextmenu':
-			// The exact slide-sorter context-menu "Paste" callback. _pasteSlide
-			// is async (it probes navigator.clipboard first, which rejects in an
-			// unfocused window and falls back to the native PASTE bridge path);
-			// fire it and let the parts-delta oracle wait for the result.
-			await we().execute((nPos: number) => {
-				void app.map._docLayer._preview._pasteSlide(nPos);
-			}, anchorParts);
-			break;
-		case 'bridge':
-			await we().execute(() => {
-				window.postMobileMessage('PASTE');
-			});
-			break;
-	}
+// Paste through the exact slide-sorter context-menu "Paste" callback.
+// _pasteSlide is async (it first probes for readable HTML on the system
+// clipboard and otherwise falls through to an internal .uno:Paste); fire it
+// and let the parts-delta oracle wait for the result.
+async function pasteSlides(anchorParts: number): Promise<void> {
+	await we().execute((nPos: number) => {
+		void app.map._docLayer._preview._pasteSlide(nPos);
+	}, anchorParts);
 }
 
 // Wait for the target to gain exactly k slides, then assert. The wait cannot
@@ -219,8 +197,6 @@ interface CrossDocOpts {
 	source: string;
 	target: string;
 	n: number;
-	mechanism: Mechanism;
-	waitAck: boolean;
 	expectAdded?: number;
 }
 
@@ -240,11 +216,10 @@ async function crossDocCopyPaste(opts: CrossDocOpts): Promise<void> {
 	await switchTo(opts.source);
 	await waitForIdle();
 	await selectFirstNSlides(opts.n);
-	await copySlides(opts.mechanism);
-	if (opts.waitAck) await waitCopyAcknowledged();
+	await copySlides();
 
 	await switchTo(opts.target);
-	await pasteSlides(opts.mechanism, beforeParts);
+	await pasteSlides(beforeParts);
 	await expectSlidesAdded(beforeParts, beforeImgs, k);
 }
 
@@ -282,24 +257,19 @@ describe('Cross-window slide copy/paste', () => {
 	// pasted the previous case's stale clipboard would land the wrong number of
 	// slides and fail the oracle rather than masquerade as a pass.
 
-	// The focus-immune native baseline: postMobileMessage COPYSLIDE / PASTE.
-	it('copies 3 slides A->B via the raw bridge messages', async function () {
+	it('copies 3 slides A->B', async function () {
 		await crossDocCopyPaste({
 			source: handleA,
 			target: handleB,
 			n: 3,
-			mechanism: 'bridge',
-			waitAck: true,
 		});
 	});
 
-	it('copies 2 slides A->B via the slide-sorter context menu', async function () {
+	it('copies 2 slides A->B', async function () {
 		await crossDocCopyPaste({
 			source: handleA,
 			target: handleB,
 			n: 2,
-			mechanism: 'contextmenu',
-			waitAck: true,
 		});
 	});
 
@@ -312,8 +282,6 @@ describe('Cross-window slide copy/paste', () => {
 			source: handleB,
 			target: handleA,
 			n: 3,
-			mechanism: 'bridge',
-			waitAck: true,
 		});
 	});
 
@@ -334,16 +302,15 @@ describe('Cross-window slide copy/paste', () => {
 		await switchTo(handleA);
 		await waitForIdle();
 		await selectFirstNSlides(k);
-		await copySlides('bridge');
-		await waitCopyAcknowledged();
+		await copySlides();
 
 		await switchTo(handleB);
-		await pasteSlides('bridge', beforeParts);
+		await pasteSlides(beforeParts);
 		await expectSlidesAdded(beforeParts, beforeImgs, k);
 
 		// Second paste from the same clipboard (source unchanged).
 		await prepareTargetSelection();
-		await pasteSlides('bridge', beforeParts + k);
+		await pasteSlides(beforeParts + k);
 		await expectSlidesAdded(beforeParts, beforeImgs, 2 * k);
 	});
 
@@ -366,8 +333,6 @@ describe('Cross-window slide copy/paste', () => {
 			source: readOnlySource,
 			target: handleB,
 			n: 2,
-			mechanism: 'bridge',
-			waitAck: true,
 		});
 	});
 });
