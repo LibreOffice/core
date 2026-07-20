@@ -360,7 +360,7 @@ lcl_CleanStr(const SwTextNode& rNd,
 static bool DoSearch(SwPaM & rSearchPam,
     const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
     SwMoveFnCollection const & fnMove,
-    bool bSrchForward, bool bRegSearch, bool bChkEmptyPara, bool bChkParaEnd,
+    bool bSrchForward, bool bChkEmptyPara, bool bChkParaEnd,
     AmbiguousIndex & nStart, AmbiguousIndex & nEnd, AmbiguousIndex nTextLen,
     SwTextNode const* pNode, SwTextFrame const* pTextFrame,
     SwRootFrame const* pLayout, SwPaM& rPam);
@@ -678,7 +678,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                     nTextLen = nStartInside - nEndInside;
                 }
                 // search inside the text between a note
-                bFound = DoSearch(rSearchPam, rSearchOpt, rSText, fnMove, bSrchForward, bRegSearch,
+                bFound = DoSearch(rSearchPam, rSearchOpt, rSText, fnMove, bSrchForward,
                                   bChkEmptyPara, bChkParaEnd, nStartInside, nEndInside, nTextLen,
                                   pNode->GetTextNode(), pFrame, pLayout, *oPam);
                 if (bFound)
@@ -709,7 +709,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
         {
             // if there is no SwPostItField inside or searching inside notes
             // is disabled, we search the whole length just like before
-            bFound = DoSearch(rSearchPam, rSearchOpt, rSText, fnMove, bSrchForward, bRegSearch,
+            bFound = DoSearch(rSearchPam, rSearchOpt, rSText, fnMove, bSrchForward,
                               bChkEmptyPara, bChkParaEnd, nStart, nEnd, nTextLen,
                               pNode->GetTextNode(), pFrame, pLayout, *oPam);
         }
@@ -723,13 +723,14 @@ bool FindTextImpl(SwPaM & rSearchPam,
 
 bool DoSearch(SwPaM & rSearchPam,
         const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
-                      SwMoveFnCollection const & fnMove, bool bSrchForward, bool bRegSearch,
+                      SwMoveFnCollection const & fnMove, bool bSrchForward,
                       bool bChkEmptyPara, bool bChkParaEnd,
         AmbiguousIndex & nStart, AmbiguousIndex & nEnd, AmbiguousIndex const nTextLen,
         SwTextNode const*const pNode, SwTextFrame const*const pFrame,
         SwRootFrame const*const pLayout, SwPaM& rPam)
 {
-    if (bRegSearch && rSearchOpt.searchString.endsWith("$"))
+    if (SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2
+        && rSearchOpt.searchString.endsWith("$"))
     {
         bool bAlwaysSearchingForEndOfPara = true;
         sal_Int32 nIndex = 0;
@@ -758,7 +759,7 @@ bool DoSearch(SwPaM & rSearchPam,
     // if the search string contains a comment, we don't strip them from the text
     const bool bRemoveCommentAnchors = rSearchOpt.searchString.indexOf( CH_TXTATR_INWORD ) == -1;
 
-    if ( bRegSearch )
+    if (SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2)
     {
         if (   -1 != rSearchOpt.searchString.indexOf("\\xAD")
             || -1 != rSearchOpt.searchString.indexOf("\\x{00AD}")
