@@ -4179,11 +4179,20 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
 
             case FN_NUM_NUMBERING_ON:
-                rSet.Put(SfxBoolItem(FN_NUM_NUMBERING_ON,rSh.SelectionHasNumber()));
+            {
+                // A mixed outline lights the outline button, not this one.
+                const SwNumRule* pRule = rSh.GetNumRuleAtCurrCursorPos();
+                const bool bMixed = pRule && pRule->IsMixed();
+                rSet.Put(SfxBoolItem(FN_NUM_NUMBERING_ON, !bMixed && rSh.SelectionHasNumber()));
+            }
             break;
 
             case FN_NUM_BULLET_ON:
-                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON,rSh.SelectionHasBullet()));
+            {
+                const SwNumRule* pRule = rSh.GetNumRuleAtCurrCursorPos();
+                const bool bMixed = pRule && pRule->IsMixed();
+                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, !bMixed && rSh.SelectionHasBullet()));
+            }
             break;
 
             case FN_NUM_BULLET_OFF:
@@ -4193,8 +4202,14 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
             case FN_SVX_SET_OUTLINE:
             {
+                const SwNumRule* pCurRule = rSh.GetNumRuleAtCurrCursorPos();
+                // A mixed rule is an outline even if it matches no preset.
+                if (pCurRule && pCurRule->IsMixed())
+                {
+                    rSet.Put(SfxBoolItem(FN_SVX_SET_OUTLINE, true));
+                    break;
+                }
                 NBOTypeMgrBase* pOutline = NBOutlineTypeMgrFact::CreateInstance(NBOType::Outline);
-                auto pCurRule = const_cast<SwNumRule*>(rSh.GetNumRuleAtCurrCursorPos());
                 if (pOutline && pCurRule)
                 {
                     SvxNumRule aSvxRule = pCurRule->MakeSvxNumRule();

@@ -163,6 +163,9 @@ public:
     SW_DLLPUBLIC const SwNumFormat* GetNumFormat( sal_uInt16 i ) const;
     SW_DLLPUBLIC const SwNumFormat& Get( sal_uInt16 i ) const;
 
+    /// True when the rule mixes numbered and bullet levels (an outline).
+    bool IsMixed() const;
+
     bool IsHidden( ) const { return mbHidden; }
     void SetHidden( bool bValue ) { mbHidden = bValue; }
 

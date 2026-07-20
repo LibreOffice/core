@@ -20,8 +20,14 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/configuration.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/svxenum.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <numrule.hxx>
 #include <sfx2/kit/helper.hxx>
 
 #include <swmodeltestbase.hxx>
@@ -693,6 +699,119 @@ CPPUNIT_TEST_FIXTURE(Test, testMultiSelectionTextSelectionCallback)
     mxComponent->dispose();
     mxComponent.clear();
     comphelper::COKit::setActive(false);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSetAsDefaultNumberingListFormat)
+{
+    // A saved numbered default keeps its per-level type and list format, here
+    // upper roman wrapped as "(I)", when the numbered-list toggle runs.
+    {
+        auto pBatch = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::BulletsNumbering::DefaultListNumbering::set(
+            cpo::uno::Sequence<sal_Int32>{ SVX_NUM_ROMAN_UPPER }, pBatch);
+        officecfg::Office::Common::BulletsNumbering::DefaultListFormats::set(
+            cpo::uno::Sequence<OUString>{ u"(%1%)"_ustr }, pBatch);
+        pBatch->commit();
+    }
+    comphelper::ScopeGuard aReset([] {
+        auto pBatch = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::BulletsNumbering::DefaultListNumbering::set(
+            cpo::uno::Sequence<sal_Int32>{ SVX_NUM_ARABIC }, pBatch);
+        officecfg::Office::Common::BulletsNumbering::DefaultListFormats::set(
+            cpo::uno::Sequence<OUString>(), pBatch);
+        pBatch->commit();
+    });
+
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"A"_ustr);
+    dispatchCommand(mxComponent, u".uno:DefaultNumbering"_ustr, {});
+
+    const SwNumRule* pNumRule = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetNumRule();
+    CPPUNIT_ASSERT(pNumRule);
+    const SwNumFormat& rFormat = pNumRule->Get(0);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(SVX_NUM_ROMAN_UPPER),
+                         static_cast<sal_uInt16>(rFormat.GetNumberingType()));
+    CPPUNIT_ASSERT(rFormat.HasListFormat());
+    CPPUNIT_ASSERT_EQUAL(u"(%1%)"_ustr, rFormat.GetListFormat());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSetAsDefaultMixedOutline)
+{
+    // A saved mixed outline default (level 1 numbered as "1.", level 2 a
+    // bullet) is rebuilt by the "Select Outline Format" button.
+    {
+        auto pBatch = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::BulletsNumbering::DefaultOutlineNumbering::set(
+            cpo::uno::Sequence<sal_Int32>{ SVX_NUM_ARABIC, SVX_NUM_NUMBER_NONE }, pBatch);
+        officecfg::Office::Common::BulletsNumbering::DefaultOutlineBullets::set(
+            cpo::uno::Sequence<OUString>{ u"•"_ustr, u"▪"_ustr }, pBatch);
+        officecfg::Office::Common::BulletsNumbering::DefaultOutlineBulletsFonts::set(
+            cpo::uno::Sequence<OUString>{ u"OpenSymbol"_ustr, u"OpenSymbol"_ustr }, pBatch);
+        officecfg::Office::Common::BulletsNumbering::DefaultOutlineListFormats::set(
+            cpo::uno::Sequence<OUString>{ u"%1%."_ustr, u""_ustr }, pBatch);
+        pBatch->commit();
+    }
+    comphelper::ScopeGuard aReset([] {
+        auto pBatch = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::BulletsNumbering::DefaultOutlineNumbering::set(
+            cpo::uno::Sequence<sal_Int32>(), pBatch);
+        pBatch->commit();
+    });
+
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"A"_ustr);
+    dispatchCommand(mxComponent, u".uno:SetOutline"_ustr, {});
+
+    const SwNumRule* pNumRule = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetNumRule();
+    CPPUNIT_ASSERT(pNumRule);
+    // Level 1 keeps the numbered type and its "1." format.
+    const SwNumFormat& rLevel0 = pNumRule->Get(0);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(SVX_NUM_ARABIC),
+                         static_cast<sal_uInt16>(rLevel0.GetNumberingType()));
+    CPPUNIT_ASSERT(rLevel0.HasListFormat());
+    CPPUNIT_ASSERT_EQUAL(u"%1%."_ustr, rLevel0.GetListFormat());
+    // Level 2 is the saved bullet.
+    const SwNumFormat& rLevel1 = pNumRule->Get(1);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(SVX_NUM_CHAR_SPECIAL),
+                         static_cast<sal_uInt16>(rLevel1.GetNumberingType()));
+    CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x25AA), rLevel1.GetBulletChar());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testOutlineToggleOff)
+{
+    // A second click on "Select Outline Format" removes the mixed outline.
+    {
+        auto pBatch = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::BulletsNumbering::DefaultOutlineNumbering::set(
+            cpo::uno::Sequence<sal_Int32>{ SVX_NUM_ARABIC, SVX_NUM_NUMBER_NONE }, pBatch);
+        officecfg::Office::Common::BulletsNumbering::DefaultOutlineBullets::set(
+            cpo::uno::Sequence<OUString>{ u"•"_ustr, u"▪"_ustr }, pBatch);
+        officecfg::Office::Common::BulletsNumbering::DefaultOutlineBulletsFonts::set(
+            cpo::uno::Sequence<OUString>{ u"OpenSymbol"_ustr, u"OpenSymbol"_ustr }, pBatch);
+        officecfg::Office::Common::BulletsNumbering::DefaultOutlineListFormats::set(
+            cpo::uno::Sequence<OUString>{ u"%1%."_ustr, u""_ustr }, pBatch);
+        pBatch->commit();
+    }
+    comphelper::ScopeGuard aReset([] {
+        auto pBatch = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::BulletsNumbering::DefaultOutlineNumbering::set(
+            cpo::uno::Sequence<sal_Int32>(), pBatch);
+        pBatch->commit();
+    });
+
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"A"_ustr);
+
+    // First click applies the mixed outline.
+    dispatchCommand(mxComponent, u".uno:SetOutline"_ustr, {});
+    CPPUNIT_ASSERT(pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetNumRule());
+
+    // Second click removes it, so the paragraph is no longer in a list.
+    dispatchCommand(mxComponent, u".uno:SetOutline"_ustr, {});
+    CPPUNIT_ASSERT(!pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetNumRule());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

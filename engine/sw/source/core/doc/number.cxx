@@ -100,6 +100,21 @@ const SwNumFormat& SwNumRule::Get( sal_uInt16 i ) const
                : *saLabelAlignmentBaseFormats[ meRuleType ][ i ] );
 }
 
+bool SwNumRule::IsMixed() const
+{
+    bool bHasNumber = false;
+    bool bHasBullet = false;
+    for (sal_uInt16 nLevel = 0; nLevel < MAXLEVEL; ++nLevel)
+    {
+        const SvxNumType eType = Get(nLevel).GetNumberingType();
+        if (eType == SVX_NUM_CHAR_SPECIAL || eType == SVX_NUM_BITMAP)
+            bHasBullet = true;
+        else if (eType != SVX_NUM_NUMBER_NONE)
+            bHasNumber = true;
+    }
+    return bHasNumber && bHasBullet;
+}
+
 const SwNumFormat* SwNumRule::GetNumFormat( sal_uInt16 i ) const
 {
     const SwNumFormat * pResult = nullptr;

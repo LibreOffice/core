@@ -1497,6 +1497,19 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         return static_cast<SvxNumType>(v);
     };
 
+    // Saved list format ("(%1%)", "%1%.%2%."); empty leaves numbering as is.
+    const cpo::uno::Sequence<OUString> aDefaultFormats = bNum
+        ? officecfg::Office::Common::BulletsNumbering::DefaultListFormats::get()
+        : cpo::uno::Sequence<OUString>();
+    auto fnApplyAffixesForLevel = [&aDefaultFormats](SwNumFormat& rFormat, sal_Int32 nLevel)
+    {
+        if (!aDefaultFormats.hasElements())
+            return;
+        const OUString& rFormatStr = aDefaultFormats[nLevel % aDefaultFormats.getLength()];
+        if (!rFormatStr.isEmpty())
+            rFormat.SetListFormat(rFormatStr);
+    };
+
     const SwNumRule* pNumRule = GetNumRuleAtCurrCursorPos();
 
     // - activate outline rule respectively turning on outline rule for
@@ -1666,7 +1679,10 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 SwNumFormat aFormat(aNumRule.Get(o3tl::narrowing<sal_uInt16>(nLevel)));
 
                 if (bNum)
+                {
                     aFormat.SetNumberingType(fnNumberingTypeForLevel(nLevel));
+                    fnApplyAffixesForLevel(aFormat, nLevel);
+                }
                 else
                 {
                     // #i63395# Only apply user defined default bullet font
@@ -1751,6 +1767,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
             else
             {
                 aFormat.SetNumberingType(fnNumberingTypeForLevel(nLvl));
+                fnApplyAffixesForLevel(aFormat, nLvl);
             }
 
             // #i95907#

@@ -3002,6 +3002,36 @@
           <it>4</it>
         </value>
       </prop>
+      <prop oor:name="DefaultListFormats" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>Per-level list format when an ordered list is toggled in Writer. The list format holds the separators around the number and any included upper levels, for example "(%1%)" for "(1)" or "%1%.%2%." for "1.1". Matches DefaultListNumbering by index and cycles by modulo. Empty means the built-in numbering is used.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="DefaultOutlineNumbering" oor:type="oor:int-list" oor:nillable="false">
+        <info>
+          <desc>Per-level default for a mixed outline list, saved by "Set as My Default" when the rule mixes numbered and bullet levels. Values are css::style::NumberingType constants; 5 (NUMBER_NONE) marks a bullet level, whose glyph and font come from DefaultOutlineBullets and DefaultOutlineBulletsFonts at the same index. Cycles by modulo. Empty means no outline default is set.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="DefaultOutlineBullets" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>Per-level bullet character for the mixed outline default. Meaningful only where DefaultOutlineNumbering holds the bullet marker at the same index.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="DefaultOutlineBulletsFonts" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>Per-level bullet font for the mixed outline default. Matching font for DefaultOutlineBullets.</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="DefaultOutlineListFormats" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>Per-level list format for the mixed outline default, holding the separators and any included upper levels around a numbered level, for example "%1%.%2%." for "1.1". Meaningful only where DefaultOutlineNumbering holds a numbering type at the same index; bullet levels ignore it.</desc>
+        </info>
+        <value/>
+      </prop>
     </group>
     <group oor:name="Help">
       <info>

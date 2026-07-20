@@ -39,7 +39,59 @@
 #include <svx/nbdtmgfact.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <cpo/uno/Sequence.hxx>
+#include <vcl/font.hxx>
 #include <memory>
+
+namespace
+{
+// Rebuild rRule from the saved outline default (DefaultOutline* config); a
+// NUMBER_NONE entry marks a bullet level. Returns false if nothing is saved.
+bool lcl_ApplyOutlineDefault(SvxNumRule& rRule)
+{
+    const cpo::uno::Sequence<sal_Int32> aNumbering
+        = officecfg::Office::Common::BulletsNumbering::DefaultOutlineNumbering::get();
+    if (!aNumbering.hasElements())
+        return false;
+
+    const cpo::uno::Sequence<OUString> aBullets
+        = officecfg::Office::Common::BulletsNumbering::DefaultOutlineBullets::get();
+    const cpo::uno::Sequence<OUString> aFonts
+        = officecfg::Office::Common::BulletsNumbering::DefaultOutlineBulletsFonts::get();
+    const cpo::uno::Sequence<OUString> aFormats
+        = officecfg::Office::Common::BulletsNumbering::DefaultOutlineListFormats::get();
+
+    const sal_uInt16 nLevels = rRule.GetLevelCount();
+    const sal_Int32 nStored = aNumbering.getLength();
+    for (sal_uInt16 nLevel = 0; nLevel < nLevels; ++nLevel)
+    {
+        const sal_Int32 nIndex = nLevel % nStored;
+        SvxNumberFormat aFormat(rRule.GetLevel(nLevel));
+
+        if (aNumbering[nIndex] == SVX_NUM_NUMBER_NONE)
+        {
+            aFormat.SetBulletChar(nIndex < aBullets.getLength() ? aBullets[nIndex].toChar()
+                                                                : u'\x2022');
+            vcl::Font aFont;
+            aFont.SetFamilyName(nIndex < aFonts.getLength() ? aFonts[nIndex]
+                                                            : u"OpenSymbol"_ustr);
+            aFormat.SetBulletFont(&aFont);
+            aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+            // Bullet levels carry no number separators.
+            aFormat.SetListFormat(u""_ustr, u""_ustr, nLevel);
+        }
+        else
+        {
+            aFormat.SetNumberingType(static_cast<SvxNumType>(aNumbering[nIndex]));
+            if (nIndex < aFormats.getLength() && !aFormats[nIndex].isEmpty())
+                aFormat.SetListFormat(aFormats[nIndex]);
+        }
+        rRule.SetLevel(nLevel, aFormat);
+    }
+    return true;
+}
+}
 
 void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 {
@@ -274,7 +326,25 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
                 pFontItem = rReq.GetArgs()->GetItem( SID_ATTR_BULLET_FONT );
             }
 
-            if ( pIndexItem != nullptr || ( pCharItem != nullptr && pFontItem != nullptr ) )
+            // A plain click (no arguments) applies the saved outline default,
+            // or the first gallery outline if none is saved.
+            const bool bApplyFirstOutline = nSlot == FN_SVX_SET_OUTLINE
+                                            && pIndexItem == nullptr
+                                            && ( pCharItem == nullptr || pFontItem == nullptr );
+
+            // The button toggles: remove an already active mixed outline.
+            if (bApplyFirstOutline)
+            {
+                const SwNumRule* pCurRule = GetShell().GetNumRuleAtCurrCursorPos();
+                if (pCurRule && pCurRule->IsMixed())
+                {
+                    GetShell().NumOrBulletOff();
+                    break;
+                }
+            }
+
+            if ( pIndexItem != nullptr || ( pCharItem != nullptr && pFontItem != nullptr )
+                 || bApplyFirstOutline )
             {
                 svx::sidebar::NBOType nNBOType = svx::sidebar::NBOType::Bullets;
                 if ( nSlot == FN_SVX_SET_NUMBER )
@@ -315,6 +385,11 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
                     pNBOTypeMgr->SetItems( &aSet );
                     if (pIndexItem)
                         pNBOTypeMgr->ApplyNumRule( aNewSvxNumRule, pIndexItem->GetValue() - 1, nActNumLvl );
+                    else if (bApplyFirstOutline)
+                    {
+                        if (!lcl_ApplyOutlineDefault(aNewSvxNumRule))
+                            pNBOTypeMgr->ApplyNumRule( aNewSvxNumRule, 0, nActNumLvl );
+                    }
                     else
                     {
                         svx::sidebar::BulletsTypeMgr* pBulletsTypeMgr
@@ -328,14 +403,6 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
                     const bool bCreateNewList = ( pNumRuleAtCurrentSelection == nullptr );
                     GetShell().SetCurNumRule( aNewNumRule, bCreateNewList );
                 }
-            }
-            else if (nSlot == FN_SVX_SET_OUTLINE)
-            {
-                // no outline provided: launch dialog to request a specific outline
-                SfxBindings& rBindings = GetView().GetViewFrame().GetBindings();
-                const SfxStringItem aPage(FN_PARAM_1, u"outlinenum"_ustr);
-                const SfxPoolItem* aItems[] = { &aPage, nullptr };
-                rBindings.Execute(SID_OUTLINE_BULLET, aItems);
             }
         }
         break;

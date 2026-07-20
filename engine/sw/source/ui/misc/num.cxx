@@ -912,6 +912,15 @@ SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
 {
 }
 
+void SwSvxNumBulletTabDialog::ActivatePage(const OUString& rPage)
+{
+    SfxTabDialogController::ActivatePage(rPage);
+
+    // The image and position tabs capture nothing the defaults store.
+    const bool bHiddenPage = rPage == "graphics" || rPage == "position";
+    m_xSetDefaultBtn->set_visible(!bHiddenPage);
+}
+
 void SwSvxNumBulletTabDialog::PageCreated(const OUString& rPageId, SfxTabPage& rPage)
 {
     // set styles' names and metric
@@ -1004,9 +1013,11 @@ IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, SetDefaultHdl, weld::Button&, void)
     cpo::uno::Sequence<sal_Int32> aNumbering(nLevels);
     cpo::uno::Sequence<OUString> aBullets(nLevels);
     cpo::uno::Sequence<OUString> aFonts(nLevels);
+    cpo::uno::Sequence<OUString> aFormats(nLevels);
     auto* pNumberingData = aNumbering.getArray();
     auto* pBulletsData = aBullets.getArray();
     auto* pFontsData = aFonts.getArray();
+    auto* pFormatsData = aFormats.getArray();
 
     // Non-number levels write SVX_NUM_NUMBER_NONE into aNumbering as a
     // sentinel: storing the actual type would propagate SVX_NUM_CHAR_SPECIAL
@@ -1017,6 +1028,10 @@ IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, SetDefaultHdl, weld::Button&, void)
     {
         const SvxNumberFormat& rFmt = rRule.GetLevel(nLevel);
         const SvxNumType eType = rFmt.GetNumberingType();
+
+        // The list format carries the separators and included upper levels,
+        // for example "(%1%)" or "%1%.%2%.".
+        pFormatsData[nLevel] = rFmt.HasListFormat() ? rFmt.GetListFormat() : OUString();
 
         if (eType == SVX_NUM_CHAR_SPECIAL)
         {
@@ -1042,18 +1057,55 @@ IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, SetDefaultHdl, weld::Button&, void)
         }
     }
 
+    // The tab gives the intent: the unordered and ordered tabs force the
+    // bulleted or numbered default; other tabs go by content, where a
+    // number+bullet mix is the outline default.
+    const OUString sPage = GetCurPageId();
+    bool bStoreAsBullet;
+    bool bStoreAsOutline;
+    if (sPage == "bullets")
+    {
+        bStoreAsBullet = true;
+        bStoreAsOutline = false;
+    }
+    else if (sPage == "singlenum")
+    {
+        bStoreAsBullet = false;
+        bStoreAsOutline = false;
+    }
+    else
+    {
+        bStoreAsOutline = bAnyNumberLevel && bAnyBulletLevel;
+        bStoreAsBullet = !bStoreAsOutline && bAnyBulletLevel && !bAnyNumberLevel;
+    }
+
     try
     {
         auto pBatch = comphelper::ConfigurationChanges::create();
-        if (bAnyNumberLevel)
-            officecfg::Office::Common::BulletsNumbering::DefaultListNumbering::set(
+        if (bStoreAsOutline)
+        {
+            officecfg::Office::Common::BulletsNumbering::DefaultOutlineNumbering::set(
                 aNumbering, pBatch);
-        if (bAnyBulletLevel)
+            officecfg::Office::Common::BulletsNumbering::DefaultOutlineBullets::set(
+                aBullets, pBatch);
+            officecfg::Office::Common::BulletsNumbering::DefaultOutlineBulletsFonts::set(
+                aFonts, pBatch);
+            officecfg::Office::Common::BulletsNumbering::DefaultOutlineListFormats::set(
+                aFormats, pBatch);
+        }
+        else if (bStoreAsBullet)
         {
             officecfg::Office::Common::BulletsNumbering::DefaultListBullets::set(
                 aBullets, pBatch);
             officecfg::Office::Common::BulletsNumbering::DefaultListBulletsFonts::set(
                 aFonts, pBatch);
+        }
+        else
+        {
+            officecfg::Office::Common::BulletsNumbering::DefaultListNumbering::set(
+                aNumbering, pBatch);
+            officecfg::Office::Common::BulletsNumbering::DefaultListFormats::set(
+                aFormats, pBatch);
         }
         pBatch->commit();
 
