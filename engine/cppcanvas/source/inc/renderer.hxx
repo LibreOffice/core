@@ -19,12 +19,29 @@
 
 #pragma once
 
-#include <cpo/uno/Sequence.hxx>
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
+#include <optional>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include "canvasgraphic.hxx"
 #include "color.hxx"
+#include <memory>
 
-namespace cppcanvastools
+namespace basegfx
+{
+    class B2DRange;
+}
+
+/* Definition of Renderer interface */
+
+namespace cppcanvas
+{
+
+    class Renderer : public virtual CanvasGraphic
     {
-        cpo::uno::Sequence< double > intSRGBAToDoubleSequence( cppcanvas::IntSRGBA );
-    }
+    };
+
+    typedef std::shared_ptr< ::cppcanvas::Renderer > RendererSharedPtr;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

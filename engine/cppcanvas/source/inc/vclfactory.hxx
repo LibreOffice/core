@@ -19,9 +19,8 @@
 
 #pragma once
 
-#include <cppcanvas/canvas.hxx>
-#include <cppcanvas/renderer.hxx>
-
+#include "canvas.hxx"
+#include "renderer.hxx"
 #include <cppcanvas/cppcanvasdllapi.h>
 
 namespace vcl { class Window; }

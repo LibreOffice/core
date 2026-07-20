@@ -20,7 +20,7 @@
 #pragma once
 
 #include <action.hxx>
-#include <cppcanvas/canvas.hxx>
+#include <canvas.hxx>
 
 
 class VirtualDevice;

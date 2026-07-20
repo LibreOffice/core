@@ -19,29 +19,22 @@
 
 #pragma once
 
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
-#include <optional>
+#include <cppcanvas/cppcanvasdllapi.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <cppcanvas/canvasgraphic.hxx>
-#include <cppcanvas/color.hxx>
-#include <memory>
 
-namespace basegfx
+namespace com::sun::star::rendering
 {
-    class B2DRange;
+class XCanvas;
 }
-
-/* Definition of Renderer interface */
+class GDIMetaFile;
 
 namespace cppcanvas
 {
-
-    class Renderer : public virtual CanvasGraphic
-    {
-    };
-
-    typedef std::shared_ptr< ::cppcanvas::Renderer > RendererSharedPtr;
+// only here so we can do a unit test from drawinglayer/qa/unit/vclmetafileprocessor2d.cxx
+CPPCANVAS_DLLPUBLIC bool testCanvasDraw(const css::uno::Reference<css::rendering::XCanvas>& rCanvas,
+                                        const basegfx::B2DHomMatrix& rTransform1,
+                                        GDIMetaFile& rMetaFile,
+                                        const basegfx::B2DHomMatrix& rTransform2);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

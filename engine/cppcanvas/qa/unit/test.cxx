@@ -19,7 +19,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
-#include <cppcanvas/vclfactory.hxx>
+#include <vclfactory.hxx>
 
 using namespace ::com::sun::star;
 

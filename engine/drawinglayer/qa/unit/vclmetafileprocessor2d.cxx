@@ -20,7 +20,7 @@
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
-#include <cppcanvas/vclfactory.hxx>
+#include <cppcanvas/test.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 
@@ -122,15 +122,13 @@ public:
 
         // Now draw the metafile using canvas and verify that the line is drawn.
         setupCanvas(Size(1920, 1080));
-        cppcanvas::CanvasSharedPtr cppCanvas = cppcanvas::VCLFactory::createCanvas(mCanvas);
+
         // I got these matrices from a breakpoint in drawing the polyline, and walking up
         // the stack to the canvas code.
-        cppCanvas->setTransformation(
-            basegfx::B2DHomMatrix(0.056662828121770453, 0, 0, 0, 0.056640419947506564, 0));
-        cppcanvas::RendererSharedPtr renderer
-            = cppcanvas::VCLFactory::createRenderer(cppCanvas, metafile);
-        renderer->setTransformation(basegfx::B2DHomMatrix(14548, 0, -2, 0, 3350, 3431));
-        CPPUNIT_ASSERT(renderer->draw());
+        CPPUNIT_ASSERT(cppcanvas::testCanvasDraw(
+            mCanvas, basegfx::B2DHomMatrix(0.056662828121770453, 0, 0, 0, 0.056640419947506564, 0),
+            metafile, basegfx::B2DHomMatrix(14548, 0, -2, 0, 3350, 3431)));
+
         exportDevice(u"test-tdf136957"_ustr, mVclDevice);
         Bitmap bitmap = mVclDevice->GetBitmap(Point(), Size(1920, 1080));
         BitmapScopedReadAccess access(bitmap);

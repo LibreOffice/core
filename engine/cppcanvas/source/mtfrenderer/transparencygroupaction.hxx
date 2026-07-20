@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <cppcanvas/canvas.hxx>
+#include <canvas.hxx>
 #include <vcl/gradient.hxx>
 #include <action.hxx>
 

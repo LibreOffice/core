@@ -21,7 +21,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/rendering/ViewState.hpp>
-#include <cppcanvas/canvas.hxx>
+#include <canvas.hxx>
 
 #include <optional>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <cppcanvas/vclfactory.hxx>
+#include <vclfactory.hxx>
 #include <o3tl/any.hxx>
 #include <com/sun/star/rendering/XMtfRenderer.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>

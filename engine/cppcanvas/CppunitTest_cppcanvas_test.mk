@@ -11,6 +11,11 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,cppcanvas_test))
 
+$(eval $(call gb_CppunitTest_set_include,cppcanvas_test,\
+	-I$(SRCDIR)/cppcanvas/source/inc \
+	$$(INCLUDE) \
+))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,cppcanvas_test, \
     cppcanvas/qa/unit/test \
 ))

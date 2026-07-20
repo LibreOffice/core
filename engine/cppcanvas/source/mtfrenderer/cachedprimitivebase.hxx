@@ -23,7 +23,7 @@
 #include <com/sun/star/rendering/XCachedPrimitive.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <cppcanvas/canvas.hxx>
+#include <canvas.hxx>
 
 #include <action.hxx>
 

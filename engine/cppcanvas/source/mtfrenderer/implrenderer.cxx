@@ -23,7 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <cppcanvas/canvas.hxx>
+#include <canvas.hxx>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <cpo/uno/Sequence.hxx>

@@ -13,7 +13,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <basegfx/vector/b2dsize.hxx>
-#include <cppcanvas/canvas.hxx>
+#include <canvas.hxx>
 
 namespace com::sun::star::rendering
 {

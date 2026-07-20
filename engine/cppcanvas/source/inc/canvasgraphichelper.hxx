@@ -22,8 +22,8 @@
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include <cppcanvas/canvasgraphic.hxx>
-#include <cppcanvas/canvas.hxx>
+#include "canvasgraphic.hxx"
+#include "canvas.hxx"
 
 #include <optional>
 

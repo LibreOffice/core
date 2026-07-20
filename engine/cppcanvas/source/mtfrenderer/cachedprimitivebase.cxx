@@ -22,7 +22,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <canvas/canvastools.hxx>
-#include <cppcanvas/canvas.hxx>
+#include <canvas.hxx>
 
 #include "cachedprimitivebase.hxx"
 #include <sal/log.hxx>

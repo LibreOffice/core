@@ -26,8 +26,8 @@
 #include <utility>
 #include <vcl/kernarray.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <cppcanvas/renderer.hxx>
-#include <cppcanvas/canvas.hxx>
+#include "renderer.hxx"
+#include "canvas.hxx"
 
 #include "canvasgraphichelper.hxx"
 #include "action.hxx"

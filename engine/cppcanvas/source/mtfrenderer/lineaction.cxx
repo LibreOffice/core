@@ -29,7 +29,7 @@
 #include <canvas/canvastools.hxx>
 #include <sal/log.hxx>
 
-#include <cppcanvas/canvas.hxx>
+#include <canvas.hxx>
 #include <utility>
 
 #include "mtftools.hxx"

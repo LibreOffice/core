@@ -32,7 +32,7 @@
 
 #include "pointaction.hxx"
 #include <outdevstate.hxx>
-#include <cppcanvas/canvas.hxx>
+#include <canvas.hxx>
 #include "mtftools.hxx"
 
 

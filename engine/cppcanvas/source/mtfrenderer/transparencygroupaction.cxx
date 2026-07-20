@@ -48,7 +48,7 @@
 #include "transparencygroupaction.hxx"
 #include <outdevstate.hxx>
 #include "mtftools.hxx"
-#include <cppcanvas/vclfactory.hxx>
+#include <vclfactory.hxx>
 
 #if OSL_DEBUG_LEVEL > 2
 #include <vcl/canvastools.hxx>
