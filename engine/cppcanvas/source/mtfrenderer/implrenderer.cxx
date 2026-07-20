@@ -2479,35 +2479,6 @@ namespace cppcanvas
         }
 
 
-        namespace
-        {
-            class ActionRenderer
-            {
-            public:
-                explicit ActionRenderer( ::basegfx::B2DHomMatrix aTransformation ) :
-                    maTransformation(std::move( aTransformation )),
-                    mbRet( true )
-                {
-                }
-
-                bool result() const
-                {
-                    return mbRet;
-                }
-
-                void operator()( const ::cppcanvas::Renderer::MtfAction& rAction )
-                {
-                    // ANDing the result. We want to fail if at least
-                    // one action failed.
-                    mbRet &= rAction.mpAction->render( maTransformation );
-                }
-
-            private:
-                ::basegfx::B2DHomMatrix maTransformation;
-                bool                    mbRet;
-            };
-        }
-
         // Public methods
 
 
@@ -2609,12 +2580,17 @@ namespace cppcanvas
         {
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::Renderer::draw()" );
 
-            ::basegfx::B2DHomMatrix aMatrix = ::canvastools::getRenderStateTransform(
+            const ::basegfx::B2DHomMatrix aMatrix = ::canvastools::getRenderStateTransform(
                                                       getRenderState() );
 
             try
             {
-                return std::for_each( maActions.begin(), maActions.end(), ActionRenderer( aMatrix ) ).result();
+                bool bRet = true;
+                for (const MtfAction & rAction : maActions)
+                    // ANDing the result. We want to fail if at least
+                    // one action failed.
+                    bRet &= rAction.mpAction->render( aMatrix );
+                return bRet;
             }
             catch( uno::Exception& )
             {
