@@ -92,4 +92,10 @@ describe(['tagdesktop'], 'Calc keyboard access for the bars', function () {
 		focusRegionWithF6('#formulabar-row', 10);
 		assertTabVisitsFocusables('#formulabar-row');
 	});
+
+	it('F6 then Tab visits every focusable item of the status bar', function () {
+		calcHelper.clickOnFirstCell();
+		focusRegionWithF6('#toolbar-down', 10);
+		assertTabVisitsFocusables('#toolbar-down');
+	});
 });
