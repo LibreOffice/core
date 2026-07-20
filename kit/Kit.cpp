@@ -3902,33 +3902,36 @@ void lokit_main(
 
                 if (!configId.empty())
                 {
-                    // mount the shared autotext over the lo shared autotext's 'common' dir
-                    if (!JailUtil::bind(sharedAutotext, loJailDestAutotextPath)
-                        || !JailUtil::remountReadonly(sharedAutotext, loJailDestAutotextPath))
+                    // Overlay the WOPI host's shared presets onto the engine's
+                    // preset dirs. This is best-effort: a preset the host did not
+                    // configure (empty source - the common case, the host merely
+                    // sets a configId), or one whose target dir the engine does
+                    // not ship (e.g. presnt after --without-templates), is
+                    // skipped. It must never fail the whole jail mount: that
+                    // disables bind-mounting for the entire forkit and pushes
+                    // every document onto the slow copy path.
+                    const std::pair<std::string, std::string> presets[] = {
+                        { sharedAutotext, loJailDestAutotextPath },
+                        { sharedWordbook, loJailDestWordbookPath },
+                        { sharedTemplate, loJailDestImpressTemplatePath },
+                    };
+                    for (const auto& [presetSrc, presetDst] : presets)
                     {
-                        LOG_WRN("Failed to mount [" << sharedAutotext << "] -> ["
-                                                    << loJailDestAutotextPath
-                                                    << "], will link contents");
-                        return false;
-                    }
+                        if (FileUtil::isEmptyDirectory(presetSrc))
+                            continue; // nothing configured for this preset
 
-                    // mount the shared wordbook over the lo shared wordbook
-                    if (!JailUtil::bind(sharedWordbook, loJailDestWordbookPath)
-                        || !JailUtil::remountReadonly(sharedWordbook, loJailDestWordbookPath))
-                    {
-                        LOG_WRN("Failed to mount [" << sharedWordbook << "] -> [" << loJailDestWordbookPath
-                                                    << "], will link contents");
-                        return false;
-                    }
+                        if (!FileUtil::Stat(presetDst).exists())
+                        {
+                            LOG_WRN("Cannot apply shared preset [" << presetSrc
+                                    << "]: target [" << presetDst
+                                    << "] is not provided by the engine.");
+                            continue;
+                        }
 
-                    // mount the shared templates over the lo shared templates' 'common' dir
-                    if (!JailUtil::bind(sharedTemplate, loJailDestImpressTemplatePath) ||
-                        !JailUtil::remountReadonly(sharedTemplate, loJailDestImpressTemplatePath))
-                    {
-                        LOG_WRN("Failed to mount [" << sharedTemplate << "] -> ["
-                                                    << loJailDestImpressTemplatePath
-                                                    << "], will link contents");
-                        return false;
+                        if (!JailUtil::bind(presetSrc, presetDst) ||
+                            !JailUtil::remountReadonly(presetSrc, presetDst))
+                            LOG_WRN("Failed to mount shared preset [" << presetSrc
+                                    << "] -> [" << presetDst << "], skipping.");
                     }
                 }
 
@@ -4030,12 +4033,18 @@ void lokit_main(
 
                 if (!configId.empty())
                 {
-                    linkOrCopy(sharedAutotext, loJailDestAutotextPath + "/", linkablePath,
-                               LinkOrCopyType::All);
-                    linkOrCopy(sharedWordbook, loJailDestWordbookPath + "/", linkablePath,
-                               LinkOrCopyType::All);
-                    linkOrCopy(sharedTemplate, loJailDestImpressTemplatePath + "/", linkablePath,
-                               LinkOrCopyType::All);
+                    // Only copy presets the host actually configured; an empty
+                    // source would just make the overlayfs probe stat a
+                    // not-yet-created target and log spuriously.
+                    if (!FileUtil::isEmptyDirectory(sharedAutotext))
+                        linkOrCopy(sharedAutotext, loJailDestAutotextPath + "/", linkablePath,
+                                   LinkOrCopyType::All);
+                    if (!FileUtil::isEmptyDirectory(sharedWordbook))
+                        linkOrCopy(sharedWordbook, loJailDestWordbookPath + "/", linkablePath,
+                                   LinkOrCopyType::All);
+                    if (!FileUtil::isEmptyDirectory(sharedTemplate))
+                        linkOrCopy(sharedTemplate, loJailDestImpressTemplatePath + "/", linkablePath,
+                                   LinkOrCopyType::All);
                 }
 
 #if CODE_COVERAGE
