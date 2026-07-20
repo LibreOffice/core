@@ -1355,6 +1355,11 @@ $(eval $(call gb_Library_add_cxxflags,skia, \
 endif
 endif
 
+#TODO: Drop this once Clang supports -std=c++29:
+ifneq ($(filter -std=c++29,$(CXXFLAGS_CXX11)),)
+$(eval $(call gb_Library_add_cxxflags,skia,-std=c++2d))
+endif
+
 # Skcms code is used by png writer, which is used by SkiaHelper::dump(). Building
 # this without optimizations would mean having each pixel of saved images be
 # processed by unoptimized code.
