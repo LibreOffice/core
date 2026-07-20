@@ -3447,17 +3447,21 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		return this._map.getScaleZoom(ratio);
 	},
 
+	_writerDynamicZoom: function(containerWidth, documentWidth, bringCommentsIntoView) {
+		const commentSection = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
+		if (bringCommentsIntoView && commentSection)
+			containerWidth -= commentSection.sectionProperties.commentWidth;
+		const ratio = containerWidth / documentWidth;
+		return this._map.getScaleZoom(ratio);
+	},
+
 	_recalcZoom: function(newSize, bringCommentsIntoView, maxZoom) {
 		let _zoom;
-
-		const commentWidth = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).sectionProperties.commentWidth;
 		let documentWidth = app.activeDocument.fileSize.pX;
-		if (this.isWriter() && bringCommentsIntoView) newSize.x -= commentWidth;
 
-		var ratio = newSize.x / documentWidth;
-		_zoom = this._map.getScaleZoom(ratio);
-
-		if (this.isImpress()) {
+		if (this.isWriter()) {
+			_zoom = this._writerDynamicZoom(newSize.x, documentWidth, bringCommentsIntoView);
+		} else if (this.isImpress()) {
 			const documentHeight = app.activeDocument.fileSize.pY;
 			_zoom = this._impressDynamicZoom(newSize.x, newSize.y, documentWidth, documentHeight);
 		}
