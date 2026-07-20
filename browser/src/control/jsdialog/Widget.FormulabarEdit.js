@@ -397,6 +397,8 @@ function _formulabarEditControl(parentContainer, data, builder) {
 	textLayer.setAttribute('aria-multiline', 'true');
 	textLayer.setAttribute('aria-label', _('Formula bar'));
 
+	textLayer.setAttribute('tabindex', data.enabled === false ? '-1' : '0');
+
 	var cursorLayer = window.L.DomUtil.create('div', 'ui-custom-textarea-cursor-layer ' + builder.options.cssClass, wrapper);
 	var handleLayer = window.L.DomUtil.create('div', 'ui-custom-textarea-handle-layer ' + builder.options.cssClass, wrapper);
 
@@ -435,14 +437,17 @@ function _formulabarEditControl(parentContainer, data, builder) {
 	container.enable = function() {
 		window.L.DomUtil.removeClass(container, 'disabled');
 		textLayer.setAttribute('contenteditable', 'true');
+		textLayer.setAttribute('tabindex', '0');
 	};
 	container.disable = function() {
 		window.L.DomUtil.addClass(container, 'disabled');
 		textLayer.setAttribute('contenteditable', 'false');
+		textLayer.setAttribute('tabindex', '-1');
 	};
 	container.setReadOnly = function(readOnly) {
 		container._readOnly = readOnly;
 		textLayer.setAttribute('contenteditable', readOnly ? 'false' : 'true');
+		textLayer.setAttribute('tabindex', readOnly ? '-1' : '0');
 		var cursor = cursorLayer.querySelector('.cursor');
 		if (cursor) cursor.style.display = readOnly ? 'none' : '';
 	};
