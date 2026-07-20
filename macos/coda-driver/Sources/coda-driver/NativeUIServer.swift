@@ -38,6 +38,7 @@ import Network
 final class NativeUIServer: WebDriverHTTPServerBase {
 
     private let ax: AXTree
+    private let targetPid: pid_t
 
     /// Element registry: WebDriver element id -> AXUIElement.
     private var elements: [String: AXUIElement] = [:]
@@ -45,6 +46,7 @@ final class NativeUIServer: WebDriverHTTPServerBase {
 
     init(port: UInt16, targetPid: pid_t) throws {
         self.ax = AXTree(pid: targetPid)
+        self.targetPid = targetPid
         try super.init(port: port, label: "NativeUIServer")
     }
 
@@ -57,6 +59,9 @@ final class NativeUIServer: WebDriverHTTPServerBase {
                 "ready": true,
                 "message": "coda-driver-native",
                 "axTrusted": AXIsProcessTrusted(),
+                // Process ids of the target app and of this driver process.
+                "targetPid": Int(targetPid),
+                "driverPid": Int(ProcessInfo.processInfo.processIdentifier),
             ] as [String: Any])
             return
         }

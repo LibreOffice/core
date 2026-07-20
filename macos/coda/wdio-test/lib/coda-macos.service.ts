@@ -37,6 +37,53 @@ interface CodaMacOSServiceOptions {
 	fixturesDir: string;
 }
 
+/**
+ * One GET with a short timeout.  Resolves to the parsed 'value' object of
+ * a W3C-style JSON body, or null when the endpoint does not answer with
+ * HTTP 200 / valid JSON.
+ */
+function httpGetValue(url: string): Promise<Record<string, unknown> | null> {
+	return new Promise((resolve) => {
+		const req = http.get(url, (res) => {
+			if (res.statusCode !== 200) {
+				resolve(null);
+				res.resume();
+				return;
+			}
+			let buf = '';
+			res.on('data', (chunk) => (buf += chunk));
+			res.on('end', () => {
+				try {
+					const parsed = JSON.parse(buf);
+					resolve(
+						parsed?.value && typeof parsed.value === 'object'
+							? (parsed.value as Record<string, unknown>)
+							: null,
+					);
+				} catch {
+					resolve(null);
+				}
+			});
+		});
+		req.on('error', () => resolve(null));
+		req.setTimeout(1000, () => {
+			req.destroy();
+			resolve(null);
+		});
+	});
+}
+
+function isProcessAlive(pid: number): boolean {
+	try {
+		// Signal 0 performs the permission/existence check without
+		// delivering anything.
+		process.kill(pid, 0);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
 async function waitForHttp(
 	url: string,
 	label: string,
@@ -53,34 +100,10 @@ async function waitForHttp(
 			if (failure) throw new Error(failure);
 		}
 
-		try {
-			const body = await new Promise<string | null>((resolve, reject) => {
-				const req = http.get(url, (res) => {
-					if (res.statusCode !== 200) {
-						resolve(null);
-						res.resume();
-						return;
-					}
-					let buf = '';
-					res.on('data', (chunk) => (buf += chunk));
-					res.on('end', () => resolve(buf));
-				});
-				req.on('error', reject);
-				req.setTimeout(1000, () => req.destroy(new Error('timeout')));
-			});
-			if (body !== null) {
-				console.log(`${label} is ready`);
-				try {
-					const parsed = JSON.parse(body);
-					return parsed?.value && typeof parsed.value === 'object'
-						? (parsed.value as Record<string, unknown>)
-						: null;
-				} catch {
-					return null;
-				}
-			}
-		} catch {
-			// Not ready yet
+		const value = await httpGetValue(url);
+		if (value !== null) {
+			console.log(`${label} is ready`);
+			return value;
 		}
 		await sleep(1000);
 	}
@@ -201,8 +224,92 @@ export class CodaMacOSServiceLauncher {
 		this.#options = options;
 	}
 
+	/**
+	 * Quit the app and make sure both it and the driver are really gone.
+	 *
+	 * Ask nicely first (AppleScript quit; in UI testing mode the app
+	 * discards unsaved changes, so this returns promptly), then verify
+	 * the processes exited using the pids the driver's /status reports,
+	 * and SIGKILL whatever is left.  The driver observes the app's
+	 * termination and exits on its own, so it only ever needs the kill
+	 * when it is itself stuck.
+	 */
+	async #shutdownApp(): Promise<void> {
+		const { nativeUIPort } = this.#options;
+
+		// Grab the pids while the driver still answers.
+		const status = await httpGetValue(
+			`http://localhost:${nativeUIPort}/status`,
+		);
+		const targetPid =
+			typeof status?.targetPid === 'number' ? status.targetPid : null;
+		const driverPid =
+			typeof status?.driverPid === 'number' ? status.driverPid : null;
+
+		try {
+			execSync(
+				'osascript -e \'tell application "Collabora Office" to quit\'',
+				{ timeout: 10000 },
+			);
+		} catch {
+			// App may already be gone, or the quit is stuck; the pid
+			// checks below sort the two cases out.
+		}
+
+		if (targetPid !== null) {
+			for (let i = 0; i < 20 && isProcessAlive(targetPid); i++) {
+				await sleep(500);
+			}
+			if (isProcessAlive(targetPid)) {
+				console.warn(
+					`Collabora Office (pid ${targetPid}) did not quit; killing it`,
+				);
+				try {
+					process.kill(targetPid, 'SIGKILL');
+				} catch {
+					// Exited in the meantime
+				}
+			}
+		} else {
+			// No pid to watch (the driver was already gone); leave the
+			// grace period the quit needs to finish.
+			await sleep(1500);
+		}
+
+		if (driverPid !== null) {
+			for (let i = 0; i < 10 && isProcessAlive(driverPid); i++) {
+				await sleep(500);
+			}
+			if (isProcessAlive(driverPid)) {
+				console.warn(
+					`coda-driver (pid ${driverPid}) did not exit; killing it`,
+				);
+				try {
+					process.kill(driverPid, 'SIGKILL');
+				} catch {
+					// Exited in the meantime
+				}
+			}
+		}
+	}
+
 	async onPrepare(): Promise<void> {
 		const { appPath, driverPath, webDriverPort, nativeUIPort, fixturesDir } = this.#options;
+
+		// A leftover instance from an earlier run still owns the test
+		// ports: a fresh app instance would fail to bind them and the
+		// tests would silently drive the stale instance, old documents
+		// and all.  Shut it down before launching.
+		const stale = await httpGetValue(
+			`http://localhost:${webDriverPort}/status`,
+		);
+		if (stale !== null) {
+			console.warn(
+				'A Collabora Office test instance from a previous run is ' +
+					'still running; shutting it down first...',
+			);
+			await this.#shutdownApp();
+		}
 
 		// Copy fixtures to a temp directory; tests open files from there
 		// via the JS bridge or the native file dialog.
@@ -274,21 +381,7 @@ export class CodaMacOSServiceLauncher {
 	}
 
 	async onComplete(): Promise<void> {
-		// Quit the main app.  The driver observes app termination via
-		// NSWorkspace.didTerminateApplicationNotification and exits.
-		try {
-			execSync(
-				'osascript -e \'tell application "Collabora Office" to quit\'',
-				{ timeout: 5000 },
-			);
-		} catch {
-			// App may already be gone
-		}
-
-		// Give the driver time to notice & exit.  We do not have its
-		// pid (launched via `open`), but a quit AppleScript directed
-		// at coda-driver would also work if needed.
-		await sleep(1500);
+		await this.#shutdownApp();
 
 		if (this.#stopTail) {
 			this.#stopTail();
