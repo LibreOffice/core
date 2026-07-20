@@ -201,8 +201,8 @@ class OutlineTypeMgr final : public NBOTypeMgrBase
         virtual bool IsCustomized(sal_uInt16 nIndex) override;
         static OutlineTypeMgr& GetInstance();
     private:
-        OutlineSettings_Impl*       pOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
-        OutlineSettings_Impl*       pDefaultOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
+        OutlineSettings_Impl*       m_pOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
+        OutlineSettings_Impl*       m_pDefaultOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
 };
 }
 #endif

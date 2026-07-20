@@ -574,7 +574,7 @@ OutlineTypeMgr::OutlineTypeMgr()
     Init();
     for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ )
     {
-        pDefaultOutlineSettingsArrs[nItem] = pOutlineSettingsArrs[nItem];
+        m_pDefaultOutlineSettingsArrs[nItem] = m_pOutlineSettingsArrs[nItem];
     }
     //Initial the first time to store the default value. Then do it again for customized value
     Init();
@@ -605,8 +605,8 @@ void OutlineTypeMgr::Init()
         auto nSize = std::min<sal_Int32>(aOutlineAccess.getLength(), DEFAULT_NUM_VALUSET_COUNT);
         for(sal_Int32 nItem = 0; nItem < nSize; nItem++ )
         {
-            pOutlineSettingsArrs[ nItem ] = new OutlineSettings_Impl;
-            OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[ nItem ];
+            m_pOutlineSettingsArrs[ nItem ] = new OutlineSettings_Impl;
+            OutlineSettings_Impl* pItemArr = m_pOutlineSettingsArrs[ nItem ];
             OString id = OString::Concat(RID_SVXSTR_OUTLINENUM_DESCRIPTION_0.getId()) + OString::number(nItem);
             pItemArr->sDescription = SvxResId( TranslateId(RID_SVXSTR_OUTLINENUM_DESCRIPTION_0.mpContext, id.getStr()) );
             pItemArr->pNumSettingsArr = new NumSettingsArr_Impl;
@@ -640,11 +640,11 @@ void OutlineTypeMgr::Init()
 
 sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*mLevel*/,sal_uInt16 nFromIndex)
 {
-    sal_uInt16 const nLength = SAL_N_ELEMENTS(pOutlineSettingsArrs);
+    sal_uInt16 const nLength = SAL_N_ELEMENTS(m_pOutlineSettingsArrs);
     for(sal_uInt16 iDex = nFromIndex; iDex < nLength; iDex++)
     {
         bool bNotMatch = false;
-        OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[iDex];
+        OutlineSettings_Impl* pItemArr = m_pOutlineSettingsArrs[iDex];
         sal_uInt16 nCount = pItemArr ? pItemArr->pNumSettingsArr->size() : 0;
         for (sal_uInt16 iLevel=0;iLevel < nCount;iLevel++)
         {
@@ -722,11 +722,11 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
 
 void OutlineTypeMgr::ReplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
-    sal_uInt16 const nLength = SAL_N_ELEMENTS(pOutlineSettingsArrs);
+    sal_uInt16 const nLength = SAL_N_ELEMENTS(m_pOutlineSettingsArrs);
     if ( nIndex >= nLength )
         return;
 
-    OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[nIndex];
+    OutlineSettings_Impl* pItemArr = m_pOutlineSettingsArrs[nIndex];
     sal_uInt16 nCount = pItemArr->pNumSettingsArr->size();
     for (sal_uInt16 iLevel=0;iLevel < nCount;iLevel++)
     {
@@ -787,8 +787,8 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
 
     const FontList* pList = nullptr;
 
-    OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[nIndex];
-    if (isDefault) pItemArr=pDefaultOutlineSettingsArrs[nIndex];
+    OutlineSettings_Impl* pItemArr = m_pOutlineSettingsArrs[nIndex];
+    if (isDefault) pItemArr=m_pDefaultOutlineSettingsArrs[nIndex];
 
     NumSettingsArr_Impl *pNumSettingsArr=pItemArr->pNumSettingsArr;
 
@@ -894,12 +894,12 @@ OUString OutlineTypeMgr::GetDescription(sal_uInt16 nIndex, bool isDefault)
 {
     OUString sRet;
 
-    if ( nIndex >= SAL_N_ELEMENTS(pOutlineSettingsArrs) )
+    if ( nIndex >= SAL_N_ELEMENTS(m_pOutlineSettingsArrs) )
         return sRet;
     else
     {
-        OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[nIndex];
-        if (isDefault) pItemArr = pDefaultOutlineSettingsArrs[nIndex];
+        OutlineSettings_Impl* pItemArr = m_pOutlineSettingsArrs[nIndex];
+        if (isDefault) pItemArr = m_pDefaultOutlineSettingsArrs[nIndex];
         if ( pItemArr )
         {
             sRet = pItemArr->sDescription;
@@ -912,11 +912,11 @@ bool OutlineTypeMgr::IsCustomized(sal_uInt16 nIndex)
 {
     bool bRet = false;
 
-    if ( nIndex >= SAL_N_ELEMENTS(pOutlineSettingsArrs) )
+    if ( nIndex >= SAL_N_ELEMENTS(m_pOutlineSettingsArrs) )
         return bRet;
     else
     {
-        OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[nIndex];
+        OutlineSettings_Impl* pItemArr = m_pOutlineSettingsArrs[nIndex];
         if ( pItemArr )
         {
             bRet = pItemArr->bIsCustomized;
