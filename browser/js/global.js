@@ -314,7 +314,7 @@ class InitializerBase {
 			document.getElementById('content-keeper').remove();
 		}, false);
 
-		let productName = document.getElementById("init-product-branding-name").value;
+		let productName = document.getElementById("init-product-branding-name") ? document.getElementById("init-product-branding-name").value : "";
 		if (typeof productName === 'string' && productName.length) {
 			window.brandProductName = productName;
 		}
@@ -322,7 +322,7 @@ class InitializerBase {
 		if (typeof productURL === 'string' && productURL.length) {
 			window.brandProductURL = productURL;
 		}
-		let logoURL = document.getElementById("init-logo-url").value;
+		let logoURL = document.getElementById("init-logo-url") ? document.getElementById("init-logo-url").value : "";
 		if (typeof logoURL === 'string' && logoURL.length) {
 			window.logoURL= logoURL;
 		}

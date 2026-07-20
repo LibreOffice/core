@@ -73,11 +73,10 @@ m4_ifelse(MOBILEAPP, [true],
   <input type="hidden" id="init-app-type" value="browser" />
   <input type="hidden" id="init-css-vars" value="<!--%CSS_VARIABLES%-->" />
   <input type="hidden" id="init-product-branding-url" value="%PRODUCT_BRANDING_URL%" />
+  <input type="hidden" id="init-product-branding-name" value="%PRODUCT_BRANDING_NAME%" />
+  <input type="hidden" id="init-logo-url" value="%LOGO_URL%" />
 ]
 )
-
-<input type="hidden" id="init-product-branding-name" value="%PRODUCT_BRANDING_NAME%" />
-<input type="hidden" id="init-logo-url" value="%LOGO_URL%" />
 
 <input type="hidden" id="init-uri-prefix" value="m4_ifelse(MOBILEAPP, [], [%SERVICE_ROOT%/browser/%VERSION%/])" />
 <input type="hidden" id="init-branding-name" value="%BRANDING_THEME%" />
