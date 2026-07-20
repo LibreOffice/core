@@ -1090,6 +1090,7 @@ class Socket {
 				tileHeightTwips: tileHeightTwips / app.dpiScale,
 				docType: command.type,
 				viewId: command.viewid,
+				partHasComments: command.partHasComments,
 			};
 			if (command.type === 'text')
 				docLayer = new window.L.WriterTileLayer(options);

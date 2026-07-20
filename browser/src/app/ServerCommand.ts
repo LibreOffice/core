@@ -58,6 +58,7 @@ class ServerCommand {
 	public part?: number;
 	public parts?: number;
 	public selectedPart?: number;
+	public partHasComments?: boolean;
 
 	constructor(msg: string, map: MapZoomInterface) {
 		this.parse(msg, map);
