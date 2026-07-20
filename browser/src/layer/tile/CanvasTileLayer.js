@@ -3427,35 +3427,39 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		return 10; /* failsafe 100% */
 	},
 
+	/* assume that this is the range of diagonal sizes we are going to get
+	 * for the window and find where the current window size lies in these,
+	 * clamping it between [0,1]. then find appropriate margin between 4-9%
+	 * based on the window size factor. */
+	_impressDynamicZoom: function(containerWidth, containerHeight, documentWidth, documentHeight) {
+		const MAX_DIAGONAL = 2200;
+		const MIN_DIAGONAL = 1000;
+		const diagonal = Math.sqrt(window.innerWidth * window.innerWidth + window.innerHeight + window.innerHeight);
+		const factor = clamp((diagonal - MIN_DIAGONAL) / (MAX_DIAGONAL - MIN_DIAGONAL), 0, 1);
+
+		const percentMargin = 0.04 + factor * (0.09 - 0.04);
+		const availW = containerWidth * (1 - percentMargin);
+		const availH = containerHeight * (1 - percentMargin);
+
+		const xRatio = availW / documentWidth;
+		const yRatio = availH / documentHeight;
+		const ratio = Math.min(xRatio, yRatio);
+		return this._map.getScaleZoom(ratio);
+	},
+
 	_recalcZoom: function(newSize, bringCommentsIntoView, maxZoom) {
 		let _zoom;
 
 		const commentWidth = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).sectionProperties.commentWidth;
 		let documentWidth = app.activeDocument.fileSize.pX;
-		let documentHeight = app.activeDocument.fileSize.pY;
 		if (this.isWriter() && bringCommentsIntoView) newSize.x -= commentWidth;
 
 		var ratio = newSize.x / documentWidth;
 		_zoom = this._map.getScaleZoom(ratio);
 
-		/* assume that this is the range of diagonal sizes we are going to get
-		 * for the window and find where the current window size lies in these,
-		 * clamping it between [0,1]. then find appropriate margin between 4-9%
-		 * based on the window size factor. */
 		if (this.isImpress()) {
-			const MAX_DIAGONAL = 2200;
-			const MIN_DIAGONAL = 1000;
-			const diagonal = Math.sqrt(window.innerWidth * window.innerWidth + window.innerHeight + window.innerHeight);
-			const factor = clamp((diagonal - MIN_DIAGONAL) / (MAX_DIAGONAL - MIN_DIAGONAL), 0, 1);
-
-			const percentMargin = 0.04 + factor * (0.09 - 0.04);
-			const availW = newSize.x * (1 - percentMargin);
-			const availH = newSize.y * (1 - percentMargin);
-
-			const xRatio = availW / documentWidth;
-			const yRatio = availH / documentHeight;
-			ratio = Math.min(xRatio, yRatio);
-			_zoom = this._map.getScaleZoom(ratio);
+			const documentHeight = app.activeDocument.fileSize.pY;
+			_zoom = this._impressDynamicZoom(newSize.x, newSize.y, documentWidth, documentHeight);
 		}
 
 		if (maxZoom) _zoom = Math.min(maxZoom, Math.max(0.1, _zoom));
