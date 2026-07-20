@@ -239,7 +239,7 @@ public:
 };
 
 template <typename T>
-static bool getRawConfig(const Poco::Util::AbstractConfiguration& config, const std::string& name,
+bool getRawConfig(const Poco::Util::AbstractConfiguration& config, const std::string& name,
                          T& value)
 {
     try
@@ -255,7 +255,7 @@ static bool getRawConfig(const Poco::Util::AbstractConfiguration& config, const 
 }
 
 template <typename T>
-static T getConfigValue(const Poco::Util::AbstractConfiguration& config, const std::string& name,
+T getConfigValue(const Poco::Util::AbstractConfiguration& config, const std::string& name,
                         T def)
 {
     T value = def;
@@ -294,7 +294,7 @@ static std::string getPathFromConfig(const Poco::Util::AbstractConfiguration& co
 /// of the specified application configuration,
 /// or the default, if one doesn't exist.
 template <typename T>
-static T getConfigValue(const std::string& name, T def)
+T getConfigValue(const std::string& name, T def)
     requires(std::is_integral_v<T> || std::is_floating_point_v<T> || std::is_same_v<T, std::string>)
 {
     if constexpr (Util::isFuzzing())
@@ -361,7 +361,7 @@ inline T getConfigValue(const std::string& name, const T def, const T min = T(0)
 
 /// Returns the value of the specified application configuration,
 /// or the default, if one doesn't exist.
-template <typename T> static T getConfigValueNonZero(const std::string& name, T def)
+template <typename T> T getConfigValueNonZero(const std::string& name, T def)
 {
     static_assert(std::is_integral_v<T>, "Meaningless on non-integral types");
 
