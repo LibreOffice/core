@@ -1789,7 +1789,6 @@ cppcanvas/source/uno/uno_mtfrenderer.cxx
 cppcanvas/source/wrapper/implbitmap.cxx
 cppcanvas/source/wrapper/implbitmap.hxx
 cppcanvas/source/wrapper/implcanvas.cxx
-cppcanvas/source/wrapper/implcanvas.hxx
 cppcanvas/source/wrapper/implcustomsprite.cxx
 cppcanvas/source/wrapper/implcustomsprite.hxx
 cppcanvas/source/wrapper/implpolypolygon.cxx

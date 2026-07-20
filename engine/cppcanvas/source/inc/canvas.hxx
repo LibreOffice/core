@@ -20,18 +20,20 @@
 #pragma once
 
 #include <sal/types.h>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/rendering/ViewState.hpp>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <memory>
+#include <optional>
 
 namespace basegfx
 {
     class B2DHomMatrix;
-    class B2DPolyPolygon;
 }
 
 namespace com::sun::star::rendering
 {
     class  XCanvas;
-    struct ViewState;
 }
 
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
@@ -40,13 +42,6 @@ namespace com::sun::star::uno { template <class interface_type> class Reference;
 
 namespace cppcanvas
 {
-    class Canvas;
-
-    // forward declaration, since cloneCanvas() also references Canvas
-    typedef std::shared_ptr< Canvas > CanvasSharedPtr;
-
-    /** Canvas interface
-     */
     class Canvas
     {
     public:
@@ -60,23 +55,26 @@ namespace cppcanvas
          */
         static constexpr auto ANTIALIASING_EXTRA_SIZE=2;
 
-        Canvas() = default;
+        explicit Canvas( css::uno::Reference< css::rendering::XCanvas > xCanvas );
+        ~Canvas();
+
         Canvas(Canvas const &) = default;
         Canvas(Canvas &&) = default;
-        Canvas & operator =(Canvas const &) = default;
-        Canvas & operator =(Canvas &&) = default;
+        Canvas & operator =(Canvas const &) = delete; // due to const mxCanvas
+        Canvas & operator =(Canvas &&) = delete; // due to const mxCanvas
 
-        virtual ~Canvas() {}
+        void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
 
-        virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) = 0;
+        css::uno::Reference< css::rendering::XCanvas > getUNOCanvas() const { return mxCanvas; }
 
-        // this should be considered private. if RTTI gets enabled
-        // someday, remove that to a separate interface
-        virtual css::uno::Reference<
-            css::rendering::XCanvas >           getUNOCanvas() const = 0;
-        virtual css::rendering::ViewState       getViewState() const = 0;
+        css::rendering::ViewState        getViewState() const { return maViewState; }
+
+    private:
+        mutable css::rendering::ViewState                    maViewState;
+        const css::uno::Reference< css::rendering::XCanvas > mxCanvas;
     };
 
+    typedef std::shared_ptr< Canvas > CanvasSharedPtr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

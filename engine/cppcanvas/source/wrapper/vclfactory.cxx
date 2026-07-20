@@ -24,7 +24,7 @@
 
 #include <vclfactory.hxx>
 
-#include "implcanvas.hxx"
+#include <canvas.hxx>
 #include <renderer.hxx>
 #include <cppcanvas/test.hxx>
 
@@ -34,12 +34,12 @@ namespace cppcanvas
 {
     CanvasSharedPtr VCLFactory::createCanvas( const uno::Reference< rendering::XCanvas >& xCanvas )
     {
-        return std::make_shared<ImplCanvas>( xCanvas );
+        return std::make_shared<Canvas>( xCanvas );
     }
 
     CanvasSharedPtr VCLFactory::createBitmapCanvas( const uno::Reference< rendering::XBitmapCanvas >& xCanvas )
     {
-        return std::make_shared<ImplCanvas>( uno::Reference< rendering::XCanvas >(xCanvas) );
+        return std::make_shared<Canvas>( uno::Reference< rendering::XCanvas >(xCanvas) );
     }
 
     RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,

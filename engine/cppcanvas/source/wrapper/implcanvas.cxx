@@ -28,7 +28,7 @@
 #include <canvas/canvastools.hxx>
 #include <utility>
 
-#include "implcanvas.hxx"
+#include <canvas.hxx>
 
 
 using namespace ::com::sun::star;
@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 namespace cppcanvas
 {
 
-        ImplCanvas::ImplCanvas( uno::Reference< rendering::XCanvas > xCanvas ) :
+        Canvas::Canvas( uno::Reference< rendering::XCanvas > xCanvas ) :
             mxCanvas(std::move( xCanvas ))
         {
             OSL_ENSURE( mxCanvas.is(), "Canvas::Canvas() invalid XCanvas" );
@@ -44,25 +44,13 @@ namespace cppcanvas
             ::canvastools::initViewState( maViewState );
         }
 
-        ImplCanvas::~ImplCanvas()
+        Canvas::~Canvas()
         {
         }
 
-        void ImplCanvas::setTransformation( const ::basegfx::B2DHomMatrix& rMatrix )
+        void Canvas::setTransformation( const ::basegfx::B2DHomMatrix& rMatrix )
         {
             ::canvastools::setViewStateTransform( maViewState, rMatrix );
-        }
-
-        uno::Reference< rendering::XCanvas > ImplCanvas::getUNOCanvas() const
-        {
-            OSL_ENSURE( mxCanvas.is(), "ImplCanvas::getUNOCanvas(): Invalid XCanvas" );
-
-            return mxCanvas;
-        }
-
-        rendering::ViewState ImplCanvas::getViewState() const
-        {
-            return maViewState;
         }
 
 }
