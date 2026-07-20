@@ -1765,7 +1765,6 @@ cppcanvas/source/inc/canvas.hxx
 cppcanvas/source/inc/canvasgraphic.hxx
 cppcanvas/source/inc/canvasgraphichelper.hxx
 cppcanvas/source/inc/color.hxx
-cppcanvas/source/inc/implrenderer.hxx
 cppcanvas/source/inc/outdevstate.hxx
 cppcanvas/source/inc/renderer.hxx
 cppcanvas/source/inc/tools.hxx
@@ -10132,6 +10131,7 @@ svx/source/inc/gridcell.hxx
 svx/source/inc/gridcols.hxx
 svx/source/inc/sdbdatacolumn.hxx
 svx/source/inc/sqlparserclient.hxx
+svx/source/inc/svdobjplusdata.hxx
 svx/source/inc/svdoutlinercache.hxx
 svx/source/inc/svxpixelctlaccessiblecontext.hxx
 svx/source/inc/svxrectctaccessiblecontext.hxx
@@ -10352,6 +10352,7 @@ svx/source/svdraw/svdmrkv.cxx
 svx/source/svdraw/svdmrkv1.cxx
 svx/source/svdraw/svdoashp.cxx
 svx/source/svdraw/svdobj.cxx
+svx/source/svdraw/svdobjplusdata.cxx
 svx/source/svdraw/svdobjuserdatalist.cxx
 svx/source/svdraw/svdocapt.cxx
 svx/source/svdraw/svdocirc.cxx

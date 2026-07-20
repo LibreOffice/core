@@ -56,7 +56,7 @@
 #include <vcl/BitmapPalette.hxx>
 #include <tools/poly.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <implrenderer.hxx>
+#include <renderer.hxx>
 #include <tools.hxx>
 #include <outdevstate.hxx>
 #include <action.hxx>
@@ -363,7 +363,7 @@ namespace cppcanvas
             }
         }
 
-        bool ImplRenderer::createFillAndStroke( const ::basegfx::B2DPolyPolygon& rPolyPoly,
+        bool Renderer::createFillAndStroke( const ::basegfx::B2DPolyPolygon& rPolyPoly,
                                                 const ActionFactoryParameters&   rParms )
         {
             const OutDevState& rState( rParms.mrStates.getState() );
@@ -389,19 +389,19 @@ namespace cppcanvas
             return true;
         }
 
-        bool ImplRenderer::createFillAndStroke( const ::basegfx::B2DPolygon&   rPoly,
+        bool Renderer::createFillAndStroke( const ::basegfx::B2DPolygon&   rPoly,
                                                 const ActionFactoryParameters& rParms )
         {
             return createFillAndStroke( ::basegfx::B2DPolyPolygon( rPoly ),
                                         rParms );
         }
 
-        void ImplRenderer::skipContent( GDIMetaFile& rMtf,
+        void Renderer::skipContent( GDIMetaFile& rMtf,
                                         const char*  pCommentString,
                                         sal_Int32&   io_rCurrActionIndex )
         {
             ENSURE_OR_THROW( pCommentString,
-                              "ImplRenderer::skipContent(): NULL string given" );
+                              "Renderer::skipContent(): NULL string given" );
 
             MetaAction* pCurrAct;
             while( (pCurrAct=rMtf.NextAction()) != nullptr )
@@ -421,12 +421,12 @@ namespace cppcanvas
             // EOF
         }
 
-        bool ImplRenderer::isActionContained( GDIMetaFile&   rMtf,
+        bool Renderer::isActionContained( GDIMetaFile&   rMtf,
                                               const char*    pCommentString,
                                               MetaActionType nType )
         {
             ENSURE_OR_THROW( pCommentString,
-                              "ImplRenderer::isActionContained(): NULL string given" );
+                              "Renderer::isActionContained(): NULL string given" );
 
             bool bRet( false );
 
@@ -472,7 +472,7 @@ namespace cppcanvas
             return bRet;
         }
 
-        void ImplRenderer::createGradientAction( const ::tools::PolyPolygon&    rPoly,
+        void Renderer::createGradientAction( const ::tools::PolyPolygon&    rPoly,
                                                  const ::Gradient&              rGradient,
                                                  const ActionFactoryParameters& rParms,
                                                  bool                           bIsPolygonRectangle,
@@ -648,7 +648,7 @@ namespace cppcanvas
 
                         default:
                             ENSURE_OR_THROW( false,
-                                             "ImplRenderer::createGradientAction(): Unexpected gradient type" );
+                                             "Renderer::createGradientAction(): Unexpected gradient type" );
                             break;
                     }
 
@@ -712,7 +712,7 @@ namespace cppcanvas
             rParms.mrStates.popState();
         }
 
-        uno::Reference< rendering::XCanvasFont > ImplRenderer::createFont( double&                        o_rFontRotation,
+        uno::Reference< rendering::XCanvasFont > Renderer::createFont( double&                        o_rFontRotation,
                                                                            const vcl::Font&               rFont,
                                                                            const ActionFactoryParameters& rParms )
         {
@@ -819,7 +819,7 @@ namespace cppcanvas
         }
 
         // create text effects such as shadow/relief/embossed
-        void ImplRenderer::createTextAction( const ::Point&                 rStartPoint,
+        void Renderer::createTextAction( const ::Point&                 rStartPoint,
                                              const OUString&                rString,
                                              int                            nIndex,
                                              int                            nLength,
@@ -829,7 +829,7 @@ namespace cppcanvas
                                              bool                           bSubsettableActions )
         {
             ENSURE_OR_THROW( nIndex >= 0 && nLength <= rString.getLength() + nIndex,
-                              "ImplRenderer::createTextWithEffectsAction(): Invalid text index" );
+                              "Renderer::createTextWithEffectsAction(): Invalid text index" );
 
             if( !nLength )
                 return; // zero-length text, no visible output
@@ -1000,7 +1000,7 @@ namespace cppcanvas
             rParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
         }
 
-        void ImplRenderer::updateClipping( const ::basegfx::B2DPolyPolygon& rClipPoly,
+        void Renderer::updateClipping( const ::basegfx::B2DPolyPolygon& rClipPoly,
                                            const ActionFactoryParameters&   rParms,
                                            bool                             bIntersect )
         {
@@ -1010,7 +1010,7 @@ namespace cppcanvas
             const bool bEmptyClipPoly( rState.clip.count() == 0 );
 
             ENSURE_OR_THROW( bEmptyClipPoly || bEmptyClipRect,
-                              "ImplRenderer::updateClipping(): Clip rect and polygon are both set!" );
+                              "Renderer::updateClipping(): Clip rect and polygon are both set!" );
 
             if( !bIntersect ||
                 (bEmptyClipRect && bEmptyClipPoly) )
@@ -1075,7 +1075,7 @@ namespace cppcanvas
             }
         }
 
-        void ImplRenderer::updateClipping( const ::tools::Rectangle&             rClipRect,
+        void Renderer::updateClipping( const ::tools::Rectangle&             rClipRect,
                                            const ActionFactoryParameters& rParms,
                                            bool                           bIntersect )
         {
@@ -1085,7 +1085,7 @@ namespace cppcanvas
             const bool bEmptyClipPoly( rState.clip.count() == 0 );
 
             ENSURE_OR_THROW( bEmptyClipPoly || bEmptyClipRect,
-                              "ImplRenderer::updateClipping(): Clip rect and polygon are both set!" );
+                              "Renderer::updateClipping(): Clip rect and polygon are both set!" );
 
             if( !bIntersect ||
                 (bEmptyClipRect && bEmptyClipPoly) )
@@ -1149,7 +1149,7 @@ namespace cppcanvas
             }
         }
 
-        void ImplRenderer::createActions( GDIMetaFile&                   rMtf,
+        void Renderer::createActions( GDIMetaFile&                   rMtf,
                                           const ActionFactoryParameters& rFactoryParms,
                                           bool                           bSubsettableActions )
         {
@@ -1242,7 +1242,7 @@ namespace cppcanvas
                         {
                             if( !pClipAction->GetRegion().HasPolyPolygonOrB2DPolyPolygon() )
                             {
-                                SAL_INFO( "cppcanvas.emf", "ImplRenderer::createActions(): non-polygonal clip "
+                                SAL_INFO( "cppcanvas.emf", "Renderer::createActions(): non-polygonal clip "
                                                "region encountered, falling back to bounding box!" );
 
                                 // #121806# explicitly kept integer
@@ -1298,7 +1298,7 @@ namespace cppcanvas
 
                         if( !pClipAction->GetRegion().HasPolyPolygonOrB2DPolyPolygon() )
                         {
-                            SAL_INFO( "cppcanvas.emf", "ImplRenderer::createActions(): non-polygonal clip "
+                            SAL_INFO( "cppcanvas.emf", "Renderer::createActions(): non-polygonal clip "
                                            "region encountered, falling back to bounding box!" );
 
                             // #121806# explicitly kept integer
@@ -2495,7 +2495,7 @@ namespace cppcanvas
                     return mbRet;
                 }
 
-                void operator()( const ::cppcanvas::ImplRenderer::MtfAction& rAction )
+                void operator()( const ::cppcanvas::Renderer::MtfAction& rAction )
                 {
                     // ANDing the result. We want to fail if at least
                     // one action failed.
@@ -2511,7 +2511,7 @@ namespace cppcanvas
         // Public methods
 
 
-        ImplRenderer::ImplRenderer( const CanvasSharedPtr&  rCanvas,
+        Renderer::Renderer( const CanvasSharedPtr&  rCanvas,
                                     const GDIMetaFile&      rMtf )
             : CanvasGraphicHelper(rCanvas)
             , nFrameLeft(0)
@@ -2523,12 +2523,12 @@ namespace cppcanvas
             , nMmX(0)
             , nMmY(0)
         {
-            SAL_INFO( "cppcanvas.emf", "::cppcanvas::ImplRenderer::ImplRenderer(mtf)" );
+            SAL_INFO( "cppcanvas.emf", "::cppcanvas::Renderer::Renderer(mtf)" );
 
             OSL_ENSURE( rCanvas && rCanvas->getUNOCanvas().is(),
-                        "ImplRenderer::ImplRenderer(): Invalid canvas" );
+                        "Renderer::Renderer(): Invalid canvas" );
             OSL_ENSURE( rCanvas->getUNOCanvas()->getDevice().is(),
-                        "ImplRenderer::ImplRenderer(): Invalid graphic device" );
+                        "Renderer::Renderer(): Invalid graphic device" );
 
             // make sure canvas and graphic device are valid; action
             // creation don't check that every time
@@ -2601,13 +2601,13 @@ namespace cppcanvas
                             );
         }
 
-        ImplRenderer::~ImplRenderer()
+        Renderer::~Renderer()
         {
         }
 
-        bool ImplRenderer::draw() const
+        bool Renderer::draw() const
         {
-            SAL_INFO( "cppcanvas.emf", "::cppcanvas::ImplRenderer::draw()" );
+            SAL_INFO( "cppcanvas.emf", "::cppcanvas::Renderer::draw()" );
 
             ::basegfx::B2DHomMatrix aMatrix = ::canvastools::getRenderStateTransform(
                                                       getRenderState() );

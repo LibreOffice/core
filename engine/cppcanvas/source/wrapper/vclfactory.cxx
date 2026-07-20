@@ -25,7 +25,7 @@
 #include <vclfactory.hxx>
 
 #include "implcanvas.hxx"
-#include <implrenderer.hxx>
+#include <renderer.hxx>
 #include <cppcanvas/test.hxx>
 
 using namespace ::com::sun::star;
@@ -45,7 +45,7 @@ namespace cppcanvas
     RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,
                                                   const ::GDIMetaFile&          rMtf )
     {
-        return std::make_shared<ImplRenderer>( rCanvas, rMtf );
+        return std::make_shared<Renderer>( rCanvas, rMtf );
     }
 
     // only here so we can do a unit test from drawinglayer/qa/unit/vclmetafileprocessor2d.cxx

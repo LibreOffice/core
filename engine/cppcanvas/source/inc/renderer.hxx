@@ -19,29 +19,217 @@
 
 #pragma once
 
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
-#include <optional>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include "canvasgraphic.hxx"
-#include "color.hxx"
-#include <memory>
+#include <sal/config.h>
 
-namespace basegfx
-{
-    class B2DRange;
+#include <sal/types.h>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <tools/stream.hxx>
+#include <utility>
+#include <vcl/kernarray.hxx>
+#include <vcl/metaactiontypes.hxx>
+#include "renderer.hxx"
+#include "canvas.hxx"
+
+#include "canvasgraphic.hxx"
+#include "canvasgraphichelper.hxx"
+#include "action.hxx"
+#include "color.hxx"
+#include "outdevstate.hxx"
+
+#include <osl/diagnose.h>
+
+#include <memory>
+#include <optional>
+#include <span>
+#include <vector>
+
+
+class GDIMetaFile;
+class VirtualDevice;
+class Gradient;
+namespace tools { class Rectangle; }
+namespace vcl { class Font; }
+namespace tools { class PolyPolygon; }
+class Point;
+
+namespace basegfx {
+    class B2DPolyPolygon;
+    class B2DPolygon;
 }
 
-/* Definition of Renderer interface */
-
 namespace cppcanvas
-{
-
-    class Renderer : public virtual CanvasGraphic
     {
-    };
+        struct ActionFactoryParameters;
 
-    typedef std::shared_ptr< ::cppcanvas::Renderer > RendererSharedPtr;
+        // state stack of OutputDevice, to correctly handle
+        // push/pop actions
+        class VectorOfOutDevStates
+        {
+        public:
+            OutDevState& getState();
+            const OutDevState& getState() const;
+            void pushState(vcl::PushFlags nFlags);
+            void popState();
+            void clearStateStack();
+        private:
+            std::vector< OutDevState > m_aStates;
+        };
+
+        // EMF+
+        // Transformation matrix (used for Affine Transformation)
+        //      [ eM11, eM12, eDx ]
+        //      [ eM21, eM22, eDy ]
+        //      [ 0,    0,    1   ]
+        // that consists of a linear map (eM11, eM12, eM21, eM22)
+        // More info: https://en.wikipedia.org/wiki/Linear_map
+        // followed by a translation (eDx, eDy)
+
+        struct XForm
+        {
+            float   eM11; // M1,1 value in the matrix. Increases or decreases the size of the pixels horizontally.
+            float   eM12; // M1,2 value in the matrix. This effectively angles the X axis up or down.
+            float   eM21; // M2,1 value in the matrix. This effectively angles the Y axis left or right.
+            float   eM22; // M2,2 value in the matrix. Increases or decreases the size of the pixels vertically.
+            float   eDx;  // Delta x (Dx) value in the matrix. Moves the whole coordinate system horizontally.
+            float   eDy;  // Delta y (Dy) value in the matrix. Moves the whole coordinate system vertically.
+            XForm()
+            {
+                SetIdentity ();
+            }
+
+            void SetIdentity ()
+            {
+                eM11 =  eM22 = 1.0f;
+                eDx = eDy = eM12 = eM21 = 0.0f;
+            }
+
+            friend SvStream& ReadXForm( SvStream& rIn, XForm& rXForm )
+            {
+                if ( sizeof( float ) != 4 )
+                {
+                    OSL_FAIL( "EnhWMFReader::sizeof( float ) != 4" );
+                    rXForm = XForm();
+                }
+                else
+                {
+                    rIn.ReadFloat( rXForm.eM11 ).ReadFloat( rXForm.eM12 ).ReadFloat( rXForm.eM21 ).ReadFloat( rXForm.eM22 )
+                       .ReadFloat( rXForm.eDx ).ReadFloat( rXForm.eDy );
+                }
+                return rIn;
+            }
+        };
+
+        // EMF+
+
+        class Renderer : public virtual CanvasGraphicHelper
+        {
+        public:
+            Renderer( const CanvasSharedPtr&    rCanvas,
+                          const GDIMetaFile&        rMtf );
+
+            virtual ~Renderer() override;
+
+            virtual bool                draw() const override;
+
+
+            // element of the Renderer's action vector. Need to be
+            // public, since some functors need it, too.
+            struct MtfAction
+            {
+                MtfAction( std::shared_ptr<Action>  xAction ) :
+                    mpAction(std::move( xAction ))
+                {
+                }
+
+                std::shared_ptr<Action> mpAction;
+            };
+
+            // prefetched and prepared canvas actions
+            // (externally not visible)
+            typedef std::vector< MtfAction >      ActionVector;
+
+        private:
+            Renderer(const Renderer&) = delete;
+            Renderer& operator=( const Renderer& ) = delete;
+
+            static void updateClipping( const ::basegfx::B2DPolyPolygon&   rClipPoly,
+                                 const ActionFactoryParameters&     rParms,
+                                 bool                               bIntersect );
+
+            static void updateClipping( const ::tools::Rectangle&                 rClipRect,
+                                 const ActionFactoryParameters&     rParms,
+                                 bool                               bIntersect );
+
+            static css::uno::Reference<
+                css::rendering::XCanvasFont > createFont( double&                         o_rFontRotation,
+                                                          const vcl::Font&                rFont,
+                                                          const ActionFactoryParameters&  rParms );
+            void createActions( GDIMetaFile&                    rMtf,
+                                const ActionFactoryParameters&  rParms,
+                                bool                            bSubsettableActions );
+            bool createFillAndStroke( const ::basegfx::B2DPolyPolygon& rPolyPoly,
+                                      const ActionFactoryParameters&   rParms );
+            bool createFillAndStroke( const ::basegfx::B2DPolygon&   rPoly,
+                                      const ActionFactoryParameters& rParms );
+            static void skipContent( GDIMetaFile& rMtf,
+                              const char*  pCommentString,
+                              sal_Int32&   io_rCurrActionIndex );
+
+            static bool isActionContained( GDIMetaFile& rMtf,
+                                    const char*     pCommentString,
+                                    MetaActionType  nType );
+
+            void createGradientAction( const ::tools::PolyPolygon&    rPoly,
+                                       const ::Gradient&              rGradient,
+                                       const ActionFactoryParameters& rParms,
+                                       bool                           bIsPolygonRectangle,
+                                       bool                           bSubsettableActions );
+
+            void createTextAction( const ::Point&                 rStartPoint,
+                                   const OUString&                rString,
+                                   int                            nIndex,
+                                   int                            nLength,
+                                   KernArraySpan                pCharWidths,
+                                   std::span<const bool>          pKashidaArray,
+                                   const ActionFactoryParameters& rParms,
+                                   bool                           bSubsettable );
+
+            ActionVector maActions;
+
+            /* EMF+ */
+            XForm           aBaseTransform;
+            /* EMF+ emf header info */
+            sal_Int32       nFrameLeft;
+            sal_Int32       nFrameTop;
+            sal_Int32       nFrameRight;
+            sal_Int32       nFrameBottom;
+            sal_Int32       nPixX;
+            sal_Int32       nPixY;
+            sal_Int32       nMmX;
+            sal_Int32       nMmY;
+        };
+
+        typedef std::shared_ptr< Renderer > RendererSharedPtr;
+
+        /// Common parameters when creating actions
+        struct ActionFactoryParameters
+        {
+            ActionFactoryParameters( VectorOfOutDevStates&       rStates,
+                                     const CanvasSharedPtr&      rCanvas,
+                                     ::VirtualDevice&            rVDev,
+                                     sal_Int32&                  io_rCurrActionIndex ) :
+                mrStates(rStates),
+                mrCanvas(rCanvas),
+                mrVDev(rVDev),
+                mrCurrActionIndex(io_rCurrActionIndex)
+            {}
+
+            VectorOfOutDevStates&       mrStates;
+            const CanvasSharedPtr&      mrCanvas;
+            ::VirtualDevice&            mrVDev;
+            sal_Int32&                  mrCurrActionIndex;
+        };
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
