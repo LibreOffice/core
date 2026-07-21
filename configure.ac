@@ -494,8 +494,7 @@ AC_ARG_ENABLE([tests],
 
 AC_ARG_WITH([help-url],
             AS_HELP_STRING([--with-help-url=<url>],
-                [Set the base URL of the online help. Default is https://help.collaboraoffice.com/help.html?])
-                [--without-help-url Help buttons of dialogs will be disabled, external help website will not be used.],,)
+                [Set the base URL of the online help. By default help is disabled: the Help buttons of dialogs are hidden and no external help website is used. Pass e.g. --with-help-url=https://help.collaboraoffice.com/help.html? to enable it.]),,)
 
 AC_ARG_WITH([dictionaries],
             AS_HELP_STRING([--with-dictionaries=<language list>],
@@ -2491,12 +2490,9 @@ AC_MSG_CHECKING([for URL of online help])
 if test -n "$with_help_url" -a "$with_help_url" != "no"; then
     HELP_URL="$with_help_url"
     AC_MSG_RESULT([custom: $HELP_URL])
-elif test "$with_help_url" = "no"; then
+else
     HELP_URL=
     AC_MSG_RESULT([none, help buttons are disabled])
-else
-    HELP_URL="https://help.collaboraoffice.com/help.html?"
-    AC_MSG_RESULT([default: $HELP_URL])
 fi
 AC_SUBST(HELP_URL)
 AC_DEFINE_UNQUOTED([HELP_URL],["$HELP_URL"],[Default value of help root URL])

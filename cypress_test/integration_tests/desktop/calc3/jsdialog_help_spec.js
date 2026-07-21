@@ -10,7 +10,10 @@ describe(['tagdesktop'], 'JSDialog Help button test', function() {
 		cy.viewport(1920,1080);
 	});
 
-	it('JSDialog Help button opens online help', function() {
+	// Skipped: help is disabled by default (empty HELP_URL), so the Help
+	// button is hidden and no external help link popup appears. Revive this
+	// once builds are configured with --with-help-url again.
+	it.skip('JSDialog Help button opens online help', function() {
 		// Open Validation dialog (has a Help button)
 		cy.cGet('#Data-tab-label').click();
 		cy.cGet('.unoValidation').click();
