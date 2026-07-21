@@ -498,30 +498,6 @@ namespace canvastools
             }
         }
 
-        /** Range checker, which throws css::lang::IllegalArgument exception, when
-            range is violated
-
-            The checked range is half open, i.e. only bound by the specified value.
-
-            @param arg
-            Arg to check
-
-            @param bound
-            Bound to check against
-
-            @param bLowerBound
-            When true, given bound is the lower bound. When false,
-            given bound is the upper bound.
-        */
-        template< typename NumType > inline void verifyRange( NumType arg, NumType bound, bool bLowerBound=true )
-        {
-            if( (bLowerBound && arg < bound) ||
-                (!bLowerBound && arg > bound) )
-            {
-                throw css::lang::IllegalArgumentException();
-            }
-        }
-
         /** Range checker, which throws css::lang::IndexOutOfBounds exception, when
             index range is violated
 
@@ -556,15 +532,6 @@ namespace canvastools
                                const char*                                      pStr,
                                const css::uno::Reference< css::uno::XInterface >&     xIf );
 
-        /** Range checker, which throws css::lang::IndexOutOfBounds exception, when
-            the size is negative or null
-
-            @param size
-            Size to verify
-         */
-        CANVASTOOLS_DLLPUBLIC void verifySpriteSize( const css::geometry::RealSize2D& size,
-                               const char*                                   pStr,
-                               const css::uno::Reference< css::uno::XInterface >&  xIf );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,6 +1,3 @@
-canvas/inc/spriteredrawmanager.hxx:170
-    canvas::SpriteRedrawManager::SpriteChangeRecord meChangeType
-    ChangeType
 configmgr/source/components.hxx:159
     configmgr::Components modificationTarget_
     ModificationTarget

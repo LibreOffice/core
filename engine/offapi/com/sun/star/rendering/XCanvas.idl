@@ -95,8 +95,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     /** Clear the whole canvas area.<p>
 
         This method clears the whole canvas area to the device default
-        color (e.g. white for a printer, transparent for an
-        XCustomSprite).
+        color (e.g. white for a printer).
      */
     void                clear();
 

@@ -129,7 +129,6 @@ namespace com::sun::star::awt {
 
 namespace com::sun::star::rendering {
     class XCanvas;
-    class XSpriteCanvas;
 }
 
 // OutputDevice-Types
@@ -317,8 +316,6 @@ public:
 
     /// request XCanvas render interface
     css::uno::Reference< css::rendering::XCanvas > GetCanvas() const;
-    /// request XSpriteCanvas render interface
-    css::uno::Reference< css::rendering::XSpriteCanvas > GetSpriteCanvas() const;
 
     virtual bool CanAnimate() const = 0;
 

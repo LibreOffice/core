@@ -39,7 +39,6 @@
 
 #include "canvasbitmap.hxx"
 #include "impltools.hxx"
-#include "spritecanvas.hxx"
 
 
 using namespace ::com::sun::star;
@@ -59,15 +58,6 @@ using namespace vclcanvas;
             }
             else
             {
-                SpriteCanvas* pCanvasImpl = dynamic_cast< SpriteCanvas* >( xBitmap.get() );
-                if( pCanvasImpl && pCanvasImpl->getBackBuffer() )
-                {
-                    // TODO(F3): mind the plain Canvas impl. Consolidate with CWS canvas05
-                    const ::OutputDevice& rDev( pCanvasImpl->getBackBuffer()->getOutDev() );
-                    const ::Point aEmptyPoint;
-                    return rDev.GetBitmap( aEmptyPoint, rDev.GetOutputSizePixel() );
-                }
-
                 // TODO(F2): add support for floating point bitmap formats
                 uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntBmp(
                     xBitmap, uno::UNO_QUERY_THROW );

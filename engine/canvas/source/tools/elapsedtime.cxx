@@ -41,15 +41,6 @@ ElapsedTime::ElapsedTime()
 {
 }
 
-void ElapsedTime::reset()
-{
-    m_fLastQueriedTime = 0.0;
-    m_fStartTime = getCurrentTime();
-    m_fFrozenTime = 0.0;
-    m_bInPauseMode = false;
-    m_bInHoldMode = false;
-}
-
 double ElapsedTime::getCurrentTime() const
 {
     return m_pTimeBase == nullptr ? getSystemTime() : m_pTimeBase->getElapsedTimeImpl();

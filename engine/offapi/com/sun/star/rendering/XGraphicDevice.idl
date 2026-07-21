@@ -21,7 +21,6 @@ module com { module sun { module star { module rendering {
 
 interface XBitmap;
 interface XVolatileBitmap;
-interface XBufferController;
 
 /* TODO: There's obviously a concept called window missing here, where
    methods such as bufferController, fullscreen mode etc . belong
@@ -45,14 +44,6 @@ interface XBufferController;
  */
 interface XGraphicDevice : ::com::sun::star::uno::XInterface
 {
-    /** Query the controller for multi buffering functionality on this
-        graphic device.
-
-        If there is no such functionality available, the NULL
-        reference is returned.
-     */
-    XBufferController                           getBufferController();
-
 
     /** Query the color space interface for this graphic device.
 
@@ -231,22 +222,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
             directions.
      */
     com::sun::star::lang::XMultiServiceFactory getParametricPolyPolygonFactory();
-
-
-    /** Tells whether this graphic device has a full screen mode,
-        i.e. whether a window can cover the whole screen exclusively.
-     */
-    boolean                         hasFullScreenMode();
-
-
-    /** Enter or leave the fullscreen mode, if possible. The return
-        value denotes the success of the operation.
-
-        @attention depending on the underlying operating system,
-        fullscreen mode can be left without an enterFullScreenMode(
-        false ) call.
-     */
-    boolean                         enterFullScreenMode( [in] boolean bEnter );
 };
 
 }; }; }; };

@@ -194,83 +194,6 @@ namespace canvastools
                                                             const ::basegfx::B2DRange&      i_srcRect,
                                                             const ::basegfx::B2DHomMatrix&  i_transformation );
 
-        /** Check whether a given rectangle is within another
-            transformed rectangle.
-
-            This method checks for polygonal containedness, i.e. the
-            transformed rectangle is not represented as an axis-aligned
-            rectangle anymore (like calcTransformedRectBounds()), but
-            polygonal. Thus, the insideness test is based on tight
-            bounds.
-
-            @param rContainedRect
-            This rectangle is checked, whether it is fully within the
-            transformed rTransformRect.
-
-            @param rTransformRect
-            This rectangle is transformed, and then checked whether it
-            fully contains rContainedRect.
-
-            @param rTransformation
-            This transformation is applied to rTransformRect
-         */
-        CANVASTOOLS_DLLPUBLIC bool isInside( const ::basegfx::B2DRange&         rContainedRect,
-                       const ::basegfx::B2DRange&       rTransformRect,
-                       const ::basegfx::B2DHomMatrix&   rTransformation );
-
-        /** Clip a scroll to the given bound rect
-
-            @param io_rSourceArea
-            Source area to scroll. The resulting clipped source area
-            is returned therein.
-
-            @param io_rDestPoint
-            Destination point of the scroll (upper, left corner of
-            rSourceArea after the scroll). The new, resulting
-            destination point is returned therein.q
-
-            @param o_ClippedAreas
-            Vector of rectangles in the <em>destination</em> area
-            coordinate system, which are clipped away from the source
-            area, and thus need extra updates (i.e. they are not
-            correctly copy from the scroll operation, since there was
-            no information about them in the source).
-
-            @param rBounds
-            Bounds to clip against.
-
-            @return false, if the resulting scroll area is empty
-         */
-        CANVASTOOLS_DLLPUBLIC bool clipScrollArea( ::basegfx::B2IRange&                  io_rSourceArea,
-                             ::basegfx::B2IPoint&                  io_rDestPoint,
-                             ::std::vector< ::basegfx::B2IRange >& o_ClippedAreas,
-                             const ::basegfx::B2IRange&            rBounds );
-
-        /** Clip a blit between two differently surfaces.
-
-            This method clips source and dest rect for a clip between
-            two differently clipped surfaces, such that the resulting
-            blit rects are fully within both clip areas.
-
-            @param io_rSourceArea
-            Source area of the blit. Returned therein is the computed
-            clipped source area.
-
-            @param io_rDestPoint
-            Dest area of the blit. Returned therein is the computed
-            clipped dest area.
-
-            @param rSourceBounds
-            Clip bounds of the source surface
-
-            @param rDestBounds
-            Clip bounds of the dest surface
-
-            @return false, if the resulting blit is empty, i.e. fully
-            clipped away.
-         */
-        CANVASTOOLS_DLLPUBLIC ::basegfx::B2IRange spritePixelAreaFromB2DRange( const ::basegfx::B2DRange& rRange );
-
         /** Return a color space for a default RGBA integer format
 
             Use this method for dead-simple bitmap implementations,
@@ -330,14 +253,6 @@ namespace canvastools
 
             return static_cast<Target>(arg);
         }
-
-        CANVASTOOLS_DLLPUBLIC css::awt::Rectangle getAbsoluteWindowRect(
-            const css::awt::Rectangle&                       rRect,
-            const css::uno::Reference< css::awt::XWindow2 >& xWin  );
-
-        /** Retrieve for small bound marks around each corner of the given rectangle
-         */
-        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DPolyPolygon getBoundMarksPolyPolygon( const ::basegfx::B2DRange& rRange );
 
         /** Calculate number of gradient "strips" to generate (takes
            into account device resolution)

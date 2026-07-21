@@ -30,10 +30,6 @@ canvas/inc/parametricpolypolygon.hxx:138
     void canvas::ParametricPolyPolygon::ParametricPolyPolygon(class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice>,enum canvas::ParametricPolyPolygon::GradientType,const class cpo::uno::Sequence<class cpo::uno::Sequence<double> > &,const class cpo::uno::Sequence<double> &)
     enum canvas::ParametricPolyPolygon::GradientType eType
     0
-canvas/inc/spriteredrawmanager.hxx:109
-    void canvas::SpriteRedrawManager::SpriteInfo::SpriteInfo(class rtl::Reference<class canvas::Sprite>,const class basegfx::B2DRange &,_Bool,_Bool)
-    _Bool bNeedsUpdate
-    1
 canvas/inc/verifyinput.hxx:147
     void verifyInput(const struct com::sun::star::geometry::RealBezierSegment2D &,const char *,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,short)
     short nArgPos
@@ -58,14 +54,6 @@ canvas/source/cairo/cairo_canvashelper.hxx:248
     void cairocanvas::CanvasHelper::useStates(const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,_Bool)
     _Bool setColor
     1
-canvas/source/vcl/spritecanvashelper.hxx:44
-    void vclcanvas::SpriteCanvasHelper::init(const class std::shared_ptr<class vclcanvas::OutDevProvider> &,class vclcanvas::SpriteCanvas &,class canvas::SpriteRedrawManager &,_Bool,_Bool)
-    _Bool bProtect
-    0
-canvas/source/vcl/spritecanvashelper.hxx:44
-    void vclcanvas::SpriteCanvasHelper::init(const class std::shared_ptr<class vclcanvas::OutDevProvider> &,class vclcanvas::SpriteCanvas &,class canvas::SpriteRedrawManager &,_Bool,_Bool)
-    _Bool bHaveAlpha
-    0
 chart2/qa/extras/chart2dump/chart2dump.cxx:90
     void Chart2DumpTest::Chart2DumpTest(_Bool)
     _Bool bDumpMode

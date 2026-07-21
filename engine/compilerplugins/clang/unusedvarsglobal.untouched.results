@@ -1,5 +1,3 @@
-canvas/workben/canvasdemo.cxx:666
-    DemoApp aApp
 connectivity/source/drivers/evoab2/EApi.h:51
     gconstpointer (*)(EContact *, EContactField) e_contact_get_const
 connectivity/source/drivers/evoab2/EApi.h:55

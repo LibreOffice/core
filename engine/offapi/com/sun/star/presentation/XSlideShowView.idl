@@ -27,16 +27,6 @@ module com {  module sun {  module star {  module presentation {
  */
 interface XSlideShowView : ::com::sun::star::uno::XInterface
 {
-    /** Get view canvas.<p>
-
-        This method gets the underlying XCanvas to display on this
-        view.<p>
-
-        @return XSpriteCanvas to display on. Must be valid, and the
-        same object, as long as this view is added to any slide show.
-     */
-    ::com::sun::star::rendering::XSpriteCanvas getCanvas();
-
     /** This method clears the whole view area.
 
         The slide show uses this method to fully erase the view

@@ -57,14 +57,14 @@ namespace canvas
 
         <pre>
         Example:
-        typedef ::cppu::WeakComponentImplHelper < css::rendering::XSpriteCanvas,
+        typedef ::cppu::WeakComponentImplHelper < css::rendering::XCanvas,
                                                   css::lang::XInitialization,
                                                   css::lang::XServiceInfo,
                                                   css::lang::XServiceName > CanvasBase_Base;
         typedef ::canvas::internal::CanvasBase< CanvasBase_Base, CanvasHelper > ExampleCanvas_Base;
 
         class ExampleCanvas : public ExampleCanvas_Base,
-                              public SpriteSurface,
+                              public CanvasSurface,
                                public RepaintTarget
         {
         };

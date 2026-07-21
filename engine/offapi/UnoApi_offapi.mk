@@ -2840,8 +2840,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rdf,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	ARGBColor \
-	AnimationAttributes \
-	AnimationRepeat \
 	BlendMode \
 	Caret \
 	Color \
@@ -2884,18 +2882,14 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	TexturingMode \
 	ViewState \
 	VolatileContentDestroyedException \
-	XAnimatedSprite \
-	XAnimation \
 	XBezierPolyPolygon2D \
 	XBitmap \
 	XBitmapCanvas \
 	XBitmapPalette \
-	XBufferController \
 	XCachedPrimitive \
 	XCanvas \
 	XCanvasFont \
 	XColorSpace \
-	XCustomSprite \
 	XGraphicDevice \
 	XHalfFloatBitmap \
 	XHalfFloatReadOnlyBitmap \
@@ -2910,8 +2904,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	XMtfRenderer \
 	XParametricPolyPolygon2D \
 	XPolyPolygon2D \
-	XSprite \
-	XSpriteCanvas \
 	XTextLayout \
 	XVolatileBitmap \
 ))

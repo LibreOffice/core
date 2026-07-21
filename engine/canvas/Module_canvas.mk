@@ -23,8 +23,6 @@ $(eval $(call gb_Module_add_targets,canvas,\
 	Library_canvasfactory \
 	Library_canvastools \
 	Library_vclcanvas \
-    $(if $(filter DESKTOP,$(BUILD_TYPE)), \
-        $(if $(or $(DISABLE_GUI),$(DISABLE_DYNLOADING)),,Executable_canvasdemo)) \
 ))
 
 $(eval $(call gb_Module_add_check_targets,canvas,\

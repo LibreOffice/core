@@ -63,15 +63,11 @@ forms/source/xforms/namedcollection.hxx:104
 include/basic/sbxvar.hxx:127
     enum SbxClassType SbxValue::GetClass()const
 include/canvas/base/basemutexhelper.hxx:54
-    void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XCustomSprite, com::sun::star::rendering::XCanvas> >::disposeThis()
-include/canvas/base/basemutexhelper.hxx:54
     void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XBitmapCanvas, com::sun::star::rendering::XIntegerBitmap, com::sun::star::lang::XServiceInfo, com::sun::star::beans::XFastPropertySet> >::disposeThis()
 include/canvas/base/basemutexhelper.hxx:54
     void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XBitmapCanvas, com::sun::star::rendering::XIntegerBitmap, com::sun::star::rendering::XGraphicDevice, com::sun::star::lang::XMultiServiceFactory, com::sun::star::util::XUpdatable, com::sun::star::beans::XPropertySet, com::sun::star::lang::XServiceName> >::disposeThis()
 include/canvas/base/basemutexhelper.hxx:54
     void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XBitmapCanvas, com::sun::star::rendering::XIntegerBitmap> >::disposeThis()
-include/canvas/base/basemutexhelper.hxx:54
-    void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XCustomSprite, com::sun::star::rendering::XBitmapCanvas, com::sun::star::rendering::XIntegerBitmap, com::sun::star::lang::XServiceInfo> >::disposeThis()
 include/canvas/base/basemutexhelper.hxx:59
     void canvas::BaseMutexHelper::disposing()
 include/canvas/base/bitmapcanvasbase.hxx:80
@@ -162,14 +158,6 @@ include/canvas/base/canvascustomspritebase.hxx:241
     class basegfx::B2DRange canvas::CanvasCustomSpriteBase::getUpdateArea()const
 include/canvas/base/canvascustomspritebase.hxx:248
     double canvas::CanvasCustomSpriteBase::getPriority()const
-include/canvas/base/disambiguationhelper.hxx:62
-    void canvas::DisambiguationHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XSpriteCanvas, com::sun::star::rendering::XGraphicDevice, com::sun::star::lang::XMultiServiceFactory, com::sun::star::rendering::XBufferController, com::sun::star::awt::XWindowListener, com::sun::star::util::XUpdatable, com::sun::star::beans::XPropertySet, com::sun::star::lang::XServiceName> >::disposeThis()
-include/canvas/base/disambiguationhelper.hxx:62
-    void canvas::DisambiguationHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XSpriteCanvas, com::sun::star::rendering::XIntegerBitmap, com::sun::star::rendering::XGraphicDevice, com::sun::star::lang::XMultiServiceFactory, com::sun::star::rendering::XBufferController, com::sun::star::awt::XWindowListener, com::sun::star::util::XUpdatable, com::sun::star::beans::XPropertySet, com::sun::star::lang::XServiceName> >::disposeThis()
-include/canvas/base/disambiguationhelper.hxx:65
-    void canvas::DisambiguationHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XSpriteCanvas, com::sun::star::rendering::XIntegerBitmap, com::sun::star::rendering::XGraphicDevice, com::sun::star::lang::XMultiServiceFactory, com::sun::star::rendering::XBufferController, com::sun::star::awt::XWindowListener, com::sun::star::util::XUpdatable, com::sun::star::beans::XPropertySet, com::sun::star::lang::XServiceName> >::disposeEventSource(const struct com::sun::star::lang::EventObject &,)
-include/canvas/base/disambiguationhelper.hxx:65
-    void canvas::DisambiguationHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XSpriteCanvas, com::sun::star::rendering::XGraphicDevice, com::sun::star::lang::XMultiServiceFactory, com::sun::star::rendering::XBufferController, com::sun::star::awt::XWindowListener, com::sun::star::util::XUpdatable, com::sun::star::beans::XPropertySet, com::sun::star::lang::XServiceName> >::disposeEventSource(const struct com::sun::star::lang::EventObject &,)
 include/canvas/base/disambiguationhelper.hxx:71
     void canvas::DisambiguationHelper::disposing()
 include/canvas/base/disambiguationhelper.hxx:74
@@ -232,22 +220,6 @@ include/canvas/base/integerbitmapbase.hxx:87
     class cpo::uno::Sequence<signed char> canvas::IntegerBitmapBase::getPixel(struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
 include/canvas/base/integerbitmapbase.hxx:101
     struct com::sun::star::rendering::IntegerBitmapLayout canvas::IntegerBitmapBase::getMemoryLayout()
-include/canvas/base/spritecanvasbase.hxx:96
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimatedSprite> canvas::SpriteCanvasBase::createSpriteFromAnimation(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimation> &,)
-include/canvas/base/spritecanvasbase.hxx:107
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimatedSprite> canvas::SpriteCanvasBase::createSpriteFromBitmaps(const class cpo::uno::Sequence<class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> > &,signed char,)
-include/canvas/base/spritecanvasbase.hxx:122
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCustomSprite> canvas::SpriteCanvasBase::createCustomSprite(const struct com::sun::star::geometry::RealSize2D &,)
-include/canvas/base/spritecanvasbase.hxx:133
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XSprite> canvas::SpriteCanvasBase::createClonedSprite(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XSprite> &,)
-include/canvas/base/spritecanvasbase.hxx:145
-    void canvas::SpriteCanvasBase::showSprite(const class rtl::Reference<class canvas::Sprite> &,)
-include/canvas/base/spritecanvasbase.hxx:154
-    void canvas::SpriteCanvasBase::hideSprite(const class rtl::Reference<class canvas::Sprite> &,)
-include/canvas/base/spritecanvasbase.hxx:163
-    void canvas::SpriteCanvasBase::moveSprite(const class rtl::Reference<class canvas::Sprite> &,const class basegfx::B2DPoint &,const class basegfx::B2DPoint &,const class basegfx::B2DVector &,)
-include/canvas/base/spritecanvasbase.hxx:175
-    void canvas::SpriteCanvasBase::updateSprite(const class rtl::Reference<class canvas::Sprite> &,const class basegfx::B2DPoint &,const class basegfx::B2DRange &,)
 include/comphelper/interaction.hxx:54
     void comphelper::OInteraction::select()
 include/comphelper/proparrhlp.hxx:83

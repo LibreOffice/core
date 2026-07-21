@@ -61,7 +61,6 @@
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <officecfg/Office/Common.hxx>
 
 #include <bitmaps.hlst>

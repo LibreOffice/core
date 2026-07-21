@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/rendering/XBufferController.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
@@ -142,10 +141,6 @@ namespace canvas
         }
 
         // XGraphicDevice
-        virtual css::uno::Reference< css::rendering::XBufferController > getBufferController(  ) override
-        {
-            return css::uno::Reference< css::rendering::XBufferController >();
-        }
 
         virtual css::uno::Reference< css::rendering::XColorSpace > getDeviceColorSpace(  ) override
         {
@@ -229,16 +224,6 @@ namespace canvas
         virtual css::uno::Reference< css::lang::XMultiServiceFactory > getParametricPolyPolygonFactory(  ) override
         {
             return this;
-        }
-
-        virtual bool hasFullScreenMode(  ) override
-        {
-            return false;
-        }
-
-        virtual bool enterFullScreenMode( bool ) override
-        {
-            return false;
         }
 
         // XMultiServiceFactory

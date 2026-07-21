@@ -143,13 +143,6 @@ namespace vclcanvas
         mpOutDevProvider = rOutDev;
     }
 
-    void CanvasHelper::setBackgroundOutDev( const OutDevProviderSharedPtr& rOutDev )
-    {
-        mp2ndOutDevProvider = rOutDev;
-        mp2ndOutDevProvider->getOutDev().EnableMapMode( false );
-        mp2ndOutDevProvider->getOutDev().SetAntialiasing( AntialiasingFlags::Enable );
-    }
-
     void CanvasHelper::clear()
     {
         // are we disposed?
@@ -1173,15 +1166,6 @@ namespace vclcanvas
 
             return true;
         }
-    }
-
-    void CanvasHelper::flush() const
-    {
-        if (mpOutDevProvider)
-            mpOutDevProvider->getOutDev().Flush();
-
-        if  (mp2ndOutDevProvider)
-            mp2ndOutDevProvider->getOutDev().Flush();
     }
 
 }

@@ -12,9 +12,3 @@ excludelist:
     canvas/source/vcl/cachedbitmap.cxx:
     # Actually in use
     - com/sun/star/rendering/XCanvas.hpp
-    canvas/source/vcl/spritecanvas.cxx:
-    # Actually in use
-    - com/sun/star/awt/XTopWindow.hpp
-    canvas/source/vcl/spritecanvashelper.cxx:
-    # Needed for boost/polymorphic_cast.hpp
-    - boost/cast.hpp

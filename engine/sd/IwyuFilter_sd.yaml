@@ -171,7 +171,6 @@ excludelist:
     - com/sun/star/frame/XStatusListener.hpp
     sd/source/ui/presenter/PresenterCanvas.hxx:
     # base class has to be a complete type
-    - com/sun/star/rendering/XSpriteCanvas.hpp
     - com/sun/star/rendering/XBitmap.hpp
     - com/sun/star/awt/XWindowListener.hpp
     sd/source/ui/remotecontrol/Listener.hxx:

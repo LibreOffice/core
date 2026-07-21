@@ -61,29 +61,6 @@ namespace canvas
         typedef canvastools::ValueMap< Callbacks >     MapType;
         typedef std::vector< MapType::MapEntry > InputMap;
 
-        class MakeMap : public InputMap
-        {
-        public:
-            MakeMap(const char*        name,
-                    const GetterType&  getter,
-                    const SetterType&  setter)
-            {
-                push_back(MapType::MapEntry{name, {getter, setter}});
-            }
-            MakeMap(const char*       name,
-                    const GetterType& getter)
-            {
-                push_back(MapType::MapEntry{name, {getter, SetterType()}});
-            }
-            MakeMap& operator()(const char*        name,
-                                const GetterType&  getter,
-                                const SetterType&  setter)
-            {
-                push_back(MapType::MapEntry{name, {getter, setter}});
-                return *this;
-            }
-        };
-
         /** Create helper with zero properties
          */
         PropertySetHelper();
@@ -96,16 +73,6 @@ namespace canvas
             on to the given function pointer.
          */
         void initProperties( InputMap&& rMap );
-
-        /** Add given properties to helper
-
-            @param rMap
-            Vector of name/function pointers. Each name is offered as
-            a property, and reading/writing to this property is passed
-            on to the given function pointer. These name/function
-            pairs are added to the already existing ones.
-         */
-        void addProperties( const InputMap& rMap );
 
         /** Checks whether the given string corresponds to a valid
             property name.

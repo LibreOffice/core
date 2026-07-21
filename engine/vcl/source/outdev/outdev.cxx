@@ -39,7 +39,7 @@
 #include <com/sun/star/awt/DeviceCapability.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/rendering/CanvasFactory.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 
 #ifdef DISABLE_DYNLOADING
 // Linking all needed LO code into one .so/executable, these already
@@ -663,17 +663,6 @@ Reference< css::rendering::XCanvas > OutputDevice::GetCanvas() const
     xCanvas = ImplGetCanvas( false );
     mxCanvas = xCanvas;
     return xCanvas;
-}
-
-Reference< css::rendering::XSpriteCanvas > OutputDevice::GetSpriteCanvas() const
-{
-    Reference< css::rendering::XCanvas > xCanvas( mxCanvas );
-    Reference< css::rendering::XSpriteCanvas > xSpriteCanvas( xCanvas, UNO_QUERY );
-    if( xSpriteCanvas.is() )
-        return xSpriteCanvas;
-    xCanvas = ImplGetCanvas( true );
-    mxCanvas = xCanvas;
-    return Reference< css::rendering::XSpriteCanvas >( xCanvas, UNO_QUERY );
 }
 
 // Generic implementation, Window will override.

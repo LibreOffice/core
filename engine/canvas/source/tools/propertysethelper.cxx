@@ -76,16 +76,6 @@ namespace canvas
                                      true) );
     }
 
-    void PropertySetHelper::addProperties( const InputMap& rMap )
-    {
-        InputMap aMerged( maMapEntries );
-        aMerged.insert( aMerged.end(),
-                        rMap.begin(),
-                        rMap.end() );
-
-        initProperties( std::move(aMerged) );
-    }
-
     bool PropertySetHelper::isPropertyName( const OUString& aPropertyName ) const
     {
         if (!mpMap)

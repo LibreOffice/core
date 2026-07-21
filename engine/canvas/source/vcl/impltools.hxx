@@ -96,14 +96,6 @@ namespace vclcanvastools
         class OutDevStateKeeper
         {
         public:
-            explicit OutDevStateKeeper( OutputDevice& rOutDev ) :
-                mpOutDev( &rOutDev ),
-                mbMappingWasEnabled( mpOutDev->IsMapModeEnabled() ),
-                mnAntiAliasing( mpOutDev->GetAntialiasing() )
-            {
-                init();
-            }
-
             explicit OutDevStateKeeper( const vclcanvas::OutDevProviderSharedPtr& rOutDev ) :
                 mpOutDev( rOutDev ? &(rOutDev->getOutDev()) : nullptr ),
                 mbMappingWasEnabled( mpOutDev && mpOutDev->IsMapModeEnabled() ),

@@ -86,12 +86,6 @@ namespace vclcanvas
         void setOutDev( const OutDevProviderSharedPtr&  rOutDev,
                         bool                            bProtect);
 
-        /** Set secondary output device
-
-            Used for sprites, to generate mask bitmap.
-         */
-        void setBackgroundOutDev( const OutDevProviderSharedPtr& rOutDev );
-
 
         // CanvasHelper functionality
         // ==========================
@@ -247,14 +241,6 @@ namespace vclcanvas
                       const ::Point&                                  rPt,
                       const ::Size&                                   rSz,
                       const GraphicAttr&                              rAttr ) const;
-
-        /** Flush drawing queue.
-
-            This only works for Window canvases, and ensures that all
-            pending render operations are flushed to the
-            driver/hardware.
-         */
-        void flush() const;
 
         enum ColorType
         {

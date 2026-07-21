@@ -671,39 +671,6 @@ namespace canvastools
 #endif
         }
 
-        void verifySpriteSize( const geometry::RealSize2D&              size,
-                               const char*                              pStr,
-                               const uno::Reference< uno::XInterface >& xIf )
-        {
-            if( size.Width <= 0.0 )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifySpriteSize(): size has 0 or negative width (value: " +
-                    OUString::number(size.Width) + ")",
-                    xIf, 0 );
-#else
-                (void)pStr; (void)xIf;
-                throw lang::IllegalArgumentException();
-#endif
-            }
-
-            if( size.Height <= 0.0 )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifySpriteSize(): size has 0 or negative height (value: " +
-                    OUString::number(size.Height) + ")",
-                    xIf, 0 );
-#else
-                throw lang::IllegalArgumentException();
-#endif
-            }
-        }
-
-
 } // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,7 +38,6 @@ core_constructor_list = [
     "com_sun_star_comp_rendering_CanvasFactory_get_implementation",
 # canvas/source/vcl/vclcanvas.component
     "com_sun_star_comp_rendering_Canvas_VCL_get_implementation",
-    "com_sun_star_comp_rendering_SpriteCanvas_VCL_get_implementation",
 # chart2/source/chart2.component
     "com_sun_star_chart2_ExponentialScaling_get_implementation",
     "com_sun_star_chart2_LinearScaling_get_implementation",

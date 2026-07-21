@@ -30,18 +30,6 @@ canvas/inc/verifyinput.hxx:103
     void verifyInput(const struct com::sun::star::geometry::Matrix2D &,const char *,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,short)
     short nArgPos
     2
-canvas/workben/canvasdemo.cxx:142
-    void (anonymous namespace)::DemoRenderer::drawStringAt(const class rtl::OString &,double,double)
-    double y
-    15
-canvas/workben/canvasdemo.cxx:480
-    void (anonymous namespace)::DemoRenderer::drawRegularPolygon(double,double,int,double)
-    double centery
-    35
-canvas/workben/canvasdemo.cxx:480
-    void (anonymous namespace)::DemoRenderer::drawRegularPolygon(double,double,int,double)
-    double r
-    15
 chart2/qa/extras/chart2export.cxx:125
     void checkPolynomialTrendline(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XRegressionCurve> &,const class rtl::OUString &,int,double,double,double)
     int aExpectedDegree

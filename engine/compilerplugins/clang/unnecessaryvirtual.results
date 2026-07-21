@@ -90,40 +90,6 @@ canvas/inc/base/canvasbase.hxx:415
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawBitmapModulated(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
 canvas/inc/base/canvasbase.hxx:431
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice> canvas::CanvasBase::getDevice()
-canvas/inc/base/canvascustomspritebase.hxx:93
-    void canvas::CanvasCustomSpriteBase::disposeThis()
-canvas/inc/base/canvascustomspritebase.hxx:104
-    void canvas::CanvasCustomSpriteBase::clear()
-canvas/inc/base/canvascustomspritebase.hxx:115
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasCustomSpriteBase::drawBitmap(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-canvas/inc/base/canvascustomspritebase.hxx:141
-    void canvas::CanvasCustomSpriteBase::setAlpha(double,)
-canvas/inc/base/canvascustomspritebase.hxx:150
-    void canvas::CanvasCustomSpriteBase::move(const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-canvas/inc/base/canvascustomspritebase.hxx:163
-    void canvas::CanvasCustomSpriteBase::transform(const struct com::sun::star::geometry::AffineMatrix2D &,)
-canvas/inc/base/canvascustomspritebase.hxx:174
-    void canvas::CanvasCustomSpriteBase::clip(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,)
-canvas/inc/base/canvascustomspritebase.hxx:183
-    void canvas::CanvasCustomSpriteBase::setPriority(double,)
-canvas/inc/base/canvascustomspritebase.hxx:190
-    void canvas::CanvasCustomSpriteBase::show()
-canvas/inc/base/canvascustomspritebase.hxx:197
-    void canvas::CanvasCustomSpriteBase::hide()
-canvas/inc/base/canvascustomspritebase.hxx:206
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvas> canvas::CanvasCustomSpriteBase::getContentCanvas()
-canvas/inc/base/canvascustomspritebase.hxx:214
-    _Bool canvas::CanvasCustomSpriteBase::isAreaUpdateOpaque(const class basegfx::B2DRange &,)const
-canvas/inc/base/canvascustomspritebase.hxx:221
-    _Bool canvas::CanvasCustomSpriteBase::isContentChanged()const
-canvas/inc/base/canvascustomspritebase.hxx:228
-    class basegfx::B2DPoint canvas::CanvasCustomSpriteBase::getPosPixel()const
-canvas/inc/base/canvascustomspritebase.hxx:235
-    class basegfx::B2DVector canvas::CanvasCustomSpriteBase::getSizePixel()const
-canvas/inc/base/canvascustomspritebase.hxx:242
-    class basegfx::B2DRange canvas::CanvasCustomSpriteBase::getUpdateArea()const
-canvas/inc/base/canvascustomspritebase.hxx:249
-    double canvas::CanvasCustomSpriteBase::getPriority()const
 canvas/inc/base/disambiguationhelper.hxx:70
     void canvas::DisambiguationHelper::disposing()
 canvas/inc/base/disambiguationhelper.hxx:73
@@ -188,24 +154,6 @@ canvas/inc/base/integerbitmapbase.hxx:85
     class cpo::uno::Sequence<signed char> canvas::IntegerBitmapBase::getPixel(struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
 canvas/inc/base/integerbitmapbase.hxx:99
     struct com::sun::star::rendering::IntegerBitmapLayout canvas::IntegerBitmapBase::getMemoryLayout()
-canvas/inc/base/spritecanvasbase.hxx:84
-    void canvas::SpriteCanvasBase::disposeThis()
-canvas/inc/base/spritecanvasbase.hxx:95
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimatedSprite> canvas::SpriteCanvasBase::createSpriteFromAnimation(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimation> &,)
-canvas/inc/base/spritecanvasbase.hxx:106
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimatedSprite> canvas::SpriteCanvasBase::createSpriteFromBitmaps(const class cpo::uno::Sequence<class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> > &,signed char,)
-canvas/inc/base/spritecanvasbase.hxx:121
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCustomSprite> canvas::SpriteCanvasBase::createCustomSprite(const struct com::sun::star::geometry::RealSize2D &,)
-canvas/inc/base/spritecanvasbase.hxx:132
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XSprite> canvas::SpriteCanvasBase::createClonedSprite(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XSprite> &,)
-canvas/inc/base/spritecanvasbase.hxx:144
-    void canvas::SpriteCanvasBase::showSprite(const class rtl::Reference<class canvas::Sprite> &,)
-canvas/inc/base/spritecanvasbase.hxx:153
-    void canvas::SpriteCanvasBase::hideSprite(const class rtl::Reference<class canvas::Sprite> &,)
-canvas/inc/base/spritecanvasbase.hxx:162
-    void canvas::SpriteCanvasBase::moveSprite(const class rtl::Reference<class canvas::Sprite> &,const class basegfx::B2DPoint &,const class basegfx::B2DPoint &,const class basegfx::B2DVector &,)
-canvas/inc/base/spritecanvasbase.hxx:174
-    void canvas::SpriteCanvasBase::updateSprite(const class rtl::Reference<class canvas::Sprite> &,const class basegfx::B2DPoint &,const class basegfx::B2DRange &,)
 canvas/inc/rendering/icolorbuffer.hxx:43
     void canvas::IColorBuffer::~IColorBuffer()
 canvas/inc/rendering/irendermodule.hxx:60

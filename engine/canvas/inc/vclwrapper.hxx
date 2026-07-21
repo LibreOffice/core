@@ -55,11 +55,6 @@ namespace canvas
         public:
             typedef Wrappee_ Wrappee;
 
-            VCLObject() :
-                mpWrappee( new Wrappee() )
-            {
-            }
-
             // no explicit here. VCLObjects should be freely
             // constructible with Wrappees, and AFAIK there is no other
             // implicit conversion path that could cause harm here

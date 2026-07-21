@@ -32,7 +32,6 @@ namespace com::sun::star::rendering
 {
     class  XCanvas;
     class  XBitmapCanvas;
-    class  XSpriteCanvas;
 }
 
 /* Definition of VCLFactory class */

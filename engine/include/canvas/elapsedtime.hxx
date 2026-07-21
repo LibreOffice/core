@@ -42,15 +42,6 @@ namespace canvastools
              */
             ElapsedTime();
 
-            /** Reset the time
-
-                The instance of the reset() call starts the time
-                measurement from scratch. That means, a subsequent
-                getElapsedTime() call will return the time difference
-                between reset() and getElapsedTime() call.
-             */
-            void reset();
-
             /** Query the elapsed time
 
                 This method returns the elapsed time in seconds

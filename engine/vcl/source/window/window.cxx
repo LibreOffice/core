@@ -72,7 +72,7 @@
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/rendering/CanvasFactory.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 #include <comphelper/configuration.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
