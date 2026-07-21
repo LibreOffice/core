@@ -3643,6 +3643,16 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             rTabSett.maFirstVis.Set( pViewTab->nPosX[ SC_SPLIT_LEFT ], pViewTab->nPosY[ bVSplit ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM ], nTab );
             rTabSett.maSecondVis.Set( pViewTab->nPosX[ SC_SPLIT_RIGHT ], pViewTab->nPosY[ SC_SPLIT_BOTTOM ], nTab );
 
+            // In the LOK freeze model the frozen (top-left) pane is
+            // anchored at the sheet corner, independent of the scroll offset
+            // active when freezing. Keeping the old offset here shrinks the
+            // exported xSplit/ySplit and drops the freeze on reload.
+            if( bLOKActive && bFrozen )
+            {
+                if( bHSplit ) rTabSett.maFirstVis.SetCol( 0 );
+                if( bVSplit ) rTabSett.maFirstVis.SetRow( 0 );
+            }
+
             // active pane
             switch( pViewTab->eWhichActive )
             {

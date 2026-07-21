@@ -6242,6 +6242,40 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_OperationInvalidatesOtherView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testFreezePaneScrolledExportXLSX)
+{
+    // A frozen sheet (cols A-B + rows 1-5) whose top-left pane carries a
+    // scroll offset (sheetView topLeftCell="A6") must keep its freeze when saved
+    // to XLSX. In the LOK model the frozen pane is anchored at the sheet corner,
+    // so the exported xSplit/ySplit must equal the freeze position and not be
+    // reduced by that scroll offset - which used to collapse ySplit to 0 and drop
+    // the row freeze on reload (columns survived only because there was no
+    // horizontal scroll).
+
+    ScModelObj* pModelObj = createDoc("freezePaneScrolled.xlsx");
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    // Cursor in C6 and freeze rows and columns.
+    gotoCell(u"C6");
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, u".uno:FreezePanes"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    skipValidation();
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // Columns A-B and rows 1-5 must both stay frozen.
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, getXPath(pSheet, "//x:sheetViews//x:pane", "xSplit"));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, getXPath(pSheet, "//x:sheetViews//x:pane", "ySplit"));
+    // Frozen pane anchored at A1; the scrollable pane starts at C6.
+    CPPUNIT_ASSERT_EQUAL(u"A1"_ustr, getXPath(pSheet, "//x:sheetViews/x:sheetView", "topLeftCell"));
+    CPPUNIT_ASSERT_EQUAL(u"C6"_ustr, getXPath(pSheet, "//x:sheetViews//x:pane", "topLeftCell"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
