@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-07-13 10:56+0000\n"
+"PO-Revision-Date: 2026-07-21 07:01+0000\n"
 "Last-Translator: Gabriel <bloxgabriel18@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/pt_BR/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -3290,7 +3290,7 @@ msgstr "Ajuda Online"
 #: src/control/Control.Menubar.ts:793 src/control/Control.Menubar.ts:1101
 #: src/control/Control.NotebookbarWriter.js:469
 msgid "Keyboard shortcuts"
-msgstr "Atalhos do teclado"
+msgstr "Atalhos de teclado"
 
 #: src/control/Control.Menubar.ts:442 src/control/Control.Menubar.ts:640
 #: src/control/Control.Menubar.ts:795 src/control/Control.Menubar.ts:1103
@@ -4249,9 +4249,8 @@ msgstr "Formas"
 #: src/control/Control.NotebookbarDraw.js:1612
 #: src/control/Control.NotebookbarImpress.js:1687
 #: src/control/Control.NotebookbarWriter.js:1386
-#, fuzzy
 msgid "Assistant"
-msgstr "Assistente IA"
+msgstr "Assistente"
 
 #: src/control/Control.NotebookbarCalc.js:2112
 msgid "Insert Function"
@@ -5787,9 +5786,8 @@ msgid "Color palette"
 msgstr ""
 
 #: src/control/jsdialog/Widget.Combobox.js:245
-#, fuzzy
 msgid "Open "
-msgstr "Abrir"
+msgstr "Abrir "
 
 #: src/control/jsdialog/Widget.Combobox.js:245
 msgid " list"

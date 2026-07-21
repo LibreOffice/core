@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-05-22 17:11+0000\n"
+"PO-Revision-Date: 2026-07-21 07:01+0000\n"
 "Last-Translator: Gabriel <bloxgabriel18@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/help/pt_BR/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -80,16 +80,15 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-48
 msgid "Open"
-msgstr ""
+msgstr "Abrir"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-79
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>O</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>0</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"O</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-72
 msgid "Print (Download as PDF)"
@@ -97,7 +96,7 @@ msgstr "Imprimir (baixar como PDF)"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:21-70
 msgid "Print"
-msgstr ""
+msgstr "Imprimir"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:22-72
 msgid "Display the Keyboard shortcuts help"
@@ -353,8 +352,8 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Left</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>←</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Seta para a esquerda</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:64-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-38
@@ -370,9 +369,9 @@ msgid ""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Left</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>←</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Seta "
+"para a esquerda</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:65-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:228-38
@@ -399,8 +398,8 @@ msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Right</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>→</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Seta para a direita</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:230-38
@@ -415,8 +414,8 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Right</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>→</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Seta para a direita</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:231-38
@@ -432,9 +431,9 @@ msgid ""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Right</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>→</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Seta "
+"para a direita</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:232-38
@@ -461,8 +460,8 @@ msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Up</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>↑</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Seta para cima</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-38
@@ -477,8 +476,8 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Up</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>↑</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Seta para cima</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-38
@@ -494,9 +493,9 @@ msgid ""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Up</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>↑</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Seta "
+"para cima</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-38
@@ -523,8 +522,8 @@ msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Down</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>↓</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Seta para baixo</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-38
@@ -539,8 +538,8 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Down</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>↓</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Seta para baixo</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:76-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-38
@@ -556,9 +555,9 @@ msgid ""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Down</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>↓</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Seta "
+"para baixo</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-38
@@ -869,8 +868,8 @@ msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Keys</kbd>"
 msgstr ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>↑, "
-"↓, ← ou →</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Teclas de seta</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:104-152
 msgid ""
@@ -885,9 +884,9 @@ msgid ""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Keys</kbd>"
 msgstr ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>↑, ↓, ← ou →</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Teclas de seta</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:105-219
 msgid "Increase/decrease the size of the column/row on the left/top cell edge"
@@ -901,9 +900,9 @@ msgid ""
 ">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Keys</kbd>"
 msgstr ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>↑, ↓, ← ou →</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Teclas "
+"de seta</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-218
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-285
@@ -917,10 +916,10 @@ msgid ""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Keys</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>↑, ↓, ← ou →</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Teclas de "
+"seta</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-38
 msgid ""
@@ -1149,8 +1148,8 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Left Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>←</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Seta para esquerda</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-38
 msgid ""
@@ -1167,8 +1166,8 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Right Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>→</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Seta para direita</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-38
 msgid ""
@@ -1185,8 +1184,8 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Up Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>↑</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Seta para cima</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-38
 msgid ""
@@ -1203,8 +1202,8 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Down Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>↓</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Seta para baixo</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-38
 msgid "Go to next sheet."
@@ -1366,8 +1365,8 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Plus key</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>+</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tecla Plus</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:161-38
 msgid "Delete cells (as in menu Edit - Delete Cells)"
@@ -1378,8 +1377,8 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Minus key</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>-</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tecla de menos</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:165-9
 msgid "Cell formatting"
@@ -1443,7 +1442,7 @@ msgstr "Inserir"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:192-38
 msgid "Insert date"
-msgstr ""
+msgstr "Insira a data"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:192-76
 msgid ""
@@ -1737,6 +1736,14 @@ msgid ""
 "click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
 "aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
 msgstr ""
+"<span class=\"def\">A barra de menus:</span> O menu principal fica na parte "
+"superior e inclui muitas opções, como comandos para imprimir, editar, exibir "
+"e outros comandos avançados. Você pode ocultar a barra de menus clicando no "
+"ícone de ocultar <span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-"
+"label=\"ocultar barra de menus\" title=\"Ocultar barra de menus\"></span> "
+"localizado na extremidade direita. Para exibi-la novamente, clique no ícone "
+"de exibir <span class=\"w2ui-icon unfold icon-size\" role=\"img\" aria-"
+"label=\"exibir barra de menus\" title=\"Exibir barra de menus\"></span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:385-5
 msgid ""
@@ -1771,6 +1778,8 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Barra de status exibindo número da página, contagem de palavras, modo de "
+"inserção, modo de seleção, idioma, modo de edição, navegação, zoom e pesquisa"
 
 #: html/cool-help.html%2Bdiv.div.div.p:395-5
 msgid ""
@@ -1785,9 +1794,8 @@ msgstr ""
 "pesquisa não é sensível à caixa. Há três botões ao lado da caixa de pesquisa:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:397-7
-#, fuzzy
 msgid "Search backwards"
-msgstr "Pesquisa para trás"
+msgstr "Pesquisar de trás para frente"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:398-7
 msgid "Search forward"
@@ -1798,17 +1806,16 @@ msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "Cancelar a pesquisa (aparece somente quando o texto foi pesquisado)"
 
 #: html/cool-help.html%2Bdiv.div.div.p:403-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
 "area, the user interface is not affected. The current level of zoom is shown "
 "in this area."
 msgstr ""
-"<span class=\"def\">A barra de zoom:</span> À direita da barra de status, há "
-"um conjunto de botões para ampliar, diminuir e voltar a 100% da "
-"visualização. O zoom atua na área do documento e a interface do usuário não "
-"é afetada. O nível de zoom atual é indicado nesta área."
+"<span class=\"def\">A barra de zoom:</span> A barra de zoom inclui botões "
+"para redefinir o zoom para 100%, reduzir o zoom e ampliar o zoom. O zoom é "
+"aplicado à área do documento; a interface do usuário não é afetada. O nível "
+"de zoom atual é exibido nesta área."
 
 #: html/cool-help.html%2Bdiv.div.div.p:404-5
 msgid ""
@@ -1831,11 +1838,16 @@ msgid ""
 "details about the current document. The actual information depends on the "
 "nature of the document."
 msgstr ""
+"<span class=\"def\">A barra de informações:</span> A barra de informações "
+"exibe detalhes sobre o documento atual. As informações específicas dependem "
+"da natureza do documento."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:409-54
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Barra de informações exibindo setas de navegação de página, controles de "
+"zoom e nível de zoom"
 
 #: html/cool-help.html%2Bdiv.div.p:414-5
 msgid ""
@@ -1987,6 +1999,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Caixa de diálogo \"Reparar Documento\" que lista estados anteriores do "
+"documento, com colunas para tipo de ação, autor e carimbo de data/hora"
 
 #: html/cool-help.html%2Bdiv.div.div.p:434-5
 msgid ""
@@ -2034,7 +2048,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:443-5
 msgid "Pasting"
-msgstr "Colar"
+msgstr "Colagem"
 
 #: html/cool-help.html%2Bdiv.div.div.p:444-5
 msgid ""
@@ -2895,10 +2909,11 @@ msgid ""
 "your changes, you must either undo them, or use the <span class=\"ui\""
 ">Revision History </span> in the <span class=\"ui\">File</span> menu."
 msgstr ""
-"O <span class=\"productname\">{productname}</span> salva o documento na "
-"retaguarda regularmente e não se pode fechar sem salvar. Para abandonar suas "
-"modificações você pode desfazê-las ou utilizar o <span class=\"ui\""
-">Histórico de revisões</span> no menu <span class=\"ui\">Arquivo</span>."
+"<span class=\"productname\">{productname}</span> salva o documento em "
+"segundo plano regularmente; você não pode simplesmente fechá-lo sem salvá-"
+"lo. Para descartar as alterações, você deve desfazê-las ou usar o <span "
+"class=\"ui\">Histórico de revisões </span>na opção <span class=\"ui\">"
+"Arquivo </span>do menu."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:658-5
 msgid ""
@@ -3056,8 +3071,8 @@ msgid ""
 "Characters </span> or click the corresponding icon in the toolbar. A dialog "
 "opens."
 msgstr ""
-"Escolha <span class=\"ui\">Inserir</span> → <span class=\"ui\">Caractere "
-"especial</span> ou clique no ícone correspondente na barra de ferramentas. "
+"Escolha <span class=\"ui\">Inserir </span> → <span class=\"ui\">Caractere "
+"especial </span> ou clique no ícone correspondente na barra de ferramentas. "
 "Uma caixa de diálogo aparece."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:700-59
@@ -3232,7 +3247,7 @@ msgid ""
 "span>, <span class=\"ui\">Text Flow </span> tab"
 msgstr ""
 "Escolha <span class=\"ui\">Formatar</span> → <span class=\"ui\">Parágrafo</"
-"span>, aba <span class=\"ui\">Fluxo do texto</span>"
+"span>, guia <span class=\"ui\">Fluxo do texto</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:736-7
 msgid ""
