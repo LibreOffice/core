@@ -37,11 +37,6 @@ namespace cppcanvas
         return std::make_shared<Canvas>( xCanvas );
     }
 
-    CanvasSharedPtr VCLFactory::createBitmapCanvas( const uno::Reference< rendering::XBitmapCanvas >& xCanvas )
-    {
-        return std::make_shared<Canvas>( uno::Reference< rendering::XCanvas >(xCanvas) );
-    }
-
     RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,
                                                   const ::GDIMetaFile&          rMtf )
     {

@@ -51,7 +51,6 @@ namespace cppcanvas
     {
     public:
         static CanvasSharedPtr   createCanvas( const css::uno::Reference< css::rendering::XCanvas >& xCanvas );
-        static CanvasSharedPtr   createBitmapCanvas( const css::uno::Reference< css::rendering::XBitmapCanvas >& xCanvas );
 
         /** Create a renderer object from a Metafile
 
