@@ -45,7 +45,7 @@ public:
     Foo(const Foo&) = delete;
     const Foo& operator=(const Foo&) = delete;
 
-    virtual Any SAL_CALL queryInterface(const Type & _type) override
+    virtual Any queryInterface(const Type & _type) override
     {
         if (_type == cppu::UnoType<XInterface>::get())
         {
@@ -60,12 +60,12 @@ public:
         return Any();
     }
 
-    virtual void SAL_CALL acquire() noexcept override
+    virtual void acquire() noexcept override
     {
         osl_atomic_increment( &m_refCount );
     }
 
-    virtual void SAL_CALL release() noexcept override
+    virtual void release() noexcept override
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )
             delete this;

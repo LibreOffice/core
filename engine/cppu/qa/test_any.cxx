@@ -79,7 +79,7 @@ private:
 
 class Impl1: public Interface1, private Base {
 public:
-    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & type) override
+    virtual cpo::uno::Any queryInterface(cpo::uno::Type const & type) override
     {
         if (type == cppu::UnoType<css::uno::XInterface>::get()) {
             css::uno::Reference< css::uno::XInterface > ref(
@@ -93,18 +93,18 @@ public:
         return cpo::uno::Any();
     }
 
-    virtual void SAL_CALL acquire() noexcept override {
+    virtual void acquire() noexcept override {
         Base::acquire();
     }
 
-    virtual void SAL_CALL release() noexcept override {
+    virtual void release() noexcept override {
         Base::release();
     }
 };
 
 class Impl2: public Interface2a, public Interface3, private Base {
 public:
-    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & type) override
+    virtual cpo::uno::Any queryInterface(cpo::uno::Type const & type) override
     {
         if (type == cppu::UnoType<css::uno::XInterface>::get()) {
             css::uno::Reference< css::uno::XInterface > ref(
@@ -127,18 +127,18 @@ public:
         return cpo::uno::Any();
     }
 
-    virtual void SAL_CALL acquire() noexcept override {
+    virtual void acquire() noexcept override {
         Base::acquire();
     }
 
-    virtual void SAL_CALL release() noexcept override {
+    virtual void release() noexcept override {
         Base::release();
     }
 };
 
 class Impl2b: public Interface2b, private Base {
 public:
-    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & type) override
+    virtual cpo::uno::Any queryInterface(cpo::uno::Type const & type) override
     {
         if (type == cppu::UnoType<css::uno::XInterface>::get()) {
             css::uno::Reference< css::uno::XInterface > ref(
@@ -161,11 +161,11 @@ public:
         return cpo::uno::Any();
     }
 
-    virtual void SAL_CALL acquire() noexcept override {
+    virtual void acquire() noexcept override {
         Base::acquire();
     }
 
-    virtual void SAL_CALL release() noexcept override {
+    virtual void release() noexcept override {
         Base::release();
     }
 };

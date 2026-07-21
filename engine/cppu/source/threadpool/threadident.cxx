@@ -41,7 +41,7 @@ static void createLocalId( sal_Sequence **ppThreadId )
     rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8 *>(&(*ppThreadId)->elements[4]) );
 }
 
-extern "C" void SAL_CALL
+extern "C" void
 uno_getIdOfCurrentThread( sal_Sequence **ppThreadId ) noexcept
 {
     IdContainer& id = getIdContainer();
@@ -71,7 +71,7 @@ uno_getIdOfCurrentThread( sal_Sequence **ppThreadId ) noexcept
     }
 }
 
-extern "C" void SAL_CALL uno_releaseIdFromCurrentThread() noexcept
+extern "C" void uno_releaseIdFromCurrentThread() noexcept
 {
     IdContainer& id = getIdContainer();
     OSL_ASSERT( id.bInit );
@@ -84,7 +84,7 @@ extern "C" void SAL_CALL uno_releaseIdFromCurrentThread() noexcept
     }
 }
 
-extern "C" bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId ) noexcept
+extern "C" bool uno_bindIdToCurrentThread( sal_Sequence *pThreadId ) noexcept
 {
     IdContainer& id = getIdContainer();
     if (!id.bInit)

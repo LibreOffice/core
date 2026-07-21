@@ -661,7 +661,7 @@ static bool ireallocSequence(
 extern "C"
 {
 
-bool SAL_CALL uno_type_sequence_construct(
+bool uno_type_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire ) noexcept
@@ -708,7 +708,7 @@ bool SAL_CALL uno_type_sequence_construct(
 }
 
 
-bool SAL_CALL uno_sequence_construct(
+bool uno_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire ) noexcept
@@ -746,7 +746,7 @@ bool SAL_CALL uno_sequence_construct(
 }
 
 
-bool SAL_CALL uno_type_sequence_realloc(
+bool uno_type_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
     sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
 {
@@ -767,7 +767,7 @@ bool SAL_CALL uno_type_sequence_realloc(
 }
 
 
-bool SAL_CALL uno_sequence_realloc(
+bool uno_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
     sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
 {
@@ -785,7 +785,7 @@ bool SAL_CALL uno_sequence_realloc(
 }
 
 
-bool SAL_CALL uno_type_sequence_reference2One(
+bool uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
@@ -831,7 +831,7 @@ bool SAL_CALL uno_type_sequence_reference2One(
 }
 
 
-bool SAL_CALL uno_sequence_reference2One(
+bool uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
@@ -874,7 +874,7 @@ bool SAL_CALL uno_sequence_reference2One(
 }
 
 
-void SAL_CALL uno_sequence_assign(
+void uno_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     typelib_TypeDescription * pTypeDescr,
@@ -889,7 +889,7 @@ void SAL_CALL uno_sequence_assign(
 }
 
 
-void SAL_CALL uno_type_sequence_assign(
+void uno_type_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pType,

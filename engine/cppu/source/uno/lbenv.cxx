@@ -681,7 +681,7 @@ void writeLine(
 
 }
 
-extern "C" void SAL_CALL uno_dumpEnvironment(
+extern "C" void uno_dumpEnvironment(
     void * stream, uno_Environment * pEnv, const char * pFilter ) noexcept
 {
     assert(pEnv && "### null ptr!");
@@ -762,7 +762,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
 }
 
 
-extern "C" void SAL_CALL uno_dumpEnvironmentByName(
+extern "C" void uno_dumpEnvironmentByName(
     void * stream, rtl_uString * pEnvDcp, const char * pFilter ) noexcept
 {
     uno_Environment * pEnv = nullptr;
@@ -1086,7 +1086,7 @@ static uno_Environment * initDefaultEnvironment(
 }
 
 
-void SAL_CALL uno_createEnvironment(
+void uno_createEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext ) noexcept
 {
     assert(ppEnv && "### null ptr!");
@@ -1097,7 +1097,7 @@ void SAL_CALL uno_createEnvironment(
     *ppEnv = initDefaultEnvironment( rEnvDcp, pContext );
 }
 
-void SAL_CALL uno_getEnvironment(
+void uno_getEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext ) noexcept
 {
     assert(ppEnv && "### null ptr!");
@@ -1118,7 +1118,7 @@ void SAL_CALL uno_getEnvironment(
     }
 }
 
-void SAL_CALL uno_getRegisteredEnvironments(
+void uno_getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
     rtl_uString * pEnvDcp ) noexcept
 {

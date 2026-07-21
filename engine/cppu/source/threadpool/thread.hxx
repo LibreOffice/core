@@ -46,8 +46,8 @@ namespace cppu_threadpool {
         bool launch();
 
     private:
-        virtual void SAL_CALL run() override;
-        virtual void SAL_CALL onTerminated() override;
+        virtual void run() override;
+        virtual void onTerminated() override;
 
         ThreadPoolHolder m_aThreadPool;
         JobQueue *m_pQueue;

@@ -75,7 +75,7 @@ public:
 
 class InnerThread : public osl::Thread
 {
-    virtual void SAL_CALL run() override;
+    virtual void run() override;
 
     AffineBridge * m_pAffineBridge;
 
@@ -102,7 +102,7 @@ namespace {
 
 class OuterThread : public osl::Thread
 {
-    virtual void SAL_CALL run() override;
+    virtual void run() override;
 
     AffineBridge * m_pAffineBridge;
 

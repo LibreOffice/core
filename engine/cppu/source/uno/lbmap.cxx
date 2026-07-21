@@ -576,7 +576,7 @@ using namespace ::cppu;
 extern "C"
 {
 
-void SAL_CALL uno_getMapping(
+void uno_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo,
     rtl_uString * pAddPurpose ) noexcept
 {
@@ -641,7 +641,7 @@ void SAL_CALL uno_getMapping(
     }
 }
 
-void SAL_CALL uno_getMappingByName(
+void uno_getMappingByName(
     uno_Mapping ** ppMapping, rtl_uString * pFrom, rtl_uString * pTo,
     rtl_uString * pAddPurpose ) noexcept
 {
@@ -670,7 +670,7 @@ void SAL_CALL uno_getMappingByName(
 }
 
 
-void SAL_CALL uno_registerMapping(
+void uno_registerMapping(
     uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
     uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose ) noexcept
 {
@@ -704,7 +704,7 @@ void SAL_CALL uno_registerMapping(
     }
 }
 
-void SAL_CALL uno_revokeMapping(
+void uno_revokeMapping(
     uno_Mapping * pMapping ) noexcept
 {
     MappingsData & rData = getMappingsData();
@@ -725,7 +725,7 @@ void SAL_CALL uno_revokeMapping(
 }
 
 
-void SAL_CALL uno_registerMappingCallback(
+void uno_registerMappingCallback(
     uno_getMappingFunc pCallback ) noexcept
 {
     OSL_ENSURE( pCallback, "### null ptr!" );
@@ -734,7 +734,7 @@ void SAL_CALL uno_registerMappingCallback(
     rData.aCallbacks.insert( pCallback );
 }
 
-void SAL_CALL uno_revokeMappingCallback(
+void uno_revokeMappingCallback(
     uno_getMappingFunc pCallback ) noexcept
 {
     OSL_ENSURE( pCallback, "### null ptr!" );

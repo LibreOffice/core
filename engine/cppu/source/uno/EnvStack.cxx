@@ -105,7 +105,7 @@ static uno_Environment * s_getCurrent()
 }
 
 
-extern "C" void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString * pTypeName) noexcept
+extern "C" void uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString * pTypeName) noexcept
 {
     if (*ppEnv)
     {
@@ -305,12 +305,12 @@ static void s_environment_invoke_v(uno_Environment * pCurrEnv, uno_Environment *
         pNextEnv->release(pNextEnv);
 }
 
-extern "C" void SAL_CALL uno_Environment_invoke_v(uno_Environment * pTargetEnv, uno_EnvCallee * pCallee, va_list * pParam) noexcept
+extern "C" void uno_Environment_invoke_v(uno_Environment * pTargetEnv, uno_EnvCallee * pCallee, va_list * pParam) noexcept
 {
     s_environment_invoke_v(s_getCurrent(), pTargetEnv, pCallee, pParam);
 }
 
-extern "C" void SAL_CALL uno_Environment_invoke(uno_Environment * pEnv, uno_EnvCallee * pCallee, ...) noexcept
+extern "C" void uno_Environment_invoke(uno_Environment * pEnv, uno_EnvCallee * pCallee, ...) noexcept
 {
     va_list param;
 
@@ -319,7 +319,7 @@ extern "C" void SAL_CALL uno_Environment_invoke(uno_Environment * pEnv, uno_EnvC
     va_end(param);
 }
 
-extern "C" void SAL_CALL uno_Environment_enter(uno_Environment * pTargetEnv) noexcept
+extern "C" void uno_Environment_enter(uno_Environment * pTargetEnv) noexcept
 {
     uno_Environment * pNextEnv = nullptr;
     uno_Environment * pCurrEnv = s_getCurrent();
@@ -351,7 +351,7 @@ extern "C" void SAL_CALL uno_Environment_enter(uno_Environment * pTargetEnv) noe
     }
 }
 
-int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pReason) noexcept
+int uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pReason) noexcept
 {
     int result = 1;
 

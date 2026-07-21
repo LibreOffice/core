@@ -27,7 +27,7 @@ using namespace cppu;
 extern "C"
 {
 
-void SAL_CALL uno_type_any_assign(
+void uno_type_any_assign(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
@@ -43,7 +43,7 @@ void SAL_CALL uno_type_any_assign(
     }
 }
 
-void SAL_CALL uno_any_assign(
+void uno_any_assign(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
@@ -59,7 +59,7 @@ void SAL_CALL uno_any_assign(
     }
 }
 
-void SAL_CALL uno_type_any_construct(
+void uno_type_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire ) noexcept
@@ -74,7 +74,7 @@ void SAL_CALL uno_type_any_construct(
     }
 }
 
-void SAL_CALL uno_any_construct(
+void uno_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire ) noexcept
@@ -89,7 +89,7 @@ void SAL_CALL uno_any_construct(
     }
 }
 
-void SAL_CALL uno_type_any_constructAndConvert(
+void uno_type_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_Mapping * mapping ) noexcept
@@ -104,7 +104,7 @@ void SAL_CALL uno_type_any_constructAndConvert(
     }
 }
 
-void SAL_CALL uno_any_constructAndConvert(
+void uno_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_Mapping * mapping ) noexcept
@@ -119,12 +119,12 @@ void SAL_CALL uno_any_constructAndConvert(
     }
 }
 
-void SAL_CALL uno_any_destruct( uno_Any * pValue, uno_ReleaseFunc release ) noexcept
+void uno_any_destruct( uno_Any * pValue, uno_ReleaseFunc release ) noexcept
 {
     _destructAny( pValue, release );
 }
 
-void SAL_CALL uno_any_clear( uno_Any * pValue, uno_ReleaseFunc release ) noexcept
+void uno_any_clear( uno_Any * pValue, uno_ReleaseFunc release ) noexcept
 {
     _destructAny( pValue, release );
     CONSTRUCT_EMPTY_ANY( pValue );

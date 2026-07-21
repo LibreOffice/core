@@ -114,7 +114,7 @@ IdContainer& getIdContainer()
 
 }
 
-extern "C" bool SAL_CALL uno_setCurrentContext(
+extern "C" bool uno_setCurrentContext(
     void * pCurrentContext,
     rtl_uString * pEnvTypeName, void * pEnvContext ) noexcept
 {
@@ -160,7 +160,7 @@ extern "C" bool SAL_CALL uno_setCurrentContext(
     return true;
 }
 
-extern "C" bool SAL_CALL uno_getCurrentContext(
+extern "C" bool uno_getCurrentContext(
     void ** ppCurrentContext, rtl_uString * pEnvTypeName, void * pEnvContext ) noexcept
 {
     IdContainer& id = getIdContainer();
