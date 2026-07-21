@@ -353,29 +353,13 @@ run-mobile: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call cleanup_before_run)
 	$(call run_JS_error_check)
 	$(call start_coolwsd)
-	$(call run_interactive_mobile,$(spec)) || true
-	$(V)$(KILL_COMMAND) || true
+	$(call run_interactive,mobile,,$(MOBILE_CONFIG),$(MOBILE_ENV),$(MOBILE_TEST_FOLDER))
 
 MOBILE_CONFIG = \
 	specPattern=$(MOBILE_TEST_FOLDER)/**/*_spec.js,supportFile=$(SUPPORT_FILE),userAgent=$(MOBILE_USER_AGENT)
 
 MOBILE_ENV = \
 	CYPRESS_INCLUDE_TAGS=tagmobile,DATA_FOLDER=$(MOBILE_DATA_FOLDER),DATA_WORKDIR=$(MOBILE_DATA_WORKDIR),SERVER=$(COOLWSD_SERVER),SERVER_PORT=$(FREE_PORT),LO_CORE_VERSION="$(CORE_VERSION)",INTEGRATION=$(CYPRESS_INTEGRATION)
-
-# Run one mobile test / all mobile tests in interactive test runner.
-# Parameters:
-# 1 - spec (optional):	test file to run, if not specified all mobile tests are run.
-define run_interactive_mobile
-	$(V)echo "Open cypress with mobile tests..."
-	$(V)echo
-	$(if $(1),\
-		$(eval SPEC_FILE=$(MOBILE_TEST_FOLDER)/$(1))\
-		$(call check_spec_existence,$(1),mobile)\
-		$(call run_interactive_single,$(MOBILE_CONFIG),$(MOBILE_ENV),$(SPEC_FILE))\
-	,\
-		$(call run_interactive_all,$(MOBILE_CONFIG),$(MOBILE_ENV))\
-	)
-endef
 
 # Run one mobile test / all mobile tests in headless mode.
 # Parameters:
@@ -462,10 +446,7 @@ run-desktop: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call cleanup_before_run)
 	$(call run_JS_error_check)
 	$(call start_coolwsd)
-	$(eval CYPRESS_INCLUDE_TAGS=$(DESKTOP_INCLUDE_TAGS))
-	$(eval export CYPRESS_INCLUDE_TAGS)
-	$(if $(spec),$(call check_spec_existence,$(spec),desktop))
-	$(V)trap '$(KILL_COMMAND) || true' INT TERM EXIT; $(if $(spec),DEBUG='cypress:*' $(CYPRESS_BINARY) run --browser $(BROWSER) --headed --no-exit --config-file $(CYPRESS_CONFIG) --config $(DESKTOP_CONFIG)$(COMMA)retries=0 --env $(DESKTOP_ENV) --spec=$(DESKTOP_TEST_FOLDER)/$(spec),DEBUG='cypress:*' $(CYPRESS_BINARY) open --config-file $(CYPRESS_CONFIG) --config $(DESKTOP_CONFIG) --env $(DESKTOP_ENV)) || true
+	$(call run_interactive,desktop,$(DESKTOP_INCLUDE_TAGS),$(DESKTOP_CONFIG),$(DESKTOP_ENV),$(DESKTOP_TEST_FOLDER))
 
 DESKTOP_CONFIG = \
 	specPattern=$(DESKTOP_TEST_FOLDER)/**/*_spec.js,supportFile=$(SUPPORT_FILE),userAgent=$(DESKTOP_USER_AGENT)
@@ -475,25 +456,6 @@ DESKTOP_ENV = \
 
 DESKTOP_INCLUDE_TAGS = \
 	tagdesktop,$(A11Y_TAG)
-
-# Run one desktop test / all desktop tests in interactive test runner.
-# Parameters:
-# 1 - spec (optional):	test file to run, if not specified all desktop tests are run.
-define run_interactive_desktop
-	$(V)echo "Open cypress with desktop tests..."
-	$(V)echo
-	$(eval CYPRESS_INCLUDE_TAGS=$(DESKTOP_INCLUDE_TAGS))
-	$(V)echo Cypress tags: $(CYPRESS_INCLUDE_TAGS)
-	$(V)echo
-	$(eval export CYPRESS_INCLUDE_TAGS)
-	$(if $(1),\
-		$(eval SPEC_FILE=$(DESKTOP_TEST_FOLDER)/$(1))\
-		$(call check_spec_existence,$(1),desktop)\
-		$(call run_interactive_single,$(DESKTOP_CONFIG),$(DESKTOP_ENV),$(SPEC_FILE))\
-	,\
-		$(call run_interactive_all,$(DESKTOP_CONFIG),$(DESKTOP_ENV))\
-	)
-endef
 
 # Run one desktop test / all desktop tests in headless mode.
 # Parameters:
@@ -528,8 +490,7 @@ check-idle: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS) start_short_idle_coolwsd $(PI
 	$(V)$(KILL_COMMAND) || true
 
 run-idle: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS) start_short_idle_coolwsd $(PID_FILE)
-	$(call run_interactive_idle,$(spec)) || true
-	$(V)$(KILL_COMMAND) || true
+	$(call run_interactive,idle,$(IDLE_INCLUDE_TAGS),$(IDLE_CONFIG),$(IDLE_ENV),$(IDLE_TEST_FOLDER))
 
 IDLE_CONFIG = \
 	specPattern=$(IDLE_TEST_FOLDER)/**/*_spec.js,supportFile=$(SUPPORT_FILE),userAgent=$(IDLE_USER_AGENT)
@@ -539,25 +500,6 @@ IDLE_ENV = \
 
 IDLE_INCLUDE_TAGS = \
 	tagdesktop,$(A11Y_TAG)
-
-# Run one idle test / all idle tests in interactive test runner.
-# Parameters:
-# 1 - spec (optional):	test file to run, if not specified all idle tests are run.
-define run_interactive_idle
-	$(V)echo "Open cypress with idle tests..."
-	$(V)echo
-	$(eval CYPRESS_INCLUDE_TAGS=$(IDLE_INCLUDE_TAGS))
-	$(V)echo Cypress tags: $(CYPRESS_INCLUDE_TAGS)
-	$(V)echo
-	$(eval export CYPRESS_INCLUDE_TAGS)
-	$(if $(1),\
-		$(eval SPEC_FILE=$(IDLE_TEST_FOLDER)/$(1))\
-		$(call check_spec_existence,$(1),idle)\
-		$(call run_interactive_single,$(IDLE_CONFIG),$(IDLE_ENV),$(SPEC_FILE))\
-	,\
-		$(call run_interactive_all,$(IDLE_CONFIG),$(IDLE_ENV))\
-	)
-endef
 
 # Run one idle test / all idle tests in headless mode.
 # Parameters:
@@ -599,8 +541,7 @@ run-multi: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call cleanup_before_run)
 	$(call run_JS_error_check)
 	$(call start_coolwsd)
-	$(call run_interactive_multiuser,$(spec)) || true
-	$(V)$(KILL_COMMAND) || true
+	$(call run_interactive,multi,,$(MULTIUSER_CONFIG),$(MULTIUSER_ENV),$(MULTIUSER_TEST_FOLDER))
 
 MULTIUSER_CONFIG = \
 	specPattern=$(MULTIUSER_TEST_FOLDER)/**/*_spec.js,supportFile=$(SUPPORT_FILE),userAgent=$(DESKTOP_USER_AGENT)
@@ -617,21 +558,6 @@ define run_all_multiuser_tests
 	$(eval ENV_EXTENDED=$(MULTIUSER_ENV)$(if $(1),$(COMMA)$(1)))
 	$(call run_test_headless,\
 		$(MULTIUSER_CONFIG),$(ENV_EXTENDED),)
-endef
-
-# Run one multiuser test / all multiuser tests in interactive test runner.
-# Parameters:
-# 1 - spec (optional):	test file to run, if not specified all desktop tests are run.
-define run_interactive_multiuser
-	$(V)echo "Open cypress with multiuser tests..."
-	$(V)echo
-	$(if $(1),\
-		$(eval SPEC_FILE=$(MULTIUSER_TEST_FOLDER)/$(1))\
-		$(call check_spec_existence,$(1),multi)\
-		$(call run_interactive_single,$(MULTIUSER_CONFIG),$(MULTIUSER_ENV),$(SPEC_FILE))\
-	,\
-		$(call run_interactive_all,$(MULTIUSER_CONFIG),$(MULTIUSER_ENV))\
-	)
 endef
 
 # Run one multi-user test in headless mode.
@@ -884,8 +810,7 @@ run-redline: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call cleanup_before_run)
 	$(call run_JS_error_check)
 	$(call start_coolwsd)
-	$(call run_interactive_redline,$(spec)) || true
-	$(V)$(KILL_COMMAND) || true
+	$(call run_interactive,redline,$(REDLINE_INCLUDE_TAGS),$(REDLINE_CONFIG),$(REDLINE_ENV),$(REDLINE_TEST_FOLDER),**/*_spec.js)
 
 REDLINE_CONFIG = \
 	specPattern=$(REDLINE_TEST_FOLDER)/**/*_spec.js,supportFile=$(SUPPORT_FILE),userAgent=$(REDLINE_USER_AGENT)
@@ -920,25 +845,31 @@ define run_redline_tests
 	)
 endef
 
-define run_interactive_redline
-	$(V)echo "Open cypress with redline tests..."
-	$(V)echo
-	$(eval CYPRESS_INCLUDE_TAGS=$(REDLINE_INCLUDE_TAGS))
-	$(V)echo Cypress tags: $(CYPRESS_INCLUDE_TAGS)
-	$(V)echo
-	$(eval export CYPRESS_INCLUDE_TAGS)
-	$(if $(1),\
-		$(eval SPEC_FILE=$(REDLINE_TEST_FOLDER)/$(1))\
-		$(call check_spec_existence,$(1),redline)\
-	,\
-		$(eval SPEC_FILE=$(REDLINE_TEST_FOLDER)/**/*_spec.js)\
-	)
-	$(call run_interactive_single,$(REDLINE_CONFIG),$(REDLINE_ENV),$(SPEC_FILE))
-endef
-
 ####################
 # General functions.
 ####################
+
+# Run one test of a suite, or all of its tests, in the interactive test runner. coolwsd is
+# killed when the runner exits, including when Ctrl-C aborts make.
+#
+# Parameters:
+# 1 - suite:	suite name as check_spec_existence expects it (desktop, mobile, idle, multi, redline)
+# 2 - tags (optional):	CYPRESS_INCLUDE_TAGS value, empty when the env already carries the tags
+# 3 - config:	cypress configuration (e.g. cypress' --config argument).
+# 4 - env:	list of environment variables (e.g. cypress' --env argument).
+# 5 - folder:	directory holding the suite's spec files
+# 6 - all-glob (optional):	spec glob to run when no spec is given, instead of opening the runner
+define run_interactive
+	$(V)echo "Open cypress with $(1) tests..."
+	$(V)echo
+	$(if $(2),$(eval CYPRESS_INCLUDE_TAGS=$(2)))
+	$(if $(2),$(eval export CYPRESS_INCLUDE_TAGS))
+	$(if $(2),$(V)echo Cypress tags: $(CYPRESS_INCLUDE_TAGS))
+	$(if $(spec),$(call check_spec_existence,$(spec),$(1)))
+	$(eval INTERACTIVE_SPEC=$(if $(spec),$(5)/$(spec),$(if $(6),$(5)/$(6))))
+	$(V)trap '$(KILL_COMMAND) || true' INT TERM EXIT; \
+		$(if $(INTERACTIVE_SPEC),$(call run_interactive_single,$(3),$(4),$(INTERACTIVE_SPEC)),$(call run_interactive_all,$(3),$(4))) || true
+endef
 
 # Open cypress interactive test runner window with all tests in it.
 #
