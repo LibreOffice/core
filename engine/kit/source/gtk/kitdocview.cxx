@@ -1501,6 +1501,7 @@ callback (gpointer pData)
     case KIT_CALLBACK_SHAPE_INNER_TEXT:
     case KIT_CALLBACK_CLIPBOARD_MIMETYPES:
     case KIT_CALLBACK_SHAPE_DRAG_PREVIEW:
+    case KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA:
     {
         // TODO: Implement me
         break;
