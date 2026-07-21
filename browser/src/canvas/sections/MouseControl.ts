@@ -446,6 +446,7 @@ class MouseControl extends CanvasSectionObject {
 
 		const handles = GraphicSelection.handlesSection;
 		if (!handles?.sectionProperties?.svg) return;
+		if (handles?.sectionProperties?.hasVideo) return;
 		if (!GraphicSelection.extraInfo?.isDraggable) return;
 
 		handles.sectionProperties.svg.style.left =
