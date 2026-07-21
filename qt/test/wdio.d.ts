@@ -52,6 +52,9 @@ declare const app: {
 		isEditMode(): boolean;
 		_enterEditMode(permission: string): void;
 		sendUnoCommand(command: string, json?: unknown, force?: boolean): void;
+		// Save the document. dontTerminateEdit keeps an in-progress cell edit;
+		// dontSaveIfUnmodified skips the save when there are no edits.
+		save(dontTerminateEdit: boolean, dontSaveIfUnmodified: boolean): void;
 		_clip: {
 			clearSelection(): void;
 			setTextSelectionType(selectionType: string): void;
