@@ -248,12 +248,17 @@ void CommentsPanel::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 break;
             }
             case SwFormatFieldHintWhich::REMOVED:
-            case SwFormatFieldHintWhich::REDLINED_DELETION:
             {
                 sw::annotation::SwAnnotationWin* pAnnotationWin
                     = mpPostItMgr->GetRemovedAnnotationWin(pField);
                 sal_uInt32 nId = getPostItId(pAnnotationWin);
                 deleteComment(nId);
+                break;
+            }
+            case SwFormatFieldHintWhich::REDLINED_DELETION:
+            {
+                // A recorded deletion keeps the comment in the document, so the panel entry
+                // stays as well.
                 break;
             }
             case SwFormatFieldHintWhich::FOCUS:

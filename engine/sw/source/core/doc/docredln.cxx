@@ -1825,16 +1825,6 @@ void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
                     sw::RedlineUnDelText const hint(nStart, nLen);
                     pNd->CallSwClientNotify(hint);
                 }
-
-                if (comphelper::COKit::isActive() && IsAnnotation())
-                {
-                    auto eHintType = eWhy == Invalidation::Add ? SwFormatFieldHintWhich::INSERTED: SwFormatFieldHintWhich::REMOVED;
-                    const SwTextNode *pTextNode = this->GetPointNode().GetTextNode();
-                    SwTextAttr* pTextAttr = pTextNode ? pTextNode->GetFieldTextAttrAt(this->GetPoint()->GetContentIndex() - 1, ::sw::GetTextAttrMode::Default) : nullptr;
-                    SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pTextAttr));
-                    if (pTextField)
-                        const_cast<SwFormatField&>(pTextField->GetFormatField()).Broadcast(SwFormatFieldHint(&pTextField->GetFormatField(), eHintType));
-                }
             }
         }
     }

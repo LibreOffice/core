@@ -2166,6 +2166,8 @@ export class CommentSection extends CanvasSectionObject {
 				const oldParent = modified.getParentCommentId();
 				modified.setData(modifiedObj);
 				modified.update();
+				if (modifiedObj.layoutStatus !== undefined && modifiedObj.layoutStatus !== null)
+					modified.setLayoutClass();
 				if (oldParent !== null && modified.isRootComment()) {
 					const parentIdx = this.getIndexOf(oldParent);
 					const parentComment = this.sectionProperties.commentList[parentIdx];

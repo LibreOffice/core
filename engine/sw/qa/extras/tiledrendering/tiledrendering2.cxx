@@ -21,6 +21,7 @@
 #include <sfx2/msgpool.hxx>
 #include <vcl/scheduler.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <comphelper/kit.hxx>
@@ -43,6 +44,9 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <PostItMgr.hxx>
+#include <postithelper.hxx>
+#include <docufld.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <docsh.hxx>
@@ -1177,6 +1181,96 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormImageRemoteNotFetched)
     pDevice->SetOutputSizePixel(Size(1024, 1024));
     static_cast<SwViewShell*>(pWrtShell)->Paint(
         *pDevice, tools::Rectangle(Point(0, 0), pWrtShell->GetLayout()->getFrameArea().SSize()));
+}
+
+// Inserts a comment, turns on change recording and deletes the comment, so the deletion is only
+// recorded as a redline. Returns the post-it id of the comment.
+sal_uInt32 recordCommentDeletion(SwPostItMgr* pPostItMgr, SwTestViewCallback& rView)
+{
+    comphelper::dispatchCommand(u".uno:InsertAnnotation"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { "Text", cpo::uno::Any(u"a comment"_ustr) },
+                                    { "Author", cpo::uno::Any(u"Author"_ustr) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPostItMgr->GetPostItFields().size());
+    const SwPostItField* pPostItField = static_cast<const SwPostItField*>(
+        pPostItMgr->GetPostItFields()[0]->GetFormatField().GetField());
+    sal_uInt32 nPostItId = pPostItField->GetPostItId();
+
+    comphelper::dispatchCommand(u".uno:TrackChanges"_ustr, {});
+    comphelper::dispatchCommand(u".uno:DeleteComment"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { "Id", cpo::uno::Any(OUString::number(nPostItId)) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    // The client is told to render the comment as pending deletion instead of removing it.
+    CPPUNIT_ASSERT_EQUAL(std::string("Modify"),
+                         rView.m_aComment.get_child("action").get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SwPostItHelper::DELETED),
+                         rView.m_aComment.get_child("layoutStatus").get_value<int>());
+    return nPostItId;
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackedCommentDeletionAccept)
+{
+    // Accepting the recorded deletion of a comment removes the comment from the document and
+    // tells the client to remove it.
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SwTestViewCallback aView;
+    pWrtShell->Insert(u"word"_ustr);
+    SwPostItMgr* pPostItMgr = getSwDocShell()->GetView()->GetPostItMgr();
+    CPPUNIT_ASSERT(pPostItMgr);
+
+    sal_uInt32 nPostItId = recordCommentDeletion(pPostItMgr, aView);
+
+    // The comment is still part of the document while the deletion is pending.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPostItMgr->GetPostItFields().size());
+    CPPUNIT_ASSERT_EQUAL(SwPostItHelper::SwLayoutStatus::DELETED,
+                         pPostItMgr->GetPostItFields()[0]->mLayoutStatus);
+
+    int nCallbacks = aView.m_nCommentCallbackCount;
+    comphelper::dispatchCommand(u".uno:AcceptAllTrackedChanges"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the accompanying fix in place, this test would have failed: no comment callback
+    // arrived at all, so the client kept showing the removed comment.
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPostItMgr->GetPostItFields().size());
+    CPPUNIT_ASSERT(aView.m_nCommentCallbackCount > nCallbacks);
+    CPPUNIT_ASSERT_EQUAL(std::string("Remove"),
+                         aView.m_aComment.get_child("action").get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(nPostItId, aView.m_aComment.get_child("id").get_value<sal_uInt32>());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackedCommentDeletionReject)
+{
+    // Rejecting the recorded deletion of a comment keeps the comment and tells the client that
+    // the comment no longer counts as deleted.
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SwTestViewCallback aView;
+    pWrtShell->Insert(u"word"_ustr);
+    SwPostItMgr* pPostItMgr = getSwDocShell()->GetView()->GetPostItMgr();
+    CPPUNIT_ASSERT(pPostItMgr);
+
+    sal_uInt32 nPostItId = recordCommentDeletion(pPostItMgr, aView);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPostItMgr->GetPostItFields().size());
+
+    comphelper::dispatchCommand(u".uno:RejectAllTrackedChanges"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The comment survives the rejection.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPostItMgr->GetPostItFields().size());
+    // The client is told the comment is visible again: a Modify callback carries a layout
+    // status that is no longer DELETED.
+    CPPUNIT_ASSERT_EQUAL(std::string("Modify"),
+                         aView.m_aComment.get_child("action").get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(nPostItId, aView.m_aComment.get_child("id").get_value<sal_uInt32>());
+    CPPUNIT_ASSERT(aView.m_aComment.get_child("layoutStatus").get_value<int>()
+                   != static_cast<int>(SwPostItHelper::DELETED));
 }
 }
 

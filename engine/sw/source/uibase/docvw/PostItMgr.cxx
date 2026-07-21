@@ -623,7 +623,6 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
             }
             case SwFormatFieldHintWhich::REMOVED:
-            case SwFormatFieldHintWhich::REDLINED_DELETION:
             {
                 if (mbDeleteNote)
                 {
@@ -642,9 +641,20 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if (comphelper::COKit::isActive())
                     {
                         SwPostItField* pPostItField = static_cast<SwPostItField*>(pField->GetField());
-                        auto type = pFormatHint->Which() == SwFormatFieldHintWhich::REMOVED ? CommentNotificationType::Remove: CommentNotificationType::RedlinedDeletion;
-                        lcl_CommentNotification(mpView, type, nullptr, pPostItField->GetPostItId());
+                        lcl_CommentNotification(mpView, CommentNotificationType::Remove, nullptr, pPostItField->GetPostItId());
                     }
+                }
+                break;
+            }
+            case SwFormatFieldHintWhich::REDLINED_DELETION:
+            {
+                // A recorded deletion keeps the comment in the document until the change is
+                // accepted, so the item stays in the list and the field stays listened to;
+                // the client is only notified of the pending deletion.
+                if (pField && comphelper::COKit::isActive())
+                {
+                    SwPostItField* pPostItField = static_cast<SwPostItField*>(pField->GetField());
+                    lcl_CommentNotification(mpView, CommentNotificationType::RedlinedDeletion, nullptr, pPostItField->GetPostItId());
                 }
                 break;
             }
@@ -827,6 +837,12 @@ bool SwPostItMgr::CalcRects()
                         SwPostItHelper::getLayoutInfos( pItem->maLayoutInfo, pItem->GetAnchorPosition() );
                 }
             }
+            // Entering or leaving the deleted state is worth announcing on its own; other status
+            // changes come from normal layout progression, e.g. a page getting laid out on load.
+            if (pItem->mLayoutStatus != eOldLayoutStatus
+                && (pItem->mLayoutStatus == SwPostItHelper::DELETED
+                    || eOldLayoutStatus == SwPostItHelper::DELETED))
+                pItem->mbLayoutStatusChanged = true;
             bChange = bChange
                       || pItem->maLayoutInfo.mPosition != aOldAnchorRect
                       || pItem->mLayoutStatus != eOldLayoutStatus
@@ -1178,7 +1194,8 @@ void SwPostItMgr::LayoutPostIts()
                             // Notify about a just inserted comment.
                             aCreatedPostIts.insert(visiblePostIt);
                         }
-                        else if (visiblePostIt->IsAnchorRectChanged())
+                        else if (visiblePostIt->IsAnchorRectChanged()
+                                 || visiblePostIt->GetSidebarItem().mbLayoutStatusChanged)
                         {
                             lcl_CommentNotification(mpView, CommentNotificationType::Modify, &visiblePostIt->GetSidebarItem(), 0);
                             visiblePostIt->ResetAnchorRectChanged();
@@ -1187,6 +1204,7 @@ void SwPostItMgr::LayoutPostIts()
 
                     // Layout for this post it finished now
                     visiblePostIt->GetSidebarItem().mbPendingLayout = false;
+                    visiblePostIt->GetSidebarItem().mbLayoutStatusChanged = false;
                 }
             }
             else

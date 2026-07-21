@@ -101,6 +101,8 @@ public:
     bool mbShow;
     bool mbFocus;
     bool mbPendingLayout;
+    /// True when mLayoutStatus changed after the last layout of the post-it windows.
+    bool mbLayoutStatusChanged;
     SwPostItHelper::SwLayoutStatus mLayoutStatus;
     SwLayoutInfo maLayoutInfo;
 

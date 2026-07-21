@@ -118,6 +118,7 @@ SwAnnotationItem::SwAnnotationItem(SwFormatField& rFormatField, const bool aFocu
     , mbShow(true)
     , mbFocus(aFocus)
     , mbPendingLayout(false)
+    , mbLayoutStatusChanged(false)
     , mLayoutStatus(SwPostItHelper::INVISIBLE)
     , mrFormatField( rFormatField )
 {
