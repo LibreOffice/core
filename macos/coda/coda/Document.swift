@@ -26,6 +26,14 @@ class Document: NSDocument {
     @objc
     var fakeClientFd: Int32 = -1
 
+    /// A connected fake-socket pair belonging to this document: closing the signal
+    /// end makes the watched end readable, which marks the end of this document's
+    /// engine connection. Both stay -1 until the connection is established.
+    @objc
+    var closeNotificationSignalFd: Int32 = -1
+    @objc
+    var closeNotificationWatchedFd: Int32 = -1
+
     /// ID to identify the document to be able to get access to lok::Document (eg. for printing)
     @objc
     var appDocId: Int32 = -1
