@@ -4077,7 +4077,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		app.socket.sendMessage('commandvalues command=.uno:AcceptTrackedChanges');
 
 		map._fadeAnimated = false;
-		this._viewReset();
 
 		map.on('dragover', this._onDragOver, this);
 		map.on('drop', this._onDrop, this);
@@ -4118,10 +4117,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		this._map.sendInitUNOCommands();
 
+		map.setZoom();
+
+		this._viewReset();
 		this._resetClientVisArea();
 		this._requestNewTiles();
-
-		map.setZoom();
 
 		// This is called when page size is increased
 		// the content of the page that become visible may stay empty
