@@ -94,4 +94,9 @@ declare const app: {
 		runTheTopTask(): boolean;
 		triggerDrainCallbacks(): void;
 	};
+	file: {
+		// True while the document has edits the engine has not saved. Set from
+		// the engine's .uno:ModifiedStatus notification.
+		modified: boolean;
+	};
 };

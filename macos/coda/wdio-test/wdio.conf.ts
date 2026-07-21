@@ -49,6 +49,7 @@ export const config = {
 		join(QT_SPECS_DIR, 'open-file.spec.ts'),
 		join(QT_SPECS_DIR, 'multipage-backstage.spec.ts'),
 		join(QT_SPECS_DIR, 'slide-copy-paste.spec.ts'),
+		join(QT_SPECS_DIR, 'multidoc-close.spec.ts'),
 	]],
 
 	exclude: [],
