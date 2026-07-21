@@ -446,8 +446,10 @@ run-desktop: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call cleanup_before_run)
 	$(call run_JS_error_check)
 	$(call start_coolwsd)
-	$(call run_interactive_desktop,$(spec)) || true
-	$(V)$(KILL_COMMAND) || true
+	$(eval CYPRESS_INCLUDE_TAGS=$(DESKTOP_INCLUDE_TAGS))
+	$(eval export CYPRESS_INCLUDE_TAGS)
+	$(if $(spec),$(call check_spec_existence,$(spec),desktop))
+	$(V)trap '$(KILL_COMMAND) || true' INT TERM EXIT; $(if $(spec),DEBUG='cypress:*' $(CYPRESS_BINARY) run --browser $(BROWSER) --headed --no-exit --config-file $(CYPRESS_CONFIG) --config $(DESKTOP_CONFIG)$(COMMA)retries=0 --env $(DESKTOP_ENV) --spec=$(DESKTOP_TEST_FOLDER)/$(spec),DEBUG='cypress:*' $(CYPRESS_BINARY) open --config-file $(CYPRESS_CONFIG) --config $(DESKTOP_CONFIG) --env $(DESKTOP_ENV)) || true
 
 DESKTOP_CONFIG = \
 	specPattern=$(DESKTOP_TEST_FOLDER)/**/*_spec.js,supportFile=$(SUPPORT_FILE),userAgent=$(DESKTOP_USER_AGENT)
