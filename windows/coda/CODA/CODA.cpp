@@ -1921,6 +1921,10 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
                             data.webView = wil::com_ptr<ICoreWebView2>(webView);
                             data.webViewController = controller;
 
+                            wil::com_ptr<ICoreWebView2_22> webView22 = data.webView.try_query<ICoreWebView2_22>();
+                            if (!webView22)
+                                fatal("Could not get webView22");
+
                             // Add a few settings for the webview
                             // The demo step is redundant since the values are the default settings
                             wil::com_ptr<ICoreWebView2Settings> settings;
@@ -1946,12 +1950,13 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
                             EventRegistrationToken token;
                             HRESULT hr;
 
-                            hr = (webView->AddWebResourceRequestedFilter(
+                            hr = (webView22->AddWebResourceRequestedFilterWithRequestSourceKinds(
                                       L"cool://*",
-                                      COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL));
+                                      COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL,
+                                      COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS_ALL));
                             if (!SUCCEEDED(hr))
                             {
-                                LOG_ERR_S("AddWebResourceRequestedFilter() failed");
+                                LOG_ERR_S("AddWebResourceRequestedFilterWithRequestSourceKinds() failed");
                                 return hr;
                             }
 
