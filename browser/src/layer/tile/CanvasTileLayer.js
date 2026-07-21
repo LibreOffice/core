@@ -392,6 +392,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// text, presentation, spreadsheet, etc
 		this._docType = options.docType;
 		this._partHasComments = options.partHasComments;
+		this._documentWidthTwips = options.documentWidthTwips;
 		this._documentInfo = '';
 		if (!this.isWriter())
 			app.setCursorVisibility(false); // Don't change the default for Writer.

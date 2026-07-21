@@ -1091,6 +1091,7 @@ class Socket {
 				docType: command.type,
 				viewId: command.viewid,
 				partHasComments: command.partHasComments,
+				documentWidthTwips: command.width,
 			};
 			if (command.type === 'text')
 				docLayer = new window.L.WriterTileLayer(options);
