@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <climits>
+
 #include <basegfx/numeric/ftools.hxx>
 #include <tools/helpers.hxx>
 #include <osl/diagnose.h>
@@ -483,7 +485,8 @@ void ImplRegionBand::Intersect( tools::Long nXLeft, tools::Long nXRight )
 
 void ImplRegionBand::Exclude( tools::Long nXLeft, tools::Long nXRight )
 {
-    SAL_WARN_IF( nXLeft > nXRight, "vcl", "ImplRegionBand::Exclude(): nxLeft > nXRight" );
+    // Don't warn for intentional special cases
+    SAL_WARN_IF( nXLeft < LONG_MAX-1 && nXRight < LONG_MAX-1 && nXLeft > nXRight, "vcl", "ImplRegionBand::Exclude(): nXLeft > nXRight" );
 
     // band has been touched
     mbTouched = true;

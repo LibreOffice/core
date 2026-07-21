@@ -979,7 +979,9 @@ void RegionBand::Union(const RegionBand& rSource)
 
 void RegionBand::Exclude(tools::Long nLeft, tools::Long nTop, tools::Long nRight, tools::Long nBottom)
 {
-    SAL_WARN_IF( nLeft > nRight, "vcl", "RegionBand::Exclude() - nLeft > nRight" );
+    // Don't warn for intentional special cases
+    SAL_WARN_IF( nLeft < LONG_MAX-1 && nRight < LONG_MAX-1 && nLeft > nRight, "vcl", "RegionBand::Exclude() - nLeft > nRight" );
+
     SAL_WARN_IF( nTop > nBottom, "vcl", "RegionBand::Exclude() - nTop > nBottom" );
 
     // process exclude
