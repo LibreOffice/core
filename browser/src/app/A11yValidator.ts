@@ -230,7 +230,9 @@ class A11yValidator {
 						labelHasHtmlFor &&
 						(referencedElement as HTMLLabelElement).htmlFor === element.id;
 
-					if (htmlForPointsToThisElement) {
+					const isHiddenLabel = !this.isVisible(referencedElement);
+
+					if (htmlForPointsToThisElement && !isHiddenLabel) {
 						throw new A11yValidatorException(
 							`In '${this.getDialogTitle(element)}' at '${this.getElementPath(element)}': element in widget of type '${type}' has aria-labelledby attribute pointing to label element with id: '${labelledbyId}', but that label also has htmlFor attribute pointing to this element. Should not duplicate labelling.`,
 						);
@@ -292,7 +294,9 @@ class A11yValidator {
 					const isMultiLabel =
 						ariaLabelledBy && ariaLabelledBy.trim().split(/\s+/).length > 1;
 
-					if (!isMultiLabel) {
+					const isHiddenLabel = !this.isVisible(element);
+
+					if (!isMultiLabel && !isHiddenLabel) {
 						throw new A11yValidatorException(
 							`In '${this.getDialogTitle(element)}' at '${this.getElementPath(element)}': label element in widget of type '${type}' is associated with element with id: '${htmlFor}' via htmlFor, but that element also has aria-label or aria-labelledby attribute. Should not duplicate labelling.`,
 						);
