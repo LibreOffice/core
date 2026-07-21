@@ -100,6 +100,7 @@
 #include <window.h>
 #include <numeric>
 #include <boost/property_tree/ptree.hpp>
+#include <unx/gtk/gtkdata.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -1725,7 +1726,7 @@ OUString get_buildable_id(GtkBuildable* pWidget)
     return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
 }
 
-void set_buildable_id(GtkBuildable* pWidget, const OUString& rId)
+void set_buildable_id(GtkBuildable* pWidget, const std::u16string_view rId)
 {
     gtk_buildable_set_name(pWidget, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
 }
@@ -3783,7 +3784,7 @@ public:
 
 
 
-    void insert_item(int pos, const OUString& rId, const OUString& rStr,
+    void insert_item(int pos, const std::u16string_view rId, const OUString& rStr,
                      const OUString* pIconName, const VirtualDevice* pImageSurface,
                      TriState eCheckRadioFalse)
     {
@@ -3822,7 +3823,7 @@ public:
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
     }
 
-    void insert_separator(int pos, const OUString& rId)
+    void insert_separator(int pos, const std::u16string_view rId)
     {
         GtkWidget* pItem = gtk_separator_menu_item_new();
         ::set_buildable_id(GTK_BUILDABLE(pItem), rId);
@@ -5508,12 +5509,12 @@ public:
 
         m_pBack = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Back)).getStr()));
         gtk_widget_set_can_default(GTK_WIDGET(m_pBack), true);
-        ::set_buildable_id(GTK_BUILDABLE(m_pBack), u"previous"_ustr);
+        ::set_buildable_id(GTK_BUILDABLE(m_pBack), u"previous");
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pBack), false, false, 0);
 
         m_pNext = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Next)).getStr()));
         gtk_widget_set_can_default(GTK_WIDGET(m_pNext), true);
-        ::set_buildable_id(GTK_BUILDABLE(m_pNext), u"next"_ustr);
+        ::set_buildable_id(GTK_BUILDABLE(m_pNext), u"next");
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pNext), false, false, 0);
 
         m_pCancel = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Cancel)).getStr()));
@@ -5522,7 +5523,7 @@ public:
 
         m_pFinish = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Finish)).getStr()));
         gtk_widget_set_can_default(GTK_WIDGET(m_pFinish), true);
-        ::set_buildable_id(GTK_BUILDABLE(m_pFinish), u"finish"_ustr);
+        ::set_buildable_id(GTK_BUILDABLE(m_pFinish), u"finish");
         gtk_box_pack_end(GTK_BOX(m_pButtonBox), GTK_WIDGET(m_pFinish), false, false, 0);
 
         m_pHelp = GTK_BUTTON(gtk_button_new_with_mnemonic(MapToGtkAccelerator(GetStandardText(StandardButtonType::Help)).getStr()));
@@ -6780,7 +6781,7 @@ private:
         disable_notify_events();
 
         GtkWidget *pTabWidget = gtk_fixed_new();
-        ::set_buildable_id(GTK_BUILDABLE(pTabWidget), u"useless"_ustr);
+        ::set_buildable_id(GTK_BUILDABLE(pTabWidget), u"useless");
 
         GtkWidget *pChild = gtk_grid_new();
         gtk_notebook_append_page(pNotebook, pChild, pTabWidget);
@@ -6790,7 +6791,7 @@ private:
         enable_notify_events();
     }
 
-    void insert_page(GtkNotebook* pNotebook, const OUString& rIdent, const OUString& rLabel,
+    void insert_page(GtkNotebook* pNotebook, const std::u16string_view rIdent, const OUString& rLabel,
                      GtkWidget* pChild, int nPos, const OUString* pIconName = nullptr)
     {
         disable_notify_events();

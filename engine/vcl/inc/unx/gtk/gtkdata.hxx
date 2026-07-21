@@ -122,7 +122,7 @@ inline bool surface_get_device_position(GdkWindow* pSurface,
     return bRet;
 }
 
-void set_buildable_id(GtkBuildable* pWidget, const OUString& rId);
+void set_buildable_id(GtkBuildable* pWidget, const std::u16string_view rId);
 OUString get_buildable_id(GtkBuildable* pWidget);
 
 void container_remove(GtkWidget* pContainer, GtkWidget* pChild);
