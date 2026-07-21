@@ -430,20 +430,8 @@ bool ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
             // tiled rendering; the changed heights make the cached values from
             // the first changed row on wrong, so drop them and the next lookup
             // recomputes them from the document.
-            SfxViewShell* pSomeViewForThisDoc = GetBestViewShell(false);
-            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-            while (pViewShell)
-            {
-                ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-                if (pTabViewShell && pSomeViewForThisDoc
-                    && pTabViewShell->GetDocId() == pSomeViewForThisDoc->GetDocId())
-                {
-                    if (ScPositionHelper* pPosHelper
-                        = pTabViewShell->GetViewData().GetKitHeightHelper(nTab))
-                        pPosHelper->invalidateByIndex(nStartRow);
-                }
-                pViewShell = SfxViewShell::GetNext(*pViewShell);
-            }
+            ScTabViewShell::invalidateAllViewsKitPositions(GetBestViewShell(false),
+                                                           /*bColumns=*/false, nTab, nStartRow);
         }
 
         // tdf#76183: recalculate objects' positions

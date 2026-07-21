@@ -1844,27 +1844,8 @@ void ScViewFunc::OnKitSetWidthOrHeight(SCCOLROW nStart, bool bWidth)
     if (!comphelper::COKit::isActive())
         return;
 
-    SCTAB nCurTab = GetViewData().CurrentTabForData();
-    SfxViewShell* pCurrentViewShell = GetViewData().GetViewShell();
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    while (pViewShell)
-    {
-        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-        if (pTabViewShell && pTabViewShell->GetDocId() == pCurrentViewShell->GetDocId())
-        {
-            if (bWidth)
-            {
-                if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetKitWidthHelper(nCurTab))
-                    pPosHelper->invalidateByIndex(nStart);
-            }
-            else
-            {
-                if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetKitHeightHelper(nCurTab))
-                    pPosHelper->invalidateByIndex(nStart);
-            }
-        }
-        pViewShell = SfxViewShell::GetNext(*pViewShell);
-    }
+    ScTabViewShell::invalidateAllViewsKitPositions(GetViewData().GetViewShell(), bWidth,
+                                                   GetViewData().CurrentTabForData(), nStart);
 }
 
 //  insert cells - undo OK

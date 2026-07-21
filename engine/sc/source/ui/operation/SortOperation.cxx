@@ -271,18 +271,8 @@ bool SortOperation::runImplementation()
     if (SfxViewShell* pKitSomeViewForThisDoc
         = comphelper::COKit::isActive() ? mrDocShell.GetBestViewShell(false) : nullptr)
     {
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while (pViewShell)
-        {
-            ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-            if (pTabViewShell && pTabViewShell->GetDocId() == pKitSomeViewForThisDoc->GetDocId())
-            {
-                if (ScPositionHelper* pPosHelper
-                    = pTabViewShell->GetViewData().GetKitHeightHelper(mnTab))
-                    pPosHelper->invalidateByIndex(nStartRow);
-            }
-            pViewShell = SfxViewShell::GetNext(*pViewShell);
-        }
+        ScTabViewShell::invalidateAllViewsKitPositions(pKitSomeViewForThisDoc,
+                                                       /*bColumns=*/false, mnTab, nStartRow);
 
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
             pKitSomeViewForThisDoc, false /* bColumns */, true /* bRows */, true /* bSizes*/,

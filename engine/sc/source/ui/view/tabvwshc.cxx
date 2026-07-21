@@ -652,6 +652,28 @@ void ScTabViewShell::notifyAllViewsSheetGeomInvalidation(const SfxViewShell* pFo
     }
 }
 
+void ScTabViewShell::invalidateAllViewsKitPositions(const SfxViewShell* pForViewShell,
+                                                    bool bColumns, SCTAB nTab, SCCOLROW nStart)
+{
+    if (!comphelper::COKit::isActive() || !pForViewShell)
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell && pTabViewShell->GetDocId() == pForViewShell->GetDocId())
+        {
+            ScViewData& rViewData = pTabViewShell->GetViewData();
+            ScPositionHelper* pPosHelper = bColumns ? rViewData.GetKitWidthHelper(nTab)
+                                                    : rViewData.GetKitHeightHelper(nTab);
+            if (pPosHelper)
+                pPosHelper->invalidateByIndex(nStart);
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
 {
     bool bSubTotal = false;
