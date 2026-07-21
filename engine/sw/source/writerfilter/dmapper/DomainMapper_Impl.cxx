@@ -2787,17 +2787,11 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                             uno::Reference<container::XNamed> xCurrentNumberingRules(itNumberingRules->Value, uno::UNO_QUERY);
                             if (xCurrentNumberingRules.is())
                                 aCurrentNumberingName = xCurrentNumberingRules->getName();
-                            try
-                            {
-                                uno::Reference<container::XNamed> xPreviousNumberingRules(
-                                    m_StreamStateStack.top().xPreviousParagraph->getPropertyValue(u"NumberingRules"_ustr),
-                                    uno::UNO_QUERY_THROW);
+                            uno::Reference<container::XNamed> xPreviousNumberingRules(
+                                m_StreamStateStack.top().xPreviousParagraph->getPropertyValue(u"NumberingRules"_ustr),
+                                uno::UNO_QUERY);
+                            if (xPreviousNumberingRules.is())
                                 aPreviousNumberingName = xPreviousNumberingRules->getName();
-                            }
-                            catch (const uno::Exception&)
-                            {
-                                TOOLS_WARN_EXCEPTION("writerfilter", "DomainMapper_Impl::finishParagraph NumberingRules");
-                            }
                         }
                         else if (m_StreamStateStack.top().xPreviousParagraph->getPropertySetInfo()->hasPropertyByName(u"NumberingStyleName"_ustr)
                                 // don't update before tables
