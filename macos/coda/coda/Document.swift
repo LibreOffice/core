@@ -334,6 +334,18 @@ class Document: NSDocument {
                 self.fileType = ps.typeName
             }
 
+            // fileModificationDate is NSDocument's record of the file's date on disk; a save
+            // that leaves it older than the file makes the next save report the file as
+            // changed by another application. The low-level write above does not maintain it
+            // (the higher-level NSDocument saving pipeline normally does), so refresh it here.
+            // Save To and autosave-elsewhere write somewhere other than the document's file
+            // and keep the record unchanged, hence the URL comparison.
+            if self.fileURL == ps.url,
+               let attributes = try? FileManager.default.attributesOfItem(atPath: ps.url.path),
+               let modificationDate = attributes[.modificationDate] as? Date {
+                self.fileModificationDate = modificationDate
+            }
+
             // Clear edited state only if nothing new happened since this save began.
             self.updateChangeCount(withToken: ps.token, for: ps.operation)
 
