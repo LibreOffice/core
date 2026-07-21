@@ -709,13 +709,10 @@ bool AIChatSession::handleAction(const std::string& firstLine)
         return true;
     }
 
-    if (!baseUrl.empty() && baseUrl.back() == '/')
-        baseUrl.pop_back();
-
     LOG_DBG("AIChatAction: request [" << requestId << "] with "
             << sanitizedMessages->size() << " messages, model: " << model);
 
-    std::string requestUrl = std::move(baseUrl);
+    std::string requestUrl = AIUtil::normalizeAIBaseUrl(baseUrl);
     requestUrl.append("/v1/chat/completions");
 
     // Initialize the tool loop state
@@ -1872,10 +1869,7 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
         return req;
     }
 
-    if (!baseUrl.empty() && baseUrl.back() == '/')
-        baseUrl.pop_back();
-
-    req.requestUrl = baseUrl + "/v1/images/generations";
+    req.requestUrl = AIUtil::normalizeAIBaseUrl(baseUrl) + "/v1/images/generations";
 
 #if !MOBILEAPP
     // A built-in provider's host is a fixed public endpoint and is always

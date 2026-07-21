@@ -2286,8 +2286,7 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
         return;
     }
 
-    if (baseUrl.back() == '/')
-        baseUrl.pop_back();
+    baseUrl = AIUtil::normalizeAIBaseUrl(baseUrl);
     baseUrl += "/v1/models";
 
     Poco::URI uri(baseUrl);

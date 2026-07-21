@@ -30,10 +30,12 @@ class AIUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST_SUITE(AIUtilTests);
     CPPUNIT_TEST(testValidateTransformStructure);
     CPPUNIT_TEST(testParseLenientArgs);
+    CPPUNIT_TEST(testNormalizeAIBaseUrl);
     CPPUNIT_TEST_SUITE_END();
 
     void testValidateTransformStructure();
     void testParseLenientArgs();
+    void testNormalizeAIBaseUrl();
 };
 
 void AIUtilTests::testValidateTransformStructure()
@@ -101,6 +103,45 @@ void AIUtilTests::testParseLenientArgs()
         LOK_ASSERT_EQUAL(std::string("A1"), cell);
         LOK_ASSERT_EQUAL(std::string("=SUM(A1:A9)"), formula);
     }
+}
+
+void AIUtilTests::testNormalizeAIBaseUrl()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A bare origin is left as is.
+    LOK_ASSERT_EQUAL(std::string("https://api.openai.com"),
+                     AIUtil::normalizeAIBaseUrl("https://api.openai.com"));
+
+    // One or several trailing slashes are removed.
+    LOK_ASSERT_EQUAL(std::string("https://api.openai.com"),
+                     AIUtil::normalizeAIBaseUrl("https://api.openai.com/"));
+    LOK_ASSERT_EQUAL(std::string("http://localhost:11434"),
+                     AIUtil::normalizeAIBaseUrl("http://localhost:11434///"));
+
+    // A trailing "/v1", with or without a trailing slash, is removed.
+    LOK_ASSERT_EQUAL(std::string("http://localhost:11434"),
+                     AIUtil::normalizeAIBaseUrl("http://localhost:11434/v1"));
+    LOK_ASSERT_EQUAL(std::string("http://localhost:11434"),
+                     AIUtil::normalizeAIBaseUrl("http://localhost:11434/v1/"));
+
+    // The match is case-insensitive.
+    LOK_ASSERT_EQUAL(std::string("http://localhost:11434"),
+                     AIUtil::normalizeAIBaseUrl("http://localhost:11434/V1"));
+
+    // A path that ends in a different segment keeps that segment: "/openai" is
+    // a real base (Groq), and "/v10" is not the "/v1" we strip.
+    LOK_ASSERT_EQUAL(std::string("https://api.groq.com/openai"),
+                     AIUtil::normalizeAIBaseUrl("https://api.groq.com/openai/"));
+    LOK_ASSERT_EQUAL(std::string("https://example.com/v10"),
+                     AIUtil::normalizeAIBaseUrl("https://example.com/v10"));
+
+    // Only the single trailing "/v1" goes; an earlier "/v1" in the path stays.
+    LOK_ASSERT_EQUAL(std::string("https://example.com/v1/api"),
+                     AIUtil::normalizeAIBaseUrl("https://example.com/v1/api"));
+
+    // The empty string maps to the empty string.
+    LOK_ASSERT_EQUAL(std::string(), AIUtil::normalizeAIBaseUrl(""));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(AIUtilTests);

@@ -36,6 +36,13 @@ std::string_view preCannedAIProviderBaseUrl(std::string_view id);
 /// provider's host still goes through that allowlist.
 bool isPreCannedAIProviderHost(std::string_view host);
 
+/// Return the base URL reduced to its bare origin: any trailing slashes and a
+/// single trailing "/v1" segment removed (the "/v1" match is case-insensitive).
+/// An empty input returns empty. This is the canonical form to which a version
+/// path such as "/v1/chat/completions" is appended, so a stored value that
+/// already ends in "/v1" does not produce a doubled "/v1/v1/..." path.
+std::string normalizeAIBaseUrl(std::string_view baseUrl);
+
 /// Parse a tool's argument JSON. Most models emit a single object ({...}), but
 /// some emit a JSON array of objects ([{...},{...}]); when that happens, merge
 /// all element objects into one so downstream lookups by key continue to work.

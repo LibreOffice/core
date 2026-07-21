@@ -87,6 +87,34 @@ bool isPreCannedAIProviderHost(std::string_view host)
     return false;
 }
 
+std::string normalizeAIBaseUrl(std::string_view baseUrl)
+{
+    std::string url(baseUrl);
+
+    const auto stripTrailingSlashes = [&url]()
+    {
+        while (!url.empty() && url.back() == '/')
+            url.pop_back();
+    };
+
+    stripTrailingSlashes();
+
+    // Drop a single trailing "/v1" (any case). The version path is appended
+    // afterwards, so leaving one here would double it into "/v1/v1/...".
+    if (url.size() >= 3)
+    {
+        const std::size_t tail = url.size() - 3;
+        if (url[tail] == '/' && (url[tail + 1] == 'v' || url[tail + 1] == 'V') &&
+            url[tail + 2] == '1')
+        {
+            url.erase(tail);
+            stripTrailingSlashes();
+        }
+    }
+
+    return url;
+}
+
 bool parseLenientArgs(const std::string& argsJson, Poco::JSON::Object::Ptr& argsObj)
 {
     if (JsonUtil::parseJSON(argsJson, argsObj))

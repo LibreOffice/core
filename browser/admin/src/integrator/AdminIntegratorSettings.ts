@@ -726,6 +726,15 @@ class SettingIframe {
 	}
 
 	public async saveAll(): Promise<SaveAllResult> {
+		// Store the AI base URLs in their canonical form (no trailing "/v1"), in
+		// case a field was edited but never blurred before the save.
+		this._viewSetting.aiProviderURL = this.normalizeBaseUrl(
+			this._viewSetting.aiProviderURL || '',
+		);
+		this._viewSetting.aiImageProviderURL = this.normalizeBaseUrl(
+			this._viewSetting.aiImageProviderURL || '',
+		);
+
 		// The View-tab / AI-sidebar payoff should fire only when the user
 		// actually changed the chat AI configuration in this dialog session (not
 		// on every save that happens to already be configured). The key is
@@ -2418,7 +2427,7 @@ class SettingIframe {
 			'#aiProviderURL',
 		) as HTMLInputElement | null;
 		if (customUrlInput) {
-			customUrlInput.placeholder = _('e.g.') + ' http://localhost:11434/v1';
+			customUrlInput.placeholder = _('e.g.') + ' http://localhost:11434';
 		}
 
 		group.appendChild(
@@ -2544,7 +2553,7 @@ class SettingIframe {
 			'#aiImageProviderURL',
 		) as HTMLInputElement | null;
 		if (imageUrlInput) {
-			imageUrlInput.placeholder = _('e.g.') + ' http://localhost:11434/v1';
+			imageUrlInput.placeholder = _('e.g.') + ' http://localhost:11434';
 		}
 
 		group.appendChild(
@@ -2698,6 +2707,17 @@ class SettingIframe {
 			}
 		});
 
+		// On blur, rewrite the field to the canonical base URL (no trailing
+		// "/v1"), so the admin sees the value that will actually be stored.
+		customUrlInput?.addEventListener('change', () => {
+			if (this.isCustomProviderSelected(root, data)) {
+				const normalized = this.normalizeBaseUrl(customUrlInput.value);
+				customUrlInput.value = normalized;
+				data.aiProviderURL = normalized;
+				this._lastCustomAIProviderURL = normalized;
+			}
+		});
+
 		modelSelect?.addEventListener('change', () => {
 			this._aiConfigDirty = true;
 			data.aiProviderModel = modelSelect.value;
@@ -2765,6 +2785,20 @@ class SettingIframe {
 				data.aiImageProviderURL = customUrlInput.value;
 				this._lastCustomAIImageProviderURL = customUrlInput.value;
 				queueFetch();
+			}
+		});
+
+		// On blur, rewrite the field to the canonical base URL (no trailing
+		// "/v1"), so the admin sees the value that will actually be stored.
+		customUrlInput?.addEventListener('change', () => {
+			const imageProvider = root.querySelector(
+				'#aiImageProvider',
+			) as HTMLSelectElement | null;
+			if (imageProvider?.value === 'custom') {
+				const normalized = this.normalizeBaseUrl(customUrlInput.value);
+				customUrlInput.value = normalized;
+				data.aiImageProviderURL = normalized;
+				this._lastCustomAIImageProviderURL = normalized;
 			}
 		});
 
@@ -3301,6 +3335,11 @@ class SettingIframe {
 				this._viewSetting.aiProviderURL =
 					this.normalizeBaseUrl(viewSetting.aiProviderURL || '') ||
 					this.getDefaultAIProviderURL();
+				// An empty image URL means "Same as Text AI", so keep it empty
+				// rather than falling back to a default.
+				this._viewSetting.aiImageProviderURL = this.normalizeBaseUrl(
+					viewSetting.aiImageProviderURL || '',
+				);
 				this._aiConfigDirty = false;
 				this.generateAISettingsUI(viewSetting, settingsContainer);
 			}
@@ -3642,7 +3681,12 @@ class SettingIframe {
 	}
 
 	private normalizeBaseUrl(value: string): string {
-		return value ? value.replace(/\/+$/, '') : '';
+		if (!value) return '';
+		// The server appends "/v1/..." to this base URL, so reduce it to the bare
+		// origin. A value that already ends in "/v1" (users often paste one) would
+		// otherwise produce a doubled "/v1/v1/..." path. Trailing slashes go first,
+		// then a single trailing "/v1", then any slash left behind.
+		return value.replace(/\/+$/, '').replace(/\/v1$/i, '').replace(/\/+$/, '');
 	}
 
 	private getProviderById(id: string): AIProvider | undefined {
