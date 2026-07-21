@@ -1,0 +1,638 @@
+#
+msgid ""
+msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: \nPOT-Creation-Date: 2026-07-06 16:07+0000\nPO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\nLast-Translator: Automatically generated\nLanguage-Team: none\nLanguage: hu\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Calc-Intro-Template.ods:1
+msgid "Next Chapter: ✚"
+msgstr ""
+
+#: Calc-Intro-Template.ods:2
+msgid "2. Type the formula "
+msgstr ""
+
+#: Calc-Intro-Template.ods:3
+msgid "3. Press "
+msgstr ""
+
+#: Calc-Intro-Template.ods:4
+msgid "2. Open "
+msgstr ""
+
+#: Calc-Intro-Template.ods:5
+msgid "3. Click on "
+msgstr ""
+
+#: Calc-Intro-Template.ods:6
+msgid "4. Choose SUM from the list of functions, "
+msgstr ""
+
+#: Calc-Intro-Template.ods:7
+msgid "6. Click "
+msgstr ""
+
+#: Calc-Intro-Template.ods:8
+msgid "Formulas in Calc always start with the equals sign "
+msgstr ""
+
+#: Calc-Intro-Template.ods:9
+msgid ""
+"Collabora Office Calc provides a large library of built-in functions that "
+"help you perform different types of calculations and data analysis."
+msgstr ""
+
+#: Calc-Intro-Template.ods:10
+msgid "Next Chapter: 📋 Tables"
+msgstr ""
+
+#: Calc-Intro-Template.ods:11
+msgid "2. Open the "
+msgstr ""
+
+#: Calc-Intro-Template.ods:12
+msgid "3. Click "
+msgstr ""
+
+#: Calc-Intro-Template.ods:13
+msgid "4. Click "
+msgstr ""
+
+#: Calc-Intro-Template.ods:14
+msgid "1. Open the "
+msgstr ""
+
+#: Calc-Intro-Template.ods:15
+msgid "2. Click "
+msgstr ""
+
+#: Calc-Intro-Template.ods:16
+msgid "➜ Try it:"
+msgstr ""
+
+#: Calc-Intro-Template.ods:17
+msgid "➜Try it: "
+msgstr ""
+
+#: Calc-Intro-Template.ods:18
+msgid "Next Chapter: 🎨 Conditional Formatting"
+msgstr ""
+
+#: Calc-Intro-Template.ods:19
+msgid "4. Select the "
+msgstr ""
+
+#: Calc-Intro-Template.ods:20
+msgid "➜ Try it: Inventory stock overview"
+msgstr ""
+
+#: Calc-Intro-Template.ods:21
+msgid "💡Useful tip:"
+msgstr ""
+
+#: Calc-Intro-Template.ods:22
+msgid "Next Chapter: 📊 Charts"
+msgstr ""
+
+#: Calc-Intro-Template.ods:23
+msgid "5. Click "
+msgstr ""
+
+#: Calc-Intro-Template.ods:24
+msgid "Next Chapter:🔍 Data & filtering"
+msgstr ""
+
+#: Calc-Intro-Template.ods:25
+msgid "➜Try it: Find low stock items"
+msgstr ""
+
+#: Calc-Intro-Template.ods:26
+msgid "➜Try it: Show only Electronics items"
+msgstr ""
+
+#: Calc-Intro-Template.ods:27
+msgid "💡Useful tip: "
+msgstr ""
+
+#: Calc-Intro-Template.ods:28
+msgid "Additional filtering options give you more control over your data."
+msgstr ""
+
+#: Calc-Intro-Template.ods:29
+msgid "Last Chapter_🤝 Productivity & collaboration"
+msgstr ""
+
+#: Calc-Intro-Template.ods:30
+msgid "2. Click on "
+msgstr ""
+
+#: Calc-Intro-Template.ods:31
+msgid "3. "
+msgstr ""
+
+#: Calc-Intro-Template.ods:32
+msgid "➜Try it: Internal shares"
+msgstr ""
+
+#: Calc-Intro-Template.ods:33
+msgid "➜Try it: External shares"
+msgstr ""
+
+#: Calc-Intro-Template.ods:34
+msgid ""
+"Explore the Format tab to to customize your data with styles and formats."
+msgstr ""
+
+#: Calc-Intro-Template.ods:35
+msgid ""
+"For Medium Stock use condition \"Values between: 20-80\" and style \"Medium "
+"Stock\"."
+msgstr ""
+
+#: Calc-Intro-Template.ods:36
+msgid ""
+"Use Standard or Advanced Filter to to narrow down your data more precisely"
+msgstr ""
+
+#: Calc-Intro-Template.ods:37
+msgid ""
+"Share a direct link with people who already have access to the document for "
+"quick and easy access."
+msgstr ""
+
+#: Calc-Intro-Template.ods:38
+msgid "👋General information"
+msgstr ""
+
+#: Calc-Intro-Template.ods:39
+msgid ""
+"Collabora Office spreadsheet can be used to calculate, analyze, and manage "
+"your data. This introduction template will help you get started and explore "
+"some of the main features of the product."
+msgstr ""
+
+#: Calc-Intro-Template.ods:40
+msgid "Calc features – key features you can explore"
+msgstr ""
+
+#: Calc-Intro-Template.ods:41
+msgid "Calculations (Formulas & Functions)"
+msgstr ""
+
+#: Calc-Intro-Template.ods:42
+msgid ""
+"Use built-in functions to perform calculations on your data. Create formulas"
+" easily and get help with the Function Wizard."
+msgstr ""
+
+#: Calc-Intro-Template.ods:43
+msgid "Tables"
+msgstr ""
+
+#: Calc-Intro-Template.ods:44
+msgid ""
+"Organize your data into structured tables. Quickly edit, sort, and filter "
+"information to keep everything clear and easy to manage."
+msgstr ""
+
+#: Calc-Intro-Template.ods:45
+msgid "Charts"
+msgstr ""
+
+#: Calc-Intro-Template.ods:46
+msgid ""
+"Visualize your data with different chart types. Quickly create and customize"
+" charts to better understand trends and comparisons."
+msgstr ""
+
+#: Calc-Intro-Template.ods:47
+msgid "Sorting & filtering"
+msgstr ""
+
+#: Calc-Intro-Template.ods:48
+msgid ""
+"Find what matters faster by sorting and filtering your data. Focus only on "
+"the information you need."
+msgstr ""
+
+#: Calc-Intro-Template.ods:49
+msgid "Data formatting"
+msgstr ""
+
+#: Calc-Intro-Template.ods:50
+msgid ""
+"Format your data to improve clarity and readability. Use colors, styles, and"
+" number formats to highlight key information."
+msgstr ""
+
+#: Calc-Intro-Template.ods:51
+msgid "Collaboration tools "
+msgstr ""
+
+#: Calc-Intro-Template.ods:52
+msgid ""
+"Work together in real time. Share, comment, and track changes directly in "
+"the document."
+msgstr ""
+
+#: Calc-Intro-Template.ods:53
+msgid "Accessibility"
+msgstr ""
+
+#: Calc-Intro-Template.ods:54
+msgid ""
+"Calc is designed with accessibility in mind, helping ensure that everyone "
+"can easily create, edit, and work with spreadsheets."
+msgstr ""
+
+#: Calc-Intro-Template.ods:55
+msgid "✚Using simple functions"
+msgstr ""
+
+#: Calc-Intro-Template.ods:56
+msgid ""
+"We will look at a practical case to learn how to use basic Calc features and"
+" simple functions."
+msgstr ""
+
+#: Calc-Intro-Template.ods:57
+msgid "Step-by-step guide – Adding values"
+msgstr ""
+
+#: Calc-Intro-Template.ods:58
+msgid ""
+"In this example we want to calculate the total number of items in stock. The"
+" SUM function allows you to quickly add numbers together."
+msgstr ""
+
+#: Calc-Intro-Template.ods:59
+msgid "Writing formula into cell"
+msgstr ""
+
+#: Calc-Intro-Template.ods:60
+msgid "Item"
+msgstr ""
+
+#: Calc-Intro-Template.ods:61
+msgid "Quantity [pcs]"
+msgstr ""
+
+#: Calc-Intro-Template.ods:62
+msgid "1. Click on the cell below the Quantity column"
+msgstr ""
+
+#: Calc-Intro-Template.ods:63
+msgid "Laptop"
+msgstr ""
+
+#: Calc-Intro-Template.ods:64
+msgid "5"
+msgstr ""
+
+#: Calc-Intro-Template.ods:65
+msgid "Mouse"
+msgstr ""
+
+#: Calc-Intro-Template.ods:66
+msgid "20"
+msgstr ""
+
+#: Calc-Intro-Template.ods:67
+msgid "Notebook"
+msgstr ""
+
+#: Calc-Intro-Template.ods:68
+msgid "50"
+msgstr ""
+
+#: Calc-Intro-Template.ods:69
+msgid "Inserting formula via Formulas tab – Formula wizard"
+msgstr ""
+
+#: Calc-Intro-Template.ods:70
+msgid "5. Select the cells containing the values you want to add"
+msgstr ""
+
+#: Calc-Intro-Template.ods:71
+msgid "Inserting formula via Formulas tab choosen from Category"
+msgstr ""
+
+#: Calc-Intro-Template.ods:72
+msgid "Formulas Structure"
+msgstr ""
+
+#: Calc-Intro-Template.ods:73
+msgid "Function Library"
+msgstr ""
+
+#: Calc-Intro-Template.ods:74
+msgid "📋Create a table "
+msgstr ""
+
+#: Calc-Intro-Template.ods:75
+msgid ""
+"Tables help you organize large amounts of information in a clear and "
+"structured way. They make it easier to manage data, perform calculations, "
+"and visualize information."
+msgstr ""
+
+#: Calc-Intro-Template.ods:76
+msgid "Step-by-step guide"
+msgstr ""
+
+#: Calc-Intro-Template.ods:77
+msgid ""
+"In this example we will learn how to create and use tables to organize data "
+"in a spreadsheet."
+msgstr ""
+
+#: Calc-Intro-Template.ods:78
+msgid "Create a table from existing data"
+msgstr ""
+
+#: Calc-Intro-Template.ods:79
+msgid "Category"
+msgstr ""
+
+#: Calc-Intro-Template.ods:80
+msgid "Supplier"
+msgstr ""
+
+#: Calc-Intro-Template.ods:81
+msgid ""
+"1. Select the range of cells that contains your data (including headers)"
+msgstr ""
+
+#: Calc-Intro-Template.ods:82
+msgid "Electronics"
+msgstr ""
+
+#: Calc-Intro-Template.ods:83
+msgid "Dell"
+msgstr ""
+
+#: Calc-Intro-Template.ods:84
+msgid "Logitech"
+msgstr ""
+
+#: Calc-Intro-Template.ods:85
+msgid "Office supplies"
+msgstr ""
+
+#: Calc-Intro-Template.ods:86
+msgid "Staples"
+msgstr ""
+
+#: Calc-Intro-Template.ods:87
+msgid "Keyboard"
+msgstr ""
+
+#: Calc-Intro-Template.ods:88
+msgid "10"
+msgstr ""
+
+#: Calc-Intro-Template.ods:89
+msgid "5. Your data is now organized as a table"
+msgstr ""
+
+#: Calc-Intro-Template.ods:90
+msgid "Pen"
+msgstr ""
+
+#: Calc-Intro-Template.ods:91
+msgid "100"
+msgstr ""
+
+#: Calc-Intro-Template.ods:92
+msgid "Bic"
+msgstr ""
+
+#: Calc-Intro-Template.ods:93
+msgid "Create a table from scratch"
+msgstr ""
+
+#: Calc-Intro-Template.ods:94
+msgid "3. Select the range of cells where you want to create the table"
+msgstr ""
+
+#: Calc-Intro-Template.ods:95
+msgid "5. Your table is now ready to be filled with data"
+msgstr ""
+
+#: Calc-Intro-Template.ods:96
+msgid "Editing tables"
+msgstr ""
+
+#: Calc-Intro-Template.ods:97
+msgid ""
+"When a table is created, additional tools become available in the toolbar. "
+"These tools allow you to customize and manage your table more easily. You "
+"can apply different table styles to improve the visual appearance of your "
+"data. You can also enable or disable options such as header rows, banded "
+"rows, and filter buttons, depending on how you want to display and work with"
+" your data."
+msgstr ""
+
+#: Calc-Intro-Template.ods:98
+msgid "Pivot table"
+msgstr ""
+
+#: Calc-Intro-Template.ods:99
+msgid ""
+"The pivot table (formerly known as DataPilot) allows you to combine, "
+"compare, and analyze large amounts of data. You can view different summaries"
+" of the source data, you can display the details of areas of interest, and "
+"you can create reports. "
+msgstr ""
+
+#: Calc-Intro-Template.ods:100
+msgid "🎨Conditional formatting"
+msgstr ""
+
+#: Calc-Intro-Template.ods:101
+msgid ""
+"Format your data to make it clearer and easier to understand. You can "
+"highlight important values, show patterns, and improve readability using "
+"colors, styles, and rules."
+msgstr ""
+
+#: Calc-Intro-Template.ods:102
+msgid ""
+"In this example, we will apply conditional formatting to highlight key "
+"values in the data and make important information easier to spot at a "
+"glance."
+msgstr ""
+
+#: Calc-Intro-Template.ods:103
+msgid "Apply conditional formatting"
+msgstr ""
+
+#: Calc-Intro-Template.ods:104
+msgid "1. Select the range of cells you want to format"
+msgstr ""
+
+#: Calc-Intro-Template.ods:105
+msgid "5. Set the condition and select a cell style"
+msgstr ""
+
+#: Calc-Intro-Template.ods:106
+msgid "📊Create a chart "
+msgstr ""
+
+#: Calc-Intro-Template.ods:107
+msgid ""
+"Collabora Office lets you present data graphically in a chart so that you "
+"can visually compare data series and view trends in the data. You can insert"
+" charts into spreadsheets, text documents, drawings and presentations."
+msgstr ""
+
+#: Calc-Intro-Template.ods:108
+msgid ""
+"In this example we will learn how to create chart and explore the different "
+"types of charts available. On the other side, you can see an example table "
+"that can be used as a data source for creating charts. "
+msgstr ""
+
+#: Calc-Intro-Template.ods:109
+msgid "Create a chart from existing data"
+msgstr ""
+
+#: Calc-Intro-Template.ods:110
+msgid "Price per price [£]"
+msgstr ""
+
+#: Calc-Intro-Template.ods:111
+msgid "900"
+msgstr ""
+
+#: Calc-Intro-Template.ods:112
+msgid "15"
+msgstr ""
+
+#: Calc-Intro-Template.ods:113
+msgid "3"
+msgstr ""
+
+#: Calc-Intro-Template.ods:114
+msgid "4. Choose the chart type and style that best fits your data"
+msgstr ""
+
+#: Calc-Intro-Template.ods:115
+msgid "40"
+msgstr ""
+
+#: Calc-Intro-Template.ods:116
+msgid "1"
+msgstr ""
+
+#: Calc-Intro-Template.ods:117
+msgid "6. Your data is now displayed as a chart"
+msgstr ""
+
+#: Calc-Intro-Template.ods:118
+msgid "Create a chart via Insert tab"
+msgstr ""
+
+#: Calc-Intro-Template.ods:119
+msgid "1. Open the Insert tab in the toolbar"
+msgstr ""
+
+#: Calc-Intro-Template.ods:120
+msgid "3. Choose the chart type and style that best fits your data"
+msgstr ""
+
+#: Calc-Intro-Template.ods:121
+msgid ""
+"5. Select the range of cells that contains your data (including headers)"
+msgstr ""
+
+#: Calc-Intro-Template.ods:122
+msgid "7. Your data is now displayed as a chart"
+msgstr ""
+
+#: Calc-Intro-Template.ods:123
+msgid "Editing charts"
+msgstr ""
+
+#: Calc-Intro-Template.ods:124
+msgid ""
+"To edit a chart, double click on it to activate editing mode. Once selected,"
+" you can use the options in the sidebar or open the context menu (right "
+"click) to modify the chart."
+msgstr ""
+
+#: Calc-Intro-Template.ods:125
+msgid "🔍 Data & filtering"
+msgstr ""
+
+#: Calc-Intro-Template.ods:126
+msgid ""
+"Data and filtering tools help you organize and explore your data more "
+"efficiently. You can quickly sort information or apply filters to focus only"
+" on the data that matters."
+msgstr ""
+
+#: Calc-Intro-Template.ods:127
+msgid ""
+"In this example, we will learn how to filter data to quickly find specific "
+"items in an inventory list."
+msgstr ""
+
+#: Calc-Intro-Template.ods:128
+msgid "Enable filtering"
+msgstr ""
+
+#: Calc-Intro-Template.ods:129
+msgid "Other filtering options"
+msgstr ""
+
+#: Calc-Intro-Template.ods:130
+msgid "🤝 Productivity & collaboration"
+msgstr ""
+
+#: Calc-Intro-Template.ods:131
+msgid ""
+"A range of features helps you stay productive and collaborate with others, "
+"making it easier to organize work and share information in real time."
+msgstr ""
+
+#: Calc-Intro-Template.ods:132
+msgid "Document sharing"
+msgstr ""
+
+#: Calc-Intro-Template.ods:133
+msgid ""
+"Work together with others in real time. Multiple users can edit the same "
+"document simultaneously, making it easy to share ideas, review changes, and "
+"stay aligned."
+msgstr ""
+
+#: Calc-Intro-Template.ods:134
+msgid "Start sharing your document"
+msgstr ""
+
+#: Calc-Intro-Template.ods:135
+msgid "1. Create new document or open existing one"
+msgstr ""
+
+#: Calc-Intro-Template.ods:136
+msgid "Shortcuts"
+msgstr ""
+
+#: Calc-Intro-Template.ods:137
+msgid ""
+"Keyboard shortcuts help you work faster by reducing the need to use menus "
+"and clicks. They allow you to quickly perform common actions, such as "
+"copying, formatting, or navigating through your document, making your "
+"workflow more efficient."
+msgstr ""
+
+#: Calc-Intro-Template.ods:138
+msgid "⏯Video tutorials"
+msgstr ""
+
+#: Calc-Intro-Template.ods:139
+msgid ""
+"To continue learning, explore short video introductions that cover "
+"additional features. These videos offer quick guidance and help you build on"
+" what you’ve learned, so you can become more confident and efficient in your"
+" work."
+msgstr ""
