@@ -4117,7 +4117,31 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		this._map.sendInitUNOCommands();
 
-		map.setZoom();
+		if (this.isWriter()) {
+			let zoom;
+			const smartZoomEnabled = window.prefs.get('smartZoom') != 'false';
+			const maxZoom = this._getMaxZoom();
+
+			if (smartZoomEnabled) {
+				const documentWidth = (this._documentWidthTwips / app.tile.size.x) * (RenderManager.tileSize * app.dpiScale)
+				const containerSize = this._getDocumentContainerSize()[0] * app.dpiScale;
+				zoom = this._writerDynamicZoom(containerSize, documentWidth, this._partHasComments);
+			} else {
+				zoom = this._getWriterDefaultZoom();
+			}
+
+			if (maxZoom)
+				zoom = Math.min(maxZoom, Math.max(0.1, zoom));
+			if (zoom > 1)
+				zoom = Math.floor(zoom);
+
+			this._firstFitDone = true;
+			if (this._partHasComments)
+				this._includedCommentsInFirstFit = true;
+			map.setZoom(zoom, {animate: false});
+		} else  {
+			map.setZoom();
+		}
 
 		this._viewReset();
 		this._resetClientVisArea();
