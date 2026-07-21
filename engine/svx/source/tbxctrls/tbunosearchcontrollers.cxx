@@ -308,6 +308,7 @@ void FindTextFieldControl::SetTextToSelected_Impl()
         // prepopulate with last search word (fdo#84256)
         m_xWidget->set_entry_text(m_sRememberedSearchString.isEmpty() ? m_xWidget->get_text(0)
                                                                       : m_sRememberedSearchString);
+        m_aChangeHdl.Call(*m_xWidget);
     }
 }
 
