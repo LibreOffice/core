@@ -608,6 +608,60 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
     CPPUNIT_ASSERT_EQUAL(u"ABC123"_ustr, pDocument->GetString(aA2SheetView));
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testCellEditInvalidatesBaseSheetTiles)
+{
+    // Editing a cell while inside a sheet view must invalidate the tiles of
+    // the base sheet as well, even though no view is currently showing it. The
+    // normal paint path only invalidates the tab a view is currently
+    // displaying, so without the extra invalidation the base sheet keeps
+    // rendering the old value until it is refreshed.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    // Report the part in each tile invalidation so the test can tell which
+    // sheet was invalidated.
+    comphelper::COKit::setPartInInvalidation(true);
+    comphelper::ScopeGuard aPartGuard([] { comphelper::COKit::setPartInInvalidation(false); });
+
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabView = aView.getTabViewShell();
+
+    // Enter a sheet view of Sheet1. Layout becomes [Sheet1 (base) = 0,
+    // Sheet1 (sheet view) = 1] and the view moves onto the sheet view.
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nBaseTab(0);
+    const SCTAB nSheetViewTab(1);
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    aView.ClearAllInvalids();
+
+    // Edit A1 on the sheet view. The write reaches the base sheet and is
+    // mirrored back into the sheet view.
+    typeCharsInCell(std::string("XYZ"), 0, 0, pTabView, pModelObj);
+    Scheduler::ProcessEventsToIdle();
+
+    // The new value is present on both the sheet view and the base sheet.
+    CPPUNIT_ASSERT_EQUAL(u"XYZ"_ustr, pDocument->GetString(ScAddress(0, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"XYZ"_ustr, pDocument->GetString(ScAddress(0, 0, nBaseTab)));
+
+    // The base sheet, which no view is currently showing, must be among the
+    // invalidated parts.
+    bool bBaseInvalidated = false;
+    for (int nInvalidatedPart : aView.m_aInvalidationsParts)
+    {
+        if (nInvalidatedPart == int(nBaseTab))
+        {
+            bBaseInvalidated = true;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("Base sheet tiles were not invalidated by a cell edit in a sheet view",
+                           bBaseInvalidated);
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
 {
     // Create two views, and leave the second one current.

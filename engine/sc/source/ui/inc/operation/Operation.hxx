@@ -78,6 +78,13 @@ protected:
     void syncMarkPatternToSheetViews(const ScMarkData& rDefaultViewMark,
                                      const ScPatternAttr& rPattern);
 
+    /** Invalidate the tiles of the base sheet and every sheet view holder table
+     * on the views that are not currently showing them. The normal paint path
+     * only invalidates the tab a view currently displays, so content synced
+     * into the other parts would otherwise leave their cached tiles stale until
+     * the user switches to them. */
+    void invalidateSheetViewParts();
+
     /** Check if the input is on a sheet view tab */
     bool isInputOnSheetView() const;
 

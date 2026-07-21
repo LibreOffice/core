@@ -843,6 +843,25 @@ void KitHelper::notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int n
     }
 }
 
+void KitHelper::notifyInvalidationAllViews(vcl::ITiledRenderable* pDoc, int nPart,
+                                           tools::Rectangle const* pRect)
+{
+    if (!pDoc || pDoc->isDisposed() || DisableCallbacks::disabled())
+        return;
+
+    // The invalidation belongs to a single document. Part indices are
+    // per-document, so match the owning document. A view that currently shows
+    // this part already invalidates it through the normal paint path, so skip
+    // it here and only reach the views looking at a different part.
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        if (lcl_getDocForView(pViewShell) == pDoc && pViewShell->getPart() != nPart)
+            KitHelper::notifyInvalidation(pViewShell, nPart, pRect);
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 OString KitHelper::makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
     bool bMispelledWord, const OString& rHyperlink)
 {

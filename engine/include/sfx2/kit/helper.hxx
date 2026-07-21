@@ -195,6 +195,13 @@ public:
     static void notifyCurrentPageSizeChangedAllViews(const vcl::ITiledRenderable* pDoc);
     /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document with the same part
     static void notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int nPart);
+    /// Emits a KIT_CALLBACK_INVALIDATE_TILES for the given part on every view of
+    /// the document that is not currently showing that part. A view already
+    /// invalidates the part it displays through the normal paint path, so this
+    /// only reaches the views looking at a different part. A null rectangle
+    /// invalidates the whole part.
+    static void notifyInvalidationAllViews(vcl::ITiledRenderable* pDoc, int nPart,
+                                           tools::Rectangle const* pRect);
     /// Emits a KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR
     static void notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const * pRect, bool bControlEvent, int windowID);
     /// Emits a KIT_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
