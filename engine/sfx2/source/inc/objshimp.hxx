@@ -91,6 +91,9 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
 
     IndexBitSet         aBitSet;
     ErrCodeMsg          lErr;
+    // The message from the most recent store failure. Empty when no store has
+    // failed since the value was last cleared.
+    OUString            maLastStoreErrorMessage;
     SfxEventHintId      nEventId;           // If Open/Create as to be sent
                                             // before Activate
     std::unique_ptr<AutoReloadTimer_Impl> pReloadTimer;

@@ -230,6 +230,16 @@ ErrCodeMsg SfxObjectShell::GetErrorIgnoreWarning() const
     return GetErrorCode().IgnoreWarning();
 }
 
+void SfxObjectShell::SetLastStoreErrorMessage(const OUString& rMessage)
+{
+    pImpl->maLastStoreErrorMessage = rMessage;
+}
+
+OUString SfxObjectShell::GetLastStoreErrorMessage() const
+{
+    return pImpl->maLastStoreErrorMessage;
+}
+
 ErrCodeMsg SfxObjectShell::GetErrorCode() const
 {
     ErrCodeMsg lError=pImpl->lErr;

@@ -5384,14 +5384,16 @@ class DispatchResultListener : public cppu::WeakImplHelper<css::frame::XDispatch
     const std::shared_ptr<CallbackFlushHandler> mpCallback; ///< Callback to call.
     const std::chrono::steady_clock::time_point mSaveTime; //< The time we started saving.
     const bool mbWasModified; //< Whether or not the document was modified before saving.
+    const css::uno::Reference<css::lang::XComponent> mxComponent; //< The document the command ran on.
 
 public:
     DispatchResultListener(const char* pCommand, std::shared_ptr<CallbackFlushHandler> pCallback,
-                           bool bWasModified)
+                           bool bWasModified, css::uno::Reference<css::lang::XComponent> xComponent)
         : maCommand(pCommand)
         , mpCallback(std::move(pCallback))
         , mSaveTime(std::chrono::steady_clock::now())
         , mbWasModified(bWasModified)
+        , mxComponent(std::move(xComponent))
     {
         assert(mpCallback);
     }
@@ -5407,7 +5409,21 @@ public:
             aJson.put("success", bSuccess);
         }
 
-        unoAnyToJson(aJson, "result", rEvent.Result);
+        // A failed save comes back with a void result, so the reason the store gave would be lost.
+        // The store recorded its reason on the document shell as it failed, so carry that as the
+        // result instead.
+        OUString aStoreError;
+        if (SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(mxComponent))
+            aStoreError = pShell->GetLastStoreErrorMessage();
+        if (maCommand == ".uno:Save" && rEvent.State == frame::DispatchResultState::FAILURE
+            && !rEvent.Result.hasValue() && !aStoreError.isEmpty())
+        {
+            auto resultNode = aJson.startNode("result");
+            aJson.put("type", "string");
+            aJson.put("value", aStoreError.toUtf8());
+        }
+        else
+            unoAnyToJson(aJson, "result", rEvent.Result);
         aJson.put("wasModified", mbWasModified);
         aJson.put("startUnixTimeMics",
                   std::chrono::time_point_cast<std::chrono::microseconds>(mSaveTime)
@@ -5807,6 +5823,10 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
     // handle potential interaction
     if (gImpl && aCommand == ".uno:Save")
     {
+        // Drop any message left by an earlier store so a success does not report a stale one.
+        if (pDocSh)
+            pDocSh->SetLastStoreErrorMessage(OUString());
+
         // Check if saving a PDF file
         OUString aMimeType = lcl_getCurrentDocumentMimeType(pDocument);
         if (pDocSh && pDocSh->IsModified() && aMimeType == "application/pdf")
@@ -6048,7 +6068,8 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
     {
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),
                 new DispatchResultListener(pCommand, pDocument->mpCallbackFlushHandlers[nView],
-                                           pDocSh && pDocSh->IsModified()));
+                                           pDocSh && pDocSh->IsModified(),
+                                           pDocument->mxComponent));
     }
     else
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector));

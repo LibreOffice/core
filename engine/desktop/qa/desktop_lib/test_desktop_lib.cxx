@@ -44,6 +44,7 @@
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -134,7 +135,8 @@ private:
 
 public:
     std::unique_ptr<LibLODocument_Impl>
-    loadDocUrlImpl(const OUString& rFileURL, COKitDocumentType eType);
+    loadDocUrlImpl(const OUString& rFileURL, COKitDocumentType eType,
+                   const cpo::uno::Sequence<beans::PropertyValue>& rExtraArgs = {});
 
     LibLODocument_Impl* loadDocUrl(const OUString& rFileURL, COKitDocumentType eType);
     LibLODocument_Impl* loadDoc(const char* pName, COKitDocumentType eType);
@@ -161,6 +163,7 @@ public:
     void testSearchAllNotificationsCalc();
     void testPaintTile();
     void testSaveAs();
+    void testSaveFailedReportsReason();
     void testExportDirectToPdfDottedName();
     void testSaveAsJsonOptions();
     void testSaveAsCalc();
@@ -249,6 +252,7 @@ public:
     CPPUNIT_TEST(testSearchAllNotificationsCalc);
     CPPUNIT_TEST(testPaintTile);
     CPPUNIT_TEST(testSaveAs);
+    CPPUNIT_TEST(testSaveFailedReportsReason);
     CPPUNIT_TEST(testExportDirectToPdfDottedName);
     CPPUNIT_TEST(testSaveAsJsonOptions);
     CPPUNIT_TEST(testSaveAsCalc);
@@ -373,7 +377,8 @@ static Control* GetFocusControl(vcl::Window const * pParent)
 }
 
 std::unique_ptr<LibLODocument_Impl>
-DesktopKitTest::loadDocUrlImpl(const OUString& rFileURL, COKitDocumentType eType)
+DesktopKitTest::loadDocUrlImpl(const OUString& rFileURL, COKitDocumentType eType,
+                               const cpo::uno::Sequence<beans::PropertyValue>& rExtraArgs)
 {
     OUString aService;
     switch (eType)
@@ -394,7 +399,7 @@ DesktopKitTest::loadDocUrlImpl(const OUString& rFileURL, COKitDocumentType eType
 
     static int nDocumentIdCounter = 0;
     comphelper::COKit::setDocId(ViewShellDocId(nDocumentIdCounter));
-    mxComponent = loadFromDesktop(rFileURL, aService);
+    mxComponent = loadFromDesktop(rFileURL, aService, rExtraArgs);
 
     std::unique_ptr<LibLODocument_Impl> pDocument(new LibLODocument_Impl(mxComponent, nDocumentIdCounter));
     ++nDocumentIdCounter;
@@ -708,6 +713,43 @@ void DesktopKitTest::testSaveAs()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
+}
+
+void DesktopKitTest::testSaveFailedReportsReason()
+{
+    // Load the document editable, then drop the medium to read-only while leaving the document
+    // itself editable. In the kit a .uno:Save against a read-only medium fails with an
+    // input/output error and no dialog, which stands in for any store that fails while the
+    // document is loaded.
+    m_pDocument = loadDocUrlImpl(createFileURL(u"blank_text.odt"), KIT_DOCTYPE_TEXT);
+    LibLODocument_Impl* pDocument = m_pDocument.get();
+    pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
+
+    SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(pDocument->mxComponent);
+    CPPUNIT_ASSERT(pShell);
+    pShell->SetReadOnly();
+
+    TimeValue aTimeValue = { 5, 0 };
+    m_aCommandResultCondition.reset();
+    // A save argument makes the dispatch report the store's own true/false result rather than
+    // masking a failed save as done, matching how the kit posts a save with its own arguments.
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Save",
+                                      "{\"NoFileSync\":{\"type\":\"boolean\",\"value\":false}}", true);
+    Scheduler::ProcessEventsToIdle();
+    m_aCommandResultCondition.wait(aTimeValue);
+
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream((std::string(m_aCommandResult)));
+    boost::property_tree::read_json(aStream, aTree);
+
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:Save"),
+                         aTree.get_child("commandName").get_value<std::string>());
+    // The save failed, so the reason rides the result as a string rather than the void a failure
+    // would otherwise leave. coolwsd turns that string into the dialog's technical detail.
+    CPPUNIT_ASSERT_EQUAL(false, aTree.get_child("success").get_value<bool>());
+    CPPUNIT_ASSERT_EQUAL(std::string("string"),
+                         aTree.get_child("result.type").get_value<std::string>());
+    CPPUNIT_ASSERT(!aTree.get_child("result.value").get_value<std::string>().empty());
 }
 
 void DesktopKitTest::testExportDirectToPdfDottedName()

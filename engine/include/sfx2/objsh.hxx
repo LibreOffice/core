@@ -307,6 +307,11 @@ public:
     ErrCodeMsg                  GetErrorCode() const;
     void                        SetError(const ErrCodeMsg& rErr);
 
+    // The message from the most recent store failure. Empty when no store has
+    // failed since the value was last cleared.
+    void                        SetLastStoreErrorMessage(const OUString& rMessage);
+    OUString                    GetLastStoreErrorMessage() const;
+
     /**
      * Initialize bare minimum just enough for unit test runs.
      *
