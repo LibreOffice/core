@@ -763,6 +763,7 @@
 	box-sizing: border-box;
 	cursor: pointer;
 	user-select: none;
+	--icon-primary-color: var(--color-main-text);
 }
 
 .backstage-open-tile:hover,
@@ -791,6 +792,7 @@
 	font-weight: 500;
 	text-align: center;
 	line-height: 1.2;
+	color: var(--color-main-text);
 }
 
 .backstage-open-tile.is-cloud-provider {
