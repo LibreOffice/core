@@ -1,0 +1,18 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <clipPath id="clipClrL">
+    <rect x="2.5" y="3.5" width="14" height="13" rx="1.4"/>
+  </clipPath>
+  <rect x="2.5" y="3.5" width="14" height="13" rx="1.4" fill="#fafafa"/>
+  <rect x="2.5" y="3.5" width="14" height="3.5" fill="var(--acc,#0369a3)" clip-path="url(#clipClrL)"/>
+  <rect x="2.5" y="3.5" width="14" height="13" rx="1.4" fill="none" stroke="#3a3a38" stroke-width="1.3"/>
+  <g stroke="#b6b6b6" stroke-width=".9" stroke-linecap="round">
+    <line x1="2.5" y1="10" x2="16.5" y2="10"/>
+    <line x1="2.5" y1="13" x2="16.5" y2="13"/>
+    <line x1="7" y1="7" x2="7" y2="16.5"/>
+    <line x1="12" y1="7" x2="12" y2="16.5"/>
+  </g>
+  <g transform="rotate(-40 18.4 18.4)">
+    <rect x="13.9" y="16.5" width="9" height="3.8" rx="1" fill="#fbfbfa" stroke="#3a3a38" stroke-width="1"/>
+    <path d="M18.6 16.5 h3.3 a1 1 0 0 1 1 1 v1.8 a1 1 0 0 1-1 1 h-3.3 z" fill="#e8608a" stroke="#3a3a38" stroke-width="1"/>
+  </g>
+</svg>
