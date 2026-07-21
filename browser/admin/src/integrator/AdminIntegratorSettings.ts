@@ -3796,6 +3796,14 @@ document.addEventListener('DOMContentLoaded', () => {
 			attributes: true,
 			characterData: true,
 		});
+
+		// init() builds the settings DOM before the observer is attached, so a
+		// page that never mutates afterwards would otherwise never send its
+		// first height and the parent would keep the iframe at its CSS default
+		// height (short frame with an inner scrollbar). Post one height now,
+		// and again once fonts/images have settled the final layout.
+		postHeight();
+		window.addEventListener('load', postHeight);
 	}
 });
 
