@@ -350,9 +350,10 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                         do {
                             let result = try JSONDecoder().decode(CommandResult.self, from: data)
 
-                            // Was it a successful save?
-                            if result.commandName == ".uno:Save" && result.success == true && result.wasModified == true {
-                                document.triggerSave()
+                            // Was it a save?
+                            if result.commandName == ".uno:Save" {
+                                document.triggerSave(success: result.success == true,
+                                                     wasModified: result.wasModified == true)
                             }
                         } catch {}
                     }

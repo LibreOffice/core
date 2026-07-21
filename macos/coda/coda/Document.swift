@@ -134,9 +134,17 @@ class Document: NSDocument {
     }
 
     /**
-     * Called by the COOL once it flushed edits to `tempFileURL` (based on .uno:Save command result); completes any pending Save / Save As…
+     * Called with the result of a .uno:Save command from the engine; completes any pending
+     * Save / Save As…
+     *
+     * Every result completes a pending request, including "nothing to save" results
+     * (success without wasModified): the engine reports those when it had no edits to
+     * flush, and tempFileURL is current in that case, so the pending request can be
+     * finished by writing it out. A failed save fails the request instead, so the
+     * caller (and with it, for example, a quit waiting on the save) gets an answer
+     * rather than waiting forever.
      */
-    func triggerSave() {
+    func triggerSave(success: Bool, wasModified: Bool) {
         // Grab and clear the pending request atomically.
         var ps: PendingSave?
 
@@ -146,12 +154,21 @@ class Document: NSDocument {
         modifiedLock.unlock()
 
         if let ps {
-            // Finish the original AppKit request: write the bytes and call its original completion
-            DispatchQueue.main.async {
-                self.performPendingSave(ps)
+            if success {
+                // Finish the original AppKit request: write the bytes and call its original completion
+                DispatchQueue.main.async {
+                    self.performPendingSave(ps)
+                }
+            }
+            else {
+                // The engine could not flush the edits, so there are no current bytes
+                // to write; fail the original AppKit request.
+                DispatchQueue.main.async {
+                    ps.completion(CocoaError(.fileWriteUnknown))
+                }
             }
         }
-        else {
+        else if success && wasModified {
             // No pending AppKit request → internal/webview save: ask AppKit to Save (or show Save As… if untitled)
             DispatchQueue.main.async {
                 self.performImplicitSave()
