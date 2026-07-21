@@ -51,14 +51,14 @@ ConstraintListContext::onCreateContext( ::sal_Int32 aElement,
         LayoutAtom::connect(mpNode, pNode);
 
         Constraint& rConstraint = pNode->getConstraint();
-        rConstraint.mnFor = rAttribs.getToken( XML_for, XML_none );
+        rConstraint.mnFor = rAttribs.getToken( XML_for, XML_self );
         rConstraint.msForName = rAttribs.getStringDefaulted( XML_forName);
-        rConstraint.mnPointType = rAttribs.getToken( XML_ptType, XML_none );
+        rConstraint.mnPointType = rAttribs.getToken( XML_ptType, XML_all );
         rConstraint.mnType = rAttribs.getToken( XML_type, XML_none );
-        rConstraint.mnRefFor = rAttribs.getToken( XML_refFor, XML_none );
+        rConstraint.mnRefFor = rAttribs.getToken( XML_refFor, XML_self );
         rConstraint.msRefForName = rAttribs.getStringDefaulted( XML_refForName);
         rConstraint.mnRefType = rAttribs.getToken( XML_refType, XML_none );
-        rConstraint.mnRefPointType = rAttribs.getToken( XML_refPtType, XML_none );
+        rConstraint.mnRefPointType = rAttribs.getToken( XML_refPtType, XML_all );
         rConstraint.mfFactor = rAttribs.getDouble( XML_fact, 1.0 );
         rConstraint.mfValue = rAttribs.getDouble( XML_val, 0.0 );
         rConstraint.mnOperator = rAttribs.getToken( XML_op, XML_none );

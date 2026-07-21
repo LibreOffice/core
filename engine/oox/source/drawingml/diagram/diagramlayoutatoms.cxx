@@ -160,7 +160,7 @@ void SnakeAlg::layoutShapeChildren(const AlgAtom& rAlg, const ShapePtr& rShape,
 
         sal_Int32 nValue = it->second * rConstr.mfFactor;
 
-        if (rConstr.mnPointType == XML_none)
+        if (rConstr.mnPointType == XML_all)
         {
             aPropertiesByName[rConstr.msForName][rConstr.mnType] = nValue;
         }
@@ -730,7 +730,7 @@ void CompositeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, AlgAtom& rAl
 IteratorAttr::IteratorAttr( )
     : mnCnt( -1 )
     , mbHideLastTrans( true )
-    , mnPtType( 0 )
+    , mnPtType( XML_all )
     , mnSt( 0 )
     , mnStep( 1 )
 {
