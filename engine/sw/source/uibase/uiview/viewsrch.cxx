@@ -441,6 +441,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
 /*20 */         RES_PARATR_VERTALIGN,   RES_PARATR_VERTALIGN,
                 RES_MARGIN_FIRSTLINE,   RES_MARGIN_RIGHT,
                 RES_UL_SPACE,           RES_UL_SPACE,
+                SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_PAGEBREAK,
                 SID_ATTR_PARA_KEEP,     SID_ATTR_PARA_KEEP
             >);
 
@@ -812,6 +813,7 @@ sal_Int32 SwView::FUNC_Search(const SwSearchOptions& rOptions)
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
+        SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_PAGEBREAK,
         SID_ATTR_PARA_KEEP, SID_ATTR_PARA_KEEP
         >);
 
