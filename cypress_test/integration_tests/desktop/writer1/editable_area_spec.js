@@ -785,6 +785,10 @@ describe(['taga11yenabled'], 'Editable area - Empty selection', function() {
 	beforeEach(function () {
 		helper.setupAndLoadDocument('writer/undo_redo.odt');
 		cy.cGet('div.clipboard').as('clipboard');
+
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	it('Typing <backspace> with empty selection', function () {
@@ -817,6 +821,7 @@ describe(['taga11yenabled'], 'Editable area - Empty selection', function() {
 		ceHelper.moveCaret('left', 'shift');
 		ceHelper.checkPlainContent('Green red');
 		ceHelper.checkSelectionIsEmpty(0);
+		helper.processToIdle(this.win);
 		ceHelper.type('{backspace}');
 		ceHelper.checkPlainContent('Hello WorldGreen red');
 		ceHelper.checkSelectionIsNull();
@@ -854,6 +859,7 @@ describe(['taga11yenabled'], 'Editable area - Empty selection', function() {
 		ceHelper.moveCaret('right', 'shift');
 		ceHelper.checkPlainContent('Hello World');
 		ceHelper.checkSelectionIsEmpty(11);
+		helper.processToIdle(this.win);
 		ceHelper.type('{del}');
 		ceHelper.checkPlainContent('Hello WorldGreen red');
 		ceHelper.checkSelectionIsNull();
