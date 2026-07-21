@@ -63,11 +63,11 @@ namespace cppcanvas
         Canvas & operator =(Canvas const &) = delete; // due to const mxCanvas
         Canvas & operator =(Canvas &&) = delete; // due to const mxCanvas
 
-        void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
+        void setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
 
-        css::uno::Reference< css::rendering::XCanvas > getUNOCanvas() const { return mxCanvas; }
+        const css::uno::Reference< css::rendering::XCanvas > & getUNOCanvas() const { return mxCanvas; }
 
-        css::rendering::ViewState        getViewState() const { return maViewState; }
+        const css::rendering::ViewState & getViewState() const { return maViewState; }
 
     private:
         mutable css::rendering::ViewState                    maViewState;
