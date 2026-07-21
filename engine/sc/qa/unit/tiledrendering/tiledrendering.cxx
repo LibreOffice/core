@@ -1616,6 +1616,51 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTilesBelowSortedRangeInvalidatedO
     CPPUNIT_ASSERT(anyInvalidationCoversY(rDoc.GetRowHeight(0, nRow + 14, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowsKeepPositionAfterCellStyleChange)
+{
+    // Changing a cell style through the style API, the way a macro or extension does,
+    // recomputes the optimal height of every row that uses the style. A view that already
+    // resolved row positions for that area must place the rows below at their new positions,
+    // and the client has to be told that the row geometry it caches changed.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScDocument& rDoc = pViewData->GetDocument();
+    ScTestViewCallback aView;
+
+    const SCROW nRow = 9840;
+    for (SCROW nR = nRow; nR <= nRow + 3; ++nR)
+        rDoc.SetString(ScAddress(0, nR, 0), "row " + OUString::number(nR + 1));
+
+    const tools::Long nRowOffsetTw = rDoc.GetRowHeight(0, nRow - 1, 0);
+    const tools::Rectangle aVisArea(0, nRowOffsetTw - 2000, 20000, nRowOffsetTw + 8000);
+    requestRowColumnHeaders(pModelObj, aVisArea);
+
+    const double fPPTY = pViewData->GetPPTY();
+    CPPUNIT_ASSERT_EQUAL(expectedRowPosition(rDoc, fPPTY, nRow + 8),
+                         pViewData->GetScrPos(0, nRow + 8, pViewData->GetActivePart()).Y());
+
+    // A bigger font in the default cell style makes every row with content taller.
+    const sal_uInt16 nOldHeight = rDoc.GetRowHeight(nRow, 0);
+    uno::Reference<style::XStyleFamiliesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xFamilies = xSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xCellStyles(xFamilies->getByName(u"CellStyles"_ustr),
+                                                      uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xStyle(xCellStyles->getByName(u"Default"_ustr),
+                                               uno::UNO_QUERY_THROW);
+    aView.m_sInvalidateSheetGeometry = ""_ostr;
+    xStyle->setPropertyValue(u"CharHeight"_ustr, cpo::uno::Any(float(24)));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(rDoc.GetRowHeight(nRow, 0) > nOldHeight);
+
+    CPPUNIT_ASSERT_EQUAL(expectedRowPosition(rDoc, fPPTY, nRow + 8),
+                         pViewData->GetScrPos(0, nRow + 8, pViewData->GetActivePart()).Y());
+
+    // The client re-reads the row geometry only when it is told that it changed.
+    CPPUNIT_ASSERT_EQUAL("rows sizes"_ostr, aView.m_sInvalidateSheetGeometry);
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDisableUndoRepair)
 {
     ScModelObj* pModelObj = createDoc("cursor-away.ods");

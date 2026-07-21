@@ -53,6 +53,8 @@
 #include <compressedarray.hxx>
 #include <refdata.hxx>
 #include <docsh.hxx>
+#include <tabvwsh.hxx>
+#include <comphelper/kit.hxx>
 #include <dpobject.hxx>
 
 #include <scitems.hxx>
@@ -3239,19 +3241,40 @@ void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRem
         aCol[i].FindStyleSheet(pStyleSheet, aUsedRows, bRemoved);
 
     sc::RowHeightContext aCxt(rDocument.MaxRow(), nPPTX, nPPTY, fZoomX, fZoomY, pDev);
+    SCROW nFirstChangedRow = -1;
     SCROW nRow = 0;
     while (nRow <= rDocument.MaxRow())
     {
         ScFlatBoolRowSegments::RangeData aData;
         if (!aUsedRows.getRangeData(nRow, aData))
             // search failed!
-            return;
+            break;
 
         SCROW nEndRow = aData.mnRow2;
-        if (aData.mbValue)
-            SetOptimalHeight(aCxt, nRow, nEndRow, true);
+        // Rows are visited from the top, so the first span that changes holds the first
+        // changed row.
+        if (aData.mbValue && SetOptimalHeight(aCxt, nRow, nEndRow, true)
+            && nFirstChangedRow < 0)
+            nFirstChangedRow = nRow;
 
         nRow = nEndRow + 1;
+    }
+
+    // In tiled rendering a changed row height shifts every row below it, so the cached
+    // accumulated row positions of this sheet are wrong from the first changed row on and the
+    // clients have to fetch its row geometry again. Sheets whose row heights did not change
+    // need nothing.
+    if (nFirstChangedRow >= 0 && comphelper::COKit::isActive())
+    {
+        ScDocShell* pDocShell = rDocument.GetDocumentShell();
+        SfxViewShell* pSomeViewForThisDoc
+            = pDocShell ? pDocShell->GetBestViewShell(false) : nullptr;
+        ScTabViewShell::invalidateAllViewsKitPositions(pSomeViewForThisDoc, /*bColumns=*/false,
+                                                       nTab, nFirstChangedRow);
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(pSomeViewForThisDoc, ROW_HEADER, nTab);
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+            pSomeViewForThisDoc, false /* bColumns */, true /* bRows */, true /* bSizes */,
+            false /* bHidden */, false /* bFiltered */, false /* bGroups */, nTab);
     }
 }
 
