@@ -117,6 +117,7 @@ bool GfxLink::LoadNative(Graphic& rGraphic, sal_Int32 nPageNum) const
             {
                 case GfxLinkType::NativeGif: aShortName = GIF_SHORTNAME; break;
                 case GfxLinkType::NativeJpg: aShortName = JPG_SHORTNAME; break;
+                case GfxLinkType::NativeJxl: aShortName = JXL_SHORTNAME; break;
                 case GfxLinkType::NativePng: aShortName = PNG_SHORTNAME; break;
                 case GfxLinkType::NativeTif: aShortName = TIF_SHORTNAME; break;
                 case GfxLinkType::NativeWmf: aShortName = WMF_SHORTNAME; break;

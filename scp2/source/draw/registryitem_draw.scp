@@ -1079,6 +1079,7 @@ CONDITIONAL_REGISTER_DOC_EXTENSION( Gif,  gid_Module_Prg_Draw_Other_Reg, gif,  G
 CONDITIONAL_REGISTER_DOC_EXTENSION( Jpg,  gid_Module_Prg_Draw_Other_Reg, jpg,  JPG,  JOINT_PHOTOGRAPHIC_EXPERTS_GROUP, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Jpeg,  gid_Module_Prg_Draw_Other_Reg, jpeg,  JPEG,  JOINT_PHOTOGRAPHIC_EXPERTS_GROUP, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Jpe,  gid_Module_Prg_Draw_Other_Reg, jpe,  JPE,  JOINT_PHOTOGRAPHIC_EXPERTS_GROUP, 5, sdraw.exe, open, Draw )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Jxl,  gid_Module_Prg_Draw_Other_Reg, jxl, JXL, JPEG_XL, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Pbm,  gid_Module_Prg_Draw_Other_Reg, pbm,  PBM,  PORTABLE_BITMAP_FORMAT, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Pcx,  gid_Module_Prg_Draw_Other_Reg, pcx,  PCX,  PERSONAL_COMPUTER_EXCHANGE, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Pgm,  gid_Module_Prg_Draw_Other_Reg, pgm,  PGM,  PORTABLE_GRAYMAP_FORMAT, 5, sdraw.exe, open, Draw )

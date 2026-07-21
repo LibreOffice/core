@@ -38,6 +38,7 @@ enum class GraphicFileFormat
     PSD = 0x000f,
     EPS = 0x0010,
     WEBP = 0x0011,
+    JXL = 0x0012,
     MOV = 0x00e0,
     PDF = 0x00e1,
     DXF = 0x00f1,

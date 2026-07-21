@@ -81,6 +81,7 @@ namespace o3tl
 #define IMP_GIF                 "SVIGIF"
 #define IMP_PNG                 "SVIPNG"
 #define IMP_JPEG                "SVIJPEG"
+#define IMP_JXL                 "SVIJXL"
 #define IMP_XBM                 "SVIXBM"
 #define IMP_XPM                 "SVIXPM"
 #define IMP_SVG                 "SVISVG"
@@ -106,6 +107,7 @@ namespace o3tl
 #define EXP_EMF                 "SVEMF"
 #define EXP_EMZ                 "SVEMZ"
 #define EXP_JPEG                "SVEJPEG"
+#define EXP_JXL                 "SVEJXL"
 #define EXP_SVG                 "SVESVG"
 #define EXP_SVGZ                "SVESVGZ"
 #define EXP_PDF                 "SVEPDF"
@@ -120,6 +122,7 @@ namespace o3tl
 inline constexpr OUString BMP_SHORTNAME = u"BMP"_ustr;
 inline constexpr OUString GIF_SHORTNAME = u"GIF"_ustr;
 inline constexpr OUString JPG_SHORTNAME = u"JPG"_ustr;
+inline constexpr OUString JXL_SHORTNAME = u"JXL"_ustr;
 inline constexpr OUString MET_SHORTNAME = u"MET"_ustr;
 inline constexpr OUString PCT_SHORTNAME = u"PCT"_ustr;
 inline constexpr OUString PNG_SHORTNAME = u"PNG"_ustr;
@@ -141,6 +144,7 @@ class VCL_DLLPUBLIC GraphicDescriptor final
     SAL_DLLPRIVATE bool            ImpDetectBMP( SvStream& rStm, bool bExtendedInfo );
     SAL_DLLPRIVATE bool            ImpDetectGIF( SvStream& rStm, bool bExtendedInfo );
     SAL_DLLPRIVATE bool            ImpDetectJPG( SvStream& rStm, bool bExtendedInfo );
+    SAL_DLLPRIVATE bool            ImpDetectJXL( SvStream& rStm, bool bExtendedInfo );
     SAL_DLLPRIVATE bool            ImpDetectPCD( SvStream& rStm, bool bExtendedInfo );
     SAL_DLLPRIVATE bool            ImpDetectPCX( SvStream& rStm );
     SAL_DLLPRIVATE bool            ImpDetectPNG( SvStream& rStm, bool bExtendedInfo );
@@ -319,6 +323,7 @@ public:
                     BinaryDataContainer & rpGraphicContent);
     SAL_DLLPRIVATE static ErrCode readJPEG(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
                     GraphicFilterImportFlags nImportFlags);
+    SAL_DLLPRIVATE static ErrCode readJXL(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
     SAL_DLLPRIVATE static ErrCode readSVG(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
                     BinaryDataContainer & rpGraphicContent);
     SAL_DLLPRIVATE static ErrCode readXBM(SvStream & rStream, Graphic & rGraphic);

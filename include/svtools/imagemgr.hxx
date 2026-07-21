@@ -40,6 +40,7 @@ enum class SvImageId {
     HTML                   = START + 63,
     JPG                    = START + 64,
     WEBP                   = START + 65,
+    JXL                    = START + 66,
     Math                   = START + 68,
     MathTemplate           = START + 69,
     File                   = START + 74,

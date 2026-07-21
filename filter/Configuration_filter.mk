@@ -715,8 +715,9 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_typ
 	gif_Graphics_Interchange \
 	graphic_HTML \
 	jpg_JPEG \
+	jxl_JPEG_XL \
 	met_OS2_Metafile \
-        mov_MOV \
+	mov_MOV \
 	pbm_Portable_Bitmap \
 	pcd_Photo_CD_Base \
 	pcd_Photo_CD_Base16 \
@@ -750,6 +751,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	EPS___Encapsulated_PostScript \
 	GIF___Graphics_Interchange \
 	JPG___JPEG \
+	JXL___JPEG_XL \
 	MET___OS_2_Metafile \
 	mov__MOV \
 	PBM___Portable_Bitmap \
@@ -801,6 +803,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_
 	graphic_HTML \
 	impress_CGM_Computer_Graphics_Metafile \
 	jpg_JPEG \
+	jxl_JPEG_XL \
 	met_OS2_Metafile \
 	pbm_Portable_Bitmap \
 	pct_Mac_Pict \
@@ -871,8 +874,9 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics
 	eps_Encapsulated_PostScript \
 	gif_Graphics_Interchange \
 	jpg_JPEG \
+	jxl_JPEG_XL \
 	met_OS2_Metafile \
-        mov_MOV \
+	mov_MOV \
 	pbm_Portable_Bitmap \
 	pcd_Photo_CD_Base \
 	pcd_Photo_CD_Base16 \
@@ -911,6 +915,7 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 	gif_Import \
 	jpg_Export \
 	jpg_Import \
+	jxl_Import \
 	met_Import \
 	pbm_Import \
 	pcd_Import_Base \

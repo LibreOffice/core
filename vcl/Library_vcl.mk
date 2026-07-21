@@ -101,6 +101,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
     lcms2 \
     libeot \
     libjpeg \
+    libjxl \
     libpng \
     libtiff \
     libwebp \
@@ -542,6 +543,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/jpeg/JpegReader \
     vcl/source/filter/jpeg/JpegWriter \
     vcl/source/filter/jpeg/JpegTransform \
+    vcl/source/filter/jxl/reader \
     vcl/source/filter/svm/SvmConverter \
     vcl/source/filter/svm/SvmReader \
     vcl/source/filter/svm/SvmWriter \

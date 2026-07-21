@@ -30,6 +30,7 @@ class SvStream;
 inline constexpr OUString MIMETYPE_BMP = u"image/x-MS-bmp"_ustr;
 inline constexpr OUString MIMETYPE_GIF = u"image/gif"_ustr;
 inline constexpr OUString MIMETYPE_JPG = u"image/jpeg"_ustr;
+inline constexpr OUString MIMETYPE_JXL = u"image/jxl"_ustr;
 inline constexpr OUString MIMETYPE_PCD = u"image/x-photo-cd"_ustr;
 inline constexpr OUString MIMETYPE_PCX = u"image/x-pcx"_ustr;
 inline constexpr OUString MIMETYPE_PNG = u"image/png"_ustr;

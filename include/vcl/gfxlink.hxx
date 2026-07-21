@@ -48,12 +48,13 @@ enum class GfxLinkType
     NativeMov    = 10,
     NativeBmp    = 11,
     NativePdf    = 12,
-    NativeWebp   = 13, // If a new type is added, make sure to change NativeLast too
+    NativeWebp   = 13,
+    NativeJxl    = 14, // If a new type is added, make sure to change NativeLast too
 
     // Alias for when the first native type starts and last native
     // type ends.
     NativeFirst  = NativeGif,
-    NativeLast   = NativeWebp,
+    NativeLast   = NativeJxl,
 };
 
 class Graphic;

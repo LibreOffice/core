@@ -490,6 +490,7 @@ OUString convertGfxLinkTypeToString(GfxLinkType eGfxLinkType)
         case GfxLinkType::NativeBmp: return u"NativeBmp"_ustr;
         case GfxLinkType::NativeGif: return u"NativeGif"_ustr;
         case GfxLinkType::NativeJpg: return u"NativeJpg"_ustr;
+        case GfxLinkType::NativeJxl: return u"NativeJxl"_ustr;
         case GfxLinkType::NativeMet: return u"NativeMet"_ustr;
         case GfxLinkType::NativeMov: return u"NativeMov"_ustr;
         case GfxLinkType::NativePct: return u"NativePct"_ustr;

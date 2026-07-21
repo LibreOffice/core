@@ -66,6 +66,7 @@
 #include <filter/GifWriter.hxx>
 #include <filter/BmpReader.hxx>
 #include <filter/BmpWriter.hxx>
+#include <filter/JxlReader.hxx>
 #include <filter/WebpReader.hxx>
 #include <filter/WebpWriter.hxx>
 #include <osl/module.hxx>
@@ -724,6 +725,11 @@ ErrCode prepareImageTypeAndData(SvStream& rStream, sal_uInt32 nStreamLength, Bin
         rLinkType = GfxLinkType::NativeJpg;
         nStatus = ERRCODE_NONE;
     }
+    else if (o3tl::equalsIgnoreAsciiCase(rFilterName, IMP_JXL))
+    {
+        rLinkType = GfxLinkType::NativeJxl;
+        nStatus = ERRCODE_NONE;
+    }
     else if (o3tl::equalsIgnoreAsciiCase(rFilterName, IMP_SVG))
     {
         rStream.Seek(nStreamBegin);
@@ -941,6 +947,17 @@ ErrCode GraphicFilter::readJPEG(SvStream & rStream, Graphic & rGraphic, GfxLinkT
     rLinkType = GfxLinkType::NativeJpg;
 
     return ERRCODE_NONE;
+}
+
+ErrCode GraphicFilter::readJXL(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType)
+{
+    if (ImportJxlGraphic(rStream, rGraphic))
+    {
+        rLinkType = GfxLinkType::NativeJxl;
+        return ERRCODE_NONE;
+    }
+    else
+        return ERRCODE_GRFILTER_FILTERERROR;
 }
 
 ErrCode GraphicFilter::readSVG(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, BinaryDataContainer& rpGraphicContent)
@@ -1332,6 +1349,10 @@ ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPat
     else if (aFilterName.equalsIgnoreAsciiCase(IMP_JPEG))
     {
         nStatus = readJPEG(rIStream, rGraphic, eLinkType, nImportFlags);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_JXL))
+    {
+        nStatus = readJXL(rIStream, rGraphic, eLinkType);
     }
     else if (aFilterName.equalsIgnoreAsciiCase(IMP_SVG) || aFilterName.equalsIgnoreAsciiCase(IMP_SVGZ))
     {
@@ -1839,6 +1860,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
         case ConvertDataFormat::BMP: aShortName = BMP_SHORTNAME; break;
         case ConvertDataFormat::GIF: aShortName = GIF_SHORTNAME; break;
         case ConvertDataFormat::JPG: aShortName = JPG_SHORTNAME; break;
+        case ConvertDataFormat::JXL: aShortName = JXL_SHORTNAME; break;
         case ConvertDataFormat::MET: aShortName = MET_SHORTNAME; break;
         case ConvertDataFormat::PCT: aShortName = PCT_SHORTNAME; break;
         case ConvertDataFormat::PNG: aShortName = PNG_SHORTNAME; break;

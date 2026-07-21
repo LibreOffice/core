@@ -403,6 +403,7 @@ bool GalleryTheme::InsertGraphic(const Graphic& rGraphic, sal_uInt32 nInsertPos)
                 case GfxLinkType::NativeBmp: nExportFormat = ConvertDataFormat::BMP; break;
 
                 case GfxLinkType::NativeJpg: nExportFormat = ConvertDataFormat::JPG; break;
+                case GfxLinkType::NativeJxl: nExportFormat = ConvertDataFormat::JXL; break;
                 case GfxLinkType::NativePng: nExportFormat = ConvertDataFormat::PNG; break;
                 case GfxLinkType::NativeTif: nExportFormat = ConvertDataFormat::TIF; break;
                 case GfxLinkType::NativeWmf: nExportFormat = ConvertDataFormat::WMF; break;

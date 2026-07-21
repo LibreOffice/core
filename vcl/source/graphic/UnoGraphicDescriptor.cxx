@@ -116,6 +116,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString& rURL )
         case GraphicFileFormat::BMP: aMimeType = MIMETYPE_BMP; cType = graphic::GraphicType::PIXEL; break;
         case GraphicFileFormat::GIF: aMimeType = MIMETYPE_GIF; cType = graphic::GraphicType::PIXEL; break;
         case GraphicFileFormat::JPG: aMimeType = MIMETYPE_JPG; cType = graphic::GraphicType::PIXEL; break;
+        case GraphicFileFormat::JXL: aMimeType = MIMETYPE_JXL; cType = graphic::GraphicType::PIXEL; break;
         case GraphicFileFormat::PCD: aMimeType = MIMETYPE_PCD; cType = graphic::GraphicType::PIXEL; break;
         case GraphicFileFormat::PCX: aMimeType = MIMETYPE_PCX; cType = graphic::GraphicType::PIXEL; break;
         case GraphicFileFormat::PNG: aMimeType = MIMETYPE_PNG; cType = graphic::GraphicType::PIXEL; break;
@@ -290,6 +291,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                             case GfxLinkType::NativeBmp: aMimeType = MIMETYPE_BMP; break;
 
                             case GfxLinkType::NativeJpg: aMimeType = MIMETYPE_JPG; break;
+                            case GfxLinkType::NativeJxl: aMimeType = MIMETYPE_JXL; break;
                             case GfxLinkType::NativePng: aMimeType = MIMETYPE_PNG; break;
                             case GfxLinkType::NativeTif: aMimeType = MIMETYPE_TIF; break;
                             case GfxLinkType::NativeWmf: aMimeType = aLink.IsEMF() ? MIMETYPE_EMF : MIMETYPE_WMF; break;

@@ -28,6 +28,7 @@
 #include <tools/zcodec.hxx>
 #include <tools/fract.hxx>
 #include <tools/mapunit.hxx>
+#include <filter/JxlReader.hxx>
 #include <filter/WebpReader.hxx>
 #include "igif/gifread.hxx"
 #include <vcl/TypeSerializer.hxx>
@@ -160,6 +161,16 @@ bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest
     {
         bSomethingTested = true;
         if (aDetector.checkJPG())
+        {
+            rFormatExtension = getImportFormatShortName(aDetector.getMetadata().mnFormat);
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("JXL"))
+    {
+        bSomethingTested = true;
+        if (aDetector.checkJXL())
         {
             rFormatExtension = getImportFormatShortName(aDetector.getMetadata().mnFormat);
             return true;
@@ -975,6 +986,20 @@ bool GraphicFormatDetector::checkJPG()
         || (mnFirstLong == 0xffd8fffe) || (0xffd8ff00 == (mnFirstLong & 0xffffff00)))
     {
         maMetadata.mnFormat = GraphicFileFormat::JPG;
+        return true;
+    }
+    return false;
+}
+
+bool GraphicFormatDetector::checkJXL()
+{
+    if ((maFirstBytes[0] == 0xFF && maFirstBytes[1] == 0x0A)
+        || (maFirstBytes[0] == 0x00 && maFirstBytes[1] == 0x00 && maFirstBytes[2] == 0x00
+            && maFirstBytes[3] == 0x0C && maFirstBytes[4] == 0x4A && maFirstBytes[5] == 0x58
+            && maFirstBytes[6] == 0x4C && maFirstBytes[7] == 0x20 && maFirstBytes[8] == 0x0D
+            && maFirstBytes[9] == 0x0A && maFirstBytes[10] == 0x87 && maFirstBytes[11] == 0x0A))
+    {
+        maMetadata.mnFormat = GraphicFileFormat::JXL;
         return true;
     }
     return false;

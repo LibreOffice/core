@@ -40,6 +40,9 @@ static inline OUString getImportFormatShortName(GraphicFileFormat nFormat)
         case GraphicFileFormat::JPG:
             aKeyName = u"JPG"_ustr;
             break;
+        case GraphicFileFormat::JXL:
+            aKeyName = u"JXL"_ustr;
+            break;
         case GraphicFileFormat::PCD:
             aKeyName = u"PCD"_ustr;
             break;
@@ -165,6 +168,7 @@ public:
     bool checkPNG();
     bool checkAPNG();
     bool checkJPG();
+    bool checkJXL();
     SAL_DLLPRIVATE bool checkSVM();
     SAL_DLLPRIVATE bool checkPCD();
     bool checkPSD();

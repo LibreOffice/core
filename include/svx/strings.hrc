@@ -1426,6 +1426,7 @@
 #define STR_IMAGE_CAPACITY_WITH_REDUCTION                   NC_("STR_IMAGE_CAPACITY_WITH_REDUCTION", "$(CAPACITY) KiB ($(REDUCTION)% reduction)")
 #define STR_IMAGE_GIF                                       NC_("STR_IMAGE_GIF", "GIF image")
 #define STR_IMAGE_JPEG                                      NC_("STR_IMAGE_JPEG", "JPEG image")
+#define STR_IMAGE_JXL                                       NC_("STR_IMAGE_JXL", "JPEG XL image")
 #define STR_IMAGE_PNG                                       NC_("STR_IMAGE_PNG", "PNG image")
 #define STR_IMAGE_TIFF                                      NC_("STR_IMAGE_TIFF", "TIFF image")
 #define STR_IMAGE_WMF                                       NC_("STR_IMAGE_WMF", "WMF image")

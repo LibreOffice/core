@@ -48,6 +48,7 @@
 #include <vcl/font/EOTConverter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>
+#include <filter/JxlReader.hxx>
 #include <filter/TiffReader.hxx>
 #include <filter/TgaReader.hxx>
 #include <filter/PictReader.hxx>
@@ -146,6 +147,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             ImportOutput aImportOutput;
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>(ImportJPEG(aFileStream, aImportOutput, GraphicFilterImportFlags::NONE, nullptr));
+        }
+        else if (strcmp(argv[2], "jxl") == 0)
+        {
+            Graphic aGraphic;
+            SvFileStream aFileStream(out, StreamMode::READ);
+            ret = static_cast<int>(ImportJxlGraphic(aFileStream, aGraphic));
         }
         else if (strcmp(argv[2], "gif") == 0)
         {
