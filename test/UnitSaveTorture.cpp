@@ -657,6 +657,12 @@ public:
 
         std::cerr << "\n\nYour Kit process has Save torturing hooks\n\n\n";
     }
+
+    void initialize() override
+    {
+        // Empty, so the socket poll thread is not started, which is unused by this test.
+    }
+
     virtual bool filterKitMessage(WebSocketHandler *, std::string & /* message */) override
     {
         return false;
