@@ -1022,35 +1022,11 @@ static LRESULT CALLBACK HiddenOwnerWndProc(HWND hWnd, UINT message, WPARAM wPara
         }
 
         case WM_RENDERALLFORMATS:
-        {
             // This window is about to be destroyed (the app is exiting) while it still owns the
             // clipboard with formats it only promised. Render them all now, so the content outlives
             // the app. The engine still holds the one shared clipboard, so the bytes are available.
-            if (try_open_clipboard(hWnd))
-            {
-                if (GetClipboardOwner() == hWnd)
-                {
-                    // Collect the promised formats first, then render each. Do not probe with
-                    // GetClipboardData here(): on a still-promised format it would send
-                    // WM_RENDERFORMAT again. Re-setting an already-rendered format is harmless.
-                    std::vector<UINT> formats;
-                    UINT format = 0;
-                    while ((format = EnumClipboardFormats(format)) != 0)
-                        formats.push_back(format);
-                    for (UINT f : formats)
-                    {
-                        std::string mimeType = MIME_type_for_clipboard_format(f);
-                        if (mimeType.empty())
-                            continue;
-                        HANDLE hData = copyEngineClipboardData(f, mimeType);
-                        if (hData)
-                            SetClipboardData(f, hData);
-                    }
-                }
-                CloseClipboard();
-            }
+            materialize_clipboard_formats();
             return 0;
-        }
 
         case WM_DESTROYCLIPBOARD:
             weOwnTheClipboard = false;
@@ -2638,6 +2614,40 @@ void install_clipboard_provider(kit::Office& kitOffice)
     provider.getMimeTypes = clipboardProviderGetMimeTypes;
     provider.getDataForMimeType = clipboardProviderGetData;
     kitOffice.installClipboardProvider(&provider);
+}
+
+void materialize_clipboard_formats()
+{
+    static bool beenHere = false;
+
+    if (beenHere)
+        return;
+
+    beenHere = true;
+
+    if (GetClipboardOwner() == hiddenOwnerWindow)
+    {
+        if (try_open_clipboard(hiddenOwnerWindow))
+        {
+            // Collect the promised formats first, then render each. Do not probe with
+            // GetClipboardData here(): on a still-promised format it would send
+            // WM_RENDERFORMAT again. Re-setting an already-rendered format is harmless.
+            std::vector<UINT> formats;
+            UINT format = 0;
+            while ((format = EnumClipboardFormats(format)) != 0)
+                formats.push_back(format);
+            for (UINT f : formats)
+            {
+                std::string mimeType = MIME_type_for_clipboard_format(f);
+                if (mimeType.empty())
+                    continue;
+                HANDLE hData = copyEngineClipboardData(f, mimeType);
+                if (hData)
+                    SetClipboardData(f, hData);
+            }
+            CloseClipboard();
+        }
+    }
 }
 
 static void processMessage(WindowData& data, wil::unique_cotaskmem_string& message)

@@ -95,6 +95,7 @@
 
 #ifdef _WIN32
 #include <processthreadsapi.h>
+#include <windows.hpp>
 #endif
 
 // for version info
@@ -649,6 +650,10 @@ namespace Util
             LOG_FTL("Forced Exit with code: " << code);
         else
             LOG_INF("Forced Exit with code: " << code);
+
+#ifdef _WIN32
+        materialize_clipboard_formats();
+#endif
 
 #if !MOBILEAPP
         /// Wait for the signal handler, if any,
