@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-30 00:25+0000\n"
+"PO-Revision-Date: 2026-07-15 07:01+0000\n"
 "Last-Translator: reducedradius "
 "<137701630+flytothehighest@users.noreply.github.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -446,7 +446,7 @@ msgstr "错误"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "了解更多"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -1055,7 +1055,7 @@ msgstr "重置"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "恢复至默认值{0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
