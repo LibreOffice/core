@@ -579,12 +579,48 @@ class Document: NSDocument {
         return msgStr.prefix(100) + (msgStr.count > 100 ? "..." : "")
     }
 
+    /// Whether the message in the buffer starts with the given prefix.
+    private func message(_ buffer: UnsafePointer<CChar>, length: Int,
+                         hasPrefix prefix: String) -> Bool {
+        let prefixLength = prefix.utf8.count
+        return length > prefixLength && strncmp(buffer, prefix, prefixLength) == 0
+    }
+
+    /**
+     * Handles a unocommandresult message from the engine. The page receives the
+     * message too, but its processing runs on the page's timers and animation
+     * frames, which an occluded window's page may not run at all; a command result
+     * that something waits on - like a save during quitting - completes here even
+     * then. Only the .uno:Save result is handled so far.
+     */
+    private func handleUnoCommandResult(buffer: UnsafePointer<CChar>, length: Int) {
+        let message = String(
+            decoding: UnsafeRawBufferPointer(start: UnsafeRawPointer(buffer), count: length),
+            as: UTF8.self)
+        guard let brace = message.firstIndex(of: "{"),
+              let result = try? JSONDecoder().decode(
+                  CommandResult.self, from: Data(message[brace...].utf8)) else {
+            return
+        }
+
+        if result.commandName == ".uno:Save" {
+            triggerSave(success: result.success == true,
+                        wasModified: result.wasModified == true)
+        }
+    }
+
     @objc
     func send2JS(_ buffer: UnsafePointer<CChar>, length: Int) {
         let abbrMsg = abbreviatedMessage(buffer: buffer, length: length)
         COWrapper.LOG_TRC("To JS: \(abbrMsg)")
 
         let binaryMessage = COWrapper.isBinaryMessage(buffer, length: length)
+
+        // Handle command results straight from the engine's message stream, ahead
+        // of the page hand-off below.
+        if !binaryMessage && message(buffer, length: length, hasPrefix: "unocommandresult:") {
+            handleUnoCommandResult(buffer: buffer, length: length)
+        }
 
         let pretext = binaryMessage
             ? "window.TheFakeWebSocket.onmessage({'data': window.atob('"

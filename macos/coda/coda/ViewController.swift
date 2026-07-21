@@ -341,22 +341,11 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     }
                 }
                 else if body.hasPrefix("COMMANDRESULT ") {
-                    if let brace = body.firstIndex(of: "{") {
-                        // substring that shares storage with the original string
-                        let jsonSlice = body[brace...]
-
-                        // convert directly to Data and decode.
-                        let data = Data(jsonSlice.utf8)
-                        do {
-                            let result = try JSONDecoder().decode(CommandResult.self, from: data)
-
-                            // Was it a save?
-                            if result.commandName == ".uno:Save" {
-                                document.triggerSave(success: result.success == true,
-                                                     wasModified: result.wasModified == true)
-                            }
-                        } catch {}
-                    }
+                    // Command results are already handled in the Document's
+                    // handleUnoCommandResult(), straight from the engine's message
+                    // stream, so the page's echo of them carries nothing new.
+                    // Swallowing it here keeps it from being forwarded back to the
+                    // engine as a client message.
                 }
                 else if body == "PRINT" {
                     document.printDocument(self)
