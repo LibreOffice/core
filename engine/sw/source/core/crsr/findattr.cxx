@@ -28,6 +28,7 @@
 #include <svl/itemiter.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/whiter.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
 #include <fmtpdsc.hxx>
@@ -59,6 +60,15 @@ static bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
     case RES_CHRATR_FONT:
         return rItem1.StaticWhichCast(RES_CHRATR_FONT).GetFamilyName() == rItem2.StaticWhichCast(RES_CHRATR_FONT).GetFamilyName();
 
+    case RES_CHRATR_BACKGROUND:
+    {
+        const SvxBrushItem& rBrush1 = rItem1.StaticWhichCast(RES_CHRATR_BACKGROUND);
+        const SvxBrushItem& rBrush2 = rItem2.StaticWhichCast(RES_CHRATR_BACKGROUND);
+        if (rBrush1.getComplexColor().isUsed() && rBrush2.getComplexColor().isUsed())
+            return rItem1 == rItem2;
+
+        return rBrush1.GetColor().IsRGBEqual(rBrush2.GetColor());
+    }
     case RES_CHRATR_COLOR:
     {
         ::Color Color1 = rItem1.StaticWhichCast(RES_CHRATR_COLOR).GetValue();
