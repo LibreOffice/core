@@ -662,6 +662,55 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCellEditInvalidatesBaseSheetTiles)
                            bBaseInvalidated);
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testUndoInvalidatesBaseSheetTiles)
+{
+    // Undoing a cell edit made inside a sheet view must invalidate the tiles of
+    // the base sheet too, so it stops rendering the value that was just undone.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    comphelper::COKit::setPartInInvalidation(true);
+    comphelper::ScopeGuard aPartGuard([] { comphelper::COKit::setPartInInvalidation(false); });
+
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabView = aView.getTabViewShell();
+
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nBaseTab(0);
+    const SCTAB nSheetViewTab(1);
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    // Edit A1 on the sheet view, then discard the invalidations from the edit
+    // so only the undo's invalidations remain.
+    typeCharsInCell(std::string("XYZ"), 0, 0, pTabView, pModelObj);
+    Scheduler::ProcessEventsToIdle();
+    aView.ClearAllInvalids();
+
+    undo();
+    Scheduler::ProcessEventsToIdle();
+
+    // The value is gone from both the sheet view and the base sheet.
+    CPPUNIT_ASSERT_EQUAL(OUString(), pDocument->GetString(ScAddress(0, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(OUString(), pDocument->GetString(ScAddress(0, 0, nBaseTab)));
+
+    // The base sheet, which no view is currently showing, must be among the
+    // invalidated parts after the undo.
+    bool bBaseInvalidated = false;
+    for (int nInvalidatedPart : aView.m_aInvalidationsParts)
+    {
+        if (nInvalidatedPart == int(nBaseTab))
+        {
+            bBaseInvalidated = true;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("Base sheet tiles were not invalidated when undoing a sheet view edit",
+                           bBaseInvalidated);
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
 {
     // Create two views, and leave the second one current.

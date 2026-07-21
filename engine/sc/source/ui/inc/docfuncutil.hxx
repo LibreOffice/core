@@ -13,6 +13,7 @@
 
 class ScAddress;
 class ScDocFunc;
+class ScDocShell;
 class ScMarkData;
 class ScRange;
 enum class InsertDeleteFlags : sal_Int32;
@@ -46,6 +47,13 @@ public:
 
     static std::shared_ptr<ScSimpleUndo::DataSpansType> getNonEmptyCellSpans(
         const ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange );
+
+    /// Invalidate the tiles of the base sheet and every sheet view holder table
+    /// of nDefaultViewTab on the views that are not currently showing them. The
+    /// normal paint path only invalidates the tab a view currently displays, so
+    /// content synced into the other parts would otherwise leave their tiles
+    /// stale until the user switches to them.
+    static void invalidateSheetViewTiles(ScDocShell& rDocShell, SCTAB nDefaultViewTab);
 };
 
 }

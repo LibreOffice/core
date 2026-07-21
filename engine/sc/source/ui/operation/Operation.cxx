@@ -16,13 +16,10 @@
 #include <markdata.hxx>
 #include <rangelst.hxx>
 #include <viewdata.hxx>
-#include <docuno.hxx>
+#include <docfuncutil.hxx>
 #include <SheetViewManager.hxx>
 #include <SheetView.hxx>
 #include <undo/UndoSheetViewSortData.hxx>
-#include <comphelper/kit.hxx>
-#include <sfx2/kit/helper.hxx>
-#include <tools/gen.hxx>
 #include <sal/log.hxx>
 
 namespace sc
@@ -540,34 +537,11 @@ void Operation::syncMarkPatternToSheetViews(const ScMarkData& rDefaultViewMark,
 
 void Operation::invalidateSheetViewParts()
 {
-    if (!mpViewData || !comphelper::COKit::isActive())
+    if (!mpViewData)
         return;
 
-    auto& rDocument = mpViewData->GetDocument();
-    SCTAB nDefaultViewTab = mpViewData->GetDefaultViewTab();
-
-    std::shared_ptr<SheetViewManager> pManager = rDocument.GetSheetViewManager(nDefaultViewTab);
-    if (!pManager || pManager->isEmpty())
-        return;
-
-    ScDocShell* pDocShell = mpViewData->GetDocShell();
-    if (!pDocShell)
-        return;
-
-    ScModelObj* pModel = pDocShell->GetModel();
-    if (!pModel)
-        return;
-
-    // Invalidate the whole part so that the views looking at a different sheet
-    // pick up the synced content. The rectangle is larger than any sheet, so it
-    // covers every tile of the part. The sheet view holder tables and the base
-    // sheet share the same part index space that ScModelObj::getPartInfo
-    // exposes to the client, which is the table number.
-    tools::Rectangle aWholePart(0, 0, 1000000000, 1000000000);
-    KitHelper::notifyInvalidationAllViews(pModel, static_cast<int>(nDefaultViewTab), &aWholePart);
-    for (auto& rSheetView : pManager->iterateValidSheetViews())
-        KitHelper::notifyInvalidationAllViews(pModel, static_cast<int>(rSheetView.getTableNumber()),
-                                              &aWholePart);
+    if (ScDocShell* pDocShell = mpViewData->GetDocShell())
+        DocFuncUtil::invalidateSheetViewTiles(*pDocShell, mpViewData->GetDefaultViewTab());
 }
 
 bool Operation::isInputOnSheetView() const { return getCurrentSheetView(mpViewData) != nullptr; }

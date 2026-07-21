@@ -22,6 +22,7 @@
 #include <svx/svdundo.hxx>
 
 #include <undobase.hxx>
+#include <docfuncutil.hxx>
 #include <refundo.hxx>
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
@@ -189,6 +190,7 @@ void ScSimpleUndo::SyncSheetViews()
     ScDocument& rDocument = rDocShell.GetDocument();
     SCTAB nDefaultViewTable = rDocument.GetDefaultViewTableNumber(pViewData->GetTabNumber());
     rDocument.SyncSheetViews(nDefaultViewTable);
+    sc::DocFuncUtil::invalidateSheetViewTiles(rDocShell, nDefaultViewTable);
 }
 
 void ScSimpleUndo::BroadcastChanges( const ScRange& rRange )

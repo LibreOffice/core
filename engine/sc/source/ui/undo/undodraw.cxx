@@ -18,6 +18,7 @@
  */
 
 #include <undodraw.hxx>
+#include <docfuncutil.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
 #include <tabvwsh.hxx>
@@ -83,6 +84,7 @@ void ScUndoDraw::SyncSheetViews()
     SCTAB nCurrentTab = pViewData->GetTabNumber();
     SCTAB nDefaultTab = rDocument.GetDefaultViewTableNumber(nCurrentTab);
     rDocument.SyncSheetViews(nDefaultTab);
+    sc::DocFuncUtil::invalidateSheetViewTiles(rDocShell, nDefaultTab);
 }
 
 void ScUndoDraw::Undo()
