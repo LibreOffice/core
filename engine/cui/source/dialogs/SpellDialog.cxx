@@ -104,10 +104,10 @@ public:
     void stopListening();
 
     //  XEventListener
-    void SAL_CALL disposing(const css::lang::EventObject& rSource) override;
+    void disposing(const css::lang::EventObject& rSource) override;
 
     // XDictionaryEventListener
-    void SAL_CALL processDictionaryEvent(const DictionaryEvent& rDicEvt) override;
+    void processDictionaryEvent(const DictionaryEvent& rDicEvt) override;
 
 private:
     uno::Reference<linguistic2::XDictionary> m_xDict;

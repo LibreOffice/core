@@ -160,18 +160,17 @@ public:
     TmpRepositoryCommandEnv();
 
     // XCommandEnvironment
-    virtual css::uno::Reference<css::task::XInteractionHandler>
-        SAL_CALL getInteractionHandler() override;
-    virtual css::uno::Reference<css::ucb::XProgressHandler> SAL_CALL getProgressHandler() override;
+    virtual css::uno::Reference<css::task::XInteractionHandler> getInteractionHandler() override;
+    virtual css::uno::Reference<css::ucb::XProgressHandler> getProgressHandler() override;
 
     // XInteractionHandler
-    virtual void SAL_CALL
+    virtual void
     handle(css::uno::Reference<css::task::XInteractionRequest> const& xRequest) override;
 
     // XProgressHandler
-    virtual void SAL_CALL push(cpo::uno::Any const& Status) override;
-    virtual void SAL_CALL update(cpo::uno::Any const& Status) override;
-    virtual void SAL_CALL pop() override;
+    virtual void push(cpo::uno::Any const& Status) override;
+    virtual void update(cpo::uno::Any const& Status) override;
+    virtual void pop() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

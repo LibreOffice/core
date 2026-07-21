@@ -33,22 +33,21 @@ class GetCreateDialogFactoryService
 {
 public:
     // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual OUString getImplementationName() override
     {
         return u"com.sun.star.cui.GetCreateDialogFactoryService"_ustr;
     }
-    virtual bool SAL_CALL supportsService(const OUString& serviceName) override
+    virtual bool supportsService(const OUString& serviceName) override
     {
         return cppu::supportsService(this, serviceName);
     }
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override
     {
         return { u"com.sun.star.cui.GetCreateDialogFactoryService"_ustr };
     }
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL
-    getSomething(const ::cpo::uno::Sequence<::sal_Int8>& /*aIdentifier*/) override
+    virtual sal_Int64 getSomething(const ::cpo::uno::Sequence<::sal_Int8>& /*aIdentifier*/) override
     {
         // Noting that we have to return a pointer to **VclAbstractDialogFactory** otherwise
         // the dynamic_casting on the other end will fail on Windows (possibly because of the virtual base involved).
