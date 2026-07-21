@@ -54,13 +54,7 @@ namespace vclcanvas
         css::uno::Reference< css::rendering::XBitmap > createCompatibleBitmap(
             const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
             const css::geometry::IntegerSize2D&                                        size );
-        css::uno::Reference< css::rendering::XVolatileBitmap > createVolatileBitmap(
-            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
-            const css::geometry::IntegerSize2D&                                        size );
         css::uno::Reference< css::rendering::XBitmap > createCompatibleAlphaBitmap(
-            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
-            const css::geometry::IntegerSize2D&                                        size );
-        css::uno::Reference< css::rendering::XVolatileBitmap > createVolatileAlphaBitmap(
             const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
             const css::geometry::IntegerSize2D&                                        size );
 

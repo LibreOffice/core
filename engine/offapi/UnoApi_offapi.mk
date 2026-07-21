@@ -2850,8 +2850,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	CompositeOperation \
 	EmphasisMark \
 	FillRule \
-	FloatingPointBitmapFormat \
-	FloatingPointBitmapLayout \
 	FontInfo \
 	FontMetrics \
 	FontRequest \
@@ -2877,7 +2875,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	StringContext \
 	StrokeAttributes \
 	TextDirection \
-	TextHit \
 	Texture \
 	TexturingMode \
 	ViewState \
@@ -2891,12 +2888,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	XCanvasFont \
 	XColorSpace \
 	XGraphicDevice \
-	XHalfFloatBitmap \
-	XHalfFloatReadOnlyBitmap \
-	XIeeeDoubleBitmap \
-	XIeeeDoubleReadOnlyBitmap \
-	XIeeeFloatBitmap \
-	XIeeeFloatReadOnlyBitmap \
 	XIntegerBitmap \
 	XIntegerBitmapColorSpace \
 	XIntegerReadOnlyBitmap \
@@ -2905,7 +2896,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	XParametricPolyPolygon2D \
 	XPolyPolygon2D \
 	XTextLayout \
-	XVolatileBitmap \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/resource,\
 	MissingResourceException \

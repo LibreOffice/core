@@ -20,7 +20,6 @@
 module com { module sun { module star { module rendering {
 
 interface XBitmap;
-interface XVolatileBitmap;
 
 /* TODO: There's obviously a concept called window missing here, where
    methods such as bufferController, fullscreen mode etc . belong
@@ -105,25 +104,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
-    /** Create a volatile bitmap that is usable with this graphic device.
-
-        A volatile bitmap's difference in comparison to a plain bitmap
-        (e.g. generated via createCompatibleBitmap()) is the fact that
-        its content might vanish at any point in time (making any
-        operation with them produce a
-        VolatileContentDestroyedException). The benefit,
-        on the other hand, is that they might be easy to
-        hardware-accelerate on certain platforms, without the need to
-        keep a safety copy of the content internally.
-
-        @param size
-        Size of the requested bitmap in pixel. Both components of the
-        size must be greater than 0
-     */
-    XVolatileBitmap                 createVolatileBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
-
     /** Create a bitmap with alpha channel whose memory layout and
         sample model is compatible to the graphic device.
 
@@ -132,26 +112,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         size must be greater than 0
      */
     XBitmap                         createCompatibleAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
-
-    /** Create a volatile bitmap with alpha channel that is usable
-        with this graphic device.
-
-        A volatile bitmap's difference in comparison to a plain bitmap
-        (e.g. generated via createCompatibleBitmap()) is the fact that
-        its content might vanish at any point in time (making any
-        operation with them produce a
-        VolatileContentDestroyedException). The benefit,
-        on the other hand, is that they might be easy to
-        hardware-accelerate on certain platforms, without the need to
-        keep a safety copy of the content internally.
-
-        @param size
-        Size of the requested bitmap in pixel. Both components of the
-        size must be greater than 0
-     */
-    XVolatileBitmap                 createVolatileAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 

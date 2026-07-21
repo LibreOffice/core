@@ -284,12 +284,6 @@ namespace vclcanvas
         return 0.0;
     }
 
-    rendering::TextHit TextLayout::getTextHit( const geometry::RealPoint2D& )
-    {
-        // TODO(F1)
-        return rendering::TextHit();
-    }
-
     rendering::Caret TextLayout::getCaret( sal_Int32, bool )
     {
         // TODO(F1)

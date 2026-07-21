@@ -257,19 +257,6 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
-    /** This method determines the hit position in the text.<p>
-
-        This method determines the index of the character hit at the
-        specified position (in font coordinate space).<p>
-
-        @param aHitPoint
-        The position in font coordinate space to determine the
-        underlying character index for.
-
-     */
-    TextHit getTextHit( [in] ::com::sun::star::geometry::RealPoint2D aHitPoint );
-
-
     /** This method converts an insertion index to a caret.<p>
 
         This method generates caret information for a given insertion

@@ -63,7 +63,6 @@ namespace vclcanvas
         virtual css::geometry::RealRectangle2D queryTextBounds(  ) override;
         virtual double justify( double nSize ) override;
         virtual double combinedJustify( const cpo::uno::Sequence< css::uno::Reference< css::rendering::XTextLayout > >& aNextLayouts, double nSize ) override;
-        virtual css::rendering::TextHit getTextHit( const css::geometry::RealPoint2D& aHitPoint ) override;
         virtual css::rendering::Caret getCaret( sal_Int32 nInsertionIndex, bool bExcludeLigatures ) override;
         virtual sal_Int32 getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, bool bExcludeLigatures ) override;
         virtual css::uno::Reference< css::rendering::XPolyPolygon2D > queryVisualHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
