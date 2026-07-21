@@ -82,7 +82,7 @@ struct SAL_WARN_UNUSED ContextEntry_Init
     @return new context object
 */
 CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext >
-SAL_CALL createComponentContext(
+createComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
     css::uno::Reference< css::uno::XComponentContext > const & xDelegate =
     css::uno::Reference< css::uno::XComponentContext >() );

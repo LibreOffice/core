@@ -61,14 +61,14 @@ public:
     const OWeakConnectionPoint& operator=(const OWeakConnectionPoint&) = delete;
 
     // XInterface
-    Any SAL_CALL        queryInterface( const Type & rType ) override;
-    void SAL_CALL       acquire() noexcept override;
-    void SAL_CALL       release() noexcept override;
+    Any        queryInterface( const Type & rType ) override;
+    void       acquire() noexcept override;
+    void       release() noexcept override;
 
     // XAdapter
-    css::uno::Reference< css::uno::XInterface > SAL_CALL queryAdapted() override;
-    void SAL_CALL addReference( const css::uno::Reference< css::uno::XReference >& xRef ) override;
-    void SAL_CALL removeReference( const css::uno::Reference< css::uno::XReference >& xRef ) override;
+    css::uno::Reference< css::uno::XInterface > queryAdapted() override;
+    void addReference( const css::uno::Reference< css::uno::XReference >& xRef ) override;
+    void removeReference( const css::uno::Reference< css::uno::XReference >& xRef ) override;
 
     /// Called from the weak object if the reference count goes to zero.
     ///
@@ -87,14 +87,14 @@ private:
 };
 
 // XInterface
-Any SAL_CALL OWeakConnectionPoint::queryInterface( const Type & rType )
+Any OWeakConnectionPoint::queryInterface( const Type & rType )
 {
     return ::cppu::queryInterface(
         rType, static_cast< XAdapter * >( this ), static_cast< XInterface * >( this ) );
 }
 
 // XInterface
-void SAL_CALL OWeakConnectionPoint::acquire() noexcept
+void OWeakConnectionPoint::acquire() noexcept
 {
 #ifdef DBG_UTIL
     // catch things early which have been deleted and then re-acquired
@@ -104,7 +104,7 @@ void SAL_CALL OWeakConnectionPoint::acquire() noexcept
 }
 
 // XInterface
-void SAL_CALL OWeakConnectionPoint::release() noexcept
+void OWeakConnectionPoint::release() noexcept
 {
     if (! osl_atomic_decrement( &m_aRefCount ))
     {
@@ -147,7 +147,7 @@ void OWeakConnectionPoint::dispose()
 }
 
 // XInterface
-Reference< XInterface > SAL_CALL OWeakConnectionPoint::queryAdapted()
+Reference< XInterface > OWeakConnectionPoint::queryAdapted()
 {
     Reference< XInterface > ret;
 
@@ -178,14 +178,14 @@ Reference< XInterface > SAL_CALL OWeakConnectionPoint::queryAdapted()
 }
 
 // XInterface
-void SAL_CALL OWeakConnectionPoint::addReference(const Reference< XReference >& rRef)
+void OWeakConnectionPoint::addReference(const Reference< XReference >& rRef)
 {
     std::scoped_lock aGuard(*gpWeakMutex);
     m_aReferences.push_back( rRef );
 }
 
 // XInterface
-void SAL_CALL OWeakConnectionPoint::removeReference(const Reference< XReference >& rRef)
+void OWeakConnectionPoint::removeReference(const Reference< XReference >& rRef)
 {
     std::scoped_lock aGuard(*gpWeakMutex);
     // Search from end because the thing that last added a ref is most likely to be the
@@ -207,7 +207,7 @@ void SAL_CALL OWeakConnectionPoint::removeReference(const Reference< XReference 
 //-- OWeakObject -------------------------------------------------------
 
 // XInterface
-Any SAL_CALL OWeakObject::queryInterface( const Type & rType )
+Any OWeakObject::queryInterface( const Type & rType )
 {
     return ::cppu::queryInterface(
         rType,
@@ -215,13 +215,13 @@ Any SAL_CALL OWeakObject::queryInterface( const Type & rType )
 }
 
 // XInterface
-void SAL_CALL OWeakObject::acquire() noexcept
+void OWeakObject::acquire() noexcept
 {
     osl_atomic_increment( &m_refCount );
 }
 
 // XInterface
-void SAL_CALL OWeakObject::release() noexcept
+void OWeakObject::release() noexcept
 {
     if (osl_atomic_decrement( &m_refCount ) == 0) {
         // notify/clear all weak-refs before object's dtor is executed
@@ -253,7 +253,7 @@ OWeakObject::~OWeakObject() COVERITY_NOEXCEPT_FALSE
 }
 
 // XWeak
-Reference< XAdapter > SAL_CALL OWeakObject::queryAdapter()
+Reference< XAdapter > OWeakObject::queryAdapter()
 {
     std::scoped_lock aGuard( *gpWeakMutex );
     if( !m_pWeakConnectionPoint )
@@ -336,12 +336,12 @@ public:
     const OWeakRefListener& operator=(const OWeakRefListener&) = delete;
 
     // XInterface
-    Any SAL_CALL queryInterface( const Type & rType ) override;
-    void SAL_CALL acquire() noexcept override;
-    void SAL_CALL release() noexcept override;
+    Any queryInterface( const Type & rType ) override;
+    void acquire() noexcept override;
+    void release() noexcept override;
 
     // XReference
-    void SAL_CALL   dispose() override;
+    void   dispose() override;
 
     /// The reference counter.
     oslInterlockedCount         m_aRefCount;
@@ -396,26 +396,26 @@ OWeakRefListener::~OWeakRefListener()
 }
 
 // XInterface
-Any SAL_CALL OWeakRefListener::queryInterface( const Type & rType )
+Any OWeakRefListener::queryInterface( const Type & rType )
 {
     return ::cppu::queryInterface(
         rType, static_cast< XReference * >( this ), static_cast< XInterface * >( this ) );
 }
 
 // XInterface
-void SAL_CALL OWeakRefListener::acquire() noexcept
+void OWeakRefListener::acquire() noexcept
 {
     osl_atomic_increment( &m_aRefCount );
 }
 
 // XInterface
-void SAL_CALL OWeakRefListener::release() noexcept
+void OWeakRefListener::release() noexcept
 {
     if( ! osl_atomic_decrement( &m_aRefCount ) )
         delete this;
 }
 
-void SAL_CALL OWeakRefListener::dispose()
+void OWeakRefListener::dispose()
 {
     Reference< XAdapter > xAdp;
     {
@@ -497,7 +497,7 @@ WeakReferenceHelper & WeakReferenceHelper::operator =(
     return *this;
 }
 
-WeakReferenceHelper & SAL_CALL
+WeakReferenceHelper &
 WeakReferenceHelper::operator= (const Reference< XInterface > & xInt)
 {
     try

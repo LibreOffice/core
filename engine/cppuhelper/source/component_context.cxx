@@ -92,7 +92,7 @@ public:
         Reference< lang::XComponent > const & xSource,
         Reference< lang::XComponent > const & xTarget );
 
-    virtual void SAL_CALL disposing( lang::EventObject const & rSource ) override;
+    virtual void disposing( lang::EventObject const & rSource ) override;
 };
 
 }
@@ -147,23 +147,23 @@ public:
         Reference< XComponentContext > const & xDelegate );
 
     // XComponentContext
-    virtual Any SAL_CALL getValueByName( OUString const & rName ) override;
-    virtual Reference<lang::XMultiComponentFactory> SAL_CALL getServiceManager() override;
+    virtual Any getValueByName( OUString const & rName ) override;
+    virtual Reference<lang::XMultiComponentFactory> getServiceManager() override;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName(
+    virtual void insertByName(
         OUString const & name, Any const & element ) override;
-    virtual void SAL_CALL removeByName( OUString const & name ) override;
+    virtual void removeByName( OUString const & name ) override;
     // XNameReplace
-    virtual void SAL_CALL replaceByName(
+    virtual void replaceByName(
         OUString const & name, Any const & element ) override;
     // XNameAccess
-    virtual Any SAL_CALL getByName( OUString const & name ) override;
-    virtual Sequence<OUString> SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName( OUString const & name ) override;
+    virtual Any getByName( OUString const & name ) override;
+    virtual Sequence<OUString> getElementNames() override;
+    virtual bool hasByName( OUString const & name ) override;
     // XElementAccess
-    virtual Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual Type getElementType() override;
+    virtual bool hasElements() override;
 };
 
 }
@@ -543,7 +543,7 @@ extern "C" { static void s_createComponentContext_v(va_list * pParam)
     *ppContext = pTarget2curr->mapInterface(xContext.get(), cppu::UnoType<decltype(xContext)>::get());
 }}
 
-Reference< XComponentContext > SAL_CALL createComponentContext(
+Reference< XComponentContext > createComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
     Reference< XComponentContext > const & xDelegate )
 {

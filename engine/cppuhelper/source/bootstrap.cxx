@@ -79,7 +79,7 @@ const OUString & BootstrapException::getMessage() const
     return m_aMessage;
 }
 
-Reference< XComponentContext > SAL_CALL bootstrap()
+Reference< XComponentContext > bootstrap()
 {
     Reference< XComponentContext > xRemoteContext;
 

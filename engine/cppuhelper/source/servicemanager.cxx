@@ -458,9 +458,9 @@ public:
 private:
     virtual ~ContentEnumeration() override {}
 
-    virtual bool SAL_CALL hasMoreElements() override;
+    virtual bool hasMoreElements() override;
 
-    virtual cpo::uno::Any SAL_CALL nextElement() override;
+    virtual cpo::uno::Any nextElement() override;
 
     std::mutex mutex_;
     std::vector< cpo::uno::Any > factories_;
@@ -509,11 +509,11 @@ public:
 private:
     virtual ~SingletonFactory() override {}
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< css::uno::XInterface >
     createInstanceWithContext(
         css::uno::Reference< css::uno::XComponentContext > const & Context) override;
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< css::uno::XInterface >
     createInstanceWithArgumentsAndContext(
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
         css::uno::Reference< css::uno::XComponentContext > const & Context) override;
@@ -561,27 +561,27 @@ public:
 private:
     virtual ~ImplementationWrapper() override {}
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< css::uno::XInterface >
     createInstanceWithContext(
         css::uno::Reference< css::uno::XComponentContext > const & Context) override;
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< css::uno::XInterface >
     createInstanceWithArgumentsAndContext(
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
         css::uno::Reference< css::uno::XComponentContext > const & Context) override;
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< css::uno::XInterface >
     createInstance() override;
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    virtual css::uno::Reference< css::uno::XInterface >
     createInstanceWithArguments(
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments) override;
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool supportsService(OUString const & ServiceName) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override;
 
     rtl::Reference< cppuhelper::ServiceManager > manager_;

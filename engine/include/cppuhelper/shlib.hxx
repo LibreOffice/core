@@ -47,7 +47,7 @@ namespace cppu
     css::lang::XSingleServiceFactory)
 */
 CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XInterface >
-SAL_CALL loadSharedLibComponentFactory(
+loadSharedLibComponentFactory(
     ::rtl::OUString const & uri,
     ::rtl::OUString const & rImplName,
     css::uno::Reference< css::lang::XMultiServiceFactory > const & xMgr );
@@ -66,7 +66,7 @@ SAL_CALL loadSharedLibComponentFactory(
     @param xKey registry key to be provided to the component
 */
 CPPUHELPER_DLLPUBLIC void
-SAL_CALL writeSharedLibComponentInfo(
+writeSharedLibComponentInfo(
     ::rtl::OUString const & uri,
     css::uno::Reference< css::lang::XMultiServiceFactory > const & xMgr,
     css::uno::Reference< css::registry::XRegistryKey > const & xKey );

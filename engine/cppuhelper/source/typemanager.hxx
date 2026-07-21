@@ -56,33 +56,33 @@ public:
 private:
     virtual ~TypeManager() noexcept override;
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool supportsService(OUString const & ServiceName) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override;
 
-    virtual cpo::uno::Any SAL_CALL getByHierarchicalName(
+    virtual cpo::uno::Any getByHierarchicalName(
         OUString const & aName) override;
 
-    virtual bool SAL_CALL hasByHierarchicalName(OUString const & aName) override;
+    virtual bool hasByHierarchicalName(OUString const & aName) override;
 
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
+    virtual cpo::uno::Type getElementType() override;
 
-    virtual bool SAL_CALL hasElements() override;
+    virtual bool hasElements() override;
 
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual css::uno::Reference< css::container::XEnumeration >
     createEnumeration() override;
 
-    virtual bool SAL_CALL has(cpo::uno::Any const & aElement) override;
+    virtual bool has(cpo::uno::Any const & aElement) override;
 
-    virtual void SAL_CALL insert(cpo::uno::Any const & aElement) override;
+    virtual void insert(cpo::uno::Any const & aElement) override;
 
-    virtual void SAL_CALL remove(cpo::uno::Any const & aElement) override;
+    virtual void remove(cpo::uno::Any const & aElement) override;
 
     virtual css::uno::Reference< css::reflection::XTypeDescriptionEnumeration >
-    SAL_CALL createTypeDescriptionEnumeration(
+    createTypeDescriptionEnumeration(
         OUString const & moduleName,
         cpo::uno::Sequence< cpo::uno::TypeClass > const & types,
         css::reflection::TypeDescriptionSearchDepth depth) override;

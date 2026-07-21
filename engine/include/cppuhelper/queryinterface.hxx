@@ -36,7 +36,7 @@ namespace cppu
     @return acquired interface of demanded type or empty Any
 */
 template< class Interface1 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1 )
 {
@@ -55,7 +55,7 @@ inline cpo::uno::Any SAL_CALL queryInterface(
     @return acquired interface of demanded type or empty Any
 */
 template< class Interface1, class Interface2 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2 )
 {
@@ -78,7 +78,7 @@ inline cpo::uno::Any SAL_CALL queryInterface(
     @return acquired interface of demanded type or empty Any
 */
 template< class Interface1, class Interface2, class Interface3 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3 )
 {
@@ -105,7 +105,7 @@ inline cpo::uno::Any SAL_CALL queryInterface(
     @return acquired interface of demanded type or empty Any
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4 )
 {
@@ -136,7 +136,7 @@ inline cpo::uno::Any SAL_CALL queryInterface(
     @return acquired interface of demanded type or empty Any
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5 )
 {
@@ -172,7 +172,7 @@ inline cpo::uno::Any SAL_CALL queryInterface(
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6 )
@@ -213,7 +213,7 @@ inline cpo::uno::Any SAL_CALL queryInterface(
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7 )
@@ -258,7 +258,7 @@ inline cpo::uno::Any SAL_CALL queryInterface(
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8 )
@@ -307,7 +307,7 @@ inline cpo::uno::Any SAL_CALL queryInterface(
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9 )
@@ -360,7 +360,7 @@ inline cpo::uno::Any SAL_CALL queryInterface(
 */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10 )
@@ -418,7 +418,7 @@ inline cpo::uno::Any SAL_CALL queryInterface(
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
           class Interface11 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10,
@@ -481,7 +481,7 @@ inline cpo::uno::Any SAL_CALL queryInterface(
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
           class Interface11, class Interface12 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10,
@@ -521,7 +521,7 @@ inline cpo::uno::Any SAL_CALL queryInterface(
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
           class Interface11, class Interface12, class Interface13 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10,
@@ -563,7 +563,7 @@ inline cpo::uno::Any SAL_CALL queryInterface(
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
           class Interface11, class Interface12, class Interface13, class Interface14 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10,
@@ -608,7 +608,7 @@ template< class Interface1, class Interface2, class Interface3, class Interface4
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
           class Interface11, class Interface12, class Interface13, class Interface14, class Interface15,
           class Interface16, class Interface17 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10,
@@ -660,7 +660,7 @@ template< class Interface1, class Interface2, class Interface3, class Interface4
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
           class Interface11, class Interface12, class Interface13, class Interface14, class Interface15,
           class Interface16, class Interface17, class Interface18 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10,
@@ -714,7 +714,7 @@ template< class Interface1, class Interface2, class Interface3, class Interface4
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
           class Interface11, class Interface12, class Interface13, class Interface14, class Interface15,
           class Interface16, class Interface17, class Interface18, class Interface19 >
-inline cpo::uno::Any SAL_CALL queryInterface(
+inline cpo::uno::Any queryInterface(
     const cpo::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10,

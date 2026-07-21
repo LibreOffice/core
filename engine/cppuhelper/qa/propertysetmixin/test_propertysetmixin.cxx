@@ -92,7 +92,7 @@ public:
         return m_count;
     }
 
-    virtual void SAL_CALL disposing(css::lang::EventObject const &)
+    virtual void disposing(css::lang::EventObject const &)
         throw (css::uno::RuntimeException)
     {
         osl::MutexGuard g(m_mutex);
@@ -100,7 +100,7 @@ public:
         ++m_count;
     }
 
-    virtual void SAL_CALL propertyChange(
+    virtual void propertyChange(
         css::beans::PropertyChangeEvent const &)
         throw (css::uno::RuntimeException)
     { CPPUNIT_FAIL("BoundListener::propertyChange called"); }
@@ -126,7 +126,7 @@ public:
         return m_count;
     }
 
-    virtual void SAL_CALL disposing(css::lang::EventObject const &)
+    virtual void disposing(css::lang::EventObject const &)
         throw (css::uno::RuntimeException)
     {
         osl::MutexGuard g(m_mutex);
@@ -134,7 +134,7 @@ public:
         ++m_count;
     }
 
-    virtual void SAL_CALL vetoableChange(
+    virtual void vetoableChange(
         css::beans::PropertyChangeEvent const &)
         throw (css::beans::PropertyVetoException, css::uno::RuntimeException)
     { CPPUNIT_FAIL("VetoListener::vetoableChange called"); }

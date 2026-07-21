@@ -37,12 +37,12 @@ struct SAL_WARN_UNUSED ImplementationEntry
     /** Function that returns the implementation-name of the implementation
        (same as XServiceInfo.getImplementationName() ).
      */
-     rtl::OUString (SAL_CALL * getImplementationName)();
+     rtl::OUString (* getImplementationName)();
 
     /** Function that returns all supported servicenames of the implementation
        ( same as XServiceInfo.getSupportedServiceNames() ).
     */
-     cpo::uno::Sequence< rtl::OUString > (SAL_CALL * getSupportedServiceNames) ();
+     cpo::uno::Sequence< rtl::OUString > (* getSupportedServiceNames) ();
 
     /** Function that creates a SingleComponentFactory.
 
@@ -50,7 +50,7 @@ struct SAL_WARN_UNUSED ImplementationEntry
         removed library unloading feature; always set to null.
     */
      css::uno::Reference< css::lang::XSingleComponentFactory >
-     (SAL_CALL * createFactory)(
+     (* createFactory)(
          ComponentFactoryFunc fptr,
          ::rtl::OUString const & rImplementationName,
          cpo::uno::Sequence< ::rtl::OUString > const & rServiceNames,

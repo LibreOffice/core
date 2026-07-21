@@ -66,23 +66,23 @@ public:
             cpo::uno::Sequence< OUString >())
     {}
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & type)
+    virtual cpo::uno::Any queryInterface(cpo::uno::Type const & type)
         throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL acquire() throw () { OWeakObject::acquire(); }
+    virtual void acquire() throw () { OWeakObject::acquire(); }
 
-    virtual void SAL_CALL release() throw () { OWeakObject::release(); }
+    virtual void release() throw () { OWeakObject::release(); }
 
-    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException) {
+    virtual void dispose() throw (css::uno::RuntimeException) {
         cppu::PropertySetMixin< css::lang::XComponent >::dispose();
     }
 
-    virtual void SAL_CALL addEventListener(
+    virtual void addEventListener(
         css::uno::Reference< css::lang::XEventListener > const &)
         throw (css::uno::RuntimeException)
     {}
 
-    virtual void SAL_CALL removeEventListener(
+    virtual void removeEventListener(
         css::uno::Reference< css::lang::XEventListener > const &)
         throw (css::uno::RuntimeException)
     {}
@@ -124,23 +124,23 @@ public:
             cpo::uno::Sequence< OUString >())
     {}
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & type)
+    virtual cpo::uno::Any queryInterface(cpo::uno::Type const & type)
         throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL acquire() throw () { OWeakObject::acquire(); }
+    virtual void acquire() throw () { OWeakObject::acquire(); }
 
-    virtual void SAL_CALL release() throw () { OWeakObject::release(); }
+    virtual void release() throw () { OWeakObject::release(); }
 
-    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException) {
+    virtual void dispose() throw (css::uno::RuntimeException) {
         cppu::PropertySetMixin< css::lang::XComponent >::dispose();
     }
 
-    virtual void SAL_CALL addEventListener(
+    virtual void addEventListener(
         css::uno::Reference< css::lang::XEventListener > const &)
         throw (css::uno::RuntimeException)
     {}
 
-    virtual void SAL_CALL removeEventListener(
+    virtual void removeEventListener(
         css::uno::Reference< css::lang::XEventListener > const &)
         throw (css::uno::RuntimeException)
     {}
@@ -194,26 +194,26 @@ public:
             false)
     {}
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & type)
+    virtual cpo::uno::Any queryInterface(cpo::uno::Type const & type)
         throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL acquire() throw () { OWeakObject::acquire(); }
+    virtual void acquire() throw () { OWeakObject::acquire(); }
 
-    virtual void SAL_CALL release() throw () { OWeakObject::release(); }
+    virtual void release() throw () { OWeakObject::release(); }
 
-    virtual sal_Int32 SAL_CALL getFirst() throw (css::uno::RuntimeException);
+    virtual sal_Int32 getFirst() throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL setFirst(sal_Int32 value)
+    virtual void setFirst(sal_Int32 value)
         throw (css::uno::RuntimeException);
 
     virtual
     css::beans::Ambiguous<
         css::beans::Defaulted< css::beans::Optional< sal_Int32 > > >
-    SAL_CALL getSecond()
+    getSecond()
         throw (
             css::beans::UnknownPropertyException, css::uno::RuntimeException);
 
-    virtual void SAL_CALL setSecond(
+    virtual void setSecond(
         css::beans::Ambiguous<
         css::beans::Defaulted< css::beans::Optional< ::sal_Int32 > > > const &
         value)
@@ -221,19 +221,19 @@ public:
             css::beans::PropertyVetoException,
             css::beans::UnknownPropertyException, css::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getThird()
+    virtual sal_Int32 getThird()
         throw (
             css::beans::UnknownPropertyException, css::uno::RuntimeException);
 
-    virtual void SAL_CALL setThird(sal_Int32 value)
+    virtual void setThird(sal_Int32 value)
         throw (
             css::beans::UnknownPropertyException, css::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getFourth()
+    virtual sal_Int32 getFourth()
         throw (
             css::beans::UnknownPropertyException, css::uno::RuntimeException);
 
-    virtual void SAL_CALL setFourth(sal_Int32 value)
+    virtual void setFourth(sal_Int32 value)
         throw (
             css::beans::UnknownPropertyException, css::uno::RuntimeException);
 
@@ -352,16 +352,16 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & context):
         m_context(context) {}
 
-    virtual css::uno::Reference< css::lang::XComponent > SAL_CALL getEmpty1()
+    virtual css::uno::Reference< css::lang::XComponent > getEmpty1()
         throw (css::uno::RuntimeException)
     { return new Empty1(m_context); }
 
-    virtual css::uno::Reference< css::lang::XComponent > SAL_CALL getEmpty2()
+    virtual css::uno::Reference< css::lang::XComponent > getEmpty2()
         throw (css::uno::RuntimeException)
     { return new Empty2(m_context); }
 
     virtual css::uno::Reference< test::cppuhelper::propertysetmixin::XTest3 >
-    SAL_CALL getFull() throw (css::uno::RuntimeException)
+    getFull() throw (css::uno::RuntimeException)
     { return new Full(m_context); }
 
 private:
@@ -373,18 +373,18 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_context;
 };
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL create(
+css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
     return static_cast< cppu::OWeakObject * >(new Supplier(context));
 }
 
-OUString SAL_CALL getImplementationName() {
+OUString getImplementationName() {
     return OUString(
             "test.cppuhelper.propertysetmixin.comp.CppSupplier");
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+cpo::uno::Sequence< OUString > getSupportedServiceNames()
 {
     return { "test.cppuhelper.propertysetmixin.CppSupplier" };
 }
@@ -396,7 +396,7 @@ cppu::ImplementationEntry entries[] = {
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL mixin_component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * mixin_component_getFactory(
     char const * implName, void * serviceManager, void * registryKey)
 {
     return cppu::component_getFactoryHelper(

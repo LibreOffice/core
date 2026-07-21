@@ -87,28 +87,28 @@ public:
         }
 
     // XSingleServiceFactory
-    Reference<XInterface > SAL_CALL createInstance() override;
-    Reference<XInterface > SAL_CALL createInstanceWithArguments( const Sequence<Any>& Arguments ) override;
+    Reference<XInterface > createInstance() override;
+    Reference<XInterface > createInstanceWithArguments( const Sequence<Any>& Arguments ) override;
     // XSingleComponentFactory
-    virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
+    virtual Reference< XInterface > createInstanceWithContext(
         Reference< XComponentContext > const & xContext ) override;
-    virtual Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
+    virtual Reference< XInterface > createInstanceWithArgumentsAndContext(
         Sequence< Any > const & rArguments,
         Reference< XComponentContext > const & xContext ) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    OUString getImplementationName() override;
+    bool supportsService(const OUString& ServiceName) override;
+    Sequence< OUString > getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual Sequence< Type > SAL_CALL getTypes() override;
+    virtual Sequence< Type > getTypes() override;
 
     // XUnloadingPreference
-    virtual bool SAL_CALL releaseOnNotification() override;
+    virtual bool releaseOnNotification() override;
 
     // WeakComponentImplHelper
-    void SAL_CALL disposing() override;
+    void disposing() override;
 
 private:
     css::uno::Reference<css::uno::XInterface> createInstanceWithArgumentsEveryTime(
@@ -323,7 +323,7 @@ Sequence< OUString > OFactoryComponentHelper::getSupportedServiceNames()
 // one-instance factory: false
 // single factory: true
 // component factory: true
-bool SAL_CALL OFactoryComponentHelper::releaseOnNotification()
+bool OFactoryComponentHelper::releaseOnNotification()
 {
     if (m_bOneInstance)
         return false;
@@ -349,23 +349,23 @@ public:
         {}
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( Type const & type ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual Any queryInterface( Type const & type ) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
     // XTypeProvider
-    virtual Sequence< Type > SAL_CALL getTypes() override;
+    virtual Sequence< Type > getTypes() override;
     // XPropertySet
-    virtual Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
+    virtual Reference< beans::XPropertySetInfo > getPropertySetInfo() override;
 
     // OPropertySetHelper
-    virtual IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-    virtual bool SAL_CALL convertFastPropertyValue(
+    virtual IPropertyArrayHelper & getInfoHelper() override;
+    virtual bool convertFastPropertyValue(
         Any & rConvertedValue, Any & rOldValue,
         sal_Int32 nHandle, Any const & rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+    virtual void setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle, Any const & rValue ) override;
     using OPropertySetHelper::getFastPropertyValue;
-    virtual void SAL_CALL getFastPropertyValue(
+    virtual void getFastPropertyValue(
         Any & rValue, sal_Int32 nHandle ) const override;
 
     // OFactoryComponentHelper
@@ -373,16 +373,16 @@ public:
         Reference< XComponentContext > const & xContext ) override;
 
     // XSingleServiceFactory
-    Reference<XInterface > SAL_CALL createInstanceWithArguments(const Sequence<Any>& Arguments) override;
+    Reference<XInterface > createInstanceWithArguments(const Sequence<Any>& Arguments) override;
     // XSingleComponentFactory
-    Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
+    Reference< XInterface > createInstanceWithArgumentsAndContext(
         Sequence< Any > const & rArguments,
         Reference< XComponentContext > const & xContext ) override;
 
     // XServiceInfo
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    Sequence< OUString > getSupportedServiceNames() override;
     // XUnloadingPreference
-    bool SAL_CALL releaseOnNotification() override;
+    bool releaseOnNotification() override;
 
 
 private:
@@ -405,7 +405,7 @@ protected:
 
 // XInterface
 
-Any SAL_CALL ORegistryFactoryHelper::queryInterface(
+Any ORegistryFactoryHelper::queryInterface(
     Type const & type )
 {
     Any ret( OFactoryComponentHelper::queryInterface( type ) );
@@ -532,7 +532,7 @@ Reference<XInterface > ORegistryFactoryHelper::createInstanceEveryTime(
     return Reference<XInterface >();
 }
 
-Reference<XInterface > SAL_CALL ORegistryFactoryHelper::createInstanceWithArguments(
+Reference<XInterface > ORegistryFactoryHelper::createInstanceWithArguments(
     const Sequence<Any>& Arguments )
 {
     if( !xModuleFactory.is() && !xModuleFactoryDepr.is() )
@@ -681,7 +681,7 @@ Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames()
     return m_aServiceNames;
 }
 
-bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification()
+bool ORegistryFactoryHelper::releaseOnNotification()
 {
     bool retVal= true;
     if( isOneInstance() && isInstance())
@@ -708,7 +708,7 @@ bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification()
 }
 
 // global function
-Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
+Reference<XSingleServiceFactory > createSingleFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,
     const OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
@@ -720,7 +720,7 @@ Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
 }
 
 // global function
-Reference<XSingleServiceFactory > SAL_CALL createOneInstanceFactory(
+Reference<XSingleServiceFactory > createOneInstanceFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,
     const OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
@@ -732,7 +732,7 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceFactory(
 }
 
 // global function
-Reference<XSingleServiceFactory > SAL_CALL createSingleRegistryFactory(
+Reference<XSingleServiceFactory > createSingleRegistryFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,
     const OUString & rImplementationName,
     const Reference<XRegistryKey > & rImplementationKey )
@@ -741,7 +741,7 @@ Reference<XSingleServiceFactory > SAL_CALL createSingleRegistryFactory(
         rServiceManager, rImplementationName, rImplementationKey, false );
 }
 
-Reference< lang::XSingleComponentFactory > SAL_CALL createSingleComponentFactory(
+Reference< lang::XSingleComponentFactory > createSingleComponentFactory(
     ComponentFactoryFunc fptr,
     OUString const & rImplementationName,
     Sequence< OUString > const & rServiceNames,
@@ -751,7 +751,7 @@ Reference< lang::XSingleComponentFactory > SAL_CALL createSingleComponentFactory
         Reference< XMultiServiceFactory >(), rImplementationName, nullptr, fptr, &rServiceNames, false );
 }
 
-Reference< lang::XSingleComponentFactory > SAL_CALL createOneInstanceComponentFactory(
+Reference< lang::XSingleComponentFactory > createOneInstanceComponentFactory(
     ComponentFactoryFunc fptr,
     OUString const & rImplementationName,
     Sequence< OUString > const & rServiceNames,

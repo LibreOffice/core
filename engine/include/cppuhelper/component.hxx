@@ -60,35 +60,35 @@ public:
     virtual ~OComponentHelper() SAL_OVERRIDE;
 
     // XAggregation
-    virtual cpo::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any queryInterface(
         cpo::uno::Type const & rType ) SAL_OVERRIDE;
-    virtual cpo::uno::Any SAL_CALL queryAggregation(
+    virtual cpo::uno::Any queryAggregation(
         cpo::uno::Type const & rType ) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire()
+    virtual void acquire()
         SAL_NOEXCEPT SAL_OVERRIDE;
-    virtual void SAL_CALL release()
+    virtual void release()
         SAL_NOEXCEPT SAL_OVERRIDE;
 
     /** @attention
         XTypeProvider::getImplementationId() has to be implemented separately!
     */
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE = 0;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() SAL_OVERRIDE = 0;
     /** @attention
         XTypeProvider::getTypes() has to be re-implemented!
     */
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() SAL_OVERRIDE;
 
     // XComponent
-    virtual void SAL_CALL dispose() SAL_OVERRIDE;
-    virtual void SAL_CALL addEventListener(
+    virtual void dispose() SAL_OVERRIDE;
+    virtual void addEventListener(
         const css::uno::Reference< css::lang::XEventListener >& aListener ) SAL_OVERRIDE;
-    virtual void SAL_CALL removeEventListener(
+    virtual void removeEventListener(
         const css::uno::Reference< css::lang::XEventListener >& aListener ) SAL_OVERRIDE;
 
 protected:
     /** Called in dispose method after the listeners were notified.
     */
-    virtual void SAL_CALL disposing();
+    virtual void disposing();
 
     /// @cond INTERNAL
     OBroadcastHelper    m_rBHelper;

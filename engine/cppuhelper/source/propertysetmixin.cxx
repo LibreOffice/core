@@ -274,12 +274,12 @@ class Info: public cppu::WeakImplHelper< css::beans::XPropertySetInfo > {
 public:
     explicit Info(Data * data): m_data(data) {}
 
-    virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
+    virtual cpo::uno::Sequence< css::beans::Property > getProperties() override;
 
-    virtual css::beans::Property SAL_CALL getPropertyByName(
+    virtual css::beans::Property getPropertyByName(
         OUString const & name) override;
 
-    virtual bool SAL_CALL hasPropertyByName(OUString const & name) override;
+    virtual bool hasPropertyByName(OUString const & name) override;
 
 private:
     rtl::Reference< Data > m_data;

@@ -79,9 +79,9 @@ public:
     explicit OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ );
 
     // XPropertySetInfo-methods
-    virtual Sequence< Property > SAL_CALL getProperties() override;
-    virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) override;
-    virtual bool SAL_CALL hasPropertyByName(const OUString& PropertyName) override;
+    virtual Sequence< Property > getProperties() override;
+    virtual Property getPropertyByName(const OUString& PropertyName) override;
+    virtual bool hasPropertyByName(const OUString& PropertyName) override;
 };
 
 }

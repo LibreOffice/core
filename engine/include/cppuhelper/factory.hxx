@@ -54,7 +54,7 @@ typedef struct _uno_Environment uno_Environment;
     @param ppEnv function returns its environment if the environment is session specific,
                  i.e. has special context
 */
-typedef void (SAL_CALL * component_getImplementationEnvironmentFunc)(
+typedef void (* component_getImplementationEnvironmentFunc)(
     const char ** ppEnvTypeName, uno_Environment ** ppEnv );
 
 /** Function pointer declaration.
@@ -67,7 +67,7 @@ typedef void (SAL_CALL * component_getImplementationEnvironmentFunc)(
                          i.e. has special context
     @param pImplName
 */
-typedef void (SAL_CALL * component_getImplementationEnvironmentExtFunc)(
+typedef void (* component_getImplementationEnvironmentExtFunc)(
     char        const ** ppEnvTypeName,
     uno_Environment       ** ppEnv,
     char        const  * pImplName,
@@ -88,7 +88,7 @@ typedef void (SAL_CALL * component_getImplementationEnvironmentExtFunc)(
     returned by component_getImplementationEnvironment)
     @return true if everything went fine
 */
-typedef bool (SAL_CALL * component_writeInfoFunc)(
+typedef bool (* component_writeInfoFunc)(
     void * pServiceManager, void * pRegistryKey );
 
 /** Function pointer declaration.
@@ -106,7 +106,7 @@ typedef bool (SAL_CALL * component_writeInfoFunc)(
    (the type is lang::XSingleComponentFactory or lang::XSingleServiceFactory to be used by the
    environment returned by component_getImplementationEnvironment)
 */
-typedef void * (SAL_CALL * component_getFactoryFunc)(
+typedef void * (* component_getFactoryFunc)(
     const char * pImplName, void * pServiceManager, void * pRegistryKey );
 
 
@@ -120,7 +120,7 @@ namespace cppu
     @return component instance
 */
 typedef css::uno::Reference< css::uno::XInterface >(
-    SAL_CALL * ComponentFactoryFunc)(
+    * ComponentFactoryFunc)(
         css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
 /** Creates a single component factory supporting the XSingleComponentFactory interface.
@@ -132,7 +132,7 @@ typedef css::uno::Reference< css::uno::XInterface >(
            unloading feature; always set to null
 */
 CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleComponentFactory >
-SAL_CALL createSingleComponentFactory(
+createSingleComponentFactory(
     ComponentFactoryFunc fptr,
     ::rtl::OUString const & rImplementationName,
     cpo::uno::Sequence< ::rtl::OUString > const & rServiceNames,
@@ -148,7 +148,7 @@ SAL_CALL createSingleComponentFactory(
 
     @see createSingleComponentFactory
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleComponentFactory > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleComponentFactory >
 createOneInstanceComponentFactory(
     ComponentFactoryFunc fptr,
     ::rtl::OUString const & rImplementationName,
@@ -161,7 +161,7 @@ createOneInstanceComponentFactory(
     @see createOneInstanceFactory
     @deprecated
 */
-typedef css::uno::Reference< css::uno::XInterface >(SAL_CALL * ComponentInstantiation)(
+typedef css::uno::Reference< css::uno::XInterface >(* ComponentInstantiation)(
     const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager );
 
 /** Deprecated.  Creates a single service factory.
@@ -178,7 +178,7 @@ typedef css::uno::Reference< css::uno::XInterface >(SAL_CALL * ComponentInstanti
     @see createOneInstanceFactory
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory >
 createSingleFactory(
     const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
@@ -200,7 +200,7 @@ createSingleFactory(
     @see createSingleFactory
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory >
 createOneInstanceFactory(
     const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rComponentName,
@@ -217,7 +217,7 @@ createOneInstanceFactory(
     XSingleServiceFactory and XComponent.
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory >
 createSingleRegistryFactory(
     const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,

@@ -238,19 +238,19 @@ protected:
        <code>css::uno::XInterface::queryInterface</code> of this UNO
        object.
     */
-    virtual cpo::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any queryInterface(
         cpo::uno::Type const & type) SAL_OVERRIDE;
 
     // @see css::beans::XPropertySet::getPropertySetInfo
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() SAL_OVERRIDE;
 
     // @see css::beans::XPropertySet::setPropertyValue
-    virtual void SAL_CALL setPropertyValue(
+    virtual void setPropertyValue(
         rtl::OUString const & propertyName,
         cpo::uno::Any const & value) SAL_OVERRIDE;
 
     // @see css::beans::XPropertySet::getPropertyValue
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(
+    virtual cpo::uno::Any getPropertyValue(
         rtl::OUString const & propertyName) SAL_OVERRIDE;
 
     /**
@@ -262,13 +262,13 @@ protected:
 
        @see css::beans::XPropertySet::addPropertyChangeListener
     */
-    virtual void SAL_CALL addPropertyChangeListener(
+    virtual void addPropertyChangeListener(
         rtl::OUString const & propertyName,
         css::uno::Reference<
         css::beans::XPropertyChangeListener > const & listener) SAL_OVERRIDE;
 
     // @see css::beans::XPropertySet::removePropertyChangeListener
-    virtual void SAL_CALL removePropertyChangeListener(
+    virtual void removePropertyChangeListener(
         rtl::OUString const & propertyName,
         css::uno::Reference<
         css::beans::XPropertyChangeListener > const & listener) SAL_OVERRIDE;
@@ -282,30 +282,30 @@ protected:
 
        @see css::beans::XPropertySet::addVetoableChangeListener
     */
-    virtual void SAL_CALL addVetoableChangeListener(
+    virtual void addVetoableChangeListener(
         rtl::OUString const & propertyName,
         css::uno::Reference<
         css::beans::XVetoableChangeListener > const & listener) SAL_OVERRIDE;
 
     // @see css::beans::XPropertySet::removeVetoableChangeListener
-    virtual void SAL_CALL removeVetoableChangeListener(
+    virtual void removeVetoableChangeListener(
         rtl::OUString const & propertyName,
         css::uno::Reference<
         css::beans::XVetoableChangeListener > const & listener) SAL_OVERRIDE;
 
     // @see css::beans::XFastPropertySet::setFastPropertyValue
-    virtual void SAL_CALL setFastPropertyValue(
+    virtual void setFastPropertyValue(
         sal_Int32 handle, cpo::uno::Any const & value) SAL_OVERRIDE;
 
     // @see css::beans::XFastPropertySet::getFastPropertyValue
-    virtual cpo::uno::Any SAL_CALL getFastPropertyValue(
+    virtual cpo::uno::Any getFastPropertyValue(
         sal_Int32 handle) SAL_OVERRIDE;
 
     // @see css::beans::XPropertyAccess::getPropertyValues
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues() SAL_OVERRIDE;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getPropertyValues() SAL_OVERRIDE;
 
     // @see css::beans::XPropertyAccess::setPropertyValues
-    virtual void SAL_CALL setPropertyValues(
+    virtual void setPropertyValues(
         cpo::uno::Sequence< css::beans::PropertyValue > const & props) SAL_OVERRIDE;
 
 private:

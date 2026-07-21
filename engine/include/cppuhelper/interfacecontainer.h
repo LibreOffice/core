@@ -89,20 +89,20 @@ public:
     ~OInterfaceIteratorHelper();
 
     /** Return true, if there are more elements in the iterator. */
-    bool SAL_CALL hasMoreElements() const
+    bool hasMoreElements() const
         { return nRemain != 0; }
     /** Return the next element of the iterator. Calling this method if
         hasMoreElements() has returned false, is an error. Cast the
         returned pointer to the
      */
-    css::uno::XInterface * SAL_CALL next();
+    css::uno::XInterface * next();
 
     /** Removes the current element (the last one returned by next())
         from the underlying container. Calling this method before
         next() has been called or calling it twice with no next()
         inbetween is an error.
     */
-    void SAL_CALL remove();
+    void remove();
 
 private:
     OInterfaceContainerHelper & rCont;
@@ -145,12 +145,12 @@ public:
       Return the number of Elements in the container. Only useful if you have acquired
       the mutex.
      */
-    sal_Int32 SAL_CALL getLength() const;
+    sal_Int32 getLength() const;
 
     /**
       Return all interfaces added to this container.
      **/
-    cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > > SAL_CALL getElements() const;
+    cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > > getElements() const;
 
     /** Inserts an element into the container.  The position is not specified, thus it is not
         specified in which order events are fired.
@@ -168,7 +168,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 SAL_CALL addInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
+    sal_Int32 addInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
     /** Removes an element from the container.  It uses interface equality to remove the interface.
 
         @param rxIFace
@@ -176,16 +176,16 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 SAL_CALL removeInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
+    sal_Int32 removeInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
     /**
       Call disposing on all object in the container that
       support XEventListener. Then clear the container.
      */
-    void SAL_CALL disposeAndClear( const css::lang::EventObject & rEvt );
+    void disposeAndClear( const css::lang::EventObject & rEvt );
     /**
       Clears the container without calling disposing().
      */
-    void SAL_CALL clear();
+    void clear();
 
     /** Executes a functor for each contained listener of specified type, e.g.
         <code>forEach<awt::XPaintListener>(...</code>.
@@ -223,7 +223,7 @@ public:
 @endcode
     */
     template< typename ListenerT, typename EventT >
-    inline void notifyEach( void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event );
+    inline void notifyEach( void ( ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event );
 
 private:
 friend class OInterfaceIteratorHelper;
@@ -254,7 +254,7 @@ private:
     class NotifySingleListener
     {
     private:
-        typedef void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& );
+        typedef void ( ListenerT::*NotificationMethod )( const EventT& );
         NotificationMethod  m_pMethod;
         const EventT&       m_rEvent;
     public:
@@ -286,7 +286,7 @@ inline void OInterfaceContainerHelper::forEach( FuncT const& func )
 }
 
 template< typename ListenerT, typename EventT >
-inline void OInterfaceContainerHelper::notifyEach( void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event )
+inline void OInterfaceContainerHelper::notifyEach( void ( ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event )
 {
     forEach< ListenerT, NotifySingleListener< ListenerT, EventT > >( NotifySingleListener< ListenerT, EventT >( NotificationMethod, Event ) );
 }
@@ -318,7 +318,7 @@ public:
     /**
       Return all id's under which at least one interface is added.
      */
-    inline cpo::uno::Sequence< key > SAL_CALL getContainedTypes() const;
+    inline cpo::uno::Sequence< key > getContainedTypes() const;
 
     /**
       Return the container created under this key.
@@ -326,7 +326,7 @@ public:
       @return the container created under this key. If the container
                  was not created, null was returned.
      */
-    inline OInterfaceContainerHelper * SAL_CALL getContainer( const key & ) const;
+    inline OInterfaceContainerHelper * getContainer( const key & ) const;
 
     /** Inserts an element into the container with the specified key.
         The position is not specified, thus it is not specified in which order events are fired.
@@ -346,7 +346,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    inline sal_Int32 SAL_CALL addInterface(
+    inline sal_Int32 addInterface(
         const key & rKey,
         const css::uno::Reference< css::uno::XInterface > & r );
 
@@ -360,7 +360,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    inline sal_Int32 SAL_CALL removeInterface(
+    inline sal_Int32 removeInterface(
         const key & rKey,
         const css::uno::Reference< css::uno::XInterface > & rxIFace );
 
@@ -369,11 +369,11 @@ public:
       support XEventListener. Then clears the container.
       @param rEvt the event object which is passed during disposing() call
      */
-    inline void SAL_CALL disposeAndClear( const css::lang::EventObject & rEvt );
+    inline void disposeAndClear( const css::lang::EventObject & rEvt );
     /**
       Remove all elements of all containers. Does not delete the container.
      */
-    inline void SAL_CALL clear();
+    inline void clear();
 
     typedef key keyType;
 private:
@@ -467,7 +467,7 @@ struct SAL_WARN_UNUSED OBroadcastHelperVar
                 was not created, null was returned. This can be used to optimize
               performance ( construction of an event object can be avoided ).
      ***/
-    OInterfaceContainerHelper * SAL_CALL getContainer( const keyType &key ) const
+    OInterfaceContainerHelper * getContainer( const keyType &key ) const
         { return aLC.getContainer( key ); }
 };
 
@@ -508,14 +508,14 @@ public:
     /**
       Return all id's under which at least one interface is added.
      */
-    cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getContainedTypes() const;
+    cpo::uno::Sequence< cpo::uno::Type > getContainedTypes() const;
 
     /**
       Return the container created under this key.
       @return the container created under this key. If the container
                  was not created, null was returned.
      */
-    OInterfaceContainerHelper * SAL_CALL getContainer( const cpo::uno::Type & rKey ) const;
+    OInterfaceContainerHelper * getContainer( const cpo::uno::Type & rKey ) const;
 
     /** Inserts an element into the container with the specified key.
         The position is not specified, thus it is not specified in which order events are fired.
@@ -535,7 +535,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 SAL_CALL addInterface(
+    sal_Int32 addInterface(
         const cpo::uno::Type & rKey,
         const css::uno::Reference< css::uno::XInterface > & r );
 
@@ -549,7 +549,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 SAL_CALL removeInterface(
+    sal_Int32 removeInterface(
         const cpo::uno::Type & rKey,
         const css::uno::Reference< css::uno::XInterface > & rxIFace );
 
@@ -557,11 +557,11 @@ public:
       Call disposing on all object in the container that
       support XEventListener. Then clear the container.
      */
-    void SAL_CALL disposeAndClear( const css::lang::EventObject & rEvt );
+    void disposeAndClear( const css::lang::EventObject & rEvt );
     /**
       Remove all elements of all containers. Does not delete the container.
      */
-    void SAL_CALL clear();
+    void clear();
 
     typedef cpo::uno::Type keyType;
 private:

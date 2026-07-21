@@ -201,7 +201,7 @@ static void * queryDeepNoXInterface(
 
 // ImplHelper
 
-Any SAL_CALL ImplHelper_query(
+Any ImplHelper_query(
     Type const & rType, class_data * cd, void * that )
 {
     checkInterface( rType );
@@ -225,7 +225,7 @@ Any SAL_CALL ImplHelper_query(
     return Any( &p, pTDR );
 }
 
-Any SAL_CALL ImplHelper_queryNoXInterface(
+Any ImplHelper_queryNoXInterface(
     Type const & rType, class_data * cd, void * that )
 {
     checkInterface( rType );
@@ -245,7 +245,7 @@ cpo::uno::Sequence<sal_Int8> ImplHelper_getImplementationId(
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-Sequence< Type > SAL_CALL ImplHelper_getTypes(
+Sequence< Type > ImplHelper_getTypes(
     class_data * cd )
 {
     Sequence< Type > types( cd->m_nTypes );
@@ -254,7 +254,7 @@ Sequence< Type > SAL_CALL ImplHelper_getTypes(
     return types;
 }
 
-Sequence< Type >  SAL_CALL ImplInhHelper_getTypes(
+Sequence< Type >  ImplInhHelper_getTypes(
     class_data * cd, Sequence< Type > const & rAddTypes )
 {
     sal_Int32 nImplTypes = cd->m_nTypes;
@@ -268,7 +268,7 @@ Sequence< Type >  SAL_CALL ImplInhHelper_getTypes(
 
 // WeakImplHelper
 
-Any SAL_CALL WeakImplHelper_query(
+Any WeakImplHelper_query(
     Type const & rType, class_data * cd, void * that, OWeakObject * pBase )
 {
     checkInterface( rType );
@@ -286,7 +286,7 @@ Any SAL_CALL WeakImplHelper_query(
     return pBase->OWeakObject::queryInterface( rType );
 }
 
-Sequence< Type > SAL_CALL WeakImplHelper_getTypes(
+Sequence< Type > WeakImplHelper_getTypes(
     class_data * cd )
 {
     sal_Int32 nTypes = cd->m_nTypes;
@@ -299,7 +299,7 @@ Sequence< Type > SAL_CALL WeakImplHelper_getTypes(
 
 // WeakAggImplHelper
 
-Any SAL_CALL WeakAggImplHelper_queryAgg(
+Any WeakAggImplHelper_queryAgg(
     Type const & rType, class_data * cd, void * that, OWeakAggObject * pBase )
 {
     checkInterface( rType );
@@ -317,7 +317,7 @@ Any SAL_CALL WeakAggImplHelper_queryAgg(
     return pBase->OWeakAggObject::queryAggregation( rType );
 }
 
-Sequence< Type > SAL_CALL WeakAggImplHelper_getTypes(
+Sequence< Type > WeakAggImplHelper_getTypes(
     class_data * cd )
 {
     sal_Int32 nTypes = cd->m_nTypes;
@@ -331,7 +331,7 @@ Sequence< Type > SAL_CALL WeakAggImplHelper_getTypes(
 
 // WeakComponentImplHelper
 
-Any SAL_CALL WeakComponentImplHelper_query(
+Any WeakComponentImplHelper_query(
     Type const & rType, class_data * cd, void * that, WeakComponentImplHelperBase * pBase )
 {
     checkInterface( rType );
@@ -349,7 +349,7 @@ Any SAL_CALL WeakComponentImplHelper_query(
     return pBase->WeakComponentImplHelperBase::queryInterface( rType );
 }
 
-Sequence< Type > SAL_CALL WeakComponentImplHelper_getTypes(
+Sequence< Type > WeakComponentImplHelper_getTypes(
     class_data * cd )
 {
     sal_Int32 nTypes = cd->m_nTypes;
@@ -363,7 +363,7 @@ Sequence< Type > SAL_CALL WeakComponentImplHelper_getTypes(
 
 // WeakAggComponentImplHelper
 
-Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
+Any WeakAggComponentImplHelper_queryAgg(
     Type const & rType, class_data * cd, void * that, WeakAggComponentImplHelperBase * pBase )
 {
     checkInterface( rType );
@@ -381,7 +381,7 @@ Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
     return pBase->WeakAggComponentImplHelperBase::queryAggregation( rType );
 }
 
-Sequence< Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
+Sequence< Type > WeakAggComponentImplHelper_getTypes(
     class_data * cd )
 {
     sal_Int32 nTypes = cd->m_nTypes;

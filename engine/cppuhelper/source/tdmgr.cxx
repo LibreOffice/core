@@ -605,7 +605,7 @@ public:
         {}
 
     // XEventListener
-    virtual void SAL_CALL disposing( lang::EventObject const & rEvt ) override;
+    virtual void disposing( lang::EventObject const & rEvt ) override;
 };
 
 }
@@ -620,7 +620,7 @@ void EventListenerImpl::disposing( lang::EventObject const & rEvt )
 }
 
 
-bool SAL_CALL installTypeDescriptionManager(
+bool installTypeDescriptionManager(
     Reference< container::XHierarchicalNameAccess > const & xTDMgr_c )
 {
     uno::Environment curr_env(Environment::getCurrent());

@@ -100,7 +100,7 @@ public:
 
         @return this OWeakObject
     */
-    OWeakObject & SAL_CALL operator = ( const OWeakObject &)
+    OWeakObject & operator = ( const OWeakObject &)
         { return *this; }
 
     /** Basic queryInterface() implementation supporting com::sun::star::uno::XWeak and
@@ -109,28 +109,28 @@ public:
         @param rType demanded type
         @return demanded type or empty any
     */
-    virtual cpo::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any queryInterface(
         const cpo::uno::Type & rType ) SAL_OVERRIDE;
     /** increasing m_refCount
     */
-    virtual void SAL_CALL acquire()
+    virtual void acquire()
         SAL_NOEXCEPT SAL_OVERRIDE;
     /** decreasing m_refCount
     */
-    virtual void SAL_CALL release()
+    virtual void release()
         SAL_NOEXCEPT SAL_OVERRIDE;
 
     /** XWeak::queryAdapter() implementation
 
         @return a com::sun::star::uno::XAdapter reference
     */
-    virtual css::uno::Reference< css::uno::XAdapter > SAL_CALL queryAdapter() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XAdapter > queryAdapter() SAL_OVERRIDE;
 
     /** Cast operator to XInterface reference.
 
         @return XInterface reference
     */
-    SAL_CALL operator css::uno::Reference< css::uno::XInterface > ()
+    operator css::uno::Reference< css::uno::XInterface > ()
         { return this; }
 
     css::uno::XWeak* getXWeak() { return this; }

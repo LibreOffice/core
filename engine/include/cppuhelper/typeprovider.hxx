@@ -147,7 +147,7 @@ public:
 
         @return type collection
     */
-    cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes()
+    cpo::uno::Sequence< cpo::uno::Type > getTypes()
         { return _aTypes; }
     cpo::uno::Sequence< cpo::uno::Type > const & getTypes() const
         { return _aTypes; }

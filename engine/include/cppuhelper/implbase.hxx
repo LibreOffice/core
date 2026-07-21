@@ -105,17 +105,17 @@ public:
     WeakImplHelper & operator =(WeakImplHelper const &) = default;
     WeakImplHelper & operator =(WeakImplHelper &&) = default;
 
-    cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & aType) override
+    cpo::uno::Any queryInterface(cpo::uno::Type const & aType) override
     { return WeakImplHelper_query(aType, cd::get(), this, this); }
 
-    void SAL_CALL acquire() SAL_NOEXCEPT override { OWeakObject::acquire(); }
+    void acquire() SAL_NOEXCEPT override { OWeakObject::acquire(); }
 
-    void SAL_CALL release() SAL_NOEXCEPT override { OWeakObject::release(); }
+    void release() SAL_NOEXCEPT override { OWeakObject::release(); }
 
-    cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override
+    cpo::uno::Sequence<cpo::uno::Type> getTypes() override
     { return WeakImplHelper_getTypes(cd::get()); }
 
-    cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
+    cpo::uno::Sequence<sal_Int8> getImplementationId() override
     { return cpo::uno::Sequence<sal_Int8>(); }
 };
 
@@ -158,20 +158,20 @@ public:
     ImplInheritanceHelper & operator =(ImplInheritanceHelper const &) = default;
     ImplInheritanceHelper & operator =(ImplInheritanceHelper &&) = default;
 
-    cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const & aType) override
+    cpo::uno::Any queryInterface(cpo::uno::Type const & aType) override
     {
         cpo::uno::Any ret(ImplHelper_queryNoXInterface(aType, cd::get(), this));
         return ret.hasValue() ? ret : BaseClass::queryInterface(aType);
     }
 
-    void SAL_CALL acquire() SAL_NOEXCEPT override { BaseClass::acquire(); }
+    void acquire() SAL_NOEXCEPT override { BaseClass::acquire(); }
 
-    void SAL_CALL release() SAL_NOEXCEPT override { BaseClass::release(); }
+    void release() SAL_NOEXCEPT override { BaseClass::release(); }
 
-    cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override
+    cpo::uno::Sequence<cpo::uno::Type> getTypes() override
     { return ImplInhHelper_getTypes(cd::get(), BaseClass::getTypes()); }
 
-    cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
+    cpo::uno::Sequence<sal_Int8> getImplementationId() override
     { return cpo::uno::Sequence<sal_Int8>(); }
 };
 

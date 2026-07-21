@@ -32,7 +32,7 @@ namespace cppu
     @param rExc
            exception to be thrown.
 */
-CPPUHELPER_DLLPUBLIC void SAL_CALL throwException(const cpo::uno::Any& rExc);
+CPPUHELPER_DLLPUBLIC void throwException(const cpo::uno::Any& rExc);
 
 /** Use this function to get the dynamic type of a caught C++-UNO exception;
     completes the above function throwing exceptions generically.
@@ -83,7 +83,7 @@ CPPUHELPER_DLLPUBLIC void SAL_CALL throwException(const cpo::uno::Any& rExc);
               development, because the whole OOo code base is compiled using the
               same C++ compiler (and linking against one runtime library).
 */
-CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL getCaughtException();
+CPPUHELPER_DLLPUBLIC cpo::uno::Any getCaughtException();
 }
 
 #endif

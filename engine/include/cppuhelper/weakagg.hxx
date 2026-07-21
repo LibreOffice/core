@@ -52,11 +52,11 @@ public:
     /** If a delegator is set, then the delegators gets acquired.  Otherwise call is delegated to
         base class ::cppu::OWeakObject.
     */
-    virtual void SAL_CALL acquire() SAL_NOEXCEPT SAL_OVERRIDE;
+    virtual void acquire() SAL_NOEXCEPT SAL_OVERRIDE;
     /** If a delegator is set, then the delegators gets released.  Otherwise call is delegated to
         base class ::cppu::OWeakObject.
     */
-    virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE;
+    virtual void release() SAL_NOEXCEPT SAL_OVERRIDE;
     /** If a delegator is set, then the delegator is queried for the demanded interface.  If the
         delegator cannot provide the demanded interface, it calls queryAggregation() on its
         aggregated objects.
@@ -65,19 +65,19 @@ public:
         @return demanded type or empty any
         @see queryAggregation.
     */
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) SAL_OVERRIDE;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) SAL_OVERRIDE;
 
     /** Set the delegator.  The delegator member reference is a weak reference.
 
         @param Delegator the object that delegate its queryInterface to this aggregate.
     */
-    virtual void SAL_CALL setDelegator( const css::uno::Reference< css::uno::XInterface > & Delegator ) SAL_OVERRIDE;
+    virtual void setDelegator( const css::uno::Reference< css::uno::XInterface > & Delegator ) SAL_OVERRIDE;
     /** Called by the delegator or queryInterface. Re-implement this method instead of
         queryInterface.
 
         @see queryInterface
     */
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const cpo::uno::Type & rType ) SAL_OVERRIDE;
+    virtual cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) SAL_OVERRIDE;
 
 protected:
     /** Virtual dtor. Called when reference count is 0.

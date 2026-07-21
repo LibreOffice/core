@@ -39,7 +39,7 @@ namespace cppu
     @param xTDMgr manager instance
     @return true, if successfully registered
 */
-CPPUHELPER_DLLPUBLIC bool SAL_CALL installTypeDescriptionManager(
+CPPUHELPER_DLLPUBLIC bool installTypeDescriptionManager(
     css::uno::Reference< css::container::XHierarchicalNameAccess > const & xTDMgr );
 
 /** Bootstraps an initial component context with service manager upon
@@ -55,7 +55,7 @@ CPPUHELPER_DLLPUBLIC bool SAL_CALL installTypeDescriptionManager(
 
     @return component context
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext >
 defaultBootstrap_InitialComponentContext();
 
 
@@ -73,7 +73,7 @@ defaultBootstrap_InitialComponentContext();
     @param iniFile ini filename to get bootstrap variables
     @return component context
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext > SAL_CALL
+CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext >
 defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile);
 
 /**
@@ -131,7 +131,7 @@ private:
  * bootstrap error.
  */
 CPPUHELPER_DLLPUBLIC css::uno::Reference< css::uno::XComponentContext >
-SAL_CALL bootstrap();
+bootstrap();
 
 /// @cond INTERNAL
 /**
@@ -150,7 +150,7 @@ SAL_CALL bootstrap();
  * If uri is a vnd.sun.star.expand URL that contains unknown macros.
  */
 CPPUHELPER_DLLPUBLIC ::rtl::OUString
-SAL_CALL bootstrap_expandUri(::rtl::OUString const & uri);
+bootstrap_expandUri(::rtl::OUString const & uri);
 /// @endcond
 
 } // end namespace cppu

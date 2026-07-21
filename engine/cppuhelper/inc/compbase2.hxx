@@ -41,13 +41,13 @@ public:
     virtual ~WeakComponentImplHelperBase2() override;
 
     // css::lang::XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL
+    virtual void dispose() override;
+    virtual void
     addEventListener(css::uno::Reference<css::lang::XEventListener> const& rxListener) override;
-    virtual void SAL_CALL
+    virtual void
     removeEventListener(css::uno::Reference<css::lang::XEventListener> const& rxListener) override;
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const& rType) override;
+    virtual cpo::uno::Any queryInterface(cpo::uno::Type const& rType) override;
 
     /**
         Called by dispose for subclasses to do dispose() work.
@@ -76,33 +76,30 @@ class SAL_DLLPUBLIC_TEMPLATE WeakComponentImplHelper2 : public WeakComponentImpl
                                                         public Ifc...
 {
 public:
-    virtual void SAL_CALL acquire() noexcept override { OWeakObject::acquire(); }
+    virtual void acquire() noexcept override { OWeakObject::acquire(); }
 
-    virtual void SAL_CALL release() noexcept override { OWeakObject::release(); }
+    virtual void release() noexcept override { OWeakObject::release(); }
 
     // css::lang::XComponent
-    virtual void SAL_CALL dispose() noexcept final override
-    {
-        WeakComponentImplHelperBase2::dispose();
-    }
-    virtual void SAL_CALL addEventListener(
+    virtual void dispose() noexcept final override { WeakComponentImplHelperBase2::dispose(); }
+    virtual void addEventListener(
         css::uno::Reference<css::lang::XEventListener> const& rxListener) final override
     {
         WeakComponentImplHelperBase2::addEventListener(rxListener);
     }
-    virtual void SAL_CALL removeEventListener(
+    virtual void removeEventListener(
         css::uno::Reference<css::lang::XEventListener> const& rxListener) final override
     {
         WeakComponentImplHelperBase2::removeEventListener(rxListener);
     }
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(cpo::uno::Type const& rType) override
+    virtual cpo::uno::Any queryInterface(cpo::uno::Type const& rType) override
     {
         return WeakComponentImplHelper_query(rType, class_data_get(), this);
     }
 
     // css::lang::XTypeProvider
-    virtual cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override
+    virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override
     {
         static const cpo::uno::Sequence<cpo::uno::Type> aTypeList{
             cppu::UnoType<css::uno::XWeak>::get(), cppu::UnoType<css::lang::XComponent>::get(),
@@ -110,7 +107,7 @@ public:
         };
         return aTypeList;
     }
-    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
+    virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override
     {
         return cpo::uno::Sequence<sal_Int8>();
     }

@@ -48,7 +48,7 @@ protected:
 
     /** this function is called upon disposing the component
     */
-    virtual void SAL_CALL disposing();
+    virtual void disposing();
 
     /** This is the one and only constructor that is called from derived implementations.
 
@@ -60,16 +60,16 @@ public:
     */
     virtual ~WeakComponentImplHelperBase() SAL_OVERRIDE;
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any queryInterface(
         cpo::uno::Type const & rType ) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire()
+    virtual void acquire()
         SAL_NOEXCEPT SAL_OVERRIDE;
-    virtual void SAL_CALL release()
+    virtual void release()
         SAL_NOEXCEPT SAL_OVERRIDE;
-    virtual void SAL_CALL dispose() SAL_OVERRIDE;
-    virtual void SAL_CALL addEventListener(
+    virtual void dispose() SAL_OVERRIDE;
+    virtual void addEventListener(
         css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
-    virtual void SAL_CALL removeEventListener(
+    virtual void removeEventListener(
         css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
 };
 
@@ -85,49 +85,49 @@ protected:
 
     /** Is called upon disposing the component.
     */
-    virtual void SAL_CALL disposing();
+    virtual void disposing();
 
     WeakAggComponentImplHelperBase( ::osl::Mutex & rMutex );
 public:
     virtual ~WeakAggComponentImplHelperBase() SAL_OVERRIDE;
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(
+    virtual cpo::uno::Any queryInterface(
         cpo::uno::Type const & rType ) SAL_OVERRIDE;
-    virtual cpo::uno::Any SAL_CALL queryAggregation(
+    virtual cpo::uno::Any queryAggregation(
         cpo::uno::Type const & rType ) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire()
+    virtual void acquire()
         SAL_NOEXCEPT SAL_OVERRIDE;
-    virtual void SAL_CALL release()
+    virtual void release()
         SAL_NOEXCEPT SAL_OVERRIDE;
-    virtual void SAL_CALL dispose() SAL_OVERRIDE;
-    virtual void SAL_CALL addEventListener(
+    virtual void dispose() SAL_OVERRIDE;
+    virtual void addEventListener(
         css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
-    virtual void SAL_CALL removeEventListener(
+    virtual void removeEventListener(
         css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
 };
 
 /** WeakComponentImplHelper
 */
-CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL WeakComponentImplHelper_query(
+CPPUHELPER_DLLPUBLIC cpo::uno::Any WeakComponentImplHelper_query(
     cpo::uno::Type const & rType,
     class_data * cd,
     void * that,
     ::cppu::WeakComponentImplHelperBase * pBase );
 /** WeakComponentImplHelper
 */
-CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< cpo::uno::Type > SAL_CALL WeakComponentImplHelper_getTypes(
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< cpo::uno::Type > WeakComponentImplHelper_getTypes(
     class_data * cd );
 
 /** WeakAggComponentImplHelper
 */
-CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
+CPPUHELPER_DLLPUBLIC cpo::uno::Any WeakAggComponentImplHelper_queryAgg(
     cpo::uno::Type const & rType,
     class_data * cd,
     void * that,
     ::cppu::WeakAggComponentImplHelperBase * pBase );
 /** WeakAggComponentImplHelper
 */
-CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< cpo::uno::Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< cpo::uno::Type > WeakAggComponentImplHelper_getTypes(
     class_data * cd );
 
 }

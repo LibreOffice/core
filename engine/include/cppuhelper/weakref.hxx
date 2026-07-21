@@ -88,7 +88,7 @@ public:
 
         @param rWeakRef another weak ref
     */
-    WeakReferenceHelper & SAL_CALL operator = ( const WeakReferenceHelper & rWeakRef );
+    WeakReferenceHelper & operator = ( const WeakReferenceHelper & rWeakRef );
 
     WeakReferenceHelper & operator =(WeakReferenceHelper && other);
 
@@ -98,7 +98,7 @@ public:
 
         @param xInt another hard reference
     */
-    WeakReferenceHelper & SAL_CALL operator = (
+    WeakReferenceHelper & operator = (
             const css::uno::Reference< css::uno::XInterface > & xInt );
 
     /** Releases this reference and takes over hard reference xWeak. This
@@ -115,25 +115,25 @@ public:
         @param rObj another weak ref
         @return true, if both weak refs reference to the same object.
     */
-    bool SAL_CALL operator == ( const WeakReferenceHelper & rObj ) const
+    bool operator == ( const WeakReferenceHelper & rObj ) const
         { return (get() == rObj.get()); }
 
     /**  Gets a hard reference to the object.
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    css::uno::Reference< css::uno::XInterface > SAL_CALL get() const;
+    css::uno::Reference< css::uno::XInterface > get() const;
 
     /**  Gets a hard reference to the object.
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    SAL_CALL operator css::uno::Reference< css::uno::XInterface > () const
+    operator css::uno::Reference< css::uno::XInterface > () const
         { return get(); }
 
     /** Releases this reference.
     */
-    void SAL_CALL clear();
+    void clear();
 
 protected:
     /// @cond INTERNAL
@@ -176,7 +176,7 @@ public:
 
         @param xInt another hard reference
     */
-    WeakReference & SAL_CALL operator = (
+    WeakReference & operator = (
             const css::uno::Reference< interface_type > & xInt )
         { WeakReferenceHelper::operator=(xInt); return *this; }
 
@@ -194,7 +194,7 @@ public:
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    SAL_CALL operator css::uno::Reference< interface_type > () const
+    operator css::uno::Reference< interface_type > () const
         { return css::uno::Reference< interface_type >::query( get() ); }
 };
 

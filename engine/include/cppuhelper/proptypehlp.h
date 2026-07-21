@@ -34,21 +34,21 @@ namespace cppu {
    @exception css::lang::IllegalArgumentException when the type could not be converted.
  */
 template < class target >
-inline void SAL_CALL convertPropertyValue( target &value , const  cpo::uno::Any & a);
+inline void convertPropertyValue( target &value , const  cpo::uno::Any & a);
 
 /**
   conversion of basic types
 */
-inline void SAL_CALL convertPropertyValue( bool & target      , const cpo::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( sal_Int64 & target , const cpo::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( sal_uInt64 & target, const cpo::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( sal_Int32 & target , const cpo::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( sal_uInt32 & target, const cpo::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( sal_Int16 & target , const cpo::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( sal_uInt16 & target, const cpo::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( sal_Int8 & target  , const cpo::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( float & target     , const cpo::uno::Any & source );
-inline void SAL_CALL convertPropertyValue( double &target     , const cpo::uno::Any &source );
+inline void convertPropertyValue( bool & target      , const cpo::uno::Any & source );
+inline void convertPropertyValue( sal_Int64 & target , const cpo::uno::Any & source );
+inline void convertPropertyValue( sal_uInt64 & target, const cpo::uno::Any & source );
+inline void convertPropertyValue( sal_Int32 & target , const cpo::uno::Any & source );
+inline void convertPropertyValue( sal_uInt32 & target, const cpo::uno::Any & source );
+inline void convertPropertyValue( sal_Int16 & target , const cpo::uno::Any & source );
+inline void convertPropertyValue( sal_uInt16 & target, const cpo::uno::Any & source );
+inline void convertPropertyValue( sal_Int8 & target  , const cpo::uno::Any & source );
+inline void convertPropertyValue( float & target     , const cpo::uno::Any & source );
+inline void convertPropertyValue( double &target     , const cpo::uno::Any &source );
 
 } // end namespace cppu
 

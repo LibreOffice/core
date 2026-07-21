@@ -92,11 +92,11 @@ public:
         {}
 
     // XMacroExpander impl
-    virtual OUString SAL_CALL expandMacros( OUString const & exp ) override;
+    virtual OUString expandMacros( OUString const & exp ) override;
     // XServiceInfo impl
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( OUString const & serviceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( OUString const & serviceName ) override;
+    virtual Sequence< OUString > getSupportedServiceNames() override;
 };
 
 
