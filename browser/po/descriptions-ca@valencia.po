@@ -1,11 +1,12 @@
 # TransGecko <sigekos824@mongrec.com>, 2025.
+# Ecron <ecron_89@hotmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2025-04-26 18:31+0000\n"
-"Last-Translator: TransGecko <sigekos824@mongrec.com>\n"
+"PO-Revision-Date: 2026-07-21 07:01+0000\n"
+"Last-Translator: Ecron <ecron_89@hotmail.com>\n"
 "Language-Team: Valencian <https://hosted.weblate.org/projects/collabora-"
 "online/app-store-descriptions/ca@valencia/>\n"
 "Language: ca@valencia\n"
@@ -13,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #. App name - 50 chars limit
 #: descriptions/google-play.html%2Bhtml.body.h3:5-1
@@ -22,12 +23,12 @@ msgstr "Collabora Office: LibreOffice, OpenOffice i més"
 
 #. Short description - 80 chars limit
 #: descriptions/google-play.html%2Bhtml.body.p:9-1
-#, fuzzy
 msgid ""
 "LibreOffice based editor for Microsoft Office, LibreOffice and OpenOffice "
 "docs."
 msgstr ""
-"Editor basat en LibreOffice per a documents de Office i Open/LibreOffice."
+"Editor basat en el LibreOffice per a documents de l'Office i l'Open/"
+"LibreOffice."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:13-1
@@ -37,22 +38,27 @@ msgid ""
 "and now it's on Android, enhancing your possibilities to work on mobile and "
 "for collaboration."
 msgstr ""
+"El Collabora Office és un programa d'edició de text, full de càlcul i "
+"presentacions basat en el LibreOffice, el paquet ofimàtic de codi obert més "
+"popular del món. I ara és a l'Android, millorant les vostres possibilitats "
+"de treballar als dispositius mòbils i de manera col·laborativa."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:17-1
 msgid ""
 "This app is in active development, feedback and bug reports are very welcome."
 msgstr ""
+"L'aplicació es troba en desenvolupament actiu, agraïm els comentaris i la "
+"notificació d'errors."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:21-1
-#, fuzzy
 msgid "Supported files:"
-msgstr "Arxius compatibles:"
+msgstr "Fitxers compatibles:"
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:26-5
 msgid "Open Document Format (.odt, .odp, .ods, .ots, .ott, .otp)"
-msgstr "Open Document Format (.odt, .odp, .ods, .ots, .ott, .otp)"
+msgstr "Format Open Document (.odt, .odp, .ods, .ots, .ott, .otp)"
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:27-5
 msgid ""
@@ -68,9 +74,8 @@ msgstr "Microsoft Office 97/2000/XP/2003 (.doc, .ppt, .xls, .dot, .xlt, .pps)"
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:31-1
-#, fuzzy
 msgid "Report issues:"
-msgstr "Informar sobre problemes:"
+msgstr "Notifiqueu errors:"
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:35-1
@@ -79,10 +84,13 @@ msgid ""
 "href=\"https://col.la/android\"> https://col.la/android</a>. Please note "
 "that anything you enter in the bugtracker will be public."
 msgstr ""
+"Useu el gestor d'errors i adjunteu qualsevol fitxer que haja causat "
+"problemes a través de <a href=\"https://col.la/android\"> https://col.la/"
+"android</a>. Tingueu en compte que qualsevol cosa que envieu al gestor "
+"d'errors serà pública."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:40-1
-#, fuzzy
 msgid "About the app:"
 msgstr "Sobre l'aplicació:"
 
@@ -93,6 +101,10 @@ msgid ""
 "Windows, Mac, and Linux. This, combined with a new front-end based on "
 "Collabora Online, reads and saves documents similarly to LibreOffice desktop."
 msgstr ""
+"Collabora Office per a l'Android usa el mateix motor que el LibreOffice per "
+"al Windows, Mac i Linux. Això, combinat amb la nova interfície basada en el "
+"Collabora Online, llig i guarda documents de manera similar al LibreOffice "
+"d'escriptori."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:48-1
@@ -102,6 +114,11 @@ msgid ""
 "developing Android support since 2012, with the help of Google Summer of "
 "Code students Andrzej Hunt, Iain Billet and Kaishu Sahu."
 msgstr ""
+"Els enginyers del Collabora Tor Lillqvist, Tomaž Vajngerl, Michael Meeks, "
+"Miklos Vajna, Jan Holešovský, Mert Tümer, Rashesh Padia i Skyler Grey "
+"desenvolupen la compatibilitat amb Android des de l'any 2012, amb l'ajuda "
+"dels estudiants del Google Summer of Code Andrzej Hunt, Iain Billet i Kaishu "
+"Sahu."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:52-1
@@ -111,7 +128,7 @@ msgstr "Llicència:"
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:56-1
 msgid "Open Source - Mozilla Public License v2 and other"
-msgstr "De codi obert - Mozilla Public License v2 i altres"
+msgstr "Codi obert - Mozilla Public License v2 i d'altres"
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:60-1
