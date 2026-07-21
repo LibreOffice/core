@@ -306,7 +306,7 @@ final class AXTree {
         let id = stringAttr(elem, kAXIdentifierAttribute as String) ?? ""
         let title = stringAttr(elem, kAXTitleAttribute as String) ?? ""
         out += "\(indent)role=\"\(role)\" id=\"\(id)\" title=\"\(title)\"\n"
-        for child in arrayAttr(elem, kAXChildrenAttribute as String) ?? [] {
+        for child in childElements(of: elem) {
             dump(child, depth: depth + 1, into: &out)
         }
     }
@@ -350,7 +350,7 @@ final class AXTree {
         }
         out += " path=\"\(path.map(String.init).joined(separator: " "))\""
 
-        let children = arrayAttr(elem, kAXChildrenAttribute as String) ?? []
+        let children = childElements(of: elem)
         if children.isEmpty {
             out += "/>\n"
             return
@@ -449,6 +449,21 @@ final class AXTree {
 
     private func arrayAttr(_ elem: AXUIElement, _ name: String) -> [AXUIElement]? {
         return attr(elem, name) as? [AXUIElement]
+    }
+
+    /// Child elements for tree building: the normal children plus any attached
+    /// sheets. A document-modal alert (for example the "file was changed by
+    /// another application" save error) is a sheet on its window and is not
+    /// always listed among the plain children, so include sheets explicitly,
+    /// skipping any a window already lists as a child.
+    private func childElements(of elem: AXUIElement) -> [AXUIElement] {
+        var elements = arrayAttr(elem, kAXChildrenAttribute as String) ?? []
+        for sheet in arrayAttr(elem, "AXSheets") ?? [] {
+            if !elements.contains(where: { CFEqual($0, sheet) }) {
+                elements.append(sheet)
+            }
+        }
+        return elements
     }
 
     private func elementAttr(_ elem: AXUIElement, _ name: String) -> AXUIElement? {
