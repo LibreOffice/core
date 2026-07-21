@@ -683,15 +683,31 @@ bool InsertCellsOperation::runImplementation()
             for (SCTAB j = i + 1; j < nTabCount && rDoc.IsScenario(j); j++)
                 nScenarioCount++;
 
-            bool bAdjusted
-                = (meCmd == INS_INSROWS_BEFORE || meCmd == INS_INSROWS_AFTER)
-                      ? mrDocShell.GetDocFunc().AdjustRowHeight(
-                            ScRange(0, nStartRow, i, rDoc.MaxCol(), nEndRow, i + nScenarioCount),
-                            true, mbApi)
-                      : mrDocShell.GetDocFunc().AdjustRowHeight(ScRange(0, nPaintStartRow, i,
-                                                                        rDoc.MaxCol(), nPaintEndRow,
-                                                                        i + nScenarioCount),
-                                                                true, mbApi);
+            bool bAdjusted;
+            switch (meCmd)
+            {
+                case INS_INSROWS_BEFORE:
+                case INS_INSROWS_AFTER:
+                    bAdjusted = mrDocShell.GetDocFunc().AdjustRowHeight(
+                        ScRange(0, nStartRow, i, rDoc.MaxCol(), nEndRow, i + nScenarioCount), true,
+                        mbApi);
+                    break;
+                case INS_INSCOLS_BEFORE:
+                case INS_INSCOLS_AFTER:
+                case INS_CELLSRIGHT:
+                    // A horizontal insert, a whole column or cells shifted right, only adds empty
+                    // cells and shifts existing cells sideways, leaving their content and column
+                    // widths unchanged, so no row's optimal height can change. Nothing to
+                    // recompute.
+                    bAdjusted = false;
+                    break;
+                default:
+                    bAdjusted = mrDocShell.GetDocFunc().AdjustRowHeight(
+                        ScRange(0, nPaintStartRow, i, rDoc.MaxCol(), nPaintEndRow,
+                                i + nScenarioCount),
+                        true, mbApi);
+                    break;
+            }
             if (bAdjusted)
             {
                 //  paint only what is not done by AdjustRowHeight
