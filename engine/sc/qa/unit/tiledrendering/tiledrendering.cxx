@@ -1348,12 +1348,15 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowsBelowKeepPositionAfterRowHeig
     // positions: both in the coordinates it reports and in the tiles it paints.
     // When it does not, tiles below the grown row show the neighbouring rows
     // shifted by the height delta, with text cut in half at the tile boundary.
+    // The clients also have to be told that the row geometry they cache changed.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
     ScDocShell* pDocSh = pViewData->GetDocShell();
     CPPUNIT_ASSERT(pDocSh);
     ScDocument& rDoc = pViewData->GetDocument();
+    ScTestViewCallback aView;
 
     // A distant row makes a stale cached position visible as a large offset;
     // the rows around the grown one carry text so a shifted render differs in
@@ -1383,9 +1386,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowsBelowKeepPositionAfterRowHeig
     rEngine.SetTextCurrentDefaults(u"one\ntwo\nthree\nfour\nfive"_ustr);
     rDoc.SetEditText(ScAddress(nCol, nRow, 0), rEngine.CreateTextObject());
     const sal_uInt16 nOldHeight = rDoc.GetRowHeight(nRow, 0);
+    aView.m_sInvalidateSheetGeometry = ""_ostr;
     CPPUNIT_ASSERT(pDocSh->AdjustRowHeight(nRow, nRow, 0));
     CPPUNIT_ASSERT(rDoc.GetRowHeight(nRow, 0) > nOldHeight);
     Scheduler::ProcessEventsToIdle();
+
+    // The client re-reads the row geometry only when it is told that it changed.
+    CPPUNIT_ASSERT_EQUAL("rows sizes"_ostr, aView.m_sInvalidateSheetGeometry);
 
     // The view's position for a row below the grown one has to match the
     // position accumulated from the document row heights.

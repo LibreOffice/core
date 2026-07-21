@@ -18,6 +18,7 @@
  */
 
 #include <utility>
+#include <comphelper/kit.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdundo.hxx>
 
@@ -361,6 +362,15 @@ bool ScBlockUndo::AdjustHeight()
 
     if (bRet)
     {
+        if (comphelper::COKit::isActive())
+        {
+            // The recomputed heights shift every row below the block, so the cached
+            // accumulated row positions from the first block row on are wrong.
+            ScTabViewShell::invalidateAllViewsKitPositions(
+                rDocShell.GetBestViewShell(false), /*bColumns=*/false,
+                aBlockRange.aStart.Tab(), aBlockRange.aStart.Row());
+        }
+
         // tdf#76183: recalculate objects' positions
         rDoc.SetDrawPageSize(aBlockRange.aStart.Tab());
 
