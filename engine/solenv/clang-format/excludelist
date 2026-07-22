@@ -399,6 +399,7 @@ bridges/source/cpp_uno/gcc3_macosx_x86-64/cpp2uno.cxx
 bridges/source/cpp_uno/gcc3_macosx_x86-64/except.cxx
 bridges/source/cpp_uno/gcc3_macosx_x86-64/share.hxx
 bridges/source/cpp_uno/gcc3_macosx_x86-64/uno2cpp.cxx
+bridges/source/cpp_uno/msvc_win32_arm64/cpp2uno.cxx
 bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx
 bridges/source/cpp_uno/msvc_win32_x86-64/uno2cpp.cxx
 bridges/source/cpp_uno/shared/bridge.cxx
@@ -464,6 +465,7 @@ canvas/source/vcl/impltools.cxx
 canvas/source/vcl/impltools.hxx
 canvas/source/vcl/outdevprovider.hxx
 canvas/source/vcl/repainttarget.hxx
+canvas/source/vcl/sprite.hxx
 canvas/source/vcl/textlayout.cxx
 canvas/source/vcl/textlayout.hxx
 chart2/inc/ChartModel.hxx
@@ -8357,6 +8359,7 @@ sd/qa/unit/tiledrendering/tiledrendering.cxx
 sd/qa/unit/uiimpress.cxx
 sd/qa/unit/uimpress.cxx
 sd/qa/unit/vector/VectorPrimitiveReferenceTest.cxx
+sd/qa/unit/vector/VectorRenderingTest.cxx
 sd/source/core/CustomAnimationCloner.cxx
 sd/source/core/CustomAnimationEffect.cxx
 sd/source/core/CustomAnimationPreset.cxx
@@ -8373,6 +8376,7 @@ sd/source/core/drawdoc.cxx
 sd/source/core/drawdoc2.cxx
 sd/source/core/drawdoc3.cxx
 sd/source/core/drawdoc4.cxx
+sd/source/core/drawdoc_animations.cxx
 sd/source/core/pglink.cxx
 sd/source/core/sdpage.cxx
 sd/source/core/sdpage2.cxx
@@ -10749,6 +10753,7 @@ sw/qa/unit/sw-dialogs-test.cxx
 sw/qa/unit/sw-dialogs-test_2.cxx
 sw/source/core/SwNumberTree/SwNodeNum.cxx
 sw/source/core/SwNumberTree/SwNumberTree.cxx
+sw/source/core/access/AccessibilityIssue.cxx
 sw/source/core/access/acccell.cxx
 sw/source/core/access/acccell.hxx
 sw/source/core/access/acccontext.cxx
@@ -13656,6 +13661,7 @@ vcl/unx/gtk3/a11y/atktextattributes.cxx
 vcl/unx/gtk3/a11y/atkvalue.cxx
 vcl/unx/gtk3/a11y/atkwrapper.cxx
 vcl/unx/gtk3/a11y/atkwrapper.hxx
+vcl/unx/gtk3/customcellrenderer.cxx
 vcl/unx/gtk3/fpicker/SalGtkFilePicker.cxx
 vcl/unx/gtk3/fpicker/SalGtkFilePicker.hxx
 vcl/unx/gtk3/fpicker/SalGtkFolderPicker.cxx
@@ -14494,6 +14500,7 @@ xmlsecurity/inc/xmlsec/xmldocumentwrapper_xmlsecimpl.hxx
 xmlsecurity/inc/xmlsignaturehelper.hxx
 xmlsecurity/inc/xsecctl.hxx
 xmlsecurity/qa/certext/SanCertExt.cxx
+xmlsecurity/qa/unit/signing/signing.cxx
 xmlsecurity/source/component/certificatecontainer.cxx
 xmlsecurity/source/component/documentdigitalsignatures.cxx
 xmlsecurity/source/dialogs/certificatechooser.cxx
