@@ -899,7 +899,12 @@ ErrCodeMsg MarkdownReader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rP
             {
                 SwTextNode* pLast = aLast.GetNode().GetTextNode();
                 if (pLast && pLast->GetText().isEmpty())
-                    pLast->JoinPrev();
+                {
+                    // Keep the formatting of pPrev (has content) and drop aLast (no content).
+                    SwNodeIndex aPrev(aLast, -1);
+                    if (SwTextNode* pPrev = aPrev.GetNode().GetTextNode())
+                        pPrev->JoinNext();
+                }
             }
         }
 

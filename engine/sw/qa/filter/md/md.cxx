@@ -1072,6 +1072,39 @@ CPPUNIT_TEST_FIXTURE(Test, testListPaste)
     CPPUNIT_ASSERT_EQUAL(u"List B"_ustr, getParagraph(5)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testListEndPaste)
+{
+    // Given a document with 4 paragraphs (Before, List A, List B, After), where
+    // "List A" and "List B" are list items:
+    createSwDoc("paste-list-end.docx");
+
+    // When pasting a markdown list at the end of the 3rd paragraph:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->MovePara(GoCurrPara, fnParaEnd);
+    rtl::Reference<TransferDataContainer> xTransferable(new TransferDataContainer);
+    xTransferable->CopyString(SotClipboardFormatId::MARKDOWN, u"- List 1\n- List 2"_ustr);
+    TransferableDataHelper aHelper(xTransferable);
+    SwTransferable::PasteFormat(*pWrtShell, aHelper, SotClipboardFormatId::MARKDOWN);
+
+    // Then make sure the two pasted list items have their bullet / are counted:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    SwTextNode* pList1 = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT(pList1);
+    CPPUNIT_ASSERT(!pList1->GetSwAttrSet().GetItemIfSet(RES_PARATR_LIST_ISCOUNTED, false));
+    pWrtShell->Down(/*bSelect=*/false);
+    SwTextNode* pList2 = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT(pList2);
+    // Without the accompanying fix in place, this test would have failed, the
+    // last pasted list item was missing its bullet.
+    CPPUNIT_ASSERT(!pList2->GetSwAttrSet().GetItemIfSet(RES_PARATR_LIST_ISCOUNTED, false));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCTLPaste)
 {
     createSwDoc();
