@@ -415,11 +415,11 @@
           "dest-filename": "Open_Sans.zip"
         },
         {
-          "url": "https://dev-www.libreoffice.org/src/quickjs-v0.13.0.tar.gz",
-          "sha256": "13ed1d22cd4b2b693a94a234e752d1ea6a0064434a740031ff90439679257c6c",
+          "url": "https://dev-www.libreoffice.org/src/quickjs-v0.14.0.tar.gz",
+          "sha256": "928e9406addd99eb8623348f2cfcd916eade9a263c60d42be79bc7aee4ee8453",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "quickjs-v0.13.0.tar.gz"
+          "dest-filename": "quickjs-v0.14.0.tar.gz"
         },
         {
           "url": "https://dev-www.libreoffice.org/src/pdfium-7897.tar.bz2",
@@ -450,11 +450,11 @@
           "dest-filename": "antlr4-cpp-runtime-4.13.2-source.zip"
         },
         {
-          "url": "https://dev-www.libreoffice.org/src/xmlsec1-1.3.11.tar.gz",
-          "sha256": "53675e98fa83b48201d24f7bfbcaeaa1b51496b8b19ff969785856bdeb196af3",
+          "url": "https://dev-www.libreoffice.org/src/xmlsec1-1.3.12.tar.gz",
+          "sha256": "24045199af12d93fe5fdbbbf7e386e823e4842071e9432e2b90ac108b889a923",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "xmlsec1-1.3.11.tar.gz"
+          "dest-filename": "xmlsec1-1.3.12.tar.gz"
         },
         {
           "url": "https://dev-www.libreoffice.org/src/368f114c078f94214a308a74c7e991bc-crosextrafonts-20130214.tar.gz",
@@ -562,11 +562,11 @@
           "dest-filename": "libcmis-0.6.3.tar.xz"
         },
         {
-          "url": "https://dev-www.libreoffice.org/src/libe-book-0.1.3.tar.xz",
-          "sha256": "7e8d8ff34f27831aca3bc6f9cc532c2f90d2057c778963b884ff3d1e34dfe1f9",
+          "url": "https://dev-www.libreoffice.org/src/libe-book-0.1.4.tar.xz",
+          "sha256": "104b7e791b6632745898e9b6a0037b7540235771a4d8c3bde2c764466ad912f1",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "libe-book-0.1.3.tar.xz"
+          "dest-filename": "libe-book-0.1.4.tar.xz"
         },
         {
           "url": "https://dev-www.libreoffice.org/src/libetonyek-0.1.13.tar.xz",
@@ -611,11 +611,11 @@
           "dest-filename": "libmspub-0.1.5.tar.xz"
         },
         {
-          "url": "https://dev-www.libreoffice.org/src/libmwaw-0.3.22.tar.xz",
-          "sha256": "a1a39ffcea3ff2a7a7aae0c23877ddf4918b554bf82b0de5d7ce8e7f61ea8e32",
+          "url": "https://dev-www.libreoffice.org/src/libmwaw-0.3.23.tar.xz",
+          "sha256": "ac3590f691a2904eb8c7dc8b757b8a29f125f592449e421459ae8fa928b399eb",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "libmwaw-0.3.22.tar.xz"
+          "dest-filename": "libmwaw-0.3.23.tar.xz"
         },
         {
           "url": "https://dev-www.libreoffice.org/src/libodfgen-0.1.8.tar.xz",
@@ -632,18 +632,18 @@
           "dest-filename": "libpagemaker-0.0.4.tar.xz"
         },
         {
-          "url": "https://dev-www.libreoffice.org/src/librevenge-0.0.5.tar.bz2",
-          "sha256": "5892ca6796f7a2a93d580832e907e849b19d980b40d326a283b18877ab6de0c5",
+          "url": "https://dev-www.libreoffice.org/src/librevenge-0.0.6.tar.bz2",
+          "sha256": "52a65e904d255dbdd97a8b7bb28d6574e14f999eb01416aff004502406d0904d",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "librevenge-0.0.5.tar.bz2"
+          "dest-filename": "librevenge-0.0.6.tar.bz2"
         },
         {
-          "url": "https://dev-www.libreoffice.org/src/libstaroffice-0.0.7.tar.xz",
-          "sha256": "f94fb0ad8216f97127bedef163a45886b43c62deac5e5b0f5e628e234220c8db",
+          "url": "https://dev-www.libreoffice.org/src/libstaroffice-0.0.8.tar.xz",
+          "sha256": "bbca92882e96c55bd1527670866d6bc7529ccb12786da55a2398b60a063378da",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "libstaroffice-0.0.7.tar.xz"
+          "dest-filename": "libstaroffice-0.0.8.tar.xz"
         },
         {
           "url": "https://dev-www.libreoffice.org/src/libvisio-0.1.11.tar.xz",
