@@ -71,8 +71,12 @@ void RangeSelectionListenerParent::enableRangeChoosing(bool bEnable, weld::Dialo
     weld::Assistant* pAss = dynamic_cast<weld::Assistant*>(pDlg);
     if (pAss && bEnable)
         m_sRestorePageIdent = pAss->get_current_page_ident();
+    if (bEnable)
+        pDlg->hide();
+    // set modality while the dialog is hidden
     pDlg->set_modal(!bEnable);
-    pDlg->set_visible(!bEnable);
+    if (!bEnable)
+        pDlg->show();
     if (pAss && !bEnable)
         pAss->set_current_page(m_sRestorePageIdent);
 }
