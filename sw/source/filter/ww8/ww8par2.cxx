@@ -2721,12 +2721,20 @@ void WW8TabDesc::MoveOutsideTable()
         *m_pIo->m_pPaM->GetPoint() = *m_xTmpPos->GetPoint();
 }
 
+static SwNodeOffset lcl_TableNodeSpan(const SwTableNode* pTableNode)
+{
+    return pTableNode
+        ? pTableNode->EndOfSectionIndex() - pTableNode->GetIndex()
+        : SwNodeOffset(0);
+}
+
 void WW8TabDesc::FinishSwTable()
 {
     m_pIo->m_xRedlineStack->closeall(*m_pIo->m_pPaM->GetPoint());
 
     SwTableNode* pTableNode = m_pTable->GetTableNode();
     sw::WeakBroadcastingPtr pWeakTableNode(pTableNode);
+    const SwNodeOffset nNodesBefore(lcl_TableNodeSpan(pTableNode));
     {
         // ofz#38011 the RedlineStack destructor can delete the anchored nodes
         WW8LastAnchorPosSaver aSaveLastAnchorPos(*m_pIo);
@@ -2746,7 +2754,8 @@ void WW8TabDesc::FinishSwTable()
 
     m_pIo->m_aInsertedTables.InsertTable(*m_pTableNd, *m_pIo->m_pPaM);
 
-    if (pTableNode && !pWeakTableNode)
+    // a gone table node, or a shrunk one, leaves the boxes pointing at freed nodes
+    if (pTableNode && (!pWeakTableNode || lcl_TableNodeSpan(pTableNode) < nNodesBefore))
         throw std::runtime_error("table unexpectedly destroyed by applying redlines");
 
     MergeCells();
