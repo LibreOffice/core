@@ -117,12 +117,7 @@ public:
         mxEntry->set_position(-1);
     }
 
-    Selection GetSelection() const
-    {
-        int nStartPos, nEndPos;
-        mxEntry->get_selection_bounds(nStartPos, nEndPos);
-        return Selection(nStartPos, nEndPos);
-    }
+    Selection GetSelection() const;
 
     OUString GetLabelTextForShrinkMode();
 
