@@ -4250,9 +4250,6 @@ include/codemaker/typemanager.hxx
 include/codemaker/unotype.hxx
 include/com/sun/star/uno/Reference.h
 include/com/sun/star/uno/Reference.hxx
-include/cpo/uno/Type.h
-include/cpo/uno/Type.hxx
-include/cpo/uno/genfunc.hxx
 include/comphelper/ChainablePropertySet.hxx
 include/comphelper/ChainablePropertySetInfo.hxx
 include/comphelper/IdPropArrayHelper.hxx
@@ -4381,6 +4378,9 @@ include/cpo/uno/Any.h
 include/cpo/uno/Any.hxx
 include/cpo/uno/Sequence.h
 include/cpo/uno/Sequence.hxx
+include/cpo/uno/Type.h
+include/cpo/uno/Type.hxx
+include/cpo/uno/genfunc.hxx
 include/cppu/Enterable.hxx
 include/cppu/EnvGuards.hxx
 include/cppu/Map.hxx
