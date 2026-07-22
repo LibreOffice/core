@@ -16,14 +16,24 @@
 
 #include <config.h>
 
+#include <common/Log.hpp>
 #include <net/HttpRequest.hpp>
 #include <fuzzer/Common.hpp>
 
+#include <cstdlib>
+
+extern "C" int LLVMFuzzerInitialize(int* /*argc*/, char*** /*argv*/)
+{
+    fuzzer::DoInitialization();
+
+    // Shut down logging before static destructors run.
+    std::atexit([] { Log::shutdown(); });
+
+    return 0;
+}
+
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
-    static bool initialized = fuzzer::DoInitialization();
-    (void)initialized;
-
     for (size_t i = 0; i < size; ++i)
     {
         http::Response response;
