@@ -9,6 +9,7 @@
 
 #include <sctiledrenderingtest.hxx>
 
+#include <tools/json_writer.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -6462,6 +6463,92 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testFreezePaneScrolledExportXLSX)
     // Frozen pane anchored at A1; the scrollable pane starts at C6.
     CPPUNIT_ASSERT_EQUAL(u"A1"_ustr, getXPath(pSheet, "//x:sheetViews/x:sheetView", "topLeftCell"));
     CPPUNIT_ASSERT_EQUAL(u"C6"_ustr, getXPath(pSheet, "//x:sheetViews//x:pane", "topLeftCell"));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewRowsKeepPositionAfterDefaultViewEdit)
+{
+    // An edit in the default view syncs the content, including the recomputed row heights, to
+    // every sheet view holder table. A view showing a sheet view that already resolved row
+    // positions for that area must place the rows below the changed one at their new
+    // positions, the same as a freshly created view does, and the client of that view has to
+    // be told that the sheet geometry it caches changed.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDocument);
+
+    // A distant multiline cell whose row is tall, with text in the neighbouring rows, set up
+    // before the sheet view exists so the holder table starts with the same content.
+    const SCROW nRow = 9840;
+    for (SCROW nR = nRow - 3; nR <= nRow + 3; ++nR)
+        if (nR != nRow)
+            pDocument->SetString(ScAddress(0, nR, 0), "row " + OUString::number(nR + 1));
+    ScFieldEditEngine& rEngine = pDocument->GetEditEngine();
+    rEngine.SetTextCurrentDefaults(u"one\ntwo\nthree\nfour\nfive"_ustr);
+    pDocument->SetEditText(ScAddress(0, nRow, 0), rEngine.CreateTextObject());
+    ScDocShell* pDocSh = ScDocShell::GetViewData()->GetDocShell();
+    CPPUNIT_ASSERT(pDocSh);
+    CPPUNIT_ASSERT(pDocSh->AdjustRowHeight(nRow, nRow, 0));
+
+    setupViews();
+
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), mpTabViewSheetView->GetViewData().GetTabNumber());
+    const sal_uInt16 nTallHeight = pDocument->GetRowHeight(nRow, 1);
+    CPPUNIT_ASSERT_EQUAL(pDocument->GetRowHeight(nRow, 0), nTallHeight);
+
+    // The header request records row position anchors for this area on the holder tab of the
+    // sheet view.
+    const tools::Long nRowOffsetTw = pDocument->GetRowHeight(0, nRow - 1, 1);
+    const tools::Rectangle aVisArea(0, nRowOffsetTw - 2000, 20000, nRowOffsetTw + 8000);
+    pModelObj->setClientVisibleArea(aVisArea);
+    {
+        tools::JsonWriter aJsonWriter;
+        pModelObj->getRowColumnHeaders(aVisArea, aJsonWriter);
+        aJsonWriter.finishAndGetAsOString();
+    }
+    Scheduler::ProcessEventsToIdle();
+
+    ScViewData& rSheetViewData = mpTabViewSheetView->GetViewData();
+    const double fPPTY = rSheetViewData.GetPPTY();
+    auto expectedRowPosition = [pDocument, fPPTY](SCROW nWhichRow) {
+        tools::Long nPixels = 0;
+        for (SCROW nR = 0; nR < nWhichRow; ++nR)
+            if (sal_uInt16 nSize = pDocument->GetRowHeight(nR, 1))
+                nPixels += ScViewData::ToPixel(nSize, fPPTY);
+        return nPixels;
+    };
+    CPPUNIT_ASSERT_EQUAL(expectedRowPosition(nRow + 8),
+                         rSheetViewData.GetScrPos(0, nRow + 8, rSheetViewData.GetActivePart()).Y());
+
+    // Clearing the multiline cell in the default view and recomputing the row height through
+    // the document shell, the way undo of a data entry does, shrinks the row on the default
+    // tab and invalidates the default tab positions in every view.
+    switchToDefaultView();
+    gotoCell(u"A9841");
+    dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pDocSh->AdjustRowHeight(nRow, nRow, 0));
+    CPPUNIT_ASSERT(pDocument->GetRowHeight(nRow, 0) < nTallHeight);
+    CPPUNIT_ASSERT_EQUAL(nTallHeight, pDocument->GetRowHeight(nRow, 1));
+
+    // The next syncing edit in the default view makes the holder table take over the shrunk
+    // row height.
+    moSheetView->m_sInvalidateSheetGeometry = ""_ostr;
+    gotoCell(u"A1");
+    dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pDocument->GetRowHeight(nRow, 1) < nTallHeight);
+
+    switchToSheetView();
+    CPPUNIT_ASSERT_EQUAL(expectedRowPosition(nRow + 8),
+                         rSheetViewData.GetScrPos(0, nRow + 8, rSheetViewData.GetActivePart()).Y());
+
+    // The client of the sheet view re-reads the geometry of its tab only when it is told that
+    // it changed.
+    CPPUNIT_ASSERT_EQUAL("all"_ostr, moSheetView->m_sInvalidateSheetGeometry);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

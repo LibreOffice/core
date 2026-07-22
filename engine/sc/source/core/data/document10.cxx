@@ -28,6 +28,7 @@
 #include <drwlayer.hxx>
 #include <externalrefmgr.hxx>
 #include <docsh.hxx>
+#include <tabvwsh.hxx>
 #include <bcaslot.hxx>
 #include <broadcast.hxx>
 #include <SheetViewManager.hxx>
@@ -1403,6 +1404,9 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
         if (oQueryParam)
             Query(nSheetViewTab, *oQueryParam, false, false);
     }
+
+    if (mpShell)
+        ScTabViewShell::invalidateAllViewsKitSheetViewPositions(*mpShell, nDefaultViewTable);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -481,6 +481,10 @@ public:
     /// from the document.
     static void invalidateAllViewsKitPositions(const SfxViewShell* pForViewShell, bool bColumns,
                                                SCTAB nTab, SCCOLROW nStart);
+    /// Drops all cached accumulated column and row positions of every sheet view holder table
+    /// of nDefaultViewTab, in every view of the document.
+    static void invalidateAllViewsKitSheetViewPositions(ScDocShell& rDocShell,
+                                                        SCTAB nDefaultViewTab);
     void KitSendFormulabarUpdate(const EditView* pEditView, const OUString& rText, const ESelection& rSelection);
     css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
     SC_DLLPUBLIC static css::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);

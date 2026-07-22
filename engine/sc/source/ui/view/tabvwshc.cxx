@@ -29,7 +29,10 @@
 #include <scres.hrc>
 #include <global.hxx>
 #include <scmod.hxx>
+#include <docsh.hxx>
 #include <document.hxx>
+#include <SheetView.hxx>
+#include <SheetViewManager.hxx>
 #include <uiitems.hxx>
 #include <namedlg.hxx>
 #include <namedefdlg.hxx>
@@ -671,6 +674,34 @@ void ScTabViewShell::invalidateAllViewsKitPositions(const SfxViewShell* pForView
                 pPosHelper->invalidateByIndex(nStart);
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
+void ScTabViewShell::invalidateAllViewsKitSheetViewPositions(ScDocShell& rDocShell,
+                                                             SCTAB nDefaultViewTab)
+{
+    if (!comphelper::COKit::isActive())
+        return;
+
+    std::shared_ptr<sc::SheetViewManager> pManager
+        = rDocShell.GetDocument().GetSheetViewManager(nDefaultViewTab);
+    if (!pManager || pManager->isEmpty())
+        return;
+
+    SfxViewShell* pForViewShell = rDocShell.GetBestViewShell(false);
+    if (!pForViewShell)
+        return;
+
+    for (auto const& rSheetView : pManager->iterateValidSheetViews())
+    {
+        SCTAB nSheetViewTab = rSheetView.getTableNumber();
+        invalidateAllViewsKitPositions(pForViewShell, /*bColumns=*/true, nSheetViewTab, 0);
+        invalidateAllViewsKitPositions(pForViewShell, /*bColumns=*/false, nSheetViewTab, 0);
+
+        notifyAllViewsSheetGeomInvalidation(pForViewShell, true /* bColumns */, true /* bRows */,
+                                            true /* bSizes */, true /* bHidden */,
+                                            true /* bFiltered */, true /* bGroups */,
+                                            nSheetViewTab);
     }
 }
 
