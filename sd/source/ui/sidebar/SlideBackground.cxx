@@ -56,6 +56,7 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <EventMultiplexer.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/intlwrapper.hxx>
 #include <utility>
 #include <vcl/EnumContext.hxx>
 #include <vcl/svapp.hxx>
@@ -833,6 +834,38 @@ OUString const & SlideBackground::GetPatternSetOrDefault()
     return mpBitmapItem->GetName();
 }
 
+namespace
+{
+MapUnit lcl_FieldUnitToMapUnit( FieldUnit eFieldUnit )
+{
+    switch( eFieldUnit )
+    {   // only units available for units of measurement
+        // convert to unit for page size
+        case FieldUnit::MM :
+            return MapUnit::MapMM;
+        case FieldUnit::CM :
+        case FieldUnit::M  :
+        case FieldUnit::KM :
+            return MapUnit::MapCM;
+        case FieldUnit::INCH :
+        case FieldUnit::FOOT :
+        case FieldUnit::MILE :
+        case FieldUnit::PICA : // No exact conversion
+            return MapUnit::MapInch;
+        case FieldUnit::POINT :
+            return MapUnit::MapPoint;
+        // No corresponding conversion
+        case FieldUnit::CHAR :
+        case FieldUnit::LINE :
+            return MapUnit::MapPixel;
+        default :
+            SAL_WARN( "sd.ui", "invalid field unit for measurement" );
+            // default value
+            return MapUnit::MapCM;
+    }
+}
+}
+
 void SlideBackground::NotifyItemUpdate(
     const sal_uInt16 nSID,
     const SfxItemState eState,
@@ -943,6 +976,11 @@ void SlideBackground::NotifyItemUpdate(
 
                 Paper ePaper = SvxPaperInfo::GetSvxPaper(aPaperSize, meUnit);
                 mxPaperSizeBox->set_active_id( ePaper );
+                OUString sHelp;
+                const IntlWrapper aIntlWrapper( Application::GetSettings().GetUILanguageTag() );
+                pSizeItem->GetPresentation( SfxItemPresentation::Complete, meUnit,
+                                lcl_FieldUnitToMapUnit( meFUnit ), sHelp, aIntlWrapper );
+                mxPaperSizeBox->set_tooltip_text( sHelp );
             }
         }
         break;

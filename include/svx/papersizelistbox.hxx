@@ -50,6 +50,7 @@ public:
     void clear() { m_xControl->clear(); }
     void save_value() { return m_xControl->save_value(); }
     bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
+    void set_tooltip_text(const OUString& rTip) { m_xControl->set_tooltip_text(rTip); }
 
     weld::ComboBox& get_widget() const { return *m_xControl; }
 };
