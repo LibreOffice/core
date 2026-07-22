@@ -21,8 +21,9 @@
 #include <document.hxx>
 #include <simpref.hxx>
 
-ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent)
-    : ScAnyRefDlgController(pB, pCW, pParent, u"modules/scalc/ui/simplerefdialog.ui"_ustr, u"SimpleRefDialog"_ustr)
+ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings& rBindings, SfxChildWindow* pCW, weld::Window* pParent)
+    : ScAnyRefDlgController(&rBindings, pCW, pParent, u"modules/scalc/ui/simplerefdialog.ui"_ustr,
+                            u"SimpleRefDialog"_ustr)
     , bAutoReOpen(true)
     , bCloseOnButtonUp(false)
     , bSingleCell(false)

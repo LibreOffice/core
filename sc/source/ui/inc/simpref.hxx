@@ -54,7 +54,7 @@ protected:
     virtual void    RefInputDone( bool bForced = false ) override;
 
 public:
-                    ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent);
+    ScSimpleRefDlg(SfxBindings& rBindings, SfxChildWindow* pCW, weld::Window* pParent);
     virtual        ~ScSimpleRefDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument& rDoc ) override;

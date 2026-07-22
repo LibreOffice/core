@@ -200,7 +200,7 @@ ScTabViewShell::CreateRefDialogController(SfxBindings& rBindings, SfxChildWindow
 
             ScViewData& rViewData = GetViewData();
             rViewData.SetRefTabNo( rViewData.CurrentTabForData() );
-            xResult = std::make_shared<ScSimpleRefDlg>(&rBindings, pCW, pParent);
+            xResult = std::make_shared<ScSimpleRefDlg>(rBindings, pCW, pParent);
             break;
         }
         case FID_DEFINE_NAME:
