@@ -4344,3 +4344,9 @@ img#collab-choice-avatar {
 	outline: 2px solid var(--color-primary);
 	outline-offset: -1px;
 }
+
+.ui-treeview.ui-treeview-tree .ui-treeview-entry:focus,
+.ui-treeview.ui-treeview-tree .ui-treeview-entry:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: -2px;
+}
