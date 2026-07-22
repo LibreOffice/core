@@ -211,6 +211,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"modules/scalc/ui/paratemplatedialog.ui",
     u"modules/scalc/ui/pastespecial.ui",
     u"modules/scalc/ui/pivotfielddialog.ui",
+    u"modules/scalc/ui/printareasdialog.ui",
     u"modules/scalc/ui/protectsheetdlg.ui",
     u"modules/scalc/ui/regressiondialog.ui",
     u"modules/scalc/ui/rowheightdialog.ui",
