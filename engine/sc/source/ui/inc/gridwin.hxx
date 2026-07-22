@@ -215,7 +215,8 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) ScGridWindow : public vcl::DocWindow,
     ScAddress               aAutoMarkPos;
     ScAddress               aListValPos;
 
-    Point                   aDrawSelectionPos;
+    // The position of the mouse when the left button was pressed
+    Point                   aDrawMouseDownPos;
 
     tools::Rectangle               aInvertRect;
 
