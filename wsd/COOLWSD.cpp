@@ -746,7 +746,8 @@ static size_t addNewChild(std::shared_ptr<ChildProcess> child)
     LOG_INF("Have " << count << " spare " << (count == 1 ? "child" : "children")
                     << " after adding [" << pid << "]. Notifying.");
 
-    NewChildrenCV.notify_one();
+    // cf. filtering in notified waiter
+    NewChildrenCV.notify_all();
     return count;
 }
 
