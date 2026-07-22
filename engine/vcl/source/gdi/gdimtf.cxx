@@ -406,17 +406,9 @@ bool GDIMetaFile::ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Si
             if( xBitmapCanvas.is() )
             {
                 const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
-                uno::Reference< rendering::XMtfRenderer > xMtfRenderer = rendering::MtfRenderer::createWithBitmapCanvas( xContext, xBitmapCanvas );
-
+                uno::Reference< rendering::XMtfRenderer > xMtfRenderer = rendering::MtfRenderer::create( xContext );
                 xBitmapCanvas->clear();
-                uno::Reference< beans::XFastPropertySet > xMtfFastPropertySet( xMtfRenderer, uno::UNO_QUERY );
-                if( xMtfFastPropertySet.is() )
-                    // set this metafile to the renderer to
-                    // speedup things (instead of copying data to
-                    // sequence of bytes passed to renderer)
-                    xMtfFastPropertySet->setFastPropertyValue( 0, cpo::uno::Any( reinterpret_cast<sal_Int64>( this ) ) );
-
-                xMtfRenderer->draw( rDestSize.Width(), rDestSize.Height() );
+                xMtfRenderer->draw( xBitmapCanvas, reinterpret_cast<sal_Int64>( this ), rDestSize.Width(), rDestSize.Height() );
 
                 Bitmap aBitmap;
                 if( aBitmap.Create( xBitmapCanvas, aSize ) )

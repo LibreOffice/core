@@ -9,16 +9,18 @@
 
 #include <vclfactory.hxx>
 #include <o3tl/any.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XMtfRenderer.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <comphelper/compbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/gdimtf.hxx>
 
 using namespace ::com::sun::star;
 
-typedef comphelper::WeakComponentImplHelper<css::rendering::XMtfRenderer, css::beans::XFastPropertySet> MtfRendererBase;
+typedef comphelper::WeakComponentImplHelper<css::rendering::XMtfRenderer, css::lang::XServiceInfo> MtfRendererBase;
 
 namespace {
 
@@ -29,48 +31,31 @@ public:
                  css::uno::Reference<css::uno::XComponentContext> const&);
 
     // XMtfRenderer iface
-    void SAL_CALL setMetafile (const cpo::uno::Sequence< sal_Int8 >& rMtf) override;
-    void SAL_CALL draw (double fScaleX, double fScaleY) override;
+    void SAL_CALL draw (const css::uno::Reference<css::rendering::XBitmapCanvas>& xCanvas, sal_Int64 pMeta, double fScaleX, double fScaleY) override;
 
-    // XFastPropertySet
-    // setFastPropertyValue (0, GDIMetaFile*) is used to speedup the rendering
-    virtual cpo::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 /*nHandle*/) override { return cpo::uno::Any(); }
-    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const cpo::uno::Any&) override;
-
-private:
-    GDIMetaFile* mpMetafile;
-    css::uno::Reference<css::rendering::XBitmapCanvas> mxCanvas;
+    // XServiceIfno
+    virtual ::rtl::OUString getImplementationName() override { return u"com.sun.star.comp.rendering.MtfRenderer"_ustr; }
+    virtual bool supportsService( const ::rtl::OUString& rServiceName ) override
+    {  return cppu::supportsService(this, rServiceName); }
+    virtual ::cpo::uno::Sequence< ::rtl::OUString > getSupportedServiceNames() override
+    {
+        return { u"com.sun.star.rendering.MtfRenderer"_ustr };
+    }
 };
 
-void MtfRenderer::setMetafile (const cpo::uno::Sequence< sal_Int8 >& /*rMtf*/)
+void MtfRenderer::draw (const css::uno::Reference<css::rendering::XBitmapCanvas>& xCanvas, sal_Int64 pMeta, double fScaleX, double fScaleY)
 {
-        // printf ("MtfRenderer::setMetafile unimplemented, use fast property set or implement me\n");
+    GDIMetaFile* pMetafile = reinterpret_cast<GDIMetaFile*>(pMeta);
+    cppcanvas::CanvasSharedPtr canvas = cppcanvas::VCLFactory::createCanvas (xCanvas);
+    cppcanvas::RendererSharedPtr renderer = cppcanvas::VCLFactory::createRenderer (canvas, *pMetafile);
+    ::basegfx::B2DHomMatrix aMatrix;
+    aMatrix.scale( fScaleX, fScaleY );
+    canvas->setTransformation( aMatrix );
+    renderer->draw ();
 }
 
-void MtfRenderer::draw (double fScaleX, double fScaleY)
+MtfRenderer::MtfRenderer (cpo::uno::Sequence<cpo::uno::Any> const&, uno::Reference<uno::XComponentContext> const&)
 {
-    if (mpMetafile && mxCanvas) {
-        cppcanvas::CanvasSharedPtr canvas = cppcanvas::VCLFactory::createCanvas (mxCanvas);
-        cppcanvas::RendererSharedPtr renderer = cppcanvas::VCLFactory::createRenderer (canvas, *mpMetafile);
-        ::basegfx::B2DHomMatrix aMatrix;
-        aMatrix.scale( fScaleX, fScaleY );
-        canvas->setTransformation( aMatrix );
-        renderer->draw ();
-    }
-}
-
-void MtfRenderer::setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& aAny)
-{
-    if (nHandle == 0) {
-        mpMetafile = reinterpret_cast<GDIMetaFile*>( *o3tl::doAccess<sal_Int64>(aAny) );
-    }
-}
-
-MtfRenderer::MtfRenderer (cpo::uno::Sequence<cpo::uno::Any> const& aArgs, uno::Reference<uno::XComponentContext> const&) : mpMetafile (nullptr)
-{
-    if( aArgs.getLength() == 1 ) {
-        aArgs[0] >>= mxCanvas;
-    }
 }
 
 } // namespace
