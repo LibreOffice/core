@@ -39,6 +39,10 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/useroptions.hxx>
 
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <sc.hrc>
 #include <postit.hxx>
 #include <attrib.hxx>
@@ -1449,6 +1453,97 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowsBelowKeepPositionAfterRowHeig
     CPPUNIT_ASSERT_MESSAGE(aDiffInfo.getStr(),
         std::equal(aLowerTile.begin(), aLowerTile.end(),
                    aBothTiles.begin() + aUpperTile.size()));
+}
+
+namespace
+{
+
+// Records row and column position anchors for the given area in the current view, the way a
+// client viewport does when it shows that part of the sheet.
+void requestRowColumnHeaders(ScModelObj* pModelObj, const tools::Rectangle& rArea)
+{
+    pModelObj->setClientVisibleArea(rArea);
+    tools::JsonWriter aJsonWriter;
+    pModelObj->getRowColumnHeaders(rArea, aJsonWriter);
+    aJsonWriter.finishAndGetAsOString();
+    Scheduler::ProcessEventsToIdle();
+}
+
+// The pixel position of the top of nRow accumulated from the document row heights, the same
+// way a freshly created view resolves it. Hidden rows contribute nothing.
+tools::Long expectedRowPosition(const ScDocument& rDoc, double fPPTY, SCROW nRow)
+{
+    tools::Long nPixels = 0;
+    for (SCROW nR = 0; nR < nRow; ++nR)
+        if (sal_uInt16 nSize = rDoc.GetRowHeight(nR, 0))
+            nPixels += ScViewData::ToPixel(nSize, fPPTY);
+    return nPixels;
+}
+
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowsKeepPositionAfterSortUndo)
+{
+    // Undo of a sort that was executed on a range with hidden rows moves the hidden flags
+    // back to their previous rows. A view that already resolved row positions for that area
+    // must place the rows at their restored positions, the same as a freshly created view,
+    // and the clients have to be told that the row geometry they cache changed.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScDocument& rDoc = pViewData->GetDocument();
+    ScTestViewCallback aView;
+
+    // Descending values in a distant range make the ascending sort reverse the row order; a
+    // stale cached row position then shows up as a large offset.
+    const SCROW nRow = 9840;
+    const int nRangeSize = 10;
+    for (int i = 0; i < nRangeSize; ++i)
+        rDoc.SetValue(ScAddress(0, nRow + i, 0), nRangeSize - i);
+
+    // Two tall hidden rows: hiding them removes more height than hiding the default rows the
+    // sort is going to hide in their place, so the total height above the rows below changes
+    // with every move of the hidden flags.
+    rDoc.SetRowHeightRange(nRow + 2, nRow + 3, 0, 800);
+    rDoc.SetManualHeight(nRow + 2, nRow + 3, 0, true);
+    rDoc.SetRowHidden(nRow + 2, nRow + 3, 0, true);
+
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                    comphelper::InitPropertySequence(
+                        { { "ToPoint", cpo::uno::Any(u"A9841:A9850"_ustr) } }));
+    dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The rows that carried the values 8 and 7 moved to the positions of the values in the
+    // ascending order, and took their hidden flags with them; the tall rows became visible.
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, nRow, 0)));
+    CPPUNIT_ASSERT(rDoc.RowHidden(nRow + 6, 0));
+    CPPUNIT_ASSERT(rDoc.RowHidden(nRow + 7, 0));
+    CPPUNIT_ASSERT(!rDoc.RowHidden(nRow + 2, 0));
+
+    const tools::Long nRowOffsetTw = rDoc.GetRowHeight(0, nRow - 1, 0);
+    const tools::Rectangle aVisArea(0, nRowOffsetTw - 2000, 20000, nRowOffsetTw + 8000);
+    requestRowColumnHeaders(pModelObj, aVisArea);
+
+    const double fPPTY = pViewData->GetPPTY();
+    CPPUNIT_ASSERT_EQUAL(expectedRowPosition(rDoc, fPPTY, nRow + 8),
+                         pViewData->GetScrPos(0, nRow + 8, pViewData->GetActivePart()).Y());
+
+    aView.m_sInvalidateSheetGeometry = ""_ostr;
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The undo moved the hidden flags back to the tall rows.
+    CPPUNIT_ASSERT(rDoc.RowHidden(nRow + 2, 0));
+    CPPUNIT_ASSERT(rDoc.RowHidden(nRow + 3, 0));
+    CPPUNIT_ASSERT(!rDoc.RowHidden(nRow + 6, 0));
+
+    CPPUNIT_ASSERT_EQUAL(expectedRowPosition(rDoc, fPPTY, nRow + 8),
+                         pViewData->GetScrPos(0, nRow + 8, pViewData->GetActivePart()).Y());
+
+    // The client re-reads the row geometry only when it is told that it changed.
+    CPPUNIT_ASSERT_EQUAL("rows"_ostr, aView.m_sInvalidateSheetGeometry);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDisableUndoRepair)

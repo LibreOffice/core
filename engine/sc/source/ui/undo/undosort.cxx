@@ -11,7 +11,9 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <global.hxx>
+#include <tabvwsh.hxx>
 #include <undoutil.hxx>
+#include <comphelper/kit.hxx>
 #include <utility>
 
 namespace sc {
@@ -47,6 +49,26 @@ void UndoSort::Execute( bool bUndo )
     rDoc.Reorder(aParam);
 
     UndoSheetViewSortData::restore(rDocShell, bUndo);
+
+    if (comphelper::COKit::isActive())
+    {
+        const SCTAB nTab = maParam.maSortRange.aStart.Tab();
+        const SCROW nStartRow = maParam.maSortRange.aStart.Row();
+        SfxViewShell* pSomeViewForThisDoc = rDocShell.GetBestViewShell(false);
+
+        ScTabViewShell::invalidateAllViewsKitPositions(pSomeViewForThisDoc, /*bColumns=*/false,
+                                                       nTab, nStartRow);
+
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+            pSomeViewForThisDoc, false /* bColumns */, true /* bRows */, true /* bSizes */,
+            true /* bHidden */, true /* bFiltered */, true /* bGroups */, nTab);
+
+        // When hidden or filtered rows moved, every row below the reordered range can sit at
+        // a new position; repaint down to the end of the sheet.
+        if (maParam.mbHiddenFiltered)
+            rDocShell.PostPaint(ScRange(0, nStartRow, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
+                                PaintPartFlags::Grid | PaintPartFlags::Left);
+    }
 
     ScRange aOverallRange( maParam.maSortRange);
     if (maParam.maDataAreaExtras.anyExtrasWanted())
