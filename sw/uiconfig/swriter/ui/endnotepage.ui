@@ -172,7 +172,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="frame6">
+      <object class="GtkFrame" id="allstyles">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label-xalign">0</property>
