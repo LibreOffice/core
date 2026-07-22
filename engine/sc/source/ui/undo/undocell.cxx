@@ -115,7 +115,7 @@ void ScUndoCursorAttr::DoChange( const CellAttributeHolder& rWhichPattern, const
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        pViewShell->SetTabNo( nTab );
+        SetViewTabNo( nTab );
         pViewShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_JUMP, false, false );
         pViewShell->AdjustBlockHeight();
     }
@@ -176,7 +176,7 @@ void ScUndoCursorMove::MoveCursor() const
     if (!pViewShell || pViewShell->GetViewData().GetDocShell() != &rDocShell)
         return;
 
-    pViewShell->SetTabNo( maPos.Tab() );
+    SetViewTabNo( maPos.Tab() );
     pViewShell->MoveCursorAbs( maPos.Col(), maPos.Row(), SC_FOLLOW_JUMP, false, false );
 }
 
@@ -229,11 +229,7 @@ void ScUndoEnterData::DoChange() const
                 pViewShell, false /* bColumns */, true /* bRows */, true /* bSizes*/,
                 false /* bHidden */, false /* bFiltered */, false /* bGroups */, maPos.Tab());
         }
-        // Don't switch tabs if the current view is a sheet view.
-        SCTAB nCurrentTab = pViewShell->GetViewData().GetTabNumber();
-        ScDocument& rDocument = rDocShell.GetDocument();
-        if (rDocument.GetDefaultViewTableNumber(nCurrentTab) != maPos.Tab())
-            pViewShell->SetTabNo(maPos.Tab());
+        SetViewTabNo(maPos.Tab());
         pViewShell->MoveCursorAbs(maPos.Col(), maPos.Row(), SC_FOLLOW_JUMP, false, false);
     }
 
@@ -592,7 +588,7 @@ void ScUndoPageBreak::DoChange( bool bInsertP ) const
 
     if (pViewShell)
     {
-        pViewShell->SetTabNo( nTab );
+        SetViewTabNo( nTab );
         pViewShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_JUMP, false, false );
 
         if (bInsertP)
@@ -747,7 +743,7 @@ void ScUndoThesaurus::DoChange( bool bUndo, const ScCellValue& rText )
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        pViewShell->SetTabNo( nTab );
+        SetViewTabNo( nTab );
         pViewShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_JUMP, false, false );
     }
 

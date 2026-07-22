@@ -240,11 +240,25 @@ void ScSimpleUndo::BroadcastChanges( const DataSpansType& rSpans )
     }
 }
 
-void ScSimpleUndo::ShowTable( SCTAB nTab )
+void ScSimpleUndo::SetViewTabNo( SCTAB nTab )
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if (pViewShell)
-        pViewShell->SetTabNo( nTab );
+    if (!pViewShell)
+        return;
+
+    ScDocument& rDocument = pViewShell->GetViewData().GetDocument();
+    SCTAB nCurrentTab = pViewShell->GetViewData().GetTabNumber();
+    // A sheet view already shows the same change as its base sheet, so keep the
+    // view on the sheet view instead of pulling it onto the base sheet.
+    if (rDocument.GetDefaultViewTableNumber(nCurrentTab) == nTab)
+        return;
+
+    pViewShell->SetTabNo( nTab );
+}
+
+void ScSimpleUndo::ShowTable( SCTAB nTab )
+{
+    SetViewTabNo( nTab );
 }
 
 void ScSimpleUndo::ShowTable( const ScRange& rRange )
@@ -256,7 +270,7 @@ void ScSimpleUndo::ShowTable( const ScRange& rRange )
         SCTAB nEnd   = rRange.aEnd.Tab();
         SCTAB nTab = pViewShell->GetViewData().GetTabNumber();
         if ( nTab < nStart || nTab > nEnd )                     // if not in range:
-            pViewShell->SetTabNo( nStart );                     // at beginning of the range
+            SetViewTabNo( nStart );                             // at beginning of the range
     }
 }
 

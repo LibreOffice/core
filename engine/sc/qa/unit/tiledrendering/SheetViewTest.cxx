@@ -711,6 +711,40 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testUndoInvalidatesBaseSheetTiles)
                            bBaseInvalidated);
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testUndoFormattingOnSheetViewKeepsView)
+{
+    // Undoing or redoing a formatting change made inside a sheet view must keep
+    // the view on the sheet view. The formatting undo restores the view to the
+    // changed range's tab, which is the base sheet, so it used to pull the view
+    // off the sheet view onto the base sheet.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabView = aView.getTabViewShell();
+
+    // Enter a sheet view of Sheet1. The view moves onto the sheet view tab.
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nSheetViewTab(1);
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    // Make A1 bold on the sheet view.
+    setCellBold(u"A1");
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    undo();
+    Scheduler::ProcessEventsToIdle();
+    // The view stays on the sheet view rather than switching to the base sheet.
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    redo();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
 {
     // Create two views, and leave the second one current.

@@ -75,6 +75,12 @@ protected:
 
     static void     ShowTable( SCTAB nTab );
     static void     ShowTable( const ScRange& rRange );
+
+    /** Switch the active view to nTab, but not when the current view is a sheet
+        view whose base sheet is nTab. A sheet view already mirrors changes made
+        on its base sheet, so switching to the base sheet would move the user
+        off the sheet view they are working in. */
+    static void     SetViewTabNo( SCTAB nTab );
 };
 
 enum ScBlockUndoMode { SC_UNDO_SIMPLE, SC_UNDO_MANUALHEIGHT, SC_UNDO_AUTOHEIGHT };
