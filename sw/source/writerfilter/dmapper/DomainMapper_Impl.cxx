@@ -2288,6 +2288,12 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
         }
     }
 
+    // Now that this paragraph is really being finished (it is not a discarded
+    // header/footer and not a conditional field paragraph deferred above), decide
+    // inline vs display text mode for any formulas it contains. Done here while its
+    // content flag (bParaChanged) is still valid, i.e. before it is reset below.
+    finalizeParagraphFormulas();
+
 #ifdef DBG_UTIL
     TagLogger::getInstance().startElement("finishParagraph");
 #endif
@@ -3845,10 +3851,48 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
         // mimic the treatment of graphics here... it seems anchoring as character
         // gives a better ( visually ) result
         appendTextContent(xStarMath, uno::Sequence<beans::PropertyValue>());
+
+        // The size set above assumes display style. Remember the formula so that
+        // finalizeParagraphFormulas() can switch it to text mode (and re-fetch its
+        // size) if the finished paragraph turns out to hold more than just it.
+        m_StreamStateStack.top().aParagraphFormulas.emplace_back(xStarMath, xInterface);
     }
     catch( const uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION( "writerfilter", "in creation of StarMath object" );
+    }
+}
+
+void DomainMapper_Impl::finalizeParagraphFormulas()
+{
+    auto aFormulas(std::move(m_StreamStateStack.top().aParagraphFormulas));
+    if (aFormulas.empty())
+        return;
+
+    // A formula that is the paragraph's only content is a display equation and
+    // keeps its full size; if the paragraph has any other content (text, a shape,
+    // a second formula, ...) the formula is inline and is drawn in text mode, with
+    // reduced fraction numerators/denominators and script-style limits.
+    const bool bInline = m_StreamStateStack.top().bParaChanged || aFormulas.size() > 1;
+    for (const auto& [xObject, xComponent] : aFormulas)
+    {
+        try
+        {
+            if (uno::Reference<beans::XPropertySet> xComponentProps{ xComponent, uno::UNO_QUERY })
+                xComponentProps->setPropertyValue(u"IsTextMode"_ustr, uno::Any(bInline));
+            if (auto* pFormula = dynamic_cast<oox::FormulaImExportBase*>(xComponent.get()))
+            {
+                const Size aSize(pFormula->getFormulaSize());
+                xObject->setPropertyValue(getPropertyName(PROP_WIDTH),
+                                          uno::Any(sal_Int32(aSize.Width())));
+                xObject->setPropertyValue(getPropertyName(PROP_HEIGHT),
+                                          uno::Any(sal_Int32(aSize.Height())));
+            }
+        }
+        catch (const uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("writerfilter", "in finalizing StarMath object");
+        }
     }
 }
 

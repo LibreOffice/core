@@ -12,6 +12,7 @@
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -996,6 +997,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166191)
     uno::Reference<text::XTextRange> textRun = getRun(getParagraph(2), 1);
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(textRun, u"CharWeight"_ustr));
     CPPUNIT_ASSERT_EQUAL(12.0f, getProperty<float>(textRun, u"CharHeight"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInlineFormulaTextMode)
+{
+    // An equation that shares its paragraph with other content is inline, and is typeset
+    // in non-display ("text") style: fraction numerators and denominators are drawn at a
+    // reduced size. StarMath models this with text mode; without it an inline formula is
+    // imported taller than intended. An equation that is a paragraph's only content is a
+    // display equation and keeps its full size.
+    createSwDoc("inline-formula-text-mode.rtf");
+
+    // First equation shares its paragraph with text => inline => text mode.
+    uno::Reference<document::XEmbeddedObjectSupplier2> xInline(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xInline.is());
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xInline->getEmbeddedObject(), u"IsTextMode"_ustr));
+
+    // Second equation is alone in its paragraph => display => not text mode.
+    uno::Reference<document::XEmbeddedObjectSupplier2> xDisplay(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDisplay.is());
+    CPPUNIT_ASSERT_EQUAL(false,
+                         getProperty<bool>(xDisplay->getEmbeddedObject(), u"IsTextMode"_ustr));
 }
 
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
