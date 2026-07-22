@@ -353,10 +353,10 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
     if (comphelper::COKit::isActive())
     {
         SfxViewShell& rSfxViewShell = mrViewShell.GetViewShellBase();
-        const int nEditMode = rSfxViewShell.getEditMode();
+        const int nStandardEditMode = 0;
         const int nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
         for (int nSlide = 0; nSlide < nPageCount; ++nSlide)
-            rSfxViewShell.viewInvalidateTilesCallback(nullptr, nSlide, nEditMode);
+            rSfxViewShell.viewInvalidateTilesCallback(nullptr, nSlide, nStandardEditMode);
     }
 }
 
