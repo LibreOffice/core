@@ -416,6 +416,7 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 							if (firstVisible) {
 								firstVisible.focus();
 								event.preventDefault();
+								event.stopPropagation();
 							}
 						} else if (event.key === 'Enter') {
 							var firstVisible = grid.querySelector('.ui-combobox-entry:not(.hidden)');

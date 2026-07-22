@@ -141,7 +141,7 @@ function findNextFocusableSiblingElement(element, direction) {
 
 // Helper function to find the current active element is a input TEXTAREA
 function isTextInputField(currentActiveElement){
-	return (currentActiveElement.tagName === 'INPUT' && currentActiveElement.type === 'text') || currentActiveElement.tagName === 'TEXTAREA';
+	return (currentActiveElement.tagName === 'INPUT' && (currentActiveElement.type === 'text' || currentActiveElement.type === 'search')) || currentActiveElement.tagName === 'TEXTAREA';
 }
 
 // Find focusable parent element using DOM traversal
