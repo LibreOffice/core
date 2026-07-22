@@ -18,7 +18,6 @@
  */
 
 #include <sal/config.h>
-#include <config_emscripten.h>
 #include <config_features.h>
 
 #include <desktop/dllapi.h>
@@ -67,7 +66,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 #endif
     tools::extendApplicationEnvironment();
 
-#if defined __EMSCRIPTEN__ && !HAVE_EMSCRIPTEN_JSPI
+#if defined __EMSCRIPTEN__
     //HACK: Qt5 QWasmEventDispatcher::processEvents
     // (qtbase/src/plugins/platforms/wasm/qwasmeventdispatcher.cpp) calls
     // emscripten_set_main_loop_arg with simulateInfiniteLoop == true, and as we use
