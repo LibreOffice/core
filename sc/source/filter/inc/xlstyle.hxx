@@ -572,7 +572,7 @@ public:
 
     /** Sets all "attribute used" flags to the passed state. */
     void                SetAllUsedFlags( bool bUsed );
-    /** Returns true, if any "attribute used" flags are ste in this XF. */
+    /** Returns true, if any "attribute used" flags are set in this XF. */
     bool                HasUsedFlags() const;
 
     /** Returns true, if this is a hard cell format. */
