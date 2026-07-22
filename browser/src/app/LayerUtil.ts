@@ -198,6 +198,10 @@ class CReferences extends BaseClass {
 		return false;
 	}
 
+	public empty(): boolean {
+		return this._marks.length === 0;
+	}
+
 	public clear(): void {
 		for (let i = 0; i < this._marks.length; ++i)
 			this._overlay.removePath(this._marks[i]);

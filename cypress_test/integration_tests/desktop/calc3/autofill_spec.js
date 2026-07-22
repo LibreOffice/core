@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require expect */
+/* global describe it cy beforeEach require */
 
 var helper = require('../../common/helper');
 var calcHelper = require('../../common/calc_helper');
@@ -7,38 +7,41 @@ describe(['tagdesktop'], 'Calc autofill marker drag.', function() {
 
 	beforeEach(function() {
 		helper.setupAndLoadDocument('calc/autofill.fods');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
-	// Drag the autofill marker two cells down by invoking its handlers
-	// directly. Cypress synthetic DOM events are guarded against by the
-	// canvas section container (mouseIsInside, button-state checks), so
-	// this is the same approach as the mobile autofill marker test.
-	function dragMarkerTwoCellsDown(eventInit) {
+	// Drag the autofill marker two cells down with a real mouse drag, the same
+	// gesture a user makes on the fill handle. The canvas container drives the
+	// drag, so the whole fill path runs end to end. modifierOptions carries the
+	// keyboard modifier (for example ctrlKey) that is held during the drag.
+	function dragMarkerTwoCellsDown(win, modifierOptions) {
 		calcHelper.clickOnFirstCell();
 		cy.cGet('[id="test-div-auto fill marker"]').should('exist');
 
-		cy.getFrameWindow().then(function(win) {
-			var marker = win.app.sectionContainer.getSectionWithName('auto fill marker');
-			expect(marker, 'autofill marker section').to.exist;
+		// The click that selected the cell arms a 250ms click timer, and
+		// mouse-control drops moves while it is pending. Let it finish so the
+		// drag below is not swallowed.
+		helper.waitForTimers(win, 'clicktimer');
+		helper.processToIdle(win);
 
-			var halfWidth = Math.floor(marker.size[0] / 2);
-			var halfHeight = Math.floor(marker.size[1] / 2);
-			var cellHeight = win.app.calc.cellCursorRectangle.pHeight;
+		cy.cGet('[id="test-div-auto fill marker"]').then(function($handle) {
+			var rectangle = $handle[0].getBoundingClientRect();
+			var startX = rectangle.left + rectangle.width / 2;
+			var startY = rectangle.top + rectangle.height / 2;
+			var cellHeight = win.app.calc.cellCursorRectangle.pHeight / win.app.dpiScale;
+			var endY = startY + Math.round(cellHeight * 2);
 
-			var localStart = win.cool.SimplePoint.fromCorePixels([halfWidth, halfHeight]);
-			marker.onMouseDown(localStart, new win.MouseEvent('mousedown', eventInit));
-
-			var localEnd = win.cool.SimplePoint.fromCorePixels([halfWidth, halfHeight + cellHeight * 2]);
-			marker.onMouseMove(localEnd, [0, cellHeight * 2], new win.MouseEvent('mousemove', eventInit));
-			marker.onMouseUp(localEnd, new win.MouseEvent('mouseup', eventInit));
+			cy.cGet('body').realMouseDown(Object.assign({ x: startX, y: startY }, modifierOptions));
+			cy.cGet('body').realMouseMove(startX, endY, modifierOptions);
+			cy.cGet('body').realMouseUp(Object.assign({ x: startX, y: endY }, modifierOptions));
 		});
 
-		cy.getFrameWindow().then(function(win) {
-			helper.processToIdle(win);
-		});
+		helper.processToIdle(win);
 
-		// after the drag core opens the autofill options dropdown
-		// (Copy Cells / Fill Series), dismiss it
+		// After the drag core opens the autofill options dropdown
+		// (Copy Cells / Fill Series), dismiss it.
 		cy.cGet('#jsd-context-menu-dropdown-overlay').click();
 		cy.cGet('#jsd-context-menu-dropdown-overlay').should('not.exist');
 	}
@@ -58,13 +61,13 @@ describe(['tagdesktop'], 'Calc autofill marker drag.', function() {
 	}
 
 	it('Drag autofill marker fills cells with incremented numbers', function() {
-		dragMarkerTwoCellsDown({ button: 0 });
+		dragMarkerTwoCellsDown(this.win, {});
 
 		assertCellContents(['1', '2', '3']);
 	});
 
 	it('Ctrl+drag autofill marker copies the source cell', function() {
-		dragMarkerTwoCellsDown({ button: 0, ctrlKey: true });
+		dragMarkerTwoCellsDown(this.win, { ctrlKey: true });
 
 		assertCellContents(['1', '1', '1']);
 	});

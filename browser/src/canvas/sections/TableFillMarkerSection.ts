@@ -33,25 +33,8 @@ app.definitions.TableFillMarkerSection = class TableFillMarkerSection extends (
 		this.setMarkerPosition();
 	}
 
-	public onMouseMove(
-		point: cool.SimplePoint,
-		dragDistance: Array<number>,
-		e: MouseEvent,
-	) {
-		if (
-			dragDistance === null ||
-			!this.sectionProperties.docLayer._tableAutoFillAreaPixels
-		)
-			return; // No dragging or no event handling or table fill marker is not visible.
-
-		const p2 = this.getDocumentPositionFromLocal(point);
-		app.map._docLayer._postMouseEvent('move', p2.x, p2.y, 1, 1, 0);
-
-		if (
-			!this.containerObject.isMouseInside() &&
-			this.containerObject.isDraggingSomething()
-		)
-			this.autoScroll(this.getDocumentPositionFromLocal(point));
+	protected isFillAreaVisible(): boolean {
+		return !!this.sectionProperties.docLayer._tableAutoFillAreaPixels;
 	}
 
 	public onMouseEnter() {

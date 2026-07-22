@@ -170,12 +170,16 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 				// Wait for autoscroll to start at the edge before moving outside
 				helper.processToIdle(this.win);
 
-				// Move the mouse pointer outside the document. It should be widening the selection (mouse button is pressed and being held).
-				for (let i = 0; i < 10; i++) {
-					cy.cGet('body').realMouseMove(horizontalCenter, bottom + 20);
-					helper.processToIdle(this.win);
-					cy.cGet('body').realMouseMove(horizontalCenter, bottom + 30);
-				}
+				// Move the mouse pointer outside the document (button still held). The
+				// edge autoscroll timer now scrolls the view on its own, and the drag
+				// position is re-sent on each scroll, so the selection keeps growing
+				// under the stationary pointer. Retry reading the Name Box until the
+				// selection has grown well past the row the assertion below checks.
+				const endRow = (val) => parseInt(String(val).split(':').pop().replace(/[^0-9]/g, ''), 10);
+				cy.cGet('body').realMouseMove(horizontalCenter, bottom + 30);
+				cy.cGet(helper.addressInputSelector, { timeout: 20000 }).invoke('val').should((val) => {
+					expect(endRow(val)).to.be.greaterThan(26);
+				});
 
 				// Release the mouse button to stop autoscroll
 				cy.cGet('body').realMouseUp();

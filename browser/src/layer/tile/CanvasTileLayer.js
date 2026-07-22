@@ -2593,6 +2593,15 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (newSelection.equals(oldSelection.toArray()))
 			return;
 
+		// When user is scrolling the view, don't scroll to selection position.
+		// We also don't scroll when reference marks are visible. They are visible only when user is scrolling via ScrollSection.
+		const mouseControl = app.activeDocument && app.activeDocument.mouseControl;
+		if (mouseControl && mouseControl.mouseDownSent)
+			return;
+
+		if (this._references && !this._references.empty())
+			return;
+
 		const viewedRectangle = app.activeDocument.activeLayout.viewedRectangle;
 		const directionDownOrRight = (newSelection.pX2 !== oldSelection.pX2) || (newSelection.pY2 !== oldSelection.pY2);
 

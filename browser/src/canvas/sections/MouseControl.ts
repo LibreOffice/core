@@ -416,14 +416,16 @@ class MouseControl extends CanvasSectionObject {
 				this.mouseDownSent = true;
 			}
 
-			if (!this.containerObject.isMouseInside()) {
-				point.pX += this.position[0];
-				point.pY += this.position[1];
-				app.map.fire('handleautoscroll', {
-					pos: { x: point.cX, y: point.cY },
-					map: app.map,
-				});
-			} else app.map.fire('scrollvelocity', { vx: 0, vy: 0 });
+			// Autoscroll toward whichever viewport edge the pointer is near,
+			// whether it is just inside that edge or already past it. The handler
+			// gives zero velocity and stops autoscroll when the pointer is not near
+			// an edge, so a pointer resting in the middle does not scroll.
+			point.pX += this.position[0];
+			point.pY += this.position[1];
+			app.map.fire('handleautoscroll', {
+				pos: { x: point.cX, y: point.cY },
+				map: app.map,
+			});
 
 			this.postCoreMouseEvent(
 				'move',

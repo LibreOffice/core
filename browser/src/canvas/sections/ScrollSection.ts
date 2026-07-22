@@ -35,6 +35,10 @@ export class ScrollSection extends CanvasSectionObject {
 
 	map: any;
 	autoScrollTimer: any;
+	// The velocity the running autoscroll timer scrolls by each tick, or null
+	// when no timer runs. Compared against so a stream of same-velocity requests
+	// keeps one timer running instead of restarting (and starving) it.
+	autoScrollVelocity: { x: number; y: number } = null;
 	pendingScrollEvent: any = null;
 	stepByStepScrolling: boolean = false; // quick scroll will move "page up/down" not "jump to"
 
@@ -169,6 +173,7 @@ export class ScrollSection extends CanvasSectionObject {
 			app.timerRegistry.clearInterval(this.autoScrollTimer);
 			this.autoScrollTimer = null;
 		}
+		this.autoScrollVelocity = null;
 		this.map.isAutoScrolling = false;
 	}
 
@@ -176,13 +181,26 @@ export class ScrollSection extends CanvasSectionObject {
 	public onScrollVelocity (e: any): void {
 		if (e.vx === 0 && e.vy === 0) {
 			this.cancelAutoScroll();
-		} else {
-			this.cancelAutoScroll();
-			this.map.isAutoScrolling = true;
-			this.autoScrollTimer = app.timerRegistry.setInterval('autoscroll', window.L.bind(function() {
-				this.onScrollBy({x: e.vx, y: e.vy});
-			}, this), 100);
+			return;
 		}
+
+		// A drag near an edge sends this on every pointer move. Keep the running
+		// timer when the velocity is unchanged, otherwise each move would restart
+		// the 100ms timer before it ever fires and no autoscroll would happen.
+		if (
+			this.autoScrollTimer !== null &&
+			this.autoScrollVelocity !== null &&
+			this.autoScrollVelocity.x === e.vx &&
+			this.autoScrollVelocity.y === e.vy
+		)
+			return;
+
+		this.cancelAutoScroll();
+		this.autoScrollVelocity = { x: e.vx, y: e.vy };
+		this.map.isAutoScrolling = true;
+		this.autoScrollTimer = app.timerRegistry.setInterval('autoscroll', window.L.bind(function() {
+			this.onScrollBy({x: e.vx, y: e.vy});
+		}, this), 100);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

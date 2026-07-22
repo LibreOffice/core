@@ -160,23 +160,6 @@ class AutoFillBaseSection extends CanvasSectionObject {
 		this.context.restore();
 	}
 
-	protected getDocumentPositionFromLocal(
-		point: cool.SimplePoint,
-	): cool.SimplePoint {
-		const p2 = point.clone();
-		// myTopLeft sits at the visual (mirrored in RTL) position, so
-		// `point.pX` is measured from the visual left edge. In RTL the
-		// visual axis is flipped relative to LTR document coordinates;
-		// convert back so `_postMouseEvent` gets an LTR doc pX.
-		if (app.calc.isRTL()) {
-			p2.pX = this.position[0] + this.size[0] - point.pX;
-		} else {
-			p2.pX = this.position[0] + point.pX;
-		}
-		p2.pY = this.position[1] + point.pY;
-		return p2;
-	}
-
 	private getCenterRegardingDocument(): cool.SimplePoint {
 		const p2 = new cool.SimplePoint(0, 0);
 		p2.pX += this.position[0] + this.size[0] * 0.5;
@@ -194,76 +177,94 @@ class AutoFillBaseSection extends CanvasSectionObject {
 		}
 	}
 
-	protected autoScroll(point: cool.SimplePoint) {
+	private getMouseControl(): MouseControl {
 		Util.ensureValue(app.activeDocument);
-		const viewedRectangle = app.activeDocument.activeLayout.viewedRectangle;
-		const viewCenter = viewedRectangle.pCenter;
-		const refX =
-			point.pX > viewCenter[0] ? viewedRectangle.pX2 : viewedRectangle.pX1;
-		const refY =
-			point.pY > viewCenter[1] ? viewedRectangle.pY2 : viewedRectangle.pY1;
-
-		if (!app.isXVisibleInTheDisplayedArea(point.x))
-			app.activeDocument.activeLayout.scroll(point.pX - refX, 0);
-		else if (!app.isYVisibleInTheDisplayedArea(point.y))
-			app.activeDocument.activeLayout.scroll(0, point.pY - refY);
+		Util.ensureValue(app.activeDocument.mouseControl);
+		return app.activeDocument.mouseControl;
 	}
 
+	// Whether the fill area this marker drags is currently shown. Subclasses that
+	// drive a different fill area override this.
+	protected isFillAreaVisible(): boolean {
+		return !!this.sectionProperties.docLayer._cellAutoFillAreaPixels;
+	}
+
+	// MouseControl decides between panning the view and posting to the engine from
+	// e.type, and it pans on a touch drag. An autofill drag must post (fill), so
+	// present the event to MouseControl as the matching mouse type. Only the type
+	// changes; the modifier keys stay intact for readModifier.
+	private asMouseEvent(e: MouseEvent): MouseEvent {
+		const touchToMouse: { [key: string]: string } = {
+			touchstart: 'mousedown',
+			touchmove: 'mousemove',
+			touchend: 'mouseup',
+		};
+		const mouseType = touchToMouse[e.type];
+		if (mouseType)
+			Object.defineProperty(e, 'type', {
+				value: mouseType,
+				configurable: true,
+			});
+		return e;
+	}
+
+	// Convert a marker-local point into MouseControl's coordinate frame.
+	// Marker-local plus myTopLeft is the canvas-pixel coordinate. MouseControl is
+	// bound to the tiles section and expects its point in that section's local
+	// frame, which is offset from canvas by the document anchor (for example the
+	// ruler height in Writer), so remove the anchor as well.
+	protected toMouseControlPoint(point: cool.SimplePoint): cool.SimplePoint {
+		const docAnchor = app.sectionContainer.getDocumentAnchor();
+		let canvasX = point.pX + this.myTopLeft[0];
+		const canvasY = point.pY + this.myTopLeft[1];
+
+		// On mobile the marker is drawn half a cell to the left of the handle, so
+		// shift the point back to the cell corner the engine hit-tests for.
+		if (!(<any>window).mode.isDesktop()) {
+			Util.ensureValue(app.calc.cellCursorRectangle);
+			canvasX += app.calc.cellCursorRectangle.pWidth * 0.5;
+		}
+
+		return cool.SimplePoint.fromCorePixels([
+			canvasX - docAnchor[0],
+			canvasY - docAnchor[1],
+		]);
+	}
+
+	// Forward the drag to MouseControl, which posts the mouse events to the engine
+	// and runs the shared edge autoscroll and the re-send of the drag position
+	// while the view scrolls, so the fill keeps following the pointer.
 	public onMouseMove(
 		point: cool.SimplePoint,
 		dragDistance: Array<number>,
 		e: MouseEvent,
 	) {
-		if (
-			dragDistance === null ||
-			!this.sectionProperties.docLayer._cellAutoFillAreaPixels
-		)
-			return; // No dragging or no event handling or auto fill marker is not visible.
+		if (dragDistance === null || !this.isFillAreaVisible()) return; // No dragging or no event handling or the fill marker is not visible.
 
-		const p2 = this.getDocumentPositionFromLocal(point);
-		this.adjustForMobileCenterOffset(p2);
-		app.map._docLayer._postMouseEvent(
-			'move',
-			p2.x,
-			p2.y,
-			1,
-			1,
-			MouseControl.readModifier(e),
+		this.getMouseControl().onMouseMove(
+			this.toMouseControlPoint(point),
+			dragDistance,
+			this.asMouseEvent(e),
 		);
-
-		if (
-			!this.containerObject.isMouseInside() &&
-			this.containerObject.isDraggingSomething()
-		)
-			this.autoScroll(this.getDocumentPositionFromLocal(point));
 	}
 
 	public onMouseUp(point: cool.SimplePoint, e: MouseEvent) {
-		const p2 = this.getDocumentPositionFromLocal(point);
-		this.adjustForMobileCenterOffset(p2);
-		app.map._docLayer._postMouseEvent(
-			'buttonup',
-			p2.x,
-			p2.y,
-			1,
-			1,
-			MouseControl.readModifier(e),
+		this.getMouseControl().onMouseUp(
+			this.toMouseControlPoint(point),
+			this.asMouseEvent(e),
 		);
 	}
 
 	public onMouseDown(point: cool.SimplePoint, e: MouseEvent) {
-		// revert coordinates to global and fire event again with position in the center
-		// inverse of convertPositionToCanvasLocale
-		const p2 = this.getCenterRegardingDocument();
-		this.adjustForMobileCenterOffset(p2);
-
-		app.map._docLayer._postMouseEvent(
-			'buttondown',
-			p2.x,
-			p2.y,
-			1,
-			1,
-			MouseControl.readModifier(e),
+		// Anchor the drag at the marker centre, the cell's bottom-right corner, so
+		// the engine starts an autofill rather than a cell selection.
+		const center = cool.SimplePoint.fromCorePixels([
+			this.size[0] * 0.5,
+			this.size[1] * 0.5,
+		]);
+		this.getMouseControl().onMouseDown(
+			this.toMouseControlPoint(center),
+			this.asMouseEvent(e),
 		);
 	}
 
