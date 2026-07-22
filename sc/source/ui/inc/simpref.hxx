@@ -44,8 +44,6 @@ private:
     std::unique_ptr<weld::Button> m_xBtnOk;
     std::unique_ptr<weld::Button> m_xBtnCancel;
 
-    void            Init();
-
     DECL_LINK( CancelBtnHdl, weld::Button&, void );
     DECL_LINK( OkBtnHdl, weld::Button&, void );
 

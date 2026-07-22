@@ -37,8 +37,9 @@ ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings& rBindings, SfxChildWindow* pCW, weld
     m_xEdAssign->SetReferences(this, m_xFtAssign.get());
     m_xRbAssign->SetReferences(this, m_xEdAssign.get());
 
-    // in order to keep the Strings with the FixedTexts in the resource:
-    Init();
+    m_xBtnOk->connect_clicked(LINK(this, ScSimpleRefDlg, OkBtnHdl));
+    m_xBtnCancel->connect_clicked(LINK(this, ScSimpleRefDlg, CancelBtnHdl));
+    bCloseFlag = false;
     SetDispatcherLock( true ); // activate modal mode
 }
 
@@ -56,13 +57,6 @@ void ScSimpleRefDlg::FillInfo(SfxChildWinInfo& rWinInfo) const
 void ScSimpleRefDlg::SetRefString(const OUString &rStr)
 {
     m_xEdAssign->SetText(rStr);
-}
-
-void ScSimpleRefDlg::Init()
-{
-    m_xBtnOk->connect_clicked( LINK( this, ScSimpleRefDlg, OkBtnHdl ) );
-    m_xBtnCancel->connect_clicked( LINK( this, ScSimpleRefDlg, CancelBtnHdl ) );
-    bCloseFlag=false;
 }
 
 // Set the reference to a cell range selected with the mouse. This is then
