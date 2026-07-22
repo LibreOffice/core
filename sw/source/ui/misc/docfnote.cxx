@@ -117,7 +117,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
                                           : new SwFootnoteInfo( m_pSh->GetFootnoteInfo() ));
     SfxObjectShell * pDocSh = SfxObjectShell::Current();
 
-    if (dynamic_cast<SwWebDocShell*>( pDocSh) )
+    if (m_xStylesContainer && dynamic_cast<SwWebDocShell*>( pDocSh) )
         m_xStylesContainer->hide();
 
     if ( m_bEndNote )
