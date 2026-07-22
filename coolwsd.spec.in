@@ -38,7 +38,6 @@ Requires(post): /usr/sbin/setcap
 
 %build
 %configure \
-	--enable-silent-rules \
 	--with-lokit-path=bundled/include \
 	--with-lo-path=/opt/collaboraoffice \
 	--disable-tests \

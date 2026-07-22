@@ -58,7 +58,7 @@ cp -a online/engine/instdir "$INSTDIR"/opt/collaboraoffice
 
 # build
 ( cd online && ./autogen.sh ) || exit 1
-( cd online && ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-silent-rules --disable-tests --with-lokit-path="$BUILDDIR"/online/engine/include --with-lo-path=/opt/collaboraoffice $ONLINE_EXTRA_BUILD_OPTIONS) || exit 1
+( cd online && ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-tests --with-lokit-path="$BUILDDIR"/online/engine/include --with-lo-path=/opt/collaboraoffice $ONLINE_EXTRA_BUILD_OPTIONS) || exit 1
 ( cd online && make -j $(nproc)) || exit 1
 
 # copy stuff

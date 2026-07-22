@@ -66,7 +66,7 @@ jobs:
         wget --no-verbose https://github.com/CollaboraOnline/online/releases/download/for-code-assets/engine-main-assets.tar.gz
         tar xf engine-main-assets.tar.gz -C engine && rm engine-main-assets.tar.gz
         ./autogen.sh
-        ./configure --enable-silent-rules --with-lokit-path=${GITHUB_WORKSPACE}/engine/include --with-lo-path=${GITHUB_WORKSPACE}/engine/instdir --enable-debug
+        ./configure --with-lokit-path=${GITHUB_WORKSPACE}/engine/include --with-lo-path=${GITHUB_WORKSPACE}/engine/instdir --enable-debug
         cd browser && npm update
 
     - if: matrix.language == 'cpp'
