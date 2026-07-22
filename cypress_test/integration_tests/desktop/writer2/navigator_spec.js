@@ -6,6 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 
 	function expandSection(name) {
+		cy.getFrameWindow().then((win) => helper.processToIdle(win));
 		cy.cGet('#contenttree')
 			.contains('.jsdialog.sidebar.ui-treeview-cell-text', name)
 			.parent() // .ui-treeview-cell
@@ -13,6 +14,7 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 			.parent() // .ui-treeview-entry
 			.find('.ui-treeview-expander-column')
 			.click();
+		cy.getFrameWindow().then((win) => helper.processToIdle(win));
 	}
 
 	beforeEach(function() {
