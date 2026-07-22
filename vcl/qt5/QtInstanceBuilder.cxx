@@ -325,6 +325,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"modules/swriter/ui/templatedialog16.ui",
     u"modules/swriter/ui/templatedialog1.ui",
     u"modules/swriter/ui/templatedialog2.ui",
+    u"modules/swriter/ui/templatedialog4.ui",
     u"modules/swriter/ui/templatedialog8.ui",
     u"modules/swriter/ui/testmailsettings.ui",
     u"modules/swriter/ui/tocdialog.ui",
