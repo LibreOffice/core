@@ -47,7 +47,7 @@ namespace sc
 {
 void ConditionalFormatEasyDialog::SetDescription(std::u16string_view rCondition)
 {
-    mxDescription->set_label(mxDescription->get_label().replaceAll("%1", rCondition));
+    mxConditionFrame->set_label(mxConditionFrame->get_label().replaceAll("%1", rCondition));
 }
 
 ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
@@ -65,7 +65,7 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     , mxRangeEntry(new formula::RefEdit(m_xBuilder->weld_entry(u"entryRange"_ustr)))
     , mxButtonRangeEdit(new formula::RefButton(m_xBuilder->weld_button(u"rbassign"_ustr)))
     , mxStyles(m_xBuilder->weld_combo_box(u"themeCombo"_ustr))
-    , mxDescription(m_xBuilder->weld_label(u"description"_ustr))
+    , mxConditionFrame(m_xBuilder->weld_frame(u"condition"_ustr))
     , mxButtonOk(m_xBuilder->weld_button(u"ok"_ustr))
     , mxButtonCancel(m_xBuilder->weld_button(u"cancel"_ustr))
 {

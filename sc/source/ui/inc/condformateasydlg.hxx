@@ -50,7 +50,7 @@ private:
     std::unique_ptr<formula::RefEdit> mxRangeEntry;
     std::unique_ptr<formula::RefButton> mxButtonRangeEdit;
     std::unique_ptr<weld::ComboBox> mxStyles;
-    std::unique_ptr<weld::Label> mxDescription;
+    std::unique_ptr<weld::Frame> mxConditionFrame;
     std::unique_ptr<weld::Button> mxButtonOk;
     std::unique_ptr<weld::Button> mxButtonCancel;
 };

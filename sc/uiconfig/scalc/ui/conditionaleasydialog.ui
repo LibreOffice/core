@@ -86,7 +86,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">24</property>
             <child>
-              <object class="GtkFrame">
+              <object class="GtkFrame" id="condition">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label-xalign">0</property>
