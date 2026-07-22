@@ -12,6 +12,9 @@ MAINTAINERCLEANFILES = Makefile.in
 
 export NODE_PATH=$(abs_builddir)/node_modules
 
+# drop the inherited malformed value, there is no session bus to reach here
+unexport DBUS_SESSION_BUS_ADDRESS
+
 V = $(if $(verbose),,@)
 abs_dir = $(if $(filter $(abs_builddir),$(abs_srcdir)),.,$(abs_srcdir))
 CYPRESS_BINARY = $(abs_builddir)/node_modules/cypress/bin/cypress
