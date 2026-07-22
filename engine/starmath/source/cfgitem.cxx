@@ -444,13 +444,16 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
         OUString aUiSetName( aSet );
         if (bPredefined)
         {
-            OUString aTmp;
-            aTmp = SmLocalizedSymbolData::GetUiSymbolName( rSymbolName );
-            OSL_ENSURE( !aTmp.isEmpty(), "localized symbol-name not found" );
+            // The Arabic math symbols use coded export names that are not
+            // words in any language and so have no localized name.
+            const bool bExpectLocalizedName = aSet != "Arabic";
+
+            OUString aTmp = SmLocalizedSymbolData::GetUiSymbolName( rSymbolName );
+            OSL_ENSURE( !bExpectLocalizedName || !aTmp.isEmpty(), "localized symbol-name not found" );
             if (!aTmp.isEmpty())
                 aUiName = aTmp;
             aTmp = SmLocalizedSymbolData::GetUiSymbolSetName( aSet );
-            OSL_ENSURE( !aTmp.isEmpty(), "localized symbolset-name not found" );
+            OSL_ENSURE( !bExpectLocalizedName || !aTmp.isEmpty(), "localized symbolset-name not found" );
             if (!aTmp.isEmpty())
                 aUiSetName = aTmp;
         }
