@@ -259,7 +259,6 @@ parts:
         --prefix=/usr \
         --enable-qtapp \
         --enable-ld \
-        --disable-ssl \
         --with-lo-path=/usr/lib/collaboraoffice \
         --with-lokit-path=$(pwd)/engine/include \
         --with-vendor="Collabora Productivity Limited" \

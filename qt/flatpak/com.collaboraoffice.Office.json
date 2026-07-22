@@ -345,7 +345,7 @@
       "build-commands": [
         "cd engine && ./autogen.sh --with-distro=CPLinuxQtFlatpak --prefix=$(pwd)/inst && make && make distro-pack-install && make cmd cmd='$(SRCDIR)/solenv/bin/assemble-flatpak.sh com.collaboraoffice.Office'",
         "autoreconf -vfi",
-        "./configure --prefix=/app --enable-qtapp --enable-qtapp-tests --with-atspi-driver-path=/app/lib/selenium-webdriver-at-spi/selenium-webdriver-at-spi.py --enable-ld --disable-ssl --with-lo-builddir=$(pwd)/engine --with-lokit-path=$(pwd)/engine/include --with-lo-path=/app/collaboraoffice --with-vendor=\"Collabora Productivity Limited\" --with-app-name=\"Collabora Office\" --with-info-url=https://collaboraoffice.com/",
+        "./configure --prefix=/app --enable-qtapp --enable-qtapp-tests --with-atspi-driver-path=/app/lib/selenium-webdriver-at-spi/selenium-webdriver-at-spi.py --enable-ld --with-lo-builddir=$(pwd)/engine --with-lokit-path=$(pwd)/engine/include --with-lo-path=/app/collaboraoffice --with-vendor=\"Collabora Productivity Limited\" --with-app-name=\"Collabora Office\" --with-info-url=https://collaboraoffice.com/",
         "make",
         "make install"
       ],
