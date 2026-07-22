@@ -497,6 +497,8 @@ describe(['tagdesktop'], 'Restricted user tracked changes dialog button state', 
 		cy.cGet('.notebookbar #Review-tab-label').click();
 		desktopHelper.getNbIcon('AcceptTrackedChanges', 'Review').click();
 		cy.cGet('#AcceptRejectChangesDialog').should('be.visible');
+		cy.getFrameWindow().then((win) => helper.processToIdle(win));
+		cy.cGet('#writerchanges .ui-treeview-entry').should('have.length.at.least', 1);
 		cy.cGet('#writerchanges .ui-treeview-entry').first().click();
 		cy.getFrameWindow().then((win) => helper.processToIdle(win));
 	}
