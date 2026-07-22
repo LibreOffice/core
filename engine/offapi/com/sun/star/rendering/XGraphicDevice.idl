@@ -115,10 +115,10 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
-    /** Get a reference to this device's parametric polygon factory.
+    /** Create a parametric polygon.
 
-        @return a reference to this device's parametric polygon
-        factory. Although it is possible to use parametric polygons on
+        @return a parametric polygon.
+        Although it is possible to use parametric polygons on
         all canvases, regardless of the associated graphic device,
         this is not advisable: each canvas implementation is free to
         internally generate optimized parametric polygons, which can
@@ -168,20 +168,11 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
             is maintained also for the center color: the gradient will
             not collapse into a single point, but become a line of
             center color.
-
-        - Hatch patterns - Required hatch services:
-
-          - "VerticalLineHatch" - this hatching consists of vertical lines
-          - "OrthogonalLinesHatch" - this hatching consists of
-            crossing vertical and horizontal lines
-          - "ThreeCrossingLinesHatch" - this hatching consists of
-            vertical and horizontal lines plus diagonal lines from
-            left, top to bottom, right.
-          - "FourCrossingLinesHatch" - this hatching consists of
-            vertical and horizontal lines plus diagonal lines in both
-            directions.
      */
-    com::sun::star::lang::XMultiServiceFactory getParametricPolyPolygonFactory();
+    XParametricPolyPolygon2D createParametricPolyPolygon([in] string GradientService,
+                [in] sequence< sequence < double > >colors,
+                [in] sequence< double > stops,
+                [in] double aspectRatio);
 };
 
 }; }; }; };

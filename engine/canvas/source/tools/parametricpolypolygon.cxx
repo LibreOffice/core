@@ -43,38 +43,10 @@ namespace canvas
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::create(
         const uno::Reference< rendering::XGraphicDevice >& rDevice,
         std::u16string_view rServiceName,
-        const cpo::uno::Sequence< cpo::uno::Any >& rArgs )
+        const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colorSequence,
+        const ::cpo::uno::Sequence< double >& colorStops,
+        double fAspectRatio )
     {
-        double fAspectRatio=1.0;
-
-        // defaults
-        cpo::uno::Sequence< cpo::uno::Sequence< double > > colorSequence{
-            rDevice->getDeviceColorSpace()->convertFromRGB({ rendering::RGBColor(0,0,0) }),
-            rDevice->getDeviceColorSpace()->convertFromRGB({ rendering::RGBColor(1,1,1) })
-        };
-        cpo::uno::Sequence< double > colorStops{ 0, 1 };
-
-        // extract args
-        for( const cpo::uno::Any& rArg : rArgs )
-        {
-            beans::PropertyValue aProp;
-            if( rArg >>= aProp )
-            {
-                if ( aProp.Name == "Colors" )
-                {
-                    aProp.Value >>= colorSequence;
-                }
-                else if ( aProp.Name == "Stops" )
-                {
-                    aProp.Value >>= colorStops;
-                }
-                else if ( aProp.Name == "AspectRatio" )
-                {
-                    aProp.Value >>= fAspectRatio;
-                }
-            }
-        }
-
         if ( rServiceName == u"LinearGradient" )
         {
             return createLinearHorizontalGradient(rDevice, colorSequence, colorStops);
@@ -87,22 +59,8 @@ namespace canvas
         {
             return createRectangularGradient(rDevice, colorSequence, colorStops, fAspectRatio);
         }
-        else if ( rServiceName == u"VerticalLineHatch" )
-        {
-            // TODO: NYI
-        }
-        else if ( rServiceName == u"OrthogonalLinesHatch" )
-        {
-            // TODO: NYI
-        }
-        else if ( rServiceName == u"ThreeCrossingLinesHatch" )
-        {
-            // TODO: NYI
-        }
-        else if ( rServiceName == u"FourCrossingLinesHatch" )
-        {
-            // TODO: NYI
-        }
+        else
+            assert(false && "unsupported service");
 
         return nullptr;
     }

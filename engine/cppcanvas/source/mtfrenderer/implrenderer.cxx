@@ -495,10 +495,10 @@ namespace cppcanvas
                 // discernible difference should be visible.
                 nSteps > 64 )
             {
-                uno::Reference< lang::XMultiServiceFactory> xFactory(
-                    rParms.mrCanvas->getUNOCanvas()->getDevice()->getParametricPolyPolygonFactory() );
+                uno::Reference< rendering::XGraphicDevice > xGraphicDevice(
+                    rParms.mrCanvas->getUNOCanvas()->getDevice() );
 
-                if( xFactory.is() )
+                if( xGraphicDevice.is() )
                 {
                     rendering::Texture aTexture;
 
@@ -655,16 +655,8 @@ namespace cppcanvas
                     ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
                                                                     aGradInfo.getTextureTransform() );
 
-                    cpo::uno::Sequence<cpo::uno::Any> args(comphelper::InitAnyPropertySequence(
-                    {
-                        {"Colors", cpo::uno::Any(aColors)},
-                        {"Stops", cpo::uno::Any(aStops)},
-                        {"AspectRatio", cpo::uno::Any(aGradInfo.getAspectRatio())},
-                    }));
-                    aTexture.Gradient.set(
-                        xFactory->createInstanceWithArguments(aGradientService,
-                                                              args),
-                        uno::UNO_QUERY);
+                    aTexture.Gradient =
+                        xGraphicDevice->createParametricPolyPolygon(aGradientService, aColors, aStops, aGradInfo.getAspectRatio());
                     if( aTexture.Gradient.is() )
                     {
                         std::shared_ptr<Action> pPolyAction(

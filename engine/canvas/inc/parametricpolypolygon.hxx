@@ -88,7 +88,9 @@ namespace canvas
         static rtl::Reference<ParametricPolyPolygon> create(
             const css::uno::Reference< css::rendering::XGraphicDevice >& rDevice,
             std::u16string_view rServiceName,
-            const cpo::uno::Sequence< cpo::uno::Any >& rArgs );
+            const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors,
+            const ::cpo::uno::Sequence< double >& stops,
+            double aspectRatio );
 
         /// Dispose all internal references
         virtual void disposing(std::unique_lock<std::mutex>&) override;

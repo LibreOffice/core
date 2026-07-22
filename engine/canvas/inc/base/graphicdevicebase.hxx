@@ -198,33 +198,13 @@ namespace canvas
             return maDeviceHelper.createCompatibleAlphaBitmap( this, size );
         }
 
-        virtual css::uno::Reference< css::lang::XMultiServiceFactory > getParametricPolyPolygonFactory(  ) override
-        {
-            return this;
-        }
-
-        // XMultiServiceFactory
-        virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override
+        virtual ::css::uno::Reference< ::css::rendering::XParametricPolyPolygon2D > createParametricPolyPolygon( const ::rtl::OUString& GradientService, const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors, const ::cpo::uno::Sequence< double >& stops, double aspectRatio ) override
         {
             return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::create(this,
-                                              aServiceSpecifier,
-                                              cpo::uno::Sequence< cpo::uno::Any >()));
+                                              GradientService,
+                                              colors, stops, aspectRatio));
         }
-
-        virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const OUString& aServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override
-        {
-            return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
-                ParametricPolyPolygon::create(this,
-                                              aServiceSpecifier,
-                                              Arguments));
-        }
-
-        virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override
-        {
-            return ParametricPolyPolygon::getAvailableServiceNames();
-        }
-
 
         // XUpdatable
         virtual void update() override
