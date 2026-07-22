@@ -1170,7 +1170,7 @@ $(DIST_FOLDER)/bundle.css: $(call prereq_css)
 	$(QUIET_STYLELINT) $(NODE) node_modules/stylelint/bin/stylelint.js --config $(srcdir)/.stylelintrc.json $(srcdir)/css/*.css --fix
 	$(call bundle_css)
 
-$(DIST_FOLDER)/bundle.js: $(INTERMEDIATE_DIR)/cool-src.js $(call prereq_all)
+$(DIST_FOLDER)/bundle.js: $(INTERMEDIATE_DIR)/cool-src.js $(L10N_ALL_JS) $(call prereq_all)
 	@mkdir -p $(dir $@)
 	$(call bundle_all)
 
