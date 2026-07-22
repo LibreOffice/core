@@ -1781,6 +1781,13 @@ cmd/sc_tableinsertmenu.png cmd/sc_insertrowsafter.png
 cmd/sc_tablemenu.png cmd/sc_tabledialog.png
 cmd/sc_tableselectmenu.png cmd/sc_selecttable.png
 
+cmd/32/selectsheetview.png cmd/32/selecttable.png
+cmd/32/themeselectorpanel.png cmd/32/symbolshapes.moon.png
+cmd/lc_selectsheetview.png cmd/lc_selecttable.png
+cmd/lc_themeselectorpanel.png cmd/lc_symbolshapes.moon.png
+cmd/sc_selectsheetview.png cmd/sc_selecttable.png
+cmd/sc_themeselectorpanel.png cmd/sc_symbolshapes.moon.png
+
 # text background colour Impress/Draw
 cmd/32/charbackcolor.png cmd/32/backcolor.png
 cmd/32/setdefault.png cmd/32/resetattributes.png
