@@ -347,6 +347,7 @@
         "autoreconf -vfi",
         "./configure --prefix=/app --enable-qtapp --enable-qtapp-tests --with-atspi-driver-path=/app/lib/selenium-webdriver-at-spi/selenium-webdriver-at-spi.py --enable-ld --with-lo-builddir=$(pwd)/engine --with-lokit-path=$(pwd)/engine/include --with-lo-path=/app/collaboraoffice --with-vendor=\"Collabora Productivity Limited\" --with-app-name=\"Collabora Office\" --with-info-url=https://collaboraoffice.com/",
         "make",
+        "rm -rf /app/share/applications /app/share/icons /app/share/appdata /app/bin/collaboraoffice",
         "make install"
       ],
       "ensure-writable": [
@@ -354,12 +355,6 @@
       ],
       "post-install": [
         "python3 scripts/insert-coda-license.py /app/collaboraoffice/LICENSE.html CODA-THIRDPARTYLICENSES.html"
-      ],
-      "cleanup": [
-        "/bin/collaboraoffice",
-        "/share/icons",
-        "/share/appdata",
-        "/share/applications"
       ],
       "sources": [
         {
