@@ -56,8 +56,9 @@ RUN --mount=type=secret,id=secret_key \
     dpkg-query -W -f '${Package}\n' | sort > /tmp/pkgs.before && \
 # Update repos before installing packages
     apt-get update && \
-# Install dependencies of installer of Collabora Online (setcap is build-time only)
-    apt-get -y install libcap2-bin ca-certificates && \
+# Install dependencies of installer of Collabora Online (setcap and locale
+# generation are build-time only)
+    apt-get -y install libcap2-bin ca-certificates locales && \
 # Setup Collabora repo
     repourl="https://collaboraoffice.com/${repo:-repos}/CollaboraOnline/"; \
     secret_key=$(cat /run/secrets/secret_key); \

@@ -32,7 +32,7 @@ FILELIST=/tmp/rootfs.files
 #   fontconfig      - postinst uses fc-cache to build the font cache that goes
 #                     into systemplate; the fontconfig tools are not used at runtime
 #   cpio            - postinst uses it to run coolwsd-systemplate-setup
-BUILD_ONLY="libcap2-bin ca-certificates adduser fontconfig cpio"
+BUILD_ONLY="libcap2-bin ca-certificates adduser fontconfig cpio locales"
 
 # Packages pulled in transitively (mostly by the fontconfig build tool and
 # ca-certificates) that are not needed at runtime, because the engine links its
@@ -228,6 +228,18 @@ install -D -m 0644 /etc/group  "$ROOTFS/etc/group"
 # coolwsd writes a generated SSL certificate under /tmp/ssl; make sure a
 # world-writable /tmp exists in the distroless image.
 install -d -m 1777 "$ROOTFS/tmp"
+
+# The distroless base ships no locale data, so glibc cannot provide a UTF-8
+# locale; coolwsd then falls back to plain C and cannot open documents with
+# non-ASCII file names. Generate a minimal C.UTF-8 into the archive glibc
+# reads - the standard /usr/lib/locale/locale-archive (this base's glibc does
+# not honour $LOCALE_ARCHIVE). C.UTF-8 has no localedef source of its own (it
+# is a glibc built-in the Nix-built base lacks), so build it from the C locale
+# with the UTF-8 charmap. The locales package (charmaps) is build-only.
+echo "=== Generating C.UTF-8 locale archive ==="
+rm -f /usr/lib/locale/locale-archive
+localedef -i C -c -f UTF-8 C.UTF-8
+install -D -m 0644 /usr/lib/locale/locale-archive "$ROOTFS/usr/lib/locale/locale-archive"
 
 # Replace the jail's glibc loader / NSS / resolver objects and the CA trust
 # store with the target (base) image's own copies, when the build provides the
