@@ -214,7 +214,8 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
     ScAddress               aAutoMarkPos;
     ScAddress               aListValPos;
 
-    Point                   aDrawSelectionPos;
+    // The position of the mouse when the left button was pressed
+    Point                   aDrawMouseDownPos;
 
     tools::Rectangle               aInvertRect;
 

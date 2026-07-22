@@ -392,7 +392,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos 
             aComboButton( GetOutDev() ),
             aCurMousePos( 0,0 ),
             nPaintCount( 0 ),
-            aDrawSelectionPos( 0,0 ),
+            aDrawMouseDownPos( 0,0 ),
             aRFSelectedCorned( NONE ),
             maShowPageBreaksTimer("ScGridWindow maShowPageBreaksTimer"),
             bEEMouse( false ),

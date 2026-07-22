@@ -53,14 +53,13 @@ static bool lcl_HasSelectionChanged(const SdrMarkList & rBeforeList, const SdrMa
     return false;
 }
 
-static bool lcl_PosUnchanged(const tools::Rectangle& rSelectionRect, const Point& rDrawSelectionPos)
-{
-    return rDrawSelectionPos.X() == rSelectionRect.Left() &&
-        rDrawSelectionPos.Y() == rSelectionRect.Top();
-}
-
 bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 {
+    // Keep track of the mouse position when the left button was pressed so we can detect if it was
+    // moved on mouse up
+    if (rMEvt.IsLeft())
+        aDrawMouseDownPos = rMEvt.GetPosPixel();
+
     bool bRet = false;
     FuPoor* pDraw = mrViewData.GetView()->GetDrawFuncPtr();
     if (pDraw)
@@ -75,14 +74,6 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 
         pDraw->SetWindow( this );
         Point aLogicPos = PixelToLogic(rMEvt.GetPosPixel());
-        SdrMarkList aPreMarkList = pDrView->GetMarkedObjectList();
-        if(!aPreMarkList.GetMarkCount())
-            aDrawSelectionPos = Point(0,0);
-        else
-        {
-            tools::Rectangle aRect = pDrView->GetAllMarkedRect();
-            aDrawSelectionPos = Point(aRect.Left(), aRect.Top());
-        }
 
         if ( pDraw->IsDetectiveHit( aLogicPos ) )
         {
@@ -91,6 +82,7 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
+            SdrMarkList aPreMarkList = pDrView->GetMarkedObjectList();
             bRet = pDraw->MouseButtonDown( rMEvt );
             if (bRet)
             {
@@ -111,6 +103,18 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
         bRet = true;
     }
     return bRet;
+}
+
+namespace
+{
+bool lcl_MouseUnmoved(ScDrawView* pDrView, const MouseEvent& rMEvt, const Point& aDownPos)
+{
+    sal_Int32 nThreshold = pDrView->GetDragThresholdPixels();
+    const Point& aMousePos = rMEvt.GetPosPixel();
+
+    return std::abs(aMousePos.getX() - aDownPos.getX()) < nThreshold &&
+        std::abs(aMousePos.getY() - aDownPos.getY()) < nThreshold;
+}
 }
 
 bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
@@ -148,7 +152,7 @@ bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
             && ScModule::get()->GetAppOptions().IsClickChangeRotation()
             && !pDraw->HasSelectionChanged()
             && dynamic_cast<FuSelection*>(pDraw)
-            && lcl_PosUnchanged(pDrView->GetAllMarkedRect(), aDrawSelectionPos))
+            && lcl_MouseUnmoved(pDrView, rMEvt, aDrawMouseDownPos))
         {
             mrViewData.GetView()->SwitchRotateMode();
         }
