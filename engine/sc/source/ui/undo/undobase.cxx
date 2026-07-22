@@ -190,7 +190,11 @@ void ScSimpleUndo::SyncSheetViews()
     ScDocument& rDocument = rDocShell.GetDocument();
     SCTAB nDefaultViewTable = rDocument.GetDefaultViewTableNumber(pViewData->GetTabNumber());
     rDocument.SyncSheetViews(nDefaultViewTable);
-    sc::DocFuncUtil::invalidateSheetViewTiles(rDocShell, nDefaultViewTable);
+    // Undo repaints only the base sheet, so the view sitting on a sheet view
+    // does not invalidate the part it shows through the normal paint path.
+    // Include that part so the current sheet view is refreshed too.
+    sc::DocFuncUtil::invalidateSheetViewTiles(rDocShell, nDefaultViewTable,
+                                              true /* bIncludeViewShownPart */);
 }
 
 void ScSimpleUndo::BroadcastChanges( const ScRange& rRange )

@@ -49,11 +49,15 @@ public:
         const ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange );
 
     /// Invalidate the tiles of the base sheet and every sheet view holder table
-    /// of nDefaultViewTab on the views that are not currently showing them. The
-    /// normal paint path only invalidates the tab a view currently displays, so
-    /// content synced into the other parts would otherwise leave their tiles
-    /// stale until the user switches to them.
-    static void invalidateSheetViewTiles(ScDocShell& rDocShell, SCTAB nDefaultViewTab);
+    /// of nDefaultViewTab. The normal paint path only invalidates the tab a view
+    /// currently displays, so content synced into the other parts would
+    /// otherwise leave their tiles stale until the user switches to them. When
+    /// bIncludeViewShownPart is true the invalidation also reaches a view that
+    /// is currently showing one of these parts; pass true from a caller that did
+    /// not repaint the part on the view showing it (for example an undo that
+    /// repaints only the base sheet), so that view is refreshed too.
+    static void invalidateSheetViewTiles(ScDocShell& rDocShell, SCTAB nDefaultViewTab,
+                                         bool bIncludeViewShownPart = false);
 };
 
 }

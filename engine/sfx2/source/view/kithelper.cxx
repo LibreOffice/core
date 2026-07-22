@@ -844,19 +844,22 @@ void KitHelper::notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int n
 }
 
 void KitHelper::notifyInvalidationAllViews(vcl::ITiledRenderable* pDoc, int nPart,
-                                           tools::Rectangle const* pRect)
+                                           tools::Rectangle const* pRect,
+                                           bool bSkipViewShowingPart)
 {
     if (!pDoc || pDoc->isDisposed() || DisableCallbacks::disabled())
         return;
 
     // The invalidation belongs to a single document. Part indices are
-    // per-document, so match the owning document. A view that currently shows
-    // this part already invalidates it through the normal paint path, so skip
-    // it here and only reach the views looking at a different part.
+    // per-document, so match the owning document. When bSkipViewShowingPart is
+    // set a view that currently shows this part is left out, because it already
+    // invalidates the part through the normal paint path, so only the views
+    // looking at a different part are reached.
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (lcl_getDocForView(pViewShell) == pDoc && pViewShell->getPart() != nPart)
+        if (lcl_getDocForView(pViewShell) == pDoc
+            && (!bSkipViewShowingPart || pViewShell->getPart() != nPart))
             KitHelper::notifyInvalidation(pViewShell, nPart, pRect);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }

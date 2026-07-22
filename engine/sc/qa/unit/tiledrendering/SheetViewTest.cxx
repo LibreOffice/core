@@ -711,6 +711,57 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testUndoInvalidatesBaseSheetTiles)
                            bBaseInvalidated);
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testUndoInvalidatesCurrentSheetViewTiles)
+{
+    // Undoing a cell edit made inside a sheet view must invalidate the tiles of
+    // the sheet view the user is currently on. The undo repaints only the base
+    // sheet, so without an explicit invalidation of the shown part the current
+    // sheet view keeps rendering the value that was just undone even though its
+    // data is already correct.
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    comphelper::COKit::setPartInInvalidation(true);
+    comphelper::ScopeGuard aPartGuard([] { comphelper::COKit::setPartInInvalidation(false); });
+
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabView = aView.getTabViewShell();
+
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+    const SCTAB nSheetViewTab(1);
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, pTabView->GetViewData().GetTabNumber());
+
+    // Edit A1 on the sheet view, then discard the invalidations from the edit
+    // so only the undo's invalidations remain.
+    typeCharsInCell(std::string("XYZ"), 0, 0, pTabView, pModelObj);
+    Scheduler::ProcessEventsToIdle();
+    aView.ClearAllInvalids();
+
+    undo();
+    Scheduler::ProcessEventsToIdle();
+
+    // The value is gone from the sheet view the user is on.
+    CPPUNIT_ASSERT_EQUAL(OUString(), pDocument->GetString(ScAddress(0, 0, nSheetViewTab)));
+
+    // The sheet view the user is currently on must be among the invalidated
+    // parts after the undo.
+    bool bSheetViewInvalidated = false;
+    for (int nInvalidatedPart : aView.m_aInvalidationsParts)
+    {
+        if (nInvalidatedPart == int(nSheetViewTab))
+        {
+            bSheetViewInvalidated = true;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE(
+        "Current sheet view tiles were not invalidated when undoing a sheet view edit",
+        bSheetViewInvalidated);
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testUndoFormattingOnSheetViewKeepsView)
 {
     // Undoing or redoing a formatting change made inside a sheet view must keep

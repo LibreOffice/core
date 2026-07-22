@@ -143,7 +143,8 @@ std::shared_ptr<ScSimpleUndo::DataSpansType> DocFuncUtil::getNonEmptyCellSpans(
     return pDataSpans;
 }
 
-void DocFuncUtil::invalidateSheetViewTiles(ScDocShell& rDocShell, SCTAB nDefaultViewTab)
+void DocFuncUtil::invalidateSheetViewTiles(ScDocShell& rDocShell, SCTAB nDefaultViewTab,
+                                           bool bIncludeViewShownPart)
 {
     if (!comphelper::COKit::isActive())
         return;
@@ -157,15 +158,18 @@ void DocFuncUtil::invalidateSheetViewTiles(ScDocShell& rDocShell, SCTAB nDefault
     if (!pModel)
         return;
 
+    const bool bSkipViewShowingPart = !bIncludeViewShownPart;
+
     // Invalidate the whole part. The rectangle is larger than any sheet, so it
     // covers every tile of the part. The sheet view holder tables and the base
     // sheet share the same part index space that ScModelObj::getPartInfo
     // exposes to the client, which is the table number.
     tools::Rectangle aWholePart(0, 0, 1000000000, 1000000000);
-    KitHelper::notifyInvalidationAllViews(pModel, static_cast<int>(nDefaultViewTab), &aWholePart);
+    KitHelper::notifyInvalidationAllViews(pModel, static_cast<int>(nDefaultViewTab), &aWholePart,
+                                          bSkipViewShowingPart);
     for (auto& rSheetView : pManager->iterateValidSheetViews())
         KitHelper::notifyInvalidationAllViews(pModel, static_cast<int>(rSheetView.getTableNumber()),
-                                              &aWholePart);
+                                              &aWholePart, bSkipViewShowingPart);
 }
 
 }
