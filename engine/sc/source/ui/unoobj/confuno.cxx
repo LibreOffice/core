@@ -565,7 +565,7 @@ cpo::uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString
     else if ( aPropertyName == SC_UNO_MODIFYPASSWORDINFO )
         aRet <<= pDocShell->GetModifyPasswordInfo();
     else if (aPropertyName == SC_UNO_MODIFYPASSWORDHASH)
-        aRet <<= pDocShell->GetModifyPasswordHash();
+        aRet <<= static_cast<sal_Int32>(pDocShell->GetModifyPasswordHash());
     else if (aPropertyName == SC_UNO_EMBED_FONTS)
         aRet <<= rDoc.IsEmbedFonts();
     else if (aPropertyName == SC_UNO_EMBED_ONLY_USED_FONTS)
