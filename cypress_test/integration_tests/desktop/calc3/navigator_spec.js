@@ -1,7 +1,17 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 var { insertImage, deleteImage } = require('../../common/desktop_helper');
+
+function assertFocusOutline() {
+	cy.cGet('#contentbox .ui-treeview-entry:focus')
+		.should('exist')
+		.should(function ($entry) {
+			var style = getComputedStyle($entry[0]);
+			expect(style.outlineStyle).to.equal('solid');
+			expect(parseFloat(style.outlineWidth)).to.be.greaterThan(0);
+		});
+}
 
 describe(['tagdesktop'], 'Navigator focus when launched', function () {
 	var win;
@@ -24,6 +34,15 @@ describe(['tagdesktop'], 'Navigator focus when launched', function () {
 		// Launching the navigator should move keyboard focus into it so it can
 		// be operated by keyboard at once, the same way the sidebar does.
 		cy.cGet('#navigation-sidebar').find(':focus').should('exist');
+	});
+
+	it('the focused tree item shows a visible focus outline', function () {
+		assertFocusOutline();
+		cy.realPress('ArrowDown');
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+		assertFocusOutline();
 	});
 });
 
