@@ -107,21 +107,23 @@
                     <property name="row-spacing">6</property>
                     <property name="column-spacing">12</property>
                     <child>
-                      <object class="GtkButton" id="rbprintarea">
+                      <object class="GtkComboBoxText" id="lbprintarea">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="receives-default">False</property>
-                        <child>
-                          <placeholder/>
-                        </child>
+                        <items>
+                          <item translatable="yes" context="printareasdialog|lbprintarea">- none -</item>
+                          <item translatable="yes" context="printareasdialog|lbprintarea">- entire sheet -</item>
+                          <item translatable="yes" context="printareasdialog|lbprintarea">- user defined -</item>
+                          <item translatable="yes" context="printareasdialog|lbprintarea">- selection -</item>
+                        </items>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="rbprintarea-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|rbprintarea">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>
+                          <object class="AtkObject" id="lbprintarea-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|lbprintarea">Allows you to modify a defined print range.</property>
                           </object>
                         </child>
                       </object>
                       <packing>
-                        <property name="left-attach">2</property>
+                        <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
@@ -145,23 +147,21 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="lbprintarea">
+                      <object class="GtkButton" id="rbprintarea">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <items>
-                          <item translatable="yes" context="printareasdialog|lbprintarea">- none -</item>
-                          <item translatable="yes" context="printareasdialog|lbprintarea">- entire sheet -</item>
-                          <item translatable="yes" context="printareasdialog|lbprintarea">- user defined -</item>
-                          <item translatable="yes" context="printareasdialog|lbprintarea">- selection -</item>
-                        </items>
+                        <property name="receives-default">False</property>
+                        <child>
+                          <placeholder/>
+                        </child>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="lbprintarea-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|lbprintarea">Allows you to modify a defined print range.</property>
+                          <object class="AtkObject" id="rbprintarea-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|rbprintarea">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>
                           </object>
                         </child>
                       </object>
                       <packing>
-                        <property name="left-attach">0</property>
+                        <property name="left-attach">2</property>
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
@@ -202,6 +202,25 @@
                     <property name="row-spacing">6</property>
                     <property name="column-spacing">12</property>
                     <child>
+                      <object class="GtkComboBoxText" id="lbrepeatrow">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <items>
+                          <item translatable="yes" context="printareasdialog|lbrepeatrow">- none -</item>
+                          <item translatable="yes" context="printareasdialog|lbrepeatrow">- user defined -</item>
+                        </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="lbrepeatrow-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|lbrepeatrow">Choose one or more rows to print on every page. In the right text box enter the row reference, for example, "1" or "$1" or "$2:$3".</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkEntry" id="edrepeatrow">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
@@ -236,25 +255,6 @@
                       </object>
                       <packing>
                         <property name="left-attach">2</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="lbrepeatrow">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <items>
-                          <item translatable="yes" context="printareasdialog|lbrepeatrow">- none -</item>
-                          <item translatable="yes" context="printareasdialog|lbrepeatrow">- user defined -</item>
-                        </items>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="lbrepeatrow-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|lbrepeatrow">Choose one or more rows to print on every page. In the right text box enter the row reference, for example, "1" or "$1" or "$2:$3".</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
@@ -295,6 +295,25 @@
                     <property name="row-spacing">6</property>
                     <property name="column-spacing">12</property>
                     <child>
+                      <object class="GtkComboBoxText" id="lbrepeatcol">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <items>
+                          <item translatable="yes" context="printareasdialog|lbrepeatcol">- none -</item>
+                          <item translatable="yes" context="printareasdialog|lbrepeatcol">- user defined -</item>
+                        </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="lbrepeatcol-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|lbrepeatcol">Choose one or more columns to print on every page. In the right text box enter the column reference, for example, "A" or "AB" or "$C:$E".</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkEntry" id="edrepeatcol">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
@@ -329,25 +348,6 @@
                       </object>
                       <packing>
                         <property name="left-attach">2</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="lbrepeatcol">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <items>
-                          <item translatable="yes" context="printareasdialog|lbrepeatcol">- none -</item>
-                          <item translatable="yes" context="printareasdialog|lbrepeatcol">- user defined -</item>
-                        </items>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="lbrepeatcol-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|lbrepeatcol">Choose one or more columns to print on every page. In the right text box enter the column reference, for example, "A" or "AB" or "$C:$E".</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
