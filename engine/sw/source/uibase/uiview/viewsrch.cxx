@@ -442,6 +442,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 RES_MARGIN_FIRSTLINE,   RES_MARGIN_RIGHT,
                 RES_UL_SPACE,           RES_UL_SPACE,
                 SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_PAGEBREAK,
+                SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_MODEL,
                 SID_ATTR_PARA_KEEP,     SID_ATTR_PARA_KEEP
             >);
 
@@ -816,12 +817,18 @@ sal_Int32 SwView::FUNC_Search(const SwSearchOptions& rOptions)
         RES_PARATR_BEGIN, RES_PARATR_END-1,
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_PAGEBREAK,
+        SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL, // page style
         SID_ATTR_PARA_KEEP, SID_ATTR_PARA_KEEP
         >);
 
     SfxItemSet aSrchSet( m_pWrtShell->GetAttrPool(), aSearchAttrRange);
     if( s_xSearchList && s_xSearchList->Count() )
+    {
         s_xSearchList->Get( aSrchSet );
+
+        // create Sw Page Style from Sfx Page Style
+        ::SfxToSwPageDescAttr(*m_pWrtShell, aSrchSet);
+    }
 
     std::optional<SfxItemSet> xReplSet;
     if( bDoReplace && s_xReplaceList && s_xReplaceList->Count() )

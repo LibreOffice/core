@@ -2010,6 +2010,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, weld::Button&, void)
         aTxt = SvxResId( RID_SVXSTR_REPLACE );
         m_pReplaceList->Get(aSet);
     }
+    aSet.DisableItem(rPool.GetWhichIDFromSlotID(SID_ATTR_PARA_MODEL));
     aSet.DisableItem(rPool.GetWhichIDFromSlotID(SID_ATTR_PARA_PAGEBREAK));
     aSet.DisableItem(rPool.GetWhichIDFromSlotID(SID_ATTR_PARA_KEEP));
 
