@@ -460,7 +460,7 @@ class Socket {
 			msg += ' spellOnline=' + spellOnline;
 		}
 
-		const darkTheme = window.prefs.getBoolean('darkTheme');
+		const darkTheme = window.prefs.seedDarkModeDefault();
 		msg += ' darkTheme=' + darkTheme;
 
 		const darkBackground = window.prefs.getBoolean(

@@ -54,6 +54,9 @@ class UIManager extends window.L.Control {
 	// Guards the one-time reconciliation of an integrator-forced theme with
 	// the server-stored user setting (see reconcileIntegratorThemeOverride).
 	private integratorThemeReconciled = false;
+	// Live OS light/dark tracking in the browser (see the constructor and
+	// followSystemDarkMode); null on native apps, which own dark mode.
+	private colorSchemeQuery: MediaQueryList | null = null;
 
 	/**
 	 * Called when the UIManager control is added to the map.
@@ -161,6 +164,37 @@ class UIManager extends window.L.Control {
 					this.refreshUIAfterThemeChange();
 			});
 		}
+		// In the browser, follow the OS light/dark setting live while the user
+		// has made no explicit choice. The native desktop app (CODA) owns dark
+		// mode itself (through preferences.json); the mobile and WASM builds opt
+		// out here for now.
+		if (window.matchMedia && !window.mode.isCODesktop() && !window.ThisIsAMobileApp) {
+			this.colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+			this.colorSchemeQuery.addEventListener('change', () => {
+				this.followSystemDarkMode();
+			});
+		}
+	}
+
+	/**
+	 * Re-applies the OS light/dark setting after the desktop theme changed.
+	 *
+	 * A theme the user (or integrator) chose explicitly wins and is left alone.
+	 * Otherwise the new OS mode is applied without persisting, so the pref stays
+	 * "unset" and keeps tracking the OS. On a loaded document this goes through
+	 * applyDarkMode so the canvas and core follow too (as a manual toggle does);
+	 * on the starter screen there is no document, canvas or socket yet, so just
+	 * restyle its UI through the normal init path.
+	 */
+	followSystemDarkMode(): void {
+		if (window.prefs.hasExplicitDarkModePref())
+			return;
+		if (window.starterScreen) {
+			delete (window.prefs as any)._localStorageCache['darkTheme'];
+			this.initDarkModeFromSettings();
+			return;
+		}
+		this.applyDarkMode(window.prefs.prefersDarkOS(), false);
 	}
 
 	// UI initialization
@@ -476,7 +510,12 @@ class UIManager extends window.L.Control {
 		if (this.reconcileIntegratorThemeOverride())
 			return;
 
-		var inDarkTheme = window.prefs.getBoolean('darkTheme');
+		// With no explicit choice, follow the OS light/dark setting instead of
+		// defaulting to light, so the document opens matching the desktop.
+		// seedDarkModeDefault caches the OS value (without persisting) so every
+		// getBoolean('darkTheme') caller agrees and the pref keeps tracking later
+		// OS changes.
+		var inDarkTheme = window.prefs.seedDarkModeDefault();
 
 		if (inDarkTheme) {
 			this.loadDarkMode();
