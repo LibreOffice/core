@@ -81,19 +81,17 @@ Bitmap convertPrimitive2DSequenceToBitmap(
                 aDPI = *rTargetDPI;
             }
 
-            const uno::Reference< rendering::XBitmap > xBitmap(
+            std::unique_ptr<Bitmap> xBitmap(reinterpret_cast<Bitmap*>(
                 xPrimitive2DRenderer->rasterize(
                     comphelper::containerToSequence(rSequence),
                     aViewParameters,
                     aDPI.getWidth(),
                     aDPI.getHeight(),
                     aRealRect,
-                    nMaximumQuadraticPixels));
+                    nMaximumQuadraticPixels)));
 
-            if(xBitmap.is())
-            {
-                aRetval = vcl::unotools::bitmapFromXBitmap(xBitmap);
-            }
+            if(xBitmap)
+                aRetval = *xBitmap;
         }
         catch (const uno::Exception&)
         {

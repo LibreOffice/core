@@ -24,7 +24,7 @@ interface XPrimitive2D;
 /** XPrimitive2DRenderer interface
 
     This interface allows to convert from a sequence of XPrimitive2Ds
-    to a XBitmap
+    to a vcl Bitmap pointer, which the caller then owns.
  */
 interface XPrimitive2DRenderer : ::com::sun::star::uno::XInterface
 {
@@ -57,7 +57,7 @@ interface XPrimitive2DRenderer : ::com::sun::star::uno::XInterface
             gets limited to given number. If a value of 0 is given, a default of
             500000 is used.
      */
-    com::sun::star::rendering::XBitmap rasterize(
+    hyper rasterize(
         [in] sequence< XPrimitive2D > Primitive2DSequence,
         [in] sequence< ::com::sun::star::beans::PropertyValue > aViewInformationSequence,
         [in] unsigned long DPI_X,

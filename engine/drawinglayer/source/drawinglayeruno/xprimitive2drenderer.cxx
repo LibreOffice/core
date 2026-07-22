@@ -52,7 +52,7 @@ namespace drawinglayer::unorenderer
             const XPrimitive2DRenderer& operator=(const XPrimitive2DRenderer&) = delete;
 
             // XPrimitive2DRenderer
-            virtual uno::Reference< rendering::XBitmap > rasterize(
+            virtual sal_Int64 rasterize(
                 const cpo::uno::Sequence< uno::Reference< graphic::XPrimitive2D > >& Primitive2DSequence,
                 const cpo::uno::Sequence< beans::PropertyValue >& aViewInformationSequence,
                 ::sal_uInt32 DPI_X,
@@ -72,7 +72,7 @@ namespace drawinglayer::unorenderer
         {
         }
 
-        uno::Reference< rendering::XBitmap > XPrimitive2DRenderer::rasterize(
+        sal_Int64 XPrimitive2DRenderer::rasterize(
             const cpo::uno::Sequence< uno::Reference< graphic::XPrimitive2D > >& aPrimitive2DSequence,
             const cpo::uno::Sequence< beans::PropertyValue >& aViewInformationSequence,
             ::sal_uInt32 DPI_X,
@@ -90,7 +90,7 @@ namespace drawinglayer::unorenderer
                 eRangeUnit = static_cast<o3tl::Length>(nVal);
             }
 
-            uno::Reference< rendering::XBitmap > XBitmap;
+            Bitmap* pBitmap(nullptr);
 
             if(aPrimitive2DSequence.hasElements())
             {
@@ -154,12 +154,12 @@ namespace drawinglayer::unorenderer
                     {
                         aBitmap.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
                         aBitmap.SetPrefSize(Size(basegfx::fround<tools::Long>(fWidth), basegfx::fround<tools::Long>(fHeight)));
-                        XBitmap = vcl::unotools::xBitmapFromBitmap(aBitmap);
+                        pBitmap = new Bitmap(aBitmap);
                     }
                 }
             }
 
-            return XBitmap;
+            return reinterpret_cast<sal_Int64>(pBitmap);
         }
 
         OUString XPrimitive2DRenderer::getImplementationName()

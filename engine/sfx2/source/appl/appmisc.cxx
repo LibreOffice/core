@@ -185,18 +185,18 @@ bool SfxApplication::loadBrandSvg(std::u16string_view sName, Bitmap &rBitmap, in
             0, 0,
             nWidth, nWidth / fAspectRatio);
 
-        const uno::Reference< rendering::XBitmap > xBitmap(
+        std::unique_ptr<Bitmap> xBitmap(reinterpret_cast<Bitmap*>(
             xPrimitive2DRenderer->rasterize(
                 drawinglayer::primitive2d::Primitive2DContainer{xTransformRef}.toSequence(),
                 cpo::uno::Sequence< beans::PropertyValue >(),
                 fFakeDPI,
                 fFakeDPI,
                 aRealRect,
-                500000));
+                500000)));
 
-        if(xBitmap.is())
+        if(xBitmap)
         {
-            rBitmap = vcl::unotools::bitmapFromXBitmap(xBitmap);
+            rBitmap = *xBitmap;
             return true;
         }
     }

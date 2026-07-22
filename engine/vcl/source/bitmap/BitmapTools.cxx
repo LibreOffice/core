@@ -106,14 +106,11 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, Bitmap& rBitmap, doub
     double nDPI = 96 * fScalingFactor;
 
     const css::uno::Reference<css::graphic::XPrimitive2DRenderer> xPrimitive2DRenderer = css::graphic::Primitive2DTools::create(xContext);
-    const css::uno::Reference<css::rendering::XBitmap> xBitmap(
-        xPrimitive2DRenderer->rasterize(aPrimitiveSequence, aViewParameters, nDPI, nDPI, aRealRect, 256*256));
+    std::unique_ptr<Bitmap> xBitmap(reinterpret_cast<Bitmap*>(
+        xPrimitive2DRenderer->rasterize(aPrimitiveSequence, aViewParameters, nDPI, nDPI, aRealRect, 256*256)));
 
-    if (xBitmap.is())
-    {
-        rBitmap = vcl::unotools::bitmapFromXBitmap(xBitmap);
-    }
-
+    if (xBitmap)
+        rBitmap = *xBitmap;
 }
 
 /** Copy block of image data into the bitmap.
