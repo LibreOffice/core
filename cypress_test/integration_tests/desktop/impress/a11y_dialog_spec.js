@@ -242,8 +242,10 @@ describe(['tagdesktop'], 'Accessibility Impress Dialog Tests', { testIsolation: 
 
     it('Graphic dialog', function () {
         helper.typeIntoDocument('{esc}{esc}');
+        helper.processToIdle(win);
         desktopHelper.insertImage();
         cy.cGet('#test-div-shapeHandlesSection').should('exist');
+        helper.processToIdle(win);
         a11yHelper.testDialog(win, '.uno:CompressGraphic');
         // remove the inserted image so subsequent tests can reach the table
         helper.typeIntoDocument('{del}');
