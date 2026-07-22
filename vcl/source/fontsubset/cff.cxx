@@ -21,7 +21,6 @@
 #include <cstdio>
 #include <cstring>
 #include <vector>
-#include <assert.h>
 
 #include <fontsubset.hxx>
 
@@ -872,7 +871,8 @@ inline int CffSubsetterContext::popInt()
 {
     const ValType aVal = popVal();
     const int nInt = static_cast<int>(aVal);
-    assert( nInt == aVal);
+    SAL_WARN_IF(nInt != aVal, "vcl.fonts.cff",
+                "non-integer dict operand " << aVal << " truncated to " << nInt);
     return nInt;
 }
 
