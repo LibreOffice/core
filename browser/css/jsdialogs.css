@@ -655,8 +655,14 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	padding-left: 16px;
 }
 
-#CharNamePage.jsdialog .ui-treeview.ui-grid-cell {
+/* Keeps all elements in ui-treeview within the grid container */
+.jsdialog .ui-treeview,
+.jsdialog .ui-treeview.ui-grid-cell {
 	box-sizing: border-box;
+}
+
+/* Shrinks the Search bar in #CharNamePage instead of overflowing */
+#CharNamePage.jsdialog .ui-treeview.ui-grid-cell {
 	grid-template-columns: minmax(0, 1fr) !important;
 }
 
