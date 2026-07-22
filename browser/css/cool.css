@@ -1203,6 +1203,10 @@ input, button {
 	background: var(--color-main-background) !important;
 }
 
+.iframe-settings-wrap.jsdialog-container.ui-dialog.lokdialog_container.ui-widget-content {
+	background: var(--settings-background, var(--color-main-background)) !important;
+}
+
 .lokdialog.ui-dialog-content.ui-widget-content {
 	overflow: auto;
 	border-top-left-radius: 0px;
