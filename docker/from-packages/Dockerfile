@@ -211,8 +211,14 @@ USER 1001
 # pick the listening port and the http/https scheme, then checks the loopback
 # endpoint. This needs no curl or shell, so it works in the distroless image.
 # Exit 0 means healthy.
+#
+# --use-env-vars lets the probe honour the same 'extra_params' the entrypoint
+# does, so a TLS-terminating deployment that sets --o:ssl.enable=false there gets
+# the right scheme (and port) on the first try. The probe also falls back to the
+# other scheme on its own, which covers ssl.enable overrides passed directly on
+# the run command line - args this separate healthcheck process cannot observe.
 HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=3 \
-    CMD ["/usr/bin/coolwsd", "--probe"]
+    CMD ["/usr/bin/coolwsd", "--probe", "--use-env-vars"]
 
 # Start coolwsd directly, with no shell in between: self-signed certificate
 # generation (unless DONT_GEN_SSL_CERT is set) and arbitrary-UID handling are

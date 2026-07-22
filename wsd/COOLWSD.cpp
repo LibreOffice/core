@@ -100,6 +100,7 @@
 #include <cstring>
 #include <ctime>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <map>
 #include <memory>
@@ -1463,17 +1464,22 @@ void ensureUserEntry()
 
 #if !MOBILEAPP
 /// Health-check the locally running coolwsd for the --probe option: connect to
-/// the loopback interface on the configured port and scheme, GET the root
-/// ("OK") endpoint, and return EX_OK when the server answers HTTP 200. This
-/// gives the shell-less, distroless container image a self-contained
-/// HEALTHCHECK that needs no curl.
+/// the loopback interface on the configured port, GET the root ("OK") endpoint,
+/// and return EX_OK when the server answers HTTP 200. This gives the shell-less,
+/// distroless container image a self-contained HEALTHCHECK that needs no curl.
 ///
-/// It talks to coolwsd's own socket, so the scheme follows ssl.enable only -
-/// not ssl.termination, which describes the upstream proxy this probe
-/// deliberately bypasses.
+/// It talks to coolwsd's own socket, so ssl.termination is irrelevant here - it
+/// describes the upstream proxy this probe deliberately bypasses.
+///
+/// The scheme (http/https) follows ssl.enable, but this separate probe process
+/// only sees the config file and, under --use-env-vars, extra_params - not the
+/// ssl.enable override the running server may have received directly on its own
+/// command line (docker run ... --o:ssl.enable=false), which no HEALTHCHECK can
+/// observe. So the configured scheme is only a preference: if it does not answer
+/// we try the other one. A wrong scheme fails the connection or TLS handshake
+/// instead of returning HTTP 200, so trying both cannot yield a false positive.
 static int probeRunningServer()
 {
-    const bool ssl = ConfigUtil::isSslEnabled();
     const int port = ClientPortNumber > 0 ? ClientPortNumber : DEFAULT_CLIENT_PORT_NUMBER;
     const std::string path = COOLWSD::ServiceRoot + "/";
 
@@ -1482,15 +1488,6 @@ static int probeRunningServer()
     // literal, or the bracketed IPv6 literal for an IPv6-only server. Both are
     // literals, so the probe needs no name resolution.
     const std::string host = (ClientPortProto == Socket::Type::IPv6) ? "[::1]" : "127.0.0.1";
-    const std::string target =
-        (ssl ? "https://" : "http://") + host + ':' + std::to_string(port) + path;
-
-#if ENABLE_SSL
-    if (ssl && !ssl::Manager::isClientContextInitialized())
-        ssl::Manager::initializeClientContext(
-            std::string(), std::string(), std::string(),
-            "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH", ssl::CertificateVerification::Disabled);
-#endif
 
     // The HTTP client resolves via the async DNS subsystem, which the normal
     // server only starts later in innerMain(); bring it up just for the probe.
@@ -1498,34 +1495,74 @@ static int probeRunningServer()
 
     int exitCode = EX_UNAVAILABLE;
     std::string error;
-    try
+    bool completeResponse = false;
+
+    // Two attempts share the HEALTHCHECK --timeout budget (10s in the image), so
+    // keep each below half of it.
+    const std::function<bool(bool)> tryScheme = [&](bool ssl) -> bool
     {
-        const std::shared_ptr<http::Session> session =
-            ssl ? http::Session::createHttpSsl(host, port) : http::Session::createHttp(host, port);
-        if (!session)
-            error = "could not create a session for " + target;
-        else
+        const std::string target =
+            (ssl ? "https://" : "http://") + host + ':' + std::to_string(port) + path;
+#if ENABLE_SSL
+        if (ssl && !ssl::Manager::isClientContextInitialized())
+            ssl::Manager::initializeClientContext(
+                std::string(), std::string(), std::string(),
+                "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH", ssl::CertificateVerification::Disabled);
+#endif
+        completeResponse = false;
+        try
         {
-            const std::shared_ptr<const http::Response> response =
-                session->syncRequest(http::Request(path), std::chrono::seconds(5));
-            if (response && response->state() == http::Response::State::Complete)
+            const std::shared_ptr<http::Session> session =
+                ssl ? http::Session::createHttpSsl(host, port) : http::Session::createHttp(host, port);
+            if (!session)
+                error = "could not create a session for " + target;
+            else
             {
-                // The server answered with a complete HTTP response.
-                if (response->statusCode() == http::StatusCode::OK)
-                    exitCode = EX_OK;
-                else
+                const std::shared_ptr<const http::Response> response =
+                    session->syncRequest(http::Request(path), std::chrono::seconds(4));
+                if (response && response->state() == http::Response::State::Complete)
+                {
+                    // The server answered with a complete HTTP response, so this
+                    // scheme is the right one: a non-200 is a real unhealthy signal,
+                    // not a reason to try the other scheme.
+                    completeResponse = true;
+                    if (response->statusCode() == http::StatusCode::OK)
+                    {
+                        exitCode = EX_OK;
+                        return true;
+                    }
                     error = target + " returned HTTP " +
                             std::to_string(static_cast<int>(response->statusCode()));
+                }
+                else if (response && response->state() == http::Response::State::Timeout)
+                    error = "timed out connecting to " + target;
+                else
+                    error = "could not connect to " + target;
             }
-            else if (response && response->state() == http::Response::State::Timeout)
-                error = "timed out connecting to " + target;
-            else
-                error = "could not connect to " + target;
         }
-    }
-    catch (const std::exception& ex)
+        catch (const std::exception& ex)
+        {
+            error = "error probing " + target + ": " + ex.what();
+        }
+        return false;
+    };
+
+    const bool preferSsl = ConfigUtil::isSslEnabled();
+#if ENABLE_SSL
+    const bool canSsl = true;
+#else
+    const bool canSsl = false;
+#endif
+    // Try the configured scheme first (keeps the normal https deployment quiet).
+    // Only fall back on a transport/handshake failure - i.e. no complete HTTP
+    // response, which is what a scheme mismatch looks like; a connecting-to-http
+    // https probe may even hang to the timeout, so we must not gate this on it.
+    // http is always available; https only in an SSL-enabled build.
+    if (!tryScheme(preferSsl) && !completeResponse)
     {
-        error = "error probing " + target + ": " + ex.what();
+        const bool other = !preferSsl;
+        if (!other || canSsl)
+            tryScheme(other);
     }
 
     net::AsyncDNS::stopAsyncDNS();
