@@ -45,10 +45,7 @@
 #include <vcl/event.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
-#include <comphelper/base64.hxx>
 #include <comphelper/kit.hxx>
-#include <tools/stream.hxx>
-#include <rtl/strbuf.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/cuicharmap.hxx>
@@ -621,21 +618,7 @@ OString SvxCharacterMap::encodeCharGraphic(sal_UCS4 cChar)
 {
     ScopedVclPtr<VirtualDevice> pVirDev = generateCharGraphic(cChar);
     Bitmap aBitmap = pVirDev->GetBitmap(Point(0, 0), pVirDev->GetOutputSizePixel());
-
-    SvMemoryStream aOStm(65535, 65535);
-    // Match the iconview's own encoding: fastest compression.
-    cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
-        comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
-    };
-    vcl::PngImageWriter aPNGWriter(aOStm);
-    aPNGWriter.setParameters(aFilterData);
-    if (!aPNGWriter.write(aBitmap))
-        return OString();
-
-    cpo::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()), aOStm.Tell());
-    OStringBuffer aBuffer("data:image/png;base64,");
-    ::comphelper::Base64::encode(aBuffer, aSeq);
-    return aBuffer.makeStringAndClear();
+    return vcl::encodeBitmapAsPngDataUri(aBitmap);
 }
 
 bool SvxCharacterMap::getCharImageOnDemand(weld::IconView& rIconView,

@@ -13,6 +13,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
+#include <rtl/string.hxx>
 #include <vector>
 
 #pragma once
@@ -41,6 +42,11 @@ public:
     void setParameters(cpo::uno::Sequence<css::beans::PropertyValue> const& rParameters);
     bool write(const Graphic& rGraphic);
 };
+
+// Encode a bitmap as a PNG at the fastest compression level and return it as a
+// "data:image/png;base64," data URI. Returns an empty string when the PNG
+// encoding fails.
+VCL_DLLPUBLIC OString encodeBitmapAsPngDataUri(const Bitmap& rBitmap);
 
 } // namespace vcl
 

@@ -25,10 +25,7 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <tools/json_writer.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
-#include <tools/stream.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <comphelper/base64.hxx>
-#include <comphelper/propertyvalue.hxx>
 
 namespace
 {
@@ -287,28 +284,6 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 
 FactoryFunction IconView::GetUITestFactory() const { return IconViewUIObject::create; }
 
-static OString extractPngString(const SvLBoxContextBmp* pBmpItem)
-{
-    Bitmap aImage = pBmpItem->GetBitmap1().GetBitmap();
-    SvMemoryStream aOStm(65535, 65535);
-    // Use fastest compression "1"
-    cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
-        comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
-    };
-    vcl::PngImageWriter aPNGWriter(aOStm);
-    aPNGWriter.setParameters(aFilterData);
-    if (aPNGWriter.write(aImage))
-    {
-        cpo::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
-                                          aOStm.Tell());
-        OStringBuffer aBuffer("data:image/png;base64,");
-        ::comphelper::Base64::encode(aBuffer, aSeq);
-        return aBuffer.makeStringAndClear();
-    }
-
-    return ""_ostr;
-}
-
 OUString IconView::renderEntry(int pos, int dpiscale) const
 {
     SvTreeListEntry* pEntry = GetEntry(pos);
@@ -325,7 +300,9 @@ OUString IconView::renderEntry(int pos, int dpiscale) const
         {
             const SvLBoxContextBmp* pBmpItem = static_cast<const SvLBoxContextBmp*>(pIt);
             if (pBmpItem)
-                return OStringToOUString(extractPngString(pBmpItem), RTL_TEXTENCODING_ASCII_US);
+                return OStringToOUString(
+                    vcl::encodeBitmapAsPngDataUri(pBmpItem->GetBitmap1().GetBitmap()),
+                    RTL_TEXTENCODING_ASCII_US);
         }
     }
 

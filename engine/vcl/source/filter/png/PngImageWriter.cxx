@@ -14,6 +14,9 @@
 #include <vcl/BitmapTools.hxx>
 #include <sal/log.hxx>
 #include <rtl/crc.h>
+#include <rtl/strbuf.hxx>
+#include <comphelper/base64.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 namespace
 {
@@ -497,6 +500,24 @@ bool PngImageWriter::write(const Graphic& rGraphic)
 {
     return pngWrite(mrStream, rGraphic, mnCompressionLevel, mbInterlaced, mbTranslucent,
                     maAdditionalChunks);
+}
+
+OString encodeBitmapAsPngDataUri(const Bitmap& rBitmap)
+{
+    SvMemoryStream aOStm(65535, 65535);
+    // Use fastest compression "1"
+    cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
+    };
+    PngImageWriter aPNGWriter(aOStm);
+    aPNGWriter.setParameters(aFilterData);
+    if (!aPNGWriter.write(rBitmap))
+        return OString();
+
+    cpo::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()), aOStm.Tell());
+    OStringBuffer aBuffer("data:image/png;base64,");
+    comphelper::Base64::encode(aBuffer, aSeq);
+    return aBuffer.makeStringAndClear();
 }
 
 } // namespace vcl

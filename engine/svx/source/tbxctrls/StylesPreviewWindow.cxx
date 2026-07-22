@@ -19,7 +19,6 @@
 
 #include <StylesPreviewWindow.hxx>
 
-#include <comphelper/base64.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -584,27 +583,6 @@ void StylesListUpdateTask::Invoke()
     m_rStylesList.UpdateSelection();
 }
 
-static OString extractPngString(const Bitmap& rBitmap)
-{
-    SvMemoryStream aOStm(65535, 65535);
-    // Use fastest compression "1"
-    cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
-        comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
-    };
-    vcl::PngImageWriter aPNGWriter(aOStm);
-    aPNGWriter.setParameters(aFilterData);
-    if (aPNGWriter.write(rBitmap))
-    {
-        cpo::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
-                                          aOStm.Tell());
-        OStringBuffer aBuffer("data:image/png;base64,");
-        ::comphelper::Base64::encode(aBuffer, aSeq);
-        return aBuffer.makeStringAndClear();
-    }
-
-    return ""_ostr;
-}
-
 // 0: OUString, 1: TreeIter, 2: dpiscale, returns true if supported
 IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_query&, rQuery, bool)
 {
@@ -672,7 +650,7 @@ OString StylesPreviewWindow_Base::GetCachedPreviewJson(const StylePreviewDescrip
         return aJsonFound->second;
 
     Bitmap aBitmap = GetCachedPreview(rStyle, nDpiScale);
-    OString sResult = extractPngString(aBitmap);
+    OString sResult = vcl::encodeBitmapAsPngDataUri(aBitmap);
     rDpiJsonCache[aKey] = sResult;
     return sResult;
 }

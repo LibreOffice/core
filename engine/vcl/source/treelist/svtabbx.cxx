@@ -36,39 +36,14 @@
 #include <svdata.hxx>
 #include <memory>
 #include <tools/json_writer.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxHeaderBar.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxHeaderCell.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxTableCell.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
-#include <comphelper/base64.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
-
-namespace {
-    OString lcl_extractPngString(const Bitmap& rImage)
-    {
-        SvMemoryStream aOStm(65535, 65535);
-        // Use fastest compression "1"
-        cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
-            comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
-        };
-        vcl::PngImageWriter aPNGWriter(aOStm);
-        aPNGWriter.setParameters(aFilterData);
-        if (aPNGWriter.write(rImage))
-        {
-            cpo::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
-                                            aOStm.Tell());
-            OStringBuffer aBuffer("data:image/png;base64,");
-            ::comphelper::Base64::encode(aBuffer, aSeq);
-            return aBuffer.makeStringAndClear();
-        }
-
-        return ""_ostr;
-    }
-}
 
 static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                                      SvTreeListEntry* pEntry,
@@ -139,9 +114,11 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                             {
                                 auto aColumn = rJsonWriter.startStruct();
                                 if (bHasCollapsed)
-                                    rJsonWriter.put("collapsedimage", lcl_extractPngString(aCollapsedImage));
+                                    rJsonWriter.put("collapsedimage",
+                                                    vcl::encodeBitmapAsPngDataUri(aCollapsedImage));
                                 if (bHasExpanded)
-                                    rJsonWriter.put("collapsedimage", lcl_extractPngString(aExpandedImage));
+                                    rJsonWriter.put("collapsedimage",
+                                                    vcl::encodeBitmapAsPngDataUri(aExpandedImage));
                             }
                         }
                     }
