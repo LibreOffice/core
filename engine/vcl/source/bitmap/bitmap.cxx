@@ -1194,8 +1194,6 @@ bool Bitmap::ImplMake8BitNoConversion()
 
 bool Bitmap::ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const* pExtColor)
 {
-    SAL_WARN_IF(ePixelFormat <= getPixelFormat(), "vcl", "New pixel format must be greater!" );
-
     BitmapScopedReadAccess pReadAcc(*this);
     if (!pReadAcc)
         return false;
