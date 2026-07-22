@@ -107,6 +107,8 @@ if ${trace} \
 				   --o:cache_files.path="$cache_path" \
 				   --o:storage.filesystem[@allow]=true \
 				   --o:logging.level=trace \
+				   --o:logging.file[@enable]=false \
+				   --o:logging_ui_cmd.file[@enable]=false \
 				   --o:ssl.key_file_path="@abs_top_srcdir@/etc/key.pem" \
 				   --o:ssl.cert_file_path="@abs_top_srcdir@/etc/cert.pem" \
 				   --o:ssl.ca_file_path="@abs_top_srcdir@/etc/ca-chain.cert.pem" \
