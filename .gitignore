@@ -109,6 +109,7 @@ browser/typescript_js
 *.tsbuildinfo
 browser/src/app/TaskWorker.js
 
+/coconvert
 /coolforkit
 /coolforkitns
 /coolforkit-caps
