@@ -58,6 +58,8 @@ FunnelChart::FunnelChart(const rtl::Reference<ChartType>& xChartTypeModel,
     {
         TOOLS_WARN_EXCEPTION("chart2", "");
     }
+
+    m_bAlignCenter = true;
 }
 
 FunnelChart::~FunnelChart() {}
