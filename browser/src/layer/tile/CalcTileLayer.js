@@ -1296,6 +1296,17 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		return this._twipsToPixels(new cool.Point(app.activeDocument.fileSize.x, app.activeDocument.fileSize.y));
 	},
 
+	// Scroll by the smallest amount that brings the whole cell cursor inside one of the
+	// view panes. The view stays where it is when the cell cursor is already visible.
+	_scrollCellCursorIntoView: function () {
+		const scroll = this._calculateScrollForNewCellCursor();
+		if (scroll.x !== 0 || scroll.y !== 0) {
+			scroll.x += app.activeDocument.activeLayout.viewedRectangle.x1;
+			scroll.y += app.activeDocument.activeLayout.viewedRectangle.y1;
+			app.activeDocument.activeLayout.scrollTo(scroll.pX, scroll.pY);
+		}
+	},
+
 	_calculateScrollForNewCellCursor: function () {
 		var scroll = new cool.SimplePoint(0, 0);
 

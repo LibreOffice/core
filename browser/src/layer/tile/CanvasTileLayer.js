@@ -3314,12 +3314,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (app.calc.cellCursorVisible) {
 			if (scrollToCursor &&
 			    !this._map.calcInputBarHasFocus()) {
-				const scroll = this._calculateScrollForNewCellCursor();
-				if (scroll.x !== 0 || scroll.y !== 0) {
-					scroll.x += app.activeDocument.activeLayout.viewedRectangle.x1;
-					scroll.y += app.activeDocument.activeLayout.viewedRectangle.y1;
-					app.activeDocument.activeLayout.scrollTo(scroll.pX, scroll.pY);
-				}
+				this._scrollCellCursorIntoView();
 
 				this._prevCellCursorAddress = app.calc.cellAddress.clone();
 			}
@@ -4011,15 +4006,24 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	_nonDesktopChecksAfterResizeEvent: function(heightIncreased) {
 		// We want to keep cursor visible when we show the keyboard on mobile device or tablet
 		if (!window.mode.isSmallScreenDevice() && !window.mode.isTablet()) return;
+		if (heightIncreased || !this._map._docLoaded) return;
 
 		const hasVisibleCursor = app.file.textCursor.visible
 			&& this._map._docLayer._cursorMarker && this._map._docLayer._cursorMarker.isDomAttached();
-		if (!heightIncreased && this._map._docLoaded && hasVisibleCursor) {
+		if (hasVisibleCursor) {
 			const cursorPos = this._map._docLayer._twipsToIntern({ x: app.file.textCursor.rectangle.x1, y: app.file.textCursor.rectangle.y2 });
 			const cursorPositionInView = this._isInternInView(cursorPos);
 			if (!cursorPositionInView)
 				this._map.panTo(cursorPos);
 		}
+		// In Calc a cell is selected for typing without an active caret cursor. The
+		// keyboard is up, so scroll the sheet to keep the selected cell visible.
+		else if (
+			this.isCalc() &&
+			app.calc.cellCursorVisible &&
+			!this._map.calcInputBarHasFocus()
+		)
+			this._scrollCellCursorIntoView();
 	},
 
 	_syncTileContainerSize: function () {
