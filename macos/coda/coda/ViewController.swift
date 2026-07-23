@@ -549,7 +549,12 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     NSPasteboard.general.setString(text, forType: .string)
                     return (nil, nil)
                 }
-                else if let result = ViewController.handleBackstageMessage(body) {
+                else if let result = ViewController.handleBackstageMessage(body, onOpened: { [weak self] in
+                    // The picked document opens in its own window; return the
+                    // originating window to its document view.
+                    self?.webView?.evaluateJavaScript(
+                        "window.app?.map?.backstageView?.returnToDocumentView();")
+                }) {
                     return result
                 }
                 else {
@@ -710,7 +715,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         }
     }
 
-    static func handleBackstageMessage(_ body: String, onClose: (() -> Void)? = nil) -> (Any?, String?)? {
+    static func handleBackstageMessage(_ body: String, onClose: (() -> Void)? = nil, onOpened: (() -> Void)? = nil) -> (Any?, String?)? {
         if let settingsResult = handleSettingsMessage(body) {
             return settingsResult
         }
@@ -766,7 +771,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         }
         else if body == "uno .uno:Open" {
             // FIXME A real message would be preferred over intercepting a uno command; but this is what the backstage currently uses
-            (NSDocumentController.shared as? DocumentController)?.focusOrPresentOpenPanel()
+            (NSDocumentController.shared as? DocumentController)?.focusOrPresentOpenPanel(onPick: onOpened)
 
             onClose?()
             return (nil, nil)

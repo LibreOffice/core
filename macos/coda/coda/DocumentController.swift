@@ -36,6 +36,11 @@ final class DocumentController: NSDocumentController {
     private weak var liveOpenPanel: NSOpenPanel?
 
     /**
+     * Fired when the live Open panel picks documents; dropped on cancel.
+     */
+    private var openPanelPickHandler: (() -> Void)?
+
+    /**
      * Window for the New document workflow.
      */
     private static var backstageWindowController: NSWindowController?
@@ -62,6 +67,10 @@ final class DocumentController: NSDocumentController {
             guard let self = self else { return }
             // Panel is going away regardless of result.
             self.liveOpenPanel = nil
+            if result == NSApplication.ModalResponse.OK.rawValue {
+                self.openPanelPickHandler?()
+            }
+            self.openPanelPickHandler = nil
             completionHandler(result)
         }
     }
@@ -169,8 +178,9 @@ final class DocumentController: NSDocumentController {
 
     /**
      * Opens the Open panel when no other documents or windows are presented.
+     * When a panel is already up it is focused and `onPick` is ignored.
      */
-    func focusOrPresentOpenPanel() {
+    func focusOrPresentOpenPanel(onPick: (() -> Void)? = nil) {
         if let panel = liveOpenPanel {
             // Focus the existing panel (sheet or app-modal).
             if let parent = panel.sheetParent {
@@ -182,6 +192,8 @@ final class DocumentController: NSDocumentController {
             NSApp.activate(ignoringOtherApps: true)
             return
         }
+
+        openPanelPickHandler = onPick
 
         // No panel up -> trigger standard Open panel flow.
         super.openDocument(nil)
