@@ -50,8 +50,11 @@ abstract class ShapeHandleSubSection extends CanvasSectionObject {
 			this.setShowSection(false);
 			this.interactable = false;
 		} else {
-			this.setShowSection(true);
-			this.interactable = true;
+			this.setShowSection(
+				this.sectionProperties.parentHandlerSection?.showSection ?? false,
+			);
+			this.interactable =
+				this.sectionProperties.parentHandlerSection?.showSection ?? false;
 		}
 	}
 }

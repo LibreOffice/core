@@ -37,7 +37,9 @@ class ShapeHandleDiagramSubSection extends ShapeHandleSubSection {
 		if (event.detail.visible) {
 			this.setShowSection(false);
 		} else {
-			this.setShowSection(true);
+			this.setShowSection(
+				this.sectionProperties.parentHandlerSection?.showSection ?? false,
+			);
 		}
 	}
 
