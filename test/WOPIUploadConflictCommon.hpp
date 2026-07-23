@@ -317,11 +317,7 @@ public:
 
         TST_LOG("===== Finished " << name(_scenario) << " test scenario =====");
 
-        if (_scenario != Scenario::VerifyOverwrite)
-        {
-            // Restart the next scenario, unless we are at the last one.
-            TRANSITION_STATE(_phase, Phase::Load);
-        }
+        const bool bLastScenario = (_scenario == Scenario::VerifyOverwrite);
 
         switch (_scenario)
         {
@@ -340,6 +336,12 @@ public:
             case Scenario::VerifyOverwrite:
                 passTest("Finished all test scenarios without issues");
                 break;
+        }
+
+        if (!bLastScenario)
+        {
+            // Restart the next scenario, unless we are at the last one.
+            TRANSITION_STATE(_phase, Phase::Load);
         }
     }
 
