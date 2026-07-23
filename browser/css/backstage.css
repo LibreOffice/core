@@ -10,6 +10,9 @@
 	--color-primary-text: #ffffff;
 	--color-accent-background: var(--color-background-lighter);
 
+	--icon-primary-color: rgb(58, 58, 56);
+	--icon-secondary-color: var(--doc-type-color);
+
 	user-select: none;
 
 	position: fixed;
@@ -149,8 +152,6 @@
 	position: relative;
 	margin: 2px 8px;
 	border-radius: var(--border-radius);
-	--icon-primary-color: rgb(58, 58, 56);
-	--icon-secondary-color: var(--doc-type-color);
 }
 
 .backstage-sidebar-item.active {
