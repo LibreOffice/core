@@ -107,6 +107,9 @@ private: //methods
             double fLogicPositiveYSum, double fLogicNegativeYSum,
             sal_Int32 nAttachedAxisIndex);
 
+protected:
+    bool                                 m_bAlignCenter = false; // Center the bars, as for funnel charts
+
 private: //member
     BarPositionHelper                    m_aMainPosHelper;
     cpo::uno::Sequence< sal_Int32 >      m_aOverlapSequence;

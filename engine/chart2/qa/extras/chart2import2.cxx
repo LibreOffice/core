@@ -515,6 +515,39 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testFunnelChartShiftedCategoryPosition)
     CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testFunnelRendering)
+{
+    loadFromFile(u"pptx/funnel-pp1.pptx");
+    Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 0);
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xSeries(getShapeByName(xShapes, u"CID/D=0:CS=0:CT=0:Series=0"_ustr),
+                                       UNO_SET_THROW);
+
+    Reference<container::XIndexAccess> xIndexAccess(xSeries, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xIndexAccess->getCount());
+
+    // Data values of the first series
+    const double aValues[] = { 4.3, 2.5, 3.5, 4.5 };
+
+    Reference<drawing::XShape> xBar0(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
+    const double fWidth0 = xBar0->getSize().Width;
+    const double fCenter0 = xBar0->getPosition().X + fWidth0 / 2.0;
+    CPPUNIT_ASSERT(fWidth0 > 0);
+
+    for (sal_Int32 i = 1; i < 4; ++i)
+    {
+        Reference<drawing::XShape> xBar(xIndexAccess->getByIndex(i), UNO_QUERY_THROW);
+        const double fWidth = xBar->getSize().Width;
+        const double fCenter = xBar->getPosition().X + fWidth / 2.0;
+        // All bars share a common vertical center line
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fCenter0, fCenter, 30);
+        // Bar lengths are proportional to the data values
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aValues[i] / aValues[0], fWidth / fWidth0, 0.02);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf133376)
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
