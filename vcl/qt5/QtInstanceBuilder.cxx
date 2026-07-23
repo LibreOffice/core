@@ -193,6 +193,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"modules/scalc/ui/duplicaterecordsdlg.ui",
     u"modules/scalc/ui/exponentialsmoothingdialog.ui",
     u"modules/scalc/ui/externaldata.ui",
+    u"modules/scalc/ui/filldlg.ui",
     u"modules/scalc/ui/formatcellsdialog.ui",
     u"modules/scalc/ui/formulacalculationoptions.ui",
     u"modules/scalc/ui/fourieranalysisdialog.ui",
