@@ -210,90 +210,6 @@
                             <property name="row-spacing">6</property>
                             <property name="column-spacing">12</property>
                             <child>
-                              <object class="GtkComboBoxText" id="connect1">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <items>
-                                  <item translatable="yes" context="standardfilterdialog|connect1">AND</item>
-                                  <item translatable="yes" context="standardfilterdialog|connect1">OR</item>
-                                </items>
-                                <accessibility>
-                                  <relation type="labelled-by" target="label2"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="connect1-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect1-atkobject">Operator 1</property>
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|connect1">For the following arguments, you can choose between the logical operators AND / OR.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="connect2">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <items>
-                                  <item translatable="yes" context="standardfilterdialog|connect2">AND</item>
-                                  <item translatable="yes" context="standardfilterdialog|connect2">OR</item>
-                                </items>
-                                <accessibility>
-                                  <relation type="labelled-by" target="label2"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="connect2-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect2-atkobject">Operator 2</property>
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|connect2">For the following arguments, you can choose between the logical operators AND / OR.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="connect3">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <items>
-                                  <item translatable="yes" context="standardfilterdialog|connect3">AND</item>
-                                  <item translatable="yes" context="standardfilterdialog|connect3">OR</item>
-                                </items>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="connect3-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect3-atkobject">Operator 3</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="connect4">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <items>
-                                  <item translatable="yes" context="standardfilterdialog|connect4">AND</item>
-                                  <item translatable="yes" context="standardfilterdialog|connect4">OR</item>
-                                </items>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="connect4-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect4-atkobject">Operator 4</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkLabel" id="label2">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -338,6 +254,29 @@
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkComboBoxText" id="connect1">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <items>
+                                  <item translatable="yes" context="standardfilterdialog|connect1">AND</item>
+                                  <item translatable="yes" context="standardfilterdialog|connect1">OR</item>
+                                </items>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label2"/>
+                                </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="connect1-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect1-atkobject">Operator 1</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|connect1">For the following arguments, you can choose between the logical operators AND / OR.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkComboBoxText" id="field1">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -354,59 +293,6 @@
                               <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="field2">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <accessibility>
-                                  <relation type="labelled-by" target="label3"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="field2-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|field2-atkobject">Field Name 2</property>
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|field2">Specifies the field names from the current table to set them in the argument.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="field3">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <accessibility>
-                                  <relation type="labelled-by" target="label3"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="field3-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|field3-atkobject">Field Name 3</property>
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|field3">Specifies the field names from the current table to set them in the argument.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="field4">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="field4-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|field4-atkobject">Field Name 4</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">4</property>
                               </packing>
                             </child>
                             <child>
@@ -446,253 +332,6 @@
                               <packing>
                                 <property name="left-attach">2</property>
                                 <property name="top-attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="cond2">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <items>
-                                  <item>=</item>
-                                  <item>&lt;</item>
-                                  <item>&gt;</item>
-                                  <item>&lt;=</item>
-                                  <item>&gt;=</item>
-                                  <item>&lt;&gt;</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Largest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Largest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Contains</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Does not contain</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Begins with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Font color</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
-                                </items>
-                                <accessibility>
-                                  <relation type="labelled-by" target="label4"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="cond2-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|cond2-atkobject">Condition 2</property>
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|cond2">Specifies the comparative operators through which the entries in the Field name and Value fields can be linked.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">2</property>
-                                <property name="top-attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="cond3">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <items>
-                                  <item>=</item>
-                                  <item>&lt;</item>
-                                  <item>&gt;</item>
-                                  <item>&lt;=</item>
-                                  <item>&gt;=</item>
-                                  <item>&lt;&gt;</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Largest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Largest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Contains</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Does not contain</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Begins with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Font color</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
-                                </items>
-                                <accessibility>
-                                  <relation type="labelled-by" target="label4"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="cond3-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|cond3-atkobject">Condition 3</property>
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|cond3">Specifies the comparative operators through which the entries in the Field name and Value fields can be linked.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">2</property>
-                                <property name="top-attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="cond4">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <items>
-                                  <item>=</item>
-                                  <item>&lt;</item>
-                                  <item>&gt;</item>
-                                  <item>&lt;=</item>
-                                  <item>&gt;=</item>
-                                  <item>&lt;&gt;</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Largest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Largest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest %</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Contains</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Does not contain</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Begins with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Font color</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
-                                </items>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="cond4-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|cond4-atkobject">Condition 4</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">2</property>
-                                <property name="top-attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="remove1">
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes" context="standardfilterdialog|remove1|tooltip_text">Remove</property>
-                                <property name="margin-end">8</property>
-                                <property name="image">image1</property>
-                                <property name="always-show-image">True</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">4</property>
-                                <property name="top-attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="remove2">
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes" context="standardfilterdialog|remove2|tooltip_text">Remove</property>
-                                <property name="margin-end">8</property>
-                                <property name="image">image2</property>
-                                <property name="always-show-image">True</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">4</property>
-                                <property name="top-attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="remove3">
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes" context="standardfilterdialog|remove3|tooltip_text">Remove</property>
-                                <property name="margin-end">8</property>
-                                <property name="image">image3</property>
-                                <property name="always-show-image">True</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">4</property>
-                                <property name="top-attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="remove4">
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes" context="standardfilterdialog|remove4|tooltip_text">Remove</property>
-                                <property name="margin-end">8</property>
-                                <property name="image">image4</property>
-                                <property name="always-show-image">True</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">4</property>
-                                <property name="top-attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <!-- n-columns=2 n-rows=1 -->
-                              <object class="GtkGrid">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <child>
-                                  <object class="GtkComboBoxText" id="val2">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="has-entry">True</property>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry">
-                                        <property name="can-focus">True</property>
-                                        <property name="activates-default">True</property>
-                                        <property name="truncate-multiline">True</property>
-                                      </object>
-                                    </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label5"/>
-                                    </accessibility>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="val2-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
-                                        <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|val1">Specifies a value to filter the field.</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="color2">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="model">liststore2</property>
-                                    <property name="entry-text-column">0</property>
-                                    <property name="id-column">1</property>
-                                    <child>
-                                      <object class="GtkCellRendererText"/>
-                                      <attributes>
-                                        <attribute name="text">1</attribute>
-                                      </attributes>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCellRendererPixbuf"/>
-                                      <attributes>
-                                        <attribute name="pixbuf">3</attribute>
-                                      </attributes>
-                                    </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label5"/>
-                                    </accessibility>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="color2-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color2-atkobject">Color</property>
-                                        <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color2">Specifies a color to filter the field.</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">3</property>
-                                <property name="top-attach">2</property>
                               </packing>
                             </child>
                             <child>
@@ -770,6 +409,268 @@
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkButton" id="remove1">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes" context="standardfilterdialog|remove1|tooltip_text">Remove</property>
+                                <property name="margin-end">8</property>
+                                <property name="image">image1</property>
+                                <property name="always-show-image">True</property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">4</property>
+                                <property name="top-attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="connect2">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <items>
+                                  <item translatable="yes" context="standardfilterdialog|connect2">AND</item>
+                                  <item translatable="yes" context="standardfilterdialog|connect2">OR</item>
+                                </items>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label2"/>
+                                </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="connect2-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect2-atkobject">Operator 2</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|connect2">For the following arguments, you can choose between the logical operators AND / OR.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="field2">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label3"/>
+                                </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="field2-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|field2-atkobject">Field Name 2</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|field2">Specifies the field names from the current table to set them in the argument.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="cond2">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <items>
+                                  <item>=</item>
+                                  <item>&lt;</item>
+                                  <item>&gt;</item>
+                                  <item>&lt;=</item>
+                                  <item>&gt;=</item>
+                                  <item>&lt;&gt;</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Contains</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not contain</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Begins with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Font color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
+                                </items>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label4"/>
+                                </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="cond2-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|cond2-atkobject">Condition 2</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|cond2">Specifies the comparative operators through which the entries in the Field name and Value fields can be linked.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">2</property>
+                                <property name="top-attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <!-- n-columns=2 n-rows=1 -->
+                              <object class="GtkGrid">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <child>
+                                  <object class="GtkComboBoxText" id="val2">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="has-entry">True</property>
+                                    <child internal-child="entry">
+                                      <object class="GtkEntry">
+                                        <property name="can-focus">True</property>
+                                        <property name="activates-default">True</property>
+                                        <property name="truncate-multiline">True</property>
+                                      </object>
+                                    </child>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label5"/>
+                                    </accessibility>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="val2-atkobject">
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|val1">Specifies a value to filter the field.</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="color2">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="model">liststore2</property>
+                                    <property name="entry-text-column">0</property>
+                                    <property name="id-column">1</property>
+                                    <child>
+                                      <object class="GtkCellRendererText"/>
+                                      <attributes>
+                                        <attribute name="text">1</attribute>
+                                      </attributes>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCellRendererPixbuf"/>
+                                      <attributes>
+                                        <attribute name="pixbuf">3</attribute>
+                                      </attributes>
+                                    </child>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label5"/>
+                                    </accessibility>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="color2-atkobject">
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color2-atkobject">Color</property>
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color2">Specifies a color to filter the field.</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">0</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">3</property>
+                                <property name="top-attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="remove2">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes" context="standardfilterdialog|remove2|tooltip_text">Remove</property>
+                                <property name="margin-end">8</property>
+                                <property name="image">image2</property>
+                                <property name="always-show-image">True</property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">4</property>
+                                <property name="top-attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="connect3">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <items>
+                                  <item translatable="yes" context="standardfilterdialog|connect3">AND</item>
+                                  <item translatable="yes" context="standardfilterdialog|connect3">OR</item>
+                                </items>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="connect3-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect3-atkobject">Operator 3</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="field3">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label3"/>
+                                </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="field3-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|field3-atkobject">Field Name 3</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|field3">Specifies the field names from the current table to set them in the argument.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="cond3">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <items>
+                                  <item>=</item>
+                                  <item>&lt;</item>
+                                  <item>&gt;</item>
+                                  <item>&lt;=</item>
+                                  <item>&gt;=</item>
+                                  <item>&lt;&gt;</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Contains</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not contain</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Begins with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Font color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
+                                </items>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label4"/>
+                                </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="cond3-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|cond3-atkobject">Condition 3</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|cond3">Specifies the comparative operators through which the entries in the Field name and Value fields can be linked.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">2</property>
+                                <property name="top-attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
                               <!-- n-columns=2 n-rows=1 -->
                               <object class="GtkGrid">
                                 <property name="visible">True</property>
@@ -844,6 +745,90 @@
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkButton" id="remove3">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes" context="standardfilterdialog|remove3|tooltip_text">Remove</property>
+                                <property name="margin-end">8</property>
+                                <property name="image">image3</property>
+                                <property name="always-show-image">True</property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">4</property>
+                                <property name="top-attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="connect4">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <items>
+                                  <item translatable="yes" context="standardfilterdialog|connect4">AND</item>
+                                  <item translatable="yes" context="standardfilterdialog|connect4">OR</item>
+                                </items>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="connect4-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect4-atkobject">Operator 4</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="field4">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="field4-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|field4-atkobject">Field Name 4</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="cond4">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <items>
+                                  <item>=</item>
+                                  <item>&lt;</item>
+                                  <item>&gt;</item>
+                                  <item>&lt;=</item>
+                                  <item>&gt;=</item>
+                                  <item>&lt;&gt;</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Largest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Smallest %</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Contains</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not contain</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Begins with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Font color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
+                                </items>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="cond4-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|cond4-atkobject">Condition 4</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">2</property>
+                                <property name="top-attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
                               <!-- n-columns=2 n-rows=1 -->
                               <object class="GtkGrid">
                                 <property name="visible">True</property>
@@ -914,6 +899,21 @@
                               </object>
                               <packing>
                                 <property name="left-attach">3</property>
+                                <property name="top-attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="remove4">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes" context="standardfilterdialog|remove4|tooltip_text">Remove</property>
+                                <property name="margin-end">8</property>
+                                <property name="image">image4</property>
+                                <property name="always-show-image">True</property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">4</property>
                                 <property name="top-attach">4</property>
                               </packing>
                             </child>
@@ -994,26 +994,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="header">
-                        <property name="label" translatable="yes" context="standardfilterdialog|header">Range c_ontains column labels</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="header-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|header">Includes the column labels in the first row of a cell range.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkCheckButton" id="regexp">
                         <property name="label" translatable="yes" context="standardfilterdialog|regexp">Regular _expressions</property>
                         <property name="visible">True</property>
@@ -1031,6 +1011,26 @@
                       <packing>
                         <property name="left-attach">1</property>
                         <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="header">
+                        <property name="label" translatable="yes" context="standardfilterdialog|header">Range c_ontains column labels</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="header-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|header">Includes the column labels in the first row of a cell range.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
