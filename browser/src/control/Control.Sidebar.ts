@@ -19,9 +19,140 @@ class Sidebar extends SidebarBase {
 	isUserRequest: boolean; /// automatic or user request to show the sidebar
 	sidebarShownTheFirstTime: boolean = true;
 
+	tabsContainer: HTMLElement;
+	propertiesTabPanel: HTMLElement;
+	extensionsTabPanel: HTMLElement;
+
 	constructor(map: MapInterface) {
 		super(map, SidebarType.Sidebar);
 		this.isUserRequest = false;
+	}
+
+	protected setupContainer(parentContainer?: HTMLElement) {
+		super.setupContainer(parentContainer);
+
+		this.refreshTabs();
+	}
+
+	refreshTabs() {
+		const hasExtensions =
+			!!window.enableExperimentalFeatures &&
+			Object.keys(app.map._extensions || {}).length > 0;
+		if (hasExtensions === !!this.tabsContainer) return;
+		if (hasExtensions) this.buildTabs();
+		else this.removeTabs();
+		this.onResize();
+	}
+
+	private removeTabs() {
+		if (!this.tabsContainer) return;
+		const sidebarPanel = document.getElementById(`${this.type}-panel`);
+		if (sidebarPanel && this.container)
+			sidebarPanel.appendChild(this.container);
+		this.tabsContainer.remove();
+		if (this.propertiesTabPanel) this.propertiesTabPanel.remove();
+		if (this.extensionsTabPanel) this.extensionsTabPanel.remove();
+		this.tabsContainer = null;
+		this.propertiesTabPanel = null;
+		this.extensionsTabPanel = null;
+	}
+
+	private buildTabs() {
+		const sidebarPanel = document.getElementById(`${this.type}-panel`);
+		if (!sidebarPanel || this.tabsContainer) return;
+
+		const tabs = window.L.DomUtil.create('div', 'navigation-tabs sidebar-tabs');
+		tabs.id = 'sidebar-tabs';
+		tabs.setAttribute('role', 'tablist');
+
+		const propertiesTab = window.L.DomUtil.create('button', 'tab', tabs);
+		propertiesTab.id = 'sidebar-tab-properties';
+		propertiesTab.textContent = _('Properties');
+		propertiesTab.setAttribute('aria-controls', 'sidebar-properties-tabpanel');
+
+		const extensionsTab = window.L.DomUtil.create('button', 'tab', tabs);
+		extensionsTab.id = 'sidebar-tab-extensions';
+		extensionsTab.textContent = _('Extensions');
+		extensionsTab.setAttribute('aria-controls', 'sidebar-extensions-tabpanel');
+
+		this.propertiesTabPanel = window.L.DomUtil.create(
+			'div',
+			'sidebar-tabpanel',
+		);
+		this.propertiesTabPanel.id = 'sidebar-properties-tabpanel';
+		this.propertiesTabPanel.setAttribute('role', 'tabpanel');
+		this.propertiesTabPanel.setAttribute(
+			'aria-labelledby',
+			'sidebar-tab-properties',
+		);
+
+		this.extensionsTabPanel = window.L.DomUtil.create(
+			'div',
+			'sidebar-tabpanel',
+		);
+		this.extensionsTabPanel.id = 'sidebar-extensions-tabpanel';
+		this.extensionsTabPanel.setAttribute('role', 'tabpanel');
+		this.extensionsTabPanel.setAttribute(
+			'aria-labelledby',
+			'sidebar-tab-extensions',
+		);
+		this.extensionsTabPanel.style.display = 'none';
+
+		const tabButtons = [propertiesTab, extensionsTab];
+		const contentDivs = [this.propertiesTabPanel, this.extensionsTabPanel];
+
+		tabButtons.forEach((tab, index) => {
+			tab.setAttribute('role', 'tab');
+			if (index === 0) {
+				tab.setAttribute('aria-selected', 'true');
+				tab.classList.add('selected');
+			} else {
+				tab.setAttribute('aria-selected', 'false');
+				tab.setAttribute('tabindex', '-1');
+			}
+			tab.addEventListener('click', () => this.switchTab(tab.id));
+		});
+
+		JSDialog.KeyboardTabNavigation(tabButtons, contentDivs);
+
+		sidebarPanel.append(tabs, this.propertiesTabPanel, this.extensionsTabPanel);
+		if (this.container) this.propertiesTabPanel.appendChild(this.container);
+		this.tabsContainer = tabs;
+	}
+
+	private switchTab(tabId: string) {
+		this.tabsContainer.querySelectorAll('.tab').forEach((t) => {
+			t.classList.remove('selected');
+			t.setAttribute('aria-selected', 'false');
+			t.setAttribute('tabindex', '-1');
+		});
+
+		const tab = this.tabsContainer.querySelector('#' + tabId) as HTMLElement;
+		if (tab) {
+			tab.classList.add('selected');
+			tab.setAttribute('aria-selected', 'true');
+			tab.removeAttribute('tabindex');
+		}
+
+		const showProperties = tabId === 'sidebar-tab-properties';
+		this.propertiesTabPanel.style.display = showProperties ? '' : 'none';
+		this.extensionsTabPanel.style.display = showProperties ? 'none' : '';
+	}
+
+	mountExtensionPanel(panel: HTMLElement): boolean {
+		if (!this.extensionsTabPanel) return false;
+		this.extensionsTabPanel.appendChild(panel);
+		return true;
+	}
+
+	showExtensionsTab() {
+		if (this.tabsContainer) this.switchTab('sidebar-tab-extensions');
+	}
+
+	protected get reservedContainerHeight(): number {
+		return this.tabsContainer
+			? this.tabsContainer.getBoundingClientRect().height
+			: 0;
 	}
 
 	onAdd(map: MapInterface) {

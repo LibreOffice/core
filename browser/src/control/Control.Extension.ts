@@ -261,10 +261,11 @@ window.L.Control.Extension = window.L.Control.extend({
 		});
 	},
 
-	// Dispatcher entry point.  The Extensions tab fires
-	// extension-toggle-<id>, but the X button on the panel is the only
-	// way to remove the extension; here a click on the toolitem just
-	// ensures the panel is present and unfolded inside the sidebar.
+	// Dispatcher entry point.  The notebookbar Extensions tab fires
+	// extension-toggle-<id>; here a click on the toolitem ensures the
+	// panel is present and unfolded inside the sidebar's Extensions tab,
+	// makes the sidebar visible and switches to that tab.  The remove
+	// button on the panel header is the way to deactivate the extension.
 	toggle: function () {
 		if (this._panel) {
 			this._panel.classList.remove('folded');
@@ -272,6 +273,8 @@ window.L.Control.Extension = window.L.Control.extend({
 			this._showPanel();
 		}
 		this._ensureSidebarVisible();
+		if (this.map.sidebar && this.map.sidebar.showExtensionsTab)
+			this.map.sidebar.showExtensionsTab();
 	},
 
 	// Make sure the sidebar dock is shown so the user can see the panel
@@ -296,13 +299,13 @@ window.L.Control.Extension = window.L.Control.extend({
 	_showPanel: function () {
 		const manifest: ExtensionManifest = this.options.manifest;
 
-		// The extension is rendered as a foldable panel prepended to
-		// #sidebar-panel - sitting above whichever core deck is currently
-		// rendered in #sidebar-container, both coexisting.  Folding only
-		// hides the iframe via CSS so the iframe stays in the DOM and its
-		// listeners keep working; the X button (handled by _removePanel)
-		// runs the Extension_Teardown handshake to detach listeners and
-		// then drops the panel.
+		// The extension is rendered as a foldable panel inside the sidebar's
+		// Extensions tab (#sidebar-extensions-tabpanel), so it looks like the
+		// Properties sections rather than stacking on top of the sidebar.
+		// Folding only hides the iframe via CSS so the iframe stays in the DOM
+		// and its listeners keep working; the remove button (handled by
+		// _removePanel) runs the Extension_Teardown handshake to detach
+		// listeners and then drops the panel.
 		const sidebarPanel = document.getElementById('sidebar-panel');
 		if (!sidebarPanel) return;
 
@@ -313,30 +316,34 @@ window.L.Control.Extension = window.L.Control.extend({
 		const header = document.createElement('div');
 		header.classList.add('extension-panel-header');
 		header.addEventListener('click', (e) => {
-			// Don't toggle fold when the click was on the close button.
-			if ((e.target as HTMLElement).closest('.extension-panel-close')) return;
+			// Don't toggle fold when the click was on the remove button.
+			if ((e.target as HTMLElement).closest('.extension-panel-remove')) return;
 			panel.classList.toggle('folded');
 		});
-
-		const disclosure = document.createElement('span');
-		disclosure.classList.add('extension-panel-disclosure');
-		disclosure.setAttribute('aria-hidden', 'true');
-		header.appendChild(disclosure);
 
 		const title = document.createElement('span');
 		title.classList.add('extension-panel-title');
 		title.textContent = manifest.name;
 		header.appendChild(title);
 
-		const closeBtn = document.createElement('button');
-		closeBtn.classList.add('extension-panel-close');
-		closeBtn.textContent = 'X';
-		closeBtn.title = _('Close extension');
-		closeBtn.onclick = (e) => {
+		const removeBtn = document.createElement('button');
+		removeBtn.classList.add(
+			'ui-content',
+			'unobutton',
+			'extension-panel-remove',
+		);
+		const removeText = _('Deactivate extension');
+		removeBtn.setAttribute('aria-label', removeText);
+		removeBtn.title = removeText;
+		const removeIcon = document.createElement('img');
+		removeIcon.alt = '';
+		app.LOUtil.setImage(removeIcon, 'lc_aichat_trash.svg', this.map);
+		removeBtn.appendChild(removeIcon);
+		removeBtn.onclick = (e) => {
 			e.stopPropagation();
 			this._removePanel();
 		};
-		header.appendChild(closeBtn);
+		header.appendChild(removeBtn);
 		panel.appendChild(header);
 
 		const body = document.createElement('div');
@@ -373,10 +380,14 @@ window.L.Control.Extension = window.L.Control.extend({
 			panel.addEventListener(evt, stopProp);
 		});
 
-		// Prepend so the extension sits above the core-rendered deck in
-		// #sidebar-container.  We're a sibling of #sidebar-container, not
-		// inside it, so a core sidebar rebuild won't clobber us.
-		sidebarPanel.insertBefore(panel, sidebarPanel.firstChild);
+		// Mount inside the Extensions tab.  Fall back to prepending to
+		// #sidebar-panel if the tab shell isn't present (shouldn't happen when
+		// an extension toolitem is clickable, since discovery builds the shell).
+		const mounted =
+			this.map.sidebar && this.map.sidebar.mountExtensionPanel
+				? this.map.sidebar.mountExtensionPanel(panel)
+				: false;
+		if (!mounted) sidebarPanel.insertBefore(panel, sidebarPanel.firstChild);
 		this._panel = panel;
 	},
 

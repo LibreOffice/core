@@ -9,29 +9,30 @@
  */
 
 /*
- * An extension's iframe is rendered as a foldable panel prepended to
- * #sidebar-panel - it sits above whatever core deck (Properties, ...)
- * is currently rendered, and coexists with it.  Folding hides the
- * iframe via CSS only so the iframe stays in the DOM and keeps its
- * listeners attached.  Clicking the close X tears the iframe down
- * (Extension_Teardown handshake) and removes the panel.
+ * An extension's iframe is rendered as a foldable panel inside the sidebar's
+ * Extensions tab (#sidebar-extensions-tabpanel), styled to match the
+ * Properties sections.  Folding hides the iframe via CSS only so the iframe
+ * stays in the DOM and keeps its listeners attached.  Clicking the remove
+ * button tears the iframe down (Extension_Teardown handshake) and removes the
+ * panel, deactivating the extension.
  */
 
 .extension-panel {
 	display: flex;
 	flex-direction: column;
-	border-bottom: 1px solid var(--color-border);
-	background: var(--color-main-background);
+	border-bottom: 1px solid var(--color-border-lighter);
 }
 
 .extension-panel-header {
 	display: flex;
 	align-items: center;
-	padding: 6px 12px;
-	background: var(--color-background-darker);
+	height: var(--sidebar-header-height, 34px);
+	padding-inline: 8px;
 	cursor: pointer;
 	user-select: none;
 	flex-shrink: 0;
+	color: var(--color-main-text);
+	font-family: var(--cool-font);
 }
 
 .extension-panel-disclosure {
@@ -49,22 +50,64 @@
 	transform: rotate(-90deg);
 }
 
+.extension-panel-header:hover {
+	background: var(--color-background-darker);
+}
+
 .extension-panel-title {
 	flex: 1;
-	font-weight: 600;
+	color: var(--color-main-text);
+	font-family: var(--cool-font);
+	font-size: var(--header-font-size);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-.extension-panel-close {
-	background: none;
+.extension-panel-title::before {
+	content: 'V';
+	color: transparent;
+	display: inline-block;
+	margin-inline-end: 7px;
+	background: transparent url('images/lc_menu_chevron.svg') no-repeat center;
+	filter: brightness(0.5);
+	transform: rotate(90deg);
+}
+
+.extension-panel.folded .extension-panel-title::before {
+	transform: none;
+	background-position: center right;
+}
+
+[data-theme='dark'] .extension-panel-title::before {
+	filter: brightness(1);
+}
+
+.extension-panel-remove {
+	flex-shrink: 0;
+	box-sizing: border-box;
+	width: var(--btn-size);
+	height: var(--btn-size);
+	padding: var(--btn-padding);
 	border: none;
-	color: inherit;
-	font-size: 14px;
+	border-radius: var(--border-radius);
+	background-color: transparent;
 	cursor: pointer;
-	padding: 0 4px;
 	margin-inline-start: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0.75;
+}
+
+.extension-panel-remove:hover {
+	background-color: var(--color-background-darker);
+	opacity: 1;
+}
+
+.extension-panel-remove img {
+	width: var(--btn-img-size);
+	height: var(--btn-img-size);
 }
 
 .extension-panel-body {
