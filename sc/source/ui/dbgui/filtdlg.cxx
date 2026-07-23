@@ -168,6 +168,16 @@ ScopedVclPtr<VirtualDevice> lcl_getColorImage(const Color &rColor)
 
 void ScFilterDlg::Init()
 {
+    m_xLbField1->append_text(u"0000000000"_ustr);
+    m_xLbField1->set_active(0);
+    auto nPrefWidth = m_xLbField1->get_preferred_size().Width();
+    m_xLbField1->clear();
+
+    m_xLbField1->set_size_request(nPrefWidth, -1);
+    m_xLbField2->set_size_request(nPrefWidth, -1);
+    m_xLbField3->set_size_request(nPrefWidth, -1);
+    m_xLbField4->set_size_request(nPrefWidth, -1);
+
     m_xBtnClear->connect_clicked   ( LINK( this, ScFilterDlg, BtnClearHdl ) );
     m_xBtnOk->connect_clicked      ( LINK( this, ScFilterDlg, EndDlgHdl ) );
     m_xBtnCancel->connect_clicked  ( LINK( this, ScFilterDlg, EndDlgHdl ) );
@@ -182,16 +192,6 @@ void ScFilterDlg::Init()
     m_xLbConnect2->connect_changed( LINK( this, ScFilterDlg, LbSelectHdl ) );
     m_xLbConnect3->connect_changed( LINK( this, ScFilterDlg, LbSelectHdl ) );
     m_xLbConnect4->connect_changed( LINK( this, ScFilterDlg, LbSelectHdl ) );
-
-    m_xLbField1->append_text(u"0000000000"_ustr);
-    m_xLbField1->set_active(0);
-    auto nPrefWidth = m_xLbField1->get_preferred_size().Width();
-    m_xLbField1->clear();
-
-    m_xLbField1->set_size_request(nPrefWidth, -1);
-    m_xLbField2->set_size_request(nPrefWidth, -1);
-    m_xLbField3->set_size_request(nPrefWidth, -1);
-    m_xLbField4->set_size_request(nPrefWidth, -1);
 
     m_xLbCond1->connect_changed( LINK( this, ScFilterDlg, LbSelectHdl ) );
     m_xLbCond2->connect_changed( LINK( this, ScFilterDlg, LbSelectHdl ) );
