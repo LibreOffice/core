@@ -195,6 +195,45 @@ static IMP standardImpOfInputAccessoryView = nil;
                                                                       options:0
                                                                       metrics:nil
                                                                         views:views]];
+
+    // Listener for keyboard dismissal. Calc needs to leave the in-cell edit so the
+    // keyboard is not immediately reshown by the cursor-visible/resize refocus path
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+}
+
+- (void)keyboardWillHide:(NSNotification*)notification
+{
+    if (self.webView == nil)
+        return;
+
+    if (self.view.window == nil || self.presentedViewController != nil)
+        return;
+
+    if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive)
+        return;
+
+    if (isExternalKeyboardAttached())
+        return;
+
+    NSString* notifyKeyboardHidden = @"{"
+                                      "    if (window.onNativeKeyboardHidden) {"
+                                      "        window.onNativeKeyboardHidden();"
+                                      "    }"
+                                      "}";
+
+    [self.webView evaluateJavaScript:notifyKeyboardHidden
+                   completionHandler:^(id _Nullable obj, NSError* _Nullable error) {
+                     if (error)
+                     {
+                         NSString* jsException = error.userInfo[@"WKJavaScriptExceptionMessage"];
+                         if (jsException != nil)
+                             LOG_ERR("JavaScript exception in onNativeKeyboardHidden: " <<
+                                     [jsException UTF8String]);
+                     }
+                   }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -218,6 +257,7 @@ static IMP standardImpOfInputAccessoryView = nil;
 }
 
 - (IBAction)dismissDocumentViewController {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [self dismissViewControllerAnimated:YES completion:^ {
             [self.document closeWithCompletionHandler:^(BOOL success){
                     LOG_TRC("close completion handler gets " << (success?"YES":"NO"));

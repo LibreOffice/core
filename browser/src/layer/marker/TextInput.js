@@ -154,6 +154,18 @@ window.L.TextInput = window.L.Layer.extend({
 					that2._onKeyUp(e);
 				};
 			};
+
+			// The iOS app calls this once the on-screen keyboard is dismissed.
+			window.onNativeKeyboardHidden = function () {
+				if (
+					app.map.getDocType() === 'spreadsheet' &&
+					app.file.textCursor.visible
+				) {
+					app.setCursorVisibility(false);
+					app.dispatcher.acceptFormulaInPlace();
+				}
+			};
+
 			window.postMobileMessage('FOCUSIFHWKBD');
 		}
 
@@ -164,6 +176,7 @@ window.L.TextInput = window.L.Layer.extend({
 		window.MagicToGetHWKeyboardWorking = null;
 		window.MagicKeyDownHandler = null;
 		window.MagicKeyUpHandler = null;
+		window.onNativeKeyboardHidden = null;
 
 		if (this._container && this._container.parentNode) {
 			this._container.parentNode.removeChild(this._container);

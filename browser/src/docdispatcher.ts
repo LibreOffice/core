@@ -682,17 +682,20 @@ class Dispatcher {
 				section.openContextMenuForCurrentSelection();
 		};
 
+		// Save the cell edit. On a small screen the edit is saved with an Enter key
+		// press, so the cell cursor also moves on to the next cell.
 		this.actionsMap['acceptformula'] = function () {
-			if (window.mode.isSmallScreenDevice()) {
-				app.map.focus();
-				app.map._docLayer.postKeyboardEvent(
-					'input',
-					app.map.keyboard.keyCodes.enter,
-					app.map.keyboard._toUNOKeyCode(app.map.keyboard.keyCodes.enter),
-				);
-			} else {
-				app.map.sendUnoCommand('.uno:AcceptFormula');
+			if (!window.mode.isSmallScreenDevice()) {
+				app.dispatcher.acceptFormulaInPlace();
+				return;
 			}
+
+			app.map.focus();
+			app.map._docLayer.postKeyboardEvent(
+				'input',
+				app.map.keyboard.keyCodes.enter,
+				app.map.keyboard._toUNOKeyCode(app.map.keyboard.keyCodes.enter),
+			);
 
 			app.map.onFormulaBarBlur();
 			app.map.formulabarBlur();
@@ -1310,6 +1313,15 @@ class Dispatcher {
 		}
 
 		if (window.mode.isSmallScreenDevice()) this.addMobileCommands();
+	}
+
+	// Save the cell edit and leave the cell cursor on the same cell.
+	public acceptFormulaInPlace() {
+		app.map.sendUnoCommand('.uno:AcceptFormula');
+
+		app.map.onFormulaBarBlur();
+		app.map.formulabarBlur();
+		app.map.formulabarSetDirty();
 	}
 
 	public dispatch(action: string, data?: any) {
