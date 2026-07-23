@@ -244,6 +244,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"modules/schart/ui/insertgriddlg.ui",
     u"modules/schart/ui/inserttitledlg.ui",
     u"modules/schart/ui/smoothlinesdlg.ui",
+    u"modules/schart/ui/steppedlinesdlg.ui",
     u"modules/sdraw/ui/dlgsnap.ui",
     u"modules/sdraw/ui/drawchardialog.ui",
     u"modules/sdraw/ui/drawpagedialog.ui",
