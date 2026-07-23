@@ -35,7 +35,6 @@ $(eval $(call gb_CppunitTest_use_ure,canvas_test))
 $(eval $(call gb_CppunitTest_use_vcl,canvas_test))
 
 $(eval $(call gb_CppunitTest_use_components,canvas_test,\
-    canvas/source/vcl/vclcanvas \
     canvas/source/factory/canvasfactory \
     configmgr/source/configmgr \
     i18npool/util/i18npool \

@@ -20,23 +20,9 @@
 
 module com { module sun { module star { module rendering {
 
-/** The CanvasFactory is used to create the Canvas
-    objects, evaluating the user's configuration preferences from
-
-    <code>/org.openoffice.VCL/Settings/Canvas/PreferredServices</code>.
-
-    The latter specifies a string list of service names to use.
-
-    <p>
-    Instantiating this service, you can use its
-    com::sun::star::lang::XMultiComponentFactory
-    interface to create Canvas objects, passing an empty string
-    as service specifier (default).
-    If you want to manually override the configured service list, you can pass
-    a service name to try first.
-    </p>
+/** The CanvasFactory is used to create XCanvas objects.
 */
-service CanvasFactory : com::sun::star::lang::XMultiComponentFactory;
+service CanvasFactory : XCanvasFactory;
 
 }; }; }; };
 

@@ -24,7 +24,7 @@
 #include <vcl/svapp.hxx>
 
 #include "bitmapbackbuffer.hxx"
-#include "impltools.hxx"
+#include <impltools.hxx>
 
 namespace vclcanvas
 {

@@ -22,8 +22,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
 
-class CanvasSettings;
-
 class OfaMiscTabPage : public SfxTabPage
 {
 private:
@@ -73,8 +71,6 @@ public:
 class OfaViewTabPage : public SfxTabPage
 {
 private:
-    std::unique_ptr<CanvasSettings>         pCanvasSettings;
-
     std::unique_ptr<weld::CheckButton> m_xFontAntiAliasing;
     std::unique_ptr<weld::Widget> m_xFontAntiAliasingImg;
     std::unique_ptr<weld::Label> m_xAAPointLimitLabel;
@@ -84,8 +80,6 @@ private:
     std::unique_ptr<weld::CheckButton> m_xFontShowCB;
     std::unique_ptr<weld::Widget> m_xFontShowImg;
 
-    std::unique_ptr<weld::CheckButton> m_xUseHardwareAccell;
-    std::unique_ptr<weld::Widget> m_xUseHardwareAccellImg;
     std::unique_ptr<weld::CheckButton> m_xUseAntiAliase;
     std::unique_ptr<weld::Widget> m_xUseAntiAliaseImg;
     std::unique_ptr<weld::CheckButton> m_xUseSkia;
@@ -108,7 +102,6 @@ private:
     DECL_LINK(OnRunGPTestClick, weld::Button&, void);
     void UpdateSkiaStatus();
     void HideSkiaWidgets();
-    void UpdateHardwareAccelStatus();
 
 public:
     OfaViewTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

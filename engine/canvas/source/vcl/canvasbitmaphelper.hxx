@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "canvashelper.hxx"
+#include <canvashelper.hxx>
 
 #include <vcl/bitmap.hxx>
 

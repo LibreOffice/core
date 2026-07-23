@@ -27,7 +27,7 @@
 #include <vcl/dibtools.hxx>
 
 #include "canvasbitmap.hxx"
-#include "devicehelper.hxx"
+#include <devicehelper.hxx>
 
 using namespace ::com::sun::star;
 

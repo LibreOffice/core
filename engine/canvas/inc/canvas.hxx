@@ -21,8 +21,6 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
@@ -31,10 +29,10 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 
-#include <base/basemutexhelper.hxx>
-#include <base/bitmapcanvasbase.hxx>
-#include <base/integerbitmapbase.hxx>
-#include <base/graphicdevicebase.hxx>
+#include "./base/basemutexhelper.hxx"
+#include "./base/bitmapcanvasbase.hxx"
+#include "./base/integerbitmapbase.hxx"
+#include "./base/graphicdevicebase.hxx"
 
 #include "canvashelper.hxx"
 #include "impltools.hxx"
@@ -47,9 +45,7 @@ namespace vclcanvas
                                              css::rendering::XIntegerBitmap,
                                              css::rendering::XGraphicDevice,
                                              css::util::XUpdatable,
-                                             css::beans::XPropertySet,
-                                             css::lang::XServiceName,
-                                             css::lang::XServiceInfo >    GraphicDeviceBase_Base;
+                                             css::beans::XPropertySet >    GraphicDeviceBase_Base;
     typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >,
                                            DeviceHelper,
                                            vclcanvastools::LocalGuard,
@@ -74,12 +70,7 @@ namespace vclcanvas
                    public RepaintTarget
     {
     public:
-        Canvas( const cpo::uno::Sequence<
-                      cpo::uno::Any >&               aArguments,
-                const css::uno::Reference<
-                      css::uno::XComponentContext >& rxContext );
-
-        void initialize();
+        Canvas( sal_Int64 nOutDev );
 
         /// For resource tracking
         virtual ~Canvas() override;
@@ -94,13 +85,6 @@ namespace vclcanvas
         //                                       V                 V                            V
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( Canvas,   GraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
 
-        // XServiceName
-        virtual OUString getServiceName(  ) override;
-
-        OUString getImplementationName() override;
-        bool supportsService(OUString const & ServiceName) override;
-        cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
-
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                 rGrf,
                               const css::rendering::ViewState&              viewState,
@@ -109,8 +93,6 @@ namespace vclcanvas
                               const ::Size&                                 rSz,
                               const GraphicAttr&                            rAttr ) const override;
 
-    private:
-        cpo::uno::Sequence< cpo::uno::Any >                maArguments;
     };
 }
 

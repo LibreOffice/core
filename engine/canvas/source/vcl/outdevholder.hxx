@@ -21,7 +21,7 @@
 
 #include <vcl/outdev.hxx>
 
-#include "outdevprovider.hxx"
+#include <outdevprovider.hxx>
 
 namespace vclcanvas
 {

@@ -30,7 +30,6 @@ gb_MERGE_LIBRARY_LIST := \
 	basegfx \
 	bib \
 	cached1 \
-	canvasfactory \
 	canvastools \
 	chart2 \
 	chart2api \

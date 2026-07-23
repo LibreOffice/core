@@ -49,8 +49,8 @@
 
 #include "canvasbitmap.hxx"
 #include "canvasfont.hxx"
-#include "canvashelper.hxx"
-#include "impltools.hxx"
+#include <canvashelper.hxx>
+#include <impltools.hxx>
 #include "textlayout.hxx"
 
 

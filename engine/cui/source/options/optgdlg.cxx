@@ -51,7 +51,6 @@
 #include <GraphicsTestsDialog.hxx>
 #include <unotools/searchopt.hxx>
 #include <sal/log.hxx>
-#include <officecfg/Office/Canvas.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <comphelper/configuration.hxx>
@@ -357,114 +356,10 @@ IMPL_STATIC_LINK_NOARG(OfaMiscTabPage, FileAssocClick, weld::Button&, void)
 }
 #endif
 
-class CanvasSettings
-{
-public:
-    CanvasSettings();
-
-    bool    IsHardwareAccelerationAvailable() const;
-
-private:
-    typedef std::vector< std::pair<OUString,Sequence<OUString> > > ServiceVector;
-
-    Reference<XNameAccess> mxForceFlagNameAccess;
-    ServiceVector          maAvailableImplementations;
-    mutable bool           mbHWAccelAvailable;
-    mutable bool           mbHWAccelChecked;
-};
-
-CanvasSettings::CanvasSettings() :
-    mbHWAccelAvailable(false),
-    mbHWAccelChecked(false)
-{
-    try
-    {
-        Reference<XMultiServiceFactory> xConfigProvider(
-            css::configuration::theDefaultProvider::get(
-                comphelper::getProcessComponentContext()));
-
-        Sequence<Any> aArgs1(comphelper::InitAnyPropertySequence(
-        {
-            {"nodepath", Any(u"/org.openoffice.Office.Canvas"_ustr)}
-        }));
-        mxForceFlagNameAccess.set(
-            xConfigProvider->createInstanceWithArguments(
-                u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
-                aArgs1 ),
-            UNO_QUERY_THROW );
-
-        Sequence<Any> aArgs2(comphelper::InitAnyPropertySequence(
-        {
-            {"nodepath", Any(u"/org.openoffice.Office.Canvas/CanvasServiceList"_ustr)}
-        }));
-        Reference<XNameAccess> xNameAccess(
-            xConfigProvider->createInstanceWithArguments(
-                u"com.sun.star.configuration.ConfigurationAccess"_ustr,
-                aArgs2 ), UNO_QUERY_THROW );
-        Reference<XHierarchicalNameAccess> xHierarchicalNameAccess(
-            xNameAccess, UNO_QUERY_THROW);
-
-        for (auto& serviceName : xNameAccess->getElementNames())
-        {
-            Reference<XNameAccess> xEntryNameAccess(
-                xHierarchicalNameAccess->getByHierarchicalName(serviceName),
-                UNO_QUERY );
-
-            if( xEntryNameAccess.is() )
-            {
-                Sequence<OUString> preferredImplementations;
-                if( xEntryNameAccess->getByName(u"PreferredImplementations"_ustr) >>= preferredImplementations )
-                    maAvailableImplementations.emplace_back(serviceName, preferredImplementations);
-            }
-        }
-    }
-    catch (const Exception&)
-    {
-    }
-}
-
-bool CanvasSettings::IsHardwareAccelerationAvailable() const
-{
-    if( !mbHWAccelChecked )
-    {
-        mbHWAccelChecked = true;
-
-        Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-
-        // check whether any of the service lists has an
-        // implementation that presents the "HardwareAcceleration" property
-        for (auto const& availableImpl : maAvailableImplementations)
-        {
-            for (auto& currImpl : availableImpl.second)
-            {
-                try
-                {
-                    Reference<XPropertySet> xPropSet( xFactory->createInstance(
-                                                          currImpl.trim() ),
-                                                      UNO_QUERY_THROW );
-                    bool bHasAccel(false);
-                    if( xPropSet->getPropertyValue(u"HardwareAcceleration"_ustr) >>= bHasAccel )
-                        if( bHasAccel )
-                        {
-                            mbHWAccelAvailable = true;
-                            return mbHWAccelAvailable;
-                        }
-                }
-                catch (const Exception&)
-                {
-                }
-            }
-        }
-    }
-
-    return mbHWAccelAvailable;
-}
-
 // class OfaViewTabPage --------------------------------------------------
 
 OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, u"cui/ui/optviewpage.ui"_ustr, u"OptViewPage"_ustr, &rSet)
-    , pCanvasSettings(new CanvasSettings)
     , m_xFontAntiAliasing(m_xBuilder->weld_check_button(u"aafont"_ustr))
     , m_xFontAntiAliasingImg(m_xBuilder->weld_widget(u"lockaafont"_ustr))
     , m_xAAPointLimitLabel(m_xBuilder->weld_label(u"aafrom"_ustr))
@@ -472,8 +367,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xAAPointLimit(m_xBuilder->weld_metric_spin_button(u"aanf"_ustr, FieldUnit::PIXEL))
     , m_xFontShowCB(m_xBuilder->weld_check_button(u"showfontpreview"_ustr))
     , m_xFontShowImg(m_xBuilder->weld_widget(u"lockshowfontpreview"_ustr))
-    , m_xUseHardwareAccell(m_xBuilder->weld_check_button(u"useaccel"_ustr))
-    , m_xUseHardwareAccellImg(m_xBuilder->weld_widget(u"lockuseaccel"_ustr))
     , m_xUseAntiAliase(m_xBuilder->weld_check_button(u"useaa"_ustr))
     , m_xUseAntiAliaseImg(m_xBuilder->weld_widget(u"lockuseaa"_ustr))
     , m_xUseSkia(m_xBuilder->weld_check_button(u"useskia"_ustr))
@@ -580,9 +473,6 @@ void OfaViewTabPage::UpdateSkiaStatus()
     m_xForceSkiaRasterImg->set_visible(officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly());
     m_xSkiaLog->set_sensitive(bEnabled);
 
-    // Technically the 'use hardware acceleration' option could be used to mean !forceSkiaRaster, but the implementation
-    // of the option is so tied to the implementation of the canvas module that it's simpler to ignore it.
-    UpdateHardwareAccelStatus();
 #else
     HideSkiaWidgets();
 #endif
@@ -607,7 +497,7 @@ OUString OfaViewTabPage::GetAllStrings()
     }
 
     OUString checkButton[]
-        = { u"useaccel"_ustr, u"useaa"_ustr, u"useskia"_ustr, u"forceskiaraster"_ustr, u"showfontpreview"_ustr, u"aafont"_ustr };
+        = { u"useaa"_ustr, u"useskia"_ustr, u"forceskiaraster"_ustr, u"showfontpreview"_ustr, u"aafont"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -660,16 +550,6 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     {
         officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::set(m_xFontShowCB->get_active(), xChanges);
         bModified = true;
-    }
-
-    // #i95644#  if disabled, do not use value, see in ::Reset()
-    if (m_xUseHardwareAccell->get_sensitive())
-    {
-        if(m_xUseHardwareAccell->get_state_changed_from_saved())
-        {
-            officecfg::Office::Canvas::ForceSafeServiceImpl::set(m_xUseHardwareAccell->get_active(), xChanges);
-            bModified = true;
-        }
     }
 
     // #i95644#  if disabled, do not use value, see in ::Reset()
@@ -754,9 +634,6 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xFontShowCB->set_sensitive(bEnable);
     m_xFontShowImg->set_visible(!bEnable);
 
-    UpdateHardwareAccelStatus();
-    m_xUseHardwareAccell->save_state();
-
     { // #i95644# AntiAliasing
         m_xUseAntiAliase->set_active(SvtOptionsDrawinglayer::IsAntiAliasing());
         bEnable = !officecfg::Office::Common::Drawinglayer::AntiAliasing::isReadOnly();
@@ -780,27 +657,6 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 
     OnAntialiasingToggled(*m_xFontAntiAliasing);
     UpdateSkiaStatus();
-}
-
-void OfaViewTabPage::UpdateHardwareAccelStatus()
-{
-    // #i95644# HW accel (unified to disable mechanism)
-    bool bHardwareAccRO = officecfg::Office::Canvas::ForceSafeServiceImpl::isReadOnly();
-    if(pCanvasSettings->IsHardwareAccelerationAvailable())
-    {
-        m_xUseHardwareAccell->set_active(officecfg::Office::Canvas::ForceSafeServiceImpl::get());
-        m_xUseHardwareAccell->set_sensitive(!bHardwareAccRO);
-        m_xUseHardwareAccellImg->set_visible(bHardwareAccRO);
-    }
-    else
-    {
-        m_xUseHardwareAccell->set_active(false);
-        m_xUseHardwareAccell->set_sensitive(false);
-        m_xUseHardwareAccellImg->set_visible(true);
-    }
-#if HAVE_FEATURE_SKIA
-    m_xUseHardwareAccell->set_sensitive(!bHardwareAccRO && !m_xUseSkia->get_active());
-#endif
 }
 
 struct LanguageConfig_Impl

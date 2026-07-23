@@ -45,8 +45,8 @@
 #include <canvas/canvastools.hxx>
 #include <parametricpolypolygon.hxx>
 
-#include "canvashelper.hxx"
-#include "impltools.hxx"
+#include <canvashelper.hxx>
+#include <impltools.hxx>
 
 
 using namespace ::com::sun::star;

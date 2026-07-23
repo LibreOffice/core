@@ -38,7 +38,7 @@
 #include <canvas/canvastools.hxx>
 
 #include "canvasbitmap.hxx"
-#include "impltools.hxx"
+#include <impltools.hxx>
 
 
 using namespace ::com::sun::star;

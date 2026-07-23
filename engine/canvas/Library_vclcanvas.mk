@@ -24,9 +24,9 @@ $(eval $(call gb_Library_set_include,vclcanvas,\
     -I$(SRCDIR)/canvas/inc \
 ))
 
-$(eval $(call gb_Library_set_precompiled_header,vclcanvas,canvas/inc/pch/precompiled_vclcanvas))
+$(eval $(call gb_Library_set_componentfile,vclcanvas,canvas/source/factory/canvasfactory,services))
 
-$(eval $(call gb_Library_set_componentfile,vclcanvas,canvas/source/vcl/vclcanvas,services))
+$(eval $(call gb_Library_set_precompiled_header,vclcanvas,canvas/inc/pch/precompiled_vclcanvas))
 
 $(eval $(call gb_Library_use_external,vclcanvas,boost_headers))
 
@@ -47,6 +47,7 @@ $(eval $(call gb_Library_use_libraries,vclcanvas,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclcanvas,\
+	canvas/source/factory/cf_service \
 	canvas/source/vcl/bitmapbackbuffer \
 	canvas/source/vcl/cachedbitmap \
 	canvas/source/vcl/canvas \

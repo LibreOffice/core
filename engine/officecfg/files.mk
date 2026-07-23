@@ -14,7 +14,6 @@ officecfg_XCSFILES := \
     Office/BasicIDE \
     Office/Calc \
     Office/CalcAddIns \
-    Office/Canvas \
     Office/Chart \
     Office/Commands \
     Office/Common \

@@ -240,15 +240,6 @@ OUString OutputDevice::GetRenderBackendName() const
     return mpGraphics->getRenderBackendName();
 }
 
-cpo::uno::Any OutputDevice::GetSystemGfxDataAny() const
-{
-    const SystemGraphicsData aSysData = GetSystemGfxData();
-    cpo::uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(&aSysData),
-                                                      aSysData.nSize );
-
-    return cpo::uno::Any(aSeq);
-}
-
 void OutputDevice::SetRefPoint()
 {
     if ( mpMetaFile )
@@ -660,45 +651,24 @@ Reference< css::rendering::XCanvas > OutputDevice::GetCanvas() const
     // canvas still valid? Then we're done.
     if( xCanvas.is() )
         return xCanvas;
-    xCanvas = ImplGetCanvas( false );
+    xCanvas = ImplGetCanvas();
     mxCanvas = xCanvas;
     return xCanvas;
 }
 
 // Generic implementation, Window will override.
-css::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetCanvas( bool bSpriteCanvas ) const
+css::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetCanvas() const
 {
-    /* Arguments:
-       0: ptr to creating instance (Window or VirtualDevice)
-       1: current bounds of creating instance
-       2: bool, denoting always on top state for Window (always false for VirtualDevice)
-       3: XWindow for creating Window (or empty for VirtualDevice)
-       4: SystemGraphicsData as a streamed Any
-     */
-    Sequence< Any > aArg{
-        Any(reinterpret_cast<sal_Int64>(this)),
-        Any(css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight )),
-        Any(false),
-        Any(Reference< css::awt::XWindow >()),
-        GetSystemGfxDataAny()
-    };
-
     const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
 
-    static tools::DeleteUnoReferenceOnDeinit<css::lang::XMultiComponentFactory> xStaticCanvasFactory(
+    static tools::DeleteUnoReferenceOnDeinit<css::rendering::XCanvasFactory> xStaticCanvasFactory(
         css::rendering::CanvasFactory::create( xContext ) );
-    Reference<css::lang::XMultiComponentFactory> xCanvasFactory(xStaticCanvasFactory.get());
+    Reference<css::rendering::XCanvasFactory> xCanvasFactory(xStaticCanvasFactory.get());
     Reference< css::rendering::XCanvas > xCanvas;
 
     if(xCanvasFactory.is())
     {
-        xCanvas.set( xCanvasFactory->createInstanceWithArgumentsAndContext(
-                         bSpriteCanvas ?
-                         u"com.sun.star.rendering.SpriteCanvas"_ustr :
-                         u"com.sun.star.rendering.Canvas"_ustr,
-                         aArg,
-                         xContext ),
-                     UNO_QUERY );
+        xCanvas = xCanvasFactory->create(reinterpret_cast<sal_Int64>(this));
     }
 
     // no factory??? Empty reference, then.

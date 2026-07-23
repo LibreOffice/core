@@ -31,7 +31,7 @@
 
 #include <vclwrapper.hxx>
 
-#include "outdevprovider.hxx"
+#include <outdevprovider.hxx>
 
 
 /* Definition of CanvasFont class */

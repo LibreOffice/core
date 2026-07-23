@@ -32,7 +32,6 @@ $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Interaction.xcu \
 	org/openoffice/Office/Calc.xcu \
 	org/openoffice/Office/BasicIDE.xcu \
-	org/openoffice/Office/Canvas.xcu \
 	org/openoffice/Office/Compatibility.xcu \
 	org/openoffice/Office/ExtensionDependencies.xcu \
 	org/openoffice/Office/ExtensionManager.xcu \

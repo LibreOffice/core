@@ -280,8 +280,6 @@ public:
     SystemGraphicsData          GetSystemGfxData() const;
     OUString                    GetRenderBackendName() const;
 
-    SAL_DLLPRIVATE cpo::uno::Any GetSystemGfxDataAny() const;
-
     void                        SetRefPoint();
     void                        SetRefPoint( const Point& rRefPoint );
     const Point&                GetRefPoint() const { return maRefPoint; }
@@ -435,7 +433,7 @@ protected:
 
     SAL_DLLPRIVATE bool         is_double_buffered_window() const;
 
-    virtual css::uno::Reference< css::rendering::XCanvas > ImplGetCanvas( bool bSpriteCanvas ) const;
+    css::uno::Reference< css::rendering::XCanvas > ImplGetCanvas() const;
     SAL_DLLPRIVATE void         ImplDisposeCanvas();
 
 private:

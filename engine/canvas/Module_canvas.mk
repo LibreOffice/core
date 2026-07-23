@@ -20,7 +20,6 @@
 $(eval $(call gb_Module_Module,canvas))
 
 $(eval $(call gb_Module_add_targets,canvas,\
-	Library_canvasfactory \
 	Library_canvastools \
 	Library_vclcanvas \
 ))

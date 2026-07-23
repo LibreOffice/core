@@ -26,8 +26,8 @@
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
 
-#include "cachedbitmap.hxx"
-#include "repainttarget.hxx"
+#include <cachedbitmap.hxx>
+#include <repainttarget.hxx>
 
 
 using namespace ::com::sun::star;

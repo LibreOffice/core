@@ -19,12 +19,11 @@
 
 #include <sal/config.h>
 
-#include "canvas.hxx"
+#include <canvas.hxx>
 
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <vcl/outdev.hxx>
 
 #include "outdevholder.hxx"
@@ -33,37 +32,13 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    Canvas::Canvas( const cpo::uno::Sequence< cpo::uno::Any >&                aArguments,
-                    const uno::Reference< uno::XComponentContext >& /*rxContext*/ ) :
-        maArguments(aArguments)
+    Canvas::Canvas( sal_Int64 nOutDev )
     {
-    }
-
-    void Canvas::initialize()
-    {
-        // #i64742# Only perform initialization when not in probe mode
-        if( !maArguments.hasElements() )
-            return;
-
-        /* maArguments:
-           0: ptr to creating instance (Window or VirtualDevice)
-           1: current bounds of creating instance
-           2: bool, denoting always on top state for Window (always false for VirtualDevice)
-           3: XWindow for creating Window (or empty for VirtualDevice)
-           4: SystemGraphicsData as a streamed Any
-         */
         SolarMutexGuard aGuard;
 
-        SAL_INFO("canvas.vcl", "VCLCanvas::initialize called" );
+        SAL_INFO("canvas.vcl", "vclcanvas::Canvas() called" );
 
-        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 5 &&
-                             maArguments[0].getValueTypeClass() == cpo::uno::TypeClass_HYPER,
-                             "Canvas::initialize: wrong number of arguments, or wrong types" );
-
-        sal_Int64 nPtr = 0;
-        maArguments[0] >>= nPtr;
-
-        OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
+        OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nOutDev);
         if( !pOutDev )
             throw lang::NoSupportException(u"Passed OutDev invalid!"_ustr, nullptr);
 
@@ -75,8 +50,6 @@ namespace vclcanvas
                              pOutdevProvider,
                              true,   // OutDev state preservation
                              false ); // no alpha on surface
-
-        maArguments.realloc(0);
     }
 
     Canvas::~Canvas()
@@ -92,23 +65,6 @@ namespace vclcanvas
         CanvasBaseT::disposeThis();
     }
 
-    OUString Canvas::getServiceName(  )
-    {
-        return u"com.sun.star.rendering.Canvas.VCL"_ustr;
-    }
-
-    OUString Canvas::getImplementationName() {
-        return u"com.sun.star.comp.rendering.Canvas.VCL"_ustr;
-    }
-
-    bool Canvas::supportsService(OUString const & ServiceName) {
-        return cppu::supportsService(this, ServiceName);
-    }
-
-    cpo::uno::Sequence<OUString> Canvas::getSupportedServiceNames() {
-        return {getServiceName()};
-    }
-
     bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,
                           const rendering::ViewState&   viewState,
                           const rendering::RenderState& renderState,
@@ -120,15 +76,6 @@ namespace vclcanvas
 
         return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
     }
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_rendering_Canvas_VCL_get_implementation(
-    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
-{
-    rtl::Reference<vclcanvas::Canvas> p = new vclcanvas::Canvas(args, context);
-    p->initialize();
-    return cppu::acquire(p.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

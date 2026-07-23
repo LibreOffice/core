@@ -133,27 +133,6 @@
                 <property name="margin-top">6</property>
                 <property name="row-spacing">3</property>
                 <child>
-                  <object class="GtkCheckButton" id="useaccel">
-                    <property name="label" translatable="yes" context="optviewpage|useaccel">Use hard_ware acceleration</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes" context="optviewpage|useaccel|tooltip_text">Requires restart</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="useaccel-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | useaccel">Directly accesses hardware features of the graphical display adapter to improve the screen display.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkCheckButton" id="useaa">
                     <property name="label" translatable="yes" context="optviewpage|useaa">Use anti-a_liasing</property>
                     <property name="visible">True</property>
@@ -255,19 +234,6 @@
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">6</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage" id="lockuseaccel">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="icon-name">res/lock.png</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>

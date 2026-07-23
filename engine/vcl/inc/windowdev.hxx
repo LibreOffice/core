@@ -59,9 +59,6 @@ public:
     /** Get the vcl::Window that this OutputDevice belongs to, if any */
     virtual vcl::Window* GetOwnerWindow() const override { return mxOwnerWindow.get(); }
 
-    virtual css::uno::Reference<css::rendering::XCanvas>
-    ImplGetCanvas(bool bSpriteCanvas) const override;
-
     virtual bool HasAlpha() const override { return true; }
 
 private:

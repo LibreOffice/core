@@ -33,8 +33,8 @@
 #include <base/integerbitmapbase.hxx>
 #include "canvasbitmaphelper.hxx"
 
-#include "impltools.hxx"
-#include "repainttarget.hxx"
+#include <impltools.hxx>
+#include <repainttarget.hxx>
 
 
 /* Definition of CanvasBitmap class */

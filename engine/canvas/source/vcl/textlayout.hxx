@@ -26,7 +26,7 @@
 #include <com/sun/star/rendering/XTextLayout.hpp>
 
 #include "canvasfont.hxx"
-#include "impltools.hxx"
+#include <impltools.hxx>
 
 /* Definition of TextLayout class */
 
