@@ -1670,7 +1670,25 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf151752)
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(1, 0, 0));
+    // tdf#152327 - paste operation was silently dropped because the current sheet was deselected
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(1, 0, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf152327_enter_data_after_select_unprotected_cells)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Select unprotected cells does not select any cells since all cells are protected by default
+    dispatchCommand(mxComponent, u".uno:SelectUnprotectedCells"_ustr, {});
+
+    insertStringToCell(u"A1"_ustr, u"1");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the current tab was cleared and the cell value was silently dropped
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(0, 0, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf95306)
@@ -2578,7 +2596,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf159174)
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getByIndex(0),
                                              uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xPage->getCount());
+    // tdf#152327 - paste operation was silently dropped because the current sheet was deselected
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xPage->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testKeyboardMergeRef)
