@@ -57,6 +57,7 @@
 #include <cellform.hxx>
 #include <cellvalue.hxx>
 #include <compiler.hxx>
+#include <dbdata.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>
@@ -211,6 +212,29 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     ScAddress aPos( nPosX, nPosY, nTab );
                     if ( pDocSh->IsReadOnly() || !pDocSh->GetChangeAction(aPos) || pDocSh->IsDocShared() )
                         rSet.DisableItem( nWhich );
+                }
+                break;
+
+            case FID_HANDLEDUPLICATERECORDS:
+                {
+                    // MSO parity: disable on a multi-range mark, or a rect that intersects
+                    // a table/db range without being fully inside it (like merge-cells).
+                    ScRange aSel;
+                    if (rViewData.GetSimpleArea(aSel) != SC_MARK_SIMPLE)
+                        rSet.DisableItem( nWhich );
+                    else
+                    {
+                        for (const ScDBData* pDB : rDoc.GetAllNamedDBsInArea(aSel))
+                        {
+                            ScRange aArea;
+                            pDB->GetArea(aArea);
+                            if (!aArea.Contains(aSel))
+                            {
+                                rSet.DisableItem( nWhich );
+                                break;
+                            }
+                        }
+                    }
                 }
                 break;
 

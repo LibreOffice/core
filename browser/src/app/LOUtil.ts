@@ -583,6 +583,8 @@ class LOUtil {
 			renamecalctable: 'renametable',
 			// TODO: reusing a similar icon for now; needs a dedicated Convert to Range icon
 			convertcalctabletorange: 'tabledesign',
+			// TODO: reusing a similar icon for now; needs a dedicated "Handle Duplicate" icon
+			handleduplicaterecords: 'tabledesign',
 			calculatedfieldrun: 'functiondialog',
 			databasesettings: 'tabledesign',
 			tracechangemode: 'trackchanges',

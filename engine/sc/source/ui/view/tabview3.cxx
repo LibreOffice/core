@@ -602,6 +602,7 @@ void ScTabView::SelectionChanged(bool bFromPaste)
     rBindings.Invalidate( FID_MERGE_ON );
     rBindings.Invalidate( FID_MERGE_OFF );
     rBindings.Invalidate( FID_MERGE_TOGGLE );
+    rBindings.Invalidate( FID_HANDLEDUPLICATERECORDS );
     rBindings.Invalidate( SID_AUTOFILTER_HIDE );
     rBindings.Invalidate( SID_UNFILTER );
     rBindings.Invalidate( SID_REIMPORT_DATA );

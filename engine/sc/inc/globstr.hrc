@@ -137,6 +137,7 @@
 #define STR_MSSG_TABLE_RESIZE_NO_DATA           NC_("STR_MSSG_TABLE_RESIZE_NO_DATA", "The Table must include at least one row of data below the header row.")
 #define STR_MSSG_TABLE_RENAME_DUPLICATE         NC_("STR_MSSG_TABLE_RENAME_DUPLICATE", "A Table with this name already exists.")
 #define STR_QUERY_CONVERT_CALCTABLE_TO_RANGE    NC_("STR_QUERY_CONVERT_CALCTABLE_TO_RANGE", "Do you want to convert the table to a normal range?")
+#define STR_MSSG_TABLE_DUPLICATES               NC_("STR_MSSG_TABLE_DUPLICATES", "%1 duplicate values found and removed; %2 unique\nvalues remain. Note that counts may include\nempty cells, spaces, etc.")
 #define STR_MSSG_REPEATDB_0                     NC_("STR_MSSG_REPEATDB_0", "No operations to execute")
 #define STR_MSSG_MAKEAUTOFILTER_0               NC_("STR_MSSG_MAKEAUTOFILTER_0", "The range does not contain column headers.\nDo you want the first line to be used as column header?")
 #define STR_MSSG_IMPORTDATA_0                   NC_("STR_MSSG_IMPORTDATA_0", "Error while importing data!")

@@ -2020,9 +2020,10 @@ void ScTabViewShell::HandleDuplicateRecordsHighlight(const rtl::Reference<ScTabl
 
     ScDocument& rDoc = GetViewData().GetDocShell()->GetDocument();
 
-    comphelper::ScopeGuard aUndoContextGuard(
+    // Highlighting only builds a selection (no undoable document change), so it
+    // takes just the controller/action locks to batch the marking - no undo context.
+    comphelper::ScopeGuard aLockGuard(
         [pModel, &rDoc] {
-        pModel->getUndoManager()->leaveUndoContext();
         pModel->removeActionLock();
         if (pModel->hasControllersLocked())
             pModel->unlockControllers();
@@ -2032,7 +2033,6 @@ void ScTabViewShell::HandleDuplicateRecordsHighlight(const rtl::Reference<ScTabl
     rDoc.LockAdjustHeight();
     pModel->lockControllers();
     pModel->addActionLock();
-    pModel->getUndoManager()->enterUndoContext(u"HandleDuplicateRecords"_ustr);
 
     bool nModifier = false;         // modifier key pressed?
     bool bNoDuplicatesForSelection = true;
@@ -2101,7 +2101,8 @@ void ScTabViewShell::HandleDuplicateRecordsHighlight(const rtl::Reference<ScTabl
 void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSheetObj>& ActiveSheet,
                                 const css::table::CellRangeAddress& aRange,
                                 bool bIncludesHeaders, bool bDuplicateRows,
-                                const std::vector<int>& rSelectedEntries)
+                                const std::vector<int>& rSelectedEntries,
+                                sal_Int32* pnRemoved, sal_Int32* pnRemaining)
 {
     if (rSelectedEntries.size() == 0)
     {
@@ -2109,7 +2110,8 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
         return;
     }
 
-    ScModelObj* pModel(GetViewData().GetDocShell()->GetModel());
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScModelObj* pModel(pDocSh->GetModel());
     rtl::Reference<ScCellRangeObj> xSheetRange(
             ActiveSheet->getScCellRangeByPosition(aRange.StartColumn, aRange.StartRow, aRange.EndColumn, aRange.EndRow));
 
@@ -2119,8 +2121,8 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
     ScDocument& rDoc = GetViewData().GetDocShell()->GetDocument();
 
     comphelper::ScopeGuard aUndoContextGuard(
-        [pModel, &bAutoCalc, &rDoc] {
-        pModel->getUndoManager()->leaveUndoContext();
+        [pModel, pDocSh, &bAutoCalc, &rDoc] {
+        pDocSh->GetUndoManager()->LeaveListAction();
         pModel->enableAutomaticCalculation(bAutoCalc);
         pModel->removeActionLock();
         if (pModel->hasControllersLocked())
@@ -2132,7 +2134,10 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
     pModel->lockControllers();
     pModel->addActionLock();
     pModel->enableAutomaticCalculation(true);
-    pModel->getUndoManager()->enterUndoContext(u"HandleDuplicateRecords"_ustr);
+    // Use the Sfx-native undo manager with this view's id: Online filters undo per
+    // view, and the UNO XUndoManager stamps ViewShellId(-1) (invisible there).
+    pDocSh->GetUndoManager()->EnterListAction(u"HandleDuplicateRecords"_ustr,
+                                              u"HandleDuplicateRecords"_ustr, 0, GetViewShellId());
 
     if (bDuplicateRows)
     {
@@ -2167,6 +2172,11 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
         }
         for (const table::CellRangeAddress & rRange : aDelRanges)
             ActiveSheet->removeRange(rRange, sheet::CellDeleteMode_UP);
+
+        if (pnRemoved)
+            *pnRemoved = static_cast<sal_Int32>(nDeleteCount);
+        if (pnRemaining)
+            *pnRemaining = static_cast<sal_Int32>(aUnionArray.size());
     }
     else
     {
@@ -2206,6 +2216,11 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
         }
         for (const table::CellRangeAddress & rRange : aDelRanges)
             ActiveSheet->removeRange(rRange, sheet::CellDeleteMode_LEFT);
+
+        if (pnRemoved)
+            *pnRemoved = static_cast<sal_Int32>(nDeleteCount);
+        if (pnRemaining)
+            *pnRemaining = static_cast<sal_Int32>(aUnionArray.size());
     }
 }
 

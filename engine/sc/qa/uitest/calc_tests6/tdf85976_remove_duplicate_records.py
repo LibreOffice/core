@@ -15,7 +15,7 @@ from uitest.uihelper.common import get_state_as_dict
 class tdf85976(UITestCase):
     def test_tdf85976(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf85976.ods")) as calc_doc:
-            with self.ui_test.execute_dialog_through_command(".uno:HandleDuplicateRecords") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:HandleDuplicateRecords", close_button="") as xDialog:
                 xColumn = xDialog.getChild("column")
                 xRow = xDialog.getChild("row")
                 xIncludesHeaders = xDialog.getChild("includesheaders")
@@ -56,6 +56,10 @@ class tdf85976(UITestCase):
 
                 self.assertEqual("Species", get_state_as_dict(xCheckList.getChild(5))["Text"])
                 self.assertEqual("true", get_state_as_dict(xCheckList.getChild(5))["IsChecked"])
+
+                xOk = xDialog.getChild("ok")
+                with self.ui_test.execute_dialog_through_action(xOk, "CLICK", close_button="ok"):
+                    pass
 
             self.assertEqual("Id", get_cell_by_position(calc_doc, 0, 0, 0).getString())
             self.assertEqual("1", get_cell_by_position(calc_doc, 0, 0, 1).getString())

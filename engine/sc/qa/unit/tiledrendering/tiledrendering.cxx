@@ -798,6 +798,55 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTableResizeUndoKeepsCursor)
                                  pViewData->GetCurY());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTableRemoveDuplicates)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+
+    // A styled table A1:B5: a header + 4 data rows, where rows 4 and 5 duplicate rows 2 and 3.
+    rDoc.SetString(0, 0, 0, u"Name"_ustr);  rDoc.SetString(1, 0, 0, u"City"_ustr);
+    rDoc.SetString(0, 1, 0, u"Alice"_ustr); rDoc.SetString(1, 1, 0, u"NY"_ustr);
+    rDoc.SetString(0, 2, 0, u"Bob"_ustr);   rDoc.SetString(1, 2, 0, u"LA"_ustr);
+    rDoc.SetString(0, 3, 0, u"Alice"_ustr); rDoc.SetString(1, 3, 0, u"NY"_ustr);
+    rDoc.SetString(0, 4, 0, u"Bob"_ustr);   rDoc.SetString(1, 4, 0, u"LA"_ustr);
+
+    ScDBDocFunc aFunc(*pDocShell);
+    CPPUNIT_ASSERT(aFunc.AddDBTable(u"Table1"_ustr, ScRange(0, 0, 0, 1, 4, 0),
+                                    /*bHeader*/ true, /*bRecord*/ true, /*bApi*/ true,
+                                    u"TableStyleMedium2"_ustr));
+
+    // Keep the cursor inside the table so the command stays enabled (not a mixed selection).
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->SetCursor(0, 1);
+
+    // Remove duplicate rows over the table (compare all columns; first row is the header).
+    // The explicit args drive the synchronous playback path - no async dialog to wait on.
+    cpo::uno::Sequence<beans::PropertyValue> aArgs{
+        comphelper::makePropertyValue(u"Remove"_ustr, true),
+        comphelper::makePropertyValue(u"IncludesHeaders"_ustr, true),
+        comphelper::makePropertyValue(u"DuplicateRows"_ustr, true),
+        comphelper::makePropertyValue(u"StartColumn"_ustr, sal_Int32(0)),
+        comphelper::makePropertyValue(u"StartRow"_ustr, sal_Int32(0)),
+        comphelper::makePropertyValue(u"EndColumn"_ustr, sal_Int32(1)),
+        comphelper::makePropertyValue(u"EndRow"_ustr, sal_Int32(4)),
+        comphelper::makePropertyValue(u"TabNo"_ustr, sal_Int32(0)),
+    };
+    dispatchCommand(mxComponent, u".uno:HandleDuplicateRecords"_ustr, aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // First occurrences kept; the two duplicate rows removed (shifted up, so now empty).
+    CPPUNIT_ASSERT_EQUAL(u"Alice"_ustr, rDoc.GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"NY"_ustr, rDoc.GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Bob"_ustr, rDoc.GetString(0, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"LA"_ustr, rDoc.GetString(1, 2, 0));
+    CPPUNIT_ASSERT_MESSAGE("first duplicate row removed", rDoc.GetString(0, 3, 0).isEmpty());
+    CPPUNIT_ASSERT_MESSAGE("second duplicate row removed", rDoc.GetString(0, 4, 0).isEmpty());
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testResizeTotalsRowsOnlyUndoRedo)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");

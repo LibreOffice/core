@@ -291,7 +291,8 @@ public:
     void HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSheetObj>& ActiveSheet,
                                 const css::table::CellRangeAddress& aRange,
                                 bool bIncludesHeaders, bool bDuplicateRows,
-                                const std::vector<int>& rSelectedEntries);
+                                const std::vector<int>& rSelectedEntries,
+                                sal_Int32* pnRemoved = nullptr, sal_Int32* pnRemaining = nullptr);
     rtl::Reference<ScTableSheetObj> GetRangeWithSheet(css::table::CellRangeAddress& rRangeData, bool& bHasData, bool bHasUnoArguments);
     void            ExtendSingleSelection(css::table::CellRangeAddress& rRangeData);
 
