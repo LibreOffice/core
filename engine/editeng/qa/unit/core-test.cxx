@@ -2726,6 +2726,11 @@ void Test::testPasteURLOverSelection()
     CPPUNIT_ASSERT_EQUAL(aSelectedText, pURLField->GetRepresentation());
     CPPUNIT_ASSERT_EQUAL(u"Click here for details"_ustr,
                          rDoc.GetParaAsString(sal_Int32(0)));
+
+    // A regular string must not be treated as a URL ex: "Cool" -> "http://Cool"
+    rtl::Reference<svt::OStringTransferable> xPlain(new svt::OStringTransferable(u"Cool"_ustr));
+    TransferableDataHelper aPlainHelper(xPlain);
+    CPPUNIT_ASSERT_EQUAL(OUString(), aPlainHelper.GetSimpleURL());
 }
 
 #if HAVE_MORE_FONTS

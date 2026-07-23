@@ -2089,6 +2089,8 @@ OUString TransferableDataHelper::GetSimpleURL() const
         if (sText.indexOf('\n') < 0 && sText.indexOf('\r') < 0)
         {
             INetURLObject aURLObj;
+            // A bare word must not be promoted to a hyperlink ex:"Cool" -> "http://Cool"
+            aURLObj.SetSmartProtocol(INetProtocol::NotValid);
             aURLObj.SetSmartURL(sText);
             if (aURLObj.GetProtocol() == INetProtocol::Http ||
                 aURLObj.GetProtocol() == INetProtocol::Https ||
