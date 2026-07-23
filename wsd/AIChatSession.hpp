@@ -135,8 +135,11 @@ private:
     void sendChatResult(bool success, const std::string& text, const std::string& requestId,
                         const std::string& displayText = std::string());
     /// Maps an HTTP status (or an ai::Http* sentinel) to a user-facing message.
+    /// The response body lets a 429 tell an exhausted quota apart from a
+    /// throttle, which need opposite advice.
     static std::string mapHttpStatusToError(int statusCode,
                                             const std::string& reasonPhrase,
+                                            const std::string& body = "",
                                             const std::string& context = "");
     Poco::JSON::Array::Ptr buildToolDefinitions(const std::string& docType) const;
 #if MOBILEAPP

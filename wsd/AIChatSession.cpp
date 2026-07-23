@@ -87,6 +87,23 @@ bool isValidImageSize(const std::string& size)
     }
 }
 
+bool isInsufficientQuotaError(const std::string& body)
+{
+    Poco::JSON::Object::Ptr root;
+    if (!JsonUtil::parseJSON(body, root) || !root)
+        return false;
+    const Poco::JSON::Object::Ptr err = root->getObject("error");
+    if (!err)
+        return false;
+    std::string code;
+    JsonUtil::findJSONValue(err, "code", code);
+    if (code == "insufficient_quota")
+        return true;
+    std::string type;
+    JsonUtil::findJSONValue(err, "type", type);
+    return type == "insufficient_quota";
+}
+
 const std::string AI_SYSTEM_PROMPT =
     "You are a helpful assistant for Collabora Online. "
     "Help users with their documents - answering questions, suggesting edits, "
@@ -285,7 +302,7 @@ void AIChatSession::sendChatResult(bool success, const std::string& text,
 
 std::string AIChatSession::mapHttpStatusToError(
     int statusCode, const std::string& reasonPhrase,
-    const std::string& context)
+    const std::string& body, const std::string& context)
 {
     switch (statusCode)
     {
@@ -294,7 +311,10 @@ std::string AIChatSession::mapHttpStatusToError(
                                    : "Invalid " + context + " request";
         case 401 /* Unauthorized */:        return "Invalid API key";
         case 403 /* Forbidden */:           return "API key lacks permissions";
-        case 429 /* Too Many Requests */:   return "Rate limited - please wait a moment and retry";
+        case 429 /* Too Many Requests */:
+            return isInsufficientQuotaError(body)
+                       ? "API quota exceeded - check your plan and billing details"
+                       : "Rate limited - please wait a moment and retry";
         case 500 /* Internal Server Error */: return "API server error - try again later";
         case 503 /* Service Unavailable */:   return "Service temporarily unavailable";
         default:
@@ -865,7 +885,7 @@ void AIChatSession::callLLMAPI()
         {
             LOG_WRN("AIChat: provider returned HTTP " << statusCode
                     << " for request [" << requestId << "]; body: " << body);
-            self->sendChatResult(false, mapHttpStatusToError(statusCode, reason), requestId);
+            self->sendChatResult(false, mapHttpStatusToError(statusCode, reason, body), requestId);
             self->_toolLoop.reset();
             return;
         }

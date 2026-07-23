@@ -3139,6 +3139,12 @@ class SettingIframe {
 		if (body) {
 			console.warn(`fetch-models failed (HTTP ${status}): ${body}`);
 		}
+		// A 429 covers both a throttle and an exhausted quota. They need
+		// opposite advice, so tell them apart from the error body: waiting
+		// clears a throttle, but not a quota that is used up.
+		if (status === 429 && /insufficient_quota/.test(body)) {
+			return _('API quota exceeded - check your plan and billing details');
+		}
 		return (
 			AI_ERROR_MESSAGES[status] ||
 			_(
