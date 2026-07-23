@@ -2626,6 +2626,13 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 								'text': _UNO('.uno:TextToColumns', 'spreadsheet'),
 								'command': '.uno:TextToColumns',
 								'accessibility': { focusBack: true,	combination: 'CT', de: null }
+							},
+							{
+								'id': 'data-handle-duplicate-records',
+								'type': 'toolitem',
+								'text': _UNO('.uno:HandleDuplicateRecords', 'spreadsheet'),
+								'command': '.uno:HandleDuplicateRecords',
+								'accessibility': { focusBack: true,	combination: 'HD', de: null }
 							}
 						]
 					}
