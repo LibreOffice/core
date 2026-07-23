@@ -382,6 +382,111 @@ function _setSelection(builder, container, wrapper, cursorLayer, handleLayer, te
 	);
 }
 
+function _selectAllText(textLayer, builder, id) {
+	let endX = 0;
+	let endY = 0;
+	for (const child of textLayer.children) {
+		if (child.tagName === 'BR') {
+			endX = 0;
+			endY++;
+		} else {
+			endX++;
+		}
+	}
+
+	builder.callback(
+		'edit',
+		'textselection',
+		{ id: id },
+		'0;' + endX + ';0;' + endY,
+		builder,
+	);
+}
+
+// On a touch device a long press selects the whole formula and offers Cut, Copy and Paste in the
+// mobile wizard.
+function _addLongPressContextMenu(
+	textLayer,
+	container,
+	builder,
+	isInactive,
+	grabEditFocus,
+) {
+	let menuShownForThisPress = false;
+	let touchActive = false;
+	let longPressTimer = null;
+
+	function clearLongPress() {
+		if (longPressTimer) {
+			clearTimeout(longPressTimer);
+			longPressTimer = null;
+		}
+	}
+
+	function clearNativeSelection() {
+		const selection = document.getSelection();
+		if (selection) selection.removeAllRanges();
+		if (document.activeElement === textLayer) textLayer.blur();
+	}
+
+	function showFormulabarContextMenu() {
+		if (menuShownForThisPress) return;
+		if (!container.isConnected) return;
+		if (isInactive()) return;
+		if (!builder.map.isEditMode()) return;
+		menuShownForThisPress = true;
+
+		grabEditFocus(false);
+		_selectAllText(textLayer, builder, container.id);
+		clearNativeSelection();
+
+		// Show the same mobile-wizard popup a cell long-press shows.
+		const menu = {
+			cut: { name: _('Cut'), command: '.uno:Cut' },
+			copy: { name: _('Copy'), command: '.uno:Copy' },
+			paste: { name: _('Paste'), command: '.uno:Paste' },
+		};
+		const menuData =
+			window.L.Control.JSDialogBuilder.getMenuStructureForMobileWizard(
+				menu,
+				true,
+				'',
+			);
+		window.contextMenuWizard = true;
+		builder.map.fire('mobilewizard', { data: menuData });
+	}
+
+	function onTouchEnd(event) {
+		touchActive = event.touches.length > 0;
+		clearLongPress();
+	}
+
+	textLayer.addEventListener('contextmenu', function (event) {
+		event.preventDefault();
+		if (!touchActive) menuShownForThisPress = false;
+		clearLongPress();
+		showFormulabarContextMenu();
+	});
+
+	// Detect the long press manually.
+	textLayer.addEventListener('touchstart', function () {
+		if (isInactive()) return;
+		touchActive = true;
+		menuShownForThisPress = false;
+		clearLongPress();
+		longPressTimer = setTimeout(function () {
+			longPressTimer = null;
+			showFormulabarContextMenu();
+		}, app.LOUtil.longPressTime);
+	});
+
+	// A moving finger is a scroll or selection drag, not a long-press.
+	textLayer.addEventListener('touchmove', clearLongPress);
+
+	textLayer.addEventListener('touchend', onTouchEnd);
+	textLayer.addEventListener('touchcancel', onTouchEnd);
+}
+
 function _formulabarEditControl(parentContainer, data, builder) {
 	var container = window.L.DomUtil.create('div', 'ui-custom-textarea ' + builder.options.cssClass, parentContainer);
 	var wrapper = window.L.DomUtil.create('div', 'ui-custom-textarea-overflow-wrapper ' + builder.options.cssClass, container);
@@ -482,9 +587,20 @@ function _formulabarEditControl(parentContainer, data, builder) {
 		event.preventDefault();
 	};
 
-	['click', 'dblclick', 'contextmenu'].forEach(function (ev) {
+	['click', 'dblclick'].forEach(function (ev) {
 		textLayer.addEventListener(ev, textSelectionHandler);
 	});
+
+	if (!window.mode.isSmallScreenDevice())
+		textLayer.addEventListener('contextmenu', textSelectionHandler);
+	else
+		_addLongPressContextMenu(
+			textLayer,
+			container,
+			builder,
+			isInactive,
+			grabEditFocus,
+		);
 
 	// hide old selection when user starts to select something else
 	textLayer.addEventListener('mousedown', function() {

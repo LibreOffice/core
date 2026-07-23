@@ -1240,7 +1240,7 @@ class CanvasSectionContainer {
 			(e as any).clientX = e.touches[0].clientX;
 			(e as any).clientY = e.touches[0].clientY;
 			this.onMouseMove(e);
-		}.bind(this), 550);
+		}.bind(this), app.LOUtil.longPressTime);
 	}
 
 	private stopLongPress() {

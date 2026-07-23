@@ -129,6 +129,9 @@ class LOUtil {
 		'text/rtf',
 	];
 
+	// Time in milliseconds a touch has to stay down to count as a long press.
+	public static readonly longPressTime = 550;
+
 	public static onRemoveHTMLElement(
 		element: Element,
 		onDetachCallback: () => void,

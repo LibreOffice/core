@@ -212,3 +212,185 @@ describe(['tagmobile', 'tagnextcloud'], 'Formula bar tests.', function() {
 		cy.cGet('#copy-paste-container table td:nth-of-type(1)').should('have.text', '5');
 	});
 });
+
+describe(['tagmobile'], 'Formula bar context menu tests.', function() {
+	var textLayerSelector = '#sc_input_window .ui-custom-textarea-text-layer';
+	var selectionSelector = '#sc_input_window .ui-custom-textarea-cursor-layer span.selection';
+	var cellText = 'long line long line long line';
+	var win;
+
+	beforeEach(function() {
+		helper.setupAndLoadDocument('calc/formulabar.ods');
+
+		mobileHelper.enableEditingMobile();
+
+		cy.getFrameWindow().then(function(frameWindow) {
+			win = frameWindow;
+		});
+
+		calcHelper.clickOnFirstCell();
+	});
+
+	// Dispatch the touch sequence of a long press on the formula bar. Chrome
+	// fires contextmenu itself part way through the press, pass false to leave
+	// it out and let the widget's own long press timer trigger instead.
+	function longPressOnFormulabar(withContextMenu = true) {
+		cy.cGet(textLayerSelector).then(function(textLayer) {
+			var element = textLayer[0];
+			var rectangle = element.getBoundingClientRect();
+			var posX = rectangle.left + 20;
+			var posY = rectangle.top + rectangle.height / 2;
+
+			var touch = new win.Touch({
+				identifier: 1,
+				target: element,
+				clientX: posX,
+				clientY: posY,
+				pageX: posX,
+				pageY: posY,
+			});
+
+			element.dispatchEvent(new win.TouchEvent('touchstart', {
+				bubbles: true,
+				cancelable: true,
+				touches: [touch],
+				targetTouches: [touch],
+				changedTouches: [touch],
+			}));
+
+			if (withContextMenu) {
+				element.dispatchEvent(new win.MouseEvent('contextmenu', {
+					bubbles: true,
+					cancelable: true,
+					clientX: posX,
+					clientY: posY,
+				}));
+			} else {
+				// A touchend would cancel the timer, so outwait it first.
+				cy.wait(win.app.LOUtil.longPressTime + 50);
+			}
+
+			cy.then(function() {
+				element.dispatchEvent(new win.TouchEvent('touchend', {
+					bubbles: true,
+					cancelable: true,
+					touches: [],
+					targetTouches: [],
+					changedTouches: [touch],
+				}));
+			});
+		});
+	}
+
+	// A right click or the context menu key arrives without any touch events.
+	function contextMenuOnFormulabar() {
+		cy.cGet(textLayerSelector).then(function(textLayer) {
+			var element = textLayer[0];
+			var rectangle = element.getBoundingClientRect();
+
+			element.dispatchEvent(new win.MouseEvent('contextmenu', {
+				bubbles: true,
+				cancelable: true,
+				clientX: rectangle.left + 20,
+				clientY: rectangle.top + rectangle.height / 2,
+			}));
+		});
+	}
+
+	function assertContextMenu() {
+		cy.cGet('#mobile-wizard-content').should('be.visible');
+		cy.cGet('body').contains('#mobile-wizard-content .ui-header', 'Cut').should('be.visible');
+		cy.cGet('body').contains('#mobile-wizard-content .ui-header', 'Copy').should('be.visible');
+		cy.cGet('body').contains('#mobile-wizard-content .ui-header', 'Paste').should('be.visible');
+	}
+
+	// The selection is drawn from what core reports back, so this also asserts
+	// that core knows about the selection - not just the browser.
+	function assertWholeFormulaSelected() {
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+		cy.cGet(selectionSelector)
+			.should('have.length', 1)
+			.should('have.text', cellText)
+			.should('be.visible');
+		cy.cGet('#sc_input_window .formulabar-selection-handle-start').should('be.visible');
+		cy.cGet('#sc_input_window .formulabar-selection-handle-end').should('be.visible');
+	}
+
+	it('Long press selects the formula and opens the context menu', function() {
+		longPressOnFormulabar();
+
+		assertContextMenu();
+		assertWholeFormulaSelected();
+	});
+
+	it('Copy and Paste from the formula bar', function() {
+		helper.setDummyClipboardForCopy();
+
+		longPressOnFormulabar();
+
+		assertContextMenu();
+		assertWholeFormulaSelected();
+
+		cy.then(function() {
+			cy.stub(win.app.idleHandler, '_deactivate');
+		});
+
+		cy.cGet('body').contains('#mobile-wizard-content .menu-entry-with-icon', 'Copy').click();
+
+		// Pasting into the empty cell below shows what the copy really captured.
+		helper.typeIntoInputField(helper.addressInputSelector, 'A2');
+		cy.then(function() {
+			win.app.socket.sendMessage('uno .uno:Paste');
+		});
+
+		calcHelper.assertSheetContents(
+			[cellText, '', cellText, '1', '', '4', '', '10'], true);
+	});
+
+	it('Cut empties the formula bar', function() {
+		helper.setDummyClipboardForCopy('text/plain');
+
+		longPressOnFormulabar();
+
+		assertContextMenu();
+		assertWholeFormulaSelected();
+
+		cy.cGet('body').contains('#mobile-wizard-content .menu-entry-with-icon', 'Cut').click();
+
+		cy.cGet(textLayerSelector).should('have.text', '');
+	});
+
+	it('Long press works without a native contextmenu event', function() {
+		longPressOnFormulabar(false);
+
+		assertContextMenu();
+		assertWholeFormulaSelected();
+	});
+
+	it('Long press works when the formula bar already has the cursor', function() {
+		cy.cGet(textLayerSelector).click();
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+
+		longPressOnFormulabar();
+
+		assertContextMenu();
+		assertWholeFormulaSelected();
+	});
+
+	it('Repeated context menu requests keep opening the menu', function() {
+		contextMenuOnFormulabar();
+		assertContextMenu();
+
+		cy.then(function() {
+			win.app.map.fire('closemobilewizard');
+		});
+		cy.cGet('#mobile-wizard-content').should('not.be.visible');
+
+		contextMenuOnFormulabar();
+		assertContextMenu();
+	});
+});
