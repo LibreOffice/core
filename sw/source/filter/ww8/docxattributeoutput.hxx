@@ -901,6 +901,8 @@ private:
 
     /// Field data to remember in the text run
     bool m_bPreventDoubleFieldsHandling;
+    /// Number format locale of the date/time field run being written, else LANGUAGE_DONTKNOW.
+    LanguageType m_nFieldFormatLang = LANGUAGE_DONTKNOW;
     std::vector< FieldInfos > m_Fields;
     OUString m_sFieldBkm;
     sal_Int32 m_nNextBookmarkId;

@@ -6034,7 +6034,20 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
     aUSLocale.Country = "US";
 
     lang::Locale aCurrentLocale;
-    GetAnyProperty(PROP_CHAR_LOCALE, GetTopContext()) >>= aCurrentLocale;
+    // tdf#146973 the date is formatted in the language of the field's own run, kept here
+    // by AppendFieldCommand(); an RTL or CJK run only sets the language of its script
+    const PropertyMapPtr& rFieldProps = GetTopFieldContext()->getProperties();
+    for (const PropertyIds eId :
+         { PROP_CHAR_LOCALE, PROP_CHAR_LOCALE_COMPLEX, PROP_CHAR_LOCALE_ASIAN })
+    {
+        if (std::optional<PropertyMap::Property> oProperty = rFieldProps->getProperty(eId))
+        {
+            oProperty->second >>= aCurrentLocale;
+            break;
+        }
+    }
+    if (aCurrentLocale.Language.isEmpty())
+        GetAnyProperty(PROP_CHAR_LOCALE, GetTopContext()) >>= aCurrentLocale;
 
     if (sFormatString.isEmpty())
     {

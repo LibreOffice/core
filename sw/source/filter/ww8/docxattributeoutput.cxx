@@ -104,6 +104,9 @@
 #include <svx/svdogrp.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
 #include <svl/grabbagitem.hxx>
+#include <svl/numformat.hxx>
+#include <svl/zformat.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/datetimeutils.hxx>
@@ -3204,6 +3207,41 @@ void DocxAttributeOutput::CmdEndField_Impl(SwTextNode const*const pNode,
         }
 }
 
+static LanguageType lcl_getDateFieldNumberFormatLang(const FieldInfos& rInfos, SwDoc& rDoc)
+{
+    if (!rInfos.pField)
+        return LANGUAGE_DONTKNOW;
+    switch (rInfos.eType)
+    {
+        case ww::eDATE:
+        case ww::eTIME:
+        case ww::eCREATEDATE:
+        case ww::eSAVEDATE:
+        case ww::ePRINTDATE:
+            break;
+        default:
+            return LANGUAGE_DONTKNOW;
+    }
+    SvNumberFormatter* pFormatter = rDoc.GetNumberFormatter();
+    const SvNumberformat* pEntry
+        = pFormatter ? pFormatter->GetEntry(rInfos.pField->GetUntypedFormat()) : nullptr;
+    return pEntry ? pEntry->GetLanguage() : LANGUAGE_DONTKNOW;
+}
+
+/// The w:lang attribute for the script of this language.
+static sal_Int32 lcl_getLangAttr(LanguageType nLang)
+{
+    switch (MsLangId::getScriptType(nLang))
+    {
+        case css::i18n::ScriptType::ASIAN:
+            return FSNS(XML_w, XML_eastAsia);
+        case css::i18n::ScriptType::COMPLEX:
+            return FSNS(XML_w, XML_bidi);
+        default:
+            return FSNS(XML_w, XML_val);
+    }
+}
+
 /// Writes properties for run that is used to separate field implementation.
 /// There are several runs are used:
 ///     <w:r>
@@ -3246,6 +3284,10 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
     }
 
     m_bPreventDoubleFieldsHandling = true;
+    // tdf#146973 OOXML takes a date field's month/day names from the run language
+    m_nFieldFormatLang = m_Fields.empty()
+        ? LANGUAGE_DONTKNOW
+        : lcl_getDateFieldNumberFormatLang(m_Fields.back(), m_rExport.m_rDoc);
 
     {
         m_pSerializer->startElementNS(XML_w, XML_rPr);
@@ -3262,6 +3304,15 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
         SwWW8AttrIter aAttrIt( m_rExport, *pNode );
         aAttrIt.OutAttr( nPos, bWriteCombChars );
 
+        // add w:lang unless CharLanguage already emitted it from the run above
+        if ( m_nFieldFormatLang != LANGUAGE_DONTKNOW )
+        {
+            const sal_Int32 nLangAttr = lcl_getLangAttr( m_nFieldFormatLang );
+            if ( !m_pCharLangAttrList || !m_pCharLangAttrList->hasAttribute( nLangAttr ) )
+                AddToAttrList( m_pCharLangAttrList, nLangAttr,
+                               LanguageTag( m_nFieldFormatLang ).getBcp47MS() );
+        }
+
         // 3. write the character properties
         WriteCollectedRunProperties();
 
@@ -3271,6 +3322,7 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
 
+    m_nFieldFormatLang = LANGUAGE_DONTKNOW;
     m_bPreventDoubleFieldsHandling = false;
 }
 
@@ -8428,7 +8480,13 @@ void DocxAttributeOutput::CharKerning( const SvxKerningItem& rKerning )
 
 void DocxAttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
 {
-    OUString aLanguageCode(LanguageTag( rLanguage.GetLanguage()).getBcp47MS());
+    LanguageType nLang = rLanguage.GetLanguage();
+    // tdf#146973 a date/time field run carries its number format locale instead
+    if ( m_nFieldFormatLang != LANGUAGE_DONTKNOW
+         && rLanguage.Which() == GetWhichOfScript( RES_CHRATR_LANGUAGE,
+                                     MsLangId::getScriptType( m_nFieldFormatLang ) ) )
+        nLang = m_nFieldFormatLang;
+    OUString aLanguageCode( LanguageTag( nLang ).getBcp47MS() );
 
     switch ( rLanguage.Which() )
     {
