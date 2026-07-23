@@ -1149,8 +1149,9 @@ class BackstageView extends window.L.Class {
 	}
 
 	// In starter mode there is no document to return to; the app closes
-	// the starter window itself.
-	private returnToDocumentView(): void {
+	// the starter window itself. Also called by the apps once a native
+	// file-open dialog picks a document.
+	public returnToDocumentView(): void {
 		if (!this.isStarterMode) {
 			this.hide();
 		}

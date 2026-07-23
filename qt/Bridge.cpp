@@ -1029,7 +1029,7 @@ QVariant Bridge::cool(const QString& messageStr)
         dialog->setAttribute(Qt::WA_DeleteOnClose);
 
         QObject::connect(dialog, &QFileDialog::filesSelected,
-                         [](const QStringList& filePaths)
+                         [this](const QStringList& filePaths)
                          {
                              // Under flatpak the picker returns sandboxed document-portal paths,
                              // resolve the real host location for the recent-files list.
@@ -1042,6 +1042,10 @@ QVariant Bridge::cool(const QString& messageStr)
                              coda::openFiles(filePaths, displayUris);
                              // Close starter screen if it exists
                              closeStarterScreen();
+
+                             // The picked document opens in its own window; return the
+                             // originating window to its document view.
+                             evalJS("window.app?.map?.backstageView?.returnToDocumentView();");
                          });
 
         dialog->open();

@@ -3106,6 +3106,13 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
                     filenamesAndUrisToOpen.push_back(i);
 
                 load_next_document();
+
+                // The picked document opens in its own window; return the
+                // originating window to its document view.
+                if (data.mode != DocumentMode::STARTER)
+                    PostMessageW(data.hWnd, CODA_WM_EXECUTESCRIPT,
+                                 (WPARAM)_strdup("window.app?.map?.backstageView?.returnToDocumentView()"),
+                                 0);
             }
             // Close the starter window
             if (data.mode == DocumentMode::STARTER)
