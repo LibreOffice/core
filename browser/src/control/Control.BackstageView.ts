@@ -431,11 +431,12 @@ class BackstageView extends window.L.Class {
 			currentDoc &&
 			decodeURIComponent(uri) === decodeURIComponent(currentDoc)
 		) {
-			this.hide();
+			this.returnToDocumentView();
 			return;
 		}
 
 		window.postMobileMessage(`opendoc file=${encodeURIComponent(uri)}`);
+		this.returnToDocumentView();
 	}
 
 	private getDocumentIconClass(docType: string): string {
@@ -1144,7 +1145,12 @@ class BackstageView extends window.L.Class {
 		params.push('basename=' + encodeURIComponent(basename));
 
 		window.postMobileMessage('newdoc ' + params.join(' '));
+		this.returnToDocumentView();
+	}
 
+	// In starter mode there is no document to return to; the app closes
+	// the starter window itself.
+	private returnToDocumentView(): void {
 		if (!this.isStarterMode) {
 			this.hide();
 		}
