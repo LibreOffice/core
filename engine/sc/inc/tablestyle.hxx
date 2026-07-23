@@ -39,6 +39,24 @@ enum class ScTableStyleElement
     LastHeaderCell,
 };
 
+// The visual family a table style belongs to, derived from its programmatic
+// name. The built-in styles are named TableStyleLight<n>, TableStyleMedium<n>
+// and TableStyleDark<n>; every other name, custom styles included, is Custom.
+// The order matches the order the families are grouped and sorted for display.
+enum class ScTableStyleFamily
+{
+    Light,
+    Medium,
+    Dark,
+    Custom
+};
+
+// Classify a table style. Only the app's own built-ins have a Light, Medium or
+// Dark family; every other style is Custom. This is the single place that knows
+// that rule, so the grouping, the sort order and the swatch colours all agree on
+// which family a style belongs to.
+ScTableStyleFamily ScGetTableStyleFamily(std::u16string_view rName, bool bIsBuiltin);
+
 template <class T> const T* GetItemFromPattern(ScPatternAttr* pPattern, TypedWhichId<T> nWhich)
 {
     return pPattern->GetItemSet().GetItemIfSet(nWhich);
@@ -131,6 +149,10 @@ public:
     void AddTableStyle(std::unique_ptr<ScTableStyle> pTableStyle);
     const ScTableStyle* GetTableStyle(const OUString& rName) const;
     bool HasTableStyle() const { return !maTableStyles.empty(); }
+
+    // All table styles ordered by programmatic name, giving callers a stable
+    // display order over the unordered internal storage.
+    std::vector<const ScTableStyle*> GetSortedTableStyles() const;
 
     const OUString& GetDefaultStyleName() const { return maDefaultStyleName; }
     void SetDefaultStyleName(const OUString& rName) { maDefaultStyleName = rName; }
