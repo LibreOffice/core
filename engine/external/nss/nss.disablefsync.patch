@@ -14,5 +14,5 @@
 +    return 0;
 +
    /* The following "ifdef/elif/else/" block has the same structure as
-   ** the one below. It is replicated here solely to avoid cluttering 
+   ** the one below. It is replicated here solely to avoid cluttering
    ** up the real code with the UNUSED_PARAMETER() macros.

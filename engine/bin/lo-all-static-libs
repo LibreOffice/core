@@ -77,6 +77,7 @@ iOS)
 	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/dev/out/*.a"
 	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/freebl/out/*.a"
 	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/freebl/out/Darwin_SINGLE_SHLIB/*.o"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/freebl/out/Darwin_SINGLE_SHLIB/aarch64-gcm-slothy/*.o"
 	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/freebl/out/Darwin_SINGLE_SHLIB/deprecated/*.o"
 	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/certsel/out/*.a"
 	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/checker/out/*.a"
