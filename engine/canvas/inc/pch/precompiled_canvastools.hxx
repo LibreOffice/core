@@ -36,7 +36,6 @@
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <base/cachedprimitivebase.hxx>
-#include <base/canvascustomspritehelper.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -97,7 +96,6 @@
 #include <canvas/elapsedtime.hxx>
 #include <parametricpolypolygon.hxx>
 #include <propertysethelper.hxx>
-#include <spriteredrawmanager.hxx>
 #include <verifyinput.hxx>
 #endif // PCH_LEVEL >= 4
 
