@@ -2131,15 +2131,29 @@ css::uno::Any fromJs(JSContext* ctx, css::uno::Type const& type, JSValueConst va
                     }
                     if (has == 0)
                     {
-                        JS_ThrowTypeError(ctx, "TODO: BAD UNO STRUCT VALUE");
-                        throw JsException();
+                        if (compDesc->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_ANY)
+                        {
+                            mems.emplace_back();
+                        }
+                        else
+                        {
+                            css::uno::TypeDescription memDesc(compDesc->ppTypeRefs[i]);
+                            memDesc.makeComplete();
+                            std::vector<char> buf(memDesc.get()->nSize, 0);
+                            uno_constructData(buf.data(), memDesc.get());
+                            mems.emplace_back(buf.data(), css::uno::Type(compDesc->ppTypeRefs[i]));
+                            uno_destructData(buf.data(), memDesc.get(), css::uno::cpp_release);
+                        }
                     }
-                    ValueRef mem(ctx, JS_GetProperty(ctx, val, a));
-                    if (JS_IsException(mem))
+                    else
                     {
-                        throw JsException();
+                        ValueRef mem(ctx, JS_GetProperty(ctx, val, a));
+                        if (JS_IsException(mem))
+                        {
+                            throw JsException();
+                        }
+                        mems.push_back(fromJs(ctx, compDesc->ppTypeRefs[i], mem));
                     }
-                    mems.push_back(fromJs(ctx, compDesc->ppTypeRefs[i], mem));
                 }
                 compDesc = compDesc->pBaseTypeDescription;
                 if (compDesc == nullptr)
