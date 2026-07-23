@@ -102,15 +102,11 @@ JSDialog.comboboxEntry = function (parentContainer, data, builder) {
 	};
 
 	entry.addEventListener('click', clickFunction);
-	entry.addEventListener('keypress', function (event) {
+	entry.addEventListener('keydown', function (event) {
         if (event.key === 'Enter' || event.key === ' ') {
 			clickFunction();
 			event.preventDefault();
-		}
-	});
-
-	entry.addEventListener('keydown', function (event) {
-        if (event.key === 'Tab') {
+		} else if (event.key === 'Tab') {
 			JSDialog.CloseDropdown(data.comboboxId);
 			event.preventDefault();
 		}
