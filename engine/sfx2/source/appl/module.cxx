@@ -219,13 +219,15 @@ FieldUnit SfxModule::GetModuleFieldUnit( css::uno::Reference< css::frame::XFrame
 {
     ENSURE_OR_RETURN( i_frame.is(), "SfxModule::GetModuleFieldUnit: invalid frame!", FieldUnit::MM_100TH );
 
-    // find SfxViewFrame for the given XFrame
-    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
+    // find SfxViewFrame for the given XFrame. Match on frame identity and
+    // include not-yet-visible frames, so a frame still being connected is
+    // found as well as a shown one.
+    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( nullptr, false );
     while ( pViewFrame != nullptr )
     {
         if ( pViewFrame->GetFrame().GetFrameInterface() == i_frame )
             break;
-        pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
+        pViewFrame = SfxViewFrame::GetNext( *pViewFrame, nullptr, false );
     }
     ENSURE_OR_RETURN(
         pViewFrame != nullptr,
