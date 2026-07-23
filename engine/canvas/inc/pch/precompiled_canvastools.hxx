@@ -35,7 +35,6 @@
 #include <vcl/window.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <base/cachedprimitivebase.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>

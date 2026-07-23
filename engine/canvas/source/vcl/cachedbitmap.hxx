@@ -19,8 +19,11 @@
 
 #pragma once
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
-#include <base/cachedprimitivebase.hxx>
+#include <com/sun/star/rendering/ViewState.hpp>
+#include <com/sun/star/rendering/XCachedPrimitive.hpp>
+#include <comphelper/compbase.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <memory>
 
@@ -31,7 +34,9 @@ namespace vclcanvas
 {
     typedef std::shared_ptr< GraphicObject > GraphicObjectSharedPtr;
 
-    class CachedBitmap : public ::canvas::CachedPrimitiveBase
+    typedef comphelper::WeakComponentImplHelper< css::rendering::XCachedPrimitive,
+                                           css::lang::XServiceInfo > CachedBitmap_Base;
+    class CachedBitmap : public CachedBitmap_Base
     {
     public:
 
@@ -48,12 +53,17 @@ namespace vclcanvas
         /// Dispose all internal references
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
+        // XCachedPrimitive
+        virtual ::sal_Int8 redraw( const css::rendering::ViewState& aState ) override;
+
+        // XServiceInfo
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
+
     private:
-        virtual ::sal_Int8 doRedraw( const css::rendering::ViewState&  rNewState,
-                                     const css::uno::Reference< css::rendering::XCanvas >&    rTargetCanvas,
-                                     bool                              bSameViewTransform ) override;
-
-
+        css::rendering::ViewState                         maUsedViewState;
+        css::uno::Reference< css::rendering::XCanvas >    mxTarget;
         GraphicObjectSharedPtr                                         mpGraphicObject;
         const css::rendering::RenderState                              maRenderState;
         const ::Point                                                  maPoint;

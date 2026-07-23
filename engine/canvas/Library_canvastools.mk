@@ -46,7 +46,6 @@ $(eval $(call gb_Library_use_libraries,canvastools,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,canvastools,\
-	canvas/source/tools/cachedprimitivebase \
 	canvas/source/tools/canvastools \
 	canvas/source/tools/elapsedtime \
 	canvas/source/tools/parametricpolypolygon \

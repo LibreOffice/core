@@ -19,8 +19,10 @@
 
 #include <sal/config.h>
 
+#include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/RepaintResult.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -39,7 +41,9 @@ namespace vclcanvas
                                 const rendering::ViewState&                 rUsedViewState,
                                 rendering::RenderState                      aUsedRenderState,
                                 const uno::Reference< rendering::XCanvas >& rTarget ) :
-        CachedPrimitiveBase( rUsedViewState, rTarget ),
+        CachedBitmap_Base(),
+        maUsedViewState( rUsedViewState ),
+        mxTarget( rTarget ),
         mpGraphicObject(std::move( xGraphicObject )),
         maRenderState(std::move(aUsedRenderState)),
         maPoint( rPoint ),
@@ -48,28 +52,38 @@ namespace vclcanvas
     {
     }
 
-    void CachedBitmap::disposing(std::unique_lock<std::mutex>& rGuard)
+    void CachedBitmap::disposing(std::unique_lock<std::mutex>& )
     {
         mpGraphicObject.reset();
-
-        CachedPrimitiveBase::disposing(rGuard);
+        mxTarget.clear();
     }
 
-    ::sal_Int8 CachedBitmap::doRedraw( const rendering::ViewState&                  rNewState,
-                                       const uno::Reference< rendering::XCanvas >&  rTargetCanvas,
-                                       bool                                         bSameViewTransform )
+    sal_Int8 CachedBitmap::redraw( const rendering::ViewState& aState )
     {
-        ENSURE_OR_THROW( bSameViewTransform,
-                         "CachedBitmap::doRedraw(): base called with changed view transform "
-                         "(told otherwise during construction)" );
+        ::basegfx::B2DHomMatrix aUsedTransformation;
+        ::basegfx::B2DHomMatrix aNewTransformation;
 
-        RepaintTarget* pTarget = dynamic_cast< RepaintTarget* >(rTargetCanvas.get());
+        ::basegfx::unotools::homMatrixFromAffineMatrix( aUsedTransformation,
+                                                        maUsedViewState.AffineTransform );
+        ::basegfx::unotools::homMatrixFromAffineMatrix( aNewTransformation,
+                                                        aState.AffineTransform );
+
+        const bool bSameViewTransform( aUsedTransformation == aNewTransformation );
+
+        if( !bSameViewTransform )
+        {
+            // differing transformations, don't try to draft the
+            // output, just plain fail here.
+            return rendering::RepaintResult::FAILED;
+        }
+
+        RepaintTarget* pTarget = dynamic_cast< RepaintTarget* >(mxTarget.get());
 
         ENSURE_OR_THROW( pTarget,
                           "CachedBitmap::redraw(): cannot cast target to RepaintTarget" );
 
         if( !pTarget->repaint( mpGraphicObject,
-                               rNewState,
+                               aState,
                                maRenderState,
                                maPoint,
                                maSize,
@@ -81,6 +95,22 @@ namespace vclcanvas
 
         return rendering::RepaintResult::REDRAWN;
     }
+
+    OUString CachedBitmap::getImplementationName(  )
+    {
+        return u"canvas::CachedPrimitiveBase"_ustr;
+    }
+
+    bool CachedBitmap::supportsService( const OUString& ServiceName )
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    cpo::uno::Sequence< OUString > CachedBitmap::getSupportedServiceNames(  )
+    {
+        return { u"com.sun.star.rendering.CachedBitmap"_ustr };
+    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
