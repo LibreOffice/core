@@ -430,10 +430,6 @@ canvas/inc/base/graphicdevicebase.hxx
 canvas/inc/base/integerbitmapbase.hxx
 canvas/inc/parametricpolypolygon.hxx
 canvas/inc/propertysethelper.hxx
-canvas/inc/rendering/icolorbuffer.hxx
-canvas/inc/rendering/irendermodule.hxx
-canvas/inc/rendering/isurface.hxx
-canvas/inc/rendering/isurfaceproxy.hxx
 canvas/inc/vclwrapper.hxx
 canvas/inc/verifyinput.hxx
 canvas/source/factory/cf_service.cxx
