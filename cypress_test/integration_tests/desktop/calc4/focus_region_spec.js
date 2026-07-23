@@ -84,4 +84,29 @@ describe(['tagdesktop'], 'Calc F6 region navigation', function () {
 		cy.realPress(['Shift', 'F6']);
 		assertGridFocused();
 	});
+
+	it('F6 visits the Navigator when it is open', function () {
+		// Open the Navigator. Opening it grabs keyboard focus, so let that
+		// grab settle and put focus back in the grid to start from a known
+		// region.
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:Navigator');
+		});
+		cy.cGet('#contentbox').should('be.visible');
+		cy.getFrameWindow().then(function (win) {
+			helper.waitUntilLayoutingIsIdle(win);
+			helper.waitForTimers(win, 'navigatorstealfocus');
+		});
+		calcHelper.clickOnFirstCell();
+		assertGridFocused();
+
+		// Shift+F6 backward from the grid lands in the Navigator.
+		cy.realPress(['Shift', 'F6']);
+		a11yHelper.assertFocusWithin('#navigation-sidebar');
+		cy.cGet('#navigation-sidebar .ui-treeview-entry:focus').should('exist');
+
+		// F6 forward out of the Navigator continues into the grid.
+		cy.realPress('F6');
+		assertGridFocused();
+	});
 });

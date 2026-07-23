@@ -468,16 +468,31 @@ class Dispatcher {
 			},
 		};
 
-		const slidePanel = {
+		// The docked panel on the left is a single container that shows one
+		// tab at a time. For presentation and drawing that tab is the slide
+		// sorter, for every doc type it can be the navigator tree. One region
+		// covers the container and focuses whichever tab is currently showing.
+		const slideSorterShowing = () =>
+			app.map.isPresentationOrDrawing() &&
+			isVisible(document.getElementById('slide-sorter'));
+
+		const navigationSidebar = {
 			available: () =>
-				app.map.isPresentationOrDrawing() &&
-				isVisible(document.getElementById('slide-sorter')),
+				slideSorterShowing() ||
+				(!!app.map.navigator && app.map.navigator.isNavigationPanelVisible()),
 			hasFocus: () => contains(document.getElementById('navigation-sidebar')),
 			focus: () => {
-				if (!preview()) return false;
-				preview().focusCurrentSlide();
-				preview().partsFocused = true;
-				return true;
+				if (slideSorterShowing()) {
+					if (!preview()) return false;
+					preview().focusCurrentSlide();
+					preview().partsFocused = true;
+					return true;
+				}
+				if (!app.map.navigator) return false;
+				app.map.navigator.focusNavigationItem();
+				// focusNavigationItem picks the tree row itself, so report
+				// back whether focus actually moved into the panel.
+				return contains(document.getElementById('navigation-sidebar'));
 			},
 			blur: () => {
 				if (preview()) preview().partsFocused = false;
@@ -529,8 +544,7 @@ class Dispatcher {
 
 		const regions = [topBar];
 		if (docType === 'spreadsheet') regions.push(formulaBar);
-		if (docType === 'presentation' || docType === 'drawing')
-			regions.push(slidePanel);
+		regions.push(navigationSidebar);
 		regions.push(documentArea);
 		regions.push(sidebar);
 		if (docType === 'spreadsheet') regions.push(sheetTabs);
