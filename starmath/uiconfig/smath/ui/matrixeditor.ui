@@ -136,7 +136,19 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkButton" id="button_help">
+                <property name="label" translatable="yes" context="stock">_Help</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+                <property name="secondary">True</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -199,6 +211,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label_name"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="matrixname-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="matrixeditor|extendedtip|matrixname">Name of the elements of the matrix.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -229,13 +246,18 @@
                         <property name="hexpand">True</property>
                         <property name="max-width-chars">3</property>
                         <property name="text">3</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment_rows</property>
                         <property name="climb-rate">1</property>
                         <property name="value">3</property>
-                        <property name="truncate-multiline">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="label_rows"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="num_rows-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="matrixeditor|extendedtip|num_rows">Number of rows of the matrix.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -265,13 +287,18 @@
                         <property name="valign">start</property>
                         <property name="max-width-chars">2</property>
                         <property name="text">2</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment_cols</property>
                         <property name="climb-rate">1</property>
                         <property name="value">1</property>
-                        <property name="truncate-multiline">True</property>
                         <accessibility>
                           <relation type="labelled-by" target="label_columns"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="num_cols-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="matrixeditor|extendedtip|num_cols">Number of columns of the matrix.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -287,6 +314,11 @@
                         <property name="margin-start">18</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">fullmatrix</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="unitmatrix-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="matrixeditor|extendedtip|unitmatrix">Creates a unit matrix.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -303,6 +335,11 @@
                         <property name="margin-start">18</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">fullmatrix</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="diagmatrix-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="matrixeditor|extendedtip|diagmatrix">Creates a diagonal matrix.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -319,6 +356,11 @@
                         <property name="margin-start">18</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">fullmatrix</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="symmatrix-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="matrixeditor|extendedtip|symmatrix">Creates a symmetrical matrix.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -335,6 +377,11 @@
                         <property name="margin-start">18</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fullmatrix-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="matrixeditor|extendedtip|fullmatrix">Creates a generic, full matrix.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -609,6 +656,7 @@
     <action-widgets>
       <action-widget response="-5">button_ok</action-widget>
       <action-widget response="-5">button_cancel</action-widget>
+      <action-widget response="-11">button_help</action-widget>
     </action-widgets>
     <child internal-child="accessible">
       <object class="AtkObject" id="MatrixEditor-atkobject">
