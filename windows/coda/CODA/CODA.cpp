@@ -6,6 +6,7 @@
 
 #include <config.h>
 
+#include <cctype>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
@@ -700,6 +701,232 @@ static std::string get_html_clipboard_fragment(const char* data)
         return "";
 
     return htmlData.substr(startPos, endPos - startPos);
+}
+
+// Convert an HTML document into the Windows "HTML Format" clipboard payload.
+//
+// See
+// https://learn.microsoft.com/en-us/windows/win32/dataxchg/html-clipboard-format
+// for the specification of that format.
+//
+// This is deliberately a tiny tokenizer, not a full parser. It is not likely that
+// engine would actually produce pathological HTML with things like the string "<body"
+// inside an attribute, comment, or whatever, but be careful anyway.
+//   * The <body> start tag may carry attributes; we find the true end '>'
+//     of the start tag while respecting quoted attribute values.
+//   * The substring "<body" may occur inside an attribute value in <head>
+//     (e.g. <meta content="<body>">). Because we scan tag by tag and skip
+//     over quoted attribute regions, such occurrences are not mistaken for
+//     the body element.
+//   * Comments, <!doctype>/<?...?> declarations, and the raw-text elements
+//     <script>/<style>/<textarea>/<title> are skipped wholesale, so "<body"
+//     or "</body>" appearing as text/inside them is ignored too.
+//
+//  Header lines use CRLF, matching what Windows browsers emit.
+
+struct BodySpan
+{
+    bool found = false;
+    bool endFound = false;
+    std::size_t startBegin = 0;
+    std::size_t endEnd = 0;
+};
+
+static bool case_insensitive_match(const std::string& haystack, std::size_t pos, const std::string_view needle)
+{
+    if (pos + needle.size() > haystack.size())
+        return false;
+    for (std::size_t k = 0; k < needle.size(); ++k)
+    {
+        auto a = static_cast<unsigned char>(haystack[pos + k]);
+        auto b = static_cast<unsigned char>(needle[k]);
+        if (std::tolower(a) != std::tolower(b))
+            return false;
+    }
+    return true;
+}
+
+// i points at the '<' of a tag. Return the index just past the tag's
+// closing '>', honoring single- and double-quoted attribute values (so a
+// '>' inside a quoted value does not end the tag).
+static std::size_t skip_tag(const std::string& s, std::size_t i)
+{
+    const std::size_t n = s.size();
+    ++i;
+    char quote = 0;
+    while (i < n)
+    {
+        char c = s[i];
+        if (quote)
+        {
+            if (c == quote)
+                quote = 0;
+        }
+        else if (c == '"' || c == '\'')
+            quote = c;
+        else if (c == '>')
+            return i + 1;
+        ++i;
+    }
+    return n; // unterminated tag: treat rest of string as the tag
+}
+
+static bool name_equals(const std::string_view name, const std::string_view lit)
+{
+    if (name.size() != lit.size())
+        return false;
+    for (std::size_t k = 0; k < lit.size(); ++k)
+    {
+        if (std::tolower(static_cast<unsigned char>(name[k])) !=
+            std::tolower(static_cast<unsigned char>(lit[k])))
+            return false;
+    }
+    return true;
+}
+
+static BodySpan find_body(const std::string& s)
+{
+    BodySpan r;
+    const std::size_t n = s.size();
+    std::size_t i = 0;
+
+    while (i < n)
+    {
+        if (s[i] != '<')
+        {
+            ++i;
+            continue;
+        }
+
+        // Comment: <!-- ... -->
+        if (case_insensitive_match(s, i, "<!--"))
+        {
+            std::size_t e = s.find("-->", i + 4);
+            i = (e == std::string::npos) ? n : e + 3;
+            continue;
+        }
+        // Declaration or processing instruction: <! ... >  /  <? ... >
+        if (i + 1 < n && (s[i + 1] == '!' || s[i + 1] == '?'))
+        {
+            std::size_t e = s.find('>', i + 2);
+            i = (e == std::string::npos) ? n : e + 1;
+            continue;
+        }
+
+        const bool isEnd = (i + 1 < n && s[i + 1] == '/');
+        const std::size_t nameStart = i + (isEnd ? 2 : 1);
+
+        // Read an ASCII tag name (letters, digits, '-').
+        std::size_t j = nameStart;
+        while (j < n)
+        {
+            unsigned char u = static_cast<unsigned char>(s[j]);
+            if (std::isalnum(u) || u == '-')
+                ++j;
+            else
+                break;
+        }
+        std::string_view name(s.data() + nameStart, j - nameStart);
+
+        if (name.empty()) // a bare '<' that isn't a real tag
+        {
+            ++i;
+            continue;
+        }
+
+        if (!isEnd && name_equals(name, "body"))
+        {
+            r.found = true;
+            r.startBegin = i;
+            i = skip_tag(s, i); // step past the (possibly attributed) start tag
+            continue;
+        }
+        if (isEnd && name_equals(name, "body"))
+        {
+            r.endFound = true;
+            r.endEnd = skip_tag(s, i);
+            break; // done: we have both ends
+        }
+
+        // Raw-text elements: skip their entire content to the matching end tag
+        // so their text (which may contain '<', '>', quotes, "<body>", etc.)
+        // never confuses the scan.
+        if (!isEnd && (name_equals(name, "script") || name_equals(name, "style") ||
+                       name_equals(name, "textarea") || name_equals(name, "title")))
+        {
+            std::size_t after = skip_tag(s, i);
+            std::string endTag = "</";
+            endTag.append(name);
+            std::size_t e = after;
+            std::size_t close = std::string::npos;
+            while (e + endTag.size() <= n)
+            {
+                if (case_insensitive_match(s, e, endTag))
+                {
+                    close = e;
+                    break;
+                }
+                ++e;
+            }
+            i = (close == std::string::npos) ? n : skip_tag(s, close);
+            continue;
+        }
+
+        // Any other tag: skip it.
+        i = skip_tag(s, i);
+    }
+    return r;
+}
+
+static std::string num10(std::size_t v)
+{
+    char b[24];
+    std::snprintf(b, sizeof b, "%010zu", v);
+    return std::string(b);
+}
+
+static std::string build_header(std::size_t startHtml, std::size_t endHtml,
+                                std::size_t startFrag, std::size_t endFrag)
+{
+    std::string h;
+    h += "Version:0.9\r\n";
+    h += "StartHTML:"     + num10(startHtml) + "\r\n";
+    h += "EndHTML:"       + num10(endHtml)   + "\r\n";
+    h += "StartFragment:" + num10(startFrag) + "\r\n";
+    h += "EndFragment:"   + num10(endFrag)   + "\r\n";
+    return h;
+}
+
+std::string generate_html_format(const std::string& html)
+{
+    static const std::string SF = "<!--StartFragment-->";
+    static const std::string EF = "<!--EndFragment-->";
+
+    // Measure the headers once with dummy values.
+    const std::size_t headerLen = build_header(0, 0, 0, 0).size();
+
+    // Locate the body. Degrade gracefully if it's missing or unterminated.
+    const BodySpan b = find_body(html);
+    const std::size_t startBegin = b.found ? b.startBegin : 0;
+    const std::size_t endEnd = (b.found && b.endFound) ? b.endEnd : html.size();
+
+    // Assemble the content: prefix + <!--StartFragment--> + <body>..</body>
+    //                       + <!--EndFragment--> + suffix.
+    std::string content;
+    content.reserve(html.size() + SF.size() + EF.size());
+    content.append(html, 0, startBegin);
+    content.append(SF);
+    content.append(html, startBegin, endEnd - startBegin);
+    content.append(EF);
+    content.append(html, endEnd, std::string::npos);
+
+    // Offsets are byte positions from the very start of the payload.
+    const std::size_t startHtml = headerLen;
+    const std::size_t endHtml = headerLen + content.size();
+    const std::size_t startFrag = headerLen + startBegin + SF.size(); // at '<body'
+    const std::size_t endFrag = headerLen + endEnd + SF.size(); // just past '</body>'
+
+    return build_header(startHtml, endHtml, startFrag, endFrag) + content;
 }
 
 static void do_open_hyperlink(HWND hWnd, std::wstring url)
@@ -2354,12 +2581,19 @@ static HANDLE copyEngineClipboardData(UINT format, const std::string& mimeType)
     HGLOBAL hMem;
     const void *src;
     size_t size;
-    std::wstring temp;
+    std::wstring wtemp;
+    std::string temp;
     if (format == CF_UNICODETEXT && mimeType == "text/plain;charset=utf-8")
     {
-        temp = Util::string_to_wide_string(std::string_view(outStreams[0], outSizes[0]));
+        wtemp = Util::string_to_wide_string(std::string_view(outStreams[0], outSizes[0]));
+        src = wtemp.c_str();
+        size = (wtemp.length() + 1) * 2;
+    }
+    else if (format == RegisterClipboardFormatW(L"HTML Format") && mimeType == "text/html")
+    {
+        temp = generate_html_format(std::string(outStreams[0], outSizes[0]));
         src = temp.c_str();
-        size = (temp.length() + 1) * 2;
+        size = temp.length();
     }
     else
     {
@@ -2410,7 +2644,7 @@ static std::string MIME_type_for_clipboard_format(UINT format)
         return "image/png";
     else if (name == L"Rich Text Format")
         return "text/rtf";
-    else if (name == L"HTML (HyperText Markup Language)" || name == L"HTML Format")
+    else if (name == L"HTML Format")
         return "text/html";
 
     return "";
@@ -2425,10 +2659,7 @@ static std::vector<int> clipboard_formats_for_MIME_type(const char* mimeType)
     else if (std::strcmp(mimeType, "text/rtf") == 0)
         result.push_back(RegisterClipboardFormatW(L"Rich Text Format"));
     else if (std::strcmp(mimeType, "text/html") == 0)
-    {
         result.push_back(RegisterClipboardFormatW(L"HTML Format"));
-        result.push_back(RegisterClipboardFormatW(L"HTML (HyperText Markup Language)"));
-    }
     else if (std::strcmp(mimeType, "text/markdown") == 0)
     {
         result.push_back(RegisterClipboardFormatW(L"text/markdown"));
