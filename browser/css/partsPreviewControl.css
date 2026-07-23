@@ -54,6 +54,7 @@
 	max-width: 164px;
 	cursor: pointer;
 	border: 3px solid transparent !important;
+	border-radius: var(--border-radius);
 	outline: 3px solid var(--color-border);
 	box-sizing: border-box;
 	margin-left: 10px;
@@ -193,4 +194,77 @@
 .slide-section-name.selected {
 	color: rgb(var(--doc-type));
 	font-weight: 600;
+}
+
+/* While the navigation sidebar is maximized the wrapper is a flex column:
+ * the scrolling slide grid above, the slide toolbar in its own row at the
+ * bottom. The flex display itself is an inline style on the wrapper,
+ * written together with this class, because the wrapper's visibility is
+ * inline-managed too and a class rule cannot win against that. */
+.parts-preview-grid {
+	flex-direction: column;
+}
+
+/* Grid layout for the slide list while the panel is maximized. The slides
+ * flow into as many columns as the wide panel fits; the reorder drop site
+ * and the section headers take a whole row of their own. The grid takes
+ * the space left above the toolbar and scrolls on its own. The rows pack
+ * at their content height from the top: left to the default stretch, a
+ * short deck's row tracks would inflate to fill the panel and any
+ * fixed-height cell added to a row would redistribute that slack, moving
+ * every row. */
+.parts-preview-grid #slide-sorter {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+	align-content: start;
+	gap: 12px;
+	padding: 12px;
+	white-space: normal;
+	overflow-x: visible;
+	overflow-y: auto;
+	flex: 1;
+	min-height: 0;
+	max-height: none;
+}
+
+/* Out of the grid the toolbar flows at the end of the column rather than
+ * pinning to the wrapper's bottom edge over the slides. It keeps its full
+ * height so the grid scrolls above it. */
+.parts-preview-grid #presentation-toolbar {
+	position: static;
+	flex-shrink: 0;
+}
+
+/* The toolbar row is as wide as the whole document area here. Keep the slide
+ * buttons grouped in the centre at their normal size instead of spreading
+ * them to the far edges. */
+.parts-preview-grid #presentation-buttons-toolbar {
+	justify-content: center;
+	gap: 4px;
+}
+
+.parts-preview-grid #first-drop-site,
+.parts-preview-grid .slide-section-header {
+	grid-column: 1 / -1;
+}
+
+.parts-preview-grid .preview-frame {
+	padding: 0;
+	justify-content: stretch;
+}
+
+.parts-preview-grid .preview-helper,
+.parts-preview-grid .preview-slide-number {
+	display: none;
+}
+
+/* The preview code sets an inline pixel width and height on every thumbnail;
+ * in the grid the cell decides the size, so these override that inline rule
+ * to make each thumbnail fill its column while keeping the slide ratio. */
+.parts-preview-grid .preview-img {
+	min-width: 0;
+	max-width: none;
+	width: 100% !important;
+	height: auto !important;
+	margin: 0;
 }

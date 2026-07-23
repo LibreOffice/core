@@ -611,6 +611,8 @@ class UIManager extends window.L.Control {
 
 			this.map.navigator = JSDialog.NavigatorPanel(this.map);
 
+			this.map.paneExpander = new PaneExpander(this.map);
+
 			this.map.formulaautocomplete = new FormulaAutoCompletePopup(this.map);
 			this.map.formulausage = new FormulaUsagePopup(this.map);
 			this.map.autofillpreviewtooltip = new AutoFillPreviewTooltip(this.map);

@@ -579,6 +579,45 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	background-image: url('images/dark/closedoc.svg');
 }
 
+/* The header title takes the free space so the grid toggle and the close
+ * button sit together at the trailing edge. It keeps to one line and
+ * truncates with an ellipsis when the panel is too narrow for it, so the
+ * buttons stay on the title's row inside the fixed-height header. */
+.navigation-title {
+	flex: 1;
+	min-width: 0;
+	margin: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Maximize-to-grid toggle, next to the close button. */
+.navigation-expand-button {
+	min-width: auto;
+	width: var(--btn-img-size);
+	height: var(--btn-img-size);
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+	padding: 0;
+	margin-inline-end: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: var(--border-radius);
+}
+
+.navigation-expand-button:hover,
+.navigation-expand-button[aria-pressed='true'] {
+	background-color: var(--color-background-darker);
+}
+
+.navigation-expand-button img {
+	width: var(--btn-img-size);
+	height: var(--btn-img-size);
+}
+
 /* Navigation Tabs */
 #navigation-options {
 	display: flex;
@@ -623,6 +662,18 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	display: none;
 	border-inline-end: 1px solid var(--color-border);
 	/* bg set in #sidebar-dock-wrapper, #navigator-dock-wrapper */
+}
+
+/* Maximized layout: the open panel covers the document area. The document
+ * canvas underneath keeps rendering, so returning to the normal layout
+ * needs no re-render. */
+#main-document-content.panes-expanded #navigation-sidebar.visible {
+	position: absolute;
+	inset-block: 0;
+	inset-inline-start: 0;
+	inset-inline-end: 0;
+	width: auto;
+	z-index: 992;
 }
 
 /* Quick Find Panel */

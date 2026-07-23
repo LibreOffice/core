@@ -780,6 +780,8 @@ input, button {
 	margin: 0;
 	padding: 0;
 	min-height: 0;
+	/* The maximized panes are placed against this box. */
+	position: relative;
 }
 
 .cool-annotation-collapsed-show .cool-annotation-img {

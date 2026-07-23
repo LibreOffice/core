@@ -21,6 +21,7 @@ class NavigatorPanel extends SidebarBase {
 	navigatorDockWrapper: HTMLElement;
 	quickFindWrapper: HTMLElement;
 	closeNavButton: HTMLElement;
+	expandButton: HTMLElement;
 
 	highlightTerm: string;
 	focusQuickFind: boolean;
@@ -123,6 +124,13 @@ class NavigatorPanel extends SidebarBase {
 
 		var navTitle = window.L.DomUtil.create('h2', 'navigation-title', navHeader);
 		navTitle.textContent = _('Navigation');
+
+		// The slide list of a presentation or drawing can be maximized into a
+		// grid that covers the document area; other document types have no
+		// grid view, so the toggle is offered only there.
+		if (this.map.isPresentationOrDrawing()) {
+			this.createExpandButton(navHeader);
+		}
 
 		// Create wrapper for search
 		const navSearchWrapper = window.L.DomUtil.create(
@@ -294,6 +302,32 @@ class NavigatorPanel extends SidebarBase {
 		this.dirtyWidth = true;
 	}
 
+	// The grid toggle in the navigation header. Pressing it maximizes the
+	// open slide panels into grids over the document area, and pressing it
+	// again returns to the side-by-side layout.
+	createExpandButton(navHeader: HTMLElement) {
+		const button = window.L.DomUtil.create(
+			'button',
+			'navigation-expand-button',
+			navHeader,
+		);
+		this.expandButton = button;
+		const expandText = _('Maximize to grid');
+		button.setAttribute('aria-label', expandText);
+		button.setAttribute('aria-pressed', 'false');
+		button.setAttribute('data-cooltip', expandText);
+		button.setAttribute('tabindex', '0');
+		window.L.control.attachTooltipEventListener(button, this.map);
+
+		const img = window.L.DomUtil.create('img', '', button);
+		img.alt = '';
+		app.LOUtil.setImage(img, 'lc_fullscreen.svg', this.map);
+
+		button.addEventListener('click', () => {
+			if (this.map.paneExpander) this.map.paneExpander.toggle();
+		});
+	}
+
 	createFloatingNavigatorBtn() {
 		// Get or create the main wrapper div
 		this.floatingNavIcon.className =
@@ -421,6 +455,17 @@ class NavigatorPanel extends SidebarBase {
 
 	// Function to handle tab click
 	switchNavigationTab(tabId: string) {
+		// The maximized grid is a view of the slide list, so it lives on the
+		// slides tab: leaving that tab returns the panel to the side-by-side
+		// layout, and the grid toggle shows only while that tab is selected.
+		if (tabId !== 'tab-slide-sorter' && this.map.paneExpander)
+			this.map.paneExpander.reset();
+		if (this.expandButton)
+			this.expandButton.classList.toggle(
+				'hidden',
+				tabId !== 'tab-slide-sorter',
+			);
+
 		// Remove 'selected' class from all tabs
 		this.navigationPanel
 			.querySelectorAll('.navigation-tabs .tab')
@@ -510,8 +555,9 @@ class NavigatorPanel extends SidebarBase {
 		if (
 			app.map.isPresentationOrDrawing() &&
 			this.presentationControlsWrapper &&
-			// the wrapper's inline display is 'block' while its tab is shown, 'none' when hidden
-			this.presentationControlsWrapper.style.display === 'block'
+			// the wrapper's inline display is 'none' while its tab is hidden;
+			// shown it is 'block' as the strip or 'flex' as the maximized grid
+			this.presentationControlsWrapper.style.display !== 'none'
 		) {
 			app.map._docLayer._preview?.focusCurrentSlide();
 			return;
@@ -552,6 +598,8 @@ class NavigatorPanel extends SidebarBase {
 	}
 
 	closeNavigation() {
+		if (this.map.paneExpander)
+			this.map.paneExpander.onPanelClosing('navigation-sidebar');
 		app.layoutingService.appendLayoutingTask(() => {
 			this.navigationPanel.classList.remove('visible');
 			this.floatingNavIcon.classList.add('visible');

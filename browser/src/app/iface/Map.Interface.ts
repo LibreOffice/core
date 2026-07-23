@@ -176,6 +176,7 @@ interface MapInterface extends Evented {
 	showComments(on?: boolean): void;
 	showResolvedComments(on?: boolean): void;
 	navigator: NavigatorPanel;
+	paneExpander: PaneExpander;
 	setPart(
 		part: number | string,
 		external?: boolean,

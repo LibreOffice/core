@@ -63,6 +63,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 	onAdd: function (map) {
 		this._previewInitialized = false;
+		this._gridMode = false;
 		this._previewTiles = [];
 		this._sectionHeaders = []; // Section header DOM elements
 		this._collapsedSections = new Set(); // Names of sections collapsed by the user
@@ -1092,8 +1093,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			if (child === element || child === element.parentNode) {
 				return frameIndex;
 			}
-			// Only count non-section-header children as frames
-			if (!child.classList.contains('slide-section-header'))
+			// Only count slide frames: not section headers, and not the
+			// drop-gap cell a grid drag keeps in the flow.
+			if (!child.classList.contains('slide-section-header') &&
+			    !child.classList.contains('drop-gap-cell'))
 				frameIndex++;
 		}
 		return -1;
@@ -1384,6 +1387,37 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		this._height = window.innerHeight;
 		this._width = window.innerWidth;
+	},
+
+	// Switch the slide list between the narrow vertical strip and a wide
+	// grid. The grid shows bigger thumbnails, so the previews are re-fetched
+	// at a larger size to stay crisp.
+	setGridMode: function (enabled) {
+		enabled = !!enabled;
+		if (this._gridMode === enabled)
+			return;
+		this._gridMode = enabled;
+
+		var wrapper = window.L.DomUtil.get('presentation-controls-wrapper');
+		if (wrapper) {
+			if (enabled)
+				window.L.DomUtil.addClass(wrapper, 'parts-preview-grid');
+			else
+				window.L.DomUtil.removeClass(wrapper, 'parts-preview-grid');
+			// The wrapper shows and hides through its inline display value, so
+			// the layout change writes that same value: 'flex' stacks the
+			// slide list and the toolbar as a column for the grid, 'block' is
+			// the plain flow of the strip. A hidden wrapper stays hidden.
+			if (wrapper.style.display !== 'none')
+				wrapper.style.display = enabled ? 'flex' : 'block';
+		}
+
+		var listSize = window.mode.isDesktop() ? 180 : (window.mode.isTablet() ? 120 : 60);
+		this.options.maxWidth = enabled ? 256 : listSize;
+		this.options.maxHeight = this.options.maxWidth;
+
+		if (this._previewInitialized)
+			this._invalidateParts();
 	},
 
 	_beforeRequestPreview: function (e) {
@@ -1690,15 +1724,21 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			sizes.push(size);
 			gapSize += size;
 		}
+		// In the grid layout the gap is one empty cell, so it takes a
+		// single slide's height rather than the dragged frames' sum.
+		if (this._gridMode && sizes.length)
+			gapSize = sizes[0];
 
 		this._dragState = {
 			draggedParts: draggedParts,
 			frames: frames,
 			sizes: sizes,
 			sizeProperty: sizeProperty,
+			grid: this._gridMode,
 			gapSize: gapSize,
 			gapFrame: null,
 			gapSide: null,
+			gapPlaceholder: null,
 			insertIndex: null,
 			pointer: null,
 			autoScrollId: null
@@ -1713,6 +1753,17 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		setTimeout(() => {
 			if (this._dragState !== state)
 				return;
+			// A grid frame keeps occupying its cell at zero size, so in the
+			// grid the dragged frames leave the flow entirely and the
+			// remaining slides slide into the freed cells.
+			if (state.grid) {
+				this._animateGridChange(function () {
+					for (let i = 0; i < frames.length; i++)
+						frames[i].style.display = 'none';
+				});
+				this._schedulePreviewRefresh();
+				return;
+			}
 			for (let i = 0; i < frames.length; i++) {
 				frames[i].style.boxSizing = 'border-box';
 				frames[i].style[sizeProperty] = sizes[i] + 'px';
@@ -1759,7 +1810,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// shows its own highlight, so no insertion gap. Clearing the
 		// pointer also pauses the edge auto-scroll.
 		if (e.target && e.target.closest && e.target.closest('.slide-section-header')) {
-			this._removeDropGap(state);
+			this._closeDropGap(state);
 			state.insertIndex = null;
 			state.pointer = null;
 			return;
@@ -1792,7 +1843,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (e.clientX >= rect.left && e.clientX < rect.right &&
 		    e.clientY >= rect.top && e.clientY < rect.bottom)
 			return;
-		this._removeDropGap(state);
+		this._closeDropGap(state);
 		state.insertIndex = null;
 		state.pointer = null;
 	},
@@ -1820,6 +1871,83 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._finishDrag(false);
 	},
 
+	// Slide the sorter's children from where they are into the places a
+	// layout change gives them. The grid re-places whole cells in one
+	// step, so each moved child briefly keeps its old position as a
+	// transform and then slides from there into its new cell. mutate()
+	// applies the layout change.
+	_animateGridChange: function (mutate) {
+		if (window.matchMedia &&
+		    window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			mutate();
+			return;
+		}
+
+		const container = this._partsPreviewCont;
+		const children = Array.prototype.slice.call(container.children);
+		const before = new Map();
+		for (let i = 0; i < children.length; i++) {
+			const el = children[i];
+			// A change arriving mid-slide starts from the spot the child
+			// has reached: the rect includes the running transform, which
+			// then resets so the new layout measures clean.
+			before.set(el, el.getBoundingClientRect());
+			if (el._gridSlideTimer) {
+				clearTimeout(el._gridSlideTimer);
+				el._gridSlideTimer = null;
+			}
+			el.style.transition = '';
+			el.style.transform = '';
+		}
+
+		mutate();
+
+		const moved = [];
+		for (let i = 0; i < container.children.length; i++) {
+			const el = container.children[i];
+			const from = before.get(el);
+			if (!from || (!from.width && !from.height))
+				continue;
+			const to = el.getBoundingClientRect();
+			if (!to.width && !to.height)
+				continue;
+			const deltaX = from.left - to.left;
+			const deltaY = from.top - to.top;
+			if (!deltaX && !deltaY)
+				continue;
+			el.style.transition = 'none';
+			el.style.transform =
+				'translate(' + deltaX + 'px, ' + deltaY + 'px)';
+			moved.push(el);
+		}
+		if (!moved.length)
+			return;
+
+		// With the old positions frozen in as transforms, releasing them
+		// after a reflow slides each child into its new cell.
+		void container.offsetHeight;
+		for (let i = 0; i < moved.length; i++) {
+			const el = moved[i];
+			el.style.transition = 'transform 0.15s ease-out';
+			el.style.transform = '';
+			el._gridSlideTimer = setTimeout(() => {
+				el.style.transition = '';
+				el._gridSlideTimer = null;
+			}, 200);
+		}
+	},
+
+	// Close the insertion gap; in the grid the surrounding slides move
+	// back into the freed cells.
+	_closeDropGap: function (state) {
+		if (!state.gapFrame)
+			return;
+		if (state.grid)
+			this._animateGridChange(() => this._removeDropGap(state));
+		else
+			this._removeDropGap(state);
+	},
+
 	// Choose the insertion point from the pointer position and open a
 	// slide-sized gap there. The gap is a margin on the frame the dragged
 	// slides would be inserted before (or after the last frame, when the
@@ -1830,6 +1958,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			return;
 
 		const horizontal = this._direction === 'x';
+		const rtl = document.documentElement.dir === 'rtl';
 		const pointerPosition = horizontal ? state.pointer.x : state.pointer.y;
 
 		let insertIndex = this._previewTiles.length;
@@ -1843,8 +1972,22 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			if (frame.classList.contains('section-collapsed'))
 				continue;
 			const rect = frame.getBoundingClientRect();
-			const middle = horizontal ? rect.left + rect.width / 2 : rect.top + rect.height / 2;
-			if (pointerPosition < middle) {
+			let pointerBefore;
+			if (state.grid) {
+				// The grid flows in reading order: the pointer comes before
+				// a frame when it is above the frame's row, or in the same
+				// row on the near side of the frame's middle.
+				const middleX = rect.left + rect.width / 2;
+				const beforeInRow = rtl ?
+					state.pointer.x > middleX : state.pointer.x < middleX;
+				pointerBefore = state.pointer.y < rect.top ||
+					(state.pointer.y < rect.bottom && beforeInRow);
+			} else {
+				const middle = horizontal ?
+					rect.left + rect.width / 2 : rect.top + rect.height / 2;
+				pointerBefore = pointerPosition < middle;
+			}
+			if (pointerBefore) {
 				insertIndex = i;
 				gapFrame = frame;
 				break;
@@ -1860,11 +2003,32 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (gapFrame === state.gapFrame && gapSide === state.gapSide)
 			return;
 
-		this._removeDropGap(state);
-		state.gapFrame = gapFrame;
-		state.gapSide = gapSide;
-		if (gapFrame)
-			gapFrame.style[this._gapMarginProperty(gapSide)] = state.gapSize + 'px';
+		const applyGap = () => {
+			this._removeDropGap(state);
+			state.gapFrame = gapFrame;
+			state.gapSide = gapSide;
+			if (!gapFrame)
+				return;
+			if (state.grid) {
+				// A margin on a grid item stays inside its own cell and
+				// moves no neighbour, so the grid gap is an empty cell
+				// inserted into the flow where the slides would land.
+				const cell = document.createElement('div');
+				cell.className = 'drop-gap-cell';
+				cell.style.height = state.gapSize + 'px';
+				this._partsPreviewCont.insertBefore(cell,
+					gapSide === 'before' ? gapFrame : gapFrame.nextSibling);
+				state.gapPlaceholder = cell;
+			} else {
+				gapFrame.style[this._gapMarginProperty(gapSide)] = state.gapSize + 'px';
+			}
+		};
+		// A gap move re-places the slides around it in one step; the
+		// animation slides them from their old cells into the new ones.
+		if (state.grid)
+			this._animateGridChange(applyGap);
+		else
+			applyGap();
 
 		// A gap move shifts the slides around it; load the previews of the
 		// ones it brought into view.
@@ -1880,7 +2044,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	_removeDropGap: function (state) {
 		if (!state || !state.gapFrame)
 			return;
-		state.gapFrame.style[this._gapMarginProperty(state.gapSide)] = '';
+		if (state.gapPlaceholder) {
+			state.gapPlaceholder.remove();
+			state.gapPlaceholder = null;
+		} else {
+			state.gapFrame.style[this._gapMarginProperty(state.gapSide)] = '';
+		}
 		state.gapFrame = null;
 		state.gapSide = null;
 	},
@@ -2011,6 +2180,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		const container = this._partsPreviewCont;
 		const restoreFrame = function (frame) {
+			frame.style.display = '';
 			frame.style.width = '';
 			frame.style.height = '';
 			frame.style.padding = '';
@@ -2018,6 +2188,20 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			frame.style.overflow = '';
 			frame.style.boxSizing = '';
 		};
+
+		// A grid drag settles by sliding the slides from their current
+		// cells into the ones the closed gap and the returning frames
+		// give them. The frames come back whole, so there is no size to
+		// grow back.
+		if (state.grid) {
+			this._animateGridChange(() => {
+				this._removeDropGap(state);
+				state.frames.forEach(restoreFrame);
+			});
+			container.classList.remove('dragging-slide');
+			this._schedulePreviewRefresh();
+			return;
+		}
 
 		if (!animate)
 			container.classList.add('drag-no-transition');

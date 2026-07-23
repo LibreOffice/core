@@ -615,18 +615,6 @@ a.leaflet-control-zoom-in {
 	box-shadow: 0 2px 4px 0 var(--color-black-20), 0 4px 6px 0 rgba(0, 0, 0, 0.19) !important;
 	border: none !important;
 }
-#slide-sorter .preview-img {
-	border-radius: var(--border-radius);
-	border-color: var(--color-border);
-}
-#slide-sorter .preview-img:hover {
-	border-color: var(--color-primary-darker);
-}
-#slide-sorter .preview-img-currentpart {
-	border-color: var(--color-primary-dark);
-	border-style: solid;
-	border-radius: var(--border-radius);
-}
 #presentation-controls-wrapper {
 	background: none;
 	border: none;
