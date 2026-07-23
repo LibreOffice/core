@@ -41,6 +41,15 @@
   </kudos>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="26.04.2.4-1" date="2026-07-23">
+      <description>
+        <p>New features and fixes in this release:</p>
+        <ul>
+          <li>All fixes and improvements that come from the shared codebase with Collabora Online 26.04.2.4</li>
+          <li>Various small bugfixes related to the desktop application</li>
+        </ul>
+      </description>
+    </release>
     <release version="26.04.1.4-1" date="2026-07-02">
       <description>
         <p>New features and fixes in this release:</p>
