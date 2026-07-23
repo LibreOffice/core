@@ -86,7 +86,6 @@ namespace canvastools
         {
             // setup identity transform
             setIdentityAffineMatrix2D( viewState.AffineTransform );
-            viewState.Clip.clear();
 
             return viewState;
         }
@@ -924,28 +923,6 @@ namespace canvastools
         {
             // accumulate non-empty clips into one region
             vcl::Region aClipRegion(true);
-
-            if( viewState.Clip.is() )
-            {
-                ::basegfx::B2DPolyPolygon aClipPoly(
-                    ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(viewState.Clip) );
-
-                if( aClipPoly.count() )
-                {
-                    // setup non-empty clipping
-                    ::basegfx::B2DHomMatrix aMatrix;
-                    aClipPoly.transform(
-                        ::basegfx::unotools::homMatrixFromAffineMatrix( aMatrix,
-                                                                        viewState.AffineTransform ) );
-
-                    aClipRegion = vcl::Region::GetRegionFromPolyPolygon( ::tools::PolyPolygon( aClipPoly ) );
-                }
-                else
-                {
-                    // clip polygon is empty
-                    aClipRegion.SetEmpty();
-                }
-            }
 
             if( renderState.Clip.is() )
             {

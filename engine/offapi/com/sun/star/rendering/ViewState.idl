@@ -36,23 +36,6 @@ struct ViewState
      */
     ::com::sun::star::geometry::AffineMatrix2D  AffineTransform;
 
-
-    /** The clipping area associated with the view.<p>
-
-        This clipping is interpreted in the view coordinate systems,
-        i.e. subject to the view transform before mapping to the
-        device coordinate space.<p>
-
-        Specifying an empty interface denotes no clipping,
-        i.e. everything rendered to the canvas will be visible
-        (subject to device-dependent constraints, of
-        course). Specifying an empty XPolyPolygon2D, i.e. a
-        poly-polygon containing zero polygons, or an XPolyPolygon2D
-        with any number of empty sub-polygons, denotes the NULL
-        clip. That means, nothing rendered to the canvas will be
-        visible.<p>
-     */
-    XPolyPolygon2D                                      Clip;
 };
 
 }; }; }; };

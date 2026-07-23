@@ -56,17 +56,12 @@ namespace vclcanvas
     }
 
     ::sal_Int8 CachedBitmap::doRedraw( const rendering::ViewState&                  rNewState,
-                                       const rendering::ViewState&                  rOldState,
                                        const uno::Reference< rendering::XCanvas >&  rTargetCanvas,
                                        bool                                         bSameViewTransform )
     {
         ENSURE_OR_THROW( bSameViewTransform,
                          "CachedBitmap::doRedraw(): base called with changed view transform "
                          "(told otherwise during construction)" );
-
-        // TODO(P1): Could adapt to modified clips as well
-        if( rNewState.Clip != rOldState.Clip )
-            return rendering::RepaintResult::FAILED;
 
         RepaintTarget* pTarget = dynamic_cast< RepaintTarget* >(rTargetCanvas.get());
 

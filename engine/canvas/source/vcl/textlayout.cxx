@@ -111,8 +111,7 @@ namespace vclcanvas
         setupLayoutMode( *pVDev, mnTextDirection );
 
         const rendering::ViewState aViewState(
-            geometry::AffineMatrix2D(1,0,0, 0,1,0),
-            nullptr);
+            geometry::AffineMatrix2D(1,0,0, 0,1,0));
 
         rendering::RenderState aRenderState (
             geometry::AffineMatrix2D(1,0,0,0,1,0),
@@ -158,10 +157,6 @@ namespace vclcanvas
         pVDev->SetFont( mpFont->getVCLFont() );
 
         setupLayoutMode( *pVDev, mnTextDirection );
-
-        const rendering::ViewState aViewState(
-            geometry::AffineMatrix2D(1,0,0, 0,1,0),
-            nullptr);
 
         rendering::RenderState aRenderState (
             geometry::AffineMatrix2D(1,0,0,0,1,0),

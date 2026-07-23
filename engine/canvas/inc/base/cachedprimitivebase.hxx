@@ -91,7 +91,6 @@ namespace canvas
             When true, rNewState and rOldState have the same transformation.
          */
         virtual ::sal_Int8 doRedraw( const css::rendering::ViewState&  rNewState,
-                                     const css::rendering::ViewState&  rOldState,
                                      const css::uno::Reference< css::rendering::XCanvas >&    rTargetCanvas,
                                      bool                              bSameViewTransform ) = 0;
 

@@ -50,7 +50,6 @@ namespace vclcanvas
 
     private:
         virtual ::sal_Int8 doRedraw( const css::rendering::ViewState&  rNewState,
-                                     const css::rendering::ViewState&  rOldState,
                                      const css::uno::Reference< css::rendering::XCanvas >&    rTargetCanvas,
                                      bool                              bSameViewTransform ) override;
 

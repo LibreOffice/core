@@ -45,7 +45,6 @@ namespace canvas
 
     void CachedPrimitiveBase::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
     {
-        maUsedViewState.Clip.clear();
         mxTarget.clear();
     }
 
@@ -69,7 +68,6 @@ namespace canvas
         }
 
         return doRedraw( aState,
-                         maUsedViewState,
                          mxTarget,
                          bSameViewTransforms );
     }
