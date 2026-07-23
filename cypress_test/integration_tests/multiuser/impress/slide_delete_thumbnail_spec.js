@@ -13,15 +13,14 @@ describe(['tagmultiuser'], 'Multiuser slide delete thumbnails', function() {
 
 	// Map each slide's identity to the thumbnail image it currently shows,
 	// skipping slides whose preview is still a placeholder (not yet fetched).
+	// A preview showing a placeholder carries the glyph's name in
+	// placeholderName; a fetched thumbnail has it unset.
 	function thumbnailsByHash(win) {
 		var preview = win.app.map._docLayer._preview;
-		var ph = win.document.querySelector('meta[name="previewSmile"]').content;
-		var ph2 = win.document.querySelector('meta[name="previewImg"]').content;
 		var map = {};
 		preview._previewTiles.forEach(function(img) {
-			var src = img.src || '';
-			if (src !== ph && src !== ph2)
-				map[img.hash] = src;
+			if (!img.placeholderName && img.src)
+				map[img.hash] = img.src;
 		});
 		return map;
 	}

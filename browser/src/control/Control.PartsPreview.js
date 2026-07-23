@@ -237,6 +237,88 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		return this._menuPosEl;
 	},
 
+	// The proportions of the document's slides, as height over width, from
+	// the same document sizes the preview fetch uses. Falls back to the 16:9
+	// slide default while the sizes are not known yet.
+	_slideRatio: function () {
+		const docLayer = this._map._docLayer;
+		let width = 0;
+		let height = 0;
+		if (docLayer) {
+			if (docLayer._partDimensions &&
+			    docLayer._partDimensions.length === docLayer._parts) {
+				width = docLayer.getPartWidth(0);
+				height = docLayer.getPartHeight(0);
+			}
+			if (!(width > 0 && height > 0)) {
+				width = docLayer._partWidthTwips;
+				height = docLayer._partHeightTwips;
+			}
+		}
+		if (!(width > 0 && height > 0) && app.activeDocument && app.activeDocument.fileSize) {
+			width = app.activeDocument.fileSize.x;
+			height = app.activeDocument.fileSize.y;
+		}
+		return (width > 0 && height > 0) ? height / width : 9 / 16;
+	},
+
+	// The picture a preview shows in place of a thumbnail that has not
+	// arrived: the glyph from the named meta tag (the previewSmile mark, or
+	// the previewImg spinner while a request is under way) centered on a box
+	// with the slides' own proportions. The box gives the placeholder the
+	// intrinsic shape of a loaded thumbnail, so it takes the same size in
+	// every layout; the glyph's own square would otherwise set the shape.
+	_placeholderSrc: function (metaName) {
+		const ratio = this._slideRatio();
+		this._placeholderCache = this._placeholderCache || {};
+		const cached = this._placeholderCache[metaName];
+		if (cached && cached.ratio === ratio)
+			return cached.src;
+
+		const base64Prefix = 'data:image/svg+xml;base64,';
+		const content = document.querySelector('meta[name="' + metaName + '"]').content;
+		const glyphMarkup = window.atob(content.substring(base64Prefix.length));
+		const boxWidth = 512;
+		const boxHeight = Math.round(boxWidth * ratio);
+		const glyphSize = Math.round(Math.min(boxWidth, boxHeight) / 2);
+		// The glyph goes in as a nested svg sized to its spot in the box;
+		// its own fixed width and height would win over the wrapper's
+		// sizes, so they go away.
+		const tagEnd = glyphMarkup.indexOf('>');
+		const glyph = glyphMarkup.substring(0, tagEnd)
+			.replace(/\s(?:width|height)=(?:"[^"]*"|'[^']*')/g, '') +
+			' x="' + Math.round((boxWidth - glyphSize) / 2) + '"' +
+			' y="' + Math.round((boxHeight - glyphSize) / 2) + '"' +
+			' width="' + glyphSize + '" height="' + glyphSize + '"' +
+			glyphMarkup.substring(tagEnd);
+		const src = base64Prefix + window.btoa(
+			'<svg xmlns="http://www.w3.org/2000/svg" width="' + boxWidth +
+			'" height="' + boxHeight + '">' + glyph + '</svg>');
+		this._placeholderCache[metaName] = {ratio: ratio, src: src};
+		return src;
+	},
+
+	// Point a preview at the named placeholder glyph. The property holds the
+	// name of the meta tag the picture is built from; a preview showing a
+	// fetched thumbnail has it unset.
+	_setPlaceholder: function (img, metaName) {
+		img.placeholderName = metaName;
+		const src = this._placeholderSrc(metaName);
+		if (img.src !== src)
+			img.src = src;
+	},
+
+	// Rebuild the placeholders on the previews that still show one, so their
+	// boxes follow the slide proportions currently in use. A preview showing
+	// a fetched thumbnail is left alone.
+	_refreshPlaceholders: function () {
+		for (let i = 0; i < this._previewTiles.length; ++i) {
+			const img = this._previewTiles[i];
+			if (img && img.placeholderName)
+				this._setPlaceholder(img, img.placeholderName);
+		}
+	},
+
 	_createPreview: function (i, hashCode) {
 		var frameClass = 'preview-frame ' + this.options.frameClass;
 		var frame = window.L.DomUtil.create('div', frameClass, this._partsPreviewCont);
@@ -268,7 +350,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// carries that id under its legacy name, hash, and this property
 		// keeps the name it is seeded from.
 		img.hash = hashCode;
-		img.src = document.querySelector('meta[name="previewSmile"]').content;
+		this._setPlaceholder(img, 'previewSmile');
 		img.fetched = false;
 		if (!window.mode.isDesktop()) {
 			(new Hammer(img, {recognizers: [[Hammer.Press]]}))
@@ -1314,7 +1396,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 				for (it = 0; it < app.impress.partList.length; it++) {
 					this._previewTiles[it].hash = app.impress.partList[it].hash;
-					this._previewTiles[it].src = document.querySelector('meta[name="previewSmile"]').content;
+					this._setPlaceholder(this._previewTiles[it], 'previewSmile');
 					this._previewTiles[it].fetched = false;
 				}
 			}
@@ -1331,7 +1413,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				if (this._previewTiles[it].hash) {
 					previewByHash[this._previewTiles[it].hash] = {
 						src: this._previewTiles[it].src,
-						fetched: this._previewTiles[it].fetched
+						fetched: this._previewTiles[it].fetched,
+						placeholderName: this._previewTiles[it].placeholderName
 					};
 				}
 			}
@@ -1343,6 +1426,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					if (knownPreview) {
 						this._previewTiles[it].src = knownPreview.src;
 						this._previewTiles[it].fetched = knownPreview.fetched;
+						this._previewTiles[it].placeholderName = knownPreview.placeholderName;
 					} else {
 						this._map.getPreview(it, it, this.options.maxWidth, this.options.maxHeight, {autoUpdate: this.options.autoUpdate});
 					}
@@ -1401,8 +1485,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 	_beforeRequestPreview: function (e) {
 		if (e.part !== undefined && e.part >= 0 && e.part < this._previewTiles.length) {
-			if (this._previewTiles[e.part].src === document.querySelector('meta[name="previewSmile"]').content)
-				this._previewTiles[e.part].src = document.querySelector('meta[name="previewImg"]').content;
+			if (this._previewTiles[e.part].placeholderName === 'previewSmile')
+				this._setPlaceholder(this._previewTiles[e.part], 'previewImg');
 		}
 	},
 
@@ -1426,6 +1510,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				return candidate.hash === e.uniqueId;
 			});
 			if (tile) {
+				tile.placeholderName = null;
 				tile.src = e.tile.src;
 				tile.fetched = true;
 				window.app.console.debug('PREVIEW: part fetched : ' + parseInt(e.id));
@@ -2270,6 +2355,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		    !this._previewInitialized ||
 		    !this._previewTiles)
 			return;
+
+		// The invalidation may come from a slide size change. The requests
+		// below only reach the slides in view, so the placeholders on the
+		// rest pick up the new proportions here.
+		this._refreshPlaceholders();
 
 		for (var part = 0; part < this._previewTiles.length; part++) {
 			this._previewTiles[part].fetched = false;
