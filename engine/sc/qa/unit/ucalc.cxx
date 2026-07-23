@@ -3651,6 +3651,54 @@ CPPUNIT_TEST_FIXTURE(Test, testToggleRefFlag)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testAutoFilterFlagShiftUpUndo)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // An autofilter range A25:F35 (header row 25 == index 24), with the ScMF::Auto
+    // buttons on the header - as an anonymous database range carries them.
+    ScDBData* pDBData = new ScDBData(STR_DB_GLOBAL_NONAME, 0, 0, 24, 5, 34);
+    pDBData->SetAutoFilter(true);
+    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
+    m_pDoc->ApplyFlagsTab(0, 24, 5, 24, 0, ScMF::Auto);
+
+    auto bHasAutoFilter = [this](SCCOL nCol, SCROW nRow) {
+        return bool(m_pDoc->GetAttr(nCol, nRow, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto);
+    };
+
+    CPPUNIT_ASSERT(bHasAutoFilter(0, 24)); // A25
+    CPPUNIT_ASSERT(bHasAutoFilter(1, 24)); // B25
+
+    // Shift cells up above the range: delete A10:B20, pulling the cells below up.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_xDocShell->GetDocFunc().DeleteCells(ScRange(0, 9, 0, 1, 19, 0), &aMark,
+                                          DelCellCmd::CellsUp, true);
+
+    // Forward: the buttons stay on the header (RefreshAutoFilter reconciles them).
+    CPPUNIT_ASSERT_MESSAGE("A25 keeps its autofilter button after shift-up",
+                           bHasAutoFilter(0, 24));
+    CPPUNIT_ASSERT_MESSAGE("B25 keeps its autofilter button after shift-up",
+                           bHasAutoFilter(1, 24));
+
+    // Undo re-inserts the rows, which pushes the A/B header cells down 11 rows. The
+    // buttons must stay on the header (A25:B25), not ride down to A36:B36.
+    m_pDoc->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_MESSAGE("A25 keeps its autofilter button after undo", bHasAutoFilter(0, 24));
+    CPPUNIT_ASSERT_MESSAGE("B25 keeps its autofilter button after undo", bHasAutoFilter(1, 24));
+    CPPUNIT_ASSERT_MESSAGE("no stray autofilter button at A36 after undo", !bHasAutoFilter(0, 35));
+    CPPUNIT_ASSERT_MESSAGE("no stray autofilter button at B36 after undo", !bHasAutoFilter(1, 35));
+
+    // Redo re-does the shift-up; the buttons must again land on the header, not ride up
+    // with the shifted cells (to A14/B14).
+    m_pDoc->GetUndoManager()->Redo();
+    CPPUNIT_ASSERT_MESSAGE("A25 keeps its autofilter button after redo", bHasAutoFilter(0, 24));
+    CPPUNIT_ASSERT_MESSAGE("B25 keeps its autofilter button after redo", bHasAutoFilter(1, 24));
+    CPPUNIT_ASSERT_MESSAGE("no stray autofilter button at A14 after redo", !bHasAutoFilter(0, 13));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testAutofilter)
 {
     m_pDoc->InsertTab( 0, u"Test"_ustr );

@@ -608,13 +608,14 @@ void ScUndoDeleteCells::Undo()
 
     // Now that DBData have been restored in ScMoveUndo::EndUndo() via its
     // pRefUndoDoc we can apply the AutoFilter buttons.
-    // Add one row for cases undoing deletion right above a cut AutoFilter
-    // range so the buttons are removed.
-    SCROW nRefreshEndRow = std::min<SCROW>( aEffRange.aEnd.Row() + 1, rDoc.MaxRow());
+    // The re-inserted cells push every database range below the deletion down - its
+    // header (carrying the AutoFilter buttons) rides along - so reconcile the buttons
+    // over the full column height, not just the deleted band, otherwise the buttons of
+    // a range further below are left shifted down instead of back on its header.
     for (SCTAB i=0; i < nCount; ++i)
     {
         rDoc.RefreshAutoFilter( aEffRange.aStart.Col(), aEffRange.aStart.Row(),
-                aEffRange.aEnd.Col(), nRefreshEndRow, pTabs[i]);
+                aEffRange.aEnd.Col(), rDoc.MaxRow(), pTabs[i]);
     }
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
@@ -648,7 +649,7 @@ void ScUndoDeleteCells::Redo()
     for (SCTAB i=0; i < nCount; ++i)
     {
         rDoc.RefreshAutoFilter( aEffRange.aStart.Col(), aEffRange.aStart.Row(),
-                aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]);
+                aEffRange.aEnd.Col(), rDoc.MaxRow(), pTabs[i]);
     }
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
