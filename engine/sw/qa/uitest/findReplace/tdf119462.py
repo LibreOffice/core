@@ -29,7 +29,7 @@ class tdf119462(UITestCase):
 
                 #verify label searchdesc
                 searchdesc = xDialog.getChild("searchdesc")
-                self.assertEqual(get_state_as_dict(searchdesc)["Text"], "bold")
+                self.assertEqual(get_state_as_dict(searchdesc)["Text"], "Bold")
                 noformat = xDialog.getChild("noformat")
                 noformat.executeAction("CLICK", tuple())   #click No format button
                 self.assertEqual(get_state_as_dict(searchdesc)["Text"], "")
