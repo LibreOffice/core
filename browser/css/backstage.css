@@ -301,13 +301,16 @@
 	background-color: var(--color-toolbar-border);
 }
 
-.backstage-home-more-button {
+/* Shared secondary-action button, used by the home "More Templates" and the
+ * open "Add Cloud +" actions. Follows the canonical secondary button: 32px
+ * tall via 8px/12px spacing tokens, --border-radius corners, default font. */
+#backstage-view .backstage-home-more-button,
+#backstage-view .backstage-open-add-cloud-button {
 	background: var(--color-accent-background);
 	border: 1px solid var(--color-border);
-	border-radius: 4px;
-	padding: 0 8px;
-	height: 24px;
-	font-size: 12px;
+	border-radius: var(--border-radius);
+	padding: var(--spacing-m) var(--spacing-l);
+	font-size: var(--default-font-size);
 	font-weight: 600;
 	color: var(--color-main-text);
 	cursor: pointer;
@@ -318,9 +321,13 @@
 	justify-content: center;
 }
 
-.backstage-home-more-button:hover {
+#backstage-view .backstage-home-more-button:hover,
+#backstage-view .backstage-home-more-button:focus-visible,
+#backstage-view .backstage-open-add-cloud-button:hover,
+#backstage-view .backstage-open-add-cloud-button:focus-visible {
 	background-color: var(--color-background-dark);
 	border-color: var(--doc-type-color);
+	outline: none;
 }
 
 .backstage-templates-empty {
@@ -882,26 +889,6 @@
 	flex: 1;
 	height: 1px;
 	background: var(--color-border, #d0d0d0);
-}
-
-#backstage-view .backstage-open-add-cloud-button {
-	background: var(--color-background-lighter);
-	border: 1px solid var(--color-border);
-	border-radius: 4px;
-	padding: 6px 12px;
-	font-size: 13px;
-	font-weight: 600;
-	color: var(--doc-type-color);
-	cursor: pointer;
-	white-space: nowrap;
-	transition: all 0.2s ease;
-}
-
-#backstage-view .backstage-open-add-cloud-button:hover,
-#backstage-view .backstage-open-add-cloud-button:focus-visible {
-	background-color: var(--color-background-dark);
-	border-color: var(--doc-type-color);
-	outline: none;
 }
 
 /* Add-cloud modal */
