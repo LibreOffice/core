@@ -29,6 +29,27 @@
 
 [data-theme='dark'] .backstage-view {
 	--color-accent-background: var(--doc-type-color);
+	--icon-primary-color: rgb(138, 138, 138);
+}
+
+[data-theme='dark'] .backstage-view .icon-white {
+	fill: transparent;
+}
+
+[data-theme='dark'] .backstage-sidebar-item.active {
+	--icon-primary-color: white;
+}
+
+/* Sidebar's save icon: make it outline on dark mode */
+[data-theme='dark'] #backstage-save .icon-primary {
+	stroke-width: 0.4;
+	stroke: var(--icon-primary-color);
+}
+[data-theme='dark'] #backstage-save .icon-white {
+	fill: var(--color-backstage-background-dark);
+}
+[data-theme='dark'] #backstage-save .icon-gray {
+	fill: var(--color-backstage-background-dark);
 }
 
 .backstage-view.hidden {
