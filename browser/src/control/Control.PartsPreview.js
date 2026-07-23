@@ -12,7 +12,7 @@
  * window.L.Control.PartsPreview
  */
 
-/* global _ app $ Hammer _UNO cool JSDialog */
+/* global _ app $ Hammer _UNO cool JSDialog buildSlideDragGhost */
 window.L.Control.PartsPreview = window.L.Control.extend({
 	options: {
 		fetchThumbnail: true,
@@ -1673,28 +1673,34 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// By default we move when dragging, but can
 		// support duplication with ctrl in the future.
 		e.dataTransfer.effectAllowed = 'move';
+		// The drag carries only the custom type. A drag that starts on the
+		// preview picture is a native image drag, which the browser preloads
+		// with the picture's URL as text and HTML; clearing that keeps a drop
+		// on a text input or another application from pasting the preview
+		// data there.
+		e.dataTransfer.clearData();
 		e.dataTransfer.setData('application/x-cool-slide', String(partId));
 
-		// The drag ghost is the slide picture at its on-screen size with
-		// the standard preview border, held at the grab point.
+		partsPreview._beginDrag(partId, alreadySelected);
+
+		// The drag ghost is the grabbed slide's picture at its on-screen
+		// size with the standard preview border, held at the grab point;
+		// the other dragged slides stack behind it and a badge counts them.
 		const img = partsPreview._previewTiles[partId];
 		if (img && e.dataTransfer.setDragImage) {
 			const rect = img.getBoundingClientRect();
-			const ghost = document.createElement('div');
-			ghost.className = 'slide-drag-ghost';
-			const ghostImg = document.createElement('img');
-			ghostImg.src = img.src;
-			ghostImg.style.width = rect.width + 'px';
-			ghostImg.style.height = rect.height + 'px';
-			ghost.appendChild(ghostImg);
+			const draggedParts = partsPreview._dragState.draggedParts;
+			const sources = [partId]
+				.concat(draggedParts.filter(function (part) { return part !== partId; }))
+				.map(function (part) { return partsPreview._previewTiles[part].src; });
+			const ghost = buildSlideDragGhost(sources, rect.width, rect.height,
+				draggedParts.length);
 			document.body.appendChild(ghost);
 			e.dataTransfer.setDragImage(ghost, e.clientX - rect.left, e.clientY - rect.top);
 			// The snapshot is taken when the dragstart handler returns;
 			// the ghost element itself is no longer needed after that.
 			setTimeout(function () { ghost.remove(); }, 0);
 		}
-
-		partsPreview._beginDrag(partId, alreadySelected);
 	},
 
 	// Collect the slides taking part in the drag and start the drag

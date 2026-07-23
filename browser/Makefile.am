@@ -571,6 +571,7 @@ COOL_JS_LST =\
 	src/control/Control.ESignature.ts \
 	src/control/Control.ESignatureDialog.ts \
 	src/control/Control.AIChatSidebar.ts \
+	src/control/SlideDragGhost.tsx \
 	src/control/Control.PaneExpander.ts \
 	src/control/CalcNotifications.ts \
 	src/control/ColorPicker.ts \
@@ -1501,6 +1502,7 @@ pot:
 		src/control/Control.PartsPreview.js \
 		src/control/Control.PresentationBar.js \
 		src/control/Control.SaveState.ts \
+		src/control/SlideDragGhost.tsx \
 		src/control/Control.PaneExpander.ts \
 		src/control/Control.Scroll.Annotation.js \
 		src/control/Control.ServerAuditDialog.ts \

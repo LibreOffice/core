@@ -92,18 +92,43 @@
 	transition: none;
 }
 
-/* The drag ghost: the slide picture with the standard preview border,
-   rendered out of view while the browser takes its snapshot. */
+/* The drag ghost: the grabbed slide's picture with the standard preview
+   border on top; the other dragged slides stack behind it and a badge
+   counts them all. It sits at the viewport's top-left corner while the
+   browser takes its snapshot, because browsers only render a drag image
+   element that is on screen; the negative z-index keeps the page content
+   painted over it, so the user never sees it. */
 .slide-drag-ghost {
 	position: absolute;
-	top: -1000px;
+	top: 0;
 	left: 0;
-	border: 3px solid var(--color-border);
-	background: var(--color-background-lighter);
+	z-index: -1;
 }
 
 .slide-drag-ghost img {
 	display: block;
+	position: absolute;
+	border: 3px solid var(--color-border);
+	border-radius: var(--border-radius);
+	background: var(--color-background-lighter);
+}
+
+/* How many slides the drag carries, over the top picture's corner. */
+.slide-drag-ghost-count {
+	position: absolute;
+	min-width: 22px;
+	height: 22px;
+	padding: 0 6px;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 11px;
+	background: var(--color-primary);
+	color: var(--color-primary-text);
+	font-family: var(--cool-font);
+	font-size: 12px;
+	font-weight: 600;
 }
 
 @media (prefers-reduced-motion: reduce) {
