@@ -79,19 +79,17 @@ void XMLTextNumRuleInfo::Set(
         mnListLevel = 0;
     }
 
+    if ( mnListLevel < 0 )
+    {
+        Reset();
+        return;
+    }
+
     // Assertion saving writer document (#i97312#)
     if ( mxNumRules.is() && mxNumRules->getCount() < 1 )
     {
         SAL_WARN("xmloff",
                     "<XMLTextNumRuleInfo::Set(..)> - numbering rules instance does not contain any numbering rule" );
-        Reset();
-        return;
-    }
-
-    if ( mnListLevel < 0 )
-    {
-        SAL_WARN("xmloff",
-                    "<XMLTextNumRuleInfo::Set(..)> - unexpected numbering level" );
         Reset();
         return;
     }
