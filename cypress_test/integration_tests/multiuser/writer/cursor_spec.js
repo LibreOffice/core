@@ -148,3 +148,84 @@ describe(['tagmultiuser'], 'Check cursor and view behavior', function() {
 		});
 	});
 });
+
+describe(['tagmultiuser'], 'Keep the view fixed while another view edits', function() {
+
+	beforeEach(function() {
+		// Give each iframe a distinct user id so their per-user settings stay
+		// separate and one user's view state does not leak into the other.
+		helper.setupAndLoadDocument('writer/cursor_jump.odt', true, false, undefined,
+			'userid1=1&userid2=2');
+		desktopHelper.switchUIToNotebookbar();
+	});
+
+	it('Move a view down for edits above it, but leave it still for edits below', function() {
+		// Scroll offsets carried between the queued command callbacks below.
+		const before = {};
+
+		// The document is already several pages long. The first view keeps its
+		// caret at the very start, and the second view sends its caret to the
+		// very end, so the two views look at opposite ends of the document.
+		cy.cSetActiveFrame('#iframe1');
+		helper.typeIntoDocument('{ctrl}{home}');
+
+		cy.cSetActiveFrame('#iframe2');
+		helper.typeIntoDocument('{ctrl}{end}');
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+		cy.getFrameWindow().then(function(win) {
+			before.secondViewY = win.app.activeDocument.activeLayout.viewedRectangle.pY1;
+		});
+
+		// The first view inserts several paragraphs at the very start. That
+		// reflow pushes the second view's caret, at the end, further down the
+		// document.
+		cy.cSetActiveFrame('#iframe1');
+		for (let i = 0; i < 8; i++)
+			helper.typeIntoDocument('{enter}');
+
+		// The second view scrolls down to keep its caret at the same spot on
+		// screen, so its scroll offset grows. Without the fix the view would
+		// stay put and the caret would drift up off the bottom.
+		cy.cSetActiveFrame('#iframe2');
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+		cy.getFrameWindow().then(function(win) {
+			cy.wrap(null).should(function() {
+				const secondViewY = win.app.activeDocument.activeLayout.viewedRectangle.pY1;
+				expect(secondViewY, 'second view scrolled down to follow the reflow above it')
+					.to.be.greaterThan(before.secondViewY);
+			});
+		});
+
+		// Now record where the first view, still at the top, is scrolled to.
+		cy.cSetActiveFrame('#iframe1');
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+		cy.getFrameWindow().then(function(win) {
+			before.firstViewY = win.app.activeDocument.activeLayout.viewedRectangle.pY1;
+		});
+
+		// The second view inserts a paragraph at the very end, below everything
+		// the first view can see.
+		cy.cSetActiveFrame('#iframe2');
+		helper.typeIntoDocument('{enter}');
+
+		// An edit below the first view does not move its caret, so its view
+		// stays exactly where it was.
+		cy.cSetActiveFrame('#iframe1');
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+		cy.getFrameWindow().then(function(win) {
+			cy.wrap(null).should(function() {
+				const firstViewY = win.app.activeDocument.activeLayout.viewedRectangle.pY1;
+				expect(firstViewY, 'first view stays put for an edit below it')
+					.to.be.closeTo(before.firstViewY, 1);
+			});
+		});
+	});
+});

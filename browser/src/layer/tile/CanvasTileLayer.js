@@ -3146,24 +3146,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			}
 		}
 		else if (keepCaretPositionRelativeToScreen) {
-			/* We should be here when:
-				Another view updated the text.
-				That edit changed our cursor position.
-			Now we already set the cursor position to another point.
-			We want to keep the cursor position at the same point relative to screen.
-			Do that only when we are reaching the end of screen so we don't flicker.
-			*/
-			var that = this;
-
-			var isCursorVisible = app.isPointVisibleInTheDisplayedArea(app.file.textCursor.rectangle.toArray());
-
-			if (!isCursorVisible) {
-				setTimeout(function () {
-					var y = app.file.textCursor.rectangle.pY1 - that._cursorPreviousPositionCorePixels.pY1;
-					if (y) {
-						app.sectionContainer.getSectionWithName(app.CSections.Scroll.name).scrollVerticalWithOffset(y);
-					}
-				}, 0);
+			// Another view's edit reflowed the text and moved our cursor. Keep the
+			// caret at the same spot on screen by scrolling the view by the same
+			// amount the caret moved, so the content the user is reading stays put.
+			var y = app.file.textCursor.rectangle.pY1 - this._cursorPreviousPositionCorePixels.pY1;
+			if (y) {
+				app.sectionContainer.getSectionWithName(app.CSections.Scroll.name).scrollVerticalWithOffset(y);
 			}
 		}
 
