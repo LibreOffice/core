@@ -2591,6 +2591,13 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 								'text': _UNO('.uno:Validation', 'spreadsheet'),
 								'command': '.uno:Validation',
 								'accessibility': { focusBack: true,	combination: 'DV', de: null }
+							},
+							{
+								'id': 'data-text-to-columns',
+								'type': 'toolitem',
+								'text': _UNO('.uno:TextToColumns', 'spreadsheet'),
+								'command': '.uno:TextToColumns',
+								'accessibility': { focusBack: true,	combination: 'CT', de: null }
 							}
 						]
 					}

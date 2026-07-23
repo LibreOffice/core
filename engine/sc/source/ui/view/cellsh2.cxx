@@ -1130,36 +1130,47 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     // #i87703# text to columns fails with tab separator
                     aExport.SetDelimiter( u'\0' );
 
-                    SvMemoryStream aStream;
-                    aStream.SetStreamEncoding( RTL_TEXTENCODING_UNICODE );
-                    aStream.ResetEndianSwap();
-                    aExport.ExportStream( aStream, OUString(), SotClipboardFormatId::STRING );
+                    // The stream must outlive the (async) dialog, so keep it in a shared_ptr
+                    // that the callback captures.
+                    auto pStream = std::make_shared<SvMemoryStream>();
+                    pStream->SetStreamEncoding( RTL_TEXTENCODING_UNICODE );
+                    pStream->ResetEndianSwap();
+                    aExport.ExportStream( *pStream, OUString(), SotClipboardFormatId::STRING );
 
-                    aStream.Seek(0);
+                    pStream->Seek(0);
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(
-                            pTabViewShell->GetFrameWeld(), OUString(), &aStream, SC_TEXTTOCOLUMNS));
+                    VclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(
+                            pTabViewShell->GetFrameWeld(), OUString(), pStream.get(), SC_TEXTTOCOLUMNS));
 
-                    if ( pDlg->Execute() == RET_OK )
-                    {
-                        ScDocShell* pDocSh = rData.GetDocShell();
+                    ScDocShell* pDocSh = rData.GetDocShell();
+                    const ViewShellId nViewShellId = rData.GetViewShell()->GetViewShellId();
 
-                        OUString aUndo = ScResId( STR_UNDO_TEXTTOCOLUMNS );
-                        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rData.GetViewShell()->GetViewShellId() );
+                    pDlg->StartExecuteAsync(
+                        [pDlg, pStream, pDocSh, aRange, nViewShellId](sal_Int32 nResult)
+                        {
+                            if ( nResult == RET_OK )
+                            {
+                                ScDocument& rImportDoc = pDocSh->GetDocument();
 
-                        ScImportExport aImport( rDoc, aRange.aStart );
-                        ScAsciiOptions aOptions;
-                        pDlg->GetOptions( aOptions );
-                        pDlg->SaveParameters();
-                        aImport.SetExtOptions( aOptions );
-                        aImport.SetApi( false );
-                        aImport.SetImportBroadcast( true );
-                        aImport.SetOverwriting( true );
-                        aStream.Seek( 0 );
-                        aImport.ImportStream( aStream, OUString(), SotClipboardFormatId::STRING );
+                                OUString aUndo = ScResId( STR_UNDO_TEXTTOCOLUMNS );
+                                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, nViewShellId );
 
-                        pDocSh->GetUndoManager()->LeaveListAction();
-                    }
+                                ScImportExport aImport( rImportDoc, aRange.aStart );
+                                ScAsciiOptions aOptions;
+                                pDlg->GetOptions( aOptions );
+                                pDlg->SaveParameters();
+                                aImport.SetExtOptions( aOptions );
+                                aImport.SetApi( false );
+                                aImport.SetImportBroadcast( true );
+                                aImport.SetOverwriting( true );
+                                pStream->Seek( 0 );
+                                aImport.ImportStream( *pStream, OUString(), SotClipboardFormatId::STRING );
+
+                                pDocSh->GetUndoManager()->LeaveListAction();
+                            }
+
+                            pDlg->disposeOnce();
+                        });
                 }
             }
             break;

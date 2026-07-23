@@ -1032,6 +1032,7 @@ class Menubar extends window.L.Control {
 				{uno: '.uno:SortAscending'},
 				{uno: '.uno:SortDescending'},
 				{uno: '.uno:Validation'},
+				{uno: '.uno:TextToColumns'},
 				{uno: '.uno:Calculate'},
 				{uno: '.uno:ConvertFormulaToValue'},
 				{type: 'separator'},
