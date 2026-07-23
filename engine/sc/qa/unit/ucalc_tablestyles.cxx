@@ -210,6 +210,44 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleFillColors)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testGetDataAreaExcludeDBRange)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // Loose column A (A1:A4) directly left of a table B1:C5 (no empty gap between them).
+    m_pDoc->SetString(0, 0, 0, u"a1"_ustr);
+    m_pDoc->SetString(0, 1, 0, u"a2"_ustr);
+    m_pDoc->SetString(0, 2, 0, u"a3"_ustr);
+    m_pDoc->SetString(0, 3, 0, u"a4"_ustr);
+    for (SCCOL nCol = 1; nCol <= 2; ++nCol)
+        for (SCROW nRow = 0; nRow <= 4; ++nRow)
+            m_pDoc->SetString(nCol, nRow, 0, u"t"_ustr);
+    createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, /*nCol1*/ 1, /*nRow1*/ 0, /*nCol2*/ 2,
+                     /*nRow2*/ 4, /*bHasHeader*/ true, /*bHasTotals*/ false);
+
+    SCCOL nStartCol = 0, nEndCol = 0;
+    SCROW nStartRow = 1, nEndRow = 1;
+
+    // Default: the auto-detect grows from the loose cell across into the table.
+    m_pDoc->GetDataArea(0, nStartCol, nStartRow, nEndCol, nEndRow, /*bIncludeOld*/ true,
+                        /*bOnlyDown*/ false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("default includes the table", SCCOL(2), nEndCol);
+
+    // bExcludeDBRange: the table acts as a boundary, so only the loose column is detected.
+    nStartCol = 0;
+    nStartRow = 1;
+    nEndCol = 0;
+    nEndRow = 1;
+    m_pDoc->GetDataArea(0, nStartCol, nStartRow, nEndCol, nEndRow, /*bIncludeOld*/ true,
+                        /*bOnlyDown*/ false, /*bExcludeDBRange*/ true);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), nStartCol);
+    CPPUNIT_ASSERT_EQUAL(SCROW(0), nStartRow);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("table excluded", SCCOL(0), nEndCol);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("re-shrunk past the table's extra row", SCROW(3), nEndRow);
+
+    m_pDoc->DeleteTab(0);
+}
+
 // Test 3: Verify border widths and styles
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBorders)
 {

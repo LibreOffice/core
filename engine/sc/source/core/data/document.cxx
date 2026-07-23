@@ -1163,10 +1163,50 @@ SCROW ScDocument::GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nL
 // connected area
 
 void ScDocument::GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                              SCCOL& rEndCol, SCROW& rEndRow, bool bIncludeOld, bool bOnlyDown ) const
+                              SCCOL& rEndCol, SCROW& rEndRow, bool bIncludeOld, bool bOnlyDown,
+                              bool bExcludeDBRange ) const
 {
-    if (const ScTable* pTable = FetchTable(nTab))
-        pTable->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld, bOnlyDown );
+    const ScTable* pTable = FetchTable(nTab);
+    if (!pTable)
+        return;
+
+    // Anchor = the input cell, before the area grows around it.
+    const ScAddress aAnchor(rStartCol, rStartRow, nTab);
+
+    pTable->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld, bOnlyDown );
+
+    if (!bExcludeDBRange)
+        return;
+
+    // Treat any named database range as a boundary: subtract each foreign range from the
+    // grown area, keep the piece holding the anchor, then re-shrink to its own data.
+    const ScRange aGrown(rStartCol, rStartRow, nTab, rEndCol, rEndRow, nTab);
+    ScRangeList aPieces(aGrown);
+    for (const ScDBData* pDB : GetAllNamedDBsInArea(aGrown))
+    {
+        ScRange aArea;
+        pDB->GetArea(aArea);
+        // Keep the range the anchor itself sits in; only carve out foreign ones.
+        if (!aArea.Contains(aAnchor))
+            aPieces.DeleteArea(aArea.aStart.Col(), aArea.aStart.Row(), nTab,
+                               aArea.aEnd.Col(), aArea.aEnd.Row(), nTab);
+    }
+    for (size_t i = 0; i < aPieces.size(); ++i)
+    {
+        if (aPieces[i].Contains(aAnchor))
+        {
+            // Trim the surviving piece to its own data: carving out the neighbour can leave
+            // the empty rows/cols it had padded the grown area with. A sheet-wide shrink
+            // misses them (the neighbour still holds that extent), so shrink per-range.
+            ScRange aPiece(aPieces[i]);
+            GetDataAreaSubrange(aPiece);
+            rStartCol = aPiece.aStart.Col();
+            rStartRow = aPiece.aStart.Row();
+            rEndCol   = aPiece.aEnd.Col();
+            rEndRow   = aPiece.aEnd.Row();
+            break;
+        }
+    }
 }
 
 bool ScDocument::GetDataAreaSubrange(ScRange& rRange) const

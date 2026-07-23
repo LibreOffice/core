@@ -1990,8 +1990,10 @@ void ScTabViewShell::ExtendSingleSelection(css::table::CellRangeAddress& rRangeD
     SCROW aStartRow(rRangeData.StartRow);
     SCROW aEndRow(rRangeData.EndRow);
 
+    // Exclude database ranges/tables from the auto-detected area: a loose cell next to
+    // a table must not grow into the table.
     GetViewData().GetDocument().GetDataArea(rRangeData.Sheet, aStartCol, aStartRow, aEndCol,
-                                            aEndRow, true, false);
+                                            aEndRow, true, false, /*bExcludeDBRange*/ true);
     MarkRange(ScRange(ScAddress(aStartCol, aStartRow, rRangeData.Sheet),
                       ScAddress(aEndCol, aEndRow, rRangeData.Sheet)));
 
