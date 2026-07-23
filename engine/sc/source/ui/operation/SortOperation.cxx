@@ -298,6 +298,9 @@ bool SortOperation::runImplementation()
             nPaint |= PaintPartFlags::Left;
             nStartX = 0;
             nEndX = rDoc.MaxCol();
+            // Moving hidden or filtered rows changes the total height of the sorted range,
+            // so every row below it can sit at a new position
+            nEndY = rDoc.MaxRow();
         }
         mrDocShell.PostPaint(ScRange(nStartX, nStartY, mnTab, nEndX, nEndY, mnTab), nPaint);
     }

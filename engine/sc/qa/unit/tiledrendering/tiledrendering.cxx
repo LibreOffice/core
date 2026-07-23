@@ -1553,6 +1553,69 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowsKeepPositionAfterSortUndo)
     CPPUNIT_ASSERT_EQUAL("rows"_ostr, aView.m_sInvalidateSheetGeometry);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTilesBelowSortedRangeInvalidatedOnSort)
+{
+    // Sorting a range with hidden rows moves the hidden flags along with the rows, so every
+    // row below the sorted range can sit at a new position. The clients keep the old pixels
+    // of that area until they receive an invalidation for it.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScDocument& rDoc = pViewData->GetDocument();
+    ScTestViewCallback aView;
+
+    const SCROW nRow = 9840;
+    const int nRangeSize = 10;
+    for (int i = 0; i < nRangeSize; ++i)
+        rDoc.SetValue(ScAddress(0, nRow + i, 0), nRangeSize - i);
+
+    // Content below the sorted range extends the document there, so invalidations for that
+    // area are not clipped away.
+    for (SCROW nR = nRow + 12; nR <= nRow + 20; ++nR)
+        rDoc.SetString(ScAddress(1, nR, 0), "row " + OUString::number(nR + 1));
+
+    // Two tall hidden rows: every move of the hidden flags changes the total height of the
+    // sorted range and with it the position of everything below.
+    rDoc.SetRowHeightRange(nRow + 2, nRow + 3, 0, 800);
+    rDoc.SetManualHeight(nRow + 2, nRow + 3, 0, true);
+    rDoc.SetRowHidden(nRow + 2, nRow + 3, 0, true);
+
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr,
+                    comphelper::InitPropertySequence(
+                        { { "ToPoint", cpo::uno::Any(u"A9841:A9850"_ustr) } }));
+
+    // The client viewport covers the sorted range and the rows below it; invalidations are
+    // clipped to the area the client can show.
+    const tools::Long nRowOffsetTw = rDoc.GetRowHeight(0, nRow - 1, 0);
+    pModelObj->setClientVisibleArea(
+        tools::Rectangle(0, nRowOffsetTw - 1000, 20000, nRowOffsetTw + 12000));
+    Scheduler::ProcessEventsToIdle();
+
+    auto anyInvalidationCoversY = [&aView](tools::Long nY) {
+        for (const auto& rRect : aView.m_aInvalidations)
+            if (rRect.Top() <= nY && rRect.Bottom() >= nY)
+                return true;
+        return false;
+    };
+
+    aView.ClearAllInvalids();
+    dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(rDoc.RowHidden(nRow + 6, 0));
+
+    // A row a few rows below the sorted range sits at a new position now, so its old pixels
+    // are stale and the view has to receive an invalidation covering it.
+    CPPUNIT_ASSERT(anyInvalidationCoversY(rDoc.GetRowHeight(0, nRow + 14, 0)));
+
+    aView.ClearAllInvalids();
+    dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(rDoc.RowHidden(nRow + 2, 0));
+
+    CPPUNIT_ASSERT(anyInvalidationCoversY(rDoc.GetRowHeight(0, nRow + 14, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDisableUndoRepair)
 {
     ScModelObj* pModelObj = createDoc("cursor-away.ods");
