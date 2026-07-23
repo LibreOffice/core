@@ -34,6 +34,7 @@ module cpo {
      CONSTANTS = 30,
      SINGLETON = 31
     };
+    published interface XAdapter;
    };
 };
 module com {
@@ -1629,12 +1630,6 @@ module com {
    };
    module uno {
     published interface XReference;
-    published interface XAdapter {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface queryAdapted();
-     void addReference([in] ::com::sun::star::uno::XReference xRef);
-     void removeReference([in] ::com::sun::star::uno::XReference xRef);
-    };
     /** @deprecated */ published interface XAggregation {
      interface ::com::sun::star::uno::XInterface;
      void setDelegator([in] ::com::sun::star::uno::XInterface pDelegator);
@@ -1655,7 +1650,7 @@ module com {
     };
     published interface XWeak {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XAdapter queryAdapter();
+     ::cpo::uno::XAdapter queryAdapter();
     };
    };
    module uri {
@@ -1757,6 +1752,12 @@ module com {
 };
 module cpo {
    module uno {
+    published interface XAdapter {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface queryAdapted();
+     void addReference([in] ::com::sun::star::uno::XReference xRef);
+     void removeReference([in] ::com::sun::star::uno::XReference xRef);
+    };
     published interface XNamingService {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::uno::XInterface getRegisteredObject([in] string Name) raises (::com::sun::star::uno::Exception);

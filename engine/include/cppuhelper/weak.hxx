@@ -122,9 +122,9 @@ public:
 
     /** XWeak::queryAdapter() implementation
 
-        @return a com::sun::star::uno::XAdapter reference
+        @return a cpo::uno::XAdapter reference
     */
-    virtual css::uno::Reference< css::uno::XAdapter > queryAdapter() SAL_OVERRIDE;
+    virtual css::uno::Reference< cpo::uno::XAdapter > queryAdapter() SAL_OVERRIDE;
 
     /** Cast operator to XInterface reference.
 

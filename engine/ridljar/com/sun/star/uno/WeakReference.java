@@ -19,10 +19,12 @@
 
 package com.sun.star.uno;
 
+import cpo.uno.XAdapter;
+
 /**
  * This class holds weak reference to an object.
  *
- * <p>It actually holds a reference to a <code>com.sun.star.XAdapter</code>
+ * <p>It actually holds a reference to a <code>cpo.XAdapter</code>
  * implementation and obtains a hard reference if necessary.
  */
 public class WeakReference

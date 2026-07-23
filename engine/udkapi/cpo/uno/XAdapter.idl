@@ -19,7 +19,7 @@
 
 
 
- module com {  module sun {  module star {  module uno {
+module cpo { module uno {
 
 
 /** This is the server-side interface to a weak adapter.
@@ -52,6 +52,6 @@ published interface XAdapter: com::sun::star::uno::XInterface
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

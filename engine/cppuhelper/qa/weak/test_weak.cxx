@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XAdapter.hpp>
+#include <cpo/uno/XAdapter.hpp>
 #include <com/sun/star/uno/XReference.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -77,7 +77,7 @@ public:
 
 void Test::testReferenceDispose() {
     css::uno::Reference< css::uno::XWeak > w(new ::cppu::OWeakObject);
-    css::uno::Reference< css::uno::XAdapter > a(w->queryAdapter());
+    css::uno::Reference< cpo::uno::XAdapter > a(w->queryAdapter());
     ::rtl::Reference< Reference > r1(new RuntimeExceptionReference);
     ::rtl::Reference< Reference > r2(new Reference);
     ::rtl::Reference< Reference > r3(new DisposedExceptionReference);

@@ -80,7 +80,7 @@ published interface XWeak: com::sun::star::uno::XInterface
 
         </p>
      */
-    com::sun::star::uno::XAdapter queryAdapter();
+    cpo::uno::XAdapter queryAdapter();
 
 };
 

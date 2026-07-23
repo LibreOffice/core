@@ -463,6 +463,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/task,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/uno,\
 	TypeClass \
+	XAdapter \
 	XNamingService \
 	XUnloadingPreference \
 ))
@@ -471,7 +472,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
 	Exception \
 	RuntimeException \
 	SecurityException \
-	XAdapter \
 	XAggregation \
 	XComponentContext \
 	XCurrentContext \

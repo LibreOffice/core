@@ -21,6 +21,7 @@ package com.sun.star.uno;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import cpo.uno.XAdapter;
 import org.junit.Test;
 import util.WaitUnreachable;
 import static org.junit.Assert.*;

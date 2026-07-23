@@ -18,7 +18,7 @@
 
 package com.sun.star.lib.uno.helper;
 import com.sun.star.uno.XWeak;
-import com.sun.star.uno.XAdapter;
+import cpo.uno.XAdapter;
 import com.sun.star.lang.XTypeProvider;
 import cpo.uno.Type;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class WeakBase implements XWeak, XTypeProvider
 
     /** Method of XWeak. The returned XAdapter implementation can be used to keep
      * a weak reference to this object.
-     * @return a com.sun.star.uno.XAdapter implementation.
+     * @return a cpo.uno.XAdapter implementation.
      */
     synchronized public XAdapter queryAdapter()
     {

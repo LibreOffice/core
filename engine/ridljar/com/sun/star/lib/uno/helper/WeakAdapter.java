@@ -18,7 +18,7 @@
 
 package com.sun.star.lib.uno.helper;
 import java.lang.ref.WeakReference;
-import com.sun.star.uno.XAdapter;
+import cpo.uno.XAdapter;
 import com.sun.star.uno.XReference;
 import java.util.List;
 import java.util.Collections;
@@ -65,7 +65,7 @@ public class WeakAdapter implements XAdapter
         }
     }
 
-    /** Method  of com.sun.star.uno.XAdapter. It is called to obtain a hard reference
+    /** Method  of cpo.uno.XAdapter. It is called to obtain a hard reference
      *  to the object which is kept weak by this instance.
      *  @return hard reference to the object
      */
@@ -74,7 +74,7 @@ public class WeakAdapter implements XAdapter
         return m_weakRef.get();
     }
 
-    /** Method of com.sun.star.uno.XAdapter. Called by clients to register listener which
+    /** Method of cpo.uno.XAdapter. Called by clients to register listener which
      * are notified when the weak object is dying.
      *@param xReference a listener
      */
@@ -83,7 +83,7 @@ public class WeakAdapter implements XAdapter
         m_xreferenceList.remove(xReference);
     }
 
-    /** Method of com.sun.star.uno.XAdapter. Called by clients to unregister listeners.
+    /** Method of cpo.uno.XAdapter. Called by clients to unregister listeners.
      *@param xReference listener
      */
     public void addReference(XReference xReference)

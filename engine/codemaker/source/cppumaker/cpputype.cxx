@@ -128,7 +128,7 @@ bool isBootstrapType(OUString const & name)
         "com.sun.star.uno.RuntimeException",
         "cpo.uno.TypeClass",
         "com.sun.star.uno.Uik",
-        "com.sun.star.uno.XAdapter",
+        "cpo.uno.XAdapter",
         "com.sun.star.uno.XAggregation",
         "com.sun.star.uno.XComponentContext",
         "com.sun.star.uno.XCurrentContext",

@@ -46,7 +46,7 @@ class OComponentEventThread
             ,public ::cppu::OWeakObject
 {
     typedef std::vector<std::unique_ptr<css::lang::EventObject>> ThreadEvents;
-    typedef std::vector< css::uno::Reference< css::uno::XAdapter> > ThreadObjects;
+    typedef std::vector< css::uno::Reference< cpo::uno::XAdapter> > ThreadObjects;
 
     std::mutex                      m_aMutex;
     ::osl::Condition                m_aCond;            // Queue filled?
