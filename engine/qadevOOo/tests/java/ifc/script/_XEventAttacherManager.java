@@ -274,15 +274,15 @@ public class _XEventAttacherManager extends MultiMethodTest {
         try {
             XMultiServiceFactory xMSF = tParam.getMSF();
             attachedObject = xMSF.createInstance
-                ( "com.sun.star.uno.NamingService" );
+                ( "cpo.uno.NamingService" );
         } catch( com.sun.star.uno.Exception e ) {
-            log.println("com.sun.star.uno.NamingService not available" );
+            log.println("cpo.uno.NamingService not available" );
             e.printStackTrace(log);
             tRes.tested("attach()", false);
             return;
         }
         if (attachedObject == null) {
-            log.println("com.sun.star.uno.NamingService not available" );
+            log.println("cpo.uno.NamingService not available" );
             tRes.tested("attach()", false);
             return;
         }

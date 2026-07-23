@@ -141,7 +141,7 @@
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridge.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
+#include <cpo/uno/XNamingService.hpp>
 
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
@@ -3658,7 +3658,7 @@ Reference<XInterface> FunctionBasedURPInstanceProvider::getInstance(const OUStri
     {
         Reference<XNamingService> rNamingService(
             m_rContext->getServiceManager()->createInstanceWithContext(
-                u"com.sun.star.uno.NamingService"_ustr, m_rContext),
+                u"cpo.uno.NamingService"_ustr, m_rContext),
             UNO_QUERY);
         if (rNamingService.is())
         {

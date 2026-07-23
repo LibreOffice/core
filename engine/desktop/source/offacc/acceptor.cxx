@@ -23,7 +23,7 @@
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/connection/Acceptor.hpp>
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
+#include <cpo/uno/XNamingService.hpp>
 #include <officecfg/Office/Security.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
@@ -227,8 +227,8 @@ Reference<XInterface> AccInstanceProvider::getInstance (const OUString& aName )
     }
     else if ( aName == "StarOffice.NamingService" )
     {
-        Reference< XNamingService > rNamingService(
-            m_rContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.uno.NamingService"_ustr, m_rContext),
+        Reference< cpo::uno::XNamingService > rNamingService(
+            m_rContext->getServiceManager()->createInstanceWithContext(u"cpo.uno.NamingService"_ustr, m_rContext),
             UNO_QUERY );
         if ( rNamingService.is() )
         {

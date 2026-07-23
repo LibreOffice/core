@@ -24,7 +24,7 @@ import com.sun.star.uno.MappingException;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
+import cpo.uno.XNamingService;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.UndeclaredThrowableException;

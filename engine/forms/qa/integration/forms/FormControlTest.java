@@ -34,7 +34,7 @@ import com.sun.star.sdbc.XDataSource;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XResultSetUpdate;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XNamingService;
+import cpo.uno.XNamingService;
 import com.sun.star.util.URL;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XURLTransformer;

@@ -17,14 +17,41 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- module com {  module sun {  module star {  module uno {
+module cpo { module uno {
 
-/** a simple named object container.
+
+/** allows to insert, remove and access named objects.
  */
-published service NamingService : com::sun::star::uno::XNamingService;
+published interface XNamingService: com::sun::star::uno::XInterface
+{
+
+    /** provides a previous registered object.
+     */
+    com::sun::star::uno::XInterface getRegisteredObject( [in] string Name )
+            raises (com::sun::star::uno::Exception);
 
 
-}; }; }; };
+    /** registers one object under the specified name.
+
+    <p>If any object is registered before, then this
+        object is revoked automatically.
+
+        </p>
+     */
+    void registerObject( [in]string Name, [in]com::sun::star::uno::XInterface Object )
+        raises (com::sun::star::uno::Exception);
+
+
+    /** revokes the registration of an object. <p>If the object was not
+        previously registered, then this call does nothing.
+     */
+    void revokeObject( [in]string Name )
+        raises (com::sun::star::uno::Exception);
+};
+
+
+
+}; };
 
 /*=============================================================================
 

@@ -31,7 +31,7 @@ import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XNamingService;
+import cpo.uno.XNamingService;
 
 
 /**
@@ -99,7 +99,7 @@ public class _XContainer extends MultiMethodTest {
         if (container != null) {
             if (container instanceof com.sun.star.awt.XControlContainer) {
                 CC = (XControlContainer) container;
-            } else if (container instanceof com.sun.star.uno.XNamingService) {
+            } else if (container instanceof cpo.uno.XNamingService) {
                 NV = (XNamingService) container;
             } else if (container instanceof com.sun.star.container.XNameReplace) {
                 NR = (XNameReplace) container;

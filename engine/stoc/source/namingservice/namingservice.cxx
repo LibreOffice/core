@@ -22,7 +22,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <com/sun/star/uno/XNamingService.hpp>
+#include <cpo/uno/XNamingService.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <mutex>
@@ -70,7 +70,7 @@ NamingService_Impl::NamingService_Impl() {}
 // XServiceInfo
 OUString NamingService_Impl::getImplementationName()
 {
-    return u"com.sun.star.comp.stoc.NamingService"_ustr;
+    return u"cpo.comp.stoc.NamingService"_ustr;
 }
 
 // XServiceInfo
@@ -82,7 +82,7 @@ bool NamingService_Impl::supportsService( const OUString & rServiceName )
 // XServiceInfo
 Sequence< OUString > NamingService_Impl::getSupportedServiceNames()
 {
-    return { u"com.sun.star.uno.NamingService"_ustr };
+    return { u"cpo.uno.NamingService"_ustr };
 }
 
 // XServiceInfo

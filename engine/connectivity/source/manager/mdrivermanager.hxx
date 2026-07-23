@@ -25,7 +25,7 @@
 #include <vector>
 
 #include <com/sun/star/sdbc/XDriverManager2.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
+#include <cpo/uno/XNamingService.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
@@ -51,7 +51,7 @@ namespace drivermanager
 
     typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriverManager2
                                   ,   css::lang::XServiceInfo
-                                  ,   css::uno::XNamingService
+                                  ,   cpo::uno::XNamingService
                                   >   OSDBCDriverManager_Base;
 
     class OSDBCDriverManager final : public cppu::BaseMutex, public OSDBCDriverManager_Base

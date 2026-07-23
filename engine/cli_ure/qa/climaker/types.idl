@@ -152,7 +152,7 @@ typedef any Any;
 typedef Enum2 Enum;
 typedef Struct1 Struct;
 typedef com::sun::star::uno::XInterface XInterface;
-typedef com::sun::star::uno::XNamingService XNamingService;
+typedef cpo::uno::XNamingService XNamingService;
 typedef com::sun::star::lang::XComponent XComponent;
 
 typedef sequence< Boolean > SequenceBoolean;
@@ -193,7 +193,7 @@ struct Struct2 {
     Enum2 p15;
     Struct1 p16;
     com::sun::star::uno::XInterface p17;
-    com::sun::star::uno::XNamingService p18;
+    cpo::uno::XNamingService p18;
     Boolean t1;
     Byte t2;
     Short t3;
@@ -229,7 +229,7 @@ struct Struct2 {
     sequence< Enum2 > a15;
     sequence< Struct1 > a16;
     sequence< com::sun::star::uno::XInterface > a17;
-    sequence< com::sun::star::uno::XNamingService > a18;
+    sequence< cpo::uno::XNamingService > a18;
     sequence< sequence< boolean > > aa1;
     sequence< sequence< byte > > aa2;
     sequence< sequence< short > > aa3;
@@ -247,7 +247,7 @@ struct Struct2 {
     sequence< sequence< Enum2 > > aa15;
     sequence< sequence< Struct1 > > aa16;
     sequence< sequence< com::sun::star::uno::XInterface > > aa17;
-    sequence< sequence< com::sun::star::uno::XNamingService > > aa18;
+    sequence< sequence< cpo::uno::XNamingService > > aa18;
     sequence< SequenceBoolean > at1;
     sequence< SequenceByte > at2;
     sequence< SequenceShort > at3;

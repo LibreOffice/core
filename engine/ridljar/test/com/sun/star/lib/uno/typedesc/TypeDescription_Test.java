@@ -24,7 +24,7 @@ import com.sun.star.uno.Any;
 import cpo.uno.Type;
 import cpo.uno.TypeClass;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
+import cpo.uno.XNamingService;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -97,8 +97,8 @@ public final class TypeDescription_Test {
             com.sun.star.uno.Exception.class, TypeClass.EXCEPTION,
             new Object[] { interfaceData } };
         Object[] namingServiceData = new Object[] {
-            "com.sun.star.uno.XNamingService",
-            "[Lcom.sun.star.uno.XNamingService;", XNamingService.class,
+            "cpo.uno.XNamingService",
+            "[Lcpo.uno.XNamingService;", XNamingService.class,
             TypeClass.INTERFACE, null, interfaceData };
 
         emptyTypeSig.test("TypeSignature.test(byte)", byteData,
@@ -118,7 +118,7 @@ public final class TypeDescription_Test {
         namingServiceTypeSig.test("TypeSignature.test(XNamingService)",
                                   namingServiceData,
                                   TypeDescription.getTypeDescription(
-                                      "com.sun.star.uno.XNamingService"));
+                                      "cpo.uno.XNamingService"));
     }
 
     @Test public void testUnsigned() throws ClassNotFoundException {

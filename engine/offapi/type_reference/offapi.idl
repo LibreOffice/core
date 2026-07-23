@@ -9944,7 +9944,7 @@ module com {
     published interface XDatabaseContext {
      interface ::com::sun::star::container::XEnumerationAccess;
      interface ::com::sun::star::container::XNameAccess;
-     interface ::com::sun::star::uno::XNamingService;
+     interface ::cpo::uno::XNamingService;
      interface ::com::sun::star::container::XContainer;
      interface ::com::sun::star::lang::XSingleServiceFactory;
      interface ::com::sun::star::sdb::XDatabaseRegistrations;

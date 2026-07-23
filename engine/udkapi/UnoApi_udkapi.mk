@@ -112,9 +112,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/script,\
 	Invocation \
 	InvocationAdapterFactory \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/uno,\
-	NamingService \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/uri,\
 	ExternalUriReferenceTranslator \
 	UriReferenceFactory \
@@ -125,6 +122,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/uri,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/util,\
 	MacroExpander \
 	theMacroExpander \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,cpo/uno,\
+	NamingService \
 ))
 
 
@@ -463,6 +463,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/task,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/uno,\
 	TypeClass \
+	XNamingService \
 	XUnloadingPreference \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
@@ -475,7 +476,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
 	XComponentContext \
 	XCurrentContext \
 	XInterface \
-	XNamingService \
 	XReference \
 	XWeak \
 ))

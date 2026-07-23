@@ -24,7 +24,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XDataSource;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XNamingService;
+import cpo.uno.XNamingService;
 import lib.StatusException;
 
 /** wraps a com.sun.star.sdb.DataSource

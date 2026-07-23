@@ -30,7 +30,7 @@ import com.sun.star.uno.IBridge;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
+import cpo.uno.XNamingService;
 
 
 

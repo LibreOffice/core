@@ -1628,13 +1628,6 @@ module com {
     };
    };
    module uno {
-    published interface XNamingService {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XInterface getRegisteredObject([in] string Name) raises (::com::sun::star::uno::Exception);
-     void registerObject([in] string Name, [in] ::com::sun::star::uno::XInterface Object) raises (::com::sun::star::uno::Exception);
-     void revokeObject([in] string Name) raises (::com::sun::star::uno::Exception);
-    };
-    published service NamingService: ::com::sun::star::uno::XNamingService;
     published interface XReference;
     published interface XAdapter {
      interface ::com::sun::star::uno::XInterface;
@@ -1764,6 +1757,13 @@ module com {
 };
 module cpo {
    module uno {
+    published interface XNamingService {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface getRegisteredObject([in] string Name) raises (::com::sun::star::uno::Exception);
+     void registerObject([in] string Name, [in] ::com::sun::star::uno::XInterface Object) raises (::com::sun::star::uno::Exception);
+     void revokeObject([in] string Name) raises (::com::sun::star::uno::Exception);
+    };
+    published service NamingService: ::cpo::uno::XNamingService;
     /** @deprecated */ published interface XUnloadingPreference {
      interface ::com::sun::star::uno::XInterface;
      boolean releaseOnNotification();

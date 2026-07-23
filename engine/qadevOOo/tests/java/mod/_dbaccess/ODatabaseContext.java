@@ -29,7 +29,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
+import cpo.uno.XNamingService;
 import com.sun.star.frame.XStorable;
 import com.sun.star.sdb.XDocumentDataSource;
 import util.utils;
@@ -43,13 +43,13 @@ import util.utils;
 *  <li> <code>com::sun::star::container::XEnumerationAccess</code></li>
 *  <li> <code>com::sun::star::container::XNameAccess</code></li>
 *  <li> <code>com::sun::star::container::XElementAccess</code></li>
-*  <li> <code>com::sun::star::uno::XNamingService</code></li>
+*  <li> <code>cpo::uno::XNamingService</code></li>
 * </ul>
 *
 * @see com.sun.star.container.XNameAccess
 * @see com.sun.star.container.XEnumerationAccess
 * @see com.sun.star.container.XElementAccess
-* @see com.sun.star.uno.XNamingService
+* @see cpo.uno.XNamingService
 * @see com.sun.star.sdb.DatabaseContext
 * @see ifc.container._XNameAccess
 * @see ifc.container._XEnumerationAccess

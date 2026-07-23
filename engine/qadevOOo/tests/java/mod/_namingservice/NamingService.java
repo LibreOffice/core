@@ -29,15 +29,15 @@ import com.sun.star.uno.XInterface;
 
 /**
 * Test for object which is represented by service
-* <code>com.sun.star.uno.NamingService</code>. <p>
+* <code>cpo.uno.NamingService</code>. <p>
 * Object implements the following interfaces :
 * <ul>
-*  <li> <code>com::sun::star::uno::XNamingService</code></li>
+*  <li> <code>cpo::uno::XNamingService</code></li>
 * </ul>
 * This object test <b> is NOT </b> designed to be run in several
 * threads concurrently.
-* @see com.sun.star.uno.XNamingService
-* @see com.sun.star.uno.NamingService
+* @see cpo.uno.XNamingService
+* @see cpo.uno.NamingService
 * @see ifc.uno._XNamingService
 */
 public class NamingService extends TestCase {
@@ -45,7 +45,7 @@ public class NamingService extends TestCase {
     /**
     * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
-    * <code>com.sun.star.uno.NamingService</code>.
+    * <code>cpo.uno.NamingService</code>.
     *     Object relations created :
     * <ul>
     *  <li> <code>'XNamingService.RegisterObject'</code> for
@@ -65,7 +65,7 @@ public class NamingService extends TestCase {
         try {
             XMultiServiceFactory xMSF = Param.getMSF();
             oInterface = xMSF.createInstance
-                ( "com.sun.star.uno.NamingService" );
+                ( "cpo.uno.NamingService" );
         }
         catch( com.sun.star.uno.Exception e ) {
             log.println("Service not available" );

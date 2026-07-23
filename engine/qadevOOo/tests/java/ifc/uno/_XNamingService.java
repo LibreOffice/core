@@ -22,11 +22,11 @@ import lib.MultiMethodTest;
 import lib.StatusException;
 
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
+import cpo.uno.XNamingService;
 
 
 /**
-* Testing <code>com.sun.star.uno.XNamingService</code>
+* Testing <code>cpo.uno.XNamingService</code>
 * interface methods. <p>
 * This test need the following object relations :
 * <ul>

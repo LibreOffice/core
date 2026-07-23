@@ -32,7 +32,7 @@
 
 
 /** is a factory to establish database connections. It should be registered at
-    a com::sun::star::uno::NamingService.
+    a cpo::uno::NamingService.
     @see com::sun::star::sdb::DatabaseContext
  */
 published service DataSource

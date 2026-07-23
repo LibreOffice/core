@@ -38,7 +38,7 @@ published interface XDatabaseContext
 
     /** Interface for registering new datasources.
      */
-    interface com::sun::star::uno::XNamingService;
+    interface cpo::uno::XNamingService;
 
     /** Interface for registering listener to get notified when new datasources are created or removed.
     */

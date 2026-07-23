@@ -26,7 +26,7 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.sdbc.XConnection ;
 import com.sun.star.util.Date ;
-import com.sun.star.uno.XNamingService ;
+import cpo.uno.XNamingService ;
 import com.sun.star.task.XInteractionHandler ;
 import com.sun.star.sdb.XCompletedConnection ;
 import com.sun.star.frame.XStorable;

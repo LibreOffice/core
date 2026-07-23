@@ -43,7 +43,7 @@
 #include "com/sun/star/security/AccessController.hpp"
 #include "com/sun/star/security/Policy.hpp"
 #include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/NamingService.hpp"
+#include "cpo/uno/NamingService.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "cpo/uno/Sequence.hxx"

@@ -60,7 +60,7 @@ typedef type Type;
 typedef any Any;
 typedef com::sun::star::lang::Locale Locale;
 typedef com::sun::star::uno::XInterface XInterface;
-typedef com::sun::star::uno::XNamingService XNamingService;
+typedef cpo::uno::XNamingService XNamingService;
 
 typedef sequence< Boolean > SequenceBoolean;
 typedef sequence< Byte > SequenceByte;
@@ -115,7 +115,7 @@ service S1: XTest {
         [in] any p14,
         [in] com::sun::star::lang::Locale p15,
         [in] com::sun::star::uno::XInterface p16,
-        [in] com::sun::star::uno::XNamingService p17,
+        [in] cpo::uno::XNamingService p17,
         [in] Boolean t1,
         [in] Byte t2,
         [in] Short t3,
@@ -150,7 +150,7 @@ service S1: XTest {
         [in] sequence< sequence< com::sun::star::lang::Locale > > a15,
         [in] sequence< sequence< com::sun::star::uno::XInterface > > a16,
         [in] sequence< sequence<
-            com::sun::star::uno::XNamingService > > a17,
+            cpo::uno::XNamingService > > a17,
         [in] sequence< SequenceBoolean > at1,
         [in] sequence< SequenceByte > at2,
         [in] sequence< SequenceShort > at3,
