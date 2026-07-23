@@ -617,8 +617,10 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
         ImpSetEdgeInfoToAttr(); // copy values from aEdgeInfo into the pool
         m_bEdgeTrackDirty=false;
 
-        // Only redraw here, no object change
         ActionChanged();
+
+        // tdf#93156 - recalculate possible glued connector targets
+        BroadcastObjectChange();
 
         SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 
