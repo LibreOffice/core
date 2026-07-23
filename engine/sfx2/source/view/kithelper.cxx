@@ -865,12 +865,13 @@ void KitHelper::notifyInvalidationAllViews(vcl::ITiledRenderable* pDoc, int nPar
 }
 
 OString KitHelper::makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
-    bool bMispelledWord, const OString& rHyperlink)
+    bool bMispelledWord, const OString& rHyperlink, int nEditorViewId)
 {
     if (comphelper::COKit::isViewIdForVisCursorInvalidation())
     {
         OString sHyperlink = rHyperlink.isEmpty() ? "{}"_ostr : rHyperlink;
         return OString::Concat("{ \"viewId\": \"") + OString::number(nViewId) +
+            "\", \"editorViewId\": \"" + OString::number(nEditorViewId) +
             "\", \"rectangle\": \"" + rRectangle +
             "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) +
             "\", \"hyperlink\": " + sHyperlink + " }";

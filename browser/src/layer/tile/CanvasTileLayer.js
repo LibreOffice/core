@@ -1863,8 +1863,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			return;
 		}
 
-		// tells who trigerred cursor invalidation, but recCursors is still "ours"
-		var modifierViewId = parseInt(obj.viewId);
+		const editorViewId = obj.editorViewId !== undefined ? parseInt(obj.editorViewId) : null;
+		var modifierViewId = editorViewId !== null && editorViewId !== -1 ? editorViewId : parseInt(obj.viewId);
 		var weAreModifier = (modifierViewId === this._viewId);
 		if (weAreModifier && app.isFollowingOff())
 			app.setFollowingUser(this._viewId);

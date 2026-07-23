@@ -81,6 +81,7 @@ SwVisibleCursor::SwVisibleCursor(::sw::VisibleCursorState const& rState,
     : m_rState(rState)
     , m_pCursorShell(pCShell)
     , m_nPageLastTime(0)
+    , m_nLastKitCursorEditorViewId(-1)
 {
     if (&rState == pCShell)
     {
@@ -241,6 +242,10 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         // that there's been an update, and the other side will pull the data using
         // getKitPayload() when it decides to.
         m_aLastKitRect = aRect;
+        // getCurrentView() here is the view being processed, i.e. the one whose
+        // edit is running now and moved this cursor. Capture it while that view
+        // is still current, because the payload is built later on demand.
+        m_nLastKitCursorEditorViewId = KitHelper::getCurrentView();
         if (pViewShell)
         {
             if (pViewShell == pNotifyViewShell)
@@ -345,7 +350,7 @@ std::optional<OString> SwVisibleCursor::getKitPayload(int nType, int nViewId) co
             }
         }
 
-        return KitHelper::makeVisCursorInvalidation(nViewId, sRect, bIsWrong, sHyperlink);
+        return KitHelper::makeVisCursorInvalidation(nViewId, sRect, bIsWrong, sHyperlink, m_nLastKitCursorEditorViewId);
     }
     else
         abort();

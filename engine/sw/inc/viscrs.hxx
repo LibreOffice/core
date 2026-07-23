@@ -51,6 +51,11 @@ class SW_DLLPUBLIC SwVisibleCursor
     /// For COKit only - remember what page we were at the last time.
     sal_uInt16 m_nPageLastTime;
     SwRect m_aLastKitRect;
+    /// For COKit only - id of the view whose change last moved this cursor, or
+    /// -1 when unknown. In shared editing this can differ from the view that
+    /// owns the cursor, because one view's edit reflows the text and shifts
+    /// another view's cursor.
+    int m_nLastKitCursorEditorViewId;
 
     bool m_bIsVisible;
     bool m_bIsDragCursor;
