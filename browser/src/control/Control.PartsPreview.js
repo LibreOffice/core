@@ -738,43 +738,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			}, this);
 		}
 
-		// Drop target: dropping a slide onto a section header makes it the
-		// new first slide of that section.  Dropping above the header (on
-		// the preceding slide frame) keeps the default behaviour of placing
-		// the slide outside the section.
-		if (!app.file.fileBasedView) {
-			header.addEventListener('dragenter', function (e) {
-				if (e.preventDefault) e.preventDefault();
-			});
-			header.addEventListener('dragover', function (e) {
-				if (e.preventDefault) e.preventDefault();
-				e.dataTransfer.dropEffect = 'move';
-				header.classList.add('slide-section-dropsite');
-				return false;
-			});
-			header.addEventListener('dragleave', function () {
-				header.classList.remove('slide-section-dropsite');
-			});
-			header.addEventListener('drop', function (e) {
-				if (e.stopPropagation) e.stopPropagation();
-				if (e.preventDefault) e.preventDefault();
-				header.classList.remove('slide-section-dropsite');
-				var startIndex = section.startIndex;
-				var position = startIndex > 0 ? startIndex - 1 : -1;
-				app.socket.sendMessage(
-					'moveselectedclientparts position=' + position +
-					' intoSection=' + sectionIndex);
-				// The dropped slides become the first slides of the section:
-				// settle them locally in front of its current first slide.
-				const state = that._dragState;
-				if (state) {
-					that._applyDropLocally(startIndex, state.draggedParts, true);
-					that._finishDrag(false);
-				}
-				return false;
-			});
-		}
-
 		return header;
 	},
 
@@ -1620,7 +1583,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 	_handleTouchCancel: function(e) {
 		$('.preview-frame').removeClass('preview-img-dropsite');
-		$('.slide-section-dropsite').removeClass('slide-section-dropsite');
 		$(this.draggedSlide).remove();
 		this._removeDnDTouchHandlers(e);
 	},
@@ -1639,7 +1601,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			}
 		}
 		$('.preview-frame').removeClass('preview-img-dropsite');
-		$('.slide-section-dropsite').removeClass('slide-section-dropsite');
 		$(this.draggedSlide).remove();
 		this._removeDnDTouchHandlers(e);
 		return false;
@@ -1746,6 +1707,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			gapSide: null,
 			gapPlaceholder: null,
 			insertIndex: null,
+			intoSection: null,
 			pointer: null,
 			autoScrollId: null
 		};
@@ -1812,16 +1774,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			return;
 		}
 
-		// Over a section header the header itself is the drop target and
-		// shows its own highlight, so no insertion gap. Clearing the
-		// pointer also pauses the edge auto-scroll.
-		if (e.target && e.target.closest && e.target.closest('.slide-section-header')) {
-			this._closeDropGap(state);
-			state.insertIndex = null;
-			state.pointer = null;
-			return;
-		}
-
 		e.preventDefault();
 		if (e.dataTransfer)
 			e.dataTransfer.dropEffect = 'move';
@@ -1870,10 +1822,16 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 
 		// Insert after the slide preceding the gap; -1 inserts before the
-		// first slide.
-		app.socket.sendMessage('moveselectedclientparts position=' + (insertIndex - 1));
+		// first slide. On a section boundary intoSection names the section
+		// whose first slides the dropped slides become; without it they
+		// land above the section, outside it.
+		let message = 'moveselectedclientparts position=' + (insertIndex - 1);
+		if (state.intoSection !== null)
+			message += ' intoSection=' + state.intoSection;
+		app.socket.sendMessage(message);
 
-		this._applyDropLocally(insertIndex, state.draggedParts);
+		this._applyDropLocally(insertIndex, state.draggedParts,
+			state.intoSection !== null);
 		this._finishDrag(false);
 	},
 
@@ -1954,6 +1912,19 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			this._removeDropGap(state);
 	},
 
+	// The header of the section whose first slide sits at the given slide
+	// index, or null when no section starts there.
+	_sectionHeaderAt: function (slideIndex) {
+		const sections = (app.impress && app.impress.sections) || [];
+		for (let h = 0; h < this._sectionHeaders.length; h++) {
+			const header = this._sectionHeaders[h];
+			const s = parseInt(header.getAttribute('data-section-index'), 10);
+			if (sections[s] && sections[s].startIndex === slideIndex)
+				return header;
+		}
+		return null;
+	},
+
 	// Choose the insertion point from the pointer position and open a
 	// slide-sized gap there. The gap is a margin on the frame the dragged
 	// slides would be inserted before (or after the last frame, when the
@@ -2005,7 +1976,33 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			gapSide = 'after';
 		}
 
+		// The same insertion index means two spots when a section starts
+		// there: the last spot outside the section, above its header, and
+		// the spot of the section's first slide, below it. The side of the
+		// header's middle the pointer is on picks between them: above it
+		// the slides land outside the section and the gap opens above the
+		// header; below it they become the section's first slides and the
+		// gap opens between the header and the slide.
+		let intoSection = null;
+		const boundaryHeader = (gapFrame && gapSide === 'before') ?
+			this._sectionHeaderAt(insertIndex) : null;
+		if (boundaryHeader) {
+			const rect = boundaryHeader.getBoundingClientRect();
+			// A grid header spans its own full row, so the grid boundary
+			// reads vertically even though the slides flow in rows.
+			const useX = horizontal && !state.grid;
+			const middle = useX ?
+				rect.left + rect.width / 2 : rect.top + rect.height / 2;
+			const pointer = useX ? state.pointer.x : state.pointer.y;
+			if (pointer < middle)
+				gapFrame = boundaryHeader;
+			else
+				intoSection = parseInt(
+					boundaryHeader.getAttribute('data-section-index'), 10);
+		}
+
 		state.insertIndex = insertIndex;
+		state.intoSection = intoSection;
 		if (gapFrame === state.gapFrame && gapSide === state.gapSide)
 			return;
 
@@ -2249,9 +2246,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// Reached without a drop when the drag was cancelled or released
 		// outside a drop target: put the dragged slides back where they were.
 		this.partsPreview._finishDrag(true);
-		document.querySelectorAll('.slide-section-dropsite').forEach(function (el) {
-			el.classList.remove('slide-section-dropsite');
-		});
 	},
 
 	_invalidateParts: function () {

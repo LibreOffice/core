@@ -152,14 +152,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 			});
 		});
 
-		describe('Drop slide onto section header', function() {
-
-			function dropOnSectionHeader(sectionIndex) {
-				cy.cGet('.slide-section-header').eq(sectionIndex).then(function($el) {
-					var evt = new Event('drop', { bubbles: true, cancelable: true });
-					$el[0].dispatchEvent(evt);
-				});
-			}
+		describe('Drop slide at a section boundary', function() {
 
 			// Wait until app.impress.sections reflects [0, 4, 11] - the section
 			// header DOM can render before the late-arriving SlideSections state
@@ -174,43 +167,125 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 				});
 			}
 
-			// TODO: fix and re-enable
-			it.skip('Drop sends correct message', function() {
+			// Starts a reorder drag on the given slide's frame; the dragstart
+			// handler selects the slide and opens the drag state, so a slide
+			// that is already part of a selection drags the whole selection.
+			function beginSlideDrag(win, slideIndex) {
+				var frame = win.document.getElementById(
+					'preview-frame-part-' + slideIndex);
+				frame.dispatchEvent(new win.DragEvent('dragstart', {
+					bubbles: true,
+					cancelable: true,
+					dataTransfer: new win.DataTransfer(),
+				}));
+			}
+
+			// Moves the drag pointer to a viewport point; the sorter places
+			// the insertion gap from it.
+			function dragOverAt(win, x, y) {
+				var sorter = win.document.getElementById('slide-sorter');
+				sorter.dispatchEvent(new win.DragEvent('dragover', {
+					bubbles: true,
+					cancelable: true,
+					clientX: x,
+					clientY: y,
+					dataTransfer: new win.DataTransfer(),
+				}));
+			}
+
+			// Drops on the given element. The drop bubbles to the sorter and
+			// lands the dragged slides at the current insertion gap.
+			function dropOn(win, target, x, y) {
+				target.dispatchEvent(new win.DragEvent('drop', {
+					bubbles: true,
+					cancelable: true,
+					clientX: x,
+					clientY: y,
+					dataTransfer: new win.DataTransfer(),
+				}));
+			}
+
+			// Drags the given slide to just below the given section header's
+			// middle and drops it there, so it lands as the section's first
+			// slide.
+			function dragSlideIntoSection(win, slideIndex, sectionIndex) {
+				beginSlideDrag(win, slideIndex);
+				var header = win.document.querySelectorAll(
+					'.slide-section-header')[sectionIndex];
+				var rect = header.getBoundingClientRect();
+				var x = rect.left + rect.width / 2;
+				var y = rect.bottom - 1;
+				dragOverAt(win, x, y);
+				dropOn(win, header, x, y);
+			}
+
+			it('Drop below the header lands as the section first slide', function() {
 				helper.processToIdle(this.win);
 				waitForInitialSections();
 
-				// Stub sendMessage so we can inspect what the drop handler emits
+				// Stub sendMessage so we can inspect what the drop emits
 				// without letting the message round-trip to the server.
 				cy.window().then(function(win) {
 					cy.stub(win['0'].app.socket, 'sendMessage').as('sendMessage');
 				});
 
+				// Grab slide 6 and hover just below the middle of Section-2's
+				// header.
+				cy.getFrameWindow().then(function(win) {
+					beginSlideDrag(win, 6);
+					var header = win.document.querySelectorAll(
+						'.slide-section-header')[1];
+					var rect = header.getBoundingClientRect();
+					var x = rect.left + rect.width / 2;
+					var y = rect.bottom - 1;
+					dragOverAt(win, x, y);
+					// The section's first slide moves down: the gap opens
+					// between the header and the slide, showing the drop
+					// lands as the section's first slide.
+					var firstFrame = win.document.getElementById(
+						'preview-frame-part-4');
+					expect(firstFrame.style.marginTop, 'gap below the header')
+						.to.not.equal('');
+					expect(header.style.marginTop, 'header stays put')
+						.to.equal('');
+					// The header is not a drop target of its own: a drop on
+					// it lands at the gap.
+					dropOn(win, header, x, y);
+				});
+
 				// Section-2 starts at index 4 -> position = 3, intoSection = 1.
-				dropOnSectionHeader(1);
 				cy.get('@sendMessage').should('have.been.calledWith',
 					'moveselectedclientparts position=3 intoSection=1');
-
-				// Section-1 starts at index 0 -> position = -1, intoSection = 0.
-				dropOnSectionHeader(0);
-				cy.get('@sendMessage').should('have.been.calledWith',
-					'moveselectedclientparts position=-1 intoSection=0');
 			});
 
-			it('Drop clears dropsite class', function() {
+			it('Drop above the header lands outside the section', function() {
 				helper.processToIdle(this.win);
 				waitForInitialSections();
 
-				// Simulate the dragover state by adding the class directly.
-				cy.cGet('.slide-section-header').eq(1).then(function($el) {
-					$el[0].classList.add('slide-section-dropsite');
+				cy.window().then(function(win) {
+					cy.stub(win['0'].app.socket, 'sendMessage').as('sendMessage');
 				});
-				cy.cGet('.slide-section-header').eq(1)
-					.should('have.class', 'slide-section-dropsite');
 
-				dropOnSectionHeader(1);
+				// Grab slide 6 and hover just above the middle of Section-2's
+				// header.
+				cy.getFrameWindow().then(function(win) {
+					beginSlideDrag(win, 6);
+					var header = win.document.querySelectorAll(
+						'.slide-section-header')[1];
+					var rect = header.getBoundingClientRect();
+					var x = rect.left + rect.width / 2;
+					var y = rect.top + 1;
+					dragOverAt(win, x, y);
+					// The header itself moves down: the gap opens above it,
+					// showing the drop lands outside the section.
+					expect(header.style.marginTop, 'gap above the header')
+						.to.not.equal('');
+					dropOn(win, header, x, y);
+				});
 
-				cy.cGet('.slide-section-header').eq(1)
-					.should('not.have.class', 'slide-section-dropsite');
+				// The same slide position, but without joining the section.
+				cy.get('@sendMessage').should('have.been.calledWith',
+					'moveselectedclientparts position=3');
 			});
 
 			// TODO: fix and re-enable
@@ -230,8 +305,10 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 					expect(win['0'].app.impress.isSlideSelected(0)).to.be.true;
 				});
 
-				// Drop onto Section-2 header.
-				dropOnSectionHeader(1);
+				// Drag slide 0 into Section-2.
+				cy.getFrameWindow().then(function(win) {
+					dragSlideIntoSection(win, 0, 1);
+				});
 				helper.processToIdle(this.win);
 
 				cy.window().should(function(win) {
@@ -258,8 +335,10 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 					expect(win['0'].app.impress.isSlideSelected(12)).to.be.true;
 				});
 
-				// Drop on Section-1 header.
-				dropOnSectionHeader(0);
+				// Drag the selection into Section-1.
+				cy.getFrameWindow().then(function(win) {
+					dragSlideIntoSection(win, 11, 0);
+				});
 				helper.processToIdle(this.win);
 
 				cy.window().should(function(win) {
@@ -290,8 +369,10 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 					expect(win['0'].app.impress.isSlideSelected(1)).to.be.true;
 				});
 
-				// Drop on Section-3 header (startIndex 11 -> position 10).
-				dropOnSectionHeader(2);
+				// Drag the selection into Section-3 (startIndex 11 -> position 10).
+				cy.getFrameWindow().then(function(win) {
+					dragSlideIntoSection(win, 0, 2);
+				});
 				helper.processToIdle(this.win);
 
 				cy.window().should(function(win) {
@@ -309,10 +390,12 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide sections', function(
 				helper.processToIdle(this.win);
 				waitForInitialSections();
 
-				// Drop slide 0 onto Section-2 header.
+				// Drag slide 0 into Section-2.
 				cy.cGet('#preview-img-part-0').click();
 				helper.processToIdle(this.win);
-				dropOnSectionHeader(1);
+				cy.getFrameWindow().then(function(win) {
+					dragSlideIntoSection(win, 0, 1);
+				});
 				helper.processToIdle(this.win);
 
 				cy.window().should(function(win) {
