@@ -36,7 +36,7 @@ BUFFERED_SCRIPT = $(abs_srcdir)/run_buffered.sh
 # Render the browser UI with DejaVu Sans on every host, so jsdialogs drawn
 # as HTML match the pixel baselines regardless of the distribution's default
 # sans font. Only affect the cypress process, so it does not reach the kit.
-CYPRESS_FONTCONFIG = FONTCONFIG_FILE=$(abs_srcdir)/fontconfig/cypress-fonts.conf
+CYPRESS_FONTCONFIG = FONTCONFIG_FILE=$(abs_builddir)/fontconfig/cypress-fonts.conf
 
 PID_FILE=$(abs_builddir)/workdir/coolwsd.pid
 ERROR_LOG=$(abs_builddir)/workdir/error.log

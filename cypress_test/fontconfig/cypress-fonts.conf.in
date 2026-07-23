@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+	<!-- Draw browser UI text with the DejaVu fonts the engine bundles, so
+	     every machine renders it the same way the snapshot baselines were
+	     captured. The rejectfont rules drop the host font directories so a
+	     different DejaVu release installed on the machine cannot win.
+	     configure fills in the configured engine install path. -->
+	<include ignore_missing="yes">/etc/fonts/fonts.conf</include>
+
+	<dir>@LO_PATH@/share/fonts/truetype</dir>
+
+	<selectfont><rejectfont>
+		<glob>/usr/*</glob>
+	</rejectfont></selectfont>
+
+	<alias binding="strong">
+		<family>sans-serif</family>
+		<prefer><family>DejaVu Sans</family></prefer>
+	</alias>
+	<alias binding="strong">
+		<family>system-ui</family>
+		<prefer><family>DejaVu Sans</family></prefer>
+	</alias>
+	<alias binding="strong">
+		<family>serif</family>
+		<prefer><family>DejaVu Serif</family></prefer>
+	</alias>
+	<alias binding="strong">
+		<family>monospace</family>
+		<prefer><family>DejaVu Sans Mono</family></prefer>
+	</alias>
+</fontconfig>

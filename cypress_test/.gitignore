@@ -1,3 +1,4 @@
+fontconfig/cypress-fonts.conf
 node_modules
 cypress
 package-lock.json
