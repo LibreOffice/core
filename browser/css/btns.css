@@ -266,6 +266,7 @@ button.jsdialog[disabled] img {
 
 .jsdialog.ui-button-box.end {
 	margin-top: 8px;
+	margin-inline-start: 4px;
 	display: flex;
 	justify-content: space-between;
 }
