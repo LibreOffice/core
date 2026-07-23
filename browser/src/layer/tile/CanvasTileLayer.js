@@ -3435,7 +3435,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	_impressDynamicZoom: function(containerWidth, containerHeight, documentWidth, documentHeight) {
 		const MAX_DIAGONAL = 2200;
 		const MIN_DIAGONAL = 1000;
-		const diagonal = Math.sqrt(window.innerWidth * window.innerWidth + window.innerHeight + window.innerHeight);
+		const diagonal = Math.sqrt((window.innerWidth * window.innerWidth) + (window.innerHeight * window.innerHeight));
 		const factor = clamp((diagonal - MIN_DIAGONAL) / (MAX_DIAGONAL - MIN_DIAGONAL), 0, 1);
 
 		const percentMargin = 0.04 + factor * (0.09 - 0.04);
