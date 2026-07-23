@@ -1206,9 +1206,9 @@ class SlideShowPresenter {
 			window.L.bind(this._closeSlideShowWindow, this),
 		);
 		const slideShowWindow = this._slideShowWindowProxy;
-		if (!this.isFollowing()) {
+		if (this._slideShowInSeparateWindow && !this.isFollowing()) {
 			this._map.uiManager.showSnackbar(
-				_('Presenting in window'),
+				_('Presenting in another window'),
 				_('Close Presentation'),
 				window.L.bind(this._closeSlideShowWindow, this),
 				-1,

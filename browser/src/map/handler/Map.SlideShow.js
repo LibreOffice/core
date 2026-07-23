@@ -199,7 +199,7 @@ window.L.Map.SlideShow = window.L.Handler.extend({
 			this._slideShowWindowProxy.addEventListener('keydown', this._onSlideWindowKeyPress.bind(this));
 
 			var slideShowWindow = this._slideShowWindowProxy;
-			this._map.uiManager.showSnackbar(_('Presenting in window'),
+			this._map.uiManager.showSnackbar(_('Presenting in another window'),
 				_('Close Presentation'),
 				function() {slideShowWindow.close();},
 				-1, false, true);

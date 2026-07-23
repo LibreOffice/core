@@ -42,7 +42,6 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         cy.cGet('.notebookbar #slide-presentation-follow-me').click();
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
-        impressHelper.dismissPresentingSnackbar(win2);
         getSlideShowContent().find('#slideshow-canvas').click();
         impressHelper.waitForSlideShowIdle(win2);
 
@@ -58,7 +57,6 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
-        impressHelper.dismissPresentingSnackbar(win2);
 
         //move to nextslide last effect
         for (let i = 0; i < 5; i++) {
@@ -102,7 +100,6 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
-        impressHelper.dismissPresentingSnackbar(win2);
 
         //move to nextslide last effect
         for (let i = 0; i < 4; i++) {
@@ -145,7 +142,6 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
-        impressHelper.dismissPresentingSnackbar(win2);
 
         //move to nextslide last effect
         for (let i = 0; i < 4; i++) {
@@ -193,7 +189,6 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
-        impressHelper.dismissPresentingSnackbar(win2);
         impressHelper.clickSlideShowNav(win2, '#next');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
@@ -218,7 +213,6 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
-        impressHelper.dismissPresentingSnackbar(win2);
         for (let i = 0; i < 4; i++) {
             impressHelper.clickSlideShowNav(win2, '#next');
             impressHelper.waitForSlideShowIdle(win2);
@@ -254,7 +248,6 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
-        impressHelper.dismissPresentingSnackbar(win2);
         impressHelper.clickSlideShowNav(win2, '#next');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
