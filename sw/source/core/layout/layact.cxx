@@ -589,9 +589,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                 unlockPositionOfObjects( pPage );
 
                 pPage->ValidateAtPageFly();
-                pPage->SetInAtPageFlyFormatting(true);
                 SwObjectFormatter::FormatObjsAtFrame(*pPage, *pPage, this);
-                pPage->SetInAtPageFlyFormatting(false);
                 bAtPageObjectsAreInvalid = pPage->IsInvalidAtPageFly();
 
                 if ( !pPage->GetSortedObjs() )
