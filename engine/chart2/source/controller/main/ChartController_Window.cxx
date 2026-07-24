@@ -1246,6 +1246,10 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     {
                         auto nItemId = xPopupMenu->getItemId(nPos);
                         OUString aCommandURL = xPopupMenu->getCommand(nItemId);
+                        // separators and submenu parents carry no command URL, so
+                        // leave them at their default state instead of disabling them
+                        if (aCommandURL.isEmpty())
+                            continue;
                         if (!pCommandDispatch->commandAvailable(aCommandURL))
                             xPopupMenu->enableItem(nItemId, false);
                     }
