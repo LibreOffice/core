@@ -766,7 +766,6 @@ $(eval $(call gb_Library_use_externals,vcl,\
         $(if $(ENABLE_CPDB),cpdb) \
         $(if $(ENABLE_CUPS),cups) \
         fontconfig \
-        freetype \
     ) \
     $(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
     $(if $(filter AFDKO,$(BUILD_TYPE)),afdko libxml2) \
