@@ -1181,7 +1181,7 @@ HRESULT DocumentHolder::SetObjectRects(LPCRECT aRect, LPCRECT aClip)
 }
 
 
-css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWindow()
+css::uno::Reference< css::awt::XWindow> DocumentHolder::getContainerWindow()
 {
     if(m_xContainerWindow.is())
         return m_xContainerWindow;
@@ -1230,7 +1230,7 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
 }
 
 
-bool SAL_CALL DocumentHolder::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace )
+bool DocumentHolder::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace )
 {
     if(m_bOnDeactivate)
         return true;
@@ -1246,7 +1246,7 @@ bool SAL_CALL DocumentHolder::requestDockingAreaSpace( const css::awt::Rectangle
 }
 
 
-void SAL_CALL DocumentHolder::setDockingAreaSpace( const css::awt::Rectangle& BorderSpace )
+void DocumentHolder::setDockingAreaSpace( const css::awt::Rectangle& BorderSpace )
 {
     if(m_bOnDeactivate)
         return;
@@ -1278,7 +1278,7 @@ void SAL_CALL DocumentHolder::setDockingAreaSpace( const css::awt::Rectangle& Bo
 }
 
 
-void SAL_CALL DocumentHolder::disposing( const css::lang::EventObject& aSource )
+void DocumentHolder::disposing( const css::lang::EventObject& aSource )
 {
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
     {
@@ -1291,7 +1291,7 @@ void SAL_CALL DocumentHolder::disposing( const css::lang::EventObject& aSource )
 }
 
 
-void SAL_CALL
+void
 DocumentHolder::queryClosing(
     const lang::EventObject& aSource,
     bool /*bGetsOwnership*/
@@ -1304,7 +1304,7 @@ DocumentHolder::queryClosing(
 }
 
 
-void SAL_CALL
+void
 DocumentHolder::notifyClosing(
     const lang::EventObject& aSource )
 {
@@ -1332,7 +1332,7 @@ DocumentHolder::notifyClosing(
         m_xFrame.clear();
 }
 
-void SAL_CALL
+void
 DocumentHolder::queryTermination(
     const lang::EventObject& /*aSource*/
 )
@@ -1341,7 +1341,7 @@ DocumentHolder::queryTermination(
         throw frame::TerminationVetoException();
 }
 
-void SAL_CALL
+void
 DocumentHolder::notifyTermination(
     const lang::EventObject& aSource
 )
@@ -1355,7 +1355,7 @@ DocumentHolder::notifyTermination(
 }
 
 
-void SAL_CALL DocumentHolder::modified( const lang::EventObject& /*aEvent*/ )
+void DocumentHolder::modified( const lang::EventObject& /*aEvent*/ )
 {
     if ( m_xOleAccess.is() )
     {

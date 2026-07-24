@@ -121,7 +121,7 @@ void Interceptor::DisconnectDocHolder()
 }
 
 //XDispatch
-void SAL_CALL
+void
 Interceptor::dispatch(
     const util::URL& URL,
     const cpo::uno::Sequence<
@@ -240,7 +240,7 @@ void Interceptor::generateFeatureStateEvent()
 }
 
 
-void SAL_CALL
+void
 Interceptor::addStatusListener(
     const uno::Reference<
     frame::XStatusListener >& Control,
@@ -346,7 +346,7 @@ Interceptor::addStatusListener(
 }
 
 
-void SAL_CALL
+void
 Interceptor::removeStatusListener(
     const uno::Reference<
     frame::XStatusListener >& Control,
@@ -363,7 +363,6 @@ Interceptor::removeStatusListener(
 
 //XInterceptorInfo
 cpo::uno::Sequence< OUString >
-SAL_CALL
 Interceptor::getInterceptedURLs(  )
 {
     // now implemented as update
@@ -376,7 +375,7 @@ Interceptor::getInterceptedURLs(  )
 
 // XDispatchProvider
 
-uno::Reference< frame::XDispatch > SAL_CALL
+uno::Reference< frame::XDispatch >
 Interceptor::queryDispatch(
     const util::URL& URL,
     const OUString& TargetFrameName,
@@ -404,7 +403,7 @@ Interceptor::queryDispatch(
     }
 }
 
-cpo::uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL
+cpo::uno::Sequence< uno::Reference< frame::XDispatch > >
 Interceptor::queryDispatches(
     const cpo::uno::Sequence<frame::DispatchDescriptor >& Requests )
 {
@@ -435,14 +434,14 @@ Interceptor::queryDispatches(
 
 //XDispatchProviderInterceptor
 
-uno::Reference< frame::XDispatchProvider > SAL_CALL
+uno::Reference< frame::XDispatchProvider >
 Interceptor::getSlaveDispatchProvider(  )
 {
     osl::MutexGuard aGuard(m_aMutex);
     return m_xSlaveDispatchProvider;
 }
 
-void SAL_CALL
+void
 Interceptor::setSlaveDispatchProvider(
     const uno::Reference< frame::XDispatchProvider >& NewDispatchProvider )
 {
@@ -451,7 +450,7 @@ Interceptor::setSlaveDispatchProvider(
 }
 
 
-uno::Reference< frame::XDispatchProvider > SAL_CALL
+uno::Reference< frame::XDispatchProvider >
 Interceptor::getMasterDispatchProvider(  )
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -459,7 +458,7 @@ Interceptor::getMasterDispatchProvider(  )
 }
 
 
-void SAL_CALL
+void
 Interceptor::setMasterDispatchProvider(
     const uno::Reference< frame::XDispatchProvider >& NewSupplier )
 {

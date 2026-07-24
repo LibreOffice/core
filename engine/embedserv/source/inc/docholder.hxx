@@ -196,35 +196,35 @@ public:
     }
 
     // XEventListener
-    virtual void SAL_CALL
+    virtual void
     disposing( const css::lang::EventObject& aSource ) override;
 
     // XCloseListener
-    virtual void SAL_CALL
+    virtual void
     queryClosing(
         const css::lang::EventObject& aSource,
         bool bGetsOwnership
     ) override;
 
-    virtual void SAL_CALL
+    virtual void
     notifyClosing(
         const css::lang::EventObject& aSource
     ) override;
 
     // XTerminateListener
-    virtual void SAL_CALL
+    virtual void
     queryTermination(
         const css::lang::EventObject& aSource
     ) override;
 
-    virtual void SAL_CALL
+    virtual void
     notifyTermination(
         const css::lang::EventObject& aSource
     ) override;
 
 
     // XModifyListener
-    virtual void SAL_CALL
+    virtual void
     modified(
         const css::lang::EventObject& aEvent
     ) override;
@@ -232,16 +232,16 @@ public:
     // XDockingAreaAcceptor
 
     virtual css::uno::Reference<
-        css::awt::XWindow> SAL_CALL
+        css::awt::XWindow>
     getContainerWindow(
     ) override;
 
-    virtual bool SAL_CALL
+    virtual bool
     requestDockingAreaSpace(
         const css::awt::Rectangle& RequestedSpace
     ) override;
 
-    virtual void SAL_CALL
+    virtual void
     setDockingAreaSpace(
         const css::awt::Rectangle& BorderSpace
     ) override;

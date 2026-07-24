@@ -74,52 +74,52 @@ public:
 
 
     //XDispatch
-    virtual void SAL_CALL
+    virtual void
     dispatch(
         const css::util::URL& URL,
         const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
-    virtual void SAL_CALL
+    virtual void
     addStatusListener(
         const css::uno::Reference< css::frame::XStatusListener >& Control,
         const css::util::URL& URL ) override;
 
-    virtual void SAL_CALL
+    virtual void
     removeStatusListener(
         const css::uno::Reference< css::frame::XStatusListener >& Control,
         const css::util::URL& URL ) override;
 
     //XInterceptorInfo
     virtual cpo::uno::Sequence< OUString >
-    SAL_CALL getInterceptedURLs(  ) override;
+    getInterceptedURLs(  ) override;
 
 
     //XDispatchProvider ( inherited by XDispatchProviderInterceptor )
     virtual css::uno::Reference<
-    css::frame::XDispatch > SAL_CALL
+    css::frame::XDispatch >
     queryDispatch(
         const css::util::URL& URL,
         const OUString& TargetFrameName,
         sal_Int32 SearchFlags ) override;
 
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
     queryDispatches(
         const cpo::uno::Sequence<
         css::frame::DispatchDescriptor >& Requests ) override;
 
 
     //XDispatchProviderInterceptor
-    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
+    virtual css::uno::Reference< css::frame::XDispatchProvider >
     getSlaveDispatchProvider(  ) override;
 
-    virtual void SAL_CALL
+    virtual void
     setSlaveDispatchProvider(
         const css::uno::Reference< css::frame::XDispatchProvider >& NewDispatchProvider ) override;
 
-    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
+    virtual css::uno::Reference< css::frame::XDispatchProvider >
     getMasterDispatchProvider(  ) override;
 
-    virtual void SAL_CALL
+    virtual void
     setMasterDispatchProvider(
         const css::uno::Reference< css::frame::XDispatchProvider >& NewSupplier ) override;
 

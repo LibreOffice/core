@@ -37,11 +37,11 @@ public:
     EmbedServer_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory > &xFactory );
     virtual ~EmbedServer_Impl() override;
 
-    OUString SAL_CALL getImplementationName() override;
+    OUString getImplementationName() override;
 
-    bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    bool supportsService(OUString const & ServiceName) override;
 
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 protected:
 
