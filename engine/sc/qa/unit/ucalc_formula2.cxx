@@ -3856,8 +3856,7 @@ double lcl_GetElement(const std::vector<double>& rMatrix, size_t nRowCount, size
     and that multiplying the factors back together gives the matrix again.
  */
 sc::SingularValueDecompositionResult
-decomposeAndCheckPromises(const std::vector<double>& rValues, size_t nRowCount,
-                          size_t nColumnCount)
+decomposeAndCheckPromises(const std::vector<double>& rValues, size_t nRowCount, size_t nColumnCount)
 {
     const size_t nRank = std::min(nRowCount, nColumnCount);
 
@@ -3975,36 +3974,32 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSingularValuesOfMixedMatrixMatchTheirInva
     // input whose singular values are not simply its elements. They are the
     // square roots of 45 and 5.
     const std::vector<double> aValues{ 3.0, 4.0, 0.0, 5.0 };
-    const sc::SingularValueDecompositionResult aResult
-        = decomposeAndCheckPromises(aValues, 2, 2);
+    const sc::SingularValueDecompositionResult aResult = decomposeAndCheckPromises(aValues, 2, 2);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(std::sqrt(45.0), aResult.maSingularValues[0], 1e-13);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(std::sqrt(5.0), aResult.maSingularValues[1], 1e-13);
 
     // The singular values multiply to the size of the determinant and their
     // squares add up to the sum of the squares of all the elements.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        15.0, aResult.maSingularValues[0] * aResult.maSingularValues[1], 1e-13);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(15.0, aResult.maSingularValues[0] * aResult.maSingularValues[1],
+                                 1e-13);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(50.0,
                                  aResult.maSingularValues[0] * aResult.maSingularValues[0]
                                      + aResult.maSingularValues[1] * aResult.maSingularValues[1],
                                  1e-12);
 
-    CPPUNIT_ASSERT_MESSAGE("one rotation settles a two column matrix",
-                           aResult.mnSweepCount <= 2);
+    CPPUNIT_ASSERT_MESSAGE("one rotation settles a two column matrix", aResult.mnSweepCount <= 2);
 }
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testRankDeficientInputLeavesNullDirectionUndetermined)
 {
     // The second column is twice the first, so the matrix has rank one.
     const std::vector<double> aValues{ 1.0, 2.0, 3.0, 2.0, 4.0, 6.0 };
-    const sc::SingularValueDecompositionResult aResult
-        = decomposeAndCheckPromises(aValues, 3, 2);
+    const sc::SingularValueDecompositionResult aResult = decomposeAndCheckPromises(aValues, 3, 2);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(std::sqrt(70.0), aResult.maSingularValues[0], 1e-13);
     CPPUNIT_ASSERT_MESSAGE("the second singular value counts as zero",
-                           aResult.maSingularValues[1]
-                               < aResult.maSingularValues[0] * 1e-14);
+                           aResult.maSingularValues[1] < aResult.maSingularValues[0] * 1e-14);
 
     // No unit direction belongs to a singular value of zero, so the vector
     // comes back as zeros rather than as an arbitrary choice.
@@ -4018,12 +4013,10 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testWideInputDecomposesLikeItsTranspose)
     // Two rows and three columns, so the work runs on the transpose and the
     // two families of vectors have to be swapped back afterwards.
     const std::vector<double> aWide{ 1.0, 4.0, 2.0, 5.0, 3.0, 6.0 };
-    const sc::SingularValueDecompositionResult aWideResult
-        = decomposeAndCheckPromises(aWide, 2, 3);
+    const sc::SingularValueDecompositionResult aWideResult = decomposeAndCheckPromises(aWide, 2, 3);
 
     const std::vector<double> aTall{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
-    const sc::SingularValueDecompositionResult aTallResult
-        = decomposeAndCheckPromises(aTall, 3, 2);
+    const sc::SingularValueDecompositionResult aTallResult = decomposeAndCheckPromises(aTall, 3, 2);
 
     CPPUNIT_ASSERT_EQUAL(aTallResult.maSingularValues.size(), aWideResult.maSingularValues.size());
     for (size_t nIndex = 0; nIndex < aWideResult.maSingularValues.size(); ++nIndex)
@@ -4084,14 +4077,14 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testAllZeroInputHasNoSingularValueAboveZero)
     // Nothing rotates, so the right vectors are left as the axes they started
     // out as.
     const std::vector<double> aExpectedRight{ 1.0, 0.0, 0.0, 1.0 };
-    CPPUNIT_ASSERT(aExpectedRight == aResult.maRightVectors);
+    CPPUNIT_ASSERT_MESSAGE("Right vectors must remain as the axes they started out as",
+                           std::ranges::equal(aExpectedRight, aResult.maRightVectors));
 }
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testScalingTheInputScalesOnlyTheSingularValues)
 {
     const std::vector<double> aValues{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
-    const sc::SingularValueDecompositionResult aPlain
-        = decomposeAndCheckPromises(aValues, 3, 2);
+    const sc::SingularValueDecompositionResult aPlain = decomposeAndCheckPromises(aValues, 3, 2);
 
     // Every element is squared while an angle is worked out, so without a
     // scaling step these two would square to infinity and to zero.
@@ -4140,6 +4133,118 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testDecompositionSettlesWellWithinTheSweepLim
         = decomposeAndCheckPromises(aValues, nRowCount, nColumnCount);
     CPPUNIT_ASSERT_MESSAGE("the sweeps settle long before the limit stops them",
                            aResult.mnSweepCount <= 20);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncMSVD)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"MSVD_test"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // Three rows and two columns, the second column twice the first, so the
+    // matrix has rank one and only one singular value above zero.
+    const double aValues[3][2] = { { 1.0, 2.0 }, { 2.0, 4.0 }, { 3.0, 6.0 } };
+    for (SCROW nRow = 0; nRow < 3; ++nRow)
+        for (SCCOL nCol = 0; nCol < 2; ++nCol)
+            m_pDoc->SetValue(nCol, nRow, 0, aValues[nRow][nCol]);
+
+    // Left as three rows by two columns.
+    m_pDoc->InsertMatrixFormula(3, 0, 4, 2, aMark, u"=MSVD(A1:B3;1)"_ustr);
+    // The direction of the one column that carries a singular value above
+    // zero, which is the shared direction of both input columns.
+    const double fLength = std::sqrt(14.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0 / fLength, m_pDoc->GetValue(ScAddress(3, 0, 0)), 1e-13);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0 / fLength, m_pDoc->GetValue(ScAddress(3, 1, 0)), 1e-13);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0 / fLength, m_pDoc->GetValue(ScAddress(3, 2, 0)), 1e-13);
+    // Nothing points along the second singular value, so that column is zeros.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, m_pDoc->GetValue(ScAddress(4, 0, 0)), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, m_pDoc->GetValue(ScAddress(4, 1, 0)), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, m_pDoc->GetValue(ScAddress(4, 2, 0)), 0.0);
+
+    // The singular values fill a single column, and leaving the part out asks
+    // for the same thing.
+    m_pDoc->InsertMatrixFormula(5, 0, 5, 1, aMark, u"=MSVD(A1:B3;2)"_ustr);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(std::sqrt(70.0), m_pDoc->GetValue(ScAddress(5, 0, 0)), 1e-13);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, m_pDoc->GetValue(ScAddress(5, 1, 0)), 1e-13);
+    m_pDoc->InsertMatrixFormula(6, 0, 6, 1, aMark, u"=MSVD(A1:B3)"_ustr);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(std::sqrt(70.0), m_pDoc->GetValue(ScAddress(6, 0, 0)), 1e-13);
+
+    // Right as two rows by two columns, the input having two columns.
+    m_pDoc->InsertMatrixFormula(7, 0, 8, 1, aMark, u"=MSVD(A1:B3;3)"_ustr);
+    const double fRightLength = std::sqrt(5.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0 / fRightLength, m_pDoc->GetValue(ScAddress(7, 0, 0)), 1e-13);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0 / fRightLength, m_pDoc->GetValue(ScAddress(7, 1, 0)), 1e-13);
+
+    // The singular values on a diagonal, so the whole decomposition can be
+    // multiplied back together with MMULT.
+    m_pDoc->InsertMatrixFormula(9, 0, 10, 1, aMark, u"=MSVD(A1:B3;4)"_ustr);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(std::sqrt(70.0), m_pDoc->GetValue(ScAddress(9, 0, 0)), 1e-13);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, m_pDoc->GetValue(ScAddress(10, 0, 0)), 1e-13);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, m_pDoc->GetValue(ScAddress(9, 1, 0)), 1e-13);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, m_pDoc->GetValue(ScAddress(10, 1, 0)), 1e-13);
+
+    // Multiplying the three factors reproduces the input.
+    m_pDoc->InsertMatrixFormula(
+        3, 5, 4, 7, aMark,
+        u"=MMULT(MMULT(MSVD(A1:B3;1);MSVD(A1:B3;4));TRANSPOSE(MSVD(A1:B3;3)))"_ustr);
+    for (SCROW nRow = 0; nRow < 3; ++nRow)
+        for (SCCOL nCol = 0; nCol < 2; ++nCol)
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+                "the three factors multiply back to the input", aValues[nRow][nCol],
+                m_pDoc->GetValue(ScAddress(3 + nCol, 5 + nRow, 0)), 1e-12);
+
+    // A part outside the four the function offers is rejected.
+    m_pDoc->SetString(ScAddress(0, 10, 0), u"=MSVD(A1:B3;0)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(int(FormulaError::NoValue), int(m_pDoc->GetErrCode(ScAddress(0, 10, 0))));
+    m_pDoc->SetString(ScAddress(0, 11, 0), u"=MSVD(A1:B3;5)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(int(FormulaError::NoValue), int(m_pDoc->GetErrCode(ScAddress(0, 11, 0))));
+
+    // Text where an array belongs gives an error rather than a number.
+    m_pDoc->SetString(ScAddress(0, 12, 0), u"=MSVD(\"x\")"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("text is not an array to decompose",
+                           m_pDoc->GetErrCode(ScAddress(0, 12, 0)) != FormulaError::NONE);
+
+    // Text inside the range is rejected as well, the same as MDETERM and
+    // MINVERSE reject it.
+    m_pDoc->SetString(ScAddress(1, 2, 0), u"text"_ustr);
+    m_pDoc->SetString(ScAddress(0, 13, 0), u"=MSVD(A1:B3;2)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(int(FormulaError::NoValue), int(m_pDoc->GetErrCode(ScAddress(0, 13, 0))));
+    m_pDoc->SetValue(1, 2, 0, 6.0);
+
+    // An error anywhere in the range comes back out, rather than being folded
+    // into the arithmetic as a value that is not a number.
+    m_pDoc->SetString(ScAddress(1, 2, 0), u"=1/0"_ustr);
+    m_pDoc->SetString(ScAddress(0, 14, 0), u"=MSVD(A1:B3;2)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(int(FormulaError::DivisionByZero),
+                         int(m_pDoc->GetErrCode(ScAddress(0, 14, 0))));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncMSVDCarriesANamespaceIntoDocuments)
+{
+    // Both file formats write the name in the space that marks it as belonging
+    // to this implementation, so a reader that does not know it says so.
+    CPPUNIT_ASSERT(m_pDoc->InsertTab(0, u"Test"_ustr));
+
+    ScAddress aPosition(0, 0, 0);
+    ScCompiler aCompiler(*m_pDoc, aPosition, FormulaGrammar::GRAM_ENGLISH);
+    std::unique_ptr<ScTokenArray> pTokens(aCompiler.CompileString(u"=MSVD(A1:B2;2)"_ustr));
+    CPPUNIT_ASSERT(pTokens);
+
+    sc::TokenStringContext aOdfContext(*m_pDoc, formula::FormulaGrammar::GRAM_ODFF);
+    const OUString aOdfFormula = pTokens->CreateString(aOdfContext, aPosition);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the name written into an ODF spreadsheet", true,
+                                 aOdfFormula.startsWith(u"COM.COLLABORAOFFICE.MSVD("));
+
+    sc::TokenStringContext aOoxmlContext(*m_pDoc, formula::FormulaGrammar::GRAM_OOXML);
+    const OUString aOoxmlFormula = pTokens->CreateString(aOoxmlContext, aPosition);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the name written into an OOXML workbook", true,
+                                 aOoxmlFormula.startsWith(u"_xlfn.COM.COLLABORAOFFICE.MSVD("));
+
+    m_pDoc->DeleteTab(0);
 }
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFormulaErrorPropagation)

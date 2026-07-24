@@ -1576,6 +1576,16 @@ const TranslateId ocMAT_INV_ARY[] =
     NC_("ocMAT_INV", "The array to be inverted.")
 };
 
+// -=*# Resource for function MSVD #*=-
+const TranslateId ocMSVD_ARY[] =
+{
+    NC_("ocMSVD", "Returns one part of the singular value decomposition of an array."),
+    NC_("ocMSVD", "Array"),
+    NC_("ocMSVD", "The array to be decomposed."),
+    NC_("ocMSVD", "Part"),
+    NC_("ocMSVD", "Which part to return: 1 for the left vectors, 2 or omitted for the singular values as a single column, 3 for the right vectors, 4 for the singular values on the diagonal of a square array. A left vector whose singular value is zero is returned as zeros.")
+};
+
 // -=*# Resource for function MUNIT #*=-
 const TranslateId ocMATRIX_UNIT_ARY[] =
 {

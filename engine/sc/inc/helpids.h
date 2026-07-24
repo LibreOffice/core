@@ -599,6 +599,7 @@ inline constexpr OUString HID_FUNC_FINDB = u"SC_HID_FUNC_FINDB"_ustr;
 inline constexpr OUString HID_FUNC_SEARCHB = u"SC_HID_FUNC_SEARCHB"_ustr;
 inline constexpr OUString HID_FUNC_REGEX = u"SC_HID_FUNC_REGEX"_ustr;
 inline constexpr OUString HID_FUNC_FOURIER = u"SC_HID_FUNC_FOURIER"_ustr;
+inline constexpr OUString HID_FUNC_MSVD = u"SC_HID_FUNC_MSVD"_ustr;
 inline constexpr OUString HID_FUNC_RAND_NV = u"SC_HID_FUNC_RAND_NV"_ustr;
 inline constexpr OUString HID_FUNC_RANDBETWEEN_NV = u"SC_HID_FUNC_RANDBETWEEN_NV"_ustr;
 inline constexpr OUString HID_FUNC_RANDARRAY_MS = u"SC_HID_FUNC_RANDARRAY_MS"_ustr;

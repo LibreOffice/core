@@ -4042,6 +4042,7 @@ void ScInterpreter::DispatchOpCode( OpCode eOp )
         case ocMatInv           : ScMatInv();                   break;
         case ocMatMult          : ScMatMult();                  break;
         case ocMatSequence      : ScMatSequence();              break;
+        case ocMatSvd           : ScMatSvd();                   break;
         case ocMatTrans         : ScMatTrans();                 break;
         case ocMatRef           : ScMatRef();                   break;
         case ocByCol            : ScByCol();                    break;

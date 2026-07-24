@@ -971,6 +971,7 @@ public:
     void ScMatInv();
     void ScMatMult();
     void ScMatSequence();
+    void ScMatSvd();
     void ScMatTrans();
     void ScEMat();
     void ScMatRef();

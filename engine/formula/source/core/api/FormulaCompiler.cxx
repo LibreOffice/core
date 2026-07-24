@@ -1303,6 +1303,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocMatTrans :
         case ocMatMult :
         case ocMatInv :
+        case ocMatSvd :
         case ocMatrixUnit :
         case ocModalValue_Multi :
         case ocFourier :

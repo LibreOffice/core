@@ -818,6 +818,7 @@ ScFunctionList::ScFunctionList( bool bEnglishFunctionNames )
         { ocReduce, ENTRY(ocREDUCE_ARY), 0, ID_FUNCTION_GRP_MATRIX, HID_FUNC_REDUCE_MS, 3, { 1, 0, 0 }, 0 },
         { ocScan, ENTRY(ocSCAN_ARY), 0, ID_FUNCTION_GRP_MATRIX, HID_FUNC_SCAN_MS, 3, { 1, 0, 0 }, 0 },
         { ocArrayToText, ENTRY(ocARRAYTOTEXT_ARY), 0, ID_FUNCTION_GRP_TEXT, HID_FUNC_ARRAYTOTEXT_MS, 2, { 0, 1 }, 0 },
+        { ocMatSvd, ENTRY(ocMSVD_ARY), 0, ID_FUNCTION_GRP_MATRIX, HID_FUNC_MSVD, 2, { 0, 1 }, 0 },
     };
 
     ScFuncDesc* pDesc = nullptr;

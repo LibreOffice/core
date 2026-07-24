@@ -35,12 +35,14 @@
 #include <document.hxx>
 #include <dociter.hxx>
 #include <scmatrix.hxx>
+#include <matrixdecomposition.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <cellkeytranslator.hxx>
 #include <formulagroup.hxx>
 #include <vcl/svapp.hxx> //Application::
 
+#include <algorithm>
 #include <vector>
 
 using namespace formula;
@@ -1085,6 +1087,135 @@ void ScInterpreter::ScMatInv()
             }
         }
     }
+}
+
+void ScInterpreter::ScMatSvd()
+{
+    sal_uInt8 nParameterCount = GetByte();
+    if (!MustHaveParamCount(nParameterCount, 1, 2))
+        return;
+
+    // The last argument is on top of the stack, so read it before the array.
+    // Part 1 asks for the left vectors, 2 for the singular values, 3 for the
+    // right vectors and 4 for the singular values on a diagonal.
+    sal_Int32 nPart = 2;
+    if (nParameterCount == 2)
+    {
+        if (IsMissing())
+            Pop();
+        else
+        {
+            nPart = GetInt32WithDefault(2);
+            if (nGlobalError != FormulaError::NONE)
+            {
+                PushError(nGlobalError);
+                return;
+            }
+            if (nPart < 1 || nPart > 4)
+            {
+                // Any part outside the four the function offers is rejected
+                // with #VALUE!.
+                PushError(FormulaError::NoValue);
+                return;
+            }
+        }
+    }
+
+    ScMatrixRef pMatrix = GetMatrix();
+    if (!pMatrix)
+    {
+        PushIllegalParameter();
+        return;
+    }
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError(nGlobalError);
+        return;
+    }
+    if (!pMatrix->IsNumeric())
+    {
+        PushNoValue();
+        return;
+    }
+
+    SCSIZE nColumnCount, nRowCount;
+    pMatrix->GetDimensions(nColumnCount, nRowCount);
+    if (nColumnCount == 0 || nRowCount == 0)
+    {
+        PushIllegalArgument();
+        return;
+    }
+    const SCSIZE nRank = std::min(nColumnCount, nRowCount);
+
+    SCSIZE nResultColumns = 0;
+    SCSIZE nResultRows = 0;
+    switch (nPart)
+    {
+        case 1:
+            nResultColumns = nRank;
+            nResultRows = nRowCount;
+            break;
+        case 2:
+            nResultColumns = 1;
+            nResultRows = nRank;
+            break;
+        case 3:
+            nResultColumns = nRank;
+            nResultRows = nColumnCount;
+            break;
+        default:
+            nResultColumns = nRank;
+            nResultRows = nRank;
+            break;
+    }
+    if (!ScMatrix::IsSizeAllocatable(nResultColumns, nResultRows))
+    {
+        PushError(FormulaError::MatrixSize);
+        return;
+    }
+
+    std::vector<double> aValues;
+    pMatrix->GetDoubleArray(aValues);
+    for (double fValue : aValues)
+    {
+        // An element that carries an error, and a non-finite element, both
+        // leave the decomposition without a meaning.
+        FormulaError nError = GetDoubleErrorValue(fValue);
+        if (nError != FormulaError::NONE)
+        {
+            PushError(nError);
+            return;
+        }
+    }
+
+    sc::SingularValueDecompositionResult aDecomposition;
+    sc::DecomposeSingularValues(aValues, nRowCount, nColumnCount, aDecomposition);
+
+    std::vector<double> aResult;
+    switch (nPart)
+    {
+        case 1:
+            aResult = std::move(aDecomposition.maLeftVectors);
+            break;
+        case 2:
+            aResult = std::move(aDecomposition.maSingularValues);
+            break;
+        case 3:
+            aResult = std::move(aDecomposition.maRightVectors);
+            break;
+        default:
+            aResult.resize(nRank * nRank, 0.0);
+            for (SCSIZE nDiagonal = 0; nDiagonal < nRank; ++nDiagonal)
+                aResult[nDiagonal * nRank + nDiagonal]
+                    = aDecomposition.maSingularValues[nDiagonal];
+            break;
+    }
+
+    ScMatrixRef pResultMatrix = GetNewMat(nResultColumns, nResultRows, aResult);
+    if (!pResultMatrix)
+        PushError(FormulaError::CodeOverflow);
+    else
+        PushMatrix(pResultMatrix);
 }
 
 void ScInterpreter::ScMatMult()

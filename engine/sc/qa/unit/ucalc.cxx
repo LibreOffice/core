@@ -2931,6 +2931,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "MDETERM",
         "MINVERSE",
         "MMULT",
+        "MSVD",
         "MUNIT",
         "REDUCE",
         "SCAN",

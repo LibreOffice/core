@@ -694,6 +694,7 @@ const XclFunctionInfo saFuncTable_OOoLO[] =
     EXC_FUNCENTRY_OOO( ocRoundSig,      2,  2,  0,  "ORG.LIBREOFFICE.ROUNDSIG" ),
     EXC_FUNCENTRY_OOO( ocRegex,         2,  4,  0,  "ORG.LIBREOFFICE.REGEX" ),
     EXC_FUNCENTRY_OOO( ocFourier,       2,  5,  0,  "ORG.LIBREOFFICE.FOURIER" ),
+    EXC_FUNCENTRY_OOO( ocMatSvd,        1,  2,  0,  "COM.COLLABORAOFFICE.MSVD" ),
     EXC_FUNCENTRY_OOO( ocRandomNV,      0,  0,  0,  "ORG.LIBREOFFICE.RAND.NV" ),
     EXC_FUNCENTRY_OOO( ocRandbetweenNV, 2,  2,  0,  "ORG.LIBREOFFICE.RANDBETWEEN.NV" )
 };
