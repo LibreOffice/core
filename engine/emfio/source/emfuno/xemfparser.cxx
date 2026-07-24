@@ -56,16 +56,16 @@ namespace emfio::emfreader
             XEmfParser& operator=(const XEmfParser&) = delete;
 
             // XEmfParser
-            virtual cpo::uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > SAL_CALL getDecomposition(
+            virtual cpo::uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > getDecomposition(
                 const uno::Reference< ::io::XInputStream >& xEmfStream,
                 const OUString& aAbsolutePath,
                 const cpo::uno::Sequence< ::beans::PropertyValue >& rProperties) override;
-            void SAL_CALL setSizeHint(const geometry::RealPoint2D& rSize) override;
+            void setSizeHint(const geometry::RealPoint2D& rSize) override;
 
             // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName() override;
-            virtual bool SAL_CALL supportsService(const OUString&) override;
-            virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+            virtual OUString getImplementationName() override;
+            virtual bool supportsService(const OUString&) override;
+            virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
         };
 
         }
@@ -210,17 +210,17 @@ namespace emfio::emfreader
             maSizeHint.setY(rSize.Y);
         }
 
-        OUString SAL_CALL XEmfParser::getImplementationName()
+        OUString XEmfParser::getImplementationName()
         {
             return u"emfio::emfreader::XEmfParser"_ustr;
         }
 
-        bool SAL_CALL XEmfParser::supportsService(const OUString& rServiceName)
+        bool XEmfParser::supportsService(const OUString& rServiceName)
         {
             return cppu::supportsService(this, rServiceName);
         }
 
-        cpo::uno::Sequence< OUString > SAL_CALL XEmfParser::getSupportedServiceNames()
+        cpo::uno::Sequence< OUString > XEmfParser::getSupportedServiceNames()
         {
             return { u"com.sun.star.graphic.EmfTools"_ustr };
         }
