@@ -1015,23 +1015,7 @@ SwPositiveSize SwTextPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 
 void SwTextPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    if (rInf.OnWin() && TextFrameIndex(1) == rInf.GetLen()
-        && CH_TXT_ATR_FIELDEND == rInf.GetText()[sal_Int32(rInf.GetIdx())])
-    {
-        assert(false); // this is some debugging only code
-        rInf.DrawBackBrush( *this );
-        const OUString aText(CH_TXT_ATR_SUBST_FIELDEND);
-        rInf.DrawText(aText, *this, TextFrameIndex(0), TextFrameIndex(aText.getLength()));
-    }
-    else if (rInf.OnWin() && TextFrameIndex(1) == rInf.GetLen()
-        && CH_TXT_ATR_FIELDSTART == rInf.GetText()[sal_Int32(rInf.GetIdx())])
-    {
-        assert(false); // this is some debugging only code
-        rInf.DrawBackBrush( *this );
-        const OUString aText(CH_TXT_ATR_SUBST_FIELDSTART);
-        rInf.DrawText(aText, *this, TextFrameIndex(0), TextFrameIndex(aText.getLength()));
-    }
-    else if( GetLen() )
+    if( GetLen() )
     {
         rInf.DrawBackBrush( *this );
         rInf.DrawBorder( *this );
