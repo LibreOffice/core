@@ -114,8 +114,8 @@ namespace RenderTiles
         const size_t pixmapWidth = tilesByX * static_cast<size_t>(pixelWidth);
         const size_t pixmapHeight = tilesByY * static_cast<size_t>(pixelHeight);
 
-        if (pixmapWidth > 4096 || pixmapHeight > 4096)
-            LOG_WRN("Unusual extremely large tile combine of size " << pixmapWidth << 'x' << pixmapHeight
+        if (pixmapWidth > 10000 || pixmapHeight > 10000)
+            LOG_WRN("Unusually large tile combine of size " << pixmapWidth << 'x' << pixmapHeight
                     << " (" << tilesByX << 'x' << tilesByY << " tiles to serve " << tiles.size() << " tiles: "
                     << (tiles.size() * 100)/(tilesByX * tilesByY) << "% in " << (tilesByX*tilesByY*0.25) << "MB");
 
