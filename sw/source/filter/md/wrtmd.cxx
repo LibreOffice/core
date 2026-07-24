@@ -946,6 +946,8 @@ void OutMarkdown_SwTableNode(SwMDWriter& rWrt, const SwTableNode& rTableNode)
         {
             const SwTableBox* pBox = pLine->GetTabBoxes()[nBox];
             const SwStartNode* pStart = pBox->GetSttNd();
+            if (!pStart)
+                continue;
             SwNodeOffset nCellStartIndex = pStart->GetIndex() + 1;
             SwMDCellInfo& rStartInfo = aTableInfo.aCellInfos[nCellStartIndex];
             const SwEndNode* pEnd = pStart->EndOfSectionNode();
