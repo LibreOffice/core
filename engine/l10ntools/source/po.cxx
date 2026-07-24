@@ -228,6 +228,13 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
                 *pLastMsg += lcl_GenNormString(sLine);
             }
         }
+        else if (sLine.startsWith("#"))
+        {
+            // Skip comment lines we do not interpret, e.g. the "#|" previous-string
+            // hints that msgmerge adds to fuzzy entries, or plain translator
+            // comments. Treating them as end-of-entry would leave the record
+            // without a msgctxt/msgid and make it fail the input validity check.
+        }
         else
             break;
         getline(rIFStream,sTemp);
@@ -599,31 +606,42 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
 {
     assert( isOpen() && !eof() );
     GenPoEntry aGenPo;
-    aGenPo.readFromFile( m_aInPut );
-    if( aGenPo.isNull() )
+    for(;;)
     {
-        m_bEof = true;
-        rPoEntry = PoEntry();
-    }
-    else
-    {
-        if( lcl_CheckInputEntry(aGenPo) )
+        aGenPo.readFromFile( m_aInPut );
+        if( aGenPo.isNull() )
         {
-            if( rPoEntry.m_pGenPo )
-            {
-                *(rPoEntry.m_pGenPo) = std::move(aGenPo);
-            }
-            else
-            {
-                rPoEntry.m_pGenPo.reset( new GenPoEntry(std::move(aGenPo)) );
-            }
-            rPoEntry.m_bIsInitialized = true;
+            m_bEof = true;
+            rPoEntry = PoEntry();
+            return;
+        }
+        // An obsolete ("#~") or comment-only block carries no live msgctxt,
+        // msgid or source reference - the parser sees only comment lines. It is
+        // not a malformed entry, so skip it and read the next one instead of
+        // treating it as a parse error.
+        if( aGenPo.getMsgId().isEmpty() && aGenPo.getMsgCtxt().isEmpty()
+            && aGenPo.getReference().empty() )
+        {
+            continue;
+        }
+        break;
+    }
+    if( lcl_CheckInputEntry(aGenPo) )
+    {
+        if( rPoEntry.m_pGenPo )
+        {
+            *(rPoEntry.m_pGenPo) = std::move(aGenPo);
         }
         else
         {
-            SAL_WARN("l10ntools", "Parse problem with entry: " << aGenPo.getMsgStr());
-            throw PoIfstream::Exception();
+            rPoEntry.m_pGenPo.reset( new GenPoEntry(std::move(aGenPo)) );
         }
+        rPoEntry.m_bIsInitialized = true;
+    }
+    else
+    {
+        SAL_WARN("l10ntools", "Parse problem with entry: " << aGenPo.getMsgStr());
+        throw PoIfstream::Exception();
     }
 }
 
