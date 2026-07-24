@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-07-23 15:01+0000\n"
+"PO-Revision-Date: 2026-07-24 11:50+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hr/>\n"
@@ -953,7 +953,7 @@ msgstr "API postavkama Zotero računa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2064
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Zotero postavke"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2096
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
@@ -971,7 +971,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2121
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Postavke za potpisivanje dokumenata"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 #: admin/src/integrator/AdminIntegratorSettings.ts:2176
@@ -1077,7 +1077,7 @@ msgstr "Prenesi Xcu"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3375
 #: admin/src/integrator/AdminIntegratorSettings.ts:3385
 msgid "Enter {0}"
-msgstr ""
+msgstr "Upiši {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 msgid "Reset"
@@ -1085,15 +1085,15 @@ msgstr "Resetiraj"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Resetiraj na standardne vrijednosti {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Stvarno želiš resetirati {0}?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
-msgstr ""
+msgstr "Spremi {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
