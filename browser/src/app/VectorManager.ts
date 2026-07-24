@@ -177,6 +177,7 @@ class VectorManager extends RenderManagerBase {
 
 		this._drainPending(part, data);
 		this._fireChanged();
+		this.setVisualsReady();
 	}
 
 	/// Apply a delta to a cached part: rebuild its object list from the

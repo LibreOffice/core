@@ -69,28 +69,12 @@ class BitmapTileManager extends RenderManagerBase {
 
 	//private static _debugTime: any = {}; Reserved for future.
 
-	// Did we ever get a reply for a tilecombine request?
-	private receivedFirstTile: boolean = false;
-
-	// Tasks to be executed after we got our first tile.
-	private afterFirstTileTasks: Array<AfterFirstTileTask> = [];
-
 	public initialize() {
 		window.app.socket.setTaskHandler(
 			'endTransaction',
 			this.onWorkerEndTransaction.bind(this),
 		);
 		window.app.socket.addTaskErrorHandler(this.onWorkerError.bind(this));
-	}
-
-	public appendAfterFirstTileTask(task: AfterFirstTileTask): void {
-		// in case we are already after the first tile -> do in next frame
-		if (this.receivedFirstTile)
-			app.layoutingService.appendLayoutingTask(() => {
-				task();
-			});
-		// wait for it
-		else this.afterFirstTileTasks.push(task);
 	}
 
 	/// Called before frame rendering to update details
@@ -1812,12 +1796,7 @@ class BitmapTileManager extends RenderManagerBase {
 
 		this.queueAcknowledgement(tileMsgObj);
 
-		// This was the first tile, exec the queued tasks.
-		this.receivedFirstTile = true;
-		while (this.afterFirstTileTasks.length > 0) {
-			const task = this.afterFirstTileTasks.shift();
-			task();
-		}
+		this.setVisualsReady();
 	}
 
 	// Returns a guess of how many tiles are yet to arrive

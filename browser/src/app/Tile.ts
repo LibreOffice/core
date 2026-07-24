@@ -84,5 +84,3 @@ class Tile {
 		return !!this.image;
 	}
 }
-
-type AfterFirstTileTask = () => void;

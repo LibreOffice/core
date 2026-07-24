@@ -18,13 +18,35 @@
  * parts that apply to it.
  */
 
+type AfterVisualsReadyTask = () => void;
+
 class RenderManagerBase {
+	// Whether some of the document's content has arrived and can be painted.
+	private visualsReady: boolean = false;
+
+	// Tasks to be executed once the first visuals are ready.
+	private afterVisualsReadyTasks: Array<AfterVisualsReadyTask> = [];
+
 	// -- lifecycle / discovery --
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	initialize(): void {}
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	appendAfterFirstTileTask(_task: () => void): void {}
+	appendAfterVisualsReady(task: AfterVisualsReadyTask): void {
+		// in case the visuals are already there -> do in next frame
+		if (this.visualsReady)
+			app.layoutingService.appendLayoutingTask(() => {
+				task();
+			});
+		else this.afterVisualsReadyTasks.push(task);
+	}
+
+	protected setVisualsReady(): void {
+		this.visualsReady = true;
+		while (this.afterVisualsReadyTasks.length > 0) {
+			const task = this.afterVisualsReadyTasks.shift();
+			task();
+		}
+	}
 
 	// -- rendering / drawing --
 	// eslint-disable-next-line @typescript-eslint/no-empty-function

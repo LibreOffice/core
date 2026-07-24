@@ -51,8 +51,8 @@ class RenderManager {
 		RenderManager.makeInstance(docType).initialize();
 	}
 
-	static appendAfterFirstTileTask(task: AfterFirstTileTask): void {
-		RenderManager.ensureInstance().appendAfterFirstTileTask(task);
+	static appendAfterVisualsReady(task: AfterVisualsReadyTask): void {
+		RenderManager.ensureInstance().appendAfterVisualsReady(task);
 	}
 
 	static updateOverlayMessages(): void {

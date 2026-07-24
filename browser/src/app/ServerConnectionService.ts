@@ -28,7 +28,7 @@ interface ViewSetting {
 
 class ServerConnectionService {
 	public constructor() {
-		RenderManager.appendAfterFirstTileTask(this.onFirstTileReceived.bind(this));
+		RenderManager.appendAfterVisualsReady(this.onVisualsReady.bind(this));
 	}
 
 	// below methods should be sorted in expected order of execution to help understand the init
@@ -178,8 +178,8 @@ class ServerConnectionService {
 		}
 	}
 
-	public onFirstTileReceived() {
-		app.console.debug('ServerConnectionService: onFirstTileReceived');
+	public onVisualsReady() {
+		app.console.debug('ServerConnectionService: onVisualsReady');
 
 		if (!window.mode.isSmallScreenDevice()) {
 			// show zotero items if needed
