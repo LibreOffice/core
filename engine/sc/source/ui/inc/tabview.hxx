@@ -564,7 +564,7 @@ public:
      * @param nModifier: 0, KEY_SHIFT, KEY_MOD1, KEY_SHIFT | KEY_MOD1
      */
 
-    void            MarkColumns(SCCOL nCol, sal_Int16 nModifier);
+    SC_DLLPUBLIC void MarkColumns(SCCOL nCol, sal_Int16 nModifier);
     /**
      * Called to select the specified full row.
      *

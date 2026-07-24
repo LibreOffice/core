@@ -766,6 +766,81 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextSelectionBounds)
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMergedCellSelectedOnlyInItsOwnRow)
+{
+    // A cell that a merge covers belongs to the merge, so marking the column that K7:L7 starts
+    // in, together with the M column, selects the L column in row 7 and nowhere else.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    ScTestViewCallback aView;
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    constexpr SCTAB nTab = 0;
+    constexpr SCCOL nColJ = 9;
+    constexpr SCCOL nColK = 10;
+    constexpr SCCOL nColL = 11;
+    constexpr SCCOL nColM = 12;
+    constexpr SCCOL nColN = 13;
+    constexpr SCROW nMergeRow = 6;
+
+    pDoc->DoMerge(nColK, nMergeRow, nColL, nMergeRow, nTab);
+
+    // A single column header click marks one range, which is sent as one rectangle. The merge
+    // reaches the selection once the Ctrl click on the M header adds a second range.
+    pView->MarkColumns(nColK, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    aView.m_aTextSelectionResult.clear();
+    pView->MarkColumns(nColM, KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!aView.m_aTextSelectionResult.empty());
+
+    // The rectangles arrive in print twips, which are the coordinates the document itself uses.
+    auto isSelected = [&](SCCOL nCol, SCROW nRow)
+    {
+        const Point aCenter(pDoc->GetColOffset(nCol, nTab) + pDoc->GetColWidth(nCol, nTab) / 2,
+                            pDoc->GetRowOffset(nRow, nTab) + pDoc->GetRowHeight(nRow, nTab) / 2);
+        for (size_t nRect = 0; nRect < aView.m_aTextSelectionResult.m_aRelRects.size(); ++nRect)
+        {
+            if (aView.m_aTextSelectionResult.getBounds(nRect).Contains(aCenter))
+                return true;
+        }
+
+        return false;
+    };
+
+    // Every checked row is inside the tiled area an empty document reports, so the selection
+    // reaches all of them.
+    const SCROW aRows[] = { 0, nMergeRow - 1, nMergeRow, nMergeRow + 1, 19 };
+    for (SCROW nRow : aRows)
+    {
+        const OString aRowText = " in row " + OString::number(nRow + 1);
+        CPPUNIT_ASSERT_MESSAGE(OString("The marked K column is selected" + aRowText).getStr(),
+                               isSelected(nColK, nRow));
+        CPPUNIT_ASSERT_MESSAGE(OString("The marked M column is selected" + aRowText).getStr(),
+                               isSelected(nColM, nRow));
+
+        if (nRow == nMergeRow)
+            CPPUNIT_ASSERT_MESSAGE("The merged cell is selected with the column it starts in",
+                                   isSelected(nColL, nRow));
+        else
+            CPPUNIT_ASSERT_MESSAGE(
+                OString("The L column holds no marked cell" + aRowText).getStr(),
+                !isSelected(nColL, nRow));
+    }
+
+    CPPUNIT_ASSERT_MESSAGE("The column left of the marked ones holds no marked cell",
+                           !isSelected(nColJ, nMergeRow));
+    CPPUNIT_ASSERT_MESSAGE("The column right of the marked ones holds no marked cell",
+                           !isSelected(nColN, nMergeRow));
+
+    SfxViewShell::Current()->setCOKitViewCallback(nullptr);
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetViewDataCrash)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");

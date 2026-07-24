@@ -2638,7 +2638,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
             }
             else
             {
-                for (SCROW nY = nStartPosY; nY < nWhereY && (bAllowNeg || bIsTiledRendering || nScrPosY <= aScrSize.Height()); nY++)
+                for (SCROW nY = nStartPosY; nY < nWhereY && (bIsTiledRendering || nScrPosY <= aScrSize.Height()); nY++)
                 {
                     if ( nY > mrDoc.MaxRow() )
                         nScrPosY = 0x7FFFFFFF;

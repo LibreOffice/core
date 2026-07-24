@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <memory>
 #include <optional>
 #include <scitems.hxx>
@@ -56,6 +57,7 @@
 #include <viewdata.hxx>
 #include <output.hxx>
 #include <document.hxx>
+#include <dociter.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>
 #include <dbdata.hxx>
@@ -2383,11 +2385,6 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
 {
     ScDocument& rDoc = mrViewData.GetDocument();
     SCTAB nTab = mrViewData.CurrentTabForData();
-    double nPPTX = mrViewData.GetPPTX();
-    double nPPTY = mrViewData.GetPPTY();
-    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
-    // COKit clients needs exact document coordinates, so don't horizontally mirror them.
-    tools::Long nLayoutSign = (!comphelper::COKit::isActive() && bLayoutRTL) ? -1 : 1;
 
     ScMarkData aMultiMark( rMarkData );
     aMultiMark.SetMarking( false );
@@ -2415,27 +2412,8 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
         if (nX2 < nPosX || nY2 < nPosY)
             return;
 
-        Point aScrStartPos = bInPrintTwips ? mrViewData.GetPrintTwipsPos(nX1, nY1) :
-            mrViewData.GetScrPos(nX1, nY1, eWhich);
-
-        tools::Long nStartX = aScrStartPos.X();
-        tools::Long nStartY = aScrStartPos.Y();
-
-        Point aScrEndPos = bInPrintTwips ? mrViewData.GetPrintTwipsPos(nX2, nY2) :
-            mrViewData.GetScrPos(nX2, nY2, eWhich);
-
-        tools::Long nWidthTwips = rDoc.GetColWidth(nX2, nTab);
-        const tools::Long nWidth = bInPrintTwips ?
-            nWidthTwips : ScViewData::ToPixel(nWidthTwips, nPPTX);
-        tools::Long nEndX = aScrEndPos.X() + (nWidth - 1) * nLayoutSign;
-
-        sal_uInt16 nHeightTwips = rDoc.GetRowHeight( nY2, nTab );
-        const tools::Long nHeight = bInPrintTwips ?
-            nHeightTwips : ScViewData::ToPixel(nHeightTwips, nPPTY);
-        tools::Long nEndY = aScrEndPos.Y() + nHeight - 1;
-
         ScInvertMerger aInvert( &rRects );
-        aInvert.AddRect( tools::Rectangle( nStartX, nStartY, nEndX, nEndY ) );
+        aInvert.AddRect( GetCellBlockRect( nX1, nY1, nX2, nY2, bInPrintTwips ) );
 
         return;
     }
@@ -2443,6 +2421,61 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
     aMultiMark.MarkToMulti();
     if ( !aMultiMark.IsMultiMarked() )
         return;
+
+    if (comphelper::COKit::isActive())
+    {
+        // A COKit client is sent the selection over the whole tiled document, which for a
+        // selected column is a million rows, so the rectangles are built from the marked
+        // ranges themselves.
+        SCCOL nMaxTiledCol;
+        SCROW nMaxTiledRow;
+        rDoc.GetTiledRenderingArea(nTab, nMaxTiledCol, nMaxTiledRow);
+
+        ScRangeList aRangeList;
+        aMultiMark.FillRangeListWithMarks(&aRangeList, true, nTab);
+
+        ScInvertMerger aInvert( &rRects );
+        auto addBlockRect = [&](SCCOL nBlockX1, SCROW nBlockY1, SCCOL nBlockX2, SCROW nBlockY2)
+        {
+            const tools::Rectangle aRect = GetCellBlockRect( nBlockX1, nBlockY1, nBlockX2,
+                                                             nBlockY2, bInPrintTwips );
+            // A block of rows or columns that are all hidden ends before it starts, and there
+            // is nothing to draw for it.
+            if (aRect.Left() <= aRect.Right() && aRect.Top() <= aRect.Bottom())
+                aInvert.AddRect( aRect );
+        };
+
+        for (const ScRange& rRange : aRangeList)
+        {
+            SCCOL nX1 = rRange.aStart.Col();
+            SCROW nY1 = rRange.aStart.Row();
+            SCCOL nX2 = std::min( rRange.aEnd.Col(), nMaxTiledCol );
+            SCROW nY2 = std::min( rRange.aEnd.Row(), nMaxTiledRow );
+            if (nX1 > nX2 || nY1 > nY2)
+                continue;
+
+            // A merged cell reaches as far as its own size, which can be past the end of the
+            // range, and the cells it covers contribute nothing, so the rows that hold one
+            // are walked cell by cell. Every row in between is marked over the full width of
+            // the range and becomes a single rectangle.
+            SCROW nRow = nY1;
+            for (const auto& [nMergeFirst, nMergeLast] : GetMergeRowBands( nX1, nY1, nX2, nY2 ))
+            {
+                if (nRow < nMergeFirst)
+                    addBlockRect( nX1, nRow, nX2, nMergeFirst - 1 );
+
+                AddCellRects( aInvert, aMultiMark, nX1, nMergeFirst, nX2, nMergeLast, nX1,
+                              bInPrintTwips );
+                nRow = nMergeLast + 1;
+            }
+
+            if (nRow <= nY2)
+                addBlockRect( nX1, nRow, nX2, nY2 );
+        }
+
+        return;
+    }
+
     const ScRange& aMultiRange = aMultiMark.GetMultiMarkArea();
     SCCOL nX1 = aMultiRange.aStart.Col();
     SCROW nY1 = aMultiRange.aStart.Row();
@@ -2468,39 +2501,114 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
     if (nY1 < nPosY)
         nY1 = nPosY;
 
-    if (!comphelper::COKit::isActive())
-    {
-        // limit the selection to only what is visible on the screen
-        SCCOL nXRight = nPosX + mrViewData.VisibleCellsX(eHWhich);
-        if (nXRight > rDoc.MaxCol())
-            nXRight = rDoc.MaxCol();
+    // limit the selection to only what is visible on the screen
+    SCCOL nXRight = nPosX + mrViewData.VisibleCellsX(eHWhich);
+    if (nXRight > rDoc.MaxCol())
+        nXRight = rDoc.MaxCol();
 
-        SCROW nYBottom = nPosY + mrViewData.VisibleCellsY(eVWhich);
-        if (nYBottom > rDoc.MaxRow())
-            nYBottom = rDoc.MaxRow();
+    SCROW nYBottom = nPosY + mrViewData.VisibleCellsY(eVWhich);
+    if (nYBottom > rDoc.MaxRow())
+        nYBottom = rDoc.MaxRow();
 
-        // is the selection visible at all?
-        if (nX1 > nXRight || nY1 > nYBottom)
-            return;
+    // is the selection visible at all?
+    if (nX1 > nXRight || nY1 > nYBottom)
+        return;
 
-        if (nX2 > nXRight)
-            nX2 = nXRight;
-        if (nY2 > nYBottom)
-            nY2 = nYBottom;
-    }
-    else
-    {
-        SCCOL nMaxTiledCol;
-        SCROW nMaxTiledRow;
-        rDoc.GetTiledRenderingArea(nTab, nMaxTiledCol, nMaxTiledRow);
-
-        if (nX2 > nMaxTiledCol)
-            nX2 = nMaxTiledCol;
-        if (nY2 > nMaxTiledRow)
-            nY2 = nMaxTiledRow;
-    }
+    if (nX2 > nXRight)
+        nX2 = nXRight;
+    if (nY2 > nYBottom)
+        nY2 = nYBottom;
 
     ScInvertMerger aInvert( &rRects );
+    AddCellRects( aInvert, aMultiMark, nX1, nY1, nX2, nY2, nRealX1, bInPrintTwips );
+}
+
+// COKit clients needs exact document coordinates, so don't horizontally mirror them.
+static tools::Long lcl_getLayoutSign( const ScDocument& rDoc, SCTAB nTab )
+{
+    return (!comphelper::COKit::isActive() && rDoc.IsLayoutRTL( nTab )) ? -1 : 1;
+}
+
+// The one rectangle that covers a block of cells which is marked as a whole, taken from the
+// positions of its two corner cells.
+tools::Rectangle ScGridWindow::GetCellBlockRect(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
+                                                bool bInPrintTwips) const
+{
+    ScDocument& rDoc = mrViewData.GetDocument();
+    SCTAB nTab = mrViewData.CurrentTabForData();
+    tools::Long nLayoutSign = lcl_getLayoutSign( rDoc, nTab );
+
+    Point aStartPos = bInPrintTwips ? mrViewData.GetPrintTwipsPos(nX1, nY1) :
+        mrViewData.GetScrPos(nX1, nY1, eWhich);
+    Point aEndPos = bInPrintTwips ? mrViewData.GetPrintTwipsPos(nX2, nY2) :
+        mrViewData.GetScrPos(nX2, nY2, eWhich);
+
+    tools::Long nWidthTwips = rDoc.GetColWidth(nX2, nTab);
+    const tools::Long nWidth = bInPrintTwips ?
+        nWidthTwips : ScViewData::ToPixel(nWidthTwips, mrViewData.GetPPTX());
+    tools::Long nEndX = aEndPos.X() + (nWidth - 1) * nLayoutSign;
+
+    sal_uInt16 nHeightTwips = rDoc.GetRowHeight( nY2, nTab );
+    const tools::Long nHeight = bInPrintTwips ?
+        nHeightTwips : ScViewData::ToPixel(nHeightTwips, mrViewData.GetPPTY());
+    tools::Long nEndY = aEndPos.Y() + nHeight - 1;
+
+    return tools::Rectangle( aStartPos.X(), aStartPos.Y(), nEndX, nEndY );
+}
+
+// The rows of a cell block that hold a merged cell or a cell covered by one, as closed row
+// bands in ascending order. Merge information lives in the cell formatting, which is kept as
+// spans of equally formatted cells, so this costs one step per span and not one per row.
+std::vector<std::pair<SCROW, SCROW>> ScGridWindow::GetMergeRowBands(SCCOL nX1, SCROW nY1,
+                                                                   SCCOL nX2, SCROW nY2) const
+{
+    ScDocument& rDoc = mrViewData.GetDocument();
+    SCTAB nTab = mrViewData.CurrentTabForData();
+
+    std::vector<std::pair<SCROW, SCROW>> aBands;
+    ScDocAttrIterator aAttrIter( rDoc, nTab, nX1, nY1, nX2, nY2 );
+    SCCOL nCol = 0;
+    SCROW nSpanFirst = 0;
+    SCROW nSpanLast = 0;
+    while (const ScPatternAttr* pPattern = aAttrIter.GetNext( nCol, nSpanFirst, nSpanLast ))
+    {
+        const ScMergeAttr& rMerge = pPattern->GetItem(ATTR_MERGE);
+        const ScMergeFlagAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE_FLAG);
+        if (rMerge.IsMerged() || rMergeFlag.IsOverlapped())
+            aBands.emplace_back( std::max( nSpanFirst, nY1 ), std::min( nSpanLast, nY2 ) );
+    }
+
+    // The iterator reports the spans of one column after those of the previous one, so bands
+    // of different columns arrive in any order and can cover the same rows. Sorting and
+    // joining them leaves every row in a single band.
+    std::sort( aBands.begin(), aBands.end() );
+
+    std::vector<std::pair<SCROW, SCROW>> aJoinedBands;
+    for (const auto& rBand : aBands)
+    {
+        if (!aJoinedBands.empty() && rBand.first <= aJoinedBands.back().second + 1)
+            aJoinedBands.back().second = std::max( aJoinedBands.back().second, rBand.second );
+        else
+            aJoinedBands.push_back( rBand );
+    }
+
+    return aJoinedBands;
+}
+
+// Add a rectangle for every marked cell of a block, grown to the size of the merge for a cell
+// that holds one, and nothing for a cell that a merge covers.
+void ScGridWindow::AddCellRects(ScInvertMerger& rInvert, const ScMarkData& rMultiMark,
+                                SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, SCCOL nRealX1,
+                                bool bInPrintTwips) const
+{
+    ScDocument& rDoc = mrViewData.GetDocument();
+    SCTAB nTab = mrViewData.CurrentTabForData();
+    double nPPTX = mrViewData.GetPPTX();
+    double nPPTY = mrViewData.GetPPTY();
+    tools::Long nLayoutSign = lcl_getLayoutSign( rDoc, nTab );
+
+    SCCOL nPosX = mrViewData.GetPosX( eHWhich );
+    SCROW nPosY = mrViewData.GetPosY( eVWhich );
 
     Point aScrPos = bInPrintTwips ? mrViewData.GetPrintTwipsPos(nX1, nY1) :
             mrViewData.GetScrPos(nX1, nY1, eWhich);
@@ -2581,7 +2689,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
                         }
                     }
 
-                    if ( aMultiMark.IsCellMarked( nThisX, nThisY, true ) )
+                    if ( rMultiMark.IsCellMarked( nThisX, nThisY, true ) )
                     {
                         if ( !pMergeFlag->IsOverlapped() )
                         {
@@ -2595,13 +2703,13 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
                                         mrViewData.GetScrPos(nEndColMerge, nEndRowMerge, eWhich);
                                 if ( aEndPos.X() * nLayoutSign > nScrX * nLayoutSign && aEndPos.Y() > nScrY )
                                 {
-                                    aInvert.AddRect( tools::Rectangle( nScrX,nScrY,
+                                    rInvert.AddRect( tools::Rectangle( nScrX,nScrY,
                                                 aEndPos.X()-nLayoutSign,aEndPos.Y()-1 ) );
                                 }
                             }
                             else if ( nEndX * nLayoutSign >= nScrX * nLayoutSign && nEndY >= nScrY )
                             {
-                                aInvert.AddRect( tools::Rectangle( nScrX,nScrY,nEndX,nEndY ) );
+                                rInvert.AddRect( tools::Rectangle( nScrX,nScrY,nEndX,nEndY ) );
                             }
                         }
                     }

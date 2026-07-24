@@ -31,6 +31,7 @@
 #include <vcl/window.hxx>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 
@@ -56,6 +57,7 @@ class SdrEditView;
 class ScNoteOverlay;
 class SdrHdlList;
 class ScTransferObj;
+class ScInvertMerger;
 struct SpellCallbackInfo;
 class ScKitRTLContext;
 
@@ -325,6 +327,13 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) ScGridWindow : public vcl::DocWindow,
                                       ::std::vector< tools::Rectangle >& rPixelRects ) const;
     void            GetRectsAnyFor(const ScMarkData &rMarkData,
                                   ::std::vector< tools::Rectangle >& rRects, bool bInPrintTwips) const;
+    tools::Rectangle GetCellBlockRect(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
+                                      bool bInPrintTwips) const;
+    std::vector<std::pair<SCROW, SCROW>> GetMergeRowBands(SCCOL nX1, SCROW nY1,
+                                                          SCCOL nX2, SCROW nY2) const;
+    void            AddCellRects(ScInvertMerger& rInvert, const ScMarkData& rMultiMark,
+                                 SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, SCCOL nRealX1,
+                                 bool bInPrintTwips) const;
     void            UpdateKitSelection(const std::vector<tools::Rectangle>& rRectangles,
                                        std::vector<tools::Rectangle>* pLogicRects = nullptr);
     bool            NeedKitCursorInvalidation(const tools::Rectangle& rCursorRect,

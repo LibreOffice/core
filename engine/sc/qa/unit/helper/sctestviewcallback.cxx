@@ -102,29 +102,28 @@ void ScTestTextSelectionMessage::parseMessage(const char* pMessage)
     m_aRefPoint.setX(aSeq[0].toInt32());
     m_aRefPoint.setY(aSeq[1].toInt32());
 
+    // The rectangles are separated by a semicolon, and the last one is followed by the end of
+    // the string, so every piece up to and including the one that ends the string is taken.
     size_t nStart = 0;
-    size_t nEnd = aRectListString.find(";");
-    if (nEnd == std::string::npos)
-        nEnd = aRectListString.length();
-    do
+    while (nStart <= aRectListString.length())
     {
-        std::string aRectString = aRectListString.substr(nStart, nEnd - nStart);
-        {
-            aSeq
-                = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aRectString));
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aSeq.getLength());
-            tools::Rectangle aRect;
-            aRect.SetLeft(aSeq[0].toInt32());
-            aRect.SetTop(aSeq[1].toInt32());
-            aRect.setWidth(aSeq[2].toInt32());
-            aRect.setHeight(aSeq[3].toInt32());
+        size_t nEnd = aRectListString.find(";", nStart);
+        if (nEnd == std::string::npos)
+            nEnd = aRectListString.length();
 
-            m_aRelRects.push_back(aRect);
-        }
+        std::string aRectString = aRectListString.substr(nStart, nEnd - nStart);
+        aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aRectString));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aSeq.getLength());
+        tools::Rectangle aRect;
+        aRect.SetLeft(aSeq[0].toInt32());
+        aRect.SetTop(aSeq[1].toInt32());
+        aRect.setWidth(aSeq[2].toInt32());
+        aRect.setHeight(aSeq[3].toInt32());
+
+        m_aRelRects.push_back(aRect);
 
         nStart = nEnd + 1;
-        nEnd = aRectListString.find(";", nStart);
-    } while (nEnd != std::string::npos);
+    }
 }
 
 tools::Rectangle ScTestTextSelectionMessage::getBounds(size_t nIndex)
