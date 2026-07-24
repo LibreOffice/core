@@ -55,7 +55,7 @@ private:
 
     void onTeardown();
 
-    virtual void SAL_CALL run() override;
+    virtual void run() override;
     void updateImpl(const BufferedDecompositionPrimitive2D*);
     void updateImpl(const BufferedDecompositionGroupPrimitive2D*);
     void removeImpl(const BufferedDecompositionPrimitive2D*);

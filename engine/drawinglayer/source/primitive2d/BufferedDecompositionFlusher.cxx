@@ -259,7 +259,7 @@ void BufferedDecompositionFlusher::flushRemoved(FlushBatch& rBatch)
     g_bFlushing = false;
 }
 
-void SAL_CALL BufferedDecompositionFlusher::run()
+void BufferedDecompositionFlusher::run()
 {
     setName("BufferedDecompositionFlusher");
     while (true)

@@ -52,7 +52,7 @@ namespace drawinglayer::unorenderer
             const XPrimitive2DRenderer& operator=(const XPrimitive2DRenderer&) = delete;
 
             // XPrimitive2DRenderer
-            virtual uno::Reference< rendering::XBitmap > SAL_CALL rasterize(
+            virtual uno::Reference< rendering::XBitmap > rasterize(
                 const cpo::uno::Sequence< uno::Reference< graphic::XPrimitive2D > >& Primitive2DSequence,
                 const cpo::uno::Sequence< beans::PropertyValue >& aViewInformationSequence,
                 ::sal_uInt32 DPI_X,
@@ -61,9 +61,9 @@ namespace drawinglayer::unorenderer
                 ::sal_uInt32 MaximumQuadraticPixels) override;
 
             // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName() override;
-            virtual bool SAL_CALL supportsService(const OUString&) override;
-            virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+            virtual OUString getImplementationName() override;
+            virtual bool supportsService(const OUString&) override;
+            virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
         };
 
         }
@@ -162,17 +162,17 @@ namespace drawinglayer::unorenderer
             return XBitmap;
         }
 
-        OUString SAL_CALL XPrimitive2DRenderer::getImplementationName()
+        OUString XPrimitive2DRenderer::getImplementationName()
         {
             return u"drawinglayer::unorenderer::XPrimitive2DRenderer"_ustr;
         }
 
-        bool SAL_CALL XPrimitive2DRenderer::supportsService(const OUString& rServiceName)
+        bool XPrimitive2DRenderer::supportsService(const OUString& rServiceName)
         {
             return cppu::supportsService(this, rServiceName);
         }
 
-        cpo::uno::Sequence< OUString > SAL_CALL XPrimitive2DRenderer::getSupportedServiceNames()
+        cpo::uno::Sequence< OUString > XPrimitive2DRenderer::getSupportedServiceNames()
         {
             return { u"com.sun.star.graphic.Primitive2DTools"_ustr };
         }

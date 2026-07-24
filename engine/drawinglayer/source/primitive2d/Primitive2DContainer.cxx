@@ -130,21 +130,21 @@ void Primitive2DContainer::append(Primitive2DContainer&& rSource)
 UnoPrimitive2D::~UnoPrimitive2D() {}
 
 cpo::uno::Sequence<::css::uno::Reference<::css::graphic::XPrimitive2D>>
-    SAL_CALL UnoPrimitive2D::getDecomposition(
-        const cpo::uno::Sequence<css::beans::PropertyValue>& rViewParameters)
+UnoPrimitive2D::getDecomposition(
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rViewParameters)
 {
     std::unique_lock aGuard(m_aMutex);
     return mxPrimitive->getDecomposition(rViewParameters).toSequence();
 }
 
-css::geometry::RealRectangle2D SAL_CALL
+css::geometry::RealRectangle2D
 UnoPrimitive2D::getRange(const cpo::uno::Sequence<css::beans::PropertyValue>& rViewParameters)
 {
     std::unique_lock aGuard(m_aMutex);
     return mxPrimitive->getRange(rViewParameters);
 }
 
-sal_Int64 SAL_CALL UnoPrimitive2D::estimateUsage()
+sal_Int64 UnoPrimitive2D::estimateUsage()
 {
     std::unique_lock aGuard(m_aMutex);
     return mxPrimitive->estimateUsage();
