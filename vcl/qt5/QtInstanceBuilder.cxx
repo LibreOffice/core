@@ -232,6 +232,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"modules/scalc/ui/sharedocumentdlg.ui",
     u"modules/scalc/ui/showsheetdialog.ui",
     u"modules/scalc/ui/simplerefdialog.ui",
+    u"modules/scalc/ui/solverdlg.ui",
     u"modules/scalc/ui/solveroptionsdialog.ui",
     u"modules/scalc/ui/sortdialog.ui",
     u"modules/scalc/ui/sparklinedialog.ui",
