@@ -236,6 +236,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"modules/scalc/ui/solverdlg.ui",
     u"modules/scalc/ui/solveroptionsdialog.ui",
     u"modules/scalc/ui/solverprogressdialog.ui",
+    u"modules/scalc/ui/solversuccessdialog.ui",
     u"modules/scalc/ui/sortdialog.ui",
     u"modules/scalc/ui/sparklinedialog.ui",
     u"modules/scalc/ui/standardfilterdialog.ui",
