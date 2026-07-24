@@ -213,6 +213,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"modules/scalc/ui/movecopysheet.ui",
     u"modules/scalc/ui/movingaveragedialog.ui",
     u"modules/scalc/ui/namerangesdialog.ui",
+    u"modules/scalc/ui/nosolutiondialog.ui",
     u"modules/scalc/ui/optimalcolwidthdialog.ui",
     u"modules/scalc/ui/optimalrowheightdialog.ui",
     u"modules/scalc/ui/pagetemplatedialog.ui",
