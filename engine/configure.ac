@@ -1856,9 +1856,10 @@ libo_FUZZ_ARG_ENABLE(sdremote,
 ,test "${enable_sdremote+set}" = set || enable_sdremote=yes)
 
 libo_FUZZ_ARG_ENABLE(sdremote-bluetooth,
-    AS_HELP_STRING([--disable-sdremote-bluetooth],
-        [Determines whether to build sdremote with bluetooth support.
-         Requires dbus on Linux.]))
+    AS_HELP_STRING([--enable-sdremote-bluetooth],
+        [Build sdremote with bluetooth support. Requires dbus on Linux.
+         Disabled by default.]),
+,enable_sdremote_bluetooth=no)
 
 libo_FUZZ_ARG_ENABLE(gio,
     AS_HELP_STRING([--disable-gio],

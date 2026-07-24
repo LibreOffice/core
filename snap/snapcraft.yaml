@@ -149,7 +149,6 @@ parts:
         --disable-randr \
         --disable-sal-log \
         --disable-sdremote \
-        --disable-sdremote-bluetooth \
         --enable-cairo-rgba \
         --enable-hardening-flags \
         --enable-ld \
