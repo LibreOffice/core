@@ -555,7 +555,7 @@ css::uno::Reference<css::datatransfer::XTransferable2> ScTabViewShell::GetClipDa
 
 void ScTabViewShell::notifyAllViewsHeaderInvalidation(const SfxViewShell* pForViewShell, HeaderType eHeaderType, SCTAB nCurrentTabIndex)
 {
-    if (!comphelper::COKit::isActive())
+    if (!comphelper::COKit::isActive() || !pForViewShell)
         return;
 
     OString aPayload;
@@ -615,7 +615,7 @@ void ScTabViewShell::notifyAllViewsSheetGeomInvalidation(const SfxViewShell* pFo
                                                          bool bRows, bool bSizes, bool bHidden, bool bFiltered,
                                                          bool bGroups, SCTAB nCurrentTabIndex)
 {
-    if (!comphelper::COKit::isActive() ||
+    if (!comphelper::COKit::isActive() || !pForViewShell ||
             !comphelper::COKit::isCompatFlagSet(
                 comphelper::COKit::Compat::scPrintTwipsMsgs))
         return;
