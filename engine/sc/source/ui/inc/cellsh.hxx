@@ -25,6 +25,7 @@
 #include <tools/link.hxx>
 #include <memory>
 #include "formatsh.hxx"
+#include <global.hxx>
 #include <rtl/ref.hxx>
 #include <sot/formats.hxx>
 #include <vcl/vclptr.hxx>
@@ -34,6 +35,7 @@ class SvxClipboardFormatItem;
 class TransferableDataHelper;
 class TransferableClipboardListener;
 class AbstractScLinkedAreaDlg;
+class ScTransferObj;
 
 struct CellShell_Impl
 {
@@ -85,6 +87,10 @@ public:
     void        GetState(SfxItemSet &);
 
     void        ExecuteEdit( SfxRequest& rReq );
+    void        AfterInsCellContents(SfxRequest& rReq, const ScTransferObj* pOwnClip,
+                                     InsertDeleteFlags nFlags, ScPasteFunc nFunction,
+                                     InsCellCmd eMoveMode, bool bSkipEmpty, bool bTranspose,
+                                     bool bAsLink, bool bOtherDoc);
     void        ExecuteTrans( SfxRequest& rReq );
     void        ExecuteRotateTrans( const SfxRequest& rReq );
 

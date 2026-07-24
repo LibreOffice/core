@@ -384,7 +384,7 @@ VclPtr<AbstractScInsertCellDlg> ScAbstractDialogFactory_Impl::CreateScInsertCell
 namespace
 {
 class AbstractScInsertContentsDlg_Impl
-    : public ScreenshottedDialog_Impl_Sync<AbstractScInsertContentsDlg, ScInsertContentsDlg>
+    : public ScreenshottedDialog_Impl_Async<AbstractScInsertContentsDlg, ScInsertContentsDlg>
 {
 public:
     using ScreenshottedDialog_Impl_BASE::ScreenshottedDialog_Impl_BASE;

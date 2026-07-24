@@ -163,6 +163,33 @@ OUString FlagsToString( InsertDeleteFlags nFlags,
     return aFlagsStr;
 }
 
+/// Deferred paste state for the async .uno:PasteSpecial callback.
+struct ScPasteJob
+{
+    ScCellShell* pCellShell;
+    std::shared_ptr<SfxRequest> xRequest;
+    const ScTransferObj* pOwnClip;
+    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable;
+    ScTabViewShell* pTabViewShell;
+    InsertDeleteFlags nFlags;
+    ScPasteFunc nFunction;
+    InsCellCmd eMoveMode;
+    bool bSkipEmpty;
+    bool bTranspose;
+    bool bAsLink;
+    bool bOtherDoc;
+};
+
+/// Finishes a paste using an ScPasteJob.
+void RunScPasteJob(void* /*instance*/, void* data)
+{
+    std::unique_ptr<ScPasteJob> pJob(static_cast<ScPasteJob*>(data));
+    pJob->pCellShell->AfterInsCellContents(*pJob->xRequest, pJob->pOwnClip, pJob->nFlags,
+                                           pJob->nFunction, pJob->eMoveMode, pJob->bSkipEmpty,
+                                           pJob->bTranspose, pJob->bAsLink, pJob->bOtherDoc);
+    pJob->pTabViewShell->CellContentChanged();
+}
+
 void SetTabNoAndCursor( const ScViewData& rViewData, std::u16string_view rCellId )
 {
     ScTabViewShell* pTabViewShell = rViewData.GetViewShell();
@@ -1544,7 +1571,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScDocument& rDoc = GetViewData().GetDocument();
                 bool bOtherDoc = !rDoc.IsClipboardSource();
                 // keep a reference in case the clipboard is changed during dialog or PasteFromClip
-                const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(GetViewData().GetActiveWin()));
+                css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(
+                    ScTabViewShell::GetClipData(GetViewData().GetActiveWin()));
+                const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(xTransferable);
                 if ( pOwnClip )
                 {
                     InsertDeleteFlags nFlags = InsertDeleteFlags::NONE;
@@ -1587,7 +1616,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                            ScopedVclPtr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg(pTabViewShell->GetFrameWeld()));
+                            VclPtr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg(pTabViewShell->GetFrameWeld()));
                             pDlg->SetOtherDoc( bOtherDoc );
                             // if ChangeTrack MoveMode disable
                             pDlg->SetChangeTrack( rDoc.GetChangeTrack() != nullptr );
@@ -1653,72 +1682,47 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                     }
                                 }
                             }
-                            if (pDlg->Execute() == RET_OK)
-                            {
-                                nFlags     = pDlg->GetInsContentsCmdBits();
-                                nFunction  = pDlg->GetFormulaCmdBits();
-                                bSkipEmpty = pDlg->IsSkipEmptyCells();
-                                bTranspose = pDlg->IsTranspose();
-                                bAsLink    = pDlg->IsLink();
-                                eMoveMode  = pDlg->GetMoveMode();
-                            }
+
+                            auto xRequest = std::make_shared<SfxRequest>(rReq);
+                            rReq.Ignore(); // the 'old' request is not relevant any more
+
+                            pDlg->StartExecuteAsync([pDlg, pTabViewShell, pOwnClip, xTransferable,
+                                                     bOtherDoc, this, xRequest=std::move(xRequest)](sal_Int32 nResult) {
+                                auto pJob = std::make_unique<ScPasteJob>();
+                                pJob->pCellShell    = this;
+                                pJob->xRequest      = xRequest;
+                                pJob->pOwnClip      = pOwnClip;
+                                pJob->xTransferable = xTransferable;
+                                pJob->pTabViewShell = pTabViewShell;
+                                pJob->nFlags        = InsertDeleteFlags::NONE;
+                                pJob->nFunction     = ScPasteFunc::NONE;
+                                pJob->eMoveMode     = INS_NONE;
+                                pJob->bSkipEmpty    = false;
+                                pJob->bTranspose    = false;
+                                pJob->bAsLink       = false;
+                                pJob->bOtherDoc     = bOtherDoc;
+                                if (nResult == RET_OK)
+                                {
+                                    pJob->nFlags     = pDlg->GetInsContentsCmdBits();
+                                    pJob->nFunction  = pDlg->GetFormulaCmdBits();
+                                    pJob->bSkipEmpty = pDlg->IsSkipEmptyCells();
+                                    pJob->bTranspose = pDlg->IsTranspose();
+                                    pJob->bAsLink    = pDlg->IsLink();
+                                    pJob->eMoveMode  = pDlg->GetMoveMode();
+                                }
+                                pDlg->disposeOnce();
+                                // AfterInsCellContents can open a nested dialog, defer it.
+                                Application::PostUserEvent(LINK_NONMEMBER(nullptr, RunScPasteJob),
+                                                           pJob.release());
+                            });
+                            return;
                         }
                         else
                             pTabViewShell->ErrorMessage(aTester.GetMessageId());
                     }
 
-                    if( nFlags != InsertDeleteFlags::NONE )
-                    {
-                        {
-                            weld::WaitObject aWait( GetViewData().GetDialogParent() );
-                            if ( bAsLink && bOtherDoc )
-                                pTabViewShell->PasteFromSystem(SotClipboardFormatId::LINK);  // DDE insert
-                            else
-                            {
-                                ScDocument* pPasteDoc = pOwnClip->GetDocument();
-                                const ScClipParam& rClipParam = pPasteDoc->GetClipParam();
-
-                                // For matrix clips (origin or non-origin), Paste
-                                // Special pastes values only from the original
-                                // selection — no array expansion.
-                                if (!rClipParam.maOriginMatrixRanges.empty()
-                                    || !rClipParam.maMatrixRanges.empty())
-                                {
-                                    const ScRange& rOrigRange = rClipParam.maOriginalRange;
-                                    SCTAB nClipTab = rOrigRange.aStart.Tab();
-
-                                    auto pValDoc = std::make_shared<ScDocument>(SCDOCMODE_CLIP);
-                                    pValDoc->ResetClip(pPasteDoc, nClipTab);
-                                    pPasteDoc->CopyStaticToDocument(rOrigRange, nClipTab, *pValDoc);
-                                    ScClipParam aValParam(rOrigRange, false);
-                                    pValDoc->SetClipParam(aValParam);
-
-                                    pTabViewShell->PasteFromClip( nFlags, pValDoc.get(),
-                                        nFunction, bSkipEmpty, bTranspose, bAsLink,
-                                        eMoveMode, InsertDeleteFlags::NONE, true );
-                                }
-                                else
-                                {
-                                    pTabViewShell->PasteFromClip( nFlags, pPasteDoc,
-                                        nFunction, bSkipEmpty, bTranspose, bAsLink,
-                                        eMoveMode, InsertDeleteFlags::NONE, true );
-                                }
-                            }
-                        }
-
-                        if( !pReqArgs )
-                        {
-                            OUString  aFlags = FlagsToString( nFlags );
-
-                            rReq.AppendItem( SfxStringItem( FID_INS_CELL_CONTENTS, aFlags ) );
-                            rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bSkipEmpty ) );
-                            rReq.AppendItem( SfxBoolItem( FN_PARAM_3, bTranspose ) );
-                            rReq.AppendItem( SfxBoolItem( FN_PARAM_4, bAsLink ) );
-                            rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nFunction) ) );
-                            rReq.AppendItem( SfxInt16Item( FN_PARAM_5, static_cast<sal_Int16>(eMoveMode) ) );
-                            rReq.Done();
-                        }
-                    }
+                    AfterInsCellContents(rReq, pOwnClip, nFlags, nFunction, eMoveMode,
+                                         bSkipEmpty, bTranspose, bAsLink, bOtherDoc);
                 }
             }
             pTabViewShell->CellContentChanged();        // => PasteFromXXX ???
@@ -3516,6 +3520,64 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         default:
             OSL_FAIL("incorrect slot in ExecuteEdit");
             break;
+    }
+}
+
+void ScCellShell::AfterInsCellContents(SfxRequest& rReq, const ScTransferObj* pOwnClip,
+                                       InsertDeleteFlags nFlags, ScPasteFunc nFunction,
+                                       InsCellCmd eMoveMode, bool bSkipEmpty, bool bTranspose,
+                                       bool bAsLink, bool bOtherDoc)
+{
+    if (nFlags == InsertDeleteFlags::NONE)
+        return;
+
+    ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
+    {
+        weld::WaitObject aWait(GetViewData().GetDialogParent());
+        if (bAsLink && bOtherDoc)
+            pTabViewShell->PasteFromSystem(SotClipboardFormatId::LINK); // DDE insert
+        else
+        {
+            ScDocument* pPasteDoc = pOwnClip->GetDocument();
+            const ScClipParam& rClipParam = pPasteDoc->GetClipParam();
+
+            // For matrix clips (origin or non-origin), Paste
+            // Special pastes values only from the original
+            // selection — no array expansion.
+            if (!rClipParam.maOriginMatrixRanges.empty() || !rClipParam.maMatrixRanges.empty())
+            {
+                const ScRange& rOrigRange = rClipParam.maOriginalRange;
+                SCTAB nClipTab = rOrigRange.aStart.Tab();
+
+                auto pValDoc = std::make_shared<ScDocument>(SCDOCMODE_CLIP);
+                pValDoc->ResetClip(pPasteDoc, nClipTab);
+                pPasteDoc->CopyStaticToDocument(rOrigRange, nClipTab, *pValDoc);
+                ScClipParam aValParam(rOrigRange, false);
+                pValDoc->SetClipParam(aValParam);
+
+                pTabViewShell->PasteFromClip(nFlags, pValDoc.get(), nFunction, bSkipEmpty,
+                                             bTranspose, bAsLink, eMoveMode,
+                                             InsertDeleteFlags::NONE, true);
+            }
+            else
+            {
+                pTabViewShell->PasteFromClip(nFlags, pPasteDoc, nFunction, bSkipEmpty, bTranspose,
+                                             bAsLink, eMoveMode, InsertDeleteFlags::NONE, true);
+            }
+        }
+    }
+
+    if (!rReq.GetArgs())
+    {
+        OUString aFlags = FlagsToString(nFlags);
+
+        rReq.AppendItem(SfxStringItem(FID_INS_CELL_CONTENTS, aFlags));
+        rReq.AppendItem(SfxBoolItem(FN_PARAM_2, bSkipEmpty));
+        rReq.AppendItem(SfxBoolItem(FN_PARAM_3, bTranspose));
+        rReq.AppendItem(SfxBoolItem(FN_PARAM_4, bAsLink));
+        rReq.AppendItem(SfxUInt16Item(FN_PARAM_1, static_cast<sal_uInt16>(nFunction)));
+        rReq.AppendItem(SfxInt16Item(FN_PARAM_5, static_cast<sal_Int16>(eMoveMode)));
+        rReq.Done();
     }
 }
 
