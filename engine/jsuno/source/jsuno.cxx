@@ -417,9 +417,10 @@ JSValue enumerationIterator(JSContext* ctx, JSValueConst this_val, int, JSValueC
     });
 }
 
-JSValue wrapperGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValueConst receiver)
+int wrapperGetOwnProperty(JSContext* ctx, JSPropertyDescriptor* desc, JSValueConst obj, JSAtom atom)
 {
-    return callFromJs(ctx, [ctx, obj, atom, receiver] {
+    try
+    {
         if (atom == getRuntimeData(ctx)->symbolIteratorAtom)
         {
             css::uno::Reference<css::container::XEnumeration> en(
@@ -428,16 +429,21 @@ JSValue wrapperGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValu
                 css::uno::UNO_QUERY);
             if (!en.is())
             {
-                return JS_UNDEFINED;
+                return 0;
             }
-            ValueRef val(ctx, JS_NewCFunction(ctx, enumerationIterator, "[Symbol.iterator]", 0));
-            JS_SetProperty(ctx, receiver, atom, val.dup());
-            return val.release();
+            if (desc != nullptr)
+            {
+                desc->flags = JS_PROP_C_W_E;
+                desc->value = JS_NewCFunction(ctx, enumerationIterator, "[Symbol.iterator]", 0);
+                desc->getter = JS_UNDEFINED;
+                desc->setter = JS_UNDEFINED;
+            }
+            return 1;
         }
         ValueRef const v(ctx, JS_AtomToString(ctx, atom));
         if (!JS_IsString(v))
         {
-            return JS_UNDEFINED;
+            return 0;
         }
         css::uno::Reference<css::script::XInvocation2> invoke(
             css::script::Invocation::create(comphelper::getProcessComponentContext())
@@ -452,30 +458,56 @@ JSValue wrapperGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValu
         }
         catch (css::lang::IllegalArgumentException)
         {
-            return JS_UNDEFINED;
+            return 0;
         }
-        switch (info.eMemberType)
+        if (desc != nullptr)
         {
-            case css::script::MemberType_METHOD:
+            switch (info.eMemberType)
             {
-                ValueRef data(ctx, JS_NewObjectClass(ctx, getRuntimeData(ctx)->pointerClassId));
-                [[maybe_unused]] auto const e
-                    = JS_SetOpaque(data, new css::script::InvocationInfo(info));
-                assert(e == 0); //TODO
+                case css::script::MemberType_METHOD:
+                {
+                    ValueRef data(ctx, JS_NewObjectClass(ctx, getRuntimeData(ctx)->pointerClassId));
+                    [[maybe_unused]] auto const e
+                        = JS_SetOpaque(data, new css::script::InvocationInfo(info));
+                    assert(e == 0); //TODO
 #if defined DBG_UTIL
-                getRuntimeData(ctx)->toFinalize.inc();
+                    getRuntimeData(ctx)->toFinalize.inc();
 #endif
-                ValueRef val(ctx, JS_NewCFunctionData(ctx, invokeUno, info.aParamTypes.getLength(),
-                                                      0, 1, data.ptr()));
-                JS_SetProperty(ctx, receiver, atom, val.dup());
-                return val.release();
+                    desc->flags = JS_PROP_C_W_E;
+                    desc->value = JS_NewCFunctionData(ctx, invokeUno, info.aParamTypes.getLength(),
+                                                      0, 1, data.ptr());
+                    desc->getter = JS_UNDEFINED;
+                    desc->setter = JS_UNDEFINED;
+                    break;
+                }
+                case css::script::MemberType_PROPERTY:
+                    desc->flags = JS_PROP_C_W_E;
+                    desc->value = toJs(ctx, invoke->getValue(info.aName)).release();
+                    desc->getter = JS_UNDEFINED;
+                    desc->setter = JS_UNDEFINED;
+                    break;
+                default:
+                    O3TL_UNREACHABLE;
             }
-            case css::script::MemberType_PROPERTY:
-                return toJs(ctx, invoke->getValue(info.aName)).release();
-            default:
-                O3TL_UNREACHABLE;
         }
-    });
+        return 1;
+    }
+    catch (JsException)
+    {
+        return -1;
+    }
+    catch (css::uno::Exception&)
+    {
+        auto const e = cppu::getCaughtException();
+        ValueRef val = toJs(ctx, e);
+        JS_Throw(ctx, val.release());
+        return -1;
+    }
+    catch (std::exception& e)
+    {
+        JS_ThrowPlainError(ctx, "std exception: %s", e.what());
+        return -1;
+    }
 }
 
 int wrapperSetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValueConst value,
@@ -562,9 +594,6 @@ JSValue wrapUnoObject(JSContext* ctx, css::uno::Reference<css::uno::XInterface> 
 #if defined DBG_UTIL
     getRuntimeData(ctx)->toFinalize.inc();
 #endif
-    JS_SetPropertyStr(
-        ctx, val, "toString",
-        JS_NewCFunction(ctx, wrapperToString, "toString", 0)); //TODO: add to prototype
     return val;
 }
 
@@ -640,8 +669,6 @@ void setTypeProperty(JSContext* ctx, JSValueConst obj, char const* prop, cpo::un
 #if defined DBG_UTIL
     getRuntimeData(ctx)->toFinalize.inc();
 #endif
-    JS_SetPropertyStr(ctx, val, "toString",
-                      JS_NewCFunction(ctx, typeToString, "toString", 0)); //TODO: add to prototype
     JS_SetPropertyStr(ctx, obj, prop, val.release());
 }
 
@@ -666,9 +693,6 @@ JSValue unoTypeSequence(JSContext* ctx, JSValueConst, int argc, JSValueConst* ar
 #if defined DBG_UTIL
         getRuntimeData(ctx)->toFinalize.inc();
 #endif
-        JS_SetPropertyStr(
-            ctx, val, "toString",
-            JS_NewCFunction(ctx, typeToString, "toString", 0)); //TODO: add to prototype
         return val.release();
     });
 }
@@ -690,9 +714,6 @@ JSValue unoTypeEnum(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
 #if defined DBG_UTIL
         getRuntimeData(ctx)->toFinalize.inc();
 #endif
-        JS_SetPropertyStr(
-            ctx, val, "toString",
-            JS_NewCFunction(ctx, typeToString, "toString", 0)); //TODO: add to prototype
         return val.release();
     });
 }
@@ -785,9 +806,6 @@ JSValue unoTypeStruct(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv
 #if defined DBG_UTIL
         getRuntimeData(ctx)->toFinalize.inc();
 #endif
-        JS_SetPropertyStr(
-            ctx, val, "toString",
-            JS_NewCFunction(ctx, typeToString, "toString", 0)); //TODO: add to prototype
         return val.release();
     });
 }
@@ -815,9 +833,6 @@ JSValue unoTypeException(JSContext* ctx, JSValueConst, int argc, JSValueConst* a
 #if defined DBG_UTIL
         getRuntimeData(ctx)->toFinalize.inc();
 #endif
-        JS_SetPropertyStr(
-            ctx, val, "toString",
-            JS_NewCFunction(ctx, typeToString, "toString", 0)); //TODO: add to prototype
         return val.release();
     });
 }
@@ -839,9 +854,6 @@ JSValue unoTypeInterface(JSContext* ctx, JSValueConst, int argc, JSValueConst* a
 #if defined DBG_UTIL
         getRuntimeData(ctx)->toFinalize.inc();
 #endif
-        JS_SetPropertyStr(
-            ctx, val, "toString",
-            JS_NewCFunction(ctx, typeToString, "toString", 0)); //TODO: add to prototype
         return val.release();
     });
 }
@@ -1266,9 +1278,6 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
 #if defined DBG_UTIL
                 getRuntimeData(ctx)->toFinalize.inc();
 #endif
-                JS_SetPropertyStr(ctx, val2, "toString",
-                                  JS_NewCFunction(ctx, enumeratorToString, "toString",
-                                                  0)); //TODO: add to prototype
                 JS_SetPropertyStr(ctx, val,
                                   OUString::unacquired(&enumDesc->ppEnumNames[i]).toUtf8().getStr(),
                                   val2.release());
@@ -2827,8 +2836,10 @@ OUString jsuno::execute(OUString const& script, std::function<void(OUString cons
     [[maybe_unused]] auto e = JS_NewClass(rt, getRuntimeData(rt)->pointerClassId, &pointerClass);
     assert(e == 0); //TODO
     JS_NewClassID(rt, &getRuntimeData(rt)->wrapperClassId);
-    JSClassExoticMethods wrapperMethods{ nullptr, nullptr /*TODO*/,   nullptr,           nullptr,
-                                         nullptr, wrapperGetProperty, wrapperSetProperty };
+    JSClassExoticMethods wrapperMethods{
+        wrapperGetOwnProperty, nullptr /*TODO*/, nullptr, nullptr, nullptr, nullptr,
+        wrapperSetProperty
+    };
     JSClassDef wrapperClass{ "UnoWrapper", wrapperFinalizer, nullptr, nullptr, &wrapperMethods };
     e = JS_NewClass(rt, getRuntimeData(rt)->wrapperClassId, &wrapperClass);
     assert(e == 0); //TODO
@@ -2875,6 +2886,30 @@ OUString jsuno::execute(OUString const& script, std::function<void(OUString cons
     e = JS_NewClass(rt, getRuntimeData(rt)->moduleClassId, &moduleClass);
     assert(e == 0); //TODO
     auto const ctx = JS_NewContext(rt);
+    {
+        static JSCFunctionListEntry const functions[] = {
+            JS_CFUNC_DEF("toString", 0, typeToString),
+        };
+        ValueRef proto(ctx, JS_NewObject(ctx));
+        JS_SetPropertyFunctionList(ctx, proto, functions, std::size(functions));
+        JS_SetClassProto(ctx, getRuntimeData(ctx)->typeClassId, proto.release());
+    }
+    {
+        static JSCFunctionListEntry const functions[] = {
+            JS_CFUNC_DEF("toString", 0, enumeratorToString),
+        };
+        ValueRef proto(ctx, JS_NewObject(ctx));
+        JS_SetPropertyFunctionList(ctx, proto, functions, std::size(functions));
+        JS_SetClassProto(ctx, getRuntimeData(ctx)->enumeratorClassId, proto.release());
+    }
+    {
+        static JSCFunctionListEntry const functions[] = {
+            JS_CFUNC_DEF("toString", 0, wrapperToString),
+        };
+        ValueRef proto(ctx, JS_NewObject(ctx));
+        JS_SetPropertyFunctionList(ctx, proto, functions, std::size(functions));
+        JS_SetClassProto(ctx, getRuntimeData(ctx)->wrapperClassId, proto.release());
+    }
     std::optional<ExceptionData> exc;
     OUString result;
     {
