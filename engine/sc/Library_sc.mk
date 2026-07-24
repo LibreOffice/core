@@ -270,6 +270,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/listenerquery \
     sc/source/core/tool/lookupcache \
     sc/source/core/tool/math \
+    sc/source/core/tool/matrixdecomposition \
     sc/source/core/tool/matrixoperators \
     sc/source/core/tool/navicfg \
     sc/source/core/tool/numformat \

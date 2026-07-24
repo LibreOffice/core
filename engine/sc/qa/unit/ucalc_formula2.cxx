@@ -21,6 +21,7 @@
 #include <undomanager.hxx>
 #include <broadcast.hxx>
 #include <kahan.hxx>
+#include <matrixdecomposition.hxx>
 
 #include <svl/broadcast.hxx>
 #include <sfx2/docfile.hxx>
@@ -3838,6 +3839,307 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncMDETERM)
         "Calculation of MDETERM incorrect for non-singular integer matrix", -180655.0,
         m_pDoc->GetValue(aPos), 1.0E-6);
     m_pDoc->DeleteTab(0);
+}
+
+namespace
+{
+/// Element of a matrix whose values are listed column by column.
+double lcl_GetElement(const std::vector<double>& rMatrix, size_t nRowCount, size_t nRow,
+                      size_t nColumn)
+{
+    return rMatrix[nColumn * nRowCount + nRow];
+}
+
+/** Decompose a matrix and check everything the result promises: the shapes of
+    the three factors, that the singular values are not negative and come
+    largest first, that the vectors are of length one and mutually orthogonal,
+    and that multiplying the factors back together gives the matrix again.
+ */
+sc::SingularValueDecompositionResult
+decomposeAndCheckPromises(const std::vector<double>& rValues, size_t nRowCount,
+                          size_t nColumnCount)
+{
+    const size_t nRank = std::min(nRowCount, nColumnCount);
+
+    sc::SingularValueDecompositionResult aResult;
+    sc::DecomposeSingularValues(rValues, nRowCount, nColumnCount, aResult);
+
+    CPPUNIT_ASSERT_MESSAGE("the columns reached mutual orthogonality", aResult.mbConverged);
+    CPPUNIT_ASSERT_EQUAL(nRank, aResult.maSingularValues.size());
+    CPPUNIT_ASSERT_EQUAL(nRowCount * nRank, aResult.maLeftVectors.size());
+    CPPUNIT_ASSERT_EQUAL(nColumnCount * nRank, aResult.maRightVectors.size());
+
+    for (size_t nIndex = 0; nIndex < nRank; ++nIndex)
+    {
+        CPPUNIT_ASSERT_MESSAGE("a singular value is not negative",
+                               aResult.maSingularValues[nIndex] >= 0.0);
+        if (nIndex > 0)
+            CPPUNIT_ASSERT_MESSAGE("the singular values come largest first",
+                                   aResult.maSingularValues[nIndex - 1]
+                                       >= aResult.maSingularValues[nIndex]);
+    }
+
+    const double fLargest = aResult.maSingularValues[0];
+    const double fTolerance
+        = fLargest * static_cast<double>(nRank) * 32.0 * std::numeric_limits<double>::epsilon();
+
+    for (size_t nRow = 0; nRow < nRowCount; ++nRow)
+    {
+        for (size_t nColumn = 0; nColumn < nColumnCount; ++nColumn)
+        {
+            KahanSum aSum;
+            for (size_t nIndex = 0; nIndex < nRank; ++nIndex)
+                aSum += lcl_GetElement(aResult.maLeftVectors, nRowCount, nRow, nIndex)
+                        * aResult.maSingularValues[nIndex]
+                        * lcl_GetElement(aResult.maRightVectors, nColumnCount, nColumn, nIndex);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("the factors multiply back to the matrix",
+                                                 lcl_GetElement(rValues, nRowCount, nRow, nColumn),
+                                                 aSum.get(), fTolerance);
+        }
+    }
+
+    // A left vector comes back as all zeros when no direction belongs to it,
+    // which happens exactly when its singular value is negligible next to the
+    // largest one.
+    std::vector<bool> aLeftIsNull(nRank, false);
+    for (size_t nIndex = 0; nIndex < nRank; ++nIndex)
+    {
+        bool bAllZero = true;
+        for (size_t nRow = 0; nRow < nRowCount && bAllZero; ++nRow)
+            bAllZero = lcl_GetElement(aResult.maLeftVectors, nRowCount, nRow, nIndex) == 0.0;
+        aLeftIsNull[nIndex] = bAllZero;
+        if (bAllZero)
+            CPPUNIT_ASSERT_MESSAGE("only a negligible singular value has no direction",
+                                   aResult.maSingularValues[nIndex] <= fLargest * 1e-14);
+    }
+
+    const double fUnitTolerance
+        = static_cast<double>(nRank) * 32.0 * std::numeric_limits<double>::epsilon();
+    for (size_t nFirst = 0; nFirst < nRank; ++nFirst)
+    {
+        for (size_t nSecond = nFirst; nSecond < nRank; ++nSecond)
+        {
+            const double fExpected = nFirst == nSecond ? 1.0 : 0.0;
+
+            KahanSum aRightProduct;
+            for (size_t nRow = 0; nRow < nColumnCount; ++nRow)
+                aRightProduct
+                    += lcl_GetElement(aResult.maRightVectors, nColumnCount, nRow, nFirst)
+                       * lcl_GetElement(aResult.maRightVectors, nColumnCount, nRow, nSecond);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("the right vectors are orthogonal unit vectors",
+                                                 fExpected, aRightProduct.get(), fUnitTolerance);
+
+            if (aLeftIsNull[nFirst] || aLeftIsNull[nSecond])
+                continue;
+
+            KahanSum aLeftProduct;
+            for (size_t nRow = 0; nRow < nRowCount; ++nRow)
+                aLeftProduct += lcl_GetElement(aResult.maLeftVectors, nRowCount, nRow, nFirst)
+                                * lcl_GetElement(aResult.maLeftVectors, nRowCount, nRow, nSecond);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("the left vectors are orthogonal unit vectors",
+                                                 fExpected, aLeftProduct.get(), fUnitTolerance);
+        }
+    }
+
+    return aResult;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSingularValuesOfDiagonalMatrixAreItsSortedMagnitudes)
+{
+    // The columns of a diagonal matrix already stand at right angles, so its
+    // singular values are the sizes of the numbers on the diagonal, put in
+    // order.
+    const std::vector<double> aTwoByTwo{ 2.0, 0.0, 0.0, -3.0 };
+    sc::SingularValueDecompositionResult aResult = decomposeAndCheckPromises(aTwoByTwo, 2, 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aResult.maSingularValues[0], 1e-14);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, aResult.maSingularValues[1], 1e-14);
+
+    // The negative sign cannot go into the singular value, so it lands in the
+    // left vector.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, lcl_GetElement(aResult.maLeftVectors, 2, 0, 0), 1e-14);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, lcl_GetElement(aResult.maLeftVectors, 2, 1, 0), 1e-14);
+
+    // Three distinct values pin that the sort permutes both families of
+    // vectors the same way.
+    const std::vector<double> aThreeByThree{ 1.0, 0.0, 0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 3.0 };
+    aResult = decomposeAndCheckPromises(aThreeByThree, 3, 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, aResult.maSingularValues[0], 1e-14);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aResult.maSingularValues[1], 1e-14);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, aResult.maSingularValues[2], 1e-14);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSingularValuesOfMixedMatrixMatchTheirInvariants)
+{
+    // Two columns that are neither parallel nor at right angles, the smallest
+    // input whose singular values are not simply its elements. They are the
+    // square roots of 45 and 5.
+    const std::vector<double> aValues{ 3.0, 4.0, 0.0, 5.0 };
+    const sc::SingularValueDecompositionResult aResult
+        = decomposeAndCheckPromises(aValues, 2, 2);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(std::sqrt(45.0), aResult.maSingularValues[0], 1e-13);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(std::sqrt(5.0), aResult.maSingularValues[1], 1e-13);
+
+    // The singular values multiply to the size of the determinant and their
+    // squares add up to the sum of the squares of all the elements.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        15.0, aResult.maSingularValues[0] * aResult.maSingularValues[1], 1e-13);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(50.0,
+                                 aResult.maSingularValues[0] * aResult.maSingularValues[0]
+                                     + aResult.maSingularValues[1] * aResult.maSingularValues[1],
+                                 1e-12);
+
+    CPPUNIT_ASSERT_MESSAGE("one rotation settles a two column matrix",
+                           aResult.mnSweepCount <= 2);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testRankDeficientInputLeavesNullDirectionUndetermined)
+{
+    // The second column is twice the first, so the matrix has rank one.
+    const std::vector<double> aValues{ 1.0, 2.0, 3.0, 2.0, 4.0, 6.0 };
+    const sc::SingularValueDecompositionResult aResult
+        = decomposeAndCheckPromises(aValues, 3, 2);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(std::sqrt(70.0), aResult.maSingularValues[0], 1e-13);
+    CPPUNIT_ASSERT_MESSAGE("the second singular value counts as zero",
+                           aResult.maSingularValues[1]
+                               < aResult.maSingularValues[0] * 1e-14);
+
+    // No unit direction belongs to a singular value of zero, so the vector
+    // comes back as zeros rather than as an arbitrary choice.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, lcl_GetElement(aResult.maLeftVectors, 3, 0, 1), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, lcl_GetElement(aResult.maLeftVectors, 3, 1, 1), 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, lcl_GetElement(aResult.maLeftVectors, 3, 2, 1), 0.0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testWideInputDecomposesLikeItsTranspose)
+{
+    // Two rows and three columns, so the work runs on the transpose and the
+    // two families of vectors have to be swapped back afterwards.
+    const std::vector<double> aWide{ 1.0, 4.0, 2.0, 5.0, 3.0, 6.0 };
+    const sc::SingularValueDecompositionResult aWideResult
+        = decomposeAndCheckPromises(aWide, 2, 3);
+
+    const std::vector<double> aTall{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
+    const sc::SingularValueDecompositionResult aTallResult
+        = decomposeAndCheckPromises(aTall, 3, 2);
+
+    CPPUNIT_ASSERT_EQUAL(aTallResult.maSingularValues.size(), aWideResult.maSingularValues.size());
+    for (size_t nIndex = 0; nIndex < aWideResult.maSingularValues.size(); ++nIndex)
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            "transposing a matrix leaves its singular values alone",
+            aTallResult.maSingularValues[nIndex], aWideResult.maSingularValues[nIndex], 1e-13);
+
+    // The squares of the singular values add up to the sum of the squares of
+    // all the elements, which is 91 for both.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(91.0,
+                                 aWideResult.maSingularValues[0] * aWideResult.maSingularValues[0]
+                                     + aWideResult.maSingularValues[1]
+                                           * aWideResult.maSingularValues[1],
+                                 1e-12);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testSingleValueInputCarriesItsSignInTheLeftVector)
+{
+    const std::vector<double> aSingle{ -5.0 };
+    sc::SingularValueDecompositionResult aResult = decomposeAndCheckPromises(aSingle, 1, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, aResult.maSingularValues[0], 1e-14);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, aResult.maLeftVectors[0], 1e-14);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, aResult.maRightVectors[0], 1e-14);
+
+    // A single column has no pair to rotate against, so it only gets scaled to
+    // length one.
+    const std::vector<double> aColumn{ 3.0, 4.0 };
+    aResult = decomposeAndCheckPromises(aColumn, 2, 1);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aResult.maSingularValues.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, aResult.maSingularValues[0], 1e-14);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.6, aResult.maLeftVectors[0], 1e-14);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, aResult.maLeftVectors[1], 1e-14);
+
+    // The same values as a single row put that direction on the other side.
+    const std::vector<double> aRow{ 3.0, 4.0 };
+    aResult = decomposeAndCheckPromises(aRow, 1, 2);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aResult.maSingularValues.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, aResult.maSingularValues[0], 1e-14);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, aResult.maLeftVectors[0], 1e-14);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.6, aResult.maRightVectors[0], 1e-14);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, aResult.maRightVectors[1], 1e-14);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testAllZeroInputHasNoSingularValueAboveZero)
+{
+    const std::vector<double> aValues(6, 0.0);
+    sc::SingularValueDecompositionResult aResult;
+    sc::DecomposeSingularValues(aValues, 3, 2, aResult);
+
+    CPPUNIT_ASSERT(aResult.mbConverged);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aResult.maSingularValues.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aResult.maSingularValues[0], 0.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aResult.maSingularValues[1], 0.0);
+
+    for (const double fValue : aResult.maLeftVectors)
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, fValue, 0.0);
+
+    // Nothing rotates, so the right vectors are left as the axes they started
+    // out as.
+    const std::vector<double> aExpectedRight{ 1.0, 0.0, 0.0, 1.0 };
+    CPPUNIT_ASSERT(aExpectedRight == aResult.maRightVectors);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testScalingTheInputScalesOnlyTheSingularValues)
+{
+    const std::vector<double> aValues{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
+    const sc::SingularValueDecompositionResult aPlain
+        = decomposeAndCheckPromises(aValues, 3, 2);
+
+    // Every element is squared while an angle is worked out, so without a
+    // scaling step these two would square to infinity and to zero.
+    for (const double fFactor : { 1e200, 1e-200 })
+    {
+        std::vector<double> aScaled(aValues.size());
+        std::transform(aValues.begin(), aValues.end(), aScaled.begin(),
+                       [fFactor](double fValue) { return fValue * fFactor; });
+
+        const sc::SingularValueDecompositionResult aResult
+            = decomposeAndCheckPromises(aScaled, 3, 2);
+        for (size_t nIndex = 0; nIndex < aResult.maSingularValues.size(); ++nIndex)
+        {
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+                "the singular values grow by the factor the matrix grew by",
+                aPlain.maSingularValues[nIndex] * fFactor, aResult.maSingularValues[nIndex],
+                aPlain.maSingularValues[0] * fFactor * 1e-13);
+        }
+        // The directions do not depend on how big the matrix is.
+        for (size_t nIndex = 0; nIndex < aResult.maLeftVectors.size(); ++nIndex)
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aPlain.maLeftVectors[nIndex],
+                                         aResult.maLeftVectors[nIndex], 1e-13);
+        for (size_t nIndex = 0; nIndex < aResult.maRightVectors.size(); ++nIndex)
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aPlain.maRightVectors[nIndex],
+                                         aResult.maRightVectors[nIndex], 1e-13);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testDecompositionSettlesWellWithinTheSweepLimit)
+{
+    // Twelve columns of forty values each, from a recurrence rather than a
+    // random source so that the sweep count below is reproducible. The
+    // recurrence runs far longer than the 480 values taken from it, so no two
+    // columns come out alike and the matrix has full rank.
+    const size_t nRowCount = 40;
+    const size_t nColumnCount = 12;
+    std::vector<double> aValues(nRowCount * nColumnCount);
+    sal_uInt32 nState = 12345;
+    for (double& rValue : aValues)
+    {
+        nState = nState * 1103515245 + 12345;
+        rValue = static_cast<double>(static_cast<int>((nState >> 16) % 1000) - 500);
+    }
+
+    const sc::SingularValueDecompositionResult aResult
+        = decomposeAndCheckPromises(aValues, nRowCount, nColumnCount);
+    CPPUNIT_ASSERT_MESSAGE("the sweeps settle long before the limit stops them",
+                           aResult.mnSweepCount <= 20);
 }
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFormulaErrorPropagation)
