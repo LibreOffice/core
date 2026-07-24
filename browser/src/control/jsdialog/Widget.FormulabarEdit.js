@@ -453,7 +453,8 @@ function _formulabarEditControl(parentContainer, data, builder) {
 	};
 
 	var textSelectionHandler = function(event) {
-		if (window.L.DomUtil.hasClass(container, 'disabled')) {
+		// A read-only formula bar is display only, so ignore clicks like the disabled case.
+		if (window.L.DomUtil.hasClass(container, 'disabled') || container._readOnly) {
 			event.preventDefault();
 			return;
 		}
