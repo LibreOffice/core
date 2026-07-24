@@ -370,8 +370,9 @@ var AdminSocketOverview = AdminSocketBase.extend({
 					document.getElementById('userview').deleteRow(userDocListCell.parentNode.rowIndex);
 				}
 				else {
-					docEntry = null;
-					userDocListCell.children[0].innerText = String(parseInt(userDocListCell.children[0].innerText) - 1);
+					docEntry.remove();
+					var userCollapsable = getCollapsibleClass(userDocListCell.children[0].id);
+					userCollapsable.setText(String(docCount - 1) + _(' document(s) open.'));
 				}
 			}
 		}
