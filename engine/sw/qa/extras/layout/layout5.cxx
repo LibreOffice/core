@@ -2287,6 +2287,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf169158)
     assertXPath(pXmlDoc, "//page/anchored/fly/tab/row/cell/txt/infos/bounds", "top", u"2698");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testCool16036)
+{
+    // A nearly frame-wide rectangle, centered on its (empty) paragraph, inside a fixed-size
+    // text frame anchored at the page. The rectangle cannot fit centered, so formatting the
+    // paragraph did not converge and SwLayAction::InternalAction looped forever: opening the
+    // document hung.
+    createSwDoc("vert-centered-object-in-fly-at-page.fodt");
+    // Without the fix, laying out the document (below) never returns.
+    auto pXmlDoc = parseLayoutDump();
+
+    // The at-page text frame is laid out at its fixed size, with the rectangle nested in it.
+    assertXPath(pXmlDoc, "//page", 1);
+    assertXPath(pXmlDoc, "//page/anchored/fly", 1);
+    assertXPath(pXmlDoc, "//page/anchored/fly/infos/bounds", "height", u"2835");
+    assertXPath(pXmlDoc, "//page/anchored/fly/section/txt/anchored/SwAnchoredDrawObject", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf169320)
 {
     // A list with one item hidden by usual hidden text property, and another having a hidden

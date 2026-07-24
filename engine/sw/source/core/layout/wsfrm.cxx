@@ -740,7 +740,7 @@ void SwFrame::InvalidatePage( const SwPageFrame *pPage ) const
                     pFly->GetAnchorFrame()->InvalidatePage();
                 }
                 else
-                    pPage->InvalidateFlyLayout();
+                    pPage->InvalidateFlyLayout( pFly );
             }
         }
         else

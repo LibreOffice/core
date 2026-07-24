@@ -830,6 +830,19 @@ void SwFlyLayFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     SetNotifyBack();
 }
 
+void SwPageFrame::InvalidateFlyLayout(const SwAnchoredObject* pAnchoredObj) const
+{
+    const_cast<SwPageFrame*>(this)->m_bInvalidFlyLayout = true;
+    // An at-page anchored object may need another FormatObjsAtFrame pass after formatting
+    // its content invalidated it (e.g. a table cell with non-default vertical alignment,
+    // tdf#169158). Invalidations from other objects (e.g. at-paragraph flys living inside
+    // an at-page fly's content) must not set this, or a non-converging layout would loop.
+    if (!m_bInvalidAtPageFly && pAnchoredObj)
+        if (auto pFrameFormat = pAnchoredObj->GetFrameFormat())
+            if (pFrameFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+                m_bInvalidAtPageFly = true;
+}
+
 void SwPageFrame::AppendFlyToPage( SwFlyFrame *pNew )
 {
     if ( !pNew->GetVirtDrawObj()->IsInserted() )
