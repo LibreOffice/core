@@ -989,21 +989,6 @@ int OfaTreeOptionsDialog::applySearchFilter(const OUString& rSearchTerm)
 
 void OfaTreeOptionsDialog::showDialog(const VectorOfMatchedIds& rPageIds)
 {
-    //
-    //     void generalOptions();      // SID_GENERAL_OPTIONS
-    //     void loadAndSaveOptions();  // SID_FILTER_DLG
-    //     void languageOptions();     // SID_LANGUAGE_OPTIONS
-    //     void writerOptions();       // SID_SW_EDITOPTIONS
-    //     void writerWebOptions();    // SID_SW_ONLINEOPTIONS
-    //     void calcOptions();         // SID_SC_EDITOPTIONS
-    //     void impressOptions();      // SID_SD_EDITOPTIONS
-    //     void drawOptions();         // SID_SD_GRAPHIC_OPTIONS
-    //     void mathOptions();         // SID_SM_EDITOPTIONS
-    //     void databaseOptions();     // SID_SB_STARBASEOPTIONS
-    //     void chartOptions();        // SID_SCH_EDITOPTIONS
-    //     void internetOptions();     // SID_INET_DLG
-    //
-
     for (const auto& rEntryId : rPageIds)
     {
         switch (rEntryId.first)
