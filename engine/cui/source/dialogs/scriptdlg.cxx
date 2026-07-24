@@ -243,7 +243,7 @@ SvxScriptOrgDialog::getLangNodeFromRootNode( Reference< browse::XBrowseNode > co
         };
         {
             // First try without Java interaction, to avoid warnings for non-JRE-dependent providers
-            css::uno::ContextLayer layer(comphelper::NoEnableJavaInteractionContext());
+            cpo::uno::ContextLayer layer(comphelper::NoEnableJavaInteractionContext());
             langNode = tryFind();
         }
         if (!langNode)

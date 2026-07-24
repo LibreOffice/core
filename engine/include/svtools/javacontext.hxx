@@ -21,7 +21,7 @@
 
 #include <svtools/svtdllapi.h>
 
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <cpo/uno/XCurrentContext.hpp>
 
 
 namespace com::sun::star::task { class XInteractionHandler; }
@@ -32,7 +32,7 @@ namespace svt
 //generated class. This conflicts with other libraries if they use the same inline
 //class.
     class SVT_DLLPUBLIC JavaContext final :
-        public css::uno::XCurrentContext
+        public cpo::uno::XCurrentContext
     {
 
     public:
@@ -42,7 +42,7 @@ namespace svt
             particular Request then the message box is shown. Afterwards
             nothing happens.
          */
-        JavaContext( const css::uno::Reference< css::uno::XCurrentContext> & ctx );
+        JavaContext( const css::uno::Reference< cpo::uno::XCurrentContext> & ctx );
         ~JavaContext();
 
         // XInterface
@@ -61,7 +61,7 @@ namespace svt
         JavaContext& operator = (JavaContext const &) = delete;
 
         oslInterlockedCount                                  m_aRefCount;
-        css::uno::Reference< css::uno::XCurrentContext >     m_xNextContext;
+        css::uno::Reference< cpo::uno::XCurrentContext >     m_xNextContext;
         css::uno::Reference< css::task::XInteractionHandler> m_xHandler;
     };
 }

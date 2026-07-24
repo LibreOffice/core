@@ -33,7 +33,7 @@ extern "C"
     Don't spread the returned interface around to other threads.  Every thread has its own
     current context.
 
-    @param ppCurrentContext  inout param current context of type com.sun.star.uno.XCurrentContext
+    @param ppCurrentContext  inout param current context of type cpo.uno.XCurrentContext
     @param pEnvDcp           descriptor of returned interface's environment
     @param pEnvContext       context of returned interface's environment (commonly 0)
     @return                  true, if context ref was transferred (even if null ref)
@@ -45,7 +45,7 @@ CPPU_DLLPUBLIC bool SAL_CALL uno_getCurrentContext(
 
 /** Sets the current task's context.
 
-    @param pCurrentContext  in param current context of type com.sun.star.uno.XCurrentContext
+    @param pCurrentContext  in param current context of type cpo.uno.XCurrentContext
     @param pEnvDcp          descriptor of interface's environment
     @param pEnvContext      context of interface's environment (commonly 0)
     @return                 true, if context ref was transferred (even if null ref)

@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <cpo/uno/XCurrentContext.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
@@ -521,11 +521,11 @@ static void lcl_CheckForChildren(Menu* pMenu, sal_uInt16 nItemId)
 namespace {
 
 class QuietInteractionContext:
-    public cppu::WeakImplHelper< css::uno::XCurrentContext >
+    public cppu::WeakImplHelper< cpo::uno::XCurrentContext >
 {
 public:
     explicit QuietInteractionContext(
-        css::uno::Reference< css::uno::XCurrentContext > context):
+        css::uno::Reference< cpo::uno::XCurrentContext > context):
         context_(std::move(context)) {}
     QuietInteractionContext(const QuietInteractionContext&) = delete;
     QuietInteractionContext& operator=(const QuietInteractionContext&) = delete;
@@ -541,7 +541,7 @@ private:
             : cpo::uno::Any();
     }
 
-    css::uno::Reference< css::uno::XCurrentContext >
+    css::uno::Reference< cpo::uno::XCurrentContext >
         context_;
 };
 
@@ -552,9 +552,9 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
     if ( pMenu != m_pVCLMenu )
         return true;
 
-    css::uno::ContextLayer layer(
+    cpo::uno::ContextLayer layer(
         new QuietInteractionContext(
-            css::uno::getCurrentContext()));
+            cpo::uno::getCurrentContext()));
 
     // set/unset hiding disabled menu entries
     bool bDontHide           = officecfg::Office::Common::View::Menu::DontHideDisabledEntry::get();

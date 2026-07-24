@@ -22,7 +22,8 @@ import os
 import sys
 
 from com.sun.star.lang import XTypeProvider, XSingleComponentFactory, XServiceInfo
-from com.sun.star.uno import RuntimeException, XCurrentContext
+from com.sun.star.uno import RuntimeException
+from cpo.uno import XCurrentContext
 from com.sun.star.beans.MethodConcept import ALL as METHOD_CONCEPT_ALL
 from com.sun.star.beans.PropertyConcept import ALL as PROPERTY_CONCEPT_ALL
 

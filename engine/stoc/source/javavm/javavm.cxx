@@ -44,7 +44,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <cpo/uno/XCurrentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <comphelper/propertysequence.hxx>
@@ -139,8 +139,8 @@ bool askForRetry(cpo::uno::Any const & rException)
     if (comphelper::IsContextFlagActive(u"DontEnableJava"_ustr))
         return false;
 
-    css::uno::Reference< css::uno::XCurrentContext > xContext(
-        css::uno::getCurrentContext());
+    css::uno::Reference< cpo::uno::XCurrentContext > xContext(
+        cpo::uno::getCurrentContext());
     if (xContext.is())
     {
         css::uno::Reference< css::task::XInteractionHandler > xHandler;

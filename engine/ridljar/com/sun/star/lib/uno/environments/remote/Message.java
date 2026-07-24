@@ -21,7 +21,7 @@ package com.sun.star.lib.uno.environments.remote;
 
 import com.sun.star.lib.uno.typedesc.MethodDescription;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
-import com.sun.star.uno.XCurrentContext;
+import cpo.uno.XCurrentContext;
 
 /**
  * A remote request or reply message.

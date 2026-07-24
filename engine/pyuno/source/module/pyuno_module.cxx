@@ -789,7 +789,7 @@ static PyObject *getCurrentContext(
     {
         Runtime runtime;
         ret = runtime.any2PyObject(
-            Any( css::uno::getCurrentContext() ) );
+            Any( cpo::uno::getCurrentContext() ) );
     }
     catch( const css::uno::Exception & e )
     {
@@ -810,11 +810,11 @@ static PyObject *setCurrentContext(
             Runtime runtime;
             Any a = runtime.pyObject2Any( PyTuple_GetItem( args, 0 ) );
 
-            Reference< css::uno::XCurrentContext > context;
+            Reference< cpo::uno::XCurrentContext > context;
 
             if( (a.hasValue() && (a >>= context)) || ! a.hasValue() )
             {
-                ret = css::uno::setCurrentContext( context ) ? Py_True : Py_False;
+                ret = cpo::uno::setCurrentContext( context ) ? Py_True : Py_False;
             }
             else
             {

@@ -248,7 +248,7 @@ void ScriptContainersListBox::Fill(const weld::TreeIter* pEntryIter)
     if (xNode->hasChildNodes())
     {
         // tdf#120362: Don't ask to enable disabled Java when filling script list
-        css::uno::ContextLayer layer(comphelper::NoEnableJavaInteractionContext());
+        cpo::uno::ContextLayer layer(comphelper::NoEnableJavaInteractionContext());
 
         bool bIsRootNode = false;
 

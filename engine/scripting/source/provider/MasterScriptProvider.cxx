@@ -470,7 +470,7 @@ template <typename Proc> bool FindProviderAndApply(ProviderCache& rCache, Proc p
     // This allows us to avoid useless user interaction in case when other provider
     // (not JVM) actually handles the operation.
     {
-        css::uno::ContextLayer layer(comphelper::NoEnableJavaInteractionContext());
+        cpo::uno::ContextLayer layer(comphelper::NoEnableJavaInteractionContext());
         bSuccess = pass();
     }
     // 2. Now retry asking to enable JVM in case we didn't succeed first time

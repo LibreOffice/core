@@ -23,7 +23,7 @@ import com.sun.star.lib.uno.environments.remote.Message;
 import com.sun.star.lib.uno.environments.remote.ThreadId;
 import com.sun.star.lib.uno.typedesc.MethodDescription;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
-import com.sun.star.uno.XCurrentContext;
+import cpo.uno.XCurrentContext;
 
 final class UrpMessage extends Message {
     public UrpMessage(

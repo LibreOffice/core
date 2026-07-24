@@ -1794,7 +1794,7 @@ void SvXMLExport::GetViewSettingsAndViews(cpo::uno::Sequence<beans::PropertyValu
     if(!xViewDataSupplier.is())
         return;
 
-    std::optional<css::uno::ContextLayer> oLayer;
+    std::optional<cpo::uno::ContextLayer> oLayer;
     if (comphelper::COKit::isActive())
     {
         oLayer.emplace(comphelper::NewFlagContext(u"IsKitExport"_ustr));
@@ -1804,7 +1804,7 @@ void SvXMLExport::GetViewSettingsAndViews(cpo::uno::Sequence<beans::PropertyValu
     xViewDataSupplier->setViewData( xIndexAccess ); // make sure we get a newly created sequence
     {
         // tdf#130559: don't export preview view data if active
-        css::uno::ContextLayer layer(comphelper::NewFlagContext(u"NoPreviewData"_ustr));
+        cpo::uno::ContextLayer layer(comphelper::NewFlagContext(u"NoPreviewData"_ustr));
         xIndexAccess = xViewDataSupplier->getViewData();
     }
     bool bAdd = false;

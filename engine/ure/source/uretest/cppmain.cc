@@ -101,7 +101,7 @@ private:
 ::sal_Int32 Service::run(cpo::uno::Sequence< ::rtl::OUString > const &) {
     osl_getThreadIdentifier(0); // check for sal
     (new salhelper::SimpleReferenceObject)->release(); // check for salhelper
-    css::uno::getCurrentContext(); // check for cppu
+    cpo::uno::getCurrentContext(); // check for cppu
     try { // check for cppuhelper
         std::auto_ptr< cppu::UnoUrl > dummy(new cppu::UnoUrl(rtl::OUString()));
     } catch (rtl::MalformedUriException &) {}

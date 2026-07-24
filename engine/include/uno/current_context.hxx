@@ -27,10 +27,10 @@
 #include "uno/current_context.h"
 #include "uno/lbnames.h"
 
-#include "com/sun/star/uno/XCurrentContext.hpp"
+#include "cpo/uno/XCurrentContext.hpp"
 
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 
 /** Getting the current context.
@@ -40,9 +40,9 @@ namespace com::sun::star::uno
 
     @return current context or null ref, if none is set
 */
-inline Reference< XCurrentContext > SAL_CALL getCurrentContext()
+inline css::uno::Reference< XCurrentContext > SAL_CALL getCurrentContext()
 {
-    Reference< XCurrentContext > xRet;
+    css::uno::Reference< XCurrentContext > xRet;
     ::rtl::OUString aEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME );
     ::uno_getCurrentContext( reinterpret_cast<void **>(&xRet), aEnvTypeName.pData, NULL );
     return xRet;
@@ -53,7 +53,7 @@ inline Reference< XCurrentContext > SAL_CALL getCurrentContext()
     @return true, if context has been successfully set
 */
 inline bool SAL_CALL setCurrentContext(
-    Reference< XCurrentContext > const & xContext )
+    css::uno::Reference< XCurrentContext > const & xContext )
 {
     ::rtl::OUString aEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME );
     return ::uno_setCurrentContext( xContext.get(), aEnvTypeName.pData, NULL );
@@ -70,7 +70,7 @@ class ContextLayer
     ::rtl::OUString m_aEnvTypeName;
     /** previous context
     */
-    Reference< XCurrentContext > m_xPreviousContext;
+    css::uno::Reference< XCurrentContext > m_xPreviousContext;
 
 public:
     /** Constructor: Saves the previous context and sets the new (given) one.
@@ -78,7 +78,7 @@ public:
         @param xNewContext new context to be set
     */
     inline ContextLayer(
-        Reference< XCurrentContext > const & xNewContext = Reference< XCurrentContext >() );
+        css::uno::Reference< XCurrentContext > const & xNewContext = css::uno::Reference< XCurrentContext >() );
     /** Destructor: restores the previous context.
     */
     inline ~ContextLayer();
@@ -87,11 +87,11 @@ public:
 
         @return the previously set context
     */
-    Reference< XCurrentContext > SAL_CALL getPreviousContext() const
+    css::uno::Reference< XCurrentContext > SAL_CALL getPreviousContext() const
         { return m_xPreviousContext; }
 };
 
-inline ContextLayer::ContextLayer( Reference< XCurrentContext > const & xNewContext )
+inline ContextLayer::ContextLayer( css::uno::Reference< XCurrentContext > const & xNewContext )
     : m_aEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME )
 {
     ::uno_getCurrentContext( reinterpret_cast<void **>(&m_xPreviousContext), m_aEnvTypeName.pData, NULL );

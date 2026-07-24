@@ -699,7 +699,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             // Since some layers use a published API and cannot be modified directly, we use a context layer instead.
             // This is a one-time flag and is not stored in any configuration.
             // For an example of how it's used, see ScFilterOptionsObj::execute.
-            std::optional<css::uno::ContextLayer> oLayer;
+            std::optional<cpo::uno::ContextLayer> oLayer;
             if (bShowFilterDialog.has_value())
             {
                 oLayer.emplace(comphelper::NewFlagContext(u"ShowFilterDialog"_ustr,

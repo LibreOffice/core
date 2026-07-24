@@ -131,7 +131,7 @@ bool isBootstrapType(OUString const & name)
         "cpo.uno.XAdapter",
         "com.sun.star.uno.XAggregation",
         "com.sun.star.uno.XComponentContext",
-        "com.sun.star.uno.XCurrentContext",
+        "cpo.uno.XCurrentContext",
         "com.sun.star.uno.XInterface",
         "com.sun.star.uno.XReference",
         "cpo.uno.XUnloadingPreference",

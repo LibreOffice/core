@@ -349,7 +349,7 @@ void SwTestAccountSettingsDialog::Test()
 
             xInMailService->addConnectionListener(xConnectionListener);
             //check connection
-            uno::Reference< uno::XCurrentContext> xConnectionContext =
+            uno::Reference< cpo::uno::XCurrentContext> xConnectionContext =
                     new SwConnectionContext(
                         m_pParent->m_pConfigItem->GetInServerName(),
                         m_pParent->m_pConfigItem->GetInServerPort(),
@@ -379,7 +379,7 @@ void SwTestAccountSettingsDialog::Test()
             return;
         bIsServer = true;
         //check connection
-        uno::Reference< uno::XCurrentContext> xConnectionContext =
+        uno::Reference< cpo::uno::XCurrentContext> xConnectionContext =
                 new SwConnectionContext(
                     m_pParent->m_xServerED->get_text(),
                     m_pParent->m_xPortNF->get_value(),

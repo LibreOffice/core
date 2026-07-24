@@ -1640,10 +1640,6 @@ module com {
      any getValueByName([in] string Name);
      ::com::sun::star::lang::XMultiComponentFactory getServiceManager();
     };
-    published interface XCurrentContext {
-     interface ::com::sun::star::uno::XInterface;
-     any getValueByName([in] string Name);
-    };
     published interface XReference {
      interface ::com::sun::star::uno::XInterface;
      void dispose();
@@ -1757,6 +1753,10 @@ module cpo {
      ::com::sun::star::uno::XInterface queryAdapted();
      void addReference([in] ::com::sun::star::uno::XReference xRef);
      void removeReference([in] ::com::sun::star::uno::XReference xRef);
+    };
+    published interface XCurrentContext {
+     interface ::com::sun::star::uno::XInterface;
+     any getValueByName([in] string Name);
     };
     published interface XNamingService {
      interface ::com::sun::star::uno::XInterface;

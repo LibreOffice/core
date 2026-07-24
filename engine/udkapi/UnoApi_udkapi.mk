@@ -474,7 +474,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
 	SecurityException \
 	XAggregation \
 	XComponentContext \
-	XCurrentContext \
 	XInterface \
 	XReference \
 	XWeak \
@@ -494,6 +493,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uri,\
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/util,\
 	XMacroExpander \
 	XVeto \
+))
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/uno,\
+	XCurrentContext \
 ))
 
 $(eval $(call gb_UnoApi_set_reference_rdbfile,udkapi,$(SRCDIR)/udkapi/type_reference/udkapi.idl))

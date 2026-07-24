@@ -26,7 +26,7 @@
 #include <uno/lbnames.h>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <cpo/uno/XCurrentContext.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

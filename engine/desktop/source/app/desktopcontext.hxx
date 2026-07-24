@@ -20,20 +20,20 @@
 #pragma once
 
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <cpo/uno/XCurrentContext.hpp>
 
 namespace desktop
 {
-    class DesktopContext: public cppu::WeakImplHelper< css::uno::XCurrentContext >
+    class DesktopContext: public cppu::WeakImplHelper< cpo::uno::XCurrentContext >
     {
     public:
-    explicit DesktopContext( const css::uno::Reference< css::uno::XCurrentContext > & ctx);
+    explicit DesktopContext( const css::uno::Reference< cpo::uno::XCurrentContext > & ctx);
 
         // XCurrentContext
         virtual cpo::uno::Any getValueByName( const OUString& Name ) override;
 
     private:
-            css::uno::Reference< css::uno::XCurrentContext > m_xNextContext;
+            css::uno::Reference< cpo::uno::XCurrentContext > m_xNextContext;
     };
 }
 

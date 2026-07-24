@@ -76,7 +76,7 @@ interface XMailService: ::com::sun::star::uno::XInterface {
         @see com::sun::star::mail::connectUser
         @see com::sun::star::io::NotConnectedException
     */
-    com::sun::star::uno::XCurrentContext getCurrentConnectionContext()
+    cpo::uno::XCurrentContext getCurrentConnectionContext()
         raises(com::sun::star::io::NotConnectedException);
 
     /**
@@ -139,7 +139,7 @@ interface XMailService: ::com::sun::star::uno::XInterface {
         @throws com::sun::star::mail::MailException
         for other errors during login.
 
-        @see com::sun::star::uno::XCurrentContext
+        @see cpo::uno::XCurrentContext
         @see com::sun::star::mail::XAuthenticator
         @see com::sun::star::lang::IllegalArgumentException
         @see com::sun::star::io::AlreadyConnectedException
@@ -150,7 +150,7 @@ interface XMailService: ::com::sun::star::uno::XInterface {
         @see com::sun::star::mail::IllegalStateException
         @see com::sun::star::mail::MailException
     */
-    void connect([in] com::sun::star::uno::XCurrentContext xConnectionContext, [in] XAuthenticator xAuthenticator)
+    void connect([in] cpo::uno::XCurrentContext xConnectionContext, [in] XAuthenticator xAuthenticator)
         raises(com::sun::star::lang::IllegalArgumentException,
                com::sun::star::io::AlreadyConnectedException,
                com::sun::star::io::UnknownHostException,

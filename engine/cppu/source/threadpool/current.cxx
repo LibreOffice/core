@@ -38,10 +38,10 @@ namespace cppu
 
 static typelib_InterfaceTypeDescription * impl_get_type_XCurrentContext()
 {
-    OUString sTypeName(u"com.sun.star.uno.XCurrentContext"_ustr);
+    OUString sTypeName(u"cpo.uno.XCurrentContext"_ustr);
     typelib_InterfaceTypeDescription* pTD = nullptr;
     typelib_TypeDescriptionReference* pMembers[1] = { nullptr };
-    OUString sMethodName0(u"com.sun.star.uno.XCurrentContext::getValueByName"_ustr);
+    OUString sMethodName0(u"cpo.uno.XCurrentContext::getValueByName"_ustr);
     typelib_typedescriptionreference_new(&pMembers[0], typelib_TypeClass_INTERFACE_METHOD,
                                          sMethodName0.pData);
     typelib_typedescription_newInterface(

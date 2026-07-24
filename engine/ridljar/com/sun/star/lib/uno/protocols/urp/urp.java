@@ -33,7 +33,7 @@ import com.sun.star.uno.IBridge;
 import cpo.uno.Type;
 import cpo.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XCurrentContext;
+import cpo.uno.XCurrentContext;
 import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

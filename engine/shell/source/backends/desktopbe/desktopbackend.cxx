@@ -35,7 +35,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <cpo/uno/XCurrentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/file.hxx>

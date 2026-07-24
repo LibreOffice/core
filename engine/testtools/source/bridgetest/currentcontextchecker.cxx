@@ -24,7 +24,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <cpo/uno/XCurrentContext.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
@@ -41,7 +41,7 @@ constexpr OUString VALUE = u"good"_ustr;
 
 class CurrentContext:
     public ::osl::DebugBase< CurrentContext >,
-    public ::cppu::WeakImplHelper< css::uno::XCurrentContext >
+    public ::cppu::WeakImplHelper< cpo::uno::XCurrentContext >
 {
 public:
     CurrentContext();
@@ -71,7 +71,7 @@ bool testtools::bridgetest::CurrentContextChecker::perform(
     ::sal_Int32 setSteps, ::sal_Int32 checkSteps)
 {
     if (setSteps == 0) {
-        css::uno::ContextLayer layer(new CurrentContext);
+        cpo::uno::ContextLayer layer(new CurrentContext);
         return performCheck(other, setSteps, checkSteps);
     } else {
         return performCheck(other, setSteps, checkSteps);
@@ -85,8 +85,8 @@ bool testtools::bridgetest::CurrentContextChecker::performCheck(
 {
     OSL_ASSERT(other.is() && checkSteps >= 0);
     if (checkSteps == 0) {
-        css::uno::Reference< css::uno::XCurrentContext > context(
-            css::uno::getCurrentContext());
+        css::uno::Reference< cpo::uno::XCurrentContext > context(
+            cpo::uno::getCurrentContext());
         if (!context.is()) {
             return false;
         }

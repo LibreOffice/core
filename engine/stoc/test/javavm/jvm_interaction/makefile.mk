@@ -49,7 +49,7 @@ UNOTYPES= com.sun.star.lang.XMultiComponentFactory \
     com.sun.star.lang.XSingleServiceFactory \
     cpo.uno.TypeClass \
     com.sun.star.lang.XMultiServiceFactory \
-    com.sun.star.uno.XCurrentContext \
+    cpo.uno.XCurrentContext \
     com.sun.star.task.XInteractionHandler \
     com.sun.star.task.XInteractionRequest \
     com.sun.star.task.XInteractionContinuation \

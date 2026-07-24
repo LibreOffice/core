@@ -22,7 +22,7 @@
 #include <cpo/uno/Sequence.h>
 #include <com/sun/star/mail/XAuthenticator.hpp>
 #include <com/sun/star/mail/XConnectionListener.hpp>
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <cpo/uno/XCurrentContext.hpp>
 #include <com/sun/star/mail/XMailMessage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -156,7 +156,7 @@ public:
 
 };
 
-class SW_DLLPUBLIC SwConnectionContext final : public cppu::WeakImplHelper<css::uno::XCurrentContext>
+class SW_DLLPUBLIC SwConnectionContext final : public cppu::WeakImplHelper<cpo::uno::XCurrentContext>
 {
     OUString m_sMailServer;
     sal_Int16 m_nPort;

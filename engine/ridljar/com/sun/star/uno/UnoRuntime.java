@@ -31,6 +31,7 @@ import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.lib.util.WeakMap;
 import cpo.uno.Type;
 import cpo.uno.TypeClass;
+import cpo.uno.XCurrentContext;
 
 /**
  * The central class needed for implementing or using UNO components in Java.

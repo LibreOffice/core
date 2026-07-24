@@ -36,7 +36,7 @@
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <cpo/uno/XCurrentContext.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionContinuation.hpp>

@@ -190,7 +190,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
 
         bool bShow;
         // The "ShowFilterDialog" flag is passed from SfxApplication::OpenDocExec_Impl
-        if (!(css::uno::getCurrentContext()->getValueByName(u"ShowFilterDialog"_ustr) >>= bShow))
+        if (!(cpo::uno::getCurrentContext()->getValueByName(u"ShowFilterDialog"_ustr) >>= bShow))
             bShow = utl::isShowFilterOptionsDialog(aFilterString);
         const bool bOk = !bShow || pDlg->Execute() == RET_OK;
 

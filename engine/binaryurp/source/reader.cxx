@@ -32,7 +32,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <cpo/uno/XCurrentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <o3tl/safeint.hxx>
@@ -217,7 +217,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
     css::uno::UnoInterfaceReference cc;
     if (ccMode) {
         css::uno::TypeDescription t(
-            cppu::UnoType<css::uno::XCurrentContext>::get());
+            cppu::UnoType<cpo::uno::XCurrentContext>::get());
         cc.set(
             *static_cast< uno_Interface ** >(
                 unmarshal.readValue(t).getValue(t)));

@@ -511,7 +511,7 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
         if ( xRootNode->hasChildNodes() )
         {
             // tdf#120362: Don't ask to enable disabled Java when filling script list
-            css::uno::ContextLayer layer(comphelper::NoEnableJavaInteractionContext());
+            cpo::uno::ContextLayer layer(comphelper::NoEnableJavaInteractionContext());
 
             const Sequence< Reference< browse::XBrowseNode > > children =
                 xRootNode->getChildNodes();

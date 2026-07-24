@@ -409,7 +409,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                         {
                             // tdf#128010: Do not nag user asking to enable JRE: if it's disabled,
                             // simply don't show relevant entries (user chose to not use JRE)
-                            css::uno::ContextLayer layer(
+                            cpo::uno::ContextLayer layer(
                                 comphelper::NoEnableJavaInteractionContext());
                             //Add the children and the grand children
                             addChildren(xMacroGroup.get(), childGroup, pFunctionListBox, filterTerm,

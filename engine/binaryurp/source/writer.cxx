@@ -29,7 +29,7 @@
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <cpo/uno/XCurrentContext.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <sal/log.hxx>
 #include <uno/dispatcher.hxx>
@@ -290,12 +290,12 @@ void Writer::sendRequest(
             &buf,
             css::uno::TypeDescription(
                 cppu::UnoType<
-                    css::uno::Reference< css::uno::XCurrentContext > >::get()),
+                    css::uno::Reference< cpo::uno::XCurrentContext > >::get()),
             BinaryAny(
                 css::uno::TypeDescription(
                     cppu::UnoType<
                         css::uno::Reference<
-                            css::uno::XCurrentContext > >::get()),
+                            cpo::uno::XCurrentContext > >::get()),
                 &cc.m_pUnoI));
     }
     switch (member.get()->eTypeClass) {

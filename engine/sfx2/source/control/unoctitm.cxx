@@ -216,9 +216,9 @@ SfxOfficeDispatch::~SfxOfficeDispatch()
 // This function checks if a JavaContext is already available (typically
 // created by Desktop::Main() in app.cxx), and creates new one if not.
 namespace {
-std::unique_ptr< css::uno::ContextLayer > EnsureJavaContext()
+std::unique_ptr< cpo::uno::ContextLayer > EnsureJavaContext()
 {
-    css::uno::Reference< css::uno::XCurrentContext > xContext(css::uno::getCurrentContext());
+    css::uno::Reference< cpo::uno::XCurrentContext > xContext(cpo::uno::getCurrentContext());
     if (xContext.is())
     {
         css::uno::Reference< css::task::XInteractionHandler > xHandler;
@@ -226,7 +226,7 @@ std::unique_ptr< css::uno::ContextLayer > EnsureJavaContext()
         if (xHandler.is())
             return nullptr; // No need to add new layer: JavaContext already present
     }
-    return std::make_unique< css::uno::ContextLayer >(new svt::JavaContext(xContext));
+    return std::make_unique< cpo::uno::ContextLayer >(new svt::JavaContext(xContext));
 }
 }
 #endif
@@ -237,7 +237,7 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const cpo
     if ( pImpl )
     {
 #if HAVE_FEATURE_JAVA
-        std::unique_ptr< css::uno::ContextLayer > layer(EnsureJavaContext());
+        std::unique_ptr< cpo::uno::ContextLayer > layer(EnsureJavaContext());
 #endif
         comphelper::SequenceAsHashMap aDescriptor(aArgs);
         bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
@@ -268,7 +268,7 @@ void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const css::util::URL&
     if ( pImpl )
     {
 #if HAVE_FEATURE_JAVA
-        std::unique_ptr< css::uno::ContextLayer > layer(EnsureJavaContext());
+        std::unique_ptr< cpo::uno::ContextLayer > layer(EnsureJavaContext());
 #endif
         pImpl->dispatch( aURL, aArgs, rListener );
     }

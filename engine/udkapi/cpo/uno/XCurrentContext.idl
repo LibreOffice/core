@@ -18,7 +18,7 @@
  */
 
 
-module com {  module sun {  module star {  module uno {
+module cpo {  module uno {
 
 /** Task (thread) local execution context for UNO.
     Arbitrary values can be retrieved from the context.
@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module uno {
     In general, do not spread the current context across different tasks.
     Values of the current context are destined for that task only.
 */
-published interface XCurrentContext : XInterface
+published interface XCurrentContext : com::sun::star::uno::XInterface
 {
     /** Gets a value from the context.
 
@@ -42,6 +42,6 @@ published interface XCurrentContext : XInterface
     any getValueByName( [in] string Name );
 };
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

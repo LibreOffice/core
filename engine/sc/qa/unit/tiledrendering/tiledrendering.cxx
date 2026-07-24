@@ -3843,7 +3843,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
     pModelObj->setExportZoom(150);
 
     {
-        uno::ContextLayer aLayer(comphelper::NewFlagContext(u"IsKitExport"_ustr));
+        cpo::uno::ContextLayer aLayer(comphelper::NewFlagContext(u"IsKitExport"_ustr));
         save(TestFilter::ODS); // .ODS
     }
     xmlDocUniquePtr pSettingsXml = parseExport(u"settings.xml"_ustr);

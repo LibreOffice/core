@@ -29,7 +29,7 @@ import com.sun.star.lib.uno.typedesc.MethodDescription;
 import com.sun.star.uno.Any;
 import cpo.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XCurrentContext;
+import cpo.uno.XCurrentContext;
 
 /**
  * The Job is an abstraction for tasks which have to be done

@@ -56,7 +56,7 @@ for d in definitionSet:
         continue
     if varname.startswith("autoRegister"): # auto-generated CPPUNIT stuff
         continue
-    if vartype in ["css::uno::ContextLayer", "SolarMutexGuard", "SolarMutexReleaser"]:
+    if vartype in ["cpo::uno::ContextLayer", "SolarMutexGuard", "SolarMutexReleaser"]:
         continue
     if vartype in ["SchedulerGuard", "SkiaZone"]:
         continue

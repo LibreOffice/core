@@ -322,7 +322,7 @@
 #include <cpo/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <cpo/uno/XCurrentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <cpo/uno/genfunc.h>

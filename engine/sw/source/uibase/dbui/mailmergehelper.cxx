@@ -123,7 +123,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
 
             xInMailService->addConnectionListener(xConnectionListener);
             //check connection
-            uno::Reference< uno::XCurrentContext> xConnectionContext =
+            uno::Reference< cpo::uno::XCurrentContext> xConnectionContext =
                     new SwConnectionContext(
                         rConfigItem.GetInServerName(),
                         rConfigItem.GetInServerPort(),
@@ -150,7 +150,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
         xSmtpServer->getSupportedConnectionTypes();
         //check connection
 
-        uno::Reference< uno::XCurrentContext> xConnectionContext =
+        uno::Reference< cpo::uno::XCurrentContext> xConnectionContext =
                 new SwConnectionContext(
                     rConfigItem.GetMailServer(),
                     rConfigItem.GetMailPort(),

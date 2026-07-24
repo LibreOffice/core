@@ -1077,7 +1077,7 @@ int Desktop::Main()
     pExecGlobals = new ExecuteGlobals();
 
     // Remember current context object
-    css::uno::ContextLayer layer( css::uno::getCurrentContext() );
+    cpo::uno::ContextLayer layer( cpo::uno::getCurrentContext() );
 
     if ( m_aBootstrapError != BE_OK )
     {
@@ -1091,7 +1091,7 @@ int Desktop::Main()
     }
 
     // Detect desktop environment - need to do this as early as possible
-    css::uno::setCurrentContext( new DesktopContext( css::uno::getCurrentContext() ) );
+    cpo::uno::setCurrentContext( new DesktopContext( cpo::uno::getCurrentContext() ) );
 
     if (officecfg::Office::Common::Misc::PreloadJVM::get() && pExecGlobals)
     {
@@ -1329,8 +1329,8 @@ int Desktop::Main()
 #if HAVE_FEATURE_JAVA
         // The JavaContext contains an interaction handler which is used when
         // the creation of a Java Virtual Machine fails
-        css::uno::ContextLayer layer2(
-            new svt::JavaContext( css::uno::getCurrentContext() ) );
+        cpo::uno::ContextLayer layer2(
+            new svt::JavaContext( cpo::uno::getCurrentContext() ) );
 #endif
         // check whether the shutdown is caused by restart just before entering the Execute
         pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested ||

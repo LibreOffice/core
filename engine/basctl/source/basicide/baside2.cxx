@@ -298,7 +298,7 @@ void ModulWindow::CheckCompileBasic()
 
     {
         // tdf#106529: only use strict compilation mode when compiling from the IDE
-        css::uno::ContextLayer layer(comphelper::NewFlagContext(u"BasicStrict"_ustr));
+        cpo::uno::ContextLayer layer(comphelper::NewFlagContext(u"BasicStrict"_ustr));
         bDone = m_xModule->Compile();
     }
     if ( !bWasModified )
