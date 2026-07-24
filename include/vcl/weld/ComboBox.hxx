@@ -88,6 +88,7 @@ protected:
         = 0;
     virtual void do_set_active(int pos) = 0;
     virtual void do_set_active_id(const OUString& rStr) = 0;
+    virtual void do_set_entry_text(const OUString& rStr) = 0;
 
 public:
     void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName,
@@ -167,7 +168,7 @@ public:
     //entry related
     virtual bool has_entry() const = 0;
     virtual void set_entry_message_type(EntryMessageType eType) = 0;
-    virtual void set_entry_text(const OUString& rStr) = 0;
+    void set_entry_text(const OUString& rStr);
     virtual void set_entry_width_chars(int nChars) = 0;
     virtual void set_entry_max_length(int nChars) = 0;
     virtual void select_entry_region(int nStartPos, int nEndPos) = 0;

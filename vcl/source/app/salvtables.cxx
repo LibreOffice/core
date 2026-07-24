@@ -5852,7 +5852,7 @@ void SalInstanceComboBoxWithoutEdit::set_entry_message_type(weld::EntryMessageTy
     assert(false);
 }
 
-void SalInstanceComboBoxWithoutEdit::set_entry_text(const OUString& /*rText*/) { assert(false); }
+void SalInstanceComboBoxWithoutEdit::do_set_entry_text(const OUString& /*rText*/) { assert(false); }
 
 void SalInstanceComboBoxWithoutEdit::select_entry_region(int /*nStartPos*/, int /*nEndPos*/)
 {
@@ -5999,7 +5999,7 @@ void SalInstanceComboBoxWithEdit::insert_separator(int pos, const OUString& /*rI
     m_xComboBox->AddSeparator(nInsertPos - 1);
 }
 
-void SalInstanceComboBoxWithEdit::set_entry_text(const OUString& rText)
+void SalInstanceComboBoxWithEdit::do_set_entry_text(const OUString& rText)
 {
     m_xComboBox->SetText(rText);
 }

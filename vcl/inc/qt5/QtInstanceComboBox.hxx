@@ -56,7 +56,7 @@ public:
 
     virtual bool has_entry() const override;
     virtual void set_entry_message_type(weld::EntryMessageType eType) override;
-    virtual void set_entry_text(const OUString& rStr) override;
+    virtual void do_set_entry_text(const OUString& rStr) override;
     virtual void set_entry_width_chars(int nChars) override;
     virtual void set_entry_max_length(int nChars) override;
     virtual void select_entry_region(int nStartPos, int nEndPos) override;

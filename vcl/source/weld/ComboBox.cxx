@@ -33,6 +33,13 @@ void weld::ComboBox::set_active_id(const OUString& rStr)
     enable_notify_events();
 }
 
+void weld::ComboBox::set_entry_text(const OUString& rStr)
+{
+    disable_notify_events();
+    do_set_entry_text(rStr);
+    enable_notify_events();
+}
+
 bool weld::ComboBox::get_values_changed_from_saved() const
 {
     return !m_aSavedValues.empty()

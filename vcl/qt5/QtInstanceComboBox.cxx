@@ -227,7 +227,7 @@ void QtInstanceComboBox::set_entry_message_type(weld::EntryMessageType eType)
     QtInstanceEntry::setMessageType(*m_pComboBox->lineEdit(), eType);
 }
 
-void QtInstanceComboBox::set_entry_text(const OUString& rStr)
+void QtInstanceComboBox::do_set_entry_text(const OUString& rStr)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] { m_pComboBox->setEditText(toQString(rStr)); });

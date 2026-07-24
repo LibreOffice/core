@@ -20084,7 +20084,7 @@ public:
         ::set_entry_message_type(GTK_ENTRY(m_pEntry), eType);
     }
 
-    virtual void set_entry_text(const OUString& rText) override
+    virtual void do_set_entry_text(const OUString& rText) override
     {
         assert(m_pEditable);
         disable_notify_events();
@@ -22036,7 +22036,7 @@ public:
         ::set_entry_message_type(GTK_ENTRY(m_pEntry), eType);
     }
 
-    virtual void set_entry_text(const OUString& rText) override
+    virtual void do_set_entry_text(const OUString& rText) override
     {
         assert(m_pEntry);
         disable_notify_events();
