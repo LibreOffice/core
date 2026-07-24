@@ -597,8 +597,56 @@ def process_install_script(install_script):
     return result
 
 
+def read_externals(path):
+    """Read the gb_Externals value from a temp file."""
+    entries = []
+    with open(path, "r") as f:
+        for line in f.readlines():
+            entries += line.strip().split(" ")
+        if len(entries) == 0: # practically impossible to build with none
+            raise Exception(f"externals file empty: {path}")
+    result = {}
+    for entry in entries:
+        e = entry.split(";")
+        result[(e[1], e[2])] = e[0]
+    return result
+
+def assign_externals(files_by_package, externals):
+    """Find all files that come from externals, and set "external" property on them."""
+
+    def simple_get_dir(dirs):
+        if len(dirs) == 1:
+            assert dirs[0]["ParentID"] == "PREDEFINED_PROGDIR"
+            return "/"
+        return simple_get_dir(dirs[1:]) + dirs[0]["HostName"] + "/"
+
+    def simple_get_path(pathlist):
+        file = pathlist[0]
+        return os.environ.get("INSTDIR") + simple_get_dir(pathlist[1:]) + file["Name"]
+
+    for package in files_by_package:
+        for pathlist in files_by_package[package]:
+            file = pathlist[0]
+            if "Name" in file: # externals are never locale specific
+                if "FILELIST" in install_script_value_to_array(file["Styles"]):
+                    (packagename, ext) = os.path.splitext(file["Name"])
+                    if ext != ".filelist":
+                        raise Exception(f"unexpected filelist {packagename}{ext}")
+                    if ("pkg", packagename) in externals:
+                        external = externals[("pkg", packagename)]
+                        file["external"] = external
+                else:
+                    filename = simple_get_path(pathlist)
+                    if os.path.splitext(filename)[1] == ".jar":
+                        if ("jar", filename) in externals:
+                            file["external"] = externals[("jar", filename)]
+                    else:
+                        if ("native", filename) in externals:
+                            file["external"] = externals[("native", filename)]
+
+
 if __name__ == "__main__":
-    if len(sys.argv) < 12:
+    if len(sys.argv) < 13:
         print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <4 packinfo> <path of install script> <languages>")
     else:
         sbom_path = sys.argv[1]
@@ -614,9 +662,12 @@ if __name__ == "__main__":
         packinfos += parse_packinfo(sys.argv[9])
         install_script = parse_install_script(sys.argv[10])
         languages = sys.argv[11].split()
+        externalsfile = sys.argv[12]
         init_filelistdirs(ziplist)
         gen_packages(packinfos, ziplist, languages)
-        files = process_install_script(install_script)
+        files_by_package = process_install_script(install_script)
+        externalfiles = read_externals(externalsfile)
+        assign_externals(files_by_package, externalfiles)
         #TODO process_file(license_path)
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"

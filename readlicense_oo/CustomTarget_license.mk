@@ -97,7 +97,8 @@ SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
 		$(filter PRODUCTNAME_WITHOUT_SPACES LIBO_VERSION% %TARBALL, $(.VARIABLES)), \
 		$(eval export $(v)=$($v)) \
 	)
-	$(call gb_ExternalExecutable_get_command,python) $(create_SBOM) \
+	EXTERNALSFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_Externals)) \
+	&& $(call gb_ExternalExecutable_get_command,python) $(create_SBOM) \
 		$(readlicense_oo_DIR) \
 		$(readlicense_oo_DIR)/LICENSE.html \
 		$(BUILDDIR)/instsetoo_native/util/openoffice.lst \
@@ -108,7 +109,9 @@ SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_brand.txt \
 		$(SRCDIR)/setup_native/source/packinfo/packinfo_extensions.txt \
 		$(call gb_InstallScript_get_target,setup_osl) \
-		"$(if $(filter en-US,$(gb_WITH_LANG)),,en-US) $(gb_WITH_LANG)"
+		"$(if $(filter en-US,$(gb_WITH_LANG)),,en-US) $(gb_WITH_LANG)" \
+		$${EXTERNALSFILE} \
+	&& rm -f $${EXTERNALSFILE}
 	mkdir -p $(SBOM_DIR)
 	cp $(readlicense_oo_DIR)/*sbom.spdx.json $(SBOM_DIR)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PY )
