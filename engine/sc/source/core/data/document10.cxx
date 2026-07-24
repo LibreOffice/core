@@ -1400,9 +1400,16 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
             rSheetView.resetSortOrder();
             Sort(nSheetViewTab, aSortParam, false, false, nullptr, nullptr);
         }
-        // Apply the stored query state (if available)
+
+        // Re-apply the stored query state. Query() only sets
+        // which rows are hidden, so store the query params on the sheet view's
+        // auto-filter data as well.
         if (oQueryParam)
+        {
             Query(nSheetViewTab, *oQueryParam, false, false);
+            if (ScDBData* pSheetViewFilterData = GetAnonymousDBData(nSheetViewTab))
+                pSheetViewFilterData->SetQueryParam(*oQueryParam);
+        }
     }
 
     if (mpShell)

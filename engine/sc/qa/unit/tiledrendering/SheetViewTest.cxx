@@ -37,6 +37,8 @@
 #include <rangenam.hxx>
 #include <dbdocfun.hxx>
 #include <dbdata.hxx>
+#include <queryparam.hxx>
+#include <queryentry.hxx>
 #include <subtotalparam.hxx>
 #include <drawview.hxx>
 #include <drwlayer.hxx>
@@ -55,6 +57,8 @@
 #include <generalfunction.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdpage.hxx>
+#include <svl/sharedstring.hxx>
+#include <svl/sharedstringpool.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
@@ -520,6 +524,96 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewHiddenColumnSurvivesCellEdit)
                            rDocument.ColHidden(nHiddenColumn, nSheetViewTab));
     // The default view is unaffected.
     CPPUNIT_ASSERT(!rDocument.ColHidden(nHiddenColumn, nDefaultViewTab));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewFilterSurvivesCellEditBelowRange)
+{
+    // A value filter applied only inside a sheet view stays applied after cells
+    // are typed below the auto-filter range in a filtered column. Such an edit
+    // extends the auto-filter range and takes the full sync path, which must
+    // keep re-applying the sheet view's own filter instead of leaving every row
+    // visible.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilterMultiColumn.fods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    // Create a sheet view. Layout becomes [Sheet1 (default), Sheet1 (sheet view)].
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+
+    const SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    const SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), nDefaultViewTab);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), nSheetViewTab);
+
+    // The auto-filter covers A1:C5 on both the default view and the sheet view.
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 2, 4, nDefaultViewTab),
+                         getAutoFilterArea(rDocument, nDefaultViewTab));
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nSheetViewTab, 2, 4, nSheetViewTab),
+                         getAutoFilterArea(rDocument, nSheetViewTab));
+
+    {
+        // Filter the sheet view to the rows where column B (Mid) equals "m1". This
+        // is the same in-place value filter the auto-filter drop-down applies, and
+        // it leaves only the first data row visible.
+        ScDBData* pSheetViewDBData = rDocument.GetAnonymousDBData(nSheetViewTab);
+        CPPUNIT_ASSERT(pSheetViewDBData);
+        ScQueryParam aParam;
+        pSheetViewDBData->GetQueryParam(aParam);
+        ScQueryEntry& rEntry = aParam.GetEntry(0);
+        rEntry.bDoQuery = true;
+        rEntry.nField = 1;
+        rEntry.eOp = SC_EQUAL;
+        rEntry.GetQueryItem().meType = ScQueryEntry::ByString;
+        rEntry.GetQueryItem().maString = rDocument.GetSharedStringPool().intern(u"m1"_ustr);
+        aParam.bInplace = true;
+        mpTabViewSheetView->Query(aParam, nullptr, true);
+        Scheduler::ProcessEventsToIdle();
+
+        // The filter hides the m2, m3 and m4 rows in the sheet view but leaves the
+        // m1 row visible, and it does not touch the default view.
+        CPPUNIT_ASSERT(pSheetViewDBData->HasQueryParam());
+        CPPUNIT_ASSERT(!rDocument.RowFiltered(1, nSheetViewTab));
+        CPPUNIT_ASSERT(rDocument.RowFiltered(2, nSheetViewTab));
+        CPPUNIT_ASSERT(rDocument.RowFiltered(3, nSheetViewTab));
+        CPPUNIT_ASSERT(rDocument.RowFiltered(4, nSheetViewTab));
+        CPPUNIT_ASSERT(!rDocument.RowFiltered(2, nDefaultViewTab));
+    }
+
+    // Type in column A below the auto-filter range twice, still on the sheet
+    // view the user is looking at. Each edit sits below the filtered rows but in
+    // a filtered column, so it grows the auto-filter range and forces the full
+    // sync.
+    typeCharsInCell(std::string("hello world"), 0, 9, mpTabViewSheetView, pModelObj);
+    Scheduler::ProcessEventsToIdle();
+    typeCharsInCell(std::string("again"), 0, 10, mpTabViewSheetView, pModelObj);
+    Scheduler::ProcessEventsToIdle();
+
+    // The edits reached the default view.
+    CPPUNIT_ASSERT_EQUAL(u"hello world"_ustr,
+                         rDocument.GetString(ScAddress(0, 9, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"again"_ustr, rDocument.GetString(ScAddress(0, 10, nDefaultViewTab)));
+
+    // The sheet view's filter must still be applied: the m2, m3 and m4 rows stay
+    // hidden. A reset would make every row visible again.
+    ScDBData* pSheetViewDBData = rDocument.GetAnonymousDBData(nSheetViewTab);
+    CPPUNIT_ASSERT_MESSAGE("Sheet view filter was reset by a cell edit below the range",
+                           pSheetViewDBData->HasQueryParam());
+    CPPUNIT_ASSERT_MESSAGE("m1 row must remain visible in the sheet view",
+                           !rDocument.RowFiltered(1, nSheetViewTab));
+    CPPUNIT_ASSERT_MESSAGE("m2 row reappeared after a cell edit below the range",
+                           rDocument.RowFiltered(2, nSheetViewTab));
+    CPPUNIT_ASSERT_MESSAGE("m3 row reappeared after a cell edit below the range",
+                           rDocument.RowFiltered(3, nSheetViewTab));
+    CPPUNIT_ASSERT_MESSAGE("m4 row reappeared after a cell edit below the range",
+                           rDocument.RowFiltered(4, nSheetViewTab));
+    // The default view stays unfiltered throughout.
+    CPPUNIT_ASSERT(!rDocument.RowFiltered(2, nDefaultViewTab));
 }
 
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
