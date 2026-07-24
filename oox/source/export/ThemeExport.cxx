@@ -59,11 +59,12 @@ void ThemeExport::write(OUString const& rPath, model::Theme const& rTheme)
 
     mpFS->startElementNS(XML_a, XML_themeElements);
 
-    const auto& pColorSet = rTheme.getColorSet();
-
-    mpFS->startElementNS(XML_a, XML_clrScheme, XML_name, pColorSet->getName());
-    writeColorSet(rTheme);
-    mpFS->endElementNS(XML_a, XML_clrScheme);
+    if (const auto& pColorSet = rTheme.getColorSet())
+    {
+        mpFS->startElementNS(XML_a, XML_clrScheme, XML_name, pColorSet->getName());
+        writeColorSet(pColorSet);
+        mpFS->endElementNS(XML_a, XML_clrScheme);
+    }
 
     model::FontScheme const& rFontScheme = rTheme.getFontScheme();
     mpFS->startElementNS(XML_a, XML_fontScheme, XML_name, rFontScheme.getName());
@@ -885,15 +886,11 @@ bool ThemeExport::writeFormatScheme(model::FormatScheme const& rFormatScheme)
     return true;
 }
 
-bool ThemeExport::writeColorSet(model::Theme const& rTheme)
+void ThemeExport::writeColorSet(std::shared_ptr<model::ColorSet> const& rColorSet)
 {
     static constexpr auto constTokenArray = std::to_array<sal_Int32>(
         { XML_dk1, XML_lt1, XML_dk2, XML_lt2, XML_accent1, XML_accent2, XML_accent3, XML_accent4,
           XML_accent5, XML_accent6, XML_hlink, XML_folHlink });
-
-    const auto& pColorSet = rTheme.getColorSet();
-    if (!pColorSet)
-        return false;
 
     for (auto nToken : constTokenArray)
     {
@@ -901,7 +898,7 @@ bool ThemeExport::writeColorSet(model::Theme const& rTheme)
         if (iterator != constTokenMap.end())
         {
             model::ThemeColorType eColorType = iterator->second;
-            Color aColor = pColorSet->getColor(eColorType);
+            Color aColor = rColorSet->getColor(eColorType);
             mpFS->startElementNS(XML_a, nToken);
             if (!aColor.IsTransparent())
                 mpFS->singleElementNS(XML_a, XML_srgbClr, XML_val,
@@ -921,8 +918,6 @@ bool ThemeExport::writeColorSet(model::Theme const& rTheme)
             mpFS->endElementNS(XML_a, nToken);
         }
     }
-
-    return true;
 }
 
 } // end namespace oox
