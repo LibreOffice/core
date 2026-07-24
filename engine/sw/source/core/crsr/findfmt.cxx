@@ -28,24 +28,27 @@ namespace sw {
 bool FindFormatImpl(SwPaM & rSearchPam,
         const SwFormat& rFormat, SwMoveFnCollection const & fnMove,
         const SwPaM &rRegion, bool bInReadOnly,
-        SwRootFrame const*const pLayout)
+        SwRootFrame const*const pLayout, SwDocPositions eStart)
 {
     bool bFound = false;
     const bool bSrchForward = &fnMove == &fnMoveForward;
     std::optional<SwPaM> oPam;
     MakeRegion( fnMove, rRegion, oPam );
 
-    // if at beginning/end then move it out of the node
-    if( bSrchForward
-        ? oPam->GetPoint()->GetContentIndex() == oPam->GetPointContentNode()->Len()
-        : !oPam->GetPoint()->GetContentIndex() )
+    if (eStart == SwDocPositions::Curr)
     {
-        if( !(*fnMove.fnPos)( oPam->GetPoint(), false ))
+        // if at beginning/end then move it out of the node
+        if (bSrchForward
+            ? oPam->GetPoint()->GetContentIndex() == oPam->GetPointContentNode()->Len()
+            : !oPam->GetPoint()->GetContentIndex())
         {
-            return false;
+            if (!(*fnMove.fnPos)(oPam->GetPoint(), false))
+            {
+                return false;
+            }
+            SwContentNode& rNd = *oPam->GetPoint()->GetNode().GetContentNode();
+            oPam->GetPoint()->SetContent(bSrchForward ? 0 : rNd.Len());
         }
-        SwContentNode *pNd = oPam->GetPoint()->GetNode().GetContentNode();
-        oPam->GetPoint()->SetContent( bSrchForward ? 0 : pNd->Len() );
     }
 
     bool bFirst = true;
