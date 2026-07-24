@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <docmodel/theme/ColorSet.hxx>
 #include <sal/config.h>
 #include <oox/dllapi.h>
 #include <oox/core/xmlfilterbase.hxx>
@@ -47,7 +48,7 @@ public:
     void writeComplexColor(model::ComplexColor const& rComplexColor);
 
 private:
-    bool writeColorSet(model::Theme const& rTheme);
+    void writeColorSet(std::shared_ptr<model::ColorSet> const& rColorSet);
     bool writeFontScheme(model::FontScheme const& rFontScheme);
     bool writeFormatScheme(model::FormatScheme const& rFormatScheme);
 
