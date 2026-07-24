@@ -1568,13 +1568,12 @@ namespace emfplushelper
         // 12 is minimal valid EMF+ record size; remaining bytes are padding
         while (length >= 12)
         {
-            sal_uInt16 type, flags;
-            sal_uInt32 size, dataSize;
-            sal_uInt64 next;
+            sal_uInt16 type(0), flags(0);
+            sal_uInt32 size(0), dataSize(0);
 
             rMS.ReadUInt16(type).ReadUInt16(flags).ReadUInt32(size).ReadUInt32(dataSize);
 
-            next = rMS.Tell() + (size - 12);
+            sal_uInt64 next = rMS.Tell() + (size - 12);
 
             if (size < 12)
             {
@@ -1616,14 +1615,18 @@ namespace emfplushelper
             }
             if (type == EmfPlusRecordTypeObject && ((mbMultipart && (flags & 0x7fff) == (mMFlags & 0x7fff)) || (flags & 0x8000)))
             {
+                if (dataSize < 4)
+                {
+                    SAL_WARN("drawinglayer.emf", "DataSize field has no room for TotalObjectSize");
+                    break;
+                }
+
                 if (!mbMultipart)
                 {
                     mbMultipart = true;
                     mMFlags = flags;
                     mMStream.Seek(0);
                 }
-
-                OSL_ENSURE(dataSize >= 4, "No room for TotalObjectSize in EmfPlusContinuedObjectRecord");
 
                 // 1st 4 bytes are TotalObjectSize
                 mMStream.WriteBytes(static_cast<const char *>(rMS.GetData()) + rMS.Tell() + 4, dataSize - 4);
