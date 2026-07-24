@@ -23,6 +23,12 @@ class CellCursorSection extends CanvasSectionObject {
 		this.sectionProperties.viewId = viewId;
 		this.sectionProperties.weight = weight;
 		this.sectionProperties.color = color;
+		this.sectionProperties.visualsReady = false;
+
+		RenderManager.appendAfterVisualsReady(() => {
+			this.sectionProperties.visualsReady = true;
+			this.containerObject?.requestReDraw();
+		});
 	}
 
 	public getViewId(): number {
@@ -59,6 +65,8 @@ class CellCursorSection extends CanvasSectionObject {
 	}
 
 	public onDraw() {
+		if (!this.sectionProperties.visualsReady) return;
+
 		if (app.calc.cellCursorVisible) {
 			Util.ensureValue(app.activeDocument);
 

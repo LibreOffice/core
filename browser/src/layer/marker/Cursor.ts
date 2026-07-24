@@ -26,6 +26,7 @@ class Cursor {
 	private blinkSuspendTimeout: any;
 	private visible: boolean = false;
 	private domAttached: boolean = false;
+	private visualsReady: boolean = false;
 
 	// position and size should be in core pixels.
 	constructor(rectangle: cool.SimpleRectangle, map: any, options: any) {
@@ -39,6 +40,11 @@ class Cursor {
 
 		this.rectangle = rectangle;
 		this.map = map;
+
+		RenderManager.appendAfterVisualsReady(() => {
+			this.visualsReady = true;
+			this.update();
+		});
 
 		this.initLayout();
 	}
@@ -140,7 +146,8 @@ class Cursor {
 		if (!this.container || !this.map || !app.activeDocument || app.activeDocument.fileSize.x === 0)
 			return;
 
-		if (!app.isRectangleVisibleInTheDisplayedArea(app.file.textCursor.rectangle.toArray())) {
+		if (!this.visualsReady ||
+			!app.isRectangleVisibleInTheDisplayedArea(app.file.textCursor.rectangle.toArray())) {
 			this.container.style.visibility = 'hidden';
 			this.visible = false;
 			this.addCursorClass(this.visible);
