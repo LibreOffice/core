@@ -2595,7 +2595,8 @@ void CallbackFlushHandler::enqueueUpdatedType( int type, const SfxViewShell* vie
     std::optional<OString> payload = viewShell->getKitPayload( type, viewId );
     if(!payload)
         return; // No actual payload to send.
-    CallbackData callbackData(*payload, viewId);
+    CallbackData callbackData = isUpdatedTypePerViewId(type)
+        ? CallbackData(*payload, viewId) : CallbackData(*payload);
     m_queue1.emplace_back(type);
     m_queue2.emplace_back(callbackData);
     SAL_INFO("kit", "Queued updated [" << type << "]: [" << callbackData.getPayload()
