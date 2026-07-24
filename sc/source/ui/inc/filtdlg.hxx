@@ -183,7 +183,7 @@ private:
 class ScSpecialFilterDlg : public ScAnyRefDlgController
 {
 public:
-    ScSpecialFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+    ScSpecialFilterDlg(SfxBindings& rBindings, SfxChildWindow* pCW, weld::Window* pParent,
                        ScViewData& rData, const SfxItemSet& rArgSet);
     virtual ~ScSpecialFilterDlg() override;
 

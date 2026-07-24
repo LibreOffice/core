@@ -51,10 +51,12 @@ namespace
     }
 }
 
-ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-                                        ScViewData& rData, const SfxItemSet&   rArgSet )
-
-    : ScAnyRefDlgController(pB, pCW, pParent, u"modules/scalc/ui/advancedfilterdialog.ui"_ustr, u"AdvancedFilterDialog"_ustr)
+ScSpecialFilterDlg::ScSpecialFilterDlg(SfxBindings& rBindings, SfxChildWindow* pCW,
+                                       weld::Window* pParent, ScViewData& rData,
+                                       const SfxItemSet& rArgSet)
+    : ScAnyRefDlgController(&rBindings, pCW, pParent,
+                            u"modules/scalc/ui/advancedfilterdialog.ui"_ustr,
+                            u"AdvancedFilterDialog"_ustr)
     , m_aStrUndefined(ScResId(SCSTR_UNDEFINED))
     , m_nWhichQuery(rArgSet.GetPool()->GetWhichIDFromSlotID(SID_QUERY))
     , m_theQueryData(static_cast<const ScQueryItem&>(rArgSet.Get(m_nWhichQuery)).GetQueryData())

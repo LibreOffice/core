@@ -403,7 +403,7 @@ ScTabViewShell::CreateRefDialogController(SfxBindings& rBindings, SfxChildWindow
                 // mark current sheet (due to RefInput in dialog)
                 GetViewData().SetRefTabNo( GetViewData().CurrentTabForData() );
 
-                xResult = std::make_shared<ScSpecialFilterDlg>(&rBindings, pCW, pParent,
+                xResult = std::make_shared<ScSpecialFilterDlg>(rBindings, pCW, pParent,
                                                                GetViewData(), aArgSet);
             }
             break;
