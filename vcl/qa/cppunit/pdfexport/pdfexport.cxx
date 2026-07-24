@@ -1890,15 +1890,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_2)
         aZCodec.Decompress(pStream->GetMemory(), aObjectStream);
         CPPUNIT_ASSERT(aZCodec.EndCompression());
         aObjectStream.Seek(0);
-        std::string aCmap("8 beginbfchar\n"
-                          "<02> <0632>\n"
+        std::string aCmap("4 beginbfchar\n"
                           "<03> <0020>\n"
                           "<04> <0648>\n"
                           "<05> <0647>\n"
                           "<06> <062F>\n"
-                          "<08> <062C>\n"
-                          "<0A> <0628>\n"
-                          "<0C> <0623>\n"
                           "endbfchar");
         std::string aData(static_cast<const char*>(aObjectStream.GetData()),
                           aObjectStream.GetSize());
@@ -1996,8 +1992,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_3)
         aZCodec.Decompress(pStream->GetMemory(), aObjectStream);
         CPPUNIT_ASSERT(aZCodec.EndCompression());
         aObjectStream.Seek(0);
-        std::string aCmap("2 beginbfchar\n"
-                          "<01> <1ECB0331030B>\n"
+        std::string aCmap("1 beginbfchar\n"
                           "<05> <0020>\n"
                           "endbfchar");
         std::string aData(static_cast<const char*>(aObjectStream.GetData()),

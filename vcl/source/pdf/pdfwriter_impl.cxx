@@ -5984,8 +5984,6 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         //   for whole words or sentences breaks text selection and
         //   highlighting in PDF viewers (there will be no way to tell
         //   which glyphs belong to which characters).
-        // * Keep generating (now) redundant ToUnicode entries for
-        //   compatibility with old tools not supporting ActualText.
 
         assert(pGlyph->charCount() >= 0);
         for (int n = 0; n < pGlyph->charCount(); n++)
@@ -6007,12 +6005,13 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             {
                 const auto it = rSubset.m_aMapping.find(nGlyphId);
                 if (it != rSubset.m_aMapping.cend() && it->second.codes() != aCodeUnits)
-                {
                     bUseActualText = true;
-                    aCodeUnits.clear();
-                }
             }
         }
+
+        // If we are using ActualText, then ToUnicode mapping is broken, drop it.
+        if (bUseActualText)
+            aCodeUnits.clear();
 
         // tdf#157390: The width stored by registerGlyph() must be the actual glyph width.
         // This must be obtained by calling GetGlyphWidth(vertical=false), otherwise an incorrect
