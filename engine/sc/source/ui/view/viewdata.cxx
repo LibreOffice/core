@@ -2628,13 +2628,13 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 
         if (nWhereY >= nStartPosY)
         {
-            if (bAllowNeg && !bIsTiledRendering)
+            if (bAllowNeg)
             {
                 // tdf#150623 If possible, use the faster range-based calculation functions.
                 if ( nStartPosY > mrDoc.MaxRow() )
                     nScrPosY = 0x7FFFFFFF;
                 else
-                    nScrPosY = mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, CurrentTabForData(), nPPTY);
+                    nScrPosY += mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, CurrentTabForData(), nPPTY);
             }
             else
             {
