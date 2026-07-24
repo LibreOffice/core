@@ -143,9 +143,17 @@ check-local: do-check
 	$(if $(wildcard $(ERROR_LOG)),$(error CypressError: some tests failed!))
 
 # TODO: enable multiuser tests $(MULTIUSER_TESTS_DONE)
-do-check: $(DESKTOP_TEST_FILES_DONE) $(MOBILE_TEST_FILES_DONE) $(IDLE_TEST_FILES_DONE)
+# The idle suite kills the shared coolwsd and starts its own short-idle one, and
+# re-resets the shared test/data/presets, so it must not run at the same time as
+# the desktop and mobile suites:
+do-check: $(DESKTOP_TEST_FILES_DONE) $(MOBILE_TEST_FILES_DONE)
 	$(V)$(KILL_COMMAND) || true
-	$(if $(wildcard $(ERROR_LOG)),$(V)cat $(ERROR_LOG))
+	$(V)rm -f $(ERROR_LOG).prev
+	$(V)test ! -f $(ERROR_LOG) || mv $(ERROR_LOG) $(ERROR_LOG).prev
+	trap '$(KILL_COMMAND)' EXIT && $(MAKE) $(IDLE_TEST_FILES_DONE)
+	$(V)test ! -f $(ERROR_LOG).prev || cat $(ERROR_LOG).prev >> $(ERROR_LOG)
+	$(V)rm -f $(ERROR_LOG).prev
+	$(V)test ! -f $(ERROR_LOG) || cat $(ERROR_LOG)
 
 $(PID_FILE): @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(call cleanup_before_run)
@@ -199,7 +207,7 @@ $(MULTIUSER_TEST_FILES_DONE): $(PID_FILE)
 		$(V)$(foreach done_file,$(MULTIUSER_TEST_FILES_DONE),mkdir -p $(dir $(done_file)) && touch $(done_file) &&) true\
 	)
 
-$(IDLE_TEST_FILES_DONE): start_short_idle_coolwsd $(PID_FILE)
+$(IDLE_TEST_FILES_DONE): start_short_idle_coolwsd
 	$(if $(PARALLEL_BUILD),\
 		$(call run_idle_tests,$(subst $(IDLE_TRACK_FOLDER)/,,$(basename $@)),$(basename $@).log),\
 		$(call run_idle_tests))
