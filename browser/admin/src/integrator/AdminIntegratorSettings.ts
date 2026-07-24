@@ -576,6 +576,18 @@ const AI_IMAGE_SIZES = [
 	'256x256',
 ];
 
+let isQtApp = false;
+try {
+	isQtApp = !!(window as any).parent.ThisIsTheQtApp;
+} catch (e) {
+	isQtApp = false;
+}
+
+// The Accessibility section holds settings that each desktop app applies
+// natively. It is offered only where the native side handles the GETUIZOOM
+// and SETUIZOOM messages.
+const accessibilitySettingsSupported = isQtApp;
+
 // Keep in sync with the pre-canned provider map in wsd/FileServer.cpp
 // fetchModels. The server ignores the baseUrl from the client for non-custom
 // providers and uses its own copy, so a caller cannot pair a pre-canned id
@@ -612,6 +624,13 @@ const AI_PROVIDERS: Array<AIProvider> = [
 const ZOOM_LEVELS: Array<number> = [
 	20, 25, 30, 35, 40, 50, 60, 70, 85, 100, 120, 150, 170, 200, 235, 280, 335,
 	400,
+];
+
+// The user interface zoom percentages offered in the Accessibility section.
+// These magnify the whole application window, so the list starts at 100% and
+// follows the steps of ZOOM_LEVELS, continued by one more step to 500%.
+const UI_ZOOM_LEVELS: Array<number> = [
+	100, 120, 150, 170, 200, 235, 280, 335, 400, 500,
 ];
 
 // Thunks rather than strings: the module loads before the translations do,
@@ -1086,12 +1105,21 @@ class SettingIframe {
 
 	private _browserSettingSection: HTMLElement | null = null;
 	private _zoomSection: HTMLElement | null = null;
+	private _accessibilitySection: HTMLElement | null = null;
 	private _xcuSection: HTMLElement | null = null;
 	private _sentenceCheckerSection: HTMLElement | null = null;
 	private _aiSection: HTMLElement | null = null;
 	private _docSigningSection: HTMLElement | null = null;
 	private _zoteroSection: HTMLElement | null = null;
 	private _configSections: SectionConfig[] | null = null;
+
+	// The zoom of the whole application window, as a percentage. Zero means
+	// no explicit zoom is chosen and the system scaling applies.
+	private _uiZoomPercent = 0;
+	// The zoom the native side holds, as last fetched or saved, in the same
+	// form as _uiZoomPercent. Null while it is unknown, either before the fetch
+	// or after it failed.
+	private _uiZoomStoredPercent: number | null = null;
 
 	private getAPIEndpoints() {
 		return {
@@ -1201,6 +1229,18 @@ class SettingIframe {
 			saves.push(
 				this.uploadServerPrivateSettingFile(this._serverPrivateSetting),
 			);
+		}
+
+		// The user interface zoom is persisted and applied by the native side.
+		// It is sent only when it differs from the value the native side holds.
+		if (
+			this._uiZoomStoredPercent !== null &&
+			this._uiZoomPercent !== this._uiZoomStoredPercent
+		) {
+			(window.parent as any).postMobileMessage(
+				'SETUIZOOM ' + this._uiZoomPercent,
+			);
+			this._uiZoomStoredPercent = this._uiZoomPercent;
 		}
 
 		await Promise.all(saves);
@@ -2783,6 +2823,74 @@ class SettingIframe {
 		return extraActionsDiv;
 	}
 
+	// Ask the native side for the stored user interface zoom percentage.
+	// Values outside the offered list (including zero) mean "as per system".
+	// Returns null when the native side gives no answer.
+	private async fetchUIZoomPercent(): Promise<number | null> {
+		try {
+			const reply = await (window.parent as any).postMobileCall('GETUIZOOM');
+			const percent = parseInt(String(reply), 10);
+			if (isNaN(percent)) {
+				console.error('Unexpected user interface zoom reply:', reply);
+				return null;
+			}
+			return UI_ZOOM_LEVELS.includes(percent) ? percent : 0;
+		} catch (error) {
+			console.error('Failed to fetch the user interface zoom:', error);
+			return null;
+		}
+	}
+
+	private generateAccessibilitySettingsUI(settingsContainer: HTMLElement) {
+		const accessibilityContainer = document.createElement('div');
+		accessibilityContainer.id = 'accessibility-section';
+		accessibilityContainer.classList.add('section');
+
+		accessibilityContainer.appendChild(this.createHeading(_('Accessibility')));
+
+		const zoomDivContainer = document.createElement('div');
+		zoomDivContainer.id = 'accessibility-ui-zoom';
+		zoomDivContainer.classList.add('view-input-container');
+		accessibilityContainer.appendChild(zoomDivContainer);
+
+		const zoomLabel = this.createHeading(_('User interface zoom'));
+		zoomLabel.classList.add('view-setting-small-label');
+		zoomDivContainer.appendChild(zoomLabel);
+
+		const zoomDescription = this.createParagraph(
+			_('Magnify the whole window, including the document and the menus.'),
+		);
+		zoomDescription.className = 'view-setting-description';
+		zoomDivContainer.appendChild(zoomDescription);
+
+		const zoomOptions = [
+			{ value: '0', label: _('As per system') },
+			...UI_ZOOM_LEVELS.map((percent) => ({
+				value: percent.toString(),
+				label: percent + '%',
+			})),
+		];
+
+		const zoomSelect = this.createSelectInput(
+			'uiZoomSelect',
+			zoomOptions,
+			this._uiZoomPercent.toString(),
+			(select) => {
+				this._uiZoomPercent = parseInt(select.value, 10) || 0;
+			},
+		);
+		// The choice is offered only once the stored zoom is known, so a save
+		// always starts from the value the native side holds.
+		zoomSelect.disabled = this._uiZoomStoredPercent === null;
+		zoomDivContainer.appendChild(zoomSelect);
+
+		this._accessibilitySection = this.mountConfigSection(
+			settingsContainer,
+			this._accessibilitySection,
+			accessibilityContainer,
+		);
+	}
+
 	private generateZoteroUI(data: ViewSettings, settingsContainer: HTMLElement) {
 		const zoteroContainer = document.createElement('div');
 		zoteroContainer.id = 'zotero-section';
@@ -4362,6 +4470,22 @@ class SettingIframe {
 				browserSettingButton.style.display = 'none';
 			} else {
 				browserSettingButton.style.removeProperty('display');
+			}
+		}
+
+		// Accessibility (user interface zoom), applied natively by the desktop
+		// apps
+		if (isUserConfig && accessibilitySettingsSupported) {
+			if (!data) {
+				this._accessibilitySection = this.createEmptySection(
+					this._accessibilitySection,
+					'accessibility-section',
+					_('Accessibility'),
+				);
+			} else {
+				this._uiZoomStoredPercent = await this.fetchUIZoomPercent();
+				this._uiZoomPercent = this._uiZoomStoredPercent ?? 0;
+				this.generateAccessibilitySettingsUI(settingsContainer);
 			}
 		}
 

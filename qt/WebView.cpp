@@ -874,6 +874,10 @@ void WebView::createWebEngineView()
                                                     view->reload();
                                             });
                      });
+
+    // Set the zoom factor before any page loads, so the window opens at the
+    // stored zoom instead of visibly rescaling.
+    applyUIZoom();
 }
 
 WebView::~WebView() {
@@ -967,7 +971,6 @@ void WebView::restoreDiscardedView()
     _viewDiscarded = false;
 
     QWebChannel* channel = new QWebChannel(_webView->page());
-    queryGnomeFontScalingUpdateZoom();
 
     assert(_bridge == nullptr);
     _bridge = new Bridge(channel, this, _document, nullptr, _webView.get());
@@ -1121,8 +1124,6 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
 
     // setup js c++ communication
     QWebChannel* channel = new QWebChannel(_webView->page());
-    // query gnome font scaling factor asynchronously and apply it to the web view
-    queryGnomeFontScalingUpdateZoom();
 
     assert(_bridge == nullptr);
     _bridge = new Bridge(channel, this, _document, nullptr, _webView.get());
@@ -1241,7 +1242,6 @@ void WebView::loadRemote(std::shared_ptr<coda::RemoteDocInfo> remoteInfo)
     LOG_INF("load remote into webview with appDocId " << _document._appDocId << ", client fd "
                                                       << _document._fakeClientFd);
 
-    queryGnomeFontScalingUpdateZoom();
     assert(_bridge == nullptr);
     _bridge = coda::attachRemoteBridge(
         _webView->page(), _document, this, nullptr, _webView.get());
@@ -1434,6 +1434,33 @@ void WebView::endPresentation()
         _webView->endPresentation();
 }
 
+void WebView::applyUIZoom()
+{
+    // A discarded view has no web view. Restoring the view applies the zoom.
+    if (!_webView)
+        return;
+
+    const int percent = Desktop::getUIZoomPercent();
+    if (percent > 0)
+    {
+        // QtWebEngine accepts zoom factors from 0.25 to 5.0.
+        _webView->setZoomFactor(std::clamp(percent / 100.0, 0.25, 5.0));
+    }
+    else
+    {
+        // No explicit zoom: reset to 1.0 and follow the system text scaling,
+        // which arrives asynchronously from the desktop portal.
+        _webView->setZoomFactor(1.0);
+        queryGnomeFontScalingUpdateZoom();
+    }
+}
+
+void WebView::applyUIZoomToAll()
+{
+    for (WebView* instance : s_instances)
+        instance->applyUIZoom();
+}
+
 void WebView::queryGnomeFontScalingUpdateZoom()
 {
     QDBusInterface portalInterface("org.freedesktop.portal.Desktop",
@@ -1473,6 +1500,11 @@ void WebView::queryGnomeFontScalingUpdateZoom()
                              QDBusVariant innerDbusVariant = innerVariant.value<QDBusVariant>();
                              innerVariant = innerDbusVariant.variant();
                          }
+
+                         // The user may have picked an explicit zoom while
+                         // this query was in flight; that choice wins.
+                         if (Desktop::getUIZoomPercent() > 0)
+                             return;
 
                          bool ok;
                          double factor = innerVariant.toDouble(&ok);

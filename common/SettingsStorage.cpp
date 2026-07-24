@@ -244,23 +244,65 @@ static Poco::Path preferencesPath()
     return path;
 }
 
-std::optional<bool> getDarkMode()
+// Parse preferences.json. Returns an empty object when the file is missing
+// or unreadable.
+static Poco::JSON::Object::Ptr readPreferences()
+{
+    Poco::JSON::Object::Ptr obj;
+    try
+    {
+        const Poco::Path path = preferencesPath();
+        if (Poco::File(path).exists())
+        {
+            std::ifstream in(path.toString(), std::ios::binary);
+            if (in.is_open())
+            {
+                std::ostringstream ss;
+                ss << in.rdbuf();
+                Poco::JSON::Parser parser;
+                obj = parser.parse(ss.str()).extract<Poco::JSON::Object::Ptr>();
+            }
+        }
+    }
+    catch (const std::exception&)
+    {
+        obj = nullptr;
+    }
+    if (!obj)
+        obj = new Poco::JSON::Object();
+    return obj;
+}
+
+// Write one key into preferences.json, preserving the other keys.
+static void writePreference(const std::string& key, const Poco::Dynamic::Var& value)
 {
     try
     {
         const Poco::Path path = preferencesPath();
-        if (!Poco::File(path).exists())
-            return std::nullopt;
+        Poco::JSON::Object::Ptr obj = readPreferences();
+        obj->set(key, value);
 
-        std::ifstream in(path.toString(), std::ios::binary);
-        if (!in.is_open())
-            return std::nullopt;
-        std::ostringstream ss;
-        ss << in.rdbuf();
+        Poco::File(path.parent()).createDirectories();
+        std::ofstream out(path.toString(), std::ios::trunc);
+        if (!out.is_open())
+        {
+            LOG_ERR("writePreference failed: could not open " << path.toString());
+            return;
+        }
+        obj->stringify(out);
+    }
+    catch (const std::exception& ex)
+    {
+        LOG_ERR("writePreference failed: " << ex.what());
+    }
+}
 
-        Poco::JSON::Parser parser;
-        const auto obj = parser.parse(ss.str()).extract<Poco::JSON::Object::Ptr>();
-        if (obj && obj->has("darkMode"))
+std::optional<bool> getDarkMode()
+{
+    try
+    {
+        const Poco::JSON::Object::Ptr obj = readPreferences();
+        if (obj->has("darkMode"))
             return obj->getValue<bool>("darkMode");
     }
     catch (const std::exception& ex)
@@ -272,45 +314,31 @@ std::optional<bool> getDarkMode()
 
 void setDarkMode(bool value)
 {
+    writePreference("darkMode", value);
+}
+
+int getUIZoomPercent()
+{
     try
     {
-        const Poco::Path path = preferencesPath();
-
-        // Merge into any existing preferences so other keys are preserved.
-        Poco::JSON::Object::Ptr obj;
-        if (Poco::File(path).exists())
+        const Poco::JSON::Object::Ptr obj = readPreferences();
+        if (obj->has("uiZoomPercent"))
         {
-            std::ifstream in(path.toString(), std::ios::binary);
-            std::ostringstream ss;
-            ss << in.rdbuf();
-            try
-            {
-                Poco::JSON::Parser parser;
-                obj = parser.parse(ss.str()).extract<Poco::JSON::Object::Ptr>();
-            }
-            catch (const std::exception&)
-            {
-                obj = nullptr;
-            }
+            const int percent = obj->getValue<int>("uiZoomPercent");
+            if (percent > 0)
+                return percent;
         }
-        if (!obj)
-            obj = new Poco::JSON::Object();
-
-        obj->set("darkMode", value);
-
-        Poco::File(path.parent()).createDirectories();
-        std::ofstream out(path.toString(), std::ios::trunc);
-        if (!out.is_open())
-        {
-            LOG_ERR("setDarkMode failed: could not open " << path.toString());
-            return;
-        }
-        obj->stringify(out);
     }
     catch (const std::exception& ex)
     {
-        LOG_ERR("setDarkMode failed: " << ex.what());
+        LOG_ERR("getUIZoomPercent failed: " << ex.what());
     }
+    return 0;
+}
+
+void setUIZoomPercent(int percent)
+{
+    writePreference("uiZoomPercent", percent);
 }
 
 } // namespace Desktop

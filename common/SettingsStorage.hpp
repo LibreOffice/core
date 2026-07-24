@@ -52,6 +52,11 @@ namespace Desktop
     std::optional<bool> getDarkMode();
     void setDarkMode(bool value);
 
+    // The zoom of the whole application user interface, as a percentage.
+    // Zero means no explicit zoom is stored and the system scaling applies.
+    int getUIZoomPercent();
+    void setUIZoomPercent(int percent);
+
     // Fetch the AI provider's model list (proxy for the desktop, which has no
     // server). payload is {"provider","apiKey","baseUrl"}; returns the provider's
     // JSON body or {"error":...}.

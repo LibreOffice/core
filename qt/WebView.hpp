@@ -255,6 +255,13 @@ public:
     bool isStarterScreen() const { return _docType == QStringLiteral("starter"); }
     bool isWelcome() const { return _isWelcome; }
 
+    /// Apply the stored user interface zoom to this window's web view. An
+    /// explicit zoom percentage becomes the web view's zoom factor; with no
+    /// explicit zoom the system text scaling is queried and applied instead.
+    void applyUIZoom();
+    /// Apply the stored user interface zoom to every open window.
+    static void applyUIZoomToAll();
+
 private:
     // query gnome font scaling factor and apply it to the web view
     void queryGnomeFontScalingUpdateZoom();

@@ -951,6 +951,28 @@ QVariant Bridge::cool(const QString& messageStr)
             tw->manager()->applyTheme(theme);
         return {};
     }
+    else if (tokens.equals(0, "SETUIZOOM"))
+    {
+        int percent = 0;
+        try
+        {
+            percent = std::stoi(tokens[1]);
+        }
+        catch (const std::exception&)
+        {
+            LOG_ERR("SETUIZOOM: invalid zoom percentage '" << tokens[1] << "'");
+            return {};
+        }
+        Desktop::setUIZoomPercent(percent);
+        // The zoom is a per-application preference, so every open window
+        // follows the new value at once.
+        WebView::applyUIZoomToAll();
+        return {};
+    }
+    else if (tokens.equals(0, "GETUIZOOM"))
+    {
+        return Desktop::getUIZoomPercent();
+    }
     else if (tokens.equals(0, "FETCHAIMODELS"))
     {
         return QString::fromStdString(Desktop::fetchAIModels(tokens.substrFromToken(1)));
