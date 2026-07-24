@@ -1,4 +1,4 @@
-/* global describe it cy require expect beforeEach */
+/* global describe it cy require expect beforeEach Cypress */
 
 var helper = require('../../common/helper');
 var mobileHelper = require('../../common/mobile_helper');
@@ -155,6 +155,13 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Changing slide properties.'
 	});
 
 	it('Remove slide fill.', function() {
+		//TODO: At least Chromium 150 crashes the renderer while rendering the slide
+		// background fill change below, same way as what is reported at
+		// <https://issues.chromium.org/issues/511985285> "Null-dereference READ in
+		// blink::ScrollAnchor::NotifyBeforeLayout ":
+		if (Cypress.browser.name === 'chromium' && Cypress.browser.majorVersion === '150')
+			this.skip();
+
 		// Wait for mobile wizard menu
 		cy.wait(500);
 
