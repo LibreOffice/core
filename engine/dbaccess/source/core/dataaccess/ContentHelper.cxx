@@ -73,7 +73,7 @@ OContentHelper::OContentHelper(const Reference< XComponentContext >& _xORB
 {
 }
 
-void SAL_CALL OContentHelper::disposing()
+void OContentHelper::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -84,11 +84,11 @@ void SAL_CALL OContentHelper::disposing()
     m_xParentContainer = nullptr;
 }
 
-OUString SAL_CALL OContentHelper::getImplementationName()
+OUString OContentHelper::getImplementationName()
     {
         return u"com.sun.star.comp.sdb.Content"_ustr;
     }
-bool SAL_CALL OContentHelper::supportsService(const OUString& _rServiceName)
+bool OContentHelper::supportsService(const OUString& _rServiceName)
     {
         const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -97,7 +97,7 @@ bool SAL_CALL OContentHelper::supportsService(const OUString& _rServiceName)
 
         return false;
     }
-cpo::uno::Sequence< OUString > SAL_CALL OContentHelper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > OContentHelper::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.Content"_ustr };
 }
@@ -109,7 +109,7 @@ cpo::uno::Sequence<sal_Int8> OContentHelper::getImplementationId()
 }
 
 // XContent
-Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  )
+Reference< XContentIdentifier > OContentHelper::getIdentifier(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     OUString aIdentifier( "private:" + impl_getHierarchicalName( true ) );
@@ -140,7 +140,7 @@ OUString OContentHelper::impl_getHierarchicalName( bool _includingRootContainer 
     return sHierarchicalName;
 }
 
-OUString SAL_CALL OContentHelper::getContentType()
+OUString OContentHelper::getContentType()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -152,14 +152,14 @@ OUString SAL_CALL OContentHelper::getContentType()
     return *m_pImpl->m_aProps.aContentType;
 }
 
-void SAL_CALL OContentHelper::addContentEventListener( const Reference< XContentEventListener >& _rxListener )
+void OContentHelper::addContentEventListener( const Reference< XContentEventListener >& _rxListener )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( _rxListener.is() )
         m_aContentListeners.addInterface(_rxListener);
 }
 
-void SAL_CALL OContentHelper::removeContentEventListener( const Reference< XContentEventListener >& _rxListener )
+void OContentHelper::removeContentEventListener( const Reference< XContentEventListener >& _rxListener )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (_rxListener.is())
@@ -167,14 +167,14 @@ void SAL_CALL OContentHelper::removeContentEventListener( const Reference< XCont
 }
 
 // XCommandProcessor
-sal_Int32 SAL_CALL OContentHelper::createCommandIdentifier(  )
+sal_Int32 OContentHelper::createCommandIdentifier(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     // Just increase counter on every call to generate an identifier.
     return ++m_nCommandId;
 }
 
-Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*CommandId*/, const Reference< XCommandEnvironment >& Environment )
+Any OContentHelper::execute( const Command& aCommand, sal_Int32 /*CommandId*/, const Reference< XCommandEnvironment >& Environment )
 {
     Any aRet;
     if ( aCommand.Name == "getPropertyValues" )
@@ -252,12 +252,12 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
     return aRet;
 }
 
-void SAL_CALL OContentHelper::abort( sal_Int32 /*CommandId*/ )
+void OContentHelper::abort( sal_Int32 /*CommandId*/ )
 {
 }
 
 // XPropertiesChangeNotifier
-void SAL_CALL OContentHelper::addPropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener )
+void OContentHelper::addPropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (!PropertyNames.hasElements())
@@ -273,7 +273,7 @@ void SAL_CALL OContentHelper::addPropertiesChangeListener( const Sequence< OUStr
     }
 }
 
-void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener )
+void OContentHelper::removePropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (!PropertyNames.hasElements())
@@ -290,18 +290,18 @@ void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< OU
 }
 
 // XPropertyContainer
-void SAL_CALL OContentHelper::addProperty( const OUString& /*Name*/, sal_Int16 /*Attributes*/, const Any& /*DefaultValue*/ )
+void OContentHelper::addProperty( const OUString& /*Name*/, sal_Int16 /*Attributes*/, const Any& /*DefaultValue*/ )
 {
     OSL_FAIL( "OContentHelper::addProperty: not implemented!" );
 }
 
-void SAL_CALL OContentHelper::removeProperty( const OUString& /*Name*/ )
+void OContentHelper::removeProperty( const OUString& /*Name*/ )
 {
     OSL_FAIL( "OContentHelper::removeProperty: not implemented!" );
 }
 
 // XInitialization
-void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments )
+void OContentHelper::initialize( const Sequence< Any >& _aArguments )
 {
     for (auto& arg : _aArguments)
     {
@@ -521,13 +521,13 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
     }
 }
 
-Reference< XInterface > SAL_CALL OContentHelper::getParent(  )
+Reference< XInterface > OContentHelper::getParent(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xParentContainer;
 }
 
-void SAL_CALL OContentHelper::setParent( const Reference< XInterface >& _xParent )
+void OContentHelper::setParent( const Reference< XInterface >& _xParent )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     m_xParentContainer = _xParent;
@@ -562,7 +562,7 @@ void OContentHelper::impl_rename_throw(const OUString& _sNewName,bool _bNotify )
     }
 }
 
-void SAL_CALL OContentHelper::rename( const OUString& newName )
+void OContentHelper::rename( const OUString& newName )
 {
 
     impl_rename_throw(newName);

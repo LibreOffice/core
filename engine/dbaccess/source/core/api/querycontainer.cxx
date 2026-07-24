@@ -136,11 +136,11 @@ void OQueryContainer::disposing()
 }
 
 // XServiceInfo
-OUString SAL_CALL OQueryContainer::getImplementationName()
+OUString OQueryContainer::getImplementationName()
     {
         return u"com.sun.star.sdb.dbaccess.OQueryContainer"_ustr;
     }
-bool SAL_CALL OQueryContainer::supportsService(const OUString& _rServiceName)
+bool OQueryContainer::supportsService(const OUString& _rServiceName)
     {
         const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -149,19 +149,19 @@ bool SAL_CALL OQueryContainer::supportsService(const OUString& _rServiceName)
 
         return false;
     }
-cpo::uno::Sequence< OUString > SAL_CALL OQueryContainer::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > OQueryContainer::getSupportedServiceNames()
 {
     return { SERVICE_SDBCX_CONTAINER, SERVICE_SDB_QUERIES };
 }
 
 // XDataDescriptorFactory
-Reference< XPropertySet > SAL_CALL OQueryContainer::createDataDescriptor(  )
+Reference< XPropertySet > OQueryContainer::createDataDescriptor(  )
 {
     return new OQueryDescriptor();
 }
 
 // XAppend
-void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet >& _rxDesc )
+void OQueryContainer::appendByDescriptor( const Reference< XPropertySet >& _rxDesc )
 {
     ResettableMutexGuard aGuard(m_aMutex);
     if ( !m_xCommandDefinitions.is() )
@@ -215,7 +215,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
 }
 
 // XDrop
-void SAL_CALL OQueryContainer::dropByName( const OUString& _rName )
+void OQueryContainer::dropByName( const OUString& _rName )
 {
     MutexGuard aGuard(m_aMutex);
     if ( !checkExistence(_rName) )
@@ -229,7 +229,7 @@ void SAL_CALL OQueryContainer::dropByName( const OUString& _rName )
     m_xCommandDefinitions->removeByName(_rName);
 }
 
-void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex )
+void OQueryContainer::dropByIndex( sal_Int32 _nIndex )
 {
     MutexGuard aGuard(m_aMutex);
     if ((_nIndex<0) || (_nIndex>getCount()))
@@ -246,7 +246,7 @@ void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex )
     dropByName(sName);
 }
 
-void SAL_CALL OQueryContainer::elementInserted( const css::container::ContainerEvent& _rEvent )
+void OQueryContainer::elementInserted( const css::container::ContainerEvent& _rEvent )
 {
     Reference< XContent > xNewElement;
     OUString sElementName;
@@ -268,7 +268,7 @@ void SAL_CALL OQueryContainer::elementInserted( const css::container::ContainerE
     insertByName(sElementName,Any(xNewElement));
 }
 
-void SAL_CALL OQueryContainer::elementRemoved( const css::container::ContainerEvent& _rEvent )
+void OQueryContainer::elementRemoved( const css::container::ContainerEvent& _rEvent )
 {
     OUString sAccessor;
     _rEvent.Accessor >>= sAccessor;
@@ -281,7 +281,7 @@ void SAL_CALL OQueryContainer::elementRemoved( const css::container::ContainerEv
     removeByName(sAccessor);
 }
 
-void SAL_CALL OQueryContainer::elementReplaced( const css::container::ContainerEvent& _rEvent )
+void OQueryContainer::elementReplaced( const css::container::ContainerEvent& _rEvent )
 {
     Reference< XContent > xNewElement;
     OUString sAccessor;
@@ -300,7 +300,7 @@ void SAL_CALL OQueryContainer::elementReplaced( const css::container::ContainerE
     replaceByName(sAccessor,Any(xNewElement));
 }
 
-Reference< XVeto > SAL_CALL OQueryContainer::approveInsertElement( const ContainerEvent& Event )
+Reference< XVeto > OQueryContainer::approveInsertElement( const ContainerEvent& Event )
 {
     OUString sName;
     OSL_VERIFY( Event.Accessor >>= sName );
@@ -318,17 +318,17 @@ Reference< XVeto > SAL_CALL OQueryContainer::approveInsertElement( const Contain
     return xReturn;
 }
 
-Reference< XVeto > SAL_CALL OQueryContainer::approveReplaceElement( const ContainerEvent& /*Event*/ )
+Reference< XVeto > OQueryContainer::approveReplaceElement( const ContainerEvent& /*Event*/ )
 {
     return nullptr;
 }
 
-Reference< XVeto > SAL_CALL OQueryContainer::approveRemoveElement( const ContainerEvent& /*Event*/ )
+Reference< XVeto > OQueryContainer::approveRemoveElement( const ContainerEvent& /*Event*/ )
 {
     return nullptr;
 }
 
-void SAL_CALL OQueryContainer::disposing( const css::lang::EventObject& _rSource )
+void OQueryContainer::disposing( const css::lang::EventObject& _rSource )
 {
     if (_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinitions, UNO_QUERY).get())
     {   // our "master container" (with the command definitions) is being disposed
@@ -410,19 +410,19 @@ bool OQueryContainer::checkExistence(const OUString& _rName)
     return bRet;
 }
 
-bool SAL_CALL OQueryContainer::hasElements( )
+bool OQueryContainer::hasElements( )
 {
     MutexGuard aGuard(m_aMutex);
     return m_xCommandDefinitions->hasElements();
 }
 
-sal_Int32 SAL_CALL OQueryContainer::getCount(  )
+sal_Int32 OQueryContainer::getCount(  )
 {
     MutexGuard aGuard(m_aMutex);
     return Reference<XIndexAccess>(m_xCommandDefinitions,UNO_QUERY_THROW)->getCount();
 }
 
-Sequence< OUString > SAL_CALL OQueryContainer::getElementNames(  )
+Sequence< OUString > OQueryContainer::getElementNames(  )
 {
     MutexGuard aGuard(m_aMutex);
 

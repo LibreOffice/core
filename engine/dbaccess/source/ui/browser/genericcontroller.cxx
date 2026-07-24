@@ -170,7 +170,7 @@ void OGenericUnoController::impl_initialize(const ::comphelper::NamedValueCollec
 {
 }
 
-void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArguments )
+void OGenericUnoController::initialize( const Sequence< Any >& aArguments )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -224,12 +224,12 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     }
 }
 
-void SAL_CALL OGenericUnoController::acquire(  ) noexcept
+void OGenericUnoController::acquire(  ) noexcept
 {
     OGenericUnoController_Base::acquire();
 }
 
-void SAL_CALL OGenericUnoController::release(  ) noexcept
+void OGenericUnoController::release(  ) noexcept
 {
     OGenericUnoController_Base::release();
 }
@@ -268,23 +268,23 @@ void OGenericUnoController::modified(const EventObject& aEvent)
     InvalidateFeature(ID_BROWSER_UNDO);
 }
 
-Reference< XWindow > SAL_CALL OGenericUnoController::getComponentWindow()
+Reference< XWindow > OGenericUnoController::getComponentWindow()
 {
     SolarMutexGuard g;
     return VCLUnoHelper::GetInterface( getView() );
 }
 
-Reference<XSidebarProvider> SAL_CALL OGenericUnoController::getSidebar()
+Reference<XSidebarProvider> OGenericUnoController::getSidebar()
 {
         return nullptr;
 }
 
-OUString SAL_CALL OGenericUnoController::getViewControllerName()
+OUString OGenericUnoController::getViewControllerName()
 {
     return u"Default"_ustr;
 }
 
-Sequence< PropertyValue > SAL_CALL OGenericUnoController::getCreationArguments()
+Sequence< PropertyValue > OGenericUnoController::getCreationArguments()
 {
     // currently we do not support any creation args, so anything passed to XModel2::createViewController would be
     // lost, so we can equally return an empty sequence here
@@ -649,13 +649,13 @@ void OGenericUnoController::disposing()
     m_xUrlTransformer.clear();
 }
 
-void SAL_CALL OGenericUnoController::addEventListener( const Reference< XEventListener >& xListener )
+void OGenericUnoController::addEventListener( const Reference< XEventListener >& xListener )
 {
     // disambiguate
     OGenericUnoController_Base::WeakComponentImplHelperBase::addEventListener( xListener );
 }
 
-void SAL_CALL OGenericUnoController::removeEventListener( const Reference< XEventListener >& xListener )
+void OGenericUnoController::removeEventListener( const Reference< XEventListener >& xListener )
 {
     // disambiguate
     OGenericUnoController_Base::WeakComponentImplHelperBase::removeEventListener( xListener );
@@ -769,7 +769,7 @@ bool OGenericUnoController::isUserDefinedFeature( const OUString& _rFeatureURL )
     return ( pos != m_aSupportedFeatures.end() ) && isUserDefinedFeature( pos->second.nFeatureId );
 }
 
-bool SAL_CALL OGenericUnoController::supportsService(const OUString& ServiceName)
+bool OGenericUnoController::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -860,27 +860,27 @@ IMPL_LINK_NOARG(OGenericUnoController, OnAsyncCloseTask, void*, void)
     }
 }
 
-Any SAL_CALL OGenericUnoController::getViewData()
+Any OGenericUnoController::getViewData()
 {
     return Any();
 }
 
-void SAL_CALL OGenericUnoController::restoreViewData(const Any& /*Data*/)
+void OGenericUnoController::restoreViewData(const Any& /*Data*/)
 {
 }
 
-Reference< XModel > SAL_CALL OGenericUnoController::getModel()
+Reference< XModel > OGenericUnoController::getModel()
 {
     return Reference< XModel >();
 }
 
-Reference< XFrame > SAL_CALL OGenericUnoController::getFrame()
+Reference< XFrame > OGenericUnoController::getFrame()
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_aCurrentFrame.getFrame();
 }
 
-bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > & /*xModel*/)
+bool OGenericUnoController::attachModel(const Reference< XModel > & /*xModel*/)
 {
     SAL_WARN("dbaccess.ui", "OGenericUnoController::attachModel: not supported!" );
     return false;
@@ -915,7 +915,7 @@ Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw(bool bCreat
 }
 
 // XTitle
-OUString SAL_CALL OGenericUnoController::getTitle()
+OUString OGenericUnoController::getTitle()
 {
     ::osl::MutexGuard aGuard( getMutex() );
     if ( m_bExternalTitle )
@@ -924,7 +924,7 @@ OUString SAL_CALL OGenericUnoController::getTitle()
 }
 
 // XTitle
-void SAL_CALL OGenericUnoController::setTitle(const OUString& sTitle)
+void OGenericUnoController::setTitle(const OUString& sTitle)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -933,14 +933,14 @@ void SAL_CALL OGenericUnoController::setTitle(const OUString& sTitle)
 }
 
 // XTitleChangeBroadcaster
-void SAL_CALL OGenericUnoController::addTitleChangeListener(const Reference< XTitleChangeListener >& xListener)
+void OGenericUnoController::addTitleChangeListener(const Reference< XTitleChangeListener >& xListener)
 {
     Reference< XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper_throw(), UNO_QUERY);
     if (xBroadcaster.is ())
         xBroadcaster->addTitleChangeListener (xListener);
 }
 
-void SAL_CALL OGenericUnoController::removeTitleChangeListener(const Reference< XTitleChangeListener >& xListener)
+void OGenericUnoController::removeTitleChangeListener(const Reference< XTitleChangeListener >& xListener)
 {
     Reference< XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper_throw(false), UNO_QUERY);
     if (xBroadcaster.is ())
@@ -948,24 +948,24 @@ void SAL_CALL OGenericUnoController::removeTitleChangeListener(const Reference< 
 }
 
 // XUserInputInterception
-void SAL_CALL OGenericUnoController::addKeyHandler( const Reference< XKeyHandler >& _rxHandler )
+void OGenericUnoController::addKeyHandler( const Reference< XKeyHandler >& _rxHandler )
 {
     if ( _rxHandler.is() )
         m_aUserInputInterception.addKeyHandler( _rxHandler );
 }
 
-void SAL_CALL OGenericUnoController::removeKeyHandler( const Reference< XKeyHandler >& _rxHandler )
+void OGenericUnoController::removeKeyHandler( const Reference< XKeyHandler >& _rxHandler )
 {
     m_aUserInputInterception.removeKeyHandler( _rxHandler );
 }
 
-void SAL_CALL OGenericUnoController::addMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler )
+void OGenericUnoController::addMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler )
 {
     if ( _rxHandler.is() )
         m_aUserInputInterception.addMouseClickHandler( _rxHandler );
 }
 
-void SAL_CALL OGenericUnoController::removeMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler )
+void OGenericUnoController::removeMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler )
 {
     m_aUserInputInterception.removeMouseClickHandler( _rxHandler );
 }
@@ -985,7 +985,7 @@ bool OGenericUnoController::interceptUserInput( const NotifyEvent& _rEvent )
     return m_aUserInputInterception.handleNotifyEvent( _rEvent );
 }
 
-Sequence< ::sal_Int16 > SAL_CALL OGenericUnoController::getSupportedCommandGroups()
+Sequence< ::sal_Int16 > OGenericUnoController::getSupportedCommandGroups()
 {
     CommandHashMap aCmdHashMap;
     for (auto const& supportedFeature : m_aSupportedFeatures)
@@ -995,7 +995,7 @@ Sequence< ::sal_Int16 > SAL_CALL OGenericUnoController::getSupportedCommandGroup
     return comphelper::mapKeysToSequence( aCmdHashMap );
 }
 
-Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableDispatchInformation( ::sal_Int16 CommandGroup )
+Sequence< DispatchInformation > OGenericUnoController::getConfigurableDispatchInformation( ::sal_Int16 CommandGroup )
 {
     std::vector< DispatchInformation > aInformationVector;
     for (auto const& supportedFeature : m_aSupportedFeatures)
@@ -1020,7 +1020,7 @@ void OGenericUnoController::fillSupportedFeatures()
 #endif
 }
 
-void SAL_CALL OGenericUnoController::dispose()
+void OGenericUnoController::dispose()
 {
     SolarMutexGuard aSolarGuard;
     OGenericUnoController_Base::dispose();

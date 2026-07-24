@@ -124,11 +124,11 @@ cpo::uno::Sequence< cpo::uno::Type > ODocumentContainer::getTypes()
         ODocumentContainer_Base::getTypes( )
     );
 }
-OUString SAL_CALL ODocumentContainer::getImplementationName()
+OUString ODocumentContainer::getImplementationName()
     {
         return u"com.sun.star.comp.dba.ODocumentContainer"_ustr;
     };
-bool SAL_CALL ODocumentContainer::supportsService(const OUString& _rServiceName)
+bool ODocumentContainer::supportsService(const OUString& _rServiceName)
     {
         const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -137,7 +137,7 @@ bool SAL_CALL ODocumentContainer::supportsService(const OUString& _rServiceName)
 
         return false;
     };
-css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ODocumentContainer::getPropertySetInfo()
+css::uno::Reference< css::beans::XPropertySetInfo >  ODocumentContainer::getPropertySetInfo()
 {
     Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -154,7 +154,7 @@ css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ODocumentContainer
 }
 
 
-Sequence< OUString > SAL_CALL ODocumentContainer::getSupportedServiceNames(  )
+Sequence< OUString > ODocumentContainer::getSupportedServiceNames(  )
 {
     return { m_bFormsContainer ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION };
 }
@@ -174,7 +174,7 @@ Reference< XContent > ODocumentContainer::createObject( const OUString& _rName)
     return new ODocumentDefinition( *this, m_aContext, aFind->second, m_bFormsContainer );
 }
 
-Reference< XInterface > SAL_CALL ODocumentContainer::createInstance( const OUString& aServiceSpecifier )
+Reference< XInterface > ODocumentContainer::createInstance( const OUString& aServiceSpecifier )
 {
     return createInstanceWithArguments( aServiceSpecifier, Sequence< Any >() );
 }
@@ -192,7 +192,7 @@ namespace
     }
 }
 
-Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& _aArguments )
+Reference< XInterface > ODocumentContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& _aArguments )
 {
     Reference< XInterface > xRet;
     Reference< XContent > xContent;
@@ -396,7 +396,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
     return xRet;
 }
 
-Sequence< OUString > SAL_CALL ODocumentContainer::getAvailableServiceNames(  )
+Sequence< OUString > ODocumentContainer::getAvailableServiceNames(  )
 {
     return
     {
@@ -406,7 +406,7 @@ Sequence< OUString > SAL_CALL ODocumentContainer::getAvailableServiceNames(  )
     };
 }
 
-Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment )
+Any ODocumentContainer::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment )
 {
     Any aRet;
     if ( aCommand.Name == "open" )
@@ -515,7 +515,7 @@ namespace
     }
 }
 
-Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const OUString& _sURL
+Reference< XComponent > ODocumentContainer::loadComponentFromURL( const OUString& _sURL
                                                                        , const OUString& /*TargetFrameName*/
                                                                        , sal_Int32 /*SearchFlags*/
                                                                        , const Sequence< PropertyValue >& Arguments )
@@ -564,7 +564,7 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
     return xComp;
 }
 
-Any SAL_CALL ODocumentContainer::getByHierarchicalName( const OUString& _sName )
+Any ODocumentContainer::getByHierarchicalName( const OUString& _sName )
 {
     MutexGuard aGuard(m_aMutex);
     Any aContent;
@@ -575,7 +575,7 @@ Any SAL_CALL ODocumentContainer::getByHierarchicalName( const OUString& _sName )
     throw NoSuchElementException(_sName,*this);
 }
 
-bool SAL_CALL ODocumentContainer::hasByHierarchicalName( const OUString& _sName )
+bool ODocumentContainer::hasByHierarchicalName( const OUString& _sName )
 {
     MutexGuard aGuard(m_aMutex);
     Any aContent;
@@ -585,7 +585,7 @@ bool SAL_CALL ODocumentContainer::hasByHierarchicalName( const OUString& _sName 
 }
 
 // XHierarchicalNameContainer
-void SAL_CALL ODocumentContainer::insertByHierarchicalName( const OUString& _sName, const Any& _aElement )
+void ODocumentContainer::insertByHierarchicalName( const OUString& _sName, const Any& _aElement )
 {
     Reference< XContent > xContent(_aElement,UNO_QUERY);
     if ( !xContent.is() )
@@ -610,7 +610,7 @@ void SAL_CALL ODocumentContainer::insertByHierarchicalName( const OUString& _sNa
     xNameContainer->insertByName(sName,_aElement);
 }
 
-void SAL_CALL ODocumentContainer::removeByHierarchicalName( const OUString& _sName )
+void ODocumentContainer::removeByHierarchicalName( const OUString& _sName )
 {
     if ( _sName.isEmpty() )
         throw NoSuchElementException(_sName,*this);
@@ -626,7 +626,7 @@ void SAL_CALL ODocumentContainer::removeByHierarchicalName( const OUString& _sNa
 }
 
 // XHierarchicalNameReplace
-void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const OUString& _sName, const Any& _aElement )
+void ODocumentContainer::replaceByHierarchicalName( const OUString& _sName, const Any& _aElement )
 {
     Reference< XContent > xContent(_aElement,UNO_QUERY);
     if ( !xContent.is() )
@@ -642,13 +642,13 @@ void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const OUString& _sN
     xNameContainer->replaceByName(sName,_aElement);
 }
 
-OUString SAL_CALL ODocumentContainer::getHierarchicalName()
+OUString ODocumentContainer::getHierarchicalName()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return impl_getHierarchicalName( false );
 }
 
-OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const OUString& i_rRelativeName )
+OUString ODocumentContainer::composeHierarchicalName( const OUString& i_rRelativeName )
 {
     OUString aBuffer = getHierarchicalName() + "/" + i_rRelativeName;
     return aBuffer;
@@ -672,7 +672,7 @@ void ODocumentContainer::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any
     _rDefault.clear();
 }
 
-void SAL_CALL ODocumentContainer::commit(  )
+void ODocumentContainer::commit(  )
 {
     MutexGuard aGuard(m_aMutex);
     for (auto const& elem : m_aDocumentMap)
@@ -686,7 +686,7 @@ void SAL_CALL ODocumentContainer::commit(  )
         xTrans->commit();
 }
 
-void SAL_CALL ODocumentContainer::revert(  )
+void ODocumentContainer::revert(  )
 {
     MutexGuard aGuard(m_aMutex);
     for (auto const& elem : m_aDocumentMap)
@@ -707,7 +707,7 @@ Reference< XStorage> ODocumentContainer::getContainerStorage() const
         :   Reference< XStorage>();
 }
 
-void SAL_CALL ODocumentContainer::removeByName( const OUString& _rName )
+void ODocumentContainer::removeByName( const OUString& _rName )
 {
     ResettableMutexGuard aGuard(m_aMutex);
 
@@ -733,7 +733,7 @@ void SAL_CALL ODocumentContainer::removeByName( const OUString& _rName )
     notifyByName( aGuard, _rName, nullptr, nullptr, E_REMOVED, ContainerListemers );
 }
 
-void SAL_CALL ODocumentContainer::rename( const OUString& newName )
+void ODocumentContainer::rename( const OUString& newName )
 {
     try
     {

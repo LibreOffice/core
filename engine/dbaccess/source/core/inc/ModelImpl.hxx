@@ -135,7 +135,7 @@ protected:
 public:
     explicit OSharedConnectionManager(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
-    void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    void disposing( const css::lang::EventObject& Source ) override;
     css::uno::Reference< css::sdbc::XConnection > getConnection(   const OUString& url,
                                             const OUString& user,
                                             const OUString& password,

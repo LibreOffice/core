@@ -101,7 +101,7 @@ ORowSetDataColumn::~ORowSetDataColumn()
     return *static_cast< ::comphelper::OPropertyArrayUsageHelper< ORowSetDataColumn >* >(this)->getArrayHelper();
 }
 
-void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
+void ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     if ( PROPERTY_ID_VALUE == nHandle )
     {
@@ -123,7 +123,7 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
         ODataColumn::getFastPropertyValue( rValue, nHandle );
 }
 
-void SAL_CALL ORowSetDataColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue )
+void ORowSetDataColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue )
 {
     switch( nHandle )
     {
@@ -143,7 +143,7 @@ void SAL_CALL ORowSetDataColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHan
     }
 }
 
-bool SAL_CALL ORowSetDataColumn::convertFastPropertyValue( Any & rConvertedValue,
+bool ORowSetDataColumn::convertFastPropertyValue( Any & rConvertedValue,
                                                             Any & rOldValue,
                                                             sal_Int32 nHandle,
                                                             const Any& rValue )

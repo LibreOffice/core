@@ -55,17 +55,17 @@ namespace sdbtools
         );
 
         // XTableName
-        virtual OUString SAL_CALL getCatalogName() override;
-        virtual void SAL_CALL setCatalogName( const OUString& _catalogname ) override;
-        virtual OUString SAL_CALL getSchemaName() override;
-        virtual void SAL_CALL setSchemaName( const OUString& _schemaname ) override;
-        virtual OUString SAL_CALL getTableName() override;
-        virtual void SAL_CALL setTableName( const OUString& _tablename ) override;
-        virtual OUString SAL_CALL getNameForSelect() override;
-        virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getTable() override;
-        virtual void SAL_CALL setTable( const css::uno::Reference< css::beans::XPropertySet >& _table ) override;
-        virtual OUString SAL_CALL getComposedName( ::sal_Int32 Type, bool Quote ) override;
-        virtual void SAL_CALL setComposedName( const OUString& ComposedName, ::sal_Int32 Type ) override;
+        virtual OUString getCatalogName() override;
+        virtual void setCatalogName( const OUString& _catalogname ) override;
+        virtual OUString getSchemaName() override;
+        virtual void setSchemaName( const OUString& _schemaname ) override;
+        virtual OUString getTableName() override;
+        virtual void setTableName( const OUString& _tablename ) override;
+        virtual OUString getNameForSelect() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > getTable() override;
+        virtual void setTable( const css::uno::Reference< css::beans::XPropertySet >& _table ) override;
+        virtual OUString getComposedName( ::sal_Int32 Type, bool Quote ) override;
+        virtual void setComposedName( const OUString& ComposedName, ::sal_Int32 Type ) override;
 
     protected:
         virtual ~TableName() override;

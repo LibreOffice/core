@@ -55,25 +55,25 @@ namespace dbaui
 
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS(SbaXGridControl, FmXGridControl)
-        virtual cpo::uno::Any  SAL_CALL queryAggregation(const cpo::uno::Type& _rType) override;
+        virtual cpo::uno::Any  queryAggregation(const cpo::uno::Type& _rType) override;
 
         // XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
         // css::lang::XServiceInfo
-        OUString SAL_CALL getImplementationName() override;
-        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        OUString getImplementationName() override;
+        virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
         // css::frame::XDispatch
-        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
-        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
-        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+        virtual void dispatch(const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
+        virtual void addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+        virtual void removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
         // css::lang::XComponent
-        virtual void SAL_CALL dispose() override;
+        virtual void dispose() override;
 
-        virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit > & rToolkit, const css::uno::Reference< css::awt::XWindowPeer > & rParentPeer) override;
+        virtual void createPeer(const css::uno::Reference< css::awt::XToolkit > & rToolkit, const css::uno::Reference< css::awt::XWindowPeer > & rParentPeer) override;
 
     protected:
         virtual rtl::Reference<FmXGridPeer> imp_CreatePeer(vcl::Window* pParent) override;
@@ -93,22 +93,22 @@ namespace dbaui
         virtual ~SbaXGridPeer() override;
 
         // UNO
-        virtual void SAL_CALL  acquire() noexcept override { FmXGridPeer::acquire(); }
-        virtual void SAL_CALL release() noexcept override { FmXGridPeer::release(); }
-        virtual cpo::uno::Any  SAL_CALL queryInterface(const cpo::uno::Type& _rType) override;
+        virtual void  acquire() noexcept override { FmXGridPeer::acquire(); }
+        virtual void release() noexcept override { FmXGridPeer::release(); }
+        virtual cpo::uno::Any  queryInterface(const cpo::uno::Type& _rType) override;
 
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
         // css::frame::XDispatch
-        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
-        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
-        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+        virtual void dispatch(const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
+        virtual void addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+        virtual void removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
         // css::frame::XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
+        virtual css::uno::Reference< css::frame::XDispatch >  queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
 
         // css::lang::XComponent
-        virtual void SAL_CALL dispose() override;
+        virtual void dispose() override;
 
     private:
         virtual VclPtr<FmGridControl>  imp_CreateControl(vcl::Window* pParent, WinBits nStyle) override;

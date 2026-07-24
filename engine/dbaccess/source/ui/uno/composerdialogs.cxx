@@ -78,7 +78,7 @@ using namespace cpo::uno;
         return cpo::uno::Sequence<sal_Int8>();
     }
 
-    css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ComposerDialog::getPropertySetInfo()
+    css::uno::Reference< css::beans::XPropertySetInfo >  ComposerDialog::getPropertySetInfo()
     {
         Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
@@ -149,11 +149,11 @@ using namespace cpo::uno;
     {
     }
 
-    OUString SAL_CALL RowsetFilterDialog::getImplementationName()
+    OUString RowsetFilterDialog::getImplementationName()
     {
         return u"com.sun.star.uno.comp.sdb.RowsetFilterDialog"_ustr;
     }
-    bool SAL_CALL RowsetFilterDialog::supportsService(const OUString& _rServiceName)
+    bool RowsetFilterDialog::supportsService(const OUString& _rServiceName)
     {
         const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -162,7 +162,7 @@ using namespace cpo::uno;
 
         return false;
     }
-    cpo::uno::Sequence< OUString > SAL_CALL RowsetFilterDialog::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > RowsetFilterDialog::getSupportedServiceNames()
     {
         return { u"com.sun.star.sdb.FilterDialog"_ustr };
     }
@@ -172,7 +172,7 @@ using namespace cpo::uno;
         return std::make_unique<DlgFilterCrit>(_pParent, m_aContext, _rxConnection, m_xComposer, _rxColumns);
     }
 
-    void SAL_CALL RowsetFilterDialog::initialize( const Sequence< Any >& aArguments )
+    void RowsetFilterDialog::initialize( const Sequence< Any >& aArguments )
     {
         if( aArguments.getLength() == 3 )
         {
@@ -205,11 +205,11 @@ using namespace cpo::uno;
     {
     }
 
-    OUString SAL_CALL RowsetOrderDialog::getImplementationName()
+    OUString RowsetOrderDialog::getImplementationName()
     {
         return u"com.sun.star.uno.comp.sdb.RowsetOrderDialog"_ustr;
     }
-    bool SAL_CALL RowsetOrderDialog::supportsService(const OUString& _rServiceName)
+    bool RowsetOrderDialog::supportsService(const OUString& _rServiceName)
     {
         const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -218,7 +218,7 @@ using namespace cpo::uno;
 
         return false;
     }
-    cpo::uno::Sequence< OUString > SAL_CALL RowsetOrderDialog::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > RowsetOrderDialog::getSupportedServiceNames()
     {
         return { u"com.sun.star.sdb.OrderDialog"_ustr };
     }
@@ -228,7 +228,7 @@ using namespace cpo::uno;
         return std::make_unique<DlgOrderCrit>(pParent, rxConnection, m_xComposer, rxColumns);
     }
 
-    void SAL_CALL RowsetOrderDialog::initialize( const Sequence< Any >& aArguments )
+    void RowsetOrderDialog::initialize( const Sequence< Any >& aArguments )
     {
         if (aArguments.getLength() == 2 || aArguments.getLength() == 3)
         {

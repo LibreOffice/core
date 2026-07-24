@@ -72,8 +72,8 @@ namespace dbaui
         */
         virtual bool interceptUserInput( const NotifyEvent& _rEvent ) = 0;
 
-        virtual void SAL_CALL acquire(  ) noexcept = 0;
-        virtual void SAL_CALL release(  ) noexcept = 0;
+        virtual void acquire(  ) noexcept = 0;
+        virtual void release(  ) noexcept = 0;
 
     protected:
         ~IController() {}

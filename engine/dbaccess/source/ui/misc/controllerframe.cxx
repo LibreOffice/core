@@ -77,16 +77,16 @@ namespace dbaui
         virtual ~FrameWindowActivationListener() override;
 
         // XTopWindowListener
-        virtual void SAL_CALL windowOpened( const css::lang::EventObject& e ) override;
-        virtual void SAL_CALL windowClosing( const css::lang::EventObject& e ) override;
-        virtual void SAL_CALL windowClosed( const css::lang::EventObject& e ) override;
-        virtual void SAL_CALL windowMinimized( const css::lang::EventObject& e ) override;
-        virtual void SAL_CALL windowNormalized( const css::lang::EventObject& e ) override;
-        virtual void SAL_CALL windowActivated( const css::lang::EventObject& e ) override;
-        virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& e ) override;
+        virtual void windowOpened( const css::lang::EventObject& e ) override;
+        virtual void windowClosing( const css::lang::EventObject& e ) override;
+        virtual void windowClosed( const css::lang::EventObject& e ) override;
+        virtual void windowMinimized( const css::lang::EventObject& e ) override;
+        virtual void windowNormalized( const css::lang::EventObject& e ) override;
+        virtual void windowActivated( const css::lang::EventObject& e ) override;
+        virtual void windowDeactivated( const css::lang::EventObject& e ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
     private:
         void impl_checkDisposed_throw() const;
@@ -253,7 +253,7 @@ namespace dbaui
 
         try
         {
-            void ( SAL_CALL XTopWindow::*pListenerAction )( const Reference< XTopWindowListener >& ) =
+            void ( XTopWindow::*pListenerAction )( const Reference< XTopWindowListener >& ) =
                 _bRegister ? &XTopWindow::addTopWindowListener : &XTopWindow::removeTopWindowListener;
 
             const Reference< XWindow > xContainerWindow( m_pData->m_xFrame->getContainerWindow(), UNO_SET_THROW );
@@ -281,44 +281,44 @@ namespace dbaui
             throw DisposedException( OUString(), *const_cast< FrameWindowActivationListener* >( this ) );
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowOpened( const EventObject& /*_rEvent*/ )
+    void FrameWindowActivationListener::windowOpened( const EventObject& /*_rEvent*/ )
     {
         // not interested in
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowClosing( const EventObject& /*_rEvent*/ )
+    void FrameWindowActivationListener::windowClosing( const EventObject& /*_rEvent*/ )
     {
         // not interested in
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowClosed( const EventObject& /*_rEvent*/ )
+    void FrameWindowActivationListener::windowClosed( const EventObject& /*_rEvent*/ )
     {
         // not interested in
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowMinimized( const EventObject& /*_rEvent*/ )
+    void FrameWindowActivationListener::windowMinimized( const EventObject& /*_rEvent*/ )
     {
         // not interested in
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowNormalized( const EventObject& /*_rEvent*/ )
+    void FrameWindowActivationListener::windowNormalized( const EventObject& /*_rEvent*/ )
     {
         // not interested in
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowActivated( const EventObject& /*_rEvent*/ )
+    void FrameWindowActivationListener::windowActivated( const EventObject& /*_rEvent*/ )
     {
         impl_checkDisposed_throw();
         lcl_updateActive_nothrow( *m_pData, true );
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowDeactivated( const EventObject& /*_rEvent*/ )
+    void FrameWindowActivationListener::windowDeactivated( const EventObject& /*_rEvent*/ )
     {
         impl_checkDisposed_throw();
         lcl_updateActive_nothrow( *m_pData, false );
     }
 
-    void SAL_CALL FrameWindowActivationListener::disposing( const EventObject& /*_rEvent*/ )
+    void FrameWindowActivationListener::disposing( const EventObject& /*_rEvent*/ )
     {
         dispose();
     }

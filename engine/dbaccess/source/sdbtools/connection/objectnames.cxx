@@ -355,7 +355,7 @@ namespace sdbtools
     {
     }
 
-    OUString SAL_CALL ObjectNames::suggestName( ::sal_Int32 CommandType, const OUString& BaseName )
+    OUString ObjectNames::suggestName( ::sal_Int32 CommandType, const OUString& BaseName )
     {
         EntryGuard aGuard( *this );
 
@@ -384,14 +384,14 @@ namespace sdbtools
         return sName;
     }
 
-    OUString SAL_CALL ObjectNames::convertToSQLName( const OUString& Name )
+    OUString ObjectNames::convertToSQLName( const OUString& Name )
     {
         EntryGuard aGuard( *this );
         Reference< XDatabaseMetaData > xMeta( getConnection()->getMetaData(), css::uno::UNO_SET_THROW );
         return ::dbtools::convertName2SQLName( Name, xMeta->getExtraNameCharacters() );
     }
 
-    bool SAL_CALL ObjectNames::isNameUsed( ::sal_Int32 CommandType, const OUString& Name )
+    bool ObjectNames::isNameUsed( ::sal_Int32 CommandType, const OUString& Name )
     {
         EntryGuard aGuard( *this );
 
@@ -399,7 +399,7 @@ namespace sdbtools
         return !pNameCheck->validateName( Name );
     }
 
-    bool SAL_CALL ObjectNames::isNameValid( ::sal_Int32 CommandType, const OUString& Name )
+    bool ObjectNames::isNameValid( ::sal_Int32 CommandType, const OUString& Name )
     {
         EntryGuard aGuard( *this );
 
@@ -407,7 +407,7 @@ namespace sdbtools
         return pNameCheck->validateName( Name );
     }
 
-    void SAL_CALL ObjectNames::checkNameForCreate( ::sal_Int32 CommandType, const OUString& Name )
+    void ObjectNames::checkNameForCreate( ::sal_Int32 CommandType, const OUString& Name )
     {
         EntryGuard aGuard( *this );
 

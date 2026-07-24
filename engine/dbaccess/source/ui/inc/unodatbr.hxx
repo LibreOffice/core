@@ -131,56 +131,56 @@ namespace dbaui
         // late construction
         virtual bool Construct(vcl::Window* pParent) override;
         // XInterface
-        virtual cpo::uno::Any  SAL_CALL queryInterface(const cpo::uno::Type& _rType) override;
+        virtual cpo::uno::Any  queryInterface(const cpo::uno::Type& _rType) override;
 
         // XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
         // css::beans::XPropertyChangeListener
-        virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
+        virtual void propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 
         // css::frame::XController
-        virtual bool SAL_CALL suspend(bool bSuspend) override;
-        virtual void SAL_CALL attachFrame(const css::uno::Reference< css::frame::XFrame > & xFrame) override;
+        virtual bool suspend(bool bSuspend) override;
+        virtual void attachFrame(const css::uno::Reference< css::frame::XFrame > & xFrame) override;
 
         // css::lang::XComponent
-        virtual void        SAL_CALL disposing() override;
+        virtual void        disposing() override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+        virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         // XSelectionSupplier
-        virtual bool SAL_CALL select( const cpo::uno::Any& aSelection ) override;
-        virtual cpo::uno::Any SAL_CALL getSelection(  ) override;
-        virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-        virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+        virtual bool select( const cpo::uno::Any& aSelection ) override;
+        virtual cpo::uno::Any getSelection(  ) override;
+        virtual void addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+        virtual void removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
         // XContainerListener
-        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
-        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
-        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
+        virtual void elementInserted( const css::container::ContainerEvent& Event ) override;
+        virtual void elementRemoved( const css::container::ContainerEvent& Event ) override;
+        virtual void elementReplaced( const css::container::ContainerEvent& Event ) override;
         // css::frame::XFrameActionListener
-        virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
+        virtual void frameAction(const css::frame::FrameActionEvent& aEvent) override;
 
         // XScriptInvocationContext
-        virtual css::uno::Reference< css::document::XEmbeddedScripts > SAL_CALL getScriptContainer() override;
+        virtual css::uno::Reference< css::document::XEmbeddedScripts > getScriptContainer() override;
 
         // XContextMenuInterception
-        virtual void SAL_CALL registerContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& Interceptor ) override;
-        virtual void SAL_CALL releaseContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& Interceptor ) override;
+        virtual void registerContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& Interceptor ) override;
+        virtual void releaseContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& Interceptor ) override;
 
         // XDatabaseRegistrationsListener
-        virtual void SAL_CALL registeredDatabaseLocation( const css::sdb::DatabaseRegistrationEvent& Event ) override;
-        virtual void SAL_CALL revokedDatabaseLocation( const css::sdb::DatabaseRegistrationEvent& Event ) override;
-        virtual void SAL_CALL changedDatabaseLocation( const css::sdb::DatabaseRegistrationEvent& Event ) override;
+        virtual void registeredDatabaseLocation( const css::sdb::DatabaseRegistrationEvent& Event ) override;
+        virtual void revokedDatabaseLocation( const css::sdb::DatabaseRegistrationEvent& Event ) override;
+        virtual void changedDatabaseLocation( const css::sdb::DatabaseRegistrationEvent& Event ) override;
 
     private:
         // SbaXDataBrowserController overridable

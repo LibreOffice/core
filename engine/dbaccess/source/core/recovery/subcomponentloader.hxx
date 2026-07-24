@@ -49,13 +49,13 @@ namespace dbaccess
         );
 
         // XWindowListener
-        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e ) override;
-        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& e ) override;
-        virtual void SAL_CALL windowShown( const css::lang::EventObject& e ) override;
-        virtual void SAL_CALL windowHidden( const css::lang::EventObject& e ) override;
+        virtual void windowResized( const css::awt::WindowEvent& e ) override;
+        virtual void windowMoved( const css::awt::WindowEvent& e ) override;
+        virtual void windowShown( const css::lang::EventObject& e ) override;
+        virtual void windowHidden( const css::lang::EventObject& e ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
     protected:
         virtual ~SubComponentLoader() override;

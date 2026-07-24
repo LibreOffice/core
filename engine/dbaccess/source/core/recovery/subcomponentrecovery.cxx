@@ -258,14 +258,14 @@ namespace dbaccess
 
     public:
         // XDocumentHandler
-        virtual void SAL_CALL startDocument(  ) override;
-        virtual void SAL_CALL endDocument(  ) override;
-        virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) override;
-        virtual void SAL_CALL endElement( const OUString& aName ) override;
-        virtual void SAL_CALL characters( const OUString& aChars ) override;
-        virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
-        virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
-        virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) override;
+        virtual void startDocument(  ) override;
+        virtual void endDocument(  ) override;
+        virtual void startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) override;
+        virtual void endElement( const OUString& aName ) override;
+        virtual void characters( const OUString& aChars ) override;
+        virtual void ignorableWhitespace( const OUString& aWhitespaces ) override;
+        virtual void processingInstruction( const OUString& aTarget, const OUString& aData ) override;
+        virtual void setDocumentLocator( const Reference< XLocator >& xLocator ) override;
 
         const ::comphelper::NamedValueCollection&   getSettings() const { return m_aSettings; }
 
@@ -276,15 +276,15 @@ namespace dbaccess
 
     }
 
-    void SAL_CALL SettingsDocumentHandler::startDocument(  )
+    void SettingsDocumentHandler::startDocument(  )
     {
     }
 
-    void SAL_CALL SettingsDocumentHandler::endDocument(  )
+    void SettingsDocumentHandler::endDocument(  )
     {
     }
 
-    void SAL_CALL SettingsDocumentHandler::startElement( const OUString& i_Name, const Reference< XAttributeList >& i_Attribs )
+    void SettingsDocumentHandler::startElement( const OUString& i_Name, const Reference< XAttributeList >& i_Attribs )
     {
         ::rtl::Reference< SettingsImport >  pNewState;
 
@@ -315,7 +315,7 @@ namespace dbaccess
         m_aStates.push( pNewState );
     }
 
-    void SAL_CALL SettingsDocumentHandler::endElement( const OUString& )
+    void SettingsDocumentHandler::endElement( const OUString& )
     {
         ENSURE_OR_THROW( !m_aStates.empty(), "no active element" );
 
@@ -324,7 +324,7 @@ namespace dbaccess
         m_aStates.pop();
     }
 
-    void SAL_CALL SettingsDocumentHandler::characters( const OUString& i_Chars )
+    void SettingsDocumentHandler::characters( const OUString& i_Chars )
     {
         ENSURE_OR_THROW( !m_aStates.empty(), "no active element" );
 
@@ -332,17 +332,17 @@ namespace dbaccess
         pCurrentState->characters( i_Chars );
     }
 
-    void SAL_CALL SettingsDocumentHandler::ignorableWhitespace( const OUString& )
+    void SettingsDocumentHandler::ignorableWhitespace( const OUString& )
     {
         // ignore them - that's why they're called "ignorable"
     }
 
-    void SAL_CALL SettingsDocumentHandler::processingInstruction( const OUString&, const OUString& )
+    void SettingsDocumentHandler::processingInstruction( const OUString&, const OUString& )
     {
         OSL_FAIL( "SettingsDocumentHandler::processingInstruction: unexpected ..." );
     }
 
-    void SAL_CALL SettingsDocumentHandler::setDocumentLocator( const Reference< XLocator >& ) {}
+    void SettingsDocumentHandler::setDocumentLocator( const Reference< XLocator >& ) {}
 
     // SubComponentRecovery
     OUString SubComponentRecovery::getComponentsStorageName( const SubComponentType i_eType )

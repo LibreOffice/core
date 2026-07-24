@@ -216,11 +216,11 @@ void OQuery::rebuildColumns()
 }
 
 // XServiceInfo
-OUString SAL_CALL OQuery::getImplementationName()
+OUString OQuery::getImplementationName()
     {
         return u"com.sun.star.sdb.dbaccess.OQuery"_ustr;
     }
-bool SAL_CALL OQuery::supportsService(const OUString& _rServiceName)
+bool OQuery::supportsService(const OUString& _rServiceName)
     {
         const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -229,13 +229,13 @@ bool SAL_CALL OQuery::supportsService(const OUString& _rServiceName)
 
         return false;
     }
-cpo::uno::Sequence< OUString > SAL_CALL OQuery::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > OQuery::getSupportedServiceNames(  )
 {
     return { SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERY, u"com.sun.star.sdb.QueryDefinition"_ustr };
 }
 
 // css::beans::XPropertyChangeListener
-void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource )
+void OQuery::propertyChange( const PropertyChangeEvent& _rSource )
 {
     sal_Int32 nOwnHandle = -1;
     {
@@ -267,7 +267,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource )
     fire(&nOwnHandle, &_rSource.NewValue, &_rSource.OldValue, 1, false);
 }
 
-void SAL_CALL OQuery::disposing( const EventObject& _rSource )
+void OQuery::disposing( const EventObject& _rSource )
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -279,13 +279,13 @@ void SAL_CALL OQuery::disposing( const EventObject& _rSource )
 }
 
 // XDataDescriptorFactory
-Reference< XPropertySet > SAL_CALL OQuery::createDataDescriptor(  )
+Reference< XPropertySet > OQuery::createDataDescriptor(  )
 {
     return new OQueryDescriptor(*this);
 }
 
 // pseudo-XComponent
-void SAL_CALL OQuery::disposing()
+void OQuery::disposing()
 {
     MutexGuard aGuard(m_aMutex);
     if (m_xCommandDefinition.is())
@@ -318,7 +318,7 @@ void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _r
     }
 }
 
-Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  )
+Reference< XPropertySetInfo > OQuery::getPropertySetInfo(  )
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
@@ -341,7 +341,7 @@ rtl::Reference<OColumn> OQuery::createColumn(const OUString& /*_rName*/) const
     return nullptr;
 }
 
-void SAL_CALL OQuery::rename( const OUString& newName )
+void OQuery::rename( const OUString& newName )
 {
     MutexGuard aGuard(m_aMutex);
     Reference<XRename> xRename(m_xCommandDefinition,UNO_QUERY);

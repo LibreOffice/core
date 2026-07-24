@@ -78,11 +78,11 @@ public:
     explicit DBTypeDetection(const Reference< XComponentContext >&);
 
     // XServiceInfo
-    OUString                        SAL_CALL getImplementationName() override;
-    bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames() override;
+    OUString                        getImplementationName() override;
+    bool                        supportsService(const OUString& ServiceName) override;
+    Sequence< OUString >            getSupportedServiceNames() override;
 
-    virtual OUString SAL_CALL detect( cpo::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
+    virtual OUString detect( cpo::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
 };
 
 }
@@ -92,7 +92,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XComponentContext >& _rxContex
 {
 }
 
-OUString SAL_CALL DBTypeDetection::detect( cpo::uno::Sequence< css::beans::PropertyValue >& Descriptor )
+OUString DBTypeDetection::detect( cpo::uno::Sequence< css::beans::PropertyValue >& Descriptor )
 {
     try
     {
@@ -154,19 +154,19 @@ OUString SAL_CALL DBTypeDetection::detect( cpo::uno::Sequence< css::beans::Prope
 }
 
 // XServiceInfo
-OUString SAL_CALL DBTypeDetection::getImplementationName()
+OUString DBTypeDetection::getImplementationName()
 {
     return u"org.openoffice.comp.dbflt.DBTypeDetection"_ustr;
 }
 
 // XServiceInfo
-bool SAL_CALL DBTypeDetection::supportsService(const OUString& ServiceName)
+bool DBTypeDetection::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames()
+Sequence< OUString > DBTypeDetection::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.ExtendedTypeDetection"_ustr };
 }
@@ -194,15 +194,15 @@ public:
     explicit DBContentLoader(const Reference< XComponentContext >&);
 
     // XServiceInfo
-    OUString                        SAL_CALL getImplementationName() override;
-    bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames() override;
+    OUString                        getImplementationName() override;
+    bool                        supportsService(const OUString& ServiceName) override;
+    Sequence< OUString >            getSupportedServiceNames() override;
 
     // XLoader
-    virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
+    virtual void load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
                                 const Reference< XLoadEventListener > & _rListener) override;
-    virtual void SAL_CALL cancel() override;
+    virtual void cancel() override;
 };
 
 }
@@ -214,25 +214,25 @@ DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxFactor
 }
 
 // XServiceInfo
-OUString SAL_CALL DBContentLoader::getImplementationName()
+OUString DBContentLoader::getImplementationName()
 {
     return u"org.openoffice.comp.dbflt.DBContentLoader2"_ustr;
 }
 
 // XServiceInfo
-bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName)
+bool DBContentLoader::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames()
+Sequence< OUString > DBContentLoader::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.FrameLoader"_ustr };
 }
 
 
-void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& _rURL,
+void DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& _rURL,
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener)
 {

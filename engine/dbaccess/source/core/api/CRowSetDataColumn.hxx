@@ -55,19 +55,19 @@ namespace dbaccess
 
 
         // css::lang::XTypeProvider
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
         // comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // cppu::OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
-        virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any & rConvertedValue,
+        virtual bool convertFastPropertyValue( cpo::uno::Any & rConvertedValue,
                                                             cpo::uno::Any & rOldValue,
                                                             sal_Int32 nHandle,
                                                             const cpo::uno::Any& rValue ) override;
-        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const cpo::uno::Any& rValue ) override;
+        virtual void getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual void setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const cpo::uno::Any& rValue ) override;
 
         void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
     protected:

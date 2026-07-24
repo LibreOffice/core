@@ -92,32 +92,32 @@ public:
             const css::uno::Reference< css::uno::XComponentContext >& _xORB
         );
 
-    virtual cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override;
-    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 
 // css::uno::XInterface
     DECLARE_XINTERFACE( )
 
 // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 // OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 // css::lang::XServiceInfo
     DECLARE_SERVICE_INFO();
 
 // css::sdbcx::XDataDescriptorFactory
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > createDataDescriptor(  ) override;
 
 // css::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
+    virtual void propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
 // css::lang::XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& _rSource ) override;
+        virtual void disposing( const css::lang::EventObject& _rSource ) override;
 
 // OPropertySetHelper
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+    virtual void setFastPropertyValue_NoBroadcast(
                     sal_Int32 nHandle,
                     const cpo::uno::Any& rValue ) override;
 
@@ -126,10 +126,10 @@ public:
     void                            setWarningsContainer( ::dbtools::WarningsContainer* _pWarnings )   { m_pWarnings = _pWarnings; }
 
     // XRename
-    virtual void SAL_CALL rename( const OUString& newName ) override;
+    virtual void rename( const OUString& newName ) override;
 
 protected:
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     virtual rtl::Reference<OColumn> createColumn(const OUString& _rName) const override;
 

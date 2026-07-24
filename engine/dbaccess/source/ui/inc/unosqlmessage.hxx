@@ -39,25 +39,25 @@ public:
     OSQLMessageDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
     // XTypeProvider
-    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence<sal_Int8> getImplementationId(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XPropertySet
-    virtual css::uno::Reference<css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual css::uno::Reference<css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
 private:
-    virtual void SAL_CALL initialize(cpo::uno::Sequence< cpo::uno::Any > const & args) override;
+    virtual void initialize(cpo::uno::Sequence< cpo::uno::Any > const & args) override;
 
 // OPropertySetHelper overridables
     // (overwriting these three, because we have some special handling for our property)
-    virtual bool SAL_CALL convertFastPropertyValue( cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue) override;
+    virtual bool convertFastPropertyValue( cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue) override;
 
     // OGenericUnoDialog overridables
     virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;

@@ -111,84 +111,84 @@ public:
                 ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
 // css::lang::XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
 // css::uno::XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 // css::container::XChild
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
-    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
 // css::sdbcx::XTablesSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) override;
+    virtual css::uno::Reference< css::container::XNameAccess > getTables(  ) override;
 // css::sdbcx::XViewsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getViews(  ) override;
+    virtual css::uno::Reference< css::container::XNameAccess > getViews(  ) override;
 
 // css::sdb::XQueriesSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getQueries(  ) override;
+    virtual css::uno::Reference< css::container::XNameAccess > getQueries(  ) override;
 
 // css::sdb::XSQLQueryComposerFactory
-    virtual css::uno::Reference< css::sdb::XSQLQueryComposer > SAL_CALL createQueryComposer(  ) override;
+    virtual css::uno::Reference< css::sdb::XSQLQueryComposer > createQueryComposer(  ) override;
 
 // css::sdb::XCommandPreparation
-    virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCommand( const OUString& command, sal_Int32 commandType ) override;
+    virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareCommand( const OUString& command, sal_Int32 commandType ) override;
 
 // css::sdbc::XWarningsSupplier
-    virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
-    virtual void SAL_CALL clearWarnings(  ) override;
+    virtual cpo::uno::Any getWarnings(  ) override;
+    virtual void clearWarnings(  ) override;
 
 // css::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 // XConnection
-    virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
-    virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
-    virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
-    virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
-    virtual void SAL_CALL setAutoCommit( bool autoCommit ) override;
-    virtual bool SAL_CALL getAutoCommit(  ) override;
-    virtual void SAL_CALL commit(  ) override;
-    virtual void SAL_CALL rollback(  ) override;
-    virtual bool SAL_CALL isClosed(  ) override;
-    virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
-    virtual void SAL_CALL setReadOnly( bool readOnly ) override;
-    virtual bool SAL_CALL isReadOnly(  ) override;
-    virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
-    virtual OUString SAL_CALL getCatalog(  ) override;
-    virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
-    virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
-    virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+    virtual css::uno::Reference< css::sdbc::XStatement > createStatement(  ) override;
+    virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareStatement( const OUString& sql ) override;
+    virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareCall( const OUString& sql ) override;
+    virtual OUString nativeSQL( const OUString& sql ) override;
+    virtual void setAutoCommit( bool autoCommit ) override;
+    virtual bool getAutoCommit(  ) override;
+    virtual void commit(  ) override;
+    virtual void rollback(  ) override;
+    virtual bool isClosed(  ) override;
+    virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > getMetaData(  ) override;
+    virtual void setReadOnly( bool readOnly ) override;
+    virtual bool isReadOnly(  ) override;
+    virtual void setCatalog( const OUString& catalog ) override;
+    virtual OUString getCatalog(  ) override;
+    virtual void setTransactionIsolation( sal_Int32 level ) override;
+    virtual sal_Int32 getTransactionIsolation(  ) override;
+    virtual css::uno::Reference< css::container::XNameAccess > getTypeMap(  ) override;
+    virtual void setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 
 // css::sdbc::XCloseable
-    virtual void SAL_CALL close(  ) override;
+    virtual void close(  ) override;
 
     // XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 
     // XUsersSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getUsers(  ) override;
+    virtual css::uno::Reference< css::container::XNameAccess > getUsers(  ) override;
     // XGroupsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getGroups(  ) override;
+    virtual css::uno::Reference< css::container::XNameAccess > getGroups(  ) override;
 
     // XConnectionTools
-    virtual css::uno::Reference< css::sdb::tools::XTableName > SAL_CALL createTableName(  ) override;
-    virtual css::uno::Reference< css::sdb::tools::XObjectNames > SAL_CALL getObjectNames(  ) override;
-    virtual css::uno::Reference< css::sdb::tools::XDataSourceMetaData > SAL_CALL getDataSourceMetaData(  ) override;
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, css::uno::Reference< css::lang::XComponent >& keepFieldsAlive ) override;
-    virtual css::uno::Reference< css::sdb::XSingleSelectQueryComposer > SAL_CALL getComposer( ::sal_Int32 commandType, const OUString& command ) override;
+    virtual css::uno::Reference< css::sdb::tools::XTableName > createTableName(  ) override;
+    virtual css::uno::Reference< css::sdb::tools::XObjectNames > getObjectNames(  ) override;
+    virtual css::uno::Reference< css::sdb::tools::XDataSourceMetaData > getDataSourceMetaData(  ) override;
+    virtual css::uno::Reference< css::container::XNameAccess > getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, css::uno::Reference< css::lang::XComponent >& keepFieldsAlive ) override;
+    virtual css::uno::Reference< css::sdb::XSingleSelectQueryComposer > getComposer( ::sal_Int32 commandType, const OUString& command ) override;
 
     // XTableUIProvider
-    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getTableEditor( const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) override;
+    virtual css::uno::Reference< css::graphic::XGraphic > getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode ) override;
+    virtual css::uno::Reference< css::uno::XInterface > getTableEditor( const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) override;
 
     // IRefreshListener
     virtual void refresh(const css::uno::Reference< css::container::XNameAccess >& _rToBeRefreshed) override;

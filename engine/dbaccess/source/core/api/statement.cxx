@@ -322,7 +322,7 @@ void OStatementBase::cancel()
 }
 
 // XMultipleResults
-Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  )
+Reference< XResultSet > OStatementBase::getResultSet(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
@@ -335,7 +335,7 @@ Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  )
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY_THROW)->getResultSet();
 }
 
-sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  )
+sal_Int32 OStatementBase::getUpdateCount(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
@@ -348,7 +348,7 @@ sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  )
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY_THROW)->getUpdateCount();
 }
 
-bool SAL_CALL OStatementBase::getMoreResults(  )
+bool OStatementBase::getMoreResults(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
@@ -365,7 +365,7 @@ bool SAL_CALL OStatementBase::getMoreResults(  )
 }
 
 // XPreparedBatchExecution
-void SAL_CALL OStatementBase::addBatch(  )
+void OStatementBase::addBatch(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
@@ -378,7 +378,7 @@ void SAL_CALL OStatementBase::addBatch(  )
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY_THROW)->addBatch();
 }
 
-void SAL_CALL OStatementBase::clearBatch(  )
+void OStatementBase::clearBatch(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
@@ -391,7 +391,7 @@ void SAL_CALL OStatementBase::clearBatch(  )
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY_THROW)->clearBatch();
 }
 
-Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  )
+Sequence< sal_Int32 > OStatementBase::executeBatch(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
@@ -407,7 +407,7 @@ Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  )
     return Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY_THROW)->executeBatch();
 }
 
-Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  )
+Reference< XResultSet > OStatementBase::getGeneratedValues(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
@@ -539,7 +539,7 @@ Reference< XConnection > OStatement::getConnection()
     return m_xParent.get();
 }
 
-void SAL_CALL OStatement::disposing()
+void OStatement::disposing()
 {
     OStatementBase::disposing();
     m_xComposer.clear();

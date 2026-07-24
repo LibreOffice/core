@@ -43,11 +43,11 @@ OColumnControl::OColumnControl(const Reference<XComponentContext>& rxContext)
 {
 }
 
-OUString SAL_CALL OColumnControl::getImplementationName()
+OUString OColumnControl::getImplementationName()
 {
         return SERVICE_CONTROLDEFAULT;
 }
-bool SAL_CALL OColumnControl::supportsService(const OUString& _rServiceName)
+bool OColumnControl::supportsService(const OUString& _rServiceName)
     {
         const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -56,7 +56,7 @@ bool SAL_CALL OColumnControl::supportsService(const OUString& _rServiceName)
 
         return false;
     }
-cpo::uno::Sequence< OUString > SAL_CALL OColumnControl::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > OColumnControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.awt.UnoControl"_ustr,u"com.sun.star.sdb.ColumnDescriptorControl"_ustr };
 }
@@ -66,7 +66,7 @@ OUString OColumnControl::GetComponentServiceName() const
     return u"com.sun.star.sdb.ColumnDescriptorControl"_ustr;
 }
 
-void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit*/, const Reference< XWindowPeer >& rParentPeer)
+void OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit*/, const Reference< XWindowPeer >& rParentPeer)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     if ( getPeer().is() )

@@ -68,7 +68,7 @@ using namespace cpo::uno;
     IMPLEMENT_FORWARD_REFCOUNT( View, View_Base )
     IMPLEMENT_GET_IMPLEMENTATION_ID( View )
 
-    Any SAL_CALL View::queryInterface( const Type & _rType )
+    Any View::queryInterface( const Type & _rType )
     {
         if(_rType == cppu::UnoType<XAlterView>::get()&& !m_xViewAccess.is() )
             return Any();
@@ -78,7 +78,7 @@ using namespace cpo::uno;
         return aReturn;
     }
 
-    Sequence< Type > SAL_CALL View::getTypes(  )
+    Sequence< Type > View::getTypes(  )
     {
         Type aAlterType = cppu::UnoType<XAlterView>::get();
 
@@ -93,13 +93,13 @@ using namespace cpo::uno;
         return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());
     }
 
-    void SAL_CALL View::alterCommand( const OUString& _rNewCommand )
+    void View::alterCommand( const OUString& _rNewCommand )
     {
         OSL_ENSURE(m_xViewAccess.is(),"Illegal call to AlterView!");
         m_xViewAccess->alterCommand(this,_rNewCommand);
     }
 
-    void SAL_CALL View::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
+    void View::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         if ( _nHandle == m_nCommandHandle && m_xViewAccess.is() )
         {

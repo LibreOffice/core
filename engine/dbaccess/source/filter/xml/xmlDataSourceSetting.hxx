@@ -42,12 +42,12 @@ namespace dbaxml
                     ,OXMLDataSourceSetting* _pContainer = nullptr);
         virtual ~OXMLDataSourceSetting() override;
 
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+        virtual void endFastElement(sal_Int32 nElement) override;
 
-        virtual void SAL_CALL characters( const OUString& rChars ) override;
+        virtual void characters( const OUString& rChars ) override;
 
         /** adds value to property
             @param  _sValue

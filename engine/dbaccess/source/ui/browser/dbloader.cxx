@@ -64,15 +64,15 @@ public:
     explicit DBContentLoader(const Reference< XComponentContext >&);
 
     // XServiceInfo
-    OUString                 SAL_CALL getImplementationName() override;
-    bool                 SAL_CALL supportsService(const OUString& ServiceName) override;
-    Sequence< OUString >     SAL_CALL getSupportedServiceNames() override;
+    OUString                 getImplementationName() override;
+    bool                 supportsService(const OUString& ServiceName) override;
+    Sequence< OUString >     getSupportedServiceNames() override;
 
     // XLoader
-    virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
+    virtual void load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
                                 const Reference< XLoadEventListener > & _rListener) override;
-    virtual void SAL_CALL cancel() override;
+    virtual void cancel() override;
 };
 
 }
@@ -91,24 +91,24 @@ org_openoffice_comp_dbu_DBContentLoader_get_implementation(
 }
 
 // XServiceInfo
-OUString SAL_CALL DBContentLoader::getImplementationName()
+OUString DBContentLoader::getImplementationName()
 {
     return u"org.openoffice.comp.dbu.DBContentLoader"_ustr;
 }
 
 // XServiceInfo
-bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName)
+bool DBContentLoader::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames()
+Sequence< OUString > DBContentLoader::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.FrameLoader"_ustr, u"com.sun.star.sdb.ContentLoader"_ustr };
 }
 
-void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& rURL,
+void DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener)
 {

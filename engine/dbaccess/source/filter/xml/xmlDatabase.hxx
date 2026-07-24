@@ -31,10 +31,10 @@ namespace dbaxml
         OXMLDatabase( ODBFilter& rImport );
         virtual ~OXMLDatabase() override;
 
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+        virtual void endFastElement(sal_Int32 nElement) override;
     };
 } // namespace dbaxml
 

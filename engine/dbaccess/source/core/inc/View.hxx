@@ -50,14 +50,14 @@ namespace dbaccess
         DECLARE_XTYPEPROVIDER()
 
         // XAlterView
-        virtual void SAL_CALL alterCommand( const OUString& NewCommand ) override;
+        virtual void alterCommand( const OUString& NewCommand ) override;
 
     protected:
         virtual ~View() override;
 
     protected:
         // OPropertyContainer
-        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
+        virtual void getFastPropertyValue( cpo::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
     private:
          css::uno::Reference< css::sdb::tools::XViewAccess>     m_xViewAccess;

@@ -40,8 +40,8 @@ namespace dbaccess
                         const std::function<const ::connectivity::ORowSetValue& (sal_Int32)> &_getValue);
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,const cpo::uno::Any& rValue ) override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
+        virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,const cpo::uno::Any& rValue ) override;
     };
 
 }

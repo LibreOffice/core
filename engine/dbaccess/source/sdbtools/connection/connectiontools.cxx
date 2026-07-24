@@ -55,24 +55,24 @@ using namespace cpo::uno;
     {
     }
 
-    Reference< XTableName > SAL_CALL ConnectionTools::createTableName()
+    Reference< XTableName > ConnectionTools::createTableName()
     {
         EntryGuard aGuard( *this );
         return new TableName( getContext(), getConnection() );
     }
 
-    Reference< XObjectNames > SAL_CALL ConnectionTools::getObjectNames()
+    Reference< XObjectNames > ConnectionTools::getObjectNames()
     {
         EntryGuard aGuard( *this );
         return new ObjectNames( getContext(), getConnection() );
     }
 
-    Reference< XDataSourceMetaData > SAL_CALL ConnectionTools::getDataSourceMetaData()
+    Reference< XDataSourceMetaData > ConnectionTools::getDataSourceMetaData()
     {
         EntryGuard aGuard( *this );
         return new DataSourceMetaData( getContext(), getConnection() );
     }
-    Reference< container::XNameAccess > SAL_CALL ConnectionTools::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, Reference< lang::XComponent >& keepFieldsAlive )
+    Reference< container::XNameAccess > ConnectionTools::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, Reference< lang::XComponent >& keepFieldsAlive )
     {
         EntryGuard aGuard( *this );
         ::dbtools::SQLExceptionInfo aErrorInfo;
@@ -81,7 +81,7 @@ using namespace cpo::uno;
             aErrorInfo.doThrow();
         return xRet;
     }
-    Reference< sdb::XSingleSelectQueryComposer > SAL_CALL ConnectionTools::getComposer( ::sal_Int32 commandType, const OUString& command )
+    Reference< sdb::XSingleSelectQueryComposer > ConnectionTools::getComposer( ::sal_Int32 commandType, const OUString& command )
     {
         EntryGuard aGuard( *this );
         dbtools::StatementComposer aComposer(getConnection(), command, commandType, true );
@@ -89,22 +89,22 @@ using namespace cpo::uno;
         return aComposer.getComposer();
     }
 
-    OUString SAL_CALL ConnectionTools::getImplementationName()
+    OUString ConnectionTools::getImplementationName()
     {
         return u"com.sun.star.comp.dbaccess.ConnectionTools"_ustr;
     }
 
-    bool SAL_CALL ConnectionTools::supportsService(const OUString & ServiceName)
+    bool ConnectionTools::supportsService(const OUString & ServiceName)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    Sequence< OUString > SAL_CALL ConnectionTools::getSupportedServiceNames()
+    Sequence< OUString > ConnectionTools::getSupportedServiceNames()
     {
         return  { u"com.sun.star.sdb.tools.ConnectionTools"_ustr };
     }
 
-    void SAL_CALL ConnectionTools::initialize(const Sequence< Any > & _rArguments)
+    void ConnectionTools::initialize(const Sequence< Any > & _rArguments)
     {
         ::osl::MutexGuard aGuard( getMutex() );
 

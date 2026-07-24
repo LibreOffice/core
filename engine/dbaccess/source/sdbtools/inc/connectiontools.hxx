@@ -50,19 +50,19 @@ namespace sdbtools
         explicit ConnectionTools( const css::uno::Reference< css::uno::XComponentContext >& _rContext );
 
         // XConnectionTools
-        virtual css::uno::Reference< css::sdb::tools::XTableName > SAL_CALL createTableName() override;
-        virtual css::uno::Reference< css::sdb::tools::XObjectNames > SAL_CALL getObjectNames() override;
-        virtual css::uno::Reference< css::sdb::tools::XDataSourceMetaData > SAL_CALL getDataSourceMetaData() override;
-        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, css::uno::Reference< css::lang::XComponent >& keepFieldsAlive ) override;
-        virtual css::uno::Reference< css::sdb::XSingleSelectQueryComposer > SAL_CALL getComposer( ::sal_Int32 commandType, const OUString& command ) override;
+        virtual css::uno::Reference< css::sdb::tools::XTableName > createTableName() override;
+        virtual css::uno::Reference< css::sdb::tools::XObjectNames > getObjectNames() override;
+        virtual css::uno::Reference< css::sdb::tools::XDataSourceMetaData > getDataSourceMetaData() override;
+        virtual css::uno::Reference< css::container::XNameAccess > getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, css::uno::Reference< css::lang::XComponent >& keepFieldsAlive ) override;
+        virtual css::uno::Reference< css::sdb::XSingleSelectQueryComposer > getComposer( ::sal_Int32 commandType, const OUString& command ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService(const OUString & ServiceName) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService(const OUString & ServiceName) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
+        virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     protected:
         virtual ~ConnectionTools() override;

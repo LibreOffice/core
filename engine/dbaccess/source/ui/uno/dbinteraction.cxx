@@ -67,18 +67,18 @@ using namespace cpo::uno;
             "BasicInteractionHandler::BasicInteractionHandler: enabling legacy behavior, there should be no clients of this anymore!" );
     }
 
-    void SAL_CALL BasicInteractionHandler::initialize(const Sequence<Any>& rArgs)
+    void BasicInteractionHandler::initialize(const Sequence<Any>& rArgs)
     {
         comphelper::SequenceAsHashMap aMap(rArgs);
         m_xParentWindow.set(aMap.getValue(u"Parent"_ustr), UNO_QUERY);
     }
 
-    bool SAL_CALL BasicInteractionHandler::handleInteractionRequest( const Reference< XInteractionRequest >& i_rRequest )
+    bool BasicInteractionHandler::handleInteractionRequest( const Reference< XInteractionRequest >& i_rRequest )
     {
         return impl_handle_throw( i_rRequest );
     }
 
-    void SAL_CALL BasicInteractionHandler::handle( const Reference< XInteractionRequest >& i_rRequest )
+    void BasicInteractionHandler::handle( const Reference< XInteractionRequest >& i_rRequest )
     {
         impl_handle_throw( i_rRequest );
     }
@@ -343,11 +343,11 @@ using namespace cpo::uno;
     }
 
     // SQLExceptionInteractionHandler
-    OUString SAL_CALL SQLExceptionInteractionHandler::getImplementationName()
+    OUString SQLExceptionInteractionHandler::getImplementationName()
     {
         return u"com.sun.star.comp.dbaccess.DatabaseInteractionHandler"_ustr;
     }
-    bool SAL_CALL SQLExceptionInteractionHandler::supportsService(const OUString& _rServiceName)
+    bool SQLExceptionInteractionHandler::supportsService(const OUString& _rServiceName)
     {
         const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -356,17 +356,17 @@ using namespace cpo::uno;
 
         return false;
     }
-    cpo::uno::Sequence< OUString > SAL_CALL SQLExceptionInteractionHandler::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > SQLExceptionInteractionHandler::getSupportedServiceNames()
     {
         return { u"com.sun.star.sdb.DatabaseInteractionHandler"_ustr };
     }
 
     // LegacyInteractionHandler
-    OUString SAL_CALL LegacyInteractionHandler::getImplementationName()
+    OUString LegacyInteractionHandler::getImplementationName()
     {
         return u"com.sun.star.comp.dbaccess.LegacyInteractionHandler"_ustr;
     }
-    bool SAL_CALL LegacyInteractionHandler::supportsService(const OUString& _rServiceName)
+    bool LegacyInteractionHandler::supportsService(const OUString& _rServiceName)
     {
         const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -375,7 +375,7 @@ using namespace cpo::uno;
 
         return false;
     }
-    cpo::uno::Sequence< OUString > SAL_CALL LegacyInteractionHandler::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > LegacyInteractionHandler::getSupportedServiceNames()
     {
         return { u"com.sun.star.sdb.InteractionHandler"_ustr };
     }

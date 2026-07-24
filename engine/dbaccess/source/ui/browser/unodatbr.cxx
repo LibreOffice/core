@@ -149,12 +149,12 @@ static void SafeRemovePropertyListener(const Reference< XPropertySet > & xSet, c
         xSet->removePropertyChangeListener(rPropName, pListener);
 }
 
-OUString SAL_CALL SbaTableQueryBrowser::getImplementationName()
+OUString SbaTableQueryBrowser::getImplementationName()
 {
     return u"org.openoffice.comp.dbu.ODatasourceBrowser"_ustr;
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SbaTableQueryBrowser::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SbaTableQueryBrowser::getSupportedServiceNames()
 {
     return { u"com.sun.star.sdb.DataSourceBrowser"_ustr };
 }
@@ -188,7 +188,7 @@ SbaTableQueryBrowser::~SbaTableQueryBrowser()
     m_pSplitter.reset();
 }
 
-Any SAL_CALL SbaTableQueryBrowser::queryInterface(const Type& _rType)
+Any SbaTableQueryBrowser::queryInterface(const Type& _rType)
 {
     if ( _rType.equals( cppu::UnoType<XScriptInvocationContext>::get() ) )
     {
@@ -204,7 +204,7 @@ Any SAL_CALL SbaTableQueryBrowser::queryInterface(const Type& _rType)
     return aReturn;
 }
 
-Sequence< Type > SAL_CALL SbaTableQueryBrowser::getTypes(  )
+Sequence< Type > SbaTableQueryBrowser::getTypes(  )
 {
     Sequence< Type > aTypes( ::comphelper::concatSequences(
         SbaXDataBrowserController::getTypes(),
@@ -223,12 +223,12 @@ Sequence< Type > SAL_CALL SbaTableQueryBrowser::getTypes(  )
     return aTypes;
 }
 
-Sequence< sal_Int8 > SAL_CALL SbaTableQueryBrowser::getImplementationId(  )
+Sequence< sal_Int8 > SbaTableQueryBrowser::getImplementationId(  )
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-void SAL_CALL SbaTableQueryBrowser::disposing()
+void SbaTableQueryBrowser::disposing()
 {
     SolarMutexGuard aGuard;
         // doin' a lot of VCL stuff here -> lock the SolarMutex
@@ -916,7 +916,7 @@ bool SbaTableQueryBrowser::suspend(bool bSuspend)
     return bRet;
 }
 
-void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEvent )
+void SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEvent )
 {
     // search the external dispatcher causing this call
     Reference< XDispatch > xSource(_rEvent.Source, UNO_QUERY);
@@ -1300,7 +1300,7 @@ void SbaTableQueryBrowser::implCheckExternalSlot( sal_uInt16 _nId )
     InvalidateFeature( _nId );
 }
 
-void SAL_CALL SbaTableQueryBrowser::disposing( const css::lang::EventObject& _rSource )
+void SbaTableQueryBrowser::disposing( const css::lang::EventObject& _rSource )
 {
     // our frame ?
     Reference< css::frame::XFrame >  xSourceFrame(_rSource.Source, UNO_QUERY);
@@ -1383,7 +1383,7 @@ void SbaTableQueryBrowser::implRemoveStatusListeners()
     m_aExternalFeatures.clear();
 }
 
-bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection )
+bool SbaTableQueryBrowser::select( const Any& _rSelection )
 {
     SolarMutexGuard aGuard;
         // doin' a lot of VCL stuff here -> lock the SolarMutex
@@ -1411,7 +1411,7 @@ bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection )
     return implSelect(aDescriptor,true);
 }
 
-Any SAL_CALL SbaTableQueryBrowser::getSelection(  )
+Any SbaTableQueryBrowser::getSelection(  )
 {
     Any aReturn;
 
@@ -1437,12 +1437,12 @@ Any SAL_CALL SbaTableQueryBrowser::getSelection(  )
     return aReturn;
 }
 
-void SAL_CALL SbaTableQueryBrowser::addSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener )
+void SbaTableQueryBrowser::addSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener )
 {
     m_aSelectionListeners.addInterface(_rxListener);
 }
 
-void SAL_CALL SbaTableQueryBrowser::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener )
+void SbaTableQueryBrowser::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener )
 {
     m_aSelectionListeners.removeInterface(_rxListener);
 }
@@ -2725,7 +2725,7 @@ std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::getEntryFromContainer(cons
     return xContainer;
 }
 
-void SAL_CALL SbaTableQueryBrowser::elementInserted(const ContainerEvent& rEvent)
+void SbaTableQueryBrowser::elementInserted(const ContainerEvent& rEvent)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -2780,7 +2780,7 @@ bool SbaTableQueryBrowser::isCurrentlyDisplayedChanged(std::u16string_view rName
     return rTreeView.iter_parent(*xParent) && rTreeView.iter_compare(*xParent, rContainer) == 0;
 }
 
-void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEvent )
+void SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEvent )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -2836,7 +2836,7 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
         SbaXDataBrowserController::elementRemoved(_rEvent);
 }
 
-void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEvent )
+void SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEvent )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3640,7 +3640,7 @@ void SbaTableQueryBrowser::postReloadForm()
     LoadFinished(true);
 }
 
-Reference< XEmbeddedScripts > SAL_CALL SbaTableQueryBrowser::getScriptContainer()
+Reference< XEmbeddedScripts > SbaTableQueryBrowser::getScriptContainer()
 {
     // update our database document
     Reference< XModel > xDocument;
@@ -3665,19 +3665,19 @@ Reference< XEmbeddedScripts > SAL_CALL SbaTableQueryBrowser::getScriptContainer(
     return xScripts;
 }
 
-void SAL_CALL SbaTableQueryBrowser::registerContextMenuInterceptor( const Reference< XContextMenuInterceptor >& Interceptor )
+void SbaTableQueryBrowser::registerContextMenuInterceptor( const Reference< XContextMenuInterceptor >& Interceptor )
 {
     if ( Interceptor.is() )
         m_aContextMenuInterceptors.addInterface( Interceptor );
 }
 
-void SAL_CALL SbaTableQueryBrowser::releaseContextMenuInterceptor( const Reference< XContextMenuInterceptor >& Interceptor )
+void SbaTableQueryBrowser::releaseContextMenuInterceptor( const Reference< XContextMenuInterceptor >& Interceptor )
 {
     if ( Interceptor.is() )
         m_aContextMenuInterceptors.removeInterface( Interceptor );
 }
 
-void SAL_CALL SbaTableQueryBrowser::registeredDatabaseLocation( const DatabaseRegistrationEvent& Event )
+void SbaTableQueryBrowser::registeredDatabaseLocation( const DatabaseRegistrationEvent& Event )
 {
     SolarMutexGuard aGuard;
     implAddDatasource( Event.Name, SharedConnection() );
@@ -3725,7 +3725,7 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry(std::u16string_view rData
     rTreeView.remove(*xDataSourceEntry);
 }
 
-void SAL_CALL SbaTableQueryBrowser::revokedDatabaseLocation( const DatabaseRegistrationEvent& Event )
+void SbaTableQueryBrowser::revokedDatabaseLocation( const DatabaseRegistrationEvent& Event )
 {
     SolarMutexGuard aGuard;
 
@@ -3735,7 +3735,7 @@ void SAL_CALL SbaTableQueryBrowser::revokedDatabaseLocation( const DatabaseRegis
     checkDocumentDataSource();
 }
 
-void SAL_CALL SbaTableQueryBrowser::changedDatabaseLocation( const DatabaseRegistrationEvent& Event )
+void SbaTableQueryBrowser::changedDatabaseLocation( const DatabaseRegistrationEvent& Event )
 {
     SolarMutexGuard aGuard;
 

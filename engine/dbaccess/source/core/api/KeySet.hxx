@@ -161,26 +161,26 @@ namespace dbaccess
         virtual void reset(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet) override;
 
         // css::sdbc::XRow
-        virtual bool SAL_CALL wasNull(  ) override;
-        virtual OUString SAL_CALL getString( sal_Int32 columnIndex ) override;
-        virtual bool SAL_CALL getBoolean( sal_Int32 columnIndex ) override;
-        virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) override;
-        virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) override;
-        virtual sal_Int32 SAL_CALL getInt( sal_Int32 columnIndex ) override;
-        virtual sal_Int64 SAL_CALL getLong( sal_Int32 columnIndex ) override;
-        virtual float SAL_CALL getFloat( sal_Int32 columnIndex ) override;
-        virtual double SAL_CALL getDouble( sal_Int32 columnIndex ) override;
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) override;
-        virtual css::util::Date SAL_CALL getDate( sal_Int32 columnIndex ) override;
-        virtual css::util::Time SAL_CALL getTime( sal_Int32 columnIndex ) override;
-        virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getCharacterStream( sal_Int32 columnIndex ) override;
-        virtual cpo::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL getRef( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL getBlob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL getClob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL getArray( sal_Int32 columnIndex ) override;
+        virtual bool wasNull(  ) override;
+        virtual OUString getString( sal_Int32 columnIndex ) override;
+        virtual bool getBoolean( sal_Int32 columnIndex ) override;
+        virtual sal_Int8 getByte( sal_Int32 columnIndex ) override;
+        virtual sal_Int16 getShort( sal_Int32 columnIndex ) override;
+        virtual sal_Int32 getInt( sal_Int32 columnIndex ) override;
+        virtual sal_Int64 getLong( sal_Int32 columnIndex ) override;
+        virtual float getFloat( sal_Int32 columnIndex ) override;
+        virtual double getDouble( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > getBytes( sal_Int32 columnIndex ) override;
+        virtual css::util::Date getDate( sal_Int32 columnIndex ) override;
+        virtual css::util::Time getTime( sal_Int32 columnIndex ) override;
+        virtual css::util::DateTime getTimestamp( sal_Int32 columnIndex ) override;
+        virtual css::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
+        virtual css::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual css::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
+        virtual css::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
+        virtual css::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
+        virtual css::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
 
 
         virtual bool rowUpdated(  ) override;

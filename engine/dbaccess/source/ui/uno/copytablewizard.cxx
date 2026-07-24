@@ -147,31 +147,31 @@ namespace dbaui
     {
     public:
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
         // XCopyTableWizard
-        virtual ::sal_Int16 SAL_CALL getOperation() override;
-        virtual void SAL_CALL setOperation( ::sal_Int16 _operation ) override;
-        virtual OUString SAL_CALL getDestinationTableName() override;
-        virtual void SAL_CALL setDestinationTableName( const OUString& _destinationTableName ) override;
-        virtual Optional< OUString > SAL_CALL getCreatePrimaryKey() override;
-        virtual void SAL_CALL setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey ) override;
-        virtual bool SAL_CALL getUseHeaderLineAsColumnNames() override;
-        virtual void SAL_CALL setUseHeaderLineAsColumnNames( bool _bUseHeaderLineAsColumnNames ) override;
-        virtual void SAL_CALL addCopyTableListener( const Reference< XCopyTableListener >& Listener ) override;
-        virtual void SAL_CALL removeCopyTableListener( const Reference< XCopyTableListener >& Listener ) override;
+        virtual ::sal_Int16 getOperation() override;
+        virtual void setOperation( ::sal_Int16 _operation ) override;
+        virtual OUString getDestinationTableName() override;
+        virtual void setDestinationTableName( const OUString& _destinationTableName ) override;
+        virtual Optional< OUString > getCreatePrimaryKey() override;
+        virtual void setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey ) override;
+        virtual bool getUseHeaderLineAsColumnNames() override;
+        virtual void setUseHeaderLineAsColumnNames( bool _bUseHeaderLineAsColumnNames ) override;
+        virtual void addCopyTableListener( const Reference< XCopyTableListener >& Listener ) override;
+        virtual void removeCopyTableListener( const Reference< XCopyTableListener >& Listener ) override;
 
         // XCopyTableWizard::XExecutableDialog
-        virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
-        virtual ::sal_Int16 SAL_CALL execute(  ) override;
+        virtual void setTitle( const OUString& aTitle ) override;
+        virtual ::sal_Int16 execute(  ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+        virtual void initialize( const Sequence< Any >& aArguments ) override;
 
         // XPropertySet
-        virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual Reference< XPropertySetInfo > getPropertySetInfo() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
@@ -396,29 +396,29 @@ CopyTableWizard::~CopyTableWizard()
     // some thinking - would it break existing clients which do not call a dispose, then?
 }
 
-OUString SAL_CALL CopyTableWizard::getImplementationName()
+OUString CopyTableWizard::getImplementationName()
 {
     return u"org.openoffice.comp.dbu.CopyTableWizard"_ustr;
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL CopyTableWizard::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> CopyTableWizard::getSupportedServiceNames()
 {
     return { u"com.sun.star.sdb.application.CopyTableWizard"_ustr };
 }
 
-Reference< XPropertySetInfo > SAL_CALL CopyTableWizard::getPropertySetInfo()
+Reference< XPropertySetInfo > CopyTableWizard::getPropertySetInfo()
 {
     Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
-::sal_Int16 SAL_CALL CopyTableWizard::getOperation()
+::sal_Int16 CopyTableWizard::getOperation()
 {
     CopyTableAccessGuard aGuard( *this );
     return m_nOperation;
 }
 
-void SAL_CALL CopyTableWizard::setOperation( ::sal_Int16 _operation )
+void CopyTableWizard::setOperation( ::sal_Int16 _operation )
 {
     CopyTableAccessGuard aGuard( *this );
 
@@ -441,25 +441,25 @@ void SAL_CALL CopyTableWizard::setOperation( ::sal_Int16 _operation )
     m_nOperation = _operation;
 }
 
-OUString SAL_CALL CopyTableWizard::getDestinationTableName()
+OUString CopyTableWizard::getDestinationTableName()
 {
     CopyTableAccessGuard aGuard( *this );
     return m_sDestinationTable;
 }
 
-void SAL_CALL CopyTableWizard::setDestinationTableName( const OUString& _destinationTableName )
+void CopyTableWizard::setDestinationTableName( const OUString& _destinationTableName )
 {
     CopyTableAccessGuard aGuard( *this );
     m_sDestinationTable = _destinationTableName;
 }
 
-Optional< OUString > SAL_CALL CopyTableWizard::getCreatePrimaryKey()
+Optional< OUString > CopyTableWizard::getCreatePrimaryKey()
 {
     CopyTableAccessGuard aGuard( *this );
     return m_aPrimaryKeyName;
 }
 
-void SAL_CALL CopyTableWizard::setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey )
+void CopyTableWizard::setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey )
 {
     CopyTableAccessGuard aGuard( *this );
 
@@ -473,39 +473,39 @@ void SAL_CALL CopyTableWizard::setCreatePrimaryKey( const Optional< OUString >& 
     m_aPrimaryKeyName = _newPrimaryKey;
 }
 
-bool SAL_CALL CopyTableWizard::getUseHeaderLineAsColumnNames()
+bool CopyTableWizard::getUseHeaderLineAsColumnNames()
 {
     CopyTableAccessGuard aGuard( *this );
     return m_bUseHeaderLineAsColumnNames;
 }
 
-void SAL_CALL CopyTableWizard::setUseHeaderLineAsColumnNames( bool _bUseHeaderLineAsColumnNames )
+void CopyTableWizard::setUseHeaderLineAsColumnNames( bool _bUseHeaderLineAsColumnNames )
 {
     CopyTableAccessGuard aGuard( *this );
     m_bUseHeaderLineAsColumnNames = _bUseHeaderLineAsColumnNames;
 }
 
-void SAL_CALL CopyTableWizard::addCopyTableListener( const Reference< XCopyTableListener >& _rxListener )
+void CopyTableWizard::addCopyTableListener( const Reference< XCopyTableListener >& _rxListener )
 {
     CopyTableAccessGuard aGuard( *this );
     if ( _rxListener.is() )
         m_aCopyTableListeners.addInterface( _rxListener );
 }
 
-void SAL_CALL CopyTableWizard::removeCopyTableListener( const Reference< XCopyTableListener >& _rxListener )
+void CopyTableWizard::removeCopyTableListener( const Reference< XCopyTableListener >& _rxListener )
 {
     CopyTableAccessGuard aGuard( *this );
     if ( _rxListener.is() )
         m_aCopyTableListeners.removeInterface( _rxListener );
 }
 
-void SAL_CALL CopyTableWizard::setTitle( const OUString& _rTitle )
+void CopyTableWizard::setTitle( const OUString& _rTitle )
 {
     CopyTableAccessGuard aGuard( *this );
     CopyTableWizard_DialogBase::setTitle( _rTitle );
 }
 
-::sal_Int16 SAL_CALL CopyTableWizard::execute(  )
+::sal_Int16 CopyTableWizard::execute(  )
 {
     CopyTableAccessGuard aGuard( *this );
 
@@ -951,8 +951,8 @@ namespace
 
     template< typename VALUE_TYPE >
     void transferValue( sal_Int32 _nSourcePos, sal_Int32 _nDestPos,
-        VALUE_TYPE ( SAL_CALL XRow::*_pGetter )( sal_Int32 ),
-        void (SAL_CALL XParameters::*_pSetter)( sal_Int32, VALUE_TYPE ) )
+        VALUE_TYPE ( XRow::*_pGetter )( sal_Int32 ),
+        void (XParameters::*_pSetter)( sal_Int32, VALUE_TYPE ) )
     {
         VALUE_TYPE value( (m_xSource.get()->*_pGetter)( _nSourcePos ) );
         if ( m_xSource->wasNull() )
@@ -963,8 +963,8 @@ namespace
 
     template< typename VALUE_TYPE >
     void transferComplexValue( sal_Int32 _nSourcePos, sal_Int32 _nDestPos,
-        VALUE_TYPE ( SAL_CALL XRow::*_pGetter )( sal_Int32 ),
-        void (SAL_CALL XParameters::*_pSetter)( sal_Int32, const VALUE_TYPE& ) )
+        VALUE_TYPE ( XRow::*_pGetter )( sal_Int32 ),
+        void (XParameters::*_pSetter)( sal_Int32, const VALUE_TYPE& ) )
     {
         const VALUE_TYPE value( (m_xSource.get()->*_pGetter)( _nSourcePos ) );
         if ( m_xSource->wasNull() )
@@ -1414,7 +1414,7 @@ OUString CopyTableWizard::impl_getServerSideCopyStatement_throw(const Reference<
     return sSql;
 }
 
-void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
+void CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( isInitialized() )

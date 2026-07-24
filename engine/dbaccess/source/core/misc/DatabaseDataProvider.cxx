@@ -75,7 +75,7 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
     osl_atomic_decrement( &m_refCount );
 }
 
-void SAL_CALL DatabaseDataProvider::disposing()
+void DatabaseDataProvider::disposing()
 {
     m_aParameterManager.dispose();   // (to free any references it may have to me)
     m_aFilterManager.dispose();      // (ditto)
@@ -95,23 +95,23 @@ cpo::uno::Any DatabaseDataProvider::queryInterface(cpo::uno::Type const & type)
 }
 
 // XServiceInfo
-OUString SAL_CALL DatabaseDataProvider::getImplementationName(  )
+OUString DatabaseDataProvider::getImplementationName(  )
 {
     return u"com.sun.star.comp.dbaccess.DatabaseDataProvider"_ustr;
 }
 
-bool SAL_CALL DatabaseDataProvider::supportsService( const OUString& _rServiceName )
+bool DatabaseDataProvider::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > DatabaseDataProvider::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.chart2.data.DatabaseDataProvider"_ustr };
 }
 
 // lang::XInitialization:
-void SAL_CALL DatabaseDataProvider::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
+void DatabaseDataProvider::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
 {
     osl::MutexGuard g(m_aMutex);
     for (auto& arg : aArguments)
@@ -125,7 +125,7 @@ void SAL_CALL DatabaseDataProvider::initialize(const cpo::uno::Sequence< cpo::un
 }
 
 // chart2::data::XDataProvider:
-bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const cpo::uno::Sequence< beans::PropertyValue > & _aArguments)
+bool DatabaseDataProvider::createDataSourcePossible(const cpo::uno::Sequence< beans::PropertyValue > & _aArguments)
 {
     for (auto& arg : _aArguments)
     {
@@ -154,7 +154,7 @@ bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const cpo::uno::Seq
     return true;
 }
 
-uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::createDataSource(const cpo::uno::Sequence< beans::PropertyValue > & _aArguments)
+uno::Reference< chart2::data::XDataSource > DatabaseDataProvider::createDataSource(const cpo::uno::Sequence< beans::PropertyValue > & _aArguments)
 {
     osl::ResettableMutexGuard aClearForNotifies(m_aMutex);
     if ( createDataSourcePossible(_aArguments) )
@@ -207,7 +207,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
     return m_xInternal->createDataSource(_aArguments);
 }
 
-cpo::uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArguments(const uno::Reference< chart2::data::XDataSource > & _xDataSource)
+cpo::uno::Sequence< beans::PropertyValue > DatabaseDataProvider::detectArguments(const uno::Reference< chart2::data::XDataSource > & _xDataSource)
 {
     ::comphelper::NamedValueCollection aArguments;
     aArguments.put( u"CellRangeRepresentation"_ustr, cpo::uno::Any( u"all"_ustr ) );
@@ -241,7 +241,7 @@ cpo::uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detect
     return aArguments.getPropertyValues();
 }
 
-bool SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString & /*aRangeRepresentation*/)
+bool DatabaseDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString & /*aRangeRepresentation*/)
 {
     return true;
 }
@@ -254,7 +254,7 @@ cpo::uno::Any DatabaseDataProvider::impl_getNumberFormatKey_nothrow(const OUStri
     return cpo::uno::Any(sal_Int32(0));
 }
 
-uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentation(const OUString & _sRangeRepresentation)
+uno::Reference< chart2::data::XDataSequence > DatabaseDataProvider::createDataSequenceByRangeRepresentation(const OUString & _sRangeRepresentation)
 {
     osl::MutexGuard g(m_aMutex);
     uno::Reference< chart2::data::XDataSequence > xData = m_xInternal->createDataSequenceByRangeRepresentation(_sRangeRepresentation);
@@ -268,85 +268,85 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::cre
 }
 
 uno::Reference<chart2::data::XDataSequence>
-SAL_CALL DatabaseDataProvider::createDataSequenceByValueArray(
+DatabaseDataProvider::createDataSequenceByValueArray(
     const OUString& /*aRole*/, const OUString& /*aRangeRepresentation*/, const OUString& /*aRoleQualifier*/ )
 {
     return uno::Reference<chart2::data::XDataSequence>();
 }
 
-cpo::uno::Sequence< cpo::uno::Sequence< OUString > > SAL_CALL DatabaseDataProvider::getComplexRowDescriptions()
+cpo::uno::Sequence< cpo::uno::Sequence< OUString > > DatabaseDataProvider::getComplexRowDescriptions()
 {
     return m_xComplexDescriptionAccess->getComplexRowDescriptions();
 }
 
-void SAL_CALL DatabaseDataProvider::setComplexRowDescriptions( const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aRowDescriptions )
+void DatabaseDataProvider::setComplexRowDescriptions( const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aRowDescriptions )
 {
     m_xComplexDescriptionAccess->setComplexRowDescriptions(aRowDescriptions);
 }
 
-cpo::uno::Sequence< cpo::uno::Sequence< OUString > > SAL_CALL DatabaseDataProvider::getComplexColumnDescriptions()
+cpo::uno::Sequence< cpo::uno::Sequence< OUString > > DatabaseDataProvider::getComplexColumnDescriptions()
 {
     return m_xComplexDescriptionAccess->getComplexColumnDescriptions();
 }
 
-void SAL_CALL DatabaseDataProvider::setComplexColumnDescriptions( const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aColumnDescriptions )
+void DatabaseDataProvider::setComplexColumnDescriptions( const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aColumnDescriptions )
 {
     m_xComplexDescriptionAccess->setComplexColumnDescriptions(aColumnDescriptions);
 }
 
 // ____ XChartDataArray ____
-cpo::uno::Sequence< cpo::uno::Sequence< double > > SAL_CALL DatabaseDataProvider::getData()
+cpo::uno::Sequence< cpo::uno::Sequence< double > > DatabaseDataProvider::getData()
 {
     return m_xComplexDescriptionAccess->getData();
 }
 
-void SAL_CALL DatabaseDataProvider::setData( const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rDataInRows )
+void DatabaseDataProvider::setData( const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rDataInRows )
 {
     m_xComplexDescriptionAccess->setData(rDataInRows);
 }
 
-void SAL_CALL DatabaseDataProvider::setRowDescriptions( const cpo::uno::Sequence< OUString >& aRowDescriptions )
+void DatabaseDataProvider::setRowDescriptions( const cpo::uno::Sequence< OUString >& aRowDescriptions )
 {
     m_xComplexDescriptionAccess->setRowDescriptions(aRowDescriptions);
 }
 
-void SAL_CALL DatabaseDataProvider::setColumnDescriptions( const cpo::uno::Sequence< OUString >& aColumnDescriptions )
+void DatabaseDataProvider::setColumnDescriptions( const cpo::uno::Sequence< OUString >& aColumnDescriptions )
 {
     m_xComplexDescriptionAccess->setColumnDescriptions(aColumnDescriptions);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getRowDescriptions()
+cpo::uno::Sequence< OUString > DatabaseDataProvider::getRowDescriptions()
 {
     return m_xComplexDescriptionAccess->getRowDescriptions();
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getColumnDescriptions()
+cpo::uno::Sequence< OUString > DatabaseDataProvider::getColumnDescriptions()
 {
     return m_xComplexDescriptionAccess->getColumnDescriptions();
 }
 
 // ____ XChartData (base of XChartDataArray) ____
-void SAL_CALL DatabaseDataProvider::addChartDataChangeEventListener(const uno::Reference< css::chart::XChartDataChangeEventListener >& x)
+void DatabaseDataProvider::addChartDataChangeEventListener(const uno::Reference< css::chart::XChartDataChangeEventListener >& x)
 {
     m_xComplexDescriptionAccess->addChartDataChangeEventListener(x);
 }
 
-void SAL_CALL DatabaseDataProvider::removeChartDataChangeEventListener(const uno::Reference< css::chart::XChartDataChangeEventListener >& x)
+void DatabaseDataProvider::removeChartDataChangeEventListener(const uno::Reference< css::chart::XChartDataChangeEventListener >& x)
 {
     m_xComplexDescriptionAccess->removeChartDataChangeEventListener(x);
 }
 
-double SAL_CALL DatabaseDataProvider::getNotANumber()
+double DatabaseDataProvider::getNotANumber()
 {
     return m_xComplexDescriptionAccess->getNotANumber();
 }
 
-bool SAL_CALL DatabaseDataProvider::isNotANumber( double nNumber )
+bool DatabaseDataProvider::isNotANumber( double nNumber )
 {
     return m_xComplexDescriptionAccess->isNotANumber(nNumber);
 }
 
-uno::Reference< sheet::XRangeSelection > SAL_CALL DatabaseDataProvider::getRangeSelection()
+uno::Reference< sheet::XRangeSelection > DatabaseDataProvider::getRangeSelection()
 {
     // TODO: Exchange the default return implementation for "getRangeSelection" !!!
     // Exchange the default return implementation.
@@ -357,85 +357,85 @@ uno::Reference< sheet::XRangeSelection > SAL_CALL DatabaseDataProvider::getRange
 }
 
 // chart2::data::XRangeXMLConversion:
-OUString SAL_CALL DatabaseDataProvider::convertRangeToXML(const OUString & _sRangeRepresentation)
+OUString DatabaseDataProvider::convertRangeToXML(const OUString & _sRangeRepresentation)
 {
     osl::MutexGuard g(m_aMutex);
     return m_xRangeConversion->convertRangeToXML(_sRangeRepresentation);
 }
 
-OUString SAL_CALL DatabaseDataProvider::convertRangeFromXML(const OUString & _sXMLRange)
+OUString DatabaseDataProvider::convertRangeFromXML(const OUString & _sXMLRange)
 {
     osl::MutexGuard g(m_aMutex);
     return m_xRangeConversion->convertRangeFromXML(_sXMLRange);
 }
 
 // com.sun.star.beans.XPropertySet:
-uno::Reference< beans::XPropertySetInfo > SAL_CALL DatabaseDataProvider::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > DatabaseDataProvider::getPropertySetInfo()
 {
     return ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::getPropertySetInfo();
 }
 
-void SAL_CALL DatabaseDataProvider::setPropertyValue(const OUString & aPropertyName, const cpo::uno::Any & aValue)
+void DatabaseDataProvider::setPropertyValue(const OUString & aPropertyName, const cpo::uno::Any & aValue)
 {
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::setPropertyValue(aPropertyName, aValue);
 }
 
-cpo::uno::Any SAL_CALL DatabaseDataProvider::getPropertyValue(const OUString & aPropertyName)
+cpo::uno::Any DatabaseDataProvider::getPropertyValue(const OUString & aPropertyName)
 {
     return ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::getPropertyValue(aPropertyName);
 }
 
-void SAL_CALL DatabaseDataProvider::addPropertyChangeListener(const OUString & aPropertyName, const uno::Reference< beans::XPropertyChangeListener > & xListener)
+void DatabaseDataProvider::addPropertyChangeListener(const OUString & aPropertyName, const uno::Reference< beans::XPropertyChangeListener > & xListener)
 {
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::addPropertyChangeListener(aPropertyName, xListener);
 }
 
-void SAL_CALL DatabaseDataProvider::removePropertyChangeListener(const OUString & aPropertyName, const uno::Reference< beans::XPropertyChangeListener > & xListener)
+void DatabaseDataProvider::removePropertyChangeListener(const OUString & aPropertyName, const uno::Reference< beans::XPropertyChangeListener > & xListener)
 {
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::removePropertyChangeListener(aPropertyName, xListener);
 }
 
-void SAL_CALL DatabaseDataProvider::addVetoableChangeListener(const OUString & aPropertyName, const uno::Reference< beans::XVetoableChangeListener > & xListener)
+void DatabaseDataProvider::addVetoableChangeListener(const OUString & aPropertyName, const uno::Reference< beans::XVetoableChangeListener > & xListener)
 {
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::addVetoableChangeListener(aPropertyName, xListener);
 }
 
-void SAL_CALL DatabaseDataProvider::removeVetoableChangeListener(const OUString & aPropertyName, const uno::Reference< beans::XVetoableChangeListener > & xListener)
+void DatabaseDataProvider::removeVetoableChangeListener(const OUString & aPropertyName, const uno::Reference< beans::XVetoableChangeListener > & xListener)
 {
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::removeVetoableChangeListener(aPropertyName, xListener);
 }
 
 // chart2::data::XDatabaseDataProvider:
-cpo::uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getMasterFields()
+cpo::uno::Sequence< OUString > DatabaseDataProvider::getMasterFields()
 {
     osl::MutexGuard g(m_aMutex);
     return m_MasterFields;
 }
 
-void SAL_CALL DatabaseDataProvider::setMasterFields(const cpo::uno::Sequence< OUString > & the_value)
+void DatabaseDataProvider::setMasterFields(const cpo::uno::Sequence< OUString > & the_value)
 {
     impl_invalidateParameter_nothrow();
     set(u"MasterFields"_ustr,the_value,m_MasterFields);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getDetailFields()
+cpo::uno::Sequence< OUString > DatabaseDataProvider::getDetailFields()
 {
     osl::MutexGuard g(m_aMutex);
     return m_DetailFields;
 }
 
-void SAL_CALL DatabaseDataProvider::setDetailFields(const cpo::uno::Sequence< OUString > & the_value)
+void DatabaseDataProvider::setDetailFields(const cpo::uno::Sequence< OUString > & the_value)
 {
     set(u"DetailFields"_ustr,the_value,m_DetailFields);
 }
 
-OUString SAL_CALL DatabaseDataProvider::getCommand()
+OUString DatabaseDataProvider::getCommand()
 {
     osl::MutexGuard g(m_aMutex);
     return m_Command;
 }
 
-void SAL_CALL DatabaseDataProvider::setCommand(const OUString & the_value)
+void DatabaseDataProvider::setCommand(const OUString & the_value)
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -445,13 +445,13 @@ void SAL_CALL DatabaseDataProvider::setCommand(const OUString & the_value)
     set(PROPERTY_COMMAND,the_value,m_Command);
 }
 
-::sal_Int32 SAL_CALL DatabaseDataProvider::getCommandType()
+::sal_Int32 DatabaseDataProvider::getCommandType()
 {
     osl::MutexGuard g(m_aMutex);
     return m_CommandType;
 }
 
-void SAL_CALL DatabaseDataProvider::setCommandType(::sal_Int32 the_value)
+void DatabaseDataProvider::setCommandType(::sal_Int32 the_value)
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -460,13 +460,13 @@ void SAL_CALL DatabaseDataProvider::setCommandType(::sal_Int32 the_value)
     set(PROPERTY_COMMAND_TYPE,the_value,m_CommandType);
 }
 
-OUString SAL_CALL DatabaseDataProvider::getFilter()
+OUString DatabaseDataProvider::getFilter()
 {
     osl::MutexGuard g(m_aMutex);
     return m_aFilterManager.getFilterComponent( dbtools::FilterManager::FilterComponent::PublicFilter );
 }
 
-void SAL_CALL DatabaseDataProvider::setFilter(const OUString & the_value)
+void DatabaseDataProvider::setFilter(const OUString & the_value)
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -475,13 +475,13 @@ void SAL_CALL DatabaseDataProvider::setFilter(const OUString & the_value)
     set(PROPERTY_FILTER,the_value,m_Filter);
 }
 
-bool SAL_CALL DatabaseDataProvider::getApplyFilter()
+bool DatabaseDataProvider::getApplyFilter()
 {
     osl::MutexGuard g(m_aMutex);
     return m_ApplyFilter;
 }
 
-void SAL_CALL DatabaseDataProvider::setApplyFilter( bool the_value )
+void DatabaseDataProvider::setApplyFilter( bool the_value )
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -490,13 +490,13 @@ void SAL_CALL DatabaseDataProvider::setApplyFilter( bool the_value )
     set(PROPERTY_APPLYFILTER,the_value,m_ApplyFilter);
 }
 
-OUString SAL_CALL DatabaseDataProvider::getHavingClause()
+OUString DatabaseDataProvider::getHavingClause()
 {
     osl::MutexGuard g(m_aMutex);
     return m_HavingClause;
 }
 
-void SAL_CALL DatabaseDataProvider::setHavingClause( const OUString& the_value )
+void DatabaseDataProvider::setHavingClause( const OUString& the_value )
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -505,13 +505,13 @@ void SAL_CALL DatabaseDataProvider::setHavingClause( const OUString& the_value )
     set(PROPERTY_HAVING_CLAUSE,the_value,m_HavingClause);
 }
 
-OUString SAL_CALL DatabaseDataProvider::getGroupBy()
+OUString DatabaseDataProvider::getGroupBy()
 {
     osl::MutexGuard g(m_aMutex);
     return m_GroupBy;
 }
 
-void SAL_CALL DatabaseDataProvider::setGroupBy( const OUString& the_value )
+void DatabaseDataProvider::setGroupBy( const OUString& the_value )
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -520,13 +520,13 @@ void SAL_CALL DatabaseDataProvider::setGroupBy( const OUString& the_value )
     set(PROPERTY_GROUP_BY,the_value,m_GroupBy);
 }
 
-OUString SAL_CALL DatabaseDataProvider::getOrder()
+OUString DatabaseDataProvider::getOrder()
 {
     osl::MutexGuard g(m_aMutex);
     return m_Order;
 }
 
-void SAL_CALL DatabaseDataProvider::setOrder( const OUString& the_value )
+void DatabaseDataProvider::setOrder( const OUString& the_value )
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -535,48 +535,48 @@ void SAL_CALL DatabaseDataProvider::setOrder( const OUString& the_value )
     set(PROPERTY_ORDER,the_value,m_Order);
 }
 
-bool SAL_CALL DatabaseDataProvider::getEscapeProcessing()
+bool DatabaseDataProvider::getEscapeProcessing()
 {
     osl::MutexGuard g(m_aMutex);
     return m_EscapeProcessing;
 }
 
-void SAL_CALL DatabaseDataProvider::setEscapeProcessing(bool the_value)
+void DatabaseDataProvider::setEscapeProcessing(bool the_value)
 {
     set(PROPERTY_ESCAPE_PROCESSING,the_value,m_EscapeProcessing);
 }
 
-::sal_Int32 SAL_CALL DatabaseDataProvider::getRowLimit()
+::sal_Int32 DatabaseDataProvider::getRowLimit()
 {
     osl::MutexGuard g(m_aMutex);
     return m_RowLimit;
 }
 
-void SAL_CALL DatabaseDataProvider::setRowLimit(::sal_Int32 the_value)
+void DatabaseDataProvider::setRowLimit(::sal_Int32 the_value)
 {
     set(u"RowLimit"_ustr,the_value,m_RowLimit);
 }
 
-uno::Reference< sdbc::XConnection > SAL_CALL DatabaseDataProvider::getActiveConnection()
+uno::Reference< sdbc::XConnection > DatabaseDataProvider::getActiveConnection()
 {
     osl::MutexGuard g(m_aMutex);
     return m_xActiveConnection;
 }
 
-void SAL_CALL DatabaseDataProvider::setActiveConnection(const uno::Reference< sdbc::XConnection > & the_value)
+void DatabaseDataProvider::setActiveConnection(const uno::Reference< sdbc::XConnection > & the_value)
 {
     if ( !the_value.is() )
         throw lang::IllegalArgumentException();
     set(PROPERTY_ACTIVE_CONNECTION,the_value,m_xActiveConnection);
 }
 
-OUString SAL_CALL DatabaseDataProvider::getDataSourceName()
+OUString DatabaseDataProvider::getDataSourceName()
 {
     osl::MutexGuard g(m_aMutex);
     return m_DataSourceName;
 }
 
-void SAL_CALL DatabaseDataProvider::setDataSourceName(const OUString& the_value)
+void DatabaseDataProvider::setDataSourceName(const OUString& the_value)
 {
     set(PROPERTY_DATASOURCENAME,the_value,m_DataSourceName);
 }
@@ -806,237 +806,237 @@ bool DatabaseDataProvider::impl_fillParameters_nothrow( ::osl::ResettableMutexGu
 }
 
 // css::sdbc::XParameters
-void SAL_CALL DatabaseDataProvider::setNull(sal_Int32 parameterIndex, sal_Int32 sqlType)
+void DatabaseDataProvider::setNull(sal_Int32 parameterIndex, sal_Int32 sqlType)
 {
     m_aParameterManager.setNull(parameterIndex, sqlType);
 }
 
-void SAL_CALL DatabaseDataProvider::setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName)
+void DatabaseDataProvider::setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName)
 {
     m_aParameterManager.setObjectNull(parameterIndex, sqlType, typeName);
 }
 
-void SAL_CALL DatabaseDataProvider::setBoolean(sal_Int32 parameterIndex, bool x)
+void DatabaseDataProvider::setBoolean(sal_Int32 parameterIndex, bool x)
 {
     m_aParameterManager.setBoolean(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setByte(sal_Int32 parameterIndex, sal_Int8 x)
+void DatabaseDataProvider::setByte(sal_Int32 parameterIndex, sal_Int8 x)
 {
     m_aParameterManager.setByte(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setShort(sal_Int32 parameterIndex, sal_Int16 x)
+void DatabaseDataProvider::setShort(sal_Int32 parameterIndex, sal_Int16 x)
 {
     m_aParameterManager.setShort(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setInt(sal_Int32 parameterIndex, sal_Int32 x)
+void DatabaseDataProvider::setInt(sal_Int32 parameterIndex, sal_Int32 x)
 {
     m_aParameterManager.setInt(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setLong(sal_Int32 parameterIndex, sal_Int64 x)
+void DatabaseDataProvider::setLong(sal_Int32 parameterIndex, sal_Int64 x)
 {
     m_aParameterManager.setLong(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setFloat(sal_Int32 parameterIndex, float x)
+void DatabaseDataProvider::setFloat(sal_Int32 parameterIndex, float x)
 {
     m_aParameterManager.setFloat(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setDouble(sal_Int32 parameterIndex, double x)
+void DatabaseDataProvider::setDouble(sal_Int32 parameterIndex, double x)
 {
     m_aParameterManager.setDouble(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setString(sal_Int32 parameterIndex, const OUString& x)
+void DatabaseDataProvider::setString(sal_Int32 parameterIndex, const OUString& x)
 {
     m_aParameterManager.setString(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setBytes(sal_Int32 parameterIndex, const cpo::uno::Sequence< sal_Int8 >& x)
+void DatabaseDataProvider::setBytes(sal_Int32 parameterIndex, const cpo::uno::Sequence< sal_Int8 >& x)
 {
     m_aParameterManager.setBytes(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setDate(sal_Int32 parameterIndex, const util::Date& x)
+void DatabaseDataProvider::setDate(sal_Int32 parameterIndex, const util::Date& x)
 {
     m_aParameterManager.setDate(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setTime(sal_Int32 parameterIndex, const util::Time& x)
+void DatabaseDataProvider::setTime(sal_Int32 parameterIndex, const util::Time& x)
 {
     m_aParameterManager.setTime(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setTimestamp(sal_Int32 parameterIndex, const util::DateTime& x)
+void DatabaseDataProvider::setTimestamp(sal_Int32 parameterIndex, const util::DateTime& x)
 {
     m_aParameterManager.setTimestamp(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setBinaryStream(sal_Int32 parameterIndex, const uno::Reference<io::XInputStream>& x, sal_Int32 length)
+void DatabaseDataProvider::setBinaryStream(sal_Int32 parameterIndex, const uno::Reference<io::XInputStream>& x, sal_Int32 length)
 {
     m_aParameterManager.setBinaryStream(parameterIndex, x, length);
 }
 
-void SAL_CALL DatabaseDataProvider::setCharacterStream(sal_Int32 parameterIndex, const uno::Reference<io::XInputStream>& x, sal_Int32 length)
+void DatabaseDataProvider::setCharacterStream(sal_Int32 parameterIndex, const uno::Reference<io::XInputStream>& x, sal_Int32 length)
 {
     m_aParameterManager.setCharacterStream(parameterIndex, x, length);
 }
 
-void SAL_CALL DatabaseDataProvider::setObjectWithInfo(sal_Int32 parameterIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale)
+void DatabaseDataProvider::setObjectWithInfo(sal_Int32 parameterIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale)
 {
     m_aParameterManager.setObjectWithInfo(parameterIndex, x, targetSqlType, scale);
 }
 
-void SAL_CALL DatabaseDataProvider::setObject(sal_Int32 parameterIndex, const cpo::uno::Any& x)
+void DatabaseDataProvider::setObject(sal_Int32 parameterIndex, const cpo::uno::Any& x)
 {
     m_aParameterManager.setObject(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setRef(sal_Int32 parameterIndex, const uno::Reference<sdbc::XRef>& x)
+void DatabaseDataProvider::setRef(sal_Int32 parameterIndex, const uno::Reference<sdbc::XRef>& x)
 {
     m_aParameterManager.setRef(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setBlob(sal_Int32 parameterIndex, const uno::Reference<sdbc::XBlob>& x)
+void DatabaseDataProvider::setBlob(sal_Int32 parameterIndex, const uno::Reference<sdbc::XBlob>& x)
 {
     m_aParameterManager.setBlob(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setClob(sal_Int32 parameterIndex, const uno::Reference<sdbc::XClob>& x)
+void DatabaseDataProvider::setClob(sal_Int32 parameterIndex, const uno::Reference<sdbc::XClob>& x)
 {
     m_aParameterManager.setClob(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::setArray(sal_Int32 parameterIndex, const Reference<sdbc::XArray>& x)
+void DatabaseDataProvider::setArray(sal_Int32 parameterIndex, const Reference<sdbc::XArray>& x)
 {
     m_aParameterManager.setArray(parameterIndex, x);
 }
 
-void SAL_CALL DatabaseDataProvider::clearParameters()
+void DatabaseDataProvider::clearParameters()
 {
     m_aParameterManager.clearParameters();
 }
 
 // css::sdbc::XRowSet
-void SAL_CALL DatabaseDataProvider::execute()
+void DatabaseDataProvider::execute()
 {
     cpo::uno::Sequence< beans::PropertyValue > aEmpty;
     createDataSource(aEmpty);
 }
 
-void SAL_CALL DatabaseDataProvider::addRowSetListener(const uno::Reference<sdbc::XRowSetListener>& _rListener)
+void DatabaseDataProvider::addRowSetListener(const uno::Reference<sdbc::XRowSetListener>& _rListener)
 {
     if (m_xRowSet.is())
         m_xRowSet->addRowSetListener(_rListener);
 }
 
-void SAL_CALL DatabaseDataProvider::removeRowSetListener(const uno::Reference<sdbc::XRowSetListener>& _rListener)
+void DatabaseDataProvider::removeRowSetListener(const uno::Reference<sdbc::XRowSetListener>& _rListener)
 {
     if (m_xRowSet.is())
         m_xRowSet->removeRowSetListener(_rListener);
 }
 
 // css::sdbc::XResultSet
-bool SAL_CALL DatabaseDataProvider::next()
+bool DatabaseDataProvider::next()
 {
     return m_xRowSet->next();
 }
 
-bool SAL_CALL DatabaseDataProvider::isBeforeFirst()
+bool DatabaseDataProvider::isBeforeFirst()
 {
     return m_xRowSet->isBeforeFirst();
 }
 
-bool SAL_CALL DatabaseDataProvider::isAfterLast()
+bool DatabaseDataProvider::isAfterLast()
 {
     return m_xRowSet->isAfterLast();
 }
 
-bool SAL_CALL DatabaseDataProvider::isFirst()
+bool DatabaseDataProvider::isFirst()
 {
     return m_xRowSet->isFirst();
 }
 
-bool SAL_CALL DatabaseDataProvider::isLast()
+bool DatabaseDataProvider::isLast()
 {
     return m_xRowSet->isLast();
 }
 
-void SAL_CALL DatabaseDataProvider::beforeFirst()
+void DatabaseDataProvider::beforeFirst()
 {
     m_xRowSet->beforeFirst();
 }
 
-void SAL_CALL DatabaseDataProvider::afterLast()
+void DatabaseDataProvider::afterLast()
 {
     m_xRowSet->afterLast();
 }
 
-bool SAL_CALL DatabaseDataProvider::first()
+bool DatabaseDataProvider::first()
 {
     return m_xRowSet->first();
 }
 
-bool SAL_CALL DatabaseDataProvider::last()
+bool DatabaseDataProvider::last()
 {
     return m_xRowSet->last();
 }
 
-sal_Int32 SAL_CALL DatabaseDataProvider::getRow()
+sal_Int32 DatabaseDataProvider::getRow()
 {
     return m_xRowSet->getRow();
 }
 
-bool SAL_CALL DatabaseDataProvider::absolute(sal_Int32 row)
+bool DatabaseDataProvider::absolute(sal_Int32 row)
 {
     return m_xRowSet->absolute(row);
 }
 
-bool SAL_CALL DatabaseDataProvider::relative(sal_Int32 rows)
+bool DatabaseDataProvider::relative(sal_Int32 rows)
 {
     return m_xRowSet->relative(rows);
 }
 
-bool SAL_CALL DatabaseDataProvider::previous()
+bool DatabaseDataProvider::previous()
 {
     return m_xRowSet->previous();
 }
 
-void SAL_CALL DatabaseDataProvider::refreshRow()
+void DatabaseDataProvider::refreshRow()
 {
     m_xRowSet->refreshRow();
 }
 
-bool SAL_CALL DatabaseDataProvider::rowUpdated()
+bool DatabaseDataProvider::rowUpdated()
 {
     return m_xRowSet->rowUpdated();
 }
 
-bool SAL_CALL DatabaseDataProvider::rowInserted()
+bool DatabaseDataProvider::rowInserted()
 {
     return m_xRowSet->rowInserted();
 }
 
-bool SAL_CALL DatabaseDataProvider::rowDeleted()
+bool DatabaseDataProvider::rowDeleted()
 {
     return m_xRowSet->rowDeleted();
 }
 
-uno::Reference< uno::XInterface > SAL_CALL DatabaseDataProvider::getStatement()
+uno::Reference< uno::XInterface > DatabaseDataProvider::getStatement()
 {
     return m_xRowSet->getStatement();
 }
 
-uno::Reference< uno::XInterface > SAL_CALL DatabaseDataProvider::getParent(  )
+uno::Reference< uno::XInterface > DatabaseDataProvider::getParent(  )
 {
     return m_xParent;
 }
 
-void SAL_CALL DatabaseDataProvider::setParent( const uno::Reference< uno::XInterface >& _xParent )
+void DatabaseDataProvider::setParent( const uno::Reference< uno::XInterface >& _xParent )
 {
     osl::MutexGuard g(m_aMutex);
     m_xParent = _xParent;

@@ -69,15 +69,15 @@ namespace dbaccess
         virtual ~DatabaseRegistrations() override;
 
     public:
-        virtual bool SAL_CALL hasRegisteredDatabase( const OUString& Name ) override;
-        virtual Sequence< OUString > SAL_CALL getRegistrationNames() override;
-        virtual OUString SAL_CALL getDatabaseLocation( const OUString& Name ) override;
-        virtual void SAL_CALL registerDatabaseLocation( const OUString& Name, const OUString& Location ) override;
-        virtual void SAL_CALL revokeDatabaseLocation( const OUString& Name ) override;
-        virtual void SAL_CALL changeDatabaseLocation( const OUString& Name, const OUString& NewLocation ) override;
-        virtual bool SAL_CALL isDatabaseRegistrationReadOnly( const OUString& Name ) override;
-        virtual void SAL_CALL addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener ) override;
-        virtual void SAL_CALL removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener ) override;
+        virtual bool hasRegisteredDatabase( const OUString& Name ) override;
+        virtual Sequence< OUString > getRegistrationNames() override;
+        virtual OUString getDatabaseLocation( const OUString& Name ) override;
+        virtual void registerDatabaseLocation( const OUString& Name, const OUString& Location ) override;
+        virtual void revokeDatabaseLocation( const OUString& Name ) override;
+        virtual void changeDatabaseLocation( const OUString& Name, const OUString& NewLocation ) override;
+        virtual bool isDatabaseRegistrationReadOnly( const OUString& Name ) override;
+        virtual void addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener ) override;
+        virtual void removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener ) override;
 
     private:
         void
@@ -218,14 +218,14 @@ namespace dbaccess
             throw IllegalArgumentException( OUString(), *this, 2 );
     }
 
-    bool SAL_CALL DatabaseRegistrations::hasRegisteredDatabase( const OUString& Name )
+    bool DatabaseRegistrations::hasRegisteredDatabase( const OUString& Name )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         ::utl::OConfigurationNode aNodeForName = impl_getNodeForName_nothrow( Name );
         return aNodeForName.isValid();
     }
 
-    Sequence< OUString > SAL_CALL DatabaseRegistrations::getRegistrationNames()
+    Sequence< OUString > DatabaseRegistrations::getRegistrationNames()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_aConfigurationRoot.isValid() )
@@ -245,7 +245,7 @@ namespace dbaccess
         return aDisplayNames;
     }
 
-    OUString SAL_CALL DatabaseRegistrations::getDatabaseLocation( const OUString& Name )
+    OUString DatabaseRegistrations::getDatabaseLocation( const OUString& Name )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -258,7 +258,7 @@ namespace dbaccess
         return sLocation;
     }
 
-    void SAL_CALL DatabaseRegistrations::registerDatabaseLocation( const OUString& Name, const OUString& Location )
+    void DatabaseRegistrations::registerDatabaseLocation( const OUString& Name, const OUString& Location )
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -276,7 +276,7 @@ namespace dbaccess
         m_aRegistrationListeners.notifyEach( &XDatabaseRegistrationsListener::registeredDatabaseLocation, aEvent );
     }
 
-    void SAL_CALL DatabaseRegistrations::revokeDatabaseLocation( const OUString& Name )
+    void DatabaseRegistrations::revokeDatabaseLocation( const OUString& Name )
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -301,7 +301,7 @@ namespace dbaccess
         m_aRegistrationListeners.notifyEach( &XDatabaseRegistrationsListener::revokedDatabaseLocation, aEvent );
     }
 
-    void SAL_CALL DatabaseRegistrations::changeDatabaseLocation( const OUString& Name, const OUString& NewLocation )
+    void DatabaseRegistrations::changeDatabaseLocation( const OUString& Name, const OUString& NewLocation )
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -326,20 +326,20 @@ namespace dbaccess
         m_aRegistrationListeners.notifyEach( &XDatabaseRegistrationsListener::changedDatabaseLocation, aEvent );
     }
 
-    bool SAL_CALL DatabaseRegistrations::isDatabaseRegistrationReadOnly( const OUString& Name )
+    bool DatabaseRegistrations::isDatabaseRegistrationReadOnly( const OUString& Name )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_exist(Name);
         return aDataSourceRegistration.isReadonly();
     }
 
-    void SAL_CALL DatabaseRegistrations::addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener )
+    void DatabaseRegistrations::addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener )
     {
         if ( Listener.is() )
             m_aRegistrationListeners.addInterface( Listener );
     }
 
-    void SAL_CALL DatabaseRegistrations::removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener )
+    void DatabaseRegistrations::removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener )
     {
         if ( Listener.is() )
             m_aRegistrationListeners.removeInterface( Listener );

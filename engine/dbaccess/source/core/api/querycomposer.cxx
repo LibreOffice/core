@@ -57,24 +57,24 @@ OQueryComposer::~OQueryComposer()
 {
 }
 
-void SAL_CALL OQueryComposer::disposing()
+void OQueryComposer::disposing()
 {
     ::comphelper::disposeComponent(m_xComposerHelper);
     ::comphelper::disposeComponent(m_xComposer);
 }
 
 // css::lang::XTypeProvider
-Sequence< Type > SAL_CALL OQueryComposer::getTypes()
+Sequence< Type > OQueryComposer::getTypes()
 {
     return ::comphelper::concatSequences(OSubComponent::getTypes(),OQueryComposer_BASE::getTypes());
 }
 
-Sequence< sal_Int8 > SAL_CALL OQueryComposer::getImplementationId()
+Sequence< sal_Int8 > OQueryComposer::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-Any SAL_CALL OQueryComposer::queryInterface( const Type & rType )
+Any OQueryComposer::queryInterface( const Type & rType )
 {
     Any aRet = OSubComponent::queryInterface(rType);
     if(!aRet.hasValue())
@@ -99,7 +99,7 @@ Sequence< OUString > OQueryComposer::getSupportedServiceNames(  )
 }
 
 // XSQLQueryComposer
-OUString SAL_CALL OQueryComposer::getQuery(  )
+OUString OQueryComposer::getQuery(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -111,7 +111,7 @@ OUString SAL_CALL OQueryComposer::getQuery(  )
     return sQuery;
 }
 
-void SAL_CALL OQueryComposer::setQuery( const OUString& command )
+void OQueryComposer::setQuery( const OUString& command )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -122,7 +122,7 @@ void SAL_CALL OQueryComposer::setQuery( const OUString& command )
     m_sOrgOrder = m_xComposer->getOrder();
 }
 
-OUString SAL_CALL OQueryComposer::getComposedQuery(  )
+OUString OQueryComposer::getComposedQuery(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -131,7 +131,7 @@ OUString SAL_CALL OQueryComposer::getComposedQuery(  )
     return m_xComposer->getQuery();
 }
 
-OUString SAL_CALL OQueryComposer::getFilter(  )
+OUString OQueryComposer::getFilter(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
@@ -140,7 +140,7 @@ OUString SAL_CALL OQueryComposer::getFilter(  )
     return aFilterCreator.getComposedAndClear();
 }
 
-Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilter(  )
+Sequence< Sequence< PropertyValue > > OQueryComposer::getStructuredFilter(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -148,7 +148,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilt
     return m_xComposer->getStructuredFilter();
 }
 
-OUString SAL_CALL OQueryComposer::getOrder(  )
+OUString OQueryComposer::getOrder(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -158,7 +158,7 @@ OUString SAL_CALL OQueryComposer::getOrder(  )
     return aOrderCreator.getComposedAndClear();
 }
 
-void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column )
+void OQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -174,7 +174,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     setFilter( aFilterCreator.getComposedAndClear() );
 }
 
-void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, bool ascending )
+void OQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, bool ascending )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -190,7 +190,7 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
     setOrder(aOrderCreator.getComposedAndClear());
 }
 
-void SAL_CALL OQueryComposer::setFilter( const OUString& filter )
+void OQueryComposer::setFilter( const OUString& filter )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -206,7 +206,7 @@ void SAL_CALL OQueryComposer::setFilter( const OUString& filter )
     m_xComposer->setFilter( aFilterCreator.getComposedAndClear() );
 }
 
-void SAL_CALL OQueryComposer::setOrder( const OUString& order )
+void OQueryComposer::setOrder( const OUString& order )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -224,7 +224,7 @@ void SAL_CALL OQueryComposer::setOrder( const OUString& order )
 }
 
 // XTablesSupplier
-Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  )
+Reference< XNameAccess > OQueryComposer::getTables(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -233,7 +233,7 @@ Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  )
 }
 
 // XColumnsSupplier
-Reference< XNameAccess > SAL_CALL OQueryComposer::getColumns(  )
+Reference< XNameAccess > OQueryComposer::getColumns(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -241,7 +241,7 @@ Reference< XNameAccess > SAL_CALL OQueryComposer::getColumns(  )
     return Reference<XColumnsSupplier>(m_xComposer,UNO_QUERY_THROW)->getColumns();
 }
 
-Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  )
+Reference< XIndexAccess > OQueryComposer::getParameters(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -249,12 +249,12 @@ Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  )
     return Reference<XParametersSupplier>(m_xComposer,UNO_QUERY_THROW)->getParameters();
 }
 
-void SAL_CALL OQueryComposer::acquire() noexcept
+void OQueryComposer::acquire() noexcept
 {
     OSubComponent::acquire();
 }
 
-void SAL_CALL OQueryComposer::release() noexcept
+void OQueryComposer::release() noexcept
 {
     OSubComponent::release();
 }

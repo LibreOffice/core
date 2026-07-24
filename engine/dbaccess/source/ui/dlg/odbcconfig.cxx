@@ -258,7 +258,7 @@ public:
     }
 
 protected:
-    virtual void SAL_CALL run() override
+    virtual void run() override
     {
         osl_setThreadName("dbaui::ProcessTerminationWait");
 

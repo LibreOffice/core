@@ -71,12 +71,12 @@ public:
     OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSource,::cppu::OWeakObject& _rMySelf);
 
 // css::sdbcx::XColumnsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) override;
+    virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
 
 // css::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 protected:
 
@@ -113,21 +113,21 @@ protected:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
     // OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual ~OQueryDescriptor() override;
 public:
     OQueryDescriptor();
     explicit OQueryDescriptor(const OQueryDescriptor_Base& _rSource);
 
-    virtual cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override;
-    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 
 // css::uno::XInterface
     DECLARE_XINTERFACE( )
 
     // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 };
 }   // namespace dbaccess

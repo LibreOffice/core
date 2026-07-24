@@ -86,7 +86,7 @@ namespace dbaxml
         OTableStylesContext( SvXMLImport& rImport, bool bAutoStyles );
         virtual ~OTableStylesContext() override;
 
-        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+        virtual void endFastElement(sal_Int32 nElement) override;
 
         virtual SvXMLImportPropertyMapper* GetImportPropertyMapper(
                             XmlStyleFamily nFamily ) const override;

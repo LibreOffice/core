@@ -61,49 +61,49 @@ namespace sdbtools
     {
     }
 
-    OUString SAL_CALL TableName::getCatalogName()
+    OUString TableName::getCatalogName()
     {
         EntryGuard aGuard( *this );
         return msCatalog;
     }
 
-    void SAL_CALL TableName::setCatalogName( const OUString& _catalogName )
+    void TableName::setCatalogName( const OUString& _catalogName )
     {
         EntryGuard aGuard( *this );
         msCatalog = _catalogName;
     }
 
-    OUString SAL_CALL TableName::getSchemaName()
+    OUString TableName::getSchemaName()
     {
         EntryGuard aGuard( *this );
         return msSchema;
     }
 
-    void SAL_CALL TableName::setSchemaName( const OUString& _schemaName )
+    void TableName::setSchemaName( const OUString& _schemaName )
     {
         EntryGuard aGuard( *this );
         msSchema = _schemaName;
     }
 
-    OUString SAL_CALL TableName::getTableName()
+    OUString TableName::getTableName()
     {
         EntryGuard aGuard( *this );
         return msName;
     }
 
-    void SAL_CALL TableName::setTableName( const OUString& _tableName )
+    void TableName::setTableName( const OUString& _tableName )
     {
         EntryGuard aGuard( *this );
         msName = _tableName;
     }
 
-    OUString SAL_CALL TableName::getNameForSelect()
+    OUString TableName::getNameForSelect()
     {
         EntryGuard aGuard( *this );
         return composeTableNameForSelect( getConnection(), msCatalog, msSchema, msName );
     }
 
-    Reference< XPropertySet > SAL_CALL TableName::getTable()
+    Reference< XPropertySet > TableName::getTable()
     {
         EntryGuard aGuard( *this );
 
@@ -130,7 +130,7 @@ namespace sdbtools
         return xTable;
     }
 
-    void SAL_CALL TableName::setTable( const Reference< XPropertySet >& _table )
+    void TableName::setTable( const Reference< XPropertySet >& _table )
     {
         EntryGuard aGuard( *this );
 
@@ -194,7 +194,7 @@ namespace sdbtools
         }
     }
 
-    OUString SAL_CALL TableName::getComposedName( ::sal_Int32 Type, bool Quote )
+    OUString TableName::getComposedName( ::sal_Int32 Type, bool Quote )
     {
         EntryGuard aGuard( *this );
 
@@ -204,7 +204,7 @@ namespace sdbtools
             lcl_translateCompositionType_throw( Type ) );
     }
 
-    void SAL_CALL TableName::setComposedName( const OUString& ComposedName, ::sal_Int32 Type )
+    void TableName::setComposedName( const OUString& ComposedName, ::sal_Int32 Type )
     {
         EntryGuard aGuard( *this );
 

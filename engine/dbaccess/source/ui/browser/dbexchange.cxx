@@ -215,7 +215,7 @@ using namespace cpo::uno;
         ODataAccessObjectTransferable::ObjectReleased( );
     }
 
-    void SAL_CALL ODataClipboard::disposing( const css::lang::EventObject& i_rSource )
+    void ODataClipboard::disposing( const css::lang::EventObject& i_rSource )
     {
         ODataAccessDescriptor& rDescriptor( getDescriptor() );
 

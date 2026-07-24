@@ -68,57 +68,57 @@ public:
 
 
 // css::lang::XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
 
 // css::uno::XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 // comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
 // cppu::OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
-    virtual bool SAL_CALL convertFastPropertyValue(
+    virtual bool convertFastPropertyValue(
                             cpo::uno::Any & rConvertedValue,
                             cpo::uno::Any & rOldValue,
                             sal_Int32 nHandle,
                             const cpo::uno::Any& rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+    virtual void setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const cpo::uno::Any& rValue
                                                  ) override;
-    virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual void getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
 // css::sdbc::XWarningsSupplier
-    virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
-    virtual void SAL_CALL clearWarnings(  ) override;
+    virtual cpo::uno::Any getWarnings(  ) override;
+    virtual void clearWarnings(  ) override;
 
 // css::util::XCancellable
-    virtual void SAL_CALL cancel(  ) override;
+    virtual void cancel(  ) override;
 
 // css::sdbc::XCloseable
-    virtual void SAL_CALL close(  ) override;
+    virtual void close(  ) override;
 
 // css::sdbc::XMultipleResults
-    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet(  ) override;
-    virtual sal_Int32 SAL_CALL getUpdateCount(  ) override;
-    virtual bool SAL_CALL getMoreResults(  ) override;
+    virtual css::uno::Reference< css::sdbc::XResultSet > getResultSet(  ) override;
+    virtual sal_Int32 getUpdateCount(  ) override;
+    virtual bool getMoreResults(  ) override;
 
 // css::sdbc::XPreparedBatchExecution
-    virtual void SAL_CALL addBatch(  ) override;
-    virtual void SAL_CALL clearBatch(  ) override;
-    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
+    virtual void addBatch(  ) override;
+    virtual void clearBatch(  ) override;
+    virtual cpo::uno::Sequence< sal_Int32 > executeBatch(  ) override;
 // css::sdbc::XGeneratedResultSet
-    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getGeneratedValues(  ) override;
+    virtual css::uno::Reference< css::sdbc::XResultSet > getGeneratedValues(  ) override;
 
 // Helper
     void disposeResultSet();
@@ -150,23 +150,23 @@ public:
     DECLARE_XTYPEPROVIDER()
 
 // css::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 // css::sdbc::XStatement
-    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) override;
-    virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) override;
-    virtual bool SAL_CALL execute( const OUString& sql ) override;
-    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override;
+    virtual css::uno::Reference< css::sdbc::XResultSet > executeQuery( const OUString& sql ) override;
+    virtual sal_Int32 executeUpdate( const OUString& sql ) override;
+    virtual bool execute( const OUString& sql ) override;
+    virtual css::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // XBatchExecution
-    virtual void SAL_CALL addBatch( const OUString& sql ) override;
-    virtual void SAL_CALL clearBatch(  ) override;
-    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
+    virtual void addBatch( const OUString& sql ) override;
+    virtual void clearBatch(  ) override;
+    virtual cpo::uno::Sequence< sal_Int32 > executeBatch(  ) override;
 
     using OStatementBase::addBatch;
 

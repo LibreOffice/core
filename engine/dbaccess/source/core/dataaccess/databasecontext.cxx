@@ -110,10 +110,10 @@ namespace dbaccess
 
         private:
             // XTerminateListener
-            virtual void SAL_CALL queryTermination( const lang::EventObject& Event ) override;
-            virtual void SAL_CALL notifyTermination( const lang::EventObject& Event ) override;
+            virtual void queryTermination( const lang::EventObject& Event ) override;
+            virtual void notifyTermination( const lang::EventObject& Event ) override;
             // XEventListener
-            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+            virtual void disposing( const css::lang::EventObject& Source ) override;
         };
 
         DatabaseDocumentLoader::DatabaseDocumentLoader( const Reference<XComponentContext> & rxContext )
@@ -129,7 +129,7 @@ namespace dbaccess
             }
         }
 
-        void SAL_CALL DatabaseDocumentLoader::queryTermination( const lang::EventObject& /*Event*/ )
+        void DatabaseDocumentLoader::queryTermination( const lang::EventObject& /*Event*/ )
         {
             std::vector< const ODatabaseModelImpl* > aCpy(m_aDatabaseDocuments);
             for( const auto& pCopy : aCpy )
@@ -149,11 +149,11 @@ namespace dbaccess
             }
         }
 
-        void SAL_CALL DatabaseDocumentLoader::notifyTermination( const lang::EventObject& /*Event*/ )
+        void DatabaseDocumentLoader::notifyTermination( const lang::EventObject& /*Event*/ )
         {
         }
 
-        void SAL_CALL DatabaseDocumentLoader::disposing( const lang::EventObject& /*Source*/ )
+        void DatabaseDocumentLoader::disposing( const lang::EventObject& /*Source*/ )
         {
         }
 
@@ -209,14 +209,14 @@ Reference< XInterface > ODatabaseContext::impl_createNewDataSource()
     return xDataSource;
 }
 
-Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  )
+Reference< XInterface > ODatabaseContext::createInstance(  )
 {
     // for convenience of the API user, we ensure the document is fully initialized (effectively: XLoadable::initNew
     // has been called at the DatabaseDocument).
     return impl_createNewDataSource();
 }
 
-Reference< XInterface > SAL_CALL ODatabaseContext::createInstanceWithArguments( const Sequence< Any >& _rArguments )
+Reference< XInterface > ODatabaseContext::createInstanceWithArguments( const Sequence< Any >& _rArguments )
 {
     ::comphelper::NamedValueCollection aArgs( _rArguments );
     OUString sURL = aArgs.getOrDefault( INFO_POOLURL, OUString() );
@@ -487,12 +487,12 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     }
 }
 
-void SAL_CALL ODatabaseContext::addContainerListener( const Reference< XContainerListener >& _rxListener )
+void ODatabaseContext::addContainerListener( const Reference< XContainerListener >& _rxListener )
 {
     m_aContainerListeners.addInterface(_rxListener);
 }
 
-void SAL_CALL ODatabaseContext::removeContainerListener( const Reference< XContainerListener >& _rxListener )
+void ODatabaseContext::removeContainerListener( const Reference< XContainerListener >& _rxListener )
 {
     m_aContainerListeners.removeInterface(_rxListener);
 }
@@ -523,47 +523,47 @@ void ODatabaseContext::revokeObject(const OUString& _rName)
     m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
 }
 
-bool SAL_CALL ODatabaseContext::hasRegisteredDatabase( const OUString& Name )
+bool ODatabaseContext::hasRegisteredDatabase( const OUString& Name )
 {
     return m_xDatabaseRegistrations->hasRegisteredDatabase( Name );
 }
 
-Sequence< OUString > SAL_CALL ODatabaseContext::getRegistrationNames()
+Sequence< OUString > ODatabaseContext::getRegistrationNames()
 {
     return m_xDatabaseRegistrations->getRegistrationNames();
 }
 
-OUString SAL_CALL ODatabaseContext::getDatabaseLocation( const OUString& Name )
+OUString ODatabaseContext::getDatabaseLocation( const OUString& Name )
 {
     return m_xDatabaseRegistrations->getDatabaseLocation( Name );
 }
 
-void SAL_CALL ODatabaseContext::registerDatabaseLocation( const OUString& Name, const OUString& Location )
+void ODatabaseContext::registerDatabaseLocation( const OUString& Name, const OUString& Location )
 {
     m_xDatabaseRegistrations->registerDatabaseLocation( Name, Location );
 }
 
-void SAL_CALL ODatabaseContext::revokeDatabaseLocation( const OUString& Name )
+void ODatabaseContext::revokeDatabaseLocation( const OUString& Name )
 {
     m_xDatabaseRegistrations->revokeDatabaseLocation( Name );
 }
 
-void SAL_CALL ODatabaseContext::changeDatabaseLocation( const OUString& Name, const OUString& NewLocation )
+void ODatabaseContext::changeDatabaseLocation( const OUString& Name, const OUString& NewLocation )
 {
     m_xDatabaseRegistrations->changeDatabaseLocation( Name, NewLocation );
 }
 
-bool SAL_CALL ODatabaseContext::isDatabaseRegistrationReadOnly( const OUString& Name )
+bool ODatabaseContext::isDatabaseRegistrationReadOnly( const OUString& Name )
 {
     return m_xDatabaseRegistrations->isDatabaseRegistrationReadOnly( Name );
 }
 
-void SAL_CALL ODatabaseContext::addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener )
+void ODatabaseContext::addDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener )
 {
     m_xDatabaseRegistrations->addDatabaseRegistrationsListener( Listener );
 }
 
-void SAL_CALL ODatabaseContext::removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener )
+void ODatabaseContext::removeDatabaseRegistrationsListener( const Reference< XDatabaseRegistrationsListener >& Listener )
 {
     m_xDatabaseRegistrations->removeDatabaseRegistrationsListener( Listener );
 }

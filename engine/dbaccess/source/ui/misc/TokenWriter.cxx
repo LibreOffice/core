@@ -139,7 +139,7 @@ void ODatabaseImportExport::dispose()
     m_xRowSetColumns.clear();
 }
 
-void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source )
+void ODatabaseImportExport::disposing( const EventObject& Source )
 {
     Reference<XConnection> xCon(Source.Source,UNO_QUERY);
     if(m_xConnection.is() && m_xConnection == xCon)

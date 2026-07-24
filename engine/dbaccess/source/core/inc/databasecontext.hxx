@@ -98,48 +98,48 @@ public:
     virtual ~ODatabaseContext() override;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(  ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& _rArguments ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstance(  ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& _rArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
+    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
 
     // XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // XNamingService
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) override;
-    virtual void SAL_CALL registerObject( const OUString& Name, const css::uno::Reference< css::uno::XInterface >& Object ) override;
-    virtual void SAL_CALL revokeObject( const OUString& Name ) override;
+    virtual css::uno::Reference< css::uno::XInterface > getRegisteredObject( const OUString& Name ) override;
+    virtual void registerObject( const OUString& Name, const css::uno::Reference< css::uno::XInterface >& Object ) override;
+    virtual void revokeObject( const OUString& Name ) override;
 
     // XDatabaseRegistrations
-    virtual bool SAL_CALL hasRegisteredDatabase( const OUString& Name ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getRegistrationNames() override;
-    virtual OUString SAL_CALL getDatabaseLocation( const OUString& Name ) override;
-    virtual void SAL_CALL registerDatabaseLocation( const OUString& Name, const OUString& Location ) override;
-    virtual void SAL_CALL revokeDatabaseLocation( const OUString& Name ) override;
-    virtual void SAL_CALL changeDatabaseLocation( const OUString& Name, const OUString& NewLocation ) override;
-    virtual bool SAL_CALL isDatabaseRegistrationReadOnly( const OUString& Name ) override;
-    virtual void SAL_CALL addDatabaseRegistrationsListener( const css::uno::Reference< css::sdb::XDatabaseRegistrationsListener >& Listener ) override;
-    virtual void SAL_CALL removeDatabaseRegistrationsListener( const css::uno::Reference< css::sdb::XDatabaseRegistrationsListener >& Listener ) override;
+    virtual bool hasRegisteredDatabase( const OUString& Name ) override;
+    virtual cpo::uno::Sequence< OUString > getRegistrationNames() override;
+    virtual OUString getDatabaseLocation( const OUString& Name ) override;
+    virtual void registerDatabaseLocation( const OUString& Name, const OUString& Location ) override;
+    virtual void revokeDatabaseLocation( const OUString& Name ) override;
+    virtual void changeDatabaseLocation( const OUString& Name, const OUString& NewLocation ) override;
+    virtual bool isDatabaseRegistrationReadOnly( const OUString& Name ) override;
+    virtual void addDatabaseRegistrationsListener( const css::uno::Reference< css::sdb::XDatabaseRegistrationsListener >& Listener ) override;
+    virtual void removeDatabaseRegistrationsListener( const css::uno::Reference< css::sdb::XDatabaseRegistrationsListener >& Listener ) override;
 
     // XContainer
-    virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
-    virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
     void registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl);
     void revokeDatabaseDocument( const ODatabaseModelImpl& _rModelImpl);

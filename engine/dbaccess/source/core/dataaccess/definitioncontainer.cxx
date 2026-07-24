@@ -102,7 +102,7 @@ ODefinitionContainer::ODefinitionContainer(   const Reference< XComponentContext
 
 }
 
-void SAL_CALL ODefinitionContainer::disposing()
+void ODefinitionContainer::disposing()
 {
     OContentHelper::disposing();
 
@@ -150,18 +150,18 @@ cpo::uno::Sequence<sal_Int8> ODefinitionContainer::getImplementationId()
 }
 
 // XServiceInfo
-OUString SAL_CALL ODefinitionContainer::getImplementationName(  )
+OUString ODefinitionContainer::getImplementationName(  )
 {
     return u"com.sun.star.sdb.ODefinitionContainer"_ustr;
 }
 
-Sequence< OUString > SAL_CALL ODefinitionContainer::getSupportedServiceNames(  )
+Sequence< OUString > ODefinitionContainer::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.sdb.DefinitionContainer"_ustr, u"com.sun.star.ucb.Content"_ustr };
 }
 
 // XNameContainer
-void SAL_CALL ODefinitionContainer::insertByName( const OUString& _rName, const Any& aElement )
+void ODefinitionContainer::insertByName( const OUString& _rName, const Any& aElement )
 {
     ResettableMutexGuard aGuard(m_aMutex);
 
@@ -174,7 +174,7 @@ void SAL_CALL ODefinitionContainer::insertByName( const OUString& _rName, const 
     notifyByName( aGuard, _rName, xNewElement, nullptr, E_INSERTED, ContainerListemers );
 }
 
-void SAL_CALL ODefinitionContainer::removeByName( const OUString& _rName )
+void ODefinitionContainer::removeByName( const OUString& _rName )
 {
     ResettableMutexGuard aGuard(m_aMutex);
 
@@ -198,7 +198,7 @@ void SAL_CALL ODefinitionContainer::removeByName( const OUString& _rName )
 }
 
 // XNameReplace
-void SAL_CALL ODefinitionContainer::replaceByName( const OUString& _rName, const Any& aElement )
+void ODefinitionContainer::replaceByName( const OUString& _rName, const Any& aElement )
 {
     ResettableMutexGuard aGuard(m_aMutex);
 
@@ -241,7 +241,7 @@ void SAL_CALL ODefinitionContainer::replaceByName( const OUString& _rName, const
 
 namespace
 {
-    typedef Reference< XVeto > ( SAL_CALL XContainerApproveListener::*ContainerApprovalMethod )( const ContainerEvent& );
+    typedef Reference< XVeto > ( XContainerApproveListener::*ContainerApprovalMethod )( const ContainerEvent& );
 
     struct RaiseExceptionFromVeto
     {
@@ -319,57 +319,57 @@ void ODefinitionContainer::notifyByName( ResettableMutexGuard& _rGuard, const OU
         _rGuard.reset();
 }
 
-void SAL_CALL ODefinitionContainer::addContainerListener( const Reference< XContainerListener >& _rxListener )
+void ODefinitionContainer::addContainerListener( const Reference< XContainerListener >& _rxListener )
 {
     if (_rxListener.is())
         m_aContainerListeners.addInterface(_rxListener);
 }
 
-void SAL_CALL ODefinitionContainer::removeContainerListener( const Reference< XContainerListener >& _rxListener )
+void ODefinitionContainer::removeContainerListener( const Reference< XContainerListener >& _rxListener )
 {
     if (_rxListener.is())
         m_aContainerListeners.removeInterface(_rxListener);
 }
 
-void SAL_CALL ODefinitionContainer::addContainerApproveListener( const Reference< XContainerApproveListener >& Listener )
+void ODefinitionContainer::addContainerApproveListener( const Reference< XContainerApproveListener >& Listener )
 {
     if ( Listener.is() )
         m_aApproveListeners.addInterface( Listener );
 }
 
-void SAL_CALL ODefinitionContainer::removeContainerApproveListener( const Reference< XContainerApproveListener >& Listener )
+void ODefinitionContainer::removeContainerApproveListener( const Reference< XContainerApproveListener >& Listener )
 {
     if ( Listener.is() )
         m_aApproveListeners.removeInterface( Listener );
 }
 
 // XElementAccess
-Type SAL_CALL ODefinitionContainer::getElementType( )
+Type ODefinitionContainer::getElementType( )
 {
     return cppu::UnoType<XContent>::get();
 }
 
-bool SAL_CALL ODefinitionContainer::hasElements( )
+bool ODefinitionContainer::hasElements( )
 {
     MutexGuard aGuard(m_aMutex);
     return !m_aDocuments.empty();
 }
 
 // XEnumerationAccess
-Reference< XEnumeration > SAL_CALL ODefinitionContainer::createEnumeration(  )
+Reference< XEnumeration > ODefinitionContainer::createEnumeration(  )
 {
     MutexGuard aGuard(m_aMutex);
     return new ::comphelper::OEnumerationByIndex(static_cast<XIndexAccess*>(this));
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL ODefinitionContainer::getCount(  )
+sal_Int32 ODefinitionContainer::getCount(  )
 {
     MutexGuard aGuard(m_aMutex);
     return m_aDocuments.size();
 }
 
-Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex )
+Any ODefinitionContainer::getByIndex( sal_Int32 _nIndex )
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -389,7 +389,7 @@ Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex )
     return Any(xProp);
 }
 
-Any SAL_CALL ODefinitionContainer::getByName( const OUString& _rName )
+Any ODefinitionContainer::getByName( const OUString& _rName )
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -417,7 +417,7 @@ Reference< XContent > ODefinitionContainer::implGetByName(const OUString& _rName
     return xProp;
 }
 
-Sequence< OUString > SAL_CALL ODefinitionContainer::getElementNames(  )
+Sequence< OUString > ODefinitionContainer::getElementNames(  )
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -432,14 +432,14 @@ Sequence< OUString > SAL_CALL ODefinitionContainer::getElementNames(  )
     return aNames;
 }
 
-bool SAL_CALL ODefinitionContainer::hasByName( const OUString& _rName )
+bool ODefinitionContainer::hasByName( const OUString& _rName )
 {
     MutexGuard aGuard(m_aMutex);
 
     return checkExistence(_rName);
 }
 
-void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource )
+void ODefinitionContainer::disposing( const EventObject& _rSource )
 {
     MutexGuard aGuard(m_aMutex);
     Reference< XContent > xSource(_rSource.Source, UNO_QUERY);
@@ -606,7 +606,7 @@ void ODefinitionContainer::approveNewObject(const OUString& _sName,const Referen
 }
 
 // XPropertyChangeListener
-void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& evt )
+void ODefinitionContainer::propertyChange( const PropertyChangeEvent& evt )
 {
     if( evt.PropertyName != PROPERTY_NAME && evt.PropertyName !=  "Title" )
         return;
@@ -634,7 +634,7 @@ void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& e
 }
 
 // XVetoableChangeListener
-void SAL_CALL ODefinitionContainer::vetoableChange( const PropertyChangeEvent& aEvent )
+void ODefinitionContainer::vetoableChange( const PropertyChangeEvent& aEvent )
 {
     MutexGuard aGuard(m_aMutex);
 

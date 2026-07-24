@@ -35,12 +35,12 @@ namespace dbaccess
     {
     }
 
-    OUString SAL_CALL Veto::getReason()
+    OUString Veto::getReason()
     {
         return OUString();
     }
 
-    Any SAL_CALL Veto::getDetails()
+    Any Veto::getDetails()
     {
         return m_aDetails;
     }

@@ -90,7 +90,7 @@ struct DispatchHelper
 }
 
 //XDispatch
-void SAL_CALL OInterceptor::dispatch( const URL& URL,const Sequence<PropertyValue >& Arguments )
+void OInterceptor::dispatch( const URL& URL,const Sequence<PropertyValue >& Arguments )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_pContentHolder )
@@ -182,7 +182,7 @@ IMPL_LINK( OInterceptor, OnDispatch, void*, _pDispatcher, void )
     }
 }
 
-void SAL_CALL OInterceptor::addStatusListener(
+void OInterceptor::addStatusListener(
     const Reference<
     XStatusListener >& Control,
     const URL& URL )
@@ -258,7 +258,7 @@ void SAL_CALL OInterceptor::addStatusListener(
 }
 
 
-void SAL_CALL OInterceptor::removeStatusListener(
+void OInterceptor::removeStatusListener(
     const Reference<
     XStatusListener >& Control,
     const URL& URL )
@@ -274,7 +274,7 @@ void SAL_CALL OInterceptor::removeStatusListener(
 
 
 //XInterceptorInfo
-Sequence< OUString > SAL_CALL OInterceptor::getInterceptedURLs(  )
+Sequence< OUString > OInterceptor::getInterceptedURLs(  )
 {
     // now implemented as update
     return m_aInterceptedURL;
@@ -283,7 +283,7 @@ Sequence< OUString > SAL_CALL OInterceptor::getInterceptedURLs(  )
 
 // XDispatchProvider
 
-Reference< XDispatch > SAL_CALL OInterceptor::queryDispatch( const URL& URL,const OUString& TargetFrameName,sal_Int32 SearchFlags )
+Reference< XDispatch > OInterceptor::queryDispatch( const URL& URL,const OUString& TargetFrameName,sal_Int32 SearchFlags )
 {
     osl::MutexGuard aGuard(m_aMutex);
     for (auto& interceptedUrl : m_aInterceptedURL)
@@ -296,7 +296,7 @@ Reference< XDispatch > SAL_CALL OInterceptor::queryDispatch( const URL& URL,cons
         return Reference<XDispatch>();
 }
 
-Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  const Sequence<DispatchDescriptor >& Requests )
+Sequence< Reference< XDispatch > > OInterceptor::queryDispatches(  const Sequence<DispatchDescriptor >& Requests )
 {
     osl::MutexGuard aGuard(m_aMutex);
     typedef Sequence<Reference<XDispatch>> DispatchSeq;
@@ -323,13 +323,13 @@ Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  cons
 
 //XDispatchProviderInterceptor
 
-Reference< XDispatchProvider > SAL_CALL OInterceptor::getSlaveDispatchProvider(  )
+Reference< XDispatchProvider > OInterceptor::getSlaveDispatchProvider(  )
 {
     osl::MutexGuard aGuard(m_aMutex);
     return m_xSlaveDispatchProvider;
 }
 
-void SAL_CALL
+void
 OInterceptor::setSlaveDispatchProvider( const Reference< XDispatchProvider >& NewDispatchProvider )
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -337,14 +337,14 @@ OInterceptor::setSlaveDispatchProvider( const Reference< XDispatchProvider >& Ne
 }
 
 
-Reference< XDispatchProvider > SAL_CALL OInterceptor::getMasterDispatchProvider(  )
+Reference< XDispatchProvider > OInterceptor::getMasterDispatchProvider(  )
 {
     osl::MutexGuard aGuard(m_aMutex);
     return m_xMasterDispatchProvider;
 }
 
 
-void SAL_CALL OInterceptor::setMasterDispatchProvider(
+void OInterceptor::setMasterDispatchProvider(
     const Reference< XDispatchProvider >& NewSupplier )
 {
     osl::MutexGuard aGuard(m_aMutex);

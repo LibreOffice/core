@@ -58,17 +58,17 @@ OSQLMessageDialog::OSQLMessageDialog(const Reference< XComponentContext >& _rxOR
         &m_sHelpURL, cppu::UnoType<decltype(m_sHelpURL)>::get() );
 }
 
-Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  )
+Sequence<sal_Int8> OSQLMessageDialog::getImplementationId(  )
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-OUString SAL_CALL OSQLMessageDialog::getImplementationName()
+OUString OSQLMessageDialog::getImplementationName()
 {
     return u"org.openoffice.comp.dbu.OSQLMessageDialog"_ustr;
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL OSQLMessageDialog::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OSQLMessageDialog::getSupportedServiceNames()
 {
     return { u"com.sun.star.sdb.ErrorMessageDialog"_ustr };
 }
@@ -91,7 +91,7 @@ void OSQLMessageDialog::initialize(Sequence<Any> const & args)
     }
 }
 
-bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
+bool OSQLMessageDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
 {
     switch (_nHandle)
     {
@@ -112,7 +112,7 @@ bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( Any& _rConvertedValue
     }
 }
 
-Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo()
+Reference<XPropertySetInfo>  OSQLMessageDialog::getPropertySetInfo()
 {
     Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;

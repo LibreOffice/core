@@ -362,14 +362,14 @@ OConnection::~OConnection()
 }
 
 // XWarningsSupplier
-Any SAL_CALL OConnection::getWarnings()
+Any OConnection::getWarnings()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
     return m_aWarnings.getWarnings();
 }
 
-void SAL_CALL OConnection::clearWarnings(  )
+void OConnection::clearWarnings(  )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -546,7 +546,7 @@ Reference< XNameAccess >  OConnection::getTables()
     return m_pTables.get();
 }
 
-Reference< XNameAccess > SAL_CALL OConnection::getViews(  )
+Reference< XNameAccess > OConnection::getViews(  )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -566,7 +566,7 @@ Reference< XNameAccess >  OConnection::getQueries()
 }
 
 // css::sdb::XCommandPreparation
-Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const OUString& command, sal_Int32 commandType )
+Reference< XPreparedStatement >  OConnection::prepareCommand( const OUString& command, sal_Int32 commandType )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -597,7 +597,7 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const OUS
     return prepareStatement(aStatement);
 }
 
-Reference< XInterface > SAL_CALL OConnection::createInstance( const OUString& _sServiceSpecifier )
+Reference< XInterface > OConnection::createInstance( const OUString& _sServiceSpecifier )
 {
     Reference< XServiceInfo > xRet;
     if ( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER == _sServiceSpecifier || _sServiceSpecifier == "com.sun.star.sdb.SingleSelectQueryAnalyzer" )
@@ -625,12 +625,12 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const OUString& _s
     return Reference<XInterface>(xRet, UNO_QUERY);
 }
 
-Reference< XInterface > SAL_CALL OConnection::createInstanceWithArguments( const OUString& _sServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
+Reference< XInterface > OConnection::createInstanceWithArguments( const OUString& _sServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
 {
     return createInstance(_sServiceSpecifier);
 }
 
-Sequence< OUString > SAL_CALL OConnection::getAvailableServiceNames(  )
+Sequence< OUString > OConnection::getAvailableServiceNames(  )
 {
     Sequence< OUString > aRet { SERVICE_NAME_SINGLESELECTQUERYCOMPOSER };
     return aRet;
@@ -655,7 +655,7 @@ Reference< XTablesSupplier > const & OConnection::getMasterTables()
 }
 
 // XUsersSupplier
-Reference< XNameAccess > SAL_CALL OConnection::getUsers(  )
+Reference< XNameAccess > OConnection::getUsers(  )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -665,7 +665,7 @@ Reference< XNameAccess > SAL_CALL OConnection::getUsers(  )
 }
 
 // XGroupsSupplier
-Reference< XNameAccess > SAL_CALL OConnection::getGroups(  )
+Reference< XNameAccess > OConnection::getGroups(  )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -678,7 +678,7 @@ void OConnection::impl_loadConnectionTools_throw()
     m_xConnectionTools = css::sdb::tools::ConnectionTools::createWithConnection( m_aContext, this );
 }
 
-Reference< XTableName > SAL_CALL OConnection::createTableName(  )
+Reference< XTableName > OConnection::createTableName(  )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -687,7 +687,7 @@ Reference< XTableName > SAL_CALL OConnection::createTableName(  )
     return m_xConnectionTools->createTableName();
 }
 
-Reference< XObjectNames > SAL_CALL OConnection::getObjectNames(  )
+Reference< XObjectNames > OConnection::getObjectNames(  )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -696,7 +696,7 @@ Reference< XObjectNames > SAL_CALL OConnection::getObjectNames(  )
     return m_xConnectionTools->getObjectNames();
 }
 
-Reference< XDataSourceMetaData > SAL_CALL OConnection::getDataSourceMetaData(  )
+Reference< XDataSourceMetaData > OConnection::getDataSourceMetaData(  )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -705,7 +705,7 @@ Reference< XDataSourceMetaData > SAL_CALL OConnection::getDataSourceMetaData(  )
     return m_xConnectionTools->getDataSourceMetaData();
 }
 
-Reference< css::container::XNameAccess > SAL_CALL OConnection::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, css::uno::Reference< css::lang::XComponent >& keepFieldsAlive )
+Reference< css::container::XNameAccess > OConnection::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, css::uno::Reference< css::lang::XComponent >& keepFieldsAlive )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -714,7 +714,7 @@ Reference< css::container::XNameAccess > SAL_CALL OConnection::getFieldsByComman
     return m_xConnectionTools->getFieldsByCommandDescriptor(commandType,command,keepFieldsAlive);
 }
 
-Reference< XSingleSelectQueryComposer > SAL_CALL OConnection::getComposer( ::sal_Int32 commandType, const OUString& command )
+Reference< XSingleSelectQueryComposer > OConnection::getComposer( ::sal_Int32 commandType, const OUString& command )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -754,7 +754,7 @@ void OConnection::impl_checkTableQueryNames_nothrow()
     }
 }
 
-Reference< XGraphic > SAL_CALL OConnection::getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode )
+Reference< XGraphic > OConnection::getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode )
 {
     Reference< XGraphic > xReturn;
 
@@ -770,7 +770,7 @@ Reference< XGraphic > SAL_CALL OConnection::getTableIcon( const OUString& TableN
     return xReturn;
 }
 
-Reference< XInterface > SAL_CALL OConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& DocumentUI, const OUString& TableName )
+Reference< XInterface > OConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& DocumentUI, const OUString& TableName )
 {
     Reference< XInterface > xReturn;
 

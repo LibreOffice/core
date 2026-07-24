@@ -309,10 +309,10 @@ namespace
         {
         }
 
-        virtual bool SAL_CALL select( const Any& xSelection ) override;
-        virtual Any SAL_CALL getSelection(  ) override;
-        virtual void SAL_CALL addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) override;
-        virtual void SAL_CALL removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) override;
+        virtual bool select( const Any& xSelection ) override;
+        virtual Any getSelection(  ) override;
+        virtual void addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) override;
+        virtual void removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) override;
 
     protected:
         virtual ~SelectionSupplier() override
@@ -323,24 +323,24 @@ namespace
         Any m_aSelection;
     };
 
-    bool SAL_CALL SelectionSupplier::select( const Any& /*_Selection*/ )
+    bool SelectionSupplier::select( const Any& /*_Selection*/ )
     {
         throw IllegalArgumentException();
         // API bug: this should be a NoSupportException
     }
 
-    Any SAL_CALL SelectionSupplier::getSelection(  )
+    Any SelectionSupplier::getSelection(  )
     {
         return m_aSelection;
     }
 
-    void SAL_CALL SelectionSupplier::addSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ )
+    void SelectionSupplier::addSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ )
     {
         OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
         // API bug: this should be a NoSupportException
     }
 
-    void SAL_CALL SelectionSupplier::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ )
+    void SelectionSupplier::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ )
     {
         OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
         // API bug: this should be a NoSupportException

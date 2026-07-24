@@ -74,12 +74,12 @@ Reference< XContent > OCommandContainer::createObject( const OUString& _rName)
         return static_cast< css::sdb::XQueryDefinition * > ( new OCommandDefinition( *this, _rName, m_aContext, pElementContent ) );
 }
 
-Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(const Sequence< Any >& /*aArguments*/ )
+Reference< XInterface > OCommandContainer::createInstanceWithArguments(const Sequence< Any >& /*aArguments*/ )
 {
     return createInstance( );
 }
 
-Reference< XInterface > SAL_CALL OCommandContainer::createInstance( )
+Reference< XInterface > OCommandContainer::createInstance( )
 {
     if(m_bTables)
         return css::sdb::TableDefinition::createDefault( m_aContext );

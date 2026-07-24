@@ -91,7 +91,7 @@ class OComponentDefinition  :public OContentHelper
 
 protected:
     virtual ~OComponentDefinition() override;
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     const   OComponentDefinition_Impl& getDefinition() const { return dynamic_cast< const OComponentDefinition_Impl& >( *m_pImpl ); }
             OComponentDefinition_Impl& getDefinition()       { return dynamic_cast<       OComponentDefinition_Impl& >( *m_pImpl ); }
@@ -110,27 +110,27 @@ public:
             ,bool _bTable = true
         );
 
-    virtual cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override;
-    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 
 // css::uno::XInterface
     DECLARE_XINTERFACE( )
 
     // css::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( cpo::uno::Sequence< cpo::uno::Any > const & rArguments) override;
+    virtual void initialize( cpo::uno::Sequence< cpo::uno::Any > const & rArguments) override;
 
     // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // XColumnsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) override;
+    virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
 
     // OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // IColumnFactory
     virtual rtl::Reference<OColumn> createColumn(const OUString& _rName) const override;
@@ -143,7 +143,7 @@ protected:
 // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+    virtual void setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
                                     const cpo::uno::Any& rValue) override;
 

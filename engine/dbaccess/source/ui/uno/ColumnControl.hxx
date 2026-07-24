@@ -39,7 +39,7 @@ namespace dbaui
         DECLARE_SERVICE_INFO();
 
         // css::awt::XControl
-        virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent) override;
+        virtual void createPeer(const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent) override;
     };
 }   // namespace dbaui
 

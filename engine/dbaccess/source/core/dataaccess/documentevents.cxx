@@ -89,12 +89,12 @@ namespace dbaccess
     {
     }
 
-    void SAL_CALL DocumentEvents::acquire() noexcept
+    void DocumentEvents::acquire() noexcept
     {
         mrParent.acquire();
     }
 
-    void SAL_CALL DocumentEvents::release() noexcept
+    void DocumentEvents::release() noexcept
     {
         mrParent.release();
     }
@@ -111,7 +111,7 @@ namespace dbaccess
         return false;
     }
 
-    void SAL_CALL DocumentEvents::replaceByName( const OUString& Name, const Any& Element )
+    void DocumentEvents::replaceByName( const OUString& Name, const Any& Element )
     {
         ::osl::MutexGuard aGuard( mrMutex );
 
@@ -144,7 +144,7 @@ namespace dbaccess
         elementPos->second = std::move(aEventDescriptor);
     }
 
-    Any SAL_CALL DocumentEvents::getByName( const OUString& Name )
+    Any DocumentEvents::getByName( const OUString& Name )
     {
         ::osl::MutexGuard aGuard( mrMutex );
 
@@ -159,26 +159,26 @@ namespace dbaccess
         return aReturn;
     }
 
-    Sequence< OUString > SAL_CALL DocumentEvents::getElementNames(  )
+    Sequence< OUString > DocumentEvents::getElementNames(  )
     {
         ::osl::MutexGuard aGuard( mrMutex );
 
         return comphelper::mapKeysToSequence( mrEventsData );
     }
 
-    bool SAL_CALL DocumentEvents::hasByName( const OUString& Name )
+    bool DocumentEvents::hasByName( const OUString& Name )
     {
         ::osl::MutexGuard aGuard( mrMutex );
 
         return mrEventsData.find( Name ) != mrEventsData.end();
     }
 
-    Type SAL_CALL DocumentEvents::getElementType(  )
+    Type DocumentEvents::getElementType(  )
     {
         return ::cppu::UnoType< Sequence< PropertyValue > >::get();
     }
 
-    bool SAL_CALL DocumentEvents::hasElements(  )
+    bool DocumentEvents::hasElements(  )
     {
         ::osl::MutexGuard aGuard( mrMutex );
         return !mrEventsData.empty();

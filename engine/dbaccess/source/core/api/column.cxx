@@ -103,12 +103,12 @@ Reference< XPropertySetInfo > OColumn::getPropertySetInfo()
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-OUString SAL_CALL OColumn::getName(  )
+OUString OColumn::getName(  )
 {
     return m_sName;
 }
 
-void SAL_CALL OColumn::setName( const OUString& _rName )
+void OColumn::setName( const OUString& _rName )
 {
     m_sName = _rName;
 }
@@ -249,7 +249,7 @@ Reference< XPropertySet > OColumns::createDescriptor()
         return Reference< XPropertySet >();
 }
 
-Any SAL_CALL OColumns::queryInterface( const Type & rType )
+Any OColumns::queryInterface( const Type & rType )
 {
     Any aRet;
     if(m_xDrvColumns.is())
@@ -275,7 +275,7 @@ Any SAL_CALL OColumns::queryInterface( const Type & rType )
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OColumns::getTypes(  )
+Sequence< Type > OColumns::getTypes(  )
 {
     bool bAppendFound = false,bDropFound = false;
 
@@ -389,13 +389,13 @@ void OColumns::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     ::dbaccess::notifyDataSourceModified(m_xParent);
 }
 
-Reference< XInterface > SAL_CALL OColumns::getParent(  )
+Reference< XInterface > OColumns::getParent(  )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return m_xParent;
 }
 
-void SAL_CALL OColumns::setParent( const Reference< XInterface >& _xParent )
+void OColumns::setParent( const Reference< XInterface >& _xParent )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     m_xParent = _xParent;

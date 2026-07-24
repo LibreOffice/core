@@ -38,7 +38,7 @@ namespace dbaui
     {
     }
 
-    void SAL_CALL OFilePickerInteractionHandler::handle( const Reference< XInteractionRequest >& _rxRequest )
+    void OFilePickerInteractionHandler::handle( const Reference< XInteractionRequest >& _rxRequest )
     {
         InteractiveIOException aIoException;
         if ( _rxRequest->getRequest() >>= aIoException )

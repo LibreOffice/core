@@ -68,34 +68,34 @@ namespace dbaui
     public:
         explicit OTextConnectionSettingsDialog( const Reference<XComponentContext>& _rContext );
 
-        virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 
         DECLARE_SERVICE_INFO();
-        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
 
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) override;
-        virtual bool SAL_CALL convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) override;
-        virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const override;
+        virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) override;
+        virtual bool convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) override;
+        virtual void getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const override;
 
         // Overrides to resolve inheritance ambiguity
-        virtual void SAL_CALL setPropertyValue(const OUString& p1, const cpo::uno::Any& p2) override
+        virtual void setPropertyValue(const OUString& p1, const cpo::uno::Any& p2) override
             { ODatabaseAdministrationDialog::setPropertyValue(p1, p2); }
-        virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& p1) override
+        virtual cpo::uno::Any getPropertyValue(const OUString& p1) override
             { return ODatabaseAdministrationDialog::getPropertyValue(p1); }
-        virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+        virtual void addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
             { ODatabaseAdministrationDialog::addPropertyChangeListener(p1, p2); }
-        virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+        virtual void removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
             { ODatabaseAdministrationDialog::removePropertyChangeListener(p1, p2); }
-        virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+        virtual void addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
             { ODatabaseAdministrationDialog::addVetoableChangeListener(p1, p2); }
-        virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+        virtual void removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
             { ODatabaseAdministrationDialog::removeVetoableChangeListener(p1, p2); }
-        virtual void SAL_CALL setTitle(const OUString& p1) override
+        virtual void setTitle(const OUString& p1) override
             { ODatabaseAdministrationDialog::setTitle(p1); }
-        virtual sal_Int16 SAL_CALL execute() override
+        virtual sal_Int16 execute() override
             { return ODatabaseAdministrationDialog::execute(); }
 
     protected:
@@ -119,11 +119,11 @@ namespace dbaui
         return cpo::uno::Sequence<sal_Int8>();
     }
 
-    OUString SAL_CALL OTextConnectionSettingsDialog::getImplementationName()
+    OUString OTextConnectionSettingsDialog::getImplementationName()
     {
         return u"com.sun.star.comp.dbaccess.OTextConnectionSettingsDialog"_ustr;
     }
-    bool SAL_CALL OTextConnectionSettingsDialog::supportsService(const OUString& _rServiceName)
+    bool OTextConnectionSettingsDialog::supportsService(const OUString& _rServiceName)
     {
         const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -132,12 +132,12 @@ namespace dbaui
 
         return false;
     }
-    cpo::uno::Sequence< OUString > SAL_CALL OTextConnectionSettingsDialog::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > OTextConnectionSettingsDialog::getSupportedServiceNames()
     {
         return { u"com.sun.star.sdb.TextConnectionSettings"_ustr };
     }
 
-    Reference< XPropertySetInfo >  SAL_CALL OTextConnectionSettingsDialog::getPropertySetInfo()
+    Reference< XPropertySetInfo >  OTextConnectionSettingsDialog::getPropertySetInfo()
     {
         return createPropertySetInfo( getInfoHelper() );
     }
@@ -209,7 +209,7 @@ namespace dbaui
         return std::make_unique<TextConnectionSettingsDialog>(Application::GetFrameWeld(rParent), *m_pDatasourceItems);
     }
 
-    void SAL_CALL OTextConnectionSettingsDialog::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
+    void OTextConnectionSettingsDialog::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
     {
         PropertyValues::const_iterator pos = m_aPropertyValues.find( _nHandle );
         if ( pos != m_aPropertyValues.end() )
@@ -222,7 +222,7 @@ namespace dbaui
         }
     }
 
-    bool SAL_CALL OTextConnectionSettingsDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
+    bool OTextConnectionSettingsDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
     {
         bool bModified = false;
 
@@ -242,7 +242,7 @@ namespace dbaui
         return bModified;
     }
 
-    void SAL_CALL OTextConnectionSettingsDialog::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
+    void OTextConnectionSettingsDialog::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         PropertyValues::const_iterator pos = m_aPropertyValues.find( _nHandle );
         if ( pos != m_aPropertyValues.end() )

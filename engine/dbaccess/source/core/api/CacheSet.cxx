@@ -386,102 +386,102 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
     }
 }
 
-bool SAL_CALL OCacheSet::wasNull(  )
+bool OCacheSet::wasNull(  )
 {
     return m_xDriverRow->wasNull();
 }
 
-OUString SAL_CALL OCacheSet::getString( sal_Int32 columnIndex )
+OUString OCacheSet::getString( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getString(columnIndex);
 }
 
-bool SAL_CALL OCacheSet::getBoolean( sal_Int32 columnIndex )
+bool OCacheSet::getBoolean( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getBoolean(columnIndex);
 }
 
-sal_Int8 SAL_CALL OCacheSet::getByte( sal_Int32 columnIndex )
+sal_Int8 OCacheSet::getByte( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getByte(columnIndex);
 }
 
-sal_Int16 SAL_CALL OCacheSet::getShort( sal_Int32 columnIndex )
+sal_Int16 OCacheSet::getShort( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getShort(columnIndex);
 }
 
-sal_Int32 SAL_CALL OCacheSet::getInt( sal_Int32 columnIndex )
+sal_Int32 OCacheSet::getInt( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getInt(columnIndex);
 }
 
-sal_Int64 SAL_CALL OCacheSet::getLong( sal_Int32 columnIndex )
+sal_Int64 OCacheSet::getLong( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getLong(columnIndex);
 }
 
-float SAL_CALL OCacheSet::getFloat( sal_Int32 columnIndex )
+float OCacheSet::getFloat( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getFloat(columnIndex);
 }
 
-double SAL_CALL OCacheSet::getDouble( sal_Int32 columnIndex )
+double OCacheSet::getDouble( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getDouble(columnIndex);
 }
 
-Sequence< sal_Int8 > SAL_CALL OCacheSet::getBytes( sal_Int32 columnIndex )
+Sequence< sal_Int8 > OCacheSet::getBytes( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getBytes(columnIndex);
 }
 
-css::util::Date SAL_CALL OCacheSet::getDate( sal_Int32 columnIndex )
+css::util::Date OCacheSet::getDate( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getDate(columnIndex);
 }
 
-css::util::Time SAL_CALL OCacheSet::getTime( sal_Int32 columnIndex )
+css::util::Time OCacheSet::getTime( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getTime(columnIndex);
 }
 
-css::util::DateTime SAL_CALL OCacheSet::getTimestamp( sal_Int32 columnIndex )
+css::util::DateTime OCacheSet::getTimestamp( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getTimestamp(columnIndex);
 }
 
-Reference< css::io::XInputStream > SAL_CALL OCacheSet::getBinaryStream( sal_Int32 columnIndex )
+Reference< css::io::XInputStream > OCacheSet::getBinaryStream( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getBinaryStream(columnIndex);
 }
 
-Reference< css::io::XInputStream > SAL_CALL OCacheSet::getCharacterStream( sal_Int32 columnIndex )
+Reference< css::io::XInputStream > OCacheSet::getCharacterStream( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getCharacterStream(columnIndex);
 }
 
-Any SAL_CALL OCacheSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap )
+Any OCacheSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap )
 {
     return m_xDriverRow->getObject(columnIndex,typeMap);
 }
 
-Reference< XRef > SAL_CALL OCacheSet::getRef( sal_Int32 columnIndex )
+Reference< XRef > OCacheSet::getRef( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getRef(columnIndex);
 }
 
-Reference< XBlob > SAL_CALL OCacheSet::getBlob( sal_Int32 columnIndex )
+Reference< XBlob > OCacheSet::getBlob( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getBlob(columnIndex);
 }
 
-Reference< XClob > SAL_CALL OCacheSet::getClob( sal_Int32 columnIndex )
+Reference< XClob > OCacheSet::getClob( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getClob(columnIndex);
 }
 
-Reference< XArray > SAL_CALL OCacheSet::getArray( sal_Int32 columnIndex )
+Reference< XArray > OCacheSet::getArray( sal_Int32 columnIndex )
 {
     return m_xDriverRow->getArray(columnIndex);
 }

@@ -81,134 +81,134 @@ namespace dbaccess
         virtual ~OResultSet() override;
 
     // css::lang::XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
     // css::uno::XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+        virtual void acquire() noexcept override;
+        virtual void release() noexcept override;
 
     // css::lang::XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // ::cppu::OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
     // css::sdbc::XCloseable
-        virtual void SAL_CALL close(  ) override;
+        virtual void close(  ) override;
 
     // css::beans::XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
     // cppu::OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
-        virtual bool SAL_CALL convertFastPropertyValue(
+        virtual bool convertFastPropertyValue(
                                 cpo::uno::Any & rConvertedValue,
                                 cpo::uno::Any & rOldValue,
                                 sal_Int32 nHandle,
                                 const cpo::uno::Any& rValue ) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+        virtual void setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
                                     const cpo::uno::Any& rValue
                                                      ) override;
-        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual void getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // css::sdbc::XWarningsSupplier
-        virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
-        virtual void SAL_CALL clearWarnings(  ) override;
+        virtual cpo::uno::Any getWarnings(  ) override;
+        virtual void clearWarnings(  ) override;
 
     // css::sdbc::XResultSetMetaDataSupplier
-        virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
 
     // css::sdbc::XColumnLocate
-        virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) override;
+        virtual sal_Int32 findColumn( const OUString& columnName ) override;
 
     // css::sdbcx::XColumnsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
 
     // css::sdbc::XRow
-        virtual bool SAL_CALL wasNull(  ) override;
-        virtual OUString SAL_CALL getString( sal_Int32 columnIndex ) override;
-        virtual bool SAL_CALL getBoolean( sal_Int32 columnIndex ) override;
-        virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) override;
-        virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) override;
-        virtual sal_Int32 SAL_CALL getInt( sal_Int32 columnIndex ) override;
-        virtual sal_Int64 SAL_CALL getLong( sal_Int32 columnIndex ) override;
-        virtual float SAL_CALL getFloat( sal_Int32 columnIndex ) override;
-        virtual double SAL_CALL getDouble( sal_Int32 columnIndex ) override;
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) override;
-        virtual css::util::Date SAL_CALL getDate( sal_Int32 columnIndex ) override;
-        virtual css::util::Time SAL_CALL getTime( sal_Int32 columnIndex ) override;
-        virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getCharacterStream( sal_Int32 columnIndex ) override;
-        virtual cpo::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL getRef( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL getBlob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL getClob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL getArray( sal_Int32 columnIndex ) override;
+        virtual bool wasNull(  ) override;
+        virtual OUString getString( sal_Int32 columnIndex ) override;
+        virtual bool getBoolean( sal_Int32 columnIndex ) override;
+        virtual sal_Int8 getByte( sal_Int32 columnIndex ) override;
+        virtual sal_Int16 getShort( sal_Int32 columnIndex ) override;
+        virtual sal_Int32 getInt( sal_Int32 columnIndex ) override;
+        virtual sal_Int64 getLong( sal_Int32 columnIndex ) override;
+        virtual float getFloat( sal_Int32 columnIndex ) override;
+        virtual double getDouble( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > getBytes( sal_Int32 columnIndex ) override;
+        virtual css::util::Date getDate( sal_Int32 columnIndex ) override;
+        virtual css::util::Time getTime( sal_Int32 columnIndex ) override;
+        virtual css::util::DateTime getTimestamp( sal_Int32 columnIndex ) override;
+        virtual css::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
+        virtual css::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual css::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
+        virtual css::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
+        virtual css::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
+        virtual css::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
 
     // css::sdbc::XResultSet
-        virtual bool SAL_CALL next(  ) override;
-        virtual bool SAL_CALL isBeforeFirst(  ) override;
-        virtual bool SAL_CALL isAfterLast(  ) override;
-        virtual bool SAL_CALL isFirst(  ) override;
-        virtual bool SAL_CALL isLast(  ) override;
-        virtual void SAL_CALL beforeFirst(  ) override;
-        virtual void SAL_CALL afterLast(  ) override;
-        virtual bool SAL_CALL first(  ) override;
-        virtual bool SAL_CALL last(  ) override;
-        virtual sal_Int32 SAL_CALL getRow(  ) override;
-        virtual bool SAL_CALL absolute( sal_Int32 row ) override;
-        virtual bool SAL_CALL relative( sal_Int32 rows ) override;
-        virtual bool SAL_CALL previous(  ) override;
-        virtual void SAL_CALL refreshRow(  ) override;
-        virtual bool SAL_CALL rowUpdated(  ) override;
-        virtual bool SAL_CALL rowInserted(  ) override;
-        virtual bool SAL_CALL rowDeleted(  ) override;
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getStatement(  ) override;
+        virtual bool next(  ) override;
+        virtual bool isBeforeFirst(  ) override;
+        virtual bool isAfterLast(  ) override;
+        virtual bool isFirst(  ) override;
+        virtual bool isLast(  ) override;
+        virtual void beforeFirst(  ) override;
+        virtual void afterLast(  ) override;
+        virtual bool first(  ) override;
+        virtual bool last(  ) override;
+        virtual sal_Int32 getRow(  ) override;
+        virtual bool absolute( sal_Int32 row ) override;
+        virtual bool relative( sal_Int32 rows ) override;
+        virtual bool previous(  ) override;
+        virtual void refreshRow(  ) override;
+        virtual bool rowUpdated(  ) override;
+        virtual bool rowInserted(  ) override;
+        virtual bool rowDeleted(  ) override;
+        virtual css::uno::Reference< css::uno::XInterface > getStatement(  ) override;
 
     // css::sdbcx::XRowLocate
-        virtual cpo::uno::Any SAL_CALL getBookmark(  ) override;
-        virtual bool SAL_CALL moveToBookmark( const cpo::uno::Any& bookmark ) override;
-        virtual bool SAL_CALL moveRelativeToBookmark( const cpo::uno::Any& bookmark, sal_Int32 rows ) override;
-        virtual sal_Int32 SAL_CALL compareBookmarks( const cpo::uno::Any& first, const cpo::uno::Any& second ) override;
-        virtual bool SAL_CALL hasOrderedBookmarks(  ) override;
-        virtual sal_Int32 SAL_CALL hashBookmark( const cpo::uno::Any& bookmark ) override;
+        virtual cpo::uno::Any getBookmark(  ) override;
+        virtual bool moveToBookmark( const cpo::uno::Any& bookmark ) override;
+        virtual bool moveRelativeToBookmark( const cpo::uno::Any& bookmark, sal_Int32 rows ) override;
+        virtual sal_Int32 compareBookmarks( const cpo::uno::Any& first, const cpo::uno::Any& second ) override;
+        virtual bool hasOrderedBookmarks(  ) override;
+        virtual sal_Int32 hashBookmark( const cpo::uno::Any& bookmark ) override;
 
     // css::sdbc::XResultSetUpdate
-        virtual void SAL_CALL insertRow(  ) override;
-        virtual void SAL_CALL updateRow(  ) override;
-        virtual void SAL_CALL deleteRow(  ) override;
-        virtual void SAL_CALL cancelRowUpdates(  ) override;
-        virtual void SAL_CALL moveToInsertRow(  ) override;
-        virtual void SAL_CALL moveToCurrentRow(  ) override;
+        virtual void insertRow(  ) override;
+        virtual void updateRow(  ) override;
+        virtual void deleteRow(  ) override;
+        virtual void cancelRowUpdates(  ) override;
+        virtual void moveToInsertRow(  ) override;
+        virtual void moveToCurrentRow(  ) override;
 
     // css::sdbc::XRowUpdate
-        virtual void SAL_CALL updateNull( sal_Int32 columnIndex ) override;
-        virtual void SAL_CALL updateBoolean( sal_Int32 columnIndex, bool x ) override;
-        virtual void SAL_CALL updateByte( sal_Int32 columnIndex, sal_Int8 x ) override;
-        virtual void SAL_CALL updateShort( sal_Int32 columnIndex, sal_Int16 x ) override;
-        virtual void SAL_CALL updateInt( sal_Int32 columnIndex, sal_Int32 x ) override;
-        virtual void SAL_CALL updateLong( sal_Int32 columnIndex, sal_Int64 x ) override;
-        virtual void SAL_CALL updateFloat( sal_Int32 columnIndex, float x ) override;
-        virtual void SAL_CALL updateDouble( sal_Int32 columnIndex, double x ) override;
-        virtual void SAL_CALL updateString( sal_Int32 columnIndex, const OUString& x ) override;
-        virtual void SAL_CALL updateBytes( sal_Int32 columnIndex, const cpo::uno::Sequence< sal_Int8 >& x ) override;
-        virtual void SAL_CALL updateDate( sal_Int32 columnIndex, const css::util::Date& x ) override;
-        virtual void SAL_CALL updateTime( sal_Int32 columnIndex, const css::util::Time& x ) override;
-        virtual void SAL_CALL updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) override;
-        virtual void SAL_CALL updateBinaryStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void SAL_CALL updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void SAL_CALL updateObject( sal_Int32 columnIndex, const cpo::uno::Any& x ) override;
-        virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const cpo::uno::Any& x, sal_Int32 scale ) override;
+        virtual void updateNull( sal_Int32 columnIndex ) override;
+        virtual void updateBoolean( sal_Int32 columnIndex, bool x ) override;
+        virtual void updateByte( sal_Int32 columnIndex, sal_Int8 x ) override;
+        virtual void updateShort( sal_Int32 columnIndex, sal_Int16 x ) override;
+        virtual void updateInt( sal_Int32 columnIndex, sal_Int32 x ) override;
+        virtual void updateLong( sal_Int32 columnIndex, sal_Int64 x ) override;
+        virtual void updateFloat( sal_Int32 columnIndex, float x ) override;
+        virtual void updateDouble( sal_Int32 columnIndex, double x ) override;
+        virtual void updateString( sal_Int32 columnIndex, const OUString& x ) override;
+        virtual void updateBytes( sal_Int32 columnIndex, const cpo::uno::Sequence< sal_Int8 >& x ) override;
+        virtual void updateDate( sal_Int32 columnIndex, const css::util::Date& x ) override;
+        virtual void updateTime( sal_Int32 columnIndex, const css::util::Time& x ) override;
+        virtual void updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) override;
+        virtual void updateBinaryStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void updateObject( sal_Int32 columnIndex, const cpo::uno::Any& x ) override;
+        virtual void updateNumericObject( sal_Int32 columnIndex, const cpo::uno::Any& x, sal_Int32 scale ) override;
 
     private:
         void checkReadOnly() const;

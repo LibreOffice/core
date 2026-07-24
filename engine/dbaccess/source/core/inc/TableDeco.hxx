@@ -84,16 +84,16 @@ namespace dbaccess
         virtual void refreshColumns() override;
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 _nId) const override;
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
         // OPropertySetHelper
-        virtual bool SAL_CALL convertFastPropertyValue(
+        virtual bool convertFastPropertyValue(
                             cpo::uno::Any & rConvertedValue,
                             cpo::uno::Any & rOldValue,
                             sal_Int32 nHandle,
                             const cpo::uno::Any& rValue ) override;
-        virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+        virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+        virtual void setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const cpo::uno::Any& rValue
                                                  ) override;
@@ -119,42 +119,42 @@ namespace dbaccess
         void construct();
 
         //XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+        virtual void acquire() noexcept override;
+        virtual void release() noexcept override;
         //XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
     // OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
     // css::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     // css::sdbcx::XRename,
-        virtual void SAL_CALL rename( const OUString& _rNewName ) override;
+        virtual void rename( const OUString& _rNewName ) override;
 
     // css::sdbcx::XAlterTable,
-        virtual void SAL_CALL alterColumnByName( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
-        virtual void SAL_CALL alterColumnByIndex( sal_Int32 _nIndex, const css::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
+        virtual void alterColumnByName( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
+        virtual void alterColumnByIndex( sal_Int32 _nIndex, const css::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
 
         // XNamed
-        virtual OUString SAL_CALL getName() override;
-        virtual void SAL_CALL setName( const OUString& aName ) override;
+        virtual OUString getName() override;
+        virtual void setName( const OUString& aName ) override;
         // css::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        virtual sal_Int64 getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
         static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
         // XColumnsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
         // XKeysSupplier
-        virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getKeys(  ) override;
+        virtual css::uno::Reference< css::container::XIndexAccess > getKeys(  ) override;
         // XIndexesSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getIndexes(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > getIndexes(  ) override;
         // XDataDescriptorFactory
-        virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDataDescriptor(  ) override;
 
     protected:
         using ODataSettings::getFastPropertyValue;

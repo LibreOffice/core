@@ -108,12 +108,12 @@ public:
     const Sequence< PropertyValue >&  getValues() const { return m_aValues; }
 
 // XInteractionSupplyParameters
-    virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) override;
+    virtual void setParameters( const Sequence< PropertyValue >& _rValues ) override;
 };
 
 }
 
-void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues )
+void OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues )
 {
     m_aValues = _rValues;
 }
@@ -133,82 +133,82 @@ public:
     explicit FormControllerImpl(SbaXDataBrowserController* pOwner);
 
     // XFormController
-    virtual css::uno::Reference< css::form::runtime::XFormOperations > SAL_CALL getFormOperations() override;
-    virtual css::uno::Reference< css::awt::XControl >  SAL_CALL getCurrentControl() override;
-    virtual void SAL_CALL addActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) override;
-    virtual void SAL_CALL removeActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) override;
-    virtual void SAL_CALL addChildController( const css::uno::Reference< css::form::runtime::XFormController >& ChildController ) override;
-    virtual css::uno::Reference< css::form::runtime::XFormControllerContext > SAL_CALL getContext() override;
-    virtual void SAL_CALL setContext( const css::uno::Reference< css::form::runtime::XFormControllerContext >& _context ) override;
-    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler() override;
-    virtual void SAL_CALL setInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _interactionHandler ) override;
+    virtual css::uno::Reference< css::form::runtime::XFormOperations > getFormOperations() override;
+    virtual css::uno::Reference< css::awt::XControl >  getCurrentControl() override;
+    virtual void addActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) override;
+    virtual void removeActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) override;
+    virtual void addChildController( const css::uno::Reference< css::form::runtime::XFormController >& ChildController ) override;
+    virtual css::uno::Reference< css::form::runtime::XFormControllerContext > getContext() override;
+    virtual void setContext( const css::uno::Reference< css::form::runtime::XFormControllerContext >& _context ) override;
+    virtual css::uno::Reference< css::task::XInteractionHandler > getInteractionHandler() override;
+    virtual void setInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _interactionHandler ) override;
 
     // XChild, base of XFormController
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
-    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
     // XComponent, base of XFormController
-    virtual void SAL_CALL dispose(  ) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose(  ) override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XIndexAccess, base of XFormController
-    virtual ::sal_Int32 SAL_CALL getCount(  ) override;
-    virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override;
+    virtual ::sal_Int32 getCount(  ) override;
+    virtual cpo::uno::Any getByIndex( ::sal_Int32 Index ) override;
 
     // XElementAccess, base of XIndexAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 
     // XEnumerationAccess, base of XElementAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
+    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
 
     // XModifyBroadcaster, base of XFormController
-    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // XConfirmDeleteBroadcaster, base of XFormController
-    virtual void SAL_CALL addConfirmDeleteListener( const css::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) override;
-    virtual void SAL_CALL removeConfirmDeleteListener( const css::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) override;
+    virtual void addConfirmDeleteListener( const css::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) override;
+    virtual void removeConfirmDeleteListener( const css::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) override;
 
     // XSQLErrorBroadcaster, base of XFormController
-    virtual void SAL_CALL addSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) override;
-    virtual void SAL_CALL removeSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) override;
+    virtual void addSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) override;
+    virtual void removeSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) override;
 
     // XRowSetApproveBroadcaster, base of XFormController
-    virtual void SAL_CALL addRowSetApproveListener( const css::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) override;
-    virtual void SAL_CALL removeRowSetApproveListener( const css::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) override;
+    virtual void addRowSetApproveListener( const css::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) override;
+    virtual void removeRowSetApproveListener( const css::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) override;
 
     // XDatabaseParameterBroadcaster2, base of XFormController
-    virtual void SAL_CALL addDatabaseParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
-    virtual void SAL_CALL removeDatabaseParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
+    virtual void addDatabaseParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
+    virtual void removeDatabaseParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
 
     // XDatabaseParameterBroadcaster, base of XDatabaseParameterBroadcaster2
-    virtual void SAL_CALL addParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
-    virtual void SAL_CALL removeParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
+    virtual void addParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
+    virtual void removeParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
 
     // XModeSelector, base of XFormController
-    virtual void SAL_CALL setMode( const OUString& aMode ) override;
-    virtual OUString SAL_CALL getMode(  ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) override;
-    virtual bool SAL_CALL supportsMode( const OUString& aMode ) override;
+    virtual void setMode( const OUString& aMode ) override;
+    virtual OUString getMode(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedModes(  ) override;
+    virtual bool supportsMode( const OUString& aMode ) override;
 
     // XTabController, base of XFormController
-    virtual void SAL_CALL setModel(const css::uno::Reference< css::awt::XTabControllerModel > & Model) override;
-    virtual css::uno::Reference< css::awt::XTabControllerModel >  SAL_CALL getModel() override;
-    virtual void SAL_CALL setContainer(const css::uno::Reference< css::awt::XControlContainer > & Container) override;
-    virtual css::uno::Reference< css::awt::XControlContainer >  SAL_CALL getContainer() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::awt::XControl >  > SAL_CALL getControls() override;
-    virtual void SAL_CALL autoTabOrder() override;
-    virtual void SAL_CALL activateTabOrder() override;
-    virtual void SAL_CALL activateFirst() override;
-    virtual void SAL_CALL activateLast() override;
+    virtual void setModel(const css::uno::Reference< css::awt::XTabControllerModel > & Model) override;
+    virtual css::uno::Reference< css::awt::XTabControllerModel >  getModel() override;
+    virtual void setContainer(const css::uno::Reference< css::awt::XControlContainer > & Container) override;
+    virtual css::uno::Reference< css::awt::XControlContainer >  getContainer() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::awt::XControl >  > getControls() override;
+    virtual void autoTabOrder() override;
+    virtual void activateTabOrder() override;
+    virtual void activateFirst() override;
+    virtual void activateLast() override;
 
     // XFrameActionListener
-    virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
+    virtual void frameAction(const css::frame::FrameActionEvent& aEvent) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+    virtual void disposing(const css::lang::EventObject& Source) override;
 
 protected:
     virtual ~FormControllerImpl() override;
@@ -227,7 +227,7 @@ SbaXDataBrowserController::FormControllerImpl::~FormControllerImpl()
 
 }
 
-Reference< runtime::XFormOperations > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getFormOperations()
+Reference< runtime::XFormOperations > SbaXDataBrowserController::FormControllerImpl::getFormOperations()
 {
     return FormOperations::createWithFormController( m_pOwner->m_xContext, this );
 }
@@ -237,203 +237,203 @@ Reference< css::awt::XControl >  SbaXDataBrowserController::FormControllerImpl::
     return m_pOwner->getBrowserView() ? m_pOwner->getBrowserView()->getGridControl() : Reference< css::awt::XControl > ();
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addActivateListener(const Reference< css::form::XFormControllerListener > & l)
+void SbaXDataBrowserController::FormControllerImpl::addActivateListener(const Reference< css::form::XFormControllerListener > & l)
 {
     m_aActivateListeners.addInterface(l);
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListener(const Reference< css::form::XFormControllerListener > & l)
+void SbaXDataBrowserController::FormControllerImpl::removeActivateListener(const Reference< css::form::XFormControllerListener > & l)
 {
     m_aActivateListeners.removeInterface(l);
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addChildController( const Reference< runtime::XFormController >& )
+void SbaXDataBrowserController::FormControllerImpl::addChildController( const Reference< runtime::XFormController >& )
 {
     // not supported
     throw IllegalArgumentException( OUString(), *this, 1 );
 }
 
-Reference< runtime::XFormControllerContext > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContext()
+Reference< runtime::XFormControllerContext > SbaXDataBrowserController::FormControllerImpl::getContext()
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::getContext: no support!!" );
     return nullptr;
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContext( const Reference< runtime::XFormControllerContext >& /*_context*/ )
+void SbaXDataBrowserController::FormControllerImpl::setContext( const Reference< runtime::XFormControllerContext >& /*_context*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::setContext: no support!!" );
 }
 
-Reference< XInteractionHandler > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getInteractionHandler()
+Reference< XInteractionHandler > SbaXDataBrowserController::FormControllerImpl::getInteractionHandler()
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::getInteractionHandler: no support!!" );
     return nullptr;
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setInteractionHandler( const Reference< XInteractionHandler >& /*_interactionHandler*/ )
+void SbaXDataBrowserController::FormControllerImpl::setInteractionHandler( const Reference< XInteractionHandler >& /*_interactionHandler*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::setInteractionHandler: no support!!" );
 }
 
-Reference< XInterface > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getParent(  )
+Reference< XInterface > SbaXDataBrowserController::FormControllerImpl::getParent(  )
 {
     // don't have any parent form controllers
     return nullptr;
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setParent( const Reference< XInterface >& /*Parent*/ )
+void SbaXDataBrowserController::FormControllerImpl::setParent( const Reference< XInterface >& /*Parent*/ )
 {
     throw NoSupportException( OUString(), *this );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::dispose(  )
+void SbaXDataBrowserController::FormControllerImpl::dispose(  )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::dispose: no, you do *not* want to do this!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addEventListener( const Reference< XEventListener >& /*xListener*/ )
+void SbaXDataBrowserController::FormControllerImpl::addEventListener( const Reference< XEventListener >& /*xListener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addEventListener: no support!!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeEventListener( const Reference< XEventListener >& /*aListener*/ )
+void SbaXDataBrowserController::FormControllerImpl::removeEventListener( const Reference< XEventListener >& /*aListener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeEventListener: no support!!" );
 }
 
-::sal_Int32 SAL_CALL SbaXDataBrowserController::FormControllerImpl::getCount(  )
+::sal_Int32 SbaXDataBrowserController::FormControllerImpl::getCount(  )
 {
     // no sub controllers, never
     return 0;
 }
 
-Any SAL_CALL SbaXDataBrowserController::FormControllerImpl::getByIndex( ::sal_Int32 /*Index*/ )
+Any SbaXDataBrowserController::FormControllerImpl::getByIndex( ::sal_Int32 /*Index*/ )
 {
     // no sub controllers, never
     throw IndexOutOfBoundsException( OUString(), *this );
 }
 
-Type SAL_CALL SbaXDataBrowserController::FormControllerImpl::getElementType(  )
+Type SbaXDataBrowserController::FormControllerImpl::getElementType(  )
 {
     return ::cppu::UnoType< runtime::XFormController >::get();
 }
 
-bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::hasElements(  )
+bool SbaXDataBrowserController::FormControllerImpl::hasElements(  )
 {
     // no sub controllers, never
     return false;
 }
 
-Reference< XEnumeration > SAL_CALL SbaXDataBrowserController::FormControllerImpl::createEnumeration(  )
+Reference< XEnumeration > SbaXDataBrowserController::FormControllerImpl::createEnumeration(  )
 {
     return new ::comphelper::OEnumerationByIndex( this );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addModifyListener( const Reference< XModifyListener >& /*_Listener*/ )
+void SbaXDataBrowserController::FormControllerImpl::addModifyListener( const Reference< XModifyListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addModifyListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeModifyListener( const Reference< XModifyListener >& /*_Listener*/ )
+void SbaXDataBrowserController::FormControllerImpl::removeModifyListener( const Reference< XModifyListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeModifyListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ )
+void SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ )
+void SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ )
+void SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ )
+void SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ )
+void SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ )
+void SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ )
+void SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ )
+void SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ )
+void SbaXDataBrowserController::FormControllerImpl::addParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addParameterListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ )
+void SbaXDataBrowserController::FormControllerImpl::removeParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeParameterListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setMode( const OUString& _rMode )
+void SbaXDataBrowserController::FormControllerImpl::setMode( const OUString& _rMode )
 {
     if ( !supportsMode( _rMode ) )
         throw NoSupportException();
 }
 
-OUString SAL_CALL SbaXDataBrowserController::FormControllerImpl::getMode(  )
+OUString SbaXDataBrowserController::FormControllerImpl::getMode(  )
 {
     return u"DataMode"_ustr;
 }
 
-Sequence< OUString > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getSupportedModes(  )
+Sequence< OUString > SbaXDataBrowserController::FormControllerImpl::getSupportedModes(  )
 {
     Sequence< OUString > aModes { u"DataMode"_ustr };
     return aModes;
 }
 
-bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::supportsMode( const OUString& aMode )
+bool SbaXDataBrowserController::FormControllerImpl::supportsMode( const OUString& aMode )
 {
     return aMode == "DataMode";
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setModel(const Reference< css::awt::XTabControllerModel > & /*Model*/)
+void SbaXDataBrowserController::FormControllerImpl::setModel(const Reference< css::awt::XTabControllerModel > & /*Model*/)
 {
     SAL_WARN("dbaccess.ui","SbaXDataBrowserController::FormControllerImpl::setModel : invalid call, can't change my model !");
 }
 
-Reference< css::awt::XTabControllerModel >  SAL_CALL SbaXDataBrowserController::FormControllerImpl::getModel()
+Reference< css::awt::XTabControllerModel >  SbaXDataBrowserController::FormControllerImpl::getModel()
 {
     return Reference< XTabControllerModel >(m_pOwner->getRowSet(), UNO_QUERY);
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContainer(const Reference< css::awt::XControlContainer > &)
+void SbaXDataBrowserController::FormControllerImpl::setContainer(const Reference< css::awt::XControlContainer > &)
 {
     SAL_WARN("dbaccess.ui","SbaXDataBrowserController::FormControllerImpl::setContainer : invalid call, can't change my container !");
 }
 
-Reference< css::awt::XControlContainer >  SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContainer()
+Reference< css::awt::XControlContainer >  SbaXDataBrowserController::FormControllerImpl::getContainer()
 {
     if (m_pOwner->getBrowserView())
         return m_pOwner->getBrowserView()->getContainer();
     return Reference< css::awt::XControlContainer > ();
 }
 
-Sequence< Reference< css::awt::XControl > > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getControls()
+Sequence< Reference< css::awt::XControl > > SbaXDataBrowserController::FormControllerImpl::getControls()
 {
     if (m_pOwner->getBrowserView())
     {
@@ -443,40 +443,40 @@ Sequence< Reference< css::awt::XControl > > SAL_CALL SbaXDataBrowserController::
     return Sequence< Reference< css::awt::XControl > >();
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::autoTabOrder()
+void SbaXDataBrowserController::FormControllerImpl::autoTabOrder()
 {
     SAL_WARN("dbaccess.ui","SbaXDataBrowserController::FormControllerImpl::autoTabOrder : nothing to do (always have only one control) !");
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateTabOrder()
+void SbaXDataBrowserController::FormControllerImpl::activateTabOrder()
 {
     SAL_WARN("dbaccess.ui","SbaXDataBrowserController::FormControllerImpl::activateTabOrder : nothing to do (always have only one control) !");
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateFirst()
+void SbaXDataBrowserController::FormControllerImpl::activateFirst()
 {
     if (m_pOwner->getBrowserView())
         m_pOwner->getBrowserView()->getVclControl()->ActivateCell();
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateLast()
+void SbaXDataBrowserController::FormControllerImpl::activateLast()
 {
     if (m_pOwner->getBrowserView())
         m_pOwner->getBrowserView()->getVclControl()->ActivateCell();
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::frameAction(const css::frame::FrameActionEvent& /*aEvent*/)
+void SbaXDataBrowserController::FormControllerImpl::frameAction(const css::frame::FrameActionEvent& /*aEvent*/)
 {
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::disposing(const css::lang::EventObject& /*Source*/)
+void SbaXDataBrowserController::FormControllerImpl::disposing(const css::lang::EventObject& /*Source*/)
 {
     // nothing to do
     // we don't add ourself as listener to any broadcasters, so we are not responsible for removing us
 }
 
 // SbaXDataBrowserController
-Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(  )
+Sequence< Type > SbaXDataBrowserController::getTypes(  )
 {
     return ::comphelper::concatSequences(
         SbaXDataBrowserController_Base::getTypes(),
@@ -484,12 +484,12 @@ Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(  )
     );
 }
 
-Sequence< sal_Int8 > SAL_CALL SbaXDataBrowserController::getImplementationId(  )
+Sequence< sal_Int8 > SbaXDataBrowserController::getImplementationId(  )
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType)
+Any SbaXDataBrowserController::queryInterface(const Type& _rType)
 {
     // check for our additional interfaces
     Any aRet = SbaXDataBrowserController_Base::queryInterface(_rType);
@@ -898,14 +898,14 @@ void SbaXDataBrowserController::removeControlListeners(const Reference< css::awt
         xWindow->removeFocusListener(this);
 }
 
-void SAL_CALL SbaXDataBrowserController::focusGained(const FocusEvent& /*e*/)
+void SbaXDataBrowserController::focusGained(const FocusEvent& /*e*/)
 {
     // notify our activate listeners (registered on the form controller aggregate)
     EventObject aEvt(*this);
     m_xFormControllerImpl->m_aActivateListeners.notifyEach( &css::form::XFormControllerListener::formActivated, aEvt );
 }
 
-void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e)
+void SbaXDataBrowserController::focusLost(const FocusEvent& e)
 {
     // some general checks
     if (!getBrowserView() || !getBrowserView()->getGridControl().is())
@@ -1007,13 +1007,13 @@ void SbaXDataBrowserController::disposing(const EventObject& Source)
     SbaXDataBrowserController_Base::OGenericUnoController::disposing( Source );
 }
 
-void SAL_CALL SbaXDataBrowserController::setIdentifier( const OUString& Identifier )
+void SbaXDataBrowserController::setIdentifier( const OUString& Identifier )
 {
     ::osl::MutexGuard aGuard( getMutex() );
     m_sModuleIdentifier = Identifier;
 }
 
-OUString SAL_CALL SbaXDataBrowserController::getIdentifier(  )
+OUString SbaXDataBrowserController::getIdentifier(  )
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_sModuleIdentifier;

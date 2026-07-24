@@ -70,13 +70,13 @@ namespace dbaui
         );
 
         // XInitialization
-        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
+        virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
 
         // XInteractionHandler2
-        virtual bool SAL_CALL handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
+        virtual bool handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 
         // XInteractionHandler
-        virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
+        virtual void handle( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 
     protected:
         bool

@@ -41,7 +41,7 @@ namespace dbaccess
         explicit OSharedConnection(css::uno::Reference< css::uno::XAggregation >& _rxProxyConnection);
 
         // XCloseable
-        virtual void SAL_CALL close(  ) override
+        virtual void close(  ) override
         {
             {
                 ::osl::MutexGuard aGuard( m_aMutex );
@@ -51,40 +51,40 @@ namespace dbaccess
         }
 
         // XConnection
-        virtual void SAL_CALL setAutoCommit( bool /*autoCommit*/ ) override
+        virtual void setAutoCommit( bool /*autoCommit*/ ) override
         {
             throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,cpo::uno::Any());
         }
-        virtual void SAL_CALL setReadOnly( bool /*readOnly*/ ) override
+        virtual void setReadOnly( bool /*readOnly*/ ) override
         {
             throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,cpo::uno::Any());
         }
-        virtual void SAL_CALL setCatalog( const OUString& /*catalog*/ ) override
+        virtual void setCatalog( const OUString& /*catalog*/ ) override
         {
             throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,cpo::uno::Any());
         }
-        virtual void SAL_CALL setTransactionIsolation( sal_Int32 /*level*/ ) override
+        virtual void setTransactionIsolation( sal_Int32 /*level*/ ) override
         {
             throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,cpo::uno::Any());
         }
-        virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& /*typeMap*/ ) override
+        virtual void setTypeMap( const css::uno::Reference< css::container::XNameAccess >& /*typeMap*/ ) override
         {
             throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,cpo::uno::Any());
         }
         // XConnection
-        virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
-        virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
-        virtual bool SAL_CALL getAutoCommit(  ) override;
-        virtual void SAL_CALL commit(  ) override;
-        virtual void SAL_CALL rollback(  ) override;
-        virtual bool SAL_CALL isClosed(  ) override;
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
-        virtual bool SAL_CALL isReadOnly(  ) override;
-        virtual OUString SAL_CALL getCatalog(  ) override;
-        virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
-        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
+        virtual css::uno::Reference< css::sdbc::XStatement > createStatement(  ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareStatement( const OUString& sql ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareCall( const OUString& sql ) override;
+        virtual OUString nativeSQL( const OUString& sql ) override;
+        virtual bool getAutoCommit(  ) override;
+        virtual void commit(  ) override;
+        virtual void rollback(  ) override;
+        virtual bool isClosed(  ) override;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > getMetaData(  ) override;
+        virtual bool isReadOnly(  ) override;
+        virtual OUString getCatalog(  ) override;
+        virtual sal_Int32 getTransactionIsolation(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > getTypeMap(  ) override;
     };
 
 }   // namespace dbaccess

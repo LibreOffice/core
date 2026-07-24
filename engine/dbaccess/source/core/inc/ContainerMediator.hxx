@@ -52,10 +52,10 @@ namespace dbaccess
             const css::uno::Reference< css::container::XNameAccess >& _xSettings
        );
 
-        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& _rEvent ) override;
-        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& _rEvent ) override;
-        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& _rEvent ) override;
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void elementInserted( const css::container::ContainerEvent& _rEvent ) override;
+        virtual void elementRemoved( const css::container::ContainerEvent& _rEvent ) override;
+        virtual void elementReplaced( const css::container::ContainerEvent& _rEvent ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
         void notifyElementCreated(const OUString& _sElementName
                                 ,const css::uno::Reference< css::beans::XPropertySet>& _xElement);

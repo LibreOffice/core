@@ -38,7 +38,7 @@ public:
                   const css::uno::Reference< css::uno::XInterface >& _xParent);
 
 // css::uno::XInterface
-    virtual void SAL_CALL release() noexcept override;
+    virtual void release() noexcept override;
 
     operator css::uno::Reference< css::uno::XInterface > () const
         { return static_cast<css::uno::XWeak *>(const_cast<OSubComponent *>(this)); }

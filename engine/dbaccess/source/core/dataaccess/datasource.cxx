@@ -116,9 +116,9 @@ protected:
 
 protected:
     // XFlushListener
-    virtual void SAL_CALL flushed( const css::lang::EventObject& rEvent ) override;
+    virtual void flushed( const css::lang::EventObject& rEvent ) override;
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 };
 
 }
@@ -154,7 +154,7 @@ void FlushNotificationAdapter::impl_dispose()
     m_aBroadcaster.clear();
 }
 
-void SAL_CALL FlushNotificationAdapter::flushed( const EventObject& rEvent )
+void FlushNotificationAdapter::flushed( const EventObject& rEvent )
 {
     Reference< XFlushListener > xListener( m_aListener );
     if ( xListener.is() )
@@ -163,7 +163,7 @@ void SAL_CALL FlushNotificationAdapter::flushed( const EventObject& rEvent )
         impl_dispose();
 }
 
-void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source )
+void FlushNotificationAdapter::disposing( const EventObject& Source )
 {
     Reference< XFlushListener > xListener( m_aListener );
     if ( xListener.is() )
@@ -178,66 +178,66 @@ OAuthenticationContinuation::OAuthenticationContinuation()
 {
 }
 
-bool SAL_CALL OAuthenticationContinuation::canSetRealm(  )
+bool OAuthenticationContinuation::canSetRealm(  )
 {
     return false;
 }
 
-void SAL_CALL OAuthenticationContinuation::setRealm( const OUString& /*Realm*/ )
+void OAuthenticationContinuation::setRealm( const OUString& /*Realm*/ )
 {
     SAL_WARN("dbaccess","OAuthenticationContinuation::setRealm: not supported!");
 }
 
-bool SAL_CALL OAuthenticationContinuation::canSetUserName(  )
+bool OAuthenticationContinuation::canSetUserName(  )
 {
     // we always allow this, even if the database document is read-only. In this case,
     // it's simply that the user cannot store the new user name.
     return m_bCanSetUserName;
 }
 
-void SAL_CALL OAuthenticationContinuation::setUserName( const OUString& _rUser )
+void OAuthenticationContinuation::setUserName( const OUString& _rUser )
 {
     m_sUser = _rUser;
 }
 
-bool SAL_CALL OAuthenticationContinuation::canSetPassword(  )
+bool OAuthenticationContinuation::canSetPassword(  )
 {
     return true;
 }
 
-void SAL_CALL OAuthenticationContinuation::setPassword( const OUString& _rPassword )
+void OAuthenticationContinuation::setPassword( const OUString& _rPassword )
 {
     m_sPassword = _rPassword;
 }
 
-Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberPasswordModes( RememberAuthentication& _reDefault )
+Sequence< RememberAuthentication > OAuthenticationContinuation::getRememberPasswordModes( RememberAuthentication& _reDefault )
 {
     _reDefault = RememberAuthentication_SESSION;
     return { _reDefault };
 }
 
-void SAL_CALL OAuthenticationContinuation::setRememberPassword( RememberAuthentication _eRemember )
+void OAuthenticationContinuation::setRememberPassword( RememberAuthentication _eRemember )
 {
     m_bRememberPassword = (RememberAuthentication_NO != _eRemember);
 }
 
-bool SAL_CALL OAuthenticationContinuation::canSetAccount(  )
+bool OAuthenticationContinuation::canSetAccount(  )
 {
     return false;
 }
 
-void SAL_CALL OAuthenticationContinuation::setAccount( const OUString& )
+void OAuthenticationContinuation::setAccount( const OUString& )
 {
     SAL_WARN("dbaccess","OAuthenticationContinuation::setAccount: not supported!");
 }
 
-Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberAccountModes( RememberAuthentication& _reDefault )
+Sequence< RememberAuthentication > OAuthenticationContinuation::getRememberAccountModes( RememberAuthentication& _reDefault )
 {
     _reDefault = RememberAuthentication_NO;
     return { RememberAuthentication_NO };
 }
 
-void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentication /*Remember*/ )
+void OAuthenticationContinuation::setRememberAccount( RememberAuthentication /*Remember*/ )
 {
     SAL_WARN("dbaccess","OAuthenticationContinuation::setRememberAccount: not supported!");
 }
@@ -251,7 +251,7 @@ OSharedConnectionManager::~OSharedConnectionManager()
 {
 }
 
-void SAL_CALL OSharedConnectionManager::disposing( const css::lang::EventObject& Source )
+void OSharedConnectionManager::disposing( const css::lang::EventObject& Source )
 {
     MutexGuard aGuard(m_aMutex);
     Reference<XConnection> xConnection(Source.Source,UNO_QUERY);
@@ -455,7 +455,7 @@ void ODatabaseSource::release() noexcept
     ODatabaseSource_Base::release();
 }
 
-void SAL_CALL ODatabaseSource::disposing( const css::lang::EventObject& Source )
+void ODatabaseSource::disposing( const css::lang::EventObject& Source )
 {
     if ( m_pImpl.is() )
         m_pImpl->disposing(Source);
@@ -917,7 +917,7 @@ sal_Int32 ODatabaseSource::getLoginTimeout()
 }
 
 // XCompletedConnection
-Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler )
+Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler )
 {
     return connectWithCompletion(_rxHandler,false);
 }
@@ -927,12 +927,12 @@ Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, co
     return getConnection(user,password,false);
 }
 
-Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnection( const OUString& user, const OUString& password )
+Reference< XConnection > ODatabaseSource::getIsolatedConnection( const OUString& user, const OUString& password )
 {
     return getConnection(user,password,true);
 }
 
-Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnectionWithCompletion( const Reference< XInteractionHandler >& _rxHandler )
+Reference< XConnection > ODatabaseSource::getIsolatedConnectionWithCompletion( const Reference< XInteractionHandler >& _rxHandler )
 {
     return connectWithCompletion(_rxHandler,true);
 }
@@ -1068,14 +1068,14 @@ Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, co
     return xConn;
 }
 
-Reference< XNameAccess > SAL_CALL ODatabaseSource::getBookmarks(  )
+Reference< XNameAccess > ODatabaseSource::getBookmarks(  )
 {
     ModelMethodGuard aGuard( *this );
     // tdf#114596 this may look nutty but see OBookmarkContainer::acquire()
     return static_cast<XNameContainer*>(&m_Bookmarks);
 }
 
-Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( )
+Reference< XNameAccess > ODatabaseSource::getQueryDefinitions( )
 {
     ModelMethodGuard aGuard( *this );
 
@@ -1119,7 +1119,7 @@ Reference< XNameAccess >  ODatabaseSource::getTables()
     return xContainer;
 }
 
-void SAL_CALL ODatabaseSource::flush(  )
+void ODatabaseSource::flush(  )
 {
     try
     {
@@ -1147,7 +1147,7 @@ void SAL_CALL ODatabaseSource::flush(  )
     }
 }
 
-void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ )
+void ODatabaseSource::flushed( const EventObject& /*rEvent*/ )
 {
     ModelMethodGuard aGuard( *this );
 
@@ -1179,31 +1179,31 @@ void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ )
     m_pImpl->setModified( bWasModified );
 }
 
-void SAL_CALL ODatabaseSource::addFlushListener( const Reference< css::util::XFlushListener >& _xListener )
+void ODatabaseSource::addFlushListener( const Reference< css::util::XFlushListener >& _xListener )
 {
     m_aFlushListeners.addInterface(_xListener);
 }
 
-void SAL_CALL ODatabaseSource::removeFlushListener( const Reference< css::util::XFlushListener >& _xListener )
+void ODatabaseSource::removeFlushListener( const Reference< css::util::XFlushListener >& _xListener )
 {
     m_aFlushListeners.removeInterface(_xListener);
 }
 
-void SAL_CALL ODatabaseSource::elementInserted( const ContainerEvent& /*Event*/ )
+void ODatabaseSource::elementInserted( const ContainerEvent& /*Event*/ )
 {
     ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
         m_pImpl->setModified(true);
 }
 
-void SAL_CALL ODatabaseSource::elementRemoved( const ContainerEvent& /*Event*/ )
+void ODatabaseSource::elementRemoved( const ContainerEvent& /*Event*/ )
 {
     ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
         m_pImpl->setModified(true);
 }
 
-void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& /*Event*/ )
+void ODatabaseSource::elementReplaced( const ContainerEvent& /*Event*/ )
 {
     ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
@@ -1211,7 +1211,7 @@ void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& /*Event*/ 
 }
 
 // XDocumentDataSource
-Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocument()
+Reference< XOfficeDatabaseDocument > ODatabaseSource::getDatabaseDocument()
 {
     ModelMethodGuard aGuard( *this );
 
@@ -1222,7 +1222,7 @@ Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocume
     return Reference< XOfficeDatabaseDocument >( static_cast<cppu::OWeakObject*>(xModel.get()), UNO_QUERY_THROW );
 }
 
-void SAL_CALL ODatabaseSource::initialize( cpo::uno::Sequence< cpo::uno::Any > const & )
+void ODatabaseSource::initialize( cpo::uno::Sequence< cpo::uno::Any > const & )
 {
 }
 

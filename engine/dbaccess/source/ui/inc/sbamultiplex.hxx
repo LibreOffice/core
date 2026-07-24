@@ -46,8 +46,8 @@ namespace dbaui
     public:
         OSbaWeakSubObject(::cppu::OWeakObject& rParent) : m_rParent(rParent) { }
 
-        virtual void SAL_CALL acquire() noexcept override { m_rParent.acquire(); }
-        virtual void SAL_CALL release() noexcept override { m_rParent.release(); }
+        virtual void acquire() noexcept override { m_rParent.acquire(); }
+        virtual void release() noexcept override { m_rParent.release(); }
     };
 
     // some listener multiplexers
@@ -60,12 +60,12 @@ namespace dbaui
     public:
         SbaXStatusMultiplexer(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex);
         DECLARE_UNO3_DEFAULTS(SbaXStatusMultiplexer, OSbaWeakSubObject)
-        virtual cpo::uno::Any  SAL_CALL queryInterface(const cpo::uno::Type& _rType) override;
+        virtual cpo::uno::Any  queryInterface(const cpo::uno::Type& _rType) override;
 
         /* css::lang::XEventListener */
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+        virtual void disposing(const css::lang::EventObject& Source) override;
 
-        virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& e) override;
+        virtual void statusChanged(const css::frame::FeatureStateEvent& e) override;
 
     private:
         css::frame::FeatureStateEvent  m_aLastKnownStatus;

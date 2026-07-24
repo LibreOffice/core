@@ -41,22 +41,22 @@ ODataSourcePropertyDialog::ODataSourcePropertyDialog(const Reference<XComponentC
 {
 }
 
-Sequence<sal_Int8> SAL_CALL ODataSourcePropertyDialog::getImplementationId()
+Sequence<sal_Int8> ODataSourcePropertyDialog::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-OUString SAL_CALL ODataSourcePropertyDialog::getImplementationName()
+OUString ODataSourcePropertyDialog::getImplementationName()
 {
     return u"org.openoffice.comp.dbu.ODatasourceAdministrationDialog"_ustr;
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ODataSourcePropertyDialog::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ODataSourcePropertyDialog::getSupportedServiceNames()
 {
     return { u"com.sun.star.sdb.DatasourceAdministrationDialog"_ustr };
 }
 
-Reference<XPropertySetInfo> SAL_CALL ODataSourcePropertyDialog::getPropertySetInfo()
+Reference<XPropertySetInfo> ODataSourcePropertyDialog::getPropertySetInfo()
 {
     Reference<XPropertySetInfo> xInfo(createPropertySetInfo(getInfoHelper()));
     return xInfo;

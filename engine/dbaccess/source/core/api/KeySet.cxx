@@ -1219,7 +1219,7 @@ bool OKeySet::fillAllRows()
 }
 
 // XRow
-bool SAL_CALL OKeySet::wasNull(  )
+bool OKeySet::wasNull(  )
 {
     if ( ! m_xRow.is() )
         throwGenericSQLException(u"Must call getFOO() for some FOO before wasNull()"_ustr, *this);
@@ -1238,115 +1238,115 @@ inline void OKeySet::ensureRowForData( )
     OSL_ENSURE(m_xRow.is(),"m_xRow is null! I've called throwSQLException but execution continued?");
 }
 
-OUString SAL_CALL OKeySet::getString( sal_Int32 columnIndex )
+OUString OKeySet::getString( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getString(columnIndex);
 }
 
-bool SAL_CALL OKeySet::getBoolean( sal_Int32 columnIndex )
+bool OKeySet::getBoolean( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getBoolean(columnIndex);
 }
 
-sal_Int8 SAL_CALL OKeySet::getByte( sal_Int32 columnIndex )
+sal_Int8 OKeySet::getByte( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getByte(columnIndex);
 }
 
-sal_Int16 SAL_CALL OKeySet::getShort( sal_Int32 columnIndex )
+sal_Int16 OKeySet::getShort( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getShort(columnIndex);
 }
 
-sal_Int32 SAL_CALL OKeySet::getInt( sal_Int32 columnIndex )
+sal_Int32 OKeySet::getInt( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getInt(columnIndex);
 }
 
-sal_Int64 SAL_CALL OKeySet::getLong( sal_Int32 columnIndex )
+sal_Int64 OKeySet::getLong( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getLong(columnIndex);
 }
 
-float SAL_CALL OKeySet::getFloat( sal_Int32 columnIndex )
+float OKeySet::getFloat( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getFloat(columnIndex);
 }
 
-double SAL_CALL OKeySet::getDouble( sal_Int32 columnIndex )
+double OKeySet::getDouble( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getDouble(columnIndex);
 }
 
-Sequence< sal_Int8 > SAL_CALL OKeySet::getBytes( sal_Int32 columnIndex )
+Sequence< sal_Int8 > OKeySet::getBytes( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getBytes(columnIndex);
 }
 
-css::util::Date SAL_CALL OKeySet::getDate( sal_Int32 columnIndex )
+css::util::Date OKeySet::getDate( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getDate(columnIndex);
 }
 
-css::util::Time SAL_CALL OKeySet::getTime( sal_Int32 columnIndex )
+css::util::Time OKeySet::getTime( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getTime(columnIndex);
 }
 
-css::util::DateTime SAL_CALL OKeySet::getTimestamp( sal_Int32 columnIndex )
+css::util::DateTime OKeySet::getTimestamp( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getTimestamp(columnIndex);
 }
 
-Reference< css::io::XInputStream > SAL_CALL OKeySet::getBinaryStream( sal_Int32 columnIndex )
+Reference< css::io::XInputStream > OKeySet::getBinaryStream( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getBinaryStream(columnIndex);
 }
 
-Reference< css::io::XInputStream > SAL_CALL OKeySet::getCharacterStream( sal_Int32 columnIndex )
+Reference< css::io::XInputStream > OKeySet::getCharacterStream( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getCharacterStream(columnIndex);
 }
 
-Any SAL_CALL OKeySet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap )
+Any OKeySet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap )
 {
     ensureRowForData();
     return m_xRow->getObject(columnIndex,typeMap);
 }
 
-Reference< XRef > SAL_CALL OKeySet::getRef( sal_Int32 columnIndex )
+Reference< XRef > OKeySet::getRef( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getRef(columnIndex);
 }
 
-Reference< XBlob > SAL_CALL OKeySet::getBlob( sal_Int32 columnIndex )
+Reference< XBlob > OKeySet::getBlob( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getBlob(columnIndex);
 }
 
-Reference< XClob > SAL_CALL OKeySet::getClob( sal_Int32 columnIndex )
+Reference< XClob > OKeySet::getClob( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getClob(columnIndex);
 }
 
-Reference< XArray > SAL_CALL OKeySet::getArray( sal_Int32 columnIndex )
+Reference< XArray > OKeySet::getArray( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getArray(columnIndex);

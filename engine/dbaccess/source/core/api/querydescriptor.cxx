@@ -96,7 +96,7 @@ void OQueryDescriptor::registerProperties()
                     &m_aLayoutInformation, cppu::UnoType<decltype(m_aLayoutInformation)>::get());
 }
 
-Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  )
+Reference< XPropertySetInfo > OQueryDescriptor::getPropertySetInfo(  )
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
@@ -160,7 +160,7 @@ void OQueryDescriptor_Base::clearColumns( )
     setColumnsOutOfDate();
 }
 
-Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( )
+Reference< XNameAccess > OQueryDescriptor_Base::getColumns( )
 {
     MutexGuard aGuard(m_rMutex);
 
@@ -190,17 +190,17 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( )
     return m_pColumns.get();
 }
 
-OUString SAL_CALL OQueryDescriptor_Base::getImplementationName(  )
+OUString OQueryDescriptor_Base::getImplementationName(  )
 {
     return u"com.sun.star.sdb.OQueryDescriptor"_ustr;
 }
 
-bool SAL_CALL OQueryDescriptor_Base::supportsService( const OUString& _rServiceName )
+bool OQueryDescriptor_Base::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > SAL_CALL OQueryDescriptor_Base::getSupportedServiceNames(  )
+Sequence< OUString > OQueryDescriptor_Base::getSupportedServiceNames(  )
 {
     return { SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERYDESCRIPTOR };
 }

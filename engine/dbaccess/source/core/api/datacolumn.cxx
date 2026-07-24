@@ -62,7 +62,7 @@ Sequence< sal_Int8 > ODataColumn::getImplementationId()
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-Any SAL_CALL ODataColumn::queryInterface( const Type & _rType )
+Any ODataColumn::queryInterface( const Type & _rType )
 {
     Any aReturn = OResultColumn::queryInterface(_rType);
     if (!aReturn.hasValue())

@@ -112,17 +112,17 @@ public:
     void dispose();
 
     // XDocumentSubStorageSupplier
-    virtual Reference< XStorage > SAL_CALL getDocumentSubStorage( const OUString& aStorageName, ::sal_Int32 _nMode ) override;
-    virtual Sequence< OUString > SAL_CALL getDocumentSubStoragesNames(  ) override;
+    virtual Reference< XStorage > getDocumentSubStorage( const OUString& aStorageName, ::sal_Int32 _nMode ) override;
+    virtual Sequence< OUString > getDocumentSubStoragesNames(  ) override;
 
     // XTransactionListener
-    virtual void SAL_CALL preCommit( const css::lang::EventObject& aEvent ) override;
-    virtual void SAL_CALL commited( const css::lang::EventObject& aEvent ) override;
-    virtual void SAL_CALL preRevert( const css::lang::EventObject& aEvent ) override;
-    virtual void SAL_CALL reverted( const css::lang::EventObject& aEvent ) override;
+    virtual void preCommit( const css::lang::EventObject& aEvent ) override;
+    virtual void commited( const css::lang::EventObject& aEvent ) override;
+    virtual void preRevert( const css::lang::EventObject& aEvent ) override;
+    virtual void reverted( const css::lang::EventObject& aEvent ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     /// disposes all storages managed by this instance
     void disposeStorages();
@@ -266,7 +266,7 @@ bool DocumentStorageAccess::commitEmbeddedStorage( bool _bPreventRootCommits )
 
 }
 
-Reference< XStorage > SAL_CALL DocumentStorageAccess::getDocumentSubStorage( const OUString& aStorageName, ::sal_Int32 _nDesiredMode )
+Reference< XStorage > DocumentStorageAccess::getDocumentSubStorage( const OUString& aStorageName, ::sal_Int32 _nDesiredMode )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     NamedStorages::const_iterator pos = m_aExposedStorages.find( aStorageName );
@@ -279,7 +279,7 @@ Reference< XStorage > SAL_CALL DocumentStorageAccess::getDocumentSubStorage( con
     return pos->second;
 }
 
-Sequence< OUString > SAL_CALL DocumentStorageAccess::getDocumentSubStoragesNames(  )
+Sequence< OUString > DocumentStorageAccess::getDocumentSubStoragesNames(  )
 {
     Reference< XStorage > xRootStor( m_pModelImplementation->getRootStorage() );
     if ( !xRootStor.is() )
@@ -298,12 +298,12 @@ Sequence< OUString > SAL_CALL DocumentStorageAccess::getDocumentSubStoragesNames
         :  Sequence< OUString >( aNames.data(), aNames.size() );
 }
 
-void SAL_CALL DocumentStorageAccess::preCommit( const css::lang::EventObject& /*aEvent*/ )
+void DocumentStorageAccess::preCommit( const css::lang::EventObject& /*aEvent*/ )
 {
     // not interested in
 }
 
-void SAL_CALL DocumentStorageAccess::commited( const css::lang::EventObject& aEvent )
+void DocumentStorageAccess::commited( const css::lang::EventObject& aEvent )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -326,17 +326,17 @@ void SAL_CALL DocumentStorageAccess::commited( const css::lang::EventObject& aEv
     }
 }
 
-void SAL_CALL DocumentStorageAccess::preRevert( const css::lang::EventObject& /*aEvent*/ )
+void DocumentStorageAccess::preRevert( const css::lang::EventObject& /*aEvent*/ )
 {
     // not interested in
 }
 
-void SAL_CALL DocumentStorageAccess::reverted( const css::lang::EventObject& /*aEvent*/ )
+void DocumentStorageAccess::reverted( const css::lang::EventObject& /*aEvent*/ )
 {
     // not interested in
 }
 
-void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& Source )
+void DocumentStorageAccess::disposing( const css::lang::EventObject& Source )
 {
     OSL_ENSURE( Reference< XStorage >( Source.Source, UNO_QUERY ).is(), "DocumentStorageAccess::disposing: No storage? What's this?" );
 

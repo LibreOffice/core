@@ -78,44 +78,44 @@ public:
     virtual ~OBookmarkContainer() override;
 
 // css::uno::XInterface
-    virtual void SAL_CALL acquire(  ) noexcept override;
-    virtual void SAL_CALL release(  ) noexcept override;
+    virtual void acquire(  ) noexcept override;
+    virtual void release(  ) noexcept override;
 
 // css::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 // css::container::XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual cpo::uno::Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 
 // css::container::XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
+    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
 
 // css::container::XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) override;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 _nIndex ) override;
+    virtual sal_Int32 getCount(  ) override;
+    virtual cpo::uno::Any getByIndex( sal_Int32 _nIndex ) override;
 
 // css::container::XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& _rName, const cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const OUString& _rName ) override;
+    virtual void insertByName( const OUString& _rName, const cpo::uno::Any& aElement ) override;
+    virtual void removeByName( const OUString& _rName ) override;
 
 // css::container::XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& _rName, const cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const OUString& _rName, const cpo::uno::Any& aElement ) override;
 
 // css::container::XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
 // css::container::XContainer
-    virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
-    virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
 // css::container::XChild
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
-    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
 private:
     /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.

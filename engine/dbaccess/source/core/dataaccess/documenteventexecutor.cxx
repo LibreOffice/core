@@ -126,7 +126,7 @@ namespace dbaccess
     {
     }
 
-    void SAL_CALL DocumentEventExecutor::documentEventOccured( const DocumentEvent& Event )
+    void DocumentEventExecutor::documentEventOccured( const DocumentEvent& Event )
     {
         rtl::Reference< ODatabaseDocument > xDocument( mxDocument.get() );
         if ( !xDocument )
@@ -176,7 +176,7 @@ namespace dbaccess
         }
     }
 
-    void SAL_CALL DocumentEventExecutor::disposing( const lang::EventObject& /*_Source*/ )
+    void DocumentEventExecutor::disposing( const lang::EventObject& /*_Source*/ )
     {
         // not interested in
     }

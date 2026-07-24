@@ -46,61 +46,61 @@ namespace dbaccess
                       const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta);
 
     // css::lang::XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
     // css::uno::XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-        virtual void SAL_CALL acquire() noexcept override { OResultColumn::acquire(); }
-        virtual void SAL_CALL release() noexcept override { OResultColumn::release(); }
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+        virtual void acquire() noexcept override { OResultColumn::acquire(); }
+        virtual void release() noexcept override { OResultColumn::release(); }
 
     // css::lang::XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // cppu::OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
     // css::sdb::XColumn
-        virtual bool SAL_CALL wasNull(  ) override;
-        virtual OUString SAL_CALL getString(  ) override;
-        virtual bool SAL_CALL getBoolean(  ) override;
-        virtual sal_Int8 SAL_CALL getByte(  ) override;
-        virtual sal_Int16 SAL_CALL getShort(  ) override;
-        virtual sal_Int32 SAL_CALL getInt(  ) override;
-        virtual sal_Int64 SAL_CALL getLong(  ) override;
-        virtual float SAL_CALL getFloat(  ) override;
-        virtual double SAL_CALL getDouble(  ) override;
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getBytes(  ) override;
-        virtual css::util::Date SAL_CALL getDate(  ) override;
-        virtual css::util::Time SAL_CALL getTime(  ) override;
-        virtual css::util::DateTime SAL_CALL getTimestamp(  ) override;
-        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream(  ) override;
-        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getCharacterStream(  ) override;
-        virtual cpo::uno::Any SAL_CALL getObject( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL getRef(  ) override;
-        virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL getBlob(  ) override;
-        virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL getClob(  ) override;
-        virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL getArray(  ) override;
+        virtual bool wasNull(  ) override;
+        virtual OUString getString(  ) override;
+        virtual bool getBoolean(  ) override;
+        virtual sal_Int8 getByte(  ) override;
+        virtual sal_Int16 getShort(  ) override;
+        virtual sal_Int32 getInt(  ) override;
+        virtual sal_Int64 getLong(  ) override;
+        virtual float getFloat(  ) override;
+        virtual double getDouble(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > getBytes(  ) override;
+        virtual css::util::Date getDate(  ) override;
+        virtual css::util::Time getTime(  ) override;
+        virtual css::util::DateTime getTimestamp(  ) override;
+        virtual css::uno::Reference< css::io::XInputStream > getBinaryStream(  ) override;
+        virtual css::uno::Reference< css::io::XInputStream > getCharacterStream(  ) override;
+        virtual cpo::uno::Any getObject( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual css::uno::Reference< css::sdbc::XRef > getRef(  ) override;
+        virtual css::uno::Reference< css::sdbc::XBlob > getBlob(  ) override;
+        virtual css::uno::Reference< css::sdbc::XClob > getClob(  ) override;
+        virtual css::uno::Reference< css::sdbc::XArray > getArray(  ) override;
 
     // css::sdb::XColumnUpdate
-        virtual void SAL_CALL updateNull(  ) override;
-        virtual void SAL_CALL updateBoolean( bool x ) override;
-        virtual void SAL_CALL updateByte( sal_Int8 x ) override;
-        virtual void SAL_CALL updateShort( sal_Int16 x ) override;
-        virtual void SAL_CALL updateInt( sal_Int32 x ) override;
-        virtual void SAL_CALL updateLong( sal_Int64 x ) override;
-        virtual void SAL_CALL updateFloat( float x ) override;
-        virtual void SAL_CALL updateDouble( double x ) override;
-        virtual void SAL_CALL updateString( const OUString& x ) override;
-        virtual void SAL_CALL updateBytes( const cpo::uno::Sequence< sal_Int8 >& x ) override;
-        virtual void SAL_CALL updateDate( const css::util::Date& x ) override;
-        virtual void SAL_CALL updateTime( const css::util::Time& x ) override;
-        virtual void SAL_CALL updateTimestamp( const css::util::DateTime& x ) override;
-        virtual void SAL_CALL updateBinaryStream( const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void SAL_CALL updateCharacterStream( const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void SAL_CALL updateObject( const cpo::uno::Any& x ) override;
-        virtual void SAL_CALL updateNumericObject( const cpo::uno::Any& x, sal_Int32 scale ) override;
+        virtual void updateNull(  ) override;
+        virtual void updateBoolean( bool x ) override;
+        virtual void updateByte( sal_Int8 x ) override;
+        virtual void updateShort( sal_Int16 x ) override;
+        virtual void updateInt( sal_Int32 x ) override;
+        virtual void updateLong( sal_Int64 x ) override;
+        virtual void updateFloat( float x ) override;
+        virtual void updateDouble( double x ) override;
+        virtual void updateString( const OUString& x ) override;
+        virtual void updateBytes( const cpo::uno::Sequence< sal_Int8 >& x ) override;
+        virtual void updateDate( const css::util::Date& x ) override;
+        virtual void updateTime( const css::util::Time& x ) override;
+        virtual void updateTimestamp( const css::util::DateTime& x ) override;
+        virtual void updateBinaryStream( const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void updateCharacterStream( const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void updateObject( const cpo::uno::Any& x ) override;
+        virtual void updateNumericObject( const cpo::uno::Any& x, sal_Int32 scale ) override;
     };
 }
 

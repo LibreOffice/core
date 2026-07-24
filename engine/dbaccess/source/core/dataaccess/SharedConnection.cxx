@@ -33,7 +33,7 @@ OSharedConnection::OSharedConnection(Reference<XAggregation>& _rxProxyConnection
 
 OSharedConnection::~OSharedConnection() {}
 
-Reference<XStatement> SAL_CALL OSharedConnection::createStatement()
+Reference<XStatement> OSharedConnection::createStatement()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -41,7 +41,7 @@ Reference<XStatement> SAL_CALL OSharedConnection::createStatement()
     return m_xConnection->createStatement();
 }
 
-Reference<XPreparedStatement> SAL_CALL OSharedConnection::prepareStatement(const OUString& sql)
+Reference<XPreparedStatement> OSharedConnection::prepareStatement(const OUString& sql)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -49,7 +49,7 @@ Reference<XPreparedStatement> SAL_CALL OSharedConnection::prepareStatement(const
     return m_xConnection->prepareStatement(sql);
 }
 
-Reference<XPreparedStatement> SAL_CALL OSharedConnection::prepareCall(const OUString& sql)
+Reference<XPreparedStatement> OSharedConnection::prepareCall(const OUString& sql)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -57,7 +57,7 @@ Reference<XPreparedStatement> SAL_CALL OSharedConnection::prepareCall(const OUSt
     return m_xConnection->prepareCall(sql);
 }
 
-OUString SAL_CALL OSharedConnection::nativeSQL(const OUString& sql)
+OUString OSharedConnection::nativeSQL(const OUString& sql)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -65,7 +65,7 @@ OUString SAL_CALL OSharedConnection::nativeSQL(const OUString& sql)
     return m_xConnection->nativeSQL(sql);
 }
 
-bool SAL_CALL OSharedConnection::getAutoCommit()
+bool OSharedConnection::getAutoCommit()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -73,7 +73,7 @@ bool SAL_CALL OSharedConnection::getAutoCommit()
     return m_xConnection->getAutoCommit();
 }
 
-void SAL_CALL OSharedConnection::commit()
+void OSharedConnection::commit()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -81,7 +81,7 @@ void SAL_CALL OSharedConnection::commit()
     m_xConnection->commit();
 }
 
-void SAL_CALL OSharedConnection::rollback()
+void OSharedConnection::rollback()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -89,7 +89,7 @@ void SAL_CALL OSharedConnection::rollback()
     m_xConnection->rollback();
 }
 
-bool SAL_CALL OSharedConnection::isClosed()
+bool OSharedConnection::isClosed()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (!m_xConnection.is())
@@ -98,7 +98,7 @@ bool SAL_CALL OSharedConnection::isClosed()
     return m_xConnection->isClosed();
 }
 
-Reference<XDatabaseMetaData> SAL_CALL OSharedConnection::getMetaData()
+Reference<XDatabaseMetaData> OSharedConnection::getMetaData()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -106,7 +106,7 @@ Reference<XDatabaseMetaData> SAL_CALL OSharedConnection::getMetaData()
     return m_xConnection->getMetaData();
 }
 
-bool SAL_CALL OSharedConnection::isReadOnly()
+bool OSharedConnection::isReadOnly()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -114,7 +114,7 @@ bool SAL_CALL OSharedConnection::isReadOnly()
     return m_xConnection->isReadOnly();
 }
 
-OUString SAL_CALL OSharedConnection::getCatalog()
+OUString OSharedConnection::getCatalog()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -122,7 +122,7 @@ OUString SAL_CALL OSharedConnection::getCatalog()
     return m_xConnection->getCatalog();
 }
 
-sal_Int32 SAL_CALL OSharedConnection::getTransactionIsolation()
+sal_Int32 OSharedConnection::getTransactionIsolation()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -130,7 +130,7 @@ sal_Int32 SAL_CALL OSharedConnection::getTransactionIsolation()
     return m_xConnection->getTransactionIsolation();
 }
 
-Reference<css::container::XNameAccess> SAL_CALL OSharedConnection::getTypeMap()
+Reference<css::container::XNameAccess> OSharedConnection::getTypeMap()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);

@@ -73,7 +73,7 @@ public:
     explicit ODBFilter( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
     // XFilter
-    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
+    virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
 
     /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static();

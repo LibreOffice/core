@@ -49,13 +49,13 @@ public:
     OColumnPropertyListener(const OColumnPropertyListener&) = delete;
     const OColumnPropertyListener& operator=(const OColumnPropertyListener&) = delete;
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) override
+    virtual void propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) override
     {
         if ( m_pComponent )
             m_pComponent->notifyDataSourceModified();
     }
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) override
+    virtual void disposing( const EventObject& /*_rSource*/ ) override
     {
     }
     void clear() { m_pComponent = nullptr; }
@@ -151,17 +151,17 @@ cpo::uno::Sequence< cpo::uno::Type > OComponentDefinition::getTypes()
 }
 IMPLEMENT_FORWARD_XINTERFACE3( OComponentDefinition,OContentHelper,ODataSettings,OComponentDefinition_BASE)
 
-OUString SAL_CALL OComponentDefinition::getImplementationName()
+OUString OComponentDefinition::getImplementationName()
 {
     return u"com.sun.star.comp.dba.OComponentDefinition"_ustr;
 }
 
-Sequence< OUString > SAL_CALL OComponentDefinition::getSupportedServiceNames()
+Sequence< OUString > OComponentDefinition::getSupportedServiceNames()
 {
     return { u"com.sun.star.sdb.TableDefinition"_ustr, u"com.sun.star.ucb.Content"_ustr };
 }
 
-void SAL_CALL OComponentDefinition::disposing()
+void OComponentDefinition::disposing()
 {
     OContentHelper::disposing();
     if (m_pColumns)
@@ -184,7 +184,7 @@ IPropertyArrayHelper* OComponentDefinition::createArrayHelper( ) const
     return new OPropertyArrayHelper(aProps);
 }
 
-Reference< XPropertySetInfo > SAL_CALL OComponentDefinition::getPropertySetInfo(  )
+Reference< XPropertySetInfo > OComponentDefinition::getPropertySetInfo(  )
 {
     Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;

@@ -31,7 +31,7 @@ SbaXStatusMultiplexer::SbaXStatusMultiplexer(::cppu::OWeakObject& rSource, ::osl
 {
 }
 
-cpo::uno::Any  SAL_CALL SbaXStatusMultiplexer::queryInterface(const cpo::uno::Type& _rType)
+cpo::uno::Any  SbaXStatusMultiplexer::queryInterface(const cpo::uno::Type& _rType)
 {
     cpo::uno::Any aReturn = OSbaWeakSubObject::queryInterface(_rType);
     if (!aReturn.hasValue())
@@ -42,12 +42,12 @@ cpo::uno::Any  SAL_CALL SbaXStatusMultiplexer::queryInterface(const cpo::uno::Ty
 
     return aReturn;
 }
-void SAL_CALL SbaXStatusMultiplexer::disposing(const css::lang::EventObject& )
+void SbaXStatusMultiplexer::disposing(const css::lang::EventObject& )
 {
 }
 
 
-void SAL_CALL SbaXStatusMultiplexer::statusChanged(const css::frame::FeatureStateEvent& e)
+void SbaXStatusMultiplexer::statusChanged(const css::frame::FeatureStateEvent& e)
 {
     m_aLastKnownStatus = e;
     m_aLastKnownStatus.Source = &m_rParent;

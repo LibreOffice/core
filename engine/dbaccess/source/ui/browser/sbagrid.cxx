@@ -77,7 +77,7 @@ com_sun_star_comp_dbu_SbaXGridControl_get_implementation(
     return cppu::acquire(new SbaXGridControl(context));
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL SbaXGridControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SbaXGridControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.form.control.InteractionGridControl"_ustr, u"com.sun.star.form.control.GridControl"_ustr,
          u"com.sun.star.awt.UnoControl"_ustr };
@@ -86,7 +86,7 @@ cpo::uno::Sequence<OUString> SAL_CALL SbaXGridControl::getSupportedServiceNames(
 
 // SbaXGridControl
 
-OUString SAL_CALL SbaXGridControl::getImplementationName()
+OUString SbaXGridControl::getImplementationName()
 {
     return u"com.sun.star.comp.dbu.SbaXGridControl"_ustr;
 }
@@ -124,25 +124,25 @@ rtl::Reference<FmXGridPeer> SbaXGridControl::imp_CreatePeer(vcl::Window* pParent
     return pReturn;
 }
 
-Any SAL_CALL SbaXGridControl::queryAggregation(const Type& _rType)
+Any SbaXGridControl::queryAggregation(const Type& _rType)
 {
     Any aRet = FmXGridControl::queryAggregation(_rType);
     return aRet.hasValue() ? aRet : ::cppu::queryInterface(_rType,static_cast<css::frame::XDispatch*>(this));
 }
 
-Sequence< Type > SAL_CALL SbaXGridControl::getTypes(  )
+Sequence< Type > SbaXGridControl::getTypes(  )
 {
     return comphelper::concatSequences(
         FmXGridControl::getTypes(),
         Sequence { cppu::UnoType<css::frame::XDispatch>::get() });
 }
 
-Sequence< sal_Int8 > SAL_CALL SbaXGridControl::getImplementationId(  )
+Sequence< sal_Int8 > SbaXGridControl::getImplementationId(  )
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-void SAL_CALL SbaXGridControl::createPeer(const Reference< css::awt::XToolkit > & rToolkit, const Reference< css::awt::XWindowPeer > & rParentPeer)
+void SbaXGridControl::createPeer(const Reference< css::awt::XToolkit > & rToolkit, const Reference< css::awt::XWindowPeer > & rParentPeer)
 {
     FmXGridControl::createPeer(rToolkit, rParentPeer);
 
@@ -159,14 +159,14 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< css::awt::XToolkit > 
     }
 }
 
-void SAL_CALL SbaXGridControl::dispatch(const css::util::URL& aURL, const Sequence< PropertyValue >& aArgs)
+void SbaXGridControl::dispatch(const css::util::URL& aURL, const Sequence< PropertyValue >& aArgs)
 {
     Reference< css::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
     if (xDisp.is())
         xDisp->dispatch(aURL, aArgs);
 }
 
-void SAL_CALL SbaXGridControl::addStatusListener( const Reference< XStatusListener > & _rxListener, const URL& _rURL )
+void SbaXGridControl::addStatusListener( const Reference< XStatusListener > & _rxListener, const URL& _rURL )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     if ( !_rxListener.is() )
@@ -193,7 +193,7 @@ void SAL_CALL SbaXGridControl::addStatusListener( const Reference< XStatusListen
     }
 }
 
-void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< css::frame::XStatusListener > & _rxListener, const css::util::URL& _rURL)
+void SbaXGridControl::removeStatusListener(const Reference< css::frame::XStatusListener > & _rxListener, const css::util::URL& _rURL)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
@@ -211,7 +211,7 @@ void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< css::frame:
     xMultiplexer->removeInterface( _rxListener );
 }
 
-void SAL_CALL SbaXGridControl::dispose()
+void SbaXGridControl::dispose()
 {
     SolarMutexGuard aGuard;
 
@@ -241,7 +241,7 @@ SbaXGridPeer::~SbaXGridPeer()
 {
 }
 
-void SAL_CALL SbaXGridPeer::dispose()
+void SbaXGridPeer::dispose()
 {
     {
         std::unique_lock g(m_aMutex);
@@ -283,7 +283,7 @@ void SbaXGridPeer::NotifyStatusChanged(const css::util::URL& _rUrl, const Refere
     }
 }
 
-Any SAL_CALL SbaXGridPeer::queryInterface(const Type& _rType)
+Any SbaXGridPeer::queryInterface(const Type& _rType)
 {
     Any aRet = ::cppu::queryInterface(_rType,static_cast<css::frame::XDispatch*>(this));
     if(aRet.hasValue())
@@ -291,7 +291,7 @@ Any SAL_CALL SbaXGridPeer::queryInterface(const Type& _rType)
     return FmXGridPeer::queryInterface(_rType);
 }
 
-Reference< css::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags)
+Reference< css::frame::XDispatch >  SbaXGridPeer::queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags)
 {
     if  (   ( aURL.Complete == ".uno:GridSlots/BrowserAttribs" ) || ( aURL.Complete == ".uno:GridSlots/RowHeight" )
         ||  ( aURL.Complete == ".uno:GridSlots/ColumnAttribs" )  || ( aURL.Complete == ".uno:GridSlots/ColumnWidth" )
@@ -338,7 +338,7 @@ SbaXGridPeer::DispatchType SbaXGridPeer::classifyDispatchURL( const URL& _rURL )
     return eURLType;
 }
 
-void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyValue >& aArgs)
+void SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyValue >& aArgs)
 {
     VclPtr< SbaGridControl > pGrid = GetAs< SbaGridControl >();
     if (!pGrid)
@@ -435,7 +435,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     NotifyStatusChanged( aURL, nullptr );
 }
 
-void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL)
+void SbaXGridPeer::addStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL)
 {
     {
         std::unique_lock g(m_aMutex);
@@ -449,7 +449,7 @@ void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< css::frame::XStat
     NotifyStatusChanged(aURL, xControl);
 }
 
-void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL)
+void SbaXGridPeer::removeStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL)
 {
     std::unique_lock g(m_aMutex);
     ::comphelper::OInterfaceContainerHelper4< css::frame::XStatusListener >* pCont = m_aStatusListeners.getContainer(g, aURL);
@@ -457,7 +457,7 @@ void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< css::frame::XS
         pCont->removeInterface(g, xControl);
 }
 
-Sequence< Type > SAL_CALL SbaXGridPeer::getTypes()
+Sequence< Type > SbaXGridPeer::getTypes()
 {
     return comphelper::concatSequences(
         FmXGridPeer::getTypes(),

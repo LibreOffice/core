@@ -152,7 +152,7 @@ public:
     rtl::Reference < XMLPropertySetMapper > const & GetCellStylesPropertySetMapper() const;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     const css::uno::Reference<css::beans::XPropertySet>& getDataSource() const { return m_xDataSource; }
 };

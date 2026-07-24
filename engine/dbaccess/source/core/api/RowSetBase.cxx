@@ -125,7 +125,7 @@ Any ORowSetBase::queryInterface( const Type & rType )
     return aRet;
 }
 
-void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
+void ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
     if(m_pCache)
     {
@@ -146,7 +146,7 @@ void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) c
 }
 
 // OComponentHelper
-void SAL_CALL ORowSetBase::disposing()
+void ORowSetBase::disposing()
 {
     MutexGuard aGuard(*m_pMutex);
 
@@ -172,13 +172,13 @@ void SAL_CALL ORowSetBase::disposing()
 }
 
 // cppu::OPropertySetHelper
-::cppu::IPropertyArrayHelper& SAL_CALL ORowSetBase::getInfoHelper()
+::cppu::IPropertyArrayHelper& ORowSetBase::getInfoHelper()
 {
     return *getArrayHelper();
 }
 
 // XRow
-bool SAL_CALL ORowSetBase::wasNull(  )
+bool ORowSetBase::wasNull(  )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -249,79 +249,79 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
     return m_aEmptyValue;
 }
 
-OUString SAL_CALL ORowSetBase::getString( sal_Int32 columnIndex )
+OUString ORowSetBase::getString( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex).getString();
 }
 
-bool SAL_CALL ORowSetBase::getBoolean( sal_Int32 columnIndex )
+bool ORowSetBase::getBoolean( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex).getBool();
 }
 
-sal_Int8 SAL_CALL ORowSetBase::getByte( sal_Int32 columnIndex )
+sal_Int8 ORowSetBase::getByte( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex).getInt8();
 }
 
-sal_Int16 SAL_CALL ORowSetBase::getShort( sal_Int32 columnIndex )
+sal_Int16 ORowSetBase::getShort( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex).getInt16();
 }
 
-sal_Int32 SAL_CALL ORowSetBase::getInt( sal_Int32 columnIndex )
+sal_Int32 ORowSetBase::getInt( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex).getInt32();
 }
 
-sal_Int64 SAL_CALL ORowSetBase::getLong( sal_Int32 columnIndex )
+sal_Int64 ORowSetBase::getLong( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex).getLong();
 }
 
-float SAL_CALL ORowSetBase::getFloat( sal_Int32 columnIndex )
+float ORowSetBase::getFloat( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex).getFloat();
 }
 
-double SAL_CALL ORowSetBase::getDouble( sal_Int32 columnIndex )
+double ORowSetBase::getDouble( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex).getDouble();
 }
 
-Sequence< sal_Int8 > SAL_CALL ORowSetBase::getBytes( sal_Int32 columnIndex )
+Sequence< sal_Int8 > ORowSetBase::getBytes( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex).getSequence();
 }
 
-css::util::Date SAL_CALL ORowSetBase::getDate( sal_Int32 columnIndex )
+css::util::Date ORowSetBase::getDate( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex).getDate();
 }
 
-css::util::Time SAL_CALL ORowSetBase::getTime( sal_Int32 columnIndex )
+css::util::Time ORowSetBase::getTime( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex).getTime();
 }
 
-css::util::DateTime SAL_CALL ORowSetBase::getTimestamp( sal_Int32 columnIndex )
+css::util::DateTime ORowSetBase::getTimestamp( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex).getDateTime();
 }
 
-Reference< css::io::XInputStream > SAL_CALL ORowSetBase::getBinaryStream( sal_Int32 columnIndex )
+Reference< css::io::XInputStream > ORowSetBase::getBinaryStream( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -358,12 +358,12 @@ Reference< css::io::XInputStream > SAL_CALL ORowSetBase::getBinaryStream( sal_In
     return Reference< css::io::XInputStream >();
 }
 
-Reference< css::io::XInputStream > SAL_CALL ORowSetBase::getCharacterStream( sal_Int32 columnIndex )
+Reference< css::io::XInputStream > ORowSetBase::getCharacterStream( sal_Int32 columnIndex )
 {
     return getBinaryStream(columnIndex);
 }
 
-Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNameAccess >& /*typeMap*/ )
+Any ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNameAccess >& /*typeMap*/ )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -371,28 +371,28 @@ Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNa
     return getValue(columnIndex).makeAny();
 }
 
-Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 /*columnIndex*/ )
+Reference< XRef > ORowSetBase::getRef( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XRow::getRef"_ustr, *m_pMySelf );
 }
 
-Reference< XBlob > SAL_CALL ORowSetBase::getBlob( sal_Int32 columnIndex )
+Reference< XBlob > ORowSetBase::getBlob( sal_Int32 columnIndex )
 {
     return Reference< XBlob >(getValue(columnIndex).makeAny(),UNO_QUERY);
 }
 
-Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 columnIndex )
+Reference< XClob > ORowSetBase::getClob( sal_Int32 columnIndex )
 {
     return Reference< XClob >(getValue(columnIndex).makeAny(),UNO_QUERY);
 }
 
-Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 /*columnIndex*/ )
+Reference< XArray > ORowSetBase::getArray( sal_Int32 /*columnIndex*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XRow::getArray"_ustr, *m_pMySelf );
 }
 
 // css::sdbcx::XRowLocate
-Any SAL_CALL ORowSetBase::getBookmark(  )
+Any ORowSetBase::getBookmark(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::getBookmark() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -409,7 +409,7 @@ Any SAL_CALL ORowSetBase::getBookmark(  )
     return m_aBookmark;
 }
 
-bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark )
+bool ORowSetBase::moveToBookmark( const Any& bookmark )
 {
     SAL_INFO("dbaccess", "ORowSetBase::moveToBookmark(Any) Clone = " << m_bClone);
     OSL_ENSURE(bookmark.hasValue(),"ORowSetBase::moveToBookmark bookmark has no value!");
@@ -459,7 +459,7 @@ bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark )
     return bRet;
 }
 
-bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows )
+bool ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows )
 {
     SAL_INFO("dbaccess", "ORowSetBase::moveRelativeToBookmark(Any," << rows << ") Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -502,21 +502,21 @@ bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_Int3
     return bRet;
 }
 
-sal_Int32 SAL_CALL ORowSetBase::compareBookmarks( const Any& _first, const Any& _second )
+sal_Int32 ORowSetBase::compareBookmarks( const Any& _first, const Any& _second )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     return m_pCache->compareBookmarks(_first,_second);
 }
 
-bool SAL_CALL ORowSetBase::hasOrderedBookmarks(  )
+bool ORowSetBase::hasOrderedBookmarks(  )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     return m_pCache->hasOrderedBookmarks();
 }
 
-sal_Int32 SAL_CALL ORowSetBase::hashBookmark( const Any& bookmark )
+sal_Int32 ORowSetBase::hashBookmark( const Any& bookmark )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -524,7 +524,7 @@ sal_Int32 SAL_CALL ORowSetBase::hashBookmark( const Any& bookmark )
 }
 
 // XResultSetMetaDataSupplier
-Reference< XResultSetMetaData > SAL_CALL ORowSetBase::getMetaData(  )
+Reference< XResultSetMetaData > ORowSetBase::getMetaData(  )
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
@@ -536,7 +536,7 @@ Reference< XResultSetMetaData > SAL_CALL ORowSetBase::getMetaData(  )
 }
 
 // XColumnLocate
-sal_Int32 SAL_CALL ORowSetBase::findColumn( const OUString& columnName )
+sal_Int32 ORowSetBase::findColumn( const OUString& columnName )
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
@@ -546,7 +546,7 @@ sal_Int32 SAL_CALL ORowSetBase::findColumn( const OUString& columnName )
 }
 
 // css::sdbcx::XColumnsSupplier
-Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  )
+Reference< XNameAccess > ORowSetBase::getColumns(  )
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
@@ -562,7 +562,7 @@ Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  )
 }
 
 // XResultSet
-bool SAL_CALL ORowSetBase::next(  )
+bool ORowSetBase::next(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::next() Clone = " << m_bClone);
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
@@ -622,7 +622,7 @@ bool SAL_CALL ORowSetBase::next(  )
     return bRet;
 }
 
-bool SAL_CALL ORowSetBase::isBeforeFirst(  )
+bool ORowSetBase::isBeforeFirst(  )
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
@@ -633,7 +633,7 @@ bool SAL_CALL ORowSetBase::isBeforeFirst(  )
     return m_bBeforeFirst;
 }
 
-bool SAL_CALL ORowSetBase::isAfterLast(  )
+bool ORowSetBase::isAfterLast(  )
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
@@ -648,7 +648,7 @@ bool ORowSetBase::isOnFirst()
     return isFirst();
 }
 
-bool SAL_CALL ORowSetBase::isFirst(  )
+bool ORowSetBase::isFirst(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::isFirst() Clone = " << m_bClone);
 
@@ -674,7 +674,7 @@ bool ORowSetBase::isOnLast()
     return isLast();
 }
 
-bool SAL_CALL ORowSetBase::isLast(  )
+bool ORowSetBase::isLast(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::isLast() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -699,7 +699,7 @@ bool SAL_CALL ORowSetBase::isLast(  )
     return bIsLast;
 }
 
-void SAL_CALL ORowSetBase::beforeFirst(  )
+void ORowSetBase::beforeFirst(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::beforeFirst() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -740,7 +740,7 @@ void SAL_CALL ORowSetBase::beforeFirst(  )
     SAL_INFO("dbaccess", "ORowSetBase::beforeFirst() Clone = " << m_bClone);
 }
 
-void SAL_CALL ORowSetBase::afterLast(  )
+void ORowSetBase::afterLast(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::afterLast() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -779,7 +779,7 @@ void SAL_CALL ORowSetBase::afterLast(  )
     SAL_INFO("dbaccess", "ORowSetBase::afterLast() Clone = " << m_bClone);
 }
 
-bool SAL_CALL ORowSetBase::move(std::function<bool(ORowSetBase *)> const & _aCheckFunctor,
+bool ORowSetBase::move(std::function<bool(ORowSetBase *)> const & _aCheckFunctor,
                                 std::function<bool(ORowSetCache *)> const & _aMovementFunctor)
 {
     SAL_INFO("dbaccess", "ORowSetBase::move() Clone = " << m_bClone);
@@ -826,7 +826,7 @@ bool SAL_CALL ORowSetBase::move(std::function<bool(ORowSetBase *)> const & _aChe
     return bRet;
 }
 
-bool SAL_CALL ORowSetBase::first(  )
+bool ORowSetBase::first(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::first() Clone = " << m_bClone);
     auto ioF_tmp = std::mem_fn(&ORowSetBase::isOnFirst);
@@ -834,7 +834,7 @@ bool SAL_CALL ORowSetBase::first(  )
     return move(ioF_tmp,F_tmp);
 }
 
-bool SAL_CALL ORowSetBase::last(  )
+bool ORowSetBase::last(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::last() Clone = " << m_bClone);
     auto ioL_tmp = std::mem_fn(&ORowSetBase::isOnLast);
@@ -842,7 +842,7 @@ bool SAL_CALL ORowSetBase::last(  )
     return move(ioL_tmp,L_tmp);
 }
 
-sal_Int32 SAL_CALL ORowSetBase::getRow(  )
+sal_Int32 ORowSetBase::getRow(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::getRow() Clone = " << m_bClone);
     ::osl::MutexGuard aGuard( *m_pMutex );
@@ -871,7 +871,7 @@ sal_Int32 ORowSetBase::impl_getRow()
     return nPos;
 }
 
-bool SAL_CALL ORowSetBase::absolute( sal_Int32 row )
+bool ORowSetBase::absolute( sal_Int32 row )
 {
     SAL_INFO("dbaccess", "ORowSetBase::absolute(" << row << ") Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -916,7 +916,7 @@ bool SAL_CALL ORowSetBase::absolute( sal_Int32 row )
     return bRet;
 }
 
-bool SAL_CALL ORowSetBase::relative( sal_Int32 rows )
+bool ORowSetBase::relative( sal_Int32 rows )
 {
     SAL_INFO("dbaccess", "ORowSetBase::relative(" << rows << ") Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -971,7 +971,7 @@ bool SAL_CALL ORowSetBase::relative( sal_Int32 rows )
     return bRet;
 }
 
-bool SAL_CALL ORowSetBase::previous(  )
+bool ORowSetBase::previous(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::previous() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -1083,7 +1083,7 @@ Reference< XInterface >  ORowSetBase::getStatement()
     return nullptr;
 }
 
-void SAL_CALL ORowSetBase::refreshRow(  )
+void ORowSetBase::refreshRow(  )
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
@@ -1101,7 +1101,7 @@ void SAL_CALL ORowSetBase::refreshRow(  )
     }
 }
 
-bool SAL_CALL ORowSetBase::rowUpdated(  )
+bool ORowSetBase::rowUpdated(  )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -1112,7 +1112,7 @@ bool SAL_CALL ORowSetBase::rowUpdated(  )
     return m_pCache->rowUpdated();
 }
 
-bool SAL_CALL ORowSetBase::rowInserted(  )
+bool ORowSetBase::rowInserted(  )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
 
@@ -1124,7 +1124,7 @@ bool SAL_CALL ORowSetBase::rowInserted(  )
     return m_pCache->rowInserted();
 }
 
-bool SAL_CALL ORowSetBase::rowDeleted(  )
+bool ORowSetBase::rowDeleted(  )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -1137,7 +1137,7 @@ bool ORowSetBase::impl_rowDeleted(  )
 }
 
 // XWarningsSupplier
-Any SAL_CALL ORowSetBase::getWarnings(  )
+Any ORowSetBase::getWarnings(  )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
 
@@ -1151,7 +1151,7 @@ Any SAL_CALL ORowSetBase::getWarnings(  )
     return Any();
 }
 
-void SAL_CALL ORowSetBase::clearWarnings(  )
+void ORowSetBase::clearWarnings(  )
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
 

@@ -91,49 +91,49 @@ public:
                 const css::uno::Reference< css::sdbc::XConnection >& i_rConnection
             );
 
-    virtual cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override;
-    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 
 // css::uno::XInterface
     DECLARE_XINTERFACE( )
 
 // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // OPropertySetHelper
-    virtual void SAL_CALL getFastPropertyValue(
+    virtual void getFastPropertyValue(
                                 cpo::uno::Any& o_rValue,
                                 sal_Int32 i_nHandle
                             ) const override;
 
     // XComponentSupplier
-    virtual css::uno::Reference< css::util::XCloseable > SAL_CALL getComponent(  ) override;
+    virtual css::uno::Reference< css::util::XCloseable > getComponent(  ) override;
 
     // XSubDocument
-    virtual css::uno::Reference< css::lang::XComponent > SAL_CALL open(  ) override;
-    virtual css::uno::Reference< css::lang::XComponent > SAL_CALL openDesign(  ) override;
-    virtual void SAL_CALL store(  ) override;
-    virtual bool SAL_CALL close(  ) override;
+    virtual css::uno::Reference< css::lang::XComponent > open(  ) override;
+    virtual css::uno::Reference< css::lang::XComponent > openDesign(  ) override;
+    virtual void store(  ) override;
+    virtual bool close(  ) override;
 
     // XHierarchicalName
-    virtual OUString SAL_CALL getHierarchicalName(  ) override;
-    virtual OUString SAL_CALL composeHierarchicalName( const OUString& aRelativeName ) override;
+    virtual OUString getHierarchicalName(  ) override;
+    virtual OUString composeHierarchicalName( const OUString& aRelativeName ) override;
 
 // OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // XCommandProcessor
-    virtual cpo::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
+    virtual cpo::uno::Any execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
 
     // XRename
-    virtual void SAL_CALL rename( const OUString& newName ) override;
+    virtual void rename( const OUString& newName ) override;
 
     // XCloseListener
-    virtual void SAL_CALL queryClosing( const css::lang::EventObject& Source, bool GetsOwnership ) override;
-    virtual void SAL_CALL notifyClosing( const css::lang::EventObject& Source ) override;
+    virtual void queryClosing( const css::lang::EventObject& Source, bool GetsOwnership ) override;
+    virtual void notifyClosing( const css::lang::EventObject& Source ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     /** returns the forms/reports container storage, depending on m_bForm. Our own storage
         inside this container storage is the one with the name as indicated by m_pImpl->m_aProps.sPersistentName.
@@ -241,7 +241,7 @@ private:
     virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, cpo::uno::Any& _rDefault ) const override;
 
     // helper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     // OContentHelper overridables
     virtual OUString determineContentType() const override;

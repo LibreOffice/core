@@ -53,7 +53,7 @@ namespace dbaccess
 
     protected:
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
         // IColumnFactory
         virtual rtl::Reference<OColumn> createColumn(const OUString& _rName) const override;
@@ -80,7 +80,7 @@ namespace dbaccess
         virtual ::connectivity::sdbcx::OCollection* createIndexes(const ::std::vector< OUString>& _rNames) override;
 
         // OComponentHelper
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
     public:
         /** constructs a wrapper supporting the com.sun.star.sdb.Table service.<BR>
             @param          _rxConn         the connection the table belongs to
@@ -110,22 +110,22 @@ namespace dbaccess
         virtual void construct() override;
 
         //XInterface
-        virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
+        virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
         //XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
     // css::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
 
     // css::beans::XPropertySet
-        virtual void SAL_CALL getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
+        virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
 
     // css::sdbcx::XRename,
-        virtual void SAL_CALL rename( const OUString& _rNewName ) override;
+        virtual void rename( const OUString& _rNewName ) override;
 
     // css::sdbcx::XAlterTable,
-        virtual void SAL_CALL alterColumnByName( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
+        virtual void alterColumnByName( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
 
     private:
         using OTable_Base::createArrayHelper;

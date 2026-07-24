@@ -111,82 +111,82 @@ public:
         );
 
     // XContainerListener
-    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
-    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
-    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
+    virtual void elementInserted( const css::container::ContainerEvent& Event ) override;
+    virtual void elementRemoved( const css::container::ContainerEvent& Event ) override;
+    virtual void elementReplaced( const css::container::ContainerEvent& Event ) override;
     // css::sdbcx::XTablesSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) override;
+    virtual css::uno::Reference< css::container::XNameAccess > getTables(  ) override;
 
 // css::lang::XTypeProvider
-    virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes() override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
 // css::uno::XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
 // css::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
 // comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
 // cppu::OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
-    virtual bool SAL_CALL convertFastPropertyValue(
+    virtual bool convertFastPropertyValue(
                             cpo::uno::Any & rConvertedValue,
                             cpo::uno::Any & rOldValue,
                             sal_Int32 nHandle,
                             const cpo::uno::Any& rValue ) override;
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+    virtual void setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const cpo::uno::Any& rValue
                                                  ) override;
-    virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+    virtual void getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
 // css::sdb::XCompletedConnection
-    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connectWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler ) override;
+    virtual css::uno::Reference< css::sdbc::XConnection > connectWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler ) override;
 
 // css::sdbc::XDataSource
-    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& user, const OUString& password ) override;
-    virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) override;
-    virtual sal_Int32 SAL_CALL getLoginTimeout(  ) override;
+    virtual css::uno::Reference< css::sdbc::XConnection > getConnection( const OUString& user, const OUString& password ) override;
+    virtual void setLoginTimeout( sal_Int32 seconds ) override;
+    virtual sal_Int32 getLoginTimeout(  ) override;
 
 //::css::sdb::XBookmarksSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getBookmarks(  ) override;
+    virtual css::uno::Reference< css::container::XNameAccess > getBookmarks(  ) override;
 
 //::css::sdb::XQueryDefinitionsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getQueryDefinitions(  ) override;
+    virtual css::uno::Reference< css::container::XNameAccess > getQueryDefinitions(  ) override;
 
 // css::sdbc::XIsolatedConnection
-    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getIsolatedConnection( const OUString& user, const OUString& password ) override;
-    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getIsolatedConnectionWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler ) override;
+    virtual css::uno::Reference< css::sdbc::XConnection > getIsolatedConnection( const OUString& user, const OUString& password ) override;
+    virtual css::uno::Reference< css::sdbc::XConnection > getIsolatedConnectionWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler ) override;
 
 // XFlushable
-    virtual void SAL_CALL flush(  ) override;
-    virtual void SAL_CALL addFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
-    virtual void SAL_CALL removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
+    virtual void flush(  ) override;
+    virtual void addFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
+    virtual void removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
 
     // XFlushListener
-    virtual void SAL_CALL flushed( const css::lang::EventObject& rEvent ) override;
+    virtual void flushed( const css::lang::EventObject& rEvent ) override;
 
     // XDocumentDataSource
-    virtual css::uno::Reference< css::sdb::XOfficeDatabaseDocument > SAL_CALL getDatabaseDocument() override;
+    virtual css::uno::Reference< css::sdb::XOfficeDatabaseDocument > getDatabaseDocument() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 protected:
     // ModelDependentComponent overridables

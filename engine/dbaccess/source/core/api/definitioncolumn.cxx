@@ -114,13 +114,13 @@ void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle
     ::dbaccess::notifyDataSourceModified( m_xParent );
 }
 
-Reference< XInterface > SAL_CALL OTableColumnDescriptor::getParent(  )
+Reference< XInterface > OTableColumnDescriptor::getParent(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xParent;
 }
 
-void SAL_CALL OTableColumnDescriptor::setParent( const Reference< XInterface >& _xParent )
+void OTableColumnDescriptor::setParent( const Reference< XInterface >& _xParent )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     m_xParent = _xParent;
@@ -145,7 +145,7 @@ OUString OTableColumn::getImplementationName(  )
     return u"com.sun.star.sdb.OTableColumn"_ustr;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL OTableColumn::getInfoHelper()
+::cppu::IPropertyArrayHelper& OTableColumn::getInfoHelper()
 {
     return *OTableColumn_PBase::getArrayHelper();
 }
@@ -281,12 +281,12 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( OQueryColumn )
 
-OUString SAL_CALL OQueryColumn::getImplementationName(  )
+OUString OQueryColumn::getImplementationName(  )
 {
     return u"org.openoffice.comp.dbaccess.OQueryColumn"_ustr;
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL OQueryColumn::getInfoHelper()
+::cppu::IPropertyArrayHelper& OQueryColumn::getInfoHelper()
 {
     return *OQueryColumn_PBase::getArrayHelper();
 }
@@ -296,7 +296,7 @@ OUString SAL_CALL OQueryColumn::getImplementationName(  )
     return OTableColumnDescriptor::createArrayHelper();
 }
 
-void SAL_CALL OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
+void OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
 {
     OTableColumnDescriptor::getFastPropertyValue( _rValue, _nHandle );
 

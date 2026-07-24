@@ -105,7 +105,7 @@ namespace dbaui
         bool isCheckEnabled() const { return m_bCheckOnly; }
 
     private:
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
         void impl_initFromDescriptor( const svx::ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit );
     };
 

@@ -121,7 +121,7 @@ Sequence< sal_Int8 > ODBTable::getImplementationId()
 }
 
 // OComponentHelper
-void SAL_CALL ODBTable::disposing()
+void ODBTable::disposing()
 {
     OPropertySetHelper::disposing();
     OTable_Base::disposing();
@@ -225,17 +225,17 @@ void ODBTable::construct()
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL ODBTable::getInfoHelper()
+::cppu::IPropertyArrayHelper & ODBTable::getInfoHelper()
 {
     return *ODBTable_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
 
 // XServiceInfo
-OUString SAL_CALL ODBTable::getImplementationName()
+OUString ODBTable::getImplementationName()
     {
         return u"com.sun.star.sdb.dbaccess.ODBTable"_ustr;
     }
-bool SAL_CALL ODBTable::supportsService(const OUString& _rServiceName)
+bool ODBTable::supportsService(const OUString& _rServiceName)
     {
         const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -244,13 +244,13 @@ bool SAL_CALL ODBTable::supportsService(const OUString& _rServiceName)
 
         return false;
     }
-cpo::uno::Sequence< OUString > SAL_CALL ODBTable::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ODBTable::getSupportedServiceNames()
 {
     return { SERVICE_SDBCX_TABLE };
 }
 
 
-Any SAL_CALL ODBTable::queryInterface( const Type & rType )
+Any ODBTable::queryInterface( const Type & rType )
 {
     if(rType == cppu::UnoType<XRename>::get()&& !getRenameService().is() )
         return Any();
@@ -259,7 +259,7 @@ Any SAL_CALL ODBTable::queryInterface( const Type & rType )
     return OTable_Base::queryInterface( rType);
 }
 
-Sequence< Type > SAL_CALL ODBTable::getTypes(  )
+Sequence< Type > ODBTable::getTypes(  )
 {
     Type aRenameType = cppu::UnoType<XRename>::get();
     Type aAlterType = cppu::UnoType<XAlterTable>::get();
@@ -278,7 +278,7 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  )
 }
 
 // XRename,
-void SAL_CALL ODBTable::rename( const OUString& _rNewName )
+void ODBTable::rename( const OUString& _rNewName )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -291,7 +291,7 @@ void SAL_CALL ODBTable::rename( const OUString& _rNewName )
 }
 
 // XAlterTable,
-void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Reference< XPropertySet >& _rxDescriptor )
+void ODBTable::alterColumnByName( const OUString& _rName, const Reference< XPropertySet >& _rxDescriptor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed);

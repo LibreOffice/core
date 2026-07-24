@@ -67,7 +67,7 @@ namespace dbaccess
     {
     }
 
-    void SAL_CALL OPropertyForward::propertyChange( const PropertyChangeEvent& evt )
+    void OPropertyForward::propertyChange( const PropertyChangeEvent& evt )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -109,7 +109,7 @@ namespace dbaccess
         }
     }
 
-    void SAL_CALL OPropertyForward::disposing( const css::lang::EventObject& /*_rSource*/ )
+    void OPropertyForward::disposing( const css::lang::EventObject& /*_rSource*/ )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
 

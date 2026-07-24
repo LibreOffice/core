@@ -135,62 +135,62 @@ namespace dbaui
         virtual bool Construct(vcl::Window* pParent) override;
 
         // UNO
-        virtual cpo::uno::Any  SAL_CALL queryInterface(const cpo::uno::Type& _rType) override;
+        virtual cpo::uno::Any  queryInterface(const cpo::uno::Type& _rType) override;
 
         // XTypeProvider
-        virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
         // css::lang::XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+        virtual void disposing(const css::lang::EventObject& Source) override;
 
         // css::util::XModifyListener
-        virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) override;
+        virtual void modified(const css::lang::EventObject& aEvent) override;
 
         // css::container::XContainerListener
-        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& Event) override;
-        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& Event) override;
-        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& Event) override;
+        virtual void elementInserted(const css::container::ContainerEvent& Event) override;
+        virtual void elementRemoved(const css::container::ContainerEvent& Event) override;
+        virtual void elementReplaced(const css::container::ContainerEvent& Event) override;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
+        virtual void propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
         // XModule
-        virtual void SAL_CALL setIdentifier( const OUString& Identifier ) override;
-        virtual OUString SAL_CALL getIdentifier(  ) override;
+        virtual void setIdentifier( const OUString& Identifier ) override;
+        virtual OUString getIdentifier(  ) override;
 
         // css::awt::XFocusListener
-        virtual void SAL_CALL focusGained(const css::awt::FocusEvent& e) override;
-        virtual void SAL_CALL focusLost(const css::awt::FocusEvent& e) override;
+        virtual void focusGained(const css::awt::FocusEvent& e) override;
+        virtual void focusLost(const css::awt::FocusEvent& e) override;
 
         // css::frame::XController
-        virtual bool SAL_CALL suspend(bool bSuspend) override;
+        virtual bool suspend(bool bSuspend) override;
 
         // css::lang::XComponent
-        virtual void        SAL_CALL disposing() override;
+        virtual void        disposing() override;
 
         // css::frame::XFrameActionListener
-        virtual void        SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
+        virtual void        frameAction(const css::frame::FrameActionEvent& aEvent) override;
 
         // css::sdb::XSQLErrorListener
-        virtual void        SAL_CALL errorOccured(const css::sdb::SQLErrorEvent& aEvent) override;
+        virtual void        errorOccured(const css::sdb::SQLErrorEvent& aEvent) override;
 
         // css::form::XDatabaseParameterListener
-        virtual bool    SAL_CALL approveParameter(const css::form::DatabaseParameterEvent& aEvent) override;
+        virtual bool    approveParameter(const css::form::DatabaseParameterEvent& aEvent) override;
 
         // css::form::XConfirmDeleteListener
-        virtual bool    SAL_CALL confirmDelete(const css::sdb::RowChangeEvent& aEvent) override;
+        virtual bool    confirmDelete(const css::sdb::RowChangeEvent& aEvent) override;
 
         // css::form::XLoadListener
-        virtual void SAL_CALL loaded(const css::lang::EventObject& aEvent) override;
-        virtual void SAL_CALL unloading(const css::lang::EventObject& aEvent) override;
-        virtual void SAL_CALL unloaded(const css::lang::EventObject& aEvent) override;
-        virtual void SAL_CALL reloading(const css::lang::EventObject& aEvent) override;
-        virtual void SAL_CALL reloaded(const css::lang::EventObject& aEvent) override;
+        virtual void loaded(const css::lang::EventObject& aEvent) override;
+        virtual void unloading(const css::lang::EventObject& aEvent) override;
+        virtual void unloaded(const css::lang::EventObject& aEvent) override;
+        virtual void reloading(const css::lang::EventObject& aEvent) override;
+        virtual void reloaded(const css::lang::EventObject& aEvent) override;
 
         // css::form::XResetListener
-        virtual bool SAL_CALL approveReset(const css::lang::EventObject& rEvent) override;
-        virtual void SAL_CALL resetted(const css::lang::EventObject& rEvent) override;
+        virtual bool approveReset(const css::lang::EventObject& rEvent) override;
+        virtual void resetted(const css::lang::EventObject& rEvent) override;
 
         // SbaGridListener
         virtual void RowChanged() override;

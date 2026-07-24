@@ -42,22 +42,22 @@ ODBTypeWizDialog::ODBTypeWizDialog(const Reference< XComponentContext >& _rxORB)
 {
 }
 
-Sequence<sal_Int8> SAL_CALL ODBTypeWizDialog::getImplementationId(  )
+Sequence<sal_Int8> ODBTypeWizDialog::getImplementationId(  )
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-OUString SAL_CALL ODBTypeWizDialog::getImplementationName()
+OUString ODBTypeWizDialog::getImplementationName()
 {
     return u"org.openoffice.comp.dbu.ODBTypeWizDialog"_ustr;
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ODBTypeWizDialog::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ODBTypeWizDialog::getSupportedServiceNames()
 {
     return { u"com.sun.star.sdb.DataSourceTypeChangeDialog"_ustr };
 }
 
-Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialog::getPropertySetInfo()
+Reference<XPropertySetInfo>  ODBTypeWizDialog::getPropertySetInfo()
 {
     Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;

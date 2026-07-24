@@ -76,15 +76,15 @@ namespace dbaccess
     {
     }
 
-    void SAL_CALL SubComponentLoader::windowResized( const WindowEvent&  )
+    void SubComponentLoader::windowResized( const WindowEvent&  )
     {
     }
 
-    void SAL_CALL SubComponentLoader::windowMoved( const WindowEvent& )
+    void SubComponentLoader::windowMoved( const WindowEvent& )
     {
     }
 
-    void SAL_CALL SubComponentLoader::windowShown( const EventObject& )
+    void SubComponentLoader::windowShown( const EventObject& )
     {
         try
         {
@@ -111,11 +111,11 @@ namespace dbaccess
         mxAppComponentWindow->removeWindowListener( this );
     }
 
-    void SAL_CALL SubComponentLoader::windowHidden( const EventObject& )
+    void SubComponentLoader::windowHidden( const EventObject& )
     {
     }
 
-    void SAL_CALL SubComponentLoader::disposing( const EventObject& )
+    void SubComponentLoader::disposing( const EventObject& )
     {
     }
 

@@ -80,22 +80,22 @@ namespace dbaccess
         DECLARE_XINTERFACE( )
 
         // css::lang::XTypeProvider
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
         // css::lang::XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // css::container::XChild
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
-        virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+        virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
+        virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
         // ::comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
         // ::cppu::OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
+        virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
     private:
         void    impl_registerProperties();
@@ -116,13 +116,13 @@ namespace dbaccess
         OTableColumn(const OUString& _rName);
 
         // XTypeProvider
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual OUString getImplementationName(  ) override;
 
         // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
     };
 
@@ -155,15 +155,15 @@ namespace dbaccess
         );
 
         // XTypeProvider
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual OUString getImplementationName(  ) override;
 
         // *Property*
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
-        virtual void SAL_CALL getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
+        virtual void getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     private:
         css::uno::Reference< css::beans::XPropertySet >
@@ -193,16 +193,16 @@ namespace dbaccess
         virtual ~OColumnWrapper() override;
 
     public:
-        virtual void SAL_CALL getFastPropertyValue(
+        virtual void getFastPropertyValue(
                                 cpo::uno::Any& rValue,
                                 sal_Int32 nHandle
                                  ) const override;
-        virtual bool SAL_CALL convertFastPropertyValue(
+        virtual bool convertFastPropertyValue(
                                 cpo::uno::Any & rConvertedValue,
                                 cpo::uno::Any & rOldValue,
                                 sal_Int32 nHandle,
                                 const cpo::uno::Any& rValue ) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+        virtual void setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
                                     const cpo::uno::Any& rValue
                                                      ) override;
@@ -230,27 +230,27 @@ namespace dbaccess
             const bool _bPureWrap, const bool _bIsDescriptor );
 
     // css::lang::XTypeProvider
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
     // css::lang::XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // OIdPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const override;
 
     // cppu::OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-        virtual void SAL_CALL getFastPropertyValue(
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
+        virtual void getFastPropertyValue(
                                     cpo::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const override;
-        virtual bool SAL_CALL convertFastPropertyValue(
+        virtual bool convertFastPropertyValue(
                                 cpo::uno::Any & rConvertedValue,
                                 cpo::uno::Any & rOldValue,
                                 sal_Int32 nHandle,
                                 const cpo::uno::Any& rValue ) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+        virtual void setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
                                     const cpo::uno::Any& rValue
                                                      ) override;
@@ -276,14 +276,14 @@ namespace dbaccess
                              const bool _bPureWrap );
 
     // css::lang::XTypeProvider
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
     // css::lang::XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // OIdPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const override;
     };
 }

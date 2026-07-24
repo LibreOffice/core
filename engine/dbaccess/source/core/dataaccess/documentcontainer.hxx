@@ -62,53 +62,53 @@ public:
     // css::uno::XInterface
     DECLARE_XINTERFACE( )
 
-    virtual cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override;
-    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 
     // css::lang::XServiceInfo
     DECLARE_SERVICE_INFO();
 
     // XComponentLoader
-    virtual css::uno::Reference< css::lang::XComponent > SAL_CALL loadComponentFromURL( const OUString& URL, const OUString& TargetFrameName, sal_Int32 SearchFlags, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
+    virtual css::uno::Reference< css::lang::XComponent > loadComponentFromURL( const OUString& URL, const OUString& TargetFrameName, sal_Int32 SearchFlags, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
     // css::lang::XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 
     // XCommandProcessor
-    virtual cpo::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
+    virtual cpo::uno::Any execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
 
     // XHierarchicalNameAccess
-    virtual cpo::uno::Any SAL_CALL getByHierarchicalName( const OUString& _sName ) override;
-    virtual bool SAL_CALL hasByHierarchicalName( const OUString& _sName ) override;
+    virtual cpo::uno::Any getByHierarchicalName( const OUString& _sName ) override;
+    virtual bool hasByHierarchicalName( const OUString& _sName ) override;
 
     // XHierarchicalNameContainer
-    virtual void SAL_CALL insertByHierarchicalName( const OUString& aName, const cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByHierarchicalName( const OUString& Name ) override;
+    virtual void insertByHierarchicalName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void removeByHierarchicalName( const OUString& Name ) override;
 
     // XHierarchicalName
-    virtual OUString SAL_CALL getHierarchicalName(  ) override;
-    virtual OUString SAL_CALL composeHierarchicalName( const OUString& aRelativeName ) override;
+    virtual OUString getHierarchicalName(  ) override;
+    virtual OUString composeHierarchicalName( const OUString& aRelativeName ) override;
 
     // XNameContainer
-    virtual void SAL_CALL removeByName( const OUString& _rName ) override;
+    virtual void removeByName( const OUString& _rName ) override;
 
     // XHierarchicalNameReplace
-    virtual void SAL_CALL replaceByHierarchicalName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void replaceByHierarchicalName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // XTransactedObject
-    virtual void SAL_CALL commit(  ) override;
-    virtual void SAL_CALL revert(  ) override;
+    virtual void commit(  ) override;
+    virtual void revert(  ) override;
 
     // XRename
-    virtual void SAL_CALL rename( const OUString& newName ) override;
+    virtual void rename( const OUString& newName ) override;
 
     // OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // helper
     ::rtl::Reference<OContentHelper> getContent(const OUString& _sName) const;

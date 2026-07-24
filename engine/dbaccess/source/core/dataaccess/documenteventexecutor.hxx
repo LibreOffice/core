@@ -45,9 +45,9 @@ namespace dbaccess
         virtual ~DocumentEventExecutor() override;
 
         // css.document.XDocumentEventListener
-        virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) override;
+        virtual void documentEventOccured( const css::document::DocumentEvent& Event ) override;
         // css.lang.XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        virtual void disposing( const css::lang::EventObject& Source ) override;
 
     private:
         unotools::WeakReference< ODatabaseDocument > mxDocument;

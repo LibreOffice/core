@@ -74,17 +74,17 @@ namespace
         DECLARE_XTYPEPROVIDER()
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual Sequence< OUString > getSupportedServiceNames(  ) override;
 
     protected:
         virtual ~DataAccessDescriptor() override;
 
     protected:
         // XPropertySet
-        virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+        virtual Reference< XPropertySetInfo > getPropertySetInfo() override;
+        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
@@ -144,22 +144,22 @@ namespace
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( DataAccessDescriptor, DataAccessDescriptor_TypeBase, DataAccessDescriptor_PropertyBase );
 
-    OUString SAL_CALL DataAccessDescriptor::getImplementationName()
+    OUString DataAccessDescriptor::getImplementationName()
     {
         return u"com.sun.star.comp.dba.DataAccessDescriptor"_ustr;
     }
 
-    bool SAL_CALL DataAccessDescriptor::supportsService( const OUString& rServiceName )
+    bool DataAccessDescriptor::supportsService( const OUString& rServiceName )
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL DataAccessDescriptor::getSupportedServiceNames(  )
+    Sequence< OUString > DataAccessDescriptor::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.sdb.DataAccessDescriptor"_ustr };
     }
 
-    Reference< XPropertySetInfo > SAL_CALL DataAccessDescriptor::getPropertySetInfo()
+    Reference< XPropertySetInfo > DataAccessDescriptor::getPropertySetInfo()
     {
         Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
@@ -182,12 +182,12 @@ namespace
     {
     public:
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XDataAccessDescriptorFactory
-        virtual Reference< XPropertySet > SAL_CALL createDataAccessDescriptor(  ) override;
+        virtual Reference< XPropertySet > createDataAccessDescriptor(  ) override;
 
         DataAccessDescriptorFactory();
     };
@@ -196,22 +196,22 @@ namespace
     {
     }
 
-    OUString SAL_CALL DataAccessDescriptorFactory::getImplementationName()
+    OUString DataAccessDescriptorFactory::getImplementationName()
     {
         return u"com.sun.star.comp.dba.DataAccessDescriptorFactory"_ustr;
     }
 
-    bool SAL_CALL DataAccessDescriptorFactory::supportsService( const OUString& rServiceName )
+    bool DataAccessDescriptorFactory::supportsService( const OUString& rServiceName )
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL DataAccessDescriptorFactory::getSupportedServiceNames()
+    Sequence< OUString > DataAccessDescriptorFactory::getSupportedServiceNames()
     {
         return { u"com.sun.star.sdb.DataAccessDescriptorFactory"_ustr };
     }
 
-    Reference< XPropertySet > SAL_CALL DataAccessDescriptorFactory::createDataAccessDescriptor(  )
+    Reference< XPropertySet > DataAccessDescriptorFactory::createDataAccessDescriptor(  )
     {
         return new DataAccessDescriptor();
     }

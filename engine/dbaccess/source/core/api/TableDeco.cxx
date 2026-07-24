@@ -75,7 +75,7 @@ Sequence< sal_Int8 > ODBTableDecorator::getImplementationId()
 }
 
 // OComponentHelper
-void SAL_CALL ODBTableDecorator::disposing()
+void ODBTableDecorator::disposing()
 {
     OPropertySetHelper::disposing();
     OTableDescriptor_BASE::disposing();
@@ -90,7 +90,7 @@ void SAL_CALL ODBTableDecorator::disposing()
     m_xColumnMediator = nullptr;
 }
 
-bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
+bool ODBTableDecorator::convertFastPropertyValue(
                             Any & rConvertedValue,
                             Any & rOldValue,
                             sal_Int32 nHandle,
@@ -332,7 +332,7 @@ void ODBTableDecorator::construct()
     return new ::cppu::OPropertyArrayHelper(aTableProps);
 }
 
-::cppu::IPropertyArrayHelper & SAL_CALL ODBTableDecorator::getInfoHelper()
+::cppu::IPropertyArrayHelper & ODBTableDecorator::getInfoHelper()
 {
     Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
 
@@ -351,11 +351,11 @@ void ODBTableDecorator::construct()
 }
 
 // XServiceInfo
-OUString SAL_CALL ODBTableDecorator::getImplementationName()
+OUString ODBTableDecorator::getImplementationName()
     {
         return u"com.sun.star.sdb.dbaccess.ODBTableDecorator"_ustr;
     }
-bool SAL_CALL ODBTableDecorator::supportsService(const OUString& _rServiceName)
+bool ODBTableDecorator::supportsService(const OUString& _rServiceName)
     {
         const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -364,13 +364,13 @@ bool SAL_CALL ODBTableDecorator::supportsService(const OUString& _rServiceName)
 
         return false;
     }
-cpo::uno::Sequence< OUString > SAL_CALL ODBTableDecorator::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ODBTableDecorator::getSupportedServiceNames()
 {
     return { SERVICE_SDBCX_TABLE };
 }
 
 
-Any SAL_CALL ODBTableDecorator::queryInterface( const Type & rType )
+Any ODBTableDecorator::queryInterface( const Type & rType )
 {
     Any aRet;
     if(m_xTable.is())
@@ -387,7 +387,7 @@ Any SAL_CALL ODBTableDecorator::queryInterface( const Type & rType )
     return aRet;
 }
 
-Sequence< Type > SAL_CALL ODBTableDecorator::getTypes(  )
+Sequence< Type > ODBTableDecorator::getTypes(  )
 {
     Reference<XTypeProvider> xTypes(m_xTable,UNO_QUERY);
     OSL_ENSURE(xTypes.is(),"Table must be a TypeProvider!");
@@ -395,7 +395,7 @@ Sequence< Type > SAL_CALL ODBTableDecorator::getTypes(  )
 }
 
 // XRename,
-void SAL_CALL ODBTableDecorator::rename( const OUString& _rNewName )
+void ODBTableDecorator::rename( const OUString& _rNewName )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -407,7 +407,7 @@ void SAL_CALL ODBTableDecorator::rename( const OUString& _rNewName )
 }
 
 // XAlterTable,
-void SAL_CALL ODBTableDecorator::alterColumnByName( const OUString& _rName, const Reference< XPropertySet >& _rxDescriptor )
+void ODBTableDecorator::alterColumnByName( const OUString& _rName, const Reference< XPropertySet >& _rxDescriptor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -419,7 +419,7 @@ void SAL_CALL ODBTableDecorator::alterColumnByName( const OUString& _rName, cons
         m_pColumns->refresh();
 }
 
-void SAL_CALL ODBTableDecorator::alterColumnByIndex( sal_Int32 _nIndex, const Reference< XPropertySet >& _rxDescriptor )
+void ODBTableDecorator::alterColumnByIndex( sal_Int32 _nIndex, const Reference< XPropertySet >& _rxDescriptor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -457,7 +457,7 @@ Reference< XNameAccess> ODBTableDecorator::getColumns()
     return m_pColumns.get();
 }
 
-OUString SAL_CALL ODBTableDecorator::getName()
+OUString ODBTableDecorator::getName()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -466,7 +466,7 @@ OUString SAL_CALL ODBTableDecorator::getName()
     return xName->getName();
 }
 
-sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& rId )
+sal_Int64 ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& rId )
 {
     if (comphelper::isUnoTunnelId<ODBTableDecorator>(rId))
         return comphelper::getSomething_cast(this);
@@ -513,7 +513,7 @@ void ODBTableDecorator::fillPrivileges() const
     }
 }
 
-Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  )
+Reference< XPropertySet > ODBTableDecorator::createDataDescriptor(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -532,7 +532,7 @@ Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  )
     );
 }
 
-Reference< css::beans::XPropertySetInfo > SAL_CALL ODBTableDecorator::getPropertySetInfo(  )
+Reference< css::beans::XPropertySetInfo > ODBTableDecorator::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
@@ -616,17 +616,17 @@ Reference< XPropertySet > ODBTableDecorator::createColumnDescriptor()
     return new OTableColumnDescriptorWrapper( xNames->createDataDescriptor(), false, true );
 }
 
-void SAL_CALL ODBTableDecorator::acquire() noexcept
+void ODBTableDecorator::acquire() noexcept
 {
     OTableDescriptor_BASE::acquire();
 }
 
-void SAL_CALL ODBTableDecorator::release() noexcept
+void ODBTableDecorator::release() noexcept
 {
     OTableDescriptor_BASE::release();
 }
 
-void SAL_CALL ODBTableDecorator::setName( const OUString& /*aName*/ )
+void ODBTableDecorator::setName( const OUString& /*aName*/ )
 {
     throwFunctionNotSupportedRuntimeException( u"XNamed::setName"_ustr, *this );
 }

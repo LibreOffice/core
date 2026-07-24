@@ -43,18 +43,18 @@ class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBA) OAuthenticationContinuation :
 public:
     OAuthenticationContinuation();
 
-    bool SAL_CALL canSetRealm(  ) override;
-    void SAL_CALL setRealm( const OUString& Realm ) override;
-    bool SAL_CALL canSetUserName(  ) override;
-    void SAL_CALL setUserName( const OUString& UserName ) override;
-    bool SAL_CALL canSetPassword(  ) override;
-    void SAL_CALL setPassword( const OUString& Password ) override;
-    cpo::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL getRememberPasswordModes( css::ucb::RememberAuthentication& Default ) override;
-    void SAL_CALL setRememberPassword( css::ucb::RememberAuthentication Remember ) override;
-    bool SAL_CALL canSetAccount(  ) override;
-    void SAL_CALL setAccount( const OUString& Account ) override;
-    cpo::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL getRememberAccountModes( css::ucb::RememberAuthentication& Default ) override;
-    void SAL_CALL setRememberAccount( css::ucb::RememberAuthentication Remember ) override;
+    bool canSetRealm(  ) override;
+    void setRealm( const OUString& Realm ) override;
+    bool canSetUserName(  ) override;
+    void setUserName( const OUString& UserName ) override;
+    bool canSetPassword(  ) override;
+    void setPassword( const OUString& Password ) override;
+    cpo::uno::Sequence< css::ucb::RememberAuthentication > getRememberPasswordModes( css::ucb::RememberAuthentication& Default ) override;
+    void setRememberPassword( css::ucb::RememberAuthentication Remember ) override;
+    bool canSetAccount(  ) override;
+    void setAccount( const OUString& Account ) override;
+    cpo::uno::Sequence< css::ucb::RememberAuthentication > getRememberAccountModes( css::ucb::RememberAuthentication& Default ) override;
+    void setRememberAccount( css::ucb::RememberAuthentication Remember ) override;
 
     void            setCanChangeUserName( bool bVal )  { m_bCanSetUserName = bVal; }
     const OUString& getUser() const             { return m_sUser; }

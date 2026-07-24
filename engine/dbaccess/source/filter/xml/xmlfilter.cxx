@@ -227,7 +227,7 @@ private:
 };
 }
 
-bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescriptor )
+bool ODBFilter::filter( const Sequence< PropertyValue >& rDescriptor )
 {
     FocusWindowWaitGuard aWindowFocusGuard;
     bool    bRet = false;
@@ -376,7 +376,7 @@ public:
     {
     }
 
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual uno::Reference< xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
         if (nElement == XML_ELEMENT(OFFICE, XML_SETTINGS))
@@ -395,7 +395,7 @@ public:
     {
     }
 
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual uno::Reference< xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
         ODBFilter & rImport(static_cast<ODBFilter&>(GetImport()));
@@ -422,7 +422,7 @@ public:
     {
     }
 
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual uno::Reference< xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
         ODBFilter & rImport(static_cast<ODBFilter&>(GetImport()));
@@ -446,7 +446,7 @@ public:
     {
     }
 
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual uno::Reference< xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
         ODBFilter & rImport(static_cast<ODBFilter&>(GetImport()));

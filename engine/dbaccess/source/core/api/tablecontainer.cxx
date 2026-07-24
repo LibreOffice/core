@@ -119,11 +119,11 @@ OUString OTableContainer::getTableTypeRestriction() const
 }
 
 // XServiceInfo
-OUString SAL_CALL OTableContainer::getImplementationName()
+OUString OTableContainer::getImplementationName()
     {
         return u"com.sun.star.sdb.dbaccess.OTableContainer"_ustr;
     }
-bool SAL_CALL OTableContainer::supportsService(const OUString& _rServiceName)
+bool OTableContainer::supportsService(const OUString& _rServiceName)
     {
         const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
@@ -132,7 +132,7 @@ bool SAL_CALL OTableContainer::supportsService(const OUString& _rServiceName)
 
         return false;
     }
-cpo::uno::Sequence< OUString > SAL_CALL OTableContainer::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > OTableContainer::getSupportedServiceNames()
 {
     return { SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES };
 }
@@ -391,7 +391,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     }
 }
 
-void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event )
+void OTableContainer::elementInserted( const ContainerEvent& Event )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     OUString sName;
@@ -409,11 +409,11 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event )
     }
 }
 
-void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& /*Event*/ )
+void OTableContainer::elementRemoved( const ContainerEvent& /*Event*/ )
 {
 }
 
-void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event )
+void OTableContainer::elementReplaced( const ContainerEvent& Event )
 {
     // create a new config entry
     OUString sOldComposedName,sNewComposedName;
@@ -431,7 +431,7 @@ void OTableContainer::disposing()
     m_pTableMediator = nullptr;
 }
 
-void SAL_CALL OTableContainer::disposing( const css::lang::EventObject& /*Source*/ )
+void OTableContainer::disposing( const css::lang::EventObject& /*Source*/ )
 {
 }
 

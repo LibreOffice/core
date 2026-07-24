@@ -39,8 +39,8 @@ namespace dbaccess
     public:
         Veto( cpo::uno::Any _aDetails );
 
-        virtual OUString SAL_CALL getReason() override;
-        virtual cpo::uno::Any SAL_CALL getDetails() override;
+        virtual OUString getReason() override;
+        virtual cpo::uno::Any getDetails() override;
 
     protected:
         virtual ~Veto() override;

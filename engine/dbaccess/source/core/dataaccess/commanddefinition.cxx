@@ -88,7 +88,7 @@ cpo::uno::Sequence< cpo::uno::Type > OCommandDefinition::getTypes()
     );
 }
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandDefinition,OComponentDefinition,OCommandDefinition_Base)
-css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL OCommandDefinition::getPropertySetInfo()
+css::uno::Reference< css::beans::XPropertySetInfo >  OCommandDefinition::getPropertySetInfo()
 {
     Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -105,12 +105,12 @@ css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL OCommandDefinition
 }
 
 
-OUString SAL_CALL OCommandDefinition::getImplementationName()
+OUString OCommandDefinition::getImplementationName()
 {
     return u"com.sun.star.comp.dba.OCommandDefinition"_ustr;
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL OCommandDefinition::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OCommandDefinition::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.sdb.QueryDefinition"_ustr,
@@ -119,7 +119,7 @@ cpo::uno::Sequence<OUString> SAL_CALL OCommandDefinition::getSupportedServiceNam
     };
 }
 
-void SAL_CALL OCommandDefinition::rename( const OUString& newName )
+void OCommandDefinition::rename( const OUString& newName )
 {
     try
     {
