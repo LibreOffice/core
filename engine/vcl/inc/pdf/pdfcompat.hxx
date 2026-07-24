@@ -29,21 +29,23 @@ bool isCompatible(SvStream& rInStream);
 /// Usually used to deal with missing referenced objects in the
 /// source pdf stream.
 /// The conversion takes place if either the stream is encrypted, or 'bForce' is true
+/// rPassword, if non-empty, is used to open an encrypted stream without prompting.
 bool convertToHighestSupported(
     SvStream& rInStream, SvStream& rOutStream,
     const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler, bool bForce,
-    bool& bEncrypted);
+    bool& bEncrypted, const OUString& rPassword = OUString());
 
 /// Takes care of transparently downgrading the version of the PDF stream in
 /// case it's too new for our PDF export.
 bool getCompatibleStream(
     SvStream& rInStream, SvStream& rOutStream,
     const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
-    bool& bEncrypted);
+    bool& bEncrypted, const OUString& rPassword = OUString());
 
 BinaryDataContainer createBinaryDataContainer(
     SvStream& rStream, bool& bEncrypted,
-    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr,
+    const OUString& rPassword = OUString());
 
 } // end of vcl::filter::ipdf namespace
 
