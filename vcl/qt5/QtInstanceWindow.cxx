@@ -97,8 +97,21 @@ Point QtInstanceWindow::get_position() const
 bool QtInstanceWindow::has_toplevel_focus() const
 {
     SolarMutexGuard g;
+
     bool bFocus = false;
-    GetQtInstance().RunInMainThread([&] { bFocus = QApplication::activeWindow() == getQWidget(); });
+    GetQtInstance().RunInMainThread([&] {
+        // workaround for QTBUG-148561 ("Wayland: QApplication::activeWindow returns
+        // previously active window in QApplication::focusChanged callback"):
+        // if there's a focus widget, manually check whether that one is in the
+        // window instead of calling QApplication::activeWindow
+        if (QWidget* pFocusWidget = QApplication::focusWidget())
+        {
+            bFocus = pFocusWidget->window() == getQWidget();
+            return;
+        }
+
+        bFocus = QApplication::activeWindow() == getQWidget();
+    });
     return bFocus;
 }
 
