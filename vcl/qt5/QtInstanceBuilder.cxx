@@ -419,6 +419,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
 // These UI files are only supported inside native Qt dialogs/widgets
 constexpr auto SUPPORTED_WITH_QT_PARENT = frozen::make_unordered_set<std::u16string_view>({
     u"cui/ui/acorexceptpage.ui",
+    u"cui/ui/acoroptionspage.ui",
     u"cui/ui/acorreplacepage.ui",
     u"cui/ui/additionsfragment.ui",
     u"cui/ui/appearance.ui",
