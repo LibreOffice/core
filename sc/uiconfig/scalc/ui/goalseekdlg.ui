@@ -112,32 +112,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label3">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="goalseekdlg|label3">Target _value:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">target</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="vartext">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="goalseekdlg|vartext">Variable _cell:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">varedit</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkEntry" id="formulaedit">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
@@ -154,6 +128,35 @@
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="formulabutton">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="receives-default">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="formulabutton-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="goalseekdlg|extended_tip|formulabutton">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label3">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="goalseekdlg|label3">Target _value:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">target</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -176,6 +179,19 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkLabel" id="vartext">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="goalseekdlg|vartext">Variable _cell:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">varedit</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkEntry" id="varedit">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
@@ -192,22 +208,6 @@
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="formulabutton">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="receives-default">False</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="formulabutton-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="goalseekdlg|extended_tip|formulabutton">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
