@@ -602,17 +602,31 @@ window.L.Control.Tabs = window.L.Control.extend({
 		// on the left or on the right wrt. the current tab position
 		var newIndexZeroBased = newIndex > currentTab ? newIndex - 2 : newIndex - 1;
 		this._map._docLayer._sheetSwitch.updateOnSheetMoved(currentTab, newIndexZeroBased);
-		this._map.sendUnoCommand('.uno:Move?Copy:bool=false&UseCurrentDocument:bool=true&Index=' + newIndex);
+		this._map.sendUnoCommand('.uno:Move', {
+			Copy: { type: 'boolean', value: 'false' },
+			UseCurrentDocument: { type: 'boolean', value: 'true' },
+			Index: { type: 'unsigned short', value: String(newIndex) },
+		});
 	},
 
 	_moveOrCopySheet: function () {
 		var contextMenuTab = this._tabForContextMenu;
-		this._map.sendUnoCommand('.uno:Move?FromContextMenu:bool=true&MoveOrCopySheetDialog:bool=true&ContextMenuIndex=' + contextMenuTab);
+		this._map.sendUnoCommand('.uno:Move', {
+			FromContextMenu: { type: 'boolean', value: 'true' },
+			MoveOrCopySheetDialog: { type: 'boolean', value: 'true' },
+			ContextMenuIndex: { type: 'unsigned short', value: String(contextMenuTab) },
+		});
 	},
 
 	_moveSheetLR: function (contextMenuTab, newIndex) {
 		if (contextMenuTab !== undefined && contextMenuTab >= 0)
-			this._map.sendUnoCommand('.uno:Move?Copy:bool=false&UseCurrentDocument:bool=true&FromContextMenu:bool=true&ContextMenuIndex=' + contextMenuTab + '&Index=' + newIndex);
+			this._map.sendUnoCommand('.uno:Move', {
+				Copy: { type: 'boolean', value: 'false' },
+				UseCurrentDocument: { type: 'boolean', value: 'true' },
+				FromContextMenu: { type: 'boolean', value: 'true' },
+				ContextMenuIndex: { type: 'unsigned short', value: String(contextMenuTab) },
+				Index: { type: 'unsigned short', value: String(newIndex) },
+			});
 	},
 
 	_moveSheetLeft: function () {
