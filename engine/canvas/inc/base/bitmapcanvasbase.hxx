@@ -407,6 +407,25 @@ namespace canvas
             return maCanvasHelper.getDevice();
         }
 
+        // XBitmapCanvas
+        virtual void copyRect( const css::uno::Reference< css::rendering::XBitmapCanvas >&   sourceCanvas,
+                                        const css::geometry::RealRectangle2D&                                      sourceRect,
+                                        const css::rendering::ViewState&                                           sourceViewState,
+                                        const css::rendering::RenderState&                                         sourceRenderState,
+                                        const css::geometry::RealRectangle2D&                                      destRect,
+                                        const css::rendering::ViewState&                                           destViewState,
+                                        const css::rendering::RenderState&                                         destRenderState ) override
+        {
+            canvastools::verifyArgs(sourceCanvas, sourceRect, sourceViewState, sourceRenderState,
+                              destRect, destViewState, destRenderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+        }
+
     protected:
         ~BitmapCanvasBase() {} // we're a ref-counted UNO class. _We_ destroy ourselves.
 
@@ -439,35 +458,6 @@ namespace canvas
         BitmapCanvasBase& operator=( const BitmapCanvasBase& ) = delete;
     };
 
-    template< class Base,
-              class CanvasHelper,
-              class Mutex=::osl::MutexGuard,
-              class UnambiguousBase = css::uno::XInterface > class BitmapCanvasBase2 :
-        public BitmapCanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >
-    {
-        typedef BitmapCanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >
-            BaseType;
-
-    public:
-        // XBitmapCanvas
-        virtual void copyRect( const css::uno::Reference< css::rendering::XBitmapCanvas >&   sourceCanvas,
-                                        const css::geometry::RealRectangle2D&                                      sourceRect,
-                                        const css::rendering::ViewState&                                           sourceViewState,
-                                        const css::rendering::RenderState&                                         sourceRenderState,
-                                        const css::geometry::RealRectangle2D&                                      destRect,
-                                        const css::rendering::ViewState&                                           destViewState,
-                                        const css::rendering::RenderState&                                         destRenderState ) override
-        {
-            canvastools::verifyArgs(sourceCanvas, sourceRect, sourceViewState, sourceRenderState,
-                              destRect, destViewState, destRenderState,
-                              __func__,
-                              static_cast< typename BaseType::UnambiguousBaseType* >(this));
-
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
-
-            BaseType::mbSurfaceDirty = true;
-        }
-    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
