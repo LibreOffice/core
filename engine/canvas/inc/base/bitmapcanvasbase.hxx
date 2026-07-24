@@ -19,9 +19,23 @@
 
 #pragma once
 
-#include <base/canvasbase.hxx>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/rendering/TextDirection.hpp>
+#include <cpo/uno/Sequence.hxx>
+#include <osl/mutex.hxx>
+#include <verifyinput.hxx>
 
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::geometry { class XMapping2D; }
+namespace com::sun::star::rendering { class XBitmap; }
+namespace com::sun::star::rendering { class XCachedPrimitive; }
+namespace com::sun::star::rendering { class XCanvasFont; }
+namespace com::sun::star::rendering { class XGraphicDevice; }
+namespace com::sun::star::rendering { class XPolyPolygon2D; }
+namespace com::sun::star::rendering { class XTextLayout; }
+namespace com::sun::star::rendering { struct FontInfo; }
+namespace com::sun::star::rendering { struct StringContext; }
 namespace com::sun::star::rendering { class XBitmapCanvas; }
 
 namespace canvas
@@ -63,17 +77,345 @@ namespace canvas
               class CanvasHelper,
               class Mutex=::osl::MutexGuard,
               class UnambiguousBase=css::uno::XInterface > class BitmapCanvasBase :
-        public CanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >
+            public Base
     {
     public:
-        typedef CanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >    BaseType;
+        typedef Base            BaseType;
+        typedef Mutex           MutexType;
+        typedef UnambiguousBase UnambiguousBaseType;
+
+        /** Create BitmapCanvasBase
+         */
+        BitmapCanvasBase() :
+            maCanvasHelper(),
+            mbSurfaceDirty( true )
+        {
+        }
+
+        virtual void disposeThis() override
+        {
+            MutexType aGuard( BaseType::m_aMutex );
+
+            maCanvasHelper.disposing();
+
+            // pass on to base class
+            BaseType::disposeThis();
+        }
+
+        // XCanvas
+        virtual void clear() override
+        {
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            maCanvasHelper.clear();
+        }
+
+        virtual void drawPoint(const css::geometry::RealPoint2D&     aPoint,
+                                        const css::rendering::ViewState&      viewState,
+                                        const css::rendering::RenderState&    renderState) override
+        {
+            canvastools::verifyArgs(aPoint, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+        }
+
+        virtual void drawLine(const css::geometry::RealPoint2D&  aStartPoint,
+                                       const css::geometry::RealPoint2D&  aEndPoint,
+                                       const css::rendering::ViewState&   viewState,
+                                       const css::rendering::RenderState& renderState) override
+        {
+            canvastools::verifyArgs(aStartPoint, aEndPoint, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            maCanvasHelper.drawLine( this, aStartPoint, aEndPoint, viewState, renderState );
+        }
+
+        virtual void drawBezier( const css::geometry::RealBezierSegment2D&    aBezierSegment,
+                                          const css::geometry::RealPoint2D&            aEndPoint,
+                                          const css::rendering::ViewState&             viewState,
+                                          const css::rendering::RenderState&           renderState ) override
+        {
+            canvastools::verifyArgs(aBezierSegment, aEndPoint, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            maCanvasHelper.drawBezier( this, aBezierSegment, aEndPoint, viewState, renderState );
+        }
+
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+            drawPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
+                            const css::rendering::ViewState&                             viewState,
+                            const css::rendering::RenderState&                           renderState) override
+        {
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.drawPolyPolygon( this, xPolyPolygon, viewState, renderState );
+        }
+
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+            strokePolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&   xPolyPolygon,
+                              const css::rendering::ViewState&                               viewState,
+                              const css::rendering::RenderState&                             renderState,
+                              const css::rendering::StrokeAttributes&                        strokeAttributes) override
+        {
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.strokePolyPolygon( this, xPolyPolygon, viewState, renderState, strokeAttributes );
+        }
+
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+            strokeTexturedPolyPolygon( const css::uno::Reference< css::rendering::XPolyPolygon2D >&   xPolyPolygon,
+                                       const css::rendering::ViewState&                               viewState,
+                                       const css::rendering::RenderState&                             renderState,
+                                       const cpo::uno::Sequence< css::rendering::Texture >&           textures,
+                                       const css::rendering::StrokeAttributes&                        strokeAttributes ) override
+        {
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.strokeTexturedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures, strokeAttributes );
+        }
+
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+            strokeTextureMappedPolyPolygon( const css::uno::Reference< css::rendering::XPolyPolygon2D >&  xPolyPolygon,
+                                            const css::rendering::ViewState&                              viewState,
+                                            const css::rendering::RenderState&                            renderState,
+                                            const cpo::uno::Sequence< css::rendering::Texture >&          textures,
+                                            const css::uno::Reference< css::geometry::XMapping2D >&       xMapping,
+                                            const css::rendering::StrokeAttributes&                       strokeAttributes ) override
+        {
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping, strokeAttributes,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.strokeTextureMappedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures, xMapping, strokeAttributes );
+        }
+
+        virtual css::uno::Reference< css::rendering::XPolyPolygon2D >
+            queryStrokeShapes( const css::uno::Reference< css::rendering::XPolyPolygon2D >&                xPolyPolygon,
+                               const css::rendering::ViewState&                                            viewState,
+                               const css::rendering::RenderState&                                          renderState,
+                               const css::rendering::StrokeAttributes&                                     strokeAttributes ) override
+        {
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.queryStrokeShapes( this, xPolyPolygon, viewState, renderState, strokeAttributes );
+        }
+
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+            fillPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&               xPolyPolygon,
+                             const css::rendering::ViewState&                                          viewState,
+                             const css::rendering::RenderState&                                        renderState) override
+        {
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.fillPolyPolygon( this, xPolyPolygon, viewState, renderState );
+        }
+
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+            fillTexturedPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
+                                    const css::rendering::ViewState&                             viewState,
+                                    const css::rendering::RenderState&                           renderState,
+                                    const cpo::uno::Sequence< css::rendering::Texture >&         textures) override
+        {
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.fillTexturedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures );
+        }
+
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+            fillTextureMappedPolyPolygon( const css::uno::Reference< css::rendering::XPolyPolygon2D >&    xPolyPolygon,
+                                          const css::rendering::ViewState&                                viewState,
+                                          const css::rendering::RenderState&                              renderState,
+                                          const cpo::uno::Sequence< css::rendering::Texture >&            textures,
+                                          const css::uno::Reference< css::geometry::XMapping2D >&         xMapping ) override
+        {
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.fillTextureMappedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures, xMapping );
+        }
+
+
+        virtual css::uno::Reference< css::rendering::XCanvasFont >
+            createFont( const css::rendering::FontRequest&                                     fontRequest,
+                        const cpo::uno::Sequence< css::beans::PropertyValue >&                 extraFontProperties,
+                        const css::geometry::Matrix2D&                                         fontMatrix ) override
+        {
+            canvastools::verifyArgs(fontRequest,
+                              // dummy, to keep argPos in sync
+                              fontRequest,
+                              fontMatrix,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            return maCanvasHelper.createFont( this, fontRequest, extraFontProperties, fontMatrix );
+        }
+
+
+        virtual cpo::uno::Sequence< css::rendering::FontInfo >
+            queryAvailableFonts( const css::rendering::FontInfo&                          aFilter,
+                                 const cpo::uno::Sequence< css::beans::PropertyValue >&   aFontProperties ) override
+        {
+            canvastools::verifyArgs(aFilter,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            return maCanvasHelper.queryAvailableFonts( this, aFilter, aFontProperties );
+        }
+
+
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+            drawText(const css::rendering::StringContext&                                     text,
+                     const css::uno::Reference< css::rendering::XCanvasFont >&                xFont,
+                     const css::rendering::ViewState&                                         viewState,
+                     const css::rendering::RenderState&                                       renderState,
+                     sal_Int8                                                                 textDirection) override
+        {
+            canvastools::verifyArgs(xFont, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+            canvastools::verifyRange( textDirection,
+                                css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
+                                css::rendering::TextDirection::STRONG_RIGHT_TO_LEFT );
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.drawText( this, text, xFont, viewState, renderState, textDirection );
+        }
+
+
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+            drawTextLayout(const css::uno::Reference< css::rendering::XTextLayout >&               laidOutText,
+                            const css::rendering::ViewState&                                       viewState,
+                            const css::rendering::RenderState&                                     renderState) override
+        {
+            canvastools::verifyArgs(laidOutText, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.drawTextLayout( this, laidOutText, viewState, renderState );
+        }
+
+
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+            drawBitmap( const css::uno::Reference< css::rendering::XBitmap >&              xBitmap,
+                        const css::rendering::ViewState&                                   viewState,
+                        const css::rendering::RenderState&                                 renderState ) override
+        {
+            canvastools::verifyArgs(xBitmap, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.drawBitmap( this, xBitmap, viewState, renderState );
+        }
+
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+            drawBitmapModulated( const css::uno::Reference< css::rendering::XBitmap >&                 xBitmap,
+                                 const css::rendering::ViewState&                                      viewState,
+                                 const css::rendering::RenderState&                                    renderState ) override
+        {
+            canvastools::verifyArgs(xBitmap, viewState, renderState,
+                              __func__,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+
+            return maCanvasHelper.drawBitmapModulated( this, xBitmap, viewState, renderState );
+        }
+
+        virtual css::uno::Reference< css::rendering::XGraphicDevice >
+            getDevice() override
+        {
+            MutexType aGuard( BaseType::m_aMutex );
+
+            return maCanvasHelper.getDevice();
+        }
+
+    protected:
+        ~BitmapCanvasBase() {} // we're a ref-counted UNO class. _We_ destroy ourselves.
 
         // XBitmap
         virtual css::geometry::IntegerSize2D getSize(  ) override
         {
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+            MutexType aGuard( BaseType::m_aMutex );
 
-            return BaseType::maCanvasHelper.getSize();
+            return maCanvasHelper.getSize();
         }
 
         virtual bool hasAlpha(  ) override
@@ -84,11 +426,17 @@ namespace canvas
         virtual css::uno::Reference< css::rendering::XBitmap > getScaledBitmap( const css::geometry::RealSize2D& newSize,
                                                                                                                    bool                                      beFast ) override
         {
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+            MutexType aGuard( BaseType::m_aMutex );
 
-            return BaseType::maCanvasHelper.getScaledBitmap( newSize, beFast );
+            return maCanvasHelper.getScaledBitmap( newSize, beFast );
         }
 
+        CanvasHelper        maCanvasHelper;
+        mutable bool        mbSurfaceDirty;
+
+    private:
+        BitmapCanvasBase( const BitmapCanvasBase& ) = delete;
+        BitmapCanvasBase& operator=( const BitmapCanvasBase& ) = delete;
     };
 
     template< class Base,
@@ -115,9 +463,9 @@ namespace canvas
                               __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
-            typename BaseType::BaseType::MutexType aGuard( BaseType::m_aMutex );
+            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            BaseType::BaseType::mbSurfaceDirty = true;
+            BaseType::mbSurfaceDirty = true;
         }
     };
 }
