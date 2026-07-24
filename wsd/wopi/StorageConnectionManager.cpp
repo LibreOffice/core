@@ -52,6 +52,13 @@
 bool StorageConnectionManager::SSLAsScheme = true;
 bool StorageConnectionManager::SSLEnabled = false;
 
+bool StorageConnectionManager::isStorageVerificationDisabled()
+{
+    if (!(SSLEnabled || SSLAsScheme))
+        return true;
+    return !ConfigUtil::getConfigValue<bool>("ssl.ssl_verification", true);
+}
+
 namespace
 {
 // access_token must be decoded
@@ -216,13 +223,12 @@ void StorageConnectionManager::initialize()
         }
         sslClientParams.cipherList =
             ConfigUtil::getPathFromConfigWithFallback("storage.ssl.cipher_list", "ssl.cipher_list");
-        const bool sslVerification = ConfigUtil::getConfigValue<bool>("ssl.ssl_verification", true);
-        sslClientParams.verificationMode =
-            !sslVerification ? Poco::Net::Context::VERIFY_NONE : Poco::Net::Context::VERIFY_STRICT;
         sslClientParams.loadDefaultCAs = true;
     }
-    else
-        sslClientParams.verificationMode = Poco::Net::Context::VERIFY_NONE;
+
+    sslClientParams.verificationMode = isStorageVerificationDisabled()
+                                           ? Poco::Net::Context::VERIFY_NONE
+                                           : Poco::Net::Context::VERIFY_STRICT;
 
     Poco::SharedPtr<Poco::Net::PrivateKeyPassphraseHandler> consoleClientHandler =
         new Poco::Net::KeyConsoleHandler(false);

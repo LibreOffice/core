@@ -52,6 +52,11 @@ public:
 
     static void initialize();
 
+    /// True when the storage client SSL context does no certificate
+    /// verification: either storage SSL is off altogether, or it is on but
+    /// ssl.ssl_verification is false.
+    static bool isStorageVerificationDisabled();
+
 private:
     StorageConnectionManager() = default;
 
