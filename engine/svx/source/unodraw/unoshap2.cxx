@@ -45,6 +45,7 @@
 #include <svx/unoshape.hxx>
 #include <svx/unopage.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdouno.hxx>
@@ -353,6 +354,91 @@ bool SAL_CALL SvxShapeGroup::hasElements()
     ::SolarMutexGuard aGuard;
 
     return HasSdrObject() && GetSdrObject()->GetSubList() && (GetSdrObject()->GetSubList()->GetObjCount() > 0);
+}
+
+bool SvxShapeGroup::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue )
+{
+    switch( pProperty->nWID )
+    {
+    case OWN_ATTR_IS_DIAGRAM:
+    {
+        // check if this is a Diagram
+        bool bIsDiagram = false;
+        auto* pGroup = dynamic_cast<SdrObjGroup*>(GetSdrObject());
+        if (nullptr != pGroup && SdrObject::useAdvancedDiagramFeatures())
+            bIsDiagram = pGroup->isDiagram();
+        rValue <<= bIsDiagram;
+        return true;
+    }
+
+    case OWN_ATTR_DIAGRAM_DATA:
+    {
+        // get DiagramData if available. Format is a uno::Sequence< OUString >
+        // with exactly four entries in a defined order. The entries are
+        // OUString representationms of the needed DomTrees. The Data one is
+        // a reduced version of data.xml, the others are unchanged/original
+        cpo::uno::Sequence< OUString > aRetval;
+        auto* pGroup = dynamic_cast<SdrObjGroup*>(GetSdrObject());
+
+        if (nullptr != pGroup && SdrObject::useAdvancedDiagramFeatures())
+        {
+            aRetval.realloc(4);
+            aRetval.getArray()[0] = pGroup->GetDiagramLayout();
+            aRetval.getArray()[1] = pGroup->GetDiagramData();
+            aRetval.getArray()[2] = pGroup->GetDiagramColors();
+            aRetval.getArray()[3] = pGroup->GetDiagramQuickstyle();
+        }
+
+        rValue <<= aRetval;
+        return true;
+    }
+
+    default:
+        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
+    }
+}
+
+bool SvxShapeGroup::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue )
+{
+    switch( pProperty->nWID )
+    {
+    case OWN_ATTR_DIAGRAM_DATA:
+    {
+        auto* pGroup = dynamic_cast<SdrObjGroup*>(GetSdrObject());
+        if (nullptr == pGroup)
+            // not a Group, error
+            throw lang::IllegalArgumentException();
+
+        cpo::uno::Sequence< OUString > aDiagramData;
+        if (!(rValue >>= aDiagramData))
+            // no Data provided, error
+            throw lang::IllegalArgumentException();
+
+        if (4 != aDiagramData.getLength())
+            // Data wrong format, error
+            throw lang::IllegalArgumentException();
+
+        // extract DomTree OUStrings
+        const OUString aLayout(aDiagramData.getArray()[0]);
+        const OUString aData(aDiagramData.getArray()[1]);
+        const OUString aColors(aDiagramData.getArray()[2]);
+        const OUString aQuickstyle(aDiagramData.getArray()[3]);
+
+        if (aLayout.isEmpty() || aData.isEmpty() || aColors.isEmpty() || aQuickstyle.isEmpty())
+            // not all Data provided, error
+            throw lang::IllegalArgumentException();
+
+        if (SdrObject::useAdvancedDiagramFeatures())
+            // set DiagramData. That will instantiate & create all needed data
+            // based on those four DomTrees.
+            pGroup->SetDiagramData(aLayout, aData, aColors, aQuickstyle);
+
+        return true;
+    }
+
+    default:
+        return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
+    }
 }
 
 SvxShapeConnector::SvxShapeConnector(SdrObject* pObj)

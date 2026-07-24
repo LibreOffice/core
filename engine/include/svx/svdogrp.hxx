@@ -37,6 +37,13 @@ public:
     // a valid SdrObject* to allow to use this as a loop-through-call
     virtual SdrObject* getDiagramSubSelection() override;
 
+    // DiagramData access
+    OUString GetDiagramLayout() const;
+    OUString GetDiagramData() const;
+    OUString GetDiagramColors() const;
+    OUString GetDiagramQuickstyle() const;
+    void SetDiagramData(std::u16string_view rLayout, std::u16string_view rData, std::u16string_view rColors, std::u16string_view rQuickstyle);
+
 private:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual std::unique_ptr<sdr::properties::BaseProperties>

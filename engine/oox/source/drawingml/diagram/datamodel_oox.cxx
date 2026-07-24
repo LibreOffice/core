@@ -118,7 +118,7 @@ void DiagramData_oox::writeDiagramReplacement(DrawingML& rOriginalDrawingML, sax
     rTarget->endDocument();
 }
 
-void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget, std::u16string_view rDrawingRelId)
+void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget, std::u16string_view rDrawingRelId, bool bReducedData)
 {
     if (!rTarget)
         return;
@@ -132,8 +132,13 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
         FSNS(XML_xmlns, XML_a), aNsDml);
 
     // need to use a full ShapeExport to get the correct DocumentType suppport if SW export
-    ShapeExport aShapeExport(XML_dsp, rTarget, nullptr, pOriginalFB, rOriginalDrawingML.GetDocumentType(), rOriginalDrawingML.GetTextExport(), true);
-    aShapeExport.setDiagaramExport(true);
+    std::unique_ptr<ShapeExport> aShapeExport;
+
+    if (!bReducedData)
+    {
+        aShapeExport.reset(new ShapeExport(XML_dsp, rTarget, nullptr, pOriginalFB, rOriginalDrawingML.GetDocumentType(), rOriginalDrawingML.GetTextExport(), true));
+        aShapeExport->setDiagaramExport(true);
+    }
 
     // write PointList
     rTarget->startElementNS(XML_dgm, XML_ptLst);
@@ -150,88 +155,91 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
         // write basic Point infos
         rPoint.writeDiagramData_data(rTarget);
 
-        // we need to find a XShape related to this Node (rPoint). Not
-        // all Nodes have an associated XShape. First try direct find,
-        // that will work e.g. for Objects in the Background (NOT our
-        // own BGShape) that have no text, but might have a fill
-        uno::Reference<drawing::XShape> xAssociatedShape(getXShapeByModelID(rPoint.msModelId));
-        uno::Reference<beans::XPropertySet> xProps;
-        bool bWriteFill(false);
-        bool bWriteText(false);
-
-        if (xAssociatedShape)
+        if (!bReducedData)
         {
-            // only for those mentioned BgShapes because for TextNodes
-            // (presName="textNode") the fill is written to the associated
-            // text node (phldrT="[Text]")
-            if (u"bgShp"_ustr == rPoint.msPresentationLayoutStyleLabel)
-            {
-                // check for fill
-                xProps = uno::Reference<beans::XPropertySet>(xAssociatedShape, uno::UNO_QUERY);
-                bWriteFill = xProps->getPropertyValue(u"FillStyle"_ustr) != drawing::FillStyle_NONE;
-            }
-        }
-        else
-        {
-            // for TextShapes it's more complex: this Node (rPoint) may be the
-            // Node holdig the text, but the XShape referencing it is associated
-            // with a Node that references this by using presAssocID. Use
-            // getMasterXShapeForPoint that uses that association and try
-            // to access the XShape containing the Text ModelData
-            xAssociatedShape = getMasterXShapeForPoint(rPoint);
+            // we need to find a XShape related to this Node (rPoint). Not
+            // all Nodes have an associated XShape. First try direct find,
+            // that will work e.g. for Objects in the Background (NOT our
+            // own BGShape) that have no text, but might have a fill
+            uno::Reference<drawing::XShape> xAssociatedShape(getXShapeByModelID(rPoint.msModelId));
+            uno::Reference<beans::XPropertySet> xProps;
+            bool bWriteFill(false);
+            bool bWriteText(false);
 
             if (xAssociatedShape)
             {
-                // check for text
-                uno::Reference<text::XText> xText(xAssociatedShape, uno::UNO_QUERY);
-                bWriteText= xText && !xText->getString().isEmpty();
-
-                // check for fill. This is the associated TextNode (phldrT="[Text]")
-                // and the fill is added here, *not* at the XShape/Model node
-                xProps = uno::Reference<beans::XPropertySet>(xAssociatedShape, uno::UNO_QUERY);
-                bWriteFill = xProps->getPropertyValue(u"FillStyle"_ustr) != drawing::FillStyle_NONE;
+                // only for those mentioned BgShapes because for TextNodes
+                // (presName="textNode") the fill is written to the associated
+                // text node (phldrT="[Text]")
+                if (u"bgShp"_ustr == rPoint.msPresentationLayoutStyleLabel)
+                {
+                    // check for fill
+                    xProps = uno::Reference<beans::XPropertySet>(xAssociatedShape, uno::UNO_QUERY);
+                    bWriteFill = xProps->getPropertyValue(u"FillStyle"_ustr) != drawing::FillStyle_NONE;
+                }
             }
-        }
+            else
+            {
+                // for TextShapes it's more complex: this Node (rPoint) may be the
+                // Node holdig the text, but the XShape referencing it is associated
+                // with a Node that references this by using presAssocID. Use
+                // getMasterXShapeForPoint that uses that association and try
+                // to access the XShape containing the Text ModelData
+                xAssociatedShape = getMasterXShapeForPoint(rPoint);
 
-        // <spPr> element is before <t> element
-        if (bWriteFill)
-        {
-            rTarget->startElementNS(XML_dgm, XML_spPr);
-            aShapeExport.WriteFill( xProps, xAssociatedShape->getSize());
+                if (xAssociatedShape)
+                {
+                    // check for text
+                    uno::Reference<text::XText> xText(xAssociatedShape, uno::UNO_QUERY);
+                    bWriteText= xText && !xText->getString().isEmpty();
 
-            rTarget->endElementNS(XML_dgm, XML_spPr);
-        }
-        else
-        {
-            // write empty fill
-            rTarget->singleElementNS(XML_dgm, XML_spPr);
-        }
+                    // check for fill. This is the associated TextNode (phldrT="[Text]")
+                    // and the fill is added here, *not* at the XShape/Model node
+                    xProps = uno::Reference<beans::XPropertySet>(xAssociatedShape, uno::UNO_QUERY);
+                    bWriteFill = xProps->getPropertyValue(u"FillStyle"_ustr) != drawing::FillStyle_NONE;
+                }
+            }
 
-        if (bWriteText)
-        {
-            rTarget->startElementNS(XML_dgm, XML_t);
-            aShapeExport.WriteText(xAssociatedShape, false, true, XML_a);
-            rTarget->endElementNS(XML_dgm, XML_t);
-        }
-        else
-        {
-            const bool bWriteEmptyText(
-                TypeConstant::XML_parTrans == rPoint.mnXMLType ||
-                TypeConstant::XML_sibTrans == rPoint.mnXMLType ||
-                "textNode" == rPoint.msPresentationLayoutName);
+            // <spPr> element is before <t> element
+            if (bWriteFill)
+            {
+                rTarget->startElementNS(XML_dgm, XML_spPr);
+                aShapeExport->WriteFill( xProps, xAssociatedShape->getSize());
 
-            // empty text is written by MSO, but may not be needed. For now, just do it
-            static bool bSuppressEmptyText(false);
+                rTarget->endElementNS(XML_dgm, XML_spPr);
+            }
+            else
+            {
+                // write empty fill
+                rTarget->singleElementNS(XML_dgm, XML_spPr);
+            }
 
-            if (bWriteEmptyText && !bSuppressEmptyText)
+            if (bWriteText)
             {
                 rTarget->startElementNS(XML_dgm, XML_t);
-                rTarget->singleElementNS(XML_a, XML_bodyPr);
-                rTarget->singleElementNS(XML_a, XML_lstStyle);
-                rTarget->startElementNS(XML_a, XML_p);
-                rTarget->singleElementNS(XML_a, XML_endParaRPr, XML_lang, "en-US");
-                rTarget->endElementNS(XML_a, XML_p);
+                aShapeExport->WriteText(xAssociatedShape, false, true, XML_a);
                 rTarget->endElementNS(XML_dgm, XML_t);
+            }
+            else
+            {
+                const bool bWriteEmptyText(
+                    TypeConstant::XML_parTrans == rPoint.mnXMLType ||
+                    TypeConstant::XML_sibTrans == rPoint.mnXMLType ||
+                    "textNode" == rPoint.msPresentationLayoutName);
+
+                // empty text is written by MSO, but may not be needed. For now, just do it
+                static bool bSuppressEmptyText(false);
+
+                if (bWriteEmptyText && !bSuppressEmptyText)
+                {
+                    rTarget->startElementNS(XML_dgm, XML_t);
+                    rTarget->singleElementNS(XML_a, XML_bodyPr);
+                    rTarget->singleElementNS(XML_a, XML_lstStyle);
+                    rTarget->startElementNS(XML_a, XML_p);
+                    rTarget->singleElementNS(XML_a, XML_endParaRPr, XML_lang, "en-US");
+                    rTarget->endElementNS(XML_a, XML_p);
+                    rTarget->endElementNS(XML_dgm, XML_t);
+                }
             }
         }
 
@@ -243,67 +251,69 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
     // write ConnectorList
     rTarget->startElementNS(XML_dgm, XML_cxnLst);
     for (auto& rConnection : getConnections())
-        rConnection.writeDiagramData(rTarget);
+        rConnection.writeDiagramData_connection(rTarget);
     rTarget->endElementNS(XML_dgm, XML_cxnLst);
 
-    // write BGFill
-    rTarget->startElementNS(XML_dgm, XML_bg);
-
-    // there is *no* export for oox::drawingml::FillProperties which we have in mpBackgroundShapeFillProperties.
-    // searching for 'XML_.*XML_noFill' shows that there is also a pretty direct export for FillStyle in Chart2,
-    // maybe that could be adapted for general use.
-    // But there is DrawingML::WriteFill, that needs the XShape, sax_fastparser::FSHelper and a XmlFilterBase. We
-    // can organize all that and then export from XShape model data.
-    // For The BGShape is is okay since in MSO Diagram data no shape for that exists anyways, it's just
-    // FillAttributes and a XShape for BG needs to exist in DrawObject model anytime anyways, see
-    // Diagram::createShapeHierarchyFromModel. This will also allow to use existing stuff like standard dialogs
-    // and more for later offering changing the Background of a Diagram.
-    // Note that an incarnation of BG as XShape is also needed to 'carry' the correct Size for that Diagram.
-    uno::Reference<drawing::XShape> xBgShape(getXShapeByModelID(getBackgroundShapeModelID()));
-
-    if (xBgShape.is())
+    if (!bReducedData)
     {
-        // use created temporary ShapeExport with correct DocumentType
-        uno::Reference<beans::XPropertySet> xProps(xBgShape, uno::UNO_QUERY);
-        aShapeExport.WriteFill( xProps, xBgShape->getSize());
-    }
+        // write BGFill
+        rTarget->startElementNS(XML_dgm, XML_bg);
 
-    rTarget->endElementNS(XML_dgm, XML_bg);
+        // there is *no* export for oox::drawingml::FillProperties which we have in mpBackgroundShapeFillProperties.
+        // searching for 'XML_.*XML_noFill' shows that there is also a pretty direct export for FillStyle in Chart2,
+        // maybe that could be adapted for general use.
+        // But there is DrawingML::WriteFill, that needs the XShape, sax_fastparser::FSHelper and a XmlFilterBase. We
+        // can organize all that and then export from XShape model data.
+        // For The BGShape is is okay since in MSO Diagram data no shape for that exists anyways, it's just
+        // FillAttributes and a XShape for BG needs to exist in DrawObject model anytime anyways, see
+        // Diagram::createShapeHierarchyFromModel. This will also allow to use existing stuff like standard dialogs
+        // and more for later offering changing the Background of a Diagram.
+        // Note that an incarnation of BG as XShape is also needed to 'carry' the correct Size for that Diagram.
+        uno::Reference<drawing::XShape> xBgShape(getXShapeByModelID(getBackgroundShapeModelID()));
 
-    bool bBGLineStyleWritten(false);
-    if (xBgShape.is())
-    {
-        uno::Reference<beans::XPropertySet> xProps(xBgShape, uno::UNO_QUERY);
-        bBGLineStyleWritten = xProps->getPropertyValue(u"LineStyle"_ustr) != drawing::LineStyle_NONE;
-
-        if (bBGLineStyleWritten)
+        if (xBgShape.is())
         {
-            rTarget->startElementNS(XML_dgm, XML_whole);
-            aShapeExport.WriteOutline( xProps );
-            // aShapeExport.WriteLineArrow( xProps, false);
-            rTarget->endElementNS(XML_dgm, XML_whole);
+            // use created temporary ShapeExport with correct DocumentType
+            uno::Reference<beans::XPropertySet> xProps(xBgShape, uno::UNO_QUERY);
+            aShapeExport->WriteFill( xProps, xBgShape->getSize());
         }
-    }
 
-    if (!bBGLineStyleWritten)
-        rTarget->singleElementNS(XML_dgm, XML_whole);
+        rTarget->endElementNS(XML_dgm, XML_bg);
 
-    // write ExtList & it's contents
-    // Note: I *tried* to use XML_dsp and xmlns:dsp, but these are not defined, thus
-    // for this case where the only relevant data is the 'relId' entry I will allow
-    // to construct the XML statement by own string concatenation
-    rTarget->startElementNS(XML_dgm, XML_extLst);
-    const OUString rNsDsp(pOriginalFB->getNamespaceURL(OOX_NS(dsp)));
-    rTarget->startElementNS(XML_a, XML_ext, XML_uri, rNsDsp);
-    OUString aDspLine(u"<dsp:dataModelExt xmlns:dsp=\""_ustr + rNsDsp + u"\" "_ustr);
-    if (!rDrawingRelId.empty())
-    {
-        aDspLine += u"relId=\""_ustr + rDrawingRelId + u"\" "_ustr;
+        bool bBGLineStyleWritten(false);
+        if (xBgShape.is())
+        {
+            uno::Reference<beans::XPropertySet> xProps(xBgShape, uno::UNO_QUERY);
+            bBGLineStyleWritten = xProps->getPropertyValue(u"LineStyle"_ustr) != drawing::LineStyle_NONE;
+
+            if (bBGLineStyleWritten)
+            {
+                rTarget->startElementNS(XML_dgm, XML_whole);
+                aShapeExport->WriteOutline( xProps );
+                rTarget->endElementNS(XML_dgm, XML_whole);
+            }
+        }
+
+        if (!bBGLineStyleWritten)
+            rTarget->singleElementNS(XML_dgm, XML_whole);
+
+        // write ExtList & it's contents
+        // Note: I *tried* to use XML_dsp and xmlns:dsp, but these are not defined, thus
+        // for this case where the only relevant data is the 'relId' entry I will allow
+        // to construct the XML statement by own string concatenation
+        rTarget->startElementNS(XML_dgm, XML_extLst);
+        const OUString rNsDsp(pOriginalFB->getNamespaceURL(OOX_NS(dsp)));
+        rTarget->startElementNS(XML_a, XML_ext, XML_uri, rNsDsp);
+        OUString aDspLine(u"<dsp:dataModelExt xmlns:dsp=\""_ustr + rNsDsp + u"\" "_ustr);
+        if (!rDrawingRelId.empty())
+        {
+            aDspLine += u"relId=\""_ustr + rDrawingRelId + u"\" "_ustr;
+        }
+        aDspLine += u"minVer=\""_ustr + aNsDmlDiagram + u"\"/>"_ustr;
+        rTarget->write(aDspLine);
+        rTarget->endElementNS(XML_a, XML_ext);
+        rTarget->endElementNS(XML_dgm, XML_extLst);
     }
-    aDspLine += u"minVer=\""_ustr + aNsDmlDiagram + u"\"/>"_ustr;
-    rTarget->write(aDspLine);
-    rTarget->endElementNS(XML_a, XML_ext);
-    rTarget->endElementNS(XML_dgm, XML_extLst);
 
     rTarget->endElementNS(XML_dgm, XML_dataModel);
     rTarget->endDocument();

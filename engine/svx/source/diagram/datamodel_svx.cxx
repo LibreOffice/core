@@ -23,6 +23,7 @@
 
 #include <svx/diagram/datamodel_svx.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdmodel.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 #include <comphelper/xmltools.hxx>
@@ -136,7 +137,7 @@ Connection::Connection(const boost::property_tree::ptree& rConnectionData)
         mnXMLType = getTypeConstantForName(aXMLType);
 }
 
-void Connection::writeDiagramData(sax_fastparser::FSHelperPtr& rTarget)
+void Connection::writeDiagramData_connection(sax_fastparser::FSHelperPtr& rTarget)
 {
     if (!rTarget)
         return;
@@ -423,6 +424,30 @@ DiagramData_svx::DiagramData_svx(const boost::property_tree::ptree& rDiagramMode
     auto aRangeCn(rDiagramModel.equal_range("Cn"));
     for (auto itCn = aRangeCn.first; itCn != aRangeCn.second; itCn++)
         maConnections.emplace_back(itCn->second);
+}
+
+const OUString& DiagramData_svx::getBackgroundShapeModelID() const
+{
+    if (msBackgroundShapeModelID.isEmpty() && mxRootShape.is())
+    {
+        // TODO: WORKAROUND: Need to access BackgroundShape different
+        // copy the BackgroundShapeModelID transfered from 1st XShape to
+        // msBackgroundShapeModelID if empty. Future change will not
+        // use any msBackgroundShapeModelID at all, but I cannot change
+        // all stuff at once. Correct it here after ODF import.
+        const SdrObject* pBGObj(SdrObject::getSdrObjectFromXShape(accessRootShape())->GetSubList()->GetObj(0));
+        if (nullptr != pBGObj && !pBGObj->getDiagramDataModelID().isEmpty())
+            const_cast<DiagramData_svx*>(this)->msBackgroundShapeModelID = pBGObj->getDiagramDataModelID();
+    }
+
+    return msBackgroundShapeModelID;
+}
+
+const uno::Reference< frame::XModel >& DiagramData_svx::accessRootModel() const
+{
+    SdrObject* pObj(SdrObject::getSdrObjectFromXShape(accessRootShape()));
+    SAL_WARN_IF(!pObj, "oox.drawingml", "DiagramData_svx::accessRootModel(): no XModel");
+    return pObj->getSdrModelFromSdrObject().getUnoModel();
 }
 
 DiagramData_svx::~DiagramData_svx()

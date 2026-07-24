@@ -149,6 +149,8 @@ public:
 
     // write data to boost::property_tree
     virtual void addDiagramModelData(boost::property_tree::ptree& rTarget) const = 0;
+    virtual OUString getDiagramModelData(svx::diagram::DomMapFlag aId) const = 0;
+
     virtual const OUString& getBackgroundShapeModelID() const = 0;
     virtual bool isTextNodeModelID(const OUString& rModelID) const = 0;
 
@@ -179,6 +181,7 @@ public:
     // virtual call to instantiate a new DiagramHelper, overloaded in oox to
     // allow instantiation of a DiagramHelper_oox
     virtual std::shared_ptr<svx::diagram::DiagramHelper_svx> createDiagramHelper_svx(boost::property_tree::ptree& rTarget) const = 0;
+    virtual std::shared_ptr<svx::diagram::DiagramHelper_svx> createDiagramHelper_svx(std::u16string_view rLayout, std::u16string_view rData, std::u16string_view rColors, std::u16string_view rQuickstyle) const = 0;
 };
 
 }} // end of namespace

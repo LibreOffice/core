@@ -59,7 +59,7 @@ public:
 
     // helpers to write some specific DiagramDoms
     void writeDiagramReplacement(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget);
-    void writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget, std::u16string_view rDrawingRelId);
+    void writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget, std::u16string_view rDrawingRelId, bool bReducedData);
 
 private:
     // The model definition, the parts *only* available in oox. Also look for already

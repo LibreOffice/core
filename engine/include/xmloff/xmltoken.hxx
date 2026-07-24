@@ -3621,6 +3621,11 @@ namespace xmloff::token {
         XML_ASIAN,
         XML_COMPLEX,
 
+        XML_DIAGRAM,
+        XML_DIAGRAM_LAYOUT,
+        XML_DIAGRAM_COLORS,
+        XML_DIAGRAM_QUICKSTYLE,
+
         XML_TOKEN_END
     };
 

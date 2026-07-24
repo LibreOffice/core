@@ -418,6 +418,9 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxGroupPropertyMap()
         SHAPE_DESCRIPTOR_PROPERTIES
         MISC_OBJ_PROPERTIES
         LINKTARGET_PROPERTIES
+
+        { u"IsDiagram"_ustr, OWN_ATTR_IS_DIAGRAM, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY, 0 },
+        { u"DiagramData"_ustr, OWN_ATTR_DIAGRAM_DATA, cppu::UnoType<cpo::uno::Sequence< OUString >>::get(), 0, 0 },
     };
 
     return aGroupPropertyMap_Impl;

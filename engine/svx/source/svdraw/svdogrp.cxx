@@ -66,6 +66,51 @@ SdrObject* SdrObjGroup::getDiagramSubSelection()
     return nullptr == pRetval ? this : pRetval;
 }
 
+OUString SdrObjGroup::GetDiagramLayout() const
+{
+    if(!isDiagram())
+        return EMPTY_OUSTRING;
+
+    return getDiagramHelper()->getDiagramModelData(svx::diagram::DomMapFlag::OOXLayout);
+}
+
+OUString SdrObjGroup::GetDiagramData() const
+{
+    if(!isDiagram())
+        return EMPTY_OUSTRING;
+
+    return getDiagramHelper()->getDiagramModelData(svx::diagram::DomMapFlag::OOXData);
+}
+
+OUString SdrObjGroup::GetDiagramColors() const
+{
+    if(!isDiagram())
+        return EMPTY_OUSTRING;
+
+    return getDiagramHelper()->getDiagramModelData(svx::diagram::DomMapFlag::OOXColor);
+}
+
+OUString SdrObjGroup::GetDiagramQuickstyle() const
+{
+    if(!isDiagram())
+        return EMPTY_OUSTRING;
+
+    return getDiagramHelper()->getDiagramModelData(svx::diagram::DomMapFlag::OOXStyle);
+}
+
+void SdrObjGroup::SetDiagramData(std::u16string_view rLayout, std::u16string_view rData, std::u16string_view rColors, std::u16string_view rQuickstyle)
+{
+    if (rLayout.empty() || rData.empty() || rColors.empty() || rQuickstyle.empty())
+        return;
+
+    std::shared_ptr<svx::diagram::DiagramHelper_svx> aNewHelper(
+        svx::diagram::DiagramHelperFactory_svx::getDiagramHelperFactory_svx().createDiagramHelper_svx(
+            rLayout, rData, rColors, rQuickstyle));
+
+    resetDiagramHelper(aNewHelper);
+    mp_DiagramHelper->getRootShape() = getUnoShape();
+}
+
 // BaseProperties section
 std::unique_ptr<sdr::properties::BaseProperties> SdrObjGroup::CreateObjectSpecificProperties()
 {
@@ -843,7 +888,8 @@ void SdrObjGroup::SetDescription(const OUString& rStr)
 
     OUString aOrigDescription(rStr);
 
-    if (!rStr.isEmpty() && getSdrModelFromSdrObject().isInImportExport())
+    bool bUseNew(nullptr != std::getenv("DIAGRAM_NEW_ODF"));
+    if (!bUseNew && !rStr.isEmpty() && getSdrModelFromSdrObject().isInImportExport())
     {
         // we maybe importing a Diagram. Try to get the Diagram ModelData and
         // add needed Diagram ModelData
@@ -885,7 +931,8 @@ OUString SdrObjGroup::GetDescription() const
     // call parent to get original description
     OUString aRetval(SdrObject::GetDescription());
 
-    if (mp_DiagramHelper && getSdrModelFromSdrObject().isInImportExport())
+    bool bUseNew(nullptr != std::getenv("DIAGRAM_NEW_ODF"));
+    if (!bUseNew && mp_DiagramHelper && getSdrModelFromSdrObject().isInImportExport())
     {
         // we are a Diagram and are exporting. Get the Diagram ModelData and
         // place it to the description

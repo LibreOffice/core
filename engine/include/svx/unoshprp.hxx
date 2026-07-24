@@ -191,6 +191,8 @@
 #define OWN_ATTR_HYPERLINK                      (OWN_ATTR_VALUE_START+108)
 #define OWN_ATTR_MISC_OBJ_DECORATIVE            (OWN_ATTR_VALUE_START+109)
 #define OWN_ATTR_OBJ_ISEMPTYPRESOBJ             (OWN_ATTR_VALUE_START+110)
+#define OWN_ATTR_IS_DIAGRAM                     (OWN_ATTR_VALUE_START+111)
+#define OWN_ATTR_DIAGRAM_DATA                   (OWN_ATTR_VALUE_START+112)
 // ATTENTION: current maximum is OWN_ATTR_VALUE_START+120 svx; when adding values, update
 // OWN_ATTR_VALUE_END in include/svl/solar.hrc accordingly
 

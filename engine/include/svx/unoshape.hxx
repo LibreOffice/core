@@ -470,6 +470,11 @@ public:
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     virtual void addShape(SvxShape& rShape) final override;
+
+protected:
+    // support Diagram UNO API commands OWN_ATTR_IS_DIAGRAM/OWN_ATTR_DIAGRAM_DATA
+    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const cpo::uno::Any& rValue ) override;
+    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, cpo::uno::Any& rValue ) override;
 };
 
 /***********************************************************************

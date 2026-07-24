@@ -3360,4 +3360,8 @@ color-type
 latin
 asian
 complex
+diagram
+layout
+colors
+quickstyle
 TOKEN_END_DUMMY

@@ -2181,7 +2181,33 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
     </rng:element>
   </rng:define>
 
-   </rng:include>
+    <rng:define name="draw-g">
+      <rng:element name="draw:g">
+        <rng:ref name="draw-g-attlist"/>
+        <rng:ref name="common-draw-z-index-attlist"/>
+        <rng:ref name="common-draw-name-attlist"/>
+        <rng:ref name="common-draw-id-attlist"/>
+        <rng:ref name="common-draw-style-name-attlist"/>
+        <rng:ref name="common-text-spreadsheet-shape-attlist"/>
+        <rng:ref name="common-draw-caption-id-attlist"/>
+        <!-- For SmartArt round-trip (Armin Le Grand) CO 26.04 -->
+        <rng:optional>
+          <rng:ref name="coext-diagram"/>
+        </rng:optional>
+        <!-- https://issues.oasis-open.org/browse/OFFICE-4132 -->
+        <rng:ref name="common-draw-shape-accessibility"/>
+        <rng:optional>
+          <rng:ref name="office-event-listeners"/>
+        </rng:optional>
+        <rng:zeroOrMore>
+          <rng:ref name="draw-glue-point"/>
+        </rng:zeroOrMore>
+        <rng:zeroOrMore>
+          <rng:ref name="shape"/>
+        </rng:zeroOrMore>
+      </rng:element>
+    </rng:define>
+  </rng:include>
 
     <!-- TODO no proposal -->
   <rng:define name="loext-threaded-comment">
@@ -4450,4 +4476,13 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
     </rng:optional>
   </rng:define>
 
+  <!-- For SmartArt round-trip (Armin Le Grand) CO 26.04 -->
+  <rng:define name="coext-diagram">
+    <rng:element name="coext:diagram">
+      <rng:element name="coext:layout"><rng:ref name="string"/></rng:element>
+      <rng:element name="coext:data"><rng:ref name="string"/></rng:element>
+      <rng:element name="coext:colors"><rng:ref name="string"/></rng:element>
+      <rng:element name="coext:quickstyle"><rng:ref name="string"/></rng:element>
+    </rng:element>
+  </rng:define>
 </rng:grammar>

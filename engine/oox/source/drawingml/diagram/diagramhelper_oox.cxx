@@ -34,7 +34,19 @@
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <unotools/streamwrap.hxx>
+#include <com/sun/star/xml/sax/XSAXSerializable.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <utility>
+
+#ifdef DBG_UTIL
+#include <osl/file.hxx>
+#include <o3tl/environment.hxx>
+#include <tools/stream.hxx>
+#include <unotools/streamwrap.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <com/sun/star/embed/XRelationshipAccess.hpp>
+#endif
 
 using namespace ::com::sun::star;
 using namespace svx::diagram;
@@ -64,6 +76,16 @@ DiagramHelper_oox::DiagramHelper_oox(DiagramHelper_oox const& rSource)
 DiagramHelper_oox::DiagramHelper_oox(const boost::property_tree::ptree& rDiagramModel)
     : DiagramHelper_svx()
     , mpDiagramPtr(new SmartArtDiagram(rDiagramModel))
+    , mpDiagramThemePtr()
+    , msNewNodeId()
+    , msNewNodeText()
+{
+}
+
+DiagramHelper_oox::DiagramHelper_oox(std::u16string_view rLayout, std::u16string_view rData,
+                                     std::u16string_view rColors, std::u16string_view rQuickstyle)
+    : DiagramHelper_svx()
+    , mpDiagramPtr(new SmartArtDiagram(rLayout, rData, rColors, rQuickstyle))
     , mpDiagramThemePtr()
     , msNewNodeId()
     , msNewNodeText()
@@ -591,6 +613,15 @@ void DiagramHelper_oox::writeDiagramOOXData(DrawingML& rOriginalDrawingML,
     mpDiagramPtr->writeDiagramOOXData(rOriginalDrawingML, xOutputStream, rDrawingRelId);
 }
 
+void DiagramHelper_oox::writeDiagramReducedOOXData(
+    uno::Reference<io::XOutputStream>& xOutputStream) const
+{
+    if (!mpDiagramPtr)
+        return;
+
+    mpDiagramPtr->writeDiagramReducedOOXData(xOutputStream);
+}
+
 void DiagramHelper_oox::writeDiagramOOXDrawing(
     DrawingML& rOriginalDrawingML, uno::Reference<io::XOutputStream>& xOutputStream) const
 {
@@ -639,6 +670,72 @@ bool DiagramHelper_oox::isTextNodeModelID(const OUString& rModelID) const
     return false;
 }
 
+OUString DiagramHelper_oox::getDiagramModelData(svx::diagram::DomMapFlag aId) const
+{
+    if (!checkMinimalDataDoms())
+        // check if we have needed DomTrees (OOXLayout, OOXStyle and OOXColor)
+        return EMPTY_OUSTRING;
+
+    if (svx::diagram::DomMapFlag::OOXData == aId)
+    {
+        // prepare target XOutputStream
+        SvMemoryStream aStream(1024, 1024);
+        uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
+
+        // write reduced data.xml
+        writeDiagramReducedOOXData(xOutputStream);
+
+        // this call is *important*, without it xDocBuilder->parse below fails and some strange
+        // and wrong assertion gets thrown in ~FastSerializerHelper that  shall get called
+        xOutputStream->closeOutput();
+
+#ifdef DBG_UTIL
+        const OUString env(o3tl::getEnvironment(u"DIAGRAM_DUMP_PATH"_ustr));
+        if (!env.isEmpty())
+        {
+            aStream.Seek(STREAM_SEEK_TO_BEGIN);
+            OUString url;
+            ::osl::FileBase::getFileURLFromSystemPath(env, url);
+            SvFileStream aOutStream(url + "data_Reduced.xml",
+                                    StreamMode::WRITE | StreamMode::TRUNC);
+            uno::Reference<io::XStream> xOutStream(new utl::OStreamWrapper(aOutStream));
+            uno::Reference<io::XStream> xInStream(xOutputStream, uno::UNO_QUERY);
+            comphelper::OStorageHelper::CopyInputToOutput(xInStream->getInputStream(),
+                                                          xOutStream->getOutputStream());
+        }
+#endif
+
+        // create & return as string
+        return OUString(static_cast<const char*>(aStream.GetData()), aStream.TellEnd(),
+                        RTL_TEXTENCODING_UTF8);
+    }
+
+    // get DomTree
+    uno::Reference<xml::dom::XDocument> aDomTree;
+    getOOXDomValue(aId) >>= aDomTree;
+
+    if (aDomTree)
+    {
+        // serialize existing DomTree to a MemoryStream
+        SvMemoryStream aStream(1024, 1024);
+        rtl::Reference<utl::OStreamWrapper> pStreamWrapper = new utl::OStreamWrapper(aStream);
+        uno::Reference<xml::sax::XSAXSerializable> serializer;
+        uno::Reference<xml::sax::XWriter> writer
+            = xml::sax::Writer::create(comphelper::getProcessComponentContext());
+        serializer.set(aDomTree, uno::UNO_QUERY);
+        writer->setOutputStream(pStreamWrapper->getOutputStream());
+        serializer->serialize(
+            uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
+            cpo::uno::Sequence<beans::StringPair>());
+
+        // create & return as string
+        return OUString(static_cast<const char*>(aStream.GetData()), aStream.TellEnd(),
+                        RTL_TEXTENCODING_UTF8);
+    }
+
+    return EMPTY_OUSTRING;
+}
+
 DiagramHelperFactory_oox::DiagramHelperFactory_oox()
     : DiagramHelperFactory_svx()
 {
@@ -662,6 +759,14 @@ DiagramHelperFactory_oox::createDiagramHelper_svx(boost::property_tree::ptree& r
 {
     // from here we can instantiate DiagramHelper_oox and return
     return std::make_shared<DiagramHelper_oox>(rTarget);
+}
+
+std::shared_ptr<svx::diagram::DiagramHelper_svx> DiagramHelperFactory_oox::createDiagramHelper_svx(
+    std::u16string_view rLayout, std::u16string_view rData, std::u16string_view rColors,
+    std::u16string_view rQuickstyle) const
+{
+    // from here we can instantiate DiagramHelper_oox and return
+    return std::make_shared<DiagramHelper_oox>(rLayout, rData, rColors, rQuickstyle);
 }
 
 // this is the global needed anchor in oox module for an instantiation of
