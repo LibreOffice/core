@@ -10,8 +10,7 @@ m4_dnl node_modules
 m4_foreachq([fileNode],[NODE_MODULES_JS],[
 m4_syscmd([cat ]fileNode)
 ])
-m4_dnl bundled utilities for mobile/desktop apps (no server to resolve importScripts URLs)
-m4_ifelse(MOBILEAPP, [true], [m4_syscmd([cat ]TILEUTILS_JS)
-])
+m4_dnl bundled tile utilities
+m4_syscmd([cat ]TILEUTILS_JS)
 m4_dnl bundled worker
 m4_syscmd([cat ]WORKER_JS)

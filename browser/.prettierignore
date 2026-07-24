@@ -4,6 +4,7 @@
 **/js/l10n.js
 **/src/unocommands.js
 **/src/app/TaskWorker.js
+**/src/app/TaskWorker.js.m4
 # Prettier breaks the assumption made by unocommands.py.
 **/src/control/jsdialog/Definitions.MenuCommands.ts
 **/._*

@@ -11,17 +11,13 @@
 
 /* eslint-disable no-inner-declarations */
 /* eslint no-unused-vars: ["warn", { "argsIgnorePattern": "^_" }] */
-/* global importScripts Uint8Array cool */
+/* global Uint8Array cool */
 
 if ('undefined' === typeof window) {
 	self.L = {};
 
-	// CanvasTileUtils is bundled inline for mobile/desktop app builds
-	if (typeof cool === 'undefined' || !cool.CanvasTileUtils) {
-		importScripts(
-			'%SERVICE_ROOT%/browser/%VERSION%/src/layer/tile/CanvasTileUtils.js',
-		);
-	}
+	// CanvasTileUtils.js is concatenated ahead of this file, so cool.CanvasTileUtils is already
+	// in the worker's global scope.
 
 	let tileImageCache = new Map(); // Map<string, Uint8Array>
 
