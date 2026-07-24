@@ -2317,7 +2317,7 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
             // application, so a failed load must not close the connection or
             // terminate. Only the server, with a kit process per document,
             // shuts down here.
-            if constexpr (!Util::isKitInProcess())
+            if (!Util::isKitInProcess())
             {
                 session->shutdownNormal();
                 LOG_FTL("Failed to load the document. Setting TerminationFlag");
@@ -3003,7 +3003,7 @@ void Document::flushAndExit(int code)
 #if !MOBILEAPP
     _deltaPool.stop();
 #endif
-    if constexpr (!Util::isKitInProcess())
+    if (!Util::isKitInProcess())
         Util::forcedExit(code);
     else
         SigUtil::setTerminationFlag();
@@ -3820,7 +3820,7 @@ void lokit_main(
 {
 #if !MOBILEAPP
 
-    if constexpr (!Util::isKitInProcess())
+    if (!Util::isKitInProcess())
     {
         // Already set by COOLWSD.cpp
         SigUtil::setFatalSignals("kit startup of " + Util::getCoolVersion() + ' ' +
@@ -4672,7 +4672,7 @@ void lokit_main(
 
     LOG_INF("Kit process for Jail [" << jailId << "] finished.");
     flushTraceEventRecordings();
-    if constexpr (!Util::isKitInProcess())
+    if (!Util::isKitInProcess())
         Util::forcedExit(EX_OK);
 
 #endif

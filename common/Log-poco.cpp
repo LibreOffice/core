@@ -665,7 +665,7 @@ namespace Log
         if constexpr (Util::isMobileApp())
             return;
 
-        if constexpr (!Util::isKitInProcess())
+        if (!Util::isKitInProcess())
         {
             // Allow other threads time to exit.
             for (int i = 0; i < 10 && ThreadLocalBufferCount > 1; ++i)

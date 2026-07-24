@@ -55,7 +55,7 @@ CheckResult checkPing() { return pass(); }
 
 CheckResult checkForkit()
 {
-    if constexpr (Util::isKitInProcess())
+    if (Util::isKitInProcess())
         return pass();
 
     const pid_t pid = COOLWSD::ForKitProcId;
@@ -78,7 +78,7 @@ CheckResult checkShutdown()
 
 CheckResult checkKitSpares()
 {
-    if constexpr (Util::isKitInProcess())
+    if (Util::isKitInProcess())
         return pass();
 
     if (!COOLWSD::getSpareKitPids().empty())

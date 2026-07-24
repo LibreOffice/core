@@ -311,7 +311,7 @@ bool haveCorrectCapabilities()
 /// Check if some previously forked kids have died.
 void cleanupChildren(const std::string& childRoot)
 {
-    if constexpr (Util::isKitInProcess())
+    if (Util::isKitInProcess())
         return;
 
     pid_t exitedChildPid;
@@ -552,7 +552,7 @@ int createCOKit(const std::string& childRoot, const std::string& sysTemplate,
     const auto startForkingTime = std::chrono::steady_clock::now();
 
     pid_t childPid = 0;
-    if constexpr (Util::isKitInProcess())
+    if (Util::isKitInProcess())
     {
         std::thread([childRoot, jailId = std::move(jailId), configId, sysTemplate,
                      loTemplate, queryVersion
@@ -831,7 +831,7 @@ int forkit_main(int argc, char** argv)
 
     Util::sleepFromEnvIfSet("Forkit", "SLEEPFORDEBUGGER");
 
-    if constexpr (!Util::isKitInProcess())
+    if (!Util::isKitInProcess())
     {
         // Already set by COOLWSD.cpp in kit in process
         SigUtil::setFatalSignals("forkit startup of " + Util::getCoolVersion() + ' ' +
@@ -850,7 +850,7 @@ int forkit_main(int argc, char** argv)
     if (simd::init())
         simd_deltaInit();
 
-    if constexpr (!Util::isKitInProcess())
+    if (!Util::isKitInProcess())
         Util::setApplicationPath(Poco::Path(argv[0]).parent().toString());
 
     // Initialization
@@ -1045,7 +1045,7 @@ int forkit_main(int argc, char** argv)
     JailUtil::SysTemplate::setupRandomDeviceLinks(sysTemplate);
 #endif
 
-    if constexpr (!Util::isKitInProcess())
+    if (!Util::isKitInProcess())
     {
         // Parse the configuration.
         char* const conf = std::getenv("COOL_CONFIG");

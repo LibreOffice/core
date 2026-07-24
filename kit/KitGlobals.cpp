@@ -18,5 +18,8 @@
 #include <kit/KitGlobals.hpp>
 
 #include <common/Globals.hpp>
+#include <common/Util.hpp>
+
+const bool Util::KitInProcess = Util::isFuzzing() || Util::isMobileApp();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

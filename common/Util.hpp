@@ -1063,14 +1063,11 @@ int main(int argc, char**argv)
 #endif
     }
 
-    constexpr bool isKitInProcess()
-    {
-#if defined(ENABLE_INPROC) && ENABLE_INPROC
-        return true;
-#else
-        return isFuzzing() || isMobileApp();
-#endif // ENABLE_INPROC
-    }
+    /// True when the kit runs as a thread of this process rather than as a forked child.
+    /// Defined once per binary, next to the other globals.
+    extern const bool KitInProcess;
+
+    inline bool isKitInProcess() { return KitInProcess; }
 
     /**
      * Splits string into vector<string>. Does not accept referenced variables for easy

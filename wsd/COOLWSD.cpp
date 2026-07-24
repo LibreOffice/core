@@ -564,7 +564,7 @@ void COOLWSD::cleanupDocBrokers()
 /// Forks as many children as requested.
 static void forkChildren(const std::string& configId, const int number)
 {
-    if constexpr (Util::isKitInProcess())
+    if (Util::isKitInProcess())
         return;
 
     LOG_TRC("Request forkit to spawn " << number << " new child(ren)");
@@ -590,7 +590,7 @@ static bool queueMessageToForKit(const std::string& message);
 
 bool COOLWSD::ensureSubForKit(const std::string& configId)
 {
-    if constexpr (Util::isKitInProcess())
+    if (Util::isKitInProcess())
         return false;
 
     LOG_TRC("Request forkit to spawn subForKit " << configId);
@@ -630,7 +630,7 @@ bool COOLWSD::ensureSubForKit(const std::string& configId)
 /// Cleans up dead children.
 static void cleanupChildren()
 {
-    if constexpr (Util::isKitInProcess())
+    if (Util::isKitInProcess())
         return;
 
     Util::assertIsLocked(NewChildrenMutex);
@@ -2306,7 +2306,7 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
         ConfigUtil::getConfigValue("indirection_endpoint.geolocation_setup.enable", false);
 
 #if ENABLE_DEBUG
-    if constexpr (Util::isKitInProcess())
+    if (Util::isKitInProcess())
         SingleKit = true;
 #endif
 #endif
@@ -2919,7 +2919,7 @@ bool COOLWSD::checkAndRestoreForKit()
         }
     }
 
-    if constexpr (Util::isKitInProcess())
+    if (Util::isKitInProcess())
         return true;
 
     int status;
@@ -3213,7 +3213,7 @@ bool COOLWSD::createForKit()
     // Always reap first, in case we haven't done so yet.
     if (ForKitProcId != -1)
     {
-        if constexpr (Util::isKitInProcess())
+        if (Util::isKitInProcess())
             return true;
         int status;
         waitpid(ForKitProcId, &status, WUNTRACED | WNOHANG);
@@ -4058,7 +4058,7 @@ void COOLWSD::innerMain()
 // No need to "have at least one child" beforehand on mobile
 #if !MOBILEAPP
 
-    if constexpr (!Util::isKitInProcess())
+    if (!Util::isKitInProcess())
     {
         // Make sure we have at least one child before moving forward.
         std::unique_lock<std::mutex> lock(NewChildrenMutex);
@@ -4387,7 +4387,7 @@ void COOLWSD::innerMain()
     }
 
 #if !MOBILEAPP
-    if constexpr (!Util::isKitInProcess())
+    if (!Util::isKitInProcess())
     {
         // Terminate child processes
         LOG_INF("Requesting forkit process " << ForKitProcId << " to terminate.");
@@ -4432,7 +4432,7 @@ void COOLWSD::innerMain()
     SigUtil::addActivity("terminated unused children");
 
 #if !MOBILEAPP
-    if constexpr (!Util::isKitInProcess())
+    if (!Util::isKitInProcess())
     {
         SigUtil::addActivity("waiting for forkit to exit");
 
@@ -4712,7 +4712,7 @@ void forwardSigUsr2()
 #if !MOBILEAPP
     LOG_TRC("forwardSigUsr2");
 
-    if constexpr (Util::isKitInProcess())
+    if (Util::isKitInProcess())
         return;
 
     Util::assertIsLocked(DocBrokersMutex);
