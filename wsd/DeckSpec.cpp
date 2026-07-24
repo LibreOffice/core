@@ -618,15 +618,13 @@ void emitSlideCommands(Poco::JSON::Array::Ptr cmds, const Poco::JSON::Object::Pt
     if (!notes.empty())
         pushCommand(cmds, "SetNotes", parseEmphasis(notes).plain);
 
-    // Without a template the compiler supplies the house style itself: bold
-    // titles and bulleted content. A template's masters own the look, so with
-    // one the compiler emits no formatting.
     if (!options.haveDesignTemplate)
-    {
         pushEditTextObject(cmds, 0, ".uno:Bold");
-        for (int bulletSlot : bulletSlots)
-            pushEditTextObject(cmds, bulletSlot, ".uno:DefaultBullet");
-    }
+
+    // A plain SetText fills the placeholder with unmarked paragraphs, so every
+    // deck turns bullet markers on for its bullet slots.
+    for (int bulletSlot : bulletSlots)
+        pushEditTextObject(cmds, bulletSlot, ".uno:DefaultBullet");
 
     pushCommand(cmds, "SetSlidePart", part);
     // The intent is a finer label than the part, and a template manifest may map

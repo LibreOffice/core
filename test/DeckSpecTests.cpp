@@ -444,13 +444,15 @@ void DeckSpecTests::testCompileNotes()
 
     LOK_ASSERT_EQUAL(expectedNoTemplate, DeckSpec::compileSlideSpec(parse(slide), 0, kNoTemplate));
 
-    // With a template the notes still ride along; only the formatting is gone.
+    // With a template the notes still ride along and the bullet markers are
+    // turned on; only the bold-title house style is gone.
     const std::string expectedTemplate =
         R"({"Transforms":{"SlideCommands":[)"
         R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
         R"({"SetText.0":"Points"},)"
         R"({"SetText.1":"One\nTwo"},)"
         R"({"SetNotes":"Explain each point with an example."},)"
+        R"({"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},)"
         R"({"SetSlidePart":"body"},)"
         R"({"SetSlideIntent":"bullets"}]}})";
 
@@ -485,8 +487,8 @@ void DeckSpecTests::testCompileEmphasis()
 {
     constexpr std::string_view testname = __func__;
 
-    // Bold and italic within one bullet item. With a template no house-style
-    // formatting is emitted, so the only EditTextObject is the emphasis one.
+    // Bold and italic within one bullet item. The emphasis EditTextObject comes
+    // first, then the bullet-marker EditTextObject that every slide emits.
     const std::string boldItalic =
         R"({"part":"body","intent":"bullets","title":"T",
             "blocks":[{"kind":"bullets","items":["**Bold** and *italic*"]}]})";
@@ -498,6 +500,7 @@ void DeckSpecTests::testCompileEmphasis()
         R"({"EditTextObject.1":[)"
         R"({"SelectText":[0,0,0,4]},{"UnoCommand":".uno:Bold"},)"
         R"({"SelectText":[0,9,0,15]},{"UnoCommand":".uno:Italic"}]},)"
+        R"({"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},)"
         R"({"SetSlidePart":"body"},)"
         R"({"SetSlideIntent":"bullets"}]}})";
     LOK_ASSERT_EQUAL(expectedBoldItalic,
@@ -514,6 +517,7 @@ void DeckSpecTests::testCompileEmphasis()
         R"({"SetText.1":"both"},)"
         R"({"EditTextObject.1":[)"
         R"({"SelectText":[0,0,0,4]},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:Italic"}]},)"
+        R"({"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},)"
         R"({"SetSlidePart":"body"},)"
         R"({"SetSlideIntent":"bullets"}]}})";
     LOK_ASSERT_EQUAL(expectedBoth, DeckSpec::compileSlideSpec(parse(both), 0, kWithTemplate));
@@ -528,6 +532,7 @@ void DeckSpecTests::testCompileEmphasis()
         R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
         R"({"SetText.0":"T"},)"
         R"({"SetText.1":"*oops"},)"
+        R"({"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},)"
         R"({"SetSlidePart":"body"},)"
         R"({"SetSlideIntent":"bullets"}]}})";
     LOK_ASSERT_EQUAL(expectedUnbalanced,
@@ -556,6 +561,7 @@ void DeckSpecTests::testCompileEmphasis()
         "{\"SetText.0\":\"T\"},"
         "{\"SetText.1\":\"\xF0\x9F\x98\x80x\"},"
         "{\"EditTextObject.1\":[{\"SelectText\":[0,2,0,3]},{\"UnoCommand\":\".uno:Bold\"}]},"
+        "{\"EditTextObject.1\":[{\"SelectText\":[]},{\"UnoCommand\":\".uno:DefaultBullet\"}]},"
         "{\"SetSlidePart\":\"body\"},"
         "{\"SetSlideIntent\":\"bullets\"}]}}";
     LOK_ASSERT_EQUAL(expectedEmoji, DeckSpec::compileSlideSpec(parse(emoji), 0, kWithTemplate));
@@ -712,7 +718,8 @@ void DeckSpecTests::testCompileSlideSpecAppend()
             "blocks":[{"kind":"bullets","items":["One","Two"]}]})";
 
     // A later slide moves to the end of the deck and inserts a new slide first.
-    // With a template no formatting is emitted; the masters own the look.
+    // With a template the masters own the title look, so no bold-title command;
+    // the bullet markers are still turned on.
     const std::string expected =
         R"({"Transforms":{"SlideCommands":[)"
         R"({"JumpToSlide":"last"},)"
@@ -720,6 +727,7 @@ void DeckSpecTests::testCompileSlideSpecAppend()
         R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},)"
         R"({"SetText.0":"Points"},)"
         R"({"SetText.1":"One\nTwo"},)"
+        R"({"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},)"
         R"({"SetSlidePart":"body"},)"
         R"({"SetSlideIntent":"bullets"}]}})";
 
