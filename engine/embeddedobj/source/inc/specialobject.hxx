@@ -33,31 +33,31 @@ public:
         const cpo::uno::Sequence< css::beans::NamedValue >& aObjectProps );
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& rType ) override ;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& rType ) override ;
 
     // XVisualObject
-    virtual css::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect ) override;
+    virtual css::embed::VisualRepresentation getPreferredVisualRepresentation( ::sal_Int64 nAspect ) override;
 
-    virtual void SAL_CALL setVisualAreaSize( sal_Int64 nAspect, const css::awt::Size& aSize ) override;
+    virtual void setVisualAreaSize( sal_Int64 nAspect, const css::awt::Size& aSize ) override;
 
-    virtual css::awt::Size SAL_CALL getVisualAreaSize( sal_Int64 nAspect ) override;
+    virtual css::awt::Size getVisualAreaSize( sal_Int64 nAspect ) override;
 
-    virtual sal_Int32 SAL_CALL getMapUnit( sal_Int64 nAspect ) override;
+    virtual sal_Int32 getMapUnit( sal_Int64 nAspect ) override;
 
-    virtual void SAL_CALL changeState( sal_Int32 nNewState ) override;
+    virtual void changeState( sal_Int32 nNewState ) override;
 
-    virtual void SAL_CALL doVerb( sal_Int32 nVerbID ) override;
+    virtual void doVerb( sal_Int32 nVerbID ) override;
 
 // XCommonEmbedPersist
 
-    virtual void SAL_CALL reload(
+    virtual void reload(
                 const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    OUString getImplementationName() override;
+    bool supportsService( const OUString& ServiceName ) override;
+    cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

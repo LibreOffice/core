@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 
 
-cpo::uno::Sequence< OUString > SAL_CALL VCLBitmapCreator::impl_staticGetSupportedServiceNames()
+cpo::uno::Sequence< OUString > VCLBitmapCreator::impl_staticGetSupportedServiceNames()
 {
     return
     {
@@ -37,20 +37,20 @@ cpo::uno::Sequence< OUString > SAL_CALL VCLBitmapCreator::impl_staticGetSupporte
 }
 
 
-OUString SAL_CALL VCLBitmapCreator::impl_staticGetImplementationName()
+OUString VCLBitmapCreator::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.BitmapCreator");
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::impl_staticCreateSelfInstance(
+uno::Reference< uno::XInterface > VCLBitmapCreator::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new VCLBitmapCreator( xServiceManager ) );
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::createInstance()
+uno::Reference< uno::XInterface > VCLBitmapCreator::createInstance()
         throw ( uno::Exception,
                 uno::RuntimeException)
 {
@@ -61,7 +61,7 @@ uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::createInstance()
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::createInstanceWithArguments(
+uno::Reference< uno::XInterface > VCLBitmapCreator::createInstanceWithArguments(
                                                 const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
         throw ( uno::Exception,
                 uno::RuntimeException)
@@ -85,20 +85,20 @@ uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::createInstanceWithA
 }
 
 
-OUString SAL_CALL VCLBitmapCreator::getImplementationName()
+OUString VCLBitmapCreator::getImplementationName()
         throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
-bool SAL_CALL VCLBitmapCreator::supportsService( const OUString& ServiceName )
+bool VCLBitmapCreator::supportsService( const OUString& ServiceName )
         throw ( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL VCLBitmapCreator::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > VCLBitmapCreator::getSupportedServiceNames()
         throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();

@@ -668,7 +668,7 @@ cpo::uno::Sequence< sal_Int32 > const & OCommonEmbeddedObject::GetIntermediateSt
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
+void OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get()
         && nNewState != embed::EmbedStates::LOADED )
@@ -741,7 +741,7 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
 }
 
 
-cpo::uno::Sequence< sal_Int32 > SAL_CALL OCommonEmbeddedObject::getReachableStates()
+cpo::uno::Sequence< sal_Int32 > OCommonEmbeddedObject::getReachableStates()
 {
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -754,7 +754,7 @@ cpo::uno::Sequence< sal_Int32 > SAL_CALL OCommonEmbeddedObject::getReachableStat
 }
 
 
-sal_Int32 SAL_CALL OCommonEmbeddedObject::getCurrentState()
+sal_Int32 OCommonEmbeddedObject::getCurrentState()
 {
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -767,7 +767,7 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getCurrentState()
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
+void OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
 {
     SolarMutexGuard aSolarGuard;
         //TODO: a gross hack to avoid deadlocks when this is called from the
@@ -851,7 +851,7 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
 }
 
 
-cpo::uno::Sequence< embed::VerbDescriptor > SAL_CALL OCommonEmbeddedObject::getSupportedVerbs()
+cpo::uno::Sequence< embed::VerbDescriptor > OCommonEmbeddedObject::getSupportedVerbs()
 {
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -864,7 +864,7 @@ cpo::uno::Sequence< embed::VerbDescriptor > SAL_CALL OCommonEmbeddedObject::getS
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::setClientSite(
+void OCommonEmbeddedObject::setClientSite(
                 const uno::Reference< embed::XEmbeddedClient >& xClient )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -883,7 +883,7 @@ void SAL_CALL OCommonEmbeddedObject::setClientSite(
 }
 
 
-uno::Reference< embed::XEmbeddedClient > SAL_CALL OCommonEmbeddedObject::getClientSite()
+uno::Reference< embed::XEmbeddedClient > OCommonEmbeddedObject::getClientSite()
 {
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -896,7 +896,7 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL OCommonEmbeddedObject::getClie
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::update()
+void OCommonEmbeddedObject::update()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -910,7 +910,7 @@ void SAL_CALL OCommonEmbeddedObject::update()
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::setUpdateMode( sal_Int32 nMode )
+void OCommonEmbeddedObject::setUpdateMode( sal_Int32 nMode )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -927,7 +927,7 @@ void SAL_CALL OCommonEmbeddedObject::setUpdateMode( sal_Int32 nMode )
 }
 
 
-sal_Int64 SAL_CALL OCommonEmbeddedObject::getStatus( sal_Int64 )
+sal_Int64 OCommonEmbeddedObject::getStatus( sal_Int64 )
 {
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -936,7 +936,7 @@ sal_Int64 SAL_CALL OCommonEmbeddedObject::getStatus( sal_Int64 )
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::setContainerName( const OUString& sName )
+void OCommonEmbeddedObject::setContainerName( const OUString& sName )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -952,12 +952,12 @@ void OCommonEmbeddedObject::SetOleState(bool bIsOleUpdate)
     m_bOleUpdate = bIsOleUpdate;
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL OCommonEmbeddedObject::getParent()
+css::uno::Reference< css::uno::XInterface > OCommonEmbeddedObject::getParent()
 {
     return m_xParent;
 }
 
-void SAL_CALL OCommonEmbeddedObject::setParent( const css::uno::Reference< css::uno::XInterface >& xParent )
+void OCommonEmbeddedObject::setParent( const css::uno::Reference< css::uno::XInterface >& xParent )
 {
     m_xParent = xParent;
     if ( m_nObjectState != -1 && m_nObjectState != embed::EmbedStates::LOADED )
@@ -969,7 +969,7 @@ void SAL_CALL OCommonEmbeddedObject::setParent( const css::uno::Reference< css::
 }
 
 // XDefaultSizeTransmitter
-void SAL_CALL OCommonEmbeddedObject::setDefaultSize( const css::awt::Size& rSize_100TH_MM )
+void OCommonEmbeddedObject::setDefaultSize( const css::awt::Size& rSize_100TH_MM )
 {
     //#i103460# charts do not necessarily have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method
     m_aDefaultSizeForChart_In_100TH_MM = rSize_100TH_MM;

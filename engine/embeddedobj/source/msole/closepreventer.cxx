@@ -22,18 +22,18 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <osl/diagnose.h>
 
-void SAL_CALL OClosePreventer::queryClosing(const css::lang::EventObject&, bool)
+void OClosePreventer::queryClosing(const css::lang::EventObject&, bool)
 {
     throw css::util::CloseVetoException();
 }
 
-void SAL_CALL OClosePreventer::notifyClosing(const css::lang::EventObject&)
+void OClosePreventer::notifyClosing(const css::lang::EventObject&)
 {
     // just a disaster
     OSL_FAIL("The object can not be prevented from closing!");
 }
 
-void SAL_CALL OClosePreventer::disposing(const css::lang::EventObject&)
+void OClosePreventer::disposing(const css::lang::EventObject&)
 {
     // just a disaster
     OSL_FAIL("The object can not be prevented from closing!");

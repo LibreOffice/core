@@ -52,12 +52,12 @@ class DummyHandler_Impl : public ::cppu::WeakImplHelper< task::XInteractionHandl
 public:
     DummyHandler_Impl() {}
 
-    virtual void SAL_CALL handle( const uno::Reference< task::XInteractionRequest >& xRequest ) override;
+    virtual void handle( const uno::Reference< task::XInteractionRequest >& xRequest ) override;
 };
 
 }
 
-void SAL_CALL DummyHandler_Impl::handle( const uno::Reference< task::XInteractionRequest >& )
+void DummyHandler_Impl::handle( const uno::Reference< task::XInteractionRequest >& )
 {
 }
 
@@ -551,7 +551,7 @@ void OwnView_Impl::Close()
 }
 
 
-void SAL_CALL OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
+void OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
 {
 
     uno::Reference< frame::XModel > xModel;
@@ -583,12 +583,12 @@ void SAL_CALL OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
 }
 
 
-void SAL_CALL OwnView_Impl::queryClosing( const lang::EventObject&, bool )
+void OwnView_Impl::queryClosing( const lang::EventObject&, bool )
 {
 }
 
 
-void SAL_CALL OwnView_Impl::notifyClosing( const lang::EventObject& Source )
+void OwnView_Impl::notifyClosing( const lang::EventObject& Source )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( Source.Source == m_xModel )
@@ -596,7 +596,7 @@ void SAL_CALL OwnView_Impl::notifyClosing( const lang::EventObject& Source )
 }
 
 
-void SAL_CALL OwnView_Impl::disposing( const lang::EventObject& Source )
+void OwnView_Impl::disposing( const lang::EventObject& Source )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( Source.Source == m_xModel )

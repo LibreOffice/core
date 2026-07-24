@@ -51,7 +51,7 @@ MainThreadExecutor_Impl::MainThreadExecutor_Impl( const uno::Reference< task::XJ
 }
 
 
-cpo::uno::Any SAL_CALL UNOMainThreadExecutor::execute( const cpo::uno::Sequence< beans::NamedValue >& aArguments )
+cpo::uno::Any UNOMainThreadExecutor::execute( const cpo::uno::Sequence< beans::NamedValue >& aArguments )
     throw ( lang::IllegalArgumentException,
             uno::Exception,
             uno::RuntimeException )
@@ -81,40 +81,40 @@ cpo::uno::Any SAL_CALL UNOMainThreadExecutor::execute( const cpo::uno::Sequence<
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL UNOMainThreadExecutor::impl_staticGetSupportedServiceNames()
+cpo::uno::Sequence< OUString > UNOMainThreadExecutor::impl_staticGetSupportedServiceNames()
 {
     cpo::uno::Sequence< OUString > aRet { "com.sun.star.comp.thread.MainThreadExecutor" };
     return aRet;
 }
 
 
-OUString SAL_CALL UNOMainThreadExecutor::impl_staticGetImplementationName()
+OUString UNOMainThreadExecutor::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.thread.MainThreadExecutor");
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL UNOMainThreadExecutor::impl_staticCreateSelfInstance(
+uno::Reference< uno::XInterface > UNOMainThreadExecutor::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new UNOMainThreadExecutor( xServiceManager ) );
 }
 
 
-OUString SAL_CALL UNOMainThreadExecutor::getImplementationName()
+OUString UNOMainThreadExecutor::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
-bool SAL_CALL UNOMainThreadExecutor::supportsService( const OUString& ServiceName )
+bool UNOMainThreadExecutor::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL UNOMainThreadExecutor::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > UNOMainThreadExecutor::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();

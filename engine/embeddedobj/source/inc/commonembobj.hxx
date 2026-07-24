@@ -274,38 +274,38 @@ public:
     OUString const & getContainerName() const { return m_aContainerName; }
 // XInterface
 
-    virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& rType ) override ;
+    virtual cpo::uno::Any queryInterface( const cpo::uno::Type& rType ) override ;
 
-    virtual void SAL_CALL acquire()
+    virtual void acquire()
         noexcept override;
 
-    virtual void SAL_CALL release()
+    virtual void release()
         noexcept override;
 
 // XEmbeddedObject
 
-    virtual void SAL_CALL changeState( sal_Int32 nNewState ) override;
+    virtual void changeState( sal_Int32 nNewState ) override;
 
-    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getReachableStates() override;
+    virtual cpo::uno::Sequence< sal_Int32 > getReachableStates() override;
 
-    virtual sal_Int32 SAL_CALL getCurrentState() override;
+    virtual sal_Int32 getCurrentState() override;
 
-    virtual void SAL_CALL doVerb( sal_Int32 nVerbID ) override;
+    virtual void doVerb( sal_Int32 nVerbID ) override;
 
-    virtual cpo::uno::Sequence< css::embed::VerbDescriptor > SAL_CALL getSupportedVerbs() override;
+    virtual cpo::uno::Sequence< css::embed::VerbDescriptor > getSupportedVerbs() override;
 
-    virtual void SAL_CALL setClientSite(
+    virtual void setClientSite(
                 const css::uno::Reference< css::embed::XEmbeddedClient >& xClient ) override;
 
-    virtual css::uno::Reference< css::embed::XEmbeddedClient > SAL_CALL getClientSite() override;
+    virtual css::uno::Reference< css::embed::XEmbeddedClient > getClientSite() override;
 
-    virtual void SAL_CALL update() override;
+    virtual void update() override;
 
-    virtual void SAL_CALL setUpdateMode( sal_Int32 nMode ) override;
+    virtual void setUpdateMode( sal_Int32 nMode ) override;
 
-    virtual sal_Int64 SAL_CALL getStatus( sal_Int64 nAspect ) override;
+    virtual sal_Int64 getStatus( sal_Int64 nAspect ) override;
 
-    virtual void SAL_CALL setContainerName( const OUString& sName ) override;
+    virtual void setContainerName( const OUString& sName ) override;
 
 // EmbeddedUpdate
 
@@ -314,125 +314,125 @@ public:
 
 // XVisualObject
 
-    virtual void SAL_CALL setVisualAreaSize( sal_Int64 nAspect, const css::awt::Size& aSize ) override;
+    virtual void setVisualAreaSize( sal_Int64 nAspect, const css::awt::Size& aSize ) override;
 
-    virtual css::awt::Size SAL_CALL getVisualAreaSize( sal_Int64 nAspect ) override;
+    virtual css::awt::Size getVisualAreaSize( sal_Int64 nAspect ) override;
 
-    virtual css::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect ) override;
+    virtual css::embed::VisualRepresentation getPreferredVisualRepresentation( ::sal_Int64 nAspect ) override;
 
-    virtual sal_Int32 SAL_CALL getMapUnit( sal_Int64 nAspect ) override;
+    virtual sal_Int32 getMapUnit( sal_Int64 nAspect ) override;
 
 // XEmbedPersist
 
-    virtual void SAL_CALL setPersistentEntry(
+    virtual void setPersistentEntry(
                     const css::uno::Reference< css::embed::XStorage >& xStorage,
                     const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
                     const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                     const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
-    virtual void SAL_CALL storeToEntry( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+    virtual void storeToEntry( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
-    virtual void SAL_CALL storeAsEntry(
+    virtual void storeAsEntry(
                 const css::uno::Reference< css::embed::XStorage >& xStorage,
                 const OUString& sEntName,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
-    virtual void SAL_CALL saveCompleted( bool bUseNew ) override;
+    virtual void saveCompleted( bool bUseNew ) override;
 
-    virtual bool SAL_CALL hasEntry() override;
+    virtual bool hasEntry() override;
 
-    virtual OUString SAL_CALL getEntryName() override;
+    virtual OUString getEntryName() override;
 
 // XLinkageSupport
 
-    virtual void SAL_CALL breakLink( const css::uno::Reference< css::embed::XStorage >& xStorage,
+    virtual void breakLink( const css::uno::Reference< css::embed::XStorage >& xStorage,
                                      const OUString& sEntName ) override;
 
-    virtual bool SAL_CALL isLink() override;
+    virtual bool isLink() override;
 
-    virtual OUString SAL_CALL getLinkURL() override;
+    virtual OUString getLinkURL() override;
 
 
 // XCommonEmbedPersist
 
-    virtual void SAL_CALL storeOwn() override;
+    virtual void storeOwn() override;
 
-    virtual bool SAL_CALL isReadonly() override;
+    virtual bool isReadonly() override;
 
-    virtual void SAL_CALL reload(
+    virtual void reload(
                 const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
 // XEmbedPersist2
 
-    virtual bool SAL_CALL isStored() override;
+    virtual bool isStored() override;
 
 // XInplaceObject
 
-    virtual void SAL_CALL setObjectRectangles( const css::awt::Rectangle& aPosRect,
+    virtual void setObjectRectangles( const css::awt::Rectangle& aPosRect,
                                           const css::awt::Rectangle& aClipRect ) override;
 
-    virtual void SAL_CALL enableModeless( bool bEnable ) override;
+    virtual void enableModeless( bool bEnable ) override;
 
-    virtual void SAL_CALL translateAccelerators(
+    virtual void translateAccelerators(
                     const cpo::uno::Sequence< css::awt::KeyEvent >& aKeys ) override;
 
 // XClassifiedObject
 
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getClassID() override;
+    virtual cpo::uno::Sequence< sal_Int8 > getClassID() override;
 
-    virtual OUString SAL_CALL getClassName() override;
+    virtual OUString getClassName() override;
 
-    virtual void SAL_CALL setClassInfo(
+    virtual void setClassInfo(
                 const cpo::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName ) override;
 
 
 // XComponentSupplier
 
-    virtual css::uno::Reference< css::util::XCloseable > SAL_CALL getComponent() override;
+    virtual css::uno::Reference< css::util::XCloseable > getComponent() override;
 
 // XStateChangeBroadcaster
-    virtual void SAL_CALL addStateChangeListener( const css::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
-    virtual void SAL_CALL removeStateChangeListener( const css::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
+    virtual void addStateChangeListener( const css::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
+    virtual void removeStateChangeListener( const css::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
 
 // XCloseable
 
-    virtual void SAL_CALL close( bool DeliverOwnership ) override;
+    virtual void close( bool DeliverOwnership ) override;
 
-    virtual void SAL_CALL addCloseListener(
+    virtual void addCloseListener(
                 const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
-    virtual void SAL_CALL removeCloseListener(
+    virtual void removeCloseListener(
                 const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
 // XEventBroadcaster
-    virtual void SAL_CALL addEventListener(
+    virtual void addEventListener(
                 const css::uno::Reference< css::document::XEventListener >& Listener ) override;
 
-    virtual void SAL_CALL removeEventListener(
+    virtual void removeEventListener(
                 const css::uno::Reference< css::document::XEventListener >& Listener ) override;
 
     // XChild
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
-    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
+    virtual css::uno::Reference< css::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
     // XDefaultSizeTransmitter
     //#i103460# charts do not necessarily have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method
-    virtual void SAL_CALL setDefaultSize( const css::awt::Size& rSize_100TH_MM ) override;
+    virtual void setDefaultSize( const css::awt::Size& rSize_100TH_MM ) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    OUString getImplementationName() override;
+    bool supportsService( const OUString& ServiceName ) override;
+    cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XInitialization
-    void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XTypeProvider
-    cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override;
-    cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
+    cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

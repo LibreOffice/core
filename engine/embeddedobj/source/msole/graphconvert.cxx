@@ -100,7 +100,7 @@ MainThreadNotificationRequest::MainThreadNotificationRequest( const ::rtl::Refer
 , m_nAspect( nAspect )
 {}
 
-void SAL_CALL MainThreadNotificationRequest::notify (const cpo::uno::Any& )
+void MainThreadNotificationRequest::notify (const cpo::uno::Any& )
 {
     if ( m_pObject )
     {

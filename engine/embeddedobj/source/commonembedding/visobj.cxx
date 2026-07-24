@@ -31,7 +31,7 @@
 
 using namespace ::com::sun::star;
 
-void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
+void OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -67,7 +67,7 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
         throw uno::Exception(u"SetExtent failed"_ustr, nullptr); // TODO:
 }
 
-awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
+awt::Size OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -103,7 +103,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     return aResult;
 }
 
-sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
+sal_Int32 OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -142,7 +142,7 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     return nResult;
 }
 
-embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
+embed::VisualRepresentation OCommonEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )

@@ -39,7 +39,7 @@
 
 using namespace ::com::sun::star;
 
-uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitNew(
+uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitNew(
                                             const cpo::uno::Sequence< sal_Int8 >& aClassID,
                                             const OUString& aClassName,
                                             const uno::Reference< embed::XStorage >& xStorage,
@@ -76,7 +76,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitFromEntry(
+uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const OUString& sEntName,
                                                                     const cpo::uno::Sequence< beans::PropertyValue >& aMedDescr,
@@ -238,7 +238,7 @@ static OUString HandleFilter(const OUString& rFilter)
     return aRet;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor(
+uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const OUString& sEntName,
         const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -298,7 +298,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceUserInit(
+uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceUserInit(
         const cpo::uno::Sequence< sal_Int8 >& aClassID,
         const OUString& sClassName,
         const uno::Reference< embed::XStorage >& xStorage,
@@ -334,7 +334,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceLink(
+uno::Reference< uno::XInterface > UNOEmbeddedObjectCreator::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& sEntName,
                                             const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -401,17 +401,17 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     return xResult;
 }
 
-OUString SAL_CALL UNOEmbeddedObjectCreator::getImplementationName()
+OUString UNOEmbeddedObjectCreator::getImplementationName()
 {
     return u"com.sun.star.comp.embed.EmbeddedObjectCreator"_ustr;
 }
 
-bool SAL_CALL UNOEmbeddedObjectCreator::supportsService( const OUString& ServiceName )
+bool UNOEmbeddedObjectCreator::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > UNOEmbeddedObjectCreator::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.EmbeddedObjectCreator"_ustr, u"com.sun.star.comp.embed.EmbeddedObjectCreator"_ustr };
 }

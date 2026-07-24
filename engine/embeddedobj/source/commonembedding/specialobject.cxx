@@ -44,7 +44,7 @@ OSpecialEmbeddedObject::OSpecialEmbeddedObject( const uno::Reference< uno::XComp
 }
 
 
-cpo::uno::Any SAL_CALL OSpecialEmbeddedObject::queryInterface( const cpo::uno::Type& rType )
+cpo::uno::Any OSpecialEmbeddedObject::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aReturn = ::cppu::queryInterface( rType,
                                         static_cast< embed::XEmbeddedObject* >( this ),
@@ -65,7 +65,7 @@ cpo::uno::Any SAL_CALL OSpecialEmbeddedObject::queryInterface( const cpo::uno::T
 }
 
 
-embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
+embed::VisualRepresentation OSpecialEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -87,7 +87,7 @@ embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualR
     return aVisualRepresentation;
 }
 
-void SAL_CALL OSpecialEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
+void OSpecialEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -102,7 +102,7 @@ void SAL_CALL OSpecialEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, cons
     maSize = aSize;
 }
 
-awt::Size SAL_CALL OSpecialEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
+awt::Size OSpecialEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -121,7 +121,7 @@ awt::Size SAL_CALL OSpecialEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect 
     return maSize;
 }
 
-sal_Int32 SAL_CALL OSpecialEmbeddedObject::getMapUnit( sal_Int64 nAspect )
+sal_Int32 OSpecialEmbeddedObject::getMapUnit( sal_Int64 nAspect )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -136,7 +136,7 @@ sal_Int32 SAL_CALL OSpecialEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }
 
-void SAL_CALL OSpecialEmbeddedObject::changeState( sal_Int32 nNewState )
+void OSpecialEmbeddedObject::changeState( sal_Int32 nNewState )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get()
          && nNewState != embed::EmbedStates::LOADED )
@@ -147,7 +147,7 @@ void SAL_CALL OSpecialEmbeddedObject::changeState( sal_Int32 nNewState )
     OCommonEmbeddedObject::changeState( nNewState );
 }
 
-void SAL_CALL OSpecialEmbeddedObject::doVerb( sal_Int32 nVerbID )
+void OSpecialEmbeddedObject::doVerb( sal_Int32 nVerbID )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -169,7 +169,7 @@ void SAL_CALL OSpecialEmbeddedObject::doVerb( sal_Int32 nVerbID )
         OCommonEmbeddedObject::doVerb( nVerbID );
 }
 
-void SAL_CALL OSpecialEmbeddedObject::reload(
+void OSpecialEmbeddedObject::reload(
                 const cpo::uno::Sequence< beans::PropertyValue >&,
                 const cpo::uno::Sequence< beans::PropertyValue >&)
 {
@@ -177,17 +177,17 @@ void SAL_CALL OSpecialEmbeddedObject::reload(
     SetInplaceActiveState();
 }
 
-OUString SAL_CALL OSpecialEmbeddedObject::getImplementationName()
+OUString OSpecialEmbeddedObject::getImplementationName()
 {
     return u"com.sun.star.comp.embed.OSpecialEmbeddedObject"_ustr;
 }
 
-bool SAL_CALL OSpecialEmbeddedObject::supportsService(const OUString& ServiceName)
+bool OSpecialEmbeddedObject::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL OSpecialEmbeddedObject::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OSpecialEmbeddedObject::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.embed.OSpecialEmbeddedObject"_ustr };
 }

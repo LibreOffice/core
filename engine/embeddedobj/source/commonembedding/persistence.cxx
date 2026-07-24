@@ -956,7 +956,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
+void OCommonEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
                     const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
@@ -1169,7 +1169,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
+void OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
                             const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
@@ -1295,7 +1295,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
+void OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
                             const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
@@ -1443,7 +1443,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::saveCompleted( bool bUseNew )
+void OCommonEmbeddedObject::saveCompleted( bool bUseNew )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1518,7 +1518,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( bool bUseNew )
 }
 
 
-bool SAL_CALL OCommonEmbeddedObject::hasEntry()
+bool OCommonEmbeddedObject::hasEntry()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1536,7 +1536,7 @@ bool SAL_CALL OCommonEmbeddedObject::hasEntry()
 }
 
 
-OUString SAL_CALL OCommonEmbeddedObject::getEntryName()
+OUString OCommonEmbeddedObject::getEntryName()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1558,7 +1558,7 @@ OUString SAL_CALL OCommonEmbeddedObject::getEntryName()
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::storeOwn()
+void OCommonEmbeddedObject::storeOwn()
 {
     // during switching from Activated to Running and from Running to Loaded states the object will
     // ask container to store the object, the container has to make decision
@@ -1647,7 +1647,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
 }
 
 
-bool SAL_CALL OCommonEmbeddedObject::isReadonly()
+bool OCommonEmbeddedObject::isReadonly()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1669,7 +1669,7 @@ bool SAL_CALL OCommonEmbeddedObject::isReadonly()
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::reload(
+void OCommonEmbeddedObject::reload(
                 const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
                 const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
@@ -1784,7 +1784,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
     m_xObjectStorage = m_xParentStorage->openStorageElement( m_aEntryName, nStorageMode );
 }
 
-bool SAL_CALL OCommonEmbeddedObject::isStored()
+bool OCommonEmbeddedObject::isStored()
 {
     if (!m_xObjectStorage.is())
         return false;
@@ -1793,7 +1793,7 @@ bool SAL_CALL OCommonEmbeddedObject::isStored()
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XStorage >& xStorage,
+void OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XStorage >& xStorage,
                                                 const OUString& sEntName )
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
@@ -1878,7 +1878,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
 }
 
 
-bool SAL_CALL  OCommonEmbeddedObject::isLink()
+bool  OCommonEmbeddedObject::isLink()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1888,7 +1888,7 @@ bool SAL_CALL  OCommonEmbeddedObject::isLink()
 }
 
 
-OUString SAL_CALL OCommonEmbeddedObject::getLinkURL()
+OUString OCommonEmbeddedObject::getLinkURL()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )

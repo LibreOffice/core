@@ -1273,7 +1273,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
 }
 
 
-void SAL_CALL OleEmbeddedObject::setPersistentEntry(
+void OleEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
                     const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
@@ -1473,7 +1473,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 }
 
 
-void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
+void OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
                             const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
@@ -1500,7 +1500,7 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
 }
 
 
-void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
+void OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
                             const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
@@ -1527,7 +1527,7 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
 }
 
 
-void SAL_CALL OleEmbeddedObject::saveCompleted( bool bUseNew )
+void OleEmbeddedObject::saveCompleted( bool bUseNew )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1622,7 +1622,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( bool bUseNew )
 }
 
 
-bool SAL_CALL OleEmbeddedObject::hasEntry()
+bool OleEmbeddedObject::hasEntry()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1649,7 +1649,7 @@ bool SAL_CALL OleEmbeddedObject::hasEntry()
 }
 
 
-OUString SAL_CALL OleEmbeddedObject::getEntryName()
+OUString OleEmbeddedObject::getEntryName()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1680,7 +1680,7 @@ OUString SAL_CALL OleEmbeddedObject::getEntryName()
 }
 
 
-void SAL_CALL OleEmbeddedObject::storeOwn()
+void OleEmbeddedObject::storeOwn()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1792,7 +1792,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 }
 
 
-bool SAL_CALL OleEmbeddedObject::isReadonly()
+bool OleEmbeddedObject::isReadonly()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1823,7 +1823,7 @@ bool SAL_CALL OleEmbeddedObject::isReadonly()
 }
 
 
-void SAL_CALL OleEmbeddedObject::reload(
+void OleEmbeddedObject::reload(
                 const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
                 const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
@@ -1862,7 +1862,7 @@ void SAL_CALL OleEmbeddedObject::reload(
 }
 
 
-void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorage >& xStorage,
+void OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorage >& xStorage,
                                                 const OUString& sEntName )
 {
     // begin wrapping related part ====================
@@ -1970,7 +1970,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
 }
 
 
-bool SAL_CALL  OleEmbeddedObject::isLink()
+bool  OleEmbeddedObject::isLink()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XLinkageSupport > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1989,7 +1989,7 @@ bool SAL_CALL  OleEmbeddedObject::isLink()
 }
 
 
-OUString SAL_CALL OleEmbeddedObject::getLinkURL()
+OUString OleEmbeddedObject::getLinkURL()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XLinkageSupport > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );

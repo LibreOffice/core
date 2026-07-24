@@ -43,20 +43,20 @@ public:
     }
 
     // XEmbedObjectCreator
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceInitNew( const cpo::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName, const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceInitFromEntry( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& aMedDescr, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceInitFromMediaDescriptor( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescr, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceInitNew( const cpo::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName, const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceInitFromEntry( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& aMedDescr, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceInitFromMediaDescriptor( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescr, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     // XEmbedObjectFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceUserInit( const cpo::uno::Sequence< sal_Int8 >& aClassID, const OUString& sClassName, const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, sal_Int32 nEntryConnectionMode, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs, const cpo::uno::Sequence< css::beans::PropertyValue >& aObjectArgs ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceUserInit( const cpo::uno::Sequence< sal_Int8 >& aClassID, const OUString& sClassName, const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, sal_Int32 nEntryConnectionMode, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs, const cpo::uno::Sequence< css::beans::PropertyValue >& aObjectArgs ) override;
 
     // XLinkCreator
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceLink( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescr, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceLink( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescr, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 };
 

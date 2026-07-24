@@ -130,28 +130,28 @@ public:
     void OnClose_Impl();
 
     // XCloseable
-    virtual void SAL_CALL close( bool DeliverOwnership ) override;
-    virtual void SAL_CALL addCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
-    virtual void SAL_CALL removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
+    virtual void close( bool DeliverOwnership ) override;
+    virtual void addCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
+    virtual void removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
     // XTransferable
-    virtual cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
-    virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
-    virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
+    virtual cpo::uno::Any getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
+    virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > getTransferDataFlavors(  ) override;
+    virtual bool isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener(const css::uno::Reference < css::lang::XEventListener >& aListener) override;
-    virtual void SAL_CALL removeEventListener(const css::uno::Reference < css::lang::XEventListener >& aListener) override;
+    virtual void dispose() override;
+    virtual void addEventListener(const css::uno::Reference < css::lang::XEventListener >& aListener) override;
+    virtual void removeEventListener(const css::uno::Reference < css::lang::XEventListener >& aListener) override;
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+    virtual sal_Int64 getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XModifiable
-    virtual bool SAL_CALL isModified() override;
-    virtual void SAL_CALL setModified( bool bModified ) override;
-    virtual void SAL_CALL addModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener ) override;
-    virtual void SAL_CALL removeModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener) override;
+    virtual bool isModified() override;
+    virtual void setModified( bool bModified ) override;
+    virtual void addModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener ) override;
+    virtual void removeModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

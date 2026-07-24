@@ -312,7 +312,7 @@ void OleEmbeddedObject::Dispose(osl::ResettableMutexGuard* guard)
 }
 
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL OleEmbeddedObject::getClassID()
+cpo::uno::Sequence< sal_Int8 > OleEmbeddedObject::getClassID()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -331,7 +331,7 @@ cpo::uno::Sequence< sal_Int8 > SAL_CALL OleEmbeddedObject::getClassID()
 }
 
 
-OUString SAL_CALL OleEmbeddedObject::getClassName()
+OUString OleEmbeddedObject::getClassName()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -350,7 +350,7 @@ OUString SAL_CALL OleEmbeddedObject::getClassName()
 }
 
 
-void SAL_CALL OleEmbeddedObject::setClassInfo(
+void OleEmbeddedObject::setClassInfo(
                 const cpo::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName )
 {
     // begin wrapping related part ====================
@@ -368,7 +368,7 @@ void SAL_CALL OleEmbeddedObject::setClassInfo(
 }
 
 
-uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
+uno::Reference< util::XCloseable > OleEmbeddedObject::getComponent()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -404,7 +404,7 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
 }
 
 
-void SAL_CALL OleEmbeddedObject::addStateChangeListener( const uno::Reference< embed::XStateChangeListener >& xListener )
+void OleEmbeddedObject::addStateChangeListener( const uno::Reference< embed::XStateChangeListener >& xListener )
 {
     // begin wrapping related part ====================
     if ( m_xWrappedObject.is() )
@@ -427,7 +427,7 @@ void SAL_CALL OleEmbeddedObject::addStateChangeListener( const uno::Reference< e
 }
 
 
-void SAL_CALL OleEmbeddedObject::removeStateChangeListener(
+void OleEmbeddedObject::removeStateChangeListener(
                     const uno::Reference< embed::XStateChangeListener >& xListener )
 {
     // begin wrapping related part ====================
@@ -446,7 +446,7 @@ void SAL_CALL OleEmbeddedObject::removeStateChangeListener(
 }
 
 
-void SAL_CALL OleEmbeddedObject::close( bool bDeliverOwnership )
+void OleEmbeddedObject::close( bool bDeliverOwnership )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -508,7 +508,7 @@ void SAL_CALL OleEmbeddedObject::close( bool bDeliverOwnership )
 }
 
 
-void SAL_CALL OleEmbeddedObject::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
+void OleEmbeddedObject::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -531,7 +531,7 @@ void SAL_CALL OleEmbeddedObject::addCloseListener( const uno::Reference< util::X
 }
 
 
-void SAL_CALL OleEmbeddedObject::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
+void OleEmbeddedObject::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -553,7 +553,7 @@ void SAL_CALL OleEmbeddedObject::removeCloseListener( const uno::Reference< util
 }
 
 
-void SAL_CALL OleEmbeddedObject::addEventListener( const uno::Reference< document::XEventListener >& xListener )
+void OleEmbeddedObject::addEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -576,7 +576,7 @@ void SAL_CALL OleEmbeddedObject::addEventListener( const uno::Reference< documen
 }
 
 
-void SAL_CALL OleEmbeddedObject::removeEventListener(
+void OleEmbeddedObject::removeEventListener(
                 const uno::Reference< document::XEventListener >& xListener )
 {
     // begin wrapping related part ====================
@@ -600,7 +600,7 @@ void SAL_CALL OleEmbeddedObject::removeEventListener(
 
 // XInplaceObject ( wrapper related implementation )
 
-void SAL_CALL OleEmbeddedObject::setObjectRectangles( const awt::Rectangle& aPosRect,
+void OleEmbeddedObject::setObjectRectangles( const awt::Rectangle& aPosRect,
                                                            const awt::Rectangle& aClipRect )
 {
     // begin wrapping related part ====================
@@ -617,7 +617,7 @@ void SAL_CALL OleEmbeddedObject::setObjectRectangles( const awt::Rectangle& aPos
 }
 
 
-void SAL_CALL OleEmbeddedObject::enableModeless( bool bEnable )
+void OleEmbeddedObject::enableModeless( bool bEnable )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XInplaceObject > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -633,7 +633,7 @@ void SAL_CALL OleEmbeddedObject::enableModeless( bool bEnable )
 }
 
 
-void SAL_CALL OleEmbeddedObject::translateAccelerators(
+void OleEmbeddedObject::translateAccelerators(
                     const cpo::uno::Sequence< awt::KeyEvent >& aKeys )
 {
     // begin wrapping related part ====================
@@ -650,7 +650,7 @@ void SAL_CALL OleEmbeddedObject::translateAccelerators(
 
 // XChild
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL OleEmbeddedObject::getParent()
+css::uno::Reference< css::uno::XInterface > OleEmbeddedObject::getParent()
 {
     // begin wrapping related part ====================
     uno::Reference< container::XChild > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -665,7 +665,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL OleEmbeddedObject::getParen
 }
 
 
-void SAL_CALL OleEmbeddedObject::setParent( const css::uno::Reference< css::uno::XInterface >& xParent )
+void OleEmbeddedObject::setParent( const css::uno::Reference< css::uno::XInterface >& xParent )
 {
     // begin wrapping related part ====================
     uno::Reference< container::XChild > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -701,17 +701,17 @@ void OleEmbeddedObject::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArg
         it->second >>= m_bStreamReadOnly;
 }
 
-OUString SAL_CALL OleEmbeddedObject::getImplementationName()
+OUString OleEmbeddedObject::getImplementationName()
 {
     return u"com.sun.star.comp.embed.OleEmbeddedObject"_ustr;
 }
 
-bool SAL_CALL OleEmbeddedObject::supportsService(const OUString& ServiceName)
+bool OleEmbeddedObject::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL OleEmbeddedObject::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OleEmbeddedObject::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.embed.OleEmbeddedObject"_ustr };
 }

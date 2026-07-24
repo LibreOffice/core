@@ -1489,7 +1489,7 @@ void OleComponent::OnClose_Impl()
 
 // XCloseable
 
-void SAL_CALL OleComponent::close( bool bDeliverOwnership )
+void OleComponent::close( bool bDeliverOwnership )
 {
     uno::Reference< uno::XInterface > xSelfHold;
     {
@@ -1546,7 +1546,7 @@ void SAL_CALL OleComponent::close( bool bDeliverOwnership )
 }
 
 
-void SAL_CALL OleComponent::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
+void OleComponent::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1559,7 +1559,7 @@ void SAL_CALL OleComponent::addCloseListener( const uno::Reference< util::XClose
 }
 
 
-void SAL_CALL OleComponent::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
+void OleComponent::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1572,7 +1572,7 @@ void SAL_CALL OleComponent::removeCloseListener( const uno::Reference< util::XCl
 
 // XTransferable
 
-cpo::uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor& aFlavor )
+cpo::uno::Any OleComponent::getTransferData( const datatransfer::DataFlavor& aFlavor )
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1676,7 +1676,7 @@ cpo::uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFl
 }
 
 
-cpo::uno::Sequence< datatransfer::DataFlavor > SAL_CALL OleComponent::getTransferDataFlavors()
+cpo::uno::Sequence< datatransfer::DataFlavor > OleComponent::getTransferDataFlavors()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1688,7 +1688,7 @@ cpo::uno::Sequence< datatransfer::DataFlavor > SAL_CALL OleComponent::getTransfe
 }
 
 
-bool SAL_CALL OleComponent::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
+bool OleComponent::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1703,7 +1703,7 @@ bool SAL_CALL OleComponent::isDataFlavorSupported( const datatransfer::DataFlavo
     return false;
 }
 
-void SAL_CALL OleComponent::dispose()
+void OleComponent::dispose()
 {
     try
     {
@@ -1714,7 +1714,7 @@ void SAL_CALL OleComponent::dispose()
     }
 }
 
-void SAL_CALL OleComponent::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void OleComponent::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1727,7 +1727,7 @@ void SAL_CALL OleComponent::addEventListener( const uno::Reference< lang::XEvent
 }
 
 
-void SAL_CALL OleComponent::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void OleComponent::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1738,7 +1738,7 @@ void SAL_CALL OleComponent::removeEventListener( const uno::Reference< lang::XEv
                                                 xListener );
 }
 
-sal_Int64 SAL_CALL OleComponent::getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier )
+sal_Int64 OleComponent::getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier )
 {
     try
     {
@@ -1753,12 +1753,12 @@ sal_Int64 SAL_CALL OleComponent::getSomething( const cpo::uno::Sequence< sal_Int
     return 0;
 }
 
-bool SAL_CALL OleComponent::isModified()
+bool OleComponent::isModified()
 {
     return m_bModified;
 }
 
-void SAL_CALL OleComponent::setModified( bool bModified )
+void OleComponent::setModified( bool bModified )
 {
     m_bModified = bModified;
 
@@ -1785,7 +1785,7 @@ void SAL_CALL OleComponent::setModified( bool bModified )
     }
 }
 
-void SAL_CALL OleComponent::addModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener )
+void OleComponent::addModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1797,7 +1797,7 @@ void SAL_CALL OleComponent::addModifyListener( const css::uno::Reference < css::
     m_pInterfaceContainer->addInterface( cppu::UnoType<util::XModifyListener>::get(), xListener );
 }
 
-void SAL_CALL OleComponent::removeModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener)
+void OleComponent::removeModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )

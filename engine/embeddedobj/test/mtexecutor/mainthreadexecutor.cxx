@@ -25,7 +25,7 @@
 using namespace ::com::sun::star;
 
 
-cpo::uno::Sequence< OUString > SAL_CALL MainThreadExecutor::impl_staticGetSupportedServiceNames()
+cpo::uno::Sequence< OUString > MainThreadExecutor::impl_staticGetSupportedServiceNames()
 {
     return
     {
@@ -35,20 +35,20 @@ cpo::uno::Sequence< OUString > SAL_CALL MainThreadExecutor::impl_staticGetSuppor
 }
 
 
-OUString SAL_CALL MainThreadExecutor::impl_staticGetImplementationName()
+OUString MainThreadExecutor::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.thread.MainThreadExecutor");
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL MainThreadExecutor::impl_staticCreateSelfInstance(
+uno::Reference< uno::XInterface > MainThreadExecutor::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new MainThreadExecutor( xServiceManager ) );
 }
 
 
-cpo::uno::Any SAL_CALL MainThreadExecutor::execute( const cpo::uno::Sequence< beans::NamedValue >& aArguments )
+cpo::uno::Any MainThreadExecutor::execute( const cpo::uno::Sequence< beans::NamedValue >& aArguments )
     throw ( lang::IllegalArgumentException,
             uno::Exception,
             uno::RuntimeException )
@@ -86,20 +86,20 @@ IMPL_STATIC_LINK( MainThreadExecutor, worker, MainThreadExecutorRequest*, pThrea
 }
 
 
-OUString SAL_CALL MainThreadExecutor::getImplementationName()
+OUString MainThreadExecutor::getImplementationName()
         throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
-bool SAL_CALL MainThreadExecutor::supportsService( const OUString& ServiceName )
+bool MainThreadExecutor::supportsService( const OUString& ServiceName )
         throw ( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL MainThreadExecutor::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > MainThreadExecutor::getSupportedServiceNames()
         throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();

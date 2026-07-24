@@ -83,7 +83,7 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
     return aVisualRepr;
 }
 
-void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
+void OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -319,13 +319,13 @@ awt::Size OleEmbeddedObject::getVisualAreaSize_impl(sal_Int64 nAspect,
     return aResult;
 }
 
-awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
+awt::Size OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 {
     osl::ResettableMutexGuard aGuard(m_aMutex);
     return getVisualAreaSize_impl(nAspect, aGuard);
 }
 
-embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
+embed::VisualRepresentation OleEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -413,7 +413,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     return GetVisualRepresentationInNativeFormat_Impl( m_xCachedVisualRepresentation );
 }
 
-sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
+sal_Int32 OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;

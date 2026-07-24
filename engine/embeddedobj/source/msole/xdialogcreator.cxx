@@ -119,7 +119,7 @@ static cpo::uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const cpo::uno:
 }
 
 
-embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDialog(
+embed::InsertedObjectInfo MSOLEDialogObjectCreator::createInstanceByDialog(
             const uno::Reference< embed::XStorage >& xStorage,
             const OUString& sEntName,
             const cpo::uno::Sequence< beans::PropertyValue >& aInObjArgs )
@@ -272,7 +272,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 }
 
 
-embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitFromClipboard(
+embed::InsertedObjectInfo MSOLEDialogObjectCreator::createInstanceInitFromClipboard(
                 const uno::Reference< embed::XStorage >& xStorage,
                 const OUString& sEntryName,
                 const cpo::uno::Sequence< beans::PropertyValue >& aObjectArgs )
@@ -315,19 +315,19 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
 }
 
 
-OUString SAL_CALL MSOLEDialogObjectCreator::getImplementationName()
+OUString MSOLEDialogObjectCreator::getImplementationName()
 {
     return "com.sun.star.comp.embed.MSOLEObjectSystemCreator";
 }
 
 
-bool SAL_CALL MSOLEDialogObjectCreator::supportsService( const OUString& ServiceName )
+bool MSOLEDialogObjectCreator::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > MSOLEDialogObjectCreator::getSupportedServiceNames()
 {
     return { "com.sun.star.embed.MSOLEObjectSystemCreator",
              "com.sun.star.comp.embed.MSOLEObjectSystemCreator" };

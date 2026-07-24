@@ -35,7 +35,7 @@ static bool RectanglesEqual( const awt::Rectangle& aRect1, const awt::Rectangle&
             && aRect1.Height == aRect2.Height );
 }
 
-void SAL_CALL OCommonEmbeddedObject::setObjectRectangles( const awt::Rectangle& aPosRect,
+void OCommonEmbeddedObject::setObjectRectangles( const awt::Rectangle& aPosRect,
                                                            const awt::Rectangle& aClipRect )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -59,12 +59,12 @@ void SAL_CALL OCommonEmbeddedObject::setObjectRectangles( const awt::Rectangle& 
     m_aClipRectangle = aClipRect;
 }
 
-void SAL_CALL OCommonEmbeddedObject::enableModeless( bool /*bEnable*/ )
+void OCommonEmbeddedObject::enableModeless( bool /*bEnable*/ )
 {
     // TODO: notify model that it can not use modal dialogs
 }
 
-void SAL_CALL OCommonEmbeddedObject::translateAccelerators(
+void OCommonEmbeddedObject::translateAccelerators(
                     const cpo::uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
 {
     // TODO: UI activation related

@@ -68,7 +68,7 @@ class OdtExportThread : public osl::Thread
 
 public:
     OdtExportThread(const uno::Reference<lang::XComponent>& xComponent, const OUString& rURL);
-    virtual void SAL_CALL run() override;
+    virtual void run() override;
 };
 
 OdtExportThread::OdtExportThread(const uno::Reference<lang::XComponent>& xComponent,

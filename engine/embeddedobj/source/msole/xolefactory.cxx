@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 // TODO: do not create OLE objects that represent OOo documents
 
 
-uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitFromEntry(
+uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const OUString& sEntName,
                                                                     const cpo::uno::Sequence< beans::PropertyValue >& aMedDescr,
@@ -100,7 +100,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor(
+uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const OUString& sEntName,
         const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -133,7 +133,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitNew(
+uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceInitNew(
                                             const cpo::uno::Sequence< sal_Int8 >& aClassID,
                                             const OUString& aClassName,
                                             const uno::Reference< embed::XStorage >& xStorage,
@@ -167,7 +167,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceLink(
+uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& sEntName,
                                             const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -200,7 +200,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceUserInit(
+uno::Reference< uno::XInterface > OleEmbeddedObjectFactory::createInstanceUserInit(
             const cpo::uno::Sequence< sal_Int8 >& aClassID,
             const OUString& aClassName,
             const uno::Reference< embed::XStorage >& xStorage,
@@ -237,18 +237,18 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 }
 
 
-OUString SAL_CALL OleEmbeddedObjectFactory::getImplementationName()
+OUString OleEmbeddedObjectFactory::getImplementationName()
 {
     return u"com.sun.star.comp.embed.OLEEmbeddedObjectFactory"_ustr;
 }
 
-bool SAL_CALL OleEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
+bool OleEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
-cpo::uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > OleEmbeddedObjectFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.OLEEmbeddedObjectFactory"_ustr,
              u"com.sun.star.comp.embed.OLEEmbeddedObjectFactory"_ustr };

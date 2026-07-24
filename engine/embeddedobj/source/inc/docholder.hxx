@@ -174,30 +174,30 @@ public:
     const css::uno::Reference< css::util::XCloseable >& GetComponent() const { return m_xComponent; }
 
 // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
 // XCloseListener
-    virtual void SAL_CALL queryClosing( const css::lang::EventObject& Source, bool GetsOwnership ) override;
-    virtual void SAL_CALL notifyClosing( const css::lang::EventObject& Source ) override;
+    virtual void queryClosing( const css::lang::EventObject& Source, bool GetsOwnership ) override;
+    virtual void notifyClosing( const css::lang::EventObject& Source ) override;
 
 // XTerminateListener
-    virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) override;
-    virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) override;
+    virtual void queryTermination( const css::lang::EventObject& Event ) override;
+    virtual void notifyTermination( const css::lang::EventObject& Event ) override;
 
 // XModifyListener
-    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
+    virtual void modified( const css::lang::EventObject& aEvent ) override;
 
 // XEventListener
-    virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) override;
+    virtual void notifyEvent( const css::document::EventObject& Event ) override;
 
 // XBorderResizeListener
-    virtual void SAL_CALL borderWidthsChanged( const css::uno::Reference< css::uno::XInterface >& aObject, const css::frame::BorderWidths& aNewSize ) override;
+    virtual void borderWidthsChanged( const css::uno::Reference< css::uno::XInterface >& aObject, const css::frame::BorderWidths& aNewSize ) override;
 
 // XHatchWindowController
-    virtual void SAL_CALL requestPositioning( const css::awt::Rectangle& aRect ) override;
-    virtual css::awt::Rectangle SAL_CALL calcAdjustedRectangle( const css::awt::Rectangle& aRect ) override;
-    virtual void SAL_CALL activated(  ) override;
-    virtual void SAL_CALL deactivated(  ) override;
+    virtual void requestPositioning( const css::awt::Rectangle& aRect ) override;
+    virtual css::awt::Rectangle calcAdjustedRectangle( const css::awt::Rectangle& aRect ) override;
+    virtual void activated(  ) override;
+    virtual void deactivated(  ) override;
 };
 
 } // namespace embeddedobj

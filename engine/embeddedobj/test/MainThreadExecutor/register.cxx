@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey )
+SAL_DLLPUBLIC_EXPORT void * component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = 0;
 
@@ -52,7 +52,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const char * pImplNam
     return pRet;
 }
 
-bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
+bool component_writeInfo( void * pServiceManager, void * pRegistryKey )
 {
     if (pRegistryKey)
     {

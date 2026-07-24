@@ -72,12 +72,12 @@ public:
 
     void Close();
 
-    virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) override;
+    virtual void notifyEvent( const css::document::EventObject& Event ) override;
 
-    virtual void SAL_CALL queryClosing( const css::lang::EventObject& Source, bool GetsOwnership ) override;
-    virtual void SAL_CALL notifyClosing( const css::lang::EventObject& Source ) override;
+    virtual void queryClosing( const css::lang::EventObject& Source, bool GetsOwnership ) override;
+    virtual void notifyClosing( const css::lang::EventObject& Source ) override;
 
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

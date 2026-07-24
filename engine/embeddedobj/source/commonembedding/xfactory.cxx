@@ -37,7 +37,7 @@
 using namespace ::com::sun::star;
 
 
-uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceInitFromEntry(
+uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const OUString& sEntName,
                                                                     const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -116,7 +116,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor(
+uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const OUString& sEntName,
         const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -168,7 +168,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceInitNew(
+uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitNew(
                                             const cpo::uno::Sequence< sal_Int8 >& aClassID,
                                             const OUString& /*aClassName*/,
                                             const uno::Reference< embed::XStorage >& xStorage,
@@ -210,7 +210,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceUserInit(
+uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceUserInit(
             const cpo::uno::Sequence< sal_Int8 >& aClassID,
             const OUString& /*aClassName*/,
             const uno::Reference< embed::XStorage >& xStorage,
@@ -261,7 +261,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceLink(
+uno::Reference< uno::XInterface > OOoEmbeddedObjectFactory::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& /*xStorage*/,
                                             const OUString& /*sEntName*/,
                                             const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
@@ -306,17 +306,17 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-OUString SAL_CALL OOoEmbeddedObjectFactory::getImplementationName()
+OUString OOoEmbeddedObjectFactory::getImplementationName()
 {
     return u"com.sun.star.comp.embed.OOoEmbeddedObjectFactory"_ustr;
 }
 
-bool SAL_CALL OOoEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
+bool OOoEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL OOoEmbeddedObjectFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > OOoEmbeddedObjectFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.OOoEmbeddedObjectFactory"_ustr, u"com.sun.star.comp.embed.OOoEmbeddedObjectFactory"_ustr };
 }
@@ -329,7 +329,7 @@ embeddedobj_OOoEmbeddedObjectFactory_get_implementation(
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::createInstanceUserInit(
+uno::Reference< uno::XInterface > OOoSpecialEmbeddedObjectFactory::createInstanceUserInit(
             const cpo::uno::Sequence< sal_Int8 >& aClassID,
             const OUString& /*aClassName*/,
             const uno::Reference< embed::XStorage >& /*xStorage*/,
@@ -352,17 +352,17 @@ uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::crea
     return xResult;
 }
 
-OUString SAL_CALL OOoSpecialEmbeddedObjectFactory::getImplementationName()
+OUString OOoSpecialEmbeddedObjectFactory::getImplementationName()
 {
     return u"com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory"_ustr;
 }
 
-bool SAL_CALL OOoSpecialEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
+bool OOoSpecialEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > OOoSpecialEmbeddedObjectFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.OOoSpecialEmbeddedObjectFactory"_ustr, u"com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory"_ustr };
 }

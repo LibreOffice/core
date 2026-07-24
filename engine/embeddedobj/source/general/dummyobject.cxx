@@ -97,7 +97,7 @@ ODummyEmbeddedObject::~ODummyEmbeddedObject()
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::changeState( sal_Int32 nNewState )
+void ODummyEmbeddedObject::changeState( sal_Int32 nNewState )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -109,7 +109,7 @@ void SAL_CALL ODummyEmbeddedObject::changeState( sal_Int32 nNewState )
 }
 
 
-cpo::uno::Sequence< sal_Int32 > SAL_CALL ODummyEmbeddedObject::getReachableStates()
+cpo::uno::Sequence< sal_Int32 > ODummyEmbeddedObject::getReachableStates()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -118,7 +118,7 @@ cpo::uno::Sequence< sal_Int32 > SAL_CALL ODummyEmbeddedObject::getReachableState
 }
 
 
-sal_Int32 SAL_CALL ODummyEmbeddedObject::getCurrentState()
+sal_Int32 ODummyEmbeddedObject::getCurrentState()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -127,7 +127,7 @@ sal_Int32 SAL_CALL ODummyEmbeddedObject::getCurrentState()
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::doVerb( sal_Int32 )
+void ODummyEmbeddedObject::doVerb( sal_Int32 )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -136,7 +136,7 @@ void SAL_CALL ODummyEmbeddedObject::doVerb( sal_Int32 )
 }
 
 
-cpo::uno::Sequence< embed::VerbDescriptor > SAL_CALL ODummyEmbeddedObject::getSupportedVerbs()
+cpo::uno::Sequence< embed::VerbDescriptor > ODummyEmbeddedObject::getSupportedVerbs()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -145,7 +145,7 @@ cpo::uno::Sequence< embed::VerbDescriptor > SAL_CALL ODummyEmbeddedObject::getSu
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::setClientSite(
+void ODummyEmbeddedObject::setClientSite(
                 const uno::Reference< embed::XEmbeddedClient >& xClient )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -155,7 +155,7 @@ void SAL_CALL ODummyEmbeddedObject::setClientSite(
 }
 
 
-uno::Reference< embed::XEmbeddedClient > SAL_CALL ODummyEmbeddedObject::getClientSite()
+uno::Reference< embed::XEmbeddedClient > ODummyEmbeddedObject::getClientSite()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -164,21 +164,21 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL ODummyEmbeddedObject::getClien
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::update()
+void ODummyEmbeddedObject::update()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::setUpdateMode( sal_Int32 )
+void ODummyEmbeddedObject::setUpdateMode( sal_Int32 )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
 }
 
 
-sal_Int64 SAL_CALL ODummyEmbeddedObject::getStatus( sal_Int64 )
+sal_Int64 ODummyEmbeddedObject::getStatus( sal_Int64 )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -187,14 +187,14 @@ sal_Int64 SAL_CALL ODummyEmbeddedObject::getStatus( sal_Int64 )
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::setContainerName( const OUString& )
+void ODummyEmbeddedObject::setContainerName( const OUString& )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_Runtime();
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
+void ODummyEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -211,7 +211,7 @@ void SAL_CALL ODummyEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const 
 }
 
 
-awt::Size SAL_CALL ODummyEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
+awt::Size ODummyEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -231,7 +231,7 @@ awt::Size SAL_CALL ODummyEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 }
 
 
-sal_Int32 SAL_CALL ODummyEmbeddedObject::getMapUnit( sal_Int64 nAspect )
+sal_Int32 ODummyEmbeddedObject::getMapUnit( sal_Int64 nAspect )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_Runtime();
@@ -246,7 +246,7 @@ sal_Int32 SAL_CALL ODummyEmbeddedObject::getMapUnit( sal_Int64 nAspect )
 }
 
 
-embed::VisualRepresentation SAL_CALL ODummyEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 )
+embed::VisualRepresentation ODummyEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -257,7 +257,7 @@ embed::VisualRepresentation SAL_CALL ODummyEmbeddedObject::getPreferredVisualRep
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
+void ODummyEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
                     const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
@@ -314,7 +314,7 @@ void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
+void ODummyEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const cpo::uno::Sequence< beans::PropertyValue >& /* lArguments */,
                             const cpo::uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
@@ -331,7 +331,7 @@ void SAL_CALL ODummyEmbeddedObject::storeToEntry( const uno::Reference< embed::X
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
+void ODummyEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const cpo::uno::Sequence< beans::PropertyValue >& /* lArguments */,
                             const cpo::uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
@@ -354,7 +354,7 @@ void SAL_CALL ODummyEmbeddedObject::storeAsEntry( const uno::Reference< embed::X
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::saveCompleted( bool bUseNew )
+void ODummyEmbeddedObject::saveCompleted( bool bUseNew )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -385,7 +385,7 @@ void SAL_CALL ODummyEmbeddedObject::saveCompleted( bool bUseNew )
 }
 
 
-bool SAL_CALL ODummyEmbeddedObject::hasEntry()
+bool ODummyEmbeddedObject::hasEntry()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -402,7 +402,7 @@ bool SAL_CALL ODummyEmbeddedObject::hasEntry()
 }
 
 
-OUString SAL_CALL ODummyEmbeddedObject::getEntryName()
+OUString ODummyEmbeddedObject::getEntryName()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -416,7 +416,7 @@ OUString SAL_CALL ODummyEmbeddedObject::getEntryName()
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::storeOwn()
+void ODummyEmbeddedObject::storeOwn()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -430,7 +430,7 @@ void SAL_CALL ODummyEmbeddedObject::storeOwn()
 }
 
 
-bool SAL_CALL ODummyEmbeddedObject::isReadonly()
+bool ODummyEmbeddedObject::isReadonly()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -445,7 +445,7 @@ bool SAL_CALL ODummyEmbeddedObject::isReadonly()
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::reload(
+void ODummyEmbeddedObject::reload(
                 const cpo::uno::Sequence< beans::PropertyValue >& /* lArguments */,
                 const cpo::uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
 {
@@ -461,7 +461,7 @@ void SAL_CALL ODummyEmbeddedObject::reload(
 }
 
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL ODummyEmbeddedObject::getClassID()
+cpo::uno::Sequence< sal_Int8 > ODummyEmbeddedObject::getClassID()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_Runtime();
@@ -472,7 +472,7 @@ cpo::uno::Sequence< sal_Int8 > SAL_CALL ODummyEmbeddedObject::getClassID()
 }
 
 
-OUString SAL_CALL ODummyEmbeddedObject::getClassName()
+OUString ODummyEmbeddedObject::getClassName()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -482,14 +482,14 @@ OUString SAL_CALL ODummyEmbeddedObject::getClassName()
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::setClassInfo(
+void ODummyEmbeddedObject::setClassInfo(
                 const cpo::uno::Sequence< sal_Int8 >& /*aClassID*/, const OUString& /*aClassName*/ )
 {
     throw lang::NoSupportException();
 }
 
 
-uno::Reference< util::XCloseable > SAL_CALL ODummyEmbeddedObject::getComponent()
+uno::Reference< util::XCloseable > ODummyEmbeddedObject::getComponent()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_Runtime();
@@ -498,7 +498,7 @@ uno::Reference< util::XCloseable > SAL_CALL ODummyEmbeddedObject::getComponent()
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::addStateChangeListener( const uno::Reference< embed::XStateChangeListener >& xListener )
+void ODummyEmbeddedObject::addStateChangeListener( const uno::Reference< embed::XStateChangeListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -512,7 +512,7 @@ void SAL_CALL ODummyEmbeddedObject::addStateChangeListener( const uno::Reference
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::removeStateChangeListener(
+void ODummyEmbeddedObject::removeStateChangeListener(
                     const uno::Reference< embed::XStateChangeListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -522,7 +522,7 @@ void SAL_CALL ODummyEmbeddedObject::removeStateChangeListener(
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::close( bool bDeliverOwnership )
+void ODummyEmbeddedObject::close( bool bDeliverOwnership )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -576,7 +576,7 @@ void SAL_CALL ODummyEmbeddedObject::close( bool bDeliverOwnership )
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
+void ODummyEmbeddedObject::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -589,7 +589,7 @@ void SAL_CALL ODummyEmbeddedObject::addCloseListener( const uno::Reference< util
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
+void ODummyEmbeddedObject::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pInterfaceContainer )
@@ -598,7 +598,7 @@ void SAL_CALL ODummyEmbeddedObject::removeCloseListener( const uno::Reference< u
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::addEventListener( const uno::Reference< document::XEventListener >& xListener )
+void ODummyEmbeddedObject::addEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -611,7 +611,7 @@ void SAL_CALL ODummyEmbeddedObject::addEventListener( const uno::Reference< docu
 }
 
 
-void SAL_CALL ODummyEmbeddedObject::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
+void ODummyEmbeddedObject::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pInterfaceContainer )
@@ -619,17 +619,17 @@ void SAL_CALL ODummyEmbeddedObject::removeEventListener( const uno::Reference< d
                                                 xListener );
 }
 
-OUString SAL_CALL ODummyEmbeddedObject::getImplementationName()
+OUString ODummyEmbeddedObject::getImplementationName()
 {
     return u"com.sun.star.comp.embed.ODummyEmbeddedObject"_ustr;
 }
 
-bool SAL_CALL ODummyEmbeddedObject::supportsService(const OUString& ServiceName)
+bool ODummyEmbeddedObject::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL ODummyEmbeddedObject::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ODummyEmbeddedObject::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.embed.ODummyEmbeddedObject"_ustr };
 }

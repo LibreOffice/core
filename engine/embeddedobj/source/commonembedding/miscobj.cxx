@@ -468,7 +468,7 @@ void OCommonEmbeddedObject::handleLinkedOLE( CopyBackToOLELink eState )
 }
 
 
-cpo::uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const cpo::uno::Type& rType )
+cpo::uno::Any OCommonEmbeddedObject::queryInterface( const cpo::uno::Type& rType )
 {
     cpo::uno::Any aReturn;
 
@@ -521,21 +521,21 @@ cpo::uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const cpo::uno::Ty
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::acquire()
+void OCommonEmbeddedObject::acquire()
         noexcept
 {
     ::cppu::OWeakObject::acquire() ;
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::release()
+void OCommonEmbeddedObject::release()
         noexcept
 {
     ::cppu::OWeakObject::release() ;
 }
 
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
+cpo::uno::Sequence< sal_Int8 > OCommonEmbeddedObject::getClassID()
 {
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -543,7 +543,7 @@ cpo::uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
     return m_aClassID;
 }
 
-OUString SAL_CALL OCommonEmbeddedObject::getClassName()
+OUString OCommonEmbeddedObject::getClassName()
 {
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -551,7 +551,7 @@ OUString SAL_CALL OCommonEmbeddedObject::getClassName()
     return m_aClassName;
 }
 
-void SAL_CALL OCommonEmbeddedObject::setClassInfo(
+void OCommonEmbeddedObject::setClassInfo(
                 const cpo::uno::Sequence< sal_Int8 >& /*aClassID*/, const OUString& /*aClassName*/ )
 {
     // the object class info can not be changed explicitly
@@ -559,7 +559,7 @@ void SAL_CALL OCommonEmbeddedObject::setClassInfo(
 }
 
 
-uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent()
+uno::Reference< util::XCloseable > OCommonEmbeddedObject::getComponent()
 {
     SolarMutexGuard aGuard;
     if ( m_bDisposed )
@@ -577,7 +577,7 @@ uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent(
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::addStateChangeListener( const uno::Reference< embed::XStateChangeListener >& xListener )
+void OCommonEmbeddedObject::addStateChangeListener( const uno::Reference< embed::XStateChangeListener >& xListener )
 {
     SolarMutexGuard aGuard;
     if ( m_bDisposed )
@@ -591,7 +591,7 @@ void SAL_CALL OCommonEmbeddedObject::addStateChangeListener( const uno::Referenc
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::removeStateChangeListener(
+void OCommonEmbeddedObject::removeStateChangeListener(
                     const uno::Reference< embed::XStateChangeListener >& xListener )
 {
     SolarMutexGuard aGuard;
@@ -601,7 +601,7 @@ void SAL_CALL OCommonEmbeddedObject::removeStateChangeListener(
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::close( bool bDeliverOwnership )
+void OCommonEmbeddedObject::close( bool bDeliverOwnership )
 {
     SolarMutexGuard aGuard;
     if ( m_bClosed )
@@ -697,7 +697,7 @@ void SAL_CALL OCommonEmbeddedObject::close( bool bDeliverOwnership )
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
+void OCommonEmbeddedObject::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
 {
     SolarMutexGuard aGuard;
     if ( m_bDisposed )
@@ -710,7 +710,7 @@ void SAL_CALL OCommonEmbeddedObject::addCloseListener( const uno::Reference< uti
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
+void OCommonEmbeddedObject::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
 {
     SolarMutexGuard aGuard;
     if ( m_pInterfaceContainer )
@@ -719,7 +719,7 @@ void SAL_CALL OCommonEmbeddedObject::removeCloseListener( const uno::Reference< 
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::addEventListener( const uno::Reference< document::XEventListener >& xListener )
+void OCommonEmbeddedObject::addEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
     SolarMutexGuard aGuard;
     if ( m_bDisposed )
@@ -732,7 +732,7 @@ void SAL_CALL OCommonEmbeddedObject::addEventListener( const uno::Reference< doc
 }
 
 
-void SAL_CALL OCommonEmbeddedObject::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
+void OCommonEmbeddedObject::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
     SolarMutexGuard aGuard;
     if ( m_pInterfaceContainer )
@@ -740,22 +740,22 @@ void SAL_CALL OCommonEmbeddedObject::removeEventListener( const uno::Reference< 
                                                 xListener );
 }
 
-OUString SAL_CALL OCommonEmbeddedObject::getImplementationName()
+OUString OCommonEmbeddedObject::getImplementationName()
 {
     return u"com.sun.star.comp.embed.OCommonEmbeddedObject"_ustr;
 }
 
-bool SAL_CALL OCommonEmbeddedObject::supportsService(const OUString& ServiceName)
+bool OCommonEmbeddedObject::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-cpo::uno::Sequence<OUString> SAL_CALL OCommonEmbeddedObject::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OCommonEmbeddedObject::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.embed.OCommonEmbeddedObject"_ustr };
 }
 
-cpo::uno::Sequence<cpo::uno::Type> SAL_CALL OCommonEmbeddedObject::getTypes()
+cpo::uno::Sequence<cpo::uno::Type> OCommonEmbeddedObject::getTypes()
 {
     static const cpo::uno::Sequence<cpo::uno::Type> aTypes{
         cppu::UnoType<embed::XEmbeddedObject>::get(),
@@ -771,12 +771,12 @@ cpo::uno::Sequence<cpo::uno::Type> SAL_CALL OCommonEmbeddedObject::getTypes()
     return aTypes;
 }
 
-cpo::uno::Sequence<sal_Int8> SAL_CALL OCommonEmbeddedObject::getImplementationId()
+cpo::uno::Sequence<sal_Int8> OCommonEmbeddedObject::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-void SAL_CALL OCommonEmbeddedObject::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
+void OCommonEmbeddedObject::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     if (!rArguments.hasElements())
     {

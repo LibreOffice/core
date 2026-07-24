@@ -1085,7 +1085,7 @@ awt::Rectangle DocumentHolder::AddBorderToArea( const awt::Rectangle& aRect )
 }
 
 
-void SAL_CALL DocumentHolder::disposing( const css::lang::EventObject& aSource )
+void DocumentHolder::disposing( const css::lang::EventObject& aSource )
 {
     if ( m_xComponent.is() && m_xComponent == aSource.Source )
     {
@@ -1106,14 +1106,14 @@ void SAL_CALL DocumentHolder::disposing( const css::lang::EventObject& aSource )
 }
 
 
-void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, bool /*bGetsOwnership*/ )
+void DocumentHolder::queryClosing( const lang::EventObject& aSource, bool /*bGetsOwnership*/ )
 {
     if ( m_xComponent.is() && m_xComponent == aSource.Source && !m_bAllowClosing )
         throw util::CloseVetoException(u"To close an embedded document, close the document holder (document definition), not the document itself."_ustr, static_cast< ::cppu::OWeakObject*>(this));
 }
 
 
-void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
+void DocumentHolder::notifyClosing( const lang::EventObject& aSource )
 {
     if ( m_xComponent.is() && m_xComponent == aSource.Source )
     {
@@ -1134,14 +1134,14 @@ void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
 }
 
 
-void SAL_CALL DocumentHolder::queryTermination( const lang::EventObject& )
+void DocumentHolder::queryTermination( const lang::EventObject& )
 {
     if ( m_bWaitForClose )
         throw frame::TerminationVetoException();
 }
 
 
-void SAL_CALL DocumentHolder::notifyTermination( const lang::EventObject& aSource )
+void DocumentHolder::notifyTermination( const lang::EventObject& aSource )
 {
     OSL_ENSURE( !m_xComponent.is(), "Just a disaster..." );
 
@@ -1152,7 +1152,7 @@ void SAL_CALL DocumentHolder::notifyTermination( const lang::EventObject& aSourc
 }
 
 
-void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
+void DocumentHolder::modified( const lang::EventObject& aEvent )
 {
     // if the component does not support document::XEventBroadcaster
     // the modify notifications are used as workaround, but only for running state
@@ -1161,7 +1161,7 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
 }
 
 
-void SAL_CALL DocumentHolder::notifyEvent( const document::EventObject& Event )
+void DocumentHolder::notifyEvent( const document::EventObject& Event )
 {
     if( m_pEmbedObj && Event.Source == m_xComponent )
     {
@@ -1176,7 +1176,7 @@ void SAL_CALL DocumentHolder::notifyEvent( const document::EventObject& Event )
 }
 
 
-void SAL_CALL DocumentHolder::borderWidthsChanged( const uno::Reference< uno::XInterface >& aObject,
+void DocumentHolder::borderWidthsChanged( const uno::Reference< uno::XInterface >& aObject,
                                                     const frame::BorderWidths& aNewSize )
 {
     // TODO: may require mutex introduction ???
@@ -1195,7 +1195,7 @@ void SAL_CALL DocumentHolder::borderWidthsChanged( const uno::Reference< uno::XI
 }
 
 
-void SAL_CALL DocumentHolder::requestPositioning( const awt::Rectangle& aRect )
+void DocumentHolder::requestPositioning( const awt::Rectangle& aRect )
 {
     // TODO: may require mutex introduction ???
     if ( m_pEmbedObj )
@@ -1208,7 +1208,7 @@ void SAL_CALL DocumentHolder::requestPositioning( const awt::Rectangle& aRect )
 }
 
 
-awt::Rectangle SAL_CALL DocumentHolder::calcAdjustedRectangle( const awt::Rectangle& aRect )
+awt::Rectangle DocumentHolder::calcAdjustedRectangle( const awt::Rectangle& aRect )
 {
     // Solar mutex should be locked already since this is a call from HatchWindow with focus
     awt::Rectangle aResult( aRect );
@@ -1234,7 +1234,7 @@ awt::Rectangle SAL_CALL DocumentHolder::calcAdjustedRectangle( const awt::Rectan
     return aResult;
 }
 
-void SAL_CALL DocumentHolder::activated(  )
+void DocumentHolder::activated(  )
 {
     if ( !(m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) )
         return;
@@ -1271,7 +1271,7 @@ void DocumentHolder::ResizeHatchWindow()
     xHatchWindow->setHatchBorderSize( awt::Size( HATCH_BORDER_WIDTH, HATCH_BORDER_WIDTH ) );
 }
 
-void SAL_CALL DocumentHolder::deactivated(  )
+void DocumentHolder::deactivated(  )
 {
     // deactivation is too unspecific to be useful; usually we only trigger code from activation
     // so UIDeactivation is actively triggered by the container

@@ -39,21 +39,21 @@ public:
     {
     }
 
-    static cpo::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();
+    static cpo::uno::Sequence< OUString > impl_staticGetSupportedServiceNames();
 
-    static OUString SAL_CALL impl_staticGetImplementationName();
+    static OUString impl_staticGetImplementationName();
 
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    static css::uno::Reference< css::uno::XInterface >
         impl_staticCreateSelfInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
     // XJob
-    virtual cpo::uno::Any SAL_CALL execute( const cpo::uno::Sequence< css::beans::NamedValue >& Arguments ) throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException);
+    virtual cpo::uno::Any execute( const cpo::uno::Sequence< css::beans::NamedValue >& Arguments ) throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
+    virtual OUString getImplementationName() throw (css::uno::RuntimeException);
+    virtual bool supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() throw (css::uno::RuntimeException);
 
 };
 

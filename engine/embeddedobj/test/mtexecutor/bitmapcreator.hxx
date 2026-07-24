@@ -36,21 +36,21 @@ public:
         const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
     {}
 
-    static cpo::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();
+    static cpo::uno::Sequence< OUString > impl_staticGetSupportedServiceNames();
 
-    static OUString SAL_CALL impl_staticGetImplementationName();
+    static OUString impl_staticGetImplementationName();
 
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_staticCreateSelfInstance(
+    static css::uno::Reference< css::uno::XInterface > impl_staticCreateSelfInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(  ) throw (css::uno::Exception, css::uno::RuntimeException);
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+    virtual css::uno::Reference< css::uno::XInterface > createInstance(  ) throw (css::uno::Exception, css::uno::RuntimeException);
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
+    virtual OUString getImplementationName() throw (css::uno::RuntimeException);
+    virtual bool supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() throw (css::uno::RuntimeException);
 
 };
 

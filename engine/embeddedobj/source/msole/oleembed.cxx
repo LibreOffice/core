@@ -439,7 +439,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
 }
 
 
-void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
+void OleEmbeddedObject::changeState( sal_Int32 nNewState )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get()
          && nNewState != embed::EmbedStates::LOADED )
@@ -592,7 +592,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
 }
 
 
-cpo::uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
+cpo::uno::Sequence< sal_Int32 > OleEmbeddedObject::getReachableStates()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -635,7 +635,7 @@ cpo::uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
 }
 
 
-sal_Int32 SAL_CALL OleEmbeddedObject::getCurrentState()
+sal_Int32 OleEmbeddedObject::getCurrentState()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -828,7 +828,7 @@ namespace
 }
 
 
-void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
+void OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -971,7 +971,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 }
 
 
-cpo::uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedVerbs()
+cpo::uno::Sequence< embed::VerbDescriptor > OleEmbeddedObject::getSupportedVerbs()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -1015,7 +1015,7 @@ cpo::uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSuppo
 }
 
 
-void SAL_CALL OleEmbeddedObject::setClientSite(
+void OleEmbeddedObject::setClientSite(
                 const uno::Reference< embed::XEmbeddedClient >& xClient )
 {
     // begin wrapping related part ====================
@@ -1044,7 +1044,7 @@ void SAL_CALL OleEmbeddedObject::setClientSite(
 }
 
 
-uno::Reference< embed::XEmbeddedClient > SAL_CALL OleEmbeddedObject::getClientSite()
+uno::Reference< embed::XEmbeddedClient > OleEmbeddedObject::getClientSite()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -1067,7 +1067,7 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL OleEmbeddedObject::getClientSi
 }
 
 
-void SAL_CALL OleEmbeddedObject::update()
+void OleEmbeddedObject::update()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -1099,7 +1099,7 @@ void SAL_CALL OleEmbeddedObject::update()
 }
 
 
-void SAL_CALL OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
+void OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -1126,7 +1126,7 @@ void SAL_CALL OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
 }
 
 
-sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
+sal_Int64 OleEmbeddedObject::getStatus( sal_Int64
     nAspect
 )
 {
@@ -1166,7 +1166,7 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
 }
 
 
-void SAL_CALL OleEmbeddedObject::setContainerName( const OUString& sName )
+void OleEmbeddedObject::setContainerName( const OUString& sName )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
