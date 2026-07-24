@@ -17,7 +17,7 @@ describe(['tagdesktop'], 'Table operations', function() {
 		});
 	});
 
-	function retriggerNewSvgForTableInTheCenter() {
+	function reselectWholeTable() {
 		impressHelper.removeShapeSelection();
 
 		helper.typeIntoDocument('{ctrl}{a}');
@@ -25,6 +25,19 @@ describe(['tagdesktop'], 'Table operations', function() {
 		cy.getFrameWindow().then(function(win) {
 			helper.processToIdle(win);
 		});
+	}
+
+	function retriggerNewSvgForTableInTheCenter(expectedCellCount) {
+		// Reselect until the cell SVG shows the expected count, as a single
+		// reselect can race the render and leave the old count on screen.
+		helper.retryUntil(
+			reselectWholeTable,
+			function() {
+				return cy.cGet('#document-container').then(function(overlay) {
+					return overlay.find('g.Page path[fill^="rgb"]').length === expectedCellCount;
+				});
+			},
+			{ errorMsg: 'table SVG never showed ' + expectedCellCount + ' cells' });
 	}
 
 	function selectFullTable(win) {
@@ -40,7 +53,7 @@ describe(['tagdesktop'], 'Table operations', function() {
 		selectFullTable(this.win);
 		desktopHelper.getNbIcon('InsertRowsBefore', 'Table').click();
 		cy.cGet('.table-row-resize-marker').should('have.length', 4);
-		retriggerNewSvgForTableInTheCenter();
+		retriggerNewSvgForTableInTheCenter(8);
 		cy.cGet('#document-container g.Page g').should('have.class', 'com.sun.star.drawing.TableShape');
 
 		//assert the number of cells
@@ -60,7 +73,7 @@ describe(['tagdesktop'], 'Table operations', function() {
 		desktopHelper.getNbIcon('InsertRowsAfter', 'Table').click();
 
 		cy.cGet('.table-row-resize-marker').should('have.length', 4);
-		retriggerNewSvgForTableInTheCenter();
+		retriggerNewSvgForTableInTheCenter(8);
 
 		cy.cGet('#document-container g.Page g')
 			.should('have.class', 'com.sun.star.drawing.TableShape');
@@ -85,7 +98,7 @@ describe(['tagdesktop'], 'Table operations', function() {
 		cy.cGet('.table-column-resize-marker')
 			.should('have.length', 4);
 
-		retriggerNewSvgForTableInTheCenter();
+		retriggerNewSvgForTableInTheCenter(9);
 
 		cy.cGet('#document-container g.Page g')
 			.should('have.class', 'com.sun.star.drawing.TableShape');
@@ -110,7 +123,7 @@ describe(['tagdesktop'], 'Table operations', function() {
 		cy.cGet('.table-column-resize-marker')
 			.should('have.length', 4);
 
-		retriggerNewSvgForTableInTheCenter();
+		retriggerNewSvgForTableInTheCenter(9);
 
 		cy.cGet('#document-container g.Page g')
 			.should('have.class', 'com.sun.star.drawing.TableShape');
@@ -135,7 +148,7 @@ describe(['tagdesktop'], 'Table operations', function() {
 		cy.cGet('.table-row-resize-marker')
 			.should('have.length', 2);
 
-		retriggerNewSvgForTableInTheCenter();
+		retriggerNewSvgForTableInTheCenter(4);
 
 		cy.cGet('#document-container g.Page g')
 			.should('have.class', 'com.sun.star.drawing.TableShape');
@@ -161,7 +174,7 @@ describe(['tagdesktop'], 'Table operations', function() {
 		cy.cGet('.table-column-resize-marker')
 			.should('have.length', 3);
 
-		retriggerNewSvgForTableInTheCenter();
+		retriggerNewSvgForTableInTheCenter(6);
 
 		cy.cGet('#document-container g.Page g')
 			.should('have.class', 'com.sun.star.drawing.TableShape');
@@ -183,7 +196,7 @@ describe(['tagdesktop'], 'Table operations', function() {
 		selectFullTable(this.win);
 		desktopHelper.getNbIcon('DeleteTable', 'Table').click();
 
-		retriggerNewSvgForTableInTheCenter();
+		retriggerNewSvgForTableInTheCenter(0);
 
 		cy.cGet('.table-column-resize-marker')
 			.should('not.exist');
@@ -203,7 +216,7 @@ describe(['tagdesktop'], 'Table operations', function() {
 		desktopHelper.getNbIcon('MergeCells', 'Table').should('not.be.disabled').click();
 		helper.processToIdle(this.win);
 
-		retriggerNewSvgForTableInTheCenter();
+		retriggerNewSvgForTableInTheCenter(5);
 
 		cy.cGet('#document-container g.Page g')
 			.should('have.class', 'com.sun.star.drawing.TableShape');
@@ -232,7 +245,7 @@ describe(['tagdesktop'], 'Table operations', function() {
 		desktopHelper.getNbIcon('MergeCells', 'Table').should('not.be.disabled').click();
 		helper.processToIdle(this.win);
 
-		retriggerNewSvgForTableInTheCenter();
+		retriggerNewSvgForTableInTheCenter(4);
 
 		cy.cGet('#document-container g.Page g')
 			.should('have.class', 'com.sun.star.drawing.TableShape');
