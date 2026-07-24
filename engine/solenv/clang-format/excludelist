@@ -13153,6 +13153,7 @@ vcl/osx/salprn.cxx
 vcl/osx/salsys.cxx
 vcl/osx/saltimer.cxx
 vcl/osx/service_entry.cxx
+vcl/qa/cppunit/BitmapTest.cxx
 vcl/qa/cppunit/app/test_IconThemeInfo.cxx
 vcl/qa/cppunit/app/test_IconThemeScanner.cxx
 vcl/qa/cppunit/app/test_IconThemeSelector.cxx
@@ -13384,6 +13385,7 @@ vcl/source/filter/jpeg/jpeg.hxx
 vcl/source/filter/jpeg/jpegc.cxx
 vcl/source/filter/jpeg/transupp.c
 vcl/source/filter/jpeg/transupp.h
+vcl/source/filter/png/PngImageReader.cxx
 vcl/source/filter/svm/SvmConverter.cxx
 vcl/source/filter/svm/SvmConverter.hxx
 vcl/source/filter/wmf/emfwr.cxx
