@@ -51,92 +51,92 @@ public:
 public:
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 //    XModifyBroadcaster
-    virtual void SAL_CALL addModifyListener(
+    virtual void addModifyListener(
        css::uno::Reference<css::util::XModifyListener> const & xListener ) override;
-    virtual void SAL_CALL removeModifyListener(
+    virtual void removeModifyListener(
        css::uno::Reference<css::util::XModifyListener> const & xListener ) override;
 
 //XExtensionManager
     virtual cpo::uno::Sequence<
-        css::uno::Reference<css::deployment::XPackageTypeInfo> > SAL_CALL
+        css::uno::Reference<css::deployment::XPackageTypeInfo> >
         getSupportedPackageTypes() override;
 
-    virtual css::uno::Reference<css::task::XAbortChannel> SAL_CALL
+    virtual css::uno::Reference<css::task::XAbortChannel>
     createAbortChannel() override;
 
-    virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL addExtension(
+    virtual css::uno::Reference<css::deployment::XPackage> addExtension(
         OUString const & url,
         cpo::uno::Sequence<css::beans::NamedValue> const & properties,
         OUString const & repository,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual void SAL_CALL removeExtension(
+    virtual void removeExtension(
         OUString const & identifier,
         OUString const & filename,
         OUString const & repository,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual void SAL_CALL enableExtension(
+    virtual void enableExtension(
         css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual void SAL_CALL disableExtension(
+    virtual void disableExtension(
         css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual sal_Int32 SAL_CALL checkPrerequisitesAndEnable(
+    virtual sal_Int32 checkPrerequisitesAndEnable(
         css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual cpo::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
-        SAL_CALL getDeployedExtensions(
+        getDeployedExtensions(
         OUString const & repository,
         css::uno::Reference<css::task::XAbortChannel> const &,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual css::uno::Reference< css::deployment::XPackage>
-        SAL_CALL getDeployedExtension(
+        getDeployedExtension(
         OUString const & repository,
         OUString const & identifier,
         OUString const & filename,
         css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> >
-    SAL_CALL getExtensionsWithSameIdentifier(
+    getExtensionsWithSameIdentifier(
         OUString const & identifier,
         OUString const & filename,
         css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual cpo::uno::Sequence< cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > >
-        SAL_CALL getAllExtensions(
+        getAllExtensions(
         css::uno::Reference<css::task::XAbortChannel> const &,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual void SAL_CALL reinstallDeployedExtensions(
+    virtual void reinstallDeployedExtensions(
         bool force, OUString const & repository,
         css::uno::Reference< css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual bool SAL_CALL synchronize(
+    virtual bool synchronize(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > SAL_CALL
+    virtual cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> >
     getExtensionsWithUnacceptedLicenses(
         OUString const & repository,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv) override;
 
-    virtual bool SAL_CALL isReadOnlyRepository(OUString const & repository) override;
+    virtual bool isReadOnlyRepository(OUString const & repository) override;
 
 private:
 

@@ -70,9 +70,9 @@ public:
     EmptyNodeList(const EmptyNodeList&) = delete;
     const EmptyNodeList& operator=(const EmptyNodeList&) = delete;
 
-    virtual ::sal_Int32 SAL_CALL getLength() override;
+    virtual ::sal_Int32 getLength() override;
 
-    virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL
+    virtual css::uno::Reference< css::xml::dom::XNode >
     item(::sal_Int32 index) override;
 };
 
@@ -151,13 +151,13 @@ public:
 
     bool exist() { return m_bExist;}
     // XCommandEnvironment
-    virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
+    virtual css::uno::Reference<css::task::XInteractionHandler >
     getInteractionHandler() override;
     virtual css::uno::Reference<css::ucb::XProgressHandler >
-    SAL_CALL getProgressHandler() override;
+    getProgressHandler() override;
 
     // XInteractionHandler
-    virtual void SAL_CALL handle(
+    virtual void handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 };
 

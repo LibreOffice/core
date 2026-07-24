@@ -118,7 +118,7 @@ public:
     bool isAborted() const { return m_aborted; }
 
     // XAbortChannel
-    virtual void SAL_CALL sendAbort() override;
+    virtual void sendAbort() override;
 
     class SAL_DLLPRIVATE Chain
     {

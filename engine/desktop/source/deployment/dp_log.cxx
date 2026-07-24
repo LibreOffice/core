@@ -44,7 +44,7 @@ class ProgressLogImpl : public cppu::BaseMutex, public t_log_helper
     comphelper::EventLogger m_logger;
 
 protected:
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
     virtual ~ProgressLogImpl() override;
 
 public:
@@ -52,14 +52,14 @@ public:
                      Reference<XComponentContext> const & xContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XProgressHandler
-    virtual void SAL_CALL push( Any const & Status ) override;
-    virtual void SAL_CALL update( Any const & Status ) override;
-    virtual void SAL_CALL pop() override;
+    virtual void push( Any const & Status ) override;
+    virtual void update( Any const & Status ) override;
+    virtual void pop() override;
 };
 
 }

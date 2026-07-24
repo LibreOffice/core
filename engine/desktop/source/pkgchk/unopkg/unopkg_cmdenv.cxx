@@ -80,18 +80,18 @@ public:
         bool option_suppress_license);
 
     // XCommandEnvironment
-    virtual Reference< task::XInteractionHandler > SAL_CALL
+    virtual Reference< task::XInteractionHandler >
     getInteractionHandler() override;
-    virtual Reference< XProgressHandler > SAL_CALL getProgressHandler() override;
+    virtual Reference< XProgressHandler > getProgressHandler() override;
 
     // XInteractionHandler
-    virtual void SAL_CALL handle(
+    virtual void handle(
         Reference< task::XInteractionRequest > const & xRequest ) override;
 
     // XProgressHandler
-    virtual void SAL_CALL push( Any const & Status ) override;
-    virtual void SAL_CALL update( Any const & Status ) override;
-    virtual void SAL_CALL pop() override;
+    virtual void push( Any const & Status ) override;
+    virtual void update( Any const & Status ) override;
+    virtual void pop() override;
 };
 
 

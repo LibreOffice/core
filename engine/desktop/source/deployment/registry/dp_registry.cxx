@@ -97,7 +97,7 @@ class PackageRegistryImpl : private cppu::BaseMutex, public t_helper
 
 protected:
     void check();
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     virtual ~PackageRegistryImpl() override;
     PackageRegistryImpl() : t_helper( m_aMutex ) {}
@@ -110,15 +110,15 @@ public:
         Reference<XComponentContext> const & xComponentContext );
 
     // XUpdatable
-    virtual void SAL_CALL update() override;
+    virtual void update() override;
 
     // XPackageRegistry
-    virtual Reference<deployment::XPackage> SAL_CALL bindPackage(
+    virtual Reference<deployment::XPackage> bindPackage(
         OUString const & url, OUString const & mediaType, bool bRemoved,
         OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv ) override;
-    virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
+    virtual Sequence< Reference<deployment::XPackageTypeInfo> >
     getSupportedPackageTypes() override;
-    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType) override;
+    virtual void packageRemoved(OUString const & url, OUString const & mediaType) override;
 
 };
 

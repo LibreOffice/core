@@ -78,19 +78,19 @@ public:
     virtual ~SilentCommandEnv() override;
 
     // XCommandEnvironment
-    virtual uno::Reference<task::XInteractionHandler > SAL_CALL
+    virtual uno::Reference<task::XInteractionHandler >
     getInteractionHandler() override;
     virtual uno::Reference<ucb::XProgressHandler >
-    SAL_CALL getProgressHandler() override;
+    getProgressHandler() override;
 
     // XInteractionHandler
-    virtual void SAL_CALL handle(
+    virtual void handle(
         uno::Reference<task::XInteractionRequest > const & xRequest ) override;
 
     // XProgressHandler
-    virtual void SAL_CALL push( cpo::uno::Any const & Status ) override;
-    virtual void SAL_CALL update( cpo::uno::Any const & Status ) override;
-    virtual void SAL_CALL pop() override;
+    virtual void push( cpo::uno::Any const & Status ) override;
+    virtual void update( cpo::uno::Any const & Status ) override;
+    virtual void pop() override;
 };
 
 

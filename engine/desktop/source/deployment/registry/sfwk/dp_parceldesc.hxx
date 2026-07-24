@@ -37,23 +37,23 @@ public:
     const OUString& getParcelLanguage() const { return m_sLang; }
     bool isParsed() const { return m_bIsParsed; }
     // XDocumentHandler
-    virtual void SAL_CALL startDocument() override;
+    virtual void startDocument() override;
 
-    virtual void SAL_CALL endDocument() override;
+    virtual void endDocument() override;
 
-    virtual void SAL_CALL startElement( const OUString& aName,
+    virtual void startElement( const OUString& aName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs ) override;
 
-    virtual void SAL_CALL endElement( const OUString & aName ) override;
+    virtual void endElement( const OUString & aName ) override;
 
-    virtual void SAL_CALL characters( const OUString & aChars ) override;
+    virtual void characters( const OUString & aChars ) override;
 
-    virtual void SAL_CALL ignorableWhitespace( const OUString & aWhitespaces ) override;
+    virtual void ignorableWhitespace( const OUString & aWhitespaces ) override;
 
-    virtual void SAL_CALL processingInstruction(
+    virtual void processingInstruction(
         const OUString & aTarget, const OUString & aData ) override;
 
-    virtual void SAL_CALL setDocumentLocator(
+    virtual void setDocumentLocator(
         const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 };
 }

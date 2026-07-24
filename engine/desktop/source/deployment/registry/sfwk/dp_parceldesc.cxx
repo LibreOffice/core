@@ -30,41 +30,41 @@ namespace dp_registry::backend::sfwk
 
 
 // XDocumentHandler
-void SAL_CALL
+void
 ParcelDescDocHandler::startDocument()
 {
     m_bIsParsed = false;
 }
 
-void SAL_CALL
+void
 ParcelDescDocHandler::endDocument()
 {
     m_bIsParsed = true;
 }
 
-void SAL_CALL
+void
 ParcelDescDocHandler::characters( const OUString & )
 {
 }
 
-void SAL_CALL
+void
 ParcelDescDocHandler::ignorableWhitespace( const OUString & )
 {
 }
 
-void SAL_CALL
+void
 ParcelDescDocHandler::processingInstruction(
     const OUString &, const OUString & )
 {
 }
 
-void SAL_CALL
+void
 ParcelDescDocHandler::setDocumentLocator(
     const Reference< xml::sax::XLocator >& )
 {
 }
 
-void SAL_CALL
+void
 ParcelDescDocHandler::startElement( const OUString& aName,
     const Reference< xml::sax::XAttributeList > & xAttribs )
 {
@@ -87,7 +87,7 @@ ParcelDescDocHandler::startElement( const OUString& aName,
 
 }
 
-void SAL_CALL ParcelDescDocHandler::endElement( const OUString & aName )
+void ParcelDescDocHandler::endElement( const OUString & aName )
 {
     if ( skipIndex )
     {

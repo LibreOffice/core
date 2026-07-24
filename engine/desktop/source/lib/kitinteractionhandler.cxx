@@ -75,17 +75,17 @@ KitInteractionHandler::~KitInteractionHandler()
 {
 }
 
-OUString SAL_CALL KitInteractionHandler::getImplementationName()
+OUString KitInteractionHandler::getImplementationName()
 {
     return u"com.sun.star.comp.uui.KitInteractionHandler"_ustr;
 }
 
-bool SAL_CALL KitInteractionHandler::supportsService(OUString const & rServiceName)
+bool KitInteractionHandler::supportsService(OUString const & rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL KitInteractionHandler::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > KitInteractionHandler::getSupportedServiceNames()
 {
     return { u"com.sun.star.task.InteractionHandler"_ustr,
              // added to indicate support for configuration.backend.MergeRecoveryRequest
@@ -94,11 +94,11 @@ cpo::uno::Sequence< OUString > SAL_CALL KitInteractionHandler::getSupportedServi
              u"com.sun.star.uui.InteractionHandler"_ustr };
 }
 
-void SAL_CALL KitInteractionHandler::initialize(cpo::uno::Sequence<cpo::uno::Any> const & /*rArguments*/)
+void KitInteractionHandler::initialize(cpo::uno::Sequence<cpo::uno::Any> const & /*rArguments*/)
 {
 }
 
-void SAL_CALL KitInteractionHandler::handle(
+void KitInteractionHandler::handle(
         uno::Reference<task::XInteractionRequest> const & xRequest)
 {
     // just do the same thing in both cases
@@ -452,7 +452,7 @@ bool KitInteractionHandler::handleFilterOptionsRequest(
     return false;
 }
 
-bool SAL_CALL KitInteractionHandler::handleInteractionRequest(
+bool KitInteractionHandler::handleInteractionRequest(
         const uno::Reference<task::XInteractionRequest>& xRequest)
 {
     cpo::uno::Sequence<uno::Reference<task::XInteractionContinuation>> const aContinuations = xRequest->getContinuations();

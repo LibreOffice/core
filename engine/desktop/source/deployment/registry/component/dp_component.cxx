@@ -269,7 +269,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         bool bRemoved, OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     const Reference<deployment::XPackageTypeInfo> m_xDynComponentTypeInfo;
     const Reference<deployment::XPackageTypeInfo> m_xJavaComponentTypeInfo;
@@ -316,15 +316,15 @@ public:
                  Reference<XComponentContext> const & xComponentContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XPackageRegistry
-    virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
+    virtual Sequence< Reference<deployment::XPackageTypeInfo> >
     getSupportedPackageTypes() override;
 
-    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType) override;
+    virtual void packageRemoved(OUString const & url, OUString const & mediaType) override;
 
     using PackageRegistryBackend::disposing;
 

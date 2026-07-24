@@ -53,19 +53,19 @@ class PackageManagerFactoryImpl : private cppu::BaseMutex, public t_pmfac_helper
 
 protected:
     inline void check();
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 public:
     explicit PackageManagerFactoryImpl(
         Reference<XComponentContext> const & xComponentContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XPackageManagerFactory
-    virtual Reference<deployment::XPackageManager> SAL_CALL getPackageManager(
+    virtual Reference<deployment::XPackageManager> getPackageManager(
         OUString const & context ) override;
 };
 

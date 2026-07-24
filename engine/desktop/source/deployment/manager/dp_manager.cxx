@@ -1173,7 +1173,7 @@ void PackageManagerImpl::reinstallDeployedPackages(
 }
 
 
-bool SAL_CALL PackageManagerImpl::isReadOnly(  )
+bool PackageManagerImpl::isReadOnly(  )
 {
     return m_readOnly;
 }

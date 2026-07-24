@@ -86,17 +86,17 @@ public:
 
     virtual ~KitInteractionHandler() override;
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(OUString const & rServiceName) override;
+    virtual bool supportsService(OUString const & rServiceName) override;
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
-    virtual void SAL_CALL initialize(cpo::uno::Sequence<cpo::uno::Any > const & rArguments) override;
+    virtual void initialize(cpo::uno::Sequence<cpo::uno::Any > const & rArguments) override;
 
-    virtual void SAL_CALL handle(css::uno::Reference<css::task::XInteractionRequest> const & rRequest) override;
+    virtual void handle(css::uno::Reference<css::task::XInteractionRequest> const & rRequest) override;
 
-    virtual bool SAL_CALL handleInteractionRequest(const css::uno::Reference<css::task::XInteractionRequest>& Request) override;
+    virtual bool handleInteractionRequest(const css::uno::Reference<css::task::XInteractionRequest>& Request) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

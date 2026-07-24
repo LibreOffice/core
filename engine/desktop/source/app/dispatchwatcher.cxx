@@ -842,12 +842,12 @@ bool DispatchWatcher::executeDispatchRequests(
 }
 
 
-void SAL_CALL DispatchWatcher::disposing( const css::lang::EventObject& )
+void DispatchWatcher::disposing( const css::lang::EventObject& )
 {
 }
 
 
-void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& )
+void DispatchWatcher::dispatchFinished( const DispatchResultEvent& )
 {
     int nCount = --m_nRequestCount;
     RequestHandler::RequestsCompleted();

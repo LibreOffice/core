@@ -32,20 +32,20 @@ public:
     explicit UnxSplashScreen();
 
     // XStatusIndicator
-    virtual void SAL_CALL start( const OUString& aText, sal_Int32 nRange ) override;
-    virtual void SAL_CALL end() override;
-    virtual void SAL_CALL reset() override;
-    virtual void SAL_CALL setText( const OUString& aText ) override;
-    virtual void SAL_CALL setValue( sal_Int32 nValue ) override;
+    virtual void start( const OUString& aText, sal_Int32 nRange ) override;
+    virtual void end() override;
+    virtual void reset() override;
+    virtual void setText( const OUString& aText ) override;
+    virtual void setValue( sal_Int32 nValue ) override;
 
     // XInitialize
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any>& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any>& aArguments ) override;
 
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool supportsService(OUString const & ServiceName) override;
 
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 }

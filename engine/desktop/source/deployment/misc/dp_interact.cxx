@@ -49,12 +49,12 @@ public:
             cppu::UnoType<task::XInteractionContinuation>::get().isAssignableFrom(m_type) ); }
 
     // XInterface
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
-    virtual Any SAL_CALL queryInterface( Type const & type ) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
+    virtual Any queryInterface( Type const & type ) override;
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() override;
+    virtual void select() override;
 };
 
 // XInterface

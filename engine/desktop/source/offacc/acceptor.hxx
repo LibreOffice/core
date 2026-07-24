@@ -68,12 +68,12 @@ public:
     void run();
 
     // XService info
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-    virtual bool SAL_CALL supportsService( const OUString& aName ) override;
+    virtual OUString getImplementationName() override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
+    virtual bool supportsService( const OUString& aName ) override;
 
     // XInitialize
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArguments ) override;
+    virtual void initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArguments ) override;
 };
 
 class AccInstanceProvider : public ::cppu::WeakImplHelper<css::bridge::XInstanceProvider>
@@ -86,7 +86,7 @@ public:
     virtual ~AccInstanceProvider() override;
 
     // XInstanceProvider
-    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getInstance (const OUString& aName ) override;
+    virtual css::uno::Reference<css::uno::XInterface> getInstance (const OUString& aName ) override;
 };
 
 

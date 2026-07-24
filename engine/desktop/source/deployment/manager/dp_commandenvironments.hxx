@@ -48,19 +48,19 @@ public:
         css::uno::Reference< css::task::XInteractionHandler> const & handler);
 
     // XCommandEnvironment
-    virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
+    virtual css::uno::Reference<css::task::XInteractionHandler >
     getInteractionHandler() override;
     virtual css::uno::Reference<css::ucb::XProgressHandler >
-    SAL_CALL getProgressHandler() override;
+    getProgressHandler() override;
 
     // XInteractionHandler
-    virtual void SAL_CALL handle(
+    virtual void handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 
     // XProgressHandler
-    virtual void SAL_CALL push( cpo::uno::Any const & Status ) override;
-    virtual void SAL_CALL update( cpo::uno::Any const & Status ) override;
-    virtual void SAL_CALL pop() override;
+    virtual void push( cpo::uno::Any const & Status ) override;
+    virtual void update( cpo::uno::Any const & Status ) override;
+    virtual void pop() override;
 };
 
 class TmpRepositoryCommandEnv : public BaseCommandEnv
@@ -70,7 +70,7 @@ public:
     explicit TmpRepositoryCommandEnv(css::uno::Reference< css::task::XInteractionHandler> const & handler);
 
 // XInteractionHandler
-    virtual void SAL_CALL handle(
+    virtual void handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 
 };
@@ -91,7 +91,7 @@ public:
         OUString repository);
 
 // XInteractionHandler
-    virtual void SAL_CALL handle(
+    virtual void handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 
 };
@@ -107,7 +107,7 @@ public:
     explicit NoLicenseCommandEnv(css::uno::Reference< css::task::XInteractionHandler> const & handler);
 
 // XInteractionHandler
-    virtual void SAL_CALL handle(
+    virtual void handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 
 };
@@ -125,7 +125,7 @@ class SilentCheckPrerequisitesCommandEnv : public BaseCommandEnv
 public:
     SilentCheckPrerequisitesCommandEnv();
     // XInteractionHandler
-    virtual void SAL_CALL handle(
+    virtual void handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 
     // Set to true if a PlatformException or a DependencyException were handled.

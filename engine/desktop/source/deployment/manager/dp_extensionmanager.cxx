@@ -1361,7 +1361,7 @@ void ExtensionManager::checkUpdate(
             static_cast<OWeakObject *>(this), request );
 }
 
-cpo::uno::Sequence<Reference<css::deployment::XPackage> > SAL_CALL
+cpo::uno::Sequence<Reference<css::deployment::XPackage> >
 ExtensionManager::getExtensionsWithUnacceptedLicenses(
         OUString const & repository,
         Reference<ucb::XCommandEnvironment> const & xCmdEnv)

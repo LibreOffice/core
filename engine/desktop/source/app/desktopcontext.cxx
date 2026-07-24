@@ -34,7 +34,7 @@ DesktopContext::DesktopContext(const Reference<XCurrentContext>& ctx)
 {
 }
 
-Any SAL_CALL DesktopContext::getValueByName(const OUString& Name)
+Any DesktopContext::getValueByName(const OUString& Name)
 {
     Any retVal;
 

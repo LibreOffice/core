@@ -170,7 +170,7 @@ void KitClipboardFactory::flushSharedClipboard()
 }
 
 uno::Reference<uno::XInterface>
-    SAL_CALL KitClipboardFactory::createInstanceWithArguments(const Sequence<Any>& /* rArgs */)
+    KitClipboardFactory::createInstanceWithArguments(const Sequence<Any>& /* rArgs */)
 {
     return { static_cast<cppu::OWeakObject*>(getClipboardForCurView().get()) };
 }
@@ -435,7 +435,7 @@ KitTransferable::KitTransferable(const size_t nInCount, const char** pInMimeType
     }
 }
 
-cpo::uno::Any SAL_CALL KitTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
+cpo::uno::Any KitTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
 {
     assert(m_aContent.size() == static_cast<size_t>(m_aFlavors.getLength()));
     for (size_t i = 0; i < m_aContent.size(); ++i)
@@ -450,12 +450,12 @@ cpo::uno::Any SAL_CALL KitTransferable::getTransferData(const datatransfer::Data
     return {};
 }
 
-cpo::uno::Sequence<datatransfer::DataFlavor> SAL_CALL KitTransferable::getTransferDataFlavors()
+cpo::uno::Sequence<datatransfer::DataFlavor> KitTransferable::getTransferDataFlavors()
 {
     return m_aFlavors;
 }
 
-bool SAL_CALL KitTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
+bool KitTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
 {
     return std::find_if(std::cbegin(m_aFlavors), std::cend(m_aFlavors),
                         [&rFlavor](const datatransfer::DataFlavor& i) {
@@ -490,7 +490,7 @@ KitProviderTransferable::KitProviderTransferable(const COKitClipboardProvider& r
     m_aFlavors = comphelper::containerToSequence(aFlavors);
 }
 
-cpo::uno::Any SAL_CALL KitProviderTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
+cpo::uno::Any KitProviderTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
 {
     auto itCache = m_aCache.find(rFlavor.MimeType);
     if (itCache != m_aCache.end())
@@ -534,12 +534,12 @@ cpo::uno::Any SAL_CALL KitProviderTransferable::getTransferData(const datatransf
     return aRet;
 }
 
-cpo::uno::Sequence<datatransfer::DataFlavor> SAL_CALL KitProviderTransferable::getTransferDataFlavors()
+cpo::uno::Sequence<datatransfer::DataFlavor> KitProviderTransferable::getTransferDataFlavors()
 {
     return m_aFlavors;
 }
 
-bool SAL_CALL
+bool
 KitProviderTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
 {
     return std::any_of(std::cbegin(m_aFlavors), std::cend(m_aFlavors),

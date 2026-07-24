@@ -43,11 +43,11 @@ UnxSplashScreen::~UnxSplashScreen()
     }
 }
 
-void SAL_CALL UnxSplashScreen::start( const OUString& /*aText*/, sal_Int32 /*nRange*/ )
+void UnxSplashScreen::start( const OUString& /*aText*/, sal_Int32 /*nRange*/ )
 {
 }
 
-void SAL_CALL UnxSplashScreen::end()
+void UnxSplashScreen::end()
 {
     SAL_INFO("desktop.splash", "UnxSplashScreen::end()");
     if( !m_pOutFd )
@@ -57,7 +57,7 @@ void SAL_CALL UnxSplashScreen::end()
     fflush( m_pOutFd );
 }
 
-void SAL_CALL UnxSplashScreen::reset()
+void UnxSplashScreen::reset()
 {
     SAL_INFO("desktop.splash", "UNXSplashScreen::reset()");
     if( !m_pOutFd )
@@ -67,12 +67,12 @@ void SAL_CALL UnxSplashScreen::reset()
     fflush( m_pOutFd );
 }
 
-void SAL_CALL UnxSplashScreen::setText( const OUString& /*aText*/ )
+void UnxSplashScreen::setText( const OUString& /*aText*/ )
 {
     // TODO?
 }
 
-void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
+void UnxSplashScreen::setValue( sal_Int32 nValue )
 {
     if ( m_pOutFd )
     {
@@ -82,7 +82,7 @@ void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
 }
 
 // XInitialize
-void SAL_CALL
+void
 UnxSplashScreen::initialize( const cpo::uno::Sequence< cpo::uno::Any>& )
 {
     for ( sal_uInt32 i = 0; i < osl_getCommandArgCount(); i++ )

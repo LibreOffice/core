@@ -68,27 +68,26 @@ public:
     }
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() override;
-    bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    OUString getImplementationName() override;
+    bool supportsService(const OUString& ServiceName) override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
     static cpo::uno::Sequence<OUString> getSupportedServiceNames_static();
 
     // XClipboard
-    css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;
-    void SAL_CALL setContents(
-        const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
-        const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
-        override;
-    OUString SAL_CALL getName() override { return u"CLIPBOARD"_ustr; }
+    css::uno::Reference<css::datatransfer::XTransferable> getContents() override;
+    void setContents(const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
+                     const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>&
+                         xClipboardOwner) override;
+    OUString getName() override { return u"CLIPBOARD"_ustr; }
 
     // XClipboardEx
-    sal_Int8 SAL_CALL getRenderingCapabilities() override { return 0; }
+    sal_Int8 getRenderingCapabilities() override { return 0; }
 
     // XClipboardNotifier
-    void SAL_CALL addClipboardListener(
+    void addClipboardListener(
         const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
         override;
-    void SAL_CALL removeClipboardListener(
+    void removeClipboardListener(
         const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
         override;
 };
@@ -111,11 +110,11 @@ public:
                     const char** pInStreams);
     KitTransferable(const OUString& sMimeType, const cpo::uno::Sequence<sal_Int8>& aSequence);
 
-    cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
+    cpo::uno::Any getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
 
-    cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> getTransferDataFlavors() override;
 
-    bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
+    bool isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
 
 /**
@@ -134,9 +133,9 @@ class KitProviderTransferable : public cppu::WeakImplHelper<css::datatransfer::X
 public:
     explicit KitProviderTransferable(const COKitClipboardProvider& rProvider);
 
-    cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
-    cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
-    bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
+    cpo::uno::Any getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> getTransferDataFlavors() override;
+    bool isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
 
 /// Theoretically to hook into the (horrible) vcl dtranscomp.cxx code.
@@ -160,11 +159,11 @@ public:
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance() override
+    css::uno::Reference<css::uno::XInterface> createInstance() override
     {
         return createInstanceWithArguments(cpo::uno::Sequence<cpo::uno::Any>());
     }
-    css::uno::Reference<css::uno::XInterface> SAL_CALL
+    css::uno::Reference<css::uno::XInterface>
     createInstanceWithArguments(const cpo::uno::Sequence<cpo::uno::Any>& /* rArgs */) override;
 
     /// Fetch clipboard from the global pool.

@@ -57,13 +57,13 @@ class PackageInformationProvider :
     explicit PackageInformationProvider( uno::Reference< uno::XComponentContext >const& xContext);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XPackageInformationProvider
-    virtual OUString SAL_CALL getPackageLocation( const OUString& extensionId ) override;
-    virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > > SAL_CALL getExtensionList() override;
+    virtual OUString getPackageLocation( const OUString& extensionId ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > > getExtensionList() override;
 
 private:
 
@@ -132,7 +132,7 @@ OUString PackageInformationProvider::getPackageLocation(
 }
 
 
-OUString SAL_CALL
+OUString
 PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
 {
     OUString aLocationURL = getPackageLocation( u"user"_ustr, _sExtensionId );
@@ -160,7 +160,7 @@ PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
     return aLocationURL;
 }
 
-cpo::uno::Sequence< cpo::uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::getExtensionList()
+cpo::uno::Sequence< cpo::uno::Sequence< OUString > > PackageInformationProvider::getExtensionList()
 {
     const uno::Reference<deployment::XExtensionManager> mgr =
         deployment::ExtensionManager::get(mxContext);

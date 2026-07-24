@@ -102,19 +102,19 @@ class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
             css::uno::Reference<css::ucb::XProgressHandler> const & xLogFile );
 
         // XCommandEnvironment
-        virtual css::uno::Reference<css::task::XInteractionHandler> SAL_CALL
+        virtual css::uno::Reference<css::task::XInteractionHandler>
         getInteractionHandler() override;
-        virtual css::uno::Reference<css::ucb::XProgressHandler> SAL_CALL
+        virtual css::uno::Reference<css::ucb::XProgressHandler>
         getProgressHandler() override;
 
         // XProgressHandler
-        virtual void SAL_CALL push( cpo::uno::Any const & Status ) override;
-        virtual void SAL_CALL update( cpo::uno::Any const & Status ) override;
-        virtual void SAL_CALL pop() override;
+        virtual void push( cpo::uno::Any const & Status ) override;
+        virtual void update( cpo::uno::Any const & Status ) override;
+        virtual void pop() override;
     };
 
     inline void check();
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     virtual ~PackageManagerImpl() override;
     PackageManagerImpl(
@@ -131,40 +131,40 @@ public:
         const & xComponentContext, OUString const & context );
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener(
+    virtual void dispose() override;
+    virtual void addEventListener(
         css::uno::Reference<css::lang::XEventListener> const & xListener ) override;
-    virtual void SAL_CALL removeEventListener(
+    virtual void removeEventListener(
         css::uno::Reference<css::lang::XEventListener> const & xListener ) override;
 
     // XModifyBroadcaster
-    virtual void SAL_CALL addModifyListener(
+    virtual void addModifyListener(
         css::uno::Reference<css::util::XModifyListener> const & xListener ) override;
-    virtual void SAL_CALL removeModifyListener(
+    virtual void removeModifyListener(
         css::uno::Reference<css::util::XModifyListener> const & xListener ) override;
 
     // XPackageManager
-    virtual OUString SAL_CALL getContext() override;
+    virtual OUString getContext() override;
     virtual cpo::uno::Sequence<
-        css::uno::Reference<css::deployment::XPackageTypeInfo> > SAL_CALL
+        css::uno::Reference<css::deployment::XPackageTypeInfo> >
     getSupportedPackageTypes() override;
 
-    virtual css::uno::Reference<css::task::XAbortChannel> SAL_CALL
+    virtual css::uno::Reference<css::task::XAbortChannel>
     createAbortChannel() override;
 
-    virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL addPackage(
+    virtual css::uno::Reference<css::deployment::XPackage> addPackage(
         OUString const & url,
         cpo::uno::Sequence<css::beans::NamedValue> const & properties,
         OUString const & mediaType,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL importExtension(
+    virtual css::uno::Reference<css::deployment::XPackage> importExtension(
         css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual void SAL_CALL removePackage(
+    virtual void removePackage(
         OUString const & id, OUString const & fileName,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
@@ -177,7 +177,7 @@ public:
         std::u16string_view id, ActivePackages::Data const & data,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
         bool ignoreAlienPlatforms = false );
-    virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL
+    virtual css::uno::Reference<css::deployment::XPackage>
     getDeployedPackage(
         OUString const & id, OUString const & fileName,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
@@ -186,26 +186,26 @@ public:
     getDeployedPackages_(
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
     virtual cpo::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
-    SAL_CALL getDeployedPackages(
+    getDeployedPackages(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual void SAL_CALL reinstallDeployedPackages(
+    virtual void reinstallDeployedPackages(
         bool force,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual bool SAL_CALL isReadOnly(  ) override;
+    virtual bool isReadOnly(  ) override;
 
-    virtual bool SAL_CALL synchronize(
+    virtual bool synchronize(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > SAL_CALL
+    virtual cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> >
     getExtensionsWithUnacceptedLicenses(
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv) override;
 
-    virtual sal_Int32 SAL_CALL checkPrerequisites(
+    virtual sal_Int32 checkPrerequisites(
         css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;

@@ -160,7 +160,7 @@ class BackendImpl : public ImplBaseT
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-        virtual void SAL_CALL disposing() override;
+        virtual void disposing() override;
 
 
     public:
@@ -174,39 +174,39 @@ class BackendImpl : public ImplBaseT
             OUString const & identifier);
 
         // XPackage
-        virtual bool SAL_CALL isBundle() override;
+        virtual bool isBundle() override;
 
-        virtual Sequence< Reference<deployment::XPackage> > SAL_CALL getBundle(
+        virtual Sequence< Reference<deployment::XPackage> > getBundle(
             Reference<task::XAbortChannel> const & xAbortChannel,
             Reference<ucb::XCommandEnvironment> const & xCmdEnv ) override;
-        virtual OUString SAL_CALL getDescription() override;
+        virtual OUString getDescription() override;
 
-        virtual OUString SAL_CALL getLicenseText() override;
+        virtual OUString getLicenseText() override;
 
-        virtual void SAL_CALL exportTo(
+        virtual void exportTo(
             OUString const & destFolderURL, OUString const & newTitle,
             sal_Int32 nameClashAction,
             Reference<ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-        virtual ::sal_Int32 SAL_CALL checkPrerequisites(
+        virtual ::sal_Int32 checkPrerequisites(
             const Reference< task::XAbortChannel >& xAbortChannel,
             const Reference< ucb::XCommandEnvironment >& xCmdEnv,
             bool noLicenseChecking) override;
 
-        virtual bool SAL_CALL checkDependencies(
+        virtual bool checkDependencies(
             const Reference< ucb::XCommandEnvironment >& xCmdEnv ) override;
 
-        virtual beans::Optional<OUString> SAL_CALL getIdentifier() override;
+        virtual beans::Optional<OUString> getIdentifier() override;
 
-        virtual OUString SAL_CALL getVersion() override;
+        virtual OUString getVersion() override;
 
-        virtual Sequence<OUString> SAL_CALL getUpdateInformationURLs() override;
+        virtual Sequence<OUString> getUpdateInformationURLs() override;
 
-        virtual beans::StringPair SAL_CALL getPublisherInfo() override;
+        virtual beans::StringPair getPublisherInfo() override;
 
-        virtual OUString SAL_CALL getDisplayName() override;
+        virtual OUString getDisplayName() override;
 
-        virtual Reference< graphic::XGraphic > SAL_CALL
+        virtual Reference< graphic::XGraphic >
         getIcon( bool bHighContrast ) override;
     };
     friend class PackageImpl;
@@ -228,7 +228,7 @@ class BackendImpl : public ImplBaseT
         bool bRemoved, OUString const & identifier,
         Reference<ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
 public:
     BackendImpl(
@@ -237,14 +237,14 @@ public:
         Reference<deployment::XPackageRegistry> const & xRootRegistry );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( OUString const& name ) override;
-    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( OUString const& name ) override;
+    virtual Sequence<OUString> getSupportedServiceNames() override;
 
     // XPackageRegistry
-    virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
+    virtual Sequence< Reference<deployment::XPackageTypeInfo> >
     getSupportedPackageTypes() override;
-    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType) override;
+    virtual void packageRemoved(OUString const & url, OUString const & mediaType) override;
 
     using ImplBaseT::disposing;
 };

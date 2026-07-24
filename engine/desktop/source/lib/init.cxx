@@ -3633,7 +3633,7 @@ public:
 
     // XInstanceProvider
     virtual css::uno::Reference<css::uno::XInterface>
-        SAL_CALL getInstance(const OUString& aName) override;
+        getInstance(const OUString& aName) override;
 };
 
 // InstanceProvider
@@ -3681,12 +3681,12 @@ public:
 
     // These overridden member functions use "read" and "write" from the point of view of LO,
     // i.e. the opposite to how startURP() uses them.
-    virtual sal_Int32 SAL_CALL read(Sequence<sal_Int8>& rReadBytes,
+    virtual sal_Int32 read(Sequence<sal_Int8>& rReadBytes,
                                     sal_Int32 nBytesToRead) override;
-    virtual void SAL_CALL write(const Sequence<sal_Int8>& aData) override;
-    virtual void SAL_CALL flush() override;
-    virtual void SAL_CALL close() override;
-    virtual OUString SAL_CALL getDescription() override;
+    virtual void write(const Sequence<sal_Int8>& aData) override;
+    virtual void flush() override;
+    virtual void close() override;
+    virtual OUString getDescription() override;
     void setBridge(const Reference<XBridge>&);
     void* getContext();
     inline static int g_connectionCount = 0;
@@ -5399,7 +5399,7 @@ public:
         assert(mpCallback);
     }
 
-    virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& rEvent) override
+    virtual void dispatchFinished(const css::frame::DispatchResultEvent& rEvent) override
     {
         tools::JsonWriter aJson;
         aJson.put("commandName", maCommand);
@@ -5436,7 +5436,7 @@ public:
         mpCallback->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
     }
 
-    virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
+    virtual void disposing(const css::lang::EventObject&) override {}
 };
 
 } // anonymous namespace

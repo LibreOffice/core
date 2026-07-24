@@ -290,7 +290,7 @@ oslSignalAction SalMainPipeExchangeSignal_impl(SAL_UNUSED_PARAMETER void* /*pDat
 
 
 // XServiceInfo
-OUString SAL_CALL RequestHandlerController::getImplementationName()
+OUString RequestHandlerController::getImplementationName()
 {
     return u"com.sun.star.comp.RequestHandlerController"_ustr;
 }
@@ -301,18 +301,18 @@ bool RequestHandlerController::supportsService(
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL RequestHandlerController::getSupportedServiceNames()
+Sequence< OUString > RequestHandlerController::getSupportedServiceNames()
 {
     return { };
 }
 
 // XEventListener
-void SAL_CALL RequestHandlerController::disposing( const EventObject& )
+void RequestHandlerController::disposing( const EventObject& )
 {
 }
 
 // XTerminateListener
-void SAL_CALL RequestHandlerController::queryTermination( const EventObject& )
+void RequestHandlerController::queryTermination( const EventObject& )
 {
     // Desktop ask about pending request through our office ipc pipe. We have to
     // be sure that no pending request is waiting because framework is not able to
@@ -323,7 +323,7 @@ void SAL_CALL RequestHandlerController::queryTermination( const EventObject& )
     RequestHandler::SetDowning();
 }
 
-void SAL_CALL RequestHandlerController::notifyTermination( const EventObject& )
+void RequestHandlerController::notifyTermination( const EventObject& )
 {
 }
 
