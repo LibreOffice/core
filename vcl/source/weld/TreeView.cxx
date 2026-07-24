@@ -11,7 +11,7 @@
 
 namespace weld
 {
-OUString weld::TreeView::get_text(int row, int col) const
+OUString TreeView::get_text(int row, int col) const
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         return get_text(*pIter, col);
@@ -19,32 +19,32 @@ OUString weld::TreeView::get_text(int row, int col) const
     return OUString();
 }
 
-void weld::TreeView::set_text(int row, const OUString& rText, int col)
+void TreeView::set_text(int row, const OUString& rText, int col)
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         set_text(*pIter, rText, col);
 }
 
-void weld::TreeView::set_sensitive(int row, bool bSensitive, int col)
+void TreeView::set_sensitive(int row, bool bSensitive, int col)
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         set_sensitive(*pIter, bSensitive, col);
 }
 
-void weld::TreeView::set_toggle(int row, TriState eState, int col)
+void TreeView::set_toggle(int row, TriState eState, int col)
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         set_toggle(*pIter, eState, col);
 }
 
-void weld::TreeView::set_toggle(const TreeIter& rIter, TriState bOn, int col)
+void TreeView::set_toggle(const TreeIter& rIter, TriState bOn, int col)
 {
     disable_notify_events();
     do_set_toggle(rIter, bOn, col);
     enable_notify_events();
 }
 
-TriState weld::TreeView::get_toggle(int row, int col) const
+TriState TreeView::get_toggle(int row, int col) const
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         return get_toggle(*pIter, col);
@@ -52,32 +52,32 @@ TriState weld::TreeView::get_toggle(int row, int col) const
     return TRISTATE_INDET;
 }
 
-void weld::TreeView::set_image(int row, const OUString& rImage, int col)
+void TreeView::set_image(int row, const OUString& rImage, int col)
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         set_image(*pIter, rImage, col);
 }
 
-void weld::TreeView::set_image(int row, VirtualDevice& rImage, int col)
+void TreeView::set_image(int row, VirtualDevice& rImage, int col)
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         set_image(*pIter, rImage, col);
 }
 
-void weld::TreeView::set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage,
-                               int col)
+void TreeView::set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage,
+                         int col)
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         set_image(*pIter, rImage, col);
 }
 
-void weld::TreeView::set_text_emphasis(int row, bool bOn, int col)
+void TreeView::set_text_emphasis(int row, bool bOn, int col)
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         set_text_emphasis(*pIter, bOn, col);
 }
 
-bool weld::TreeView::get_text_emphasis(int row, int col) const
+bool TreeView::get_text_emphasis(int row, int col) const
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         return get_text_emphasis(*pIter, col);
@@ -85,32 +85,32 @@ bool weld::TreeView::get_text_emphasis(int row, int col) const
     return false;
 }
 
-void weld::TreeView::set_text_align(int row, TxtAlign eAlign, int col)
+void TreeView::set_text_align(int row, TxtAlign eAlign, int col)
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         set_text_align(*pIter, eAlign, col);
 }
 
-void weld::TreeView::set_font_color(int pos, const Color& rColor)
+void TreeView::set_font_color(int pos, const Color& rColor)
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(pos))
         set_font_color(*pIter, rColor);
 }
 
-void weld::TreeView::scroll_to_row(int row)
+void TreeView::scroll_to_row(int row)
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(row))
         scroll_to_row(*pIter);
 }
 
-void weld::TreeView::scroll_to_row(const TreeIter& rIter)
+void TreeView::scroll_to_row(const TreeIter& rIter)
 {
     disable_notify_events();
     do_scroll_to_row(rIter);
     enable_notify_events();
 }
 
-bool weld::TreeView::is_selected(int pos) const
+bool TreeView::is_selected(int pos) const
 {
     if (std::unique_ptr<weld::TreeIter> pIter = get_iterator(pos))
         return is_selected(*pIter);
@@ -118,7 +118,7 @@ bool weld::TreeView::is_selected(int pos) const
     return false;
 }
 
-bool weld::TreeView::iter_next(TreeIter& rIter) const
+bool TreeView::iter_next(TreeIter& rIter) const
 {
     if (iter_children(rIter))
         return true;
@@ -136,7 +136,7 @@ bool weld::TreeView::iter_next(TreeIter& rIter) const
     return false;
 }
 
-void weld::TreeView::last_child(weld::TreeIter& rIter, int nChildren) const
+void TreeView::last_child(weld::TreeIter& rIter, int nChildren) const
 {
     iter_nth_child(rIter, nChildren - 1);
     nChildren = iter_n_children(rIter);
@@ -144,7 +144,7 @@ void weld::TreeView::last_child(weld::TreeIter& rIter, int nChildren) const
         last_child(rIter, nChildren);
 }
 
-bool weld::TreeView::iter_previous(weld::TreeIter& rIter) const
+bool TreeView::iter_previous(weld::TreeIter& rIter) const
 {
     if (iter_previous_sibling(rIter))
     {
@@ -160,7 +160,7 @@ bool weld::TreeView::iter_previous(weld::TreeIter& rIter) const
     return iter_parent(rIter);
 }
 
-bool weld::TreeView::iter_children(TreeIter& rIter) const
+bool TreeView::iter_children(TreeIter& rIter) const
 {
     if (get_children_on_demand(rIter))
         return false;
@@ -168,7 +168,7 @@ bool weld::TreeView::iter_children(TreeIter& rIter) const
     return do_iter_children(rIter);
 }
 
-int weld::TreeView::iter_n_children(const TreeIter& rIter) const
+int TreeView::iter_n_children(const TreeIter& rIter) const
 {
     if (get_children_on_demand(rIter))
         return 0;
@@ -176,7 +176,7 @@ int weld::TreeView::iter_n_children(const TreeIter& rIter) const
     return do_iter_n_children(rIter);
 }
 
-int weld::TreeView::iter_compare(const TreeIter& rIterA, const TreeIter& rIterB) const
+int TreeView::iter_compare(const TreeIter& rIterA, const TreeIter& rIterB) const
 {
     if (rIterA.equal(rIterB))
         return 0;
@@ -197,7 +197,7 @@ int weld::TreeView::iter_compare(const TreeIter& rIterA, const TreeIter& rIterB)
     return 0;
 }
 
-bool weld::TreeView::iter_has_child(const TreeIter& rIter) const
+bool TreeView::iter_has_child(const TreeIter& rIter) const
 {
     std::unique_ptr<weld::TreeIter> pIter = make_iterator(&rIter);
     return iter_children(*pIter);

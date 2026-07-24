@@ -11,36 +11,36 @@
 
 namespace weld
 {
-void weld::ComboBox::insert(int pos, const OUString& rStr, const OUString* pId,
-                            const OUString* pIconName, VirtualDevice* pImageSurface)
+void ComboBox::insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName,
+                      VirtualDevice* pImageSurface)
 {
     disable_notify_events();
     do_insert(pos, rStr, pId, pIconName, pImageSurface);
     enable_notify_events();
 }
 
-void weld::ComboBox::set_active(int pos)
+void ComboBox::set_active(int pos)
 {
     disable_notify_events();
     do_set_active(pos);
     enable_notify_events();
 }
 
-void weld::ComboBox::set_active_id(const OUString& rStr)
+void ComboBox::set_active_id(const OUString& rStr)
 {
     disable_notify_events();
     do_set_active_id(rStr);
     enable_notify_events();
 }
 
-void weld::ComboBox::set_entry_text(const OUString& rStr)
+void ComboBox::set_entry_text(const OUString& rStr)
 {
     disable_notify_events();
     do_set_entry_text(rStr);
     enable_notify_events();
 }
 
-bool weld::ComboBox::get_values_changed_from_saved() const
+bool ComboBox::get_values_changed_from_saved() const
 {
     return !m_aSavedValues.empty()
            && std::find(m_aSavedValues.begin(), m_aSavedValues.end(), get_active_text())
