@@ -192,17 +192,17 @@ public:
     virtual void    Close() override;
 
 private:
-    const OUString aStrUndefined;
+    const OUString m_aStrUndefined;
 
-    std::unique_ptr<ScFilterOptionsMgr> pOptionsMgr;
+    std::unique_ptr<ScFilterOptionsMgr> m_pOptionsMgr;
 
-    const sal_uInt16    nWhichQuery;
-    const ScQueryParam  theQueryData;
-    std::unique_ptr<ScQueryItem> pOutItem;
-    ScViewData&         rViewData;
-    ScDocument&         rDoc;
+    const sal_uInt16 m_nWhichQuery;
+    const ScQueryParam m_theQueryData;
+    std::unique_ptr<ScQueryItem> m_pOutItem;
+    ScViewData& m_rViewData;
+    ScDocument& m_rDoc;
 
-    bool                bRefInputMode;
+    bool m_bRefInputMode;
 
     formula::RefEdit* m_pRefInputEdit;
 
