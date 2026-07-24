@@ -159,7 +159,7 @@ private:
     void clearOptionsDialog();
     void selectFirstEntry();
     void storeOptionsTree();
-    void showDialog(VectorOfMatchedIds& pSearchIds);
+    void showDialog(const VectorOfMatchedIds& rPageIds);
 
     OUString               sTitle;
 

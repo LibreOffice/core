@@ -987,7 +987,7 @@ int OfaTreeOptionsDialog::applySearchFilter(const OUString& rSearchTerm)
     return xTreeLB->n_children() ? 0 : -1;
 }
 
-void OfaTreeOptionsDialog::showDialog(VectorOfMatchedIds& pSearchIds)
+void OfaTreeOptionsDialog::showDialog(const VectorOfMatchedIds& rPageIds)
 {
     //
     //     void generalOptions();      // SID_GENERAL_OPTIONS
@@ -1004,56 +1004,56 @@ void OfaTreeOptionsDialog::showDialog(VectorOfMatchedIds& pSearchIds)
     //     void internetOptions();     // SID_INET_DLG
     //
 
-    for (auto& aEntryId : pSearchIds)
+    for (const auto& rEntryId : rPageIds)
     {
-        switch (aEntryId.first)
+        switch (rEntryId.first)
         {
             case SID_GENERAL_OPTIONS:
-                generalOptions(aEntryId.second);
+                generalOptions(rEntryId.second);
                 break;
 
             case SID_FILTER_DLG:
-                loadAndSaveOptions(aEntryId.second);
+                loadAndSaveOptions(rEntryId.second);
                 break;
 
             case SID_LANGUAGE_OPTIONS:
-                languageOptions(aEntryId.second);
+                languageOptions(rEntryId.second);
                 break;
 
             case SID_SW_EDITOPTIONS:
-                writerOptions(aEntryId.second);
+                writerOptions(rEntryId.second);
                 break;
 
             case SID_SW_ONLINEOPTIONS:
-                writerWebOptions(aEntryId.second);
+                writerWebOptions(rEntryId.second);
                 break;
 
             case SID_SC_EDITOPTIONS:
-                calcOptions(aEntryId.second);
+                calcOptions(rEntryId.second);
                 break;
 
             case SID_SD_EDITOPTIONS:
-                impressOptions(aEntryId.second);
+                impressOptions(rEntryId.second);
                 break;
 
             case SID_SD_GRAPHIC_OPTIONS:
-                drawOptions(aEntryId.second);
+                drawOptions(rEntryId.second);
                 break;
 
             case SID_SM_EDITOPTIONS:
-                mathOptions(aEntryId.second);
+                mathOptions(rEntryId.second);
                 break;
 
             case SID_SB_STARBASEOPTIONS:
-                databaseOptions(aEntryId.second);
+                databaseOptions(rEntryId.second);
                 break;
 
             case SID_SCH_EDITOPTIONS:
-                chartOptions(aEntryId.second);
+                chartOptions(rEntryId.second);
                 break;
 
             case SID_INET_DLG:
-                internetOptions(aEntryId.second);
+                internetOptions(rEntryId.second);
                 break;
 
             default:
