@@ -856,14 +856,25 @@ static sal_Int32 lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
                 }
             }
 
-            // tdf#131431 move pCurrentCursor if it hasn't moved to avoid an infinite loop
-            if( bSrchBkwrd && *pEndPos == *pCurrentCursor->Start() )
+            // tdf#131431 force move pCurrentCursor if it hasn't moved to avoid an infinite loop
+            const sal_Int32 nLen = pCurrentCursor->GetPointContentNode()->Len();
+            if (!bSrchBkwrd)
             {
-                (*fnMove.fnPos)( pCurrentCursor->GetMark(), false );
+                const bool bForceMove = *pSttPos == *pCurrentCursor->End();
+                // move to next paragraph if at the end of a paragraph with content
+                if (bForceMove || (nLen && pCurrentCursor->End()->GetContentIndex() == nLen))
+                {
+                    (*fnMove.fnPos)(pCurrentCursor->End(), false);
+                }
             }
-            else if ( !bSrchBkwrd && *pSttPos == *pCurrentCursor->End() )
+            else
             {
-                (*fnMove.fnPos)( pCurrentCursor->GetPoint(), false );
+                const bool bForceMove = *pEndPos == *pCurrentCursor->Start();
+                // move to previous paragraph if at the start of a paragraph with content
+                if (bForceMove || (nLen && !pCurrentCursor->Start()->GetContentIndex()))
+                {
+                    (*fnMove.fnPos)(pCurrentCursor->Start(), false);
+                }
             }
 
             if( *pSttPos == *pEndPos )
