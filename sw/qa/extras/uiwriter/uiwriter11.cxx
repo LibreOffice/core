@@ -886,6 +886,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf36181_findReplaceParaStyle)
     rInit.SetReplaceString("Caption");
     rInit.SetPattern(true); // paragraph styles replacement
     rInit.SetSelection(true); // only search inside of the current selection
+    rInit.SetBackward(false); // search forward - important to specify to avoid other tests...
     rInit.SetCommand(SvxSearchCmd::REPLACE);
 
     // pre-select something - that is what the bug is about...
@@ -953,6 +954,46 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf129449_findReplaceParaStyle2)
     // Test the replacement of the last paragraph. Without the fix, the Title style was not found.
     CPPUNIT_ASSERT_EQUAL(u"Caption"_ustr,
                          getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf129449_findReplaceParaStyle3)
+{
+    // given a document that starts (and ends) with an empty paragraph with Title style
+
+    createSwDoc("tdf129449_findReplaceParaStyle2.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwView& rView = pWrtShell->GetView();
+
+    // initialize find/replace static environment
+    SfxItemSet aSet(rView.GetPool(), svl::Items<SID_SEARCH_ITEM, SID_SEARCH_ITEM>);
+    rView.StateSearch(aSet); // initializes SwView::GetSearchItem
+    SvxSearchItem& rInit = *SwView::GetSearchItem();
+    rInit.SetSearchString("Title");
+    rInit.SetPattern(true); // paragraph styles replacement
+    rInit.SetBackward(false); // find the next result
+    rInit.SetCommand(SvxSearchCmd::FIND);
+
+    // Go to the end of document (wrap around to find the first paragraph in the document)
+    dispatchCommand(mxComponent, u".uno:GoToEndOfDoc"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(11), pWrtShell->GetCursor()->GetPointNode().GetIndex());
+
+    // Execute search with 'Find' - should find the first paragraph's style
+    SfxItemSet aFn(rView.GetPool(), svl::Items<FN_REPEAT_SEARCH, FN_REPEAT_SEARCH>);
+    SfxRequest aRequest(FN_REPEAT_SEARCH, SfxCallMode::SYNCHRON, aFn);
+    rView.ExecSearch(aRequest);
+
+    // Without the fix, the Cursor had not moved.
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(9), pWrtShell->GetCursor()->GetPointNode().GetIndex());
+
+    // Go to the start of document (wrap around to find the last paragraph in the document)
+    dispatchCommand(mxComponent, u".uno:GoToStartOfDoc"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(9), pWrtShell->GetCursor()->GetPointNode().GetIndex());
+
+    rInit.SetBackward(true); // find the previous result
+    rView.ExecSearch(aRequest);
+
+    // Without the fix, the Cursor had not moved.
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(11), pWrtShell->GetCursor()->GetPointNode().GetIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf36582_findReplaceRedline)
