@@ -80,10 +80,24 @@ namespace vclcanvas
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
-        //                                    Classname     Base doing refcounting        Base implementing the XComponent interface
-        //                                       |                 |                            |
-        //                                       V                 V                            V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( Canvas,   GraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
+        virtual void acquire() noexcept override { GraphicDeviceBase_Base::acquire(); }   \
+        virtual void release() noexcept override { GraphicDeviceBase_Base::release(); }   \
+        virtual cpo::uno::Any  queryInterface(const cpo::uno::Type& _rType) override \
+            { return GraphicDeviceBase_Base::queryInterface(_rType); }                               \
+        virtual void dispose() override \
+        {                                                                               \
+            ::cppu::WeakComponentImplHelperBase::dispose();                                                      \
+        }                                                                               \
+        virtual void addEventListener(                                         \
+            css::uno::Reference< css::lang::XEventListener > const & xListener ) override \
+        {                                                                               \
+            ::cppu::WeakComponentImplHelperBase::addEventListener(xListener);                                        \
+        }                                                                               \
+        virtual void removeEventListener(                                      \
+            css::uno::Reference< css::lang::XEventListener > const & xListener ) override \
+        {                                                                               \
+            ::cppu::WeakComponentImplHelperBase::removeEventListener(xListener);                                 \
+        }
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                 rGrf,

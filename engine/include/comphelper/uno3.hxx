@@ -41,48 +41,6 @@ namespace comphelper
         virtual cpo::uno::Any  queryInterface(const cpo::uno::Type& _rType) override \
             { return baseclass::queryInterface(_rType); }
 
-    /** Use this macro to forward XComponent methods to base class
-
-        When using the ::cppu::WeakComponentImplHelper base classes to
-        implement a UNO interface, a problem occurs when the interface
-        itself already derives from XComponent (like e.g. awt::XWindow
-        or awt::XControl): ::cppu::WeakComponentImplHelper is then
-        still abstract. Using this macro in the most derived class
-        definition provides overrides for the XComponent methods,
-        forwarding them to the given baseclass.
-
-        @param classname
-        Name of the class this macro is issued within
-
-        @param baseclass
-        Name of the baseclass that should have the XInterface methods
-        forwarded to - that's usually the WeakComponentImplHelperN base
-
-        @param implhelper
-        Name of the baseclass that should have the XComponent methods
-        forwarded to - in the case of the WeakComponentImplHelper,
-        that would be ::cppu::WeakComponentImplHelperBase
-    */
-    #define DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS(classname, baseclass, implhelper) \
-        virtual void acquire() noexcept override { baseclass::acquire(); }   \
-        virtual void release() noexcept override { baseclass::release(); }   \
-        virtual cpo::uno::Any  queryInterface(const cpo::uno::Type& _rType) override \
-            { return baseclass::queryInterface(_rType); }                               \
-        virtual void dispose() override \
-        {                                                                               \
-            implhelper::dispose();                                                      \
-        }                                                                               \
-        virtual void addEventListener(                                         \
-            css::uno::Reference< css::lang::XEventListener > const & xListener ) override \
-        {                                                                               \
-            implhelper::addEventListener(xListener);                                        \
-        }                                                                               \
-        virtual void removeEventListener(                                      \
-            css::uno::Reference< css::lang::XEventListener > const & xListener ) override \
-        {                                                                               \
-            implhelper::removeEventListener(xListener);                                 \
-        }
-
     //= deriving from multiple XInterface-derived classes
 
     //= forwarding/merging XInterface functionality
