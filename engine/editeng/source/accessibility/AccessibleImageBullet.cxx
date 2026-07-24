@@ -61,51 +61,51 @@ AccessibleImageBullet::AccessibleImageBullet(uno::Reference<XAccessible> xParent
     mnStateSet |= AccessibleStateType::SENSITIVE;
 }
 
-sal_Int64 SAL_CALL  AccessibleImageBullet::getAccessibleChildCount()
+sal_Int64  AccessibleImageBullet::getAccessibleChildCount()
 {
     return 0;
 }
 
-uno::Reference< XAccessible > SAL_CALL  AccessibleImageBullet::getAccessibleChild( sal_Int64 )
+uno::Reference< XAccessible >  AccessibleImageBullet::getAccessibleChild( sal_Int64 )
 {
     throw lang::IndexOutOfBoundsException(u"No children available"_ustr,
                                           getXWeak() );
 }
 
-uno::Reference< XAccessible > SAL_CALL  AccessibleImageBullet::getAccessibleParent()
+uno::Reference< XAccessible >  AccessibleImageBullet::getAccessibleParent()
 {
     return mxParent;
 }
 
-sal_Int64 SAL_CALL  AccessibleImageBullet::getAccessibleIndexInParent()
+sal_Int64  AccessibleImageBullet::getAccessibleIndexInParent()
 {
     return mnIndexInParent;
 }
 
-sal_Int16 SAL_CALL  AccessibleImageBullet::getAccessibleRole()
+sal_Int16  AccessibleImageBullet::getAccessibleRole()
 {
     return AccessibleRole::GRAPHIC;
 }
 
-OUString SAL_CALL  AccessibleImageBullet::getAccessibleDescription()
+OUString  AccessibleImageBullet::getAccessibleDescription()
 {
     // Get the string from the resource for the specified id.
     return EditResId(RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION);
 }
 
-OUString SAL_CALL  AccessibleImageBullet::getAccessibleName()
+OUString  AccessibleImageBullet::getAccessibleName()
 {
     // Get the string from the resource for the specified id.
     return EditResId(RID_SVXSTR_A11Y_IMAGEBULLET_NAME);
 }
 
-uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleImageBullet::getAccessibleRelationSet()
+uno::Reference< XAccessibleRelationSet > AccessibleImageBullet::getAccessibleRelationSet()
 {
     // no relations, therefore empty
     return uno::Reference< XAccessibleRelationSet >();
 }
 
-sal_Int64 SAL_CALL AccessibleImageBullet::getAccessibleStateSet()
+sal_Int64 AccessibleImageBullet::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
 
@@ -114,7 +114,7 @@ sal_Int64 SAL_CALL AccessibleImageBullet::getAccessibleStateSet()
     return mnStateSet;
 }
 
-lang::Locale SAL_CALL AccessibleImageBullet::getLocale()
+lang::Locale AccessibleImageBullet::getLocale()
 {
     SolarMutexGuard aGuard;
 
@@ -125,7 +125,7 @@ lang::Locale SAL_CALL AccessibleImageBullet::getLocale()
     return LanguageTag(GetTextForwarder().GetLanguage( GetParagraphIndex(), 0 )).getLocale();
 }
 
-uno::Reference< XAccessible > SAL_CALL AccessibleImageBullet::getAccessibleAtPoint( const awt::Point& /*aPoint*/ )
+uno::Reference< XAccessible > AccessibleImageBullet::getAccessibleAtPoint( const awt::Point& /*aPoint*/ )
 {
     // as we have no children, empty reference
     return uno::Reference< XAccessible >();
@@ -166,14 +166,14 @@ awt::Rectangle AccessibleImageBullet::implGetBounds(  )
     return awt::Rectangle();
 }
 
-void SAL_CALL AccessibleImageBullet::grabFocus(  )
+void AccessibleImageBullet::grabFocus(  )
 {
     throw uno::RuntimeException(u"Not focusable"_ustr,
                                 uno::Reference< uno::XInterface >
                                 ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
 }
 
-sal_Int32 SAL_CALL AccessibleImageBullet::getForeground(  )
+sal_Int32 AccessibleImageBullet::getForeground(  )
 {
     // #104444# Added to XAccessibleComponent interface
     svtools::ColorConfig aColorConfig;
@@ -181,7 +181,7 @@ sal_Int32 SAL_CALL AccessibleImageBullet::getForeground(  )
     return static_cast<sal_Int32>(nColor);
 }
 
-sal_Int32 SAL_CALL AccessibleImageBullet::getBackground(  )
+sal_Int32 AccessibleImageBullet::getBackground(  )
 {
     // #104444# Added to XAccessibleComponent interface
     Color aColor( Application::GetSettings().GetStyleSettings().GetWindowColor() );
@@ -192,18 +192,18 @@ sal_Int32 SAL_CALL AccessibleImageBullet::getBackground(  )
     return static_cast<sal_Int32>( aColor );
 }
 
-OUString SAL_CALL AccessibleImageBullet::getImplementationName()
+OUString AccessibleImageBullet::getImplementationName()
 {
     return u"AccessibleImageBullet"_ustr;
 }
 
-bool SAL_CALL AccessibleImageBullet::supportsService (const OUString& sServiceName)
+bool AccessibleImageBullet::supportsService (const OUString& sServiceName)
 {
 
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL AccessibleImageBullet::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > AccessibleImageBullet::getSupportedServiceNames()
 {
     return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
 }
@@ -213,7 +213,7 @@ void AccessibleImageBullet::SetEEOffset( const Point& rOffset )
     maEEOffset = rOffset;
 }
 
-void SAL_CALL AccessibleImageBullet::dispose()
+void AccessibleImageBullet::dispose()
 {
     mxParent = nullptr;
     mpEditSource = nullptr;

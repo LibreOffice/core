@@ -52,7 +52,7 @@ class SvxXMLTextImportContext : public SvXMLImportContext
 public:
     SvxXMLTextImportContext( SvXMLImport& rImport, uno::Reference< XText > xText );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement,
             const uno::Reference< xml::sax::XFastAttributeList >& xAttrList) override;
 

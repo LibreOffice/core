@@ -37,12 +37,12 @@ SvXMLAutoCorrectTokenHandler::~SvXMLAutoCorrectTokenHandler()
 {
 }
 
-sal_Int32 SAL_CALL SvXMLAutoCorrectTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& Identifier )
+sal_Int32 SvXMLAutoCorrectTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& Identifier )
 {
     return getTokenDirect( std::string_view(reinterpret_cast< const char* >( Identifier.getConstArray() ), Identifier.getLength()) );
 }
 
-Sequence< sal_Int8 > SAL_CALL SvXMLAutoCorrectTokenHandler::getUTF8Identifier( sal_Int32 )
+Sequence< sal_Int8 > SvXMLAutoCorrectTokenHandler::getUTF8Identifier( sal_Int32 )
 {
     return Sequence< sal_Int8 >();
 }

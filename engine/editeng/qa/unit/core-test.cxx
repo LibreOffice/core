@@ -634,9 +634,9 @@ class TestTransferable : public cppu::WeakImplHelper<datatransfer::XTransferable
 
 public:
     TestTransferable(const std::vector<OString>& rContent, const std::vector<OUString>& rMimeType);
-    cpo::uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& rFlavor) override;
-    cpo::uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
-    bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor) override;
+    cpo::uno::Any getTransferData(const datatransfer::DataFlavor& rFlavor) override;
+    cpo::uno::Sequence<datatransfer::DataFlavor> getTransferDataFlavors() override;
+    bool isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor) override;
 };
 
 TestTransferable::TestTransferable(const std::vector<OString>& rContent, const std::vector<OUString>& rMimeType)

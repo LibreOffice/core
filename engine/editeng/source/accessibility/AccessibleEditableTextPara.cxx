@@ -248,7 +248,7 @@ void AccessibleEditableTextPara::SetParagraphIndex( sal_Int32 nIndex )
 }
 
 
-void SAL_CALL AccessibleEditableTextPara::dispose()
+void AccessibleEditableTextPara::dispose()
 {
     rtl::Reference<AccessibleImageBullet> xBullet = maImageBullet.get();
     if (xBullet.is())
@@ -530,14 +530,14 @@ bool AccessibleEditableTextPara::GetAttributeRun( sal_Int32& nStartIndex, sal_In
 }
 
 // XAccessibleContext
-sal_Int64 SAL_CALL AccessibleEditableTextPara::getAccessibleChildCount()
+sal_Int64 AccessibleEditableTextPara::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
 
     return HaveChildren() ? 1 : 0;
 }
 
-uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleChild( sal_Int64 i )
+uno::Reference< XAccessible > AccessibleEditableTextPara::getAccessibleChild( sal_Int64 i )
 {
     SolarMutexGuard aGuard;
 
@@ -565,35 +565,35 @@ uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessible
     return aChild;
 }
 
-uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleParent()
+uno::Reference< XAccessible > AccessibleEditableTextPara::getAccessibleParent()
 {
     SAL_WARN_IF(!mxParent.is(), "editeng", "AccessibleEditableTextPara::getAccessibleParent: no frontend set, did somebody forgot to call AccessibleTextHelper::SetEventSource()?");
 
     return mxParent;
 }
 
-sal_Int64 SAL_CALL AccessibleEditableTextPara::getAccessibleIndexInParent()
+sal_Int64 AccessibleEditableTextPara::getAccessibleIndexInParent()
 {
     return mnIndexInParent;
 }
 
-sal_Int16 SAL_CALL AccessibleEditableTextPara::getAccessibleRole()
+sal_Int16 AccessibleEditableTextPara::getAccessibleRole()
 {
     return AccessibleRole::PARAGRAPH;
 }
 
-OUString SAL_CALL AccessibleEditableTextPara::getAccessibleDescription()
+OUString AccessibleEditableTextPara::getAccessibleDescription()
 {
     return OUString();
 }
 
-OUString SAL_CALL AccessibleEditableTextPara::getAccessibleName()
+OUString AccessibleEditableTextPara::getAccessibleName()
 {
     //See tdf#101003 before implementing a body
     return OUString();
 }
 
-uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleEditableTextPara::getAccessibleRelationSet()
+uno::Reference< XAccessibleRelationSet > AccessibleEditableTextPara::getAccessibleRelationSet()
 {
     // #i27138# - provide relations CONTENT_FLOWS_FROM
     // and CONTENT_FLOWS_TO
@@ -770,7 +770,7 @@ OUString AccessibleEditableTextPara::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
     return OUString();
 }
 
-sal_Int64 SAL_CALL AccessibleEditableTextPara::getAccessibleStateSet()
+sal_Int64 AccessibleEditableTextPara::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
 
@@ -789,7 +789,7 @@ sal_Int64 SAL_CALL AccessibleEditableTextPara::getAccessibleStateSet()
     return mnStateSet;
 }
 
-lang::Locale SAL_CALL AccessibleEditableTextPara::getLocale()
+lang::Locale AccessibleEditableTextPara::getLocale()
 {
     SolarMutexGuard aGuard;
 
@@ -798,7 +798,7 @@ lang::Locale SAL_CALL AccessibleEditableTextPara::getLocale()
 
 // XAccessibleComponent
 
-uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleAtPoint( const awt::Point& _aPoint )
+uno::Reference< XAccessible > AccessibleEditableTextPara::getAccessibleAtPoint( const awt::Point& _aPoint )
 {
     SolarMutexGuard aGuard;
 
@@ -853,13 +853,13 @@ awt::Rectangle AccessibleEditableTextPara::implGetBounds()
                            aScreenRect.GetSize().Height() );
 }
 
-void SAL_CALL AccessibleEditableTextPara::grabFocus(  )
+void AccessibleEditableTextPara::grabFocus(  )
 {
     // set cursor to this paragraph
     setSelection(0,0);
 }
 
-sal_Int32 SAL_CALL AccessibleEditableTextPara::getForeground(  )
+sal_Int32 AccessibleEditableTextPara::getForeground(  )
 {
     // #104444# Added to XAccessibleComponent interface
     svtools::ColorConfig aColorConfig;
@@ -867,7 +867,7 @@ sal_Int32 SAL_CALL AccessibleEditableTextPara::getForeground(  )
     return static_cast<sal_Int32>(nColor);
 }
 
-sal_Int32 SAL_CALL AccessibleEditableTextPara::getBackground(  )
+sal_Int32 AccessibleEditableTextPara::getBackground(  )
 {
     // #104444# Added to XAccessibleComponent interface
     Color aColor( Application::GetSettings().GetStyleSettings().GetWindowColor() );
@@ -879,7 +879,7 @@ sal_Int32 SAL_CALL AccessibleEditableTextPara::getBackground(  )
 }
 
 // XAccessibleText
-sal_Int32 SAL_CALL AccessibleEditableTextPara::getCaretPosition()
+sal_Int32 AccessibleEditableTextPara::getCaretPosition()
 {
     SolarMutexGuard aGuard;
 
@@ -907,12 +907,12 @@ sal_Int32 SAL_CALL AccessibleEditableTextPara::getCaretPosition()
     return -1;
 }
 
-bool SAL_CALL AccessibleEditableTextPara::setCaretPosition( sal_Int32 nIndex )
+bool AccessibleEditableTextPara::setCaretPosition( sal_Int32 nIndex )
 {
     return setSelection(nIndex, nIndex);
 }
 
-sal_Unicode SAL_CALL AccessibleEditableTextPara::getCharacter( sal_Int32 nIndex )
+sal_Unicode AccessibleEditableTextPara::getCharacter( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -922,7 +922,7 @@ sal_Unicode SAL_CALL AccessibleEditableTextPara::getCharacter( sal_Int32 nIndex 
     return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
 }
 
-cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& rRequestedAttributes )
+cpo::uno::Sequence< beans::PropertyValue > AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& rRequestedAttributes )
 {
     SolarMutexGuard aGuard;
 
@@ -1012,7 +1012,7 @@ cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::
     return aRes;
 }
 
-awt::Rectangle SAL_CALL AccessibleEditableTextPara::getCharacterBounds( sal_Int32 nIndex )
+awt::Rectangle AccessibleEditableTextPara::getCharacterBounds( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -1045,7 +1045,7 @@ awt::Rectangle SAL_CALL AccessibleEditableTextPara::getCharacterBounds( sal_Int3
                            aScreenRect.GetSize().Height() );
 }
 
-sal_Int32 SAL_CALL AccessibleEditableTextPara::getCharacterCount()
+sal_Int32 AccessibleEditableTextPara::getCharacterCount()
 {
     SolarMutexGuard aGuard;
 
@@ -1055,7 +1055,7 @@ sal_Int32 SAL_CALL AccessibleEditableTextPara::getCharacterCount()
     return implGetText().getLength();
 }
 
-sal_Int32 SAL_CALL AccessibleEditableTextPara::getIndexAtPoint( const awt::Point& rPoint )
+sal_Int32 AccessibleEditableTextPara::getIndexAtPoint( const awt::Point& rPoint )
 {
     SolarMutexGuard aGuard;
 
@@ -1101,7 +1101,7 @@ sal_Int32 SAL_CALL AccessibleEditableTextPara::getIndexAtPoint( const awt::Point
     }
 }
 
-OUString SAL_CALL AccessibleEditableTextPara::getSelectedText()
+OUString AccessibleEditableTextPara::getSelectedText()
 {
     SolarMutexGuard aGuard;
 
@@ -1114,7 +1114,7 @@ OUString SAL_CALL AccessibleEditableTextPara::getSelectedText()
     return OCommonAccessibleText::getSelectedText();
 }
 
-sal_Int32 SAL_CALL AccessibleEditableTextPara::getSelectionStart()
+sal_Int32 AccessibleEditableTextPara::getSelectionStart()
 {
     SolarMutexGuard aGuard;
 
@@ -1127,7 +1127,7 @@ sal_Int32 SAL_CALL AccessibleEditableTextPara::getSelectionStart()
     return OCommonAccessibleText::getSelectionStart();
 }
 
-sal_Int32 SAL_CALL AccessibleEditableTextPara::getSelectionEnd()
+sal_Int32 AccessibleEditableTextPara::getSelectionEnd()
 {
     SolarMutexGuard aGuard;
 
@@ -1140,7 +1140,7 @@ sal_Int32 SAL_CALL AccessibleEditableTextPara::getSelectionEnd()
     return OCommonAccessibleText::getSelectionEnd();
 }
 
-bool SAL_CALL AccessibleEditableTextPara::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool AccessibleEditableTextPara::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -1160,7 +1160,7 @@ bool SAL_CALL AccessibleEditableTextPara::setSelection( sal_Int32 nStartIndex, s
     }
 }
 
-OUString SAL_CALL AccessibleEditableTextPara::getText()
+OUString AccessibleEditableTextPara::getText()
 {
     SolarMutexGuard aGuard;
 
@@ -1170,7 +1170,7 @@ OUString SAL_CALL AccessibleEditableTextPara::getText()
     return implGetText();
 }
 
-OUString SAL_CALL AccessibleEditableTextPara::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+OUString AccessibleEditableTextPara::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -1396,7 +1396,7 @@ void AccessibleEditableTextPara::ExtendByField( css::accessibility::TextSegment&
         Segment.SegmentText = GetTextRange(Segment.SegmentStart, Segment.SegmentEnd);
 }
 
-css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment AccessibleEditableTextPara::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aGuard;
 
@@ -1511,7 +1511,7 @@ css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtIn
     return aResult;
 }
 
-css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment AccessibleEditableTextPara::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aGuard;
 
@@ -1676,7 +1676,7 @@ css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextBefo
     return aResult;
 }
 
-css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment AccessibleEditableTextPara::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aGuard;
 
@@ -1800,7 +1800,7 @@ css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextBehi
     return aResult;
 }
 
-bool SAL_CALL AccessibleEditableTextPara::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool AccessibleEditableTextPara::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -1835,13 +1835,13 @@ bool SAL_CALL AccessibleEditableTextPara::copyText( sal_Int32 nStartIndex, sal_I
     }
 }
 
-bool SAL_CALL AccessibleEditableTextPara::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool AccessibleEditableTextPara::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }
 
 // XAccessibleEditableText
-bool SAL_CALL AccessibleEditableTextPara::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool AccessibleEditableTextPara::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
 
     SolarMutexGuard aGuard;
@@ -1875,7 +1875,7 @@ bool SAL_CALL AccessibleEditableTextPara::cutText( sal_Int32 nStartIndex, sal_In
     }
 }
 
-bool SAL_CALL AccessibleEditableTextPara::pasteText( sal_Int32 nIndex )
+bool AccessibleEditableTextPara::pasteText( sal_Int32 nIndex )
 {
 
     SolarMutexGuard aGuard;
@@ -1907,7 +1907,7 @@ bool SAL_CALL AccessibleEditableTextPara::pasteText( sal_Int32 nIndex )
     }
 }
 
-bool SAL_CALL AccessibleEditableTextPara::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool AccessibleEditableTextPara::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
 
     SolarMutexGuard aGuard;
@@ -1945,7 +1945,7 @@ bool SAL_CALL AccessibleEditableTextPara::deleteText( sal_Int32 nStartIndex, sal
     }
 }
 
-bool SAL_CALL AccessibleEditableTextPara::insertText( const OUString& sText, sal_Int32 nIndex )
+bool AccessibleEditableTextPara::insertText( const OUString& sText, sal_Int32 nIndex )
 {
 
     SolarMutexGuard aGuard;
@@ -1981,7 +1981,7 @@ bool SAL_CALL AccessibleEditableTextPara::insertText( const OUString& sText, sal
     }
 }
 
-bool SAL_CALL AccessibleEditableTextPara::replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const OUString& sReplacement )
+bool AccessibleEditableTextPara::replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const OUString& sReplacement )
 {
 
     SolarMutexGuard aGuard;
@@ -2021,7 +2021,7 @@ bool SAL_CALL AccessibleEditableTextPara::replaceText( sal_Int32 nStartIndex, sa
     }
 }
 
-bool SAL_CALL AccessibleEditableTextPara::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const cpo::uno::Sequence< beans::PropertyValue >& aAttributeSet )
+bool AccessibleEditableTextPara::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const cpo::uno::Sequence< beans::PropertyValue >& aAttributeSet )
 {
 
     SolarMutexGuard aGuard;
@@ -2076,7 +2076,7 @@ bool SAL_CALL AccessibleEditableTextPara::setAttributes( sal_Int32 nStartIndex, 
     }
 }
 
-bool SAL_CALL AccessibleEditableTextPara::setText( const OUString& sText )
+bool AccessibleEditableTextPara::setText( const OUString& sText )
 {
 
     SolarMutexGuard aGuard;
@@ -2085,7 +2085,7 @@ bool SAL_CALL AccessibleEditableTextPara::setText( const OUString& sText )
 }
 
 // XAccessibleTextAttributes
-cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getDefaultAttributes(
+cpo::uno::Sequence< beans::PropertyValue > AccessibleEditableTextPara::getDefaultAttributes(
         const cpo::uno::Sequence< OUString >& rRequestedAttributes )
 {
     SolarMutexGuard aGuard;
@@ -2166,7 +2166,7 @@ cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::
 }
 
 
-cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getRunAttributes(
+cpo::uno::Sequence< beans::PropertyValue > AccessibleEditableTextPara::getRunAttributes(
         sal_Int32 nIndex,
         const cpo::uno::Sequence< OUString >& rRequestedAttributes )
 {
@@ -2242,7 +2242,7 @@ cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::
 }
 
 // XAccessibleHypertext
-::sal_Int32 SAL_CALL AccessibleEditableTextPara::getHyperLinkCount(  )
+::sal_Int32 AccessibleEditableTextPara::getHyperLinkCount(  )
 {
     SvxAccessibleTextAdapter& rT = GetTextForwarder();
     const sal_Int32 nPara = GetParagraphIndex();
@@ -2258,7 +2258,7 @@ cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::
     return nHyperLinks;
 }
 
-css::uno::Reference< css::accessibility::XAccessibleHyperlink > SAL_CALL AccessibleEditableTextPara::getHyperLink( ::sal_Int32 nLinkIndex )
+css::uno::Reference< css::accessibility::XAccessibleHyperlink > AccessibleEditableTextPara::getHyperLink( ::sal_Int32 nLinkIndex )
 {
     rtl::Reference< AccessibleHyperlink > xRef;
 
@@ -2287,7 +2287,7 @@ css::uno::Reference< css::accessibility::XAccessibleHyperlink > SAL_CALL Accessi
     return xRef;
 }
 
-::sal_Int32 SAL_CALL AccessibleEditableTextPara::getHyperLinkIndex( ::sal_Int32 nCharIndex )
+::sal_Int32 AccessibleEditableTextPara::getHyperLinkIndex( ::sal_Int32 nCharIndex )
 {
     const sal_Int32 nPara = GetParagraphIndex();
     SvxAccessibleTextAdapter& rT = GetTextForwarder();
@@ -2312,7 +2312,7 @@ css::uno::Reference< css::accessibility::XAccessibleHyperlink > SAL_CALL Accessi
 }
 
 // XAccessibleMultiLineText
-sal_Int32 SAL_CALL AccessibleEditableTextPara::getLineNumberAtIndex( sal_Int32 nIndex )
+sal_Int32 AccessibleEditableTextPara::getLineNumberAtIndex( sal_Int32 nIndex )
 {
 
     sal_Int32 nRes = -1;
@@ -2332,7 +2332,7 @@ sal_Int32 SAL_CALL AccessibleEditableTextPara::getLineNumberAtIndex( sal_Int32 n
 }
 
 // XAccessibleMultiLineText
-css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtLineNumber( sal_Int32 nLineNo )
+css::accessibility::TextSegment AccessibleEditableTextPara::getTextAtLineNumber( sal_Int32 nLineNo )
 {
 
     css::accessibility::TextSegment aResult;
@@ -2365,7 +2365,7 @@ css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtLi
 }
 
 // XAccessibleMultiLineText
-css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtLineWithCaret(  )
+css::accessibility::TextSegment AccessibleEditableTextPara::getTextAtLineWithCaret(  )
 {
 
     css::accessibility::TextSegment aResult;
@@ -2381,7 +2381,7 @@ css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtLi
 }
 
 // XAccessibleMultiLineText
-sal_Int32 SAL_CALL AccessibleEditableTextPara::getNumberOfLineWithCaret(  )
+sal_Int32 AccessibleEditableTextPara::getNumberOfLineWithCaret(  )
 {
 
     sal_Int32 nRes = -1;

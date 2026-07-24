@@ -102,7 +102,7 @@ void SvxUnoForbiddenCharsTable::removeForbiddenCharacters( const lang::Locale& r
 }
 
 // XSupportedLocales
-Sequence< lang::Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
+Sequence< lang::Locale > SvxUnoForbiddenCharsTable::getLocales()
 {
     SolarMutexGuard aGuard;
 
@@ -123,7 +123,7 @@ Sequence< lang::Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
     return aLocales;
 }
 
-bool SAL_CALL SvxUnoForbiddenCharsTable::hasLocale( const lang::Locale& aLocale )
+bool SvxUnoForbiddenCharsTable::hasLocale( const lang::Locale& aLocale )
 {
     SolarMutexGuard aGuard;
 

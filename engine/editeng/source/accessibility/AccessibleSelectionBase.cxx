@@ -39,49 +39,49 @@ AccessibleSelectionBase::~AccessibleSelectionBase()
 }
 
 
-void SAL_CALL AccessibleSelectionBase::selectAccessibleChild( sal_Int64 nChildIndex )
+void AccessibleSelectionBase::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     ::osl::MutexGuard aGuard( implGetMutex() );
     OCommonAccessibleSelection::selectAccessibleChild( nChildIndex );
 }
 
 
-bool SAL_CALL AccessibleSelectionBase::isAccessibleChildSelected( sal_Int64 nChildIndex )
+bool AccessibleSelectionBase::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     ::osl::MutexGuard aGuard( implGetMutex() );
     return OCommonAccessibleSelection::isAccessibleChildSelected( nChildIndex );
 }
 
 
-void SAL_CALL AccessibleSelectionBase::clearAccessibleSelection(  )
+void AccessibleSelectionBase::clearAccessibleSelection(  )
 {
     ::osl::MutexGuard aGuard( implGetMutex() );
     OCommonAccessibleSelection::clearAccessibleSelection();
 }
 
 
-void SAL_CALL AccessibleSelectionBase::selectAllAccessibleChildren(  )
+void AccessibleSelectionBase::selectAllAccessibleChildren(  )
 {
     ::osl::MutexGuard aGuard( implGetMutex() );
     OCommonAccessibleSelection::selectAllAccessibleChildren();
 }
 
 
-sal_Int64 SAL_CALL AccessibleSelectionBase::getSelectedAccessibleChildCount(  )
+sal_Int64 AccessibleSelectionBase::getSelectedAccessibleChildCount(  )
 {
     ::osl::MutexGuard aGuard( implGetMutex() );
     return OCommonAccessibleSelection::getSelectedAccessibleChildCount();
 }
 
 
-uno::Reference< XAccessible > SAL_CALL AccessibleSelectionBase::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
+uno::Reference< XAccessible > AccessibleSelectionBase::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     ::osl::MutexGuard aGuard( implGetMutex() );
     return OCommonAccessibleSelection::getSelectedAccessibleChild( nSelectedChildIndex );
 }
 
 
-void SAL_CALL AccessibleSelectionBase::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
+void AccessibleSelectionBase::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     ::osl::MutexGuard aGuard( implGetMutex() );
     OCommonAccessibleSelection::deselectAccessibleChild( nSelectedChildIndex );

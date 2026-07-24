@@ -92,7 +92,7 @@ SvxUnoTextContentEnumeration::~SvxUnoTextContentEnumeration() noexcept
 }
 
 // container::XEnumeration
-bool SAL_CALL SvxUnoTextContentEnumeration::hasMoreElements()
+bool SvxUnoTextContentEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
     if( mpEditSource && !maContents.empty() )
@@ -144,7 +144,7 @@ SvxUnoTextContent::~SvxUnoTextContent() noexcept
 }
 
 // uno::XInterface
-cpo::uno::Any SAL_CALL SvxUnoTextContent::queryAggregation( const cpo::uno::Type & rType )
+cpo::uno::Any SvxUnoTextContent::queryAggregation( const cpo::uno::Type & rType )
 {
     QUERYINT( text::XTextRange );
     else QUERYINT( beans::XMultiPropertyStates );
@@ -163,24 +163,24 @@ cpo::uno::Any SAL_CALL SvxUnoTextContent::queryAggregation( const cpo::uno::Type
         return OWeakAggObject::queryAggregation( rType );
 }
 
-cpo::uno::Any SAL_CALL SvxUnoTextContent::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any SvxUnoTextContent::queryInterface( const cpo::uno::Type & rType )
 {
     return OWeakAggObject::queryInterface(rType);
 }
 
-void SAL_CALL SvxUnoTextContent::acquire() noexcept
+void SvxUnoTextContent::acquire() noexcept
 {
     OWeakAggObject::acquire();
 }
 
-void SAL_CALL SvxUnoTextContent::release() noexcept
+void SvxUnoTextContent::release() noexcept
 {
     OWeakAggObject::release();
 }
 
 // XTypeProvider
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SvxUnoTextContent::getTypes()
 {
     static const cpo::uno::Sequence< cpo::uno::Type > TYPES {
             cppu::UnoType<text::XTextRange>::get(),
@@ -197,31 +197,31 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
     return TYPES;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextContent::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SvxUnoTextContent::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 // text::XTextRange
 
-uno::Reference< text::XText > SAL_CALL SvxUnoTextContent::getText()
+uno::Reference< text::XText > SvxUnoTextContent::getText()
 {
     return mxParentText;
 }
 
 // text::XTextContent
-void SAL_CALL SvxUnoTextContent::attach( const uno::Reference< text::XTextRange >& )
+void SvxUnoTextContent::attach( const uno::Reference< text::XTextRange >& )
 {
 }
 
-uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextContent::getAnchor()
+uno::Reference< text::XTextRange > SvxUnoTextContent::getAnchor()
 {
     return mxParentText;
 }
 
 // XComponent
 
-void SAL_CALL SvxUnoTextContent::dispose()
+void SvxUnoTextContent::dispose()
 {
     SolarMutexGuard aGuard;
 
@@ -244,13 +244,13 @@ void SAL_CALL SvxUnoTextContent::dispose()
     }
 }
 
-void SAL_CALL SvxUnoTextContent::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void SvxUnoTextContent::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock aGuard(maDisposeContainerMutex);
     maDisposeListeners.addInterface(aGuard, xListener);
 }
 
-void SAL_CALL SvxUnoTextContent::removeEventListener( const uno::Reference< lang::XEventListener >& aListener )
+void SvxUnoTextContent::removeEventListener( const uno::Reference< lang::XEventListener >& aListener )
 {
    std::unique_lock aGuard(maDisposeContainerMutex);
    maDisposeListeners.removeInterface(aGuard, aListener);
@@ -258,7 +258,7 @@ void SAL_CALL SvxUnoTextContent::removeEventListener( const uno::Reference< lang
 
 // XEnumerationAccess
 
-uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextContent::createEnumeration()
+uno::Reference< container::XEnumeration > SvxUnoTextContent::createEnumeration()
 {
     SolarMutexGuard aGuard;
 
@@ -267,12 +267,12 @@ uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextContent::createEnum
 
 // XElementAccess ( container::XEnumerationAccess )
 
-cpo::uno::Type SAL_CALL SvxUnoTextContent::getElementType()
+cpo::uno::Type SvxUnoTextContent::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-bool SAL_CALL SvxUnoTextContent::hasElements()
+bool SvxUnoTextContent::hasElements()
 {
     SolarMutexGuard aGuard;
 
@@ -291,68 +291,68 @@ bool SAL_CALL SvxUnoTextContent::hasElements()
 
 // XPropertySet
 
-void SAL_CALL SvxUnoTextContent::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
+void SvxUnoTextContent::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     _setPropertyValue( aPropertyName, aValue, mnParagraph );
 }
 
-cpo::uno::Any SAL_CALL SvxUnoTextContent::getPropertyValue( const OUString& PropertyName )
+cpo::uno::Any SvxUnoTextContent::getPropertyValue( const OUString& PropertyName )
 {
     return _getPropertyValue( PropertyName, mnParagraph );
 }
 
 // XMultiPropertySet
-void SAL_CALL SvxUnoTextContent::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues )
+void SvxUnoTextContent::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues )
 {
     _setPropertyValues( aPropertyNames, aValues, mnParagraph );
 }
 
-cpo::uno::Sequence< cpo::uno::Any > SAL_CALL SvxUnoTextContent::getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames )
+cpo::uno::Sequence< cpo::uno::Any > SvxUnoTextContent::getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames )
 {
     return _getPropertyValues( aPropertyNames, mnParagraph );
 }
 
 /*// XTolerantMultiPropertySet
-cpo::uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SvxUnoTextContent::setPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+cpo::uno::Sequence< beans::SetPropertyTolerantFailed > SvxUnoTextContent::setPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     return _setPropertyValuesTolerant(aPropertyNames, aValues, mnParagraph);
 }
 
-cpo::uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SvxUnoTextContent::getPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames ) throw (uno::RuntimeException)
+cpo::uno::Sequence< beans::GetPropertyTolerantResult > SvxUnoTextContent::getPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames ) throw (uno::RuntimeException)
 {
     return _getPropertyValuesTolerant(aPropertyNames, mnParagraph);
 }
 
-cpo::uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SvxUnoTextContent::getDirectPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames )
+cpo::uno::Sequence< beans::GetDirectPropertyTolerantResult > SvxUnoTextContent::getDirectPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames )
     throw (uno::RuntimeException)
 {
     return _getDirectPropertyValuesTolerant(aPropertyNames, mnParagraph);
 }*/
 
 // beans::XPropertyState
-beans::PropertyState SAL_CALL SvxUnoTextContent::getPropertyState( const OUString& PropertyName )
+beans::PropertyState SvxUnoTextContent::getPropertyState( const OUString& PropertyName )
 {
     return _getPropertyState( PropertyName, mnParagraph );
 }
 
-cpo::uno::Sequence< beans::PropertyState > SAL_CALL SvxUnoTextContent::getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName )
+cpo::uno::Sequence< beans::PropertyState > SvxUnoTextContent::getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName )
 {
     return _getPropertyStates( aPropertyName, mnParagraph );
 }
 
-void SAL_CALL SvxUnoTextContent::setPropertyToDefault( const OUString& PropertyName )
+void SvxUnoTextContent::setPropertyToDefault( const OUString& PropertyName )
 {
     _setPropertyToDefault( PropertyName, mnParagraph );
 }
 
 // lang::XServiceInfo
 
-OUString SAL_CALL SvxUnoTextContent::getImplementationName()
+OUString SvxUnoTextContent::getImplementationName()
 {
     return u"SvxUnoTextContent"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SvxUnoTextContent::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxUnoTextRangeBase::getSupportedServiceNames(),
@@ -418,14 +418,14 @@ SvxUnoTextRangeEnumeration::~SvxUnoTextRangeEnumeration() noexcept
 
 // container::XEnumeration
 
-bool SAL_CALL SvxUnoTextRangeEnumeration::hasMoreElements()
+bool SvxUnoTextRangeEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
 
     return !maPortions.empty() && mnNextPortion < maPortions.size();
 }
 
-cpo::uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
+cpo::uno::Any SvxUnoTextRangeEnumeration::nextElement()
 {
     SolarMutexGuard aGuard;
 
@@ -459,7 +459,7 @@ SvxUnoTextCursor::~SvxUnoTextCursor() noexcept
 // Comment out automatically - [getIdlClass(es) or queryInterface]
 // Please use the XTypeProvider!
 //bool SvxUnoTextCursor::queryInterface( uno::Uik aUIK, Reference< uno::XInterface > & xRef)
-cpo::uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const cpo::uno::Type & rType )
+cpo::uno::Any SvxUnoTextCursor::queryAggregation( const cpo::uno::Type & rType )
 {
     if( rType == cppu::UnoType<text::XTextRange>::get())
         return cpo::uno::Any(uno::Reference< text::XTextRange >(static_cast<SvxUnoTextRangeBase *>(this)));
@@ -476,23 +476,23 @@ cpo::uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const cpo::uno::Type 
         return OWeakAggObject::queryAggregation( rType );
 }
 
-cpo::uno::Any SAL_CALL SvxUnoTextCursor::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any SvxUnoTextCursor::queryInterface( const cpo::uno::Type & rType )
 {
     return OWeakAggObject::queryInterface(rType);
 }
 
-void SAL_CALL SvxUnoTextCursor::acquire() noexcept
+void SvxUnoTextCursor::acquire() noexcept
 {
     OWeakAggObject::acquire();
 }
 
-void SAL_CALL SvxUnoTextCursor::release() noexcept
+void SvxUnoTextCursor::release() noexcept
 {
     OWeakAggObject::release();
 }
 
 // XTypeProvider
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SvxUnoTextCursor::getTypes()
 {
     static const cpo::uno::Sequence< cpo::uno::Type > TYPES {
             cppu::UnoType<text::XTextRange>::get(),
@@ -508,55 +508,55 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
     return TYPES;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextCursor::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SvxUnoTextCursor::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 // text::XTextCursor
-void SAL_CALL SvxUnoTextCursor::collapseToStart()
+void SvxUnoTextCursor::collapseToStart()
 {
     SolarMutexGuard aGuard;
     CollapseToStart();
 }
 
-void SAL_CALL SvxUnoTextCursor::collapseToEnd()
+void SvxUnoTextCursor::collapseToEnd()
 {
     SolarMutexGuard aGuard;
     CollapseToEnd();
 }
 
-bool SAL_CALL SvxUnoTextCursor::isCollapsed()
+bool SvxUnoTextCursor::isCollapsed()
 {
     SolarMutexGuard aGuard;
     return IsCollapsed();
 }
 
-bool SAL_CALL SvxUnoTextCursor::goLeft( sal_Int16 nCount, bool bExpand )
+bool SvxUnoTextCursor::goLeft( sal_Int16 nCount, bool bExpand )
 {
     SolarMutexGuard aGuard;
     return GoLeft( nCount, bExpand );
 }
 
-bool SAL_CALL SvxUnoTextCursor::goRight( sal_Int16 nCount, bool bExpand )
+bool SvxUnoTextCursor::goRight( sal_Int16 nCount, bool bExpand )
 {
     SolarMutexGuard aGuard;
     return GoRight( nCount, bExpand );
 }
 
-void SAL_CALL SvxUnoTextCursor::gotoStart( bool bExpand )
+void SvxUnoTextCursor::gotoStart( bool bExpand )
 {
     SolarMutexGuard aGuard;
     GotoStart( bExpand );
 }
 
-void SAL_CALL SvxUnoTextCursor::gotoEnd( bool bExpand )
+void SvxUnoTextCursor::gotoEnd( bool bExpand )
 {
     SolarMutexGuard aGuard;
     GotoEnd( bExpand );
 }
 
-void SAL_CALL SvxUnoTextCursor::gotoRange( const uno::Reference< text::XTextRange >& xRange, bool bExpand )
+void SvxUnoTextCursor::gotoRange( const uno::Reference< text::XTextRange >& xRange, bool bExpand )
 {
     if( !xRange.is() )
         return;
@@ -578,42 +578,42 @@ void SAL_CALL SvxUnoTextCursor::gotoRange( const uno::Reference< text::XTextRang
 }
 
 // text::XTextRange (rest in SvxTextRange)
-uno::Reference< text::XText > SAL_CALL SvxUnoTextCursor::getText()
+uno::Reference< text::XText > SvxUnoTextCursor::getText()
 {
     return mxParentText;
 }
 
-uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextCursor::getStart()
+uno::Reference< text::XTextRange > SvxUnoTextCursor::getStart()
 {
     return SvxUnoTextRangeBase::getStart();
 }
 
-uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextCursor::getEnd()
+uno::Reference< text::XTextRange > SvxUnoTextCursor::getEnd()
 {
     return SvxUnoTextRangeBase::getEnd();
 }
 
-OUString SAL_CALL SvxUnoTextCursor::getString()
+OUString SvxUnoTextCursor::getString()
 {
     return SvxUnoTextRangeBase::getString();
 }
 
-void SAL_CALL SvxUnoTextCursor::setString( const OUString& aString )
+void SvxUnoTextCursor::setString( const OUString& aString )
 {
     SvxUnoTextRangeBase::setString(aString);
 }
 // lang::XServiceInfo
-OUString SAL_CALL SvxUnoTextCursor::getImplementationName()
+OUString SvxUnoTextCursor::getImplementationName()
 {
     return u"SvxUnoTextCursor"_ustr;
 }
 
-bool SAL_CALL SvxUnoTextCursor::supportsService( const OUString& ServiceName )
+bool SvxUnoTextCursor::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SvxUnoTextCursor::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SvxUnoTextCursor::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxUnoTextRangeBase::getSupportedServiceNames(),

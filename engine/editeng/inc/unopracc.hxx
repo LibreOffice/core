@@ -38,19 +38,19 @@ public:
     virtual ~SvxAccessibleTextPropertySet() noexcept override;
 
     // XTextRange
-    virtual css::uno::Reference<css::text::XText> SAL_CALL getText() override;
+    virtual css::uno::Reference<css::text::XText> getText() override;
 
-    virtual cpo::uno::Any SAL_CALL queryInterface(const cpo::uno::Type& rType) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual cpo::uno::Any queryInterface(const cpo::uno::Type& rType) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
     // lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString&) override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString&) override;
 
     // lang::XTypeProvider
-    virtual cpo::uno::Sequence<cpo::uno::Type> SAL_CALL getTypes() override;
-    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

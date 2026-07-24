@@ -354,7 +354,7 @@ uno::Reference< XAccessible > AccessibleStaticTextBase::getAccessibleAtPoint( co
 }
 
 // XAccessibleText
-sal_Int32 SAL_CALL AccessibleStaticTextBase::getCaretPosition()
+sal_Int32 AccessibleStaticTextBase::getCaretPosition()
 {
     SolarMutexGuard aGuard;
 
@@ -368,12 +368,12 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getCaretPosition()
     return nPos;
 }
 
-bool SAL_CALL AccessibleStaticTextBase::setCaretPosition( sal_Int32 nIndex )
+bool AccessibleStaticTextBase::setCaretPosition( sal_Int32 nIndex )
 {
     return setSelection(nIndex, nIndex);
 }
 
-sal_Unicode SAL_CALL AccessibleStaticTextBase::getCharacter( sal_Int32 nIndex )
+sal_Unicode AccessibleStaticTextBase::getCharacter( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -382,7 +382,7 @@ sal_Unicode SAL_CALL AccessibleStaticTextBase::getCharacter( sal_Int32 nIndex )
     return GetParagraph(aPos.nPara).getCharacter(aPos.nIndex);
 }
 
-cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes )
+cpo::uno::Sequence< beans::PropertyValue > AccessibleStaticTextBase::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes )
 {
     SolarMutexGuard aGuard;
 
@@ -394,7 +394,7 @@ cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::ge
     return GetParagraph( aPos.nPara ).getCharacterAttributes( aPos.nIndex, aRequestedAttributes );
 }
 
-awt::Rectangle SAL_CALL AccessibleStaticTextBase::getCharacterBounds( sal_Int32 nIndex )
+awt::Rectangle AccessibleStaticTextBase::getCharacterBounds( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -412,7 +412,7 @@ awt::Rectangle SAL_CALL AccessibleStaticTextBase::getCharacterBounds( sal_Int32 
     return aBounds;
 }
 
-sal_Int32 SAL_CALL AccessibleStaticTextBase::getCharacterCount()
+sal_Int32 AccessibleStaticTextBase::getCharacterCount()
 {
     SolarMutexGuard aGuard;
 
@@ -424,7 +424,7 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getCharacterCount()
     return nCount;
 }
 
-sal_Int32 SAL_CALL AccessibleStaticTextBase::getIndexAtPoint( const awt::Point& rPoint )
+sal_Int32 AccessibleStaticTextBase::getIndexAtPoint( const awt::Point& rPoint )
 {
     SolarMutexGuard aGuard;
 
@@ -451,7 +451,7 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getIndexAtPoint( const awt::Point& 
     return -1;
 }
 
-OUString SAL_CALL AccessibleStaticTextBase::getSelectedText()
+OUString AccessibleStaticTextBase::getSelectedText()
 {
     SolarMutexGuard aGuard;
 
@@ -465,7 +465,7 @@ OUString SAL_CALL AccessibleStaticTextBase::getSelectedText()
     return getTextRange( nStart, nEnd );
 }
 
-sal_Int32 SAL_CALL AccessibleStaticTextBase::getSelectionStart()
+sal_Int32 AccessibleStaticTextBase::getSelectionStart()
 {
     SolarMutexGuard aGuard;
 
@@ -479,7 +479,7 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getSelectionStart()
     return nPos;
 }
 
-sal_Int32 SAL_CALL AccessibleStaticTextBase::getSelectionEnd()
+sal_Int32 AccessibleStaticTextBase::getSelectionEnd()
 {
     SolarMutexGuard aGuard;
 
@@ -493,7 +493,7 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getSelectionEnd()
     return nPos;
 }
 
-bool SAL_CALL AccessibleStaticTextBase::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool AccessibleStaticTextBase::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -504,7 +504,7 @@ bool SAL_CALL AccessibleStaticTextBase::setSelection( sal_Int32 nStartIndex, sal
                         aEndIndex.nPara, aEndIndex.nIndex);
 }
 
-OUString SAL_CALL AccessibleStaticTextBase::getText()
+OUString AccessibleStaticTextBase::getText()
 {
     SolarMutexGuard aGuard;
 
@@ -516,7 +516,7 @@ OUString SAL_CALL AccessibleStaticTextBase::getText()
     return aRes.makeStringAndClear();
 }
 
-OUString SAL_CALL AccessibleStaticTextBase::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+OUString AccessibleStaticTextBase::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -598,7 +598,7 @@ OUString SAL_CALL AccessibleStaticTextBase::getTextRange( sal_Int32 nStartIndex,
     return aRes.makeStringAndClear();
 }
 
-css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment AccessibleStaticTextBase::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aGuard;
 
@@ -649,7 +649,7 @@ css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextAtInde
     return aResult;
 }
 
-css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment AccessibleStaticTextBase::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aGuard;
 
@@ -695,7 +695,7 @@ css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBefore
     return aResult;
 }
 
-css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment AccessibleStaticTextBase::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aGuard;
 
@@ -736,7 +736,7 @@ css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBehind
     return aResult;
 }
 
-bool SAL_CALL AccessibleStaticTextBase::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+bool AccessibleStaticTextBase::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -749,7 +749,7 @@ bool SAL_CALL AccessibleStaticTextBase::copyText( sal_Int32 nStartIndex, sal_Int
     return CopyText(aStartIndex.nPara, aStartIndex.nIndex, aEndIndex.nPara, aEndIndex.nIndex);
 }
 
-bool SAL_CALL AccessibleStaticTextBase::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+bool AccessibleStaticTextBase::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
 {
     return false;
 }
@@ -788,7 +788,7 @@ cpo::uno::Sequence< beans::PropertyValue > AccessibleStaticTextBase::getDefaultA
     return comphelper::containerToSequence(aDefAttrVec);
 }
 
-cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getRunAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& RequestedAttributes )
+cpo::uno::Sequence< beans::PropertyValue > AccessibleStaticTextBase::getRunAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& RequestedAttributes )
 {
     // get those default attributes of the paragraph, which are not part
     // of the intersection of all paragraphs and add them to the run attributes

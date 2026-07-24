@@ -57,7 +57,7 @@ SvXMLWordListContext::SvXMLWordListContext(
     rLocalRef.rAutoCorrect.refreshBlockList( rLocalRef.xStorage );
 }
 
-css::uno::Reference<XFastContextHandler> SAL_CALL SvXMLWordListContext::createFastChildContext(
+css::uno::Reference<XFastContextHandler> SvXMLWordListContext::createFastChildContext(
     sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     if ( Element == SvXMLAutoCorrectToken::BLOCK )
@@ -129,7 +129,7 @@ SvXMLExceptionListContext::SvXMLExceptionListContext(
 {
 }
 
-css::uno::Reference<xml::sax::XFastContextHandler> SAL_CALL SvXMLExceptionListContext::createFastChildContext(
+css::uno::Reference<xml::sax::XFastContextHandler> SvXMLExceptionListContext::createFastChildContext(
     sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     if ( Element == SvXMLAutoCorrectToken::BLOCK )

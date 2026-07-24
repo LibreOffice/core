@@ -32,8 +32,8 @@ public:
     virtual ~SvXMLAutoCorrectTokenHandler() override;
 
     //XFastTokenHandler
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const cpo::uno::Sequence< sal_Int8 >& Identifier ) override;
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 Token ) override;
+    virtual sal_Int32 getTokenFromUTF8( const cpo::uno::Sequence< sal_Int8 >& Identifier ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > getUTF8Identifier( sal_Int32 Token ) override;
 
     // Much faster direct C++ shortcut to the method that matters
     virtual sal_Int32 getTokenDirect(std::string_view token) const override;

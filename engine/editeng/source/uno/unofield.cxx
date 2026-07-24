@@ -528,7 +528,7 @@ std::unique_ptr<SvxFieldData> SvxUnoTextField::CreateFieldData() const noexcept
 }
 
 // uno::XInterface
-cpo::uno::Any SAL_CALL SvxUnoTextField::queryAggregation( const cpo::uno::Type & rType )
+cpo::uno::Any SvxUnoTextField::queryAggregation( const cpo::uno::Type & rType )
 {
     cpo::uno::Any aAny;
 
@@ -544,7 +544,7 @@ cpo::uno::Any SAL_CALL SvxUnoTextField::queryAggregation( const cpo::uno::Type &
 
 // XTypeProvider
 
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoTextField::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SvxUnoTextField::getTypes()
 {
     if( !maTypeSequence.hasElements() )
     {
@@ -559,28 +559,28 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxUnoTextField::getTypes()
     return maTypeSequence;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextField::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SvxUnoTextField::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-cpo::uno::Any SAL_CALL SvxUnoTextField::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any SvxUnoTextField::queryInterface( const cpo::uno::Type & rType )
 {
     return OComponentHelper::queryInterface(rType);
 }
 
-void SAL_CALL SvxUnoTextField::acquire() noexcept
+void SvxUnoTextField::acquire() noexcept
 {
     OComponentHelper::acquire();
 }
 
-void SAL_CALL SvxUnoTextField::release() noexcept
+void SvxUnoTextField::release() noexcept
 {
     OComponentHelper::release();
 }
 
 // Interface text::XTextField
-OUString SAL_CALL SvxUnoTextField::getPresentation( bool bShowCommand )
+OUString SvxUnoTextField::getPresentation( bool bShowCommand )
 {
     SolarMutexGuard aGuard;
     if (bShowCommand)
@@ -630,7 +630,7 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( bool bShowCommand )
 }
 
 // Interface text::XTextContent
-void SAL_CALL SvxUnoTextField::attach( const uno::Reference< text::XTextRange >& xTextRange )
+void SvxUnoTextField::attach( const uno::Reference< text::XTextRange >& xTextRange )
 {
     SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRange>( xTextRange );
     if(pRange == nullptr)
@@ -641,37 +641,37 @@ void SAL_CALL SvxUnoTextField::attach( const uno::Reference< text::XTextRange >&
         pRange->attachField( std::move(pData) );
 }
 
-uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextField::getAnchor()
+uno::Reference< text::XTextRange > SvxUnoTextField::getAnchor()
 {
     return mxAnchor;
 }
 
 // lang::XComponent
-void SAL_CALL SvxUnoTextField::dispose()
+void SvxUnoTextField::dispose()
 {
     OComponentHelper::dispose();
     mxAnchor.clear();
 }
 
-void SAL_CALL SvxUnoTextField::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void SvxUnoTextField::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     OComponentHelper::addEventListener(xListener);
 }
 
-void SAL_CALL SvxUnoTextField::removeEventListener( const uno::Reference< lang::XEventListener >& aListener )
+void SvxUnoTextField::removeEventListener( const uno::Reference< lang::XEventListener >& aListener )
 {
     OComponentHelper::removeEventListener(aListener);
 }
 
 
 // Interface beans::XPropertySet
-uno::Reference< beans::XPropertySetInfo > SAL_CALL SvxUnoTextField::getPropertySetInfo(  )
+uno::Reference< beans::XPropertySetInfo > SvxUnoTextField::getPropertySetInfo(  )
 {
     SolarMutexGuard aGuard;
     return mpPropSet->getPropertySetInfo();
 }
 
-void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
+void SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue )
 {
     SolarMutexGuard aGuard;
 
@@ -727,7 +727,7 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
     throw lang::IllegalArgumentException();
 }
 
-cpo::uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyName )
+cpo::uno::Any SvxUnoTextField::getPropertyValue( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -774,10 +774,10 @@ cpo::uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& Proper
     return aValue;
 }
 
-void SAL_CALL SvxUnoTextField::addPropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) {}
-void SAL_CALL SvxUnoTextField::removePropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) {}
-void SAL_CALL SvxUnoTextField::addVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) {}
-void SAL_CALL SvxUnoTextField::removeVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) {}
+void SvxUnoTextField::addPropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) {}
+void SvxUnoTextField::removePropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) {}
+void SvxUnoTextField::addVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) {}
+void SvxUnoTextField::removeVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) {}
 
 // OComponentHelper
 void SvxUnoTextField::disposing()
@@ -786,12 +786,12 @@ void SvxUnoTextField::disposing()
 }
 
 // lang::XServiceInfo
-OUString SAL_CALL SvxUnoTextField::getImplementationName()
+OUString SvxUnoTextField::getImplementationName()
 {
     return u"SvxUnoTextField"_ustr;
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SvxUnoTextField::getSupportedServiceNames()
 {
     cpo::uno::Sequence<OUString> aSeq(4);
     OUString* pServices = aSeq.getArray();
@@ -865,7 +865,7 @@ cpo::uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceName
     return aSeq;
 }
 
-bool SAL_CALL SvxUnoTextField::supportsService( const OUString& ServiceName )
+bool SvxUnoTextField::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }

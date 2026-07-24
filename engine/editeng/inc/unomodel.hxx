@@ -35,33 +35,33 @@ public:
     SvxSimpleUnoModel();
 
     // XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 
     // XStyleFamiliesSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getStyleFamilies(  ) override;
+    virtual css::uno::Reference< css::container::XNameAccess > getStyleFamilies(  ) override;
 
     // XAnyCompareFactory
-    virtual css::uno::Reference< css::ucb::XAnyCompare > SAL_CALL createAnyCompareByName( const OUString& PropertyName ) override;
+    virtual css::uno::Reference< css::ucb::XAnyCompare > createAnyCompareByName( const OUString& PropertyName ) override;
 
     // XModel
-    virtual bool SAL_CALL attachResource( const OUString& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
-    virtual OUString SAL_CALL getURL(  ) override;
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getArgs(  ) override;
-    virtual void SAL_CALL connectController( const css::uno::Reference< css::frame::XController >& xController ) override;
-    virtual void SAL_CALL disconnectController( const css::uno::Reference< css::frame::XController >& xController ) override;
-    virtual void SAL_CALL lockControllers(  ) override;
-    virtual void SAL_CALL unlockControllers(  ) override;
-    virtual bool SAL_CALL hasControllersLocked(  ) override;
-    virtual css::uno::Reference< css::frame::XController > SAL_CALL getCurrentController(  ) override;
-    virtual void SAL_CALL setCurrentController( const css::uno::Reference< css::frame::XController >& xController ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getCurrentSelection(  ) override;
+    virtual bool attachResource( const OUString& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
+    virtual OUString getURL(  ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getArgs(  ) override;
+    virtual void connectController( const css::uno::Reference< css::frame::XController >& xController ) override;
+    virtual void disconnectController( const css::uno::Reference< css::frame::XController >& xController ) override;
+    virtual void lockControllers(  ) override;
+    virtual void unlockControllers(  ) override;
+    virtual bool hasControllersLocked(  ) override;
+    virtual css::uno::Reference< css::frame::XController > getCurrentController(  ) override;
+    virtual void setCurrentController( const css::uno::Reference< css::frame::XController >& xController ) override;
+    virtual css::uno::Reference< css::uno::XInterface > getCurrentSelection(  ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose(  ) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void dispose(  ) override;
+    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 };
 

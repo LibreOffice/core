@@ -50,12 +50,12 @@ AccessibleHyperlink::~AccessibleHyperlink()
 }
 
 // XAccessibleAction
-sal_Int32 SAL_CALL AccessibleHyperlink::getAccessibleActionCount()
+sal_Int32 AccessibleHyperlink::getAccessibleActionCount()
 {
      return isValid() ? 1 : 0;
 }
 
-bool SAL_CALL AccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex  )
+bool AccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex  )
 {
     bool bRet = false;
     if ( isValid() && ( nIndex == 0 ) )
@@ -66,7 +66,7 @@ bool SAL_CALL AccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex  )
     return bRet;
 }
 
-OUString  SAL_CALL AccessibleHyperlink::getAccessibleActionDescription( sal_Int32 nIndex )
+OUString  AccessibleHyperlink::getAccessibleActionDescription( sal_Int32 nIndex )
 {
     OUString aDesc;
 
@@ -76,7 +76,7 @@ OUString  SAL_CALL AccessibleHyperlink::getAccessibleActionDescription( sal_Int3
     return aDesc;
 }
 
-uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL AccessibleHyperlink::getAccessibleActionKeyBinding( sal_Int32 nIndex )
+uno::Reference< css::accessibility::XAccessibleKeyBinding > AccessibleHyperlink::getAccessibleActionKeyBinding( sal_Int32 nIndex )
 {
     if( !isValid() || ( nIndex != 0 ) )
         return nullptr;
@@ -94,27 +94,27 @@ uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL AccessibleH
 }
 
 // XAccessibleHyperlink
-cpo::uno::Any SAL_CALL AccessibleHyperlink::getAccessibleActionAnchor( sal_Int32 /*nIndex*/ )
+cpo::uno::Any AccessibleHyperlink::getAccessibleActionAnchor( sal_Int32 /*nIndex*/ )
 {
     return cpo::uno::Any();
 }
 
-cpo::uno::Any SAL_CALL AccessibleHyperlink::getAccessibleActionObject( sal_Int32 /*nIndex*/ )
+cpo::uno::Any AccessibleHyperlink::getAccessibleActionObject( sal_Int32 /*nIndex*/ )
 {
     return cpo::uno::Any();
 }
 
-sal_Int32 SAL_CALL AccessibleHyperlink::getStartIndex()
+sal_Int32 AccessibleHyperlink::getStartIndex()
 {
     return nStartIdx;
 }
 
-sal_Int32 SAL_CALL AccessibleHyperlink::getEndIndex()
+sal_Int32 AccessibleHyperlink::getEndIndex()
 {
     return nEndIdx;
 }
 
-bool SAL_CALL AccessibleHyperlink::isValid(  )
+bool AccessibleHyperlink::isValid(  )
 {
     return rTA.IsValid();
 }

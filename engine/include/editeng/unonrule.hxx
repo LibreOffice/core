@@ -46,26 +46,26 @@ public:
     virtual ~SvxUnoNumberingRules() noexcept override;
 
     //XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
+    virtual void replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override ;
-    virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+    virtual sal_Int32 getCount() override ;
+    virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
     //XElementAccess
-    virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual cpo::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // XAnyCompare
-    virtual sal_Int16 SAL_CALL compare( const cpo::uno::Any& Any1, const cpo::uno::Any& Any2 ) override;
+    virtual sal_Int16 compare( const cpo::uno::Any& Any1, const cpo::uno::Any& Any2 ) override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
+    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // internal
     /// @throws css::uno::RuntimeException

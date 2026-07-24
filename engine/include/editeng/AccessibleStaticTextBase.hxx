@@ -165,44 +165,44 @@ public:
     void Dispose();
 
     // XAccessibleText interface implementation
-    virtual sal_Int32 SAL_CALL getCaretPosition() override final;
-    virtual bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override final;
-    virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override final;
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
-    virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) override final;
-    virtual sal_Int32 SAL_CALL getCharacterCount() override final;
-    virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) override final;
-    virtual OUString SAL_CALL getSelectedText() override final;
-    virtual sal_Int32 SAL_CALL getSelectionStart() override final;
-    virtual sal_Int32 SAL_CALL getSelectionEnd() override final;
+    virtual sal_Int32 getCaretPosition() override final;
+    virtual bool setCaretPosition( sal_Int32 nIndex ) override final;
+    virtual sal_Unicode getCharacter( sal_Int32 nIndex ) override final;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
+    virtual css::awt::Rectangle getCharacterBounds( sal_Int32 nIndex ) override final;
+    virtual sal_Int32 getCharacterCount() override final;
+    virtual sal_Int32 getIndexAtPoint( const css::awt::Point& aPoint ) override final;
+    virtual OUString getSelectedText() override final;
+    virtual sal_Int32 getSelectionStart() override final;
+    virtual sal_Int32 getSelectionEnd() override final;
     /// This will only work with a functional SvxEditViewForwarder, i.e. an EditEngine/Outliner in edit mode
-    virtual bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override final;
-    virtual OUString SAL_CALL getText() override final;
-    virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override final;
+    virtual bool setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override final;
+    virtual OUString getText() override final;
+    virtual OUString getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override final;
     /// Does not support AccessibleTextType::SENTENCE (missing feature in EditEngine)
-    virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
+    virtual css::accessibility::TextSegment getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
     /// Does not support AccessibleTextType::SENTENCE (missing feature in EditEngine)
-    virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
+    virtual css::accessibility::TextSegment getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
     /// Does not support AccessibleTextType::SENTENCE (missing feature in EditEngine)
-    virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
+    virtual css::accessibility::TextSegment getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
     /// This will only work with a functional SvxEditViewForwarder, i.e. an EditEngine/Outliner in edit mode
-    virtual bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override final;
-    virtual bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override final;
+    virtual bool copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override final;
+    virtual bool scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override final;
 
     // XAccessibleTextAttributes
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getDefaultAttributes( const cpo::uno::Sequence< OUString >& RequestedAttributes ) override final;
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 Index, const cpo::uno::Sequence< OUString >& RequestedAttributes ) override final;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getDefaultAttributes( const cpo::uno::Sequence< OUString >& RequestedAttributes ) override final;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getRunAttributes( sal_Int32 Index, const cpo::uno::Sequence< OUString >& RequestedAttributes ) override final;
 
     // child-related methods from XAccessibleContext
     /// @throws css::uno::RuntimeException
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount();
+    virtual sal_Int64 getAccessibleChildCount();
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i );
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i );
 
     // child-related methods from XAccessibleComponent
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint );
+    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint );
 
 protected:
     tools::Rectangle GetParagraphBoundingBox() const;

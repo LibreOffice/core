@@ -53,7 +53,7 @@ private:
 public:
     SvXMLWordListContext ( SvXMLAutoCorrectImport& rImport );
 
-    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext( sal_Int32 Element,
+    virtual css::uno::Reference<XFastContextHandler> createFastChildContext( sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     virtual ~SvXMLWordListContext() override;
@@ -94,7 +94,7 @@ private:
 public:
     SvXMLExceptionListContext ( SvXMLExceptionListImport& rImport );
 
-    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext( sal_Int32 Element,
+    virtual css::uno::Reference<XFastContextHandler> createFastChildContext( sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     virtual ~SvXMLExceptionListContext() override;

@@ -37,31 +37,31 @@ SvxAccessibleTextPropertySet::~SvxAccessibleTextPropertySet() noexcept
 {
 }
 
-uno::Reference< text::XText > SAL_CALL SvxAccessibleTextPropertySet::getText()
+uno::Reference< text::XText > SvxAccessibleTextPropertySet::getText()
 {
   // TODO (empty?)
   return uno::Reference< text::XText > ();
 }
 
-cpo::uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryInterface( const cpo::uno::Type & rType )
+cpo::uno::Any SvxAccessibleTextPropertySet::queryInterface( const cpo::uno::Type & rType )
 {
     return OWeakObject::queryInterface(rType);
 }
 
-void SAL_CALL SvxAccessibleTextPropertySet::acquire()
+void SvxAccessibleTextPropertySet::acquire()
     noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL SvxAccessibleTextPropertySet::release()
+void SvxAccessibleTextPropertySet::release()
     noexcept
 {
     OWeakObject::release();
 }
 
 // XTypeProvider
-cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes()
+cpo::uno::Sequence< cpo::uno::Type > SvxAccessibleTextPropertySet::getTypes()
 {
     static ::cppu::OTypeCollection ourTypeCollection(
                 ::cppu::UnoType<beans::XPropertySet>::get(),
@@ -73,18 +73,18 @@ cpo::uno::Sequence< cpo::uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getT
     return ourTypeCollection.getTypes() ;
 }
 
-cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxAccessibleTextPropertySet::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SvxAccessibleTextPropertySet::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo
-OUString SAL_CALL SAL_CALL SvxAccessibleTextPropertySet::getImplementationName()
+OUString SvxAccessibleTextPropertySet::getImplementationName()
 {
     return u"SvxAccessibleTextPropertySet"_ustr;
 }
 
-bool SAL_CALL SvxAccessibleTextPropertySet::supportsService (const OUString& sServiceName)
+bool SvxAccessibleTextPropertySet::supportsService (const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }

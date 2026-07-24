@@ -100,7 +100,7 @@ SvxUnoNumberingRules::~SvxUnoNumberingRules() noexcept
 }
 
 //XIndexReplace
-void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
+void SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const cpo::uno::Any& Element )
 {
     SolarMutexGuard aGuard;
 
@@ -115,14 +115,14 @@ void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const cpo::
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount()
+sal_Int32 SvxUnoNumberingRules::getCount()
 {
     SolarMutexGuard aGuard;
 
     return maRule.GetLevelCount();
 }
 
-Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
+Any SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
 {
     SolarMutexGuard aGuard;
 
@@ -133,39 +133,39 @@ Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
 }
 
 //XElementAccess
-Type SAL_CALL SvxUnoNumberingRules::getElementType()
+Type SvxUnoNumberingRules::getElementType()
 {
     return cppu::UnoType<Sequence< beans::PropertyValue >>::get();
 }
 
-bool SAL_CALL SvxUnoNumberingRules::hasElements()
+bool SvxUnoNumberingRules::hasElements()
 {
     return true;
 }
 
 // XAnyCompare
-sal_Int16 SAL_CALL SvxUnoNumberingRules::compare( const Any& rAny1, const Any& rAny2 )
+sal_Int16 SvxUnoNumberingRules::compare( const Any& rAny1, const Any& rAny2 )
 {
     return SvxUnoNumberingRules::Compare( rAny1, rAny2 );
 }
 
 // XCloneable
-Reference< XCloneable > SAL_CALL SvxUnoNumberingRules::createClone(  )
+Reference< XCloneable > SvxUnoNumberingRules::createClone(  )
 {
     return new SvxUnoNumberingRules(maRule);
 }
 
-OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  )
+OUString SvxUnoNumberingRules::getImplementationName(  )
 {
     return u"SvxUnoNumberingRules"_ustr;
 }
 
-bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& ServiceName )
+bool SvxUnoNumberingRules::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  )
+Sequence< OUString > SvxUnoNumberingRules::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.text.NumberingRules"_ustr };
 }
@@ -484,12 +484,12 @@ namespace {
 class SvxUnoNumberingRulesCompare : public ::cppu::WeakImplHelper< XAnyCompare >
 {
 public:
-    virtual sal_Int16 SAL_CALL compare( const Any& Any1, const Any& Any2 ) override;
+    virtual sal_Int16 compare( const Any& Any1, const Any& Any2 ) override;
 };
 
 }
 
-sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const Any& Any1, const Any& Any2 )
+sal_Int16 SvxUnoNumberingRulesCompare::compare( const Any& Any1, const Any& Any2 )
 {
     return SvxUnoNumberingRules::Compare( Any1, Any2 );
 }

@@ -81,14 +81,14 @@ public:
     ThesDummy_Impl() {}
 
     // XSupportedLocales
-    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL
+    virtual cpo::uno::Sequence< css::lang::Locale >
         getLocales() override;
-    virtual bool SAL_CALL
+    virtual bool
         hasLocale( const css::lang::Locale& rLocale ) override;
 
     // XThesaurus
     virtual cpo::uno::Sequence<
-            css::uno::Reference< css::linguistic2::XMeaning > > SAL_CALL
+            css::uno::Reference< css::linguistic2::XMeaning > >
         queryMeanings( const OUString& rTerm,
                 const css::lang::Locale& rLocale,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
@@ -129,7 +129,7 @@ void ThesDummy_Impl::GetThes_Impl()
 }
 
 
-cpo::uno::Sequence< lang::Locale > SAL_CALL
+cpo::uno::Sequence< lang::Locale >
         ThesDummy_Impl::getLocales()
 {
     GetThes_Impl();
@@ -141,7 +141,7 @@ cpo::uno::Sequence< lang::Locale > SAL_CALL
 }
 
 
-bool SAL_CALL
+bool
         ThesDummy_Impl::hasLocale( const lang::Locale& rLocale )
 {
     GetThes_Impl();
@@ -153,7 +153,7 @@ bool SAL_CALL
 }
 
 
-cpo::uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
+cpo::uno::Sequence< uno::Reference< linguistic2::XMeaning > >
         ThesDummy_Impl::queryMeanings(
                 const OUString& rTerm,
                 const lang::Locale& rLocale,
@@ -182,15 +182,15 @@ class SpellDummy_Impl :
 public:
 
     // XSupportedLocales (for XSpellChecker)
-    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL
+    virtual cpo::uno::Sequence< css::lang::Locale >
         getLocales() override;
-    virtual bool SAL_CALL
+    virtual bool
         hasLocale( const css::lang::Locale& ) override;
 
-    virtual bool SAL_CALL
+    virtual bool
         isValid( const OUString& rWord, const css::lang::Locale& nLanguage,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL
+    virtual css::uno::Reference< css::linguistic2::XSpellAlternatives >
         spell( const OUString& rWord, const css::lang::Locale& nLanguage,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 };
@@ -207,7 +207,7 @@ void SpellDummy_Impl::GetSpell_Impl()
 }
 
 
-cpo::uno::Sequence< css::lang::Locale > SAL_CALL
+cpo::uno::Sequence< css::lang::Locale >
     SpellDummy_Impl::getLocales()
 {
     GetSpell_Impl();
@@ -218,7 +218,7 @@ cpo::uno::Sequence< css::lang::Locale > SAL_CALL
 }
 
 
-bool SAL_CALL
+bool
     SpellDummy_Impl::hasLocale( const css::lang::Locale& nLanguage )
 {
     GetSpell_Impl();
@@ -229,7 +229,7 @@ bool SAL_CALL
 }
 
 
-bool SAL_CALL
+bool
     SpellDummy_Impl::isValid( const OUString& rWord, const css::lang::Locale& nLanguage,
             const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
@@ -241,7 +241,7 @@ bool SAL_CALL
 }
 
 
-uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL
+uno::Reference< linguistic2::XSpellAlternatives >
     SpellDummy_Impl::spell( const OUString& rWord, const css::lang::Locale& nLanguage,
             const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
@@ -268,26 +268,26 @@ public:
 
     // XSupportedLocales
     virtual cpo::uno::Sequence<
-            css::lang::Locale > SAL_CALL
+            css::lang::Locale >
         getLocales() override;
-    virtual bool SAL_CALL
+    virtual bool
         hasLocale( const css::lang::Locale& rLocale ) override;
 
     // XHyphenator
     virtual css::uno::Reference<
-            css::linguistic2::XHyphenatedWord > SAL_CALL
+            css::linguistic2::XHyphenatedWord >
         hyphenate( const OUString& rWord,
                 const css::lang::Locale& rLocale,
                 sal_Int16 nMaxLeading,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
     virtual css::uno::Reference<
-            css::linguistic2::XHyphenatedWord > SAL_CALL
+            css::linguistic2::XHyphenatedWord >
         queryAlternativeSpelling( const OUString& rWord,
                 const css::lang::Locale& rLocale,
                 sal_Int16 nIndex,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
     virtual css::uno::Reference<
-            css::linguistic2::XPossibleHyphens > SAL_CALL
+            css::linguistic2::XPossibleHyphens >
         createPossibleHyphens(
                 const OUString& rWord,
                 const css::lang::Locale& rLocale,
@@ -306,7 +306,7 @@ void HyphDummy_Impl::GetHyph_Impl()
 }
 
 
-cpo::uno::Sequence< lang::Locale > SAL_CALL
+cpo::uno::Sequence< lang::Locale >
     HyphDummy_Impl::getLocales()
 {
     GetHyph_Impl();
@@ -317,7 +317,7 @@ cpo::uno::Sequence< lang::Locale > SAL_CALL
 }
 
 
-bool SAL_CALL
+bool
     HyphDummy_Impl::hasLocale( const lang::Locale& rLocale )
 {
     GetHyph_Impl();
@@ -328,7 +328,7 @@ bool SAL_CALL
 }
 
 
-uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
+uno::Reference< linguistic2::XHyphenatedWord >
     HyphDummy_Impl::hyphenate(
             const OUString& rWord,
             const lang::Locale& rLocale,
@@ -343,7 +343,7 @@ uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
 }
 
 
-uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
+uno::Reference< linguistic2::XHyphenatedWord >
     HyphDummy_Impl::queryAlternativeSpelling(
             const OUString& rWord,
             const lang::Locale& rLocale,
@@ -358,7 +358,7 @@ uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
 }
 
 
-uno::Reference< linguistic2::XPossibleHyphens > SAL_CALL
+uno::Reference< linguistic2::XPossibleHyphens >
     HyphDummy_Impl::createPossibleHyphens(
             const OUString& rWord,
             const lang::Locale& rLocale,
@@ -382,7 +382,7 @@ public:
     virtual ~LinguMgrExitLstnr() override;
 
     // lang::XEventListener
-    virtual void    SAL_CALL disposing(const EventObject& rSource) override;
+    virtual void    disposing(const EventObject& rSource) override;
 };
 
 LinguMgrExitLstnr::LinguMgrExitLstnr()

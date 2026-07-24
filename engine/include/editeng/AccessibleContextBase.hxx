@@ -143,40 +143,40 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
-    virtual sal_Int64 SAL_CALL
+    virtual sal_Int64
         getAccessibleChildCount() override;
 
     /// Return the specified child or throw exception.
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild (sal_Int64 nIndex) override;
 
     /// Return a reference to the parent.
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible>
         getAccessibleParent() override;
 
     /// Return this object's role.
-    virtual sal_Int16 SAL_CALL
+    virtual sal_Int16
         getAccessibleRole() override;
 
     /// Return this object's description.
-    virtual OUString SAL_CALL
+    virtual OUString
         getAccessibleDescription() override;
 
     /// Return the object's current name.
-    virtual OUString SAL_CALL
+    virtual OUString
         getAccessibleName() override;
 
     /// Return NULL to indicate that an empty relation set.
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet>
         getAccessibleRelationSet() override;
 
     /// Return the set of current states.
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
+    virtual sal_Int64 getAccessibleStateSet() override;
 
     /** Return the parents locale or throw exception if this object has no
         parent yet/anymore.
     */
-    virtual css::lang::Locale SAL_CALL
+    virtual css::lang::Locale
         getLocale() override;
 
     //=====  XAccessibleComponent  ================================================
@@ -184,33 +184,33 @@ public:
     /** The default implementation returns an empty reference.
     */
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleAtPoint(const css::awt::Point& aPoint) override;
+        getAccessibleAtPoint(const css::awt::Point& aPoint) override;
 
     /** The default implementation does nothing.
     */
-    virtual void SAL_CALL grabFocus() override;
+    virtual void grabFocus() override;
 
     /** Returns black as the default foreground color.
     */
-    virtual sal_Int32 SAL_CALL getForeground() override;
+    virtual sal_Int32 getForeground() override;
 
     /** Returns white as the default background color.
     */
-    virtual sal_Int32 SAL_CALL getBackground() override;
+    virtual sal_Int32 getBackground() override;
 
     //=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual OUString SAL_CALL
+    virtual OUString
         getImplementationName() override;
 
     /** Return whether the specified service is supported by this class.
     */
-    virtual bool SAL_CALL
+    virtual bool
         supportsService (const OUString& sServiceName) override final;
 
-    virtual cpo::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString>
         getSupportedServiceNames() override;
 
     /** Check whether or not the object has been disposed (or is in the
@@ -232,7 +232,7 @@ protected:
     rtl::Reference<utl::AccessibleRelationSetHelper> mxRelationSet;
 
     // This method is called from the component helper base class while disposing.
-    virtual void SAL_CALL disposing() override;
+    virtual void disposing() override;
 
     /** Create the accessible object's name.  This method may be called more
         than once for a single object.

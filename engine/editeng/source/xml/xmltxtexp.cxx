@@ -117,7 +117,7 @@ SvxSimpleUnoModel::SvxSimpleUnoModel()
 }
 
 // XMultiServiceFactory ( SvxFmMSFactory )
-uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( const OUString& aServiceSpecifier )
+uno::Reference< uno::XInterface > SvxSimpleUnoModel::createInstance( const OUString& aServiceSpecifier )
 {
     if( aServiceSpecifier == "com.sun.star.text.NumberingRules" )
     {
@@ -140,79 +140,79 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
 
 }
 
-uno::Reference< css::uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& )
+uno::Reference< css::uno::XInterface > SvxSimpleUnoModel::createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& )
 {
     return createInstance( ServiceSpecifier );
 }
 
-Sequence< OUString > SAL_CALL SvxSimpleUnoModel::getAvailableServiceNames(  )
+Sequence< OUString > SvxSimpleUnoModel::getAvailableServiceNames(  )
 {
     Sequence< OUString > aSeq;
     return aSeq;
 }
 
 // XAnyCompareFactory
-uno::Reference< css::ucb::XAnyCompare > SAL_CALL SvxSimpleUnoModel::createAnyCompareByName( const OUString& )
+uno::Reference< css::ucb::XAnyCompare > SvxSimpleUnoModel::createAnyCompareByName( const OUString& )
 {
     return SvxCreateNumRuleCompare();
 }
 
 // XStyleFamiliesSupplier
-uno::Reference< container::XNameAccess > SAL_CALL SvxSimpleUnoModel::getStyleFamilies(  )
+uno::Reference< container::XNameAccess > SvxSimpleUnoModel::getStyleFamilies(  )
 {
     uno::Reference< container::XNameAccess > xStyles;
     return xStyles;
 }
 
 // XModel
-bool SAL_CALL SvxSimpleUnoModel::attachResource( const OUString&, const cpo::uno::Sequence< css::beans::PropertyValue >& )
+bool SvxSimpleUnoModel::attachResource( const OUString&, const cpo::uno::Sequence< css::beans::PropertyValue >& )
 {
     return false;
 }
 
-OUString SAL_CALL SvxSimpleUnoModel::getURL(  )
+OUString SvxSimpleUnoModel::getURL(  )
 {
     return OUString();
 }
 
-cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL SvxSimpleUnoModel::getArgs(  )
+cpo::uno::Sequence< css::beans::PropertyValue > SvxSimpleUnoModel::getArgs(  )
 {
     Sequence< beans::PropertyValue > aSeq;
     return aSeq;
 }
 
-void SAL_CALL SvxSimpleUnoModel::connectController( const css::uno::Reference< css::frame::XController >& )
+void SvxSimpleUnoModel::connectController( const css::uno::Reference< css::frame::XController >& )
 {
 }
 
-void SAL_CALL SvxSimpleUnoModel::disconnectController( const css::uno::Reference< css::frame::XController >& )
+void SvxSimpleUnoModel::disconnectController( const css::uno::Reference< css::frame::XController >& )
 {
 }
 
-void SAL_CALL SvxSimpleUnoModel::lockControllers(  )
+void SvxSimpleUnoModel::lockControllers(  )
 {
 }
 
-void SAL_CALL SvxSimpleUnoModel::unlockControllers(  )
+void SvxSimpleUnoModel::unlockControllers(  )
 {
 }
 
-bool SAL_CALL SvxSimpleUnoModel::hasControllersLocked(  )
+bool SvxSimpleUnoModel::hasControllersLocked(  )
 {
     return true;
 }
 
-css::uno::Reference< css::frame::XController > SAL_CALL SvxSimpleUnoModel::getCurrentController(  )
+css::uno::Reference< css::frame::XController > SvxSimpleUnoModel::getCurrentController(  )
 {
     uno::Reference< frame::XController > xRet;
     return xRet;
 }
 
-void SAL_CALL SvxSimpleUnoModel::setCurrentController( const css::uno::Reference< css::frame::XController >& )
+void SvxSimpleUnoModel::setCurrentController( const css::uno::Reference< css::frame::XController >& )
 {
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL SvxSimpleUnoModel::getCurrentSelection(  )
+css::uno::Reference< css::uno::XInterface > SvxSimpleUnoModel::getCurrentSelection(  )
 {
     uno::Reference< XInterface > xRet;
     return xRet;
@@ -220,15 +220,15 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL SvxSimpleUnoModel::getCurre
 
 
 // XComponent
-void SAL_CALL SvxSimpleUnoModel::dispose(  )
+void SvxSimpleUnoModel::dispose(  )
 {
 }
 
-void SAL_CALL SvxSimpleUnoModel::addEventListener( const css::uno::Reference< css::lang::XEventListener >& )
+void SvxSimpleUnoModel::addEventListener( const css::uno::Reference< css::lang::XEventListener >& )
 {
 }
 
-void SAL_CALL SvxSimpleUnoModel::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
+void SvxSimpleUnoModel::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
 {
 }
 

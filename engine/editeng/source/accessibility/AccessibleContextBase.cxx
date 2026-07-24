@@ -151,7 +151,7 @@ void AccessibleContextBase::SetRelationSet (
 
 /** No children.
 */
-sal_Int64 SAL_CALL
+sal_Int64
        AccessibleContextBase::getAccessibleChildCount()
 {
     return 0;
@@ -161,7 +161,7 @@ sal_Int64 SAL_CALL
 /** Forward the request to the shape.  Return the requested shape or throw
     an exception for a wrong index.
 */
-uno::Reference<XAccessible> SAL_CALL
+uno::Reference<XAccessible>
     AccessibleContextBase::getAccessibleChild (sal_Int64 nIndex)
 {
     ensureAlive();
@@ -171,14 +171,14 @@ uno::Reference<XAccessible> SAL_CALL
 }
 
 
-uno::Reference<XAccessible> SAL_CALL
+uno::Reference<XAccessible>
        AccessibleContextBase::getAccessibleParent()
 {
     ensureAlive();
     return mxParent;
 }
 
-sal_Int16 SAL_CALL
+sal_Int16
     AccessibleContextBase::getAccessibleRole()
 {
     ensureAlive();
@@ -186,7 +186,7 @@ sal_Int16 SAL_CALL
 }
 
 
-OUString SAL_CALL
+OUString
        AccessibleContextBase::getAccessibleDescription()
 {
     ensureAlive();
@@ -195,7 +195,7 @@ OUString SAL_CALL
 }
 
 
-OUString SAL_CALL
+OUString
        AccessibleContextBase::getAccessibleName()
 {
     ensureAlive();
@@ -214,7 +214,7 @@ OUString SAL_CALL
 
 /** Return a copy of the relation set.
 */
-uno::Reference<XAccessibleRelationSet> SAL_CALL
+uno::Reference<XAccessibleRelationSet>
        AccessibleContextBase::getAccessibleRelationSet()
 {
     ensureAlive();
@@ -235,7 +235,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
         SHOWING
         VISIBLE
 */
-sal_Int64 SAL_CALL
+sal_Int64
     AccessibleContextBase::getAccessibleStateSet()
 {
     if (rBHelper.bDisposed)
@@ -251,7 +251,7 @@ sal_Int64 SAL_CALL
 }
 
 
-lang::Locale SAL_CALL
+lang::Locale
        AccessibleContextBase::getLocale()
 {
     ensureAlive();
@@ -271,14 +271,14 @@ lang::Locale SAL_CALL
 
 // XAccessibleComponent
 
-uno::Reference<XAccessible > SAL_CALL
+uno::Reference<XAccessible >
 AccessibleContextBase::getAccessibleAtPoint (
     const awt::Point& /*aPoint*/)
 {
     return uno::Reference<XAccessible>();
 }
 
-void SAL_CALL AccessibleContextBase::grabFocus()
+void AccessibleContextBase::grabFocus()
 {
     uno::Reference<XAccessibleSelection> xSelection(getAccessibleParent(), uno::UNO_QUERY);
     if (xSelection.is())
@@ -290,36 +290,36 @@ void SAL_CALL AccessibleContextBase::grabFocus()
 }
 
 
-sal_Int32 SAL_CALL AccessibleContextBase::getForeground()
+sal_Int32 AccessibleContextBase::getForeground()
 {
     return sal_Int32(COL_BLACK);
 }
 
 
-sal_Int32 SAL_CALL AccessibleContextBase::getBackground()
+sal_Int32 AccessibleContextBase::getBackground()
 {
     return sal_Int32(COL_WHITE);
 }
 
 // XServiceInfo
-OUString SAL_CALL AccessibleContextBase::getImplementationName()
+OUString AccessibleContextBase::getImplementationName()
 {
     return u"AccessibleContextBase"_ustr;
 }
 
-bool SAL_CALL AccessibleContextBase::supportsService (const OUString& sServiceName)
+bool AccessibleContextBase::supportsService (const OUString& sServiceName)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-cpo::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString >
        AccessibleContextBase::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.accessibility.AccessibleContext"_ustr};
 }
 
-void SAL_CALL AccessibleContextBase::disposing()
+void AccessibleContextBase::disposing()
 {
     SetState (AccessibleStateType::DEFUNC);
 

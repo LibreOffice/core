@@ -45,17 +45,17 @@ public:
     virtual ~AccessibleHyperlink() override;
 
     // XAccessibleAction
-    virtual sal_Int32 SAL_CALL getAccessibleActionCount() override;
-    virtual bool SAL_CALL doAccessibleAction( sal_Int32 nIndex ) override;
-    virtual OUString SAL_CALL getAccessibleActionDescription( sal_Int32 nIndex ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
+    virtual sal_Int32 getAccessibleActionCount() override;
+    virtual bool doAccessibleAction( sal_Int32 nIndex ) override;
+    virtual OUString getAccessibleActionDescription( sal_Int32 nIndex ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
     // XAccessibleHyperlink
-    virtual cpo::uno::Any SAL_CALL getAccessibleActionAnchor( sal_Int32 nIndex ) override;
-    virtual cpo::uno::Any SAL_CALL getAccessibleActionObject( sal_Int32 nIndex ) override;
-    virtual sal_Int32 SAL_CALL getStartIndex() override;
-    virtual sal_Int32 SAL_CALL getEndIndex() override;
-    virtual bool SAL_CALL isValid() override;
+    virtual cpo::uno::Any getAccessibleActionAnchor( sal_Int32 nIndex ) override;
+    virtual cpo::uno::Any getAccessibleActionObject( sal_Int32 nIndex ) override;
+    virtual sal_Int32 getStartIndex() override;
+    virtual sal_Int32 getEndIndex() override;
+    virtual bool isValid() override;
 };
 
 } // end of namespace accessibility
