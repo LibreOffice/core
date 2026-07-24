@@ -25,7 +25,11 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/wmf.hxx>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star;
 
@@ -132,5 +136,18 @@ namespace drawinglayer::primitive2d
         }
 
 } // end of namespace
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWMF(SvStream& rStream)
+{
+    GDIMetaFile aGDIMetaFile;
+    (void)ReadWindowMetafile(rStream, aGDIMetaFile);
+
+    rtl::Reference<drawinglayer::primitive2d::MetafilePrimitive2D> xMetafile(
+        new drawinglayer::primitive2d::MetafilePrimitive2D(basegfx::B2DHomMatrix(), aGDIMetaFile));
+    drawinglayer::geometry::ViewInformation2D aViewInformation;
+    drawinglayer::primitive2d::Primitive2DContainer aContainer;
+    xMetafile->get2DDecomposition(aContainer, aViewInformation);
+    return true;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
