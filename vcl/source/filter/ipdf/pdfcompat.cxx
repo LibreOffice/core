@@ -44,7 +44,7 @@ bool isCompatible(SvStream& rInStream)
 bool convertToHighestSupported(
     SvStream& rInStream, SvStream& rOutStream,
     const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler, bool bForce,
-    bool& bEncrypted)
+    bool& bEncrypted, const OUString& rPassword)
 {
     sal_uInt64 nPos = STREAM_SEEK_TO_BEGIN;
     sal_uInt64 nSize = STREAM_SEEK_TO_END;
@@ -61,7 +61,10 @@ bool convertToHighestSupported(
 
     SvMemoryStream aSaved;
     bool bAgain = false;
-    OUString aPassword;
+    // Pre-seed with the caller-supplied password (e.g. one already entered
+    // during type detection), so an encrypted stream can be opened without
+    // prompting the user again.
+    OUString aPassword(rPassword);
     do
     {
         // Load the buffer using pdfium.
@@ -98,6 +101,12 @@ bool convertToHighestSupported(
         }
         bAgain = false;
 
+        // A non-empty password means the stream was encrypted and we opened it
+        // with the supplied password; flag it so the decrypted (security removed)
+        // result below is written out even for an otherwise compatible version.
+        if (!aPassword.isEmpty())
+            bEncrypted = true;
+
         SAL_INFO("vcl.filter", "convertToHighestSupported do save");
         // 16 means PDF-1.6.
         // true means 'remove security' - i.e. not passworded
@@ -122,12 +131,13 @@ bool convertToHighestSupported(
 bool getCompatibleStream(
     SvStream& rInStream, SvStream& rOutStream,
     const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
-    bool& bEncrypted)
+    bool& bEncrypted, const OUString& rPassword)
 {
     bool bCompatible = isCompatible(rInStream);
 
     // This will convert if either the file is encrypted, or !bCompatible
-    convertToHighestSupported(rInStream, rOutStream, xInteractionHandler, !bCompatible, bEncrypted);
+    convertToHighestSupported(rInStream, rOutStream, xInteractionHandler, !bCompatible, bEncrypted,
+                              rPassword);
     rInStream.Seek(STREAM_SEEK_TO_BEGIN);
     if (bCompatible && !bEncrypted)
         // Just pass the original through
@@ -138,11 +148,12 @@ bool getCompatibleStream(
 
 BinaryDataContainer createBinaryDataContainer(
     SvStream& rStream, bool& bEncrypted,
-    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+    const OUString& rPassword)
 {
     // Save the original PDF stream for later use.
     SvMemoryStream aMemoryStream;
-    if (!getCompatibleStream(rStream, aMemoryStream, xInteractionHandler, bEncrypted))
+    if (!getCompatibleStream(rStream, aMemoryStream, xInteractionHandler, bEncrypted, rPassword))
         return {};
 
     const sal_uInt64 nStreamLength = aMemoryStream.TellEnd();

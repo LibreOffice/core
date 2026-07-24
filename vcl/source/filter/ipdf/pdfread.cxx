@@ -370,12 +370,16 @@ findLinks(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage,
 
 } // end anonymous namespace
 
-size_t ImportPDFUnloaded(SvStream& rStream, std::vector<PDFGraphicResult>& rGraphics)
+size_t
+ImportPDFUnloaded(SvStream& rStream, std::vector<PDFGraphicResult>& rGraphics,
+                  const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+                  const OUString& rPassword)
 {
     bool bEncrypted;
 
     // Save the original PDF stream for later use.
-    BinaryDataContainer aDataContainer = vcl::pdf::createBinaryDataContainer(rStream, bEncrypted);
+    BinaryDataContainer aDataContainer
+        = vcl::pdf::createBinaryDataContainer(rStream, bEncrypted, xInteractionHandler, rPassword);
     if (aDataContainer.isEmpty())
         return 0;
 
@@ -435,11 +439,14 @@ size_t ImportPDFUnloaded(SvStream& rStream, std::vector<PDFGraphicResult>& rGrap
     return rGraphics.size();
 }
 
-size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rGraphics)
+size_t
+ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rGraphics,
+                  const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+                  const OUString& rPassword)
 {
     std::unique_ptr<SvStream> xStream(
         ::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
-    return ImportPDFUnloaded(*xStream, rGraphics);
+    return ImportPDFUnloaded(*xStream, rGraphics, xInteractionHandler, rPassword);
 }
 }
 
