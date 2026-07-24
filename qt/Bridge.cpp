@@ -527,7 +527,7 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
                      });
 
     QObject::connect(dialog, &QFileDialog::fileSelected,
-                     [callback, dialog, formats](const QString& destPath)
+                     [callback, formats](const QString& destPath)
                      {
                          // The format is determined by file name not the
                          // file format dropdown menu. We can't change the
