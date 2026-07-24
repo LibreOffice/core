@@ -31,7 +31,7 @@
 #include <skia/x11/textrender.hxx>
 
 #include <unx/font/fc_fontoptions.hxx>
-#include <unx/font/FreetypeFont.hxx>
+#include <unx/font/GenericFont.hxx>
 #include <vcl/svapp.hxx>
 #include <sallayout.hxx>
 #include <skia/gdiimpl.hxx>
@@ -50,7 +50,7 @@
 
 void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGraphics& rGraphics)
 {
-    const FreetypeFont& rFont = static_cast<const FreetypeFont&>(rLayout.GetFont());
+    const GenericFont& rFont = static_cast<const GenericFont&>(rLayout.GetFont());
     const vcl::font::FontSelectPattern& rFSD = rFont.GetFontSelectPattern();
     if (rFSD.mnHeight == 0)
         return;

@@ -662,15 +662,15 @@ vcl_headless_code= \
     vcl/unx/generic/app/gendisp \
     vcl/unx/generic/app/geninst \
 
-vcl_headless_freetype_code=\
+vcl_headless_generic_code=\
     vcl/headless/svpprn \
     vcl/headless/svptext \
     vcl/unx/generic/app/gendata \
     vcl/unx/generic/gdi/cairotextrender \
-    vcl/unx/generic/gdi/freetypetextrender \
-    vcl/unx/generic/font/FreetypeFont \
-    vcl/unx/generic/font/FreetypeFontFace \
-    vcl/unx/generic/font/FreetypeFontList \
+    vcl/unx/generic/gdi/generictextrender \
+    vcl/unx/generic/font/GenericFont \
+    vcl/unx/generic/font/GenericFontFace \
+    vcl/unx/generic/font/GenericFontList \
     vcl/unx/generic/font/fontsubst \
     vcl/unx/generic/font/fontconfig \
     vcl/unx/generic/font/fontmanager \
@@ -754,7 +754,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
             vcl/null/printerinfomanager \
         ) \
         $(vcl_headless_code) \
-        $(vcl_headless_freetype_code) \
+        $(vcl_headless_generic_code) \
     ) \
     vcl/source/pdf/$(if $(filter PDFIUM,$(BUILD_TYPE)),,Dummy)PDFiumLibrary \
 ))

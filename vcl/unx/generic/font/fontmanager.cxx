@@ -79,7 +79,7 @@ FontConfigManager::FontConfigManager()
     }
 
     // this also filters the fontconfig font set, so it has to run before anything
-    // can match against it; FreetypeFontList takes the fonts off our hands
+    // can match against it; GenericFontList takes the fonts off our hands
     collectSystemFonts();
 }
 

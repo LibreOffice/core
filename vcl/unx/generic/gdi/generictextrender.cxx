@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <unx/freetypetextrender.hxx>
+#include <unx/generictextrender.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <vcl/settings.hxx>
@@ -30,62 +30,62 @@
 
 #include <unx/font/fontmanager.hxx>
 #include <unx/geninst.h>
-#include <unx/font/FreetypeFontList.hxx>
+#include <unx/font/GenericFontList.hxx>
 #include <unx/font/fc_fontoptions.hxx>
-#include <unx/font/FreetypeFont.hxx>
+#include <unx/font/GenericFont.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <font/FontMetricData.hxx>
 
 #include <sallayout.hxx>
 
-FreeTypeTextRenderImpl::FreeTypeTextRenderImpl()
+GenericTextRenderImpl::GenericTextRenderImpl()
     : mnTextColor(Color(0x00, 0x00, 0x00)) //black
 {
 }
 
-FreeTypeTextRenderImpl::~FreeTypeTextRenderImpl()
+GenericTextRenderImpl::~GenericTextRenderImpl()
 {
     ReleaseFonts();
 }
 
-void FreeTypeTextRenderImpl::SetFont(LogicalFontInstance *pEntry, int nFallbackLevel)
+void GenericTextRenderImpl::SetFont(LogicalFontInstance *pEntry, int nFallbackLevel)
 {
     // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
     {
         // old server side font is no longer referenced
-        mpFreetypeFont[i] = nullptr;
+        mpGenericFont[i] = nullptr;
     }
 
     // return early if there is no new font
     if( !pEntry )
         return;
 
-    FreetypeFont* pFreetypeFont = static_cast<FreetypeFont*>(pEntry);
-    mpFreetypeFont[ nFallbackLevel ] = pFreetypeFont;
+    GenericFont* pGenericFont = static_cast<GenericFont*>(pEntry);
+    mpGenericFont[ nFallbackLevel ] = pGenericFont;
 
     // ignore fonts with e.g. corrupted font files
-    if (!mpFreetypeFont[nFallbackLevel]->TestFont())
-        mpFreetypeFont[nFallbackLevel] = nullptr;
+    if (!mpGenericFont[nFallbackLevel]->TestFont())
+        mpGenericFont[nFallbackLevel] = nullptr;
 }
 
-FontCharMapRef FreeTypeTextRenderImpl::GetFontCharMap() const
+FontCharMapRef GenericTextRenderImpl::GetFontCharMap() const
 {
-    if (!mpFreetypeFont[0])
+    if (!mpGenericFont[0])
         return nullptr;
-    return mpFreetypeFont[0]->GetFontFace()->GetFontCharMap();
+    return mpGenericFont[0]->GetFontFace()->GetFontCharMap();
 }
 
-bool FreeTypeTextRenderImpl::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const
+bool GenericTextRenderImpl::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const
 {
-    if (!mpFreetypeFont[0])
+    if (!mpGenericFont[0])
         return false;
-    return mpFreetypeFont[0]->GetFontFace()->GetFontCapabilities(rGetImplFontCapabilities);
+    return mpGenericFont[0]->GetFontFace()->GetFontCapabilities(rGetImplFontCapabilities);
 }
 
 // SalGraphics
 void
-FreeTypeTextRenderImpl::SetTextColor( Color nColor )
+GenericTextRenderImpl::SetTextColor( Color nColor )
 {
     if( mnTextColor != nColor )
     {
@@ -93,10 +93,10 @@ FreeTypeTextRenderImpl::SetTextColor( Color nColor )
     }
 }
 
-bool FreeTypeTextRenderImpl::AddTempDevFont(vcl::font::PhysicalFontCollection* pFontCollection,
+bool GenericTextRenderImpl::AddTempDevFont(vcl::font::PhysicalFontCollection* pFontCollection,
                                             const OUString& rFileURL, const OUString& rFontName)
 {
-    FreetypeFontList& rFontList = FreetypeFontList::get();
+    GenericFontList& rFontList = GenericFontList::get();
     if (!rFontList.AddFontFile(rFileURL, rFontName))
         return false;
 
@@ -105,38 +105,38 @@ bool FreeTypeTextRenderImpl::AddTempDevFont(vcl::font::PhysicalFontCollection* p
     return true;
 }
 
-bool FreeTypeTextRenderImpl::RemoveTempDevFont(const OUString& rFileURL, const OUString& /*rFontName*/)
+bool GenericTextRenderImpl::RemoveTempDevFont(const OUString& rFileURL, const OUString& /*rFontName*/)
 {
-    FreetypeFontList::get().RemoveFontFile(rFileURL);
+    GenericFontList::get().RemoveFontFile(rFileURL);
     return true;
 }
 
-void FreeTypeTextRenderImpl::ClearDevFontCache()
+void GenericTextRenderImpl::ClearDevFontCache()
 {
 }
 
-void FreeTypeTextRenderImpl::GetDevFontList(vcl::font::PhysicalFontCollection* pFontCollection)
+void GenericTextRenderImpl::GetDevFontList(vcl::font::PhysicalFontCollection* pFontCollection)
 {
-    FreetypeFontList::get().AnnounceFonts(pFontCollection);
+    GenericFontList::get().AnnounceFonts(pFontCollection);
 
     // register platform specific font substitutions if available
     SalGenericInstance::RegisterFontSubstitutors(pFontCollection);
 }
 
-void FreeTypeTextRenderImpl::GetFontMetric( FontMetricDataRef& rxFontMetric, int nFallbackLevel )
+void GenericTextRenderImpl::GetFontMetric( FontMetricDataRef& rxFontMetric, int nFallbackLevel )
 {
     if( nFallbackLevel >= MAX_FALLBACK )
         return;
 
-    if (mpFreetypeFont[nFallbackLevel])
-        mpFreetypeFont[nFallbackLevel]->GetFontMetric(rxFontMetric);
+    if (mpGenericFont[nFallbackLevel])
+        mpGenericFont[nFallbackLevel]->GetFontMetric(rxFontMetric);
 }
 
-std::unique_ptr<GenericSalLayout> FreeTypeTextRenderImpl::GetTextLayout(int nFallbackLevel)
+std::unique_ptr<GenericSalLayout> GenericTextRenderImpl::GetTextLayout(int nFallbackLevel)
 {
-    if (!mpFreetypeFont[nFallbackLevel])
+    if (!mpGenericFont[nFallbackLevel])
         return nullptr;
-    return std::make_unique<GenericSalLayout>(*mpFreetypeFont[nFallbackLevel]);
+    return std::make_unique<GenericSalLayout>(*mpGenericFont[nFallbackLevel]);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

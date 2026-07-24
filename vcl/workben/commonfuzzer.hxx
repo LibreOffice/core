@@ -28,7 +28,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "headless/svpgdi.hxx"
-#include "unx/font/FreetypeFontList.hxx"
+#include "unx/font/GenericFontList.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -128,7 +128,7 @@ void CommonInitialize(int *argc, char ***argv)
 
     //we don't have a de-init, so inside this leak disabled region...
     //get the font info
-    FreetypeFontList::get();
+    GenericFontList::get();
     //get the printer info
     Printer::GetPrinterQueues();
 

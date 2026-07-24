@@ -25,8 +25,8 @@
 
 #include <o3tl/lru_map.hxx>
 #include <unx/font/fontmanager.hxx>
-#include <unx/font/FreetypeFontFace.hxx>
-#include <unx/font/FreetypeFontList.hxx>
+#include <unx/font/GenericFontFace.hxx>
+#include <unx/font/GenericFontList.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/dropcache.hxx>
 #include <vcl/svapp.hxx>
@@ -1175,7 +1175,7 @@ void FontConfigManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStr
             if( eFileRes == FcResultMatch )
             {
                 OString aOrgPath( reinterpret_cast<char*>(file) );
-                auto const* pFace = FreetypeFontList::get().FindFontFace(
+                auto const* pFace = GenericFontList::get().FindFontFace(
                     aOrgPath, GetCollectionIndex(nEntryId), GetVariationIndex(nEntryId));
                 if (pFace)
                 {
@@ -1432,7 +1432,7 @@ bool FontConfigManager::matchFont(FontAttributes& rDFA, const css::lang::Locale&
             if( eFileRes == FcResultMatch )
             {
                 OString aOrgPath( reinterpret_cast<char*>(file) );
-                auto const* pFace = FreetypeFontList::get().FindFontFace(
+                auto const* pFace = GenericFontList::get().FindFontFace(
                     aOrgPath, GetCollectionIndex(nEntryId), GetVariationIndex(nEntryId));
                 if (pFace)
                 {

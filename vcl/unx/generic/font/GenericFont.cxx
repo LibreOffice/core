@@ -19,9 +19,9 @@
 
 #include <sal/config.h>
 
-#include <unx/font/FreetypeFont.hxx>
-#include <unx/font/FreetypeFontFace.hxx>
-#include <unx/font/FreetypeFontList.hxx>
+#include <unx/font/GenericFont.hxx>
+#include <unx/font/GenericFontFace.hxx>
+#include <unx/font/GenericFontList.hxx>
 #include <unx/font/fontmanager.hxx>
 
 #include <font/LogicalFontInstance.hxx>
@@ -29,15 +29,15 @@
 
 #include <hb.h>
 
-// FreetypeFont
+// GenericFont
 
-FreetypeFont::FreetypeFont(const FreetypeFontFace& rFontFace, const vcl::font::FontSelectPattern& rFSD)
+GenericFont::GenericFont(const GenericFontFace& rFontFace, const vcl::font::FontSelectPattern& rFSD)
     : LogicalFontInstance(rFontFace, rFSD)
     , mnPrioAntiAlias(GetDefaultAntiAliasPrio())
 {
 }
 
-bool FreetypeFont::TestFont() const
+bool GenericFont::TestFont() const
 {
     return hb_face_get_glyph_count(GetFontFace()->GetHbFace()) > 0;
 }
@@ -50,11 +50,11 @@ namespace
     }
 }
 
-const FontConfigFontOptions* FreetypeFont::GetFontOptions() const
+const FontConfigFontOptions* GenericFont::GetFontOptions() const
 {
     if (!mxFontOptions)
     {
-        const FreetypeFontFace* pFontFace = GetFontFace();
+        const GenericFontFace* pFontFace = GetFontFace();
         mxFontOptions = GetFCFontOptions(*pFontFace, GetFontSelectPattern().mnHeight);
         mxFontOptions->SyncPattern(pFontFace->GetFontFileName(), pFontFace->GetFontFaceIndex(),
                                    pFontFace->GetFontFaceVariation(), NeedsArtificialBold(),
@@ -63,7 +63,7 @@ const FontConfigFontOptions* FreetypeFont::GetFontOptions() const
     return mxFontOptions.get();
 }
 
-bool FreetypeFont::GetAntialiasAdvice() const
+bool GenericFont::GetAntialiasAdvice() const
 {
     // TODO: also use GASP info
     return !GetFontSelectPattern().mbNonAntialiased && (mnPrioAntiAlias > 0);

@@ -21,15 +21,15 @@
 
 #include <utility>
 
-#include <unx/font/FreetypeFontFace.hxx>
-#include <unx/font/FreetypeFont.hxx>
+#include <unx/font/GenericFontFace.hxx>
+#include <unx/font/GenericFont.hxx>
 
 #include <font/LogicalFontInstance.hxx>
 #include <fontattributes.hxx>
 
 #include <hb-ot.h>
 
-FreetypeFontFace::FreetypeFontFace(const FontAttributes& rDevFontAttributes,
+GenericFontFace::GenericFontFace(const FontAttributes& rDevFontAttributes,
                                    OString aNativeFileName, int nFaceNum, int nFaceVariation,
                                    sal_IntPtr nFontId)
     : vcl::font::PhysicalFontFace(rDevFontAttributes)
@@ -43,12 +43,12 @@ FreetypeFontFace::FreetypeFontFace(const FontAttributes& rDevFontAttributes,
 }
 
 rtl::Reference<LogicalFontInstance>
-FreetypeFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
+GenericFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
 {
-    return new FreetypeFont(*this, rFSD);
+    return new GenericFont(*this, rFSD);
 }
 
-hb_face_t* FreetypeFontFace::GetHbFace() const
+hb_face_t* GenericFontFace::GetHbFace() const
 {
     if (!mpHbFace)
     {
@@ -59,13 +59,13 @@ hb_face_t* FreetypeFontFace::GetHbFace() const
     return mpHbFace;
 }
 
-hb_blob_t* FreetypeFontFace::GetHbTable(hb_tag_t nTag) const
+hb_blob_t* GenericFontFace::GetHbTable(hb_tag_t nTag) const
 {
     return hb_face_reference_table(mpHbFace, nTag);
 }
 
 const std::vector<vcl::font::Variation>&
-FreetypeFontFace::GetVariations(const LogicalFontInstance&) const
+GenericFontFace::GetVariations(const LogicalFontInstance&) const
 {
     if (!mxVariations)
     {

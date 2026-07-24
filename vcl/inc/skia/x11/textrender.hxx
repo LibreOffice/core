@@ -19,11 +19,11 @@
 
 #pragma once
 
-#include <unx/freetypetextrender.hxx>
+#include <unx/generictextrender.hxx>
 
 #include <SkFontMgr.h>
 
-class VCL_DLLPUBLIC SkiaTextRender final : public FreeTypeTextRenderImpl
+class VCL_DLLPUBLIC SkiaTextRender final : public GenericTextRenderImpl
 {
 public:
     virtual void DrawTextLayout(const GenericSalLayout&, const SalGraphics&) override;

@@ -22,7 +22,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <unx/cairotextrender.hxx>
 #include <unx/font/fc_fontoptions.hxx>
-#include <unx/font/FreetypeFont.hxx>
+#include <unx/font/GenericFont.hxx>
 #include <unx/gendata.hxx>
 #include <headless/CairoCommon.hxx>
 #include <vcl/svapp.hxx>
@@ -257,7 +257,7 @@ static void ApplyFont(cairo_t* cr, const CairoFontsCache::CacheId& rId, double n
 
 static CairoFontsCache::CacheId makeCacheId(const GenericSalLayout& rLayout)
 {
-    const FreetypeFont& rFont = static_cast<const FreetypeFont&>(rLayout.GetFont());
+    const GenericFont& rFont = static_cast<const GenericFont&>(rLayout.GetFont());
 
     CairoFontsCache::CacheId aId;
     aId.mpFace = rFont.GetFontFace();

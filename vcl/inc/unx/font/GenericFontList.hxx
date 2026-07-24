@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <unx/font/FreetypeFontFace.hxx>
+#include <unx/font/GenericFontFace.hxx>
 
 #include <o3tl/sorted_vector.hxx>
 #include <rtl/ref.hxx>
@@ -41,26 +41,26 @@ class PhysicalFontCollection;
 int GetDefaultAntiAliasPrio();
 
  /**
-  * The FreetypeFontList is the list of the fonts we know about.
+  * The GenericFontList is the list of the fonts we know about.
   *
-  * It enumerates them from fontconfig and maps a font id to the FreetypeFontFace
+  * It enumerates them from fontconfig and maps a font id to the GenericFontFace
   * for it. The faces it hands to a PhysicalFontCollection are the very same
   * objects, shared by every collection.
   **/
-class VCL_DLLPUBLIC FreetypeFontList final
+class VCL_DLLPUBLIC GenericFontList final
 {
 public:
-    FreetypeFontList(const FreetypeFontList&) = delete;
-    FreetypeFontList& operator=(const FreetypeFontList&) = delete;
+    GenericFontList(const GenericFontList&) = delete;
+    GenericFontList& operator=(const GenericFontList&) = delete;
 
-    SAL_DLLPRIVATE ~FreetypeFontList();
+    SAL_DLLPRIVATE ~GenericFontList();
 
-    static FreetypeFontList& get();
+    static GenericFontList& get();
 
     bool                    AddFontFile(std::u16string_view rFileUrl, const OUString& rFontName);
     void                    RemoveFontFile(std::u16string_view rFileUrl);
 
-    const FreetypeFontFace* FindFontFace(const OString& rFileName, int nFaceNum,
+    const GenericFontFace* FindFontFace(const OString& rFileName, int nFaceNum,
                                          int nVariationNum) const;
 
     SAL_DLLPRIVATE void     AnnounceFonts( vcl::font::PhysicalFontCollection* ) const;
@@ -68,14 +68,14 @@ public:
 private:
     // to access the constructor
     friend class GenericUnixSalData;
-    SAL_DLLPRIVATE explicit FreetypeFontList();
+    SAL_DLLPRIVATE explicit GenericFontList();
 
     SAL_DLLPRIVATE void Init();
 
     SAL_DLLPRIVATE void AddFontFace(const FontAttributes& rDFA, const OString& rFileName,
                                     int nFaceNum, int nVariationNum);
 
-    typedef std::unordered_map<sal_IntPtr, rtl::Reference<FreetypeFontFace>> FontFaceList;
+    typedef std::unordered_map<sal_IntPtr, rtl::Reference<GenericFontFace>> FontFaceList;
 
     sal_IntPtr              m_nNextFontId = 1;
     FontFaceList            m_aFontFaceList;

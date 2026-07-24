@@ -23,21 +23,21 @@
 
 #include <textrender.hxx>
 
-#include <unx/font/FreetypeFont.hxx>
+#include <unx/font/GenericFont.hxx>
 
-// Generic implementation that uses freetype, but DrawTextLayout()
+// Generic implementation of most of TextRenderImpl; DrawTextLayout()
 // still needs implementing (e.g. by Cairo or Skia).
-class VCL_DLLPUBLIC FreeTypeTextRenderImpl : public TextRenderImpl
+class VCL_DLLPUBLIC GenericTextRenderImpl : public TextRenderImpl
 {
 protected:
-    rtl::Reference<FreetypeFont>
-                            mpFreetypeFont[ MAX_FALLBACK ];
+    rtl::Reference<GenericFont>
+                            mpGenericFont[ MAX_FALLBACK ];
 
     Color           mnTextColor;
 
 public:
-    FreeTypeTextRenderImpl();
-    virtual ~FreeTypeTextRenderImpl() override;
+    GenericTextRenderImpl();
+    virtual ~GenericTextRenderImpl() override;
 
     virtual void                SetTextColor( Color nColor ) override;
     virtual void                SetFont(LogicalFontInstance*, int nFallbackLevel) override;

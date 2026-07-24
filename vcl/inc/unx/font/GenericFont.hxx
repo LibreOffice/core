@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <unx/font/FreetypeFontFace.hxx>
+#include <unx/font/GenericFontFace.hxx>
 
 #include <font/LogicalFontInstance.hxx>
 #include <font/FontMetricData.hxx>
@@ -31,15 +31,15 @@
 
 class FontConfigFontOptions;
 
-class VCL_DLLPUBLIC FreetypeFont final : public LogicalFontInstance
+class VCL_DLLPUBLIC GenericFont final : public LogicalFontInstance
 {
     friend rtl::Reference<LogicalFontInstance>
-    FreetypeFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
+    GenericFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
 
 public:
-    const FreetypeFontFace* GetFontFace() const
+    const GenericFontFace* GetFontFace() const
     {
-        return static_cast<const FreetypeFontFace*>(LogicalFontInstance::GetFontFace());
+        return static_cast<const GenericFontFace*>(LogicalFontInstance::GetFontFace());
     }
 
     bool TestFont() const;
@@ -48,7 +48,7 @@ public:
     bool GetAntialiasAdvice() const;
 
 private:
-    explicit FreetypeFont(const FreetypeFontFace&, const vcl::font::FontSelectPattern&);
+    explicit GenericFont(const GenericFontFace&, const vcl::font::FontSelectPattern&);
 
     int mnPrioAntiAlias;
 

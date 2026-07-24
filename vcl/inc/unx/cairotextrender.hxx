@@ -19,14 +19,14 @@
 
 #pragma once
 
-#include <unx/freetypetextrender.hxx>
+#include <unx/generictextrender.hxx>
 
 class GenericSalLayout;
 struct CairoCommon;
 typedef struct _cairo cairo_t;
 typedef struct _cairo_font_options cairo_font_options_t;
 
-class VCL_DLLPUBLIC CairoTextRender final : public FreeTypeTextRenderImpl
+class VCL_DLLPUBLIC CairoTextRender final : public GenericTextRenderImpl
 {
 private:
     CairoCommon& mrCairoCommon;

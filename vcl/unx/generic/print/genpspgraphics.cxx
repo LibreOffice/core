@@ -30,7 +30,7 @@
 #include <config_cairo_canvas.h>
 
 #include <fontsubset.hxx>
-#include <unx/font/FreetypeFont.hxx>
+#include <unx/font/GenericFont.hxx>
 #include <unx/geninst.h>
 #include <unx/genpspgraphics.h>
 #include <font/LogicalFontInstance.hxx>

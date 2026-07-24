@@ -25,11 +25,11 @@
 #include <fontattributes.hxx>
 #include <glyphid.hxx>
 
-// FreetypeFontFace corresponds to an unscaled font face
-class FreetypeFontFace final : public vcl::font::PhysicalFontFace
+// GenericFontFace corresponds to an unscaled font face
+class GenericFontFace final : public vcl::font::PhysicalFontFace
 {
 public:
-    FreetypeFontFace( const FontAttributes&, OString aNativeFileName,
+    GenericFontFace( const FontAttributes&, OString aNativeFileName,
                       int nFaceNum, int nFaceVariation, sal_IntPtr nFontId );
 
     const OString&        GetFontFileName() const   { return maNativeFileName; }

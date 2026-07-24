@@ -21,8 +21,8 @@
 
 #include <stdlib.h>
 
-#include <unx/font/FreetypeFontList.hxx>
-#include <unx/font/FreetypeFontFace.hxx>
+#include <unx/font/GenericFontList.hxx>
+#include <unx/font/GenericFontFace.hxx>
 #include <unx/font/fontmanager.hxx>
 #include <unx/gendata.hxx>
 
@@ -43,16 +43,16 @@ static int nDefaultPrioAntiAlias = 1;
 
 int GetDefaultAntiAliasPrio() { return nDefaultPrioAntiAlias; }
 
-FreetypeFontList::FreetypeFontList()
+GenericFontList::GenericFontList()
 {
     // TODO: remove when the priorities are selected by UI
     if (const char* pEnv = ::getenv("SAL_ANTIALIASED_TEXT_PRIORITY"))
         nDefaultPrioAntiAlias = pEnv[0] - '0';
 }
 
-void FreetypeFontList::Init()
+void GenericFontList::Init()
 {
-    // GenericUnixSalData::GetFreetypeFontList() constructs the FontConfigManager
+    // GenericUnixSalData::GetGenericFontList() constructs the FontConfigManager
     // before us, so fontconfig is up, knows about our private font directories,
     // and has already collected the fonts it will hand over here.
     for (const auto& rFont : FontConfigManager::get().takeSystemFonts())
@@ -65,16 +65,16 @@ void FreetypeFontList::Init()
     SAL_INFO("vcl.fonts", "have " << m_aFontFaceList.size() << " fonts");
 }
 
-FreetypeFontList::~FreetypeFontList() {}
+GenericFontList::~GenericFontList() {}
 
-FreetypeFontList& FreetypeFontList::get()
+GenericFontList& GenericFontList::get()
 {
     GenericUnixSalData* const pSalData(GetGenericUnixSalData());
     assert(pSalData);
-    return *pSalData->GetFreetypeFontList();
+    return *pSalData->GetGenericFontList();
 }
 
-void FreetypeFontList::AddFontFace(const FontAttributes& rDevFontAttr, const OString& rFileName,
+void GenericFontList::AddFontFace(const FontAttributes& rDevFontAttr, const OString& rFileName,
                                    int nFaceNum, int nVariationNum)
 {
     if( rFileName.isEmpty() )
@@ -82,11 +82,11 @@ void FreetypeFontList::AddFontFace(const FontAttributes& rDevFontAttr, const OSt
 
     const sal_IntPtr nFontId = m_nNextFontId++;
     m_aFontFaceList[nFontId]
-        = new FreetypeFontFace(rDevFontAttr, rFileName, nFaceNum, nVariationNum, nFontId);
+        = new GenericFontFace(rDevFontAttr, rFileName, nFaceNum, nVariationNum, nFontId);
     m_aFontFileToFontId[ rFileName ].insert( nFontId );
 }
 
-bool FreetypeFontList::AddFontFile(std::u16string_view rFileUrl, const OUString& rFontName)
+bool GenericFontList::AddFontFile(std::u16string_view rFileUrl, const OUString& rFontName)
 {
     INetURLObject aPath( rFileUrl );
     const OString aFullPath = OUStringToOString(aPath.GetFull(), osl_getThreadTextEncoding());
@@ -111,7 +111,7 @@ bool FreetypeFontList::AddFontFile(std::u16string_view rFileUrl, const OUString&
     return true;
 }
 
-void FreetypeFontList::RemoveFontFile(std::u16string_view rFileUrl)
+void GenericFontList::RemoveFontFile(std::u16string_view rFileUrl)
 {
     INetURLObject aPath( rFileUrl );
     const OString aFullPath = OUStringToOString(aPath.GetFull(), osl_getThreadTextEncoding());
@@ -127,7 +127,7 @@ void FreetypeFontList::RemoveFontFile(std::u16string_view rFileUrl)
     FontConfigManager::removeFontFile(aFullPath);
 }
 
-const FreetypeFontFace* FreetypeFontList::FindFontFace(const OString& rFileName, int nFaceNum,
+const GenericFontFace* GenericFontList::FindFontFace(const OString& rFileName, int nFaceNum,
                                                        int nVariationNum) const
 {
     auto it = m_aFontFileToFontId.find(rFileName);
@@ -139,7 +139,7 @@ const FreetypeFontFace* FreetypeFontList::FindFontFace(const OString& rFileName,
         auto face_it = m_aFontFaceList.find(nFontId);
         if (face_it == m_aFontFaceList.end())
             continue;
-        const FreetypeFontFace* pFace = face_it->second.get();
+        const GenericFontFace* pFace = face_it->second.get();
         if (pFace->GetFontFaceIndex() == nFaceNum
             && pFace->GetFontFaceVariation() == nVariationNum)
             return pFace;
@@ -148,7 +148,7 @@ const FreetypeFontFace* FreetypeFontList::FindFontFace(const OString& rFileName,
     return nullptr;
 }
 
-void FreetypeFontList::AnnounceFonts( vcl::font::PhysicalFontCollection* pToAdd ) const
+void GenericFontList::AnnounceFonts( vcl::font::PhysicalFontCollection* pToAdd ) const
 {
     for (auto const& font : m_aFontFaceList)
         pToAdd->Add( font.second.get() );
