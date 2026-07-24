@@ -1603,6 +1603,14 @@ void ClientSession::uploadBrowserSettingsToWopiHost()
     const Authorization& auth = getAuthorization();
     Poco::URI uriObject = DocumentBroker::getPresetUploadBaseUrl(_uriPublic);
 
+    // A relative URI has no host to send the request to.
+    if (uriObject.isRelative())
+    {
+        LOG_WRN("Not uploading browser settings: WOPI base URL ["
+                << uriObject.toString() << "] is relative");
+        return;
+    }
+
     const std::string& filePath = "/settings/userconfig/browsersetting/browsersetting.json";
     uriObject.addQueryParameter("fileId", filePath);
     auth.authorizeURI(uriObject);
@@ -1644,6 +1652,14 @@ void ClientSession::uploadViewSettingsToWopiHost()
     {
         const Authorization& auth = getAuthorization();
         Poco::URI uriObject = DocumentBroker::getPresetUploadBaseUrl(_uriPublic);
+
+        // A relative URI has no host to send the request to.
+        if (uriObject.isRelative())
+        {
+            LOG_WRN("Not uploading view settings: WOPI base URL ["
+                    << uriObject.toString() << "] is relative");
+            return;
+        }
 
         const std::string filePath = "/settings/userconfig/viewsetting/viewsetting.json";
         uriObject.addQueryParameter("fileId", filePath);
