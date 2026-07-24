@@ -142,13 +142,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         Application::EnableHeadlessMode(false);
         InitVCL();
 
-        if (strcmp(argv[2], "wmf") == 0 || strcmp(argv[2], "emf") == 0)
-        {
-            GDIMetaFile aGDIMetaFile;
-            SvFileStream aFileStream(out, StreamMode::READ);
-            ret = static_cast<int>(ReadWindowMetafile(aFileStream, aGDIMetaFile));
-        }
-        else if (strcmp(argv[2], "jpg") == 0)
+        if (strcmp(argv[2], "jpg") == 0)
         {
             ImportOutput aImportOutput;
             SvFileStream aFileStream(out, StreamMode::READ);
@@ -607,6 +601,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             if (!pfnImport)
             {
                 pfnImport = load(u"libsvgiolo.so", "TestImportSVG");
+            }
+            SvFileStream aFileStream(out, StreamMode::READ);
+            ret = static_cast<int>((*pfnImport)(aFileStream));
+        }
+        else if (strcmp(argv[2], "wmf") == 0 || strcmp(argv[2], "emf") == 0)
+        {
+            static FFilterCall pfnImport(nullptr);
+            if (!pfnImport)
+            {
+                pfnImport = load(u"libdrawinglayerlo.so", "TestImportWMF");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
