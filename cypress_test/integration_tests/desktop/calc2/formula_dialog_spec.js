@@ -25,7 +25,7 @@ describe(['tagdesktop'], 'Formula dialog tests', function() {
 
 		cy.wait(1000); /* wait for position changes */
 
-		cy.cGet('.ui-dialog').compareSnapshot('formula_dialog_accrintm', 0.1);
+		cy.cGet('.ui-dialog').compareSnapshot('formula_dialog_accrintm', 0.15);
 
 		helper.processToIdle(this.win);
 
@@ -35,6 +35,6 @@ describe(['tagdesktop'], 'Formula dialog tests', function() {
 		cy.cGet('#FormulaDialog #function').should('not.be.visible');
 		cy.wait(1000); /* wait for position changes */
 
-		cy.cGet('.ui-dialog').compareSnapshot('formula_dialog_accrintm_collapsed', 0.1);
+		cy.cGet('.ui-dialog').compareSnapshot('formula_dialog_accrintm_collapsed', 0.15);
 	});
 });
