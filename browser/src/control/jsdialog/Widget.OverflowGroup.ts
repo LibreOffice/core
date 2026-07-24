@@ -367,7 +367,7 @@ JSDialog.OverflowGroup = function (
 		overflowGroupInnerContainer,
 	);
 	contentContainer.classList.add(data.vertical ? 'vertical' : 'horizontal');
-	overflowGroupInnerContainer.id = data.id + '-content';
+	contentContainer.id = data.id + '-content';
 
 	const bottomBar = window.L.DomUtil.create(
 		'div',
@@ -384,7 +384,9 @@ JSDialog.OverflowGroup = function (
 	label.id = data.id + '-label';
 	if (data.name) label.innerText = data.name;
 
-	overflowGroupInnerContainer.setAttribute('aria-labelledby', label.id);
+	if (data.name) {
+		overflowGroupInnerContainer.setAttribute('aria-label', data.name);
+	}
 
 	// content
 	if (data.children) builder.build(contentContainer, data.children, false);
