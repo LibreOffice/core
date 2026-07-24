@@ -1812,9 +1812,24 @@ prettier:
 prettier-write:
 	$(call run_prettier_check,--write $(addprefix $(srcdir)/,$(PRETTIER_TARGETS)))
 
+# Verify the committed .pot files are not stale
+check-introdocs:
+	@if $(PYTHON) -c "import polib" 2>/dev/null; then \
+		echo "Running introdocs l10n tooling checks..."; \
+		(cd $(srcdir)/introdocs && $(PYTHON) -m unittest discover -s tests) || exit 1; \
+		for doc in $(srcdir)/introdocs/*.odt $(srcdir)/introdocs/*.ods $(srcdir)/introdocs/*.odp; do \
+			test -f "$$doc" || continue; \
+			name=`basename "$${doc%.*}"`; \
+			$(PYTHON) $(srcdir)/introdocs/extract_odf_text.py --check "$$doc" \
+				"$(srcdir)/introdocs/po/templates/$$name.pot" || exit 1; \
+		done; \
+	else \
+		echo "SKIPPED introdocs l10n checks: python3 module 'polib' not installed"; \
+	fi
+
 MOCHA_TEST_LOG = "`pwd`/mocha.log"
 DUPLICATION_TEST_LOG = "`pwd`/duplication.log"
-check-local: $(MOCHA_JS_DIR)/main.js
+check-local: $(MOCHA_JS_DIR)/main.js check-introdocs
 	@echo "Running mocha tests..."
 	@echo > ${MOCHA_TEST_LOG}
 	@if (cd $(srcdir) && PATH="$(abs_builddir)/node_modules/.bin:$$PATH" NODE_PATH="$(call node_module_dir,$(abs_builddir)/node_modules)" ENGINE_WORKDIR="$(ENGINE_WORKDIR)" npm test) 2> ${MOCHA_TEST_LOG} 1>&2; then \

@@ -158,6 +158,16 @@ struct COKitSelection
     std::string aText;
 };
 
+/** Result of COKit::translateDocument(). */
+enum class COKitTranslateResult
+{
+    FAILED = -1,
+    /// the l10n stream was found and the requested language matched
+    TRANSLATED = 0,
+    /// no l10n stream (byte copy), or no locale match (markers stripped)
+    COPIED_UNTRANSLATED = 1
+};
+
 /** Optional features of COKit, in particular callbacks that block
  *  COKit until the corresponding reply is received, which would
  *  deadlock if the client does not support the feature.
@@ -1852,6 +1862,26 @@ struct COKit
     virtual bool getGlobalClipboard(const char **pMimeTypes,
                                     std::vector<std::string>& rOutMimeTypes,
                                     std::vector<std::vector<char>>& rOutStreams) = 0;
+
+    /**
+     * Translate an ODF file's "_"-marked strings into the given language
+     * using the file's embedded "l10n" stream.
+     *
+     * With no "l10n" zip member the output is a byte-identical copy; with a
+     * stream that matches no locale, or that cannot be read, the rewrite
+     * only strips the "_" markers.
+     * Untouched zip members are preserved byte-for-byte.  Input and output
+     * may be the same file: the rewrite is then in place (atomic, skipped
+     * when nothing would change), and a file carrying its
+     * "l10n_template.xml" copies re-translates on every call until the
+     * first save drops them.
+     *
+     * @param pInputPath input file, system path or file URL
+     * @param pOutputPath output file, overwritten if it exists
+     * @param pBCP47Language requested language, e.g. "de-DE"
+     */
+    virtual COKitTranslateResult translateDocument(const char* pInputPath, const char* pOutputPath,
+                                                   const char* pBCP47Language) = 0;
 };
 
 struct COKitDocument

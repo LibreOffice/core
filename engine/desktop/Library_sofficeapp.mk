@@ -23,6 +23,8 @@ $(eval $(call gb_Library_use_externals,sofficeapp, \
     $(if $(filter OPENCL,$(BUILD_TYPE)),clew) \
     boost_headers \
     dbus \
+    libxml2 \
+    zlib \
     $(if $(ENABLE_CURL), \
     $(if $(filter-out EMSCRIPTEN iOS,$(OS)), \
         curl \
@@ -121,6 +123,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 ifneq ($(filter $(OS),ANDROID iOS MACOSX WNT),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
+	desktop/source/lib/l10ntranslate \
 	desktop/source/lib/kitinteractionhandler \
 	desktop/source/lib/kitclipboard \
 ))
@@ -129,6 +132,7 @@ else
 ifneq ($(filter TRUE,$(USING_X11) $(DISABLE_GUI))($filter EMSCRIPTEN,$(OS)),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
+	desktop/source/lib/l10ntranslate \
 	desktop/source/lib/kitinteractionhandler \
 	desktop/source/lib/kitclipboard \
 ))

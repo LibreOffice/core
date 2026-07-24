@@ -247,6 +247,7 @@
 #include "../app/sofficemain.h"
 #include "../app/officeipcthread.hxx"
 #include <lib/init.hxx>
+#include <lib/l10ntranslate.hxx>
 
 #include "kitinteractionhandler.hxx"
 #include "kitclipboard.hxx"
@@ -3220,6 +3221,11 @@ static void lo_installClipboardProvider(COKit* pThis, const COKitClipboardProvid
 static bool lo_getGlobalClipboard(COKit* pThis, const char** pMimeTypes,
                                   std::vector<std::string>& rOutMimeTypes, std::vector<std::vector<char>>& rOutStreams);
 
+static COKitTranslateResult lo_translateDocument(COKit* pThis,
+                                                 const char* pInputPath,
+                                                 const char* pOutputPath,
+                                                 const char* pBCP47Language);
+
 COKitImpl::COKitImpl()
     : maThread(nullptr)
     , mpCallback(nullptr)
@@ -3372,6 +3378,12 @@ bool COKitImpl::getGlobalClipboard(const char **pMimeTypes,
                                     std::vector<std::vector<char>>& rOutStreams)
 {
     return lo_getGlobalClipboard(this, pMimeTypes, rOutMimeTypes, rOutStreams);
+}
+
+COKitTranslateResult COKitImpl::translateDocument(const char* pInputPath, const char* pOutputPath,
+                                                   const char* pBCP47Language)
+{
+    return lo_translateDocument(this, pInputPath, pOutputPath, pBCP47Language);
 }
 
 COKitImpl::~COKitImpl()
@@ -3929,6 +3941,42 @@ static bool lo_signDocument(COKit* /*pThis*/,
     return true;
 }
 
+
+static COKitTranslateResult lo_translateDocument(COKit* /*pThis*/,
+                                                 const char* pInputPath,
+                                                 const char* pOutputPath,
+                                                 const char* pBCP47Language)
+{
+    SetLastExceptionMsg();
+    if (!pInputPath || !pOutputPath || !pBCP47Language)
+    {
+        SetLastExceptionMsg(u"translateDocument: null argument"_ustr);
+        return COKitTranslateResult::FAILED;
+    }
+
+    desktop::l10n::TranslateResult eResult = desktop::l10n::TranslateResult::Error;
+    try
+    {
+        eResult = desktop::l10n::translateDocument(
+            OUString(pInputPath, strlen(pInputPath), RTL_TEXTENCODING_UTF8),
+            OUString(pOutputPath, strlen(pOutputPath), RTL_TEXTENCODING_UTF8),
+            OUString(pBCP47Language, strlen(pBCP47Language), RTL_TEXTENCODING_UTF8));
+    }
+    catch (const std::exception& e)
+    {
+        SAL_WARN("kit", "lo_translateDocument: " << e.what());
+    }
+    switch (eResult)
+    {
+        case desktop::l10n::TranslateResult::Translated:
+            return COKitTranslateResult::TRANSLATED;
+        case desktop::l10n::TranslateResult::CopiedUntranslated:
+            return COKitTranslateResult::COPIED_UNTRANSLATED;
+        default:
+            SetLastExceptionMsg(u"translateDocument: failed"_ustr);
+            return COKitTranslateResult::FAILED;
+    }
+}
 
 static std::string lo_extractRequest(COKit* /*pThis*/, const char* pFilePath)
 {

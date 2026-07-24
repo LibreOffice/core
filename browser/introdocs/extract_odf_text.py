@@ -1,95 +1,30 @@
 #!/usr/bin/env python3
-"""
-Extract all text starting with "_" from an ODF file and generate a .pot file.
+"""Extract the "_"-marked translatable strings from an ODF template into a
+.pot file.
+
+Key derivation and the <N> span-tag msgid format are defined in
+l10n_odf.py.  Marker spec violations reject the document with exit code 1.
+--check compares the fresh .pot against the committed one instead of
+writing it; a stale file prints a diff and exits 2.
 """
 
-import zipfile
-import xml.etree.ElementTree as ET
-from typing import List
-from datetime import datetime
+import argparse
+import difflib
+import os
+import sys
 
 import polib
 
-
-def extract_underscore_text(odf_file_path: str) -> List[str]:
-    """
-    Extract all text starting with '_' from an ODF file.
-
-    Args:
-        odf_file_path: Path to the ODF file
-
-    Returns:
-        List of text strings that start with '_'
-    """
-    texts = []
-
-    try:
-        with zipfile.ZipFile(odf_file_path, "r") as zip_ref:
-            if "content.xml" not in zip_ref.namelist():
-                print("Error: content.xml not found in ODF file")
-                return texts
-
-            content_xml = zip_ref.read("content.xml")
-            root = ET.fromstring(content_xml)
-
-            namespaces = {
-                "text": "urn:oasis:names:tc:opendocument:xmlns:text:1.0",
-            }
-
-            # Find all text:span elements
-            for span in root.findall(".//text:span", namespaces):
-                if span.text and span.text.startswith("_") and span.text not in texts:
-                    texts.append(span.text)
-
-            # Also check text:p (paragraphs) and text:h (headings)
-            for element in root.findall(".//text:p", namespaces):
-                if element.text and element.text.startswith("_") and element.text not in texts:
-                    texts.append(element.text)
-
-            for element in root.findall(".//text:h", namespaces):
-                if element.text and element.text.startswith("_") and element.text not in texts:
-                    texts.append(element.text)
-
-    except FileNotFoundError:
-        print(f"Error: File '{odf_file_path}' not found")
-    except zipfile.BadZipFile:
-        print(f"Error: '{odf_file_path}' is not a valid ZIP/ODF file")
-    except ET.ParseError as e:
-        print(f"Error parsing XML: {e}")
-
-    marker_only = [t for t in texts if not t.lstrip("_")]
-    for t in marker_only:
-        print(
-            f"Warning: skipping marker-only text {t!r}; keep the '_' in the"
-            " same text span as the string it marks"
-        )
-    return [t for t in texts if t.lstrip("_")]
+from l10n_odf import analyze_document
 
 
-def create_po_file(
-    texts: List[str],
-    output_file: str,
-    source_location: str,
-    project_name: str = "PACKAGE VERSION",
-) -> None:
-    """
-    Create a .pot file matching the project format.
-
-    Args:
-        texts: List of text strings to translate
-        output_file: Path to output .pot file
-        source_location: Source location string
-        project_name: Project name for the POT file header
-    """
-    now = datetime.now()
-    pot_creation_date = now.strftime("%Y-%m-%d %H:%M+0000")
-
-    # polib takes care of gettext escaping (quotes, backslashes, newlines).
+def build_pot(units, source_name):
     pot = polib.POFile()
+    # no POT-Creation-Date: regenerating an unchanged document must be
+    # byte-stable (--check), and the tooling embeds no timestamps anywhere
     pot.metadata = {
-        "Project-Id-Version": project_name,
+        "Project-Id-Version": source_name,
         "Report-Msgid-Bugs-To": "",
-        "POT-Creation-Date": pot_creation_date,
         "PO-Revision-Date": "YEAR-MO-DA HO:MI+ZONE",
         "Last-Translator": "FULL NAME <EMAIL@ADDRESS>",
         "Language-Team": "LANGUAGE <LL@li.org>",
@@ -99,44 +34,71 @@ def create_po_file(
         "Content-Transfer-Encoding": "8bit",
     }
 
-    seen = set()
-    for i, text in enumerate(texts, 1):
-        # Remove leading underscore for msgid
-        msgid_text = text.lstrip("_")
-        if msgid_text in seen:
-            continue
-        seen.add(msgid_text)
-        pot.append(
-            polib.POEntry(msgid=msgid_text, msgstr="", occurrences=[(source_location, i)])
-        )
+    # document order, duplicates merged with their contexts combined
+    entries = {}
+    for unit in units:
+        entry = entries.get(unit.key)
+        if entry is None:
+            entry = polib.POEntry(msgid=unit.key, msgstr="", comment=unit.where)
+            entries[unit.key] = entry
+            pot.append(entry)
+        elif unit.where not in entry.comment.split("; "):
+            entry.comment += "; " + unit.where
+    return pot
 
-    try:
-        pot.save(output_file)
-        print(f"POT file created: {output_file}")
-        print(f"Total entries: {len(pot)}")
-    except IOError as e:
-        print(f"Error writing POT file: {e}")
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Extract '_'-marked strings from an ODF file into a .pot")
+    parser.add_argument("--check", action="store_true",
+                        help="compare against the existing .pot instead of "
+                             "writing; exit 2 when it is stale")
+    parser.add_argument("odf_file")
+    parser.add_argument("pot_file")
+    args = parser.parse_args()
+
+    units, errors, warnings = analyze_document(args.odf_file)
+    for warning in warnings:
+        print(f"warning: {warning}", file=sys.stderr)
+    if errors:
+        for error in errors:
+            print(f"error: {error}", file=sys.stderr)
+        print(f"{len(errors)} lint error(s) in {args.odf_file}; not writing "
+              "a .pot", file=sys.stderr)
+        return 1
+
+    pot = build_pot(units, os.path.basename(args.odf_file))
+    generated = str(pot)
+
+    if args.check:
+        try:
+            with open(args.pot_file, encoding="utf-8") as existing_file:
+                existing = existing_file.read()
+        except FileNotFoundError:
+            print(f"{args.pot_file} does not exist; run "
+                  f"extract_odf_text.py {args.odf_file} {args.pot_file}",
+                  file=sys.stderr)
+            return 2
+        if existing != generated:
+            sys.stdout.writelines(difflib.unified_diff(
+                existing.splitlines(keepends=True),
+                generated.splitlines(keepends=True),
+                fromfile=f"{args.pot_file} (committed)",
+                tofile=f"{args.pot_file} (regenerated)"))
+            print(f"{args.pot_file} is stale; regenerate it with "
+                  f"extract_odf_text.py {args.odf_file} {args.pot_file}",
+                  file=sys.stderr)
+            return 2
+        print(f"{args.pot_file} is up to date "
+              f"({len(pot)} entries from {len(units)} units)")
+        return 0
+
+    with open(args.pot_file, "w", encoding="utf-8") as output_file:
+        output_file.write(generated)
+    print(f"POT file created: {args.pot_file}")
+    print(f"Total entries: {len(pot)} (from {len(units)} units)")
+    return 0
 
 
 if __name__ == "__main__":
-    import sys
-
-    if len(sys.argv) < 3:
-        print("usage: extract_odf_text.py <odf_file> <output.pot>")
-        sys.exit(1)
-
-    odf_path = sys.argv[1]
-    pot_path = sys.argv[2]
-
-    print(f"Extracting text starting with '_' from: {odf_path}\n")
-    texts = extract_underscore_text(odf_path)
-
-    if texts:
-        print(f"Found {len(texts)} text(s) starting with '_':")
-        for i, text in enumerate(texts, 1):
-            print(f"  {i}. {text}")
-
-        print("\nCreating POT file...")
-        create_po_file(texts, pot_path, odf_path)
-    else:
-        print("No text starting with '_' found.")
+    sys.exit(main())

@@ -18,6 +18,8 @@ $(eval $(call gb_CppunitTest_use_externals,desktop_app, \
     icu_headers \
     icui18n \
     icuuc \
+    libxml2 \
+    zlib \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \

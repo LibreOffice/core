@@ -2305,6 +2305,19 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
         _docPasswordToModify.clear();
 
         const char* url = loadUri.c_str();
+
+#if defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+        // In-place translation of a document carrying an "l10n" stream
+        // (the intro templates); a no-op for ordinary documents.  With no
+        // language the markers still come off, so the text reads plainly.
+        // Every app build that ships the intro documents needs this: the
+        // stream's keys carry no "_", so the import-time mapper in xmloff
+        // cannot translate them.
+        if (loKitPtr &&
+            loKitPtr->translateDocument(url, url, lang.c_str()) == COKitTranslateResult::FAILED)
+            LOG_WRN("translateDocument failed for " << uriAnonym << "; opening as-is");
+#endif // defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+
         LOG_DBG("Calling lokit::documentLoad(" << anonymizeUrl(url) << ", \"" << options << "\")");
         const auto start = std::chrono::steady_clock::now();
         _loKitDocument.reset(_loKit->documentLoadWithOptions(url, options.c_str()));

@@ -497,6 +497,8 @@ namespace desktop {
         bool getGlobalClipboard(const char **pMimeTypes,
                                 std::vector<std::string>& rOutMimeTypes,
                                 std::vector<std::vector<char>>& rOutStreams) override;
+        COKitTranslateResult translateDocument(const char* pInputPath, const char* pOutputPath,
+                                               const char* pBCP47Language) override;
     };
 
     /// Helper function to extract the value from parameters delimited by

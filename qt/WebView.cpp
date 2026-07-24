@@ -160,8 +160,15 @@ QString getDocumentsDirectory()
     return documentsDir;
 }
 
-Poco::Path getTemplatePath(const std::string& templateType, const std::string& templatePath)
+/// Resolve the template to copy.  pbUsedRequestedTemplate, when given, says
+/// whether the returned path is the requested template rather than the blank
+/// document this falls back to.
+Poco::Path getTemplatePath(const std::string& templateType, const std::string& templatePath,
+                           bool* pbUsedRequestedTemplate = nullptr)
 {
+    if (pbUsedRequestedTemplate)
+        *pbUsedRequestedTemplate = false;
+
     Poco::Path resolvedPath;
 
     if (!templatePath.empty())
@@ -199,6 +206,8 @@ Poco::Path getTemplatePath(const std::string& templateType, const std::string& t
         return defaultPath;
     }
 
+    if (pbUsedRequestedTemplate)
+        *pbUsedRequestedTemplate = true;
     return resolvedPath;
 }
 
@@ -1228,7 +1237,9 @@ void WebView::loadRemote(std::shared_ptr<coda::RemoteDocInfo> remoteInfo)
 QString WebView::createNewDocumentFile(const std::string& templateType, const std::string& templatePath, const std::string& basename)
 {
     // Get template file path
-    Poco::Path templatePathObj = getTemplatePath(templateType, templatePath);
+    bool bUsedRequestedTemplate = false;
+    Poco::Path templatePathObj =
+        getTemplatePath(templateType, templatePath, &bUsedRequestedTemplate);
 
     // Get user's Documents directory
     QString documentsDir = getDocumentsDirectory();
@@ -1236,16 +1247,26 @@ QString WebView::createNewDocumentFile(const std::string& templateType, const st
     // Get document name prefix and extension based on template type
     auto [docNamePrefix, extension] = getDocumentNameInfo(templateType, basename);
 
-    // Find the next available document name
-    QString newFilePath = findNextAvailableDocumentName(documentsDir, docNamePrefix, extension);
-
-    // Copy template to the new location
-    QString templateFilePath = QString::fromStdString(templatePathObj.toString());
-    if (!QFile::copy(templateFilePath, newFilePath))
+    // Copy an intro document once and reopen that copy on later clicks;
+    // deleting it gives a fresh copy.  A request naming a template that does
+    // not resolve gets the blank document, which is a new file every time.
+    const bool reuseCopy = bUsedRequestedTemplate;
+    QString newFilePath =
+        QDir(documentsDir).filePath(QString("%1.%2").arg(docNamePrefix).arg(extension));
+    if (!reuseCopy || !QFileInfo::exists(newFilePath))
     {
-        LOG_ERR("Failed to copy template from " << templateFilePath.toStdString()
-                << " to " << newFilePath.toStdString());
-        return {};
+        if (!reuseCopy)
+            newFilePath = findNextAvailableDocumentName(documentsDir, docNamePrefix, extension);
+
+        // Copy the template to the new location; a template carrying an l10n
+        // stream is translated in place by the kit when the copy is loaded.
+        QString templateFilePath = QString::fromStdString(templatePathObj.toString());
+        if (!QFile::copy(templateFilePath, newFilePath))
+        {
+            LOG_ERR("Failed to copy template from " << templateFilePath.toStdString()
+                    << " to " << newFilePath.toStdString());
+            return {};
+        }
     }
 
     return newFilePath;

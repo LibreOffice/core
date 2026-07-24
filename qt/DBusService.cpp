@@ -130,8 +130,13 @@ namespace coda
             LOG_ERR("Failed to create new " << templateType << " document");
             return false;
         }
-        TabbedWindow* tw = TabbedWindow::getOrCreate(Application::getProfile());
         Poco::URI newDocumentURI(Poco::Path(path.toStdString()));
+        if (WebView* existingDocument = WebView::findOpenDocument(newDocumentURI))
+        {
+            existingDocument->activateWindow();
+            return true;
+        }
+        TabbedWindow* tw = TabbedWindow::getOrCreate(Application::getProfile());
         tw->manager()->addDocumentTab(newDocumentURI, /*newFile*/ true);
         Application::getRecentFiles().add(newDocumentURI.toString());
         return true;
