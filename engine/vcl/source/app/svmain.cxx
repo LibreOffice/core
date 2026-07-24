@@ -401,7 +401,11 @@ void DeInitVCL()
     //tear everything down and recreate them on the next call, there's too many
     //(c++) singletons that point to stuff that gets deleted during shutdown
     //which won't be recreated on restart.
-    if (comphelper::COKit::isActive())
+    // The unit test harness is the only code that installs a deinit hook, and it
+    // does want a full teardown - including in KIT_ALWAYS_ACTIVE builds, where
+    // COKit is always active. Without it VCL is never deinitialized and the Desktop
+    // ends up disposed without being terminated (asserts in Desktop::disposing()).
+    if (comphelper::COKit::isActive() && !ImplGetSVData()->maDeInitHook.IsSet())
         return;
 
     {
