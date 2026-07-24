@@ -3233,13 +3233,12 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
             argv[0] = _strdup("mobile");
             argv[1] = nullptr;
             ProcUtil::setThreadName("app");
-            while (true)
-            {
-                coolwsd = new COOLWSD();
-                coolwsd->run(1, argv);
-                delete coolwsd;
-                LOG_TRC("One run of COOLWSD completed");
-            }
+            coolwsd = new COOLWSD();
+            coolwsd->run(1, argv);
+            // We will actually not get here, Util::forcedExit() will be called
+            delete coolwsd;
+            coolwsd = nullptr;
+            LOG_TRC("COOLWSD completed");
         });
 
     {
