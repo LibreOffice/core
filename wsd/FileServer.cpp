@@ -2252,8 +2252,24 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
     const std::string& provider = form.get("provider", std::string());
     const std::string& apiKey = form.get("apiKey", std::string());
     std::string baseUrl = form.get("baseUrl", std::string());
+    // With no typed key, the server reads the saved one from viewsetting.json:
+    // currentFileUrl locates it, secretField picks the key, accessToken reads it.
+    const std::string& accessToken = form.get("accessToken", std::string());
+    const std::string& currentFileUrl = form.get("currentFileUrl", std::string());
+    const std::string& secretField = form.get("secretField", std::string());
 
     const std::string& shortMessage = "Failed to fetch AI models";
+
+    // Restrict the field to the two AI keys so a caller cannot read an arbitrary
+    // value out of the stored settings.
+    const bool useStoredKey = apiKey.empty() && !currentFileUrl.empty() && !secretField.empty();
+    if (useStoredKey && secretField != "aiProviderAPIKey" &&
+        secretField != "aiImageProviderAPIKey")
+    {
+        sendError(http::StatusCode::BadRequest, getRequestPath(request), socket, shortMessage,
+                  "Unsupported secret field");
+        return;
+    }
     // The API key is optional: self-hosted endpoints often list their models
     // without one. The provider (and, for a custom provider, the base URL
     // checked below) are what we need to reach the models endpoint.
@@ -2307,50 +2323,137 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
 
     const std::string& uriAnonym = Anonymizer::anonymizeUrl(uri.toString());
 
-    // With an empty key, mark the token as header-less so no Authorization
-    // header (and no bare "Bearer ") is sent to the models endpoint.
-    Authorization auth(Authorization::Type::Token, apiKey, /*noHeader=*/apiKey.empty());
-    auto httpRequest = StorageConnectionManager::createHttpRequest(uri, auth);
-    httpRequest.setVerb(http::Request::VERB_GET);
-    httpRequest.set("Content-Type", "application/json");
+    // Fetch the model list with the given key (client's, or read back from storage).
+    auto fetchWithKey = [uri, uriAnonym, socket, requestPath = getRequestPath(request),
+                         shortMessage](const std::string& effectiveKey)
+    {
+        // With an empty key, mark the token as header-less so no Authorization
+        // header (and no bare "Bearer ") is sent to the models endpoint.
+        Authorization auth(Authorization::Type::Token, effectiveKey,
+                           /*noHeader=*/effectiveKey.empty());
+        auto httpRequest = StorageConnectionManager::createHttpRequest(uri, auth);
+        httpRequest.setVerb(http::Request::VERB_GET);
+        httpRequest.set("Content-Type", "application/json");
+
+        std::weak_ptr<StreamSocket> socketWeak(socket);
+
+        http::Session::FinishedCallback finishedCallback =
+            [uriAnonym, socketWeak, requestPath,
+             shortMessage](const std::shared_ptr<http::Session>& httpSession)
+        {
+            std::shared_ptr<StreamSocket> destSocket = socketWeak.lock();
+            if (!destSocket)
+            {
+                LOG_ERR("Invalid socket while fetching models from [" << uriAnonym << ']');
+                return;
+            }
+
+            const auto httpResponse = httpSession->response();
+            if (httpResponse->statusLine().statusCode() != http::StatusCode::OK)
+            {
+                LOG_ERR("Failed to fetch models from [" << uriAnonym
+                        << "] with status [" << httpResponse->statusLine().reasonPhrase() << ']');
+                sendError(httpResponse->statusLine().statusCode(), requestPath, destSocket,
+                          shortMessage,
+                          httpResponse->statusLine().reasonPhrase() + ". Response: " +
+                              httpResponse->getBody());
+                return;
+            }
+
+            http::Response clientResponse(http::StatusCode::OK);
+            clientResponse.set("Content-Type", "application/json; charset=utf-8");
+            clientResponse.set("Cache-Control", "no-cache");
+            clientResponse.setBody(httpResponse->getBody());
+            destSocket->sendAndShutdown(clientResponse);
+            LOG_DBG("Successfully fetched models from [" << uriAnonym << ']');
+        };
+
+        LOG_DBG("Fetching models from [" << uriAnonym << ']');
+        auto httpSession = StorageConnectionManager::getHttpSession(uri);
+        httpSession->setFinishedHandler(std::move(finishedCallback));
+        httpSession->asyncRequest(httpRequest, COOLWSD::getWebServerPoll());
+    };
+
+    if (!useStoredKey)
+    {
+        fetchWithKey(apiKey);
+        return;
+    }
+
+    // Read the saved key from the stored file and use it here; it is never sent
+    // back to the browser.
+    if (accessToken.empty())
+    {
+        sendError(http::StatusCode::BadRequest, getRequestPath(request), socket, shortMessage,
+                  "Missing access token needed to read the stored key");
+        return;
+    }
+
+    Poco::URI storedUri(currentFileUrl);
+    if (!isAllowedWopiHost(storedUri))
+    {
+        LOG_WRN("Rejected stored-settings read from untrusted host ["
+                << Anonymizer::anonymizeUrl(currentFileUrl) << ']');
+        sendError(http::StatusCode::Forbidden, getRequestPath(request), socket, shortMessage,
+                  "Target host is not in the allowed WOPI host list");
+        return;
+    }
+
+    bool hasAccessToken = false;
+    for (const auto& param : storedUri.getQueryParameters())
+    {
+        if (param.first == "access_token")
+        {
+            hasAccessToken = true;
+            break;
+        }
+    }
+    if (!hasAccessToken)
+        storedUri.addQueryParameter("access_token", accessToken);
+
+    const std::string storedUriAnonym = Anonymizer::anonymizeUrl(storedUri.toString());
+    Authorization storedAuth(Authorization::Type::Token, accessToken, false);
+    auto storedRequest = StorageConnectionManager::createHttpRequest(storedUri, storedAuth);
+    storedRequest.setVerb(http::Request::VERB_GET);
+    storedRequest.set("Content-Type", "text/plain");
 
     std::weak_ptr<StreamSocket> socketWeak(socket);
 
-    http::Session::FinishedCallback finishedCallback =
-        [uriAnonym, socketWeak, requestPath = getRequestPath(request),
-         shortMessage](const std::shared_ptr<http::Session>& httpSession)
+    http::Session::FinishedCallback storedCallback =
+        [fetchWithKey, secretField, socketWeak, storedUriAnonym,
+         requestPath = getRequestPath(request),
+         shortMessage](const std::shared_ptr<http::Session>& wopiSession)
     {
         std::shared_ptr<StreamSocket> destSocket = socketWeak.lock();
         if (!destSocket)
         {
-            LOG_ERR("Invalid socket while fetching models from [" << uriAnonym << ']');
+            LOG_ERR("Invalid socket while reading stored viewsetting.json from ["
+                    << storedUriAnonym << ']');
             return;
         }
 
-        const auto httpResponse = httpSession->response();
+        const auto httpResponse = wopiSession->response();
         if (httpResponse->statusLine().statusCode() != http::StatusCode::OK)
         {
-            LOG_ERR("Failed to fetch models from [" << uriAnonym
+            LOG_ERR("Failed to read stored viewsetting.json from [" << storedUriAnonym
                     << "] with status [" << httpResponse->statusLine().reasonPhrase() << ']');
             sendError(httpResponse->statusLine().statusCode(), requestPath, destSocket,
-                      shortMessage,
-                      httpResponse->statusLine().reasonPhrase() + ". Response: " +
-                          httpResponse->getBody());
+                      shortMessage, "Could not read the stored settings needed to list models");
             return;
         }
 
-        http::Response clientResponse(http::StatusCode::OK);
-        clientResponse.set("Content-Type", "application/json; charset=utf-8");
-        clientResponse.set("Cache-Control", "no-cache");
-        clientResponse.setBody(httpResponse->getBody());
-        destSocket->sendAndShutdown(clientResponse);
-        LOG_DBG("Successfully fetched models from [" << uriAnonym << ']');
+        std::string storedKey;
+        Poco::JSON::Object::Ptr stored;
+        if (JsonUtil::parseJSON(httpResponse->getBody(), stored) && stored)
+            JsonUtil::findJSONValue(stored, secretField, storedKey);
+        fetchWithKey(storedKey);
     };
 
-    LOG_DBG("Fetching models from [" << uriAnonym << ']');
-    auto httpSession = StorageConnectionManager::getHttpSession(uri);
-    httpSession->setFinishedHandler(std::move(finishedCallback));
-    httpSession->asyncRequest(httpRequest, COOLWSD::getWebServerPoll());
+    LOG_DBG("Reading stored viewsetting.json from [" << storedUriAnonym
+            << "] to list AI models");
+    auto storedSession = StorageConnectionManager::getHttpSession(storedUri);
+    storedSession->setFinishedHandler(std::move(storedCallback));
+    storedSession->asyncRequest(storedRequest, COOLWSD::getWebServerPoll());
 }
 
 void FileServerRequestHandler::deleteWopiSettingConfigs(const Poco::Net::HTTPRequest& request,

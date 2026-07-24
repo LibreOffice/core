@@ -249,6 +249,9 @@ define start_coolwsd_instance
 	$(V)fc-cache "@LO_PATH@"/share/fonts/truetype
 	$(V)echo
 	$(V)mkdir -p $(dir $(COOLWSD_OUTPUT))
+# The AI settings block in the settings dialog needs ai.enabled and
+# ai.allow_user_settings on. The central endpoint is pinned empty so a run does not pick
+# up whatever credentials a developer put in their generated coolwsd.xml.
 	ulimit -n 1024; ../coolwsd --o:sys_template_path="@SYSTEMPLATE_PATH@" \
 			--o:child_root_path="@JAILS_PATH@" \
 			--o:cache_files.path="@CACHE_PATH@" \
@@ -263,6 +266,8 @@ define start_coolwsd_instance
 			--o:user_interface.mode=$(USER_INTERFACE) \
 			--o:accessibility.enable=$(A11Y_ENABLE) \
 			--o:security.enable_macros_execution=true \
+			--o:ai.enabled=true --o:ai.allow_user_settings=true \
+			--o:ai.api_url="" --o:ai.api_key="" --o:ai.model="" \
 			$(if $(SHORT_IDLE),--o:per_view.out_of_focus_timeout_secs=1) \
 			$(if $(SHORT_IDLE),--o:per_view.idle_timeout_secs=7) \
 			--port=$(FREE_PORT) \

@@ -2852,9 +2852,18 @@ class SettingIframe {
 		const provider = this.getProviderById(effectiveProviderId);
 		const isCustom = provider?.isCustom ?? effectiveProviderId === 'custom';
 
+		// Which saved key the server should read back: image key, else chat key.
+		const storedImageSecretField = data.aiImageProviderAPIKeyStored
+			? 'aiImageProviderAPIKey'
+			: data.aiProviderAPIKeyStored
+				? 'aiProviderAPIKey'
+				: '';
+		const canUseStoredKey =
+			!isCODesktop && !!storedImageSecretField && !!this._viewSettingFileUrl;
+
 		// As for text: a custom (self-hosted) image provider lists models with
 		// just a base URL; the pre-canned cloud providers still need a key.
-		if (!effectiveUrl || (!isCustom && !effectiveKey)) {
+		if (!effectiveUrl || (!isCustom && !effectiveKey && !canUseStoredKey)) {
 			this.setAIImageStatus('', 'hidden');
 			this.resetAIImageModelSelect(data.aiImageModel);
 			return;
@@ -2888,6 +2897,11 @@ class SettingIframe {
 				formData.append('provider', providerId);
 				formData.append('apiKey', effectiveKey);
 				formData.append('baseUrl', effectiveUrl);
+				if (!effectiveKey && canUseStoredKey) {
+					formData.append('currentFileUrl', this._viewSettingFileUrl);
+					formData.append('accessToken', window.accessToken ?? '');
+					formData.append('secretField', storedImageSecretField);
+				}
 
 				const response = await fetch(this.getAPIEndpoints().fetchModels, {
 					method: 'POST',
@@ -2959,9 +2973,15 @@ class SettingIframe {
 			: provider.baseUrl;
 		const apiKey = data.aiProviderAPIKey || '';
 
+		// No typed key, but a saved one the server can read back.
+		const canUseStoredKey =
+			!isCODesktop &&
+			!!data.aiProviderAPIKeyStored &&
+			!!this._viewSettingFileUrl;
+
 		// A self-hosted (custom) provider can list its models with just a base
 		// URL; the pre-canned cloud providers still need a key to reach theirs.
-		if (isCustom ? !baseUrl : !apiKey) {
+		if (isCustom ? !baseUrl : !apiKey && !canUseStoredKey) {
 			this.setAIStatus('', 'hidden');
 			this.resetAIModelSelect(data.aiProviderModel);
 			return;
@@ -2990,6 +3010,11 @@ class SettingIframe {
 				formData.append('provider', provider.id);
 				formData.append('apiKey', apiKey);
 				formData.append('baseUrl', baseUrl);
+				if (!apiKey && canUseStoredKey) {
+					formData.append('currentFileUrl', this._viewSettingFileUrl);
+					formData.append('accessToken', window.accessToken ?? '');
+					formData.append('secretField', 'aiProviderAPIKey');
+				}
 
 				const response = await fetch(this.getAPIEndpoints().fetchModels, {
 					method: 'POST',

@@ -16,6 +16,8 @@ function plugin(on, config) {
 		copyFile: tasks.copyFile,
 		getSelectors: tasks.getSelectors,
 		writeUserSetting: tasks.writeUserSetting,
+		writeUserViewSetting: tasks.writeUserViewSetting,
+		removeUserViewSetting: tasks.removeUserViewSetting,
 		lighthouse: lighthouse(),
 	});
 

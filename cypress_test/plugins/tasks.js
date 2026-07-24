@@ -53,6 +53,38 @@ function writeUserSetting(args) {
 	});
 }
 
+// Mirrors userPresetDir() in test/TestWopiFileServer.hpp: the default user
+// ("test" or empty) uses the shared location, others get u-<userId>.
+function userPresetDir(userId) {
+	var base = path.resolve(__dirname, '../../test/data/presets/user');
+	if (!userId || String(userId) === 'test')
+		return base;
+	return path.join(base, 'u-' + String(userId));
+}
+
+function writeUserViewSetting(args) {
+	return new Promise(function(resolve) {
+		var dir = userPresetDir(args.userId);
+		fs.mkdirSync(dir, { recursive: true });
+		fs.writeFileSync(path.join(dir, 'viewsetting.json'), JSON.stringify(args.settings));
+		resolve('wrote viewsetting.json');
+	});
+}
+
+function removeUserViewSetting(args) {
+	return new Promise(function(resolve) {
+		var file = path.join(userPresetDir(args.userId), 'viewsetting.json');
+		try {
+			fs.unlinkSync(file);
+		} catch (e) {
+			// Already absent; nothing to clean up.
+		}
+		resolve('removed viewsetting.json');
+	});
+}
+
 module.exports.copyFile = copyFile;
 module.exports.getSelectors = getSelectors;
 module.exports.writeUserSetting = writeUserSetting;
+module.exports.writeUserViewSetting = writeUserViewSetting;
+module.exports.removeUserViewSetting = removeUserViewSetting;
