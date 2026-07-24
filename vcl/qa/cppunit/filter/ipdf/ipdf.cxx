@@ -22,6 +22,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/filter/pdfdocument.hxx>
+#include <vcl/pdfread.hxx>
 #include <svl/cryptosign.hxx>
 
 using namespace ::com::sun::star;
@@ -208,6 +209,33 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testMixedArrayWithNumbers)
     CPPUNIT_ASSERT(dynamic_cast<vcl::filter::PDFNumberElement*>(aElements[2]));
     CPPUNIT_ASSERT(dynamic_cast<vcl::filter::PDFNumberElement*>(aElements[4]));
     CPPUNIT_ASSERT(dynamic_cast<vcl::filter::PDFNumberElement*>(aElements[6]));
+}
+
+CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testImportEncryptedPDFWithPassword)
+{
+    // A password-protected PDF newer than version 1.6 has to be decrypted for
+    // the version downgrade done on import. Opening such a PDF (e.g. one that
+    // Online exported as a 1.7 encrypted PDF) failed because the password was
+    // not threaded down to the downgrade step (cool#16022).
+    OUString aSourceURL = createFileURL(u"encrypted-with-password.pdf");
+
+    // Without a password the import cannot decrypt, so it yields no pages - but
+    // must fail gracefully rather than crash.
+    {
+        SvFileStream aFile(aSourceURL, StreamMode::READ);
+        std::vector<vcl::PDFGraphicResult> aResults;
+        CPPUNIT_ASSERT_EQUAL(size_t(0), vcl::ImportPDFUnloaded(aFile, aResults));
+    }
+
+    // With the correct password passed through, the import succeeds.
+    // Without the accompanying fix in place, this returned 0 pages.
+    {
+        SvFileStream aFile(aSourceURL, StreamMode::READ);
+        std::vector<vcl::PDFGraphicResult> aResults;
+        CPPUNIT_ASSERT_EQUAL(size_t(1), vcl::ImportPDFUnloaded(aFile, aResults,
+                                                               /*xInteractionHandler=*/nullptr,
+                                                               u"secret"_ustr));
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

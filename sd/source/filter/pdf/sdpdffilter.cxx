@@ -21,9 +21,13 @@
 
 #include <osl/process.h>
 #include <sfx2/docfile.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <svx/svdograf.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/urlobj.hxx>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
@@ -64,10 +68,13 @@ SdPdfFilter::SdPdfFilter(SfxMedium& rMedium, sd::DrawDocShell& rDocShell)
 
 SdPdfFilter::~SdPdfFilter() {}
 
-static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument)
+static bool ImportPDF(SvStream& rStream, SdDrawDocument& rDocument,
+                      const uno::Reference<task::XInteractionHandler>& xInteractionHandler
+                      = nullptr,
+                      const OUString& rPassword = OUString())
 {
     std::vector<vcl::PDFGraphicResult> aGraphics;
-    if (vcl::ImportPDFUnloaded(rStream, aGraphics) == 0)
+    if (vcl::ImportPDFUnloaded(rStream, aGraphics, xInteractionHandler, rPassword) == 0)
         return false;
 
     bool bWasLocked = rDocument.isLocked();
@@ -389,7 +396,14 @@ bool SdPdfFilter::Import()
     std::unique_ptr<SvStream> xStream(::utl::UcbStreamHelper::CreateStream(
         aFileName, StreamMode::READ | StreamMode::SHARE_DENYNONE));
 
-    return ImportPDF(*xStream, mrDocument);
+    // An encrypted PDF has to be decrypted for the version downgrade done while
+    // reading. Forward the password already collected during type detection (if
+    // any) and the interaction handler so it can be obtained without failing.
+    OUString aPassword;
+    if (const SfxStringItem* pPasswordItem = mrMedium.GetItemSet().GetItem(SID_PASSWORD, false))
+        aPassword = pPasswordItem->GetValue();
+
+    return ImportPDF(*xStream, mrDocument, mrMedium.GetInteractionHandler(), aPassword);
 }
 
 bool SdPdfFilter::Export() { return false; }

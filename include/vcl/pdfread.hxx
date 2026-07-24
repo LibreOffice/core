@@ -129,9 +129,17 @@ public:
 
 /// Import PDF as Graphic images (1 per page), but not loaded yet.
 /// Returns the number of pages read.
-VCL_DLLPUBLIC size_t ImportPDFUnloaded(const OUString& rURL,
-                                       std::vector<PDFGraphicResult>& rGraphics);
-VCL_DLLPUBLIC size_t ImportPDFUnloaded(SvStream& rStream, std::vector<PDFGraphicResult>& rGraphics);
+/// xInteractionHandler and rPassword let an encrypted (and/or too-new) PDF be
+/// decrypted for the version downgrade - the password is used directly when
+/// given, otherwise the handler is asked.
+VCL_DLLPUBLIC size_t ImportPDFUnloaded(
+    const OUString& rURL, std::vector<PDFGraphicResult>& rGraphics,
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr,
+    const OUString& rPassword = OUString());
+VCL_DLLPUBLIC size_t ImportPDFUnloaded(
+    SvStream& rStream, std::vector<PDFGraphicResult>& rGraphics,
+    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr,
+    const OUString& rPassword = OUString());
 }
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
