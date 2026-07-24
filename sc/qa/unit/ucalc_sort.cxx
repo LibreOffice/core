@@ -20,6 +20,7 @@
 #include <dbdocfun.hxx>
 #include <docfunc.hxx>
 #include <scitems.hxx>
+#include <attrib.hxx>
 #include <editutil.hxx>
 #include <drwlayer.hxx>
 #include <queryiter.hxx>
@@ -2564,6 +2565,37 @@ CPPUNIT_TEST_FIXTURE(TestSort, testShuffleAndThenSort)
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
     CPPUNIT_ASSERT_EQUAL(u"Sort"_ustr, pUndoMgr->GetUndoActionComment());
+
+    m_pDoc->DeleteTab(0);
+}
+
+// cool#16004: a first row that carries autofilter or pivot table button
+// attributes is a header row, so sorting leaves it in place.
+CPPUNIT_TEST_FIXTURE(TestSort, testColHeaderWithFilterButtons)
+{
+    m_pDoc->InsertTab(0, u"test"_ustr);
+
+    // All cells numeric, so no row qualifies as a header by cell type alone.
+    const std::vector<std::vector<const char*>> aData = {
+        { "10", "20" },
+        { "3", "1" },
+        { "2", "5" },
+    };
+    insertRangeData(m_pDoc, ScAddress(0, 0, 0), aData);
+
+    CPPUNIT_ASSERT(!m_pDoc->HasColHeader(0, 0, 1, 2, 0));
+
+    // Flag the first row the way an autofilter marks its header cells.
+    m_pDoc->ApplyFlagsTab(0, 0, 1, 0, 0, ScMF::Auto);
+    CPPUNIT_ASSERT(m_pDoc->HasColHeader(0, 0, 1, 2, 0));
+
+    m_pDoc->RemoveFlagsTab(0, 0, 1, 0, 0, ScMF::Auto);
+    CPPUNIT_ASSERT(!m_pDoc->HasColHeader(0, 0, 1, 2, 0));
+
+    // A single cell flagged the way a pivot table marks its field buttons
+    // is enough to make the whole first row a header.
+    m_pDoc->ApplyFlagsTab(1, 0, 1, 0, 0, ScMF::ButtonPopup);
+    CPPUNIT_ASSERT(m_pDoc->HasColHeader(0, 0, 1, 2, 0));
 
     m_pDoc->DeleteTab(0);
 }
