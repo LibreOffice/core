@@ -2304,6 +2304,48 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testCool16036)
     assertXPath(pXmlDoc, "//page/anchored/fly/section/txt/anchored/SwAnchoredDrawObject", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf104020)
+{
+    // A nearly frame-wide rectangle set to centre on its anchor paragraph, which has no text
+    // of its own, in a fixed-height text frame anchored at the page. The rectangle is centred
+    // on the frame's content area, as centring it on the paragraph would be circular: the
+    // paragraph's height comes from the rectangle's own wrap.
+    createSwDoc("object-centred-in-fixed-height-fly.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    // The paragraph keeps the whole frame; without the fix it collapsed to a single line (276).
+    assertXPath(pXmlDoc, "//page/anchored/fly/infos/bounds", "top", u"567");
+    assertXPath(pXmlDoc, "//page/anchored/fly/infos/bounds", "height", u"2835");
+    assertXPath(pXmlDoc, "//page/anchored/fly/section/txt/infos/bounds", "height", u"2835");
+
+    // The rectangle sits centred in the frame, (2835 - 2384) / 2 below its top; without the
+    // fix it was centred on the single line instead, which put it above the frame.
+    assertXPath(pXmlDoc, "//page/anchored/fly/section/txt/anchored/SwAnchoredDrawObject/bounds",
+                "height", u"2384");
+    assertXPath(pXmlDoc, "//page/anchored/fly/section/txt/anchored/SwAnchoredDrawObject/bounds",
+                "top", u"792");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf104020FittingObject)
+{
+    // The same fixed-height text frame, but with a rectangle that fits in its anchor
+    // paragraph: it is placed in the paragraph as asked, next to the paragraph's own line,
+    // and the paragraph stays a single line. Nothing is circular here, so this must keep
+    // using the paragraph as the alignment area.
+    createSwDoc("object-fitting-empty-paragraph-in-fly.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page/anchored/fly/infos/bounds", "top", u"567");
+    assertXPath(pXmlDoc, "//page/anchored/fly/section/txt/infos/bounds", "height", u"276");
+
+    // Centred on the single line, (276 - 173) / 2 below the paragraph's top - not on the
+    // whole frame, which would put it near the frame's middle instead.
+    assertXPath(pXmlDoc, "//page/anchored/fly/section/txt/anchored/SwAnchoredDrawObject/bounds",
+                "height", u"173");
+    assertXPath(pXmlDoc, "//page/anchored/fly/section/txt/anchored/SwAnchoredDrawObject/bounds",
+                "top", u"619");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf169320)
 {
     // A list with one item hidden by usual hidden text property, and another having a hidden
