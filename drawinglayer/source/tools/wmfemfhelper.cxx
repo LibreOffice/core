@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
+
 #include <wmfemfhelper.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <vcl/alpha.hxx>
@@ -155,25 +157,31 @@ namespace wmfemfhelper
 
     void PropertyHolders::Push(vcl::PushFlags nPushFlags)
     {
-        if (bool(nPushFlags))
-        {
-            OSL_ENSURE(maPropertyHolders.size(), "PropertyHolders: PUSH with no property holders (!)");
-            if (!maPropertyHolders.empty())
-            {
-                PropertyHolder* pNew = new PropertyHolder(*maPropertyHolders.back());
-                pNew->setPushFlags(nPushFlags);
-                maPropertyHolders.push_back(pNew);
-            }
-        }
+        // The holder the stack is constructed with is never popped, so there is always one to copy.
+        assert(!maPropertyHolders.empty());
+
+        // Every push adds a holder, including one with no flags at all, so each pop has exactly one
+        // push to pair with. A holder with no flags copies nothing back when it is popped.
+        PropertyHolder* pNew = new PropertyHolder(*maPropertyHolders.back());
+        pNew->setPushFlags(nPushFlags);
+        maPropertyHolders.push_back(pNew);
     }
 
     void PropertyHolders::Pop()
     {
-        OSL_ENSURE(maPropertyHolders.size(), "PropertyHolders: POP with no property holders (!)");
-        const sal_uInt32 nSize(maPropertyHolders.size());
+        assert(!maPropertyHolders.empty());
 
-        if (!nSize)
+        // Only a holder that a push added can be popped, so a metafile with more pops than pushes
+        // keeps the holder the stack was constructed with.
+        const size_t nPushCount(maPropertyHolders.size() - 1);
+
+        if (!nPushCount)
+        {
+            SAL_WARN("drawinglayer", "PropertyHolders: POP without a matching PUSH (!)");
             return;
+        }
+
+        const sal_uInt32 nSize(maPropertyHolders.size());
 
         const PropertyHolder* pTip = maPropertyHolders.back();
         const vcl::PushFlags nPushFlags(pTip->getPushFlags());
