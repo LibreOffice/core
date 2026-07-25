@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles>
+  <style:default-style style:family="paragraph"><style:text-properties style:font-name="Liberation Sans" fo:font-size="12pt"/></style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Frame" style:family="graphic"/>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Frame"><style:graphic-properties style:vertical-pos="from-top" style:vertical-rel="page" style:horizontal-pos="from-left" style:horizontal-rel="page" style:wrap="none" draw:auto-grow-height="false" fo:padding="0mm" fo:border="none"/></style:style>
+  <style:style style:name="fr2" style:family="graphic"><style:graphic-properties style:vertical-pos="middle" style:vertical-rel="paragraph-content" style:horizontal-pos="from-left" style:horizontal-rel="paragraph" style:wrap="dynamic" draw:fill="solid" draw:fill-color="#cccccc"/></style:style>
+  <style:style style:name="Sect1" style:family="section"/>
+  <style:page-layout style:name="pl1"><style:page-layout-properties fo:page-width="100mm" fo:page-height="100mm" fo:margin="5mm"/></style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pl1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <!-- No whitespace inside the text:p elements: in ODF that would be text content, and
+        the point here is a paragraph whose only content is the anchored rectangle. -->
+   <text:p text:style-name="Standard"><draw:frame draw:style-name="fr1" draw:name="Box1" text:anchor-type="page" text:anchor-page-number="1" svg:x="5mm" svg:y="5mm" svg:width="90mm" svg:height="50mm" draw:z-index="0">
+     <draw:text-box>
+      <text:section text:style-name="Sect1" text:name="Sec1">
+       <text:p text:style-name="Standard"><draw:rect draw:style-name="fr2" draw:name="Rect1" text:anchor-type="paragraph" svg:x="1mm" svg:width="87mm" svg:height="42mm" draw:z-index="1"/></text:p>
+      </text:section>
+     </draw:text-box>
+    </draw:frame></text:p>
+  </office:text>
+ </office:body>
+</office:document>

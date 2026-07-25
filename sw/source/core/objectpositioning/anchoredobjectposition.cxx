@@ -168,6 +168,56 @@ SwTwips SwAnchoredObjectPosition::ToCharTopOfLine() const
     return 0;
 }
 
+namespace
+{
+/** tdf#104020: the text frame whose content area replaces the anchor's own print area as
+    the vertical alignment area, or nullptr to keep using the anchor's print area.
+
+    A paragraph without text of its own takes its height from the wrap of the object
+    anchored in it, so aligning that object to the paragraph is circular. The circle has no
+    solution as soon as the height it leads to exceeds the fixed height of the text frame
+    the paragraph is in, and the layout oscillates instead of converging. The content area
+    of a text frame that such a paragraph alone occupies is the area available to the
+    paragraph, and unlike the paragraph it does not depend on where the object ends up.
+*/
+const SwFlyFrame* lcl_GetFlyWithStableAlignArea(const SwFrame& rVertOrientFrame,
+                                                const SwFrameFormat& rFrameFormat,
+                                                const SwTwips nObjHeight)
+{
+    if (!rVertOrientFrame.IsTextFrame() || !rVertOrientFrame.IsInFly()
+        || !static_cast<const SwTextFrame&>(rVertOrientFrame).GetText().isEmpty())
+        return nullptr;
+
+    // Without wrap the paragraph keeps its own height, so there is no circle to break.
+    bool bWrapThrough = rFrameFormat.GetSurround().GetSurround() == text::WrapTextMode_THROUGH;
+    SwTextBoxHelper::getShapeWrapThrough(&rFrameFormat, bWrapThrough);
+    if (bWrapThrough)
+        return nullptr;
+
+    // An object that fits in the paragraph is placed in it as asked, whether the wrap moves
+    // the paragraph's own text or leaves it beside the object. Only one that does not fit
+    // would land outside the paragraph, which is where its height starts to follow the
+    // object. Once the paragraph has grown to the whole frame both areas are the same, so
+    // this does not make the position alternate between them.
+    SwRectFnSet aRectFnSet(rVertOrientFrame);
+    if (nObjHeight <= aRectFnSet.GetHeight(rVertOrientFrame.getFramePrintArea()))
+        return nullptr;
+
+    const SwFlyFrame* pFly = rVertOrientFrame.FindFlyFrame();
+    // A frame that grows with its content, or that passes content on to a linked or a split
+    // follow, takes its own height from the content again.
+    if (!pFly || !pFly->HasFixSize() || pFly->GetNextLink() || pFly->IsFlySplitAllowed())
+        return nullptr;
+
+    // Only the content area of a frame the paragraph alone occupies is the paragraph's area.
+    if (pFly->ContainsContent() != &rVertOrientFrame)
+        return nullptr;
+    const SwContentFrame* pNext
+        = static_cast<const SwTextFrame&>(rVertOrientFrame).GetNextContentFrame();
+    return !pNext || !pFly->IsAnLower(pNext) ? pFly : nullptr;
+}
+}
+
 /** helper method to determine top of a frame for the vertical
     object positioning
 
@@ -243,6 +293,15 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
             // #i11860# - consider upper space of previous frame
             nOffset = aRectFnSet.GetTopMargin(_rVertOrientFrame) -
                       nVertOrientUpperSpaceForPrevFrameAndPageGrid;
+            // tdf#104020: an anchor paragraph that only holds this object cannot serve as
+            // the alignment area, as its own height follows the object's position.
+            if (const SwFlyFrame* pFly = lcl_GetFlyWithStableAlignArea(
+                    _rVertOrientFrame, *mpFrameFormat,
+                    aRectFnSet.GetHeight(GetAnchoredObj().GetObjRect())))
+            {
+                nHeight = aRectFnSet.GetHeight(pFly->getFramePrintArea());
+                nOffset = aRectFnSet.YDiff(aRectFnSet.GetPrtTop(*pFly), nVertOrientTop);
+            }
             // if aligned to page in horizontal layout, consider header and
             // footer frame height appropriately.
             if( _rVertOrientFrame.IsPageFrame() && !aRectFnSet.IsVert() )
