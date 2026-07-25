@@ -232,11 +232,11 @@ static void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, tools::PolyPolygo
     }
 }
 
-SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf )
+SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, ImplMetaReadData& rData )
 {
     if( !rStm.GetError() )
     {
-        ImplConvertFromSVM1( rStm, rMtf );
+        ImplConvertFromSVM1( rStm, rMtf, rData );
     }
 }
 
@@ -281,7 +281,8 @@ void static lcl_error( SvStream& rIStm, const SvStreamEndian& nOldFormat, sal_uI
     rIStm.Seek(nPos);
     return;
 }
-void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
+void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf,
+                                        ImplMetaReadData& rData )
 {
     const sal_uInt64        nPos = rIStm.Tell();
     const SvStreamEndian    nOldFormat = rIStm.GetEndian();
@@ -1116,7 +1117,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 sal_Int32   nFollowingActionCount(0);
 
                 SvmReader aReader( rIStm );
-                aReader.Read( aMtf );
+                aReader.Read( aMtf, rData );
                 aSerializer.readPoint(aPos);
                 aSerializer.readSize(aSize);
                 aSerializer.readGradient(aGradient);
