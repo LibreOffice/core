@@ -44,14 +44,15 @@ namespace com::sun::star::sheet {
 namespace tools { class Rectangle; }
 class ScDocument;
 struct ScDPOutLevelData;
-class ScDPOutputImpl;
 class ScDPObject;
+namespace sc::pivot { class StyleOutput; }
 
 class ScDPOutput
 {
 private:
     ScDocument* mpDocument;
     sc::FormatOutput maFormatOutput;
+    std::unique_ptr<sc::pivot::StyleOutput> mpStyleOutput;
     css::uno::Reference<css::sheet::XDimensionsSupplier> mxSource;
     ScAddress maStartPos;
     std::vector<ScDPOutLevelData> mpColFields;
@@ -114,8 +115,8 @@ private:
     sal_Int32       GetRowFieldCompact(SCCOL nColQuery, SCROW nRowQuery) const;
 
     void outputPageFields(SCTAB nTab);
-    void outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl);
-    void outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl);
+    void outputColumnHeaders(SCTAB nTab);
+    void outputRowHeader(SCTAB nTab);
     void outputDataResults(SCTAB nTab);
 
 public:

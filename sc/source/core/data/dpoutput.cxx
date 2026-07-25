@@ -20,10 +20,6 @@
 #include <scitems.hxx>
 
 #include <comphelper/sequence.hxx>
-#include <editeng/borderline.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/justifyitem.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <svl/itemset.hxx>
@@ -36,14 +32,13 @@
 #include <formula/errorcodes.hxx>
 #include <miscuno.hxx>
 #include <globstr.hrc>
-#include <stlpool.hxx>
-#include <stlsheet.hxx>
 #include <scresid.hxx>
 #include <unonames.hxx>
 #include <strings.hrc>
 #include <stringutil.hxx>
 #include <dputil.hxx>
 #include <pivot/DPOutLevelData.hxx>
+#include <pivot/StyleOutput.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
@@ -73,11 +68,6 @@
 
 using namespace com::sun::star;
 
-#define SC_DP_FRAME_INNER_BOLD      20
-#define SC_DP_FRAME_OUTER_BOLD      40
-
-#define SC_DP_FRAME_COLOR           Color(0,0,0) //( 0x20, 0x40, 0x68 )
-
 namespace
 {
 struct ScDPOutLevelDataComparator
@@ -90,227 +80,8 @@ struct ScDPOutLevelDataComparator
 };
 } // end anonymous namespace
 
-class ScDPOutputImpl
-{
-    ScDocument*         mpDoc;
-    sal_uInt16          mnTab;
-    std::vector< bool > mbNeedLineCols;
-    std::vector< SCCOL > mnCols;
-
-    std::vector< bool > mbNeedLineRows;
-    std::vector< SCROW > mnRows;
-
-    SCCOL   mnTabStartCol;
-    SCROW   mnTabStartRow;
-
-    SCCOL   mnDataStartCol;
-    SCROW   mnDataStartRow;
-    SCCOL   mnTabEndCol;
-    SCROW   mnTabEndRow;
-
-public:
-    ScDPOutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
-        SCCOL   nTabStartCol,
-        SCROW   nTabStartRow,
-        SCCOL nDataStartCol,
-        SCROW nDataStartRow,
-        SCCOL nTabEndCol,
-        SCROW nTabEndRow );
-    bool AddRow( SCROW nRow );
-    bool AddCol( SCCOL nCol );
-
-    void OutputDataArea();
-    void OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, bool bHori = false );
-
-};
-
-void ScDPOutputImpl::OutputDataArea()
-{
-    AddRow( mnDataStartRow );
-    AddCol( mnDataStartCol );
-
-    mnCols.push_back( mnTabEndCol+1); //set last row bottom
-    mnRows.push_back( mnTabEndRow+1); //set last col bottom
-
-    bool bAllRows = ( ( mnTabEndRow - mnDataStartRow + 2 ) == static_cast<SCROW>(mnRows.size()) );
-
-    std::sort( mnCols.begin(), mnCols.end());
-    std::sort( mnRows.begin(), mnRows.end());
-
-    for( SCCOL nCol = 0; nCol < static_cast<SCCOL>(mnCols.size())-1; nCol ++ )
-    {
-        if ( !bAllRows )
-        {
-            if ( nCol < static_cast<SCCOL>(mnCols.size())-2)
-            {
-                for ( SCROW i = nCol%2; i < static_cast<SCROW>(mnRows.size())-2; i +=2 )
-                    OutputBlockFrame( mnCols[nCol], mnRows[i], mnCols[nCol+1]-1, mnRows[i+1]-1 );
-                if ( mnRows.size()>=2 )
-                    OutputBlockFrame(  mnCols[nCol], mnRows[mnRows.size()-2], mnCols[nCol+1]-1, mnRows[mnRows.size()-1]-1 );
-            }
-            else
-            {
-                for ( SCROW i = 0 ; i < static_cast<SCROW>(mnRows.size())-1; i++ )
-                    OutputBlockFrame(  mnCols[nCol], mnRows[i], mnCols[nCol+1]-1,  mnRows[i+1]-1 );
-            }
-        }
-        else
-            OutputBlockFrame( mnCols[nCol], mnRows.front(), mnCols[nCol+1]-1, mnRows.back()-1, bAllRows );
-    }
-    //out put rows area outer framer
-    if ( mnTabStartCol != mnDataStartCol )
-    {
-        if ( mnTabStartRow != mnDataStartRow )
-            OutputBlockFrame( mnTabStartCol, mnTabStartRow, mnDataStartCol-1, mnDataStartRow-1 );
-        OutputBlockFrame( mnTabStartCol, mnDataStartRow, mnDataStartCol-1, mnTabEndRow );
-    }
-    //out put cols area outer framer
-    OutputBlockFrame( mnDataStartCol, mnTabStartRow, mnTabEndCol, mnDataStartRow-1 );
-}
-
-ScDPOutputImpl::ScDPOutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
-        SCCOL   nTabStartCol,
-        SCROW   nTabStartRow,
-        SCCOL nDataStartCol,
-        SCROW nDataStartRow,
-        SCCOL nTabEndCol,
-        SCROW nTabEndRow ):
-    mpDoc( pDoc ),
-    mnTab( nTab ),
-    mnTabStartCol( nTabStartCol ),
-    mnTabStartRow( nTabStartRow ),
-    mnDataStartCol ( nDataStartCol ),
-    mnDataStartRow ( nDataStartRow ),
-    mnTabEndCol(  nTabEndCol ),
-    mnTabEndRow(  nTabEndRow )
-{
-    mbNeedLineCols.resize( nTabEndCol-nDataStartCol+1, false );
-    mbNeedLineRows.resize( nTabEndRow-nDataStartRow+1, false );
-
-}
-
-bool ScDPOutputImpl::AddRow( SCROW nRow )
-{
-    if ( !mbNeedLineRows[ nRow - mnDataStartRow ] )
-    {
-        mbNeedLineRows[ nRow - mnDataStartRow ] = true;
-        mnRows.push_back( nRow );
-        return true;
-    }
-    else
-        return false;
-}
-
-bool ScDPOutputImpl::AddCol( SCCOL nCol )
-{
-
-    if ( !mbNeedLineCols[ nCol - mnDataStartCol ] )
-    {
-        mbNeedLineCols[ nCol - mnDataStartCol ] = true;
-        mnCols.push_back( nCol );
-        return true;
-    }
-    else
-        return false;
-}
-
-void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, bool bHori )
-{
-    Color color = SC_DP_FRAME_COLOR;
-    ::editeng::SvxBorderLine aLine( &color, SC_DP_FRAME_INNER_BOLD );
-    ::editeng::SvxBorderLine aOutLine( &color, SC_DP_FRAME_OUTER_BOLD );
-
-    SvxBoxItem aBox( ATTR_BORDER );
-
-    if ( nStartCol == mnTabStartCol )
-        aBox.SetLine(&aOutLine, SvxBoxItemLine::LEFT);
-    else
-        aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
-
-    if ( nStartRow == mnTabStartRow )
-        aBox.SetLine(&aOutLine, SvxBoxItemLine::TOP);
-    else
-        aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
-
-    if ( nEndCol == mnTabEndCol ) //bottom row
-        aBox.SetLine(&aOutLine, SvxBoxItemLine::RIGHT);
-    else
-        aBox.SetLine(&aLine,  SvxBoxItemLine::RIGHT);
-
-    if ( nEndRow == mnTabEndRow ) //bottom
-        aBox.SetLine(&aOutLine,  SvxBoxItemLine::BOTTOM);
-    else
-        aBox.SetLine(&aLine,  SvxBoxItemLine::BOTTOM);
-
-    SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
-    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT,false );
-    if ( bHori )
-    {
-        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI);
-        aBoxInfo.SetLine( &aLine, SvxBoxInfoItemLine::HORI );
-    }
-    else
-        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI,false );
-
-    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE,false);
-
-    mpDoc->ApplyFrameAreaTab(ScRange(nStartCol, nStartRow, mnTab, nEndCol, nEndRow , mnTab), aBox, aBoxInfo);
-
-}
-
 namespace
 {
-
-void lcl_SetStyleById(ScDocument* pDoc, SCTAB nTab,
-                      SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                      TranslateId pStrId)
-{
-    if ( nCol1 > nCol2 || nRow1 > nRow2 )
-    {
-        OSL_FAIL("SetStyleById: invalid range");
-        return;
-    }
-
-    OUString aStyleName = ScResId(pStrId);
-    ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
-    ScStyleSheet* pStyle = static_cast<ScStyleSheet*>( pStlPool->Find( aStyleName, SfxStyleFamily::Para ) );
-    if (!pStyle)
-    {
-        //  create new style (was in ScPivot::SetStyle)
-
-        pStyle = static_cast<ScStyleSheet*>( &pStlPool->Make( aStyleName, SfxStyleFamily::Para,
-                                                    SfxStyleSearchBits::UserDefined ) );
-        pStyle->SetParent( ScResId(STR_STYLENAME_STANDARD) );
-        SfxItemSet& rSet = pStyle->GetItemSet();
-        if (pStrId == STR_PIVOT_STYLENAME_RESULT || pStrId == STR_PIVOT_STYLENAME_TITLE){
-            rSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
-            rSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_CJK_FONT_WEIGHT ) );
-            rSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_CTL_FONT_WEIGHT ) );
-        }
-        if (pStrId == STR_PIVOT_STYLENAME_CATEGORY || pStrId == STR_PIVOT_STYLENAME_TITLE)
-            rSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY ) );
-    }
-
-    pDoc->ApplyStyleAreaTab( nCol1, nRow1, nCol2, nRow2, nTab, *pStyle );
-}
-
-void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
-                    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                    sal_uInt16 nWidth )
-{
-    ::editeng::SvxBorderLine aLine(nullptr, nWidth, SvxBorderLineStyle::SOLID);
-    SvxBoxItem aBox( ATTR_BORDER );
-    aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
-    aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
-    aBox.SetLine(&aLine, SvxBoxItemLine::RIGHT);
-    aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
-    SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
-    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI,false);
-    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT,false);
-    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE,false);
-
-    pDoc->ApplyFrameAreaTab(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab), aBox, aBoxInfo);
-}
 
 void lcl_FillNumberFormats( std::unique_ptr<sal_uInt32[]>& rFormats, sal_Int32& rCount,
                             const uno::Reference<sheet::XDataPilotMemberResults>& xLevRes,
@@ -483,6 +254,7 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
                        const ScAddress& rPosition, bool bFilter, bool bExpandCollapse, ScDPObject& rObject, bool bHideHeader)
     : mpDocument(pDocument)
     , maFormatOutput(rObject)
+    , mpStyleOutput(std::make_unique<sc::pivot::StyleOutput>(*pDocument))
     , mxSource(std::move(xSource))
     , maStartPos(rPosition)
     , mnColFormatCount(0)
@@ -772,23 +544,11 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
     if ( !(nFlags & sheet::MemberResultFlags::SUBTOTAL) )
         return;
 
-    ScDPOutputImpl outputimp(mpDocument, nTab,
-        mnTabStartCol, mnTabStartRow,
-        mnDataStartCol, mnDataStartRow, mnTabEndCol, mnTabEndRow);
-    //TODO: limit frames to horizontal or vertical?
+    bool bGrandTotal = (nFlags & sheet::MemberResultFlags::GRANDTOTAL) != 0;
     if (bColHeader)
-    {
-        outputimp.OutputBlockFrame(nCol, mnMemberStartRow+static_cast<SCROW>(nLevel), nCol, mnDataStartRow - 1);
-
-        lcl_SetStyleById(mpDocument, nTab, nCol, mnMemberStartRow + static_cast<SCROW>(nLevel), nCol, mnDataStartRow - 1, STR_PIVOT_STYLENAME_TITLE);
-        lcl_SetStyleById(mpDocument, nTab, nCol, mnDataStartRow, nCol, mnTabEndRow, STR_PIVOT_STYLENAME_RESULT );
-    }
+        mpStyleOutput->addSubtotalColumn(nCol, mnMemberStartRow + SCROW(nLevel), bGrandTotal);
     else
-    {
-        outputimp.OutputBlockFrame(mnMemberStartCol + static_cast<SCCOL>(nLevel), nRow, mnDataStartCol - 1, nRow);
-        lcl_SetStyleById(mpDocument, nTab, mnMemberStartCol + static_cast<SCCOL>(nLevel), nRow, mnDataStartCol - 1, nRow, STR_PIVOT_STYLENAME_TITLE);
-        lcl_SetStyleById(mpDocument, nTab, mnDataStartCol, nRow, mnTabEndCol, nRow, STR_PIVOT_STYLENAME_RESULT);
-    }
+        mpStyleOutput->addSubtotalRow(nRow, mnMemberStartCol + SCCOL(nLevel), bGrandTotal);
 }
 
 void ScDPOutput::MultiFieldCell(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bRowField)
@@ -808,7 +568,7 @@ void ScDPOutput::MultiFieldCell(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bRowFie
     nMergeFlag |= ScMF::ButtonPopup2;
 
     mpDocument->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, nMergeFlag);
-    lcl_SetStyleById(mpDocument, nTab, nCol, nRow, nCol, nRow, STR_PIVOT_STYLENAME_FIELDNAME);
+    mpStyleOutput->addFieldCell(nCol, nRow, /*bFrame*/ false);
 }
 
 void ScDPOutput::FieldCell(
@@ -820,9 +580,6 @@ void ScDPOutput::FieldCell(
     aParam.meSetTextNumFormat = ScSetStringParam::Always;
     aParam.mbHandleApostrophe = false;
     mpDocument->SetString(nCol, nRow, nTab, rData.maCaption, &aParam);
-
-    if (bInTable)
-        lcl_SetFrame(mpDocument, nTab, nCol,nRow, nCol,nRow, 20);
 
     // For field button drawing
     ScMF nMergeFlag = ScMF::NONE;
@@ -843,7 +600,7 @@ void ScDPOutput::FieldCell(
         mpDocument->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, nMergeFlag);
     }
 
-    lcl_SetStyleById(mpDocument, nTab, nCol,nRow, nCol,nRow, STR_PIVOT_STYLENAME_FIELDNAME);
+    mpStyleOutput->addFieldCell(nCol, nRow, bInTable);
 }
 
 static void lcl_DoFilterButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
@@ -995,11 +752,11 @@ void ScDPOutput::outputPageFields(SCTAB nTab)
         aParam.setTextInput();
         mpDocument->SetString(nFieldCol, nHeaderRow, nTab, aPageValue, &aParam);
 
-        lcl_SetFrame(mpDocument, nTab, nFieldCol, nHeaderRow, nFieldCol, nHeaderRow, 20);
+        mpStyleOutput->addPageFieldValueCell(nFieldCol, nHeaderRow);
     }
 }
 
-void ScDPOutput::outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
+void ScDPOutput::outputColumnHeaders(SCTAB nTab)
 {
     size_t nNumColFields = mpColFields.size();
 
@@ -1038,27 +795,7 @@ void ScDPOutput::outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
                     ++nEnd;
 
                 SCCOL nEndColPos = mnDataStartCol + SCCOL(nEnd); //TODO: check for overflow
-                if (nField + 1 < mpColFields.size())
-                {
-                    if (nField + 2 == mpColFields.size())
-                    {
-                        rOutputImpl.AddCol( nColPos );
-                        if (nColPos + 1 == nEndColPos)
-                            rOutputImpl.OutputBlockFrame(nColPos, nRowPos, nEndColPos, nRowPos + 1, true);
-                    }
-                    else
-                        rOutputImpl.OutputBlockFrame(nColPos, nRowPos, nEndColPos, nRowPos);
-
-                    lcl_SetStyleById(mpDocument, nTab, nColPos, nRowPos, nEndColPos, mnDataStartRow - 1, STR_PIVOT_STYLENAME_CATEGORY);
-                }
-                else
-                {
-                    lcl_SetStyleById(mpDocument, nTab, nColPos, nRowPos, nColPos, mnDataStartRow - 1, STR_PIVOT_STYLENAME_CATEGORY);
-                }
-            }
-            else if (rMember.Flags & sheet::MemberResultFlags::SUBTOTAL)
-            {
-                rOutputImpl.AddCol(nColPos);
+                mpStyleOutput->addColumnMemberSpan(nField, nColPos, nEndColPos, nRowPos);
             }
 
             // Resolve formats
@@ -1067,15 +804,11 @@ void ScDPOutput::outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
             // Apply the same number format as in data source.
             mpDocument->ApplyAttr(nColPos, nRowPos, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, mpColFields[nField].mnSrcNumFmt));
         }
-        if (nField == 0 && mpColFields.size() == 1 && mnMemberStartRow > mnTabStartRow)
-            rOutputImpl.OutputBlockFrame(mnDataStartCol, mnTabStartRow, mnTabEndCol, nRowPos - 1);
     }
 }
 
-void ScDPOutput::outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
+void ScDPOutput::outputRowHeader(SCTAB nTab)
 {
-    std::vector<bool> vbSetBorder;
-    vbSetBorder.resize(mnTabEndRow - mnDataStartRow + 1, false);
     size_t nFieldColOffset = 0;
     size_t nFieldIndentLevel = 0; // To calculate indent level for fields packed in a column.
     size_t nNumRowFields = mpRowFields.size();
@@ -1104,31 +837,13 @@ void ScDPOutput::outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
             HeaderCell( nColPos, nRowPos, nTab, rData, false, nFieldColOffset );
             if (bHasMember && !bSubtotal)
             {
-                if (nField + 1 < mpRowFields.size())
+                tools::Long nEnd = nRow;
+                while (nEnd + 1 < nThisRowCount && (pMemberArray[nEnd + 1].Flags & sheet::MemberResultFlags::CONTINUE))
                 {
-                    tools::Long nEnd = nRow;
-                    while (nEnd + 1 < nThisRowCount && (pMemberArray[nEnd + 1].Flags & sheet::MemberResultFlags::CONTINUE))
-                    {
-                        ++nEnd;
-                    }
-                    SCROW nEndRowPos = mnDataStartRow + SCROW(nEnd); //TODO: check for overflow
-                    rOutputImpl.AddRow(nRowPos);
-                    if (!vbSetBorder[nRow] )
-                    {
-                        rOutputImpl.OutputBlockFrame(nColPos, nRowPos, mnTabEndCol, nEndRowPos);
-                        vbSetBorder[nRow] = true;
-                    }
-                    rOutputImpl.OutputBlockFrame(nColPos, nRowPos, nColPos, nEndRowPos);
-
-                    if (nField == mpRowFields.size() - 2)
-                        rOutputImpl.OutputBlockFrame(nColPos + 1, nRowPos, nColPos + 1, nEndRowPos);
-
-                    lcl_SetStyleById(mpDocument, nTab, nColPos, nRowPos, mnDataStartCol - 1, nEndRowPos, STR_PIVOT_STYLENAME_CATEGORY);
+                    ++nEnd;
                 }
-                else
-                {
-                    lcl_SetStyleById(mpDocument, nTab, nColPos, nRowPos, mnDataStartCol - 1, nRowPos, STR_PIVOT_STYLENAME_CATEGORY);
-                }
+                SCROW nEndRowPos = mnDataStartRow + SCROW(nEnd); //TODO: check for overflow
+                mpStyleOutput->addRowMemberSpan(nField, nColPos, nRowPos, nEndRowPos);
 
                 // Set flags for collapse/expand buttons and indent field header text
                 {
@@ -1137,17 +852,13 @@ void ScDPOutput::outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
                     tools::Long nIndent = o3tl::convert(13 * (bLast ? nFieldIndentLevel : nMinIndentLevel + nFieldIndentLevel), o3tl::Length::px, o3tl::Length::twip);
                     bool bHasContinue = !bLast && nRow + 1 < nThisRowCount && (pMemberArray[nRow + 1].Flags & sheet::MemberResultFlags::CONTINUE);
                     if (nIndent)
-                        mpDocument->ApplyAttr(nColPos, nRowPos, nTab, ScIndentItem(nIndent));
+                        mpStyleOutput->addIndent(nColPos, nRowPos, nIndent);
                     if (mbExpandCollapse && !bLast)
                     {
-                        mpDocument->ApplyFlagsTab(nColPos, nRowPos, nColPos, nRowPos, nTab,
+                        mpStyleOutput->addExpander(nColPos, nRowPos,
                             bHasContinue ? ScMF::DpCollapse : ScMF::DpExpand);
                     }
                 }
-            }
-            else if (bSubtotal)
-            {
-                rOutputImpl.AddRow(nRowPos);
             }
 
             // Resolve formats
@@ -1200,6 +911,25 @@ void ScDPOutput::Output()
     if (mbSizeOverflow || mbResultsError)   // does output area exceed sheet limits?
         return;                             // nothing
 
+    // Collect the pivot table sections while the content is written, so all the visual
+    // formatting can be drawn in one pass at the end.
+    mpStyleOutput->clear();
+    {
+        sc::pivot::Geometry aGeometry;
+        aGeometry.mnTab = nTab;
+        aGeometry.mnTabStartCol = mnTabStartCol;
+        aGeometry.mnTabStartRow = mnTabStartRow;
+        aGeometry.mnMemberStartCol = mnMemberStartCol;
+        aGeometry.mnMemberStartRow = mnMemberStartRow;
+        aGeometry.mnDataStartCol = mnDataStartCol;
+        aGeometry.mnDataStartRow = mnDataStartRow;
+        aGeometry.mnTabEndCol = mnTabEndCol;
+        aGeometry.mnTabEndRow = mnTabEndRow;
+        aGeometry.mnColumnFieldCount = mpColFields.size();
+        aGeometry.mnRowFieldCount = mpRowFields.size();
+        mpStyleOutput->setGeometry(aGeometry);
+    }
+
     // Prepare format output
     bool bColumnFieldIsDataOnly = mnColCount == 1 && mnRowCount > 0 && mpColFields.empty();
     maFormatOutput.prepare(nTab, mpColFields, mpRowFields, bColumnFieldIsDataOnly);
@@ -1239,18 +969,11 @@ void ScDPOutput::Output()
     }
     mpDocument->SetString(mnTabStartCol, mnTabStartRow, nTab, maDataDescription);
 
-    //  set STR_PIVOT_STYLENAME_INNER for whole data area (subtotals are overwritten)
+    mpStyleOutput->applyAreaStyles();
 
-    if (mnDataStartRow > mnTabStartRow)
-        lcl_SetStyleById(mpDocument, nTab, mnTabStartCol, mnTabStartRow, mnTabEndCol, mnDataStartRow - 1, STR_PIVOT_STYLENAME_TOP);
-    lcl_SetStyleById(mpDocument, nTab, mnDataStartCol, mnDataStartRow, mnTabEndCol, mnTabEndRow, STR_PIVOT_STYLENAME_INNER);
+    outputColumnHeaders(nTab);
 
-    ScDPOutputImpl aOutputImpl(mpDocument, nTab, mnTabStartCol, mnTabStartRow,
-                               mnDataStartCol, mnDataStartRow, mnTabEndCol, mnTabEndRow);
-
-    outputColumnHeaders(nTab, aOutputImpl);
-
-    outputRowHeader(nTab, aOutputImpl);
+    outputRowHeader(nTab);
 
     if (bColumnFieldIsDataOnly)
     {
@@ -1266,7 +989,7 @@ void ScDPOutput::Output()
 
     outputDataResults(nTab);
 
-    aOutputImpl.OutputDataArea();
+    mpStyleOutput->apply();
 }
 
 void ScDPOutput::Output(const ScRange& rOldRange, bool bCheckForSpill)
