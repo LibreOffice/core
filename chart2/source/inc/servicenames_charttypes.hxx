@@ -46,6 +46,8 @@ inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER
     = u"com.sun.star.chart2.BoxWhiskerChartType"_ustr;
 inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_CLUSTEREDCOLUMN
     = u"com.sun.star.chart2.ClusteredColumnChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_CORRELATIONCIRCLE
+    = u"com.sun.star.chart2.CorrelationCircleChartType"_ustr;
 inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL
     = u"com.sun.star.chart2.FunnelChartType"_ustr;
 inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE

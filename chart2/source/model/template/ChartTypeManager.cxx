@@ -30,6 +30,7 @@
 #include "StockChartTypeTemplate.hxx"
 #include "NetChartTypeTemplate.hxx"
 #include "BubbleChartTypeTemplate.hxx"
+#include "CorrelationCircleChartTypeTemplate.hxx"
 #include "FunnelChartTypeTemplate.hxx"
 #include "BoxWhiskerChartTypeTemplate.hxx"
 #include "ClusteredColumnChartTypeTemplate.hxx"
@@ -126,6 +127,7 @@ enum TemplateId
     TEMPLATE_STOCKVOLUMELOWHIGHCLOSE,
     TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE,
     TEMPLATE_BUBBLE,
+    TEMPLATE_CORRELATIONCIRCLE,
     TEMPLATE_FUNNEL,
     TEMPLATE_BOXWHISKER,
     TEMPLATE_CLUSTEREDCOLUMN,
@@ -212,6 +214,7 @@ const tTemplateMapType & lcl_DefaultChartTypeMap()
         {"com.sun.star.chart2.template.StockVolumeLowHighClose",        TEMPLATE_STOCKVOLUMELOWHIGHCLOSE},
         {"com.sun.star.chart2.template.StockVolumeOpenLowHighClose",    TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE},
         {"com.sun.star.chart2.template.Bubble",                         TEMPLATE_BUBBLE},
+        {"com.sun.star.chart2.template.CorrelationCircle",              TEMPLATE_CORRELATIONCIRCLE},
         {"com.sun.star.chart2.template.Funnel",                         TEMPLATE_FUNNEL},
         {"com.sun.star.chart2.template.BoxWhisker",                     TEMPLATE_BOXWHISKER},
         {"com.sun.star.chart2.template.ClusteredColumn",                TEMPLATE_CLUSTEREDCOLUMN},
@@ -554,6 +557,11 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
         //BubbleChart
         case TEMPLATE_BUBBLE:
             xTemplate.set( new BubbleChartTypeTemplate( m_xContext, aServiceSpecifier ));
+            break;
+
+        // Correlation circle plot
+        case TEMPLATE_CORRELATIONCIRCLE:
+            xTemplate.set( new CorrelationCircleChartTypeTemplate( m_xContext, aServiceSpecifier ));
             break;
 
         // Funnel chart

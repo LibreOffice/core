@@ -47,6 +47,7 @@ core_constructor_list = [
     "com_sun_star_comp_chart_AreaChartType_get_implementation",
     "com_sun_star_comp_chart_BarChartType_get_implementation",
     "com_sun_star_comp_chart_BubbleChartType_get_implementation",
+    "com_sun_star_comp_chart_CorrelationCircleChartType_get_implementation",
     "com_sun_star_comp_chart_CachedDataSequence_get_implementation",
     "com_sun_star_comp_chart_CandleStickChartType_get_implementation",
     "com_sun_star_comp_chart_ChartTypeManager_get_implementation",

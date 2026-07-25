@@ -201,6 +201,8 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
                     m_aValues_Y_Last.init( xDataSequence );
                 else if (aRole == "values-size")
                     m_aValues_Bubble_Size.init( xDataSequence );
+                else if (aRole == "values-feature")
+                    m_aValues_Feature.init( xDataSequence );
                 else
                 {
                     VDataSequence aSequence;
@@ -771,6 +773,11 @@ uno::Sequence< double > const & VDataSeries::getAllX() const
     return m_aValues_X.m_aValues;
 }
 
+uno::Sequence< double > const & VDataSeries::getAllFeatureValues() const
+{
+    return m_aValues_Feature.m_aValues;
+}
+
 uno::Sequence< double > const & VDataSeries::getAllY() const
 {
     if(!m_aValues_Y.is() && !m_aValues_Y.getLength() && m_nPointCount)
@@ -1120,6 +1127,7 @@ VDataSeries* VDataSeries::createCopyForTimeBased() const
     pNew->m_aValues_Y_First = m_aValues_Y_First;
     pNew->m_aValues_Y_Last = m_aValues_Y_Last;
     pNew->m_aValues_Bubble_Size = m_aValues_Bubble_Size;
+    pNew->m_aValues_Feature = m_aValues_Feature;
     pNew->m_PropertyMap = m_PropertyMap;
 
     pNew->m_nPointCount = m_nPointCount;

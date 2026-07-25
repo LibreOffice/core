@@ -627,7 +627,8 @@ sal_Int32 ChartType::getAxisType(sal_Int32 nDimensionIndex)
     if (nDimensionIndex == 0) //x-axis
     {
         if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
-         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE))
+         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE)
+         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CORRELATIONCIRCLE))
             return chart2::AxisType::REALNUMBER;
         return chart2::AxisType::CATEGORY;
     }

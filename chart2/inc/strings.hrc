@@ -103,6 +103,7 @@
 #define STR_DATA_ROLE_X                             NC_("STR_DATA_ROLE_X", "X-Values")
 #define STR_DATA_ROLE_Y                             NC_("STR_DATA_ROLE_Y", "Y-Values")
 #define STR_DATA_ROLE_SIZE                          NC_("STR_DATA_ROLE_SIZE", "Bubble Sizes")
+#define STR_DATA_ROLE_FEATURE                       NC_("STR_DATA_ROLE_FEATURE", "Feature Values")
 #define STR_DATA_ROLE_X_ERROR                       NC_("STR_DATA_ROLE_X_ERROR", "X-Error-Bars")
 #define STR_DATA_ROLE_X_ERROR_POSITIVE              NC_("STR_DATA_ROLE_X_ERROR_POSITIVE", "Positive X-Error-Bars")
 #define STR_DATA_ROLE_X_ERROR_NEGATIVE              NC_("STR_DATA_ROLE_X_ERROR_NEGATIVE", "Negative X-Error-Bars")

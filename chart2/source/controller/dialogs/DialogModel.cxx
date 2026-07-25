@@ -79,6 +79,7 @@ OUString lcl_ConvertRole( const OUString & rRoleString )
         { "values-x",     ::chart::SchResId( STR_DATA_ROLE_X ) },
         { "values-y",     ::chart::SchResId( STR_DATA_ROLE_Y ) },
         { "values-size",  ::chart::SchResId( STR_DATA_ROLE_SIZE ) },
+        { "values-feature", ::chart::SchResId( STR_DATA_ROLE_FEATURE ) },
         { "FillColor",    ::chart::SchResId( STR_PROPERTY_ROLE_FILLCOLOR ) },
         { "BorderColor",  ::chart::SchResId( STR_PROPERTY_ROLE_BORDERCOLOR ) },
     };
@@ -113,6 +114,7 @@ lcl_tRoleIndexMap lcl_createRoleIndexMap()
     aMap[ u"values-max"_ustr ] =            ++nIndex;
     aMap[ u"values-last"_ustr ] =           ++nIndex;
     aMap[ u"values-size"_ustr ] =           ++nIndex;
+    aMap[ u"values-feature"_ustr ] =        ++nIndex;
 
     return aMap;
 }

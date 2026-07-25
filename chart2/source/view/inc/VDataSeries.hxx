@@ -94,6 +94,7 @@ public:
 
     css::uno::Sequence< double > const & getAllX() const;
     css::uno::Sequence< double > const & getAllY() const;
+    css::uno::Sequence< double > const & getAllFeatureValues() const;
 
     double getXMeanValue() const;
     double getYMeanValue() const;
@@ -214,6 +215,7 @@ private: //member
     VDataSequence   m_aValues_Y_Last;
 
     VDataSequence   m_aValues_Bubble_Size;
+    VDataSequence   m_aValues_Feature;
 
     VDataSequence*  m_pValueSequenceForDataLabelNumberFormatDetection;
 
