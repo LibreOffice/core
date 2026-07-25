@@ -611,7 +611,8 @@ namespace emfplushelper
         drawinglayer::attribute::LineStartEndAttribute aStart;
         if (pen->penDataFlags & EmfPlusPenDataStartCap)
         {
-            if ((pen->penDataFlags & EmfPlusPenDataCustomStartCap)
+            if ((pen->penDataFlags & EmfPlusPenDataCustomStartCap) && pen->customStartCap
+                && pen->customStartCap->polygon.count()
                 && (pen->customStartCap->polygon.begin()->count() > 1))
                 aStart = drawinglayer::attribute::LineStartEndAttribute(
                     pen->customStartCap->polygon.getB2DRange().getRange().getX() * mdExtractedXScale
@@ -624,7 +625,8 @@ namespace emfplushelper
         drawinglayer::attribute::LineStartEndAttribute aEnd;
         if (pen->penDataFlags & EmfPlusPenDataEndCap)
         {
-            if ((pen->penDataFlags & EmfPlusPenDataCustomEndCap)
+            if ((pen->penDataFlags & EmfPlusPenDataCustomEndCap) && pen->customEndCap
+                && pen->customEndCap->polygon.count()
                 && (pen->customEndCap->polygon.begin()->count() > 1))
                 aEnd = drawinglayer::attribute::LineStartEndAttribute(
                     pen->customEndCap->polygon.getB2DRange().getRange().getX() * mdExtractedXScale
