@@ -38,10 +38,13 @@
 
 static bool checkFontTypeSupported(CTFontDescriptorRef pFD, CFStringRef pFamilyName)
 {
-    int nFormat;
+    int nFormat = kCTFontFormatUnrecognized;
     CFNumberRef pFormat = static_cast<CFNumberRef>(CTFontDescriptorCopyAttribute(pFD, kCTFontFormatAttribute));
-    CFNumberGetValue(pFormat, kCFNumberIntType, &nFormat);
-    CFRelease(pFormat);
+    if (pFormat)
+    {
+        CFNumberGetValue(pFormat, kCFNumberIntType, &nFormat);
+        CFRelease(pFormat);
+    }
 
     if (nFormat == kCTFontFormatPostScript)
     {
@@ -52,8 +55,10 @@ static bool checkFontTypeSupported(CTFontDescriptorRef pFD, CFStringRef pFamilyN
         {
             CFDataRef pTable = CTFontCopyTable(pFont, kCTFontTableCFF, kCTFontTableOptionNoOptions);
             if (pTable)
+            {
                 nFormat = kCTFontFormatOpenTypePostScript;
-            CFRelease(pTable);
+                CFRelease(pTable);
+            }
         }
         CFRelease(pFont);
     }
