@@ -48,8 +48,9 @@ private:
 public:
     VCL_DLLPUBLIC SvmReader(SvStream& rIStm);
 
-    VCL_DLLPUBLIC SvStream& Read(GDIMetaFile& rMetaFile, ImplMetaReadData* pData = nullptr);
-    rtl::Reference<MetaAction> MetaActionHandler(ImplMetaReadData* pData);
+    VCL_DLLPUBLIC SvStream& Read(GDIMetaFile& rMetaFile);
+    SvStream& Read(GDIMetaFile& rMetaFile, ImplMetaReadData& rData);
+    rtl::Reference<MetaAction> MetaActionHandler(ImplMetaReadData& rData);
     rtl::Reference<MetaAction> LineColorHandler();
     rtl::Reference<MetaAction> FillColorHandler();
     rtl::Reference<MetaAction> RectHandler();
@@ -64,10 +65,10 @@ public:
     rtl::Reference<MetaAction> PolyLineHandler();
     rtl::Reference<MetaAction> PolygonHandler();
     rtl::Reference<MetaAction> PolyPolygonHandler();
-    rtl::Reference<MetaAction> TextHandler(const ImplMetaReadData* pData);
-    rtl::Reference<MetaAction> TextArrayHandler(const ImplMetaReadData* pData);
-    rtl::Reference<MetaAction> StretchTextHandler(const ImplMetaReadData* pData);
-    rtl::Reference<MetaAction> TextRectHandler(const ImplMetaReadData* pData);
+    rtl::Reference<MetaAction> TextHandler(const ImplMetaReadData& rData);
+    rtl::Reference<MetaAction> TextArrayHandler(const ImplMetaReadData& rData);
+    rtl::Reference<MetaAction> StretchTextHandler(const ImplMetaReadData& rData);
+    rtl::Reference<MetaAction> TextRectHandler(const ImplMetaReadData& rData);
     rtl::Reference<MetaAction> TextLineHandler();
     rtl::Reference<MetaAction> BmpHandler();
     rtl::Reference<MetaAction> BmpScaleHandler();
@@ -92,13 +93,13 @@ public:
     rtl::Reference<MetaAction> OverlineColorHandler();
     rtl::Reference<MetaAction> TextAlignHandler();
     rtl::Reference<MetaAction> MapModeHandler();
-    rtl::Reference<MetaAction> FontHandler(ImplMetaReadData* pData);
+    rtl::Reference<MetaAction> FontHandler(ImplMetaReadData& rData);
     rtl::Reference<MetaAction> PushHandler();
     rtl::Reference<MetaAction> PopHandler();
     rtl::Reference<MetaAction> RasterOpHandler();
     rtl::Reference<MetaAction> TransparentHandler();
-    rtl::Reference<MetaAction> FloatTransparentHandler(ImplMetaReadData* pData);
-    rtl::Reference<MetaAction> EPSHandler();
+    rtl::Reference<MetaAction> FloatTransparentHandler(ImplMetaReadData& rData);
+    rtl::Reference<MetaAction> EPSHandler(ImplMetaReadData& rData);
     rtl::Reference<MetaAction> RefPointHandler();
     rtl::Reference<MetaAction> CommentHandler();
     rtl::Reference<MetaAction> LayoutModeHandler();
