@@ -340,30 +340,29 @@ bool PhysicalFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilit
         SvMemoryStream aStream(const_cast<uint8_t*>(aData.data()), aData.size(), StreamMode::READ);
         aStream.SetEndian(SvStreamEndian::BIG);
 
-        sal_uInt32 nValue;
+        sal_uInt32 nValue = 0;
 
-        auto& rUnicodeRange = mxFontCapabilities->oUnicodeRange;
-        rUnicodeRange = std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM>();
+        std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> aUnicodeRange;
         aStream.Seek(vcl::OS2_ulUnicodeRange1_offset);
         aStream.ReadUInt32(nValue);
-        appendBitset(*rUnicodeRange, 0, nValue);
+        appendBitset(aUnicodeRange, 0, nValue);
         aStream.ReadUInt32(nValue);
-        appendBitset(*rUnicodeRange, 32, nValue);
+        appendBitset(aUnicodeRange, 32, nValue);
         aStream.ReadUInt32(nValue);
-        appendBitset(*rUnicodeRange, 64, nValue);
+        appendBitset(aUnicodeRange, 64, nValue);
         aStream.ReadUInt32(nValue);
-        appendBitset(*rUnicodeRange, 96, nValue);
-
+        appendBitset(aUnicodeRange, 96, nValue);
         if (aStream.good())
-        {
-            auto& rCodePageRange = mxFontCapabilities->oCodePageRange;
-            rCodePageRange = std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM>();
-            aStream.Seek(vcl::OS2_ulCodePageRange1_offset);
-            aStream.ReadUInt32(nValue);
-            appendBitset(*rCodePageRange, 0, nValue);
-            aStream.ReadUInt32(nValue);
-            appendBitset(*rCodePageRange, 32, nValue);
-        }
+            mxFontCapabilities->oUnicodeRange = aUnicodeRange;
+
+        std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM> aCodePageRange;
+        aStream.Seek(vcl::OS2_ulCodePageRange1_offset);
+        aStream.ReadUInt32(nValue);
+        appendBitset(aCodePageRange, 0, nValue);
+        aStream.ReadUInt32(nValue);
+        appendBitset(aCodePageRange, 32, nValue);
+        if (aStream.good())
+            mxFontCapabilities->oCodePageRange = aCodePageRange;
     }
 
     rFontCapabilities = *mxFontCapabilities;
