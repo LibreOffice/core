@@ -68,7 +68,6 @@
 #include <rtl/bootstrap.hxx>
 #include <tools/stream.hxx>
 #include <vcl/gdimtf.hxx>
-#include <fontsubset.hxx>
 
 #include "../source/filter/igif/gifread.hxx"
 #include "../source/filter/ixbm/xbmread.hxx"
