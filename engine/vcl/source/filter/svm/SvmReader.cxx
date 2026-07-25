@@ -66,7 +66,13 @@ SvmReader::SvmReader(SvStream& rIStm)
 {
 }
 
-SvStream& SvmReader::Read(GDIMetaFile& rMetaFile, ImplMetaReadData* pData)
+SvStream& SvmReader::Read(GDIMetaFile& rMetaFile)
+{
+    ImplMetaReadData aData;
+    return Read(rMetaFile, aData);
+}
+
+SvStream& SvmReader::Read(GDIMetaFile& rMetaFile, ImplMetaReadData& rData)
 {
     if (mrStream.GetError())
     {
@@ -81,6 +87,11 @@ SvStream& SvmReader::Read(GDIMetaFile& rMetaFile, ImplMetaReadData* pData)
 
     try
     {
+        DepthGuard aDepthGuard(rData, mrStream);
+
+        if (aDepthGuard.TooDeep())
+            throw std::runtime_error("too much recursion");
+
         char aId[7];
         aId[0] = 0;
         aId[6] = 0;
@@ -104,20 +115,9 @@ SvStream& SvmReader::Read(GDIMetaFile& rMetaFile, ImplMetaReadData* pData)
 
             pCompat.reset(); // destructor writes stuff into the header
 
-            std::unique_ptr<ImplMetaReadData> xReadData;
-            if (!pData)
-            {
-                xReadData.reset(new ImplMetaReadData);
-                pData = xReadData.get();
-            }
-            DepthGuard aDepthGuard(*pData, mrStream);
-
-            if (aDepthGuard.TooDeep())
-                throw std::runtime_error("too much recursion");
-
             for (sal_uInt32 nAction = 0; (nAction < nCount) && !mrStream.eof(); nAction++)
             {
-                rtl::Reference<MetaAction> pAction = MetaActionHandler(pData);
+                rtl::Reference<MetaAction> pAction = MetaActionHandler(rData);
                 if (pAction)
                 {
                     if (pAction->GetType() == MetaActionType::COMMENT)
@@ -135,7 +135,7 @@ SvStream& SvmReader::Read(GDIMetaFile& rMetaFile, ImplMetaReadData* pData)
         else
         {
             mrStream.Seek(nStmPos);
-            SVMConverter(mrStream, rMetaFile);
+            SVMConverter(mrStream, rMetaFile, rData);
         }
     }
     catch (...)
@@ -155,7 +155,7 @@ SvStream& SvmReader::Read(GDIMetaFile& rMetaFile, ImplMetaReadData* pData)
     return mrStream;
 }
 
-rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
+rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData& rData)
 {
     rtl::Reference<MetaAction> pAction;
     sal_uInt16 nTmp = 0;
@@ -191,13 +191,13 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
         case MetaActionType::POLYPOLYGON:
             return PolyPolygonHandler();
         case MetaActionType::TEXT:
-            return TextHandler(pData);
+            return TextHandler(rData);
         case MetaActionType::TEXTARRAY:
-            return TextArrayHandler(pData);
+            return TextArrayHandler(rData);
         case MetaActionType::STRETCHTEXT:
-            return StretchTextHandler(pData);
+            return StretchTextHandler(rData);
         case MetaActionType::TEXTRECT:
-            return TextRectHandler(pData);
+            return TextRectHandler(rData);
         case MetaActionType::TEXTLINE:
             return TextLineHandler();
         case MetaActionType::BMP:
@@ -251,7 +251,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
         case MetaActionType::MAPMODE:
             return MapModeHandler();
         case MetaActionType::FONT:
-            return FontHandler(pData);
+            return FontHandler(rData);
         case MetaActionType::PUSH:
             return PushHandler();
         case MetaActionType::POP:
@@ -261,9 +261,9 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
         case MetaActionType::Transparent:
             return TransparentHandler();
         case MetaActionType::FLOATTRANSPARENT:
-            return FloatTransparentHandler(pData);
+            return FloatTransparentHandler(rData);
         case MetaActionType::EPS:
-            return EPSHandler();
+            return EPSHandler(rData);
         case MetaActionType::REFPOINT:
             return RefPointHandler();
         case MetaActionType::COMMENT:
@@ -539,14 +539,14 @@ rtl::Reference<MetaAction> SvmReader::PolyPolygonHandler()
     return pAction;
 }
 
-rtl::Reference<MetaAction> SvmReader::TextHandler(const ImplMetaReadData* pData)
+rtl::Reference<MetaAction> SvmReader::TextHandler(const ImplMetaReadData& rData)
 {
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
     Point aPoint;
     aSerializer.readPoint(aPoint);
-    OUString aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
+    OUString aStr = mrStream.ReadUniOrByteString(rData.meActualCharSet);
     sal_uInt16 nTmpIndex(0);
     mrStream.ReadUInt16(nTmpIndex);
     sal_uInt16 nTmpLen(0);
@@ -571,7 +571,7 @@ rtl::Reference<MetaAction> SvmReader::TextHandler(const ImplMetaReadData* pData)
     return pAction;
 }
 
-rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* pData)
+rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData& rData)
 {
     KernArray aArray;
 
@@ -581,7 +581,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
     Point aPoint;
     aSerializer.readPoint(aPoint);
 
-    OUString aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
+    OUString aStr = mrStream.ReadUniOrByteString(rData.meActualCharSet);
 
     sal_uInt16 nStrIndex(0);
     mrStream.ReadUInt16(nStrIndex);
@@ -695,14 +695,14 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
                                    nStrIndex, nStrLen, nLayoutContextIndex, nLayoutContextLen);
 }
 
-rtl::Reference<MetaAction> SvmReader::StretchTextHandler(const ImplMetaReadData* pData)
+rtl::Reference<MetaAction> SvmReader::StretchTextHandler(const ImplMetaReadData& rData)
 {
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
     Point aPoint;
     aSerializer.readPoint(aPoint);
-    OUString aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
+    OUString aStr = mrStream.ReadUniOrByteString(rData.meActualCharSet);
     sal_uInt32 nTmpWidth(0);
     mrStream.ReadUInt32(nTmpWidth);
     sal_uInt16 nTmpIndex(0);
@@ -730,14 +730,14 @@ rtl::Reference<MetaAction> SvmReader::StretchTextHandler(const ImplMetaReadData*
     return pAction;
 }
 
-rtl::Reference<MetaAction> SvmReader::TextRectHandler(const ImplMetaReadData* pData)
+rtl::Reference<MetaAction> SvmReader::TextRectHandler(const ImplMetaReadData& rData)
 {
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
     tools::Rectangle aRect;
     aSerializer.readRectangle(aRect);
-    OUString aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
+    OUString aStr = mrStream.ReadUniOrByteString(rData.meActualCharSet);
     sal_uInt16 nTmp(0);
     mrStream.ReadUInt16(nTmp);
 
@@ -1107,14 +1107,14 @@ rtl::Reference<MetaAction> SvmReader::MapModeHandler()
     return new MetaMapModeAction(aMapMode);
 }
 
-rtl::Reference<MetaAction> SvmReader::FontHandler(ImplMetaReadData* pData)
+rtl::Reference<MetaAction> SvmReader::FontHandler(ImplMetaReadData& rData)
 {
     VersionCompatRead aCompat(mrStream);
     vcl::Font aFont;
     ReadFont(mrStream, aFont);
-    pData->meActualCharSet = aFont.GetCharSet();
-    if (pData->meActualCharSet == RTL_TEXTENCODING_DONTKNOW)
-        pData->meActualCharSet = osl_getThreadTextEncoding();
+    rData.meActualCharSet = aFont.GetCharSet();
+    if (rData.meActualCharSet == RTL_TEXTENCODING_DONTKNOW)
+        rData.meActualCharSet = osl_getThreadTextEncoding();
 
     return new MetaFontAction(aFont);
 }
@@ -1158,7 +1158,7 @@ rtl::Reference<MetaAction> SvmReader::TransparentHandler()
     return new MetaTransparentAction(aPolyPoly, nTransPercent);
 }
 
-rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* pData)
+rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData& rData)
 {
     VersionCompatRead aCompat(mrStream);
     GDIMetaFile aMtf;
@@ -1166,7 +1166,7 @@ rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* 
     // A nested metafile, so init with the current map mode scale
     aReader.mfCumulativeMapScaleX = mfCumulativeMapScaleX;
     aReader.mfCumulativeMapScaleY = mfCumulativeMapScaleY;
-    aReader.Read(aMtf, pData);
+    aReader.Read(aMtf, rData);
     TypeSerializer aSerializer(mrStream);
     Point aPoint;
     aSerializer.readPoint(aPoint);
@@ -1208,7 +1208,7 @@ rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* 
     return new MetaFloatTransparentAction(aMtf, aPoint, aSize, aGradient, aColorStops);
 }
 
-rtl::Reference<MetaAction> SvmReader::EPSHandler()
+rtl::Reference<MetaAction> SvmReader::EPSHandler(ImplMetaReadData& rData)
 {
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
@@ -1219,7 +1219,7 @@ rtl::Reference<MetaAction> SvmReader::EPSHandler()
     Size aSize;
     aSerializer.readSize(aSize);
     GDIMetaFile aSubst;
-    Read(aSubst);
+    Read(aSubst, rData);
 
     return new MetaEPSAction(aPoint, aSize, std::move(aGfxLink), aSubst);
 }
