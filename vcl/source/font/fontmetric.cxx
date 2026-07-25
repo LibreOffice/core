@@ -441,8 +441,7 @@ void FontMetricData::ImplCalcLineSpacing(LogicalFontInstance* pFontInstance)
     pFontInstance->GetScale(nullptr, &fScale);
     double fAscent = 0, fDescent = 0, fExtLeading = 0;
 
-    auto aFvar(pFace->GetRawFontData(HB_TAG('f', 'v', 'a', 'r')));
-    if (!aFvar.empty())
+    if (hb_ot_var_has_data(pFace->GetHbFace()))
     {
         // This is a variable font, trust HarfBuzz to give us the right metrics
         // and apply variations to them.
