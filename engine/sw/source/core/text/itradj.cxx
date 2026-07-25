@@ -39,6 +39,21 @@
 
 using namespace ::com::sun::star;
 
+// A line's terminating blank hangs outside the line, and may be split over several hole portions.
+// Only the ones with nothing of substance after them are that blank; a hole followed by more
+// content sits inside the line and keeps its width.
+static bool isTrailingBlank(const SwLinePortion* pPor)
+{
+    for (const SwLinePortion* p = pPor->GetNextPortion(); p; p = p->GetNextPortion())
+    {
+        if (p->IsMarginPortion() || p->IsBreakPortion())
+            return true;
+        if (p->Width() && !p->IsHolePortion())
+            return false;
+    }
+    return true;
+}
+
 void SwTextAdjuster::FormatBlock( )
 {
     // Block format does not apply to the last line.
@@ -64,7 +79,7 @@ void SwTextAdjuster::FormatBlock( )
             if( !pPos->InGlueGrp() &&
                 // don't calculate with the terminating space,
                 // otherwise it would result justified line mistakenly
-                ( pPos->GetNextPortion() || !pPos->IsHolePortion() ) )
+                !( pPos->IsHolePortion() && isTrailingBlank( pPos ) ) )
             {
                 nBreakWidth += pPos->Width();
             }
@@ -411,8 +426,10 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
             else
                 ++nGluePortion;
         }
-        else
+        else if( !( pPos->IsHolePortion() && isTrailingBlank( pPos ) ) )
         {
+            // the terminating blank hangs outside the line, so it does not count towards the
+            // width the line would have without shrinking
             nBreakWidth += pPos->Width();
         }
         GetInfo().SetIdx( GetInfo().GetIdx() + pPos->GetLen() );

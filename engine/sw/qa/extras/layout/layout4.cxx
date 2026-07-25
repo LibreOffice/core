@@ -14,6 +14,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/scheduler.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/editobj.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -2043,6 +2044,35 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf171959ManyBlanks)
     CPPUNIT_ASSERT_GREATER(sal_Int32(1), nLen1);
     CPPUNIT_ASSERT_GREATER(sal_Int32(0), nLen2);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(200), nLen1 + nLen2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf171692)
+{
+    // A justified paragraph whose single line ends in a long run of blanks. The blanks are split
+    // over two hole portions, and both of them hang outside the line.
+    createSwDoc("tdf171692.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    getSwDocShell()->GetPreviewMetaFile();
+
+    // Bolding a word in the middle reformats the line.
+    pWrtShell->SttEndDoc(/*bStart=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 24, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+    pWrtShell->SetAttrItem(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+
+    // Without the fix only the last of the two holes was left out of the width the line would
+    // have without shrinking. The line then looked wider than the text area, so its spaces were
+    // shrunk to a negative width: the words were drawn on top of each other, and walking right
+    // through the text took the cursor backwards at every space.
+    pWrtShell->SttEndDoc(/*bStart=*/true);
+    SwTwips nPrev = 0;
+    for (int i = 0; i < 90; ++i)
+    {
+        const SwTwips nX = pWrtShell->GetCharRect().Left();
+        CPPUNIT_ASSERT_MESSAGE("the cursor moved backwards", nX >= nPrev);
+        nPrev = nX;
+        pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    }
 }
 
 } // end of anonymous namespace
