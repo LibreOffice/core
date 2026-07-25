@@ -21,7 +21,6 @@
 
 #include <com/sun/star/geometry/IntegerPoint2D.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
-#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
 #include "cachedbitmap.hxx"
@@ -98,46 +97,12 @@ namespace vclcanvas
                        const css::geometry::RealPoint2D&   aEndPoint,
                        const css::rendering::ViewState&    viewState,
                        const css::rendering::RenderState&  renderState );
-        void drawBezier( const css::rendering::XCanvas*            rCanvas,
-                         const css::geometry::RealBezierSegment2D& aBezierSegment,
-                         const css::geometry::RealPoint2D&         aEndPoint,
-                         const css::rendering::ViewState&          viewState,
-                         const css::rendering::RenderState&        renderState );
-        css::uno::Reference< css::rendering::XCachedPrimitive >
-            drawPolyPolygon( const css::rendering::XCanvas*        rCanvas,
+        void drawPolyPolygon( const css::rendering::XCanvas*        rCanvas,
                              const css::uno::Reference<
                                  css::rendering::XPolyPolygon2D >&     xPolyPolygon,
                              const css::rendering::ViewState&      viewState,
                              const css::rendering::RenderState&    renderState );
-        css::uno::Reference< css::rendering::XCachedPrimitive >
-            strokePolyPolygon( const css::rendering::XCanvas*          rCanvas,
-                               const css::uno::Reference<
-                                       css::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                               const css::rendering::ViewState&        viewState,
-                               const css::rendering::RenderState&      renderState,
-                               const css::rendering::StrokeAttributes& strokeAttributes );
-        css::uno::Reference< css::rendering::XCachedPrimitive >
-            strokeTexturedPolyPolygon( const css::rendering::XCanvas*          rCanvas,
-                                       const css::uno::Reference<
-                                               css::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                                       const css::rendering::ViewState&        viewState,
-                                       const css::rendering::RenderState&      renderState,
-                                       const cpo::uno::Sequence<
-                                               css::rendering::Texture >&      textures,
-                                       const css::rendering::StrokeAttributes& strokeAttributes );
-        css::uno::Reference< css::rendering::XCachedPrimitive >
-            strokeTextureMappedPolyPolygon( const css::rendering::XCanvas*             rCanvas,
-                                            const css::uno::Reference<
-                                                    css::rendering::XPolyPolygon2D >&  xPolyPolygon,
-                                            const css::rendering::ViewState&           viewState,
-                                            const css::rendering::RenderState&         renderState,
-                                            const cpo::uno::Sequence<
-                                                    css::rendering::Texture >&         textures,
-                                            const css::uno::Reference<
-                                                    css::geometry::XMapping2D >&       xMapping,
-                                            const css::rendering::StrokeAttributes&    strokeAttributes );
-        css::uno::Reference< css::rendering::XPolyPolygon2D >
-            queryStrokeShapes( const css::rendering::XCanvas*          rCanvas,
+        void strokePolyPolygon( const css::rendering::XCanvas*          rCanvas,
                                const css::uno::Reference<
                                        css::rendering::XPolyPolygon2D >&   xPolyPolygon,
                                const css::rendering::ViewState&        viewState,
@@ -157,16 +122,6 @@ namespace vclcanvas
                                      const css::rendering::RenderState&        renderState,
                                      const cpo::uno::Sequence<
                                              css::rendering::Texture >&        textures );
-        css::uno::Reference< css::rendering::XCachedPrimitive >
-            fillTextureMappedPolyPolygon( const css::rendering::XCanvas*           rCanvas,
-                                          const css::uno::Reference<
-                                                  css::rendering::XPolyPolygon2D >&    xPolyPolygon,
-                                          const css::rendering::ViewState&         viewState,
-                                          const css::rendering::RenderState&       renderState,
-                                          const cpo::uno::Sequence<
-                                                  css::rendering::Texture >&       textures,
-                                          const css::uno::Reference<
-                                                  css::geometry::XMapping2D >&         xMapping );
 
         css::uno::Reference< css::rendering::XCanvasFont >
             createFont( const css::rendering::XCanvas*         rCanvas,
@@ -175,14 +130,7 @@ namespace vclcanvas
                             css::beans::PropertyValue >&       extraFontProperties,
                         const css::geometry::Matrix2D&         fontMatrix );
 
-        cpo::uno::Sequence< css::rendering::FontInfo >
-            queryAvailableFonts( const css::rendering::XCanvas*        rCanvas,
-                                 const css::rendering::FontInfo&       aFilter,
-                                 const cpo::uno::Sequence<
-                                         css::beans::PropertyValue >&  aFontProperties );
-
-        css::uno::Reference< css::rendering::XCachedPrimitive >
-            drawText( const css::rendering::XCanvas*       rCanvas,
+        void drawText( const css::rendering::XCanvas*       rCanvas,
                       const css::rendering::StringContext& text,
                       const css::uno::Reference<
                               css::rendering::XCanvasFont >& xFont,
@@ -190,8 +138,7 @@ namespace vclcanvas
                       const css::rendering::RenderState&   renderState,
                       sal_Int8                                          textDirection );
 
-        css::uno::Reference< css::rendering::XCachedPrimitive >
-            drawTextLayout( const css::rendering::XCanvas*         rCanvas,
+        void drawTextLayout( const css::rendering::XCanvas*         rCanvas,
                             const css::uno::Reference<
                                     css::rendering::XTextLayout >& laidOutText,
                             const css::rendering::ViewState&       viewState,

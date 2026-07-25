@@ -2532,8 +2532,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/gallery,\
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/geometry,\
 	AffineMatrix2D \
 	AffineMatrix3D \
-	EllipticalArc \
-	IntegerBezierSegment2D \
 	IntegerPoint2D \
 	IntegerRectangle2D \
 	IntegerSize2D \
@@ -2543,7 +2541,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/geometry,\
 	RealRectangle2D \
 	RealRectangle3D \
 	RealSize2D \
-	XMapping2D \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/graphic,\
 	GraphicColorMode \
@@ -2853,7 +2850,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	FontInfo \
 	FontMetrics \
 	FontRequest \
-	IntegerBitmapLayout \
 	InterpolationMode \
 	Panose \
 	PanoseArmStyle \

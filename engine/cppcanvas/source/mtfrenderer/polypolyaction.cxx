@@ -157,9 +157,9 @@ namespace cppcanvas
 
                 if( aLocalState.DeviceColor.hasElements() )
                 {
-                    rCachedPrimitive = mpCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly,
-                                                                                  mpCanvas->getViewState(),
-                                                                                  aLocalState );
+                    mpCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly,
+                                                              mpCanvas->getViewState(),
+                                                              aLocalState );
                 }
 
                 return true;
@@ -304,7 +304,7 @@ namespace cppcanvas
                 maState.DeviceColor = rState.lineColor;
             }
 
-            bool StrokedPolyPolyAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+            bool StrokedPolyPolyAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& /*rCachedPrimitive*/,
                                                          const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PolyPolyAction::renderPrimitive()" );
@@ -313,10 +313,10 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                rCachedPrimitive = mpCanvas->getUNOCanvas()->strokePolyPolygon( mxPolyPoly,
-                                                                                mpCanvas->getViewState(),
-                                                                                aLocalState,
-                                                                                maStrokeAttributes );
+                mpCanvas->getUNOCanvas()->strokePolyPolygon( mxPolyPoly,
+                                                            mpCanvas->getViewState(),
+                                                            aLocalState,
+                                                            maStrokeAttributes );
                 return true;
             }
 

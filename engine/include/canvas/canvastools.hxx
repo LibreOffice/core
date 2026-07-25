@@ -53,7 +53,6 @@ namespace com::sun::star::rendering
 {
     struct RenderState;
     struct ViewState;
-    struct IntegerBitmapLayout;
     class  XCanvas;
     struct Texture;
     class  XIntegerBitmapColorSpace;

@@ -31,7 +31,6 @@
 
 #include "./base/basemutexhelper.hxx"
 #include "./base/bitmapcanvasbase.hxx"
-#include "./base/integerbitmapbase.hxx"
 #include "./base/graphicdevicebase.hxx"
 
 #include "canvashelper.hxx"
@@ -50,12 +49,11 @@ namespace vclcanvas
                                            DeviceHelper,
                                            vclcanvastools::LocalGuard,
                                            ::cppu::OWeakObject >    CanvasBase_Base;
-    typedef ::canvas::IntegerBitmapBase<
-        canvas::BitmapCanvasBase<
+    typedef canvas::BitmapCanvasBase<
             CanvasBase_Base,
             CanvasHelper,
             vclcanvastools::LocalGuard,
-            ::cppu::OWeakObject> > CanvasBaseT;
+            ::cppu::OWeakObject> CanvasBaseT;
 
     /** Product of this component's factory.
 

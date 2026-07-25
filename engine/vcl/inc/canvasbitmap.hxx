@@ -20,7 +20,6 @@
 #pragma once
 
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/rendering/XBitmapPalette.hpp>
@@ -41,7 +40,6 @@ namespace vcl::unotools
         std::optional<BitmapScopedReadAccess>          m_pBmpReadAcc;
         cpo::uno::Sequence<sal_Int8>                   m_aComponentTags;
         cpo::uno::Sequence<sal_Int32>                  m_aComponentBitCounts;
-        css::rendering::IntegerBitmapLayout            m_aLayout;
         sal_Int32                                      m_nBitsPerInputPixel;
         sal_Int32                                      m_nBitsPerOutputPixel;
         sal_Int32                                      m_nRedIndex;

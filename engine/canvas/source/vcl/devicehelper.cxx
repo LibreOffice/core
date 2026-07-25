@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <canvas/canvastools.hxx>

@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/FontRequest.hpp>
-#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
@@ -493,49 +492,6 @@ namespace canvastools
 #else
             throw lang::IllegalArgumentException();
 #endif
-        }
-
-        void verifyInput( const rendering::IntegerBitmapLayout&     bitmapLayout,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
-        {
-            if( bitmapLayout.ScanLines < 0 )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifyInput(): bitmap layout's ScanLines is negative",
-                    xIf, nArgPos );
-#else
-                (void)pStr; (void)xIf; (void)nArgPos;
-                throw lang::IllegalArgumentException();
-#endif
-            }
-
-            if( bitmapLayout.ScanLineBytes < 0 )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifyInput(): bitmap layout's ScanLineBytes is negative",
-                    xIf, nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
-            }
-
-            if( !bitmapLayout.ColorSpace.is() )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifyInput(): bitmap layout's ColorSpace is invalid",
-                    xIf, nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
-            }
         }
 
         void verifyInput( const rendering::FontRequest&             fontRequest,

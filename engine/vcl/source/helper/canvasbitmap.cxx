@@ -115,34 +115,19 @@ VclCanvasBitmap::VclCanvasBitmap( const Bitmap& rBitmap ) :
     m_nIndexIndex(-1),
     m_bPalette(false)
 {
-    m_aLayout.ScanLines      = 0;
-    m_aLayout.ScanLineBytes  = 0;
-    m_aLayout.ScanLineStride = 0;
-    m_aLayout.PlaneStride    = 0;
-    m_aLayout.ColorSpace.clear();
-    m_aLayout.Palette.clear();
-    m_aLayout.IsMsbFirst     = false;
-
     if( !m_pBmpAcc )
         return;
-
-    m_aLayout.ScanLines      = m_pBmpAcc->Height();
-    m_aLayout.ScanLineBytes  = (m_pBmpAcc->GetBitCount()*m_pBmpAcc->Width() + 7) / 8;
-    m_aLayout.ScanLineStride = m_pBmpAcc->GetScanlineSize();
-    m_aLayout.PlaneStride    = 0;
 
     switch( m_pBmpAcc->GetScanlineFormat() )
     {
         case ScanlineFormat::N8BitPal:
             m_bPalette           = true;
             m_nBitsPerInputPixel = 8;
-            m_aLayout.IsMsbFirst = false; // doesn't matter
             break;
 
         case ScanlineFormat::N24BitTcBgr:
             m_bPalette           = false;
             m_nBitsPerInputPixel = 24;
-            m_aLayout.IsMsbFirst = false; // doesn't matter
             setComponentInfo( static_cast<sal_uInt32>(0xff0000UL),
                               static_cast<sal_uInt32>(0x00ff00UL),
                               static_cast<sal_uInt32>(0x0000ffUL) );
@@ -151,7 +136,6 @@ VclCanvasBitmap::VclCanvasBitmap( const Bitmap& rBitmap ) :
         case ScanlineFormat::N24BitTcRgb:
             m_bPalette           = false;
             m_nBitsPerInputPixel = 24;
-            m_aLayout.IsMsbFirst = false; // doesn't matter
             setComponentInfo( static_cast<sal_uInt32>(0x0000ffUL),
                               static_cast<sal_uInt32>(0x00ff00UL),
                               static_cast<sal_uInt32>(0xff0000UL) );
@@ -162,7 +146,6 @@ VclCanvasBitmap::VclCanvasBitmap( const Bitmap& rBitmap ) :
         {
             m_bPalette           = false;
             m_nBitsPerInputPixel = 24;
-            m_aLayout.IsMsbFirst = false; // doesn't matter
 
             m_aComponentTags = { /* 0 */ rendering::ColorComponentTag::ALPHA,
                                  /* 1 */ rendering::ColorComponentTag::RGB_BLUE,
@@ -186,7 +169,6 @@ VclCanvasBitmap::VclCanvasBitmap( const Bitmap& rBitmap ) :
         {
             m_bPalette           = false;
             m_nBitsPerInputPixel = 24;
-            m_aLayout.IsMsbFirst = false; // doesn't matter
 
             m_aComponentTags = { /* 0 */ rendering::ColorComponentTag::ALPHA,
                                  /* 1 */ rendering::ColorComponentTag::RGB_RED,
@@ -210,7 +192,6 @@ VclCanvasBitmap::VclCanvasBitmap( const Bitmap& rBitmap ) :
         {
             m_bPalette           = false;
             m_nBitsPerInputPixel = 24;
-            m_aLayout.IsMsbFirst = false; // doesn't matter
 
             m_aComponentTags = { /* 0 */ rendering::ColorComponentTag::RGB_BLUE,
                                  /* 1 */ rendering::ColorComponentTag::RGB_GREEN,
@@ -234,7 +215,6 @@ VclCanvasBitmap::VclCanvasBitmap( const Bitmap& rBitmap ) :
         {
             m_bPalette           = false;
             m_nBitsPerInputPixel = 24;
-            m_aLayout.IsMsbFirst = false; // doesn't matter
 
             m_aComponentTags = { /* 0 */ rendering::ColorComponentTag::RGB_RED,
                                  /* 1 */ rendering::ColorComponentTag::RGB_GREEN,
@@ -293,11 +273,6 @@ VclCanvasBitmap::VclCanvasBitmap( const Bitmap& rBitmap ) :
     // always add a full byte to the pixel size, otherwise
     // pixel packing hell breaks loose.
     m_nBitsPerOutputPixel += 8;
-
-    // adapt scanline parameters
-    const Size aSize = m_aBmp.GetSizePixel();
-    m_aLayout.ScanLineBytes  =
-    m_aLayout.ScanLineStride = (aSize.Width()*m_nBitsPerOutputPixel + 7)/8;
 }
 
 VclCanvasBitmap::~VclCanvasBitmap()

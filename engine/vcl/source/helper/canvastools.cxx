@@ -25,7 +25,6 @@
 
 #include <com/sun/star/rendering/VolatileContentDestroyedException.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
 
 #include <basegfx/point/b2dpoint.hxx>

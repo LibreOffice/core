@@ -18,10 +18,6 @@
  */
 
 
-module com {  module sun {  module star {  module geometry {
-    interface XMapping2D;
-}; }; }; };
-
 module com { module sun { module star { module rendering {
 
 interface XCanvasFont;
@@ -141,29 +137,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
-    /** Draw a cubic Bezier curve in device resolution width (i.e. one
-        device pixel wide).
-
-        @param aBezierSegment
-        The start and the two control points of the Bezier curve.
-
-        @param aEndPoint
-        The end point of the Bezier curve.
-
-        @param aViewState
-        The view state to be used when drawing this curve.
-
-        @param aRenderState
-        The render state to be used when drawing this curve.
-
-        @throws com::sun::star::lang::IllegalArgumentException
-        if one of the view and render state parameters are outside the
-        specified range.
-     */
-    void                drawBezier( [in] ::com::sun::star::geometry::RealBezierSegment2D aBezierSegment, [in] ::com::sun::star::geometry::RealPoint2D aEndPoint, [in] ViewState aViewState, [in] RenderState aRenderState )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
-
     /** Draw a poly-polygon in device resolution line width (i.e. the
         lines are one device pixel wide).
 
@@ -176,13 +149,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @param aRenderState
         The render state to be used when drawing this polygon.
 
-        @return a handle to the cached rendering output.
-
         @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
-    XCachedPrimitive    drawPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
+    void drawPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
@@ -208,133 +179,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @param aStrokeAttributes
         Further attributes used to parameterize the stroking.
 
-        @return a handle to the cached rendering output.
-
         @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
-    XCachedPrimitive    strokePolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
-
-    /** Stroke each polygon of the provided poly-polygon with the
-        specified stroke attributes, fill the stroked outline
-        with the specified texture graphics.<p>
-
-        This method considers the stroking of all polygons as an
-        atomic operation in relation to the RenderState's
-        CompositeOp operation. That means, overlapping
-        strokes from distinct polygons will look exactly as
-        overlapping segments of the same polygon, even with
-        transparency.<p>
-
-        @param xPolyPolygon
-        The poly-polygon to render.
-
-        @param aViewState
-        The view state to be used when strokes this polygon.
-
-        @param aRenderState
-        The render state to be used when stroking this polygon.
-
-        @param aTextures
-        A sequence of texture definitions, with which to fill the
-        stroked area.
-
-        @param aStrokeAttributes
-        Further attributes used to parameterize the stroking.
-
-        @return a handle to the cached rendering output.
-
-        @throws com::sun::star::lang::IllegalArgumentException
-        if one of the view and render state parameters are outside the
-        specified range.
-
-        @throws VolatileContentDestroyedException
-        if a texture bitmap was volatile, and the content was
-        destroyed before the rendering could take place.
-     */
-    XCachedPrimitive    strokeTexturedPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] sequence<Texture> aTextures, [in] StrokeAttributes aStrokeAttributes )
-        raises (com::sun::star::lang::IllegalArgumentException,
-                VolatileContentDestroyedException);
-
-
-    /** Stroke each polygon of the provided poly-polygon with the
-        specified stroke attributes, fill the stroked outline
-        with the specified texture graphics, map the texture to the
-        outline via the specified texture mapping.<p>
-
-        This method considers the stroking of all polygons as an
-        atomic operation in relation to the RenderState's
-        CompositeOp operation. That means, overlapping
-        strokes from distinct polygons will look exactly as
-        overlapping segments of the same polygon, even with
-        transparency.
-
-        @param xPolyPolygon
-        The poly-polygon to render.
-
-        @param aViewState
-        The view state to be used when stroking this polygon.
-
-        @param aRenderState
-        The render state to be used when stroking this polygon.
-
-        @param aTextures
-        A sequence of texture definitions, with which to fill the
-        stroked area.
-
-        @param xMapping
-        A bilinear mapping function which defines the warping of the
-        textures on the output area.
-
-        @param aStrokeAttributes
-        Further attributes used to parameterize the stroking.
-
-        @return a handle to the cached rendering output.
-
-        @throws com::sun::star::lang::IllegalArgumentException
-        if one of the view and render state parameters are outside the
-        specified range.
-
-        @throws VolatileContentDestroyedException
-        if a texture bitmap was volatile, and the content was
-        destroyed before the rendering could take place.
-     */
-    XCachedPrimitive    strokeTextureMappedPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] sequence<Texture> aTextures, [in] ::com::sun::star::geometry::XMapping2D xMapping, [in] StrokeAttributes aStrokeAttributes )
-        raises (com::sun::star::lang::IllegalArgumentException,
-                VolatileContentDestroyedException);
-
-
-    //  [TODO: Method misplaced at this interface?]
-
-    /** Query the polygonal representation of the stroke outlines, as
-        it would be generated by the strokePolyPolygon methods.<p>
-
-        This method can be used to e.g. set a clipping which covers the same
-        area as a stroke.<p>
-
-        @param xPolyPolygon
-        The poly-polygon to render.
-
-        @param aViewState
-        The view state to be used when generating the outline.
-
-        @param aRenderState
-        The render state to be used when generating the outline.
-
-        @param aStrokeAttributes
-        Further attributes used to parameterize the stroking.
-
-        @return a poly-polygon describing the outline of the stroked
-        area.
-
-        @throws com::sun::star::lang::IllegalArgumentException
-        if one of the view and render state parameters are outside the
-        specified range.
-     */
-    XPolyPolygon2D      queryStrokeShapes( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
+    void strokePolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
@@ -397,45 +246,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
                 VolatileContentDestroyedException);
 
 
-    /** Fill the given poly-polygon with a mapped texture.<p>
-
-        This method fills the given poly-polygon according to the
-        RenderState's color, the given textures and
-        poly-polygon's fill rule. The texture is mapped to the
-        poly-polygon's interior via the given texture mapping.<p>
-
-        @param xPolyPolygon
-        The poly-polygon to render.
-
-        @param aViewState
-        The view state to be used when filling this polygon.
-
-        @param aRenderState
-        The render state to be used when filling this polygon.
-
-        @param xTextures
-        A sequence of texture definitions, with which to fill the
-        polygonal area.
-
-        @param xMapping
-        A bilinear mapping function which defines the warping of the
-        textures on the output area.
-
-        @return a handle to the cached rendering output.
-
-        @throws com::sun::star::lang::IllegalArgumentException
-        if one of the view and render state parameters are outside the
-        specified range.
-
-        @throws VolatileContentDestroyedException
-        if a texture bitmap was volatile, and the content was
-        destroyed before the rendering could take place.
-     */
-    XCachedPrimitive    fillTextureMappedPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] sequence<Texture> xTextures, [in] ::com::sun::star::geometry::XMapping2D xMapping )
-        raises (com::sun::star::lang::IllegalArgumentException,
-                VolatileContentDestroyedException);
-
-
     /** Create a suitable font for the specified font description.
 
         @param aFontRequest
@@ -459,29 +269,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if one of the parameters is not within the allowed range.
      */
     XCanvasFont         createFont( [in] FontRequest aFontRequest, [in] sequence< ::com::sun::star::beans::PropertyValue > aExtraFontProperties, [in] ::com::sun::star::geometry::Matrix2D aFontMatrix )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
-
-    /** Query font information, specific to this canvas.<p>
-
-        @param aFilter
-        Filter parameter to reduce the list of returned fonts. Every
-        member of FontInfo that is not the empty string
-        or the "don't care" value restricts the list of returned fonts
-        to contain only those that have the specified attribute.
-
-        @param aFontProperties
-        This interface can provide additional font properties to
-        filter the list of available fonts against.
-
-        @returns the list of fonts matching the filter set.
-
-        @throws com::sun::star::lang::IllegalArgumentException
-        if one of the font properties are invalid or not recognized,
-        or if one of the FontInfo members is not within
-        the permitted range.
-     */
-    sequence< FontInfo > queryAvailableFonts( [in] FontInfo aFilter, [in] sequence< ::com::sun::star::beans::PropertyValue > aFontProperties )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
@@ -513,13 +300,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         i.e. the left edge for left-to-right and the right edge for
         right-to-left text.
 
-        @return a handle to the cached rendering output.
-
         @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
-    XCachedPrimitive    drawText( [in] StringContext aText, [in] XCanvasFont xFont, [in] ViewState aViewState, [in] RenderState aRenderState, [in] byte nTextDirection )
+    void drawText( [in] StringContext aText, [in] XCanvasFont xFont, [in] ViewState aViewState, [in] RenderState aRenderState, [in] byte nTextDirection )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
@@ -544,13 +329,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @param aRenderState
         The render state to be used when drawing this text.
 
-        @return a handle to the cached rendering output.
-
         @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
-    XCachedPrimitive    drawTextLayout( [in] XTextLayout xLayoutetText, [in] ViewState aViewState, [in] RenderState aRenderState )
+    void drawTextLayout( [in] XTextLayout xLayoutetText, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
@@ -585,46 +368,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     XCachedPrimitive    drawBitmap( [in] XBitmap xBitmap, [in] ViewState aViewState, [in] RenderState aRenderState )
         raises (com::sun::star::lang::IllegalArgumentException,
                 VolatileContentDestroyedException);
-
-    /** Render the given bitmap, with a global color modulation.<p>
-
-        This method renders the bitmap, at a position and shape as
-        specified by the combined view and render transformations. For
-        fast render speed, the bitmap should be created by the
-        corresponding XGraphicDevice's
-        XGraphicDevice::createCompatibleBitmap()
-        method. The bitmap's color channel values are multiplied with
-        the device color values as specified in the render state.<p>
-
-        @param xBitmap
-        The bitmap to render.
-
-        @param aViewState
-        The view state to be used when drawing this text.
-
-        @param aRenderState
-        The render state to be used when drawing this text. The device
-        color entry in the render state is multiplied with every pixel
-        color value, and only the result is rendered into the
-        canvas. If, for example, the bitmap should be rendered with
-        increased global transparency, set all device color channels
-        to 1.0, except for the alpha channel, which should be set to
-        the desired transparency.
-
-        @return a handle to the cached rendering output.
-
-        @throws com::sun::star::lang::IllegalArgumentException
-        if one of the view and render state parameters are outside the
-        specified range.
-
-        @throws VolatileContentDestroyedException
-        if a texture bitmap was volatile, and the content was
-        destroyed before the rendering could take place.
-     */
-    XCachedPrimitive    drawBitmapModulated( [in] XBitmap xBitmap, [in] ViewState aViewState, [in] RenderState aRenderState )
-        raises (com::sun::star::lang::IllegalArgumentException,
-                VolatileContentDestroyedException);
-
 
     /** Request the associated graphic device for this canvas.<p>
 

@@ -30,7 +30,6 @@
 
 #include <base/bitmapcanvasbase.hxx>
 #include <base/basemutexhelper.hxx>
-#include <base/integerbitmapbase.hxx>
 #include "canvasbitmaphelper.hxx"
 
 #include <impltools.hxx>
@@ -45,12 +44,11 @@ namespace vclcanvas
                                              css::rendering::XIntegerBitmap,
                                              css::lang::XServiceInfo,
                                              css::beans::XFastPropertySet >    CanvasBitmapBase_Base;
-    typedef ::canvas::IntegerBitmapBase<
-        canvas::BitmapCanvasBase<
+    typedef canvas::BitmapCanvasBase<
             ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
             CanvasBitmapHelper,
             vclcanvastools::LocalGuard,
-            ::cppu::OWeakObject> > CanvasBitmap_Base;
+            ::cppu::OWeakObject> CanvasBitmap_Base;
 
     class CanvasBitmap : public CanvasBitmap_Base,
                          public RepaintTarget
