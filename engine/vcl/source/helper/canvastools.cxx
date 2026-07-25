@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/geometry/IntegerPoint2D.hpp>
@@ -56,99 +57,6 @@ namespace vcl::unotools
             return new vcl::unotools::VclCanvasBitmap( inputBitmap );
         }
 
-        namespace
-        {
-            bool equalsLayout( const rendering::IntegerBitmapLayout& rLHS,
-                                    const rendering::IntegerBitmapLayout& rRHS )
-            {
-                return
-                    rLHS.ScanLineBytes       == rRHS.ScanLineBytes &&
-                    rLHS.ScanLineStride      == rRHS.ScanLineStride &&
-                    rLHS.PlaneStride         == rRHS.PlaneStride &&
-                    rLHS.ColorSpace          == rRHS.ColorSpace &&
-                    rLHS.Palette             == rRHS.Palette &&
-                    rLHS.IsMsbFirst          == rRHS.IsMsbFirst;
-            }
-            bool readBmp( sal_Int32                                                  nWidth,
-                          sal_Int32                                                  nHeight,
-                          const rendering::IntegerBitmapLayout&                      rLayout,
-                          const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap,
-                          BitmapScopedWriteAccess&                                   rWriteAcc,
-                          bool bHasAlpha )
-            {
-                rendering::IntegerBitmapLayout      aCurrLayout;
-                geometry::IntegerRectangle2D        aRect;
-                cpo::uno::Sequence<sal_Int8>             aPixelData;
-                cpo::uno::Sequence<rendering::RGBColor>  aRGBColors;
-                cpo::uno::Sequence<rendering::ARGBColor> aARGBColors;
-
-                for( aRect.Y1=0; aRect.Y1<nHeight; ++aRect.Y1 )
-                {
-                    aRect.X1 = 0; aRect.X2 = nWidth; aRect.Y2 = aRect.Y1+1;
-                    try
-                    {
-                        aPixelData = xInputBitmap->getData(aCurrLayout,aRect);
-                    }
-                    catch( rendering::VolatileContentDestroyedException& )
-                    {
-                        // re-read bmp from the start
-                        return false;
-                    }
-                    if( !equalsLayout(aCurrLayout, rLayout) )
-                        return false; // re-read bmp from the start
-
-                    Scanline pScanline = rWriteAcc->GetScanline( aRect.Y1 );
-                    if( bHasAlpha )
-                    {
-                        // read ARGB color
-                        aARGBColors = rLayout.ColorSpace->convertIntegerToARGB(aPixelData);
-
-                        assert( !rWriteAcc->HasPalette() );
-                        for( sal_Int32 x=0; x<nWidth; ++x )
-                        {
-                            const rendering::ARGBColor& rColor=aARGBColors[x];
-                            rWriteAcc->SetPixelOnData( pScanline, x,
-                                                 BitmapColor( ColorAlpha,
-                                                              toByteColor(rColor.Red),
-                                                              toByteColor(rColor.Green),
-                                                              toByteColor(rColor.Blue),
-                                                              toByteColor(rColor.Alpha) ));
-                        }
-                    }
-                    else
-                    {
-                        // read RGB color
-                        aRGBColors = rLayout.ColorSpace->convertIntegerToRGB(aPixelData);
-                        if( rWriteAcc->HasPalette() )
-                        {
-                            for( sal_Int32 x=0; x<nWidth; ++x )
-                            {
-                                const rendering::RGBColor& rColor=aRGBColors[x];
-                                rWriteAcc->SetPixelOnData( pScanline, x,
-                                                     BitmapColor(static_cast<sal_uInt8>(rWriteAcc->GetBestPaletteIndex(
-                                                         BitmapColor( toByteColor(rColor.Red),
-                                                                      toByteColor(rColor.Green),
-                                                                      toByteColor(rColor.Blue))))) );
-                            }
-                        }
-                        else
-                        {
-                            for( sal_Int32 x=0; x<nWidth; ++x )
-                            {
-                                const rendering::RGBColor& rColor=aRGBColors[x];
-                                rWriteAcc->SetPixelOnData( pScanline, x,
-                                                     BitmapColor( toByteColor(rColor.Red),
-                                                                  toByteColor(rColor.Green),
-                                                                  toByteColor(rColor.Blue) ));
-                            }
-                        }
-                    }
-                }
-
-                return true;
-            }
-        }
-
         ::Bitmap bitmapFromXBitmap( const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap )
         {
             SAL_INFO( "vcl.helper", "vcl::unotools::bitmapExFromXBitmap()" );
@@ -161,122 +69,14 @@ namespace vcl::unotools
             if( pImplBitmap )
                 return pImplBitmap->getBitmap();
 
-            // retrieve data via UNO interface
-
-            // volatile bitmaps are a bit more complicated to read
-            // from...
-
-            // loop a few times, until successfully read (for XVolatileBitmap)
-            for( int i=0; i<10; ++i )
-            {
-                sal_Int32 nDepth=0;
-                bool bHasAlpha = false;
-                const rendering::IntegerBitmapLayout aLayout(
-                    xInputBitmap->getMemoryLayout());
-
-                OSL_ENSURE(aLayout.ColorSpace.is(),
-                           "Cannot convert image without color space!");
-                if( !aLayout.ColorSpace.is() )
-                    return ::Bitmap();
-
-                nDepth = aLayout.ColorSpace->getBitsPerPixel();
-
-                if( xInputBitmap->hasAlpha() )
-                {
-                    // determine alpha channel depth
-                    const cpo::uno::Sequence<sal_Int8> aTags(
-                        aLayout.ColorSpace->getComponentTags() );
-                    const sal_Int8* pStart(aTags.getConstArray());
-                    const std::size_t  nLen(aTags.getLength());
-                    const sal_Int8* pEnd(pStart+nLen);
-
-                    const std::ptrdiff_t nAlphaIndex =
-                        std::find(pStart,pEnd,
-                                  rendering::ColorComponentTag::ALPHA) - pStart;
-
-                    ENSURE_OR_THROW( nAlphaIndex < sal::static_int_cast<std::ptrdiff_t>(nLen),
-                        "bitmap has alpha, but alphaindex not valid");
-                    auto nAlphaBitCount = aLayout.ColorSpace->getComponentBitCounts()[nAlphaIndex];
-                    ENSURE_OR_THROW(nAlphaBitCount == 8, "unsupported alpha bit count");
-                    bHasAlpha = true;
-                    nDepth -= nAlphaBitCount;
-                }
-
-                BitmapPalette aPalette;
-                if( aLayout.Palette.is() )
-                {
-                    ENSURE_OR_THROW(!bHasAlpha, "unsupported");
-                    uno::Reference< rendering::XColorSpace > xPaletteColorSpace(
-                        aLayout.Palette->getColorSpace());
-                    ENSURE_OR_THROW(xPaletteColorSpace.is(),
-                                    "Palette without color space");
-
-                    const sal_Int32 nEntryCount( aLayout.Palette->getNumberOfEntries() );
-                    if( nEntryCount <= 256 )
-                    {
-                        if( nEntryCount <= 2 )
-                            nDepth = 1;
-                        else
-                            nDepth = 8;
-
-                        const sal_uInt16 nPaletteEntries(
-                            sal::static_int_cast<sal_uInt16>(
-                                std::min(sal_Int32(255), nEntryCount)));
-
-                        // copy palette entries
-                        aPalette.SetEntryCount(nPaletteEntries);
-                        uno::Reference<rendering::XBitmapPalette> xPalette( aLayout.Palette );
-                        uno::Reference<rendering::XColorSpace>    xPalColorSpace( xPalette->getColorSpace() );
-
-                        cpo::uno::Sequence<double> aPaletteEntry;
-                        for( sal_uInt16 j=0; j<nPaletteEntries; ++j )
-                        {
-                            bool b = xPalette->getIndex(aPaletteEntry,j);
-                            ENSURE_OR_THROW(b, "transparent entry in palette unsupported");
-                            cpo::uno::Sequence<rendering::RGBColor> aColors=xPalColorSpace->convertToRGB(aPaletteEntry);
-                            ENSURE_OR_THROW(aColors.getLength() == 1,
-                                            "Palette returned more or less than one entry");
-                            const rendering::RGBColor& rColor=aColors[0];
-                            aPalette[j] = BitmapColor(toByteColor(rColor.Red),
-                                                      toByteColor(rColor.Green),
-                                                      toByteColor(rColor.Blue));
-                        }
-                    }
-                }
-
-                const ::Size aPixelSize(
-                    sizeFromIntegerSize2D(xInputBitmap->getSize()));
-
-                // normalize bitcount
-                vcl::PixelFormat ePixelFormat;
-                if (bHasAlpha)
-                    ePixelFormat = vcl::PixelFormat::N32_BPP;
-                else if ( nDepth <= 8 )
-                    ePixelFormat = vcl::PixelFormat::N8_BPP;
-                else
-                    ePixelFormat = vcl::PixelFormat::N24_BPP;
-
-                ::Bitmap aBitmap( aPixelSize,
-                                  ePixelFormat,
-                                  aLayout.Palette.is() ? &aPalette : nullptr );
-
-                { // limit scoped access
-                    BitmapScopedWriteAccess pWriteAccess( aBitmap );
-                    ENSURE_OR_THROW(pWriteAccess.get() != nullptr,
-                                    "Cannot get write access to bitmap");
-
-                    const sal_Int32 nWidth(aPixelSize.Width());
-                    const sal_Int32 nHeight(aPixelSize.Height());
-
-                    if( !readBmp(nWidth,nHeight,aLayout,xInputBitmap,pWriteAccess,bHasAlpha) )
-                        continue;
-                } // limit scoped access
-
-                return aBitmap;
-            }
-
-            // failed to read data 10 times - bail out
-            return ::Bitmap();
+            // The only other possible implementation of XIntegerReadOnlyBitmap is
+            // vclcanvas::CanvasBitmap in canvas/source/vcl/canvasbitmap.cxx, which has a XFastPropertySet fast-path
+            uno::Reference<css::beans::XFastPropertySet> xFastProp(xInputBitmap, uno::UNO_QUERY_THROW);
+            cpo::uno::Any aAny = xFastProp->getFastPropertyValue(0);
+            sal_Int64 nBitmapPtr(0);
+            aAny >>= nBitmapPtr;
+            std::unique_ptr<Bitmap> pBitmap(reinterpret_cast<Bitmap*>(nBitmapPtr));
+            return *pBitmap;
         }
 
         geometry::RealSize2D size2DFromSize( const Size& rSize )
