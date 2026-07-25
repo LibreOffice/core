@@ -13,6 +13,8 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/frame/DispatchResultEvent.hpp>
+#include <com/sun/star/frame/DispatchResultState.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/objsh.hxx>
@@ -145,6 +147,32 @@ CPPUNIT_TEST_FIXTURE(Test, testSetDocumentPropertiesUpdate)
     CPPUNIT_ASSERT_EQUAL(u"test"_ustr, it->second.get<OUString>());
     CPPUNIT_ASSERT(!aMap.contains(u"ZOTERO_PREF_2"_ustr));
     CPPUNIT_ASSERT(aMap.contains(u"OTHER"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSaveAsSwitchesToEditMode)
+{
+    // Given a document opened in read-only mode:
+    loadWithParams(createFileURL(u"hello.odt"),
+                   { comphelper::makePropertyValue(u"ReadOnly"_ustr, true) });
+    auto pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    CPPUNIT_ASSERT(pObjectShell->IsReadOnly());
+
+    // When saving it under a different name:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs{
+        comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"writer8"_ustr)
+    };
+    frame::DispatchResultEvent aResult;
+    CPPUNIT_ASSERT(dispatchCommand(mxComponent, u".uno:SaveAs"_ustr, aArgs) >>= aResult);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(frame::DispatchResultState::SUCCESS), aResult.State);
+
+    // Then make sure that the document can be edited:
+    // Without the accompanying fix in place, this test would have failed, as the document
+    // was left in read-only mode after the successful save.
+    CPPUNIT_ASSERT(!pObjectShell->IsReadOnly());
 }
 }
 
