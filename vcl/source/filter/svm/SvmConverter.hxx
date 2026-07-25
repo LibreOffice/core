@@ -22,6 +22,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/gdimtf.hxx>
 
+struct ImplMetaReadData;
+
 #define GDI_PIXEL_ACTION                1
 #define GDI_POINT_ACTION                2
 #define GDI_LINE_ACTION                 3
@@ -74,10 +76,12 @@
 class SVMConverter
 {
 private:
-    static void      ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf );
+    static void      ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf,
+                                          ImplMetaReadData& rData );
 
 public:
-                        SVMConverter( SvStream& rIStm, GDIMetaFile& rMtf  );
+                        SVMConverter( SvStream& rIStm, GDIMetaFile& rMtf,
+                                      ImplMetaReadData& rData );
 
 private:
                         SVMConverter( const SVMConverter& ) = delete;
