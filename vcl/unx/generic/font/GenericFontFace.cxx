@@ -59,11 +59,6 @@ hb_face_t* GenericFontFace::GetHbFace() const
     return mpHbFace;
 }
 
-hb_blob_t* GenericFontFace::GetHbTable(hb_tag_t nTag) const
-{
-    return hb_face_reference_table(mpHbFace, nTag);
-}
-
 const std::vector<vcl::font::Variation>&
 GenericFontFace::GetVariations(const LogicalFontInstance&) const
 {
