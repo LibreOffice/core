@@ -79,6 +79,7 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 
     bool ShowUnderline() const { return m_bShowUnderline; }
+    void SetShowUnderline(bool bNew) { m_bShowUnderline = bNew; }
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;

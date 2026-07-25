@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+#include <optional>
+
+#include <o3tl/safeint.hxx>
+
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <paratr.hxx>
@@ -40,6 +45,7 @@
 #include "pordrop.hxx"
 #include <crstate.hxx>
 #include "pormulti.hxx"
+#include "portxt.hxx"
 #include <numrule.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
@@ -437,6 +443,75 @@ static bool isTrailingDecoration(SwLinePortion* p)
     return true; // no more portions
 }
 
+// How much of the text area is still free after this portion: an adjusted line parks whatever is
+// left of it in the trailing margin portion(s). Lines that need no adjustment - left-aligned ones -
+// get no margin portion at all, and keep the room they were formatted against; those answer none.
+static std::optional<SwTwips> calcTrailingRoom(const SwLinePortion* p)
+{
+    std::optional<SwTwips> oRoom;
+    for (; p; p = p->GetNextPortion())
+        if (p->IsMarginPortion())
+            oRoom = oRoom.value_or(0) + p->Width();
+    return oRoom;
+}
+
+// tdf#171959: The trailing blank deliberately hangs outside the line (tdf#57187), so once the line
+// is adjusted it can sit past the text area - and its decorations would then be drawn out there.
+// Keep them inside by decorating only as much as still fits, and letting a plain hole carry the
+// rest of the blank, so the cursor can still be moved over all of it.
+static void limitTrailingDecoration(SwLinePortion& rPor, const SwLinePortion* pNext)
+{
+    if (!rPor.IsHolePortion())
+        return;
+
+    auto& rHole = static_cast<SwHolePortion&>(rPor);
+    if (!rHole.ShowUnderline())
+        return;
+
+    const std::optional<SwTwips> oRoom = calcTrailingRoom(pNext);
+    if (!oRoom || *oRoom >= rHole.Width())
+        return;
+
+    if (*oRoom <= 0)
+    {
+        rHole.SetShowUnderline(false);
+        return;
+    }
+
+    // A hole holds nothing but blanks, so its characters divide up in proportion to its width.
+    // Keeping one is the least that makes sense: the decorated part exists to be decorated.
+    const SwTwips nWidth = rHole.Width();
+    const sal_Int32 nCount = sal_Int32(rHole.GetLen());
+    // The room is short of the width, so the share of the blanks that fits cannot exceed them all
+    const sal_Int32 nFits
+        = o3tl::narrowing<sal_Int32>((nCount * *oRoom + nWidth / 2) / nWidth);
+    const TextFrameIndex nKeep(std::max<sal_Int32>(1, nFits));
+    const TextFrameIndex nMoved(rHole.GetLen() - nKeep);
+    const SwTwips nExcess(nWidth - *oRoom);
+
+    rHole.SetLen(nKeep);
+    rHole.Width(*oRoom);
+
+    // A blank too long for the line already has a plain hole after it, holding what did not fit.
+    // The part that no longer fits the text area belongs there too; only make a hole of its own
+    // when there is none. Note the follower has not been given its width yet, so hand it over as
+    // extra blank width, the way formatting left it.
+    SwLinePortion* pFollow = rHole.GetNextPortion();
+    if (pFollow && pFollow->IsHolePortion()
+        && !static_cast<SwHolePortion*>(pFollow)->ShowUnderline())
+    {
+        pFollow->SetLen(pFollow->GetLen() + nMoved);
+        pFollow->ExtraBlankWidth(pFollow->ExtraBlankWidth() + nExcess);
+        return;
+    }
+
+    SwHolePortion* pRest = new SwHolePortion(rHole);
+    pRest->SetShowUnderline(false);
+    pRest->SetLen(nMoved);
+    pRest->Width(nExcess);
+    rHole.Insert(pRest);
+}
+
 // tdf#120715 tdf#43100: Make width for some HolePortions, so cursor will be able to move into it.
 // It should not change the layout, so this should be called after the layout is calculated.
 void SwTextCursor::AddExtraBlankWidth()
@@ -451,6 +526,7 @@ void SwTextCursor::AddExtraBlankWidth()
         {
             pPos->Width(pPos->Width() + pPos->ExtraBlankWidth());
             pPos->ExtraBlankWidth(0);
+            limitTrailingDecoration(*pPos, pNextPos);
         }
         pPos = pNextPos;
     }

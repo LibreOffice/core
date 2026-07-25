@@ -11,7 +11,9 @@
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
+#include <vcl/gdimtf.hxx>
 #include <vcl/scheduler.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/editobj.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -1965,6 +1967,82 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf164098)
 
     // Without the fix, this line will cause a freeze:
     pWrtShell->Insert(u"ـ"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf171959)
+{
+    // Every line of this document ends in a blank, and the text is justified and underlined.
+    createSwDoc("tdf171959.odt");
+
+    // Whether the trailing blank is decorated can only be settled once the line has been adjusted,
+    // which happens on the way to painting.
+    std::shared_ptr<GDIMetaFile> xMetaFile = getSwDocShell()->GetPreviewMetaFile();
+
+    // Justification stretches each line to the right margin, leaving no room for the trailing
+    // blank, which hangs outside the text area. Without the fix the blank kept its underline, so
+    // the underline was drawn past the margin.
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    assertXPath(pLayout, "//SwHolePortion", 7);
+    assertXPath(pLayout, "//SwHolePortion[@show-underline='true']", 0);
+
+    // The blank is still painted (tdf#43244), only without decorations.
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pMetaXml = dumpAndParse(dumper, *xMetaFile);
+    assertXPath(pMetaXml, "//textarray[@length='1']", 7);
+    assertXPath(pMetaXml, "//textarray[@length='1'][preceding-sibling::font[1]/@underline!='0']",
+                0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf171959Centered)
+{
+    // Same document, but centred: here the trailing blank has the right half of the free space to
+    // live in, so its decorations may show as far as that reaches.
+    createSwDoc("tdf171959-center.odt");
+    getSwDocShell()->GetPreviewMetaFile();
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+
+    // A line with 365 twips to spare decorates the whole 60 twip blank.
+    assertXPath(pLayout, "//txt[1]/SwParaPortion/SwLineLayout[2]/SwHolePortion", "width", u"60");
+    assertXPath(pLayout, "//txt[1]/SwParaPortion/SwLineLayout[2]/SwHolePortion", "show-underline",
+                u"true");
+
+    // A line with only 49 twips left decorates that much, and an undecorated hole carries the rest
+    // of the blank, so the cursor still travels over all of it.
+    assertXPath(pLayout, "//txt[1]/SwParaPortion/SwLineLayout[5]/SwHolePortion[1]", "width", u"49");
+    assertXPath(pLayout, "//txt[1]/SwParaPortion/SwLineLayout[5]/SwHolePortion[1]",
+                "show-underline", u"true");
+    assertXPath(pLayout, "//txt[1]/SwParaPortion/SwLineLayout[5]/SwHolePortion[2]", "width", u"11");
+    assertXPath(pLayout, "//txt[1]/SwParaPortion/SwLineLayout[5]/SwHolePortion[2]",
+                "show-underline", u"false");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf171959ManyBlanks)
+{
+    // A centred line ending in many blanks: only the right half of the free space is inside the
+    // text area, so roughly half of the blanks may keep the decoration.
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SetAttrItem(SvxAdjustItem(SvxAdjust::Center, RES_PARATR_ADJUST));
+    pWrtShell->Insert("foo" + RepeatedUChar(' ', 200));
+    getSwDocShell()->GetPreviewMetaFile();
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+
+    // The blank was already too long for the line, so it had a plain hole after it: what no longer
+    // fits the text area joins that one instead of making a third.
+    assertXPath(pLayout, "//SwLineLayout/SwHolePortion", 2);
+    assertXPath(pLayout, "//SwLineLayout/SwHolePortion[1]", "show-underline", u"true");
+    assertXPath(pLayout, "//SwLineLayout/SwHolePortion[2]", "show-underline", u"false");
+
+    // The blanks are shared out, not squeezed into the decorated part, and none go missing.
+    const sal_Int32 nLen1
+        = getXPath(pLayout, "//SwLineLayout/SwHolePortion[1]", "length").toInt32();
+    const sal_Int32 nLen2
+        = getXPath(pLayout, "//SwLineLayout/SwHolePortion[2]", "length").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(1), nLen1);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), nLen2);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(200), nLen1 + nLen2);
 }
 
 } // end of anonymous namespace
