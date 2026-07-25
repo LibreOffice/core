@@ -60,7 +60,6 @@ fuzzer_core_libraries = \
     ) \
     canvastools \
     configmgr \
-    cppcanvas \
     ctl \
     dba \
     dbase \

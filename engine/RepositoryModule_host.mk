@@ -31,7 +31,6 @@ endif
 ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	canvas \
-	cppcanvas \
 ))
 endif
 

@@ -64,7 +64,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 		canvas \
 		configmgr \
 		connectivity \
-		cppcanvas \
 		docmodel \
 		drawinglayer \
 		editeng \

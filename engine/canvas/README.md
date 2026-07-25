@@ -51,3 +51,12 @@ Look at Cairo `canvas` and situation when it is used
 ## TODO
 There still might be more cases when we
 can save some roundtrips when exchanging data with vcl.
+
+# C++ Helper Classes for canvas in source/cppcanvas
+
+Helper C++ classes for `canvas`, plus a `GDIMetaFile`-to-`XCanvas` converter.
+
+## EMF+
+
+For `canvas/source/cppcanvas/mtfrenderer`, see the `README.md` in `vcl` (the EMF+ part).
+

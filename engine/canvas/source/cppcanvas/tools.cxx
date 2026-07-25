@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
  * This file is part of the Collabora Office project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -15,16 +15,26 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- -->
+ */
 
-<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.rendering.CanvasFactory"
-      constructor="com_sun_star_comp_rendering_CanvasFactory_get_implementation">
-    <service name="com.sun.star.rendering.CanvasFactory"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.rendering.MtfRenderer"
-    constructor="com_sun_star_comp_rendering_MtfRenderer_get_implementation">
-    <service name="com.sun.star.rendering.MtfRenderer"/>
-  </implementation>
-</component>
+
+#include "tools.hxx"
+
+
+using namespace ::com::sun::star;
+
+namespace cppcanvastools
+{
+        cpo::uno::Sequence< double > intSRGBAToDoubleSequence( cppcanvas::IntSRGBA aColor  )
+        {
+            cpo::uno::Sequence< double > aRes{
+                cppcanvas::getRed(aColor) / 255.0,
+                cppcanvas::getGreen(aColor) / 255.0,
+                cppcanvas::getBlue(aColor) / 255.0,
+                cppcanvas::getAlpha(aColor) / 255.0
+            };
+            return aRes;
+        }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -255,7 +255,7 @@ void WriteOnlyVars::run()
         if (loplugin::isSamePathname(fn,
                                      SRCDIR "/accessibility/source/standard/vclxaccessiblebox.cxx"))
             return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/cppcanvas/source/mtfrenderer/implrenderer.cxx"))
+        if (loplugin::isSamePathname(fn, SRCDIR "/canvas/source/cppcanvas/implrenderer.cxx"))
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/sfx2/source/doc/guisaveas.cxx"))
             return;

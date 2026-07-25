@@ -1859,7 +1859,7 @@ void VclMetafileProcessor2D::processPolygonStrokePrimitive2D(
                     if (array.size() == pos)
                     {
                         aHairLinePolyPolygon.append(rBasePolygon);
-                        // This will be used by setupStrokeAttributes() in cppcanvas.
+                        // This will be used by setupStrokeAttributes() in canvas/source/cppcanvas.
                         aLineInfo.SetStyle(LineStyle::Dash);
                         aLineInfo.SetDashCount(dashCount);
                         aLineInfo.SetDashLen(getTransformedLineWidth(dashLen));

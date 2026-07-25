@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
  * This file is part of the Collabora Office project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -15,16 +15,17 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- -->
+ */
+#pragma once
 
-<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.rendering.CanvasFactory"
-      constructor="com_sun_star_comp_rendering_CanvasFactory_get_implementation">
-    <service name="com.sun.star.rendering.CanvasFactory"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.rendering.MtfRenderer"
-    constructor="com_sun_star_comp_rendering_MtfRenderer_get_implementation">
-    <service name="com.sun.star.rendering.MtfRenderer"/>
-  </implementation>
-</component>
+#include <sal/config.h>
+#include <sal/types.h>
+
+#if defined(VCLCANVAS_DLLIMPLEMENTATION)
+#define VCLCANVAS_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define VCLCANVAS_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
+#define VCLCANVAS_DLLPRIVATE SAL_DLLPRIVATE
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -110,7 +110,7 @@ emf/wmf is translated to GDIMetafile in import filter
 
 emf+ is encapsulated into GDIMetafile inside comment records and
 parsed/rendered later, when it reaches cppcanvas. It is parsed and
-rendered in cppcanvas/source/mtfrenderer. also note that there are
+rendered in canvas/source/cppcanvas/mtfrenderer. also note that there are
 emf+-only and emf+-dual files. dual files contains both types of
 records (emf and emf+) for rendering the images. these can used also
 in applications which don't know emf+. in that case we must ignore

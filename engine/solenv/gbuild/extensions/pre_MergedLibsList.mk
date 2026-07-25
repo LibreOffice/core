@@ -35,7 +35,6 @@ gb_MERGE_LIBRARY_LIST := \
 	chart2api \
 	comphelper \
 	configmgr \
-	cppcanvas \
 	cppu \
 	cppuhelper \
 	ctl \

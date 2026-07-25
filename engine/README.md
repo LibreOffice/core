@@ -112,7 +112,6 @@ Module    | Description
 ----------|-------------------------------------------------
 [basegfx/](basegfx)  | algorithms and data-types for graphics as used in the canvas
 [canvas/](canvas)   | new (UNO) canvas rendering model with various backends
-[cppcanvas/](cppcanvas) | C++ helper classes for using the UNO canvas
 [drawinglayer/](drawinglayer) | View code to render drawable objects and break them down into primitives we can render more easily.
 
 ## Rules for #include Directives (C/C++)

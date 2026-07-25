@@ -32,6 +32,10 @@ $(eval $(call gb_Library_use_external,vclcanvas,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,vclcanvas))
 
+$(eval $(call gb_Library_add_defs,vclcanvas,\
+	-DVCLCANVAS_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_use_libraries,vclcanvas,\
 	basegfx \
 	canvastools \
@@ -40,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,vclcanvas,\
 	cppuhelper \
 	i18nlangtag \
 	sal \
+	salhelper \
 	svt \
 	tk \
 	tl \
@@ -59,6 +64,20 @@ $(eval $(call gb_Library_add_exception_objects,vclcanvas,\
 	canvas/source/vcl/impltools \
 	canvas/source/vcl/textlayout \
 	canvas/source/vcl/canvashelper_texturefill \
+	canvas/source/cppcanvas/bitmapaction \
+	canvas/source/cppcanvas/cachedprimitivebase \
+	canvas/source/cppcanvas/implrenderer \
+	canvas/source/cppcanvas/lineaction \
+	canvas/source/cppcanvas/mtftools \
+	canvas/source/cppcanvas/pointaction \
+	canvas/source/cppcanvas/polypolyaction \
+	canvas/source/cppcanvas/textaction \
+	canvas/source/cppcanvas/textlineshelper \
+	canvas/source/cppcanvas/transparencygroupaction \
+	canvas/source/cppcanvas/tools \
+	canvas/source/cppcanvas/uno_mtfrenderer \
+	canvas/source/cppcanvas/implcanvas \
+	canvas/source/cppcanvas/vclfactory \
 ))
 
 # vim: set noet sw=4 ts=4:

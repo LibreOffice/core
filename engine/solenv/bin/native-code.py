@@ -36,6 +36,7 @@ core_constructor_list = [
     "stardiv_UnoControls_StatusIndicator_get_implementation",
 # canvas/source/factory/canvasfactory.component
     "com_sun_star_comp_rendering_CanvasFactory_get_implementation",
+    "com_sun_star_comp_rendering_MtfRenderer_get_implementation",
 # chart2/source/chart2.component
     "com_sun_star_chart2_ExponentialScaling_get_implementation",
     "com_sun_star_chart2_LinearScaling_get_implementation",
@@ -109,8 +110,6 @@ core_constructor_list = [
     ("connectivity_OSDBCDriverManager_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
 # connectivity/source/drivers/dbase/dbase.component
     ("connectivity_dbase_ODriver", "#if HAVE_FEATURE_DBCONNECTIVITY"),
-# cppcanvas/source/uno/mtfrenderer.component
-    "com_sun_star_comp_rendering_MtfRenderer_get_implementation",
 # cui/util/cui.component
     ("com_sun_star_cui_ColorPicker_get_implementation", "#if !ENABLE_FUZZERS"),
     ("com_sun_star_cui_GetCreateDialogFactoryService", "#if !ENABLE_FUZZERS"),

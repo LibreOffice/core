@@ -26,6 +26,13 @@ $(eval $(call gb_Module_add_targets,canvas,\
 
 $(eval $(call gb_Module_add_check_targets,canvas,\
     CppunitTest_canvas_test \
+    CppunitTest_canvas_cppcanvas \
 ))
+
+ifneq ($(DISPLAY),)
+$(eval $(call gb_Module_add_slowcheck_targets,canvas,\
+    CppunitTest_canvas_emfplus \
+))
+endif
 
 # vim: set noet sw=4 ts=4:

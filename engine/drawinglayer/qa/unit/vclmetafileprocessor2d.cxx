@@ -20,7 +20,7 @@
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
-#include <cppcanvas/test.hxx>
+#include <canvas/cppcanvastest.hxx>
 
 #include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
