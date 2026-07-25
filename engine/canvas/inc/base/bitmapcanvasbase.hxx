@@ -442,14 +442,6 @@ namespace canvas
             return true;
         }
 
-        virtual css::uno::Reference< css::rendering::XBitmap > getScaledBitmap( const css::geometry::RealSize2D& newSize,
-                                                                                                                   bool                                      beFast ) override
-        {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maCanvasHelper.getScaledBitmap( newSize, beFast );
-        }
-
         CanvasHelper        maCanvasHelper;
         mutable bool        mbSurfaceDirty;
 

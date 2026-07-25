@@ -201,25 +201,6 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XIntegerBitmapColorSpace> const & getStdColorSpace();
 
-        /** Return a color space for a default RGB integer format
-
-            Use this method for dead-simple bitmap implementations,
-            that map all their formats to 8888 RGB color (the last byte
-            is unused).
-         */
-        CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XIntegerBitmapColorSpace> const & getStdColorSpaceWithoutAlpha();
-
-        /** Return a memory layout for a default RGBA integer format
-
-            Use this method for dead-simple bitmap implementations,
-            that map all their formats to 8888 RGBA color.
-         */
-        CANVASTOOLS_DLLPUBLIC css::rendering::IntegerBitmapLayout getStdMemoryLayout(
-            const css::geometry::IntegerSize2D& rBitmapSize );
-
-        /// Convert standard 8888 RGBA color to vcl color
-        CANVASTOOLS_DLLPUBLIC cpo::uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor );
-
         // Modelled closely after boost::numeric_cast, only that we
         // issue some trace output here and throw a RuntimeException
 

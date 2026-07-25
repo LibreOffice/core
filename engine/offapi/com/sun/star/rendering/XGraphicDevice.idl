@@ -52,29 +52,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
     XColorSpace                                 getDeviceColorSpace();
 
 
-    /** Query the physical resolution of the device in pixel per
-        millimeter.
-
-        A special floating point value of +infinity here indicates
-        "unknown", i.e. at the time of rendering undetermined or
-        possibly infinite resolution along the corresponding
-        direction.
-     */
-    ::com::sun::star::geometry::RealSize2D  getPhysicalResolution();
-
-
-    /** Query the physical dimensions of the device in millimeter.
-
-        A special floating point value of +infinity here indicates
-        "unknown", i.e. at the time of rendering undetermined or
-        possibly infinite resolution along the corresponding
-        direction.
-
-        @see XBitmap::getSize()
-     */
-    ::com::sun::star::geometry::RealSize2D  getPhysicalSize();
-
-
     /** Create a line poly-polygon which can internally use
         device-optimized representations already.
 
@@ -91,17 +68,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         The points of the poly-polygon, in a separate array for every polygon.
      */
     XBezierPolyPolygon2D            createCompatibleBezierPolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealBezierSegment2D > > points );
-
-
-    /** Create a bitmap whose memory layout and sample model is
-        compatible to the graphic device.
-
-        @param size
-        Size of the requested bitmap in pixel. Both components of the
-        size must be greater than 0
-     */
-    XBitmap                         createCompatibleBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
-        raises (com::sun::star::lang::IllegalArgumentException);
 
 
     /** Create a bitmap with alpha channel whose memory layout and

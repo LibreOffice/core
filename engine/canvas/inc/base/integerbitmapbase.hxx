@@ -39,69 +39,6 @@ namespace canvas
         public Base
     {
     public:
-        // XIntegerBitmap
-        virtual cpo::uno::Sequence< sal_Int8 > getData( css::rendering::IntegerBitmapLayout&     bitmapLayout,
-                                                                              const css::geometry::IntegerRectangle2D& rect ) override
-        {
-            canvastools::verifyArgs(rect,
-                              __func__,
-                              static_cast< typename Base::UnambiguousBaseType* >(this));
-            canvastools::verifyIndexRange(rect, Base::getSize() );
-
-            typename Base::MutexType aGuard( Base::m_aMutex );
-
-            return Base::maCanvasHelper.getData( bitmapLayout,
-                                                     rect );
-        }
-
-        virtual void setData( const cpo::uno::Sequence< sal_Int8 >&,
-                                       const css::rendering::IntegerBitmapLayout& bitmapLayout,
-                                       const css::geometry::IntegerRectangle2D&   rect ) override
-        {
-            canvastools::verifyArgs(bitmapLayout, rect,
-                              __func__,
-                              static_cast< typename Base::UnambiguousBaseType* >(this));
-            canvastools::verifyIndexRange(rect, Base::getSize() );
-
-            typename Base::MutexType aGuard( Base::m_aMutex );
-
-            Base::mbSurfaceDirty = true;
-        }
-
-        virtual void setPixel( const cpo::uno::Sequence< sal_Int8 >&,
-                                        const css::rendering::IntegerBitmapLayout& bitmapLayout,
-                                        const css::geometry::IntegerPoint2D&       pos ) override
-        {
-            canvastools::verifyArgs(bitmapLayout, pos,
-                              __func__,
-                              static_cast< typename Base::UnambiguousBaseType* >(this));
-            canvastools::verifyIndexRange(pos, Base::getSize() );
-
-            typename Base::MutexType aGuard( Base::m_aMutex );
-
-            Base::mbSurfaceDirty = true;
-        }
-
-        virtual cpo::uno::Sequence< sal_Int8 > getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
-                                                                  const css::geometry::IntegerPoint2D& pos ) override
-        {
-            canvastools::verifyArgs(pos,
-                              __func__,
-                              static_cast< typename Base::UnambiguousBaseType* >(this));
-            canvastools::verifyIndexRange(pos, Base::getSize() );
-
-            typename Base::MutexType aGuard( Base::m_aMutex );
-
-            return Base::maCanvasHelper.getPixel( bitmapLayout,
-                                                      pos );
-        }
-
-        virtual css::rendering::IntegerBitmapLayout getMemoryLayout(  ) override
-        {
-            typename Base::MutexType aGuard( Base::m_aMutex );
-
-            return Base::maCanvasHelper.getMemoryLayout();
-        }
     };
 }
 

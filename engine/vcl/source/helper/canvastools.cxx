@@ -23,8 +23,6 @@
 #include <com/sun/star/geometry/IntegerPoint2D.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 
-#include <com/sun/star/rendering/ColorSpaceType.hpp>
-#include <com/sun/star/rendering/RenderingIntent.hpp>
 #include <com/sun/star/rendering/VolatileContentDestroyedException.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
@@ -197,48 +195,6 @@ namespace vcl::unotools
             private:
                 cpo::uno::Sequence< sal_Int8 > m_aComponentTags;
 
-                virtual ::sal_Int8 SAL_CALL getType(  ) override
-                {
-                    return rendering::ColorSpaceType::RGB;
-                }
-                virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getComponentTags(  ) override
-                {
-                    return m_aComponentTags;
-                }
-                virtual ::sal_Int8 SAL_CALL getRenderingIntent(  ) override
-                {
-                    return rendering::RenderingIntent::PERCEPTUAL;
-                }
-                virtual cpo::uno::Sequence< beans::PropertyValue > SAL_CALL getProperties(  ) override
-                {
-                    return cpo::uno::Sequence< beans::PropertyValue >();
-                }
-                virtual cpo::uno::Sequence< double > SAL_CALL convertColorSpace( const cpo::uno::Sequence< double >& deviceColor,
-                                                                            const uno::Reference< rendering::XColorSpace >& targetColorSpace ) override
-                {
-                    // TODO(P3): if we know anything about target
-                    // colorspace, this can be greatly sped up
-                    cpo::uno::Sequence<rendering::ARGBColor> aIntermediate(
-                        convertToARGB(deviceColor));
-                    return targetColorSpace->convertFromARGB(aIntermediate);
-                }
-                virtual cpo::uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const cpo::uno::Sequence< double >& deviceColor ) override
-                {
-                    const double*  pIn( deviceColor.getConstArray() );
-                    const std::size_t nLen( deviceColor.getLength() );
-                    ENSURE_ARG_OR_THROW2(nLen%4==0,
-                                         "number of channels no multiple of 4",
-                                         static_cast<rendering::XColorSpace*>(this), 0);
-
-                    cpo::uno::Sequence< rendering::RGBColor > aRes(nLen/4);
-                    rendering::RGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
-                    {
-                        *pOut++ = rendering::RGBColor(pIn[0],pIn[1],pIn[2]);
-                        pIn += 4;
-                    }
-                    return aRes;
-                }
                 virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const cpo::uno::Sequence< double >& deviceColor ) override
                 {
                     const double*  pIn( deviceColor.getConstArray() );
@@ -256,38 +212,6 @@ namespace vcl::unotools
                     }
                     return aRes;
                 }
-                virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const cpo::uno::Sequence< double >& deviceColor ) override
-                {
-                    const double*  pIn( deviceColor.getConstArray() );
-                    const std::size_t nLen( deviceColor.getLength() );
-                    ENSURE_ARG_OR_THROW2(nLen%4==0,
-                                         "number of channels no multiple of 4",
-                                         static_cast<rendering::XColorSpace*>(this), 0);
-
-                    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
-                    rendering::ARGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
-                    {
-                        *pOut++ = rendering::ARGBColor(pIn[3],pIn[3]*pIn[0],pIn[3]*pIn[1],pIn[3]*pIn[2]);
-                        pIn += 4;
-                    }
-                    return aRes;
-                }
-                virtual cpo::uno::Sequence< double > SAL_CALL convertFromRGB( const cpo::uno::Sequence< rendering::RGBColor >& rgbColor ) override
-                {
-                    const std::size_t             nLen( rgbColor.getLength() );
-
-                    cpo::uno::Sequence< double > aRes(nLen*4);
-                    double* pColors=aRes.getArray();
-                    for( const auto& rIn : rgbColor )
-                    {
-                        *pColors++ = rIn.Red;
-                        *pColors++ = rIn.Green;
-                        *pColors++ = rIn.Blue;
-                        *pColors++ = 1.0;
-                    }
-                    return aRes;
-                }
                 virtual cpo::uno::Sequence< double > SAL_CALL convertFromARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
                     const std::size_t              nLen( rgbColor.getLength() );
@@ -299,21 +223,6 @@ namespace vcl::unotools
                         *pColors++ = rIn.Red;
                         *pColors++ = rIn.Green;
                         *pColors++ = rIn.Blue;
-                        *pColors++ = rIn.Alpha;
-                    }
-                    return aRes;
-                }
-                virtual cpo::uno::Sequence< double > SAL_CALL convertFromPARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
-                {
-                    const std::size_t              nLen( rgbColor.getLength() );
-
-                    cpo::uno::Sequence< double > aRes(nLen*4);
-                    double* pColors=aRes.getArray();
-                    for( const auto& rIn : rgbColor )
-                    {
-                        *pColors++ = rIn.Red/rIn.Alpha;
-                        *pColors++ = rIn.Green/rIn.Alpha;
-                        *pColors++ = rIn.Blue/rIn.Alpha;
                         *pColors++ = rIn.Alpha;
                     }
                     return aRes;

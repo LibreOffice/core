@@ -27,6 +27,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
+#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 
 #include <vcl/dibtools.hxx>

@@ -220,20 +220,6 @@ namespace vclcanvas
 
         css::geometry::IntegerSize2D getSize();
 
-        css::uno::Reference< css::rendering::XBitmap >
-            getScaledBitmap( const css::geometry::RealSize2D&  newSize,
-                             bool                              beFast );
-
-        cpo::uno::Sequence< sal_Int8 >
-            getData( css::rendering::IntegerBitmapLayout&      bitmapLayout,
-                     const css::geometry::IntegerRectangle2D&  rect );
-
-        cpo::uno::Sequence< sal_Int8 >
-            getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
-                      const css::geometry::IntegerPoint2D& pos );
-
-        css::rendering::IntegerBitmapLayout getMemoryLayout();
-
         /// Repaint a cached bitmap
         bool repaint( const GraphicObjectSharedPtr&                   rGrf,
                       const css::rendering::ViewState&                viewState,

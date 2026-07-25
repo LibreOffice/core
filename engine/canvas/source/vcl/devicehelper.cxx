@@ -41,36 +41,6 @@ namespace vclcanvas
         mpOutDev = rOutDev;
     }
 
-    geometry::RealSize2D DeviceHelper::getPhysicalResolution()
-    {
-        if( !mpOutDev )
-            return ::canvastools::createInfiniteSize2D(); // we're disposed
-
-        // Map a one-by-one millimeter box to pixel
-        OutputDevice& rOutDev = mpOutDev->getOutDev();
-        const MapMode aOldMapMode( rOutDev.GetMapMode() );
-        rOutDev.SetMapMode( MapMode(MapUnit::MapMM) );
-        const Size aPixelSize( rOutDev.LogicToPixel(Size(1,1)) );
-        rOutDev.SetMapMode( aOldMapMode );
-
-        return vcl::unotools::size2DFromSize( aPixelSize );
-    }
-
-    geometry::RealSize2D DeviceHelper::getPhysicalSize()
-    {
-        if( !mpOutDev )
-            return ::canvastools::createInfiniteSize2D(); // we're disposed
-
-        // Map the pixel dimensions of the output window to millimeter
-        OutputDevice& rOutDev = mpOutDev->getOutDev();
-        const MapMode aOldMapMode( rOutDev.GetMapMode() );
-        rOutDev.SetMapMode( MapMode(MapUnit::MapMM) );
-        const Size aLogSize( rOutDev.PixelToLogic(rOutDev.GetOutputSizePixel()) );
-        rOutDev.SetMapMode( aOldMapMode );
-
-        return vcl::unotools::size2DFromSize( aLogSize );
-    }
-
     uno::Reference< rendering::XLinePolyPolygon2D > DeviceHelper::createCompatibleLinePolyPolygon(
         const uno::Reference< rendering::XGraphicDevice >&              ,
         const cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > >&  points )
@@ -101,20 +71,6 @@ namespace vclcanvas
         xPoly->setFillRule(rendering::FillRule_EVEN_ODD);
 
         return xPoly;
-    }
-
-    uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleBitmap(
-        const uno::Reference< rendering::XGraphicDevice >& rDevice,
-        const geometry::IntegerSize2D&                     size )
-    {
-        if( !mpOutDev )
-            return uno::Reference< rendering::XBitmap >(); // we're disposed
-
-        return uno::Reference< rendering::XBitmap >(
-            new CanvasBitmap( vcl::unotools::sizeFromIntegerSize2D(size),
-                              false,
-                              *rDevice,
-                              mpOutDev ) );
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap(

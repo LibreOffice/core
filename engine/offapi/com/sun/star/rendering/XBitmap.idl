@@ -51,31 +51,6 @@ interface XBitmap : ::com::sun::star::uno::XInterface
         not.
       */
     boolean                                     hasAlpha();
-
-
-    /** Query a scaled copy of the original bitmap.
-
-        @param newSize
-        Requested size of the new bitmap. Both of the two size
-        components must be greater than zero.
-
-        @param beFast
-        When set to true, this parameter advises getScaledBitmap to
-        use the fastest available algorithm to scale the bitmap, which
-        might cause visible artifacts.
-
-        @returns the new scaled bitmap.
-
-        @throws com::sun::star::lang::IllegalArgumentException
-        if the size components are outside the specified range.
-
-        @throws VolatileContentDestroyedException
-        if the contents of a volatile bitmap have been destroyed, and
-        thus cannot be read to generate the scaled bitmap.
-     */
-    XBitmap                         getScaledBitmap( [in] ::com::sun::star::geometry::RealSize2D newSize, [in] boolean beFast )
-        raises (com::sun::star::lang::IllegalArgumentException,
-                VolatileContentDestroyedException);
 };
 
 }; }; }; };

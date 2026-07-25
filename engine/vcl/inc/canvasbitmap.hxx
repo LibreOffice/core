@@ -20,6 +20,7 @@
 #pragma once
 
 #include <cppuhelper/implbase.hxx>
+#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/rendering/XBitmapPalette.hpp>
@@ -59,44 +60,10 @@ namespace vcl::unotools
         // XBitmap
         VCL_DLLPUBLIC virtual css::geometry::IntegerSize2D SAL_CALL getSize() override;
         VCL_DLLPUBLIC virtual bool SAL_CALL hasAlpha(  ) override;
-        VCL_DLLPUBLIC virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL getScaledBitmap( const css::geometry::RealSize2D& newSize, bool beFast ) override;
-
-        // XIntegerReadOnlyBitmap
-        VCL_DLLPUBLIC virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerRectangle2D& rect ) override;
-        VCL_DLLPUBLIC virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerPoint2D& pos ) override;
-        /// @throws css::uno::RuntimeException
-        VCL_DLLPUBLIC css::uno::Reference< css::rendering::XBitmapPalette > getPalette(  );
-        virtual css::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) override;
-
-        // XBitmapPalette
-        virtual sal_Int32 SAL_CALL getNumberOfEntries() override;
-        virtual bool SAL_CALL getIndex( cpo::uno::Sequence< double >& entry, ::sal_Int32 nIndex ) override;
-        virtual bool SAL_CALL setIndex( const cpo::uno::Sequence< double >& color, bool transparency, ::sal_Int32 nIndex ) override;
-        virtual css::uno::Reference< css::rendering::XColorSpace > SAL_CALL getColorSpace(  ) override;
 
         // XIntegerBitmapColorSpace
-        virtual ::sal_Int8 SAL_CALL getType(  ) override;
-        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getComponentTags(  ) override;
-        virtual ::sal_Int8 SAL_CALL getRenderingIntent(  ) override;
-        virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getProperties(  ) override;
-        virtual cpo::uno::Sequence< double > SAL_CALL convertColorSpace( const cpo::uno::Sequence< double >& deviceColor, const css::uno::Reference< css::rendering::XColorSpace >& targetColorSpace ) override;
-        virtual cpo::uno::Sequence< css::rendering::RGBColor > SAL_CALL convertToRGB( const cpo::uno::Sequence< double >& deviceColor ) override;
         virtual cpo::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertToARGB( const cpo::uno::Sequence< double >& deviceColor ) override;
-        virtual cpo::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertToPARGB( const cpo::uno::Sequence< double >& deviceColor ) override;
-        virtual cpo::uno::Sequence< double > SAL_CALL convertFromRGB( const cpo::uno::Sequence< css::rendering::RGBColor >& rgbColor ) override;
         virtual cpo::uno::Sequence< double > SAL_CALL convertFromARGB( const cpo::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
-        virtual cpo::uno::Sequence< double > SAL_CALL convertFromPARGB( const cpo::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
-        virtual ::sal_Int32 SAL_CALL getBitsPerPixel(  ) override;
-        virtual cpo::uno::Sequence< ::sal_Int32 > SAL_CALL getComponentBitCounts(  ) override;
-        virtual ::sal_Int8 SAL_CALL getEndianness(  ) override;
-        virtual cpo::uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor, const css::uno::Reference< css::rendering::XColorSpace >& targetColorSpace ) override;
-        virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor, const css::uno::Reference< css::rendering::XIntegerBitmapColorSpace >& targetColorSpace ) override;
-        VCL_DLLPUBLIC virtual cpo::uno::Sequence< css::rendering::RGBColor > SAL_CALL convertIntegerToRGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor ) override;
-        VCL_DLLPUBLIC virtual cpo::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor ) override;
-        virtual cpo::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor ) override;
-        VCL_DLLPUBLIC virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const cpo::uno::Sequence< css::rendering::RGBColor >& rgbColor ) override;
-        VCL_DLLPUBLIC virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const cpo::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
-        virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const cpo::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
 
         /** Create API wrapper for given Bitmap
 

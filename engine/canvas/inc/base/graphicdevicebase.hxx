@@ -148,20 +148,6 @@ namespace canvas
             return maDeviceHelper.getColorSpace();
         }
 
-        virtual css::geometry::RealSize2D getPhysicalResolution() override
-        {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maDeviceHelper.getPhysicalResolution();
-        }
-
-        virtual css::geometry::RealSize2D getPhysicalSize() override
-        {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maDeviceHelper.getPhysicalSize();
-        }
-
         virtual css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points ) override
         {
             MutexType aGuard( BaseType::m_aMutex );
@@ -174,17 +160,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.createCompatibleBezierPolyPolygon( this, points );
-        }
-
-        virtual css::uno::Reference< css::rendering::XBitmap > createCompatibleBitmap( const css::geometry::IntegerSize2D& size ) override
-        {
-            canvastools::verifyBitmapSize(size,
-                                    __func__,
-                                    static_cast< UnambiguousBaseType* >(this));
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maDeviceHelper.createCompatibleBitmap( this, size );
         }
 
         virtual css::uno::Reference< css::rendering::XBitmap > createCompatibleAlphaBitmap( const css::geometry::IntegerSize2D& size ) override

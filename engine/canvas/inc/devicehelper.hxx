@@ -43,17 +43,12 @@ namespace vclcanvas
         void disposing();
 
         // XWindowGraphicDevice
-        css::geometry::RealSize2D getPhysicalResolution();
-        css::geometry::RealSize2D getPhysicalSize();
         css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon(
             const css::uno::Reference< css::rendering::XGraphicDevice >&                               rDevice,
             const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points );
         css::uno::Reference< css::rendering::XBezierPolyPolygon2D > createCompatibleBezierPolyPolygon(
             const css::uno::Reference< css::rendering::XGraphicDevice >&                                       rDevice,
             const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealBezierSegment2D > >& points );
-        css::uno::Reference< css::rendering::XBitmap > createCompatibleBitmap(
-            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
-            const css::geometry::IntegerSize2D&                                        size );
         css::uno::Reference< css::rendering::XBitmap > createCompatibleAlphaBitmap(
             const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
             const css::geometry::IntegerSize2D&                                        size );
