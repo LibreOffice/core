@@ -214,11 +214,6 @@ class TTFFont
 private:
     FontDataContainer const& mrFontDataContainer;
 
-    const char* getTablePointer(const TableDirectoryEntry* pEntry)
-    {
-        return mrFontDataContainer.getPointer() + pEntry->offset;
-    }
-
 public:
     TTFFont(FontDataContainer const& rFontDataContainer)
         : mrFontDataContainer(rFontDataContainer)
