@@ -4,7 +4,7 @@
     <string name="app_version">Versiyon: %1$s, Build ID: %2$s</string>
     <string name="app_description">$APP_NAME LibreOffice tabanlı bir belge görüntüleyicisidir.</string>
     <string name="app_vendor">Bu sürüm $VENDOR tarafından derlenmiştir.</string>
-    <string name="temp_file_saving_disabled">Bu dosya salt okunur, kaydedilemez.</string>
+    <string name="temp_file_saving_disabled">Kaynak uygulama tarafından salt okunur paylaşıldı. Değişiklik yapmak için \"Bir kopyasını düzenle\" seçeneğini kullanın.</string>
     <string name="about_license">Lisansı Görüntüle</string>
     <string name="about_notice">Bildiriyi Görüntüle</string>
     <string name="about_moreinfo">Daha Fazla Bilgi</string>
@@ -77,7 +77,7 @@
     <string name="action_cancel">İptal</string>
     <!-- Create New Document Dialog Strings -->
     <string name="create_new_document_title">Dosya ismi girin</string>
-    <string name="action_create">OLUŞTUR</string>
+    <string name="action_create">Oluştur</string>
     <!-- Presentation Mode Strings -->
     <!-- Calc Header Menu Strings -->
     <!-- Password dialog strings -->
