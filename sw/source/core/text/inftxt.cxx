@@ -701,8 +701,11 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
 
     aDrawInf.SetUnderFnt( m_pUnderFnt );
 
+    // tdf#171959: a hole portion carries the trailing blank that hangs outside the line, so it
+    // takes no part in the justification of the line's content
     const tools::Long nSpaceAdd = ( rPor.IsBlankPortion() || rPor.IsDropPortion() ||
-                             rPor.InNumberGrp() ) ? 0 : GetSpaceAdd(/*bShrink=*/true);
+                             rPor.InNumberGrp() || rPor.IsHolePortion() )
+                                 ? 0 : GetSpaceAdd(/*bShrink=*/true);
     if ( nSpaceAdd )
     {
         TextFrameIndex nCharCnt(0);
