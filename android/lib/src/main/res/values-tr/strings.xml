@@ -5,7 +5,7 @@
     <string name="failed_to_insert_image">Resim ekleme başarısız oldu</string>
     <string name="failed_to_load_file">Yüklenecek dosyanın tanımlaması başarısız oldu</string>
     <string name="storage_permission_required">Depolama izni gerekiyor</string>
-    <string name="temp_file_saving_disabled">Bu dosya salt okunur, kaydedilemez.</string>
+    <string name="temp_file_saving_disabled">Kaynak uygulama tarafından salt okunur paylaşıldı. Değişiklik yapmak için \"Bir kopyasını düzenle\" seçeneğini kullanın.</string>
     <string name="exiting">Çıkış yapılıyor...</string>
     <string name="rate_our_app_title">%1$s kullandığınız için teşekkürler!</string>
     <string name="later">Daha sonra</string>
