@@ -291,6 +291,8 @@ namespace emfplushelper
             return aPolygon;
         if (aNumSegments >= nPoints)
             aNumSegments = nPoints - 1;
+        if (aOffset >= aNumSegments)
+            return aPolygon;
         GetCardinalMatrix(fTension, mat);
         // duplicate first point
         xPoints.push_front(xPoints.front());
