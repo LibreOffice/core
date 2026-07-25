@@ -57,6 +57,9 @@ namespace emfplushelper
                 dataSize -= 16;
             }
 
+            if (dataSize > s.remainingSize())
+                dataSize = s.remainingSize();
+
             SAL_INFO("drawinglayer.emf", "EMF+\tmetafile type: " << mfType << " dataSize: " << mfSize << " real size calculated from record dataSize: " << dataSize);
 
             GraphicFilter filter;
