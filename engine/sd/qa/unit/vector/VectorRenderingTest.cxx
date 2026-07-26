@@ -486,6 +486,52 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaIncludesEditedObject)
                          aDelta.getInt("/objects/0/id").value_or(-1));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaIncludesGroupWithEditedObject)
+{
+    // A delta requested while a text object inside a group is being edited
+    // must carry the group, the same way it carries a top-level object under
+    // edit. Typing does not advance the part version.
+    createBlankDoc();
+    SdrObject* pInner
+        = addGroupedRectangle(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), COL_BLUE);
+    SdrObject* pGroup = page(1)->GetObj(0);
+
+    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    pView->SdrBeginTextEdit(pInner);
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"Hello"_ustr);
+
+    const sal_Int64 nVersion
+        = getVectorPrimitives(u"testGroupEditDeltaBase").getInt("/version").value_or(-1);
+    auto aDelta = getVectorPrimitives(u"testGroupEditDelta", nVersion);
+
+    pView->SdrEndTextEdit();
+
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pGroup->GetUniqueID()),
+                         aDelta.getInt("/objects/0/id").value_or(-1));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testGraphicsResponseKeepsTypeOnUnknownChecksum)
+{
+    // A graphics request for a checksum the document does not know still
+    // gets a typed response naming the checksum, only without image data.
+    createBlankDoc();
+
+    SdXImpressDocument* pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDocument);
+
+    tools::JsonWriter aJsonWriter;
+    pDocument->getCommandValues(aJsonWriter, ".uno:VectorRenderingGraphics?checksum=12345");
+    OString aResult = aJsonWriter.finishAndGetAsOString();
+
+    auto oJson = tools::JsonPath::parse(std::string_view(aResult.getStr(), aResult.getLength()));
+    CPPUNIT_ASSERT(oJson.has_value());
+    assertJsonPath(*oJson, "/type", "vectorrenderinggraphics");
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(12345), oJson->getInt("/checksum").value_or(-1));
+}
+
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokedRectangle)
 {
     // A stroke-only rectangle decomposes to a polygonStroke primitive

@@ -2459,6 +2459,25 @@ private:
         }
     }
 
+    /// True when the object, or any object inside it when it is a
+    /// group, has an active text edit.
+    static bool hasActiveTextEdit(SdrObject* pObject)
+    {
+        SdrTextObj* pTextObj = DynCastSdrTextObj(pObject);
+        if (pTextObj && pTextObj->IsInEditMode())
+            return true;
+        if (SdrObjList* pChildren = pObject->GetSubList())
+        {
+            for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
+            {
+                SdrObject* pChild = pChildren->GetObj(i);
+                if (pChild && hasActiveTextEdit(pChild))
+                    return true;
+            }
+        }
+        return false;
+    }
+
     void writePageObjects(tools::JsonWriter& rWriter, SdPage* pPage)
     {
         auto aObjectsArray = rWriter.startArray("objects");
@@ -2475,8 +2494,7 @@ private:
             // is not version-tracked until the edit is committed.
             if (isDelta())
             {
-                SdrTextObj* pTextObj = DynCastSdrTextObj(pObject);
-                const bool bBeingEdited = pTextObj && pTextObj->IsInEditMode();
+                const bool bBeingEdited = hasActiveTextEdit(pObject);
                 if (!bBeingEdited
                     && !mpModel->isVectorObjectChangedSince(
                            mnResolvedPage, pObject->GetUniqueID(),
@@ -2546,11 +2564,14 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
         if (it != aMap.end())
         {
             sal_Int64 nChecksum = it->second.toInt64();
+            // The response always carries the type and the requested
+            // checksum. The image data is present only when the graphic
+            // is known.
+            rJsonWriter.put("type", "vectorrenderinggraphics");
+            rJsonWriter.put("checksum", nChecksum);
             auto itGraphic = maBitmapCache.find(nChecksum);
             if (itGraphic != maBitmapCache.end())
             {
-                rJsonWriter.put("type", "vectorrenderinggraphics");
-                rJsonWriter.put("checksum", nChecksum);
                 drawinglayer::Primitive2dJsonProcessor::writeGraphicBase64(
                     rJsonWriter, itGraphic->second);
             }
