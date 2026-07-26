@@ -370,7 +370,7 @@ namespace emfplushelper
 
         if (flags & 0x4000)
         {
-            sal_Int16 ix, iy;
+            sal_Int16 ix(0), iy(0);
 
             s.ReadInt16(ix).ReadInt16(iy);
 
@@ -387,7 +387,7 @@ namespace emfplushelper
     {
         if (bCompressed)
         {
-            sal_Int16 ix, iy, iw, ih;
+            sal_Int16 ix(0), iy(0), iw(0), ih(0);
 
             s.ReadInt16(ix).ReadInt16(iy).ReadInt16(iw).ReadInt16(ih);
 
@@ -1652,7 +1652,7 @@ namespace emfplushelper
                 {
                     case EmfPlusRecordTypeHeader:
                     {
-                        sal_uInt32 version, emfPlusFlags;
+                        sal_uInt32 version(0), emfPlusFlags(0);
                         SAL_INFO("drawinglayer.emf", "EMF+\tDual: " << ((flags & 1) ? "true" : "false"));
 
                         rMS.ReadUInt32(version).ReadUInt32(emfPlusFlags).ReadUInt32(mnHDPI).ReadUInt32(mnVDPI);
@@ -1709,7 +1709,7 @@ namespace emfplushelper
                     case EmfPlusRecordTypeDrawPie:
                     case EmfPlusRecordTypeDrawArc:
                     {
-                        float startAngle, sweepAngle;
+                        float startAngle(0), sweepAngle(0);
 
                         // Silent MSVC warning C4701: potentially uninitialized local variable 'brushIndexOrColor' used
                         sal_uInt32 brushIndexOrColor = 999;
@@ -1729,7 +1729,7 @@ namespace emfplushelper
                         }
 
                         rMS.ReadFloat(startAngle).ReadFloat(sweepAngle);
-                        float dx, dy, dw, dh;
+                        float dx(0), dy(0), dw(0), dh(0);
                         ReadRectangle(rMS, dx, dy, dw, dh, bool(flags & 0x4000));
                         SAL_INFO("drawinglayer.emf", "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
                         startAngle = basegfx::deg2rad(startAngle);
@@ -1776,7 +1776,7 @@ namespace emfplushelper
                     case EmfPlusRecordTypeFillPath:
                     {
                         sal_uInt32 index = flags & 0xff;
-                        sal_uInt32 brushIndexOrColor;
+                        sal_uInt32 brushIndexOrColor(0);
                         rMS.ReadUInt32(brushIndexOrColor);
                         SAL_INFO("drawinglayer.emf", "EMF+ FillPath slot: " << index);
 
@@ -1790,7 +1790,7 @@ namespace emfplushelper
                     case EmfPlusRecordTypeFillRegion:
                     {
                         sal_uInt32 index = flags & 0xff;
-                        sal_uInt32 brushIndexOrColor;
+                        sal_uInt32 brushIndexOrColor(0);
                         rMS.ReadUInt32(brushIndexOrColor);
                         SAL_INFO("drawinglayer.emf", "EMF+\t FillRegion slot: " << index);
 
@@ -1815,7 +1815,7 @@ namespace emfplushelper
                         }
 
                         SAL_INFO("drawinglayer.emf", "EMF+\t " << (type == EmfPlusRecordTypeFillEllipse ? "Fill" : "Draw") << "Ellipse slot: " << (flags & 0xff));
-                        float dx, dy, dw, dh;
+                        float dx(0), dy(0), dw(0), dh(0);
                         ReadRectangle(rMS, dx, dy, dw, dh, bool(flags & 0x4000));
                         SAL_INFO("drawinglayer.emf", "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
                         ::basegfx::B2DPolyPolygon polyPolygon(
@@ -1834,8 +1834,8 @@ namespace emfplushelper
                         // Silent MSVC warning C4701: potentially uninitialized local variable 'brushIndexOrColor' used
                         sal_uInt32 brushIndexOrColor = 999;
                         ::basegfx::B2DPolyPolygon polyPolygon;
-                        sal_uInt32 rectangles;
-                        float x, y, width, height;
+                        sal_uInt32 rectangles(0);
+                        float x(0), y(0), width(0), height(0);
                         const bool isColor = (flags & 0x8000);
                         ::basegfx::B2DPolygon polygon;
 
@@ -1885,7 +1885,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeFillPolygon:
                     {
-                        sal_uInt32 brushIndexOrColor, points;
+                        sal_uInt32 brushIndexOrColor(0), points(0);
 
                         rMS.ReadUInt32(brushIndexOrColor);
                         rMS.ReadUInt32(points);
@@ -1900,7 +1900,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeDrawLines:
                     {
-                        sal_uInt32 points;
+                        sal_uInt32 points(0);
                         rMS.ReadUInt32(points);
                         SAL_INFO("drawinglayer.emf", "EMF+\t Points: " << points);
                         EMFPPath path(points, true);
@@ -1914,7 +1914,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeDrawPath:
                     {
-                        sal_uInt32 penIndex;
+                        sal_uInt32 penIndex(0);
                         rMS.ReadUInt32(penIndex);
                         SAL_INFO("drawinglayer.emf", "EMF+\t Pen: " << penIndex);
 
@@ -1928,8 +1928,8 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeDrawBeziers:
                     {
-                        sal_uInt32 aCount;
-                        float x1, y1, x2, y2, x3, y3, x4, y4;
+                        sal_uInt32 aCount(0);
+                        float x1(0), y1(0), x2(0), y2(0), x3(0), y3(0), x4(0), y4(0);
                         ::basegfx::B2DPolygon aPolygon;
                         rMS.ReadUInt32(aCount);
                         SAL_INFO("drawinglayer.emf", "EMF+\t DrawBeziers slot: " << (flags & 0xff));
@@ -1967,8 +1967,8 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeDrawCurve:
                     {
-                        sal_uInt32 aOffset, aNumSegments, points;
-                        float aTension;
+                        sal_uInt32 aOffset(0), aNumSegments(0), points(0);
+                        float aTension(0);
                         rMS.ReadFloat(aTension);
                         rMS.ReadUInt32(aOffset);
                         rMS.ReadUInt32(aNumSegments);
@@ -1994,7 +1994,7 @@ namespace emfplushelper
                     {
                         // Silent MSVC warning C4701: potentially uninitialized local variable 'brushIndexOrColor' used
                         sal_uInt32 brushIndexOrColor = 999, points;
-                        float aTension;
+                        float aTension(0);
                         if (type == EmfPlusRecordTypeFillClosedCurve)
                         {
                             rMS.ReadUInt32(brushIndexOrColor);
@@ -2032,8 +2032,8 @@ namespace emfplushelper
                     case EmfPlusRecordTypeDrawImage:
                     case EmfPlusRecordTypeDrawImagePoints:
                     {
-                        sal_uInt32 imageAttributesId;
-                        sal_Int32 sourceUnit;
+                        sal_uInt32 imageAttributesId(0);
+                        sal_Int32 sourceUnit(0);
                         rMS.ReadUInt32(imageAttributesId).ReadInt32(sourceUnit);
                         SAL_INFO("drawinglayer.emf",
                                 "EMF+\t " << (type == EmfPlusRecordTypeDrawImage ? "DrawImage"
@@ -2047,7 +2047,7 @@ namespace emfplushelper
                                 dynamic_cast<EMFPImage*>(maEMFPObjects[flags & 0xff].get()) :
                                 nullptr)
                         {
-                            float sx, sy, sw, sh;
+                            float sx(0), sy(0), sw(0), sh(0);
                             ReadRectangle(rMS, sx, sy, sw, sh);
 
                             ::tools::Rectangle aSource(Point(sx, sy), Size(sw + 1, sh + 1));
@@ -2063,7 +2063,7 @@ namespace emfplushelper
                             double fShearY = 0.0;
                             if (type == EmfPlusRecordTypeDrawImagePoints)
                             {
-                                sal_uInt32 aCount;
+                                sal_uInt32 aCount(0);
                                 rMS.ReadUInt32(aCount);
 
                                 // Number of points used by DrawImagePoints. Exactly 3 points must be specified.
@@ -2074,7 +2074,7 @@ namespace emfplushelper
                                                                     << aCount);
                                     break;
                                 }
-                                float x1, y1, x2, y2, x3, y3;
+                                float x1(0), y1(0), x2(0), y2(0), x3(0), y3(0);
 
                                 ReadPoint(rMS, x1, y1, flags); // upper-left point
                                 ReadPoint(rMS, x2, y2, flags); // upper-right
@@ -2202,7 +2202,7 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer.emf", "EMF+\t Length: " << stringLength);
 
                         // read the layout rectangle
-                        float lx, ly, lw, lh;
+                        float lx(0), ly(0), lw(0), lh(0);
                         rMS.ReadFloat(lx).ReadFloat(ly).ReadFloat(lw).ReadFloat(lh);
 
                         SAL_INFO("drawinglayer.emf", "EMF+\t DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
@@ -2377,7 +2377,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeSetPageTransform:
                     {
-                        float pageScale;
+                        float pageScale(0);
                         rMS.ReadFloat(pageScale);
                         SAL_INFO("drawinglayer.emf", "EMF+\t Scale: " << pageScale << " unit: " << UnitTypeToString(flags));
 
@@ -2437,7 +2437,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeSave:
                     {
-                        sal_uInt32 stackIndex;
+                        sal_uInt32 stackIndex(0);
                         rMS.ReadUInt32(stackIndex);
                         SAL_INFO("drawinglayer.emf", "EMF+\t Save stack index: " << stackIndex);
 
@@ -2447,7 +2447,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeRestore:
                     {
-                        sal_uInt32 stackIndex;
+                        sal_uInt32 stackIndex(0);
                         rMS.ReadUInt32(stackIndex);
                         SAL_INFO("drawinglayer.emf", "EMF+\t Restore stack index: " << stackIndex);
 
@@ -2456,15 +2456,15 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeBeginContainer:
                     {
-                        float dx, dy, dw, dh;
+                        float dx(0), dy(0), dw(0), dh(0);
                         ReadRectangle(rMS, dx, dy, dw, dh);
                         SAL_INFO("drawinglayer.emf", "EMF+\t Dest RectData: " << dx << "," << dy << " " << dw << "x" << dh);
 
-                        float sx, sy, sw, sh;
+                        float sx(0), sy(0), sw(0), sh(0);
                         ReadRectangle(rMS, sx, sy, sw, sh);
                         SAL_INFO("drawinglayer.emf", "EMF+\t Source RectData: " << sx << "," << sy << " " << sw << "x" << sh);
 
-                        sal_uInt32 stackIndex;
+                        sal_uInt32 stackIndex(0);
                         rMS.ReadUInt32(stackIndex);
                         SAL_INFO("drawinglayer.emf", "EMF+\t Begin Container stack index: " << stackIndex << ", PageUnit: " << flags);
 
@@ -2480,7 +2480,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeBeginContainerNoParams:
                     {
-                        sal_uInt32 stackIndex;
+                        sal_uInt32 stackIndex(0);
                         rMS.ReadUInt32(stackIndex);
                         SAL_INFO("drawinglayer.emf", "EMF+\t Begin Container No Params stack index: " << stackIndex);
 
@@ -2489,7 +2489,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeEndContainer:
                     {
-                        sal_uInt32 stackIndex;
+                        sal_uInt32 stackIndex(0);
                         rMS.ReadUInt32(stackIndex);
                         SAL_INFO("drawinglayer.emf", "EMF+\t End Container stack index: " << stackIndex);
 
@@ -2543,7 +2543,7 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer.emf", "EMF+\t TranslateWorldTransform, Post multiply: " << bool(flags & 0x2000));
 
                         basegfx::B2DHomMatrix transform;
-                        float eDx, eDy;
+                        float eDx(0), eDy(0);
                         rMS.ReadFloat(eDx).ReadFloat(eDy);
                         transform.set(0, 2, eDx);
                         transform.set(1, 2, eDy);
@@ -2572,7 +2572,7 @@ namespace emfplushelper
                     case EmfPlusRecordTypeScaleWorldTransform:
                     {
                         basegfx::B2DHomMatrix transform;
-                        float eSx, eSy;
+                        float eSx(0), eSy(0);
                         rMS.ReadFloat(eSx).ReadFloat(eSy);
                         transform.set(0, 0, eSx);
                         transform.set(1, 1, eSy);
@@ -2603,7 +2603,7 @@ namespace emfplushelper
                     case EmfPlusRecordTypeRotateWorldTransform:
                     {
                         // Angle of rotation in degrees
-                        float eAngle;
+                        float eAngle(0);
                         rMS.ReadFloat(eAngle);
 
                         SAL_INFO("drawinglayer.emf", "EMF+\t RotateWorldTransform Angle: " << eAngle <<
@@ -2637,7 +2637,7 @@ namespace emfplushelper
                         {
                             SAL_INFO("drawinglayer.emf", "EMF+\t SetClipRect");
 
-                            float dx, dy, dw, dh;
+                            float dx(0), dy(0), dw(0), dh(0);
                             ReadRectangle(rMS, dx, dy, dw, dh);
                             SAL_INFO("drawinglayer.emf",
                                     "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
@@ -2721,7 +2721,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeOffsetClip:
                     {
-                        float dx, dy;
+                        float dx(0), dy(0);
                         rMS.ReadFloat(dx).ReadFloat(dy);
                         SAL_INFO("drawinglayer.emf", "EMF+\tOffset x:" << dx << ", y:" << dy);
 
