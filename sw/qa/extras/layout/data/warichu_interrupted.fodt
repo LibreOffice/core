@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:automatic-styles>
+    <style:style style:name="Warichu" style:family="text">
+      <!-- Turn ON Two-Lines-in-One -->
+      <style:text-properties style:text-combine="lines"/>
+    </style:style>
+    <style:style style:name="RubyText" style:family="text">
+      <style:text-properties style:ruby-align="center" style:ruby-position="above"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:text>
+      <text:p>
+        <!-- Start Warichu -->
+        <text:span text:style-name="Warichu">Double
+          <!-- Interrupt it immediately with Ruby! -->
+          <text:ruby>
+            <text:ruby-base>Line</text:ruby-base>
+            <text:ruby-text text:style-name="RubyText">test</text:ruby-text>
+          </text:ruby>
+          Portion
+        </text:span>
+      </text:p>
+    </office:text>
+  </office:body>
+</office:document>

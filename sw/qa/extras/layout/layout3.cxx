@@ -2479,6 +2479,58 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testCombinedCharacters5)
                 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testWarichuInterrupted)
+{
+    createSwDoc("warichu_interrupted.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // The ruby portion sandwiched between the two double-line portions must have
+    // successfully formatted its nested field portion.
+    assertXPath(pXmlDoc, "//SwMultiPortion[contains(@symbol, 'SwRubyPortion')]//SwFieldPortion", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testWarichuToggleInterrupted)
+{
+    createSwDoc("warichu_toggle.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // "Middle Portion " is correctly split into 2 stacked SwLineLayout rows.
+    assertXPath(pXmlDoc,
+                "//SwMultiPortion[contains(@symbol, 'SwDoubleLinePortion')][@portion='Middle "
+                "Portion ']/SwLineLayout",
+                2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testRotateWarichuInterrupted)
+{
+    createSwDoc("rotate_warichu_interrupted.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Both rotated portions survive alongside the double-line portion.
+    assertXPath(pXmlDoc, "//SwMultiPortion[contains(@symbol, 'SwRotatedPortion')]", 2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testWarichuFieldWrapRestPortion)
+{
+    createSwDoc("warichu_field_wrap.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Trigger SwTextFormatter::MakeRestPortion for a Warichu (double-line)
+    // block wrapping a long field across lines.
+    assertXPath(
+        pXmlDoc,
+        "//SwMultiPortion[contains(@symbol, 'SwDoubleLinePortion')][@length='44']/SwLineLayout", 2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testRubyWrapRestPortion)
+{
+    createSwDoc("ruby_wrap.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // separate ruby portions (one per wrapped word) survive the wrap.
+    assertXPath(pXmlDoc, "//SwMultiPortion[contains(@symbol, 'SwRubyPortion')]", 5);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

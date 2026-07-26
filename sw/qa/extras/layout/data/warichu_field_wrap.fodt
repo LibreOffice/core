@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:automatic-styles>
+    <style:page-layout style:name="NarrowPage">
+      <style:page-layout-properties fo:page-width="2.5cm" fo:page-height="29.7cm" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="0.2cm" fo:margin-right="0.2cm"/>
+    </style:page-layout>
+    <style:style style:name="Warichu" style:family="text">
+      <!-- Force Two-Lines-in-One -->
+      <style:text-properties style:text-combine="lines"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Standard" style:page-layout-name="NarrowPage"/>
+  </office:master-styles>
+  <office:body>
+    <office:text>
+      <!-- A long Input Field inside a Warichu span, forced to split in half across lines -->
+      <text:p>Start <text:span text:style-name="Warichu">Double <text:text-input text:description="input">LongInputFieldTextThatMustWrapAcrossLines</text:text-input> Line</text:span> End</text:p>
+    </office:text>
+  </office:body>
+</office:document>

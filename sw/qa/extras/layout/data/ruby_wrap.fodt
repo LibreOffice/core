@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:automatic-styles>
+    <style:page-layout style:name="NarrowPage">
+      <style:page-layout-properties fo:page-width="2.5cm" fo:page-height="29.7cm" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="0.2cm" fo:margin-right="0.2cm"/>
+    </style:page-layout>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Standard" style:page-layout-name="NarrowPage"/>
+  </office:master-styles>
+  <office:body>
+    <office:text>
+      <!-- Adding spaces inside ruby-base forces line 1 to take 'Ruby Base' and line 2 to take 'Text That Wraps' -->
+      <!-- This forces IsIncompleteRuby == true -->
+      <text:p>Start <text:ruby><text:ruby-base>Ruby Base Text That Wraps Across Lines</text:ruby-base><text:ruby-text>kana</text:ruby-text></text:ruby> End</text:p>
+    </office:text>
+  </office:body>
+</office:document>

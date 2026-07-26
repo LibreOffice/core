@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:automatic-styles>
+    <style:style style:name="WarichuOn" style:family="text">
+      <!-- Turn Two-Lines-in-One ON -->
+      <style:text-properties style:text-combine="lines"/>
+    </style:style>
+    <style:style style:name="WarichuOff" style:family="text">
+      <!-- Explicitly turn Two-Lines-in-One OFF -->
+      <style:text-properties style:text-combine="none"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:text>
+      <text:p>
+        <!-- Outer span is ON -->
+        <text:span text:style-name="WarichuOn">Double 
+          <!-- Inner nested span is OFF! This forces bTwo != bOn and manipulates the stack -->
+          <text:span text:style-name="WarichuOff">Middle</text:span> 
+          Portion
+        </text:span>
+      </text:p>
+    </office:text>
+  </office:body>
+</office:document>

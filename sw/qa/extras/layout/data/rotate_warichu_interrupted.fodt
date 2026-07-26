@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:automatic-styles>
+    <style:style style:name="Rotate90" style:family="text">
+      <!-- Force 90-degree Rotation -->
+      <style:text-properties style:text-rotation-angle="90"/>
+    </style:style>
+    <style:style style:name="Warichu" style:family="text">
+      <!-- Force Two-Lines-in-One -->
+      <style:text-properties style:text-combine="lines"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:body>
+    <office:text>
+      <text:p>
+        <!-- Rotated text span -->
+        <text:span text:style-name="Rotate90">Rotated 
+          <!-- Interrupting Two-Lines portion to trigger lcl_Has2Lines (Lines 1292-1309) -->
+          <text:span text:style-name="Warichu">Double Line</text:span> 
+          Text
+        </text:span>
+      </text:p>
+    </office:text>
+  </office:body>
+</office:document>
