@@ -920,6 +920,46 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124820)
                                  aFont.GetStrikeout());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf170494_Validity_Cell_Function)
+{
+    createScDoc("tdf170494.ods");
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell(u"A4"_ustr, u"2");
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(0, 3, 0)));
+
+    insertStringToCell(u"A4"_ustr, u"3");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 3
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(0, 3, 0)));
+
+    insertStringToCell(u"A8"_ustr, u"2");
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(0, 7, 0)));
+
+    insertStringToCell(u"A8"_ustr, u"3");
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(0, 7, 0)));
+
+    insertStringToCell(u"A12"_ustr, u"2");
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(0, 11, 0)));
+
+    insertStringToCell(u"A12"_ustr, u"3");
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(0, 11, 0)));
+
+    insertStringToCell(u"A16"_ustr, u"2");
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(0, 15, 0)));
+
+    insertStringToCell(u"A16"_ustr, u"3");
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(0, 15, 0)));
+
+    insertStringToCell(u"A20"_ustr, u"2");
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(0, 19, 0)));
+
+    insertStringToCell(u"A20"_ustr, u"3");
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(0, 19, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132026)
 {
     createScDoc("tdf132026.ods");
