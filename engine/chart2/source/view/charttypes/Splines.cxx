@@ -24,6 +24,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <vector>
 
@@ -106,8 +107,8 @@ void SplineCalculator::CalculateBSplines(
     std::vector<std::vector<css::drawing::Position3D>>& rResult, sal_uInt32 nResolution,
     sal_uInt32 nDegree)
 {
-    OSL_ASSERT(nResolution > 1);
-    OSL_ASSERT(nDegree >= 1);
+    SAL_WARN_IF(nResolution <= 1, "chart2", "B-spline resolution should be greater than 1");
+    SAL_WARN_IF(nDegree < 1, "chart2", "B-spline degree should be at least 1");
 
     sal_uInt32 nOuterCount = rInput.size();
 

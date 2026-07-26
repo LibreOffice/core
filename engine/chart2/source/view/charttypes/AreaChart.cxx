@@ -286,17 +286,17 @@ static void lcl_transformBezierToScene(basegfx::B2DPolyPolygon& rPolyPolygon, do
             if (bHasNext)
                 aNext = aPolygon.getNextControlPoint(nJ);
 
-            auto aScene = rPosHelper.transformScaledLogicToScene(aPoint.getX(), aPoint.getY(), fZ, false);
+            drawing::Position3D aScene = rPosHelper.transformScaledLogicToScene(aPoint.getX(), aPoint.getY(), fZ, false);
             aPolygon.setB2DPoint(nJ, basegfx::B2DPoint(aScene.PositionX, aScene.PositionY));
 
             if (bHasPrev)
             {
-                auto aScenePrev = rPosHelper.transformScaledLogicToScene(aPrev.getX(), aPrev.getY(), fZ, false);
+                drawing::Position3D aScenePrev = rPosHelper.transformScaledLogicToScene(aPrev.getX(), aPrev.getY(), fZ, false);
                 aPolygon.setPrevControlPoint(nJ, basegfx::B2DPoint(aScenePrev.PositionX, aScenePrev.PositionY));
             }
             if (bHasNext)
             {
-                auto aSceneNext = rPosHelper.transformScaledLogicToScene(aNext.getX(), aNext.getY(), fZ, false);
+                drawing::Position3D aSceneNext = rPosHelper.transformScaledLogicToScene(aNext.getX(), aNext.getY(), fZ, false);
                 aPolygon.setNextControlPoint(nJ, basegfx::B2DPoint(aSceneNext.PositionX, aSceneNext.PositionY));
             }
         }
