@@ -85,11 +85,41 @@ describe('VectorPrimitiveRenderer', function () {
 			const fillCall = recorder.findCall('fill');
 			nodeassert.ok(fillCall, 'fill not called');
 			nodeassert.strictEqual(recorder.properties.fillStyle, primitive.color);
-			nodeassert.strictEqual(fillCall.args.length, 1);
 			nodeassert.strictEqual(
 				(fillCall.args[0] as Path2DRecorder).path,
 				primitive.path,
 			);
+			// The fill uses the even-odd rule, matching the engine, so
+			// a subpath inside another subpath reads as a hole.
+			nodeassert.strictEqual(fillCall.args[1], 'evenodd');
+		});
+
+		it('keeps a polypolygon hole unpainted', function () {
+			// The engine ships the outer ring and the hole as two
+			// subpaths of one path, both travelling in the same
+			// direction. A single even-odd fill leaves the hole
+			// unpainted.
+			const primitive = loadVectorRenderingReference(
+				'testPolyPolygonColorWithHole',
+			).primitives[0];
+			nodeassert.strictEqual(primitive.type, 'polyPolygonColor');
+			nodeassert.strictEqual(
+				(primitive.path.match(/[Mm]/g) || []).length,
+				2,
+				'fixture must carry two subpaths',
+			);
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const fills = recorder.callsOf('fill');
+			nodeassert.strictEqual(fills.length, 1, 'expected a single fill');
+			nodeassert.strictEqual(
+				(fills[0].args[0] as Path2DRecorder).path,
+				primitive.path,
+			);
+			nodeassert.strictEqual(fills[0].args[1], 'evenodd');
 		});
 
 		it('applies transparency to polyPolygonRGBA at fill time', function () {

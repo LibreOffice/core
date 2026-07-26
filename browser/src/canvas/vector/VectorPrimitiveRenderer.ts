@@ -174,7 +174,9 @@ namespace cool {
 				context.globalAlpha = 1 - transparency;
 			}
 			context.fillStyle = primitive.color;
-			context.fill(path);
+			// The engine fills polypolygons with the even-odd rule, so
+			// a subpath inside another subpath reads as a hole.
+			context.fill(path, 'evenodd');
 			if (needsAlphaBracket) context.restore();
 		}
 

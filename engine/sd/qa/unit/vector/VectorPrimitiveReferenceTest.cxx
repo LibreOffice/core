@@ -165,6 +165,39 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolyPolygonColor)
     assertJsonPathExists(aJson, "/primitives/0/path");
 }
 
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolyPolygonColorWithHole)
+{
+    // A red square with a centered square hole. Both rings travel
+    // in the same direction, so the hole shows only with an
+    // even-odd fill.
+    basegfx::B2DPolygon aOuter;
+    aOuter.append(basegfx::B2DPoint(0.0, 0.0));
+    aOuter.append(basegfx::B2DPoint(100.0, 0.0));
+    aOuter.append(basegfx::B2DPoint(100.0, 100.0));
+    aOuter.append(basegfx::B2DPoint(0.0, 100.0));
+    aOuter.setClosed(true);
+
+    basegfx::B2DPolygon aInner;
+    aInner.append(basegfx::B2DPoint(25.0, 25.0));
+    aInner.append(basegfx::B2DPoint(75.0, 25.0));
+    aInner.append(basegfx::B2DPoint(75.0, 75.0));
+    aInner.append(basegfx::B2DPoint(25.0, 75.0));
+    aInner.setClosed(true);
+
+    basegfx::B2DPolyPolygon aPolyPolygon(aOuter);
+    aPolyPolygon.append(aInner);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new PolyPolygonColorPrimitive2D(aPolyPolygon, basegfx::BColor(1.0, 0.0, 0.0)));
+
+    auto aJson = writeReference(u"testPolyPolygonColorWithHole", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "polyPolygonColor");
+    assertJsonPath(aJson, "/primitives/0/color", "#ff0000");
+    assertJsonPathExists(aJson, "/primitives/0/path");
+}
+
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolyPolygonRGBAPrimitive)
 {
     // polyPolygonRGBA fills a polygon with one colour and an optional
