@@ -37,7 +37,6 @@
 #include <editeng/flditem.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
-#include <formulacell.hxx>
 #include <validat.hxx>
 #include <unonames.hxx>
 #include <convuno.hxx>
@@ -1703,8 +1702,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle ) :
     XclExpRecord( EXC_ID_DV ),
     XclExpRoot( rRoot ),
     mnFlags( 0 ),
-    mnScHandle( nScHandle ),
-    mbValidFormula( true )
+    mnScHandle( nScHandle )
 {
     if( const ScValidationData* pValData = GetDoc().GetValidationEntry( mnScHandle ) )
     {
@@ -1766,27 +1764,6 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle ) :
 
         // formulas
         XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
-
-        auto isValidList = [](const ScTokenArray& rTokArr)
-        {
-            formula::FormulaTokenArrayPlainIterator aIter(rTokArr);
-            const formula::FormulaToken* pScToken = aIter.First();
-
-            if (!pScToken || aIter.Next() || pScToken->GetOpCode() == ocErrRef)
-                return false;
-
-            switch (pScToken->GetType())
-            {
-                case formula::svSingleRef:
-                case formula::svDoubleRef:
-                case formula::svExternalSingleRef:
-                case formula::svExternalDoubleRef:
-                case formula::svIndex:
-                    return true;
-                default:
-                    return false;
-            }
-        };
 
         // first formula
         std::unique_ptr< ScTokenArray > xScTokArr = pValData->CreateFlatCopiedTokenArray( 0 );
@@ -1865,7 +1842,6 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle ) :
                         Formula compiler supports this by offering two different functions
                         CreateDataValFormula() and CreateListValFormula(). */
                     mxTokArr1 = rFmlaComp.CreateFormula(EXC_FMLATYPE_LISTVAL, *xScTokArr);
-                    mbValidFormula = isValidList(*xScTokArr);
                 }
             }
             else
@@ -1878,9 +1854,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle ) :
         // second formula
         xScTokArr = pValData->CreateFlatCopiedTokenArray( 1 );
         if (xScTokArr)
-        {
             mxTokArr2 = rFmlaComp.CreateFormula(EXC_FMLATYPE_DATAVAL, *xScTokArr);
-        }
     }
     else
     {
@@ -1920,9 +1894,6 @@ void XclExpDV::WriteBody( XclExpStream& rStrm )
 
 void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
 {
-    if (!mbValidFormula)
-        return;
-
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_dataValidation,
             XML_allowBlank,         ToPsz( ::get_flag( mnFlags, EXC_DV_IGNOREBLANK ) ),
@@ -1996,8 +1967,7 @@ void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
 
 XclExpDval::XclExpDval( const XclExpRoot& rRoot ) :
     XclExpRecord( EXC_ID_DVAL, 18 ),
-    XclExpRoot( rRoot ),
-    mnDVCount( 0 )
+    XclExpRoot( rRoot )
 {
 }
 
@@ -2036,12 +2006,12 @@ void XclExpDval::Save( XclExpStream& rStrm )
 
 void XclExpDval::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( !mnDVCount)
+    if( maDVList.IsEmpty() )
         return;
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_dataValidations,
-            XML_count, OString::number(mnDVCount)
+            XML_count, OString::number(maDVList.GetSize())
             // OOXTODO: XML_disablePrompts,
             // OOXTODO: XML_xWindow,
             // OOXTODO: XML_yWindow
@@ -2086,8 +2056,6 @@ XclExpDV& XclExpDval::SearchOrCreateDv( sal_uInt32 nScHandle )
 
     // create new DV record
     mxLastFoundDV = new XclExpDV( *this, nScHandle );
-    if (mxLastFoundDV->ContainsValidFormula())
-        mnDVCount++;
     maDVList.InsertRecord( mxLastFoundDV, nCurrPos );
     return *mxLastFoundDV;
 }

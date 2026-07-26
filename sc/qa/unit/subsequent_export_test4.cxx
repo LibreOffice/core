@@ -759,6 +759,49 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf126305_DataValidatyErrorAlert)
                 u"information");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testDataValidationExport)
+{
+    createScDoc("xlsx/data_validation_test.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // Sheet1 has 4 data validation checks
+    // Without this change, some data validations didn't get exported
+    assertXPath(pSheet, "/x:worksheet/x:dataValidations", "count", u"4");
+    CPPUNIT_ASSERT_EQUAL(
+        4, countXPathNodes(pSheet, "/x:worksheet/x:dataValidations/x:dataValidation"));
+
+    std::map<OUString, OUString> aExpected{
+        { u"A1"_ustr, u"Sheet2!$A$2:$A$4"_ustr },
+        { u"A2"_ustr, u"Sheet2!$B$2:$B$4"_ustr },
+        { u"B1"_ustr, u"INDIRECT(Sheet2!$A$1)"_ustr },
+        { u"B2"_ustr, u"INDIRECT(OFFSET(Sheet2!$A$1,0,1))"_ustr },
+    };
+
+    // Calc's export of data validity checks can differ from Excel's
+    // if that changes, this test needs to be updated
+    for (int i = 1; i <= 4; i++)
+    {
+        const OString aEntry
+            = "/x:worksheet/x:dataValidations/x:dataValidation[" + OString::number(i) + "]";
+
+        const OUString aSqref = getXPath(pSheet, aEntry, "sqref");
+        const auto it = aExpected.find(aSqref);
+
+        CPPUNIT_ASSERT_MESSAGE(
+            OString("Unexpected or duplicated sqref: " + aSqref.toUtf8()).getStr(),
+            it != aExpected.end());
+
+        assertXPathContent(pSheet, aEntry + "/x:formula1", it->second);
+
+        aExpected.erase(it);
+    }
+
+    CPPUNIT_ASSERT_MESSAGE("Not every data validation was exported", aExpected.empty());
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf76047_externalLink)
 {
     createScDoc("xlsx/tdf76047_externalLink.xlsx");
