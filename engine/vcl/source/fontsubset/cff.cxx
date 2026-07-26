@@ -2263,16 +2263,31 @@ OString CffContext::getGlyphName( int nGlyphIndex)
 
 bool CffContext::getBaseAccent(ValType aBase, ValType aAccent, int* nBase, int* nAccent)
 {
+    // the seac-like operands are codes in the standard encoding
+    const int nBaseCode = static_cast<int>(aBase);
+    const int nAccentCode = static_cast<int>(aAccent);
+    const int nEncodingSize = SAL_N_ELEMENTS(pStandardEncoding);
+    if (nBaseCode < 0 || nBaseCode >= nEncodingSize)
+    {
+        SAL_WARN("vcl.fonts.cff", "base char code " << nBaseCode << " outside the standard encoding");
+        return false;
+    }
+    if (nAccentCode < 0 || nAccentCode >= nEncodingSize)
+    {
+        SAL_WARN("vcl.fonts.cff", "accent char code " << nAccentCode << " outside the standard encoding");
+        return false;
+    }
+
     bool bBase = false, bAccent = false;
     for (int i = 0; i < mnCharStrCount; i++)
     {
         OString pGlyphName = getGlyphName(i);
-        if (pGlyphName == pStandardEncoding[int(aBase)])
+        if (pGlyphName == pStandardEncoding[nBaseCode])
         {
             *nBase = i;
             bBase = true;
         }
-        if (pGlyphName == pStandardEncoding[int(aAccent)])
+        if (pGlyphName == pStandardEncoding[nAccentCode])
         {
             *nAccent = i;
             bAccent = true;
