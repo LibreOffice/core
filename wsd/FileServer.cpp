@@ -2678,7 +2678,8 @@ void FileServerRequestHandler::handleViewSettingUpload(
     storedRequest.set("Content-Type", "text/plain");
 
     http::Session::FinishedCallback storedCallback =
-        [uploadedBody, postBody, storedUriAnonym, requestPath, shortMessage,
+        [uploadedBody = std::move(uploadedBody), postBody = std::move(postBody), storedUriAnonym,
+         requestPath, shortMessage,
          socketWeak](const std::shared_ptr<http::Session>& wopiSession)
     {
         std::shared_ptr<StreamSocket> destSocket = socketWeak.lock();
