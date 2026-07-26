@@ -1005,6 +1005,28 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf57187_Tdf158900)
                 u"PortionType::Break");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf168777_BlankBeforeFly)
+{
+    // Two underlined paragraphs wrapping around an anchored rectangle, saved by Word with its
+    // "underline trailing space" compatibility option on.
+    createSwDoc("tdf168777-blank-before-fly.docx");
+
+    // Whether a trailing blank shows its decorations is settled while painting.
+    getSwDocShell()->GetPreviewMetaFile();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // The first line reads "Foo bar" with the rectangle in between, so the blank after "Foo" is a
+    // hole portion sitting in the middle of the line, before the fly, and there is room for it
+    // before the rectangle. Word decorates that blank, and so should we: only the hole made when
+    // the blanks do not fit the line was taught to show decorations, while the one that
+    // SwTextPortion::FormatEOL makes for a blank before a fly kept them off.
+    static constexpr OString sLine1 = "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr;
+    assertXPath(pXmlDoc, sLine1 + "/SwHolePortion[1]", "show-underline", u"true");
+
+    // The blanks at the end of the same line keep theirs, as before.
+    assertXPath(pXmlDoc, sLine1 + "/SwHolePortion[2]", "show-underline", u"true");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf147666)
 {
     createSwDoc("tdf147666.odt");
