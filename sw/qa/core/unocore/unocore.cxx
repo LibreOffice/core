@@ -1002,6 +1002,34 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testCollectFrameAtNodeWithLayout)
     assertXPath(pXmlDoc, "//draw:frame", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testCollectFrameAtNodeHiddenParagraphMark)
+{
+    // Given two paragraphs where the first one has a hidden paragraph mark, so both of them are
+    // laid out in one text frame, and two frames anchored in the second paragraph, one to the
+    // paragraph and one to a character:
+    createSwDoc("hidden-para-mark-fly.fodt");
+    calcLayout();
+
+    // The two paragraphs share one text frame:
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    assertXPath(pLayout, "//body/txt", 1);
+
+    // When saving to ODT:
+    save(TestFilter::ODT);
+
+    // Then each frame is written once, as the content of its own anchor paragraph:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 3
+    // i.e. the at-paragraph frame was written for both of the paragraphs the text frame covers,
+    // while the at-character one keeps its single position either way.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:frame", 2);
+    // Both of them belong to the second paragraph, and none to the first one:
+    assertXPath(pXmlDoc, "//office:text/text:p[1]/draw:frame", 0);
+    assertXPath(pXmlDoc, "//office:text/text:p[2]/draw:frame", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf149555)
 {
     createSwDoc("tdf149555.docx");

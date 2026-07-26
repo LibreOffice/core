@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties text:display="none"/>
+  </style:style>
+  <style:style style:name="fr1" style:family="graphic">
+   <style:graphic-properties style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="left" style:horizontal-rel="paragraph"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:p loext:marker-style-name="T1">first paragraph, its paragraph mark is hidden</text:p>
+   <text:p>second paragraph, both frames are anchored here<draw:frame draw:style-name="fr1" draw:name="Frame2" text:anchor-type="char" svg:width="5cm" svg:height="2cm">
+     <draw:text-box>
+      <text:p>at-character frame text</text:p>
+     </draw:text-box>
+    </draw:frame><draw:frame draw:style-name="fr1" draw:name="Frame1" text:anchor-type="paragraph" svg:width="5cm" svg:height="2cm">
+     <draw:text-box>
+      <text:p>frame text</text:p>
+     </draw:text-box>
+    </draw:frame></text:p>
+  </office:text>
+ </office:body>
+</office:document>

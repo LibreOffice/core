@@ -113,7 +113,7 @@ struct FrameClientSortListLess
     }
 };
 
-    void lcl_CollectFrameAtNodeWithLayout(const SwContentFrame* pCFrame,
+    void lcl_CollectFrameAtNodeWithLayout(const SwNode& rNd, const SwContentFrame* pCFrame,
             FrameClientSortList_t& rFrames,
             const RndStdIds nAnchorType)
     {
@@ -127,6 +127,14 @@ struct FrameClientSortListLess
             if(SwTextBoxHelper::isTextBox(pFormat, RES_FLYFRMFMT))
                 continue;
 
+            const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
+
+            // One content frame can cover more than one text node, and it has the objects anchored
+            // in all of them. Every one of those nodes is asked about in its own right, so take
+            // only the objects anchored in the node this call is about.
+            if(rAnchor.GetAnchorNode() != &rNd)
+                continue;
+
             if (nAnchorType == RndStdIds::FLY_AT_PARA)
             {
                 auto pFlyAtContentFrame = dynamic_cast<SwFlyAtContentFrame*>(pAnchoredObj);
@@ -138,10 +146,10 @@ struct FrameClientSortListLess
                 }
             }
 
-            if(pFormat->GetAnchor().GetAnchorId() == nAnchorType)
+            if(rAnchor.GetAnchorId() == nAnchorType)
             {
-                const sal_Int32 nIdx = pFormat->GetAnchor().GetAnchorContentOffset();
-                const auto nOrder = pFormat->GetAnchor().GetOrder();
+                const sal_Int32 nIdx = rAnchor.GetAnchorContentOffset();
+                const auto nOrder = rAnchor.GetOrder();
                 rFrames.emplace_back(nIdx, nOrder, std::make_unique<sw::FrameClient>(pFormat));
             }
         }
@@ -167,7 +175,7 @@ void CollectFrameAtNode( const SwNode& rNd,
         nullptr != (pCNd = rNd.GetContentNode()) &&
         nullptr != (pCFrame = pCNd->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout())) )
     {
-        lcl_CollectFrameAtNodeWithLayout(pCFrame, rFrames, nChkType);
+        lcl_CollectFrameAtNodeWithLayout(rNd, pCFrame, rFrames, nChkType);
     }
     else
     {
