@@ -12,6 +12,7 @@
 #include <basegfx/numeric/GaussianElimination.hxx>
 
 #include <algorithm>
+#include <cassert>
 #include <utility>
 
 namespace basegfx
@@ -70,15 +71,18 @@ bool GaussianElimination::forwardEliminate()
         for (size_t nElimRow = nColumn + 1;
              nElimRow < nLastIndex + 1 && mrRowOffsets[nElimRow] <= nColumn; ++nElimRow)
         {
+            // The shift also happens when the leading cell is already
+            // zero, so every row starts at its diagonal by the time it
+            // becomes the pivot.
             double fEliminate = mrRows[nElimRow][0];
-            if (fEliminate == 0.0)
-                continue;
             for (sal_uInt32 nI = 1; nI <= mnBandwidth; ++nI)
                 mrRows[nElimRow][nI - 1] = mrRows[nElimRow][nI] - fEliminate * mrRows[nColumn][nI];
             mrRows[nElimRow][mnBandwidth] = 0.0;
+            ++mrRowOffsets[nElimRow];
+            if (fEliminate == 0.0)
+                continue;
             for (const std::span<double>& aRhs : maRhsList)
                 aRhs[nElimRow] -= fEliminate * aRhs[nColumn];
-            ++mrRowOffsets[nElimRow];
         }
     }
     return true;
@@ -93,8 +97,12 @@ void GaussianElimination::backSubstitute()
     for (size_t nBackColumn = nLastIndex; nBackColumn >= 1; --nBackColumn)
     {
         size_t nRow = nBackColumn - 1;
-        while (nBackColumn - nRow < mnBandwidth)
+        // After forward elimination each row starts at its diagonal, so the
+        // entries to cancel sit up to mnBandwidth columns above it.
+        while (nBackColumn - nRow <= mnBandwidth)
         {
+            assert(mrRowOffsets[nRow] == nRow
+                   && "forward elimination leaves each row starting at its diagonal");
             double fEliminate = mrRows[nRow][nBackColumn - mrRowOffsets[nRow]];
             if (fEliminate != 0.0)
             {

@@ -63,6 +63,58 @@ CPPUNIT_TEST_FIXTURE(GaussianEliminationTest, testKnownTridiagonalSystem)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, aRhs[2], 1e-10);
 }
 
+CPPUNIT_TEST_FIXTURE(GaussianEliminationTest, testUpperBidiagonalCancelsFarBandEdge)
+{
+    // The system:
+    //   1a + 2b = 3
+    //         b = 1
+    // has the unique solution (1, 1). With bandwidth 1 the off-diagonal 2
+    // is the furthest above-diagonal entry, sitting exactly one column from
+    // the diagonal. Back substitution has to reach that far band edge.
+    // Stopping one column short leaves the off-diagonal uncancelled and
+    // reports (3, 1).
+    std::vector<std::vector<double>> aRows{ { 1.0, 2.0 }, { 1.0, 0.0 } };
+    std::vector<size_t> aOffsets{ 0, 1 };
+    std::vector<double> aRhs{ 3.0, 1.0 };
+    std::span<double> aRhsList[] = { aRhs };
+
+    GaussianElimination aSolver(aRows, aOffsets, 1 /*bandwidth*/, aRhsList);
+    CPPUNIT_ASSERT(aSolver.solveBanded());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, aRhs[0], 1e-12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, aRhs[1], 1e-12);
+}
+
+CPPUNIT_TEST_FIXTURE(GaussianEliminationTest, testZeroLeadingCellKeepsRowAligned)
+{
+    // Eliminating column 0 leaves the second row with a zero leading
+    // cell, and the column-1 pivot search then swaps that row further
+    // down. The row's stored band must keep starting at the processed
+    // column through both steps, or back substitution reads past the
+    // row's storage. The system (bands padded with trailing zeros):
+    //    2a           =  2
+    //   -2a      + 2c = -2
+    //         b       =  2
+    //              d  =  0
+    //              2e = -1
+    // has the unique solution (1, 2, 0, 0, -0.5).
+    std::vector<std::vector<double>> aRows{ { 2.0, 0.0, 0.0 },
+                                            { -2.0, 0.0, 2.0 },
+                                            { 1.0, 0.0, 0.0 },
+                                            { 1.0, 0.0, 0.0 },
+                                            { 2.0, 0.0, 0.0 } };
+    std::vector<size_t> aOffsets{ 0, 0, 1, 3, 4 };
+    std::vector<double> aRhs{ 2.0, -2.0, 2.0, 0.0, -1.0 };
+    std::span<double> aRhsList[] = { aRhs };
+
+    GaussianElimination aSolver(aRows, aOffsets, 2 /*bandwidth*/, aRhsList);
+    CPPUNIT_ASSERT(aSolver.solveBanded());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, aRhs[0], 1e-12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, aRhs[1], 1e-12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aRhs[2], 1e-12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aRhs[3], 1e-12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.5, aRhs[4], 1e-12);
+}
+
 CPPUNIT_TEST_FIXTURE(GaussianEliminationTest, testSingularMatrixReturnsFalse)
 {
     // Two identical rows leave the matrix rank-deficient. The pivot
