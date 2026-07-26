@@ -22,7 +22,7 @@
 #include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/rendering/XBitmapCanvas.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
@@ -40,7 +40,7 @@
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvas,
                                              css::rendering::XIntegerBitmap,
                                              css::lang::XServiceInfo,
                                              css::beans::XFastPropertySet >    CanvasBitmapBase_Base;

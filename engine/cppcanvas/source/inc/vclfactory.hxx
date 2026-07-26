@@ -31,7 +31,6 @@ class GDIMetaFile;
 namespace com::sun::star::rendering
 {
     class  XCanvas;
-    class  XBitmapCanvas;
 }
 
 /* Definition of VCLFactory class */

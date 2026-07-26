@@ -21,7 +21,7 @@ module com { module sun { module star { module rendering {
 
     interface XMtfRenderer : ::com::sun::star::uno::XInterface
     {
-        void draw( [in] ::com::sun::star::rendering::XBitmapCanvas xCanvas,
+        void draw( [in] ::com::sun::star::rendering::XCanvas xCanvas,
                    [in] hyper pMetafile,
                    [in] double fScaleX, [in] double fScaleY );
     };

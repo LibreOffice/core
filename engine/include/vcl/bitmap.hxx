@@ -39,7 +39,7 @@
 class AlphaMask;
 namespace basegfx { class BColorModifierStack; }
 namespace com::sun::star::rendering {
-    class XBitmapCanvas;
+    class XCanvas;
 }
 
 inline sal_uInt8 GAMMA(double _def_cVal, double _def_InvGamma)
@@ -629,7 +629,7 @@ public:
 
     /// populate from a canvas implementation
     bool                Create(
-                            const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
+                            const css::uno::Reference< css::rendering::XCanvas > &xBitmapCanvas,
                             const Size &rSize );
 
     SAL_DLLPRIVATE void ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );

@@ -963,9 +963,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/presentation/t
 	Footer \
 	Header \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/rendering,\
-	BitmapCanvas \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/script/browse,\
 	BrowseNode \
 	BrowseNodeFactory \
@@ -2876,7 +2873,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	VolatileContentDestroyedException \
 	XBezierPolyPolygon2D \
 	XBitmap \
-	XBitmapCanvas \
 	XBitmapPalette \
 	XCachedPrimitive \
 	XCanvas \

@@ -17,7 +17,6 @@
 
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
 #include <vclfactory.hxx>
 
@@ -79,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
         vcl::unotools::integerSize2DFromSize(aSize));
     CPPUNIT_ASSERT(xBitmap.is());
 
-    uno::Reference<rendering::XBitmapCanvas> xBitmapCanvas(xBitmap, uno::UNO_QUERY);
+    uno::Reference<rendering::XCanvas> xBitmapCanvas(xBitmap, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xBitmapCanvas.is());
 
     Bitmap aBitmap;

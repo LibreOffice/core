@@ -11,7 +11,6 @@
 #include <o3tl/any.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XMtfRenderer.hpp>
-#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <comphelper/compbase.hxx>
@@ -31,7 +30,7 @@ public:
                  css::uno::Reference<css::uno::XComponentContext> const&);
 
     // XMtfRenderer iface
-    void SAL_CALL draw (const css::uno::Reference<css::rendering::XBitmapCanvas>& xCanvas, sal_Int64 pMeta, double fScaleX, double fScaleY) override;
+    void SAL_CALL draw (const css::uno::Reference<css::rendering::XCanvas>& xCanvas, sal_Int64 pMeta, double fScaleX, double fScaleY) override;
 
     // XServiceIfno
     virtual ::rtl::OUString getImplementationName() override { return u"com.sun.star.comp.rendering.MtfRenderer"_ustr; }
@@ -43,7 +42,7 @@ public:
     }
 };
 
-void MtfRenderer::draw (const css::uno::Reference<css::rendering::XBitmapCanvas>& xCanvas, sal_Int64 pMeta, double fScaleX, double fScaleY)
+void MtfRenderer::draw (const css::uno::Reference<css::rendering::XCanvas>& xCanvas, sal_Int64 pMeta, double fScaleX, double fScaleY)
 {
     GDIMetaFile* pMetafile = reinterpret_cast<GDIMetaFile*>(pMeta);
     cppcanvas::CanvasSharedPtr canvas = cppcanvas::VCLFactory::createCanvas (xCanvas);

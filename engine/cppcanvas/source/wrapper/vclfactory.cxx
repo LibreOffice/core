@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/rendering/XBitmapCanvas.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 #include <osl/diagnose.h>
 #include <vcl/window.hxx>
 #include <vcl/canvastools.hxx>

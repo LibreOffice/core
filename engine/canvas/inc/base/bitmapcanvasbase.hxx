@@ -35,7 +35,6 @@ namespace com::sun::star::rendering { class XPolyPolygon2D; }
 namespace com::sun::star::rendering { class XTextLayout; }
 namespace com::sun::star::rendering { struct FontInfo; }
 namespace com::sun::star::rendering { struct StringContext; }
-namespace com::sun::star::rendering { class XBitmapCanvas; }
 
 namespace canvas
 {
@@ -285,25 +284,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             return maCanvasHelper.getDevice();
-        }
-
-        // XBitmapCanvas
-        virtual void copyRect( const css::uno::Reference< css::rendering::XBitmapCanvas >&   sourceCanvas,
-                                        const css::geometry::RealRectangle2D&                                      sourceRect,
-                                        const css::rendering::ViewState&                                           sourceViewState,
-                                        const css::rendering::RenderState&                                         sourceRenderState,
-                                        const css::geometry::RealRectangle2D&                                      destRect,
-                                        const css::rendering::ViewState&                                           destViewState,
-                                        const css::rendering::RenderState&                                         destRenderState ) override
-        {
-            canvastools::verifyArgs(sourceCanvas, sourceRect, sourceViewState, sourceRenderState,
-                              destRect, destViewState, destRenderState,
-                              __func__,
-                              static_cast< UnambiguousBaseType* >(this));
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            mbSurfaceDirty = true;
         }
 
     protected:

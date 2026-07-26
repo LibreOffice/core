@@ -50,7 +50,7 @@
 #include <bitmap/impoctree.hxx>
 #include <bitmap/Octree.hxx>
 #include <bitmap/BlendFrameCache.hxx>
-#include <com/sun/star/rendering/XBitmapCanvas.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <o3tl/any.hxx>
 #include <o3tl/environment.hxx>
@@ -2366,7 +2366,7 @@ void Bitmap::AdjustTransparency(sal_uInt8 cTrans)
 
 // Shift alpha transparent pixels between cppcanvas/ implementations
 // and vcl in a generally grotesque and under-performing fashion
-bool Bitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
+bool Bitmap::Create( const css::uno::Reference< css::rendering::XCanvas > &xBitmapCanvas,
                        const Size & /*rSize*/ )
 {
     css::uno::Reference< css::beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, css::uno::UNO_QUERY );
