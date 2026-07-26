@@ -2881,10 +2881,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	XCachedPrimitive \
 	XCanvas \
 	XCanvasFont \
-	XColorSpace \
 	XGraphicDevice \
 	XIntegerBitmap \
-	XIntegerBitmapColorSpace \
 	XIntegerReadOnlyBitmap \
 	XLinePolyPolygon2D \
 	XMtfRenderer \

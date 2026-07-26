@@ -129,14 +129,6 @@ namespace canvas
         return cpo::uno::Sequence< double >();
     }
 
-    uno::Reference< rendering::XColorSpace > ParametricPolyPolygon::getColorSpace()
-    {
-        std::unique_lock aGuard( m_aMutex );
-
-        return mxDevice.is() ? mxDevice->getDeviceColorSpace() : uno::Reference< rendering::XColorSpace >();
-    }
-
-
     OUString ParametricPolyPolygon::getImplementationName(  )
     {
         return u"Canvas::ParametricPolyPolygon"_ustr;

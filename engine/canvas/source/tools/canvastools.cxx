@@ -44,8 +44,6 @@
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XColorSpace.hpp>
-#include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <sal/log.hxx>
@@ -157,71 +155,6 @@ namespace canvastools
             matrix.m11 = 1.0;
 
             return matrix;
-        }
-
-        namespace
-        {
-            class StandardColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace >
-            {
-            private:
-                cpo::uno::Sequence< sal_Int8 >  maComponentTags;
-                cpo::uno::Sequence< sal_Int32 > maBitCounts;
-
-                virtual cpo::uno::Sequence< rendering::ARGBColor > convertToARGB( const cpo::uno::Sequence< double >& deviceColor ) override
-                {
-                    SAL_WARN_IF(!deviceColor.hasElements(), "canvas", "empty deviceColor argument");
-                    const sal_Int32 nLen(deviceColor.getLength());
-                    ENSURE_ARG_OR_THROW2(nLen%4==0,
-                                         "number of channels no multiple of 4",
-                                         static_cast<rendering::XColorSpace*>(this), 0);
-
-                    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
-                    rendering::ARGBColor* pOut( aRes.getArray() );
-                    for (sal_Int32 i = 0; i < nLen; i += 4)
-                    {
-                        *pOut++ = rendering::ARGBColor(deviceColor[i+3], deviceColor[i], deviceColor[i+1], deviceColor[i+2]);
-                    }
-                    return aRes;
-                }
-                virtual cpo::uno::Sequence< double > convertFromARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
-                {
-                    cpo::uno::Sequence<double> aRes(rgbColor.getLength() * 4);
-                    double* pColors=aRes.getArray();
-                    for (auto& color : rgbColor)
-                    {
-                        *pColors++ = color.Red;
-                        *pColors++ = color.Green;
-                        *pColors++ = color.Blue;
-                        *pColors++ = color.Alpha;
-                    }
-                    return aRes;
-                }
-
-            public:
-                StandardColorSpace() :
-                    maComponentTags(4),
-                    maBitCounts(4)
-                {
-                    sal_Int8*  pTags = maComponentTags.getArray();
-                    sal_Int32* pBitCounts = maBitCounts.getArray();
-                    pTags[0] = rendering::ColorComponentTag::RGB_RED;
-                    pTags[1] = rendering::ColorComponentTag::RGB_GREEN;
-                    pTags[2] = rendering::ColorComponentTag::RGB_BLUE;
-                    pTags[3] = rendering::ColorComponentTag::ALPHA;
-
-                    pBitCounts[0] =
-                    pBitCounts[1] =
-                    pBitCounts[2] =
-                    pBitCounts[3] = 8;
-                }
-            };
-
-        }
-
-        uno::Reference<rendering::XIntegerBitmapColorSpace> const & getStdColorSpace()
-        {
-            static uno::Reference<rendering::XIntegerBitmapColorSpace> SPACE = new StandardColorSpace();
-            return SPACE;
         }
 
         // Create a corrected view transformation out of the give one,

@@ -55,7 +55,6 @@ namespace com::sun::star::rendering
     struct ViewState;
     class  XCanvas;
     struct Texture;
-    class  XIntegerBitmapColorSpace;
 }
 
 namespace com::sun::star::awt
@@ -192,13 +191,6 @@ namespace canvastools
         CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix calcRectToOriginTransform(
                                                             const ::basegfx::B2DRange&      i_srcRect,
                                                             const ::basegfx::B2DHomMatrix&  i_transformation );
-
-        /** Return a color space for a default RGBA integer format
-
-            Use this method for dead-simple bitmap implementations,
-            that map all their formats to 8888 RGBA color.
-         */
-        CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XIntegerBitmapColorSpace> const & getStdColorSpace();
 
         // Modelled closely after boost::numeric_cast, only that we
         // issue some trace output here and throw a RuntimeException

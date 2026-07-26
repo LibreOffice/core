@@ -87,8 +87,7 @@ namespace cppcanvas
             {
                 cppcanvastools::initRenderState(maState,rState);
                 maState.DeviceColor = vcl::unotools::colorToDoubleSequence(
-                    rAltColor,
-                    rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
+                    rAltColor );
             }
 
             bool PointAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const

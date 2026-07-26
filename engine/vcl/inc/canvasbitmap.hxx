@@ -21,7 +21,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
-#include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/rendering/XBitmapPalette.hpp>
 
 #include <vcl/bitmap.hxx>
@@ -31,8 +30,7 @@ namespace vcl::unotools
 {
     class SAL_DLLPUBLIC_RTTI VclCanvasBitmap final :
         public cppu::WeakImplHelper< css::rendering::XIntegerReadOnlyBitmap,
-                                     css::rendering::XBitmapPalette,
-                                     css::rendering::XIntegerBitmapColorSpace >
+                                     css::rendering::XBitmapPalette >
     {
     private:
         ::Bitmap                                       m_aBmp;
@@ -58,10 +56,6 @@ namespace vcl::unotools
         // XBitmap
         VCL_DLLPUBLIC virtual css::geometry::IntegerSize2D SAL_CALL getSize() override;
         VCL_DLLPUBLIC virtual bool SAL_CALL hasAlpha(  ) override;
-
-        // XIntegerBitmapColorSpace
-        virtual cpo::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertToARGB( const cpo::uno::Sequence< double >& deviceColor ) override;
-        virtual cpo::uno::Sequence< double > SAL_CALL convertFromARGB( const cpo::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
 
         /** Create API wrapper for given Bitmap
 

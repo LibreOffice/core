@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <canvas/canvastools.hxx>
@@ -111,27 +110,6 @@ namespace vclcanvas
     cpo::uno::Any DeviceHelper::getSurfaceHandle() const
     {
         return getDeviceHandle();
-    }
-
-    namespace
-    {
-        uno::Reference<rendering::XColorSpace>& GetDeviceColorSpace()
-        {
-            static uno::Reference<rendering::XColorSpace> xColorSpace =
-            []()
-            {
-                auto xTmp = canvastools::getStdColorSpace();
-                assert( xTmp.is() );
-                return xTmp;
-            }();
-            return xColorSpace;
-        };
-    }
-
-    uno::Reference<rendering::XColorSpace> const & DeviceHelper::getColorSpace() const
-    {
-        // always the same
-        return GetDeviceColorSpace();
     }
 
     void DeviceHelper::dumpScreenContent() const

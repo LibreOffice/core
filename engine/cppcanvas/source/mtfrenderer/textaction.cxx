@@ -473,7 +473,6 @@ namespace cppcanvas
              */
             bool renderEffectText( const TextRenderer&                          rRenderer,
                                    const rendering::RenderState&                rRenderState,
-                                   const uno::Reference< rendering::XCanvas >&  xCanvas,
                                    const ::Color&                               rShadowColor,
                                    const ::basegfx::B2DSize&                    rShadowOffset,
                                    const ::Color&                               rReliefColor,
@@ -481,8 +480,6 @@ namespace cppcanvas
                                    const ::Color&                               rTextFillColor )
             {
                 ::Color aEmptyColor( COL_AUTO );
-                uno::Reference<rendering::XColorSpace> xColorSpace(
-                    xCanvas->getDevice()->getDeviceColorSpace() );
 
                 // draw shadow text, if enabled
                 if( rShadowColor != aEmptyColor )
@@ -496,8 +493,7 @@ namespace cppcanvas
                     ::canvastools::appendToRenderState(aShadowState, aTranslate);
 
                     aShadowState.DeviceColor =
-                        vcl::unotools::colorToDoubleSequence( rShadowColor,
-                                                                xColorSpace );
+                        vcl::unotools::colorToDoubleSequence( rShadowColor );
 
                     rRenderer( aShadowState, rTextFillColor, false );
                 }
@@ -514,8 +510,7 @@ namespace cppcanvas
                     ::canvastools::appendToRenderState(aReliefState, aTranslate);
 
                     aReliefState.DeviceColor =
-                        vcl::unotools::colorToDoubleSequence( rReliefColor,
-                                                                xColorSpace );
+                        vcl::unotools::colorToDoubleSequence( rReliefColor );
 
                     rRenderer( aReliefState, rTextFillColor, false );
                 }
@@ -738,7 +733,7 @@ namespace cppcanvas
                 {
                     rendering::RenderState aLocalState( rRenderState );
                     aLocalState.DeviceColor = vcl::unotools::colorToDoubleSequence(
-                        rTextFillColor, aCanvas->getDevice()->getDeviceColorSpace());
+                        rTextFillColor);
                     auto xTextBounds = queryTextBounds(aCanvas);
                     // background of text
                     aCanvas->fillPolyPolygon(xTextBounds, aViewState, aLocalState);
@@ -767,7 +762,6 @@ namespace cppcanvas
 
                 return renderEffectText( *this,
                                          aLocalState,
-                                         mpCanvas->getUNOCanvas(),
                                          maShadowColor,
                                          maShadowOffset,
                                          maReliefColor,
@@ -1040,7 +1034,7 @@ namespace cppcanvas
                 {
                     rendering::RenderState aLocalState(rRenderState);
                     aLocalState.DeviceColor = vcl::unotools::colorToDoubleSequence(
-                        rTextFillColor, aCanvas->getDevice()->getDeviceColorSpace());
+                        rTextFillColor);
                     auto xTextBounds = queryTextBounds(aCanvas);
                     // background of text
                     aCanvas->fillPolyPolygon(xTextBounds, aViewState, aLocalState);
@@ -1066,7 +1060,6 @@ namespace cppcanvas
 
                 return renderEffectText( *this,
                                          aLocalState,
-                                         mpCanvas->getUNOCanvas(),
                                          maShadowColor,
                                          maShadowOffset,
                                          maReliefColor,
@@ -1098,7 +1091,7 @@ namespace cppcanvas
                     {
                         rendering::RenderState aLocalState(rRenderState);
                         aLocalState.DeviceColor = vcl::unotools::colorToDoubleSequence(
-                            rTextFillColor, mrCanvas->getDevice()->getDeviceColorSpace());
+                            rTextFillColor);
                         auto xTextBounds = queryTextBounds();
                         // background of text
                         mrCanvas->fillPolyPolygon(xTextBounds, mrViewState, aLocalState);
@@ -1171,7 +1164,6 @@ namespace cppcanvas
                                                  aHelper,
                                                  aViewState ),
                     aLocalState,
-                    xCanvas,
                     maShadowColor,
                     maShadowOffset,
                     maReliefColor,
@@ -1274,8 +1266,7 @@ namespace cppcanvas
                 mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),
                 maFillColor(
                     vcl::unotools::colorToDoubleSequence(
-                        COL_WHITE,
-                        rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() )),
+                        COL_WHITE )),
                 mxBackgroundFillPoly(std::move( xFillPoly )),
                 maTextLineInfo( cppcanvastools::createTextLineInfo( rVDev, rState ) ),
                 maReliefOffset( rReliefOffset ),
@@ -1309,7 +1300,7 @@ namespace cppcanvas
                 {
                     rendering::RenderState aLocalState( rRenderState );
                     aLocalState.DeviceColor = vcl::unotools::colorToDoubleSequence(
-                        maBackgroundFillColor, xCanvas->getDevice()->getDeviceColorSpace());
+                        maBackgroundFillColor);
                     xCanvas->fillPolyPolygon(mxBackgroundFillPoly, aViewState, aLocalState);
                 }
 
@@ -1360,7 +1351,6 @@ namespace cppcanvas
 
                 return renderEffectText( *this,
                                          aLocalState,
-                                         mpCanvas->getUNOCanvas(),
                                          maShadowColor,
                                          maShadowOffset,
                                          maReliefColor,

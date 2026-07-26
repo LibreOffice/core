@@ -56,8 +56,6 @@ namespace vclcanvas
         cpo::uno::Any isAccelerated() const;
         cpo::uno::Any getDeviceHandle() const;
         cpo::uno::Any getSurfaceHandle() const;
-        css::uno::Reference<
-            css::rendering::XColorSpace > const & getColorSpace() const;
 
         /** called when DumpScreenContent property is enabled on
             XGraphicDevice, and writes out bitmaps of current screen.

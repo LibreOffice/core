@@ -65,7 +65,6 @@ struct RenderState
         device color space.<p>
 
         @see XGraphicDevice
-        @see XColorSpace
      */
     sequence<ColorComponent>                            DeviceColor;
 

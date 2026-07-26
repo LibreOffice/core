@@ -44,14 +44,6 @@ interface XBitmap;
 interface XGraphicDevice : ::com::sun::star::uno::XInterface
 {
 
-    /** Query the color space interface for this graphic device.
-
-        This is to be used when interpreting or setting device color
-        values.
-     */
-    XColorSpace                                 getDeviceColorSpace();
-
-
     /** Create a line poly-polygon which can internally use
         device-optimized representations already.
 

@@ -31,7 +31,6 @@
 
 namespace com::sun::star::beans { class XPropertySetInfo; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
-namespace com::sun::star::rendering { class XColorSpace; }
 
 
 /* Definition of GraphicDeviceBase class */
@@ -140,13 +139,6 @@ namespace canvas
         }
 
         // XGraphicDevice
-
-        virtual css::uno::Reference< css::rendering::XColorSpace > getDeviceColorSpace(  ) override
-        {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maDeviceHelper.getColorSpace();
-        }
 
         virtual css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points ) override
         {

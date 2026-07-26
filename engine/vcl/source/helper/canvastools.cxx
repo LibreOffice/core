@@ -26,6 +26,7 @@
 #include <com/sun/star/rendering/VolatileContentDestroyedException.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
+#include <com/sun/star/rendering/ARGBColor.hpp>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dsize.hxx>
@@ -187,63 +188,6 @@ namespace vcl::unotools
                               rRectangle.X2, rRectangle.Y2 );
         }
 
-        namespace
-        {
-            class StandardColorSpace : public cppu::WeakImplHelper< css::rendering::XColorSpace >
-            {
-            private:
-                cpo::uno::Sequence< sal_Int8 > m_aComponentTags;
-
-                virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const cpo::uno::Sequence< double >& deviceColor ) override
-                {
-                    const double*  pIn( deviceColor.getConstArray() );
-                    const std::size_t nLen( deviceColor.getLength() );
-                    ENSURE_ARG_OR_THROW2(nLen%4==0,
-                                         "number of channels no multiple of 4",
-                                         static_cast<rendering::XColorSpace*>(this), 0);
-
-                    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
-                    rendering::ARGBColor* pOut( aRes.getArray() );
-                    for( std::size_t i=0; i<nLen; i+=4 )
-                    {
-                        *pOut++ = rendering::ARGBColor(pIn[3],pIn[0],pIn[1],pIn[2]);
-                        pIn += 4;
-                    }
-                    return aRes;
-                }
-                virtual cpo::uno::Sequence< double > SAL_CALL convertFromARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
-                {
-                    const std::size_t              nLen( rgbColor.getLength() );
-
-                    cpo::uno::Sequence< double > aRes(nLen*4);
-                    double* pColors=aRes.getArray();
-                    for( const auto& rIn : rgbColor )
-                    {
-                        *pColors++ = rIn.Red;
-                        *pColors++ = rIn.Green;
-                        *pColors++ = rIn.Blue;
-                        *pColors++ = rIn.Alpha;
-                    }
-                    return aRes;
-                }
-
-            public:
-                StandardColorSpace() : m_aComponentTags(4)
-                {
-                    sal_Int8* pTags = m_aComponentTags.getArray();
-                    pTags[0] = rendering::ColorComponentTag::RGB_RED;
-                    pTags[1] = rendering::ColorComponentTag::RGB_GREEN;
-                    pTags[2] = rendering::ColorComponentTag::RGB_BLUE;
-                    pTags[3] = rendering::ColorComponentTag::ALPHA;
-                }
-            };
-        }
-
-        uno::Reference<rendering::XColorSpace> createStandardColorSpace()
-        {
-            return new StandardColorSpace();
-        }
-
         cpo::uno::Sequence< double > colorToStdColorSpaceSequence( const Color& rColor )
         {
             return
@@ -270,34 +214,14 @@ namespace vcl::unotools
             return aColor;
         }
 
-        cpo::uno::Sequence< double > colorToDoubleSequence(
-            const Color&                                    rColor,
-            const uno::Reference< rendering::XColorSpace >& xColorSpace )
+        cpo::uno::Sequence< double > colorToDoubleSequence( const Color& rColor )
         {
-            cpo::uno::Sequence<rendering::ARGBColor> aSeq
-            {
-                {
-                    toDoubleColor(rColor.GetAlpha()),
-                    toDoubleColor(rColor.GetRed()),
-                    toDoubleColor(rColor.GetGreen()),
-                    toDoubleColor(rColor.GetBlue())
-                }
-            };
-
-            return xColorSpace->convertFromARGB(aSeq);
+            return colorToStdColorSpaceSequence(rColor);
         }
 
-        Color doubleSequenceToColor(
-            const cpo::uno::Sequence< double >&                  rColor,
-            const uno::Reference< rendering::XColorSpace >& xColorSpace )
+        Color doubleSequenceToColor( const cpo::uno::Sequence< double >& rColor )
         {
-            const rendering::ARGBColor aARGBColor(
-                xColorSpace->convertToARGB(rColor)[0]);
-
-            return Color( ColorAlpha, toByteColor(aARGBColor.Alpha),
-                          toByteColor(aARGBColor.Red),
-                          toByteColor(aARGBColor.Green),
-                          toByteColor(aARGBColor.Blue) );
+            return stdColorSpaceSequenceToColor(rColor);
         }
 
 } // namespace canvas

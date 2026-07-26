@@ -99,7 +99,6 @@ namespace canvas
         virtual css::uno::Reference< css::rendering::XPolyPolygon2D > getOutline( double t ) override;
         virtual cpo::uno::Sequence< double > getColor( double t ) override;
         virtual cpo::uno::Sequence< double > getPointColor( const css::geometry::RealPoint2D& point ) override;
-        virtual css::uno::Reference< css::rendering::XColorSpace > getColorSpace() override;
 
         // XServiceInfo
         virtual OUString getImplementationName(  ) override;

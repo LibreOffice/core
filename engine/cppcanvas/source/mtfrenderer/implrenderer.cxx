@@ -82,8 +82,7 @@ namespace
 {
     template < class MetaActionType > void setStateColor( MetaActionType*                   pAct,
                                                           bool&                             rIsColorSet,
-                                                          cpo::uno::Sequence< double >&          rColorSequence,
-                                                          const cppcanvas::CanvasSharedPtr& rCanvas )
+                                                          cpo::uno::Sequence< double >&     rColorSequence )
     {
         rIsColorSet = pAct->IsSetting();
         if (!rIsColorSet)
@@ -98,8 +97,7 @@ namespace
         //aColor.SetTransparency(128);
 
         rColorSequence = vcl::unotools::colorToDoubleSequence(
-            aColor,
-            rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
+            aColor );
     }
 
     void setupStrokeAttributes( rendering::StrokeAttributes&                          o_rStrokeAttributes,
@@ -523,14 +521,10 @@ namespace cppcanvas
                     aVCLEndColor.SetGreen( static_cast<sal_uInt8>(aVCLEndColor.GetGreen() * nEndIntensity / 100) );
                     aVCLEndColor.SetBlue( static_cast<sal_uInt8>(aVCLEndColor.GetBlue() * nEndIntensity / 100) );
 
-                    uno::Reference<rendering::XColorSpace> xColorSpace(
-                        rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
                     const cpo::uno::Sequence< double > aStartColor(
-                        vcl::unotools::colorToDoubleSequence( aVCLStartColor,
-                                                                xColorSpace ));
+                        vcl::unotools::colorToDoubleSequence( aVCLStartColor ));
                     const cpo::uno::Sequence< double > aEndColor(
-                        vcl::unotools::colorToDoubleSequence( aVCLEndColor,
-                                                                xColorSpace ));
+                        vcl::unotools::colorToDoubleSequence( aVCLEndColor ));
 
                     cpo::uno::Sequence< cpo::uno::Sequence < double > > aColors;
                     cpo::uno::Sequence< double > aStops;
@@ -837,9 +831,6 @@ namespace cppcanvas
             ::Size  aShadowOffset;
             ::Size  aReliefOffset;
 
-            uno::Reference<rendering::XColorSpace> xColorSpace(
-                rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
-
             if( rState.isTextEffectShadowSet )
             {
                 // calculate shadow offset (similar to outdev3.cxx)
@@ -853,7 +844,7 @@ namespace cppcanvas
 
                 // determine shadow color (from outdev3.cxx)
                 ::Color aTextColor = vcl::unotools::doubleSequenceToColor(
-                    rState.textColor, xColorSpace );
+                    rState.textColor );
                 bool bIsDark = (aTextColor == COL_BLACK)
                     || (aTextColor.GetLuminance() < 8);
 
@@ -877,7 +868,7 @@ namespace cppcanvas
 
                 // determine relief color (from outdev3.cxx)
                 ::Color aTextColor = vcl::unotools::doubleSequenceToColor(
-                    rState.textColor, xColorSpace );
+                    rState.textColor );
 
                 aReliefColor = COL_LIGHTGRAY;
 
@@ -889,7 +880,7 @@ namespace cppcanvas
                     aTextColor = COL_WHITE;
                     rParms.mrStates.getState().textColor =
                         vcl::unotools::colorToDoubleSequence(
-                            aTextColor, xColorSpace );
+                            aTextColor );
                 }
 
                 if( aTextColor == COL_WHITE )
@@ -898,7 +889,7 @@ namespace cppcanvas
             }
 
             if (rState.isTextFillColorSet)
-                aTextFillColor = vcl::unotools::doubleSequenceToColor(rState.textFillColor, xColorSpace);
+                aTextFillColor = vcl::unotools::doubleSequenceToColor(rState.textFillColor);
 
             // create the actual text action
             std::shared_ptr<Action> pTextAction(
@@ -1327,8 +1318,7 @@ namespace cppcanvas
                     case MetaActionType::LINECOLOR:
                         setStateColor( static_cast<MetaLineColorAction*>(pCurrAct),
                                        rStates.getState().isLineColorSet,
-                                       rStates.getState().lineColor,
-                                       rCanvas );
+                                       rStates.getState().lineColor );
                         break;
 
                     case MetaActionType::FILLCOLOR:
@@ -1352,17 +1342,14 @@ namespace cppcanvas
                         aColor.SetAlpha(255);
 
                         rStates.getState().textColor =
-                            vcl::unotools::colorToDoubleSequence(
-                                aColor,
-                                rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
+                            vcl::unotools::colorToDoubleSequence( aColor );
                     }
                     break;
 
                     case MetaActionType::TEXTFILLCOLOR:
                         setStateColor( static_cast<MetaTextFillColorAction*>(pCurrAct),
                                        rStates.getState().isTextFillColorSet,
-                                       rStates.getState().textFillColor,
-                                       rCanvas );
+                                       rStates.getState().textFillColor );
                         break;
 
                     case MetaActionType::TEXTLINECOLOR:
@@ -1377,8 +1364,7 @@ namespace cppcanvas
                     case MetaActionType::OVERLINECOLOR:
                         setStateColor( static_cast<MetaOverlineColorAction*>(pCurrAct),
                                        rStates.getState().isTextOverlineColorSet,
-                                       rStates.getState().textOverlineColor,
-                                       rCanvas );
+                                       rStates.getState().textOverlineColor );
                         break;
 
                     case MetaActionType::TEXTALIGN:

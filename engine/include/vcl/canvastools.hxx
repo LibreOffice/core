@@ -57,8 +57,6 @@ namespace com::sun::star::rendering
     class  XIntegerReadOnlyBitmap;
 }
 
-namespace com::sun::star::rendering { class XColorSpace; }
-
 namespace vcl::unotools
 {
         // Bitmap conversions
@@ -88,13 +86,9 @@ namespace vcl::unotools
 
             @param rColor
             Color to convert
-
-            @param xColorSpace
-            Color space to convert into
          */
         cpo::uno::Sequence< double >
-        VCL_DLLPUBLIC colorToDoubleSequence( const Color&                                              rColor,
-                                             const css::uno::Reference< css::rendering::XColorSpace >& xColorSpace );
+        VCL_DLLPUBLIC colorToDoubleSequence( const Color& rColor );
 
         /** Convert from standard device color space to VCL/Tools color
 
@@ -108,12 +102,8 @@ namespace vcl::unotools
 
             @param rColor
             Color sequence to convert from
-
-            @param xColorSpace
-            Color space to convert from
          */
-        Color VCL_DLLPUBLIC doubleSequenceToColor( const cpo::uno::Sequence< double >& rColor,
-                                                   const css::uno::Reference< css::rendering::XColorSpace >& xColorSpace );
+        Color VCL_DLLPUBLIC doubleSequenceToColor( const cpo::uno::Sequence< double >& rColor );
 
         /// Convert [0,1] double value to [0,255] int
         inline sal_Int8 toByteColor( double val )
@@ -127,9 +117,6 @@ namespace vcl::unotools
         {
             return val / 255.0;
         }
-
-        /// Create a standard color space suitable for VCL RGB color
-        css::uno::Reference< css::rendering::XColorSpace> VCL_DLLPUBLIC createStandardColorSpace();
 
         // Geometry conversions (vcl/tools <-> x)
 
