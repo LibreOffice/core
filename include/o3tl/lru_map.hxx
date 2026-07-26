@@ -205,7 +205,7 @@ public:
         checkLRUMaxSize();
     }
 
-    list_const_iterator_t insert(key_value_pair_t& rPair)
+    void insert(key_value_pair_t& rPair)
     {
         map_iterator_t i = mLruMap.find(rPair.first);
 
@@ -230,11 +230,9 @@ public:
             mLruList.splice(mLruList.begin(), mLruList, i->second);
             checkLRUItemUpdate();
         }
-
-        return mLruList.cbegin();
     }
 
-    list_const_iterator_t insert(key_value_pair_t&& rPair)
+    void insert(key_value_pair_t&& rPair)
     {
         map_iterator_t i = mLruMap.find(rPair.first);
 
@@ -258,8 +256,6 @@ public:
             mLruList.splice(mLruList.begin(), mLruList, i->second);
             checkLRUItemUpdate();
         }
-
-        return mLruList.cbegin();
     }
 
     list_const_iterator_t find(const Key& key)
@@ -303,12 +299,6 @@ public:
     {
         assert(mLruMap.size() == mLruList.size());
         return mLruMap.size();
-    }
-
-    size_t empty() const
-    {
-        assert(mLruMap.empty() == mLruList.empty());
-        return mLruMap.empty();
     }
 
     // size_t total_size() const; - only if custom ValueSize
