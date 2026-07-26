@@ -183,11 +183,6 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, [[maybe_unused]] SalGraphic
     return true;
 }
 
-bool SkiaSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>&, Size&)
-{
-    return false;
-}
-
 void SkiaSalBitmap::Destroy()
 {
     SAL_INFO("vcl.skia.trace", "destroy(" << this << ")");

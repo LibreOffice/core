@@ -278,26 +278,6 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics& rSGraphics )
     return bRet;
 }
 
-bool WinSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas, Size& /*rSize*/ )
-{
-    css::uno::Reference< css::beans::XFastPropertySet >
-        xFastPropertySet( rBitmapCanvas, css::uno::UNO_QUERY );
-
-    assert( xFastPropertySet && "creating without an xFastPropertySet?");
-    if( !xFastPropertySet )
-        return false;
-
-    cpo::uno::Sequence< cpo::uno::Any > args;
-    if( !(xFastPropertySet->getFastPropertyValue(1) >>= args) )
-        return false;
-
-    sal_Int64 aHBmp64;
-    if( !(args[0] >>= aHBmp64) )
-        return false;
-
-    return Create( reinterpret_cast<HBITMAP>(aHBmp64) );
-}
-
 sal_uInt16 WinSalBitmap::ImplGetDIBColorCount( HGLOBAL hDIB )
 {
     if (!hDIB)

@@ -117,12 +117,6 @@ bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics& rGraphics )
     return false;
 }
 
-bool QuartzSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& /*xBitmapCanvas*/,
-                              Size& /*rSize*/ )
-{
-    return false;
-}
-
 void QuartzSalBitmap::Destroy()
 {
     doDestroy();
