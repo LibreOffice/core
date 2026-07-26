@@ -54,7 +54,6 @@ namespace com::sun::star::geometry
 namespace com::sun::star::rendering
 {
     class  XBitmap;
-    class  XIntegerReadOnlyBitmap;
 }
 
 namespace vcl::unotools
@@ -69,7 +68,7 @@ namespace vcl::unotools
 
         /** Create a Bitmap from an XBitmap
          */
-        ::Bitmap VCL_DLLPUBLIC bitmapFromXBitmap( const css::uno::Reference< css::rendering::XIntegerReadOnlyBitmap >& xInputBitmap );
+        ::Bitmap VCL_DLLPUBLIC bitmapFromXBitmap( const css::uno::Reference< css::rendering::XBitmap >& xInputBitmap );
 
         // Color conversions (vcl/tools Color <-> canvas standard color space)
 

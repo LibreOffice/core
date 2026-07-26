@@ -48,8 +48,6 @@ namespace vclcanvastools
 using namespace vclcanvas;
         ::Bitmap bitmapFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
         {
-            // TODO(F3): CanvasCustomSprite should also be tunnelled
-            // through (also implements XIntegerBitmap interface)
             CanvasBitmap* pBitmapImpl = dynamic_cast< CanvasBitmap* >( xBitmap.get() );
 
             if( pBitmapImpl )
@@ -58,11 +56,7 @@ using namespace vclcanvas;
             }
             else
             {
-                // TODO(F2): add support for floating point bitmap formats
-                uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntBmp(
-                    xBitmap, uno::UNO_QUERY_THROW );
-
-                ::Bitmap aBmp = vcl::unotools::bitmapFromXBitmap( xIntBmp );
+                ::Bitmap aBmp = vcl::unotools::bitmapFromXBitmap( xBitmap );
                 if( !aBmp.IsEmpty() )
                     return aBmp;
 

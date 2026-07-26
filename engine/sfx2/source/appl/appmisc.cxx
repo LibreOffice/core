@@ -22,7 +22,7 @@
 
 #include <vcl/canvastools.hxx>
 #include <vcl/vectorgraphicdata.hxx>
-#include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -196,8 +196,7 @@ bool SfxApplication::loadBrandSvg(std::u16string_view sName, Bitmap &rBitmap, in
 
         if(xBitmap.is())
         {
-            const uno::Reference< rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
-            rBitmap = vcl::unotools::bitmapFromXBitmap(xIntBmp);
+            rBitmap = vcl::unotools::bitmapFromXBitmap(xBitmap);
             return true;
         }
     }

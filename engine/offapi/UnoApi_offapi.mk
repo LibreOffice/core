@@ -2873,13 +2873,10 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	VolatileContentDestroyedException \
 	XBezierPolyPolygon2D \
 	XBitmap \
-	XBitmapPalette \
 	XCachedPrimitive \
 	XCanvas \
 	XCanvasFont \
 	XGraphicDevice \
-	XIntegerBitmap \
-	XIntegerReadOnlyBitmap \
 	XLinePolyPolygon2D \
 	XMtfRenderer \
 	XParametricPolyPolygon2D \

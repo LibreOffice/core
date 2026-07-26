@@ -55,7 +55,7 @@ namespace vcl::unotools
             return new vcl::unotools::VclCanvasBitmap( inputBitmap );
         }
 
-        ::Bitmap bitmapFromXBitmap( const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap )
+        ::Bitmap bitmapFromXBitmap( const uno::Reference< rendering::XBitmap >& xInputBitmap )
         {
             SAL_INFO( "vcl.helper", "vcl::unotools::bitmapExFromXBitmap()" );
 
@@ -67,7 +67,7 @@ namespace vcl::unotools
             if( pImplBitmap )
                 return pImplBitmap->getBitmap();
 
-            // The only other possible implementation of XIntegerReadOnlyBitmap is
+            // The only other possible implementation of XBitmap is
             // vclcanvas::CanvasBitmap in canvas/source/vcl/canvasbitmap.cxx, which has a XFastPropertySet fast-path
             uno::Reference<css::beans::XFastPropertySet> xFastProp(xInputBitmap, uno::UNO_QUERY_THROW);
             cpo::uno::Any aAny = xFastProp->getFastPropertyValue(0);

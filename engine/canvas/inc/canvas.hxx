@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 
 #include <cppuhelper/compbase.hxx>
@@ -41,7 +41,7 @@
 namespace vclcanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvas,
-                                             css::rendering::XIntegerBitmap,
+                                             css::rendering::XBitmap,
                                              css::rendering::XGraphicDevice,
                                              css::util::XUpdatable,
                                              css::beans::XPropertySet >    GraphicDeviceBase_Base;

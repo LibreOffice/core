@@ -20,8 +20,7 @@
 #pragma once
 
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
-#include <com/sun/star/rendering/XBitmapPalette.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/BitmapReadAccess.hxx>
@@ -29,8 +28,7 @@
 namespace vcl::unotools
 {
     class SAL_DLLPUBLIC_RTTI VclCanvasBitmap final :
-        public cppu::WeakImplHelper< css::rendering::XIntegerReadOnlyBitmap,
-                                     css::rendering::XBitmapPalette >
+        public cppu::WeakImplHelper< css::rendering::XBitmap >
     {
     private:
         ::Bitmap                                       m_aBmp;
