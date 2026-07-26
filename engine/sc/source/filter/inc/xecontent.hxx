@@ -328,8 +328,6 @@ public:
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
-    bool ContainsValidFormula() const { return mbValidFormula; }
-
 private:
     /** Writes the body of the DV record. */
     virtual void        WriteBody( XclExpStream& rStrm ) override;
@@ -349,7 +347,6 @@ private:
     OUString            msFormula2;     /// OOXML Formula for second condition.
     sal_uInt32          mnFlags;        /// Miscellaneous flags.
     sal_uInt32          mnScHandle;     /// The core handle for quick list search.
-    bool                mbValidFormula; /// Formula valid for export
 };
 
 /** This class contains the DV record list following the DVAL record. */
@@ -379,7 +376,6 @@ private:
 
     XclExpDVList        maDVList;       /// List of DV records
     XclExpDVRef         mxLastFoundDV;  /// For search optimization.
-    sal_uInt16          mnDVCount;      /// Count of Valid DV
 };
 
 // Web Queries ================================================================
