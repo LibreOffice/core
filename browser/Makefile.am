@@ -1592,6 +1592,7 @@ clean-local:
 	@rm -rf $(INTERMEDIATE_DIR)
 	@rm -rf $(TYPESCRIPT_JS_DIR)
 	@rm -rf node_modules
+	@rm -f package-lock.json
 	@rm -f $(abs_srcdir)/jsconfig.json
 	@rm -f $(abs_srcdir)/admin/jsconfig.json
 	@rm -f mocha.log duplication.log
