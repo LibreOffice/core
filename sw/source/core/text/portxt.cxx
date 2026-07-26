@@ -1102,7 +1102,7 @@ void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
     Width( Width() - nBlankSize );
     rInf.X( rInf.X() - nBlankSize );
     SetLen( GetLen() - nHoleLen );
-    SwHolePortion* pHole = new SwHolePortion(*this);
+    SwHolePortion* pHole = new SwHolePortion(*this, IsPaintTrailingSpaceDecorations(rInf));
     pHole->SetBlankWidth(nBlankSize);
     pHole->SetLen(nHoleLen);
     Insert( pHole );
