@@ -465,11 +465,20 @@ namespace cool {
 			context.save();
 			if (typeof alpha === 'number' && alpha < 255)
 				context.globalAlpha = alpha / 255;
-			if (drawMode === 'greys') context.filter = 'grayscale(1)';
+			// A drawMode recolour is the innermost colour modifier
+			// around its graphic, so its filter leads the list.
+			if (drawMode === 'greys')
+				context.filter = this._composeFilter(context, 'grayscale(1)');
 			else if (drawMode === 'mono')
-				context.filter = 'grayscale(1) contrast(1000%)';
+				context.filter = this._composeFilter(
+					context,
+					'grayscale(1) contrast(1000%)',
+				);
 			else if (drawMode === 'watermark')
-				context.filter = 'grayscale(1) brightness(1.5) opacity(0.3)';
+				context.filter = this._composeFilter(
+					context,
+					'grayscale(1) brightness(1.5) opacity(0.3)',
+				);
 			// The matrix maps the unit square to the image's bounds,
 			// so we draw the image into the unit square and let the
 			// transform place it on the slide.
@@ -595,12 +604,23 @@ namespace cool {
 
 			if (filter !== null) {
 				context.save();
-				context.filter = filter;
+				context.filter = this._composeFilter(context, filter);
 				this._renderPrimitives(context, primitive.children);
 				context.restore();
 			} else {
 				this._renderPrimitives(context, primitive.children);
 			}
+		}
+
+		/// Prepend a filter to the context's active filter list. The
+		/// engine applies the innermost colour modifier first and
+		/// canvas filters run left to right, so the new filter leads.
+		private _composeFilter(
+			context: CanvasRenderingContext2D,
+			filter: string,
+		): string {
+			const active = context.filter;
+			return active && active !== 'none' ? filter + ' ' + active : filter;
 		}
 
 		private _renderUnifiedTransparence(

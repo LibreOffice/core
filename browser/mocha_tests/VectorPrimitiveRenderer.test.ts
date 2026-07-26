@@ -618,6 +618,71 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.strictEqual(recorder.findCall('drawImage'), undefined);
 		});
 
+		it('composes nested colour modifiers inner first', function () {
+			// Both modifiers apply, the inner one first as in the
+			// engine, so its filter leads the canvas filter list.
+			const primitive = {
+				type: 'modifiedColor',
+				modifier: 'gray',
+				children: [
+					{
+						type: 'modifiedColor',
+						modifier: 'invert',
+						children: [
+							{
+								type: 'polyPolygonColor',
+								color: '#ff0000',
+								path: 'M 0 0 L 10 0 L 10 10 Z',
+							},
+						],
+					},
+				],
+			} as any;
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const fill = recorder.findCall('fill');
+			nodeassert.ok(fill, 'fill not called');
+			nodeassert.strictEqual(
+				fill?.properties.filter,
+				'invert(1) grayscale(1)',
+			);
+		});
+
+		it('composes a drawMode recolour with an enclosing colour modifier', function () {
+			// The drawMode is the innermost colour modifier around
+			// its graphic, so its filter leads and the enclosing
+			// invert follows.
+			const primitive = {
+				type: 'modifiedColor',
+				modifier: 'invert',
+				children: [
+					{
+						type: 'graphic',
+						checksum: 7,
+						matrix: [100, 0, 0, 100, 0, 0],
+						drawMode: 'greys',
+					},
+				],
+			} as any;
+
+			const cachedImage = new ImageRecorder();
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer(
+				() => cachedImage as unknown as HTMLImageElement,
+			);
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const draw = recorder.findCall('drawImage');
+			nodeassert.ok(draw, 'drawImage not called');
+			nodeassert.strictEqual(
+				draw?.properties.filter,
+				'grayscale(1) invert(1)',
+			);
+		});
+
 		it('rotates a graphic around the centre of the unit square', function () {
 			// The wire rotation is in tenths of a degree. The
 			// renderer translates to the centre of the unit square,
