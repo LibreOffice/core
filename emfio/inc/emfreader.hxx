@@ -44,9 +44,9 @@ namespace emfio
         ~EmfReader();
 
         bool ReadEnhWMF();
-        void ReadGDIComment(sal_uInt32 nCommentId);
+        void ReadGDIComment(sal_uInt32 nCommentId, sal_uInt64 nNextPos);
         /// Parses EMR_COMMENT_MULTIFORMATS.
-        void ReadMultiformatsComment();
+        void ReadMultiformatsComment(sal_uInt64 nNextPos);
         void SetSizeHint(const basegfx::B2DTuple& rSizeHint) { maSizeHint = rSizeHint; }
         void SetEnableEMFPlus(bool bEnableEMFPlus) { mbEnableEMFPlus = bEnableEMFPlus; }
 

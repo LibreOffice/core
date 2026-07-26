@@ -423,7 +423,7 @@ namespace emfio
     const sal_uInt32 EMR_COMMENT_MULTIFORMATS = 0x40000004;
     const sal_uInt32 EMR_COMMENT_WINDOWS_METAFILE = 0x80000001;
 
-    void EmfReader::ReadGDIComment(sal_uInt32 nCommentId)
+    void EmfReader::ReadGDIComment(sal_uInt32 nCommentId, sal_uInt64 nNextPos)
     {
         sal_uInt32 nPublicCommentIdentifier(0);
         mpInputStream->ReadUInt32(nPublicCommentIdentifier);
@@ -460,7 +460,7 @@ namespace emfio
                 break;
 
             case EMR_COMMENT_MULTIFORMATS:
-                ReadMultiformatsComment();
+                ReadMultiformatsComment(nNextPos);
                 break;
 
             case EMR_COMMENT_WINDOWS_METAFILE:
@@ -473,7 +473,7 @@ namespace emfio
         }
     }
 
-    void EmfReader::ReadMultiformatsComment()
+    void EmfReader::ReadMultiformatsComment(sal_uInt64 nNextPos)
     {
         tools::Rectangle aOutputRect = EmfReader::ReadRectangle();
 
@@ -506,9 +506,17 @@ namespace emfio
         // Skip the Version field without reading it, since its value is irrelevant here.
         mpInputStream->SeekRel(sizeof(sal_uInt32));
 
+        // The embedded data lives inside this comment record, so the record says how much of it
+        // there can be.
+        const sal_uInt64 nRecordEnd = std::min<sal_uInt64>(nNextPos, mnEndPos);
+        const sal_uInt64 nDataLeft = mpInputStream->Tell() < nRecordEnd
+                                         ? std::min(nRecordEnd - mpInputStream->Tell(),
+                                                    mpInputStream->remainingSize())
+                                         : 0;
+
         sal_uInt32 nSizeData(0);
         mpInputStream->ReadUInt32(nSizeData);
-        if (!nSizeData || nSizeData > mpInputStream->remainingSize())
+        if (!nSizeData || nSizeData > nDataLeft)
         {
             return;
         }
@@ -912,7 +920,10 @@ namespace emfio
 
                 SAL_INFO("emfio", "\tGDI comment, length: " << length);
 
-                if( mpInputStream->good() && length >= 4 && length <= mpInputStream->remainingSize() ) {
+                // DataSize counts the bytes that follow it inside this record, so the record size
+                // minus its own 8 byte header and the 4 byte DataSize field is the most it can be.
+                if( mpInputStream->good() && length >= 4 && nRecSize >= 12
+                    && length <= nRecSize - 12 && length <= mpInputStream->remainingSize() ) {
                     sal_uInt32 nCommentId;
 
                     mpInputStream->ReadUInt32( nCommentId );
@@ -927,7 +938,7 @@ namespace emfio
                     }
                     else if( nCommentId == EMR_COMMENT_PUBLIC && nRecSize >= 12 )
                     {
-                        ReadGDIComment(nCommentId);
+                        ReadGDIComment(nCommentId, nNextPos);
                     }
                     else if( nCommentId == EMR_COMMENT_EMFSPOOL && nRecSize >= 12 )
                     {
@@ -2481,7 +2492,14 @@ namespace emfio
 
                         SAL_INFO("emfio", "\t\tGradientFill nVer: " << nVer << " nTri: " << nTri << " mode: " << ulMode);
 
-                        if ( !mpInputStream->good() || nVer > 256 * 1024 || nTri > 256 * 1024 )
+                        // A vertex costs 16 bytes and a triangle or rectangle index pair 8, so what is
+                        // left of this record says how many of each there can really be.
+                        const sal_uInt64 nRecordEnd = std::min<sal_uInt64>(nNextPos, mnEndPos);
+                        const sal_uInt64 nRecordLeft = mpInputStream->Tell() < nRecordEnd
+                                                           ? nRecordEnd - mpInputStream->Tell()
+                                                           : 0;
+                        if ( !mpInputStream->good() || nVer > 256 * 1024 || nTri > 256 * 1024
+                             || nVer * sal_uInt64( 16 ) + nTri * sal_uInt64( 8 ) > nRecordLeft )
                         {
                             bStatus = false;
                             break;
