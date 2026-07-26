@@ -681,7 +681,17 @@ namespace emfio
         if (!bRecordOk || !nPoints)
             return tools::Polygon();
 
-        auto nRemainingSize = std::min(nNextPos - mpInputStream->Tell(), mpInputStream->remainingSize());
+        // The header fields are read before this point, so a record that is shorter than those
+        // fields leaves the stream past the end of its own data and holds no points at all.
+        const sal_uInt64 nEndPos = std::min<sal_uInt64>(nNextPos, mnEndPos);
+        if (mpInputStream->Tell() >= nEndPos)
+        {
+            SAL_WARN("emfio", "polygon record ends before its points begin");
+            return tools::Polygon();
+        }
+
+        const sal_uInt64 nRemainingSize
+            = std::min(nEndPos - mpInputStream->Tell(), mpInputStream->remainingSize());
         auto nMaxPossiblePoints = nRemainingSize / (sizeof(T) * 2);
         auto nPointCount = nPoints - nStartIndex;
         if (nPointCount > nMaxPossiblePoints)
