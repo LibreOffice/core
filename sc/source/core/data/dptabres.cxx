@@ -989,11 +989,9 @@ ResultMembers& ScDPResultData::GetDimResultMembers(tools::Long nDim, const ScDPD
 
 ScDPResultMemberSlim::ScDPResultMemberSlim(
         ScDPResultDimension* pRDimension,
-        const ScDPResultData* pData,
         const ScDPParentDimData& rParentDimData) :
     mpOurDimension(pRDimension),
     mpMemberDesc(rParentDimData.mpMemberDesc),
-    pResultData(pData),
     mnOrder(rParentDimData.mnOrder),
     bmHasElements(false),
     bmHasHiddenDetails(false),
@@ -1037,6 +1035,12 @@ const ScDPLevel* ScDPResultMemberSlim::GetParentLevel() const
         return GetPromote()->GetParentLevel();
     // We don't store the Parent information, ask our dimension
     return mpOurDimension->GetParentLevelForResult();
+}
+
+const ScDPResultData* ScDPResultMemberSlim::GetResultData() const
+{
+    // pResultData is constant over the dimension, just ask it
+    return mpOurDimension->GetResultData();
 }
 
 ScDPResultMemberFull::ScDPResultMemberFull(
@@ -3826,7 +3830,7 @@ ScDPResultMember* ScDPResultDimension::Promote(ScDPResultMemberSlim* pSlim, SCRO
     assert(pSlim == maMemberArray[nIndex].get());
 
     ScDPParentDimData aParentData(nOrder, mpDimension, mpLevel, pSlim->mpMemberDesc);
-    ScDPResultMember* pFull = new ScDPResultMemberFull(pSlim->pResultData, aParentData);
+    ScDPResultMember* pFull = new ScDPResultMemberFull(pResultData, aParentData);
 
     if (pSlim->bmHasElements)
         pFull->SetHasElements();
@@ -4289,7 +4293,7 @@ SCROW ScDPResultMember::GetDataId() const
 
 ScDPResultMember* ScDPResultDimension::AddMember(const ScDPParentDimData &aData )
 {
-    ScDPResultMember* pMember = new ScDPResultMemberSlim(this, pResultData, aData);
+    ScDPResultMember* pMember = new ScDPResultMemberSlim(this, aData);
     maMemberArray.emplace_back( pMember );
 
     return pMember;

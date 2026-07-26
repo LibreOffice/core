@@ -449,7 +449,6 @@ private:
     // When adding fields here, update ScDPResultDimension::Promote
     ScDPResultDimension* mpOurDimension;
     const ScDPMember* mpMemberDesc;
-    const ScDPResultData* pResultData;
     const SCROW mnOrder;
     bool bmHasElements : 1;
     bool bmHasHiddenDetails : 1;
@@ -469,8 +468,7 @@ private:
     ScDPResultMember* Promote(const char* sReason);
 
 public:
-    ScDPResultMemberSlim(ScDPResultDimension* pRDimension, const ScDPResultData* pData,
-                         const ScDPParentDimData& rParentDimData);
+    ScDPResultMemberSlim(ScDPResultDimension* pRDimension, const ScDPParentDimData& rParentDimData);
 
     bool GetHasElements() const override
     {
@@ -614,11 +612,7 @@ public:
         return bmInitialized;
     };
 
-    const ScDPResultData* GetResultData() const override
-    {
-        // pResultData is never changed, and on promotion is passed to new version
-        return pResultData;
-    }
+    const ScDPResultData* GetResultData() const override;
 
     SCROW GetOrder() const override
     {
@@ -878,6 +872,7 @@ public:
 
     const ScMemberSortOrder& GetMemberOrder() const     { return aMemberOrder; }
     ScMemberSortOrder&  GetMemberOrder()                { return aMemberOrder; }
+    const ScDPResultData* GetResultData() const { return pResultData; }
 
     bool IsDataLayout() const { return bIsDataLayout; }
     const OUString& GetName() const { return aDimensionName; }
