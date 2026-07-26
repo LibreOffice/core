@@ -205,6 +205,20 @@ window.L.Control.Extension = window.L.Control.extend({
 		map.on('comment', this._onComment, this);
 	},
 
+	// The extension iframe is our own content from the COOL origin.  The mobile and desktop
+	// apps load over file://, where the iframe's origin is opaque and only '*' reaches it.
+	_targetOrigin: function (): string {
+		return window.origin.startsWith('http') ? window.origin : '*';
+	},
+
+	_postToIframe: function (payload: object) {
+		if (!this._iframe || !this._iframe.contentWindow) return;
+		this._iframe.contentWindow.postMessage(
+			JSON.stringify(payload),
+			this._targetOrigin(),
+		);
+	},
+
 	// Forward LOK comment events (Add/Modify/Remove) to the iframe as Extension_DocumentEvent
 	// postMessages with the corresponding event name; cool.js maps each to the matching
 	// cool.document.onCommentXxx handler.
@@ -225,14 +239,11 @@ window.L.Control.Extension = window.L.Control.extend({
 			default:
 				return;
 		}
-		this._iframe.contentWindow.postMessage(
-			JSON.stringify({
-				msgId: 'Extension_DocumentEvent',
-				name: name,
-				payload: e.comment,
-			}),
-			'*',
-		);
+		this._postToIframe({
+			msgId: 'Extension_DocumentEvent',
+			name: name,
+			payload: e.comment,
+		});
 	},
 
 	_onProxyCall: function (e: {
@@ -241,17 +252,13 @@ window.L.Control.Extension = window.L.Control.extend({
 		method: string;
 		args: unknown[];
 	}) {
-		if (!this._iframe || !this._iframe.contentWindow) return;
-		this._iframe.contentWindow.postMessage(
-			JSON.stringify({
-				msgId: 'Extension_ProxyCall',
-				proxyId: e.proxyId,
-				callId: e.callId,
-				method: e.method,
-				args: e.args,
-			}),
-			'*',
-		);
+		this._postToIframe({
+			msgId: 'Extension_ProxyCall',
+			proxyId: e.proxyId,
+			callId: e.callId,
+			method: e.method,
+			args: e.args,
+		});
 	},
 
 	// Dispatcher entry point.  The Extensions tab fires
@@ -379,10 +386,7 @@ window.L.Control.Extension = window.L.Control.extend({
 		if (this._teardownTimer !== null) return;
 		// If the iframe isn't ready, skip the handshake (nothing to detach):
 		if (this._iframe && this._iframe.contentWindow) {
-			this._iframe.contentWindow.postMessage(
-				JSON.stringify({ msgId: 'Extension_Teardown' }),
-				'*',
-			);
+			this._postToIframe({ msgId: 'Extension_Teardown' });
 			this._teardownTimer = setTimeout(
 				this._finishRemovePanel.bind(this),
 				1000,
@@ -579,30 +583,21 @@ window.L.Control.Extension = window.L.Control.extend({
 		dialogId: string,
 		result: { cancelled: boolean; value?: unknown },
 	) {
-		if (!this._iframe || !this._iframe.contentWindow) return;
-		this._iframe.contentWindow.postMessage(
-			JSON.stringify({
-				msgId: 'Extension_DialogResult',
-				dialogId: dialogId,
-				cancelled: result.cancelled,
-				value: result.cancelled ? null : result.value,
-			}),
-			'*',
-		);
+		this._postToIframe({
+			msgId: 'Extension_DialogResult',
+			dialogId: dialogId,
+			cancelled: result.cancelled,
+			value: result.cancelled ? null : result.value,
+		});
 	},
 
 	_onScriptResult: function (e: ExtensionScriptResult) {
-		if (this._iframe && this._iframe.contentWindow) {
-			this._iframe.contentWindow.postMessage(
-				JSON.stringify({
-					msgId: 'Extension_CallResult',
-					callId: e.id,
-					ok: e.ok,
-					err: e.err,
-				}),
-				'*',
-			);
-		}
+		this._postToIframe({
+			msgId: 'Extension_CallResult',
+			callId: e.id,
+			ok: e.ok,
+			err: e.err,
+		});
 		if (e.legacyUnoApi) {
 			this.map.uiManager.showLegacyUnoApiSnackbarOnce();
 		}
