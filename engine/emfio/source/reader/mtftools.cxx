@@ -1046,15 +1046,21 @@ namespace emfio
             }
         }
         std::vector<std::unique_ptr<GDIObj>>::size_type nIndex;
-        for ( nIndex = 0; nIndex < mvGDIObj.size(); nIndex++ )
+        for ( nIndex = mnLowestFreeGDIObj; nIndex < mvGDIObj.size(); nIndex++ )
         {
             if ( !mvGDIObj[ nIndex ] )
                 break;
+        }
+        if ( nIndex > 0xffff )   // the same ceiling an indexed object has
+        {
+            SAL_WARN( "emfio", "too many objects" );
+            return;
         }
         if ( nIndex == mvGDIObj.size() )
             ImplResizeObjectArry( mvGDIObj.size() + 16 );
 
         mvGDIObj[ nIndex ] = std::move(pObject);
+        mnLowestFreeGDIObj = nIndex + 1;
     }
 
     void MtfTools::CreateObjectIndexed( sal_uInt32 nIndex, std::unique_ptr<GDIObj> pObject )
@@ -1099,6 +1105,9 @@ namespace emfio
         if ( nIndex >= mvGDIObj.size() )
             ImplResizeObjectArry( nIndex + 16 );
 
+        if ( !pObject && nIndex < mnLowestFreeGDIObj )
+            mnLowestFreeGDIObj = nIndex;
+
         mvGDIObj[ nIndex ] = std::move(pObject);
     }
 
@@ -1114,6 +1123,8 @@ namespace emfio
             if ( nIndex < mvGDIObj.size() )
             {
                 mvGDIObj[ nIndex ].reset();
+                if ( nIndex < mnLowestFreeGDIObj )
+                    mnLowestFreeGDIObj = nIndex;
             }
         }
     }
@@ -1184,6 +1195,7 @@ namespace emfio
         mnBkMode(BackgroundMode::OPAQUE),
         meLatestRasterOp(RasterOp::Invert),
         meRasterOp(RasterOp::OverPaint),
+        mnLowestFreeGDIObj(0),
         mnRop(),
         meGfxMode(GraphicsMode::GM_COMPATIBLE),
         meMapMode(MappingMode::MM_TEXT),

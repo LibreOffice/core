@@ -682,6 +682,9 @@ namespace emfio
         RasterOp            meRasterOp;
 
         std::vector< std::unique_ptr<GDIObj> > mvGDIObj;
+        /// Every slot in mvGDIObj below this index holds an object, so the first free one is here
+        /// or above.
+        std::size_t         mnLowestFreeGDIObj;
         Point               maActPos;
         WMFRasterOp         mnRop;
         std::vector< std::shared_ptr<SaveStruct> > mvSaveStack;
