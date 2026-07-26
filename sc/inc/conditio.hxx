@@ -34,8 +34,6 @@
 #include <rtl/math.hxx>
 #include <tools/date.hxx>
 #include <tools/link.hxx>
-#include <o3tl/lru_map.hxx>
-#include <vcl/dropcache.hxx>
 
 #include <optional>
 #include <map>
@@ -303,7 +301,7 @@ public:
     }
 };
 
-class SAL_DLLPUBLIC_RTTI ScConditionEntry : public ScFormatEntry, public CacheOwner
+class SAL_DLLPUBLIC_RTTI ScConditionEntry : public ScFormatEntry
 {
                                         // stored data:
     ScConditionMode     eOp;
@@ -325,9 +323,6 @@ class SAL_DLLPUBLIC_RTTI ScConditionEntry : public ScFormatEntry, public CacheOw
     OUString              aSrcString;     // formula source position as text during XML import
     std::unique_ptr<ScFormulaCell>  pFCell1;
     std::unique_ptr<ScFormulaCell>  pFCell2;
-    typedef o3tl::lru_map<ScAddress, std::unique_ptr<ScFormulaCell>> RelRefCells;
-    std::unique_ptr<RelRefCells> xRelRefCells1;
-    std::unique_ptr<RelRefCells> xRelRefCells2;
     bool                bRelRef1;
     bool                bRelRef2;
     bool                bFirstRun;
@@ -350,8 +345,6 @@ class SAL_DLLPUBLIC_RTTI ScConditionEntry : public ScFormatEntry, public CacheOw
     bool    IsValid( double nArg, const ScAddress& rPos ) const;
     bool    IsValidStr( const OUString& rArg, const ScAddress& rPos ) const;
     void    StartListening();
-
-    static std::unique_ptr<RelRefCells> makeRelRefCells();
 
 public:
             ScConditionEntry( ScConditionMode eOper,
@@ -407,10 +400,6 @@ public:
     virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) override;
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) override;
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) override;
-
-    virtual bool dropCaches() override;
-    virtual void dumpState(rtl::OStringBuffer& rState) override;
-    virtual OUString getCacheName() const override;
 
     bool            MarkUsedExternalReferences() const;
 
