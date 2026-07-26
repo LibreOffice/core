@@ -277,6 +277,9 @@ browser/util/__pycache__
 
 .envrc
 
+# scripts/coverity.sh
+/cov-int/
+
 # This needs to stay at the end, to honor engine/.gitignore:
 !engine/**
 /engine/translations
