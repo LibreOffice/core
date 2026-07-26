@@ -499,29 +499,35 @@ namespace cool {
 			}
 
 			if (crop && (crop.left || crop.top || crop.right || crop.bottom)) {
-				// Image bounds in slide units, from the matrix's two
-				// column vectors.
-				const imageW = Math.hypot(matrix[0], matrix[1]);
-				const imageH = Math.hypot(matrix[2], matrix[3]);
-				const left = (crop.left ?? 0) / imageW;
-				const top = (crop.top ?? 0) / imageH;
-				const right = (crop.right ?? 0) / imageW;
-				const bottom = (crop.bottom ?? 0) / imageH;
-				const sx = Math.round(left * image.naturalWidth);
-				const sy = Math.round(top * image.naturalHeight);
-				const sw = Math.round((1 - left - right) * image.naturalWidth);
-				const sh = Math.round((1 - top - bottom) * image.naturalHeight);
-				context.drawImage(
-					image,
-					sx,
-					sy,
-					sw,
-					sh,
-					left,
-					top,
-					1 - left - right,
-					1 - top - bottom,
-				);
+				// The crop distances and the matrix's column-vector
+				// frame size share slide units, so dividing gives
+				// fractions of the frame.
+				const frameW = Math.hypot(matrix[0], matrix[1]);
+				const frameH = Math.hypot(matrix[2], matrix[3]);
+				const left = (crop.left ?? 0) / frameW;
+				const top = (crop.top ?? 0) / frameH;
+				const right = (crop.right ?? 0) / frameW;
+				const bottom = (crop.bottom ?? 0) / frameH;
+				// The uncropped image spans -left to 1 + right and -top
+				// to 1 + bottom in the frame's unit square, which shows
+				// the part inside it. Draw the overlap, mapped back to
+				// source pixels, since drawImage needs a source
+				// rectangle inside the image.
+				const x0 = Math.max(0, -left);
+				const y0 = Math.max(0, -top);
+				const x1 = Math.min(1, 1 + right);
+				const y1 = Math.min(1, 1 + bottom);
+				if (x0 < x1 && y0 < y1) {
+					const unitW = 1 + left + right;
+					const unitH = 1 + top + bottom;
+					const sx = Math.round(((x0 + left) / unitW) * image.naturalWidth);
+					const sy = Math.round(((y0 + top) / unitH) * image.naturalHeight);
+					const sw = Math.round(((x1 - x0) / unitW) * image.naturalWidth);
+					const sh = Math.round(((y1 - y0) / unitH) * image.naturalHeight);
+					if (sw > 0 && sh > 0) {
+						context.drawImage(image, sx, sy, sw, sh, x0, y0, x1 - x0, y1 - y0);
+					}
+				}
 			} else {
 				context.drawImage(image, 0, 0, 1, 1);
 			}

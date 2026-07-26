@@ -56,6 +56,7 @@
 
 #include <basegfx/utils/bgradient.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 
 #include <vcl/graph.hxx>
 #include <vcl/gfxlink.hxx>
@@ -848,11 +849,24 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             const GraphicAttr& rAttributes = rPrimitive.getGraphicAttr();
             if (rAttributes.IsCropped())
             {
+                // The GraphicAttr crop distances are relative to the graphic's preferred size.
+                // Convert them to the object's space, as the primitive's decomposition does,
+                // so they share the matrix's units.
+                const basegfx::B2DVector aObjectScale(rPrimitive.getTransform()
+                                                      * basegfx::B2DVector(1.0, 1.0));
+                const basegfx::B2DVector aCropScale(
+                    rPrimitive.getGraphicObject().calculateCropScaling(
+                        aObjectScale.getX(), aObjectScale.getY(), rAttributes.GetLeftCrop(),
+                        rAttributes.GetTopCrop(), rAttributes.GetRightCrop(),
+                        rAttributes.GetBottomCrop()));
+
                 auto aCropNode = mrWriter.startNode("crop");
-                mrWriter.put("left", double(rAttributes.GetLeftCrop()) * mfScaleFactor);
-                mrWriter.put("top", double(rAttributes.GetTopCrop()) * mfScaleFactor);
-                mrWriter.put("right", double(rAttributes.GetRightCrop()) * mfScaleFactor);
-                mrWriter.put("bottom", double(rAttributes.GetBottomCrop()) * mfScaleFactor);
+                mrWriter.put("left", rAttributes.GetLeftCrop() * aCropScale.getX() * mfScaleFactor);
+                mrWriter.put("top", rAttributes.GetTopCrop() * aCropScale.getY() * mfScaleFactor);
+                mrWriter.put("right",
+                             rAttributes.GetRightCrop() * aCropScale.getX() * mfScaleFactor);
+                mrWriter.put("bottom",
+                             rAttributes.GetBottomCrop() * aCropScale.getY() * mfScaleFactor);
             }
 
             if (rAttributes.IsTransparent())
