@@ -29,6 +29,8 @@ namespace emfplushelper
         sal_uInt32                   nPoints;
         std::deque<float>            xPoints, yPoints;
         std::unique_ptr<sal_uInt8[]> pPointTypes;
+        /// true when a point type byte follows each point in the stream
+        bool                         bHasPointTypes;
 
     public:
         EMFPPath(sal_uInt32 _nPoints, bool bLines = false);
