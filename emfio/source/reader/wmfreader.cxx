@@ -279,8 +279,11 @@ namespace
         if (o3tl::make_unsigned(nWidthBytes) < nMinStride)
             return Bitmap();
 
-        const size_t nSize(static_cast<size_t>(o3tl::make_unsigned(nWidthBytes)) * static_cast<size_t>(o3tl::make_unsigned(nHeight)));
-        std::vector<sal_uInt8> aBits(nSize, 0);
+        const sal_uInt64 nBitsSize = o3tl::make_unsigned(nWidthBytes) * o3tl::make_unsigned(nHeight);
+        if (nBitsSize > rStream.remainingSize())
+            return Bitmap();
+
+        std::vector<sal_uInt8> aBits(nBitsSize, 0);
         if (rStream.ReadBytes(aBits.data(), aBits.size()) != aBits.size())
             return Bitmap();
 
