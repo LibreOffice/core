@@ -84,14 +84,6 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
     uno::Reference<rendering::XCanvas> xBitmapCanvas(xBitmap, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xBitmapCanvas.is());
 
-    Bitmap aBitmap;
-    {
-        // clear the canvas and basic sanity check ...
-        xBitmapCanvas->clear();
-        CPPUNIT_ASSERT(aBitmap.Create(xBitmapCanvas, aSize));
-        CPPUNIT_ASSERT(aBitmap.HasAlpha());
-    }
-
     {
         // render something
         rendering::RenderState aDefaultState;

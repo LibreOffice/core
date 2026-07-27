@@ -416,8 +416,8 @@ bool GDIMetaFile::ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Si
         xBitmapCanvas->clear();
         xMtfRenderer->draw( xBitmapCanvas, reinterpret_cast<sal_Int64>( this ), rDestSize.Width(), rDestSize.Height() );
 
-        Bitmap aBitmap;
-        if( aBitmap.Create( xBitmapCanvas, aSize ) )
+        Bitmap aBitmap = vcl::unotools::bitmapFromXBitmap(xBitmap);
+        if( !aBitmap.IsEmpty() )
         {
             if (rOut.GetMapMode().GetMapUnit() == MapUnit::MapPixel)
                 rOut.DrawBitmap( rPos, aBitmap );
