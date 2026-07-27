@@ -67,6 +67,7 @@ ScaleTabPage::ScaleTabPage(weld::Container* pPage, weld::DialogController* pCont
     , m_bAllowDateAxis(false)
     , pNumFormatter(nullptr)
     , m_bShowAxisOrigin(false)
+    , m_bShowHistogramBinning(false)
     , m_xCbxReverse(m_xBuilder->weld_check_button(u"CBX_REVERSE"_ustr))
     , m_xCbxLogarithm(m_xBuilder->weld_check_button(u"CBX_LOGARITHM"_ustr))
     , m_xBxType(m_xBuilder->weld_widget(u"boxTYPE"_ustr))
@@ -92,6 +93,16 @@ ScaleTabPage::ScaleTabPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xFmtFldOrigin(m_xBuilder->weld_formatted_spin_button(u"EDT_ORIGIN"_ustr))
     , m_xCbxAutoOrigin(m_xBuilder->weld_check_button(u"CBX_AUTO_ORIGIN"_ustr))
     , m_xBxOrigin(m_xBuilder->weld_widget(u"boxORIGIN"_ustr))
+    , m_xBxHistogramBinning(m_xBuilder->weld_widget(u"boxHISTOGRAM_BINNING"_ustr))
+    , m_xRbtHistogramAutomatic(m_xBuilder->weld_radio_button(u"RB_HISTOGRAM_AUTOMATIC"_ustr))
+    , m_xRbtHistogramBinWidth(m_xBuilder->weld_radio_button(u"RB_HISTOGRAM_BIN_WIDTH"_ustr))
+    , m_xFmtFldHistogramBinWidth(m_xBuilder->weld_formatted_spin_button(u"EDT_HISTOGRAM_BIN_WIDTH"_ustr))
+    , m_xRbtHistogramBinCount(m_xBuilder->weld_radio_button(u"RB_HISTOGRAM_BIN_COUNT"_ustr))
+    , m_xMtHistogramBinCount(m_xBuilder->weld_spin_button(u"MT_HISTOGRAM_BIN_COUNT"_ustr))
+    , m_xCbxHistogramOverflow(m_xBuilder->weld_check_button(u"CBX_HISTOGRAM_OVERFLOW"_ustr))
+    , m_xFmtFldHistogramOverflow(m_xBuilder->weld_formatted_spin_button(u"EDT_HISTOGRAM_OVERFLOW"_ustr))
+    , m_xCbxHistogramUnderflow(m_xBuilder->weld_check_button(u"CBX_HISTOGRAM_UNDERFLOW"_ustr))
+    , m_xFmtFldHistogramUnderflow(m_xBuilder->weld_formatted_spin_button(u"EDT_HISTOGRAM_UNDERFLOW"_ustr))
 {
     m_xCbxAutoMin->connect_toggled(LINK(this, ScaleTabPage, EnableValueHdl));
     m_xCbxAutoMax->connect_toggled(LINK(this, ScaleTabPage, EnableValueHdl));
@@ -99,6 +110,20 @@ ScaleTabPage::ScaleTabPage(weld::Container* pPage, weld::DialogController* pCont
     m_xCbxAutoStepHelp->connect_toggled(LINK(this, ScaleTabPage, EnableValueHdl));
     m_xCbxAutoOrigin->connect_toggled(LINK(this, ScaleTabPage, EnableValueHdl));
     m_xCbx_AutoTimeResolution->connect_toggled(LINK(this, ScaleTabPage, EnableValueHdl));
+    m_xRbtHistogramAutomatic->connect_toggled(LINK(this, ScaleTabPage, HistogramToggleHdl));
+    m_xRbtHistogramBinWidth->connect_toggled(LINK(this, ScaleTabPage, HistogramToggleHdl));
+    m_xRbtHistogramBinCount->connect_toggled(LINK(this, ScaleTabPage, HistogramToggleHdl));
+    m_xCbxHistogramOverflow->connect_toggled(LINK(this, ScaleTabPage, HistogramToggleHdl));
+    m_xCbxHistogramUnderflow->connect_toggled(LINK(this, ScaleTabPage, HistogramToggleHdl));
+
+    for (weld::FormattedSpinButton* pField :
+        { m_xFmtFldHistogramBinWidth.get(),
+        m_xFmtFldHistogramOverflow.get(),
+        m_xFmtFldHistogramUnderflow.get() })
+    {
+        pField->GetFormatter().ClearMinValue();
+        pField->GetFormatter().ClearMaxValue();
+    }
 
     Formatter& rFmtFldMax = m_xFmtFldMax->GetFormatter();
     rFmtFldMax.ClearMinValue();
@@ -168,6 +193,27 @@ void ScaleTabPage::EnableControls()
     EnableValueHdl(*m_xCbxAutoStepHelp);
     EnableValueHdl(*m_xCbxAutoOrigin);
     EnableValueHdl(*m_xCbx_AutoTimeResolution);
+    EnableHistogramControls();
+}
+
+void ScaleTabPage::EnableHistogramControls()
+{
+    m_xBxHistogramBinning->set_visible(
+        m_bShowHistogramBinning);
+
+    if (!m_bShowHistogramBinning)
+    {
+        return;
+    }
+
+    m_xFmtFldHistogramBinWidth->set_sensitive(
+        m_xRbtHistogramBinWidth->get_active());
+    m_xMtHistogramBinCount->set_sensitive(
+        m_xRbtHistogramBinCount->get_active());
+    m_xFmtFldHistogramOverflow->set_sensitive(
+        m_xCbxHistogramOverflow->get_active());
+    m_xFmtFldHistogramUnderflow->set_sensitive(
+        m_xCbxHistogramUnderflow->get_active());
 }
 
 IMPL_LINK( ScaleTabPage, EnableValueHdl, weld::Toggleable&, rCbx, void )
@@ -200,6 +246,11 @@ IMPL_LINK( ScaleTabPage, EnableValueHdl, weld::Toggleable&, rCbx, void )
     {
         m_xFmtFldOrigin->set_sensitive( bEnable );
     }
+}
+
+IMPL_LINK_NOARG(ScaleTabPage, HistogramToggleHdl, weld::Toggleable&, void)
+{
+    EnableHistogramControls();
 }
 
 namespace {
@@ -262,6 +313,27 @@ bool ScaleTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 
     rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_MAIN_TIME_UNIT,m_nMainTimeUnit));
     rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_HELP_TIME_UNIT,m_nHelpTimeUnit));
+
+    if (m_bShowHistogramBinning)
+    {
+        sal_Int32 nFrequencyType = 0;
+        if (m_xRbtHistogramBinWidth->get_active())
+        {
+            nFrequencyType = 1;
+        }
+        else if (m_xRbtHistogramBinCount->get_active())
+        {
+            nFrequencyType = 2;
+        }
+
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_HISTOGRAM_FREQUENCY_TYPE, nFrequencyType));
+        rOutAttrs->Put(SvxDoubleItem(m_xFmtFldHistogramBinWidth->GetFormatter().GetValue(),SCHATTR_HISTOGRAM_BIN_WIDTH));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_HISTOGRAM_BIN_COUNT,m_xMtHistogramBinCount->get_value()));
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_HISTOGRAM_USE_OVERFLOW_BIN,m_xCbxHistogramOverflow->get_active()));
+        rOutAttrs->Put(SvxDoubleItem(m_xFmtFldHistogramOverflow->GetFormatter().GetValue(),SCHATTR_HISTOGRAM_OVERFLOW_BIN_VALUE));
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_HISTOGRAM_USE_UNDERFLOW_BIN,m_xCbxHistogramUnderflow->get_active()));
+        rOutAttrs->Put(SvxDoubleItem(m_xFmtFldHistogramUnderflow->GetFormatter().GetValue(),SCHATTR_HISTOGRAM_UNDERFLOW_BIN_VALUE));
+    }
 
     return true;
 }
@@ -373,6 +445,53 @@ void ScaleTabPage::Reset(const SfxItemSet* rInAttrs)
         m_xLB_HelpTimeUnit->set_active( m_nHelpTimeUnit );
     }
 
+
+    const SfxInt32Item* pFrequencyType = rInAttrs->GetItemIfSet(SCHATTR_HISTOGRAM_FREQUENCY_TYPE);
+    m_bShowHistogramBinning = pFrequencyType != nullptr;
+
+    if (m_bShowHistogramBinning)
+    {
+        const sal_Int32 nFrequencyType = pFrequencyType->GetValue();
+
+        m_xRbtHistogramAutomatic->set_active(nFrequencyType != 1 && nFrequencyType != 2);
+        m_xRbtHistogramBinWidth->set_active(nFrequencyType == 1);
+        m_xRbtHistogramBinCount->set_active(nFrequencyType == 2);
+
+        if (const SvxDoubleItem* pItem = rInAttrs->GetItemIfSet(SCHATTR_HISTOGRAM_BIN_WIDTH))
+        {
+            lcl_setValue(*m_xFmtFldHistogramBinWidth, pItem->GetValue());
+            m_xFmtFldHistogramBinWidth->save_value();
+        }
+
+        if (const SfxInt32Item* pItem = rInAttrs->GetItemIfSet(SCHATTR_HISTOGRAM_BIN_COUNT))
+        {
+            m_xMtHistogramBinCount->set_value(pItem->GetValue());
+            m_xMtHistogramBinCount->save_value();
+        }
+
+        if (const SfxBoolItem* pItem = rInAttrs->GetItemIfSet(SCHATTR_HISTOGRAM_USE_OVERFLOW_BIN))
+        {
+            m_xCbxHistogramOverflow->set_active(pItem->GetValue());
+        }
+
+        if (const SvxDoubleItem* pItem = rInAttrs->GetItemIfSet(SCHATTR_HISTOGRAM_OVERFLOW_BIN_VALUE))
+        {
+            lcl_setValue(*m_xFmtFldHistogramOverflow, pItem->GetValue());
+            m_xFmtFldHistogramOverflow->save_value();
+        }
+
+        if (const SfxBoolItem* pItem = rInAttrs->GetItemIfSet(SCHATTR_HISTOGRAM_USE_UNDERFLOW_BIN))
+        {
+            m_xCbxHistogramUnderflow->set_active(pItem->GetValue());
+        }
+
+        if (const SvxDoubleItem* pItem = rInAttrs->GetItemIfSet(SCHATTR_HISTOGRAM_UNDERFLOW_BIN_VALUE))
+        {
+            lcl_setValue(*m_xFmtFldHistogramUnderflow, pItem->GetValue());
+            m_xFmtFldHistogramUnderflow->save_value();
+        }
+    }
+
     EnableControls();
     SetNumFormat();
 }
@@ -407,6 +526,10 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     m_nTimeResolution = m_xLB_TimeResolution->get_active();
     m_nMainTimeUnit = m_xLB_MainTimeUnit->get_active();
     m_nHelpTimeUnit = m_xLB_HelpTimeUnit->get_active();
+
+    const double fHistogramBinWidth = m_xFmtFldHistogramBinWidth->GetFormatter().GetValue();
+    const double fHistogramUnderflow = m_xFmtFldHistogramUnderflow->GetFormatter().GetValue();
+    const double fHistogramOverflow = m_xFmtFldHistogramOverflow->GetFormatter().GetValue();
 
     if( m_nAxisType != chart2::AxisType::REALNUMBER )
         m_xCbxLogarithm->hide();
@@ -447,6 +570,41 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     {
         pControl = m_xFmtFldOrigin.get();
         pErrStrId = STR_INVALID_NUMBER;
+    }
+    else if (m_bShowHistogramBinning && m_xRbtHistogramBinWidth->get_active()
+             && m_xFmtFldHistogramBinWidth->get_value_changed_from_saved()
+             && !pNumFormatter->IsNumberFormat(m_xFmtFldHistogramBinWidth->get_text(), nStepFmt,
+                                               fDummy))
+    {
+        pControl = m_xFmtFldHistogramBinWidth.get();
+        pErrStrId = STR_INVALID_NUMBER;
+    }
+    else if (m_bShowHistogramBinning && m_xCbxHistogramOverflow->get_active()
+             && m_xFmtFldHistogramOverflow->get_value_changed_from_saved()
+             && !pNumFormatter->IsNumberFormat(m_xFmtFldHistogramOverflow->get_text(),
+                                               nMinMaxOriginFmt, fDummy))
+    {
+        pControl = m_xFmtFldHistogramOverflow.get();
+        pErrStrId = STR_INVALID_NUMBER;
+    }
+    else if (m_bShowHistogramBinning && m_xCbxHistogramUnderflow->get_active()
+             && m_xFmtFldHistogramUnderflow->get_value_changed_from_saved()
+             && !pNumFormatter->IsNumberFormat(m_xFmtFldHistogramUnderflow->get_text(),
+                                               nMinMaxOriginFmt, fDummy))
+    {
+        pControl = m_xFmtFldHistogramUnderflow.get();
+        pErrStrId = STR_INVALID_NUMBER;
+    }
+    else if (m_bShowHistogramBinning && m_xRbtHistogramBinWidth->get_active()
+             && fHistogramBinWidth <= 0.0)
+    {
+        pControl = m_xFmtFldHistogramBinWidth.get();
+        pErrStrId = STR_HISTOGRAM_BIN_WIDTH_GT_ZERO;
+    }
+    else if (m_bShowHistogramBinning && m_xCbxHistogramUnderflow->get_active() && m_xCbxHistogramOverflow->get_active() && fHistogramUnderflow >= fHistogramOverflow)
+    {
+        pControl = m_xFmtFldHistogramUnderflow.get();
+        pErrStrId = STR_HISTOGRAM_INVALID_OVERFLOW_UNDERFLOW;
     }
     else if (!m_xCbxAutoStepMain->get_active() && fStepMain <= 0.0)
     {
@@ -505,10 +663,18 @@ void ScaleTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
     Formatter& rFmtFldStepMain = m_xFmtFldStepMain->GetFormatter();
     Formatter& rFmtFldOrigin = m_xFmtFldOrigin->GetFormatter();
 
+    Formatter& rHistogramBinWidth = m_xFmtFldHistogramBinWidth->GetFormatter();
+    Formatter& rHistogramOverflow = m_xFmtFldHistogramOverflow->GetFormatter();
+    Formatter& rHistogramUnderflow = m_xFmtFldHistogramUnderflow->GetFormatter();
+
     rFmtFldMax.SetFormatter( pNumFormatter );
     rFmtFldMin.SetFormatter( pNumFormatter );
     rFmtFldStepMain.SetFormatter( pNumFormatter );
     rFmtFldOrigin.SetFormatter( pNumFormatter );
+
+    rHistogramBinWidth.SetFormatter(pNumFormatter);
+    rHistogramOverflow.SetFormatter(pNumFormatter);
+    rHistogramUnderflow.SetFormatter(pNumFormatter);
 
     // #i6278# allow more decimal places than the output format.  As
     // the numbers shown in the edit fields are used for input, it makes more
@@ -518,6 +684,10 @@ void ScaleTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
     rFmtFldMin.UseInputStringForFormatting();
     rFmtFldStepMain.UseInputStringForFormatting();
     rFmtFldOrigin.UseInputStringForFormatting();
+
+    rHistogramBinWidth.UseInputStringForFormatting();
+    rHistogramOverflow.UseInputStringForFormatting();
+    rHistogramUnderflow.UseInputStringForFormatting();
 
     SetNumFormat();
 }
@@ -580,6 +750,13 @@ void ScaleTabPage::SetNumFormat()
         }
     }
 
+    // The bin width spans a distance along the axis, so it takes the interval format that the
+    // main step uses. The overflow and underflow boundaries are positions on the axis, so they
+    // take the same format as Minimum, Maximum and Origin.
+    const sal_uInt32 nAxisValueFormat = rFmtFldMax.GetFormatKey();
+    m_xFmtFldHistogramBinWidth->GetFormatter().SetFormatKey(nFmt);
+    m_xFmtFldHistogramOverflow->GetFormatter().SetFormatKey(nAxisValueFormat);
+    m_xFmtFldHistogramUnderflow->GetFormatter().SetFormatKey(nAxisValueFormat);
     m_xFmtFldStepMain->GetFormatter().SetFormatKey(nFmt);
 }
 
@@ -630,6 +807,7 @@ void ScaleTabPage::HideAllControls()
     m_xCbxAutoStepHelp->hide();
     m_xBxOrigin->hide();
     m_xBxResolution->hide();
+    m_xBxHistogramBinning->hide();
 }
 
 } //namespace chart

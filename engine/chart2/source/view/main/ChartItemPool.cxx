@@ -174,7 +174,14 @@ static ItemInfoPackage& getItemInfoPackageChart()
             { SCHATTR_DATA_TABLE_OUTLINE, new SfxBoolItem(SCHATTR_DATA_TABLE_OUTLINE, false), 0, SFX_ITEMINFOFLAG_NONE },
             { SCHATTR_DATA_TABLE_KEYS, new SfxBoolItem(SCHATTR_DATA_TABLE_KEYS, false), 0, SFX_ITEMINFOFLAG_NONE },
             { SCHATTR_COLOR_PALETTE, new SvxChartColorPaletteItem(ChartColorPaletteType::Unknown, 0, SCHATTR_COLOR_PALETTE), 0, SFX_ITEMINFOFLAG_NONE },
-            { SCHATTR_GRADIENT_PRESET, new SvxChartGradientPresetItem(ChartGradientVariation::Unknown, ChartGradientType::Invalid, SCHATTR_GRADIENT_PRESET), 0, SFX_ITEMINFOFLAG_NONE }
+            { SCHATTR_GRADIENT_PRESET, new SvxChartGradientPresetItem(ChartGradientVariation::Unknown, ChartGradientType::Invalid, SCHATTR_GRADIENT_PRESET), 0, SFX_ITEMINFOFLAG_NONE },
+            { SCHATTR_HISTOGRAM_FREQUENCY_TYPE, new SfxInt32Item(SCHATTR_HISTOGRAM_FREQUENCY_TYPE, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SCHATTR_HISTOGRAM_BIN_WIDTH, new SvxDoubleItem(0.0, SCHATTR_HISTOGRAM_BIN_WIDTH), 0, SFX_ITEMINFOFLAG_NONE },
+            { SCHATTR_HISTOGRAM_BIN_COUNT, new SfxInt32Item(SCHATTR_HISTOGRAM_BIN_COUNT, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SCHATTR_HISTOGRAM_USE_UNDERFLOW_BIN, new SfxBoolItem(SCHATTR_HISTOGRAM_USE_UNDERFLOW_BIN, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SCHATTR_HISTOGRAM_UNDERFLOW_BIN_VALUE, new SvxDoubleItem(0.0, SCHATTR_HISTOGRAM_UNDERFLOW_BIN_VALUE), 0, SFX_ITEMINFOFLAG_NONE },
+            { SCHATTR_HISTOGRAM_USE_OVERFLOW_BIN, new SfxBoolItem(SCHATTR_HISTOGRAM_USE_OVERFLOW_BIN, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SCHATTR_HISTOGRAM_OVERFLOW_BIN_VALUE, new SvxDoubleItem(0.0, SCHATTR_HISTOGRAM_OVERFLOW_BIN_VALUE), 0, SFX_ITEMINFOFLAG_NONE }
         }};
 
         virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }

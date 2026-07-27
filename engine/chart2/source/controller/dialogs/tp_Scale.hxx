@@ -56,6 +56,7 @@ private:
     SvNumberFormatter*  pNumFormatter;
 
     bool                m_bShowAxisOrigin;
+    bool                m_bShowHistogramBinning;
 
     std::unique_ptr<weld::CheckButton> m_xCbxReverse;
     std::unique_ptr<weld::CheckButton> m_xCbxLogarithm;
@@ -82,11 +83,23 @@ private:
     std::unique_ptr<weld::FormattedSpinButton> m_xFmtFldOrigin;
     std::unique_ptr<weld::CheckButton> m_xCbxAutoOrigin;
     std::unique_ptr<weld::Widget> m_xBxOrigin;
+    std::unique_ptr<weld::Widget> m_xBxHistogramBinning;
+    std::unique_ptr<weld::RadioButton> m_xRbtHistogramAutomatic;
+    std::unique_ptr<weld::RadioButton> m_xRbtHistogramBinWidth;
+    std::unique_ptr<weld::FormattedSpinButton> m_xFmtFldHistogramBinWidth;
+    std::unique_ptr<weld::RadioButton> m_xRbtHistogramBinCount;
+    std::unique_ptr<weld::SpinButton> m_xMtHistogramBinCount;
+    std::unique_ptr<weld::CheckButton> m_xCbxHistogramOverflow;
+    std::unique_ptr<weld::FormattedSpinButton> m_xFmtFldHistogramOverflow;
+    std::unique_ptr<weld::CheckButton> m_xCbxHistogramUnderflow;
+    std::unique_ptr<weld::FormattedSpinButton> m_xFmtFldHistogramUnderflow;
 
     void EnableControls();
+    void EnableHistogramControls();
 
     DECL_LINK(SelectAxisTypeHdl, weld::ComboBox&, void);
     DECL_LINK(EnableValueHdl, weld::Toggleable&, void);
+    DECL_LINK(HistogramToggleHdl, weld::Toggleable&, void);
 
     /** shows a warning window due to an invalid input.
 

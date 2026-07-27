@@ -143,6 +143,8 @@
 #define STR_TYPE_BAR                                NC_("STR_TYPE_BAR", "Bar")
 #define STR_TYPE_HISTOGRAM                          NC_("STR_TYPE_HISTOGRAM", "Histogram")
 #define STR_HISTOGRAM                               NC_("STR_HISTOGRAM", "Histogram Chart")
+#define STR_HISTOGRAM_BIN_WIDTH_GT_ZERO             NC_("STR_HISTOGRAM_BIN_WIDTH_GT_ZERO", "The bin width requires a positive number. Check your input.")
+#define STR_HISTOGRAM_INVALID_OVERFLOW_UNDERFLOW    NC_("STR_HISTOGRAM_INVALID_OVERFLOW_UNDERFLOW", "The underflow value must be lower than the overflow value. Check your input.")
 #define STR_TYPE_FUNNEL                             NC_("STR_TYPE_FUNNEL", "Funnel")
 #define STR_FUNNEL                                  NC_("STR_FUNNEL", "Funnel Chart")
 #define STR_TYPE_AREA                               NC_("STR_TYPE_AREA", "Area")

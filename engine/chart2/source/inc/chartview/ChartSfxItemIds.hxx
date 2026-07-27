@@ -212,7 +212,17 @@ inline constexpr TypedWhichId<SvxChartGradientPresetItem> SCHATTR_GRADIENT_PRESE
 inline constexpr sal_uInt16                               SCHATTR_GRADIENT_PRESET_END          (SCHATTR_GRADIENT_PRESET);
 
 
-inline constexpr sal_uInt16 SCHATTR_END (SCHATTR_GRADIENT_PRESET_END);
+inline constexpr sal_uInt16                               SCHATTR_HISTOGRAM_BINNING_START      (SCHATTR_GRADIENT_PRESET_END + 1);
+inline constexpr TypedWhichId<SfxInt32Item>               SCHATTR_HISTOGRAM_FREQUENCY_TYPE     (SCHATTR_HISTOGRAM_BINNING_START);
+inline constexpr TypedWhichId<SvxDoubleItem>              SCHATTR_HISTOGRAM_BIN_WIDTH          (SCHATTR_HISTOGRAM_BINNING_START + 1);
+inline constexpr TypedWhichId<SfxInt32Item>               SCHATTR_HISTOGRAM_BIN_COUNT          (SCHATTR_HISTOGRAM_BINNING_START + 2);
+inline constexpr TypedWhichId<SfxBoolItem>                SCHATTR_HISTOGRAM_USE_UNDERFLOW_BIN  (SCHATTR_HISTOGRAM_BINNING_START + 3);
+inline constexpr TypedWhichId<SvxDoubleItem>              SCHATTR_HISTOGRAM_UNDERFLOW_BIN_VALUE(SCHATTR_HISTOGRAM_BINNING_START + 4);
+inline constexpr TypedWhichId<SfxBoolItem>                SCHATTR_HISTOGRAM_USE_OVERFLOW_BIN   (SCHATTR_HISTOGRAM_BINNING_START + 5);
+inline constexpr TypedWhichId<SvxDoubleItem>              SCHATTR_HISTOGRAM_OVERFLOW_BIN_VALUE (SCHATTR_HISTOGRAM_BINNING_START + 6);
+inline constexpr sal_uInt16                               SCHATTR_HISTOGRAM_BINNING_END        (SCHATTR_HISTOGRAM_OVERFLOW_BIN_VALUE);
+
+inline constexpr sal_uInt16 SCHATTR_END (SCHATTR_HISTOGRAM_BINNING_END);
 
 // values for Items
 
