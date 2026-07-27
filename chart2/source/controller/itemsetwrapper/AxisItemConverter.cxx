@@ -33,6 +33,7 @@
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <ChartView.hxx>
+#include <servicenames_charttypes.hxx>
 #include <memory>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
@@ -45,6 +46,7 @@
 #include <osl/diagnose.h>
 #include <o3tl/any.hxx>
 #include <svl/eitem.hxx>
+#include <svl/itempool.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/sdangitm.hxx>
 #include <svl/intitem.hxx>
@@ -72,6 +74,65 @@ ItemPropertyMapType & lcl_GetAxisPropertyMap()
         {SCHATTR_AXIS_LABEL_OVERLAP, {"TextOverlap",      0}}};
     return aAxisPropertyMap;
 };
+
+OUString lcl_getHistogramPropertyName(sal_uInt16 nWhichId)
+{
+    switch (nWhichId)
+    {
+        case SCHATTR_HISTOGRAM_FREQUENCY_TYPE:
+            return u"FrequencyType"_ustr;
+        case SCHATTR_HISTOGRAM_BIN_WIDTH:
+            return u"BinWidth"_ustr;
+        case SCHATTR_HISTOGRAM_BIN_COUNT:
+            return u"BinCount"_ustr;
+        case SCHATTR_HISTOGRAM_USE_UNDERFLOW_BIN:
+            return u"UseUnderflowBin"_ustr;
+        case SCHATTR_HISTOGRAM_UNDERFLOW_BIN_VALUE:
+            return u"UnderflowBinValue"_ustr;
+        case SCHATTR_HISTOGRAM_USE_OVERFLOW_BIN:
+            return u"UseOverflowBin"_ustr;
+        case SCHATTR_HISTOGRAM_OVERFLOW_BIN_VALUE:
+            return u"OverflowBinValue"_ustr;
+        default:
+            return OUString();
+    }
+}
+
+rtl::Reference<::chart::ChartType> lcl_getHistogramChartTypeForAxis(
+    const rtl::Reference<::chart::Axis>& xAxis,
+    const rtl::Reference<::chart::ChartModel>& xChartDoc)
+{
+    if (!xAxis.is() || !xChartDoc.is())
+        return nullptr;
+
+    rtl::Reference<::chart::BaseCoordinateSystem> xCooSys(
+        AxisHelper::getCoordinateSystemOfAxis(
+            xAxis, xChartDoc->getFirstChartDiagram()));
+
+    if (!xCooSys.is())
+        return nullptr;
+
+    sal_Int32 nDimensionIndex = -1;
+    sal_Int32 nAxisIndex = -1;
+    if (!AxisHelper::getIndicesForAxis(
+            xAxis, xCooSys, nDimensionIndex, nAxisIndex)
+        || nDimensionIndex != 0 || nAxisIndex != 0)
+    {
+        return nullptr;
+    }
+
+    rtl::Reference<::chart::ChartType> xChartType
+        = AxisHelper::getChartTypeByIndex(xCooSys, 0);
+
+    if (!xChartType.is()
+        || xChartType->getChartType()
+               != CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM)
+    {
+        return nullptr;
+    }
+
+    return xChartType;
+}
 
 } // anonymous namespace
 
@@ -158,6 +219,30 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 {
     if( !m_xAxis.is() )
         return;
+
+    const OUString aHistogramProperty = lcl_getHistogramPropertyName(nWhichId);
+
+    if (!aHistogramProperty.isEmpty())
+    {
+        rtl::Reference<::chart::ChartType> xHistogramType
+            = lcl_getHistogramChartTypeForAxis(m_xAxis, m_xChartDoc);
+
+        if (!xHistogramType.is())
+        {
+            return;
+        }
+
+        std::unique_ptr<SfxPoolItem> pItem(
+            GetItemPool().GetUserOrPoolDefaultItem(nWhichId).Clone());
+
+        if (pItem
+            && pItem->PutValue(xHistogramType->getPropertyValue(aHistogramProperty), 0))
+        {
+            pItem->SetWhich(nWhichId);
+            rOutItemSet.Put(std::move(pItem));
+        }
+        return;
+    }
 
     const chart2::ScaleData      aScale( m_xAxis->getScaleData() );
     const chart2::IncrementData& rIncrement( aScale.IncrementData );
@@ -464,6 +549,32 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 {
     if( !m_xAxis.is() )
         return false;
+
+    const OUString aHistogramProperty = lcl_getHistogramPropertyName(nWhichId);
+
+    if (!aHistogramProperty.isEmpty())
+    {
+        rtl::Reference<::chart::ChartType> xHistogramType
+            = lcl_getHistogramChartTypeForAxis(m_xAxis, m_xChartDoc);
+
+        if (!xHistogramType.is())
+        {
+            return false;
+        }
+
+        uno::Any aNewValue;
+        rItemSet.Get(nWhichId).QueryValue(aNewValue);
+
+        if (xHistogramType->getPropertyValue(aHistogramProperty)
+            == aNewValue)
+        {
+            return false;
+        }
+
+        xHistogramType->setPropertyValue(
+            aHistogramProperty, aNewValue);
+        return true;
+    }
 
     chart2::ScaleData     aScale( m_xAxis->getScaleData() );
 

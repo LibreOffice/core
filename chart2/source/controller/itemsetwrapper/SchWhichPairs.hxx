@@ -38,6 +38,7 @@ const WhichRangesContainer nTitleWhichPairs(svl::Items<
 const WhichRangesContainer nAxisWhichPairs(svl::Items<
     SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     SCHATTR_AXIS_START, SCHATTR_AXIS_END,
+    SCHATTR_HISTOGRAM_BINNING_START, SCHATTR_HISTOGRAM_BINNING_END,
     XATTR_LINE_FIRST, XATTR_LINE_LAST,                          //  1000 -  1016  svx/xdef.hxx
     EE_ITEMS_START, EE_ITEMS_END,                             // Characters
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,   // 10585 - 10585  svx/svxids.hrc
