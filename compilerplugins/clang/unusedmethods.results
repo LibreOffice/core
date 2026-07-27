@@ -120,8 +120,6 @@ cppuhelper/inc/interfacecontainer4.hxx:277
     void cppuhelper::OInterfaceContainerHelper4::NotifySingleListener::operator()(const Reference<type-parameter-?-?> &) const
 cui/source/dialogs/SpellAttrib.hxx:73
     _Bool svx::SpellErrorDescription::operator==(const struct svx::SpellErrorDescription &) const
-cui/source/inc/CustomNotebookbarGenerator.hxx:30
-     CustomNotebookbarGenerator::CustomNotebookbarGenerator()
 cui/source/inc/fileextcheckdlg.hxx:32
     void FileExtCheckDialog::LinkStubOnOkClick(void *,weld::Button &)
 cui/source/inc/fileextcheckdlg.hxx:32
