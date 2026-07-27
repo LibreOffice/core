@@ -67,4 +67,58 @@ describe(['tagdesktop'], 'JSDialog Help button test', function() {
 			expect(b.bottom + ring, 'ring bottom edge').to.be.at.most(c.bottom);
 		});
 	});
+
+	it('Settings nav item focus ring is not clipped by the nav column', function() {
+		// Open the Options (settings) dialog. Its UI is rendered inside a
+		// nested, same-origin iframe.
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.settings.showSettingsDialog();
+		});
+
+		// Wait until the iframe has loaded and its category list is populated.
+		cy.cGet('.iframe-settings-modal').should(function($iframe) {
+			var doc = $iframe[0].contentDocument;
+			expect(doc, 'settings iframe document').to.not.be.null;
+			expect(
+				doc.querySelectorAll('.settings-nav-item').length,
+				'settings nav items loaded'
+			).to.be.greaterThan(0);
+		});
+
+		// The settings page keeps fetching/rebuilding while it loads, so retry
+		// until a nav item is actually laid out, then check its geometry.
+		cy.cGet('.iframe-settings-modal').should(function($iframe) {
+			var doc = $iframe[0].contentDocument;
+
+			// A category link flush against the nav column edge is the one
+			// whose focus ring gets clipped, so exercise the first one.
+			var item = doc.querySelector('.settings-nav-item');
+			expect(item, 'a settings nav item exists').to.not.be.null;
+
+			var b = item.getBoundingClientRect();
+			expect(b.width, 'nav item is rendered').to.be.greaterThan(0);
+
+			// Focus it - the ring only matters when the item is focused.
+			// preventScroll keeps focus from scrolling the padding out of view.
+			item.focus({ preventScroll: true });
+			expect(doc.activeElement, 'nav item is focused').to.equal(item);
+
+			// The nav column clips overflow (overflow-y:auto forces overflow-x
+			// to clip too), so it is what would cut off the item's focus ring.
+			var clip = doc.getElementById('settings-nav');
+			expect(clip, 'nav column exists').to.not.be.null;
+
+			var c = clip.getBoundingClientRect();
+
+			// The item must sit inside the clipping column with room on every
+			// side for the focus ring - in particular on the inline-start edge,
+			// where it used to be flush (no padding) and the ring was cut off.
+			// A couple of pixels of slack is enough to clear a normal ring.
+			var slack = 2;
+			expect(b.left - c.left, 'gap to nav left edge').to.be.at.least(slack);
+			expect(c.right - b.right, 'gap to nav right edge').to.be.at.least(0);
+			expect(b.top - c.top, 'gap to nav top edge').to.be.at.least(0);
+			expect(c.bottom - b.bottom, 'gap to nav bottom edge').to.be.at.least(0);
+		});
+	});
 });
