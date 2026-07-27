@@ -831,8 +831,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152575)
     CPPUNIT_ASSERT_EQUAL(3, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/1);
     CPPUNIT_ASSERT(pPdfPage);
-    // Without the fix for tdf#152575 this would be only 42 objects
-    CPPUNIT_ASSERT_EQUAL(51, pPdfPage->getObjectCount());
+    // Without the fix for tdf#152575 this would be only 44 objects
+    CPPUNIT_ASSERT_EQUAL(53, pPdfPage->getObjectCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf140731)

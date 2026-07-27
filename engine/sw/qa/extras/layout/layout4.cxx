@@ -11,9 +11,11 @@
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
+#include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/scheduler.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/editobj.hxx>
@@ -2098,6 +2100,77 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf171959ManyBlanks)
     CPPUNIT_ASSERT_GREATER(sal_Int32(1), nLen1);
     CPPUNIT_ASSERT_GREATER(sal_Int32(0), nLen2);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(200), nLen1 + nLen2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTrailingBlankInUntaggedPdf)
+{
+    // The same centred line ending in many blanks, this time exported to PDF with tagging off.
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SetAttrItem(SvxAdjustItem(SvxAdjust::Center, RES_PARATR_ADJUST));
+    pWrtShell->SetAttrItem(SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
+    pWrtShell->Insert("foo" + RepeatedUChar(' ', 200));
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(
+             u"FilterData"_ustr,
+             comphelper::InitPropertySequence({ { "UseTaggedPDF", cpo::uno::Any(false) } })) });
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport();
+    if (!pPdf)
+        return;
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdf->openPage(0);
+    int nText = 0;
+    int nPath = 0;
+    for (int i = 0; i < pPage->getObjectCount(); ++i)
+    {
+        switch (pPage->getObject(i)->getType())
+        {
+            case vcl::pdf::PDFPageObjectType::Text:
+                ++nText;
+                break;
+            case vcl::pdf::PDFPageObjectType::Path:
+                ++nPath;
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Turning tagging off used to drop the trailing blank from the export altogether, leaving only
+    // the word and its underline. The word and both halves of the blank are written out now, ...
+    CPPUNIT_ASSERT_EQUAL(3, nText);
+    // ... and the word and the decorated half of the blank each carry an underline. This is what a
+    // tagged export of the same document produces, down to the position of every object.
+    CPPUNIT_ASSERT_EQUAL(2, nPath);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf32181)
+{
+    // A justified, underlined paragraph: the attachment of tdf#32181 / i68503, with its font
+    // changed to a bundled one. Justification stretches the blank each line ends in, and the blank
+    // used to be underlined, so the underline ran off to the right well past the margin.
+    createSwDoc("underline-over-margin.odt");
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(
+             u"FilterData"_ustr,
+             comphelper::InitPropertySequence({ { "UseTaggedPDF", cpo::uno::Any(false) } })) });
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport();
+    if (!pPdf)
+        return;
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdf->openPage(0);
+
+    // The page is 21 cm wide with a 2 cm right margin, so text ends here. An underline is drawn a
+    // little wider than the run it belongs to, at both ends, hence the tolerance.
+    const double fRightMargin = 19.0 * 72 / 2.54;
+    for (int i = 0; i < pPage->getObjectCount(); ++i)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pObject = pPage->getObject(i);
+        if (pObject->getType() != vcl::pdf::PDFPageObjectType::Path)
+            continue;
+        // The underline of the stretched blank reached the edge of the page.
+        CPPUNIT_ASSERT_LESS(fRightMargin + 1.0, pObject->getBounds().getMaxX());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf171692)
