@@ -1027,6 +1027,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf168777_BlankBeforeFly)
     assertXPath(pXmlDoc, sLine1 + "/SwHolePortion[2]", "show-underline", u"true");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf171688)
+{
+    // The line ends with an underlined word, and the blank after it is not underlined: it is the
+    // next word that gets wrapped, so the blank ends up in a hole portion of its own.
+    createSwDoc("tdf171688.fodt");
+    std::shared_ptr<GDIMetaFile> xMetaFile = getSwDocShell()->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+
+    // Without the fix the blank was drawn with the font of the word in front of it, so that word's
+    // underline looked like it ran past its end. A hole portion is not in the text group, so the
+    // painter used to leave the font of the previous portion in place for it.
+    assertXPath(pXmlDoc, "//textarray[@length='1']", 1);
+    assertXPath(pXmlDoc, "//textarray[@length='1']/preceding-sibling::font[1]", "underline", u"0");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf147666)
 {
     createSwDoc("tdf147666.odt");

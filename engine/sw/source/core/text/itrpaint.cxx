@@ -444,7 +444,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 GetRedln()->Seek(*m_pFont, pos.first->GetIndex(), pos.second, 0);
             }
         }
-        else if( pPor->InTextGrp() || pPor->InFieldGrp() || pPor->InTabGrp() )
+        else if( pPor->InTextGrp() || pPor->InFieldGrp() || pPor->InTabGrp()
+                 || pPor->IsHolePortion() )
             SeekAndChg( GetInfo() );
         else if ( !bFirst && pPor->IsBreakPortion() && GetInfo().GetOpt().IsParagraph() )
         {
