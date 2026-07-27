@@ -262,8 +262,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             rWrtSh.GetCurAttr( aSetItem.GetItemSet() );
             SfxItemSet aAttrSet( rPool, aSetItem.GetItemSet().GetRanges() );
 
-            SvtScriptType nScriptTypes
-                = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
+            SvtScriptType nScriptTypes = rWrtSh.GetScriptType();
             const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>(
                                         aSetItem.GetItemOfScript( nScriptTypes ) ) );
             std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> vItems;
@@ -300,7 +299,9 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                         nSize = nFontInc;
 
                     aSize.SetHeight( nSize );
-                    aSetItem.PutItemForScriptType( nScriptTypes, aSize );
+                    aSetItem.PutItemForScriptType(SvtScriptType::LATIN | SvtScriptType::ASIAN
+                                                      | SvtScriptType::COMPLEX,
+                                                  aSize);
                     aAttrSet.Put( aSetItem.GetItemSet() );
                     if( pColl )
                         pColl->SetFormatAttr( aAttrSet );

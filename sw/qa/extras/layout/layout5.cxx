@@ -2137,6 +2137,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf72341GrowAllScripts)
     CPPUNIT_ASSERT_GREATER(nWidthAlephInitial, nWidthAlephResized);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf172932GrowAllScripts)
+{
+    createSwDoc("tdf172932-grow-all-scripts.fodt");
+
+    auto* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect*/ false, 10, /*bBasicCall*/ false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect*/ true, 10, /*bBasicCall*/ false);
+
+    for (size_t i = 0; i < 20; ++i)
+    {
+        dispatchCommand(mxComponent, u".uno:Grow"_ustr, {});
+    }
+
+    // Without the fix, the first line contents will be:
+    // "Since the first pair of Eurasian beavers (Castor fiber) was released into the "
+    auto pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//body/txt/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Since the first pair of Eurasian ");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf168858_singleHiddenSection)
 {
     // Both test documents have no content outside of hidden sections.
