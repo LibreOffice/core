@@ -35,6 +35,21 @@ using namespace svt;
 
 namespace {
 
+// Windows relies on the share locks the operating system already takes on an open file, so this
+// code never acquires an advisory lock of its own there.
+#if defined(_WIN32)
+constexpr bool bPlatformTakesLock = false;
+#else
+constexpr bool bPlatformTakesLock = true;
+#endif
+
+// What a probe reports while this process holds the lock, and once it has let it go. A platform
+// that takes no advisory lock cannot tell either state from a target it is unable to probe.
+constexpr LockLivenessProbe eProbeWhileHeld
+    = bPlatformTakesLock ? LockLivenessProbe::Held : LockLivenessProbe::Unsupported;
+constexpr LockLivenessProbe eProbeOnceReleased
+    = bPlatformTakesLock ? LockLivenessProbe::Free : LockLivenessProbe::Unsupported;
+
 // Create an empty file in the system temp area and return its file URL.
 OUString makeTempLockFileURL()
 {
@@ -103,8 +118,8 @@ void LockFileLivenessTest::heldLockReadsAsHeld()
 {
     OUString aURL = makeTempLockFileURL();
     LockFileLivenessHandle aHandle = acquireLockFileLiveness(aURL);
-    CPPUNIT_ASSERT(aHandle.is());
-    CPPUNIT_ASSERT_EQUAL(static_cast<int>(LockLivenessProbe::Held),
+    CPPUNIT_ASSERT_EQUAL(bPlatformTakesLock, aHandle.is());
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(eProbeWhileHeld),
         static_cast<int>(probeLockFileLiveness(aURL)));
     osl::File::remove(aURL);
 }
@@ -115,9 +130,9 @@ void LockFileLivenessTest::releasedLockReadsAsFree()
     OUString aURL = makeTempLockFileURL();
     {
         LockFileLivenessHandle aHandle = acquireLockFileLiveness(aURL);
-        CPPUNIT_ASSERT(aHandle.is());
+        CPPUNIT_ASSERT_EQUAL(bPlatformTakesLock, aHandle.is());
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<int>(LockLivenessProbe::Free),
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(eProbeOnceReleased),
         static_cast<int>(probeLockFileLiveness(aURL)));
     osl::File::remove(aURL);
 }
