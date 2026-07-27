@@ -21,35 +21,14 @@ module com { module sun { module star { module rendering {
 
 struct Panose
 {
-    /// PanoseFamilyTypes
-    byte    FamilyType;
-
-    /// PanoseSerifStyle
-    byte    SerifStyle;
-
     /// PanoseWeight
     byte    Weight;
 
     /// PanoseProportion
     byte    Proportion;
 
-    /// PanoseContrast
-    byte    Contrast;
-
-    /// PanoseStrokeVariation
-    byte    StrokeVariation;
-
-    /// PanoseArmStyle
-    byte    ArmStyle;
-
     /// PanoseLetterForm
     byte    Letterform;
-
-    /// PanoseMidline
-    byte    Midline;
-
-    /// PanoseXHeight
-    byte    XHeight;
 };
 
 }; }; }; };

@@ -2840,16 +2840,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	FontMetrics \
 	FontRequest \
 	Panose \
-	PanoseArmStyle \
-	PanoseContrast \
-	PanoseFamilyTypes \
 	PanoseLetterForm \
-	PanoseMidline \
 	PanoseProportion \
-	PanoseSerifStyle \
-	PanoseStrokeVariation \
 	PanoseWeight \
-	PanoseXHeight \
 	PathCapType \
 	PathJoinType \
 	RGBColor \
