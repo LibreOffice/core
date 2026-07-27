@@ -6260,7 +6260,7 @@ SfxBoolItem HandleDuplicateRecords FID_HANDLEDUPLICATERECORDS
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
