@@ -76,6 +76,9 @@ struct SdrMediaObj::Impl
     OUString m_LastFailedPkgURL;
     // owned by the link manager while registered, null otherwise
     SdrMediaLink* m_pMediaLink = nullptr;
+    // true when the user picked this media reference in this session, false when it arrived with
+    // the document
+    bool m_bLinkAllowed = false;
 };
 
 SdrMediaLink::SdrMediaLink(SdrMediaObj& rObj)
@@ -124,6 +127,9 @@ SdrMediaObj::SdrMediaObj(SdrModel& rSdrModel, SdrMediaObj const & rSource)
 #endif
     setMediaProperties( rSource.getMediaProperties() );
     m_xImpl->m_xCachedSnapshot = rSource.m_xImpl->m_xCachedSnapshot;
+    // A copy of media the user picked stays picked by the user, so duplicating or moving a shape
+    // keeps it playable.
+    m_xImpl->m_bLinkAllowed = rSource.m_xImpl->m_bLinkAllowed;
 }
 
 SdrMediaObj::SdrMediaObj(
@@ -239,13 +245,9 @@ uno::Reference< graphic::XGraphic > const & SdrMediaObj::getSnapshot() const
         {
             // No extracted copy inside the document, so the media is reached
             // through its URL. Treat it like a linked graphic and only fetch
-            // once the user has allowed link updates, so opening or converting
-            // a document never silently fetches the referenced content. A
-            // model with no document shell has no user to ask, so it does not
-            // fetch either.
-            sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
-            SfxObjectShell* pShell = pLinkManager ? pLinkManager->GetPersist() : nullptr;
-            if (!pShell || !pShell->getEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+            // once the link is allowed, so opening or converting a document
+            // never silently fetches the referenced content.
+            if (!isLinkAllowed())
                 return m_xImpl->m_xCachedSnapshot;
             aRealURL = m_xImpl->m_MediaProperties.getURL();
         }
@@ -343,6 +345,21 @@ const OUString& SdrMediaObj::getURL() const
     static OUString ret;
     return ret;
 #endif
+}
+
+void SdrMediaObj::setLinkAllowed(bool bAllowed)
+{
+    m_xImpl->m_bLinkAllowed = bAllowed;
+}
+
+bool SdrMediaObj::isLinkAllowed() const
+{
+    if (m_xImpl->m_bLinkAllowed)
+        return true;
+    // A model with no document shell has no user to ask, so its links stay disallowed.
+    sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
+    SfxObjectShell* pShell = pLinkManager ? pLinkManager->GetPersist() : nullptr;
+    return pShell && pShell->getEmbeddedObjectContainer().getUserAllowsLinkUpdate();
 }
 
 const OUString& SdrMediaObj::getTempURL() const

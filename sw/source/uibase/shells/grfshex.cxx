@@ -143,6 +143,12 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
             tools::Rectangle(aPos, aSize));
 
         pObj->setURL( realURL, u""_ustr );
+
+        // The user picked this media file, so its external reference is allowed without asking
+        // again.
+        if (bLink)
+            pObj->setLinkAllowed(true);
+
         rSh.EnterStdMode();
         rSh.SwFEShell::InsertDrawObj( *pObj, aPos );
         bRet = true;
