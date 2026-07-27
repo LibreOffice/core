@@ -127,10 +127,6 @@ namespace com::sun::star::awt {
     class XGraphics;
 }
 
-namespace com::sun::star::rendering {
-    class XCanvas;
-}
-
 // OutputDevice-Types
 
 enum OutDevType { OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV, OUTDEV_PDF };
@@ -181,8 +177,6 @@ private:
     std::unique_ptr<ImplOutDevData> mpOutDevData;
     std::vector< VCLXGraphics* >*   mpUnoGraphicsList;
     vcl::ExtOutDevData*             mpExtOutDevData;
-    // The canvas interface for this output device. Is persistent after the first GetCanvas() call
-    mutable cpo::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;
 
     /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
     tools::Long                            mnOutOffOrigX;
@@ -312,9 +306,6 @@ public:
 
     virtual size_t               GetSyncCount() const { return 0xffffffff; }
 
-    /// request XCanvas render interface
-    css::uno::Reference< css::rendering::XCanvas > GetCanvas() const;
-
     virtual bool CanAnimate() const = 0;
 
 protected:
@@ -432,9 +423,6 @@ protected:
     SAL_DLLPRIVATE void         drawOutDevDirect(const OutputDevice& rSrcDev, SalTwoRect& rPosAry);
 
     SAL_DLLPRIVATE bool         is_double_buffered_window() const;
-
-    css::uno::Reference< css::rendering::XCanvas > ImplGetCanvas() const;
-    SAL_DLLPRIVATE void         ImplDisposeCanvas();
 
 private:
 

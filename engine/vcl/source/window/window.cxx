@@ -154,10 +154,6 @@ void Window::dispose()
     // remove Key and Mouse events issued by Application::PostKey/MouseEvent
     Application::RemoveMouseAndKeyEvents( this );
 
-    // Dispose of the canvas implementation (which, currently, has an
-    // own wrapper window as a child to this one.
-    GetOutDev()->ImplDisposeCanvas();
-
     mpWindowImpl->mbInDispose = true;
 
     CallEventListeners( VclEventId::ObjectDying );

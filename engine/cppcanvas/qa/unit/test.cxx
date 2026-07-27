@@ -15,6 +15,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 
+#include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
@@ -69,7 +70,9 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
 {
     ScopedVclPtrInstance<WorkWindow> pWin(nullptr, WB_STDWORK);
 
-    uno::Reference<rendering::XCanvas> xCanvas = pWin->GetOutDev()->GetCanvas();
+    uno::Reference<rendering::XCanvas> xCanvas
+        = css::rendering::CanvasFactory::create(m_xContext)
+              ->create(reinterpret_cast<sal_Int64>(pWin->GetOutDev()));
     CPPUNIT_ASSERT(xCanvas.is());
 
     // a huge canvas ...
@@ -140,7 +143,9 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testTdf155810)
 
         aOutputMetaFile.Record(pDev.get());
 
-        auto xCanvas = pDev->GetCanvas();
+        uno::Reference<rendering::XCanvas> xCanvas
+            = css::rendering::CanvasFactory::create(m_xContext)
+                  ->create(reinterpret_cast<sal_Int64>(pDev.get()));
         CPPUNIT_ASSERT(xCanvas.is());
         auto pCanvas = cppcanvas::VCLFactory::createCanvas(xCanvas);
 

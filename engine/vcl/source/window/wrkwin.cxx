@@ -136,10 +136,6 @@ void WorkWindow::ShowFullScreenMode( bool bFullScreenMode, sal_Int32 nDisplayScr
     if ( mbSysChild )
         return;
 
-    // Dispose of the canvas implementation, which might rely on
-    // screen-specific system data.
-    GetOutDev()->ImplDisposeCanvas();
-
     mpWindowImpl->mpFrameWindow->mpWindowImpl->mbWaitSystemResize = true;
     ImplGetFrame()->ShowFullScreen( bFullScreenMode, nDisplayScreen );
 }

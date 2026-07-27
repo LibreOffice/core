@@ -644,46 +644,4 @@ css::awt::DeviceInfo OutputDevice::GetDeviceInfo() const
     return aInfo;
 }
 
-Reference< css::rendering::XCanvas > OutputDevice::GetCanvas() const
-{
-    // try to retrieve hard reference from weak member
-    Reference< css::rendering::XCanvas > xCanvas( mxCanvas );
-    // canvas still valid? Then we're done.
-    if( xCanvas.is() )
-        return xCanvas;
-    xCanvas = ImplGetCanvas();
-    mxCanvas = xCanvas;
-    return xCanvas;
-}
-
-// Generic implementation, Window will override.
-css::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetCanvas() const
-{
-    const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
-
-    static tools::DeleteUnoReferenceOnDeinit<css::rendering::XCanvasFactory> xStaticCanvasFactory(
-        css::rendering::CanvasFactory::create( xContext ) );
-    Reference<css::rendering::XCanvasFactory> xCanvasFactory(xStaticCanvasFactory.get());
-    Reference< css::rendering::XCanvas > xCanvas;
-
-    if(xCanvasFactory.is())
-    {
-        xCanvas = xCanvasFactory->create(reinterpret_cast<sal_Int64>(this));
-    }
-
-    // no factory??? Empty reference, then.
-    return xCanvas;
-}
-
-void OutputDevice::ImplDisposeCanvas()
-{
-    css::uno::Reference< css::rendering::XCanvas > xCanvas( mxCanvas );
-    if( xCanvas.is() )
-    {
-        css::uno::Reference< css::lang::XComponent >  xCanvasComponent( xCanvas, css::uno::UNO_QUERY );
-        if( xCanvasComponent.is() )
-            xCanvasComponent->dispose();
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -22,6 +22,7 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <cppcanvas/test.hxx>
 
+#include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
 using namespace drawinglayer;
@@ -66,7 +67,8 @@ public:
         mVclDevice->SetOutputSizePixel(size);
         mVclDevice->SetBackground(Wallpaper(backgroundColor));
         mVclDevice->Erase();
-        mCanvas = mVclDevice->GetCanvas();
+        mCanvas = css::rendering::CanvasFactory::create(m_xContext)
+                      ->create(reinterpret_cast<sal_Int64>(mVclDevice.get()));
         CPPUNIT_ASSERT(mCanvas.is());
     }
 
