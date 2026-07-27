@@ -1359,9 +1359,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
             xWindow = xListBox;
         }
     }
-    else if (name == "VclOptionalBox" || name == "sfxlo-OptionalBox")
+    else if (name == "VclOptionalBox")
     {
-        // tdf#135495 fallback sfxlo-OptionalBox to VclOptionalBox as a stopgap
         xWindow = VclPtr<OptionalBox>::Create(pParent);
     }
     else if (name == "svtlo-ManagedMenuButton")
