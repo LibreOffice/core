@@ -28,9 +28,9 @@ build-samples:
 
 if ENABLE_MOBILEAPP
 
-if ENABLE_MACOS
+if ENABLE_MACOSAPP
 SUBDIRS = macos browser
-else !ENABLE_MACOS
+else !ENABLE_MACOSAPP
 if ENABLE_QTAPP
 SUBDIRS = qt browser
 

@@ -83,10 +83,10 @@ Step back to the top of the `collabora-office` clone (one level up from `engine/
 --with-lo-builddir=$(pwd)/engine
 ```
 
-Then build the JavaScript bits:
+Then build the JavaScript bits by running make from the top of the monorepo:
 
 ```bash
-(cd browser && make)
+make
 ```
 
 The configure script puts the app name as the `CFBundleDisplayName` property into the `ios/Mobile/Info.plist` file, and sets up some symbolic links that point to the engine source and build directories (which typically will be the same, of course).
