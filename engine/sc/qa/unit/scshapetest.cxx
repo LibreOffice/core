@@ -861,6 +861,13 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf152081_UndoHideColsWithNotes)
 
     // Get document and shape
     ScDocument* pDoc = getScDoc();
+    // A note gets its caption only when something asks for it, and with the Kit the sheet never
+    // shows one, so ask for it before looking for it on the drawing page.
+    std::vector<sc::NoteEntry> aNotes;
+    pDoc->GetAllNoteEntries(aNotes);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aNotes.size());
+    aNotes[0].mpNote->GetOrCreateCaption(aNotes[0].maPos);
+
     SdrObject* pObj = lcl_getSdrObjectWithAssert(*pDoc, 0);
 
     CPPUNIT_ASSERT_MESSAGE("Load: Note object should be visible", pObj->IsVisible());

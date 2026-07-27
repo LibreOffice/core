@@ -384,9 +384,13 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     sal_uInt32 nDefaultObjectSizeHeight = rAppOpt.GetDefaultObjectSizeHeight();
 
     // calc position and size
-    bool bLOKIsActive = comphelper::COKit::isActive();
+    // Put the object where the client looks. Without the Kit, or before the client has said
+    // what it looks at, go by what the window shows.
+    ScViewData& rViewData = GetViewData();
+    bool bUseKitVisibleArea
+        = comphelper::COKit::isActive() && !rViewData.getKitVisibleArea().IsEmpty();
     Point aInsertPos;
-    if(!bLOKIsActive)
+    if(!bUseKitVisibleArea)
     {
         tools::Rectangle aVisArea = pWin->PixelToLogic(tools::Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
         aInsertPos = aVisArea.Center();
@@ -395,7 +399,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     }
     else
     {
-        ScViewData& rViewData = GetViewData();
         tools::Long nLayoutSign = rViewData.GetDocument().IsLayoutRTL(rViewData.CurrentTabForData()) ? -1 : 1;
         aInsertPos = rViewData.getKitVisibleArea().Center();
         if (comphelper::COKit::isCompatFlagSet(
