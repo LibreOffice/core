@@ -5035,8 +5035,21 @@ void DocumentBroker::uploadPresetsToWopiHost()
         COOLWSD::EnableMountNamespaces, getJailRoot(), JAILED_CONFIG_ROOT);
 
     const Poco::URI uploadBaseUri = DocumentBroker::getPresetUploadBaseUrl(_uriPublic);
+
+    // A relative URI has no host to send the request to.
+    if (uploadBaseUri.isRelative())
+    {
+        LOG_WRN("Not uploading presets: WOPI base URL [" << uploadBaseUri.toString()
+                                                         << "] is relative");
+        return;
+    }
+
     LOG_DBG("Uploading presets from jailPath[" << jailPresetsPath << "] to wopiHost["
                                                << uploadBaseUri.toString() << ']');
+
+    // The completion handlers below run on the web server poll, which outlives this broker,
+    // so they carry their own copy of the document key.
+    const std::string docKey = _docKey;
 
     for (const RoundTripPresetGroup& group : getRoundTripPresetGroups())
     {
@@ -5083,7 +5096,10 @@ void DocumentBroker::uploadPresetsToWopiHost()
                 if (scrubbedPath.empty())
                 {
                     // Either nothing allowed remained or scrubbing failed;
-                    // in both cases don't push anything for this file.
+                    // in both cases don't push anything for this file. Record
+                    // the timestamp so the next session removal reaches the
+                    // same conclusion without parsing the file again.
+                    _presetTimestamp[key] = currentTimestamp;
                     continue;
                 }
                 bodyPath = scrubbedPath;
@@ -5104,25 +5120,60 @@ void DocumentBroker::uploadPresetsToWopiHost()
                 uriObject, Authorization::create(_uriPublic));
             httpRequest.setVerb(http::Request::VERB_POST);
 
-            LOG_TRC("Uploading file from jailPath[" << filePath << "] to wopiHost["
-                                                    << uriObject.toString() << ']');
+            const std::string uriAnonym = Anonymizer::anonymizeUrl(uriObject.toString());
+            LOG_TRC("Uploading file from jailPath[" << filePath << "] to wopiHost[" << uriAnonym
+                                                    << ']');
 
             httpRequest.setBodyFile(bodyPath);
             httpRequest.set("Content-Type", "application/octet-stream");
 
-            auto httpSession = StorageConnectionManager::getHttpSession(uriObject);
-            auto httpResponse = httpSession->syncRequest(httpRequest);
+            // Mark the file as handled before the request goes out, so a second session
+            // leaving while this one is in flight leaves it alone. A failed upload waits
+            // for the next change to the file.
+            _presetTimestamp[key] = currentTimestamp;
 
-            http::StatusLine statusLine = httpResponse->statusLine();
-            if (statusLine.statusCode() != http::StatusCode::OK)
+            auto reportResult = [key, uriAnonym, docKey](const http::StatusLine& statusLine)
             {
-                LOG_ERR("Failed to upload file[" << key << "] to wopiHost["
-                                                 << uriObject.getAuthority() << " with status["
-                                                 << statusLine.reasonPhrase() << ']');
+                if (statusLine.statusCode() != http::StatusCode::OK)
+                {
+                    LOG_ERR_S("Failed to upload file["
+                              << key << "] for docKey[" << docKey << "] to wopiHost[" << uriAnonym
+                              << "] with status[" << statusLine.reasonPhrase() << ']');
+                    return;
+                }
+
+                LOG_DBG_S("Successfully uploaded presetFile[" << key << "] for docKey[" << docKey
+                                                              << ']');
+            };
+
+            auto httpSession = StorageConnectionManager::getHttpSession(uriObject);
+
+            const std::shared_ptr<TerminatingPoll> webServerPoll = COOLWSD::getWebServerPoll();
+            if (!webServerPoll || !webServerPoll->isAlive())
+            {
+                // At shutdown the web server poll is joined before the documents are
+                // drained, so there is no thread left to carry an asynchronous request.
+                // Blocking is harmless at that point: the clients have already been told
+                // the server is going away.
+                reportResult(httpSession->syncRequest(httpRequest)->statusLine());
                 continue;
             }
 
-            LOG_DBG("Successfully uploaded presetFile[" << key << ']');
+            // These run on the web server poll, which outlives this broker, so they hold
+            // a copy of everything they report.
+            httpSession->setFinishedHandler(
+                [reportResult](const std::shared_ptr<http::Session>& session)
+                { reportResult(session->response()->statusLine()); });
+
+            httpSession->setConnectFailHandler(
+                [key, uriAnonym, docKey](const std::shared_ptr<http::Session>&)
+                {
+                    LOG_ERR_S("Failed to connect to wopiHost[" << uriAnonym << "] to upload file["
+                                                               << key << "] for docKey[" << docKey
+                                                               << ']');
+                });
+
+            httpSession->asyncRequest(httpRequest, webServerPoll);
         }
     }
 }
