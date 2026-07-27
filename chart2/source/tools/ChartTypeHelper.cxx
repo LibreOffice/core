@@ -70,12 +70,6 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE)
-        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER)
-        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE)
-        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_REGIONMAP)
-        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SUNBURST)
-        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_TREEMAP)
-        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL)   // TODO: check this
         )
     {
         aRet.realloc(5);
@@ -85,6 +79,28 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
         *pSeq++ = css::chart::DataLabelPlacement::LEFT;
         *pSeq++ = css::chart::DataLabelPlacement::RIGHT;
         *pSeq++ = css::chart::DataLabelPlacement::CENTER;
+    }
+    else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_REGIONMAP)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SUNBURST)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_TREEMAP)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL)
+        )
+    {
+        // chartex chart types: support every value the chartex pos attribute
+        // can carry, so imported placements survive
+        aRet.realloc(9);
+        sal_Int32* pSeq = aRet.getArray();
+        *pSeq++ = css::chart::DataLabelPlacement::CENTER;
+        *pSeq++ = css::chart::DataLabelPlacement::TOP;
+        *pSeq++ = css::chart::DataLabelPlacement::BOTTOM;
+        *pSeq++ = css::chart::DataLabelPlacement::LEFT;
+        *pSeq++ = css::chart::DataLabelPlacement::RIGHT;
+        *pSeq++ = css::chart::DataLabelPlacement::OUTSIDE;
+        *pSeq++ = css::chart::DataLabelPlacement::INSIDE;
+        *pSeq++ = css::chart::DataLabelPlacement::NEAR_ORIGIN;
+        *pSeq++ = css::chart::DataLabelPlacement::AVOID_OVERLAP;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )

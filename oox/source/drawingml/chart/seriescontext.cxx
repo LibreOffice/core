@@ -82,7 +82,13 @@ ContextHandlerRef lclDataLabelSharedCreateContext( ContextHandler2& rContext,
         case CX_TOKEN( txPr ):
             return new TextBodyContext( rContext, orModel.mxTextProp.create() );
         case CX_TOKEN( visibility ):
-            return nullptr; // TODO
+            // chartex has no legend key or percentage labels
+            orModel.mobShowSerName = rAttribs.getBool( XML_seriesName, false );
+            orModel.mobShowCatName = rAttribs.getBool( XML_categoryName, false );
+            orModel.mobShowVal = rAttribs.getBool( XML_value, false );
+            orModel.mobShowLegendKey = false;
+            orModel.mobShowPercent = false;
+            return nullptr;
     }
     return nullptr;
 }
@@ -169,6 +175,20 @@ ContextHandlerRef DataLabelsContext::onCreateContext( sal_Int32 nElement, const 
     {
         case C_TOKEN( dLbl ):
             return new DataLabelContext( *this, mrModel.maPointLabels.create(mrModel, bMSO2007Doc) );
+        case CX_TOKEN( dataLabel ):
+        {
+            DataLabelModel& rLabel = mrModel.maPointLabels.create( mrModel, bMSO2007Doc );
+            rLabel.mnIndex = rAttribs.getInteger( XML_idx, -1 );
+            rLabel.monLabelPos = rAttribs.getToken( XML_pos );
+            return new DataLabelContext( *this, rLabel );
+        }
+        case CX_TOKEN( dataLabelHidden ):
+        {
+            DataLabelModel& rLabel = mrModel.maPointLabels.create( mrModel, bMSO2007Doc );
+            rLabel.mnIndex = rAttribs.getInteger( XML_idx, -1 );
+            rLabel.mbDeleted = true;
+            return nullptr;
+        }
         case C_TOKEN( leaderLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxLeaderLines.create() );
         case C_TOKEN( showLeaderLines ):
@@ -935,7 +955,11 @@ ContextHandlerRef ChartexSeriesContext::onCreateContext( sal_Int32 nElement, con
                 case CX_TOKEN( dataPt ):
                     return new DataPointContext( *this, mrModel.maPoints.create(false) );
                 case CX_TOKEN( dataLabels ):
-                    return new DataLabelsContext( *this, mrModel.mxLabels.create(false) );
+                {
+                    DataLabelsModel& rLabels = mrModel.mxLabels.create(false);
+                    rLabels.monLabelPos = rAttribs.getToken( XML_pos );
+                    return new DataLabelsContext( *this, rLabels );
+                }
                 case CX_TOKEN( dataId ):
                     mrModel.mnDataId = rAttribs.getInteger(XML_val, -1);
                     return nullptr;
