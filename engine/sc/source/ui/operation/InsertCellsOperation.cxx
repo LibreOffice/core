@@ -758,13 +758,13 @@ bool InsertCellsOperation::runImplementation()
         bool bInsertCols = (meCmd == INS_INSCOLS_BEFORE || meCmd == INS_INSCOLS_AFTER);
         bool bInsertRows = (meCmd == INS_INSROWS_BEFORE || meCmd == INS_INSROWS_AFTER);
 
-        if (bInsertCols)
+        if (pViewSh && bInsertCols)
         {
             pViewSh->OnKitInsertDeleteColumn(
                 aInputRange.aStart.Col() - (meCmd == INS_INSCOLS_BEFORE ? 1 : 0), 1);
         }
 
-        if (bInsertRows)
+        if (pViewSh && bInsertRows)
         {
             pViewSh->OnKitInsertDeleteRow(
                 aInputRange.aStart.Row() - (meCmd == INS_INSROWS_BEFORE ? 1 : 0), 1);
