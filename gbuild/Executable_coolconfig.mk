@@ -46,7 +46,6 @@ $(eval $(call gb_Executable_use_externals,coolconfig, \
 $(eval $(call gb_Executable_add_libs,coolconfig,$(UNIX_DLAPI_LIBS)))
 
 $(eval $(call gb_Executable_add_generated_exception_objects,coolconfig, \
-    common/Crypto \
     tools/Config \
     tools/ConfigMigrationAssistant \
 ))

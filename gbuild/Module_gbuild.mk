@@ -36,6 +36,7 @@ $(eval $(call gb_Module_add_targets,gbuild, \
     Executable_coolmount \
     Executable_coolsocketdump \
     Executable_coolstress \
+    Executable_coolwsd \
     Executable_lokitclient \
     StaticLibrary_dummytraceevent \
     StaticLibrary_forkit \
@@ -43,6 +44,7 @@ $(eval $(call gb_Module_add_targets,gbuild, \
     StaticLibrary_kitglobals \
     StaticLibrary_shared \
     StaticLibrary_simd \
+    StaticLibrary_wsdglobals \
 ))
 
 # vim: set noet sw=4 ts=4:

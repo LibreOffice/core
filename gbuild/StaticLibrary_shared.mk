@@ -44,6 +44,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,shared, \
     common/CommandControl \
     common/ConfigUtil \
     common/CoolMount \
+    common/Crypto \
     common/FileUtil \
     common/FileUtil-unix \
     common/JailUtil \

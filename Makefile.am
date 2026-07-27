@@ -67,8 +67,7 @@ if ENABLE_CYPRESS
 SUBDIRS += cypress_test
 endif
 
-bin_PROGRAMS = \
-	coolwsd
+bin_PROGRAMS =
 if ENABLE_DEBUG
 bin_PROGRAMS += coolwsd-inproc
 endif
@@ -157,13 +156,8 @@ endif
 
 LDADD = $(POCO_LIBS)
 
-coolwsd_LDADD = libwsdglobals.a $(POCO_LIBS_HOST)
-coolwsd_LDFLAGS = $(POCO_LIBS_WHOLE) $(AM_LDFLAGS)
-
 if ENABLE_SSL
 AM_LDFLAGS += ${OPENSSL_LIBS}
-else
-coolwsd_LDADD += ${OPENSSL_LIBS}
 endif
 
 if ENABLE_MACOS
@@ -255,20 +249,12 @@ coolwsd_sources = \
                   wsd/wopi/WopiProxy.cpp \
                   wsd/wopi/WopiStorage.cpp
 
-coolwsd_SOURCES = $(coolwsd_sources) \
-                  $(shared_sources) \
-                  wsd/coolwsd-fork.cpp
-
-EXTRA_coolwsd_DEPENDENCIES = browser/node_modules
-
 noinst_PROGRAMS =
 
-noinst_LIBRARIES = libsimd.a libwsdglobals.a libkitwsdglobals.a
+noinst_LIBRARIES = libsimd.a libkitwsdglobals.a
 
 libsimd_a_SOURCES = kit/DeltaSimd.c
 libsimd_a_CFLAGS = @SIMD_CFLAGS@
-
-libwsdglobals_a_SOURCES = wsd/WSDGlobals.cpp
 
 libkitwsdglobals_a_SOURCES = wsd/KitWSDGlobals.cpp
 
@@ -524,7 +510,7 @@ endif
 
 ENGINE_BUILDDIR = @LO_PATH@/..
 
-GBUILD_EXES = coolconfig coolconvert coolforkit-caps coolforkit-ns coolmount coolstress
+GBUILD_EXES = coolconfig coolconvert coolforkit-caps coolforkit-ns coolmount coolstress coolwsd
 
 GBUILD_EXES_NOINST = clientnb coconvert connect coolbench coolmap coolsocketdump lokitclient
 
@@ -780,9 +766,7 @@ all_compiled_sources = $(sort \
 	$(shared_sources) \
 	$(coolwsd_sources) \
 	$(coolforkit_sources) \
-	$(coolwsd_SOURCES) \
 	$(libsimd_a_SOURCES) \
-	$(libwsdglobals_a_SOURCES) \
 	$(libkitwsdglobals_a_SOURCES) \
 )
 

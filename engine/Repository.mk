@@ -966,6 +966,7 @@ $(eval $(call gb_Helper_register_executables,ONLINE, \
     coolmount \
     coolsocketdump \
     coolstress \
+    coolwsd \
     lokitclient \
 ))
 
