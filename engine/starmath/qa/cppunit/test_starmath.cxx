@@ -25,6 +25,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 
+#include <comphelper/kit.hxx>
 #include <editeng/editeng.hxx>
 
 #include <sfx2/zoomitem.hxx>
@@ -446,6 +447,12 @@ void Test::replacePlaceholder()
 
 void Test::viewZoom()
 {
+    // The window zooms by giving its device a scaled map mode. With the Kit the device works in
+    // twips with no map mode at all, so that mouse coordinates can be passed straight through, and
+    // the client does the zooming instead: this window has no zoom of its own to check.
+    if (comphelper::COKit::isActive())
+        return;
+
     sal_uInt16 nOrigZoom, nFinalZoom;
 
     EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
