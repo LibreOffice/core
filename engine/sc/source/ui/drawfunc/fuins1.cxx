@@ -262,6 +262,11 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
         tools::Rectangle(aInsertPos, aSize));
 
     pObj->setURL( realURL, u""_ustr/*TODO?*/ );
+
+    // The user picked this media file, so its external reference is allowed without asking again.
+    if (bLink)
+        pObj->setLinkAllowed(true);
+
     pView->InsertObjectAtView( pObj.get(), *pPV, bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE );
 }
 #endif

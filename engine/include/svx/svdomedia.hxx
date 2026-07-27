@@ -60,6 +60,12 @@ public:
         void                        setURL(const OUString& rURL, const OUString& rReferer);
         const OUString&      getURL() const;
 
+        // An external media reference the user picked in this session is allowed on its own, in
+        // the same way as a presentation sound the user picks. A reference that arrived with the
+        // document is allowed only by the document-wide link update permission.
+        void                        setLinkAllowed(bool bAllowed);
+        bool                        isLinkAllowed() const;
+
         /// Returns the URL to the temporary extracted media file.
         const OUString&      getTempURL() const;
 
