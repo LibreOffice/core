@@ -954,6 +954,7 @@ $(eval $(call gb_Helper_register_executables,NONE, gbuildselftestexe))
 endif
 
 $(eval $(call gb_Helper_register_executables,ONLINE, \
+    coolconfig \
     coolmount \
 ))
 

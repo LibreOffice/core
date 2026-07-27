@@ -72,7 +72,6 @@ bin_PROGRAMS = \
 	coolforkit-caps \
 	coolforkit-ns \
 	coolstress \
-	coolconfig \
 	coolwsd
 if ENABLE_DEBUG
 bin_PROGRAMS += coolwsd-inproc
@@ -164,13 +163,11 @@ LDADD = $(POCO_LIBS)
 
 coolwsd_LDADD = libwsdglobals.a $(POCO_LIBS_HOST)
 coolwsd_LDFLAGS = $(POCO_LIBS_WHOLE) $(AM_LDFLAGS)
-coolconfig_LDADD = libglobals.a $(LDADD)
 
 if ENABLE_SSL
 AM_LDFLAGS += ${OPENSSL_LIBS}
 else
 coolwsd_LDADD += ${OPENSSL_LIBS}
-coolconfig_LDADD += ${OPENSSL_LIBS}
 endif
 
 if ENABLE_MACOS
@@ -415,20 +412,6 @@ coolstress_SOURCES = tools/Stress.cpp \
 
 coolstress_LDADD = libglobals.a $(LDADD)
 
-coolconfig_SOURCES = \
-                    common/ConfigUtil.cpp \
-                    common/Crypto.cpp \
-                    common/DummyTraceEventEmitter.cpp \
-                    common/Log-common.cpp \
-                    common/Log-poco.cpp \
-                    common/ProcUtil.cpp \
-                    common/StringVector.cpp \
-                    common/Util-server.cpp \
-                    common/Util-unix.cpp \
-                    common/Util.cpp \
-                    tools/Config.cpp \
-                    tools/ConfigMigrationAssistant.cpp
-
 coolsocketdump_SOURCES = tools/WebSocketDump.cpp \
 			 common/DummyTraceEventEmitter.cpp \
 			 $(shared_sources)
@@ -666,7 +649,7 @@ endif
 
 ENGINE_BUILDDIR = @LO_PATH@/..
 
-GBUILD_EXES = coolmount
+GBUILD_EXES = coolconfig coolmount
 
 build-gbuild: FORCE
 	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.BUILDDIR=$(abs_top_builddir) Module_gbuild
@@ -926,7 +909,6 @@ all_compiled_sources = $(sort \
 	$(connect_SOURCES) \
 	$(lokitclient_SOURCES) \
 	$(coolstress_SOURCES) \
-	$(coolconfig_SOURCES) \
 	$(coolsocketdump_SOURCES) \
 	$(coolbench_SOURCES) \
 	$(coolconvert_SOURCES) \
