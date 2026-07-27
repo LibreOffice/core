@@ -391,7 +391,7 @@ window.L.Map.include({
 					'value': ''
 				},
 				'Index': {
-					'type': 'long',
+					'type': 'unsigned short',
 					'value': nPos + 1
 				}
 			};
@@ -455,7 +455,7 @@ window.L.Map.include({
 			this._docLayer._sheetSwitch.updateOnSheetDeleted(nPos);
 			var command = {
 				'Index': {
-					'type': 'long',
+					'type': 'unsigned short',
 					'value': nPos + 1
 				}
 			};
@@ -506,7 +506,7 @@ window.L.Map.include({
 					'value': name
 				},
 				'Index': {
-					'type': 'long',
+					'type': 'unsigned short',
 					'value': nPos + 1
 				}
 			};
