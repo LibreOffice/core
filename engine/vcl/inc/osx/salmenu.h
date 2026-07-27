@@ -34,19 +34,6 @@ class AquaSalMenu : public SalMenu
 {
     std::vector< AquaSalMenuItem* >     maItems;
 
-public: // for OOStatusView
-    struct MenuBarButtonEntry
-    {
-        NSImage*                mpNSImage;      // cached image
-        NSString*               mpToolTipString;
-
-        MenuBarButtonEntry() : mpNSImage( nil ), mpToolTipString( nil ) {}
-    };
-private:
-    std::vector< MenuBarButtonEntry >   maButtons;
-
-    MenuBarButtonEntry* findButtonItem( sal_uInt16 i_nItemId );
-    static void statusLayout();
 public:
     AquaSalMenu( bool bMenuBar );
     virtual ~AquaSalMenu() override;
@@ -73,8 +60,6 @@ public:
     static void enableMainMenu( bool bEnable );
     static void addFallbackMenuItem( NSMenuItem* NewItem );
     static void removeFallbackMenuItem( NSMenuItem* pOldItem );
-
-    const std::vector< MenuBarButtonEntry >& getButtons() const { return maButtons; }
 
     bool                    mbMenuBar;          // true - Menubar, false - Menu
     NSMenu*                 mpMenu;             // The Carbon reference to this menu

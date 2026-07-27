@@ -21,7 +21,6 @@
 
 #include <osl/diagnose.h>
 #include <osx/saldata.hxx>
-#include <osx/salnsmenu.h>
 #include <osx/salinst.h>
 #include <o3tl/enumarray.hxx>
 #include <tools/stream.hxx>
@@ -51,7 +50,6 @@ SalData::SalData()
     mpFirstObject( nullptr ),
     mpFirstVD( nullptr ),
     mpFirstPrinter( nullptr ),
-    mpStatusItem( nil ),
     mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceSRGB) ),
     mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGrayGamma2_2) ),
     maCursors(),
@@ -96,11 +94,6 @@ SalData::~SalData()
         [mpAppleRemoteMainController release];
 #endif
 
-    if( mpStatusItem )
-    {
-        [mpStatusItem release];
-        mpStatusItem = nil;
-    }
     SetSalData( nullptr );
 }
 
@@ -254,28 +247,6 @@ NSCursor* SalData::getCursor( PointerStyle i_eStyle )
 
     maCursors[ i_eStyle ] = pCurs;
     return pCurs;
-}
-
-NSStatusItem* SalData::getStatusItem()
-{
-    SalData* pData = GetSalData();
-    if( ! pData->mpStatusItem )
-    {
-        NSStatusBar* pStatBar =[NSStatusBar systemStatusBar];
-        if( pStatBar )
-        {
-            pData->mpStatusItem = [pStatBar statusItemWithLength: NSVariableStatusItemLength];
-            [pData->mpStatusItem retain];
-            OOStatusItemView* pView = [[OOStatusItemView alloc] init];
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                // "'setView:' is deprecated: first deprecated in macOS 10.14 - Use the standard
-                // button property instead"
-            [pData->mpStatusItem setView: pView ];
-SAL_WNODEPRECATED_DECLARATIONS_POP
-            [pView display];
-        }
-    }
-    return pData->mpStatusItem;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

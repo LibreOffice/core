@@ -22,14 +22,6 @@
 class AquaSalMenu;
 class AquaSalMenuItem;
 
-@interface OOStatusItemView : NSView
-{
-}
-- (void)drawRect:(NSRect)aRect;
-- (void)layout;
-- (void)mouseUp:(NSEvent*)pEvent;
-@end
-
 @interface SalNSMenu : NSMenu
 {
     AquaSalMenu* mpMenu;

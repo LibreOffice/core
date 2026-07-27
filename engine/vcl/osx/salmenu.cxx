@@ -43,24 +43,6 @@
 #include <window.h>
 #include <vcl/mnemonic.hxx>
 
-namespace {
-
-void releaseButtonEntry( AquaSalMenu::MenuBarButtonEntry& i_rEntry )
-{
-    if( i_rEntry.mpNSImage )
-    {
-        [i_rEntry.mpNSImage release];
-        i_rEntry.mpNSImage = nil;
-    }
-    if( i_rEntry.mpToolTipString )
-    {
-        [i_rEntry.mpToolTipString release];
-        i_rEntry.mpToolTipString = nil;
-    }
-}
-
-}
-
 const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = nullptr;
 
 @interface MainMenuSelector : NSObject
@@ -255,11 +237,6 @@ AquaSalMenu::~AquaSalMenu()
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) && mpFrame->mpMenu == this )
         const_cast<AquaSalFrame*>(mpFrame)->mpMenu = nullptr;
 
-    // this should normally be empty already, but be careful...
-    for( size_t i = 0; i < maButtons.size(); i++ )
-        releaseButtonEntry( maButtons[i] );
-    maButtons.clear();
-
     // is this leaking in some cases ? the release often leads to a duplicate release
     // it seems the parent item gets ownership of the menu
     if( mpMenu )
@@ -427,9 +404,6 @@ void AquaSalMenu::setMainMenu()
                 }
             }
             pCurrentMenuBar = this;
-
-            // change status item
-            statusLayout();
         }
         enableMainMenu( true );
     }
@@ -813,32 +787,6 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
     [pAquaSalMenuItem->mpMenuItem setKeyEquivalentModifierMask: nItemModifier];
     if (pString)
         [pString release];
-}
-
-AquaSalMenu::MenuBarButtonEntry* AquaSalMenu::findButtonItem( sal_uInt16 i_nItemId )
-{
-    for (auto& rButton : maButtons)
-    {
-        if (rButton.maButton.mnId == i_nItemId)
-            return &rButton;
-    }
-    return nullptr;
-}
-
-void AquaSalMenu::statusLayout()
-{
-    if( GetSalData()->mpStatusItem )
-    {
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            // "'view' is deprecated: first deprecated in macOS 10.14 - Use the standard button
-            // property instead"
-        NSView* pNSView = [GetSalData()->mpStatusItem view];
-SAL_WNODEPRECATED_DECLARATIONS_POP
-        if( [pNSView isMemberOfClass: [OOStatusItemView class]] ) // well of course it is
-            [static_cast<OOStatusItemView*>(pNSView) layout];
-        else
-            OSL_FAIL( "someone stole our status view" );
-    }
 }
 
 /*
