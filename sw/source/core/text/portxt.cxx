@@ -24,7 +24,6 @@
 #include <i18npool/breakiterator.hxx>
 #include <breakit.hxx>
 #include <hintids.hxx>
-#include <EnhancedPDFExportHelper.hxx>
 #include <SwPortionHandler.hxx>
 #include "porlay.hxx"
 #include "inftxt.hxx"
@@ -1394,11 +1393,7 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
     if( !rInf.GetOut() )
         return;
 
-    bool bPDFExport = rInf.GetVsh()->GetViewOptions()->IsPDFExport();
-
-    // #i16816# export stuff only needed for tagged pdf support
-    if (bPDFExport && !SwTaggedPDFHelper::IsExportTaggedPDF( *rInf.GetOut()) )
-        return;
+    const bool bPDFExport = rInf.GetVsh()->GetViewOptions()->IsPDFExport();
 
     // #i68503# the hole must have no decoration for a consistent visual appearance
     const SwFont* pOrigFont = rInf.GetFont();
