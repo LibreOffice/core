@@ -21,7 +21,6 @@
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/util/Endianness.hpp>
-#include <com/sun/star/rendering/ColorComponentTag.hpp>
 
 #include <comphelper/diagnose_ex.hxx>
 #include <canvasbitmap.hxx>

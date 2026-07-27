@@ -2835,14 +2835,10 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	ARGBColor \
 	Color \
 	ColorComponent \
-	ColorComponentTag \
-	ColorProfile \
-	EmphasisMark \
 	FillRule \
 	FontInfo \
 	FontMetrics \
 	FontRequest \
-	InterpolationMode \
 	Panose \
 	PanoseArmStyle \
 	PanoseContrast \
@@ -2865,7 +2861,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	Texture \
 	TexturingMode \
 	ViewState \
-	VolatileContentDestroyedException \
 	XBezierPolyPolygon2D \
 	XBitmap \
 	XCachedPrimitive \

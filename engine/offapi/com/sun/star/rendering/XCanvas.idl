@@ -236,14 +236,9 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
-
-        @throws VolatileContentDestroyedException
-        if a texture bitmap was volatile, and the content was
-        destroyed before the rendering could take place.
     */
     XCachedPrimitive    fillTexturedPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] sequence<Texture> xTextures )
-        raises (com::sun::star::lang::IllegalArgumentException,
-                VolatileContentDestroyedException);
+        raises (com::sun::star::lang::IllegalArgumentException);
 
 
     /** Create a suitable font for the specified font description.
@@ -360,14 +355,9 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
-
-        @throws VolatileContentDestroyedException
-        if a texture bitmap was volatile, and the content was
-        destroyed before the rendering could take place.
      */
     XCachedPrimitive    drawBitmap( [in] XBitmap xBitmap, [in] ViewState aViewState, [in] RenderState aRenderState )
-        raises (com::sun::star::lang::IllegalArgumentException,
-                VolatileContentDestroyedException);
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     /** Request the associated graphic device for this canvas.<p>
 

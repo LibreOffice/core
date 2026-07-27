@@ -64,7 +64,6 @@
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/rendering/ColorComponentTag.hpp>
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
