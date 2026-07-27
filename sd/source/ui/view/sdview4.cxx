@@ -320,7 +320,11 @@ void View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
 #endif
     }
 
-    InsertMediaObj(realURL, rAction, rPos, rSize);
+    SdrMediaObj* pMediaObj = InsertMediaObj(realURL, rAction, rPos, rSize);
+
+    // The user picked this media file, so its external reference is allowed without asking again.
+    if (bLink && pMediaObj)
+        pMediaObj->setLinkAllowed(true);
 }
 
 SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, sal_Int8& rAction,

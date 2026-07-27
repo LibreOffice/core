@@ -226,6 +226,30 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testMediaLinkNotFetchedWhenUpdatesDisallowed)
 #endif
 }
 
+#if HAVE_FEATURE_AVMEDIA
+CPPUNIT_TEST_FIXTURE(SdrTest, testMediaLinkPickedByUserIsFetched)
+{
+    loadFromFile(u"media-link.fodp");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    auto* pSvxDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pSvxDrawPage);
+    auto* pMedia = dynamic_cast<SdrMediaObj*>(pSvxDrawPage->GetSdrPage()->GetObj(0));
+    CPPUNIT_ASSERT(pMedia);
+
+    // The document as a whole may not update its links.
+    SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    CPPUNIT_ASSERT(pShell);
+    pShell->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
+
+    // A media file the user picks during the session is playable straight away, so the
+    // placeholder image is fetched even though the document-wide permission is off.
+    pMedia->setLinkAllowed(true);
+    CPPUNIT_ASSERT(pMedia->getSnapshot().is());
+}
+#endif
+
 CPPUNIT_TEST_FIXTURE(SdrTest, test3DRotatedText)
 {
     // The document contains a shape with text "Vertical" and a 3D scene camera rotation of 90 deg.
