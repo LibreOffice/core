@@ -40,6 +40,7 @@
 #include <environmentofanchoredobject.hxx>
 #include <frmatr.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
+#include <layouter.hxx>
 #include <rowfrm.hxx>
 #include <sortedobjs.hxx>
 #include <textboxhelper.hxx>
@@ -733,7 +734,12 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                         {
                             // No need to grow the anchor cell in case the follow-text-flow object
                             // is wrap-though.
-                            if (!GetAnchorFrame().IsInTab() || !DoesObjFollowsTextFlow() || !bWrapThrough)
+                            if (!GetAnchorFrame().IsInTab() || ((!DoesObjFollowsTextFlow() || !bWrapThrough) &&
+                                // tdf#172156: stop growing the cell once this object has grown it
+                                // too many times during positioning
+                                !SwLayouter::RegisterAnchoredObjGrowInTab(
+                                    GetAnchoredObj().GetFrameFormat()->GetDoc(),
+                                    &GetAnchoredObj()) ))
                             {
                                 pLayoutFrameToGrow->Grow( nRelPosY - nAvail );
                             }
@@ -895,7 +901,11 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             {
                 // No need to grow the anchor cell in case the follow-text-flow object
                 // is wrap-though.
-                if (!GetAnchorFrame().IsInTab() || !DoesObjFollowsTextFlow() || !bWrapThrough)
+                if (!GetAnchorFrame().IsInTab() || ((!DoesObjFollowsTextFlow() || !bWrapThrough) &&
+                    // tdf#172156: see above - break the cell-grow oscillation.
+                    !SwLayouter::RegisterAnchoredObjGrowInTab(
+                        GetAnchoredObj().GetFrameFormat()->GetDoc(),
+                        &GetAnchoredObj()) ))
                 {
                     pLayoutFrameToGrow->Grow( -nDist );
                 }

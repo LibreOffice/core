@@ -490,6 +490,8 @@ void DocumentLayoutManager::ClearSwLayouterEntries()
     SwLayouter::ClearObjsTmpConsiderWrapInfluence( m_rDoc );
     // #i65250#
     SwLayouter::ClearMoveBwdLayoutInfo( m_rDoc );
+    // tdf#172156
+    SwLayouter::ClearAnchoredObjGrowInTabInfo( m_rDoc );
 }
 
 size_t DocumentLayoutManager::GetMovedFwdFramesCount() const

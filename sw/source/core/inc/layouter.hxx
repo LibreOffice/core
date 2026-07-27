@@ -92,6 +92,12 @@ private:
     std::unordered_map< tMoveBwdLayoutInfoKey, sal_uInt16,
                    fMoveBwdLayoutInfoKeyHash,
                    fMoveBwdLayoutInfoKeyEq > maMoveBwdLayoutInfo;
+    // tdf#172156 - per-object counter of how often an anchored object in a
+    // table cell has grown its cell during object positioning. A follow-text-
+    // flow object that is larger than its cell keeps growing the cell (and
+    // hence the row/table), which re-triggers its own positioning: a monotonic
+    // grow spiral that never converges. A high count reveals that oscillation.
+    std::unordered_map< const void*, sal_uInt16 > maAnchoredObjGrowInTabCount;
 public:
     SwLayouter();
     ~SwLayouter();
@@ -139,6 +145,11 @@ public:
                                    const SwFlowFrame& p_rFlowFrame,
                                    const SwLayoutFrame& p_rNewUpperFrame );
     static void ClearMoveBwdLayoutInfo( const SwDoc& p_rDoc );
+
+
+    static bool RegisterAnchoredObjGrowInTab( const SwDoc& _rDoc,
+                                              const void* _pAnchoredObj );
+    static void ClearAnchoredObjGrowInTabInfo( const SwDoc& _rDoc );
 };
 
 extern void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTextFrame& rTextFrame );

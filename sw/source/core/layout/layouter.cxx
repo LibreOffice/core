@@ -511,4 +511,28 @@ void SwLayouter::ClearMoveBwdLayoutInfo( const SwDoc& _rDoc )
         const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().GetLayouter()->maMoveBwdLayoutInfo.clear();
 }
 
+bool SwLayouter::RegisterAnchoredObjGrowInTab( const SwDoc& _rDoc,
+                                               const void* _pAnchoredObj )
+{
+    if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter() )
+    {
+        const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
+    }
+
+    // If positioning the same object keeps growing its table cell over and over
+    // again, the layout is oscillating (the grow never lets the object fit) and
+    // further growing has to be stopped.
+    constexpr sal_uInt16 cAnchoredObjGrowInTabThreshold = 20;
+    return ++const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().GetLayouter()
+                    ->maAnchoredObjGrowInTabCount[ _pAnchoredObj ]
+           > cAnchoredObjGrowInTabThreshold;
+}
+
+void SwLayouter::ClearAnchoredObjGrowInTabInfo( const SwDoc& _rDoc )
+{
+    if ( _rDoc.getIDocumentLayoutAccess().GetLayouter() )
+        const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().GetLayouter()
+            ->maAnchoredObjGrowInTabCount.clear();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

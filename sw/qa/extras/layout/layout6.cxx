@@ -2343,6 +2343,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCenterInlineTableBesideFloatingTable)
     CPPUNIT_ASSERT_GREATEREQUAL(nFlyRight, nTabFrameLeft + nTabPrtLeft);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf172156)
+{
+    // Images anchored inside table cells are larger than their cell. Positioning
+    // such an object grows its cell (and hence the row and the enclosing table)
+    // to fit it. Without the fix, createSwDoc() below never returns.
+    createSwDoc("tdf172156.docx");
+
+    getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Sanity that the document actually laid out
+    CPPUNIT_ASSERT_GREATEREQUAL(1, getPages());
+    CPPUNIT_ASSERT_GREATEREQUAL(1, countXPathNodes(pXmlDoc, "//tab"));
+    CPPUNIT_ASSERT_GREATEREQUAL(9, countXPathNodes(pXmlDoc, "//anchored/fly"));
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
