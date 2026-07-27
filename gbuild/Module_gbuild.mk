@@ -11,6 +11,18 @@
 
 $(eval $(call gb_Module_Module,gbuild))
 
+# Poco static libraries that get linked whole-archive, to keep Poco's static
+# initialisers and factory registrations:
+online_poco_whole_libs := \
+    PocoNetSSL \
+    PocoCrypto \
+    PocoNet \
+    PocoZip \
+    PocoUtil \
+    PocoJSON \
+    PocoXML \
+    PocoFoundation
+
 $(eval $(call gb_Module_add_targets,gbuild, \
     Executable_clientnb \
     Executable_coconvert \
@@ -18,13 +30,17 @@ $(eval $(call gb_Module_add_targets,gbuild, \
     Executable_coolbench \
     Executable_coolconfig \
     Executable_coolconvert \
+    Executable_coolforkit-caps \
+    Executable_coolforkit-ns \
     Executable_coolmap \
     Executable_coolmount \
     Executable_coolsocketdump \
     Executable_coolstress \
     Executable_lokitclient \
     StaticLibrary_dummytraceevent \
+    StaticLibrary_forkit \
     StaticLibrary_globals \
+    StaticLibrary_kitglobals \
     StaticLibrary_shared \
     StaticLibrary_simd \
 ))

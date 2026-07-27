@@ -1929,6 +1929,7 @@ AC_SUBST([PNG_LIBS])
 AC_SUBST([ZSTD_CFLAGS])
 AC_SUBST([ZSTD_LIBS])
 
+CAP_LIBS=
 AS_IF([test "$ENABLE_WINDOWSAPP" != "true"],
       [# Check if the platform supports Capabilities
        AC_CHECK_HEADERS([sys/capability.h],
@@ -1941,6 +1942,8 @@ AS_IF([test "$ENABLE_WINDOWSAPP" != "true"],
            [
                dnl If found, define a macro we can test in our code
                AC_DEFINE([HAVE_LIBCAP], [1], [Define to 1 if libcap (cap_get_proc) is available])
+               AS_IF([test "$ac_cv_search_cap_get_proc" != 'none required'],
+                     [CAP_LIBS=$ac_cv_search_cap_get_proc])
            ],
            [
                AC_MSG_ERROR([libcap not available?])
@@ -1950,6 +1953,7 @@ AS_IF([test "$ENABLE_WINDOWSAPP" != "true"],
        ])
       ]
 )
+AC_SUBST([CAP_LIBS])
 
 dnl config for qtapp frontend for cool
 AS_IF([test "$ENABLE_QTAPP" = true],

@@ -157,6 +157,7 @@ gb_Executable_set_precompiled_header = $(call gb_Executable__forward_to_Linktarg
 gb_Executable_reuse_precompiled_header = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_use_common_precompiled_header = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_add_nativeres = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_Executable_set_visibility_default = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_set_warnings_not_errors = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_set_warnings_disabled = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_set_external_code = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))

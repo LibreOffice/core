@@ -68,8 +68,6 @@ SUBDIRS += cypress_test
 endif
 
 bin_PROGRAMS = \
-	coolforkit-caps \
-	coolforkit-ns \
 	coolwsd
 if ENABLE_DEBUG
 bin_PROGRAMS += coolwsd-inproc
@@ -265,12 +263,10 @@ EXTRA_coolwsd_DEPENDENCIES = browser/node_modules
 
 noinst_PROGRAMS =
 
-noinst_LIBRARIES = libsimd.a libkitglobals.a libwsdglobals.a libkitwsdglobals.a
+noinst_LIBRARIES = libsimd.a libwsdglobals.a libkitwsdglobals.a
 
 libsimd_a_SOURCES = kit/DeltaSimd.c
 libsimd_a_CFLAGS = @SIMD_CFLAGS@
-
-libkitglobals_a_SOURCES = kit/KitGlobals.cpp
 
 libwsdglobals_a_SOURCES = wsd/WSDGlobals.cpp
 
@@ -281,24 +277,6 @@ coolforkit_sources = \
                      kit/ForKit.cpp \
                      kit/Kit.cpp \
                      kit/KitWebSocket.cpp
-
-coolforkit_ldadd = libsimd.a libkitglobals.a $(POCO_LIBS_HOST)
-
-coolforkit_caps_SOURCES = $(coolforkit_sources) \
-                          $(shared_sources) \
-                          kit/forkit-main.cpp \
-                          kit/forkit-variant-caps.cpp
-
-coolforkit_caps_LDADD = ${coolforkit_ldadd}
-coolforkit_caps_LDFLAGS = $(POCO_LIBS_WHOLE) $(AM_LDFLAGS)
-
-coolforkit_ns_SOURCES = $(coolforkit_sources) \
-                        $(shared_sources) \
-                        kit/forkit-main.cpp \
-                        kit/forkit-variant-ns.cpp
-
-coolforkit_ns_LDADD = ${coolforkit_ldadd}
-coolforkit_ns_LDFLAGS = $(POCO_LIBS_WHOLE) $(AM_LDFLAGS)
 
 if ENABLE_DEBUG
 coolwsd_inproc_SOURCES = $(coolwsd_sources) \
@@ -546,12 +524,12 @@ endif
 
 ENGINE_BUILDDIR = @LO_PATH@/..
 
-GBUILD_EXES = coolconfig coolconvert coolmount coolstress
+GBUILD_EXES = coolconfig coolconvert coolforkit-caps coolforkit-ns coolmount coolstress
 
 GBUILD_EXES_NOINST = clientnb coconvert connect coolbench coolmap coolsocketdump lokitclient
 
 build-gbuild: FORCE
-	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.BUILDDIR=$(abs_top_builddir) Module_gbuild
+	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.BUILDDIR=$(abs_top_builddir) ONLINE.CAP_LIBS='$(CAP_LIBS)' Module_gbuild
 $(GBUILD_EXES) $(GBUILD_EXES_NOINST): build-gbuild
 
 FORCE:
@@ -803,9 +781,7 @@ all_compiled_sources = $(sort \
 	$(coolwsd_sources) \
 	$(coolforkit_sources) \
 	$(coolwsd_SOURCES) \
-	$(coolforkit_caps_SOURCES) \
 	$(libsimd_a_SOURCES) \
-	$(libkitglobals_a_SOURCES) \
 	$(libwsdglobals_a_SOURCES) \
 	$(libkitwsdglobals_a_SOURCES) \
 )

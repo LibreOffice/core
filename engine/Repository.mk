@@ -960,6 +960,8 @@ $(eval $(call gb_Helper_register_executables,ONLINE, \
     coolbench \
     coolconfig \
     coolconvert \
+    coolforkit-caps \
+    coolforkit-ns \
     coolmap \
     coolmount \
     coolsocketdump \
