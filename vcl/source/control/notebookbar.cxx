@@ -23,7 +23,6 @@
 #include <vcl/NotebookbarContextControl.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
-#include <rtl/bootstrap.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <config_folders.h>
@@ -31,21 +30,6 @@
 #include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <comphelper/lok.hxx>
-
-static OUString getCustomizedUIRootDir()
-{
-    OUString sShareLayer(u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE(
-        "bootstrap") ":UserInstallation}/user/config/soffice.cfg/"_ustr);
-    rtl::Bootstrap::expandMacros(sShareLayer);
-    return sShareLayer;
-}
-
-static bool doesFileExist(std::u16string_view sUIDir, std::u16string_view sUIFile)
-{
-    OUString sUri = OUString::Concat(sUIDir) + sUIFile;
-    osl::File file(sUri);
-    return( file.open(0) == osl::FileBase::E_None );
-}
 
 /**
  * split from the main class since it needs different ref-counting mana
@@ -85,14 +69,9 @@ NotebookBar::NotebookBar(Window* pParent, const OUString& rID, const OUString& r
     m_pEventListener->setupFrameListener(true);
 
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
-    OUString sUIDir = AllSettings::GetUIRootDir();
-    bool doesCustomizedUIExist = doesFileExist(getCustomizedUIRootDir(), rUIXMLDescription);
-    if ( doesCustomizedUIExist )
-        sUIDir = getCustomizedUIRootDir();
 
-    m_pUIBuilder.reset(
-        new VclBuilder(this, sUIDir, rUIXMLDescription, rID, rFrame, true,
-                       std::move(pNotebookBarAddonsItem)));
+    m_pUIBuilder.reset(new VclBuilder(this, AllSettings::GetUIRootDir(), rUIXMLDescription, rID,
+                                      rFrame, true, std::move(pNotebookBarAddonsItem)));
 
     // In the Notebookbar's .ui file must exist control handling context
     // - implementing NotebookbarContextControl interface with id "ContextContainer"
