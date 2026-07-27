@@ -34,6 +34,7 @@
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
+#include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include <com/sun/star/rendering/Texture.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
@@ -311,18 +312,6 @@ namespace canvastools
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): textures' alpha value out of range (is " +
                     OUString::number(texture.Alpha) + ")",
-                    xIf, nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
-            }
-
-            if( texture.NumberOfHatchPolygons < 0 )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifyInput(): textures' NumberOfHatchPolygons is negative",
                     xIf, nArgPos );
 #else
                 throw lang::IllegalArgumentException();
