@@ -9,23 +9,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/*
- * Main entry point for the ForKit process.
- * Functions: main() - Initializes and runs ForKit
- */
-
-#include <config.h>
-
-#include <common/Common.hpp>
-#include <kit/Kit.hpp>
-#include <net/ServerSocket.hpp>
-
-int ClientPortNumber = DEFAULT_CLIENT_PORT_NUMBER;
-UnxSocketPath MasterLocation;
-
-int main (int argc, char **argv)
-{
-    return forkit_main(argc, argv);
-}
+// Embed a variant string so coolforkit-caps and coolforkit-ns get distinct build-ids.
+__attribute__((used)) const char* const ForkitVariant = "ns";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

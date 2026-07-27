@@ -286,23 +286,19 @@ coolforkit_ldadd = libsimd.a libkitglobals.a $(POCO_LIBS_HOST)
 
 coolforkit_caps_SOURCES = $(coolforkit_sources) \
                           $(shared_sources) \
-                          kit/forkit-main.cpp
+                          kit/forkit-main.cpp \
+                          kit/forkit-variant-caps.cpp
 
 coolforkit_caps_LDADD = ${coolforkit_ldadd}
 coolforkit_caps_LDFLAGS = $(POCO_LIBS_WHOLE) $(AM_LDFLAGS)
 
-# Define variant to ensure different binary content and thus different build-id
-coolforkit_caps_CPPFLAGS = $(AM_CPPFLAGS) -DCOOL_FORKIT_VARIANT=\"caps\"
-
 coolforkit_ns_SOURCES = $(coolforkit_sources) \
                         $(shared_sources) \
-                        kit/forkit-main.cpp
+                        kit/forkit-main.cpp \
+                        kit/forkit-variant-ns.cpp
 
 coolforkit_ns_LDADD = ${coolforkit_ldadd}
 coolforkit_ns_LDFLAGS = $(POCO_LIBS_WHOLE) $(AM_LDFLAGS)
-
-# Define variant to ensure different binary content and thus different build-id
-coolforkit_ns_CPPFLAGS = $(AM_CPPFLAGS) -DCOOL_FORKIT_VARIANT=\"ns\"
 
 if ENABLE_DEBUG
 coolwsd_inproc_SOURCES = $(coolwsd_sources) \
