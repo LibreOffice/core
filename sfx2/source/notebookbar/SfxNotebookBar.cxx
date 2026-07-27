@@ -341,9 +341,9 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
         bool bIsLOK = comphelper::LibreOfficeKit::isActive();
 
-        OUString sFile = lcl_getNotebookbarFileName( eApp );
+        const OUString sFile = lcl_getNotebookbarFileName(eApp);
 
-        OUString sNewFile = rUIFile + sFile;
+        const OUString sNewFile = rUIFile + sFile;
         OUString sCurrentFile;
         VclPtr<NotebookBar> pNotebookBar = pSysWindow->GetNotebookBar();
         if ( pNotebookBar )
@@ -356,8 +356,6 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 (!pNotebookBar || !pNotebookBar->IsVisible()) ||
                 bReloadNotebookbar))
         {
-            OUString aBuf = rUIFile + sFile;
-
             //Addons For Notebookbar
             std::vector<Image> aImageValues;
             std::vector<css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > > aExtensionValues;
@@ -377,7 +375,8 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
             RemoveListeners(pSysWindow);
 
-            pSysWindow->SetNotebookBar(aBuf, xFrame, std::move(pNotebookBarAddonsItem), bReloadNotebookbar);
+            pSysWindow->SetNotebookBar(sNewFile, xFrame, std::move(pNotebookBarAddonsItem),
+                                       bReloadNotebookbar);
             pNotebookBar = pSysWindow->GetNotebookBar();
             pNotebookBar->Show();
 
