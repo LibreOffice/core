@@ -473,10 +473,6 @@ protected:
                                           weld::TreeView& rTreeView, weld::TreeIter& rIter,
                                           bool bMenu = false);
 
-    void InsertEntryIntoNotebookbarTabUI(std::u16string_view sClassId, const OUString& sUIItemId,
-                                         const OUString& sUIItemCommand,
-                                         weld::TreeView& rTreeView, const weld::TreeIter& rIter);
-
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );
 

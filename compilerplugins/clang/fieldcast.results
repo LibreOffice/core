@@ -49,9 +49,6 @@ configmgr/source/xcsparser.hxx:80
 cppu/source/uno/lbenv.cxx:72
     (anonymous namespace)::InterfaceEntry pTypeDescr typelib_InterfaceTypeDescription *
     _typelib_TypeDescription
-cui/source/inc/cfg.hxx:407
-    SvxConfigPage m_xContentsListBox std::unique_ptr<SvxMenuEntriesListBox>
-    SvxNotebookbarEntriesListBox
 cui/source/inc/cuitabline.hxx:321
     SvxLineEndDefTabPage pPolyObj const SdrObject *
     SdrPathObj
