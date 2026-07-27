@@ -120,7 +120,7 @@ public:
     void                        SAL_CALL acquire() noexcept override;
     void                        SAL_CALL release() noexcept override;
 
-    // css::uno::XAggregation
+    // cpo::uno::XAggregation
     cpo::uno::Any  SAL_CALL queryAggregation( const cpo::uno::Type & rType ) override;
 
     // css::util::XCloneable

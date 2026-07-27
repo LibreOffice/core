@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_UNO3_HXX
 #define INCLUDED_COMPHELPER_UNO3_HXX
 
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <cpo/uno/XAggregation.hpp>
 #include <comphelper/sequence.hxx>
 
 
@@ -109,7 +109,7 @@ namespace comphelper
                 ...
     */
     template <class iface>
-    bool query_aggregation(const css::uno::Reference< css::uno::XAggregation >& _rxAggregate, css::uno::Reference<iface>& _rxOut)
+    bool query_aggregation(const css::uno::Reference< cpo::uno::XAggregation >& _rxAggregate, css::uno::Reference<iface>& _rxOut)
     {
         _rxOut.clear();
         if (_rxAggregate.is())
@@ -126,7 +126,7 @@ namespace comphelper
                 ...
     */
     template <class iface>
-    css::uno::Reference<iface> query_aggregation(const css::uno::Reference< css::uno::XAggregation >& _rxAggregate)
+    css::uno::Reference<iface> query_aggregation(const css::uno::Reference< cpo::uno::XAggregation >& _rxAggregate)
     {
         css::uno::Reference<iface> _rxOut;
         query_aggregation(_rxAggregate, _rxOut);

@@ -26,7 +26,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace connectivity;
 
-OSharedConnection::OSharedConnection(Reference<XAggregation>& _rxProxyConnection)
+OSharedConnection::OSharedConnection(Reference<cpo::uno::XAggregation>& _rxProxyConnection)
 {
     setDelegation(_rxProxyConnection);
 }

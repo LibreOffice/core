@@ -22,7 +22,7 @@
 
 #include "cppuhelper/weak.hxx"
 #include "cppuhelper/weakref.hxx"
-#include "com/sun/star/uno/XAggregation.hpp"
+#include "cpo/uno/XAggregation.hpp"
 #include "cppuhelper/cppuhelperdllapi.h"
 
 
@@ -41,7 +41,7 @@ namespace cppu
 */
 class CPPUHELPER_DLLPUBLIC OWeakAggObject
     : public ::cppu::OWeakObject
-    , public css::uno::XAggregation
+    , public cpo::uno::XAggregation
 {
 public:
     /** Constructor.  No delegator set.

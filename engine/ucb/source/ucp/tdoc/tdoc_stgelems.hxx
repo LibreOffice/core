@@ -29,7 +29,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <cpo/uno/XAggregation.hpp>
 
 #include "tdoc_storage.hxx"
 
@@ -170,7 +170,7 @@ public:
 
 private:
     rtl::Reference< StorageElementFactory >         m_xFactory;
-    css::uno::Reference< css::uno::XAggregation >         m_xAggProxy;
+    css::uno::Reference< cpo::uno::XAggregation >         m_xAggProxy;
     css::uno::Reference< css::embed::XStorage >           m_xWrappedStorage;
     css::uno::Reference< css::embed::XTransactedObject >  m_xWrappedTransObj;
     css::uno::Reference< css::lang::XComponent >          m_xWrappedComponent;
@@ -229,7 +229,7 @@ public:
 
 private:
     css::uno::Reference<
-        css::uno::XAggregation >     m_xAggProxy;
+        cpo::uno::XAggregation >     m_xAggProxy;
     css::uno::Reference<
         css::io::XOutputStream >     m_xWrappedStream;
     css::uno::Reference<
@@ -324,7 +324,7 @@ private:
     rtl::Reference<OfficeDocumentsManager> m_docsMgr;
     OUString m_uri;
     css::uno::Reference<
-        css::uno::XAggregation >     m_xAggProxy;
+        cpo::uno::XAggregation >     m_xAggProxy;
     css::uno::Reference<
         css::io::XStream >           m_xWrappedStream;
     css::uno::Reference<

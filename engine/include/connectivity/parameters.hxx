@@ -42,7 +42,7 @@ namespace com::sun::star::sdbc { class XDatabaseMetaData; }
 namespace com::sun::star::sdbc { class XParameters; }
 namespace com::sun::star::sdbc { class XRef; }
 namespace com::sun::star::task { class XInteractionHandler; }
-namespace com::sun::star::uno { class XAggregation; }
+namespace cpo::uno { class XAggregation; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace dbtools
@@ -106,7 +106,7 @@ namespace dbtools
 
         cpo::uno::WeakReference< css::beans::XPropertySet >
                                             m_xComponent;                // the database component whose parameters we're handling
-        css::uno::Reference< css::uno::XAggregation >
+        css::uno::Reference< cpo::uno::XAggregation >
                                             m_xAggregatedRowSet;    // the aggregated row set - necessary for unwrapped access to some interfaces
         css::uno::Reference< css::sdbc::XParameters >
                                             m_xInnerParamUpdate;    // write access to the inner parameters
@@ -144,7 +144,7 @@ namespace dbtools
         /// late ctor
         void    initialize(
                     const css::uno::Reference< css::beans::XPropertySet >& _rxComponent,
-                    const css::uno::Reference< css::uno::XAggregation >& _rxComponentAggregate
+                    const css::uno::Reference< cpo::uno::XAggregation >& _rxComponentAggregate
                 );
 
         /// makes the object forgetting the references to the database component

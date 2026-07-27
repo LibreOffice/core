@@ -181,7 +181,7 @@ void ScShapeObj::GetShapePropertyState()
     }
 }
 
-static uno::Reference<lang::XComponent> lcl_GetComponent( const uno::Reference<uno::XAggregation>& xAgg )
+static uno::Reference<lang::XComponent> lcl_GetComponent( const uno::Reference<cpo::uno::XAggregation>& xAgg )
 {
     uno::Reference<lang::XComponent> xRet;
     if ( xAgg.is() )
@@ -189,7 +189,7 @@ static uno::Reference<lang::XComponent> lcl_GetComponent( const uno::Reference<u
     return xRet;
 }
 
-static uno::Reference<text::XText> lcl_GetText( const uno::Reference<uno::XAggregation>& xAgg )
+static uno::Reference<text::XText> lcl_GetText( const uno::Reference<cpo::uno::XAggregation>& xAgg )
 {
     uno::Reference<text::XText> xRet;
     if ( xAgg.is() )
@@ -197,7 +197,7 @@ static uno::Reference<text::XText> lcl_GetText( const uno::Reference<uno::XAggre
     return xRet;
 }
 
-static uno::Reference<text::XSimpleText> lcl_GetSimpleText( const uno::Reference<uno::XAggregation>& xAgg )
+static uno::Reference<text::XSimpleText> lcl_GetSimpleText( const uno::Reference<cpo::uno::XAggregation>& xAgg )
 {
     uno::Reference<text::XSimpleText> xRet;
     if ( xAgg.is() )
@@ -205,7 +205,7 @@ static uno::Reference<text::XSimpleText> lcl_GetSimpleText( const uno::Reference
     return xRet;
 }
 
-static uno::Reference<text::XTextRange> lcl_GetTextRange( const uno::Reference<uno::XAggregation>& xAgg )
+static uno::Reference<text::XTextRange> lcl_GetTextRange( const uno::Reference<cpo::uno::XAggregation>& xAgg )
 {
     uno::Reference<text::XTextRange> xRet;
     if ( xAgg.is() )

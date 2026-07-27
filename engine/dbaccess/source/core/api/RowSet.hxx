@@ -258,7 +258,7 @@ namespace dbaccess
         virtual void acquire() noexcept override;
         virtual void release() noexcept override;
 
-    // css::uno::XAggregation
+    // cpo::uno::XAggregation
         virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& aType ) override;
 
     // css::lang::XServiceInfo

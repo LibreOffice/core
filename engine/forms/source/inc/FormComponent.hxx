@@ -43,7 +43,7 @@
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
 #include <com/sun/star/sdb/XRowSetChangeListener.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <cpo/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -141,7 +141,7 @@ class OControl  :public ::cppu::OComponentHelper
 protected:
     ::osl::Mutex                                m_aMutex;
     css::uno::Reference< css::awt::XControl >   m_xControl;
-    css::uno::Reference< css::uno::XAggregation>
+    css::uno::Reference< cpo::uno::XAggregation>
                                                 m_xAggregate;
 
     WindowStateGuard                            m_aWindowStateGuard;

@@ -23,7 +23,7 @@ import lib.MultiMethodTest;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.reflection.XProxyFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XAggregation;
+import cpo.uno.XAggregation;
 
 /**
 /**

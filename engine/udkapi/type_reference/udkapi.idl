@@ -35,6 +35,7 @@ module cpo {
      SINGLETON = 31
     };
     published interface XAdapter;
+    published interface XAggregation;
    };
 };
 module com {
@@ -1158,13 +1159,10 @@ module com {
      ::com::sun::star::reflection::XIdlClass aType;
     };
    };
-   module uno {
-    published interface XAggregation;
-   };
    module reflection {
     /** @deprecated */ published interface XProxyFactory {
      interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::uno::XAggregation createProxy([in] ::com::sun::star::uno::XInterface xTarget);
+     ::cpo::uno::XAggregation createProxy([in] ::com::sun::star::uno::XInterface xTarget);
     };
     /** @deprecated */ published service ProxyFactory: ::com::sun::star::reflection::XProxyFactory;
     published enum TypeDescriptionSearchDepth {
@@ -1630,11 +1628,6 @@ module com {
    };
    module uno {
     published interface XReference;
-    /** @deprecated */ published interface XAggregation {
-     interface ::com::sun::star::uno::XInterface;
-     void setDelegator([in] ::com::sun::star::uno::XInterface pDelegator);
-     any queryAggregation([in] type aType);
-    };
     published interface XComponentContext {
      interface ::com::sun::star::uno::XInterface;
      any getValueByName([in] string Name);
@@ -1753,6 +1746,11 @@ module cpo {
      ::com::sun::star::uno::XInterface queryAdapted();
      void addReference([in] ::com::sun::star::uno::XReference xRef);
      void removeReference([in] ::com::sun::star::uno::XReference xRef);
+    };
+    /** @deprecated */ published interface XAggregation {
+     interface ::com::sun::star::uno::XInterface;
+     void setDelegator([in] ::com::sun::star::uno::XInterface pDelegator);
+     any queryAggregation([in] type aType);
     };
     published interface XCurrentContext {
      interface ::com::sun::star::uno::XInterface;

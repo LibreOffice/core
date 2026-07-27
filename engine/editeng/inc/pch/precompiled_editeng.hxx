@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2023-01-10 23:29:32 using:
+ Generated on 2026-08-04 10:50:31 using:
  ./bin/update_pch editeng editeng --cutoff=5 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,10 +24,15 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <cassert>
 #include <chrono>
+#include <climits>
 #include <cmath>
+#include <compare>
+#include <concepts>
 #include <cstddef>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <deque>
@@ -52,11 +57,13 @@
 #include <string.h>
 #include <string>
 #include <string_view>
+#include <tuple>
 #include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
+#include <boost/container/vector.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
@@ -86,7 +93,6 @@
 #include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -99,14 +105,13 @@
 #include <sal/typesizes.h>
 #include <vcl/BinaryDataContainer.hxx>
 #include <vcl/GraphicExternalLink.hxx>
-#include <vcl/Scanline.hxx>
-#include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/filter/embedfontinfo.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
@@ -117,7 +122,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/task.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/weld.hxx>
@@ -126,6 +130,7 @@
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/color/bcolortools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -142,58 +147,69 @@
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/utils/common.hxx>
+#include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2ivector.hxx>
+#include <basegfx/vector/b3dvector.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
+#include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <com/sun/star/i18n/Calendar2.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
+#include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/LanguageCountryInfo.hpp>
 #include <com/sun/star/i18n/LocaleDataItem2.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
+#include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
+#include <com/sun/star/i18n/ParseResult.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <cpo/uno/Any.h>
-#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/XWeak.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/XAccounting.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
+#include <comphelper/compbase.hxx>
+#include <comphelper/comphelperdllapi.h>
+#include <comphelper/configuration.hxx>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/errcode.hxx>
+#include <comphelper/interfacecontainer4.hxx>
+#include <comphelper/kit.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/unoimplbase.hxx>
+#include <cpo/uno/Any.h>
+#include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.h>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/XWeak.hpp>
+#include <cpo/uno/XAggregation.hpp>
 #include <cpo/uno/genfunc.h>
 #include <cpo/uno/genfunc.hxx>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
-#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <comphelper/comphelperdllapi.h>
-#include <comphelper/diagnose_ex.hxx>
-#include <comphelper/errcode.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
@@ -205,14 +221,30 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/color/Transformation.hxx>
+#include <docmodel/dllapi.h>
+#include <docmodel/theme/ThemeColorType.hxx>
+#include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/CommonTypes.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/i18nutildllapi.h>
 #include <i18nutil/transliteration.hxx>
 #include <libxml/xmlwriter.h>
+#include <o3tl/concepts.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/hash_combine.hxx>
+#include <o3tl/intcmp.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -222,11 +254,10 @@
 #include <sax/fastattribs.hxx>
 #include <sax/saxdllapi.h>
 #include <sfx2/dllapi.h>
+#include <sfx2/shell.hxx>
 #include <sot/formats.hxx>
 #include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
-#include <svl/cenumitm.hxx>
-#include <svl/cintitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
@@ -242,7 +273,6 @@
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/degree.hxx>
-#include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
@@ -260,8 +290,10 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
-#include <unotools/configmgr.hxx>
+#include <unotools/charclass.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>
+#include <unotools/saveopt.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <xmloff/dllapi.h>
@@ -270,6 +302,7 @@
 #include <xmloff/xmltoken.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <editeng/StripPortionsHelper.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -307,6 +340,7 @@
 #include <editeng/shdditem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/tstpitem.hxx>
+#include <editeng/txtrange.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/unoedsrc.hxx>

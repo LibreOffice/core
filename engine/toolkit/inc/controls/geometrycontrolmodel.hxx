@@ -54,7 +54,7 @@ namespace toolkit { class ScriptEventContainer; }
         ,public OGCM_Base
     {
     protected:
-        css::uno::Reference< css::uno::XAggregation >
+        css::uno::Reference< cpo::uno::XAggregation >
                     m_xAggregate;
         rtl::Reference< toolkit::ScriptEventContainer >
                     mxEventContainer;
@@ -83,7 +83,7 @@ namespace toolkit { class ScriptEventContainer; }
             @param _pAggregateInstance
                 the object to be aggregated. The refcount of the instance given MUST be 0!
         */
-        OGeometryControlModel_Base(css::uno::XAggregation* _pAggregateInstance);
+        OGeometryControlModel_Base(cpo::uno::XAggregation* _pAggregateInstance);
 
         /**
             @param _rxAggregateInstance

@@ -442,7 +442,7 @@ ScModelObj::~ScModelObj()
     pPrinterOptions.reset();
 }
 
-uno::Reference< uno::XAggregation> const & ScModelObj::GetFormatter()
+uno::Reference< cpo::uno::XAggregation> const & ScModelObj::GetFormatter()
 {
     // pDocShell may be NULL if this is the base of a ScDocOptionsObj
     if ( !xNumberAgg.is() && pDocShell )
@@ -455,7 +455,7 @@ uno::Reference< uno::XAggregation> const & ScModelObj::GetFormatter()
         uno::Reference<util::XNumberFormatsSupplier> xFormatter(
             new SvNumberFormatsSupplierObj(pDocShell->GetDocument().GetThreadedContext().GetFormatTable() ));
         {
-            xNumberAgg.set(uno::Reference<uno::XAggregation>( xFormatter, uno::UNO_QUERY ));
+            xNumberAgg.set(uno::Reference<cpo::uno::XAggregation>( xFormatter, uno::UNO_QUERY ));
             // extra block to force deletion of the temporary before setDelegator
         }
 

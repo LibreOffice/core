@@ -38,7 +38,7 @@ namespace dbaccess
     protected:
         virtual ~OSharedConnection() override;
     public:
-        explicit OSharedConnection(css::uno::Reference< css::uno::XAggregation >& _rxProxyConnection);
+        explicit OSharedConnection(css::uno::Reference< cpo::uno::XAggregation >& _rxProxyConnection);
 
         // XCloseable
         virtual void close(  ) override

@@ -176,7 +176,7 @@
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hdl>
 #include <cpo/uno/TypeClass.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <cpo/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <cpo/uno/genfunc.h>

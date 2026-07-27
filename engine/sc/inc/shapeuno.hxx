@@ -31,14 +31,13 @@
 #include <cppuhelper/implbase1.hxx>
 
 namespace com::sun::star {
-    namespace uno {
-        class XAggregation;
-    }
     namespace drawing {
         class XShape;
     }
 }
-
+namespace cpo::uno {
+    class XAggregation;
+}
 class SdrObject;
 struct SvEventDescription;
 class  ScMacroInfo;
@@ -62,7 +61,7 @@ class ScShapeObj final : public ScShapeObj_Base
 {
 private:
     friend ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( const ScShapeObj* pShape, bool bCreate );
-    css::uno::Reference< css::uno::XAggregation >              mxShapeAgg;
+    css::uno::Reference< cpo::uno::XAggregation >              mxShapeAgg;
     // cached pointers to avoid repeated queryAggregation calls:
     css::beans::XPropertySet*                                  pShapePropertySet;
     css::beans::XPropertyState*                                pShapePropertyState;

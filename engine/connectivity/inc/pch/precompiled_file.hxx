@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:55:38 using:
+ Generated on 2026-08-04 10:49:38 using:
  ./bin/update_pch connectivity file --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,7 +25,10 @@
 #include <algorithm>
 #include <cassert>
 #include <chrono>
+#include <climits>
+#include <cmath>
 #include <cstddef>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <functional>
@@ -35,6 +38,7 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <optional>
 #include <ostream>
@@ -44,6 +48,7 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 #endif // PCH_LEVEL >= 1
@@ -58,6 +63,7 @@
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
+#include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
@@ -80,12 +86,10 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/dllapi.h>
-#include <comphelper/errcode.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
+#include <basegfx/basegfxdllapi.h>
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
@@ -97,10 +101,10 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -111,28 +115,19 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#include <cpo/uno/Any.h>
-#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <cpo/uno/Sequence.h>
-#include <cpo/uno/Sequence.hxx>
-#include <cpo/uno/Type.h>
-#include <cpo/uno/Type.hxx>
-#include <cpo/uno/TypeClass.hdl>
-#include <cpo/uno/TypeClass.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
-#include <cpo/uno/genfunc.h>
-#include <cpo/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/errcode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -146,6 +141,17 @@
 #include <comphelper/uno3.hxx>
 #include <component/CColumns.hxx>
 #include <component/CResultSet.hxx>
+#include <cpo/uno/Any.h>
+#include <cpo/uno/Any.hxx>
+#include <cpo/uno/Sequence.h>
+#include <cpo/uno/Sequence.hxx>
+#include <cpo/uno/Type.h>
+#include <cpo/uno/Type.hxx>
+#include <cpo/uno/TypeClass.hdl>
+#include <cpo/uno/TypeClass.hpp>
+#include <cpo/uno/XAggregation.hpp>
+#include <cpo/uno/genfunc.h>
+#include <cpo/uno/genfunc.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -159,7 +165,6 @@
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
@@ -183,6 +188,9 @@
 #include <file/fcode.hxx>
 #include <file/fcomp.hxx>
 #include <file/filedllapi.hxx>
+#include <o3tl/intcmp.hxx>
+#include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <resource/sharedresources.hxx>
@@ -190,7 +198,6 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/date.hxx>
 #include <tools/debug.hxx>
-#include <comphelper/diagnose_ex.hxx>
 #include <tools/lineend.hxx>
 #include <tools/long.hxx>
 #include <tools/ref.hxx>
@@ -213,11 +220,11 @@
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbexception.hxx>
-#include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
+#include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlparse.hxx>
 #endif // PCH_LEVEL >= 4
 

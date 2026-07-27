@@ -62,7 +62,7 @@
 #include <comphelper/asyncquithandler.hxx>
 #include <map>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <cpo/uno/XAggregation.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 
 #include <com/sun/star/awt/DialogProvider.hpp>

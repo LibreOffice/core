@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2026-07-28 23:17:01 using:
+ Generated on 2026-08-04 13:10:07 using:
  ./bin/update_pch sd sdui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -303,7 +303,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -333,6 +332,7 @@
 #include <cpo/uno/Type.h>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hdl>
+#include <cpo/uno/XAggregation.hpp>
 #include <cpo/uno/genfunc.h>
 #include <cpo/uno/genfunc.hxx>
 #include <cppu/cppudllapi.h>

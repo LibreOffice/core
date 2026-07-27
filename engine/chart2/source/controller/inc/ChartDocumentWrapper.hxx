@@ -22,7 +22,7 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <cpo/uno/XAggregation.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <unotools/eventlisteneradapter.hxx>
@@ -47,7 +47,7 @@ class ChartDocumentWrapper_Base : public ::cppu::ImplInheritanceHelper
                                 , css::drawing::XDrawPageSupplier
                                 , css::lang::XMultiServiceFactory
                                 , css::lang::XServiceInfo
-                                , css::uno::XAggregation
+                                , cpo::uno::XAggregation
                                 >
 {
 };

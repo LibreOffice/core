@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2026-07-27 19:35:17 using:
+ Generated on 2026-08-04 10:50:05 using:
  ./bin/update_pch cppuhelper cppuhelper --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -52,7 +52,6 @@
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
-#include <rtl/textcvt.h>
 #include <rtl/unload.h>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
@@ -82,11 +81,11 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <comphelper/sequence.hxx>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>
+#include <cpo/uno/XAggregation.hpp>
 #include <cppu/cppudllapi.h>
 #include <o3tl/string_view.hxx>
 #include <salhelper/simplereferenceobject.hxx>

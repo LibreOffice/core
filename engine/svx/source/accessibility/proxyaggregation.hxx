@@ -81,7 +81,7 @@ namespace accessibility
     class OProxyAggregation
     {
     private:
-        css::uno::Reference< css::uno::XAggregation >             m_xProxyAggregate;
+        css::uno::Reference< cpo::uno::XAggregation >             m_xProxyAggregate;
         css::uno::Reference< css::lang::XTypeProvider >           m_xProxyTypeAccess;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
 

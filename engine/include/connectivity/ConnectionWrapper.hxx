@@ -47,14 +47,14 @@ namespace connectivity
                                                      public OConnection_BASE
     {
     protected:
-        css::uno::Reference< css::uno::XAggregation >   m_xProxyConnection;
+        css::uno::Reference< cpo::uno::XAggregation >   m_xProxyConnection;
         css::uno::Reference< css::sdbc::XConnection >   m_xConnection;
         css::uno::Reference< css::lang::XTypeProvider > m_xTypeProvider;
         css::uno::Reference< css::lang::XUnoTunnel >    m_xUnoTunnel;
         css::uno::Reference< css::lang::XServiceInfo >  m_xServiceInfo;
 
         virtual ~OConnectionWrapper();
-        void setDelegation(css::uno::Reference< css::uno::XAggregation >& _rxProxyConnection);
+        void setDelegation(css::uno::Reference< cpo::uno::XAggregation >& _rxProxyConnection);
         virtual void disposing() override;
     public:
         OConnectionWrapper( );

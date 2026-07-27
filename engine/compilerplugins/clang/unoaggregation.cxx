@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// Find classes that derive from css::uno::XAggregation, but which implement queryInterface in
+// Find classes that derive from cpo::uno::XAggregation, but which implement queryInterface in
 // violation of the protocol laid out in the documentation at
-// udkapi/com/sun/star/uno/XAggregation.idl (which implies that such a class either doesn't actually
+// udkapi/cpo/uno/XAggregation.idl (which implies that such a class either doesn't actually
 // make use of the deprecated XAggregation mechanism, which should thus be removed from that class
 // hierarchy, or that its implementation of queryInterface needs to be fixed).
 
@@ -48,22 +48,19 @@ bool isQueryInterface(CXXMethodDecl const* decl)
 
 bool derivesFromXAggregation(CXXRecordDecl const* decl, bool checkSelf)
 {
-    // need to this formatting to make css->cpo transition work nicely
-    // clang-format off
     return loplugin::isDerivedFrom(decl,
                                    [](Decl const* decl) -> bool {
                                        return bool(loplugin::DeclCheck(decl)
                                                        .Class("XAggregation")
                                                        .Namespace("uno")
-                                                       .Namespace("star").Namespace("sun").Namespace("com")
+                                                       .Namespace("cpo")
                                                        .GlobalNamespace());
                                    },
                                    checkSelf);
-    // clang-format on
 }
 
 // Return true if decl is an implementation of css::uno::XInterface::queryInterface in a class
-// derived from css::uno::XAggregation:
+// derived from cpo::uno::XAggregation:
 bool isXAggregationQueryInterface(CXXMethodDecl const* decl)
 {
     return isQueryInterface(decl) && derivesFromXAggregation(decl->getParent(), false);

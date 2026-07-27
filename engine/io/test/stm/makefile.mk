@@ -55,7 +55,7 @@ UNOTYPES =	com.sun.star.test.XSimpleTest \
         com.sun.star.registry.XRegistryKey	\
         com.sun.star.test.XSimpleTest	\
         cpo.uno.TypeClass	\
-        com.sun.star.uno.XAggregation	\
+        cpo.uno.XAggregation	\
         com.sun.star.uno.XWeak
 
 SLOFILES=	 \

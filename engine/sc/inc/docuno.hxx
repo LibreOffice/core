@@ -49,7 +49,7 @@
 #include <com/sun/star/sheet/XCellRangesAccess.hpp>
 #include <com/sun/star/sheet/opencl/XOpenCLSelection.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <cpo/uno/XAggregation.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <svl/itemprop.hxx>
@@ -97,7 +97,7 @@ private:
     std::unique_ptr<ScPrintFuncCache> pPrintFuncCache;
     std::unique_ptr<ScPrintUIOptions> pPrinterOptions;
     std::unique_ptr<ScPrintState> m_pPrintState;
-    css::uno::Reference<css::uno::XAggregation> xNumberAgg;
+    css::uno::Reference<cpo::uno::XAggregation> xNumberAgg;
     css::uno::Reference<css::uno::XInterface> xDrawGradTab;
     css::uno::Reference<css::uno::XInterface> xDrawHatchTab;
     css::uno::Reference<css::uno::XInterface> xDrawBitmapTab;
@@ -113,7 +113,7 @@ private:
                                                 const cpo::uno::Sequence< css::beans::PropertyValue >& rOptions,
                                                 ScMarkData& rMark, ScPrintSelectionStatus& rStatus, OUString& rPagesStr,
                                                 bool& rbRenderToGraphic ) const;
-    css::uno::Reference<css::uno::XAggregation> const & GetFormatter();
+    css::uno::Reference<cpo::uno::XAggregation> const & GetFormatter();
     void                    HandleCalculateEvents();
 
     css::uno::Reference<css::uno::XInterface> create(

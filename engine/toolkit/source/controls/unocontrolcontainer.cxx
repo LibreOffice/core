@@ -396,7 +396,7 @@ void UnoControlContainer::dispose(  )
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     lang::EventObject aDisposeEvent;
-    aDisposeEvent.Source = static_cast< uno::XAggregation* >( this );
+    aDisposeEvent.Source = static_cast< cpo::uno::XAggregation* >( this );
 
     // Notify listeners about disposal of this Container (This is much faster if they
     // listen on the controls and the container).

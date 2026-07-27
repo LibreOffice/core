@@ -134,7 +134,7 @@ namespace cppu
         css::uno::XInterface which supports weak mechanism to be held weakly
         (supporting css::uno::XWeak through ::cppu::OWeakAggObject).
         In addition, it supports also aggregation meaning object of this class can be aggregated
-        (css::uno::XAggregation through ::cppu::OWeakAggObject).
+        (cpo::uno::XAggregation through ::cppu::OWeakAggObject).
         If a delegator is set (this object is aggregated), then incoming queryInterface()
         calls are delegated to the delegator object. If the delegator does not support the
         demanded interface, it calls queryAggregation() on its aggregated objects.
@@ -239,7 +239,7 @@ namespace cppu
 
         @attention
         The BaseClass has to be complete in a sense, that css::uno::XInterface,
-        css::uno::XAggregation and css::lang::XTypeProvider
+        cpo::uno::XAggregation and css::lang::XTypeProvider
         are implemented properly.  The BaseClass must have at least one ctor
         that can be called with six or fewer arguments, of which none is of
         non-const reference type.

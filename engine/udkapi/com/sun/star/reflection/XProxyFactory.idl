@@ -48,7 +48,7 @@ published interface XProxyFactory: com::sun::star::uno::XInterface
         @return
                 proxy object
     */
-    com::sun::star::uno::XAggregation createProxy(
+    cpo::uno::XAggregation createProxy(
         [in] com::sun::star::uno::XInterface xTarget );
 };
 

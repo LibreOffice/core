@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2026-07-28 10:31:54 using:
+ Generated on 2026-08-04 10:47:38 using:
  ./bin/update_pch sw vbaswobj --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -202,6 +202,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
@@ -236,7 +237,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
@@ -249,7 +249,6 @@
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/errcode.hxx>
 #include <comphelper/interfacecontainer4.hxx>
-#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
@@ -263,6 +262,7 @@
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hdl>
 #include <cpo/uno/TypeClass.hpp>
+#include <cpo/uno/XAggregation.hpp>
 #include <cpo/uno/genfunc.h>
 #include <cpo/uno/genfunc.hxx>
 #include <cppu/cppudllapi.h>
@@ -272,6 +272,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <dmapper/resourcemodel.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/autodiritem.hxx>
 #include <editeng/editengdllapi.h>
@@ -303,8 +304,8 @@
 #include <o3tl/unit_conversion.hxx>
 #include <ooo/vba/XCollection.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/word/WdSaveFormat.hpp>
 #include <ooo/vba/word/XSection.hpp>
+#include <ooo/vba/word/XWrapFormat.hpp>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <sfx2/AccessibilityIssue.hxx>
@@ -331,7 +332,6 @@
 #include <svl/stylesheetuser.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
-#include <svl/undo.hxx>
 #include <svl/whichranges.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/svtdllapi.h>
@@ -341,7 +341,6 @@
 #include <svx/xdef.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
-#include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/degree.hxx>
 #include <tools/fldunit.hxx>
@@ -381,7 +380,6 @@
 #include <IMark.hxx>
 #include <IShellCursorSupplier.hxx>
 #include <SwNumberTreeTypes.hxx>
-#include <SwRewriter.hxx>
 #include <bparr.hxx>
 #include <calbck.hxx>
 #include <charfmt.hxx>
@@ -422,13 +420,11 @@
 #include <swtable.hxx>
 #include <swtblfmt.hxx>
 #include <swtypes.hxx>
-#include <swundo.hxx>
 #include <tblenum.hxx>
 #include <tblsel.hxx>
 #include <textboxhelper.hxx>
 #include <tox.hxx>
 #include <toxe.hxx>
-#include <undobj.hxx>
 #include <unobaseclass.hxx>
 #include <unobasestyle.hxx>
 #include <unocoll.hxx>

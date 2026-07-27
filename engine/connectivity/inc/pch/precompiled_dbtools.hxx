@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-11 19:47:45 using:
+ Generated on 2026-08-04 10:49:25 using:
  ./bin/update_pch connectivity dbtools --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,6 +29,7 @@
 #include <functional>
 #include <iterator>
 #include <limits>
+#include <map>
 #include <memory>
 #include <new>
 #include <optional>
@@ -42,15 +43,16 @@
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/mutex.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
+#include <rtl/alloc.h>
 #include <rtl/character.hxx>
 #include <rtl/digest.h>
 #include <rtl/locale.h>
+#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/process.h>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
@@ -115,16 +117,10 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
-#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XGroupsSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
-#include <com/sun/star/task/XInteractionRequest.hpp>
-#include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
@@ -135,39 +131,42 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <comphelper/broadcasthelper.hxx>
+#include <comphelper/compbase.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/proparrhlp.hxx>
+#include <comphelper/propcontainerimplhelper.hxx>
 #include <comphelper/property.hxx>
-#include <comphelper/propertycontainer.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
+#include <cpo/uno/Any.hxx>
+#include <cpo/uno/Sequence.hxx>
+#include <cpo/uno/XAggregation.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <o3tl/any.hxx>
 #include <o3tl/functional.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <o3tl/unreachable.hxx>
 #include <resource/sharedresources.hxx>
-#include <salhelper/simplereferenceobject.hxx>
 #include <sdbcx/VIndexColumn.hxx>
 #include <sdbcx/VKey.hxx>
 #include <sdbcx/VKeyColumn.hxx>
-#include <comphelper/diagnose_ex.hxx>
 #include <tools/toolsdllapi.h>
 #include <unotools/resmgr.hxx>
 #include <unotools/sharedunocomponent.hxx>
@@ -177,7 +176,6 @@
 #include <FDatabaseMetaDataResultSet.hxx>
 #include <FDatabaseMetaDataResultSetMetaData.hxx>
 #include <ParameterCont.hxx>
-#include <ParameterSubstitution.hxx>
 #include <RowFunctionParser.hxx>
 #include <TConnection.hxx>
 #include <TIndex.hxx>
@@ -208,6 +206,7 @@
 #include <connectivity/sqlerror.hxx>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlparse.hxx>
+#include <connectivity/standardsqlstate.hxx>
 #include <connectivity/statementcomposer.hxx>
 #endif // PCH_LEVEL >= 4
 

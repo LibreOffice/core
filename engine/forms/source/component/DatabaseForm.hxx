@@ -163,7 +163,7 @@ class ODatabaseForm :public OFormComponents
     cpo::uno::Sequence< OUString >      m_aDetailFields;
 
     // the object doin' most of the work - an SDB-rowset
-    css::uno::Reference< css::uno::XAggregation>      m_xAggregate;
+    css::uno::Reference< cpo::uno::XAggregation>      m_xAggregate;
     // same object, interface as member because of performance reasons
     css::uno::Reference< css::sdbc::XRowSet>          m_xAggregateAsRowSet;
 

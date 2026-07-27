@@ -122,7 +122,7 @@ namespace svxform
                                 css::uno::Reference< css::frame::XDispatch >
                             >   DispatcherContainer;
 
-        css::uno::Reference< css::uno::XAggregation>              m_xAggregate;
+        css::uno::Reference< cpo::uno::XAggregation>              m_xAggregate;
         css::uno::Reference< css::awt::XTabController>            m_xTabController;
         css::uno::Reference< css::awt::XControl>                  m_xActiveControl, m_xCurrentControl;
         css::uno::Reference< css::container::XIndexAccess>        m_xModelAsIndex;

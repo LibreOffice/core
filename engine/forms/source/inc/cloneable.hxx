@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <cpo/uno/XAggregation.hpp>
 
 
 namespace frm
@@ -28,10 +28,10 @@ namespace frm
     class OCloneableAggregation
     {
     protected:
-        css::uno::Reference< css::uno::XAggregation>  m_xAggregate;
+        css::uno::Reference< cpo::uno::XAggregation>  m_xAggregate;
 
     protected:
-        static css::uno::Reference< css::uno::XAggregation > createAggregateClone( const OCloneableAggregation* _pOriginal );
+        static css::uno::Reference< cpo::uno::XAggregation > createAggregateClone( const OCloneableAggregation* _pOriginal );
     };
 
 

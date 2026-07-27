@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-08-22 14:50:18 using:
+ Generated on 2026-08-04 10:52:28 using:
  ./bin/update_pch xmloff xo --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,32 +24,43 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <cassert>
+#include <climits>
 #include <cmath>
+#include <compare>
+#include <concepts>
 #include <cstddef>
 #include <cstdlib>
+#include <cstring>
 #include <float.h>
 #include <functional>
 #include <initializer_list>
-#include <iomanip>
+#include <iterator>
 #include <limits.h>
 #include <limits>
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <numeric>
 #include <optional>
 #include <ostream>
 #include <set>
+#include <span>
 #include <stddef.h>
 #include <string.h>
 #include <string>
 #include <string_view>
+#include <tuple>
 #include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include <boost/container/vector.hpp>
+#include <boost/core/noinit_adaptor.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -70,8 +81,12 @@
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
+#include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
@@ -84,54 +99,63 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/Scanline.hxx>
-#include <vcl/alpha.hxx>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/filter/embedfontinfo.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
+#include <vcl/task.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
+#include <basegfx/color/bcolortools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/Range2D.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Size2D.hxx>
 #include <basegfx/tuple/Tuple2D.hxx>
 #include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/utils/common.hxx>
+#include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
+#include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
+#include <com/sun/star/i18n/LanguageCountryInfo.hpp>
+#include <com/sun/star/i18n/LocaleDataItem2.hpp>
+#include <com/sun/star/i18n/LocaleItem.hpp>
+#include <com/sun/star/i18n/reservedWords.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -141,31 +165,32 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
-#include <cpo/uno/Any.h>
-#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <cpo/uno/Sequence.h>
-#include <cpo/uno/Sequence.hxx>
-#include <cpo/uno/Type.h>
-#include <cpo/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
-#include <cpo/uno/genfunc.h>
-#include <cpo/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <comphelper/base64.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/errcode.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <cpo/uno/Any.h>
+#include <cpo/uno/Any.hxx>
+#include <cpo/uno/Sequence.h>
+#include <cpo/uno/Sequence.hxx>
+#include <cpo/uno/Type.h>
+#include <cpo/uno/TypeClass.hdl>
+#include <cpo/uno/XAggregation.hpp>
+#include <cpo/uno/genfunc.h>
+#include <cpo/uno/genfunc.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
@@ -174,13 +199,22 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/color/Transformation.hxx>
+#include <docmodel/dllapi.h>
+#include <docmodel/theme/ThemeColorType.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/concepts.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/hash_combine.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sorted_vector.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -190,17 +224,18 @@
 #include <sax/tools/converter.hxx>
 #include <svl/svldllapi.h>
 #include <tools/color.hxx>
-#include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/degree.hxx>
-#include <comphelper/diagnose_ex.hxx>
+#include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
+#include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
+#include <tools/ref.hxx>
 #include <tools/solar.h>
-#include <tools/time.hxx>
+#include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
@@ -211,7 +246,6 @@
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <PageMasterStyleMap.hxx>
-#include <XMLStringBufferImportContext.hxx>
 #include <xexptran.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
@@ -236,7 +270,6 @@
 #include <xmloff/xmlprhdl.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlstyle.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmluconv.hxx>

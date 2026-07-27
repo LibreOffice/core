@@ -17674,7 +17674,7 @@ compute_violation
 connectivity::OColumnsHelper::createDescriptor()
 connectivity::OConnectionWrapper::createUniqueId(rtl::OUString const&, cpo::uno::Sequence<com::sun::star::beans::PropertyValue>&, unsigned char*, rtl::OUString const&, rtl::OUString const&)
 connectivity::OConnectionWrapper::getUnoTunnelId()
-connectivity::OConnectionWrapper::setDelegation(com::sun::star::uno::Reference<com::sun::star::uno::XAggregation>&)
+connectivity::OConnectionWrapper::setDelegation(com::sun::star::uno::Reference<cpo::uno::XAggregation>&)
 connectivity::ODatabaseMetaDataBase::getTablePrivileges(cpo::uno::Any const&, rtl::OUString const&, rtl::OUString const&)
 connectivity::ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet()
 connectivity::ODatabaseMetaDataResultSet::absolute(int)

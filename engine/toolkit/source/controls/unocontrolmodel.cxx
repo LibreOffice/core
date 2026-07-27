@@ -440,7 +440,7 @@ void UnoControlModel::dispose(  )
     std::unique_lock aGuard( m_aMutex );
 
     css::lang::EventObject aEvt;
-    aEvt.Source = static_cast<css::uno::XAggregation*>(static_cast<cppu::OWeakAggObject*>(this));
+    aEvt.Source = static_cast<cpo::uno::XAggregation*>(static_cast<cppu::OWeakAggObject*>(this));
     maDisposeListeners.disposeAndClear( aGuard, aEvt );
 
     // let the property set helper notify our property listeners

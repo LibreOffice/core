@@ -402,7 +402,7 @@ excludelist:
      - com/sun/star/drawing/XDrawPageSupplier.hpp
      - com/sun/star/lang/XMultiServiceFactory.hpp
      - com/sun/star/lang/XServiceInfo.hpp
-     - com/sun/star/uno/XAggregation.hpp
+     - cpo/uno/XAggregation.hpp
     chart2/source/controller/inc/dlg_ChartType.hxx:
     # Needed for vclptr type
     - namespace chart { class ChartTypeTabPage; }

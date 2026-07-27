@@ -35,9 +35,9 @@ namespace frm
     //= OCloneableAggregation
 
 
-    Reference< XAggregation > OCloneableAggregation::createAggregateClone( const OCloneableAggregation* _pOriginal )
+    Reference< cpo::uno::XAggregation > OCloneableAggregation::createAggregateClone( const OCloneableAggregation* _pOriginal )
     {
-        Reference< XAggregation > xAggregateClone;      // will be the aggregate's clone
+        Reference< cpo::uno::XAggregation > xAggregateClone;      // will be the aggregate's clone
 
         if (auto xAggregateCloneable = query_aggregation<XCloneable>(_pOriginal->m_xAggregate))
         {

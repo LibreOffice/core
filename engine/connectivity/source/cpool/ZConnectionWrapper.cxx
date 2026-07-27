@@ -24,7 +24,7 @@ using namespace connectivity;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
 
-OConnectionWeakWrapper::OConnectionWeakWrapper(Reference< XAggregation >& _xConnection)
+OConnectionWeakWrapper::OConnectionWeakWrapper(Reference< cpo::uno::XAggregation >& _xConnection)
 {
     setDelegation(_xConnection);
     OSL_ENSURE(m_xConnection.is(),"OConnectionWeakWrapper: Connection must be valid!");

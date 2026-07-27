@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2026-07-28 10:31:46 using:
+ Generated on 2026-08-04 13:09:59 using:
  ./bin/update_pch sw msword --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -44,7 +44,6 @@
 #include <iterator>
 #include <limits.h>
 #include <limits>
-#include <list>
 #include <locale>
 #include <map>
 #include <math.h>
@@ -145,6 +144,7 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 #include <vcl/rendercontext/AntialiasingFlags.hxx>
@@ -165,6 +165,7 @@
 #include <vcl/task.hxx>
 #include <vcl/themecolors.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
@@ -196,6 +197,9 @@
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/units/Length.hxx>
+#include <basegfx/units/LengthBase.hxx>
+#include <basegfx/units/LengthTypes.hxx>
 #include <basegfx/utils/bgradient.hxx>
 #include <basegfx/utils/common.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
@@ -219,6 +223,7 @@
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/awt/XAdjustmentListener.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -253,7 +258,18 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.hpp>
+#include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
@@ -276,6 +292,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
@@ -297,6 +314,7 @@
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -324,7 +342,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -355,6 +373,7 @@
 #include <cpo/uno/Type.h>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hdl>
+#include <cpo/uno/XAggregation.hpp>
 #include <cpo/uno/genfunc.h>
 #include <cpo/uno/genfunc.hxx>
 #include <cppu/cppudllapi.h>
@@ -369,6 +388,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <dmapper/resourcemodel.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <docmodel/color/Transformation.hxx>
 #include <docmodel/dllapi.h>
@@ -453,7 +473,8 @@
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <ooo/vba/word/WdSaveFormat.hpp>
+#include <ooo/vba/XHelperInterface.hpp>
+#include <ooo/vba/word/XWrapFormat.hpp>
 #include <oox/core/filterbase.hxx>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -470,6 +491,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/docfile.hxx>
 #include <sfx2/redlinerecordingmode.hxx>
+#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/object.hxx>
 #include <sot/sotdllapi.h>
@@ -505,6 +527,8 @@
 #include <svx/EnhancedCustomShapeFunctionParser.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/ctredlin.hxx>
+#include <svx/dataaccessdescriptor.hxx>
+#include <svx/dbaexchange.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/msdffdef.hxx>
@@ -576,6 +600,7 @@
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
+#include <tools/globname.hxx>
 #include <tools/helpers.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
@@ -608,6 +633,9 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/weakref.hxx>
+#include <vbahelper/vbadllapi.h>
+#include <vbahelper/vbahelper.hxx>
+#include <vbahelper/vbahelperinterface.hxx>
 #include <xmloff/odffields.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
@@ -620,7 +648,6 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <IMark.hxx>
 #include <IShellCursorSupplier.hxx>
-#include <SwRewriter.hxx>
 #include <bparr.hxx>
 #include <breakit.hxx>
 #include <calbck.hxx>
@@ -677,7 +704,6 @@
 #include <ndarr.hxx>
 #include <ndgrf.hxx>
 #include <ndhints.hxx>
-#include <ndindex.hxx>
 #include <ndole.hxx>
 #include <ndtxt.hxx>
 #include <ndtyp.hxx>
@@ -708,7 +734,6 @@
 #include <toxe.hxx>
 #include <txatbase.hxx>
 #include <txtftn.hxx>
-#include <undobj.hxx>
 #include <unobaseclass.hxx>
 #include <unocrsr.hxx>
 #include <unotxdoc.hxx>

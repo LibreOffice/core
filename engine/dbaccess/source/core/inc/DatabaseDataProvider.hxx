@@ -239,7 +239,7 @@ private:
     css::uno::Reference< css::chart2::data::XRangeXMLConversion>  m_xRangeConversion;
     css::uno::Reference< css::task::XInteractionHandler>          m_xHandler;
     // the object doin' most of the work - an SDB-rowset
-    css::uno::Reference< css::uno::XAggregation>                  m_xAggregate;
+    css::uno::Reference< cpo::uno::XAggregation>                  m_xAggregate;
     css::uno::Reference< css::beans::XPropertySet>                m_xAggregateSet;
     css::uno::Reference< css::uno::XInterface>                    m_xParent;
     cpo::uno::Sequence< OUString >                                m_MasterFields;

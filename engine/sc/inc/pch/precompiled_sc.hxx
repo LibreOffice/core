@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2026-07-28 10:33:24 using:
+ Generated on 2026-08-04 10:51:28 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -42,7 +42,6 @@
 #include <iterator>
 #include <limits.h>
 #include <limits>
-#include <locale>
 #include <map>
 #include <math.h>
 #include <memory>
@@ -53,7 +52,6 @@
 #include <set>
 #include <span>
 #include <sstream>
-#include <stack>
 #include <stddef.h>
 #include <stdexcept>
 #include <string.h>
@@ -88,7 +86,6 @@
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
-#include <rtl/cipher.h>
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
@@ -135,7 +132,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
-#include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
 #include <vcl/filter/embedfontinfo.hxx>
 #include <vcl/fntstyle.hxx>
@@ -257,12 +253,12 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -280,7 +276,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/errcode.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/hash.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/multiinterfacecontainer4.hxx>
@@ -305,6 +300,7 @@
 #include <cpo/uno/Type.h>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hdl>
+#include <cpo/uno/XAggregation.hpp>
 #include <cpo/uno/genfunc.h>
 #include <cpo/uno/genfunc.hxx>
 #include <cppu/cppudllapi.h>
@@ -363,8 +359,6 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/wghtitem.hxx>
-#include <filter/msfilter/mscodec.hxx>
-#include <filter/msfilter/msfilterdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <o3tl/concepts.hxx>
 #include <o3tl/cow_wrapper.hxx>
@@ -380,9 +374,6 @@
 #include <o3tl/unit_conversion.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <oox/core/filterbase.hxx>
-#include <oox/core/relations.hxx>
-#include <oox/core/xmlfilterbase.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/refmap.hxx>
@@ -390,8 +381,6 @@
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
-#include <sax/fshelper.hxx>
-#include <sax/saxdllapi.h>
 #include <sax/tools/converter.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -438,9 +427,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/ehdl.hxx>
 #include <svtools/svtdllapi.h>
-#include <svtools/svtresid.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/algitem.hxx>
@@ -474,7 +461,6 @@
 #include <svx/svdview.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/svxerr.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xhatch.hxx>
@@ -574,7 +560,6 @@
 #include <editutil.hxx>
 #include <externalrefmgr.hxx>
 #include <fillinfo.hxx>
-#include <filter.hxx>
 #include <formula/IControlReferenceHandler.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/formuladllapi.h>
@@ -582,7 +567,6 @@
 #include <formula/opcode.hxx>
 #include <formula/token.hxx>
 #include <formulacell.hxx>
-#include <ftools.hxx>
 #include <funcdesc.hxx>
 #include <global.hxx>
 #include <globalnames.hxx>
@@ -647,13 +631,6 @@
 #include <userdat.hxx>
 #include <validat.hxx>
 #include <viewdata.hxx>
-#include <xerecord.hxx>
-#include <xeroot.hxx>
-#include <xestream.hxx>
-#include <xladdress.hxx>
-#include <xlconst.hxx>
-#include <xlroot.hxx>
-#include <xlstream.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

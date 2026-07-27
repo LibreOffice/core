@@ -1834,7 +1834,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                                     continue;
                                 }
                             }
-                        } else if (className == "com.sun.star.uno.XAggregation")
+                        } else if (className == "cpo.uno.XAggregation")
                         {
                             if( aMethName == "setDelegator" )
                             {

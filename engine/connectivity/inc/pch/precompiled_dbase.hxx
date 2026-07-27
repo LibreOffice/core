@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:55:37 using:
+ Generated on 2026-08-04 10:49:03 using:
  ./bin/update_pch connectivity dbase --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,9 +23,13 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <atomic>
 #include <cassert>
 #include <chrono>
+#include <climits>
+#include <concepts>
 #include <cstddef>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <functional>
@@ -35,6 +39,7 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <optional>
 #include <ostream>
@@ -59,6 +64,7 @@
 #include <osl/mutex.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
+#include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
@@ -82,12 +88,9 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/dllapi.h>
-#include <comphelper/errcode.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -96,6 +99,11 @@
 #include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -122,41 +130,46 @@
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
-#include <cpo/uno/Any.h>
-#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/XWeak.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/XCancellable.hpp>
+#include <comphelper/broadcasthelper.hxx>
+#include <comphelper/bytereader.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/comphelperdllapi.h>
+#include <comphelper/errcode.hxx>
+#include <comphelper/extract.hxx>
+#include <comphelper/interfacecontainer4.hxx>
+#include <comphelper/multiinterfacecontainer4.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propagg.hxx>
+#include <comphelper/proparrhlp.hxx>
+#include <comphelper/propcontainerimplhelper.hxx>
+#include <comphelper/propertycontainerhelper.hxx>
+#include <comphelper/propimplhelper.hxx>
+#include <comphelper/propstate.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/stl_types.hxx>
+#include <comphelper/types.hxx>
+#include <comphelper/uno3.hxx>
+#include <comphelper/unoimplbase.hxx>
+#include <cpo/uno/Any.h>
+#include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.h>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hdl>
 #include <cpo/uno/TypeClass.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/XWeak.hpp>
+#include <cpo/uno/XAggregation.hpp>
 #include <cpo/uno/genfunc.h>
 #include <cpo/uno/genfunc.hxx>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/XCancellable.hpp>
-#include <comphelper/broadcasthelper.hxx>
-#include <comphelper/comphelperdllapi.h>
-#include <comphelper/extract.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/propagg.hxx>
-#include <comphelper/proparrhlp.hxx>
-#include <comphelper/propertycontainer.hxx>
-#include <comphelper/propertycontainerhelper.hxx>
-#include <comphelper/propstate.hxx>
-#include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
-#include <comphelper/stl_types.hxx>
-#include <comphelper/types.hxx>
-#include <comphelper/uno3.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
@@ -170,7 +183,6 @@
 #include <cppuhelper/proptypehlp.h>
 #include <cppuhelper/proptypehlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -190,9 +202,13 @@
 #include <dbase/DTables.hxx>
 #include <file/fcode.hxx>
 #include <file/filedllapi.hxx>
+#include <o3tl/cow_wrapper.hxx>
+#include <o3tl/intcmp.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/untaint.hxx>
 #include <resource/sharedresources.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
@@ -210,9 +226,12 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
+#include <unotools/resmgr.hxx>
 #include <unotools/sharedunocomponent.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <unotools/weakref.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <TConnection.hxx>
@@ -224,6 +243,7 @@
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/sqliterator.hxx>
+#include <connectivity/standardsqlstate.hxx>
 #include <propertyids.hxx>
 #endif // PCH_LEVEL >= 4
 

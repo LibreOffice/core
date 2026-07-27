@@ -22,7 +22,7 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <cpo/uno/XAggregation.hpp>
 
 
 namespace connectivity
@@ -35,7 +35,7 @@ namespace connectivity
 
     class ODriverWrapper final : public ODriverWrapper_BASE
     {
-        css::uno::Reference< css::uno::XAggregation >
+        css::uno::Reference< cpo::uno::XAggregation >
                             m_xDriverAggregate;
         css::uno::Reference< css::sdbc::XDriver >
                             m_xDriver;
@@ -48,7 +48,7 @@ namespace connectivity
                 the driver to aggregate. The object will be reset to <NULL/> when returning from the ctor.
         */
         ODriverWrapper(
-            css::uno::Reference< css::uno::XAggregation >& _rxAggregateDriver,
+            css::uno::Reference< cpo::uno::XAggregation >& _rxAggregateDriver,
             OConnectionPool* _pPool
             );
 

@@ -180,7 +180,7 @@ private:
 
     cpo::uno::WeakReference< css::accessibility::XAccessibleContext >
                     m_aControlContext;      // the AccessibleContext of the control
-    css::uno::Reference< css::uno::XAggregation >
+    css::uno::Reference< cpo::uno::XAggregation >
                     m_xControlContextProxy; // the proxy for "aggregating" the AccessibleContext of the control
     css::uno::Reference< css::lang::XTypeProvider >
                     m_xControlContextTypeAccess;    // cached interface of our aggregate

@@ -30,7 +30,7 @@ module chart2
     ::com::sun::star::chart::ChartDocument service and
     is initialized with a
     ::com::sun::star::chart2::ChartDocument via
-    the ::com::sun::star::uno::XAggregation interface.
+    the ::cpo::uno::XAggregation interface.
  */
 service ChartDocumentWrapper
 {
@@ -43,7 +43,7 @@ service ChartDocumentWrapper
     /** provides the possibility to forward requests to a
         ChartDocument.
      */
-    interface ::com::sun::star::uno::XAggregation;
+    interface ::cpo::uno::XAggregation;
 };
 
 } ; // chart2

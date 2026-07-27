@@ -18,7 +18,7 @@
  */
 
 
-module com { module sun { module star { module uno {
+module cpo { module uno {
 
 /** Objects which implement this interface can become aggregates of
     a delegator.
@@ -100,6 +100,6 @@ published interface XAggregation: com::sun::star::uno::XInterface
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

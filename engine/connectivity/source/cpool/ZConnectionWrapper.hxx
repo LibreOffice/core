@@ -37,7 +37,7 @@ namespace connectivity
         // OComponentHelper
         virtual ~OConnectionWeakWrapper() override;
     public:
-        explicit OConnectionWeakWrapper(css::uno::Reference< css::uno::XAggregation >& _xConnection);
+        explicit OConnectionWeakWrapper(css::uno::Reference< cpo::uno::XAggregation >& _xConnection);
 
         // XServiceInfo
         DECLARE_SERVICE_INFO();

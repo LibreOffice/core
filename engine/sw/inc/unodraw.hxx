@@ -32,7 +32,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <cpo/uno/XAggregation.hpp>
 #include <cppuhelper/implbase.hxx>
 
 class SdrMarkList;
@@ -133,7 +133,7 @@ class SwXShape : public SwXShapeBaseClass
     friend class SwFmDrawPage;
     const SwFmDrawPage* m_pPage;
 
-    css::uno::Reference< css::uno::XAggregation > m_xShapeAgg;
+    css::uno::Reference< cpo::uno::XAggregation > m_xShapeAgg;
     // reference to <XShape>, determined in the
     // constructor by <queryAggregation> at <xShapeAgg>.
     css::uno::Reference< css::drawing::XShape > mxShape;

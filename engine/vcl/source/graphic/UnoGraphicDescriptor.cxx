@@ -210,7 +210,7 @@ cpo::uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNa
 cpo::uno::Sequence< cpo::uno::Type > SAL_CALL GraphicDescriptor::getTypes()
 {
     static const cpo::uno::Sequence< cpo::uno::Type > aTypes {
-        cppu::UnoType<uno::XAggregation>::get(),
+        cppu::UnoType<cpo::uno::XAggregation>::get(),
         cppu::UnoType<lang::XServiceInfo>::get(),
         cppu::UnoType<lang::XTypeProvider>::get(),
         cppu::UnoType<beans::XPropertySet>::get(),

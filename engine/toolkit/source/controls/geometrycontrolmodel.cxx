@@ -64,7 +64,7 @@ using namespace cpo::uno;
     //= OGeometryControlModel_Base
 
 
-    OGeometryControlModel_Base::OGeometryControlModel_Base(css::uno::XAggregation* _pAggregateInstance)
+    OGeometryControlModel_Base::OGeometryControlModel_Base(cpo::uno::XAggregation* _pAggregateInstance)
         :OPropertySetAggregationHelper( m_aBHelper )
         ,OPropertyContainer( m_aBHelper )
         ,OGCM_Base( m_aMutex )

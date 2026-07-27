@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2026-07-28 10:31:53 using:
+ Generated on 2026-08-04 13:09:42 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -164,6 +164,9 @@
 #include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolboxid.hxx>
+#include <vcl/toolkit/treelist.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
+#include <vcl/toolkit/treelistentries.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
@@ -275,6 +278,7 @@
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/HatchStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -313,19 +317,22 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
+#include <com/sun/star/text/XRelativeTextContentInsert.hpp>
+#include <com/sun/star/text/XRelativeTextContentRemove.hpp>
+#include <com/sun/star/text/XTextAppendAndConvert.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextCopy.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cpo/uno/XCurrentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <cpo/uno/XWeak.hpp>
+#include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -355,6 +362,8 @@
 #include <cpo/uno/Type.h>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hdl>
+#include <cpo/uno/XAggregation.hpp>
+#include <cpo/uno/XCurrentContext.hpp>
 #include <cpo/uno/genfunc.h>
 #include <cpo/uno/genfunc.hxx>
 #include <cppu/cppudllapi.h>
@@ -375,6 +384,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <dmapper/resourcemodel.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <docmodel/color/Transformation.hxx>
 #include <docmodel/dllapi.h>
@@ -433,8 +443,8 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/word/WdSaveFormat.hpp>
 #include <ooo/vba/word/XSection.hpp>
+#include <ooo/vba/word/XWrapFormat.hpp>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <sfx2/AccessibilityIssue.hxx>
@@ -497,7 +507,6 @@
 #include <svx/autoformathelper.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/colorwindow.hxx>
-#include <svx/ctredlin.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/dbaexchange.hxx>
 #include <svx/dialmgr.hxx>
@@ -573,7 +582,6 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IMark.hxx>
 #include <SwNumberTreeTypes.hxx>
-#include <SwRewriter.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <autoformatpreview.hxx>
 #include <bparr.hxx>
@@ -662,7 +670,6 @@
 #include <swuicnttab.hxx>
 #include <swuiexp.hxx>
 #include <swuipardlg.hxx>
-#include <swundo.hxx>
 #include <swwait.hxx>
 #include <tablemgr.hxx>
 #include <tblafmt.hxx>
@@ -675,8 +682,8 @@
 #include <txatbase.hxx>
 #include <uiitems.hxx>
 #include <uitool.hxx>
-#include <undobj.hxx>
 #include <unobaseclass.hxx>
+#include <unotext.hxx>
 #include <unotools.hxx>
 #include <unotxdoc.hxx>
 #include <usrpref.hxx>

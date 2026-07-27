@@ -472,7 +472,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
 	Exception \
 	RuntimeException \
 	SecurityException \
-	XAggregation \
 	XComponentContext \
 	XInterface \
 	XReference \
@@ -495,6 +494,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/util,\
 	XVeto \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/uno,\
+	XAggregation \
 	XCurrentContext \
 ))
 
