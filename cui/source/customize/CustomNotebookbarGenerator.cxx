@@ -69,30 +69,6 @@ static OUString lcl_getAppName(vcl::EnumContext::Application eApp)
     }
 }
 
-static OUString customizedUIPathBuffer()
-{
-    OUString sDirPath(u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE(
-        "bootstrap") ":UserInstallation}/user/config/soffice.cfg/"_ustr);
-    rtl::Bootstrap::expandMacros(sDirPath);
-    return sDirPath;
-}
-
-OUString CustomNotebookbarGenerator::getCustomizedUIPath()
-{
-    OUString sAppName, sNotebookbarUIFileName;
-    CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sNotebookbarUIFileName);
-    return customizedUIPathBuffer() + "modules/s" + sAppName.toAsciiLowerCase() + "/ui/"
-           + sNotebookbarUIFileName;
-}
-
-OUString CustomNotebookbarGenerator::getOriginalUIPath()
-{
-    OUString sAppName, sNotebookbarUIFileName;
-    CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sNotebookbarUIFileName);
-    return AllSettings::GetUIRootDir() + "modules/s" + sAppName.toAsciiLowerCase() + "/ui/"
-           + sNotebookbarUIFileName;
-}
-
 void CustomNotebookbarGenerator::getFileNameAndAppName(OUString& sAppName,
                                                        OUString& sNotebookbarUIFileName)
 {

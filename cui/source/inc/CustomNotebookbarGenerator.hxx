@@ -28,8 +28,6 @@ class CustomNotebookbarGenerator
 {
 public:
     CustomNotebookbarGenerator();
-    static OUString getCustomizedUIPath();
-    static OUString getOriginalUIPath();
     static void getFileNameAndAppName(OUString& sAppName, OUString& sNotebookbarUIFileName);
 };
 
