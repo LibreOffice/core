@@ -1132,6 +1132,7 @@ category
 categoryAxis
 categoryEl
 categoryIdx
+categoryName
 ccw
 ccwIn
 ccwOut
@@ -1696,6 +1697,7 @@ dataFields
 dataId
 dataLabel
 dataLabelCallout
+dataLabelHidden
 dataLabels
 dataModel
 dataModelExt
@@ -4718,6 +4720,7 @@ seriesAxis
 seriesEl
 seriesIdx
 seriesLine
+seriesName
 serverCommand
 serverField
 serverFill

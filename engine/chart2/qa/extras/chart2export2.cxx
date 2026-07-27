@@ -291,6 +291,68 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_clusteredColumn)
                        u"Waterfall");
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexPerPointDataLabelXLSX)
+{
+    loadFromFile(u"xlsx/funnel1.xlsx");
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPoint(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+    chart2::DataPointLabel aLabel;
+    xPoint->getPropertyValue(u"Label"_ustr) >>= aLabel;
+    aLabel.ShowNumber = true;
+    xPoint->setPropertyValue(u"Label"_ustr, cpo::uno::Any(aLabel));
+    xPoint->setPropertyValue(u"LabelPlacement"_ustr,
+                             cpo::uno::Any(chart::DataLabelPlacement::CENTER));
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    OString sDataLabelPath = "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/"
+                             "cx:dataLabels/cx:dataLabel"_ostr;
+    assertXPath(pXmlDoc, sDataLabelPath, "idx", u"0");
+    assertXPath(pXmlDoc, sDataLabelPath, "pos", u"ctr");
+    // Group-level label properties must precede the cx:dataLabel elements
+    assertXPath(pXmlDoc,
+                sDataLabelPath
+                    + "/following-sibling::*[not(self::cx:dataLabel or "
+                      "self::cx:dataLabelHidden or self::cx:extLst)]",
+                0);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexDataLabelsRoundTrip)
+{
+    loadFromFile(u"xlsx/funnel-label-options.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    OString sLabelsPath = "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/"
+                          "cx:dataLabels"_ostr;
+
+    // Group-level position and separator
+    assertXPath(pXmlDoc, sLabelsPath, "pos", u"ctr");
+    assertXPathContent(pXmlDoc, sLabelsPath + "/cx:separator", u", ");
+
+    // Individual label positions
+    assertXPath(pXmlDoc, sLabelsPath + "/cx:dataLabel[@idx='0']", "pos", u"t");
+    assertXPath(pXmlDoc, sLabelsPath + "/cx:dataLabel[@idx='3']", "pos", u"b");
+    assertXPath(pXmlDoc, sLabelsPath + "/cx:dataLabel[@idx='7']", "pos", u"inEnd");
+
+    // Individual label number format and separator
+    assertXPath(pXmlDoc, sLabelsPath + "/cx:dataLabel[@idx='0']/cx:numFmt", "formatCode", u"0.00%");
+    assertXPathContent(pXmlDoc, sLabelsPath + "/cx:dataLabel[@idx='0']/cx:separator", u";");
+
+    // Hidden labels, after the cx:dataLabel elements
+    assertXPath(pXmlDoc, sLabelsPath + "/cx:dataLabelHidden", 2);
+    assertXPath(pXmlDoc, sLabelsPath + "/cx:dataLabelHidden[@idx='4']", 1);
+    assertXPath(pXmlDoc, sLabelsPath + "/cx:dataLabelHidden[@idx='8']", 1);
+    assertXPath(pXmlDoc, sLabelsPath + "/cx:dataLabelHidden/following-sibling::cx:dataLabel", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexPPTX)
 {
     loadFromFile(u"pptx/funnel-pp1.pptx");

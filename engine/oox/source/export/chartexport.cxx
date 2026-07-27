@@ -6024,7 +6024,12 @@ void ChartExport::writeLabelProperties(
 
     exportTextProps(xPropSet, bIsChartex); // c:txPr
 
-    if (!bIsChartex) {
+    if (bIsChartex) {
+        pFS->singleElement(FSNS(XML_cx, XML_visibility),
+                XML_seriesName, ToPsz10(aLabel.ShowSeriesName),
+                XML_categoryName, ToPsz10(aLabel.ShowCategoryName),
+                XML_value, ToPsz10(aLabel.ShowNumber));
+    } else {
         // In chartex label position is an attribute of cx:dataLabel
         if (rLabelParam.mbExport)
         {
@@ -6088,12 +6093,6 @@ void ChartExport::exportDataLabels(
 
     FSHelperPtr pFS = GetFS();
 
-    if (bIsChartex) {
-        pFS->startElement(FSNS(XML_cx, XML_dataLabels));
-    } else {
-        pFS->startElement(FSNS(XML_c, XML_dLbls));
-    }
-
     cpo::uno::Sequence<sal_Int32> aAttrLabelIndices;
     xPropSet->getPropertyValue(u"AttributedDataPoints"_ustr) >>= aAttrLabelIndices;
 
@@ -6152,6 +6151,27 @@ void ChartExport::exportDataLabels(
             ;
     }
 
+    if (bIsChartex) {
+        sal_Int32 nLabelPlacement = aParam.meDefault;
+        if (aParam.mbExport
+            && (xPropSet->getPropertyValue(u"LabelPlacement"_ustr) >>= nLabelPlacement)
+            && aParam.maAllowedValues.count(nLabelPlacement))
+        {
+            pFS->startElement(FSNS(XML_cx, XML_dataLabels),
+                    XML_pos, toOOXMLPlacement(nLabelPlacement));
+        } else {
+            pFS->startElement(FSNS(XML_cx, XML_dataLabels));
+        }
+    } else {
+        pFS->startElement(FSNS(XML_c, XML_dLbls));
+    }
+
+    // In CT_DataLabels the group-level label properties precede the
+    // cx:dataLabel children
+    if (bIsChartex)
+        writeLabelProperties(xPropSet, aParam, -1, rDLblsRange, true);
+
+    std::vector<sal_Int32> aHiddenLabelIndices;
     for (const sal_Int32 nIdx : aAttrLabelIndices)
     {
         uno::Reference<beans::XPropertySet> xLabelPropSet = xSeries->getDataPointByIndex(nIdx);
@@ -6160,17 +6180,27 @@ void ChartExport::exportDataLabels(
             continue;
 
         if (bIsChartex) {
-            if (aParam.mbExport)
+            chart2::DataPointLabel aPointLabel;
+            if ((xLabelPropSet->getPropertyValue(u"Label"_ustr) >>= aPointLabel)
+                && !aPointLabel.ShowNumber && !aPointLabel.ShowNumberInPercent
+                && !aPointLabel.ShowCategoryName && !aPointLabel.ShowLegendSymbol
+                && !aPointLabel.ShowCustomLabel && !aPointLabel.ShowSeriesName)
             {
-                sal_Int32 nLabelPlacement = aParam.meDefault;
-                if (xPropSet->getPropertyValue(u"LabelPlacement"_ustr) >>= nLabelPlacement)
-                {
-                    if (!aParam.maAllowedValues.count(nLabelPlacement))
-                        nLabelPlacement = aParam.meDefault;
-                    pFS->startElement(FSNS(XML_cx, XML_dataLabel),
-                            XML_idx, OString::number(nIdx),
-                            XML_pos, toOOXMLPlacement(nLabelPlacement));
-                }
+                // In CT_DataLabels the cx:dataLabelHidden elements follow the
+                // cx:dataLabel elements
+                aHiddenLabelIndices.push_back(nIdx);
+                continue;
+            }
+
+            sal_Int32 nLabelPlacement = aParam.meDefault;
+            if (aParam.mbExport
+                && (xLabelPropSet->getPropertyValue(u"LabelPlacement"_ustr) >>= nLabelPlacement))
+            {
+                if (!aParam.maAllowedValues.count(nLabelPlacement))
+                    nLabelPlacement = aParam.meDefault;
+                pFS->startElement(FSNS(XML_cx, XML_dataLabel),
+                        XML_idx, OString::number(nIdx),
+                        XML_pos, toOOXMLPlacement(nLabelPlacement));
             } else {
                 pFS->startElement(FSNS(XML_cx, XML_dataLabel), XML_idx, OString::number(nIdx));
             }
@@ -6212,13 +6242,19 @@ void ChartExport::exportDataLabels(
 
         // Individual label property that overwrites the baseline.
         writeLabelProperties(xLabelPropSet, aParam, nIdx, rDLblsRange, bIsChartex);
-        pFS->endElement(FSNS(XML_c, XML_dLbl));
+        if (bIsChartex)
+            pFS->endElement(FSNS(XML_cx, XML_dataLabel));
+        else
+            pFS->endElement(FSNS(XML_c, XML_dLbl));
     }
 
-    // Baseline label properties for all labels.
-    writeLabelProperties(xPropSet, aParam, -1, rDLblsRange, bIsChartex);
+    for (const sal_Int32 nIdx : aHiddenLabelIndices)
+        pFS->singleElement(FSNS(XML_cx, XML_dataLabelHidden), XML_idx, OString::number(nIdx));
 
     if (!bIsChartex) {
+        // Baseline label properties for all labels.
+        writeLabelProperties(xPropSet, aParam, -1, rDLblsRange, false);
+
         bool bShowLeaderLines = false;
         xPropSet->getPropertyValue(u"ShowCustomLeaderLines"_ustr) >>= bShowLeaderLines;
 
