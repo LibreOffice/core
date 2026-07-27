@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 
+#include <optional>
 #include <vector>
 
 #include <comphelper/processfactory.hxx>
@@ -57,7 +58,7 @@ protected:
 
 static void createTheme( const OUString& aThemeName, std::u16string_view aGalleryURL,
                          const OUString& aDestDir, std::vector<INetURLObject> &rFiles,
-                         bool bRelativeURLs )
+                         bool bRelativeURLs, sal_uInt32 nId )
 {
     std::unique_ptr<Gallery> pGallery(new Gallery( aGalleryURL ));
 
@@ -68,11 +69,13 @@ static void createTheme( const OUString& aThemeName, std::u16string_view aGaller
              pGallery->GetThemeCount() );
 
     GalleryTheme *pGalTheme;
-    if( !pGallery->HasTheme( aThemeName) ) {
-            if( !pGallery->CreateTheme( aThemeName ) ) {
-                    fprintf( stderr, "Failed to create theme\n" );
-                    exit( 1 );
-            }
+    if (!pGallery->HasTheme(aThemeName))
+    {
+        if (!pGallery->CreateTheme(aThemeName, nId))
+        {
+            fprintf(stderr, "Failed to create theme\n");
+            exit(1);
+        }
     }
 
     fprintf( stderr, "Existing themes: %" SAL_PRI_SIZET "u\n",
@@ -112,11 +115,12 @@ static int PrintHelp()
 {
     fprintf( stdout, "Utility to generate LibreOffice gallery files\n\n" );
 
-    fprintf( stdout, "using: gengal --name <name> --path <dir> [ --destdir <path> ]\n");
+    fprintf( stdout, "using: gengal --name <name> --id <id> --path <dir> [ --destdir <path> ]\n");
     fprintf( stdout, "              [ files ... ]\n\n" );
 
     fprintf( stdout, "options:\n");
     fprintf( stdout, " --name <theme>\t\tdefines the user visible name of the created or updated theme.\n");
+    fprintf( stdout, " --id <id>\t\tid of system theme, or zero if non-system (include/svx/gallery.hxx).\n");
 
     fprintf( stdout, " --path <dir>\t\tdefines directory where the gallery files are created\n");
     fprintf( stdout, "\t\t\tor updated.\n");
@@ -255,6 +259,7 @@ int GalApp::Main()
         OUString aPath, aDestDir;
         OUString aName( u"Default name"_ustr );
         std::vector<INetURLObject> aFiles;
+        std::optional<sal_uInt32> nId;
 
         for( sal_uInt16 i = 0; i < GetCommandLineParamCount(); ++i )
         {
@@ -274,6 +279,8 @@ int GalApp::Main()
             else if ( aParam == "--path" )
                 aPath = Smartify( GetCommandLineParam( ++i ) ).
                     GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            else if ( aParam == "--id")
+                nId = GetCommandLineParam(++i).toUInt32();
             else if ( aParam == "--destdir" )
                 aDestDir = GetCommandLineParam( ++i );
             else if ( aParam == "--relative-urls" )
@@ -290,7 +297,7 @@ int GalApp::Main()
         if( aFiles.empty() )
             return PrintHelp();
 
-        createTheme( aName, aPath, aDestDir, aFiles, mbRelativeURLs );
+        createTheme(aName, aPath, aDestDir, aFiles, mbRelativeURLs, nId.value_or(0));
     }
     catch (const uno::Exception&)
     {

@@ -127,7 +127,7 @@ public:
     bool                        HasTheme( std::u16string_view rThemeName );
     SAL_DLLPRIVATE OUString     GetThemeName( sal_uInt32 nThemeId ) const;
 
-    bool                        CreateTheme( const OUString& rThemeName );
+    bool                        CreateTheme( const OUString& rThemeName, sal_uInt32 nId = 0U );
     void                        RenameTheme( const OUString& rOldName, const OUString& rNewName );
     bool                        RemoveTheme( const OUString& rThemeName );
 

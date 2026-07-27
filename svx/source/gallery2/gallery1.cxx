@@ -575,7 +575,7 @@ bool Gallery::HasTheme( std::u16string_view rThemeName )
     return( ImplGetThemeEntry( rThemeName ) != nullptr );
 }
 
-bool Gallery::CreateTheme( const OUString& rThemeName )
+bool Gallery::CreateTheme( const OUString& rThemeName, sal_uInt32 nId )
 {
     bool bRet = false;
 
@@ -585,7 +585,7 @@ bool Gallery::CreateTheme( const OUString& rThemeName )
         aURL.Append( rThemeName );
         GalleryThemeEntry* pNewEntry = new GalleryThemeEntry(
                 true, aURL, rThemeName,
-                false, true, 0, false );
+                false, true, nId, false );
 
         m_aThemeList.emplace_back( pNewEntry );
         delete pNewEntry->createGalleryTheme( this );
