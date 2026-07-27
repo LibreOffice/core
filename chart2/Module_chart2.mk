@@ -25,6 +25,7 @@ $(eval $(call gb_Module_add_l10n_targets,chart2,\
 ifneq ($(OS),iOS)
 $(eval $(call gb_Module_add_check_targets,chart2,\
 	CppunitTest_chart2_common_functors \
+	CppunitTest_chart2_correlation_coefficient \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,chart2,\

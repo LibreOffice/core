@@ -344,6 +344,11 @@ bool ChartType::isSupportingStatisticProperties(sal_Int32 nDimensionCount)
     if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE)) //todo: BubbleChart support error bars and trend lines
         return false;
 
+    // The points of a correlation circle plot are worked out from the data
+    // rather than taken from it, so there is nothing to put a spread on.
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CORRELATIONCIRCLE))
+        return false;
+
     return true;
 }
 
@@ -386,6 +391,9 @@ bool ChartType::isSupportingAreaProperties(sal_Int32 nDimensionCount)
 
         if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK))
             return false;
+
+        if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CORRELATIONCIRCLE))
+            return false;
     }
     return true;
 }
@@ -405,6 +413,9 @@ bool ChartType::isSupportingSymbolProperties(sal_Int32 nDimensionCount)
         return true;
 
     if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET))
+        return true;
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CORRELATIONCIRCLE))
         return true;
 
     return false;

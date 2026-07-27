@@ -70,6 +70,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CORRELATIONCIRCLE)
         )
     {
         aRet.realloc(5);
@@ -348,6 +349,14 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
         aRet.realloc(1);
         sal_Int32* pSeq = aRet.getArray();
         *pSeq++ = css::chart::MissingValueTreatment::USE_ZERO;
+    }
+    else if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CORRELATIONCIRCLE))
+    {
+        // A correlation leaves out the instances where one of the two values is
+        // missing, and there is no other interpretation of a gap that makes sense.
+        aRet.realloc(1);
+        sal_Int32* pSeq = aRet.getArray();
+        *pSeq++ = css::chart::MissingValueTreatment::LEAVE_GAP;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )
     {

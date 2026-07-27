@@ -50,6 +50,8 @@ protected:
                              ::sal_Int32 nSeriesCount) override;
     virtual sal_Int32 getDimension() const override;
     virtual StackMode getStackMode(sal_Int32 nChartTypeIndex) const override;
+    virtual void
+    adaptAxes(const std::vector<rtl::Reference<::chart::BaseCoordinateSystem>>& rCoordSys) override;
 };
 
 } //  namespace chart

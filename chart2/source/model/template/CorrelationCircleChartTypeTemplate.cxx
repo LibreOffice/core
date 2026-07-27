@@ -12,6 +12,10 @@
 #include "CorrelationCircleChartTypeTemplate.hxx"
 #include "CorrelationCircleChartType.hxx"
 #include "CorrelationCircleDataInterpreter.hxx"
+#include <Axis.hxx>
+#include <AxisHelper.hxx>
+#include <AxisIndexDefines.hxx>
+#include <BaseCoordinateSystem.hxx>
 #include <DataSeries.hxx>
 #include <PropertyHelper.hxx>
 #include <unonames.hxx>
@@ -83,6 +87,27 @@ StackMode CorrelationCircleChartTypeTemplate::getStackMode(sal_Int32 /* nChartTy
     return StackMode::NONE;
 }
 
+void CorrelationCircleChartTypeTemplate::adaptAxes(
+    const std::vector<rtl::Reference<BaseCoordinateSystem>>& rCoordSys)
+{
+    ChartTypeTemplate::adaptAxes(rCoordSys);
+
+    // The circle and the two lines through the origin are the frame the arrows
+    // are read against, so the plot starts with neither grid.
+    for (rtl::Reference<BaseCoordinateSystem> const& xCooSys : rCoordSys)
+    {
+        if (!xCooSys.is())
+            continue;
+
+        for (sal_Int32 nDimension = 0; nDimension < xCooSys->getDimension(); ++nDimension)
+        {
+            rtl::Reference<Axis> xAxis = AxisHelper::getAxis(nDimension, MAIN_AXIS_INDEX, xCooSys);
+            if (xAxis.is())
+                AxisHelper::makeGridInvisible(xAxis->getGridProperties2());
+        }
+    }
+}
+
 sal_Bool CorrelationCircleChartTypeTemplate::supportsCategories() { return false; }
 
 void CorrelationCircleChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& xSeries,
@@ -94,10 +119,11 @@ void CorrelationCircleChartTypeTemplate::applyStyle2(const rtl::Reference<DataSe
 
     try
     {
-        // The line is the arrow from the origin and the symbol marks its tip.
+        // The line is the arrow from the origin and the symbol marks its tip. A
+        // thin line keeps a crowd of arrows apart.
         xSeries->switchSymbolsOnOrOff(true, nSeriesIndex);
         xSeries->switchLinesOnOrOff(true);
-        xSeries->makeLinesThickOrThin(true);
+        xSeries->makeLinesThickOrThin(false);
 
         // One point stands for a whole feature, so its name says more than the
         // number behind it.
