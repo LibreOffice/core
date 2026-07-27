@@ -2348,7 +2348,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf104020)
 {
     // A nearly frame-wide rectangle set to centre on its anchor paragraph, which has no text
     // of its own, in a fixed-height text frame anchored at the page. The rectangle is centred
-    // on the frame's content area, as centring it on the paragraph would be circular: the
+    // on the frame's content area, as centering it on the paragraph would be circular: the
     // paragraph's height comes from the rectangle's own wrap.
     createSwDoc("object-centred-in-fixed-height-fly.fodt");
     auto pXmlDoc = parseLayoutDump();
