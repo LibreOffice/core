@@ -30,18 +30,18 @@
 
 namespace com::sun::star::rendering { enum class FillRule; }
 
-namespace basegfx::unotools
+namespace canvastools
 {
     typedef comphelper::WeakComponentImplHelper<
             css::rendering::XLinePolyPolygon2D,
             css::rendering::XBezierPolyPolygon2D,
             css::lang::XServiceInfo > UnoPolyPolygonBase;
 
-    class BASEGFX_DLLPUBLIC UnoPolyPolygon
+    class CANVASTOOLS_DLLPUBLIC UnoPolyPolygon
         : public UnoPolyPolygonBase
     {
     public:
-        explicit UnoPolyPolygon( B2DPolyPolygon );
+        explicit UnoPolyPolygon( basegfx::B2DPolyPolygon );
 
         // XPolyPolygon2D
         SAL_DLLPRIVATE virtual void addPolyPolygon( const css::geometry::RealPoint2D& position, const css::uno::Reference< css::rendering::XPolyPolygon2D >& polyPolygon ) override final;
@@ -69,7 +69,7 @@ namespace basegfx::unotools
         SAL_DLLPRIVATE virtual bool supportsService( const OUString& ServiceName ) override final;
         SAL_DLLPRIVATE virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override final;
 
-        SAL_DLLPRIVATE B2DPolyPolygon getPolyPolygon() const;
+        SAL_DLLPRIVATE basegfx::B2DPolyPolygon getPolyPolygon() const;
 
     protected:
         /// Check whether index is a valid polygon index
@@ -79,13 +79,13 @@ namespace basegfx::unotools
                 throw css::lang::IndexOutOfBoundsException();
         }
 
-        SAL_DLLPRIVATE B2DPolyPolygon getSubsetPolyPolygon( sal_Int32 nPolygonIndex,
+        SAL_DLLPRIVATE basegfx::B2DPolyPolygon getSubsetPolyPolygon( sal_Int32 nPolygonIndex,
                                              sal_Int32 nNumberOfPolygons,
                                              sal_Int32 nPointIndex,
                                              sal_Int32 nNumberOfPoints ) const;
 
         /// Get cow copy of internal polygon. not thread-safe outside this object.
-        const B2DPolyPolygon& getPolyPolygonUnsafe() const
+        const basegfx::B2DPolyPolygon& getPolyPolygonUnsafe() const
         {
             return maPolyPoly;
         }
@@ -97,7 +97,7 @@ namespace basegfx::unotools
         UnoPolyPolygon(const UnoPolyPolygon&) = delete;
         UnoPolyPolygon& operator=(const UnoPolyPolygon&) = delete;
 
-        B2DPolyPolygon                        maPolyPoly;
+        basegfx::B2DPolyPolygon               maPolyPoly;
         css::rendering::FillRule              meFillRule;
     };
 }

@@ -35,12 +35,6 @@ namespace com::sun::star::geometry
     struct RealBezierSegment2D;
 }
 
-namespace com::sun::star::rendering
-{
-    class  XGraphicDevice;
-    class  XPolyPolygon2D;
-}
-
 namespace com::sun::star::awt
 {
     struct Rectangle;
@@ -67,21 +61,15 @@ namespace basegfx::unotools
 {
         // Polygon conversions
 
+        BASEGFX_DLLPUBLIC cpo::uno::Sequence< css::geometry::RealBezierSegment2D > bezierSequenceFromB2DPolygon(const ::basegfx::B2DPolygon& rPoly);
 
-        BASEGFX_DLLPUBLIC css::uno::Reference< css::rendering::XPolyPolygon2D >
-            xPolyPolygonFromB2DPolygon( const css::uno::Reference< css::rendering::XGraphicDevice >&  xGraphicDevice,
-                                        const ::basegfx::B2DPolygon&                        rPoly    );
+        BASEGFX_DLLPUBLIC cpo::uno::Sequence< css::geometry::RealPoint2D > pointSequenceFromB2DPolygon( const ::basegfx::B2DPolygon& rPoly );
 
-        BASEGFX_DLLPUBLIC css::uno::Reference< css::rendering::XPolyPolygon2D >
-            xPolyPolygonFromB2DPolyPolygon( const css::uno::Reference< css::rendering::XGraphicDevice >& xGraphicDevice,
-                                            const ::basegfx::B2DPolyPolygon&                    rPolyPoly    );
-
-
-        cpo::uno::Sequence<
+        BASEGFX_DLLPUBLIC cpo::uno::Sequence<
               cpo::uno::Sequence< css::geometry::RealBezierSegment2D > >
                     bezierSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
 
-        cpo::uno::Sequence<
+        BASEGFX_DLLPUBLIC cpo::uno::Sequence<
               cpo::uno::Sequence< css::geometry::RealPoint2D > >
                     pointSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
 
@@ -96,9 +84,6 @@ namespace basegfx::unotools
 
         BASEGFX_DLLPUBLIC ::basegfx::B2DPolyPolygon polyPolygonFromBezier2DSequenceSequence(
             const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealBezierSegment2D > >& rPoints );
-
-        BASEGFX_DLLPUBLIC ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D(
-            const css::uno::Reference< css::rendering::XPolyPolygon2D >& rPoly );
 
         // Matrix conversions
 

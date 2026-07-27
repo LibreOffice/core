@@ -30,7 +30,6 @@
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <basegfx/utils/unopolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -45,49 +44,46 @@ using namespace ::com::sun::star;
 
 namespace basegfx::unotools
 {
-        namespace
+        cpo::uno::Sequence< geometry::RealBezierSegment2D > bezierSequenceFromB2DPolygon(const ::basegfx::B2DPolygon& rPoly)
         {
-            cpo::uno::Sequence< geometry::RealBezierSegment2D > bezierSequenceFromB2DPolygon(const ::basegfx::B2DPolygon& rPoly)
+            const sal_uInt32 nPointCount(rPoly.count());
+            cpo::uno::Sequence< geometry::RealBezierSegment2D > outputSequence(nPointCount);
+            geometry::RealBezierSegment2D* pOutput = outputSequence.getArray();
+
+            // fill sequences and imply closed polygon on this implementation layer
+            for(sal_uInt32 a(0); a < nPointCount; a++)
             {
-                const sal_uInt32 nPointCount(rPoly.count());
-                cpo::uno::Sequence< geometry::RealBezierSegment2D > outputSequence(nPointCount);
-                geometry::RealBezierSegment2D* pOutput = outputSequence.getArray();
+                const basegfx::B2DPoint aStart(rPoly.getB2DPoint(a));
+                const basegfx::B2DPoint aControlA(rPoly.getNextControlPoint(a));
+                const basegfx::B2DPoint aControlB(rPoly.getPrevControlPoint((a + 1) % nPointCount));
 
-                // fill sequences and imply closed polygon on this implementation layer
-                for(sal_uInt32 a(0); a < nPointCount; a++)
-                {
-                    const basegfx::B2DPoint aStart(rPoly.getB2DPoint(a));
-                    const basegfx::B2DPoint aControlA(rPoly.getNextControlPoint(a));
-                    const basegfx::B2DPoint aControlB(rPoly.getPrevControlPoint((a + 1) % nPointCount));
-
-                    pOutput[a] = geometry::RealBezierSegment2D(
-                        aStart.getX(), aStart.getY(),
-                        aControlA.getX(), aControlA.getY(),
-                        aControlB.getX(), aControlB.getY());
-                }
-
-                return outputSequence;
+                pOutput[a] = geometry::RealBezierSegment2D(
+                    aStart.getX(), aStart.getY(),
+                    aControlA.getX(), aControlA.getY(),
+                    aControlB.getX(), aControlB.getY());
             }
 
-            cpo::uno::Sequence< geometry::RealPoint2D > pointSequenceFromB2DPolygon( const ::basegfx::B2DPolygon& rPoly )
+            return outputSequence;
+        }
+
+        cpo::uno::Sequence< geometry::RealPoint2D > pointSequenceFromB2DPolygon( const ::basegfx::B2DPolygon& rPoly )
+        {
+            const sal_uInt32 nNumPoints( rPoly.count() );
+
+            cpo::uno::Sequence< geometry::RealPoint2D > outputSequence( nNumPoints );
+            geometry::RealPoint2D* pOutput = outputSequence.getArray();
+
+            // fill sequence from polygon
+            sal_uInt32 i;
+            for( i=0; i<nNumPoints; ++i )
             {
-                const sal_uInt32 nNumPoints( rPoly.count() );
+                const ::basegfx::B2DPoint   aPoint( rPoly.getB2DPoint(i) );
 
-                cpo::uno::Sequence< geometry::RealPoint2D > outputSequence( nNumPoints );
-                geometry::RealPoint2D* pOutput = outputSequence.getArray();
-
-                // fill sequence from polygon
-                sal_uInt32 i;
-                for( i=0; i<nNumPoints; ++i )
-                {
-                    const ::basegfx::B2DPoint   aPoint( rPoly.getB2DPoint(i) );
-
-                    pOutput[i] = geometry::RealPoint2D( aPoint.getX(),
-                                                        aPoint.getY() );
-                }
-
-                return outputSequence;
+                pOutput[i] = geometry::RealPoint2D( aPoint.getX(),
+                                                    aPoint.getY() );
             }
+
+            return outputSequence;
         }
 
         cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > > bezierSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly )
@@ -120,64 +116,6 @@ namespace basegfx::unotools
             }
 
             return outputSequence;
-        }
-
-        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
-                                                                                const ::basegfx::B2DPolygon&                        rPoly    )
-        {
-            uno::Reference< rendering::XPolyPolygon2D > xRes;
-
-            if( !xGraphicDevice.is() )
-                return xRes;
-
-            if( rPoly.areControlPointsUsed() )
-            {
-                cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > > outputSequence{ bezierSequenceFromB2DPolygon( rPoly )};
-
-                xRes = xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence );
-            }
-            else
-            {
-                cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > > outputSequence{
-                 pointSequenceFromB2DPolygon( rPoly )};
-
-                xRes = xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence );
-            }
-
-            if( xRes.is() && rPoly.isClosed() )
-                xRes->setClosed( 0, true );
-
-            return xRes;
-        }
-
-        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
-                                                                                    const ::basegfx::B2DPolyPolygon&                    rPolyPoly    )
-        {
-            uno::Reference< rendering::XPolyPolygon2D > xRes;
-
-            if( !xGraphicDevice.is() )
-                return xRes;
-
-            const sal_uInt32 nNumPolies( rPolyPoly.count() );
-            sal_uInt32 i;
-
-            if( rPolyPoly.areControlPointsUsed() )
-            {
-                xRes = xGraphicDevice->createCompatibleBezierPolyPolygon(
-                              bezierSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) );
-            }
-            else
-            {
-                xRes = xGraphicDevice->createCompatibleLinePolyPolygon(
-                              pointSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) );
-            }
-
-            for( i=0; i<nNumPolies; ++i )
-            {
-                xRes->setClosed( i, rPolyPoly.getB2DPolygon(i).isClosed() );
-            }
-
-            return xRes;
         }
 
         ::basegfx::B2DPolygon polygonFromPoint2DSequence( const cpo::uno::Sequence< geometry::RealPoint2D >& points )
@@ -246,59 +184,6 @@ namespace basegfx::unotools
             }
 
             return aRes;
-        }
-
-        ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
-        {
-            ::basegfx::unotools::UnoPolyPolygon* pPolyImpl =
-                dynamic_cast< ::basegfx::unotools::UnoPolyPolygon* >( xPoly.get() );
-
-            if( pPolyImpl )
-            {
-                return pPolyImpl->getPolyPolygon();
-            }
-            else
-            {
-                // not a known implementation object - try data source
-                // interfaces
-                const sal_Int32 nPolys( xPoly->getNumberOfPolygons() );
-
-                uno::Reference< rendering::XBezierPolyPolygon2D > xBezierPoly(
-                    xPoly,
-                    uno::UNO_QUERY );
-
-                if( xBezierPoly.is() )
-                {
-                    return ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence(
-                        xBezierPoly->getBezierSegments( 0,
-                                                        nPolys,
-                                                        0,
-                                                        -1 ) );
-                }
-                else
-                {
-                    uno::Reference< rendering::XLinePolyPolygon2D > xLinePoly(
-                        xPoly,
-                        uno::UNO_QUERY );
-
-                    // no implementation class and no data provider
-                    // found - contract violation.
-                    if( !xLinePoly.is() )
-                    {
-                        throw lang::IllegalArgumentException(
-                            u"basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(): Invalid input"
-                            "poly-polygon, cannot retrieve vertex data"_ustr,
-                            uno::Reference< uno::XInterface >(),
-                            0 );
-                    }
-
-                    return ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence(
-                        xLinePoly->getPoints( 0,
-                                              nPolys,
-                                              0,
-                                              -1 ));
-                }
-            }
         }
 
         ::basegfx::B2DHomMatrix& homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&        output,

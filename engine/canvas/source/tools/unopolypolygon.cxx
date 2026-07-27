@@ -24,15 +24,16 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/utils/unopolypolygon.hxx>
+#include <canvas/canvastools.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <unopolypolygon.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;
 
-namespace basegfx::unotools
+namespace canvastools
 {
-    UnoPolyPolygon::UnoPolyPolygon( B2DPolyPolygon aPolyPoly ) :
+    UnoPolyPolygon::UnoPolyPolygon( basegfx::B2DPolyPolygon aPolyPoly ) :
         maPolyPoly(std::move( aPolyPoly )),
         meFillRule( rendering::FillRule_EVEN_ODD )
     {
@@ -57,7 +58,7 @@ namespace basegfx::unotools
             return;
         }
 
-        B2DPolyPolygon        aSrcPoly;
+        basegfx::B2DPolyPolygon        aSrcPoly;
         const UnoPolyPolygon* pSrc( dynamic_cast< UnoPolyPolygon* >(polyPolygon.get()) );
 
         // try to extract polygon data from interface. First,
@@ -77,7 +78,7 @@ namespace basegfx::unotools
 
             if( xBezierPoly.is() )
             {
-                aSrcPoly = unotools::polyPolygonFromBezier2DSequenceSequence(
+                aSrcPoly = basegfx::unotools::polyPolygonFromBezier2DSequenceSequence(
                     xBezierPoly->getBezierSegments( 0,
                                                     nPolys,
                                                     0,
@@ -97,7 +98,7 @@ namespace basegfx::unotools
                         "poly-polygon, cannot retrieve vertex data"_ustr,
                         getXWeak(), 1);
 
-                aSrcPoly = unotools::polyPolygonFromPoint2DSequenceSequence(
+                aSrcPoly = basegfx::unotools::polyPolygonFromPoint2DSequenceSequence(
                     xLinePoly->getPoints( 0,
                                           nPolys,
                                           0,
@@ -105,8 +106,8 @@ namespace basegfx::unotools
             }
         }
 
-        const B2DRange  aBounds( aSrcPoly.getB2DRange() );
-        const B2DVector     aOffset( unotools::b2DPointFromRealPoint2D( position ) -
+        const basegfx::B2DRange  aBounds( aSrcPoly.getB2DRange() );
+        const basegfx::B2DVector     aOffset( basegfx::unotools::b2DPointFromRealPoint2D( position ) -
                                              aBounds.getMinimum() );
 
         if( !aOffset.equalZero() )
@@ -173,7 +174,7 @@ namespace basegfx::unotools
             checkIndex( index );
 
             // fetch referenced polygon, change state
-            B2DPolygon aTmp( maPolyPoly.getB2DPolygon(index) );
+            basegfx::B2DPolygon aTmp( maPolyPoly.getB2DPolygon(index) );
             aTmp.setClosed( closedState );
 
             // set back to container
@@ -187,7 +188,7 @@ namespace basegfx::unotools
         sal_Int32 nPointIndex,
         sal_Int32 nNumberOfPoints )
     {
-        return unotools::pointSequenceSequenceFromB2DPolyPolygon(
+        return basegfx::unotools::pointSequenceSequenceFromB2DPolyPolygon(
             getSubsetPolyPolygon( nPolygonIndex,
                                   nNumberOfPolygons,
                                   nPointIndex,
@@ -201,8 +202,8 @@ namespace basegfx::unotools
         std::unique_lock const guard( m_aMutex );
         modifying();
 
-        const B2DPolyPolygon aNewPolyPoly(
-            unotools::polyPolygonFromPoint2DSequenceSequence( points ) );
+        const basegfx::B2DPolyPolygon aNewPolyPoly(
+            basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points ) );
 
         if( nPolygonIndex == -1 )
         {
@@ -223,12 +224,12 @@ namespace basegfx::unotools
         std::unique_lock const guard( m_aMutex );
         checkIndex( nPolygonIndex );
 
-        const B2DPolygon& rPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
+        const basegfx::B2DPolygon& rPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
 
         if( nPointIndex < 0 || o3tl::make_unsigned(nPointIndex) >= rPoly.count() )
             throw lang::IndexOutOfBoundsException();
 
-        return unotools::point2DFromB2DPoint( rPoly.getB2DPoint( nPointIndex ) );
+        return basegfx::unotools::point2DFromB2DPoint( rPoly.getB2DPoint( nPointIndex ) );
     }
 
     void UnoPolyPolygon::setPoint(
@@ -240,13 +241,13 @@ namespace basegfx::unotools
         checkIndex( nPolygonIndex );
         modifying();
 
-        B2DPolygon aPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
+        basegfx::B2DPolygon aPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
 
         if( nPointIndex < 0 || o3tl::make_unsigned(nPointIndex) >= aPoly.count() )
             throw lang::IndexOutOfBoundsException();
 
         aPoly.setB2DPoint( nPointIndex,
-                           unotools::b2DPointFromRealPoint2D( point ) );
+                           basegfx::unotools::b2DPointFromRealPoint2D( point ) );
         maPolyPoly.setB2DPolygon( nPolygonIndex, aPoly );
     }
 
@@ -256,7 +257,7 @@ namespace basegfx::unotools
         sal_Int32 nPointIndex,
         sal_Int32 nNumberOfPoints )
     {
-        return unotools::bezierSequenceSequenceFromB2DPolyPolygon(
+        return basegfx::unotools::bezierSequenceSequenceFromB2DPolyPolygon(
             getSubsetPolyPolygon( nPolygonIndex,
                                   nNumberOfPolygons,
                                   nPointIndex,
@@ -269,8 +270,8 @@ namespace basegfx::unotools
     {
         std::unique_lock const guard( m_aMutex );
         modifying();
-        const B2DPolyPolygon aNewPolyPoly(
-            unotools::polyPolygonFromBezier2DSequenceSequence( points ) );
+        const basegfx::B2DPolyPolygon aNewPolyPoly(
+            basegfx::unotools::polyPolygonFromBezier2DSequenceSequence( points ) );
 
         if( nPolygonIndex == -1 )
         {
@@ -290,15 +291,15 @@ namespace basegfx::unotools
         std::unique_lock const guard( m_aMutex );
         checkIndex( nPolygonIndex );
 
-        const B2DPolygon& rPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
+        const basegfx::B2DPolygon& rPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
         const sal_uInt32  nPointCount(rPoly.count());
 
         if( nPointIndex < 0 || o3tl::make_unsigned(nPointIndex) >= nPointCount )
             throw lang::IndexOutOfBoundsException();
 
-        const B2DPoint& rPt( rPoly.getB2DPoint( nPointIndex ) );
-        const B2DPoint aCtrl0( rPoly.getNextControlPoint(nPointIndex) );
-        const B2DPoint aCtrl1( rPoly.getPrevControlPoint((nPointIndex + 1) % nPointCount) );
+        const basegfx::B2DPoint& rPt( rPoly.getB2DPoint( nPointIndex ) );
+        const basegfx::B2DPoint aCtrl0( rPoly.getNextControlPoint(nPointIndex) );
+        const basegfx::B2DPoint aCtrl1( rPoly.getPrevControlPoint((nPointIndex + 1) % nPointCount) );
 
         return geometry::RealBezierSegment2D( rPt.getX(),
                                               rPt.getY(),
@@ -316,24 +317,24 @@ namespace basegfx::unotools
         checkIndex( nPolygonIndex );
         modifying();
 
-        B2DPolygon aPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
+        basegfx::B2DPolygon aPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
         const sal_uInt32 nPointCount(aPoly.count());
 
         if( nPointIndex < 0 || o3tl::make_unsigned(nPointIndex) >= nPointCount )
             throw lang::IndexOutOfBoundsException();
 
         aPoly.setB2DPoint( nPointIndex,
-                           B2DPoint( segment.Px,
+                           basegfx::B2DPoint( segment.Px,
                                      segment.Py ) );
         aPoly.setNextControlPoint(nPointIndex,
-                                  B2DPoint(segment.C1x, segment.C1y));
+                                  basegfx::B2DPoint(segment.C1x, segment.C1y));
         aPoly.setPrevControlPoint((nPointIndex + 1) % nPointCount,
-                                  B2DPoint(segment.C2x, segment.C2y));
+                                  basegfx::B2DPoint(segment.C2x, segment.C2y));
 
         maPolyPoly.setB2DPolygon( nPolygonIndex, aPoly );
     }
 
-    B2DPolyPolygon UnoPolyPolygon::getSubsetPolyPolygon(
+    basegfx::B2DPolyPolygon UnoPolyPolygon::getSubsetPolyPolygon(
         sal_Int32 nPolygonIndex,
         sal_Int32 nNumberOfPolygons,
         sal_Int32 nPointIndex,
@@ -353,7 +354,7 @@ namespace basegfx::unotools
             return maPolyPoly;
         }
 
-        B2DPolyPolygon aSubsetPoly;
+        basegfx::B2DPolyPolygon aSubsetPoly;
 
         // create temporary polygon (as an extract from maPoly,
         // which contains the requested subset)
@@ -361,7 +362,7 @@ namespace basegfx::unotools
         {
             checkIndex(i);
 
-            const B2DPolygon& rCurrPoly( maPolyPoly.getB2DPolygon(i) );
+            const basegfx::B2DPolygon& rCurrPoly( maPolyPoly.getB2DPolygon(i) );
 
             sal_Int32 nFirstPoint(0);
             sal_Int32 nLastPoint(nPolyCount-1);
@@ -405,7 +406,7 @@ namespace basegfx::unotools
                 if( nLastPoint < 0 || nLastPoint >= nPolyCount )
                     throw lang::IndexOutOfBoundsException();
 
-                B2DPolygon aTmp;
+                basegfx::B2DPolygon aTmp;
                 for( sal_Int32 j=nFirstPoint; j<nLastPoint; ++j )
                     aTmp.append( rCurrPoly.getB2DPoint(j) );
 
@@ -431,7 +432,7 @@ namespace basegfx::unotools
         return { u"com.sun.star.rendering.PolyPolygon2D"_ustr };
     }
 
-    B2DPolyPolygon UnoPolyPolygon::getPolyPolygon() const
+    basegfx::B2DPolyPolygon UnoPolyPolygon::getPolyPolygon() const
     {
         std::unique_lock const guard( m_aMutex );
 

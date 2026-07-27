@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <math.h>
 #include <string.h>
@@ -52,9 +53,11 @@ namespace com::sun::star::geometry
 namespace com::sun::star::rendering
 {
     struct RenderState;
-    struct ViewState;
-    class  XCanvas;
     struct Texture;
+    struct ViewState;
+    class XCanvas;
+    class XGraphicDevice;
+    class XPolyPolygon2D;
 }
 
 namespace com::sun::star::awt
@@ -384,6 +387,18 @@ namespace canvastools
 
         CANVASTOOLS_DLLPUBLIC void extractExtraFontProperties(const cpo::uno::Sequence<css::beans::PropertyValue>& rExtraFontProperties,
                         sal_uInt32& rEmphasisMark);
+
+        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D(
+            const css::uno::Reference< css::rendering::XPolyPolygon2D >& rPoly );
+
+        CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XPolyPolygon2D >
+            xPolyPolygonFromB2DPolygon( const css::uno::Reference< css::rendering::XGraphicDevice >&  xGraphicDevice,
+                                        const ::basegfx::B2DPolygon&                        rPoly    );
+
+        CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XPolyPolygon2D >
+            xPolyPolygonFromB2DPolyPolygon( const css::uno::Reference< css::rendering::XGraphicDevice >& xGraphicDevice,
+                                            const ::basegfx::B2DPolyPolygon&                    rPolyPoly    );
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

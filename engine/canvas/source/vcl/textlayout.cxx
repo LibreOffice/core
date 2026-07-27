@@ -138,7 +138,7 @@ namespace vclcanvas
             sal_Int32 nIndex (0);
             for (auto const& outline : aOutlines)
             {
-                aOutlineSequence[nIndex++] = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                aOutlineSequence[nIndex++] = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
                     mxDevice,
                     outline);
             }

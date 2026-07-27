@@ -534,7 +534,7 @@ namespace cppcanvas
                 auto aRange = aPoly.getB2DRange().getRange();
                 o_rOverallSize = basegfx::B2DSize(aRange.getX(), aRange.getY());
 
-                o_rTextLines = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                o_rTextLines = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
                     rCanvas->getUNOCanvas()->getDevice(),
                     aPoly );
             }
@@ -799,7 +799,7 @@ namespace cppcanvas
                 auto aTextBounds = queryTextBounds();
                 auto aB2DBounds = ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aTextBounds);
                 auto aTextBoundsPoly = ::basegfx::utils::createPolygonFromRect(aB2DBounds);
-                return ::basegfx::unotools::xPolyPolygonFromB2DPolygon(rCanvas->getDevice(), aTextBoundsPoly);
+                return ::canvastools::xPolyPolygonFromB2DPolygon(rCanvas->getDevice(), aTextBoundsPoly);
             }
 
             sal_Int32 EffectTextAction::getActionCount() const
@@ -1021,7 +1021,7 @@ namespace cppcanvas
                 const geometry::RealRectangle2D aTextBounds(mxTextLayout->queryTextBounds());
                 auto aB2DBounds = ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aTextBounds);
                 auto aTextBoundsPoly = ::basegfx::utils::createPolygonFromRect(aB2DBounds);
-                return ::basegfx::unotools::xPolyPolygonFromB2DPolygon(rCanvas->getDevice(), aTextBoundsPoly);
+                return ::canvastools::xPolyPolygonFromB2DPolygon(rCanvas->getDevice(), aTextBoundsPoly);
             }
 
             bool EffectTextArrayAction::operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText) const
@@ -1111,7 +1111,7 @@ namespace cppcanvas
                     const geometry::RealRectangle2D aTextBounds(mrTextLayout->queryTextBounds());
                     auto aB2DBounds = ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aTextBounds);
                     auto aTextBoundsPoly = ::basegfx::utils::createPolygonFromRect(aB2DBounds);
-                    return ::basegfx::unotools::xPolyPolygonFromB2DPolygon(mrCanvas->getDevice(), aTextBoundsPoly);
+                    return ::canvastools::xPolyPolygonFromB2DPolygon(mrCanvas->getDevice(), aTextBoundsPoly);
                 }
 
                 const uno::Reference< rendering::XCanvas >&         mrCanvas;
@@ -1591,7 +1591,7 @@ namespace cppcanvas
                                   rVDev,
                                   rState ));
                 const uno::Reference< rendering::XPolyPolygon2D > xTextPoly(
-                    ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                    ::canvastools::xPolyPolygonFromB2DPolyPolygon(
                         rCanvas->getUNOCanvas()->getDevice(),
                         aResultingPolyPolygon ) );
 
@@ -1609,7 +1609,7 @@ namespace cppcanvas
                     auto aTextBounds = xTextLayout->queryTextBounds();
                     auto aB2DBounds = ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aTextBounds);
                     auto aTextBoundsPoly = ::basegfx::utils::createPolygonFromRect(aB2DBounds);
-                    xTextBoundsPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolygon(
+                    xTextBoundsPoly = ::canvastools::xPolyPolygonFromB2DPolygon(
                         rCanvas->getUNOCanvas()->getDevice(),
                         aTextBoundsPoly);
                 }

@@ -12,6 +12,7 @@
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/utils/canvastools.hxx>
+#include <canvas/canvastools.hxx>
 #include <outdevstate.hxx>
 #include <utility>
 #include "textlineshelper.hxx"
@@ -60,19 +61,19 @@ void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo
     if (aOverline.count())
     {
         aRange.expand(aOverline.getB2DRange());
-        mxOverline = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(xDevice, aOverline);
+        mxOverline = ::canvastools::xPolyPolygonFromB2DPolyPolygon(xDevice, aOverline);
     }
 
     if (aUnderline.count())
     {
         aRange.expand(aUnderline.getB2DRange());
-        mxUnderline = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(xDevice, aUnderline);
+        mxUnderline = ::canvastools::xPolyPolygonFromB2DPolyPolygon(xDevice, aUnderline);
     }
 
     if (aStrikeout.count())
     {
         aRange.expand(aStrikeout.getB2DRange());
-        mxStrikeout = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(xDevice, aStrikeout);
+        mxStrikeout = ::canvastools::xPolyPolygonFromB2DPolyPolygon(xDevice, aStrikeout);
     }
 
     initLineStyleWaveline(rLineInfo.mnOverlineStyle, mbOverlineWaveline, mbOverlineWavelineBold);

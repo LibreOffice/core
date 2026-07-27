@@ -53,6 +53,7 @@
 #include <vcl/window.hxx>
 
 #include <canvas/canvastools.hxx>
+#include <unopolypolygon.hxx>
 
 
 using namespace ::com::sun::star;
@@ -280,7 +281,7 @@ namespace canvastools
             if( renderState.Clip.is() )
             {
                 ::basegfx::B2DPolyPolygon aClipPoly(
-                    ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(renderState.Clip) );
+                    b2DPolyPolygonFromXPolyPolygon2D(renderState.Clip) );
 
                 ::basegfx::B2DHomMatrix aMatrix;
                 aClipPoly.transform(mergeViewAndRenderTransform(aMatrix, viewState, renderState));
@@ -318,6 +319,117 @@ namespace canvastools
                 if (rPropVal.Name == "EmphasisMark")
                     rPropVal.Value >>= rEmphasisMark;
             }
+        }
+
+        ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
+        {
+            ::canvastools::UnoPolyPolygon* pPolyImpl =
+                dynamic_cast< ::canvastools::UnoPolyPolygon* >( xPoly.get() );
+
+            if( pPolyImpl )
+            {
+                return pPolyImpl->getPolyPolygon();
+            }
+            else
+            {
+                // not a known implementation object - try data source
+                // interfaces
+                const sal_Int32 nPolys( xPoly->getNumberOfPolygons() );
+
+                uno::Reference< rendering::XBezierPolyPolygon2D > xBezierPoly(
+                    xPoly,
+                    uno::UNO_QUERY );
+
+                if( xBezierPoly.is() )
+                {
+                    return ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence(
+                        xBezierPoly->getBezierSegments( 0,
+                                                        nPolys,
+                                                        0,
+                                                        -1 ) );
+                }
+                else
+                {
+                    uno::Reference< rendering::XLinePolyPolygon2D > xLinePoly(
+                        xPoly,
+                        uno::UNO_QUERY );
+
+                    // no implementation class and no data provider
+                    // found - contract violation.
+                    if( !xLinePoly.is() )
+                    {
+                        throw lang::IllegalArgumentException(
+                            u"basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(): Invalid input"
+                            "poly-polygon, cannot retrieve vertex data"_ustr,
+                            uno::Reference< uno::XInterface >(),
+                            0 );
+                    }
+
+                    return ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence(
+                        xLinePoly->getPoints( 0,
+                                              nPolys,
+                                              0,
+                                              -1 ));
+                }
+            }
+        }
+
+        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
+                                                                                    const ::basegfx::B2DPolyPolygon&                    rPolyPoly    )
+        {
+            uno::Reference< rendering::XPolyPolygon2D > xRes;
+
+            if( !xGraphicDevice.is() )
+                return xRes;
+
+            const sal_uInt32 nNumPolies( rPolyPoly.count() );
+            sal_uInt32 i;
+
+            if( rPolyPoly.areControlPointsUsed() )
+            {
+                xRes = xGraphicDevice->createCompatibleBezierPolyPolygon(
+                              basegfx::unotools::bezierSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) );
+            }
+            else
+            {
+                xRes = xGraphicDevice->createCompatibleLinePolyPolygon(
+                              basegfx::unotools::pointSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) );
+            }
+
+            for( i=0; i<nNumPolies; ++i )
+            {
+                xRes->setClosed( i, rPolyPoly.getB2DPolygon(i).isClosed() );
+            }
+
+            return xRes;
+        }
+
+        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
+                                                                                const ::basegfx::B2DPolygon&                        rPoly    )
+        {
+            uno::Reference< rendering::XPolyPolygon2D > xRes;
+
+            if( !xGraphicDevice.is() )
+                return xRes;
+
+            if( rPoly.areControlPointsUsed() )
+            {
+                cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > > outputSequence{ basegfx::unotools::bezierSequenceFromB2DPolygon( rPoly )};
+
+                xRes = xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence );
+            }
+            else
+            {
+                cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > > outputSequence{
+                 basegfx::unotools::pointSequenceFromB2DPolygon( rPoly )};
+
+                xRes = xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence );
+            }
+
+            if( xRes.is() && rPoly.isClosed() )
+                xRes->setClosed( 0, true );
+
+            return xRes;
         }
 
 } // namespace

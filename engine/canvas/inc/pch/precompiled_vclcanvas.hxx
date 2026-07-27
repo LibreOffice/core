@@ -62,7 +62,6 @@
 #include <basegfx/utils/keystoplerp.hxx>
 #include <basegfx/utils/lerp.hxx>
 #include <basegfx/utils/tools.hxx>
-#include <basegfx/utils/unopolypolygon.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>

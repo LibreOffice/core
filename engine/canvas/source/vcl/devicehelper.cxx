@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <basegfx/utils/canvastools.hxx>
-#include <basegfx/utils/unopolypolygon.hxx>
 #include <canvas/canvastools.hxx>
 #include <tools/stream.hxx>
 #include <vcl/canvastools.hxx>
@@ -28,6 +27,7 @@
 
 #include "canvasbitmap.hxx"
 #include <devicehelper.hxx>
+#include <unopolypolygon.hxx>
 
 using namespace ::com::sun::star;
 
@@ -49,7 +49,7 @@ namespace vclcanvas
         if( !mpOutDev )
             return xPoly; // we're disposed
 
-        xPoly.set( new ::basegfx::unotools::UnoPolyPolygon(
+        xPoly.set( new ::canvastools::UnoPolyPolygon(
                        ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points ) ) );
         // vcl only handles even_odd polygons
         xPoly->setFillRule(rendering::FillRule_EVEN_ODD);
@@ -65,7 +65,7 @@ namespace vclcanvas
         if( !mpOutDev )
             return xPoly; // we're disposed
 
-        xPoly.set( new ::basegfx::unotools::UnoPolyPolygon(
+        xPoly.set( new ::canvastools::UnoPolyPolygon(
                        ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence( points ) ) );
         // vcl only handles even_odd polygons
         xPoly->setFillRule(rendering::FillRule_EVEN_ODD);

@@ -144,7 +144,7 @@ namespace cppcanvastools
 
                 aLocalClip.transform( aTransform );
 
-                o_rRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                o_rRenderState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
                     rCanvas->getUNOCanvas()->getDevice(),
                     aLocalClip );
 
@@ -175,7 +175,7 @@ namespace cppcanvastools
 
                     aLocalClip.transform( aTransform );
 
-                    o_rRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                    o_rRenderState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
                         rCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon( aLocalClip ) );
                 }
@@ -183,7 +183,7 @@ namespace cppcanvastools
                 {
                     // scale and offset - do it on the fly, have to
                     // convert to float anyway.
-                    o_rRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                    o_rRenderState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
                         rCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
                             ::basegfx::utils::createPolygonFromRect(
@@ -197,7 +197,7 @@ namespace cppcanvastools
                 {
                     // offset only - do it on the fly, have to convert
                     // to float anyway.
-                    o_rRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                    o_rRenderState.Clip = ::canvastools::xPolyPolygonFromB2DPolyPolygon(
                         rCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
                             ::basegfx::utils::createPolygonFromRect(

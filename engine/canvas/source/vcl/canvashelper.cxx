@@ -216,7 +216,7 @@ namespace vclcanvas
             setupOutDevState( viewState, renderState, LINE_COLOR );
 
             const ::basegfx::B2DPolyPolygon aBasegfxPolyPoly(
-                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
+                ::canvastools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
             const ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon( aBasegfxPolyPoly, viewState, renderState ) );
 
             if( aBasegfxPolyPoly.isClosed() )
@@ -265,7 +265,7 @@ namespace vclcanvas
             ::canvastools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
 
             ::basegfx::B2DPolyPolygon aPolyPoly(
-                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
+                ::canvastools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
 
             // apply dashing, if any
             if( strokeAttributes.DashArray.hasElements() )
@@ -379,7 +379,7 @@ namespace vclcanvas
 
             const int nAlpha( setupOutDevState( viewState, renderState, FILL_COLOR ) );
             ::basegfx::B2DPolyPolygon aB2DPolyPoly(
-                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
+                ::canvastools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
             aB2DPolyPoly.setClosed(true); // ensure closed poly, otherwise VCL does not fill
             const ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon(
                                              aB2DPolyPoly,

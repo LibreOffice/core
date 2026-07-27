@@ -160,7 +160,6 @@ basegfx/source/tools/numbertools.cxx
 basegfx/source/tools/stringconversiontools.cxx
 basegfx/source/tools/systemdependentdata.cxx
 basegfx/source/tools/tools.cxx
-basegfx/source/tools/unopolypolygon.cxx
 basegfx/source/tools/zoomtools.cxx
 basegfx/source/tuple/b2dtuple.cxx
 basegfx/source/tuple/b3dtuple.cxx
@@ -435,6 +434,7 @@ canvas/inc/outdevprovider.hxx
 canvas/inc/parametricpolypolygon.hxx
 canvas/inc/propertysethelper.hxx
 canvas/inc/repainttarget.hxx
+canvas/inc/unopolypolygon.hxx
 canvas/inc/vclwrapper.hxx
 canvas/inc/verifyinput.hxx
 canvas/source/factory/cf_service.cxx
@@ -444,6 +444,7 @@ canvas/source/tools/elapsedtime.cxx
 canvas/source/tools/parametricpolypolygon.cxx
 canvas/source/tools/propertysethelper.cxx
 canvas/source/tools/surfacerect.hxx
+canvas/source/tools/unopolypolygon.cxx
 canvas/source/tools/verifyinput.cxx
 canvas/source/vcl/bitmapbackbuffer.cxx
 canvas/source/vcl/bitmapbackbuffer.hxx
@@ -4213,7 +4214,6 @@ include/basegfx/utils/lerp.hxx
 include/basegfx/utils/rectcliptools.hxx
 include/basegfx/utils/systemdependentdata.hxx
 include/basegfx/utils/tools.hxx
-include/basegfx/utils/unopolypolygon.hxx
 include/basegfx/vector/b2dvector.hxx
 include/basegfx/vector/b2enums.hxx
 include/basegfx/vector/b2ivector.hxx

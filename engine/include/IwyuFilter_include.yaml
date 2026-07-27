@@ -211,11 +211,6 @@ excludelist:
     include/basegfx/numeric/ftools.hxx:
     # MSVC does not compile when this is removed
     - math.h
-    include/basegfx/utils/unopolypolygon.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/rendering/XBezierPolyPolygon2D.hpp
-    - com/sun/star/rendering/XLinePolyPolygon2D.hpp
     include/o3tl/float_int_conversion.hxx:
     # Don't replace with std <concepts>
     - o3tl/concepts.hxx
