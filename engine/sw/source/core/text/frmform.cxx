@@ -216,6 +216,13 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
             bOldInvaContent  = pPage->IsInvalidContent();
         }
 
+        // Some text of the follow moves back into this frame here. The footnotes of that text
+        // belong to this frame from now on. The follow is about to get a new, larger offset,
+        // and after that it does not cover the moved text any more, so it cannot find those
+        // footnotes any more either. Remove them now, while the old offset still covers them.
+        if (pMyFollow->GetOffset() < nTextOfst)
+            RemoveFootnote(pMyFollow->GetOffset(), nTextOfst - pMyFollow->GetOffset());
+
         pMyFollow->SetOffset_( nTextOfst );
         pMyFollow->SetFieldFollow( bFollowField );
         if( HasFootnote() || pMyFollow->HasFootnote() )
