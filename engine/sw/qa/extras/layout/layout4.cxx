@@ -1043,6 +1043,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf171688)
     assertXPath(pXmlDoc, "//textarray[@length='1']/preceding-sibling::font[1]", "underline", u"0");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf171959_WrapArea)
+{
+    // Justified underlined text wrapping around a rectangle on the right. The blank that ends each
+    // wrapped line hangs outside the line, and the justification stretches the text right up to the
+    // rectangle, so the blank lands in the space reserved for the wrap.
+    createSwDoc("underline-in-wrap-area.fodt");
+    std::shared_ptr<GDIMetaFile> xMetaFile = getSwDocShell()->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+
+    // Three lines wrap against the rectangle, and each ends in such a blank. Without the fix they
+    // kept their underline, which was then drawn inside the reserved space.
+    assertXPath(pXmlDoc, "//textarray[@length='1']", 3);
+    assertXPath(pXmlDoc, "//textarray[@length='1'][preceding-sibling::font[1]/@underline!='0']", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf147666)
 {
     createSwDoc("tdf147666.odt");
