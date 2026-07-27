@@ -19,7 +19,6 @@
 
 #include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 
@@ -65,7 +64,6 @@ public:
         mViewState.AffineTransform = aUnit;
         mRenderState.AffineTransform = aUnit;
         mRenderState.DeviceColor = mColorBlack;
-        mRenderState.CompositeOperation = rendering::CompositeOperation::OVER;
     }
 
     virtual void tearDown() override

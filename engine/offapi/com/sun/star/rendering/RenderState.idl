@@ -68,16 +68,6 @@ struct RenderState
      */
     sequence<ColorComponent>                            DeviceColor;
 
-
-    /** The composition mode associated with this render
-        operation.<p>
-
-        The composite mode determines in which way the primitive and
-        possibly existing background is combined. The permissible
-        values must be one out of the CompositeOperation
-        constants.<p>
-     */
-    byte                                                CompositeOperation;
 };
 
 }; }; }; };

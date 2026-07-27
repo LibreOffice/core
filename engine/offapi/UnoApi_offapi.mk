@@ -2840,7 +2840,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	ColorComponent \
 	ColorComponentTag \
 	ColorProfile \
-	CompositeOperation \
 	EmphasisMark \
 	FillRule \
 	FontInfo \

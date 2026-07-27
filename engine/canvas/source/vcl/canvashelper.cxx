@@ -29,7 +29,6 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
@@ -384,8 +383,7 @@ namespace vclcanvas
             const ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon(
                                              aB2DPolyPoly,
                                              viewState, renderState ) );
-            const bool bSourceAlpha( renderState.CompositeOperation == rendering::CompositeOperation::SOURCE );
-            if( nAlpha == 255 || bSourceAlpha )
+            if( nAlpha == 255 )
             {
                 mpOutDevProvider->getOutDev().DrawPolyPolygon( aPolyPoly );
             }

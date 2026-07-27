@@ -66,7 +66,6 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>

@@ -40,7 +40,6 @@
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
@@ -66,7 +65,6 @@ namespace canvastools
             setIdentityAffineMatrix2D( renderState.AffineTransform );
             renderState.Clip.clear();
             renderState.DeviceColor = cpo::uno::Sequence< double >();
-            renderState.CompositeOperation = rendering::CompositeOperation::OVER;
 
             return renderState;
         }

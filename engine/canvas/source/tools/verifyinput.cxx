@@ -30,7 +30,6 @@
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
@@ -293,21 +292,6 @@ namespace canvastools
                 throw lang::IllegalArgumentException();
 #endif
             }
-
-            if( renderState.CompositeOperation >= rendering::CompositeOperation::CLEAR &&
-                renderState.CompositeOperation <= rendering::CompositeOperation::SATURATE )
-                return;
-
-#if OSL_DEBUG_LEVEL > 0
-            throw lang::IllegalArgumentException(
-                OUString::createFromAscii(pStr) +
-                ": verifyInput(): render state's CompositeOperation value out of range (" +
-                OUString::number(sal::static_int_cast<sal_Int32>(renderState.CompositeOperation)) +
-                " not known)",
-                xIf, nArgPos );
-#else
-            throw lang::IllegalArgumentException();
-#endif
         }
 
         void verifyInput( const rendering::Texture&                 texture,

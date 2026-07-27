@@ -294,7 +294,6 @@
 #include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
-#include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
