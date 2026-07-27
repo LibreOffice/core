@@ -897,7 +897,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/gallery,\
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/graphic,\
 	Graphic \
 	GraphicDescriptor \
-	GraphicRasterizer \
 	GraphicRendererVCL \
 	MediaProperties \
 ))
@@ -2547,7 +2546,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/graphic,\
 	XGraphicObject \
 	XGraphicProvider \
 	XGraphicProvider2 \
-	XGraphicRasterizer \
 	XGraphicRenderer \
 	XGraphicTransformer \
 	XGraphicMapper \
