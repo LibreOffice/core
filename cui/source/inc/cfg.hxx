@@ -435,9 +435,6 @@ protected:
     std::unique_ptr<weld::Button>              m_xAddCommandButton;
     std::unique_ptr<weld::Button>              m_xRemoveCommandButton;
 
-    OUString m_sAppName;
-    OUString m_sFileName;
-
     SvxConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&);
 
     DECL_LINK(MoveHdl, weld::Button&, void);
@@ -490,8 +487,6 @@ public:
     static bool     CanConfig( std::u16string_view rModuleId );
 
     SaveInData*     GetSaveInData() { return pCurrentSaveInData; }
-    const OUString& GetAppName() const { return m_sAppName; }
-    const OUString& GetFileName() const { return m_sFileName; }
 
     int             AddFunction(int nTarget,
                                 bool bAllowDuplicates,
