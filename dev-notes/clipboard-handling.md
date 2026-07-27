@@ -158,7 +158,7 @@ formats and the app does only raw NSPasteboard input and output:
 | macOS | engine-driven COKitClipboardProvider; paste issues `.uno:Paste` directly with no `read` round-trip | NSPasteboard, UTType | `macos/coda/coda/COWrapper.mm` |
 | Windows | WebView2 `postMobileMessage`: COPY/CUT/PASTE/CLIPBOARD* | Win32 clipboard formats | `windows/coda/CODA/CODA.cpp:631` |
 | Qt | QWebChannel `Bridge.cool()`: COPY/CUT/PASTE/... | QClipboard, QMimeData | `qt/QtClipboard.cpp:162` |
-| iOS | WKWebView `clipboard` handler: read/write/sendToInternal | UIPasteboard, UTType | `ios/Mobile/DocumentViewController.mm:307` |
+| iOS | engine-driven COKitClipboardProvider; paste issues `.uno:Paste` directly | UIPasteboard, UTType | `ios/ios.mm` |
 | Android | `@JavascriptInterface` plus JNI getClipboardContent/setClipboardContent/paste | ClipboardManager, ClipData | `android/lib/.../androidapp.cpp:355` |
 | WASM | none, uses the web browser path | browser `navigator.clipboard` | `Clipboard.js` |
 
@@ -179,11 +179,11 @@ XML, Object Descriptor, ODF) > HTML > RTF > plain text.
 - Web decision in `dataTransferToDocument` (`Clipboard.js:466`) matches
   the pasted meta-origin against this view's current or previous token
   path and short-circuits to `_doInternalPaste` (`Clipboard.js:476`).
-- macOS, Windows, Qt do the same with an own-clipboard check so they skip
-  re-reading the operating system clipboard: changeCount on macOS
-  (`COWrapper.mm:279`), `GetClipboardSequenceNumber` on Windows
-  (`CODA.cpp:734`), `ownsClipboard` plus a source document id on Qt
-  (`Bridge.cpp:615`).
+- macOS, Windows, Qt, and iOS do the same with an own-clipboard check so
+  they skip re-reading the operating system clipboard: changeCount on
+  macOS and iOS (`COWrapper.mm:279`, `ios/ios.mm`),
+  `GetClipboardSequenceNumber` on Windows (`CODA.cpp:734`),
+  `ownsClipboard` plus a source document id on Qt (`Bridge.cpp:615`).
 
 ### 2. Between two documents in the same web server
 
@@ -233,7 +233,7 @@ same tables):
 | macOS | The engine drives the paste through the provider: it lists the pasteboard flavors, each system type mapped back to its MIME type, rich types kept, and pulls only the single format its paste path chooses. | Advertises every flavor the Kit reports, raw, including the internal Star formats under their raw MIME names; bytes are fetched per format on demand by the owner. |
 | Windows | Fixed list (`CODA.cpp:771`): plain text, `text/html` (CF_HTML fragment extracted), `text/rtf`, `image/png`, Star Embed Source XML, Star Object Descriptor XML. `image/svg+xml` is recognised but not yet consumed. Anything else is dropped. | The same fixed list (`CODA.cpp:631`): plain text, RTF, HTML, PNG (written under both `image/png` and `PNG`), Star Embed Source XML, Star Object Descriptor XML. |
 | Qt | Explicit whitelist (`QtClipboard.cpp:162`): `text/*`, `image/png`, `image/jpeg`, `image/bmp`, `image/svg+*`, `application/x-openoffice-*`, `application/x-libreoffice-*`, ODF `application/vnd.oasis.opendocument.*`, `application/vnd.sun.xml.*`, `application/msword`, `application/mathml+xml`, `application/pdf`. Broadest of the native apps. | Whatever the Kit advertises. The lazy clipboard publishes the full reported flavor list and fetches bytes on demand (`QtClipboard.cpp:92,225`). No whitelist on this side. |
-| iOS | Every pasteboard type that maps to a MIME type, forwarded as is. Types with no MIME mapping are skipped (`DocumentViewController.mm:384`). | Every flavor the Kit reports. Plain text and images get a typed representation, and every flavor is also stored raw under its MIME key (`DocumentViewController.mm:307`). |
+| iOS | The engine drives the paste through the provider, like macOS: it lists the pasteboard flavors, each system type mapped back to its MIME type, and pulls only the single format its paste path chooses (`ios/ios.mm`). | Every flavor the Kit reports, serialized at copy time (UIPasteboard has no lazy owner): known types under their system UTI, the internal engine formats raw under their MIME names. |
 | Android | One flavor only, first match in priority order HTML, then `image/*`, then plain text (`LOActivity.java:1535,1568,1593`). | `text/html` plus plain text only, through `ClipData.newHtmlText` (`LOActivity.java:1515`). Full fidelity is kept in a side cache file, not on the system clipboard. |
 
 Takeaways:
@@ -365,24 +365,24 @@ fields are browser widgets, and clipboard there mostly bypasses the Kit.
 - `browser/src/map/Clipboard.js` is the one client module for all
   platforms.
 - The two-pass clipboard capture (ask for all flavors, then ask
-  explicitly for `text/plain;charset=utf-8` and `text/html`) is the same
-  idea on iOS and Android, and iOS is a hand-port of the Android code
-  (comment at `DocumentViewController.mm:306`).
+  explicitly for `text/plain;charset=utf-8` and `text/html`) survives on
+  Android only; the iOS hand-port of it went away with the move to the
+  clipboard provider.
 
 ## What is not shared (duplicated per platform)
 
 This section describes the state before the COKitClipboardProvider move and
-still holds for Windows, Qt, iOS, and Android. macOS has since moved to the
-provider (see the Done section): the engine now decides the formats, so on
-macOS the mapping table is reached through the provider callbacks and the
-old `write` and `setClipboardWith` paths named below are gone. The
+still holds for Qt and Android. macOS, Windows, and iOS have since moved to
+the provider (see the Done section): the engine now decides the formats, so
+there the mapping table is reached through the provider callbacks and the
+old eager write and read-everything paths named below are gone. The
 duplication described here is what the provider move is meant to remove,
 one app at a time.
 
 - **Operating system to MIME mapping tables.** Written five times, each
   covering a slightly different format set:
   `COWrapper.mm:187`, `CODA.cpp:631`, `QtClipboard.cpp:162`,
-  `DocumentViewController.mm` (UTI mapping), `androidapp.cpp:355`. There
+  `ios/ios.mm` (UTI mapping), `androidapp.cpp:355`. There
   is no common translation table, so a format supported on one platform
   can silently drop on another.
   - Stays partly separate: the native half of each lookup speaks a
@@ -397,10 +397,10 @@ one app at a time.
     Android. Windows is the only platform that truly needs a format-id
     translation step.
 - **The own-clipboard optimisation.** Implemented independently with five
-  different mechanisms: NSPasteboard changeCount, Win32 sequence number,
-  Qt `ownsClipboard` plus source document id, Android magic plus instance
-  id plus cache file, and the web meta-origin token match. iOS leans on
-  the `sendToInternal` direct path instead.
+  different mechanisms: pasteboard changeCount on macOS and iOS, Win32
+  sequence number, Qt `ownsClipboard` plus source document id, Android
+  magic plus instance id plus cache file, and the web meta-origin token
+  match.
   - Stays separate: the primitive question "has the clipboard changed
     since I last wrote it" has no cross-platform answer. Each native check
     is the only one its operating system offers.
@@ -409,8 +409,8 @@ one app at a time.
     set then paste. That decision already lives once in the browser JS
     (`dataTransferToDocument`, `Clipboard.js:466`), and each native app
     re-derives it. A shared helper that takes a single per-platform "do I
-    still own it" boolean would remove the duplication. iOS skips the
-    optimisation entirely and could adopt the same model.
+    still own it" boolean would remove the duplication. The provider's
+    `ownsClipboard` callback is that helper for the apps that moved.
 - **The own-content identity marker.** The web and the desktop and iOS
   apps use the `data-coolorigin` meta-origin div. Android invents its own
   `cool-clip-magic-<instance id>` signature. Two schemes for one concept.
@@ -610,10 +610,31 @@ per-app "which flavors matter" guesswork is gone.
   directly instead of asking the native side through the `read` script
   message. `_readClipboardItems` (`browser/src/map/Clipboard.js`) reports an
   internal paste for macOS without a round-trip, and the macOS `read`
-  handler is gone. iOS still uses `read`, since it is not on the provider.
+  handler is gone.
 - The provider is registered once, on the first message after the kit
   document loads (`COWrapper handleMessageWith`), not on copy or paste, so
   copy and paste need no setup step of their own.
+
+### iOS: engine-driven clipboard through COKitClipboardProvider
+
+The iOS app followed macOS onto the provider, with the same shape: the
+engine picks the formats in both directions, and the app does only raw
+UIPasteboard input and output (`ios/ios.mm`). The `clipboard` script
+message handler with its `read`, `write` and `sendToInternal` verbs is
+gone (`ios/Mobile/DocumentViewController.mm`), and the browser sends only
+the uno command: `_readClipboardItems` reports an internal paste, and the
+DOM paste event short-circuits to `.uno:Paste` (`Clipboard.js`).
+
+Two per-platform points differ from macOS:
+
+- Eager advertise. UIPasteboard has no lazy type owner, so the advertise
+  callback serializes every advertised format onto the pasteboard at copy
+  time. While that runs, the provider reports the clipboard as ours, which
+  keeps the engine serving the bytes from the fresh in-memory
+  transferable.
+- Install point. The iOS kit loop does not go through `startMainLoop()`,
+  where macOS and Windows install their provider, so the install sits in
+  `runKitLoopInAThread()` (`kit/Kit.cpp`).
 
 ## Action plan
 
@@ -627,11 +648,11 @@ explains it.
   return, and a code comment already says so. Windows paste does not use
   it. Remove it and its branch in `_asyncAttemptNavigatorClipboardRead`
   (`Clipboard.js:1142`).
-- Collapse the redundant two-pass clipboard capture on iOS and Android.
-  Both call `getClipboard` once for all flavors and again only for
-  `text/plain;charset=utf-8` and `text/html`
-  (`DocumentViewController.mm:307`, `androidapp.cpp:355`). The first pass
-  already returns those, so the second is wasted work.
+- Collapse the redundant two-pass clipboard capture on Android. It calls
+  `getClipboard` once for all flavors and again only for
+  `text/plain;charset=utf-8` and `text/html` (`androidapp.cpp:355`). The
+  first pass already returns those, so the second is wasted work. The
+  iOS copy of this pattern went away with the provider move.
 - Extract one canonical MIME list. Pull the supported MIME types, the
   plain-text normalisation, and the Star format names into a single shared
   header that the five mapping tables read from, even before the adapters
@@ -650,16 +671,14 @@ explains it.
 
 ### Larger reworks
 
-- Move Qt and Windows onto the COKitClipboardProvider (the model macOS now
-  uses, see the Done section). Each app registers a provider per document
+- Move Qt onto the COKitClipboardProvider (the model macOS, Windows, and
+  iOS now use, see the Done section). Each app registers a provider
   and implements the same small surface: advertise a flavor list on copy,
   list the pasteboard flavors, fetch one format's bytes, and answer the
   own-clipboard check. The engine then drives both directions and picks the
   paste format, so the per-platform "which flavors matter" lists (the Qt
-  whitelist, the Windows fixed list) and the eager copy out go away. Qt
-  already has a lazy clipboard, so it is the smaller step; Windows still
-  serializes every format up front and gains lazy copy from the move. Start
-  with Qt, then Windows; iOS and Android can follow later. This is the
+  whitelist) and the eager copy out go away. Qt already has a lazy
+  clipboard, so it is a small step; Android can follow later. This is the
   chosen shape of the "shares lots of code" goal for the in-process apps:
   the shared logic lives in the engine instead of a shared C++ helper, and
   each app is left a thin raw input and output adapter.
