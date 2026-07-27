@@ -765,6 +765,14 @@ SwMoveFnCollection const & SwCursor::MakeFindRange( SwDocPositions nStart,
                 ? fnMoveForward : fnMoveBackward;
 }
 
+static bool lcl_IsNotTextSearch(const SvxSearchItem* pSearchItem)
+{
+    if (!pSearchItem || pSearchItem->GetSearchString().isEmpty())
+        return true;
+
+    return pSearchItem->GetPattern(); // paragraph style search
+}
+
 static sal_Int32 lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCursor,
                         SwMoveFnCollection const & fnMove, SwCursor*& pFndRing,
                         SwPaM& aRegion, FindRanges eFndRngs,
@@ -857,25 +865,28 @@ static sal_Int32 lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
             }
 
             // tdf#131431 force move pCurrentCursor if it hasn't moved to avoid an infinite loop
-            const sal_Int32 nLen = pCurrentCursor->GetPointContentNode()->Len();
+            bool bToNextPara = false;
             if (!bSrchBkwrd)
             {
-                const bool bForceMove = *pSttPos == *pCurrentCursor->End();
-                // move to next paragraph if at the end of a paragraph with content
-                if (bForceMove || (nLen && pCurrentCursor->End()->GetContentIndex() == nLen))
+                bToNextPara = *pSttPos == *pCurrentCursor->End(); // force move
+                if (!bToNextPara && lcl_IsNotTextSearch(xSearchItem.get()))
                 {
-                    (*fnMove.fnPos)(pCurrentCursor->End(), false);
+                    // move to next paragraph when last find was at the very end of a paragraph
+                    const SwContentNode* pPointNd = pCurrentCursor->GetPointContentNode();
+                    bToNextPara = pCurrentCursor->End()->GetContentIndex() == pPointNd->Len();
                 }
             }
             else
             {
-                const bool bForceMove = *pEndPos == *pCurrentCursor->Start();
-                // move to previous paragraph if at the start of a paragraph with content
-                if (bForceMove || (nLen && !pCurrentCursor->Start()->GetContentIndex()))
+                bToNextPara = *pEndPos == *pCurrentCursor->Start(); // force move
+                if (!bToNextPara && lcl_IsNotTextSearch(xSearchItem.get()))
                 {
-                    (*fnMove.fnPos)(pCurrentCursor->Start(), false);
+                    // move to previous paragraph when last find was at the start of a paragraph
+                    bToNextPara = !pCurrentCursor->Start()->GetContentIndex();
                 }
             }
+            if (bToNextPara)
+                (*fnMove.fnPos)(pCurrentCursor->GetPoint(), false);
 
             if( *pSttPos == *pEndPos )
                 // in area but at the end => done

@@ -414,9 +414,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf131431)
 
     // setup search for any underline text
     uno::Sequence<beans::PropertyValue> aSearchAttribute(comphelper::InitPropertySequence(
-        { { "CharUnderline", uno::Any(sal_Int32(css::awt::FontUnderline::NONE)) } }));
+        { { "CharUnderline", uno::Any(sal_Int32(css::awt::FontUnderline::SINGLE)) } }));
 
-    // setup replace with green highlight color
+    // setup replace to also apply green highlight color
     uno::Sequence<beans::PropertyValue> aReplaceAttribute(
         comphelper::InitPropertySequence({ { "CharBackColor", uno::Any(sal_Int32(0x00FF00)) } }));
 
@@ -447,9 +447,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf131431)
     TimeoutThread.join();
 
     // ideally should be 9, but due to some bugs it reports more
-    // CPPUNIT_ASSERT_EQUAL(sal_Int32(9), nReplaceCount);
-    CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(8), nReplaceCount);
-    CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(14), nReplaceCount);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), nReplaceCount);
+
+    // a simple 'search' should also report the same number
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(9), xReplace->findAll(xReplaceDes)->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf147583_backwardSearch)
