@@ -2243,7 +2243,7 @@ void Bitmap::ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
         for ( tools::Long nX = 0, nWidth = pAccess->Width(); nX < nWidth; nX++ )
         {
             BitmapColor aCol = pAccess->GetPixelFromData( pScanline, nX );
-            const sal_uInt8 cIndex = aCol.GetAlpha();
+            const sal_uInt8 cIndex = aCol.GetIndex();
             if ( cIndex == cIndexFrom )
             {
                 aCol.SetAlpha(nAlphaTo);
