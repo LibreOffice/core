@@ -8,6 +8,7 @@
  */
 
 #include "basictest.hxx"
+#include <comphelper/kit.hxx>
 #include <osl/file.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -94,12 +95,25 @@ void Coverage::process_directory(const OUString& sDirName)
     fprintf(stderr,"end process directory\n");
 }
 
+// Point both the configuration and the Kit at a locale. With the Kit active, AllSettings answers
+// with the Kit's language and leaves this configuration alone, and the number parsers follow
+// AllSettings.
+void setTestLocale(const LanguageTag& rLocale)
+{
+    SvtSysLocaleOptions aLocalOptions;
+    aLocalOptions.SetLocaleConfigString( rLocale.getBcp47() );
+    comphelper::COKit::setLanguageTag(rLocale);
+    comphelper::COKit::setLocale(rLocale);
+}
+
 void Coverage::Coverage_Iterator()
 {
     OUString sDirName = m_directories.getURLFromSrc(u"basic/qa/basic_coverage");
 
     CPPUNIT_ASSERT(!sDirName.isEmpty());
-    process_directory(sDirName); // any files in the root test dir are run in test harness default locale ( en-US )
+    // The files in the root test dir expect en-US.
+    setTestLocale(LanguageTag(LANGUAGE_ENGLISH_US));
+    process_directory(sDirName);
     std::vector< OUString > sLangDirs = get_subdirnames( sDirName );
 
     for (auto const& langDir : sLangDirs)
@@ -111,9 +125,8 @@ void Coverage::Coverage_Iterator()
             LanguageTag aLocale( sLangISO );
             if ( aLocale.isValidBcp47() )
             {
-                SvtSysLocaleOptions aLocalOptions;
                 // set locale for test dir
-                aLocalOptions.SetLocaleConfigString( sLangISO );
+                setTestLocale(aLocale);
                 process_directory(langDir);
             }
         }

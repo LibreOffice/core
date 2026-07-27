@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include "basictest.hxx"
+#include <comphelper/kit.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <test/bootstrapfixture.hxx>
 
@@ -163,6 +164,10 @@ void VBATest::testMiscVBAFunctions()
     LanguageTag aLocale(LANGUAGE_ENGLISH_UK);
     SvtSysLocaleOptions aLocalOptions;
     aLocalOptions.SetLocaleConfigString( aLocale.getBcp47() );
+    // With the Kit active, AllSettings answers with the Kit's language and leaves this
+    // configuration alone, and the calendar the runtime builds follows AllSettings.
+    comphelper::COKit::setLanguageTag(aLocale);
+    comphelper::COKit::setLocale(aLocale);
 
     for ( size_t  i=0; i<std::size( macroSource ); ++i )
     {
