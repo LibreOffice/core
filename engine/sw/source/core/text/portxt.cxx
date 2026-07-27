@@ -1259,8 +1259,6 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
     if( !rInf.GetOut() )
         return;
 
-    const bool bPDFExport = rInf.GetVsh()->GetViewOptions()->IsPDFExport();
-
     // #i68503# the hole must have no decoration for a consistent visual appearance
     const SwFont* pOrigFont = rInf.GetFont();
     std::unique_ptr<SwFont> pHoleFont;
@@ -1276,21 +1274,13 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
         oFontSave.emplace( rInf, pHoleFont.get() );
     }
 
-    if (bPDFExport)
+    if (m_bShowUnderline)
     {
-        rInf.DrawText(u" "_ustr, *this, TextFrameIndex(0), TextFrameIndex(1));
+        rInf.DrawBackBrush(*this);
+        rInf.DrawBorder(*this);
     }
-    else
-    {
-        if (m_bShowUnderline)
-        {
-            rInf.DrawBackBrush(*this);
-            rInf.DrawBorder(*this);
-        }
-        // tdf#43244: Paint spaces even at end of line,
-        // but only if this paint is not called for pdf export, to keep that pdf export intact
-        rInf.DrawText(*this, rInf.GetLen());
-    }
+    // tdf#43244: Paint spaces even at end of line
+    rInf.DrawText(*this, rInf.GetLen());
 
     oFontSave.reset();
     pHoleFont.reset();

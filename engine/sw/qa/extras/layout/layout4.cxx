@@ -2110,6 +2110,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTrailingBlankInUntaggedPdf)
     pWrtShell->SetAttrItem(SvxAdjustItem(SvxAdjust::Center, RES_PARATR_ADJUST));
     pWrtShell->SetAttrItem(SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
     pWrtShell->Insert("foo" + RepeatedUChar(' ', 200));
+    getSwDocShell()->GetPreviewMetaFile();
+
+    // The decorated part of the blank, in points.
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    const double fBlank
+        = getXPath(pLayout, "//SwLineLayout/SwHolePortion[1]", "width").toDouble() / 20;
+
     save(TestFilter::PDF_WRITER,
          { comphelper::makePropertyValue(
              u"FilterData"_ustr,
@@ -2120,20 +2127,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTrailingBlankInUntaggedPdf)
         return;
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdf->openPage(0);
     int nText = 0;
-    int nPath = 0;
+    std::vector<basegfx::B2DRectangle> aUnderlines;
     for (int i = 0; i < pPage->getObjectCount(); ++i)
     {
-        switch (pPage->getObject(i)->getType())
-        {
-            case vcl::pdf::PDFPageObjectType::Text:
-                ++nText;
-                break;
-            case vcl::pdf::PDFPageObjectType::Path:
-                ++nPath;
-                break;
-            default:
-                break;
-        }
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pObject = pPage->getObject(i);
+        if (pObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+            ++nText;
+        else if (pObject->getType() == vcl::pdf::PDFPageObjectType::Path)
+            aUnderlines.push_back(pObject->getBounds());
     }
 
     // Turning tagging off used to drop the trailing blank from the export altogether, leaving only
@@ -2141,7 +2142,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTrailingBlankInUntaggedPdf)
     CPPUNIT_ASSERT_EQUAL(3, nText);
     // ... and the word and the decorated half of the blank each carry an underline. This is what a
     // tagged export of the same document produces, down to the position of every object.
-    CPPUNIT_ASSERT_EQUAL(2, nPath);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aUnderlines.size());
+
+    // The blank's underline is as long as the blank. An export used to write out a single space
+    // whatever the blank's real length, so the underline stopped one space in.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(fBlank, aUnderlines[1].getWidth(), 1.0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf32181)
