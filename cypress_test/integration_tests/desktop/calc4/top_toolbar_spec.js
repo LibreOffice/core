@@ -1,41 +1,22 @@
-/* global describe it cy beforeEach require expect */
+/* global describe it cy before beforeEach require expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 var calcHelper = require('../../common/calc_helper');
 
-describe(['tagdesktop'], 'Top toolbar tests.', function() {
-	var newFilePath;
+describe(['tagdesktop'], 'Top toolbar tests.', { testIsolation: false }, function() {
+
+	desktopHelper.shareDocumentAcrossTests('calc/top_toolbar.ods');
+
+	before(function() {
+		desktopHelper.switchUIToCompact();
+	});
 
 	beforeEach(function() {
-		newFilePath = helper.setupAndLoadDocument('calc/top_toolbar.ods');
-		desktopHelper.switchUIToCompact();
 		helper.typeIntoInputField(helper.addressInputSelector, 'A1');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
-	});
-
-	it('Save.', function () {
-		desktopHelper.getCompactIcon('Bold').click();
-		cy.cGet('#save').click();
-		helper.waitUntilDocumentSaved();
-
-		helper.reloadDocument(newFilePath);
-
-		cy.cGet(helper.addressInputSelector)
-		.should('exist');
-
-		desktopHelper.switchUIToCompact();
-		calcHelper.clickOnFirstCell();
-
-		cy.cGet(helper.addressInputSelector)
-			.should('exist');
-
-		helper.setDummyClipboardForCopy();
-		calcHelper.selectEntireSheet();
-		helper.copy();
-		cy.cGet('#copy-paste-container table td b').should('exist');
 	});
 
 	it('Clone Formatting.', function() {
@@ -92,6 +73,9 @@ describe(['tagdesktop'], 'Top toolbar tests.', function() {
 		cy.cGet('body').contains('.ui-combobox-entry', 'Active Sheet').click();
 
 		cy.get('@windowOpen').should('be.called');
+
+		cy.realPress('Escape');
+		cy.cGet('body').contains('.ui-combobox-entry', 'Active Sheet').should('not.exist');
 	});
 
 	it('Enable text wrapping.', function() {
@@ -249,7 +233,9 @@ describe(['tagdesktop'], 'Top toolbar tests.', function() {
 		desktopHelper.selectColorFromPalette('3FAF46');
 		desktopHelper.getCompactIconArrow('Color').click();
 		cy.cGet('.ui-color-picker').should('be.visible');
-		cy.cGet('.ui-color-picker-entry[value="3FAF46"]').should('be.checked');
+		// A colour picked once also appears in the recent row, so this looks at
+		// the entry in the palette itself.
+		cy.cGet('.ui-color-picker-palette .ui-color-picker-entry[value="3FAF46"]').should('be.checked');
 		cy.realPress('Escape');
 	});
 
@@ -339,4 +325,38 @@ describe(['tagdesktop'], 'Top toolbar tests.', function() {
 		cy.cGet('#copy-paste-container table td').should('have.attr', 'align', 'left');
 	});
 
+});
+
+// Saving writes the formatting into the file on disk and the reload brings it
+// back, so this test needs a document of its own.
+describe(['tagdesktop'], 'Top toolbar save test.', function() {
+	var newFilePath;
+
+	beforeEach(function() {
+		newFilePath = helper.setupAndLoadDocument('calc/top_toolbar.ods');
+		desktopHelper.switchUIToCompact();
+		helper.typeIntoInputField(helper.addressInputSelector, 'A1');
+	});
+
+	it('Save.', function () {
+		desktopHelper.getCompactIcon('Bold').click();
+		cy.cGet('#save').click();
+		helper.waitUntilDocumentSaved();
+
+		helper.reloadDocument(newFilePath);
+
+		cy.cGet(helper.addressInputSelector)
+		.should('exist');
+
+		desktopHelper.switchUIToCompact();
+		calcHelper.clickOnFirstCell();
+
+		cy.cGet(helper.addressInputSelector)
+			.should('exist');
+
+		helper.setDummyClipboardForCopy();
+		calcHelper.selectEntireSheet();
+		helper.copy();
+		cy.cGet('#copy-paste-container table td b').should('exist');
+	});
 });

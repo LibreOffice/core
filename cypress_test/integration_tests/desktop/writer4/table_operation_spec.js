@@ -1,14 +1,17 @@
-/* global describe it cy beforeEach Cypress require expect */
+/* global describe it cy before Cypress require expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 var mode = Cypress.env('USER_INTERFACE');
 
-describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', function() {
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', { testIsolation: false }, function() {
 
-	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/table_operation.odt');
-		desktopHelper.switchUIToNotebookbar();
+	desktopHelper.shareDocumentAcrossTests('writer/table_operation.odt', {
+		notebookbar: true,
+		caretToDocumentStart: true,
+	});
+
+	before(function() {
 		desktopHelper.selectZoomLevel('70', false);
 	});
 

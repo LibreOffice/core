@@ -1,23 +1,26 @@
-/* global describe it cy beforeEach require Cypress */
+/* global describe it cy before beforeEach require Cypress */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 var writerHelper = require('../../common/writer_helper');
 
-describe(['tagdesktop'], 'Top toolbar apply tests.', function() {
+describe(['tagdesktop'], 'Top toolbar apply tests.', { testIsolation: false }, function() {
 
-	beforeEach(function() {
-		cy.viewport(1920,1080);
-		helper.setupAndLoadDocument('writer/top_toolbar.odt');
-		desktopHelper.switchUIToNotebookbar();
+	desktopHelper.shareDocumentAcrossTests('writer/top_toolbar.odt', {
+		notebookbar: true,
+		viewport: [1920, 1080],
+	});
 
+	before(function() {
 		if (Cypress.env('INTEGRATION') === 'nextcloud') {
 			desktopHelper.showSidebar();
 		}
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		})
+	});
 
+	beforeEach(function() {
 		writerHelper.selectAllTextOfDoc();
 	});
 
@@ -26,16 +29,9 @@ describe(['tagdesktop'], 'Top toolbar apply tests.', function() {
 		writerHelper.selectAllTextOfDoc();
 	}
 
-	it('Apply highlight color.', function() {
-		helper.setDummyClipboardForCopy();
-		desktopHelper.getNbIconArrow('CharBackColor', 'Home').click();
-		desktopHelper.selectColorFromPalette('FFB66C');
-		writerHelper.selectAllTextOfDoc();
-		helper.copy();
-		cy.cGet('#copy-paste-container p font span')
-			.should('have.attr', 'style', 'background: #ffb66c');
-	});
-
+	// The colour a palette leaves on the highlighting button stays there for the
+	// rest of the file, so this test comes first, while the button still shows
+	// the transparent it starts with.
 	it('Apply transparent highlight color.', function() {
 		helper.setDummyClipboardForCopy();
 		desktopHelper.getNbIcon('CharBackColor', 'Home').first().click();
@@ -45,6 +41,16 @@ describe(['tagdesktop'], 'Top toolbar apply tests.', function() {
 			.should('have.attr', 'style', 'background: transparent');
 		desktopHelper.getNbIcon('CharBackColor').find('.selected-color')
 				.should('have.attr', 'style', 'background-color: transparent; border-color: var(--color-border);');
+	});
+
+	it('Apply highlight color.', function() {
+		helper.setDummyClipboardForCopy();
+		desktopHelper.getNbIconArrow('CharBackColor', 'Home').click();
+		desktopHelper.selectColorFromPalette('FFB66C');
+		writerHelper.selectAllTextOfDoc();
+		helper.copy();
+		cy.cGet('#copy-paste-container p font span')
+			.should('have.attr', 'style', 'background: #ffb66c');
 	});
 
 	it('Apply font color.', function() {

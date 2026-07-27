@@ -1,4 +1,4 @@
-/* global cy  require Cypress expect */
+/* global cy  require Cypress expect before beforeEach afterEach */
 
 var helper = require('./helper');
 
@@ -109,7 +109,10 @@ function selectColorFromPalette(color) {
 	cy.log('>> selectColorFromPalette - start');
 
 	cy.cGet('.ui-color-picker').should('be.visible');
-	cy.cGet('.ui-color-picker-entry[value="' + color + '"]').click();
+	// The picker also carries a custom and a recent row, and a colour picked
+	// once shows up there too. The entry from the palette itself is the one to
+	// click.
+	cy.cGet('.ui-color-picker-palette .ui-color-picker-entry[value="' + color + '"]').click();
 	cy.cGet('.ui-color-picker').should('not.exist');
 
 	cy.log('<< selectColorFromPalette - end');
@@ -677,10 +680,80 @@ function undoAll() {
 		});
 	});
 
-	// Nothing left to undo, so the Undo control is disabled.
-	cy.cGet('#Home-container .unoUndo').should('have.attr', 'disabled');
+	// Every step has been undone, so the undo stack is empty. Core answers for
+	// this, which keeps the check working whichever toolbar the test uses.
+	cy.getFrameWindow().then(function(win) {
+		getUndoCount(win).then(function(count) {
+			expect(count, 'undo steps left').to.equal(0);
+		});
+	});
 
 	cy.log('<< undoAll - end');
+}
+
+// Loads the test document once for a whole spec file and gives each test the
+// document as it was loaded. Register it at the top of a describe that turns
+// test isolation off:
+//
+//	describe(['tagdesktop'], 'My tests', { testIsolation: false }, function() {
+//		desktopHelper.shareDocumentAcrossTests('writer/top_toolbar.odt', { notebookbar: true });
+//
+//		it('...', function() { ... });
+//	});
+//
+// filePath: test document path, for example 'writer/top_toolbar.odt'
+// options.notebookbar: true to switch the user interface to the notebookbar
+// options.viewport: [width, height] of the browser window, for specs whose tests
+//   need a particular size; left alone when this is not given
+// options.caretToDocumentStart: true to put the caret back at the start of the
+//   document before each test, for tests that count cursor movements from there
+//
+// Tests that share a document run in file order, and each one starts from the
+// state the previous ones left in the parts that undo does not reach: the user
+// interface, the caret, and the scroll position. A test that needs a control in
+// its untouched state belongs before the tests that change it.
+function shareDocumentAcrossTests(filePath, options) {
+	var settings = options || {};
+
+	function setViewport() {
+		if (settings.viewport) {
+			cy.viewport(settings.viewport[0], settings.viewport[1]);
+		}
+	}
+
+	before(function() {
+		setViewport();
+		helper.setupAndLoadDocument(filePath);
+
+		if (settings.notebookbar) {
+			switchUIToNotebookbar();
+		}
+	});
+
+	beforeEach(function() {
+		// Cypress restores the configured viewport before every test, so the
+		// size the tests were written for is set again here.
+		setViewport();
+
+		// The copy results land in this container, so every test starts with
+		// it empty.
+		cy.cGet('#copy-paste-container').invoke('html', '');
+
+		if (settings.caretToDocumentStart) {
+			helper.typeIntoDocument('{ctrl}{home}');
+		}
+	});
+
+	// The run stops at the first failure, so a test that passed is the one
+	// with formatting to hand back.
+	afterEach(function() {
+		if (this.currentTest.state === 'passed') {
+			// Escape closes a dropdown or leaves cell edit mode, which puts the
+			// document itself in front of the undo that follows.
+			helper.typeIntoDocument('{esc}');
+			undoAll();
+		}
+	});
 }
 
 module.exports.showSidebar = showSidebar;
@@ -725,3 +798,4 @@ module.exports.getCompactIconArrow = getCompactIconArrow;
 module.exports.getNbIconArrow = getNbIconArrow;
 module.exports.getDropdown = getDropdown;
 module.exports.undoAll = undoAll;
+module.exports.shareDocumentAcrossTests = shareDocumentAcrossTests;
