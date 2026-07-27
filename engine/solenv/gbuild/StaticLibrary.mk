@@ -117,6 +117,7 @@ gb_StaticLibrary_set_warnings_disabled = $(call gb_StaticLibrary__forward_to_Lin
 gb_StaticLibrary_set_external_code = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_StaticLibrary_set_generated_cxx_suffix = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_StaticLibrary_set_generated_cxx_base = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_StaticLibrary_set_generated_c_base = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_StaticLibrary_set_generated_warnings_as_errors = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_StaticLibrary_use_clang = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_StaticLibrary_set_clang_precompiled_header = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))

@@ -12,8 +12,10 @@
 $(eval $(call gb_Module_Module,gbuild))
 
 $(eval $(call gb_Module_add_targets,gbuild, \
+    Executable_clientnb \
     Executable_coconvert \
     Executable_connect \
+    Executable_coolbench \
     Executable_coolconfig \
     Executable_coolconvert \
     Executable_coolmap \
@@ -24,6 +26,7 @@ $(eval $(call gb_Module_add_targets,gbuild, \
     StaticLibrary_dummytraceevent \
     StaticLibrary_globals \
     StaticLibrary_shared \
+    StaticLibrary_simd \
 ))
 
 # vim: set noet sw=4 ts=4:

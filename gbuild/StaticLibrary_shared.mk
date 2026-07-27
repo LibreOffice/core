@@ -56,6 +56,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,shared, \
     common/Seccomp \
     common/Session \
     common/SigUtil-server \
+    common/Simd \
     common/SpookyV2 \
     common/StringVector \
     common/Syscall \

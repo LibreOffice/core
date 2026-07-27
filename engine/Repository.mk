@@ -954,8 +954,10 @@ $(eval $(call gb_Helper_register_executables,NONE, gbuildselftestexe))
 endif
 
 $(eval $(call gb_Helper_register_executables,ONLINE, \
+    clientnb \
     coconvert \
     connect \
+    coolbench \
     coolconfig \
     coolconvert \
     coolmap \

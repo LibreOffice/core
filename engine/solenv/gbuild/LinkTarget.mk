@@ -346,22 +346,22 @@ endif
 
 # GenCObject class
 
-gb_GenCObject_get_source = $(WORKDIR)/$(1).c
+gb_GenCObject_get_source = $(or $(gb_LinkTarget_GENCBASE_$(call gb_LinkTarget__get_workdir_linktargetname,$(2))),$(WORKDIR))/$(1).c
 
 ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_GenCObject_get_target,%) : $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Output_announce,$*.c,$(true),C  ,3)
 	$(call gb_Trace_StartRange,$*.c,C  )
-	test -f $(call gb_GenCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenCObject_get_source,$*)" && false)
-	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CObject__tool_command,$*,$(call gb_GenCObject_get_source,$*),$(COMPILER_PLUGINS)))
-	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$(call gb_GenCObject_get_source,$*),$(call gb_GenCObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_CC))))
+	test -f $(GEN_C_SOURCE) || (echo "Missing generated source file $(GEN_C_SOURCE)" && false)
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CObject__tool_command,$*,$(GEN_C_SOURCE),$(COMPILER_PLUGINS)))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$(GEN_C_SOURCE),$(call gb_GenCObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_CC))))
 	$(call gb_Trace_EndRange,$*.c,C  )
 else
 $(call gb_GenCObject_get_target,%) :
 	$(call gb_Output_announce,$*.c,$(true),C  ,3)
 	$(call gb_Trace_StartRange,$*.c,C  )
-	test -f $(call gb_GenCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenCObject_get_source,$*)" && false)
-	$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$(call gb_GenCObject_get_source,$*),$(call gb_GenCObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_CC))
+	test -f $(GEN_C_SOURCE) || (echo "Missing generated source file $(GEN_C_SOURCE)" && false)
+	$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$(GEN_C_SOURCE),$(call gb_GenCObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_CC))
 	$(call gb_Trace_EndRange,$*.c,C  )
 endif
 
@@ -1604,12 +1604,13 @@ $(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCObject_get_target,$(2))
-$(call gb_GenCObject_get_target,$(2)) : $(call gb_GenCObject_get_source,$(2))
+$(call gb_GenCObject_get_target,$(2)) : $(call gb_GenCObject_get_source,$(2),$(1))
 # Often gb_GenCObject_get_source does not have its own rule and is only a byproduct.
 # That's why we need this order-only dependency on gb_Helper_MISCDUMMY
-$(call gb_GenCObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
+$(call gb_GenCObject_get_source,$(2),$(1)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_GenCObject_get_target,$(2)) : WARNINGS_NOT_ERRORS := $(true)
+$(call gb_GenCObject_get_target,$(2)) : GEN_C_SOURCE := $(call gb_GenCObject_get_source,$(2),$(1))
 $(call gb_GenCObject_get_target,$(2)) : T_CFLAGS += $(call gb_LinkTarget__get_cflags,$(4)) $(3)
 $(call gb_GenCObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
@@ -2240,6 +2241,12 @@ endef
 # call gb_LinkTarget_set_generated_cxx_base,linktarget,dir
 define gb_LinkTarget_set_generated_cxx_base
 gb_LinkTarget_GENCXXBASE_$(call gb_LinkTarget__get_workdir_linktargetname,$(1)) := $(2)
+
+endef
+
+# call gb_LinkTarget_set_generated_c_base,linktarget,dir
+define gb_LinkTarget_set_generated_c_base
+gb_LinkTarget_GENCBASE_$(call gb_LinkTarget__get_workdir_linktargetname,$(1)) := $(2)
 
 endef
 

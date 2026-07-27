@@ -263,20 +263,12 @@ coolwsd_SOURCES = $(coolwsd_sources) \
 
 EXTRA_coolwsd_DEPENDENCIES = browser/node_modules
 
-if ENABLE_FUZZERS
 noinst_PROGRAMS =
-else
-noinst_PROGRAMS = \
-                  clientnb \
-                  coolbench
-endif
 
-noinst_LIBRARIES = libsimd.a libglobals.a libkitglobals.a libwsdglobals.a libkitwsdglobals.a
+noinst_LIBRARIES = libsimd.a libkitglobals.a libwsdglobals.a libkitwsdglobals.a
 
 libsimd_a_SOURCES = kit/DeltaSimd.c
 libsimd_a_CFLAGS = @SIMD_CFLAGS@
-
-libglobals_a_SOURCES = common/Globals.cpp
 
 libkitglobals_a_SOURCES = kit/KitGlobals.cpp
 
@@ -327,35 +319,6 @@ coolwsd_inproc_LDADD += ${OPENSSL_LIBS}
 endif
 
 endif
-
-clientnb_SOURCES = \
-                   $(util_platform_cpp) \
-                   common/DummyTraceEventEmitter.cpp \
-                   common/Log-common.cpp \
-                   common/Log-poco.cpp \
-                   common/ProcUtil.cpp \
-                   common/StringVector.cpp \
-                   common/Util-server.cpp \
-                   common/Util-unix.cpp \
-                   common/Util.cpp \
-                   net/clientnb.cpp
-
-clientnb_LDADD = libsimd.a libglobals.a $(LDADD)
-
-coolbench_SOURCES = \
-                    $(util_platform_cpp) \
-                    common/DummyTraceEventEmitter.cpp \
-                    common/Log-common.cpp \
-                    common/Log-poco.cpp \
-                    common/ProcUtil.cpp \
-                    common/Simd.cpp \
-                    common/StringVector.cpp \
-                    common/Util-server.cpp \
-                    common/Util-unix.cpp \
-                    common/Util.cpp \
-                    tools/Benchmark.cpp
-
-coolbench_LDADD = libsimd.a libglobals.a $(LDADD)
 
 wsd_headers = \
               wsd/Admin.hpp \
@@ -589,7 +552,7 @@ ENGINE_BUILDDIR = @LO_PATH@/..
 
 GBUILD_EXES = coolconfig coolconvert coolmount coolstress
 
-GBUILD_EXES_NOINST = coconvert connect coolmap coolsocketdump lokitclient
+GBUILD_EXES_NOINST = clientnb coconvert connect coolbench coolmap coolsocketdump lokitclient
 
 build-gbuild: FORCE
 	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.BUILDDIR=$(abs_top_builddir) Module_gbuild
@@ -845,10 +808,7 @@ all_compiled_sources = $(sort \
 	$(coolforkit_sources) \
 	$(coolwsd_SOURCES) \
 	$(coolforkit_caps_SOURCES) \
-	$(coolbench_SOURCES) \
-	$(clientnb_SOURCES) \
 	$(libsimd_a_SOURCES) \
-	$(libglobals_a_SOURCES) \
 	$(libkitglobals_a_SOURCES) \
 	$(libwsdglobals_a_SOURCES) \
 	$(libkitwsdglobals_a_SOURCES) \
