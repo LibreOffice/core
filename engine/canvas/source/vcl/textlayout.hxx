@@ -53,21 +53,11 @@ namespace vclcanvas
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XTextLayout
-        virtual cpo::uno::Sequence< css::uno::Reference< css::rendering::XPolyPolygon2D > > queryTextShapes(  ) override;
-        virtual cpo::uno::Sequence< css::geometry::RealRectangle2D > queryInkMeasures(  ) override;
-        virtual cpo::uno::Sequence< css::geometry::RealRectangle2D > queryMeasures(  ) override;
         virtual cpo::uno::Sequence< double > queryLogicalAdvancements(  ) override;
         virtual void applyLogicalAdvancements( const cpo::uno::Sequence< double >& aAdvancements ) override;
         virtual cpo::uno::Sequence< bool > queryKashidaPositions(  ) override;
         virtual void applyKashidaPositions( const cpo::uno::Sequence< bool >& aPositions ) override;
         virtual css::geometry::RealRectangle2D queryTextBounds(  ) override;
-        virtual double justify( double nSize ) override;
-        virtual double combinedJustify( const cpo::uno::Sequence< css::uno::Reference< css::rendering::XTextLayout > >& aNextLayouts, double nSize ) override;
-        virtual css::rendering::Caret getCaret( sal_Int32 nInsertionIndex, bool bExcludeLigatures ) override;
-        virtual sal_Int32 getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, bool bExcludeLigatures ) override;
-        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > queryVisualHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > queryLogicalHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-        virtual double getBaselineOffset(  ) override;
         virtual sal_Int8 getMainTextDirection(  ) override;
         virtual css::uno::Reference< css::rendering::XCanvasFont > getFont(  ) override;
         virtual css::rendering::StringContext getText(  ) override;
