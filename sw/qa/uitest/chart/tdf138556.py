@@ -9,6 +9,7 @@
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.chart import select_chart_type
 
 from uitest.framework import UITestCase
 
@@ -27,9 +28,7 @@ class tdf138556( UITestCase ):
             #Change Chart Type to Stock 1
             #TODO: test other subtypes
             with self.ui_test.execute_dialog_through_action( xChart, "COMMAND", mkPropertyValues({ "COMMAND" : "DiagramType" })) as xDialog:
-                xChartType = xDialog.getChild( "charttype" )
-                xStockType = xChartType.getChild("9")
-                xStockType.executeAction( "SELECT", tuple())
+                select_chart_type(self, xDialog, "Stock")
 
             #Insert Data Series
             with self.ui_test.execute_dialog_through_action( xChart, "COMMAND", mkPropertyValues({ "COMMAND" : "DiagramData" }), close_button="close") as xDialog:

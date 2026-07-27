@@ -427,6 +427,10 @@ OUString SeriesHeader::GetChartTypeImage(
     {
         aResult = BMP_TYPE_BUBBLE;
     }
+    else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_CORRELATIONCIRCLE )
+    {
+        aResult = BMP_TYPE_CORRELATION_CIRCLE;
+    }
 
     return aResult;
 }

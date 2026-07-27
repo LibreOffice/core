@@ -22,6 +22,10 @@ inline constexpr OUString BMP_TYPE_STOCK = u"chart2/res/typestock_16.png"_ustr;
 inline constexpr OUString BMP_TYPE_COLUMN_LINE = u"chart2/res/typecolumnline_16.png"_ustr;
 inline constexpr OUString BMP_TYPE_BUBBLE = u"chart2/res/typebubble_16.png"_ustr;
 inline constexpr OUString BMP_BUBBLE_1 = u"chart2/res/bubble_52x60.png"_ustr;
+inline constexpr OUString BMP_TYPE_CORRELATION_CIRCLE
+    = u"chart2/res/typecorrelationcircle_16.png"_ustr;
+inline constexpr OUString BMP_CORRELATION_CIRCLE
+    = u"chart2/res/correlationcircle_52x60.png"_ustr;
 inline constexpr OUString BMP_AREAS_2D = u"chart2/res/areas_52x60.png"_ustr;
 inline constexpr OUString BMP_AREAS_2D_1 = u"chart2/res/areaspiled_52x60.png"_ustr;
 inline constexpr OUString BMP_AREAS_2D_3 = u"chart2/res/areasfull_52x60.png"_ustr;
