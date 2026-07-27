@@ -18,7 +18,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/weldutils.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/lok.hxx>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <officecfg/Office/UI/ToolbarMode.hxx>
@@ -49,9 +48,6 @@ static void NotebookbarAddonValues(
     std::vector<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>>&
         aExtensionValues)
 {
-    if (comphelper::LibreOfficeKit::isActive())
-        return;
-
     framework::AddonsOptions aAddonsItems;
 
     for (int nIdx = 0; nIdx < aAddonsItems.GetAddonsNotebookBarCount(); nIdx++)
@@ -339,7 +335,6 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
         OUString aModuleName = xModuleManager->identify( xFrame );
         vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
-        bool bIsLOK = comphelper::LibreOfficeKit::isActive();
 
         const OUString sFile = lcl_getNotebookbarFileName(eApp);
 
@@ -351,10 +346,8 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
         bool bChangedFile = sNewFile != sCurrentFile;
 
-        if (!bIsLOK && (
-                (!sFile.isEmpty() && bChangedFile) ||
-                (!pNotebookBar || !pNotebookBar->IsVisible()) ||
-                bReloadNotebookbar))
+        if ((!sFile.isEmpty() && bChangedFile) || (!pNotebookBar || !pNotebookBar->IsVisible())
+            || bReloadNotebookbar)
         {
             //Addons For Notebookbar
             std::vector<Image> aImageValues;
