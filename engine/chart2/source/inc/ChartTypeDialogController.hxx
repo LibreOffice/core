@@ -363,6 +363,21 @@ private:
     std::unique_ptr<weld::SpinButton> m_xMF_NumberOfLines;
 };
 
+class CorrelationCircleChartDialogController final : public ChartTypeDialogController
+{
+public:
+    CorrelationCircleChartDialogController();
+    virtual ~CorrelationCircleChartDialogController() override;
+
+    virtual OUString getName() override;
+    virtual OUString getImage() override;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
+                                 const ChartTypeParameter& rParameter) override;
+    virtual OUString getChartName(sal_Int32 nId) const override;
+    virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
+};
+
 class BubbleChartDialogController final : public ChartTypeDialogController
 {
 public:

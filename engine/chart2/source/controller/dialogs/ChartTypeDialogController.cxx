@@ -1625,6 +1625,68 @@ void CombiColumnLineChartDialogController::adjustParameterToSubType( ChartTypePa
     }
 }
 
+//=========
+// CorrelationCircleChartDialogController
+//=========
+
+CorrelationCircleChartDialogController::CorrelationCircleChartDialogController()
+{
+    bSupports3D = false;
+}
+
+CorrelationCircleChartDialogController::~CorrelationCircleChartDialogController()
+{
+}
+
+OUString CorrelationCircleChartDialogController::getName()
+{
+    return SchResId(STR_TYPE_CORRELATION_CIRCLE);
+}
+
+OUString CorrelationCircleChartDialogController::getImage()
+{
+    return BMP_TYPE_CORRELATION_CIRCLE;
+}
+
+const tTemplateServiceChartTypeParameterMap&
+    CorrelationCircleChartDialogController::getTemplateMap() const
+{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+        {"com.sun.star.chart2.template.CorrelationCircle" , ChartTypeParameter(1,true)}};
+    return s_aTemplateMap;
+}
+
+void CorrelationCircleChartDialogController::fillSubTypeList( weld::IconView& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+{
+    rSubTypeList.clear();
+
+    lcl_appendSubType(rSubTypeList, u"1"_ustr, SchResId(STR_CORRELATION_CIRCLE),
+                      getPreviewBitmap(Image(StockImage::Yes, BMP_CORRELATION_CIRCLE)));
+}
+
+OUString CorrelationCircleChartDialogController::getChartName( sal_Int32 nId ) const
+{
+    switch (nId)
+    {
+        case 1:
+            return SchResId( STR_CORRELATION_CIRCLE );
+        default:
+            break;
+    }
+    return OUString();
+}
+
+void CorrelationCircleChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
+{
+    rParameter.b3DLook = false;
+    rParameter.eStackMode = GlobalStackMode_NONE;
+    rParameter.bXAxisWithValues = true;
+}
+
+//=========
+// BubbleChartDialogController
+//=========
+
 BubbleChartDialogController::BubbleChartDialogController()
 {
 }
