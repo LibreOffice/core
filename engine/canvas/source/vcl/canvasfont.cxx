@@ -104,25 +104,6 @@ namespace vclcanvas
         return maFontRequest;
     }
 
-    rendering::FontMetrics  CanvasFont::getFontMetrics(  )
-    {
-        SolarMutexGuard aGuard;
-
-        OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
-        ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
-        pVDev->SetFont(getVCLFont());
-        const ::FontMetric aMetric( pVDev->GetFontMetric() );
-
-        return rendering::FontMetrics(
-            aMetric.GetAscent(),
-            aMetric.GetDescent(),
-            aMetric.GetInternalLeading(),
-            aMetric.GetExternalLeading(),
-            0,
-            aMetric.GetDescent() / 2.0,
-            aMetric.GetAscent() / 2.0);
-    }
-
     cpo::uno::Sequence< double >  CanvasFont::getAvailableSizes(  )
     {
         // TODO(F1)

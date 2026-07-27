@@ -62,7 +62,6 @@ namespace vclcanvas
         // XCanvasFont
         virtual css::uno::Reference< css::rendering::XTextLayout > createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) override;
         virtual css::rendering::FontRequest getFontRequest(  ) override;
-        virtual css::rendering::FontMetrics getFontMetrics(  ) override;
         virtual cpo::uno::Sequence< double > getAvailableSizes(  ) override;
         virtual cpo::uno::Sequence< css::beans::PropertyValue > getExtraFontProperties(  ) override;
 

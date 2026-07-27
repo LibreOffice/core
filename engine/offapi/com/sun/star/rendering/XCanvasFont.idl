@@ -56,18 +56,6 @@ interface XCanvasFont : ::com::sun::star::uno::XInterface
     FontRequest                                         getFontRequest();
 
 
-    /** Query metric information about the font, that is generic to
-        all its glyphs.<p>
-
-        Note that the metric values in the returned result are in the
-        font coordinate system, i.e. relative to the corresponding
-        size of this font. That is, when this font was created with a
-        cell size of 20 units, the metrics returned are calculated
-        relative to this size.
-     */
-    FontMetrics                                         getFontMetrics();
-
-
     /** Query the list of available font sizes.<p>
 
         This method queries the list of available font sizes (in
