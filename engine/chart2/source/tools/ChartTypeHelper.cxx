@@ -70,6 +70,7 @@ cpo::uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( c
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CORRELATIONCIRCLE)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_REGIONMAP)
@@ -332,6 +333,14 @@ cpo::uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatm
         aRet.realloc(1);
         sal_Int32* pSeq = aRet.getArray();
         *pSeq++ = css::chart::MissingValueTreatment::USE_ZERO;
+    }
+    else if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CORRELATIONCIRCLE))
+    {
+        // A correlation leaves out the instances where one of the two values is
+        // missing, and there is no other interpretation of a gap that makes sense.
+        aRet.realloc(1);
+        sal_Int32* pSeq = aRet.getArray();
+        *pSeq++ = css::chart::MissingValueTreatment::LEAVE_GAP;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )
     {
