@@ -40,7 +40,6 @@
 #include <cppcanvas/canvas.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/svdomedia.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
@@ -271,16 +270,9 @@ namespace slideshow::internal
 
         bool ViewMediaShape::implMediaLinkAllowed() const
         {
-            SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape);
-            if (!pObj)
-                return false;
-            uno::Reference<beans::XPropertySet> xModelProps(
-                pObj->getSdrModelFromSdrObject().getUnoModel(), uno::UNO_QUERY);
-            if (!xModelProps.is())
-                return false;
-            bool bAllow = false;
-            xModelProps->getPropertyValue(u"AllowLinkUpdate"_ustr) >>= bAllow;
-            return bAllow;
+            SdrMediaObj* pObj
+                = dynamic_cast<SdrMediaObj*>(SdrObject::getSdrObjectFromXShape(mxShape));
+            return pObj && pObj->isLinkAllowed();
         }
 
 
