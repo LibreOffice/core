@@ -359,14 +359,11 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             //Addons For Notebookbar
             std::vector<Image> aImageValues;
             std::vector<css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > > aExtensionValues;
-            std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem;
-            if (!bIsLOK)
-            {
-                pNotebookBarAddonsItem = std::make_unique<NotebookBarAddonsItem>();
-                NotebookbarAddonValues(aImageValues , aExtensionValues);
-                pNotebookBarAddonsItem->aAddonValues = std::move(aExtensionValues);
-                pNotebookBarAddonsItem->aImageValues = std::move(aImageValues);
-            }
+            std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem
+                = std::make_unique<NotebookBarAddonsItem>();
+            NotebookbarAddonValues(aImageValues, aExtensionValues);
+            pNotebookBarAddonsItem->aAddonValues = std::move(aExtensionValues);
+            pNotebookBarAddonsItem->aImageValues = std::move(aImageValues);
 
             // tdf#164899 don't call SystemWindow::SetNotebookBar recursively
             // if NoteBookBar is in process of getting set
