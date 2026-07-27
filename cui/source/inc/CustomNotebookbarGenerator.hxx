@@ -30,10 +30,8 @@ public:
     CustomNotebookbarGenerator();
     static OUString getCustomizedUIPath();
     static OUString getOriginalUIPath();
-    static OString getSystemPath(OUString const& sURL);
     static Sequence<OUString> getCustomizedUIItem(const OUString& sNotebookbarConfigType);
     static void getFileNameAndAppName(OUString& sAppName, OUString& sNotebookbarUIFileName);
-    static void modifyCustomizedUIFile(const Sequence<OUString>& sUIItemProperties);
     static void createCustomizedUIFile();
     static void setCustomizedUIItem(const Sequence<OUString>& rUIItemProperties,
                                     const OUString& rNotebookbarConfigType);
