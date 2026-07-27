@@ -304,25 +304,37 @@ namespace cool {
 			const text = primitive.text.substring(start, start + length);
 			if (!text) return null;
 
-			const [a = 0, b = 0, c = 0, , e = 0, f = 0] = primitive.matrix ?? [];
 			const fontSize = primitive.fontSize ?? 12;
+			if (!(fontSize > 0)) return null;
+			// A missing matrix defaults to the plain upright scale.
+			const [a = fontSize, b = 0, c = 0, d = fontSize, e = 0, f = 0] =
+				primitive.matrix ?? [];
 			const style = primitive.italic ? 'italic' : 'normal';
 			const weight =
 				VectorPrimitiveRenderer._FONT_WEIGHT_CSS[primitive.weight ?? 5] ?? 400;
 			const family = primitive.familyname ?? 'sans-serif';
 
 			context.font = `${style} ${weight} ${fontSize}px "${family}"`;
-			const rotated = b !== 0 || c !== 0;
-			if (rotated) {
-				// Off-diagonal matrix entries mean the run is rotated.
-				// Move to the anchor first, then rotate so the text
-				// draws along the rotated direction.
-				context.translate(e, f);
-				context.rotate(Math.atan2(b, a));
+			// A matrix that only scales by the font size moves the
+			// anchor and nothing else, so it skips the transform.
+			const transformed =
+				b !== 0 || c !== 0 || a !== fontSize || d !== fontSize;
+			if (transformed) {
+				// The font size is the matrix's scale, so dividing it
+				// out leaves a unit transform that rotates, shears,
+				// flips or stretches the glyphs drawn at fontSize px.
+				context.transform(
+					a / fontSize,
+					b / fontSize,
+					c / fontSize,
+					d / fontSize,
+					e,
+					f,
+				);
 			}
 			return {
-				x: rotated ? 0 : e,
-				y: rotated ? 0 : f,
+				x: transformed ? 0 : e,
+				y: transformed ? 0 : f,
 				fontSize,
 				text,
 			};

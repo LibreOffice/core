@@ -290,6 +290,48 @@ describe('VectorPrimitiveRenderer', function () {
 			);
 		});
 
+		it('draws sheared text with the matrix shear', function () {
+			// The whole matrix, divided by the font size, goes onto
+			// the canvas, so glyphs land sheared and not only rotated.
+			const primitive = {
+				type: 'textSimplePortion',
+				text: 'Hi',
+				fontSize: 20,
+				matrix: [20, 0, 10, 20, 5, 7],
+			} as any;
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const transform = recorder.findCall('transform');
+			nodeassert.ok(transform, 'transform not called');
+			nodeassert.deepStrictEqual(transform.args, [1, 0, 0.5, 1, 5, 7]);
+			const fillText = recorder.findCall('fillText');
+			nodeassert.ok(fillText, 'fillText not called');
+			nodeassert.strictEqual(fillText?.args[1], 0);
+			nodeassert.strictEqual(fillText?.args[2], 0);
+		});
+
+		it('draws flipped text with the matrix flip', function () {
+			// An axis-aligned flip has no rotation or shear, only a
+			// negative vertical scale, and still reaches the canvas.
+			const primitive = {
+				type: 'textSimplePortion',
+				text: 'Hi',
+				fontSize: 20,
+				matrix: [20, 0, 0, -20, 5, 7],
+			} as any;
+
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const transform = recorder.findCall('transform');
+			nodeassert.ok(transform, 'transform not called');
+			nodeassert.deepStrictEqual(transform.args, [1, 0, 0, -1, 5, 7]);
+		});
+
 		it('draws underline and strikeout for textDecoratedPortion', function () {
 			// textDecoratedPortion paints the same text as the simple
 			// portion and adds underline, overline and strikeout lines
