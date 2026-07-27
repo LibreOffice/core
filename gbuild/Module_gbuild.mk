@@ -12,8 +12,15 @@
 $(eval $(call gb_Module_Module,gbuild))
 
 $(eval $(call gb_Module_add_targets,gbuild, \
+    Executable_coconvert \
+    Executable_connect \
     Executable_coolconfig \
+    Executable_coolconvert \
+    Executable_coolmap \
     Executable_coolmount \
+    Executable_coolsocketdump \
+    Executable_coolstress \
+    Executable_lokitclient \
     StaticLibrary_dummytraceevent \
     StaticLibrary_globals \
     StaticLibrary_shared \

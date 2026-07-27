@@ -68,10 +68,8 @@ SUBDIRS += cypress_test
 endif
 
 bin_PROGRAMS = \
-	coolconvert \
 	coolforkit-caps \
 	coolforkit-ns \
-	coolstress \
 	coolwsd
 if ENABLE_DEBUG
 bin_PROGRAMS += coolwsd-inproc
@@ -270,44 +268,8 @@ noinst_PROGRAMS =
 else
 noinst_PROGRAMS = \
                   clientnb \
-                  coconvert \
-                  connect \
-                  coolbench \
-                  coolmap \
-                  coolsocketdump \
-                  lokitclient
+                  coolbench
 endif
-
-connect_SOURCES = \
-                  $(util_platform_cpp) \
-                  common/DummyTraceEventEmitter.cpp \
-                  common/Log-common.cpp \
-                  common/Log-poco.cpp \
-                  common/ProcUtil.cpp \
-                  common/Protocol.cpp \
-                  common/StringVector.cpp \
-                  common/Util-server.cpp \
-                  common/Util-unix.cpp \
-                  common/Util.cpp \
-                  tools/Connect.cpp
-
-connect_LDADD = libglobals.a $(LDADD)
-
-lokitclient_SOURCES = \
-                      $(util_platform_cpp) \
-                      common/DummyTraceEventEmitter.cpp \
-                      common/Log-common.cpp \
-                      common/Log-poco.cpp \
-                      common/Protocol.cpp \
-                      common/ProcUtil.cpp \
-                      common/StringVector.cpp \
-                      common/TraceEvent.cpp \
-                      common/Util-server.cpp \
-                      common/Util-unix.cpp \
-                      common/Util.cpp \
-                      tools/KitClient.cpp
-
-lokitclient_LDADD = libglobals.a $(LDADD)
 
 noinst_LIBRARIES = libsimd.a libglobals.a libkitglobals.a libwsdglobals.a libkitwsdglobals.a
 
@@ -380,8 +342,6 @@ clientnb_SOURCES = \
 
 clientnb_LDADD = libsimd.a libglobals.a $(LDADD)
 
-coolmap_SOURCES = tools/map.cpp
-
 coolbench_SOURCES = \
                     $(util_platform_cpp) \
                     common/DummyTraceEventEmitter.cpp \
@@ -396,27 +356,6 @@ coolbench_SOURCES = \
                     tools/Benchmark.cpp
 
 coolbench_LDADD = libsimd.a libglobals.a $(LDADD)
-
-coolconvert_SOURCES = tools/Tool.cpp
-
-# coconvert converts documents in-process: it loads the engine libraries
-# through the COKit header instead of talking to a running server.
-coconvert_SOURCES = tools/coconvert.cpp
-
-coolstress_TDOC_CPPFLAGS = -DTDOC=\"$(abs_top_srcdir)/test/data\"
-coolstress_CPPFLAGS = ${coolstress_TDOC_CPPFLAGS} ${include_paths} \
-			$(AM_CPPFLAGS)
-coolstress_SOURCES = tools/Stress.cpp \
-                     common/DummyTraceEventEmitter.cpp \
-                     $(shared_sources)
-
-coolstress_LDADD = libglobals.a $(LDADD)
-
-coolsocketdump_SOURCES = tools/WebSocketDump.cpp \
-			 common/DummyTraceEventEmitter.cpp \
-			 $(shared_sources)
-
-coolsocketdump_LDADD = libglobals.a $(LDADD)
 
 wsd_headers = \
               wsd/Admin.hpp \
@@ -648,11 +587,13 @@ endif
 
 ENGINE_BUILDDIR = @LO_PATH@/..
 
-GBUILD_EXES = coolconfig coolmount
+GBUILD_EXES = coolconfig coolconvert coolmount coolstress
+
+GBUILD_EXES_NOINST = coconvert connect coolmap coolsocketdump lokitclient
 
 build-gbuild: FORCE
 	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.BUILDDIR=$(abs_top_builddir) Module_gbuild
-$(GBUILD_EXES): build-gbuild
+$(GBUILD_EXES) $(GBUILD_EXES_NOINST): build-gbuild
 
 FORCE:
 
@@ -693,7 +634,7 @@ clean-local:
 	if test "z@JAILS_PATH@" != "z"; then rm -rf "@JAILS_PATH@" || echo "WARNING: failed to remove all jails cleanly"; fi
 	if test "z@CACHE_PATH@" != "z"; then rm -rf "@CACHE_PATH@" || echo "WARNING: failed to remove all cache cleanly"; fi
 	rm -rf loolconfig loolconvert loolforkit loolmap loolmount # kill old binaries
-	if test -f config.h && test -f "$(ENGINE_BUILDDIR)/config_host.mk"; then $(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.BUILDDIR=$(abs_top_builddir) Module_gbuild.clean; else rm -f $(GBUILD_EXES); fi
+	if test -f config.h && test -f "$(ENGINE_BUILDDIR)/config_host.mk"; then $(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.BUILDDIR=$(abs_top_builddir) Module_gbuild.clean; else rm -f $(GBUILD_EXES) $(GBUILD_EXES_NOINST); fi
 	rm -f .dir
 	rm -rf loolwsd loolwsd_fuzzer coolwsd_fuzzer loolstress loolsocketdump
 	rm -rf collabora-online-sbom.spdx.json
@@ -896,7 +837,7 @@ endef
 CLANGXX_COMPILE_FLAGS=clang++ $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 
-JSON_COMPILE_FLAGS=$(subst ",\",$(subst \,\\,$(CLANGXX_COMPILE_FLAGS) $(coolstress_TDOC_CPPFLAGS)))
+JSON_COMPILE_FLAGS=$(subst ",\",$(subst \,\\,$(CLANGXX_COMPILE_FLAGS)))
 
 all_compiled_sources = $(sort \
 	$(shared_sources) \
@@ -904,14 +845,7 @@ all_compiled_sources = $(sort \
 	$(coolforkit_sources) \
 	$(coolwsd_SOURCES) \
 	$(coolforkit_caps_SOURCES) \
-	$(connect_SOURCES) \
-	$(lokitclient_SOURCES) \
-	$(coolstress_SOURCES) \
-	$(coolsocketdump_SOURCES) \
 	$(coolbench_SOURCES) \
-	$(coolconvert_SOURCES) \
-	$(coconvert_SOURCES) \
-	$(coolmap_SOURCES) \
 	$(clientnb_SOURCES) \
 	$(libsimd_a_SOURCES) \
 	$(libglobals_a_SOURCES) \
