@@ -4681,6 +4681,11 @@ void runKitLoopInAThread()
                     ProcUtil::setThreadName("lokit_runloop");
 
                     std::shared_ptr<COKit> loKit(lo_kit);
+
+                    // One process-shared clipboard for every open document; the provider does
+                    // the raw system-pasteboard input and output.
+                    install_clipboard_provider(*loKit);
+
                     int dummy;
                     loKit->runLoop(pollCallback, wakeCallback, &dummy);
 
