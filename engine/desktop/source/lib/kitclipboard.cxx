@@ -38,6 +38,12 @@ static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard
 
 rtl::Reference<KitClipboard> KitClipboardFactory::getClipboardForCurView()
 {
+    // VCL deinit takes the registry away while shutdown is still asking for a clipboard, to drop
+    // what it holds. Answer with nothing, which creating the service turns into the
+    // DeploymentException that such a caller already expects from a UNO on its way out.
+    if (!getClipboards().get())
+        return {};
+
     {
         osl::MutexGuard aGuard(gMutex);
         if (gHasGlobalProvider)
@@ -553,10 +559,10 @@ desktop_KitClipboard_get_implementation(css::uno::XComponentContext*,
 {
     SolarMutexGuard aGuard;
 
-    cppu::OWeakObject* pClipboard = KitClipboardFactory::getClipboardForCurView().get();
-
-    pClipboard->acquire();
-    return pClipboard;
+    rtl::Reference<KitClipboard> xClipboard = KitClipboardFactory::getClipboardForCurView();
+    if (xClipboard.is())
+        xClipboard->acquire();
+    return static_cast<cppu::OWeakObject*>(xClipboard.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
