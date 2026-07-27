@@ -111,24 +111,6 @@ namespace canvas
         mxDevice.clear();
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > ParametricPolyPolygon::getOutline( double /*t*/ )
-    {
-        // TODO(F1): outline NYI
-        return uno::Reference< rendering::XPolyPolygon2D >();
-    }
-
-    cpo::uno::Sequence< double > ParametricPolyPolygon::getColor( double /*t*/ )
-    {
-        // TODO(F1): color NYI
-        return cpo::uno::Sequence< double >();
-    }
-
-    cpo::uno::Sequence< double > ParametricPolyPolygon::getPointColor( const geometry::RealPoint2D& /*point*/ )
-    {
-        // TODO(F1): point color NYI
-        return cpo::uno::Sequence< double >();
-    }
-
     OUString ParametricPolyPolygon::getImplementationName(  )
     {
         return u"Canvas::ParametricPolyPolygon"_ustr;

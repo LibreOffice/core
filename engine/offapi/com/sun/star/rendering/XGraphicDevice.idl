@@ -53,15 +53,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
     XLinePolyPolygon2D              createCompatibleLinePolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points );
 
 
-    /** Create a Bezier poly-polygon which can internally use
-        device-optimized representations already.
-
-        @param points
-        The points of the poly-polygon, in a separate array for every polygon.
-     */
-    XBezierPolyPolygon2D            createCompatibleBezierPolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealBezierSegment2D > > points );
-
-
     /** Create a bitmap with alpha channel whose memory layout and
         sample model is compatible to the graphic device.
 

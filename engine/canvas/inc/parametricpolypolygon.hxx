@@ -95,11 +95,6 @@ namespace canvas
         /// Dispose all internal references
         virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-        // XParametricPolyPolygon2D
-        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > getOutline( double t ) override;
-        virtual cpo::uno::Sequence< double > getColor( double t ) override;
-        virtual cpo::uno::Sequence< double > getPointColor( const css::geometry::RealPoint2D& point ) override;
-
         // XServiceInfo
         virtual OUString getImplementationName(  ) override;
         virtual bool supportsService( const OUString& ServiceName ) override;

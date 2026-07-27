@@ -21,6 +21,7 @@
 
 #include <basegfx/utils/canvastools.hxx>
 #include <canvas/canvastools.hxx>
+#include <rtl/ref.hxx>
 #include <tools/stream.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
@@ -45,30 +46,12 @@ namespace vclcanvas
         const uno::Reference< rendering::XGraphicDevice >&              ,
         const cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > >&  points )
     {
-        uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
         if( !mpOutDev )
-            return xPoly; // we're disposed
+            return {}; // we're disposed
 
-        xPoly.set( new ::canvastools::UnoPolyPolygon(
-                       ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points ) ) );
         // vcl only handles even_odd polygons
-        xPoly->setFillRule(rendering::FillRule_EVEN_ODD);
-
-        return xPoly;
-    }
-
-    uno::Reference< rendering::XBezierPolyPolygon2D > DeviceHelper::createCompatibleBezierPolyPolygon(
-        const uno::Reference< rendering::XGraphicDevice >&                      ,
-        const cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > >&  points )
-    {
-        uno::Reference< rendering::XBezierPolyPolygon2D > xPoly;
-        if( !mpOutDev )
-            return xPoly; // we're disposed
-
-        xPoly.set( new ::canvastools::UnoPolyPolygon(
-                       ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence( points ) ) );
-        // vcl only handles even_odd polygons
-        xPoly->setFillRule(rendering::FillRule_EVEN_ODD);
+        rtl::Reference<canvastools::UnoPolyPolygon> xPoly( new ::canvastools::UnoPolyPolygon(
+                       ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points ), rendering::FillRule_EVEN_ODD ) );
 
         return xPoly;
     }

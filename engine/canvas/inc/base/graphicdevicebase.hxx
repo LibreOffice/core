@@ -147,13 +147,6 @@ namespace canvas
             return maDeviceHelper.createCompatibleLinePolyPolygon( this, points );
         }
 
-        virtual css::uno::Reference< css::rendering::XBezierPolyPolygon2D > createCompatibleBezierPolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealBezierSegment2D > >& points ) override
-        {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maDeviceHelper.createCompatibleBezierPolyPolygon( this, points );
-        }
-
         virtual css::uno::Reference< css::rendering::XBitmap > createCompatibleAlphaBitmap( const css::geometry::IntegerSize2D& size ) override
         {
             canvastools::verifyBitmapSize(size,

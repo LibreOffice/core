@@ -51,45 +51,6 @@ interface XLinePolyPolygon2D : XPolyPolygon2D
     sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > getPoints( [in] long nPolygonIndex, [in] long nNumberOfPolygons, [in] long nPointIndex, [in] long nNumberOfPoints )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
 
-
-    /** Set the specified sequence of points to the poly-polygon.
-
-        This method can either set the whole poly-polygon to the new
-        data, or insert the points at the given index
-
-        @param points the points.
-
-        @param nPolygonIndex
-        The index of the polygon to start point insertion with. This
-        index must be in the range [0,numPolygons], and the insertion
-        will take place <em>before</em> this position (i.e. when
-        specifying 0 here, the given point sequence will precede all
-        existing polygons already within the poly-polygon). To append
-        to a poly-polygon, call setPoints() with
-        XLinePolyPolygon2D::getNumberOfPolygons()
-        as the polygon index. If nPolygonIndex is -1, the given
-        sequence of points <em>replaces</em> the poly-polygon content,
-        such that after this method completes, it contains exactly the
-        specified point data.
-
-        @throws com::sun::star::lang::IndexOutOfBoundsException
-        if one of the given values exceed the permissible range.
-     */
-    void setPoints( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points, [in] long nPolygonIndex )
-        raises (com::sun::star::lang::IndexOutOfBoundsException);
-
-
-    /** Get a single point from the poly-polygon
-     */
-    ::com::sun::star::geometry::RealPoint2D getPoint( [in] long nPolygonIndex, [in] long nPointIndex )
-        raises (com::sun::star::lang::IndexOutOfBoundsException);
-
-
-    /** Set a single point on the poly-polygon. The remaining points of
-        the poly-polygon will not be changed by this method.
-     */
-    void setPoint( [in] ::com::sun::star::geometry::RealPoint2D point, [in] long nPolygonIndex, [in] long nPointIndex )
-        raises (com::sun::star::lang::IndexOutOfBoundsException);
 };
 
 }; }; }; };

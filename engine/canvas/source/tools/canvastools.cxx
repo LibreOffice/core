@@ -374,59 +374,31 @@ namespace canvastools
         uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
                                                                                     const ::basegfx::B2DPolyPolygon&                    rPolyPoly    )
         {
-            uno::Reference< rendering::XPolyPolygon2D > xRes;
-
             if( !xGraphicDevice.is() )
-                return xRes;
+                return {};
 
-            const sal_uInt32 nNumPolies( rPolyPoly.count() );
-            sal_uInt32 i;
+            // vcl only handles even_odd polygons
+            rtl::Reference<canvastools::UnoPolyPolygon> xRes = new ::canvastools::UnoPolyPolygon( rPolyPoly, rendering::FillRule_EVEN_ODD );
 
             if( rPolyPoly.areControlPointsUsed() )
-            {
-                xRes = xGraphicDevice->createCompatibleBezierPolyPolygon(
-                              basegfx::unotools::bezierSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) );
-            }
+                return static_cast<rendering::XBezierPolyPolygon2D*>(xRes.get());
             else
-            {
-                xRes = xGraphicDevice->createCompatibleLinePolyPolygon(
-                              basegfx::unotools::pointSequenceSequenceFromB2DPolyPolygon( rPolyPoly ) );
-            }
-
-            for( i=0; i<nNumPolies; ++i )
-            {
-                xRes->setClosed( i, rPolyPoly.getB2DPolygon(i).isClosed() );
-            }
-
-            return xRes;
+                return static_cast<rendering::XLinePolyPolygon2D*>(xRes.get());
         }
 
         uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
                                                                                 const ::basegfx::B2DPolygon&                        rPoly    )
         {
-            uno::Reference< rendering::XPolyPolygon2D > xRes;
-
             if( !xGraphicDevice.is() )
-                return xRes;
+                return {};
+
+            // vcl only handles even_odd polygons
+            rtl::Reference<canvastools::UnoPolyPolygon> xRes = new ::canvastools::UnoPolyPolygon(basegfx::B2DPolyPolygon(rPoly), rendering::FillRule_EVEN_ODD);
 
             if( rPoly.areControlPointsUsed() )
-            {
-                cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > > outputSequence{ basegfx::unotools::bezierSequenceFromB2DPolygon( rPoly )};
-
-                xRes = xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence );
-            }
+                return static_cast<rendering::XBezierPolyPolygon2D*>(xRes.get());
             else
-            {
-                cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > > outputSequence{
-                 basegfx::unotools::pointSequenceFromB2DPolygon( rPoly )};
-
-                xRes = xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence );
-            }
-
-            if( xRes.is() && rPoly.isClosed() )
-                xRes->setClosed( 0, true );
-
-            return xRes;
+                return static_cast<rendering::XLinePolyPolygon2D*>(xRes.get());
         }
 
         /// Convert [0,1] double value to [0,255] int

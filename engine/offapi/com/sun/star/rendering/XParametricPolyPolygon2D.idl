@@ -28,42 +28,6 @@ module com { module sun { module star { module rendering {
  */
 interface XParametricPolyPolygon2D : ::com::sun::star::uno::XInterface
 {
-    /** Query the polygonal outline at the specified value.
-
-        The returned outline should be clipped to the [0,1]x[0,1]
-        rectangle.
-
-        @param t
-        Parameter value in the range [0,1]. During painting, this
-        range is swept through starting from 0. When using such a
-        parametric poly-polygon for gradients, the area covered by the
-        returned XPolyPolygon2D should be monotonically decreasing
-        with t (unless singularities in e.g. the resulting gradient
-        are desired).
-     */
-    XPolyPolygon2D              getOutline( [in] double t )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
-
-    /** Query the color value for the polygonal area at the specified
-        parameter value.
-
-        @param t
-        Parameter value in the range [0,1]. During painting, this
-        range is swept through starting from 0.
-     */
-    sequence<ColorComponent>    getColor( [in] double t )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
-
-    /** Query the color for a dedicated point in the plane.
-
-        @param point
-        The permissible parameter range for point is [0,1]x[0,1]
-     */
-    sequence<ColorComponent>    getPointColor( [in] ::com::sun::star::geometry::RealPoint2D point )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
 };
 
 }; }; }; };

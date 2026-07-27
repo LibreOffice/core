@@ -25,7 +25,7 @@
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/basegfxdllapi.h>
+#include <canvas/canvastoolsdllapi.h>
 #include <o3tl/safeint.hxx>
 
 namespace com::sun::star::rendering { enum class FillRule; }
@@ -42,27 +42,17 @@ namespace canvastools
     {
     public:
         explicit UnoPolyPolygon( basegfx::B2DPolyPolygon );
+        UnoPolyPolygon( basegfx::B2DPolyPolygon, css::rendering::FillRule fillRule);
 
         // XPolyPolygon2D
-        SAL_DLLPRIVATE virtual void addPolyPolygon( const css::geometry::RealPoint2D& position, const css::uno::Reference< css::rendering::XPolyPolygon2D >& polyPolygon ) override final;
         SAL_DLLPRIVATE virtual ::sal_Int32 getNumberOfPolygons(  ) override final;
-        SAL_DLLPRIVATE virtual ::sal_Int32 getNumberOfPolygonPoints( ::sal_Int32 polygon ) override final;
         SAL_DLLPRIVATE virtual css::rendering::FillRule getFillRule(  ) override final;
-        SAL_DLLPRIVATE virtual void setFillRule( css::rendering::FillRule fillRule ) override final;
-        SAL_DLLPRIVATE virtual bool isClosed( ::sal_Int32 index ) override final;
-        SAL_DLLPRIVATE virtual void setClosed( ::sal_Int32 index, bool closedState ) override final;
 
         // XLinePolyPolygon2D
         SAL_DLLPRIVATE virtual cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > > getPoints( ::sal_Int32 nPolygonIndex, ::sal_Int32 nNumberOfPolygons, ::sal_Int32 nPointIndex, ::sal_Int32 nNumberOfPoints ) override final;
-        SAL_DLLPRIVATE virtual void setPoints( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points, ::sal_Int32 nPolygonIndex ) override final;
-        SAL_DLLPRIVATE virtual css::geometry::RealPoint2D getPoint( ::sal_Int32 nPolygonIndex, ::sal_Int32 nPointIndex ) override final;
-        SAL_DLLPRIVATE virtual void setPoint( const css::geometry::RealPoint2D& point, ::sal_Int32 nPolygonIndex, ::sal_Int32 nPointIndex ) override final;
 
         // XBezierPolyPolygon2D
         SAL_DLLPRIVATE virtual cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealBezierSegment2D > > getBezierSegments( ::sal_Int32 nPolygonIndex, ::sal_Int32 nNumberOfPolygons, ::sal_Int32 nPointIndex, ::sal_Int32 nNumberOfPoints ) override final;
-        SAL_DLLPRIVATE virtual void setBezierSegments( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealBezierSegment2D > >& points, ::sal_Int32 nPolygonIndex ) override final;
-        SAL_DLLPRIVATE virtual css::geometry::RealBezierSegment2D getBezierSegment( ::sal_Int32 nPolygonIndex, ::sal_Int32 nPointIndex ) override final;
-        SAL_DLLPRIVATE virtual void setBezierSegment( const css::geometry::RealBezierSegment2D& point, ::sal_Int32 nPolygonIndex, ::sal_Int32 nPointIndex ) override final;
 
         // XServiceInfo
         SAL_DLLPRIVATE virtual OUString getImplementationName() override final;
@@ -89,9 +79,6 @@ namespace canvastools
         {
             return maPolyPoly;
         }
-
-        /// Called whenever internal polypolygon gets modified
-        virtual void modifying() const {}
 
     private:
         UnoPolyPolygon(const UnoPolyPolygon&) = delete;
