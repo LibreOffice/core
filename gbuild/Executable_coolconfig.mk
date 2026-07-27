@@ -32,7 +32,9 @@ $(eval $(call gb_Executable_use_static_libraries,coolconfig, \
     PocoNetSSL \
     PocoUtil \
     PocoXML \
+    dummytraceevent \
     globals \
+    shared \
 ))
 
 $(eval $(call gb_Executable_use_externals,coolconfig, \
@@ -44,16 +46,7 @@ $(eval $(call gb_Executable_use_externals,coolconfig, \
 $(eval $(call gb_Executable_add_libs,coolconfig,$(UNIX_DLAPI_LIBS)))
 
 $(eval $(call gb_Executable_add_generated_exception_objects,coolconfig, \
-    common/ConfigUtil \
     common/Crypto \
-    common/DummyTraceEventEmitter \
-    common/Log-common \
-    common/Log-poco \
-    common/ProcUtil \
-    common/StringVector \
-    common/Util \
-    common/Util-server \
-    common/Util-unix \
     tools/Config \
     tools/ConfigMigrationAssistant \
 ))
