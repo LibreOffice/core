@@ -37,6 +37,15 @@ static OUString getTempDirectoryURL_()
     // This resolves symlinks in the temp path if any
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
                          osl::FileBase::getAbsoluteFileURL(aDir, aDir, aDir));
+    // A Windows path can be spelled with the short 8.3 aliases the filesystem may keep for names
+    // that its old limits could not hold. A file status reports the full spelling, so take the full
+    // spelling of this directory too: the tests build their names on top of it and compare them
+    // with what a file status gives back.
+    osl::DirectoryItem aItem;
+    osl::FileStatus aStatus(osl_FileStatus_Mask_FileURL);
+    if (osl::DirectoryItem::get(aDir, aItem) == osl::FileBase::E_None
+        && aItem.getFileStatus(aStatus) == osl::FileBase::E_None)
+        aDir = aStatus.getFileURL();
     return aDir;
 }
 
