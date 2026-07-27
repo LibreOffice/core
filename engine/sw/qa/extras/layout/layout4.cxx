@@ -1160,6 +1160,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testPageBreakInHiddenSection)
     assertXPath(pXmlDoc, "//page[4]/body/section/infos/bounds", "height", u"0");
 }
 
+// The chart object's own drawing, inside the page's metafile.
+constexpr OString aChart = "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]"_ostr;
+
+// One of the chart's text runs, counted among the runs themselves rather than among the groups
+// they sit in. A run is put in a group of its own only when it needs a map mode of its own, and
+// that depends on the font size, on the platform's font metrics, and on whether the drawing goes
+// through the Kit, so the groups do not give a run a stable address.
+OString getChartTextXPath(std::string_view aPosition)
+{
+    return "(" + aChart + "//textarray)[" + aPosition + "]/text";
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159443)
 {
     // Given a document with chart, which have a datatable
@@ -1171,22 +1183,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159443)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
+    // The data table writes its cells before anything else in the chart, so its first three text
+    // runs are the column header and the first row's header and value.
     //// Without the fix, this would fail:
     //// - Expected: DataSeries1
     //// - Actual  : 1.25
     //// - In <>, XPath contents of child does not match
-    assertXPathContent(
-        pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push[47]/textarray/text",
-        u"DataSeries1");
-    assertXPathContent(
-        pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push[49]/textarray/text",
-        u"Category1");
-    assertXPathContent(
-        pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push[51]/textarray/text",
-        u"4.3");
+    assertXPathContent(pXmlDoc, getChartTextXPath("1"), u"DataSeries1");
+    assertXPathContent(pXmlDoc, getChartTextXPath("2"), u"Category1");
+    assertXPathContent(pXmlDoc, getChartTextXPath("3"), u"4.3");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159422)
@@ -1200,28 +1205,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159422)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
+    // Each data table row is keyed by a symbol filled in its series' color. The bars carry the
+    // same colors, but a bar is clipped to the plot area, so its color sits one level deeper.
+    auto getSymbolY = [this, &pXmlDoc](const char* pColor) {
+        return getXPath(pXmlDoc,
+                        OString::Concat(aChart) + "/push[fillcolor/@color='" + pColor
+                            + "']/polypolygon/polygon/point[1]",
+                        "y")
+            .toInt32();
+    };
     //// Without the fix, this would fail:
     //// - Expected: 5877
     //// - Actual  : 5649
     //// - Delta   : 20
-    sal_Int32 nYSymbol1 = getXPath(pXmlDoc,
-                                   "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
-                                   "push[1]/push[99]/polypolygon/polygon/point[1]",
-                                   "y")
-                              .toInt32();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(5877, nYSymbol1, 20);
-    sal_Int32 nYSymbol2 = getXPath(pXmlDoc,
-                                   "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
-                                   "push[1]/push[100]/polypolygon/polygon/point[1]",
-                                   "y")
-                              .toInt32();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(6225, nYSymbol2, 20);
-    sal_Int32 nYSymbol3 = getXPath(pXmlDoc,
-                                   "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
-                                   "push[1]/push[101]/polypolygon/polygon/point[1]",
-                                   "y")
-                              .toInt32();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(6573, nYSymbol3, 20);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5877, getSymbolY("#004586"), 20);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6225, getSymbolY("#ff420e"), 20);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6573, getSymbolY("#ffd320"), 20);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159456)
@@ -1234,18 +1233,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159456)
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    // The y axis labels are the last text runs the chart writes, and this axis runs 0 to 6.
     //// Without the fix, this would fail:
     //// - Expected: 1
     //// - Actual  : 1.5
     //// - In <>, XPath contents of child does not match
-    assertXPathContent(pXmlDoc,
-                       "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/"
-                       "push[103]/textarray/text",
-                       u"1");
-    assertXPathContent(pXmlDoc,
-                       "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/"
-                       "push[104]/textarray/text",
-                       u"2");
+    assertXPathContent(pXmlDoc, getChartTextXPath("last()-5"), u"1");
+    assertXPathContent(pXmlDoc, getChartTextXPath("last()-4"), u"2");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, test_i84870)
