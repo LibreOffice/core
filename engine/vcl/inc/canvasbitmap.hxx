@@ -32,21 +32,6 @@ namespace vcl::unotools
     {
     private:
         ::Bitmap                                       m_aBmp;
-        BitmapScopedInfoAccess                         m_pBmpAcc;
-        std::optional<BitmapScopedReadAccess>          m_pBmpReadAcc;
-        cpo::uno::Sequence<sal_Int8>                   m_aComponentTags;
-        cpo::uno::Sequence<sal_Int32>                  m_aComponentBitCounts;
-        sal_Int32                                      m_nBitsPerInputPixel;
-        sal_Int32                                      m_nBitsPerOutputPixel;
-        sal_Int32                                      m_nRedIndex;
-        sal_Int32                                      m_nGreenIndex;
-        sal_Int32                                      m_nBlueIndex;
-        sal_Int32                                      m_nAlphaIndex;
-        sal_Int32                                      m_nIndexIndex;
-        bool                                           m_bPalette;
-
-        void setComponentInfo( sal_uInt32 redShift, sal_uInt32 greenShift, sal_uInt32 blueShift );
-        BitmapScopedReadAccess& getBitmapReadAccess();
 
         virtual ~VclCanvasBitmap() override;
 
