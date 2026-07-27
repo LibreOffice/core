@@ -29,7 +29,6 @@
 #import "ProcUtil.hpp"
 #import "SigUtil.hpp"
 #import "Util.hpp"
-#import "Clipboard.hpp"
 #import "CoolURLSchemeHandler.h"
 
 #define LIBO_INTERNAL_ONLY
@@ -37,10 +36,7 @@
 
 #import "DocumentViewController.h"
 
-#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
-#import <Poco/MemoryStream.h>
-
-@interface DocumentViewController() <WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, WKScriptMessageHandlerWithReply, UIScrollViewDelegate, UIDocumentPickerDelegate, UIFontPickerViewControllerDelegate> {
+@interface DocumentViewController() <WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, UIScrollViewDelegate, UIDocumentPickerDelegate, UIFontPickerViewControllerDelegate> {
     int closeNotificationPipeForForwardingThread[2];
     NSURL *downloadAsTmpURL;
 }
@@ -96,7 +92,6 @@ static IMP standardImpOfInputAccessoryView = nil;
     [userContentController addScriptMessageHandler:self name:@"debug"];
     [userContentController addScriptMessageHandler:self name:@"lok"];
     [userContentController addScriptMessageHandler:self name:@"error"];
-    [userContentController addScriptMessageHandlerWithReply:self contentWorld:[WKContentWorld pageWorld] name:@"clipboard"];
 
     configuration.userContentController = userContentController;
     
@@ -301,243 +296,6 @@ static IMP standardImpOfInputAccessoryView = nil;
     // Fix issue #5876 by closing the document if the content process dies
     [self bye];
     LOG_ERR("WebContent process terminated! Is closing the document enough?");
-}
-
-// Tracks the system pasteboard state right after our own copy to decide
-// whether to use engine's full-fidelity clipboard or system pasteboard.
-// This mirrors the macOS app (COWrapper.mm).
-static NSInteger sOwnedPasteboardChangeCount = -1;
-static unsigned sOwnedClipboardDocId = 0;
-
-// This is the same method as Java_org_libreoffice_androidlib_LOActivity_getClipboardContent, with minimal editing to work with objective C
-- (bool)getClipboardContent:(out NSMutableDictionary *)content {
-    const char** mimeTypes = nullptr;
-    std::vector<std::string> outMimeTypes;
-    std::vector<std::vector<char>> outStreams;
-    bool bResult = false;
-
-    if (DocumentData::get(self.document->appDocId).loKitDocument->getClipboard(mimeTypes,
-                                                     outMimeTypes,
-                                                     outStreams))
-    {
-        // return early
-        if (outMimeTypes.size() == 0)
-            return bResult;
-
-        for (size_t i = 0; i < outMimeTypes.size(); ++i)
-        {
-            NSString * identifier = [NSString stringWithUTF8String:outMimeTypes[i].c_str()];
-
-            // For interop with other apps, if this mime-type is known we can export it
-            UTType * uti = [UTType typeWithMIMEType:identifier];
-            if (uti != nil && !uti.dynamic) {
-                if ([uti conformsToType:UTTypePlainText]) {
-                    [content setValue:outStreams[i].size() == 0
-                                       ? @""
-                                       : [[NSString alloc] initWithBytes:outStreams[i].data()
-                                                           length:outStreams[i].size()
-                                                           encoding:NSUTF8StringEncoding]
-                             forKey:uti.identifier];
-                } else if (uti != nil && [uti conformsToType:UTTypeImage]) {
-                    [content setValue:[UIImage imageWithData:[NSData dataWithBytes:outStreams[i].data() length:outStreams[i].size()]] forKey:uti.identifier];
-                } else {
-                    [content setValue:[NSData dataWithBytes:outStreams[i].data() length:outStreams[i].size()] forKey:uti.identifier];
-                }
-            }
-            
-            // But to preserve the data we need, we'll always also export the raw, unaltered bytes
-            [content setValue:[NSData dataWithBytes:outStreams[i].data() length:outStreams[i].size()] forKey:identifier];
-        }
-        bResult = true;
-    }
-    else
-        LOG_DBG("failed to fetch mime-types");
-
-    const char* mimeTypesHTML[] = { "text/plain;charset=utf-8", "text/html", nullptr };
-
-    if (DocumentData::get(self.document->appDocId).loKitDocument->getClipboard(mimeTypesHTML,
-                                                     outMimeTypes,
-                                                     outStreams))
-    {
-        // return early
-        if (outMimeTypes.size() == 0)
-            return bResult;
-
-        for (size_t i = 0; i < outMimeTypes.size(); ++i)
-        {
-            NSString * identifier = [NSString stringWithUTF8String:outMimeTypes[i].c_str()];
-
-            // For interop with other apps, if this mime-type is known we can export it
-            UTType * uti = [UTType typeWithMIMEType:identifier];
-            if (uti != nil && !uti.dynamic) {
-                if ([uti conformsToType:UTTypePlainText]) {
-                    [content setValue:outStreams[i].size() == 0
-                                      ? @""
-                                      : [[NSString alloc] initWithBytes:outStreams[i].data()
-                                                           length:outStreams[i].size()
-                                                           encoding:NSUTF8StringEncoding]
-                             forKey:uti.identifier];
-                } else if (uti != nil && [uti conformsToType:UTTypeImage]) {
-                    [content setValue:[UIImage imageWithData:[NSData dataWithBytes:outStreams[i].data() length:outStreams[i].size()]] forKey:uti.identifier];
-                } else {
-                    [content setValue:[NSData dataWithBytes:outStreams[i].data() length:outStreams[i].size()] forKey:uti.identifier];
-                }
-            }
-            
-            // But to preserve the data we need, we'll always also export the raw, unaltered bytes
-            [content setValue:[NSData dataWithBytes:outStreams[i].data() length:outStreams[i].size()] forKey:identifier];
-        }
-        bResult = true;
-    }
-    else
-        LOG_DBG("failed to fetch mime-types");
-
-    return bResult;
-}
-
-- (void)setClipboardContent:(UIPasteboard *)pasteboard {
-    NSMutableDictionary * pasteboardItems = [NSMutableDictionary new];
-    
-    if (pasteboard.numberOfItems != 0) {
-        for (NSString * identifier in pasteboard.items[0])
-        {
-            UTType * uti = [UTType typeWithIdentifier:identifier];
-            NSString * mime = identifier;
-            
-            if (uti != nil) {
-                mime = uti.preferredMIMEType;
-            }
-            
-            if (mime == nil) {
-                LOG_WRN("UTI " << [identifier UTF8String] << " did not have associated mime type when deserializing clipboard, skipping...");
-                continue;
-            }
-            
-            NSData * value = [pasteboard dataForPasteboardType:identifier];
-            
-            if (uti != nil && [pasteboardItems objectForKey:mime] != nil) {
-                // We export both mime and UTI keys, don't overwrite the mime-type ones with the UTI ones
-                continue;
-            }
-            
-            if (value != nil) {
-                [pasteboardItems setObject:value forKey:mime];
-            }
-        }
-    }
-    
-    const char * pInMimeTypes[pasteboardItems.count];
-    size_t pInSizes[pasteboardItems.count];
-    const char * pInStreams[pasteboardItems.count];
-    
-    size_t i = 0;
-    
-    for (NSString * mime in pasteboardItems) {
-        pInMimeTypes[i] = [mime UTF8String];
-        pInStreams[i] = (const char*)[pasteboardItems[mime] bytes];
-        pInSizes[i] = [pasteboardItems[mime] length];
-        i++;
-    }
-    
-    DocumentData::get(self.document->appDocId).loKitDocument->setClipboard(pasteboardItems.count, pInMimeTypes, pInSizes, pInStreams);
-}
-
-/**
- * Remember the pasteboard state right after we wrote it ourselves.
- */
-- (void)noteClipboardWritten {
-    sOwnedPasteboardChangeCount = [UIPasteboard generalPasteboard].changeCount;
-    sOwnedClipboardDocId = self.document->appDocId;
-}
-
-/**
- * Whether the pasteboard still holds the copy this document last wrote.
- * If so, use the engine's own clipboard rather than system pasteboard.
- */
-- (BOOL)pasteboardOwnedByUs {
-    return sOwnedPasteboardChangeCount >= 0
-    && self.document->appDocId == sOwnedClipboardDocId
-    && [UIPasteboard generalPasteboard].changeCount == sOwnedPasteboardChangeCount;
-}
-
-- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message replyHandler:(nonnull void (^)(id _Nullable, NSString * _Nullable))replyHandler {
-
-    if ([message.name isEqualToString:@"clipboard"]) {
-        if ([message.body isEqualToString:@"read"]) {
-            UIPasteboard * pasteboard = [UIPasteboard generalPasteboard];
-
-            // Only use the system's pasteboard if the last copy is not generated by us.
-            if (![self pasteboardOwnedByUs])
-                [self setClipboardContent:pasteboard];
-
-            replyHandler(@"(internal)", nil);
-        } else if ([message.body isEqualToString:@"write"]) {
-            NSMutableDictionary * pasteboardItem = [NSMutableDictionary dictionaryWithCapacity:2];
-            bool success = [self getClipboardContent:pasteboardItem];
-            
-            if (!success) {
-                replyHandler(nil, @"Failed to get clipboard contents...");
-                return;
-            }
-            
-            UIPasteboard * pasteboard = [UIPasteboard generalPasteboard];
-
-            [pasteboard setItems:[NSArray arrayWithObject:pasteboardItem]];
-
-            // Record that this copy is ours, so a subsequent paste in the same
-            // document pastes from the engine's live clipboard.
-            [self noteClipboardWritten];
-
-            replyHandler(nil, nil);
-        } else if ([message.body hasPrefix:@"sendToInternal "]) {
-            ClipboardData data;
-            NSString * content = [message.body substringFromIndex:[@"sendToInternal " length]];
-            std::vector<char> html;
-            
-            size_t nInCount;
-            
-            if ([content hasPrefix:@"<!DOCTYPE html>"]) {
-                // Content is just HTML
-                const char * _Nullable content_cstr = [content cStringUsingEncoding:NSUTF8StringEncoding];
-                html = std::vector(content_cstr, content_cstr + [content lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-                nInCount = 1;
-            } else {
-                Poco::MemoryInputStream stream([content cStringUsingEncoding:NSUTF8StringEncoding], [content lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-                data.read(stream);
-                nInCount = data.size();
-            }
-            
-            std::vector<size_t> pInSizes(nInCount);
-            std::vector<const char*> pInMimeTypes(nInCount);
-            std::vector<const char*> pInStreams(nInCount);
-            
-            if (html.empty()) {
-                for (size_t i = 0; i < nInCount; ++i) {
-                    pInSizes[i] = data._content[i].length();
-                    pInStreams[i] = data._content[i].c_str();
-                    pInMimeTypes[i] = data._mimeTypes[i].c_str();
-                }
-            } else {
-                pInSizes[0] = html.size();
-                pInStreams[0] = html.data();
-                pInMimeTypes[0] = "text/html";
-            }
-            
-            if (!DocumentData::get(self.document->appDocId).loKitDocument->setClipboard(nInCount, pInMimeTypes.data(), pInSizes.data(),
-                                                                                        pInStreams.data())) {
-                LOG_ERR("set clipboard returned failure");
-                replyHandler(nil, @"set clipboard returned failure");
-            } else {
-                LOG_TRC("set clipboard succeeded");
-                replyHandler(nil, nil);
-            }
-        } else {
-            replyHandler(nil, [NSString stringWithFormat:@"Invalid clipboard action %@", message.body]);
-        }
-    } else {
-        LOG_ERR("Unrecognized kind of message received from WebView: " << [message.name UTF8String] << ":" << [message.body UTF8String]);
-        replyHandler(nil, [NSString stringWithFormat:@"Message of type %@ does not exist or is not replyable", message.name]);
-    }
 }
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
