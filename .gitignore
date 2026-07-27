@@ -158,6 +158,7 @@ test/TAGS
 docker/from-source/instdir
 docker/from-source/builddir
 
+ios/Mobile/Config.xcconfig
 ios/Mobile/Info.plist
 ios/Mobile/Fonts
 ios/Mobile/Branding

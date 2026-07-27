@@ -78,6 +78,7 @@ Step back to the top of the `collabora-office` clone (one level up from `engine/
 ./configure \
 --enable-iosapp \
 --with-app-name="My Own Mobile Office Suite" \
+--with-app-package-name=com.yourpackage.name \
 --enable-experimental \
 --with-vendor="MyOwnApp" \
 --with-lo-builddir=$(pwd)/engine
@@ -89,7 +90,7 @@ Then build the JavaScript bits by running make from the top of the monorepo:
 make
 ```
 
-The configure script puts the app name as the `CFBundleDisplayName` property into the `ios/Mobile/Info.plist` file, and sets up some symbolic links that point to the engine source and build directories (which typically will be the same, of course).
+The configure script puts the app name as the `CFBundleDisplayName` property into the `ios/Mobile/Info.plist` file, writes the bundle identifier into `ios/Mobile/Config.xcconfig` for the Xcode project to pick up, and sets up some symbolic links that point to the engine source and build directories (which typically will be the same, of course).
 
 ## Build the app
 
@@ -100,7 +101,8 @@ Before opening the Xcode project for the first time, seriously consider disablin
 Now open the Mobile Xcode project. Xcode is very restrictive and requires some configuration before you can run the app:
 
 * Xcode must be signed into an Apple ID that is a member of the Apple Developer Program.
-* In the project's Signing & Capabilities panel, change the Bundle Identifier to a unique bundle ID. To obtain one, log in to your Apple Developer account at https://developer.apple.com and create a unique bundle ID in the Certificates, Identifiers & Profiles page. Be sure to check the Fonts and iCloud options in the Capabilities section. A sample configuration is shown here: https://collaboraonline.github.io/images/build-code-ios-bundle-ID-config.png
+* The app is built with the bundle identifier that was given to `configure` as `--with-app-package-name`. Without that option it is `com.collabora.office.Mobile`, which only Collabora can sign, so you need a bundle ID of your own. To obtain one, log in to your Apple Developer account at https://developer.apple.com and create a unique bundle ID in the Certificates, Identifiers & Profiles page. Be sure to check the Fonts and iCloud options in the Capabilities section. A sample configuration is shown here: https://collaboraonline.github.io/images/build-code-ios-bundle-ID-config.png Then pass that bundle ID to `configure`. If Xcode was already running when `configure` first created `ios/Mobile/Config.xcconfig`, close and reopen the project, so that Xcode picks the file up and resolves the identifier everywhere, including its run and launch steps.
+* In the project's Signing & Capabilities panel, select your development team.
 
 Then build and run. Note that building for "My Mac (Designed for iPad)" on Mac Silicon will run but is unstable. You can't run in a simulator since the engine for iOS is built for arm64 only, so you can only test on a real iOS device.
 <!-- build-doc-end -->

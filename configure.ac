@@ -286,7 +286,7 @@ AC_ARG_WITH(android-abi,
 
 AC_ARG_WITH(app-package-name,
             AS_HELP_STRING([--with-app-package-name="org.collabora.app"],
-                           [Set the app package name of the build.]),
+                           [Set the app package name of the build (the application id of the Android app, or the bundle identifier of the iOS or macOS app).]),
 ,)
 
 AC_ARG_WITH([app-name],
@@ -1170,7 +1170,12 @@ AM_CONDITIONAL([ENABLE_ANDROIDAPP], [test "$ENABLE_ANDROIDAPP" = "true"])
 APP_PACKAGE_NAME=
 AC_MSG_CHECKING([for app package name])
 if test -z "$with_app_package_name" -o "$with_app_package_name" = "no"; then
-    APP_PACKAGE_NAME="org.collabora.app"
+    if test "$enable_iosapp" = "yes"; then
+        # The bundle identifier of the official Collabora Office iOS app.
+        APP_PACKAGE_NAME="com.collabora.office.Mobile"
+    else
+        APP_PACKAGE_NAME="org.collabora.app"
+    fi
     AC_MSG_RESULT([not set, using $APP_PACKAGE_NAME])
 else
     APP_PACKAGE_NAME="$with_app_package_name"
@@ -2815,6 +2820,7 @@ AC_CONFIG_HEADERS([config_version.h])
 if test "$enable_iosapp" = "yes"; then
     AC_CONFIG_FILES([ios/config.h
                  ios/FakeQuickLook/Info.plist
+                 ios/Mobile/Config.xcconfig
                  ios/Mobile/Info.plist
                  ios/Mobile/Resources/Settings.bundle/Root.plist])
 fi

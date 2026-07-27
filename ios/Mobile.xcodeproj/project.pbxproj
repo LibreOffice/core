@@ -929,6 +929,7 @@
 		BE8D77392136762600AC58EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BE8D773C2136762600AC58EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BE8D773E2136762600AC58EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C7C0F1A02F5B00010000A001 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		BE8D773F2136762600AC58EA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BE8D85BC214055F2009F1860 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = "../../../lobuilddir-symlink/workdir/CustomTarget/ios/resources/offapi.rdb"; sourceTree = "<group>"; };
 		BE8D85BD214055F2009F1860 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = "../../../lobuilddir-symlink/workdir/CustomTarget/ios/resources/share"; sourceTree = "<group>"; };
@@ -2764,6 +2765,7 @@
 				BE8D77362136762500AC58EA /* Main.storyboard */,
 				BE8D77392136762600AC58EA /* Assets.xcassets */,
 				BE8D773B2136762600AC58EA /* LaunchScreen.storyboard */,
+				C7C0F1A02F5B00010000A001 /* Config.xcconfig */,
 				BE8D773E2136762600AC58EA /* Info.plist */,
 				BE8D773F2136762600AC58EA /* main.m */,
 			);
@@ -3958,6 +3960,7 @@
 /* Begin XCBuildConfiguration section */
 		BE8D77412136762600AC58EA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C7C0F1A02F5B00010000A001 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -4019,6 +4022,7 @@
 		};
 		BE8D77422136762600AC58EA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C7C0F1A02F5B00010000A001 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -4132,8 +4136,9 @@
 					"$(SOURCE_ROOT)/../zstdlib-symlink",
 					"-lzstd",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.collabora.office.Mobile;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_PACKAGE_NAME:default=com.collabora.office.Mobile)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "$(MOBILE_PROVISIONING_PROFILE_SPECIFIER)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -4197,8 +4202,9 @@
 					"$(SOURCE_ROOT)/../zstdlib-symlink",
 					"-lzstd",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.collabora.office.Mobile;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_PACKAGE_NAME:default=com.collabora.office.Mobile)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "$(MOBILE_PROVISIONING_PROFILE_SPECIFIER)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -4297,8 +4303,9 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.collabora.office.Mobile.FakeQuickLook;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_PACKAGE_NAME:default=com.collabora.office.Mobile).FakeQuickLook";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "$(FAKEQUICKLOOK_PROVISIONING_PROFILE_SPECIFIER)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -4336,8 +4343,9 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.collabora.office.Mobile.FakeQuickLook;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_PACKAGE_NAME:default=com.collabora.office.Mobile).FakeQuickLook";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "$(FAKEQUICKLOOK_PROVISIONING_PROFILE_SPECIFIER)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;

@@ -258,7 +258,7 @@
 	</array>
 	<key>NSUbiquitousContainers</key>
 	<dict>
-		<key>iCloud.com.collabora.office.Mobile</key>
+		<key>iCloud.@APP_PACKAGE_NAME@</key>
 		<dict>
 			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
 			<true/>
