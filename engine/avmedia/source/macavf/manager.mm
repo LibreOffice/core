@@ -60,7 +60,7 @@ bool Manager::supportsService( const OUString& ServiceName )
 }
 
 
-uno::Sequence< OUString > Manager::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > Manager::getSupportedServiceNames(  )
 {
     return { "com.sun.star.media.Manager_MacAVF" };
 }

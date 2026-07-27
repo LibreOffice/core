@@ -193,13 +193,13 @@ using namespace ::com::sun::star::uno;
     }
 }
 
-+(void)applyAttributesFrom:(Sequence < PropertyValue > const &)attributes toString:(NSMutableAttributedString *)string forRange:(NSRange)range fontDescriptor:(AquaA11yFontDescriptor*)fontDescriptor {
++(void)applyAttributesFrom:(cpo::uno::Sequence< css::beans::PropertyValue > const &)attributes toString:(NSMutableAttributedString *)string forRange:(NSRange)range fontDescriptor:(AquaA11yFontDescriptor*)fontDescriptor {
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     // vars
     sal_Int32 underlineColor = 0;
     bool underlineHasColor = false;
     // add attributes to string
-    for ( const PropertyValue& property : attributes ) {
+    for ( const css::beans::PropertyValue& property : attributes ) {
         // TODO: NSAccessibilityAttachmentTextAttribute, NSAccessibilityLinkTextAttribute
         // NSAccessibilityStrikethroughColorTextAttribute is unsupported by UNP-API
         if ( property.Value.hasValue() ) {
@@ -309,7 +309,7 @@ using namespace ::com::sun::star::uno;
 // only when compiler optimization is enabled, so disable optimization for the
 // +[AquaA11yTextAttributesWrapper createAttributedStringForElement] selector.
 +(NSMutableAttributedString *)createAttributedStringForElement:(AquaA11yWrapper *)wrapper inOrigRange:(id)origRange __attribute__((optnone)) {
-    static const Sequence < OUString > emptySequence;
+    static const cpo::uno::Sequence< OUString > emptySequence;
     // vars
     NSMutableAttributedString * string = nil;
     int loc = [ origRange rangeValue ].location;
@@ -326,7 +326,7 @@ using namespace ::com::sun::star::uno;
         if ( [ wrapper accessibleTextAttributes ] && [myString characterAtIndex:0] != 57361) { // TODO: dirty fix for i87817
             [ string beginEditing ];
             // add default attributes for whole string
-            Sequence < PropertyValue > defaultAttributes = [ wrapper accessibleTextAttributes ] -> getDefaultAttributes ( emptySequence );
+            cpo::uno::Sequence< css::beans::PropertyValue > defaultAttributes = [ wrapper accessibleTextAttributes ] -> getDefaultAttributes ( emptySequence );
             AquaA11yFontDescriptor *defaultFontDescriptor = [[AquaA11yFontDescriptor alloc] init];
             [ AquaA11yTextAttributesWrapper applyAttributesFrom: defaultAttributes toString: string forRange: NSMakeRange ( 0, len ) fontDescriptor: defaultFontDescriptor ];
             // add attributes for attribute run(s)
@@ -335,7 +335,7 @@ using namespace ::com::sun::star::uno;
                 int endOfRange = endIndex > textSegment.SegmentEnd ? textSegment.SegmentEnd : endIndex;
                 NSRange rangeForAttributeRun = NSMakeRange ( currentIndex - loc , endOfRange - currentIndex );
                 // add run attributes
-                Sequence < PropertyValue > attributes = [ wrapper accessibleTextAttributes ] -> getRunAttributes ( currentIndex, emptySequence );
+                cpo::uno::Sequence< css::beans::PropertyValue > attributes = [ wrapper accessibleTextAttributes ] -> getRunAttributes ( currentIndex, emptySequence );
                 AquaA11yFontDescriptor *fontDescriptor = [[AquaA11yFontDescriptor alloc] initWithDescriptor:defaultFontDescriptor];
                 [ AquaA11yTextAttributesWrapper applyAttributesFrom: attributes toString: string forRange: rangeForAttributeRun fontDescriptor: fontDescriptor ];
                 [fontDescriptor release];

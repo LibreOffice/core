@@ -311,7 +311,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 
-uno::Reference< ::media::XPlayerWindow > Player::createPlayerWindow( const uno::Sequence< cpo::uno::Any >& aArguments )
+uno::Reference< ::media::XPlayerWindow > Player::createPlayerWindow( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     // get the preferred window size
     const awt::Size aSize( getPreferredPlayerWindowSize() );
@@ -353,7 +353,7 @@ bool Player::supportsService( const OUString& ServiceName )
 }
 
 
-uno::Sequence< OUString > Player::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > Player::getSupportedServiceNames(  )
 {
     return { AVMEDIA_MACAVF_PLAYER_SERVICENAME };
 }

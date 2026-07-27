@@ -732,7 +732,7 @@ static void addBool( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
 
 static void addRadio( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat nAttachOffset,
                      const OUString& rText,
-                     const OUString& rProperty, Sequence<OUString> const & rChoices, sal_Int32 nSelectValue,
+                     const OUString& rProperty, cpo::uno::Sequence<OUString> const & rChoices, sal_Int32 nSelectValue,
                      std::vector<ColumnItem >& rLeftColumn,
                      std::vector<ColumnItem >& rRightColumn,
                      ControllerProperties* pControllerProperties,
@@ -808,7 +808,7 @@ static void addRadio( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat
 
 static void addList( NSView* pCurParent, CGFloat& rCurX, CGFloat& rCurY, CGFloat /*nAttachOffset*/,
                     const OUString& rText,
-                    const OUString& rProperty, Sequence<OUString> const & rChoices, sal_Int32 nSelectValue,
+                    const OUString& rProperty, cpo::uno::Sequence<OUString> const & rChoices, sal_Int32 nSelectValue,
                     std::vector<ColumnItem >& rLeftColumn,
                     std::vector<ColumnItem >& rRightColumn,
                     ControllerProperties* pControllerProperties,
@@ -996,7 +996,7 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
                withController: (vcl::PrinterController*)pController
                     withState: (PrintAccessoryViewState*)pState
 {
-    const Sequence< PropertyValue >& rOptions( pController->getUIOptions() );
+    const cpo::uno::Sequence< PropertyValue >& rOptions( pController->getUIOptions() );
     if( rOptions.getLength() == 0 )
         return nil;
 
@@ -1031,13 +1031,13 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
 
     for( const PropertyValue & prop : rOptions )
     {
-        Sequence< beans::PropertyValue > aOptProp;
+        cpo::uno::Sequence< beans::PropertyValue > aOptProp;
         prop.Value >>= aOptProp;
 
         OUString aCtrlType;
         OUString aPropertyName;
-        Sequence< OUString > aChoices;
-        Sequence< bool > aChoicesDisabled;
+        cpo::uno::Sequence< OUString > aChoices;
+        cpo::uno::Sequence< bool > aChoicesDisabled;
         sal_Int32 aSelectionChecked = 0;
         for( const beans::PropertyValue& rEntry : aOptProp )
         {
@@ -1093,7 +1093,7 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
 
     for( const PropertyValue & prop : rOptions )
     {
-        Sequence< beans::PropertyValue > aOptProp;
+        cpo::uno::Sequence< beans::PropertyValue > aOptProp;
         prop.Value >>= aOptProp;
 
         // extract ui element
@@ -1101,7 +1101,7 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
         OUString aText;
         OUString aPropertyName;
         OUString aGroupHint;
-        Sequence< OUString > aChoices;
+        cpo::uno::Sequence< OUString > aChoices;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         CGFloat nAttachOffset = 0;
         bool bIgnore = false;

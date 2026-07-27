@@ -254,7 +254,7 @@ bool Window::supportsService( const OUString& ServiceName )
 }
 
 
-uno::Sequence< OUString > Window::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > Window::getSupportedServiceNames(  )
 {
     return { AVMEDIA_MACAVF_WINDOW_SERVICENAME };
 }

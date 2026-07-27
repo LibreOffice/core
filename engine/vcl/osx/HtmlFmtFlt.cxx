@@ -78,12 +78,12 @@ const std::string TAG_END_HTML("</html>");
 const std::string TAG_BODY("<body");
 const std::string TAG_END_BODY("</body");
 
-Sequence<sal_Int8> TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
+cpo::uno::Sequence<sal_Int8> TextHtmlToHTMLFormat(cpo::uno::Sequence<sal_Int8> const & aTextHtml)
 {
     OSL_ASSERT(aTextHtml.getLength() > 0);
 
     if (aTextHtml.getLength() <= 0)
-        return Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
 
     // fill the buffer with dummy values to calc the exact length
     std::string dummyHtmlHeader = GetHtmlFormatHeader(0, 0, 0, 0);
@@ -104,7 +104,7 @@ Sequence<sal_Int8> TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
     std::string htmlFormat = GetHtmlFormatHeader(nStartHtml, nEndHtml, nStartFragment, nEndFragment);
     htmlFormat += textHtml;
 
-    Sequence<sal_Int8> byteSequence(htmlFormat.length() + 1); // space the trailing '\0'
+    cpo::uno::Sequence<sal_Int8> byteSequence(htmlFormat.length() + 1); // space the trailing '\0'
     memset(byteSequence.getArray(), 0, byteSequence.getLength());
 
     memcpy(
@@ -117,11 +117,11 @@ Sequence<sal_Int8> TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
 
 const char* const HtmlStartTag = "<html";
 
-Sequence<sal_Int8> HTMLFormatToTextHtml(const Sequence<sal_Int8>& aHTMLFormat)
+cpo::uno::Sequence<sal_Int8> HTMLFormatToTextHtml(const cpo::uno::Sequence<sal_Int8>& aHTMLFormat)
 {
   assert(isHTMLFormat(aHTMLFormat) && "No HTML Format provided");
 
-  Sequence<sal_Int8>& nonconstHTMLFormatRef = const_cast< Sequence<sal_Int8>& >(aHTMLFormat);
+  cpo::uno::Sequence<sal_Int8>& nonconstHTMLFormatRef = const_cast< cpo::uno::Sequence<sal_Int8>& >(aHTMLFormat);
   char* dataStart = reinterpret_cast<char*>(nonconstHTMLFormatRef.getArray());
   char* dataEnd = dataStart + nonconstHTMLFormatRef.getLength() - 1;
   const char* htmlStartTag = strcasestr(dataStart, HtmlStartTag);
@@ -136,7 +136,7 @@ Sequence<sal_Int8> HTMLFormatToTextHtml(const Sequence<sal_Int8>& aHTMLFormat)
   }
 
   sal_Int32 len = dataEnd - htmlStartTag;
-  Sequence<sal_Int8> plainHtmlData(len);
+  cpo::uno::Sequence<sal_Int8> plainHtmlData(len);
 
   memcpy(static_cast<void*>(plainHtmlData.getArray()), htmlStartTag, len);
 
@@ -151,7 +151,7 @@ Sequence<sal_Int8> HTMLFormatToTextHtml(const Sequence<sal_Int8>& aHTMLFormat)
 const char HtmlFormatStart[] = "Version:";
 int const HtmlFormatStartLen = sizeof(HtmlFormatStart) - 1;
 
-bool isHTMLFormat(const Sequence<sal_Int8>& aHtmlSequence)
+bool isHTMLFormat(const cpo::uno::Sequence<sal_Int8>& aHtmlSequence)
 {
   if (aHtmlSequence.getLength() < HtmlFormatStartLen)
     return false;
