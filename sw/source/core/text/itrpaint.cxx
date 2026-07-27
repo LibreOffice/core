@@ -35,6 +35,7 @@
 #include "porfld.hxx"
 #include "porfly.hxx"
 #include "portab.hxx"
+#include "portxt.hxx"
 #include <txatbase.hxx>
 #include <charfmt.hxx>
 #include "redlnitr.hxx"
@@ -207,6 +208,16 @@ SwTextPaintOmitter::~SwTextPaintOmitter()
         m_rPainter.GetInfo().SetDeleteColorPaint(false);
     }
 }
+}
+
+// Where the space that an object reserved for its wrap begins, measured in the line, or the end of
+// the line when no object follows this portion.
+static SwTwips wrapStart(const SwLinePortion* pPor)
+{
+    for (const SwLinePortion* p = pPor->GetNextPortion(); p; p = p->GetNextPortion())
+        if (p->IsFlyPortion())
+            return static_cast<const SwFlyPortion*>(p)->GetFix();
+    return SAL_MAX_INT32;
 }
 
 // There are two possibilities to output transparent font:
@@ -534,6 +545,15 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                     GetInfo().X( GetInfo().X() +
                             m_pCurr->GetLetterSpacing() * (sal_Int32(m_pCurr->GetLetterCount())) +
                             m_pCurr->GetScaleWidthSpacing() );
+                }
+                // tdf#171959: a trailing blank hangs outside the line, so the adjustment can leave
+                // it in the space an object reserved for its wrap. Its decorations must not be
+                // drawn in there, no differently than on the margin.
+                if (pPor->IsHolePortion())
+                {
+                    auto& rHole = static_cast<SwHolePortion&>(*pPor);
+                    if (rHole.ShowUnderline() && GetInfo().X() >= nTmpLeft + wrapStart(pPor))
+                        rHole.SetShowUnderline(false);
                 }
                 pPor->Paint( GetInfo() );
             }
