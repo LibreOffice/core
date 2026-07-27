@@ -188,42 +188,6 @@ namespace vcl::unotools
                               rRectangle.X2, rRectangle.Y2 );
         }
 
-        cpo::uno::Sequence< double > colorToStdColorSpaceSequence( const Color& rColor )
-        {
-            return
-            {
-                toDoubleColor(rColor.GetRed()),
-                toDoubleColor(rColor.GetGreen()),
-                toDoubleColor(rColor.GetBlue()),
-                toDoubleColor(rColor.GetAlpha())
-            };
-        }
-
-        Color stdColorSpaceSequenceToColor( const cpo::uno::Sequence< double >& rColor        )
-        {
-            ENSURE_ARG_OR_THROW( rColor.getLength() == 4,
-                                 "color must have 4 channels" );
-
-            Color aColor;
-
-            aColor.SetRed  ( toByteColor(rColor[0]) );
-            aColor.SetGreen( toByteColor(rColor[1]) );
-            aColor.SetBlue ( toByteColor(rColor[2]) );
-            aColor.SetAlpha( toByteColor(rColor[3]) );
-
-            return aColor;
-        }
-
-        cpo::uno::Sequence< double > colorToDoubleSequence( const Color& rColor )
-        {
-            return colorToStdColorSpaceSequence(rColor);
-        }
-
-        Color doubleSequenceToColor( const cpo::uno::Sequence< double >& rColor )
-        {
-            return stdColorSpaceSequenceToColor(rColor);
-        }
-
 } // namespace canvas
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

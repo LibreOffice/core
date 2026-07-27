@@ -12,6 +12,7 @@
 
 #include <vcl/virdev.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <canvas/canvastools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
@@ -57,8 +58,8 @@ public:
     virtual void setUp() override
     {
         BootstrapFixture::setUp();
-        mColorBlack = vcl::unotools::colorToStdColorSpaceSequence(COL_BLACK);
-        mColorBlue = vcl::unotools::colorToStdColorSpaceSequence(COL_BLUE);
+        mColorBlack = canvastools::colorToStdColorSpaceSequence(COL_BLACK);
+        mColorBlue = canvastools::colorToStdColorSpaceSequence(COL_BLUE);
         // Geometry init
         geometry::AffineMatrix2D aUnit(1, 0, 0, 0, 1, 0);
         mViewState.AffineTransform = aUnit;

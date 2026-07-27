@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_external,canvas_test,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,canvas_test, \
     basegfx \
+    canvastools \
     comphelper \
     cppu \
     cppuhelper \

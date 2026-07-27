@@ -493,7 +493,7 @@ namespace cppcanvas
                     ::canvastools::appendToRenderState(aShadowState, aTranslate);
 
                     aShadowState.DeviceColor =
-                        vcl::unotools::colorToDoubleSequence( rShadowColor );
+                        canvastools::colorToDoubleSequence( rShadowColor );
 
                     rRenderer( aShadowState, rTextFillColor, false );
                 }
@@ -510,7 +510,7 @@ namespace cppcanvas
                     ::canvastools::appendToRenderState(aReliefState, aTranslate);
 
                     aReliefState.DeviceColor =
-                        vcl::unotools::colorToDoubleSequence( rReliefColor );
+                        canvastools::colorToDoubleSequence( rReliefColor );
 
                     rRenderer( aReliefState, rTextFillColor, false );
                 }
@@ -732,7 +732,7 @@ namespace cppcanvas
                 if (rTextFillColor != COL_AUTO)
                 {
                     rendering::RenderState aLocalState( rRenderState );
-                    aLocalState.DeviceColor = vcl::unotools::colorToDoubleSequence(
+                    aLocalState.DeviceColor = canvastools::colorToDoubleSequence(
                         rTextFillColor);
                     auto xTextBounds = queryTextBounds(aCanvas);
                     // background of text
@@ -1033,7 +1033,7 @@ namespace cppcanvas
                 if (rTextFillColor != COL_AUTO)
                 {
                     rendering::RenderState aLocalState(rRenderState);
-                    aLocalState.DeviceColor = vcl::unotools::colorToDoubleSequence(
+                    aLocalState.DeviceColor = canvastools::colorToDoubleSequence(
                         rTextFillColor);
                     auto xTextBounds = queryTextBounds(aCanvas);
                     // background of text
@@ -1090,7 +1090,7 @@ namespace cppcanvas
                     if (rTextFillColor != COL_AUTO)
                     {
                         rendering::RenderState aLocalState(rRenderState);
-                        aLocalState.DeviceColor = vcl::unotools::colorToDoubleSequence(
+                        aLocalState.DeviceColor = canvastools::colorToDoubleSequence(
                             rTextFillColor);
                         auto xTextBounds = queryTextBounds();
                         // background of text
@@ -1265,7 +1265,7 @@ namespace cppcanvas
                 mpCanvas( rCanvas ),
                 mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),
                 maFillColor(
-                    vcl::unotools::colorToDoubleSequence(
+                    canvastools::colorToDoubleSequence(
                         COL_WHITE )),
                 mxBackgroundFillPoly(std::move( xFillPoly )),
                 maTextLineInfo( cppcanvastools::createTextLineInfo( rVDev, rState ) ),
@@ -1299,7 +1299,7 @@ namespace cppcanvas
                 if (mxBackgroundFillPoly.is())
                 {
                     rendering::RenderState aLocalState( rRenderState );
-                    aLocalState.DeviceColor = vcl::unotools::colorToDoubleSequence(
+                    aLocalState.DeviceColor = canvastools::colorToDoubleSequence(
                         maBackgroundFillColor);
                     xCanvas->fillPolyPolygon(mxBackgroundFillPoly, aViewState, aLocalState);
                 }

@@ -86,7 +86,7 @@ namespace cppcanvas
                 mpCanvas( rCanvas )
             {
                 cppcanvastools::initRenderState(maState,rState);
-                maState.DeviceColor = vcl::unotools::colorToDoubleSequence(
+                maState.DeviceColor = canvastools::colorToDoubleSequence(
                     rAltColor );
             }
 

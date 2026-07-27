@@ -96,7 +96,7 @@ namespace
         aColor.SetAlpha(255);
         //aColor.SetTransparency(128);
 
-        rColorSequence = vcl::unotools::colorToDoubleSequence(
+        rColorSequence = canvastools::colorToDoubleSequence(
             aColor );
     }
 
@@ -522,9 +522,9 @@ namespace cppcanvas
                     aVCLEndColor.SetBlue( static_cast<sal_uInt8>(aVCLEndColor.GetBlue() * nEndIntensity / 100) );
 
                     const cpo::uno::Sequence< double > aStartColor(
-                        vcl::unotools::colorToDoubleSequence( aVCLStartColor ));
+                        canvastools::colorToDoubleSequence( aVCLStartColor ));
                     const cpo::uno::Sequence< double > aEndColor(
-                        vcl::unotools::colorToDoubleSequence( aVCLEndColor ));
+                        canvastools::colorToDoubleSequence( aVCLEndColor ));
 
                     cpo::uno::Sequence< cpo::uno::Sequence < double > > aColors;
                     cpo::uno::Sequence< double > aStops;
@@ -843,7 +843,7 @@ namespace cppcanvas
                 aShadowOffset.setHeight( nShadowOffset );
 
                 // determine shadow color (from outdev3.cxx)
-                ::Color aTextColor = vcl::unotools::doubleSequenceToColor(
+                ::Color aTextColor = canvastools::doubleSequenceToColor(
                     rState.textColor );
                 bool bIsDark = (aTextColor == COL_BLACK)
                     || (aTextColor.GetLuminance() < 8);
@@ -867,7 +867,7 @@ namespace cppcanvas
                 aReliefOffset.setHeight( nReliefOffset );
 
                 // determine relief color (from outdev3.cxx)
-                ::Color aTextColor = vcl::unotools::doubleSequenceToColor(
+                ::Color aTextColor = canvastools::doubleSequenceToColor(
                     rState.textColor );
 
                 aReliefColor = COL_LIGHTGRAY;
@@ -879,7 +879,7 @@ namespace cppcanvas
                 {
                     aTextColor = COL_WHITE;
                     rParms.mrStates.getState().textColor =
-                        vcl::unotools::colorToDoubleSequence(
+                        canvastools::colorToDoubleSequence(
                             aTextColor );
                 }
 
@@ -889,7 +889,7 @@ namespace cppcanvas
             }
 
             if (rState.isTextFillColorSet)
-                aTextFillColor = vcl::unotools::doubleSequenceToColor(rState.textFillColor);
+                aTextFillColor = canvastools::doubleSequenceToColor(rState.textFillColor);
 
             // create the actual text action
             std::shared_ptr<Action> pTextAction(
@@ -1342,7 +1342,7 @@ namespace cppcanvas
                         aColor.SetAlpha(255);
 
                         rStates.getState().textColor =
-                            vcl::unotools::colorToDoubleSequence( aColor );
+                            canvastools::colorToDoubleSequence( aColor );
                     }
                     break;
 

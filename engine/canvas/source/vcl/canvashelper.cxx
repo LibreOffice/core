@@ -834,7 +834,7 @@ namespace vclcanvas
 
         if( renderState.DeviceColor.getLength() > 2 )
         {
-            aColor = vcl::unotools::stdColorSpaceSequenceToColor(
+            aColor = canvastools::stdColorSpaceSequenceToColor(
                 renderState.DeviceColor );
         }
 
@@ -906,7 +906,7 @@ namespace vclcanvas
 
         if( renderState.DeviceColor.getLength() > 2 )
         {
-            aColor = vcl::unotools::stdColorSpaceSequenceToColor(
+            aColor = canvastools::stdColorSpaceSequenceToColor(
                 renderState.DeviceColor );
         }
 

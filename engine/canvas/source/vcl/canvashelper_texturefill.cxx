@@ -645,7 +645,7 @@ namespace vclcanvas
                                        &aValues.maColors[0]+aValues.maColors.getLength(),
                                        aColors.begin(),
                                        [](const cpo::uno::Sequence< double >& aColor) {
-                                           return vcl::unotools::stdColorSpaceSequenceToColor( aColor );
+                                           return canvastools::stdColorSpaceSequenceToColor( aColor );
                                        } );
 
                         // TODO(E1): Return value

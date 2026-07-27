@@ -399,6 +399,39 @@ namespace canvastools
             xPolyPolygonFromB2DPolyPolygon( const css::uno::Reference< css::rendering::XGraphicDevice >& xGraphicDevice,
                                             const ::basegfx::B2DPolyPolygon&                    rPolyPoly    );
 
+        // Color conversions (vcl/tools Color <-> canvas standard color space)
+
+        /** Create a device-specific color sequence from VCL/Tools color
+
+            Note that this method assumes a color space equivalent to
+            the one returned from createStandardColorSpace()
+         */
+        cpo::uno::Sequence< double >
+            CANVASTOOLS_DLLPUBLIC colorToStdColorSpaceSequence( const Color& rColor );
+
+        /** Convert from standard device color space to VCL/Tools color
+
+            Note that this method assumes a color space equivalent to
+            the one returned from createStandardColorSpace()
+         */
+        Color CANVASTOOLS_DLLPUBLIC stdColorSpaceSequenceToColor(
+            const cpo::uno::Sequence< double >& rColor );
+
+        /** Convert color to device color sequence
+
+            @param rColor
+            Color to convert
+         */
+        cpo::uno::Sequence< double >
+        CANVASTOOLS_DLLPUBLIC colorToDoubleSequence( const Color& rColor );
+
+        /** Convert color to device color sequence
+
+            @param rColor
+            Color sequence to convert from
+         */
+        Color CANVASTOOLS_DLLPUBLIC doubleSequenceToColor( const cpo::uno::Sequence< double >& rColor );
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
