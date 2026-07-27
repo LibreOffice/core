@@ -160,6 +160,9 @@ ConfigItem::ConfigItem(ConfigItem &&) = default;
 
 ConfigItem::~ConfigItem()
 {
+    if (comphelper::IsFuzzing())
+        return;
+
     suppress_fun_call_w_exception(RemoveChangesListener());
     ConfigManager::getConfigManager().removeConfigItem(*this);
 }
