@@ -69,22 +69,6 @@ static OUString lcl_getAppName(vcl::EnumContext::Application eApp)
     }
 }
 
-static OUString getAppNameRegistryPath()
-{
-    vcl::EnumContext::Application eApp = vcl::EnumContext::Application::Any;
-
-    if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
-    {
-        const Reference<frame::XFrame>& xFrame = pViewFrame->GetFrame().GetFrameInterface();
-        const Reference<frame::XModuleManager> xModuleManager
-            = frame::ModuleManager::create(::comphelper::getProcessComponentContext());
-        eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
-    }
-
-    OUString sAppName(lcl_getAppName(eApp));
-    return "org.openoffice.Office.UI.ToolbarMode/Applications/" + sAppName;
-}
-
 static OUString customizedUIPathBuffer()
 {
     OUString sDirPath(u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE(
@@ -109,15 +93,6 @@ OUString CustomNotebookbarGenerator::getOriginalUIPath()
            + sNotebookbarUIFileName;
 }
 
-static OUString getUIDirPath()
-{
-    OUString sAppName, sNotebookbarUIFileName;
-    CustomNotebookbarGenerator::getFileNameAndAppName(sAppName, sNotebookbarUIFileName);
-    OUString sUIDirPath
-        = customizedUIPathBuffer() + "modules/s" + sAppName.toAsciiLowerCase() + "/ui/";
-    return sUIDirPath;
-}
-
 void CustomNotebookbarGenerator::getFileNameAndAppName(OUString& sAppName,
                                                        OUString& sNotebookbarUIFileName)
 {
@@ -137,57 +112,6 @@ void CustomNotebookbarGenerator::getFileNameAndAppName(OUString& sAppName,
     sAppName = lcl_getAppName(eApp);
     const Any aValue = aRoot.getNodeValue(sActiveAppName);
     aValue >>= sNotebookbarUIFileName;
-}
-
-void CustomNotebookbarGenerator::createCustomizedUIFile()
-{
-    OUString sUserUIDir = getUIDirPath();
-    OUString sOriginalUIPath = getOriginalUIPath();
-    OUString sCustomizedUIPath = getCustomizedUIPath();
-
-    sal_uInt32 nflag = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write;
-    osl::Directory aDirectory(sUserUIDir);
-    if (aDirectory.open() != osl::FileBase::E_None)
-        osl::Directory::create(sUserUIDir, nflag);
-    else
-        SAL_WARN("cui.customnotebookbar",
-                 "Cannot create the directory or directory was present :" << sUserUIDir);
-
-    osl::File aFile(sCustomizedUIPath);
-    if (aFile.open(nflag) != osl::FileBase::E_None)
-        osl::File::copy(sOriginalUIPath, sCustomizedUIPath);
-    else
-        SAL_WARN("cui.customnotebookbar",
-                 "Cannot copy the file or file was present :" << sCustomizedUIPath);
-}
-
-Sequence<OUString>
-CustomNotebookbarGenerator::getCustomizedUIItem(const OUString& sNotebookbarConfigType)
-{
-    OUString aPath = getAppNameRegistryPath();
-    const utl::OConfigurationTreeRoot aAppNode(::comphelper::getProcessComponentContext(), aPath,
-                                               false);
-
-    const utl::OConfigurationNode aModesNode = aAppNode.openNode(u"Modes"_ustr);
-    const utl::OConfigurationNode aModeNode(aModesNode.openNode(sNotebookbarConfigType));
-    const Any aValue = aModeNode.getNodeValue(u"UIItemProperties"_ustr);
-    Sequence<OUString> aValues;
-    aValue >>= aValues;
-    return aValues;
-}
-
-void CustomNotebookbarGenerator::setCustomizedUIItem(const Sequence<OUString>& rUIItemProperties,
-                                                     const OUString& rNotebookbarConfigType)
-{
-    OUString aPath = getAppNameRegistryPath();
-    const utl::OConfigurationTreeRoot aAppNode(::comphelper::getProcessComponentContext(), aPath,
-                                               true);
-    const utl::OConfigurationNode aModesNode = aAppNode.openNode(u"Modes"_ustr);
-    const utl::OConfigurationNode aModeNode(aModesNode.openNode(rNotebookbarConfigType));
-
-    css::uno::Any aUIItemProperties(rUIItemProperties);
-    aModeNode.setNodeValue(u"UIItemProperties"_ustr, aUIItemProperties);
-    aAppNode.commit();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

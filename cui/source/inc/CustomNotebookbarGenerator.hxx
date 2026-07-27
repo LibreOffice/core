@@ -30,11 +30,7 @@ public:
     CustomNotebookbarGenerator();
     static OUString getCustomizedUIPath();
     static OUString getOriginalUIPath();
-    static Sequence<OUString> getCustomizedUIItem(const OUString& sNotebookbarConfigType);
     static void getFileNameAndAppName(OUString& sAppName, OUString& sNotebookbarUIFileName);
-    static void createCustomizedUIFile();
-    static void setCustomizedUIItem(const Sequence<OUString>& rUIItemProperties,
-                                    const OUString& rNotebookbarConfigType);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
