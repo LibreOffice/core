@@ -119,11 +119,43 @@ namespace COOLProtocol
     bool getTokenUInt32(std::string_view token, std::string_view name, uint32_t& value);
     bool getTokenUInt64(std::string_view token, std::string_view name, uint64_t& value);
     bool getTokenString(std::string_view token, std::string_view name, std::string& value);
+    /// Reads name=<keyword> out of one token and translates the keyword through the map. The
+    /// mapped-to type is whatever the caller asks for, so a keyword can name an enumerator
+    /// directly instead of a number the caller has to convert.
+    template <typename T>
     bool getTokenKeyword(std::string_view token, std::string_view name,
-                         const std::map<std::string, int>& map, int& value);
+                         const std::map<std::string, T>& map, T& value)
+    {
+        std::string t;
+        if (getTokenString(token, name, t))
+        {
+            if (t[0] == '\'' && t[t.size() - 1] == '\'')
+            {
+                t = t.substr(1, t.size() - 2);
+            }
 
+            const auto p = map.find(t);
+            if (p != map.cend())
+            {
+                value = p->second;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    template <typename T>
     bool getTokenKeyword(const StringVector& tokens, std::string_view name,
-                         const std::map<std::string, int>& map, int& value);
+                         const std::map<std::string, T>& map, T& value)
+    {
+        for (size_t i = 0; i < tokens.size(); i++)
+        {
+            if (getTokenKeyword(tokens[i], name, map, value))
+                return true;
+        }
+        return false;
+    }
 
     inline bool getTokenInteger(const StringVector& tokens, const std::string_view name,
                                 int& value)

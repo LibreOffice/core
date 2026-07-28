@@ -133,38 +133,6 @@ namespace COOLProtocol
         return false;
     }
 
-    bool getTokenKeyword(const std::string_view token, const std::string_view name,
-                         const std::map<std::string, int>& map, int& value)
-    {
-        std::string t;
-        if (getTokenString(token, name, t))
-        {
-            if (t[0] == '\'' && t[t.size() - 1] == '\'')
-            {
-                t = t.substr(1, t.size() - 2);
-            }
-
-            const auto p = map.find(t);
-            if (p != map.cend())
-            {
-                value = p->second;
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    bool getTokenKeyword(const StringVector& tokens, const std::string_view name, const std::map<std::string, int>& map, int& value)
-    {
-        for (size_t i = 0; i < tokens.size(); i++)
-        {
-            if (getTokenKeyword(tokens[i], name, map, value))
-                return true;
-        }
-        return false;
-    }
-
     bool getTokenStringFromMessage(const std::string_view message, const std::string_view name,
                                    std::string& value)
     {
