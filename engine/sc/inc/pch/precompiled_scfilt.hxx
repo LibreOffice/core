@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:15:21 using:
+ Generated on 2026-07-28 10:33:26 using:
  ./bin/update_pch sc scfilt --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
@@ -34,11 +35,15 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <optional>
 #include <ostream>
 #include <set>
+#include <span>
+#include <sstream>
 #include <stack>
+#include <stddef.h>
 #include <stdexcept>
 #include <stdio.h>
 #include <string.h>
@@ -48,6 +53,8 @@
 #include <unordered_set>
 #include <utility>
 #include <vector>
+#include <boost/container/small_vector.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -55,7 +62,6 @@
 #include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
-#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
@@ -82,12 +88,13 @@
 #include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
+#include <sal/typesizes.h>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/animate/Animation.hxx>
-#include <vcl/checksum.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
-#include <comphelper/errcode.hxx>
+#include <vcl/dropcache.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
@@ -98,10 +105,11 @@
 #include <vcl/vectorgraphicdata.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/color/bcolortools.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
+#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -111,9 +119,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
@@ -123,40 +133,46 @@
 #include <com/sun/star/graphic/XGraphicMapper.hpp>
 #include <com/sun/star/graphic/XGraphicProvider2.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
-#include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <cpo/uno/Any.h>
-#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <comphelper/comphelperdllapi.h>
+#include <comphelper/configuration.hxx>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/errcode.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/string.hxx>
+#include <cpo/uno/Any.h>
+#include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.h>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>
 #include <cpo/uno/genfunc.hxx>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
-#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
-#include <comphelper/comphelperdllapi.h>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
-#include <comphelper/string.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/color/Transformation.hxx>
+#include <docmodel/dllapi.h>
+#include <docmodel/theme/ThemeColorType.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
@@ -177,21 +193,30 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <export/ExportTools.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <filter/msfilter/msocximex.hxx>
 #include <i18nlangtag/lang.h>
+#include <o3tl/concepts.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/hash_combine.hxx>
+#include <o3tl/lru_map.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <o3tl/untaint.hxx>
+#include <officecfg/Office/Calc.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <oox/core/contexthandler.hxx>
 #include <oox/core/contexthandler2.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/core/relations.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/export/utils.hxx>
@@ -221,13 +246,16 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/objsh.hxx>
 #include <sot/storage.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/listener.hxx>
 #include <svl/lstner.hxx>
+#include <svl/numformat.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/sharedstring.hxx>
 #include <svl/sharedstringpool.hxx>
@@ -235,7 +263,9 @@
 #include <svl/style.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
+#include <svl/whichranges.hxx>
 #include <svl/zforlist.hxx>
+#include <svtools/htmltokn.h>
 #include <svtools/svtdllapi.h>
 #include <svx/itextprovider.hxx>
 #include <svx/msdffdef.hxx>
@@ -243,29 +273,30 @@
 #include <svx/sdtaitm.hxx>
 #include <svx/sdtakitm.hxx>
 #include <svx/svddef.hxx>
+#include <svx/svdgeodata.hxx>
 #include <svx/svdoattr.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdobjkind.hxx>
+#include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdorect.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdtext.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/unoapi.hxx>
 #include <svx/xit.hxx>
+#include <tools/UniqueID.hxx>
 #include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/degree.hxx>
-#include <comphelper/diagnose_ex.hxx>
-#include <tools/fract.hxx>
+#include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <tools/mapunit.hxx>
-#include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
@@ -274,9 +305,8 @@
 #include <typelib/typedescription.h>
 #include <uno/data.h>
 #include <unotools/charclass.hxx>
-#include <unotools/configitem.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/options.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
@@ -285,8 +315,10 @@
 #include <addressconverter.hxx>
 #include <attrib.hxx>
 #include <autofilterbuffer.hxx>
+#include <autofiltercontext.hxx>
 #include <biffhelper.hxx>
 #include <calcmacros.hxx>
+#include <cellsuno.hxx>
 #include <cellvalue.hxx>
 #include <colrowst.hxx>
 #include <compiler.hxx>
@@ -320,7 +352,6 @@
 #include <filter.hxx>
 #include <formel.hxx>
 #include <formula/errorcodes.hxx>
-#include <formula/formuladllapi.h>
 #include <formula/grammar.hxx>
 #include <formula/opcode.hxx>
 #include <formulabase.hxx>
@@ -330,13 +361,17 @@
 #include <fprogressbar.hxx>
 #include <ftools.hxx>
 #include <global.hxx>
+#include <globalnames.hxx>
 #include <imp_op.hxx>
 #include <namebuff.hxx>
+#include <orcus_utils.hxx>
 #include <pagesettings.hxx>
 #include <patattr.hxx>
 #include <pivotcachebuffer.hxx>
+#include <pivottablebuffer.hxx>
 #include <postit.hxx>
 #include <queryparam.hxx>
+#include <querytablebuffer.hxx>
 #include <rangelst.hxx>
 #include <rangenam.hxx>
 #include <refdata.hxx>
@@ -351,22 +386,23 @@
 #include <scresid.hxx>
 #include <sharedstringsbuffer.hxx>
 #include <sheetdatabuffer.hxx>
+#include <sortparam.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <stringutil.hxx>
 #include <stylesbuffer.hxx>
 #include <stylesfragment.hxx>
+#include <table.hxx>
 #include <tablebuffer.hxx>
 #include <tabprotection.hxx>
 #include <themebuffer.hxx>
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>
-#include <tokstack.hxx>
 #include <tool.h>
 #include <types.hxx>
+#include <undobase.hxx>
 #include <unitconverter.hxx>
 #include <unonames.hxx>
-#include <userdat.hxx>
 #include <viewsettings.hxx>
 #include <workbookhelper.hxx>
 #include <workbooksettings.hxx>
@@ -375,6 +411,7 @@
 #include <worksheetsettings.hxx>
 #include <xcl97rec.hxx>
 #include <xecontent.hxx>
+#include <xedbdata.hxx>
 #include <xeescher.hxx>
 #include <xeformula.hxx>
 #include <xehelper.hxx>

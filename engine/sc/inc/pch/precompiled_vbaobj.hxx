@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:17:35 using:
+ Generated on 2026-07-28 10:33:26 using:
  ./bin/update_pch sc vbaobj --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,11 +28,11 @@
 #include <memory>
 #include <string_view>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/file.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
@@ -56,6 +56,8 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -128,7 +130,6 @@
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
-#include <com/sun/star/sheet/XGoalSeek.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
@@ -159,6 +160,8 @@
 #include <com/sun/star/sheet/XViewSplitable.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>
@@ -193,6 +196,7 @@
 #include <com/sun/star/util/TriState.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XMergeable.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
@@ -203,17 +207,24 @@
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
+#include <cppu/unotype.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <filter/msfilter/util.hxx>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/map.h>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <ooo/vba/XCommandBarControls.hpp>
 #include <ooo/vba/XCommandBars.hpp>
@@ -298,7 +309,6 @@
 #include <svl/itemset.hxx>
 #include <svl/srchitem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/eventcfg.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:14:26 using:
+ Generated on 2026-07-28 10:33:26 using:
  ./bin/update_pch sc scui --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -32,7 +32,10 @@
 #include <osl/time.h>
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <vcl/abstdlgimpl.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -40,6 +43,8 @@
 #include <vcl/weld.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
@@ -52,16 +57,23 @@
 #include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <cpo/uno/Any.hxx>
-#include <cpo/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
+#include <cpo/uno/Any.hxx>
+#include <cpo/uno/Sequence.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/flstitem.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -77,10 +89,10 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
+#include <svl/numformat.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <svl/style.hxx>
 #include <svl/typedwhich.hxx>
-#include <svl/zforlist.hxx>
 #include <svtools/collatorres.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ehdl.hxx>
@@ -89,22 +101,29 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/unitconv.hxx>
 #include <svx/colorbox.hxx>
+#include <svx/drawitem.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/langbox.hxx>
 #include <svx/numinf.hxx>
+#include <svx/ofaitem.hxx>
 #include <svx/pageitem.hxx>
+#include <svx/svdview.hxx>
 #include <svx/txencbox.hxx>
+#include <svx/txenctab.hxx>
 #include <tools/color.hxx>
-#include <comphelper/diagnose_ex.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/lineend.hxx>
 #include <unicode/ucsdet.h>
 #include <unotools/collatorwrapper.hxx>
+#include <unotools/filteroptions_settings.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/useroptions.hxx>
+#include <unotools/viewoptions.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <PivotCalcFieldDialog.hxx>
 #include <appoptio.hxx>
 #include <attrdlg.hxx>
 #include <attrib.hxx>
