@@ -116,14 +116,12 @@ enum class COKitWindowAction
     PASTE
 };
 
-typedef enum
+enum class COKitSelectionType
 {
-    KIT_SELTYPE_NONE,
-    KIT_SELTYPE_TEXT,
-    KIT_SELTYPE_LARGE_TEXT, // unused (same as KIT_SELTYPE_COMPLEX)
-    KIT_SELTYPE_COMPLEX
-}
-COKitSelectionType;
+    NONE,
+    TEXT,
+    COMPLEX
+};
 
 /** Optional features of COKit, in particular callbacks that block
  *  COKit until the corresponding reply is received, which would
@@ -1840,7 +1838,7 @@ struct COKitDocumentClassStruct
                          const char   **pInStreams);
 
     /// @see kit::Document::getSelectionType
-    int (*getSelectionType) (COKitDocument* pThis);
+    COKitSelectionType (*getSelectionType) (COKitDocument* pThis);
 
     /// @see kit::Document::removeTextContext
     void (*removeTextContext) (COKitDocument* pThis,
@@ -1899,10 +1897,10 @@ struct COKitDocumentClassStruct
     void (*sendContentControlEvent)(COKitDocument* pThis, const char* pArguments);
 
     /// @see kit::Document::getSelectionTypeAndText
-    int (*getSelectionTypeAndText) (COKitDocument* pThis,
-                                    const char* pMimeType,
-                                    char** pText,
-                                    char** pUsedMimeType);
+    COKitSelectionType (*getSelectionTypeAndText) (COKitDocument* pThis,
+                                                   const char* pMimeType,
+                                                   char** pText,
+                                                   char** pUsedMimeType);
 
     /// @see kit::Document::getDataArea().
     void (*getDataArea) (COKitDocument* pThis,
@@ -2328,9 +2326,9 @@ public:
      *
      * In most cases it is more efficient to use getSelectionTypeAndText().
      *
-     * @return an element of the COKitSelectionType enum.
+     * @return what kind of selection the document holds.
      */
-    int getSelectionType()
+    COKitSelectionType getSelectionType()
     {
         return mpDoc->pClass->getSelectionType(mpDoc);
     }
@@ -2340,15 +2338,16 @@ public:
      *
      * This function is a more efficient combination of getSelectionType() and getTextSelection().
      * It returns the same as getSelectionType(), and additionally if the return value is
-     * KIT_SELTYPE_TEXT then it also returns the same as getTextSelection(), otherwise
+     * COKitSelectionType::TEXT then it also returns the same as getTextSelection(), otherwise
      * pText and pUsedMimeType are unchanged.
      *
      * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
      * @param pText the currently selected text
      * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
-     * @return an element of the COKitSelectionType enum.
+     * @return what kind of selection the document holds.
      */
-    int getSelectionTypeAndText(const char* pMimeType, char** pText, char** pUsedMimeType = NULL)
+    COKitSelectionType getSelectionTypeAndText(const char* pMimeType, char** pText,
+                                              char** pUsedMimeType = NULL)
     {
         return mpDoc->pClass->getSelectionTypeAndText(mpDoc, pMimeType, pText, pUsedMimeType);
     }

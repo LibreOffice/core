@@ -3925,17 +3925,21 @@ void DesktopKitTest::testComplexSelection()
     static constexpr OString aText("hello world"_ostr);
 
     // Certainly not complex.
-    CPPUNIT_ASSERT_EQUAL(static_cast<int>(KIT_SELTYPE_NONE), pDocument->pClass->getSelectionType(pDocument));
-    CPPUNIT_ASSERT_EQUAL(static_cast<int>(KIT_SELTYPE_NONE), pDocument->pClass->getSelectionTypeAndText(pDocument,
-                                                                 "", nullptr, nullptr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::NONE),
+                         static_cast<int>(pDocument->pClass->getSelectionType(pDocument)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::NONE),
+                         static_cast<int>(pDocument->pClass->getSelectionTypeAndText(
+                             pDocument, "", nullptr, nullptr)));
 
     // Paste text.
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
 
     // No selection.
-    CPPUNIT_ASSERT_EQUAL(static_cast<int>(KIT_SELTYPE_NONE), pDocument->pClass->getSelectionType(pDocument));
-    CPPUNIT_ASSERT_EQUAL(static_cast<int>(KIT_SELTYPE_NONE), pDocument->pClass->getSelectionTypeAndText(pDocument,
-                                                                 "", nullptr, nullptr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::NONE),
+                         static_cast<int>(pDocument->pClass->getSelectionType(pDocument)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::NONE),
+                         static_cast<int>(pDocument->pClass->getSelectionTypeAndText(
+                             pDocument, "", nullptr, nullptr)));
 
     // Paste an image.
     OUString aFileURL = createFileURL(u"paste.jpg");
@@ -3968,9 +3972,11 @@ void DesktopKitTest::testComplexSelection()
     free(pText);
 
     // We expect this to be complex.
-    CPPUNIT_ASSERT_EQUAL(static_cast<int>(KIT_SELTYPE_COMPLEX), pDocument->pClass->getSelectionType(pDocument));
-    CPPUNIT_ASSERT_EQUAL(static_cast<int>(KIT_SELTYPE_COMPLEX), pDocument->pClass->getSelectionTypeAndText(pDocument,
-                                                                 "", nullptr, nullptr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::COMPLEX),
+                         static_cast<int>(pDocument->pClass->getSelectionType(pDocument)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(COKitSelectionType::COMPLEX),
+                         static_cast<int>(pDocument->pClass->getSelectionTypeAndText(
+                             pDocument, "", nullptr, nullptr)));
 }
 
 void DesktopKitTest::testCalcSaveAs()

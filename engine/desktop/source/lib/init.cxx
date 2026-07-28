@@ -1244,11 +1244,11 @@ static void doc_setTextSelection (COKitDocument* pThis,
 static char* doc_getTextSelection(COKitDocument* pThis,
                                   const char* pMimeType,
                                   char** pUsedMimeType);
-static int doc_getSelectionType(COKitDocument* pThis);
-static int doc_getSelectionTypeAndText(COKitDocument* pThis,
-                                       const char* pMimeType,
-                                       char** pText,
-                                       char** pUsedMimeType);
+static COKitSelectionType doc_getSelectionType(COKitDocument* pThis);
+static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis,
+                                                      const char* pMimeType,
+                                                      char** pText,
+                                                      char** pUsedMimeType);
 static int doc_getClipboard (COKitDocument* pThis,
                              const char **pMimeTypes,
                              size_t      *pOutCount,
@@ -6513,7 +6513,7 @@ static char* doc_getTextSelection(COKitDocument* pThis, const char* pMimeType, c
     return convertOString(aRet);
 }
 
-static int doc_getSelectionType(COKitDocument* pThis)
+static COKitSelectionType doc_getSelectionType(COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getSelectionType");
 
@@ -6524,32 +6524,33 @@ static int doc_getSelectionType(COKitDocument* pThis)
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return KIT_SELTYPE_NONE;
+        return COKitSelectionType::NONE;
     }
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
         SetLastExceptionMsg(u"No selection available"_ustr);
-        return KIT_SELTYPE_NONE;
+        return COKitSelectionType::NONE;
     }
 
     css::uno::Reference<css::datatransfer::XTransferable2> xTransferable2(xTransferable, css::uno::UNO_QUERY);
     if (xTransferable2.is() && xTransferable2->isComplex())
-        return KIT_SELTYPE_COMPLEX;
+        return COKitSelectionType::COMPLEX;
 
     OString aRet;
     bool bSuccess = getFromTransferable(xTransferable, "text/plain;charset=utf-8"_ostr, aRet);
     if (!bSuccess)
-        return KIT_SELTYPE_NONE;
+        return COKitSelectionType::NONE;
 
     if (aRet.getLength() > 10000)
-        return KIT_SELTYPE_COMPLEX;
+        return COKitSelectionType::COMPLEX;
 
-    return !aRet.isEmpty() ? KIT_SELTYPE_TEXT : KIT_SELTYPE_NONE;
+    return !aRet.isEmpty() ? COKitSelectionType::TEXT : COKitSelectionType::NONE;
 }
 
-static int doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeType, char** pText, char** pUsedMimeType)
+static COKitSelectionType doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeType,
+                                                      char** pText, char** pUsedMimeType)
 {
     // The purpose of this function is to avoid double call to pDoc->getSelection(),
     // which may be expensive.
@@ -6562,19 +6563,19 @@ static int doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeTy
     if (!pDoc)
     {
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return KIT_SELTYPE_NONE;
+        return COKitSelectionType::NONE;
     }
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
         SetLastExceptionMsg(u"No selection available"_ustr);
-        return KIT_SELTYPE_NONE;
+        return COKitSelectionType::NONE;
     }
 
     css::uno::Reference<css::datatransfer::XTransferable2> xTransferable2(xTransferable, css::uno::UNO_QUERY);
     if (xTransferable2.is() && xTransferable2->isComplex())
-        return KIT_SELTYPE_COMPLEX;
+        return COKitSelectionType::COMPLEX;
 
     OString aType
         = pMimeType && pMimeType[0] != '\0' ? OString(pMimeType) : "text/plain;charset=utf-8"_ostr;
@@ -6582,13 +6583,13 @@ static int doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeTy
     OString aRet;
     bool bSuccess = getFromTransferable(xTransferable, aType, aRet);
     if (!bSuccess)
-        return KIT_SELTYPE_NONE;
+        return COKitSelectionType::NONE;
 
     if (aRet.getLength() > 10000)
-        return KIT_SELTYPE_COMPLEX;
+        return COKitSelectionType::COMPLEX;
 
     if (aRet.isEmpty())
-        return KIT_SELTYPE_NONE;
+        return COKitSelectionType::NONE;
 
     if (pText)
         *pText = convertOString(aRet);
@@ -6601,7 +6602,7 @@ static int doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeTy
             *pUsedMimeType = nullptr;
     }
 
-    return KIT_SELTYPE_TEXT;
+    return COKitSelectionType::TEXT;
 }
 
 // Serialize the current clipboard's contents into the out parameters. The

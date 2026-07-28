@@ -1717,10 +1717,11 @@ bool ChildSession::getTextSelection(const StringVector& tokens)
     for (const auto& type : mimeTypes)
     {
         char* textSelection = nullptr;
-        const int selectionType = getLOKitDocument()->getSelectionTypeAndText(type.c_str(), &textSelection);
+        const COKitSelectionType selectionType
+            = getLOKitDocument()->getSelectionTypeAndText(type.c_str(), &textSelection);
         std::string selection(textSelection ? textSelection : "");
         free(textSelection);
-        if (selectionType == KIT_SELTYPE_LARGE_TEXT || selectionType == KIT_SELTYPE_COMPLEX)
+        if (selectionType == COKitSelectionType::COMPLEX)
         {
             // Flag complex data so the client will download async.
             sendTextFrame("complexselection:");
