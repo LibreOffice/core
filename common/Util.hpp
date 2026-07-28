@@ -14,7 +14,7 @@
 #include <common/StringVector.hpp>
 #include <common/Log.hpp>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <typeinfo>
 

@@ -15,7 +15,6 @@
 #include <common/Util.hpp>
 
 #include <COKit/COKit.hxx>
-#include <COKit/COKitEnums.h>
 
 #include <cstdlib>
 #include <string>

@@ -38,7 +38,6 @@
 #include <kit/SlideCompressor.hpp>
 
 #include <COKit/COKit.hxx>
-#include <COKit/COKitEnums.h>
 
 #include <Poco/StreamCopier.h>
 #include <Poco/URI.h>

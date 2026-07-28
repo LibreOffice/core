@@ -13,7 +13,6 @@
 
 #include <COKit/COKitInit.h>
 #include <COKit/COKit.hxx>
-#include <COKit/COKitEnums.h>
 #include <vector>
 #include <common/Log.hpp>
 #include <cstdlib>

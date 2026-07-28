@@ -27,7 +27,7 @@
 #include <string>
 #include <string_view>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 namespace COOLProtocol
 {

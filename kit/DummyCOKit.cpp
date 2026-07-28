@@ -18,7 +18,6 @@
 
 #include "DummyCOKit.hpp"
 
-#include <COKit/COKitEnums.h>
 #include <COKit/COKit.hxx>
 
 #include <cstdlib>

@@ -23,7 +23,7 @@
 #include <string_view>
 #include <vector>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 namespace COOLProtocol
 {
