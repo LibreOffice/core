@@ -452,6 +452,7 @@ copy-results-only
 copy-styles
 corner-radius
 correct
+correlation-circle
 cos
 cosh
 cot

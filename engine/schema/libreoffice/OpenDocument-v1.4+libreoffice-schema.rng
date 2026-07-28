@@ -2916,6 +2916,7 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
       <rng:attribute name="coext:class">
         <rng:choice>
           <rng:value>coext:histogram</rng:value>
+          <rng:value>coext:correlation-circle</rng:value>
         </rng:choice>
       </rng:attribute>
     </rng:optional>

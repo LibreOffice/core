@@ -145,6 +145,7 @@ const SvXMLEnumMapEntry<SchXMLChartTypeEnum> aXMLChartClassMap[] =
     { XML_HISTOGRAM,    XML_CHART_CLASS_HISTOGRAM },
     { XML_STOCK,        XML_CHART_CLASS_STOCK   },
     { XML_BUBBLE,       XML_CHART_CLASS_BUBBLE  },
+    { XML_CORRELATION_CIRCLE, XML_CHART_CLASS_CORRELATION_CIRCLE },
     { XML_SURFACE,      XML_CHART_CLASS_BAR     }, //@todo change this if a surface chart is available
     { XML_ADD_IN,       XML_CHART_CLASS_ADDIN   },
     { XML_TOKEN_INVALID, XML_CHART_CLASS_UNKNOWN }
@@ -188,7 +189,9 @@ static const tMakeStringStringMap& lcl_getChartTypeNameMap()
         {"com.sun.star.chart.StockDiagram",
          "com.sun.star.chart2.CandleStickChartType"},
         {"com.sun.star.chart.BubbleDiagram",
-         "com.sun.star.chart2.BubbleChartType"}};
+         "com.sun.star.chart2.BubbleChartType"},
+        {"com.sun.star.chart.CorrelationCircleDiagram",
+         "com.sun.star.chart2.CorrelationCircleChartType"}};
     return g_aChartTypeNameMap;
 }
 
@@ -248,6 +251,8 @@ OUString GetChartTypeByClassName(
 
     else if( IsXMLToken( rClassName, XML_BUBBLE ))
         aResultBuffer.append("Bubble");
+    else if( IsXMLToken( rClassName, XML_CORRELATION_CIRCLE ))
+        aResultBuffer.append("CorrelationCircle");
     else if( IsXMLToken( rClassName, XML_RADAR ))
         aResultBuffer.append("Net");
     else if( IsXMLToken( rClassName, XML_FILLED_RADAR ))
@@ -328,6 +333,8 @@ XMLTokenEnum getTokenByChartType(
                 eResult = XML_SCATTER;
             else if ( aServiceName == u"Bubble" )
                 eResult = XML_BUBBLE;
+            else if ( aServiceName == u"CorrelationCircle" )
+                eResult = XML_CORRELATION_CIRCLE;
             else if ( aServiceName == u"Net" )
                 eResult = XML_RADAR;
             else if ( aServiceName == u"FilledNet" )

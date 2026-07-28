@@ -567,6 +567,9 @@ OUString lcl_getDiagramType( std::u16string_view rTemplateServiceName )
         if( aName.find( u"Bubble" ) != std::u16string_view::npos )
             return u"com.sun.star.chart.BubbleDiagram"_ustr;
 
+        if( aName.find( u"CorrelationCircle" ) != std::u16string_view::npos )
+            return u"com.sun.star.chart.CorrelationCircleDiagram"_ustr;
+
         // Note: this must be checked after Bar, Net and Scatter
 
         // "Symbol" "StackedSymbol" "PercentStackedSymbol" "Line" "StackedLine"
@@ -601,6 +604,8 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
         {"com.sun.star.chart2.NetChartType", "com.sun.star.chart.NetDiagram"},
         {"com.sun.star.chart2.CandleStickChartType", "com.sun.star.chart.StockDiagram"},
         {"com.sun.star.chart2.BubbleChartType", "com.sun.star.chart.BubbleDiagram"},
+        {"com.sun.star.chart2.CorrelationCircleChartType",
+         "com.sun.star.chart.CorrelationCircleDiagram"},
         {"com.sun.star.chart2.FunnelChartType", "com.sun.star.chart.FunnelDiagram"},
         {"com.sun.star.chart2.BoxWhiskerChartType", "com.sun.star.chart.BoxWhiskerDiagram"},
         {"com.sun.star.chart2.ClusteredColumnChartType", "com.sun.star.chart.ClusteredColumnDiagram"},
