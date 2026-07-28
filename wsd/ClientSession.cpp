@@ -1266,6 +1266,17 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         // only if the session has WOPI write permission
         if (!isWritable())
             return false;
+
+        std::string value;
+        if (tokens.size() > 1 && getTokenString(tokens[1], "value", value) && value == "true")
+        {
+            // Write the modifications right away, while the view may still save; the kit's
+            // read-only command filters do not dispatch .uno:Save for a read-only view
+            // (ie. after we switch).
+            docBroker->manualSave(client_from_this(), /*dontTerminateEdit=*/true,
+                                  /*dontSaveIfUnmodified=*/true, std::string());
+        }
+
         return forwardToChild(firstLine, docBroker);
     }
     else if (tokens.equals(0, "allowlinkupdate"))
