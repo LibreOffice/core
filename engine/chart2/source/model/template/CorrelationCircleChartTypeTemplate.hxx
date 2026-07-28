@@ -39,6 +39,7 @@ protected:
 
     // ____ ChartTypeTemplate ____
     virtual bool supportsCategories() override;
+    virtual bool usesLastTwoColumnsAsDimensions() const override;
     virtual rtl::Reference<::chart::ChartType> getChartTypeForIndex(sal_Int32 nChartTypeIndex) override;
     virtual rtl::Reference<::chart::ChartType> getChartTypeForNewSeries2(
         const std::vector<rtl::Reference<::chart::ChartType>>& aFormerlyUsedChartTypes) override;

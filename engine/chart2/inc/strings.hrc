@@ -27,6 +27,7 @@
 #define STR_DLG_REMOVE_DATA_TABLE                   NC_("STR_DLG_REMOVE_DATA_TABLE", "This chart currently contains an internal data table. Do you want to proceed, deleting the internal data table, and set a new data range?")
 #define STR_PAGE_CHARTTYPE                          NC_("STR_PAGE_CHARTTYPE", "Chart Type")
 #define STR_PAGE_DATA_RANGE                         NC_("STR_PAGE_DATA_RANGE", "Data Range")
+#define STR_RANGE_NOTE_DIMENSIONS                   NC_("STR_RANGE_NOTE_DIMENSIONS", "The last two columns hold the dimensions; the columns before them are the features.")
 #define STR_PAGE_CHART_ELEMENTS                     NC_("STR_PAGE_CHART_ELEMENTS", "Chart Elements")
 #define STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS     NC_("STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS", "Mean value line with value %AVERAGE_VALUE and standard deviation %STD_DEVIATION")
 #define STR_OBJECT_AXIS                             NC_("STR_OBJECT_AXIS", "Axis")

@@ -159,6 +159,13 @@ public:
 
     virtual bool isSwapXAndY() const;
 
+    /** True for a template that reads the last two columns of its range as the
+        two dimensions its points are placed against, and every column before
+        them as one of the features. False for a template whose range reads the
+        way a reader expects without being told.
+     */
+    virtual bool usesLastTwoColumnsAsDimensions() const;
+
     // Methods for creating the diagram piecewise
 
     /** Allows derived classes to manipulate the diagrams whole, like changing

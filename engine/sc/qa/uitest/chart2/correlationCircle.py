@@ -102,4 +102,24 @@ class correlationCircle(UITestCase):
             # after any other edit.
             xChartWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE": "ESC"}))
 
+    # The note about the last two columns belongs to this chart type alone.
+    def test_the_note_is_shown_only_for_this_type(self):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
+            self.fill_sheet(document)
+
+            with self.ui_test.execute_dialog_through_command(
+                    ".uno:InsertObjectChart", close_button="cancel") as xChartDlg:
+                select_chart_type(self, xChartDlg, "Bar")
+                xChartDlg.getChild("next").executeAction("CLICK", tuple())
+                self.assertEqual(
+                    "false",
+                    get_state_as_dict(xChartDlg.getChild("FT_RANGE_NOTE"))["Visible"])
+
+                xChartDlg.getChild("previous").executeAction("CLICK", tuple())
+                select_chart_type(self, xChartDlg, "Correlation Circle")
+                xChartDlg.getChild("next").executeAction("CLICK", tuple())
+                self.assertEqual(
+                    "true",
+                    get_state_as_dict(xChartDlg.getChild("FT_RANGE_NOTE"))["Visible"])
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
