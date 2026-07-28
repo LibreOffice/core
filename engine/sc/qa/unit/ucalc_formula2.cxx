@@ -6861,6 +6861,45 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncARRAYTOTEXTBooleanLocale)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalNameAsArgumentHasNoParameters)
+{
+    // An add-in name that stands in an argument position rather than being
+    // called must compile with a parameter count of zero. When the count kept
+    // whatever value the previously built token had left behind, interpreting
+    // the formula tried to pop that many arguments off the stack and underflowed
+    // it.
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // MONTHS is a date add-in function. Here it fills the lookup-array position
+    // of VLOOKUP, so it is a plain operand and not a call with its own
+    // arguments.
+    m_pDoc->SetFormula(ScAddress(0, 0, 0),
+                       u"=VLOOKUP(MONTH(D8)&\"/\"&YEAR(D8),MONTHS,2)"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+
+    const ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    const ScTokenArray* pCode = pCell->GetCode();
+    CPPUNIT_ASSERT(pCode);
+
+    const FormulaExternalToken* pExternal = nullptr;
+    FormulaToken** ppTokens = pCode->GetCode();
+    for (sal_uInt16 nIdx = 0; nIdx < pCode->GetCodeLen(); ++nIdx)
+    {
+        FormulaToken* pToken = ppTokens[nIdx];
+        if (pToken->GetOpCode() == ocExternal && pToken->GetType() == svExternal)
+        {
+            pExternal = static_cast<const FormulaExternalToken*>(pToken);
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("the add-in name resolves to an external token",
+                           pExternal);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), static_cast<sal_Int32>(pExternal->GetByte()));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
