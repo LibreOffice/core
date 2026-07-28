@@ -147,8 +147,7 @@ rtl::Reference<sd::framework::AbstractResource> PresenterPaneFactory::createReso
     }
 
     // No.  Create a new one.
-    rtl::Reference<sd::framework::AbstractResource> xResource = CreatePane(rxPaneId);
-    return xResource;
+    return CreatePane(rxPaneId);
 }
 
 void PresenterPaneFactory::releaseResource (const rtl::Reference<sd::framework::AbstractResource>& rxResource)
@@ -187,9 +186,8 @@ void PresenterPaneFactory::releaseResource (const rtl::Reference<sd::framework::
     }
 }
 
-
-rtl::Reference<sd::framework::AbstractResource> PresenterPaneFactory::CreatePane (
-    const rtl::Reference<sd::framework::ResourceId>& rxPaneId)
+rtl::Reference<sdext::presenter::PresenterPaneBase>
+PresenterPaneFactory::CreatePane(const rtl::Reference<sd::framework::ResourceId>& rxPaneId)
 {
     if ( ! rxPaneId.is())
         return nullptr;
@@ -221,10 +219,10 @@ rtl::Reference<sd::framework::AbstractResource> PresenterPaneFactory::CreatePane
     return nullptr;
 }
 
-rtl::Reference<sd::framework::AbstractResource> PresenterPaneFactory::CreatePane (
-    const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
-    const rtl::Reference<sd::framework::AbstractPane>& rxParentPane,
-    const bool bIsSpritePane)
+rtl::Reference<sdext::presenter::PresenterPaneBase>
+PresenterPaneFactory::CreatePane(const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
+                                 const rtl::Reference<sd::framework::AbstractPane>& rxParentPane,
+                                 const bool bIsSpritePane)
 {
     Reference<XComponentContext> xContext (mxComponentContextWeak);
     Reference<lang::XMultiComponentFactory> xFactory (

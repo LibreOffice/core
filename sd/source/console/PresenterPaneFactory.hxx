@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEFACTORY_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEFACTORY_HXX
 
+#include "PresenterPaneBase.hxx"
+
 #include <com/sun/star/frame/XController.hpp>
 #include <framework/AbstractPane.hxx>
 #include <framework/ResourceFactory.hxx>
@@ -93,12 +95,12 @@ private:
 
     void Register (const rtl::Reference<::sd::DrawController>& rxController);
 
-    rtl::Reference<sd::framework::AbstractResource> CreatePane (
-        const rtl::Reference<sd::framework::ResourceId>& rxPaneId);
-    rtl::Reference<sd::framework::AbstractResource> CreatePane (
-        const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
-        const rtl::Reference<sd::framework::AbstractPane>& rxParentPane,
-        const bool bIsSpritePane);
+    rtl::Reference<sdext::presenter::PresenterPaneBase>
+    CreatePane(const rtl::Reference<sd::framework::ResourceId>& rxPaneId);
+    rtl::Reference<sdext::presenter::PresenterPaneBase>
+    CreatePane(const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
+               const rtl::Reference<sd::framework::AbstractPane>& rxParentPane,
+               const bool bIsSpritePane);
 };
 
 }
