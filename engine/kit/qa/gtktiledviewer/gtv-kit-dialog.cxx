@@ -12,6 +12,7 @@
 
 #include <iostream>
 
+#include <COKit/COKit.hxx>
 #include <COKit/COKitGtk.h>
 #include <COKit/COKitEnums.h>
 

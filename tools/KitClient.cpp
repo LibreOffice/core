@@ -23,7 +23,7 @@
 #include <kit/KitHelper.hpp>
 
 #include <COKit/COKitInit.h>
-#include <COKit/COKit.h>
+#include <COKit/COKit.hxx>
 
 #include <Poco/String.h>
 #include <Poco/TemporaryFile.h>

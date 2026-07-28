@@ -12,6 +12,7 @@
 #include <filesystem>
 #include <memory>
 
+#include <COKit/COKit.hxx>
 #include <COKit/COKitGtk.h>
 #include <COKit/COKitEnums.h>
 

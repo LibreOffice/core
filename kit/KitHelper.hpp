@@ -14,7 +14,7 @@
 #include <common/JsonUtil.hpp>
 #include <common/Util.hpp>
 
-#include <COKit/COKit.h>
+#include <COKit/COKit.hxx>
 #include <COKit/COKitEnums.h>
 
 #include <cstdlib>

@@ -19,7 +19,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/awt/Key.hpp>
-#include <COKit/COKit.h>
+#include <COKit/COKit.hxx>
 #include <COKit/COKitInit.h>
 #include <COKit/COKitEnums.h>
 #include <COKit/COKitGtk.h>

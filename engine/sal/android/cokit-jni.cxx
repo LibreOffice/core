@@ -27,7 +27,7 @@
 
 #include <osl/detail/android-bootstrap.h>
 
-#include <COKit/COKit.h>
+#include <COKit/COKit.hxx>
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "COKit", __VA_ARGS__))
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "COKit", __VA_ARGS__))

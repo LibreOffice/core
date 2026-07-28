@@ -15,7 +15,7 @@
 #include <qt/WebView.hpp>
 #include <qt/CodaConfig.hpp>
 #include <common/Log.hpp>
-#include <COKit/COKit.h>
+#include <COKit/COKit.hxx>
 #include <qt/qt.hpp>
 #include <Poco/URI.h>
 #include <Poco/Path.h>

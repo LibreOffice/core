@@ -69,7 +69,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include <COKit/COKit.h>
+#include <COKit/COKit.hxx>
 #include <COKit/COKitEnums.h>
 
 #include <sal/log.hxx>

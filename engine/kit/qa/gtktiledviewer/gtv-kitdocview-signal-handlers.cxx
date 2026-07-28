@@ -16,6 +16,8 @@
 #include "gtv-kitdocview-signal-handlers.hxx"
 #include "gtv-kit-dialog.hxx"
 
+#include <COKit/COKit.hxx>
+
 #include <boost/property_tree/json_parser.hpp>
 
 static gboolean deleteKitDialog(GtkWidget* pWidget, GdkEvent* /*event*/, gpointer userdata)

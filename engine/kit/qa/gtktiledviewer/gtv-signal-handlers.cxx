@@ -14,6 +14,8 @@
 #include "gtv-kitdocview-signal-handlers.hxx"
 #include "gtv-signal-handlers.hxx"
 
+#include <COKit/COKit.hxx>
+
 #include <sal/macros.h>
 
 #include <cassert>

@@ -2224,9 +2224,9 @@ AS_IF([test "$mobile_app" != "true"],
       [LIBS="$LIBS -lcrypto"])
 
 AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_WINDOWSAPP" != "true" -a "$ENABLE_ANDROIDAPP" != "true" -a "$ENABLE_MACOSAPP" != "true" -a "$host_os" != "emscripten"],
-      [AC_CHECK_HEADERS([COKit/COKit.h],
+      [AC_CHECK_HEADERS([COKit/COKit.hxx],
                         [],
-                        [AC_MSG_ERROR([header COKit/COKit.h not found, perhaps you want to use --with-lokit-path])])
+                        [AC_MSG_ERROR([header COKit/COKit.hxx not found, perhaps you want to use --with-lokit-path])])
        AC_CHECK_HEADERS([Poco/Net/WebSocket.h],
                         [],
                         [AC_MSG_ERROR([header Poco/Net/WebSocket.h not found; build the engine first (POCO is built there) or install a system POCO])])

@@ -13,7 +13,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import <COKit/COKit.h>
+#import <COKit/COKit.hxx>
 
 @class DocumentViewController;
 

@@ -11,7 +11,7 @@
 
 #define LIBO_INTERNAL_ONLY
 #import <COKit/COKitInit.h>
-#import <COKit/COKit.h>
+#import <COKit/COKit.hxx>
 
 #import "ios.h"
 #import "AppDelegate.h"

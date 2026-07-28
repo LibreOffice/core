@@ -16,7 +16,7 @@
 
 #include <osl/detail/android-bootstrap.h>
 
-#include <COKit/COKit.h>
+#include <COKit/COKit.hxx>
 
 /* COKit */
 

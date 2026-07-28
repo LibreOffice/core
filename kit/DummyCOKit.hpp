@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <COKit/COKit.h>
+#include <COKit/COKit.hxx>
 
 #ifdef __cplusplus
 extern "C"

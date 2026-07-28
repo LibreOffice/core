@@ -23,7 +23,7 @@
 #include <osl/thread.h>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
-#include <COKit/COKit.h>
+#include <COKit/COKit.hxx>
 #include <COKit/COKitEnums.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
