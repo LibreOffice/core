@@ -20,6 +20,8 @@ extern "C" {
 #import <string>
 #import <vector>
 
+#import "Log.hpp"
+
 const char *user_name = nullptr;
 
 int coolwsd_server_socket_fd = -1;
@@ -115,6 +117,74 @@ static NSData *_Nullable copyEngineClipboardData(const char *mime)
 }
 
 /**
+ * The URL a pasteboard that carries one points to, when it looks like an image: its path
+ * extension maps to a type that conforms to public.image. Returns nil otherwise. Reading the
+ * URL's value shows the system's paste banner.
+ */
+static NSURL *_Nullable imageURLOnPasteboard()
+{
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    if (!pasteboard.hasURLs)
+        return nil;
+
+    NSURL *url = pasteboard.URL;
+    if (url == nil)
+        return nil;
+
+    NSString *extension = url.pathExtension;
+    UTType *uti = extension.length > 0 ? [UTType typeWithFilenameExtension:extension] : nil;
+    if (uti == nil || ![uti conformsToType:UTTypeImage]) {
+        LOG_DBG("clipboard provider: the pasteboard URL " << [url.absoluteString UTF8String]
+                << " does not look like an image, ignoring it");
+        return nil;
+    }
+
+    return url;
+}
+
+/**
+ * Download an image and re-encode it as PNG. UIImage decodes every format iOS knows (webp,
+ * heic, ...), so the result is a format the engine pastes regardless of what the web serves.
+ * Runs synchronously, with a timeout; returns nil when the download or the decode fails.
+ */
+static NSData *_Nullable downloadImageAsPNG(NSURL *url)
+{
+    LOG_DBG("clipboard provider: downloading the pasteboard image "
+            << [url.absoluteString UTF8String]);
+
+    __block NSData *body = nil;
+    dispatch_semaphore_t done = dispatch_semaphore_create(0);
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.timeoutInterval = 15;
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession]
+        dataTaskWithRequest:request
+          completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+              if (error != nil)
+                  LOG_DBG("clipboard provider: downloading the pasteboard image failed: "
+                          << [error.localizedDescription UTF8String]);
+              else
+                  body = data;
+              dispatch_semaphore_signal(done);
+          }];
+    [task resume];
+    dispatch_semaphore_wait(done, dispatch_time(DISPATCH_TIME_NOW, 20 * NSEC_PER_SEC));
+
+    if (body == nil)
+        return nil;
+
+    UIImage *image = [UIImage imageWithData:body];
+    if (image == nil) {
+        LOG_DBG("clipboard provider: the downloaded data does not decode as an image");
+        return nil;
+    }
+
+    NSData *png = UIImagePNGRepresentation(image);
+    LOG_DBG("clipboard provider: converted the downloaded image to "
+            << (size_t)(png != nil ? png.length : 0) << " bytes of PNG");
+    return png;
+}
+
+/**
  * The clipboard provider the engine drives. On copy the engine advertises its formats through
  * advertise; on an external paste it reads the pasteboard one format at a time. The callbacks
  * act on the process, not one document, so the one shared clipboard is reached from whichever
@@ -180,6 +250,20 @@ static std::vector<std::string> clipboardProviderGetMimeTypes()
             }
         }
 
+        // A web image copied in another app often arrives as nothing but its URL, under
+        // public.url. When the types alone gave nothing to paste and that URL looks like an
+        // image, promise image/png: getDataForMimeType() downloads the image and re-encodes
+        // it. The check reads the URL's value, so it stays behind the nothing-to-paste
+        // condition and the paste banner only shows for a paste that would otherwise fail.
+        if (mimes.count == 0) {
+            NSURL *url = imageURLOnPasteboard();
+            if (url != nil) {
+                LOG_DBG("clipboard provider: getMimeTypes: promising image/png for "
+                        << [url.absoluteString UTF8String]);
+                [mimes addObject:@"image/png"];
+            }
+        }
+
         std::vector<std::string> result;
         result.reserve(mimes.count);
         for (NSString *mime in mimes)
@@ -219,6 +303,19 @@ static bool clipboardProviderGetData(const char* pMimeType, std::vector<char>* p
                 return true;
             }
         }
+
+        // No pasteboard type carries the format directly; serve the image/png promised by
+        // getMimeTypes() for a pasteboard that holds an image URL.
+        if ([wanted isEqualToString:@"image/png"]) {
+            NSURL *url = imageURLOnPasteboard();
+            NSData *png = url != nil ? downloadImageAsPNG(url) : nil;
+            if (png != nil) {
+                pOutData->assign(static_cast<const char *>(png.bytes),
+                                 static_cast<const char *>(png.bytes) + png.length);
+                return true;
+            }
+        }
+
         return false;
     }
 }
