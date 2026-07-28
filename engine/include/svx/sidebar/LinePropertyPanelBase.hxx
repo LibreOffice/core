@@ -41,8 +41,6 @@ public:
     virtual ~LinePropertyPanelBase() override;
 
     void SetWidth(tools::Long nWidth);
-    void SetWidthIcon(int n);
-    void SetWidthIcon();
 
     void EndLineWidthPopup();
 
@@ -99,12 +97,6 @@ private:
 
     sal_uInt16 mnTrans;
     MapUnit meMapUnit;
-
-    // images from resource
-    OUString maIMGNone;
-
-    // multi-images
-    Bitmap maIMGWidthIcon[8];
 
     bool mbWidthValuable : 1;
     bool mbArrowSupported;

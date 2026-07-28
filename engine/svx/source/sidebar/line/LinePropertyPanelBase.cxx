@@ -25,8 +25,6 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
-#include <svx/xtable.hxx>
-#include <bitmaps.hlst>
 
 using namespace css;
 using namespace css::uno;
@@ -84,7 +82,6 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     mxLineStyleNoneChange(new LineStyleNoneChange(*this)),
     mnTrans(0),
     meMapUnit(MapUnit::MapMM),
-    maIMGNone(BMP_NONE_ICON),
     mbWidthValuable(true),
     mbArrowSupported(true),
     mbNoneLineStyle(false)
@@ -112,17 +109,6 @@ void LinePropertyPanelBase::Initialize()
 {
     mxTBWidth->set_item_popover(SELECTWIDTH, mxLineWidthPopup->getTopLevel());
 
-    maIMGWidthIcon[0] = XDashList::CreateBitmapForXDash(nullptr, 1);
-    maIMGWidthIcon[1] = XDashList::CreateBitmapForXDash(nullptr, 2);
-    maIMGWidthIcon[2] = XDashList::CreateBitmapForXDash(nullptr, 3);
-    maIMGWidthIcon[3] = XDashList::CreateBitmapForXDash(nullptr, 4);
-    maIMGWidthIcon[4] = XDashList::CreateBitmapForXDash(nullptr, 5);
-    maIMGWidthIcon[5] = XDashList::CreateBitmapForXDash(nullptr, 6);
-    maIMGWidthIcon[6] = XDashList::CreateBitmapForXDash(nullptr, 7);
-    maIMGWidthIcon[7] = XDashList::CreateBitmapForXDash(nullptr, 8);
-
-    Graphic aGraf(maIMGWidthIcon[0]);
-    mxTBWidth->set_item_image(SELECTWIDTH, aGraf.GetXGraphic());
     mxTBWidth->connect_clicked(LINK(this, LinePropertyPanelBase, ToolboxWidthSelectHdl));
     mxTBWidth->connect_menu_toggled(LINK(this, LinePropertyPanelBase, ToolboxWidthToggleMenuHdl));
 
@@ -180,13 +166,11 @@ void LinePropertyPanelBase::updateLineWidth(bool bDisabled, bool bSetOrDefault,
         {
             mnWidthCoreValue = pItem->GetValue();
             mbWidthValuable = true;
-            SetWidthIcon();
             return;
         }
     }
 
     mbWidthValuable = false;
-    SetWidthIcon();
 }
 
 IMPL_LINK_NOARG(LinePropertyPanelBase, ToolboxWidthSelectHdl, const OUString&, void)
@@ -211,47 +195,6 @@ IMPL_LINK_NOARG( LinePropertyPanelBase, ChangeTransparentHdl, weld::MetricSpinBu
     XLineTransparenceItem aItem( nVal );
 
     setLineTransparency(aItem);
-}
-
-void LinePropertyPanelBase::SetWidthIcon(int n)
-{
-    if (n == 0)
-        mxTBWidth->set_item_icon_name(SELECTWIDTH, maIMGNone);
-    else
-    {
-        Graphic aGraf(maIMGWidthIcon[n-1]);
-        mxTBWidth->set_item_image(SELECTWIDTH, aGraf.GetXGraphic());
-    }
-}
-
-void LinePropertyPanelBase::SetWidthIcon()
-{
-    if(!mbWidthValuable)
-    {
-        mxTBWidth->set_item_icon_name(SELECTWIDTH, maIMGNone);
-        return;
-    }
-
-    tools::Long nVal = OutputDevice::LogicToLogic(mnWidthCoreValue * 10, meMapUnit, MapUnit::MapPoint);
-
-    Graphic aGraf;
-    if(nVal <= 6)
-        aGraf = Graphic(maIMGWidthIcon[0]);
-    else if (nVal <= 9)
-        aGraf = Graphic(maIMGWidthIcon[1]);
-    else if (nVal <= 12)
-        aGraf = Graphic(maIMGWidthIcon[2]);
-    else if (nVal <= 19)
-        aGraf = Graphic(maIMGWidthIcon[3]);
-    else if (nVal <= 26)
-        aGraf = Graphic(maIMGWidthIcon[4]);
-    else if (nVal <= 37)
-        aGraf = Graphic(maIMGWidthIcon[5]);
-    else if (nVal <= 52)
-        aGraf = Graphic(maIMGWidthIcon[6]);
-    else
-        aGraf = Graphic(maIMGWidthIcon[7]);
-    mxTBWidth->set_item_image(SELECTWIDTH, aGraf.GetXGraphic());
 }
 
 void LinePropertyPanelBase::SetWidth(tools::Long nWidth)

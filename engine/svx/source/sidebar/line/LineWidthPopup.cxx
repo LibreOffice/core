@@ -128,7 +128,6 @@ IMPL_LINK_NOARG(LineWidthPopup, ItemActivatedHdl, weld::IconView&, bool)
         nVal = m_xMFWidth->denormalize(nVal);
         XLineWidthItem aWidthItem(nVal);
         m_rParent.setLineWidth(aWidthItem);
-        m_rParent.SetWidthIcon(iPos);
         m_rParent.SetWidth(nVal);
     }
     else if (iPos == 9)
