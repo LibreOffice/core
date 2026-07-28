@@ -95,11 +95,6 @@ namespace canvastools
             return static_cast< sal_Int32 >( ceil( rVal ) );
         }
 
-        /** Create a RealSize2D with both coordinate values set to +infinity
-         */
-        CANVASTOOLS_DLLPUBLIC css::geometry::RealSize2D createInfiniteSize2D();
-
-
         // View- and RenderState utilities
 
 

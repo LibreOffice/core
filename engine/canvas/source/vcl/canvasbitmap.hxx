@@ -70,11 +70,6 @@ namespace vclcanvas
                       css::rendering::XGraphicDevice&              rDevice,
                       const OutDevProviderSharedPtr&               rOutDevProvider );
 
-        /// Must be called with locked Solar mutex
-        CanvasBitmap( const ::Bitmap&                              rBitmap,
-                      css::rendering::XGraphicDevice&              rDevice,
-                      const OutDevProviderSharedPtr&               rOutDevProvider );
-
         // XServiceInfo
         virtual OUString getImplementationName(  ) override;
         virtual bool supportsService( const OUString& ServiceName ) override;

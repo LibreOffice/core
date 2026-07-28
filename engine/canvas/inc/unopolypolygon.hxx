@@ -41,7 +41,6 @@ namespace canvastools
         : public UnoPolyPolygonBase
     {
     public:
-        explicit UnoPolyPolygon( basegfx::B2DPolyPolygon );
         UnoPolyPolygon( basegfx::B2DPolyPolygon, css::rendering::FillRule fillRule);
 
         // XPolyPolygon2D
@@ -73,12 +72,6 @@ namespace canvastools
                                              sal_Int32 nNumberOfPolygons,
                                              sal_Int32 nPointIndex,
                                              sal_Int32 nNumberOfPoints ) const;
-
-        /// Get cow copy of internal polygon. not thread-safe outside this object.
-        const basegfx::B2DPolyPolygon& getPolyPolygonUnsafe() const
-        {
-            return maPolyPoly;
-        }
 
     private:
         UnoPolyPolygon(const UnoPolyPolygon&) = delete;

@@ -33,13 +33,6 @@ using namespace ::com::sun::star;
 
 namespace canvas
 {
-    cpo::uno::Sequence<OUString> ParametricPolyPolygon::getAvailableServiceNames()
-    {
-        return {u"LinearGradient"_ustr,
-                u"EllipticalGradient"_ustr,
-                u"RectangularGradient"_ustr};
-    }
-
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::create(
         const uno::Reference< rendering::XGraphicDevice >& rDevice,
         std::u16string_view rServiceName,

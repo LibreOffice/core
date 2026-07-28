@@ -84,7 +84,6 @@ namespace canvas
             const GradientType                                  meType;
         };
 
-        static cpo::uno::Sequence< OUString > getAvailableServiceNames();
         static rtl::Reference<ParametricPolyPolygon> create(
             const css::uno::Reference< css::rendering::XGraphicDevice >& rDevice,
             std::u16string_view rServiceName,

@@ -78,11 +78,6 @@ namespace vclcanvastools
         class LocalGuard
         {
         public:
-            LocalGuard() :
-                aSolarGuard()
-            {
-            }
-
             /// To be compatible with CanvasBase mutex concept
             explicit LocalGuard( const ::osl::Mutex& ) :
                 aSolarGuard()

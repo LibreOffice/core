@@ -185,8 +185,6 @@ namespace vclcanvas
                               const css::rendering::RenderState&   renderState,
                               ColorType                            eColorType ) const;
 
-        bool hasAlpha() const { return mbHaveAlpha; }
-
     protected:
         /** Phyical output device
 

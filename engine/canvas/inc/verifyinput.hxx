@@ -124,50 +124,6 @@ namespace canvastools
                           const css::uno::Reference< css::uno::XInterface >&   xIf,
                           ::sal_Int16                                       nArgPos );
 
-        /** Verify that the given bezier segment contains valid
-            floating point values.
-
-            @param rSegment
-            Segment to check
-
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
-
-            @param nArgPos
-            Argument position on the call site (i.e. the position of
-            the argument, checked here, on the UNO interface
-            method. Counting starts at 0).
-
-            @throws a lang::IllegalArgumentException, if anything is wrong
-         */
-        CANVASTOOLS_DLLPUBLIC void verifyInput( const css::geometry::RealBezierSegment2D&  rSegment,
-                          const char*                                               pStr,
-                          const css::uno::Reference< css::uno::XInterface >&        xIf,
-                          ::sal_Int16                                               nArgPos );
-
-        /** Verify that the given rectangle contains valid floating
-            point values.
-
-            @param rRect
-            Rect to check
-
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
-
-            @param nArgPos
-            Argument position on the call site (i.e. the position of
-            the argument, checked here, on the UNO interface
-            method. Counting starts at 0).
-
-            @throws a lang::IllegalArgumentException, if anything is wrong
-         */
-        CANVASTOOLS_DLLPUBLIC void verifyInput( const css::geometry::RealRectangle2D&  rRect,
-                          const char*                                           pStr,
-                          const css::uno::Reference< css::uno::XInterface >&    xIf,
-                          ::sal_Int16                                           nArgPos );
-
         /** Basic check for view state validity.
 
             @param viewState
@@ -351,23 +307,6 @@ namespace canvastools
         // TODO(Q2): Employ some template arglist magic here, to avoid
         // this duplication of code...
 
-        template< typename Arg0 > void verifyArgs( const Arg0&                                  rArg0,
-                                                   const char*                                  pStr,
-                                                   const css::uno::Reference< css::uno::XInterface >& xIf )
-        {
-            verifyInput( rArg0, pStr, xIf, 0 );
-        }
-
-        template< typename Arg0,
-                  typename Arg1 > void verifyArgs( const Arg0&                                  rArg0,
-                                                   const Arg1&                                  rArg1,
-                                                   const char*                                  pStr,
-                                                   const css::uno::Reference< css::uno::XInterface >& xIf )
-        {
-            verifyInput( rArg0, pStr, xIf, 0 );
-            verifyInput( rArg1, pStr, xIf, 1 );
-        }
-
         template< typename Arg0,
                   typename Arg1,
                   typename Arg2 > void verifyArgs( const Arg0&                                  rArg0,
@@ -397,73 +336,6 @@ namespace canvastools
             verifyInput( rArg3, pStr, xIf, 3 );
         }
 
-        template< typename Arg0,
-                  typename Arg1,
-                  typename Arg2,
-                  typename Arg3,
-                  typename Arg4 > void verifyArgs( const Arg0&                                  rArg0,
-                                                   const Arg1&                                  rArg1,
-                                                   const Arg2&                                  rArg2,
-                                                   const Arg3&                                  rArg3,
-                                                   const Arg4&                                  rArg4,
-                                                   const char*                                  pStr,
-                                                   const css::uno::Reference< css::uno::XInterface >& xIf )
-        {
-            verifyInput( rArg0, pStr, xIf, 0 );
-            verifyInput( rArg1, pStr, xIf, 1 );
-            verifyInput( rArg2, pStr, xIf, 2 );
-            verifyInput( rArg3, pStr, xIf, 3 );
-            verifyInput( rArg4, pStr, xIf, 4 );
-        }
-
-        template< typename Arg0,
-                  typename Arg1,
-                  typename Arg2,
-                  typename Arg3,
-                  typename Arg4,
-                  typename Arg5 > void verifyArgs( const Arg0&                                  rArg0,
-                                                   const Arg1&                                  rArg1,
-                                                   const Arg2&                                  rArg2,
-                                                   const Arg3&                                  rArg3,
-                                                   const Arg4&                                  rArg4,
-                                                   const Arg5&                                  rArg5,
-                                                   const char*                                  pStr,
-                                                   const css::uno::Reference< css::uno::XInterface >& xIf )
-        {
-            verifyInput( rArg0, pStr, xIf, 0 );
-            verifyInput( rArg1, pStr, xIf, 1 );
-            verifyInput( rArg2, pStr, xIf, 2 );
-            verifyInput( rArg3, pStr, xIf, 3 );
-            verifyInput( rArg4, pStr, xIf, 4 );
-            verifyInput( rArg5, pStr, xIf, 5 );
-        }
-
-        template< typename Arg0,
-                  typename Arg1,
-                  typename Arg2,
-                  typename Arg3,
-                  typename Arg4,
-                  typename Arg5,
-                  typename Arg6 > void verifyArgs( const Arg0&                                  rArg0,
-                                                   const Arg1&                                  rArg1,
-                                                   const Arg2&                                  rArg2,
-                                                   const Arg3&                                  rArg3,
-                                                   const Arg4&                                  rArg4,
-                                                   const Arg5&                                  rArg5,
-                                                   const Arg6&                                  rArg6,
-                                                   const char*                                  pStr,
-                                                   const css::uno::Reference< css::uno::XInterface >& xIf )
-        {
-            verifyInput( rArg0, pStr, xIf, 0 );
-            verifyInput( rArg1, pStr, xIf, 1 );
-            verifyInput( rArg2, pStr, xIf, 2 );
-            verifyInput( rArg3, pStr, xIf, 3 );
-            verifyInput( rArg4, pStr, xIf, 4 );
-            verifyInput( rArg5, pStr, xIf, 5 );
-            verifyInput( rArg6, pStr, xIf, 6 );
-        }
-
-
         /** Range checker, which throws css::lang::IllegalArgument exception, when
             range is violated
         */
@@ -475,30 +347,6 @@ namespace canvastools
                 throw css::lang::IllegalArgumentException();
             }
         }
-
-        /** Range checker, which throws css::lang::IndexOutOfBounds exception, when
-            index range is violated
-
-            @param rect
-            Rect to verify
-
-            @param size
-            Given rectangle must be within ((0,0), (size.Width, size.Height))
-         */
-        CANVASTOOLS_DLLPUBLIC void verifyIndexRange( const css::geometry::IntegerRectangle2D& rect,
-                               const css::geometry::IntegerSize2D&      size );
-
-        /** Range checker, which throws css::lang::IndexOutOfBounds exception, when
-            index range is violated
-
-            @param pos
-            Position to verify
-
-            @param size
-            Given position must be within ((0,0), (size.Width, size.Height))
-         */
-        CANVASTOOLS_DLLPUBLIC void verifyIndexRange( const css::geometry::IntegerPoint2D& pos,
-                               const css::geometry::IntegerSize2D&  size );
 
         /** Range checker, which throws css::lang::IndexOutOfBounds exception, when
             the size is negative or null

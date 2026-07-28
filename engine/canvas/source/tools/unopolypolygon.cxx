@@ -33,12 +33,6 @@ using namespace ::com::sun::star;
 
 namespace canvastools
 {
-    UnoPolyPolygon::UnoPolyPolygon( basegfx::B2DPolyPolygon aPolyPoly ) :
-        maPolyPoly(std::move( aPolyPoly )),
-        meFillRule( rendering::FillRule_EVEN_ODD )
-    {
-    }
-
     UnoPolyPolygon::UnoPolyPolygon( basegfx::B2DPolyPolygon aPolyPoly, css::rendering::FillRule fillRule ) :
         maPolyPoly(std::move( aPolyPoly )),
         meFillRule( fillRule )

@@ -59,14 +59,6 @@ namespace vclcanvas
         }
     }
 
-    CanvasBitmap::CanvasBitmap( const ::Bitmap&                rBitmap,
-                                rendering::XGraphicDevice&     rDevice,
-                                const OutDevProviderSharedPtr& rOutDevProvider )
-    {
-        maCanvasHelper.init( rBitmap, rDevice, rOutDevProvider );
-    }
-
-
     OUString CanvasBitmap::getImplementationName(  )
     {
         return u"VCLCanvas.CanvasBitmap"_ustr;
