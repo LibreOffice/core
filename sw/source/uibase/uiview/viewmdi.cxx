@@ -77,6 +77,11 @@ void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, bool bViewOnly )
     if (bCursorIsVisible)
         m_pWrtShell->ShowCursor();
 
+    // tdf#172903 - Web View renders paragraph spotlight markers off canvas
+    if (IsSpotlightParaStyles())
+        m_pWrtShell->SetBrowseBorder(Size(GetWindow()->LogicToPixel(Size(375, 0)).Width(),
+                                          m_pWrtShell->GetBrowseBorder().Height()));
+
     Invalidate(SID_ZOOM_IN);
     Invalidate(SID_ZOOM_OUT);
 
