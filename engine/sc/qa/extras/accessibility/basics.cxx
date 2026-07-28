@@ -15,6 +15,7 @@
 
 #include <com/sun/star/awt/Key.hpp>
 #include <COKit/COKitEnums.h>
+#include <comphelper/kit.hxx>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -25,6 +26,10 @@ using namespace css;
 
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestCalcMenu)
 {
+    // The client draws the menus with the Kit, so there is no menu bar here to drive
+    if (comphelper::COKit::isActive())
+        return;
+
     load(u"private:factory/scalc"_ustr);
 
     const Date beforeDate(Date::SYSTEM);
