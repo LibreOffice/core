@@ -11,3 +11,8 @@
 // https://help.apple.com/xcode/#/dev745c5c974
 
 APP_PACKAGE_NAME = @APP_PACKAGE_NAME@
+
+// The version of the app, derived by configure from the source tree. The main app carries it in
+// its generated Info.plist; the QuickLook extension takes it from here, since an embedded
+// extension has to declare the same CFBundleShortVersionString as its containing app.
+APP_BUNDLE_SHORT_VERSION = @IOSAPP_BUNDLE_SHORT_VERSION@
