@@ -110,6 +110,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/drawstyleutils.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/json_writer.hxx>
@@ -2045,50 +2046,6 @@ public:
     }
 };
 
-    void lcl_convertStringArguments(sal_uInt16 nSId, const std::unique_ptr<SfxItemSet>& pArgs)
-    {
-        const SfxPoolItem* pItem = nullptr;
-
-        if (nSId == SID_ATTR_FILL_COLOR)
-        {
-            pItem = pArgs->GetItem(SID_ATTR_FILL_COLOR);
-            Color aColor = pItem ? static_cast<const XFillColorItem*>(pItem)->GetColorValue() : COL_AUTO;
-            if (aColor.IsFullyTransparent())
-            {
-                const XFillStyleItem aXFillStyleItem(drawing::FillStyle_NONE);
-                pArgs->Put(aXFillStyleItem);
-            }
-            else
-            {
-                SfxItemState eState = pArgs->GetItemState(SID_ATTR_FILL_STYLE, false, &pItem);
-                if (eState != SfxItemState::SET || static_cast<const XFillStyleItem*>(pItem)->GetValue() == drawing::FillStyle_NONE)
-                {
-                    const XFillStyleItem aXFillStyleItem(drawing::FillStyle_SOLID);
-                    pArgs->Put(aXFillStyleItem);
-                }
-            }
-        }
-        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
-        {
-            double fValue = static_cast<const SvxDoubleItem*>(pItem)->GetValue();
-            // FIXME: different units...
-            int nPow = 100;
-            int nValue = fValue * nPow;
-
-            XLineWidthItem aItem(nValue);
-            pArgs->Put(aItem);
-        }
-        if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
-        {
-            const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
-            if (pJSON)
-            {
-                basegfx::BGradient aGradient = basegfx::BGradient::fromJSON(pJSON->GetValue());
-                XFillGradientItem aItem(aGradient);
-                pArgs->Put(aItem);
-            }
-        }
-    }
 }
 
 void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
@@ -2382,9 +2339,20 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if( rReq.GetArgs() )
             {
-                std::unique_ptr<SfxItemSet> pNewArgs = rReq.GetArgs()->Clone();
-                lcl_convertStringArguments(nSId, pNewArgs);
+                const SfxItemSet* pReqArgs = rReq.GetArgs();
+                std::unique_ptr<SfxItemSet> pNewArgs = pReqArgs->Clone();
+                svx::convertDrawStyleArguments(*pNewArgs);
+
+                const bool bUndo = mpDrawView->IsUndoEnabled();
+                if (bUndo)
+                    mpDrawView->BegUndo();
+
                 mpDrawView->SetAttributes(*pNewArgs);
+                svx::applyBareLineColorToMarked(*mpDrawView, *pReqArgs);
+
+                if (bUndo)
+                    mpDrawView->EndUndo();
+
                 rReq.Done();
             }
             else

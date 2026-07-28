@@ -54,9 +54,8 @@
 #include <sfx2/viewsh.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <memory>
-#include <svx/xlnwtit.hxx>
-#include <svx/chrtitem.hxx>
-#include <svx/xflgrit.hxx>
+#include <svx/svdmark.hxx>
+#include <svx/drawstyleutils.hxx>
 #include <tools/UnitConversion.hxx>
 #include <comphelper/kit.hxx>
 #include <vcl/unohelp2.hxx>
@@ -64,29 +63,6 @@
 using namespace css;
 
 SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
-
-namespace
-{
-    void lcl_convertStringArguments(SfxItemSet& rArgs)
-    {
-        if (const SvxDoubleItem* pWidthItem = rArgs.GetItemIfSet(SID_ATTR_LINE_WIDTH_ARG, false))
-        {
-            double fValue = pWidthItem->GetValue();
-            // FIXME: different units...
-            int nPow = 100;
-            int nValue = fValue * nPow;
-
-            XLineWidthItem aItem(nValue);
-            rArgs.Put(aItem);
-        }
-        if (const SfxStringItem* pJSON = rArgs.GetItemIfSet(SID_FILL_GRADIENT_JSON, false))
-        {
-            basegfx::BGradient aGradient = basegfx::BGradient::fromJSON(pJSON->GetValue());
-            XFillGradientItem aItem(aGradient);
-            rArgs.Put(aItem);
-        }
-    }
-}
 
 void ScDrawShell::InitInterface_Impl()
 {
@@ -258,11 +234,21 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
                 }
 
-                if( rMarkList.GetMarkCount() != 0 )
+                if( nMarkCount != 0 )
                 {
-                    std::unique_ptr<SfxItemSet> pNewArgs = rReq.GetArgs()->Clone();
-                    lcl_convertStringArguments(*pNewArgs);
+                    const SfxItemSet* pReqArgs = rReq.GetArgs();
+                    std::unique_ptr<SfxItemSet> pNewArgs = pReqArgs->Clone();
+                    svx::convertDrawStyleArguments(*pNewArgs);
+
+                    const bool bUndo = pView->IsUndoEnabled();
+                    if (bUndo)
+                        pView->BegUndo();
+
                     pView->SetAttrToMarked(*pNewArgs, false);
+                    svx::applyBareLineColorToMarked(*pView, *pReqArgs);
+
+                    if (bUndo)
+                        pView->EndUndo();
                 }
                 else
                     pView->SetDefaultAttr( *rReq.GetArgs(), false);

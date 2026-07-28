@@ -341,6 +341,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/sdrpagewindow \
     svx/source/svdraw/sdrpaintwindow \
     svx/source/svdraw/sdrundomanager \
+    svx/source/svdraw/drawstyleutils \
     svx/source/svdraw/selectioncontroller \
     svx/source/svdraw/svdattr \
     svx/source/svdraw/svdcrtv \
