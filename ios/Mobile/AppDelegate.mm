@@ -17,6 +17,7 @@
 
 #define LIBO_INTERNAL_ONLY
 #import <COKit/COKit.hxx>
+#import <COKit/COKitInit.h>
 
 #include <comphelper/kit.hxx>
 #include <i18nlangtag/languagetag.hxx>

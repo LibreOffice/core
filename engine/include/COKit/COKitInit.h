@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the Collabora Office project.
  *
@@ -25,8 +25,7 @@
 #include <string.h>
 #include <sys/stat.h>
 
-struct COKitStruct;
-typedef struct COKitStruct COKit;
+#include "COKit.hxx"
 
 #ifndef _WIN32
 
@@ -423,6 +422,26 @@ int cok_preinit( const char *install_path,  const char *user_profile_url )
 #ifdef __cplusplus
 }
 #endif
+
+namespace kit
+{
+
+/// Create a kit::Office instance.
+///
+/// Presumably you are not supposed to create multiple kit::Office
+/// instances in the same process. Possibly not even a new one after
+/// destroying a previous one.
+///
+/// For information on the parameters, see writeup for cok_init_2 above.
+inline Office* kit_cpp_init(const char* pInstallPath, const char* pUserProfileUrl = NULL)
+{
+    COKit* pThis = cok_init_2(pInstallPath, pUserProfileUrl);
+    if (pThis == NULL)
+        return NULL;
+    return new ::kit::Office(pThis);
+}
+
+}
 
 #endif // defined(__linux__) || defined (__FreeBSD__) || defined(_WIN32) || defined(__APPLE__)
 

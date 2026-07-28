@@ -25,6 +25,7 @@
 #include <cppunit/TextTestProgressListener.h>
 
 #import <COKit/COKit.hxx>
+#import <COKit/COKitInit.h>
 
 extern "C" {
 #import <native-code.h>

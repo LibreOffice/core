@@ -18,6 +18,7 @@
 #include <Poco/URI.h>
 
 #include <COKit/COKit.hxx>
+#include <COKit/COKitInit.h>
 
 #if defined _WIN32
 #include <Windows.h>
