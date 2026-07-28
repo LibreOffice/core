@@ -3602,6 +3602,14 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
         {
             PostMessageW(data.hWnd, WM_CLOSE, 0, 0);
         }
+        else if (s == L"uno .uno:Quit")
+        {
+            // Ask each window to close, the same way the window's own close button does. The
+            // messages are queued, so the windows are all still up when this returns. The
+            // application exits when the last one has gone.
+            for (const auto& entry : windowData)
+                PostMessageW(entry.first, WM_CLOSE, 0, 0);
+        }
         else if (s.starts_with(L"newdoc "))
         {
             auto const ns = Util::wide_string_to_string(s);
