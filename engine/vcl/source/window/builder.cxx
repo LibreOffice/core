@@ -196,7 +196,7 @@ void Application::EnableUICoverage(bool bEnable)
 }
 
 void Application::UICoverageReport(tools::JsonWriter& rJson,
-        /*COKitDocumentType*/ int docType,
+        COKitDocumentType docType,
         bool linguisticDataAvailable)
 {
     auto resultNode = rJson.startNode("result");
@@ -213,17 +213,17 @@ void Application::UICoverageReport(tools::JsonWriter& rJson,
     std::vector<OUString> missingAppDialogUIs, missingAppSidebarUIs;
     switch (docType)
     {
-        case KIT_DOCTYPE_TEXT:
+        case COKitDocumentType::TEXT:
             sAppName = "Writer";
             missingAppDialogUIs = jsdialog::completeWriterDialogList(entries);
             missingAppSidebarUIs = jsdialog::completeWriterSidebarList(entries);
             break;
-        case KIT_DOCTYPE_SPREADSHEET:
+        case COKitDocumentType::SPREADSHEET:
             sAppName = "Calc";
             missingAppDialogUIs = jsdialog::completeCalcDialogList(entries);
             missingAppSidebarUIs = jsdialog::completeCalcSidebarList(entries);
             break;
-        case KIT_DOCTYPE_PRESENTATION:
+        case COKitDocumentType::PRESENTATION:
             sAppName = "Impress";
             missingAppDialogUIs = jsdialog::completeImpressDialogList(entries);
             missingAppSidebarUIs = jsdialog::completeImpressSidebarList(entries);

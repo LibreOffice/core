@@ -1147,7 +1147,7 @@ extern "C"
 
 static void doc_destroy(COKitDocument* pThis);
 static int doc_saveAs(COKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
-static int doc_getDocumentType(COKitDocument* pThis);
+static COKitDocumentType doc_getDocumentType(COKitDocument* pThis);
 static int doc_getParts(COKitDocument* pThis);
 static char* doc_getPartPageRectangles(COKitDocument* pThis);
 static int doc_getPart(COKitDocument* pThis);
@@ -1426,7 +1426,7 @@ vcl::Font FindFont_FallbackToDefault(std::u16string_view rFontName)
                                         GetDefaultFontFlags::NONE);
 }
 
-int getDocumentType (COKitDocument* pThis)
+COKitDocumentType getDocumentType (COKitDocument* pThis)
 {
     SetLastExceptionMsg();
 
@@ -1438,19 +1438,19 @@ int getDocumentType (COKitDocument* pThis)
 
         if (xDocument->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr))
         {
-            return KIT_DOCTYPE_SPREADSHEET;
+            return COKitDocumentType::SPREADSHEET;
         }
         else if (xDocument->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr))
         {
-            return KIT_DOCTYPE_PRESENTATION;
+            return COKitDocumentType::PRESENTATION;
         }
         else if (xDocument->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr))
         {
-            return KIT_DOCTYPE_DRAWING;
+            return COKitDocumentType::DRAWING;
         }
         else if (xDocument->supportsService(u"com.sun.star.text.TextDocument"_ustr) || xDocument->supportsService(u"com.sun.star.text.WebDocument"_ustr))
         {
-            return KIT_DOCTYPE_TEXT;
+            return COKitDocumentType::TEXT;
         }
         else
         {
@@ -1461,7 +1461,7 @@ int getDocumentType (COKitDocument* pThis)
     {
         SetLastExceptionMsg("exception: " + exception.Message);
     }
-    return KIT_DOCTYPE_OTHER;
+    return COKitDocumentType::OTHER;
 }
 
 } // anonymous namespace
@@ -1978,7 +1978,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         }
 
         // In Writer we drop all notifications during painting.
-        if (doc_getDocumentType(m_pDocument) == KIT_DOCTYPE_TEXT)
+        if (doc_getDocumentType(m_pDocument) == COKitDocumentType::TEXT)
             return;
     }
 
@@ -3915,19 +3915,19 @@ static int doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pForma
 
         switch (doc_getDocumentType(pThis))
         {
-        case KIT_DOCTYPE_SPREADSHEET:
+        case COKitDocumentType::SPREADSHEET:
             pMap = aCalcExtensionMap;
             break;
-        case KIT_DOCTYPE_PRESENTATION:
+        case COKitDocumentType::PRESENTATION:
             pMap = aImpressExtensionMap;
             break;
-        case KIT_DOCTYPE_DRAWING:
+        case COKitDocumentType::DRAWING:
             pMap = aDrawExtensionMap;
             break;
-        case KIT_DOCTYPE_TEXT:
+        case COKitDocumentType::TEXT:
             pMap = aWriterExtensionMap;
             break;
-        case KIT_DOCTYPE_OTHER:
+        case COKitDocumentType::OTHER:
         default:
             SAL_INFO("kit", "Can't save document - unsupported document type.");
             return false;
@@ -4211,7 +4211,7 @@ static void doc_iniUnoCommands ()
     }
 }
 
-static int doc_getDocumentType (COKitDocument* pThis)
+static COKitDocumentType doc_getDocumentType (COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getDocumentType");
 
@@ -4709,8 +4709,8 @@ static void doc_paintPartTile(COKitDocument* pThis,
     {
         // Text documents have a single coordinate system; don't change part.
         int nOrigPart = 0;
-        const int aType = doc_getDocumentType(pThis);
-        const bool isText = (aType == KIT_DOCTYPE_TEXT);
+        const COKitDocumentType aType = doc_getDocumentType(pThis);
+        const bool isText = (aType == COKitDocumentType::TEXT);
         int nOrigEditMode = 0;
         bool bPaintTextEdit = true;
         int nViewId = nOrigViewId;
@@ -5286,7 +5286,7 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
     // frame remains selected at the Writer level as a TextEmbeddedObject,
     // and writer_svg_Export's embedded-object path can render the
     // replacement graphic even while the chart is still in edit mode.
-    if (doc_getDocumentType(pThis) != KIT_DOCTYPE_TEXT)
+    if (doc_getDocumentType(pThis) != COKitDocumentType::TEXT)
     {
         KitChartHelper aChartHelper(SfxViewShell::Current());
         if (aChartHelper.GetWindow())
@@ -5308,16 +5308,16 @@ static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
         comphelper::SequenceAsHashMap aMediaDescriptor;
         switch (doc_getDocumentType(pThis))
         {
-            case KIT_DOCTYPE_PRESENTATION:
+            case COKitDocumentType::PRESENTATION:
                 aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_svg_Export"_ustr;
                 break;
-            case KIT_DOCTYPE_DRAWING:
+            case COKitDocumentType::DRAWING:
                 aMediaDescriptor[u"FilterName"_ustr] <<= u"draw_svg_Export"_ustr;
                 break;
-            case KIT_DOCTYPE_TEXT:
+            case COKitDocumentType::TEXT:
                 aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_svg_Export"_ustr;
                 break;
-            case KIT_DOCTYPE_SPREADSHEET:
+            case COKitDocumentType::SPREADSHEET:
                 aMediaDescriptor[u"FilterName"_ustr] <<= u"calc_svg_Export"_ustr;
                 break;
             default:
@@ -7181,7 +7181,8 @@ static void addStyleEntry(boost::property_tree::ptree& rChildren,
     rChildren.push_back(std::make_pair("", aChild));
 }
 
-static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>& rComponent, int docType, const char* pCommand)
+static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>& rComponent,
+                                COKitDocumentType docType, const char* pCommand)
 {
     boost::property_tree::ptree aTree;
     aTree.put("commandName", pCommand);
@@ -7219,7 +7220,7 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
         // should be shown in the normal dropdown, which we should add to the start of the list
         // to simplify their selection.
         if (sStyleFam == "ParagraphStyles"
-            && docType == KIT_DOCTYPE_TEXT)
+            && docType == COKitDocumentType::TEXT)
         {
             for (const OUString& rStyle: aWriterStyles)
             {
@@ -7234,7 +7235,7 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
             // Filter out the default styles - they are already at the top
             // of the list
             if (aDefaultStyleNames.find(rStyle) == aDefaultStyleNames.end() ||
-                (sStyleFam != "ParagraphStyles" || docType != KIT_DOCTYPE_TEXT) )
+                (sStyleFam != "ParagraphStyles" || docType != COKitDocumentType::TEXT) )
             {
                 addStyleEntry(aChildren, xStyleFamily, rStyle);
             }
@@ -7399,7 +7400,7 @@ static char* getTrackedChanges(COKitDocument* pThis)
     // We want positions of the track changes also which is not possible from
     // UNO. Enable positioning information for text documents only for now, so
     // construct the tracked changes JSON from inside the sw/, not here using UNO
-    if (doc_getDocumentType(pThis) != KIT_DOCTYPE_TEXT && xRedlinesSupplier.is())
+    if (doc_getDocumentType(pThis) != COKitDocumentType::TEXT && xRedlinesSupplier.is())
     {
         auto redlinesNode = aJson.startArray("redlines");
         uno::Reference<container::XEnumeration> xRedlines = xRedlinesSupplier->getRedlines()->createEnumeration();
@@ -8235,7 +8236,7 @@ static void doc_sendFormFieldEvent(COKitDocument* pThis, const char* pArguments)
     SolarMutexGuard aGuard;
 
     // Supported in Writer only
-    if (doc_getDocumentType(pThis) != KIT_DOCTYPE_TEXT)
+    if (doc_getDocumentType(pThis) != COKitDocumentType::TEXT)
             return;
 
     StringMap aMap(jsdialog::jsonToStringMap(pArguments));
@@ -8260,7 +8261,7 @@ static bool doc_renderSearchResult(COKitDocument* pThis,
                                      const char* pSearchResult, unsigned char** pBitmapBuffer,
                                      int* pWidth, int* pHeight, size_t* pByteSize)
 {
-    if (doc_getDocumentType(pThis) != KIT_DOCTYPE_TEXT)
+    if (doc_getDocumentType(pThis) != COKitDocumentType::TEXT)
         return false;
 
     if (pBitmapBuffer == nullptr)
@@ -8311,7 +8312,7 @@ static void doc_sendContentControlEvent(COKitDocument* pThis, const char* pArgum
     SolarMutexGuard aGuard;
 
     // Supported in Writer only
-    if (doc_getDocumentType(pThis) != KIT_DOCTYPE_TEXT)
+    if (doc_getDocumentType(pThis) != COKitDocumentType::TEXT)
     {
         return;
     }
@@ -8387,8 +8388,9 @@ static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER COKitDocument* pThis,
 {
     SolarMutexGuard aGuard;
 
-    int nDocType = getDocumentType(pThis);
-    if (!(nDocType == KIT_DOCTYPE_TEXT || nDocType == KIT_DOCTYPE_PRESENTATION || nDocType == KIT_DOCTYPE_SPREADSHEET))
+    COKitDocumentType eDocType = getDocumentType(pThis);
+    if (!(eDocType == COKitDocumentType::TEXT || eDocType == COKitDocumentType::PRESENTATION
+          || eDocType == COKitDocumentType::SPREADSHEET))
         return;
 
     KitHelper::setAccessibilityState(nId, nEnabled);
@@ -8989,7 +8991,7 @@ static void preloadData()
         if (component.factory == "private:factory/swriter")
         {
             // Query document styles to initialize writer's on-demand created table style globals
-            char *pThrowaway = getComponentStyles(xComp, KIT_DOCTYPE_TEXT, ".uno:StyleApply");
+            char *pThrowaway = getComponentStyles(xComp, COKitDocumentType::TEXT, ".uno:StyleApply");
             free(pThrowaway);
         }
 

@@ -1081,7 +1081,7 @@ void Document::renderTiles(TileCombined &tileCombined)
     // is the slide the pixels show.
     const auto docType = _loKitDocument->getDocumentType();
     int paintPart = -1;
-    if (docType == KIT_DOCTYPE_PRESENTATION || docType == KIT_DOCTYPE_DRAWING)
+    if (docType == COKitDocumentType::PRESENTATION || docType == COKitDocumentType::DRAWING)
     {
         const std::vector<TileDesc>& tiles = tileCombined.getTiles();
         if (tiles.size() == 1 && tiles[0].isPreview() &&
@@ -2309,13 +2309,13 @@ std::shared_ptr<kit::Document> Document::load(const std::shared_ptr<ChildSession
 
         switch (_loKitDocument->getDocumentType())
         {
-        case KIT_DOCTYPE_TEXT:
-        case KIT_DOCTYPE_SPREADSHEET:
+        case COKitDocumentType::TEXT:
+        case COKitDocumentType::SPREADSHEET:
             // writer and calc can have different spell checking settings per view, so use this users
             // preference
             break;
-        case KIT_DOCTYPE_PRESENTATION:
-        case KIT_DOCTYPE_DRAWING:
+        case COKitDocumentType::PRESENTATION:
+        case COKitDocumentType::DRAWING:
         default:
             // impress/draw currently cannot, so use the current document state
             // so simply joining doesn't toggle that shared spelling state

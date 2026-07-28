@@ -465,7 +465,7 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
         return;
     }
 
-    const int docType = loKitDoc->getDocumentType();
+    const COKitDocumentType docType = loKitDoc->getDocumentType();
     const auto formats = getSaveAsFormats(docType);
 
     if (formats.empty())

@@ -1074,30 +1074,30 @@ static std::vector<FilenameAndUri> fileOpenDialog()
     return result;
 }
 
-static std::vector<COMDLG_FILTERSPEC>getSaveAsFormats(int docType)
+static std::vector<COMDLG_FILTERSPEC>getSaveAsFormats(COKitDocumentType docType)
 {
     std::vector<COMDLG_FILTERSPEC> result;
 
-    if (docType == KIT_DOCTYPE_TEXT)
+    if (docType == COKitDocumentType::TEXT)
     {
         result.push_back({L"ODT", L"*.odt"});
         result.push_back({L"RTF", L"*.rtf"});
         result.push_back({L"DOCX", L"*.docx"});
         result.push_back({L"DOC", L"*.doc"});
     }
-    else if (docType == KIT_DOCTYPE_SPREADSHEET)
+    else if (docType == COKitDocumentType::SPREADSHEET)
     {
         result.push_back({L"ODS", L"*.ods"});
         result.push_back({L"XLSX", L"*.xlsx"});
         result.push_back({L"XLS", L"*.xls"});
     }
-    else if (docType == KIT_DOCTYPE_PRESENTATION)
+    else if (docType == COKitDocumentType::PRESENTATION)
     {
         result.push_back({L"ODP", L"*.odp"});
         result.push_back({L"PPTX", L"*.pptx"});
         result.push_back({L"PPT", L"*.ppt"});
     }
-    else if (docType == KIT_DOCTYPE_DRAWING)
+    else if (docType == COKitDocumentType::DRAWING)
     {
         result.push_back({L"ODG", L"*.odg"});
     }
@@ -3121,7 +3121,7 @@ static void processMessage(WindowData& data, wil::unique_cotaskmem_string& messa
         else if (s == L"uno .uno:SaveAs")
         {
             auto loKitDoc = DocumentData::get(data.appDocId).loKitDocument;
-            const int docType = loKitDoc->getDocumentType();
+            const COKitDocumentType docType = loKitDoc->getDocumentType();
             const auto formats = getSaveAsFormats(docType);
             auto filenameAndUri = fileSaveDialog("", "", formats);
 

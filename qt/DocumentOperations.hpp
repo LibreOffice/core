@@ -18,6 +18,8 @@
 #include <QString>
 #include <QWidget>
 
+#include <COKit/COKit.hxx>
+
 class QFileDialog;
 
 struct SaveAsFormat
@@ -27,7 +29,7 @@ struct SaveAsFormat
     QString displayName; // e.g., "ODF text document (.odt)"
 };
 
-std::vector<SaveAsFormat> getSaveAsFormats(int docType);
+std::vector<SaveAsFormat> getSaveAsFormats(COKitDocumentType docType);
 
 // Shows the printer-selection dialog for an already-exported PDF file and
 // prints or copies it as the user chooses. Removes the file's private temp

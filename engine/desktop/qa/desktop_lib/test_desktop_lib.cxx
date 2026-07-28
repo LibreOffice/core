@@ -86,12 +86,12 @@ static COKitDocumentType getDocumentTypeFromName(std::string_view name)
     const std::string_view ext = name.substr(it);
 
     if (ext == ".ods")
-        return KIT_DOCTYPE_SPREADSHEET;
+        return COKitDocumentType::SPREADSHEET;
 
     if (ext == ".odp")
-        return KIT_DOCTYPE_PRESENTATION;
+        return COKitDocumentType::PRESENTATION;
 
-    return KIT_DOCTYPE_TEXT;
+    return COKitDocumentType::TEXT;
 }
 
 class DesktopKitTest : public UnoApiTest
@@ -383,13 +383,13 @@ DesktopKitTest::loadDocUrlImpl(const OUString& rFileURL, COKitDocumentType eType
     OUString aService;
     switch (eType)
     {
-    case KIT_DOCTYPE_TEXT:
+    case COKitDocumentType::TEXT:
         aService = u"com.sun.star.text.TextDocument"_ustr;
         break;
-    case KIT_DOCTYPE_SPREADSHEET:
+    case COKitDocumentType::SPREADSHEET:
         aService = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
         break;
-    case KIT_DOCTYPE_PRESENTATION:
+    case COKitDocumentType::PRESENTATION:
         aService = u"com.sun.star.presentation.PresentationDocument"_ustr;
         break;
     default:
@@ -721,7 +721,7 @@ void DesktopKitTest::testSaveFailedReportsReason()
     // itself editable. In the kit a .uno:Save against a read-only medium fails with an
     // input/output error and no dialog, which stands in for any store that fails while the
     // document is loaded.
-    m_pDocument = loadDocUrlImpl(createFileURL(u"blank_text.odt"), KIT_DOCTYPE_TEXT);
+    m_pDocument = loadDocUrlImpl(createFileURL(u"blank_text.odt"), COKitDocumentType::TEXT);
     LibLODocument_Impl* pDocument = m_pDocument.get();
     pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
@@ -783,7 +783,7 @@ void DesktopKitTest::testExportDirectToPdfDottedName()
     comphelper::ScopeGuard aResetCallback(
         []() { comphelper::COKit::setFileSaveDialogCallback({}); });
 
-    LibLODocument_Impl* pDocument = loadDocUrl(aDocUrl, KIT_DOCTYPE_TEXT);
+    LibLODocument_Impl* pDocument = loadDocUrl(aDocUrl, COKitDocumentType::TEXT);
     pDocument->pClass->postUnoCommand(pDocument, ".uno:ExportDirectToPDF", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
@@ -1260,7 +1260,7 @@ void DesktopKitTest::testSheetOperations()
 
 void DesktopKitTest::testSheetSelections()
 {
-    LibLODocument_Impl* pDocument = loadDoc("sheets.ods", KIT_DOCTYPE_SPREADSHEET);
+    LibLODocument_Impl* pDocument = loadDoc("sheets.ods", COKitDocumentType::SPREADSHEET);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
@@ -1355,7 +1355,7 @@ void DesktopKitTest::testSheetSelections()
 
 void DesktopKitTest::testSheetDragDrop()
 {
-    LibLODocument_Impl* pDocument = loadDoc("sheets.ods", KIT_DOCTYPE_SPREADSHEET);
+    LibLODocument_Impl* pDocument = loadDoc("sheets.ods", COKitDocumentType::SPREADSHEET);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
@@ -1558,7 +1558,7 @@ namespace {
 
 void DesktopKitTest::testContextMenuCalc()
 {
-    LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods", KIT_DOCTYPE_SPREADSHEET);
+    LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods", COKitDocumentType::SPREADSHEET);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
@@ -3650,7 +3650,7 @@ void DesktopKitTest::testInsertCertificate_DER_ODT()
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
     closeDoc();
 
-    pDocument = loadDocUrl(maTempFile.GetURL(), KIT_DOCTYPE_TEXT);
+    pDocument = loadDocUrl(maTempFile.GetURL(), COKitDocumentType::TEXT);
 
     Scheduler::ProcessEventsToIdle();
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
@@ -3697,7 +3697,7 @@ void DesktopKitTest::testInsertCertificate_PEM_ODT()
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
     closeDoc();
 
-    pDocument = loadDocUrl(maTempFile.GetURL(), KIT_DOCTYPE_TEXT);
+    pDocument = loadDocUrl(maTempFile.GetURL(), COKitDocumentType::TEXT);
 
     Scheduler::ProcessEventsToIdle();
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
@@ -3751,7 +3751,7 @@ void DesktopKitTest::testInsertCertificate_PEM_DOCX()
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, maTempFile.GetURL().toUtf8().getStr(), "docx", nullptr));
     closeDoc();
 
-    pDocument = loadDocUrl(maTempFile.GetURL(), KIT_DOCTYPE_TEXT);
+    pDocument = loadDocUrl(maTempFile.GetURL(), COKitDocumentType::TEXT);
 
     Scheduler::ProcessEventsToIdle();
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
@@ -3994,7 +3994,7 @@ void DesktopKitTest::testCalcSaveAs()
     closeDoc();
 
     // Load the new document and verify that the in-flight changes are saved.
-    pDocument = loadDocUrl(maTempFile.GetURL(), KIT_DOCTYPE_SPREADSHEET);
+    pDocument = loadDocUrl(maTempFile.GetURL(), COKitDocumentType::SPREADSHEET);
     CPPUNIT_ASSERT(pDocument);
 
     ViewCallback aView(pDocument);
@@ -4024,7 +4024,7 @@ void DesktopKitTest::testSpellcheckerMultiView()
     aSettings.SetLanguageTag(aLangISO, true);
     Application::SetSettings(aSettings);
 
-    LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods", KIT_DOCTYPE_SPREADSHEET);
+    LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods", COKitDocumentType::SPREADSHEET);
     pDocument->pClass->setViewLanguage(pDocument, 0, "en-US"); // For spellchecking.
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);

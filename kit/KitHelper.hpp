@@ -34,16 +34,16 @@ namespace LOKitHelper
     {
         switch (type)
         {
-        case KIT_DOCTYPE_TEXT:
+        case COKitDocumentType::TEXT:
             return "text";
-        case KIT_DOCTYPE_SPREADSHEET:
+        case COKitDocumentType::SPREADSHEET:
             return "spreadsheet";
-        case KIT_DOCTYPE_PRESENTATION:
+        case COKitDocumentType::PRESENTATION:
             return "presentation";
-        case KIT_DOCTYPE_DRAWING:
+        case COKitDocumentType::DRAWING:
             return "drawing";
         default:
-            return "other-" + std::to_string(type);
+            return "other-" + std::to_string(static_cast<int>(type));
         }
     }
 
@@ -210,12 +210,12 @@ namespace LOKitHelper
         int mode = 0;
         std::string hasComments = "false";
 
-        if (type == KIT_DOCTYPE_SPREADSHEET)
+        if (type == COKitDocumentType::SPREADSHEET)
             fetchCalcSpecificData(loKitDocument, resultInfo, selectedPart);
-        else if (type == KIT_DOCTYPE_TEXT)
+        else if (type == COKitDocumentType::TEXT)
             fetchWriterSpecificData(loKitDocument, resultInfo, mode, hasComments);
 
-        if (type == KIT_DOCTYPE_SPREADSHEET || type == KIT_DOCTYPE_PRESENTATION || type == KIT_DOCTYPE_DRAWING)
+        if (type == COKitDocumentType::SPREADSHEET || type == COKitDocumentType::PRESENTATION || type == COKitDocumentType::DRAWING)
             fetchPartsData(loKitDocument, resultInfo, partsCount, mode);
 
         resultInfo["mode"] = std::to_string(mode);

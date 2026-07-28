@@ -232,13 +232,13 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         getLOKitDocument()->setView(_viewId);
 
         int curPart = 0;
-        if (getLOKitDocument()->getDocumentType() != KIT_DOCTYPE_TEXT)
+        if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT)
             curPart = getLOKitDocument()->getPart();
 
         // Notify all views about updated view info
         _docManager->notifyViewInfo();
 
-        if (getLOKitDocument()->getDocumentType() != KIT_DOCTYPE_TEXT)
+        if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT)
         {
             sendTextFrame("curpart: part=" + std::to_string(curPart));
             sendTextFrame("setpart: part=" + std::to_string(curPart));
@@ -1697,8 +1697,8 @@ bool ChildSession::getTextSelection(const StringVector& tokens)
     std::string mimeType = mimeTypes[0];
     SigUtil::addActivity(getId(), "getTextSelection");
 
-    if (getLOKitDocument()->getDocumentType() != KIT_DOCTYPE_TEXT &&
-        getLOKitDocument()->getDocumentType() != KIT_DOCTYPE_SPREADSHEET)
+    if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT &&
+        getLOKitDocument()->getDocumentType() != COKitDocumentType::SPREADSHEET)
     {
         const std::string selection = getTextSelectionInternal(mimeType);
         if (selection.size() >= 1024 * 1024) // Don't return huge data.
@@ -3290,10 +3290,10 @@ bool ChildSession::saveAs(const StringVector& tokens)
         bool retry = true;
         switch (getLOKitDocument()->getDocumentType())
         {
-            case KIT_DOCTYPE_TEXT:         url += ".odt"; wopiFilename += ".odt"; break;
-            case KIT_DOCTYPE_SPREADSHEET:  url += ".ods"; wopiFilename += ".ods"; break;
-            case KIT_DOCTYPE_PRESENTATION: url += ".odp"; wopiFilename += ".odp"; break;
-            case KIT_DOCTYPE_DRAWING:      url += ".odg"; wopiFilename += ".odg"; break;
+            case COKitDocumentType::TEXT:         url += ".odt"; wopiFilename += ".odt"; break;
+            case COKitDocumentType::SPREADSHEET:  url += ".ods"; wopiFilename += ".ods"; break;
+            case COKitDocumentType::PRESENTATION: url += ".odp"; wopiFilename += ".odp"; break;
+            case COKitDocumentType::DRAWING:      url += ".odg"; wopiFilename += ".odg"; break;
             default:                       retry = false; break;
         }
 
@@ -3407,7 +3407,7 @@ bool ChildSession::setClientPart(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
-    if (getLOKitDocument()->getDocumentType() != KIT_DOCTYPE_TEXT && part != getLOKitDocument()->getPart())
+    if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT && part != getLOKitDocument()->getPart())
     {
         getLOKitDocument()->setPart(part);
         _currentPart = part;
@@ -3430,7 +3430,7 @@ bool ChildSession::selectClientPart(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
-    if (getLOKitDocument()->getDocumentType() != KIT_DOCTYPE_TEXT)
+    if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT)
     {
         if (part != getLOKitDocument()->getPart())
         {
@@ -3468,7 +3468,7 @@ bool ChildSession::moveSelectedClientParts(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
-    if (getLOKitDocument()->getDocumentType() != KIT_DOCTYPE_TEXT)
+    if (getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT)
     {
         getLOKitDocument()->moveSelectedParts(position, false, intoSection); // Move, don't duplicate.
 
@@ -4061,7 +4061,7 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
         int part;
         StringVector tokens(StringVector::tokenize(payload, ','));
         if (getTokenInteger(tokens[1], "part", part) &&
-            getLOKitDocument()->getDocumentType() != KIT_DOCTYPE_TEXT)
+            getLOKitDocument()->getDocumentType() != COKitDocumentType::TEXT)
             _currentPart = part;
 
         sendTextFrame("setpart: " + payload);

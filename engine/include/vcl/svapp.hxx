@@ -1228,7 +1228,7 @@ public:
 
     /** Report on what .ui files were used*/
     static void UICoverageReport(tools::JsonWriter& rJson,
-            /*COKitDocumentType*/ int eDocType,
+            COKitDocumentType eDocType,
             bool linguisticDataAvailable);
 
     ///@}

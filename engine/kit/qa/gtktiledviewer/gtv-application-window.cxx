@@ -174,7 +174,7 @@ static void initWindow(GtvApplicationWindow* window)
     if (pDocument)
     {
         COKitDocumentType eDocType = static_cast<COKitDocumentType>(pDocument->pClass->getDocumentType(pDocument));
-        if (eDocType == KIT_DOCTYPE_SPREADSHEET)
+        if (eDocType == COKitDocumentType::SPREADSHEET)
         {
             // Align to top left corner, so the tiles are in sync with the
             // row/column bar, even when zooming out enough that not all space is

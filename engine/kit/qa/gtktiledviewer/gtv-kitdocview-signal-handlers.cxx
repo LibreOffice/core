@@ -449,7 +449,7 @@ gboolean KitDocumentViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEvent
     }
 
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
-    if (!pDocument || pDocument->pClass->getDocumentType(pDocument) != KIT_DOCTYPE_SPREADSHEET)
+    if (!pDocument || pDocument->pClass->getDocumentType(pDocument) != COKitDocumentType::SPREADSHEET)
         return true;
 
     GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(window->scrolledwindow));

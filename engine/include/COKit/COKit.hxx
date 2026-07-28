@@ -88,15 +88,16 @@ struct COKitClipboardProviderStruct
     int (*getDataForMimeType)(const char* pMimeType, char** pOutData, size_t* pOutSize);
 };
 
-typedef enum
+// getDocumentType is part of the API whether or not the unstable half is asked for, so the
+// type it returns sits outside that guard.
+enum class COKitDocumentType
 {
-  KIT_DOCTYPE_TEXT,
-  KIT_DOCTYPE_SPREADSHEET,
-  KIT_DOCTYPE_PRESENTATION,
-  KIT_DOCTYPE_DRAWING,
-  KIT_DOCTYPE_OTHER
-}
-COKitDocumentType;
+  TEXT,
+  SPREADSHEET,
+  PRESENTATION,
+  DRAWING,
+  OTHER
+};
 
 enum class COKitPartMode
 {
@@ -1577,7 +1578,7 @@ struct COKitDocumentClassStruct
                    const char* pFilterOptions);
 
     /** @see kit::Document::getDocumentType(). */
-    int (*getDocumentType) (COKitDocument* pThis);
+    COKitDocumentType (*getDocumentType) (COKitDocument* pThis);
 
     /// @see kit::Document::getParts().
     int (*getParts) (COKitDocument* pThis);
@@ -2013,7 +2014,7 @@ public:
      *
      * @return an element of the COKitDocumentType enum.
      */
-    int getDocumentType()
+    COKitDocumentType getDocumentType()
     {
         return mpDoc->pClass->getDocumentType(mpDoc);
     }

@@ -808,7 +808,7 @@ std::vector<OUString> completeImpressSidebarList(const o3tl::sorted_vector<OUStr
 }
 
 std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUString>& entries,
-                                                /*COKitDocumentType*/ int docType)
+                                                COKitDocumentType docType)
 {
     std::vector<OUString> missing;
     for (const auto& entry : SidebarList)
@@ -837,7 +837,7 @@ std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUStri
         else if (entry == u"svx/ui/sidebargallery.ui")
             continue;
 
-        if (docType != KIT_DOCTYPE_TEXT)
+        if (docType != COKitDocumentType::TEXT)
         {
             // These only appear in writer
             if (entry == u"svx/ui/accessibilitycheckentry.ui" ||
@@ -848,7 +848,7 @@ std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUStri
             }
         }
 
-        if (docType == KIT_DOCTYPE_TEXT)
+        if (docType == COKitDocumentType::TEXT)
         {
             // Skip this one, its context means it cannot appear in writer
             if (entry == u"svx/ui/sidebarshadow.ui")
@@ -858,7 +858,7 @@ std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUStri
                 continue;
         }
 
-        if (docType != KIT_DOCTYPE_PRESENTATION && docType != KIT_DOCTYPE_DRAWING)
+        if (docType != COKitDocumentType::PRESENTATION && docType != COKitDocumentType::DRAWING)
         {
             // Skip this one, in practice it appears in draw/impress
             // TODO: it should probably be made to appear in writer/calc too
@@ -879,7 +879,7 @@ std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUStri
 }
 
 std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUString>& entries,
-                                               /*COKitDocumentType*/ int docType,
+                                               COKitDocumentType docType,
                                                bool linguisticDataAvailable)
 {
     std::vector<OUString> missing;
@@ -898,7 +898,7 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 continue;
             }
 
-            if (docType != KIT_DOCTYPE_TEXT)
+            if (docType != COKitDocumentType::TEXT)
             {
                 // The 'writerperfect' ones are writer only
                 if (o3tl::starts_with(entry, u"writerperfect"))
@@ -956,7 +956,7 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 }
             }
 
-            if (docType == KIT_DOCTYPE_SPREADSHEET)
+            if (docType == COKitDocumentType::SPREADSHEET)
             {
                 // Not supported in Calc
                 if (entry == u"svx/ui/gotopagedialog.ui" ||
@@ -970,7 +970,7 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 }
             }
 
-            if (docType == KIT_DOCTYPE_TEXT)
+            if (docType == COKitDocumentType::TEXT)
             {
                 // Not supported in Writer
                 if (entry == u"cui/ui/borderbackgrounddialog.ui" ||
@@ -978,7 +978,7 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                     continue;
             }
 
-            if (docType == KIT_DOCTYPE_PRESENTATION || docType == KIT_DOCTYPE_DRAWING)
+            if (docType == COKitDocumentType::PRESENTATION || docType == COKitDocumentType::DRAWING)
             {
                 // Impress doesn't use these, it has its own equivalents
                 if (entry == u"cui/ui/borderbackgrounddialog.ui" ||

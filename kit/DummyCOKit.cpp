@@ -51,7 +51,7 @@ extern "C"
 
 static void doc_destroy(COKitDocument* self);
 static int doc_saveAs(COKitDocument* self, const char* url, const char* format, const char* filterOptions);
-static int doc_getDocumentType(COKitDocument* self);
+static COKitDocumentType doc_getDocumentType(COKitDocument* self);
 static int doc_getParts(COKitDocument* self);
 static char* doc_getPartPageRectangles(COKitDocument* self);
 static int doc_getPart(COKitDocument* self);
@@ -267,10 +267,10 @@ static int doc_saveAs(COKitDocument* self, const char* url, const char* format, 
     return true;
 }
 
-static int doc_getDocumentType (COKitDocument* self)
+static COKitDocumentType doc_getDocumentType (COKitDocument* self)
 {
     (void) self;
-    return KIT_DOCTYPE_TEXT;
+    return COKitDocumentType::TEXT;
 }
 
 static int doc_getParts (COKitDocument* self)

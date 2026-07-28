@@ -240,7 +240,7 @@ struct KitDocumentViewPrivateImpl
         m_bInDragEndHandle(false),
         m_nViewId(0),
         m_nPartId(0),
-        m_eDocumentType(KIT_DOCTYPE_OTHER),
+        m_eDocumentType(COKitDocumentType::OTHER),
         m_nTileSizeTwips(0),
         m_aVisibleArea({0, 0, 0, 0}),
         m_bVisibleAreaSet(false),
@@ -1749,7 +1749,7 @@ static const GdkRGBA& getDarkColor(int nViewId, KitDocumentViewPrivate& priv)
     if (it != aColorMap.end())
         return it->second;
 
-    if (priv->m_eDocumentType == KIT_DOCTYPE_TEXT)
+    if (priv->m_eDocumentType == COKitDocumentType::TEXT)
     {
         char* pValues = priv->m_pDocument->pClass->getCommandValues(priv->m_pDocument, ".uno:TrackedChangeAuthors");
         std::stringstream aInfo;
@@ -1822,7 +1822,7 @@ renderOverlay(KitDocumentView* pDocView, cairo_t* pCairo)
                 continue;
 
             // Show view cursors when in Writer or when the part matches.
-            if (rPair.second.m_nPart != priv->m_nPartId && priv->m_eDocumentType != KIT_DOCTYPE_TEXT)
+            if (rPair.second.m_nPart != priv->m_nPartId && priv->m_eDocumentType != COKitDocumentType::TEXT)
                 continue;
 
             GdkRectangle& rCursor = rPair.second.m_aRectangle;
@@ -1934,7 +1934,7 @@ renderOverlay(KitDocumentView* pDocView, cairo_t* pCairo)
     // Selections of other views.
     for (const auto& rPair : priv->m_aTextViewSelectionRectangles)
     {
-        if (rPair.second.m_nPart != priv->m_nPartId && priv->m_eDocumentType != KIT_DOCTYPE_TEXT)
+        if (rPair.second.m_nPart != priv->m_nPartId && priv->m_eDocumentType != COKitDocumentType::TEXT)
             continue;
 
         for (const GdkRectangle& rRectangle : rPair.second.m_aRectangles)
@@ -1961,7 +1961,7 @@ renderOverlay(KitDocumentView* pDocView, cairo_t* pCairo)
     for (const auto& rPair : priv->m_aGraphicViewSelections)
     {
         const ViewRectangle& rRectangle = rPair.second;
-        if (rRectangle.m_nPart != priv->m_nPartId && priv->m_eDocumentType != KIT_DOCTYPE_TEXT)
+        if (rRectangle.m_nPart != priv->m_nPartId && priv->m_eDocumentType != COKitDocumentType::TEXT)
             continue;
 
         const GdkRGBA& rDark = getDarkColor(rPair.first, priv);

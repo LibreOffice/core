@@ -253,7 +253,7 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getDocu
     (JNIEnv* pEnv, jobject aObject)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    return (jint) pDocument->pClass->getDocumentType(pDocument);
+    return static_cast<jint>(pDocument->pClass->getDocumentType(pDocument));
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_paintTileNative

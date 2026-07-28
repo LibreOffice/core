@@ -772,7 +772,7 @@ void replyButtonClicked(GtkWidget* pWidget, gpointer userdata)
     // Different reply UNO command for impress
     std::string replyCommand = ".uno:ReplyComment";
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
-    if (pDocument && pDocument->pClass->getDocumentType(pDocument) == KIT_DOCTYPE_PRESENTATION)
+    if (pDocument && pDocument->pClass->getDocumentType(pDocument) == COKitDocumentType::PRESENTATION)
         replyCommand = ".uno:ReplyToAnnotation";
     kit_doc_view_post_command(KIT_DOC_VIEW(window->kitdocview), replyCommand.c_str(), aArguments.c_str(), false);
 }
@@ -795,9 +795,9 @@ void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
     COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
     if (pDocument)
     {
-        if (pDocument->pClass->getDocumentType(pDocument) == KIT_DOCTYPE_PRESENTATION)
+        if (pDocument->pClass->getDocumentType(pDocument) == COKitDocumentType::PRESENTATION)
             deleteCommand = ".uno:DeleteAnnotation";
-        else if (pDocument->pClass->getDocumentType(pDocument) == KIT_DOCTYPE_SPREADSHEET)
+        else if (pDocument->pClass->getDocumentType(pDocument) == COKitDocumentType::SPREADSHEET)
             deleteCommand = ".uno:DeleteNote";
     }
 

@@ -37,11 +37,11 @@
 
 #include <cstdlib>
 
-std::vector<SaveAsFormat> getSaveAsFormats(int docType)
+std::vector<SaveAsFormat> getSaveAsFormats(COKitDocumentType docType)
 {
     std::vector<SaveAsFormat> formats;
 
-    if (docType == KIT_DOCTYPE_TEXT)
+    if (docType == COKitDocumentType::TEXT)
     {
         formats = {
             {QStringLiteral("saveas-odt"), QStringLiteral("odt"), QObject::tr("ODF text document (.odt)")},
@@ -50,7 +50,7 @@ std::vector<SaveAsFormat> getSaveAsFormats(int docType)
             {QStringLiteral("saveas-doc"), QStringLiteral("doc"), QObject::tr("Word 2003 Document (.doc)")}
         };
     }
-    else if (docType == KIT_DOCTYPE_SPREADSHEET)
+    else if (docType == COKitDocumentType::SPREADSHEET)
     {
         formats = {
             {QStringLiteral("saveas-ods"), QStringLiteral("ods"), QObject::tr("ODF spreadsheet (.ods)")},
@@ -58,7 +58,7 @@ std::vector<SaveAsFormat> getSaveAsFormats(int docType)
             {QStringLiteral("saveas-xls"), QStringLiteral("xls"), QObject::tr("Excel 2003 Spreadsheet (.xls)")}
         };
     }
-    else if (docType == KIT_DOCTYPE_PRESENTATION)
+    else if (docType == COKitDocumentType::PRESENTATION)
     {
         formats = {
             {QStringLiteral("saveas-odp"), QStringLiteral("odp"), QObject::tr("ODF presentation (.odp)")},
@@ -66,7 +66,7 @@ std::vector<SaveAsFormat> getSaveAsFormats(int docType)
             {QStringLiteral("saveas-ppt"), QStringLiteral("ppt"), QObject::tr("PowerPoint 2003 Presentation (.ppt)")}
         };
     }
-    else if (docType == KIT_DOCTYPE_DRAWING)
+    else if (docType == COKitDocumentType::DRAWING)
     {
         formats = {
             {QStringLiteral("saveas-odg"), QStringLiteral("odg"), QObject::tr("ODF drawing (.odg)")}

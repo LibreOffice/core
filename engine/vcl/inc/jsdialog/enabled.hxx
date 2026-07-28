@@ -12,6 +12,8 @@
 #include <string_view>
 #include <o3tl/sorted_vector.hxx>
 
+#include <COKit/COKit.hxx>
+
 namespace jsdialog
 {
 /// used to not warn about it
@@ -40,11 +42,11 @@ std::vector<OUString> completeImpressDialogList(const o3tl::sorted_vector<OUStri
 std::vector<OUString> completeImpressSidebarList(const o3tl::sorted_vector<OUString>& entries);
 // returns vector of common/shared dialog .ui files not seen that should be seen to have complete coverage
 std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUString>& entries,
-                                               /*COKitDocumentType*/ int docType,
+                                               COKitDocumentType docType,
                                                bool linguisticDataAvailable);
 // returns vector of common/shared sidebar .ui files not seen that should be seen to have complete coverage
 std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUString>& entries,
-                                                /*COKitDocumentType*/ int docType);
+                                                COKitDocumentType docType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
