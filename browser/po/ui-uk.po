@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-30 00:25+0000\n"
-"Last-Translator: Ardev Prisec <prisecardev@gmail.com>\n"
+"PO-Revision-Date: 2026-07-29 11:05+0000\n"
+"Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/uk/>\n"
 "Language: uk\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -567,11 +567,11 @@ msgstr "Відображати Позначки Форматування"
 #: src/control/Control.NotebookbarWriter.js:2332
 #: src/control/jsdialog/Widget.HTMLContent.ts:52
 msgid "Show Comments"
-msgstr "Показати Коментарі"
+msgstr "Показати коментарі"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:569
 msgid "Accessibility Checker"
-msgstr "Перевірка Доступності"
+msgstr "Перевірка доступності"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:570
 #: src/control/Control.NavigatorPanel.ts:302
@@ -5150,9 +5150,8 @@ msgstr ""
 "бібліографію в цьому документі."
 
 #: src/control/HRuler.ts:321
-#, fuzzy
 msgid "First line"
-msgstr "Перший Слайд"
+msgstr "Перший рядок"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
@@ -6595,10 +6594,9 @@ msgid "Please send us your feedback"
 msgstr "Будь ласка, надішліть нам свій відгук"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
 msgstr ""
-"Файл типу: {0} неможливо завантажити на сервер, тому що у файла немає імені"
+"Файл типу: {0} неможливо завантажити на сервер, тому що у файла немає назви"
 
 #: src/map/handler/Map.FileInserter.js:193
 #, javascript-format
@@ -6609,7 +6607,6 @@ msgstr ""
 "Файл типу: {0} неможливо завантажити на сервер, тому що у файла немає імені"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
 msgstr "Файл типу: {0} неможливо завантажити на сервер, тому що файл порожній"
 
@@ -6899,11 +6896,11 @@ msgstr ""
 
 #: templates/templates.js:56
 msgid "Modern Style"
-msgstr ""
+msgstr "Сучасний стиль"
 
 #: templates/templates.js:66
 msgid "Simple Style"
-msgstr ""
+msgstr "Простий стиль"
 
 #: templates/templates.js:76
 msgid "Beehive"
