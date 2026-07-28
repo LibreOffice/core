@@ -165,9 +165,15 @@ static std::vector<std::string> clipboardProviderGetMimeTypes()
 {
     @autoreleasepool {
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        // List the types without reading any values. Reading a value (which the items property
+        // does for every representation at once) makes the pasteboard materialize everything
+        // the source app promised: that can block for many seconds, and the representations
+        // that cannot be delivered fall out of the list. The type list alone is available
+        // immediately.
+        NSArray<NSArray<NSString *> *> *itemTypes = [pasteboard pasteboardTypesForItemSet:nil];
         NSMutableArray<NSString *> *mimes = [NSMutableArray array];
-        for (NSDictionary<NSString *, id> *item in pasteboard.items) {
-            for (NSString *identifier in item) {
+        for (NSArray<NSString *> *types in itemTypes) {
+            for (NSString *identifier in types) {
                 NSString *mime = mimeForPasteboardType(identifier);
                 if (mime != nil && ![mimes containsObject:mime])
                     [mimes addObject:mime];
@@ -187,20 +193,29 @@ static bool clipboardProviderGetData(const char* pMimeType, std::vector<char>* p
     @autoreleasepool {
         NSString *wanted = [NSString stringWithUTF8String:pMimeType];
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        for (NSDictionary<NSString *, id> *item in pasteboard.items) {
-            for (NSString *identifier in item) {
+        NSArray<NSArray<NSString *> *> *itemTypes = [pasteboard pasteboardTypesForItemSet:nil];
+        for (NSUInteger i = 0; i < itemTypes.count; ++i) {
+            for (NSString *identifier in itemTypes[i]) {
                 NSString *candidate = mimeForPasteboardType(identifier);
                 if (candidate == nil || ![candidate isEqualToString:wanted])
                     continue;
 
-                // dataForPasteboardType converts a value stored as a string or property list
-                // into data, so text from other apps arrives as bytes too.
-                NSData *value = [pasteboard dataForPasteboardType:identifier];
-                if (value == nil)
+                // Fetch just this one representation of this one item; the source app then
+                // serializes only the format the engine actually pastes.
+                NSIndexSet *index = [NSIndexSet indexSetWithIndex:i];
+                id value =
+                    [[pasteboard dataForPasteboardType:identifier inItemSet:index] firstObject];
+
+                // A value stored as a plain string arrives as one; the engine expects bytes.
+                if ([value isKindOfClass:[NSString class]])
+                    value = [(NSString *)value dataUsingEncoding:NSUTF8StringEncoding];
+
+                if (![value isKindOfClass:[NSData class]])
                     continue;
 
-                pOutData->assign(static_cast<const char *>(value.bytes),
-                                 static_cast<const char *>(value.bytes) + value.length);
+                NSData *data = (NSData *)value;
+                pOutData->assign(static_cast<const char *>(data.bytes),
+                                 static_cast<const char *>(data.bytes) + data.length);
                 return true;
             }
         }
