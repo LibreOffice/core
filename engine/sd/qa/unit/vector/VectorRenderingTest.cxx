@@ -363,6 +363,36 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesOnlyChangedObjects)
                          aDelta.getInt("/objects/0/id").value_or(-1));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEveryObjectKeepsItsEntry)
+{
+    // Every live object gets an entry in the objects array, even one that
+    // draws nothing, so the ids the order array carries always resolve
+    // against the object set the client holds.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    // A group with no members draws nothing on the slide.
+    rtl::Reference<SdrObjGroup> pGroup = new SdrObjGroup(page(1)->getSdrModelFromSdrPage());
+    page(1)->NbcInsertObject(pGroup.get());
+    page(1)->GetObj(0)->BroadcastObjectChange();
+    pGroup->BroadcastObjectChange();
+
+    auto aFull = getVectorPrimitives(u"testObjectEntryFull");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aFull.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pGroup->GetUniqueID()),
+                         aFull.getInt("/objects/1/id").value_or(-1));
+    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
+
+    // Change only the group after that version.
+    pGroup->BroadcastObjectChange();
+
+    auto aDelta = getVectorPrimitives(u"testObjectEntryDelta", nVersion);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aDelta.getSize("/order").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pGroup->GetUniqueID()),
+                         aDelta.getInt("/objects/0/id").value_or(-1));
+}
+
 // A change to a shape inside a group must mark the top-level group as
 // changed, so a delta carries the group's new content.
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesGroupOnMemberChange)
