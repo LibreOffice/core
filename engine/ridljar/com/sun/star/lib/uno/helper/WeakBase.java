@@ -51,7 +51,7 @@ public class WeakBase implements XWeak, XTypeProvider
 
     /** Override of Object.finalize. When there are no references to this object anymore
      * then the garbage collector calls this method. Thereby causing the adapter object
-     * to be notified. The adapter, in turn, notifies all listeners (com.sun.star.uno.XReference)
+     * to be notified. The adapter, in turn, notifies all listeners (cpo.uno.XReference)
      */
     @Override
     protected void finalize() throws java.lang.Throwable

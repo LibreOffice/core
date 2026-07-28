@@ -20,6 +20,7 @@
 package com.sun.star.uno;
 
 import cpo.uno.XAdapter;
+import cpo.uno.XReference;
 
 /**
  * This class holds weak reference to an object.
@@ -91,7 +92,7 @@ public class WeakReference
 }
 
 /**
- * Implementation of com.sun.star.uno.XReference for use with WeakReference.
+ * Implementation of cpo.uno.XReference for use with WeakReference.
  *
  * <p>It keeps the XAdapter implementation and registers always with it.
  * Deregistering occurs on notification by the adapter and the adapter is
@@ -113,7 +114,7 @@ class OWeakRefListener implements XReference
     }
 
     /**
-     * Method of <code>com.sun.star.uno.XReference</code>.
+     * Method of <code>cpo.uno.XReference</code>.
      *
      * <p>When called, it deregisters this object with the adapter and releases
      * the reference to it.</p>

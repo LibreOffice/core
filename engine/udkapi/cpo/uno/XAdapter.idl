@@ -43,11 +43,11 @@ published interface XAdapter: com::sun::star::uno::XInterface
 
         </p>
      */
-    void addReference( [in] com::sun::star::uno::XReference xRef );
+    void addReference( [in] cpo::uno::XReference xRef );
 
     /** removes a reference from the adapter.
      */
-    void removeReference( [in] com::sun::star::uno::XReference xRef );
+    void removeReference( [in] cpo::uno::XReference xRef );
 
 };
 

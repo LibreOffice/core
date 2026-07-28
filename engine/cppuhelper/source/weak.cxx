@@ -67,8 +67,8 @@ public:
 
     // XAdapter
     css::uno::Reference< css::uno::XInterface > queryAdapted() override;
-    void addReference( const css::uno::Reference< css::uno::XReference >& xRef ) override;
-    void removeReference( const css::uno::Reference< css::uno::XReference >& xRef ) override;
+    void addReference( const css::uno::Reference< cpo::uno::XReference >& xRef ) override;
+    void removeReference( const css::uno::Reference< cpo::uno::XReference >& xRef ) override;
 
     /// Called from the weak object if the reference count goes to zero.
     ///

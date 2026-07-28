@@ -133,7 +133,7 @@ bool isBootstrapType(OUString const & name)
         "com.sun.star.uno.XComponentContext",
         "cpo.uno.XCurrentContext",
         "com.sun.star.uno.XInterface",
-        "com.sun.star.uno.XReference",
+        "cpo.uno.XReference",
         "cpo.uno.XUnloadingPreference",
         "com.sun.star.uno.XWeak",
         "com.sun.star.util.XMacroExpander" };

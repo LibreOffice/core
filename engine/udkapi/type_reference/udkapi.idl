@@ -1627,15 +1627,10 @@ module com {
     };
    };
    module uno {
-    published interface XReference;
     published interface XComponentContext {
      interface ::com::sun::star::uno::XInterface;
      any getValueByName([in] string Name);
      ::com::sun::star::lang::XMultiComponentFactory getServiceManager();
-    };
-    published interface XReference {
-     interface ::com::sun::star::uno::XInterface;
-     void dispose();
     };
     published interface XWeak {
      interface ::com::sun::star::uno::XInterface;
@@ -1741,11 +1736,15 @@ module com {
 };
 module cpo {
    module uno {
+    published interface XReference {
+     interface ::com::sun::star::uno::XInterface;
+     void dispose();
+    };
     published interface XAdapter {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::uno::XInterface queryAdapted();
-     void addReference([in] ::com::sun::star::uno::XReference xRef);
-     void removeReference([in] ::com::sun::star::uno::XReference xRef);
+     void addReference([in] ::cpo::uno::XReference xRef);
+     void removeReference([in] ::cpo::uno::XReference xRef);
     };
     /** @deprecated */ published interface XAggregation {
      interface ::com::sun::star::uno::XInterface;

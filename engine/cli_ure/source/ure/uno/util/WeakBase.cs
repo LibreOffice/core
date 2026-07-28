@@ -62,7 +62,7 @@ public class WeakBase : XWeak, XTypeProvider
         When there are no references to this object anymore, then the
         garbage collector calls this method, thereby causing the adapter
         object to be notified.  The adapter, in turn, notifies all
-        listeners (unoidl.com.sun.star.uno.XReference).
+        listeners (unoidl.cpo.uno.XReference).
     */
     ~WeakBase()
     {

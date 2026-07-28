@@ -22,7 +22,7 @@ import com.sun.star.bridge.XBridgeSupplier2;
 import com.sun.star.lang.XTypeProvider;
 import cpo.uno.XAdapter;
 import cpo.uno.Type;
-import com.sun.star.uno.XReference;
+import cpo.uno.XReference;
 import com.sun.star.uno.XWeak;
 
 import java.util.logging.Level;

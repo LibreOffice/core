@@ -18,6 +18,7 @@
 
 using System;
 using unoidl.com.sun.star.uno;
+using unoidl.cpo.uno;
 using unoidl.com.sun.star.lang;
 
 namespace uno.util

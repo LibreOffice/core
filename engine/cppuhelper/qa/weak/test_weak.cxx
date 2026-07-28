@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/XAdapter.hpp>
-#include <com/sun/star/uno/XReference.hpp>
+#include <cpo/uno/XReference.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
@@ -34,7 +34,7 @@
 
 namespace {
 
-class Reference: public cppu::WeakImplHelper< css::uno::XReference > {
+class Reference: public cppu::WeakImplHelper< cpo::uno::XReference > {
 public:
     Reference(): m_disposed(false) {}
 
