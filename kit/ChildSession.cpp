@@ -2625,7 +2625,8 @@ bool ChildSession::selectText(const StringVector& tokens,
 {
     std::string swap;
     unsigned winId = 0;
-    int type = 0, x = 0, y = 0;
+    COKitSetTextSelectionType type = COKitSetTextSelectionType::START;
+    int x = 0, y = 0;
     if (target == LokEventTargetEnum::Window)
     {
         if (tokens.size() != 5 ||
@@ -2643,9 +2644,9 @@ bool ChildSession::selectText(const StringVector& tokens,
     {
         if (tokens.size() != 4 ||
             !getTokenKeyword(tokens[1], "type",
-                             {{"start", KIT_SETTEXTSELECTION_START},
-                              {"end", KIT_SETTEXTSELECTION_END},
-                              {"reset", KIT_SETTEXTSELECTION_RESET}},
+                             {{"start", COKitSetTextSelectionType::START},
+                              {"end", COKitSetTextSelectionType::END},
+                              {"reset", COKitSetTextSelectionType::RESET}},
                              type) ||
             !getTokenInteger(tokens[2], "x", x) ||
             !getTokenInteger(tokens[3], "y", y))

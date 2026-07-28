@@ -1366,16 +1366,15 @@ typedef enum
 }
 COKitMouseEventType;
 
-typedef enum
+enum class COKitSetTextSelectionType
 {
     /// The start of selection is to be adjusted.
-    KIT_SETTEXTSELECTION_START,
+    START,
     /// The end of selection is to be adjusted.
-    KIT_SETTEXTSELECTION_END,
+    END,
     /// Both the start and the end of selection is to be adjusted.
-    KIT_SETTEXTSELECTION_RESET
-}
-COKitSetTextSelectionType;
+    RESET
+};
 
 enum class COKitSetGraphicSelectionType
 {
@@ -1651,7 +1650,7 @@ struct COKitDocumentClassStruct
 
     /// @see kit::Document::setTextSelection
     void (*setTextSelection) (COKitDocument* pThis,
-                              int nType,
+                              COKitSetTextSelectionType eType,
                               int nX,
                               int nY);
 
@@ -2304,9 +2303,9 @@ public:
      * @param nX horizontal position in document coordinates
      * @param nY vertical position in document coordinates
      */
-    void setTextSelection(int nType, int nX, int nY)
+    void setTextSelection(COKitSetTextSelectionType eType, int nX, int nY)
     {
-        mpDoc->pClass->setTextSelection(mpDoc, nType, nX, nY);
+        mpDoc->pClass->setTextSelection(mpDoc, eType, nX, nY);
     }
 
     /**

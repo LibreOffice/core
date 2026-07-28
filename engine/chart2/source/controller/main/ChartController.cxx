@@ -1087,7 +1087,8 @@ void ChartController::dispatch(
             rArgs[1].Value >>= nX;
             sal_Int32 nY = 0;
             rArgs[2].Value >>= nY;
-            executeDispatch_KitSetTextSelection(nType, nX, nY);
+            executeDispatch_KitSetTextSelection(
+                static_cast<COKitSetTextSelectionType>(nType), nX, nY);
         }
     }
     else if (aCommand == "KitTransform")

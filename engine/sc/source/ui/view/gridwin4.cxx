@@ -1748,7 +1748,7 @@ bool ScGridWindow::InvalidateByForeignEditView(EditView* pEditView)
     return true;
 }
 
-void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
+void ScGridWindow::SetCellSelectionPixel(COKitSetTextSelectionType eType, int nPixelX, int nPixelY)
 {
     ScTabView* pTabView = mrViewData.GetView();
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
@@ -1761,7 +1761,7 @@ void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
         pViewShell->UpdateInputHandler();
     }
 
-    if (nType == KIT_SETTEXTSELECTION_RESET)
+    if (eType == COKitSetTextSelectionType::RESET)
     {
         pTabView->DoneBlockMode();
         return;
@@ -1791,9 +1791,9 @@ void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
     mrViewData.GetPosFromPixel(nPixelX, nPixelY, eWhich, nNewPosX, nNewPosY);
 
     // change the selection
-    switch (nType)
+    switch (eType)
     {
-        case KIT_SETTEXTSELECTION_START:
+        case COKitSetTextSelectionType::START:
             if (nNewPosX != nCol1 || nNewPosY != nRow1 || bWasEmpty)
             {
                 pTabView->SetCursor(nNewPosX, nNewPosY);
@@ -1802,7 +1802,7 @@ void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
                 pTabView->MarkCursor(nCol2, nRow2, nTab);
             }
             break;
-        case KIT_SETTEXTSELECTION_END:
+        case COKitSetTextSelectionType::END:
             if (nNewPosX != nCol2 || nNewPosY != nRow2 || bWasEmpty)
             {
                 pTabView->SetCursor(nCol1, nRow1);

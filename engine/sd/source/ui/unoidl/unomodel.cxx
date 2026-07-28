@@ -5135,7 +5135,7 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
     KitHelper::postMouseEventAsync(pViewShell->GetActiveWindow(), aMouseEventData);
 }
 
-void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)
+void SdXImpressDocument::setTextSelection(COKitSetTextSelectionType eType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
 
@@ -5144,19 +5144,19 @@ void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)
         return;
 
     KitChartHelper aChartHelper(pViewShell->GetViewShell());
-    if (aChartHelper.setTextSelection(nType, nX, nY))
+    if (aChartHelper.setTextSelection(eType, nX, nY))
         return;
 
     Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
-    switch (nType)
+    switch (eType)
     {
-    case KIT_SETTEXTSELECTION_START:
+    case COKitSetTextSelectionType::START:
         pViewShell->SetCursorMm100Position(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
         break;
-    case KIT_SETTEXTSELECTION_END:
+    case COKitSetTextSelectionType::END:
         pViewShell->SetCursorMm100Position(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
         break;
-    case KIT_SETTEXTSELECTION_RESET:
+    case COKitSetTextSelectionType::RESET:
         pViewShell->SetCursorMm100Position(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
         break;
     default:

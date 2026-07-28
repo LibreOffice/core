@@ -57,7 +57,7 @@ public:
     bool postMouseEvent(int nType, int nX, int nY,
                         int nCount, int nButtons, int nModifier,
                         double fScaleX = 1.0, double fScaleY = 1.0);
-    bool setTextSelection(int nType, int nX, int nY);
+    bool setTextSelection(COKitSetTextSelectionType eType, int nX, int nY);
     bool setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY,
                              double fScaleX = 1.0, double fScaleY = 1.0);
 };

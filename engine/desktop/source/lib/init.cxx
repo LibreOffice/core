@@ -1238,7 +1238,7 @@ static void doc_setWindowTextSelection(COKitDocument* pThis,
                                        int nX,
                                        int nY);
 static void doc_setTextSelection (COKitDocument* pThis,
-                                  int nType,
+                                  COKitSetTextSelectionType eType,
                                   int nX,
                                   int nY);
 static char* doc_getTextSelection(COKitDocument* pThis,
@@ -6178,7 +6178,8 @@ static void doc_postWindowGestureEvent(COKitDocument* /*pThis*/, unsigned nKitWi
     Application::PostGestureEvent(VclEventId::WindowGestureEvent, pWindow, &aEvent);
 }
 
-static void doc_setTextSelection(COKitDocument* pThis, int nType, int nX, int nY)
+static void doc_setTextSelection(COKitDocument* pThis, COKitSetTextSelectionType eType,
+                                 int nX, int nY)
 {
     comphelper::ProfileZone aZone("doc_setTextSelection");
 
@@ -6192,7 +6193,7 @@ static void doc_setTextSelection(COKitDocument* pThis, int nType, int nX, int nY
         return;
     }
 
-    pDoc->setTextSelection(nType, nX, nY);
+    pDoc->setTextSelection(eType, nX, nY);
 }
 
 static void doc_setWindowTextSelection(COKitDocument* /*pThis*/, unsigned nKitWindowId, bool swap, int nX, int nY)

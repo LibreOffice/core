@@ -2200,21 +2200,21 @@ kit_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     {
         g_info("lcl_signalMotion: dragging the middle handle");
         getDragPoint(&priv->m_aHandleMiddleRect, pEvent, &aPoint);
-        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, KIT_SETTEXTSELECTION_RESET, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
+        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, COKitSetTextSelectionType::RESET, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
         return FALSE;
     }
     if (priv->m_bInDragStartHandle)
     {
         g_info("lcl_signalMotion: dragging the start handle");
         getDragPoint(&priv->m_aHandleStartRect, pEvent, &aPoint);
-        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, KIT_SETTEXTSELECTION_START, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
+        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, COKitSetTextSelectionType::START, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
         return FALSE;
     }
     if (priv->m_bInDragEndHandle)
     {
         g_info("lcl_signalMotion: dragging the end handle");
         getDragPoint(&priv->m_aHandleEndRect, pEvent, &aPoint);
-        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, KIT_SETTEXTSELECTION_END, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
+        priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, COKitSetTextSelectionType::END, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
         return FALSE;
     }
     aGuard.unlock();

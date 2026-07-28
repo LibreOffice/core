@@ -924,7 +924,7 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     Application::KitHandleMouseEvent(aEvent, pGridWindow, &aData);
 }
 
-void ScModelObj::setTextSelection(int nType, int nX, int nY)
+void ScModelObj::setTextSelection(COKitSetTextSelectionType eType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
 
@@ -938,7 +938,7 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     // coordinates from the client are always positive, so negate nX.
     bool bNegativeX = pViewData->GetDocument().IsNegativePage(pViewData->CurrentTabForData());
     KitChartHelper aChartHelper(pViewShell);
-    if (aChartHelper.setTextSelection(nType, bNegativeX ? -nX : nX, nY))
+    if (aChartHelper.setTextSelection(eType, bNegativeX ? -nX : nX, nY))
         return;
 
     ScInputHandler* pInputHandler = ScModule::get()->GetInputHdl(pViewShell);
@@ -956,15 +956,15 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
 
         if (pTableView && pTableView->GetOutputArea().Contains(aPoint))
         {
-            switch (nType)
+            switch (eType)
             {
-                case KIT_SETTEXTSELECTION_START:
+                case COKitSetTextSelectionType::START:
                     pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
                     break;
-                case KIT_SETTEXTSELECTION_END:
+                case COKitSetTextSelectionType::END:
                     pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
                     break;
-                case KIT_SETTEXTSELECTION_RESET:
+                case COKitSetTextSelectionType::RESET:
                     pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
                     break;
                 default:
@@ -981,15 +981,15 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
         EditView& rEditView = pOutlinerView->GetEditView();
 
         Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
-        switch (nType)
+        switch (eType)
         {
-            case KIT_SETTEXTSELECTION_START:
+            case COKitSetTextSelectionType::START:
                 rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
                 break;
-            case KIT_SETTEXTSELECTION_END:
+            case COKitSetTextSelectionType::END:
                 rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
                 break;
-            case KIT_SETTEXTSELECTION_RESET:
+            case COKitSetTextSelectionType::RESET:
                 rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
                 break;
             default:
@@ -1007,7 +1007,7 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
             return;
 
         // move the cell selection handles
-        pGridWindow->SetCellSelectionPixel(nType, nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
+        pGridWindow->SetCellSelectionPixel(eType, nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
     }
 }
 

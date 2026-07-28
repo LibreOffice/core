@@ -100,7 +100,7 @@ static void doc_postUnoCommand(COKitDocument* self,
                                const char* arguments,
                                bool notifyWhenFinished);
 static void doc_setTextSelection (COKitDocument* self,
-                                  int type,
+                                  COKitSetTextSelectionType type,
                                   int x,
                                   int y);
 static char* doc_getTextSelection(COKitDocument* self,
@@ -427,7 +427,7 @@ static void doc_postMouseEvent(COKitDocument* self, int type, int x, int y, int 
     (void) modifier;
 }
 
-static void doc_setTextSelection(COKitDocument* self, int type, int x, int y)
+static void doc_setTextSelection(COKitDocument* self, COKitSetTextSelectionType type, int x, int y)
 {
     (void) self;
     (void) type;

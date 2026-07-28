@@ -267,7 +267,7 @@ bool KitChartHelper::postMouseEvent(int nType, int nX, int nY,
     return false;
 }
 
-bool KitChartHelper::setTextSelection(int nType, int nX, int nY)
+bool KitChartHelper::setTextSelection(COKitSetTextSelectionType eType, int nX, int nY)
 {
     tools::Rectangle rChartBBox = GetChartBoundingBox();
     if (rChartBBox.Contains(Point(nX, nY)))
@@ -278,7 +278,7 @@ bool KitChartHelper::setTextSelection(int nType, int nX, int nY)
         // no scale here the chart controller expects twips
         // that are converted to hmm
         cpo::uno::Sequence< beans::PropertyValue > aArgs{
-            comphelper::makePropertyValue({}, static_cast<sal_Int32>(nType)), // Why no name?
+            comphelper::makePropertyValue({}, static_cast<sal_Int32>(eType)), // Why no name?
             comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinX)),
             comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinY))
         };

@@ -1297,7 +1297,8 @@ void ChartController::executeDispatch_LineWidth(const cpo::uno::Any& rWidth)
     }
 }
 
-void ChartController::executeDispatch_KitSetTextSelection(int nType, int nX, int nY)
+void ChartController::executeDispatch_KitSetTextSelection(COKitSetTextSelectionType eType,
+                                                          int nX, int nY)
 {
     if (!m_pDrawViewWrapper)
         return;
@@ -1311,15 +1312,15 @@ void ChartController::executeDispatch_KitSetTextSelection(int nType, int nX, int
 
     EditView& rEditView = pOutlinerView->GetEditView();
     Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
-    switch (nType)
+    switch (eType)
     {
-        case KIT_SETTEXTSELECTION_START:
+        case COKitSetTextSelectionType::START:
             rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
             break;
-        case KIT_SETTEXTSELECTION_END:
+        case COKitSetTextSelectionType::END:
             rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
             break;
-        case KIT_SETTEXTSELECTION_RESET:
+        case COKitSetTextSelectionType::RESET:
             rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
             break;
         default:

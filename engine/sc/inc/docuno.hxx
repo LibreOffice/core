@@ -349,7 +349,7 @@ public:
     virtual void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier) override;
 
     /// @see vcl::ITiledRenderable::setTextSelection().
-    virtual void setTextSelection(int nType, int nX, int nY) override;
+    virtual void setTextSelection(COKitSetTextSelectionType eType, int nX, int nY) override;
 
     /// @see vcl::ITiledRenderable::getSelection().
     virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() override;

@@ -40,6 +40,8 @@
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <COKit/COKit.hxx>
+
 #include <memory>
 #include <string_view>
 
@@ -534,7 +536,7 @@ private:
     void executeDispatch_ToggleGridHorizontal();
     void executeDispatch_ToggleGridVertical();
 
-    void executeDispatch_KitSetTextSelection(int nType, int nX, int nY);
+    void executeDispatch_KitSetTextSelection(COKitSetTextSelectionType eType, int nX, int nY);
     void executeDispatch_KitPieSegmentDragging(int nOffset);
     void executeDispatch_FillColor(const cpo::uno::Any& rColor);
     void executeDispatch_FillGradient(std::u16string_view sJSONGradient);

@@ -4081,25 +4081,25 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     KitHelper::postMouseEventAsync(&rEditWin, aMouseEventData);
 }
 
-void SwXTextDocument::setTextSelection(int nType, int nX, int nY)
+void SwXTextDocument::setTextSelection(COKitSetTextSelectionType eType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
 
     SfxViewShell* pViewShell = m_pDocShell->GetView();
     KitChartHelper aChartHelper(pViewShell);
-    if (aChartHelper.setTextSelection(nType, nX, nY))
+    if (aChartHelper.setTextSelection(eType, nX, nY))
         return;
 
     SwEditWin& rEditWin = m_pDocShell->GetView()->GetEditWin();
-    switch (nType)
+    switch (eType)
     {
-    case KIT_SETTEXTSELECTION_START:
+    case COKitSetTextSelectionType::START:
         rEditWin.SetCursorTwipPosition(Point(nX, nY), /*bPoint=*/false, /*bClearMark=*/false);
         break;
-    case KIT_SETTEXTSELECTION_END:
+    case COKitSetTextSelectionType::END:
         rEditWin.SetCursorTwipPosition(Point(nX, nY), /*bPoint=*/true, /*bClearMark=*/false);
         break;
-    case KIT_SETTEXTSELECTION_RESET:
+    case COKitSetTextSelectionType::RESET:
         rEditWin.SetCursorTwipPosition(Point(nX, nY), /*bPoint=*/true, /*bClearMark=*/true);
         break;
     default:

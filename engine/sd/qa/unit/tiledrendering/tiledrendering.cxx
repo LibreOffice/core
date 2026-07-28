@@ -198,7 +198,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetTextSelection)
     vcl::Cursor* pCursor = rEditView.GetCursor();
     Point aEnd = pCursor->GetPos();
     aEnd.setX(aEnd.getX() + 1000);
-    pXImpressDocument->setTextSelection(KIT_SETTEXTSELECTION_END, aEnd.getX(), aEnd.getY());
+    pXImpressDocument->setTextSelection(COKitSetTextSelectionType::END, aEnd.getX(), aEnd.getY());
     // The new selection must include the ending dot, too -- but not the first word.
     CPPUNIT_ASSERT_EQUAL(u"bbb."_ustr, rEditView.GetSelected());
 }

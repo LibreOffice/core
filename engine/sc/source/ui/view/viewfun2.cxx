@@ -2188,9 +2188,9 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             if (pGridWindow && nCommand == SvxSearchCmd::FIND)
             {
                 // move the cell selection handles
-                pGridWindow->SetCellSelectionPixel(KIT_SETTEXTSELECTION_RESET, aCurPos.X(), aCurPos.Y());
-                pGridWindow->SetCellSelectionPixel(KIT_SETTEXTSELECTION_START, aCurPos.X(), aCurPos.Y());
-                pGridWindow->SetCellSelectionPixel(KIT_SETTEXTSELECTION_END, aCurPos.X(), aCurPos.Y());
+                pGridWindow->SetCellSelectionPixel(COKitSetTextSelectionType::RESET, aCurPos.X(), aCurPos.Y());
+                pGridWindow->SetCellSelectionPixel(COKitSetTextSelectionType::START, aCurPos.X(), aCurPos.Y());
+                pGridWindow->SetCellSelectionPixel(COKitSetTextSelectionType::END, aCurPos.X(), aCurPos.Y());
             }
 
             if (pGridWindow)

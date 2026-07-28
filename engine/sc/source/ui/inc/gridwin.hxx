@@ -423,7 +423,7 @@ public:
     /// Update the cell selection according to what handles have been dragged.
     /// @see vcl::ITiledRenderable::setTextSelection() for the values of nType.
     /// Coordinates are in pixels.
-    void SetCellSelectionPixel(int nType, int nPixelX, int nPixelY);
+    void SetCellSelectionPixel(COKitSetTextSelectionType eType, int nPixelX, int nPixelY);
     /// Get the cell selection, coordinates are in logic units.
     void GetCellSelection(std::vector<tools::Rectangle>& rLogicRects);
 

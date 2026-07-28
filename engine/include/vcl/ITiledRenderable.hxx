@@ -188,7 +188,7 @@ public:
      *
      * @see kit::Document::setTextSelection().
      */
-    virtual void setTextSelection(int nType, int nX, int nY) = 0;
+    virtual void setTextSelection(COKitSetTextSelectionType eType, int nX, int nY) = 0;
 
     /**
      * Gets the selection as a transferable for later processing

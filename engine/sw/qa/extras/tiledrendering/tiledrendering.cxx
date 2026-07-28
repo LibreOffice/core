@@ -153,13 +153,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetTextSelection)
     // Now use setTextSelection() to move the start of the selection 1000 twips left.
     Point aStart = pShellCursor->GetSttPos();
     aStart.setX(aStart.getX() - 1000);
-    pXTextDocument->setTextSelection(KIT_SETTEXTSELECTION_START, aStart.getX(), aStart.getY());
+    pXTextDocument->setTextSelection(COKitSetTextSelectionType::START, aStart.getX(), aStart.getY());
     // The new selection must include the first word, too -- but not the ending dot.
     CPPUNIT_ASSERT_EQUAL(u"Aaa bbb"_ustr, pShellCursor->GetText());
 
-    // Next: test that KIT_SETTEXTSELECTION_RESET + KIT_SETTEXTSELECTION_END can be used to create a selection.
-    pXTextDocument->setTextSelection(KIT_SETTEXTSELECTION_RESET, aStart.getX(), aStart.getY());
-    pXTextDocument->setTextSelection(KIT_SETTEXTSELECTION_END, aStart.getX() + 1000, aStart.getY());
+    // Next: test that COKitSetTextSelectionType::RESET + COKitSetTextSelectionType::END can be used to create a selection.
+    pXTextDocument->setTextSelection(COKitSetTextSelectionType::RESET, aStart.getX(), aStart.getY());
+    pXTextDocument->setTextSelection(COKitSetTextSelectionType::END, aStart.getX() + 1000, aStart.getY());
     CPPUNIT_ASSERT_EQUAL(u"Aaa b"_ustr, pShellCursor->GetText());
 }
 

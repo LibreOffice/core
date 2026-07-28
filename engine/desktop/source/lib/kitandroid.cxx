@@ -347,7 +347,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setText
     (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->pClass->setTextSelection(pDocument, type, x, y);
+    pDocument->pClass->setTextSelection(pDocument, static_cast<COKitSetTextSelectionType>(type), x, y);
 }
 
 extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getTextSelection

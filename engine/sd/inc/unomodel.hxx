@@ -310,7 +310,7 @@ public:
     /// @see vcl::ITiledRenderable::postMouseEvent().
     SD_DLLPUBLIC virtual void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier) override;
     /// @see vcl::ITiledRenderable::setTextSelection().
-    SD_DLLPUBLIC virtual void setTextSelection(int nType, int nX, int nY) override;
+    SD_DLLPUBLIC virtual void setTextSelection(COKitSetTextSelectionType eType, int nX, int nY) override;
     /// @see vcl::ITiledRenderable::getSelection().
     SD_DLLPUBLIC virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() override;
     /// @see vcl::ITiledRenderable::setGraphicSelection().
