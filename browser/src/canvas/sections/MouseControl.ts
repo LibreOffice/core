@@ -366,6 +366,13 @@ class MouseControl extends CanvasSectionObject {
 
 		this.setCursorType();
 
+		// Not while dragging, or it would fire in the middle of a selection.
+		if (!this.containerObject.isDraggingSomething())
+			OtherViewCellCursorSection.checkHover([
+				point.pX + this.myTopLeft[0],
+				point.pY + this.myTopLeft[1],
+			]);
+
 		if (this.clickTimer) return;
 
 		clearTimeout(this.mouseMoveTimer);
@@ -546,6 +553,7 @@ class MouseControl extends CanvasSectionObject {
 		// But this is a class name and we need to remove it.
 		if (app.map._docLayer._docType === 'spreadsheet') {
 			this.context.canvas.classList.remove('spreadsheet-cursor');
+			OtherViewCellCursorSection.resetHover();
 		}
 	}
 

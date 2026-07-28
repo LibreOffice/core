@@ -22,6 +22,7 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
 
     static sectionNamePrefix = 'OtherViewCellCursorSection ';
     static sectionPointers: Array<OtherViewCellCursorSection> = [];
+    private static hoveredViewId: number | null = null;
 
     constructor(viewId: number, rectangle: cool.SimpleRectangle, part: number) {
         super(OtherViewCellCursorSection.sectionNamePrefix + viewId);
@@ -38,6 +39,8 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
 
         this.sectionProperties.username = null;
         this.sectionProperties.popUpTimer = null;
+
+        this.sectionProperties.cellAddress = null;
     }
 
     onDraw(frameCount?: number, elapsedTime?: number): void {
@@ -61,10 +64,42 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
     }
 
     adjustPopUpPosition() {
+        // Measuring a hidden popup gives 0x0, and getBoundingClientRect forces a layout
+        // on every draw. Nothing to place until it is shown.
+        if (!this.sectionProperties.popUpShown)
+            return;
+
         const width = this.sectionProperties.popUpContainer.getBoundingClientRect().width;
         const height = this.sectionProperties.popUpContainer.getBoundingClientRect().height;
 
-        const pos = [this.myTopLeft[0] / app.dpiScale + this.size[0] * 0.5 / app.dpiScale - (width * 0.5), (this.myTopLeft[1] / app.dpiScale) - (height + 15)];
+        // The sheet area: the popup is a child of the document container, so its own
+        // coordinates start at the canvas corner, while the grid starts after the headers.
+        // Outside of it the popup is covered by the toolbars or the headers.
+        const anchor = app.sectionContainer.getDocumentAnchor();
+        const viewSize = app.sectionContainer.getViewSize();
+        const minLeft = anchor[0] / app.dpiScale;
+        const minTop = anchor[1] / app.dpiScale;
+        const maxLeft = viewSize[0] / app.dpiScale - width;
+        const maxTop = viewSize[1] / app.dpiScale - height;
+
+        // Space for the arrow.
+        const arrowGap = 15;
+
+        const above = this.myTopLeft[1] / app.dpiScale - (height + arrowGap);
+        const below = (this.myTopLeft[1] + this.size[1]) / app.dpiScale + arrowGap;
+
+        // Above the cell when it fits there, below it when that fits instead.
+        const flipped = above < minTop && below <= maxTop;
+        this.sectionProperties.popUpContainer.classList.toggle('below-cell', flipped);
+
+        // In RTL myTopLeft holds the mirrored left edge.
+        const addition = app.map._docLayer.isCalcRTL() ? -this.size[0] : 0;
+        const centered = (this.myTopLeft[0] + addition + this.size[0] * 0.5) / app.dpiScale - width * 0.5;
+
+        const pos = [
+            Math.max(minLeft, Math.min(centered, maxLeft)),
+            Math.max(minTop, Math.min(flipped ? below : above, maxTop)),
+        ];
         this.sectionProperties.popUpContainer.style.left = pos[0] + 'px';
         this.sectionProperties.popUpContainer.style.top = pos[1] + 'px';
 
@@ -118,10 +153,12 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
             return; // Don't show the popup if the cursor header is shown.
 
         if (this.sectionProperties.popUpContainer && this.isVisible) {
-            this.adjustPopUpPosition();
-
             this.sectionProperties.popUpShown = true;
             this.sectionProperties.popUpContainer.style.display = '';
+
+            // Position it after it is shown, a hidden element measures 0x0 and would
+            // end up right of the cell instead of centered above it.
+            this.adjustPopUpPosition();
 
             this.clearPopUpTimer();
 
@@ -145,7 +182,7 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
             this.hideUsernamePopUp();
     }
 
-    public static addOrUpdateOtherViewCellCursor(viewId: number, username: string, rectangleData: Array<string>, part: number) {
+    public static addOrUpdateOtherViewCellCursor(viewId: number, username: string, rectangleData: Array<string>, part: number, cellAddress?: string) {
         let rectangle = new cool.SimpleRectangle(0, 0, 0, 0);
         if (rectangleData)
             rectangle = new cool.SimpleRectangle(parseInt(rectangleData[0]), parseInt(rectangleData[1]), parseInt(rectangleData[2]), parseInt(rectangleData[3]));
@@ -153,8 +190,17 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
         const sectionName = OtherViewCellCursorSection.sectionNamePrefix + viewId;
         let section: OtherViewCellCursorSection;
         let newSection = false;
+        let moved = true;
         if (app.sectionContainer.doesSectionExist(sectionName)) {
             section = app.sectionContainer.getSectionWithName(sectionName) as OtherViewCellCursorSection;
+
+            // The cursor is re-sent on zoom, on column and row resizes and on sheet
+            // switches, partly as a replay of the saved message. The cell is the same
+            // then, only its coordinates changed, so don't pop the name up again.
+            moved = section.sectionProperties.part !== part
+                || !cellAddress
+                || section.sectionProperties.cellAddress !== cellAddress;
+
             section.sectionProperties.part = part;
             section.size[0] = rectangle.pWidth;
             section.size[1] = rectangle.pHeight;
@@ -168,11 +214,12 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
         }
 
         section.sectionProperties.username = username;
+        section.sectionProperties.cellAddress = cellAddress;
         section.prepareUsernamePopUp();
 
         section.setShowSection(section.checkMyVisibility());
 
-        if (section.showSection && !newSection)
+        if (section.showSection && !newSection && moved)
             section.showUsernamePopUp();
 
         if (!section.showSection)
@@ -181,7 +228,14 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
         app.sectionContainer.requestReDraw();
     }
 
+    public static resetHover() {
+        OtherViewCellCursorSection.hoveredViewId = null;
+    }
+
     public static removeView(viewId: number) {
+        if (OtherViewCellCursorSection.hoveredViewId === viewId)
+            OtherViewCellCursorSection.resetHover();
+
         const sectionName = OtherViewCellCursorSection.sectionNamePrefix + viewId;
         if (app.sectionContainer.doesSectionExist(sectionName)) {
             const section = app.sectionContainer.getSectionWithName(sectionName) as OtherViewCellCursorSection;
@@ -225,6 +279,26 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
             const section = OtherViewCellCursorSection.getViewCursorSection(viewId);
             section.showUsernamePopUp();
         }
+    }
+
+    public static checkHover(canvasPosition: Array<number>) {
+        let hoveredViewId: number | null = null;
+
+        for (let i = 0; i < OtherViewCellCursorSection.sectionPointers.length; i++) {
+            const section = OtherViewCellCursorSection.sectionPointers[i];
+
+            if (!section.showSection || !section.isVisible)
+                continue;
+
+            if (section.isHit(canvasPosition)) {
+                hoveredViewId = section.sectionProperties.viewId;
+                if (hoveredViewId !== OtherViewCellCursorSection.hoveredViewId)
+                    section.showUsernamePopUp();
+                break;
+            }
+        }
+
+        OtherViewCellCursorSection.hoveredViewId = hoveredViewId;
     }
 }
 

@@ -162,4 +162,79 @@ describe(['tagmultiuser'], 'Check cell cursor and view behavior', function() {
 			});
 		});
 	});
+
+	function otherViewCursorOnC5() {
+		// The address input is disabled while the document loads, so wait for idle
+		// before typing into it, and keep the assertion in the same chain so the
+		// widget cannot be rebuilt as disabled in between.
+		cy.cSetActiveFrame('#iframe1');
+		cy.getFrameWindow().then((win1) => {
+			helper.processToIdle(win1);
+		});
+		cy.cGet(helper.addressInputSelector).should('not.be.disabled')
+			.type('{selectAll}A1{enter}');
+
+		cy.cSetActiveFrame('#iframe2');
+		cy.getFrameWindow().then((win2) => {
+			helper.processToIdle(win2);
+		});
+		cy.cGet(helper.addressInputSelector).should('not.be.disabled')
+			.type('{selectAll}C5{enter}');
+		cy.getFrameWindow().then((win2) => {
+			calcHelper.assertAddressAfterIdle(win2, 'C5');
+		});
+
+		cy.cSetActiveFrame('#iframe1');
+		cy.cGet('.username-pop-up', { timeout: 6000 }).should('not.be.visible');
+	}
+
+	function otherViewCursorSection(win) {
+		return win.app.sectionContainer.sections.filter(
+			(s) => s.name.startsWith('OtherViewCellCursorSection ')
+		)[0];
+	}
+
+	it('No username popup on zoom', function() {
+		otherViewCursorOnC5();
+
+		// Zoom re-sends the same cell cursor. The cell didn't move, so no popup.
+		// A resize re-sends it too, with changed coordinates, which is why the
+		// check compares the cell address and not the rectangle.
+		desktopHelper.zoomIn();
+		cy.getFrameWindow().then((win1) => {
+			helper.processToIdle(win1);
+		});
+
+		// Short timeout on purpose: the popup hides itself after 3s, so a retrying
+		// assertion would pass in the end even if it did appear.
+		cy.cGet('.username-pop-up', { timeout: 1000 }).should('not.be.visible');
+	});
+
+	it('Hovering another view cell cursor shows its username', function() {
+		otherViewCursorOnC5();
+
+		cy.getFrameWindow().then((win1) => {
+			// Retry until the cursor is there and eligible for a popup, so a failure
+			// names the reason instead of timing out on the popup below.
+			cy.wrap(win1).should((win) => {
+				const section = otherViewCursorSection(win);
+				expect(section, 'other view cell cursor section').to.not.be.undefined;
+				expect(section.showSection, 'cursor showSection').to.be.true;
+				expect(section.isVisible, 'cursor isVisible').to.be.true;
+			});
+
+			cy.wrap(win1).then((win) => {
+				// Center of the cursor, in css pixels relative to the canvas.
+				const section = otherViewCursorSection(win);
+				const x = (section.myTopLeft[0] + section.size[0] * 0.5) / win.app.dpiScale;
+				const y = (section.myTopLeft[1] + section.size[1] * 0.5) / win.app.dpiScale;
+
+				// The section container drops mousemove until the pointer entered the canvas.
+				cy.cGet('#document-canvas').trigger('mouseenter', x, y);
+				cy.cGet('#document-canvas').trigger('mousemove', x, y);
+			});
+		});
+
+		cy.cGet('.username-pop-up').should('be.visible');
+	});
 });

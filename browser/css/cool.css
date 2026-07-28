@@ -1445,6 +1445,7 @@ input, button {
 	position: absolute;
 	text-align: center;
 	z-index: 11;
+	pointer-events: none;
 	font-family: var(--cool-font);
 	font-size: var(--default-font-size);
 	border-radius: var(--border-radius-large);
@@ -1468,6 +1469,13 @@ input, button {
 	border-radius: var(--border-radius);
 }
 
+.username-pop-up.below-cell .arrow-div {
+	position: absolute;
+	top: calc(-10px + var(--border-radius));
+	left: 0;
+	right: 0;
+	margin-inline: auto;
+}
 
 #hyperlink-pop-up-preview:not(:empty) {
 	margin-bottom: 4px;

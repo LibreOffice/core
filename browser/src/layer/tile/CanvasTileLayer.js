@@ -2040,9 +2040,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			OtherViewCellCursorSection.removeView(viewId);
 		else {
 			let strTwips = obj.rectangle.match(/\d+/g);
+			const cellAddress = strTwips.slice(4).join(','); // Column and row.
 			strTwips = this._convertRawTwipsToTileTwips(strTwips);
 
-			OtherViewCellCursorSection.addOrUpdateOtherViewCellCursor(viewId, this._map.getViewName(viewId), strTwips, parseInt(obj.part));
+			OtherViewCellCursorSection.addOrUpdateOtherViewCellCursor(viewId, this._map.getViewName(viewId), strTwips, parseInt(obj.part), cellAddress);
 			CursorHeaderSection.deletePopUpNow(viewId);
 		}
 
