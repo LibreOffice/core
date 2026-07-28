@@ -17,7 +17,7 @@
 #include <functional>
 #include <set>
 #include <vector>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <sal/log.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>

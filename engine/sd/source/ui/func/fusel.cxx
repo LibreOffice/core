@@ -60,7 +60,7 @@
 #include <svx/diagram/DiagramHelper_svx.hxx>
 #include <svx/annotation/ObjectAnnotationData.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <svl/cryptosign.hxx>
 

@@ -76,7 +76,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <editeng/editview.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>

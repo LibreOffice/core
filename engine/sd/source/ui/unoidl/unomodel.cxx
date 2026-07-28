@@ -90,7 +90,7 @@
 #include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>
 #include <Outliner.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <svx/svdoutl.hxx>

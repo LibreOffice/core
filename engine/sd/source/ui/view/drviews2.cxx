@@ -203,7 +203,7 @@
 #include <svx/dialog/ThemeDialog.hxx>
 #include <svx/dialog/ThemeColorEditDialog.hxx>
 #include <svx/ColorSets.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <ViewShellBase.hxx>
 #include <memory>

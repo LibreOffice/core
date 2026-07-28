@@ -33,7 +33,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/unopage.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <notifydocumentevent.hxx>
 

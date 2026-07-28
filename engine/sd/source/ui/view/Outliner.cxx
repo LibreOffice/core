@@ -58,7 +58,7 @@
 #include <SpellDialogChildWindow.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <svx/svxids.hrc>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>

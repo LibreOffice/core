@@ -70,7 +70,7 @@
 #include <ViewShell.hxx>
 #include <DrawViewShell.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include "PageListWatcher.hxx"
 #include <strings.hxx>
 #include <unokywds.hxx>

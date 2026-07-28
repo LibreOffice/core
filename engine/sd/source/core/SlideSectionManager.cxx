@@ -21,7 +21,7 @@
 
 #include <numeric>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>

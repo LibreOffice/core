@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cpo/uno/Any.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/editstat.hxx>

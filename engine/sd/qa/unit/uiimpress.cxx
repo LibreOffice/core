@@ -9,7 +9,7 @@
 
 #include "sdmodeltestbase.hxx"
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

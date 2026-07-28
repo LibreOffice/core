@@ -12,7 +12,7 @@
 #include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/process.h>
 

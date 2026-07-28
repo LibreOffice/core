@@ -86,7 +86,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <DrawController.hxx>
 
 #include <memory>
