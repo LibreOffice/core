@@ -29,6 +29,8 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/weakref.hxx>
 
+#include <map>
+
 namespace connectivity::firebird
 {
     // The SQL dialect in use
@@ -51,6 +53,14 @@ namespace connectivity::firebird
         ::utl::TempFileNamed m_firebirdDataDirectory;
         bool m_bConfined;
 
+        // The names firebird may use for a database that lies outside its own directory, each
+        // mapped to that database's absolute path. The names are random, and only the databases
+        // the user picked in this session are in here.
+        std::map<OUString, OUString> m_aExternalDatabaseNames;
+
+        // Write m_aExternalDatabaseNames out as the databases.conf of the firebird directory.
+        void writeExternalDatabaseNames();
+
     protected:
         ::osl::Mutex                m_aMutex;       // mutex is need to control member access
         std::vector<unotools::WeakReference<Connection>>
@@ -68,6 +78,17 @@ namespace connectivity::firebird
         // connection makes its own subdirectory here, and firebird keeps
         // associated files it creates for them under this directory as well.
         OUString getDatabaseDataDirectoryURL() const { return m_firebirdDataDirectory.GetURL(); }
+
+        // Give firebird a name for a database that lies outside its own directory, and return
+        // that name. firebird resolves a name it finds in databases.conf without applying the
+        // DatabaseAccess restriction, while every path it is handed elsewhere, a difference file
+        // or a shadow, is still checked against that restriction. The name is random so that a
+        // database firebird opens cannot ask for another database by guessing the name.
+        OUString addExternalDatabaseName(const OUString& rDatabasePath);
+
+        // Take back a name from addExternalDatabaseName. Any database already attached through
+        // it stays open.
+        void removeExternalDatabaseName(const OUString& rName);
 
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
