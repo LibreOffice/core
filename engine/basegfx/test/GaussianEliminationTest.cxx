@@ -115,6 +115,20 @@ CPPUNIT_TEST_FIXTURE(GaussianEliminationTest, testZeroLeadingCellKeepsRowAligned
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.5, aRhs[4], 1e-12);
 }
 
+CPPUNIT_TEST_FIXTURE(GaussianEliminationTest, testBandPastPivotColumnReadsAsZero)
+{
+    // The bands below the zero in column 0 start later and hold no
+    // cell for it. The pivot search reads that as zero and reports
+    // the matrix as singular.
+    std::vector<std::vector<double>> aRows{ { 0.0, 1.0 }, { 5.0, 0.0 }, { 7.0, 0.0 } };
+    std::vector<size_t> aOffsets{ 0, 1, 2 };
+    std::vector<double> aRhs{ 1.0, 2.0, 3.0 };
+    std::span<double> aRhsList[] = { aRhs };
+
+    GaussianElimination aSolver(aRows, aOffsets, 1 /*bandwidth*/, aRhsList);
+    CPPUNIT_ASSERT(!aSolver.solveBanded());
+}
+
 CPPUNIT_TEST_FIXTURE(GaussianEliminationTest, testSingularMatrixReturnsFalse)
 {
     // Two identical rows leave the matrix rank-deficient. The pivot

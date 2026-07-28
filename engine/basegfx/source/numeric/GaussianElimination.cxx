@@ -17,6 +17,22 @@
 
 namespace basegfx
 {
+namespace
+{
+/** The value a row holds at the given column. A band that does not
+ *  cover the column stores no cell for it, which reads as zero.
+ */
+double getBandCellValue(const std::vector<std::vector<double>>& rRows,
+                        const std::vector<size_t>& rRowOffsets, sal_uInt32 nBandwidth,
+                        size_t nColumn, size_t nRow)
+{
+    const size_t nOffset = rRowOffsets[nRow];
+    if (nColumn < nOffset || nColumn > nOffset + nBandwidth)
+        return 0.0;
+    return rRows[nRow][nColumn - nOffset];
+}
+}
+
 GaussianElimination::GaussianElimination(std::vector<std::vector<double>>& rRows,
                                          std::vector<size_t>& rRowOffsets, sal_uInt32 nBandwidth,
                                          std::span<const std::span<double>> aRhsList)
@@ -46,9 +62,10 @@ bool GaussianElimination::forwardEliminate()
         // Partial pivot: walk down the column until a nonzero entry is
         // found, then swap that row into the pivot position.
         size_t nRow = nColumn;
-        while (nRow < nLastIndex && mrRows[nRow][nColumn - mrRowOffsets[nRow]] == 0.0)
+        while (nRow < nLastIndex
+               && getBandCellValue(mrRows, mrRowOffsets, mnBandwidth, nColumn, nRow) == 0.0)
             ++nRow;
-        if (mrRows[nRow][nColumn - mrRowOffsets[nRow]] == 0.0)
+        if (getBandCellValue(mrRows, mrRowOffsets, mnBandwidth, nColumn, nRow) == 0.0)
             return false;
         if (nRow != nColumn)
         {
