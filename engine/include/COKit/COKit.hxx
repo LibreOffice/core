@@ -70,7 +70,6 @@ public:
         return mpDoc->pClass->getDocumentType(mpDoc);
     }
 
-#if defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /**
      * Get number of part that the document contains.
      *
@@ -981,7 +980,6 @@ public:
         mpDoc->pClass->setColorPreviewState(mpDoc, nId, nEnabled);
     }
 
-#endif // defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
 /// The kit::Office class represents one started COKit instance.

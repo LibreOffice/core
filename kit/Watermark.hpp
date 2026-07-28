@@ -11,7 +11,6 @@
 
 #pragma once
 
-#define KIT_USE_UNSTABLE_API
 #include <COKit/COKitInit.h>
 #include <COKit/COKit.hxx>
 #include <COKit/COKitEnums.h>

@@ -37,7 +37,6 @@
 #include <net/ServerSocket.hpp>
 #include <net/WebSocketHandler.hpp>
 
-#define KIT_USE_UNSTABLE_API
 #include <COKit/COKit.hxx>
 
 #include <Poco/Path.h>

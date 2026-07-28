@@ -14,7 +14,6 @@
 #include <common/StringVector.hpp>
 #include <common/Log.hpp>
 
-#define KIT_USE_UNSTABLE_API
 #include <COKit/COKitEnums.h>
 
 #include <typeinfo>

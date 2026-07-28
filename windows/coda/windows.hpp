@@ -5,7 +5,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#define KIT_USE_UNSTABLE_API
 #include <COKit/COKit.hxx>
 
 #include <string>

@@ -23,12 +23,6 @@ An example program can be seen on:
 
 ## Tiled Rendering
 
-To use COKit Tiled Rendering you will need the following before the COKit includes:
-
-    #define KIT_USE_UNSTABLE_API
-
-(This must be define before ANY COKit header, i.e. including the Init header.)
-
 Currently only bitmap-buffer rendering is supported, with a 32-bit BGRA
 colorspace (further alternatives could feasibly be implemented as needed).
 Scanlines are ordered top-down (whereas CollaboraOffice will internally default

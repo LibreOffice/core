@@ -13,7 +13,6 @@
 
 #include "DocumentOperations.hpp"
 
-#define KIT_USE_UNSTABLE_API
 #include <COKit/COKit.hxx>
 
 #include <common/FileUtil.hpp>

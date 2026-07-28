@@ -23,7 +23,6 @@
 #include <string_view>
 #include <vector>
 
-#define KIT_USE_UNSTABLE_API
 #include <COKit/COKitEnums.h>
 
 namespace COOLProtocol

@@ -22,7 +22,6 @@
 #include <common/Util.hpp>
 #include <kit/KitHelper.hpp>
 
-#define KIT_USE_UNSTABLE_API
 #include <COKit/COKitInit.h>
 #include <COKit/COKit.h>
 

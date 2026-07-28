@@ -14,7 +14,6 @@
 #include <common/JsonUtil.hpp>
 #include <common/Util.hpp>
 
-#define KIT_USE_UNSTABLE_API
 #include <COKit/COKit.h>
 #include <COKit/COKitEnums.h>
 

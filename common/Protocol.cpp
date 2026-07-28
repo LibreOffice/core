@@ -27,7 +27,6 @@
 #include <string>
 #include <string_view>
 
-#define KIT_USE_UNSTABLE_API
 #include <COKit/COKitEnums.h>
 
 namespace COOLProtocol

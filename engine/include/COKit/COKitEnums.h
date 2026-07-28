@@ -17,7 +17,6 @@ extern "C"
 {
 #endif
 
-#if defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 typedef enum
 {
   KIT_DOCTYPE_TEXT,
@@ -1337,8 +1336,6 @@ typedef enum
     KIT_SETGRAPHICSELECTION_END
 }
 COKitSetGraphicSelectionType;
-
-#endif // defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 
 #ifdef __cplusplus
 }

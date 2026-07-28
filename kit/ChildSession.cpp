@@ -37,7 +37,6 @@
 #include <kit/KitHelper.hpp>
 #include <kit/SlideCompressor.hpp>
 
-#define KIT_USE_UNSTABLE_API
 #include <COKit/COKit.hxx>
 #include <COKit/COKitEnums.h>
 

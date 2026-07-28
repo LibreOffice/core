@@ -12,14 +12,11 @@
 
 #include <stddef.h>
 
-// the unstable API needs C99's bool
-// TODO remove the C99 types from the API before making stable
-#if defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
+// the API needs C99's bool
 # ifndef _WIN32
 #  include <stdbool.h>
 # endif
 # include <stdint.h>
-#endif
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
@@ -211,7 +208,6 @@ struct COKitDocumentClassStruct
     /** @see kit::Document::getDocumentType(). */
     int (*getDocumentType) (COKitDocument* pThis);
 
-#if defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /// @see kit::Document::getParts().
     int (*getParts) (COKitDocument* pThis);
 
@@ -591,7 +587,6 @@ struct COKitDocumentClassStruct
     /// @see kit::Document::flushClipboard().
     void (*flushClipboard)(COKitDocument* pThis);
 
-#endif // defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
 #ifdef __cplusplus
