@@ -930,7 +930,7 @@ class PresenterConsole {
 		// Create the image for the plus button
 		let plusImage = this._proxyPresenter.document.createElement('img');
 		plusImage.src = LOUtil.getImageURL('presenterscreen-ButtonPlusNormal.svg');
-		plusImage.alt = 'Increase Font'; // Optional: Add alt text for accessibility
+		plusImage.alt = this.labels.zoomIn; // Names the button for a screen reader
 		// Add the image inside the plus button
 		plusButton.appendChild(plusImage);
 
@@ -943,7 +943,7 @@ class PresenterConsole {
 		minusImage.src = LOUtil.getImageURL(
 			'presenterscreen-ButtonMinusNormal.svg',
 		);
-		minusImage.alt = 'Decrease Font'; // Optional: Add alt text for accessibility
+		minusImage.alt = this.labels.zoomOut; // Names the button for a screen reader
 
 		// Add the image inside the minus button
 		minusButton.appendChild(minusImage);
