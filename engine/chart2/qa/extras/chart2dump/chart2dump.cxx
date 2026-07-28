@@ -16,7 +16,10 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
+#include <comphelper/kit.hxx>
 #include <editeng/unoprnms.hxx>
+#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -94,6 +97,10 @@ protected:
         : ChartTest(u"/chart2/qa/extras/chart2dump/data/"_ustr)
     {
         m_bDumpMode = bDumpMode;
+
+        // The dumps hold locale-dependent values; no view is here to tell the Kit its language.
+        comphelper::COKit::setLanguageTag(LanguageTag(LANGUAGE_ENGLISH_US));
+        comphelper::COKit::setLocale(LanguageTag(LANGUAGE_ENGLISH_US));
     }
 
     virtual ~Chart2DumpTest() override
