@@ -14,6 +14,8 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 
+#include <COKit/COKit.hxx>
+
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XFrame; }
@@ -56,7 +58,7 @@ public:
                         int nCount, int nButtons, int nModifier,
                         double fScaleX = 1.0, double fScaleY = 1.0);
     bool setTextSelection(int nType, int nX, int nY);
-    bool setGraphicSelection(int nType, int nX, int nY,
+    bool setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY,
                              double fScaleX = 1.0, double fScaleY = 1.0);
 };
 

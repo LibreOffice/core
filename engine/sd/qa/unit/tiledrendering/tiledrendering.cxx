@@ -241,8 +241,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetGraphicSelection)
     CPPUNIT_ASSERT_EQUAL(int(SdrHdlKind::Lower), static_cast<int>(pHdl->GetKind()));
     ::tools::Rectangle aShapeBefore = pObject->GetSnapRect();
     // Resize.
-    pXImpressDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_START, o3tl::toTwips(pHdl->GetPos().getX(), o3tl::Length::mm100), o3tl::toTwips(pHdl->GetPos().getY(), o3tl::Length::mm100));
-    pXImpressDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_END, o3tl::toTwips(pHdl->GetPos().getX(), o3tl::Length::mm100), o3tl::toTwips(pHdl->GetPos().getY() + 1000, o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(COKitSetGraphicSelectionType::START, o3tl::toTwips(pHdl->GetPos().getX(), o3tl::Length::mm100), o3tl::toTwips(pHdl->GetPos().getY(), o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(COKitSetGraphicSelectionType::END, o3tl::toTwips(pHdl->GetPos().getX(), o3tl::Length::mm100), o3tl::toTwips(pHdl->GetPos().getY() + 1000, o3tl::Length::mm100));
 
     // Assert that view shell ID tracking works.
     sal_Int32 nView1 = KitHelper::getCurrentView();
@@ -506,8 +506,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTable)
 
     // Resize the upper row, decrease its height by 1 cm.
     Point aInnerRowEdge = pObject->GetSnapRect().Center();
-    pXImpressDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_START, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
-    pXImpressDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_END, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY() - 1000, o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(COKitSetGraphicSelectionType::START, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(COKitSetGraphicSelectionType::END, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY() - 1000, o3tl::Length::mm100));
 
     // Remember the resized row heights.
     sal_Int32 nResizedRow1 = xRow1->getPropertyValue(u"Size"_ustr).get<sal_Int32>();
@@ -551,8 +551,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumn)
 
     // Resize the left column, decrease its width by 1 cm.
     Point aInnerRowEdge = pObject->GetSnapRect().Center();
-    pXImpressDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_START, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
-    pXImpressDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_END, o3tl::toTwips(aInnerRowEdge.getX() - 1000, o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(COKitSetGraphicSelectionType::START, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(COKitSetGraphicSelectionType::END, o3tl::toTwips(aInnerRowEdge.getX() - 1000, o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
 
     // Remember the resized column widths.
     pXmlDoc = parseXmlDump();

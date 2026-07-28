@@ -5176,7 +5176,7 @@ uno::Reference<datatransfer::XTransferable> SdXImpressDocument::getSelection()
     return pViewShell->GetSelectionTransferable();
 }
 
-void SdXImpressDocument::setGraphicSelection(int nType, int nX, int nY)
+void SdXImpressDocument::setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
 
@@ -5187,16 +5187,16 @@ void SdXImpressDocument::setGraphicSelection(int nType, int nX, int nY)
     constexpr double fScale = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::px);
 
     KitChartHelper aChartHelper(pViewShell->GetViewShell());
-    if (aChartHelper.setGraphicSelection(nType, nX, nY, fScale, fScale))
+    if (aChartHelper.setGraphicSelection(eType, nX, nY, fScale, fScale))
         return;
 
     Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
-    switch (nType)
+    switch (eType)
     {
-    case KIT_SETGRAPHICSELECTION_START:
+    case COKitSetGraphicSelectionType::START:
         pViewShell->SetGraphicMm100Position(/*bStart=*/true, aPoint);
         break;
-    case KIT_SETGRAPHICSELECTION_END:
+    case COKitSetGraphicSelectionType::END:
         pViewShell->SetGraphicMm100Position(/*bStart=*/false, aPoint);
         break;
     default:

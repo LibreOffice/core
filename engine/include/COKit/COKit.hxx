@@ -1380,7 +1380,7 @@ typedef enum
 }
 COKitSetTextSelectionType;
 
-typedef enum
+enum class COKitSetGraphicSelectionType
 {
     /**
      * A move or a resize action starts. It is assumed that there is a valid
@@ -1395,15 +1395,14 @@ typedef enum
      * - middle-left, middle-right
      * - bottom-left, bottom-center, bottom-right
      */
-    KIT_SETGRAPHICSELECTION_START,
+    START,
     /**
      * A move or resize action stops. It is assumed that this is always used
-     * only after a KIT_SETTEXTSELECTION_START. The supplied coordinates are
+     * only after a START. The supplied coordinates are
      * the ones where the user released the screen.
      */
-    KIT_SETGRAPHICSELECTION_END
-}
-COKitSetGraphicSelectionType;
+    END
+};
 
 typedef struct COKitStruct COKit;
 typedef struct COKitClassStruct COKitClass;
@@ -1672,7 +1671,7 @@ struct COKitDocumentClassStruct
 
     /// @see kit::Document::setGraphicSelection
     void (*setGraphicSelection) (COKitDocument* pThis,
-                                 int nType,
+                                 COKitSetGraphicSelectionType eType,
                                  int nX,
                                  int nY);
 
@@ -2437,9 +2436,9 @@ public:
      * @param nX horizontal position in document coordinates
      * @param nY vertical position in document coordinates
      */
-    void setGraphicSelection(int nType, int nX, int nY)
+    void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY)
     {
-        mpDoc->pClass->setGraphicSelection(mpDoc, nType, nX, nY);
+        mpDoc->pClass->setGraphicSelection(mpDoc, eType, nX, nY);
     }
 
     /**

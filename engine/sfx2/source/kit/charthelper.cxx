@@ -288,7 +288,7 @@ bool KitChartHelper::setTextSelection(int nType, int nX, int nY)
     return false;
 }
 
-bool KitChartHelper::setGraphicSelection(int nType, int nX, int nY,
+bool KitChartHelper::setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY,
                                          double fScaleX, double fScaleY)
 {
     tools::Rectangle rChartBBox = GetChartBoundingBox();
@@ -300,9 +300,9 @@ bool KitChartHelper::setGraphicSelection(int nType, int nX, int nY,
         vcl::Window* pChartWindow = GetWindow();
 
         Point aPos(nChartWinX * fScaleX, nChartWinY * fScaleY);
-        switch (nType)
+        switch (eType)
         {
-        case KIT_SETGRAPHICSELECTION_START:
+        case COKitSetGraphicSelectionType::START:
             {
                 MouseEvent aClickEvent(aPos, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
                 pChartWindow->MouseButtonDown(aClickEvent);
@@ -310,7 +310,7 @@ bool KitChartHelper::setGraphicSelection(int nType, int nX, int nY,
                 pChartWindow->MouseMove(aMoveEvent);
             }
             break;
-        case KIT_SETGRAPHICSELECTION_END:
+        case COKitSetGraphicSelectionType::END:
             {
                 MouseEvent aMoveEvent(aPos, 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
                 pChartWindow->MouseMove(aMoveEvent);

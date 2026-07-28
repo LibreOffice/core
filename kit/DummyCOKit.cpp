@@ -111,7 +111,7 @@ static bool doc_paste(COKitDocument* self,
                       const char* data,
                       size_t size);
 static void doc_setGraphicSelection (COKitDocument* self,
-                                  int type,
+                                  COKitSetGraphicSelectionType type,
                                   int x,
                                   int y);
 static void doc_resetSelection (COKitDocument* self);
@@ -461,7 +461,8 @@ static bool doc_paste(COKitDocument* self, const char* mimeType, const char* dat
     return true;
 }
 
-static void doc_setGraphicSelection(COKitDocument* self, int type, int x, int y)
+static void doc_setGraphicSelection(COKitDocument* self, COKitSetGraphicSelectionType type,
+                                    int x, int y)
 {
     (void) self;
     (void) type;

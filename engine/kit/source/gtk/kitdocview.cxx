@@ -488,7 +488,7 @@ handleGraphicSelectionOnButtonPress(GdkRectangle& aClick, KitDocumentView* pDocV
 
             GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
             LOEvent* pLOEvent = new LOEvent(KIT_SET_GRAPHIC_SELECTION);
-            pLOEvent->m_nSetGraphicSelectionType = KIT_SETGRAPHICSELECTION_START;
+            pLOEvent->m_nSetGraphicSelectionType = COKitSetGraphicSelectionType::START;
             pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(priv->m_aGraphicHandleRects[i].x + priv->m_aGraphicHandleRects[i].width / 2, priv->m_fZoom);
             pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(priv->m_aGraphicHandleRects[i].y + priv->m_aGraphicHandleRects[i].height / 2, priv->m_fZoom);
             g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
@@ -550,7 +550,7 @@ handleGraphicSelectionOnButtonRelease(KitDocumentView* pDocView, GdkEventButton*
 
             GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
             LOEvent* pLOEvent = new LOEvent(KIT_SET_GRAPHIC_SELECTION);
-            pLOEvent->m_nSetGraphicSelectionType = KIT_SETGRAPHICSELECTION_END;
+            pLOEvent->m_nSetGraphicSelectionType = COKitSetGraphicSelectionType::END;
             pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
             pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
             g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
@@ -575,7 +575,7 @@ handleGraphicSelectionOnButtonRelease(KitDocumentView* pDocView, GdkEventButton*
 
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(KIT_SET_GRAPHIC_SELECTION);
-    pLOEvent->m_nSetGraphicSelectionType = KIT_SETGRAPHICSELECTION_END;
+    pLOEvent->m_nSetGraphicSelectionType = COKitSetGraphicSelectionType::END;
     pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
     pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
@@ -2244,7 +2244,7 @@ kit_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
 
         GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
         LOEvent* pLOEvent = new LOEvent(KIT_SET_GRAPHIC_SELECTION);
-        pLOEvent->m_nSetGraphicSelectionType = KIT_SETGRAPHICSELECTION_START;
+        pLOEvent->m_nSetGraphicSelectionType = COKitSetGraphicSelectionType::START;
         pLOEvent->m_nSetGraphicSelectionX = pixelToTwip(pEvent->x, priv->m_fZoom);
         pLOEvent->m_nSetGraphicSelectionY = pixelToTwip(pEvent->y, priv->m_fZoom);
         g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
@@ -2295,7 +2295,8 @@ setGraphicSelectionInThread(gpointer data)
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
-    ss << "kit::Document::setGraphicSelection(" << pLOEvent->m_nSetGraphicSelectionType;
+    ss << "kit::Document::setGraphicSelection("
+       << static_cast<int>(pLOEvent->m_nSetGraphicSelectionType);
     ss << ", " << pLOEvent->m_nSetGraphicSelectionX;
     ss << ", " << pLOEvent->m_nSetGraphicSelectionY << ")";
     g_info("%s", ss.str().c_str());

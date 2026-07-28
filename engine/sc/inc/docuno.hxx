@@ -355,7 +355,7 @@ public:
     virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() override;
 
     /// @see vcl::ITiledRenderable::setGraphicSelection().
-    virtual void setGraphicSelection(int nType, int nX, int nY) override;
+    virtual void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) override;
 
     /// @see kit::Document::resetSelection().
     virtual void resetSelection() override;

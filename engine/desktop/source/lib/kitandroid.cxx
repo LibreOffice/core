@@ -388,7 +388,8 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setGrap
     (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->pClass->setGraphicSelection(pDocument, type, x, y);
+    pDocument->pClass->setGraphicSelection(
+        pDocument, static_cast<COKitSetGraphicSelectionType>(type), x, y);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_resetSelection

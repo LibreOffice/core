@@ -200,7 +200,7 @@ public:
      *
      * @see kit::Document::setGraphicSelection().
      */
-    virtual void setGraphicSelection(int nType, int nX, int nY) = 0;
+    virtual void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) = 0;
 
     /**
      * @see kit::Document::resetSelection().

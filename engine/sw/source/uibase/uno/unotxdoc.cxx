@@ -4141,7 +4141,7 @@ uno::Reference<datatransfer::XTransferable> SwXTextDocument::getSelection()
     return xTransferable;
 }
 
-void SwXTextDocument::setGraphicSelection(int nType, int nX, int nY)
+void SwXTextDocument::setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
 
@@ -4151,16 +4151,16 @@ void SwXTextDocument::setGraphicSelection(int nType, int nX, int nY)
 
     SfxViewShell* pViewShell = m_pDocShell->GetView();
     KitChartHelper aChartHelper(pViewShell);
-    if (aChartHelper.setGraphicSelection(nType, nX, nY, fScale, fScale))
+    if (aChartHelper.setGraphicSelection(eType, nX, nY, fScale, fScale))
         return;
 
     SwEditWin& rEditWin = m_pDocShell->GetView()->GetEditWin();
-    switch (nType)
+    switch (eType)
     {
-    case KIT_SETGRAPHICSELECTION_START:
+    case COKitSetGraphicSelectionType::START:
         rEditWin.SetGraphicTwipPosition(/*bStart=*/true, Point(nX, nY));
         break;
-    case KIT_SETGRAPHICSELECTION_END:
+    case COKitSetGraphicSelectionType::END:
         rEditWin.SetGraphicTwipPosition(/*bStart=*/false, Point(nX, nY));
         break;
     default:

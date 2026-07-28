@@ -1267,7 +1267,7 @@ static bool doc_paste(COKitDocument* pThis,
                       size_t nSize);
 static void doc_flushClipboard(COKitDocument* pThis);
 static void doc_setGraphicSelection (COKitDocument* pThis,
-                                  int nType,
+                                  COKitSetGraphicSelectionType eType,
                                   int nX,
                                   int nY);
 static void doc_resetSelection (COKitDocument* pThis);
@@ -6855,7 +6855,8 @@ static bool doc_paste(COKitDocument* pThis, const char* pMimeType, const char* p
     return true;
 }
 
-static void doc_setGraphicSelection(COKitDocument* pThis, int nType, int nX, int nY)
+static void doc_setGraphicSelection(COKitDocument* pThis, COKitSetGraphicSelectionType eType,
+                                    int nX, int nY)
 {
     comphelper::ProfileZone aZone("doc_setGraphicSelection");
 
@@ -6869,7 +6870,7 @@ static void doc_setGraphicSelection(COKitDocument* pThis, int nType, int nX, int
         return;
     }
 
-    pDoc->setGraphicSelection(nType, nX, nY);
+    pDoc->setGraphicSelection(eType, nX, nY);
 }
 
 static void doc_resetSelection(COKitDocument* pThis)

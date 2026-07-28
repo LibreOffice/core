@@ -3145,11 +3145,12 @@ bool ChildSession::askSignatureStatus(const char* buffer, int length, const Stri
 
 bool ChildSession::selectGraphic(const StringVector& tokens)
 {
-    int type, x, y;
+    COKitSetGraphicSelectionType type = COKitSetGraphicSelectionType::START;
+    int x, y;
     if (tokens.size() != 4 ||
         !getTokenKeyword(tokens[1], "type",
-                         {{"start", KIT_SETGRAPHICSELECTION_START},
-                          {"end", KIT_SETGRAPHICSELECTION_END}},
+                         {{"start", COKitSetGraphicSelectionType::START},
+                          {"end", COKitSetGraphicSelectionType::END}},
                          type) ||
         !getTokenInteger(tokens[2], "x", x) ||
         !getTokenInteger(tokens[3], "y", y))

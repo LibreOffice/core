@@ -229,7 +229,7 @@ struct LOEvent
 
     /// @name setGraphicSelection parameters
     ///@{
-    int m_nSetGraphicSelectionType;
+    COKitSetGraphicSelectionType m_nSetGraphicSelectionType;
     int m_nSetGraphicSelectionX;
     int m_nSetGraphicSelectionY;
     ///@}
@@ -264,7 +264,7 @@ struct LOEvent
         , m_nPostMouseEventCount(0)
         , m_nPostMouseEventButton(0)
         , m_nPostMouseEventModifier(0)
-        , m_nSetGraphicSelectionType(0)
+        , m_nSetGraphicSelectionType(COKitSetGraphicSelectionType::START)
         , m_nSetGraphicSelectionX(0)
         , m_nSetGraphicSelectionY(0)
         , m_nTilePixelWidth(0)

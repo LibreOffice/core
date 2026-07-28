@@ -1041,7 +1041,7 @@ uno::Reference<datatransfer::XTransferable> ScModelObj::getSelection()
     return xTransferable;
 }
 
-void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
+void ScModelObj::setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
 
@@ -1063,15 +1063,15 @@ void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
     // coordinates from the client are always positive, so negate nX.
     bool bNegativeX = pViewData->GetDocument().IsNegativePage(pViewData->CurrentTabForData());
     KitChartHelper aChartHelper(pViewShell);
-    if (aChartHelper.setGraphicSelection(nType, bNegativeX ? -nX : nX, nY, fPPTX, fPPTY))
+    if (aChartHelper.setGraphicSelection(eType, bNegativeX ? -nX : nX, nY, fPPTX, fPPTY))
         return;
 
     int nPixelX = nX * fPPTX;
     int nPixelY = nY * fPPTY;
 
-    switch (nType)
+    switch (eType)
     {
-    case KIT_SETGRAPHICSELECTION_START:
+    case COKitSetGraphicSelectionType::START:
         {
             MouseEvent aClickEvent(Point(nPixelX, nPixelY), 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
             pGridWindow->MouseButtonDown(aClickEvent);
@@ -1079,7 +1079,7 @@ void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
             pGridWindow->MouseMove(aMoveEvent);
         }
         break;
-    case KIT_SETGRAPHICSELECTION_END:
+    case COKitSetGraphicSelectionType::END:
         {
             MouseEvent aMoveEvent(Point(nPixelX, nPixelY), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
             pGridWindow->MouseMove(aMoveEvent);

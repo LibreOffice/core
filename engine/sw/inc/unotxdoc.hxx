@@ -463,7 +463,7 @@ public:
     /// @see vcl::ITiledRenderable::getSelection().
     virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() override;
     /// @see vcl::ITiledRenderable::setGraphicSelection().
-    virtual void setGraphicSelection(int nType, int nX, int nY) override;
+    virtual void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) override;
     /// @see vcl::ITiledRenderable::resetSelection().
     virtual void resetSelection() override;
     /// @see vcl::ITiledRenderable::getPartPageRectangles().

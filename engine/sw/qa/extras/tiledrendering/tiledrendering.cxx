@@ -266,8 +266,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetGraphicSelection)
     CPPUNIT_ASSERT_EQUAL(int(SdrHdlKind::Lower), static_cast<int>(pHdl->GetKind()));
     tools::Rectangle aShapeBefore = pObject->GetSnapRect();
     // Resize.
-    pXTextDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_START, pHdl->GetPos().getX(), pHdl->GetPos().getY());
-    pXTextDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_END, pHdl->GetPos().getX(), pHdl->GetPos().getY() + 1000);
+    pXTextDocument->setGraphicSelection(COKitSetGraphicSelectionType::START, pHdl->GetPos().getX(), pHdl->GetPos().getY());
+    pXTextDocument->setGraphicSelection(COKitSetGraphicSelectionType::END, pHdl->GetPos().getX(), pHdl->GetPos().getY() + 1000);
     tools::Rectangle aShapeAfter = pObject->GetSnapRect();
     // Check that a resize happened, but aspect ratio is not kept.
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getOpenWidth(), aShapeAfter.getOpenWidth());
@@ -290,8 +290,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf168318)
     CPPUNIT_ASSERT_EQUAL(int(SdrHdlKind::Lower), static_cast<int>(pHdl->GetKind()));
     tools::Rectangle aShapeBefore = pObject->GetSnapRect();
     // Resize.
-    pXTextDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_START, pHdl->GetPos().getX(), pHdl->GetPos().getY());
-    pXTextDocument->setGraphicSelection(KIT_SETGRAPHICSELECTION_END, pHdl->GetPos().getX(), pHdl->GetPos().getY() + 1000);
+    pXTextDocument->setGraphicSelection(COKitSetGraphicSelectionType::START, pHdl->GetPos().getX(), pHdl->GetPos().getY());
+    pXTextDocument->setGraphicSelection(COKitSetGraphicSelectionType::END, pHdl->GetPos().getX(), pHdl->GetPos().getY() + 1000);
     tools::Rectangle aShapeAfter = pObject->GetSnapRect();
 
     // Without the fix in place, this test would have failed here
