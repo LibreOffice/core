@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_vclplug.h>
+
 #include "charttest.hxx"
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
@@ -545,8 +547,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf134225)
         UNO_SET_THROW);
     CPPUNIT_ASSERT(xDataPointLabel2.is());
 
-#if defined(_WIN32)
-    // font is MS Comic Sans which we can only assume is available under windows
+#if defined(_WIN32) && !USE_HEADLESS_CODE
+    // font is MS Comic Sans which we can only assume is available under windows, and only where
+    // system fonts are used
     awt::Point aLabelPosition1 = xDataPointLabel1->getPosition();
     awt::Point aLabelPosition2 = xDataPointLabel2->getPosition();
 
