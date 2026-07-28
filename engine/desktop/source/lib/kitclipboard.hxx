@@ -20,7 +20,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
-#include <COKit/COKitTypes.h>
+#include <COKit/COKit.hxx>
 
 /// A clipboard implementation for COKit.
 class KitClipboard final

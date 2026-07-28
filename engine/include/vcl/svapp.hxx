@@ -27,7 +27,7 @@
 #include <vector>
 
 #include <comphelper/solarmutex.hxx>
-#include <COKit/COKitTypes.h>
+#include <COKit/COKit.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/thread.h>

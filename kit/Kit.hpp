@@ -21,7 +21,7 @@
 #include <net/Socket.hpp>
 #include <wsd/TileDesc.hpp>
 
-#include <COKit/COKitTypes.h>
+#include <COKit/COKit.hxx>
 
 #include <Poco/Util/XMLConfiguration.h>
 

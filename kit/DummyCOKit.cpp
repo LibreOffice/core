@@ -19,7 +19,7 @@
 #include "DummyCOKit.hpp"
 
 #include <COKit/COKitEnums.h>
-#include <COKit/COKitTypes.h>
+#include <COKit/COKit.hxx>
 
 #include <cstdlib>
 #include <cstring>

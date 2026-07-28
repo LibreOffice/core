@@ -593,7 +593,6 @@ dist-hook:
 	cp @LOKIT_PATH@/COKit/COKit.hxx \
 	   @LOKIT_PATH@/COKit/COKitEnums.h \
 	   @LOKIT_PATH@/COKit/COKitInit.h \
-	   @LOKIT_PATH@/COKit/COKitTypes.h \
 	   $(distdir)/bundled/include/COKit/
 # Generate the localization maps, browser/src/unocommands.js,
 # browser/l10n/uno/*.json and browser/src/unoshortcuts.ts into the tarball from

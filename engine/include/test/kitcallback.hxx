@@ -11,7 +11,7 @@
 
 #include <sal/config.h>
 #include <test/testdllapi.hxx>
-#include <COKit/COKitTypes.h>
+#include <COKit/COKit.hxx>
 #include <sfx2/kit/callback.hxx>
 #include <vcl/idle.hxx>
 

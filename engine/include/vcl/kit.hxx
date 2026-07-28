@@ -12,7 +12,7 @@
 #include <sal/config.h>
 #include <vcl/dllapi.h>
 #include <rtl/strbuf.hxx>
-#include <COKit/COKitTypes.h>
+#include <COKit/COKit.hxx>
 
 namespace vcl::kit
 {

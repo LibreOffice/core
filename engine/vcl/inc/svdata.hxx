@@ -39,7 +39,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/window.hxx>
 #include <vcl/task.hxx>
-#include <COKit/COKitTypes.h>
+#include <COKit/COKit.hxx>
 #include <unotools/resmgr.hxx>
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
