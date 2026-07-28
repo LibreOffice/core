@@ -20,7 +20,8 @@
 #pragma once
 
 #include "PresenterBitmapContainer.hxx"
-#include <PresenterHelper.hxx>
+#include "PresenterHelper.hxx"
+
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

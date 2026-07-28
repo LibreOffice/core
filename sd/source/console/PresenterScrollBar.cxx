@@ -21,10 +21,10 @@
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
+#include "PresenterHelper.hxx"
 #include "PresenterPaintManager.hxx"
 #include "PresenterTimer.hxx"
 #include "PresenterUIPainter.hxx"
-#include <PresenterHelper.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>

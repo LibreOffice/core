@@ -96,9 +96,11 @@ $(eval $(call gb_Library_add_exception_objects,sdui,\
     sd/source/console/AccessibleNotes \
     sd/source/console/AccessibleObject \
     sd/source/console/AccessibleParagraph \
+    sd/source/console/CanvasUpdateRequester \
     sd/source/console/PresenterAccessibility \
     sd/source/console/PresenterBitmapContainer \
     sd/source/console/PresenterButton \
+    sd/source/console/PresenterCanvas \
     sd/source/console/PresenterCanvasHelper \
     sd/source/console/PresenterConfigurationAccess \
     sd/source/console/PresenterController \
@@ -106,6 +108,7 @@ $(eval $(call gb_Library_add_exception_objects,sdui,\
     sd/source/console/PresenterFrameworkObserver \
     sd/source/console/PresenterGeometryHelper \
     sd/source/console/PresenterHelpView \
+    sd/source/console/PresenterHelper \
     sd/source/console/PresenterNotesView \
     sd/source/console/PresenterPaintManager \
     sd/source/console/PresenterPane \

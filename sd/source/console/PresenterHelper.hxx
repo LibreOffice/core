@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include "sddllapi.h"
-
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
@@ -31,7 +29,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace sd::presenter {
 
-class SD_DLLPUBLIC PresenterHelper final
+class PresenterHelper final
 {
 public:
     PresenterHelper() = delete;

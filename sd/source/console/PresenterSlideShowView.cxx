@@ -21,8 +21,8 @@
 #include "PresenterSlideShowView.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
+#include "PresenterHelper.hxx"
 #include "PresenterPaneContainer.hxx"
-#include <PresenterHelper.hxx>
 #include <DrawController.hxx>
 #include <framework/ConfigurationController.hxx>
 #include <strings.hrc>

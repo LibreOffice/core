@@ -21,7 +21,8 @@
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterConfigurationAccess.hxx"
-#include <PresenterHelper.hxx>
+#include "PresenterHelper.hxx"
+
 #include <com/sun/star/rendering/PanoseWeight.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>

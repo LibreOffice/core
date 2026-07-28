@@ -19,7 +19,7 @@
 
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterConfigurationAccess.hxx"
-#include <PresenterHelper.hxx>
+#include "PresenterHelper.hxx"
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <utility>

@@ -9076,7 +9076,6 @@ sd/inc/CustomAnimationPreset.hxx
 sd/inc/EffectMigration.hxx
 sd/inc/FactoryIds.hxx
 sd/inc/OutlinerIterator.hxx
-sd/inc/PresenterHelper.hxx
 sd/inc/PresenterPreviewCache.hxx
 sd/inc/ResourceId.hxx
 sd/inc/SlideRenderer.hxx
@@ -9124,12 +9123,15 @@ sd/source/console/AccessibleObject.cxx
 sd/source/console/AccessibleObject.hxx
 sd/source/console/AccessibleParagraph.cxx
 sd/source/console/AccessibleParagraph.hxx
+sd/source/console/CanvasUpdateRequester.cxx
 sd/source/console/PresenterAccessibility.cxx
 sd/source/console/PresenterAccessibility.hxx
 sd/source/console/PresenterBitmapContainer.cxx
 sd/source/console/PresenterBitmapContainer.hxx
 sd/source/console/PresenterButton.cxx
 sd/source/console/PresenterButton.hxx
+sd/source/console/PresenterCanvas.cxx
+sd/source/console/PresenterCanvas.hxx
 sd/source/console/PresenterCanvasHelper.cxx
 sd/source/console/PresenterCanvasHelper.hxx
 sd/source/console/PresenterConfigurationAccess.cxx
@@ -9144,6 +9146,8 @@ sd/source/console/PresenterGeometryHelper.cxx
 sd/source/console/PresenterGeometryHelper.hxx
 sd/source/console/PresenterHelpView.cxx
 sd/source/console/PresenterHelpView.hxx
+sd/source/console/PresenterHelper.cxx
+sd/source/console/PresenterHelper.hxx
 sd/source/console/PresenterNotesView.cxx
 sd/source/console/PresenterNotesView.hxx
 sd/source/console/PresenterPaintManager.cxx
@@ -9563,10 +9567,6 @@ sd/source/ui/inc/unoprnms.hxx
 sd/source/ui/inc/unosrch.hxx
 sd/source/ui/inc/unprlout.hxx
 sd/source/ui/inc/vectdlg.hxx
-sd/source/ui/presenter/CanvasUpdateRequester.cxx
-sd/source/ui/presenter/PresenterCanvas.cxx
-sd/source/ui/presenter/PresenterCanvas.hxx
-sd/source/ui/presenter/PresenterHelper.cxx
 sd/source/ui/presenter/PresenterPreviewCache.cxx
 sd/source/ui/presenter/SlideRenderer.cxx
 sd/source/ui/remotecontrol/AvahiNetworkService.cxx

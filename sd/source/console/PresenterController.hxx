@@ -20,9 +20,10 @@
 #pragma once
 
 #include "PresenterAccessibility.hxx"
+#include "PresenterHelper.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterTheme.hxx"
-#include <PresenterHelper.hxx>
+
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/awt/XKeyListener.hpp>

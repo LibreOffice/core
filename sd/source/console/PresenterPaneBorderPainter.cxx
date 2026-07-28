@@ -20,8 +20,8 @@
 #include "PresenterPaneBorderPainter.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
+#include "PresenterHelper.hxx"
 #include "PresenterTheme.hxx"
-#include <PresenterHelper.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>

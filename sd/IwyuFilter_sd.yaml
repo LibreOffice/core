@@ -172,7 +172,7 @@ excludelist:
     sd/source/ui/inc/tools/SlotStateListener.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XStatusListener.hpp
-    sd/source/ui/presenter/PresenterCanvas.hxx:
+    sd/source/console/PresenterCanvas.hxx:
     # base class has to be a complete type
     - com/sun/star/rendering/XSpriteCanvas.hpp
     - com/sun/star/rendering/XBitmap.hpp

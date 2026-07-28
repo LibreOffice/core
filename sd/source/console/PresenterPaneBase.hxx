@@ -19,9 +19,8 @@
 
 #pragma once
 
+#include "PresenterHelper.hxx"
 #include "PresenterPaneBorderPainter.hxx"
-
-#include <PresenterHelper.hxx>
 
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XWindowListener.hpp>

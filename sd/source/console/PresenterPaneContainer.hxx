@@ -20,8 +20,9 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANECONTAINER_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANECONTAINER_HXX
 
+#include "PresenterHelper.hxx"
 #include "PresenterPaneBase.hxx"
-#include <PresenterHelper.hxx>
+
 #include <com/sun/star/awt/XWindow.hpp>
 #include <ResourceId.hxx>
 #include <framework/AbstractView.hxx>

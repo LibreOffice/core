@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <PresenterHelper.hxx>
+#include "PresenterHelper.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>

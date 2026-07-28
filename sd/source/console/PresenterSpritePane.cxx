@@ -18,8 +18,9 @@
  */
 
 #include "PresenterController.hxx"
+#include "PresenterHelper.hxx"
 #include "PresenterSpritePane.hxx"
-#include <PresenterHelper.hxx>
+
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
 using namespace ::com::sun::star;

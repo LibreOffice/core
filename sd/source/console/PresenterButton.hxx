@@ -20,8 +20,8 @@
 #pragma once
 
 #include "PresenterBitmapContainer.hxx"
+#include "PresenterHelper.hxx"
 #include "PresenterTheme.hxx"
-#include <PresenterHelper.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
