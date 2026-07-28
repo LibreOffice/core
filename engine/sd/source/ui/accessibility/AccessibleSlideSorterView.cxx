@@ -473,7 +473,7 @@ void AccessibleSlideSorterView::ThrowIfDisposed()
     {
         SAL_WARN("sd", "Calling disposed object. Throwing exception:");
         throw lang::DisposedException (u"object has been already disposed"_ustr,
-            static_cast<uno::XWeak*>(this));
+            static_cast<cpo::uno::XWeak*>(this));
     }
 }
 

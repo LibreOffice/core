@@ -35,7 +35,7 @@ INCPRE+=	$(OUT)$/inc$
 # --- Application 6 - testjavavm ------------------------------------
 
 UNOTYPES= com.sun.star.lang.XMultiComponentFactory \
-    com.sun.star.uno.XWeak	\
+    cpo.uno.XWeak	\
     com.sun.star.java.XJavaVM	\
     com.sun.star.java.XJavaThreadRegister_11	\
     com.sun.star.registry.XSimpleRegistry \

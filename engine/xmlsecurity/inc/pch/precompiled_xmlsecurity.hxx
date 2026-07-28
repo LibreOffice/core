@@ -146,7 +146,7 @@
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/XWeak.hpp>
+#include <cpo/uno/XWeak.hpp>
 #include <cpo/uno/genfunc.h>
 #include <cpo/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>

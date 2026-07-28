@@ -70,7 +70,7 @@ using ::com::sun::star::uno::XInterface;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::XWeak;
+using ::cpo::uno::XWeak;
 using ::cpo::uno::Type;
 using ::cpo::uno::Any;
 using ::com::sun::star::lang::IllegalArgumentException;

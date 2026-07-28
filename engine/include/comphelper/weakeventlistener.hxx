@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <utility>
 
-namespace com::sun::star::uno { class XWeak; }
+namespace cpo::uno { class XWeak; }
 
 namespace comphelper
 {
@@ -72,7 +72,7 @@ namespace comphelper
 
     protected:
         OWeakListenerAdapterBase(
-            const css::uno::Reference< css::uno::XWeak >& _rxListener,
+            const css::uno::Reference< cpo::uno::XWeak >& _rxListener,
             css::uno::Reference< css::uno::XInterface > _xBroadcaster
         )
             :m_aListener    (  _rxListener )
@@ -106,7 +106,7 @@ namespace comphelper
             as this can't be done in a generic way</p>
         */
         OWeakListenerAdapter(
-            const css::uno::Reference< css::uno::XWeak >& _rxListener,
+            const css::uno::Reference< cpo::uno::XWeak >& _rxListener,
             const css::uno::Reference< BROADCASTER >& _rxBroadcaster
         );
 
@@ -137,7 +137,7 @@ namespace comphelper
     {
     public:
         OWeakEventListenerAdapter(
-            css::uno::Reference< css::uno::XWeak > const & _rxListener,
+            css::uno::Reference< cpo::uno::XWeak > const & _rxListener,
             css::uno::Reference< css::lang::XComponent > const & _rxBroadcaster
         );
 
@@ -155,7 +155,7 @@ namespace comphelper
 
     template< class BROADCASTER, class LISTENER >
     OWeakListenerAdapter< BROADCASTER, LISTENER >::OWeakListenerAdapter(
-        const css::uno::Reference< css::uno::XWeak >& _rxListener,
+        const css::uno::Reference< cpo::uno::XWeak >& _rxListener,
         const css::uno::Reference< BROADCASTER >& _rxBroadcaster
     )
         : OWeakListenerAdapterBase( _rxListener, _rxBroadcaster )

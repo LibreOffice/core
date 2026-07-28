@@ -26,11 +26,11 @@ module com {  module sun {  module star {  module lang {
     for a specified UIK and manages a sequence of connections points.
 
     <p>An implementation of this interface <strong>must</strong>
-    support the com::sun::star::uno::XWeak interface.
+    support the cpo::uno::XWeak interface.
     Look at the language binding for a superclass or something else.  </p>
 
     @see XConnectionPoint
-    @see com::sun::star::uno::XWeak
+    @see cpo::uno::XWeak
  */
 published interface XConnectionPointContainer: com::sun::star::uno::XInterface
 {

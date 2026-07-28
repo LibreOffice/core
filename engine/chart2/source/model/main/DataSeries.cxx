@@ -476,7 +476,7 @@ void DataSeries::removeRegressionCurve(
         if( aIt == m_aRegressionCurves.end())
             throw container::NoSuchElementException(
                 u"The given regression curve is no element of this series"_ustr,
-                static_cast< uno::XWeak * >( this ));
+                static_cast< cpo::uno::XWeak * >( this ));
         m_aRegressionCurves.erase( aIt );
     }
 
@@ -543,7 +543,7 @@ void DataSeries::firePropertyChangeEvent()
 
 void DataSeries::fireModifyEvent()
 {
-    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< cpo::uno::XWeak* >( this )));
 }
 
 using impl::DataSeries_Base;

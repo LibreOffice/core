@@ -444,7 +444,7 @@ WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt)
     }
 }
 
-WeakReferenceHelper::WeakReferenceHelper(const Reference< XWeak >& xWeak)
+WeakReferenceHelper::WeakReferenceHelper(const Reference< cpo::uno::XWeak >& xWeak)
     : m_pImpl( nullptr )
 {
     if (xWeak.is())

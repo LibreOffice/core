@@ -52,7 +52,7 @@ using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::lang::XInitialization;
 using ::cpo::uno::Type;
-using ::com::sun::star::uno::XWeak;
+using ::cpo::uno::XWeak;
 using ::com::sun::star::presentation::ParagraphTarget;
 using ::com::sun::star::drawing::XShape;
 

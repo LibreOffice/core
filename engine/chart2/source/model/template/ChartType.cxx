@@ -173,7 +173,7 @@ void ChartType::removeDataSeries( const rtl::Reference< DataSeries >& xDataSerie
     if( aIt == m_aDataSeries.end())
         throw container::NoSuchElementException(
             u"The given series is no element of this charttype"_ustr,
-            static_cast< uno::XWeak * >( this ));
+            static_cast< cpo::uno::XWeak * >( this ));
 
     ModifyListenerHelper::removeListener( xDataSeries, m_xModifyEventForwarder );
     m_aDataSeries.erase( aIt );
@@ -317,7 +317,7 @@ void ChartType::fireModifyEvent()
     }
 
     if (bNotifyChanges)
-        m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+        m_xModifyEventForwarder->modified( lang::EventObject( static_cast< cpo::uno::XWeak* >( this )));
 }
 
 bool ChartType::isSupportingStatisticProperties(sal_Int32 nDimensionCount)

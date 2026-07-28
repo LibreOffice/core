@@ -617,7 +617,7 @@ void Diagram::removeCoordinateSystem(
         if( aIt == m_aCoordSystems.end())
             throw container::NoSuchElementException(
                 u"The given coordinate-system is no element of the container"_ustr,
-                static_cast< uno::XWeak * >( this ));
+                static_cast< cpo::uno::XWeak * >( this ));
         m_aCoordSystems.erase( aIt );
     }
     ModifyListenerHelper::removeListener( aCoordSys, m_xModifyEventForwarder );
@@ -720,7 +720,7 @@ void Diagram::firePropertyChangeEvent()
 
 void Diagram::fireModifyEvent()
 {
-    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< cpo::uno::XWeak* >( this )));
 }
 
 // ____ OPropertySet ____

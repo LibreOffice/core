@@ -94,7 +94,7 @@ public:
     virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override
     {
         static const cpo::uno::Sequence<cpo::uno::Type> aTypeList{
-            cppu::UnoType<css::uno::XWeak>::get(), cppu::UnoType<css::lang::XComponent>::get(),
+            cppu::UnoType<cpo::uno::XWeak>::get(), cppu::UnoType<css::lang::XComponent>::get(),
             cppu::UnoType<css::lang::XTypeProvider>::get(), cppu::UnoType<Ifc>::get()...
         };
         return aTypeList;
@@ -149,7 +149,7 @@ public:
     virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override
     {
         static const cpo::uno::Sequence<cpo::uno::Type> aTypeList{
-            cppu::UnoType<css::uno::XWeak>::get(), cppu::UnoType<css::lang::XTypeProvider>::get(),
+            cppu::UnoType<cpo::uno::XWeak>::get(), cppu::UnoType<css::lang::XTypeProvider>::get(),
             cppu::UnoType<Ifc>::get()...
         };
         return aTypeList;

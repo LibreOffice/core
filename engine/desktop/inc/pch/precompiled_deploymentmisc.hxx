@@ -64,7 +64,7 @@
 #include <cpo/uno/Sequence.h>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>
-#include <com/sun/star/uno/XWeak.hpp>
+#include <cpo/uno/XWeak.hpp>
 #include <cpo/uno/genfunc.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>

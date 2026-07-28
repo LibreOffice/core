@@ -69,7 +69,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>
 #include <cpo/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XWeak.hpp>
+#include <cpo/uno/XWeak.hpp>
 #include <cpo/uno/genfunc.h>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/csax/XCompressedDocumentHandler.hpp>

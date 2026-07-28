@@ -161,7 +161,7 @@ void GridProperties::disposing( const lang::EventObject& /* Source */ )
 // ____ OPropertySet ____
 void GridProperties::firePropertyChangeEvent()
 {
-    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< cpo::uno::XWeak* >( this )));
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

@@ -52,7 +52,7 @@ void WeakComponentImplHelperBase2::removeEventListener(
 
 cpo::uno::Any WeakComponentImplHelperBase2::queryInterface(cpo::uno::Type const& rType)
 {
-    cpo::uno::Any aReturn = ::cppu::queryInterface(rType, static_cast<css::uno::XWeak*>(this),
+    cpo::uno::Any aReturn = ::cppu::queryInterface(rType, static_cast<cpo::uno::XWeak*>(this),
                                                    static_cast<css::lang::XComponent*>(this));
     if (aReturn.hasValue())
         return aReturn;

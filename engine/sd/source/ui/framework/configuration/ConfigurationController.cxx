@@ -460,14 +460,14 @@ void ConfigurationController::ThrowIfDisposed () const
     if (mbIsDisposed)
     {
         throw lang::DisposedException (u"ConfigurationController object has already been disposed"_ustr,
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
+            const_cast<cpo::uno::XWeak*>(static_cast<const cpo::uno::XWeak*>(this)));
     }
 
     if (mpImplementation == nullptr)
     {
         OSL_ASSERT(mpImplementation != nullptr);
         throw RuntimeException(u"ConfigurationController not initialized"_ustr,
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
+            const_cast<cpo::uno::XWeak*>(static_cast<const cpo::uno::XWeak*>(this)));
     }
 }
 

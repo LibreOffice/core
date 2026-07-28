@@ -135,7 +135,7 @@ bool isBootstrapType(OUString const & name)
         "com.sun.star.uno.XInterface",
         "cpo.uno.XReference",
         "cpo.uno.XUnloadingPreference",
-        "com.sun.star.uno.XWeak",
+        "cpo.uno.XWeak",
         "com.sun.star.util.XMacroExpander" };
         // cf. cppuhelper/unotypes/Makefile UNOTYPES (plus missing dependencies)
     auto const pred = [&name](const char* aName) {

@@ -28,19 +28,14 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/cppuhelperdllapi.h"
 
-
-namespace com::sun::star::uno
-{
-class XWeak;
-}
-
 namespace cpo::uno
 {
+class XWeak;
 class OWeakRefListener;
 
 /** The WeakReferenceHelper holds a weak reference to an object.
 
-    That object must implement the css::uno::XWeak interface.
+    That object must implement the cpo::uno::XWeak interface.
 
     The WeakReferenceHelper itself is *not* thread safe, just as
     Reference itself isn't, but the implementation of the listeners etc.
@@ -78,7 +73,7 @@ public:
 
         @param xWeak another hard interface reference
     */
-    WeakReferenceHelper( const css::uno::Reference< css::uno::XWeak > & xWeak );
+    WeakReferenceHelper( const css::uno::Reference< cpo::uno::XWeak > & xWeak );
 
     /** Releases this reference.
     */
@@ -108,7 +103,7 @@ public:
         @param xWeak another hard reference
     */
     WeakReferenceHelper & operator = (
-            const css::uno::Reference< css::uno::XWeak > & xWeak );
+            const css::uno::Reference< cpo::uno::XWeak > & xWeak );
 
     /** Returns true if both weak refs reference to the same object.
 
@@ -143,7 +138,7 @@ protected:
 
 /** The WeakReference<> holds a weak reference to an object.
 
-    That object must implement the css::uno::XWeak interface.
+    That object must implement the cpo::uno::XWeak interface.
 
     The WeakReference itself is *not* thread safe, just as
     Reference itself isn't, but the implementation of the listeners etc.
@@ -187,7 +182,7 @@ public:
         @param xWeak another hard reference
     */
     WeakReference & operator = (
-            const css::uno::Reference< css::uno::XWeak > & xWeak )
+            const css::uno::Reference< cpo::uno::XWeak > & xWeak )
         { WeakReferenceHelper::operator=(xWeak); return *this; }
 
     /**  Gets a hard reference to the object.

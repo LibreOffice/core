@@ -17,7 +17,7 @@
  */
 
 package com.sun.star.lib.uno.helper;
-import com.sun.star.uno.XWeak;
+import cpo.uno.XWeak;
 import cpo.uno.XAdapter;
 import com.sun.star.lang.XTypeProvider;
 import cpo.uno.Type;
@@ -27,7 +27,7 @@ import java.util.HashMap;
 
 
 /** This class can be used as the base class for UNO components. It implements the capability
- *  to be kept weak (com.sun.star.uno.XWeak) and it implements com.sun.star.lang.XTypeProvider
+ *  to be kept weak (cpo.uno.XWeak) and it implements com.sun.star.lang.XTypeProvider
  *  which is necessary for using the component with StarBasic.
  */
 public class WeakBase implements XWeak, XTypeProvider

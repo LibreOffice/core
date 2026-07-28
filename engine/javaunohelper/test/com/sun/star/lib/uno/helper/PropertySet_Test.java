@@ -24,7 +24,7 @@ import cpo.uno.Type;
 import cpo.uno.TypeClass;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.Any;
-import com.sun.star.uno.XWeak;
+import cpo.uno.XWeak;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;

@@ -1632,10 +1632,6 @@ module com {
      any getValueByName([in] string Name);
      ::com::sun::star::lang::XMultiComponentFactory getServiceManager();
     };
-    published interface XWeak {
-     interface ::com::sun::star::uno::XInterface;
-     ::cpo::uno::XAdapter queryAdapter();
-    };
    };
    module uri {
     published interface XExternalUriReferenceTranslator {
@@ -1765,6 +1761,10 @@ module cpo {
     /** @deprecated */ published interface XUnloadingPreference {
      interface ::com::sun::star::uno::XInterface;
      boolean releaseOnNotification();
+    };
+    published interface XWeak {
+     interface ::com::sun::star::uno::XInterface;
+     ::cpo::uno::XAdapter queryAdapter();
     };
    };
 };

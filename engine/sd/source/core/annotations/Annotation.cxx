@@ -228,7 +228,7 @@ void Annotation::createChangeUndoImpl(std::unique_lock<std::mutex>& g)
     if( pModel )
     {
         pModel->SetChanged();
-        uno::Reference< XInterface > xSource( static_cast<uno::XWeak*>( this ) );
+        uno::Reference< XInterface > xSource( static_cast<cpo::uno::XWeak*>( this ) );
         NotifyDocumentEvent(
             static_cast< SdDrawDocument& >( *pModel ),
             u"OnAnnotationChanged"_ustr ,

@@ -148,7 +148,7 @@ void DataTable::disposing(const lang::EventObject& /* Source */)
 // ____ OPropertySet ____
 void DataTable::firePropertyChangeEvent()
 {
-    m_xModifyEventForwarder->modified(lang::EventObject(static_cast<uno::XWeak*>(this)));
+    m_xModifyEventForwarder->modified(lang::EventObject(static_cast<cpo::uno::XWeak*>(this)));
 }
 
 // ____ OPropertySet ____

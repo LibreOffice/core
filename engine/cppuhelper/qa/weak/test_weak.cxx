@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cpo/uno/XAdapter.hpp>
 #include <cpo/uno/XReference.hpp>
-#include <com/sun/star/uno/XWeak.hpp>
+#include <cpo/uno/XWeak.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
@@ -76,7 +76,7 @@ public:
 };
 
 void Test::testReferenceDispose() {
-    css::uno::Reference< css::uno::XWeak > w(new ::cppu::OWeakObject);
+    css::uno::Reference< cpo::uno::XWeak > w(new ::cppu::OWeakObject);
     css::uno::Reference< cpo::uno::XAdapter > a(w->queryAdapter());
     ::rtl::Reference< Reference > r1(new RuntimeExceptionReference);
     ::rtl::Reference< Reference > r2(new Reference);

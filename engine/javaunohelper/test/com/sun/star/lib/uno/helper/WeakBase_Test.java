@@ -23,7 +23,7 @@ import com.sun.star.lang.XTypeProvider;
 import cpo.uno.XAdapter;
 import cpo.uno.Type;
 import cpo.uno.XReference;
-import com.sun.star.uno.XWeak;
+import cpo.uno.XWeak;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

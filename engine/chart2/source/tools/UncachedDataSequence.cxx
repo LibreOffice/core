@@ -303,7 +303,7 @@ void UncachedDataSequence::fireModifyEvent()
 {
     // @todo: currently never called, as data changes are not yet reported by
     // the data provider
-    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< cpo::uno::XWeak* >( this )));
 }
 
 }  // namespace chart

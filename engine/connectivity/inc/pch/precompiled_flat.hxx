@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2026-08-04 10:49:50 using:
+ Generated on 2026-08-04 13:18:20 using:
  ./bin/update_pch connectivity flat --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -128,7 +128,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -156,6 +155,7 @@
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hdl>
 #include <cpo/uno/XAggregation.hpp>
+#include <cpo/uno/XWeak.hpp>
 #include <cpo/uno/genfunc.h>
 #include <cpo/uno/genfunc.hxx>
 #include <cppu/cppudllapi.h>

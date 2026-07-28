@@ -67,7 +67,7 @@ uno::Reference<XAccessible> SAL_CALL
     AccessiblePageShape::getAccessibleChild( sal_Int64 )
 {
     throw lang::IndexOutOfBoundsException (u"page shape has no children"_ustr,
-        static_cast<uno::XWeak*>(this));
+        static_cast<cpo::uno::XWeak*>(this));
 }
 
 // OAccessible

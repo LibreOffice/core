@@ -21,6 +21,7 @@ package com.sun.star.uno;
 
 import cpo.uno.XAdapter;
 import cpo.uno.XReference;
+import cpo.uno.XWeak;
 
 /**
  * This class holds weak reference to an object.

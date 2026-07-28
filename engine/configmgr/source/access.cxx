@@ -64,7 +64,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/XWeak.hpp>
+#include <cpo/uno/XWeak.hpp>
 #include <com/sun/star/util/ElementChange.hpp>
 #include <com/sun/star/util/InvalidStateException.hpp>
 #include <comphelper/sequence.hxx>
@@ -184,7 +184,7 @@ cpo::uno::Sequence< cpo::uno::Type > Access::getTypes()
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     std::vector< cpo::uno::Type > types { cppu::UnoType< css::uno::XInterface >::get(),
-                                          cppu::UnoType< css::uno::XWeak >::get(),
+                                          cppu::UnoType< cpo::uno::XWeak >::get(),
                                           cppu::UnoType< css::lang::XTypeProvider >::get(),
                                           cppu::UnoType< css::lang::XServiceInfo >::get(),
                                           cppu::UnoType< css::lang::XComponent >::get(),

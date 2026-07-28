@@ -19,7 +19,7 @@
 
 
 
- module com {  module sun {  module star {  module uno {
+module cpo {  module uno {
 
 /** the server-side interface to a weak object.
 
@@ -85,6 +85,6 @@ published interface XWeak: com::sun::star::uno::XInterface
 };
 
 
-}; }; }; };
+}; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

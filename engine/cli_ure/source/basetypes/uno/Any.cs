@@ -24,7 +24,7 @@ namespace uno
 
 /** This class can be used as a base class for UNO objects.
     It implements the capability to be kept weakly
-    (unoidl.com.sun.star.uno.XWeak) and it implements
+    (unoidl.cpo.uno.XWeak) and it implements
     unoidl.com.sun.star.lang.XTypeProvider which is necessary for
     using the object from StarBasic.
 */

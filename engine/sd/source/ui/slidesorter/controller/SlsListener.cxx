@@ -416,7 +416,7 @@ void SAL_CALL Listener::propertyChange (
     if (m_bDisposed)
     {
         throw lang::DisposedException (u"SlideSorterController object has already been disposed"_ustr,
-            static_cast<uno::XWeak*>(this));
+            static_cast<cpo::uno::XWeak*>(this));
     }
 
     if (rEvent.PropertyName == "CurrentPage")

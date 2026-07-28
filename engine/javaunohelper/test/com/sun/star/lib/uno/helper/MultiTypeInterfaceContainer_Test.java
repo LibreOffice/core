@@ -21,7 +21,7 @@ package com.sun.star.lib.uno.helper;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XTypeProvider;
 
-import com.sun.star.uno.XWeak;
+import cpo.uno.XWeak;
 import cpo.uno.Type;
 import com.sun.star.uno.XInterface;
 

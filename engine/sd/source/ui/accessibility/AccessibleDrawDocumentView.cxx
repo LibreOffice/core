@@ -222,7 +222,7 @@ uno::Reference<XAccessible> SAL_CALL
     if (pChildrenManager == nullptr)
         throw lang::IndexOutOfBoundsException (
             "no accessible child with index " + OUString::number(nIndex),
-            static_cast<uno::XWeak*>(this));
+            static_cast<cpo::uno::XWeak*>(this));
 
     return pChildrenManager->GetChild (nIndex);
 }

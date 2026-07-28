@@ -505,7 +505,7 @@ Public Class BridgeTest
 	    bReturn = testAny( Nothing, data.String,xLBT ) And bReturn
 	    bReturn = testAny( Nothing, data.Byte2 ,xLBT ) And bReturn
 	    bReturn = testAny( Nothing, data.Short2,xLBT ) And bReturn
-	    bReturn = testAny(GetType(unoidl.com.sun.star.uno.XWeak), _
+        bReturn = testAny(GetType(unoidl.cpo.uno.XWeak), _
                      data.Interface,xLBT ) And bReturn
 	    bReturn = testAny(Nothing, data, xLBT ) And bReturn
 

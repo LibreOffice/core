@@ -1616,7 +1616,7 @@ void ChartView::impl_notifyModeChangeListener( const OUString& rNewMode )
         std::unique_lock g(m_aMutex);
         if( m_aModeChangeListeners.getLength(g) )
         {
-            util::ModeChangeEvent aEvent( static_cast< uno::XWeak* >( this ), rNewMode );
+            util::ModeChangeEvent aEvent( static_cast< cpo::uno::XWeak* >( this ), rNewMode );
             m_aModeChangeListeners.notifyEach( g, &css::util::XModeChangeListener::modeChanged, aEvent);
         }
     }
@@ -1695,7 +1695,7 @@ void ChartView::setPropertyValue( const OUString& rPropertyName
             m_aPageResolution = aNewResolution;
 
             if( bSetModified )
-                this->modified( lang::EventObject(  static_cast< uno::XWeak* >( this )  ) );
+                this->modified( lang::EventObject(  static_cast< cpo::uno::XWeak* >( this )  ) );
         }
     }
     else if( rPropertyName == "ZoomFactors" )

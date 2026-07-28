@@ -79,7 +79,7 @@ template<typename Impl, typename... Ifc> struct ImplClassData {
 
 /** Implementation helper implementing interfaces
     css::uno::XInterface, css::lang::XTypeProvider, and
-    css::uno::XWeak (through cppu::OWeakObject).
+    cpo::uno::XWeak (through cppu::OWeakObject).
 
     @derive
     Inherit from this class giving your interface(s) to be implemented as

@@ -44,7 +44,7 @@ namespace dbtools::param
     using ::cpo::uno::Sequence;
     using ::cpo::uno::Type;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::XWeak;
+    using ::cpo::uno::XWeak;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XFastPropertySet;
     using ::com::sun::star::beans::XMultiPropertySet;

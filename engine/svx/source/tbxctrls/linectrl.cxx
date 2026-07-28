@@ -466,7 +466,7 @@ void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEven
         return;
 
     // The list of line ends (LineEndList) has changed
-    css::uno::Reference< css::uno::XWeak > xWeak;
+    css::uno::Reference< cpo::uno::XWeak > xWeak;
     if ( rEvent.State >>= xWeak )
     {
         mpLineEndList.set( static_cast< XLineEndList* >( xWeak.get() ) );

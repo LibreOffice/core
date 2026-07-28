@@ -88,7 +88,7 @@
 #include <cpo/uno/Type.h>
 #include <cpo/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/XWeak.hpp>
+#include <cpo/uno/XWeak.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <cppu/cppudllapi.h>

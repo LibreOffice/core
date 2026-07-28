@@ -143,7 +143,7 @@ void Wall::disposing( const lang::EventObject& /* Source */ )
 // ____ OPropertySet ____
 void Wall::firePropertyChangeEvent()
 {
-    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< cpo::uno::XWeak* >( this )));
 }
 
 using impl::Wall_Base;

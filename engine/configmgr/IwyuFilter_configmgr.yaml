@@ -35,7 +35,7 @@ excludelist:
     - com/sun/star/lang/XEventListener.hpp
     - com/sun/star/uno/XInterface.hpp
     # Safer to keep for use in cppu:UnoType template
-    - com/sun/star/uno/XWeak.hpp
+    - cpo/uno/XWeak.hpp
     configmgr/source/parsemanager.cxx:
     # Actually used
     - set

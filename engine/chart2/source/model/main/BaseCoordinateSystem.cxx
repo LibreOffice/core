@@ -281,7 +281,7 @@ void BaseCoordinateSystem::removeChartType( const Reference< chart2::XChartType 
     if( aIt == m_aChartTypes.end())
         throw container::NoSuchElementException(
             u"The given chart type is no element of the container"_ustr,
-            static_cast< uno::XWeak * >( this ));
+            static_cast< cpo::uno::XWeak * >( this ));
 
     m_aChartTypes.erase( aIt );
     ModifyListenerHelper::removeListener( aChartType, m_xModifyEventForwarder );
@@ -349,7 +349,7 @@ void BaseCoordinateSystem::firePropertyChangeEvent()
 
 void BaseCoordinateSystem::fireModifyEvent()
 {
-    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< cpo::uno::XWeak* >( this )));
 }
 
 // ____ OPropertySet ____

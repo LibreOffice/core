@@ -259,7 +259,7 @@ void RegressionCurveModel::firePropertyChangeEvent()
 
 void RegressionCurveModel::fireModifyEvent()
 {
-    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< cpo::uno::XWeak* >( this )));
 }
 
 // ____ OPropertySet ____

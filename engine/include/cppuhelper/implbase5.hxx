@@ -98,7 +98,7 @@ namespace cppu
     };
     /** Implementation helper implementing interfaces css::lang::XTypeProvider and
         css::uno::XInterface which supports weak mechanism to be held weakly
-        (supporting css::uno::XWeak thru ::cppu::OWeakObject).
+        (supporting cpo::uno::XWeak thru ::cppu::OWeakObject).
 
         @derive
         Inherit from this class giving your interface(s) to be implemented as template argument(s).
@@ -125,7 +125,7 @@ namespace cppu
     };
     /** Implementation helper implementing interfaces css::lang::XTypeProvider and
         css::uno::XInterface which supports weak mechanism to be held weakly
-        (supporting css::uno::XWeak thru ::cppu::OWeakAggObject).
+        (supporting cpo::uno::XWeak thru ::cppu::OWeakAggObject).
         In addition, it supports also aggregation meaning object of this class can be aggregated
         (cpo::uno::XAggregation thru ::cppu::OWeakAggObject).
         If a delegator is set (this object is aggregated), then incoming queryInterface()

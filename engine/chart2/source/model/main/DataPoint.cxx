@@ -221,7 +221,7 @@ void DataPoint::disposing( const lang::EventObject& )
 // ____ OPropertySet ____
 void DataPoint::firePropertyChangeEvent()
 {
-    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< cpo::uno::XWeak* >( this )));
 }
 
 // needed by MSC compiler

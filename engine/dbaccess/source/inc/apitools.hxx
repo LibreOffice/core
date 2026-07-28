@@ -41,7 +41,7 @@ public:
     virtual void release() noexcept override;
 
     operator css::uno::Reference< css::uno::XInterface > () const
-        { return static_cast<css::uno::XWeak *>(const_cast<OSubComponent *>(this)); }
+        { return static_cast<cpo::uno::XWeak *>(const_cast<OSubComponent *>(this)); }
 
 };
 

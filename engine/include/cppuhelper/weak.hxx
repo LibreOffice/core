@@ -24,7 +24,7 @@
 #include <cstddef>
 #include "osl/interlck.h"
 #include "rtl/alloc.h"
-#include "com/sun/star/uno/XWeak.hpp"
+#include "cpo/uno/XWeak.hpp"
 #include "cppuhelper/cppuhelperdllapi.h"
 
 
@@ -41,7 +41,7 @@ class OWeakConnectionPoint;
     @derive
     Inherit from this class and delegate acquire()/ release() calls.
 */
-class CPPUHELPER_DLLPUBLIC OWeakObject : public css::uno::XWeak
+class CPPUHELPER_DLLPUBLIC OWeakObject : public cpo::uno::XWeak
 {
     friend class OWeakConnectionPoint;
 
@@ -91,7 +91,7 @@ public:
     /** Dummy copy constructor.  Set the reference count to zero.
     */
     OWeakObject( const OWeakObject & )
-        : css::uno::XWeak()
+        : cpo::uno::XWeak()
         , m_refCount( 0 )
         , m_pWeakConnectionPoint( NULL )
         , m_pReserved(NULL)
@@ -103,7 +103,7 @@ public:
     OWeakObject & operator = ( const OWeakObject &)
         { return *this; }
 
-    /** Basic queryInterface() implementation supporting com::sun::star::uno::XWeak and
+    /** Basic queryInterface() implementation supporting cpo::uno::XWeak and
         com::sun::star::uno::XInterface.
 
         @param rType demanded type
@@ -133,7 +133,7 @@ public:
     operator css::uno::Reference< css::uno::XInterface > ()
         { return this; }
 
-    css::uno::XWeak* getXWeak() { return this; }
+    cpo::uno::XWeak* getXWeak() { return this; }
 };
 
 /// @cond INTERNAL
@@ -155,7 +155,7 @@ static inline css::uno::XInterface * acquire(OWeakObject * instance)
     return instance;
 }
 
-static inline css::uno::XWeak* getXWeak(OWeakObject* instance) { return instance; }
+static inline cpo::uno::XWeak* getXWeak(OWeakObject* instance) { return instance; }
 /// @endcond
 
 }

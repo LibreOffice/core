@@ -32,7 +32,7 @@ namespace comphelper
     {
     }
 
-    OWeakEventListenerAdapter::OWeakEventListenerAdapter( Reference< XWeak > const & _rxListener, Reference< XComponent > const & _rxBroadcaster )
+    OWeakEventListenerAdapter::OWeakEventListenerAdapter( Reference< cpo::uno::XWeak > const & _rxListener, Reference< XComponent > const & _rxBroadcaster )
         :OWeakEventListenerAdapter_Base( _rxListener, _rxBroadcaster )
     {
         // add ourself as listener to the broadcaster

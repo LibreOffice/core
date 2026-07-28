@@ -474,7 +474,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
 	SecurityException \
 	XComponentContext \
 	XInterface \
-	XWeak \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uri,\
 	RelativeUriExcessParentSegments \
@@ -496,6 +495,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,cpo/uno,\
 	XAggregation \
 	XCurrentContext \
 	XReference \
+	XWeak \
 ))
 
 $(eval $(call gb_UnoApi_set_reference_rdbfile,udkapi,$(SRCDIR)/udkapi/type_reference/udkapi.idl))

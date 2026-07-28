@@ -161,7 +161,7 @@ void ErrorBar::setPropertyValue( const OUString& rPropName, const cpo::uno::Any&
     else if(rPropName == "ShowNegativeError")
         rAny >>= mbShowNegativeError;
     else if(rPropName == "ErrorBarRangePositive" || rPropName == "ErrorBarRangeNegative")
-        throw beans::UnknownPropertyException(u"read-only property"_ustr, static_cast< uno::XWeak*>(this));
+        throw beans::UnknownPropertyException(u"read-only property"_ustr, static_cast< cpo::uno::XWeak*>(this));
     else if(rPropName == "LineDashName")
         rAny >>= maDashName;
     else if(rPropName == "LineDash")
@@ -177,7 +177,7 @@ void ErrorBar::setPropertyValue( const OUString& rPropName, const cpo::uno::Any&
     else if(rPropName == "LineJoint")
         rAny >>= meLineJoint;
 
-    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< cpo::uno::XWeak* >( this )));
 }
 
 namespace {

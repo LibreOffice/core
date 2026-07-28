@@ -46,10 +46,10 @@ OSLInputStreamWrapper::~OSLInputStreamWrapper()
 sal_Int32 OSLInputStreamWrapper::readBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
 {
     if (!m_pFile)
-        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<cpo::uno::XWeak*>(this));
 
     if (nBytesToRead < 0)
-        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<cpo::uno::XWeak*>(this));
 
     aData.realloc(nBytesToRead);
 
@@ -58,7 +58,7 @@ sal_Int32 OSLInputStreamWrapper::readBytes(cpo::uno::Sequence< sal_Int8 >& aData
     sal_uInt64 nRead = 0;
     FileBase::RC eError = m_pFile->read(static_cast<void*>(aData.getArray()), nBytesToRead, nRead);
     if (eError != FileBase::E_None)
-        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<cpo::uno::XWeak*>(this));
 
     // If the read character < MaxLength, adjust cpo::uno::Sequence
     if (nRead < o3tl::make_unsigned(nBytesToRead))
@@ -70,10 +70,10 @@ sal_Int32 OSLInputStreamWrapper::readBytes(cpo::uno::Sequence< sal_Int8 >& aData
 sal_Int32 OSLInputStreamWrapper::readSomeBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
 {
     if (!m_pFile)
-        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<cpo::uno::XWeak*>(this));
 
     if (nMaxBytesToRead < 0)
-        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<cpo::uno::XWeak*>(this));
 
     return readBytes(aData, nMaxBytesToRead);
 }
@@ -82,43 +82,43 @@ void OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
 {
     std::scoped_lock aGuard( m_aMutex );
     if (!m_pFile)
-        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<cpo::uno::XWeak*>(this));
 
     sal_uInt64 nCurrentPos;
     FileBase::RC eError = m_pFile->getPos(nCurrentPos);
     if (eError != FileBase::E_None)
-        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<cpo::uno::XWeak*>(this));
 
     sal_uInt64 nNewPos = nCurrentPos + nBytesToSkip;
     eError = m_pFile->setPos(osl_Pos_Absolut, nNewPos);
     if (eError != FileBase::E_None)
-        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<cpo::uno::XWeak*>(this));
 }
 
 sal_Int32 OSLInputStreamWrapper::available()
 {
     std::scoped_lock aGuard( m_aMutex );
     if (!m_pFile)
-        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<cpo::uno::XWeak*>(this));
 
     sal_uInt64 nPos;
     FileBase::RC eError = m_pFile->getPos(nPos);
     if (eError != FileBase::E_None)
-        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<cpo::uno::XWeak*>(this));
 
     eError = m_pFile->setPos(osl_Pos_End, 0);
     if (eError != FileBase::E_None)
-       throw css::io::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
+       throw css::io::NotConnectedException(OUString(),static_cast<cpo::uno::XWeak*>(this));
 
     sal_uInt64 nAvailable;
     eError = m_pFile->getPos(nAvailable);
     if (eError != FileBase::E_None)
-       throw css::io::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
+       throw css::io::NotConnectedException(OUString(),static_cast<cpo::uno::XWeak*>(this));
 
     nAvailable = nAvailable - nPos;
     eError = m_pFile->setPos(osl_Pos_Absolut, nPos);
     if (eError != FileBase::E_None)
-       throw css::io::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
+       throw css::io::NotConnectedException(OUString(),static_cast<cpo::uno::XWeak*>(this));
     return std::min<sal_Int64>(nAvailable, SAL_MAX_INT32);
 }
 
@@ -126,7 +126,7 @@ sal_Int32 OSLInputStreamWrapper::available()
 void OSLInputStreamWrapper::closeInput()
 {
     if (!m_pFile)
-        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<cpo::uno::XWeak*>(this));
 
     m_pFile->close();
 
@@ -150,7 +150,7 @@ void OSLOutputStreamWrapper::writeBytes(const cpo::uno::Sequence< sal_Int8 >& aD
     if (eError != FileBase::E_None
         || nWritten != sal::static_int_cast< sal_uInt32 >(aData.getLength()))
     {
-        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<cpo::uno::XWeak*>(this));
     }
 }
 

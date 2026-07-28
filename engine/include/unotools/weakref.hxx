@@ -31,7 +31,7 @@ namespace unotools
 {
 /** The WeakReference<> holds a weak reference to an object.
 
-    That object must implement the css::uno::XWeak interface.
+    That object must implement the cpo::uno::XWeak interface.
 
     The WeakReference itself is *not* thread safe, just as
     Reference itself isn't, but the implementation of the listeners etc.
@@ -58,7 +58,7 @@ public:
         @param rRef another hard ref
     */
     WeakReference(const rtl::Reference<interface_type>& rRef)
-        : WeakReferenceHelper(css::uno::Reference<css::uno::XWeak>(rRef))
+        : WeakReferenceHelper(css::uno::Reference<cpo::uno::XWeak>(rRef))
     {
     }
 
@@ -77,7 +77,7 @@ public:
     */
     WeakReference(interface_type* pRef)
         : WeakReferenceHelper(
-              css::uno::Reference<css::uno::XWeak>(static_cast<cppu::OWeakObject*>(pRef)))
+              css::uno::Reference<cpo::uno::XWeak>(static_cast<cppu::OWeakObject*>(pRef)))
     {
     }
 
@@ -102,7 +102,7 @@ public:
     WeakReference& operator=(interface_type* pInt)
     {
         WeakReferenceHelper::operator=(
-            css::uno::Reference<css::uno::XWeak>(static_cast<::cppu::OWeakObject*>(pInt)));
+            css::uno::Reference<cpo::uno::XWeak>(static_cast<::cppu::OWeakObject*>(pInt)));
         return *this;
     }
 

@@ -165,7 +165,7 @@ CPPUMAKERFLAGS = -L
 
 FACTORYTYPES:= 	-T com.sun.star.lang.XSingleComponentFactory \
         -T com.sun.star.uno.XComponentContext \
-        -T com.sun.star.uno.XWeak \
+        -T cpo.uno.XWeak \
         -T com.sun.star.container.XEnumeration \
         -T com.sun.star.lang.XComponent \
         -T com.sun.star.registry.XSimpleRegistry \

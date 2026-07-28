@@ -210,7 +210,7 @@ void FormattedString::firePropertyChangeEvent()
 
 void FormattedString::fireModifyEvent()
 {
-    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< cpo::uno::XWeak* >( this )));
 }
 
 // ____ OPropertySet ____

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import cpo.uno.XAdapter;
 import cpo.uno.XReference;
+import cpo.uno.XWeak;
 import org.junit.Test;
 import util.WaitUnreachable;
 import static org.junit.Assert.*;

@@ -117,7 +117,7 @@ cpo::uno::Sequence< cpo::uno::Type > CreationWizardUnoDlg::getTypes()
     static cpo::uno::Sequence<cpo::uno::Type> aTypeList{ cppu::UnoType<lang::XComponent>::get(),
                                                cppu::UnoType<lang::XTypeProvider>::get(),
                                                cppu::UnoType<cpo::uno::XAggregation>::get(),
-                                               cppu::UnoType<uno::XWeak>::get(),
+                                               cppu::UnoType<cpo::uno::XWeak>::get(),
                                                cppu::UnoType<lang::XServiceInfo>::get(),
                                                cppu::UnoType<lang::XInitialization>::get(),
                                                cppu::UnoType<frame::XTerminateListener>::get(),
