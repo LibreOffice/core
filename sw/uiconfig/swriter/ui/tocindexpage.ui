@@ -211,53 +211,20 @@
             <property name="shadow-type">none</property>
             <child>
               <!-- n-columns=2 n-rows=1 -->
-              <object class="GtkGrid" id="grid1">
+              <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="column-spacing">12</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="column-spacing">18</property>
                 <child>
-                  <!-- n-columns=2 n-rows=1 -->
-                  <object class="GtkGrid" id="grid3">
+                  <object class="GtkLabel" id="mainstyleft2">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="column-spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="mainstyleft2">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="tocindexpage|mainstyleft2">For:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">scope</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="scope">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <items>
-                          <item translatable="yes" context="tocindexpage|scope">Entire document</item>
-                          <item translatable="yes" context="tocindexpage|scope">Chapter</item>
-                        </items>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="scope-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|scope">Select whether to create the index for the document or for the current chapter.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
+                    <property name="label" translatable="yes" context="tocindexpage|mainstyleft2">For:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">scope</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -265,43 +232,17 @@
                   </packing>
                 </child>
                 <child>
-                  <!-- n-columns=2 n-rows=1 -->
-                  <object class="GtkGrid" id="grid4">
+                  <object class="GtkComboBoxText" id="scope">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="column-spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="levelft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="tocindexpage|levelft">Include up to level:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">level</property>
-                        <property name="xalign">0</property>
+                    <items>
+                      <item translatable="yes" context="tocindexpage|scope">Entire document</item>
+                      <item translatable="yes" context="tocindexpage|scope">Current Heading</item>
+                    </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="scope-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|scope">Select whether to create the index for the document or for the current chapter.</property>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="level">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="tooltip-text" translatable="yes" context="tocindexpage|level|tooltip_text">Enter the number of outline levels to include in the index.</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <property name="adjustment">adjustment1</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="level-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|level">Enter the number of outline levels to include in the index. All headings are included that have an outline level less than or equal to the specified value.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -315,7 +256,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="tocindexpage|label1">Create Index or Table of Contents</property>
+                <property name="label" translatable="yes" context="tocindexpage|label1">Scope</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -335,7 +276,7 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=2 -->
+              <!-- n-columns=1 n-rows=4 -->
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -718,13 +659,121 @@
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkBox" id="objectbox">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="label-xalign">0</property>
+                    <property name="shadow-type">none</property>
+                    <child>
+                      <object class="GtkScrolledWindow" id="objectwin">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="shadow-type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="objects">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="model">liststore1</property>
+                            <property name="headers-visible">False</property>
+                            <property name="search-column">0</property>
+                            <property name="show-expanders">False</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="alignment">0.5</property>
+                                <child>
+                                  <object class="GtkCellRendererToggle" id="cellrenderer2"/>
+                                  <attributes>
+                                    <attribute name="active">0</attribute>
+                                  </attributes>
+                                </child>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer1"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="objects-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|objects">Select the object types that you want to include in a table of objects.</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <!-- n-columns=2 n-rows=1 -->
+                  <object class="GtkGrid" id="grid4">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="column-spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="levelft">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="tocindexpage|levelft">Include up to level:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">level</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="level">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes" context="tocindexpage|level|tooltip_text">Enter the number of outline levels to include in the index.</property>
+                        <property name="activates-default">True</property>
+                        <property name="truncate-multiline">True</property>
+                        <property name="adjustment">adjustment1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="level-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|level">Enter the number of outline levels to include in the index. All headings are included that have an outline level less than or equal to the specified value.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="label2">
+              <object class="GtkLabel" id="createfrom">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="tocindexpage|label2">Create From</property>
+                <property name="label" translatable="no" context="tocindexpage|createfrom">Create %s From</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -734,81 +783,6 @@
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkFrame" id="objectframe">
-            <property name="can-focus">False</property>
-            <property name="no-show-all">True</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="label-xalign">0</property>
-            <property name="shadow-type">none</property>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="margin-start">12</property>
-                <property name="margin-top">6</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="shadow-type">in</property>
-                <child>
-                  <object class="GtkTreeView" id="objects">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="model">liststore1</property>
-                    <property name="headers-visible">False</property>
-                    <property name="search-column">0</property>
-                    <property name="show-expanders">False</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="alignment">0.5</property>
-                        <child>
-                          <object class="GtkCellRendererToggle" id="cellrenderer2"/>
-                          <attributes>
-                            <attribute name="active">0</attribute>
-                          </attributes>
-                        </child>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderer1"/>
-                          <attributes>
-                            <attribute name="text">1</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="objects-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|objects">Select the object types that you want to include in a table of objects.</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="label6">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="tocindexpage|label6">Create From the Following Objects</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>

@@ -427,6 +427,8 @@
 #define STR_DELETEINDEX                         NC_("STR_DELETEINDEX", "Delete %1")
 #define STR_COMMENT_VIEW_MODE                   NC_("STR_COMMENT_VIEW_MODE", "View Mode")
 #define STR_COMMENT_EDIT_MODE                   NC_("STR_COMMENT_EDIT_MODE", "Edit Mode")
+// to translators: %s will be replaced with the Table of Content type selected
+#define STR_TOC_CREATEFROM                      NC_("STR_TOC_CREATEFROM", "Create %s From")
 
 // Undo
 #define STR_CANT_UNDO                           NC_("STR_CANT_UNDO", "not possible")

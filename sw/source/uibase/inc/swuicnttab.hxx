@@ -39,6 +39,7 @@
 #include <vcl/weld/ToggleButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
+#include <vcl/weld/Box.hxx>
 
 #include <tox.hxx>
 #include "toxmgr.hxx"
@@ -191,7 +192,7 @@ class SwTOXSelectTabPage final : public SfxTabPage
 
     // object only
     std::unique_ptr<weld::TreeView> m_xFromObjCLB;
-    std::unique_ptr<weld::Widget> m_xFromObjFrame;
+    std::unique_ptr<weld::Box> m_xFromObjBox;
 
     std::unique_ptr<weld::CheckButton> m_xSequenceCB;
     std::unique_ptr<weld::ComboBox> m_xBracketLB;
@@ -201,6 +202,7 @@ class SwTOXSelectTabPage final : public SfxTabPage
     std::unique_ptr<weld::Widget> m_xSortFrame;
     std::unique_ptr<SvxLanguageBox> m_xLanguageLB;
     std::unique_ptr<weld::ComboBox> m_xSortAlgorithmLB;
+    std::unique_ptr<weld::Label> m_xCreateFromLB;
 
     DECL_LINK(TOXTypeHdl,   weld::ComboBox&, void );
     DECL_LINK(AddStylesHdl, weld::Button&, void );
