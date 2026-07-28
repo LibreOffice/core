@@ -11307,6 +11307,12 @@ if test "$enable_firebird_sdbc" = "yes" ; then
             FIREBIRD_LIBS=`$FIREBIRDCONFIG --embedlibs`
             FilterLibs "${FIREBIRD_LIBS}"
             FIREBIRD_LIBS="${filteredlibs}"
+            dnl The directories chosen when firebird was built. A firebird patched to resolve them
+            dnl under the FIREBIRD variable instead needs to be told where its plugin modules and
+            dnl its international modules are.
+            FIREBIRD_CONFDIR=`$FIREBIRDCONFIG --confdir`
+            FIREBIRD_PLUGINSDIR=`$FIREBIRDCONFIG --pluginsdir`
+            FIREBIRD_INTLDIR=`$FIREBIRDCONFIG --intldir`
         fi
         AC_MSG_RESULT([includes `$FIREBIRD_CFLAGS', libraries `$FIREBIRD_LIBS'])
         AC_MSG_CHECKING([Firebird version])
@@ -11328,6 +11334,14 @@ int fb_api_is_30(void) { return 0; }
 #endif]])],AC_MSG_RESULT([OK]),AC_MSG_ERROR([Ensure firebird 3.0.x is installed]))
             CFLAGS="$save_CFLAGS"
         fi
+        if test -z "$FIREBIRD_PLUGINSDIR"; then
+            AC_MSG_WARN([Firebird plugins directory unknown, so a firebird that looks for its plugins
+                         under the FIREBIRD variable cannot be told where they are, and will not open
+                         a database. Install fb_config to get the directory.])
+        fi
+        AC_DEFINE_UNQUOTED([SYSTEM_FIREBIRD_PLUGINS_DIRECTORY],["$FIREBIRD_PLUGINSDIR"])
+        AC_DEFINE_UNQUOTED([SYSTEM_FIREBIRD_INTL_DIRECTORY],["$FIREBIRD_INTLDIR"])
+        AC_DEFINE_UNQUOTED([SYSTEM_FIREBIRD_CONF_DIRECTORY],["$FIREBIRD_CONFDIR"])
         ENABLE_FIREBIRD_SDBC=TRUE
         AC_DEFINE([ENABLE_FIREBIRD_SDBC],1)
     elif test "$enable_database_connectivity" = no; then
