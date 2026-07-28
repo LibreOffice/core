@@ -51,6 +51,12 @@ class SlideShowNavigator {
 			Space: this.dispatchEffect.bind(this),
 			Backspace: this.rewindEffect.bind(this),
 			Escape: this.quit.bind(this),
+			KeyP: this.slideShowHandler.toggleAutomaticAdvancePause.bind(
+				this.slideShowHandler,
+			),
+			Pause: this.slideShowHandler.toggleAutomaticAdvancePause.bind(
+				this.slideShowHandler,
+			),
 		};
 		this.swipeHandlerMap = {
 			[Hammer.DIRECTION_RIGHT]: this.rewindEffect.bind(this),

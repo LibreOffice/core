@@ -79,6 +79,11 @@ class SlideShowHandler {
 	private aStartedEffectList: Effect[];
 	private aStartedEffectIndexMap: Map<number, number | undefined>;
 	private automaticAdvanceTimeout: number | { rewindedEffect: number };
+	// True while the countdown to the next slide is held, across slide changes too.
+	private bIsAutomaticAdvancePaused: boolean = false;
+	// Milliseconds still to wait before the show moves on by itself.
+	private nAutomaticAdvanceRemaining: number = 0;
+	private nAutomaticAdvanceStartTime: number = 0;
 	private enteringSlideTexture: WebGLTexture | ImageBitmap;
 	public isStarting: boolean;
 	private bIsFirstAutoEffectRunning: boolean = false;
@@ -112,6 +117,8 @@ class SlideShowHandler {
 		prevPage: _('Previous Slide'),
 		lastPage: _('Last Slide'),
 		quit: _('End Show'),
+		pauseShow: _('Paused'),
+		resumeShow: _('Resumed'),
 	};
 
 	constructor(presenter: SlideShowPresenter) {
@@ -404,18 +411,60 @@ class SlideShowHandler {
 		const slideInfo = this.theMetaPres.getSlideInfo(sCurrSlideHash);
 
 		if (slideInfo?.nextSlideDuration && slideInfo.nextSlideDuration > 0) {
-			this.automaticAdvanceTimeout = window.setTimeout(
-				this.slideShowNavigator.switchSlide.bind(
-					this.slideShowNavigator,
-					1,
-					false,
-				),
-				slideInfo.nextSlideDuration,
+			this.startAutomaticAdvanceTimeout(slideInfo.nextSlideDuration);
+		}
+	}
+
+	/** startAutomaticAdvanceTimeout
+	 *  Wait the given number of milliseconds and then move on to the next
+	 *  slide. While paused the wait is only recorded, ready to be started
+	 *  once the show is resumed.
+	 */
+	private startAutomaticAdvanceTimeout(nDuration: number) {
+		this.nAutomaticAdvanceRemaining = nDuration;
+		if (this.bIsAutomaticAdvancePaused) return;
+
+		this.nAutomaticAdvanceStartTime = Date.now();
+		this.automaticAdvanceTimeout = window.setTimeout(
+			this.slideShowNavigator.switchSlide.bind(
+				this.slideShowNavigator,
+				1,
+				false,
+			),
+			nDuration,
+		);
+	}
+
+	/** toggleAutomaticAdvancePause
+	 *  Hold or release the countdown that moves the show on to the next slide
+	 *  by itself. Releasing waits out only the time that was left.
+	 */
+	toggleAutomaticAdvancePause() {
+		if (this.bIsAutomaticAdvancePaused) {
+			this.bIsAutomaticAdvancePaused = false;
+			this.addA11yString(this._labelMap['resumeShow']);
+			if (this.nAutomaticAdvanceRemaining > 0)
+				this.startAutomaticAdvanceTimeout(this.nAutomaticAdvanceRemaining);
+			return;
+		}
+
+		this.bIsAutomaticAdvancePaused = true;
+		this.addA11yString(this._labelMap['pauseShow']);
+		if (typeof this.automaticAdvanceTimeout === 'number') {
+			clearTimeout(this.automaticAdvanceTimeout);
+			this.automaticAdvanceTimeout = null;
+			const nWaited = Date.now() - this.nAutomaticAdvanceStartTime;
+			this.nAutomaticAdvanceRemaining = Math.max(
+				0,
+				this.nAutomaticAdvanceRemaining - nWaited,
 			);
 		}
 	}
 
 	notifySlideStart(nNewSlideIndex: number, nOldSlideIndex: number) {
+		// Each slide has its own wait, so the one recorded for the slide before is
+		// dropped here. The hold itself stays on until the user releases it.
+		this.nAutomaticAdvanceRemaining = 0;
 		this.nCurrentEffect = 0;
 		this.bIsNextEffectRunning = false;
 		this.bIsRewinding = false;
@@ -990,6 +1039,8 @@ class SlideShowHandler {
 		// TODO: implement it;
 		this.addA11yString(this._labelMap['quit']);
 		this.automaticAdvanceTimeout = null;
+		this.bIsAutomaticAdvancePaused = false;
+		this.nAutomaticAdvanceRemaining = 0;
 	}
 
 	update() {
