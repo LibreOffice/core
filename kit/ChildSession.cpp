@@ -2184,7 +2184,7 @@ bool ChildSession::extTextInputEvent(const StringVector& tokens)
 bool ChildSession::keyEvent(const StringVector& tokens,
                             const LokEventTargetEnum target)
 {
-    int type = 0;
+    COKitKeyEventType type = COKitKeyEventType::KEYINPUT;
     int charcode = 0;
     int keycode = 0;
     unsigned winId = 0;
@@ -2205,7 +2205,7 @@ bool ChildSession::keyEvent(const StringVector& tokens,
 
     if (tokens.size() != expectedTokens ||
         !getTokenKeyword(tokens[counter++], "type",
-                         {{"input", KIT_KEYEVENT_KEYINPUT}, {"up", KIT_KEYEVENT_KEYUP}},
+                         {{"input", COKitKeyEventType::KEYINPUT}, {"up", COKitKeyEventType::KEYUP}},
                          type) ||
         !getTokenInteger(tokens[counter++], "char", charcode) ||
         !getTokenInteger(tokens[counter++], "key", keycode))
@@ -2238,7 +2238,7 @@ bool ChildSession::keyEvent(const StringVector& tokens,
     {
 #if !MOBILEAPP
         // Check if override mode is disabled.
-        if (type == KIT_KEYEVENT_KEYINPUT && charcode == 0 && keycode == KEY_INSERT &&
+        if (type == COKitKeyEventType::KEYINPUT && charcode == 0 && keycode == KEY_INSERT &&
             !ConfigUtil::getBool("overwrite_mode.enable", false))
             return true;
 #endif

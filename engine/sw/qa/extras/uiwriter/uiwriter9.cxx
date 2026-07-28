@@ -794,20 +794,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159049)
 
     // Bring shape into text edit mode
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
     // Copy text
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Deactivate text edit mode ...
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_ESCAPE);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_ESCAPE);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_ESCAPE);
     Scheduler::ProcessEventsToIdle();
     // ... and deselect shape.
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_ESCAPE);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_ESCAPE);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     // Paste special as RTF
@@ -1076,24 +1076,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
     // enclosed text
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '(', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '(', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(u"(abcd)"_ustr, xTextDocument->getText()->getString());
 
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '[', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '[', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(u"[(abcd)]"_ustr, xTextDocument->getText()->getString());
 
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '{', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '{', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(u"{[(abcd)]}"_ustr, xTextDocument->getText()->getString());
 
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '\'', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '\'', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(OUString(sStartSingleQuote + "{[(abcd)]}" + sEndSingleQuote),
                          xTextDocument->getText()->getString());
 
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '\"', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '\"', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(OUString(sStartDoubleQuote + sStartSingleQuote + "{[(abcd)]}"
                                   + sEndSingleQuote + sEndDoubleQuote),
@@ -1103,27 +1103,27 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
     const_cast<SwViewOption*>(pVwOpt)->SetEncloseWithCharactersOn(false);
     CPPUNIT_ASSERT(!pVwOpt->IsEncloseWithCharactersOn());
 
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '(', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '(', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(u"("_ustr, xTextDocument->getText()->getString());
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '[', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '[', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(u"["_ustr, xTextDocument->getText()->getString());
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '{', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '{', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(u"{"_ustr, xTextDocument->getText()->getString());
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '\'', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '\'', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sStartSingleQuote, xTextDocument->getText()->getString());
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '\"', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '\"', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sStartDoubleQuote, xTextDocument->getText()->getString());
 }
@@ -1153,7 +1153,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167132)
     xCursor->goLeft(1, true);
     xSelSupplier->select(cpo::uno::Any(xCursor));
 
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '(', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '(', 0);
     Scheduler::ProcessEventsToIdle();
     // The formula must not be removed from the document
     CPPUNIT_ASSERT(rObjectContainer.HasEmbeddedObject(xMathObject));
@@ -1184,7 +1184,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167132)
     CPPUNIT_ASSERT(xContentEnum->hasMoreElements()); // The selection contains the formula
     xSelSupplier->select(cpo::uno::Any(xCursor));
 
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '[', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '[', 0);
     Scheduler::ProcessEventsToIdle();
     // The formula must not be removed from the document
     CPPUNIT_ASSERT(rObjectContainer.HasEmbeddedObject(xMathObject));
@@ -1370,7 +1370,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf146190)
 
     // Move to the next drawing object by Tab key press:
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
     // Without the fix in place, this test would have failed with:
     // equality assertion failed
@@ -1380,7 +1380,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf146190)
     CPPUNIT_ASSERT_EQUAL(u"Shape 2"_ustr, rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
 
     // Tab key press should now select 'Shape 1':
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(u"Shape 1"_ustr, rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
 }
@@ -1422,8 +1422,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testParagraphStyleCloneFormatting)
     emulateTyping(u"First Line");
 
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     emulateTyping(u"Second Line");
@@ -1981,9 +1981,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testAutocorrectSingleQuoteUndo)
         return pWrtShell->getShellCursor(false)->GetPoint()->GetNode().GetTextNode()->GetText();
     };
 
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'c', 0);
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'e', 0);
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '\'', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 'c', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 'e', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '\'', 0);
     Scheduler::ProcessEventsToIdle();
 
     // The straight apostrophe became a typographic one (U+2019).
@@ -1999,9 +1999,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testAutocorrectSingleQuoteUndo)
     // The same holds when more is typed after the quote and it is undone: the
     // undo that reaches the quote removes it rather than exposing a straight
     // quote in between.
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '\'', 0);
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'u', 0);
-    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'n', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, '\'', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 'u', 0);
+    pTextDoc->postKeyEvent(COKitKeyEventType::KEYINPUT, 'n', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(u"ce\u2019un"_ustr, getText());
 

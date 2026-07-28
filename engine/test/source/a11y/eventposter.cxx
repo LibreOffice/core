@@ -17,9 +17,10 @@
 #include <test/a11y/AccessibilityTools.hxx>
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 
-void test::EventPosterHelper::postKeyEventAsync(int nType, int nCharCode, int nKeyCode) const
+void test::EventPosterHelper::postKeyEventAsync(COKitKeyEventType eType, int nCharCode,
+                                                int nKeyCode) const
 {
-    KitHelper::postKeyEventAsync(mxWindow, nType, nCharCode, nKeyCode);
+    KitHelper::postKeyEventAsync(mxWindow, eType, nCharCode, nKeyCode);
 }
 
 void test::EventPosterHelper::postExtTextEventAsync(COKitExtTextInputType eType,

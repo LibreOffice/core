@@ -246,7 +246,8 @@ public:
 
     /// Helper for posting async key event
     static void postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
-                                  int nType, int nCharCode, int nKeyCode, int nRepeat = 0);
+                                  COKitKeyEventType eType, int nCharCode, int nKeyCode,
+                                  int nRepeat = 0);
 
     /// Helper for posting input event
     static void postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,

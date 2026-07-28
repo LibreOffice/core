@@ -36,13 +36,14 @@ public:
     virtual ~EventPosterHelperBase(){};
 
     /** @see KitHelper::postKeyEventAsync */
-    virtual void postKeyEventAsync(int nType, int nCharCode, int nKeyCode) const = 0;
+    virtual void postKeyEventAsync(COKitKeyEventType eType, int nCharCode,
+                                   int nKeyCode) const = 0;
 
     /** Posts a full key down/up cycle */
     void postKeyEventAsync(int nCharCode, int nKeyCode) const
     {
-        postKeyEventAsync(KIT_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
-        postKeyEventAsync(KIT_KEYEVENT_KEYUP, nCharCode, nKeyCode);
+        postKeyEventAsync(COKitKeyEventType::KEYINPUT, nCharCode, nKeyCode);
+        postKeyEventAsync(COKitKeyEventType::KEYUP, nCharCode, nKeyCode);
     }
 
     /** @see KitHelper::postExtTextEventAsync */
@@ -94,7 +95,8 @@ public:
     using EventPosterHelperBase::postExtTextEventAsync;
 
     /** @see KitHelper::postKeyEventAsync */
-    virtual void postKeyEventAsync(int nType, int nCharCode, int nKeyCode) const override;
+    virtual void postKeyEventAsync(COKitKeyEventType eType, int nCharCode,
+                                   int nKeyCode) const override;
     /** @see KitHelper::postExtTextEventAsync */
     virtual void postExtTextEventAsync(COKitExtTextInputType eType,
                                        const OUString& rText) const override;

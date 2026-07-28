@@ -85,7 +85,7 @@ static void doc_registerCallback(COKitDocument* self,
                                 COKitCallback callback,
                                 void* data);
 static void doc_postKeyEvent(COKitDocument* self,
-                             int type,
+                             COKitKeyEventType type,
                              int charCode,
                              int keyCode);
 static void doc_postMouseEvent (COKitDocument* self,
@@ -400,7 +400,8 @@ static void doc_registerCallback(COKitDocument* self,
     (void) data;
 }
 
-static void doc_postKeyEvent(COKitDocument* self, int type, int charCode, int keyCode)
+static void doc_postKeyEvent(COKitDocument* self, COKitKeyEventType type, int charCode,
+                             int keyCode)
 {
     (void) self;
     (void) type;

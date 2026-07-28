@@ -632,7 +632,8 @@ postKeyEventInThread(gpointer data)
     }
 
     ss.str(std::string());
-    ss << "kit::Document::postKeyEvent(" << pLOEvent->m_nKeyEvent << ", " << pLOEvent->m_nCharCode << ", " << pLOEvent->m_nKeyCode << ")";
+    ss << "kit::Document::postKeyEvent(" << static_cast<int>(pLOEvent->m_nKeyEvent) << ", "
+       << pLOEvent->m_nCharCode << ", " << pLOEvent->m_nKeyCode << ")";
     g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->postKeyEvent(priv->m_pDocument,
                                             pLOEvent->m_nKeyEvent,
@@ -746,7 +747,7 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
 
     GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
     LOEvent* pLOEvent = new LOEvent(KIT_POST_KEY);
-    pLOEvent->m_nKeyEvent = pEvent->type == GDK_KEY_RELEASE ? KIT_KEYEVENT_KEYUP : KIT_KEYEVENT_KEYINPUT;
+    pLOEvent->m_nKeyEvent = pEvent->type == GDK_KEY_RELEASE ? COKitKeyEventType::KEYUP : COKitKeyEventType::KEYINPUT;
     pLOEvent->m_nCharCode = nCharCode;
     pLOEvent->m_nKeyCode  = nKeyCode;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);

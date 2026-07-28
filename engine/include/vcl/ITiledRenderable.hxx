@@ -174,7 +174,7 @@ public:
      *
      * @see kit::Document::postKeyEvent().
      */
-    virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) = 0;
+    virtual void postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode) = 0;
 
     /**
      * Posts a mouse event on the document.

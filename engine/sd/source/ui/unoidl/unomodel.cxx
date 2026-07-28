@@ -5137,10 +5137,10 @@ void SdXImpressDocument::initializeForTiledRendering(const cpo::uno::Sequence<cs
     }
 }
 
-void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
+void SdXImpressDocument::postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
-    KitHelper::postKeyEventAsync(getDocWindow(), nType, nCharCode, nKeyCode);
+    KitHelper::postKeyEventAsync(getDocWindow(), eType, nCharCode, nKeyCode);
 }
 
 void SdXImpressDocument::postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,

@@ -204,7 +204,7 @@ struct LOEvent
 
     /// @name postKeyEvent parameters
     ///@{
-    int m_nKeyEvent;
+    COKitKeyEventType m_nKeyEvent;
     int m_nCharCode;
     int m_nKeyCode;
     ///@}
@@ -251,7 +251,7 @@ struct LOEvent
         , m_bEdit(false)
         , m_nPartMode(COKitPartMode::SLIDES)
         , m_nPart(0)
-        , m_nKeyEvent(0)
+        , m_nKeyEvent(COKitKeyEventType::KEYINPUT)
         , m_nCharCode(0)
         , m_nKeyCode(0)
         , m_nPaintTileX(0)

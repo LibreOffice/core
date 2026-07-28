@@ -307,7 +307,8 @@ public:
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
     SD_DLLPUBLIC virtual void initializeForTiledRendering(const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
     /// @see vcl::ITiledRenderable::postKeyEvent().
-    SD_DLLPUBLIC virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) override;
+    SD_DLLPUBLIC virtual void postKeyEvent(COKitKeyEventType eType, int nCharCode,
+                                           int nKeyCode) override;
     /// @see vcl::ITiledRenderable::postMouseEvent().
     SD_DLLPUBLIC virtual void postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,
                                              int nButtons, int nModifier) override;

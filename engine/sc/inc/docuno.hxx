@@ -343,7 +343,7 @@ public:
     virtual void initializeForTiledRendering(const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 
     /// @see vcl::ITiledRenderable::postKeyEvent().
-    virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) override;
+    virtual void postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode) override;
 
     /// @see vcl::ITiledRenderable::postMouseEvent().
     virtual void postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount, int nButtons,

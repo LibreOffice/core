@@ -1184,7 +1184,7 @@ static void doc_registerCallback(COKitDocument* pThis,
                                 COKitCallback pCallback,
                                 void* pData);
 static void doc_postKeyEvent(COKitDocument* pThis,
-                             int nType,
+                             COKitKeyEventType eType,
                              int nCharCode,
                              int nKeyCode);
 static void doc_setBlockedCommandList(COKitDocument* pThis,
@@ -1204,7 +1204,7 @@ static void doc_sendDialogEvent(COKitDocument* pThis,
                                const char* pArguments);
 static void doc_postWindowKeyEvent(COKitDocument* pThis,
                                    unsigned nKitWindowId,
-                                   int nType,
+                                   COKitKeyEventType eType,
                                    int nCharCode,
                                    int nKeyCode);
 static void doc_postMouseEvent (COKitDocument* pThis,
@@ -5088,7 +5088,8 @@ static char* getAllPartSize(COKitDocument* pThis)
     return convertOString(aJsonWriter.finishAndGetAsOString());
 }
 
-static void doc_postKeyEvent(COKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
+static void doc_postKeyEvent(COKitDocument* pThis, COKitKeyEventType eType, int nCharCode,
+                             int nKeyCode)
 {
     comphelper::ProfileZone aZone("doc_postKeyEvent");
 
@@ -5104,7 +5105,7 @@ static void doc_postKeyEvent(COKitDocument* pThis, int nType, int nCharCode, int
 
     try
     {
-        pDoc->postKeyEvent(nType, nCharCode, nKeyCode);
+        pDoc->postKeyEvent(eType, nCharCode, nKeyCode);
     }
     catch (const uno::Exception& exception)
     {
@@ -5193,7 +5194,7 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nKitWindowId, i
                 pWindow->KeyInput(aEvt);
         }
         else
-            KitHelper::postKeyEventAsync(pWindow, KIT_KEYEVENT_KEYINPUT, 8, KEY_BACKSPACE, nCharBefore - 1);
+            KitHelper::postKeyEventAsync(pWindow, COKitKeyEventType::KEYINPUT, 8, KEY_BACKSPACE, nCharBefore - 1);
     }
 
     if (nCharAfter > 0)
@@ -5206,11 +5207,12 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nKitWindowId, i
                 pWindow->KeyInput(aEvt);
         }
         else
-            KitHelper::postKeyEventAsync(pWindow, KIT_KEYEVENT_KEYINPUT, 46, KEY_DELETE, nCharAfter - 1);
+            KitHelper::postKeyEventAsync(pWindow, COKitKeyEventType::KEYINPUT, 46, KEY_DELETE, nCharAfter - 1);
     }
 }
 
-static void doc_postWindowKeyEvent(COKitDocument* /*pThis*/, unsigned nKitWindowId, int nType, int nCharCode, int nKeyCode)
+static void doc_postWindowKeyEvent(COKitDocument* /*pThis*/, unsigned nKitWindowId,
+                                   COKitKeyEventType eType, int nCharCode, int nKeyCode)
 {
     comphelper::ProfileZone aZone("doc_postWindowKeyEvent");
 
@@ -5226,12 +5228,12 @@ static void doc_postWindowKeyEvent(COKitDocument* /*pThis*/, unsigned nKitWindow
 
     KeyEvent aEvent(nCharCode, nKeyCode, 0);
 
-    switch (nType)
+    switch (eType)
     {
-        case KIT_KEYEVENT_KEYINPUT:
+        case COKitKeyEventType::KEYINPUT:
             Application::PostKeyEvent(VclEventId::WindowKeyInput, pWindow, &aEvent);
             break;
-        case KIT_KEYEVENT_KEYUP:
+        case COKitKeyEventType::KEYUP:
             Application::PostKeyEvent(VclEventId::WindowKeyUp, pWindow, &aEvent);
             break;
         default:

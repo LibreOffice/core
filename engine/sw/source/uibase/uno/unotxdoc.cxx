@@ -4040,10 +4040,10 @@ void SwXTextDocument::initializeForTiledRendering(const cpo::uno::Sequence<css::
     }
 }
 
-void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
+void SwXTextDocument::postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
-    KitHelper::postKeyEventAsync(getDocWindow(), nType, nCharCode, nKeyCode);
+    KitHelper::postKeyEventAsync(getDocWindow(), eType, nCharCode, nKeyCode);
 }
 
 void SwXTextDocument::postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,

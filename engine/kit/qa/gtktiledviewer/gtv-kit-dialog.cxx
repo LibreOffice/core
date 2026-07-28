@@ -344,7 +344,7 @@ gtv_kit_dialog_signal_key(GtkWidget* pDialogDrawingArea, GdkEventKey* pEvent)
 
     pDocument->pClass->postWindowKeyEvent(pDocument,
                                           priv->dialogid,
-                                          pEvent->type == GDK_KEY_RELEASE ? KIT_KEYEVENT_KEYUP : KIT_KEYEVENT_KEYINPUT,
+                                          pEvent->type == GDK_KEY_RELEASE ? COKitKeyEventType::KEYUP : COKitKeyEventType::KEYINPUT,
                                           nCharCode,
                                           nKeyCode);
 

@@ -67,12 +67,12 @@ protected:
     /** Collects contents of the current document */
     OUString collectText() { return collectText(getDocumentAccessibleContext()); }
 
-    void documentPostKeyEvent(int nType, int nCharCode, int nKeyCode)
+    void documentPostKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode)
     {
         vcl::ITiledRenderable* pTiledRenderable
             = dynamic_cast<vcl::ITiledRenderable*>(mxDocument.get());
         CPPUNIT_ASSERT(pTiledRenderable);
-        pTiledRenderable->postKeyEvent(nType, nCharCode, nKeyCode);
+        pTiledRenderable->postKeyEvent(eType, nCharCode, nKeyCode);
     }
 
     static css::uno::Reference<css::accessibility::XAccessibleContext> getFirstRelationTargetOfType(

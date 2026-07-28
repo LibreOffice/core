@@ -1410,15 +1410,16 @@ namespace
 }
 
 void KitHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
-                                     int nType, int nCharCode, int nKeyCode, int nRepeat)
+                                     COKitKeyEventType eType, int nCharCode, int nKeyCode,
+                                     int nRepeat)
 {
     KitAsyncEventData* pKitEv = new KitAsyncEventData;
-    switch (nType)
+    switch (eType)
     {
-    case KIT_KEYEVENT_KEYINPUT:
+    case COKitKeyEventType::KEYINPUT:
         pKitEv->mnEvent = VclEventId::WindowKeyInput;
         break;
-    case KIT_KEYEVENT_KEYUP:
+    case COKitKeyEventType::KEYUP:
         pKitEv->mnEvent = VclEventId::WindowKeyUp;
         break;
     default:

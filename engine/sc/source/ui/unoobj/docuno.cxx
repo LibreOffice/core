@@ -854,10 +854,10 @@ OUString ScModelObj::getPrintRanges()
     return OStringToOUString(aJsonWriter.finishAndGetAsOString(), RTL_TEXTENCODING_UTF8);
 }
 
-void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
+void ScModelObj::postKeyEvent(COKitKeyEventType eType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
-    KitHelper::postKeyEventAsync(getDocWindow(), nType, nCharCode, nKeyCode);
+    KitHelper::postKeyEventAsync(getDocWindow(), eType, nCharCode, nKeyCode);
 }
 
 void ScModelObj::postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,

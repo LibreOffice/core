@@ -919,8 +919,8 @@ void DesktopKitTest::testUndoWriter()
 {
     // Load a Writer document and press a key.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 't', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 't', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 't', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, 't', 0);
     Scheduler::ProcessEventsToIdle();
     // Get undo info.
     boost::property_tree::ptree aTree;
@@ -2248,8 +2248,8 @@ void DesktopKitTest::testRedlineWriter()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
     xPropertySet->setPropertyValue(u"RecordChanges"_ustr, cpo::uno::Any(true));
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 't', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 't', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 't', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, 't', 0);
     Scheduler::ProcessEventsToIdle();
 
     // Get redline info.
@@ -2275,10 +2275,10 @@ void DesktopKitTest::testRedlineCalc()
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
     xPropertySet->setPropertyValue(u"RecordChanges"_ustr, cpo::uno::Any(true));
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 't', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 't', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 't', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, 't', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Get redline info.
@@ -2547,10 +2547,10 @@ void DesktopKitTest::testPaintPartTile()
 
     // Switch back to the first view and start typing.
     pDocument->m_pDocumentClass->setView(pDocument, nView1);
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'x', 0);
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 'x', 0);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 0, awt::Key::TAB);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, 0, awt::Key::TAB);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'x', 0);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
 
     // Call paintPartTile() to paint the second part (in whichever view it finds suitable for this).
@@ -2560,8 +2560,8 @@ void DesktopKitTest::testPaintPartTile()
     // Type again.
     Scheduler::ProcessEventsToIdle();
 //    aView1.m_bTilesInvalidated = false;
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'x', 0);
-    pDocument->m_pDocumentClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 'x', 0);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'x', 0);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
     // This failed: paintPartTile() (as a side-effect) ended the text edit of
     // the first view, so there were no invalidations.
@@ -2586,8 +2586,8 @@ void DesktopKitTest::testPaintTileOmitInvalidate()
     aView.m_bTilesInvalidated = false;
 
     // When pressing a key:
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'x', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 'x', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'x', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
 
     // Then make sure we get an invalidation:
@@ -2621,10 +2621,10 @@ void DesktopKitTest::testCreateViewOmitInvalidate()
     aView2.m_bTilesInvalidated = false;
 
     // When pressing a key in view 1, on sheet Two:
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'x', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 'x', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'x', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, 'x', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 0, KEY_RETURN);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Then make sure that both views are invalidated:
@@ -3907,7 +3907,7 @@ void DesktopKitTest::testTextSelectionHandles()
     // deselect & check
     m_aTextSelectionStart = ""_ostr;
     m_aTextSelectionEnd = ""_ostr;
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 0, css::awt::Key::ESCAPE);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 0, css::awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
     pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT_EQUAL(static_cast<char *>(nullptr), pText);
@@ -4018,8 +4018,8 @@ void DesktopKitTest::testCalcSaveAs()
     CPPUNIT_ASSERT(pDocument);
 
     // Enter some text, but don't commit.
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'X', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 'X', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'X', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, 'X', 0);
     Scheduler::ProcessEventsToIdle();
 
     // Save as a new file.
@@ -4034,10 +4034,10 @@ void DesktopKitTest::testCalcSaveAs()
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView);
 
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 0, KEY_RIGHT);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 0, KEY_LEFT);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, 0, KEY_LEFT);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 0, KEY_RIGHT);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, 0, KEY_RIGHT);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 0, KEY_LEFT);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, 0, KEY_LEFT);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL("X"_ostr, aView.m_aCellFormula);
@@ -4062,10 +4062,10 @@ void DesktopKitTest::testSpellcheckerMultiView()
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'a', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'a', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'a', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 0, css::awt::Key::ESCAPE);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'a', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'a', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'a', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 0, css::awt::Key::ESCAPE);
 
     // Start spellchecking.
     pDocument->pClass->postUnoCommand(pDocument, ".uno:SpellDialog", nullptr, false);
@@ -4228,14 +4228,14 @@ void DesktopKitTest::testJumpCursor()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
 
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'B', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'o', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'l', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'i', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'v', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'i', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 'a', 0);
-    pDocument->pClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, 0, css::awt::Key::ESCAPE);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'B', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'o', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'l', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'i', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'v', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'i', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 'a', 0);
+    pDocument->pClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, 0, css::awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     // There is a cursor jump to (0, 0) due to
@@ -4343,8 +4343,8 @@ static void lcl_repeatKeyStroke(LibLODocument_Impl *pDocument, int nCharCode, in
 {
     for (size_t nCtr = 0; nCtr < nCount; ++nCtr)
     {
-        pDocument->m_pDocumentClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
-        pDocument->m_pDocumentClass->postKeyEvent(pDocument, KIT_KEYEVENT_KEYUP, nCharCode, nKeyCode);
+        pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::KEYINPUT, nCharCode, nKeyCode);
+        pDocument->m_pDocumentClass->postKeyEvent(pDocument, COKitKeyEventType::KEYUP, nCharCode, nKeyCode);
     }
 }
 

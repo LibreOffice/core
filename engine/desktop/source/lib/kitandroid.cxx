@@ -314,7 +314,8 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postKey
     (JNIEnv* pEnv, jobject aObject, jint nType, jint nCharCode, jint nKeyCode)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->pClass->postKeyEvent(pDocument, nType, nCharCode, nKeyCode);
+    pDocument->pClass->postKeyEvent(pDocument, static_cast<COKitKeyEventType>(nType), nCharCode,
+                                    nKeyCode);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postMouseEvent

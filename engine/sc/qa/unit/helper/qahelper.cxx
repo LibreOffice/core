@@ -301,8 +301,8 @@ void ScModelTestBase::typeString(std::u16string_view rStr)
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     for (const char16_t c : rStr)
     {
-        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, c, 0);
-        pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, c, 0);
+        pModelObj->postKeyEvent(COKitKeyEventType::KEYINPUT, c, 0);
+        pModelObj->postKeyEvent(COKitKeyEventType::KEYUP, c, 0);
         Scheduler::ProcessEventsToIdle();
     }
 }
@@ -314,8 +314,8 @@ void ScModelTestBase::insertStringToCell(const OUString& rCell, std::u16string_v
     typeString(rStr);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(COKitKeyEventType::KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 }
 
@@ -327,8 +327,8 @@ void ScModelTestBase::insertArrayToCell(const OUString& rCell, std::u16string_vi
     typeString(rStr);
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
-    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
+    pModelObj->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
+    pModelObj->postKeyEvent(COKitKeyEventType::KEYUP, 0, KEY_MOD1 | KEY_SHIFT | awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
     if (!bDynamicArrayMaster)
@@ -359,8 +359,8 @@ void ScModelTestBase::clearCell(const OUString& rCell)
 
     // Press DELETE on a selected cell
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
-    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(COKitKeyEventType::KEYUP, 0, awt::Key::DELETE);
     Scheduler::ProcessEventsToIdle();
 }
 
@@ -381,8 +381,8 @@ void ScModelTestBase::executeAutoSum()
 
     // Use RETURN key to exit autosum edit view
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(COKitKeyEventType::KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(COKitKeyEventType::KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 }
 
