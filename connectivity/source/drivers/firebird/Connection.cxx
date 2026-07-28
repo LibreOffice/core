@@ -22,6 +22,7 @@
 #include "Clob.hxx"
 #include "Connection.hxx"
 #include "DatabaseMetaData.hxx"
+#include "Driver.hxx"
 #include "PreparedStatement.hxx"
 #include "Statement.hxx"
 #include "Util.hxx"
@@ -156,13 +157,14 @@ bool databaseHeaderHasBackupState(const OUString& rDatabasePath)
 }
 
 void Connection::construct(const OUString& url, const Sequence< PropertyValue >& info,
-                           const OUString& rDatabaseDataDirectoryURL)
+                           FirebirdDriver& rDriver)
 {
     ConnectionGuard aGuard(m_refCount);
 
     try
     {
         m_sConnectionURL = url;
+        m_xDriver = &rDriver;
 
         bool bIsNewDatabase = false;
         // the database may be stored as an
@@ -193,7 +195,8 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
             bIsNewDatabase = !m_xEmbeddedStorage->hasElements();
 
-            m_pDatabaseFileDir.reset(new ::utl::TempFileNamed(&rDatabaseDataDirectoryURL, true));
+            const OUString sDatabaseDataDirectoryURL = rDriver.getDatabaseDataDirectoryURL();
+            m_pDatabaseFileDir.reset(new ::utl::TempFileNamed(&sDatabaseDataDirectoryURL, true));
             m_pDatabaseFileDir->EnableKillingFile();
             m_sFirebirdURL = m_pDatabaseFileDir->GetFileName() + "/firebird.fdb";
             m_sFBKPath = m_pDatabaseFileDir->GetFileName() + "/firebird.fbk";
@@ -247,6 +250,10 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
                     bIsNewDatabase = true;
 
                 osl::FileBase::getSystemPathFromFileURL(m_sFirebirdURL, m_sFirebirdURL);
+
+                // The user picked this file, so it is outside the directory firebird is
+                // restricted to. Reach it by the name the driver gives us for it.
+                m_sExternalDatabaseName = rDriver.addExternalDatabaseName(m_sFirebirdURL);
             }
         }
 
@@ -324,12 +331,13 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
         ISC_STATUS_ARRAY status;            /* status vector */
         ISC_STATUS aErr;
-        const OString sFirebirdURL = OUStringToOString(m_sFirebirdURL, RTL_TEXTENCODING_UTF8);
+        const OString sDatabaseName
+            = OUStringToOString(getFirebirdDatabaseName(), RTL_TEXTENCODING_UTF8);
         if (bIsNewDatabase)
         {
             aErr = isc_create_database(status,
-                                       sFirebirdURL.getLength(),
-                                       sFirebirdURL.getStr(),
+                                       sDatabaseName.getLength(),
+                                       sDatabaseName.getStr(),
                                        &m_aDBHandle,
                                        dpbBuffer.size(),
                                        dpbBuffer.c_str(),
@@ -347,8 +355,8 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
             }
 
             aErr = isc_attach_database(status,
-                                       sFirebirdURL.getLength(),
-                                       sFirebirdURL.getStr(),
+                                       sDatabaseName.getLength(),
+                                       sDatabaseName.getStr(),
                                        &m_aDBHandle,
                                        dpbBuffer.size(),
                                        dpbBuffer.c_str());
@@ -947,6 +955,12 @@ void Connection::disposing()
     }
 
     storeDatabase();
+
+    if (!m_sExternalDatabaseName.isEmpty())
+    {
+        m_xDriver->removeExternalDatabaseName(m_sExternalDatabaseName);
+        m_sExternalDatabaseName.clear();
+    }
 
     cppu::WeakComponentImplHelperBase::disposing();
 
