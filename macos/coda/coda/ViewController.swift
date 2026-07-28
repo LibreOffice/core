@@ -795,6 +795,12 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             onClose?()
             return (nil, nil)
         }
+        else if body == "uno .uno:Quit" {
+            // Terminating asks AppKit to review every open document first, so a document that has
+            // changed is saved before the application goes away.
+            NSApp.terminate(nil)
+            return (nil, nil)
+        }
 
         return nil // not handled
     }
