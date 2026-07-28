@@ -14,6 +14,8 @@
 #include <gio/gio.h>
 #include <glib.h>
 
+#include <COKit/COKit.hxx>
+
 #include <map>
 
 #define KIT_TILEBUFFER_ERROR (KitTileBufferErrorQuark())
@@ -195,7 +197,7 @@ struct LOEvent
     gboolean m_bEdit;
 
     /// set_partmode parameter
-    int m_nPartMode;
+    COKitPartMode m_nPartMode;
 
     /// set_part parameter
     int m_nPart;
@@ -247,7 +249,7 @@ struct LOEvent
         , m_pArguments(nullptr)
         , m_bNotifyWhenFinished(false)
         , m_bEdit(false)
-        , m_nPartMode(0)
+        , m_nPartMode(COKitPartMode::SLIDES)
         , m_nPart(0)
         , m_nKeyEvent(0)
         , m_nCharCode(0)

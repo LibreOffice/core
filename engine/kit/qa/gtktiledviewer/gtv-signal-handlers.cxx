@@ -348,12 +348,12 @@ void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
     // Just convert directly back to the COKitPartMode enum.
     // I.e. the ordering above should match the enum member ordering.
     COKitPartMode ePartMode =
-        COKitPartMode( gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) ) );
+        static_cast<COKitPartMode>( gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) ) );
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pSelector));
 
     if ( window->kitdocview )
     {
-        kit_doc_view_set_partmode( KIT_DOC_VIEW(window->kitdocview), ePartMode );
+        kit_doc_view_set_partmode( KIT_DOC_VIEW(window->kitdocview), static_cast<int>(ePartMode) );
     }
 }
 

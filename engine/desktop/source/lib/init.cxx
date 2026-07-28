@@ -1155,7 +1155,7 @@ static void doc_setPart(COKitDocument* pThis, int nPart);
 static void doc_selectPart(COKitDocument* pThis, int nPart, int nSelect);
 static void doc_moveSelectedParts(COKitDocument* pThis, int nPosition, bool bDuplicate, int nIntoSection);
 static char* doc_getPartName(COKitDocument* pThis, int nPart);
-static void doc_setPartMode(COKitDocument* pThis, int nPartMode);
+static void doc_setPartMode(COKitDocument* pThis, COKitPartMode ePartMode);
 static int doc_getEditMode(COKitDocument* pThis);
 static void doc_paintTile(COKitDocument* pThis,
                           unsigned char* pBuffer,
@@ -4411,7 +4411,7 @@ static char* doc_getPartHash(COKitDocument* pThis, int nPart)
 }
 
 static void doc_setPartMode(COKitDocument* pThis,
-                            int nPartMode)
+                            COKitPartMode ePartMode)
 {
     comphelper::ProfileZone aZone("doc_setPartMode");
 
@@ -4428,7 +4428,7 @@ static void doc_setPartMode(COKitDocument* pThis,
 
     int nCurrentPart = pDoc->getPart();
 
-    pDoc->setPartMode(nPartMode);
+    pDoc->setPartMode(ePartMode);
 
     // We need to make sure the internal state is updated, just changing the mode
     // might not update the relevant shells (i.e. impress will keep rendering the

@@ -2408,11 +2408,11 @@ setPartmodeInThread(gpointer data)
     KitDocumentView* pDocView = KIT_DOC_VIEW(g_task_get_source_object(task));
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
-    int nPartMode = pLOEvent->m_nPartMode;
+    COKitPartMode ePartMode = pLOEvent->m_nPartMode;
 
     std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
-    priv->m_pDocument->pClass->setPartMode( priv->m_pDocument, nPartMode );
+    priv->m_pDocument->pClass->setPartMode( priv->m_pDocument, ePartMode );
 }
 
 static void
@@ -3805,7 +3805,7 @@ kit_doc_view_set_partmode(KitDocumentView* pDocView,
     LOEvent* pLOEvent = new LOEvent(KIT_SET_PARTMODE);
     GError* error = nullptr;
 
-    pLOEvent->m_nPartMode = nPartMode;
+    pLOEvent->m_nPartMode = static_cast<COKitPartMode>(nPartMode);
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
     g_thread_pool_push(priv->kitThreadPool, g_object_ref(task), &error);

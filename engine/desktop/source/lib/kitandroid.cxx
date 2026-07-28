@@ -246,7 +246,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setPart
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
 
-    pDocument->pClass->setPartMode(pDocument, nPartMode);
+    pDocument->pClass->setPartMode(pDocument, static_cast<COKitPartMode>(nPartMode));
 }
 
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getDocumentTypeNative

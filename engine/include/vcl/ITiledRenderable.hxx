@@ -20,6 +20,8 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <basegfx/range/b2drange.hxx>
 
+#include <COKit/COKit.hxx>
+
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::datatransfer::clipboard { class XClipboard; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
@@ -146,7 +148,7 @@ public:
     virtual OUString getPartHash(int nPart) = 0;
 
     /// @see kit::Document::setPartMode().
-    virtual void setPartMode(int) {}
+    virtual void setPartMode(COKitPartMode) {}
 
     /**
      * Get the currently used EditMode (supported in Impress).

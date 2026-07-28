@@ -98,12 +98,11 @@ typedef enum
 }
 COKitDocumentType;
 
-typedef enum
+enum class COKitPartMode
 {
-    KIT_PARTMODE_SLIDES,
-    KIT_PARTMODE_NOTES
-}
-COKitPartMode;
+    SLIDES,
+    NOTES
+};
 
 typedef enum
 {
@@ -1606,7 +1605,7 @@ struct COKitDocumentClassStruct
 
     /// @see kit::Document::setPartMode().
     void (*setPartMode) (COKitDocument* pThis,
-                         int nMode);
+                         COKitPartMode eMode);
 
     /// @see kit::Document::paintTile().
     void (*paintTile) (COKitDocument* pThis,
@@ -2075,9 +2074,9 @@ public:
         return mpDoc->pClass->getPartHash(mpDoc, nPart);
     }
 
-    void setPartMode(int nMode)
+    void setPartMode(COKitPartMode eMode)
     {
-        mpDoc->pClass->setPartMode(mpDoc, nMode);
+        mpDoc->pClass->setPartMode(mpDoc, eMode);
     }
 
     int getEditMode()

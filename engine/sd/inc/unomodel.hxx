@@ -298,7 +298,7 @@ public:
     bool isMasterViewMode();
 
     /// @see vcl::ITiledRenderable::setPartMode().
-    virtual void setPartMode( int nPartMode ) override;
+    virtual void setPartMode( COKitPartMode ePartMode ) override;
     /// @see vcl::ITiledRenderable::getEditMode().
     virtual int getEditMode() override;
     /// @see vcl::ITiledRenderable::setEditMode().

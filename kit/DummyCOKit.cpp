@@ -57,7 +57,7 @@ static char* doc_getPartPageRectangles(COKitDocument* self);
 static int doc_getPart(COKitDocument* self);
 static void doc_setPart(COKitDocument* self, int part);
 static char* doc_getPartName(COKitDocument* self, int part);
-static void doc_setPartMode(COKitDocument* self, int partMode);
+static void doc_setPartMode(COKitDocument* self, COKitPartMode partMode);
 static int doc_getEditMode(COKitDocument* self);
 static void doc_paintTile(COKitDocument* self,
                           unsigned char* buffer,
@@ -315,7 +315,7 @@ static char* doc_getPartHash(COKitDocument* self, int part)
 }
 
 static void doc_setPartMode(COKitDocument* self,
-                            int partMode)
+                            COKitPartMode partMode)
 {
     (void) self;
     (void) partMode;

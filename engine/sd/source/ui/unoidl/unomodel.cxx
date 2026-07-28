@@ -4870,18 +4870,18 @@ VclPtr<vcl::Window> SdXImpressDocument::getDocWindow()
     return pViewShell->GetActiveWindow();
 }
 
-void SdXImpressDocument::setPartMode( int nPartMode )
+void SdXImpressDocument::setPartMode( COKitPartMode ePartMode )
 {
     DrawViewShell* pViewSh = GetViewShell();
     if (!pViewSh)
         return;
 
     PageKind aPageKind( PageKind::Standard );
-    switch ( nPartMode )
+    switch ( ePartMode )
     {
-    case KIT_PARTMODE_SLIDES:
+    case COKitPartMode::SLIDES:
         break;
-    case KIT_PARTMODE_NOTES:
+    case COKitPartMode::NOTES:
         aPageKind = PageKind::Notes;
         break;
     }
