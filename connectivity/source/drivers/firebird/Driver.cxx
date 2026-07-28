@@ -82,6 +82,9 @@ constexpr OUString our_sFirebirdLibVar = u"LIBREOFFICE_FIREBIRD_LIB"_ustr;
 // whenever it has changed.
 constexpr OUString our_sDatabasesConfName = u"databases.conf"_ustr;
 
+// The file that gives a plugin the module to load it from.
+constexpr OUString our_sPluginsConfName = u"plugins.conf"_ustr;
+
 // Put rContent in the file at rURL, discarding whatever was there before.
 bool writeFile(const OUString& rURL, std::string_view aContent)
 {
@@ -107,6 +110,173 @@ bool writeFile(const OUString& rURL, std::string_view aContent)
     }
     aFile.close();
     return bWholeContentWritten;
+}
+
+// The whole content of the file at rURL, empty when it cannot be read.
+OString readFile(const OUString& rURL)
+{
+    ::osl::File aFile(rURL);
+    if (aFile.open(osl_File_OpenFlag_Read) != ::osl::FileBase::E_None)
+        return OString();
+
+    OStringBuffer aContent;
+    for (;;)
+    {
+        char aBuffer[4096];
+        sal_uInt64 nRead = 0;
+        if (aFile.read(aBuffer, sizeof(aBuffer), nRead) != ::osl::FileBase::E_None || nRead == 0)
+            break;
+        aContent.append(std::string_view(aBuffer, nRead));
+    }
+    aFile.close();
+    return aContent.makeStringAndClear();
+}
+
+// The directories of the firebird installation, empty for a bundled firebird, which resolves them
+// where it was built.
+constexpr OUString our_sSystemPluginsPath = u"" SYSTEM_FIREBIRD_PLUGINS_DIRECTORY ""_ustr;
+constexpr OUString our_sSystemIntlPath = u"" SYSTEM_FIREBIRD_INTL_DIRECTORY ""_ustr;
+constexpr OUString our_sSystemConfPath = u"" SYSTEM_FIREBIRD_CONF_DIRECTORY ""_ustr;
+
+OString toBytes(std::u16string_view rPath)
+{
+    return OUStringToOString(rPath, osl_getThreadTextEncoding());
+}
+
+// Put the directories of the installation in place of the macros that name them. rThisPath is the
+// directory the file was read from, which is what the this macro means. plugins and intl under the
+// root are the plugins and international module directories.
+OString expandFirebirdDirectoryMacros(const OString& rContent, const OString& rThisPath)
+{
+    const OString sPlugins = toBytes(our_sSystemPluginsPath);
+    const OString sIntl = toBytes(our_sSystemIntlPath);
+
+    OString sExpanded = rContent.replaceAll("$(this)"_ostr, rThisPath);
+    sExpanded = sExpanded.replaceAll("$(dir_plugins)"_ostr, sPlugins);
+    sExpanded = sExpanded.replaceAll("$(root)/plugins"_ostr, sPlugins);
+    sExpanded = sExpanded.replaceAll("$(dir_intl)"_ostr, sIntl);
+    sExpanded = sExpanded.replaceAll("$(root)/intl"_ostr, sIntl);
+    sExpanded = sExpanded.replaceAll("$(dir_conf)"_ostr, toBytes(our_sSystemConfPath));
+    return sExpanded;
+}
+
+// The file at rSourceURL with the macros expanded, empty when one is left that we have no directory
+// for. A leftover macro leaves a relative path, resolved under the root we are writing for.
+OString getExpandedConf(const OUString& rSourceURL, const OUString& rSourcePath)
+{
+    const OString sContent
+        = expandFirebirdDirectoryMacros(readFile(rSourceURL), toBytes(rSourcePath));
+    if (sContent.indexOf("$(") == -1)
+        return sContent;
+
+    SAL_WARN("connectivity.firebird", "unexpanded macro in " << rSourcePath);
+    return OString();
+}
+
+// Write a plugins.conf into the directory the FIREBIRD variable names, giving every plugin of the
+// installation the absolute path of its module. A plugin no entry names is looked for by its own
+// name in the plugins directory firebird resolves, which Debian patches to sit under that variable.
+void writeSystemFirebirdPluginsConf(std::u16string_view rDataDirURL)
+{
+    if (our_sSystemPluginsPath.isEmpty())
+        return;
+
+    OUString sPluginsURL;
+    if (::osl::FileBase::getFileURLFromSystemPath(our_sSystemPluginsPath, sPluginsURL)
+        != ::osl::FileBase::E_None)
+        return;
+
+    // The installation's own file names the plugins that need more than their module.
+    OString sSystemConf;
+    OUString sConfURL;
+    if (!our_sSystemConfPath.isEmpty()
+        && ::osl::FileBase::getFileURLFromSystemPath(our_sSystemConfPath, sConfURL)
+               == ::osl::FileBase::E_None)
+    {
+        sSystemConf = getExpandedConf(sConfURL + "/" + our_sPluginsConfName, our_sSystemConfPath);
+    }
+
+    ::osl::Directory aPluginsDirectory(sPluginsURL);
+    if (aPluginsDirectory.open() != ::osl::FileBase::E_None)
+    {
+        SAL_WARN("connectivity.firebird", "could not read " << our_sSystemPluginsPath);
+        return;
+    }
+
+    const OString sPluginsPath = toBytes(our_sSystemPluginsPath);
+    OStringBuffer aContent(sSystemConf);
+    ::osl::DirectoryItem aItem;
+    while (aPluginsDirectory.getNextItem(aItem) == ::osl::FileBase::E_None)
+    {
+        ::osl::FileStatus aStatus(osl_FileStatus_Mask_FileName);
+        if (aItem.getFileStatus(aStatus) != ::osl::FileBase::E_None)
+            continue;
+
+        // The module libEngine13.so holds the plugin Engine13.
+        const OUString sName = aStatus.getFileName();
+        if (!sName.startsWith("lib") || !sName.endsWith(".so") || sName.getLength() <= 6)
+            continue;
+        const OString sPlugin = toBytes(sName.subView(3, sName.getLength() - 6));
+
+        if (sSystemConf.indexOf(Concat2View("= " + sPlugin + " ")) != -1)
+            continue;
+
+        aContent.append("\nPlugin = " + sPlugin + " {\n    Module = " + sPluginsPath + "/" + sPlugin
+                        + "\n}\n");
+    }
+
+    const OUString sURL = OUString::Concat(rDataDirURL) + "/" + our_sPluginsConfName;
+    const OString sContent = aContent.makeStringAndClear();
+    SAL_WARN_IF(!writeFile(sURL, std::string_view(sContent)), "connectivity.firebird",
+                "could not write " << sURL);
+}
+
+// Copy the conf files of the international modules into an intl subdirectory of the directory the
+// FIREBIRD variable names, with the absolute path of each module in place of the macros. Without
+// them only the character sets and collations built into the engine work.
+void writeSystemFirebirdIntlConfs(std::u16string_view rDataDirURL)
+{
+    if (our_sSystemIntlPath.isEmpty())
+        return;
+
+    OUString sIntlURL;
+    if (::osl::FileBase::getFileURLFromSystemPath(our_sSystemIntlPath, sIntlURL)
+        != ::osl::FileBase::E_None)
+        return;
+
+    ::osl::Directory aIntlDirectory(sIntlURL);
+    if (aIntlDirectory.open() != ::osl::FileBase::E_None)
+    {
+        SAL_WARN("connectivity.firebird", "could not read " << our_sSystemIntlPath);
+        return;
+    }
+
+    const OUString sTargetURL = OUString::Concat(rDataDirURL) + "/intl";
+    if (::osl::Directory::create(sTargetURL) != ::osl::FileBase::E_None)
+    {
+        SAL_WARN("connectivity.firebird", "could not create " << sTargetURL);
+        return;
+    }
+
+    ::osl::DirectoryItem aItem;
+    while (aIntlDirectory.getNextItem(aItem) == ::osl::FileBase::E_None)
+    {
+        ::osl::FileStatus aStatus(osl_FileStatus_Mask_FileName);
+        if (aItem.getFileStatus(aStatus) != ::osl::FileBase::E_None)
+            continue;
+
+        const OUString sName = aStatus.getFileName();
+        if (!sName.endsWith(".conf"))
+            continue;
+
+        const OString sContent = getExpandedConf(sIntlURL + "/" + sName, our_sSystemIntlPath);
+        if (sContent.isEmpty())
+            continue;
+
+        const OUString sURL = sTargetURL + "/" + sName;
+        SAL_WARN_IF(!writeFile(sURL, std::string_view(sContent)), "connectivity.firebird",
+                    "could not write " << sURL);
+    }
 }
 
 // firebird takes its root directory from the FIREBIRD variable on its first use, and reads the
@@ -167,6 +337,9 @@ FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentCo
     // before the first connection.
     OUString sDataDirPath;
     ::osl::FileBase::getSystemPathFromFileURL(m_firebirdDataDirectory.GetURL(), sDataDirPath);
+
+    writeSystemFirebirdPluginsConf(m_firebirdDataDirectory.GetURL());
+    writeSystemFirebirdIntlConfs(m_firebirdDataDirectory.GetURL());
 
 #if defined(_WIN32)
     // firebird upper-cases the database path before the exact-match

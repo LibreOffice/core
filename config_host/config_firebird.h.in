@@ -7,4 +7,16 @@ Settings for Firebird
 
 #define ENABLE_FIREBIRD_SDBC 0
 
+/* The directory a system firebird has its plugin modules in, empty for a bundled firebird or when it
+   could not be determined. */
+#define SYSTEM_FIREBIRD_PLUGINS_DIRECTORY ""
+
+/* The directory a system firebird has its international modules in, empty for a bundled firebird or
+   when it could not be determined. */
+#define SYSTEM_FIREBIRD_INTL_DIRECTORY ""
+
+/* The directory a system firebird has its own configuration files in, empty for a bundled firebird
+   or when it could not be determined. */
+#define SYSTEM_FIREBIRD_CONF_DIRECTORY ""
+
 #endif
