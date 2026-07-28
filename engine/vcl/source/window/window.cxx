@@ -154,6 +154,10 @@ void Window::dispose()
 
     mpWindowImpl->mbInDispose = true;
 
+    // A window on its way out must not stay findable by its Kit id. Owners that want the client
+    // told first release the binding themselves before handing over to here.
+    ReleaseKitNotifier();
+
     CallEventListeners( VclEventId::ObjectDying );
 
     // do not send child events for frames that were registered as native frames
