@@ -1,14 +1,13 @@
 /* -*- js-indent-level: 8 -*- */
 
-/* global describe it cy require expect beforeEach */
+/* global describe it cy require expect */
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 
-describe(['tagdesktop'], 'JSDialog unit test', function() {
+describe(['tagdesktop'], 'JSDialog unit test', { testIsolation: false }, function() {
 
-	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/help_dialog.ods');
-		cy.viewport(1920,1080);
+	desktopHelper.shareDocumentAcrossTests('calc/help_dialog.ods', {
+		viewport: [1920, 1080],
 	});
 
 	it('JSDialog popup dialog', function() {
@@ -35,6 +34,11 @@ describe(['tagdesktop'], 'JSDialog unit test', function() {
 				expect(Object.keys(dialog.dialogs)).to.have.length(1);
 				dialog.closeAll(false);
 				expect(fnClosePopup).to.be.called;
+
+				// closeAll asks the server to close the popup, which is how a
+				// popup the server opened goes away. This one was built here, so
+				// it is cleared through the local close.
+				dialog.close('testpopup', false);
 			});
 	});
 
@@ -106,6 +110,7 @@ describe(['tagdesktop'], 'JSDialog unit test', function() {
 	});
 
 	it('JSDialog dropdown', function() {
+		cy.cGet('#Home-tab-label').click();
 		cy.cGet('#toolbar-up #Home .unoConditionalFormatMenu:visible').click();
 
 		desktopHelper.getDropdown('home-conditional-format-menu').should('exist');

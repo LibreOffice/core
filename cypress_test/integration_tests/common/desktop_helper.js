@@ -691,6 +691,33 @@ function undoAll() {
 	cy.log('<< undoAll - end');
 }
 
+// Close every dialog left on screen, innermost first, and confirm the screen is
+// clear afterwards.
+function closeAnyOpenDialogs() {
+	cy.log('>> closeAnyOpenDialogs - start');
+
+	cy.cGet('body').then(function($body) {
+		var closeButtons = $body.find('.jsdialog-window .ui-dialog-titlebar-close');
+		for (var i = closeButtons.length - 1; i >= 0; i--) {
+			cy.wrap(closeButtons[i]).click({force: true});
+		}
+	});
+
+	// A popup or a dropdown has no titlebar close button, so the application's
+	// own close-everything event takes care of whatever is left.
+	cy.getFrameWindow().then(function(win) {
+		win.app.map.fire('closealldialogs');
+	});
+
+	cy.cGet('.jsdialog-window:not(.ui-overflow-group-popup):not(.snackbar)').should('not.exist');
+
+	// An overlay covers what is under it, so a click in the next test lands on
+	// the overlay instead of the element the test asked for.
+	cy.cGet('.jsdialog-overlay').should('not.exist');
+
+	cy.log('<< closeAnyOpenDialogs - end');
+}
+
 // Loads the test document once for a whole spec file and gives each test the
 // document as it was loaded. Register it at the top of a describe that turns
 // test isolation off:
@@ -748,6 +775,8 @@ function shareDocumentAcrossTests(filePath, options) {
 	// with formatting to hand back.
 	afterEach(function() {
 		if (this.currentTest.state === 'passed') {
+			closeAnyOpenDialogs();
+
 			// Escape closes a dropdown or leaves cell edit mode, which puts the
 			// document itself in front of the undo that follows.
 			helper.typeIntoDocument('{esc}');
@@ -798,4 +827,5 @@ module.exports.getCompactIconArrow = getCompactIconArrow;
 module.exports.getNbIconArrow = getNbIconArrow;
 module.exports.getDropdown = getDropdown;
 module.exports.undoAll = undoAll;
+module.exports.closeAnyOpenDialogs = closeAnyOpenDialogs;
 module.exports.shareDocumentAcrossTests = shareDocumentAcrossTests;

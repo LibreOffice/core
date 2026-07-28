@@ -84,17 +84,7 @@ describe(['tagdesktop'], 'Accessibility Writer Dialog Tests', { testIsolation: f
     });
 
     afterEach(function () {
-        // Close any dialogs that might still be open after a test failure
-        cy.cGet('body').then($body => {
-            const dialogs = $body.find('.jsdialog-window .ui-dialog-titlebar-close');
-            if (dialogs.length > 0) {
-                // Close dialogs from innermost to outermost
-                for (let i = dialogs.length - 1; i >= 0; i--) {
-                    cy.wrap(dialogs[i]).click({ force: true });
-                }
-            }
-        });
-        cy.cGet('.jsdialog-window:not(.ui-overflow-group-popup):not(.snackbar)').should('not.exist');
+        desktopHelper.closeAnyOpenDialogs();
 
         a11yHelper.resetState();
     });
