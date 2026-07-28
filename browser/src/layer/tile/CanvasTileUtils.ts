@@ -41,6 +41,45 @@ namespace cool {
 	export abstract class CanvasTileUtils {
 		private static lastPixel = new Uint8Array(4);
 
+		// Cairo (and therefore the server's tile buffers) uses premultiplied alpha,
+		// but ImageData / 2D-canvas compositing expects straight alpha. We convert
+		// the changed pixels back as deltas are applied. A lookup table keyed by
+		// (alpha << 8) + channelValue avoids a per-channel divide in the hot path.
+		private static unpremultiplyTable: Uint8Array | null = null;
+
+		private static getUnpremultiplyTable(): Uint8Array {
+			if (this.unpremultiplyTable) return this.unpremultiplyTable;
+
+			const table = new Uint8Array(256 * 256);
+			// The alpha === 0 row stays zero: fully transparent -> zero RGB.
+			for (let a = 1; a < 256; ++a) {
+				const base = a << 8;
+				for (let v = 0; v < 256; ++v)
+					table[base + v] = Math.min(255, Math.ceil((v * 255) / a));
+			}
+
+			this.unpremultiplyTable = table;
+			return table;
+		}
+
+		// Convert premultiplied-alpha RGBA to straight alpha, in place.
+		// byteOffset/byteLength delimit the region to touch.
+		public static unpremultiply(
+			data: Uint8Array,
+			byteLength: number,
+			byteOffset: number = 0,
+		): void {
+			const table = this.getUnpremultiplyTable();
+			for (let i = byteOffset; i < byteOffset + byteLength; i += 4) {
+				const alpha = data[i + 3];
+				if (alpha === 255) continue;
+				const base = alpha << 8;
+				data[i] = table[base + data[i]];
+				data[i + 1] = table[base + data[i + 1]];
+				data[i + 2] = table[base + data[i + 2]];
+			}
+		}
+
 		public static unrle(
 			data: Uint8Array,
 			width: number,
@@ -58,6 +97,8 @@ namespace cool {
 				const rleMaskSizeBytes = 256 / 8;
 
 				offset += rleMaskSizeBytes;
+
+				if (rleSize > 0) this.unpremultiply(data, rleSize * 4, offset);
 
 				// It would be rather nice to have real 64bit types [!]
 				this.lastPixel.fill(0);
@@ -224,6 +265,7 @@ namespace cool {
 							);
 						i += 4;
 						span *= 4;
+						this.unpremultiply(delta, span, i);
 						for (let j = 0; j < span; ++j) imgData[offset++] = delta[i + j];
 						i += span;
 						// imgData.data[offset - 2] = 256; // debug - blue terminator
