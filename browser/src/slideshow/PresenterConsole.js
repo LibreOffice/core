@@ -981,9 +981,11 @@ class PresenterConsole {
 		if (this._pause) {
 			imgElem.src = 'images/presenterscreen-ButtonResumeTimerNormal.svg';
 			pauseBtn.setAttribute('data-cooltip', this.labels.resume); // Set the tooltip text
+			pauseBtn.setAttribute('aria-label', this.labels.resume);
 		} else {
 			imgElem.src = 'images/presenterscreen-ButtonPauseTimerNormal.svg';
 			pauseBtn.setAttribute('data-cooltip', this.labels.pause); // Set the tooltip text
+			pauseBtn.setAttribute('aria-label', this.labels.pause);
 		}
 
 		// Kind of special case, on restart we will nor show tooltip on play/pause button
