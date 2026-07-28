@@ -72,7 +72,7 @@
 #include <sfx2/kit/helper.hxx>
 #include <sc.hrc>
 #include <sfx2/bindings.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 using namespace com::sun::star;
 

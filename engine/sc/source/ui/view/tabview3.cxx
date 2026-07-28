@@ -73,7 +73,7 @@
 #include <formula/FormulaCompiler.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <output.hxx>
 
 #include <optional>

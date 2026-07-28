@@ -68,7 +68,7 @@
 
 #include <comphelper/kit.hxx>
 #include <tools/json_writer.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 using namespace com::sun::star;
 

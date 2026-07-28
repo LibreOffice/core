@@ -9,7 +9,7 @@
 
 #include "sctiledrenderingtest.hxx"
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/servicehelper.hxx>

@@ -14,7 +14,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <com/sun/star/awt/Key.hpp>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 
 #include <tools/date.hxx>

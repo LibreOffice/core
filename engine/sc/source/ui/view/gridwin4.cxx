@@ -36,7 +36,7 @@
 #include <tools/UnitConversion.hxx>
 #include <tools/weakbase.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/kit/componenthelpers.hxx>

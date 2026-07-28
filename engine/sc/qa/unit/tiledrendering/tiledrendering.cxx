@@ -24,7 +24,7 @@
 #include <svl/stritem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <vcl/scheduler.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>

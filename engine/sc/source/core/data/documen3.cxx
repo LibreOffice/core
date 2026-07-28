@@ -74,7 +74,7 @@
 #include <queryparam.hxx>
 #include <progress.hxx>
 #include <globalnames.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/flagguard.hxx>
 #include <sfx2/kit/helper.hxx>

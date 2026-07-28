@@ -49,7 +49,7 @@
 #include <vector>
 
 #include <tools/json_writer.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 using namespace css;
 using namespace css::sheet;

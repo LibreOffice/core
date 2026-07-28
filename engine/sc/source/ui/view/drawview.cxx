@@ -36,7 +36,7 @@
 #include <svx/xbtmpit.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>

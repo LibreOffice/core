@@ -82,7 +82,7 @@
 #include <comphelper/kit.hxx>
 #include <o3tl/unreachable.hxx>
 #include <o3tl/make_shared.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 {

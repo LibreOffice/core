@@ -147,7 +147,7 @@
 #include <svx/diagram/DiagramHelper_svx.hxx>
 #include <sfx2/kit/helper.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <tools/json_writer.hxx>
 
 #include <vector>

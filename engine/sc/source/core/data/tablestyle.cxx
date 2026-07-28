@@ -11,7 +11,7 @@
 #include <sc.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/borderline.hxx>
 #include <docmodel/color/ComplexColor.hxx>

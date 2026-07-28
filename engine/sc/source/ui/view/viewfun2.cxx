@@ -78,7 +78,7 @@
 #include <searchresults.hxx>
 #include <tokenarray.hxx>
 #include <rowheightcontext.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <mergecellsdialog.hxx>
 #include <sheetevents.hxx>

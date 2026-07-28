@@ -88,7 +88,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <comphelper/flagguard.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/dispatch.hxx>

@@ -50,7 +50,7 @@
 #include <drwlayer.hxx>
 #include <scresid.hxx>
 #include <sheetevents.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <tools/json_writer.hxx>
 

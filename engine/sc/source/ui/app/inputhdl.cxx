@@ -61,7 +61,7 @@
 #include <tools/json_writer.hxx>
 #include <formula/formulahelper.hxx>
 #include <formula/funcvarargs.h>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <osl/diagnose.h>
 

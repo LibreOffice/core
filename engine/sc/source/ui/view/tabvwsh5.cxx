@@ -44,7 +44,7 @@
 #include <scresid.hxx>
 #include <brdcst.hxx>
 #include <tools/json_writer.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
 #include <inputopt.hxx>

@@ -8,7 +8,7 @@
  */
 
 #include "../helper/qahelper.hxx"
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>

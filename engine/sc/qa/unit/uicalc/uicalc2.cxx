@@ -13,7 +13,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <sot/exchange.hxx>
 #include <svx/svdpage.hxx>
 #include <tools/stream.hxx>

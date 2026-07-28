@@ -16,7 +16,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <vcl/scheduler.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <sctestviewcallback.hxx>
 #include <docfunc.hxx>
 #include <docsh.hxx>

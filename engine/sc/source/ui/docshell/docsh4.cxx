@@ -54,7 +54,7 @@
 #include <svl/sharecontrolfile.hxx>
 #include <tools/json_writer.hxx>
 #include <unotools/securityoptions.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/diagnose_ex.hxx>

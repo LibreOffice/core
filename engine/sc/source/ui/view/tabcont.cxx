@@ -36,7 +36,7 @@
 #include <dragdata.hxx>
 #include <markdata.hxx>
 #include <gridwin.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 
 ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData& rData )

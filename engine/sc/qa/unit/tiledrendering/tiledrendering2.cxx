@@ -18,7 +18,7 @@
 #include <sfx2/kit/helper.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/scheduler.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <sctestviewcallback.hxx>
 #include <docuno.hxx>

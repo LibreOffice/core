@@ -10,7 +10,7 @@
 #include <config_feature_opencl.h>
 
 #include "qahelper.hxx"
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/propertysequence.hxx>
 #include "csv_handler.hxx"
 #include "debughelper.hxx"
