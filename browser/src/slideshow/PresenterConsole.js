@@ -98,7 +98,7 @@ class PresenterConsole {
 												</button>
 											</div>
 											<div id="action-buttons-container">
-												<button type="button" id="notes" data-cooltip="${this.labels.notes}" aria-label=${this.labels.notes}">
+												<button type="button" id="notes" data-cooltip="${this.labels.notes}" aria-label="${this.labels.notes}">
 													<img src="${LOUtil.getImageURL('presenterscreen-ButtonNotesNormal.svg')}">
 												</button>
 												<button type="button" id="slides" data-cooltip="${this.labels.slides}" aria-label="${this.labels.slides}">
