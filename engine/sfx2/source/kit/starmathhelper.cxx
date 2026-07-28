@@ -152,7 +152,8 @@ tools::Rectangle KitStarMathHelper::GetBoundingBox() const
     return {};
 }
 
-bool KitStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons,
+bool KitStarMathHelper::postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,
+                                       int nButtons,
                                        int nModifier, double fPPTScaleX, double fPPTScaleY)
 {
     const tools::Rectangle rBBox = GetBoundingBox();
@@ -177,7 +178,7 @@ bool KitStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, in
             aMousePos = pWindow->LogicToPixel(aMousePos);
 
             KitMouseEventData aMouseEventData(
-                nType, aMousePos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
+                eType, aMousePos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
             KitHelper::postMouseEventAsync(pWindow, aMouseEventData);
 
             return true;

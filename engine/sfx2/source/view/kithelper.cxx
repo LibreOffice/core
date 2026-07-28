@@ -1463,15 +1463,15 @@ void KitHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
 void KitHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, KitMouseEventData const & rKitMouseEventData)
 {
     KitAsyncEventData* pKitEv = new KitAsyncEventData;
-    switch (rKitMouseEventData.mnType)
+    switch (rKitMouseEventData.meType)
     {
-    case KIT_MOUSEEVENT_MOUSEBUTTONDOWN:
+    case COKitMouseEventType::MOUSEBUTTONDOWN:
         pKitEv->mnEvent = VclEventId::WindowMouseButtonDown;
         break;
-    case KIT_MOUSEEVENT_MOUSEBUTTONUP:
+    case COKitMouseEventType::MOUSEBUTTONUP:
         pKitEv->mnEvent = VclEventId::WindowMouseButtonUp;
         break;
-    case KIT_MOUSEEVENT_MOUSEMOVE:
+    case COKitMouseEventType::MOUSEMOVE:
         pKitEv->mnEvent = VclEventId::WindowMouseMove;
         break;
     default:
@@ -1517,7 +1517,8 @@ void KitHelper::dumpState(rtl::OStringBuffer &rState)
     }
 }
 
-bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int nType, int nX,
+bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell,
+                                                     COKitMouseEventType eType, int nX,
                                                      int nY, int nCount, int nButtons,
                                                      int nModifier, double fScaleX, double fScaleY,
                                                      bool bNegativeX)
@@ -1529,16 +1530,16 @@ bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int 
 
     // check if the user hit a chart/math object which is being edited by this view
     if (KitChartHelper aChartHelper(pViewShell);
-        aChartHelper.postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier, fScaleX, fScaleY))
+        aChartHelper.postMouseEvent(eType, nX, nY, nCount, nButtons, nModifier, fScaleX, fScaleY))
         return true;
 
     if (KitStarMathHelper aMathHelper(pViewShell);
-        aMathHelper.postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier, fScaleX, fScaleY))
+        aMathHelper.postMouseEvent(eType, nX, nY, nCount, nButtons, nModifier, fScaleX, fScaleY))
         return true;
 
     // check if the user hit a chart which is being edited by someone else
     // and, if so, skip current mouse event
-    if (nType != KIT_MOUSEEVENT_MOUSEMOVE)
+    if (eType != COKitMouseEventType::MOUSEMOVE)
     {
         if (KitChartHelper::HitAny({nX, nY}))
             return true;

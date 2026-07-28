@@ -89,7 +89,7 @@ static void doc_postKeyEvent(COKitDocument* self,
                              int charCode,
                              int keyCode);
 static void doc_postMouseEvent (COKitDocument* self,
-                                int type,
+                                COKitMouseEventType type,
                                 int x,
                                 int y,
                                 int count,
@@ -416,7 +416,8 @@ static void doc_postUnoCommand(COKitDocument* self, const char* command, const c
     (void) notifyWhenFinished;
 }
 
-static void doc_postMouseEvent(COKitDocument* self, int type, int x, int y, int count, int buttons, int modifier)
+static void doc_postMouseEvent(COKitDocument* self, COKitMouseEventType type, int x, int y,
+                               int count, int buttons, int modifier)
 {
     (void) self;
     (void) type;

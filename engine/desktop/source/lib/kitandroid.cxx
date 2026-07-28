@@ -323,7 +323,8 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postMou
     (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y, jint count, jint button, jint modifier)
 {
     COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
-    pDocument->pClass->postMouseEvent(pDocument, type, x, y, count, button, modifier);
+    pDocument->pClass->postMouseEvent(pDocument, static_cast<COKitMouseEventType>(type), x, y,
+                                      count, button, modifier);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postUnoCommand

@@ -860,7 +860,8 @@ void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     KitHelper::postKeyEventAsync(getDocWindow(), nType, nCharCode, nKeyCode);
 }
 
-void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+void ScModelObj::postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,
+                                int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
 
@@ -880,7 +881,7 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     SCTAB nTab = pViewData->CurrentTabForData();
     const ScDocument& rDoc = pDocShell->GetDocument();
     bool bDrawNegativeX = rDoc.IsNegativePage(nTab);
-    if (KitHelper::testInPlaceComponentMouseEventHit(pViewShell, nType, nX, nY, nCount,
+    if (KitHelper::testInPlaceComponentMouseEventHit(pViewShell, eType, nX, nY, nCount,
                                                         nButtons, nModifier, pViewData->GetPPTX(),
                                                         pViewData->GetPPTY(), bDrawNegativeX))
         return;
@@ -893,7 +894,7 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     ScDrawLayer* pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
     SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(nTab));
     SdrView* pDrawView = pViewData->GetViewShell()->GetScDrawView();
-    if (KitControlHandler::postMouseEvent(pPage, pDrawView, *pGridWindow, nType, aPointHMMDraw, nCount, nButtons, nModifier))
+    if (KitControlHandler::postMouseEvent(pPage, pDrawView, *pGridWindow, eType, aPointHMMDraw, nCount, nButtons, nModifier))
         return;
 
     if (!pGridWindow->HasChildPathFocus(true))
@@ -906,15 +907,15 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     VclEventId aEvent = VclEventId::NONE;
     MouseEvent aData(aPosition, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
     aData.setLogicPosition(aPointHMM);
-    switch (nType)
+    switch (eType)
     {
-        case KIT_MOUSEEVENT_MOUSEBUTTONDOWN:
+        case COKitMouseEventType::MOUSEBUTTONDOWN:
             aEvent = VclEventId::WindowMouseButtonDown;
             break;
-        case KIT_MOUSEEVENT_MOUSEBUTTONUP:
+        case COKitMouseEventType::MOUSEBUTTONUP:
             aEvent = VclEventId::WindowMouseButtonUp;
             break;
-        case KIT_MOUSEEVENT_MOUSEMOVE:
+        case COKitMouseEventType::MOUSEMOVE:
             aEvent = VclEventId::WindowMouseMove;
             break;
         default:

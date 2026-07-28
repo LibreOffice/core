@@ -1279,27 +1279,27 @@ void DesktopKitTest::testSheetSelections()
 
     // Select row 5 from column 1 through column 5
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      COKitMouseEventType::MOUSEBUTTONDOWN,
                                       col1, row5,
                                       1, 1, 0);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEMOVE,
+                                      COKitMouseEventType::MOUSEMOVE,
                                       col2, row5,
                                       1, 1, 0);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEMOVE,
+                                      COKitMouseEventType::MOUSEMOVE,
                                       col3, row5,
                                       1, 1, 0);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEMOVE,
+                                      COKitMouseEventType::MOUSEMOVE,
                                       col4, row5,
                                       1, 1, 0);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEMOVE,
+                                      COKitMouseEventType::MOUSEMOVE,
                                       col5, row5,
                                       1, 1, 0);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEBUTTONUP,
+                                      COKitMouseEventType::MOUSEBUTTONUP,
                                       col5, row5,
                                       1, 1, 0);
     Scheduler::ProcessEventsToIdle();
@@ -1327,11 +1327,11 @@ void DesktopKitTest::testSheetSelections()
 
     // Click at row5, col4
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      COKitMouseEventType::MOUSEBUTTONDOWN,
                                       col4, row5,
                                       1, 1, 0);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEBUTTONUP,
+                                      COKitMouseEventType::MOUSEBUTTONUP,
                                       col4, row5,
                                       1, 1, 0);
     Scheduler::ProcessEventsToIdle();
@@ -1370,19 +1370,19 @@ void DesktopKitTest::testSheetDragDrop()
 
     // Select row 01 from column 01 through column 05
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      COKitMouseEventType::MOUSEBUTTONDOWN,
                                       col01, row01,
                                       1, 1, 0);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEMOVE,
+                                      COKitMouseEventType::MOUSEMOVE,
                                       col02, row01,
                                       1, 1, 0);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEMOVE,
+                                      COKitMouseEventType::MOUSEMOVE,
                                       col05, row01,
                                       1, 1, 0);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEBUTTONUP,
+                                      COKitMouseEventType::MOUSEBUTTONUP,
                                       col05, row01,
                                       1, 1, 0);
 
@@ -1426,19 +1426,19 @@ void DesktopKitTest::testSheetDragDrop()
 
     // drag and drop
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      COKitMouseEventType::MOUSEBUTTONDOWN,
                                       col01, row01,
                                       1, 1, 0);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEMOVE,
+                                      COKitMouseEventType::MOUSEMOVE,
                                       col02, row01,
                                       1, 1, 0);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEMOVE,
+                                      COKitMouseEventType::MOUSEMOVE,
                                       col03, row01,
                                       1, 1, 0);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEBUTTONUP,
+                                      COKitMouseEventType::MOUSEBUTTONUP,
                                       col07, row01,
                                       1, 1, 0);
 
@@ -1567,7 +1567,7 @@ void DesktopKitTest::testContextMenuCalc()
     // Values in twips
     Point aPointOnImage(1150, 1100);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      COKitMouseEventType::MOUSEBUTTONDOWN,
                                       aPointOnImage.X(), aPointOnImage.Y(),
                                       1, 4, 0);
     Scheduler::ProcessEventsToIdle();
@@ -1674,7 +1674,7 @@ void DesktopKitTest::testContextMenuWriter()
 
     Point aRandomPoint(1150, 1100);
     pDocument->pClass->postMouseEvent(pDocument,
-                                      KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      COKitMouseEventType::MOUSEBUTTONDOWN,
                                       aRandomPoint.X(), aRandomPoint.Y(),
                                       1, 4, 0);
     Scheduler::ProcessEventsToIdle();
@@ -3361,15 +3361,15 @@ void DesktopKitTest::testCalcValidityDropdown()
     Scheduler::ProcessEventsToIdle();
 
     // Select row 1 from column 1.
-    pDocument->pClass->postMouseEvent(pDocument, KIT_MOUSEEVENT_MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
-    pDocument->pClass->postMouseEvent(pDocument, KIT_MOUSEEVENT_MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Open dropdown.
-    pDocument->pClass->postMouseEvent(pDocument, KIT_MOUSEEVENT_MOUSEBUTTONDOWN, 1380, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::MOUSEBUTTONDOWN, 1380, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
-    pDocument->pClass->postMouseEvent(pDocument, KIT_MOUSEEVENT_MOUSEBUTTONUP, 1380, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::MOUSEBUTTONUP, 1380, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Select some value from dropdown.
@@ -3402,15 +3402,15 @@ void DesktopKitTest::testCalcValidityDropdownInReadonlyMode()
     aView.m_JSONDialog.clear();
 
     // Select row 1 from column 1.
-    pDocument->pClass->postMouseEvent(pDocument, KIT_MOUSEEVENT_MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
-    pDocument->pClass->postMouseEvent(pDocument, KIT_MOUSEEVENT_MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Attempt to open dropdown.
-    pDocument->pClass->postMouseEvent(pDocument, KIT_MOUSEEVENT_MOUSEBUTTONDOWN, 1380, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::MOUSEBUTTONDOWN, 1380, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
-    pDocument->pClass->postMouseEvent(pDocument, KIT_MOUSEEVENT_MOUSEBUTTONUP, 1380, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::MOUSEBUTTONUP, 1380, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Dropdown should not open in readonly mode.
@@ -3430,8 +3430,8 @@ void DesktopKitTest::testPropertySettingOnFormulaBar()
     Scheduler::ProcessEventsToIdle();
 
     // Go to A1. There are 2 words in the cell.
-    pDocument->pClass->postMouseEvent(pDocument, KIT_MOUSEEVENT_MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument, KIT_MOUSEEVENT_MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Set the focus to formulabar.
@@ -3554,8 +3554,8 @@ void DesktopKitTest::testFormulaBarAcceptButton()
     Scheduler::ProcessEventsToIdle();
 
     // Go to A1.
-    pDocument->pClass->postMouseEvent(pDocument, KIT_MOUSEEVENT_MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument, KIT_MOUSEEVENT_MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument, COKitMouseEventType::MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Set the focus to formulabar.

@@ -1208,7 +1208,7 @@ static void doc_postWindowKeyEvent(COKitDocument* pThis,
                                    int nCharCode,
                                    int nKeyCode);
 static void doc_postMouseEvent (COKitDocument* pThis,
-                                int nType,
+                                COKitMouseEventType eType,
                                 int nX,
                                 int nY,
                                 int nCount,
@@ -1216,7 +1216,7 @@ static void doc_postMouseEvent (COKitDocument* pThis,
                                 int nModifier);
 static void doc_postWindowMouseEvent (COKitDocument* pThis,
                                       unsigned nKitWindowId,
-                                      int nType,
+                                      COKitMouseEventType eType,
                                       int nX,
                                       int nY,
                                       int nCount,
@@ -6082,7 +6082,8 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
     }
 }
 
-static void doc_postMouseEvent(COKitDocument* pThis, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+static void doc_postMouseEvent(COKitDocument* pThis, COKitMouseEventType eType, int nX, int nY,
+                               int nCount, int nButtons, int nModifier)
 {
     comphelper::ProfileZone aZone("doc_postMouseEvent");
 
@@ -6097,7 +6098,7 @@ static void doc_postMouseEvent(COKitDocument* pThis, int nType, int nX, int nY, 
     }
     try
     {
-        pDoc->postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier);
+        pDoc->postMouseEvent(eType, nX, nY, nCount, nButtons, nModifier);
     }
     catch (const uno::Exception& exception)
     {
@@ -6106,7 +6107,9 @@ static void doc_postMouseEvent(COKitDocument* pThis, int nType, int nX, int nY, 
     }
 }
 
-static void doc_postWindowMouseEvent(COKitDocument* /*pThis*/, unsigned nKitWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+static void doc_postWindowMouseEvent(COKitDocument* /*pThis*/, unsigned nKitWindowId,
+                                     COKitMouseEventType eType, int nX, int nY, int nCount,
+                                     int nButtons, int nModifier)
 {
     comphelper::ProfileZone aZone("doc_postWindowMouseEvent");
 
@@ -6126,15 +6129,15 @@ static void doc_postWindowMouseEvent(COKitDocument* /*pThis*/, unsigned nKitWind
 
     vcl::EnableDialogInput(pWindow);
 
-    switch (nType)
+    switch (eType)
     {
-        case KIT_MOUSEEVENT_MOUSEBUTTONDOWN:
+        case COKitMouseEventType::MOUSEBUTTONDOWN:
             Application::PostMouseEvent(VclEventId::WindowMouseButtonDown, pWindow, &aEvent);
             break;
-        case KIT_MOUSEEVENT_MOUSEBUTTONUP:
+        case COKitMouseEventType::MOUSEBUTTONUP:
             Application::PostMouseEvent(VclEventId::WindowMouseButtonUp, pWindow, &aEvent);
             break;
-        case KIT_MOUSEEVENT_MOUSEMOVE:
+        case COKitMouseEventType::MOUSEMOVE:
             Application::PostMouseEvent(VclEventId::WindowMouseMove, pWindow, &aEvent);
             break;
         default:

@@ -5143,7 +5143,8 @@ void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     KitHelper::postKeyEventAsync(getDocWindow(), nType, nCharCode, nKeyCode);
 }
 
-void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+void SdXImpressDocument::postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,
+                                        int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
 
@@ -5154,7 +5155,7 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
     constexpr double fScale = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::px);
 
     if (KitHelper::testInPlaceComponentMouseEventHit(
-            pViewShell->GetViewShell(), nType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
+            pViewShell->GetViewShell(), eType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
         return;
 
     // try to forward mouse event to control
@@ -5174,10 +5175,10 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
         return;
     }
 
-    if (KitControlHandler::postMouseEvent(pPage, pDrawView, *pActiveWin, nType, aPointHMM, nCount, nButtons, nModifier))
+    if (KitControlHandler::postMouseEvent(pPage, pDrawView, *pActiveWin, eType, aPointHMM, nCount, nButtons, nModifier))
             return;
 
-    KitMouseEventData aMouseEventData(nType, aPointHMM, nCount, MouseEventModifiers::SIMPLECLICK,
+    KitMouseEventData aMouseEventData(eType, aPointHMM, nCount, MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
     KitHelper::postMouseEventAsync(pViewShell->GetActiveWindow(), aMouseEventData);
 }

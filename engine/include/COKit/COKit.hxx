@@ -1356,16 +1356,15 @@ static inline const char* kitCallbackTypeToString(int nType)
     return nullptr;
 }
 
-typedef enum
+enum class COKitMouseEventType
 {
     /// A mouse button has been pressed down.
-    KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+    MOUSEBUTTONDOWN,
     /// A mouse button has been let go.
-    KIT_MOUSEEVENT_MOUSEBUTTONUP,
+    MOUSEBUTTONUP,
     /// The mouse has moved while a button is pressed.
-    KIT_MOUSEEVENT_MOUSEMOVE
-}
-COKitMouseEventType;
+    MOUSEMOVE
+};
 
 enum class COKitSetTextSelectionType
 {
@@ -1636,7 +1635,7 @@ struct COKitDocumentClassStruct
 
     /// @see kit::Document::postMouseEvent
     void (*postMouseEvent) (COKitDocument* pThis,
-                            int nType,
+                            COKitMouseEventType eType,
                             int nX,
                             int nY,
                             int nCount,
@@ -1745,7 +1744,7 @@ struct COKitDocumentClassStruct
     /// @see kit::Document::postWindowMouseEvent().
     void (*postWindowMouseEvent) (COKitDocument* pThis,
                                   unsigned nWindowId,
-                                  int nType,
+                                  COKitMouseEventType eType,
                                   int nX,
                                   int nY,
                                   int nCount,
@@ -2232,32 +2231,35 @@ public:
     /**
      * Posts a mouse event to the document.
      *
-     * @param nType Event type, like down, move or up.
+     * @param eType Event type, like down, move or up.
      * @param nX horizontal position in document coordinates
      * @param nY vertical position in document coordinates
      * @param nCount number of clicks: 1 for single click, 2 for double click
      * @param nButtons: which mouse buttons: 1 for left, 2 for middle, 4 right
      * @param nModifier: which keyboard modifier: (see include/vcl/vclenum.hxx for possible values)
      */
-    void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+    void postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount, int nButtons,
+                        int nModifier)
     {
-        mpDoc->pClass->postMouseEvent(mpDoc, nType, nX, nY, nCount, nButtons, nModifier);
+        mpDoc->pClass->postMouseEvent(mpDoc, eType, nX, nY, nCount, nButtons, nModifier);
     }
 
     /**
      * Posts a mouse event to the window with given id.
      *
      * @param nWindowId
-     * @param nType Event type, like down, move or up.
+     * @param eType Event type, like down, move or up.
      * @param nX horizontal position in document coordinates
      * @param nY vertical position in document coordinates
      * @param nCount number of clicks: 1 for single click, 2 for double click
      * @param nButtons: which mouse buttons: 1 for left, 2 for middle, 4 right
      * @param nModifier: which keyboard modifier: (see include/vcl/vclenum.hxx for possible values)
      */
-    void postWindowMouseEvent(unsigned nWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+    void postWindowMouseEvent(unsigned nWindowId, COKitMouseEventType eType, int nX, int nY,
+                              int nCount, int nButtons, int nModifier)
     {
-        mpDoc->pClass->postWindowMouseEvent(mpDoc, nWindowId, nType, nX, nY, nCount, nButtons, nModifier);
+        mpDoc->pClass->postWindowMouseEvent(mpDoc, nWindowId, eType, nX, nY, nCount, nButtons,
+                                           nModifier);
     }
 
     /**

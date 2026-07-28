@@ -54,7 +54,7 @@ public:
                                      int nTilePosX, int nTilePosY,
                                      tools::Long nTileWidth, tools::Long nTileHeight,
                                      bool bNegativeX = false);
-    bool postMouseEvent(int nType, int nX, int nY,
+    bool postMouseEvent(COKitMouseEventType eType, int nX, int nY,
                         int nCount, int nButtons, int nModifier,
                         double fScaleX = 1.0, double fScaleY = 1.0);
     bool setTextSelection(COKitSetTextSelectionType eType, int nX, int nY);
@@ -75,7 +75,8 @@ public:
 
     void Dispatch(const OUString& cmd, const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
 
-    bool postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier,
+    bool postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount, int nButtons,
+                        int nModifier,
                         double fPPTScaleX, double fPPTScaleY);
 
     static void PaintAllInPlaceOnTile(VirtualDevice& rDevice, int nOutputWidth, int nOutputHeight,

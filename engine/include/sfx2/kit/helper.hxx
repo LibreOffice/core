@@ -64,7 +64,7 @@
 
 struct SFX2_DLLPUBLIC KitMouseEventData
 {
-    int mnType;
+    COKitMouseEventType meType;
     Point maPosition;
     int mnCount;
     MouseEventModifiers meModifiers;
@@ -72,8 +72,8 @@ struct SFX2_DLLPUBLIC KitMouseEventData
     int mnModifier;
     std::optional<Point> maLogicPosition;
 
-    KitMouseEventData(int nType, Point aPosition, int nCount, MouseEventModifiers eModifiers, int nButtons, int nModifier)
-        : mnType(nType)
+    KitMouseEventData(COKitMouseEventType eType, Point aPosition, int nCount, MouseEventModifiers eModifiers, int nButtons, int nModifier)
+        : meType(eType)
         , maPosition(aPosition)
         , mnCount(nCount)
         , meModifiers(eModifiers)
@@ -264,7 +264,8 @@ public:
 
     /// Process the mouse event in the currently active in-place component (if any).
     /// Returns true if the event has been processed, and no further processing is necessary.
-    static bool testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int nType, int nX,
+    static bool testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell,
+                                                  COKitMouseEventType eType, int nX,
                                                   int nY, int nCount, int nButtons, int nModifier,
                                                   double fScaleX, double fScaleY,
                                                   bool bNegativeX = false);

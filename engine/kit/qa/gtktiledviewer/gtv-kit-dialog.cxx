@@ -167,7 +167,7 @@ gtv_kit_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
         priv->m_nLastButtonPressed = nEventButton;
         pDocument->pClass->postWindowMouseEvent(pDocument,
                                                 priv->dialogid,
-                                                KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                                COKitMouseEventType::MOUSEBUTTONDOWN,
                                                 (pEvent->x),
                                                 (pEvent->y),
                                                 nCount,
@@ -198,7 +198,7 @@ gtv_kit_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
         priv->m_nLastButtonPressed = nEventButton;
         pDocument->pClass->postWindowMouseEvent(pDocument,
                                                 priv->dialogid,
-                                                KIT_MOUSEEVENT_MOUSEBUTTONUP,
+                                                COKitMouseEventType::MOUSEBUTTONUP,
                                                 (pEvent->x),
                                                 (pEvent->y),
                                                 nCount,
@@ -228,7 +228,7 @@ gtv_kit_dialog_signal_motion(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
 
     pDocument->pClass->postWindowMouseEvent(pDocument,
                                             priv->dialogid,
-                                            KIT_MOUSEEVENT_MOUSEMOVE,
+                                            COKitMouseEventType::MOUSEMOVE,
                                             (pEvent->x),
                                             (pEvent->y),
                                             1,
@@ -546,7 +546,7 @@ gtv_kit_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
         priv->m_nChildLastButtonPressed = nEventButton;
         pDocument->pClass->postWindowMouseEvent(pDocument,
                                                 priv->m_nChildId,
-                                                KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                                COKitMouseEventType::MOUSEBUTTONDOWN,
                                                 (pEvent->x),
                                                 (pEvent->y),
                                                 nCount,
@@ -577,7 +577,7 @@ gtv_kit_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
         priv->m_nChildLastButtonPressed = nEventButton;
         pDocument->pClass->postWindowMouseEvent(pDocument,
                                                 priv->m_nChildId,
-                                                KIT_MOUSEEVENT_MOUSEBUTTONUP,
+                                                COKitMouseEventType::MOUSEBUTTONUP,
                                                 (pEvent->x),
                                                 (pEvent->y),
                                                 nCount,
@@ -607,7 +607,7 @@ gtv_kit_dialog_floating_win_signal_motion(GtkWidget* /*pDialogDrawingArea*/, Gdk
 
     pDocument->pClass->postWindowMouseEvent(pDocument,
                                             priv->m_nChildId,
-                                            KIT_MOUSEEVENT_MOUSEMOVE,
+                                            COKitMouseEventType::MOUSEMOVE,
                                             (pEvent->x),
                                             (pEvent->y),
                                             1,

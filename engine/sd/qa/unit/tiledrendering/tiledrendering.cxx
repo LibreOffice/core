@@ -163,10 +163,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostMouseEvent)
     vcl::Cursor* pCursor = rEditView.GetCursor();
     Point aPosition(pCursor->GetPos().getX(), pCursor->GetPos().getY() + pCursor->GetSize().Height() / 2);
     aPosition.setX(aPosition.getX() - 1000);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN,
                                       o3tl::toTwips(aPosition.getX(), o3tl::Length::mm100), o3tl::toTwips(aPosition.getY(), o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP,
                                       o3tl::toTwips(aPosition.getX(), o3tl::Length::mm100), o3tl::toTwips(aPosition.getY(), o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -692,10 +692,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_SingleClick)
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
     const auto cornerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 4), o3tl::Length::mm100);
     const auto cornerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 4), o3tl::Length::mm100);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN,
                                       cornerX, cornerY,
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP,
                                       cornerX, cornerY,
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -707,10 +707,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_SingleClick)
     // Click again, now on the text, in the center, to start editing.
     const auto centerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 2), o3tl::Length::mm100);
     const auto centerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 2), o3tl::Length::mm100);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN,
                                       centerX, centerY,
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP,
                                       centerX, centerY,
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -741,10 +741,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_DoubleClick)
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
     const auto cornerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 4), o3tl::Length::mm100);
     const auto cornerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 4), o3tl::Length::mm100);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN,
                                       cornerX, cornerY,
                                       2, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP,
                                       cornerX, cornerY,
                                       2, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -774,8 +774,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEmptyGraphicBulletParagraphClick)
     const auto nY
         = o3tl::toTwips(aRect.Top() + aRect.getOpenHeight() / 2, o3tl::Length::mm100);
 
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, nX, nY, 1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, nX, nY, 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, nX, nY, 1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, nX, nY, 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Must be in text-edit mode with cursor visible.
@@ -818,10 +818,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_MultiView)
     ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
     const auto centerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 2), o3tl::Length::mm100);
     const auto centerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 2), o3tl::Length::mm100);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN,
                                       centerX, centerY,
                                       2, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP,
                                       centerX, centerY,
                                       2, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -854,10 +854,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_Escape)
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
     const auto centerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 2), o3tl::Length::mm100);
     const auto centerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 2), o3tl::Length::mm100);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN,
                                       centerX, centerY,
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP,
                                       centerX, centerY,
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -1061,10 +1061,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf102223)
 
     // select contents of cell
     ::tools::Rectangle aRect = pTableObject->GetCurrentBoundRect();
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN,
                                       o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP,
                                       o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -1104,10 +1104,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf118354)
 
     // Without the fix, it would crash here
     ::tools::Rectangle aRect = pTableObject->GetCurrentBoundRect();
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN,
                                       o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP,
                                       o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
@@ -1227,10 +1227,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testClipNumRules)
 
         // select contents of bullet item
         ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
-        pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+        pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN,
             o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
             1, MOUSE_LEFT, 0);
-        pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+        pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP,
             o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
             1, MOUSE_LEFT, 0);
         Scheduler::ProcessEventsToIdle();
@@ -1313,10 +1313,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf104405)
     EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
     rEditView2.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
     ::tools::Rectangle aRect = pTableObject->GetCurrentBoundRect();
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN,
                                       o3tl::toTwips(aRect.Left(), o3tl::Length::mm100), o3tl::toTwips(aRect.Top(), o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP,
                                       o3tl::toTwips(aRect.Left(), o3tl::Length::mm100), o3tl::toTwips(aRect.Top(), o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
 
@@ -1693,10 +1693,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage2)
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
     const auto cornerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 4), o3tl::Length::mm100);
     const auto cornerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 4), o3tl::Length::mm100);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN,
                                       cornerX, cornerY,
                                       2, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+    pXImpressDocument->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP,
                                       cornerX, cornerY,
                                       2, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();

@@ -181,7 +181,8 @@ public:
      *
      * @see kit::Document::postMouseEvent().
      */
-    virtual void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier) = 0;
+    virtual void postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount, int nButtons,
+                                int nModifier) = 0;
 
     /**
      * Sets the start or end of a text selection.

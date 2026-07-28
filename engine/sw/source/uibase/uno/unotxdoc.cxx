@@ -4046,7 +4046,8 @@ void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     KitHelper::postKeyEventAsync(getDocWindow(), nType, nCharCode, nKeyCode);
 }
 
-void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+void SwXTextDocument::postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,
+                                     int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
 
@@ -4062,7 +4063,7 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     double fScale = aOption.GetZoom() / o3tl::convert(100.0, o3tl::Length::px, o3tl::Length::twip);
 
     if (KitHelper::testInPlaceComponentMouseEventHit(
-            m_pDocShell->GetView(), nType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
+            m_pDocShell->GetView(), eType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
         return;
 
     // try to forward mouse event to controls
@@ -4072,10 +4073,10 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     SwEditWin& rEditWin = m_pDocShell->GetView()->GetEditWin();
     Point aPointTwip(nX, nY);
     Point aPointHMMDraw = o3tl::convert(aPointTwip, o3tl::Length::twip, o3tl::Length::mm100);
-    if (KitControlHandler::postMouseEvent(pPage, pDrawView, rEditWin, nType, aPointHMMDraw, nCount, nButtons, nModifier))
+    if (KitControlHandler::postMouseEvent(pPage, pDrawView, rEditWin, eType, aPointHMMDraw, nCount, nButtons, nModifier))
             return;
 
-    KitMouseEventData aMouseEventData(nType, Point(nX, nY), nCount,
+    KitMouseEventData aMouseEventData(eType, Point(nX, nY), nCount,
                                       MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
     KitHelper::postMouseEventAsync(&rEditWin, aMouseEventData);

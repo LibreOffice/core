@@ -239,7 +239,7 @@ void KitChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
     }
 }
 
-bool KitChartHelper::postMouseEvent(int nType, int nX, int nY,
+bool KitChartHelper::postMouseEvent(COKitMouseEventType eType, int nX, int nY,
                                     int nCount, int nButtons, int nModifier,
                                     double fScaleX, double fScaleY)
 {
@@ -257,7 +257,7 @@ bool KitChartHelper::postMouseEvent(int nType, int nX, int nY,
             // can depend on the client zoom
             Point aPos(nChartWinX * fScaleX, nChartWinY * fScaleY);
 
-            KitMouseEventData aMouseEventData(nType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,
+            KitMouseEventData aMouseEventData(eType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,
                                               nButtons, nModifier);
             KitHelper::postMouseEventAsync(pChartWindow, aMouseEventData);
 

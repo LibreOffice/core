@@ -381,8 +381,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandle)
 {
     ScModelObj* pModelObj = createDoc("shape.ods");
     ScTestViewCallback aView1;
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
@@ -409,8 +409,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandleTextBox)
 {
     ScModelObj* pModelObj = createDoc("shape-textbox.ods");
     ScTestViewCallback aView1;
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
@@ -706,16 +706,16 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGraphicInvalidate)
 
     // Click to select graphic
     aView.m_bGraphicSelection = false;
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bGraphicSelection);
 
     // Drag Drop graphic
     aView.m_bGraphicSelection = false;
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEMOVE, /*x=*/ 1,/*y=*/ 10,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 10, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEMOVE, /*x=*/ 1,/*y=*/ 10,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 10, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!aView.m_bFullInvalidateTiles);
 
@@ -2802,9 +2802,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSortAscendingDescending)
     ScTestViewCallback aView;
 
     // select the values in the first column
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, 551, 129, 1, MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEMOVE, 820, 1336, 1, MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, 820, 1359, 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, 551, 129, 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEMOVE, 820, 1336, 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, 820, 1359, 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     aView.m_sInvalidateSheetGeometry = ""_ostr;
 
@@ -4008,8 +4008,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     Scheduler::ProcessEventsToIdle();
 
     // Click at on the left side of A1 cell
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
 
     // Check the A1 cell is selected in view #1
@@ -4017,8 +4017,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     CPPUNIT_ASSERT_EQUAL(SCROW(0), ScDocShell::GetViewData()->GetCurY());
 
     // Click at on the right side of A1 cell
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
 
     // Check the A1 cell is selected in view #1
@@ -4039,8 +4039,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     Scheduler::ProcessEventsToIdle();
 
     // Click at on the left side of A1 cell
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, leftCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
 
     // Check the A1 cell is selected in view #2
@@ -4048,8 +4048,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     CPPUNIT_ASSERT_EQUAL(SCROW(0), ScDocShell::GetViewData()->GetCurY());
 
     // Click at on the right side of A1 cell
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, rightCellSideX, y, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
 
     // Check the A1 cell is selected in view #2
@@ -4740,11 +4740,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartSelectionCoords)
     pTabViewShell->SetCursor(53, 40);
     Scheduler::ProcessEventsToIdle();
 
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN,
             /*x=*/ aChartAreaDtwips.Left() + 300,
             /*y=*/ aChartAreaDtwips.Top() + 300,
             /*count=*/ 2, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP,
             /*x=*/ aChartAreaDtwips.Left() + 300,
             /*y=*/ aChartAreaDtwips.Top() + 300,
             /*count=*/ 2, /*buttons=*/ 1, /*modifier=*/0);
@@ -4756,11 +4756,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartSelectionCoords)
     CPPUNIT_ASSERT_MESSAGE("Actual chart area spills out of the expected bounds", aChartAreaPtwips.Contains(aActualChartRect));
 
     // Click again for chart wall area.
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN,
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN,
             /*x=*/ aChartAreaDtwips.Left() + 300,
             /*y=*/ aChartAreaDtwips.Top() + 300,
             /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP,
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP,
             /*x=*/ aChartAreaDtwips.Left() + 300,
             /*y=*/ aChartAreaDtwips.Top() + 300,
             /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);

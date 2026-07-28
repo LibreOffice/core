@@ -219,7 +219,7 @@ struct LOEvent
 
     /// @name postMouseEvent parameters
     ///@{
-    int m_nPostMouseEventType;
+    COKitMouseEventType m_nPostMouseEventType;
     int m_nPostMouseEventX;
     int m_nPostMouseEventY;
     int m_nPostMouseEventCount;
@@ -258,7 +258,7 @@ struct LOEvent
         , m_nPaintTileY(0)
         , m_fPaintTileZoom(0)
         , m_pTileBuffer(nullptr)
-        , m_nPostMouseEventType(0)
+        , m_nPostMouseEventType(COKitMouseEventType::MOUSEBUTTONDOWN)
         , m_nPostMouseEventX(0)
         , m_nPostMouseEventY(0)
         , m_nPostMouseEventCount(0)

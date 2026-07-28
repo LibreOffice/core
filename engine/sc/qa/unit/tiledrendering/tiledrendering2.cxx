@@ -48,9 +48,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSidebarLocale)
     Scheduler::ProcessEventsToIdle();
     aView2.m_aStateChanges.clear();
 
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/1, /*y=*/1, /*count=*/2,
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, /*x=*/1, /*y=*/1, /*count=*/2,
                               /*buttons=*/1, /*modifier=*/0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/1, /*y=*/1, /*count=*/2,
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, /*x=*/1, /*y=*/1, /*count=*/2,
                               /*buttons=*/1, /*modifier=*/0);
     KitHelper::setView(nView1);
     Scheduler::ProcessEventsToIdle();
@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCopyMultiSelection)
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
     // Ctrl-click on A3:
     int nCtrl = KEY_MOD1;
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
                               MOUSE_LEFT, nCtrl);
 
     // When getting the selection:
@@ -234,9 +234,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTdf167042)
     cpo::uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, false) };
     dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, aArgs);
 
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
                               MOUSE_LEFT, 0);
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, aPoint.getX(), aPoint.getY(), 1,
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, aPoint.getX(), aPoint.getY(), 1,
                               MOUSE_LEFT, 0);
 
     // Check that FormatPaintbrush worked
@@ -290,7 +290,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testBreakPageView)
 static void lcl_drag(ScModelObj* pModelObj, Point aFrom, Point aTo, int nModifier)
 {
     // No modifiers in button down to start a drag
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, aFrom.getX(), aFrom.getY(), 1,
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONDOWN, aFrom.getX(), aFrom.getY(), 1,
                               MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     // Need a clear motion so it is detected as a drag
@@ -298,11 +298,11 @@ static void lcl_drag(ScModelObj* pModelObj, Point aFrom, Point aTo, int nModifie
     for (int i = 1; i <= nSteps; ++i)
     {
         pModelObj->postMouseEvent(
-            KIT_MOUSEEVENT_MOUSEMOVE, aFrom.getX() + (aTo.getX() - aFrom.getX()) * i / nSteps,
+            COKitMouseEventType::MOUSEMOVE, aFrom.getX() + (aTo.getX() - aFrom.getX()) * i / nSteps,
             aFrom.getY() + (aTo.getY() - aFrom.getY()) * i / nSteps, 1, MOUSE_LEFT, nModifier);
         Scheduler::ProcessEventsToIdle();
     }
-    pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONUP, aTo.getX(), aTo.getY(), 1, MOUSE_LEFT,
+    pModelObj->postMouseEvent(COKitMouseEventType::MOUSEBUTTONUP, aTo.getX(), aTo.getY(), 1, MOUSE_LEFT,
                               nModifier);
     Scheduler::ProcessEventsToIdle();
 }

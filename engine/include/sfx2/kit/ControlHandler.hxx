@@ -29,8 +29,8 @@ class KitControlHandler
 {
 public:
     static bool postMouseEvent(const SdrPage* pPage, const SdrView* pDrawView,
-                               vcl::DocWindow& rMainWindow, int nType, Point aPointHmm, int nCount,
-                               int nButtons, int nModifier)
+                               vcl::DocWindow& rMainWindow, COKitMouseEventType eType,
+                               Point aPointHmm, int nCount, int nButtons, int nModifier)
     {
         static std::optional<PointerStyle> eDocPointerStyle;
 
@@ -80,7 +80,7 @@ public:
                         Point aControlRelativePosition = o3tl::convert(
                             aControlRelativePositionHMM, o3tl::Length::mm100, o3tl::Length::px);
 
-                        KitMouseEventData aMouseEventData(nType, aControlRelativePosition, nCount,
+                        KitMouseEventData aMouseEventData(eType, aControlRelativePosition, nCount,
                                                           MouseEventModifiers::SIMPLECLICK,
                                                           nButtons, nModifier);
                         KitHelper::postMouseEventAsync(pWindow, aMouseEventData);
