@@ -478,14 +478,12 @@ namespace vclcanvas
         }
 
         bool gradientFill( OutputDevice&                                   rOutDev,
-                           OutputDevice*                                   p2ndOutDev,
                            const ::canvas::ParametricPolyPolygon::Values&  rValues,
                            const std::vector< ::Color >&                   rColors,
                            const ::tools::PolyPolygon&                     rPoly,
                            const rendering::ViewState&                     viewState,
                            const rendering::RenderState&                   renderState,
-                           const rendering::Texture&                       texture,
-                           int                                             nTransparency )
+                           const rendering::Texture&                       texture)
         {
             // TODO(T2): It is maybe necessary to lock here, should
             // maGradientPoly someday cease to be const. But then, beware of
@@ -534,16 +532,6 @@ namespace vclcanvas
                                 aPolygonDeviceRectOrig,
                                 nStepCount );
                 rOutDev.Pop();
-
-                if( p2ndOutDev && nTransparency < 253 )
-                {
-                    // HACK. Normally, CanvasHelper does not care about
-                    // actually what mp2ndOutDev is...  well, here we do &
-                    // assume a 1bpp target - everything beyond 97%
-                    // transparency is fully transparent
-                    p2ndOutDev->SetFillColor( COL_BLACK );
-                    p2ndOutDev->DrawRect( aPolygonDeviceRectOrig );
-                }
             }
             else
             {
@@ -559,16 +547,6 @@ namespace vclcanvas
                                 aPolygonDeviceRectOrig,
                                 nStepCount );
                 rOutDev.Pop();
-
-                if( p2ndOutDev && nTransparency < 253 )
-                {
-                    // HACK. Normally, CanvasHelper does not care about
-                    // actually what mp2ndOutDev is...  well, here we do &
-                    // assume a 1bpp target - everything beyond 97%
-                    // transparency is fully transparent
-                    p2ndOutDev->SetFillColor( COL_BLACK );
-                    p2ndOutDev->DrawPolyPolygon( rPoly );
-                }
             }
 
 #ifdef DEBUG_CANVAS_CANVASHELPER_TEXTUREFILL
@@ -612,7 +590,7 @@ namespace vclcanvas
         {
             vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
 
-            const int nTransparency( setupOutDevState( viewState, renderState, IGNORE_COLOR ) );
+            setupOutDevState( viewState, renderState, IGNORE_COLOR );
             ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon(
                                        ::canvastools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon),
                                        viewState, renderState ) );
@@ -651,14 +629,12 @@ namespace vclcanvas
                         // TODO(E1): Return value
                         // TODO(F1): FillRule
                         gradientFill( mpOutDevProvider->getOutDev(),
-                                      mp2ndOutDevProvider ? &mp2ndOutDevProvider->getOutDev() : nullptr,
                                       aValues,
                                       aColors,
                                       aPolyPoly,
                                       viewState,
                                       renderState,
-                                      textures[0],
-                                      nTransparency );
+                                      textures[0]);
                     }
                 }
                 else
@@ -949,21 +925,6 @@ namespace vclcanvas
                                      nTilesY,
                                      aSz,
                                      aGrfAttr );
-
-                        if( mp2ndOutDevProvider )
-                        {
-                            OutputDevice& r2ndOutDev( mp2ndOutDevProvider->getOutDev() );
-                            r2ndOutDev.IntersectClipRegion( aPolygonDeviceRect );
-                            textureFill( r2ndOutDev,
-                                         *pGrfObj,
-                                         aPt,
-                                         aIntegerNextTileX,
-                                         aIntegerNextTileY,
-                                         nTilesX,
-                                         nTilesY,
-                                         aSz,
-                                         aGrfAttr );
-                        }
                     }
                     else
                     {
@@ -1014,10 +975,6 @@ namespace vclcanvas
                             Bitmap aOutputBmp( aContentBmp.CreateColorBitmap(), aAlpha );
                             rOutDev.DrawBitmap( aPolygonDeviceRect.TopLeft(),
                                                   aOutputBmp );
-
-                            if( mp2ndOutDevProvider )
-                                mp2ndOutDevProvider->getOutDev().DrawBitmap( aPolygonDeviceRect.TopLeft(),
-                                                                       aOutputBmp );
                         }
                         else
                         {
@@ -1036,23 +993,6 @@ namespace vclcanvas
                                          aSz,
                                          aGrfAttr );
                             rOutDev.Pop();
-
-                            if( mp2ndOutDevProvider )
-                            {
-                                OutputDevice& r2ndOutDev( mp2ndOutDevProvider->getOutDev() );
-                                auto popIt = r2ndOutDev.ScopedPush(vcl::PushFlags::CLIPREGION);
-
-                                r2ndOutDev.IntersectClipRegion( aPolyClipRegion );
-                                textureFill( r2ndOutDev,
-                                             *pGrfObj,
-                                             aPt,
-                                             aIntegerNextTileX,
-                                             aIntegerNextTileY,
-                                             nTilesX,
-                                             nTilesY,
-                                             aSz,
-                                             aGrfAttr );
-                            }
                         }
                     }
                 }
