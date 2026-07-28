@@ -136,6 +136,9 @@ namespace desktop {
         DESKTOP_DLLPUBLIC virtual void viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) override;
         virtual void viewUpdatedCallback(int nType) override;
         virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) override;
+        /// Records that a slide part changed, so the next flush pushes
+        /// that part's vector-primitives delta to the client.
+        DESKTOP_DLLPUBLIC virtual void viewVectorPartChanged(int nPart) override;
         virtual void viewAddPendingInvalidateTiles() override;
         virtual void dumpState(rtl::OStringBuffer &rState) override;
 
@@ -214,9 +217,6 @@ namespace desktop {
         void queue(const int type, CallbackData& data);
         void enqueueUpdatedTypes();
         void enqueueUpdatedType( int type, const SfxViewShell* sourceViewShell, int viewId );
-        /// Record that a slide part changed, so the next flush pushes
-        /// that part's vector-primitives delta to the client.
-        void scheduleVectorPrimitivesDelta(int nPart);
         /// Compute and send the delta of every part recorded since the
         /// last flush.
         void flushVectorPrimitivesDeltas();

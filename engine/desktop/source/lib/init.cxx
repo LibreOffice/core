@@ -1779,11 +1779,16 @@ void CallbackFlushHandler::viewCallbackWithViewId(int nType, const OString& pPay
     queue(nType, callbackData);
 }
 
-void CallbackFlushHandler::scheduleVectorPrimitivesDelta(int nPart)
+void CallbackFlushHandler::viewVectorPartChanged(int nPart)
 {
-    // Repeated invalidations of the same part between two flushes
-    // collapse into a single delta, computed at flush time.
+    // Only a view that renders from vector primitives consumes deltas.
+    if (!m_bVectorRendering || nPart < 0)
+        return;
+
+    // Repeated changes of the same part between two flushes collapse
+    // into a single delta, computed at flush time.
     m_vectorDeltaParts.insert(nPart);
+    scheduleFlush();
 }
 
 void CallbackFlushHandler::flushVectorPrimitivesDeltas()
@@ -1824,16 +1829,11 @@ void CallbackFlushHandler::viewInvalidateTilesCallback(const tools::Rectangle* p
     {
         // A vector-rendered view paints no bitmap tiles, so there is no
         // painted-tile bounding box to crop against. Forward the invalidation
-        // as-is, or invalidate everything when the rect is null.
+        // as-is, or invalidate everything when the rect is null. The delta
+        // push is not scheduled here: an invalidation only reaches views
+        // whose paint pipeline is active, while viewVectorPartChanged is
+        // driven from the model change and reaches every view.
         aRect = pRect ? *pRect : RectangleAndPart::emptyAllRectangle;
-
-        // Push the changed slide's delta to this view so it does not have to
-        // request it. An invalidation without a rectangle may be a
-        // structural change a delta does not describe, so leave it to a
-        // full re-fetch by the client, whether it names a part or covers
-        // the whole document.
-        if (pRect && nPart >= 0)
-            scheduleVectorPrimitivesDelta(nPart);
     }
     else if (rPaintedTiles.IsEmpty())
     {

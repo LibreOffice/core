@@ -404,6 +404,9 @@ public:
     virtual void viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const override;
     virtual void viewUpdatedCallback(int nType) const override;
     virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const override;
+    // Tells the view's callback handler that the vector content of the
+    // given slide part changed.
+    void viewVectorPartChanged(int nPart) const;
     // Performs any pending calls to viewInvalidateTilesCallback() as necessary.
     virtual void flushPendingKitInvalidateTiles();
     virtual void viewAddPendingInvalidateTiles() override;

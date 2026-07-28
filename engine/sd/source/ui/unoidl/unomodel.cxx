@@ -2151,12 +2151,26 @@ bool SdXImpressDocument::isVectorObjectChangedSince(sal_Int32 nPart, sal_uInt64 
 
 namespace
 {
+/// The views render the changed part from vector primitives only if
+/// they asked for them, so each view's callback handler decides itself
+/// whether to push a delta.
+void notifyViewsVectorPartChanged(const SfxObjectShell* pDocShell, sal_Int32 nPart)
+{
+    SfxViewShell* pShell = SfxViewShell::GetFirst(false);
+    while (pShell)
+    {
+        if (pShell->GetObjectShell() == pDocShell)
+            pShell->viewVectorPartChanged(nPart);
+        pShell = SfxViewShell::GetNext(*pShell, false);
+    }
+}
+
 /// A master change shows on every slide that uses the master, so raise
-/// those slides' versions and remember the master change. A master's
-/// page number is a position in the master-page list, so it names no
-/// slide.
+/// those slides' versions, remember the master change and tell the
+/// views. A master's page number is a position in the master-page
+/// list, so it names no slide.
 void bumpMasterChangeForUsers(
-    SdDrawDocument& rDocument,
+    SdDrawDocument& rDocument, const SfxObjectShell* pDocShell,
     std::unordered_map<sal_Int32, SdXImpressDocument::VectorPartState>& rVectorParts,
     const SdPage* pMasterPage)
 {
@@ -2170,6 +2184,7 @@ void bumpMasterChangeForUsers(
             SdXImpressDocument::VectorPartState& rState = rVectorParts[nPage];
             ++rState.mnVersion;
             rState.mnMasterChangeVersion = rState.mnVersion;
+            notifyViewsVectorPartChanged(pDocShell, nPage);
         }
     }
 }
@@ -2210,7 +2225,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         if (pPage->IsMasterPage())
                         {
-                            bumpMasterChangeForUsers(*mpDoc, maVectorParts, pPage);
+                            bumpMasterChangeForUsers(*mpDoc, mpDocShell, maVectorParts, pPage);
                         }
                         else if (pPage->GetPageNum() > 0)
                         {
@@ -2235,6 +2250,8 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                                 rState.maObjectChangeVersions.erase(nObjectId);
                             else
                                 rState.maObjectChangeVersions[nObjectId] = rState.mnVersion;
+
+                            notifyViewsVectorPartChanged(mpDocShell, nPart);
                         }
                     }
                 }
@@ -2250,7 +2267,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     if (pPage->IsMasterPage())
                     {
-                        bumpMasterChangeForUsers(*mpDoc, maVectorParts, pPage);
+                        bumpMasterChangeForUsers(*mpDoc, mpDocShell, maVectorParts, pPage);
                     }
                     else if (pPage->GetPageNum() > 0)
                     {
@@ -2258,6 +2275,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         VectorPartState& rState = maVectorParts[nPart];
                         ++rState.mnVersion;
                         rState.mnMasterChangeVersion = rState.mnVersion;
+                        notifyViewsVectorPartChanged(mpDocShell, nPart);
                     }
                 }
             }

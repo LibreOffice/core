@@ -40,6 +40,7 @@ public:
                                              int nMode) override;
     virtual void viewUpdatedCallback(int nType) override;
     virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) override;
+    virtual void viewVectorPartChanged(int) override {}
     virtual void viewAddPendingInvalidateTiles() override;
     virtual void dumpState(rtl::OStringBuffer&) override{};
 
