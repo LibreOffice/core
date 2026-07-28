@@ -6464,7 +6464,7 @@ registry/test/testregcpp.cxx
 registry/tools/regview.cxx
 remotebridges/source/unourl_resolver/unourl_resolver.cxx
 sal/android/cokit-bootstrap.c
-sal/android/cokit-jni.c
+sal/android/cokit-jni.cxx
 sal/android/uthash.h
 sal/cppunittester/cppunittester.cxx
 sal/emscripten/cokit-bootstrap.c

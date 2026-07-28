@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the Collabora Office project.
  *
@@ -32,22 +32,29 @@
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "COKit", __VA_ARGS__))
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "COKit", __VA_ARGS__))
 
+// Everything declared here is defined in C, in cokit-bootstrap.c or in the sofficeapp library,
+// so it keeps C linkage.
+extern "C" {
+
 /* These are valid / used in all apps. */
 extern const char* data_dir;
 extern const char* cache_dir;
 extern void* apk_file;
 extern int apk_file_size;
-AAssetManager* native_asset_manager;
 
 extern void Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env, jobject clazz, jstring string);
 extern void Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env, jobject clazz, jboolean state);
 
 extern COKit* cokit_hook(const char* install_path);
 
-static char *full_program_dir = NULL;
+}
+
+AAssetManager* native_asset_manager;
+
+static char *full_program_dir = nullptr;
 
 /// Call the same method from Bootstrap.
-__attribute__ ((visibility("default")))
+extern "C" __attribute__ ((visibility("default")))
 void
 Java_org_libreoffice_kit_COKit_putenv
     (JNIEnv* env, jobject clazz, jstring string)
@@ -56,7 +63,7 @@ Java_org_libreoffice_kit_COKit_putenv
 }
 
 /// Call the same method from Bootstrap.
-__attribute__ ((visibility("default")))
+extern "C" __attribute__ ((visibility("default")))
 void Java_org_libreoffice_kit_COKit_redirectStdio
     (JNIEnv* env, jobject clazz, jboolean state)
 {
@@ -64,7 +71,7 @@ void Java_org_libreoffice_kit_COKit_redirectStdio
 }
 
 /// Initialize the COKit.
-__attribute__ ((visibility("default")))
+extern "C" __attribute__ ((visibility("default")))
 jboolean cokit_initialize(JNIEnv* env,
      jstring dataDir, jstring cacheDir, jstring apkFile, jobject assetManager)
 {
@@ -82,19 +89,19 @@ jboolean cokit_initialize(JNIEnv* env,
 
     native_asset_manager = AAssetManager_fromJava(env, assetManager);
 
-    dataDirPath = (*env)->GetStringUTFChars(env, dataDir, NULL);
+    dataDirPath = env->GetStringUTFChars(dataDir, nullptr);
     data_dir = strdup(dataDirPath);
-    (*env)->ReleaseStringUTFChars(env, dataDir, dataDirPath);
+    env->ReleaseStringUTFChars(dataDir, dataDirPath);
 
-    cacheDirPath = (*env)->GetStringUTFChars(env, cacheDir, NULL);
+    cacheDirPath = env->GetStringUTFChars(cacheDir, nullptr);
     cache_dir = strdup(cacheDirPath);
-    (*env)->ReleaseStringUTFChars(env, cacheDir, cacheDirPath);
+    env->ReleaseStringUTFChars(cacheDir, cacheDirPath);
 
     // TMPDIR is used by osl_getTempDirURL()
     setenv("TMPDIR", cache_dir, 1);
 
     data_dir_len = strlen(data_dir);
-    fontsConfPath = malloc(data_dir_len + sizeof(fontsConf));
+    fontsConfPath = static_cast<char*>(malloc(data_dir_len + sizeof(fontsConf)));
     strncpy(fontsConfPath, data_dir, data_dir_len);
     strncpy(fontsConfPath + data_dir_len, fontsConf, sizeof(fontsConf));
 
@@ -105,35 +112,35 @@ jboolean cokit_initialize(JNIEnv* env,
         setenv("FONTCONFIG_FILE", fontsConfPath, 1);
         // DEBUG:
         //setenv("FC_DEBUG", "8191", 1); // log everything
-        //Java_org_libreoffice_android_Bootstrap_redirect_1stdio(NULL, NULL, JNI_TRUE);
+        //Java_org_libreoffice_android_Bootstrap_redirect_1stdio(nullptr, nullptr, JNI_TRUE);
     }
     free(fontsConfPath);
 
-    apkFilePath =  (*env)->GetStringUTFChars(env, apkFile, NULL);
+    apkFilePath =  env->GetStringUTFChars(apkFile, nullptr);
 
     fd = open(apkFilePath, O_RDONLY);
     if (fd == -1) {
         LOGE("Could not open %s", apkFilePath);
-        (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
+        env->ReleaseStringUTFChars(apkFile, apkFilePath);
         return JNI_FALSE;
     }
     if (fstat(fd, &st) == -1) {
         LOGE("Could not fstat %s", apkFilePath);
         close(fd);
-        (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
+        env->ReleaseStringUTFChars(apkFile, apkFilePath);
         return JNI_FALSE;
     }
-    apk_file = mmap(NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
+    apk_file = mmap(nullptr, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
     close(fd);
 
     if (apk_file == MAP_FAILED) {
         LOGE("Could not mmap %s", apkFilePath);
-        (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
+        env->ReleaseStringUTFChars(apkFile, apkFilePath);
         return JNI_FALSE;
     }
     apk_file_size = st.st_size;
 
-    (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
+    env->ReleaseStringUTFChars(apkFile, apkFilePath);
 
     if (!setup_cdir())
     {
@@ -153,7 +160,7 @@ jboolean cokit_initialize(JNIEnv* env,
 }
 
 /// Initialize the COKit.
-__attribute__ ((visibility("default")))
+extern "C" __attribute__ ((visibility("default")))
 jboolean Java_org_libreoffice_kit_COKit_initializeNative
     (JNIEnv* env, jobject clazz,
      jstring dataDir, jstring cacheDir, jstring apkFile, jobject assetManager)
@@ -168,7 +175,7 @@ jboolean Java_org_libreoffice_kit_COKit_initializeNative
     // COKit expects a path to the program/ directory
     free(full_program_dir);
     data_dir_len = strlen(data_dir);
-    full_program_dir = malloc(data_dir_len + sizeof(program_dir));
+    full_program_dir = static_cast<char*>(malloc(data_dir_len + sizeof(program_dir)));
 
     strncpy(full_program_dir, data_dir, data_dir_len);
     strncpy(full_program_dir + data_dir_len, program_dir, sizeof(program_dir));
@@ -185,18 +192,17 @@ jboolean Java_org_libreoffice_kit_COKit_initializeNative
     return JNI_TRUE;
 }
 
-__attribute__ ((visibility("default")))
+extern "C" __attribute__ ((visibility("default")))
 jobject Java_org_libreoffice_kit_COKit_getCOKitHandle
     (JNIEnv* env, jobject clazz)
 {
     COKit* aOffice;
 
-    (void) env;
     (void) clazz;
 
     aOffice = cokit_hook(full_program_dir);
 
-    return (*env)->NewDirectByteBuffer(env, (void*) aOffice, sizeof(COKit));
+    return env->NewDirectByteBuffer(static_cast<void*>(aOffice), sizeof(COKit));
 }
 
 __attribute__ ((visibility("default")))

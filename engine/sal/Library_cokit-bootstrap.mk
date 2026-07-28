@@ -20,8 +20,13 @@ $(eval $(call gb_Library_add_libs,cokit-bootstrap,\
 	-landroid \
 ))
 
-$(eval $(call gb_Library_add_cobjects,cokit-bootstrap,\
+# The JNI glue is C++ because it includes the COKit header. It neither throws nor catches, so
+# it is built without exception support, matching the rest of this library.
+$(eval $(call gb_Library_add_cxxobjects,cokit-bootstrap,\
 	sal/android/cokit-jni \
+))
+
+$(eval $(call gb_Library_add_cobjects,cokit-bootstrap,\
 	sal/android/cokit-bootstrap \
 ))
 endif
