@@ -818,26 +818,28 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 return;
             }
 
-            SfxAutoRedactDialog aDlg(pDialogParent);
-            sal_Int16 nResult = aDlg.run();
-
             const SfxBoolItem* redactImage = rReq.GetArg<SfxBoolItem>(SID_REDACT_IMAGE);
 
             if (redactImage && redactImage->GetValue())
             {
+                // The request says what to redact, so there is nothing to ask for
                 RedactionTarget redactiontarget({ u"Images"_ustr, RedactionTargetType::REDACTION_TARGET_IMAGE,
                                             u"All Images"_ustr, false, false, 0 });
                 aRedactionTargets.push_back({redactiontarget, redactiontarget.sName});
             }
-            else if (nResult != RET_OK || !aDlg.hasTargets() || !aDlg.isValidState())
+            else
             {
-                //Do nothing
-                return;
+                SfxAutoRedactDialog aDlg(pDialogParent);
+                if (aDlg.run() != RET_OK || !aDlg.hasTargets() || !aDlg.isValidState())
+                {
+                    //Do nothing
+                    return;
+                }
+                aDlg.getTargets(aRedactionTargets);
             }
 
             // else continue with normal redaction
             bIsAutoRedact = true;
-            aDlg.getTargets(aRedactionTargets);
 
             [[fallthrough]];
         }
