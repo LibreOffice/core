@@ -8,6 +8,7 @@
  */
 
 #include <config_fonts.h>
+#include <config_vclplug.h>
 
 #include <ostream>
 #include <vector>
@@ -50,7 +51,11 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<double>
 
 class VclComplexTextTest : public test::BootstrapFixture
 {
-#if !defined _WIN32
+// The tests that add a font of their own and read glyphs back were left out of Windows. A Windows
+// build that takes the headless code (CODA-W) takes the same font path as the platforms they were
+// written for, and matches a font among the ones it carries rather than the system's, so it wants
+// them: the fonts they name are the ones it has.
+#if !defined _WIN32 || USE_HEADLESS_CODE
     OUString maDataUrl = u"/vcl/qa/cppunit/data/"_ustr;
 
     OUString getFullUrl(std::u16string_view sFileName)
@@ -480,7 +485,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf153440)
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetFont(aFont);
 
-#if !defined _WIN32 // TODO: Fails on jenkins but passes locally
+#if !defined _WIN32 || USE_HEADLESS_CODE // TODO: Fails on jenkins but passes locally
     // Add an emoji font so that we are sure a font will be found for the
     // emoji. The font is subset and supports only 🌿.
     bool bAdded = addFont(pOutDev, u"tdf153440.ttf", u"Noto Emoji");
@@ -514,7 +519,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf153440)
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testMixedCJKLatinScript_glyph_advancements)
 {
 #if HAVE_MORE_FONTS
-#if !defined _WIN32
+#if !defined _WIN32 || USE_HEADLESS_CODE
     OUString aTestScript(u"根据10.1(37BA) Eng"_ustr);
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
@@ -549,7 +554,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testMixedCJKLatinScript_glyph_advanceme
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107718)
 {
 #if HAVE_MORE_FONTS
-#if !defined _WIN32 // TODO: Fails on jenkins but passes locally
+#if !defined _WIN32 || USE_HEADLESS_CODE // TODO: Fails on jenkins but passes locally
     vcl::Font aFont(u"Source Han Sans"_ustr, u"Regular"_ustr, Size(0, 72));
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
@@ -878,7 +883,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf163761)
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testOpticalSizing)
 {
 #if HAVE_MORE_FONTS
-#if !defined _WIN32
+#if !defined _WIN32 || USE_HEADLESS_CODE
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetMapMode(MapMode(MapUnit::MapPoint));
 
