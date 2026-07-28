@@ -1067,6 +1067,32 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSRoundtrip)
     CPPUNIT_ASSERT_EQUAL(3.5, fBinWidth);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testCorrelationCircleEqualScales)
+{
+    loadFromFile(u"fods/correlation-circle.fods");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
+
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+
+    // Both dimensions run from minus one to one, so the plot area has to be
+    // square for the two of them to be at the same scale, which is what makes
+    // the circle of radius one a circle rather than an ellipse.
+    Reference<drawing::XShape> xPlotArea(
+        getShapeByName(xShapes, u"PlotAreaExcludingAxes"_ustr), UNO_SET_THROW);
+    const awt::Size aPlotArea = xPlotArea->getSize();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), aPlotArea.Width);
+    CPPUNIT_ASSERT_EQUAL(aPlotArea.Height, aPlotArea.Width);
+
+    // The same thing said through the axes: they are drawn the same length.
+    Reference<drawing::XShape> xAcross(
+        getShapeByName(xShapes, u"CID/D=0:CS=0:Axis=0,0"_ustr), UNO_SET_THROW);
+    Reference<drawing::XShape> xUp(
+        getShapeByName(xShapes, u"CID/D=0:CS=0:Axis=1,0"_ustr), UNO_SET_THROW);
+    CPPUNIT_ASSERT_EQUAL(xUp->getSize().Height, xAcross->getSize().Width);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testCorrelationCircleODSRoundtrip)
 {
     loadFromFile(u"fods/correlation-circle.fods");

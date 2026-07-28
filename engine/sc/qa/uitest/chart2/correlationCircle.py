@@ -79,6 +79,39 @@ class correlationCircle(UITestCase):
                      ("values-feature", "$Sheet1.$%s$2:$%s$9" % (aColumn, aColumn))],
                     aRoles)
 
+    def sizes_of_circle_and_plot_area(self, document):
+        aSizes = {}
+
+        def collect(xShapes):
+            for index in range(xShapes.getCount()):
+                xShape = xShapes.getByIndex(index)
+                aType = xShape.getShapeType()
+                if getattr(xShape, "Name", "") == "PlotAreaExcludingAxes":
+                    aSizes["plot area"] = xShape.getSize()
+                elif aType == "com.sun.star.drawing.EllipseShape":
+                    aSizes["circle"] = xShape.getSize()
+                if aType == "com.sun.star.drawing.GroupShape":
+                    collect(xShape)
+
+        collect(document.Sheets[0].Charts[0].getEmbeddedObject().getDrawPage())
+        return aSizes
+
+    # Both dimensions run from minus one to one, so the circle of radius one
+    # fills the plot area and is as wide as it is tall. Turning a chart of
+    # another type into this one keeps the axis the other type left behind, and
+    # an axis of names would make room for one more name and squeeze the circle
+    # into an ellipse.
+    def test_the_circle_stays_round_through_the_wizard(self):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
+            self.fill_sheet(document)
+            self.insert_correlation_circle(document)
+
+            aSizes = self.sizes_of_circle_and_plot_area(document)
+
+            self.assertEqual(aSizes["circle"].Height, aSizes["circle"].Width)
+            self.assertEqual(aSizes["plot area"].Width, aSizes["circle"].Width)
+            self.assertEqual(aSizes["plot area"].Height, aSizes["circle"].Height)
+
     # Reopening the ranges of such a chart shows the range it was given.
     def test_the_range_comes_back(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
