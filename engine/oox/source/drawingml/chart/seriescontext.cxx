@@ -85,7 +85,7 @@ ContextHandlerRef lclDataLabelSharedCreateContext( ContextHandler2& rContext,
             // chartex has no legend key or percentage labels
             orModel.mobShowSerName = rAttribs.getBool( XML_seriesName, false );
             orModel.mobShowCatName = rAttribs.getBool( XML_categoryName, false );
-            orModel.mobShowVal = rAttribs.getBool( XML_value, false );
+            orModel.mobShowVal = rAttribs.getBool( XML_value, true );
             orModel.mobShowLegendKey = false;
             orModel.mobShowPercent = false;
             return nullptr;
@@ -180,6 +180,10 @@ ContextHandlerRef DataLabelsContext::onCreateContext( sal_Int32 nElement, const 
             DataLabelModel& rLabel = mrModel.maPointLabels.create( mrModel, bMSO2007Doc );
             rLabel.mnIndex = rAttribs.getInteger( XML_idx, -1 );
             rLabel.monLabelPos = rAttribs.getToken( XML_pos );
+            // set MSO defaults
+            rLabel.mobShowSerName = false;
+            rLabel.mobShowCatName = false;
+            rLabel.mobShowVal = true;
             return new DataLabelContext( *this, rLabel );
         }
         case CX_TOKEN( dataLabelHidden ):
@@ -958,6 +962,10 @@ ContextHandlerRef ChartexSeriesContext::onCreateContext( sal_Int32 nElement, con
                 {
                     DataLabelsModel& rLabels = mrModel.mxLabels.create(false);
                     rLabels.monLabelPos = rAttribs.getToken( XML_pos );
+                    // set MSO defaults
+                    rLabels.mobShowSerName = false;
+                    rLabels.mobShowCatName = false;
+                    rLabels.mobShowVal = true;
                     return new DataLabelsContext( *this, rLabels );
                 }
                 case CX_TOKEN( dataId ):
