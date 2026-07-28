@@ -31,6 +31,7 @@
 #include <qt/TabManager.hpp>
 #include <qt/TabbedWindow.hpp>
 #include <qt/WebView.hpp>
+#include <qt/WindowUtils.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/SettingsStorage.hpp>
 #include <common/StringVector.hpp>
@@ -1092,6 +1093,13 @@ QVariant Bridge::cool(const QString& messageStr)
             else if (window)
                 window->close();
         });
+    }
+    else if (message == "uno .uno:Quit")
+    {
+        // The application exits when the last window has gone. The close runs from the event
+        // loop, so that the page-JS call this arrives on has returned before the web view it
+        // came from is destroyed.
+        QTimer::singleShot(0, []() { closeEveryWindow(); });
     }
     else if (tokens.equals(0, "EXCHANGEMONITORS"))
     {
