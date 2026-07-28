@@ -1071,6 +1071,9 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
             rFSD.maSearchName = GetEnglishSearchFontName(rFSD.maTargetName);
             if (PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName(rFSD.maSearchName))
                 return pFoundData;
+            // The name the suffix hid may still have a metric-compatible substitute
+            if (PhysicalFontFamily* pFoundData = FindMetricCompatibleFont(rFSD))
+                return pFoundData;
         }
 
         if (mpPreMatchHook && mpPreMatchHook->FindFontSubstitute(rFSD))
