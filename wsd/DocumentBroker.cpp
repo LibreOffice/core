@@ -4634,9 +4634,9 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
 
         // But, in reality it has unintended side effects on iOS because if you have done changes to
         // the document, it does get saved, but that is only to the temporary copy. It is only in
-        // the document callback handler for KIT_CALLBACK_UNO_COMMAND_RESULT that we then call the
+        // the document callback handler for COKitCallbackType::UNO_COMMAND_RESULT that we then call the
         // system API to save that copy back to where it came from. See the
-        // KIT_CALLBACK_UNO_COMMAND_RESULT case in ChildSession::loKitCallback() in
+        // COKitCallbackType::UNO_COMMAND_RESULT case in ChildSession::loKitCallback() in
         // ChildSession.cpp. If we did use the below code snippet here, the document callback would
         // get unregistered right away in Document::onUnload in Kit.cpp.
 

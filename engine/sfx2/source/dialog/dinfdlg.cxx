@@ -941,7 +941,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
 
                     SfxViewShell *pViewShell = SfxViewShell::Current();
                     if (pViewShell)
-                        pViewShell->viewCallback(KIT_CALLBACK_DOCUMENT_PASSWORD_RESET, payloadJson.finishAndGetAsOString());
+                        pViewShell->viewCallback(COKitCallbackType::DOCUMENT_PASSWORD_RESET, payloadJson.finishAndGetAsOString());
 
                     pShell->SetModified();
                 }

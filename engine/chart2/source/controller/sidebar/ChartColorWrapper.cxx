@@ -137,7 +137,7 @@ void ChartColorWrapper::updateData()
         OString sCommand = OUStringToOString(aUrl.Complete, RTL_TEXTENCODING_ASCII_US);
         sal_Int32 nColor = -1;
         aEvent.State >>= nColor;
-        pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED,
+        pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED,
                                                sCommand + "=" + OString::number(nColor));
     }
 }

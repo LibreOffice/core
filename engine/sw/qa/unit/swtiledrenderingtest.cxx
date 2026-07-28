@@ -81,17 +81,17 @@ void SwTiledRenderingTest::setupCOKitViewCallback(SfxViewShell* pViewShell)
     m_callbackWrapper.setKitViewId(KitHelper::getView(*pViewShell));
 }
 
-void SwTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)
+void SwTiledRenderingTest::callback(COKitCallbackType eType, const char* pPayload, void* pData)
 {
-    static_cast<SwTiledRenderingTest*>(pData)->callbackImpl(nType, pPayload);
+    static_cast<SwTiledRenderingTest*>(pData)->callbackImpl(eType, pPayload);
 }
 
-void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
+void SwTiledRenderingTest::callbackImpl(COKitCallbackType eType, const char* pPayload)
 {
     OString aPayload(pPayload);
-    switch (nType)
+    switch (eType)
     {
-        case KIT_CALLBACK_INVALIDATE_TILES:
+        case COKitCallbackType::INVALIDATE_TILES:
         {
             tools::Rectangle aInvalidation;
             cpo::uno::Sequence<OUString> aSeq
@@ -115,7 +115,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             ++m_nInvalidations;
         }
         break;
-        case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
+        case COKitCallbackType::DOCUMENT_SIZE_CHANGED:
         {
             cpo::uno::Sequence<OUString> aSeq
                 = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
@@ -124,7 +124,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             m_aDocumentSize.setHeight(aSeq[1].toInt32());
         }
         break;
-        case KIT_CALLBACK_TEXT_SELECTION:
+        case COKitCallbackType::TEXT_SELECTION:
         {
             m_aTextSelection = OString(pPayload);
             if (m_aSearchResultSelection.empty())
@@ -133,12 +133,12 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
                 ++m_nSelectionAfterSearchResult;
         }
         break;
-        case KIT_CALLBACK_SEARCH_NOT_FOUND:
+        case COKitCallbackType::SEARCH_NOT_FOUND:
         {
             m_bFound = false;
         }
         break;
-        case KIT_CALLBACK_SEARCH_RESULT_SELECTION:
+        case COKitCallbackType::SEARCH_RESULT_SELECTION:
         {
             m_aSearchResultSelection.clear();
             boost::property_tree::ptree aTree;
@@ -154,17 +154,17 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             }
         }
         break;
-        case KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+        case COKitCallbackType::REDLINE_TABLE_SIZE_CHANGED:
         {
             ++m_nRedlineTableSizeChanged;
         }
         break;
-        case KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+        case COKitCallbackType::REDLINE_TABLE_ENTRY_MODIFIED:
         {
             ++m_nRedlineTableEntryModified;
         }
         break;
-        case KIT_CALLBACK_STATE_CHANGED:
+        case COKitCallbackType::STATE_CHANGED:
         {
             OString aTrackedChangeIndexPrefix(".uno:TrackedChangeIndex="_ostr);
             if (aPayload.startsWith(aTrackedChangeIndexPrefix))
@@ -177,7 +177,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             }
         }
         break;
-        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
         {
             if (comphelper::COKit::isViewIdForVisCursorInvalidation())
             {
@@ -197,22 +197,22 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             }
         }
         break;
-        case KIT_CALLBACK_FORM_FIELD_BUTTON:
+        case COKitCallbackType::FORM_FIELD_BUTTON:
         {
             m_aFormFieldButton = OString(pPayload);
         }
         break;
-        case KIT_CALLBACK_CONTENT_CONTROL:
+        case COKitCallbackType::CONTENT_CONTROL:
         {
             m_aContentControl = OString(pPayload);
         }
         break;
-        case KIT_CALLBACK_GRAPHIC_SELECTION:
+        case COKitCallbackType::GRAPHIC_SELECTION:
         {
             m_ShapeSelection = OString(pPayload);
         }
         break;
-        case KIT_CALLBACK_TOOLTIP:
+        case COKitCallbackType::TOOLTIP:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -220,6 +220,8 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             m_aTooltip.text = aTree.get_child("text").get_value<std::string>();
             m_aTooltip.rect = aTree.get_child("rectangle").get_value<std::string>();
         }
+        break;
+        default:
         break;
     }
 }

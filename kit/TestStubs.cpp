@@ -17,7 +17,8 @@
 
 #include <kit/ChildSession.hpp>
 
-void ChildSession::loKitCallback(const int /* type */, const std::string& /* payload */) {}
+void ChildSession::loKitCallback(const COKitCallbackType /* type */,
+                                 const std::string& /* payload */) {}
 void ChildSession::disconnect() {}
 int ChildSession::getSpeed() { return 0; }
 bool ChildSession::_handleInput(const char* /*buffer*/, int /*length*/) { return false; }

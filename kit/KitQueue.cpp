@@ -27,7 +27,7 @@
 #include <string>
 #include <string_view>
 
-/* static */ std::string KitQueue::Callback::toString(int view, int type,
+/* static */ std::string KitQueue::Callback::toString(int view, COKitCallbackType type,
                                                       const std::string& payload)
 {
     std::ostringstream str;
@@ -155,13 +155,13 @@ bool extractRectangle(const StringVector& tokens, int& x, int& y, int& w, int& h
 
 }
 
-void KitQueue::putCallback(int view, int type, const std::string &payload)
+void KitQueue::putCallback(int view, COKitCallbackType type, const std::string &payload)
 {
     if (!elideDuplicateCallback(view, type, payload))
         _callbacks.emplace_back(view, type, payload);
 }
 
-bool KitQueue::elideDuplicateCallback(int view, int type, const std::string &payload)
+bool KitQueue::elideDuplicateCallback(int view, COKitCallbackType type, const std::string &payload)
 {
     const auto callbackType = static_cast<COKitCallbackType>(type);
 
@@ -171,7 +171,7 @@ bool KitQueue::elideDuplicateCallback(int view, int type, const std::string &pay
 
     switch (callbackType)
     {
-        case KIT_CALLBACK_INVALIDATE_TILES: // invalidation
+        case COKitCallbackType::INVALIDATE_TILES: // invalidation
         {
             StringVector tokens = StringVector::tokenize(payload);
 
@@ -284,7 +284,7 @@ bool KitQueue::elideDuplicateCallback(int view, int type, const std::string &pay
         }
         break;
 
-        case KIT_CALLBACK_STATE_CHANGED: // state changed
+        case COKitCallbackType::STATE_CHANGED: // state changed
         {
             constexpr std::string_view unoPrefix(".uno:");
             if (!payload.starts_with(unoPrefix))
@@ -323,18 +323,18 @@ bool KitQueue::elideDuplicateCallback(int view, int type, const std::string &pay
         }
         break;
 
-        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR: // the cursor has moved
-        case KIT_CALLBACK_CURSOR_VISIBLE: // the cursor visibility has changed
-        case KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE: // setting the indicator value
-        case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED: // setting the document size
-        case KIT_CALLBACK_CELL_CURSOR: // the cell cursor has moved
-        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR: // the view cursor has moved
-        case KIT_CALLBACK_CELL_VIEW_CURSOR: // the view cell cursor has moved
-        case KIT_CALLBACK_VIEW_CURSOR_VISIBLE: // the view cursor visibility has changed
+        case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR: // the cursor has moved
+        case COKitCallbackType::CURSOR_VISIBLE: // the cursor visibility has changed
+        case COKitCallbackType::STATUS_INDICATOR_SET_VALUE: // setting the indicator value
+        case COKitCallbackType::DOCUMENT_SIZE_CHANGED: // setting the document size
+        case COKitCallbackType::CELL_CURSOR: // the cell cursor has moved
+        case COKitCallbackType::INVALIDATE_VIEW_CURSOR: // the view cursor has moved
+        case COKitCallbackType::CELL_VIEW_CURSOR: // the view cell cursor has moved
+        case COKitCallbackType::VIEW_CURSOR_VISIBLE: // the view cursor visibility has changed
         {
-            const bool isViewCallback = (callbackType == KIT_CALLBACK_INVALIDATE_VIEW_CURSOR ||
-                                         callbackType == KIT_CALLBACK_CELL_VIEW_CURSOR ||
-                                         callbackType == KIT_CALLBACK_VIEW_CURSOR_VISIBLE);
+            const bool isViewCallback = (callbackType == COKitCallbackType::INVALIDATE_VIEW_CURSOR ||
+                                         callbackType == COKitCallbackType::CELL_VIEW_CURSOR ||
+                                         callbackType == COKitCallbackType::VIEW_CURSOR_VISIBLE);
 
             const std::string viewId
                 = (isViewCallback ? extractViewId(payload) : std::string());

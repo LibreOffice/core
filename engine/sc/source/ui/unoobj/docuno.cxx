@@ -1115,8 +1115,8 @@ void ScModelObj::resetSelection()
         pViewShell->Unmark();
 
     // and hide the cell and text selection
-    pViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION, ""_ostr);
-    KitHelper::notifyOtherViews(pViewShell, KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
+    pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, ""_ostr);
+    KitHelper::notifyOtherViews(pViewShell, COKitCallbackType::TEXT_VIEW_SELECTION, "selection", ""_ostr);
 }
 
 void ScModelObj::setClipboard(const uno::Reference<datatransfer::clipboard::XClipboard>& xClipboard)
@@ -1151,7 +1151,7 @@ static void lcl_sendKitDocumentBackground(const ScViewData* pViewData)
     const Color& rColor = rBackground.GetColor();
 
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    pViewShell->viewCallback(KIT_CALLBACK_DOCUMENT_BACKGROUND_COLOR, rColor.AsRGBHexString().toUtf8());
+    pViewShell->viewCallback(COKitCallbackType::DOCUMENT_BACKGROUND_COLOR, rColor.AsRGBHexString().toUtf8());
 }
 
 void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int nTileTwipWidth_, int nTileTwipHeight_)

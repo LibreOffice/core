@@ -1517,7 +1517,7 @@ void SdrView::SendShapeDragPreview(const sal_uInt32 handleNum)
     }
     aPayload.append("] }");
 
-    pViewShell->viewCallback(KIT_CALLBACK_SHAPE_DRAG_PREVIEW, aPayload.makeStringAndClear());
+    pViewShell->viewCallback(COKitCallbackType::SHAPE_DRAG_PREVIEW, aPayload.makeStringAndClear());
 }
 
 bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint, const sal_Int32 aObjectOrdNum, const bool bPreview)

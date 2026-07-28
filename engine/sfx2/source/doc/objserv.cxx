@@ -461,7 +461,7 @@ static void sendErrorToKit(SfxObjectShell& rShell, const ErrCodeMsg& error)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
 
-    pNotifier->viewCallback(KIT_CALLBACK_ERROR, OString(aStream.str()));
+    pNotifier->viewCallback(COKitCallbackType::ERROR_REPORT, OString(aStream.str()));
 }
 
 namespace

@@ -1264,9 +1264,9 @@ SwViewGlueDocShell::~SwViewGlueDocShell()
 SwView::~SwView()
 {
     // Notify other COKit views that we are going away.
-    KitHelper::notifyOtherViews(this, KIT_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
-    KitHelper::notifyOtherViews(this, KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
-    KitHelper::notifyOtherViews(this, KIT_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY"_ostr);
+    KitHelper::notifyOtherViews(this, COKitCallbackType::VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
+    KitHelper::notifyOtherViews(this, COKitCallbackType::TEXT_VIEW_SELECTION, "selection", ""_ostr);
+    KitHelper::notifyOtherViews(this, COKitCallbackType::GRAPHIC_VIEW_SELECTION, "selection", "EMPTY"_ostr);
 
     // Need to remove activated field's button before disposing EditWin.
     GetWrtShell().getIDocumentMarkAccess()->ClearFieldActivation();
@@ -2140,10 +2140,10 @@ void SwView::flushPendingKitInvalidateTiles()
         pSh->FlushPendingKitInvalidateTiles();
 }
 
-std::optional<OString> SwView::getKitPayload(int nType, int nViewId) const
+std::optional<OString> SwView::getKitPayload(COKitCallbackType eType, int nViewId) const
 {
     if (SwWrtShell* pSh = GetWrtShellPtr())
-        return pSh->getKitPayload(nType, nViewId);
+        return pSh->getKitPayload(eType, nViewId);
     else
         return std::nullopt;
 }

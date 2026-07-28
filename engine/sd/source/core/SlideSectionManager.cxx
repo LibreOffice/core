@@ -517,7 +517,7 @@ void SlideSectionManager::NotifySectionsChanged()
     while (pView)
     {
         if (pView->GetDocId() == nDocId)
-            pView->viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
+            pView->viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
         pView = SfxViewShell::GetNext(*pView);
     }
 }

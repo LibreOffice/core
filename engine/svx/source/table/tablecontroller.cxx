@@ -2379,8 +2379,8 @@ void SvxTableController::updateSelectionOverlay()
 
     if(SfxViewShell* pViewShell = SfxViewShell::Current())
     {
-        pViewShell->viewCallback(KIT_CALLBACK_CELL_SELECTION_AREA, aSelection.toString());
-        pViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION, aSelection.toString());
+        pViewShell->viewCallback(COKitCallbackType::CELL_SELECTION_AREA, aSelection.toString());
+        pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, aSelection.toString());
     }
 }
 
@@ -2397,10 +2397,10 @@ void SvxTableController::destroySelectionOverlay()
         // Clear the COKit text selection so far provided by this table.
         if(SfxViewShell* pViewShell = SfxViewShell::Current())
         {
-            pViewShell->viewCallback(KIT_CALLBACK_CELL_SELECTION_AREA, "EMPTY"_ostr);
-            pViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION_START, "EMPTY"_ostr);
-            pViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION_END, "EMPTY"_ostr);
-            pViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION, "EMPTY"_ostr);
+            pViewShell->viewCallback(COKitCallbackType::CELL_SELECTION_AREA, "EMPTY"_ostr);
+            pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION_START, "EMPTY"_ostr);
+            pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION_END, "EMPTY"_ostr);
+            pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, "EMPTY"_ostr);
         }
     }
 }

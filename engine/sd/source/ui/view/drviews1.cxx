@@ -840,7 +840,7 @@ void notifyLinkAnnotations(const SfxViewShell* pViewShell, const SdPage* pPage)
         }
     }
     OString aPayload = jsonWriter.finishAndGetAsOString();
-    pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
+    pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
 }
 }
 
@@ -1029,7 +1029,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             OString aPayload = OString::number(nSelectedPage);
             if (SfxViewShell* pViewShell = GetViewShell())
             {
-                pViewShell->viewCallback(KIT_CALLBACK_SET_PART, aPayload);
+                pViewShell->viewCallback(COKitCallbackType::SET_PART, aPayload);
                 notifyLinkAnnotations(pViewShell, mpActualPage);
             }
         }
@@ -1101,7 +1101,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
                     {
                         OString aPayload = ".uno:CurrentPageResize"_ostr;
                         SfxViewShell* pViewShell = GetViewShell();
-                        pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
+                        pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
                     }
                 }
             }
@@ -1145,7 +1145,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
                     {
                         OString aPayload = ".uno:PageZoomChange="_ostr + OString::number(nZoom);
                         if (SfxViewShell* pViewShell = GetViewShell())
-                            pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
+                            pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
                     }
                 }
                 if (GetDoc()->HasCanvasPage() && getCurrentPage()->IsCanvasPage() && bAllowChangeFocus)
@@ -1166,7 +1166,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
                     OString aPayload = aJsonWriter.finishAndGetAsOString();
                     if (SfxViewShell* pViewShell = GetViewShell())
                     {
-                        pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
+                        pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
                     }
                 }
             }

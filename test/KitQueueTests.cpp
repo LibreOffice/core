@@ -1144,7 +1144,7 @@ void putCallback(KitQueue &queue, const std::string &str)
     int view = std::atoi(tokens[1].c_str());
     if (tokens[1] == "all")
         view = -1;
-    int type = std::atoi(tokens[2].c_str());
+    const COKitCallbackType type = static_cast<COKitCallbackType>(std::atoi(tokens[2].c_str()));
     queue.putCallback(view, type, tokens.cat(' ', 3));
 }
 
@@ -1198,7 +1198,7 @@ void KitQueueTests::testCallbackIndicatorValue()
     LOK_ASSERT_EQUAL(1, static_cast<int>(queue.callbackSize()));
     item = queue.getCallback();
     LOK_ASSERT_EQUAL(item._view, -1);
-    LOK_ASSERT_EQUAL(item._type, 10);
+    LOK_ASSERT_EQUAL(item._type, COKitCallbackType::STATUS_INDICATOR_SET_VALUE);
     LOK_ASSERT_EQUAL_STR("50", item._payload);
 }
 
@@ -1217,7 +1217,7 @@ void KitQueueTests::testCallbackPageSize()
     LOK_ASSERT_EQUAL(1, static_cast<int>(queue.callbackSize()));
     item = queue.getCallback();
     LOK_ASSERT_EQUAL(item._view, -1);
-    LOK_ASSERT_EQUAL(item._type, 13);
+    LOK_ASSERT_EQUAL(item._type, COKitCallbackType::DOCUMENT_SIZE_CHANGED);
     LOK_ASSERT_EQUAL_STR("12474, 205748", item._payload);
 }
 
@@ -1230,7 +1230,8 @@ void KitQueueTests::testCallbackModifiedStatusIsSkipped()
     KitQueue::Callback item;
 
     std::stringstream ss;
-    ss << "callback all " << KIT_CALLBACK_STATE_CHANGED;
+    // the callback protocol carries the type as a number
+    ss << "callback all " << static_cast<int>(COKitCallbackType::STATE_CHANGED);
 
     const std::vector<std::string> messages =
     {
@@ -1483,7 +1484,8 @@ void KitQueueTests::testCallbackStateChangedDedup()
     KitQueue queue(dummy);
 
     std::stringstream ss;
-    ss << "callback all " << KIT_CALLBACK_STATE_CHANGED;
+    // the callback protocol carries the type as a number
+    ss << "callback all " << static_cast<int>(COKitCallbackType::STATE_CHANGED);
 
     putCallback(queue, ss.str() + " .uno:Bold=true");
     putCallback(queue, ss.str() + " .uno:Bold=false");
@@ -1503,7 +1505,8 @@ void KitQueueTests::testCallbackStateChangedDifferentCommands()
     KitQueue queue(dummy);
 
     std::stringstream ss;
-    ss << "callback all " << KIT_CALLBACK_STATE_CHANGED;
+    // the callback protocol carries the type as a number
+    ss << "callback all " << static_cast<int>(COKitCallbackType::STATE_CHANGED);
 
     putCallback(queue, ss.str() + " .uno:Bold=true");
     putCallback(queue, ss.str() + " .uno:Italic=true");
@@ -1520,7 +1523,8 @@ void KitQueueTests::testCallbackStateChangedNoEquals()
     KitQueue queue(dummy);
 
     std::stringstream ss;
-    ss << "callback all " << KIT_CALLBACK_STATE_CHANGED;
+    // the callback protocol carries the type as a number
+    ss << "callback all " << static_cast<int>(COKitCallbackType::STATE_CHANGED);
 
     putCallback(queue, ss.str() + " .uno:Bold=true");
     putCallback(queue, ss.str() + " .uno:Bold");
@@ -1582,7 +1586,7 @@ void KitQueueTests::testCallbackCursorDedup()
     TilePrioritizer dummy;
     KitQueue queue(dummy);
 
-    // KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR = 1
+    // COKitCallbackType::INVALIDATE_VISIBLE_CURSOR = 1
     putCallback(queue, "callback all 1 old_cursor_pos");
     putCallback(queue, "callback all 1 new_cursor_pos");
 
@@ -1600,7 +1604,7 @@ void KitQueueTests::testCallbackViewCursorDedup()
     TilePrioritizer dummy;
     KitQueue queue(dummy);
 
-    // KIT_CALLBACK_CELL_VIEW_CURSOR = 26; payload requires JSON with viewId.
+    // COKitCallbackType::CELL_VIEW_CURSOR = 26; payload requires JSON with viewId.
     putCallback(queue, "callback all 26 { \"viewId\": \"1\", \"rectangle\": \"0, 0, 100, 100\" }");
     putCallback(queue, "callback all 26 { \"viewId\": \"1\", \"rectangle\": \"50, 50, 100, 100\" }");
 
@@ -1740,7 +1744,7 @@ void KitQueueTests::testGetCallbackBoolOverload()
 
     LOK_ASSERT(queue.getCallback(cb));
     LOK_ASSERT_EQUAL(-1, cb._view);
-    LOK_ASSERT_EQUAL(10, cb._type);
+    LOK_ASSERT_EQUAL(COKitCallbackType::STATUS_INDICATOR_SET_VALUE, cb._type);
     LOK_ASSERT_EQUAL_STR("test_payload", cb._payload);
 
     // Queue is empty again.

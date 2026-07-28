@@ -1327,7 +1327,7 @@ public class LOActivity extends AppCompatActivity {
     }
 
     private void initiateExportFile(String optionsString) {
-        // The kit's KIT_CALLBACK_EXPORT_FILE branch sends "exportfile url=file:///..."
+        // The kit's COKitCallbackType::EXPORT_FILE branch sends "exportfile url=file:///..."
         // for export flows like .uno:ExportToPDF. The file is already at a tmp
         // path; show ACTION_CREATE_DOCUMENT and copy on result.
         Map<String, String> optionsMap = new HashMap<>();

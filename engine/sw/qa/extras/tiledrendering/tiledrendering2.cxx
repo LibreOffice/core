@@ -701,7 +701,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testControlCodesCursor)
     // When showing formatting marks:
     dispatchCommand(mxComponent, u".uno:ControlCodes"_ustr, {});
 
-    // Then make sure this doesn't result in a KIT_CALLBACK_CURSOR_VISIBLE callback:
+    // Then make sure this doesn't result in a COKitCallbackType::CURSOR_VISIBLE callback:
     // Without the accompanying fix in place, this test would have failed, the view jumped to the
     // cursor when showing formatting marks.
     CPPUNIT_ASSERT(!aView1.m_bCursorVisible);

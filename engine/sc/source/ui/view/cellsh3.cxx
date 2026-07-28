@@ -147,7 +147,7 @@ void lcl_kitGetWholeFunctionList()
     aPayload.append(" }");
 
     OString s = aPayload.makeStringAndClear();
-    pViewShell->viewCallback(KIT_CALLBACK_CALC_FUNCTION_LIST, s);
+    pViewShell->viewCallback(COKitCallbackType::CALC_FUNCTION_LIST, s);
 }
 
 } // end namespace

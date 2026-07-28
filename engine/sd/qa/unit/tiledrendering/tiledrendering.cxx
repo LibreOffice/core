@@ -1468,7 +1468,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action
+    // We received a COKitCallbackType::COMMENT callback with comment 'Add' action
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     int nComment1 = aView1.m_aCommentCallbackResult.get<int>("id");
@@ -1492,7 +1492,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     });
     dispatchCommand(mxComponent, u".uno:ReplyToAnnotation"_ustr, aArgs);
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Modify' action
+    // We received a COKitCallbackType::COMMENT callback with comment 'Modify' action
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView1.m_aCommentCallbackResult.get<int>("id"));
@@ -1516,7 +1516,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     });
     dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Modify' action
+    // We received a COKitCallbackType::COMMENT callback with comment 'Modify' action
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView1.m_aCommentCallbackResult.get<int>("id"));
@@ -1533,7 +1533,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     });
     dispatchCommand(mxComponent, u".uno:DeleteAnnotation"_ustr, aArgs);
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Remove' action
+    // We received a COKitCallbackType::COMMENT callback with comment 'Remove' action
     CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView1.m_aCommentCallbackResult.get<int>("id"));

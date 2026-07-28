@@ -525,7 +525,7 @@ void SmGraphicWidget::SetIsCursorVisible(bool bVis)
     if (comphelper::COKit::isActive())
     {
         mrViewShell.SendCaretToKit();
-        mrViewShell.viewCallback(KIT_CALLBACK_CURSOR_VISIBLE,
+        mrViewShell.viewCallback(COKitCallbackType::CURSOR_VISIBLE,
                                                OString::boolean(bVis));
     }
 }
@@ -2052,7 +2052,7 @@ public:
     {
         if (comphelper::COKit::isActive())
             if (auto pViewShell = GetViewShell_Impl())
-                pViewShell->viewCallback(KIT_CALLBACK_CURSOR_VISIBLE,
+                pViewShell->viewCallback(COKitCallbackType::CURSOR_VISIBLE,
                                                        OString::boolean(false));
 
         SfxBaseController::dispose();
@@ -2210,11 +2210,11 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
     }
 }
 
-std::optional<OString> SmViewShell::getKitPayload(int nType, int nViewId) const
+std::optional<OString> SmViewShell::getKitPayload(COKitCallbackType eType, int nViewId) const
 {
-    switch (nType)
+    switch (eType)
     {
-        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
         {
             OString sRectangle;
             if (const SmGraphicWidget& widget = GetGraphicWidget(); widget.IsCursorVisible())
@@ -2231,7 +2231,7 @@ std::optional<OString> SmViewShell::getKitPayload(int nType, int nViewId) const
             }
             return KitHelper::makeVisCursorInvalidation(nViewId, sRectangle, false, {});
         }
-        case KIT_CALLBACK_TEXT_SELECTION:
+        case COKitCallbackType::TEXT_SELECTION:
         {
             OString sRectangle;
             if (const SmGraphicWidget& widget = GetGraphicWidget(); widget.IsCursorVisible())
@@ -2252,26 +2252,29 @@ std::optional<OString> SmViewShell::getKitPayload(int nType, int nViewId) const
             }
             return sRectangle;
         }
-        case KIT_CALLBACK_TEXT_SELECTION_START:
-        case KIT_CALLBACK_TEXT_SELECTION_END:
-        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
-        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+        case COKitCallbackType::TEXT_SELECTION_START:
+        case COKitCallbackType::TEXT_SELECTION_END:
+        case COKitCallbackType::INVALIDATE_VIEW_CURSOR:
+        case COKitCallbackType::TEXT_VIEW_SELECTION:
             return {};
+
+        default:
+            break;
     }
-    return SfxViewShell::getKitPayload(nType, nViewId); // aborts
+    return SfxViewShell::getKitPayload(eType, nViewId); // aborts
 }
 
 void SmViewShell::SendCaretToKit() const
 {
     const int nViewId = sal_Int32(GetViewShellId());
-    if (const auto payload = getKitPayload(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR, nViewId))
+    if (const auto payload = getKitPayload(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, nViewId))
     {
-        viewCallbackWithViewId(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
+        viewCallbackWithViewId(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR,
                                              *payload, nViewId);
     }
-    if (const auto payload = getKitPayload(KIT_CALLBACK_TEXT_SELECTION, nViewId))
+    if (const auto payload = getKitPayload(COKitCallbackType::TEXT_SELECTION, nViewId))
     {
-        viewCallback(KIT_CALLBACK_TEXT_SELECTION, *payload);
+        viewCallback(COKitCallbackType::TEXT_SELECTION, *payload);
     }
 }
 

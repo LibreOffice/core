@@ -698,7 +698,8 @@ public:
     }
 
     /// LOKit (and some synthetic internal) callbacks
-    virtual bool filterLoKitCallback(const int /* type */, const std::string& /* payload */)
+    virtual bool filterLoKitCallback(const COKitCallbackType /* type */,
+                                     const std::string& /* payload */)
     {
         return false;
     }

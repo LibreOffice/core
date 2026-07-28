@@ -339,7 +339,7 @@ public:
         {
             OString aChunk = aOutput.makeStringAndClear();
             if (gImpl && gImpl->mpCallback)
-                gImpl->mpCallback(KIT_CALLBACK_PROFILE_FRAME, aChunk.getStr(), gImpl->mpCallbackData);
+                gImpl->mpCallback(COKitCallbackType::PROFILE_FRAME, aChunk.getStr(), gImpl->mpCallbackData);
         }
     }
 };
@@ -768,15 +768,15 @@ bool CallbackFlushHandler::CallbackData::validate() const
 
 } // namespace desktop
 
-static bool lcl_isViewCallbackType(const int type)
+static bool lcl_isViewCallbackType(const COKitCallbackType type)
 {
     switch (type)
     {
-        case KIT_CALLBACK_CELL_VIEW_CURSOR:
-        case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
-        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
-        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
-        case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
+        case COKitCallbackType::CELL_VIEW_CURSOR:
+        case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
+        case COKitCallbackType::INVALIDATE_VIEW_CURSOR:
+        case COKitCallbackType::TEXT_VIEW_SELECTION:
+        case COKitCallbackType::VIEW_CURSOR_VISIBLE:
             return true;
 
         default:
@@ -784,26 +784,26 @@ static bool lcl_isViewCallbackType(const int type)
     }
 }
 
-static bool isUpdatedType(int type)
+static bool isUpdatedType(COKitCallbackType type)
 {
     switch (type)
     {
-        case KIT_CALLBACK_TEXT_SELECTION:
-        case KIT_CALLBACK_TEXT_SELECTION_START:
-        case KIT_CALLBACK_TEXT_SELECTION_END:
+        case COKitCallbackType::TEXT_SELECTION:
+        case COKitCallbackType::TEXT_SELECTION_START:
+        case COKitCallbackType::TEXT_SELECTION_END:
             return true;
         default:
             return false;
     }
 }
 
-static bool isUpdatedTypePerViewId(int type)
+static bool isUpdatedTypePerViewId(COKitCallbackType type)
 {
     switch (type)
     {
-        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
-        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+        case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
+        case COKitCallbackType::INVALIDATE_VIEW_CURSOR:
+        case COKitCallbackType::TEXT_VIEW_SELECTION:
             return true;
         default:
             return false;
@@ -1502,7 +1502,7 @@ IMPL_LINK_NOARG(WaitUntilIdle, IdleHdl, Timer*, void)
     tools::JsonWriter aJson;
     aJson.put("commandName", ".uno:ReportWhenIdle");
     aJson.put("idleID", msIdleId);
-    mpCallbackFlushHandler->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+    mpCallbackFlushHandler->queue(COKitCallbackType::UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
     mpCallbackFlushHandler.reset();
     msIdleId.clear();
     mnViewId = -1;
@@ -1672,21 +1672,21 @@ CallbackFlushHandler::CallbackFlushHandler(COKitDocument* pDocument, COKitCallba
 {
     // Add the states that are safe to skip duplicates on, even when
     // not consequent (i.e. do no emit them if unchanged from last).
-    m_states.emplace(KIT_CALLBACK_TEXT_SELECTION, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_GRAPHIC_SELECTION, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_STATE_CHANGED, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_MOUSE_POINTER, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_CELL_CURSOR, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_CELL_FORMULA, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_CELL_ADDRESS, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_CURSOR_VISIBLE, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_SET_PART, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_TABLE_SELECTED, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_TAB_STOP_LIST, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_RULER_UPDATE, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_VERTICAL_RULER_UPDATE, "NIL"_ostr);
-    m_states.emplace(KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::TEXT_SELECTION, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::GRAPHIC_SELECTION, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::STATE_CHANGED, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::MOUSE_POINTER, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::CELL_CURSOR, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::CELL_FORMULA, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::CELL_ADDRESS, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::CURSOR_VISIBLE, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::SET_PART, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::TABLE_SELECTED, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::TAB_STOP_LIST, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::RULER_UPDATE, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::VERTICAL_RULER_UPDATE, "NIL"_ostr);
+    m_states.emplace(COKitCallbackType::STATUS_INDICATOR_SET_VALUE, "NIL"_ostr);
 
     if (char* pViewRenderState = pDocument->pClass->getCommandValues(pDocument, ".uno:ViewRenderState"))
     {
@@ -1721,62 +1721,65 @@ CallbackFlushHandler::queue_type2::reverse_iterator CallbackFlushHandler::toQueu
     return m_queue2.rbegin() + delta;
 }
 
-void CallbackFlushHandler::setUpdatedType( int nType, bool value )
+void CallbackFlushHandler::setUpdatedType( COKitCallbackType eType, bool value )
 {
-    assert(isUpdatedType(nType));
-    if( m_updatedTypes.size() <= o3tl::make_unsigned( nType ))
-        m_updatedTypes.resize( nType + 1 ); // new are default-constructed, i.e. false
-    m_updatedTypes[ nType ] = value;
+    assert(isUpdatedType(eType));
+    const size_t nIndex = static_cast<size_t>(eType);
+    if( m_updatedTypes.size() <= nIndex )
+        m_updatedTypes.resize( nIndex + 1 ); // new are default-constructed, i.e. false
+    m_updatedTypes[ nIndex ] = value;
     if(value)
         scheduleFlush();
 }
 
-void CallbackFlushHandler::resetUpdatedType( int nType )
+void CallbackFlushHandler::resetUpdatedType( COKitCallbackType eType )
 {
-    setUpdatedType( nType, false );
+    setUpdatedType( eType, false );
 }
 
-void CallbackFlushHandler::setUpdatedTypePerViewId( int nType, int nViewId, int nSourceViewId, bool value )
+void CallbackFlushHandler::setUpdatedTypePerViewId( COKitCallbackType eType, int nViewId, int nSourceViewId, bool value )
 {
-    assert(isUpdatedTypePerViewId(nType));
+    assert(isUpdatedTypePerViewId(eType));
     std::vector<PerViewIdData>& types = m_updatedTypesPerViewId[ nViewId ];
-    if( types.size() <= o3tl::make_unsigned( nType ))
-        types.resize( nType + 1 ); // new are default-constructed, i.e. 'set' is false
-    types[ nType ] = PerViewIdData{ value, nSourceViewId };
+    const size_t nIndex = static_cast<size_t>(eType);
+    if( types.size() <= nIndex )
+        types.resize( nIndex + 1 ); // new are default-constructed, i.e. 'set' is false
+    types[ nIndex ] = PerViewIdData{ value, nSourceViewId };
     if(value)
         scheduleFlush();
 }
 
-void CallbackFlushHandler::resetUpdatedTypePerViewId( int nType, int nViewId )
+void CallbackFlushHandler::resetUpdatedTypePerViewId( COKitCallbackType eType, int nViewId )
 {
-    assert(isUpdatedTypePerViewId(nType));
+    assert(isUpdatedTypePerViewId(eType));
     bool allViewIds = false;
     // Handle specially messages that do not have viewId for backwards compatibility.
-    if( nType == KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR && !comphelper::COKit::isViewIdForVisCursorInvalidation())
+    if( eType == COKitCallbackType::INVALIDATE_VISIBLE_CURSOR && !comphelper::COKit::isViewIdForVisCursorInvalidation())
         allViewIds = true;
     if( !allViewIds )
     {
-        setUpdatedTypePerViewId( nType, nViewId, -1, false );
+        setUpdatedTypePerViewId( eType, nViewId, -1, false );
         return;
     }
     for( auto& it : m_updatedTypesPerViewId )
     {
         std::vector<PerViewIdData>& types = it.second;
-        if( types.size() >= o3tl::make_unsigned( nType ))
-            types[ nType ].set = false;
+        const size_t nIndex = static_cast<size_t>(eType);
+        if( types.size() >= nIndex )
+            types[ nIndex ].set = false;
     }
 }
 
-void CallbackFlushHandler::viewCallback(int nType, const OString& pPayload)
+void CallbackFlushHandler::viewCallback(COKitCallbackType eType, const OString& pPayload)
 {
     CallbackData callbackData(pPayload);
-    queue(nType, callbackData);
+    queue(eType, callbackData);
 }
 
-void CallbackFlushHandler::viewCallbackWithViewId(int nType, const OString& pPayload, int nViewId)
+void CallbackFlushHandler::viewCallbackWithViewId(COKitCallbackType eType, const OString& pPayload, int nViewId)
 {
     CallbackData callbackData(pPayload, nViewId);
-    queue(nType, callbackData);
+    queue(eType, callbackData);
 }
 
 void CallbackFlushHandler::viewVectorPartChanged(int nPart)
@@ -1816,7 +1819,7 @@ void CallbackFlushHandler::flushVectorPrimitivesDeltas()
         pDocument->getCommandValues(aJsonWriter,
                                     std::string_view(aCommand.getStr(), aCommand.getLength()));
         const OString aDelta = aJsonWriter.finishAndGetAsOString();
-        m_pCallback(KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA, aDelta.getStr(), m_pData);
+        m_pCallback(COKitCallbackType::VECTOR_PRIMITIVES_DELTA, aDelta.getStr(), m_pData);
     }
 }
 
@@ -1860,23 +1863,23 @@ void CallbackFlushHandler::viewInvalidateTilesCallback(const tools::Rectangle* p
 
     // RectangleAndPart ctor doesn't store &aRect, so this is OK.
     CallbackData callbackData(&aRect, nPart, nMode);
-    queue(KIT_CALLBACK_INVALIDATE_TILES, callbackData);
+    queue(COKitCallbackType::INVALIDATE_TILES, callbackData);
 }
 
-void CallbackFlushHandler::viewUpdatedCallback(int nType)
+void CallbackFlushHandler::viewUpdatedCallback(COKitCallbackType eType)
 {
-    assert(isUpdatedType( nType ));
+    assert(isUpdatedType( eType ));
     std::unique_lock<std::recursive_mutex> lock(m_mutex);
-    SAL_INFO("kit", "Updated: [" << nType << "]");
-    setUpdatedType(nType, true);
+    SAL_INFO("kit", "Updated: [" << eType << "]");
+    setUpdatedType(eType, true);
 }
 
-void CallbackFlushHandler::viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId)
+void CallbackFlushHandler::viewUpdatedCallbackPerViewId(COKitCallbackType eType, int nViewId, int nSourceViewId)
 {
-    assert(isUpdatedTypePerViewId( nType ));
+    assert(isUpdatedTypePerViewId( eType ));
     std::unique_lock<std::recursive_mutex> lock(m_mutex);
-    SAL_INFO("kit", "Updated: [" << nType << "]");
-    setUpdatedTypePerViewId(nType, nViewId, nSourceViewId, true);
+    SAL_INFO("kit", "Updated: [" << eType << "]");
+    setUpdatedTypePerViewId(eType, nViewId, nSourceViewId, true);
 }
 
 void CallbackFlushHandler::dumpState(rtl::OStringBuffer &rState)
@@ -1902,13 +1905,13 @@ void CallbackFlushHandler::viewAddPendingInvalidateTiles()
     scheduleFlush();
 }
 
-void CallbackFlushHandler::queue(const int type, const OString& data)
+void CallbackFlushHandler::queue(const COKitCallbackType type, const OString& data)
 {
     CallbackData callbackData(data);
     queue(type, callbackData);
 }
 
-void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
+void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCallbackData)
 {
     comphelper::ProfileZone aZone("CallbackFlushHandler::queue");
 
@@ -1919,17 +1922,17 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         // In background mode - avoid any extraneous or confusing messages
         switch (type)
         {
-        case KIT_CALLBACK_INVALIDATE_TILES:
-        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        case KIT_CALLBACK_TEXT_SELECTION:
-        case KIT_CALLBACK_CURSOR_VISIBLE:
-        case KIT_CALLBACK_GRAPHIC_SELECTION:
-        case KIT_CALLBACK_TABLE_SELECTED:
-        case KIT_CALLBACK_SET_PART:
-        case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
-        case KIT_CALLBACK_MOUSE_POINTER:
-        case KIT_CALLBACK_INVALIDATE_HEADER:
-        case KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
+        case COKitCallbackType::INVALIDATE_TILES:
+        case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
+        case COKitCallbackType::TEXT_SELECTION:
+        case COKitCallbackType::CURSOR_VISIBLE:
+        case COKitCallbackType::GRAPHIC_SELECTION:
+        case COKitCallbackType::TABLE_SELECTED:
+        case COKitCallbackType::SET_PART:
+        case COKitCallbackType::DOCUMENT_SIZE_CHANGED:
+        case COKitCallbackType::MOUSE_POINTER:
+        case COKitCallbackType::INVALIDATE_HEADER:
+        case COKitCallbackType::INVALIDATE_SHEET_GEOMETRY:
             SAL_INFO("kit", "Elide event in background save mode");
             return;
         default:
@@ -1939,16 +1942,16 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
 
     bool bIsChartActive = false;
     bool bIsComment = false;
-    if (type == KIT_CALLBACK_GRAPHIC_SELECTION)
+    if (type == COKitCallbackType::GRAPHIC_SELECTION)
     {
         KitChartHelper aChartHelper(SfxViewShell::Current());
         bIsChartActive = aChartHelper.GetWindow() != nullptr;
     }
-    else if (type == KIT_CALLBACK_COMMENT)
+    else if (type == COKitCallbackType::COMMENT)
     {
         bIsComment = true;
     }
-    else if (type == KIT_CALLBACK_VIEW_RENDER_STATE)
+    else if (type == COKitCallbackType::VIEW_RENDER_STATE)
     {
         m_aViewRenderState = aCallbackData.getPayload();
     }
@@ -1962,16 +1965,16 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         // while the complex command in question executes.
         // We don't want to suppress everything here on the wrong assumption
         // that no new events are fired during painting.
-        if (type != KIT_CALLBACK_STATE_CHANGED &&
-            type != KIT_CALLBACK_INVALIDATE_TILES &&
-            type != KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
-            type != KIT_CALLBACK_CURSOR_VISIBLE &&
-            type != KIT_CALLBACK_VIEW_CURSOR_VISIBLE &&
-            type != KIT_CALLBACK_TEXT_SELECTION &&
-            type != KIT_CALLBACK_TEXT_SELECTION_START &&
-            type != KIT_CALLBACK_TEXT_SELECTION_END &&
-            type != KIT_CALLBACK_MEDIA_SHAPE &&
-            type != KIT_CALLBACK_REFERENCE_MARKS)
+        if (type != COKitCallbackType::STATE_CHANGED &&
+            type != COKitCallbackType::INVALIDATE_TILES &&
+            type != COKitCallbackType::INVALIDATE_VISIBLE_CURSOR &&
+            type != COKitCallbackType::CURSOR_VISIBLE &&
+            type != COKitCallbackType::VIEW_CURSOR_VISIBLE &&
+            type != COKitCallbackType::TEXT_SELECTION &&
+            type != COKitCallbackType::TEXT_SELECTION_START &&
+            type != COKitCallbackType::TEXT_SELECTION_END &&
+            type != COKitCallbackType::MEDIA_SHAPE &&
+            type != COKitCallbackType::REFERENCE_MARKS)
         {
             SAL_INFO("kit", "Skipping while painting [" << type << "]: [" << aCallbackData.getPayload() << "].");
             return;
@@ -1983,7 +1986,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
     }
 
     // Suppress invalid payloads.
-    if (type == KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
+    if (type == COKitCallbackType::INVALIDATE_VISIBLE_CURSOR &&
         aCallbackData.getPayload().indexOf(", 0, 0, ") != -1 &&
         aCallbackData.getPayload().indexOf("\"hyperlink\":\"\"") == -1 &&
         aCallbackData.getPayload().indexOf("\"hyperlink\": {}") == -1)
@@ -2015,37 +2018,37 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
     // drop duplicate callbacks for the listed types
     switch (type)
     {
-        case KIT_CALLBACK_TEXT_SELECTION_START:
-        case KIT_CALLBACK_TEXT_SELECTION_END:
-        case KIT_CALLBACK_TEXT_SELECTION:
-        case KIT_CALLBACK_GRAPHIC_SELECTION:
-        case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
-        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
-        case KIT_CALLBACK_STATE_CHANGED:
-        case KIT_CALLBACK_MOUSE_POINTER:
-        case KIT_CALLBACK_CELL_CURSOR:
-        case KIT_CALLBACK_CELL_VIEW_CURSOR:
-        case KIT_CALLBACK_CELL_FORMULA:
-        case KIT_CALLBACK_CELL_ADDRESS:
-        case KIT_CALLBACK_CELL_SELECTION_AREA:
-        case KIT_CALLBACK_CURSOR_VISIBLE:
-        case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
-        case KIT_CALLBACK_SET_PART:
-        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
-        case KIT_CALLBACK_INVALIDATE_HEADER:
-        case KIT_CALLBACK_WINDOW:
-        case KIT_CALLBACK_CALC_FUNCTION_LIST:
-        case KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
-        case KIT_CALLBACK_REFERENCE_MARKS:
-        case KIT_CALLBACK_CELL_AUTO_FILL_AREA:
-        case KIT_CALLBACK_A11Y_FOCUS_CHANGED:
-        case KIT_CALLBACK_A11Y_CARET_CHANGED:
-        case KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
-        case KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
-        case KIT_CALLBACK_COLOR_PALETTES:
-        case KIT_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE:
-        case KIT_CALLBACK_A11Y_SELECTION_CHANGED:
+        case COKitCallbackType::TEXT_SELECTION_START:
+        case COKitCallbackType::TEXT_SELECTION_END:
+        case COKitCallbackType::TEXT_SELECTION:
+        case COKitCallbackType::GRAPHIC_SELECTION:
+        case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
+        case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
+        case COKitCallbackType::INVALIDATE_VIEW_CURSOR:
+        case COKitCallbackType::STATE_CHANGED:
+        case COKitCallbackType::MOUSE_POINTER:
+        case COKitCallbackType::CELL_CURSOR:
+        case COKitCallbackType::CELL_VIEW_CURSOR:
+        case COKitCallbackType::CELL_FORMULA:
+        case COKitCallbackType::CELL_ADDRESS:
+        case COKitCallbackType::CELL_SELECTION_AREA:
+        case COKitCallbackType::CURSOR_VISIBLE:
+        case COKitCallbackType::VIEW_CURSOR_VISIBLE:
+        case COKitCallbackType::SET_PART:
+        case COKitCallbackType::TEXT_VIEW_SELECTION:
+        case COKitCallbackType::INVALIDATE_HEADER:
+        case COKitCallbackType::WINDOW:
+        case COKitCallbackType::CALC_FUNCTION_LIST:
+        case COKitCallbackType::INVALIDATE_SHEET_GEOMETRY:
+        case COKitCallbackType::REFERENCE_MARKS:
+        case COKitCallbackType::CELL_AUTO_FILL_AREA:
+        case COKitCallbackType::A11Y_FOCUS_CHANGED:
+        case COKitCallbackType::A11Y_CARET_CHANGED:
+        case COKitCallbackType::A11Y_TEXT_SELECTION_CHANGED:
+        case COKitCallbackType::A11Y_FOCUSED_CELL_CHANGED:
+        case COKitCallbackType::COLOR_PALETTES:
+        case COKitCallbackType::A11Y_EDITING_IN_SELECTION_STATE:
+        case COKitCallbackType::A11Y_SELECTION_CHANGED:
         {
             const auto pos = std::find(m_queue1.rbegin(), m_queue1.rend(), type);
             auto pos2 = toQueue2(pos);
@@ -2056,16 +2059,19 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             }
         }
         break;
+
+        default:
+        break;
     }
 
-    if (type == KIT_CALLBACK_TEXT_SELECTION && aCallbackData.isEmpty())
+    if (type == COKitCallbackType::TEXT_SELECTION && aCallbackData.isEmpty())
     {
-        const auto posStart = std::find(m_queue1.rbegin(), m_queue1.rend(), KIT_CALLBACK_TEXT_SELECTION_START);
+        const auto posStart = std::find(m_queue1.rbegin(), m_queue1.rend(), COKitCallbackType::TEXT_SELECTION_START);
         auto posStart2 = toQueue2(posStart);
         if (posStart != m_queue1.rend())
             posStart2->clear();
 
-        const auto posEnd = std::find(m_queue1.rbegin(), m_queue1.rend(), KIT_CALLBACK_TEXT_SELECTION_END);
+        const auto posEnd = std::find(m_queue1.rbegin(), m_queue1.rend(), COKitCallbackType::TEXT_SELECTION_END);
         auto posEnd2 = toQueue2(posEnd);
         if (posEnd != m_queue1.rend())
             posEnd2->clear();
@@ -2076,15 +2082,18 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
     {
         switch (type)
         {
-            case KIT_CALLBACK_TEXT_SELECTION_START:
-            case KIT_CALLBACK_TEXT_SELECTION_END:
-            case KIT_CALLBACK_TEXT_SELECTION:
-            case KIT_CALLBACK_GRAPHIC_SELECTION:
-            case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-            case KIT_CALLBACK_INVALIDATE_TILES:
-            case KIT_CALLBACK_TOOLTIP:
+            case COKitCallbackType::TEXT_SELECTION_START:
+            case COKitCallbackType::TEXT_SELECTION_END:
+            case COKitCallbackType::TEXT_SELECTION:
+            case COKitCallbackType::GRAPHIC_SELECTION:
+            case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
+            case COKitCallbackType::INVALIDATE_TILES:
+            case COKitCallbackType::TOOLTIP:
                 if (removeAll(type))
                     SAL_INFO("kit", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
+                break;
+
+            default:
                 break;
         }
     }
@@ -2094,26 +2103,26 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         {
             // These are safe to use the latest state and ignore previous
             // ones (if any) since the last overrides previous ones.
-            case KIT_CALLBACK_TEXT_SELECTION_START:
-            case KIT_CALLBACK_TEXT_SELECTION_END:
-            case KIT_CALLBACK_TEXT_SELECTION:
-            case KIT_CALLBACK_MOUSE_POINTER:
-            case KIT_CALLBACK_CELL_CURSOR:
-            case KIT_CALLBACK_CELL_FORMULA:
-            case KIT_CALLBACK_CELL_ADDRESS:
-            case KIT_CALLBACK_CURSOR_VISIBLE:
-            case KIT_CALLBACK_SET_PART:
-            case KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE:
-            case KIT_CALLBACK_RULER_UPDATE:
-            case KIT_CALLBACK_VERTICAL_RULER_UPDATE:
-            case KIT_CALLBACK_A11Y_FOCUS_CHANGED:
-            case KIT_CALLBACK_A11Y_CARET_CHANGED:
-            case KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
-            case KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
-            case KIT_CALLBACK_COLOR_PALETTES:
-            case KIT_CALLBACK_TOOLTIP:
-            case KIT_CALLBACK_SHAPE_INNER_TEXT:
-            case KIT_CALLBACK_SHAPE_DRAG_PREVIEW:
+            case COKitCallbackType::TEXT_SELECTION_START:
+            case COKitCallbackType::TEXT_SELECTION_END:
+            case COKitCallbackType::TEXT_SELECTION:
+            case COKitCallbackType::MOUSE_POINTER:
+            case COKitCallbackType::CELL_CURSOR:
+            case COKitCallbackType::CELL_FORMULA:
+            case COKitCallbackType::CELL_ADDRESS:
+            case COKitCallbackType::CURSOR_VISIBLE:
+            case COKitCallbackType::SET_PART:
+            case COKitCallbackType::STATUS_INDICATOR_SET_VALUE:
+            case COKitCallbackType::RULER_UPDATE:
+            case COKitCallbackType::VERTICAL_RULER_UPDATE:
+            case COKitCallbackType::A11Y_FOCUS_CHANGED:
+            case COKitCallbackType::A11Y_CARET_CHANGED:
+            case COKitCallbackType::A11Y_TEXT_SELECTION_CHANGED:
+            case COKitCallbackType::A11Y_FOCUSED_CELL_CHANGED:
+            case COKitCallbackType::COLOR_PALETTES:
+            case COKitCallbackType::TOOLTIP:
+            case COKitCallbackType::SHAPE_INNER_TEXT:
+            case COKitCallbackType::SHAPE_DRAG_PREVIEW:
             {
                 if (removeAll(type))
                     SAL_INFO("kit", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
@@ -2123,20 +2132,20 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             // These are safe to use the latest state and ignore previous
             // ones (if any) since the last overrides previous ones,
             // but only if the view is the same.
-            case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+            case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
                 // deleting the duplicate of visible cursor message can cause hyperlink popup not to show up on second/or more click on the same place.
                 // If the hyperlink is not empty we can bypass that to show the popup
                 if (aCallbackData.getPayload().indexOf("\"hyperlink\":\"\"") == -1
                     && aCallbackData.getPayload().indexOf("\"hyperlink\": {}") == -1)
                     break;
                 [[fallthrough]];
-            case KIT_CALLBACK_CELL_VIEW_CURSOR:
-            case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
-            case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
-            case KIT_CALLBACK_TEXT_VIEW_SELECTION:
-            case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
-            case KIT_CALLBACK_CALC_FUNCTION_LIST:
-            case KIT_CALLBACK_FORM_FIELD_BUTTON:
+            case COKitCallbackType::CELL_VIEW_CURSOR:
+            case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
+            case COKitCallbackType::INVALIDATE_VIEW_CURSOR:
+            case COKitCallbackType::TEXT_VIEW_SELECTION:
+            case COKitCallbackType::VIEW_CURSOR_VISIBLE:
+            case COKitCallbackType::CALC_FUNCTION_LIST:
+            case COKitCallbackType::FORM_FIELD_BUTTON:
             {
                 const int nViewId = aCallbackData.getViewId();
                 removeAll(type, [nViewId] (const CallbackData& elemData) {
@@ -2146,14 +2155,14 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             }
             break;
 
-            case KIT_CALLBACK_INVALIDATE_TILES:
+            case COKitCallbackType::INVALIDATE_TILES:
                 if (processInvalidateTilesEvent(type, aCallbackData))
                     return;
             break;
 
             // State changes with same name override previous ones with a different value.
             // Ex. ".uno:PageStatus=Slide 20 of 83" overwrites any previous PageStatus.
-            case KIT_CALLBACK_STATE_CHANGED:
+            case COKitCallbackType::STATE_CHANGED:
             {
                 // Compare the state name=value and overwrite earlier entries with same name.
                 const auto pos = aCallbackData.getPayload().indexOf('=');
@@ -2173,18 +2182,21 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             }
             break;
 
-            case KIT_CALLBACK_WINDOW:
+            case COKitCallbackType::WINDOW:
                 if (processWindowEvent(type, aCallbackData))
                     return;
             break;
 
-            case KIT_CALLBACK_GRAPHIC_SELECTION:
+            case COKitCallbackType::GRAPHIC_SELECTION:
             {
                 // remove only selection ranges and 'EMPTY' messages
                 // always send 'INPLACE' and 'INPLACE EXIT' messages
                 removeAll(type, [] (const CallbackData& elemData)
                     { return (elemData.getPayload().indexOf("INPLACE") == -1); });
             }
+            break;
+
+            default:
             break;
         }
     }
@@ -2221,7 +2233,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
     scheduleFlush();
 }
 
-bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& aCallbackData)
+bool CallbackFlushHandler::processInvalidateTilesEvent(COKitCallbackType type, CallbackData& aCallbackData)
 {
     RectangleAndPart rcNew = aCallbackData.getRectangleAndPart();
     if (rcNew.isEmpty())
@@ -2233,7 +2245,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
     // If we have to invalidate all tiles, we can skip any new tile invalidation.
     // Find the last INVALIDATE_TILES entry, if any to see if it's invalidate-all.
     const auto pos
-        = std::find(m_queue1.rbegin(), m_queue1.rend(), KIT_CALLBACK_INVALIDATE_TILES);
+        = std::find(m_queue1.rbegin(), m_queue1.rend(), COKitCallbackType::INVALIDATE_TILES);
     if (pos != m_queue1.rend())
     {
         auto pos2 = toQueue2(pos);
@@ -2262,7 +2274,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
     {
         SAL_INFO("kit", "Have Empty [" << type << "]: [" << aCallbackData.getPayload()
                                        << "] so removing all with part " << rcNew.m_nPart << ".");
-        removeAll(KIT_CALLBACK_INVALIDATE_TILES, [&rcNew](const CallbackData& elemData) {
+        removeAll(COKitCallbackType::INVALIDATE_TILES, [&rcNew](const CallbackData& elemData) {
             // Remove exiting if new is all-encompassing, or if of the same part.
             return ((rcNew.m_nPart == -1 || rcNew.m_nPart == elemData.getRectangleAndPart().m_nPart)
                 && (rcNew.m_nMode == elemData.getRectangleAndPart().m_nMode));
@@ -2273,7 +2285,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
         const auto rcOrig = rcNew;
 
         SAL_INFO("kit", "Have [" << type << "]: [" << aCallbackData.getPayload() << "] so merging overlapping.");
-        removeAll(KIT_CALLBACK_INVALIDATE_TILES,[&rcNew](const CallbackData& elemData) {
+        removeAll(COKitCallbackType::INVALIDATE_TILES,[&rcNew](const CallbackData& elemData) {
             const RectangleAndPart& rcOld = elemData.getRectangleAndPart();
             if (rcNew.m_nPart != -1 && rcOld.m_nPart != -1 &&
                 (rcOld.m_nPart != rcNew.m_nPart || rcOld.m_nMode != rcNew.m_nMode))
@@ -2343,7 +2355,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
     return false;
 }
 
-bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackData)
+bool CallbackFlushHandler::processWindowEvent(COKitCallbackType type, CallbackData& aCallbackData)
 {
     const OString& payload = aCallbackData.getPayload();
 
@@ -2357,7 +2369,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
         // remove all previous window part invalidations
         if (aRectStr.empty())
         {
-            removeAll(KIT_CALLBACK_WINDOW,[&nKitWindowId](const CallbackData& elemData) {
+            removeAll(COKitCallbackType::WINDOW,[&nKitWindowId](const CallbackData& elemData) {
                 const boost::property_tree::ptree& aOldTree = elemData.getJson();
                 if (nKitWindowId == aOldTree.get<unsigned>("id", 0)
                     && aOldTree.get<std::string>("action", "") == "invalidate")
@@ -2376,7 +2388,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
             auto it2 = m_queue2.rbegin();
             for (;it1 != m_queue1.rend(); ++it1, ++it2)
             {
-                if (*it1 != KIT_CALLBACK_WINDOW)
+                if (*it1 != COKitCallbackType::WINDOW)
                     continue;
                 const boost::property_tree::ptree& aOldTree = it2->getJson();
                 if (nKitWindowId == aOldTree.get<unsigned>("id", 0)
@@ -2403,7 +2415,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
             aRectStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
             tools::Rectangle aNewRect(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
             bool currentIsRedundant = false;
-            removeAll(KIT_CALLBACK_WINDOW, [&aNewRect, &nKitWindowId,
+            removeAll(COKitCallbackType::WINDOW, [&aNewRect, &nKitWindowId,
                        &currentIsRedundant](const CallbackData& elemData) {
                 const boost::property_tree::ptree& aOldTree = elemData.getJson();
                 if (aOldTree.get<std::string>("action", "") == "invalidate")
@@ -2476,7 +2488,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
     else if (aAction == "created")
     {
         // Remove all previous actions on same dialog, if we are creating it anew.
-        removeAll(KIT_CALLBACK_WINDOW,[&nKitWindowId](const CallbackData& elemData) {
+        removeAll(COKitCallbackType::WINDOW,[&nKitWindowId](const CallbackData& elemData) {
             const boost::property_tree::ptree& aOldTree = elemData.getJson();
             if (nKitWindowId == aOldTree.get<unsigned>("id", 0))
                 return true;
@@ -2498,7 +2510,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
     {
         // A size change is practically re-creation of the window.
         // But at a minimum it's a full invalidation.
-        removeAll(KIT_CALLBACK_WINDOW, [&nKitWindowId](const CallbackData& elemData) {
+        removeAll(COKitCallbackType::WINDOW, [&nKitWindowId](const CallbackData& elemData) {
             const boost::property_tree::ptree& aOldTree = elemData.getJson();
             if (nKitWindowId == aOldTree.get<unsigned>("id", 0))
             {
@@ -2529,23 +2541,25 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
     std::swap(updatedTypesPerViewId, m_updatedTypesPerViewId);
 
     // Some types must always precede other types, for example
-    // KIT_CALLBACK_TEXT_SELECTION_START and KIT_CALLBACK_TEXT_SELECTION_END
-    // must always precede KIT_CALLBACK_TEXT_SELECTION if present.
+    // COKitCallbackType::TEXT_SELECTION_START and COKitCallbackType::TEXT_SELECTION_END
+    // must always precede COKitCallbackType::TEXT_SELECTION if present.
     // Only these types should be present (see isUpdatedType()) and should be processed in this order.
-    static const int orderedUpdatedTypes[] = {
-        KIT_CALLBACK_TEXT_SELECTION_START, KIT_CALLBACK_TEXT_SELECTION_END, KIT_CALLBACK_TEXT_SELECTION };
+    static const COKitCallbackType orderedUpdatedTypes[] = {
+        COKitCallbackType::TEXT_SELECTION_START, COKitCallbackType::TEXT_SELECTION_END,
+        COKitCallbackType::TEXT_SELECTION };
     // Only these types should be present (see isUpdatedTypePerViewId()) and (as of now)
     // the order doesn't matter.
-    static const int orderedUpdatedTypesPerViewId[] = {
-        KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
-        KIT_CALLBACK_INVALIDATE_VIEW_CURSOR,
-        KIT_CALLBACK_TEXT_VIEW_SELECTION };
+    static const COKitCallbackType orderedUpdatedTypesPerViewId[] = {
+        COKitCallbackType::INVALIDATE_VISIBLE_CURSOR,
+        COKitCallbackType::INVALIDATE_VIEW_CURSOR,
+        COKitCallbackType::TEXT_VIEW_SELECTION };
 
     if (viewShell)
     {
-        for( int type : orderedUpdatedTypes )
+        for( COKitCallbackType type : orderedUpdatedTypes )
         {
-            if(o3tl::make_unsigned( type ) < updatedTypes.size() && updatedTypes[ type ])
+            const size_t nIndex = static_cast<size_t>(type);
+            if(nIndex < updatedTypes.size() && updatedTypes[ nIndex ])
             {
                 enqueueUpdatedType( type, viewShell, m_viewId );
             }
@@ -2561,12 +2575,13 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
     {
         int viewId = it.first;
         const std::vector<PerViewIdData>& types = it.second;
-        for( int type : orderedUpdatedTypesPerViewId )
+        for( COKitCallbackType type : orderedUpdatedTypesPerViewId )
         {
-            if(o3tl::make_unsigned( type ) < types.size() && types[ type ].set)
+            const size_t nIndex = static_cast<size_t>(type);
+            if(nIndex < types.size() && types[ nIndex ].set)
             {
                 SfxViewShell* sourceViewShell = viewShell;
-                const int sourceViewId = types[ type ].sourceViewId;
+                const int sourceViewId = types[ nIndex ].sourceViewId;
                 if( sourceViewId != m_viewId )
                 {
                     assert(sourceViewId >= 0);
@@ -2584,9 +2599,9 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
     }
 }
 
-void CallbackFlushHandler::enqueueUpdatedType( int type, const SfxViewShell* viewShell, int viewId )
+void CallbackFlushHandler::enqueueUpdatedType( COKitCallbackType type, const SfxViewShell* viewShell, int viewId )
 {
-    if (type == KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR)
+    if (type == COKitCallbackType::INVALIDATE_VISIBLE_CURSOR)
     {
         if (const SfxViewShell* viewShell2 = KitStarMathHelper(viewShell).GetSmViewShell())
             viewShell = viewShell2;
@@ -2628,7 +2643,7 @@ void CallbackFlushHandler::invoke()
     auto it2 = m_queue2.begin();
     for (; it1 != m_queue1.end(); ++it1, ++it2)
     {
-        const int type = *it1;
+        const COKitCallbackType type = *it1;
         const auto& payload = it2->getPayload();
         const int viewId = lcl_isViewCallbackType(type) ? it2->getViewId() : -1;
 
@@ -2639,7 +2654,7 @@ void CallbackFlushHandler::invoke()
         {
             sal_Int32 idx;
             // key-value pairs
-            if (type == KIT_CALLBACK_STATE_CHANGED &&
+            if (type == COKitCallbackType::STATE_CHANGED &&
                 (idx = payload.indexOf('=')) != -1)
             {
                 OString key = payload.copy(0, idx);
@@ -2730,7 +2745,7 @@ IMPL_LINK_NOARG(CallbackFlushHandler, FlushQueue, void*, void)
     invoke();
 }
 
-bool CallbackFlushHandler::removeAll(int type)
+bool CallbackFlushHandler::removeAll(COKitCallbackType type)
 {
     bool bErased = false;
     auto it1 = m_queue1.begin();
@@ -2746,7 +2761,8 @@ bool CallbackFlushHandler::removeAll(int type)
     return bErased;
 }
 
-bool CallbackFlushHandler::removeAll(int type, const std::function<bool (const CallbackData&)>& rTestFunc)
+bool CallbackFlushHandler::removeAll(COKitCallbackType type,
+                                     const std::function<bool (const CallbackData&)>& rTestFunc)
 {
     bool bErased = false;
     auto it1 = m_queue1.begin();
@@ -3209,7 +3225,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         if (pLib->mpCallback)
         {
             int nState = doc_getSignatureState(pDocument);
-            pLib->mpCallback(KIT_CALLBACK_SIGNATURE_STATUS, OString::number(nState).getStr(), pLib->mpCallbackData);
+            pLib->mpCallback(COKitCallbackType::SIGNATURE_STATUS, OString::number(nState).getStr(), pLib->mpCallbackData);
         }
 
         auto aFontMappingUseData = OutputDevice::FinishTrackingFontMappingUse();
@@ -5006,7 +5022,7 @@ static void doc_registerCallback(COKitDocument* pThis,
                 sPayload.append("\"" + f.toUtf8() + "\"");
             }
             sPayload.append(" ] }");
-            pCallback(KIT_CALLBACK_FONTS_MISSING, sPayload.toString().getStr(), pData);
+            pCallback(COKitCallbackType::FONTS_MISSING, sPayload.toString().getStr(), pData);
             pDocument->maFontsMissing.clear();
         }
 
@@ -5380,7 +5396,7 @@ namespace {
     This will call a KIT_COMMAND_FINISHED callback when postUnoCommand was
     called with the parameter requesting the notification.
 
-    @see COKitCallbackType::KIT_CALLBACK_UNO_COMMAND_RESULT.
+    @see COKitCallbackType::COKitCallbackType::UNO_COMMAND_RESULT.
 */
 class DispatchResultListener : public cppu::WeakImplHelper<css::frame::XDispatchResultListener>
 {
@@ -5436,7 +5452,7 @@ public:
         aJson.put("saveDurationMics", std::chrono::duration_cast<std::chrono::microseconds>(
                                           std::chrono::steady_clock::now() - mSaveTime)
                                           .count());
-        mpCallback->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+        mpCallback->queue(COKitCallbackType::UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
     }
 
     virtual void disposing(const css::lang::EventObject&) override {}
@@ -5756,7 +5772,7 @@ static void lcl_reportSaveResult(LibLODocument_Impl* pDocument, int nView, const
     auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nView);
     if (handlerIt != pDocument->mpCallbackFlushHandlers.end() && handlerIt->second)
     {
-        handlerIt->second->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, rResult);
+        handlerIt->second->queue(COKitCallbackType::UNO_COMMAND_RESULT, rResult);
         return;
     }
 
@@ -5765,7 +5781,7 @@ static void lcl_reportSaveResult(LibLODocument_Impl* pDocument, int nView, const
     {
         if (rPair.second)
         {
-            rPair.second->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, rResult);
+            rPair.second->queue(COKitCallbackType::UNO_COMMAND_RESULT, rResult);
             return;
         }
     }
@@ -6026,7 +6042,7 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
             aJson.put("commandName", aCommand);
             aJson.put("success", true);
             Application::UICoverageReport(aJson, getDocumentType(pThis), linguisticDataAvailable);
-            pDocument->mpCallbackFlushHandlers[nView]->queue(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+            pDocument->mpCallbackFlushHandlers[nView]->queue(COKitCallbackType::UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
         }
 
         if (applyTracking)
@@ -8743,14 +8759,14 @@ static void lo_status_indicator_callback(void *data, comphelper::COKit::statusIn
     switch (type)
     {
     case comphelper::COKit::statusIndicatorCallbackType::Start:
-        pLib->mpCallback(KIT_CALLBACK_STATUS_INDICATOR_START, pText, pLib->mpCallbackData);
+        pLib->mpCallback(COKitCallbackType::STATUS_INDICATOR_START, pText, pLib->mpCallbackData);
         break;
     case comphelper::COKit::statusIndicatorCallbackType::SetValue:
-        pLib->mpCallback(KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE,
+        pLib->mpCallback(COKitCallbackType::STATUS_INDICATOR_SET_VALUE,
             OUString(OUString::number(percent)).toUtf8().getStr(), pLib->mpCallbackData);
         break;
     case comphelper::COKit::statusIndicatorCallbackType::Finish:
-        pLib->mpCallback(KIT_CALLBACK_STATUS_INDICATOR_FINISH, nullptr, pLib->mpCallbackData);
+        pLib->mpCallback(COKitCallbackType::STATUS_INDICATOR_FINISH, nullptr, pLib->mpCallbackData);
         break;
     }
 }

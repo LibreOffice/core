@@ -271,7 +271,7 @@ class SmViewShell final : public SfxViewShell
     virtual void OuterResizePixel(const Point &rOfs, const Size  &rSize) override;
     virtual void QueryObjAreaPixel( tools::Rectangle& rRect ) const override;
     virtual void SetZoomFactor( double fX, double fY ) override;
-    virtual std::optional<OString> getKitPayload(int nType, int nViewId) const override;
+    virtual std::optional<OString> getKitPayload(COKitCallbackType eType, int nViewId) const override;
 
 public:
 

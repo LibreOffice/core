@@ -44,6 +44,8 @@
 #include <memory>
 #include <vector>
 
+#include <COKit/COKit.hxx>
+
 class OutlinerEditEng;
 class Outliner;
 class EditView;
@@ -423,18 +425,18 @@ public:
 class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI OutlinerViewShell
 {
 public:
-    virtual void viewCallback(int nType, const OString& pPayload) const = 0;
-    virtual void viewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) const = 0;
+    virtual void viewCallback(COKitCallbackType eType, const OString& pPayload) const = 0;
+    virtual void viewCallbackWithViewId(COKitCallbackType eType, const OString& pPayload, int nViewId) const = 0;
     virtual void viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const = 0;
-    virtual void viewUpdatedCallback(int nType) const = 0;
-    virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const = 0;
+    virtual void viewUpdatedCallback(COKitCallbackType eType) const = 0;
+    virtual void viewUpdatedCallbackPerViewId(COKitCallbackType eType, int nViewId, int nSourceViewId) const = 0;
     virtual void viewAddPendingInvalidateTiles() = 0;
     virtual ViewShellId GetViewShellId() const = 0;
     virtual ViewShellDocId GetDocId() const = 0;
     /// Wrapper around KitHelper::notifyOtherViews().
-    virtual void NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload) = 0;
+    virtual void NotifyOtherViews(COKitCallbackType eType, const OString& rKey, const OString& rPayload) = 0;
     /// Wrapper around KitHelper::notifyOtherView().
-    virtual void NotifyOtherView(OutlinerViewShell* pOtherShell, int nType, const OString& rKey, const OString& rPayload) = 0;
+    virtual void NotifyOtherView(OutlinerViewShell* pOtherShell, COKitCallbackType eType, const OString& rKey, const OString& rPayload) = 0;
     virtual vcl::Window* GetEditWindowForActiveOLEObj() const = 0;
 
 protected:

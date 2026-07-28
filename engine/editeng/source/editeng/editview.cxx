@@ -616,8 +616,8 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bActivat
             return;
 
         static const OString aPayload = OString::boolean(true);
-        getImpl().mpViewShell->viewCallback(KIT_CALLBACK_CURSOR_VISIBLE, aPayload);
-        getImpl().mpViewShell->NotifyOtherViews(KIT_CALLBACK_VIEW_CURSOR_VISIBLE, "visible"_ostr, aPayload);
+        getImpl().mpViewShell->viewCallback(COKitCallbackType::CURSOR_VISIBLE, aPayload);
+        getImpl().mpViewShell->NotifyOtherViews(COKitCallbackType::VIEW_CURSOR_VISIBLE, "visible"_ostr, aPayload);
     }
 }
 
@@ -634,8 +634,8 @@ void EditView::HideCursor(bool bDeactivate)
             return;
 
         OString aPayload = OString::boolean(false);
-        getImpl().mpViewShell->viewCallback(KIT_CALLBACK_CURSOR_VISIBLE, aPayload);
-        getImpl().mpViewShell->NotifyOtherViews(KIT_CALLBACK_VIEW_CURSOR_VISIBLE, "visible"_ostr, aPayload);
+        getImpl().mpViewShell->viewCallback(COKitCallbackType::CURSOR_VISIBLE, aPayload);
+        getImpl().mpViewShell->NotifyOtherViews(COKitCallbackType::VIEW_CURSOR_VISIBLE, "visible"_ostr, aPayload);
     }
 }
 
@@ -1079,7 +1079,7 @@ static void KitSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLa
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aRoot, true);
-    pViewShell->viewCallback(KIT_CALLBACK_CONTEXT_MENU, OString(aStream.str()));
+    pViewShell->viewCallback(COKitCallbackType::CONTEXT_MENU, OString(aStream.str()));
 }
 
 bool EditView::ExecuteSpellPopup(const Point& rPosPixel,

@@ -1273,7 +1273,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, aRoot, true);
-                pViewShell->viewCallback(KIT_CALLBACK_CONTEXT_MENU, OString(aStream.str()));
+                pViewShell->viewCallback(COKitCallbackType::CONTEXT_MENU, OString(aStream.str()));
             }
         }
         else

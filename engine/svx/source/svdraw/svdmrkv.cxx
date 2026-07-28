@@ -908,7 +908,7 @@ void SdrMarkView::SetInnerTextAreaForKit() const
     SfxViewShell* pViewShell = GetSfxViewShell();
     OString sRectString = CreateInnerTextRectString();
     if (pViewShell && !sRectString.isEmpty())
-        pViewShell->viewCallback(KIT_CALLBACK_SHAPE_INNER_TEXT, sRectString);
+        pViewShell->viewCallback(COKitCallbackType::SHAPE_INNER_TEXT, sRectString);
 }
 
 void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell)
@@ -978,7 +978,7 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
 
         // hide the text selection too
         if (pViewShell)
-            pViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION, ""_ostr);
+            pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, ""_ostr);
     }
 
     {
@@ -1353,7 +1353,7 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
             sSelectionText = "EMPTY"_ostr;
             sSelectionTextView = "EMPTY"_ostr;
             if (!pOtherShell && pViewShell)
-                pViewShell->NotifyOtherViews(KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection"_ostr, OString());
+                pViewShell->NotifyOtherViews(COKitCallbackType::TEXT_VIEW_SELECTION, "selection"_ostr, OString());
         }
 
         if (bTableSelection)
@@ -1368,11 +1368,11 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aTableJsonTree);
             if (pViewShell)
-                pViewShell->viewCallback(KIT_CALLBACK_TABLE_SELECTED, OString(aStream.str()));
+                pViewShell->viewCallback(COKitCallbackType::TABLE_SELECTED, OString(aStream.str()));
         }
         else if (!getSdrModelFromSdrView().IsWriter() && pViewShell)
         {
-            pViewShell->viewCallback(KIT_CALLBACK_TABLE_SELECTED, "{}"_ostr);
+            pViewShell->viewCallback(COKitCallbackType::TABLE_SELECTED, "{}"_ostr);
         }
 
         if (pOtherShell)
@@ -1380,15 +1380,15 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
             // Another shell wants to know about our existing
             // selection.
             if (pViewShell != pOtherShell)
-                KitHelper::notifyOtherView(*pViewShell, pOtherShell, KIT_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
+                KitHelper::notifyOtherView(*pViewShell, pOtherShell, COKitCallbackType::GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
         }
         else if (pViewShell)
         {
             // We have a new selection, so both pViewShell and the
             // other views want to know about it.
-            pViewShell->viewCallback(KIT_CALLBACK_GRAPHIC_SELECTION, sSelectionText);
+            pViewShell->viewCallback(COKitCallbackType::GRAPHIC_SELECTION, sSelectionText);
 
-            KitHelper::notifyOtherViews(pViewShell, KIT_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
+            KitHelper::notifyOtherViews(pViewShell, COKitCallbackType::GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
         }
     }
 }

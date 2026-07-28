@@ -36,6 +36,8 @@
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 
+#include <COKit/COKit.hxx>
+
 class SwTextFormatColl;
 class SwPageDesc;
 class SwFrameFormat;
@@ -737,7 +739,7 @@ public:
 
     virtual tools::Rectangle getKitVisibleArea() const override;
     virtual void flushPendingKitInvalidateTiles() override;
-    virtual std::optional<OString> getKitPayload(int nType, int nViewId) const override;
+    virtual std::optional<OString> getKitPayload(COKitCallbackType eType, int nViewId) const override;
     /// See SfxViewShell::getEditMode().
     int getEditMode() const override;
 

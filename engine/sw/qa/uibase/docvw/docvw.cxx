@@ -202,25 +202,25 @@ CPPUNIT_TEST_FIXTURE(Test, testShiftDoubleClickOnImage)
 
 namespace
 {
-/// Test COKit callback, handling just KIT_CALLBACK_TOOLTIP.
+/// Test COKit callback, handling just COKitCallbackType::TOOLTIP.
 struct TooltipCallback
 {
     std::string rect;
     std::string anchorRectangles;
     std::string redlineType;
 
-    static void callback(int nType, const char* pPayload, void* pData);
-    void callbackImpl(int nType, const char* pPayload);
+    static void callback(COKitCallbackType eType, const char* pPayload, void* pData);
+    void callbackImpl(COKitCallbackType eType, const char* pPayload);
 };
 
-void TooltipCallback::callback(int nType, const char* pPayload, void* pData)
+void TooltipCallback::callback(COKitCallbackType eType, const char* pPayload, void* pData)
 {
-    static_cast<TooltipCallback*>(pData)->callbackImpl(nType, pPayload);
+    static_cast<TooltipCallback*>(pData)->callbackImpl(eType, pPayload);
 }
 
-void TooltipCallback::callbackImpl(int nType, const char* pPayload)
+void TooltipCallback::callbackImpl(COKitCallbackType eType, const char* pPayload)
 {
-    if (nType == KIT_CALLBACK_TOOLTIP)
+    if (eType == COKitCallbackType::TOOLTIP)
     {
         std::stringstream aStream(pPayload);
         boost::property_tree::ptree aTree;

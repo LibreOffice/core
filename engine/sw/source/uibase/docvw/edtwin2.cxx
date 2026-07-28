@@ -726,7 +726,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         pRedline = aContentAtPos.aFnd.pRedl;
                     }
                     OString aPayload = getTooltipPayload(sText, aFieldRect, rSh, pRedline);
-                    m_rView.viewCallback(KIT_CALLBACK_TOOLTIP, aPayload);
+                    m_rView.viewCallback(COKitCallbackType::TOOLTIP, aPayload);
                 }
                 else
                 {

@@ -58,7 +58,7 @@ void UriTests::testEncode()
 // protocol messages because those are space-delimited but the filename was
 // embedded with literal spaces. The producer side (kit/Kit.cpp's
 // downloadAsFileSaveDialogCallback and kit/ChildSession.cpp's
-// KIT_CALLBACK_EXPORT_FILE handler) must Poco::URI::encode the filename and
+// COKitCallbackType::EXPORT_FILE handler) must Poco::URI::encode the filename and
 // jail-relative URL before placing them in the protocol message; the
 // consumers (DocumentBroker / ClientRequestDispatcher) Uri::decode them.
 //

@@ -237,15 +237,15 @@ bool SwWrtShell::BwdPara_()
     return bRet;
 }
 
-std::optional<OString> SwWrtShell::getKitPayload(int nType, int nViewId) const
+std::optional<OString> SwWrtShell::getKitPayload(COKitCallbackType eType, int nViewId) const
 {
-    switch(nType)
+    switch(eType)
     {
-        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
-            return GetVisibleCursor()->getKitPayload(nType, nViewId);
-        case KIT_CALLBACK_TEXT_SELECTION:
-        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+        case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
+        case COKitCallbackType::INVALIDATE_VIEW_CURSOR:
+            return GetVisibleCursor()->getKitPayload(eType, nViewId);
+        case COKitCallbackType::TEXT_SELECTION:
+        case COKitCallbackType::TEXT_VIEW_SELECTION:
         {
             // Aggregate selection rectangles from all cursors in the ring.
             // In add mode (CTRL+click multi-selection), the actual selections
@@ -265,14 +265,16 @@ std::optional<OString> SwWrtShell::getKitPayload(int nType, int nViewId) const
                 }
             }
             OString sRect = comphelper::string::join("; ", aAllRects);
-            if (nType == KIT_CALLBACK_TEXT_SELECTION)
+            if (eType == COKitCallbackType::TEXT_SELECTION)
                 return sRect;
-            else // KIT_CALLBACK_TEXT_VIEW_SELECTION
+            else // COKitCallbackType::TEXT_VIEW_SELECTION
                 return KitHelper::makePayloadJSON(GetSfxViewShell(), nViewId, "selection", sRect);
         }
-        case KIT_CALLBACK_TEXT_SELECTION_START:
-        case KIT_CALLBACK_TEXT_SELECTION_END:
-            return GetCursor_()->getKitPayload(nType);
+        case COKitCallbackType::TEXT_SELECTION_START:
+        case COKitCallbackType::TEXT_SELECTION_END:
+            return GetCursor_()->getKitPayload(eType);
+        default:
+            break;
     }
     abort();
 }

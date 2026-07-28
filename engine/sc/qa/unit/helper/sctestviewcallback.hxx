@@ -86,9 +86,9 @@ public:
 
     ~ScTestViewCallback();
 
-    static void callback(int nType, const char* pPayload, void* pData);
+    static void callback(COKitCallbackType eType, const char* pPayload, void* pData);
 
-    void callbackImpl(int nType, const char* pPayload);
+    void callbackImpl(COKitCallbackType eType, const char* pPayload);
 
     void ClearAllInvalids();
 

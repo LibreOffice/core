@@ -366,7 +366,7 @@ static void setupFillColorForChart(const SfxViewShell* pShell, SfxItemSet& rSet)
         rSet.Put(aFillColorItem);
 
         if (comphelper::COKit::isActive())
-            pShell->viewCallback(KIT_CALLBACK_STATE_CHANGED,
+            pShell->viewCallback(COKitCallbackType::STATE_CHANGED,
                     (".uno:FillColor=" + OString::number(nFillColor)));
     }
 

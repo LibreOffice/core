@@ -2362,7 +2362,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                 SfxViewShell* pViewShell = SfxViewShell::Current();
                                 if (pViewShell)
                                     pViewShell->viewCallback(
-                                        KIT_CALLBACK_EXPORT_FILE, sTempFileURL.toUtf8());
+                                        COKitCallbackType::EXPORT_FILE, sTempFileURL.toUtf8());
                             }
                         }
                         else

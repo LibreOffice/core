@@ -37,8 +37,8 @@ public:
 
     ScModelObj* createDoc(const char* pName);
     void setupCOKitViewCallback(SfxViewShell* pViewShell);
-    static void callback(int nType, const char* pPayload, void* pData);
-    void callbackImpl(int nType, const char* pPayload);
+    static void callback(COKitCallbackType eType, const char* pPayload, void* pData);
+    void callbackImpl(COKitCallbackType eType, const char* pPayload);
 
     void typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabViewShell* pView,
                          ScModelObj* pModelObj, bool bInEdit = false, bool bCommit = true);

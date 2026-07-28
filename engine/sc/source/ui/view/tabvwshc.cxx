@@ -580,7 +580,7 @@ void ScTabViewShell::notifyAllViewsHeaderInvalidation(const SfxViewShell* pForVi
         if (pTabViewShell && pViewShell->GetDocId() == pForViewShell->GetDocId()
             && (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
         {
-            pViewShell->viewCallback(KIT_CALLBACK_INVALIDATE_HEADER, aPayload);
+            pViewShell->viewCallback(COKitCallbackType::INVALIDATE_HEADER, aPayload);
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
@@ -649,7 +649,7 @@ void ScTabViewShell::notifyAllViewsSheetGeomInvalidation(const SfxViewShell* pFo
         if (pTabViewShell && pViewShell->GetDocId() == pForViewShell->GetDocId() &&
                 (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
         {
-            pViewShell->viewCallback(KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY, aPayload);
+            pViewShell->viewCallback(COKitCallbackType::INVALIDATE_SHEET_GEOMETRY, aPayload);
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }

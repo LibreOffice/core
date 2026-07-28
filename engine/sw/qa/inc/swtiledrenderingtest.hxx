@@ -27,8 +27,8 @@ public:
 protected:
     SwXTextDocument* createDoc(const char* pName = nullptr);
     void setupCOKitViewCallback(SfxViewShell* pViewShell);
-    static void callback(int nType, const char* pPayload, void* pData);
-    void callbackImpl(int nType, const char* pPayload);
+    static void callback(COKitCallbackType eType, const char* pPayload, void* pData);
+    void callbackImpl(COKitCallbackType eType, const char* pPayload);
     // First invalidation.
     tools::Rectangle m_aInvalidation;
     /// Union of all invalidations.

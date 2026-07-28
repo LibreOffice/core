@@ -44,9 +44,9 @@ bool EnableExperimental = false;
 
 extern "C"
 {
-    static void myCallback(int type, const char* payload, void*)
+    static void myCallback(COKitCallbackType eType, const char* payload, void*)
     {
-        std::cout << "Callback: " << kitCallbackTypeToString(type)
+        std::cout << "Callback: " << kitCallbackTypeToString(eType)
                   << " payload: " << payload << std::endl;
     }
 }

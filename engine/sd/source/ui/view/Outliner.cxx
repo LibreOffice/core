@@ -688,7 +688,7 @@ bool SdOutliner::SearchAndReplaceAll()
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aTree);
             OString aPayload( aStream.str() );
-            rSfxViewShell.viewCallback(KIT_CALLBACK_SEARCH_RESULT_SELECTION, aPayload);
+            rSfxViewShell.viewCallback(COKitCallbackType::SEARCH_RESULT_SELECTION, aPayload);
         }
     }
 
@@ -699,7 +699,7 @@ bool SdOutliner::SearchAndReplaceAll()
         // Find-all, tiled rendering and we have at least one match.
         OString aPayload = OString::number(mnStartPageIndex);
         SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
-        rSfxViewShell.viewCallback(KIT_CALLBACK_SET_PART, aPayload);
+        rSfxViewShell.viewCallback(COKitCallbackType::SET_PART, aPayload);
 
         // Emit a selection callback here:
         // 1) The original one is no longer valid, as we there was a SET_PART in between
@@ -712,7 +712,7 @@ bool SdOutliner::SearchAndReplaceAll()
                 aRectangles.push_back(rSelection.m_aRectangles);
         }
         OString sRectangles = comphelper::string::join("; ", aRectangles);
-        rSfxViewShell.viewCallback(KIT_CALLBACK_TEXT_SELECTION, sRectangles);
+        rSfxViewShell.viewCallback(COKitCallbackType::TEXT_SELECTION, sRectangles);
     }
 
     mnStartPageIndex = sal_uInt16(-1);
@@ -807,7 +807,7 @@ void SdOutliner::sendKitSearchResultCallback(const std::shared_ptr<sd::ViewShell
         // notify COKit about changed page
         OString aPayload = OString::number(maCurrentPosition.mnPageIndex);
         SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
-        rSfxViewShell.viewCallback(KIT_CALLBACK_SET_PART, aPayload);
+        rSfxViewShell.viewCallback(COKitCallbackType::SET_PART, aPayload);
 
         // also about search result selections
         boost::property_tree::ptree aTree;
@@ -824,11 +824,11 @@ void SdOutliner::sendKitSearchResultCallback(const std::shared_ptr<sd::ViewShell
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aTree);
         aPayload = OString(aStream.str());
-        rSfxViewShell.viewCallback(KIT_CALLBACK_SEARCH_RESULT_SELECTION, aPayload);
+        rSfxViewShell.viewCallback(COKitCallbackType::SEARCH_RESULT_SELECTION, aPayload);
 
         if (rVectorGraphicSearchContext.mbCurrentIsVectorGraphic)
         {
-            rSfxViewShell.viewCallback(KIT_CALLBACK_TEXT_SELECTION, sRectangles);
+            rSfxViewShell.viewCallback(COKitCallbackType::TEXT_SELECTION, sRectangles);
         }
     }
     else
@@ -1465,7 +1465,7 @@ void SdOutliner::ShowEndOfSearchDialog()
             if (pViewShell)
             {
                 SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
-                rSfxViewShell.viewCallback(KIT_CALLBACK_SEARCH_NOT_FOUND, mpSearchItem->GetSearchString().toUtf8());
+                rSfxViewShell.viewCallback(COKitCallbackType::SEARCH_NOT_FOUND, mpSearchItem->GetSearchString().toUtf8());
             }
         }
 

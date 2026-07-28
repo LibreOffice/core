@@ -501,7 +501,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     return (nil, nil)
                 }
                 else if body.hasPrefix("exportfile ") {
-                    // The kit's KIT_CALLBACK_EXPORT_FILE branch sends this for
+                    // The kit's COKitCallbackType::EXPORT_FILE branch sends this for
                     // export flows like .uno:ExportToPDF (PDF with options).
                     // The file has already been written to a tmp URL; show a
                     // native NSSavePanel and copy it to the user's choice.

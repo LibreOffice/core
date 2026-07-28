@@ -681,7 +681,7 @@ IMPL_LINK( ModelData_Impl, OptionsDialogClosedHdl, css::ui::dialogs::DialogClose
     if (pEvt->DialogResult == RET_OK && m_xFilterProperties)
     {
         if (pNotifier)
-            pNotifier->viewCallback( KIT_CALLBACK_EXPORT_FILE, "PENDING"_ostr );
+            pNotifier->viewCallback( COKitCallbackType::EXPORT_FILE, "PENDING"_ostr );
 
         const cpo::uno::Sequence< beans::PropertyValue > aPropsFromDialog = m_xFilterProperties->getPropertyValues();
         for ( const auto& rProp : aPropsFromDialog )
@@ -691,7 +691,7 @@ IMPL_LINK( ModelData_Impl, OptionsDialogClosedHdl, css::ui::dialogs::DialogClose
     }
     else if (pNotifier)
     {
-        pNotifier->viewCallback( KIT_CALLBACK_EXPORT_FILE, "ABORT"_ostr );
+        pNotifier->viewCallback( COKitCallbackType::EXPORT_FILE, "ABORT"_ostr );
     }
 }
 
@@ -1906,12 +1906,12 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
             // there. There is nothing left to deliver, so signal completion
             // with "DONE" - the host dismisses the "Please wait" UI without
             // popping a second, redundant save dialog. (.uno:SaveGraphic
-            // exports to a temp file and fires KIT_CALLBACK_EXPORT_FILE with
+            // exports to a temp file and fires COKitCallbackType::EXPORT_FILE with
             // that URL from its own code path, so it still delivers normally.)
-            pViewShell->viewCallback( KIT_CALLBACK_EXPORT_FILE, "DONE"_ostr );
+            pViewShell->viewCallback( COKitCallbackType::EXPORT_FILE, "DONE"_ostr );
 #else
             OUString sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-            pViewShell->viewCallback( KIT_CALLBACK_EXPORT_FILE, sURL.toUtf8() );
+            pViewShell->viewCallback( COKitCallbackType::EXPORT_FILE, sURL.toUtf8() );
 #endif
         }
     }

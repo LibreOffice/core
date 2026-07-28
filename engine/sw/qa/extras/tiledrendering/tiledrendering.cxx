@@ -1213,7 +1213,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesCallback)
     pWrtShell->Insert(u"x"_ustr);
 
     // Assert that we get exactly one notification about the redline insert.
-    // This was 0, as KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED wasn't sent.
+    // This was 0, as COKitCallbackType::REDLINE_TABLE_SIZE_CHANGED wasn't sent.
     CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableSizeChanged);
 
     CPPUNIT_ASSERT_EQUAL(-1, m_nTrackedChangeIndex);
@@ -1222,7 +1222,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesCallback)
     SfxVoidItem aItem(FN_REDLINE_ACCEPT_DIRECT);
     aSet.Put(aItem);
     pWrtShell->GetView().GetState(aSet);
-    // This failed, KIT_CALLBACK_STATE_CHANGED wasn't sent.
+    // This failed, COKitCallbackType::STATE_CHANGED wasn't sent.
     CPPUNIT_ASSERT_EQUAL(0, m_nTrackedChangeIndex);
 }
 
@@ -1241,7 +1241,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineUpdateCallback)
     pWrtShell->DelLeft();
 
     // Assert that we get exactly one notification about the redline update.
-    // This was 0, as KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED wasn't sent.
+    // This was 0, as COKitCallbackType::REDLINE_TABLE_ENTRY_MODIFIED wasn't sent.
     CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableEntryModified);
 
     // Turn off the change tracking mode, make some modification to left of the
@@ -1540,7 +1540,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, getTilePixelColor(pXTextDocument, 255, 255));
 }
 
-// Test that changing the theme sends the document background color as KIT_CALLBACK_DOCUMENT_BACKGROUND_COLOR
+// Test that changing the theme sends the document background color as COKitCallbackType::DOCUMENT_BACKGROUND_COLOR
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeChangeBackgroundCallback)
 {
     Color aDarkColor(0x1c, 0x1c, 0x1c);

@@ -2200,7 +2200,7 @@ void ScTabView::OnCOKitTabChanged()
 
     KitHelper::forEachOtherView(pThisViewShell, lTabSwitch);
 
-    pThisViewShell->viewCallback(KIT_CALLBACK_INVALIDATE_HEADER, "all"_ostr);
+    pThisViewShell->viewCallback(COKitCallbackType::INVALIDATE_HEADER, "all"_ostr);
 
     if (pThisViewShell->GetInputHandler())
         pThisViewShell->GetInputHandler()->UpdateKitReferenceMarks();

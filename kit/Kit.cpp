@@ -206,7 +206,7 @@ static int URPfromLoFDs[2] { -1, -1 };
 // Abnormally we get COKit events from another thread, which must be
 // push safely into our main poll loop to process to keep all
 // socket buffer & event processing in a single, thread.
-static bool pushToMainThread(COKitCallback cb, int type, const char* p, void* data);
+static bool pushToMainThread(COKitCallback cb, COKitCallbackType type, const char* p, void* data);
 
 [[maybe_unused]]
 static CokHookFunction2* initFunction = nullptr;
@@ -986,7 +986,7 @@ std::size_t Document::purgeSessions()
 }
 
 /// Set Document password for given URL
-void Document::setDocumentPassword(int passwordType)
+void Document::setDocumentPassword(COKitCallbackType passwordType)
 {
     // Log whether the document is password protected and a password is provided
     LOG_INF("setDocumentPassword: passwordProtected=" << _isDocPasswordProtected <<
@@ -1001,9 +1001,9 @@ void Document::setDocumentPassword(int passwordType)
 
     // One thing for sure, this is a password protected document
     _isDocPasswordProtected = true;
-    if (passwordType == KIT_CALLBACK_DOCUMENT_PASSWORD)
+    if (passwordType == COKitCallbackType::DOCUMENT_PASSWORD)
         _docPasswordType = DocumentPasswordType::ToView;
-    else if (passwordType == KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY)
+    else if (passwordType == COKitCallbackType::DOCUMENT_PASSWORD_TO_MODIFY)
         _docPasswordType = DocumentPasswordType::ToModify;
 
     LOG_INF("Calling _loKit->setDocumentPassword");
@@ -1216,52 +1216,52 @@ void Document::trimAfterInactivity()
     }
 }
 
-/* static */ void Document::GlobalCallback(const int type, const char* p, void* data)
+/* static */ void Document::GlobalCallback(COKitCallbackType eType, const char* p, void* data)
 {
     if (SigUtil::getTerminationFlag())
         return;
 
     // unusual COKit event from another thread,
     // data - is Document with process' lifetime.
-    if (pushToMainThread(GlobalCallback, type, p, data))
+    if (pushToMainThread(GlobalCallback, eType, p, data))
         return;
 
     const std::string payload = p ? p : "(nil)";
     Document* self = static_cast<Document*>(data);
 
-    if (type == KIT_CALLBACK_PROFILE_FRAME)
+    if (eType == COKitCallbackType::PROFILE_FRAME)
     {
         // We must send the trace data to the WSD process for output
 
-        LOG_TRC("Document::GlobalCallback " << kitCallbackTypeToString(type) << ": " << payload.length() << " bytes.");
+        LOG_TRC("Document::GlobalCallback " << kitCallbackTypeToString(eType) << ": " << payload.length() << " bytes.");
 
         self->sendTextFrame("traceevent: \n" + payload);
         return;
     }
 
-    LOG_TRC("Document::GlobalCallback " << kitCallbackTypeToString(type) <<
+    LOG_TRC("Document::GlobalCallback " << kitCallbackTypeToString(eType) <<
             " [" << payload << "].");
 
-    if (type == KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY ||
-        type == KIT_CALLBACK_DOCUMENT_PASSWORD)
+    if (eType == COKitCallbackType::DOCUMENT_PASSWORD_TO_MODIFY ||
+        eType == COKitCallbackType::DOCUMENT_PASSWORD)
     {
         // Mark the document password type.
-        self->setDocumentPassword(type);
+        self->setDocumentPassword(eType);
         return;
     }
-    else if (type == KIT_CALLBACK_STATUS_INDICATOR_START ||
-             type == KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE ||
-             type == KIT_CALLBACK_STATUS_INDICATOR_FINISH)
+    else if (eType == COKitCallbackType::STATUS_INDICATOR_START ||
+             eType == COKitCallbackType::STATUS_INDICATOR_SET_VALUE ||
+             eType == COKitCallbackType::STATUS_INDICATOR_FINISH)
     {
         for (auto& it : self->_sessions)
         {
             const std::shared_ptr<ChildSession>& session = it.second;
             if (!session->isCloseFrame())
-                session->loKitCallback(type, payload);
+                session->loKitCallback(eType, payload);
         }
         return;
     }
-    else if (type == KIT_CALLBACK_JSDIALOG || type == KIT_CALLBACK_HYPERLINK_CLICKED)
+    else if (eType == COKitCallbackType::JSDIALOG || eType == COKitCallbackType::HYPERLINK_CLICKED)
     {
         if (self->_sessions.size() == 1)
         {
@@ -1269,10 +1269,10 @@ void Document::trimAfterInactivity()
             const std::shared_ptr<ChildSession>& session = it->second;
             if (session && !session->isCloseFrame())
             {
-                session->loKitCallback(type, payload);
+                session->loKitCallback(eType, payload);
                 if (self->isLoadOngoing() && !self->processInputEnabled())
                 {
-                    LOG_DBG("Enable processing input due to event of " << type << " during load");
+                    LOG_DBG("Enable processing input due to event of " << eType << " during load");
                     session->getProtocol()->enableProcessInput(true);
                 }
                 return;
@@ -1281,17 +1281,17 @@ void Document::trimAfterInactivity()
     }
 
     // Broadcast leftover status indicator callbacks to all clients
-    self->broadcastCallbackToClients(type, payload);
+    self->broadcastCallbackToClients(eType, payload);
 }
 
-/* static */ void Document::ViewCallback(const int type, const char* p, void* data)
+/* static */ void Document::ViewCallback(COKitCallbackType eType, const char* p, void* data)
 {
     if (SigUtil::getTerminationFlag())
         return;
 
     // unusual COKit event from another thread.
     // data - is CallbackDescriptors which share process' lifetime.
-    if (pushToMainThread(ViewCallback, type, p, data))
+    if (pushToMainThread(ViewCallback, eType, p, data))
         return;
 
     CallbackDescriptor* descriptor = static_cast<CallbackDescriptor*>(data);
@@ -1303,10 +1303,10 @@ void Document::trimAfterInactivity()
 
     const std::string payload = p ? p : "(nil)";
     LOG_TRC("Document::ViewCallback [" << descriptor->getViewId() <<
-            "] [" << kitCallbackTypeToString(type) <<
+            "] [" << kitCallbackTypeToString(eType) <<
             "] [" << payload << "].");
 
-    if (type == KIT_CALLBACK_DOCUMENT_PASSWORD_RESET)
+    if (eType == COKitCallbackType::DOCUMENT_PASSWORD_RESET)
     {
         Document* document = descriptor->getDoc();
         Poco::JSON::Object::Ptr object;
@@ -1322,7 +1322,7 @@ void Document::trimAfterInactivity()
         }
         return;
     }
-    else if (type == KIT_CALLBACK_VIEW_RENDER_STATE)
+    else if (eType == COKitCallbackType::VIEW_RENDER_STATE)
     {
         Document* document = descriptor->getDoc();
         if (document)
@@ -1350,13 +1350,13 @@ void Document::trimAfterInactivity()
     }
 
     // merge various callback types together if possible
-    if (type == KIT_CALLBACK_INVALIDATE_TILES)
+    if (eType == COKitCallbackType::INVALIDATE_TILES)
     {
         // all views have to be in sync; FIXME: calc an issue here ?
-        queue->putCallback(-1, type, payload);
+        queue->putCallback(-1, eType, payload);
     }
     else
-        queue->putCallback(descriptor->getViewId(), type, payload);
+        queue->putCallback(descriptor->getViewId(), eType, payload);
 
     LOG_TRC("Document::ViewCallback end.");
 }
@@ -2659,7 +2659,7 @@ void Document::drainCallbacks()
         int viewId = cb._view;
         bool broadcast = cb._view == -1;
 
-        const int type = cb._type;
+        const COKitCallbackType eType = cb._type;
         const std::string &payload = cb._payload;
 
         // Forward the callback to the same view, demultiplexing is done by the CollaboraOffice core.
@@ -2672,14 +2672,14 @@ void Document::drainCallbacks()
                 if (!session.isCloseFrame())
                 {
                     isFound = true;
-                    session.loKitCallback(type, payload);
+                    session.loKitCallback(eType, payload);
                 }
                 else
                 {
                     LOG_ERR("Session-thread of session ["
                             << session.getId() << "] for view [" << viewId
                             << "] is not running. Dropping ["
-                            << kitCallbackTypeToString(type) << "] payload ["
+                            << kitCallbackTypeToString(eType) << "] payload ["
                             << COOLProtocol::getAbbreviatedMessage(payload)
                             << ']');
                 }
@@ -2690,7 +2690,7 @@ void Document::drainCallbacks()
         }
         if (!isFound)
             LOG_ERR("Document::ViewCallback. Session [" << viewId <<
-                    "] is no longer active to process [" << kitCallbackTypeToString(type) <<
+                    "] is no longer active to process [" << kitCallbackTypeToString(eType) <<
                     "] [" << COOLProtocol::getAbbreviatedMessage(payload) <<
                     "] message to Master Session.");
     }
@@ -3309,7 +3309,7 @@ int KitSocketPoll::kitPoll(int timeoutMicroS)
 }
 
 // unusual COKit event from another thread, push into our loop to process.
-bool KitSocketPoll::pushToMainThread(COKitCallback callback, int type,
+bool KitSocketPoll::pushToMainThread(COKitCallback callback, COKitCallbackType eType,
                                      const char* p, void* data) // static
 {
     if (mainPoll && mainPoll->getThreadOwner() != ProcUtil::getThreadId())
@@ -3318,9 +3318,9 @@ bool KitSocketPoll::pushToMainThread(COKitCallback callback, int type,
         std::shared_ptr<std::string> copy;
         if (p)
             copy = std::make_shared<std::string>(p, strlen(p));
-        mainPoll->addCallback([callback, type, data, copy = std::move(copy)] {
+        mainPoll->addCallback([callback, eType, data, copy = std::move(copy)] {
             LOG_TRC("Unusual process callback in main thread");
-            callback(type, copy ? copy->c_str() : nullptr, data);
+            callback(eType, copy ? copy->c_str() : nullptr, data);
         });
         return true;
     }
@@ -3329,9 +3329,9 @@ bool KitSocketPoll::pushToMainThread(COKitCallback callback, int type,
 
 KitSocketPoll *KitSocketPoll::mainPoll = nullptr;
 
-bool pushToMainThread(COKitCallback cb, int type, const char *p, void *data)
+bool pushToMainThread(COKitCallback cb, COKitCallbackType eType, const char *p, void *data)
 {
-    return KitSocketPoll::pushToMainThread(cb, type, p, data);
+    return KitSocketPoll::pushToMainThread(cb, eType, p, data);
 }
 
 #if DOCS_SHARE_PROCESS
@@ -3342,9 +3342,9 @@ std::vector<std::weak_ptr<KitSocketPoll>> KitSocketPoll::KSPolls;
 
 #endif
 
-void documentViewCallback(const int type, const char* payload, void* data)
+void documentViewCallback(COKitCallbackType eType, const char* payload, void* data)
 {
-    Document::ViewCallback(type, payload, data);
+    Document::ViewCallback(eType, payload, data);
 }
 
 #ifndef BUILDING_TESTS
@@ -3479,7 +3479,7 @@ void wakeCallback(void* data)
 // Win32 native picker (output_file_dialog_from_core, registered below). Every
 // other build hands back a fresh path under a tmp dir, lets the engine write
 // there, and then defers picker / delivery to the platform's existing
-// KIT_CALLBACK_EXPORT_FILE handler:
+// COKitCallbackType::EXPORT_FILE handler:
 //   - browser COOL (!MOBILEAPP): the path is under JAILED_DOCUMENT_ROOT so
 //     WSD's downloadId-to-file mapping picks it up; the browser's own save
 //     dialog appears when the resulting downloadas: triggers a download.
@@ -3535,7 +3535,7 @@ void downloadAsFileSaveDialogCallback(const char* suggestedURI, char* result, si
     // URL-encode the path: filename may contain characters (spaces, etc.) that
     // are illegal in a file:// URI. Without encoding, the engine's URI parser
     // either truncates at the first space or rejects the URI outright, and the
-    // resulting payload from KIT_CALLBACK_EXPORT_FILE breaks downstream
+    // resulting payload from COKitCallbackType::EXPORT_FILE breaks downstream
     // space-delimited protocol messages.
     std::string encodedPath;
     Poco::URI::encode(download.absolutePath, "", encodedPath);

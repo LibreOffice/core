@@ -45,7 +45,7 @@ namespace desktop {
         int m_nMode;
 
         // This is the "EMPTY" rectangle, which somewhat confusingly actually means
-        // to drop all rectangles (see KIT_CALLBACK_INVALIDATE_TILES documentation),
+        // to drop all rectangles (see COKitCallbackType::INVALIDATE_TILES documentation),
         // and so it is actually an infinite rectangle and not an empty one.
         constexpr static tools::Rectangle emptyAllRectangle = {0, 0, KitHelper::MaxTwips, KitHelper::MaxTwips};
 
@@ -98,7 +98,7 @@ namespace desktop {
         DESKTOP_DLLPUBLIC explicit CallbackFlushHandler(COKitDocument* pDocument, COKitCallback pCallback, void* pData);
         DESKTOP_DLLPUBLIC virtual ~CallbackFlushHandler() override;
         // TODO This should be dropped and the binary viewCallback() variants should be called?
-        DESKTOP_DLLPUBLIC void queue(const int type, const OString& data);
+        DESKTOP_DLLPUBLIC void queue(const COKitCallbackType type, const OString& data);
 
         /// Disables callbacks on this handler. Must match with identical count
         /// of enableCallbacks. Used during painting and changing views.
@@ -131,11 +131,11 @@ namespace desktop {
         }
 
         // SfxLockCallbackInterface
-        virtual void viewCallback(int nType, const OString& pPayload) override;
-        virtual void viewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) override;
+        virtual void viewCallback(COKitCallbackType eType, const OString& pPayload) override;
+        virtual void viewCallbackWithViewId(COKitCallbackType eType, const OString& pPayload, int nViewId) override;
         DESKTOP_DLLPUBLIC virtual void viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) override;
-        virtual void viewUpdatedCallback(int nType) override;
-        virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) override;
+        virtual void viewUpdatedCallback(COKitCallbackType eType) override;
+        virtual void viewUpdatedCallbackPerViewId(COKitCallbackType eType, int nViewId, int nSourceViewId) override;
         /// Records that a slide part changed, so the next flush pushes
         /// that part's vector-primitives delta to the client.
         DESKTOP_DLLPUBLIC virtual void viewVectorPartChanged(int nPart) override;
@@ -203,20 +203,21 @@ namespace desktop {
             mutable boost::variant<boost::blank, RectangleAndPart, boost::property_tree::ptree, int> PayloadObject;
         };
 
-        typedef std::vector<int> queue_type1;
+        typedef std::vector<COKitCallbackType> queue_type1;
         typedef std::vector<CallbackData> queue_type2;
 
         void scheduleFlush();
         void invoke();
-        bool removeAll(int type);
-        bool removeAll(int type, const std::function<bool (const CallbackData&)>& rTestFunc);
-        bool processInvalidateTilesEvent(int type, CallbackData& aCallbackData);
-        bool processWindowEvent(int type, CallbackData& aCallbackData);
+        bool removeAll(COKitCallbackType type);
+        bool removeAll(COKitCallbackType type,
+                       const std::function<bool (const CallbackData&)>& rTestFunc);
+        bool processInvalidateTilesEvent(COKitCallbackType type, CallbackData& aCallbackData);
+        bool processWindowEvent(COKitCallbackType type, CallbackData& aCallbackData);
         queue_type2::iterator toQueue2(queue_type1::iterator);
         queue_type2::reverse_iterator toQueue2(queue_type1::reverse_iterator);
-        void queue(const int type, CallbackData& data);
+        void queue(const COKitCallbackType type, CallbackData& data);
         void enqueueUpdatedTypes();
-        void enqueueUpdatedType( int type, const SfxViewShell* sourceViewShell, int viewId );
+        void enqueueUpdatedType( COKitCallbackType type, const SfxViewShell* sourceViewShell, int viewId );
         /// Compute and send the delta of every part recorded since the
         /// last flush.
         void flushVectorPrimitivesDeltas();
@@ -227,9 +228,9 @@ namespace desktop {
             so we split the queue in 2 to make the scanning cache friendly. */
         queue_type1 m_queue1;
         queue_type2 m_queue2;
-        std::map<int, OString> m_states;
+        std::map<COKitCallbackType, OString> m_states;
         std::unordered_map<OString, OString> m_lastStateChange;
-        std::unordered_map<int, std::unordered_map<int, OString>> m_viewStates;
+        std::unordered_map<int, std::unordered_map<COKitCallbackType, OString>> m_viewStates;
 
         /// BBox of already painted tiles: part number -> part mode -> rectangle.
         std::map<int, std::map<int, tools::Rectangle>> m_aPaintedTiles;
@@ -240,10 +241,10 @@ namespace desktop {
         // the preferred way is that viewUpdatedCallback()
         // or viewUpdatedCallbackPerViewId() get called to notify about such a message being
         // needed, and we'll set a flag here to fetch the actual message before flushing.
-        void setUpdatedType( int nType, bool value );
-        void setUpdatedTypePerViewId( int nType, int nViewId, int nSourceViewId, bool value );
-        void resetUpdatedType( int nType);
-        void resetUpdatedTypePerViewId( int nType, int nViewId );
+        void setUpdatedType( COKitCallbackType eType, bool value );
+        void setUpdatedTypePerViewId( COKitCallbackType eType, int nViewId, int nSourceViewId, bool value );
+        void resetUpdatedType( COKitCallbackType eType);
+        void resetUpdatedTypePerViewId( COKitCallbackType eType, int nViewId );
         std::vector<bool> m_updatedTypes; // index is type, value is if set
         struct PerViewIdData
         {

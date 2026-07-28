@@ -12,6 +12,8 @@
 #include <stddef.h>
 #include <assert.h>
 
+#include <ostream>
+
 // the API needs C99's bool
 # ifndef _WIN32
 #  include <stdbool.h>
@@ -21,9 +23,6 @@
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 #endif
-
-/** @see kit::Office::registerCallback(). */
-typedef void (*COKitCallback)(int nType, const char* pPayload, void* pData);
 
 /** @see kit::Office::runLoop(). */
 typedef int (*COKitPollCallback)(void* pData, int timeoutUs);
@@ -135,7 +134,7 @@ enum class COKitOptionalFeatures : unsigned long long
     NONE = 0,
 
     /**
-     * Handle KIT_CALLBACK_DOCUMENT_PASSWORD by prompting the user
+     * Handle COKitCallbackType::DOCUMENT_PASSWORD by prompting the user
      * for a password.
      *
      * @see kit::Office::setDocumentPassword().
@@ -143,7 +142,7 @@ enum class COKitOptionalFeatures : unsigned long long
     DOCUMENT_PASSWORD = (1ULL << 0),
 
     /**
-     * Handle KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY by prompting the user
+     * Handle COKitCallbackType::DOCUMENT_PASSWORD_TO_MODIFY by prompting the user
      * for a password.
      *
      * @see kit::Office::setDocumentPassword().
@@ -152,7 +151,7 @@ enum class COKitOptionalFeatures : unsigned long long
 
     /**
      * Request to have the part number as an 5th value in the
-     * KIT_CALLBACK_INVALIDATE_TILES payload.
+     * COKitCallbackType::INVALIDATE_TILES payload.
      */
     PART_IN_INVALIDATION_CALLBACK = (1ULL << 2),
 
@@ -163,7 +162,7 @@ enum class COKitOptionalFeatures : unsigned long long
 
     /**
      * Request to have the active view's Id as the 1st value in the
-     * KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR payload.
+     * COKitCallbackType::INVALIDATE_VISIBLE_CURSOR payload.
      */
     VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK = (1ULL << 5)
 };
@@ -202,7 +201,7 @@ inline COKitOptionalFeatures& operator|=(COKitOptionalFeatures& a, COKitOptional
 // TODO: We should really add some indication at the documentation for
 // each enum value telling which type of callback it is.
 
-typedef enum
+enum class COKitCallbackType
 {
     /**
      * Any tiles which are over the rectangle described in the payload are no
@@ -214,56 +213,56 @@ typedef enum
      *
      * @see COKitOptionalFeatures::PART_IN_INVALIDATION_CALLBACK.
      */
-    KIT_CALLBACK_INVALIDATE_TILES = 0,
+    INVALIDATE_TILES = 0,
     /**
      * The size and/or the position of the visible cursor changed.
      *
-     * Old format is the same as KIT_CALLBACK_INVALIDATE_TILES.
+     * Old format is the same as COKitCallbackType::INVALIDATE_TILES.
      * New format is a JSON with 3 elements the 'viewId' element represented by
      * an integer value, a 'rectangle' element in the format "x, y, width, height",
      * and a 'misspelledWord' element represented by an integer value: '1' when
      * a misspelled word is at the cursor position, '0' when the word is
      * not misspelled.
      */
-    KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR = 1,
+    INVALIDATE_VISIBLE_CURSOR = 1,
     /**
      * The list of rectangles representing the current text selection changed.
      *
      * List format is "rectangle1[; rectangle2[; ...]]" (without quotes and
      * brackets), where rectangleN has the same format as
-     * KIT_CALLBACK_INVALIDATE_TILES. When there is no selection, an empty
+     * COKitCallbackType::INVALIDATE_TILES. When there is no selection, an empty
      * string is provided.
      */
-    KIT_CALLBACK_TEXT_SELECTION = 2,
+    TEXT_SELECTION = 2,
     /**
      * The position and size of the cursor rectangle at the text
      * selection start. It is used to draw the selection handles.
      *
-     * This callback must be called prior to KIT_CALLBACK_TEXT_SELECTION every
+     * This callback must be called prior to COKitCallbackType::TEXT_SELECTION every
      * time the selection is updated.
      *
-     * Rectangle format is the same as KIT_CALLBACK_INVALIDATE_TILES.
+     * Rectangle format is the same as COKitCallbackType::INVALIDATE_TILES.
      */
-    KIT_CALLBACK_TEXT_SELECTION_START = 3,
+    TEXT_SELECTION_START = 3,
     /**
      * The position and size of the cursor rectangle at the text
      * selection end. It is used to draw the selection handles.
      *
-     * This callback must be called prior to KIT_CALLBACK_TEXT_SELECTION every
+     * This callback must be called prior to COKitCallbackType::TEXT_SELECTION every
      * time the selection is updated.
      *
-     * Rectangle format is the same as KIT_CALLBACK_INVALIDATE_TILES.
+     * Rectangle format is the same as COKitCallbackType::INVALIDATE_TILES.
      */
-    KIT_CALLBACK_TEXT_SELECTION_END = 4,
+    TEXT_SELECTION_END = 4,
     /**
      * The blinking text cursor is now visible or not.
      *
      * Clients should assume that this is true initially and are expected to
      * hide the blinking cursor at the rectangle described by
-     * KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR once it becomes false. Payload is
+     * COKitCallbackType::INVALIDATE_VISIBLE_CURSOR once it becomes false. Payload is
      * either the "true" or the "false" string.
      */
-    KIT_CALLBACK_CURSOR_VISIBLE = 5,
+    CURSOR_VISIBLE = 5,
     /**
      * The size and/or the position of the graphic selection changed,
      * the rotation angle of the embedded graphic object, and a property list
@@ -300,20 +299,20 @@ typedef enum
      *      where the "svg" property is a string containing an svg document
      *      which is a representation of the pie segment.
      */
-    KIT_CALLBACK_GRAPHIC_SELECTION = 6,
+    GRAPHIC_SELECTION = 6,
 
     /**
      * User clicked on a hyperlink that should be handled by other
      * applications accordingly.
      */
-    KIT_CALLBACK_HYPERLINK_CLICKED = 7,
+    HYPERLINK_CLICKED = 7,
 
     /**
      * Emit state update to the client.
      * For example, when cursor is on bold text, this callback is triggered
      * with payload: ".uno:Bold=true"
      */
-    KIT_CALLBACK_STATE_CHANGED = 8,
+    STATE_CHANGED = 8,
 
     /**
      * Start a "status indicator" (here restricted to a progress bar type
@@ -329,25 +328,25 @@ typedef enum
      * loading a document and then constructing a COKitDocument
      * object.
      */
-    KIT_CALLBACK_STATUS_INDICATOR_START = 9,
+    STATUS_INDICATOR_START = 9,
 
     /**
      * Sets the numeric value of the status indicator.
      * The payload should be a percentage, an integer between 0 and 100.
      */
-    KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE = 10,
+    STATUS_INDICATOR_SET_VALUE = 10,
 
     /**
      * Ends the status indicator.
      *
      * Not necessarily ever emitted.
      */
-    KIT_CALLBACK_STATUS_INDICATOR_FINISH = 11,
+    STATUS_INDICATOR_FINISH = 11,
 
     /**
      * No match was found for the search input
      */
-    KIT_CALLBACK_SEARCH_NOT_FOUND = 12,
+    SEARCH_NOT_FOUND = 12,
 
     /**
      * Size of the document changed.
@@ -356,17 +355,17 @@ typedef enum
      * having to do an explicit kit::Document::getDocumentSize() call.
      *
      * A size change is always preceded by a series of
-     * KIT_CALLBACK_INVALIDATE_TILES events invalidating any areas
+     * COKitCallbackType::INVALIDATE_TILES events invalidating any areas
      * need re-rendering to adapt.
      */
-    KIT_CALLBACK_DOCUMENT_SIZE_CHANGED = 13,
+    DOCUMENT_SIZE_CHANGED = 13,
 
     /**
      * The current part number is changed.
      *
      * Payload is a single 0-based integer.
      */
-    KIT_CALLBACK_SET_PART = 14,
+    SET_PART = 14,
 
     /**
      * Selection rectangles of the search result when find all is performed.
@@ -390,9 +389,9 @@ typedef enum
      *
      * - searchString is the search query
      * - searchResultSelection is an array of part-number and rectangle list
-     *   pairs, in KIT_CALLBACK_SET_PART / KIT_CALLBACK_TEXT_SELECTION format.
+     *   pairs, in COKitCallbackType::SET_PART / COKitCallbackType::TEXT_SELECTION format.
      */
-    KIT_CALLBACK_SEARCH_RESULT_SELECTION = 15,
+    SEARCH_RESULT_SELECTION = 15,
 
     /**
      * Result of the UNO command execution when bNotifyWhenFinished was set
@@ -407,7 +406,7 @@ typedef enum
      *     // TODO "result": "..."  // UNO Any converted to JSON (not implemented yet)
      * }
      */
-    KIT_CALLBACK_UNO_COMMAND_RESULT = 16,
+    UNO_COMMAND_RESULT = 16,
 
     /**
      * The size and/or the position of the cell cursor changed.
@@ -417,21 +416,21 @@ typedef enum
      * coordinates starting from 0.
      * When the cursor is not shown the payload format is the "EMPTY" string.
      *
-     * Rectangle format is the same as KIT_CALLBACK_INVALIDATE_TILES.
+     * Rectangle format is the same as COKitCallbackType::INVALIDATE_TILES.
      */
-    KIT_CALLBACK_CELL_CURSOR = 17,
+    CELL_CURSOR = 17,
 
     /**
      * The current mouse pointer style.
      *
      * Payload is a css mouse pointer style.
      */
-    KIT_CALLBACK_MOUSE_POINTER = 18,
+    MOUSE_POINTER = 18,
 
     /**
      * The text content of the formula bar in Calc.
      */
-    KIT_CALLBACK_CELL_FORMULA = 19,
+    CELL_FORMULA = 19,
 
     /**
      * Loading a document requires a password.
@@ -440,7 +439,7 @@ typedef enum
      * kit::Office::setDocumentPassword().  The document cannot be loaded
      * without the password.
      */
-    KIT_CALLBACK_DOCUMENT_PASSWORD = 20,
+    DOCUMENT_PASSWORD = 20,
 
     /**
      * Editing a document requires a password.
@@ -448,7 +447,7 @@ typedef enum
      * Loading the document is blocked until the password is provided via
      * kit::Office::setDocumentPassword().
      */
-    KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY = 21,
+    DOCUMENT_PASSWORD_TO_MODIFY = 21,
 
     /**
      * An error happened.
@@ -462,7 +461,7 @@ typedef enum
      *     "message": freeform description
      * }
      */
-    KIT_CALLBACK_ERROR = 22,
+    ERROR_REPORT = 22,
 
     /**
      * Context menu structure
@@ -484,7 +483,7 @@ typedef enum
      *
      *     {"text": "label text3", "type": "command", "command": ".uno:Something3", "checktype": "checkmark|radio|auto", "checked": "true|false"}
      */
-    KIT_CALLBACK_CONTEXT_MENU = 23,
+    CONTEXT_MENU = 23,
 
     /**
      * The size and/or the position of the view cursor changed. A view cursor
@@ -498,9 +497,9 @@ typedef enum
      * }
      *
      * - viewId is a value returned earlier by kit::Document::createView()
-     * - rectangle uses the format of KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR
+     * - rectangle uses the format of COKitCallbackType::INVALIDATE_VISIBLE_CURSOR
      */
-    KIT_CALLBACK_INVALIDATE_VIEW_CURSOR = 24,
+    INVALIDATE_VIEW_CURSOR = 24,
 
     /**
      * The text selection in one of the other views has changed.
@@ -513,9 +512,9 @@ typedef enum
      * }
      *
      * - viewId is a value returned earlier by kit::Document::createView()
-     * - selection uses the format of KIT_CALLBACK_TEXT_SELECTION.
+     * - selection uses the format of COKitCallbackType::TEXT_SELECTION.
      */
-    KIT_CALLBACK_TEXT_VIEW_SELECTION = 25,
+    TEXT_VIEW_SELECTION = 25,
 
     /**
      * The cell cursor in one of the other views has changed.
@@ -528,9 +527,9 @@ typedef enum
      * }
      *
      * - viewId is a value returned earlier by kit::Document::createView()
-     * - rectangle uses the format of KIT_CALLBACK_CELL_CURSOR.
+     * - rectangle uses the format of COKitCallbackType::CELL_CURSOR.
      */
-    KIT_CALLBACK_CELL_VIEW_CURSOR = 26,
+    CELL_VIEW_CURSOR = 26,
 
     /**
      * The size and/or the position of a graphic selection in one of the other
@@ -544,9 +543,9 @@ typedef enum
      * }
      *
      * - viewId is a value returned earlier by kit::Document::createView()
-     * - selection uses the format of KIT_CALLBACK_INVALIDATE_TILES.
+     * - selection uses the format of COKitCallbackType::INVALIDATE_TILES.
      */
-    KIT_CALLBACK_GRAPHIC_VIEW_SELECTION = 27,
+    GRAPHIC_VIEW_SELECTION = 27,
 
     /**
      * The blinking text cursor in one of the other views is now visible or
@@ -560,9 +559,9 @@ typedef enum
      * }
      *
      * - viewId is a value returned earlier by kit::Document::createView()
-     * - visible uses the format of KIT_CALLBACK_CURSOR_VISIBLE.
+     * - visible uses the format of COKitCallbackType::CURSOR_VISIBLE.
      */
-    KIT_CALLBACK_VIEW_CURSOR_VISIBLE = 28,
+    VIEW_CURSOR_VISIBLE = 28,
 
     /**
      * The size and/or the position of a lock rectangle in one of the other
@@ -576,9 +575,9 @@ typedef enum
      * }
      *
      * - viewId is a value returned earlier by kit::Document::createView()
-     * - rectangle uses the format of KIT_CALLBACK_INVALIDATE_TILES.
+     * - rectangle uses the format of COKitCallbackType::INVALIDATE_TILES.
      */
-    KIT_CALLBACK_VIEW_LOCK = 29,
+    VIEW_LOCK = 29,
 
     /**
      * The size of the change tracking table has changed.
@@ -603,7 +602,7 @@ typedef enum
      * - 'action' is either 'Add' or 'Remove', depending on if this is an
      *   insertion into the table or a removal.
      */
-    KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED = 30,
+    REDLINE_TABLE_SIZE_CHANGED = 30,
 
     /**
      * An entry in the change tracking table has been modified.
@@ -627,7 +626,7 @@ typedef enum
      *
      * - 'action' is 'Modify'.
      */
-    KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED = 31,
+    REDLINE_TABLE_ENTRY_MODIFIED = 31,
 
     /**
      * There is some change in comments in the document
@@ -653,7 +652,7 @@ typedef enum
      * - 'action' can be 'Add', 'Remove' or 'Modify' depending on whether
      *    comment has been added, removed or modified.
      */
-    KIT_CALLBACK_COMMENT = 32,
+    COMMENT = 32,
 
     /**
      * The column/row header is no more valid because of a column/row insertion
@@ -662,11 +661,11 @@ typedef enum
      * The payload says if we are invalidating a row or column header. So,
      * payload values can be: "row", "column", "all".
      */
-    KIT_CALLBACK_INVALIDATE_HEADER = 33,
+    INVALIDATE_HEADER = 33,
     /**
      * The text content of the address field in Calc. Eg: "A7"
      */
-    KIT_CALLBACK_CELL_ADDRESS = 34,
+    CELL_ADDRESS = 34,
     /**
      * The key horizontal ruler related properties on change are reported by this.
      *
@@ -683,7 +682,7 @@ typedef enum
      *
      * Here all aproperties are same as described in svxruler.
      */
-    KIT_CALLBACK_RULER_UPDATE = 35,
+    RULER_UPDATE = 35,
     /**
      * Window related callbacks are emitted under this category. It includes
      * external windows like dialogs, autopopups for now.
@@ -716,7 +715,7 @@ typedef enum
      * - "show" - show the window
      * - "hide" - hide the window
      */
-    KIT_CALLBACK_WINDOW = 36,
+    WINDOW = 36,
 
     /**
      * When for the current cell is defined a validity list we need to show
@@ -725,7 +724,7 @@ typedef enum
      * The payload format is: "x, y, visible" where x, y are the current
      * cell cursor coordinates and visible is set to 0 or 1.
      */
-    KIT_CALLBACK_VALIDITY_LIST_BUTTON = 37,
+    VALIDITY_LIST_BUTTON = 37,
 
     /**
      * Notification that the clipboard contents have changed.
@@ -735,7 +734,7 @@ typedef enum
      * Payload format is JSON.
      * Example: { "mimeType": "text/plain", "content": "some content" }
      */
-    KIT_CALLBACK_CLIPBOARD_CHANGED = 38,
+    CLIPBOARD_CHANGED = 38,
 
     /**
      * When the (editing) context changes - like the user switches from
@@ -744,34 +743,34 @@ typedef enum
      * Payload is the application ID and context, delimited by space.
      * Eg. com.sun.star.presentation.PresentationDocument TextObject
      */
-    KIT_CALLBACK_CONTEXT_CHANGED = 39,
+    CONTEXT_CHANGED = 39,
 
     /**
      * On-load notification of the document signature status.
      */
-    KIT_CALLBACK_SIGNATURE_STATUS = 40,
+    SIGNATURE_STATUS = 40,
 
     /**
      * Profiling tracing information single string of multiple lines
      * containing <pid> <timestamp> and zone start/stop information
      */
-    KIT_CALLBACK_PROFILE_FRAME = 41,
+    PROFILE_FRAME = 41,
 
     /**
      * The position and size of the cell selection area. It is used to
      * draw the selection handles for cells in Calc documents.
      *
-     * Rectangle format is the same as KIT_CALLBACK_INVALIDATE_TILES.
+     * Rectangle format is the same as COKitCallbackType::INVALIDATE_TILES.
      */
-    KIT_CALLBACK_CELL_SELECTION_AREA = 42,
+    CELL_SELECTION_AREA = 42,
 
     /**
      * The position and size of the cell auto fill area. It is used to
      * trigger auto fill functionality if that area is hit.
      *
-     * Rectangle format is the same as KIT_CALLBACK_INVALIDATE_TILES.
+     * Rectangle format is the same as COKitCallbackType::INVALIDATE_TILES.
      */
-    KIT_CALLBACK_CELL_AUTO_FILL_AREA = 43,
+    CELL_AUTO_FILL_AREA = 43,
 
     /**
      * When the cursor is in a table or a table is selected in the
@@ -780,7 +779,7 @@ typedef enum
      * no table is currently selected or the cursor is not inside a table
      * cell.
      */
-    KIT_CALLBACK_TABLE_SELECTED = 44,
+    TABLE_SELECTED = 44,
 
     /*
      * Show reference marks from payload.
@@ -794,24 +793,24 @@ typedef enum
      *     ]
      * }
      */
-    KIT_CALLBACK_REFERENCE_MARKS = 45,
+    REFERENCE_MARKS = 45,
 
     /**
      * Callback related to native dialogs generated in JavaScript from
      * the description.
      */
-    KIT_CALLBACK_JSDIALOG = 46,
+    JSDIALOG = 46,
 
     /**
      * Send the list of functions whose name starts with the characters entered
      * by the user in the formula input bar.
      */
-    KIT_CALLBACK_CALC_FUNCTION_LIST = 47,
+    CALC_FUNCTION_LIST = 47,
 
     /**
      * Sends the tab stop list for the current of the current cursor position.
      */
-    KIT_CALLBACK_TAB_STOP_LIST = 48,
+    TAB_STOP_LIST = 48,
 
     /**
      * Sends all information for displaying form field button for a text based field.
@@ -837,7 +836,7 @@ typedef enum
      *      "type": "drop-down"
      * }
      */
-    KIT_CALLBACK_FORM_FIELD_BUTTON = 49,
+    FORM_FIELD_BUTTON = 49,
 
     /**
      * This is Calc specific. Indicates that some or all of the current sheet's
@@ -851,24 +850,24 @@ typedef enum
      * For example, the payload 'rows sizes groups' indicates that the row heights
      * and row-groups data have changed.
      */
-    KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY = 50,
+    INVALIDATE_SHEET_GEOMETRY = 50,
 
     /**
      * When for the current cell is defined an input help text.
      *
      * The payload format is JSON: { "title": "title text", "content": "content text" }
      */
-    KIT_CALLBACK_VALIDITY_INPUT_HELP = 51,
+    VALIDITY_INPUT_HELP = 51,
 
     /**
      * Indicates the document background color in the payload as a RGB hex string (RRGGBB).
      */
-    KIT_CALLBACK_DOCUMENT_BACKGROUND_COLOR = 52,
+    DOCUMENT_BACKGROUND_COLOR = 52,
 
     /**
      * When a user tries to use command which is restricted for that user
      */
-    KIT_COMMAND_BLOCKED = 53,
+    COMMAND_BLOCKED = 53,
 
     /**
      * The position of the cell cursor jumped to.
@@ -878,9 +877,9 @@ typedef enum
      * coordinates starting from 0.
      * When the cursor is not shown the payload format is the "EMPTY" string.
      *
-     * Rectangle format is the same as KIT_CALLBACK_INVALIDATE_TILES.
+     * Rectangle format is the same as COKitCallbackType::INVALIDATE_TILES.
      */
-    KIT_CALLBACK_SC_FOLLOW_JUMP = 54,
+    SC_FOLLOW_JUMP = 54,
 
     /**
      * Sends all information for displaying metadata for a text based content control.
@@ -917,7 +916,7 @@ typedef enum
      *     "date": "true"
      * }
      */
-    KIT_CALLBACK_CONTENT_CONTROL = 55,
+    CONTENT_CONTROL = 55,
 
     /**
      * This is Calc specific. The payload contains print ranges of all
@@ -946,7 +945,7 @@ typedef enum
      * The format of the inner "ranges" array for each sheet is
      * [<startColumn>, <startRow>, <endColumn>, <endRow>]
      */
-    KIT_CALLBACK_PRINT_RANGES = 56,
+    PRINT_RANGES = 56,
 
     /**
      * Informs the COKit client that a font specified in the
@@ -967,7 +966,7 @@ typedef enum
      * missing.
      *
      */
-    KIT_CALLBACK_FONTS_MISSING = 57,
+    FONTS_MISSING = 57,
 
     /**
      * Insertion, removal, movement, and selection of a media shape.
@@ -984,7 +983,7 @@ typedef enum
      *      where the "svg" property is a string containing an svg document
      *      which is a representation of the pie segment.
      */
-    KIT_CALLBACK_MEDIA_SHAPE = 58,
+    MEDIA_SHAPE = 58,
 
     /**
      * The document is available to download by the client.
@@ -992,7 +991,7 @@ typedef enum
      * Payload example:
      * "file:///tmp/hello-world.pdf"
      */
-    KIT_CALLBACK_EXPORT_FILE = 59,
+    EXPORT_FILE = 59,
 
     /**
      * Some attribute of this view has changed, that will cause it
@@ -1002,13 +1001,13 @@ typedef enum
      * Payload is an opaque string that matches this set of states.
      * this will be emitted after creating a new view.
      */
-    KIT_CALLBACK_VIEW_RENDER_STATE = 60,
+    VIEW_RENDER_STATE = 60,
 
     /**
      * Informs the COKit client that the background color surrounding
      * the document has changed.
     */
-   KIT_CALLBACK_APPLICATION_BACKGROUND_COLOR = 61,
+   APPLICATION_BACKGROUND_COLOR = 61,
 
     /**
      * Accessibility event: a paragraph got focus.
@@ -1025,7 +1024,7 @@ typedef enum
      *   and [N1,N2] is the range of the text selection inside the focused paragraph.
      *   In case the paragraph is a list item, L is the length of the bullet/number prefix.
      */
-    KIT_CALLBACK_A11Y_FOCUS_CHANGED = 62,
+    A11Y_FOCUS_CHANGED = 62,
 
     /**
      * Accessibility event: text cursor position has changed.
@@ -1035,7 +1034,7 @@ typedef enum
      *  }
      *  where N is the position of the text cursor inside the focused paragraph.
      */
-    KIT_CALLBACK_A11Y_CARET_CHANGED = 63,
+    A11Y_CARET_CHANGED = 63,
 
     /**
      * Accessibility event: text selection has changed.
@@ -1046,18 +1045,18 @@ typedef enum
      *  }
      *  where [N1,N2] is the range of the text selection inside the focused paragraph.
      */
-    KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED = 64,
+    A11Y_TEXT_SELECTION_CHANGED = 64,
 
     /**
      * Informs the COKit client that the color palettes have changed.
     */
-    KIT_CALLBACK_COLOR_PALETTES = 65,
+    COLOR_PALETTES = 65,
 
     /**
      * Informs that the document password has been successfully changed.
      * The payload contains the new password and the type.
     */
-    KIT_CALLBACK_DOCUMENT_PASSWORD_RESET = 66,
+    DOCUMENT_PASSWORD_RESET = 66,
 
     /**
      * Accessibility event: a cell got focus.
@@ -1081,14 +1080,14 @@ typedef enum
      *       "rowSpan": <row span for current cell>
      *       "colSpan": <column span for current cell>
      *       "paragraph": {
-     *           <same structure as for KIT_CALLBACK_A11Y_FOCUS_CHANGED>
+     *           <same structure as for COKitCallbackType::A11Y_FOCUS_CHANGED>
      *        }
      *   }
      *   where row/column indexes start from 0, inList is the list of tables
      *   the user got in from the outer to the inner; row/column span default
      *   value is 1; paragraph is the cell text content.
      */
-    KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED = 67,
+    A11Y_FOCUSED_CELL_CHANGED = 67,
 
     /**
      * Accessibility event: text editing in a shape or cell has been enabled/disabled
@@ -1100,7 +1099,7 @@ typedef enum
      *      "paragraph": focused paragraph
      *  }
      */
-    KIT_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE = 68,
+    A11Y_EDITING_IN_SELECTION_STATE = 68,
 
     /**
      * Accessibility event: a selection (of a shape/graphic, etc.) has changed
@@ -1112,7 +1111,7 @@ typedef enum
      *      "text": text content if any
      *  }
      */
-    KIT_CALLBACK_A11Y_SELECTION_CHANGED = 69,
+    A11Y_SELECTION_CHANGED = 69,
 
     /**
      * Forwarding logs from core to client can be useful
@@ -1120,7 +1119,7 @@ typedef enum
      *
      * Payload is the log to be sent
      */
-    KIT_CALLBACK_CORE_LOG = 70,
+    CORE_LOG = 70,
 
     /**
      * Tooltips shown in the documents, like redline author and date.
@@ -1130,14 +1129,14 @@ typedef enum
      *      "rectangle": "x, y, width, height"
      *  }
      */
-    KIT_CALLBACK_TOOLTIP = 71,
+    TOOLTIP = 71,
 
     /**
      * Used for sending the rectangle for text inside a shape/textbox
      *
      *  Payload contains the rectangle details
      */
-    KIT_CALLBACK_SHAPE_INNER_TEXT = 72,
+    SHAPE_INNER_TEXT = 72,
         /**
      * The key vertical ruler related properties on change are reported by this.
      *
@@ -1154,7 +1153,7 @@ typedef enum
      *
      * Here all aproperties are same as described in svxruler.
      */
-    KIT_CALLBACK_VERTICAL_RULER_UPDATE = 73,
+    VERTICAL_RULER_UPDATE = 73,
 
     /**
      * Advertises the MIME types currently held by the kit clipboard,
@@ -1163,7 +1162,7 @@ typedef enum
      * Payload format is JSON.
      * Example: { "mimeTypes": ["text/plain;charset=utf-8", "image/png"] }
      */
-    KIT_CALLBACK_CLIPBOARD_MIMETYPES = 74,
+    CLIPBOARD_MIMETYPES = 74,
 
     /**
      * Preview geometry while a shape handle is dragged.
@@ -1182,7 +1181,7 @@ typedef enum
      * The points are in twips, in document coordinates. An empty
      * "polygons" array means no preview is available for this handle.
      */
-    KIT_CALLBACK_SHAPE_DRAG_PREVIEW = 75,
+    SHAPE_DRAG_PREVIEW = 75,
 
     /**
      * A vector-primitives delta for a slide that changed.
@@ -1193,10 +1192,8 @@ typedef enum
      * with the part, the version, the object order, the changed objects and,
      * when the master page changed, its content.
      */
-    KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA = 76
-
-}
-COKitCallbackType;
+    VECTOR_PRIMITIVES_DELTA = 76
+};
 
 enum class COKitKeyEventType
 {
@@ -1217,169 +1214,181 @@ enum class COKitExtTextInputType
 };
 
 /// Returns the string representation of a COKitCallbackType enumeration element.
-static inline const char* kitCallbackTypeToString(int nType)
+static inline const char* kitCallbackTypeToString(COKitCallbackType eType)
 {
-    switch (static_cast<COKitCallbackType>(nType))
+    switch (eType)
     {
-    case KIT_CALLBACK_INVALIDATE_TILES:
+    case COKitCallbackType::INVALIDATE_TILES:
         return "KIT_CALLBACK_INVALIDATE_TILES";
-    case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+    case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
         return "KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR";
-    case KIT_CALLBACK_TEXT_SELECTION:
+    case COKitCallbackType::TEXT_SELECTION:
         return "KIT_CALLBACK_TEXT_SELECTION";
-    case KIT_CALLBACK_TEXT_SELECTION_START:
+    case COKitCallbackType::TEXT_SELECTION_START:
         return "KIT_CALLBACK_TEXT_SELECTION_START";
-    case KIT_CALLBACK_TEXT_SELECTION_END:
+    case COKitCallbackType::TEXT_SELECTION_END:
         return "KIT_CALLBACK_TEXT_SELECTION_END";
-    case KIT_CALLBACK_CURSOR_VISIBLE:
+    case COKitCallbackType::CURSOR_VISIBLE:
         return "KIT_CALLBACK_CURSOR_VISIBLE";
-    case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
+    case COKitCallbackType::VIEW_CURSOR_VISIBLE:
         return "KIT_CALLBACK_VIEW_CURSOR_VISIBLE";
-    case KIT_CALLBACK_GRAPHIC_SELECTION:
+    case COKitCallbackType::GRAPHIC_SELECTION:
         return "KIT_CALLBACK_GRAPHIC_SELECTION";
-    case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
+    case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
         return "KIT_CALLBACK_GRAPHIC_VIEW_SELECTION";
-    case KIT_CALLBACK_CELL_CURSOR:
+    case COKitCallbackType::CELL_CURSOR:
         return "KIT_CALLBACK_CELL_CURSOR";
-    case KIT_CALLBACK_HYPERLINK_CLICKED:
+    case COKitCallbackType::HYPERLINK_CLICKED:
         return "KIT_CALLBACK_HYPERLINK_CLICKED";
-    case KIT_CALLBACK_MOUSE_POINTER:
+    case COKitCallbackType::MOUSE_POINTER:
         return "KIT_CALLBACK_MOUSE_POINTER";
-    case KIT_CALLBACK_STATE_CHANGED:
+    case COKitCallbackType::STATE_CHANGED:
         return "KIT_CALLBACK_STATE_CHANGED";
-    case KIT_CALLBACK_STATUS_INDICATOR_START:
+    case COKitCallbackType::STATUS_INDICATOR_START:
         return "KIT_CALLBACK_STATUS_INDICATOR_START";
-    case KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+    case COKitCallbackType::STATUS_INDICATOR_SET_VALUE:
         return "KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE";
-    case KIT_CALLBACK_STATUS_INDICATOR_FINISH:
+    case COKitCallbackType::STATUS_INDICATOR_FINISH:
         return "KIT_CALLBACK_STATUS_INDICATOR_FINISH";
-    case KIT_CALLBACK_SEARCH_NOT_FOUND:
+    case COKitCallbackType::SEARCH_NOT_FOUND:
         return "KIT_CALLBACK_SEARCH_NOT_FOUND";
-    case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
+    case COKitCallbackType::DOCUMENT_SIZE_CHANGED:
         return "KIT_CALLBACK_DOCUMENT_SIZE_CHANGED";
-    case KIT_CALLBACK_SET_PART:
+    case COKitCallbackType::SET_PART:
         return "KIT_CALLBACK_SET_PART";
-    case KIT_CALLBACK_SEARCH_RESULT_SELECTION:
+    case COKitCallbackType::SEARCH_RESULT_SELECTION:
         return "KIT_CALLBACK_SEARCH_RESULT_SELECTION";
-    case KIT_CALLBACK_DOCUMENT_PASSWORD:
+    case COKitCallbackType::DOCUMENT_PASSWORD:
         return "KIT_CALLBACK_DOCUMENT_PASSWORD";
-    case KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
+    case COKitCallbackType::DOCUMENT_PASSWORD_TO_MODIFY:
         return "KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY";
-    case KIT_CALLBACK_CONTEXT_MENU:
+    case COKitCallbackType::CONTEXT_MENU:
         return "KIT_CALLBACK_CONTEXT_MENU";
-    case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
+    case COKitCallbackType::INVALIDATE_VIEW_CURSOR:
         return "KIT_CALLBACK_INVALIDATE_VIEW_CURSOR";
-    case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+    case COKitCallbackType::TEXT_VIEW_SELECTION:
         return "KIT_CALLBACK_TEXT_VIEW_SELECTION";
-    case KIT_CALLBACK_CELL_VIEW_CURSOR:
+    case COKitCallbackType::CELL_VIEW_CURSOR:
         return "KIT_CALLBACK_CELL_VIEW_CURSOR";
-    case KIT_CALLBACK_CELL_ADDRESS:
+    case COKitCallbackType::CELL_ADDRESS:
         return "KIT_CALLBACK_CELL_ADDRESS";
-    case KIT_CALLBACK_CELL_FORMULA:
+    case COKitCallbackType::CELL_FORMULA:
         return "KIT_CALLBACK_CELL_FORMULA";
-    case KIT_CALLBACK_UNO_COMMAND_RESULT:
+    case COKitCallbackType::UNO_COMMAND_RESULT:
         return "KIT_CALLBACK_UNO_COMMAND_RESULT";
-    case KIT_CALLBACK_ERROR:
+    case COKitCallbackType::ERROR_REPORT:
         return "KIT_CALLBACK_ERROR";
-    case KIT_CALLBACK_VIEW_LOCK:
+    case COKitCallbackType::VIEW_LOCK:
         return "KIT_CALLBACK_VIEW_LOCK";
-    case KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+    case COKitCallbackType::REDLINE_TABLE_SIZE_CHANGED:
         return "KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED";
-    case KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+    case COKitCallbackType::REDLINE_TABLE_ENTRY_MODIFIED:
         return "KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED";
-    case KIT_CALLBACK_INVALIDATE_HEADER:
+    case COKitCallbackType::INVALIDATE_HEADER:
         return "KIT_CALLBACK_INVALIDATE_HEADER";
-    case KIT_CALLBACK_COMMENT:
+    case COKitCallbackType::COMMENT:
         return "KIT_CALLBACK_COMMENT";
-    case KIT_CALLBACK_RULER_UPDATE:
+    case COKitCallbackType::RULER_UPDATE:
         return "KIT_CALLBACK_RULER_UPDATE";
-    case KIT_CALLBACK_VERTICAL_RULER_UPDATE:
+    case COKitCallbackType::VERTICAL_RULER_UPDATE:
         return "KIT_CALLBACK_VERTICAL_RULER_UPDATE";
-    case KIT_CALLBACK_WINDOW:
+    case COKitCallbackType::WINDOW:
         return "KIT_CALLBACK_WINDOW";
-    case KIT_CALLBACK_VALIDITY_LIST_BUTTON:
+    case COKitCallbackType::VALIDITY_LIST_BUTTON:
         return "KIT_CALLBACK_VALIDITY_LIST_BUTTON";
-    case KIT_CALLBACK_VALIDITY_INPUT_HELP:
+    case COKitCallbackType::VALIDITY_INPUT_HELP:
         return "KIT_CALLBACK_VALIDITY_INPUT_HELP";
-    case KIT_CALLBACK_CLIPBOARD_CHANGED:
+    case COKitCallbackType::CLIPBOARD_CHANGED:
         return "KIT_CALLBACK_CLIPBOARD_CHANGED";
-    case KIT_CALLBACK_CONTEXT_CHANGED:
+    case COKitCallbackType::CONTEXT_CHANGED:
         return "KIT_CALLBACK_CONTEXT_CHANGED";
-    case KIT_CALLBACK_SIGNATURE_STATUS:
+    case COKitCallbackType::SIGNATURE_STATUS:
         return "KIT_CALLBACK_SIGNATURE_STATUS";
-    case KIT_CALLBACK_PROFILE_FRAME:
+    case COKitCallbackType::PROFILE_FRAME:
         return "KIT_CALLBACK_PROFILE_FRAME";
-    case KIT_CALLBACK_CELL_SELECTION_AREA:
+    case COKitCallbackType::CELL_SELECTION_AREA:
         return "KIT_CALLBACK_CELL_SELECTION_AREA";
-    case KIT_CALLBACK_CELL_AUTO_FILL_AREA:
+    case COKitCallbackType::CELL_AUTO_FILL_AREA:
         return "KIT_CALLBACK_CELL_AUTO_FILL_AREA";
-    case KIT_CALLBACK_TABLE_SELECTED:
+    case COKitCallbackType::TABLE_SELECTED:
         return "KIT_CALLBACK_TABLE_SELECTED";
-    case KIT_CALLBACK_REFERENCE_MARKS:
+    case COKitCallbackType::REFERENCE_MARKS:
         return "KIT_CALLBACK_REFERENCE_MARKS";
-    case KIT_CALLBACK_JSDIALOG:
+    case COKitCallbackType::JSDIALOG:
         return "KIT_CALLBACK_JSDIALOG";
-    case KIT_CALLBACK_CALC_FUNCTION_LIST:
+    case COKitCallbackType::CALC_FUNCTION_LIST:
         return "KIT_CALLBACK_CALC_FUNCTION_LIST";
-    case KIT_CALLBACK_TAB_STOP_LIST:
+    case COKitCallbackType::TAB_STOP_LIST:
         return "KIT_CALLBACK_TAB_STOP_LIST";
-    case KIT_CALLBACK_FORM_FIELD_BUTTON:
+    case COKitCallbackType::FORM_FIELD_BUTTON:
         return "KIT_CALLBACK_FORM_FIELD_BUTTON";
-    case KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
+    case COKitCallbackType::INVALIDATE_SHEET_GEOMETRY:
         return "KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY";
-    case KIT_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
+    case COKitCallbackType::DOCUMENT_BACKGROUND_COLOR:
         return "KIT_CALLBACK_DOCUMENT_BACKGROUND_COLOR";
-    case KIT_COMMAND_BLOCKED:
+    case COKitCallbackType::COMMAND_BLOCKED:
         return "KIT_COMMAND_BLOCKED";
-    case KIT_CALLBACK_SC_FOLLOW_JUMP:
+    case COKitCallbackType::SC_FOLLOW_JUMP:
         return "KIT_CALLBACK_SC_FOLLOW_JUMP";
-    case KIT_CALLBACK_CONTENT_CONTROL:
+    case COKitCallbackType::CONTENT_CONTROL:
         return "KIT_CALLBACK_CONTENT_CONTROL";
-    case KIT_CALLBACK_PRINT_RANGES:
+    case COKitCallbackType::PRINT_RANGES:
         return "KIT_CALLBACK_PRINT_RANGES";
-    case KIT_CALLBACK_FONTS_MISSING:
+    case COKitCallbackType::FONTS_MISSING:
         return "KIT_CALLBACK_FONTS_MISSING";
-    case KIT_CALLBACK_MEDIA_SHAPE:
+    case COKitCallbackType::MEDIA_SHAPE:
         return "KIT_CALLBACK_MEDIA_SHAPE";
-    case KIT_CALLBACK_EXPORT_FILE:
+    case COKitCallbackType::EXPORT_FILE:
         return "KIT_CALLBACK_EXPORT_FILE";
-    case KIT_CALLBACK_VIEW_RENDER_STATE:
+    case COKitCallbackType::VIEW_RENDER_STATE:
         return "KIT_CALLBACK_VIEW_RENDER_STATE";
-    case KIT_CALLBACK_APPLICATION_BACKGROUND_COLOR:
+    case COKitCallbackType::APPLICATION_BACKGROUND_COLOR:
         return "KIT_CALLBACK_APPLICATION_BACKGROUND_COLOR";
-    case KIT_CALLBACK_A11Y_FOCUS_CHANGED:
+    case COKitCallbackType::A11Y_FOCUS_CHANGED:
         return "KIT_CALLBACK_A11Y_FOCUS_CHANGED";
-    case KIT_CALLBACK_A11Y_CARET_CHANGED:
+    case COKitCallbackType::A11Y_CARET_CHANGED:
         return "KIT_CALLBACK_A11Y_CARET_CHANGED";
-    case KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
+    case COKitCallbackType::A11Y_TEXT_SELECTION_CHANGED:
         return "KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED";
-    case KIT_CALLBACK_COLOR_PALETTES:
+    case COKitCallbackType::COLOR_PALETTES:
         return "KIT_CALLBACK_COLOR_PALETTES";
-    case KIT_CALLBACK_DOCUMENT_PASSWORD_RESET:
+    case COKitCallbackType::DOCUMENT_PASSWORD_RESET:
         return "KIT_CALLBACK_DOCUMENT_PASSWORD_RESET";
-    case KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
+    case COKitCallbackType::A11Y_FOCUSED_CELL_CHANGED:
         return "KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED";
-    case KIT_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE:
+    case COKitCallbackType::A11Y_EDITING_IN_SELECTION_STATE:
         return "KIT_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE";
-    case KIT_CALLBACK_A11Y_SELECTION_CHANGED:
+    case COKitCallbackType::A11Y_SELECTION_CHANGED:
         return "KIT_CALLBACK_A11Y_SELECTION_CHANGED";
-    case KIT_CALLBACK_CORE_LOG:
+    case COKitCallbackType::CORE_LOG:
         return "KIT_CALLBACK_CORE_LOG";
-    case KIT_CALLBACK_TOOLTIP:
+    case COKitCallbackType::TOOLTIP:
         return "KIT_CALLBACK_TOOLTIP";
-    case KIT_CALLBACK_SHAPE_INNER_TEXT:
+    case COKitCallbackType::SHAPE_INNER_TEXT:
         return "KIT_CALLBACK_SHAPE_INNER_TEXT";
-    case KIT_CALLBACK_CLIPBOARD_MIMETYPES:
+    case COKitCallbackType::CLIPBOARD_MIMETYPES:
         return "KIT_CALLBACK_CLIPBOARD_MIMETYPES";
-    case KIT_CALLBACK_SHAPE_DRAG_PREVIEW:
+    case COKitCallbackType::SHAPE_DRAG_PREVIEW:
         return "KIT_CALLBACK_SHAPE_DRAG_PREVIEW";
-    case KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA:
+    case COKitCallbackType::VECTOR_PRIMITIVES_DELTA:
         return "KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA";
     }
 
     assert(!"Unknown COKitCallbackType type.");
     return nullptr;
 }
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>&
+operator<<(std::basic_ostream<charT, traits>& rStream, COKitCallbackType eType)
+{
+    if (const char* pName = kitCallbackTypeToString(eType))
+        return rStream << pName;
+    return rStream << static_cast<int>(eType);
+}
+
+/** @see kit::Office::registerCallback(). */
+typedef void (*COKitCallback)(COKitCallbackType eType, const char* pPayload, void* pData);
 
 enum class COKitMouseEventType
 {
@@ -1405,7 +1414,7 @@ enum class COKitSetGraphicSelectionType
 {
     /**
      * A move or a resize action starts. It is assumed that there is a valid
-     * graphic selection (see KIT_CALLBACK_GRAPHIC_SELECTION) and the supplied
+     * graphic selection (see COKitCallbackType::GRAPHIC_SELECTION) and the supplied
      * coordinates are the ones the user tapped on.
      *
      * The type of the action is move by default, unless the coordinates are
@@ -2062,7 +2071,7 @@ public:
      * don't have parts.
      *
      * @return a rectangle list, using the same format as
-     * KIT_CALLBACK_TEXT_SELECTION.
+     * COKitCallbackType::TEXT_SELECTION.
      */
     char* getPartPageRectangles()
     {
@@ -3067,14 +3076,14 @@ public:
      * @param pURL      the URL of the document, as sent to the callback
      * @param pPassword the password, nullptr indicates no password
      *
-     * In response to KIT_CALLBACK_DOCUMENT_PASSWORD, a valid password
+     * In response to COKitCallbackType::DOCUMENT_PASSWORD, a valid password
      * will continue loading the document, an invalid password will
-     * result in another KIT_CALLBACK_DOCUMENT_PASSWORD request,
+     * result in another COKitCallbackType::DOCUMENT_PASSWORD request,
      * and a NULL password will abort loading the document.
      *
-     * In response to KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY, a valid
+     * In response to COKitCallbackType::DOCUMENT_PASSWORD_TO_MODIFY, a valid
      * password will continue loading the document, an invalid password will
-     * result in another KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY request,
+     * result in another COKitCallbackType::DOCUMENT_PASSWORD_TO_MODIFY request,
      * and a NULL password will continue loading the document in read-only
      * mode.
      */

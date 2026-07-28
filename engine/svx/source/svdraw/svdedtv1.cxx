@@ -1146,7 +1146,7 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
                 {
                     if (SfxViewShell* pViewShell = GetSfxViewShell())
                     {
-                        pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED,
+                        pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED,
                             OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US));
                     }
                 }

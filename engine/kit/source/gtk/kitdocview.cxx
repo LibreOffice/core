@@ -333,7 +333,7 @@ static guint doc_view_signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[PROP_LAST] = { nullptr };
 
 static void kit_doc_view_initable_iface_init (GInitableIface *iface);
-static void callbackWorker (int nType, const char* pPayload, void* pData);
+static void callbackWorker (COKitCallbackType eType, const char* pPayload, void* pData);
 static void updateClientZoom (KitDocumentView *pDocView);
 
 #ifdef __GNUC__
@@ -930,39 +930,39 @@ globalCallback (gpointer pData)
 
     switch (pCallback->m_nType)
     {
-    case KIT_CALLBACK_STATUS_INDICATOR_START:
+    case COKitCallbackType::STATUS_INDICATOR_START:
     {
         priv->m_nLoadProgress = 0.0;
         g_signal_emit (pCallback->m_pDocView, doc_view_signals[LOAD_CHANGED], 0, 0.0);
     }
     break;
-    case KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+    case COKitCallbackType::STATUS_INDICATOR_SET_VALUE:
     {
         priv->m_nLoadProgress = static_cast<gdouble>(std::stoi(pCallback->m_aPayload)/100.0);
         g_signal_emit (pCallback->m_pDocView, doc_view_signals[LOAD_CHANGED], 0, priv->m_nLoadProgress);
     }
     break;
-    case KIT_CALLBACK_STATUS_INDICATOR_FINISH:
+    case COKitCallbackType::STATUS_INDICATOR_FINISH:
     {
         priv->m_nLoadProgress = 1.0;
         g_signal_emit (pCallback->m_pDocView, doc_view_signals[LOAD_CHANGED], 0, 1.0);
     }
     break;
-    case KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
+    case COKitCallbackType::DOCUMENT_PASSWORD_TO_MODIFY:
         bModify = true;
         [[fallthrough]];
-    case KIT_CALLBACK_DOCUMENT_PASSWORD:
+    case COKitCallbackType::DOCUMENT_PASSWORD:
     {
         char const*const pURL(pCallback->m_aPayload.c_str());
         g_signal_emit (pCallback->m_pDocView, doc_view_signals[PASSWORD_REQUIRED], 0, pURL, bModify);
     }
     break;
-    case KIT_CALLBACK_ERROR:
+    case COKitCallbackType::ERROR_REPORT:
     {
         reportError(pCallback->m_pDocView, pCallback->m_aPayload);
     }
     break;
-    case KIT_CALLBACK_SIGNATURE_STATUS:
+    case COKitCallbackType::SIGNATURE_STATUS:
     {
         // TODO
     }
@@ -977,12 +977,12 @@ globalCallback (gpointer pData)
 }
 
 static void
-globalCallbackWorker(int nType, const char* pPayload, void* pData)
+globalCallbackWorker(COKitCallbackType eType, const char* pPayload, void* pData)
 {
     KitDocumentView* pDocView = KIT_DOC_VIEW (pData);
 
-    CallbackData* pCallback = new CallbackData(nType, pPayload ? pPayload : "(nil)", pDocView);
-    g_info("KitDocumentView_Impl::globalCallbackWorkerImpl: %s, '%s'", kitCallbackTypeToString(nType), pPayload);
+    CallbackData* pCallback = new CallbackData(eType, pPayload ? pPayload : "(nil)", pDocView);
+    g_info("KitDocumentView_Impl::globalCallbackWorkerImpl: %s, '%s'", kitCallbackTypeToString(eType), pPayload);
     gdk_threads_add_idle(globalCallback, pCallback);
 }
 
@@ -1108,7 +1108,7 @@ callback (gpointer pData)
 
     switch (static_cast<COKitCallbackType>(pCallback->m_nType))
     {
-    case KIT_CALLBACK_INVALIDATE_TILES:
+    case COKitCallbackType::INVALIDATE_TILES:
     {
         if (pCallback->m_aPayload.compare(0, 5, "EMPTY") != 0) // payload doesn't start with "EMPTY"
         {
@@ -1121,7 +1121,7 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
-    case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+    case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
     {
 
         std::stringstream aStream(pCallback->m_aPayload);
@@ -1143,11 +1143,11 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
-    case KIT_CALLBACK_TEXT_SELECTION:
+    case COKitCallbackType::TEXT_SELECTION:
     {
         priv->m_aTextSelectionRectangles = payloadToRectangles(pDocView, pCallback->m_aPayload.c_str());
         bool bIsTextSelected = !priv->m_aTextSelectionRectangles.empty();
-        // In case the selection is empty, then we get no KIT_CALLBACK_TEXT_SELECTION_START/END events.
+        // In case the selection is empty, then we get no COKitCallbackType::TEXT_SELECTION_START/END events.
         if (!bIsTextSelected)
         {
             memset(&priv->m_aTextSelectionStart, 0, sizeof(priv->m_aTextSelectionStart));
@@ -1162,22 +1162,22 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
-    case KIT_CALLBACK_TEXT_SELECTION_START:
+    case COKitCallbackType::TEXT_SELECTION_START:
     {
         priv->m_aTextSelectionStart = payloadToRectangle(pDocView, pCallback->m_aPayload.c_str());
     }
     break;
-    case KIT_CALLBACK_TEXT_SELECTION_END:
+    case COKitCallbackType::TEXT_SELECTION_END:
     {
         priv->m_aTextSelectionEnd = payloadToRectangle(pDocView, pCallback->m_aPayload.c_str());
     }
     break;
-    case KIT_CALLBACK_CURSOR_VISIBLE:
+    case COKitCallbackType::CURSOR_VISIBLE:
     {
         priv->m_bCursorVisible = pCallback->m_aPayload == "true";
     }
     break;
-    case KIT_CALLBACK_MOUSE_POINTER:
+    case COKitCallbackType::MOUSE_POINTER:
     {
         // We do not want the cursor to get changed in view-only mode
         if (priv->m_bEdit)
@@ -1192,7 +1192,7 @@ callback (gpointer pData)
         }
     }
     break;
-    case KIT_CALLBACK_GRAPHIC_SELECTION:
+    case COKitCallbackType::GRAPHIC_SELECTION:
     {
         if (pCallback->m_aPayload != "EMPTY")
             priv->m_aGraphicSelection = payloadToRectangle(pDocView, pCallback->m_aPayload.c_str());
@@ -1201,7 +1201,7 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
-    case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
+    case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1221,7 +1221,7 @@ callback (gpointer pData)
         break;
     }
     break;
-    case KIT_CALLBACK_CELL_CURSOR:
+    case COKitCallbackType::CELL_CURSOR:
     {
         if (pCallback->m_aPayload != "EMPTY")
             priv->m_aCellCursor = payloadToRectangle(pDocView, pCallback->m_aPayload.c_str());
@@ -1230,33 +1230,33 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
-    case KIT_CALLBACK_HYPERLINK_CLICKED:
+    case COKitCallbackType::HYPERLINK_CLICKED:
     {
         hyperlinkClicked(pDocView, pCallback->m_aPayload);
     }
     break;
-    case KIT_CALLBACK_STATE_CHANGED:
+    case COKitCallbackType::STATE_CHANGED:
     {
         commandChanged(pDocView, pCallback->m_aPayload);
     }
     break;
-    case KIT_CALLBACK_SEARCH_NOT_FOUND:
+    case COKitCallbackType::SEARCH_NOT_FOUND:
     {
         searchNotFound(pDocView, pCallback->m_aPayload);
     }
     break;
-    case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
+    case COKitCallbackType::DOCUMENT_SIZE_CHANGED:
     {
         refreshSize(pDocView);
         g_signal_emit(pDocView, doc_view_signals[SIZE_CHANGED], 0, nullptr);
     }
     break;
-    case KIT_CALLBACK_SET_PART:
+    case COKitCallbackType::SET_PART:
     {
         setPart(pDocView, pCallback->m_aPayload);
     }
     break;
-    case KIT_CALLBACK_SEARCH_RESULT_SELECTION:
+    case COKitCallbackType::SEARCH_RESULT_SELECTION:
     {
         boost::property_tree::ptree aTree;
         std::stringstream aStream(pCallback->m_aPayload);
@@ -1265,27 +1265,27 @@ callback (gpointer pData)
         searchResultCount(pDocView, std::to_string(nCount));
     }
     break;
-    case KIT_CALLBACK_UNO_COMMAND_RESULT:
+    case COKitCallbackType::UNO_COMMAND_RESULT:
     {
         commandResult(pDocView, pCallback->m_aPayload);
     }
     break;
-    case KIT_CALLBACK_CELL_ADDRESS:
+    case COKitCallbackType::CELL_ADDRESS:
     {
         addressChanged(pDocView, pCallback->m_aPayload);
     }
     break;
-    case KIT_CALLBACK_CELL_FORMULA:
+    case COKitCallbackType::CELL_FORMULA:
     {
         formulaChanged(pDocView, pCallback->m_aPayload);
     }
     break;
-    case KIT_CALLBACK_ERROR:
+    case COKitCallbackType::ERROR_REPORT:
     {
         reportError(pDocView, pCallback->m_aPayload);
     }
     break;
-    case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
+    case COKitCallbackType::INVALIDATE_VIEW_CURSOR:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1297,7 +1297,7 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
-    case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+    case COKitCallbackType::TEXT_VIEW_SELECTION:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1309,7 +1309,7 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
-    case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
+    case COKitCallbackType::VIEW_CURSOR_VISIBLE:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1321,7 +1321,7 @@ callback (gpointer pData)
         break;
     }
     break;
-    case KIT_CALLBACK_CELL_VIEW_CURSOR:
+    case COKitCallbackType::CELL_VIEW_CURSOR:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1340,7 +1340,7 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
-    case KIT_CALLBACK_VIEW_LOCK:
+    case COKitCallbackType::VIEW_LOCK:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1359,30 +1359,30 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
-    case KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+    case COKitCallbackType::REDLINE_TABLE_SIZE_CHANGED:
     {
         break;
     }
-    case KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+    case COKitCallbackType::REDLINE_TABLE_ENTRY_MODIFIED:
     {
         break;
     }
-    case KIT_CALLBACK_COMMENT:
+    case COKitCallbackType::COMMENT:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[COMMENT], 0, pCallback->m_aPayload.c_str());
         break;
-    case KIT_CALLBACK_RULER_UPDATE:
+    case COKitCallbackType::RULER_UPDATE:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[RULER], 0, pCallback->m_aPayload.c_str());
         break;
-    case KIT_CALLBACK_VERTICAL_RULER_UPDATE:
+    case COKitCallbackType::VERTICAL_RULER_UPDATE:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[RULER], 0, pCallback->m_aPayload.c_str());
         break;
-    case KIT_CALLBACK_WINDOW:
+    case COKitCallbackType::WINDOW:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[WINDOW], 0, pCallback->m_aPayload.c_str());
         break;
-    case KIT_CALLBACK_INVALIDATE_HEADER:
+    case COKitCallbackType::INVALIDATE_HEADER:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[INVALIDATE_HEADER], 0, pCallback->m_aPayload.c_str());
         break;
-    case KIT_CALLBACK_REFERENCE_MARKS:
+    case COKitCallbackType::REFERENCE_MARKS:
     {
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1404,7 +1404,7 @@ callback (gpointer pData)
         break;
     }
 
-    case KIT_CALLBACK_CONTENT_CONTROL:
+    case COKitCallbackType::CONTENT_CONTROL:
     {
         std::stringstream aPayloadStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
@@ -1459,49 +1459,49 @@ callback (gpointer pData)
     }
     break;
 
-    case KIT_CALLBACK_STATUS_INDICATOR_START:
-    case KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE:
-    case KIT_CALLBACK_STATUS_INDICATOR_FINISH:
-    case KIT_CALLBACK_DOCUMENT_PASSWORD:
-    case KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
-    case KIT_CALLBACK_VALIDITY_LIST_BUTTON:
-    case KIT_CALLBACK_VALIDITY_INPUT_HELP:
-    case KIT_CALLBACK_SIGNATURE_STATUS:
-    case KIT_CALLBACK_CONTEXT_MENU:
-    case KIT_CALLBACK_PROFILE_FRAME:
-    case KIT_CALLBACK_CLIPBOARD_CHANGED:
-    case KIT_CALLBACK_CONTEXT_CHANGED:
-    case KIT_CALLBACK_CELL_SELECTION_AREA:
-    case KIT_CALLBACK_CELL_AUTO_FILL_AREA:
-    case KIT_CALLBACK_TABLE_SELECTED:
-    case KIT_CALLBACK_JSDIALOG:
-    case KIT_CALLBACK_CALC_FUNCTION_LIST:
-    case KIT_CALLBACK_TAB_STOP_LIST:
-    case KIT_CALLBACK_FORM_FIELD_BUTTON:
-    case KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
-    case KIT_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
-    case KIT_COMMAND_BLOCKED:
-    case KIT_CALLBACK_SC_FOLLOW_JUMP:
-    case KIT_CALLBACK_PRINT_RANGES:
-    case KIT_CALLBACK_FONTS_MISSING:
-    case KIT_CALLBACK_MEDIA_SHAPE:
-    case KIT_CALLBACK_EXPORT_FILE:
-    case KIT_CALLBACK_VIEW_RENDER_STATE:
-    case KIT_CALLBACK_APPLICATION_BACKGROUND_COLOR:
-    case KIT_CALLBACK_A11Y_FOCUS_CHANGED:
-    case KIT_CALLBACK_A11Y_CARET_CHANGED:
-    case KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
-    case KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
-    case KIT_CALLBACK_COLOR_PALETTES:
-    case KIT_CALLBACK_DOCUMENT_PASSWORD_RESET:
-    case KIT_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE:
-    case KIT_CALLBACK_A11Y_SELECTION_CHANGED:
-    case KIT_CALLBACK_CORE_LOG:
-    case KIT_CALLBACK_TOOLTIP:
-    case KIT_CALLBACK_SHAPE_INNER_TEXT:
-    case KIT_CALLBACK_CLIPBOARD_MIMETYPES:
-    case KIT_CALLBACK_SHAPE_DRAG_PREVIEW:
-    case KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA:
+    case COKitCallbackType::STATUS_INDICATOR_START:
+    case COKitCallbackType::STATUS_INDICATOR_SET_VALUE:
+    case COKitCallbackType::STATUS_INDICATOR_FINISH:
+    case COKitCallbackType::DOCUMENT_PASSWORD:
+    case COKitCallbackType::DOCUMENT_PASSWORD_TO_MODIFY:
+    case COKitCallbackType::VALIDITY_LIST_BUTTON:
+    case COKitCallbackType::VALIDITY_INPUT_HELP:
+    case COKitCallbackType::SIGNATURE_STATUS:
+    case COKitCallbackType::CONTEXT_MENU:
+    case COKitCallbackType::PROFILE_FRAME:
+    case COKitCallbackType::CLIPBOARD_CHANGED:
+    case COKitCallbackType::CONTEXT_CHANGED:
+    case COKitCallbackType::CELL_SELECTION_AREA:
+    case COKitCallbackType::CELL_AUTO_FILL_AREA:
+    case COKitCallbackType::TABLE_SELECTED:
+    case COKitCallbackType::JSDIALOG:
+    case COKitCallbackType::CALC_FUNCTION_LIST:
+    case COKitCallbackType::TAB_STOP_LIST:
+    case COKitCallbackType::FORM_FIELD_BUTTON:
+    case COKitCallbackType::INVALIDATE_SHEET_GEOMETRY:
+    case COKitCallbackType::DOCUMENT_BACKGROUND_COLOR:
+    case COKitCallbackType::COMMAND_BLOCKED:
+    case COKitCallbackType::SC_FOLLOW_JUMP:
+    case COKitCallbackType::PRINT_RANGES:
+    case COKitCallbackType::FONTS_MISSING:
+    case COKitCallbackType::MEDIA_SHAPE:
+    case COKitCallbackType::EXPORT_FILE:
+    case COKitCallbackType::VIEW_RENDER_STATE:
+    case COKitCallbackType::APPLICATION_BACKGROUND_COLOR:
+    case COKitCallbackType::A11Y_FOCUS_CHANGED:
+    case COKitCallbackType::A11Y_CARET_CHANGED:
+    case COKitCallbackType::A11Y_TEXT_SELECTION_CHANGED:
+    case COKitCallbackType::A11Y_FOCUSED_CELL_CHANGED:
+    case COKitCallbackType::COLOR_PALETTES:
+    case COKitCallbackType::DOCUMENT_PASSWORD_RESET:
+    case COKitCallbackType::A11Y_EDITING_IN_SELECTION_STATE:
+    case COKitCallbackType::A11Y_SELECTION_CHANGED:
+    case COKitCallbackType::CORE_LOG:
+    case COKitCallbackType::TOOLTIP:
+    case COKitCallbackType::SHAPE_INNER_TEXT:
+    case COKitCallbackType::CLIPBOARD_MIMETYPES:
+    case COKitCallbackType::SHAPE_DRAG_PREVIEW:
+    case COKitCallbackType::VECTOR_PRIMITIVES_DELTA:
     {
         // TODO: Implement me
         break;
@@ -1512,14 +1512,14 @@ callback (gpointer pData)
     return G_SOURCE_REMOVE;
 }
 
-static void callbackWorker (int nType, const char* pPayload, void* pData)
+static void callbackWorker (COKitCallbackType eType, const char* pPayload, void* pData)
 {
     KitDocumentView* pDocView = KIT_DOC_VIEW (pData);
 
-    CallbackData* pCallback = new CallbackData(nType, pPayload ? pPayload : "(nil)", pDocView);
+    CallbackData* pCallback = new CallbackData(eType, pPayload ? pPayload : "(nil)", pDocView);
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
     std::stringstream ss;
-    ss << "callbackWorker, view #" << priv->m_nViewId << ": " << kitCallbackTypeToString(nType) << ", '" << (pPayload ? pPayload : "(nil)") << "'";
+    ss << "callbackWorker, view #" << priv->m_nViewId << ": " << kitCallbackTypeToString(eType) << ", '" << (pPayload ? pPayload : "(nil)") << "'";
     g_info("%s", ss.str().c_str());
     gdk_threads_add_idle(callback, pCallback);
 }

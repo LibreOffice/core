@@ -1851,7 +1851,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                         if (comphelper::COKit::isActive())
                         {
                             OUString sPayload = ".uno:NumberFormat=" + aFormat;
-                            GetViewShell()->viewCallback(KIT_CALLBACK_STATE_CHANGED,
+                            GetViewShell()->viewCallback(COKitCallbackType::STATE_CHANGED,
                                 OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US));
                         }
                     }

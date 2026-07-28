@@ -587,7 +587,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
             aTree.put("message", "Blocked feature");
             aTree.put("viewID", pViewShell->GetViewShellId().get());
 
-            pViewShell->viewCallback(KIT_COMMAND_BLOCKED, aTree.finishAndGetAsOString());
+            pViewShell->viewCallback(COKitCallbackType::COMMAND_BLOCKED, aTree.finishAndGetAsOString());
             return;
         }
     }
@@ -1540,7 +1540,7 @@ static void InterceptKitStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
     auto payloadIter = enumToPayload.find(handler->second.payloadType);
     PayloadGetter_t pFunct = payloadIter != enumToPayload.end() ? payloadIter->second : nullptr;
     if (pFunct != nullptr)
-        pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED,
+        pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED,
                                                pFunct(nSID, pViewFrame, aEvent, pState));
 }
 

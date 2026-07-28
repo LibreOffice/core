@@ -44,22 +44,22 @@ inline void TestKitCallbackWrapper::startTimer()
 
 constexpr int NO_VIEWID = -1;
 
-inline void TestKitCallbackWrapper::callCallback(int nType, const char* pPayload, int nViewId)
+inline void TestKitCallbackWrapper::callCallback(COKitCallbackType eType, const char* pPayload, int nViewId)
 {
-    discardUpdatedTypes(nType, nViewId);
-    m_callback(nType, pPayload, m_data);
+    discardUpdatedTypes(eType, nViewId);
+    m_callback(eType, pPayload, m_data);
     startTimer();
 }
 
-void TestKitCallbackWrapper::viewCallback(int nType, const rtl::OString& pPayload)
+void TestKitCallbackWrapper::viewCallback(COKitCallbackType eType, const rtl::OString& pPayload)
 {
-    callCallback(nType, pPayload.getStr(), NO_VIEWID);
+    callCallback(eType, pPayload.getStr(), NO_VIEWID);
 }
 
-void TestKitCallbackWrapper::viewCallbackWithViewId(int nType, const rtl::OString& pPayload,
+void TestKitCallbackWrapper::viewCallbackWithViewId(COKitCallbackType eType, const rtl::OString& pPayload,
                                                     int nViewId)
 {
-    callCallback(nType, pPayload.getStr(), nViewId);
+    callCallback(eType, pPayload.getStr(), nViewId);
 }
 
 void TestKitCallbackWrapper::viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
@@ -75,7 +75,7 @@ void TestKitCallbackWrapper::viewInvalidateTilesCallback(const tools::Rectangle*
         buf.append(", " + OString::number(static_cast<sal_Int32>(nPart)) + ", "
                    + OString::number(static_cast<sal_Int32>(nMode)));
     }
-    callCallback(KIT_CALLBACK_INVALIDATE_TILES, buf.makeStringAndClear().getStr(), NO_VIEWID);
+    callCallback(COKitCallbackType::INVALIDATE_TILES, buf.makeStringAndClear().getStr(), NO_VIEWID);
 }
 
 // TODO This is probably a pointless code duplication with CallbackFlushHandler,
@@ -85,18 +85,18 @@ void TestKitCallbackWrapper::viewInvalidateTilesCallback(const tools::Rectangle*
 // is presumably this class using CallbackFlushHandler internally by default,
 // but having an option to use this simpler code when needed.
 
-void TestKitCallbackWrapper::viewUpdatedCallback(int nType)
+void TestKitCallbackWrapper::viewUpdatedCallback(COKitCallbackType eType)
 {
-    if (std::find(m_updatedTypes.begin(), m_updatedTypes.end(), nType) == m_updatedTypes.end())
+    if (std::find(m_updatedTypes.begin(), m_updatedTypes.end(), eType) == m_updatedTypes.end())
     {
-        m_updatedTypes.push_back(nType);
+        m_updatedTypes.push_back(eType);
         startTimer();
     }
 }
 
-void TestKitCallbackWrapper::viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId)
+void TestKitCallbackWrapper::viewUpdatedCallbackPerViewId(COKitCallbackType eType, int nViewId, int nSourceViewId)
 {
-    const PerViewIdData data{ nType, nViewId, nSourceViewId };
+    const PerViewIdData data{ eType, nViewId, nSourceViewId };
     auto& l = m_updatedTypesPerViewId;
     // The source view doesn't matter for uniqueness, just keep the latest one.
     auto it = std::find_if(l.begin(), l.end(), [data](const PerViewIdData& other) {
@@ -115,13 +115,13 @@ void TestKitCallbackWrapper::viewAddPendingInvalidateTiles()
     startTimer();
 }
 
-void TestKitCallbackWrapper::discardUpdatedTypes(int nType, int nViewId)
+void TestKitCallbackWrapper::discardUpdatedTypes(COKitCallbackType eType, int nViewId)
 {
     // If a callback is called directly with an event, drop the updated flag for it, since
     // the direct event replaces it.
     for (auto it = m_updatedTypes.begin(); it != m_updatedTypes.end();)
     {
-        if (*it == nType)
+        if (*it == eType)
             it = m_updatedTypes.erase(it);
         else
             ++it;
@@ -130,12 +130,12 @@ void TestKitCallbackWrapper::discardUpdatedTypes(int nType, int nViewId)
     bool allViewIds = false;
     if (nViewId < 0)
         allViewIds = true;
-    if (nType == KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR
+    if (eType == COKitCallbackType::INVALIDATE_VISIBLE_CURSOR
         && !comphelper::COKit::isViewIdForVisCursorInvalidation())
         allViewIds = true;
     for (auto it = m_updatedTypesPerViewId.begin(); it != m_updatedTypesPerViewId.end();)
     {
-        if (it->type == nType && (allViewIds || it->viewId == nViewId))
+        if (it->type == eType && (allViewIds || it->viewId == nViewId))
             it = m_updatedTypesPerViewId.erase(it);
         else
             ++it;
@@ -153,12 +153,12 @@ void TestKitCallbackWrapper::flushKitData()
     });
     assert(viewShell != nullptr);
     // First move data to local structures, so that callbacks don't possibly modify it.
-    std::vector<int> updatedTypes;
+    std::vector<COKitCallbackType> updatedTypes;
     std::swap(updatedTypes, m_updatedTypes);
     std::vector<PerViewIdData> updatedTypesPerViewId;
     std::swap(updatedTypesPerViewId, m_updatedTypesPerViewId);
 
-    for (int type : updatedTypes)
+    for (COKitCallbackType type : updatedTypes)
     {
         std::optional<OString> payload = viewShell->getKitPayload(type, m_viewId);
         if (payload)

@@ -168,16 +168,16 @@ ScTestViewCallback::~ScTestViewCallback()
     }
 }
 
-void ScTestViewCallback::callback(int nType, const char* pPayload, void* pData)
+void ScTestViewCallback::callback(COKitCallbackType eType, const char* pPayload, void* pData)
 {
-    static_cast<ScTestViewCallback*>(pData)->callbackImpl(nType, pPayload);
+    static_cast<ScTestViewCallback*>(pData)->callbackImpl(eType, pPayload);
 }
 
-void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
+void ScTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayload)
 {
-    switch (nType)
+    switch (eType)
     {
-        case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
+        case COKitCallbackType::VIEW_CURSOR_VISIBLE:
         {
             boost::property_tree::ptree aTree;
             std::stringstream aStream(pPayload);
@@ -185,7 +185,7 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_textCursorVisible = aTree.get_child("visible").get_value<std::string>() == "true";
         }
         break;
-        case KIT_CALLBACK_CELL_CURSOR:
+        case COKitCallbackType::CELL_CURSOR:
         {
             m_bOwnCursorInvalidated = true;
             cpo::uno::Sequence<OUString> aSeq
@@ -200,17 +200,17 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             }
         }
         break;
-        case KIT_CALLBACK_CELL_VIEW_CURSOR:
+        case COKitCallbackType::CELL_VIEW_CURSOR:
         {
             m_bViewCursorInvalidated = true;
         }
         break;
-        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+        case COKitCallbackType::TEXT_VIEW_SELECTION:
         {
             m_bTextViewSelectionInvalidated = true;
         }
         break;
-        case KIT_CALLBACK_VIEW_LOCK:
+        case COKitCallbackType::VIEW_LOCK:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -219,18 +219,18 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             ++m_nViewLockCount;
         }
         break;
-        case KIT_CALLBACK_GRAPHIC_SELECTION:
+        case COKitCallbackType::GRAPHIC_SELECTION:
         {
             m_bGraphicSelection = true;
             m_ShapeSelection = OString(pPayload);
         }
         break;
-        case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
         {
             m_bGraphicViewSelection = true;
         }
         break;
-        case KIT_CALLBACK_INVALIDATE_TILES:
+        case COKitCallbackType::INVALIDATE_TILES:
         {
             OString text(pPayload);
             if (text.startsWith("EMPTY"))
@@ -257,12 +257,12 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             }
         }
         break;
-        case KIT_CALLBACK_CELL_FORMULA:
+        case COKitCallbackType::CELL_FORMULA:
         {
             m_sCellFormula = OString(pPayload);
         }
         break;
-        case KIT_CALLBACK_COMMENT:
+        case COKitCallbackType::COMMENT:
         {
             m_aCommentCallbackResult.clear();
             std::stringstream aStream(pPayload);
@@ -270,32 +270,32 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
         }
         break;
-        case KIT_CALLBACK_INVALIDATE_HEADER:
+        case COKitCallbackType::INVALIDATE_HEADER:
         {
             m_sInvalidateHeader = OString(pPayload);
         }
         break;
-        case KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
+        case COKitCallbackType::INVALIDATE_SHEET_GEOMETRY:
         {
             m_sInvalidateSheetGeometry = OString(pPayload);
         }
         break;
-        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
         {
             m_aInvalidateCursorResult.parseMessage(pPayload);
         }
         break;
-        case KIT_CALLBACK_HYPERLINK_CLICKED:
+        case COKitCallbackType::HYPERLINK_CLICKED:
         {
             m_aHyperlinkClicked = OString(pPayload);
         }
         break;
-        case KIT_CALLBACK_TEXT_SELECTION:
+        case COKitCallbackType::TEXT_SELECTION:
         {
             m_aTextSelectionResult.parseMessage(pPayload);
         }
         break;
-        case KIT_CALLBACK_STATE_CHANGED:
+        case COKitCallbackType::STATE_CHANGED:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -327,7 +327,7 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aStateChanges[aCommandName] = aTree;
         }
         break;
-        case KIT_CALLBACK_JSDIALOG:
+        case COKitCallbackType::JSDIALOG:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -346,6 +346,8 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
                 }
             }
         }
+        break;
+        default:
         break;
     }
 }

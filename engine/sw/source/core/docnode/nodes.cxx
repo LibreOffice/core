@@ -2387,7 +2387,7 @@ void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
                 aJson.put("DeleteSection", fieldCommand);
             }
 
-            pKitClipSh->viewCallback(KIT_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+            pKitClipSh->viewCallback(COKitCallbackType::UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
         }
     }
 

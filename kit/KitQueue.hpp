@@ -65,29 +65,29 @@ public:
 
     struct Callback {
         int _view; // -1 for all
-        int _type;
+        COKitCallbackType _type;
         std::string _payload;
 
-        Callback() : _view(-1), _type(-1) { }
+        Callback() : _view(-1), _type(COKitCallbackType::INVALIDATE_TILES) { }
         Callback(const Callback&) = default;
         Callback(Callback&&) = default;
         Callback& operator=(const Callback&) = default;
         Callback& operator=(Callback&&) = default;
-        Callback(int view, int type, std::string payload)
+        Callback(int view, COKitCallbackType type, std::string payload)
             : _view(view)
             , _type(type)
             , _payload(std::move(payload))
         {
         }
 
-        static std::string toString(int view, int type, const std::string& payload);
+        static std::string toString(int view, COKitCallbackType type, const std::string& payload);
     };
 
     /// Queue a COKit callback for later emission
-    void putCallback(int view, int type, const std::string &message);
+    void putCallback(int view, COKitCallbackType type, const std::string &message);
 
     /// Work back over the queue to simplify & return false if we should not queue.
-    bool elideDuplicateCallback(int view, int type, const std::string &message);
+    bool elideDuplicateCallback(int view, COKitCallbackType type, const std::string &message);
 
     /// Obtain the next message.
     /// timeoutMs can be 0 to signify infinity.

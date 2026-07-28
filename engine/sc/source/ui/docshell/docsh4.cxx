@@ -3061,7 +3061,7 @@ void ScDocShell::KitCommentNotify(KitCommentNotificationType nType, const ScDocu
     while (pViewShell)
     {
         if (pThisViewShell == nullptr || pViewShell->GetDocId() == pThisViewShell->GetDocId())
-            pViewShell->viewCallback(KIT_CALLBACK_COMMENT, aPayload);
+            pViewShell->viewCallback(COKitCallbackType::COMMENT, aPayload);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }

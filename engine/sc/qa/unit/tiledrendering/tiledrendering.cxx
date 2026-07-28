@@ -1003,7 +1003,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         }));
         dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
-        // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action
+        // We received a COKitCallbackType::COMMENT callback with comment 'Add' action
         CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("1"), aView1.m_aCommentCallbackResult.get<std::string>("id"));
@@ -1050,7 +1050,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         });
         dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 
-        // We received a KIT_CALLBACK_COMMENT callback with comment 'Modify' action
+        // We received a COKitCallbackType::COMMENT callback with comment 'Modify' action
         CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(aCommentId, aView1.m_aCommentCallbackResult.get<std::string>("id"));
@@ -1071,7 +1071,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         });
         dispatchCommand(mxComponent, u".uno:DeleteNote"_ustr, aArgs);
 
-        // We received a KIT_CALLBACK_COMMENT callback with comment 'Remove' action
+        // We received a COKitCallbackType::COMMENT callback with comment 'Remove' action
         CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(aCommentId, aView1.m_aCommentCallbackResult.get<std::string>("id"));
@@ -3095,7 +3095,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
         }));
         dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
-        // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action
+        // We received a COKitCallbackType::COMMENT callback with comment 'Add' action
         CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("1"), aView.m_aCommentCallbackResult.get<std::string>("id"));
         CPPUNIT_ASSERT_EQUAL(std::string("0"), aView.m_aCommentCallbackResult.get<std::string>("tab"));
@@ -3115,7 +3115,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
             Scheduler::ProcessEventsToIdle();
             dispatchCommand(mxComponent, u".uno:Paste"_ustr, aCopyPasteArgs); // Paste to cell B50
 
-            // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action
+            // We received a COKitCallbackType::COMMENT callback with comment 'Add' action
             CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
             // Without the fix the id will be "1".
             CPPUNIT_ASSERT_EQUAL(std::string("2"), aView.m_aCommentCallbackResult.get<std::string>("id"));
@@ -3145,7 +3145,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
             Scheduler::ProcessEventsToIdle();
             dispatchCommand(mxComponent, u".uno:Paste"_ustr, aCopyPasteArgs); // Paste to cell D50
 
-            // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action
+            // We received a COKitCallbackType::COMMENT callback with comment 'Add' action
             CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
             // Without the fix the id will be "1".
             CPPUNIT_ASSERT_EQUAL(std::string("3"), aView.m_aCommentCallbackResult.get<std::string>("id"));
@@ -4471,7 +4471,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentInsertAndResolve)
         }));
         dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgs);
 
-        // Both views receive KIT_CALLBACK_COMMENT with action "Add"
+        // Both views receive COKitCallbackType::COMMENT with action "Add"
         CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("1"), aView1.m_aCommentCallbackResult.get<std::string>("id"));
@@ -4509,7 +4509,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentInsertAndResolve)
         });
         dispatchCommand(mxComponent, u".uno:ResolveComment"_ustr, aArgs);
 
-        // Both views receive KIT_CALLBACK_COMMENT with action "Modify"
+        // Both views receive COKitCallbackType::COMMENT with action "Modify"
         CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("true"), aView1.m_aCommentCallbackResult.get<std::string>("resolved"));

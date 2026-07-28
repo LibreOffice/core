@@ -436,7 +436,7 @@ void ScTabViewShell::ShowRefErrorInfoBar(const ScAddress& rFormulaCell)
             const auto aState = aJson.startNode("state");
             aJson.put("cellAddress", aCellStr.toUtf8());
         }
-        viewCallback(KIT_CALLBACK_STATE_CHANGED, aJson.finishAndGetAsOString());
+        viewCallback(COKitCallbackType::STATE_CHANGED, aJson.finishAndGetAsOString());
     }
     else
     {
@@ -489,7 +489,7 @@ void ScTabViewShell::NotifyExpandRefsSkipped()
         tools::JsonWriter aJson;
         aJson.put("commandName", "CalcExpandRefsSkipped");
         { const auto aState = aJson.startNode("state"); }
-        viewCallback(KIT_CALLBACK_STATE_CHANGED, aJson.finishAndGetAsOString());
+        viewCallback(COKitCallbackType::STATE_CHANGED, aJson.finishAndGetAsOString());
         return;
     }
 

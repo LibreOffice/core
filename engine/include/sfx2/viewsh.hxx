@@ -38,6 +38,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include <COKit/COKit.hxx>
+
 class SfxTabPage;
 class SfxBaseController;
 namespace weld {
@@ -399,11 +401,11 @@ public:
     /// dump view state for diagnostics
     void dumpCOKitViewState(rtl::OStringBuffer &rState);
     /// Invokes the registered callback, if there are any.
-    virtual void viewCallback(int nType, const OString& pPayload) const override;
-    virtual void viewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) const override;
+    virtual void viewCallback(COKitCallbackType eType, const OString& pPayload) const override;
+    virtual void viewCallbackWithViewId(COKitCallbackType eType, const OString& pPayload, int nViewId) const override;
     virtual void viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const override;
-    virtual void viewUpdatedCallback(int nType) const override;
-    virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const override;
+    virtual void viewUpdatedCallback(COKitCallbackType eType) const override;
+    virtual void viewUpdatedCallbackPerViewId(COKitCallbackType eType, int nViewId, int nSourceViewId) const override;
     // Tells the view's callback handler that the vector content of the
     // given slide part changed.
     void viewVectorPartChanged(int nPart) const;
@@ -413,7 +415,7 @@ public:
     // Returns current payload for nType, after viewUpdatedCallback() or
     // viewUpdatedCallbackPerViewId() were called. If no payload should
     // be generated, the ignore flag should be set.
-    virtual std::optional<OString> getKitPayload(int nType, int nViewId) const;
+    virtual std::optional<OString> getKitPayload(COKitCallbackType eType, int nViewId) const;
 
     /// Set if we are doing tiled searching.
     void setTiledSearching(bool bTiledSearching);
@@ -430,15 +432,15 @@ public:
 
     /// ICOKitNotifier.
     virtual bool hasKitClient() const override;
-    /// ICOKitNotifier. Emits a KIT_CALLBACK_INVALIDATE_TILES.
+    /// ICOKitNotifier. Emits a COKitCallbackType::INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const override;
     /// ICOKitNotifier.
     virtual void notifyCursorInvalidation(tools::Rectangle const *, bool bControlEvent, int windowID) const override;
 
     /// See OutlinerViewShell::NotifyOtherViews().
-    void NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload) override;
+    void NotifyOtherViews(COKitCallbackType eType, const OString& rKey, const OString& rPayload) override;
     /// See OutlinerViewShell::NotifyOtherView().
-    void NotifyOtherView(OutlinerViewShell* pOtherShell, int nType, const OString& rKey, const OString& rPayload) override;
+    void NotifyOtherView(OutlinerViewShell* pOtherShell, COKitCallbackType eType, const OString& rKey, const OString& rPayload) override;
     /// Ask this view to send its cursor position to pViewShell.
     virtual void NotifyCursor(SfxViewShell* /*pViewShell*/) const;
     /// Context names of the structures that enclose the current selection,

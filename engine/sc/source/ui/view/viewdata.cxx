@@ -1592,8 +1592,8 @@ void notifyCellCursorAt(const ScTabViewShell* pViewShell, SCCOL nCol, SCROW nRow
         + ", " + OString::number(nCol)
         + ", " + OString::number(nRow);
 
-    pViewShell->viewCallback(KIT_CALLBACK_CELL_CURSOR, msg);
-    KitHelper::notifyOtherViews(pViewShell, KIT_CALLBACK_CELL_VIEW_CURSOR, "rectangle",
+    pViewShell->viewCallback(COKitCallbackType::CELL_CURSOR, msg);
+    KitHelper::notifyOtherViews(pViewShell, COKitCallbackType::CELL_VIEW_CURSOR, "rectangle",
                                    msg);
 }
 

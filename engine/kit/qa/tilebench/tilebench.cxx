@@ -478,11 +478,11 @@ static int testJoin( Document *pDocument)
 static std::atomic<bool> bDialogRendered(false);
 static std::atomic<int> nDialogId(-1);
 
-static void kitCallback(int nType, const char* pPayload, void* pData)
+static void kitCallback(COKitCallbackType eType, const char* pPayload, void* pData)
 {
     Document *pDocument = static_cast<Document *>(pData);
 
-    if (nType != KIT_CALLBACK_WINDOW)
+    if (eType != COKitCallbackType::WINDOW)
         return;
 
     std::stringstream aStream(pPayload);
@@ -543,13 +543,13 @@ static void testDialog( Document *pDocument, const char *uno_cmd )
     pDocument->destroyView(view);
 }
 
-static void documentCallback(const int type, const char* p, void*)
+static void documentCallback(COKitCallbackType eType, const char* p, void*)
 {
-    std::cerr << "Document callback " << type << ": " << (p ? p : "(null)") << "\n";
+    std::cerr << "Document callback " << eType << ": " << (p ? p : "(null)") << "\n";
 }
 
 // Avoid excessive dbgutil churn.
-static void ignoreCallback(const int /*type*/, const char* /*p*/, void* /*data*/)
+static void ignoreCallback(const COKitCallbackType /*type*/, const char* /*p*/, void* /*data*/)
 {
 }
 

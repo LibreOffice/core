@@ -62,7 +62,7 @@ void lokit_main(
 
 bool globalPreinit(const std::string& loTemplate);
 /// Wrapper around private Document::ViewCallback().
-void documentViewCallback(int type, const char* p, void* data);
+void documentViewCallback(COKitCallbackType eType, const char* p, void* data);
 
 class Document;
 class DeltaGenerator;
@@ -197,7 +197,7 @@ public:
     const std::shared_ptr<Document>& getDocument() const { return _document; }
 
     // unusual COKit event from another thread, push into our loop to process.
-    static bool pushToMainThread(COKitCallback callback, int type, const char* p,
+    static bool pushToMainThread(COKitCallback callback, COKitCallbackType type, const char* p,
                                  void* data);
 
 #if DOCS_SHARE_PROCESS
@@ -244,7 +244,7 @@ public:
     /// Returns -1 on failure.
     std::size_t purgeSessions();
 
-    void setDocumentPassword(int passwordType);
+    void setDocumentPassword(COKitCallbackType passwordType);
 
     void renderTiles(TileCombined& tileCombined);
 
@@ -279,12 +279,12 @@ public:
     void trimAfterInactivity();
 
     // COKit callback entry points
-    static void GlobalCallback(int type, const char* p, void* data);
-    static void ViewCallback(int type, const char* p, void* data);
+    static void GlobalCallback(COKitCallbackType eType, const char* p, void* data);
+    static void ViewCallback(COKitCallbackType eType, const char* p, void* data);
 
 private:
     /// Helper method to broadcast callback and its payload to all clients
-    void broadcastCallbackToClients(const int type, const std::string& payload)
+    void broadcastCallbackToClients(const COKitCallbackType type, const std::string& payload)
     {
         _queue->putCallback(-1, type, payload);
     }

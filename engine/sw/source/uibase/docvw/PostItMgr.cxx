@@ -216,7 +216,7 @@ namespace {
 
         if (pView)
         {
-            pView->viewCallback(KIT_CALLBACK_COMMENT, OString(aPayload));
+            pView->viewCallback(COKitCallbackType::COMMENT, OString(aPayload));
         }
     }
 

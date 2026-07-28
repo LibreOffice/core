@@ -38,6 +38,8 @@
 #include <viewopt.hxx>
 #include <reffldsubtype.hxx>
 
+#include <COKit/COKit.hxx>
+
 namespace vcl { class Window; }
 class SbxArray;
 class SwFlyFrameAttrMgr;
@@ -542,7 +544,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void SetEnteringStdMode(bool bEnteringStdMode) { m_bEnteringStdMode = bEnteringStdMode; }
     bool IsEnteringStdMode() const { return m_bEnteringStdMode; }
 
-    SW_DLLPUBLIC std::optional<OString> getKitPayload(int nType, int nViewId) const;
+    SW_DLLPUBLIC std::optional<OString> getKitPayload(COKitCallbackType eType, int nViewId) const;
 
 private:
 

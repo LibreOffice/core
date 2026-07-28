@@ -29,6 +29,8 @@
 #include <unotools/options.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
+#include <COKit/COKit.hxx>
+
 //  class hierarchy of View:
 //         SfxListener
 //         SdrPaintView    PntV   Action            ModChg   Attr   Notify
@@ -236,7 +238,7 @@ public:
 
     // Interactive Move Action programmatically. With bPreview the document
     // is not modified: the geometry the shape would get on drop is computed
-    // on a drag clone and reported via KIT_CALLBACK_SHAPE_DRAG_PREVIEW.
+    // on a drag clone and reported via COKitCallbackType::SHAPE_DRAG_PREVIEW.
     bool MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint, const sal_Int32 aObjectOrdNum = -1, const bool bPreview = false);
 
 private:

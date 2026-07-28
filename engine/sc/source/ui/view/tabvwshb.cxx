@@ -841,7 +841,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                             tools::JsonWriter aJson;
                             aJson.put("commandName", "CalcRefErrorDismiss");
                             { const auto aState = aJson.startNode("state"); }
-                            viewCallback(KIT_CALLBACK_STATE_CHANGED,
+                            viewCallback(COKitCallbackType::STATE_CHANGED,
                                          aJson.finishAndGetAsOString());
                         }
                         else

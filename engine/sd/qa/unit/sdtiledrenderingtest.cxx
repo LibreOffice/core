@@ -71,9 +71,9 @@ void SdTiledRenderingTest::setupCOKitViewCallback(SfxViewShell& rViewShell)
     m_callbackWrapper.setKitViewId(KitHelper::getView(rViewShell));
 }
 
-void SdTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)
+void SdTiledRenderingTest::callback(COKitCallbackType eType, const char* pPayload, void* pData)
 {
-    static_cast<SdTiledRenderingTest*>(pData)->callbackImpl(nType, pPayload);
+    static_cast<SdTiledRenderingTest*>(pData)->callbackImpl(eType, pPayload);
 }
 
 namespace
@@ -104,18 +104,18 @@ void lcl_convertRectangle(std::u16string_view rString, ::tools::Rectangle& rRect
 }
 }
 
-void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
+void SdTiledRenderingTest::callbackImpl(COKitCallbackType eType, const char* pPayload)
 {
-    switch (nType)
+    switch (eType)
     {
-        case KIT_CALLBACK_INVALIDATE_TILES:
+        case COKitCallbackType::INVALIDATE_TILES:
         {
             OUString aPayload = OUString::createFromAscii(pPayload);
             if (aPayload != "EMPTY" && m_aInvalidation.IsEmpty())
                 lcl_convertRectangle(aPayload, m_aInvalidation);
         }
         break;
-        case KIT_CALLBACK_TEXT_SELECTION:
+        case COKitCallbackType::TEXT_SELECTION:
         {
             OUString aPayload = OUString::createFromAscii(pPayload);
             m_aSelection.clear();
@@ -131,23 +131,23 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
                 ++m_nSelectionAfterSearchResult;
         }
         break;
-        case KIT_CALLBACK_SEARCH_NOT_FOUND:
+        case COKitCallbackType::SEARCH_NOT_FOUND:
         {
             m_bFound = false;
         }
         break;
-        case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
+        case COKitCallbackType::DOCUMENT_SIZE_CHANGED:
         {
             m_aDocumentSizeCondition.set();
         }
         break;
-        case KIT_CALLBACK_SET_PART:
+        case COKitCallbackType::SET_PART:
         {
             OUString aPayload = OUString::createFromAscii(pPayload);
             m_nPart = aPayload.toInt32();
         }
         break;
-        case KIT_CALLBACK_SEARCH_RESULT_SELECTION:
+        case COKitCallbackType::SEARCH_RESULT_SELECTION:
         {
             m_nSearchResultCount++;
             m_aSearchResultSelection.clear();
@@ -164,6 +164,8 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
                     std::atoi(rValue.second.get<std::string>("part").c_str()));
             }
         }
+        break;
+        default:
         break;
     }
 }
@@ -218,16 +220,16 @@ SdTestViewCallback::~SdTestViewCallback()
     mpViewShell->setCOKitViewCallback(nullptr);
 }
 
-void SdTestViewCallback::callback(int nType, const char* pPayload, void* pData)
+void SdTestViewCallback::callback(COKitCallbackType eType, const char* pPayload, void* pData)
 {
-    static_cast<SdTestViewCallback*>(pData)->callbackImpl(nType, pPayload);
+    static_cast<SdTestViewCallback*>(pData)->callbackImpl(eType, pPayload);
 }
 
-void SdTestViewCallback::callbackImpl(int nType, const char* pPayload)
+void SdTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayload)
 {
-    switch (nType)
+    switch (eType)
     {
-        case KIT_CALLBACK_INVALIDATE_TILES:
+        case COKitCallbackType::INVALIDATE_TILES:
         {
             m_bTilesInvalidated = true;
             OString text(pPayload);
@@ -251,13 +253,13 @@ void SdTestViewCallback::callbackImpl(int nType, const char* pPayload)
             }
         }
         break;
-        case KIT_CALLBACK_GRAPHIC_SELECTION:
+        case COKitCallbackType::GRAPHIC_SELECTION:
         {
             m_bGraphicSelectionInvalidated = true;
             m_ShapeSelection = OString(pPayload);
         }
         break;
-        case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -267,13 +269,13 @@ void SdTestViewCallback::callbackImpl(int nType, const char* pPayload)
                 m_bGraphicViewSelectionInvalidated = true;
         }
         break;
-        case KIT_CALLBACK_CURSOR_VISIBLE:
+        case COKitCallbackType::CURSOR_VISIBLE:
         {
             m_bCursorVisibleChanged = true;
             m_bCursorVisible = (std::string_view("true") == pPayload);
         }
         break;
-        case KIT_CALLBACK_VIEW_LOCK:
+        case COKitCallbackType::VIEW_LOCK:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -281,7 +283,7 @@ void SdTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
         }
         break;
-        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        case COKitCallbackType::INVALIDATE_VIEW_CURSOR:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -290,7 +292,7 @@ void SdTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aViewCursorInvalidations[nViewId] = true;
         }
         break;
-        case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
+        case COKitCallbackType::VIEW_CURSOR_VISIBLE:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -299,12 +301,12 @@ void SdTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aViewCursorVisibilities[nViewId] = std::string_view("true") == pPayload;
         }
         break;
-        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+        case COKitCallbackType::TEXT_VIEW_SELECTION:
         {
             m_bViewSelectionSet = true;
         }
         break;
-        case KIT_CALLBACK_COMMENT:
+        case COKitCallbackType::COMMENT:
         {
             m_aCommentCallbackResult.clear();
             std::stringstream aStream(pPayload);
@@ -312,7 +314,7 @@ void SdTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
         }
         break;
-        case KIT_CALLBACK_STATE_CHANGED:
+        case COKitCallbackType::STATE_CHANGED:
         {
             std::stringstream aStream(pPayload);
             if (!aStream.str().starts_with("{"))
@@ -332,6 +334,8 @@ void SdTestViewCallback::callbackImpl(int nType, const char* pPayload)
             std::string aCommandName = it->second.get_value<std::string>();
             m_aStateChanges[aCommandName] = aTree;
         }
+        break;
+        default:
         break;
     }
 }

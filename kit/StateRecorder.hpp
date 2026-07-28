@@ -13,6 +13,8 @@
 
 #include <common/ContainerUtil.hpp>
 
+#include <COKit/COKit.hxx>
+
 /*
  * When the session is inactive, we need to record its state for a replay.
  */
@@ -20,21 +22,21 @@
 struct RecordedEvent
 {
 private:
-    int _type = 0;
+    COKitCallbackType _type = COKitCallbackType::INVALIDATE_TILES;
     std::string _payload;
 
 public:
     RecordedEvent() {}
 
-    RecordedEvent(int type, const std::string& payload)
+    RecordedEvent(COKitCallbackType type, const std::string& payload)
         : _type(type)
         , _payload(payload)
     {
     }
 
-    void setType(int type) { _type = type; }
+    void setType(COKitCallbackType type) { _type = type; }
 
-    int getType() const { return _type; }
+    COKitCallbackType getType() const { return _type; }
 
     void setPayload(const std::string& payload) { _payload = payload; }
 
@@ -46,8 +48,9 @@ class StateRecorder
 private:
     bool _invalidate;
     Util::UnorderedStringMap<std::string> _recordedStates;
-    std::unordered_map<int, std::unordered_map<int, RecordedEvent>> _recordedViewEvents;
-    std::unordered_map<int, RecordedEvent> _recordedEvents;
+    std::unordered_map<int, std::unordered_map<COKitCallbackType, RecordedEvent>>
+        _recordedViewEvents;
+    std::unordered_map<COKitCallbackType, RecordedEvent> _recordedEvents;
     std::vector<RecordedEvent> _recordedEventsVector;
 
 public:
@@ -66,13 +69,13 @@ public:
         return _recordedStates;
     }
 
-    const std::unordered_map<int, std::unordered_map<int, RecordedEvent>>&
+    const std::unordered_map<int, std::unordered_map<COKitCallbackType, RecordedEvent>>&
     getRecordedViewEvents() const
     {
         return _recordedViewEvents;
     }
 
-    const std::unordered_map<int, RecordedEvent>& getRecordedEvents() const
+    const std::unordered_map<COKitCallbackType, RecordedEvent>& getRecordedEvents() const
     {
         return _recordedEvents;
     }
@@ -82,12 +85,12 @@ public:
         return _recordedEventsVector;
     }
 
-    void recordEvent(const int type, const std::string& payload)
+    void recordEvent(const COKitCallbackType type, const std::string& payload)
     {
         _recordedEvents[type] = RecordedEvent(type, payload);
     }
 
-    void recordViewEvent(const int viewId, const int type, const std::string& payload)
+    void recordViewEvent(const int viewId, const COKitCallbackType type, const std::string& payload)
     {
         _recordedViewEvents[viewId][type] = { type, payload };
     }
@@ -99,7 +102,7 @@ public:
 
     /// In the case we need to remember all the events that come, not just
     /// the final state.
-    void recordEventSequence(const int type, const std::string& payload)
+    void recordEventSequence(const COKitCallbackType type, const std::string& payload)
     {
         _recordedEventsVector.emplace_back(type, payload);
     }

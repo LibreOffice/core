@@ -580,20 +580,20 @@ struct ViewCallback
 {
     std::set<SwRedlineRenderMode> m_aInvalidationModes;
 
-    static void callback(int nType, const char* pPayload, void* pData);
-    void callbackImpl(int nType, const char* pPayload);
+    static void callback(COKitCallbackType eType, const char* pPayload, void* pData);
+    void callbackImpl(COKitCallbackType eType, const char* pPayload);
 };
 
-void ViewCallback::callback(int nType, const char* pPayload, void* pData)
+void ViewCallback::callback(COKitCallbackType eType, const char* pPayload, void* pData)
 {
-    static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
+    static_cast<ViewCallback*>(pData)->callbackImpl(eType, pPayload);
 }
 
-void ViewCallback::callbackImpl(int nType, const char* pPayload)
+void ViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayload)
 {
-    switch (nType)
+    switch (eType)
     {
-        case KIT_CALLBACK_INVALIDATE_TILES:
+        case COKitCallbackType::INVALIDATE_TILES:
         {
             OUString aPayload = OUString::fromUtf8(pPayload);
             if (aPayload.startsWith("EMPTY"))
@@ -605,6 +605,8 @@ void ViewCallback::callbackImpl(int nType, const char* pPayload)
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), aSeq.getLength());
             m_aInvalidationModes.insert(static_cast<SwRedlineRenderMode>(aSeq[5].toInt32()));
         }
+        break;
+        default:
         break;
     }
 }

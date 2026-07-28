@@ -63,7 +63,7 @@ void KitCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewSh
         return;
 
     OString aPayload = rAnnotation.ToJSON(nType);
-    pViewShell->viewCallback(KIT_CALLBACK_COMMENT, aPayload);
+    pViewShell->viewCallback(COKitCallbackType::COMMENT, aPayload);
 }
 
 void KitCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation)
@@ -84,7 +84,7 @@ void KitCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation)
     {
         const SdrView* pDrawView = pViewShell->GetDrawView();
         if (pDrawView && &pDrawView->GetModel() == pAnnotationModel)
-            pViewShell->viewCallback(KIT_CALLBACK_COMMENT, aPayload);
+            pViewShell->viewCallback(COKitCallbackType::COMMENT, aPayload);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }

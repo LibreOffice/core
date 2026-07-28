@@ -147,8 +147,8 @@ public:
 
     void closeDoc(std::unique_ptr<LibLODocument_Impl>& loDocument);
     void closeDoc() { closeDoc(m_pDocument); }
-    static void callback(int nType, const char* pPayload, void* pData);
-    void callbackImpl(int nType, const char* pPayload);
+    static void callback(COKitCallbackType eType, const char* pPayload, void* pData);
+    void callbackImpl(COKitCallbackType eType, const char* pPayload);
 
     void testGetStyles();
     void testGetFonts();
@@ -450,16 +450,16 @@ void DesktopKitTest::closeDoc(std::unique_ptr<LibLODocument_Impl>& pDocument)
     }
 }
 
-void DesktopKitTest::callback(int nType, const char* pPayload, void* pData)
+void DesktopKitTest::callback(COKitCallbackType eType, const char* pPayload, void* pData)
 {
-    static_cast<DesktopKitTest*>(pData)->callbackImpl(nType, pPayload);
+    static_cast<DesktopKitTest*>(pData)->callbackImpl(eType, pPayload);
 }
 
-void DesktopKitTest::callbackImpl(int nType, const char* pPayload)
+void DesktopKitTest::callbackImpl(COKitCallbackType eType, const char* pPayload)
 {
-    switch (nType)
+    switch (eType)
     {
-    case KIT_CALLBACK_TEXT_SELECTION:
+    case COKitCallbackType::TEXT_SELECTION:
     {
         m_aTextSelection = OString(pPayload);
         if (m_aSearchResultSelection.empty())
@@ -468,13 +468,13 @@ void DesktopKitTest::callbackImpl(int nType, const char* pPayload)
             ++m_nSelectionAfterSearchResult;
     }
     break;
-    case KIT_CALLBACK_TEXT_SELECTION_START:
+    case COKitCallbackType::TEXT_SELECTION_START:
         m_aTextSelectionStart = OString(pPayload);
     break;
-    case KIT_CALLBACK_TEXT_SELECTION_END:
+    case COKitCallbackType::TEXT_SELECTION_END:
         m_aTextSelectionEnd = OString(pPayload);
     break;
-    case KIT_CALLBACK_SEARCH_RESULT_SELECTION:
+    case COKitCallbackType::SEARCH_RESULT_SELECTION:
     {
         m_aSearchResultSelection.clear();
         boost::property_tree::ptree aTree;
@@ -487,13 +487,13 @@ void DesktopKitTest::callbackImpl(int nType, const char* pPayload)
         }
     }
     break;
-    case KIT_CALLBACK_UNO_COMMAND_RESULT:
+    case COKitCallbackType::UNO_COMMAND_RESULT:
     {
         m_aCommandResult = OString(pPayload);
         m_aCommandResultCondition.set();
     }
     break;
-    case KIT_CALLBACK_STATE_CHANGED:
+    case COKitCallbackType::STATE_CHANGED:
     {
         OString aPayload(pPayload);
         OString aPrefix(".uno:ModifiedStatus="_ostr);
@@ -506,13 +506,15 @@ void DesktopKitTest::callbackImpl(int nType, const char* pPayload)
             ++m_nTrackChanges;
     }
     break;
-    case KIT_CALLBACK_CONTEXT_MENU:
+    case COKitCallbackType::CONTEXT_MENU:
     {
         m_aContextMenuResult.clear();
         std::stringstream aStream(pPayload);
         boost::property_tree::read_json(aStream, m_aContextMenuResult);
         m_aContextMenuCondition.set();
     }
+    break;
+    default:
     break;
     }
 }
@@ -1719,10 +1721,10 @@ void DesktopKitTest::testContextMenuWriter()
     }
 }
 
-static void callbackCompressionTest(const int type, const char* payload, void* data)
+static void callbackCompressionTest(COKitCallbackType eType, const char* payload, void* data)
 {
     std::vector<std::tuple<int, std::string>>* notifs = static_cast<std::vector<std::tuple<int, std::string>>*>(data);
-    notifs->emplace_back(type, std::string(payload ? payload : "(nil)"));
+    notifs->emplace_back(static_cast<int>(eType), std::string(payload ? payload : "(nil)"));
 }
 
 void DesktopKitTest::testNotificationCompression()
@@ -1732,83 +1734,83 @@ void DesktopKitTest::testNotificationCompression()
     std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
     handler->setViewId(KitHelper::getCurrentView());
 
-    handler->queue(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""_ostr); // 0
-    handler->queue(KIT_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"_ostr); // Superseded.
-    handler->queue(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""_ostr); // Should be dropped.
-    handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "15, 25, 15, 10"_ostr); // 1
-    handler->queue(KIT_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"_ostr); // Should be dropped.
-    handler->queue(KIT_CALLBACK_TEXT_SELECTION, ""_ostr); // Superseded.
-    handler->queue(KIT_CALLBACK_STATE_CHANGED, ""_ostr); // 2
-    handler->queue(KIT_CALLBACK_STATE_CHANGED, ".uno:Bold"_ostr); // 3
-    handler->queue(KIT_CALLBACK_STATE_CHANGED, ""_ostr); // 4
-    handler->queue(KIT_CALLBACK_MOUSE_POINTER, "text"_ostr); // 5
-    handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "15, 25, 15, 10"_ostr); // Should be dropped.
-    handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "15, 25, 15, 10"_ostr); // Should be dropped.
-    handler->queue(KIT_CALLBACK_MOUSE_POINTER, "text"_ostr); // Should be dropped.
-    handler->queue(KIT_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"_ostr); // Superseded.
-    handler->queue(KIT_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"_ostr); // Superseded.
-    handler->queue(KIT_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"_ostr); // Superseded.
-    handler->queue(KIT_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"_ostr); // Should be dropped.
-    handler->queue(KIT_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"_ostr); // Should be dropped.
-    handler->queue(KIT_CALLBACK_TEXT_SELECTION, ""_ostr); // 7
-    handler->queue(KIT_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"_ostr); // 8
-    handler->queue(KIT_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"_ostr); // 9
-    handler->queue(KIT_CALLBACK_CELL_CURSOR, "15, 25, 15, 10"_ostr); // 10
-    handler->queue(KIT_CALLBACK_CURSOR_VISIBLE, ""_ostr); // 11
-    handler->queue(KIT_CALLBACK_CELL_CURSOR, "15, 25, 15, 10"_ostr); // Should be dropped.
-    handler->queue(KIT_CALLBACK_CELL_FORMULA, "blah"_ostr); // 12
-    handler->queue(KIT_CALLBACK_SET_PART, "1"_ostr); // 13
-    handler->queue(KIT_CALLBACK_STATE_CHANGED, ".uno:AssignLayout=20"_ostr); // Superseded
-    handler->queue(KIT_CALLBACK_CURSOR_VISIBLE, ""_ostr); // Should be dropped.
-    handler->queue(KIT_CALLBACK_CELL_FORMULA, "blah"_ostr); // Should be dropped.
-    handler->queue(KIT_CALLBACK_SET_PART, "1"_ostr); // Should be dropped.
-    handler->queue(KIT_CALLBACK_STATE_CHANGED, ".uno:AssignLayout=1"_ostr); // 14
+    handler->queue(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, ""_ostr); // 0
+    handler->queue(COKitCallbackType::TEXT_SELECTION, "15, 25, 15, 10"_ostr); // Superseded.
+    handler->queue(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, ""_ostr); // Should be dropped.
+    handler->queue(COKitCallbackType::INVALIDATE_TILES, "15, 25, 15, 10"_ostr); // 1
+    handler->queue(COKitCallbackType::TEXT_SELECTION, "15, 25, 15, 10"_ostr); // Should be dropped.
+    handler->queue(COKitCallbackType::TEXT_SELECTION, ""_ostr); // Superseded.
+    handler->queue(COKitCallbackType::STATE_CHANGED, ""_ostr); // 2
+    handler->queue(COKitCallbackType::STATE_CHANGED, ".uno:Bold"_ostr); // 3
+    handler->queue(COKitCallbackType::STATE_CHANGED, ""_ostr); // 4
+    handler->queue(COKitCallbackType::MOUSE_POINTER, "text"_ostr); // 5
+    handler->queue(COKitCallbackType::INVALIDATE_TILES, "15, 25, 15, 10"_ostr); // Should be dropped.
+    handler->queue(COKitCallbackType::INVALIDATE_TILES, "15, 25, 15, 10"_ostr); // Should be dropped.
+    handler->queue(COKitCallbackType::MOUSE_POINTER, "text"_ostr); // Should be dropped.
+    handler->queue(COKitCallbackType::TEXT_SELECTION_START, "15, 25, 15, 10"_ostr); // Superseded.
+    handler->queue(COKitCallbackType::TEXT_SELECTION_END, "15, 25, 15, 10"_ostr); // Superseded.
+    handler->queue(COKitCallbackType::TEXT_SELECTION, "15, 25, 15, 10"_ostr); // Superseded.
+    handler->queue(COKitCallbackType::TEXT_SELECTION_START, "15, 25, 15, 10"_ostr); // Should be dropped.
+    handler->queue(COKitCallbackType::TEXT_SELECTION_END, "15, 25, 15, 10"_ostr); // Should be dropped.
+    handler->queue(COKitCallbackType::TEXT_SELECTION, ""_ostr); // 7
+    handler->queue(COKitCallbackType::TEXT_SELECTION_START, "15, 25, 15, 10"_ostr); // 8
+    handler->queue(COKitCallbackType::TEXT_SELECTION_END, "15, 25, 15, 10"_ostr); // 9
+    handler->queue(COKitCallbackType::CELL_CURSOR, "15, 25, 15, 10"_ostr); // 10
+    handler->queue(COKitCallbackType::CURSOR_VISIBLE, ""_ostr); // 11
+    handler->queue(COKitCallbackType::CELL_CURSOR, "15, 25, 15, 10"_ostr); // Should be dropped.
+    handler->queue(COKitCallbackType::CELL_FORMULA, "blah"_ostr); // 12
+    handler->queue(COKitCallbackType::SET_PART, "1"_ostr); // 13
+    handler->queue(COKitCallbackType::STATE_CHANGED, ".uno:AssignLayout=20"_ostr); // Superseded
+    handler->queue(COKitCallbackType::CURSOR_VISIBLE, ""_ostr); // Should be dropped.
+    handler->queue(COKitCallbackType::CELL_FORMULA, "blah"_ostr); // Should be dropped.
+    handler->queue(COKitCallbackType::SET_PART, "1"_ostr); // Should be dropped.
+    handler->queue(COKitCallbackType::STATE_CHANGED, ".uno:AssignLayout=1"_ostr); // 14
 
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), notifs.size());
 
     size_t i = 0;
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string("15, 25, 15, 10"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_STATE_CHANGED), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::STATE_CHANGED), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_STATE_CHANGED), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::STATE_CHANGED), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:Bold"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_STATE_CHANGED), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::STATE_CHANGED), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_MOUSE_POINTER), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::MOUSE_POINTER), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string("text"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_TEXT_SELECTION), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::TEXT_SELECTION), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_TEXT_SELECTION_START), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::TEXT_SELECTION_START), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string("15, 25, 15, 10"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_TEXT_SELECTION_END), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::TEXT_SELECTION_END), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string("15, 25, 15, 10"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_CELL_CURSOR), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::CELL_CURSOR), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string("15, 25, 15, 10"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_CURSOR_VISIBLE), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::CURSOR_VISIBLE), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_CELL_FORMULA), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::CELL_FORMULA), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string("blah"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_SET_PART), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::SET_PART), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string("1"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_STATE_CHANGED), std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::STATE_CHANGED), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:AssignLayout=1"), std::get<1>(notifs[i++]));
 }
 
@@ -1834,13 +1836,13 @@ void DesktopKitTest::testVectorDeltaPushCoalescing()
     size_t nDeltaCount = 0;
     for (const auto& rNotification : aNotificationList)
     {
-        if (std::get<0>(rNotification) == KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA)
+        if (std::get<0>(rNotification) == static_cast<int>(COKitCallbackType::VECTOR_PRIMITIVES_DELTA))
             ++nDeltaCount;
     }
     CPPUNIT_ASSERT_EQUAL(size_t(1), nDeltaCount);
 
     CPPUNIT_ASSERT(!aNotificationList.empty());
-    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA), std::get<0>(aNotificationList.back()));
+    CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::VECTOR_PRIMITIVES_DELTA), std::get<0>(aNotificationList.back()));
     CPPUNIT_ASSERT(std::get<1>(aNotificationList.back()).find("vectorprimitivesdelta") != std::string::npos);
 }
 
@@ -1860,18 +1862,18 @@ void DesktopKitTest::testTileInvalidationCompression()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "-100, -50, 500, 650, 0, 0"_ostr);
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, 0, 0"_ostr);
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "100, 100, 200, 200, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "-100, -50, 500, 650, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, -32767, -32767, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "100, 100, 200, 200, 0, 0"_ostr);
 
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
 
         size_t i = 0;
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[i]));
         CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 400, 600, 0, 0"), std::get<1>(notifs[i++]));
     }
 
@@ -1881,21 +1883,21 @@ void DesktopKitTest::testTileInvalidationCompression()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 1, 0"_ostr); // Different part
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 0, 0, 2, 0"_ostr); // Invalid
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "-121, -121, 200, 200, 0, 0"_ostr); // Inside first
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, 1, 0"_ostr); // Invalid
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 200, 200, 1, 0"_ostr); // Different part
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 0, 0, 2, 0"_ostr); // Invalid
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "-121, -121, 200, 200, 0, 0"_ostr); // Inside first
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, -32767, -32767, 1, 0"_ostr); // Invalid
 
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), notifs.size());
 
         size_t i = 0;
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[i]));
         CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 200, 200, 1, 0"), std::get<1>(notifs[i++]));
 
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[i]));
         CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 239, 239, 0, 0"), std::get<1>(notifs[i++]));
     }
 
@@ -1905,24 +1907,24 @@ void DesktopKitTest::testTileInvalidationCompression()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr); // 0
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 1, 0"_ostr); // 1: Different part
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 0, 0, -1, 0"_ostr); // Invalid
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "-121, -121, 200, 200, -1, 0"_ostr); // 0: All parts
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, -1, 0"_ostr); // Invalid
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "-100, -100, 1200, 1200, -1, 0"_ostr); // 0: All parts
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 3, 0"_ostr); // Overlapped
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "1000, 1000, 1239, 1239, 2, 0"_ostr); // 1: Unique region
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr); // 0
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 200, 200, 1, 0"_ostr); // 1: Different part
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 0, 0, -1, 0"_ostr); // Invalid
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "-121, -121, 200, 200, -1, 0"_ostr); // 0: All parts
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, -32767, -32767, -1, 0"_ostr); // Invalid
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "-100, -100, 1200, 1200, -1, 0"_ostr); // 0: All parts
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 239, 239, 3, 0"_ostr); // Overlapped
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "1000, 1000, 1239, 1239, 2, 0"_ostr); // 1: Unique region
 
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), notifs.size());
 
         size_t i = 0;
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[i]));
         CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 1100, 1100, -1, 0"), std::get<1>(notifs[i++]));
 
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[i]));
         CPPUNIT_ASSERT_EQUAL(std::string("1000, 1000, 1239, 1239, 2, 0"), std::get<1>(notifs[i++]));
     }
 
@@ -1932,33 +1934,33 @@ void DesktopKitTest::testTileInvalidationCompression()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 0, 0"_ostr); // 0
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 100, 100, 1, 0"_ostr); // 1: Different part
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 0, 0, -1, 0"_ostr); // Invalid
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "150, 150, 50, 50, -1, 0"_ostr); // 2: All-parts
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, -1, 0"_ostr); // Invalid
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "150, 150, 40, 40, 3, 0"_ostr); // Overlapped w/ 2
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 4, 0"_ostr); // 3: Unique
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "1000, 1000, 1239, 1239, 1, 0"_ostr); // 4: Unique
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 200, 200, 0, 0"_ostr); // 0
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 100, 100, 1, 0"_ostr); // 1: Different part
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 0, 0, -1, 0"_ostr); // Invalid
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "150, 150, 50, 50, -1, 0"_ostr); // 2: All-parts
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, -32767, -32767, -1, 0"_ostr); // Invalid
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "150, 150, 40, 40, 3, 0"_ostr); // Overlapped w/ 2
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 200, 200, 4, 0"_ostr); // 3: Unique
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "1000, 1000, 1239, 1239, 1, 0"_ostr); // 4: Unique
 
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), notifs.size());
 
         size_t i = 0;
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[i]));
         CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 200, 200, 0, 0"), std::get<1>(notifs[i++]));
 
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[i]));
         CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 100, 100, 1, 0"), std::get<1>(notifs[i++]));
 
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[i]));
         CPPUNIT_ASSERT_EQUAL(std::string("150, 150, 50, 50, -1, 0"), std::get<1>(notifs[i++]));
 
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[i]));
         CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 200, 200, 4, 0"), std::get<1>(notifs[i++]));
 
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[i]));
         CPPUNIT_ASSERT_EQUAL(std::string("1000, 1000, 1239, 1239, 1, 0"), std::get<1>(notifs[i++]));
     }
 
@@ -1968,18 +1970,18 @@ void DesktopKitTest::testTileInvalidationCompression()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "EMPTY, 0, 0"_ostr);
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 240, 0, 0"_ostr);
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "-121, -121, 300, 300, 0, 0"_ostr);
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "EMPTY, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, 239, 240, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "-121, -121, 300, 300, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "0, 0, -32767, -32767, 0, 0"_ostr);
 
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
 
         size_t i = 0;
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[i]));
         CPPUNIT_ASSERT_EQUAL(std::string("EMPTY, 0, 0"), std::get<1>(notifs[i++]));
     }
 }
@@ -1993,14 +1995,14 @@ void DesktopKitTest::testPartInInvalidation()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10"_ostr);
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "10, 10, 20, 10"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "20, 10, 20, 10"_ostr);
 
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
 
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[0]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[0]));
         CPPUNIT_ASSERT_EQUAL(std::string("10, 10, 30, 10"), std::get<1>(notifs[0]));
     }
     // No part in invalidation: don't merge.
@@ -2009,8 +2011,8 @@ void DesktopKitTest::testPartInInvalidation()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10"_ostr);
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "40, 10, 20, 10"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "10, 10, 20, 10"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "40, 10, 20, 10"_ostr);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -2029,8 +2031,8 @@ void DesktopKitTest::testPartInInvalidation()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0, 0"_ostr);
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "10, 10, 20, 10, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "20, 10, 20, 10, 0, 0"_ostr);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -2048,8 +2050,8 @@ void DesktopKitTest::testPartInInvalidation()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0, 0"_ostr);
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 1, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "10, 10, 20, 10, 0, 0"_ostr);
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, "20, 10, 20, 10, 1, 0"_ostr);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -2059,10 +2061,10 @@ void DesktopKitTest::testPartInInvalidation()
     }
 }
 
-static void callbackBinaryCallbackTest(const int type, const char* payload, void* data)
+static void callbackBinaryCallbackTest(COKitCallbackType eType, const char* payload, void* data)
 {
     std::vector<std::tuple<int, std::string>>* notifs = static_cast<std::vector<std::tuple<int, std::string>>*>(data);
-    notifs->emplace_back(type, std::string(payload ? payload : "(nil)"));
+    notifs->emplace_back(static_cast<int>(eType), std::string(payload ? payload : "(nil)"));
 }
 
 void DesktopKitTest::testBinaryCallback()
@@ -2077,12 +2079,12 @@ void DesktopKitTest::testBinaryCallback()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
         handler->setViewId(KitHelper::getCurrentView());
 
-        handler->queue(KIT_CALLBACK_INVALIDATE_TILES, OString(rect1String));
+        handler->queue(COKitCallbackType::INVALIDATE_TILES, OString(rect1String));
 
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[0]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[0]));
         CPPUNIT_ASSERT_EQUAL(rect1String, std::get<1>(notifs[0]));
     }
     {
@@ -2096,7 +2098,7 @@ void DesktopKitTest::testBinaryCallback()
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[0]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[0]));
         CPPUNIT_ASSERT_EQUAL(rect1String, std::get<1>(notifs[0]));
     }
     // Verify that the "EMPTY" invalidation gets converted properly.
@@ -2111,7 +2113,7 @@ void DesktopKitTest::testBinaryCallback()
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[0]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(notifs[0]));
         CPPUNIT_ASSERT_EQUAL(std::string("EMPTY"), std::get<1>(notifs[0]));
     }
 }
@@ -2169,7 +2171,7 @@ void DesktopKitTest::testOmitInvalidate()
         // Then make sure that's cropped:
         Scheduler::ProcessEventsToIdle();
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aCallbacks.size());
-        CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_INVALIDATE_TILES), std::get<0>(aCallbacks[0]));
+        CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::INVALIDATE_TILES), std::get<0>(aCallbacks[0]));
         // x, y, w, h, part, mode; so this is cropped.
         CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 9, 9, 0, 0"), std::get<1>(aCallbacks[0]));
     }
@@ -2383,22 +2385,22 @@ public:
         mpDocument->m_pDocumentClass->registerCallback(mpDocument, nullptr, nullptr);
     }
 
-    static void callback(int nType, const char* pPayload, void* pData)
+    static void callback(COKitCallbackType eType, const char* pPayload, void* pData)
     {
-        static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
+        static_cast<ViewCallback*>(pData)->callbackImpl(eType, pPayload);
     }
 
-    void callbackImpl(int nType, const char* pPayload)
+    void callbackImpl(COKitCallbackType eType, const char* pPayload)
     {
         OString aPayload(pPayload);
-        switch (nType)
+        switch (eType)
         {
-        case KIT_CALLBACK_INVALIDATE_TILES:
+        case COKitCallbackType::INVALIDATE_TILES:
         {
             m_bTilesInvalidated = true;
         }
         break;
-        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
         {
             cpo::uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aPayload));
             if (std::string_view("EMPTY") == pPayload)
@@ -2413,7 +2415,7 @@ public:
                 m_bZeroCursor = true;
         }
         break;
-        case KIT_CALLBACK_COMMENT:
+        case COKitCallbackType::COMMENT:
         {
             ++m_nComments;
             m_aCommentCallbackResult.clear();
@@ -2422,28 +2424,28 @@ public:
             m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
         }
         break;
-        case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
+        case COKitCallbackType::DOCUMENT_SIZE_CHANGED:
         {
             ++m_nDocSizeChanged;
         }
         break;
-        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+        case COKitCallbackType::TEXT_VIEW_SELECTION:
         {
             ++m_nTextViewSelection;
         }
         break;
-        case KIT_CALLBACK_CELL_FORMULA:
+        case COKitCallbackType::CELL_FORMULA:
         {
             m_aCellFormula = aPayload;
         }
         break;
-        case KIT_CALLBACK_TABLE_SELECTED:
+        case COKitCallbackType::TABLE_SELECTED:
         {
             m_bEmptyTableSelection = (std::string(pPayload).compare("{ }") == 0);
             ++m_nTableSelectionCount;
         }
         break;
-        case KIT_CALLBACK_COLOR_PALETTES:
+        case COKitCallbackType::COLOR_PALETTES:
         {
             m_aColorPaletteCallbackResult.clear();
             std::stringstream aStream(pPayload);
@@ -2451,7 +2453,7 @@ public:
             ++m_nColorPaletteCallbackCount;
         }
         break;
-        case KIT_CALLBACK_WINDOW:
+        case COKitCallbackType::WINDOW:
         {
             m_JSONDialog.clear();
             std::stringstream aStream(pPayload);
@@ -2460,12 +2462,12 @@ public:
             if (m_JSONDialog.find("title") != m_JSONDialog.not_found() && m_JSONDialog.get_child("title").get_value<std::string>() == "Find and Replace")
             {
                 m_findReplaceDialogId = std::atoi(m_JSONDialog.get_child("id").get_value<std::string>().c_str());
-                // Set search term to something random and make sure it is read from incoming JSON (KIT_CALLBACK_JSDIALOG).
+                // Set search term to something random and make sure it is read from incoming JSON (COKitCallbackType::JSDIALOG).
                 m_searchTerm = "something random";
             }
         }
         break;
-        case KIT_CALLBACK_JSDIALOG:
+        case COKitCallbackType::JSDIALOG:
         {
             m_JSONDialog.clear();
             std::stringstream aStream(pPayload);
@@ -2503,8 +2505,8 @@ public:
             }
         }
         break;
-        case KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
-        case KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+        case COKitCallbackType::REDLINE_TABLE_SIZE_CHANGED:
+        case COKitCallbackType::REDLINE_TABLE_ENTRY_MODIFIED:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree tree;
@@ -2514,13 +2516,16 @@ public:
             m_aLastRedlineInfo = redlines[0];
         }
         break;
-        case KIT_CALLBACK_STATE_CHANGED:
+        case COKitCallbackType::STATE_CHANGED:
         {
             if (aPayload.startsWith(".uno:Bold="))
             {
                 m_stateBold = aPayload.copy(".uno:Bold="_ostr.getLength()).toBoolean();
             }
         }
+        break;
+        default:
+        break;
         }
     }
 };
@@ -3045,7 +3050,7 @@ void DesktopKitTest::testCommentsCallbacksWriter()
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action
+    // We received a COKitCallbackType::COMMENT callback with comment 'Add' action
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     int nCommentId1 = aView1.m_aCommentCallbackResult.get<int>("id");
@@ -3055,7 +3060,7 @@ void DesktopKitTest::testCommentsCallbacksWriter()
     pDocument->pClass->postUnoCommand(pDocument, ".uno:ReplyComment", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action and linked to its parent comment
+    // We received a COKitCallbackType::COMMENT callback with comment 'Add' action and linked to its parent comment
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parentId"));
@@ -3069,7 +3074,7 @@ void DesktopKitTest::testCommentsCallbacksWriter()
     pDocument->pClass->postUnoCommand(pDocument, ".uno:EditAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Modify' action
+    // We received a COKitCallbackType::COMMENT callback with comment 'Modify' action
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     // parent is unchanged still
@@ -3083,7 +3088,7 @@ void DesktopKitTest::testCommentsCallbacksWriter()
     pDocument->pClass->postUnoCommand(pDocument, ".uno:DeleteComment", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Remove' action
+    // We received a COKitCallbackType::COMMENT callback with comment 'Remove' action
     CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nCommentId2, aView1.m_aCommentCallbackResult.get<int>("id"));
@@ -3094,7 +3099,7 @@ void DesktopKitTest::testCommentsCallbacksWriter()
     pDocument->pClass->postUnoCommand(pDocument, ".uno:ReplyComment", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action and linked to its parent comment
+    // We received a COKitCallbackType::COMMENT callback with comment 'Add' action and linked to its parent comment
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parentId"));
@@ -3124,10 +3129,10 @@ void DesktopKitTest::testCommentsCallbacksWriter()
 namespace
 {
 
-void addParameter(tools::JsonWriter& rJson, const char* sName, std::string_view type, std::string_view value)
+void addParameter(tools::JsonWriter& rJson, const char* sName, std::string_view eType, std::string_view value)
 {
     auto testNode = rJson.startNode(sName);
-    rJson.put("type", type);
+    rJson.put("type", eType);
     rJson.put("value", value);
 }
 
@@ -3151,7 +3156,7 @@ void DesktopKitTest::testCommentsAddEditDeleteDraw()
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action
+    // We received a COKitCallbackType::COMMENT callback with comment 'Add' action
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     int nCommentId1 = aView1.m_aCommentCallbackResult.get<int>("id");
 
@@ -3166,7 +3171,7 @@ void DesktopKitTest::testCommentsAddEditDeleteDraw()
     pDocument->pClass->postUnoCommand(pDocument, ".uno:EditAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Modify' action
+    // We received a COKitCallbackType::COMMENT callback with comment 'Modify' action
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("id"));
 
@@ -3179,7 +3184,7 @@ void DesktopKitTest::testCommentsAddEditDeleteDraw()
     pDocument->pClass->postUnoCommand(pDocument, ".uno:DeleteAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Remove' action
+    // We received a COKitCallbackType::COMMENT callback with comment 'Remove' action
     CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("id"));
 }
@@ -3212,7 +3217,7 @@ void DesktopKitTest::testCommentsInReadOnlyMode()
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Add' action
+    // We received a COKitCallbackType::COMMENT callback with comment 'Add' action
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
     int nCommentId = aView.m_aCommentCallbackResult.get<int>("id");
 
@@ -3227,7 +3232,7 @@ void DesktopKitTest::testCommentsInReadOnlyMode()
     pDocument->pClass->postUnoCommand(pDocument, ".uno:EditAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Modify' action
+    // We received a COKitCallbackType::COMMENT callback with comment 'Modify' action
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nCommentId, aView.m_aCommentCallbackResult.get<int>("id"));
 
@@ -3243,7 +3248,7 @@ void DesktopKitTest::testCommentsInReadOnlyMode()
     // Result is not sent for delete operation for some reason. But it is sent when debugging with online.
     // TODO: Enable below 2 checks.
 
-    // We received a KIT_CALLBACK_COMMENT callback with comment 'Remove' action
+    // We received a COKitCallbackType::COMMENT callback with comment 'Remove' action
     //CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView.m_aCommentCallbackResult.get<std::string>("action"));
     //CPPUNIT_ASSERT_EQUAL(nCommentId, aView.m_aCommentCallbackResult.get<int>("id"));
 }

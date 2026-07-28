@@ -28,6 +28,8 @@
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 
+#include <COKit/COKit.hxx>
+
 namespace desktop {
     struct LibCO_Impl;
     struct LibLODocument_Impl;
@@ -59,7 +61,7 @@ private:
     KitInteractionHandler(const KitInteractionHandler&) = delete;
     KitInteractionHandler& operator=(const KitInteractionHandler&) = delete;
 
-    /** Call the KIT_CALLBACK_ERROR on the COKit document (if available) or COKit lib.
+    /** Call the COKitCallbackType::ERROR_REPORT on the COKit document (if available) or COKit lib.
 
         The error itself is a JSON message, like:
         {

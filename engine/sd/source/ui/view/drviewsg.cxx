@@ -120,7 +120,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
             if (pViewShell && comphelper::COKit::isActive())
             {
                 OString state = !mpDrawView->IsGridVisible() ? ".uno:GridVisible=true"_ostr: ".uno:GridVisible=false"_ostr;
-                pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, state);
+                pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, state);
             }
         }
         break;
@@ -133,7 +133,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
             if (pViewShell && comphelper::COKit::isActive())
             {
                 OString state = !mpDrawView->IsGridSnap() ? ".uno:GridUse=true"_ostr: ".uno:GridUse=false"_ostr;
-                pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, state);
+                pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, state);
             }
         }
         break;

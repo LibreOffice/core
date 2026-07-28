@@ -435,7 +435,7 @@ void lcl_SendKitRedlineNotification(RedlineNotification nType, SwRangeRedline* p
     while (pViewShell)
     {
         if (pView->GetDocId() == pViewShell->GetDocId())
-            pViewShell->viewCallback(nType == RedlineNotification::Modify ? KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED : KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED, OString(aPayload));
+            pViewShell->viewCallback(nType == RedlineNotification::Modify ? COKitCallbackType::REDLINE_TABLE_ENTRY_MODIFIED : COKitCallbackType::REDLINE_TABLE_SIZE_CHANGED, OString(aPayload));
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }

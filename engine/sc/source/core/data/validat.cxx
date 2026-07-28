@@ -413,7 +413,7 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
                 aJson.put("title", aErrorTitle.toUtf8());
                 aJson.put("message", aMessage.toUtf8());
             }
-            pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, aJson.finishAndGetAsOString());
+            pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aJson.finishAndGetAsOString());
         }
         return;
     }

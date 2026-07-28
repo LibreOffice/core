@@ -585,27 +585,27 @@ static inline OString lcl_generateJSON(const SfxViewShell& rView, std::string_vi
 }
 
 void KitHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
-                                   int nType, std::string_view rKey, const OString& rPayload)
+                                   COKitCallbackType eType, std::string_view rKey, const OString& rPayload)
 {
     if (DisableCallbacks::disabled())
         return;
 
     const OString aPayload = lcl_generateJSON(rThisView, rKey, rPayload);
     const int viewId = KitHelper::getView(rThisView);
-    pOtherView->viewCallbackWithViewId(nType, aPayload, viewId);
+    pOtherView->viewCallbackWithViewId(eType, aPayload, viewId);
 }
 
 void KitHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
-                                   int nType, const boost::property_tree::ptree& rTree)
+                                   COKitCallbackType eType, const boost::property_tree::ptree& rTree)
 {
     if (DisableCallbacks::disabled() || !pOtherView)
         return;
 
     const int viewId = KitHelper::getView(rThisView);
-    pOtherView->viewCallbackWithViewId(nType, lcl_generateJSON(rThisView, rTree), viewId);
+    pOtherView->viewCallbackWithViewId(eType, lcl_generateJSON(rThisView, rTree), viewId);
 }
 
-void KitHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, std::string_view rKey,
+void KitHelper::notifyOtherViews(const SfxViewShell* pThisView, COKitCallbackType eType, std::string_view rKey,
                                     const OString& rPayload)
 {
     assert(pThisView != nullptr && "pThisView must be valid");
@@ -629,14 +629,14 @@ void KitHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, std::
                 viewId = KitHelper::getView(*pThisView);
             }
 
-            pViewShell->viewCallbackWithViewId(nType, aPayload, viewId);
+            pViewShell->viewCallbackWithViewId(eType, aPayload, viewId);
         }
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
 
-void KitHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
+void KitHelper::notifyOtherViews(const SfxViewShell* pThisView, COKitCallbackType eType,
                                     const boost::property_tree::ptree& rTree)
 {
     assert(pThisView != nullptr && "pThisView must be valid");
@@ -660,7 +660,7 @@ void KitHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
                 viewId = KitHelper::getView(*pThisView);
             }
 
-            pViewShell->viewCallbackWithViewId(nType, aPayload, viewId);
+            pViewShell->viewCallbackWithViewId(eType, aPayload, viewId);
         }
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
@@ -706,13 +706,13 @@ void KitHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pIt
 
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aItem);
-        pShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, OString(aStream.str()));
+        pShell->viewCallback(COKitCallbackType::STATE_CHANGED, OString(aStream.str()));
     }
 }
 
 void KitHelper::notifyViewRenderState(const SfxViewShell* pShell, vcl::ITiledRenderable* pDoc)
 {
-    pShell->viewCallback(KIT_CALLBACK_VIEW_RENDER_STATE, pDoc->getViewRenderState(pShell));
+    pShell->viewCallback(COKitCallbackType::VIEW_RENDER_STATE, pDoc->getViewRenderState(pShell));
 }
 
 void KitHelper::notifyWindow(const SfxViewShell* pThisView,
@@ -741,7 +741,7 @@ void KitHelper::notifyWindow(const SfxViewShell* pThisView,
     aPayload.append('}');
 
     const OString s = aPayload.makeStringAndClear();
-    pThisView->viewCallback(KIT_CALLBACK_WINDOW, s);
+    pThisView->viewCallback(COKitCallbackType::WINDOW, s);
 }
 
 void KitHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect, bool bControlEvent, int windowID)
@@ -753,7 +753,7 @@ void KitHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools::R
         sPayload += "\", \"controlEvent\": true, \"windowId\": \"" + OString::number(windowID) + "\"";
     }
     sPayload += " }";
-    pThisView->viewCallback(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload);
+    pThisView->viewCallback(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, sPayload);
 }
 
 void KitHelper::notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect)
@@ -788,7 +788,7 @@ void KitHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const O
             pThisView->viewInvalidateTilesCallback(&aRectangle, i, nMode);
         }
     }
-    pThisView->viewCallback(KIT_CALLBACK_DOCUMENT_SIZE_CHANGED, rPayload);
+    pThisView->viewCallback(COKitCallbackType::DOCUMENT_SIZE_CHANGED, rPayload);
 }
 
 void KitHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAllParts)
@@ -820,7 +820,7 @@ void KitHelper::notifyCurrentPageSizeChangedAllViews(const vcl::ITiledRenderable
         if (lcl_getDocForView(pViewShell) == pDoc)
         {
             OString aPayload = ".uno:CurrentPageResize"_ostr;
-            pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
+            pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
@@ -887,7 +887,7 @@ OString KitHelper::makeModifiedStatusPayload(bool bModified)
     return bModified ? ".uno:ModifiedStatus=true"_ostr : ".uno:ModifiedStatus=false"_ostr;
 }
 
-void KitHelper::notifyAllViews(int nType, const OString& rPayload)
+void KitHelper::notifyAllViews(COKitCallbackType eType, const OString& rPayload)
 {
     if (DisableCallbacks::disabled())
         return;
@@ -899,12 +899,12 @@ void KitHelper::notifyAllViews(int nType, const OString& rPayload)
     while (pViewShell)
     {
         if (pViewShell->GetDocId() == pCurrentViewShell->GetDocId())
-            pViewShell->viewCallback(nType, rPayload);
+            pViewShell->viewCallback(eType, rPayload);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
 
-void KitHelper::notifyView(int nViewId, int nType, const OString& rPayload)
+void KitHelper::notifyView(int nViewId, COKitCallbackType eType, const OString& rPayload)
 {
     if (DisableCallbacks::disabled() || nViewId < 0)
         return;
@@ -914,7 +914,7 @@ void KitHelper::notifyView(int nViewId, int nType, const OString& rPayload)
     {
         if (pViewShell->GetViewShellId().get() == nViewId)
         {
-            pViewShell->viewCallback(nType, rPayload);
+            pViewShell->viewCallback(eType, rPayload);
             return;
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
@@ -951,7 +951,7 @@ void KitHelper::notifyContextChange(const css::ui::ContextChangeEventObject& rEv
         aBuffer.append(" " + rParent.replace(' ', '_'));
     }
 
-    pViewShell->viewCallback(KIT_CALLBACK_CONTEXT_CHANGED, aBuffer.makeStringAndClear().toUtf8());
+    pViewShell->viewCallback(COKitCallbackType::CONTEXT_CHANGED, aBuffer.makeStringAndClear().toUtf8());
 }
 
 void KitHelper::notifyLog(const std::ostringstream& stream)
@@ -968,11 +968,11 @@ void KitHelper::notifyLog(const std::ostringstream& stream)
         {
             for (const auto& msg : g_logNotifierCache)
             {
-                pViewShell->viewCallback(KIT_CALLBACK_CORE_LOG, OString(msg));
+                pViewShell->viewCallback(COKitCallbackType::CORE_LOG, OString(msg));
             }
             g_logNotifierCache.clear();
         }
-        pViewShell->viewCallback(KIT_CALLBACK_CORE_LOG, OString(stream.str()));
+        pViewShell->viewCallback(COKitCallbackType::CORE_LOG, OString(stream.str()));
     }
     else
     {
@@ -1213,21 +1213,21 @@ void KitHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vie
     rJsonWriter.put("digest", aBuffer.makeStringAndClear());
 }
 
-void KitHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)
+void KitHelper::notifyUpdate(SfxViewShell const* pThisView, COKitCallbackType eType)
 {
     if (DisableCallbacks::disabled() || !pThisView)
         return;
 
-    pThisView->viewUpdatedCallback(nType);
+    pThisView->viewUpdatedCallback(eType);
 }
 
-void KitHelper::notifyUpdatePerViewId(SfxViewShell const& rThisView, int nType)
+void KitHelper::notifyUpdatePerViewId(SfxViewShell const& rThisView, COKitCallbackType eType)
 {
-    notifyUpdatePerViewId(rThisView, &rThisView, rThisView, nType);
+    notifyUpdatePerViewId(rThisView, &rThisView, rThisView, eType);
 }
 
 void KitHelper::notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxViewShell const* pViewShell,
-    SfxViewShell const& rSourceShell, int nType)
+    SfxViewShell const& rSourceShell, COKitCallbackType eType)
 {
     if (DisableCallbacks::disabled())
         return;
@@ -1236,10 +1236,10 @@ void KitHelper::notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxViewS
     SAL_WARN_IF(!pViewShell, "kit", "no explicit viewshell set");
     int viewId = pViewShell ? KitHelper::getView(*pViewShell) : KitHelper::getCurrentView();
     int sourceViewId = KitHelper::getView(rSourceShell);
-    rTargetShell.viewUpdatedCallbackPerViewId(nType, viewId, sourceViewId);
+    rTargetShell.viewUpdatedCallbackPerViewId(eType, viewId, sourceViewId);
 }
 
-void KitHelper::notifyOtherViewsUpdatePerViewId(SfxViewShell const* pThisView, int nType)
+void KitHelper::notifyOtherViewsUpdatePerViewId(SfxViewShell const* pThisView, COKitCallbackType eType)
 {
     if (DisableCallbacks::disabled() || !pThisView)
         return;
@@ -1250,7 +1250,7 @@ void KitHelper::notifyOtherViewsUpdatePerViewId(SfxViewShell const* pThisView, i
     while (pViewShell)
     {
         if (pViewShell != pThisView && nCurrentDocId == pViewShell->GetDocId())
-            pViewShell->viewUpdatedCallbackPerViewId(nType, viewId, viewId);
+            pViewShell->viewUpdatedCallbackPerViewId(eType, viewId, viewId);
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
@@ -1570,7 +1570,7 @@ void KitHelper::sendNetworkAccessError(std::string_view rAction)
     if (pViewShell)
     {
         pViewShell->viewCallback(
-            KIT_CALLBACK_ERROR, aWriter.finishAndGetAsOString());
+            COKitCallbackType::ERROR_REPORT, aWriter.finishAndGetAsOString());
     }
 }
 

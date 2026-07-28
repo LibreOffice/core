@@ -250,7 +250,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         if (_stateRecorder.isInvalidate())
         {
             const std::string payload = "0, 0, 1000000000, 1000000000, " + std::to_string(curPart);
-            loKitCallback(KIT_CALLBACK_INVALIDATE_TILES, payload);
+            loKitCallback(COKitCallbackType::INVALIDATE_TILES, payload);
         }
 
         for (const auto& viewPair : _stateRecorder.getRecordedViewEvents())
@@ -276,7 +276,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         for (const auto& pair : _stateRecorder.getRecordedStates())
         {
             LOG_TRC("Replaying missed state-change: " << pair.second);
-            loKitCallback(KIT_CALLBACK_STATE_CHANGED, pair.second);
+            loKitCallback(COKitCallbackType::STATE_CHANGED, pair.second);
         }
 
         for (const auto& event : _stateRecorder.getRecordedEventsVector())
@@ -2587,7 +2587,7 @@ bool ChildSession::unoCommand(const StringVector& tokens)
 
     SigUtil::addActivity(getId(), formatUnoCommandInfo(tokens[1]));
 
-    // we need to get KIT_CALLBACK_UNO_COMMAND_RESULT callback when saving
+    // we need to get COKitCallbackType::UNO_COMMAND_RESULT callback when saving
     const bool notify = (tokens.equals(1, ".uno:Save") ||
                           tokens.equals(1, ".uno:Undo") ||
                           tokens.equals(1, ".uno:Redo") ||
@@ -3351,7 +3351,7 @@ bool ChildSession::exportAs(const StringVector& tokens)
 
     // for PDF and EPUB show dialog with export options first
     // when options will be chosen and file exported we will
-    // receive KIT_CALLBACK_EXPORT_FILE message
+    // receive COKitCallbackType::EXPORT_FILE message
     std::string extension = FileUtil::extractFileExtension(wopiFilename);
 
     const bool isPDF = extension == "pdf";
@@ -3387,7 +3387,7 @@ bool ChildSession::exportAs(const StringVector& tokens)
 
     // For image export (triggered from the image context menu).
     // SaveGraphic writes the image in its native format to /tmp/
-    // and fires KIT_CALLBACK_EXPORT_FILE. If no graphic is selected,
+    // and fires COKitCallbackType::EXPORT_FILE. If no graphic is selected,
     // the command is a no-op.
     // NOTE: new document export formats must be handled above this,
     // like PDF and EPUB.
@@ -3714,37 +3714,38 @@ bool ChildSession::getSlideSections()
 /* If the user is inactive we have to remember important events so that when
  * the user becomes active again, we can replay the events.
  */
-void ChildSession::rememberEventsForInactiveUser(const int type, const std::string& payload)
+void ChildSession::rememberEventsForInactiveUser(const COKitCallbackType type,
+                                                 const std::string& payload)
 {
-    if (type == KIT_CALLBACK_INVALIDATE_TILES)
+    if (type == COKitCallbackType::INVALIDATE_TILES)
     {
         _stateRecorder.recordInvalidate(); // TODO remember the area, not just a bool ('true' invalidates everything)
     }
-    else if (type == KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR ||
-             type == KIT_CALLBACK_CURSOR_VISIBLE ||
-             type == KIT_CALLBACK_TEXT_SELECTION ||
-             type == KIT_CALLBACK_TEXT_SELECTION_START ||
-             type == KIT_CALLBACK_TEXT_SELECTION_END ||
-             type == KIT_CALLBACK_CELL_FORMULA ||
-             type == KIT_CALLBACK_CELL_CURSOR ||
-             type == KIT_CALLBACK_GRAPHIC_SELECTION ||
-             type == KIT_CALLBACK_DOCUMENT_SIZE_CHANGED ||
-             type == KIT_CALLBACK_INVALIDATE_HEADER ||
-             type == KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY ||
-             type == KIT_CALLBACK_CELL_ADDRESS ||
-             type == KIT_CALLBACK_REFERENCE_MARKS ||
-             type == KIT_CALLBACK_A11Y_FOCUS_CHANGED ||
-             type == KIT_CALLBACK_A11Y_CARET_CHANGED ||
-             type == KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED)
+    else if (type == COKitCallbackType::INVALIDATE_VISIBLE_CURSOR ||
+             type == COKitCallbackType::CURSOR_VISIBLE ||
+             type == COKitCallbackType::TEXT_SELECTION ||
+             type == COKitCallbackType::TEXT_SELECTION_START ||
+             type == COKitCallbackType::TEXT_SELECTION_END ||
+             type == COKitCallbackType::CELL_FORMULA ||
+             type == COKitCallbackType::CELL_CURSOR ||
+             type == COKitCallbackType::GRAPHIC_SELECTION ||
+             type == COKitCallbackType::DOCUMENT_SIZE_CHANGED ||
+             type == COKitCallbackType::INVALIDATE_HEADER ||
+             type == COKitCallbackType::INVALIDATE_SHEET_GEOMETRY ||
+             type == COKitCallbackType::CELL_ADDRESS ||
+             type == COKitCallbackType::REFERENCE_MARKS ||
+             type == COKitCallbackType::A11Y_FOCUS_CHANGED ||
+             type == COKitCallbackType::A11Y_CARET_CHANGED ||
+             type == COKitCallbackType::A11Y_TEXT_SELECTION_CHANGED)
     {
         _stateRecorder.recordEvent(type, payload);
     }
-    else if (type == KIT_CALLBACK_INVALIDATE_VIEW_CURSOR ||
-             type == KIT_CALLBACK_TEXT_VIEW_SELECTION ||
-             type == KIT_CALLBACK_CELL_VIEW_CURSOR ||
-             type == KIT_CALLBACK_GRAPHIC_VIEW_SELECTION ||
-             type == KIT_CALLBACK_VIEW_CURSOR_VISIBLE ||
-             type == KIT_CALLBACK_VIEW_LOCK)
+    else if (type == COKitCallbackType::INVALIDATE_VIEW_CURSOR ||
+             type == COKitCallbackType::TEXT_VIEW_SELECTION ||
+             type == COKitCallbackType::CELL_VIEW_CURSOR ||
+             type == COKitCallbackType::GRAPHIC_VIEW_SELECTION ||
+             type == COKitCallbackType::VIEW_CURSOR_VISIBLE ||
+             type == COKitCallbackType::VIEW_LOCK)
     {
         Poco::JSON::Parser parser;
 
@@ -3752,7 +3753,7 @@ void ChildSession::rememberEventsForInactiveUser(const int type, const std::stri
         int viewId = root->getValue<int>("viewId");
         _stateRecorder.recordViewEvent(viewId, type, payload);
     }
-    else if (type == KIT_CALLBACK_STATE_CHANGED)
+    else if (type == COKitCallbackType::STATE_CHANGED)
     {
         std::string name;
         std::string value;
@@ -3761,9 +3762,9 @@ void ChildSession::rememberEventsForInactiveUser(const int type, const std::stri
             _stateRecorder.recordState(name, payload);
         }
     }
-    else if (type == KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED ||
-             type == KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED ||
-             type == KIT_CALLBACK_COMMENT)
+    else if (type == COKitCallbackType::REDLINE_TABLE_SIZE_CHANGED ||
+             type == COKitCallbackType::REDLINE_TABLE_ENTRY_MODIFIED ||
+             type == COKitCallbackType::COMMENT)
     {
         _stateRecorder.recordEventSequence(type, payload);
     }
@@ -3870,7 +3871,7 @@ bool ChildSession::sendProgressFrame(const char* id, const std::string& jsonProp
     return sendTextFrame(msg);
 }
 
-void ChildSession::loKitCallback(const int type, const std::string& payload)
+void ChildSession::loKitCallback(const COKitCallbackType type, const std::string& payload)
 {
     const char* const typeName = kitCallbackTypeToString(type);
     LOG_TRC("ChildSession::loKitCallback: " << typeName << " [" << payload << ']');
@@ -3895,7 +3896,7 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
         rememberEventsForInactiveUser(type, payload);
 
         // Pass save and ModifiedStatus notifications through, block others.
-        if (type != KIT_CALLBACK_UNO_COMMAND_RESULT || payload.find(".uno:Save") == std::string::npos)
+        if (type != COKitCallbackType::UNO_COMMAND_RESULT || payload.find(".uno:Save") == std::string::npos)
         {
             if (payload.find(".uno:ModifiedStatus") == std::string::npos)
             {
@@ -3907,7 +3908,7 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
 
     switch (static_cast<COKitCallbackType>(type))
     {
-    case KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA:
+    case COKitCallbackType::VECTOR_PRIMITIVES_DELTA:
         // Push the delta to the client as a zstd binary frame, the same
         // shape the .uno:VectorPrimitives command response uses. When
         // compression fails, send the JSON as a command values text
@@ -3916,7 +3917,7 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
         if (!sendZstdFrame("zstdvectorprimitivesdelta:\n", payload.data(), payload.size()))
             sendTextFrame("commandvalues: " + payload);
         break;
-    case KIT_CALLBACK_INVALIDATE_TILES:
+    case COKitCallbackType::INVALIDATE_TILES:
         {
             StringVector tokens(StringVector::tokenize(payload, ','));
             if (tokens.size() == 5 || tokens.size() == 6)
@@ -3975,46 +3976,46 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
             }
         }
         break;
-    case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+    case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
         updateSpeed();
         updateCursorPositionJSON(payload);
         sendTextFrame("invalidatecursor: " + payload);
         break;
-    case KIT_CALLBACK_TEXT_SELECTION:
+    case COKitCallbackType::TEXT_SELECTION:
         sendTextFrame("textselection: " + payload);
         break;
-    case KIT_CALLBACK_TEXT_SELECTION_START:
+    case COKitCallbackType::TEXT_SELECTION_START:
         sendTextFrame("textselectionstart: " + payload);
         break;
-    case KIT_CALLBACK_TEXT_SELECTION_END:
+    case COKitCallbackType::TEXT_SELECTION_END:
         sendTextFrame("textselectionend: " + payload);
         break;
-    case KIT_CALLBACK_CURSOR_VISIBLE:
+    case COKitCallbackType::CURSOR_VISIBLE:
         sendTextFrame("cursorvisible: " + payload);
         break;
-    case KIT_CALLBACK_GRAPHIC_SELECTION:
+    case COKitCallbackType::GRAPHIC_SELECTION:
         sendTextFrame("graphicselection: " + payload);
         break;
-    case KIT_CALLBACK_SHAPE_INNER_TEXT:
+    case COKitCallbackType::SHAPE_INNER_TEXT:
         sendTextFrame("graphicinnertextarea: " + payload);
         break;
-    case KIT_CALLBACK_SHAPE_DRAG_PREVIEW:
+    case COKitCallbackType::SHAPE_DRAG_PREVIEW:
         sendTextFrame("shapedragpreview: " + payload);
         break;
-    case KIT_CALLBACK_CELL_CURSOR:
+    case COKitCallbackType::CELL_CURSOR:
         updateCursorPosition(payload);
         sendTextFrame("cellcursor: " + payload);
         break;
-    case KIT_CALLBACK_CELL_FORMULA:
+    case COKitCallbackType::CELL_FORMULA:
         sendTextFrame("cellformula: " + payload);
         break;
-    case KIT_CALLBACK_MOUSE_POINTER:
+    case COKitCallbackType::MOUSE_POINTER:
         sendTextFrame("mousepointer: " + payload);
         break;
-    case KIT_CALLBACK_HYPERLINK_CLICKED:
+    case COKitCallbackType::HYPERLINK_CLICKED:
         sendTextFrame("hyperlinkclicked: " + payload);
         break;
-    case KIT_CALLBACK_STATE_CHANGED:
+    case COKitCallbackType::STATE_CHANGED:
     {
         if (payload == ".uno:NotesMode=true" || payload == ".uno:NotesMode=false" ||
             payload == ".uno:RedlineRenderMode=true" || payload == ".uno:RedlineRenderMode=false")
@@ -4047,16 +4048,16 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
 
         break;
     }
-    case KIT_CALLBACK_SEARCH_NOT_FOUND:
+    case COKitCallbackType::SEARCH_NOT_FOUND:
         sendTextFrame("searchnotfound: " + payload);
         break;
-    case KIT_CALLBACK_SEARCH_RESULT_SELECTION:
+    case COKitCallbackType::SEARCH_RESULT_SELECTION:
         sendTextFrame("searchresultselection: " + payload);
         break;
-    case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
+    case COKitCallbackType::DOCUMENT_SIZE_CHANGED:
         getStatus();
         break;
-    case KIT_CALLBACK_SET_PART:
+    case COKitCallbackType::SET_PART:
     {
         int part;
         StringVector tokens(StringVector::tokenize(payload, ','));
@@ -4067,7 +4068,7 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
         sendTextFrame("setpart: " + payload);
         break;
     }
-    case KIT_CALLBACK_UNO_COMMAND_RESULT:
+    case COKitCallbackType::UNO_COMMAND_RESULT:
     {
         Parser parser;
         Poco::Dynamic::Var var = parser.parse(payload);
@@ -4148,7 +4149,7 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
             _docManager->handleSaveMessage(saveMessage);
     }
     break;
-    case KIT_CALLBACK_ERROR:
+    case COKitCallbackType::ERROR_REPORT:
         {
             LOG_ERR("CALLBACK_ERROR: " << payload);
             Parser parser;
@@ -4163,73 +4164,73 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
             sendTextFrameAndLogError(frame);
         }
         break;
-    case KIT_CALLBACK_CONTEXT_MENU:
+    case COKitCallbackType::CONTEXT_MENU:
         sendTextFrame("contextmenu: " + payload);
         break;
-    case KIT_CALLBACK_STATUS_INDICATOR_START:
+    case COKitCallbackType::STATUS_INDICATOR_START:
         sendProgressFrame("start",
                           std::string(R"("text": ")") + JsonUtil::escapeJSONValue(payload) + "\"");
         break;
-    case KIT_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+    case COKitCallbackType::STATUS_INDICATOR_SET_VALUE:
         sendProgressFrame("setvalue", std::string("\"value\": ") + payload);
         break;
-    case KIT_CALLBACK_STATUS_INDICATOR_FINISH:
+    case COKitCallbackType::STATUS_INDICATOR_FINISH:
         sendProgressFrame("finish", "");
         break;
-    case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
+    case COKitCallbackType::INVALIDATE_VIEW_CURSOR:
         updateCursorPositionJSON(payload);
         sendTextFrame("invalidateviewcursor: " + payload);
         break;
-    case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+    case COKitCallbackType::TEXT_VIEW_SELECTION:
         sendTextFrame("textviewselection: " + payload);
         break;
-    case KIT_CALLBACK_CELL_VIEW_CURSOR:
+    case COKitCallbackType::CELL_VIEW_CURSOR:
         updateCursorPositionJSON(payload);
         sendTextFrame("cellviewcursor: " + payload);
         break;
-    case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
+    case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
         sendTextFrame("graphicviewselection: " + payload);
         break;
-    case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
+    case COKitCallbackType::VIEW_CURSOR_VISIBLE:
         sendTextFrame("viewcursorvisible: " + payload);
         break;
-    case KIT_CALLBACK_VIEW_LOCK:
+    case COKitCallbackType::VIEW_LOCK:
         sendTextFrame("viewlock: " + payload);
         break;
-    case KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+    case COKitCallbackType::REDLINE_TABLE_SIZE_CHANGED:
         sendTextFrame("redlinetablechanged: " + payload);
         break;
-    case KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+    case COKitCallbackType::REDLINE_TABLE_ENTRY_MODIFIED:
         sendTextFrame("redlinetablemodified: " + payload);
         break;
-    case KIT_CALLBACK_COMMENT:
+    case COKitCallbackType::COMMENT:
     {
         sendTextFrame("comment: " + payload);
         getStatus();
         break;
     }
-    case KIT_CALLBACK_INVALIDATE_HEADER:
+    case COKitCallbackType::INVALIDATE_HEADER:
         sendTextFrame("invalidateheader: " + payload);
         break;
-    case KIT_CALLBACK_CELL_ADDRESS:
+    case COKitCallbackType::CELL_ADDRESS:
         sendTextFrame("celladdress: " + payload);
         break;
-    case KIT_CALLBACK_RULER_UPDATE:
+    case COKitCallbackType::RULER_UPDATE:
         sendTextFrame("hrulerupdate: " + payload);
         break;
-    case KIT_CALLBACK_VERTICAL_RULER_UPDATE:
+    case COKitCallbackType::VERTICAL_RULER_UPDATE:
         sendTextFrame("vrulerupdate: " + payload);
         break;
-    case KIT_CALLBACK_WINDOW:
+    case COKitCallbackType::WINDOW:
         sendTextFrame("window: " + payload);
         break;
-    case KIT_CALLBACK_VALIDITY_LIST_BUTTON:
+    case COKitCallbackType::VALIDITY_LIST_BUTTON:
         sendTextFrame("validitylistbutton: " + payload);
         break;
-    case KIT_CALLBACK_VALIDITY_INPUT_HELP:
+    case COKitCallbackType::VALIDITY_INPUT_HELP:
         sendTextFrame("validityinputhelp: " + payload);
         break;
-    case KIT_CALLBACK_CLIPBOARD_CHANGED:
+    case COKitCallbackType::CLIPBOARD_CHANGED:
     {
         if (_copyToClipboard)
         {
@@ -4242,7 +4243,7 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
 
         break;
     }
-    case KIT_CALLBACK_CLIPBOARD_MIMETYPES:
+    case COKitCallbackType::CLIPBOARD_MIMETYPES:
     {
         if (_copyToClipboard)
         {
@@ -4251,59 +4252,59 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
 
         break;
     }
-    case KIT_CALLBACK_CONTEXT_CHANGED:
+    case COKitCallbackType::CONTEXT_CHANGED:
         sendTextFrame("context: " + payload);
         break;
-    case KIT_CALLBACK_SIGNATURE_STATUS:
+    case COKitCallbackType::SIGNATURE_STATUS:
         sendTextFrame("signaturestatus: " + payload);
         break;
 
-    case KIT_CALLBACK_PROFILE_FRAME:
-    case KIT_CALLBACK_DOCUMENT_PASSWORD:
-    case KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY:
-    case KIT_CALLBACK_DOCUMENT_PASSWORD_RESET:
+    case COKitCallbackType::PROFILE_FRAME:
+    case COKitCallbackType::DOCUMENT_PASSWORD:
+    case COKitCallbackType::DOCUMENT_PASSWORD_TO_MODIFY:
+    case COKitCallbackType::DOCUMENT_PASSWORD_RESET:
         // these are not handled here.
         break;
-    case KIT_CALLBACK_CELL_SELECTION_AREA:
+    case COKitCallbackType::CELL_SELECTION_AREA:
         sendTextFrame("cellselectionarea: " + payload);
         break;
-    case KIT_CALLBACK_CELL_AUTO_FILL_AREA:
+    case COKitCallbackType::CELL_AUTO_FILL_AREA:
         sendTextFrame("cellautofillarea: " + payload);
         break;
-    case KIT_CALLBACK_TABLE_SELECTED:
+    case COKitCallbackType::TABLE_SELECTED:
         sendTextFrame("tableselected: " + payload);
         break;
-    case KIT_CALLBACK_REFERENCE_MARKS:
+    case COKitCallbackType::REFERENCE_MARKS:
         sendTextFrame("referencemarks: " + payload);
         break;
-    case KIT_CALLBACK_JSDIALOG:
+    case COKitCallbackType::JSDIALOG:
         sendTextFrame("jsdialog: " + payload);
         break;
-    case KIT_CALLBACK_CALC_FUNCTION_LIST:
+    case COKitCallbackType::CALC_FUNCTION_LIST:
         sendTextFrame("calcfunctionlist: " + payload);
         break;
-    case KIT_CALLBACK_TAB_STOP_LIST:
+    case COKitCallbackType::TAB_STOP_LIST:
         sendTextFrame("tabstoplistupdate: " + payload);
         break;
-    case KIT_CALLBACK_FORM_FIELD_BUTTON:
+    case COKitCallbackType::FORM_FIELD_BUTTON:
         sendTextFrame("formfieldbutton: " + payload);
         break;
-    case KIT_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
+    case COKitCallbackType::INVALIDATE_SHEET_GEOMETRY:
         sendTextFrame("invalidatesheetgeometry: " + payload);
         break;
-    case KIT_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
+    case COKitCallbackType::DOCUMENT_BACKGROUND_COLOR:
         sendTextFrame("documentbackgroundcolor: " + payload);
         break;
-    case KIT_CALLBACK_APPLICATION_BACKGROUND_COLOR:
+    case COKitCallbackType::APPLICATION_BACKGROUND_COLOR:
         sendTextFrame("applicationbackgroundcolor: " + payload);
         break;
-    case KIT_CALLBACK_MEDIA_SHAPE:
+    case COKitCallbackType::MEDIA_SHAPE:
         sendTextFrame("mediashape: " + payload);
         break;
-    case KIT_CALLBACK_CONTENT_CONTROL:
+    case COKitCallbackType::CONTENT_CONTROL:
         sendTextFrame("contentcontrol: " + payload);
         break;
-    case KIT_COMMAND_BLOCKED:
+    case COKitCallbackType::COMMAND_BLOCKED:
         {
 #if ENABLE_FEATURE_LOCK || ENABLE_FEATURE_RESTRICTION
             LOG_INF("COMMAND_BLOCKED: " << payload);
@@ -4317,10 +4318,10 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
 #endif
         }
         break;
-    case KIT_CALLBACK_PRINT_RANGES:
+    case COKitCallbackType::PRINT_RANGES:
         sendTextFrame("printranges: " + payload);
         break;
-    case KIT_CALLBACK_FONTS_MISSING:
+    case COKitCallbackType::FONTS_MISSING:
         if constexpr (!Util::isMobileApp())
         {
             // This environment variable is always set in COOLWSD::innerInitialize().
@@ -4343,7 +4344,7 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
             }
         }
         break;
-    case KIT_CALLBACK_EXPORT_FILE:
+    case COKitCallbackType::EXPORT_FILE:
     {
         bool isAbort = payload == "ABORT";
         bool isError = payload == "ERROR";
@@ -4467,45 +4468,45 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
 #endif
         break;
     }
-    case KIT_CALLBACK_A11Y_FOCUS_CHANGED:
+    case COKitCallbackType::A11Y_FOCUS_CHANGED:
     {
         sendTextFrame("a11yfocuschanged: " + payload);
         break;
     }
-    case KIT_CALLBACK_A11Y_CARET_CHANGED:
+    case COKitCallbackType::A11Y_CARET_CHANGED:
     {
         sendTextFrame("a11ycaretchanged: " + payload);
         break;
     }
-    case KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED:
+    case COKitCallbackType::A11Y_TEXT_SELECTION_CHANGED:
     {
         sendTextFrame("a11ytextselectionchanged: " + payload);
         break;
     }
-    case KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED:
+    case COKitCallbackType::A11Y_FOCUSED_CELL_CHANGED:
     {
         sendTextFrame("a11yfocusedcellchanged: " + payload);
         break;
     }
-    case KIT_CALLBACK_COLOR_PALETTES:
+    case COKitCallbackType::COLOR_PALETTES:
         sendTextFrame("colorpalettes: " + payload);
         break;
-    case KIT_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE:
+    case COKitCallbackType::A11Y_EDITING_IN_SELECTION_STATE:
     {
         sendTextFrame("a11yeditinginselectionstate: " + payload);
         break;
     }
-    case KIT_CALLBACK_A11Y_SELECTION_CHANGED:
+    case COKitCallbackType::A11Y_SELECTION_CHANGED:
     {
         sendTextFrame("a11yselectionchanged: " + payload);
         break;
     }
-    case KIT_CALLBACK_CORE_LOG:
+    case COKitCallbackType::CORE_LOG:
     {
         sendTextFrame("corelog: " + payload);
         break;
     }
-    case KIT_CALLBACK_TOOLTIP:
+    case COKitCallbackType::TOOLTIP:
     {
         sendTextFrame("tooltip: " + payload);
         break;

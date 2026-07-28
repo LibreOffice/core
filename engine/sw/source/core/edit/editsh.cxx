@@ -988,7 +988,7 @@ tools::Long SwEditShell::CompareDoc( const SwDoc& rDoc )
             }
         }
         OString aPayload = aWriter.finishAndGetAsOString();
-        pSfxViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
+        pSfxViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
     }
 
     return nRet;

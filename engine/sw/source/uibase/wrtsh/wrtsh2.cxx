@@ -633,7 +633,7 @@ static bool LoadURL(const SfxViewShell& rView, const OUString& rURL, LoadUrlFlag
     // unless we are jumping to a TOC mark.
     if (comphelper::COKit::isActive() && !rURL.startsWith("#"))
     {
-        rView.viewCallback(KIT_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8());
+        rView.viewCallback(COKitCallbackType::HYPERLINK_CLICKED, rURL.toUtf8());
         return true;
     }
 

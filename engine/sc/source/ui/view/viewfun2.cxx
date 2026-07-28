@@ -1134,7 +1134,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
 
             SfxViewShell* pViewShell = GetViewData().GetViewShell();
             const OString message = aJsonWriter.finishAndGetAsOString();
-            pViewShell->viewCallback(KIT_CALLBACK_PRINT_RANGES, message);
+            pViewShell->viewCallback(COKitCallbackType::PRINT_RANGES, message);
         }
 
         pDocSh->GetUndoManager()->AddUndoAction(
@@ -2133,7 +2133,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             GetFrameWin()->LeaveWait();
             if (!bIsApi)
             {
-                GetViewData().GetViewShell()->viewCallback(KIT_CALLBACK_SEARCH_NOT_FOUND, pSearchItem->GetSearchString().toUtf8());
+                GetViewData().GetViewShell()->viewCallback(COKitCallbackType::SEARCH_NOT_FOUND, pSearchItem->GetSearchString().toUtf8());
                 SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::NotFound);
             }
 
@@ -2216,9 +2216,9 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 boost::property_tree::write_json(aStream, aTree);
                 OString aPayload( aStream.str() );
                 SfxViewShell* pViewShell = GetViewData().GetViewShell();
-                pViewShell->viewCallback(KIT_CALLBACK_SEARCH_RESULT_SELECTION, aPayload);
+                pViewShell->viewCallback(COKitCallbackType::SEARCH_RESULT_SELECTION, aPayload);
 
-                // Trigger KIT_CALLBACK_TEXT_SELECTION now.
+                // Trigger COKitCallbackType::TEXT_SELECTION now.
                 MarkDataChanged();
             }
         }

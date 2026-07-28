@@ -87,7 +87,7 @@ static CallbackData gCallbackDataKit;
 /**
  * Handle retrieved callback
  */
-void messageCallback(int nType, const char* pPayload, void* pData)
+void messageCallback(COKitCallbackType eType, const char* pPayload, void* pData)
 {
     CallbackData* pCallbackData = (CallbackData*) pData;
 
@@ -110,7 +110,7 @@ void messageCallback(int nType, const char* pPayload, void* pData)
     jstring sPayload = pEnv->NewStringUTF(pPayload);
 
     jvalue aParameter[2];
-    aParameter[0].i = nType;
+    aParameter[0].i = static_cast<jint>(eType);
     aParameter[1].l = sPayload;
 
     pEnv->CallVoidMethodA(pCallbackData->aObject, pCallbackData->aJavaCallbackMethod, aParameter);

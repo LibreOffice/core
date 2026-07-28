@@ -1002,9 +1002,9 @@ void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
 
                     if (bKit)
                     {
-                        pViewShell->viewCallback(KIT_CALLBACK_APPLICATION_BACKGROUND_COLOR,
+                        pViewShell->viewCallback(COKitCallbackType::APPLICATION_BACKGROUND_COLOR,
                             aViewColors.m_aAppBackgroundColor.AsRGBHexString().toUtf8());
-                        pViewShell->viewCallback(KIT_CALLBACK_DOCUMENT_BACKGROUND_COLOR,
+                        pViewShell->viewCallback(COKitCallbackType::DOCUMENT_BACKGROUND_COLOR,
                             aViewColors.m_aDocColor.AsRGBHexString().toUtf8());
                     }
 

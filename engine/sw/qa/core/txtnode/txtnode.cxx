@@ -149,23 +149,25 @@ struct ViewCallback
 {
     int m_nInvalidations = 0;
 
-    static void callback(int nType, const char* pPayload, void* pData);
-    void callbackImpl(int nType, const char* pPayload);
+    static void callback(COKitCallbackType eType, const char* pPayload, void* pData);
+    void callbackImpl(COKitCallbackType eType, const char* pPayload);
 };
 
-void ViewCallback::callback(int nType, const char* pPayload, void* pData)
+void ViewCallback::callback(COKitCallbackType eType, const char* pPayload, void* pData)
 {
-    static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
+    static_cast<ViewCallback*>(pData)->callbackImpl(eType, pPayload);
 }
 
-void ViewCallback::callbackImpl(int nType, const char* /*pPayload*/)
+void ViewCallback::callbackImpl(COKitCallbackType eType, const char* /*pPayload*/)
 {
-    switch (nType)
+    switch (eType)
     {
-        case KIT_CALLBACK_INVALIDATE_TILES:
+        case COKitCallbackType::INVALIDATE_TILES:
         {
             ++m_nInvalidations;
         }
+        break;
+        default:
         break;
     }
 }

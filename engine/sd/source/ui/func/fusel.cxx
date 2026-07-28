@@ -287,7 +287,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if (comphelper::COKit::isActive())
                 {
                     SfxViewShell& rSfxViewShell = mrViewShell.GetViewShellBase();
-                    rSfxViewShell.viewCallback(KIT_CALLBACK_HYPERLINK_CLICKED, aVEvt.mpURLField->GetURL().toUtf8());
+                    rSfxViewShell.viewCallback(COKitCallbackType::HYPERLINK_CLICKED, aVEvt.mpURLField->GetURL().toUtf8());
                     return true;
                 }
 
@@ -464,7 +464,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                                         OString aPayload = jsonWriter.finishAndGetAsOString();
                                         if (pViewShell)
-                                            pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
+                                            pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
 
                                     }
                                 }

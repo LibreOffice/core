@@ -207,7 +207,7 @@ void SwViewShell::NotifyHeaderFooterBoundaryToKit(const SwPageFrame* pPage)
         return;
 
     maLastHeaderFooterBoundaryPayload = aPayload;
-    pSfxViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED,
+    pSfxViewShell->viewCallback(COKitCallbackType::STATE_CHANGED,
                                 "headerfooterboundary=" + aPayload);
 }
 

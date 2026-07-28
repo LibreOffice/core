@@ -1730,7 +1730,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
 
                         OUString sPayload = ".uno:TableRowHeight=" + sHeight;
 
-                        GetViewShell()->viewCallback(KIT_CALLBACK_STATE_CHANGED,
+                        GetViewShell()->viewCallback(COKitCallbackType::STATE_CHANGED,
                             OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US));
                     }
                 }
@@ -1754,7 +1754,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
 
                     OUString sPayload = ".uno:TableColumWidth=" + sWidth;
 
-                    GetViewShell()->viewCallback(KIT_CALLBACK_STATE_CHANGED,
+                    GetViewShell()->viewCallback(COKitCallbackType::STATE_CHANGED,
                         OUStringToOString(sPayload, RTL_TEXTENCODING_ASCII_US));
                 }
 

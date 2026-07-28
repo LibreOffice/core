@@ -196,7 +196,7 @@ void SfxClipboardChangeListener::ChangedContents()
     if (comphelper::COKit::isActive())
     {
         // In the future we might send the payload as well.
-        KitHelper::notifyAllViews(KIT_CALLBACK_CLIPBOARD_CHANGED, ""_ostr);
+        KitHelper::notifyAllViews(COKitCallbackType::CLIPBOARD_CHANGED, ""_ostr);
     }
 }
 
@@ -947,7 +947,7 @@ void KitDocumentFocusListener::notifyEditingInSelectionState(bool bParagraph)
     if (m_pViewShell)
     {
         SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifyEditingInSelectionState: payload: \n" << aPayload);
-        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE, OString(aPayload));
+        m_pViewShell->viewCallback(COKitCallbackType::A11Y_EDITING_IN_SELECTION_STATE, OString(aPayload));
     }
 }
 
@@ -981,7 +981,7 @@ void KitDocumentFocusListener::notifyFocusedParagraphChanged(bool force)
                        m_sFocusedParagraph, m_nCaretPosition,
                        m_nSelectionStart, m_nSelectionEnd, m_nListPrefixLength, force);
 
-        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_FOCUS_CHANGED, OString(aPayload));
+        m_pViewShell->viewCallback(COKitCallbackType::A11Y_FOCUS_CHANGED, OString(aPayload));
     }
 }
 
@@ -996,7 +996,7 @@ void KitDocumentFocusListener::notifyCaretChanged()
     if (m_pViewShell)
     {
         SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifyCaretChanged: " << m_nCaretPosition);
-        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_CARET_CHANGED, OString(aPayload));
+        m_pViewShell->viewCallback(COKitCallbackType::A11Y_CARET_CHANGED, OString(aPayload));
     }
 }
 
@@ -1014,7 +1014,7 @@ void KitDocumentFocusListener::notifyTextSelectionChanged()
     {
         SAL_INFO("kit.a11y",  "KitDocumentFocusListener::notifyTextSelectionChanged: "
                 "start: " << m_nSelectionStart << ", end: " << m_nSelectionEnd);
-        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_TEXT_SELECTION_CHANGED, OString(aPayload));
+        m_pViewShell->viewCallback(COKitCallbackType::A11Y_TEXT_SELECTION_CHANGED, OString(aPayload));
     }
 }
 
@@ -1068,7 +1068,7 @@ void KitDocumentFocusListener::notifyFocusedCellChanged(
                        m_sFocusedParagraph, m_nCaretPosition, m_nSelectionStart, m_nSelectionEnd,
                        m_nListPrefixLength, false);
 
-        m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_FOCUSED_CELL_CHANGED, OString(aPayload));
+        m_pViewShell->viewCallback(COKitCallbackType::A11Y_FOCUSED_CELL_CHANGED, OString(aPayload));
     }
 }
 
@@ -1154,7 +1154,7 @@ void KitDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
         {
             SAL_INFO("kit.a11y",  "KitDocumentFocusListener::notifySelectionChanged: "
                                      "action: " << sAction << ", name: " << sName);
-            m_pViewShell->viewCallback(KIT_CALLBACK_A11Y_SELECTION_CHANGED, OString(aPayload));
+            m_pViewShell->viewCallback(COKitCallbackType::A11Y_SELECTION_CHANGED, OString(aPayload));
         }
     }
 }
@@ -3298,19 +3298,19 @@ void SfxViewShell::dumpCOKitViewState(rtl::OStringBuffer &rState)
         pImpl->m_pCOKitViewCallback->dumpState(rState);
 }
 
-static bool ignoreCOKitViewCallback(int nType, const SfxViewShell_Impl* pImpl)
+static bool ignoreCOKitViewCallback(COKitCallbackType eType, const SfxViewShell_Impl* pImpl)
 {
     if (!comphelper::COKit::isActive())
         return true;
 
     if (comphelper::COKit::isTiledPainting())
     {
-        switch (nType)
+        switch (eType)
         {
-        case KIT_CALLBACK_FORM_FIELD_BUTTON:
-        case KIT_CALLBACK_TEXT_SELECTION:
-        case KIT_CALLBACK_COMMENT:
-        case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
+        case COKitCallbackType::FORM_FIELD_BUTTON:
+        case COKitCallbackType::TEXT_SELECTION:
+        case COKitCallbackType::COMMENT:
+        case COKitCallbackType::DOCUMENT_SIZE_CHANGED:
             break;
         default:
             // Reject e.g. invalidate during paint.
@@ -3320,15 +3320,18 @@ static bool ignoreCOKitViewCallback(int nType, const SfxViewShell_Impl* pImpl)
 
     if (pImpl->m_bTiledSearching)
     {
-        switch (nType)
+        switch (eType)
         {
-        case KIT_CALLBACK_TEXT_SELECTION:
-        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
-        case KIT_CALLBACK_TEXT_SELECTION_START:
-        case KIT_CALLBACK_TEXT_SELECTION_END:
-        case KIT_CALLBACK_GRAPHIC_SELECTION:
-        case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        case COKitCallbackType::TEXT_SELECTION:
+        case COKitCallbackType::TEXT_VIEW_SELECTION:
+        case COKitCallbackType::TEXT_SELECTION_START:
+        case COKitCallbackType::TEXT_SELECTION_END:
+        case COKitCallbackType::GRAPHIC_SELECTION:
+        case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
             return true;
+
+        default:
+            break;
         }
     }
 
@@ -3337,7 +3340,7 @@ static bool ignoreCOKitViewCallback(int nType, const SfxViewShell_Impl* pImpl)
 
 void SfxViewShell::viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const
 {
-    if (ignoreCOKitViewCallback(KIT_CALLBACK_INVALIDATE_TILES, pImpl.get()))
+    if (ignoreCOKitViewCallback(COKitCallbackType::INVALIDATE_TILES, pImpl.get()))
         return;
     if (pImpl->m_pCOKitViewCallback)
         pImpl->m_pCOKitViewCallback->viewInvalidateTilesCallback(pRect, nPart, nMode);
@@ -3357,58 +3360,58 @@ void SfxViewShell::viewVectorPartChanged(int nPart) const
             "SfxViewShell::viewVectorPartChanged no callback set!");
 }
 
-void SfxViewShell::viewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) const
+void SfxViewShell::viewCallbackWithViewId(COKitCallbackType eType, const OString& pPayload, int nViewId) const
 {
-    if (ignoreCOKitViewCallback(nType, pImpl.get()))
+    if (ignoreCOKitViewCallback(eType, pImpl.get()))
         return;
     if (pImpl->m_pCOKitViewCallback)
-        pImpl->m_pCOKitViewCallback->viewCallbackWithViewId(nType, pPayload, nViewId);
+        pImpl->m_pCOKitViewCallback->viewCallbackWithViewId(eType, pPayload, nViewId);
     else
         SAL_INFO(
             "sfx.view",
             "SfxViewShell::viewCallbackWithViewId no callback set! Dropped payload of type "
-            << kitCallbackTypeToString(nType) << ": [" << pPayload << ']');
+            << kitCallbackTypeToString(eType) << ": [" << pPayload << ']');
 }
 
 bool SfxViewShell::hasKitClient() const { return pImpl->m_pCOKitViewCallback != nullptr; }
 
-void SfxViewShell::viewCallback(int nType, const OString& pPayload) const
+void SfxViewShell::viewCallback(COKitCallbackType eType, const OString& pPayload) const
 {
-    if (ignoreCOKitViewCallback(nType, pImpl.get()))
+    if (ignoreCOKitViewCallback(eType, pImpl.get()))
         return;
     if (pImpl->m_pCOKitViewCallback)
-        pImpl->m_pCOKitViewCallback->viewCallback(nType, pPayload);
+        pImpl->m_pCOKitViewCallback->viewCallback(eType, pPayload);
     else
         SAL_INFO(
             "sfx.view",
             "SfxViewShell::viewCallback no callback set! Dropped payload of type "
-            << kitCallbackTypeToString(nType) << ": [" << pPayload << ']');
+            << kitCallbackTypeToString(eType) << ": [" << pPayload << ']');
 }
 
-void SfxViewShell::viewUpdatedCallback(int nType) const
+void SfxViewShell::viewUpdatedCallback(COKitCallbackType eType) const
 {
-    if (ignoreCOKitViewCallback(nType, pImpl.get()))
+    if (ignoreCOKitViewCallback(eType, pImpl.get()))
         return;
     if (pImpl->m_pCOKitViewCallback)
-        pImpl->m_pCOKitViewCallback->viewUpdatedCallback(nType);
+        pImpl->m_pCOKitViewCallback->viewUpdatedCallback(eType);
     else
         SAL_INFO(
             "sfx.view",
             "SfxViewShell::viewUpdatedCallback no callback set! Dropped payload of type "
-            << kitCallbackTypeToString(nType));
+            << kitCallbackTypeToString(eType));
 }
 
-void SfxViewShell::viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const
+void SfxViewShell::viewUpdatedCallbackPerViewId(COKitCallbackType eType, int nViewId, int nSourceViewId) const
 {
-    if (ignoreCOKitViewCallback(nType, pImpl.get()))
+    if (ignoreCOKitViewCallback(eType, pImpl.get()))
         return;
     if (pImpl->m_pCOKitViewCallback)
-        pImpl->m_pCOKitViewCallback->viewUpdatedCallbackPerViewId(nType, nViewId, nSourceViewId);
+        pImpl->m_pCOKitViewCallback->viewUpdatedCallbackPerViewId(eType, nViewId, nSourceViewId);
     else
         SAL_INFO(
             "sfx.view",
             "SfxViewShell::viewUpdatedCallbackPerViewId no callback set! Dropped payload of type "
-            << kitCallbackTypeToString(nType));
+            << kitCallbackTypeToString(eType));
 }
 
 void SfxViewShell::viewAddPendingInvalidateTiles()
@@ -3431,7 +3434,7 @@ void SfxViewShell::afterCallbackRegistered()
     // A view that joins an unmodified document already starts unmodified, so it needs no
     // notification and we leave that state alone.
     if (SfxObjectShell* pObjShell = GetObjectShell(); pObjShell && pObjShell->IsModified())
-        viewCallback(KIT_CALLBACK_STATE_CHANGED, KitHelper::makeModifiedStatusPayload(true));
+        viewCallback(COKitCallbackType::STATE_CHANGED, KitHelper::makeModifiedStatusPayload(true));
 
     if (GetKitAccessibilityState())
     {
@@ -3445,10 +3448,10 @@ void SfxViewShell::flushPendingKitInvalidateTiles()
     // SfxViewShell itself does not delay any tile invalidations.
 }
 
-std::optional<OString> SfxViewShell::getKitPayload(int nType, int /*nViewId*/) const
+std::optional<OString> SfxViewShell::getKitPayload(COKitCallbackType eType, int /*nViewId*/) const
 {
     // SfxViewShell itself currently doesn't handle any updated-payload types.
-    SAL_WARN("sfx.view", "SfxViewShell::getKitPayload unhandled type " << kitCallbackTypeToString(nType));
+    SAL_WARN("sfx.view", "SfxViewShell::getKitPayload unhandled type " << kitCallbackTypeToString(eType));
     abort();
 }
 
@@ -3615,18 +3618,18 @@ void SfxViewShell::notifyCursorInvalidation(tools::Rectangle const* pRect, bool 
     KitHelper::notifyCursorInvalidation(this, pRect, bControlEvent, windowID);
 }
 
-void SfxViewShell::NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload)
+void SfxViewShell::NotifyOtherViews(COKitCallbackType eType, const OString& rKey, const OString& rPayload)
 {
-    KitHelper::notifyOtherViews(this, nType, rKey, rPayload);
+    KitHelper::notifyOtherViews(this, eType, rKey, rPayload);
 }
 
-void SfxViewShell::NotifyOtherView(OutlinerViewShell* pOther, int nType, const OString& rKey, const OString& rPayload)
+void SfxViewShell::NotifyOtherView(OutlinerViewShell* pOther, COKitCallbackType eType, const OString& rKey, const OString& rPayload)
 {
     auto pOtherShell = dynamic_cast<SfxViewShell*>(pOther);
     if (!pOtherShell)
         return;
 
-    KitHelper::notifyOtherView(*this, pOtherShell, nType, rKey, rPayload);
+    KitHelper::notifyOtherView(*this, pOtherShell, eType, rKey, rPayload);
 }
 
 void SfxViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const

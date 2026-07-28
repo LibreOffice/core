@@ -51,28 +51,28 @@ SwTestViewCallback::~SwTestViewCallback()
     mpViewShell->setCOKitViewCallback(nullptr);
 }
 
-void SwTestViewCallback::callback(int nType, const char* pPayload, void* pData)
+void SwTestViewCallback::callback(COKitCallbackType eType, const char* pPayload, void* pData)
 {
-    static_cast<SwTestViewCallback*>(pData)->callbackImpl(nType, pPayload);
+    static_cast<SwTestViewCallback*>(pData)->callbackImpl(eType, pPayload);
 }
 
-void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
+void SwTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayload)
 {
     OString aPayload(pPayload);
     m_bCalled = true;
-    switch (nType)
+    switch (eType)
     {
-        case KIT_CALLBACK_STATE_CHANGED:
+        case COKitCallbackType::STATE_CHANGED:
         {
             m_aStateChanges.push_back(OString(pPayload));
             break;
         }
-        case KIT_CALLBACK_INVALIDATE_TILES:
+        case COKitCallbackType::INVALIDATE_TILES:
         {
             m_bTilesInvalidated = true;
         }
         break;
-        case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
         {
             m_bOwnCursorInvalidated = true;
 
@@ -100,7 +100,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
                 m_bOwnCursorAtOrigin = true;
         }
         break;
-        case KIT_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        case COKitCallbackType::INVALIDATE_VIEW_CURSOR:
         {
             m_bViewCursorInvalidated = true;
             std::stringstream aStream(pPayload);
@@ -119,18 +119,18 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aViewCursor.setHeight(aSeq[3].toInt32());
         }
         break;
-        case KIT_CALLBACK_TEXT_SELECTION:
+        case COKitCallbackType::TEXT_SELECTION:
         {
             m_bOwnSelectionSet = true;
         }
         break;
-        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+        case COKitCallbackType::TEXT_VIEW_SELECTION:
         {
             m_bViewSelectionSet = true;
             m_aViewSelection = aPayload;
         }
         break;
-        case KIT_CALLBACK_VIEW_CURSOR_VISIBLE:
+        case COKitCallbackType::VIEW_CURSOR_VISIBLE:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -138,7 +138,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_bViewCursorVisible = aTree.get_child("visible").get_value<std::string>() == "true";
         }
         break;
-        case KIT_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        case COKitCallbackType::GRAPHIC_VIEW_SELECTION:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -147,12 +147,12 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
                 = aTree.get_child("selection").get_value<std::string>() != "EMPTY";
         }
         break;
-        case KIT_CALLBACK_GRAPHIC_SELECTION:
+        case COKitCallbackType::GRAPHIC_SELECTION:
         {
             m_bGraphicSelection = aPayload != "EMPTY";
         }
         break;
-        case KIT_CALLBACK_VIEW_LOCK:
+        case COKitCallbackType::VIEW_LOCK:
         {
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
@@ -160,12 +160,12 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
         }
         break;
-        case KIT_CALLBACK_VIEW_RENDER_STATE:
+        case COKitCallbackType::VIEW_RENDER_STATE:
         {
             m_aViewRenderState = OString(pPayload);
         }
         break;
-        case KIT_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
+        case COKitCallbackType::REDLINE_TABLE_SIZE_CHANGED:
         {
             m_aRedlineTableChanged.clear();
             std::stringstream aStream(pPayload);
@@ -173,7 +173,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aRedlineTableChanged = m_aRedlineTableChanged.get_child("redline");
         }
         break;
-        case KIT_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
+        case COKitCallbackType::REDLINE_TABLE_ENTRY_MODIFIED:
         {
             m_aRedlineTableModified.clear();
             std::stringstream aStream(pPayload);
@@ -181,7 +181,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aRedlineTableModified = m_aRedlineTableModified.get_child("redline");
         }
         break;
-        case KIT_CALLBACK_COMMENT:
+        case COKitCallbackType::COMMENT:
         {
             ++m_nCommentCallbackCount;
             m_aComment.clear();
@@ -190,21 +190,23 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aComment = m_aComment.get_child("comment");
         }
         break;
-        case KIT_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
+        case COKitCallbackType::DOCUMENT_BACKGROUND_COLOR:
         {
             m_aDocColor = aPayload;
             break;
         }
-        case KIT_CALLBACK_EXPORT_FILE:
+        case COKitCallbackType::EXPORT_FILE:
         {
             m_aExportFile = aPayload;
             break;
         }
-        case KIT_CALLBACK_CURSOR_VISIBLE:
+        case COKitCallbackType::CURSOR_VISIBLE:
         {
             m_bCursorVisible = aPayload == "true";
             break;
         }
+        default:
+            break;
     }
 }
 

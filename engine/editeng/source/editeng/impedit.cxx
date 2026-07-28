@@ -423,7 +423,7 @@ void ImpEditView::kitSelectionCallback(const std::optional<tools::PolyPolygon> &
             if (mpKitSpecialPositioning)
                 aPayload += ":: " + sRefPoint;
 
-            mpViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION_START, aPayload);
+            mpViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION_START, aPayload);
 
             tools::Rectangle& rEnd = aRectangles.back();
             tools::Rectangle aEnd(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
@@ -432,19 +432,19 @@ void ImpEditView::kitSelectionCallback(const std::optional<tools::PolyPolygon> &
             if (mpKitSpecialPositioning)
                 aPayload += ":: " + sRefPoint;
 
-            mpViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION_END, aPayload);
+            mpViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION_END, aPayload);
         }
 
         if (mpOtherShell)
         {
             // Another shell wants to know about our existing selection.
             if (mpViewShell != mpOtherShell)
-                mpViewShell->NotifyOtherView(mpOtherShell, KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection"_ostr, sRectangle);
+                mpViewShell->NotifyOtherView(mpOtherShell, COKitCallbackType::TEXT_VIEW_SELECTION, "selection"_ostr, sRectangle);
         }
         else
         {
-            mpViewShell->viewCallback(KIT_CALLBACK_TEXT_SELECTION, sRectangle);
-            mpViewShell->NotifyOtherViews(KIT_CALLBACK_TEXT_VIEW_SELECTION, "selection"_ostr, sRectangle);
+            mpViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, sRectangle);
+            mpViewShell->NotifyOtherViews(COKitCallbackType::TEXT_VIEW_SELECTION, "selection"_ostr, sRectangle);
         }
     }
 }
@@ -1457,7 +1457,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             {
                 // Another shell wants to know about our existing cursor.
                 KitHelper::notifyOtherView(*pThisShell, pOtherShell,
-                        KIT_CALLBACK_INVALIDATE_VIEW_CURSOR, aMessageParams);
+                        COKitCallbackType::INVALIDATE_VIEW_CURSOR, aMessageParams);
             }
             else
             {
@@ -1496,16 +1496,16 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
                 if (mbBroadcastKitViewCursor)
                     KitHelper::notifyOtherViews(pThisShell,
-                            KIT_CALLBACK_INVALIDATE_VIEW_CURSOR, aMessageParams);
+                            COKitCallbackType::INVALIDATE_VIEW_CURSOR, aMessageParams);
 
                 aMessageParams.put("mispelledWord", bIsWrong ? 1 : 0);
                 aMessageParams.add_child("hyperlink", aHyperlinkTree);
 
                 if (comphelper::COKit::isViewIdForVisCursorInvalidation())
                     KitHelper::notifyOtherView(*pThisShell, pThisShell,
-                            KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR, aMessageParams);
+                            COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, aMessageParams);
                 else
-                    pThisShell->viewCallback(KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
+                    pThisShell->viewCallback(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR,
                             OString(aMessageParams.get<std::string>("rectangle")));
             }
         }

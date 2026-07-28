@@ -551,7 +551,7 @@ void ChartAreaPanel::selectionChanged(bool bCorrectType)
                                 {
                                     const OString sCommand = ".uno:FillColor"_ostr;
                                     pViewShell->viewCallback(
-                                        KIT_CALLBACK_STATE_CHANGED,
+                                        COKitCallbackType::STATE_CHANGED,
                                         sCommand + "=" + OString::number(nFillColor));
                                 }
                             }

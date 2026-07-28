@@ -355,7 +355,7 @@ void ScGridWindow::InvalidateKitViewCursor(const tools::Rectangle& rCursorRect,
                 if (fZoomX == fScaleX && fZoomY == fScaleY)
                 {
                     KitHelper::notifyOtherView(*pThisViewShell, pOtherViewShell,
-                            KIT_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", rCursorRect.toString());
+                            COKitCallbackType::INVALIDATE_VIEW_CURSOR, "rectangle", rCursorRect.toString());
                 }
             }
         }

@@ -168,34 +168,34 @@ public:
     static void forEachOtherView(ViewShellType* pThisViewShell, FunctionType f);
 
     /// Invoke the Kit callback of all other views showing the same document as pThisView, with a payload of rKey-rPayload.
-    static void notifyOtherViews(const SfxViewShell* pThisView, int nType, std::string_view rKey,
+    static void notifyOtherViews(const SfxViewShell* pThisView, COKitCallbackType eType, std::string_view rKey,
                                  const OString& rPayload);
     /// Invoke the Kit callback of all views except pThisView, with a JSON payload created from the given property tree.
-    static void notifyOtherViews(const SfxViewShell* pThisView, int nType,
+    static void notifyOtherViews(const SfxViewShell* pThisView, COKitCallbackType eType,
                                  const boost::property_tree::ptree& rTree);
     /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
     static void notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
-                                int nType, std::string_view rKey, const OString& rPayload);
+                                COKitCallbackType eType, std::string_view rKey, const OString& rPayload);
     /// Same as notifyOtherViews(), the property-tree version, but works on a selected "other" view, not on all of them.
     static void notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
-                                int nType, const boost::property_tree::ptree& rTree);
+                                COKitCallbackType eType, const boost::property_tree::ptree& rTree);
 
-    /// Emits a KIT_CALLBACK_STATE_CHANGED
+    /// Emits a COKitCallbackType::STATE_CHANGED
     static void sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem);
-    /// Emits a KIT_CALLBACK_WINDOW
+    /// Emits a COKitCallbackType::WINDOW
     static void notifyWindow(const SfxViewShell* pThisView,
                              vcl::KitWindowId nWindowId,
                              std::u16string_view rAction,
                              const std::vector<vcl::KitPayloadItem>& rPayload = std::vector<vcl::KitPayloadItem>());
-    /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED - if @bInvalidateAllParts - first invalidates all parts
+    /// Emits a COKitCallbackType::DOCUMENT_SIZE_CHANGED - if @bInvalidateAllParts - first invalidates all parts
     static void notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAllParts = true);
-    /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document - if @bInvalidateAllParts - first invalidates all parts
+    /// Emits a COKitCallbackType::DOCUMENT_SIZE_CHANGED for all views of the same document - if @bInvalidateAllParts - first invalidates all parts
     static void notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAllParts = true);
-    /// Emits a KIT_CALLBACK_STATE_CHANGED for all views of the same document - with payload ".uno:CurrentPageResize"
+    /// Emits a COKitCallbackType::STATE_CHANGED for all views of the same document - with payload ".uno:CurrentPageResize"
     static void notifyCurrentPageSizeChangedAllViews(const vcl::ITiledRenderable* pDoc);
-    /// Emits a KIT_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document with the same part
+    /// Emits a COKitCallbackType::DOCUMENT_SIZE_CHANGED for all views of the same document with the same part
     static void notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int nPart);
-    /// Emits a KIT_CALLBACK_INVALIDATE_TILES for the given part on the views of
+    /// Emits a COKitCallbackType::INVALIDATE_TILES for the given part on the views of
     /// the document. A null rectangle invalidates the whole part. When
     /// bSkipViewShowingPart is true the views currently showing that part are
     /// left out, because a view invalidates the part it displays through the
@@ -205,41 +205,41 @@ public:
     static void notifyInvalidationAllViews(vcl::ITiledRenderable* pDoc, int nPart,
                                            tools::Rectangle const* pRect,
                                            bool bSkipViewShowingPart = true);
-    /// Emits a KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR
+    /// Emits a COKitCallbackType::INVALIDATE_VISIBLE_CURSOR
     static void notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const * pRect, bool bControlEvent, int windowID);
-    /// Emits a KIT_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
+    /// Emits a COKitCallbackType::INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
     static void notifyInvalidation(SfxViewShell const* pThisView, int nPart, tools::Rectangle const *);
-    /// Emits a KIT_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed
+    /// Emits a COKitCallbackType::INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed
     /// uses the Part reported by pThisView
     static void notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const *);
     /// Notifies all views with the given type and payload.
-    static void notifyAllViews(int nType, const OString& rPayload);
+    static void notifyAllViews(COKitCallbackType eType, const OString& rPayload);
 
     /// Builds the ".uno:ModifiedStatus=true" or "...=false" state-change payload.
     static OString makeModifiedStatusPayload(bool bModified);
 
     /// Dispatches a callback to a single view identified by its view id.
-    static void notifyView(int nViewId, int nType, const OString& rPayload);
+    static void notifyView(int nViewId, COKitCallbackType eType, const OString& rPayload);
 
     /// Notify about the editing context change.
     static void notifyContextChange(const css::ui::ContextChangeEventObject& rEvent);
 
-    /// Emits an KIT_CALLBACK_VIEW_RENDER_STATE
+    /// Emits an COKitCallbackType::VIEW_RENDER_STATE
     static void notifyViewRenderState(SfxViewShell const* pViewShell, vcl::ITiledRenderable* pDoc);
 
     // Notify about the given type needing an update.
-    static void notifyUpdate(SfxViewShell const* pViewShell, int nType);
+    static void notifyUpdate(SfxViewShell const* pViewShell, COKitCallbackType eType);
     // Notify about the given type needing a per-viewid update.
-    static void notifyUpdatePerViewId(SfxViewShell const& rViewShell, int nType);
+    static void notifyUpdatePerViewId(SfxViewShell const& rViewShell, COKitCallbackType eType);
     /// Same as notifyUpdatePerViewId(), pTargetShell will be notified, relevant viewId in pViewShell,
     /// pSourceView->getKitPayload() will be called to get the data.
     static void notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxViewShell const* pViewShell,
-        SfxViewShell const& rSourceShell, int nType);
+        SfxViewShell const& rSourceShell, COKitCallbackType eType);
     // Notify other views about the given type needing a per-viewid update.
-    static void notifyOtherViewsUpdatePerViewId(SfxViewShell const* pViewShell, int nType);
+    static void notifyOtherViewsUpdatePerViewId(SfxViewShell const* pViewShell, COKitCallbackType eType);
 
     static OString makePayloadJSON(const SfxViewShell* pThisView, int nViewId, std::string_view rKey, const OString& rPayload);
-    /// Makes a KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR payload, but tweaks it according to setOptionalFeatures() if needed.
+    /// Makes a COKitCallbackType::INVALIDATE_VISIBLE_CURSOR payload, but tweaks it according to setOptionalFeatures() if needed.
     static OString makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
                                              bool bMispelledWord = false, const OString& rHyperlink = ""_ostr,
                                              int nEditorViewId = -1);

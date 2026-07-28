@@ -33,8 +33,8 @@ protected:
                                   const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments
                                   = cpo::uno::Sequence<css::beans::PropertyValue>());
     void setupCOKitViewCallback(SfxViewShell& pViewShell);
-    static void callback(int nType, const char* pPayload, void* pData);
-    void callbackImpl(int nType, const char* pPayload);
+    static void callback(COKitCallbackType eType, const char* pPayload, void* pData);
+    void callbackImpl(COKitCallbackType eType, const char* pPayload);
     xmlDocUniquePtr parseXmlDump();
 
     ::tools::Rectangle m_aInvalidation;
@@ -85,9 +85,9 @@ public:
 
     ~SdTestViewCallback();
 
-    static void callback(int nType, const char* pPayload, void* pData);
+    static void callback(COKitCallbackType eType, const char* pPayload, void* pData);
 
-    void callbackImpl(int nType, const char* pPayload);
+    void callbackImpl(COKitCallbackType eType, const char* pPayload);
 };
 
 #endif // INCLUDED_SD_QA_INC_SDTILEDRENDERINGTEST_HXX

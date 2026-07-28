@@ -30,6 +30,8 @@
 
 #include <optional>
 
+#include <COKit/COKit.hxx>
+
 namespace sdr::overlay { class OverlaySelection; }
 
 namespace sw { struct VisibleCursorState; }
@@ -73,7 +75,7 @@ public:
     void SetPosAndShow(SfxViewShell const * pViewShell);
     const vcl::Cursor& GetTextCursor() const;
 
-    std::optional<OString> getKitPayload(int nType, int nViewId) const;
+    std::optional<OString> getKitPayload(COKitCallbackType eType, int nViewId) const;
 
 #if ENABLE_YRS
     ::std::optional<OUString> m_Author;
@@ -147,7 +149,7 @@ public:
     static void Get1PixelInLogic( const SwViewShell& rSh,
                                     tools::Long* pX = nullptr, tools::Long* pY = nullptr );
 
-    std::optional<OString> getKitPayload(int nType) const;
+    std::optional<OString> getKitPayload(COKitCallbackType eType) const;
 };
 
 /// Represents the current text cursor of one opened edit window.

@@ -33,13 +33,13 @@ public:
     void clear();
     /// Set the view id of the associated SfxViewShell.
     void setKitViewId(int viewId) { m_viewId = viewId; }
-    virtual void viewCallback(int nType, const rtl::OString& pPayload) override;
-    virtual void viewCallbackWithViewId(int nType, const rtl::OString& pPayload,
+    virtual void viewCallback(COKitCallbackType eType, const rtl::OString& pPayload) override;
+    virtual void viewCallbackWithViewId(COKitCallbackType eType, const rtl::OString& pPayload,
                                         int nViewId) override;
     virtual void viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
                                              int nMode) override;
-    virtual void viewUpdatedCallback(int nType) override;
-    virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) override;
+    virtual void viewUpdatedCallback(COKitCallbackType eType) override;
+    virtual void viewUpdatedCallbackPerViewId(COKitCallbackType eType, int nViewId, int nSourceViewId) override;
     virtual void viewVectorPartChanged(int) override {}
     virtual void viewAddPendingInvalidateTiles() override;
     virtual void dumpState(rtl::OStringBuffer&) override{};
@@ -49,17 +49,17 @@ public:
     static SfxChildWindow* InitializeSidebar();
 
 private:
-    void callCallback(int nType, const char* pPayload, int nViewId);
+    void callCallback(COKitCallbackType eType, const char* pPayload, int nViewId);
     void startTimer();
     void flushKitData();
-    void discardUpdatedTypes(int nType, int nViewId);
+    void discardUpdatedTypes(COKitCallbackType eType, int nViewId);
     COKitCallback m_callback;
     void* m_data;
     int m_viewId = -1; // the associated SfxViewShell
-    std::vector<int> m_updatedTypes; // value is type
+    std::vector<COKitCallbackType> m_updatedTypes;
     struct PerViewIdData
     {
-        int type;
+        COKitCallbackType type;
         int viewId;
         int sourceViewId;
     };

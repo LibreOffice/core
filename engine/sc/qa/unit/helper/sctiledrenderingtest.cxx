@@ -70,16 +70,16 @@ void ScTiledRenderingTest::setupCOKitViewCallback(SfxViewShell* pViewShell)
     m_callbackWrapper.setKitViewId(KitHelper::getView(*pViewShell));
 }
 
-void ScTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)
+void ScTiledRenderingTest::callback(COKitCallbackType eType, const char* pPayload, void* pData)
 {
-    static_cast<ScTiledRenderingTest*>(pData)->callbackImpl(nType, pPayload);
+    static_cast<ScTiledRenderingTest*>(pData)->callbackImpl(eType, pPayload);
 }
 
-void ScTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
+void ScTiledRenderingTest::callbackImpl(COKitCallbackType eType, const char* pPayload)
 {
-    switch (nType)
+    switch (eType)
     {
-        case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
+        case COKitCallbackType::DOCUMENT_SIZE_CHANGED:
         {
             OString aPayload(pPayload);
             sal_Int32 nIndex = 0;
@@ -89,6 +89,8 @@ void ScTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             m_aDocumentSize.setHeight(aToken.toInt32());
             m_aDocSizeCondition.set();
         }
+        break;
+        default:
         break;
     }
 }

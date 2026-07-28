@@ -345,7 +345,7 @@ void KitClipboard::setContents(
         for (const auto& rMime : aMimeTypes)
             aWriter.putSimpleValue(OUString::fromUtf8(rMime));
     }
-    KitHelper::notifyView(m_nViewId, KIT_CALLBACK_CLIPBOARD_MIMETYPES,
+    KitHelper::notifyView(m_nViewId, COKitCallbackType::CLIPBOARD_MIMETYPES,
                           aWriter.finishAndGetAsOString());
 }
 

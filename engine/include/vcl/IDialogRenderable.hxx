@@ -16,6 +16,8 @@
 
 #include <vector>
 
+#include <COKit/COKit.hxx>
+
 namespace tools { class Rectangle; }
 
 namespace vcl
@@ -35,15 +37,15 @@ public:
                               const OUString& rAction,
                               const std::vector<KitPayloadItem>& rPayload = std::vector<KitPayloadItem>()) const = 0;
 
-    virtual void viewCallback(int nType, const OString& pPayload) const = 0;
+    virtual void viewCallback(COKitCallbackType eType, const OString& pPayload) const = 0;
 
     /// Whether a client is attached to receive the callbacks at all.
     virtual bool hasKitClient() const = 0;
 
-    /// Emits a KIT_CALLBACK_INVALIDATE_TILES.
+    /// Emits a COKitCallbackType::INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const = 0;
 
-    /// Emits a KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR.
+    /// Emits a COKitCallbackType::INVALIDATE_VISIBLE_CURSOR.
     virtual void notifyCursorInvalidation(tools::Rectangle const *, bool bControlEvent, int windowID) const = 0;
 
     /// Debugging

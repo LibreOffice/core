@@ -41,7 +41,7 @@ void JSDialogNotifyIdle::send(const OString& sMsg)
         {
             m_bForce = false;
             m_LastNotificationMessage = sMsg;
-            pNotifier->viewCallback(KIT_CALLBACK_JSDIALOG, m_LastNotificationMessage);
+            pNotifier->viewCallback(COKitCallbackType::JSDIALOG, m_LastNotificationMessage);
         }
     }
 }

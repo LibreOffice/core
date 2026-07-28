@@ -359,7 +359,7 @@ void SfxObjectShell::ModifyChanged()
         SfxViewShell* pCurrent = SfxViewShell::Current();
         if ( pCurrent && pCurrent->GetObjectShell() == this )
         {
-            KitHelper::notifyAllViews(KIT_CALLBACK_STATE_CHANGED,
+            KitHelper::notifyAllViews(COKitCallbackType::STATE_CHANGED,
                                       KitHelper::makeModifiedStatusPayload(IsModified()));
         }
     }

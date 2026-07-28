@@ -95,7 +95,7 @@ public:
     int getSpeed();
     bool isDocLoaded() const { return _isDocLoaded; }
 
-    void loKitCallback(int type, const std::string& payload);
+    void loKitCallback(COKitCallbackType type, const std::string& payload);
 
     /// Initializes the watermark support, if enabled and required.
     /// Returns true if watermark is enabled and initialized.
@@ -237,7 +237,7 @@ private:
     bool proxyReturn(char const * buffer, int length);
     bool getSlideSections();
 
-    void rememberEventsForInactiveUser(int type, const std::string& payload);
+    void rememberEventsForInactiveUser(COKitCallbackType type, const std::string& payload);
 
     virtual void disconnect() override;
     virtual bool _handleInput(const char* buffer, int length) override;

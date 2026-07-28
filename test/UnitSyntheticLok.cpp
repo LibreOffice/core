@@ -156,10 +156,10 @@ public:
         const char *instdir, const char *userdir,
         CokHookFunction2 fn) override;
 
-    void postLOKDocumentEvent(int type, const char* payload)
+    void postLOKDocumentEvent(COKitCallbackType eType, const char* payload)
     {
         assert(_docCallback);
-        _docCallback(type, payload, _docCallbackData);
+        _docCallback(eType, payload, _docCallbackData);
     }
 
     bool prePollCallback(int /* timeoutUs */)
@@ -172,7 +172,7 @@ public:
         if (isDocumentCreated())
         {
             TST_LOG("Send test event");
-            postLOKDocumentEvent(KIT_CALLBACK_CELL_CURSOR, "EMPTY");
+            postLOKDocumentEvent(COKitCallbackType::CELL_CURSOR, "EMPTY");
             exitTest(TestResult::Ok);
         }
     }

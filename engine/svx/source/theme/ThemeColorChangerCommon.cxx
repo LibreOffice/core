@@ -186,7 +186,7 @@ void notifyKit(std::shared_ptr<model::ColorSet> const& pColorSet,
 
         PaletteManager::generateColorNamesJSON(aTree);
 
-        KitHelper::notifyAllViews(KIT_CALLBACK_COLOR_PALETTES, aTree.finishAndGetAsOString());
+        KitHelper::notifyAllViews(COKitCallbackType::COLOR_PALETTES, aTree.finishAndGetAsOString());
     }
 }
 

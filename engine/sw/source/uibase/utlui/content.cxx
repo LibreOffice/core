@@ -7174,7 +7174,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
                     std::stringstream aStream;
                     boost::property_tree::write_json(aStream, aTree);
                     m_pActiveShell->GetView().viewCallback(
-                        KIT_CALLBACK_COMMENT, OString(aStream.str()));
+                        COKitCallbackType::COMMENT, OString(aStream.str()));
                 }
             }
         }

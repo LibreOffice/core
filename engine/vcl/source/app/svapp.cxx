@@ -326,14 +326,14 @@ OString Application::dumpNotifyState() const
     return "notimpl"_ostr;
 }
 
-void Application::viewCallback(int nType, const OString& pPayload) const
+void Application::viewCallback(COKitCallbackType eType, const OString& pPayload) const
 {
     if (!comphelper::COKit::isActive())
         return;
 
     if (m_pCallback)
     {
-        m_pCallback(nType, pPayload.getStr(), m_pCallbackData);
+        m_pCallback(eType, pPayload.getStr(), m_pCallbackData);
     }
 }
 
