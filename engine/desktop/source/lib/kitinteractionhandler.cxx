@@ -49,7 +49,7 @@
 
 #include "../../inc/lib/init.hxx"
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/viewsh.hxx>
 #include <utility>

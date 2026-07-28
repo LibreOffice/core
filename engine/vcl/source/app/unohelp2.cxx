@@ -29,7 +29,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 using namespace ::com::sun::star;
 

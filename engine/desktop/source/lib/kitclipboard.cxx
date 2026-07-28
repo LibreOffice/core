@@ -17,7 +17,7 @@
 #include <tools/lazydelete.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>

@@ -8,7 +8,7 @@
  */
 
 #include <jsdialog/jsdialogsender.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/json_writer.hxx>
 #include <vcl/dockwin.hxx>

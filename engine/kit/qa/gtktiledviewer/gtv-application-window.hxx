@@ -12,7 +12,7 @@
 
 #include <gtk/gtk.h>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include "gtv-main-toolbar.hxx"
 

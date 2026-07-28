@@ -70,7 +70,6 @@
 #include <boost/algorithm/string.hpp>
 
 #include <COKit/COKit.hxx>
-#include <COKit/COKitEnums.h>
 
 #include <sal/log.hxx>
 #include <utility>

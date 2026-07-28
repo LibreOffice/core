@@ -16,7 +16,6 @@
 #include <iostream>
 #include <osl/time.h>
 
-#include <COKit/COKitEnums.h>
 #include <COKit/COKitInit.h>
 #include <COKit/COKit.hxx>
 

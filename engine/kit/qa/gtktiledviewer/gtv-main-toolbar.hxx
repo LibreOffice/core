@@ -14,7 +14,7 @@
 
 #include <string>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #define GTV_TYPE_MAIN_TOOLBAR            (gtv_main_toolbar_get_type())
 #define GTV_MAIN_TOOLBAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTV_TYPE_MAIN_TOOLBAR, GtvMainToolbar))

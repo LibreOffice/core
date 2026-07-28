@@ -32,7 +32,6 @@
 
 #include <COKit/COKitInit.h>
 #include <COKit/COKit.hxx>
-#include <COKit/COKitEnums.h>
 
 using namespace ::boost;
 using namespace ::kit;

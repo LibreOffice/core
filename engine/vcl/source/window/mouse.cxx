@@ -23,7 +23,7 @@
 
 #include <tools/time.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/dndlistenercontainer.hxx>

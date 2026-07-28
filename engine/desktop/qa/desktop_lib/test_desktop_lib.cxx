@@ -40,7 +40,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <osl/conditn.hxx>
 #include <svl/srchitem.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>

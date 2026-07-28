@@ -14,7 +14,6 @@
 
 #include <COKit/COKit.hxx>
 #include <COKit/COKitGtk.h>
-#include <COKit/COKitEnums.h>
 
 #include "gtv-application-window.hxx"
 #include "gtv-main-toolbar.hxx"
