@@ -1309,8 +1309,8 @@ static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId, 
                                    const int nWidth, const int nHeight,
                                    const double fDPIScale, int viewId);
 
-static void doc_postWindow(COKitDocument* pThis, unsigned
- nKitWindowId, int nAction, const char* pData);
+static void doc_postWindow(COKitDocument* pThis, unsigned nKitWindowId,
+                           COKitWindowAction eAction, const char* pData);
 
 static char* doc_getPartInfo(COKitDocument* pThis, int nPart);
 
@@ -8025,7 +8025,8 @@ static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId,
     comphelper::COKit::setDialogPainting(false);
 }
 
-static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nKitWindowId, int nAction, const char* pData)
+static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nKitWindowId,
+                           COKitWindowAction eAction, const char* pData)
 {
     comphelper::ProfileZone aZone("doc_postWindow");
 
@@ -8039,11 +8040,11 @@ static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nKitWindowId, int 
         return;
     }
 
-    if (nAction == KIT_WINDOW_CLOSE)
+    if (eAction == COKitWindowAction::CLOSE)
     {
         vcl::CloseTopLevel(pWindow);
     }
-    else if (nAction == KIT_WINDOW_PASTE)
+    else if (eAction == COKitWindowAction::PASTE)
     {
 #ifndef IOS
         OUString aMimeType;
@@ -8069,7 +8070,7 @@ static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nKitWindowId, int 
             SetLastExceptionMsg(u"Window command 'paste': wrong parameters."_ustr);
 #else
         (void) pData;
-        assert(!"doc_postWindow() with KIT_WINDOW_PASTE should not be called on iOS");
+        assert(!"doc_postWindow() with COKitWindowAction::PASTE should not be called on iOS");
 #endif
     }
 }

@@ -111,12 +111,11 @@ typedef enum
 }
 COKitTileMode;
 
-typedef enum
+enum class COKitWindowAction
 {
-    KIT_WINDOW_CLOSE,
-    KIT_WINDOW_PASTE
-}
-COKitWindowAction;
+    CLOSE,
+    PASTE
+};
 
 typedef enum
 {
@@ -1738,7 +1737,8 @@ struct COKitDocumentClassStruct
                          const int width, const int height);
 
     /// @see kit::Document::postWindow().
-    void (*postWindow) (COKitDocument* pThis, unsigned nWindowId, int nAction, const char* pData);
+    void (*postWindow) (COKitDocument* pThis, unsigned nWindowId, COKitWindowAction eAction,
+                        const char* pData);
 
     /// @see kit::Document::postWindowKeyEvent().
     void (*postWindowKeyEvent) (COKitDocument* pThis,
@@ -2145,9 +2145,9 @@ public:
      *
      * @param nWindowid
      */
-    void postWindow(unsigned nWindowId, int nAction, const char* pData = nullptr)
+    void postWindow(unsigned nWindowId, COKitWindowAction eAction, const char* pData = nullptr)
     {
-        return mpDoc->pClass->postWindow(mpDoc, nWindowId, nAction, pData);
+        return mpDoc->pClass->postWindow(mpDoc, nWindowId, eAction, pData);
     }
 
     /**

@@ -3905,7 +3905,7 @@ void DesktopKitTest::testDialogPaste()
     VclPtr<vcl::Window> pWindow(Application::GetActiveTopWindow());
     CPPUNIT_ASSERT(pWindow);
 
-    pDocument->pClass->postWindow(pDocument, pWindow->GetKitWindowId(), KIT_WINDOW_PASTE,
+    pDocument->pClass->postWindow(pDocument, pWindow->GetKitWindowId(), COKitWindowAction::PASTE,
             "{ \"MimeType\" : { \"type\" : \"string\", \"value\" : \"text/plain;charset=utf-8\" }, \"Data\" : { \"type\" : \"[]byte\", \"value\" : \"www.softwarelibre.org.bo\" } }");
     Scheduler::ProcessEventsToIdle();
 

@@ -540,7 +540,7 @@ static void testDialog( Document *pDocument, const char *uno_cmd )
     }
 
     aTimes.emplace_back("post close dialog");
-    pDocument->postWindow(nDialogId, KIT_WINDOW_CLOSE);
+    pDocument->postWindow(nDialogId, COKitWindowAction::CLOSE);
     aTimes.emplace_back();
 
     pDocument->destroyView(view);

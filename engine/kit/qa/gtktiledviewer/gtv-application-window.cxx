@@ -460,7 +460,7 @@ gtv_application_window_unregister_child_window(GtvApplicationWindow* window, Gtk
         COKitDocument* pDocument = kit_doc_view_get_document(KIT_DOC_VIEW(window->kitdocview));
         guint dialogId = 0;
         g_object_get(G_OBJECT(pChildWin), "dialogid", &dialogId, nullptr);
-        pDocument->pClass->postWindow(pDocument, dialogId, KIT_WINDOW_CLOSE, nullptr);
+        pDocument->pClass->postWindow(pDocument, dialogId, COKitWindowAction::CLOSE, nullptr);
     }
 }
 

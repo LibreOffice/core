@@ -3074,9 +3074,9 @@ bool ChildSession::sendWindowCommand(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
 
     if (tokens.size() > 2 && tokens.equals(2, "close"))
-        getLOKitDocument()->postWindow(winId, KIT_WINDOW_CLOSE, nullptr);
+        getLOKitDocument()->postWindow(winId, COKitWindowAction::CLOSE, nullptr);
     else if (tokens.size() > 3 && tokens.equals(2, "paste"))
-        getLOKitDocument()->postWindow(winId, KIT_WINDOW_PASTE, tokens[3].c_str());
+        getLOKitDocument()->postWindow(winId, COKitWindowAction::PASTE, tokens[3].c_str());
 
     return true;
 }
