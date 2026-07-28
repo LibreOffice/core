@@ -22,6 +22,7 @@
 
 #include "menubarwindow.hxx"
 
+#include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/config.h>
@@ -1145,6 +1146,22 @@ VclPtr<VirtualDevice> SystemWindow::createScreenshot()
     ImplAdjustNWFSizes();
     Show();
     ToTop();
+
+    if (comphelper::COKit::isActive())
+    {
+        // With the Kit a window is only invalidated, never painted to, so waiting for a paint to
+        // complete would wait for good, and the window's own device would stay blank either way.
+        // Draw the window the way the Kit draws one for its client.
+        VclPtr<VirtualDevice> xKitOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
+        xKitOutput->SetOutputSizePixel(GetOutputSizePixel());
+
+        comphelper::COKit::setDialogPainting(true);
+        comphelper::ScopeGuard g([]() { comphelper::COKit::setDialogPainting(false); });
+        PaintToDevice(xKitOutput.get(), Point());
+
+        return xKitOutput;
+    }
+
     ensureRepaint();
 
     Size aSize(GetOutputSizePixel());
