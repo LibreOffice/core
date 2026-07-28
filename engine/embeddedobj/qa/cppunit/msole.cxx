@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_vclplug.h>
+
 #include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -90,6 +92,12 @@ void OdtExportThread::run()
 
 CPPUNIT_TEST_FIXTURE(Test, testSaveOnThread)
 {
+// An OLE server answers its container across a single-threaded apartment, and that apartment
+// answers by way of the Windows message queue. A build that takes the headless code pumps no such
+// queue: the thread saving below would wait on the main thread for good, while the main thread waits
+// for the save to finish. Nor does anyone put the main thread in an apartment there to begin with,
+// the Windows windowing code being what normally does that.
+#if !defined _WIN32 || !USE_HEADLESS_CODE
     // Given an embedded object which hosts mspaint data:
     if (Application::GetDefaultDevice()->GetDPIX() != 96)
     {
@@ -127,6 +135,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSaveOnThread)
     // - Actual  : 1.9685in
     // i.e. we wrote a hardcoded 5cm width, not the real one.
     assertXPath(pXmlDoc, "//style:graphic-properties", "visible-area-width", u"0.1665in");
+#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
