@@ -58,7 +58,7 @@
 #include <linguistic/lngprops.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/kit/helper.hxx>

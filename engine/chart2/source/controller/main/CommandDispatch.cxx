@@ -22,7 +22,7 @@
 #include <CommandDispatch.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <sfx2/viewsh.hxx>
 
 using namespace ::com::sun::star;

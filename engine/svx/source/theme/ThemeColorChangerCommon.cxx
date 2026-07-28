@@ -16,7 +16,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/section.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <sal/config.h>
 

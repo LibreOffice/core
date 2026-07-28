@@ -31,7 +31,7 @@
 #include <sal/log.hxx>
 #include <sfx2/viewsh.hxx>
 #include <utility>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 namespace chart::sidebar {
 

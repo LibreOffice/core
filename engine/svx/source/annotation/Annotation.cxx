@@ -15,7 +15,7 @@
 #include <sfx2/viewsh.hxx>
 #include <unotools/datetime.hxx>
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 using namespace css;
 

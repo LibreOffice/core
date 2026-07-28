@@ -13,7 +13,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/kit.hxx>
 #include <editeng/editeng.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/kit/helper.hxx>
 #include <vcl/transfer.hxx>

@@ -9,7 +9,7 @@
 
 #include <test/kitcallback.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/gen.hxx>
 #include <comphelper/kit.hxx>

@@ -49,7 +49,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <sfx2/viewsh.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>

@@ -25,7 +25,7 @@
 
 #include <comphelper/kit.hxx>
 #include <sfx2/viewsh.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 namespace chart::sidebar {
 

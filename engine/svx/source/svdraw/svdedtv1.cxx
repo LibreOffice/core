@@ -66,7 +66,7 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/sdprcitm.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/viewsh.hxx>
 #include <comphelper/kit.hxx>

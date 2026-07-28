@@ -14,7 +14,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/window.hxx>
 

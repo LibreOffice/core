@@ -17,7 +17,7 @@
 #include <ChartModel.hxx>
 #include <ViewElementListProvider.hxx>
 #include <PropertyHelper.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <chartview/DrawModelWrapper.hxx>
 #include <com/sun/star/chart2/XDiagram.hpp>

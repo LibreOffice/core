@@ -30,7 +30,7 @@
 #include <comphelper/kit.hxx>
 #include <tools/json_writer.hxx>
 #include <vcl/IDialogRenderable.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 using ::cpo::uno::Any;
 using ::cpo::uno::Sequence;

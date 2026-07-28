@@ -41,7 +41,7 @@
 #include <vcl/window.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/kit/helper.hxx>
