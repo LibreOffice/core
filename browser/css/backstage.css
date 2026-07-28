@@ -209,6 +209,7 @@
 	margin-inline-end: 20px;
 }
 
+#backstage-quit.backstage-sidebar-item,
 #backstage-options.backstage-sidebar-item,
 #backstage-about.backstage-sidebar-item {
 	justify-content: center;

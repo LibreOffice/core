@@ -46,6 +46,7 @@ class BackstageView extends window.L.Class {
 		options: () => this.executeOptions(),
 		about: () => this.executeAbout(),
 		sign: () => this.executeSign(),
+		quit: () => this.executeQuit(),
 	};
 
 	constructor(map: any) {
@@ -200,6 +201,13 @@ class BackstageView extends window.L.Class {
 				id: 'sidebar-horizontal-break',
 				label: '',
 				visible: !this.isStarterMode,
+			},
+			{
+				id: 'quit',
+				label: _('Quit'),
+				type: 'action',
+				actionType: 'quit',
+				visible: !this.isStarterMode && window.mode.isCODesktop(),
 			},
 			{
 				id: 'options',
@@ -1134,6 +1142,11 @@ class BackstageView extends window.L.Class {
 	private executeSign(): void {
 		this.sendUnoCommand('.uno:Signature');
 		this.hide();
+	}
+
+	private executeQuit(): void {
+		// .uno:Quit is answered by the desktop shell and never reaches the document.
+		this.sendUnoCommand('.uno:Quit');
 	}
 
 	private executeDocumentProperties(): void {
