@@ -86,7 +86,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <officecfg/Setup.hxx>
 #include <sfx2/app.hxx>

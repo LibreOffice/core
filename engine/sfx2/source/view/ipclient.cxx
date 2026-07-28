@@ -66,7 +66,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #define SFX_CLIENTACTIVATE_TIMEOUT 100
 

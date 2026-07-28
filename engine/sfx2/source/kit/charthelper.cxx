@@ -11,7 +11,7 @@
 
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

@@ -25,7 +25,7 @@
 #include <vcl/weld.hxx>
 #include <openuriexternally.hxx>
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <sfx2/viewsh.hxx>
 #include <sfx2/strings.hrc>

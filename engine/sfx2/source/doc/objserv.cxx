@@ -64,7 +64,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <tools/link.hxx>
 #include <svl/cryptosign.hxx>
 

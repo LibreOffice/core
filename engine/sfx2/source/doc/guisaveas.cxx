@@ -63,7 +63,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

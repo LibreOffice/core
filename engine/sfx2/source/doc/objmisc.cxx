@@ -52,7 +52,7 @@
 #include <com/sun/star/task/ErrorCodeRequest2.hpp>
 
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>

@@ -139,7 +139,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <vcl/threadex.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 //  namespaces
 

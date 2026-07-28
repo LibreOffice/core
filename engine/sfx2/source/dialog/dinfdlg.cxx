@@ -41,7 +41,7 @@
 #include <osl/file.hxx>
 #include <openuriexternally.hxx>
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <tools/json_writer.hxx>
 
 #include <memory>

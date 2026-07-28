@@ -52,7 +52,7 @@
 #include <comphelper/kit.hxx>
 #include <sal/log.hxx>
 #include <officecfg/Office/UI/Sidebar.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <com/sun/star/awt/XWindowPeer.hpp>
