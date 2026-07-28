@@ -183,6 +183,7 @@ public:
     void testContextMenuCalc();
     void testContextMenuWriter();
     void testNotificationCompression();
+    void testVectorDeltaPushCoalescing();
     void testTileInvalidationCompression();
     void testPartInInvalidation();
     void testBinaryCallback();
@@ -272,6 +273,7 @@ public:
     CPPUNIT_TEST(testContextMenuCalc);
     CPPUNIT_TEST(testContextMenuWriter);
     CPPUNIT_TEST(testNotificationCompression);
+    CPPUNIT_TEST(testVectorDeltaPushCoalescing);
     CPPUNIT_TEST(testTileInvalidationCompression);
     CPPUNIT_TEST(testPartInInvalidation);
     CPPUNIT_TEST(testBinaryCallback);
@@ -1808,6 +1810,38 @@ void DesktopKitTest::testNotificationCompression()
 
     CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_STATE_CHANGED), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:AssignLayout=1"), std::get<1>(notifs[i++]));
+}
+
+void DesktopKitTest::testVectorDeltaPushCoalescing()
+{
+    // Repeated part changes produce a single pushed vector
+    // primitives delta when the queue flushes, delivered after
+    // the queued messages.
+    LibLODocument_Impl* pDocument = loadDoc("blank_presentation.odp");
+    std::vector<std::tuple<int, std::string>> aNotificationList;
+    std::unique_ptr<CallbackFlushHandler> handler(
+        new CallbackFlushHandler(pDocument, callbackCompressionTest, &aNotificationList));
+    handler->setViewId(KitHelper::getCurrentView());
+    handler->setVectorRendering();
+
+    tools::Rectangle aRectangle1(Point(10, 10), Size(20, 10));
+    handler->viewInvalidateTilesCallback(&aRectangle1, 0, 0);
+    handler->viewVectorPartChanged(0);
+    handler->viewVectorPartChanged(0);
+
+    Scheduler::ProcessEventsToIdle();
+
+    size_t nDeltaCount = 0;
+    for (const auto& rNotification : aNotificationList)
+    {
+        if (std::get<0>(rNotification) == KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA)
+            ++nDeltaCount;
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(1), nDeltaCount);
+
+    CPPUNIT_ASSERT(!aNotificationList.empty());
+    CPPUNIT_ASSERT_EQUAL(int(KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA), std::get<0>(aNotificationList.back()));
+    CPPUNIT_ASSERT(std::get<1>(aNotificationList.back()).find("vectorprimitivesdelta") != std::string::npos);
 }
 
 void DesktopKitTest::testTileInvalidationCompression()
