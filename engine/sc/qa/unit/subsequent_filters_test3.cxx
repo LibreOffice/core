@@ -48,6 +48,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <test/commontesttools.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -1871,6 +1872,8 @@ SdrCaptionObj* checkCaption(ScDocument& rDoc, const ScAddress& rAddress, bool bI
     ScPostIt* pNote = rDoc.GetNote(rAddress);
 
     CPPUNIT_ASSERT(pNote);
+    // Import shows no note caption with the Kit, the client showing comments itself
+    bIsShown = bIsShown && !comphelper::COKit::isActive();
     CPPUNIT_ASSERT_EQUAL(pNote->IsCaptionShown(), bIsShown);
 
     if (!bIsShown)
