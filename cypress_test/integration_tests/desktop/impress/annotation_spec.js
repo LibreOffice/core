@@ -1,30 +1,65 @@
-/* global describe it cy require beforeEach expect Cypress */
+/* global describe it cy require before beforeEach expect Cypress */
 
 var desktopHelper = require('../../common/desktop_helper');
 var helper = require('../../common/helper');
 var { addSlide, changeSlide } = require('../../common/impress_helper');
 
-describe(['tagdesktop'], 'Annotation Tests', function() {
+describe(['tagdesktop'], 'Annotation Tests', { testIsolation: false }, function() {
+
+	// The wide viewport gives the comments horizontal room, so they stay on screen
+	// instead of falling off the right side where buttons need scrolling to reach.
+	desktopHelper.shareDocumentAcrossTests('impress/comment_switching.odp', {
+		notebookbar: true,
+		viewport: [1500, 600],
+	});
+
+	// The zoom is a view setting, so undo leaves it alone and one call covers every
+	// test.
+	before(function() {
+		desktopHelper.selectZoomLevel('50', false);
+	});
 
 	beforeEach(function() {
-		// Give more horizontal room so that comments do not fall off the right
-		// side of the screen, causing scrolling or hidden buttons
-		cy.viewport(1500, 600);
-		helper.setupAndLoadDocument('impress/comment_switching.odp');
-		desktopHelper.switchUIToNotebookbar();
-
 		if (Cypress.env('INTEGRATION') === 'nextcloud') {
 			desktopHelper.hideSidebar();
 		}
 
-		desktopHelper.getNbIcon('ModifyPage').click();
-		desktopHelper.selectZoomLevel('50', false);
+		hideModifyPageDeck();
 	});
 
-	it('Insert', function() {
+	// The Modify Page icon toggles the sidebar, so it is clicked only while the dock
+	// is on screen.
+	function hideModifyPageDeck() {
+		cy.cGet('body').then(function ($body) {
+			if ($body.find('#sidebar-dock-wrapper:visible').length === 0)
+				return;
+
+			desktopHelper.getNbIcon('ModifyPage').click();
+		});
+
+		cy.cGet('#sidebar-dock-wrapper').should('not.be.visible');
+	}
+
+	// One comment through its whole life: it shows up with the text it was given, the
+	// Modify entry changes that text, and the Remove entry takes the comment away.
+	// Inserting a comment is not an undo step in Impress, so a test that leaves one
+	// behind hands it to the next test; each test here ends with none on the slide.
+	it('A comment can be inserted, modified and removed', function() {
 		desktopHelper.insertComment();
 		cy.cGet('.annotation-marker').should('be.visible');
 		cy.cGet('.cool-annotation-content > div').should('contain','some text');
+		cy.cGet('[id^=annotation-content-area-]').should('contain','some text0');
+
+		cy.cGet('.cool-annotation-content-wrapper:visible .cool-annotation-menu').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
+		cy.cGet('[id^=annotation-modify-textarea-]').type(', some other text');
+		cy.cGet('[id^=annotation-save-]').click();
+		cy.cGet('[id^=annotation-content-area-]').should('contain','some text0, some other text');
+		cy.cGet('.annotation-marker').should('be.visible');
+
+		cy.cGet('.cool-annotation-content-wrapper:visible .cool-annotation-menu').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Remove').click();
+		cy.cGet('.annotation-marker').should('not.exist');
 	});
 
 	it('Insert into the second slide.', function() {
@@ -33,27 +68,9 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		desktopHelper.insertComment();
 		cy.cGet('.annotation-marker').should('be.visible');
 		cy.cGet('.cool-annotation-content > div').should('contain','some text');
-	});
 
-	it('Modify', function() {
-		desktopHelper.insertComment();
-		cy.cGet('.annotation-marker').should('be.visible');
-		cy.cGet('[id^=annotation-content-area-]').should('contain','some text0');
-		cy.cGet('.cool-annotation-content-wrapper:visible .cool-annotation-menu').click();
-		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
-		cy.cGet('[id^=annotation-modify-textarea-]').type(', some other text');
-		cy.cGet('[id^=annotation-save-]').click();
-		cy.cGet('[id^=annotation-content-area-]').should('contain','some text0, some other text');
-		cy.cGet('.annotation-marker').should('be.visible');
-	});
-
-	it('Remove',function() {
-		desktopHelper.insertComment();
-		cy.cGet('.annotation-marker').should('be.visible');
-		cy.cGet('.cool-annotation-content > div').should('contain','some text');
-		cy.cGet('.cool-annotation-content-wrapper:visible .cool-annotation-menu').click();
-		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Remove').click();
-		cy.cGet('.annotation-marker').should('not.exist');
+		// The added slide goes away with the undo that follows, and its comment with
+		// it, so slide 1 is left as it was.
 	});
 
 	// Skipping reply tests in Impress since reply functionality is temporarily disabled.
@@ -68,8 +85,12 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('.cool-annotation-content > div').should('include.text','some reply text');
 	});
 
-	it('Click on comment emits Clicked_Comment postMessage', function() {
+	// A click on a comment is reported to the integrator, and the menu of that same
+	// comment offers no Reply while replies are turned off in Impress.
+	it('Clicking a comment reports it, and its menu offers no reply', function() {
 		desktopHelper.insertComment();
+		cy.cGet('.annotation-marker').should('exist');
+		cy.cGet('.cool-annotation-content > div').should('contain','some text');
 
 		// This will record usage of window.postMessage (called from
 		// _postMessage in browser/src/map/handler/Map.WOPI.js
@@ -89,8 +110,18 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 			});
 			expect(found, "Clicked_Comment was not posted").to.be.true;
 		});
+
+		cy.cGet('.cool-annotation-content-wrapper:visible .cool-annotation-menu').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Reply').should('not.exist');
+
+		// The menu that was just checked also removes the comment, which leaves the
+		// slide without one for the test that follows.
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Remove').click();
+		cy.cGet('.annotation-marker').should('not.exist');
 	});
 
+	// The comment this leaves behind is never saved, so it belongs at the end of the
+	// file, after the tests that need a slide without comments.
 	it('Tab Navigation', function() {
 		desktopHelper.insertComment(undefined, false);
 
@@ -109,16 +140,6 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.realPress('Tab');
 		cy.cGet('.annotation-button-autosaved').should('be.visible');
 		cy.cGet('.annotation-button-delete').should('be.visible');
-	});
-
-	// This should be removed or updated once Reply is added.
-	it('Reply option should not be visible', function() {
-		desktopHelper.insertComment();
-		cy.cGet('.annotation-marker').should('exist');
-		cy.cGet('.cool-annotation-content > div').should('contain', 'some text');
-		cy.cGet('.cool-annotation-content-wrapper:visible .cool-annotation-menu').click();
-
-		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Reply').should('not.exist');
 	});
 });
 

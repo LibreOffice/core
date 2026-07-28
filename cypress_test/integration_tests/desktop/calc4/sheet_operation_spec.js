@@ -1,13 +1,12 @@
-/* global describe it cy beforeEach require Cypress */
+/* global describe it cy require Cypress */
 
 var helper = require('../../common/helper');
 var calcHelper = require('../../common/calc_helper');
+var desktopHelper = require('../../common/desktop_helper');
 
-describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet Operations.', function () {
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet Operations.', { testIsolation: false }, function () {
 
-	beforeEach(function () {
-		helper.setupAndLoadDocument('calc/sheet_operation.ods');
-	});
+	desktopHelper.shareDocumentAcrossTests('calc/sheet_operation.ods');
 
 	// Wait one Chrome repaint cycle (two requestAnimationFrame) so a focus
 	// change is applied before we sample it or send the next key - no

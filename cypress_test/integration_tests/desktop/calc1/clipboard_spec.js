@@ -4,15 +4,24 @@ var helper = require('../../common/helper');
 var calcHelper = require('../../common/calc_helper');
 var desktopHelper = require('../../common/desktop_helper');
 
-describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc clipboard tests.', function() {
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc clipboard tests.', { testIsolation: false }, function() {
+
+	desktopHelper.shareDocumentAcrossTests('calc/clipboard.ods', {
+		viewport: [1920, 1080],
+	});
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/clipboard.ods');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+
+			// A test that reads the clipboard installs the one it wants, so every
+			// test starts with the real one in place.
+			win.app.map._clip._dummyClipboard = undefined;
+		});
 
 		if (Cypress.env('INTEGRATION') === 'nextcloud') {
 			desktopHelper.showStatusBarIfHidden();
 		}
-		cy.viewport(1920,1080);
 		desktopHelper.shouldHaveZoomLevel('100');
 
 		// make it more complex and prevent form initial being A1
@@ -21,10 +30,6 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc clipboard tests.', fu
 		cy.cGet('#map').focus();
 		calcHelper.clickOnFirstCell();
 		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'A1');
-
-		cy.getFrameWindow().then((win) => {
-			this.win = win;
-		});
 	});
 
 	function setDummyClipboard(type, content, image = false, fail = false, imageHtml = undefined) {

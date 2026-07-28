@@ -1,13 +1,18 @@
-/* global describe it cy beforeEach require Cypress */
+/* global describe it cy before beforeEach require Cypress */
 
 var helper = require('../../common/helper');
 var impressHelper = require('../../common/impress_helper');
 var desktopHelper = require('../../common/desktop_helper');
 
-describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Top toolbar tests.', function() {
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Top toolbar tests.', { testIsolation: false }, function() {
 
-	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/top_toolbar.odp');
+	// No viewport is set here: this spec drives the compact toolbar, whose items move
+	// into the overflow when the window size changes.
+	desktopHelper.shareDocumentAcrossTests('impress/top_toolbar.odp');
+
+	// Both of these hold for the whole file. Hiding the sidebar in particular is a
+	// toggle that starts from "it is showing", so it happens once.
+	before(function() {
 		desktopHelper.switchUIToCompact();
 
 		if (Cypress.env('INTEGRATION') === 'nextcloud') {
@@ -15,11 +20,18 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Top toolbar tests.', funct
 		} else {
 			desktopHelper.hideSidebarImpress();
 		}
+	});
 
+	beforeEach(function() {
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 			helper.processToIdle(win);
 		});
+
+		// The single click in the middle means "select the shape", which needs a slide
+		// with nothing selected: from a shape that is already selected the same click
+		// starts editing its text and no rotation handle appears.
+		impressHelper.removeShapeSelection();
 
 		impressHelper.selectTextShapeInTheCenter();
 	});

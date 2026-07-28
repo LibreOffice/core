@@ -1,15 +1,28 @@
-/* global describe it cy beforeEach expect require */
+/* global describe it cy before beforeEach expect require */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 
-describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', function() {
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', { testIsolation: false }, function() {
+
+	desktopHelper.shareDocumentAcrossTests('calc/scrolling.ods');
+
+	// Switching to the compact toolbar holds for the whole file.
+	before(function() {
+		desktopHelper.switchUIToCompact();
+	});
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('calc/scrolling.ods');
-		desktopHelper.switchUIToCompact();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
+		});
+
+		// The scrollbar positions these tests check are the positions of a sheet shown
+		// from its top left corner with A2 as the current cell, which is where the
+		// document opens.
+		helper.typeIntoInputField(helper.addressInputSelector, 'A2');
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
 		});
 	});
 
@@ -21,15 +34,6 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		desktopHelper.assertScrollbarPosition('vertical', 50, 105);
 		desktopHelper.pressKey(3,'downArrow');
 		desktopHelper.assertScrollbarPosition('vertical', 25, 40);
-	});
-
-	it('Scrolling to left/right', function() {
-		desktopHelper.selectZoomLevel('200');
-		helper.typeIntoDocument('{home}');
-		desktopHelper.assertScrollbarPosition('horizontal', 48, 60);
-		helper.typeIntoDocument('{end}');
-		helper.processToIdle(this.win);
-		desktopHelper.assertScrollbarPosition('horizontal', 180, 320);
 	});
 
 	it('Scroll while selecting vertically', function() {
@@ -244,6 +248,26 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		cy.cGet(helper.addressInputSelector).invoke('val').should((val) => {
 			expect(endRow(val)).to.be.greaterThan(rowBeforeScroll + 3);
 		});
+	});
+
+	// The scrollbar positions the tests above check are pixel positions of the thumb,
+	// which the thumb takes from how much of the sheet can be scrolled. Jumping to the
+	// last used column here changes that for the rest of the file, so this test sits
+	// below the others. It stays above the frozen column test, whose freeze the undo
+	// does not lift.
+	it('Scrolling to left/right', function() {
+		desktopHelper.selectZoomLevel('200');
+		helper.typeIntoDocument('{home}');
+		desktopHelper.assertScrollbarPosition('horizontal', 48, 60);
+		helper.typeIntoDocument('{end}');
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+		desktopHelper.assertScrollbarPosition('horizontal', 180, 320);
+
+		// The zoom belongs to the view and the undo does not touch it, so it goes back
+		// to 100 percent here for the test below.
+		desktopHelper.resetZoomLevel();
 	});
 
 	it('Horizontal scroll bar spans full width with a frozen column', function() {

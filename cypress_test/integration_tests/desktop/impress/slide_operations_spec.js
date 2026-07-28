@@ -21,15 +21,24 @@ function assertSlideNumberCounterWiring(items) {
 	}
 }
 
-describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', function() {
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', { testIsolation: false }, function() {
+
+	desktopHelper.shareDocumentAcrossTests('impress/slide_operations.odp', {
+		notebookbar: true,
+	});
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/slide_operations.odp');
-		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		});
 	});
+
+	// A frame id carries the part number the slide was created with, and that number
+	// keeps climbing for as long as the document stays open. What the tests below mean
+	// is where a slide sits in the sorter, so they ask for it by position.
+	function slideFrame(position) {
+		return cy.cGet('#slide-sorter .preview-frame:not(#first-drop-site)').eq(position);
+	}
 
 	it('Add slides', function() {
 		cy.cGet('#presentation-toolbar #insertpage').click();
@@ -78,9 +87,15 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', functio
 			assertSlideNumberCounterWiring(items);
 		});
 
+		// Remember the slide sitting second, which the delete below moves to the front.
+		var secondFrameId;
+		cy.cGet('#slide-sorter .preview-frame:not(#first-drop-site)').then(function(frames) {
+			secondFrameId = frames[1].id;
+		});
+
 		// Delete the first slide: its number span must go with its frame,
 		// not linger and throw off every later slide's count.
-		cy.cGet('#preview-frame-part-0').click();
+		slideFrame(0).click();
 
 		cy.cGet('#presentation-toolbar #deletepage').click();
 		cy.cGet('#modal-dialog-deleteslide-modal .button-primary').click();
@@ -95,7 +110,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', functio
 		// The slide that used to be second is now first in DOM order, so
 		// the counter will paint it as slide 1.
 		cy.cGet('#slide-sorter .preview-frame:not(#first-drop-site)').should(function(frames) {
-			expect(frames[0].id).to.equal('preview-frame-part-1');
+			expect(frames[0].id).to.equal(secondFrameId);
 		});
 	});
 
@@ -122,7 +137,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', functio
 		// its alt text and tooltip must be relabelled to match, unlike the
 		// visible number, they are plain attributes and do not update on
 		// their own just because the frame moved in the DOM.
-		cy.cGet('#preview-frame-part-0').click();
+		slideFrame(0).click();
 
 		cy.cGet('#presentation-toolbar #deletepage').click();
 		cy.cGet('#modal-dialog-deleteslide-modal .button-primary').click();
@@ -137,7 +152,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', functio
 		// Insert a slide after the first one: the new last slide must pick
 		// up label 2 even though it was created as label 1 in a different
 		// position earlier in the test.
-		cy.cGet('#preview-frame-part-1').click();
+		slideFrame(1).click();
 		cy.cGet('#presentation-toolbar #insertpage').click();
 
 		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 3);
@@ -153,8 +168,8 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', functio
 		helper.processToIdle(this.win);
 
 		// Set the focus to slide sorter.
-		cy.cGet('#preview-frame-part-0').click();
-		cy.cGet('#preview-frame-part-1').click();
+		slideFrame(0).click();
+		slideFrame(1).click();
 
 		// Slide sorter should keep focus while user clicks on different slides.
 		cy.then(() => {
@@ -172,19 +187,19 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', functio
 		cy.cGet('#insertpage-button').click();
 		helper.processToIdle(this.win);
 
-		cy.cGet('#preview-frame-part-0').click();
+		slideFrame(0).click();
 
 		cy.then(() => {
 			expect(this.win.app.map._docLayer._preview.partsFocused).to.equal(true);
 		});
 
-		cy.cGet('#preview-frame-part-0').trigger('keydown', { key: 'Alt', code: 'AltLeft', which: 18 });
+		slideFrame(0).trigger('keydown', { key: 'Alt', code: 'AltLeft', which: 18 });
 
 		cy.then(() => {
 			expect(this.win.app.map._docLayer._preview.partsFocused).to.equal(true);
 		});
 
-		cy.cGet('#preview-frame-part-0').trigger('keydown', { key: 'Meta', code: 'MetaLeft', which: 91 });
+		slideFrame(0).trigger('keydown', { key: 'Meta', code: 'MetaLeft', which: 91 });
 
 		cy.then(() => {
 			expect(this.win.app.map._docLayer._preview.partsFocused).to.equal(true);
@@ -199,7 +214,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', functio
 		impressHelper.assertSlidePreviewCountAfterIdle(win, 2);
 
 		// Select the first (non-last) slide in the sorter.
-		cy.cGet('#preview-frame-part-0').click();
+		slideFrame(0).click();
 		cy.then(() => {
 			expect(win.app.map._docLayer._preview.partsFocused).to.equal(true);
 		});

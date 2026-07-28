@@ -4,14 +4,14 @@ var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 var impressHelper = require('../../common/impress_helper');
 
-describe(['tagdesktop'], 'Table operations', function() {
+describe(['tagdesktop'], 'Table operations', { testIsolation: false }, function() {
+
+	desktopHelper.shareDocumentAcrossTests('impress/table_operation.odp', {
+		notebookbar: true,
+		viewport: [1920, 1080],
+	});
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('impress/table_operation.odp');
-		cy.viewport(1920,1080);
-
-		desktopHelper.switchUIToNotebookbar();
-
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;
 		});
@@ -41,6 +41,11 @@ describe(['tagdesktop'], 'Table operations', function() {
 	}
 
 	function selectFullTable(win) {
+		// The two clicks below mean "select the table, then enter it", so they need a
+		// slide with nothing selected: from a table that is already selected they land
+		// one level deeper and no cell cursor appears.
+		impressHelper.removeShapeSelection();
+
 		impressHelper.selectTableInTheCenter(win);
 
 		cy.cGet('.table-row-resize-marker')
