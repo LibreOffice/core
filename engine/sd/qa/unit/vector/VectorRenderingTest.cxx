@@ -311,6 +311,27 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnMasterChange)
     CPPUNIT_ASSERT_EQUAL(nBefore + 1, nAfter);
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnBackgroundChange)
+{
+    // Changing the slide's background fill must raise the slide's
+    // reported content version.
+    createBlankDoc();
+
+    const sal_Int64 nBefore
+        = getVectorPrimitives(u"testBackgroundVersion").getInt("/version").value_or(-1);
+
+    // Set a solid background fill on the slide's page properties, the
+    // same change the page dialog applies.
+    SdrPageProperties& rPageProperties = page(1)->getSdrPageProperties();
+    rPageProperties.PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    rPageProperties.PutItem(XFillColorItem(OUString(), Color(0x4472c4)));
+
+    const sal_Int64 nAfter
+        = getVectorPrimitives(u"testBackgroundVersion").getInt("/version").value_or(-1);
+
+    CPPUNIT_ASSERT_GREATER(nBefore, nAfter);
+}
+
 // A delta since a version carries full content only for objects that
 // changed after it, while the order array still lists every object.
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesOnlyChangedObjects)
@@ -388,6 +409,32 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesChangedMasterPage)
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
     // The slide object itself is unchanged, so no object content, but
     // the changed master page comes along.
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aDelta.getSize("/objects").value_or(SIZE_MAX));
+    assertJsonPathExists(aDelta, "/masterPage");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesChangedBackground)
+{
+    // The slide background is serialized with the master page content, so
+    // a delta whose baseline predates a background change must carry that
+    // content anew.
+
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    page(1)->GetObj(0)->BroadcastObjectChange();
+
+    auto aFull = getVectorPrimitives(u"testBackgroundDeltaFull");
+    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
+
+    // Change the slide background after that version.
+    SdrPageProperties& rPageProperties = page(1)->getSdrPageProperties();
+    rPageProperties.PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    rPageProperties.PutItem(XFillColorItem(OUString(), Color(0xc00000)));
+
+    auto aDelta = getVectorPrimitives(u"testBackgroundDelta", nVersion);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    // The slide object itself is unchanged, so no object content, but
+    // the master page content with the new background comes along.
     CPPUNIT_ASSERT_EQUAL(size_t(0), aDelta.getSize("/objects").value_or(SIZE_MAX));
     assertJsonPathExists(aDelta, "/masterPage");
 }

@@ -2149,6 +2149,32 @@ bool SdXImpressDocument::isVectorObjectChangedSince(sal_Int32 nPart, sal_uInt64 
     return aObjectIterator != rObjectVersions.end() && aObjectIterator->second > nSince;
 }
 
+namespace
+{
+/// A master change shows on every slide that uses the master, so raise
+/// those slides' versions and remember the master change. A master's
+/// page number is a position in the master-page list, so it names no
+/// slide.
+void bumpMasterChangeForUsers(
+    SdDrawDocument& rDocument,
+    std::unordered_map<sal_Int32, SdXImpressDocument::VectorPartState>& rVectorParts,
+    const SdPage* pMasterPage)
+{
+    const sal_uInt16 nPageCount = rDocument.GetSdPageCount(PageKind::Standard);
+    for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
+    {
+        const SdPage* pStandardPage = rDocument.GetSdPage(nPage, PageKind::Standard);
+        if (pStandardPage && pStandardPage->TRG_HasMasterPage()
+            && &pStandardPage->TRG_GetMasterPage() == pMasterPage)
+        {
+            SdXImpressDocument::VectorPartState& rState = rVectorParts[nPage];
+            ++rState.mnVersion;
+            rState.mnMasterChangeVersion = rState.mnVersion;
+        }
+    }
+}
+}
+
 bool SdXImpressDocument::isVectorMasterChangedSince(sal_Int32 nPart, sal_uInt64 nSince) const
 {
     auto aIterator = maVectorParts.find(nPart);
@@ -2184,26 +2210,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         if (pPage->IsMasterPage())
                         {
-                            // An object on a slide master is drawn on every
-                            // slide that uses that master, so count up the
-                            // version of each of those slides and remember
-                            // it as a master change. The page number of a
-                            // master is its position in the separate
-                            // master-page list, so it does not name a slide.
-                            const sal_uInt16 nPageCount
-                                = mpDoc->GetSdPageCount(PageKind::Standard);
-                            for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
-                            {
-                                const SdPage* pStandardPage
-                                    = mpDoc->GetSdPage(nPage, PageKind::Standard);
-                                if (pStandardPage && pStandardPage->TRG_HasMasterPage()
-                                    && &pStandardPage->TRG_GetMasterPage() == pPage)
-                                {
-                                    VectorPartState& rState = maVectorParts[nPage];
-                                    ++rState.mnVersion;
-                                    rState.mnMasterChangeVersion = rState.mnVersion;
-                                }
-                            }
+                            bumpMasterChangeForUsers(*mpDoc, maVectorParts, pPage);
                         }
                         else if (pPage->GetPageNum() > 0)
                         {
@@ -2229,6 +2236,28 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             else
                                 rState.maObjectChangeVersions[nObjectId] = rState.mnVersion;
                         }
+                    }
+                }
+            }
+            else if (eKind == SdrHintKind::PageOrderChange)
+            {
+                // This hint also announces a change to the page's own
+                // properties, such as its background fill. The background
+                // travels with the master page content, so it is
+                // remembered as a master change.
+                const SdPage* pPage = dynamic_cast<const SdPage*>(pSdrHint->GetPage());
+                if (pPage && pPage->GetPageKind() == PageKind::Standard)
+                {
+                    if (pPage->IsMasterPage())
+                    {
+                        bumpMasterChangeForUsers(*mpDoc, maVectorParts, pPage);
+                    }
+                    else if (pPage->GetPageNum() > 0)
+                    {
+                        const sal_Int32 nPart = (pPage->GetPageNum() - 1) / 2;
+                        VectorPartState& rState = maVectorParts[nPart];
+                        ++rState.mnVersion;
+                        rState.mnMasterChangeVersion = rState.mnVersion;
                     }
                 }
             }

@@ -114,14 +114,6 @@ public:
     /// than nSince.
     bool isVectorMasterChangedSince(sal_Int32 nPart, sal_uInt64 nSince) const;
 
-private:
-    ::sd::DrawDocShell* mpDocShell;
-    SdDrawDocument* mpDoc;
-    bool mbDisposed;
-
-    std::unique_ptr<sd::SlideshowLayerRenderer> mpSlideshowLayerRenderer;
-    std::unordered_map<sal_Int64, Graphic> maBitmapCache;
-
     /// Content state of one vector-rendering part: its current version,
     /// the version at which its master page last changed, and, per object
     /// unique id, the version at which that object last changed.
@@ -131,6 +123,15 @@ private:
         sal_uInt64 mnMasterChangeVersion = 0;
         std::unordered_map<sal_uInt64, sal_uInt64> maObjectChangeVersions;
     };
+
+private:
+    ::sd::DrawDocShell* mpDocShell;
+    SdDrawDocument* mpDoc;
+    bool mbDisposed;
+
+    std::unique_ptr<sd::SlideshowLayerRenderer> mpSlideshowLayerRenderer;
+    std::unordered_map<sal_Int64, Graphic> maBitmapCache;
+
     /// Vector content state, keyed by 0-based slide index.
     std::unordered_map<sal_Int32, VectorPartState> maVectorParts;
 
