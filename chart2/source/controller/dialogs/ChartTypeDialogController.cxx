@@ -609,6 +609,50 @@ void HistogramChartDialogController::adjustParameterToSubType(ChartTypeParameter
 }
 
 //=========
+// FunnelChartDialogController
+//=========
+
+FunnelChartDialogController::FunnelChartDialogController()
+{
+    bSupports3D = false;
+}
+
+FunnelChartDialogController::~FunnelChartDialogController()
+{
+}
+
+OUString FunnelChartDialogController::getName()
+{
+    return SchResId(STR_TYPE_FUNNEL);
+}
+
+OUString FunnelChartDialogController::getImage()
+{
+    return BMP_TYPE_FUNNEL;
+}
+
+const tTemplateServiceChartTypeParameterMap& FunnelChartDialogController::getTemplateMap() const
+{
+    static const tTemplateServiceChartTypeParameterMap s_aTemplateMap{
+        {"com.sun.star.chart2.template.Funnel" , ChartTypeParameter(1, false, false, GlobalStackMode_NONE)}
+    };
+    return s_aTemplateMap;
+}
+
+std::vector<ChartTypeEntry>
+FunnelChartDialogController::getSubTypes(const ChartTypeParameter& /*rParameter*/)
+{
+    return { { Image(StockImage::Yes, BMP_FUNNEL), SchResId(STR_FUNNEL) } };
+}
+
+void FunnelChartDialogController::adjustParameterToSubType(ChartTypeParameter& rParameter)
+{
+    rParameter.b3DLook = false;
+    rParameter.eStackMode = GlobalStackMode_NONE;
+    rParameter.bXAxisWithValues = false;
+}
+
+//=========
 // PieChartDialogController
 //=========
 
