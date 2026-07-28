@@ -725,6 +725,22 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			that._selectSection(sectionIndex);
 		}, this);
 
+		// The second press of a double-click on the header (but not on the toggle) opens
+		// the rename dialog.
+		if (this._map.isEditMode()) {
+			window.L.DomEvent.on(header, 'mousedown', function (e) {
+				if (e.detail !== 2 || e.button !== 0 || toggleBtn.contains(e.target))
+					return;
+				window.L.DomEvent.stopPropagation(e);
+				window.L.DomEvent.preventDefault(e);
+
+				if (app.map.isReadOnlyMode())
+					return;
+
+				that._renameSection(section, sectionIndex);
+			}, this);
+		}
+
 		// Section context menu
 		if (this._map.isEditMode()) {
 			window.L.DomEvent.on(header, 'contextmenu', function(e) {
