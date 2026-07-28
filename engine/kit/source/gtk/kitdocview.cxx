@@ -99,7 +99,7 @@ struct KitDocumentViewPrivateImpl
     /// View or edit mode.
     bool m_bEdit;
     /// COKit Features
-    guint64 m_nKitFeatures;
+    COKitOptionalFeatures m_nKitFeatures;
     /// Number of parts in currently loaded document
     gint m_nParts;
     /// Position and size of the visible cursor.
@@ -215,7 +215,7 @@ struct KitDocumentViewPrivateImpl
         m_nDocumentWidthTwips(0),
         m_nDocumentHeightTwips(0),
         m_bEdit(false),
-        m_nKitFeatures(0),
+        m_nKitFeatures(COKitOptionalFeatures::NONE),
         m_nParts(0),
         m_aVisibleCursor({0, 0, 0, 0}),
         m_bCursorOverlayVisible(false),
@@ -2634,8 +2634,12 @@ static void kit_doc_view_set_property (GObject* object, guint propId, const GVal
 {
     KitDocumentView* pDocView = KIT_DOC_VIEW (object);
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
-    bool bDocPasswordEnabled = priv->m_nKitFeatures & KIT_FEATURE_DOCUMENT_PASSWORD;
-    bool bDocPasswordToModifyEnabled = priv->m_nKitFeatures & KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
+    bool bDocPasswordEnabled
+        = (priv->m_nKitFeatures & COKitOptionalFeatures::DOCUMENT_PASSWORD)
+          != COKitOptionalFeatures::NONE;
+    bool bDocPasswordToModifyEnabled
+        = (priv->m_nKitFeatures & COKitOptionalFeatures::DOCUMENT_PASSWORD_TO_MODIFY)
+          != COKitOptionalFeatures::NONE;
 
     switch (propId)
     {
@@ -2674,14 +2678,14 @@ static void kit_doc_view_set_property (GObject* object, guint propId, const GVal
     case PROP_DOC_PASSWORD:
         if (bool(g_value_get_boolean (value)) != bDocPasswordEnabled)
         {
-            priv->m_nKitFeatures = priv->m_nKitFeatures ^ KIT_FEATURE_DOCUMENT_PASSWORD;
+            priv->m_nKitFeatures = priv->m_nKitFeatures ^ COKitOptionalFeatures::DOCUMENT_PASSWORD;
             priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nKitFeatures);
         }
         break;
     case PROP_DOC_PASSWORD_TO_MODIFY:
         if ( bool(g_value_get_boolean (value)) != bDocPasswordToModifyEnabled)
         {
-            priv->m_nKitFeatures = priv->m_nKitFeatures ^ KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
+            priv->m_nKitFeatures = priv->m_nKitFeatures ^ COKitOptionalFeatures::DOCUMENT_PASSWORD_TO_MODIFY;
             priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nKitFeatures);
         }
         break;
@@ -2743,10 +2747,15 @@ static void kit_doc_view_get_property (GObject* object, guint propId, GValue *va
         g_value_set_boolean (value, priv->m_bCanZoomOut);
         break;
     case PROP_DOC_PASSWORD:
-        g_value_set_boolean (value, (priv->m_nKitFeatures & KIT_FEATURE_DOCUMENT_PASSWORD) != 0);
+        g_value_set_boolean (value,
+                             (priv->m_nKitFeatures & COKitOptionalFeatures::DOCUMENT_PASSWORD)
+                                 != COKitOptionalFeatures::NONE);
         break;
     case PROP_DOC_PASSWORD_TO_MODIFY:
-        g_value_set_boolean (value, (priv->m_nKitFeatures & KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY) != 0);
+        g_value_set_boolean (value,
+                             (priv->m_nKitFeatures
+                              & COKitOptionalFeatures::DOCUMENT_PASSWORD_TO_MODIFY)
+                                 != COKitOptionalFeatures::NONE);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, propId, pspec);
@@ -2907,8 +2916,8 @@ static gboolean kit_doc_view_initable_init (GInitable *initable, GCancellable* /
                      priv->m_aLOPath.c_str());
         return FALSE;
     }
-    priv->m_nKitFeatures |= KIT_FEATURE_PART_IN_INVALIDATION_CALLBACK;
-    priv->m_nKitFeatures |= KIT_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK;
+    priv->m_nKitFeatures |= COKitOptionalFeatures::PART_IN_INVALIDATION_CALLBACK;
+    priv->m_nKitFeatures |= COKitOptionalFeatures::VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK;
     priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nKitFeatures);
 
     if (priv->m_bUnipoll)

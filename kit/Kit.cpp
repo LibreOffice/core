@@ -2176,11 +2176,12 @@ std::shared_ptr<kit::Document> Document::load(const std::shared_ptr<ChildSession
 
         _loKit->registerCallback(GlobalCallback, this);
 
-        const int flags = KIT_FEATURE_DOCUMENT_PASSWORD
-            | KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
-            | KIT_FEATURE_PART_IN_INVALIDATION_CALLBACK
-            | KIT_FEATURE_RANGE_HEADERS
-            | KIT_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK;
+        const COKitOptionalFeatures flags
+            = COKitOptionalFeatures::DOCUMENT_PASSWORD
+            | COKitOptionalFeatures::DOCUMENT_PASSWORD_TO_MODIFY
+            | COKitOptionalFeatures::PART_IN_INVALIDATION_CALLBACK
+            | COKitOptionalFeatures::RANGE_HEADERS
+            | COKitOptionalFeatures::VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK;
         _loKit->setOptionalFeatures(flags);
 
         std::string loadUri = uri;

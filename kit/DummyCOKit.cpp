@@ -205,7 +205,7 @@ static void                    lo_registerCallback (COKit* self,
                                                     COKitCallback callback,
                                                     void* data);
 static char* lo_getFilterTypes(COKit* self);
-static void lo_setOptionalFeatures(COKit* self, unsigned long long features);
+static void lo_setOptionalFeatures(COKit* self, COKitOptionalFeatures features);
 static void                    lo_setDocumentPassword(COKit* self,
                                                        const char* url,
                                                        const char* password);
@@ -591,7 +591,7 @@ static char* lo_getFilterTypes(COKit* self)
     return nullptr;
 }
 
-static void lo_setOptionalFeatures(COKit* self, unsigned long long const features)
+static void lo_setOptionalFeatures(COKit* self, COKitOptionalFeatures const features)
 {
     (void) self;
     (void) features;

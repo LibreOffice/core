@@ -308,7 +308,7 @@ namespace desktop {
         oslThread maThread;
         COKitCallback mpCallback;
         void *mpCallbackData;
-        int64_t mOptionalFeatures;
+        COKitOptionalFeatures mOptionalFeatures;
         std::map<OString, rtl::Reference<KitInteractionHandler>> mInteractionMap;
 
         LibCO_Impl();
@@ -316,7 +316,7 @@ namespace desktop {
 
         bool hasOptionalFeature(COKitOptionalFeatures const feature)
         {
-            return (mOptionalFeatures & feature) != 0;
+            return (mOptionalFeatures & feature) != COKitOptionalFeatures::NONE;
         }
 
         void dumpState(rtl::OStringBuffer &aState);

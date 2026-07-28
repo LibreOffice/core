@@ -361,8 +361,9 @@ bool KitInteractionHandler::handlePasswordRequest(const cpo::uno::Sequence<uno::
         return false;
 
     if (m_pKit->mpCallback &&
-        m_pKit->hasOptionalFeature(bIsRequestPasswordToModify ? KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
-                                                                : KIT_FEATURE_DOCUMENT_PASSWORD))
+        m_pKit->hasOptionalFeature(bIsRequestPasswordToModify
+                                       ? COKitOptionalFeatures::DOCUMENT_PASSWORD_TO_MODIFY
+                                       : COKitOptionalFeatures::DOCUMENT_PASSWORD))
     {
         // release SolarMutex, so the callback handler, which may run in another thread,
         // can acquire it in 'lo_setDocumentPassword'

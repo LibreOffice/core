@@ -160,9 +160,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_setOption
 {
     COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
 
-    unsigned long long pOptions = (unsigned long long)options;
-
-    pCOKit->pClass->setOptionalFeatures(pCOKit, pOptions);
+    pCOKit->pClass->setOptionalFeatures(pCOKit, static_cast<COKitOptionalFeatures>(options));
 }
 
 /** Implementation of org.libreoffice.kit.Office.bindMessageCallback method */

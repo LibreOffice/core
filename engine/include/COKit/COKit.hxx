@@ -130,15 +130,17 @@ enum class COKitSelectionType
  *
  *  @see kit::Office::setOptionalFeatures().
  */
-typedef enum
+enum class COKitOptionalFeatures : unsigned long long
 {
+    NONE = 0,
+
     /**
      * Handle KIT_CALLBACK_DOCUMENT_PASSWORD by prompting the user
      * for a password.
      *
      * @see kit::Office::setDocumentPassword().
      */
-    KIT_FEATURE_DOCUMENT_PASSWORD = (1ULL << 0),
+    DOCUMENT_PASSWORD = (1ULL << 0),
 
     /**
      * Handle KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY by prompting the user
@@ -146,26 +148,50 @@ typedef enum
      *
      * @see kit::Office::setDocumentPassword().
      */
-    KIT_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY = (1ULL << 1),
+    DOCUMENT_PASSWORD_TO_MODIFY = (1ULL << 1),
 
     /**
      * Request to have the part number as an 5th value in the
      * KIT_CALLBACK_INVALIDATE_TILES payload.
      */
-    KIT_FEATURE_PART_IN_INVALIDATION_CALLBACK = (1ULL << 2),
+    PART_IN_INVALIDATION_CALLBACK = (1ULL << 2),
 
     /**
      * Enable range based header data
      */
-    KIT_FEATURE_RANGE_HEADERS = (1ULL << 4),
+    RANGE_HEADERS = (1ULL << 4),
 
     /**
      * Request to have the active view's Id as the 1st value in the
      * KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR payload.
      */
-    KIT_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK = (1ULL << 5)
+    VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK = (1ULL << 5)
+};
+
+/// The features are a set of flags, so they combine and are tested with the operators below.
+inline COKitOptionalFeatures operator|(COKitOptionalFeatures a, COKitOptionalFeatures b)
+{
+    return static_cast<COKitOptionalFeatures>(static_cast<unsigned long long>(a)
+                                              | static_cast<unsigned long long>(b));
 }
-COKitOptionalFeatures;
+
+inline COKitOptionalFeatures operator&(COKitOptionalFeatures a, COKitOptionalFeatures b)
+{
+    return static_cast<COKitOptionalFeatures>(static_cast<unsigned long long>(a)
+                                              & static_cast<unsigned long long>(b));
+}
+
+inline COKitOptionalFeatures operator^(COKitOptionalFeatures a, COKitOptionalFeatures b)
+{
+    return static_cast<COKitOptionalFeatures>(static_cast<unsigned long long>(a)
+                                              ^ static_cast<unsigned long long>(b));
+}
+
+inline COKitOptionalFeatures& operator|=(COKitOptionalFeatures& a, COKitOptionalFeatures b)
+{
+    a = a | b;
+    return a;
+}
 
 // This enumerates the types of callbacks emitted to a COKit
 // object's callback function or to a COKitDocument object's
@@ -186,7 +212,7 @@ typedef enum
      * coordinates, in twips. When all tiles are supposed to be dropped, the
      * format is the "EMPTY" string.
      *
-     * @see KIT_FEATURE_PART_IN_INVALIDATION_CALLBACK.
+     * @see COKitOptionalFeatures::PART_IN_INVALIDATION_CALLBACK.
      */
     KIT_CALLBACK_INVALIDATE_TILES = 0,
     /**
@@ -1447,7 +1473,7 @@ struct COKitClassStruct
     char* (*getFilterTypes) (COKit* pThis);
 
     /** @see kit::Office::setOptionalFeatures(). */
-    void (*setOptionalFeatures)(COKit* pThis, unsigned long long features);
+    void (*setOptionalFeatures)(COKit* pThis, COKitOptionalFeatures features);
 
     /** @see kit::Office::setDocumentPassword(). */
     void (*setDocumentPassword) (COKit* pThis,
@@ -3028,7 +3054,7 @@ public:
      *
      * @see COKitOptionalFeatures
      */
-    void setOptionalFeatures(unsigned long long features)
+    void setOptionalFeatures(COKitOptionalFeatures features)
     {
         return mpThis->pClass->setOptionalFeatures(mpThis, features);
     }

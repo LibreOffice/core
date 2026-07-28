@@ -2825,7 +2825,7 @@ static void                    lo_registerCallback (COKit* pThis,
                                                     COKitCallback pCallback,
                                                     void* pData);
 static char* lo_getFilterTypes(COKit* pThis);
-static void                    lo_setOptionalFeatures(COKit* pThis, unsigned long long features);
+static void                    lo_setOptionalFeatures(COKit* pThis, COKitOptionalFeatures features);
 static void                    lo_setDocumentPassword(COKit* pThis,
                                                        const char* pURL,
                                                        const char* pPassword);
@@ -2904,7 +2904,7 @@ LibCO_Impl::LibCO_Impl()
     , maThread(nullptr)
     , mpCallback(nullptr)
     , mpCallbackData(nullptr)
-    , mOptionalFeatures(0)
+    , mOptionalFeatures(COKitOptionalFeatures::NONE)
 {
     if(!m_pOfficeClass) {
         m_pOfficeClass = std::make_shared<COKitClass>();
@@ -8531,7 +8531,7 @@ static char* lo_getFilterTypes(COKit* pThis)
     return convertOString(aJson.finishAndGetAsOString());
 }
 
-static void lo_setOptionalFeatures(COKit* pThis, unsigned long long const features)
+static void lo_setOptionalFeatures(COKit* pThis, COKitOptionalFeatures const features)
 {
     comphelper::ProfileZone aZone("lo_setOptionalFeatures");
 
@@ -8540,11 +8540,14 @@ static void lo_setOptionalFeatures(COKit* pThis, unsigned long long const featur
 
     LibCO_Impl *const pLib = static_cast<LibCO_Impl*>(pThis);
     pLib->mOptionalFeatures = features;
-    if (features & KIT_FEATURE_PART_IN_INVALIDATION_CALLBACK)
+    if ((features & COKitOptionalFeatures::PART_IN_INVALIDATION_CALLBACK)
+        != COKitOptionalFeatures::NONE)
         comphelper::COKit::setPartInInvalidation(true);
-    if (features & KIT_FEATURE_RANGE_HEADERS)
+    if ((features & COKitOptionalFeatures::RANGE_HEADERS)
+        != COKitOptionalFeatures::NONE)
         comphelper::COKit::setRangeHeaders(true);
-    if (features & KIT_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK)
+    if ((features & COKitOptionalFeatures::VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK)
+        != COKitOptionalFeatures::NONE)
         comphelper::COKit::setViewIdForVisCursorInvalidation(true);
 }
 
