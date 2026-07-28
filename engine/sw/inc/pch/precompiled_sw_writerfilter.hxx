@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2024-04-14 18:53:53 using:
+ Generated on 2026-07-28 10:31:50 using:
  ./bin/update_pch sw sw_writerfilter --cutoff=5 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,14 +26,17 @@
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <concepts>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <functional>
 #include <iomanip>
-#include <iterator>
 #include <limits>
+#include <map>
 #include <math.h>
 #include <memory>
+#include <numeric>
 #include <optional>
 #include <ostream>
 #include <string_view>
@@ -61,10 +64,10 @@
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/uri.hxx>
-#include <rtl/ustrbuf.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
 #endif // PCH_LEVEL >= 2
@@ -76,6 +79,7 @@
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -91,24 +95,26 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#include <cpo/uno/Any.h>
-#include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <cpo/uno/Sequence.hxx>
-#include <cpo/uno/Type.h>
-#include <cpo/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <cpo/uno/genfunc.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/errcode.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
+#include <cpo/uno/Any.h>
+#include <cpo/uno/Any.hxx>
+#include <cpo/uno/Sequence.hxx>
+#include <cpo/uno/Type.h>
+#include <cpo/uno/Type.hxx>
+#include <cpo/uno/genfunc.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -117,11 +123,16 @@
 #include <dmapper/GraphicZOrderHelper.hxx>
 #include <editeng/editengdllapi.h>
 #include <filter/msfilter/util.hxx>
+#include <o3tl/cow_wrapper.hxx>
+#include <o3tl/deleter.hxx>
+#include <o3tl/intcmp.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <ooxml/resourceids.hxx>
 #include <sfx2/dllapi.h>
@@ -130,9 +141,11 @@
 #include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
+#include <tools/lineend.hxx>
 #include <tools/long.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
+#include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
@@ -140,6 +153,7 @@
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <unofield.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

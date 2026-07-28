@@ -16,6 +16,8 @@
 
 #include <sal/log.hxx>
 
+#include <swtypes.hxx>
+
 #include "rtfreferenceproperties.hxx"
 #include "rtfskipdestination.hxx"
 #include "rtftokenizer.hxx"
@@ -429,7 +431,6 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             if (m_TopLevelTableRow.getCells() != 0)
             {
                 // If the right edge of the last cell (row width) is smaller than the width of some other row, mimic WW8TabDesc::CalcDefaults(): resize the last cell
-                const int MINLAY = 23; // sw/inc/swtypes.hxx, minimal possible size of frames.
                 if ((m_TopLevelTableRow.nCellXMax - m_TopLevelTableRow.nCurrentCellX) >= MINLAY)
                 {
                     auto pXValueLast = m_aStates.top().getTableRowSprms().find(
