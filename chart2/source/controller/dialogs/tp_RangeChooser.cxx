@@ -19,6 +19,8 @@
 
 #include "tp_RangeChooser.hxx"
 #include <DataSourceHelper.hxx>
+#include <ResId.hxx>
+#include <strings.hrc>
 #include <ChartTypeTemplateProvider.hxx>
 #include <ChartTypeTemplate.hxx>
 #include "DialogModel.hxx"
@@ -63,6 +65,7 @@ RangeChooserTabPage::RangeChooserTabPage(weld::Container* pPage, weld::DialogCon
     , m_xFT_Caption(m_xBuilder->weld_label(u"FT_CAPTION_FOR_WIZARD"_ustr))
     , m_xED_Range(m_xBuilder->weld_entry(u"ED_RANGE"_ustr))
     , m_xIB_Range(m_xBuilder->weld_button(u"IB_RANGE"_ustr))
+    , m_xFT_RangeNote(m_xBuilder->weld_label(u"FT_RANGE_NOTE"_ustr))
     , m_xRB_Rows(m_xBuilder->weld_radio_button(u"RB_DATAROWS"_ustr))
     , m_xRB_Columns(m_xBuilder->weld_radio_button(u"RB_DATACOLS"_ustr))
     , m_xCB_FirstRowAsLabel(m_xBuilder->weld_check_button(u"CB_FIRST_ROW_ASLABELS"_ustr))
@@ -76,6 +79,7 @@ RangeChooserTabPage::RangeChooserTabPage(weld::Container* pPage, weld::DialogCon
     , m_xEd_TimeEnd(m_xBuilder->weld_entry(u"ED_TIME_BASED_END"_ustr))
 {
     m_xFT_Caption->set_visible(!bHideDescription);
+    m_xFT_RangeNote->set_label(SchResId(STR_RANGE_NOTE_DIMENSIONS));
 
     SetPageTitle(m_xFTTitle->get_label());// OH:remove later with dialog
 
@@ -140,6 +144,11 @@ void RangeChooserTabPage::initControlsFromModel()
         m_aLastValidRangeString.clear();
 
     m_xED_Range->set_text( m_aLastValidRangeString );
+
+    // Only a chart type that reads the ends of its range differently needs the
+    // note under the entry.
+    m_xFT_RangeNote->set_visible( m_xCurrentChartTypeTemplate.is()
+        && m_xCurrentChartTypeTemplate->usesLastTwoColumnsAsDimensions() );
 
     m_xRB_Rows->set_active( !bUseColumns );
     m_xRB_Columns->set_active(  bUseColumns );

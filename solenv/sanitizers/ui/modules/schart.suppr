@@ -35,6 +35,7 @@ chart2/uiconfig/ui/tp_ErrorBars.ui://GtkLabel[@id='STR_DATA_SELECT_RANGE_FOR_NEG
 chart2/uiconfig/ui/tp_ErrorBars.ui://GtkLabel[@id='STR_CONTROLTEXT_ERROR_BARS_FROM_DATA'] orphan-label
 chart2/uiconfig/ui/tp_LegendPosition.ui://GtkLabel[@id='FT_LEGEND_TEXTDIR'] orphan-label
 chart2/uiconfig/ui/tp_RangeChooser.ui://GtkLabel[@id='FT_CAPTION_FOR_WIZARD'] orphan-label
+chart2/uiconfig/ui/tp_RangeChooser.ui://GtkLabel[@id='FT_RANGE_NOTE'] orphan-label
 chart2/uiconfig/ui/tp_RangeChooser.ui://GtkLabel[@id='STR_PAGE_DATA_RANGE'] orphan-label
 chart2/uiconfig/ui/tp_SeriesToAxis.ui://GtkLabel[@id='FT_MISSING_VALUES'] orphan-label
 chart2/uiconfig/ui/tp_Scale.ui://GtkLabel[@id='TXT_STEP_MAIN'] orphan-label

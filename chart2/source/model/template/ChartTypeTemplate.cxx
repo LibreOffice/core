@@ -489,6 +489,11 @@ bool ChartTypeTemplate::isSwapXAndY() const
     return false;
 }
 
+bool ChartTypeTemplate::usesLastTwoColumnsAsDimensions() const
+{
+    return false;
+}
+
 void ChartTypeTemplate::createCoordinateSystems(
     const rtl::Reference< ::chart::Diagram > & xDiagram )
 {

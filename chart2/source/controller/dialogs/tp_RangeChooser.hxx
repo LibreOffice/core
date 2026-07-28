@@ -85,6 +85,7 @@ private:
     std::unique_ptr<weld::Label> m_xFT_Caption;
     std::unique_ptr<weld::Entry> m_xED_Range;
     std::unique_ptr<weld::Button> m_xIB_Range;
+    std::unique_ptr<weld::Label> m_xFT_RangeNote;
     std::unique_ptr<weld::RadioButton> m_xRB_Rows;
     std::unique_ptr<weld::RadioButton> m_xRB_Columns;
     std::unique_ptr<weld::CheckButton> m_xCB_FirstRowAsLabel;

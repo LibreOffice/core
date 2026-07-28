@@ -40,6 +40,7 @@ protected:
 
     // ____ ChartTypeTemplate ____
     virtual sal_Bool SAL_CALL supportsCategories() override;
+    virtual bool usesLastTwoColumnsAsDimensions() const override;
     virtual rtl::Reference<::chart::ChartType>
     getChartTypeForIndex(sal_Int32 nChartTypeIndex) override;
     virtual rtl::Reference<::chart::ChartType> getChartTypeForNewSeries2(

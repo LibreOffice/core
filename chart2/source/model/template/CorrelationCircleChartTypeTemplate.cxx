@@ -110,6 +110,8 @@ void CorrelationCircleChartTypeTemplate::adaptAxes(
 
 sal_Bool CorrelationCircleChartTypeTemplate::supportsCategories() { return false; }
 
+bool CorrelationCircleChartTypeTemplate::usesLastTwoColumnsAsDimensions() const { return true; }
+
 void CorrelationCircleChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& xSeries,
                                                      ::sal_Int32 nChartTypeIndex,
                                                      ::sal_Int32 nSeriesIndex,
