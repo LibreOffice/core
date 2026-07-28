@@ -428,6 +428,8 @@ public:
     /// Get the DocId used by Mobile COKit to load multiple documents.
     ViewShellDocId GetDocId() const override;
 
+    /// ICOKitNotifier.
+    virtual bool hasKitClient() const override;
     /// ICOKitNotifier. Emits a KIT_CALLBACK_INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const override;
     /// ICOKitNotifier.

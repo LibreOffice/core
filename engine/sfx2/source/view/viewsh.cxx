@@ -3370,6 +3370,8 @@ void SfxViewShell::viewCallbackWithViewId(int nType, const OString& pPayload, in
             << kitCallbackTypeToString(nType) << ": [" << pPayload << ']');
 }
 
+bool SfxViewShell::hasKitClient() const { return pImpl->m_pCOKitViewCallback != nullptr; }
+
 void SfxViewShell::viewCallback(int nType, const OString& pPayload) const
 {
     if (ignoreCOKitViewCallback(nType, pImpl.get()))

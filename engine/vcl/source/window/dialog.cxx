@@ -962,7 +962,8 @@ bool Dialog::ImplStartExecute(bool async)
         case DialogCancelMode::Off:
             break;
         case DialogCancelMode::Silent:
-            if (bModal && GetKitNotifier())
+            // Only a client answers a dialog, so with none this mode has the last word
+            if (bModal && GetKitNotifier() && GetKitNotifier()->hasKitClient())
             {
                 // check if there's already some dialog being ::Execute()d
                 const bool bDialogExecuting = std::any_of(pSVData->mpWinData->mpExecuteDialogs.begin(),

@@ -37,6 +37,9 @@ public:
 
     virtual void viewCallback(int nType, const OString& pPayload) const = 0;
 
+    /// Whether a client is attached to receive the callbacks at all.
+    virtual bool hasKitClient() const = 0;
+
     /// Emits a KIT_CALLBACK_INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const = 0;
 
