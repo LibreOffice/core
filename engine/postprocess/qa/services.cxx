@@ -39,6 +39,7 @@
 #include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/strbuf.hxx>
@@ -333,9 +334,14 @@ void Test::createInstance(
         expImpl = u"com.sun.star.comp.configuration.DefaultProvider"_ustr;
         expServs = {u"com.sun.star.configuration.DefaultProvider"_ustr};
     } else if (name == "com.sun.star.datatransfer.clipboard.SystemClipboard") {
-        // SystemClipboard is a wrapper returning either a platform-specific or
-        // the generic VCLGenericClipboard:
-        expImpl = u"com.sun.star.datatransfer.VCLGenericClipboard"_ustr;
+        // SystemClipboard is a wrapper returning a platform-specific, the Kit's, or the generic
+        // VCLGenericClipboard:
+        if (comphelper::COKit::isActive()) {
+            expImpl = u"com.sun.star.datatransfer.KitClipboard"_ustr;
+            expServs = {u"com.sun.star.datatransfer.clipboard.KitClipboard"_ustr};
+        } else {
+            expImpl = u"com.sun.star.datatransfer.VCLGenericClipboard"_ustr;
+        }
     } else if (name == "com.sun.star.ui.dialogs.FolderPicker") {
         // FolderPicker is a wrapper returning either a platform-specific or the
         // generic OfficeFolderPicker. In headless mode it is always the
