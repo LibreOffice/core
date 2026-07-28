@@ -4156,7 +4156,6 @@ idl/source/prj/globals.cxx
 idl/source/prj/parser.cxx
 idl/source/prj/svidl.cxx
 include/COKit/COKit.hxx
-include/COKit/COKitEnums.h
 include/COKit/COKitGtk.h
 include/COKit/COKitInit.h
 include/animations/animationnodehelper.hxx

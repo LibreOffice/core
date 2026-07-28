@@ -591,7 +591,6 @@ dist-hook:
 	git log -1 --format=%h --abbrev=10 > $(distdir)/dist_git_hash 2> /dev/null || rm $(distdir)/dist_git_hash
 	$(QUIET_MKDIRP) mkdir -p $(distdir)/bundled/include/COKit/
 	cp @LOKIT_PATH@/COKit/COKit.hxx \
-	   @LOKIT_PATH@/COKit/COKitEnums.h \
 	   @LOKIT_PATH@/COKit/COKitInit.h \
 	   $(distdir)/bundled/include/COKit/
 # Generate the localization maps, browser/src/unocommands.js,
