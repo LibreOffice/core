@@ -225,8 +225,6 @@ PresenterPaneFactory::CreatePane(const rtl::Reference<sd::framework::ResourceId>
                                  const bool bIsSpritePane)
 {
     Reference<XComponentContext> xContext (mxComponentContextWeak);
-    Reference<lang::XMultiComponentFactory> xFactory (
-        xContext->getServiceManager(), UNO_SET_THROW);
 
     // Create a border window and canvas and store it in the pane
     // container.
