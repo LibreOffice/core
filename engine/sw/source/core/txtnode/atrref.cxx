@@ -28,7 +28,7 @@
 #include <utility>
 #include <sfx2/viewsh.hxx>
 #include <tools/json_writer.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>

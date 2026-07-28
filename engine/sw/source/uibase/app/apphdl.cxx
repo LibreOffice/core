@@ -84,7 +84,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>

@@ -82,7 +82,7 @@
 #include <sfx2/kit/helper.hxx>
 #include <tools/UnitConversion.hxx>
 #include <tools/json_writer.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <hffrm.hxx>
 
 #if !HAVE_FEATURE_DESKTOP

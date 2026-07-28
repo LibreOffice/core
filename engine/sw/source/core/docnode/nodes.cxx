@@ -21,7 +21,7 @@
 #include <libxml/xmlwriter.h>
 #include <osl/diagnose.h>
 #include <tools/json_writer.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <sfx2/viewsh.hxx>
 #include <comphelper/kit.hxx>
 

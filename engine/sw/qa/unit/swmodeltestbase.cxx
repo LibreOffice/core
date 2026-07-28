@@ -27,7 +27,7 @@
 
 #include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <rootfrm.hxx>
 #include <unotxdoc.hxx>
 #include <view.hxx>

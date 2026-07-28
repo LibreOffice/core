@@ -15,7 +15,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <officecfg/Office/Writer.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>

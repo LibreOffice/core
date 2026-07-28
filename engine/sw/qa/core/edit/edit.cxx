@@ -12,7 +12,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <editeng/wghtitem.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <test/kitcallback.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/kit/helper.hxx>

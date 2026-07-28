@@ -45,7 +45,7 @@
 #include <uitool.hxx>
 #include <cmdid.h>
 #include <docsh.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 

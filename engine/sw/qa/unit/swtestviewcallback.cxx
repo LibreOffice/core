@@ -12,7 +12,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <cppunit/TestAssert.h>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/kit/helper.hxx>

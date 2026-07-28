@@ -8,7 +8,7 @@
  */
 
 #include <com/sun/star/awt/Key.hpp>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <vcl/scheduler.hxx>
 
 #include <test/a11y/accessibletestbase.hxx>

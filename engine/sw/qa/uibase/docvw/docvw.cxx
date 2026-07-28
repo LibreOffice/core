@@ -13,7 +13,7 @@
 
 #include <com/sun/star/text/XTextDocument.hpp>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <test/kitcallback.hxx>

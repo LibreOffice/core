@@ -43,7 +43,7 @@
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <svl/visitem.hxx>
 #include <redline.hxx>
 #include <rootfrm.hxx>

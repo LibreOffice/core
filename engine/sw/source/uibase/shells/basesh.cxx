@@ -107,7 +107,7 @@
 #include <svx/dialog/ThemeColorEditDialog.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <osl/diagnose.h>
 
 #include <svx/svxdlg.hxx>

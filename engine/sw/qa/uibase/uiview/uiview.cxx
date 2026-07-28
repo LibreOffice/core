@@ -9,7 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <comphelper/propertyvalue.hxx>

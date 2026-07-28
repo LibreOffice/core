@@ -57,7 +57,7 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <osl/diagnose.h>
 

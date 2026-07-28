@@ -21,7 +21,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svl/urlbmk.hxx>
 #include <osl/thread.h>

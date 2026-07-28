@@ -47,7 +47,7 @@
 #include <vcl/EnumContext.hxx>
 #include <o3tl/enumrange.hxx>
 #include <comphelper/kit.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <editeng/itemtype.hxx>
 #include <osl/diagnose.h>
 

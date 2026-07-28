@@ -9,7 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/text/XTextTable.hpp>

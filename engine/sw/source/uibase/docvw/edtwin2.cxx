@@ -66,7 +66,7 @@
 #include <unomap.hxx>
 #include <names.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <viscrs.hxx>
 
 using namespace css;

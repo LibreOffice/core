@@ -8,7 +8,7 @@
  */
 
 #include <swmodeltestbase.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>

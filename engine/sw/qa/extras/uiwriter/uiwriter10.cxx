@@ -17,7 +17,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <comphelper/propertysequence.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/settings.hxx>
 #include <ndtxt.hxx>

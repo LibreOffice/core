@@ -83,7 +83,7 @@
 #include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Writer.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <annotsh.hxx>
 #include <swabstdlg.hxx>

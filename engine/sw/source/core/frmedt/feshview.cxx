@@ -91,7 +91,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <calbck.hxx>
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>

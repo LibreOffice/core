@@ -63,7 +63,7 @@
 #if ENABLE_YRS
 #include <IDocumentState.hxx>
 #endif
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/kit/helper.hxx>

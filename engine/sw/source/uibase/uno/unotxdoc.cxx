@@ -38,7 +38,7 @@
 #include <sfx2/printer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/ipclient.hxx>
 #include <editeng/svxacorr.hxx>

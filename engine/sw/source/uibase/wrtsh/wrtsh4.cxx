@@ -20,7 +20,7 @@
 #include <wrtsh.hxx>
 #include <viscrs.hxx>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/kit/helper.hxx>
 

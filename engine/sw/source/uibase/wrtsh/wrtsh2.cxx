@@ -56,7 +56,7 @@
 
 #include <memory>
 
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/event.hxx>
 #include <sal/log.hxx>

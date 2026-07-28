@@ -45,7 +45,7 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <comphelper/kit.hxx>
 #include <txtfrm.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <rtl/strbuf.hxx>
 #include <strings.hrc>
 #include <tools/json_writer.hxx>

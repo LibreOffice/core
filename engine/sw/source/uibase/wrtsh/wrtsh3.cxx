@@ -31,7 +31,7 @@
 #include <sfx2/dispatch.hxx>
 #include <comphelper/kit.hxx>
 #include <tools/json_writer.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 
 #include <swmodule.hxx>
 #include <wrtsh.hxx>

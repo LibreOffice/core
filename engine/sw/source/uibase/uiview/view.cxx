@@ -116,7 +116,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <framework/windowstatehelper.hxx>
 #include <sfx2/kit/helper.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <svtools/embedhlp.hxx>
 #include <tools/UnitConversion.hxx>
 

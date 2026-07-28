@@ -53,7 +53,7 @@
 #include <tools/json_writer.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <COKit/COKitEnums.h>
+#include <COKit/COKit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
