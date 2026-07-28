@@ -87,6 +87,7 @@ enum eServiceType
     SERVICE_NAME_STOCK_DIAGRAM,
     SERVICE_NAME_XY_DIAGRAM,
     SERVICE_NAME_BUBBLE_DIAGRAM,
+    SERVICE_NAME_CORRELATION_CIRCLE_DIAGRAM,
 
     SERVICE_NAME_DASH_TABLE,
     SERVICE_NAME_GRADIENT_TABLE,
@@ -116,6 +117,7 @@ tServiceNameMap & lcl_getStaticServiceNameMap()
         {"com.sun.star.chart.StockDiagram",                   SERVICE_NAME_STOCK_DIAGRAM},
         {"com.sun.star.chart.XYDiagram",                      SERVICE_NAME_XY_DIAGRAM},
         {"com.sun.star.chart.BubbleDiagram",                  SERVICE_NAME_BUBBLE_DIAGRAM},
+        {"com.sun.star.chart.CorrelationCircleDiagram",       SERVICE_NAME_CORRELATION_CIRCLE_DIAGRAM},
 
         {"com.sun.star.drawing.DashTable",                    SERVICE_NAME_DASH_TABLE},
         {"com.sun.star.drawing.GradientTable",                SERVICE_NAME_GRADIENT_TABLE},
@@ -1227,6 +1229,14 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 {
                     xTemplate =
                         xChartTypeManager->createTemplate(u"com.sun.star.chart2.template.Bubble"_ustr);
+                    bCreateDiagram = true;
+                }
+                break;
+            case SERVICE_NAME_CORRELATION_CIRCLE_DIAGRAM:
+                if( xChartTypeManager.is())
+                {
+                    xTemplate = xChartTypeManager->createTemplate(
+                        u"com.sun.star.chart2.template.CorrelationCircle"_ustr);
                     bCreateDiagram = true;
                 }
                 break;

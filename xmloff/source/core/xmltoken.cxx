@@ -548,6 +548,7 @@ namespace xmloff::token {
         TOKEN( "copy-styles",                     XML_COPY_STYLES ),
         TOKEN( "corner-radius",                   XML_CORNER_RADIUS ),
         TOKEN( "correct",                         XML_CORRECT ),
+        TOKEN( "correlation-circle",              XML_CORRELATION_CIRCLE ),
         TOKEN( "cos",                             XML_COS ),
         TOKEN( "cosh",                            XML_COSH ),
         TOKEN( "cot",                             XML_COT ),

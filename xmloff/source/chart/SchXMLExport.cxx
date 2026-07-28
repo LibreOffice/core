@@ -1321,6 +1321,18 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                         mrExport.GetNamespaceMap().GetQNameByKey(
                             XML_NAMESPACE_LO_EXT, GetXMLToken(XML_HISTOGRAM)));
             }
+            else if (eXMLChartType == XML_CORRELATION_CIRCLE)
+            {
+                // A reader that does not know the correlation circle plot is
+                // left with points in a plane, which is the nearest thing the
+                // format has a name for.
+                mrExport.AddAttribute(XML_NAMESPACE_CHART, XML_CLASS,
+                        mrExport.GetNamespaceMap().GetQNameByKey(
+                            XML_NAMESPACE_CHART, GetXMLToken(XML_SCATTER)));
+                mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_CLASS,
+                        mrExport.GetNamespaceMap().GetQNameByKey(
+                            XML_NAMESPACE_LO_EXT, GetXMLToken(XML_CORRELATION_CIRCLE)));
+            }
             else if( eXMLChartType != XML_TOKEN_INVALID )
             {
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS,
@@ -3007,8 +3019,13 @@ void SchXMLExportHelper_Impl::exportSeries(
                         {
                             bool bIsScatterChart = aChartType == "com.sun.star.chart2.ScatterChartType";
                             bool bIsBubbleChart = aChartType == "com.sun.star.chart2.BubbleChartType";
+                            // A correlation circle plot keeps its two dimension
+                            // columns where a bubble chart keeps its x and y
+                            // values, in a domain each.
+                            bool bHasTwoDomains = bIsBubbleChart
+                                || aChartType == "com.sun.star.chart2.CorrelationCircleChartType";
                             Reference< chart2::data::XDataSequence > xYValuesForBubbleChart;
-                            if( bIsBubbleChart )
+                            if( bHasTwoDomains )
                             {
                                 Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, u"values-y"_ustr ) );
                                 if( xSequence.is() )
@@ -3018,7 +3035,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                         xYValuesForBubbleChart = nullptr;
                                 }
                             }
-                            if( bIsScatterChart || bIsBubbleChart )
+                            if( bIsScatterChart || bHasTwoDomains )
                             {
                                 Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, u"values-x"_ustr ) );
                                 if( xSequence.is() )

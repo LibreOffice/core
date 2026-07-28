@@ -469,6 +469,8 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
             OUString aMainRole(u"values-y"_ustr);
             if (maSeriesChartTypeName == "com.sun.star.chart2.BubbleChartType")
                 aMainRole = "values-size";
+            else if (maSeriesChartTypeName == "com.sun.star.chart2.CorrelationCircleChartType")
+                aMainRole = "values-feature";
             xSeqProp->setPropertyValue(u"Role"_ustr, uno::Any(aMainRole));
         }
         xLabeledSeq->setValues(xSequenceValues);
@@ -566,12 +568,15 @@ void SchXMLSeries2Context::endFastElement(sal_Int32 )
     // roles are not yet saved in the file format
     sal_Int32 nDomainCount = maDomainAddresses.size();
     bool bIsScatterChart = maSeriesChartTypeName == "com.sun.star.chart2.ScatterChartType";
-    bool bIsBubbleChart = maSeriesChartTypeName == "com.sun.star.chart2.BubbleChartType";
+    // A correlation circle plot carries its two dimension columns in a domain
+    // each, the same way a bubble chart carries its x and y values.
+    bool bHasTwoDomains = maSeriesChartTypeName == "com.sun.star.chart2.BubbleChartType"
+        || maSeriesChartTypeName == "com.sun.star.chart2.CorrelationCircleChartType";
     bool bDeleteSeries = false;
     std::vector< DomainInfo > aDomainInfos;
 
     //different handling for different chart types necessary
-    if( bIsScatterChart || ( nDomainCount==1 && !bIsBubbleChart ) )
+    if( bIsScatterChart || ( nDomainCount==1 && !bHasTwoDomains ) )
     {
         DomainInfo aDomainInfo( u"values-x"_ustr, m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress, m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex ) ;
         bool bCreateXValues = true;
@@ -602,7 +607,7 @@ void SchXMLSeries2Context::endFastElement(sal_Int32 )
         if( bCreateXValues )
             aDomainInfos.push_back( aDomainInfo );
     }
-    else if( bIsBubbleChart )
+    else if( bHasTwoDomains )
     {
         if( nDomainCount>1 )
         {

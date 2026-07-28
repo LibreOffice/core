@@ -573,6 +573,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/chart,\
 	ChartTitle \
 	ChartTwoAxisXSupplier \
 	ChartTwoAxisYSupplier \
+	CorrelationCircleDiagram \
 	Diagram \
 	Dim3DDiagram \
 	DonutDiagram \

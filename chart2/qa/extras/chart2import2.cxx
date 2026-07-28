@@ -1175,6 +1175,68 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSRoundtrip)
     CPPUNIT_ASSERT_EQUAL(3.5, fBinWidth);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testCorrelationCircleODSRoundtrip)
+{
+    loadFromFile(u"fods/correlation-circle.fods");
+
+    saveAndReload(TestFilter::ODS);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // A reader that knows nothing of this chart type is left with points in a
+    // plane, and the name of the type itself rides in the loext namespace.
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:chart/chart:chart"
+                         "[@chart:class='chart:scatter']");
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:chart/chart:chart"
+                         "[@loext:class='loext:correlation-circle']");
+
+    // Each series keeps its feature column as the series range and the two
+    // dimension columns as a domain each.
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:body/office:chart/chart:chart"
+                "/chart:plot-area/chart:series",
+                3);
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:body/office:chart/chart:chart"
+                "/chart:plot-area/chart:series[1]/chart:domain",
+                2);
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart2.CorrelationCircleChartType"_ustr,
+                         xChartType->getChartType());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getNumberOfDataSeries(xChartDoc));
+
+    // One series per feature column, every one of them against the same two
+    // dimension columns.
+    const OUString aFeatureRanges[]
+        = { u"$Sheet1.$A$2:$A$6"_ustr, u"$Sheet1.$B$2:$B$6"_ustr, u"$Sheet1.$C$2:$C$6"_ustr };
+    for (sal_Int32 nSeries = 0; nSeries < 3; ++nSeries)
+    {
+        Reference<chart2::data::XDataSequence> xFeature
+            = getDataSequenceFromDocByRole(xChartDoc, u"values-feature", nSeries);
+        CPPUNIT_ASSERT(xFeature.is());
+        CPPUNIT_ASSERT_EQUAL(aFeatureRanges[nSeries], xFeature->getSourceRangeRepresentation());
+
+        Reference<chart2::data::XDataSequence> xFirstDimension
+            = getDataSequenceFromDocByRole(xChartDoc, u"values-x", nSeries);
+        CPPUNIT_ASSERT(xFirstDimension.is());
+        CPPUNIT_ASSERT_EQUAL(u"$Sheet1.$D$2:$D$6"_ustr,
+                             xFirstDimension->getSourceRangeRepresentation());
+
+        Reference<chart2::data::XDataSequence> xSecondDimension
+            = getDataSequenceFromDocByRole(xChartDoc, u"values-y", nSeries);
+        CPPUNIT_ASSERT(xSecondDimension.is());
+        CPPUNIT_ASSERT_EQUAL(u"$Sheet1.$E$2:$E$6"_ustr,
+                             xSecondDimension->getSourceRangeRepresentation());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
 {
     // See tdf#163727

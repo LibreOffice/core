@@ -2917,6 +2917,7 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       <rng:attribute name="loext:class">
         <rng:choice>
           <rng:value>loext:histogram</rng:value>
+          <rng:value>loext:correlation-circle</rng:value>
         </rng:choice>
       </rng:attribute>
     </rng:optional>
