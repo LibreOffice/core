@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-27 18:12+0000\n"
-"Last-Translator: Kieli Puoli <kielipuoli@gmail.com>\n"
+"PO-Revision-Date: 2026-07-29 11:03+0000\n"
+"Last-Translator: \"Tinde (Joke)\" <jouko.tiilikainen@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fi/>\n"
 "Language: fi\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -408,6 +408,7 @@ msgstr "WOPI-palvelimesi ei ole turvallinen: SSL-todennus epäonnistui"
 msgid ""
 "Documents are not effectively contained: missing capabilities or namespaces."
 msgstr ""
+"Asiakirjoja ei sisällytetä tehokkaasti: puuttuvat ominaisuudet tai nimitilat."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:83
@@ -415,6 +416,8 @@ msgid ""
 "BPF filtering of potentially risky system calls (seccomp) is not enabled; a "
 "security hazard."
 msgstr ""
+"Mahdollisesti vaarallisten järjestelmäkutsujen BPF-suodatus (seccomp) ei ole "
+"käytössä; turvallisuusriski."
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:95
@@ -440,6 +443,9 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Jotkut asiakkaat ovat yhteydessä vanhaan WebSocket-URL-lomakkeeseen, joka on "
+"tarkoitus poistaa. Tarkista, että välityspalvelimesi läpäisee kompaktin "
+"lomakkeen."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -502,7 +508,7 @@ msgstr "Malli"
 #: admin/src/integrator/AdminIntegratorSettings.ts:551
 #: admin/src/integrator/AdminIntegratorSettings.ts:554
 msgid "Base URL"
-msgstr "Perusosoite"
+msgstr "Perus URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:556
 msgid "Image Size"
