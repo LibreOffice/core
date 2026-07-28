@@ -117,7 +117,7 @@ published service TextPortion
     /** contains whether the portion is the start of the portion.
 
         <p>This is used for portions which are represented by
-        2 TextPortion objects (e.g., DocmentIndexMark).</p>
+        2 TextPortion objects (e.g., DocumentIndexMark).</p>
      */
     [optional, readonly, property] boolean IsStart;
 
