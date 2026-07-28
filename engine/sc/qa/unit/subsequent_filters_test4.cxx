@@ -1655,8 +1655,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf155402)
     // After the fix =CELL("FILENAME"; D2) returns file :///X:/dr/[own.ods]Sheet1
     OUString aFilename = pDoc->GetString(1, 0, 0);
     sal_Int32 nPos = aFilename.lastIndexOf('/');
-    aFilename = OUString::Concat(aFilename.subView(nPos));
-    CPPUNIT_ASSERT_EQUAL(u"/[tdf155402.xlsx]Sheet1"_ustr, aFilename);
+    aFilename = OUString::Concat(aFilename.subView(nPos + 1));
+    CPPUNIT_ASSERT_EQUAL(u"[tdf155402.xlsx]Sheet1"_ustr, aFilename);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf142905)
