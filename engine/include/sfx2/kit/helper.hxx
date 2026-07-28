@@ -250,7 +250,7 @@ public:
 
     /// Helper for posting input event
     static void postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
-                                      int nType, const OUString &rText);
+                                      COKitExtTextInputType eType, const OUString &rText);
 
     /// Helper for posting async mouse event
     static void postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, KitMouseEventData const & rKitMouseEventData);

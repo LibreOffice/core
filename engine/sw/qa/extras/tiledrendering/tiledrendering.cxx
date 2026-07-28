@@ -3314,8 +3314,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testExtTextInputReadOnly)
     // Try to type into the protected section, is it still empty?
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/true);
-    KitHelper::postExtTextEventAsync(pEditWin, KIT_EXT_TEXTINPUT, u"x"_ustr);
-    KitHelper::postExtTextEventAsync(pEditWin, KIT_EXT_TEXTINPUT_END, u"x"_ustr);
+    KitHelper::postExtTextEventAsync(pEditWin, COKitExtTextInputType::TEXTINPUT, u"x"_ustr);
+    KitHelper::postExtTextEventAsync(pEditWin, COKitExtTextInputType::TEXTINPUT_END, u"x"_ustr);
     Scheduler::ProcessEventsToIdle();
     // Without the accompanying fix in place, this test would have failed, as it was possible to
     // type into the protected section.
@@ -3326,8 +3326,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testExtTextInputReadOnly)
     CPPUNIT_ASSERT(getParagraph(2)->getString().isEmpty());
 
     // Try to type into the protected section, does it have the typed content?
-    KitHelper::postExtTextEventAsync(pEditWin, KIT_EXT_TEXTINPUT, u"x"_ustr);
-    KitHelper::postExtTextEventAsync(pEditWin, KIT_EXT_TEXTINPUT_END, u"x"_ustr);
+    KitHelper::postExtTextEventAsync(pEditWin, COKitExtTextInputType::TEXTINPUT, u"x"_ustr);
+    KitHelper::postExtTextEventAsync(pEditWin, COKitExtTextInputType::TEXTINPUT_END, u"x"_ustr);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(u"x"_ustr, getParagraph(2)->getString());
 }

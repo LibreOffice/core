@@ -2175,8 +2175,8 @@ bool ChildSession::extTextInputEvent(const StringVector& tokens)
     URI::decode(text, decodedText);
 
     getLOKitDocument()->setView(_viewId);
-    getLOKitDocument()->postWindowExtTextInputEvent(id, KIT_EXT_TEXTINPUT, decodedText.c_str());
-    getLOKitDocument()->postWindowExtTextInputEvent(id, KIT_EXT_TEXTINPUT_END, decodedText.c_str());
+    getLOKitDocument()->postWindowExtTextInputEvent(id, COKitExtTextInputType::TEXTINPUT, decodedText.c_str());
+    getLOKitDocument()->postWindowExtTextInputEvent(id, COKitExtTextInputType::TEXTINPUT_END, decodedText.c_str());
 
     return true;
 }

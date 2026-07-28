@@ -1193,7 +1193,7 @@ static void doc_setBlockedCommandList(COKitDocument* pThis,
 
 static void doc_postWindowExtTextInputEvent(COKitDocument* pThis,
                                             unsigned nWindowId,
-                                            int nType,
+                                            COKitExtTextInputType eType,
                                             const char* pText);
 static void doc_removeTextContext(COKitDocument* pThis,
                                   unsigned nKitWindowId,
@@ -5119,7 +5119,8 @@ static void doc_setBlockedCommandList(COKitDocument* /*pThis*/, int nViewId, con
     KitHelper::setBlockedCommandList(nViewId, blockedCommandList);
 }
 
-static void doc_postWindowExtTextInputEvent(COKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)
+static void doc_postWindowExtTextInputEvent(COKitDocument* pThis, unsigned nWindowId,
+                                            COKitExtTextInputType eType, const char* pText)
 {
     comphelper::ProfileZone aZone("doc_postWindowExtTextInputEvent");
 
@@ -5146,7 +5147,8 @@ static void doc_postWindowExtTextInputEvent(COKitDocument* pThis, unsigned nWind
         return;
     }
 
-    KitHelper::postExtTextEventAsync(pWindow, nType, OUString::fromUtf8(std::string_view(pText, strlen(pText))));
+    KitHelper::postExtTextEventAsync(pWindow, eType,
+                                     OUString::fromUtf8(std::string_view(pText, strlen(pText))));
 }
 
 static void doc_removeTextContext(COKitDocument* pThis, unsigned nKitWindowId, int nCharBefore, int nCharAfter)

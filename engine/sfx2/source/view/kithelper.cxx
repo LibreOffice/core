@@ -1440,16 +1440,16 @@ void KitHelper::setBlockedCommandList(int nViewId, const char* blockedCommandLis
 }
 
 void KitHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
-                                         int nType, const OUString &rText)
+                                         COKitExtTextInputType eType, const OUString &rText)
 {
     KitAsyncEventData* pKitEv = new KitAsyncEventData;
-    switch (nType)
+    switch (eType)
     {
-    case KIT_EXT_TEXTINPUT:
+    case COKitExtTextInputType::TEXTINPUT:
         pKitEv->mnEvent = VclEventId::ExtTextInput;
         pKitEv->maText = rText;
         break;
-    case KIT_EXT_TEXTINPUT_END:
+    case COKitExtTextInputType::TEXTINPUT_END:
         pKitEv->mnEvent = VclEventId::EndExtTextInput;
         pKitEv->maText = u""_ustr;
         break;

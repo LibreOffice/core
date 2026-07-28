@@ -1180,16 +1180,15 @@ typedef enum
 }
 COKitKeyEventType;
 
-typedef enum
+enum class COKitExtTextInputType
 {
     /// cf. SalEvent::ExtTextInput
-    KIT_EXT_TEXTINPUT,
+    TEXTINPUT,
     /// cf. SalEvent::ExtTextInputPos
-    KIT_EXT_TEXTINPUT_POS,
+    TEXTINPUT_POS,
     /// cf. SalEvent::EndExtTextInput
-    KIT_EXT_TEXTINPUT_END
-}
-COKitExtTextInputType;
+    TEXTINPUT_END
+};
 
 /// Returns the string representation of a COKitCallbackType enumeration element.
 static inline const char* kitCallbackTypeToString(int nType)
@@ -1759,7 +1758,7 @@ struct COKitDocumentClassStruct
     /// @see kit::Document::postWindowExtTextInputEvent
     void (*postWindowExtTextInputEvent) (COKitDocument* pThis,
                                          unsigned nWindowId,
-                                         int nType,
+                                         COKitExtTextInputType eType,
                                          const char* pText);
 
     /// @see kit::Document::getPartInfo().
@@ -2620,12 +2619,13 @@ public:
      *
      * @param nWindowId Specify the window id to post the input event to. If
      * nWindow is 0, the event is posted into the document
-     * @param nType see COKitExtTextInputType
-     * @param pText Text for KIT_EXT_TEXTINPUT
+     * @param eType which stage of the input method's composition this is
+     * @param pText Text for COKitExtTextInputType::TEXTINPUT
      */
-    void postWindowExtTextInputEvent(unsigned nWindowId, int nType, const char* pText)
+    void postWindowExtTextInputEvent(unsigned nWindowId, COKitExtTextInputType eType,
+                                     const char* pText)
     {
-        mpDoc->pClass->postWindowExtTextInputEvent(mpDoc, nWindowId, nType, pText);
+        mpDoc->pClass->postWindowExtTextInputEvent(mpDoc, nWindowId, eType, pText);
     }
 
     /**

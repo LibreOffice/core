@@ -2180,24 +2180,24 @@ void DesktopKitTest::testInput()
 
     Scheduler::ProcessEventsToIdle(); // Get focus & other bits setup.
 
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT, "far");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT_END, "far");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT, " ");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT_END, " ");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT, "beyond");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT_END, "beyond");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT, " ");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT_END, " ");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, "far");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, "far");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, " ");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, " ");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, "beyond");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, "beyond");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, " ");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, " ");
     // Mis-spelled ...
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT, "kovely");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT_END, "kovely");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, "kovely");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, "kovely");
     // Remove it again
     pDocument->pClass->removeTextContext(pDocument, 0, 6, 0);
     // Replace it with lovely
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT, "lovely");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT_END, "lovely");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT, " ");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT_END, " ");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, "lovely");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, "lovely");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, " ");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, " ");
 
     // get the text ...
     pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", nullptr, false);
@@ -3534,8 +3534,8 @@ void DesktopKitTest::testFormulaBarAcceptButton()
     Scheduler::ProcessEventsToIdle();
 
     // Set text.
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT, "H");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, KIT_EXT_TEXTINPUT_END, "H");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT, "H");
+    pDocument->pClass->postWindowExtTextInputEvent(pDocument, 0, COKitExtTextInputType::TEXTINPUT_END, "H");
     Scheduler::ProcessEventsToIdle();
 
     aView.m_JSONDialog.clear();

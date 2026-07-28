@@ -46,13 +46,14 @@ public:
     }
 
     /** @see KitHelper::postExtTextEventAsync */
-    virtual void postExtTextEventAsync(int nType, const OUString& rText) const = 0;
+    virtual void postExtTextEventAsync(COKitExtTextInputType eType,
+                                       const OUString& rText) const = 0;
 
     /** Posts a full text input + commit sequence */
     void postExtTextEventAsync(const OUString& rText) const
     {
-        postExtTextEventAsync(KIT_EXT_TEXTINPUT, rText);
-        postExtTextEventAsync(KIT_EXT_TEXTINPUT_END, rText);
+        postExtTextEventAsync(COKitExtTextInputType::TEXTINPUT, rText);
+        postExtTextEventAsync(COKitExtTextInputType::TEXTINPUT_END, rText);
     }
 };
 
@@ -95,7 +96,8 @@ public:
     /** @see KitHelper::postKeyEventAsync */
     virtual void postKeyEventAsync(int nType, int nCharCode, int nKeyCode) const override;
     /** @see KitHelper::postExtTextEventAsync */
-    virtual void postExtTextEventAsync(int nType, const OUString& rText) const override;
+    virtual void postExtTextEventAsync(COKitExtTextInputType eType,
+                                       const OUString& rText) const override;
 };
 
 /**

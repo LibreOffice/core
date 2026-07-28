@@ -22,9 +22,10 @@ void test::EventPosterHelper::postKeyEventAsync(int nType, int nCharCode, int nK
     KitHelper::postKeyEventAsync(mxWindow, nType, nCharCode, nKeyCode);
 }
 
-void test::EventPosterHelper::postExtTextEventAsync(int nType, const OUString& rText) const
+void test::EventPosterHelper::postExtTextEventAsync(COKitExtTextInputType eType,
+                                                    const OUString& rText) const
 {
-    KitHelper::postExtTextEventAsync(mxWindow, nType, rText);
+    KitHelper::postExtTextEventAsync(mxWindow, eType, rText);
 }
 
 void test::AccessibleEventPosterHelper::setWindow(
