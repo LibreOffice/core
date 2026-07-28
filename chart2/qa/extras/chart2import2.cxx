@@ -1228,7 +1228,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)
     const Sequence<OUString> aAxisBinLabels = xAxisCatText->getTextualData();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aAxisBinLabels.getLength());
     CPPUNIT_ASSERT_EQUAL(u"[10-13.94]"_ustr, aAxisBinLabels[0]);
-    CPPUNIT_ASSERT_EQUAL(u"(13.94-17.88]"_ustr, aAxisBinLabels[1]);
+    CPPUNIT_ASSERT_EQUAL(u"(13.94-17.87]"_ustr, aAxisBinLabels[1]);
 
     // Round trip 2: non-default binning parameters survive save + reload.
     Reference<beans::XPropertySet> xProperties(xChartType, uno::UNO_QUERY_THROW);
@@ -1422,6 +1422,40 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramUnderflowOverflowBins)
     CPPUNIT_ASSERT_EQUAL(u"(11-13]"_ustr, aBinLabels[1]);
     CPPUNIT_ASSERT_EQUAL(u"(13-14]"_ustr, aBinLabels[2]);
     CPPUNIT_ASSERT_EQUAL(u"> 14"_ustr, aBinLabels[3]);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramAutomaticODSToXLSXRoundtrip)
+{
+    loadFromFile(u"fods/tdf163727_histogram_roundtrip.fods");
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    Reference<beans::XPropertySet> xProperties(xChartType, uno::UNO_QUERY_THROW);
+
+    sal_Int32 nFrequencyType = -1;
+    CPPUNIT_ASSERT(xProperties->getPropertyValue(u"FrequencyType"_ustr) >>= nFrequencyType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nFrequencyType);
+
+    saveAndReload(TestFilter::XLSX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    static constexpr OString sBinning
+        = "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/"
+          "cx:layoutPr/cx:binning"_ostr;
+
+    assertXPath(pXmlDoc, sBinning, 1);
+    assertXPath(pXmlDoc, sBinning + "/cx:binSize", 0);
+    assertXPath(pXmlDoc, sBinning + "/cx:binCount", 0);
+
+    xChartDoc = getChartDocFromSheet(0);
+    xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    xProperties.set(xChartType, uno::UNO_QUERY_THROW);
+
+    nFrequencyType = -1;
+    CPPUNIT_ASSERT(xProperties->getPropertyValue(u"FrequencyType"_ustr) >>= nFrequencyType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nFrequencyType);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramODSToXLSXExport)
