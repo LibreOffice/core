@@ -1071,6 +1071,12 @@ codemaker/source/javamaker/javamaker.cxx
 codemaker/source/javamaker/javaoptions.cxx
 codemaker/source/javamaker/javatype.cxx
 codemaker/source/javamaker/javatype.hxx
+cofficeotron/source/main.cxx
+cofficeotron/source/ooxmlsession.cxx
+cofficeotron/source/report.cxx
+cofficeotron/source/schemacache.cxx
+cofficeotron/source/schemamap.cxx
+cofficeotron/source/xmlutil.cxx
 comphelper/qa/container/comphelper_ifcontainer.cxx
 comphelper/qa/container/testifcontainer.cxx
 comphelper/qa/string/test_string.cxx
@@ -6924,6 +6930,7 @@ sc/qa/unit/opencl-test-2.cxx
 sc/qa/unit/screenshots/screenshots.cxx
 sc/qa/unit/solver.cxx
 sc/qa/unit/subsequent_export_test2.cxx
+sc/qa/unit/subsequent_export_test4.cxx
 sc/qa/unit/tiledrendering/tiledrendering.cxx
 sc/qa/unit/ucalc.cxx
 sc/qa/unit/ucalc_condformat.cxx
@@ -13160,6 +13167,7 @@ vcl/qa/cppunit/canvasbitmaptest.cxx
 vcl/qa/cppunit/complextext.cxx
 vcl/qa/cppunit/dndtest.cxx
 vcl/qa/cppunit/errorhandler.cxx
+vcl/qa/cppunit/filter/ipdf/ipdf.cxx
 vcl/qa/cppunit/font.cxx
 vcl/qa/cppunit/fontmetric.cxx
 vcl/qa/cppunit/graphicfilter/filters-dxf-test.cxx
@@ -13360,6 +13368,7 @@ vcl/source/filter/imet/ios2met.cxx
 vcl/source/filter/ipbm/ipbm.cxx
 vcl/source/filter/ipcd/ipcd.cxx
 vcl/source/filter/ipcx/ipcx.cxx
+vcl/source/filter/ipdf/pdfread.cxx
 vcl/source/filter/ipict/ipict.cxx
 vcl/source/filter/ipict/shape.cxx
 vcl/source/filter/ipict/shape.hxx
