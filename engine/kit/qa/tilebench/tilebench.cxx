@@ -70,7 +70,7 @@ static std::vector< TimeRecord > aTimes;
 /// Dump an array (or sub-array) of RGBA or BGRA to an RGB PPM file.
 static void dumpTile(const char *pNameStem,
                      const int nWidth, const int nHeight,
-                     const int mode, const unsigned char* pBufferU,
+                     const COKitTileMode mode, const unsigned char* pBufferU,
                      const int nOffX = 0, const int nOffY = 0,
                      int nTotalWidth = -1)
 {
@@ -122,18 +122,15 @@ static void dumpTile(const char *pNameStem,
             {
                 switch (mode)
                 {
-                    case KIT_TILEMODE_RGBA:
+                    case COKitTileMode::RGBA:
                         buf[0] = (*(pixel + 0) * 255 + alpha / 2) / alpha;
                         buf[1] = (*(pixel + 1) * 255 + alpha / 2) / alpha;
                         buf[2] = (*(pixel + 2) * 255 + alpha / 2) / alpha;
                         break;
-                    case KIT_TILEMODE_BGRA:
+                    case COKitTileMode::BGRA:
                         buf[0] = (*(pixel + 2) * 255 + alpha / 2) / alpha;
                         buf[1] = (*(pixel + 1) * 255 + alpha / 2) / alpha;
                         buf[2] = (*(pixel + 0) * 255 + alpha / 2) / alpha;
-                        break;
-                    default:
-                        assert(false && "unhandled COKitTileMode");
                         break;
                 }
             }
@@ -154,7 +151,7 @@ static void dumpTile(const char *pNameStem,
 static void testTile( Document *pDocument, int max_parts,
                       int max_tiles, bool dump )
 {
-    const int mode = pDocument->getTileMode();
+    const COKitTileMode mode = pDocument->getTileMode();
 
     aTimes.emplace_back("getparts");
     const int nOriginalPart = (pDocument->getDocumentType() == KIT_DOCTYPE_TEXT ? 1 : pDocument->getPart());
@@ -352,7 +349,7 @@ static int testJoinsAt( Document *pDocument, long nX, long nY,
                         long const nTilePixelSize,
                         long const nTileTwipSize )
 {
-    const int mode = pDocument->getTileMode();
+    const COKitTileMode mode = pDocument->getTileMode();
 
     long const nTilePixelWidth = nTilePixelSize;
     long const nTilePixelHeight = nTilePixelSize;

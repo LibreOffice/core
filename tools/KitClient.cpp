@@ -144,7 +144,7 @@ protected:
                     continue;
 
                 std::vector<char> png;
-                const auto mode = static_cast<COKitTileMode>(loKitDocument->pClass->getTileMode(loKitDocument));
+                const auto mode = loKitDocument->pClass->getTileMode(loKitDocument);
 
                 Png::encodeBufferToPNG(pixmap.data(), canvasWidth, canvasHeight, png, mode);
 

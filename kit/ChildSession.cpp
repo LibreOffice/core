@@ -529,7 +529,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         constexpr int offsetXTwips = 15 * 15; // start 15 pixels before the target to get a clearer thumbnail
         constexpr int offsetYTwips = 15 * 15;
 
-        const auto mode = static_cast<COKitTileMode>(getLOKitDocument()->getTileMode());
+        const auto mode = getLOKitDocument()->getTileMode();
 
         std::vector<unsigned char> thumbnail(width * height * 4);
         getLOKitDocument()->paintTile(thumbnail.data(), width, height, x - offsetXTwips, y - offsetYTwips, widthTwips, heightTwips);
@@ -2464,7 +2464,7 @@ bool ChildSession::renderSearchResult(const char* buffer, int length, const Stri
 
     getLOKitDocument()->setView(_viewId);
 
-    const auto tileMode = static_cast<COKitTileMode>(getLOKitDocument()->getTileMode());
+    const auto tileMode = getLOKitDocument()->getTileMode();
 
     unsigned char* bitmapBuffer = nullptr;
 
@@ -2712,7 +2712,7 @@ bool ChildSession::renderNextSlideLayer(SlideCompressor& scomp, const unsigned w
     if (jsonMsg.empty())
         return true;
 
-    const auto tileMode = static_cast<COKitTileMode>(getLOKitDocument()->getTileMode());
+    const auto tileMode = getLOKitDocument()->getTileMode();
     scomp.pushWork(
         [=, this, pixmap = std::move(pixmap),
          jsonMsg = std::move(jsonMsg)](std::vector<char>& output)
@@ -2774,7 +2774,7 @@ bool ChildSession::renderNextSlideLayer(SlideCompressor& scomp, const unsigned w
             output.resize(max_required_size);
             std::memcpy(output.data(), response.data(), response.size());
 
-            if (tileMode == COKitTileMode::KIT_TILEMODE_BGRA)
+            if (tileMode == COKitTileMode::BGRA)
             {
                 png_row_info rowInfo;
                 rowInfo.rowbytes = pixmap->size();
@@ -3019,7 +3019,7 @@ bool ChildSession::renderWindow(const StringVector& tokens)
     output.resize(response.size());
     std::memcpy(output.data(), response.data(), response.size());
 
-    const auto mode = static_cast<COKitTileMode>(getLOKitDocument()->getTileMode());
+    const auto mode = getLOKitDocument()->getTileMode();
 
     // TODO: use png cache for dialogs too
     if (!Png::encodeSubBufferToPNG(pixmap.data(), 0, 0, width, height, bufferWidth, bufferHeight, output, mode))

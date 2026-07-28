@@ -203,10 +203,10 @@ inline bool impl_encodeSubBufferToPNG(unsigned char* pixmap, size_t startX, size
 
     switch (mode)
     {
-        case KIT_TILEMODE_BGRA:
+        case COKitTileMode::BGRA:
             png_set_write_user_transform_fn (png_ptr, unpremultiply_bgra_data);
             break;
-        case KIT_TILEMODE_RGBA:
+        case COKitTileMode::RGBA:
             png_set_write_user_transform_fn (png_ptr, unpremultiply_rgba_data);
             break;
     }

@@ -142,7 +142,7 @@ namespace RenderTiles
                 << renderArea.getWidth() << ", " << renderArea.getHeight() << ") "
                 << " took " << elapsedUs << " (" << area / elapsedUs.count() << " MP/s).");
 
-        const auto mode = static_cast<COKitTileMode>(document->getTileMode());
+        const auto mode = document->getTileMode();
 
         const size_t pixmapSize = 4 * pixmapWidth * pixmapHeight;
         std::vector<char> output;

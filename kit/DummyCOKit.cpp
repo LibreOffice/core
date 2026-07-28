@@ -70,7 +70,7 @@ static void doc_paintPartTile(COKitDocument* self,
                               const int canvasWidth, const int canvasHeight,
                               const int tilePosX, const int tilePosY,
                               const int tileWidth, const int tileHeight);
-static int doc_getTileMode(COKitDocument* self);
+static COKitTileMode doc_getTileMode(COKitDocument* self);
 static void doc_getDocumentSize(COKitDocument* self,
                                 long* width,
                                 long* height);
@@ -357,9 +357,9 @@ static void doc_paintPartTile(COKitDocument* self,
     doc_paintTile(self, buffer, canvasWidth, canvasHeight, tilePosX, tilePosY, tileWidth, tileHeight);
 }
 
-static int doc_getTileMode(COKitDocument* /*self*/)
+static COKitTileMode doc_getTileMode(COKitDocument* /*self*/)
 {
-    return KIT_TILEMODE_RGBA;
+    return COKitTileMode::RGBA;
 }
 
 static void doc_getDocumentSize(COKitDocument* self,

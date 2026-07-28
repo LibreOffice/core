@@ -524,10 +524,10 @@ class DeltaGenerator {
     {
         switch (mode)
         {
-        case KIT_TILEMODE_RGBA:
+        case COKitTileMode::RGBA:
             std::memcpy(dest, srcBytes, count * 4);
             break;
-        case KIT_TILEMODE_BGRA:
+        case COKitTileMode::BGRA:
             if (simd::HasAVX2 &&
                 simd_copyRowSwapRB(dest, srcBytes, count))
                 break;

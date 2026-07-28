@@ -1169,7 +1169,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
                               const int nTileWidth, const int nTileHeight);
-static int doc_getTileMode(COKitDocument* pThis);
+static COKitTileMode doc_getTileMode(COKitDocument* pThis);
 static void doc_getDocumentSize(COKitDocument* pThis,
                                 long* pWidth,
                                 long* pHeight);
@@ -4501,7 +4501,7 @@ static void doc_paintTile(COKitDocument* pThis,
 #if defined(IOS)
     double fDPIScale = 1.0;
 
-    // Online uses the KIT_TILEMODE_RGBA by default so flip the normal flags
+    // Online uses COKitTileMode::RGBA by default so flip the normal flags
     // to kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big
     CGContextRef pCGContext = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8,
                                                     nCanvasWidth * 4, CGColorSpaceCreateDeviceRGB(),
@@ -4841,13 +4841,13 @@ void LibLODocument_Impl::updateViewsForPaintedTile(int nOrigViewId, int nPart, i
     }
 }
 
-static int doc_getTileMode(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/)
+static COKitTileMode doc_getTileMode(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/)
 {
     SetLastExceptionMsg();
 #if ENABLE_CAIRO_RGBA || defined IOS
-    return KIT_TILEMODE_RGBA;
+    return COKitTileMode::RGBA;
 #else
-    return KIT_TILEMODE_BGRA;
+    return COKitTileMode::BGRA;
 #endif
 }
 
@@ -7985,7 +7985,7 @@ static void doc_paintWindowForView(COKitDocument* pThis, unsigned nKitWindowId,
     comphelper::COKit::setDPIScale(fDPIScale);
 
 #if defined(IOS)
-    // Online uses the KIT_TILEMODE_RGBA by default so flip the normal flags
+    // Online uses COKitTileMode::RGBA by default so flip the normal flags
     // to kCGImageAlphaNoneSkipLast | kCGImageByteOrder32Big
     CGContextRef cgc = CGBitmapContextCreate(pBuffer, nWidth, nHeight, 8, nWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipLast | kCGImageByteOrder32Big);
 

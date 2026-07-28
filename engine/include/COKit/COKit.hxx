@@ -104,12 +104,11 @@ enum class COKitPartMode
     NOTES
 };
 
-typedef enum
+enum class COKitTileMode
 {
-    KIT_TILEMODE_RGBA,
-    KIT_TILEMODE_BGRA
-}
-COKitTileMode;
+    RGBA,
+    BGRA
+};
 
 enum class COKitWindowAction
 {
@@ -1617,7 +1616,7 @@ struct COKitDocumentClassStruct
                        const int nTileHeight);
 
     /// @see kit::Document::getTileMode().
-    int (*getTileMode) (COKitDocument* pThis);
+    COKitTileMode (*getTileMode) (COKitDocument* pThis);
 
     /// @see kit::Document::getDocumentSize().
     void (*getDocumentSize) (COKitDocument* pThis,
@@ -2153,9 +2152,9 @@ public:
     /**
      * Gets the tile mode: the pixel format used for the pBuffer of paintTile().
      *
-     * @return an element of the COKitTileMode enum.
+     * @return the pixel order the document's tiles use.
      */
-    int getTileMode()
+    COKitTileMode getTileMode()
     {
         return mpDoc->pClass->getTileMode(mpDoc);
     }
