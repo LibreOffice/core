@@ -28,6 +28,7 @@
 
 #include <fontattributes.hxx>
 #include <impfontcharmap.hxx>
+#include <font/CFFCharset.hxx>
 #include <font/TrueTypeFont.hxx>
 #include <salgdi.hxx>
 
@@ -530,6 +531,12 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
     flags |= HB_SUBSET_FLAGS_DESUBROUTINIZE;
 #endif
 
+#if HB_VERSION_ATLEAST(14, 3, 0)
+    // Make the charset of CID-keyed CFF fonts identity, so that the CIDs of the
+    // subset are its glyph IDs and we don’t have to read them from the charset.
+    flags |= HB_SUBSET_FLAGS_CFF_IDENTITY_CHARSET;
+#endif
+
     hb_subset_input_set_flags(pInput, flags);
 
     // Add the requested glyph IDs to the subset input, and set up
@@ -693,23 +700,29 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
     }
     else
     {
-        // Ideally we should be outputting a CFF (Type1C) font here, but I couldn’t get it to work.
-        // So we oconvert it to Type1 font instead.
-        // TODO: simplify CreateCFFfontSubset() to only do the conversion, since we already
-        // have the subsetted font.
-        rInfo.m_nFontType = FontType::TYPE1_PFB;
-
         unsigned int nCffLen;
         const char* pCffData = hb_blob_get_data(pCFFBlob, &nCffLen);
         if (!pCffData || !nCffLen)
             return false;
 
-        if (!ConvertCFFfontToType1(reinterpret_cast<const unsigned char*>(pCffData), nCffLen,
-                                   rOutBuffer, rInfo))
+        // Embed the bare CFF as the font program of a CIDFontType0 composite
+        // font. An empty CID mapping means the CIDs are the glyph IDs, which
+        // is the case for name-keyed CFF and for the identity charset HarfBuzz
+        // writes for CID-keyed ones.
+        rInfo.m_nFontType = FontType::CFF_FONT;
+
+#if !HB_VERSION_ATLEAST(14, 3, 0)
+        // Old HarfBuzz keeps the original CIDs of CID-keyed fonts, so we have
+        // to read them out of the charset ourselves.
+        if (!ReadCFFGlyphCIDs(reinterpret_cast<const sal_uInt8*>(pCffData), nCffLen, rInfo.m_aCIDs))
         {
-            SAL_WARN("vcl.fonts.cff", "Failed to convert CFF data to Type 1 font");
+            SAL_WARN("vcl.fonts.cff", "Failed to read CIDs of subsetted CFF font");
             return false;
         }
+#endif
+
+        rOutBuffer.assign(reinterpret_cast<const sal_uInt8*>(pCffData),
+                          reinterpret_cast<const sal_uInt8*>(pCffData) + nCffLen);
     }
 
     return true;

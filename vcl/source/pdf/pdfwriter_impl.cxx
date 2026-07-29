@@ -1976,6 +1976,125 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
     return nStream;
 }
 
+sal_Int32 PDFWriterImpl::emitCIDCMap(sal_Int32 nSubsetID, const std::vector<sal_uInt16>& rCIDs,
+                                     sal_uInt32 nGlyphs)
+{
+    sal_Int32 nStream = createObject();
+    if (!updateObject(nStream))
+        return 0;
+
+    // Map each code byte to the CID of the glyph at the same subset position.
+    // For CID-keyed CFF the CIDs come from the font's charset; for name-keyed
+    // CFF glyph IDs are used as CIDs directly (identity).
+    SAL_WARN_IF(!rCIDs.empty() && rCIDs.size() < nGlyphs, "vcl.pdfwriter",
+                "CID mapping is shorter than the subset");
+    struct Range
+    {
+        sal_uInt32 nFirst;
+        sal_uInt32 nLast;
+        sal_uInt16 nCID;
+    };
+    std::vector<Range> aRanges;
+    for (sal_uInt32 i = 0; i < nGlyphs; ++i)
+    {
+        sal_uInt16 nCID = i < rCIDs.size() ? rCIDs[i] : i;
+        if (!aRanges.empty() && aRanges.back().nCID + (i - aRanges.back().nFirst) == nCID)
+            aRanges.back().nLast = i;
+        else
+            aRanges.push_back({ i, i, nCID });
+    }
+
+    OStringBuffer aContents(PDFWRITER_IMPL_BUFFERSIZE);
+    aContents.append("/CIDInit/ProcSet findresource begin\n"
+                     "12 dict begin\n"
+                     "begincmap\n"
+                     "/CIDSystemInfo<<\n"
+                     "/Registry (Adobe)\n"
+                     "/Ordering (Identity)\n"
+                     "/Supplement 0\n"
+                     ">> def\n"
+                     "/CMapName/Subset-"
+                     + OString::number(nSubsetID)
+                     + " def\n"
+                       "/CMapType 1 def\n"
+                       "1 begincodespacerange\n"
+                       "<00> <FF>\n"
+                       "endcodespacerange\n");
+
+    // At most 100 entries per begincidrange section (Adobe CMap spec).
+    size_t nEmitted = 0;
+    while (nEmitted < aRanges.size())
+    {
+        size_t nChunk = std::min<size_t>(aRanges.size() - nEmitted, 100);
+        aContents.append(OString::number(nChunk) + " begincidrange\n");
+        for (size_t n = 0; n < nChunk; ++n)
+        {
+            const auto& rRange = aRanges[nEmitted + n];
+            aContents.append('<');
+            COSWriter::appendHex(static_cast<sal_Int8>(rRange.nFirst), aContents);
+            aContents.append("> <");
+            COSWriter::appendHex(static_cast<sal_Int8>(rRange.nLast), aContents);
+            aContents.append("> " + OString::number(rRange.nCID) + "\n");
+        }
+        aContents.append("endcidrange\n");
+        nEmitted += nChunk;
+    }
+
+    aContents.append("endcmap\n"
+                     "CMapName currentdict /CMap defineresource pop\n"
+                     "end\n"
+                     "end\n");
+
+    SvMemoryStream aStream;
+    if (!g_bDebugDisableCompression)
+    {
+        ZCodec aCodec(0x4000, 0x4000);
+        aCodec.BeginCompression();
+        aCodec.Write(aStream, reinterpret_cast<const sal_uInt8*>(aContents.getStr()),
+                     aContents.getLength());
+        aCodec.EndCompression();
+    }
+
+    OStringBuffer aLine(80);
+    aLine.append(OString::number(nStream)
+                 + " 0 obj\n"
+                   "<</Type/CMap"
+                   "/CMapName/Subset-"
+                 + OString::number(nSubsetID)
+                 + "-CMap"
+                   "/CIDSystemInfo<</Registry(Adobe)/Ordering(Identity)/Supplement 0>>"
+                   "/Length ");
+    sal_uInt64 nLen = 0;
+    if (!g_bDebugDisableCompression)
+    {
+        nLen = aStream.Tell();
+        aStream.Seek(0);
+        aLine.append(OString::number(nLen) + "/Filter/FlateDecode");
+    }
+    else
+        aLine.append(aContents.getLength());
+    aLine.append(">>\nstream\n");
+    if (!writeBuffer(aLine))
+        return 0;
+    checkAndEnableStreamEncryption(nStream);
+    if (!g_bDebugDisableCompression)
+    {
+        if (!writeBufferBytes(aStream.GetData(), nLen))
+            return 0;
+    }
+    else
+    {
+        if (!writeBuffer(aContents))
+            return 0;
+    }
+    disableStreamEncryption();
+    aLine.setLength(0);
+    aLine.append("\nendstream\nendobj\n\n");
+    if (!writeBuffer(aLine))
+        return 0;
+    return nStream;
+}
+
 sal_Int32 PDFWriterImpl::emitFontDescriptor( const vcl::font::PhysicalFontFace* pFace, FontSubsetInfo const & rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
 {
     OStringBuffer aLine( PDFWRITER_IMPL_BUFFERSIZE );
@@ -2038,6 +2157,9 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const vcl::font::PhysicalFontFace* 
         {
             case FontType::SFNT_TTF:
                 aLine.append( '2' );
+                break;
+            case FontType::CFF_FONT:
+                aLine.append( '3' );
                 break;
             case FontType::TYPE1_PFB:
                 break;
@@ -2128,6 +2250,18 @@ bool PDFWriterImpl::emitFonts()
                     if (!writeBufferBytes(aBuffer.data(), aBuffer.size()))
                         return false;
                 }
+                else if( aSubsetInfo.m_nFontType == FontType::CFF_FONT )
+                {
+                    aLine.append("/Subtype/CIDFontType0C>>\nstream\n");
+                    if ( !writeBuffer( aLine ) ) return false;
+                    if ( osl::File::E_None != m_aFile.getPos(nStartPos) ) return false;
+
+                    // copy bare CFF font program
+                    beginCompression();
+                    checkAndEnableStreamEncryption( nFontStream );
+                    if (!writeBufferBytes(aBuffer.data(), aBuffer.size()))
+                        return false;
+                }
                 else if( aSubsetInfo.m_nFontType & FontType::TYPE1_PFB) // TODO: also support PFA?
                 {
                     // get the PFB-segment lengths
@@ -2184,37 +2318,100 @@ bool PDFWriterImpl::emitFonts()
                 if( nToUnicodeStream )
                     nToUnicodeStream = createToUnicodeCMap( pEncoding, aCodeUnits, pCodeUnitsPerGlyph, pEncToUnicodeIndex, nGlyphs );
 
+                // For composite (CFF) fonts emit the CMap and CIDFontType0
+                // descendant before the main Type 0 wrapper object.
+                sal_Int32 nCMapStream = 0;
+                sal_Int32 nCIDFontObject = 0;
+                if (aSubsetInfo.m_nFontType == FontType::CFF_FONT)
+                {
+                    nCMapStream = emitCIDCMap(s_subset.m_nFontID, aSubsetInfo.m_aCIDs, nGlyphs);
+                    if (!nCMapStream) return false;
+
+                    nCIDFontObject = createObject();
+                    if (!updateObject(nCIDFontObject)) return false;
+                    OStringBuffer aCIDLine;
+                    aCIDLine.append(OString::number(nCIDFontObject) + " 0 obj\n"
+                        "<</Type/Font/Subtype/CIDFontType0/BaseFont/");
+                    appendSubsetName(s_subset.m_nFontID, aSubsetInfo.m_aPSName, aCIDLine);
+                    aCIDLine.append("\n/CIDSystemInfo<</Registry(Adobe)/Ordering(Identity)/Supplement 0>>\n"
+                        "/FontDescriptor " + OString::number(nFontDescriptor) + " 0 R\n"
+                        "/W[");
+                    // /W is indexed by CID, emit runs of consecutive CIDs
+                    std::vector<std::pair<sal_uInt16, sal_Int32>> aCIDWidths;
+                    aCIDWidths.reserve(nGlyphs);
+                    for (auto i = 0u; i < nGlyphs; i++)
+                    {
+                        sal_uInt16 nCID = i < aSubsetInfo.m_aCIDs.size() ? aSubsetInfo.m_aCIDs[i] : i;
+                        aCIDWidths.emplace_back(nCID, pWidths[i]);
+                    }
+                    std::sort(aCIDWidths.begin(), aCIDWidths.end());
+                    for (size_t i = 0; i < aCIDWidths.size();)
+                    {
+                        size_t nRun = 1;
+                        while (i + nRun < aCIDWidths.size()
+                               && aCIDWidths[i + nRun].first == aCIDWidths[i].first + nRun)
+                            nRun++;
+                        aCIDLine.append(OString::number(aCIDWidths[i].first) + "[");
+                        for (size_t n = 0; n < nRun; ++n)
+                        {
+                            aCIDLine.append(aCIDWidths[i + n].second);
+                            aCIDLine.append(((n & 15) == 15) ? "\n" : " ");
+                        }
+                        aCIDLine.append(']');
+                        i += nRun;
+                    }
+                    aCIDLine.append("]\n>>\nendobj\n\n");
+                    if (!writeBuffer(aCIDLine)) return false;
+                }
+
                 sal_Int32 nFontObject = createObject();
                 if ( !updateObject( nFontObject ) ) return false;
                 aLine.setLength( 0 );
                 aLine.append( OString::number(nFontObject) + " 0 obj\n" );
-                aLine.append( (aSubsetInfo.m_nFontType == FontType::TYPE1_PFB) ?
-                             "<</Type/Font/Subtype/Type1/BaseFont/" :
-                             "<</Type/Font/Subtype/TrueType/BaseFont/" );
-                appendSubsetName( s_subset.m_nFontID, aSubsetInfo.m_aPSName, aLine );
-                aLine.append( "\n"
-                             "/FirstChar 0\n"
-                             "/LastChar "
-                    + OString::number( nGlyphs-1 )
-                    + "\n"
-                      "/Widths[" );
-                for (auto i = 0u; i < nGlyphs; i++)
+
+                if (aSubsetInfo.m_nFontType == FontType::CFF_FONT)
                 {
-                    aLine.append( pWidths[ i ] );
-                    aLine.append( ((i & 15) == 15) ? "\n" : " " );
+                    // Type 0 wrapper
+                    aLine.append("<</Type/Font/Subtype/Type0/BaseFont/");
+                    appendSubsetName(s_subset.m_nFontID, aSubsetInfo.m_aPSName, aLine);
+                    aLine.append("\n/Encoding " + OString::number(nCMapStream) + " 0 R\n"
+                        "/DescendantFonts[" + OString::number(nCIDFontObject) + " 0 R]\n");
+                    if (nToUnicodeStream)
+                    {
+                        aLine.append("/ToUnicode " + OString::number(nToUnicodeStream) + " 0 R\n");
+                    }
+                    aLine.append(">>\nendobj\n\n");
                 }
-                aLine.append( "]\n"
-                             "/FontDescriptor "
-                    + OString::number( nFontDescriptor )
-                    + " 0 R\n" );
-                if( nToUnicodeStream )
+                else
                 {
-                    aLine.append( "/ToUnicode "
-                        + OString::number( nToUnicodeStream )
+                    aLine.append( (aSubsetInfo.m_nFontType == FontType::TYPE1_PFB) ?
+                                 "<</Type/Font/Subtype/Type1/BaseFont/" :
+                                 "<</Type/Font/Subtype/TrueType/BaseFont/" );
+                    appendSubsetName( s_subset.m_nFontID, aSubsetInfo.m_aPSName, aLine );
+                    aLine.append( "\n"
+                                 "/FirstChar 0\n"
+                                 "/LastChar "
+                        + OString::number( nGlyphs-1 )
+                        + "\n"
+                          "/Widths[" );
+                    for (auto i = 0u; i < nGlyphs; i++)
+                    {
+                        aLine.append( pWidths[ i ] );
+                        aLine.append( ((i & 15) == 15) ? "\n" : " " );
+                    }
+                    aLine.append( "]\n"
+                                 "/FontDescriptor "
+                        + OString::number( nFontDescriptor )
                         + " 0 R\n" );
+                    if( nToUnicodeStream )
+                    {
+                        aLine.append( "/ToUnicode "
+                            + OString::number( nToUnicodeStream )
+                            + " 0 R\n" );
+                    }
+                    aLine.append( ">>\n"
+                                 "endobj\n\n" );
                 }
-                aLine.append( ">>\n"
-                             "endobj\n\n" );
                 if ( !writeBuffer( aLine ) ) return false;
 
                 aFontIDToObject[ s_subset.m_nFontID ] = nFontObject;

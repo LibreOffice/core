@@ -38,6 +38,7 @@ $(eval $(call gb_CppunitTest_use_externals,vcl_pdfexport2, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,vcl_pdfexport2,\
+    -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/uibase/inc \

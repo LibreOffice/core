@@ -31,6 +31,7 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
+#include <font/CFFCharset.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <unotools/streamwrap.hxx>
@@ -5297,7 +5298,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155161)
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
-    // Check that all fonts in the document are Type 3 fonts
+    // Check that all fonts in the document are not Type 3 fonts.
     std::set<OString> aFontNames;
     for (const auto& aElement : aDocument.GetElements())
     {
@@ -5310,7 +5311,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155161)
             auto pSubtype
                 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
             CPPUNIT_ASSERT(pSubtype);
-            CPPUNIT_ASSERT_EQUAL("Type1"_ostr, pSubtype->GetValue());
+            CPPUNIT_ASSERT("Type3"_ostr != pSubtype->GetValue());
             auto pName
                 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"_ostr));
             CPPUNIT_ASSERT(pName);
@@ -5321,6 +5322,135 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155161)
     // There must be two fonts
     std::set<OString> aExpected{ "Cantarell-Regular"_ostr, "Cantarell-Bold"_ostr };
     CPPUNIT_ASSERT_EQUAL(aExpected, aFontNames);
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf171869)
+{
+    // Document using an embedded CID-keyed font (a Source Han Sans subset)
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"tdf171869.odt");
+    save(TestFilter::PDF_WRITER);
+
+    // Parse the export result.
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The only fonts must be a Type 0 wrapper and its CIDFontType0 descendant.
+    vcl::filter::PDFObjectElement* pType0 = nullptr;
+    vcl::filter::PDFObjectElement* pCIDFont = nullptr;
+    int nFonts = 0;
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (!pType || pType->GetValue() != "Font")
+            continue;
+        nFonts++;
+        auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+        CPPUNIT_ASSERT(pSubtype);
+        if (pSubtype->GetValue() == "Type0")
+            pType0 = pObject;
+        else if (pSubtype->GetValue() == "CIDFontType0")
+            pCIDFont = pObject;
+    }
+    CPPUNIT_ASSERT_EQUAL(2, nFonts);
+    CPPUNIT_ASSERT(pType0);
+    CPPUNIT_ASSERT(pCIDFont);
+
+    auto pBaseFont = dynamic_cast<vcl::filter::PDFNameElement*>(pType0->Lookup("BaseFont"_ostr));
+    CPPUNIT_ASSERT(pBaseFont);
+    CPPUNIT_ASSERT_EQUAL("SourceHanSans-Regular"_ostr, pBaseFont->GetValue().copy(7));
+
+    // The font program is a bare CFF (CIDFontType0C)
+    auto pDescriptorRef
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pCIDFont->Lookup("FontDescriptor"_ostr));
+    CPPUNIT_ASSERT(pDescriptorRef);
+    auto pDescriptor = pDescriptorRef->LookupObject();
+    CPPUNIT_ASSERT(pDescriptor);
+    auto pFontFileRef
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pDescriptor->Lookup("FontFile3"_ostr));
+    CPPUNIT_ASSERT(pFontFileRef);
+    auto pFontFile = pFontFileRef->LookupObject();
+    CPPUNIT_ASSERT(pFontFile);
+    auto pFontFileSubtype
+        = dynamic_cast<vcl::filter::PDFNameElement*>(pFontFile->Lookup("Subtype"_ostr));
+    CPPUNIT_ASSERT(pFontFileSubtype);
+    CPPUNIT_ASSERT_EQUAL("CIDFontType0C"_ostr, pFontFileSubtype->GetValue());
+
+    auto pEncodingRef
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pType0->Lookup("Encoding"_ostr));
+    CPPUNIT_ASSERT(pEncodingRef);
+    auto pEncoding = pEncodingRef->LookupObject();
+    CPPUNIT_ASSERT(pEncoding);
+    auto pEncodingStream = pEncoding->GetStream();
+    CPPUNIT_ASSERT(pEncodingStream);
+    SvMemoryStream aObjectStream;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    pEncodingStream->GetMemory().Seek(0);
+    aZCodec.Decompress(pEncodingStream->GetMemory(), aObjectStream);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+    std::string aCMap(static_cast<const char*>(aObjectStream.GetData()), aObjectStream.GetSize());
+    CPPUNIT_ASSERT(aCMap.find("begincidrange") != std::string::npos);
+
+#if 1
+    // The codes must be mapped by a CMap to the CIDs that the embedded font
+    // gives its glyphs. Which CIDs these are is up to HarfBuzz, so we read
+    // them from the font we embedded instead of hard coding them.
+    auto pFontFileStream = pFontFile->GetStream();
+    CPPUNIT_ASSERT(pFontFileStream);
+    SvMemoryStream aCFFStream;
+    ZCodec aCFFCodec;
+    aCFFCodec.BeginCompression();
+    pFontFileStream->GetMemory().Seek(0);
+    aCFFCodec.Decompress(pFontFileStream->GetMemory(), aCFFStream);
+    CPPUNIT_ASSERT(aCFFCodec.EndCompression());
+
+    std::vector<sal_uInt16> aCIDs;
+    CPPUNIT_ASSERT(vcl::font::ReadCFFGlyphCIDs(static_cast<const sal_uInt8*>(aCFFStream.GetData()),
+                                               aCFFStream.GetSize(), aCIDs));
+    // It is a CID-keyed font, so it has a CID for each of its three glyphs
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aCIDs.size());
+
+    // Expand the “<lo> <hi> cid” ranges of the CMap and compare
+    std::vector<sal_uInt16> aCodeToCID(aCIDs.size(), 0xFFFF);
+    auto nRanges = aCMap.find("begincidrange");
+    std::string aRanges(aCMap, nRanges, aCMap.find("endcidrange", nRanges) - nRanges);
+    for (size_t nPos = 0; (nPos = aRanges.find('<', nPos)) != std::string::npos; nPos++)
+    {
+        unsigned nLow, nHigh, nCID;
+        if (sscanf(aRanges.c_str() + nPos, "<%x> <%x> %u", &nLow, &nHigh, &nCID) != 3)
+            continue;
+        for (unsigned nCode = nLow; nCode <= nHigh && nCode < aCodeToCID.size(); nCode++)
+            aCodeToCID[nCode] = nCID + (nCode - nLow);
+    }
+    for (size_t i = 0; i < aCIDs.size(); i++)
+        CPPUNIT_ASSERT_EQUAL(aCIDs[i], aCodeToCID[i]);
+#else
+    // Once our HarfBuzz baseline is >=14.3.0, the charset of the subset
+    // is always identity.
+    CPPUNIT_ASSERT(aCMap.find("begincidrange\n"
+                              "<00> <02> 0\n"
+                              "endcidrange")
+                   != std::string::npos);
+#endif
+
+    // Check the text can be extracted (i.e. the ToUnicode CMap works)
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pPdfTextPage);
+    int nChars = pPdfTextPage->countChars();
+    CPPUNIT_ASSERT_EQUAL(2, nChars);
+    std::vector<sal_uInt32> aChars(nChars);
+    for (int i = 0; i < nChars; i++)
+        aChars[i] = pPdfTextPage->getUnicode(i);
+    OUString aActualText(aChars.data(), aChars.size());
+    CPPUNIT_ASSERT_EQUAL(u"世솅"_ustr, aActualText);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf48707_1)
