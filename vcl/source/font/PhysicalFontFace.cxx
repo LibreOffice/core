@@ -520,10 +520,8 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
 
     unsigned int flags = HB_SUBSET_FLAGS_DEFAULT;
 
-#if HB_VERSION_ATLEAST(13, 0, 0)
     // If the font has CFF2 table, we need to downgrade it to CFF, as we can’t embed CFF2 in PDF.
     flags |= HB_SUBSET_FLAGS_DOWNGRADE_CFF2;
-#endif
 
 #if !HB_VERSION_ATLEAST(13, 0, 2)
     // tdf#171202: Work around HarfBuzz bug where setting old_to_new_glyph_mapping would result in

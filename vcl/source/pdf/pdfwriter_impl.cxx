@@ -1638,10 +1638,6 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         ResourceDict aResourceDict;
         std::list<StreamRedirect> aOutputStreams;
 
-        // Scale for glyph outlines.
-        double fScaleX = (GetDPIX() / 72.) * fScale;
-        double fScaleY = (GetDPIY() / 72.) * fScale;
-
         for (auto i = 1u; i < nGlyphs; i++)
         {
             auto nStream = pGlyphStreams[i];
@@ -1721,21 +1717,6 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                 aContents.append(" ");
                 appendDouble(aRect.getY() * fScale, aContents);
                 aContents.append(" cm /Im" + OString::number(nObject) + " Do Q\n");
-            }
-
-            const auto& rOutline = rGlyph.getOutline();
-            if (rOutline.count())
-            {
-                aContents.append("q ");
-                appendDouble(fScaleX, aContents);
-                aContents.append(" 0 0 ");
-                appendDouble(fScaleY, aContents);
-                aContents.append(" 0 ");
-                appendDouble(m_aPages.back().getHeight() * -fScaleY, aContents, 3);
-                aContents.append(" cm\n");
-                m_aPages.back().appendPolyPolygon(rOutline, aContents);
-                aContents.append("f\n"
-                                 "Q\n");
             }
 
             aLine.setLength(0);
@@ -5673,24 +5654,13 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                                   const std::vector<sal_Ucs>& rCodeUnits, sal_Int32 nGlyphWidth,
                                   sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject)
 {
-    // tdf#155161
-    // PDF doesn't support CFF2 table and we currently don't convert them to
-    // Type 1 (like we do with CFF table), so embed as Type 3 fonts.
-    // Non-CFF2 variable fonts are instanced via hb-subset and embedded normally.
-    // With HarfBuzz 13.0.0, we downgrade CFF2 to CFF when subsetting.
-#if HB_VERSION_ATLEAST(13, 0, 0)
-    bool bCFF2 = false;
-#else
-    bool bCFF2 = !pFace->GetRawFontData(HB_TAG('C', 'F', 'F', '2')).empty();
-#endif
-
-    if (pFace->IsColorFont() || bCFF2)
+    if (pFace->IsColorFont())
     {
         // Font has colors, check if this glyph has color layers or bitmap.
         tools::Rectangle aRect;
         auto aLayers = pFace->GetGlyphColorLayers(nFontGlyphId);
         auto aBitmap = pFace->GetGlyphColorBitmap(nFontGlyphId, aRect);
-        if (!aLayers.empty() || !aBitmap.empty() || bCFF2)
+        if (!aLayers.empty() || !aBitmap.empty())
         {
             auto& rSubset = m_aType3Fonts[pFace];
             auto it = rSubset.m_aMapping.find(nFontGlyphId);
@@ -5738,8 +5708,6 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
                 }
                 else if (!aBitmap.empty())
                     rNewGlyphEmit.setColorBitmap(aBitmap, aRect);
-                else if (bCFF2)
-                    rNewGlyphEmit.setOutline(pFont->GetGlyphOutlineUntransformed(nFontGlyphId));
 
                 // add new glyph to font mapping
                 Glyph& rNewGlyph = rSubset.m_aMapping[nFontGlyphId];

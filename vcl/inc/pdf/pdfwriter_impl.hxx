@@ -283,7 +283,6 @@ class GlyphEmit
     std::vector<ColorLayer>         m_aColorLayers;
     font::RawFontData               m_aColorBitmap;
     tools::Rectangle                m_aRect;
-    basegfx::B2DPolyPolygon         m_aOutline;
 
 public:
     GlyphEmit() : m_nSubsetGlyphID(0), m_nGlyphWidth(0)
@@ -309,9 +308,6 @@ public:
         rRect = m_aRect;
         return m_aColorBitmap;
     }
-
-    void setOutline(const basegfx::B2DPolyPolygon& rOutline) { m_aOutline = rOutline; }
-    const basegfx::B2DPolyPolygon& getOutline() const { return m_aOutline; }
 
     void addCode( sal_Ucs i_cCode )
     {
