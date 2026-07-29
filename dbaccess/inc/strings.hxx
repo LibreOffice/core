@@ -249,6 +249,7 @@ inline constexpr OUString SERVICE_SDB_DIRECTSQLDIALOG
 
 inline constexpr OUString PROPERTY_QUERYDESIGNVIEW(u"QueryDesignView"_ustr);
 inline constexpr OUString PROPERTY_GRAPHICAL_DESIGN(u"GraphicalDesign"_ustr);
+inline constexpr OUString PROPERTY_FORMAT_WARNING_SHOWN(u"FormatWarningShown"_ustr);
 inline constexpr OUString PROPERTY_HELP_URL(u"HelpURL"_ustr);
 inline constexpr OUString FRAME_NAME_QUERY_PREVIEW = u"QueryPreview"_ustr;
 inline constexpr OUString SERVICE_CONTROLDEFAULT = u"com.sun.star.comp.dbu.OColumnControl"_ustr;

@@ -9,6 +9,8 @@
 
 # Regression test for tdf#42713 - SQL comments are preserved when working
 # with queries containing comments in the Base query editor.
+# Also covers tdf#46841 - a query's SQL formatting more generally (not just
+# comments) is preserved when it was last saved from SQL View.
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file, get_state_as_dict
@@ -44,6 +46,32 @@ class QueryCommentPreservation(UITestCase):
                     sql_text,
                     "SQL comment must be visible when opening query; got: "
                     + sql_text,
+                )
+
+    def test_format_preserved_when_last_edited_in_sql_view(self):
+        """A query with no comments, but last saved from SQL View, opens in
+        SQL View with its formatting intact instead of being 
+        canonicalized by Design View (tdf#46841)."""
+        with self.ui_test.load_file(
+            get_url_for_data_file("tdf46841.odb")
+        ) as document:
+            xToolkit = Toolkit.create(self.xContext)
+
+            self.xUITest.executeCommand(".uno:DBViewQueries")
+            xToolkit.waitUntilAllIdlesDispatched()
+
+            self.xUITest.executeCommand(".uno:SelectAll")
+
+            with self.ui_test.open_subcomponent_through_command(
+                ".uno:DBQueryEdit"
+            ) as xQueryFrame:
+                xSql = self.xUITest.getTopFocusWindow().getChild("sql")
+                sql_text = get_state_as_dict(xSql)["Text"]
+                self.assertEqual(
+                    'SELECT "object"."description" \nFROM "object"',
+                    sql_text,
+                    "Query last saved from SQL View must open in SQL View "
+                    "with its formatting intact; got: " + sql_text,
                 )
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

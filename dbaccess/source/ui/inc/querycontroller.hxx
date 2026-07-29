@@ -78,6 +78,8 @@ namespace dbaui
         bool            m_bGraphicalDesign; // are we in the graphical design mode (sal_True) or in the text design (sal_False)?
         bool            m_bDistinct;        // true when you want "select distinct" otherwise false
         bool            m_bEscapeProcessing;// is true when we shouldn't parse the statement
+        bool            m_bLastEditedInSqlView = false; //true if the query was last saved in SQL view
+        bool            m_bFormatWarningAlreadyShown = false; // true if the destructive-format warning was already shown
 
 
         /** returns the container of queries, views, or command definitions, depending on what object type
@@ -191,7 +193,7 @@ namespace dbaui
         virtual void reset() override;
         virtual void impl_initialize(const ::comphelper::NamedValueCollection& rArguments) override;
 
-        void    impl_reset( const bool i_bIgnoreQuerySettings = false );
+        void    impl_reset( const bool i_bIgnoreQuerySettings = false, const bool i_bIsInitialLoad = false );
         /// tells the user that we needed to switch to SQL view automatically
         void    impl_showAutoSQLViewError( const css::uno::Any& _rErrorDetails );
 

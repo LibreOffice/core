@@ -19,21 +19,33 @@
 
 #include <databaseobjectview.hxx>
 #include <strings.hxx>
+#include <strings.hrc>
+#include <query.hrc>
+#include <core_resource.hxx>
 #include <asyncmodaldialog.hxx>
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <connectivity/dbtools.hxx>
+#include <o3tl/test_info.hxx>
 #include <osl/diagnose.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <utility>
+#include <vcl/stdtext.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/Window.hxx>
 #include <vcl/window.hxx>
 
 namespace dbaui
@@ -204,6 +216,71 @@ namespace dbaui
         {
             i_rDispatchArgs.put( PROPERTY_ESCAPE_PROCESSING, false );
         }
+    }
+
+    Reference< XComponent > QueryDesigner::doCreateView( const Any& _rDataSource, const OUString& _rObjectName,
+        const ::comphelper::NamedValueCollection& i_rCreationArgs )
+    {
+        const bool bHeadingIntoDesignView = i_rCreationArgs.getOrDefault( PROPERTY_GRAPHICAL_DESIGN, true );
+        if ( m_nCommandType == CommandType::QUERY && !_rObjectName.isEmpty() && bHeadingIntoDesignView
+            && !Application::IsHeadlessModeEnabled() && !o3tl::IsRunningUITest() )
+        {
+            try
+            {
+                Reference< XQueriesSupplier > xSupplier( getConnection(), UNO_QUERY );
+                Reference< css::container::XNameAccess > xQueries( xSupplier.is() ? xSupplier->getQueries() : Reference< css::container::XNameAccess >() );
+                Reference< XPropertySet > xQuery;
+                if ( xQueries.is() && xQueries->hasByName( _rObjectName ) )
+                    xQueries->getByName( _rObjectName ) >>= xQuery;
+
+                Sequence< PropertyValue > aLayoutInformation;
+                if ( xQuery.is() )
+                    xQuery->getPropertyValue( PROPERTY_LAYOUTINFORMATION ) >>= aLayoutInformation;
+
+                const ::comphelper::NamedValueCollection aSettings( aLayoutInformation );
+                const bool bLastEditedInSqlView = aSettings.getOrDefault( u"LastEditedInSqlView"_ustr, false );
+
+                if ( bLastEditedInSqlView )
+                {
+                    OUString sMessage = DBA_RES( STR_QRY_FORMAT_WARNING_3CHOICES );
+                    sMessage = sMessage.replaceFirst( "$object$", DBA_RES( RSC_QUERY_OBJECT_TYPE[ m_nCommandType ] ) );
+
+                    const Reference< XFrame >& xParentFrame( getParentFrame() );
+                    VclPtr<vcl::Window> pParentWindow = xParentFrame.is()
+                        ? VCLUnoHelper::GetWindow( xParentFrame->getContainerWindow() ) : nullptr;
+                    weld::Window* pParent = pParentWindow ? pParentWindow->GetFrameWeld() : nullptr;
+                    std::unique_ptr<weld::MessageDialog> xDlg(
+                        Application::CreateMessageDialog(
+                            pParent, VclMessageType::Warning,
+                            VclButtonsType::NONE, sMessage ) );
+                    xDlg->add_button( u"SQL View"_ustr, RET_NO );
+                    xDlg->add_button( u"Continue"_ustr, RET_YES );
+                    xDlg->add_button( GetStandardText( StandardButtonType::Cancel ), RET_CANCEL );
+                    xDlg->set_default_response( RET_NO );
+                    sal_uInt16 nResult = xDlg->run();
+
+                    if ( nResult == RET_CANCEL )
+                        return Reference< XComponent >();
+
+                    // tell the controller we already show the warning, so it doesn't show it again in impl_reset()
+                    // this should be removed in the future together with the comment specific warning
+                    ::comphelper::NamedValueCollection aForcedArgs( i_rCreationArgs );
+                    aForcedArgs.put( PROPERTY_FORMAT_WARNING_SHOWN, true );
+
+                    if ( nResult == RET_NO )
+                    {
+                        aForcedArgs.put( PROPERTY_GRAPHICAL_DESIGN, false );
+                    }
+                    return DatabaseObjectView::doCreateView( _rDataSource, _rObjectName, aForcedArgs );
+                }
+            }
+            catch ( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION( "dbaccess" );
+            }
+        }
+
+        return DatabaseObjectView::doCreateView( _rDataSource, _rObjectName, i_rCreationArgs );
     }
 
     // TableDesigner

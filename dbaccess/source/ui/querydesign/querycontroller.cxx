@@ -607,17 +607,20 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                             }
                             else
                             {
-                                // Check for SQL comments before switching to Design View (tdf#42713)
                                 if (!m_bGraphicalDesign)
                                 {
-                                    std::vector<CommentStrip> aComments = getComment(m_sStatement);
-                                    if (!aComments.empty())
+                                    OUString sCurrentCanonical;
+                                    if (m_pSqlIterator->getParseTree())
+                                        m_pSqlIterator->getParseTree()->parseNodeToStr(
+                                            sCurrentCanonical, getConnection());
+                                    if (sCurrentCanonical != m_sStatement)
                                     {
                                         bool bUserSaysNo = true;
                                         if (!Application::IsHeadlessModeEnabled() && !o3tl::IsRunningUITest())
                                         {
                                             OUString aMessage = lcl_getObjectResourceString(
-                                                STR_QRY_COMMENTS_WARNING_2CHOICES, m_nCommandType);
+                                                STR_QRY_FORMAT_WARNING_2CHOICES,
+                                                m_nCommandType);
                                             std::unique_ptr<weld::MessageDialog> xDlg(
                                                 Application::CreateMessageDialog(
                                                     getFrameWeld(), VclMessageType::Warning,
@@ -879,6 +882,7 @@ void OQueryController::impl_initialize(const ::comphelper::NamedValueCollection&
 
     // more non-legacy
     rArguments.get_ensureType( PROPERTY_GRAPHICAL_DESIGN, m_bGraphicalDesign );
+    rArguments.get_ensureType( PROPERTY_FORMAT_WARNING_SHOWN, m_bFormatWarningAlreadyShown );
 
     bool bEscapeProcessing( true );
     if ( rArguments.get_ensureType( PROPERTY_ESCAPE_PROCESSING, bEscapeProcessing ) )
@@ -972,7 +976,7 @@ void OQueryController::impl_initialize(const ::comphelper::NamedValueCollection&
     try
     {
         getContainer()->initialize();
-        impl_reset( bForceInitialDesign );
+        impl_reset( bForceInitialDesign, /*i_bIsInitialLoad*/ true );
 
         SQLExceptionInfo aError;
         const bool bAttemptedGraphicalDesign = m_bGraphicalDesign;
@@ -1181,6 +1185,7 @@ void OQueryController::saveViewSettings( ::comphelper::NamedValueCollection& o_r
     o_rViewSettings.put( u"Fields"_ustr, aAllFieldsData.getPropertyValues() );
     o_rViewSettings.put( u"SplitterPosition"_ustr, m_nSplitPos );
     o_rViewSettings.put( u"VisibleRows"_ustr, m_nVisibleRows );
+    o_rViewSettings.put( u"LastEditedInSqlView"_ustr, !m_bGraphicalDesign );
 }
 
 void OQueryController::loadViewSettings( const ::comphelper::NamedValueCollection& o_rViewSettings )
@@ -1190,6 +1195,7 @@ void OQueryController::loadViewSettings( const ::comphelper::NamedValueCollectio
     m_nSplitPos = o_rViewSettings.getOrDefault( u"SplitterPosition"_ustr, m_nSplitPos );
     m_nVisibleRows = o_rViewSettings.getOrDefault( u"VisibleRows"_ustr, m_nVisibleRows );
     m_aFieldInformation = o_rViewSettings.getOrDefault( u"Fields"_ustr, m_aFieldInformation );
+    m_bLastEditedInSqlView = o_rViewSettings.getOrDefault( u"LastEditedInSqlView"_ustr, false );
 }
 
 void OQueryController::execute_QueryPropDlg()
@@ -1684,7 +1690,7 @@ short OQueryController::saveModified()
     return nRet;
 }
 
-void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings )
+void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings, const bool i_bIsInitialLoad )
 {
     bool bValid = false;
 
@@ -1804,7 +1810,12 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
         setQueryComposer();
     OSL_ENSURE(m_pSqlIterator,"No SQLIterator set!");
 
-    // When loading (or re-loading) in Design view, check for SQL comments (tdf#42713).
+    // When loading (or re-loading) in Design view, check whether entering it would
+    // be destructive: either the SQL has comments (tdf#42713), or (more generally)
+    // it was last saved in SQL View (tdf#46841), meaning it may carry custom
+    // formatting (or comments) that Design View's canonicalization would destroy.
+    // TODO: in the future only check if last saved in SQL View
+    // (keep for now the comments check for backward compatibility).
     if (m_bGraphicalDesign && !m_sStatement.isEmpty() && m_sStatementWithComments.isEmpty())
     {
         auto cacheStatementWithComments = [this]
@@ -1819,17 +1830,46 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
         };
 
         std::vector<CommentStrip> aComments = getComment(m_sStatement);
-        if (!aComments.empty())
+        if ((!aComments.empty() || m_bLastEditedInSqlView) && !m_bFormatWarningAlreadyShown)
         {
             if (Application::IsHeadlessModeEnabled() || o3tl::IsRunningUITest())
             {
                 // No UI available/desired; keep the existing safe default.
                 m_bGraphicalDesign = false;
             }
+            else if (i_bIsInitialLoad)
+            {
+                OUString aMessage = lcl_getObjectResourceString(
+                    !aComments.empty() ? STR_QRY_COMMENTS_WARNING_3CHOICES
+                                       : STR_QRY_FORMAT_WARNING_3CHOICES,
+                    m_nCommandType);
+                std::unique_ptr<weld::MessageDialog> xDlg(
+                    Application::CreateMessageDialog(
+                        getFrameWeld(), VclMessageType::Warning,
+                        VclButtonsType::NONE, aMessage));
+                xDlg->add_button(u"SQL View"_ustr, RET_NO);
+                xDlg->add_button(u"Continue"_ustr, RET_YES);
+                xDlg->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                xDlg->set_default_response(RET_NO);
+                sal_uInt16 nResult = xDlg->run();
+
+                if (nResult == RET_CANCEL)
+                {
+                    throw VetoException();
+                }
+                if (nResult == RET_NO)
+                {
+                    m_bGraphicalDesign = false;
+                    m_sStatementWithComments.clear();
+                    m_sStatementCanonical.clear();
+                }
+                else // RET_YES
+                {
+                    cacheStatementWithComments();
+                }
+            }
             else
             {
-                // Tentatively proceed into Design View and wait for the user's decision.
-                // PostUserEvent triggers OnDecideCommentsHandling
                 cacheStatementWithComments();
                 Application::PostUserEvent(LINK(this, OQueryController, OnDecideCommentsHandling));
             }
@@ -1881,10 +1921,11 @@ IMPL_LINK_NOARG( OQueryController, OnExecuteAddTable, void*, void )
 
 IMPL_LINK_NOARG( OQueryController, OnDecideCommentsHandling, void*, void )
 {
-    // tdf#42713: ask now that the frame is attached (see impl_reset) whether to
-    // stay in Design View (already tentatively shown), switch back to SQL view,
-    // or abort the open entirely.
-    OUString aMessage = lcl_getObjectResourceString(STR_QRY_COMMENTS_WARNING_3CHOICES, m_nCommandType);
+    // keep for backward compatibility
+    const bool bHasComments = !getComment(m_sStatementWithComments).empty();
+    OUString aMessage = lcl_getObjectResourceString(
+        bHasComments ? STR_QRY_COMMENTS_WARNING_3CHOICES : STR_QRY_FORMAT_WARNING_3CHOICES,
+        m_nCommandType);
     std::unique_ptr<weld::MessageDialog> xDlg(
         Application::CreateMessageDialog(
             getFrameWeld(), VclMessageType::Warning,

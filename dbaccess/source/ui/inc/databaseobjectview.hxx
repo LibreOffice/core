@@ -85,6 +85,8 @@ namespace dbaui
                 getApplicationUI() const { return m_xApplication; }
         css::uno::Reference< css::sdbc::XConnection >
                 getConnection() const;
+        const css::uno::Reference< css::frame::XFrame >&
+                getParentFrame() const { return m_xParentFrame; }
 
     public:
         DatabaseObjectView(
@@ -146,6 +148,12 @@ namespace dbaui
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const css::uno::Any& _aDataSource,
             const OUString& _rObjectName
+        ) override;
+
+        virtual css::uno::Reference< css::lang::XComponent > doCreateView(
+            const css::uno::Any& _rDataSource,
+            const OUString& _rObjectName,
+            const ::comphelper::NamedValueCollection& i_rCreationArgs
         ) override;
 
     public:
