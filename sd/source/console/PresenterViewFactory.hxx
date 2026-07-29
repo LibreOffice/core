@@ -37,13 +37,13 @@ namespace sdext::presenter {
 class SAL_LOPLUGIN_ANNOTATE("crosscast") CachablePresenterView
 {
 public:
-    virtual void ActivatePresenterView();
+    virtual void ActivatePresenterView() = 0;
 
     /** Called before the view is disposed.  This gives the view the
         opportunity to trigger actions that may lead to (synchronous)
         callbacks that do not result in DisposedExceptions.
     */
-    virtual void ReleaseView();
+    virtual void ReleaseView() = 0;
 
 protected:
     CachablePresenterView();

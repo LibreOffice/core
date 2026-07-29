@@ -54,8 +54,7 @@ typedef cppu::ImplInheritanceHelper<
     notes text.
 */
 class PresenterNotesView
-    : public PresenterNotesViewInterfaceBase,
-      public CachablePresenterView
+    : public PresenterNotesViewInterfaceBase
 {
 public:
     explicit PresenterNotesView (

@@ -56,8 +56,7 @@ typedef cppu::ImplInheritanceHelper<
     to create the slide previews.  Painting is done via a canvas.
 */
 class PresenterSlideSorter
-    : public PresenterSlideSorterInterfaceBase,
-      public CachablePresenterView
+    : public PresenterSlideSorterInterfaceBase
 {
 public:
     PresenterSlideSorter (

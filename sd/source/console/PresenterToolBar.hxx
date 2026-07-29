@@ -59,8 +59,7 @@ typedef cppu::ImplInheritanceHelper<
 */
 class PresenterToolBar
     : private ::cppu::BaseMutex,
-      public PresenterToolBarInterfaceBase,
-      public CachablePresenterView
+      public PresenterToolBarInterfaceBase
 {
 public:
     enum class Anchor { Left, Center };

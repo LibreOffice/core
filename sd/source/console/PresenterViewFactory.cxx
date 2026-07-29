@@ -397,14 +397,6 @@ CachablePresenterView::CachablePresenterView()
 {
 }
 
-void CachablePresenterView::ActivatePresenterView()
-{
-}
-
-void CachablePresenterView::ReleaseView()
-{
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
