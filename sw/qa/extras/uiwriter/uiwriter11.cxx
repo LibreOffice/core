@@ -994,6 +994,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf129449_findReplaceParaStyle3)
 
     // Without the fix, the Cursor had not moved.
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(11), pWrtShell->GetCursor()->GetPointNode().GetIndex());
+
+    // Get the count of a FindAll for the paragraphs with a Title style
+    uno::Reference<util::XSearchable> xSearch(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XSearchDescriptor> xSearchDes = xSearch->createSearchDescriptor();
+
+    // specifying the search attributes
+    uno::Reference<beans::XPropertySet> xPropSet(xSearchDes, uno::UNO_QUERY_THROW);
+    xSearchDes->setPropertyValue(u"SearchStyles"_ustr, uno::Any(true));
+    xSearchDes->setSearchString(u"Title"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSearch->findAll(xSearchDes)->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf36582_findReplaceRedline)

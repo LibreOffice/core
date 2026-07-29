@@ -886,7 +886,16 @@ static sal_Int32 lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
                 }
             }
             if (bToNextPara)
-                (*fnMove.fnPos)(pCurrentCursor->GetPoint(), false);
+            {
+                if (!(*fnMove.fnPos)(pCurrentCursor->GetPoint(), false))
+                {
+                    if (lcl_IsNotTextSearch(xSearchItem.get()))
+                    {
+                        // At end of the document with a style/format/attr search: done this ring
+                        break;
+                    }
+                }
+            }
 
             if( *pSttPos == *pEndPos )
                 // in area but at the end => done

@@ -446,8 +446,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf131431)
     completed = true;
     TimeoutThread.join();
 
-    // ideally should be 9, but due to some bugs it reports more
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), nReplaceCount);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), nReplaceCount);
 
     // a simple 'search' should also report the same number
     // CPPUNIT_ASSERT_EQUAL(sal_Int32(9), xReplace->findAll(xReplaceDes)->getCount());
