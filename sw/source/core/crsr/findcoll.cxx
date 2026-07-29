@@ -33,14 +33,12 @@ struct SwFindParaFormatColl : public SwFindParas
 {
     const SwTextFormatColl *pFormatColl, *pReplColl;
     SwRootFrame const* m_pLayout;
-    SwDocPositions m_eStart;
     SwFindParaFormatColl(const SwTextFormatColl& rFormatColl,
             const SwTextFormatColl *const pRpColl,
-            SwRootFrame const*const pLayout, SwDocPositions eStart)
+            SwRootFrame const*const pLayout)
         : pFormatColl( &rFormatColl )
         , pReplColl( pRpColl )
         , m_pLayout(pLayout)
-        , m_eStart(eStart)
     {}
     virtual ~SwFindParaFormatColl() {}
     virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly, std::unique_ptr<SvxSearchItem>& xSearchItem) override;
@@ -57,7 +55,7 @@ int SwFindParaFormatColl::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnM
     if( bInReadOnly && pReplColl )
         bInReadOnly = false;
 
-    if (!sw::FindFormatImpl(rCursor, *pFormatColl, fnMove, rRegion, bInReadOnly, m_pLayout, m_eStart))
+    if (!sw::FindFormatImpl(rCursor, *pFormatColl, fnMove, rRegion, bInReadOnly, m_pLayout))
         nRet = FIND_NOT_FOUND;
     else if( pReplColl )
     {
@@ -97,7 +95,7 @@ sal_Int32 SwCursor::FindFormat( const SwTextFormatColl& rFormatColl, SwDocPositi
                 &aRewriter );
     }
 
-    SwFindParaFormatColl aSwFindParaFormatColl(rFormatColl, pReplFormatColl, pLayout, nStart);
+    SwFindParaFormatColl aSwFindParaFormatColl(rFormatColl, pReplFormatColl, pLayout);
 
     sal_Int32 nRet = FindAll( aSwFindParaFormatColl, nStart, nEnd, eFndRngs, bCancel );
     rDoc.SetOle2Link( aLnk );

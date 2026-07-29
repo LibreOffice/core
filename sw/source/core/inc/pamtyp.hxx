@@ -22,7 +22,6 @@
 
 #include <unotools/textsearch.hxx>
 
-#include <cshtyp.hxx>
 #include <memory>
 #include <optional>
 
@@ -105,7 +104,7 @@ namespace sw {
                 const SwFormat& rFormat,
                 SwMoveFnCollection const & fnMove,
                 const SwPaM & rRegion, bool bInReadOnly,
-                SwRootFrame const* pLayout, SwDocPositions eStart);
+                SwRootFrame const* pLayout);
     bool FindAttrImpl(SwPaM & rSearchPam,
                 const SfxPoolItem& rAttr,
                 SwMoveFnCollection const & fnMove,

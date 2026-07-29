@@ -449,7 +449,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf131431)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(9), nReplaceCount);
 
     // a simple 'search' should also report the same number
-    // CPPUNIT_ASSERT_EQUAL(sal_Int32(9), xReplace->findAll(xReplaceDes)->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), xReplace->findAll(xReplaceDes)->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf147583_backwardSearch)

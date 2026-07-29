@@ -28,28 +28,12 @@ namespace sw {
 bool FindFormatImpl(SwPaM & rSearchPam,
         const SwFormat& rFormat, SwMoveFnCollection const & fnMove,
         const SwPaM &rRegion, bool bInReadOnly,
-        SwRootFrame const*const pLayout, SwDocPositions eStart)
+        SwRootFrame const*const pLayout)
 {
     bool bFound = false;
     const bool bSrchForward = &fnMove == &fnMoveForward;
     std::optional<SwPaM> oPam;
     MakeRegion( fnMove, rRegion, oPam );
-
-    if (eStart == SwDocPositions::Curr)
-    {
-        // if at beginning/end then move it out of the node
-        if (bSrchForward
-            ? oPam->GetPoint()->GetContentIndex() == oPam->GetPointContentNode()->Len()
-            : !oPam->GetPoint()->GetContentIndex())
-        {
-            if (!(*fnMove.fnPos)(oPam->GetPoint(), false))
-            {
-                return false;
-            }
-            SwContentNode& rNd = *oPam->GetPoint()->GetNode().GetContentNode();
-            oPam->GetPoint()->SetContent(bSrchForward ? 0 : rNd.Len());
-        }
-    }
 
     bool bFirst = true;
     SwContentNode* pNode;

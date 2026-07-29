@@ -1295,7 +1295,7 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
     bool bReplaceText
         = pSearchOpt && (!pSearchOpt->replaceString.isEmpty() || !pSet->Count() || bReplaceNoAttr);
     bool bReplaceAttr = pReplSet && pReplSet->Count();
-    bool bMoveFirst = !bReplaceAttr;
+    bool bMoveFirst = false;
     if( bInReadOnly && (bReplaceAttr || bReplaceText ))
         bInReadOnly = false;
 
