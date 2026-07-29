@@ -703,8 +703,8 @@ void PresenterToolBar::Layout()
     double nX (0);
     switch (meAnchor)
     {
-        case Left : nX = 0; break;
-        case Center: nX = (aWindowBox.Width - aTotalSize.Width - nTotalHorizontalGap) / 2; break;
+        case Anchor::Left : nX = 0; break;
+        case Anchor::Center: nX = (aWindowBox.Width - aTotalSize.Width - nTotalHorizontalGap) / 2; break;
     }
 
     // Place the parts.
@@ -942,7 +942,7 @@ PresenterToolBarView::PresenterToolBarView (
             mxWindow,
             mxCanvas,
             rpPresenterController,
-            PresenterToolBar::Center);
+            PresenterToolBar::Anchor::Center);
         mpToolBar->Initialize(u"PresenterScreenSettings/ToolBars/ToolBar"_ustr);
 
         if (mxWindow.is())

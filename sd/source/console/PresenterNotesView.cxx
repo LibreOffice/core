@@ -192,7 +192,7 @@ void PresenterNotesView::CreateToolBar (
         mxToolBarWindow,
         mxToolBarCanvas,
         rpPresenterController,
-        PresenterToolBar::Left);
+        PresenterToolBar::Anchor::Left);
     mpToolBar->Initialize(
         u"PresenterScreenSettings/ToolBars/NotesToolBar"_ustr);
 }

@@ -63,7 +63,7 @@ class PresenterToolBar
       public CachablePresenterView
 {
 public:
-    enum Anchor { Left, Center };
+    enum class Anchor { Left, Center };
 
     PresenterToolBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
