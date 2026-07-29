@@ -295,7 +295,7 @@ int main(int argc, char** argv)
         if( contents.empty())
             continue;
         foundSomething = false;
-        if( !tooling::runToolOnCodeWithArgs( std::unique_ptr<FindNamedClassAction>(new FindNamedClassAction), contents, args, argv[ i ] ))
+        if( !tooling::runToolOnCodeWithArgs( std::unique_ptr<FindNamedClassAction>(new FindNamedClassAction), contents, args, argv[ i ], LO_CLANG_EXECUTABLE ))
         {
             std::cerr << "Failed to analyze: " << argv[ i ] << std::endl;
             return 2;

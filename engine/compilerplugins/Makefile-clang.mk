@@ -274,6 +274,7 @@ $(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisit
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGDEFS) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGINCLUDES) \
         -I$(BUILDDIR)/config_host -DCLANGFLAGS='"$(CLANGTOOLDEFS)"' \
+        -DLO_CLANG_EXECUTABLE='"$(CLANGDIR)/bin/clang$(CLANG_EXE_EXT)"' \
         -DLO_CLANG_USE_ANALYZER_PCH=$(if $(COMPILER_PLUGINS_ANALYZER_PCH),1,0) \
         -c $< -o $(CLANGOUTDIR)/sharedvisitor/analyzer.o -MMD -MT $@ -MP \
         -MF $(CLANGOUTDIR)/sharedvisitor/analyzer.d
