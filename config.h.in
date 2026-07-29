@@ -78,6 +78,9 @@
 /* User feedback URL. */
 #undef FEEDBACK_URL
 
+/* Accessibility statement URL. */
+#undef ACCESSIBILITY_STATEMENT_URL
+
 /* Define to 1 if libcap (cap_get_proc) is available, otherwise 0 */
 #define HAVE_LIBCAP 0
 

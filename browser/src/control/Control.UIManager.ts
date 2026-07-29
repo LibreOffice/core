@@ -941,7 +941,26 @@ class UIManager extends window.L.Control {
 			this.map.on('docloaded', startPresentation);
 		this.map.contextToolbar = new ContextToolbar(this.map);
 
+		this.map.once('docloaded', () => {
+			this.showAccessibilityStatementNotice();
+		});
+
 		app.serverConnectionService.onSpecializedUI(docType);
+	}
+
+	/**
+	 * Tells the reader of a small screen that this view is not fully
+	 * accessible, and offers the accessibility statement of the deployment.
+	 * The statement URL comes from --with-accessibility-statement-url. It is
+	 * empty unless the deployment sets one, and then there is nothing to say.
+	 */
+	showAccessibilityStatementNotice(): void {
+		if (!window.mode.isSmallScreenDevice()) return;
+
+		const url = window.accessibilityStatementUrl;
+		if (!url) return;
+
+		AccessibilityNotice.show(url);
 	}
 
 	/**

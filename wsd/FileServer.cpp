@@ -1631,6 +1631,9 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     Poco::replaceInPlace(preprocess, std::string("%ENABLE_UPDATE_NOTIFICATION%"), boolToString(allowUpdateNotification));
 
     Poco::replaceInPlace(preprocess, std::string("%FEEDBACK_URL%"), std::string(FEEDBACK_URL));
+    Poco::replaceInPlace(preprocess, std::string("%ACCESSIBILITY_STATEMENT_URL%"),
+                         ConfigUtil::getConfigValue<std::string>(
+                             config, "accessibility_statement_url", ACCESSIBILITY_STATEMENT_URL));
     Poco::replaceInPlace(preprocess, std::string("%WELCOME_URL%"), std::string(WELCOME_URL));
 
     Poco::replaceInPlace(preprocess, BUYPRODUCT_URL, urv[BUYPRODUCT_URL]);

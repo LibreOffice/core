@@ -69,6 +69,7 @@ m4_ifelse(MOBILEAPP, [true],
   </style>
   <input type="hidden" id="init-welcome-url" value="%WELCOME_URL%" />
   <input type="hidden" id="init-feedback-url" value="%FEEDBACK_URL%" />
+  <input type="hidden" id="init-accessibility-statement-url" value="%ACCESSIBILITY_STATEMENT_URL%" />
   <input type="hidden" id="init-buy-product-url" value="%BUYPRODUCT_URL%" />
   <input type="hidden" id="init-app-type" value="browser" />
   <input type="hidden" id="init-css-vars" value="<!--%CSS_VARIABLES%-->" />

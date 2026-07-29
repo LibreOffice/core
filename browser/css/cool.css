@@ -1652,3 +1652,52 @@ body.slideshow-presenting-in-window .jsdialog-window.modalpopup {
 #debug-panel label { display: block; cursor: pointer; padding: 1px 0; }
 #debug-panel input[type='checkbox'] { margin-right: 5px; }
 #debug-panel .debug-panel-number { width: 5.5em; margin-left: 5px; font: inherit; }
+
+/* the bar saying that a small screen is not fully accessible */
+.accessibility-notice {
+	position: fixed;
+	left: 8px;
+	right: 8px;
+	bottom: 8px;
+	z-index: 1100;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	border-radius: 4px;
+	background-color: #323232;
+	color: white;
+	font-size: var(--header-font-size);
+}
+
+.accessibility-notice-message {
+	flex: 1 1 auto;
+	margin: 0;
+}
+
+.accessibility-notice-link {
+	color: white;
+	text-decoration: underline;
+	white-space: nowrap;
+}
+
+.accessibility-notice-dismiss {
+	background: transparent;
+	border: none;
+	color: white;
+	font: inherit;
+	text-decoration: underline;
+	padding: 4px;
+	cursor: pointer;
+}
+
+/* Present only to a screen reader. The visible message is its own element. */
+.accessibility-notice-announcement {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}

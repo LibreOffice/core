@@ -237,6 +237,7 @@ class InitializerBase {
 
 		window.welcomeUrl = document.getElementById("init-welcome-url") ? document.getElementById("init-welcome-url").value: "";
 		window.feedbackUrl = document.getElementById("init-feedback-url") ? document.getElementById("init-feedback-url").value: "";
+		window.accessibilityStatementUrl = document.getElementById("init-accessibility-statement-url") ? document.getElementById("init-accessibility-statement-url").value: "";
 		window.buyProductUrl = document.getElementById("init-buy-product-url") ? document.getElementById("init-buy-product-url").value: "";
 		let initCSSVars = document.getElementById("init-css-vars") ? document.getElementById("init-css-vars").value: "";
 

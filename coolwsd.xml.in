@@ -417,6 +417,8 @@
 
     <help_url desc="The Help root URL, or empty for no help (hides the Help buttons)" type="string" default="@HELP_URL@">@HELP_URL@</help_url>
 
+    <accessibility_statement_url desc="The URL of the accessibility statement of this deployment, or empty for none. When empty the small-screen view says nothing about its accessibility." type="string" default="@ACCESSIBILITY_STATEMENT_URL@">@ACCESSIBILITY_STATEMENT_URL@</accessibility_statement_url>
+
     <overwrite_mode>
         <enable desc="Enable overwrite mode (user can use insert key)" type="bool" default="false">false</enable>
     </overwrite_mode>

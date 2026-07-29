@@ -452,6 +452,10 @@ AC_ARG_WITH([feedback-url],
             AS_HELP_STRING([--with-feedback-url=<url>],
                            [User feedback URL.]))
 
+AC_ARG_WITH([accessibility-statement-url],
+            AS_HELP_STRING([--with-accessibility-statement-url=<url>],
+                           [Accessibility statement URL.]))
+
 AC_ARG_WITH([infobar-url],
             AS_HELP_STRING([--with-infobar-url=<url>],
                            [Infobar URL.]))
@@ -1321,6 +1325,15 @@ if test -n "$with_feedback_url"; then
 fi
 
 AC_DEFINE_UNQUOTED([FEEDBACK_URL],["$FEEDBACK_URL"],[User feedback URL.])
+
+ACCESSIBILITY_STATEMENT_URL=
+
+if test -n "$with_accessibility_statement_url"; then
+   ACCESSIBILITY_STATEMENT_URL=$with_accessibility_statement_url
+fi
+
+AC_SUBST(ACCESSIBILITY_STATEMENT_URL)
+AC_DEFINE_UNQUOTED([ACCESSIBILITY_STATEMENT_URL],["$ACCESSIBILITY_STATEMENT_URL"],[Default value of the accessibility statement URL.])
 
 INFOBAR_URL=
 if test -n "$with_infobar_url"; then

@@ -119,7 +119,7 @@ ENGINE_WORKDIR = @LO_PATH@/../workdir
 # tsc can report a failure, but still create a .js and a second make attempt will succeed,
 # so if this returns an error then delete the target
 $(MOCHA_JS_DIR)/main.js: $(MOCHA_DIR)/main.ts $(wildcard $(MOCHA_DIR)/*.ts $(MOCHA_DIR)/*/*.ts)
-	$(QUIET_TSC) $(builddir)/node_modules/typescript/bin/tsc $< --outfile $@ --module none --moduleResolution node --lib dom,es2016 --target ES5 --downlevelIteration --allowJs || (rm -f $@ && false)
+	$(QUIET_TSC) $(builddir)/node_modules/typescript/bin/tsc $< --outfile $@ --module none --moduleResolution node --lib dom,es2016 --target ES5 --downlevelIteration --allowJs --jsx react --jsxFactory h --jsxFragmentFactory Fragment || (rm -f $@ && false)
 
 JQUERY_LIGHTNESS_IMAGE_PATH = $(srcdir)/images/jquery-ui-lightness
 JQUERY_LIGHTNESS_IMAGES = $(wildcard $(JQUERY_LIGHTNESS_IMAGE_PATH)/*.png)
@@ -689,6 +689,7 @@ COOL_JS_LST =\
 	src/control/backstage/CloudDialogs.tsx \
 	src/control/Control.BackstageView.ts \
 	src/control/DropFileOverlay.tsx \
+	src/control/AccessibilityNotice.tsx \
 	src/control/Control.ContextToolbar.ts \
 	src/control/Control.SidebarBase.ts \
 	src/control/Control.Sidebar.ts \
@@ -1470,6 +1471,7 @@ pot:
 		src/control/backstage/OpenView.tsx \
 		src/control/backstage/CloudDialogs.tsx \
 		src/control/DropFileOverlay.tsx \
+		src/control/AccessibilityNotice.tsx \
 		src/control/Control.Command.js \
 		src/control/Control.DocumentNameInput.js \
 		src/control/Control.DocumentRepair.js \

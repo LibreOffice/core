@@ -9,6 +9,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/// <reference path="../src/dom/JSX.ts" />
 /// <reference path="../src/app/DocUtil.ts" />
 /// <reference path="../src/app/LocaleService.ts" />
 /// <reference path="../src/app/LayoutingService.ts" />
@@ -243,6 +244,7 @@
 /// <reference path="../src/control/jsdialog/Control.ContextMenu.ts" />
 /// <reference path="../src/control/CalcNotifications.ts" />
 /// <reference path="../src/control/Control.PaneExpander.ts" />
+/// <reference path="../src/control/AccessibilityNotice.tsx" />
 /// <reference path="../src/control/Control.UIManager.ts" />
 /// <reference path="../src/control/Notebookbar.WriterReferencesTab.ts" />
 /// <reference path="../src/control/Control.ContextToolbar.ts" />
