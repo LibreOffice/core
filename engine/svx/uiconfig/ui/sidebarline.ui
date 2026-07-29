@@ -88,7 +88,7 @@
             <child>
               <object class="GtkMenuToolButton" id="SelectWidth">
                 <property name="visible">True</property>
-                <property name="icon-name">selectwidth</property>
+                <property name="icon-name">cmd/lc_selectwidth.png</property>
                 <property name="tooltip-text" translatable="yes" context="sidebarline|SelectWidth|tooltip_text">Line Thickness</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
