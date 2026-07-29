@@ -40,6 +40,32 @@ describe('Print', () => {
 		await openFixture(browser.webEngine, browser.native, 'print-sample.odp');
 	});
 
+	// A test that fails part way through leaves its dialog on screen, and the
+	// next test then counts that one along with its own, so it fails too.
+	// Dismiss whatever is still up after a test that did not pass.
+	afterEach(async function () {
+		if (this.currentTest?.state === 'passed') return;
+
+		const leftovers: [string, string][] = [
+			['//dialog[@name="Print Document"]', 'Cancel'],
+			['//alert[@name="Export Error"]', 'OK'],
+		];
+		for (const [dialog, dismiss] of leftovers) {
+			try {
+				for (let i = 0; i < 5; i++) {
+					if (!(await browser.native.$$(dialog)).length) break;
+					const button = await browser.native.$(
+						`${dialog}//button[@name="${dismiss}"]`,
+					);
+					await button.click();
+					await new Promise((resolve) => setTimeout(resolve, 500));
+				}
+			} catch {
+				// The failure the test itself reported is the one worth reading.
+			}
+		}
+	});
+
 	it('keeps the web view responsive and opens the print dialog', async function () {
 		this.timeout(90000);
 
@@ -101,23 +127,29 @@ describe('Print', () => {
 		await dialog.waitForExist({ timeout: 30000 });
 
 		// A broken guard would run a second export alongside the first and its
-		// dialog would appear a moment later, so let the count settle before
-		// asserting rather than sampling it the instant the first dialog shows.
+		// dialog would appear a moment later, so let the count settle at one
+		// before asserting rather than sampling it the instant the first dialog
+		// shows. A poll that reads the accessibility tree while it is being
+		// rebuilt finds no dialog at all, so a run of stable polls starts over
+		// and the count is reported when the settle never happens.
 		let stableOnePolls = 0;
-		await we().waitUntil(
-			async () => {
-				const dialogs = await browser.native.$$(
-					'//dialog[@name="Print Document"]',
-				);
-				stableOnePolls = dialogs.length === 1 ? stableOnePolls + 1 : -1000;
-				return stableOnePolls >= 10;
-			},
-			{
-				timeout: 20000,
-				interval: 300,
-				timeoutMsg: 'a second print dialog appeared while one was open',
-			},
-		);
+		let dialogsSeen = 0;
+		try {
+			await we().waitUntil(
+				async () => {
+					dialogsSeen = (
+						await browser.native.$$('//dialog[@name="Print Document"]')
+					).length;
+					stableOnePolls = dialogsSeen === 1 ? stableOnePolls + 1 : 0;
+					return stableOnePolls >= 10;
+				},
+				{ timeout: 20000, interval: 300 },
+			);
+		} catch {
+			throw new Error(
+				`the number of open print dialogs never settled at one, last count ${dialogsSeen}`,
+			);
+		}
 
 		const cancelButton = await browser.native.$(
 			'//dialog[@name="Print Document"]//button[@name="Cancel"]',

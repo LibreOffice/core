@@ -201,10 +201,12 @@ EXTRA_DIST += \
 	$(TEST_DIR)/fixtures/slide_navigation.odp \
 	$(TEST_DIR)/fixtures/empty-presentation.odp \
 	$(TEST_DIR)/fixtures/readonly-source.odp \
+	$(TEST_DIR)/fixtures/popout-dialog.odt \
 	$(TEST_DIR)/specs/harness.spec.ts \
 	$(TEST_DIR)/specs/document-lifecycle.spec.ts \
 	$(TEST_DIR)/specs/open-file.spec.ts \
-	$(TEST_DIR)/specs/slide-copy-paste.spec.ts
+	$(TEST_DIR)/specs/slide-copy-paste.spec.ts \
+	$(TEST_DIR)/specs/popout-dialog.spec.ts
 
 ### --- WebdriverIO test integration end ---
 

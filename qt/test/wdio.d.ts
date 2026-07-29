@@ -48,6 +48,7 @@ declare const app: {
 		deselectAll(): void;
 		isEditMode(): boolean;
 		_enterEditMode(permission: string): void;
+		sendUnoCommand(command: string, json?: unknown, force?: boolean): void;
 		_clip: {
 			clearSelection(): void;
 			setTextSelectionType(selectionType: string): void;
@@ -64,6 +65,10 @@ declare const app: {
 			show(): void;
 			hide(): void;
 			toggle(): void;
+		};
+		jsdialog: {
+			dialogs: { [id: string]: unknown };
+			close(id: string, sendCloseEvent: boolean, focusHandled?: boolean): boolean;
 		};
 	};
 	impress: {
