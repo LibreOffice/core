@@ -171,8 +171,7 @@ PresenterPaneContainer::SharedPaneDescriptor
     return pDescriptor;
 }
 
-PresenterPaneContainer::SharedPaneDescriptor
-    PresenterPaneContainer::RemovePane (const rtl::Reference<sd::framework::ResourceId>& rxPaneId)
+void PresenterPaneContainer::RemovePane(const rtl::Reference<sd::framework::ResourceId>& rxPaneId)
 {
     SharedPaneDescriptor pDescriptor (FindPaneId(rxPaneId));
     if (pDescriptor)
@@ -185,7 +184,6 @@ PresenterPaneContainer::SharedPaneDescriptor
         pDescriptor->mxView = nullptr;
         pDescriptor->mbIsActive = false;
     }
-    return pDescriptor;
 }
 
 PresenterPaneContainer::SharedPaneDescriptor

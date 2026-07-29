@@ -110,8 +110,7 @@ public:
     SharedPaneDescriptor StoreView (
         const rtl::Reference<sd::framework::AbstractView>& rxView);
 
-    SharedPaneDescriptor RemovePane (
-        const rtl::Reference<sd::framework::ResourceId>& rxPaneId);
+    void RemovePane(const rtl::Reference<sd::framework::ResourceId>& rxPaneId);
 
     SharedPaneDescriptor RemoveView (
         const rtl::Reference<sd::framework::AbstractView>& rxView);
