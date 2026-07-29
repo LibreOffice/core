@@ -627,6 +627,32 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testRedlineRenderModePartInfo)
     CPPUNIT_ASSERT_EQUAL(std::string("2"), aTree.get<std::string>("mode"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCommentOnSecondPagePartInfo)
+{
+    // Given a two page document whose only comment is anchored on the second page:
+    createSwDoc("comment-on-second-page.fodt");
+
+    // When getting the COKit part info right after the load, while the layout pass that builds the
+    // comment windows is still pending:
+    OUString aPartInfo = getSwTextDoc()->getPartInfo(0);
+
+    // Then make sure the part info reports that the document has comments:
+    std::stringstream aStream((std::string(aPartInfo.toUtf8())));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: true
+    // - Actual  : false
+    // i.e. the comment counted only once its window had been built.
+    CPPUNIT_ASSERT_EQUAL(std::string("true"), aTree.get<std::string>("partHasComments"));
+
+    // The page count is checked once the measurement is done. Reading it walks the view cursor to
+    // the last page, and that scroll lays the comment windows out, which is the very state the
+    // check above has to see untouched. It still fails loudly if the page break in the fixture ever
+    // stops working, instead of quietly turning this into a first page test.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
