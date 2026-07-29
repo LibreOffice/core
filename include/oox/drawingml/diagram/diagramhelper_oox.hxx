@@ -117,7 +117,6 @@ public:
     virtual void addDiagramModelData(boost::property_tree::ptree& rTarget) const override;
     virtual OUString getDiagramModelData(svx::diagram::DomMapFlag aId) const override;
 
-    virtual const OUString& getBackgroundShapeModelID() const override;
     virtual bool isTextNodeModelID(const OUString& rModelID) const override;
 };
 
