@@ -20,7 +20,10 @@
 #include <svgtools.hxx>
 #include <cstdint>
 #include <sal/log.hxx>
+#include <rtl/uri.hxx>
 #include <tools/color.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/securityoptions.hxx>
 #include <rtl/math.hxx>
 #include <o3tl/string_view.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -1395,6 +1398,45 @@ namespace svgio::svgreader
                     rUrl = rCandidate;
                 }
             }
+        }
+
+        OUString resolveImageUrl(const OUString& rDocumentPath, const OUString& rUrl)
+        {
+            OUString aAbsoluteUrl;
+
+            try
+            {
+                aAbsoluteUrl = rtl::Uri::convertRelToAbs(rDocumentPath, rUrl);
+            }
+            catch (const rtl::MalformedUriException& rException)
+            {
+                SAL_WARN("svg", "caught rtl::MalformedUriException \"" << rException.getMessage() << "\"");
+                return OUString();
+            }
+
+            if (aAbsoluteUrl.isEmpty() || aAbsoluteUrl == rDocumentPath)
+                return OUString();
+
+            if (INetURLObject(aAbsoluteUrl).IsExoticProtocol())
+            {
+                SAL_WARN("svg", "ignore exotic protocol: " << rUrl);
+                return OUString();
+            }
+
+            // A document that arrived as a stream has no location of its own, so it
+            // was never stored next to whatever an absolute reference names.
+            if (rDocumentPath.isEmpty())
+            {
+                SAL_WARN("svg", "ignore reference from a document with no location: " << rUrl);
+                return OUString();
+            }
+
+            // While links are blocked, only a document in a trusted location reaches
+            // out to a file beside it.
+            if (SvtSecurityOptions::isUntrustedReferer(rDocumentPath))
+                return OUString();
+
+            return aAbsoluteUrl;
         }
 
         // #i125325#

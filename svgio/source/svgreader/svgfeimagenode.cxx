@@ -25,7 +25,6 @@
 #include <svgdocument.hxx>
 #include <comphelper/base64.hxx>
 #include <tools/stream.hxx>
-#include <rtl/uri.hxx>
 
 namespace svgio::svgreader
 {
@@ -96,18 +95,9 @@ void SvgFeImageNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
     }
     else if (!maUrl.isEmpty())
     {
-        const OUString& rPath = getDocument().getAbsolutePath();
-        OUString aAbsUrl;
-        try
-        {
-            aAbsUrl = rtl::Uri::convertRelToAbs(rPath, maUrl);
-        }
-        catch (rtl::MalformedUriException& e)
-        {
-            SAL_WARN("svg", "caught rtl::MalformedUriException \"" << e.getMessage() << "\"");
-        }
+        const OUString aAbsUrl = resolveImageUrl(getDocument().getAbsolutePath(), maUrl);
 
-        if (!aAbsUrl.isEmpty() && rPath != aAbsUrl)
+        if (!aAbsUrl.isEmpty())
         {
             SvFileStream aStream(aAbsUrl, StreamMode::STD_READ);
             Graphic aGraphic;

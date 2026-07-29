@@ -28,7 +28,6 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <comphelper/base64.hxx>
@@ -226,18 +225,10 @@ namespace svgio::svgreader
             }
             else if(!maUrl.isEmpty())
             {
-                const OUString& rPath = getDocument().getAbsolutePath();
-                OUString aAbsUrl;
-                try {
-                    aAbsUrl = rtl::Uri::convertRelToAbs(rPath, maUrl);
-                } catch (rtl::MalformedUriException & e) {
-                    SAL_WARN(
-                        "svg",
-                        "caught rtl::MalformedUriException \""
-                            << e.getMessage() << "\"");
-                }
+                const OUString aAbsUrl
+                    = resolveImageUrl(getDocument().getAbsolutePath(), maUrl);
 
-                if (!aAbsUrl.isEmpty() && rPath != aAbsUrl)
+                if (!aAbsUrl.isEmpty())
                 {
                     SvFileStream aStream(aAbsUrl, StreamMode::STD_READ);
                     Graphic aGraphic;
