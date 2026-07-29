@@ -969,8 +969,6 @@ void ScDPOutput::Output()
     }
     mpDocument->SetString(mnTabStartCol, mnTabStartRow, nTab, maDataDescription);
 
-    mpStyleOutput->applyAreaStyles();
-
     outputColumnHeaders(nTab);
 
     outputRowHeader(nTab);

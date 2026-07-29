@@ -123,11 +123,9 @@ struct Expander
     ScMF nFlags = ScMF::NONE;
 };
 
-/** Collects the sections of a pivot table while the table content is written to the sheet and
- *  handles the whole visual formatting of the pivot table. The cell styles are applied as the
- *  sections are added, before any direct formatting reaches the cells, and apply() then draws
- *  the block frames, the member indents and the expand and collapse buttons in one pass over
- *  the collected sections. */
+/** Collects the sections of a pivot table while the table content is written to the sheet, and
+ *  then draws the whole visual formatting of the pivot table (block frames, member indents and
+ *  the expand and collapse buttons) in one pass over the collected sections. */
 class StyleOutput
 {
 private:
@@ -152,24 +150,35 @@ public:
 
     void setGeometry(Geometry const& rGeometry) { maGeometry = rGeometry; }
 
-    /** Applies the base cell styles of the table: the header area on top and the data area
-     *  below. The more specific styles of the sections are applied over them. */
-    void applyAreaStyles();
-
-    void addFieldCell(SCCOL nCol, SCROW nRow, bool bFrame);
+    void addFieldCell(SCCOL nCol, SCROW nRow, bool bFrame)
+    {
+        maFieldCells.push_back(FieldCell{ nCol, nRow, bFrame });
+    }
 
     void addPageFieldValueCell(SCCOL nCol, SCROW nRow)
     {
         maPageFieldValueCells.push_back(PageFieldValueCell{ nCol, nRow });
     }
 
-    void addColumnMemberSpan(size_t nField, SCCOL nStartCol, SCCOL nEndCol, SCROW nRow);
+    void addColumnMemberSpan(size_t nField, SCCOL nStartCol, SCCOL nEndCol, SCROW nRow)
+    {
+        maColumnMemberSpans.push_back(ColumnMemberSpan{ nField, nStartCol, nEndCol, nRow });
+    }
 
-    void addRowMemberSpan(size_t nField, SCCOL nCol, SCROW nStartRow, SCROW nEndRow);
+    void addRowMemberSpan(size_t nField, SCCOL nCol, SCROW nStartRow, SCROW nEndRow)
+    {
+        maRowMemberSpans.push_back(RowMemberSpan{ nField, nCol, nStartRow, nEndRow });
+    }
 
-    void addSubtotalColumn(SCCOL nCol, SCROW nStartRow, bool bGrandTotal);
+    void addSubtotalColumn(SCCOL nCol, SCROW nStartRow, bool bGrandTotal)
+    {
+        maSubtotalColumns.push_back(SubtotalColumn{ nCol, nStartRow, bGrandTotal });
+    }
 
-    void addSubtotalRow(SCROW nRow, SCCOL nStartCol, bool bGrandTotal);
+    void addSubtotalRow(SCROW nRow, SCCOL nStartCol, bool bGrandTotal)
+    {
+        maSubtotalRows.push_back(SubtotalRow{ nRow, nStartCol, bGrandTotal });
+    }
 
     void addIndent(SCCOL nCol, SCROW nRow, tools::Long nIndent)
     {
