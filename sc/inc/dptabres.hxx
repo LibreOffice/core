@@ -657,7 +657,6 @@ public:
                                         const ::std::vector< SCROW >& pItemData,
                                         size_t nPos,
                                         ScDPInitState& rInitState);
-    void CheckShowEmpty( bool bShow = false );
     const ScDPResultData* GetResultData() const { return pResultData; }
 
     bool IsAutoHidden() const { return bAutoHidden; };
