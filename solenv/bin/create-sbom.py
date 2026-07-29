@@ -645,6 +645,126 @@ def assign_externals(files_by_package, externals):
                             file["external"] = externals[("native", filename)]
 
 
+from enum import Flag, auto
+class FileFlags(Flag):
+    EXECUTABLE = auto()
+    ARCHIVE = auto()
+    STRUCTURED = auto()
+
+def locate_files(files_by_package, languages, ziplist):
+    """
+    Find actual paths of the files, which depends on language and variables,
+    and determine flags.
+    """
+
+    archives = [
+            ".odb", ".odc", ".odf", ".odg", ".odm", ".odp", ".ods", ".odt",
+            ".otc", ".otf", ".otg", ".oth", ".otm", ".otp", ".ots", ".ott",
+            ".stw", ".otr", ".bau", ".dat", ".sob", ".sop", ".zip" ]
+    executables = [
+            ".so", ".pyd", ".dll", ".dylib", ".jnilib", ".exe", ".com", ".bin",
+            ".jar", ".class", ".java", ".bsh", ".js",
+            ".py", ".pyi",
+            ".xba", ".xdl",
+            ".xsl",
+            ".glsl",
+            ".PS" ]
+
+    def get_flags(file, abspath, instpath):
+        (basename, ext) = os.path.splitext(instpath)
+        if ext == ".pyc":
+            raise Exception(f"Eeeek! a .pyc file to be installed: {instpath}")
+        styles = install_script_value_to_array(file["Styles"]) if "Styles" in file else []
+        perms = file.get("UnixRights", "644")
+        if not(perms in ("644", "755")):
+            raise Exception(f"Unexpected UnixRights: {file}")
+        # there are both shell scripts and ELF executables without suffix
+        elif ext in executables or perms == "755" \
+            or ("FILELIST" in styles and "USE_INTERNAL_RIGHTS" in styles \
+                and os.access(abspath, os.X_OK)) \
+            or os.path.splitext(basename)[1] in (".so", ".dylib"): # .so.N
+                return FileFlags.EXECUTABLE
+        elif ext in archives:
+            if ext != ".dat" or "autocorr" in basename:
+                # for now assume no structured files other than archives
+                return FileFlags.ARCHIVE | FileFlags.STRUCTURED
+
+    def check_file(abspath):
+        instpath = os.path.relpath(abspath, os.environ.get("INSTDIR")).replace("\\", "/")
+        if not(os.path.exists(abspath)):
+            raise Exception(f"file not found: '{abspath}'")
+        return (abspath, instpath)
+
+    def find_file(sourcepath, instpath):
+        abspath = os.environ.get("INSTDIR") + "/" + sourcepath
+        if not(os.path.exists(abspath)):
+            raise Exception(f"file not found: {sourcepath} expected '{abspath}'")
+        return (abspath, instpath)
+
+    ZIPLIST_VAR = re.compile(r"\$\{(\w+)\}")
+    variables = ziplist[productname]["settings"]["variables"]
+
+    def subst_ziplist_vars(value):
+        return ZIPLIST_VAR.sub(lambda match: variables.get(match.group(1), match.group(0)), value)
+
+    def get_dir(dirs, lang):
+        if len(dirs) == 1:
+            assert dirs[0]["ParentID"] == "PREDEFINED_PROGDIR"
+            return ""
+        if dirs[0]["ismultilingual"] == 1 and f"HostName ({lang})" in dirs[0]:
+            name = dirs[0][f"HostName ({lang})"]
+        else:
+            name = dirs[0]["HostName"]
+        return get_dir(dirs[1:], lang) + subst_ziplist_vars(name) + "/"
+
+    def get_files(pathlist, languages):
+        result = set() # set because multiple languages may resolve to same path
+        file = pathlist[0]
+        for lang in languages:
+            parent = get_dir(pathlist[1:], lang)
+            styles = install_script_value_to_array(file["Styles"]) if "Styles" in file else []
+            if file["ismultilingual"] == 1:
+                if not(f"Name ({lang})" in file):
+                    continue # skip it!
+                name = subst_ziplist_vars(file[f"Name ({lang})"])
+                if "MAKE_LANG_SPECIFIC" in styles:
+                    (basename, ext) = os.path.splitext(name)
+                    instname = basename + "_" + lang + ext
+                else:
+                    instname = name
+            else:
+                name = subst_ziplist_vars(file["Name"])
+                instname = name
+            if "FILELIST" in styles:
+                if parent != "":
+                    raise Exception(f"unexpected dir {parent} on filelist: {name}")
+                listfiles = parse_filelist(name)
+                result = result.union([check_file(lf) for lf in listfiles])
+            else:
+                result.add(find_file(parent + name, parent + instname))
+        return result
+
+    result = {}
+
+    for package in files_by_package:
+        package_files = []
+        for pathlist in files_by_package[package]:
+            file = pathlist[0]
+            files = get_files(pathlist, languages)
+            for (abspath, instpath) in files:
+                flags = get_flags(file, abspath, instpath)
+                package_files.append({"flags": flags, "instpath": instpath,
+                    "abspath": abspath, "external": file.get("external")})
+        result[package] = package_files
+
+    return result
+
+def filter_files(files_by_package):
+    """Remove files that are not required to be in SBOM."""
+    for package in files_by_package:
+        files_by_package[package] = [file for file in files_by_package[package] if bool(file["flags"])]
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 13:
         print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of openoffice.lst> <4 packinfo> <path of install script> <languages>")
@@ -668,6 +788,8 @@ if __name__ == "__main__":
         files_by_package = process_install_script(install_script)
         externalfiles = read_externals(externalsfile)
         assign_externals(files_by_package, externalfiles)
+        files = locate_files(files_by_package, languages, ziplist)
+        filter_files(files)
         #TODO process_file(license_path)
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"
