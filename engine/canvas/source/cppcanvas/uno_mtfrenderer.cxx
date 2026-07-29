@@ -14,8 +14,13 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <comphelper/compbase.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/canvastools.hxx>
+#include <canvas.hxx>
 
 using namespace ::com::sun::star;
 
@@ -30,7 +35,7 @@ public:
                  css::uno::Reference<css::uno::XComponentContext> const&);
 
     // XMtfRenderer iface
-    void SAL_CALL draw (const css::uno::Reference<css::rendering::XCanvas>& xCanvas, sal_Int64 pMeta, double fScaleX, double fScaleY) override;
+    sal_Int64 SAL_CALL draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fScaleX, double fScaleY) override;
 
     // XServiceIfno
     virtual ::rtl::OUString getImplementationName() override { return u"com.sun.star.comp.rendering.MtfRenderer"_ustr; }
@@ -42,15 +47,34 @@ public:
     }
 };
 
-void MtfRenderer::draw (const css::uno::Reference<css::rendering::XCanvas>& xCanvas, sal_Int64 pMeta, double fScaleX, double fScaleY)
+sal_Int64 MtfRenderer::draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fScaleX, double fScaleY)
 {
+    rtl::Reference<vclcanvas::Canvas> xCanvas(new vclcanvas::Canvas(pOutputDevice));
+    comphelper::ScopeGuard aCanvasScopeGuard([&xCanvas] {
+        comphelper::disposeComponent(xCanvas);
+    });
+
+    Size aSize (fScaleX + 1, fScaleY + 1);
+    uno::Reference<rendering::XBitmap> xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
+    if( !xBitmap )
+        return 0;
+
+    uno::Reference< rendering::XCanvas > xBitmapCanvas( xBitmap, uno::UNO_QUERY );
+    if( !xBitmapCanvas )
+        return 0;
+
+    xBitmapCanvas->clear();
+
     GDIMetaFile* pMetafile = reinterpret_cast<GDIMetaFile*>(pMeta);
-    cppcanvas::CanvasSharedPtr canvas = cppcanvas::VCLFactory::createCanvas (xCanvas);
+    cppcanvas::CanvasSharedPtr canvas = cppcanvas::VCLFactory::createCanvas (xBitmapCanvas);
     cppcanvas::RendererSharedPtr renderer = cppcanvas::VCLFactory::createRenderer (canvas, *pMetafile);
     ::basegfx::B2DHomMatrix aMatrix;
     aMatrix.scale( fScaleX, fScaleY );
     canvas->setTransformation( aMatrix );
     renderer->draw ();
+
+    Bitmap aBitmap = vcl::unotools::bitmapFromXBitmap(xBitmap);
+    return reinterpret_cast<sal_Int64>(new Bitmap(aBitmap));
 }
 
 MtfRenderer::MtfRenderer (cpo::uno::Sequence<cpo::uno::Any> const&, uno::Reference<uno::XComponentContext> const&)

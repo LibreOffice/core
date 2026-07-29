@@ -19,9 +19,19 @@
 
 module com { module sun { module star { module rendering {
 
+    /**
+     * This interface exists only to deal with a circular dependency between the canvas/ and vcl/ modules.
+     */
     interface XMtfRenderer : ::com::sun::star::uno::XInterface
     {
-        void draw( [in] ::com::sun::star::rendering::XCanvas xCanvas,
+        /**
+         * Render a metafile to a bitmap.
+         *
+         * @param pOutputDevice pointer to a vcl OutputDevice
+         * @param pMetafile pointer to a vcl GDIMetaFile
+         * @return a pointer to a vcl Bitmap, which the caller owns.
+         */
+        hyper draw( [in] hyper pOutputDevice,
                    [in] hyper pMetafile,
                    [in] double fScaleX, [in] double fScaleY );
     };

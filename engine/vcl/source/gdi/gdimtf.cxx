@@ -396,33 +396,16 @@ bool GDIMetaFile::ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Si
     try
     {
         const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
-        uno::Reference<rendering::XCanvas> xCanvas = css::rendering::CanvasFactory::create( xContext )->create(reinterpret_cast<sal_Int64>(win->GetOutDev()));
-        if (!xCanvas.is())
-            return false;
-        comphelper::ScopeGuard aCanvasScopeGuard([&xCanvas] {
-            comphelper::disposeComponent(xCanvas);
-        });
-
-        Size aSize (rDestSize.Width () + 1, rDestSize.Height () + 1);
-        uno::Reference<rendering::XBitmap> xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
-        if( !xBitmap )
-            return false;
-
-        uno::Reference< rendering::XCanvas > xBitmapCanvas( xBitmap, uno::UNO_QUERY );
-        if( !xBitmapCanvas )
-            return false;
-
         uno::Reference< rendering::XMtfRenderer > xMtfRenderer = rendering::MtfRenderer::create( xContext );
-        xBitmapCanvas->clear();
-        xMtfRenderer->draw( xBitmapCanvas, reinterpret_cast<sal_Int64>( this ), rDestSize.Width(), rDestSize.Height() );
+        std::unique_ptr<Bitmap> pBitmap(reinterpret_cast<Bitmap*>(
+            xMtfRenderer->draw( reinterpret_cast<sal_Int64>(win->GetOutDev()), reinterpret_cast<sal_Int64>( this ), rDestSize.Width(), rDestSize.Height() )));
 
-        Bitmap aBitmap = vcl::unotools::bitmapFromXBitmap(xBitmap);
-        if( !aBitmap.IsEmpty() )
+        if( pBitmap && !pBitmap->IsEmpty() )
         {
             if (rOut.GetMapMode().GetMapUnit() == MapUnit::MapPixel)
-                rOut.DrawBitmap( rPos, aBitmap );
+                rOut.DrawBitmap( rPos, *pBitmap );
             else
-                rOut.DrawBitmap( rPos, rLogicDestSize, aBitmap );
+                rOut.DrawBitmap( rPos, rLogicDestSize, *pBitmap );
             return true;
         }
     }
