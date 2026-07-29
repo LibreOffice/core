@@ -22,6 +22,6 @@ $(call gb_CustomTarget_get_clean_target,rust_uno/cargo):
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(gb_CustomTarget_workdir)/rust_uno/cargo && \
 		rm -f $(call gb_CustomTarget_get_target,rust_uno/cargo))
-	rm -fr $(SRCDIR)/rust_uno/Cargo.lock $(SRCDIR)/rust_uno/target
+	rm -fr $(SRCDIR)/rust_uno/target
 
 # vim: set noet sw=4 ts=4:
