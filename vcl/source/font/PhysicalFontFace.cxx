@@ -523,12 +523,6 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
     // If the font has CFF2 table, we need to downgrade it to CFF, as we can’t embed CFF2 in PDF.
     flags |= HB_SUBSET_FLAGS_DOWNGRADE_CFF2;
 
-#if !HB_VERSION_ATLEAST(13, 0, 2)
-    // tdf#171202: Work around HarfBuzz bug where setting old_to_new_glyph_mapping would result in
-    // invalid local subr indices. De-subroutinize the font if we are building against old HarfBuzz.
-    flags |= HB_SUBSET_FLAGS_DESUBROUTINIZE;
-#endif
-
 #if HB_VERSION_ATLEAST(14, 3, 0)
     // Make the charset of CID-keyed CFF fonts identity, so that the CIDs of the
     // subset are its glyph IDs and we don’t have to read them from the charset.
