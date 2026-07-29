@@ -1272,6 +1272,69 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackedCommentDeletionReject)
     CPPUNIT_ASSERT(aView.m_aComment.get_child("layoutStatus").get_value<int>()
                    != static_cast<int>(SwPostItHelper::DELETED));
 }
+
+// The comment field of the single comment the document is expected to have.
+const SwPostItField* getOnlyPostItField(SwPostItMgr& rPostItMgr)
+{
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rPostItMgr.GetPostItFields().size());
+    return static_cast<const SwPostItField*>(
+        rPostItMgr.GetPostItFields()[0]->GetFormatField().GetField());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoCommentDeletionAndTextChange)
+{
+    // Undoing the deletion of a comment and then the text change made before it brings the
+    // comment back with its earlier text and tells the client about it.
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SwTestViewCallback aView;
+    pWrtShell->Insert(u"word"_ustr);
+    SwPostItMgr* pPostItMgr = getSwDocShell()->GetView()->GetPostItMgr();
+    CPPUNIT_ASSERT(pPostItMgr);
+
+    comphelper::dispatchCommand(u".uno:InsertAnnotation"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { "Text", cpo::uno::Any(u"first text"_ustr) },
+                                    { "Author", cpo::uno::Any(u"Author"_ustr) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    sal_uInt32 nPostItId = getOnlyPostItField(*pPostItMgr)->GetPostItId();
+
+    comphelper::dispatchCommand(u".uno:EditAnnotation"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { "Id", cpo::uno::Any(OUString::number(nPostItId)) },
+                                    { "Text", cpo::uno::Any(u"second text"_ustr) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"second text"_ustr, getOnlyPostItField(*pPostItMgr)->GetPar2());
+
+    comphelper::dispatchCommand(u".uno:DeleteComment"_ustr,
+                                comphelper::InitPropertySequence({
+                                    { "Id", cpo::uno::Any(OUString::number(nPostItId)) },
+                                }));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPostItMgr->GetPostItFields().size());
+
+    // A comment is given its window when the layout runs, and the layout only runs once the
+    // event queue is worked through. Both undo commands are sent before that happens, which is
+    // what a client does when it undoes a whole run of comment work at once.
+    comphelper::dispatchCommand(u".uno:Undo"_ustr, {});
+    // The comment is back in the document but has no window yet, which is the state the second
+    // undo works on.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPostItMgr->GetPostItFields().size());
+    CPPUNIT_ASSERT(!pPostItMgr->GetPostItFields()[0]->mpPostIt);
+    comphelper::dispatchCommand(u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(u"first text"_ustr, getOnlyPostItField(*pPostItMgr)->GetPar2());
+    // The comment that came back keeps the id it had, so the client can match it with the one it
+    // was told to remove.
+    CPPUNIT_ASSERT_EQUAL(nPostItId, getOnlyPostItField(*pPostItMgr)->GetPostItId());
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"),
+                         aView.m_aComment.get_child("action").get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(nPostItId, aView.m_aComment.get_child("id").get_value<sal_uInt32>());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

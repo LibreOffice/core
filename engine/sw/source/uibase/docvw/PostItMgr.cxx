@@ -677,15 +677,15 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             postItField->mpPostIt->SetPostItText();
                             mbLayout = true;
                             this->Forward(rBC, rHint);
-                        }
 
-                        // Emit annotation callbacks for COKit
-                        if (comphelper::COKit::isActive())
-                        {
-                            if(SwFormatFieldHintWhich::CHANGED == pFormatHint->Which())
-                                lcl_CommentNotification(mpView, CommentNotificationType::Modify, postItField.get(), 0);
-                            else
-                                lcl_CommentNotification(mpView, CommentNotificationType::Resolve, postItField.get(), 0);
+                            // Emit annotation callbacks for COKit
+                            if (comphelper::COKit::isActive())
+                            {
+                                if(SwFormatFieldHintWhich::CHANGED == pFormatHint->Which())
+                                    lcl_CommentNotification(mpView, CommentNotificationType::Modify, postItField.get(), 0);
+                                else
+                                    lcl_CommentNotification(mpView, CommentNotificationType::Resolve, postItField.get(), 0);
+                            }
                         }
                         break;
                     }
