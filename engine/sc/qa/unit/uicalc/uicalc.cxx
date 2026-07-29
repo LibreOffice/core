@@ -13,6 +13,7 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -2357,6 +2358,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf158551)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf166767)
 {
+    // A cell selection offers no image formats with the Kit (ScTransferObj::AddSupportedFormats)
+    if (comphelper::COKit::isActive())
+        return;
+
     createScDoc();
 
     insertStringToCell(u"A1"_ustr, u"Test");
@@ -2380,6 +2385,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf166767)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf167901)
 {
+    // A cell selection offers no image formats with the Kit (ScTransferObj::AddSupportedFormats)
+    if (comphelper::COKit::isActive())
+        return;
+
     createScDoc();
 
     ScDocument* pDoc = getScDoc();
