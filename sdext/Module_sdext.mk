@@ -22,7 +22,6 @@ $(eval $(call gb_Module_add_targets,sdext,\
 ifeq ($(ENABLE_POPPLER),TRUE)
 $(eval $(call gb_Module_add_targets,sdext,\
     Executable_xpdfimport \
-    Package_pdfimport_xpdfimport \
 ))
 endif
 
