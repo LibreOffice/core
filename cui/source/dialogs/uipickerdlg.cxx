@@ -22,6 +22,33 @@
 #include <vcl/tabs.hrc>
 #include <vcl/weld/Builder.hxx>
 
+namespace
+{
+OUString lcl_GetApplyToText()
+{
+    if (std::optional<vcl::EnumContext::Application> sApp = UITabPage::GetCurrentAppEnum())
+    {
+        switch (*sApp)
+        {
+            case vcl::EnumContext::Application::Writer:
+                return CuiResId(RID_CUISTR_UI_APPLY_TO_WRITER);
+            case vcl::EnumContext::Application::Calc:
+                return CuiResId(RID_CUISTR_UI_APPLY_TO_CALC);
+            case vcl::EnumContext::Application::Impress:
+                return CuiResId(RID_CUISTR_UI_APPLY_TO_IMPRESS);
+            case vcl::EnumContext::Application::Draw:
+                return CuiResId(RID_CUISTR_UI_APPLY_TO_DRAW);
+            default:
+                break;
+        }
+    }
+
+    assert(!"UI picker dialog used for unsupported application");
+
+    return OUString();
+}
+}
+
 UIPickerDialog::UIPickerDialog(weld::Window* pParent)
     : SfxTabDialogController(pParent, u"cui/ui/uipickerdialog.ui"_ustr, u"UIPickerDialog"_ustr)
     , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
@@ -39,8 +66,7 @@ UIPickerDialog::UIPickerDialog(weld::Window* pParent)
 
     // it's mandatory for gtk3 to set the icon before changing the label
     m_xApplyBtn->set_from_icon_name("sw/res/sc20558.png");
-    m_xApplyBtn->set_label(
-        CuiResId(RID_CUISTR_UI_APPLY).replaceFirst("%MODULE", UITabPage::GetCurrentApp()));
+    m_xApplyBtn->set_label(lcl_GetApplyToText());
     m_xResetBtn->set_label(CuiResId(RID_CUISTR_UI_APPLYALL));
     m_xApplyBtn->connect_clicked(LINK(this, UIPickerDialog, OnApplyClick));
     m_xResetBtn->connect_clicked(LINK(this, UIPickerDialog, OnApplyClick));

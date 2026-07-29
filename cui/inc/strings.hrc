@@ -387,7 +387,12 @@
 #define RID_CUISTR_ADDITIONS_THEMES                 NC_("RID_SVXSTR_ADDITIONS_THEMES", "Extensions: Color Themes")
 #define RID_CUISTR_ADDITIONS_TEMPLATES              NC_("RID_SVXSTR_ADDITIONS_TEMPLATES", "Extensions: Templates")
 
-#define RID_CUISTR_UI_APPLY                         NC_("RID_SVXSTR_UI_APPLY", "Apply to %MODULE")
+// Application names for the “Apply to X” button in the UI chooser dialog
+#define RID_CUISTR_UI_APPLY_TO_WRITER               NC_("RID_CUISTR_UI_APPLY_TO_WRITER", "Apply to Writer")
+#define RID_CUISTR_UI_APPLY_TO_CALC                 NC_("RID_CUISTR_UI_APPLY_TO_CALC", "Apply to Calc")
+#define RID_CUISTR_UI_APPLY_TO_IMPRESS              NC_("RID_CUISTR_UI_APPLY_TO_IMPRESS", "Apply to Impress")
+#define RID_CUISTR_UI_APPLY_TO_DRAW                 NC_("RID_CUISTR_UI_APPLY_TO_DRAW", "Apply to Draw")
+
 #define RID_CUISTR_UI_APPLYALL                      NC_("RID_SVXSTR_UI_APPLYALL", "Apply to All")
 
 #define RID_CUISTR_OLE_INSERT                       NC_("RID_SVXSTR_OLE_INSERT", "Inserting OLE object...")
