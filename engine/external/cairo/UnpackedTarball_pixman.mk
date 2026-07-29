@@ -11,6 +11,15 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,pixman))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,pixman,$(PIXMAN_TARBALL),,cairo))
 
+ifneq ($(MSYSTEM),)
+# pixman 0.46.4 ships symlinks under .gitlab-ci.d/meson-cross/ (links to files
+# extracted later); git-bash/msys tar fails to create them since MSYS defaults
+# to not create links
+ifeq ($(filter winsymlinks%,$(MSYS)),)
+$(call gb_UnpackedTarball_get_target,pixman): export MSYS:=$(MSYS) winsymlinks
+endif
+endif
+
 ifeq ($(OS)-$(ENABLE_HEADLESS),WNT-TRUE)
 $(eval $(call gb_UnpackedTarball_add_file,pixman,pixman/pixman-config.h,external/cairo/configs/wnt_pixman_pixman-config.h))
 $(eval $(call gb_UnpackedTarball_add_file,pixman,pixman/pixman-version.h,external/cairo/configs/wnt_pixman_pixman-version.h))
