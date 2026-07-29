@@ -27,6 +27,8 @@
 #include "PresenterTextView.hxx"
 #include <DrawController.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -175,8 +177,8 @@ void PresenterNotesView::CreateToolBar (
         return;
 
     // Create a new window as container of the tool bar.
-    mxToolBarWindow = sd::presenter::PresenterHelper::createWindow(
-        mxParentWindow, true);
+    mxToolBarWindow = VCLUnoHelper::GetInterface(
+        sd::presenter::PresenterHelper::createWindow(mxParentWindow, true));
     mxToolBarCanvas = sd::presenter::PresenterHelper::createSharedCanvas (
         Reference<rendering::XSpriteCanvas>(mxCanvas, UNO_QUERY),
         mxParentWindow,

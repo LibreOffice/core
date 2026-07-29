@@ -24,6 +24,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <comphelper/compbase.hxx>
+#include <vcl/window.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -43,9 +44,9 @@ public:
             When `true` the new window will be visible from the start,
             i.e. a window listener will not receive a windowShown signal.
     */
-    static css::uno::Reference<css::awt::XWindow> createWindow (
-        const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-        bool bInitiallyVisible);
+    static VclPtr<vcl::Window>
+    createWindow(const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
+                 bool bInitiallyVisible);
 
     /** Create a new canvas for the given window.  The new canvas is a
         wrapper around the given shared canvas.  The wrapper only modifies

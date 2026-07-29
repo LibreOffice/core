@@ -23,6 +23,9 @@
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterPaintManager.hxx"
 #include "PresenterUIPainter.hxx"
+
+#include <toolkit/helper/vclunohelper.hxx>
+
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
@@ -99,7 +102,8 @@ PresenterButton::PresenterButton(
 {
     try
     {
-        mxWindow = sd::presenter::PresenterHelper::createWindow(rxParentWindow, false);
+        mxWindow = VCLUnoHelper::GetInterface(
+            sd::presenter::PresenterHelper::createWindow(rxParentWindow, false));
 
         // Make the background transparent.
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY_THROW);

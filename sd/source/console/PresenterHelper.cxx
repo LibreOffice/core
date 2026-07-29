@@ -41,9 +41,8 @@ using namespace ::com::sun::star::uno;
 
 namespace sd::presenter {
 
-Reference<awt::XWindow> PresenterHelper::createWindow (
-    const Reference<awt::XWindow>& rxParentWindow,
-    bool bInitiallyVisible)
+VclPtr<vcl::Window> PresenterHelper::createWindow(const Reference<awt::XWindow>& rxParentWindow,
+                                                  bool bInitiallyVisible)
 {
     VclPtr<vcl::Window> pParentWindow(VCLUnoHelper::GetWindow(rxParentWindow));
 
@@ -57,7 +56,7 @@ Reference<awt::XWindow> PresenterHelper::createWindow (
     pWindow->SetParentClipMode(ParentClipMode::NoClip);
     pWindow->SetPaintTransparent(true);
 
-    return VCLUnoHelper::GetInterface(pWindow);
+    return pWindow;
 }
 
 Reference<rendering::XCanvas> PresenterHelper::createSharedCanvas (
