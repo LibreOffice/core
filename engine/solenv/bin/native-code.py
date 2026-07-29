@@ -35,7 +35,6 @@ core_constructor_list = [
     "stardiv_UnoControls_ProgressMonitor_get_implementation",
     "stardiv_UnoControls_StatusIndicator_get_implementation",
 # canvas/source/factory/canvasfactory.component
-    "com_sun_star_comp_rendering_CanvasFactory_get_implementation",
     "com_sun_star_comp_rendering_MtfRenderer_get_implementation",
 # chart2/source/chart2.component
     "com_sun_star_chart2_ExponentialScaling_get_implementation",

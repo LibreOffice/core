@@ -22,16 +22,12 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <canvas/cppcanvastest.hxx>
 
-#include <com/sun/star/rendering/CanvasFactory.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
-
 using namespace drawinglayer;
 using namespace com::sun::star;
 
 class VclMetaFileProcessor2DTest : public test::BootstrapFixture
 {
     VclPtr<VirtualDevice> mVclDevice;
-    uno::Reference<rendering::XCanvas> mCanvas;
 
     // if enabled - check the result images with:
     // "xdg-open ./workdir/CppunitTest/drawinglayer_processors.test.core/"
@@ -56,7 +52,6 @@ public:
     virtual void tearDown() override
     {
         mVclDevice.reset();
-        mCanvas = uno::Reference<rendering::XCanvas>();
         BootstrapFixture::tearDown();
     }
 
@@ -67,9 +62,6 @@ public:
         mVclDevice->SetOutputSizePixel(size);
         mVclDevice->SetBackground(Wallpaper(backgroundColor));
         mVclDevice->Erase();
-        mCanvas = css::rendering::CanvasFactory::create(m_xContext)
-                      ->create(reinterpret_cast<sal_Int64>(mVclDevice.get()));
-        CPPUNIT_ASSERT(mCanvas.is());
     }
 
     // Test drawing a dotted line in Impress presentation mode.
@@ -128,8 +120,9 @@ public:
         // I got these matrices from a breakpoint in drawing the polyline, and walking up
         // the stack to the canvas code.
         CPPUNIT_ASSERT(cppcanvas::testCanvasDraw(
-            mCanvas, basegfx::B2DHomMatrix(0.056662828121770453, 0, 0, 0, 0.056640419947506564, 0),
-            metafile, basegfx::B2DHomMatrix(14548, 0, -2, 0, 3350, 3431)));
+            mVclDevice,
+            basegfx::B2DHomMatrix(0.056662828121770453, 0, 0, 0, 0.056640419947506564, 0), metafile,
+            basegfx::B2DHomMatrix(14548, 0, -2, 0, 3350, 3431)));
 
         exportDevice(u"test-tdf136957"_ustr, mVclDevice);
         Bitmap bitmap = mVclDevice->GetBitmap(Point(), Size(1920, 1080));

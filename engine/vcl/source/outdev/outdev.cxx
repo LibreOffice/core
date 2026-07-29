@@ -38,7 +38,6 @@
 
 #include <com/sun/star/awt/DeviceCapability.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
 #ifdef DISABLE_DYNLOADING

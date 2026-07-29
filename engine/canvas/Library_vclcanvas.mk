@@ -52,7 +52,6 @@ $(eval $(call gb_Library_use_libraries,vclcanvas,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclcanvas,\
-	canvas/source/factory/cf_service \
 	canvas/source/vcl/bitmapbackbuffer \
 	canvas/source/vcl/cachedbitmap \
 	canvas/source/vcl/canvas \

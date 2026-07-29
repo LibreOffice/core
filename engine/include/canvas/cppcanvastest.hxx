@@ -22,16 +22,13 @@
 #include <canvas/vclcanvasdllapi.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-namespace com::sun::star::rendering
-{
-class XCanvas;
-}
+class OutputDevice;
 class GDIMetaFile;
 
 namespace cppcanvas
 {
 // only here so we can do a unit test from drawinglayer/qa/unit/vclmetafileprocessor2d.cxx
-VCLCANVAS_DLLPUBLIC bool testCanvasDraw(const css::uno::Reference<css::rendering::XCanvas>& rCanvas,
+VCLCANVAS_DLLPUBLIC bool testCanvasDraw(OutputDevice* pDev,
                                         const basegfx::B2DHomMatrix& rTransform1,
                                         GDIMetaFile& rMetaFile,
                                         const basegfx::B2DHomMatrix& rTransform2);

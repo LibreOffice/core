@@ -45,8 +45,6 @@
 
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/rendering/MtfRenderer.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;

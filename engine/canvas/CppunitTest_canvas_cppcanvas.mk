@@ -12,6 +12,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,cppcanvas_test))
 
 $(eval $(call gb_CppunitTest_set_include,cppcanvas_test,\
+	-I$(SRCDIR)/canvas/inc \
 	-I$(SRCDIR)/canvas/source/cppcanvas \
 	$$(INCLUDE) \
 ))
@@ -23,7 +24,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppcanvas_test, \
 $(eval $(call gb_CppunitTest_use_external,cppcanvas_test,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,cppcanvas_test, \
-	vclcanvas \
 	basegfx \
 	canvastools \
 	comphelper \
@@ -36,6 +36,7 @@ $(eval $(call gb_CppunitTest_use_libraries,cppcanvas_test, \
 	tl \
 	unotest \
 	vcl \
+	vclcanvas \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,cppcanvas_test))

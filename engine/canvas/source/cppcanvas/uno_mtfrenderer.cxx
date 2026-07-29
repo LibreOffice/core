@@ -49,7 +49,7 @@ public:
 
 sal_Int64 MtfRenderer::draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fScaleX, double fScaleY)
 {
-    rtl::Reference<vclcanvas::Canvas> xCanvas(new vclcanvas::Canvas(pOutputDevice));
+    rtl::Reference<vclcanvas::Canvas> xCanvas(new vclcanvas::Canvas(reinterpret_cast<OutputDevice*>(pOutputDevice)));
     comphelper::ScopeGuard aCanvasScopeGuard([&xCanvas] {
         comphelper::disposeComponent(xCanvas);
     });

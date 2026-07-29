@@ -18,8 +18,8 @@
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
 #include <unopolypolygon.hxx>
+#include <canvas.hxx>
 
-#include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
@@ -83,8 +83,7 @@ public:
         mVclDevice->SetOutputSizePixel(size);
         mVclDevice->SetBackground(Wallpaper(backgroundColor));
         mVclDevice->Erase();
-        mCanvas = css::rendering::CanvasFactory::create(m_xContext)
-                      ->create(reinterpret_cast<sal_Int64>(mVclDevice.get()));
+        mCanvas = new vclcanvas::Canvas(mVclDevice.get());
         CPPUNIT_ASSERT(mCanvas.is());
         mDevice
             = uno::Reference<rendering::XGraphicDevice>(mCanvas->getDevice(), uno::UNO_SET_THROW);

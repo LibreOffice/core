@@ -32,13 +32,12 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    Canvas::Canvas( sal_Int64 nOutDev )
+    Canvas::Canvas( OutputDevice* pOutDev )
     {
         SolarMutexGuard aGuard;
 
         SAL_INFO("canvas.vcl", "vclcanvas::Canvas() called" );
 
-        OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nOutDev);
         if( !pOutDev )
             throw lang::NoSupportException(u"Passed OutDev invalid!"_ustr, nullptr);
 

@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,canvas_test, \
     tl \
     unotest \
     vcl \
+    vclcanvas \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,canvas_test))

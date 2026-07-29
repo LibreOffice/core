@@ -272,10 +272,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/rdf,\
 	URI \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/rendering,\
-	Canvas \
-	CanvasFactory \
 	MtfRenderer \
-	XCanvasFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/resource,\
 	StringResource \

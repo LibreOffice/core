@@ -28,6 +28,7 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
+#include <canvas/vclcanvasdllapi.h>
 
 #include "./base/basemutexhelper.hxx"
 #include "./base/bitmapcanvasbase.hxx"
@@ -37,6 +38,8 @@
 #include "impltools.hxx"
 #include "devicehelper.hxx"
 #include "repainttarget.hxx"
+
+class OutputDevice;
 
 namespace vclcanvas
 {
@@ -68,7 +71,7 @@ namespace vclcanvas
                    public RepaintTarget
     {
     public:
-        Canvas( sal_Int64 nOutDev );
+        VCLCANVAS_DLLPUBLIC Canvas( OutputDevice* pOutDev );
 
         /// For resource tracking
         virtual ~Canvas() override;
