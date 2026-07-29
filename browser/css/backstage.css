@@ -199,6 +199,20 @@
 	display: none;
 }
 
+#backstage-sidebar-common-break.backstage-sidebar-item {
+	height: 2px;
+	background-color: var(--color-toolbar-border);
+	padding: 0;
+	cursor: default;
+	/* Starts under the icons of the entries. Ends level with the break at the foot of the
+	   sidebar. */
+	margin-inline-start: 24px;
+	margin-inline-end: 20px;
+	/* The gap in the tab list and the margin of an entry add 6px more, so the line has 14px of
+	   space above and below. */
+	margin-block: 8px;
+}
+
 #backstage-sidebar-horizontal-break.backstage-sidebar-item {
 	height: 2px;
 	background-color: var(--color-toolbar-border);

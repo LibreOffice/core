@@ -135,6 +135,12 @@ class BackstageView extends window.L.Class {
 				visible: true,
 			},
 			{
+				type: 'separator',
+				id: 'sidebar-common-break',
+				label: '',
+				visible: !this.isStarterMode,
+			},
+			{
 				id: 'share',
 				label: _('Share'),
 				type: 'action',
