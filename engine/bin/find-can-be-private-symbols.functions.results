@@ -10534,11 +10534,11 @@ bsolve_xA2
 btran
 canvas::CanvasCustomSpriteHelper::getUpdateArea(basegfx::B2DRange const&) const
 canvas::CanvasCustomSpriteHelper::updateClipState(rtl::Reference<canvas::Sprite> const&)
-canvas::ParametricPolyPolygon::ParametricPolyPolygon(com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice>, basegfx::B2DPolygon const&, canvas::ParametricPolyPolygon::GradientType, cpo::uno::Sequence<cpo::uno::Sequence<double> > const&, cpo::uno::Sequence<double> const&, double)
-canvas::ParametricPolyPolygon::ParametricPolyPolygon(com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice>, canvas::ParametricPolyPolygon::GradientType, cpo::uno::Sequence<cpo::uno::Sequence<double> > const&, cpo::uno::Sequence<double> const&)
-canvas::ParametricPolyPolygon::createEllipticalGradient(com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&, cpo::uno::Sequence<cpo::uno::Sequence<double> > const&, cpo::uno::Sequence<double> const&, double)
-canvas::ParametricPolyPolygon::createLinearHorizontalGradient(com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&, cpo::uno::Sequence<cpo::uno::Sequence<double> > const&, cpo::uno::Sequence<double> const&)
-canvas::ParametricPolyPolygon::createRectangularGradient(com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&, cpo::uno::Sequence<cpo::uno::Sequence<double> > const&, cpo::uno::Sequence<double> const&, double)
+canvas::ParametricPolyPolygon::ParametricPolyPolygon(com::sun::star::uno::Reference<com::sun::star::vclcanvas::XGraphicDevice>, basegfx::B2DPolygon const&, canvas::ParametricPolyPolygon::GradientType, cpo::uno::Sequence<cpo::uno::Sequence<double> > const&, cpo::uno::Sequence<double> const&, double)
+canvas::ParametricPolyPolygon::ParametricPolyPolygon(com::sun::star::uno::Reference<com::sun::star::vclcanvas::XGraphicDevice>, canvas::ParametricPolyPolygon::GradientType, cpo::uno::Sequence<cpo::uno::Sequence<double> > const&, cpo::uno::Sequence<double> const&)
+canvas::ParametricPolyPolygon::createEllipticalGradient(com::sun::star::uno::Reference<com::sun::star::vclcanvas::XGraphicDevice> const&, cpo::uno::Sequence<cpo::uno::Sequence<double> > const&, cpo::uno::Sequence<double> const&, double)
+canvas::ParametricPolyPolygon::createLinearHorizontalGradient(com::sun::star::uno::Reference<com::sun::star::vclcanvas::XGraphicDevice> const&, cpo::uno::Sequence<cpo::uno::Sequence<double> > const&, cpo::uno::Sequence<double> const&)
+canvas::ParametricPolyPolygon::createRectangularGradient(com::sun::star::uno::Reference<com::sun::star::vclcanvas::XGraphicDevice> const&, cpo::uno::Sequence<cpo::uno::Sequence<double> > const&, cpo::uno::Sequence<double> const&, double)
 canvas::ParametricPolyPolygon::disposing(std::unique_lock<std::mutex>&)
 canvas::ParametricPolyPolygon::getColor(double)
 canvas::ParametricPolyPolygon::getColorSpace()

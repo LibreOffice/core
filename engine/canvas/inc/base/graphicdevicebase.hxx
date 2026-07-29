@@ -57,7 +57,7 @@ namespace canvas
 
         <pre>
         Example:
-        typedef ::cppu::WeakComponentImplHelper < css::rendering::XGraphicDevice,
+        typedef ::cppu::WeakComponentImplHelper < css::vclcanvas::XGraphicDevice,
                                                   css::rendering::XColorSpace,
                                                   css::rendering::XPropertySet,
                                                   css::lang::XServiceInfo,

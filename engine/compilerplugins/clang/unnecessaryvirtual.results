@@ -89,7 +89,7 @@ canvas/inc/base/canvasbase.hxx:399
 canvas/inc/base/canvasbase.hxx:415
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawBitmapModulated(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
 canvas/inc/base/canvasbase.hxx:431
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice> canvas::CanvasBase::getDevice()
+    class com::sun::star::uno::Reference<class com::sun::star::vclcanvas::XGraphicDevice> canvas::CanvasBase::getDevice()
 canvas/inc/base/disambiguationhelper.hxx:70
     void canvas::DisambiguationHelper::disposing()
 canvas/inc/base/disambiguationhelper.hxx:73

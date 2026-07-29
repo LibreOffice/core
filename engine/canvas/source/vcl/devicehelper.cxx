@@ -43,7 +43,7 @@ namespace vclcanvas
     }
 
     uno::Reference< rendering::XLinePolyPolygon2D > DeviceHelper::createCompatibleLinePolyPolygon(
-        const uno::Reference< rendering::XGraphicDevice >&              ,
+        const uno::Reference< vclcanvas::XGraphicDevice >&              ,
         const cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > >&  points )
     {
         if( !mpOutDev )
@@ -57,7 +57,7 @@ namespace vclcanvas
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >& rDevice,
+        const uno::Reference< vclcanvas::XGraphicDevice >& rDevice,
         const geometry::IntegerSize2D&                     size )
     {
         if( !mpOutDev )

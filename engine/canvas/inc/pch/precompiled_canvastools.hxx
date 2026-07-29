@@ -73,7 +73,6 @@
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 #include <comphelper/diagnose_ex.hxx>

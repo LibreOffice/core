@@ -51,6 +51,7 @@
 #include <canvashelper.hxx>
 #include <impltools.hxx>
 #include "textlayout.hxx"
+#include <XGraphicDevice.hxx>
 
 
 using namespace ::com::sun::star;
@@ -117,7 +118,7 @@ namespace vclcanvas
         mpOutDevProvider.reset();
     }
 
-    void CanvasHelper::init( rendering::XGraphicDevice&     rDevice,
+    void CanvasHelper::init( vclcanvas::XGraphicDevice&     rDevice,
                              const OutDevProviderSharedPtr& rOutDev,
                              bool                           bProtect,
                              bool                           bHaveAlpha )

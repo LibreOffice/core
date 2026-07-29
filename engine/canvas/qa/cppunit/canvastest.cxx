@@ -29,7 +29,7 @@ class CanvasTest : public test::BootstrapFixture
 {
     VclPtr<VirtualDevice> mVclDevice;
     uno::Reference<vclcanvas::XCanvas> mCanvas;
-    uno::Reference<rendering::XGraphicDevice> mDevice;
+    uno::Reference<vclcanvas::XGraphicDevice> mDevice;
     rendering::ViewState mViewState;
     rendering::RenderState mRenderState;
     cpo::uno::Sequence<double> mColorBlack;
@@ -71,7 +71,7 @@ public:
     {
         mVclDevice.disposeAndClear();
         mCanvas = uno::Reference<vclcanvas::XCanvas>();
-        mDevice = uno::Reference<rendering::XGraphicDevice>();
+        mDevice = uno::Reference<vclcanvas::XGraphicDevice>();
         BootstrapFixture::tearDown();
     }
 
@@ -85,7 +85,7 @@ public:
         mCanvas = new vclcanvas::Canvas(mVclDevice.get());
         CPPUNIT_ASSERT(mCanvas.is());
         mDevice
-            = uno::Reference<rendering::XGraphicDevice>(mCanvas->getDevice(), uno::UNO_SET_THROW);
+            = uno::Reference<vclcanvas::XGraphicDevice>(mCanvas->getDevice(), uno::UNO_SET_THROW);
         CPPUNIT_ASSERT(mDevice.is());
     }
 

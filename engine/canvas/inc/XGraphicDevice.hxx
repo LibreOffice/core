@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the Collabora Office project.
  *
@@ -16,11 +16,34 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#pragma once
 
-module com { module sun { module star { module rendering {
+#include <sal/config.h>
 
-interface XBitmap;
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
+#include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
+#include <com/sun/star/rendering/XParametricPolyPolygon2D.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Sequence.hxx>
+#include <cpo/uno/Type.hxx>
+#include <cppu/unotype.hxx>
+#include <cppu/macros.hxx>
+#include <rtl/ustring.hxx>
 
+#include <type_traits>
+
+namespace cpo::uno
+{
+class Type;
+}
+
+namespace vclcanvas
+{
 /* TODO: There's obviously a concept called window missing here, where
    methods such as bufferController, fullscreen mode etc . belong
    to. But see below
@@ -41,8 +64,14 @@ interface XBitmap;
     have this state, it might even be that all windows on the screen
     share a common graphic device.
  */
-interface XGraphicDevice : ::com::sun::star::uno::XInterface
+class XGraphicDevice : public ::css::uno::XInterface
 {
+public:
+    XGraphicDevice() = default;
+    XGraphicDevice(XGraphicDevice const&) = default;
+    XGraphicDevice(XGraphicDevice&&) = default;
+    XGraphicDevice& operator=(XGraphicDevice const&) = default;
+    XGraphicDevice& operator=(XGraphicDevice&&) = default;
 
     /** Create a line poly-polygon which can internally use
         device-optimized representations already.
@@ -50,8 +79,10 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         @param points
         The points of the poly-polygon, in a separate array for every polygon.
      */
-    XLinePolyPolygon2D              createCompatibleLinePolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points );
-
+    virtual ::css::uno::Reference<::css::rendering::XLinePolyPolygon2D>
+    createCompatibleLinePolyPolygon(
+        const ::cpo::uno::Sequence<::cpo::uno::Sequence<::css::geometry::RealPoint2D>>& points)
+        = 0;
 
     /** Create a bitmap with alpha channel whose memory layout and
         sample model is compatible to the graphic device.
@@ -60,9 +91,8 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         Size of the requested bitmap in pixel. Both components of the
         size must be greater than 0
      */
-    XBitmap                         createCompatibleAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
+    virtual ::css::uno::Reference<::css::rendering::XBitmap>
+    createCompatibleAlphaBitmap(const ::css::geometry::IntegerSize2D& size) = 0;
 
     /** Create a parametric polygon.
 
@@ -118,12 +148,41 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
             not collapse into a single point, but become a line of
             center color.
      */
-    XParametricPolyPolygon2D createParametricPolyPolygon([in] string GradientService,
-                [in] sequence< sequence < double > >colors,
-                [in] sequence< double > stops,
-                [in] double aspectRatio);
+    virtual ::css::uno::Reference<::css::rendering::XParametricPolyPolygon2D>
+    createParametricPolyPolygon(const ::rtl::OUString& GradientService,
+                                const ::cpo::uno::Sequence<::cpo::uno::Sequence<double>>& colors,
+                                const ::cpo::uno::Sequence<double>& stops, double aspectRatio)
+        = 0;
+
+    static inline ::cpo::uno::Type const& static_type(void* = nullptr);
+
+protected:
+    ~XGraphicDevice() noexcept {} // avoid warnings about virtual members and non-virtual dtor
 };
 
-}; }; }; };
+inline ::cpo::uno::Type const&
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::vclcanvas::XGraphicDevice const*)
+{
+    static typelib_TypeDescriptionReference* the_type = nullptr;
+    if (!the_type)
+    {
+        typelib_static_type_init(&the_type, typelib_TypeClass_INTERFACE,
+                                 "vclcanvas.XGraphicDevice");
+    }
+    return *reinterpret_cast<::cpo::uno::Type*>(&the_type);
+}
+}
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+::cpo::uno::Type const& ::vclcanvas::XGraphicDevice::static_type(SAL_UNUSED_PARAMETER void*)
+{
+    return ::cppu::UnoType<::vclcanvas::XGraphicDevice>::get();
+}
+
+namespace cppu::detail
+{
+template <> struct IsUnoInterfaceType<::vclcanvas::XGraphicDevice> : ::std::true_type
+{
+};
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -35,7 +35,7 @@ namespace vclcanvas
     // take a bitmap here, but a VDev directly.
     CanvasBitmap::CanvasBitmap( const ::Size&                  rSize,
                                 bool                           bAlphaBitmap,
-                                rendering::XGraphicDevice&     rDevice,
+                                vclcanvas::XGraphicDevice&     rDevice,
                                 const OutDevProviderSharedPtr& rOutDevProvider )
     {
         // create bitmap for given reference device

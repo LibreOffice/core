@@ -66,7 +66,7 @@ namespace vclcanvas
             Reference output device. Used to create matching bitmap.
          */
         void init( const ::Bitmap&                              rBitmap,
-                   css::rendering::XGraphicDevice&              rDevice,
+                   vclcanvas::XGraphicDevice&                   rDevice,
                    const OutDevProviderSharedPtr&               rOutDevProvider );
 
 

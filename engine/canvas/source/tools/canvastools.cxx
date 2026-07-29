@@ -372,7 +372,7 @@ namespace canvastools
             }
         }
 
-        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
+        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolyPolygon( const uno::Reference< vclcanvas::XGraphicDevice >&  xGraphicDevice,
                                                                                     const ::basegfx::B2DPolyPolygon&                    rPolyPoly    )
         {
             if( !xGraphicDevice.is() )
@@ -387,7 +387,7 @@ namespace canvastools
                 return static_cast<rendering::XLinePolyPolygon2D*>(xRes.get());
         }
 
-        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
+        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolygon( const uno::Reference< vclcanvas::XGraphicDevice >&  xGraphicDevice,
                                                                                 const ::basegfx::B2DPolygon&                        rPoly    )
         {
             if( !xGraphicDevice.is() )

@@ -26,6 +26,7 @@
 
 #include <canvas/canvastoolsdllapi.h>
 #include <rtl/ref.hxx>
+#include "XGraphicDevice.hxx"
 #include <utility>
 
 namespace com::sun::star::rendering { class XGraphicDevice; }
@@ -85,7 +86,7 @@ namespace canvas
         };
 
         static rtl::Reference<ParametricPolyPolygon> create(
-            const css::uno::Reference< css::rendering::XGraphicDevice >& rDevice,
+            const css::uno::Reference< vclcanvas::XGraphicDevice >& rDevice,
             std::u16string_view rServiceName,
             const ::cpo::uno::Sequence< ::cpo::uno::Sequence< double > >& colors,
             const ::cpo::uno::Sequence< double >& stops,
@@ -108,36 +109,36 @@ namespace canvas
         ParametricPolyPolygon& operator=( const ParametricPolyPolygon& ) = delete;
 
         static rtl::Reference<ParametricPolyPolygon> createLinearHorizontalGradient( const css::uno::Reference<
-                                                                         css::rendering::XGraphicDevice >& rDevice,
+                                                                         vclcanvas::XGraphicDevice >& rDevice,
                                                                       const cpo::uno::Sequence< cpo::uno::Sequence< double > >& colors,
                                                                       const cpo::uno::Sequence< double >& stops );
         static rtl::Reference<ParametricPolyPolygon> createEllipticalGradient( const css::uno::Reference<
-                                                                   css::rendering::XGraphicDevice >& rDevice,
+                                                                   vclcanvas::XGraphicDevice >& rDevice,
                                                                 const cpo::uno::Sequence< cpo::uno::Sequence< double > >& colors,
                                                                 const cpo::uno::Sequence< double >& stops,
                                                                 double fAspect );
         static rtl::Reference<ParametricPolyPolygon> createRectangularGradient( const css::uno::Reference<
-                                                                    css::rendering::XGraphicDevice >& rDevice,
+                                                                    vclcanvas::XGraphicDevice >& rDevice,
                                                                  const cpo::uno::Sequence< cpo::uno::Sequence< double > >& colors,
                                                                  const cpo::uno::Sequence< double >& stops,
                                                                  double fAspect );
 
         /// Private, because objects can only be created from the static factories
         ParametricPolyPolygon( css::uno::Reference<
-                                   css::rendering::XGraphicDevice >             xDevice,
+                                   vclcanvas::XGraphicDevice >             xDevice,
                                const ::basegfx::B2DPolygon&                     rGradientPoly,
                                GradientType                                     eType,
                                const cpo::uno::Sequence< cpo::uno::Sequence< double > >&  colors,
                                const cpo::uno::Sequence< double >&              stops,
                                double                                           nAspectRatio );
         ParametricPolyPolygon( css::uno::Reference<
-                                   css::rendering::XGraphicDevice >             xDevice,
+                                   vclcanvas::XGraphicDevice >             xDevice,
                                GradientType                                     eType,
                                const cpo::uno::Sequence< cpo::uno::Sequence< double > >&  colors,
                                const cpo::uno::Sequence< double >&              stops );
 
         css::uno::Reference<
-            css::rendering::XGraphicDevice >    mxDevice;
+            vclcanvas::XGraphicDevice >    mxDevice;
 
         /// All defining values of this object
         const Values                                         maValues;

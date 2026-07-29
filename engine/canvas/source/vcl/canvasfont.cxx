@@ -39,7 +39,7 @@ namespace vclcanvas
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
                             const cpo::uno::Sequence< beans::PropertyValue >&    rExtraFontProperties,
                             const geometry::Matrix2D&                       rFontMatrix,
-                            rendering::XGraphicDevice&                      rDevice,
+                            vclcanvas::XGraphicDevice&                      rDevice,
                             const OutDevProviderSharedPtr&                  rOutDevProvider ) :
         maFont( vcl::Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,

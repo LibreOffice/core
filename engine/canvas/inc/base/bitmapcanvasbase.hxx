@@ -30,7 +30,7 @@ namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::rendering { class XBitmap; }
 namespace com::sun::star::rendering { class XCachedPrimitive; }
 namespace com::sun::star::rendering { class XCanvasFont; }
-namespace com::sun::star::rendering { class XGraphicDevice; }
+namespace vclcanvas { class XGraphicDevice; }
 namespace com::sun::star::rendering { class XPolyPolygon2D; }
 namespace com::sun::star::rendering { class XTextLayout; }
 namespace com::sun::star::rendering { struct FontInfo; }
@@ -278,7 +278,7 @@ namespace canvas
             return maCanvasHelper.drawBitmap( this, xBitmap, viewState, renderState );
         }
 
-        virtual css::uno::Reference< css::rendering::XGraphicDevice >
+        virtual css::uno::Reference< vclcanvas::XGraphicDevice >
             getDevice() override
         {
             MutexType aGuard( BaseType::m_aMutex );

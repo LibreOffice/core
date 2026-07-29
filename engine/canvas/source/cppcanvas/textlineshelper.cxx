@@ -56,7 +56,7 @@ void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo
     mxUnderline.clear();
     mxStrikeout.clear();
 
-    uno::Reference<rendering::XGraphicDevice> xDevice = mpCanvas->getUNOCanvas()->getDevice();
+    uno::Reference<vclcanvas::XGraphicDevice> xDevice = mpCanvas->getUNOCanvas()->getDevice();
 
     if (aOverline.count())
     {

@@ -39,7 +39,7 @@ namespace vclcanvas
     }
 
     void CanvasBitmapHelper::init( const ::Bitmap&                rBitmap,
-                                   rendering::XGraphicDevice&     rDevice,
+                                   vclcanvas::XGraphicDevice&     rDevice,
                                    const OutDevProviderSharedPtr& rOutDevReference )
     {
         mpOutDevReference = rOutDevReference;

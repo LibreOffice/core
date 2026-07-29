@@ -77,7 +77,7 @@ namespace vclcanvas
     TextLayout::TextLayout( rendering::StringContext                   aText,
                             sal_Int8                                   nDirection,
                             CanvasFont::Reference                      rFont,
-                            uno::Reference<rendering::XGraphicDevice>  xDevice,
+                            uno::Reference<vclcanvas::XGraphicDevice>  xDevice,
                             OutDevProviderSharedPtr                    xOutDev ) :
         maText(std::move( aText )),
         mpFont(std::move( rFont )),

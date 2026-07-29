@@ -19,9 +19,8 @@
 
 #pragma once
 
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
-
 #include "outdevprovider.hxx"
+#include "XGraphicDevice.hxx"
 
 
 /* Definition of DeviceHelper class */
@@ -44,10 +43,10 @@ namespace vclcanvas
 
         // XWindowGraphicDevice
         css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon(
-            const css::uno::Reference< css::rendering::XGraphicDevice >&                               rDevice,
+            const css::uno::Reference< vclcanvas::XGraphicDevice >&                               rDevice,
             const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points );
         css::uno::Reference< css::rendering::XBitmap > createCompatibleAlphaBitmap(
-            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
+            const css::uno::Reference< vclcanvas::XGraphicDevice >&  rDevice,
             const css::geometry::IntegerSize2D&                                        size );
 
         cpo::uno::Any isAccelerated() const;

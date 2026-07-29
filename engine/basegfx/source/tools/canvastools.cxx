@@ -28,8 +28,8 @@
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <cpo/uno/Sequence.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>

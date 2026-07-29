@@ -24,7 +24,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <canvas.hxx>
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
@@ -492,7 +491,7 @@ namespace cppcanvas
                 // discernible difference should be visible.
                 nSteps > 64 )
             {
-                uno::Reference< rendering::XGraphicDevice > xGraphicDevice(
+                uno::Reference< vclcanvas::XGraphicDevice > xGraphicDevice(
                     rParms.mrCanvas->getUNOCanvas()->getDevice() );
 
                 if( xGraphicDevice.is() )

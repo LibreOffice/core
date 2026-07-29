@@ -25,7 +25,6 @@
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
 
 #include <vcl/font.hxx>
 
@@ -53,7 +52,7 @@ namespace vclcanvas
         CanvasFont( const css::rendering::FontRequest&                                     fontRequest,
                     const cpo::uno::Sequence< css::beans::PropertyValue >&                 extraFontProperties,
                     const css::geometry::Matrix2D&                                         rFontMatrix,
-                    css::rendering::XGraphicDevice&                                        rDevice,
+                    vclcanvas::XGraphicDevice&                                             rDevice,
                     const OutDevProviderSharedPtr&                                                      rOutDevProvider );
 
         /// Dispose all internal references
@@ -77,7 +76,7 @@ namespace vclcanvas
     private:
         ::canvas::vcltools::VCLObject<vcl::Font>                          maFont;
         css::rendering::FontRequest                                       maFontRequest;
-        css::uno::Reference< css::rendering::XGraphicDevice>              mpRefDevice;
+        css::uno::Reference< vclcanvas::XGraphicDevice>                   mpRefDevice;
         OutDevProviderSharedPtr                                           mpOutDevProvider;
         css::geometry::Matrix2D                                           maFontMatrix;
     };

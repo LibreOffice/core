@@ -71,7 +71,7 @@ namespace vclcanvas
             @param bHaveAlpha
             When true, hasAlpha() will always return true, otherwise, false.
          */
-        void init( css::rendering::XGraphicDevice&              rDevice,
+        void init( vclcanvas::XGraphicDevice&                   rDevice,
                    const OutDevProviderSharedPtr&               rOutDev,
                    bool                                         bProtect,
                    bool                                         bHaveAlpha );
@@ -157,8 +157,8 @@ namespace vclcanvas
                                  const css::rendering::RenderState&    renderState );
         // cast away const, need to change refcount (as this is
         // ~invisible to client code, still logically const)
-        css::uno::Reference< css::rendering::XGraphicDevice >
-            getDevice() { return css::uno::Reference< css::rendering::XGraphicDevice >(mpDevice); }
+        css::uno::Reference< vclcanvas::XGraphicDevice >
+            getDevice() { return css::uno::Reference< vclcanvas::XGraphicDevice >(mpDevice); }
 
 
         // BitmapCanvasHelper functionality
@@ -190,7 +190,7 @@ namespace vclcanvas
             Deliberately not a refcounted reference, because of
             potential circular references for spritecanvas.
          */
-        css::rendering::XGraphicDevice*              mpDevice;
+        vclcanvas::XGraphicDevice*                   mpDevice;
 
         /// Rendering to this outdev preserves its state
         OutDevProviderSharedPtr                      mpProtectedOutDevProvider;

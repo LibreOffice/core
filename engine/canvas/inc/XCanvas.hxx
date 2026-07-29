@@ -35,7 +35,6 @@ namespace com::sun::star::rendering
 class XBitmap;
 class XCachedPrimitive;
 class XCanvasFont;
-class XGraphicDevice;
 class XPolyPolygon2D;
 class XTextLayout;
 }
@@ -48,6 +47,11 @@ class XTextLayout;
 namespace cpo::uno
 {
 class Type;
+}
+
+namespace vclcanvas
+{
+class XGraphicDevice;
 }
 
 /** Central interface for rendering.<p>
@@ -423,7 +427,7 @@ public:
 
         @return the associated XGraphicDevice.
      */
-    virtual ::css::uno::Reference<::css::rendering::XGraphicDevice> getDevice() = 0;
+    virtual ::css::uno::Reference<::vclcanvas::XGraphicDevice> getDevice() = 0;
 
     static inline ::cpo::uno::Type const& static_type(void* = nullptr);
 

@@ -27,7 +27,7 @@ basic/source/runtime/methods.cxx:3122
     const short defaultValue
     0
 canvas/inc/parametricpolypolygon.hxx:138
-    void canvas::ParametricPolyPolygon::ParametricPolyPolygon(class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice>,enum canvas::ParametricPolyPolygon::GradientType,const class cpo::uno::Sequence<class cpo::uno::Sequence<double> > &,const class cpo::uno::Sequence<double> &)
+    void canvas::ParametricPolyPolygon::ParametricPolyPolygon(class com::sun::star::uno::Reference<class com::sun::star::vclcanvas::XGraphicDevice>,enum canvas::ParametricPolyPolygon::GradientType,const class cpo::uno::Sequence<class cpo::uno::Sequence<double> > &,const class cpo::uno::Sequence<double> &)
     enum canvas::ParametricPolyPolygon::GradientType eType
     0
 canvas/inc/verifyinput.hxx:147

@@ -69,6 +69,10 @@ namespace com::sun::star::beans {
     struct PropertyValue;
 }
 
+namespace vclcanvas {
+    class XGraphicDevice;
+}
+
 class Color;
 class OutputDevice;
 
@@ -386,11 +390,11 @@ namespace canvastools
             const css::uno::Reference< css::rendering::XPolyPolygon2D >& rPoly );
 
         CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XPolyPolygon2D >
-            xPolyPolygonFromB2DPolygon( const css::uno::Reference< css::rendering::XGraphicDevice >&  xGraphicDevice,
+            xPolyPolygonFromB2DPolygon( const css::uno::Reference< vclcanvas::XGraphicDevice >&  xGraphicDevice,
                                         const ::basegfx::B2DPolygon&                        rPoly    );
 
         CANVASTOOLS_DLLPUBLIC css::uno::Reference< css::rendering::XPolyPolygon2D >
-            xPolyPolygonFromB2DPolyPolygon( const css::uno::Reference< css::rendering::XGraphicDevice >& xGraphicDevice,
+            xPolyPolygonFromB2DPolyPolygon( const css::uno::Reference< vclcanvas::XGraphicDevice >& xGraphicDevice,
                                             const ::basegfx::B2DPolyPolygon&                    rPolyPoly    );
 
         // Color conversions (vcl/tools Color <-> canvas standard color space)

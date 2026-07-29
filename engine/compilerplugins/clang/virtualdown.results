@@ -65,7 +65,7 @@ include/basic/sbxvar.hxx:127
 include/canvas/base/basemutexhelper.hxx:54
     void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XBitmapCanvas, com::sun::star::rendering::XIntegerBitmap, com::sun::star::lang::XServiceInfo, com::sun::star::beans::XFastPropertySet> >::disposeThis()
 include/canvas/base/basemutexhelper.hxx:54
-    void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XBitmapCanvas, com::sun::star::rendering::XIntegerBitmap, com::sun::star::rendering::XGraphicDevice, com::sun::star::lang::XMultiServiceFactory, com::sun::star::util::XUpdatable, com::sun::star::beans::XPropertySet, com::sun::star::lang::XServiceName> >::disposeThis()
+    void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XBitmapCanvas, com::sun::star::rendering::XIntegerBitmap, com::sun::star::vclcanvas::XGraphicDevice, com::sun::star::lang::XMultiServiceFactory, com::sun::star::util::XUpdatable, com::sun::star::beans::XPropertySet, com::sun::star::lang::XServiceName> >::disposeThis()
 include/canvas/base/basemutexhelper.hxx:54
     void canvas::BaseMutexHelper<cppu::WeakComponentImplHelper<com::sun::star::rendering::XBitmapCanvas, com::sun::star::rendering::XIntegerBitmap> >::disposeThis()
 include/canvas/base/basemutexhelper.hxx:59
@@ -125,7 +125,7 @@ include/canvas/base/canvasbase.hxx:383
 include/canvas/base/canvasbase.hxx:416
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawBitmapModulated(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
 include/canvas/base/canvasbase.hxx:432
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice> canvas::CanvasBase::getDevice()
+    class com::sun::star::uno::Reference<class com::sun::star::vclcanvas::XGraphicDevice> canvas::CanvasBase::getDevice()
 include/canvas/base/canvascustomspritebase.hxx:103
     void canvas::CanvasCustomSpriteBase::clear()
 include/canvas/base/canvascustomspritebase.hxx:114

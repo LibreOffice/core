@@ -7,7 +7,7 @@ basic/qa/cppunit/test_global_array.cxx:26
 basic/qa/cppunit/test_global_as_new.cxx:26
     (anonymous namespace)::GlobalAsNewTest lib BasicDLL
 canvas/source/vcl/canvasbitmap.hxx:113
-    vclcanvas::CanvasBitmap mxDevice css::uno::Reference<css::rendering::XGraphicDevice>
+    vclcanvas::CanvasBitmap mxDevice css::uno::Reference<css::vclcanvas::XGraphicDevice>
 canvas/source/vcl/impltools.hxx:93
     vclcanvastools::LocalGuard aSolarGuard SolarMutexGuard
 chart2/source/controller/inc/dlg_DataEditor.hxx:48

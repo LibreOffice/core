@@ -66,7 +66,7 @@ namespace vclcanvas
          */
         CanvasBitmap( const ::Size&                                rSize,
                       bool                                         bAlphaBitmap,
-                      css::rendering::XGraphicDevice&              rDevice,
+                      vclcanvas::XGraphicDevice&                   rDevice,
                       const OutDevProviderSharedPtr&               rOutDevProvider );
 
         // XServiceInfo
@@ -102,7 +102,7 @@ namespace vclcanvas
         /** MUST hold here, too, since CanvasHelper only contains a
             raw pointer (without refcounting)
         */
-        css::uno::Reference<css::rendering::XGraphicDevice> mxDevice;
+        css::uno::Reference<vclcanvas::XGraphicDevice> mxDevice;
     };
 }
 
