@@ -5410,18 +5410,14 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             }
         }
 
-        const OUString& rColorName = NumFor[n].GetColorName();
-        if ( !rColorName.isEmpty() )
+        // Take the color by value: its name is in the language the format was parsed in, which
+        // need not be the one the scanner holds now
+        if (const Color* pColor = NumFor[n].GetColor())
         {
-            const NfKeywordTable & rKey = rScan.GetKeywords();
-            for ( int j = NF_KEY_FIRSTCOLOR; j <= NF_KEY_LASTCOLOR; j++ )
-            {
-                if ( rKey[j] == rColorName )
-                {
-                    aPrefix += "[" + rKeywords[j] + "]";
-                    break;  // for
-                }
-            }
+            const std::vector<Color>& rColors = ImpSvNumberformatScan::GetStandardColors();
+            const auto it = std::find(rColors.begin(), rColors.end(), *pColor);
+            if (it != rColors.end())
+                aPrefix += "[" + rKeywords[NF_KEY_FIRSTCOLOR + (it - rColors.begin())] + "]";
         }
 
         SvNumberNatNum aNatNum = NumFor[n].GetNatNum();

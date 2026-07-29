@@ -2029,6 +2029,35 @@ CPPUNIT_TEST_FIXTURE(Test, testLanguageNone)
     CPPUNIT_ASSERT_EQUAL(u"dd.mm.yyyy"_ustr, pFormat->GetMappedFormatstring(keywords, *ldw));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testExcelExportColorOfOtherLanguage)
+{
+    SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
+
+    OUString aCode(u"0.00;[RED]-0.00"_ustr);
+    sal_Int32 nCheckPos;
+    SvNumFormatType eType;
+    sal_uInt32 nKey;
+    aFormatter.PutEntry(aCode, nCheckPos, eType, nKey, LANGUAGE_ENGLISH_US);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nCheckPos);
+
+    // A document holds formats of several languages, and the one parsed last leaves the scanner
+    // keywords in its language
+    OUString aGermanCode(u"0,00;[ROT]-0,00"_ustr);
+    sal_uInt32 nGermanKey;
+    aFormatter.PutEntry(aGermanCode, nCheckPos, eType, nGermanKey, LANGUAGE_GERMAN);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nCheckPos);
+
+    SvNumberFormatter aTempFormatter(m_xContext, LANGUAGE_ENGLISH_US);
+    NfKeywordTable aKeywords;
+    aTempFormatter.FillKeywordTableForExcel(aKeywords);
+
+    // Without the fix in place, this would fail with
+    // - Expected: [$-409]0.00;[RED]\-0.00
+    // - Actual  : [$-409]0.00;\-0.00
+    CPPUNIT_ASSERT_EQUAL(u"[$-409]0.00;[RED]\\-0.00"_ustr,
+                         aFormatter.GetFormatStringForExcel(nKey, aKeywords, aTempFormatter));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf160306)
 {
     // Check some cases, where the output of ROUND and of number formatter differed
