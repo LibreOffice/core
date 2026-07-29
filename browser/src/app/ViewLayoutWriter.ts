@@ -87,6 +87,8 @@ class ViewLayoutWriter extends ViewLayoutBase {
 		);
 	}
 
+	// How far the document sits left of centre, in CSS pixels. The widths it is
+	// worked out from are canvas pixels.
 	public getDocumentScrollOffset() {
 		if (this.commentsHiddenOrNotPresent()) return 0;
 		if (!this.viewHasEnoughSpaceToShowFullWidthComments()) return 0;
@@ -94,7 +96,7 @@ class ViewLayoutWriter extends ViewLayoutBase {
 		if (this.documentCanMoveLeft(true)) {
 			this.documentScrollOffset = 0;
 			this.documentScrollOffset = this.documentMoveLeftByOffset();
-			return this.documentScrollOffset;
+			return this.documentScrollOffset / app.dpiScale;
 		}
 
 		return 0;

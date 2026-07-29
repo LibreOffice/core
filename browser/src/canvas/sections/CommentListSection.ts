@@ -508,16 +508,17 @@ export class CommentSection extends CanvasSectionObject {
 		return type === 'ViewLayoutMultiPage' || type === 'ViewLayoutCompareChanges';
 	}
 
+	// Width of the empty space on one side of the document, in canvas pixels,
+	// the unit the comment column widths and the section coordinates use.
 	public calculateAvailableSpace() {
 		if (CommentSection.isMultiColumnLayout()) {
 			const layout = app.activeDocument.activeLayout as ViewLayoutMultiPage | ViewLayoutCompareChanges;
 			const availableSpace = layout.getTotalSideSpace();
-			return Math.round(availableSpace * 0.5 / app.dpiScale);
+			return Math.round(availableSpace * 0.5);
 		}
 		else {
-			let availableSpace = (this.containerObject.getDocumentAnchorSection().size[0] - app.activeDocument.fileSize.pX) * 0.5;
-			availableSpace = Math.round(availableSpace / app.dpiScale);
-			return availableSpace;
+			const availableSpace = (this.containerObject.getDocumentAnchorSection().size[0] - app.activeDocument.fileSize.pX) * 0.5;
+			return Math.round(availableSpace);
 		}
 	}
 
@@ -2663,7 +2664,7 @@ export class CommentSection extends CanvasSectionObject {
 
 		let horizontalScroll = app.activeDocument.fileSize.x;
 		if (availableSpace < this.sectionProperties.commentWidth && !this.isCollapsed)
-			horizontalScroll = (app.activeDocument.fileSize.cX + this.sectionProperties.commentWidth) * app.pixelsToTwips * app.dpiScale;
+			horizontalScroll += this.sectionProperties.commentWidth * app.pixelsToTwips;
 
 		const checkY = lastY + app.activeDocument.activeLayout.viewedRectangle.pY1;
 
@@ -2842,7 +2843,7 @@ export class CommentSection extends CanvasSectionObject {
 							maxSize = this.sectionProperties.commentList[i + 1].getContainerPosY()
 								- this.sectionProperties.commentList[i].getContainerPosY()
 								- this.sectionProperties.commentList[i].sectionProperties.author.getBoundingClientRect().height
-								- 3 * this.sectionProperties.marginY //top/bottom of comment window + space between comments
+								- 3 * this.sectionProperties.marginY / app.dpiScale //top/bottom of comment window + space between comments
 								- 2; // not sure why
 
 						if (maxSize > maxMaxHeight) {
