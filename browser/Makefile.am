@@ -113,9 +113,12 @@ QUIET_UNOSHORTCUTS_0 = @echo "  UNOSHORTCUTS " $@;
 
 MOCHA_DIR = $(srcdir)/mocha_tests
 MOCHA_JS_DIR = $(MOCHA_DIR)/workdir
+
+ENGINE_WORKDIR = @LO_PATH@/../workdir
+
 # tsc can report a failure, but still create a .js and a second make attempt will succeed,
 # so if this returns an error then delete the target
-$(MOCHA_JS_DIR)/main.js: $(MOCHA_DIR)/main.ts
+$(MOCHA_JS_DIR)/main.js: $(MOCHA_DIR)/main.ts $(wildcard $(MOCHA_DIR)/*.ts $(MOCHA_DIR)/*/*.ts)
 	$(QUIET_TSC) $(builddir)/node_modules/typescript/bin/tsc $< --outfile $@ --module none --moduleResolution node --lib dom,es2016 --target ES5 --downlevelIteration --allowJs || (rm -f $@ && false)
 
 JQUERY_LIGHTNESS_IMAGE_PATH = $(srcdir)/images/jquery-ui-lightness
@@ -1654,7 +1657,7 @@ DUPLICATION_TEST_LOG = "`pwd`/duplication.log"
 check-local: $(MOCHA_JS_DIR)/main.js
 	@echo "Running mocha tests..."
 	@echo > ${MOCHA_TEST_LOG}
-	@if (cd $(srcdir) && PATH="$(abs_builddir)/node_modules/.bin:$$PATH" NODE_PATH="$(abs_builddir)/node_modules" npm test) 2> ${MOCHA_TEST_LOG} 1>&2; then \
+	@if (cd $(srcdir) && PATH="$(abs_builddir)/node_modules/.bin:$$PATH" NODE_PATH="$(abs_builddir)/node_modules" ENGINE_WORKDIR="$(ENGINE_WORKDIR)" npm test) 2> ${MOCHA_TEST_LOG} 1>&2; then \
 		echo "Mocha tests finished successfully. Results in ${MOCHA_TEST_LOG}"; \
 	else \
 		cat ${MOCHA_TEST_LOG}; \
