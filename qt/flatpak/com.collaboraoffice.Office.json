@@ -20,7 +20,6 @@
     "--socket=wayland",
     "--socket=pulseaudio",
     "--socket=cups",
-    "--filesystem=xdg-documents",
     "--env=LIBO_FLATPAK=1",
     "--device=dri"
   ],
