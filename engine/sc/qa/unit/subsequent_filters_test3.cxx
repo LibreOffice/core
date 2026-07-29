@@ -20,8 +20,10 @@
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/lineitem.hxx>
+#include <tools/json_writer.hxx>
 #include <dbdata.hxx>
 #include <validat.hxx>
 #include <userdat.hxx>
@@ -29,6 +31,7 @@
 #include <scitems.hxx>
 #include <docsh.hxx>
 #include <cellvalue.hxx>
+#include <docuno.hxx>
 #include <attrib.hxx>
 #include <formulacell.hxx>
 #include <stlpool.hxx>
@@ -722,6 +725,10 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testEnterDataFlagsArrayReturningFormula)
     pDoc->SetValue(ScAddress(1, 3, 0), 40.0);
 
     ScTabViewShell* pViewShell = getViewShell();
+
+    // The entered formula is interpreted over the range the client specifies
+    requestKitRowColumnHeaders();
+
     pViewShell->EnterData(0, 0, 0, u"=UNIQUE(B1:B4)"_ustr, nullptr, /*bAutoDynamicArray*/ true);
 
     ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(0, 0, 0));

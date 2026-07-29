@@ -181,6 +181,8 @@ public:
 
     void testFormats(ScDocument* pDoc,std::u16string_view sFormat);
 
+    /// Requests the headers of an area the way a client does, so that the view knows what is shown
+    void requestKitRowColumnHeaders();
     void goToCell(const OUString& rCell);
     void typeString(std::u16string_view rStr);
     void insertStringToCell(const OUString& rCell, std::u16string_view rStr);

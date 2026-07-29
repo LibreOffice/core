@@ -11,6 +11,7 @@
 
 #include "qahelper.hxx"
 #include <COKit/COKit.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertysequence.hxx>
 #include "csv_handler.hxx"
 #include "debughelper.hxx"
@@ -24,6 +25,7 @@
 #include <formulagroup.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
+#include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
@@ -287,6 +289,22 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
     pCondFormat = pDoc->GetCondFormat(1,1,2);
     const ScRangeList& rRange3 = pCondFormat->GetRange();
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(1,1,2,3,1,2)), rRange3);
+}
+
+void ScModelTestBase::requestKitRowColumnHeaders()
+{
+    // Without the Kit the view goes by the window, which needs no request
+    if (!comphelper::COKit::isActive())
+        return;
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    // A1:Z100 in twips, which covers the cells the tests work on
+    const ScDocument& rDoc = getScDocShell()->GetDocument();
+    const tools::Rectangle aArea(0, 0, rDoc.GetColOffset(26, 0), rDoc.GetRowOffset(100, 0));
+    tools::JsonWriter aJsonWriter;
+    pModelObj->getRowColumnHeaders(aArea, aJsonWriter);
+    aJsonWriter.finishAndGetAsOString();
 }
 
 void ScModelTestBase::goToCell(const OUString& rCell)
