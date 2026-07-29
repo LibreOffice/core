@@ -47,7 +47,7 @@ class FocusCellSection extends CanvasSectionObject {
 			app.sectionContainer.addSection(FocusCellSection.instance);
 		}
 
-		if (!this.instance.showSection) this.instance.setShowSection(true);
+		this.instance.setShowSection(true);
 
 		this.instance.onCellAddressChanged();
 	}
