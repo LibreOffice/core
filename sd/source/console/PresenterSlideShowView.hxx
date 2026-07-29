@@ -20,7 +20,8 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSLIDESHOWVIEW_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSLIDESHOWVIEW_HXX
 
-#include "PresenterViewFactory.hxx"
+#include "PresenterController.hxx"
+
 #include <com/sun/star/presentation/XSlideShowView.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
@@ -29,6 +30,7 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <framework/AbstractPane.hxx>
+#include <DrawController.hxx>
 #include <ResourceId.hxx>
 #include <framework/AbstractView.hxx>
 #include <com/sun/star/frame/XController.hpp>
