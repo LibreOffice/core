@@ -39,11 +39,6 @@ class SAL_LOPLUGIN_ANNOTATE("crosscast") CachablePresenterView
 public:
     virtual void ActivatePresenterView();
 
-    /** Called when the view is put into a cache.  The view must not paint
-        itself while being deactivated.
-    */
-    virtual void DeactivatePresenterView();
-
     /** Called before the view is disposed.  This gives the view the
         opportunity to trigger actions that may lead to (synchronous)
         callbacks that do not result in DisposedExceptions.

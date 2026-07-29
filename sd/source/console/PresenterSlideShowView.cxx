@@ -631,15 +631,6 @@ void PresenterSlideShowView::ActivatePresenterView()
     }
 }
 
-void PresenterSlideShowView::DeactivatePresenterView()
-{
-    if (mxSlideShow.is() && mbIsViewAdded)
-    {
-        mxSlideShow->removeView(this);
-        mbIsViewAdded = false;
-    }
-}
-
 
 void PresenterSlideShowView::PaintOuterWindow (const awt::Rectangle& rRepaintBox)
 {

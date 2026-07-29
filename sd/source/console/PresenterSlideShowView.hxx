@@ -169,8 +169,6 @@ public:
 
     virtual void ActivatePresenterView() override;
 
-    virtual void DeactivatePresenterView() override;
-
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     ::rtl::Reference<PresenterController> mpPresenterController;

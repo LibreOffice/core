@@ -403,11 +403,6 @@ void CachablePresenterView::ActivatePresenterView()
     mbIsPresenterViewActive = true;
 }
 
-void CachablePresenterView::DeactivatePresenterView()
-{
-    mbIsPresenterViewActive = false;
-}
-
 void CachablePresenterView::ReleaseView()
 {
 }
