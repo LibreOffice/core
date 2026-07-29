@@ -3675,7 +3675,7 @@ bool ChildSession::getSlideSections()
     getLOKitDocument()->setView(_viewId);
 
     LOKitHelper::ScopedString info(getLOKitDocument()->getPresentationInfo());
-    if (!info || !info.get())
+    if (!info)
     {
         sendTextFrame("slidesections: []");
         return true;
