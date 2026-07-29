@@ -1,7 +1,21 @@
-diff -ur fontconfig.org/fc-const/fc-const.py fontconfig/fc-const/fc-const.py
---- fontconfig.org/fc-const/fc-const.py	2026-07-18 17:05:54.507214565 +0200
-+++ fontconfig/fc-const/fc-const.py	2026-07-18 18:06:37.278327797 +0200
-@@ -155,7 +155,6 @@
+From 7f61e1b77325b8ce58a51f0694c2b8bcee3da450 Mon Sep 17 00:00:00 2001
+From: Julien Nabet <serval2412@yahoo.fr>
+Date: Sun, 19 Jul 2026 18:57:05 +0200
+Subject: [PATCH] Fix "FileType is deprecated"
+
+See https://docs.python.org/3/library/argparse.html#argparse.FileType
+
+Changelog: fixed
+---
+ fc-const/fc-const.py                 | 15 ++++++++++-----
+ fc-genericfamily/fc-genericfamily.py | 12 ++++++++----
+ 2 files changed, 18 insertions(+), 9 deletions(-)
+
+diff --git a/fc-const/fc-const.py b/fc-const/fc-const.py
+index 75e6ccaa..212e6ede 100644
+--- a/fc-const/fc-const.py
++++ b/fc-const/fc-const.py
+@@ -155,7 +155,6 @@ def main():
          formatter_class=argparse.ArgumentDefaultsHelpFormatter,
      )
      parser.add_argument('-o', '--output',
@@ -9,7 +23,7 @@ diff -ur fontconfig.org/fc-const/fc-const.py fontconfig/fc-const/fc-const.py
                          default='-',
                          help='Output file')
      parser.add_argument('-t', '--test',
-@@ -167,12 +166,18 @@
+@@ -167,12 +166,18 @@ def main():
                          help='fcobjs.h file')
  
      args = parser.parse_args()
@@ -32,10 +46,11 @@ diff -ur fontconfig.org/fc-const/fc-const.py fontconfig/fc-const/fc-const.py
  
      sys.exit(0)
  
-diff -ur fontconfig.org/fc-genericfamily/fc-genericfamily.py fontconfig/fc-genericfamily/fc-genericfamily.py
---- fontconfig.org/fc-genericfamily/fc-genericfamily.py	2026-07-18 17:05:54.508715805 +0200
-+++ fontconfig/fc-genericfamily/fc-genericfamily.py	2026-07-18 18:20:37.049930484 +0200
-@@ -153,7 +153,6 @@
+diff --git a/fc-genericfamily/fc-genericfamily.py b/fc-genericfamily/fc-genericfamily.py
+index fe9887b0..b0fd3359 100755
+--- a/fc-genericfamily/fc-genericfamily.py
++++ b/fc-genericfamily/fc-genericfamily.py
+@@ -153,7 +153,6 @@ def main():
      parser.add_argument(
          "-o",
          "--output",
@@ -43,14 +58,14 @@ diff -ur fontconfig.org/fc-genericfamily/fc-genericfamily.py fontconfig/fc-gener
          default=sys.stdout,
          help="Output file (default: stdout)",
      )
-@@ -177,10 +176,15 @@
+@@ -177,10 +176,15 @@ def main():
          )
          sys.exit(1)
  
-+    if args.output == '-': 
++    if args.output == '-':
 +        output = sys.stdout
-+    else:   
-+        output = open(args.output, 'w')
++    else:
++        output = open(args.output, 'w', encoding="utf-8")
 +
      # Generate output
 -    with args.output:
@@ -61,4 +76,3 @@ diff -ur fontconfig.org/fc-genericfamily/fc-genericfamily.py fontconfig/fc-gener
 +        output.write(gen_gperf_code(family_map))
  
      return 0
- 
