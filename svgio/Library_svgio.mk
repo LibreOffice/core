@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,svgio,\
     sal \
     tl \
     sax \
+    utl \
     vcl \
     svt \
 ))

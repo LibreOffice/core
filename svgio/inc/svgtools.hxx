@@ -211,6 +211,14 @@ namespace svgio
         void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rMimeType, OUString& rData);
 
         OUString convert(const OUString& rCandidate, sal_Unicode nPattern, sal_Unicode nNew, bool bRemove);
+
+        /** Resolve an image reference against the location the document was read from.
+
+            Returns the absolute URL to read, or an empty string when the reference
+            must not be resolved.
+        */
+        OUString resolveImageUrl(const OUString& rDocumentPath, const OUString& rUrl);
+
         OUString consolidateContiguousSpace(const OUString& rCandidate);
         OUString whiteSpaceHandlingDefault(const OUString& rCandidate);
         OUString whiteSpaceHandlingPreserve(const OUString& rCandidate);
