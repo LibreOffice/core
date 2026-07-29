@@ -21,7 +21,6 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentState.hxx>
 #include <docsh.hxx>
-#include <unocoll.hxx>
 #include <unoframe.hxx>
 #include <unodraw.hxx>
 #include <unotextrange.hxx>
@@ -55,7 +54,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/WritingMode.hpp>

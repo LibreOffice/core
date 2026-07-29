@@ -37,11 +37,9 @@
 #include <unoframe.hxx>
 #include <textboxhelper.hxx>
 #include <ndindex.hxx>
-#include <pam.hxx>
 #include <frameformats.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <svx/svdobj.hxx>
-#include <svx/svdpage.hxx>
 #include <osl/diagnose.h>
 #include <vcl/scheduler.hxx>
 

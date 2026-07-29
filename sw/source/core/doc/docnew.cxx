@@ -28,7 +28,6 @@
 
 #include <doc.hxx>
 #include <proofreadingiterator.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
@@ -113,7 +112,6 @@
 #include <textcontentcontrol.hxx>
 
 #include <svx/xfillit0.hxx>
-#include <unotools/configmgr.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/setitem.hxx>
 #include <unotxdoc.hxx>

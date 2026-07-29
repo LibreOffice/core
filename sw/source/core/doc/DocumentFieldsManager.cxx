@@ -45,7 +45,6 @@
 #include <ndtxt.hxx>
 #include <txtfld.hxx>
 #include <docfld.hxx>
-#include <hints.hxx>
 #include <docary.hxx>
 #include <fldbas.hxx>
 #include <expfld.hxx>
@@ -54,7 +53,6 @@
 #include <usrfld.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
-#include <o3tl/deleter.hxx>
 #include <osl/diagnose.h>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>

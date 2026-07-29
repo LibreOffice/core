@@ -26,7 +26,6 @@
 
 #include <editeng/lrspitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <tools/fract.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <doc.hxx>
@@ -47,7 +46,6 @@
 #include <fldbas.hxx>
 #include <rowfrm.hxx>
 #include <ddefld.hxx>
-#include <hints.hxx>
 #include <UndoTable.hxx>
 #include <cellatr.hxx>
 #include <mvsave.hxx>

@@ -26,7 +26,6 @@
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
-#include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <pam.hxx>
@@ -37,7 +36,6 @@
 #include <cellatr.hxx>
 #include <mvsave.hxx>
 #include <fmtanchr.hxx>
-#include <hints.hxx>
 #include <UndoTable.hxx>
 #include <fmtfsize.hxx>
 #include <frameformats.hxx>

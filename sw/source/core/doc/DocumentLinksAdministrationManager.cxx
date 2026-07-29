@@ -22,37 +22,29 @@
 #include <FillBitmapLinkTracker.hxx>
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
-#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <drawdoc.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
-#include <dialoghelp.hxx>
 #include <linkenum.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <swtypes.hxx>
 #include <docsh.hxx>
-#include <bookmark.hxx>
 #include <swserv.hxx>
 #include <swbaslnk.hxx>
 #include <section.hxx>
 #include <docary.hxx>
 #include <frmfmt.hxx>
 #include <numrule.hxx>
-#include <rootfrm.hxx>
 #include <fmtcntnt.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
-#include <frameformats.hxx>
-#include <sot/formats.hxx>
 #include <svx/fillbitmaplink.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/securityoptions.hxx>
-#include <utility>
 
 using namespace ::com::sun::star;
 

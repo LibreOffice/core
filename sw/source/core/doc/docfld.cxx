@@ -36,13 +36,11 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <node2lay.hxx>
 #include <cntfrm.hxx>
-#include <pagefrm.hxx>
 #include <txtfrm.hxx>
 #include <notxtfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
-#include <calc.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <txttxmrk.hxx>

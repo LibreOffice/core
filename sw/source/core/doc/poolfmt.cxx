@@ -21,7 +21,6 @@
 
 #include <hintids.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <osl/diagnose.h>
 #include <doc.hxx>

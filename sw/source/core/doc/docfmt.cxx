@@ -31,7 +31,6 @@
 #include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
-#include <unotools/configmgr.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <i18npool/breakiterator.hxx>

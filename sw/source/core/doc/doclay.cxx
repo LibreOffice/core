@@ -30,7 +30,6 @@
 #include <osl/diagnose.h>
 #include <svx/svdouno.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <istype.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -83,7 +82,6 @@
 #include <strings.hrc>
 #include <frameformats.hxx>
 #include <tools/datetimeutils.hxx>
-#include <comphelper/string.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <sortedobjs.hxx>

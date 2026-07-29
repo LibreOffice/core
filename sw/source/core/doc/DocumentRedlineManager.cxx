@@ -42,7 +42,6 @@
 #include <swmodule.hxx>
 #include <osl/diagnose.h>
 #include <editeng/prntitem.hxx>
-#include <comphelper/configuration.hxx>
 #include <comphelper/lok.hxx>
 #include <svl/itemiter.hxx>
 #include <istyleaccess.hxx>

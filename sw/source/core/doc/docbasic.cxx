@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -32,7 +31,6 @@
 #include <docsh.hxx>
 #include <swevent.hxx>
 #include <frameformats.hxx>
-#include <memory>
 
 using namespace ::com::sun::star::uno;
 

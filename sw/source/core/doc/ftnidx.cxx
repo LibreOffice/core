@@ -26,7 +26,6 @@
 #include <redline.hxx>
 #include <ftnidx.hxx>
 #include <ndtxt.hxx>
-#include <ndindex.hxx>
 #include <section.hxx>
 #include <fmtftntx.hxx>
 #include <rootfrm.hxx>

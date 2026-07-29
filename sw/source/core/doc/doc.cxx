@@ -64,7 +64,6 @@
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <dbfld.hxx>
-#include <txtinet.hxx>
 #include <txtrfmrk.hxx>
 #include <frmatr.hxx>
 #include <pagefrm.hxx>

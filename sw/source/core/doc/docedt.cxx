@@ -40,7 +40,7 @@
 #include <ndtxt.hxx>
 #include <undobj.hxx>
 #include <frameformats.hxx>
-#include <unotxdoc.hxx>
+#include <com/sun/star/frame/XModel3.hpp>
 
 #include <vector>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>

@@ -26,13 +26,9 @@
 #include <swtypes.hxx>
 #include <hintids.hxx>
 #include <fmtornt.hxx>
-#include <editsh.hxx>
-#include <fmtlsplt.hxx>
-#include <fmtrowsplt.hxx>
 #include <swmodule.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <osl/thread.h>
 
 #include <editeng/adjustitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -41,17 +37,13 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/formatbreakitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/legacyitem.hxx>
-#include <editeng/lineitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
-#include <svx/algitem.hxx>
-#include <svx/rotmodit.hxx>
 #include <unostyle.hxx>
 #include <names.hxx>
 

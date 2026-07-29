@@ -29,7 +29,6 @@
 #include <ndole.hxx>
 #include <swtblfmt.hxx>
 #include <tblsel.hxx>
-#include <frameformats.hxx>
 #include <UndoTable.hxx>
 #include <unochart.hxx>
 #include <osl/diagnose.h>

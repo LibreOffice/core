@@ -18,7 +18,6 @@
 
 #include <hintids.hxx>
 #include <editeng/flditem.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>

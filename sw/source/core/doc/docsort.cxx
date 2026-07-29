@@ -27,7 +27,6 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <IDocumentFieldsAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentState.hxx>
 #include <node.hxx>
@@ -39,7 +38,6 @@
 #include <docsort.hxx>
 #include <UndoSort.hxx>
 #include <UndoRedline.hxx>
-#include <hints.hxx>
 #include <tblsel.hxx>
 #include <cellatr.hxx>
 #include <redline.hxx>

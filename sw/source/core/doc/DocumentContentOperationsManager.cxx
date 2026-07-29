@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <DocumentContentOperationsManager.hxx>
-#include <DocumentRedlineManager.hxx>
 #include <wrtsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -79,7 +78,6 @@
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <i18nutil/guessparadirection.hxx>
