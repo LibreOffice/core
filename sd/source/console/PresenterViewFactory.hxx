@@ -137,7 +137,7 @@ private:
     rtl::Reference<sd::framework::AbstractView> CreateHelpView(
         const rtl::Reference<sd::framework::ResourceId>& rxViewId) const;
 
-    rtl::Reference<sd::framework::AbstractResource> CreateView(
+    rtl::Reference<sd::framework::AbstractView> CreateView(
         const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane);
 };

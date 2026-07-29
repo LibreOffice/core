@@ -163,7 +163,7 @@ rtl::Reference<sd::framework::AbstractResource> PresenterViewFactory::createReso
         throwIfDisposed(l);
     }
 
-    rtl::Reference<sd::framework::AbstractResource> xView;
+    rtl::Reference<sd::framework::AbstractView> xView;
 
     if (rxViewId.is())
     {
@@ -214,7 +214,7 @@ void PresenterViewFactory::releaseResource (const rtl::Reference<sd::framework::
     }
 }
 
-rtl::Reference<sd::framework::AbstractResource> PresenterViewFactory::CreateView(
+rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateView(
     const rtl::Reference<sd::framework::ResourceId>& rxViewId,
     const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane)
 {
