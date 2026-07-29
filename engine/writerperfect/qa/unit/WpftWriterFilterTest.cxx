@@ -7,10 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_vclplug.h>
+
 #include "WpftFilterTestBase.hxx"
 
 namespace
 {
+#if defined _WIN32 && USE_HEADLESS_CODE
+constexpr bool bComApartmentNeededButMissing = true;
+#else
+constexpr bool bComApartmentNeededButMissing = false;
+#endif
+
 class WpftWriterFilterTest : public writerperfect::test::WpftFilterTestBase
 {
 public:
@@ -54,7 +62,8 @@ void WpftWriterFilterTest::test()
     const writerperfect::test::WpftOptionalMap_t aWpsOptional{
         { "PocketWord.psw", REQUIRE_WPS_VERSION(0, 4, 12) },
         { "Word_5.0_DOS.doc", REQUIRE_WPS_VERSION(0, 4, 3) },
-        { "Write_3.1.wri", REQUIRE_WPS_VERSION(0, 4, 2) },
+        // The embedded OLE object needs a COM apartment, absent in the headless test code
+        { "Write_3.1.wri", REQUIRE_WPS_VERSION(0, 4, 2) && !bComApartmentNeededButMissing },
     };
 
     doTest(u"com.sun.star.comp.Writer.AbiWordImportFilter"_ustr,
