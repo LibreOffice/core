@@ -113,9 +113,10 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 		cy.cGet('#sidebar-panel').should('be.visible');
 
 		//sidebar needs more time
-		cy.cGet('#sidebar-dock-wrapper').should('be.visible').wait(2000).scrollTo('bottom');
+		cy.cGet('#sidebar-dock-wrapper').should('be.visible').wait(2000);
 
-		cy.cGet('.ui-expander-label').contains('Position and Size').should('be.visible').click();
+		cy.cGet('.ui-expander-label').contains('Position and Size')
+			.scrollIntoView().should('be.visible').click();
 
 		cy.cGet('#selectwidth input').type('{selectAll}{backspace}10{enter}');
 
@@ -127,9 +128,10 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 
 		//Keep ratio checked
 		//sidebar needs more time
-		cy.cGet('#sidebar-dock-wrapper').should('be.visible').wait(2000).scrollTo('bottom');
+		cy.cGet('#sidebar-dock-wrapper').should('be.visible').wait(2000);
 
-		cy.cGet('.ui-expander-label').contains('Position and Size').should('be.visible').click();
+		cy.cGet('.ui-expander-label').contains('Position and Size')
+			.scrollIntoView().should('be.visible').click();
 
 		cy.cGet('#ratio input').check();
 
