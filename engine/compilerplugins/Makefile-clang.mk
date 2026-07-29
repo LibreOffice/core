@@ -258,7 +258,7 @@ $(CLANGOUTDIR)/sharedvisitor/sharedvisitor.cxx: $(SHARED_SOURCE_INFOS) $(CLANGOU
 # Older versions of Clang have a problem to find their own internal headers, so add it.
 # Also filter out the c++ library, it's not necessary to be specific about it in this case
 # and it can also cause trouble with finding the proper headers.
-CLANGTOOLDEFS = $(filter-out -stdlib=%,$(CLANGDEFS) -I$(CLANGSYSINCLUDE))
+CLANGTOOLDEFS = $(filter-out -stdlib=%,$(CLANGDEFS) $(if $(CLANGSYSINCLUDE),-I$(CLANGSYSINCLUDE)))
 CLANGTOOLDEFS += -w
 ifneq ($(filter MACOSX,$(OS)),)
 CLANGTOOLLIBS += -Wl,-rpath,$(CLANGLIBDIR)
