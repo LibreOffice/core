@@ -11841,7 +11841,7 @@ AC_SUBST(WITH_PARQUET_FILTER)
 dnl ===================================================================
 dnl HarfBuzz
 dnl ===================================================================
-harfbuzz_required_version=8.3.1
+harfbuzz_required_version=14.3.0
 
 GRAPHITE_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/graphite/include -DGRAPHITE2_STATIC"
 HARFBUZZ_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/harfbuzz/src"
