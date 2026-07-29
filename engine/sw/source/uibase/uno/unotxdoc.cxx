@@ -394,14 +394,14 @@ bool SwXTextDocument::partHasComments() const
     if (!m_pDocShell)
         return false;
 
-    for (auto const& sidebarItem : *m_pDocShell->GetView()->GetPostItMgr())
-    {
-        if (!sidebarItem->mpPostIt)
-            continue;
-        return true;
-    }
+    const SwView* pView = m_pDocShell->GetView();
+    if (!pView)
+        return false;
 
-    return false;
+    // The comment list is filled from the comment fields as soon as the document is loaded, so it
+    // is complete before the windows that present those comments have been laid out.
+    const SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
+    return pPostItMgr && pPostItMgr->HasNotes();
 }
 
 SdrModel& SwXTextDocument::getSdrModelFromUnoModel() const
