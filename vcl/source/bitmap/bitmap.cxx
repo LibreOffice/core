@@ -28,6 +28,7 @@
 #include <utility>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/BitmapColor.hxx>
 #include <vcl/outdev.hxx>
 
 #include <svdata.hxx>
@@ -2226,7 +2227,7 @@ Bitmap Bitmap::CreateColorBitmap() const
     return aPair.first;
 }
 
-void Bitmap::ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
+void Bitmap::ChangeColorAlpha( BitmapColor aColorFrom, sal_Int8 nAlphaTo )
 {
     assert(HasAlpha());
     if (!HasAlpha())
@@ -2243,8 +2244,7 @@ void Bitmap::ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
         for ( tools::Long nX = 0, nWidth = pAccess->Width(); nX < nWidth; nX++ )
         {
             BitmapColor aCol = pAccess->GetPixelFromData( pScanline, nX );
-            const sal_uInt8 cIndex = aCol.GetIndex();
-            if ( cIndex == cIndexFrom )
+            if ( aCol == aColorFrom )
             {
                 aCol.SetAlpha(nAlphaTo);
                 pAccess->SetPixelOnData( pScanline, nX, aCol );

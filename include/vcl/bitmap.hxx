@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <vcl/BitmapColor.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/degree.hxx>
@@ -637,7 +638,7 @@ public:
                             const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
                             const Size &rSize );
 
-    SAL_DLLPRIVATE void ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
+    SAL_DLLPRIVATE void ChangeColorAlpha( BitmapColor aColorFrom, sal_Int8 nAlphaTo );
 
     /**
      * Adds a constant value to the alpha layer
