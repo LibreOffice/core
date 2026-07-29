@@ -85,9 +85,6 @@ private:
     unotools::WeakReference<sd::framework::ConfigurationController>
         mxConfigurationControllerWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    typedef ::std::map<OUString, rtl::Reference<sd::framework::AbstractResource> >
-        ResourceContainer;
-    std::unique_ptr<ResourceContainer> mpResourceCache;
 
     PresenterPaneFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,

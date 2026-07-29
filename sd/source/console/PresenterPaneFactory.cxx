@@ -93,17 +93,6 @@ void PresenterPaneFactory::disposing(std::unique_lock<std::mutex>&)
     if (xCC.is())
         xCC->removeResourceFactoryForReference(this);
     mxConfigurationControllerWeak.clear();
-
-    // Dispose the panes in the cache.
-    if (mpResourceCache != nullptr)
-    {
-        for (const auto& rxPane : *mpResourceCache)
-        {
-            if (rxPane.second.is())
-                rxPane.second->dispose();
-        }
-        mpResourceCache.reset();
-    }
 }
 
 //----- AbstractPaneFactory ----------------------------------------------------------
@@ -123,30 +112,6 @@ rtl::Reference<sd::framework::AbstractResource> PresenterPaneFactory::createReso
     if (sPaneURL.isEmpty())
         return nullptr;
 
-    if (mpResourceCache != nullptr)
-    {
-        // Has the requested resource already been created?
-        ResourceContainer::const_iterator iResource (mpResourceCache->find(sPaneURL));
-        if (iResource != mpResourceCache->end())
-        {
-            // Yes.  Mark it as active.
-            rtl::Reference<PresenterPaneContainer> pPaneContainer(
-                mpPresenterController->GetPaneContainer());
-            PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
-                pPaneContainer->FindPaneURL(sPaneURL));
-            if (pDescriptor)
-            {
-                pDescriptor->SetActivationState(true);
-                if (pDescriptor->mxBorderWindow.is())
-                    pDescriptor->mxBorderWindow->setVisible(true);
-                pPaneContainer->StorePane(pDescriptor->mxPane);
-            }
-
-            return iResource->second;
-        }
-    }
-
-    // No.  Create a new one.
     return CreatePane(rxPaneId);
 }
 
@@ -173,17 +138,9 @@ void PresenterPaneFactory::releaseResource (const rtl::Reference<sd::framework::
     if (pDescriptor->mxBorderWindow.is())
         pDescriptor->mxBorderWindow->setVisible(false);
 
-    if (mpResourceCache != nullptr)
-    {
-        // Store the pane in the cache.
-        (*mpResourceCache)[sPaneURL] = rxResource;
-    }
-    else
-    {
-        // Dispose the pane.
-        if (rxResource.is())
-            rxResource->dispose();
-    }
+    // Dispose the pane.
+    if (rxResource.is())
+        rxResource->dispose();
 }
 
 rtl::Reference<sdext::presenter::PresenterPaneBase>
