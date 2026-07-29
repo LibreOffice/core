@@ -428,7 +428,7 @@ function _formulabarEditControl(parentContainer, data, builder) {
 		text = text.split('\n');
 
 		_setSelection(builder, container, wrapper, cursorLayer, handleLayer, textLayer, text, startX, endX, startY, endY);
-		if (container._readOnly) {
+		if (!builder.map.isEditMode()) {
 			var cursor = cursorLayer.querySelector('.cursor');
 			if (cursor) cursor.style.display = 'none';
 		}
@@ -445,7 +445,6 @@ function _formulabarEditControl(parentContainer, data, builder) {
 		textLayer.setAttribute('tabindex', '-1');
 	};
 	container.setReadOnly = function(readOnly) {
-		container._readOnly = readOnly;
 		textLayer.setAttribute('contenteditable', readOnly ? 'false' : 'true');
 		textLayer.setAttribute('tabindex', readOnly ? '-1' : '0');
 		var cursor = cursorLayer.querySelector('.cursor');
@@ -454,9 +453,9 @@ function _formulabarEditControl(parentContainer, data, builder) {
 
 	var pointerFocus = false;
 
-	// A read-only formula bar is display only, so ignore it like the disabled case.
+	// Outside edit mode the formula bar is display only, so ignore it like the disabled case.
 	var isInactive = function() {
-		return window.L.DomUtil.hasClass(container, 'disabled') || container._readOnly;
+		return window.L.DomUtil.hasClass(container, 'disabled') || !builder.map.isEditMode();
 	};
 
 	var grabEditFocus = function(sendSelection) {
@@ -489,6 +488,9 @@ function _formulabarEditControl(parentContainer, data, builder) {
 
 	// hide old selection when user starts to select something else
 	textLayer.addEventListener('mousedown', function() {
+		if (isInactive())
+			return;
+
 		pointerFocus = true;
 		textLayer.addEventListener('mouseup', textSelectionHandler, {once: true});
 		builder.callback('edit', 'grab_focus', container, null, builder);

@@ -64,7 +64,7 @@ class FormulaBar {
 	}
 
 	_updateEditButtons() {
-		var enabled = !this.map.isReadOnlyMode();
+		var enabled = this.map.isEditMode();
 		for (var btn of ['functiondialog', 'AutoSumMenu', 'startformula'])
 			this._setButtonEnabled(btn, enabled);
 		var inputField = this.getInputField();
@@ -232,7 +232,7 @@ class FormulaBar {
 			if (eventType === 'keypress' && data === UNOKey.RETURN || data === UNOKey.ESCAPE)
 				map.focus();
 			else if (eventType === 'grab_focus') {
-				if (app.isReadOnly())
+				if (!map.isEditMode())
 					return;
 				this.focusField();
 				map.onFormulaBarFocus();
@@ -254,9 +254,9 @@ class FormulaBar {
 
 	// Move keyboard focus into the formula bar, the same way a click on it
 	// does. Returns false when it cannot take focus, either because there is
-	// no field yet or the view is read-only.
+	// no field yet or the view is not editing.
 	focus() {
-		if (app.isReadOnly())
+		if (!this.map.isEditMode())
 			return false;
 		var input = this.getInputField();
 		if (!input)
