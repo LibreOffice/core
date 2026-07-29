@@ -374,18 +374,18 @@ void PresenterNotesView::Layout()
     // Size the tool bar and the horizontal separator above it.
     if (mxToolBarWindow.is())
     {
-            const geometry::RealSize2D aToolBarSize (mpToolBar->GetMinimalSize());
-            const sal_Int32 nToolBarHeight = sal_Int32(aToolBarSize.Height + 0.5);
-            mxToolBarWindow->setPosSize(0, aWindowBox.Height - nToolBarHeight,
-                                        sal_Int32(aToolBarSize.Width + 0.5), nToolBarHeight,
-                                        awt::PosSize::POSSIZE);
-            mnSeparatorYLocation = aWindowBox.Height - nToolBarHeight - gnSpaceBelowSeparator;
-            aNewTextBoundingBox.Y2 = mnSeparatorYLocation - gnSpaceAboveSeparator;
-            // Place the close button.
-            if (mpCloseButton)
-                mpCloseButton->SetCenter(geometry::RealPoint2D(
-                                                               (aWindowBox.Width +  aToolBarSize.Width) / 2,
-                                                               aWindowBox.Height - aToolBarSize.Height/2));
+        const geometry::RealSize2D aToolBarSize(mpToolBar->GetMinimalSize());
+        const sal_Int32 nToolBarHeight = sal_Int32(aToolBarSize.Height + 0.5);
+        mxToolBarWindow->setPosSize(0, aWindowBox.Height - nToolBarHeight,
+                                    sal_Int32(aToolBarSize.Width + 0.5), nToolBarHeight,
+                                    awt::PosSize::POSSIZE);
+        mnSeparatorYLocation = aWindowBox.Height - nToolBarHeight - gnSpaceBelowSeparator;
+        aNewTextBoundingBox.Y2 = mnSeparatorYLocation - gnSpaceAboveSeparator;
+        // Place the close button.
+        if (mpCloseButton)
+            mpCloseButton->SetCenter(
+                geometry::RealPoint2D((aWindowBox.Width + aToolBarSize.Width) / 2,
+                                      aWindowBox.Height - aToolBarSize.Height / 2));
     }
     // Check whether the vertical scroll bar is necessary.
     if (mpScrollBar)
