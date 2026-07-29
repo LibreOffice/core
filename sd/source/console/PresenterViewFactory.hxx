@@ -31,26 +31,6 @@ namespace sd { class DrawController; }
 
 namespace sdext::presenter {
 
-/** Base class for presenter views that allows the view factory to store
-    them in a cache and reuse deactivated views.
-*/
-class SAL_LOPLUGIN_ANNOTATE("crosscast") CachablePresenterView
-{
-public:
-    virtual void ActivatePresenterView() = 0;
-
-    /** Called before the view is disposed.  This gives the view the
-        opportunity to trigger actions that may lead to (synchronous)
-        callbacks that do not result in DisposedExceptions.
-    */
-    virtual void ReleaseView() = 0;
-
-protected:
-    CachablePresenterView();
-
-    ~CachablePresenterView() {}
-};
-
 /** Factory of the presenter screen specific views.  The supported set of
     views includes:
         a life view of the current slide,

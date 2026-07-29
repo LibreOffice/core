@@ -198,7 +198,7 @@ void PresenterViewFactory::releaseResource (const rtl::Reference<sd::framework::
     if (pDescriptor)
         pDescriptor->SetActivationState(false);
 
-    CachablePresenterView* pView = dynamic_cast<CachablePresenterView*>(rxView.get());
+    PresenterSlideShowView* pView = dynamic_cast<PresenterSlideShowView*>(rxView.get());
     try
     {
         if (pView != nullptr)
@@ -250,7 +250,7 @@ rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateView(
         }
 
         // Activate it.
-        CachablePresenterView* pView = dynamic_cast<CachablePresenterView*>(xView.get());
+        PresenterSlideShowView* pView = dynamic_cast<PresenterSlideShowView*>(xView.get());
         if (pView != nullptr)
             pView->ActivatePresenterView();
     }
@@ -389,12 +389,6 @@ rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateHelpView
         rxViewId,
         mxControllerWeak.get(),
         mpPresenterController);
-}
-
-//===== CachablePresenterView =================================================
-
-CachablePresenterView::CachablePresenterView()
-{
 }
 
 }

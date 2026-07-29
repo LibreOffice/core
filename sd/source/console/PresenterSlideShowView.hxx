@@ -53,8 +53,7 @@ typedef cppu::ImplInheritanceHelper<
 /** Life view in a secondary window of a full screen slide show.
 */
 class PresenterSlideShowView
-    : public PresenterSlideShowViewInterfaceBase,
-      public CachablePresenterView
+    : public PresenterSlideShowViewInterfaceBase
 {
 public:
     PresenterSlideShowView (
@@ -69,9 +68,13 @@ public:
     void LateInit();
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    // CachablePresenterView
-    virtual void ActivatePresenterView() override;
-    virtual void ReleaseView() override;
+    void ActivatePresenterView();
+
+    /** Called before the view is disposed.  This gives the view the
+        opportunity to trigger actions that may lead to (synchronous)
+        callbacks that do not result in DisposedExceptions.
+    */
+    void ReleaseView();
 
     // XSlideShowView
 

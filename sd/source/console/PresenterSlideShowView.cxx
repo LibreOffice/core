@@ -605,8 +605,6 @@ bool PresenterSlideShowView::isAnchorOnly()
     return false;
 }
 
-//----- CachablePresenterView -------------------------------------------------
-
 void PresenterSlideShowView::ActivatePresenterView()
 {
     if (mxSlideShow.is() && ! mbIsViewAdded)
