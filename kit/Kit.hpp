@@ -296,6 +296,15 @@ private:
     Priority getTilePriority(const TileDesc& desc) const override;
     std::vector<ViewIdInactivity> getViewIdsByInactivity() const override;
 
+    /// The unique id of the slide at the given part index: the hash member of
+    /// the part info, an integer the core assigns to the slide for its whole
+    /// lifetime. Zero when there is no such part or its info carries no hash.
+    uint64_t partUniqueId(int part) const;
+
+    /// The part index the slide with the given unique id holds now, or -1
+    /// when no slide has that id.
+    int findPartByUniqueId(uint64_t uniqueId) const;
+
 public:
     /// Request loading a document, or a new view, if one exists,
     /// and register callbacks.

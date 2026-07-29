@@ -57,6 +57,9 @@ namespace RenderTiles
         return nextId;
     }
 
+    /// Renders the tiles of tileCombined and outputs the tile or tilecombine response messages.
+    /// A non-negative paintPart is the part the pixels are painted from, while the tile
+    /// descriptors keep the part of the request.
     bool doRender(
         const std::shared_ptr<kit::Document>& document, DeltaGenerator& deltaGen,
         TileCombined& tileCombined, ThreadPool& pngPool,
@@ -65,7 +68,8 @@ namespace RenderTiles
                                  COKitTileMode mode)>& blendWatermark,
         const std::function<void(const char* buffer, size_t length)>& outputMessage,
         const std::function<void(std::string_view msg)>& errorMessage,
-        [[maybe_unused]] unsigned mobileAppDocId, CanonicalViewId canonicalViewId, bool dumpTiles)
+        [[maybe_unused]] unsigned mobileAppDocId, CanonicalViewId canonicalViewId, bool dumpTiles,
+        int paintPart = -1)
     {
         const auto& tiles = tileCombined.getTiles();
 
@@ -126,7 +130,7 @@ namespace RenderTiles
         const auto start = std::chrono::steady_clock::now();
         LOG_TRC("Calling paintPartTile(" << (void*)pixmap.data() << ')');
         document->paintPartTile(pixmap.data(),
-                                tileCombined.getPart(),
+                                paintPart >= 0 ? paintPart : tileCombined.getPart(),
                                 tileCombined.getEditMode(),
                                 pixmapWidth, pixmapHeight,
                                 renderArea.getLeft(), renderArea.getTop(),

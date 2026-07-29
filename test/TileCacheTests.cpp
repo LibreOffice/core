@@ -71,6 +71,7 @@ class TileCacheTests : public CPPUNIT_NS::TestFixture
 
     CPPUNIT_TEST(testDesc);
     CPPUNIT_TEST(testSimple);
+    CPPUNIT_TEST(testPreviewUniqueId);
     CPPUNIT_TEST(testSimpleCombine);
     CPPUNIT_TEST(testTileSubscription);
     CPPUNIT_TEST(testSize);
@@ -109,6 +110,7 @@ class TileCacheTests : public CPPUNIT_NS::TestFixture
 
     void testDesc();
     void testSimple();
+    void testPreviewUniqueId();
     void testSimpleCombine();
     void testTileSubscription();
     void testSize();
@@ -265,6 +267,46 @@ void TileCacheTests::testSimple()
     // No Cache
     tileData = tc.lookupTile(tile);
     LOK_ASSERT_MESSAGE("found tile when none was expected", !tileData || !tileData->isValid());
+}
+
+// A cached preview is served only for the slide it was rendered from. An entry left at an index
+// another slide holds now, after the parts were renumbered, forces a fresh render instead.
+void TileCacheTests::testPreviewUniqueId()
+{
+    constexpr std::string_view testname = __func__;
+
+    if (isStandalone())
+    {
+        if (!UnitWSD::init(UnitWSD::UnitType::Wsd, ""))
+            throw std::runtime_error("Failed to load wsd unit test library.");
+    }
+
+    TileCache tc("doc.odp", std::chrono::system_clock::time_point());
+
+    // A preview tile of part 0, rendered from the slide with unique id 42.
+    TileDesc preview(CanonicalViewId::None, 0, 0, 256, 256, 0, 0, 3840, 3840, -1, 0, 0);
+    preview.setUniqueId(42);
+
+    const int size = 1024;
+    std::vector<char> data = genRandomData(size);
+    data[0] = 'Z'; // compressed pixels.
+    tc.saveTileAndNotify(preview, data.data(), size);
+
+    // An ordinary tile carries no unique id and is served whatever the slot holds.
+    TileDesc plain(CanonicalViewId::None, 0, 0, 256, 256, 0, 0, 3840, 3840, -1, 0, -1);
+    Tile tileData = tc.lookupTile(plain);
+    LOK_ASSERT_MESSAGE("expected the cached preview", tileData && tileData->isValid());
+
+    // A request naming the slide the entry was rendered from is served it.
+    tileData = tc.lookupTile(preview);
+    LOK_ASSERT_MESSAGE("expected the cached preview of the same slide",
+                       tileData && tileData->isValid());
+
+    // A request naming another slide is not served the entry.
+    TileDesc otherSlide(CanonicalViewId::None, 0, 0, 256, 256, 0, 0, 3840, 3840, -1, 0, 0);
+    otherSlide.setUniqueId(43);
+    tileData = tc.lookupTile(otherSlide);
+    LOK_ASSERT_MESSAGE("a preview of another slide must not be served", !tileData);
 }
 
 void TileCacheTests::testSimpleCombine()

@@ -212,13 +212,15 @@ window.L.Map.include({
 			window.app.console.debug('PREVIEW: request preview parts : ' + previewParts.join());
 	},
 
-	_addPreviewToQueue: function(part, tileMsg) {
+	_addPreviewToQueue: function(part, id, tileMsg) {
 		for (var tile in this._previewQueue)
-			if (this._previewQueue[tile][0] === part)
-				// we already have this tile in the queue
-				// no need to ask for it twice
+			if (this._previewQueue[tile][0] === part && this._previewQueue[tile][2] === id) {
+				// One queued request per preview; the newest one carries the
+				// freshest view of which slide sits at this index, so it wins.
+				this._previewQueue[tile][1] = tileMsg;
 				return;
-		this._previewQueue.push([part, tileMsg]);
+			}
+		this._previewQueue.push([part, tileMsg, id]);
 	},
 
 	getPreview: function (id, part, maxWidth, maxHeight, options) {
@@ -259,9 +261,16 @@ window.L.Map.include({
 				RenderManager.requestThumbnail(id, part, maxWidth, maxHeight);
 			} else {
 				var mode = app.activeDocument.activeModes[0];
-				this._addPreviewToQueue(part, 'tile ' +
+				// The slide list carries each slide's unique id under its
+				// legacy name, hash. The unique id names the slide this
+				// preview asks for, wherever that slide sits by the time it
+				// is rendered.
+				const partList = app.impress && app.impress.partList;
+				const slideId = partList && partList[part] ? partList[part].hash : undefined;
+				this._addPreviewToQueue(part, id, 'tile ' +
 								'nviewid=0' + ' ' +
 								'part=' + String(part) + ' ' +
+								(slideId !== undefined ? 'uniqueid=' + String(slideId) + ' ' : '') +
 								'mode=' + String(mode) + ' ' +
 								'width=' + String(maxWidth * app.roundedDpiScale) + ' ' +
 								'height=' + String(maxHeight * app.roundedDpiScale) + ' ' +
@@ -290,7 +299,7 @@ window.L.Map.include({
 			tilePosY: tilePosY, tileWidth: tileWidth, tileHeight: tileHeight, autoUpdate: autoUpdate, invalid: false};
 
 		var mode = app.activeDocument.activeModes[0];
-		this._addPreviewToQueue(part, 'tile ' +
+		this._addPreviewToQueue(part, id, 'tile ' +
 							'nviewid=0' + ' ' +
 							'part=' + part + ' ' +
 							((mode !== 0) ? ('mode=' + mode + ' ') : '') +

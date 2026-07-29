@@ -259,7 +259,7 @@ status
 
 styles
 
-tile part=<partNumber> width=<width> height=<height> tileposx=<xpos> tileposy=<ypos> tilewidth=<tileWidth> tileheight=<tileHeight> [timestamp=<time>] [id=<id>] [oldwid=<wireId>]
+tile part=<partNumber> width=<width> height=<height> tileposx=<xpos> tileposy=<ypos> tilewidth=<tileWidth> tileheight=<tileHeight> [timestamp=<time>] [id=<id>] [oldwid=<wireId>] [uniqueid=<slideUniqueId>]
 
     Parameters are numbers except wireId which is an opaque string
     identifier unique to this tile.
@@ -268,6 +268,14 @@ tile part=<partNumber> width=<width> height=<height> tileposx=<xpos> tileposy=<y
     when rendering slide previews of presentation documents, and not
     for anything else. It is only useful to JS part and will break it
     if not returned in the response.
+
+    A preview request of a presentation or drawing document also
+    carries uniqueid, the unique id of the slide the preview asks
+    for, as listed for each slide in the status message under the
+    name hash. The slide is rendered from whichever part index it
+    holds at render time, so the picture is of that slide even if
+    the parts were renumbered after the request was sent. A preview
+    naming a slide that no longer exists is not rendered.
 
 tilecombine <parameters>
 
@@ -758,6 +766,11 @@ tile: part=<partNumber> width=<width> height=<height> tileposx=<xpos> tileposy=<
 <binaryPngImage>
 
     The parameters from the corresponding 'tile' command.
+
+    A preview response of a presentation or drawing document also
+    carries uniqueid=<number>, the unique id of the slide the image
+    shows, as listed for each slide in the status message under the
+    name hash.
 
     WireId is a monotonically incrementing, unique reference to a
     state of the document on the server, and can be included by
