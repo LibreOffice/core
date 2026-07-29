@@ -5,12 +5,19 @@ var desktopHelper = require('../../common/desktop_helper');
 var ceHelper = require('../../common/contenteditable_helper');
 // var repairHelper = require('../../common/repair_document_helper');
 
-describe(['taga11ydisabled'], 'Editable area [a11y disabled] - Empty paragraph', function() {
+describe(['taga11ydisabled'], 'Editable area [a11y disabled]', { testIsolation: false }, function() {
 
+	desktopHelper.shareDocumentAcrossTests('writer/undo_redo.odt', {
+		caretToDocumentStart: true,
+	});
+
+	// The tests reach the editable area through this alias, and an alias is cleared
+	// before every test, so it is registered again for each one.
 	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/undo_redo.odt');
 		cy.cGet('div.clipboard').as('clipboard');
 	});
+
+	// Empty paragraph.
 
 	it('Typing in an empty paragraph', function () {
 		// initial position
@@ -40,14 +47,8 @@ describe(['taga11ydisabled'], 'Editable area [a11y disabled] - Empty paragraph',
 		ceHelper.checkHTMLContent('');
 		ceHelper.checkCaretPosition(0);
 	});
-});
 
-describe(['taga11ydisabled'], 'Editable area [a11y disabled] - Basic typing', function() {
-
-	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/undo_redo.odt');
-		cy.cGet('div.clipboard').as('clipboard');
-	});
+	// Basic typing.
 
 	it('Typing at paragraph beginning', function () {
 		ceHelper.type('Hello World');
@@ -117,12 +118,21 @@ describe(['taga11ydisabled'], 'Editable area [a11y disabled] - Basic typing', fu
 	});
 });
 
-describe(['taga11yenabled'], 'Editable area - Empty paragraph', function() {
+describe(['taga11yenabled'], 'Editable area', { testIsolation: false }, function() {
+
+	desktopHelper.shareDocumentAcrossTests('writer/undo_redo.odt', {
+		caretToDocumentStart: true,
+	});
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/undo_redo.odt');
 		cy.cGet('div.clipboard').as('clipboard');
+
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
+
+	// Empty paragraph.
 
 	it('Typing in an empty paragraph', function () {
 		// initial position
@@ -157,18 +167,8 @@ describe(['taga11yenabled'], 'Editable area - Empty paragraph', function() {
 		ceHelper.checkHTMLContent('');
 		ceHelper.checkCaretPosition(0);
 	});
-});
 
-describe(['taga11yenabled'], 'Editable area - Basic typing and caret moving', function() {
-
-	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/undo_redo.odt');
-		cy.cGet('div.clipboard').as('clipboard');
-
-		cy.getFrameWindow().then((win) => {
-			this.win = win;
-		});
-	});
+	// Basic typing and caret moving.
 
 	it('Moving inside paragraph', function () {
 		// initial position
@@ -464,24 +464,7 @@ describe(['taga11yenabled'], 'Editable area - Basic typing and caret moving', fu
 		ceHelper.checkPlainContent('Hello World');
 	});
 
-	it('Typing after switching accessibility state', function () {
-		ceHelper.type('r');
-		desktopHelper.setAccessibilityState(false);
-		ceHelper.checkPlainContent('');
-		ceHelper.type('e');
-		desktopHelper.setAccessibilityState(true);
-		ceHelper.checkPlainContent('re');
-		ceHelper.type('d');
-		ceHelper.checkPlainContent('red');
-	});
-});
-
-describe(['taga11yenabled'], 'Editable area - Inner selection', function() {
-
-	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/undo_redo.odt');
-		cy.cGet('div.clipboard').as('clipboard');
-	});
+	// Inner selection.
 
 	it('Selecting inside paragraph', function () {
 		ceHelper.type('Hello World');
@@ -628,14 +611,8 @@ describe(['taga11yenabled'], 'Editable area - Inner selection', function() {
 		ceHelper.checkCaretPosition(6);
 		ceHelper.checkSelectionIsNull();
 	});
-});
 
-describe(['taga11yenabled'], 'Editable area - Multi-paragraph selection', function() {
-
-	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/undo_redo.odt');
-		cy.cGet('div.clipboard').as('clipboard');
-	});
+	// Multi-paragraph selection.
 
 	it('Selection starts in previous paragraph', function () {
 		ceHelper.type('Hello World');
@@ -778,18 +755,8 @@ describe(['taga11yenabled'], 'Editable area - Multi-paragraph selection', functi
 		ceHelper.checkSelectionIsNull();
 		ceHelper.checkCaretPosition(6);
 	});
-});
 
-describe(['taga11yenabled'], 'Editable area - Empty selection', function() {
-
-	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/undo_redo.odt');
-		cy.cGet('div.clipboard').as('clipboard');
-
-		cy.getFrameWindow().then((win) => {
-			this.win = win;
-		});
-	});
+	// Empty selection.
 
 	it('Typing <backspace> with empty selection', function () {
 		ceHelper.type('Green red');
@@ -865,14 +832,8 @@ describe(['taga11yenabled'], 'Editable area - Empty selection', function() {
 		ceHelper.checkSelectionIsNull();
 		ceHelper.checkCaretPosition(11);
 	});
-});
 
-describe(['taga11yenabled'], 'Editable area - Undo/Redo', function() {
-
-	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/undo_redo.odt');
-		cy.cGet('div.clipboard').as('clipboard');
-	});
+	// Undo and redo.
 
 	it('Undo/Redo after typing', function () {
 		ceHelper.type('Hello World');
@@ -940,14 +901,8 @@ describe(['taga11yenabled'], 'Editable area - Undo/Redo', function() {
 		ceHelper.checkPlainContent('Hello ');
 		ceHelper.checkSelectionIsEmpty(6);
 	});
-});
 
-describe(['taga11yenabled'], 'Editable area - More typing', function() {
-
-	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/undo_redo.odt');
-		cy.cGet('div.clipboard').as('clipboard');
-	});
+	// More typing.
 
 	it('Typing after undo command', function() {
 		ceHelper.type('Hello World');
@@ -1016,6 +971,20 @@ describe(['taga11yenabled'], 'Editable area - More typing', function() {
 		ceHelper.checkPlainContent('Green redWorld');
 	});
 
+	// Last in the group on purpose: this one turns the accessibility state off and
+	// back on, and the state is not something the rewind between tests can give
+	// back, so it is only restored by the test reaching its own end.
+	it('Typing after switching accessibility state', function () {
+		ceHelper.type('r');
+		desktopHelper.setAccessibilityState(false);
+		ceHelper.checkPlainContent('');
+		ceHelper.type('e');
+		desktopHelper.setAccessibilityState(true);
+		ceHelper.checkPlainContent('re');
+		ceHelper.type('d');
+		ceHelper.checkPlainContent('red');
+	});
+
 });
 
 // unordered_list.odt
@@ -1025,10 +994,13 @@ describe(['taga11yenabled'], 'Editable area - More typing', function() {
 //   ◦ Item 1.2
 // • Item 2
 // • Item 3
-describe(['taga11yenabled'], 'Editable area - Unordered lists', function() {
+describe(['taga11yenabled'], 'Editable area - Unordered lists', { testIsolation: false }, function() {
+
+	desktopHelper.shareDocumentAcrossTests('writer/unordered_list.odt', {
+		caretToDocumentStart: true,
+	});
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/unordered_list.odt');
 		cy.cGet('div.clipboard').as('clipboard');
 	});
 
@@ -1088,26 +1060,6 @@ describe(['taga11yenabled'], 'Editable area - Unordered lists', function() {
 		ceHelper.moveCaret('end');
 		ceHelper.checkPlainContent('• Item 2');
 		ceHelper.checkCaretPosition(8);
-	});
-
-	it('Add entries', function () {
-		ceHelper.moveCaret('down');
-		ceHelper.moveCaret('end');
-		ceHelper.type('{enter}');
-		ceHelper.checkPlainContent('• ');
-		ceHelper.checkCaretPosition(2);
-		ceHelper.type('New item');
-		ceHelper.checkPlainContent('• New item');
-		ceHelper.moveCaret('down');
-		ceHelper.checkPlainContent('◦ Item 1.1');
-		ceHelper.moveCaret('end');
-		ceHelper.type('{enter}');
-		ceHelper.checkPlainContent('◦ ');
-		ceHelper.checkCaretPosition(2);
-		ceHelper.type('New sub-item');
-		ceHelper.checkPlainContent('◦ New sub-item');
-		ceHelper.moveCaret('down');
-		ceHelper.checkPlainContent('◦ Item 1.2');
 	});
 
 	it('Typing <backspace> at entry beginning', function () {
@@ -1206,12 +1158,37 @@ describe(['taga11yenabled'], 'Editable area - Unordered lists', function() {
 		ceHelper.checkCaretPosition(8);
 	});
 
+	// Last in the group: the tests above walk the list the document was built with,
+	// and this is the only one that gives it new entries.
+	it('Add entries', function () {
+		ceHelper.moveCaret('down');
+		ceHelper.moveCaret('end');
+		ceHelper.type('{enter}');
+		ceHelper.checkPlainContent('• ');
+		ceHelper.checkCaretPosition(2);
+		ceHelper.type('New item');
+		ceHelper.checkPlainContent('• New item');
+		ceHelper.moveCaret('down');
+		ceHelper.checkPlainContent('◦ Item 1.1');
+		ceHelper.moveCaret('end');
+		ceHelper.type('{enter}');
+		ceHelper.checkPlainContent('◦ ');
+		ceHelper.checkCaretPosition(2);
+		ceHelper.type('New sub-item');
+		ceHelper.checkPlainContent('◦ New sub-item');
+		ceHelper.moveCaret('down');
+		ceHelper.checkPlainContent('◦ Item 1.2');
+	});
+
 });
 
-describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Editing - Basic typing', function() {
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Editing - Basic typing', { testIsolation: false }, function() {
+
+	desktopHelper.shareDocumentAcrossTests('writer/undo_redo.odt', {
+		caretToDocumentStart: true,
+	});
 
 	beforeEach(function () {
-		helper.setupAndLoadDocument('writer/undo_redo.odt');
 		cy.cGet('div.clipboard').as('clipboard');
 	});
 

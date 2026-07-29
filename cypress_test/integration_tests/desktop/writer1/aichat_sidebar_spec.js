@@ -1,14 +1,17 @@
 /* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
+var desktopHelper = require('../../common/desktop_helper');
 var aichatHelper = require('../../common/aichat_helper');
 
-describe(['tagdesktop'], 'AI Chat Sidebar', function() {
+describe(['tagdesktop'], 'AI Chat Sidebar', { testIsolation: false }, function() {
+
+	desktopHelper.shareDocumentAcrossTests('writer/help_dialog.odt');
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/help_dialog.odt');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
+			aichatHelper.resetAIChat(win);
 		});
 	});
 

@@ -616,6 +616,26 @@ function getNbIcon(unoCommand, tabName) {
 	return cy.cGet((tabName ? '#' + tabName + '-container' : '') + '.notebookbar  .uno' + unoCommand + ' > button.unobutton:visible');
 }
 
+// Bring a notebookbar tab's icons on screen.
+//
+// The click is made only while the tab's icons are away, which covers all three
+// starting points: another tab is up, this tab is up but the strip is collapsed, and
+// this tab is already showing. Clicking the label of the tab that is already up
+// collapses the strip instead of doing nothing, so an unconditional click hides the
+// icons the caller is asking for.
+function selectNotebookbarTab(tabName) {
+	cy.log('>> selectNotebookbarTab - start');
+
+	cy.cGet('body').then(function($body) {
+		if (!$body.find('#' + tabName + '-container:visible').length)
+			cy.cGet('#' + tabName + '-tab-label').click();
+	});
+
+	cy.cGet('#' + tabName + '-container').should('be.visible');
+
+	cy.log('<< selectNotebookbarTab - end');
+}
+
 /// get icon arrow for given uno command from classic toolbar to open the dropdown
 function getCompactIconArrow(unoCommand) {
 	return cy.cGet('#toolbar-up .uno' + unoCommand + ' > .arrowbackground:visible');
@@ -823,6 +843,7 @@ module.exports.ensureSidebarHidden = ensureSidebarHidden;
 module.exports.assertSidebarStealsFocus = assertSidebarStealsFocus;
 module.exports.getCompactIcon = getCompactIcon;
 module.exports.getNbIcon = getNbIcon;
+module.exports.selectNotebookbarTab = selectNotebookbarTab;
 module.exports.getCompactIconArrow = getCompactIconArrow;
 module.exports.getNbIconArrow = getNbIconArrow;
 module.exports.getDropdown = getDropdown;

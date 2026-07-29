@@ -1,23 +1,30 @@
-/* global describe it cy beforeEach require Cypress expect */
+/* global describe it cy before beforeEach require Cypress expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 var writerHelper = require('../../common/writer_helper');
 
-describe(['tagdesktop'], 'Top toolbar tests.', function() {
-	var newFilePath;
+describe(['tagdesktop'], 'Top toolbar tests.', { testIsolation: false }, function() {
 
-	beforeEach(function() {
-		cy.viewport(1920,1080);
-		newFilePath = helper.setupAndLoadDocument('writer/top_toolbar.odt');
-		desktopHelper.switchUIToNotebookbar();
+	desktopHelper.shareDocumentAcrossTests('writer/top_toolbar.odt', {
+		notebookbar: true,
+		viewport: [1920, 1080],
+	});
 
+	before(function() {
 		if (Cypress.env('INTEGRATION') === 'nextcloud') {
 			desktopHelper.showSidebar();
 		}
+	});
+
+	beforeEach(function() {
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
 		})
+
+		// Which tab is up is inherited from the test before, and the tests below reach
+		// for icons on the Home tab or switch away from it themselves.
+		desktopHelper.selectNotebookbarTab('Home');
 
 		writerHelper.selectAllTextOfDoc();
 	});
@@ -218,21 +225,6 @@ describe(['tagdesktop'], 'Top toolbar tests.', function() {
 		cy.cGet('#test-div-shapeHandlesSection').should('not.exist');
 	});
 
-	it('Save.', function() {
-		desktopHelper.getNbIcon('Bold').click();
-		cy.cGet('.notebookbar-shortcuts-bar .unoSave').click();
-		helper.waitUntilDocumentSaved();
-		helper.reloadDocument(newFilePath);
-		helper.setDummyClipboardForCopy();
-		writerHelper.selectAllTextOfDoc();
-		// document was reloaded, fetch the frame window again
-		cy.getFrameWindow().then((win) => {
-			helper.processToIdle(win);
-		})
-		helper.copy();
-		cy.cGet('#copy-paste-container p b').should('exist');
-	});
-
 	it('Print', function() {
 		// A new window should be opened with the PDF.
 		cy.stub(this.win, 'open').as('windowOpen');
@@ -269,33 +261,6 @@ describe(['tagdesktop'], 'Top toolbar tests.', function() {
 		helper.copy();
 		helper.processToIdle(this.win); // wait for new clipboard
 		cy.cGet('#copy-paste-container p i').should('exist');
-	});
-
-	it('Enable/Disable Screen Reading', function() {
-		// when accessibility is disabled at server level
-		// this unit passes but doesn't perform any check
-		desktopHelper.switchUIToNotebookbar();
-		desktopHelper.checkAccessibilityEnabledToBe(true);
-		desktopHelper.setAccessibilityState(false);
-		desktopHelper.checkAccessibilityEnabledToBe(false);
-		desktopHelper.setAccessibilityState(true);
-		desktopHelper.checkAccessibilityEnabledToBe(true);
-		desktopHelper.switchUIToCompact();
-		desktopHelper.checkAccessibilityEnabledToBe(true);
-		desktopHelper.setAccessibilityState(false);
-		desktopHelper.checkAccessibilityEnabledToBe(false);
-		desktopHelper.setAccessibilityState(true);
-		desktopHelper.checkAccessibilityEnabledToBe(true);
-		desktopHelper.setAccessibilityState(false);
-		desktopHelper.switchUIToNotebookbar();
-		desktopHelper.checkAccessibilityEnabledToBe(false);
-		desktopHelper.switchUIToCompact();
-		desktopHelper.setAccessibilityState(true);
-		desktopHelper.switchUIToNotebookbar();
-		desktopHelper.checkAccessibilityEnabledToBe(true);
-		desktopHelper.setAccessibilityState(false);
-		desktopHelper.switchUIToCompact();
-		desktopHelper.checkAccessibilityEnabledToBe(false);
 	});
 
 	it('Show/Hide sidebar.', function() {
@@ -497,6 +462,72 @@ describe(['tagdesktop'], 'Top toolbar tests.', function() {
 		helper.copy();
 		cy.cGet('#copy-paste-container p').should('exist');
 		cy.cGet('#copy-paste-container p b').should('not.exist');
+	});
+});
+
+// The formatting this test applies goes into the file on disk and the reload brings it
+// back, so it keeps a document of its own.
+describe(['tagdesktop'], 'Top toolbar save.', function() {
+	var newFilePath;
+
+	beforeEach(function() {
+		cy.viewport(1920,1080);
+		newFilePath = helper.setupAndLoadDocument('writer/top_toolbar.odt');
+		desktopHelper.switchUIToNotebookbar();
+		writerHelper.selectAllTextOfDoc();
+	});
+
+	it('Save.', function() {
+		desktopHelper.getNbIcon('Bold').click();
+		cy.cGet('.notebookbar-shortcuts-bar .unoSave').click();
+		helper.waitUntilDocumentSaved();
+		helper.reloadDocument(newFilePath);
+		helper.setDummyClipboardForCopy();
+		writerHelper.selectAllTextOfDoc();
+		// document was reloaded, fetch the frame window again
+		cy.getFrameWindow().then((win) => {
+			helper.processToIdle(win);
+		})
+		helper.copy();
+		cy.cGet('#copy-paste-container p b').should('exist');
+	});
+});
+
+// This one walks the user interface between the notebookbar and the compact toolbar and
+// ends on the compact one with screen reading off, so it keeps a document of its own.
+describe(['tagdesktop'], 'Top toolbar screen reading.', function() {
+
+	beforeEach(function() {
+		cy.viewport(1920,1080);
+		helper.setupAndLoadDocument('writer/top_toolbar.odt');
+		desktopHelper.switchUIToNotebookbar();
+	});
+
+	it('Enable/Disable Screen Reading', function() {
+		// when accessibility is disabled at server level
+		// this unit passes but doesn't perform any check
+		desktopHelper.switchUIToNotebookbar();
+		desktopHelper.checkAccessibilityEnabledToBe(true);
+		desktopHelper.setAccessibilityState(false);
+		desktopHelper.checkAccessibilityEnabledToBe(false);
+		desktopHelper.setAccessibilityState(true);
+		desktopHelper.checkAccessibilityEnabledToBe(true);
+		desktopHelper.switchUIToCompact();
+		desktopHelper.checkAccessibilityEnabledToBe(true);
+		desktopHelper.setAccessibilityState(false);
+		desktopHelper.checkAccessibilityEnabledToBe(false);
+		desktopHelper.setAccessibilityState(true);
+		desktopHelper.checkAccessibilityEnabledToBe(true);
+		desktopHelper.setAccessibilityState(false);
+		desktopHelper.switchUIToNotebookbar();
+		desktopHelper.checkAccessibilityEnabledToBe(false);
+		desktopHelper.switchUIToCompact();
+		desktopHelper.setAccessibilityState(true);
+		desktopHelper.switchUIToNotebookbar();
+		desktopHelper.checkAccessibilityEnabledToBe(true);
+		desktopHelper.setAccessibilityState(false);
+		desktopHelper.switchUIToCompact();
+		desktopHelper.checkAccessibilityEnabledToBe(false);
 	});
 });
 

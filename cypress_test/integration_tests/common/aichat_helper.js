@@ -129,7 +129,50 @@ function closeTonePicker() {
 	cy.cGet('#aichat-tone-picker.aichat-tone-picker-open').should('not.exist');
 }
 
+/**
+ * Give the sidebar back the state a freshly loaded document has it in: no
+ * conversation, no saved voice, no tone picker, and the panel closed.
+ *
+ * The message elements are numbered by their place in the conversation, so a
+ * conversation left behind would move every later message's id. A saved tone stays
+ * in the preferences rather than in local storage, and it comes back as one more
+ * chip, so both the stored copy and the one the sidebar is holding have to go: the
+ * preferences are removed and the sidebar's own loader is asked to read them again.
+ * The tone chip toggles the picker, so a picker left open turns the next open into a
+ * close. Only the state is set here, and the panel is built again from it the next
+ * time a test opens the sidebar.
+ *
+ * @param {Window} win - the frame window (from cy.getFrameWindow())
+ */
+function resetAIChat(win) {
+	cy.log('>> resetAIChat - start');
+
+	var sidebar = win.JSDialog.AIChatSidebar;
+	if (sidebar) {
+		[sidebar.PREFS_CUSTOM_TONES, sidebar.PREFS_RECENT_ICONS,
+			sidebar.PREFS_SELECTED_TONE, sidebar.PREFS_EMOJIFY].forEach(function(key) {
+			win.prefs.remove(key);
+		});
+		sidebar.loadPrefs();
+
+		sidebar.tonePickerOpen = false;
+		sidebar.clearConversation();
+	}
+
+	// Opening and closing go through the same dispatch, so it is sent only when
+	// something is on screen to close.
+	cy.cGet('body').then(function($body) {
+		if ($body.find('#aichat-dock-wrapper.visible').length)
+			win.app.dispatcher.dispatch('aichat');
+	});
+
+	cy.cGet('#aichat-dock-wrapper.visible').should('not.exist');
+
+	cy.log('<< resetAIChat - end');
+}
+
 module.exports.enableAIAndStubSocket = enableAIAndStubSocket;
+module.exports.resetAIChat = resetAIChat;
 module.exports.enableAIWithCaptureSocket = enableAIWithCaptureSocket;
 module.exports.openAIChat = openAIChat;
 module.exports.closeAIChat = closeAIChat;
