@@ -348,11 +348,23 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		});
 	},
 
+	// The document a dialog lives in: the one its container is part of, which for a
+	// popped-out dialog is that window's own document. Before the container is built,
+	// the document it will be created in, from containerParent.
+	getOwnerDocument: function(instance) {
+		if (instance.container)
+			return instance.container.ownerDocument;
+		if (instance.containerParent)
+			return instance.containerParent.ownerDocument;
+		return document;
+	},
+
 	getOrCreateOverlay: function(instance) {
 		// Submenu is created inside the same overlay as parent dropdown
 		if (instance.isDropdown && instance.isSubmenu) {
 			// use the last instance
-			const allOverlays = document.body.querySelectorAll('.jsdialog-overlay');
+			const overlayRoot = this.getOwnerDocument(instance).body;
+			const allOverlays = overlayRoot.querySelectorAll('.jsdialog-overlay');
 			instance.overlay = allOverlays.length ? allOverlays[allOverlays.length - 1] : null;
 			return;
 		}
@@ -697,11 +709,14 @@ window.L.Control.JSDialog = window.L.Control.extend({
 	setPosition: function(instance, updatedPos) {
 		var calculated = false;
 		var isRTL = document.documentElement.dir === 'rtl';
+		// A popup anchored to a widget inside a popped-out dialog clamps against
+		// that dialog window's bounds, not the main window's.
+		const ownerWindow = this.getOwnerDocument(instance).defaultView || window;
 
 		if (instance.isSnackbar) {
 			calculated = true;
-			instance.posx = window.innerWidth/2 - instance.form.offsetWidth/2;
-			instance.posy = window.innerHeight - instance.form.offsetHeight - 40;
+			instance.posx = ownerWindow.innerWidth/2 - instance.form.offsetWidth/2;
+			instance.posy = ownerWindow.innerHeight - instance.form.offsetHeight - 40;
 		} else if (instance.nonModal || instance.popupParent) {
 			// in case of toolbox we want to create popup positioned by toolitem not toolbox
 			if (updatedPos) {
@@ -710,6 +725,8 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				instance.posy = updatedPos.y;
 			}
 			var parent = window.L.DomUtil.get(instance.popupParent);
+			if (!parent && typeof instance.popupParent === 'string')
+				parent = JSDialog.FindInPopoutWindows(instance.popupParent);
 
 			if (instance.clickToCloseElement && parent) {
 				// anchor the popup to the element that closes it, which was
@@ -765,14 +782,14 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				instance.container.style.minWidth = anchor.getBoundingClientRect().width + 'px';
 
 				if (isRTL)
-					instance.posx = window.innerWidth - instance.posx;
+					instance.posx = ownerWindow.innerWidth - instance.posx;
 
 				if (instance.popupAnchor && instance.popupAnchor.indexOf('end') >= 0)
 					instance.posx += (isRTL ? 0 : 1) * (parent.clientWidth) - 15;
 
-				if (instance.content.clientWidth > window.innerWidth)
-					instance.container.style.maxWidth = (window.innerWidth - instance.posx - 20) + 'px';
-				else if (instance.posx + instance.content.clientWidth > window.innerWidth) {
+				if (instance.content.clientWidth > ownerWindow.innerWidth)
+					instance.container.style.maxWidth = (ownerWindow.innerWidth - instance.posx - 20) + 'px';
+				else if (instance.posx + instance.content.clientWidth > ownerWindow.innerWidth) {
 					if (instance.isDropdown && instance.isSubmenu && !isRTL) {
 						// Flip to the left side of the parent entry rather than
 						// nudging leftward. Nudging lands the submenu on top of the
@@ -780,16 +797,16 @@ window.L.Control.JSDialog = window.L.Control.extend({
 						const leftPos = parent.getBoundingClientRect().left
 							- instance.content.clientWidth;
 						instance.posx = leftPos >= 0 ? leftPos
-							: instance.posx - (instance.posx + instance.content.clientWidth + 10 - window.innerWidth);
+							: instance.posx - (instance.posx + instance.content.clientWidth + 10 - ownerWindow.innerWidth);
 					} else {
-						instance.posx -= instance.posx + instance.content.clientWidth + 10 - window.innerWidth;
+						instance.posx -= instance.posx + instance.content.clientWidth + 10 - ownerWindow.innerWidth;
 					}
 				}
 
-				if (instance.content.clientHeight > window.innerHeight)
-					instance.container.style.maxHeight = (window.innerHeight - instance.posy - 20) + 'px';
-				else if (instance.posy + instance.content.clientHeight > window.innerHeight)
-					instance.posy -= instance.posy + instance.content.clientHeight + 10 - window.innerHeight;
+				if (instance.content.clientHeight > ownerWindow.innerHeight)
+					instance.container.style.maxHeight = (ownerWindow.innerHeight - instance.posy - 20) + 'px';
+				else if (instance.posy + instance.content.clientHeight > ownerWindow.innerHeight)
+					instance.posy -= instance.posy + instance.content.clientHeight + 10 - ownerWindow.innerHeight;
 			}
 			else {
 				var height = instance.form.getBoundingClientRect().height;
@@ -1061,6 +1078,18 @@ window.L.Control.JSDialog = window.L.Control.extend({
 	},
 
 	getAutoPopupParentContainer(instance) {
+		// A popup anchored to an element inside a popped-out dialog
+		// belongs in that dialog's window.
+		const anchor = instance.popupParent;
+		if (anchor && typeof anchor !== 'string'
+			&& anchor.ownerDocument && anchor.ownerDocument !== document)
+			return anchor.ownerDocument.body;
+		if (typeof anchor === 'string' && !window.L.DomUtil.get(anchor)) {
+			const popoutAnchor = JSDialog.FindInPopoutWindows(anchor);
+			if (popoutAnchor)
+				return popoutAnchor.ownerDocument.body;
+		}
+
 		// Parent container will
 		if (instance.isAutofilter || instance.isAutoCompletePopup || !instance.isDocumentAreaPopup) {
 			if (instance.isModalPopUp && document.fullscreenElement)
@@ -1088,7 +1117,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		if (!this.canPopout(instance))
 			return null;
 
-		var win = JSDialog.GetPopoutWindow(instance.id);
+		const win = JSDialog.GetPopoutWindow(instance.id);
 		if (win)
 			return win;
 

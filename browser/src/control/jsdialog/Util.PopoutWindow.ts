@@ -135,8 +135,10 @@ JSDialog.OpenPopoutWindow = function (
 
 	// Key events inside the dialog land in the child document. The window
 	// outlives dialog rebuilds, so the listener is added here, once, rather
-	// than with the per-build dialog handlers.
+	// than with the per-build dialog handlers. An Escape a widget already
+	// consumed closes only that widget.
 	win.document.addEventListener('keydown', (event: KeyboardEvent) => {
+		if (event.defaultPrevented) return;
 		if (event.key === 'Escape') onUserClose();
 	});
 

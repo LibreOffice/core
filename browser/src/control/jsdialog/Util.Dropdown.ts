@@ -365,5 +365,12 @@ JSDialog.CloseAllDropdowns = function () {
 JSDialog.GetDropdown = function (id: string) {
 	// remember it can get some random numbers due to JSDialog.MakeIdUnique
 	// TODO: use some register for it
-	return document.body.querySelector('[id^="' + id + '"].modalpopup');
+	const selector = '[id^="' + id + '"].modalpopup';
+	let dropdown = document.body.querySelector(selector);
+	if (!dropdown) {
+		JSDialog.ForEachPopoutDocument((childDocument: Document) => {
+			if (!dropdown) dropdown = childDocument.body.querySelector(selector);
+		});
+	}
+	return dropdown;
 };
