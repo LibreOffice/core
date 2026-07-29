@@ -82,7 +82,7 @@
 #include <tools/time.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <canvas/elapsedtime.hxx>
 #include <parametricpolypolygon.hxx>
 #include <propertysethelper.hxx>

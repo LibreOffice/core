@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <basegfx/numeric/ftools.hxx>
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>

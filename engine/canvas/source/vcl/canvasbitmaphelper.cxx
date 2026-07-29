@@ -20,7 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/BitmapTools.hxx>

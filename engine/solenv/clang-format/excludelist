@@ -428,6 +428,7 @@ canvas/inc/base/graphicdevicebase.hxx
 canvas/inc/cachedbitmap.hxx
 canvas/inc/canvas.hxx
 canvas/inc/canvashelper.hxx
+canvas/inc/canvastools.hxx
 canvas/inc/devicehelper.hxx
 canvas/inc/impltools.hxx
 canvas/inc/outdevprovider.hxx
@@ -4240,7 +4241,6 @@ include/basic/sbxmeth.hxx
 include/basic/sbxobj.hxx
 include/basic/sbxvar.hxx
 include/basic/vbahelper.hxx
-include/canvas/canvastools.hxx
 include/canvas/elapsedtime.hxx
 include/codemaker/commoncpp.hxx
 include/codemaker/commonjava.hxx

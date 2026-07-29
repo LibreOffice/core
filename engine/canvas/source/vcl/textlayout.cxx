@@ -34,7 +34,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 
 #include "textlayout.hxx"
 

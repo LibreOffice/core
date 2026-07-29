@@ -43,7 +43,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gradient.hxx>
 
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <parametricpolypolygon.hxx>
 
 #include <canvashelper.hxx>

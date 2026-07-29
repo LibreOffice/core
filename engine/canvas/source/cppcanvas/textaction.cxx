@@ -37,7 +37,7 @@
 #include <vcl/virdev.hxx>
 
 #include <basegfx/utils/canvastools.hxx>
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <memory>
 #include <sal/log.hxx>
 

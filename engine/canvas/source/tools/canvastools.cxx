@@ -51,7 +51,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/window.hxx>
 
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <unopolypolygon.hxx>
 
 

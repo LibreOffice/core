@@ -83,7 +83,7 @@
 #include <tools/stream.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <parametricpolypolygon.hxx>
 #endif // PCH_LEVEL >= 4
 

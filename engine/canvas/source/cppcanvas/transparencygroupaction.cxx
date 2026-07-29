@@ -24,7 +24,7 @@
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
 
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 
 #include <com/sun/star/rendering/XBitmap.hpp>
 

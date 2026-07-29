@@ -24,7 +24,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unopolypolygon.hxx>
 #include <utility>

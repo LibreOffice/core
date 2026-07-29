@@ -11,7 +11,7 @@
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/utils/canvastools.hxx>
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include "outdevstate.hxx"
 #include <utility>
 #include "textlineshelper.hxx"

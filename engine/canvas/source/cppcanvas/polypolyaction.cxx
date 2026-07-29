@@ -25,7 +25,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <com/sun/star/rendering/RenderState.hpp>
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 

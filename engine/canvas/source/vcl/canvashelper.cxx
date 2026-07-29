@@ -44,7 +44,7 @@
 #include <vcl/bitmap/BitmapAlphaClampFilter.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 
 #include "canvasbitmap.hxx"
 #include "canvasfont.hxx"

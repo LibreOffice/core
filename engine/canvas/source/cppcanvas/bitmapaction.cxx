@@ -23,7 +23,7 @@
 #include <vcl/bitmap.hxx>
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>

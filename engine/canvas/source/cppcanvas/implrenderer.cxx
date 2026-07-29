@@ -42,7 +42,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/canvastools.hxx>

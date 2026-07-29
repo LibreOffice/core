@@ -24,7 +24,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/utils/canvastools.hxx>
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/rendering/RenderState.hpp>
 

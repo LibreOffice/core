@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <basegfx/utils/canvastools.hxx>
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <rtl/ref.hxx>
 #include <tools/stream.hxx>
 #include <vcl/canvastools.hxx>

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <canvas/canvastools.hxx>
+#include "canvastools.hxx"
 
 #include <functional>
 #include <vector>

@@ -21,7 +21,7 @@
 #include <com/sun/star/rendering/RepaintResult.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <canvas.hxx>
 
 #include "cachedprimitivebase.hxx"

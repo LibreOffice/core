@@ -13,7 +13,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/BitmapReadAccess.hxx>
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>

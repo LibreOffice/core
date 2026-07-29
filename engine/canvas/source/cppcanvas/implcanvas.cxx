@@ -23,7 +23,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <osl/diagnose.h>
 
-#include <canvas/canvastools.hxx>
+#include <canvastools.hxx>
 #include <utility>
 
 #include "canvas.hxx"
