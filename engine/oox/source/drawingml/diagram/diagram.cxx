@@ -158,9 +158,8 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
     if (mpData->getBackgroundShapeLineProperties())
         pBackground->getLineProperties() = *mpData->getBackgroundShapeLineProperties();
 
-    // create and set ModelID for BackgroundShape to allow later association
-    getData()->setBackgroundShapeModelID(OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8));
-    pBackground->setDiagramDataModelID(getData()->getBackgroundShapeModelID());
+    // create BackgroundShape, use empty string for identification
+    pBackground->setDiagramDataModelID(EMPTY_OUSTRING);
 
     auto& aChildren = pParentShape->getChildren();
     aChildren.insert(aChildren.begin(), pBackground);

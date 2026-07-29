@@ -154,16 +154,14 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) DiagramDataState
     Points maPoints;
     std::vector<css::uno::Reference<css::drawing::XShape>> mxShapes;
     basegfx::B2DHomMatrix maTransformation;
-    OUString msBackgroundShapeModelID;
 
 public:
-    DiagramDataState(const Connections& aConnections, const Points& aPoints, const css::uno::Reference< css::drawing::XShape >& rRootShape, const OUString& rBackgroundShapeModelID);
+    DiagramDataState(const Connections& aConnections, const Points& aPoints, const css::uno::Reference< css::drawing::XShape >& rRootShape);//, const OUString& rBackgroundShapeModelID);
 
     const Connections& getConnections() const { return maConnections; }
     const Points& getPoints() const { return maPoints; }
     const std::vector<css::uno::Reference<css::drawing::XShape>>& getXShapes() const { return mxShapes;}
     const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
-    const OUString& getBackgroundShapeModelID() const { return msBackgroundShapeModelID; }
 };
 
 typedef std::shared_ptr< DiagramDataState > DiagramDataStatePtr;
@@ -223,9 +221,6 @@ public:
     const css::uno::Reference< css::xml::dom::XDocument >& getThemeDocument() const { return mxThemeDocument; }
     void setThemeDocument( const css::uno::Reference< css::xml::dom::XDocument >& xRef ) { mxThemeDocument = xRef; }
 
-    const OUString& getBackgroundShapeModelID() const;
-    void setBackgroundShapeModelID( const OUString& rModelID ) { msBackgroundShapeModelID = rModelID; }
-
     // model modifiers
     std::pair<OUString, DomMapFlags> addDiagramNode();
     DomMapFlags removeDiagramNode(const OUString& rNodeId);
@@ -273,7 +268,6 @@ protected:
     PointsNameMap     maPointsPresNameMap;
     ConnectionNameMap maConnectionNameMap;
     StringMap         maPresOfNameMap;
-    OUString          msBackgroundShapeModelID;
 };
 
 typedef std::shared_ptr< DiagramData_svx > DiagramDataPtr_svx;

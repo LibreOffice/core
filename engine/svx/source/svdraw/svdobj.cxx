@@ -232,15 +232,12 @@ bool SdrObject::ObjectNameIsDiagramModelID()
 
 bool SdrObject::isDiagramBackgroundShape() const
 {
-    const OUString& rID(getDiagramDataModelID());
-    if (rID.isEmpty())
-        return false;
-
     const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(getDiagramHelper());
     if (!rDiagramHelper)
         return false;
 
-    return rID == rDiagramHelper->getBackgroundShapeModelID();
+    // BGShape has empty string for identification
+    return EMPTY_OUSTRING == getDiagramDataModelID();
 }
 
 bool SdrObject::isDiagramTextNode() const

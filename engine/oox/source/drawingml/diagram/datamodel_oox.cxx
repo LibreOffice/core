@@ -104,7 +104,7 @@ void DiagramData_oox::writeDiagramReplacement(DrawingML& rOriginalDrawingML, sax
                 // do *not* write BackgroundShape. MSO has BG infos just as fill properties
                 // as part of the OOXData DomTree
                 SdrObject* pTarget(SdrObject::getSdrObjectFromXShape(xShape));
-                if (nullptr == pTarget || getBackgroundShapeModelID() == pTarget->getDiagramDataModelID())
+                if (nullptr == pTarget || pTarget->isDiagramBackgroundShape())
                     continue;
 
                 // write Shape & sub-shapes
@@ -269,7 +269,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
         // Diagram::createShapeHierarchyFromModel. This will also allow to use existing stuff like standard dialogs
         // and more for later offering changing the Background of a Diagram.
         // Note that an incarnation of BG as XShape is also needed to 'carry' the correct Size for that Diagram.
-        uno::Reference<drawing::XShape> xBgShape(getXShapeByModelID(getBackgroundShapeModelID()));
+        uno::Reference<drawing::XShape> xBgShape(getXShapeByModelID(EMPTY_OUSTRING));
 
         if (xBgShape.is())
         {

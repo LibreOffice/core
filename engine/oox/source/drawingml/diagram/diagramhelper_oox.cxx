@@ -162,12 +162,12 @@ void DiagramHelper_oox::reLayout()
     uno::Reference<drawing::XShape> xOldShapeWithText;
     uno::Reference<drawing::XShape> xOldBGShape;
     {
-        const OUString& rBGShapeID(mpDiagramPtr->getData()->getBackgroundShapeModelID());
         SdrObjListIter aIter(*pTarget, SdrIterMode::DeepNoGroups);
         while (aIter.IsMore())
         {
             SdrObject* pCandidate(aIter.Next());
-            if (pCandidate->getDiagramDataModelID() == rBGShapeID)
+            if (pCandidate->getDiagramDataModelID() == EMPTY_OUSTRING)
+                // empty string -> is BGShape
                 xOldBGShape = pCandidate->getUnoShape();
             else
             {
@@ -257,12 +257,12 @@ void DiagramHelper_oox::reLayout()
     uno::Reference<drawing::XShape> xNewShape;
     uno::Reference<drawing::XShape> xNewBGShape;
     {
-        const OUString& rBGShapeID(mpDiagramPtr->getData()->getBackgroundShapeModelID());
         SdrObjListIter aIter(*pTarget, SdrIterMode::DeepNoGroups);
         while (aIter.IsMore())
         {
             SdrObject* pCandidate(aIter.Next());
-            if (pCandidate->getDiagramDataModelID() == rBGShapeID)
+            if (pCandidate->getDiagramDataModelID() == EMPTY_OUSTRING)
+                // empty string -> is BGShape
                 xNewBGShape = pCandidate->getUnoShape();
             else
             {
@@ -645,14 +645,6 @@ void DiagramHelper_oox::addDiagramModelData(boost::property_tree::ptree& rTarget
         return;
 
     mpDiagramPtr->addDiagramModelData(rTarget);
-}
-
-const OUString& DiagramHelper_oox::getBackgroundShapeModelID() const
-{
-    if (!mpDiagramPtr)
-        return EMPTY_OUSTRING;
-
-    return mpDiagramPtr->getData()->getBackgroundShapeModelID();
 }
 
 bool DiagramHelper_oox::isTextNodeModelID(const OUString& rModelID) const

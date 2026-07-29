@@ -384,7 +384,6 @@ DiagramData_svx::DiagramData_svx()
 , maPointsPresNameMap()
 , maConnectionNameMap()
 , maPresOfNameMap()
-, msBackgroundShapeModelID()
 {
 }
 
@@ -399,8 +398,6 @@ DiagramData_svx::DiagramData_svx(DiagramData_svx const& rSource)
 , maPointsPresNameMap()
 , maConnectionNameMap()
 , maPresOfNameMap()
-// copy BackgroundShapeModelID, the BGSgape will need to be identified on reLayout
-, msBackgroundShapeModelID(rSource.msBackgroundShapeModelID)
 {
 }
 
@@ -413,7 +410,6 @@ DiagramData_svx::DiagramData_svx(const boost::property_tree::ptree& rDiagramMode
 , maPointsPresNameMap()
 , maConnectionNameMap()
 , maPresOfNameMap()
-, msBackgroundShapeModelID(OUString::fromUtf8(rDiagramModel.get("BGShapeModelID", "")))
 {
     // read all Point entries
     auto aRangePt(rDiagramModel.equal_range("Pt"));
@@ -424,23 +420,6 @@ DiagramData_svx::DiagramData_svx(const boost::property_tree::ptree& rDiagramMode
     auto aRangeCn(rDiagramModel.equal_range("Cn"));
     for (auto itCn = aRangeCn.first; itCn != aRangeCn.second; itCn++)
         maConnections.emplace_back(itCn->second);
-}
-
-const OUString& DiagramData_svx::getBackgroundShapeModelID() const
-{
-    if (msBackgroundShapeModelID.isEmpty() && mxRootShape.is())
-    {
-        // TODO: WORKAROUND: Need to access BackgroundShape different
-        // copy the BackgroundShapeModelID transfered from 1st XShape to
-        // msBackgroundShapeModelID if empty. Future change will not
-        // use any msBackgroundShapeModelID at all, but I cannot change
-        // all stuff at once. Correct it here after ODF import.
-        const SdrObject* pBGObj(SdrObject::getSdrObjectFromXShape(accessRootShape())->GetSubList()->GetObj(0));
-        if (nullptr != pBGObj && !pBGObj->getDiagramDataModelID().isEmpty())
-            const_cast<DiagramData_svx*>(this)->msBackgroundShapeModelID = pBGObj->getDiagramDataModelID();
-    }
-
-    return msBackgroundShapeModelID;
 }
 
 const uno::Reference< frame::XModel >& DiagramData_svx::accessRootModel() const
@@ -531,12 +510,11 @@ DomMapFlags DiagramData_svx::removeDiagramNode(const OUString& rNodeId)
     return aRetval;
 }
 
-DiagramDataState::DiagramDataState(const Connections& aConnections, const Points& aPoints, const uno::Reference< drawing::XShape >& rRootShape, const OUString& rBackgroundShapeModelID)
+DiagramDataState::DiagramDataState(const Connections& aConnections, const Points& aPoints, const uno::Reference< drawing::XShape >& rRootShape)
 : maConnections(aConnections)
 , maPoints(aPoints)
 , mxShapes()
 , maTransformation()
-, msBackgroundShapeModelID(rBackgroundShapeModelID)
 {
     SdrObjGroup* pSource(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rRootShape)));
     if (nullptr != pSource)
@@ -561,7 +539,7 @@ DiagramDataStatePtr DiagramData_svx::extractDiagramDataState() const
 {
     // Just copy all Connections && Points. The shared_ptr data in
     // Point-entries is no problem, it just continues exiting shared
-    return std::make_shared< DiagramDataState >(maConnections, maPoints, accessRootShape(), getBackgroundShapeModelID());
+    return std::make_shared< DiagramDataState >(maConnections, maPoints, accessRootShape());
 }
 
 void DiagramData_svx::applyDiagramDataState(const DiagramDataStatePtr& rState)
@@ -589,10 +567,6 @@ void DiagramData_svx::applyDiagramDataState(const DiagramDataStatePtr& rState)
             basegfx::B2DPolyPolygon aPolyPolygon;
             pTarget->TRSetBaseGeometry(rState->getTransformation(), aPolyPolygon);
         }
-
-        // BackgroundShapeModelID is needed to identify the correct data
-        // carrier in the following ::reLayout
-        setBackgroundShapeModelID(rState->getBackgroundShapeModelID());
 
         // Reset temporary buffered ModelData association lists & rebuild them
         // and the Diagram DataModel. Do that here *immediately* to prevent
@@ -638,8 +612,6 @@ void DiagramData_svx::getDiagramChildrenString(
 uno::Reference<drawing::XShape> DiagramData_svx::getXShapeByModelID(std::u16string_view rModelID) const
 {
     uno::Reference<drawing::XShape> xRetval;
-    if (rModelID.empty())
-        return xRetval;
 
     SdrObject* pCandidate(SdrObject::getSdrObjectFromXShape(accessRootShape()));
     if (nullptr == pCandidate)
@@ -667,9 +639,6 @@ const Point* DiagramData_svx::getPointByModelID(std::u16string_view rModelID) co
 
 void DiagramData_svx::addDiagramModelData(boost::property_tree::ptree& rTarget) const
 {
-    // write BGShapeModelID to boost::property_tree
-    rTarget.put("BGShapeModelID", getBackgroundShapeModelID());
-
     // write all points to boost::property_tree
     const svx::diagram::Points& rPoints = getPoints();
     for (auto & point : rPoints)

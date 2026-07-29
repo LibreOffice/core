@@ -151,10 +151,9 @@ public:
     virtual void addDiagramModelData(boost::property_tree::ptree& rTarget) const = 0;
     virtual OUString getDiagramModelData(svx::diagram::DomMapFlag aId) const = 0;
 
-    virtual const OUString& getBackgroundShapeModelID() const = 0;
     virtual bool isTextNodeModelID(const OUString& rModelID) const = 0;
 
-    const OUString& getSelectedModelID() const;
+    const OUString& getSelectedModelID() const { return msSelectedModelID; }
     void setSelectedModelID(const OUString& rNew) { msSelectedModelID = rNew; }
     SdrObject* getDiagramSubSelection();
     void markDirectDiagramSubSelection(SdrObject& rCandidate);
