@@ -840,10 +840,7 @@ public class LOActivity extends AppCompatActivity {
                         getIntent().setData(intent.getData());
                         /** add the document to recents */
                         addIntentToRecents(intent);
-                        // This will actually change the doc permission to write
-                        // It's a toggle for blue edit button, but also changes permission
-                        // Toggle is achieved by calling setPermission('edit') in javascript
-                        callFakeWebsocketOnMessage("mobile: readonlymode");
+                        callFakeWebsocketOnMessage("mobile: editmode");
                         isDocEditable = true;
                     }
                     return;

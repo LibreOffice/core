@@ -196,7 +196,10 @@ window.L.Map = window.L.Evented.extend({
 		});
 		if (window.ThisIsTheAndroidApp) {
 			this.on('readonlymode', function() {
-				this.setPermission('edit');
+				this.setPermission('readonly');
+			});
+			this.on('editmode', function() {
+				this._switchToEditMode();
 			});
 		}
 
