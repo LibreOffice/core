@@ -225,7 +225,6 @@ public:
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage() override;
 
 private:
-    //    css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     rtl::Reference<sd::framework::AbstractPane> mxPane;
     rtl::Reference<sd::framework::ResourceId> mxViewId;
     css::uno::Reference<css::awt::XWindow> mxWindow;
