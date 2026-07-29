@@ -3510,7 +3510,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				}
 			}
 
-			// this isn't being triggered now when the sidebar shows up
 			const considerCommentWidthInOffset = () => {
 				if (app.activeDocument.partHasComments) {
 					if ((recalcFirstFit || !this._includedCommentsInFirstFit)) {

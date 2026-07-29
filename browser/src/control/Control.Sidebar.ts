@@ -193,8 +193,14 @@ class Sidebar extends SidebarBase {
 				if (!this.isVisible()) {
 					this.showSidebar();
 
-					// on initial load of file do not focus automatically
-					if (!this.sidebarShownTheFirstTime) this.isUserRequest = true;
+					if (this.sidebarShownTheFirstTime) {
+						// The resize that the new width triggers is what refits the
+						// zoom, so ask before that resize is handled.
+						app.serverConnectionService.onShowSidebar();
+					} else {
+						// on initial load of file do not focus automatically
+						this.isUserRequest = true;
+					}
 				}
 
 				this.map.uiManager.setDocTypePref('ShowSidebar', true);
@@ -229,10 +235,7 @@ class Sidebar extends SidebarBase {
 						); // see animation time in #sidebar-dock-wrapper.visible
 					}
 
-					if (this.sidebarShownTheFirstTime) {
-						app.serverConnectionService.onShowSidebar();
-						this.sidebarShownTheFirstTime = false;
-					}
+					this.sidebarShownTheFirstTime = false;
 				});
 
 				this.isUserRequest = false;
