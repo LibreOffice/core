@@ -23,6 +23,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <tools/UnitConversion.hxx>
 #include <svl/numformat.hxx>
@@ -819,6 +820,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testCommentStyles)
         CPPUNIT_ASSERT(pNote);
 
         auto pCaption = pNote->GetCaption();
+        if (comphelper::COKit::isActive())
+        {
+            // Under the kit, the captions are not created automatically
+            CPPUNIT_ASSERT(!pCaption);
+            pCaption = pNote->GetOrCreateCaption(aPos);
+        }
         CPPUNIT_ASSERT(pCaption);
 
         // Check that we don't keep the shadow attribute as DF
