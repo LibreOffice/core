@@ -2701,12 +2701,12 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
             aPos.SetTab( nTab );
             // AppendContent() is a no-op if both cells are empty.
             SCCOL lastCol = std::max( rRefDoc.ClampToAllocatedColumns( nTab, nCol2 ),
-                                      rRefDoc.ClampToAllocatedColumns( nTab, nCol2 ));
+                                      rDoc.ClampToAllocatedColumns( nTab, nCol2 ));
             for ( SCCOL nCol = nCol1; nCol <= lastCol; nCol++ )
             {
                 aPos.SetCol( nCol );
                 SCROW lastRow = std::max( rRefDoc.GetLastDataRow( nTab, nCol, nCol, nRow2 ),
-                                          rRefDoc.GetLastDataRow( nTab, nCol, nCol, nRow2 ));
+                                          rDoc.GetLastDataRow( nTab, nCol, nCol, nRow2 ));
                 for ( SCROW nRow = nRow1; nRow <= lastRow; nRow++ )
                 {
                     aPos.SetRow( nRow );
