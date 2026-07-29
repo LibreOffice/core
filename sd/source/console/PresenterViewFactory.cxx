@@ -262,7 +262,7 @@ rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateView(
     return xView;
 }
 
-rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateSlideShowView(
+rtl::Reference<PresenterSlideShowView> PresenterViewFactory::CreateSlideShowView(
     const rtl::Reference<sd::framework::ResourceId>& rxViewId) const
 {
     if ( ! mxConfigurationController.is())

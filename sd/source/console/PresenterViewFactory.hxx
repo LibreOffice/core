@@ -20,6 +20,8 @@
 #pragma once
 
 #include "PresenterController.hxx"
+#include "PresenterSlideShowView.hxx"
+
 #include <framework/ResourceFactory.hxx>
 #include <framework/AbstractView.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -91,7 +93,7 @@ private:
 
     void Register (const ::rtl::Reference<::sd::DrawController>& rxController);
 
-    rtl::Reference<sd::framework::AbstractView> CreateSlideShowView(
+    rtl::Reference<PresenterSlideShowView> CreateSlideShowView(
         const rtl::Reference<sd::framework::ResourceId>& rxViewId) const;
 
     rtl::Reference<sd::framework::AbstractView> CreateSlidePreviewView(
