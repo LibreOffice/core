@@ -2355,6 +2355,10 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			control.style.width = '100%';
 		}
 
+		if (data.vexpand) {
+			window.L.DomUtil.addClass(control, 'jsdialog-vexpand');
+		}
+
 		if (data.valign) {
 			control.style.alignSelf = data.valign;
 		}

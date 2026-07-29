@@ -4499,11 +4499,94 @@ img#collab-choice-avatar {
 	margin: 0 !important;
 }
 
-/* The window takes its size from the dialog, so the dialog is laid out at the
-   width its content wants. */
+.jsdialog-window.jsdialog-popout {
+	inset: 0;
+}
+
+/* The window is opened at the size of the dialog's content and is the larger of
+   the two from then on, so a window the user drags out is covered by the dialog
+   rather than by a blank field. */
 .jsdialog-window.jsdialog-popout > .jsdialog-container.lokdialog_container {
+	inset: 0;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+}
+
+/* The measuring class is on for as long as it takes to read the size the dialog
+   would like, and turns off the rules below, so the answer is the size of the
+   dialog's own content rather than of the longest list in it. */
+.jsdialog-window.jsdialog-popout.jsdialog-popout-measuring > .jsdialog-container.lokdialog_container {
 	width: max-content;
 	max-width: var(--dialog-available-width);
+	height: max-content;
+}
+
+.jsdialog-window.jsdialog-popout:not(.jsdialog-popout-measuring) > .jsdialog-container.lokdialog_container {
+	width: 100%;
+	height: 100%;
+}
+
+/* The height comes from the window, not from the fraction of the browser window
+   an in-page dialog is held to. */
+.jsdialog-popout:not(.jsdialog-popout-measuring) .ui-dialog-content {
+	max-height: none;
+}
+
+/* Core marks the widgets a dialog hands its spare height to. Each of them takes
+   that height, and so does every container between one and the dialog itself. */
+.jsdialog-popout:not(.jsdialog-popout-measuring) .jsdialog-vexpand,
+.jsdialog-popout:not(.jsdialog-popout-measuring)
+.jsdialog:has(.jsdialog-vexpand) {
+	flex: 1 1 auto;
+	align-self: stretch;
+	min-height: 0;
+}
+
+/* A plain container hands its height on as a column of children. A grid does it
+   through its 1fr row and a tab panel through its own height below. */
+.jsdialog-popout:not(.jsdialog-popout-measuring)
+.jsdialog:has(.jsdialog-vexpand):not(.ui-grid):not(.ui-content):not(
+	.ui-tabs-content
+):not(.ui-tabs-root) {
+	display: flex;
+	flex-direction: column;
+}
+
+/* The tab rail is positioned against the whole tab control, so the panel
+   beside it follows the control's height instead of being a flex child. */
+.jsdialog-popout:not(.jsdialog-popout-measuring)
+.ui-tabs-root > .ui-tabs-content {
+	height: 100%;
+	min-height: 0;
+}
+
+/* The grid is as tall as the window it fills, so the marked row takes the height
+   the other rows do not need. */
+.jsdialog-popout:not(.jsdialog-popout-measuring)
+.ui-grid:has(> .jsdialog-vexpand) {
+	grid-template-rows: var(--jsdialog-filled-rows) !important;
+}
+
+/* A single-child grid has an empty cell ahead of the widget, which leaves the
+   widget outside the rows the grid describes. A row hands the height straight on. */
+.jsdialog-popout:not(.jsdialog-popout-measuring)
+.single-child-grid:has(> .jsdialog-vexpand) {
+	display: flex;
+}
+
+/* The widget takes what the dialog's own window gives it, not the fraction of
+   the browser window that keeps an in-page dialog smaller than the document. */
+.jsdialog-popout:not(.jsdialog-popout-measuring) .jsdialog-vexpand {
+	max-height: none;
+}
+
+/* Entries keep their own height and start at the top, so a gallery given more
+   room than its entries need shows a plain gap under the last row. */
+.jsdialog-popout:not(.jsdialog-popout-measuring)
+.ui-iconview.jsdialog-vexpand {
+	align-content: start;
+	overflow-y: auto;
 }
 
 .jsdialog-popout .ui-dialog-titlebar {

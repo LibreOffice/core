@@ -68,7 +68,10 @@ run_tests() {
     export XKB_DEFAULT_LAYOUT=us
 
     local weston_args=(--no-config --socket="$WAYLAND_SOCKET")
-    [ -z "${CODA_QT_TEST_GUI:-}" ] && weston_args+=(--backend=headless)
+    # The default headless output of 1024x640 leaves a dialog window too little
+    # room to be dragged out much beyond the dialog in it.
+    [ -z "${CODA_QT_TEST_GUI:-}" ] &&
+        weston_args+=(--backend=headless --width=1600 --height=1200)
 
     weston "${weston_args[@]}" &>/dev/null &
     WESTON_PID=$!

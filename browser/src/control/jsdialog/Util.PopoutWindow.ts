@@ -178,7 +178,12 @@ JSDialog.FitPopoutToContent = function (
 		// window, which is always visible.
 		window.requestAnimationFrame(() => {
 			if (entry.win.closed) return;
+			// The dialog covers whatever window it is given, so the size it would
+			// like can only be read while the rules that stretch it are off.
+			const wrapper = form.parentElement;
+			wrapper?.classList.add('jsdialog-popout-measuring');
 			const rect = form.getBoundingClientRect();
+			wrapper?.classList.remove('jsdialog-popout-measuring');
 			entry.win.resizeTo(Math.ceil(rect.width), Math.ceil(rect.height));
 		});
 	});

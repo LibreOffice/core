@@ -87,16 +87,30 @@ JSDialog.grid = function (
 		table.setAttribute('tabindex', data.tabIndex);
 
 	const expandCols = new Set<number>();
+	const expandRows = new Set<number>();
 	let hasSizeGroup = false;
+	let hasVexpandChild = false;
 	for (const child of data.children || []) {
 		if (child.hexpand && child.left !== undefined)
 			expandCols.add(parseInt(child.left));
 		if (child.sizeGroupId) hasSizeGroup = true;
+		if (child.vexpand) {
+			hasVexpandChild = true;
+			if (child.top !== undefined) expandRows.add(parseInt(child.top));
+		}
 	}
 
 	let colTemplate = '';
 	for (let c = 0; c < cols; c++)
 		colTemplate += (c > 0 ? ' ' : '') + (expandCols.has(c) ? '1fr' : 'auto');
+
+	// The rows for a grid taller than its content: the spare height goes to the
+	// row core marked. A grid only as tall as its content keeps the all-auto rows
+	// above, where an fr row would grow to the tallest its widget could ever be.
+	let filledRowTemplate = '';
+	for (let r = 0; r < rows; r++)
+		filledRowTemplate +=
+			(r > 0 ? ' ' : '') + (expandRows.has(r) ? '1fr' : 'auto');
 
 	const gridRowColStyle =
 		'grid-template-rows: repeat(' +
@@ -111,6 +125,9 @@ JSDialog.grid = function (
 		// group's min-width equalization relies on matching column widths across
 		// grids, so pin columns to their content width for a grid that has one.
 		(expandCols.size === 0 && hasSizeGroup ? ' justify-content: start;' : '') +
+		(hasVexpandChild
+			? ' --jsdialog-filled-rows: ' + filledRowTemplate + ';'
+			: '') +
 		(data.columnSpacing > 0 ? ' column-gap:' + data.columnSpacing + 'px;' : '');
 
 	table.style = gridRowColStyle;

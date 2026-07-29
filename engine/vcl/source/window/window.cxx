@@ -3402,6 +3402,9 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     if (get_hexpand())
         rJsonWriter.put("hexpand", true);
 
+    if (get_vexpand())
+        rJsonWriter.put("vexpand", true);
+
     {
         WindowImpl* pGroupImpl = mpWindowImpl->mpBorderWindow
             ? mpWindowImpl->mpBorderWindow->mpWindowImpl.get()
@@ -3464,6 +3467,9 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
                 if (pChild->get_hexpand())
                     rJsonWriter.put("hexpand", true);
+
+                if (pChild->get_vexpand())
+                    rJsonWriter.put("vexpand", true);
 
                 if (pChild->get_expand())
                     rJsonWriter.put("expand", true);

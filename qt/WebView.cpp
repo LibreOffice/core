@@ -630,9 +630,6 @@ void CODAWebEngineView::claimChildWindow(WebView* child, const QUrl& url)
         _dialogWindows.append(dialogWindow);
 
         QWidget* documentWindow = window();
-        // Drop the default document-window minimum size; the dialog's actual
-        // size comes from the geometry the page requests below.
-        dialogWindow->setMinimumSize(1, 1);
         dialogWindow->setParent(documentWindow, Qt::Dialog);
         if (role == "coda-dialog-modal")
             dialogWindow->setWindowModality(Qt::WindowModal);
@@ -643,13 +640,16 @@ void CODAWebEngineView::claimChildWindow(WebView* child, const QUrl& url)
                          &QWidget::setWindowTitle);
 
         // The page requests the size that fits its content; the window is shown for the first
-        // time centered over the document window at that size.
+        // time centered over the document window at that size. That size is also the smallest
+        // the window can be, so the whole dialog stays visible wherever the user drags the
+        // frame, and a window dragged larger hands the extra room to the dialog.
         QObject::connect(childPage, &QWebEnginePage::geometryChangeRequested, dialogWindow,
                          [dialogWindow, documentWindow](const QRect& geometry)
                          {
-                             dialogWindow->resize(geometry.size());
+                             dialogWindow->setMinimumSize(geometry.size());
                              if (!dialogWindow->isVisible())
                              {
+                                 dialogWindow->resize(geometry.size());
                                  const QRect parentGeometry = documentWindow->frameGeometry();
                                  dialogWindow->move(
                                      parentGeometry.center()

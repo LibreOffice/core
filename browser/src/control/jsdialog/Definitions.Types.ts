@@ -30,6 +30,7 @@ interface WidgetJSON {
 	width?: string; // inside grid - width in number of columns
 	hexpand?: boolean; // horizontal expand in grid column
 	sizeGroupId?: string; // size group ID; widgets sharing an ID get their min-width equalized
+	vexpand?: boolean; // vertical expand in grid row
 	halign?: string; // horizontal alignment within the grid cell (start, center, end)
 	valign?: string; // vertical alignment within the grid cell (start, center, end)
 	labelledBy?: string | string[];

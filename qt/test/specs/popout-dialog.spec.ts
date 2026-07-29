@@ -238,6 +238,78 @@ describe('Popped-out jsdialogs', () => {
 		expect(fit.height).toBeGreaterThan(200);
 	});
 
+	it('grows the dialog with its window and gives the extra room to the content', async function () {
+		const beforeHandles = await browser.webEngine.getWindowHandles();
+
+		await browser.webEngine.switchToWindow(documentHandle);
+		await browser.webEngine.execute(() => {
+			app.map.sendUnoCommand('.uno:HyperlinkDialog');
+		});
+		await webview.switchToNewWebView(browser.webEngine, beforeHandles);
+		await browser.webEngine.waitForCondition(
+			() => document.querySelector('.jsdialog-vexpand') !== null,
+			{
+				timeout: 10000,
+				timeoutMsg: 'Nothing in the dialog takes the spare height',
+			},
+		);
+
+		const tallestStretchingPart = () =>
+			browser.webEngine.execute(() => {
+				const parts = document.querySelectorAll('.jsdialog-vexpand');
+				let tallest = 0;
+				parts.forEach((part) => {
+					tallest = Math.max(tallest, part.getBoundingClientRect().height);
+				});
+				return Math.round(tallest);
+			});
+
+		const fittedWindowHeight = await browser.webEngine.execute(
+			() => window.innerHeight,
+		);
+		const fittedPartHeight = await tallestStretchingPart();
+
+		// Ask for a window taller than the dialog needs, which leaves the dialog
+		// with the same spare room as dragging the frame out does.
+		const extra = 300;
+		await browser.webEngine.execute(
+			(height: number) => {
+				window.resizeTo(window.innerWidth, height);
+			},
+			fittedWindowHeight + extra,
+		);
+		// waitForCondition runs its predicate inside the page, where the fitted
+		// height measured here is not in scope, so poll from outside.
+		for (let i = 0; i < 50; i++) {
+			const height = await browser.webEngine.execute(() => window.innerHeight);
+			if (height > fittedWindowHeight + extra / 2) break;
+			await new Promise((resolve) => setTimeout(resolve, 200));
+		}
+
+		const grown = await browser.webEngine.execute(() => {
+			const rect = (
+				document.querySelector('.jsdialog-container') as HTMLElement
+			).getBoundingClientRect();
+			return {
+				windowWidth: window.innerWidth,
+				windowHeight: window.innerHeight,
+				dialogWidth: Math.round(rect.width),
+				dialogHeight: Math.round(rect.height),
+			};
+		});
+		const grownPartHeight = await tallestStretchingPart();
+
+		// The window really did grow, so there is room to hand on.
+		expect(grown.windowHeight).toBeGreaterThan(
+			fittedWindowHeight + extra / 2,
+		);
+		// The dialog covers the window it was given, leaving no blank field.
+		expect(grown.dialogWidth).toBeGreaterThanOrEqual(grown.windowWidth - 2);
+		expect(grown.dialogHeight).toBeGreaterThanOrEqual(grown.windowHeight - 2);
+		// The added height goes to the content rather than to empty space.
+		expect(grownPartHeight).toBeGreaterThan(fittedPartHeight + extra / 2);
+	});
+
 	it('opens a dropdown from a popped-out Find and Replace dialog inside the dialog window', async function () {
 		const beforeHandles = await browser.webEngine.getWindowHandles();
 

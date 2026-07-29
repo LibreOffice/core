@@ -467,8 +467,13 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		if (instance.isMessageBox)
 			window.L.DomUtil.addClass(instance.container, 'messagebox');
 
-		if (instance.popoutWindow)
+		if (instance.popoutWindow) {
 			window.L.DomUtil.addClass(instance.container, 'jsdialog-popout');
+			// The dialog is measured at the size its own content wants, and
+			// stretched to cover its window only once the shell has been
+			// told what size to open at.
+			window.L.DomUtil.addClass(instance.container, 'jsdialog-popout-measuring');
+		}
 
 		if (instance.isAutofilter && !this.isChildAutoFilter(instance))
 			window.L.DomUtil.addClass(instance.container, 'autofilter-popup');
