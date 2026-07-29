@@ -3,6 +3,11 @@
 	----------------------------------*/
 	--cool-font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
+	/* The room a dialog has to lay itself out in. Not always the viewport: a
+	   dialog in a window of its own has the room the document window has. */
+	--dialog-available-width: 100vw;
+	--dialog-available-height: 100vh;
+
 	/* Shared color for cell and selection border */
 	--cell-cursor-selection-border-color: var(--color-primary);
 

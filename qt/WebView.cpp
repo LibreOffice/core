@@ -563,8 +563,11 @@ QWebEngineView* CODAWebEngineView::createWindow(QWebEnginePage::WebWindowType /*
     QWebEnginePage* page = childView->page();
     QObject::connect(page, &QWebEnginePage::windowCloseRequested, page,
                      [child]() {
+                         // StandaloneWindow::closeEvent deletes the WebView and with it the
+                         // page emitting this signal, so the close runs from the event loop
+                         // instead, once the emission has finished.
                          if (QMainWindow* window = child->mainWindow())
-                             window->close();
+                             QTimer::singleShot(0, window, [window]() { window->close(); });
                      });
 
     childWindow->setCloseCallback(
@@ -602,6 +605,59 @@ void CODAWebEngineView::claimChildWindow(WebView* child, const QUrl& url)
         if (_presenterConsole == child)
             return;
         _presenterConsole = child;
+    }
+    else if (role == "coda-dialog-close")
+    {
+        // A fragment-only navigation the dialog page uses to ask the shell to close its own
+        // window, so teardown takes the same path a click on the title-bar close button does.
+        QMainWindow* dialogWindow = child->mainWindow();
+        QTimer::singleShot(0, dialogWindow, [dialogWindow]() { dialogWindow->close(); });
+        return;
+    }
+    else if (role == "coda-dialog" || role == "coda-dialog-modal")
+    {
+        QMainWindow* dialogWindow = child->mainWindow();
+        // This can run again for the same window once its URL is already known, so a property
+        // on the window keeps the claim to a single run.
+        if (dialogWindow->property("codaDialogClaimed").toBool())
+            return;
+        dialogWindow->setProperty("codaDialogClaimed", true);
+
+        // Each dialog open creates a fresh window, unlike the document window, which lives for
+        // the whole session. Without this, one hidden window per dialog ever opened builds up.
+        dialogWindow->setAttribute(Qt::WA_DeleteOnClose);
+
+        _dialogWindows.append(dialogWindow);
+
+        QWidget* documentWindow = window();
+        // Drop the default document-window minimum size; the dialog's actual
+        // size comes from the geometry the page requests below.
+        dialogWindow->setMinimumSize(1, 1);
+        dialogWindow->setParent(documentWindow, Qt::Dialog);
+        if (role == "coda-dialog-modal")
+            dialogWindow->setWindowModality(Qt::WindowModal);
+
+        QWebEnginePage* childPage = child->webEngineView()->page();
+        dialogWindow->setWindowTitle(childPage->title());
+        QObject::connect(childPage, &QWebEnginePage::titleChanged, dialogWindow,
+                         &QWidget::setWindowTitle);
+
+        // The page requests the size that fits its content; the window is shown for the first
+        // time centered over the document window at that size.
+        QObject::connect(childPage, &QWebEnginePage::geometryChangeRequested, dialogWindow,
+                         [dialogWindow, documentWindow](const QRect& geometry)
+                         {
+                             dialogWindow->resize(geometry.size());
+                             if (!dialogWindow->isVisible())
+                             {
+                                 const QRect parentGeometry = documentWindow->frameGeometry();
+                                 dialogWindow->move(
+                                     parentGeometry.center()
+                                     - QPoint(geometry.width() / 2, geometry.height() / 2));
+                                 dialogWindow->show();
+                             }
+                         });
+        return;
     }
     else
     {
@@ -684,6 +740,13 @@ CODAWebEngineView::~CODAWebEngineView()
         QObject::disconnect(_screenRemoved);
 
     endPresentation();
+
+    // A popped-out dialog window is a top-level window of its own, so it does not go away with
+    // the document view. Closing it here, while the document's page is still alive, lets the
+    // dialog report the close to the document.
+    for (const QPointer<QMainWindow>& dialogWindow : _dialogWindows)
+        if (dialogWindow)
+            dialogWindow->close();
 }
 
 WebView::WebView(QWebEngineProfile* profile, bool isWelcome)

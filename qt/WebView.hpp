@@ -15,8 +15,10 @@
 
 #include <Poco/URI.h>
 
+#include <QList>
 #include <QMainWindow>
 #include <QObject>
+#include <QPointer>
 #include <QString>
 #include <QWebEngineView>
 
@@ -113,6 +115,9 @@ private:
     // restore.
     WebView* _presentationView;
     WebView* _presenterConsole;
+    // Dialog windows popped out of this document's page. Each window deletes
+    // itself on close, which clears its QPointer entry here.
+    QList<QPointer<QMainWindow>> _dialogWindows;
     QMetaObject::Connection _screenAdded;
     QMetaObject::Connection _screenRemoved;
 

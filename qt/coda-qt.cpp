@@ -130,6 +130,11 @@ namespace
     {
         const char *varName = "QTWEBENGINE_CHROMIUM_FLAGS";
         std::string val = (getenv(varName) ? getenv(varName) : "");
+        // The document window's page keeps driving the logic of the other native windows
+        // (dialogs, slideshow) even while one of them covers it or holds the focus, so Chromium
+        // must not throttle the timers or rendering of occluded or background pages.
+        val = "--disable-renderer-backgrounding --disable-backgrounding-occluded-windows "
+              "--disable-background-timer-throttling " + val;
         // cool#14039: renderer accessibility triggers a check-box state crash, so
         // it is disabled unless QT_ACCESSIBILITY=1 (e.g. for screen-reader / Orca
         // testing).

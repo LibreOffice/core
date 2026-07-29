@@ -46,9 +46,13 @@
 	max-width: 380px;
 }
 
+/* A dialog that has a window of its own keeps its natural size in a narrow
+   window, because that window is sized to the dialog. */
 @media (max-width: 480px) {
 
-	.jsdialog-window:not(.modalpopup) .jsdialog-container:not(.snackbar) {
+	body:not(.jsdialog-popout-body)
+	.jsdialog-window:not(.modalpopup)
+	.jsdialog-container:not(.snackbar) {
 		min-width: unset;
 		width: 460px;
 	}
@@ -252,7 +256,7 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 }
 
 .jsdialog-container .ui-dialog-content {
-	max-height: calc( 90vh - 34px);
+	max-height: calc(0.9 * var(--dialog-available-height) - 34px);
 	overflow-y: auto !important;
 	background-color: var(--color-background-lighter) !important;
 	font-family: var(--cool-font);
@@ -262,7 +266,7 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 }
 [data-docType='spreadsheet'] .jsdialog-container .ui-dialog-content,
 [data-docType='text'] .jsdialog-container .ui-dialog-content {
-	max-height: calc( 90vh - 98px);
+	max-height: calc(0.9 * var(--dialog-available-height) - 98px);
 }
 #SortKeyWindow {
 	/* As used in .jsdialog-container .ui-dialog-content 90 % of the viewport
@@ -274,7 +278,7 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 		- 38px formulabar
 		- 38px document-header
    */
-	max-height: calc( 90vh - 352px);
+	max-height: calc(0.9 * var(--dialog-available-height) - 352px);
 }
 
 .jsdialog-container .ui-dialog-content > div:not(.ui-scrollwindow) {
@@ -283,7 +287,9 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 
 @media (max-width: 480px) {
 
-	.jsdialog-container .ui-dialog-content > div:not(.ui-scrollwindow) {
+	body:not(.jsdialog-popout-body)
+	.jsdialog-container
+	.ui-dialog-content > div:not(.ui-scrollwindow) {
 		overflow: unset;
 	}
 }
@@ -303,7 +309,9 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 
 @media (max-width: 480px) {
 
-	.jsdialog-container .lokdialog.ui-dialog-content.ui-widget-content {
+	body:not(.jsdialog-popout-body)
+	.jsdialog-container
+	.lokdialog.ui-dialog-content.ui-widget-content {
 		overflow-x: unset;
 	}
 }
@@ -2071,7 +2079,7 @@ img.ui-combobox-value-preview {
 	justify-content: space-between;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
-	max-height: 40vh;
+	max-height: calc(0.4 * var(--dialog-available-height));
 	gap: var(--spacing-xs);
 	padding: var(--spacing-xs);
 }
@@ -3290,7 +3298,7 @@ button.has-img img {
 }
 
 #zoterolist.jsdialog {
-	width: calc(min(800px, 80vw));
+	width: min(800px, calc(0.8 * var(--dialog-available-width)));
 }
 
 .jsdialog[id^='zotero'][id$='-label'] {
@@ -3874,7 +3882,7 @@ kbd,
 }
 
 #ServerAuditDialog #ServerAuditDialog-mainbox {
-	min-width: calc(min(600px, 80vw));
+	min-width: min(600px, calc(0.8 * var(--dialog-available-width)));
 }
 
 #ServerAuditDialog .ui-treeview {
@@ -3987,7 +3995,7 @@ kbd,
 
 [id^='ColorPage'].jsdialog [id^='iconview_colors'].ui-iconview,
 [id^='colorwindow_iv_colors'].ui-iconview {
-	max-height: 25vh;
+	max-height: calc(0.25 * var(--dialog-available-height));
 }
 
 [id^='ColorPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview .ui-iconview-entry :is(img, span),
@@ -4148,7 +4156,7 @@ kbd,
 /* Listbox UI grid */
 /* exclude text/bg color-picker: it's not a scolling list */
 .jsdialog.ui-grid[role='listbox']:not(:has(> .ui-iconview)):not(:has(> .ui-color-picker)) {
-	max-height: min(470px, 45vh);
+	max-height: min(470px, calc(0.45 * var(--dialog-available-height)));
 }
 
 .jsdialog.ui-grid[role='listbox'] {
@@ -4483,4 +4491,26 @@ img#collab-choice-avatar {
 .ui-treeview.ui-treeview-tree .ui-treeview-entry:focus-visible {
 	outline: 2px solid var(--color-primary);
 	outline-offset: -2px;
+}
+
+/* The shell draws the frame, title and close button, so the in-page titlebar
+   and position margins fall away. */
+.jsdialog-popout {
+	margin: 0 !important;
+}
+
+/* The window takes its size from the dialog, so the dialog is laid out at the
+   width its content wants. */
+.jsdialog-window.jsdialog-popout > .jsdialog-container.lokdialog_container {
+	width: max-content;
+	max-width: var(--dialog-available-width);
+}
+
+.jsdialog-popout .ui-dialog-titlebar {
+	display: none;
+}
+
+.jsdialog-popout-body {
+	margin: 0;
+	overflow: hidden;
 }

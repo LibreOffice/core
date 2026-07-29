@@ -72,6 +72,8 @@ window.L.Control.JSDialog = window.L.Control.extend({
 	},
 
 	clearDialog: function(id) {
+		JSDialog.ClosePopoutWindow(id);
+
 		const dialogInfo = this.dialogs[id];
 		const builder = dialogInfo.builder;
 
@@ -453,6 +455,9 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		if (instance.isMessageBox)
 			window.L.DomUtil.addClass(instance.container, 'messagebox');
 
+		if (instance.popoutWindow)
+			window.L.DomUtil.addClass(instance.container, 'jsdialog-popout');
+
 		if (instance.isAutofilter && !this.isChildAutoFilter(instance))
 			window.L.DomUtil.addClass(instance.container, 'autofilter-popup');
 
@@ -494,7 +499,9 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		if (!instance.canHaveFocus)
 			return;
 
-		const elementToFocus = document.getElementById(instance.init_focus_id);
+		const elementToFocus = instance.init_focus_id
+			? instance.container.querySelector('[id=\'' + instance.init_focus_id + '\']')
+			: null;
 
 		if (instance.init_focus_id === 'input-modal-input' && elementToFocus) {
 			elementToFocus.select();
@@ -535,7 +542,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			};
 		}
 
-		if (instance.nonModal && instance.haveTitlebar) {
+		if (instance.nonModal && instance.haveTitlebar && !instance.popoutWindow) {
 			instance.titleCloseButton.onclick = () => {
 				var newestDialog = Math.max.apply(null,
 					Object.keys(instance.that.dialogs).map(function(i) { return parseInt(i);}));
@@ -1063,6 +1070,39 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		return document.getElementById('document-container');
 	},
 
+	// True for instances that render as their own native window in the Qt
+	// shell: real dialogs, modal or non-modal.
+	canPopout: function(instance) {
+		return window.ThisIsTheQtApp
+			&& !instance.isDropdown
+			&& !instance.isSnackbar
+			&& !instance.isDocumentAreaPopup
+			&& !instance.isAutoCompletePopup
+			&& !instance.isAutoFillPreviewTooltip
+			&& !instance.popupParent
+			&& instance.id !== 'busypopup'
+			&& (instance.nonModal || instance.isModalPopUp || instance.isMessageBox);
+	},
+
+	openPopoutIfWanted: function(instance) {
+		if (!this.canPopout(instance))
+			return null;
+
+		var win = JSDialog.GetPopoutWindow(instance.id);
+		if (win)
+			return win;
+
+		// The callback outlives this dialog instance, since rebuilds for the
+		// same id reuse the window. Capture only the id, so a superseded
+		// instance is not kept alive by the window's handlers.
+		const dialogId = instance.id;
+		return JSDialog.OpenPopoutWindow(
+			dialogId,
+			instance.isModalPopUp || instance.isMessageBox,
+			instance.title || '',
+			() => { this.close(dialogId, true); });
+	},
+
 	onJSDialog: function(e) {
 		/*
 			Dialog types:
@@ -1196,7 +1236,11 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			if (this.map && !instance.isDropdown)
 				this.map._progressBar.end();
 
-			const dialogDomParent = instance.overlay ? instance.overlay: instance.containerParent;
+			instance.popoutWindow = this.openPopoutIfWanted(instance);
+
+			let dialogDomParent = instance.overlay ? instance.overlay : instance.containerParent;
+			if (instance.popoutWindow)
+				dialogDomParent = instance.popoutWindow.document.body;
 			const documentFragment = new DocumentFragment(); // do not modify dom yet
 
 			this.createContainer(instance, documentFragment);
@@ -1259,8 +1303,13 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				// Keep a tabbed dialog from shrinking when a tab switch rebuilds it.
 				this.applySizeFloor(instance);
 
-				// Special case for nonModal dialogues. Core side doesn't send their initial coordinates. We need to center them.
-				if (instance.nonModal && !(instance.startX && instance.startY)) {
+				// A popped-out dialog is positioned and sized by the shell;
+				// in-page coordinates do not apply to it.
+				if (instance.popoutWindow) {
+					JSDialog.FitPopoutToContent(instance.id, instance.form);
+				} else if (instance.nonModal && !(instance.startX && instance.startY)) {
+					// Core does not send initial coordinates for non-modal
+					// dialogues, so center them.
 					this.centerDialogPosition(instance);
 				} else {
 					instance.updatePos();
@@ -1323,6 +1372,10 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				if (dialog) app.console.debug('JSDialog: old data was: ' + JSON.stringify(dialog));
 				return;
 			}
+			if (dialogInfo.popoutWindow) {
+				JSDialog.FitPopoutToContent(data.id, dialogInfo.form);
+				return;
+			}
 			if (dialogInfo.isDocumentAreaPopup) {
 				// In case of AutocompletePopup's update data would have posx, posy
 				dialogInfo.updatePos(new cool.Point(data.posx, data.posy));
@@ -1360,7 +1413,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		const entryChanges = data.jsontype === 'popup' && innerData.action_type && innerData.action_type === 'rendered_entry';
 
 		// focus on element outside view will move viewarea leaving blank space on the bottom
-		if (innerData.action_type === 'grab_focus') {
+		if (innerData.action_type === 'grab_focus' && !dialog.popoutWindow) {
 			app.layoutingService.appendLayoutingTask(() => {
 				var control = dialogContainer.querySelector('[id=\'' + innerData.control_id + '\']');
 				var controlPosition = control ? control.getBoundingClientRect() : null;
