@@ -42,17 +42,6 @@ PresenterPane::~PresenterPane()
 {
 }
 
-//----- AbstractPane -----------------------------------------------------------------
-
-Reference<rendering::XCanvas> PresenterPane::getCanvas()
-{
-    {
-        std::unique_lock l(m_aMutex);
-        throwIfDisposed(l);
-    }
-    return mxContentCanvas;
-}
-
 //----- XWindowListener -------------------------------------------------------
 
 void SAL_CALL PresenterPane::windowResized (const awt::WindowEvent& rEvent)

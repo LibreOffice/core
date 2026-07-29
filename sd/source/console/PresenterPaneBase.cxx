@@ -168,6 +168,15 @@ Reference<awt::XWindow> PresenterPaneBase::getWindow()
     return mxContentWindow;
 }
 
+Reference<rendering::XCanvas> PresenterPaneBase::getCanvas()
+{
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
+    return mxContentCanvas;
+}
+
 //----- XWindowListener -------------------------------------------------------
 
 void SAL_CALL PresenterPaneBase::windowResized (const awt::WindowEvent&)
