@@ -794,9 +794,25 @@ private:
 public: // TODO: is public really needed?
     // accessing the value stack
     // TODO: add more checks
-    void    push( ValType nVal) { mnValStack[ mnStackIdx++] = nVal;}
+    void    push( ValType nVal)
+            {
+                if( mnStackIdx >= NMAXSTACK) {
+                    SAL_WARN("vcl.fonts.cff", "too many CFF operands");
+                    abandonDictParse();
+                    return;
+                }
+                mnValStack[ mnStackIdx++] = nVal;
+            }
     ValType popVal() { return ((mnStackIdx>0) ? mnValStack[ --mnStackIdx] : 0);}
-    ValType getVal( int nIndex) const { return mnValStack[ nIndex];}
+    ValType getVal( int nIndex) const
+            {
+                if( nIndex < 0 || nIndex >= mnStackIdx) {
+                    SAL_WARN("vcl.fonts.cff", "CFF operand index " << nIndex
+                             << " outside the " << mnStackIdx << " operands pushed");
+                    return 0;
+                }
+                return mnValStack[ nIndex];
+            }
     int     popInt();
     int     size() const { return mnStackIdx;}
     void    clear() { mnStackIdx = 0;}
@@ -1542,6 +1558,8 @@ void CffSubsetterContext::convertOneTypeEsc()
         break;
         }
     case TYPE2OP::RANDOM:
+        if ( mnStackIdx >= NMAXSTACK )
+            break;
         pTop[+1] = 1234; // TODO
         ++mnStackIdx;
         break;
@@ -1549,7 +1567,8 @@ void CffSubsetterContext::convertOneTypeEsc()
         // TODO: implement
         break;
     case TYPE2OP::DUP:
-        assert( mnStackIdx >= 1 );
+        if ( mnStackIdx < 1 || mnStackIdx >= NMAXSTACK )
+            break;
         pTop[+1] = pTop[0];
         ++mnStackIdx;
         break;
