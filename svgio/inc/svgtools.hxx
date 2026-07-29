@@ -125,6 +125,13 @@ namespace svgio::svgreader
 
         void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rData);
 
+        /** Resolve an image reference against the location the document was read from.
+
+            Returns the absolute URL to read, or an empty string when the reference
+            must not be resolved.
+        */
+        OUString resolveImageUrl(const OUString& rDocumentPath, const OUString& rUrl);
+
         OUString consolidateContiguousSpace(const OUString& rCandidate);
 
         // #125325# removes block comment of the general form '/* ... */', returns
