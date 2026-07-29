@@ -226,7 +226,10 @@ rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateView(
 
         if (sResourceURL == msCurrentSlidePreviewViewURL)
         {
-            xView = CreateSlideShowView(rxViewId);
+            rtl::Reference<PresenterSlideShowView> pView = CreateSlideShowView(rxViewId);
+            if (pView)
+                pView->ActivatePresenterView();
+            xView = pView;
         }
         else if (sResourceURL == msNotesViewURL)
         {
@@ -248,11 +251,6 @@ rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateView(
         {
             xView = CreateHelpView(rxViewId);
         }
-
-        // Activate it.
-        PresenterSlideShowView* pView = dynamic_cast<PresenterSlideShowView*>(xView.get());
-        if (pView != nullptr)
-            pView->ActivatePresenterView();
     }
     catch (RuntimeException&)
     {
