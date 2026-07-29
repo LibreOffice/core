@@ -8,7 +8,8 @@ layout.buildDirectory.set(rootProject.layout.buildDirectory.dir("app"))
 android {
     namespace 'org.libreoffice.androidapp'
     compileSdk 36
-    ndkVersion "28.2.13676358"
+    buildToolsVersion "36.0.0"
+    ndkVersion "29.0.14206865"
     buildFeatures.buildConfig = true
 
     defaultConfig {
