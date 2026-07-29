@@ -279,9 +279,6 @@ void SAL_CALL PresenterNotesView::windowPaint (const awt::PaintEvent& rEvent)
         throwIfDisposed(l);
     }
 
-    if ( ! mbIsPresenterViewActive)
-        return;
-
     ::osl::MutexGuard aSolarGuard (::osl::Mutex::getGlobalMutex());
     Paint(rEvent.UpdateRect);
 }

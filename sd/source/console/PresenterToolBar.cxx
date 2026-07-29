@@ -480,9 +480,6 @@ void SAL_CALL PresenterToolBar::windowPaint (const css::awt::PaintEvent& rEvent)
     if ( ! mxCanvas.is())
         return;
 
-    if ( ! mbIsPresenterViewActive)
-        return;
-
     const rendering::ViewState aViewState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         PresenterGeometryHelper::CreatePolygon(rEvent.UpdateRect, mxCanvas->getDevice()));

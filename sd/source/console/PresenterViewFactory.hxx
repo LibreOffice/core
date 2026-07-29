@@ -46,8 +46,6 @@ public:
     virtual void ReleaseView();
 
 protected:
-    bool mbIsPresenterViewActive;
-
     CachablePresenterView();
 
     ~CachablePresenterView() {}

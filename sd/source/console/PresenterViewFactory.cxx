@@ -394,13 +394,11 @@ rtl::Reference<sd::framework::AbstractView> PresenterViewFactory::CreateHelpView
 //===== CachablePresenterView =================================================
 
 CachablePresenterView::CachablePresenterView()
-    : mbIsPresenterViewActive(true)
 {
 }
 
 void CachablePresenterView::ActivatePresenterView()
 {
-    mbIsPresenterViewActive = true;
 }
 
 void CachablePresenterView::ReleaseView()

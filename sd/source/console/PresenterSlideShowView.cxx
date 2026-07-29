@@ -495,10 +495,6 @@ void SAL_CALL PresenterSlideShowView::disposing (const lang::EventObject& rEvent
 
 void SAL_CALL PresenterSlideShowView::windowPaint (const awt::PaintEvent& rEvent)
 {
-    // Deactivated views must not be painted.
-    if ( ! mbIsPresenterViewActive)
-        return;
-
     awt::Rectangle aViewWindowBox (mxViewWindow->getPosSize());
     if (aViewWindowBox.Width <= 0 || aViewWindowBox.Height <= 0)
         return;
