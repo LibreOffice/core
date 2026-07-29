@@ -501,7 +501,8 @@ void SwAddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, std::u1
     if (bIsSelected)
     {
         //selection rectangle
-        rRenderContext.SetFillColor(COL_TRANSPARENT);
+        const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
+        rRenderContext.SetFillColor(rSettings.GetDialogColor());
         rRenderContext.DrawRect(tools::Rectangle(rTopLeft, rSize));
     }
     sal_Int32 nHeight = GetTextHeight();
