@@ -169,7 +169,7 @@
     <PostBuildEvent>
       <Command>
         xcopy $(OnlineBuildDir)\coolkitconfig.xcu $(OutDir)..\ /q /y
-        robocopy $(OnlineBuildDir)\browser\dist $(OutDir)..\cool *.* /E /XF debug.html framed.doc.html framed.html load.doc.html multidocs.html tsconfig.tsbuildinfo l10n-all.js wasm.html /XD src /NFL /NDL /NJH /NJS /NP
+        robocopy $(OnlineBuildDir)\browser\dist $(OutDir)..\cool *.* /E /XF debug.html framed.doc.html framed.html load.doc.html multidocs.html tsconfig.tsbuildinfo l10n-all.js wasm.html $(CoolSrcExclude) /NFL /NDL /NJH /NJS /NP
         xcopy $(OnlineBuildDir)\browser\dist\src\layer\tile\CanvasTileUtils.js $(OutDir)..\cool\src\layer\tile\ /q /y
         xcopy $(OnlineBuildDir)\browser\dist\src\app\TaskWorker.js $(OutDir)..\cool\src\app\ /q /y
         xcopy $(LO_PATH) $(OutDir)..\ /s /q /y /exclude:..\xcopy.excludes

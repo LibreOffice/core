@@ -15,6 +15,13 @@
     <LO_PATH>@LO_PATH@</LO_PATH>
     <APP_NAME>@APP_NAME@</APP_NAME>
     <APP_VENDOR>@VENDOR@</APP_VENDOR>
+    <!-- Exclude browser/dist/src from the deploy only when JS is bundled
+         (bundle.js is self-contained). When unbundled, cool.html loads the
+         individual src/*.js, so they must ship - and they carry the source
+         maps used for WebView2 JS/TS debugging. Tied to the configure
+         bundling decision so the deploy and the browser build can never
+         disagree. -->
+    <CoolSrcExclude Condition="'@ENABLE_BUNDLE@' == 'true'">/XD src</CoolSrcExclude>
   </PropertyGroup>
   <!-- Run the clang-cl compiles through the ccache masquerade directory
        configure created. When CODA_CCACHE is empty the condition is false

@@ -608,11 +608,6 @@ if test "$enable_debug" = "yes"; then
    # helps attaching to the right process
    NUM_PRESPAWN_CHILDREN=1
 
-   # Must use bundle.js in CODA-W because browser/dist/src gets excluded by the PostBuildEvent
-   if test "$enable_windowsapp" = "yes"; then
-      enable_bundle=yes
-   fi
-
    AC_MSG_CHECKING([whether to bundle JS and CSS files])
    if test "$enable_bundle" != "yes"; then
       ENABLE_BUNDLE=false
