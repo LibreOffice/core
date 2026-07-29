@@ -168,7 +168,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(call gb_Helper_optional,FUZZERS,mmlfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,mtpfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,htmlfuzzer) \
-	$(call gb_Helper_optional,FUZZERS,sftfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,eotfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,dbffuzzer) \
 	$(call gb_Helper_optional,FUZZERS,webpfuzzer) \

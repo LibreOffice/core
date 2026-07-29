@@ -215,7 +215,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_mtpfuzzer \
     Executable_htmlfuzzer \
     Executable_eotfuzzer \
-    Executable_sftfuzzer \
     Executable_dbffuzzer \
     Executable_webpfuzzer \
     Executable_zipfuzzer \

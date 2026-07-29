@@ -129,7 +129,7 @@ git clone --depth 1 --filter=blob:none --sparse https://github.com/harfbuzz/harf
     cp -r harfbuzz/test/shape/data/in-house/fonts $SRC/sample-sft-fonts/harfbuzz && rm -rf harfbuzz
 # exclude very large fonts that are slow to process under sanitizers
 find $SRC/sample-sft-fonts -size +1M -delete
-zip -qr $SRC/sftfuzzer_seed_corpus.zip $SRC/sample-sft-fonts
+zip -qr $SRC/eotfuzzer_seed_corpus.zip $SRC/sample-sft-fonts
 
 # PDF
 git clone --depth 1 https://github.com/strongcourage/fuzzing-corpus.git && \
@@ -188,7 +188,6 @@ cp fodtfuzzer_seed_corpus.zip fodt2pdffuzzer_seed_corpus.zip
 cp rtffuzzer_seed_corpus.zip rtf2pdffuzzer_seed_corpus.zip
 cp fodsfuzzer_seed_corpus.zip fods2xlsfuzzer_seed_corpus.zip
 cp htmlfuzzer_seed_corpus.zip schtmlfuzzer_seed_corpus.zip
-cp sftfuzzer_seed_corpus.zip eotfuzzer_seed_corpus.zip
 cp pdffuzzer_seed_corpus.zip pdf2fodgfuzzer_seed_corpus.zip
 
 echo end downloading dependencies at `date -u`

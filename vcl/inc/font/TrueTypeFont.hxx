@@ -184,6 +184,4 @@ public:
 
 } // namespace vcl
 
-int VCL_DLLPUBLIC TestFontParsing(const void* data, sal_uInt32 size);
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

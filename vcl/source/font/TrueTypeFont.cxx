@@ -215,6 +215,4 @@ FontWeight TrueTypeFont::getFontWeight() const
 
 } // namespace vcl
 
-int TestFontParsing(const void*, sal_uInt32) { return 0; }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
