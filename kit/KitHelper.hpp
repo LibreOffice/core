@@ -205,7 +205,7 @@ namespace LOKitHelper
 
         if (diffSizePages)
         {
-            resultInfo["currentpageresized"] = std::to_string(true);
+            resultInfo["currentpageresized"] = "true";
             return MapToJSONString(resultInfo);
         }
 
