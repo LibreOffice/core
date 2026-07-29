@@ -891,10 +891,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 	) \
 ))
 
-$(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
-	$(if $(BUILD_POSTGRESQL_SDBC),connectivity_postgresql-sdbc) \
-))
-
 $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 	odk_share_readme \
 	odk_share_readme_generated \

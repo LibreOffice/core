@@ -97,7 +97,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_postgresql \
 	Library_postgresql-sdbc \
 	Library_postgresql-sdbc-impl \
-	Package_postgresql-sdbc \
 	Rdb_postgresql-sdbc \
 ))
 endif
