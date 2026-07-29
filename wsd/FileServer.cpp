@@ -2323,8 +2323,10 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
 
     const std::string& uriAnonym = Anonymizer::anonymizeUrl(uri.toString());
 
+    std::weak_ptr<StreamSocket> socketWeak(socket);
+
     // Fetch the model list with the given key (client's, or read back from storage).
-    auto fetchWithKey = [uri, uriAnonym, socket, requestPath = getRequestPath(request),
+    auto fetchWithKey = [uri, uriAnonym, socketWeak, requestPath = getRequestPath(request),
                          shortMessage](const std::string& effectiveKey)
     {
         // With an empty key, mark the token as header-less so no Authorization
@@ -2334,8 +2336,6 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
         auto httpRequest = StorageConnectionManager::createHttpRequest(uri, auth);
         httpRequest.setVerb(http::Request::VERB_GET);
         httpRequest.set("Content-Type", "application/json");
-
-        std::weak_ptr<StreamSocket> socketWeak(socket);
 
         http::Session::FinishedCallback finishedCallback =
             [uriAnonym, socketWeak, requestPath,
@@ -2416,8 +2416,6 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
     auto storedRequest = StorageConnectionManager::createHttpRequest(storedUri, storedAuth);
     storedRequest.setVerb(http::Request::VERB_GET);
     storedRequest.set("Content-Type", "text/plain");
-
-    std::weak_ptr<StreamSocket> socketWeak(socket);
 
     http::Session::FinishedCallback storedCallback =
         [fetchWithKey, secretField, socketWeak, storedUriAnonym,
