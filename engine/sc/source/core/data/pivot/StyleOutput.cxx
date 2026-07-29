@@ -25,14 +25,10 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/wghtitem.hxx>
-#include <osl/diagnose.h>
 
 #include <attrib.hxx>
 #include <document.hxx>
-#include <globstr.hrc>
-#include <scresid.hxx>
-#include <stlpool.hxx>
-#include <stlsheet.hxx>
+#include <patattr.hxx>
 
 #include <algorithm>
 
@@ -42,40 +38,6 @@ constexpr sal_uInt16 SC_DP_FRAME_INNER_BOLD = 20;
 constexpr sal_uInt16 SC_DP_FRAME_OUTER_BOLD = 40;
 
 constexpr Color SC_DP_FRAME_COLOR(0, 0, 0); //( 0x20, 0x40, 0x68 )
-
-void lcl_SetStyleById(ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
-                      SCROW nRow2, TranslateId pStrId)
-{
-    if (nCol1 > nCol2 || nRow1 > nRow2)
-    {
-        OSL_FAIL("SetStyleById: invalid range");
-        return;
-    }
-
-    OUString aStyleName = ScResId(pStrId);
-    ScStyleSheetPool* pStlPool = rDoc.GetStyleSheetPool();
-    ScStyleSheet* pStyle
-        = static_cast<ScStyleSheet*>(pStlPool->Find(aStyleName, SfxStyleFamily::Para));
-    if (!pStyle)
-    {
-        //  create new style (was in ScPivot::SetStyle)
-
-        pStyle = static_cast<ScStyleSheet*>(
-            &pStlPool->Make(aStyleName, SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined));
-        pStyle->SetParent(ScResId(STR_STYLENAME_STANDARD));
-        SfxItemSet& rSet = pStyle->GetItemSet();
-        if (pStrId == STR_PIVOT_STYLENAME_RESULT || pStrId == STR_PIVOT_STYLENAME_TITLE)
-        {
-            rSet.Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
-            rSet.Put(SvxWeightItem(WEIGHT_BOLD, ATTR_CJK_FONT_WEIGHT));
-            rSet.Put(SvxWeightItem(WEIGHT_BOLD, ATTR_CTL_FONT_WEIGHT));
-        }
-        if (pStrId == STR_PIVOT_STYLENAME_CATEGORY || pStrId == STR_PIVOT_STYLENAME_TITLE)
-            rSet.Put(SvxHorJustifyItem(SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY));
-    }
-
-    rDoc.ApplyStyleAreaTab(nCol1, nRow1, nCol2, nRow2, nTab, *pStyle);
-}
 
 void lcl_SetFrame(ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                   sal_uInt16 nWidth)
@@ -92,6 +54,23 @@ void lcl_SetFrame(ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL 
     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE, false);
 
     rDoc.ApplyFrameAreaTab(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab), aBox, aBoxInfo);
+}
+
+void lcl_SetLeftAligned(ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
+                        SCROW nRow2)
+{
+    ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
+    aPattern.ItemSetPut(SvxHorJustifyItem(SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY));
+    rDoc.ApplyPatternAreaTab(nCol1, nRow1, nCol2, nRow2, nTab, aPattern);
+}
+
+void lcl_SetBold(ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+{
+    ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
+    aPattern.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+    aPattern.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_CJK_FONT_WEIGHT));
+    aPattern.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_CTL_FONT_WEIGHT));
+    rDoc.ApplyPatternAreaTab(nCol1, nRow1, nCol2, nRow2, nTab, aPattern);
 }
 
 /** Draws the block frames of the table: each block gets a box around it, with a bold line on the
@@ -247,80 +226,6 @@ public:
 
 namespace sc::pivot
 {
-void StyleOutput::applyAreaStyles()
-{
-    SCTAB nTab = maGeometry.mnTab;
-
-    if (maGeometry.mnDataStartRow > maGeometry.mnTabStartRow)
-    {
-        lcl_SetStyleById(mrDocument, nTab, maGeometry.mnTabStartCol, maGeometry.mnTabStartRow,
-                         maGeometry.mnTabEndCol, maGeometry.mnDataStartRow - 1,
-                         STR_PIVOT_STYLENAME_TOP);
-    }
-    lcl_SetStyleById(mrDocument, nTab, maGeometry.mnDataStartCol, maGeometry.mnDataStartRow,
-                     maGeometry.mnTabEndCol, maGeometry.mnTabEndRow, STR_PIVOT_STYLENAME_INNER);
-}
-
-void StyleOutput::addFieldCell(SCCOL nCol, SCROW nRow, bool bFrame)
-{
-    maFieldCells.push_back(FieldCell{ nCol, nRow, bFrame });
-
-    lcl_SetStyleById(mrDocument, maGeometry.mnTab, nCol, nRow, nCol, nRow,
-                     STR_PIVOT_STYLENAME_FIELDNAME);
-}
-
-void StyleOutput::addColumnMemberSpan(size_t nField, SCCOL nStartCol, SCCOL nEndCol, SCROW nRow)
-{
-    maColumnMemberSpans.push_back(ColumnMemberSpan{ nField, nStartCol, nEndCol, nRow });
-
-    if (nField + 1 < maGeometry.mnColumnFieldCount)
-    {
-        lcl_SetStyleById(mrDocument, maGeometry.mnTab, nStartCol, nRow, nEndCol,
-                         maGeometry.mnDataStartRow - 1, STR_PIVOT_STYLENAME_CATEGORY);
-    }
-    else
-    {
-        lcl_SetStyleById(mrDocument, maGeometry.mnTab, nStartCol, nRow, nStartCol,
-                         maGeometry.mnDataStartRow - 1, STR_PIVOT_STYLENAME_CATEGORY);
-    }
-}
-
-void StyleOutput::addRowMemberSpan(size_t nField, SCCOL nCol, SCROW nStartRow, SCROW nEndRow)
-{
-    maRowMemberSpans.push_back(RowMemberSpan{ nField, nCol, nStartRow, nEndRow });
-
-    if (nField + 1 < maGeometry.mnRowFieldCount)
-    {
-        lcl_SetStyleById(mrDocument, maGeometry.mnTab, nCol, nStartRow,
-                         maGeometry.mnDataStartCol - 1, nEndRow, STR_PIVOT_STYLENAME_CATEGORY);
-    }
-    else
-    {
-        lcl_SetStyleById(mrDocument, maGeometry.mnTab, nCol, nStartRow,
-                         maGeometry.mnDataStartCol - 1, nStartRow, STR_PIVOT_STYLENAME_CATEGORY);
-    }
-}
-
-void StyleOutput::addSubtotalColumn(SCCOL nCol, SCROW nStartRow, bool bGrandTotal)
-{
-    maSubtotalColumns.push_back(SubtotalColumn{ nCol, nStartRow, bGrandTotal });
-
-    lcl_SetStyleById(mrDocument, maGeometry.mnTab, nCol, nStartRow, nCol,
-                     maGeometry.mnDataStartRow - 1, STR_PIVOT_STYLENAME_TITLE);
-    lcl_SetStyleById(mrDocument, maGeometry.mnTab, nCol, maGeometry.mnDataStartRow, nCol,
-                     maGeometry.mnTabEndRow, STR_PIVOT_STYLENAME_RESULT);
-}
-
-void StyleOutput::addSubtotalRow(SCROW nRow, SCCOL nStartCol, bool bGrandTotal)
-{
-    maSubtotalRows.push_back(SubtotalRow{ nRow, nStartCol, bGrandTotal });
-
-    lcl_SetStyleById(mrDocument, maGeometry.mnTab, nStartCol, nRow, maGeometry.mnDataStartCol - 1,
-                     nRow, STR_PIVOT_STYLENAME_TITLE);
-    lcl_SetStyleById(mrDocument, maGeometry.mnTab, maGeometry.mnDataStartCol, nRow,
-                     maGeometry.mnTabEndCol, nRow, STR_PIVOT_STYLENAME_RESULT);
-}
-
 void StyleOutput::clear()
 {
     maGeometry = Geometry();
@@ -370,6 +275,13 @@ void StyleOutput::apply()
                 aBlockFrames.OutputBlockFrame(rSpan.nStartCol, rSpan.nRow, rSpan.nEndCol,
                                               rSpan.nRow);
             }
+            lcl_SetLeftAligned(mrDocument, nTab, rSpan.nStartCol, rSpan.nRow, rSpan.nEndCol,
+                               maGeometry.mnDataStartRow - 1);
+        }
+        else
+        {
+            lcl_SetLeftAligned(mrDocument, nTab, rSpan.nStartCol, rSpan.nRow, rSpan.nStartCol,
+                               maGeometry.mnDataStartRow - 1);
         }
     }
 
@@ -382,12 +294,19 @@ void StyleOutput::apply()
                                       maGeometry.mnTabEndCol, maGeometry.mnMemberStartRow - 1);
     }
 
-    // Subtotal and grand total columns
+    // Subtotal and grand total columns. The label cells in the header area are bold and aligned
+    // to the left, the result cells below them are bold.
     for (SubtotalColumn const& rColumn : maSubtotalColumns)
     {
         aBlockFrames.AddCol(rColumn.nCol);
         aBlockFrames.OutputBlockFrame(rColumn.nCol, rColumn.nStartRow, rColumn.nCol,
                                       maGeometry.mnDataStartRow - 1);
+        lcl_SetBold(mrDocument, nTab, rColumn.nCol, rColumn.nStartRow, rColumn.nCol,
+                    maGeometry.mnDataStartRow - 1);
+        lcl_SetLeftAligned(mrDocument, nTab, rColumn.nCol, rColumn.nStartRow, rColumn.nCol,
+                           maGeometry.mnDataStartRow - 1);
+        lcl_SetBold(mrDocument, nTab, rColumn.nCol, maGeometry.mnDataStartRow, rColumn.nCol,
+                    maGeometry.mnTabEndRow);
     }
 
     // Row field members. The first member that begins in a row also gets a frame around the whole
@@ -409,18 +328,34 @@ void StyleOutput::apply()
             if (rSpan.nField == maGeometry.mnRowFieldCount - 2)
                 aBlockFrames.OutputBlockFrame(rSpan.nCol + 1, rSpan.nStartRow, rSpan.nCol + 1,
                                               rSpan.nEndRow);
+
+            lcl_SetLeftAligned(mrDocument, nTab, rSpan.nCol, rSpan.nStartRow,
+                               maGeometry.mnDataStartCol - 1, rSpan.nEndRow);
+        }
+        else
+        {
+            lcl_SetLeftAligned(mrDocument, nTab, rSpan.nCol, rSpan.nStartRow,
+                               maGeometry.mnDataStartCol - 1, rSpan.nStartRow);
         }
     }
 
-    // Subtotal and grand total rows
+    // Subtotal and grand total rows. The label cells in the header area are bold and aligned to
+    // the left, the result cells to the right of them are bold.
     for (SubtotalRow const& rRow : maSubtotalRows)
     {
         aBlockFrames.AddRow(rRow.nRow);
         aBlockFrames.OutputBlockFrame(rRow.nStartCol, rRow.nRow, maGeometry.mnDataStartCol - 1,
                                       rRow.nRow);
+        lcl_SetBold(mrDocument, nTab, rRow.nStartCol, rRow.nRow, maGeometry.mnDataStartCol - 1,
+                    rRow.nRow);
+        lcl_SetLeftAligned(mrDocument, nTab, rRow.nStartCol, rRow.nRow,
+                           maGeometry.mnDataStartCol - 1, rRow.nRow);
+        lcl_SetBold(mrDocument, nTab, maGeometry.mnDataStartCol, rRow.nRow, maGeometry.mnTabEndCol,
+                    rRow.nRow);
     }
 
-    // Member indents and expand/collapse buttons
+    // Member indents and the expand and collapse buttons. The indent shows up because the member
+    // cells are aligned to the left, an indent has no effect in a centered cell.
     for (Indent const& rIndent : maIndentCells)
         mrDocument.ApplyAttr(rIndent.nCol, rIndent.nRow, nTab, ScIndentItem(rIndent.nIndent));
 
