@@ -21,9 +21,9 @@
 #include <test/bootstrapfixture.hxx>
 
 #define REQUIRE_VERSION(major, minor, micro, req_major, req_minor, req_micro)                      \
-    (major) > (req_major)                                                                          \
-        || ((major) == (req_major)                                                                 \
-            && ((minor) > (req_minor) || ((minor) == (req_minor) && ((micro) >= (req_micro)))))
+    ((major) > (req_major)                                                                         \
+     || ((major) == (req_major)                                                                    \
+         && ((minor) > (req_minor) || ((minor) == (req_minor) && ((micro) >= (req_micro))))))
 
 #define REQUIRE_EBOOK_VERSION(major, minor, micro)                                                 \
     REQUIRE_VERSION(EBOOK_VERSION_MAJOR, EBOOK_VERSION_MINOR, EBOOK_VERSION_MICRO, major, minor,   \
