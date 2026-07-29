@@ -42,6 +42,10 @@ class VectorManager extends RenderManagerBase {
 	// in flight.
 	private _bitmapsInFlight: Set<number> = new Set();
 
+	// Checksums for which no usable image could be obtained. A repeat
+	// request would return the same answer.
+	private _unavailableBitmaps: Set<number> = new Set();
+
 	// Reverse index from bitmap checksum to the parts that reference
 	// it. Lets a freshly-decoded bitmap re-render only the affected
 	// thumbnails.
@@ -236,13 +240,21 @@ class VectorManager extends RenderManagerBase {
 		this._fireChanged();
 	}
 
-	/// Handle a fetched bitmap: cache it and re-render the
-	/// previews that use it.
+	/// Handle a fetched bitmap: cache it and re-render the previews
+	/// that use it. Data that is missing or fails to decode marks
+	/// the checksum as unavailable.
 	handleVectorRenderingGraphicsResponse(
 		values: cool.VectorRenderingGraphicsResponse,
 	): void {
 		if (this._bitmapCache.has(values.checksum)) {
 			this._bitmapsInFlight.delete(values.checksum);
+			return;
+		}
+		if (!values.data) {
+			this._markBitmapUnavailable(
+				values.checksum,
+				'the engine reported: ' + (values.error || 'no image data'),
+			);
 			return;
 		}
 		const image = new Image();
@@ -255,9 +267,25 @@ class VectorManager extends RenderManagerBase {
 			this._fireChanged();
 		};
 		image.onerror = () => {
-			this._bitmapsInFlight.delete(values.checksum);
+			this._markBitmapUnavailable(
+				values.checksum,
+				'its image data failed to decode',
+			);
 		};
 		image.src = values.data;
+	}
+
+	/// Record a checksum no usable image could be obtained for, so
+	/// it is not requested again, and log the reason.
+	private _markBitmapUnavailable(checksum: number, reason: string): void {
+		window.app.console.warn(
+			'VectorRenderingGraphics: bitmap ' +
+				String(checksum) +
+				' is unavailable: ' +
+				reason,
+		);
+		this._unavailableBitmaps.add(checksum);
+		this._bitmapsInFlight.delete(checksum);
 	}
 
 	private _indexChecksumsForPart(part: number, checksums: Set<number>): void {
@@ -294,6 +322,7 @@ class VectorManager extends RenderManagerBase {
 		for (const checksum of checksums) {
 			if (this._bitmapCache.has(checksum)) continue;
 			if (this._bitmapsInFlight.has(checksum)) continue;
+			if (this._unavailableBitmaps.has(checksum)) continue;
 			this._bitmapsInFlight.add(checksum);
 			app.socket.sendMessage(
 				'commandvalues command=.uno:VectorRenderingGraphics?checksum=' +
@@ -325,6 +354,7 @@ class VectorManager extends RenderManagerBase {
 		this._pendingPreviews.clear();
 		this._bitmapCache.clear();
 		this._bitmapsInFlight.clear();
+		this._unavailableBitmaps.clear();
 		this._checksumToParts.clear();
 		this._renderedPreviews.clear();
 		this._fireChanged();

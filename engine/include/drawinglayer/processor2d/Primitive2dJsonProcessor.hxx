@@ -74,7 +74,8 @@ public:
     static OString
     dumpAsJson(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence);
 
-    /// Write a Graphic as base64 data URL to a JsonWriter.
+    /// Write a Graphic as base64 data URL to a JsonWriter. A graphic that cannot be encoded gets
+    /// an error attribute naming the reason instead of data.
     static void writeGraphicBase64(tools::JsonWriter& rWriter, const Graphic& rGraphic);
 
     /// Set an external bitmap cache. Graphics encountered during

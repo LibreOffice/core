@@ -84,7 +84,8 @@ void Primitive2dJsonProcessor::setBitmapCache(std::unordered_map<sal_Int64, Grap
     mpBitmapCache = &rCache;
 }
 
-/// Write graphic data as base64 data URL, preferring native browser-supported formats.
+/// Write graphic data as base64 data URL, preferring native browser-supported formats. A graphic
+/// that cannot be encoded gets an error attribute naming the reason instead of data.
 void Primitive2dJsonProcessor::writeGraphicBase64(tools::JsonWriter& rWriter,
                                                   const Graphic& rGraphic)
 {
@@ -136,7 +137,10 @@ void Primitive2dJsonProcessor::writeGraphicBase64(tools::JsonWriter& rWriter,
         OStringBuffer aBase64("data:image/png;base64,");
         comphelper::Base64::encode(aBase64, aSequence);
         rWriter.put("data", aBase64);
+        return;
     }
+
+    rWriter.put("error", "conversionfailed");
 }
 
 /// Write graphic: checksum + either cache or inline base64.

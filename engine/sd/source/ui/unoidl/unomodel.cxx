@@ -2565,8 +2565,8 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
         {
             sal_Int64 nChecksum = it->second.toInt64();
             // The response always carries the type and the requested
-            // checksum. The image data is present only when the graphic
-            // is known.
+            // checksum, and then either the image data or an error
+            // attribute naming why there is none.
             rJsonWriter.put("type", "vectorrenderinggraphics");
             rJsonWriter.put("checksum", nChecksum);
             auto itGraphic = maBitmapCache.find(nChecksum);
@@ -2574,6 +2574,10 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
             {
                 drawinglayer::Primitive2dJsonProcessor::writeGraphicBase64(
                     rJsonWriter, itGraphic->second);
+            }
+            else
+            {
+                rJsonWriter.put("error", "notfound");
             }
         }
     }
