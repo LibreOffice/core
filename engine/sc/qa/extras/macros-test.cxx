@@ -8,6 +8,9 @@
  */
 
 #include <sal/config.h>
+
+#include <config_vclplug.h>
+
 #include <helper/qahelper.hxx>
 #include <sal/log.hxx>
 #include <svx/svdpage.hxx>
@@ -1130,7 +1133,9 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf168750)
     CPPUNIT_ASSERT_EQUAL(u"FALSE"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
 }
 
-#if defined(_WIN32) // DDE calls work only on Windows currently
+// DDE calls work only on Windows currently, and there they are answered through the Windows
+// message queue, which a build taking the headless code does not pump
+#if defined(_WIN32) && !USE_HEADLESS_CODE
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testDdePoke)
 {
     // Get a document with a text in A1, and use its Basic macro to send that text into the
