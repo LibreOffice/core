@@ -1190,6 +1190,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf149378)
     // {} wrapping in the formula text.
 
     createScDoc();
+    requestKitRowColumnHeaders();
     ScDocument* pDoc = getScDoc();
 
     auto checkDynamic = [pDoc](SCCOL nCol, SCROW nRow) {
@@ -1243,6 +1244,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testBinaryRangeAdditionSpills)
     // dynamic-array master and spill the result into C1:C4.
 
     createScDoc();
+    requestKitRowColumnHeaders();
     ScDocument* pDoc = getScDoc();
 
     insertStringToCell(u"A2"_ustr, u"1");
@@ -1279,6 +1281,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testChainedRangeAdditionSpills)
     // even when the cell sits inside the source row span.
 
     createScDoc();
+    requestKitRowColumnHeaders();
     ScDocument* pDoc = getScDoc();
 
     insertStringToCell(u"A1"_ustr, u"1");
@@ -1312,6 +1315,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testIfWithRangeBranchesSpills)
     // master and spills the chosen branch.
 
     createScDoc();
+    requestKitRowColumnHeaders();
     ScDocument* pDoc = getScDoc();
 
     insertStringToCell(u"A1"_ustr, u"1");
@@ -1345,6 +1349,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testRangeTimesScalarSpills)
     // compile-time implicit-intersection skip is exercised as well.
 
     createScDoc();
+    requestKitRowColumnHeaders();
     ScDocument* pDoc = getScDoc();
 
     insertStringToCell(u"A1"_ustr, u"1");
@@ -1396,6 +1401,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testAtOperatorOnOperandsControlsSpill)
     // lets the other spill.
 
     createScDoc();
+    requestKitRowColumnHeaders();
     ScDocument* pDoc = getScDoc();
 
     insertStringToCell(u"A1"_ustr, u"1");
