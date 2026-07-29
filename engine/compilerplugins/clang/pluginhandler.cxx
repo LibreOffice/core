@@ -80,6 +80,9 @@ PluginHandler::PluginHandler( CompilerInstance& compiler, const std::vector< std
     , scope( "mainfile" )
     , warningsAsErrors( false )
 {
+    // The compiler resolves a relative pathname against this, which is empty unless it was given
+    // -working-directory, and then means the working directory of the process.
+    setPathnameWorkingDirectory(compiler.getFileSystemOpts().WorkingDir);
     std::set< std::string > rewriters;
     for( std::string const & arg : args )
         {
@@ -252,25 +255,14 @@ bool PluginHandler::checkIgnoreLocation(SourceLocation loc)
     PresumedLoc presumedLoc = compiler.getSourceManager().getPresumedLoc( expansionLoc );
     if( presumedLoc.isInvalid())
         return true;
-    const char* bufferName = presumedLoc.getFilename();
-    if (bufferName == NULL
-        || hasPathnamePrefix(bufferName, SRCDIR "/external/") )
+    const char* rawBufferName = presumedLoc.getFilename();
+    if (rawBufferName == NULL)
+        return true;
+    StringRef const bufferName = makePathnameAbsolute(rawBufferName);
+    if (hasPathnamePrefix(bufferName, SRCDIR "/external/") )
         return true;
     if( hasPathnamePrefix(bufferName, WORKDIR "/") )
-    {
-        // workdir/CustomTarget/vcl/unx/kde4/tst_exclude_socket_notifiers.moc
-        // includes
-        // "../../../../../vcl/unx/kde4/tst_exclude_socket_notifiers.hxx",
-        // making the latter file erroneously match here; so strip any ".."
-        // segments:
-        if (strstr(bufferName, "/..") == nullptr) {
-            return true;
-        }
-        std::string s(bufferName);
-        normalizeDotDotInFilePath(s);
-        if (hasPathnamePrefix(s, WORKDIR "/"))
-            return true;
-    }
+        return true;
     if( hasPathnamePrefix(bufferName, BUILDDIR "/")
         || hasPathnamePrefix(bufferName, SRCDIR "/") )
         return false; // ok
@@ -341,7 +333,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         std::string modifyFile;
         const char* pathWarning = NULL;
         bool bSkip = false;
-        StringRef const name = e->getName();
+        StringRef const name = makePathnameAbsolute(e->getName());
         if( name.starts_with(WORKDIR "/") )
             pathWarning = "modified source in workdir/ : %0";
         else if( strcmp( SRCDIR, BUILDDIR ) != 0 && name.starts_with(BUILDDIR "/") )

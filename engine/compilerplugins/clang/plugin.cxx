@@ -18,6 +18,9 @@
 #include <clang/AST/ParentMapContext.h>
 #include <clang/Basic/FileManager.h>
 #include <clang/Lex/Lexer.h>
+#include <llvm/ADT/StringMap.h>
+#include <llvm/Support/FileSystem.h>
+#include <llvm/Support/Path.h>
 
 #include "config_clang.h"
 
@@ -30,6 +33,55 @@ Base classes for plugin actions.
 */
 namespace loplugin
 {
+
+namespace
+{
+// The directory a relative pathname is taken to be relative to. An empty string means the working
+// directory of the process.
+std::string s_WorkingDirectory;
+
+// The absolute form of every pathname that has been through makePathnameAbsolute. The caller gets a
+// StringRef, so the strings have to outlive the call. The map doubles as a cache. One plugin
+// instance belongs to one compiler instance and runs on a single thread, so it needs no locking.
+llvm::StringMap<std::string> s_AbsolutePathnames;
+}
+
+void setPathnameWorkingDirectory(StringRef directory)
+{
+    s_WorkingDirectory = directory.str();
+    s_AbsolutePathnames.clear();
+}
+
+StringRef makePathnameAbsolute(StringRef pathname)
+{
+    if (pathname.empty() || pathname.starts_with("<"))
+    {
+        return pathname;
+    }
+    // An absolute pathname with no "." or ".." segment is already in the wanted form, and this is
+    // the common case, so it skips the map.
+    if (llvm::sys::path::is_absolute(pathname) && pathname.find("/..") == StringRef::npos
+        && pathname.find("/./") == StringRef::npos)
+    {
+        return pathname;
+    }
+    auto const it = s_AbsolutePathnames.find(pathname);
+    if (it != s_AbsolutePathnames.end())
+    {
+        return it->second;
+    }
+    SmallString<256> absolute(pathname);
+    if (s_WorkingDirectory.empty())
+    {
+        llvm::sys::fs::make_absolute(absolute);
+    }
+    else
+    {
+        llvm::sys::fs::make_absolute(s_WorkingDirectory, absolute);
+    }
+    llvm::sys::path::remove_dots(absolute, /*remove_dot_dot=*/true);
+    return s_AbsolutePathnames.try_emplace(pathname, std::string(absolute)).first->second;
+}
 
 namespace {
 
@@ -410,7 +462,7 @@ const FunctionDecl* Plugin::getParentFunctionDecl( const Stmt* stmt )
     return nullptr;
 }
 
-StringRef Plugin::getFilenameOfLocation(SourceLocation spellingLocation) const
+StringRef Plugin::getRawFilenameOfLocation(SourceLocation spellingLocation) const
 {
     // prevent crashes when running the global-analysis plugins
     if (!spellingLocation.isValid())
@@ -433,7 +485,7 @@ StringRef Plugin::getFilenameOfLocation(SourceLocation spellingLocation) const
         if (pCXX && strstr(pCXX, "sccache"))
         {   // heuristic; sccache passes file with -frewrite-directives by name
             s_Mode = STDIN;
-            return getFilenameOfLocation(spellingLocation);
+            return getRawFilenameOfLocation(spellingLocation);
         }
         auto const fn(compiler.getSourceManager().getFilename(spellingLocation));
         if (!fn.data()) // wtf? happens in sot/source/sdstor/stg.cxx
@@ -441,11 +493,16 @@ StringRef Plugin::getFilenameOfLocation(SourceLocation spellingLocation) const
             return fn;
         }
 #if !defined _WIN32
-        assert(fn.starts_with("/") || fn == "<stdin>");
+        assert(makePathnameAbsolute(fn).starts_with("/") || fn == "<stdin>");
 #endif
         s_Mode = fn == "<stdin>" ? STDIN : GOOD;
-        return getFilenameOfLocation(spellingLocation);
+        return getRawFilenameOfLocation(spellingLocation);
     }
+}
+
+StringRef Plugin::getFilenameOfLocation(SourceLocation spellingLocation) const
+{
+    return makePathnameAbsolute(getRawFilenameOfLocation(spellingLocation));
 }
 
 bool Plugin::isInUnoIncludeFile(SourceLocation spellingLocation) const
@@ -930,14 +987,15 @@ template<typename Fn> bool checkPathname(
 bool hasPathnamePrefix(StringRef pathname, StringRef prefix)
 {
     return checkPathname(
-        pathname, prefix,
+        makePathnameAbsolute(pathname), prefix,
         [](StringRef p, StringRef a) { return p.starts_with(a); });
 }
 
 bool isSamePathname(StringRef pathname, StringRef other)
 {
     return checkPathname(
-        pathname, other, [](StringRef p, StringRef a) { return p == a; });
+        makePathnameAbsolute(pathname), other,
+        [](StringRef p, StringRef a) { return p == a; });
 }
 
 bool hasCLanguageLinkageType(FunctionDecl const * decl) {

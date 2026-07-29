@@ -264,7 +264,8 @@ bool GetImplementationName::returnsStringConstant(
 void GetImplementationName::generateOutput(FunctionDecl const * decl, const std::string unoimpl, const std::string cppclass) {
     ensureOutdirCreated();
     clang::SourceManager& sm(compiler.getSourceManager());
-    const std::string absfilename(sm.getFilename(decl->getSourceRange().getBegin()).str());
+    const std::string absfilename(
+        loplugin::makePathnameAbsolute(sm.getFilename(decl->getSourceRange().getBegin())).str());
     if(absfilename.length() <= m_Srcdir.length())
         return;
     const std::string filename(absfilename.substr(m_Srcdir.length()+1));

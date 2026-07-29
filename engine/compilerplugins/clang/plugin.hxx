@@ -87,6 +87,8 @@ protected:
     /**
      Get filename of the given location. Use this instead of SourceManager::getFilename(), as that one
      does not handle source with expanded #inline directives (used by Icecream for remote compilation).
+     The result is an absolute pathname, or one of the names in angle brackets that Clang gives to a
+     buffer that is not a file, such as "<stdin>" or "<built-in>".
     */
     StringRef getFilenameOfLocation(SourceLocation spellingLocation) const;
     /**
@@ -109,6 +111,12 @@ protected:
         Expr const * argument1, Expr const * argument2);
 
 private:
+    /**
+     The filename as the compiler saw it, which may be a pathname relative to the working directory
+     the compiler was started in.
+    */
+    StringRef getRawFilenameOfLocation(SourceLocation spellingLocation) const;
+
     static void registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName,
         bool isPPCallback, bool isSharedPlugin, bool byDefault );
     template< typename T > static Plugin* createHelper( const InstantiationData& data );
@@ -276,12 +284,29 @@ public:
 
 void normalizeDotDotInFilePath(std::string&);
 
+// Turn a pathname the compiler was given relative to its working directory into the absolute
+// pathname it stands for, and drop any "." and ".." segments. ccache hands the compiler relative
+// pathnames when its base_dir setting is in use, so that one cache entry can serve several build
+// directories. The pathnames the plugins match against, SRCDIR and the other configured
+// directories, are absolute.
+//
+// Names in angle brackets such as "<stdin>" and "<built-in>" stand for a buffer that is not a file,
+// so they are passed through as they are.
+StringRef makePathnameAbsolute(StringRef pathname);
+
+// Set the directory that makePathnameAbsolute resolves a relative pathname against. An empty
+// directory means the working directory of the process.
+void setPathnameWorkingDirectory(StringRef directory);
+
 // Same as pathname.startswith(prefix), except on Windows, where pathname and
-// prefix may also contain backslashes:
+// prefix may also contain backslashes. The pathname goes through
+// makePathnameAbsolute first, so a relative pathname still matches an absolute
+// prefix:
 bool hasPathnamePrefix(StringRef pathname, StringRef prefix);
 
 // Same as pathname == other, except on Windows, where pathname and other may
-// also contain backslashes:
+// also contain backslashes. The pathname goes through makePathnameAbsolute
+// first, so a relative pathname still matches an absolute one:
 bool isSamePathname(StringRef pathname, StringRef other);
 
 // It appears that, given a function declaration, there is no way to determine

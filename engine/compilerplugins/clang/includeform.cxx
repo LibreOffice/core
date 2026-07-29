@@ -60,11 +60,13 @@ private:
                    || loplugin::hasPathnamePrefix(
                        SearchPath, WORKDIR "/UnpackedTarball/"));
         } else {
-            auto dir1 = std::string(SearchPath);
-            loplugin::normalizeDotDotInFilePath(dir1);
-            auto const file = StringRef(
-                compiler.getSourceManager().getPresumedLoc(HashLoc)
-                .getFilename());
+            auto const dir1 = std::string(loplugin::makePathnameAbsolute(SearchPath));
+            // Both directories have to be in the same form before they are compared, so the
+            // including file is made absolute too.
+            auto const file = loplugin::makePathnameAbsolute(
+                StringRef(
+                    compiler.getSourceManager().getPresumedLoc(HashLoc)
+                    .getFilename()));
             auto pos = file.rfind('/');
 #if defined _WIN32
             auto const pos2 = file.rfind('\\');
