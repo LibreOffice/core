@@ -1518,10 +1518,6 @@ include/unotools/useroptions.hxx:90
     void SvtUserOptions::SetBoolValue(enum UserOptToken,_Bool)
     enum UserOptToken nToken
     19
-include/vcl/accessibility/AccessibleTextAttributeHelper.hxx:63
-    class rtl::OUString GetIAccessible2TextAttributes(const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessibleText> &,enum IA2AttributeType,int,int &,int &)
-    enum IA2AttributeType eAttributeType
-    3
 include/vcl/bitmap/BitmapBasicMorphologyFilter.hxx:47
     void BitmapErodeFilter::BitmapErodeFilter(int,unsigned char)
     unsigned char nValueOutside

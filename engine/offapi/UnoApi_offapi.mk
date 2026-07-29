@@ -1516,7 +1516,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/accessibility,\
 	AccessibleTextType \
 	IllegalAccessibleComponentStateException \
 	TextSegment \
-    MSAAService \
 	XAccessible \
 	XAccessibleAction \
 	XAccessibleComponent \
@@ -1543,7 +1542,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/accessibility,\
 	XAccessibleTextMarkup \
     XAccessibleTextSelection \
 	XAccessibleValue \
-    XMSAAService \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/animations,\
 	AnimationAdditiveMode \

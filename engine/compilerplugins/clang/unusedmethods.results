@@ -1118,8 +1118,6 @@ include/unotools/weakref.hxx:69
      unotools::WeakReference::WeakReference<interface_type>(type-parameter-?-? &)
 include/vcl/abstdlgimpl.hxx:42
      vcl::AbstractDialogImpl_BASE::AbstractDialogImpl_BASE(type-parameter-?-? &&...)
-include/vcl/accessibility/AccessibleTextAttributeHelper.hxx:61
-    rtl::OUString AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleText> &,enum IA2AttributeType,int,int &,int &)
 include/vcl/alpha.hxx:43
     _Bool AlphaMask::operator==(const AlphaMask &) const
 include/vcl/alpha.hxx:44

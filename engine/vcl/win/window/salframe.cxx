@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/accessibility/MSAAService.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/uno/DeploymentException.hpp>
 #include <officecfg/Office/Common.hxx>
 
 #include <memory>
@@ -31,7 +29,6 @@
 
 #include <svsys.h>
 
-#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/windowserrorstring.hxx>
 
 #include <rtl/bootstrap.hxx>
@@ -76,9 +73,6 @@
 #include <vector>
 
 #include <com/sun/star/uno/Exception.hpp>
-
-#include <oleacc.h>
-#include <com/sun/star/accessibility/XMSAAService.hpp>
 
 #include <time.h>
 
@@ -5484,65 +5478,6 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
     }
 }
 
-static bool
-ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
-{
-    static const bool disable = []
-    {
-        const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED");
-        return pEnv && pEnv[0] == '0';
-    }();
-    if (disable)
-        return false;
-    uno::Reference<accessibility::XMSAAService> xMSAA;
-    if (ImplSalYieldMutexTryToAcquire())
-    {
-        ImplSVData* pSVData = ImplGetSVData();
-
-        // Make sure to launch Accessibility only the following criteria are satisfied
-        // to avoid RFT interrupts regular accessibility processing
-        if ( !pSVData->mxAccessBridge.is() )
-        {
-            css::uno::Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
-            try
-            {
-                pSVData->mxAccessBridge = css::accessibility::MSAAService::create(xContext);
-                SAL_INFO("vcl", "got IAccessible2 bridge");
-            }
-            catch (css::uno::DeploymentException&)
-            {
-                TOOLS_WARN_EXCEPTION("vcl", "got no IAccessible2 bridge");
-                assert(false && "failed to create IAccessible2 bridge");
-            }
-        }
-        xMSAA.set(pSVData->mxAccessBridge, uno::UNO_QUERY);
-        ImplSalYieldMutexRelease();
-    }
-    else
-    {   // tdf#155794: access without locking: hopefully this should be fine
-        // as WM_GETOBJECT is received only on the main thread and by the time in
-        // VCL shutdown when ImplSvData dies there should not be Windows any
-        // more that could receive messages.
-        xMSAA.set(ImplGetSVData()->mxAccessBridge, uno::UNO_QUERY);
-    }
-
-    if ( xMSAA.is() )
-    {
-        sal_Int32 lParam32 = static_cast<sal_Int32>(lParam);
-        sal_uInt32 wParam32 = static_cast<sal_uInt32>(wParam);
-
-        // mhOnSetTitleWnd not set to reasonable value anywhere...
-        if ( lParam32 == OBJID_CLIENT )
-        {
-            nRet = xMSAA->getAccObjectPtr(
-                    reinterpret_cast<sal_Int64>(hWnd), lParam32, wParam32);
-            if (nRet != 0)
-                return true;
-        }
-    }
-    return false;
-}
-
 static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
@@ -6152,14 +6087,6 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
 
         case WM_IME_NOTIFY:
             ImplHandleIMENotify( hWnd, wParam );
-            break;
-
-        case WM_GETOBJECT:
-            // tdf#155794: this must complete without taking SolarMutex
-            if ( ImplHandleGetObject( hWnd, lParam, wParam, nRet ) )
-            {
-                rDef = false;
-            }
             break;
 
         case WM_APPCOMMAND:

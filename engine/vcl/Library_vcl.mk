@@ -116,7 +116,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/accessibility/AccessibleBrowseBoxTable \
     vcl/source/accessibility/AccessibleBrowseBoxTableBase \
     vcl/source/accessibility/AccessibleBrowseBoxTableCell \
-    vcl/source/accessibility/AccessibleTextAttributeHelper \
     vcl/source/accessibility/accessiblebrowseboxcell \
     vcl/source/accessibility/accessibleiconchoicectrl \
     vcl/source/accessibility/accessibleiconchoicectrlentry \

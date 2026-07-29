@@ -524,37 +524,6 @@
         <p><a href="#a__LGPL_version_2_1">Jump to LGPL Version 2.1</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
     </div>
-    <h2>IAccessible2</h2>
-    <p>The following software may be included in this product: IAccessible2 API.</p>
-    <p>IAccessible2 IDL Specification</p>
-    <p>Copyright (c) 2007, 2013 Linux Foundation<br />
-    Copyright (c) 2006 IBM Corporation<br />
-    Copyright (c) 2000, 2006 Sun Microsystems, Inc.<br />
-    All rights reserved.</p>
-    <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
-    following conditions are met:</p>
-    <ol>
-        <li>Redistributions of source code must retain the above copyright notice, this list of conditions and the
-        following disclaimer.</li>
-        <li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
-        following disclaimer in the documentation and/or other materials provided with the distribution.</li>
-        <li>Neither the name of the Linux Foundation nor the names of its contributors may be used to endorse or
-        promote products derived from this software without specific prior written permission.</li>
-    </ol>
-    <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
-    WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-    PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-    INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
-    GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-    OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-    <p>This BSD License conforms to the Open Source Initiative "Simplified BSD License" as published at: <a href=
-    "http://www.opensource.org/licenses/bsd-license.php">http://www.opensource.org/licenses/bsd-license.php</a></p>
-    <p>IAccessible2 is a trademark of the Linux Foundation. The IAccessible2 mark may be used in accordance with the
-    <a href="http://www.linuxfoundation.org/collaborate/workgroups/accessibility/trademark-policy">Linux Foundation
-    Trademark Policy</a> to indicate compliance with the IAccessible2 specification.</p>
-    <p>Find out more about IAccessible2 at <a href=
-    "http://accessibility.linuxfoundation.org/">http://accessibility.linuxfoundation.org/</a>.</p>
     <div class="ICU">
         <h2>ICU</h2>
         <p>The following software may be included in this product: ICU. Use of any of this software is governed by the

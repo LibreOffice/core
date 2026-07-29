@@ -42,7 +42,6 @@
 #include <COKit/COKitTypes.h>
 #include <unotools/resmgr.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include "vcleventlisteners.hxx"
 #include "print.h"
@@ -397,7 +396,6 @@ struct ImplSVData
     oslThreadIdentifier     mnMainThreadId = 0;
     rtl::Reference< vcl::DisplayConnectionDispatch > mxDisplayConnection;
 
-    css::uno::Reference< css::lang::XComponent > mxAccessBridge;
     std::unordered_map< int, OUString > maPaperNames;
     std::unordered_set<CacheOwner*> maCacheOwners;
 

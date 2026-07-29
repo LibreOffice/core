@@ -533,10 +533,6 @@ certain functionality.
 @li @c vcl.window
 @li @c vcl.win.dtrans
 
-@section winaccessibility
-
-@li @c iacc2 - IAccessible2 bridge debug
-
 @section Writer
 
 @li @c sw

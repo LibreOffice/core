@@ -2274,11 +2274,7 @@ bool MiscSettings::GetDisablePrinting() const
 bool MiscSettings::GetEnableATToolSupport()
 {
     static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED");
-    if (pEnv && *pEnv)
-        return pEnv[0] != '0';
-
-    ImplSVData* pSVData = ImplGetSVData();
-    return pSVData->mxAccessBridge.is();
+    return pEnv && *pEnv && pEnv[0] != '0';
 }
 
 void MiscSettings::SetEnableLocalizedDecimalSep( bool bEnable )

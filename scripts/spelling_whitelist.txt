@@ -9340,7 +9340,6 @@ wiese
 wikipedia
 wil
 wilful
-winaccessibility
 winbits
 windowkey
 windowmanager
