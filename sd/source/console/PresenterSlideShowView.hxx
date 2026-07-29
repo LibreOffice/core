@@ -70,7 +70,7 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // CachablePresenterView
-
+    virtual void ActivatePresenterView() override;
     virtual void ReleaseView() override;
 
     // XSlideShowView
@@ -164,10 +164,6 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide) override;
 
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage() override;
-
-    // CachablePresenterView
-
-    virtual void ActivatePresenterView() override;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;

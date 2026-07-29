@@ -291,17 +291,6 @@ css::uno::Reference<css::drawing::XDrawPage> SAL_CALL PresenterSlideShowView::ge
     return mxCurrentSlide;
 }
 
-//----- CachablePresenterView -------------------------------------------------
-
-void PresenterSlideShowView::ReleaseView()
-{
-    if (mxSlideShow.is() && mbIsViewAdded)
-    {
-        mxSlideShow->removeView(this);
-        mbIsViewAdded = false;
-    }
-}
-
 //----- XSlideShowView --------------------------------------------------------
 
 Reference<rendering::XSpriteCanvas> SAL_CALL PresenterSlideShowView::getCanvas()
@@ -627,6 +616,14 @@ void PresenterSlideShowView::ActivatePresenterView()
     }
 }
 
+void PresenterSlideShowView::ReleaseView()
+{
+    if (mxSlideShow.is() && mbIsViewAdded)
+    {
+        mxSlideShow->removeView(this);
+        mbIsViewAdded = false;
+    }
+}
 
 void PresenterSlideShowView::PaintOuterWindow (const awt::Rectangle& rRepaintBox)
 {
