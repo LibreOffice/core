@@ -110,7 +110,6 @@ private:
     typedef ::std::pair<rtl::Reference<sd::framework::AbstractView>,
         rtl::Reference<sd::framework::AbstractPane> > ViewResourceDescriptor;
     typedef ::std::map<OUString, ViewResourceDescriptor> ResourceContainer;
-    std::unique_ptr<ResourceContainer> mpResourceCache;
 
     PresenterViewFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -138,9 +137,6 @@ private:
     rtl::Reference<sd::framework::AbstractView> CreateHelpView(
         const rtl::Reference<sd::framework::ResourceId>& rxViewId) const;
 
-    rtl::Reference<sd::framework::AbstractResource> GetViewFromCache (
-        const rtl::Reference<sd::framework::ResourceId>& rxViewId,
-        const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane) const;
     rtl::Reference<sd::framework::AbstractResource> CreateView(
         const rtl::Reference<sd::framework::ResourceId>& rxViewId,
         const rtl::Reference<sd::framework::AbstractPane>& rxAnchorPane);
