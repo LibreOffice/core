@@ -8,6 +8,7 @@
  */
 
 #include <sal/config.h>
+#include <comphelper/kit.hxx>
 #include <test/unoapi_test.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
@@ -266,6 +267,10 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testScroll)
     // ActiveWindow.ScrollColumn = 30
     // ActiveWindow.ScrollRow = 100
 
+    // The Kit keeps the first visible column and row at 0, the client scrolling by itself
+    if (comphelper::COKit::isActive())
+        return;
+
     loadFromFile(u"VariousTestMacros.xlsm");
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
@@ -405,6 +410,10 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
     cpo::uno::Sequence<cpo::uno::Any> aParams;
     for (const auto& rTestInfo : testInfo)
     {
+        // Window.xls checks scrolling, and the Kit keeps the first visible column and row at 0
+        if (comphelper::COKit::isActive() && rTestInfo.sFileBaseName == "Window.xls")
+            continue;
+
         OUString aFileName = loadFromFile(rTestInfo.sFileBaseName);
 
         // process all events such as OnLoad events etc.  otherwise they tend
