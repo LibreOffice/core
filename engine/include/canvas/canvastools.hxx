@@ -55,7 +55,6 @@ namespace com::sun::star::rendering
     struct RenderState;
     struct Texture;
     struct ViewState;
-    class XCanvas;
     class XGraphicDevice;
     class XPolyPolygon2D;
 }

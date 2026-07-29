@@ -19,7 +19,7 @@
 
 
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/RenderState.hpp>
 #include <vcl/bitmap.hxx>
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
@@ -33,7 +33,7 @@
 #include "outdevstate.hxx"
 #include "mtftools.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-
+#include <XCanvas.hxx>
 
 using namespace ::com::sun::star;
 

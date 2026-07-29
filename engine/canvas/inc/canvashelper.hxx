@@ -21,7 +21,6 @@
 
 #include <com/sun/star/geometry/IntegerPoint2D.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
 
 #include "cachedbitmap.hxx"
 #include "outdevprovider.hxx"
@@ -92,30 +91,30 @@ namespace vclcanvas
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)
         void clear();
-        void drawLine( const css::rendering::XCanvas*      rCanvas,
+        void drawLine( const vclcanvas::XCanvas*      rCanvas,
                        const css::geometry::RealPoint2D&   aStartPoint,
                        const css::geometry::RealPoint2D&   aEndPoint,
                        const css::rendering::ViewState&    viewState,
                        const css::rendering::RenderState&  renderState );
-        void drawPolyPolygon( const css::rendering::XCanvas*        rCanvas,
+        void drawPolyPolygon( const vclcanvas::XCanvas*        rCanvas,
                              const css::uno::Reference<
                                  css::rendering::XPolyPolygon2D >&     xPolyPolygon,
                              const css::rendering::ViewState&      viewState,
                              const css::rendering::RenderState&    renderState );
-        void strokePolyPolygon( const css::rendering::XCanvas*          rCanvas,
+        void strokePolyPolygon( const vclcanvas::XCanvas*          rCanvas,
                                const css::uno::Reference<
                                        css::rendering::XPolyPolygon2D >&   xPolyPolygon,
                                const css::rendering::ViewState&        viewState,
                                const css::rendering::RenderState&      renderState,
                                const css::rendering::StrokeAttributes& strokeAttributes );
         css::uno::Reference< css::rendering::XCachedPrimitive >
-            fillPolyPolygon( const css::rendering::XCanvas*            rCanvas,
+            fillPolyPolygon( const vclcanvas::XCanvas*            rCanvas,
                              const css::uno::Reference<
                                      css::rendering::XPolyPolygon2D >&     xPolyPolygon,
                              const css::rendering::ViewState&          viewState,
                              const css::rendering::RenderState&        renderState );
         css::uno::Reference< css::rendering::XCachedPrimitive >
-            fillTexturedPolyPolygon( const css::rendering::XCanvas*            rCanvas,
+            fillTexturedPolyPolygon( const vclcanvas::XCanvas*            rCanvas,
                                      const css::uno::Reference<
                                              css::rendering::XPolyPolygon2D >& xPolyPolygon,
                                      const css::rendering::ViewState&          viewState,
@@ -124,13 +123,13 @@ namespace vclcanvas
                                              css::rendering::Texture >&        textures );
 
         css::uno::Reference< css::rendering::XCanvasFont >
-            createFont( const css::rendering::XCanvas*         rCanvas,
+            createFont( const vclcanvas::XCanvas*         rCanvas,
                         const css::rendering::FontRequest&     fontRequest,
                         const cpo::uno::Sequence<
                             css::beans::PropertyValue >&       extraFontProperties,
                         const css::geometry::Matrix2D&         fontMatrix );
 
-        void drawText( const css::rendering::XCanvas*       rCanvas,
+        void drawText( const vclcanvas::XCanvas*       rCanvas,
                       const css::rendering::StringContext& text,
                       const css::uno::Reference<
                               css::rendering::XCanvasFont >& xFont,
@@ -138,20 +137,20 @@ namespace vclcanvas
                       const css::rendering::RenderState&   renderState,
                       sal_Int8                                          textDirection );
 
-        void drawTextLayout( const css::rendering::XCanvas*         rCanvas,
+        void drawTextLayout( const vclcanvas::XCanvas*         rCanvas,
                             const css::uno::Reference<
                                     css::rendering::XTextLayout >& laidOutText,
                             const css::rendering::ViewState&       viewState,
                             const css::rendering::RenderState&     renderState );
 
         css::uno::Reference< css::rendering::XCachedPrimitive >
-            drawBitmap( const css::rendering::XCanvas*     rCanvas,
+            drawBitmap( const vclcanvas::XCanvas*     rCanvas,
                         const css::uno::Reference<
                                 css::rendering::XBitmap >& xBitmap,
                         const css::rendering::ViewState&   viewState,
                         const css::rendering::RenderState& renderState );
         css::uno::Reference< css::rendering::XCachedPrimitive >
-            drawBitmapModulated( const css::rendering::XCanvas*        rCanvas,
+            drawBitmapModulated( const vclcanvas::XCanvas*        rCanvas,
                                  const css::uno::Reference<
                                          css::rendering::XBitmap >&        xBitmap,
                                  const css::rendering::ViewState&      viewState,
@@ -204,7 +203,7 @@ namespace vclcanvas
 
     private:
         css::uno::Reference< css::rendering::XCachedPrimitive >
-            implDrawBitmap( const css::rendering::XCanvas*     rCanvas,
+            implDrawBitmap( const vclcanvas::XCanvas*     rCanvas,
                             const css::uno::Reference<
                                     css::rendering::XBitmap >&     xBitmap,
                             const css::rendering::ViewState&   viewState,

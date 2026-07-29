@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the Collabora Office project.
  *
@@ -16,16 +16,39 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#pragma once
 
+#include <sal/config.h>
 
-module com { module sun { module star { module rendering {
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/geometry/Matrix2D.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/rendering/FontRequest.hpp>
+#include <com/sun/star/rendering/RenderState.hpp>
+#include <com/sun/star/rendering/StringContext.hpp>
+#include <com/sun/star/rendering/StrokeAttributes.hpp>
+#include <com/sun/star/rendering/Texture.hpp>
+#include <com/sun/star/rendering/ViewState.hpp>
 
-interface XCanvasFont;
-interface XPolyPolygon2D;
-interface XCachedPrimitive;
-interface XBitmap;
-interface XGraphicDevice;
-interface XTextLayout;
+namespace com::sun::star::rendering
+{
+class XBitmap;
+class XCachedPrimitive;
+class XCanvasFont;
+class XGraphicDevice;
+class XPolyPolygon2D;
+class XTextLayout;
+}
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Sequence.h>
+#include <cppu/macros.hxx>
+#include <sal/types.h>
+
+namespace cpo::uno
+{
+class Type;
+}
 
 /** Central interface for rendering.<p>
 
@@ -86,16 +109,25 @@ interface XTextLayout;
     getDevice() call) - they will then internally
     optimize to the underlying graphics subsystem.<p>
  */
-interface XCanvas : ::com::sun::star::uno::XInterface
+namespace vclcanvas
 {
+class XCanvas : public ::css::uno::XInterface
+{
+public:
+    XCanvas() = default;
+    XCanvas(XCanvas const&) = default;
+    XCanvas(XCanvas&&) = default;
+    XCanvas& operator=(XCanvas const&) = default;
+    XCanvas& operator=(XCanvas&&) = default;
+
     /** Clear the whole canvas area.<p>
 
         This method clears the whole canvas area to the device default
         color (e.g. white for a printer).
      */
-    void                clear();
+    virtual void clear() = 0;
 
-     /** Draw a point in device resolution on the device.
+    /** Draw a point in device resolution on the device.
 
         @param aPoint
         The point to draw.
@@ -110,9 +142,10 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if one of the view and render state parameters are outside the
         specified range.
      */
-    void                drawPoint( [in] ::com::sun::star::geometry::RealPoint2D aPoint, [in] ViewState aViewState, [in] RenderState aRenderState )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
+    virtual void drawPoint(const ::css::geometry::RealPoint2D& aPoint,
+                           const ::css::rendering::ViewState& aViewState,
+                           const ::css::rendering::RenderState& aRenderState)
+        = 0;
 
     /** Draw a line in device resolution width (i.e. one device pixel
         wide).
@@ -133,9 +166,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if one of the view and render state parameters are outside the
         specified range.
      */
-    void                drawLine( [in] ::com::sun::star::geometry::RealPoint2D aStartPoint, [in] ::com::sun::star::geometry::RealPoint2D aEndPoint, [in] ViewState aViewState, [in] RenderState aRenderState )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
+    virtual void drawLine(const ::css::geometry::RealPoint2D& aStartPoint,
+                          const ::css::geometry::RealPoint2D& aEndPoint,
+                          const ::css::rendering::ViewState& aViewState,
+                          const ::css::rendering::RenderState& aRenderState)
+        = 0;
 
     /** Draw a poly-polygon in device resolution line width (i.e. the
         lines are one device pixel wide).
@@ -153,9 +188,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if one of the view and render state parameters are outside the
         specified range.
      */
-    void drawPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
+    virtual void
+    drawPolyPolygon(const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
+                    const ::css::rendering::ViewState& aViewState,
+                    const ::css::rendering::RenderState& aRenderState)
+        = 0;
 
     /** Stroke each polygon of the provided poly-polygon with the
         specified stroke attributes.<p>
@@ -183,9 +220,12 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if one of the view and render state parameters are outside the
         specified range.
      */
-    void strokePolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
+    virtual void
+    strokePolyPolygon(const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
+                      const ::css::rendering::ViewState& aViewState,
+                      const ::css::rendering::RenderState& aRenderState,
+                      const ::css::rendering::StrokeAttributes& aStrokeAttributes)
+        = 0;
 
     /** Fill the given poly-polygon.<p>
 
@@ -208,9 +248,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if one of the view and render state parameters are outside the
         specified range.
      */
-    XCachedPrimitive    fillPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
+    virtual ::css::uno::Reference<::css::rendering::XCachedPrimitive>
+    fillPolyPolygon(const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
+                    const ::css::rendering::ViewState& aViewState,
+                    const ::css::rendering::RenderState& aRenderState)
+        = 0;
 
     /** Fill the given poly-polygon with a texture.<p>
 
@@ -237,9 +279,12 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if one of the view and render state parameters are outside the
         specified range.
     */
-    XCachedPrimitive    fillTexturedPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] sequence<Texture> xTextures )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
+    virtual ::css::uno::Reference<::css::rendering::XCachedPrimitive> fillTexturedPolyPolygon(
+        const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
+        const ::css::rendering::ViewState& aViewState,
+        const ::css::rendering::RenderState& aRenderState,
+        const ::cpo::uno::Sequence<::css::rendering::Texture>& xTextures)
+        = 0;
 
     /** Create a suitable font for the specified font description.
 
@@ -263,9 +308,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @throws com::sun::star::lang::IllegalArgumentException
         if one of the parameters is not within the allowed range.
      */
-    XCanvasFont         createFont( [in] FontRequest aFontRequest, [in] sequence< ::com::sun::star::beans::PropertyValue > aExtraFontProperties, [in] ::com::sun::star::geometry::Matrix2D aFontMatrix )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
+    virtual ::css::uno::Reference<::css::rendering::XCanvasFont>
+    createFont(const ::css::rendering::FontRequest& aFontRequest,
+               const ::cpo::uno::Sequence<::css::beans::PropertyValue>& aExtraFontProperties,
+               const ::css::geometry::Matrix2D& aFontMatrix)
+        = 0;
 
     /** Draw the text given by the substring of the specified string
         with the given font.<p>
@@ -299,9 +346,12 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if one of the view and render state parameters are outside the
         specified range.
      */
-    void drawText( [in] StringContext aText, [in] XCanvasFont xFont, [in] ViewState aViewState, [in] RenderState aRenderState, [in] byte nTextDirection )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
+    virtual void drawText(const ::css::rendering::StringContext& aText,
+                          const ::css::uno::Reference<::css::rendering::XCanvasFont>& xFont,
+                          const ::css::rendering::ViewState& aViewState,
+                          const ::css::rendering::RenderState& aRenderState,
+                          ::sal_Int8 nTextDirection)
+        = 0;
 
     /** Draw the formatted text given by the text layout.<p>
 
@@ -328,9 +378,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if one of the view and render state parameters are outside the
         specified range.
      */
-    void drawTextLayout( [in] XTextLayout xLayoutetText, [in] ViewState aViewState, [in] RenderState aRenderState )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
+    virtual void
+    drawTextLayout(const ::css::uno::Reference<::css::rendering::XTextLayout>& xLayoutetText,
+                   const ::css::rendering::ViewState& aViewState,
+                   const ::css::rendering::RenderState& aRenderState)
+        = 0;
 
     /** Render the given bitmap.<p>
 
@@ -356,8 +408,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         if one of the view and render state parameters are outside the
         specified range.
      */
-    XCachedPrimitive    drawBitmap( [in] XBitmap xBitmap, [in] ViewState aViewState, [in] RenderState aRenderState )
-        raises (com::sun::star::lang::IllegalArgumentException);
+    virtual ::css::uno::Reference<::css::rendering::XCachedPrimitive>
+    drawBitmap(const ::css::uno::Reference<::css::rendering::XBitmap>& xBitmap,
+               const ::css::rendering::ViewState& aViewState,
+               const ::css::rendering::RenderState& aRenderState)
+        = 0;
 
     /** Request the associated graphic device for this canvas.<p>
 
@@ -368,9 +423,36 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return the associated XGraphicDevice.
      */
-    XGraphicDevice          getDevice();
+    virtual ::css::uno::Reference<::css::rendering::XGraphicDevice> getDevice() = 0;
+
+    static inline ::cpo::uno::Type const& static_type(void* = nullptr);
+
+protected:
+    ~XCanvas() noexcept {} // avoid warnings about virtual members and non-virtual dtor
 };
 
-}; }; }; };
+inline ::cpo::uno::Type const&
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::vclcanvas::XCanvas const*)
+{
+    static typelib_TypeDescriptionReference* the_type = nullptr;
+    if (!the_type)
+    {
+        typelib_static_type_init(&the_type, typelib_TypeClass_INTERFACE, "vclcanvas.XCanvas");
+    }
+    return *reinterpret_cast<::cpo::uno::Type*>(&the_type);
+}
+}
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+::cpo::uno::Type const& ::vclcanvas::XCanvas::static_type(SAL_UNUSED_PARAMETER void*)
+{
+    return ::cppu::UnoType<::vclcanvas::XCanvas>::get();
+}
+
+namespace cppu::detail
+{
+template <> struct IsUnoInterfaceType<::vclcanvas::XCanvas> : ::std::true_type
+{
+};
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

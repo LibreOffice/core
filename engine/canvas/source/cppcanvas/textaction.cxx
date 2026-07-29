@@ -22,7 +22,6 @@
 
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -661,7 +660,7 @@ namespace cppcanvas
                 virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText ) const override;
 
                 geometry::RealRectangle2D queryTextBounds() const;
-                css::uno::Reference<css::rendering::XPolyPolygon2D> queryTextBounds(const uno::Reference<rendering::XCanvas>& rCanvas) const;
+                css::uno::Reference<css::rendering::XPolyPolygon2D> queryTextBounds(const uno::Reference<vclcanvas::XCanvas>& rCanvas) const;
 
                 // TODO(P2): This is potentially a real mass object
                 // (every character might be a separate TextAction),
@@ -726,7 +725,7 @@ namespace cppcanvas
             bool EffectTextAction::operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool /*bNormalText*/ ) const
             {
                 const rendering::ViewState aViewState( mpCanvas->getViewState() );
-                const uno::Reference< rendering::XCanvas > aCanvas( mpCanvas->getUNOCanvas() );
+                const uno::Reference< vclcanvas::XCanvas > aCanvas( mpCanvas->getUNOCanvas() );
 
                 //rhbz#1589029 non-transparent text fill background support
                 if (rTextFillColor != COL_AUTO)
@@ -794,7 +793,7 @@ namespace cppcanvas
                 return xTextLayout->queryTextBounds();
             }
 
-            css::uno::Reference<css::rendering::XPolyPolygon2D> EffectTextAction::queryTextBounds(const uno::Reference<rendering::XCanvas>& rCanvas) const
+            css::uno::Reference<css::rendering::XPolyPolygon2D> EffectTextAction::queryTextBounds(const uno::Reference<vclcanvas::XCanvas>& rCanvas) const
             {
                 auto aTextBounds = queryTextBounds();
                 auto aB2DBounds = ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aTextBounds);
@@ -955,7 +954,7 @@ namespace cppcanvas
                 // TextRenderer interface
                 virtual bool operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText ) const override;
 
-                css::uno::Reference<css::rendering::XPolyPolygon2D> queryTextBounds(const uno::Reference<rendering::XCanvas>& rCanvas) const;
+                css::uno::Reference<css::rendering::XPolyPolygon2D> queryTextBounds(const uno::Reference<vclcanvas::XCanvas>& rCanvas) const;
 
                 // TODO(P2): This is potentially a real mass object
                 // (every character might be a separate TextAction),
@@ -1016,7 +1015,7 @@ namespace cppcanvas
                                  rState, nullptr );
             }
 
-            css::uno::Reference<css::rendering::XPolyPolygon2D> EffectTextArrayAction::queryTextBounds(const uno::Reference<rendering::XCanvas>& rCanvas) const
+            css::uno::Reference<css::rendering::XPolyPolygon2D> EffectTextArrayAction::queryTextBounds(const uno::Reference<vclcanvas::XCanvas>& rCanvas) const
             {
                 const geometry::RealRectangle2D aTextBounds(mxTextLayout->queryTextBounds());
                 auto aB2DBounds = ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aTextBounds);
@@ -1027,7 +1026,7 @@ namespace cppcanvas
             bool EffectTextArrayAction::operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText) const
             {
                 const rendering::ViewState aViewState( mpCanvas->getViewState() );
-                const uno::Reference< rendering::XCanvas > aCanvas( mpCanvas->getUNOCanvas() );
+                const uno::Reference< vclcanvas::XCanvas > aCanvas( mpCanvas->getUNOCanvas() );
 
                 //rhbz#1589029 non-transparent text fill background support
                 if (rTextFillColor != COL_AUTO)
@@ -1070,7 +1069,7 @@ namespace cppcanvas
             class EffectTextArrayRenderHelper : public TextRenderer
             {
             public:
-                EffectTextArrayRenderHelper( const uno::Reference< rendering::XCanvas >&        rCanvas,
+                EffectTextArrayRenderHelper( const uno::Reference< vclcanvas::XCanvas >&        rCanvas,
                                              const uno::Reference< rendering::XTextLayout >&    rTextLayout,
                                              const TextLinesHelper&                             rTextLinesHelper,
                                              const rendering::ViewState&                        rViewState ) :
@@ -1114,7 +1113,7 @@ namespace cppcanvas
                     return ::canvastools::xPolyPolygonFromB2DPolygon(mrCanvas->getDevice(), aTextBoundsPoly);
                 }
 
-                const uno::Reference< rendering::XCanvas >&         mrCanvas;
+                const uno::Reference< vclcanvas::XCanvas >&         mrCanvas;
                 const uno::Reference< rendering::XTextLayout >&     mrTextLayout;
                 const TextLinesHelper&                              mrTextLinesHelper;
                 const rendering::ViewState&                         mrViewState;
@@ -1148,7 +1147,7 @@ namespace cppcanvas
                 // create and setup local line polygon
                 // ===================================
 
-                uno::Reference< rendering::XCanvas > xCanvas( mpCanvas->getUNOCanvas() );
+                uno::Reference< vclcanvas::XCanvas > xCanvas( mpCanvas->getUNOCanvas() );
                 const rendering::ViewState           aViewState( mpCanvas->getViewState() );
 
                 TextLinesHelper aHelper = maTextLinesHelper;
@@ -1294,7 +1293,7 @@ namespace cppcanvas
             bool OutlineAction::operator()( const rendering::RenderState& rRenderState, const ::Color& /*rTextFillColor*/, bool /*bNormalText*/ ) const
             {
                 const rendering::ViewState                  aViewState( mpCanvas->getViewState() );
-                const uno::Reference< rendering::XCanvas >  xCanvas( mpCanvas->getUNOCanvas() );
+                const uno::Reference< vclcanvas::XCanvas >  xCanvas( mpCanvas->getUNOCanvas() );
 
                 if (mxBackgroundFillPoly.is())
                 {

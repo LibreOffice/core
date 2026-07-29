@@ -31,7 +31,7 @@ namespace basegfx
     class B2DHomMatrix;
 }
 
-namespace com::sun::star::rendering
+namespace vclcanvas
 {
     class  XCanvas;
 }
@@ -55,7 +55,7 @@ namespace cppcanvas
          */
         static constexpr auto ANTIALIASING_EXTRA_SIZE=2;
 
-        explicit Canvas( css::uno::Reference< css::rendering::XCanvas > xCanvas );
+        explicit Canvas( css::uno::Reference< vclcanvas::XCanvas > xCanvas );
         ~Canvas();
 
         Canvas(Canvas const &) = default;
@@ -65,13 +65,13 @@ namespace cppcanvas
 
         void setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
 
-        const css::uno::Reference< css::rendering::XCanvas > & getUNOCanvas() const { return mxCanvas; }
+        const css::uno::Reference< vclcanvas::XCanvas > & getUNOCanvas() const { return mxCanvas; }
 
         const css::rendering::ViewState & getViewState() const { return maViewState; }
 
     private:
         mutable css::rendering::ViewState                    maViewState;
-        const css::uno::Reference< css::rendering::XCanvas > mxCanvas;
+        const css::uno::Reference< vclcanvas::XCanvas > mxCanvas;
     };
 
     typedef std::shared_ptr< Canvas > CanvasSharedPtr;

@@ -18,14 +18,13 @@
  */
 
 
-#include <com/sun/star/rendering/XCanvas.hpp>
-
 #include <sal/types.h>
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <com/sun/star/rendering/RenderState.hpp>
 #include <canvas/canvastools.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -35,7 +34,7 @@
 #include "outdevstate.hxx"
 #include <utility>
 #include "mtftools.hxx"
-
+#include <XCanvas.hxx>
 
 using namespace ::com::sun::star;
 

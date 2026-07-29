@@ -27,7 +27,6 @@
 #include <canvas/canvastools.hxx>
 
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <vcl/metaact.hxx>
 #include <vcl/svapp.hxx>
@@ -53,6 +52,7 @@
 #if OSL_DEBUG_LEVEL > 2
 #include <vcl/canvastools.hxx>
 #endif
+#include <XCanvas.hxx>
 
 using namespace ::com::sun::star;
 

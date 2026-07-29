@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <osl/diagnose.h>
 #include <vcl/window.hxx>
 #include <vcl/canvastools.hxx>
@@ -33,7 +32,7 @@ using namespace ::com::sun::star;
 
 namespace cppcanvas
 {
-    CanvasSharedPtr VCLFactory::createCanvas( const uno::Reference< rendering::XCanvas >& xCanvas )
+    CanvasSharedPtr VCLFactory::createCanvas( const uno::Reference< vclcanvas::XCanvas >& xCanvas )
     {
         return std::make_shared<Canvas>( xCanvas );
     }
@@ -50,7 +49,7 @@ namespace cppcanvas
             GDIMetaFile& rMetaFile,
             const basegfx::B2DHomMatrix& rTransform2)
     {
-        css::uno::Reference<css::rendering::XCanvas> rCanvas = new vclcanvas::Canvas(pOutDev);
+        css::uno::Reference<vclcanvas::XCanvas> rCanvas = new vclcanvas::Canvas(pOutDev);
         cppcanvas::CanvasSharedPtr cppCanvas = cppcanvas::VCLFactory::createCanvas(rCanvas);
         // I got these matrices from a breakpoint in drawing the polyline, and walking up
         // the stack to the canvas code.

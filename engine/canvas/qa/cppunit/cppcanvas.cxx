@@ -16,7 +16,6 @@
 #include <vcl/metaact.hxx>
 
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <vclfactory.hxx>
 #include <canvas.hxx>
@@ -70,7 +69,7 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
 {
     ScopedVclPtrInstance<WorkWindow> pWin(nullptr, WB_STDWORK);
 
-    uno::Reference<rendering::XCanvas> xCanvas = new vclcanvas::Canvas(pWin->GetOutDev());
+    uno::Reference<vclcanvas::XCanvas> xCanvas = new vclcanvas::Canvas(pWin->GetOutDev());
     CPPUNIT_ASSERT(xCanvas.is());
 
     // a huge canvas ...
@@ -79,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
         vcl::unotools::integerSize2DFromSize(aSize));
     CPPUNIT_ASSERT(xBitmap.is());
 
-    uno::Reference<rendering::XCanvas> xBitmapCanvas(xBitmap, uno::UNO_QUERY);
+    uno::Reference<vclcanvas::XCanvas> xBitmapCanvas(xBitmap, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xBitmapCanvas.is());
 
     {
@@ -133,7 +132,7 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testTdf155810)
 
         aOutputMetaFile.Record(pDev.get());
 
-        uno::Reference<rendering::XCanvas> xCanvas = new vclcanvas::Canvas(pDev.get());
+        uno::Reference<vclcanvas::XCanvas> xCanvas = new vclcanvas::Canvas(pDev.get());
         CPPUNIT_ASSERT(xCanvas.is());
         auto pCanvas = cppcanvas::VCLFactory::createCanvas(xCanvas);
 

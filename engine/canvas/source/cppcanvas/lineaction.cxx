@@ -21,19 +21,18 @@
 #include "lineaction.hxx"
 #include "outdevstate.hxx"
 
-#include <com/sun/star/rendering/XCanvas.hpp>
-
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <canvas/canvastools.hxx>
 #include <sal/log.hxx>
+#include <com/sun/star/rendering/RenderState.hpp>
 
 #include "canvas.hxx"
 #include <utility>
 
 #include "mtftools.hxx"
-
+#include <XCanvas.hxx>
 
 using namespace ::com::sun::star;
 

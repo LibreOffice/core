@@ -59,7 +59,7 @@ sal_Int64 MtfRenderer::draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fS
     if( !xBitmap )
         return 0;
 
-    uno::Reference< rendering::XCanvas > xBitmapCanvas( xBitmap, uno::UNO_QUERY );
+    uno::Reference< vclcanvas::XCanvas > xBitmapCanvas( xBitmap, uno::UNO_QUERY );
     if( !xBitmapCanvas )
         return 0;
 

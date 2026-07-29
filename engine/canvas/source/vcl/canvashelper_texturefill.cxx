@@ -33,6 +33,7 @@
 #include <basegfx/utils/lerp.hxx>
 #include <basegfx/utils/tools.hxx>
 #include <com/sun/star/rendering/TexturingMode.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/poly.hxx>
@@ -575,7 +576,7 @@ namespace vclcanvas
         }
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          pCanvas,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const vclcanvas::XCanvas*                          pCanvas,
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                          const rendering::ViewState&                        viewState,
                                                                                          const rendering::RenderState&                      renderState,

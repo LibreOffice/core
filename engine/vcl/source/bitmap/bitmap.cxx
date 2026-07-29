@@ -50,7 +50,6 @@
 #include <bitmap/impoctree.hxx>
 #include <bitmap/Octree.hxx>
 #include <bitmap/BlendFrameCache.hxx>
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <o3tl/any.hxx>
 #include <o3tl/environment.hxx>

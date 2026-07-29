@@ -159,7 +159,7 @@ namespace vclcanvas
                                      rOutDev.GetOutputSizePixel()) );
     }
 
-    void CanvasHelper::drawLine( const rendering::XCanvas*      ,
+    void CanvasHelper::drawLine( const vclcanvas::XCanvas*      ,
                                  const geometry::RealPoint2D&   aStartRealPoint2D,
                                  const geometry::RealPoint2D&   aEndRealPoint2D,
                                  const rendering::ViewState&    viewState,
@@ -181,7 +181,7 @@ namespace vclcanvas
         mpOutDevProvider->getOutDev().DrawLine( aStartPoint, aEndPoint );
     }
 
-    void CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          ,
+    void CanvasHelper::drawPolyPolygon( const vclcanvas::XCanvas*                          ,
                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                          const rendering::ViewState&                        viewState,
                                          const rendering::RenderState&                      renderState )
@@ -221,7 +221,7 @@ namespace vclcanvas
         }
     }
 
-    void CanvasHelper::strokePolyPolygon( const rendering::XCanvas*                            ,
+    void CanvasHelper::strokePolyPolygon( const vclcanvas::XCanvas*                            ,
                                            const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
                                            const rendering::ViewState&                          viewState,
                                            const rendering::RenderState&                        renderState,
@@ -334,7 +334,7 @@ namespace vclcanvas
         }
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          ,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const vclcanvas::XCanvas*                          ,
                                                                                  const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                  const rendering::ViewState&                        viewState,
                                                                                  const rendering::RenderState&                      renderState )
@@ -368,7 +368,7 @@ namespace vclcanvas
         return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
-    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                        ,
+    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const vclcanvas::XCanvas*                        ,
                                                                        const rendering::FontRequest&                    fontRequest,
                                                                        const cpo::uno::Sequence< beans::PropertyValue >&     extraFontProperties,
                                                                        const geometry::Matrix2D&                        fontMatrix )
@@ -384,7 +384,7 @@ namespace vclcanvas
         return uno::Reference< rendering::XCanvasFont >();
     }
 
-    void CanvasHelper::drawText( const rendering::XCanvas*                         ,
+    void CanvasHelper::drawText( const vclcanvas::XCanvas*                         ,
                                   const rendering::StringContext&                   text,
                                   const uno::Reference< rendering::XCanvasFont >&   xFont,
                                   const rendering::ViewState&                       viewState,
@@ -430,7 +430,7 @@ namespace vclcanvas
         }
     }
 
-    void CanvasHelper::drawTextLayout( const rendering::XCanvas*                       ,
+    void CanvasHelper::drawTextLayout( const vclcanvas::XCanvas*                       ,
                                         const uno::Reference< rendering::XTextLayout >& xLayoutedText,
                                         const rendering::ViewState&                     viewState,
                                         const rendering::RenderState&                   renderState )
@@ -467,7 +467,7 @@ namespace vclcanvas
         }
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::implDrawBitmap( const rendering::XCanvas*                   pCanvas,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::implDrawBitmap( const vclcanvas::XCanvas*                   pCanvas,
                                                                                 const uno::Reference< rendering::XBitmap >& xBitmap,
                                                                                 const rendering::ViewState&                 viewState,
                                                                                 const rendering::RenderState&               renderState,
@@ -643,7 +643,7 @@ namespace vclcanvas
                                       // change refcount (as this is
                                       // ~invisible to client code,
                                       // still logically const)
-                                      const_cast< rendering::XCanvas* >(pCanvas)) );
+                                      const_cast< vclcanvas::XCanvas* >(pCanvas)) );
             }
         }
 
@@ -651,7 +651,7 @@ namespace vclcanvas
         return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas*                   pCanvas,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const vclcanvas::XCanvas*                   pCanvas,
                                                                             const uno::Reference< rendering::XBitmap >& xBitmap,
                                                                             const rendering::ViewState&                 viewState,
                                                                             const rendering::RenderState&               renderState )
@@ -663,7 +663,7 @@ namespace vclcanvas
                                false );
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const rendering::XCanvas*                      pCanvas,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const vclcanvas::XCanvas*                      pCanvas,
                                                                                      const uno::Reference< rendering::XBitmap >&    xBitmap,
                                                                                      const rendering::ViewState&                    viewState,
                                                                                      const rendering::RenderState&                  renderState )

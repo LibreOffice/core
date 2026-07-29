@@ -21,7 +21,6 @@
 
 #include <framework/AbstractResource.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <comphelper/compbase.hxx>
 #include <sddllapi.h>
 

@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <basegfx/utils/canvastools.hxx>
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/RepaintResult.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
@@ -40,7 +39,7 @@ namespace vclcanvas
                                 const GraphicAttr&                          rAttr,
                                 const rendering::ViewState&                 rUsedViewState,
                                 rendering::RenderState                      aUsedRenderState,
-                                const uno::Reference< rendering::XCanvas >& rTarget ) :
+                                const uno::Reference< vclcanvas::XCanvas >& rTarget ) :
         CachedBitmap_Base(),
         maUsedViewState( rUsedViewState ),
         mxTarget( rTarget ),

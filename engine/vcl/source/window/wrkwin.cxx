@@ -24,7 +24,6 @@
 // declare system types in sysdata.hxx
 #include <vcl/sysdata.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <svdata.hxx>
 #include <salframe.hxx>

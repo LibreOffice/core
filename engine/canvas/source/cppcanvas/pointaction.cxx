@@ -18,8 +18,6 @@
  */
 
 
-#include <com/sun/star/rendering/XCanvas.hpp>
-
 #include <sal/types.h>
 #include <sal/log.hxx>
 #include <utility>
@@ -29,12 +27,13 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <canvas/canvastools.hxx>
+#include <com/sun/star/rendering/RenderState.hpp>
 
 #include "pointaction.hxx"
 #include "outdevstate.hxx"
 #include "canvas.hxx"
 #include "mtftools.hxx"
-
+#include <XCanvas.hxx>
 
 using namespace ::com::sun::star;
 

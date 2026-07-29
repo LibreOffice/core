@@ -28,7 +28,7 @@ class Bitmap;
 
 class GDIMetaFile;
 
-namespace com::sun::star::rendering
+namespace vclcanvas
 {
     class  XCanvas;
 }
@@ -48,7 +48,7 @@ namespace cppcanvas
     class VCLCANVAS_DLLPUBLIC VCLFactory
     {
     public:
-        static CanvasSharedPtr   createCanvas( const css::uno::Reference< css::rendering::XCanvas >& xCanvas );
+        static CanvasSharedPtr   createCanvas( const css::uno::Reference< vclcanvas::XCanvas >& xCanvas );
 
         /** Create a renderer object from a Metafile
 

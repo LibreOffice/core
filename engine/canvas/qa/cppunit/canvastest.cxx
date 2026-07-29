@@ -20,7 +20,6 @@
 #include <unopolypolygon.hxx>
 #include <canvas.hxx>
 
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 
@@ -29,7 +28,7 @@ using namespace ::com::sun::star;
 class CanvasTest : public test::BootstrapFixture
 {
     VclPtr<VirtualDevice> mVclDevice;
-    uno::Reference<rendering::XCanvas> mCanvas;
+    uno::Reference<vclcanvas::XCanvas> mCanvas;
     uno::Reference<rendering::XGraphicDevice> mDevice;
     rendering::ViewState mViewState;
     rendering::RenderState mRenderState;
@@ -71,7 +70,7 @@ public:
     virtual void tearDown() override
     {
         mVclDevice.disposeAndClear();
-        mCanvas = uno::Reference<rendering::XCanvas>();
+        mCanvas = uno::Reference<vclcanvas::XCanvas>();
         mDevice = uno::Reference<rendering::XGraphicDevice>();
         BootstrapFixture::tearDown();
     }

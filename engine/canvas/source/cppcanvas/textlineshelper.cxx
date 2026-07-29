@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -17,6 +16,7 @@
 #include <utility>
 #include "textlineshelper.hxx"
 #include "mtftools.hxx"
+#include <XCanvas.hxx>
 
 using namespace ::com::sun::star;
 
@@ -84,7 +84,7 @@ void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo
 void TextLinesHelper::render(const rendering::RenderState& rRenderState, bool bNormalText) const
 {
     const rendering::ViewState aViewState(mpCanvas->getViewState());
-    const uno::Reference<rendering::XCanvas> xCanvas(mpCanvas->getUNOCanvas());
+    const uno::Reference<vclcanvas::XCanvas> xCanvas(mpCanvas->getUNOCanvas());
     rendering::StrokeAttributes aStrokeAttributes;
     aStrokeAttributes.JoinType = rendering::PathJoinType::ROUND;
 

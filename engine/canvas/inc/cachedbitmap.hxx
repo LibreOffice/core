@@ -26,7 +26,7 @@
 #include <comphelper/compbase.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <memory>
-
+#include "XCanvas.hxx"
 
 /* Definition of CachedBitmap class */
 
@@ -48,7 +48,7 @@ namespace vclcanvas
                       const GraphicAttr&                              rAttr,
                       const css::rendering::ViewState&                rUsedViewState,
                       css::rendering::RenderState                     aUsedRenderState,
-                      const css::uno::Reference< css::rendering::XCanvas >&   rTarget );
+                      const css::uno::Reference< vclcanvas::XCanvas >&   rTarget );
 
         /// Dispose all internal references
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
@@ -63,7 +63,7 @@ namespace vclcanvas
 
     private:
         css::rendering::ViewState                         maUsedViewState;
-        css::uno::Reference< css::rendering::XCanvas >    mxTarget;
+        css::uno::Reference< vclcanvas::XCanvas >                      mxTarget;
         GraphicObjectSharedPtr                                         mpGraphicObject;
         const css::rendering::RenderState                              maRenderState;
         const ::Point                                                  maPoint;

@@ -23,8 +23,6 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <osl/diagnose.h>
 
-#include <com/sun/star/rendering/XCanvas.hpp>
-
 #include <canvas/canvastools.hxx>
 #include <utility>
 
@@ -36,7 +34,7 @@ using namespace ::com::sun::star;
 namespace cppcanvas
 {
 
-        Canvas::Canvas( uno::Reference< rendering::XCanvas > xCanvas ) :
+        Canvas::Canvas( uno::Reference< vclcanvas::XCanvas > xCanvas ) :
             mxCanvas(std::move( xCanvas ))
         {
             OSL_ENSURE( mxCanvas.is(), "Canvas::Canvas() invalid XCanvas" );

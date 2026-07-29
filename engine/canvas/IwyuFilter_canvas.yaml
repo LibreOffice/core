@@ -9,9 +9,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/rendering/XCachedPrimitive.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    canvas/source/vcl/cachedbitmap.cxx:
-    # Actually in use
-    - com/sun/star/rendering/XCanvas.hpp
     canvas/inc/unopolypolygon.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp

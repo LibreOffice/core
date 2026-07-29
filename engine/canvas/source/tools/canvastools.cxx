@@ -36,12 +36,13 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
+#include <com/sun/star/rendering/Texture.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <sal/log.hxx>

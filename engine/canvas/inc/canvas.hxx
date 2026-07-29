@@ -22,7 +22,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 
@@ -43,7 +42,7 @@ class OutputDevice;
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvas,
+    typedef ::cppu::WeakComponentImplHelper< vclcanvas::XCanvas,
                                              css::rendering::XBitmap,
                                              css::rendering::XGraphicDevice,
                                              css::util::XUpdatable,
