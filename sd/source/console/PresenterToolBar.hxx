@@ -63,8 +63,6 @@ class PresenterToolBar
       public CachablePresenterView
 {
 public:
-    typedef ::std::function<void ()> Action;
-
     enum Anchor { Left, Center };
 
     PresenterToolBar (
