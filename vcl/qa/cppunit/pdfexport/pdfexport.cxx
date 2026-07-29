@@ -1363,6 +1363,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_1)
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (pType && pType->GetValue() == "Font")
         {
+            // ToUnicode is on the Type 0 font, not its descendant CIDFont
+            auto pSubtype
+                = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+            if (!pSubtype || pSubtype->GetValue() != "Type0")
+                continue;
+
             auto pToUnicodeRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(
                 pObject->Lookup("ToUnicode"_ostr));
             CPPUNIT_ASSERT(pToUnicodeRef);
@@ -1434,6 +1440,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2)
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
         if (pType && pType->GetValue() == "Font")
         {
+            // ToUnicode is on the Type 0 font, not its descendant CIDFont
+            auto pSubtype
+                = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+            if (!pSubtype || pSubtype->GetValue() != "Type0")
+                continue;
+
             auto pToUnicodeRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(
                 pObject->Lookup("ToUnicode"_ostr));
             CPPUNIT_ASSERT(pToUnicodeRef);
@@ -1766,6 +1778,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_1)
             auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
             if (pType && pType->GetValue() == "Font")
             {
+                // ToUnicode is on the Type 0 font, not its descendant CIDFont
+                auto pSubtype
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+                if (!pSubtype || pSubtype->GetValue() != "Type0")
+                    continue;
+
                 auto pName
                     = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"_ostr));
                 auto aName = pName->GetValue().copy(7); // skip the subset id
@@ -1867,6 +1885,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_2)
             auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
             if (pType && pType->GetValue() == "Font")
             {
+                // ToUnicode is on the Type 0 font, not its descendant CIDFont
+                auto pSubtype
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+                if (!pSubtype || pSubtype->GetValue() != "Type0")
+                    continue;
+
                 auto pName
                     = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"_ostr));
                 CPPUNIT_ASSERT(pName);
@@ -1968,6 +1992,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_3)
             auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
             if (pType && pType->GetValue() == "Font")
             {
+                // ToUnicode is on the Type 0 font, not its descendant CIDFont
+                auto pSubtype
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+                if (!pSubtype || pSubtype->GetValue() != "Type0")
+                    continue;
+
                 auto pName
                     = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"_ostr));
                 auto aName = pName->GetValue().copy(7); // skip the subset id

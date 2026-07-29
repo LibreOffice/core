@@ -29,6 +29,7 @@ endif
 # TODO, attempt upstream
 pdfium_patches += ofz451333752.patch
 pdfium_patches += extractpatterns.patch
+pdfium_patches += charbboxinflation.patch.1
 # Hide bundled FreeType symbols
 pdfium_patches += freetype-hidden-visibility.patch
 

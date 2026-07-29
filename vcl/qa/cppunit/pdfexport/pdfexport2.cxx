@@ -5324,6 +5324,68 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155161)
     CPPUNIT_ASSERT_EQUAL(aExpected, aFontNames);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTrueTypeCompositeFont)
+{
+    // Subsets of fonts with glyf outlines are embedded as composite fonts, so
+    // that the subset no longer needs a cmap of our own making.
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"SimpleTestDocument.fodt");
+    save(TestFilter::PDF_WRITER);
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    vcl::filter::PDFObjectElement* pType0 = nullptr;
+    vcl::filter::PDFObjectElement* pCIDFont = nullptr;
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (!pType || pType->GetValue() != "Font")
+            continue;
+        auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+        CPPUNIT_ASSERT(pSubtype);
+        if (pSubtype->GetValue() == "Type0")
+            pType0 = pObject;
+        else if (pSubtype->GetValue() == "CIDFontType2")
+            pCIDFont = pObject;
+    }
+    CPPUNIT_ASSERT(pType0);
+    CPPUNIT_ASSERT(pCIDFont);
+
+    // The CIDs are the glyph IDs of the subset
+    auto pCIDToGIDMap
+        = dynamic_cast<vcl::filter::PDFNameElement*>(pCIDFont->Lookup("CIDToGIDMap"_ostr));
+    CPPUNIT_ASSERT(pCIDToGIDMap);
+    CPPUNIT_ASSERT_EQUAL("Identity"_ostr, pCIDToGIDMap->GetValue());
+
+    // and it is not a simple font any more
+    CPPUNIT_ASSERT(!pType0->Lookup("FirstChar"_ostr));
+    CPPUNIT_ASSERT(!pType0->Lookup("Widths"_ostr));
+
+    // The font program is still a TrueType one
+    auto pDescriptorRef
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pCIDFont->Lookup("FontDescriptor"_ostr));
+    CPPUNIT_ASSERT(pDescriptorRef);
+    auto pDescriptor = pDescriptorRef->LookupObject();
+    CPPUNIT_ASSERT(pDescriptor);
+    CPPUNIT_ASSERT(pDescriptor->Lookup("FontFile2"_ostr));
+
+    // and the text can still be extracted
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pPdfTextPage);
+    int nChars = pPdfTextPage->countChars();
+    std::vector<sal_uInt32> aChars(nChars);
+    for (int i = 0; i < nChars; i++)
+        aChars[i] = pPdfTextPage->getUnicode(i);
+    CPPUNIT_ASSERT_EQUAL(u"This is a test document."_ustr, OUString(aChars.data(), aChars.size()));
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPDFA1CIDSet)
 {
     // PDF/A-1 requires a CIDSet listing the CIDs of the font program.
