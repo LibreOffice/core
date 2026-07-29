@@ -420,12 +420,7 @@ bool LogicalFontInstance::DrawGlyph(hb_font_t* pHbFont, sal_GlyphId nGlyph,
         hb_draw_funcs_set_close_path_func(m_pHbDrawFuncs, close_path_func, pUserData, nullptr);
     }
 
-#if HB_VERSION_ATLEAST(11, 2, 0)
     return hb_font_draw_glyph_or_fail(pHbFont, nGlyph, m_pHbDrawFuncs, &rPoly);
-#else
-    hb_font_draw_glyph(pHbFont, nGlyph, m_pHbDrawFuncs, &rPoly);
-    return true;
-#endif
 }
 
 basegfx::B2DPolyPolygon LogicalFontInstance::GetGlyphOutlineUntransformed(sal_GlyphId nGlyph) const
