@@ -117,7 +117,6 @@ public: // TODO: make data members private
     void GetFontMetric(FontMetricDataRef const&);
     bool GetGlyphBoundRect(sal_GlyphId, basegfx::B2DRectangle&, bool) const;
     bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const;
-    SAL_DLLPRIVATE basegfx::B2DPolyPolygon GetGlyphOutlineUntransformed(sal_GlyphId) const;
 
     sal_GlyphId GetGlyphIndex(uint32_t, uint32_t = 0) const;
 
@@ -140,7 +139,6 @@ protected:
     virtual void ImplInitHbFont(hb_font_t*) {}
 
 private:
-    SAL_DLLPRIVATE hb_font_t* GetHbFontUntransformed() const;
     SAL_DLLPRIVATE bool DrawGlyph(hb_font_t*, sal_GlyphId, basegfx::B2DPolyPolygon&) const;
 
     struct MapEntry
@@ -157,7 +155,6 @@ private:
     mutable ImplFontCache* mpFontCache;
     const vcl::font::FontSelectPattern m_aFontSelData;
     hb_font_t* m_pHbFont;
-    mutable hb_font_t* m_pHbFontUntransformed = nullptr;
     rtl::Reference<vcl::font::PhysicalFontFace> m_pFontFace;
     std::optional<bool> m_xbIsGraphiteFont;
     std::vector<vcl::font::Variation> m_aVariations;

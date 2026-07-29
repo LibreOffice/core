@@ -56,9 +56,6 @@ LogicalFontInstance::~LogicalFontInstance()
     if (m_pHbFont)
         hb_font_destroy(m_pHbFont);
 
-    if (m_pHbFontUntransformed)
-        hb_font_destroy(m_pHbFontUntransformed);
-
     if (m_pHbDrawFuncs)
         hb_draw_funcs_destroy(m_pHbDrawFuncs);
 }
@@ -118,25 +115,6 @@ hb_font_t* LogicalFontInstance::InitHbFont()
         hb_font_set_synthetic_slant(pHbFont, ARTIFICIAL_ITALIC_SKEW);
 
     ImplInitHbFont(pHbFont);
-
-    return pHbFont;
-}
-
-hb_font_t* LogicalFontInstance::GetHbFontUntransformed() const
-{
-    auto* pHbFont = const_cast<LogicalFontInstance*>(this)->GetHbFont();
-
-    if (NeedsArtificialItalic()) // || NeedsArtificialBold()
-    {
-        if (!m_pHbFontUntransformed)
-        {
-            m_pHbFontUntransformed = hb_font_create_sub_font(pHbFont);
-            // Unset slant set on parent font.
-            // Does not actually work: https://github.com/harfbuzz/harfbuzz/issues/3890
-            hb_font_set_synthetic_slant(m_pHbFontUntransformed, 0);
-        }
-        return m_pHbFontUntransformed;
-    }
 
     return pHbFont;
 }
@@ -421,13 +399,6 @@ bool LogicalFontInstance::DrawGlyph(hb_font_t* pHbFont, sal_GlyphId nGlyph,
     }
 
     return hb_font_draw_glyph_or_fail(pHbFont, nGlyph, m_pHbDrawFuncs, &rPoly);
-}
-
-basegfx::B2DPolyPolygon LogicalFontInstance::GetGlyphOutlineUntransformed(sal_GlyphId nGlyph) const
-{
-    basegfx::B2DPolyPolygon aPolyPoly;
-    DrawGlyph(GetHbFontUntransformed(), nGlyph, aPolyPoly);
-    return aPolyPoly;
 }
 
 bool LogicalFontInstance::GetGlyphOutline(sal_GlyphId nID, basegfx::B2DPolyPolygon& rPoly,
