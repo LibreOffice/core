@@ -41,8 +41,6 @@ public:
 
     // AbstractPane
 
-    css::uno::Reference<css::awt::XWindow> getWindow() override;
-
     css::uno::Reference<css::rendering::XCanvas> getCanvas() override;
 
     // XWindowListener

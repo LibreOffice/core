@@ -157,6 +157,17 @@ bool PresenterPaneBase::isAnchorOnly()
     return true;
 }
 
+// AbstractPane
+
+Reference<awt::XWindow> PresenterPaneBase::getWindow()
+{
+    {
+        std::unique_lock l(m_aMutex);
+        throwIfDisposed(l);
+    }
+    return mxContentWindow;
+}
+
 //----- XWindowListener -------------------------------------------------------
 
 void SAL_CALL PresenterPaneBase::windowResized (const awt::WindowEvent&)

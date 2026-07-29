@@ -45,10 +45,6 @@ public:
 
     using PresenterPaneBase::disposing;
 
-    // AbstractPane
-
-    virtual css::uno::Reference<css::awt::XWindow> getWindow() override;
-
     virtual css::uno::Reference<css::rendering::XCanvas> getCanvas() override;
 
     // XWindowListener
