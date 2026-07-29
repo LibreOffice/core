@@ -40,6 +40,15 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 ))
 endif
 
+# Read online's own gbuild module from online/gbuild/, only once online is configured, and only when
+# the command line names one of its own targets (a bare engine build shall leave online alone):
+ifneq ($(filter Executable_% StaticLibrary_% Module_gbuild%,$(MAKECMDGOALS)),)
+ifneq ($(wildcard $(or $(ONLINE.BUILDDIR),$(realpath $(BUILDDIR)/..))/config.h),)
+gb_Module_MODULELOCATIONS += online:$(SRCDIR)/..
+$(eval $(call gb_Module_add_moduledir,online,gbuild))
+endif
+endif
+
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	android \
     $(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \

@@ -232,6 +232,7 @@ gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
 	$(foreach exe,$(gb_Executable_OOO),$(exe):OOO) \
 	$(foreach exe,$(gb_Executable_NONE),$(exe):NONE) \
+	$(foreach exe,$(gb_Executable_ONLINE),$(exe):ONLINE) \
 
 
 gb_Executable_get_rpath :=

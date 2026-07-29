@@ -26,11 +26,13 @@ gb_Executable_LAYER_DIRS := \
 	UREBIN:$(INSTROOT)/$(LIBO_URE_BIN_FOLDER) \
 	OOO:$(INSTROOT)/$(LIBO_BIN_FOLDER) \
 	NONE:$(gb_Executable_BINDIR) \
+	ONLINE:$(or $(ONLINE.BUILDDIR),$(realpath $(BUILDDIR)/..)) \
 
 gb_Executable_LAYER_DIRS_FOR_BUILD := \
 	UREBIN:$(INSTROOT_FOR_BUILD)/$(LIBO_URE_BIN_FOLDER_FOR_BUILD) \
 	OOO:$(INSTROOT_FOR_BUILD)/$(LIBO_BIN_FOLDER_FOR_BUILD) \
 	NONE:$(gb_Executable_BINDIR_FOR_BUILD) \
+	ONLINE:$(or $(ONLINE.BUILDDIR),$(realpath $(or $(BUILDDIR_FOR_BUILD),$(BUILDDIR))/..)) \
 
 $(dir $(call gb_Executable_get_runtime_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
@@ -52,6 +54,10 @@ gb_Executable__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(call gb
 gb_Executable__get_dir_for_layer_for_build = $(patsubst $(1):%,%,$(filter $(1):%,$(call gb_Executable_LAYER_DIRS_FOR_BUILD)))
 gb_Executable__get_dir_for_exe = $(call gb_Executable__get_dir_for_layer,$(call gb_Executable_get_layer,$(1)))
 gb_Executable__get_dir_for_exe_for_build = $(call gb_Executable__get_dir_for_layer_for_build,$(call gb_Executable_get_layer,$(1)))
+
+# ONLINE delivers outside WORKDIR, so create its layer directory marker here:
+$(call gb_Executable__get_dir_for_layer,ONLINE)/.dir:
+	mkdir -p $(@D) && touch $@
 
 define gb_Executable_Executable
 $(call gb_Postprocess_register_target,AllExecutables,Executable,$(1))
@@ -155,6 +161,8 @@ gb_Executable_set_warnings_not_errors = $(call gb_Executable__forward_to_Linktar
 gb_Executable_set_warnings_disabled = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_set_external_code = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_set_generated_cxx_suffix = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_Executable_set_generated_cxx_base = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_Executable_set_generated_warnings_as_errors = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_use_clang = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_set_clang_precompiled_header = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_use_vclmain = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))

@@ -71,7 +71,6 @@ bin_PROGRAMS = \
 	coolconvert \
 	coolforkit-caps \
 	coolforkit-ns \
-	coolmount \
 	coolstress \
 	coolconfig \
 	coolwsd
@@ -384,9 +383,6 @@ clientnb_SOURCES = \
 
 clientnb_LDADD = libsimd.a libglobals.a $(LDADD)
 
-coolmount_SOURCES = tools/mount.cpp \
-                    common/CoolMount.cpp
-
 coolmap_SOURCES = tools/map.cpp
 
 coolbench_SOURCES = \
@@ -668,6 +664,16 @@ else
 CLEANUP_DEPS=coolwsd coolmount coolforkit-caps coolforkit-ns
 endif
 
+ENGINE_BUILDDIR = @LO_PATH@/..
+
+GBUILD_EXES = coolmount
+
+build-gbuild: FORCE
+	$(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.BUILDDIR=$(abs_top_builddir) Module_gbuild
+$(GBUILD_EXES): build-gbuild
+
+FORCE:
+
 # Build coolwsd and coolmount first, so we can cleanup before updating
 # the systemplate directory, which we can't rm if it's mounted.
 $(SYSTEM_STAMP): ${top_srcdir}/coolwsd-systemplate-setup $(CLEANUP_DEPS)
@@ -706,6 +712,8 @@ clean-local:
 	if test "z@CACHE_PATH@" != "z"; then rm -rf "@CACHE_PATH@" || echo "WARNING: failed to remove all cache cleanly"; fi
 	rm -rf "${top_srcdir}/loleaflet"
 	rm -rf loolconfig loolconvert loolforkit loolmap loolmount # kill old binaries
+	if test -f config.h && test -f "$(ENGINE_BUILDDIR)/config_host.mk"; then $(MAKE) $(if $(verbose),,-s) -C $(abs_top_srcdir)/gbuild BUILDDIR=$(ENGINE_BUILDDIR) ONLINE.BUILDDIR=$(abs_top_builddir) Module_gbuild.clean; else rm -f $(GBUILD_EXES); fi
+	rm -f .dir
 	rm -rf loolwsd loolwsd_fuzzer coolwsd_fuzzer loolstress loolsocketdump
 	rm -rf collabora-online-sbom.spdx.json
 	rm -rf test/data/presets
@@ -923,7 +931,6 @@ all_compiled_sources = $(sort \
 	$(coolbench_SOURCES) \
 	$(coolconvert_SOURCES) \
 	$(coconvert_SOURCES) \
-	$(coolmount_SOURCES) \
 	$(coolmap_SOURCES) \
 	$(clientnb_SOURCES) \
 	$(libsimd_a_SOURCES) \
@@ -1006,6 +1013,10 @@ install-exec-hook:
 	test -e coolconfig && $(LN_S) coolconfig loolconfig || true; \
 	test -e coolwsd && $(LN_S) coolwsd loolwsd || true; \
 	test -e coolwsd-systemplate-setup && $(LN_S) coolwsd-systemplate-setup loolwsd-systemplate-setup || true
+
+install-exec-local: $(GBUILD_EXES)
+	test -z "$(GBUILD_EXES)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
+	for exe in $(GBUILD_EXES); do $(INSTALL_PROGRAM) "$$exe" "$(DESTDIR)$(bindir)/$$exe"; done
 
 stress_file=$(abs_top_srcdir)/test/data/hello-world.odt
 trace_dir=$(abs_top_srcdir)/test/traces

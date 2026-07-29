@@ -953,4 +953,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, gbuildselfte
 $(eval $(call gb_Helper_register_executables,NONE, gbuildselftestexe))
 endif
 
+$(eval $(call gb_Helper_register_executables,ONLINE, \
+    coolmount \
+))
+
 # vim: set noet sw=4 ts=4:

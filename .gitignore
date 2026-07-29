@@ -15,6 +15,7 @@ doc/cpp/**
 **/.clangd
 **/.cache
 Makefile
+!/gbuild/Makefile
 Makefile.in
 coolkitconfig.xcu
 coolwsd.spec
@@ -109,6 +110,7 @@ browser/typescript_js
 *.tsbuildinfo
 browser/src/app/TaskWorker.js
 
+/.dir
 /coconvert
 /coolforkit
 /coolforkitns

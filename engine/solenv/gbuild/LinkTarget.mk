@@ -380,7 +380,7 @@ endif
 
 # GenCxxObject class
 
-gb_GenCxxObject_get_source = $(WORKDIR)/$(1).$(gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(2)))
+gb_GenCxxObject_get_source = $(or $(gb_LinkTarget_GENCXXBASE_$(call gb_LinkTarget__get_workdir_linktargetname,$(2))),$(WORKDIR))/$(1).$(gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(2)))
 
 ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_GenCxxObject_get_target,%) : $(gb_FORCE_COMPILE_TARGET)
@@ -1112,7 +1112,7 @@ endif # gb_FULLDEPS
 gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(1)) := cxx
 
 # installed linktargets need a rule to build!
-$(if $(findstring $(INSTDIR),$(1)),$(call gb_LinkTarget__make_installed_rule,$(1)))
+$(if $(findstring $(INSTDIR),$(1))$(filter ONLINE,$(3)),$(call gb_LinkTarget__make_installed_rule,$(1)))
 
 $(call gb_PrecompiledHeader_generate_timestamp_rule,$(2))
 
@@ -1634,7 +1634,7 @@ $(call gb_GenCxxObject_get_target,$(2)) : $(call gb_GenCxxObject_get_source,$(2)
 # That's why we need this order-only dependency on gb_Helper_MISCDUMMY
 $(call gb_GenCxxObject_get_source,$(2),$(1)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_GenCxxObject_get_target,$(2)) : WARNINGS_NOT_ERRORS := $(true)
+$(call gb_GenCxxObject_get_target,$(2)) : WARNINGS_NOT_ERRORS := $(if $(gb_LinkTarget_GENCXX_WERROR_$(call gb_LinkTarget__get_workdir_linktargetname,$(1))),,$(true))
 $(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(call gb_LinkTarget__get_cxxflags,$(4)) $(3) $(5)
 $(call gb_GenCxxObject_get_target,$(2)) : OBJECT_HAS_EXTRA_CXXFLAGS := $(if $(strip $(3)),1)
 $(call gb_GenCxxObject_get_target,$(2)) : \
@@ -2234,6 +2234,18 @@ endef
 # call gb_LinkTarget_set_generated_cxx_suffix,linktarget,used-suffix
 define gb_LinkTarget_set_generated_cxx_suffix
 gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(1)) := $(2)
+
+endef
+
+# call gb_LinkTarget_set_generated_cxx_base,linktarget,dir
+define gb_LinkTarget_set_generated_cxx_base
+gb_LinkTarget_GENCXXBASE_$(call gb_LinkTarget__get_workdir_linktargetname,$(1)) := $(2)
+
+endef
+
+# call gb_LinkTarget_set_generated_warnings_as_errors,linktarget
+define gb_LinkTarget_set_generated_warnings_as_errors
+gb_LinkTarget_GENCXX_WERROR_$(call gb_LinkTarget__get_workdir_linktargetname,$(1)) := $(true)
 
 endef
 
