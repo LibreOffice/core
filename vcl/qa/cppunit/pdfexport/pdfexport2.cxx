@@ -5324,6 +5324,112 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155161)
     CPPUNIT_ASSERT_EQUAL(aExpected, aFontNames);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPDFA1CIDSet)
+{
+    // PDF/A-1 requires a CIDSet listing the CIDs of the font program.
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "SelectPdfVersion", uno::Any(sal_Int32(1)) }, // PDF/A-1b
+    }));
+    comphelper::SequenceAsHashMap aMediaDescriptor;
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"tdf171869.odt");
+    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    vcl::filter::PDFObjectElement* pCIDFont = nullptr;
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+        if (pSubtype && pSubtype->GetValue() == "CIDFontType0")
+            pCIDFont = pObject;
+    }
+    CPPUNIT_ASSERT(pCIDFont);
+
+    auto pDescriptorRef
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pCIDFont->Lookup("FontDescriptor"_ostr));
+    CPPUNIT_ASSERT(pDescriptorRef);
+    auto pDescriptor = pDescriptorRef->LookupObject();
+    CPPUNIT_ASSERT(pDescriptor);
+
+    auto pCIDSetRef
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pDescriptor->Lookup("CIDSet"_ostr));
+    CPPUNIT_ASSERT(pCIDSetRef);
+    auto pCIDSetObject = pCIDSetRef->LookupObject();
+    CPPUNIT_ASSERT(pCIDSetObject);
+    auto pCIDSetStream = pCIDSetObject->GetStream();
+    CPPUNIT_ASSERT(pCIDSetStream);
+
+    SvMemoryStream aCIDSet;
+    ZCodec aCIDSetCodec;
+    aCIDSetCodec.BeginCompression();
+    pCIDSetStream->GetMemory().Seek(0);
+    aCIDSetCodec.Decompress(pCIDSetStream->GetMemory(), aCIDSet);
+    CPPUNIT_ASSERT(aCIDSetCodec.EndCompression());
+
+    // Read the CIDs out of the font rather than hard coding them.
+    auto pFontFileRef
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pDescriptor->Lookup("FontFile3"_ostr));
+    CPPUNIT_ASSERT(pFontFileRef);
+    auto pFontFileStream = pFontFileRef->LookupObject()->GetStream();
+    CPPUNIT_ASSERT(pFontFileStream);
+    SvMemoryStream aCFF;
+    ZCodec aCFFCodec;
+    aCFFCodec.BeginCompression();
+    pFontFileStream->GetMemory().Seek(0);
+    aCFFCodec.Decompress(pFontFileStream->GetMemory(), aCFF);
+    CPPUNIT_ASSERT(aCFFCodec.EndCompression());
+
+    std::vector<sal_uInt16> aCIDs;
+    CPPUNIT_ASSERT(vcl::font::ReadCFFGlyphCIDs(static_cast<const sal_uInt8*>(aCFF.GetData()),
+                                               aCFF.GetSize(), aCIDs));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aCIDs.size());
+
+    // Long enough for the largest CID and no longer.
+    const auto* pBits = static_cast<const sal_uInt8*>(aCIDSet.GetData());
+    sal_uInt16 nMaxCID = *std::max_element(aCIDs.begin(), aCIDs.end());
+    CPPUNIT_ASSERT_EQUAL(size_t(nMaxCID / 8 + 1), aCIDSet.GetSize());
+    for (auto nCID : aCIDs)
+        CPPUNIT_ASSERT((pBits[nCID / 8] & (0x80 >> (nCID % 8))) != 0);
+
+    // and nothing else is set
+    int nSet = 0;
+    for (size_t i = 0; i < aCIDSet.GetSize(); ++i)
+        for (int nBit = 0; nBit < 8; ++nBit)
+            if (pBits[i] & (0x80 >> nBit))
+                nSet++;
+    CPPUNIT_ASSERT_EQUAL(int(aCIDs.size()), nSet);
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testNoCIDSetWithoutPDFA1)
+{
+    // Not PDF/A-1, so no CIDSet.
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"tdf171869.odt");
+    save(TestFilter::PDF_WRITER);
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    bool bSawDescriptor = false;
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (!pType || pType->GetValue() != "FontDescriptor")
+            continue;
+        bSawDescriptor = true;
+        CPPUNIT_ASSERT(!pObject->Lookup("CIDSet"_ostr));
+    }
+    CPPUNIT_ASSERT(bSawDescriptor);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf171869)
 {
     // Document using an embedded CID-keyed font (a Source Han Sans subset)

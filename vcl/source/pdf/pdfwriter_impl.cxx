@@ -1432,7 +1432,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
     pFace->CreateFontSubset(aBuffer, aGlyphIds, pEncoding, 1, aInfo);
 
     // write font descriptor
-    sal_Int32 nFontDescriptor = emitFontDescriptor( pFace, aInfo, 0, 0 );
+    sal_Int32 nFontDescriptor = emitFontDescriptor( pFace, aInfo, 0, 0, 0 );
     if( nFontDescriptor )
     {
         // write font object
@@ -1542,7 +1542,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         // write font descriptor
         sal_Int32 nFontDescriptor = 0;
         if (m_aContext.Version > PDFWriter::PDFVersion::PDF_1_4)
-            nFontDescriptor = emitFontDescriptor(pFace, aSubsetInfo, rSubset.m_nFontID, 0);
+            nFontDescriptor = emitFontDescriptor(pFace, aSubsetInfo, rSubset.m_nFontID, 0, 0);
 
         if (nToUnicodeStream)
             nToUnicodeStream = createToUnicodeCMap(pEncoding, aCodeUnits, pCodeUnitsPerGlyph,
@@ -2095,7 +2095,69 @@ sal_Int32 PDFWriterImpl::emitCIDCMap(sal_Int32 nSubsetID, const std::vector<sal_
     return nStream;
 }
 
-sal_Int32 PDFWriterImpl::emitFontDescriptor( const vcl::font::PhysicalFontFace* pFace, FontSubsetInfo const & rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
+sal_Int32 PDFWriterImpl::emitCIDSet(const std::vector<sal_uInt16>& rCIDs, sal_uInt32 nGlyphs)
+{
+    // Only PDF/A-1 requires one, and PDF 2.0 deprecates it.
+    if (m_nPDFA_Version != 1 || !nGlyphs)
+        return 0;
+
+    // A table of bits indexed by CID, high-order bit of the first byte first.
+    sal_uInt32 nMaxCID
+        = rCIDs.empty() ? nGlyphs - 1 : *std::max_element(rCIDs.begin(), rCIDs.end());
+    std::vector<sal_uInt8> aCIDSet(nMaxCID / 8 + 1, 0);
+    for (sal_uInt32 i = 0; i < nGlyphs; ++i)
+    {
+        sal_uInt32 nCID = i < rCIDs.size() ? rCIDs[i] : i;
+        aCIDSet[nCID / 8] |= 0x80 >> (nCID % 8);
+    }
+
+    sal_Int32 nStream = createObject();
+    if (!updateObject(nStream))
+        return 0;
+
+    SvMemoryStream aStream;
+    if (!g_bDebugDisableCompression)
+    {
+        ZCodec aCodec(0x4000, 0x4000);
+        aCodec.BeginCompression();
+        aCodec.Write(aStream, aCIDSet.data(), aCIDSet.size());
+        aCodec.EndCompression();
+    }
+
+    OStringBuffer aLine(80);
+    aLine.append(OString::number(nStream) + " 0 obj\n<</Length ");
+    sal_uInt64 nLen = 0;
+    if (!g_bDebugDisableCompression)
+    {
+        nLen = aStream.Tell();
+        aStream.Seek(0);
+        aLine.append(OString::number(nLen) + "/Filter/FlateDecode");
+    }
+    else
+        aLine.append(OString::number(aCIDSet.size()));
+    aLine.append(">>\nstream\n");
+    if (!writeBuffer(aLine))
+        return 0;
+    checkAndEnableStreamEncryption(nStream);
+    if (!g_bDebugDisableCompression)
+    {
+        if (!writeBufferBytes(aStream.GetData(), nLen))
+            return 0;
+    }
+    else
+    {
+        if (!writeBufferBytes(aCIDSet.data(), aCIDSet.size()))
+            return 0;
+    }
+    disableStreamEncryption();
+    aLine.setLength(0);
+    aLine.append("\nendstream\nendobj\n\n");
+    if (!writeBuffer(aLine))
+        return 0;
+    return nStream;
+}
+
+sal_Int32 PDFWriterImpl::emitFontDescriptor( const vcl::font::PhysicalFontFace* pFace, FontSubsetInfo const & rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream, sal_Int32 nCIDSet )
 {
     OStringBuffer aLine( PDFWRITER_IMPL_BUFFERSIZE );
     // get font flags, see PDF reference 1.4 p. 358
@@ -2169,6 +2231,8 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const vcl::font::PhysicalFontFace* 
         }
         aLine.append( " " + OString::number(nFontStream) + " 0 R\n" );
     }
+    if( nCIDSet )
+        aLine.append( "/CIDSet " + OString::number(nCIDSet) + " 0 R\n" );
     aLine.append( ">>\n"
                   "endobj\n\n" );
     if (!writeBuffer(aLine)) return 0;
@@ -2312,8 +2376,13 @@ bool PDFWriterImpl::emitFonts()
                     + "\nendobj\n\n" );
                 if ( !writeBuffer( aLine ) ) return false;
 
+                // PDF/A-1 wants the CIDs of a composite subset listed
+                sal_Int32 nCIDSet = 0;
+                if (aSubsetInfo.m_nFontType == FontType::CFF_FONT)
+                    nCIDSet = emitCIDSet(aSubsetInfo.m_aCIDs, nGlyphs);
+
                 // write font descriptor
-                sal_Int32 nFontDescriptor = emitFontDescriptor( subset.first.m_pFace, aSubsetInfo, s_subset.m_nFontID, nFontStream );
+                sal_Int32 nFontDescriptor = emitFontDescriptor( subset.first.m_pFace, aSubsetInfo, s_subset.m_nFontID, nFontStream, nCIDSet );
 
                 if( nToUnicodeStream )
                     nToUnicodeStream = createToUnicodeCMap( pEncoding, aCodeUnits, pCodeUnitsPerGlyph, pEncToUnicodeIndex, nGlyphs );

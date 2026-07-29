@@ -948,13 +948,15 @@ private:
     /* writes a type3 font object and appends it to the font id mapping, or returns false in case of failure */
     bool emitType3Font(const vcl::font::PhysicalFontFace*, const FontSubset&, std::map<sal_Int32, sal_Int32>&);
     /* writes a font descriptor and returns its object id (or 0) */
-    sal_Int32 emitFontDescriptor(const vcl::font::PhysicalFontFace*, FontSubsetInfo const &, sal_Int32 nSubsetID, sal_Int32 nStream);
+    sal_Int32 emitFontDescriptor(const vcl::font::PhysicalFontFace*, FontSubsetInfo const &, sal_Int32 nSubsetID, sal_Int32 nStream, sal_Int32 nCIDSet);
     /* writes a ToUnicode cmap, returns the corresponding stream object */
     sal_Int32 createToUnicodeCMap( sal_uInt8 const * pEncoding, const std::vector<sal_Ucs>& CodeUnits, const sal_Int32* pCodeUnitsPerGlyph,
                                    const sal_Int32* pEncToUnicodeIndex, uint32_t nGlyphs );
     /* writes the code to CID CMap for composite CFF fonts, returns the stream object id (or 0 in case of failure) */
     sal_Int32 emitCIDCMap(sal_Int32 nSubsetID, const std::vector<sal_uInt16>& rCIDs,
                           sal_uInt32 nGlyphs);
+    /* writes the CIDSet of a composite subset, returns the stream object id (or 0 if not wanted) */
+    sal_Int32 emitCIDSet(const std::vector<sal_uInt16>& rCIDs, sal_uInt32 nGlyphs);
 
     /* get resource dict object number */
     sal_Int32 getResourceDictObj()
