@@ -1017,6 +1017,17 @@ ScDPResultMemberSlim::ScDPResultMemberSlim(
 {
 };
 
+// Used for array new, items filled in shortly after
+ScDPResultMemberSlim::ScDPResultMemberSlim()
+    : mpOurDimension(nullptr)
+    , mpMemberDesc(nullptr)
+    , mnOrder(std::numeric_limits<SCROW>::max())
+    , // To stop false matches during init
+    bmHasElements(false)
+    , bmHasHiddenDetails(false)
+    , bmInitialized(false)
+    , bmPromoted(false){};
+
 ScDPResultMember* ScDPResultMemberSlim::GetPromote() const
 {
     return mpOurDimension->GetPromote(mnOrder);
@@ -3042,6 +3053,11 @@ ScDPResultDimension::ScDPResultDimension(const ScDPResultData* pData)
 
 ScDPResultDimension::~ScDPResultDimension()
 {
+    if (mpaMemberSlimArray != nullptr)
+    {
+        // This is the raw array in the span under the unique_ptr
+        delete[] mpaMemberSlimArray->data();
+    }
 }
 
 ScDPResultMember *ScDPResultDimension::FindMember(  SCROW  iData ) const
@@ -3152,7 +3168,27 @@ void ScDPResultDimension::InitFrom(
     // Now, go through all members and initialize them.
     ScDPMembers* pMembers = pThisLevel->GetMembersObject();
     tools::Long nMembCount = pMembers->getCount();
+
+    // Loop once to find out how much space we need
+    size_t nCount = 0;
     for ( tools::Long i=0; i<nMembCount; i++ )
+    {
+        tools::Long nSorted = rGlobalOrder.empty() ? i : rGlobalOrder[i];
+
+        ScDPMember* pMember = pMembers->getByIndex(nSorted);
+        if (aCompare.IsIncluded(*pMember))
+        {
+            nCount++;
+        }
+    }
+
+    auto aSlimRawArray = new ScDPResultMemberSlim[nCount];
+    mpaMemberSlimArray.reset(
+        new std::span<ScDPResultMemberSlim>(&aSlimRawArray[0], &aSlimRawArray[nCount]));
+
+    // Loop again to actually fill in the data
+    size_t nIndex = 0;
+    for (tools::Long i = 0; i < nMembCount; i++)
     {
         tools::Long nSorted = rGlobalOrder.empty() ? i : rGlobalOrder[i];
 
@@ -3160,13 +3196,19 @@ void ScDPResultDimension::InitFrom(
         if ( aCompare.IsIncluded( *pMember ) )
         {
             ScDPParentDimData aData( i, pThisDim, pThisLevel, pMember);
-            ScDPResultMember* pNew = AddMember( aData );
+            ScDPResultMemberSlim* pNew = &(*mpaMemberSlimArray)[nIndex++];
+
+            // Fill in the array element by hand
+            pNew->mpOurDimension = this;
+            pNew->mpMemberDesc = pMember;
+            pNew->mnOrder = i;
 
             rInitState.AddMember(nDimSource, pNew->GetDataId());
             pNew->InitFrom( ppDim, ppLev, nPos+1, rInitState, bInitChild  );
             rInitState.RemoveMember();
         }
     }
+    assert(nIndex == nCount);
     bInitialized = true;
 }
 
@@ -3878,15 +3920,8 @@ ScDPResultMember* ScDPResultDimension::GetPromote(SCROW nOrder) const
 // to do something which Slim can't represent
 ScDPResultMember* ScDPResultDimension::Promote(ScDPResultMemberSlim* pSlim, SCROW nOrder)
 {
-    // Find the existing slim entry
-    SCROW nIndex;
-    if (!lcl_SearchMember(maMemberArray, nOrder, nIndex))
-        throw container::NoSuchElementException();
-
-    assert(pSlim == maMemberArray[nIndex].get());
-
     ScDPParentDimData aParentData(nOrder, mpDimension, mpLevel, pSlim->mpMemberDesc);
-    ScDPResultMember* pFull = new ScDPResultMemberFull(pResultData, aParentData);
+    ScDPResultMember* pFull = InsertMember(&aParentData);
 
     if (pSlim->bmHasElements)
         pFull->SetHasElements();
@@ -3894,17 +3929,6 @@ ScDPResultMember* ScDPResultDimension::Promote(ScDPResultMemberSlim* pSlim, SCRO
         pFull->SetHasHiddenDetails();
     if (pSlim->bmInitialized)
         pFull->SetInitialized();
-
-    // Remove the Slim from the memberarray but don't deallocate
-    // We can't free it yet, because this Promote is called from Promote on
-    // this Slim instance and it's caller may use the pointer again
-    ScDPResultMember* pOldSlim = maMemberArray[nIndex].release();
-    assert(pOldSlim == pSlim);
-
-    maMemberArray[nIndex].reset(pFull);
-
-    // Stash the unpromoted member for later deletion - when this list is dropped
-    maPromotedMembers.emplace_back(pOldSlim);
 
     return pFull;
 }
@@ -4349,7 +4373,7 @@ SCROW ScDPResultMember::GetDataId() const
 
 ScDPResultMember* ScDPResultDimension::AddMember(const ScDPParentDimData &aData )
 {
-    ScDPResultMember* pMember = new ScDPResultMemberSlim(this, aData);
+    ScDPResultMember* pMember = new ScDPResultMemberFull(pResultData, aData);
     maMemberArray.emplace_back( pMember );
 
     return pMember;

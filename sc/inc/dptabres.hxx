@@ -450,7 +450,7 @@ private:
     // When adding fields here, update ScDPResultDimension::Promote
     ScDPResultDimension* mpOurDimension;
     const ScDPMember* mpMemberDesc;
-    const SCROW mnOrder;
+    SCROW mnOrder;
     bool bmHasElements : 1;
     bool bmHasHiddenDetails : 1;
     bool bmInitialized : 1;
@@ -470,6 +470,8 @@ private:
 
 public:
     ScDPResultMemberSlim(ScDPResultDimension* pRDimension, const ScDPParentDimData& rParentDimData);
+    // Just for array new
+    ScDPResultMemberSlim();
 
     bool GetHasElements() const override
     {
@@ -789,7 +791,6 @@ private:
     // Used during 'Promote' of ScDPResultMember
     ScDPDimension* mpDimension;
     ScDPLevel* mpLevel;
-    MemberArray maPromotedMembers;
 
     OUString                aDimensionName;     //! or ptr to IntDimension?
     tools::Long                    nSortMeasure;
