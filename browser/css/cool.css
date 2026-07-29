@@ -1441,42 +1441,43 @@ input, button {
 }
 
 .username-pop-up {
-	min-width: 110px;
-	padding-inline: 8px;
-	height: 45px;
+	min-width: 40px;
 	position: absolute;
 	text-align: center;
 	z-index: 11;
 	pointer-events: none;
 	font-family: var(--cool-font);
 	font-size: var(--default-font-size);
-	border-radius: var(--border-radius-large);
 	box-shadow: 0 0 2px 1px var(--color-box-shadow);
 }
 
-.username-pop-up p {
-	line-height: 45px;
-	padding: 0;
-	margin: auto;
+.username-pop-up .name-row {
+	line-height: 24px;
+	padding-inline: 8px;
 	color: white;
+	white-space: nowrap;
+}
+
+.username-pop-up .name-row.more-row {
+	background-color: var(--color-main-background);
+	color: var(--color-main-text);
 }
 
 .username-pop-up .arrow-div {
 	width: 20px;
 	height: 20px;
 	transform: rotate(45deg);
-	display: inline-block;
-	position: relative;
-	top: calc(-10px - var(--border-radius));
-	border-radius: var(--border-radius);
-}
-
-.username-pop-up.below-cell .arrow-div {
 	position: absolute;
-	top: calc(-10px + var(--border-radius));
 	left: 0;
 	right: 0;
 	margin-inline: auto;
+	bottom: -6px;
+	z-index: -1;
+}
+
+.username-pop-up.below-cell .arrow-div {
+	bottom: auto;
+	top: -6px;
 }
 
 #hyperlink-pop-up-preview:not(:empty) {

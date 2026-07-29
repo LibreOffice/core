@@ -236,5 +236,21 @@ describe(['tagmultiuser'], 'Check cell cursor and view behavior', function() {
 		});
 
 		cy.cGet('.username-pop-up').should('be.visible');
+		// One row per view on the cell, and only the one view is there.
+		cy.cGet('.username-pop-up .name-row').should('have.length', 1);
+
+		cy.getFrameWindow().then((win1) => {
+			const section = otherViewCursorSection(win1);
+
+			const margin = 40;
+			const awayX = (section.myTopLeft[0] + section.size[0]) / win1.app.dpiScale + margin;
+			const awayY = (section.myTopLeft[1] + section.size[1]) / win1.app.dpiScale + margin;
+
+			// Moving off takes it down at once. Short timeout below on purpose: with the
+			// default one it would pass on the 3s auto hide instead of on the move.
+			cy.cGet('#document-canvas').trigger('mousemove', awayX, awayY);
+		});
+
+		cy.cGet('.username-pop-up', { timeout: 1000 }).should('not.be.visible');
 	});
 });

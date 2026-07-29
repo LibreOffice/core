@@ -1444,6 +1444,7 @@ pot:
 		src/canvas/sections/CommentListSection.ts \
 		src/canvas/sections/CommentSection.ts \
 		src/canvas/sections/CompareChangesLabelSection.ts \
+		src/canvas/sections/OtherViewCellCursorSection.ts \
 		src/canvas/sections/ShapeHandlesSection.ts \
 		src/canvas/sections/URLPopUpSection.ts \
 		src/canvas/sections/TableInsertMarkerSection.ts \

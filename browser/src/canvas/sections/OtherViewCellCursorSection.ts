@@ -23,6 +23,8 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
     static sectionNamePrefix = 'OtherViewCellCursorSection ';
     static sectionPointers: Array<OtherViewCellCursorSection> = [];
     private static hoveredViewId: number | null = null;
+    private static hoveredCellAddress: string | null = null;
+    private static maxPopUpRows = 6; // 5 names + 1 summary row
 
     constructor(viewId: number, rectangle: cool.SimpleRectangle, part: number) {
         super(OtherViewCellCursorSection.sectionNamePrefix + viewId);
@@ -90,7 +92,10 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
 
         // Above the cell when it fits there, below it when that fits instead.
         const flipped = above < minTop && below <= maxTop;
-        this.sectionProperties.popUpContainer.classList.toggle('below-cell', flipped);
+        if (flipped !== this.sectionProperties.popUpContainer.classList.contains('below-cell')) {
+            this.sectionProperties.popUpContainer.classList.toggle('below-cell', flipped);
+            this.updateArrowColor();
+        }
 
         // In RTL myTopLeft holds the mirrored left edge.
         const addition = app.map._docLayer.isCalcRTL() ? -this.size[0] : 0;
@@ -120,23 +125,81 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
             const nameContainer = document.createElement('div');
             popUpContainer.appendChild(nameContainer);
 
-            const nameParagraph = document.createElement('p');
-            nameContainer.appendChild(nameParagraph);
-            nameParagraph.textContent = this.sectionProperties.username;
-
             const arrowDiv = document.createElement('div');
             arrowDiv.className = 'arrow-div';
             popUpContainer.appendChild(arrowDiv);
 
-            popUpContainer.style.backgroundColor = nameContainer.style.backgroundColor = this.sectionProperties.color;
-            arrowDiv.style.backgroundColor = nameParagraph.style.backgroundColor = this.sectionProperties.color;
-
             document.getElementById('document-container').appendChild(popUpContainer);
 
             this.sectionProperties.popUpContainer = popUpContainer;
+            this.sectionProperties.nameContainer = nameContainer;
+            this.sectionProperties.arrowDiv = arrowDiv;
 
             this.hideUsernamePopUp();
         }
+    }
+
+    // Every view sitting on this cell, in the order the sections were created, which
+    // is also the order they are drawn in.
+    getCoLocatedSections(): Array<OtherViewCellCursorSection> {
+        const address = this.sectionProperties.cellAddress;
+
+        // Without an address there is nothing to compare, so only this view is listed.
+        if (!address)
+            return [this];
+
+        const group: Array<OtherViewCellCursorSection> = [];
+
+        for (let i = 0; i < OtherViewCellCursorSection.sectionPointers.length; i++) {
+            const section = OtherViewCellCursorSection.sectionPointers[i];
+
+            if (section.showSection && section.isVisible
+                && section.sectionProperties.part === this.sectionProperties.part
+                && section.sectionProperties.cellAddress === address)
+                group.push(section);
+        }
+
+        return group;
+    }
+
+    fillUsernamePopUp(group: Array<OtherViewCellCursorSection>) {
+        const rows = document.createDocumentFragment();
+        const maxRows = OtherViewCellCursorSection.maxPopUpRows;
+
+        // Truncate only when that saves a row. The oldest sections go, keeping the ones
+        // drawn on top, this one among them: it anchors the bubble and colors the arrow.
+        const truncated = group.length > maxRows;
+        const shown = truncated ? group.slice(group.length - (maxRows - 1)) : group;
+
+        for (let i = 0; i < shown.length; i++) {
+            const row = document.createElement('div');
+            row.className = 'name-row';
+            row.textContent = shown[i].sectionProperties.username;
+            row.style.backgroundColor = shown[i].sectionProperties.color;
+            rows.appendChild(row);
+        }
+
+        if (truncated) {
+            const row = document.createElement('div');
+            row.className = 'name-row more-row';
+            row.textContent = _('%n more').replace('%n', (group.length - shown.length).toString());
+            rows.appendChild(row);
+        }
+
+        this.sectionProperties.nameContainer.replaceChildren(rows);
+        this.updateArrowColor();
+    }
+
+    updateArrowColor() {
+        const rows = this.sectionProperties.nameContainer.children;
+
+        if (rows.length === 0)
+            return;
+
+        const flipped = this.sectionProperties.popUpContainer.classList.contains('below-cell');
+        const row = flipped ? rows[0] : rows[rows.length - 1];
+
+        this.sectionProperties.arrowDiv.style.backgroundColor = getComputedStyle(row).backgroundColor;
     }
 
     clearPopUpTimer() {
@@ -147,24 +210,61 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
     }
 
     showUsernamePopUp() {
-        const textCursorSectionName = CursorHeaderSection.namePrefix + this.sectionProperties.viewId;
+        if (!this.sectionProperties.popUpContainer || !this.isVisible)
+            return;
 
-        if (app.sectionContainer.doesSectionExist(textCursorSectionName))
-            return; // Don't show the popup if the cursor header is shown.
+        const group = this.getCoLocatedSections();
+        const owner = group[group.length - 1];
 
-        if (this.sectionProperties.popUpContainer && this.isVisible) {
-            this.sectionProperties.popUpShown = true;
-            this.sectionProperties.popUpContainer.style.display = '';
+        if (!owner)
+            return;
 
-            // Position it after it is shown, a hidden element measures 0x0 and would
-            // end up right of the cell instead of centered above it.
-            this.adjustPopUpPosition();
+        if (owner !== this) {
+            owner.showUsernamePopUp();
+            return;
+        }
 
-            this.clearPopUpTimer();
+        // Only the owner's bubble is used for the cell.
+        OtherViewCellCursorSection.hidePopUpsForCell(this.sectionProperties.part, this.sectionProperties.cellAddress);
 
-            this.sectionProperties.popUpTimer = setTimeout(() => {
-                this.hideUsernamePopUp();
-            }, 3000);
+        const named: Array<OtherViewCellCursorSection> = [];
+        for (let i = 0; i < group.length; i++) {
+            const headerName = CursorHeaderSection.namePrefix + group[i].sectionProperties.viewId;
+            if (!app.sectionContainer.doesSectionExist(headerName))
+                named.push(group[i]);
+        }
+
+        if (named.length === 0) {
+            this.hideUsernamePopUp();
+            return;
+        }
+
+        this.fillUsernamePopUp(named);
+
+        this.sectionProperties.popUpShown = true;
+        this.sectionProperties.popUpContainer.style.display = '';
+
+        // Position it after it is shown, a hidden element measures 0x0 and would
+        // end up right of the cell instead of centered above it.
+        this.adjustPopUpPosition();
+
+        this.clearPopUpTimer();
+
+        this.sectionProperties.popUpTimer = setTimeout(() => {
+            this.hideUsernamePopUp();
+        }, 3000);
+    }
+
+    onRemove(): void {
+        // The bubble of the cell lists this view, and the container is not a child of
+        // the canvas, so it would stay behind.
+        OtherViewCellCursorSection.hidePopUpsForCell(this.sectionProperties.part, this.sectionProperties.cellAddress);
+
+        this.clearPopUpTimer();
+
+        if (this.sectionProperties.popUpContainer) {
+            this.sectionProperties.popUpContainer.remove();
+            this.sectionProperties.popUpContainer = null;
         }
     }
 
@@ -201,6 +301,10 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
                 || !cellAddress
                 || section.sectionProperties.cellAddress !== cellAddress;
 
+            // The bubble of the cell being left still lists this view.
+            if (moved)
+                OtherViewCellCursorSection.hidePopUpsForCell(section.sectionProperties.part, section.sectionProperties.cellAddress);
+
             section.sectionProperties.part = part;
             section.size[0] = rectangle.pWidth;
             section.size[1] = rectangle.pHeight;
@@ -229,7 +333,45 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
     }
 
     public static resetHover() {
-        OtherViewCellCursorSection.hoveredViewId = null;
+        OtherViewCellCursorSection.setHoveredView(null);
+    }
+
+    // The bubble is supplementary, so it goes as soon as the pointer moves on, leaving
+    // one on screen at a time instead of a trail of them. The hide timer stays as a
+    // backstop.
+    private static setHoveredView(section: OtherViewCellCursorSection | null) {
+        const viewId = section ? section.sectionProperties.viewId : null;
+        const previous = OtherViewCellCursorSection.hoveredViewId;
+        const entered = viewId !== previous;
+
+        // Only take down what the hover put up. Once that view has moved on, the bubble
+        // on screen is the one its move opened, and it lives its own time out.
+        if (entered && previous !== null) {
+            const previousSection = OtherViewCellCursorSection.getViewCursorSection(previous) as OtherViewCellCursorSection;
+
+            if (previousSection && previousSection.sectionProperties.cellAddress === OtherViewCellCursorSection.hoveredCellAddress)
+                previousSection.hideUsernamePopUp();
+        }
+
+        // Refreshed even when the view is unchanged: it can have moved under a pointer
+        // that did not.
+        OtherViewCellCursorSection.hoveredViewId = viewId;
+        OtherViewCellCursorSection.hoveredCellAddress = section ? section.sectionProperties.cellAddress : null;
+
+        if (entered && section)
+            section.showUsernamePopUp();
+    }
+
+    private static hidePopUpsForCell(part: number, cellAddress: string) {
+        if (!cellAddress)
+            return;
+
+        for (let i = 0; i < OtherViewCellCursorSection.sectionPointers.length; i++) {
+            const section = OtherViewCellCursorSection.sectionPointers[i];
+
+            if (section.sectionProperties.part === part && section.sectionProperties.cellAddress === cellAddress)
+                section.hideUsernamePopUp();
+        }
     }
 
     public static removeView(viewId: number) {
@@ -282,23 +424,22 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
     }
 
     public static checkHover(canvasPosition: Array<number>) {
-        let hoveredViewId: number | null = null;
+        let hovered: OtherViewCellCursorSection | null = null;
 
+        // Two views on the same cell have the very same rectangle, so all of them are
+        // hit. Keep the last one: these sections share their drawing order, so the one
+        // added last is drawn on top, and it owns the bubble listing the whole cell.
         for (let i = 0; i < OtherViewCellCursorSection.sectionPointers.length; i++) {
             const section = OtherViewCellCursorSection.sectionPointers[i];
 
             if (!section.showSection || !section.isVisible)
                 continue;
 
-            if (section.isHit(canvasPosition)) {
-                hoveredViewId = section.sectionProperties.viewId;
-                if (hoveredViewId !== OtherViewCellCursorSection.hoveredViewId)
-                    section.showUsernamePopUp();
-                break;
-            }
+            if (section.isHit(canvasPosition))
+                hovered = section;
         }
 
-        OtherViewCellCursorSection.hoveredViewId = hoveredViewId;
+        OtherViewCellCursorSection.setHoveredView(hovered);
     }
 }
 
