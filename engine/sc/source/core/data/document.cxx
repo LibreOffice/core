@@ -577,7 +577,7 @@ bool ScDocument::InsertTab(
         aCxt.mnTabDeletedEnd = nPos;
         SetAllFormulasDirty(aCxt);
 
-        if (comphelper::COKit::isActive() && GetDrawLayer())
+        if (comphelper::COKit::isActive() && GetDrawLayer() && GetDocumentShell())
         {
             ScModelObj* pModel = GetDocumentShell()->GetModel();
             KitHelper::notifyDocumentSizeChangedAllViews(pModel);
@@ -777,7 +777,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 SetAllFormulasDirty(aFormulaDirtyCxt);
             }
 
-            if (comphelper::COKit::isActive())
+            if (comphelper::COKit::isActive() && GetDocumentShell())
             {
                 ScModelObj* pModel = GetDocumentShell()->GetModel();
                 KitHelper::notifyDocumentSizeChangedAllViews(pModel);
@@ -871,7 +871,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                 SetAllFormulasDirty(aFormulaDirtyCxt);
             }
 
-            if (comphelper::COKit::isActive())
+            if (comphelper::COKit::isActive() && GetDocumentShell())
             {
                 ScModelObj* pModel = GetDocumentShell()->GetModel();
                 KitHelper::notifyDocumentSizeChangedAllViews(pModel);
@@ -980,7 +980,7 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
                 }
             }
 
-            if (comphelper::COKit::isActive() && GetDrawLayer())
+            if (comphelper::COKit::isActive() && GetDrawLayer() && GetDocumentShell())
             {
                 ScModelObj* pModel = GetDocumentShell()->GetModel();
                 KitHelper::notifyDocumentSizeChangedAllViews(pModel);
