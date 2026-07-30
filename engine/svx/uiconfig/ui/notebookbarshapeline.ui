@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<interface domain="svx">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkBox" id="ShapeLineBox">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkToolbar" id="LineWeldedToolbar">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="toolbar_style">icons</property>
+        <property name="show_arrow">False</property>
+        <child>
+          <object class="GtkMenuToolButton" id="XLineStyle">
+            <property name="visible">True</property>
+            <property name="action_name">.uno:XLineStyle</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkGrid" id="arrowgrid">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="column-spacing">6</property>
+        <child>
+          <object class="GtkLabel" id="startarrowlabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="notebookbarshapeline|startarrowlabel">_Start:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">startarrowstyle</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="startarrowstyle">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="has-entry">True</property>
+            <property name="tooltip-text" translatable="yes" context="notebookbarshapeline|startarrowstyle|tooltip_text">Select the style of the start arrowhead.</property>
+            <child internal-child="entry">
+              <object class="GtkEntry">
+                <property name="can-focus">True</property>
+                <property name="editable">False</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="endarrowlabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="notebookbarshapeline|endarrowlabel">_End:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">endarrowstyle</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">2</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="endarrowstyle">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="has-entry">True</property>
+            <property name="tooltip-text" translatable="yes" context="notebookbarshapeline|endarrowstyle|tooltip_text">Select the style of the end arrowhead.</property>
+            <child internal-child="entry">
+              <object class="GtkEntry">
+                <property name="can-focus">True</property>
+                <property name="editable">False</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">3</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+  </object>
+</interface>

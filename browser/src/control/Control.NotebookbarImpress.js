@@ -2589,38 +2589,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'vertical': 'true'
 			},
 			{ type: 'separator', id: 'shape-fliphorizontal-break', orientation: 'vertical' },
-			{
-				'type': 'container',
-				'children': [
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'shape-xline-color:ColorPickerMenu',
-								'noLabel': true,
-								'type': 'toolitem',
-								'text': _UNO('.uno:XLineColor'),
-								'command': '.uno:XLineColor',
-								'accessibility': { focusBack: true, combination: 'LC', de: null }
-							}
-						]
-					},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'shape-fill-color:ColorPickerMenu',
-								'noLabel': true,
-								'type': 'toolitem',
-								'text': _UNO('.uno:FillColor'),
-								'command': '.uno:FillColor',
-								'accessibility': { focusBack: true, combination: 'FC', de: null }
-							}
-						]
-					}
-				],
-				'vertical': 'true'
-			},
+			this.getShapeLinePropertiesSection(),
 			{ type: 'separator', id: 'shape-fillcolor-break', orientation: 'vertical' },
 			{
 				'id': 'shape-convert-curve',
@@ -2952,38 +2921,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				]
 			},
 			{ type: 'separator', id: 'picture-transparency-break', orientation: 'vertical' },
-			{
-				'type': 'container',
-				'children': [
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'picture-xline-color:ColorPickerMenu',
-								'type': 'menubutton',
-								'noLabel': true,
-								'text': _UNO('.uno:XLineColor'),
-								'command': '.uno:XLineColor',
-								'accessibility': { focusBack: true, combination: 'LC', de: null }
-							}
-						]
-					},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'picture-fill-color:ColorPickerMenu',
-								'type': 'menubutton',
-								'noLabel': true,
-								'text': _UNO('.uno:FillColor'),
-								'command': '.uno:FillColor',
-								'accessibility': { focusBack: true, combination: 'FC', de: null }
-							}
-						]
-					}
-				],
-				'vertical': 'true'
-			},
+			this.getPictureLinePropertiesSection(),
 			{ type: 'separator', id: 'picture-fillcolor-break', orientation: 'vertical' },
 			{
 				'id': 'picture-transform-dialog',

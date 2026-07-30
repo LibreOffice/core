@@ -20,6 +20,7 @@
 #include <sidebar/DeckDescriptor.hxx>
 #include <sidebar/PanelDescriptor.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
+#include <sfx2/viewsh.hxx>
 #include <sidebar/Tools.hxx>
 
 #include <officecfg/Office/Common.hxx>
@@ -62,6 +63,15 @@ sal_Int32 getInt32(utl::OConfigurationNode const & aNode, const OUString& rNodeN
 bool getBool(utl::OConfigurationNode const & aNode, const OUString& rNodeName)
 {
     return comphelper::getBOOL(aNode.getNodeValue(rNodeName));
+}
+
+bool isKitButNotMobilePhone()
+{
+    if (!comphelper::COKit::isActive())
+        return false;
+
+    const SfxViewShell* pViewShell = SfxViewShell::Current();
+    return !pViewShell || !pViewShell->isKitMobilePhone();
 }
 
 cpo::uno::Sequence<OUString> BuildContextList (const ContextList& rContextList)
@@ -212,6 +222,8 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
     {
         const PanelDescriptor& rPanelDescriptor (*panel);
         if (rPanelDescriptor.mbExperimental && !officecfg::Office::Common::Misc::ExperimentalMode::get())
+            continue;
+        if (rPanelDescriptor.mbKitMobilePhoneOnly && isKitButNotMobilePhone())
             continue;
         if ( rPanelDescriptor.msDeckId != sDeckId )
             continue;
@@ -465,6 +477,7 @@ void ResourceManager::ReadPanelList()
         rPanelDescriptor.mbShowForReadOnlyDocuments = getBool(aPanelNode, u"ShowForReadOnlyDocument"_ustr);
         rPanelDescriptor.mbWantsAWT = getBool(aPanelNode, u"WantsAWT"_ustr);
         rPanelDescriptor.mbExperimental = getBool(aPanelNode, u"IsExperimental"_ustr);
+        rPanelDescriptor.mbKitMobilePhoneOnly = getBool(aPanelNode, u"KitMobilePhoneOnly"_ustr);
         const OUString sDefaultMenuCommand(getString(aPanelNode, u"DefaultMenuCommand"_ustr));
 
         rPanelDescriptor.msNodeName = rPanelNodeName;

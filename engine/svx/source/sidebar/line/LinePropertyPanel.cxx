@@ -98,19 +98,9 @@ void LinePropertyPanel::NotifyItemUpdate(
             updateLineWidth(bDisabled, bSetOrDefault, pState);
             break;
         }
-        case SID_ATTR_LINE_START:
+        default:
         {
-            updateLineStart(bDisabled, bSetOrDefault, pState);
-            break;
-        }
-        case SID_ATTR_LINE_END:
-        {
-            updateLineEnd(bDisabled, bSetOrDefault, pState);
-            break;
-        }
-        case SID_LINEEND_LIST:
-        {
-            updateLineEndList(pState);
+            updateLineEnds(nSID, eState, pState);
             break;
         }
     }

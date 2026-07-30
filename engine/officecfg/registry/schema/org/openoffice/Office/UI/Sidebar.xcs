@@ -230,6 +230,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="KitMobilePhoneOnly" oor:type="xs:boolean">
+        <info>
+          <desc>This flag controls whether the panel is left out of a COKit view which is not a mobile phone.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="WantsAWT" oor:type="xs:boolean">
         <info>
           <desc>This flag controls whether the panel requires a awt::XWindow parent. This option cannot be false if WantsCanvas

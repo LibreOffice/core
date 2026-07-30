@@ -26,7 +26,8 @@ PanelDescriptor::PanelDescriptor()
       mnOrderIndex(10000), // Default value as defined in Sidebar.xcs
       mbShowForReadOnlyDocuments(false),
       mbWantsAWT(true),
-      mbExperimental(false)
+      mbExperimental(false),
+      mbKitMobilePhoneOnly(false)
 {
 }
 
@@ -42,7 +43,8 @@ PanelDescriptor::PanelDescriptor (const PanelDescriptor& rOther)
       mnOrderIndex(rOther.mnOrderIndex),
       mbShowForReadOnlyDocuments(rOther.mbShowForReadOnlyDocuments),
       mbWantsAWT(rOther.mbWantsAWT),
-      mbExperimental(rOther.mbExperimental)
+      mbExperimental(rOther.mbExperimental),
+      mbKitMobilePhoneOnly(rOther.mbKitMobilePhoneOnly)
 {
 }
 

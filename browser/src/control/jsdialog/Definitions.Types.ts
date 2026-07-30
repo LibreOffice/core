@@ -456,6 +456,8 @@ interface ComboBoxWidget extends WidgetJSON {
 	// entries which are values of the box but are not offered in its list
 	hiddenEntries?: Array<string | number>;
 	entrycompletion?: boolean;
+	// build the box even while it has no entries yet
+	buildWhenEmpty?: boolean;
 }
 
 interface TreeColumnJSON {

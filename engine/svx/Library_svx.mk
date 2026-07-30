@@ -121,6 +121,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/dialcontrol \
     svx/source/dialog/dlgctl3d \
     svx/source/dialog/dlgctrl \
+    svx/source/dialog/LineEndStyleBoxes \
     svx/source/dialog/fntctrl \
     svx/source/dialog/fontwork \
     svx/source/dialog/frmdirlbox \
@@ -252,6 +253,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/tbxctrls/layctrl \
     svx/source/tbxctrls/lboxctrl \
     svx/source/tbxctrls/linewidthctrl \
+    svx/source/tbxctrls/NotebookbarLineController \
     svx/source/tbxctrls/tbunocontroller \
     svx/source/tbxctrls/tbunosearchcontrollers \
     svx/source/tbxctrls/tbxcolor \

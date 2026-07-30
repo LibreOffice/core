@@ -13,12 +13,24 @@
 
 WeldedTabbedNotebookbar::WeldedTabbedNotebookbar(
     const VclPtr<vcl::Window>& pContainerWindow, const OUString& rUIFilePath,
-    const css::uno::Reference<css::frame::XFrame>& rFrame, sal_uInt64 nWindowId)
+    const css::uno::Reference<css::frame::XFrame>& rFrame, sal_uInt64 nWindowId,
+    const std::vector<ExtraPanel>& rExtraPanels)
     : m_xBuilder(JSInstanceBuilder::CreateNotebookbarBuilder(
           pContainerWindow, AllSettings::GetUIRootDir(), rUIFilePath, rFrame, nWindowId))
 {
     m_xContainer = m_xBuilder->weld_container(u"NotebookBar"_ustr);
     m_xWeldedToolbar = m_xBuilder->weld_toolbar(u"WeldedToolbar"_ustr);
+
+    for (const ExtraPanel& rPanel : rExtraPanels)
+    {
+        ExtraToolbar aExtra;
+        aExtra.m_aControllerService = rPanel.m_aControllerService;
+        aExtra.m_xBuilder = JSInstanceBuilder::CreateNotebookbarBuilder(
+            pContainerWindow, AllSettings::GetUIRootDir(), OUString(rPanel.m_aUIFilePath), rFrame,
+            nWindowId);
+        aExtra.m_xToolbar = aExtra.m_xBuilder->weld_toolbar(OUString(rPanel.m_aToolbarId));
+        m_aExtraToolbars.push_back(std::move(aExtra));
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

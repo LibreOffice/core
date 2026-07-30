@@ -2595,36 +2595,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'vertical': 'true'
 			},
 			{ type: 'separator', id: 'shape-fliphorizontal-break', orientation: 'vertical' },
-			{
-				'type': 'container',
-				'children': [
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'shape-tab-xlinecolor:ColorPickerMenu',
-								'noLabel': true,
-								'type': 'toolitem',
-								'text': _UNO('.uno:XLineColor'),
-								'command': '.uno:XLineColor'
-							}
-						]
-					},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'shape-tab-fillcolor:ColorPickerMenu',
-								'noLabel': true,
-								'type': 'toolitem',
-								'text': _UNO('.uno:FillColor'),
-								'command': '.uno:FillColor'
-							}
-						]
-					}
-				],
-				'vertical': 'true'
-			},
+			this.getShapeLinePropertiesSection(),
 			{ type: 'separator', id: 'shape-fillcolor-break', orientation: 'vertical' },
 			{
 				'type': 'overflowgroup',

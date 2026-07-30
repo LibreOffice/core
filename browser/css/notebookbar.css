@@ -27,6 +27,13 @@
 	min-width: 70px;
 }
 
+#arrowgrid.notebookbar .notebookbar.ui-combobox {
+	/* the value is the arrow preview and nothing else, so the field is no wider
+	   than the dropdown it opens, plus the room the arrow indicator takes */
+	width: 72px;
+	min-width: 0;
+}
+
 /* center text vertically */
 
 .notebookbar.ui-radiobutton,

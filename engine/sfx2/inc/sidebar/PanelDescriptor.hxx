@@ -37,6 +37,7 @@ public:
     bool mbShowForReadOnlyDocuments;
     bool mbWantsAWT;
     bool mbExperimental;
+    bool mbKitMobilePhoneOnly;
 
     OUString msNodeName; // some impress panel nodes names are different from their Id
 

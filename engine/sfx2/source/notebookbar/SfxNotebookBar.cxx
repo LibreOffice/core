@@ -28,6 +28,12 @@
 #include <comphelper/types.hxx>
 #include <framework/addonsoptions.hxx>
 #include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
+#include <vcl/weldutils.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <comphelper/diagnose_ex.hxx>
+#include <memory>
 #include <vector>
 #include <unordered_map>
 #include <vcl/WeldedTabbedNotebookbar.hxx>
@@ -54,13 +60,67 @@ struct NotebookBarViewData
     std::unique_ptr<WeldedTabbedNotebookbar> m_pWeldedWrapper;
     VclPtr<NotebookBar> m_pNotebookBar;
     std::unique_ptr<ToolbarUnoDispatcher> m_pToolbarUnoDispatcher;
+    std::vector<std::unique_ptr<ToolbarUnoDispatcher>> m_aExtraToolbarUnoDispatchers;
+    std::vector<css::uno::Reference<css::lang::XComponent>> m_aExtraPanelControllers;
 
     ~NotebookBarViewData()
     {
+        releaseExtraPanels();
+
         if (m_pNotebookBar)
             m_pNotebookBar.disposeAndClear();
     }
+
+    void releaseExtraPanels()
+    {
+        for (const auto& rController : m_aExtraPanelControllers)
+            rController->dispose();
+        m_aExtraPanelControllers.clear();
+        m_aExtraToolbarUnoDispatchers.clear();
+    }
 };
+
+/** Creates the UNO component which drives the non-toolbar widgets of a welded
+    notebookbar panel, handing it the builder of that panel's .ui. */
+css::uno::Reference<css::lang::XComponent>
+CreateExtraPanelController(const OUString& rServiceName,
+                           const css::uno::Reference<css::frame::XFrame>& rFrame,
+                           SfxBindings& rBindings, weld::Toolbar& rToolbar,
+                           weld::Builder& rBuilder)
+{
+    css::uno::Reference<css::awt::XWindow> xWidget(
+        new weld::TransportAsXWindow(&rToolbar, &rBuilder));
+
+    css::beans::PropertyValue aFrame;
+    aFrame.Name = u"Frame"_ustr;
+    aFrame.Value <<= rFrame;
+    css::beans::PropertyValue aParent;
+    aParent.Name = u"ParentWindow"_ustr;
+    aParent.Value <<= xWidget;
+    css::beans::PropertyValue aBindings;
+    aBindings.Name = u"SfxBindings"_ustr;
+    aBindings.Value <<= reinterpret_cast<sal_uInt64>(&rBindings);
+
+    const cpo::uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any(aFrame),
+                                                        cpo::uno::Any(aParent),
+                                                        cpo::uno::Any(aBindings) };
+
+    try
+    {
+        const css::uno::Reference<css::uno::XComponentContext>& xContext
+            = comphelper::getProcessComponentContext();
+        return css::uno::Reference<css::lang::XComponent>(
+            xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                rServiceName, aArguments, xContext),
+            css::uno::UNO_QUERY);
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sfx.appl", "cannot create " << rServiceName);
+    }
+
+    return nullptr;
+}
 
 /** Notebookbar instance manager is a singleton that is used for track the
  *  per-view instances of view specific data contained in NotebookBarViewData
@@ -510,15 +570,42 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 assert(pNotebookBar->IsWelded());
 
                 sal_uInt64 nWindowId = reinterpret_cast<sal_uInt64>(pViewShell);
+
+                const std::vector<WeldedTabbedNotebookbar::ExtraPanel> aExtraPanels{
+                    { u"svx/ui/notebookbarshapeline.ui", u"LineWeldedToolbar",
+                      u"com.sun.star.svx.NotebookbarLineController" },
+                    { u"svx/ui/notebookbarpictureline.ui", u"PictureLineWeldedToolbar", u"" },
+                };
+
                 rViewData.m_pWeldedWrapper.reset(
                         new WeldedTabbedNotebookbar(pNotebookBar->GetMainContainer(),
                                                     pNotebookBar->GetUIFilePath(),
-                                                    xFrame, nWindowId));
+                                                    xFrame, nWindowId, aExtraPanels));
                 pNotebookBar->SetDisposeCallback(LINK(nullptr, SfxNotebookBar, VclDisposeHdl), pViewShell);
 
                 rViewData.m_pToolbarUnoDispatcher.reset(
                     new ToolbarUnoDispatcher(rViewData.m_pWeldedWrapper->getWeldedToolbar(),
                                              rViewData.m_pWeldedWrapper->getBuilder(), xFrame));
+
+                // Wire a UNO dispatcher for each present welded sub-toolbar
+                for (auto& rExtra : rViewData.m_pWeldedWrapper->getExtraPanels())
+                {
+                    if (!rExtra.m_xToolbar || !rExtra.m_xBuilder)
+                        continue;
+
+                    rViewData.m_aExtraToolbarUnoDispatchers.push_back(
+                        std::make_unique<ToolbarUnoDispatcher>(*rExtra.m_xToolbar,
+                                                               *rExtra.m_xBuilder, xFrame));
+
+                    if (rExtra.m_aControllerService.empty())
+                        continue;
+
+                    if (css::uno::Reference<css::lang::XComponent> xController
+                        = CreateExtraPanelController(OUString(rExtra.m_aControllerService), xFrame,
+                                                     pViewShell->GetViewFrame().GetBindings(),
+                                                     *rExtra.m_xToolbar, *rExtra.m_xBuilder))
+                        rViewData.m_aExtraPanelControllers.push_back(std::move(xController));
+                }
 
                 return true;
             }

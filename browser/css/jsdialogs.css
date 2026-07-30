@@ -1854,6 +1854,26 @@ img.ui-combobox-value-preview {
 	background-color: var(--color-background-hover);
 }
 
+/* Line width dropdown of the Shape tab: draw a preview line as thick as the
+ * entry it labels */
+.ui-combobox-entry[class*='ui-linewidth-']::before {
+	content: '';
+	flex: 0 0 auto;
+	width: 56px;
+	margin-inline-end: 12px;
+	background-color: currentColor;
+	border-radius: 1px;
+}
+
+.ui-combobox-entry.ui-linewidth-18::before { height: 1px; }
+.ui-combobox-entry.ui-linewidth-28::before { height: 2px; }
+.ui-combobox-entry.ui-linewidth-35::before { height: 3px; }
+.ui-combobox-entry.ui-linewidth-53::before { height: 4px; }
+.ui-combobox-entry.ui-linewidth-81::before { height: 6px; }
+.ui-combobox-entry.ui-linewidth-106::before { height: 8px; }
+.ui-combobox-entry.ui-linewidth-159::before { height: 11px; }
+.ui-combobox-entry.ui-linewidth-212::before { height: 14px; }
+
 [id^='comment-menu-'][id$='-entries'] .ui-combobox-entry:hover,
 #jsd-context-menu-entries .ui-combobox-entry:hover,
 [id^='comment-menu-'][id$='-entries'] .ui-combobox-entry.has-open-submenu,

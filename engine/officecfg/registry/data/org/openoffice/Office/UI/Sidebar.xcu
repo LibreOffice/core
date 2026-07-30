@@ -934,6 +934,11 @@
         <prop oor:name="WantsAWT" oor:type="xs:boolean">
           <value>false</value>
         </prop>
+        <!-- In online the Line section lives in the notebookbar, which a mobile
+             phone does not have -->
+        <prop oor:name="KitMobilePhoneOnly" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
       </node>
 
       <node oor:name="GalleryPanel" oor:op="replace">

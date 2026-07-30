@@ -392,6 +392,7 @@ core_constructor_list = [
     "com_sun_star_comp_svx_FrameToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_LineStyleToolBoxControl_get_implementation",
+    "com_sun_star_comp_svx_NotebookbarLineController_get_implementation",
     "com_sun_star_comp_svx_StyleToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_StylesPreviewToolBoxControl_get_implementation",
     "com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation",

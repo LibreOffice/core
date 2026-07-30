@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<interface domain="svx">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkBox" id="PictureLineBox">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkToolbar" id="PictureLineWeldedToolbar">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="toolbar_style">icons</property>
+        <property name="show_arrow">False</property>
+        <child>
+          <object class="GtkMenuToolButton" id="XLineStyle">
+            <property name="visible">True</property>
+            <property name="action_name">.uno:XLineStyle</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+  </object>
+</interface>

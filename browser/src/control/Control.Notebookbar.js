@@ -572,6 +572,180 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		return arr;
 	},
 
+	_getArrowStylePicker: function(which) {
+		var isStart = which === 'start';
+		return [
+			{
+				'id': isStart ? 'startarrowlabel' : 'endarrowlabel',
+				'type': 'fixedtext',
+				'text': isStart ? _('Start:') : _('End:'),
+				'top': isStart ? '0' : '1',
+				'left': '0'
+			},
+			{
+				'id': isStart ? 'startarrowstyle' : 'endarrowstyle',
+				'type': 'combobox',
+				'text': '',
+				'entries': [],
+				'buildWhenEmpty': true,
+				'selectedCount': '0',
+				'selectedEntries': [],
+				'labelledBy': isStart ? 'startarrowlabel' : 'endarrowlabel',
+				'aria': { 'label': isStart ? _('Start arrowhead style') : _('End arrowhead style') },
+				'accessibility': { focusBack: true, combination: isStart ? 'AS' : 'AE', de: null },
+				'top': isStart ? '0' : '1',
+				'left': '1'
+			}
+		];
+	},
+
+	_getLinePropertiesSection: function(opts) {
+		var p = opts.prefix;
+		var section = {
+			'type': 'overflowgroup',
+			'id': opts.panelId,
+			'name': _('Properties'),
+			'accessibility': { focusBack: false, combination: opts.combination, de: null },
+			'children': [
+				{
+					'type': 'container',
+					'children': [
+						{
+							'type': 'container',
+							'children': [
+								{
+									'type': 'toolbox',
+									'id': p + '-fillcolor-box',
+									'children': [
+										{
+											'id': p + '-fillcolor:ColorPickerMenu',
+											'type': 'toolitem',
+											'noLabel': true,
+											'text': _UNO('.uno:FillColor'),
+											'command': '.uno:FillColor',
+											'accessibility': { focusBack: true, combination: 'FC', de: null }
+										}
+									]
+								},
+								{
+									'type': 'toolbox',
+									'id': p + '-linecolor-box',
+									'children': [
+										{
+											'id': p + '-linecolor:ColorPickerMenu',
+											'type': 'toolitem',
+											'noLabel': true,
+											'text': _UNO('.uno:XLineColor'),
+											'command': '.uno:XLineColor',
+											'accessibility': { focusBack: true, combination: 'LC', de: null }
+										}
+									]
+								},
+								{
+									'type': 'toolbox',
+									'id': opts.weldedToolbarId,
+									'children': [
+										{
+											'id': p + '-linestyle',
+											'type': 'toolitem',
+											'noLabel': true,
+											'dropdown': true,
+											'text': _UNO('.uno:XLineStyle', 'text'),
+											'command': '.uno:XLineStyle',
+											'accessibility': { focusBack: true, combination: 'LS', de: null }
+										}
+									]
+								},
+								{
+									'type': 'toolbox',
+									'id': p + '-linewidth-box',
+									'children': [
+										{
+											'id': p + '-linewidth',
+											'type': 'menubutton',
+											'noLabel': true,
+											'command': '.uno:LineWidth',
+											'icon': 'lc_selectwidth.svg',
+											'text': _('Line Width'),
+											'accessibility': { focusBack: true, combination: 'LW', de: null },
+											'menu': [
+												{ text: '0.5 pt', class: 'ui-linewidth-18', uno: 'LineWidth?LineWidth:long=18' },
+												{ text: '0.8 pt', class: 'ui-linewidth-28', uno: 'LineWidth?LineWidth:long=28' },
+												{ text: '1.0 pt', class: 'ui-linewidth-35', uno: 'LineWidth?LineWidth:long=35' },
+												{ text: '1.5 pt', class: 'ui-linewidth-53', uno: 'LineWidth?LineWidth:long=53' },
+												{ text: '2.3 pt', class: 'ui-linewidth-81', uno: 'LineWidth?LineWidth:long=81' },
+												{ text: '3.0 pt', class: 'ui-linewidth-106', uno: 'LineWidth?LineWidth:long=106' },
+												{ text: '4.5 pt', class: 'ui-linewidth-159', uno: 'LineWidth?LineWidth:long=159' },
+												{ text: '6.0 pt', class: 'ui-linewidth-212', uno: 'LineWidth?LineWidth:long=212' }
+											]
+										}
+									]
+								}
+							],
+							'vertical': false
+						},
+						{
+							'id': p + '-transparency_set',
+							'type': 'grid',
+							'children': [
+								{
+									'id': p + '-translabel',
+									'type': 'fixedtext',
+									'text': _('Line Transparency:'),
+									'top': '0',
+									'left': '0'
+								},
+								{
+									'id': p + '-linetransparency',
+									'type': 'linetransparency',
+									'text': '0%',
+									'min': 0,
+									'max': 100,
+									'step': 5,
+									'labelledBy': p + '-translabel',
+									'top': '0',
+									'left': '1'
+								}
+							]
+						}
+					],
+					'vertical': true
+				}
+			]
+		};
+
+		if (opts.includeArrow) {
+			section.children.push({
+				'id': 'arrowgrid',
+				'type': 'grid',
+				'children': this._getArrowStylePicker('start')
+					.concat(this._getArrowStylePicker('end'))
+			});
+		}
+
+		return section;
+	},
+
+	getPictureLinePropertiesSection: function() {
+		return this._getLinePropertiesSection({
+			prefix: 'picture',
+			panelId: 'picture-properties-panel',
+			weldedToolbarId: 'PictureLineWeldedToolbar',
+			combination: 'PL',
+			includeArrow: false
+		});
+	},
+
+	getShapeLinePropertiesSection: function() {
+		return this._getLinePropertiesSection({
+			prefix: 'shape',
+			panelId: 'shape-properties-panel',
+			weldedToolbarId: 'LineWeldedToolbar',
+			combination: 'PR',
+			includeArrow: true
+		});
+	},
+
 	// Rebuild the notebookbar from a fresh tabsJSON.  Used by
 	// ServerConnectionService once extensions have been discovered so the
 	// Extensions tab picks them up; preserves whichever tab the user has

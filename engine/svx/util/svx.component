@@ -120,6 +120,10 @@
     constructor="com_sun_star_comp_svx_VertTextToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.NotebookbarLineController"
+    constructor="com_sun_star_comp_svx_NotebookbarLineController_get_implementation">
+    <service name="com.sun.star.svx.NotebookbarLineController"/>
+  </implementation>
   <implementation name="com.sun.star.comp.svx.ThemeColorsToolBoxControl"
     constructor="com_sun_star_comp_svx_ThemeColorsToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>

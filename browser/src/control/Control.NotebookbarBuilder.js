@@ -30,6 +30,7 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 		this._controlHandlers['tabcontrol'] = this._overriddenTabsControlHandler;
 		this._controlHandlers['iconviewlist'] = JSDialog.notebookbarIconViewList;
 		this._controlHandlers['tabpage'] = this._overriddenTabPageHandler;
+		this._controlHandlers['linetransparency'] = this._lineTransparencyControl;
 
 		this._toolitemHandlers['.uno:XLineColor'] = JSDialog.colorPickerButton;
 		this._toolitemHandlers['.uno:FontColor'] = JSDialog.colorPickerButton;
@@ -129,6 +130,41 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 		this._toolitemHandlers['vnd.sun.star.findbar:FocusToFindbar'] = function() {};
 	},
 
+	// Line transparency spinfield
+	_lineTransparencyControl: function(parentContainer, data, builder) {
+		var command = '.uno:LineTransparence';
+		var callback = function(objectType, eventType, object, value) {
+			var percent = parseInt(value, 10);
+			if (isNaN(percent))
+				percent = 0;
+			builder.map.sendUnoCommand(command + '?LineTransparence:short=' + percent);
+		};
+		var result = JSDialog.spinfieldControl(parentContainer, data, builder, callback);
+
+		// Show the transparency of whatever is selected
+		var container = parentContainer.querySelector('#' + data.id);
+		var spinfield = container ? container.querySelector('input') : null;
+		if (!spinfield)
+			return result;
+
+		var setValueFromState = function(state) {
+			var percent = parseInt(state, 10);
+			if (isNaN(percent))
+				return;
+			JSDialog._setSpinFieldValue(spinfield,
+				JSDialog._formatSpinFieldValue(percent, container._unit), percent);
+		};
+
+		setValueFromState(builder.map.stateChangeHandler.getItemValue(command));
+		builder.map.on('commandstatechanged', function(e) {
+			// a tab rebuild replaces these elements; let the stale ones go
+			if (e.commandName === command && container.isConnected)
+				setValueFromState(e.state);
+		}, this);
+
+		return result;
+	},
+
 	_bigtoolitemHandler: function(parentContainer, data, builder) {
 		var noLabels = builder.options.noLabelsForUnoButtons;
 		builder.options.noLabelsForUnoButtons = false;
@@ -181,7 +217,7 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 	},
 
 	_comboboxControl: function(parentContainer, data, builder) {
-		if (!data.entries || data.entries.length === 0)
+		if ((!data.entries || data.entries.length === 0) && !data.buildWhenEmpty)
 			return false;
 
 		// Fix exception due to undefined _createiOsFontButton function
