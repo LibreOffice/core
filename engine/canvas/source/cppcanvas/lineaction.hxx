@@ -45,7 +45,6 @@ namespace cppcanvas
             /// Plain hair line from point 1 to point 2
             std::shared_ptr<Action> createLineAction( const ::basegfx::B2DPoint&,
                                                      const ::basegfx::B2DPoint&,
-                                                     const CanvasSharedPtr&,
                                                      const OutDevState& );
         }
 

@@ -32,9 +32,8 @@ void initLineStyleWaveline(sal_uInt32 nLineStyle, bool& bIsWaveline, bool& bIsBo
 
 namespace cppcanvas
 {
-TextLinesHelper::TextLinesHelper(CanvasSharedPtr xCanvas, const OutDevState& rState)
-    : mpCanvas(std::move(xCanvas))
-    , mbIsOverlineColorSet(rState.isTextOverlineColorSet)
+TextLinesHelper::TextLinesHelper(const OutDevState& rState)
+    : mbIsOverlineColorSet(rState.isTextOverlineColorSet)
     , maOverlineColor(rState.textOverlineColor)
     , mbIsUnderlineColorSet(rState.isTextLineColorSet)
     , maUnderlineColor(rState.textLineColor)
@@ -79,10 +78,11 @@ void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo
     initLineStyleWaveline(rLineInfo.mnUnderlineStyle, mbUnderlineWaveline, mbUnderlineWavelineBold);
 }
 
-void TextLinesHelper::render(const vclcanvas::RenderState& rRenderState, bool bNormalText) const
+void TextLinesHelper::render(const CanvasSharedPtr& rCanvas,
+                             const vclcanvas::RenderState& rRenderState, bool bNormalText) const
 {
-    const vclcanvas::ViewState aViewState(mpCanvas->getViewState());
-    const uno::Reference<vclcanvas::XCanvas> xCanvas(mpCanvas->getUNOCanvas());
+    const vclcanvas::ViewState aViewState(rCanvas->getViewState());
+    const uno::Reference<vclcanvas::XCanvas> xCanvas(rCanvas->getUNOCanvas());
     rendering::StrokeAttributes aStrokeAttributes;
     aStrokeAttributes.JoinType = rendering::PathJoinType::ROUND;
 

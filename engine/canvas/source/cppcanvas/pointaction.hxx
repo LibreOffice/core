@@ -44,12 +44,10 @@ namespace cppcanvas
         {
             /// Point in current color
             std::shared_ptr<Action> createPointAction( const ::basegfx::B2DPoint&,
-                                                      const CanvasSharedPtr&,
                                                       const OutDevState& );
 
             /// Point in given color
             std::shared_ptr<Action> createPointAction( const ::basegfx::B2DPoint&,
-                                                      const CanvasSharedPtr&,
                                                       const OutDevState&,
                                                       const ::Color&        );
         }

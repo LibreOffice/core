@@ -75,9 +75,9 @@ namespace cppcanvas
                                                      KernArraySpan                  pDXArray,
                                                      std::span<const bool>          pKashidaArray,
                                                      VirtualDevice&                 rVDev,
-                                                     const CanvasSharedPtr&         rCanvas,
                                                      const OutDevState&             rState,
-                                                     bool                           bSubsettable );
+                                                     bool                           bSubsettable,
+                                                     const css::uno::Reference<vclcanvas::XCanvas>& );
         }
 }
 

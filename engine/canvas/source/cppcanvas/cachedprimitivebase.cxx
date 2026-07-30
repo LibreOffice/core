@@ -32,21 +32,19 @@ using namespace ::com::sun::star;
 
 namespace cppcanvas
 {
-        CachedPrimitiveBase::CachedPrimitiveBase( CanvasSharedPtr        xCanvas,
-                                                  bool                   bOnlyRedrawWithSameTransform ) :
-            mpCanvas(std::move( xCanvas )),
+        CachedPrimitiveBase::CachedPrimitiveBase( bool bOnlyRedrawWithSameTransform ) :
             mbOnlyRedrawWithSameTransform( bOnlyRedrawWithSameTransform )
         {
             // TODO(F2): also store last view transform, and refuse to
             // redraw if changed.
         }
 
-        bool CachedPrimitiveBase::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+        bool CachedPrimitiveBase::render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const
         {
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::CachedPrimitiveBase::render()" );
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::CachedPrimitiveBase: 0x" << std::hex << this );
 
-            const vclcanvas::ViewState  aViewState( mpCanvas->getViewState() );
+            const vclcanvas::ViewState  aViewState( rCanvas->getViewState() );
             ::basegfx::B2DHomMatrix     aTotalTransform = ::canvastools::getViewStateTransform(
                                                     aViewState );
             aTotalTransform *= rTransformation;
@@ -70,7 +68,7 @@ namespace cppcanvas
             maLastTransformation = aTotalTransform;
 
             // delegate rendering to derived classes
-            return renderPrimitive( mxCachedPrimitive,
+            return renderPrimitive( rCanvas, mxCachedPrimitive,
                                     rTransformation );
         }
 }

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sal/types.h>
+#include "canvas.hxx"
 
 namespace basegfx
 {
@@ -84,7 +85,8 @@ namespace cppcanvas
                 @return true, if rendering was successful. If
                 rendering failed, false is returned.
              */
-            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
+            virtual bool render( const CanvasSharedPtr& rCanvas,
+                                 const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
 
             /** Render the given part of the action to the associated
                 canvas.
@@ -100,7 +102,8 @@ namespace cppcanvas
                 specified subset is invalid for this action, or if
                 rendering failed for other reasons, false is returned.
              */
-            virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+            virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+                                       const ::basegfx::B2DHomMatrix& rTransformation,
                                        const Subset&                  rSubset ) const = 0;
 
             /** Query action count.

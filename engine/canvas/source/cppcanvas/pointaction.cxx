@@ -45,51 +45,45 @@ namespace cppcanvas
             {
             public:
                 PointAction( const ::basegfx::B2DPoint&,
-                             CanvasSharedPtr,
                              const OutDevState& );
                 PointAction( const ::basegfx::B2DPoint&,
-                             const CanvasSharedPtr&,
                              const OutDevState&,
                              const ::Color&     );
 
                 PointAction(const PointAction&) = delete;
                 const PointAction& operator=(const PointAction&) = delete;
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                virtual bool render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const override;
+                virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+                                           const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
                 virtual sal_Int32 getActionCount() const override;
 
             private:
                 ::basegfx::B2DPoint                         maPoint;
-                CanvasSharedPtr                             mpCanvas;
                 ::vclcanvas::RenderState                 maState;
             };
 
             PointAction::PointAction( const ::basegfx::B2DPoint& rPoint,
-                                      CanvasSharedPtr            xCanvas,
                                       const OutDevState&         rState ) :
-                maPoint( rPoint ),
-                mpCanvas(std::move( xCanvas ))
+                maPoint( rPoint )
             {
                 cppcanvastools::initRenderState(maState,rState);
                 maState.DeviceColor = rState.lineColor;
             }
 
             PointAction::PointAction( const ::basegfx::B2DPoint& rPoint,
-                                      const CanvasSharedPtr&     rCanvas,
                                       const OutDevState&         rState,
                                       const ::Color&             rAltColor ) :
-                maPoint( rPoint ),
-                mpCanvas( rCanvas )
+                maPoint( rPoint )
             {
                 cppcanvastools::initRenderState(maState,rState);
                 maState.DeviceColor = canvastools::colorToDoubleSequence(
                     rAltColor );
             }
 
-            bool PointAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool PointAction::render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PointAction::render()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PointAction: 0x" << std::hex << this );
@@ -97,14 +91,15 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                mpCanvas->getUNOCanvas()->drawPoint( ::basegfx::unotools::point2DFromB2DPoint(maPoint),
-                                                     mpCanvas->getViewState(),
+                rCanvas->getUNOCanvas()->drawPoint( ::basegfx::unotools::point2DFromB2DPoint(maPoint),
+                                                     rCanvas->getViewState(),
                                                      aLocalState );
 
                 return true;
             }
 
-            bool PointAction::renderSubset( const ::basegfx::B2DHomMatrix&    rTransformation,
+            bool PointAction::renderSubset( const CanvasSharedPtr& rCanvas,
+                                            const ::basegfx::B2DHomMatrix&    rTransformation,
                                             const Subset&                     rSubset ) const
             {
                 // point only contains a single action, fail if subset
@@ -113,7 +108,7 @@ namespace cppcanvas
                     rSubset.mnSubsetEnd != 1 )
                     return false;
 
-                return render( rTransformation );
+                return render( rCanvas, rTransformation );
             }
 
             sal_Int32 PointAction::getActionCount() const
@@ -123,18 +118,16 @@ namespace cppcanvas
         }
 
         std::shared_ptr<Action> PointActionFactory::createPointAction( const ::basegfx::B2DPoint& rPoint,
-                                                               const CanvasSharedPtr&     rCanvas,
                                                                const OutDevState&         rState )
         {
-            return std::make_shared<PointAction>( rPoint, rCanvas, rState );
+            return std::make_shared<PointAction>( rPoint, rState );
         }
 
         std::shared_ptr<Action> PointActionFactory::createPointAction( const ::basegfx::B2DPoint& rPoint,
-                                                               const CanvasSharedPtr&     rCanvas,
                                                                const OutDevState&         rState,
                                                                const ::Color&             rColor    )
         {
-            return std::make_shared<PointAction>( rPoint, rCanvas, rState, rColor );
+            return std::make_shared<PointAction>( rPoint, rState, rColor );
         }
 }
 

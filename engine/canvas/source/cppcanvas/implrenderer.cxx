@@ -373,7 +373,7 @@ namespace cppcanvas
 
             std::shared_ptr<Action> pPolyAction(
                 PolyPolyActionFactory::createPolyPolyAction(
-                    rPolyPoly, rParms.mrCanvas, rState ) );
+                    rPolyPoly, rState ) );
 
             if( pPolyAction )
             {
@@ -492,7 +492,7 @@ namespace cppcanvas
                 nSteps > 64 )
             {
                 uno::Reference< vclcanvas::XGraphicDevice > xGraphicDevice(
-                    rParms.mrCanvas->getUNOCanvas()->getDevice() );
+                    rParms.mrUnoCanvas->getDevice() );
 
                 if( xGraphicDevice.is() )
                 {
@@ -654,7 +654,6 @@ namespace cppcanvas
                         std::shared_ptr<Action> pPolyAction(
                             PolyPolyActionFactory::createPolyPolyAction(
                                 aDevicePoly,
-                                rParms.mrCanvas,
                                 rParms.mrStates.getState(),
                                 aTexture ) );
 
@@ -792,14 +791,14 @@ namespace cppcanvas
             {
                 cpo::uno::Sequence< beans::PropertyValue > aProperties{ comphelper::makePropertyValue(
                     u"EmphasisMark"_ustr, sal_uInt32(rFont.GetEmphasisMark())) };
-                return rParms.mrCanvas->getUNOCanvas()->createFont(aFontRequest,
-                                                                aProperties,
-                                                                aFontMatrix);
+                return rParms.mrUnoCanvas->createFont(aFontRequest,
+                                                        aProperties,
+                                                        aFontMatrix);
             }
 
-            return rParms.mrCanvas->getUNOCanvas()->createFont( aFontRequest,
-                                                                cpo::uno::Sequence< beans::PropertyValue >(),
-                                                                aFontMatrix );
+            return rParms.mrUnoCanvas->createFont( aFontRequest,
+                                                    cpo::uno::Sequence< beans::PropertyValue >(),
+                                                    aFontMatrix );
         }
 
         // create text effects such as shadow/relief/embossed
@@ -904,9 +903,9 @@ namespace cppcanvas
                     pCharWidths,
                     pKashidaArray,
                     rParms.mrVDev,
-                    rParms.mrCanvas,
                     rState,
-                    bSubsettableActions ) );
+                    bSubsettableActions,
+                    rParms.mrUnoCanvas ) );
 
             std::shared_ptr<Action> pStrikeoutTextAction;
 
@@ -962,9 +961,9 @@ namespace cppcanvas
                             aStrikeoutCharWidths,
                             pKashidaArray,
                             rParms.mrVDev,
-                            rParms.mrCanvas,
                             rState,
-                            bSubsettableActions ) ;
+                            bSubsettableActions,
+                            rParms.mrUnoCanvas ) ;
                 }
             }
 
@@ -1149,7 +1148,6 @@ namespace cppcanvas
 
             // alias common parameters
             VectorOfOutDevStates&  rStates(rFactoryParms.mrStates);
-            const CanvasSharedPtr& rCanvas(rFactoryParms.mrCanvas);
             ::VirtualDevice&       rVDev(rFactoryParms.mrVDev);
             sal_Int32&             io_rCurrActionIndex(rFactoryParms.mrCurrActionIndex);
 
@@ -1633,7 +1631,6 @@ namespace cppcanvas
                                     std::shared_ptr<Action> pPolyAction(
                                         PolyPolyActionFactory::createPolyPolyAction(
                                             aPoly,
-                                            rCanvas,
                                             rStates.getState(),
                                             aTexture ) );
 
@@ -1686,7 +1683,6 @@ namespace cppcanvas
                                 PointActionFactory::createPointAction(
                                     rState.mapModeTransform * vcl::unotools::b2DPointFromPoint(
                                         static_cast<MetaPointAction*>(pCurrAct)->GetPoint() ),
-                                    rCanvas,
                                     rState ) );
 
                             if( pPointAction )
@@ -1708,7 +1704,6 @@ namespace cppcanvas
                                 PointActionFactory::createPointAction(
                                     rState.mapModeTransform * vcl::unotools::b2DPointFromPoint(
                                         static_cast<MetaPixelAction*>(pCurrAct)->GetPoint() ),
-                                    rCanvas,
                                     rState,
                                     static_cast<MetaPixelAction*>(pCurrAct)->GetColor() ) );
 
@@ -1745,7 +1740,6 @@ namespace cppcanvas
                                     LineActionFactory::createLineAction(
                                         aStartPoint,
                                         aEndPoint,
-                                        rCanvas,
                                         rState );
 
                                 if( pLineAction )
@@ -1774,7 +1768,7 @@ namespace cppcanvas
                                 pLineAction =
                                     PolyPolyActionFactory::createPolyPolyAction(
                                         ::basegfx::B2DPolyPolygon( aPoly ),
-                                        rCanvas, rState, aStrokeAttributes );
+                                        rState, aStrokeAttributes );
 
                                 if( pLineAction )
                                 {
@@ -1924,7 +1918,6 @@ namespace cppcanvas
                                 pLineAction =
                                     PolyPolyActionFactory::createLinePolyPolyAction(
                                         ::basegfx::B2DPolyPolygon(aPoly),
-                                        rCanvas,
                                         rState );
 
                                 if( pLineAction )
@@ -1946,7 +1939,6 @@ namespace cppcanvas
                                 pLineAction =
                                     PolyPolyActionFactory::createPolyPolyAction(
                                         ::basegfx::B2DPolyPolygon(aPoly),
-                                        rCanvas,
                                         rState,
                                         aStrokeAttributes ) ;
 
@@ -1990,7 +1982,6 @@ namespace cppcanvas
                                     pAct->GetBitmap(),
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
-                                    rCanvas,
                                     rStates.getState() ) );
 
                         if( pBmpAction )
@@ -2011,7 +2002,6 @@ namespace cppcanvas
                                     pAct->GetBitmap(),
                                     rStates.getState().mapModeTransform * vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rStates.getState().mapModeTransform * vcl::unotools::b2DVectorFromSize( pAct->GetSize() ),
-                                    rCanvas,
                                     rStates.getState() ) );
 
                         if( pBmpAction )
@@ -2041,7 +2031,6 @@ namespace cppcanvas
                                     vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DVectorFromSize( pAct->GetDestSize() ),
-                                    rCanvas,
                                     rStates.getState() ) );
 
                         if( pBmpAction )
@@ -2062,7 +2051,6 @@ namespace cppcanvas
                                     pAct->GetBitmap(),
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
-                                    rCanvas,
                                     rStates.getState() ) );
 
                         if( pBmpAction )
@@ -2085,7 +2073,6 @@ namespace cppcanvas
                                     vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DVectorFromSize( pAct->GetSize() ),
-                                    rCanvas,
                                     rStates.getState() ) );
 
                         if( pBmpAction )
@@ -2115,7 +2102,6 @@ namespace cppcanvas
                                 vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
                                 rStates.getState().mapModeTransform *
                                 vcl::unotools::b2DVectorFromSize( pAct->GetDestSize() ),
-                                rCanvas,
                                 rStates.getState() ) );
 
                         if( pBmpAction )
@@ -2142,7 +2128,6 @@ namespace cppcanvas
                                 aBmp,
                                 rStates.getState().mapModeTransform *
                                 vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
-                                rCanvas,
                                 rStates.getState() ) );
 
                         if( pBmpAction )
@@ -2171,7 +2156,6 @@ namespace cppcanvas
                                 vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                 rStates.getState().mapModeTransform *
                                 vcl::unotools::b2DVectorFromSize( pAct->GetSize() ),
-                                rCanvas,
                                 rStates.getState() ) );
 
                         if( pBmpAction )
@@ -2206,7 +2190,6 @@ namespace cppcanvas
                                 vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
                                 rStates.getState().mapModeTransform *
                                 vcl::unotools::b2DVectorFromSize( pAct->GetDestSize() ),
-                                rCanvas,
                                 rStates.getState() ) );
 
                         if( pBmpAction )
@@ -2240,7 +2223,6 @@ namespace cppcanvas
                             std::shared_ptr<Action> pPolyAction(
                                 PolyPolyActionFactory::createPolyPolyAction(
                                     aPoly,
-                                    rCanvas,
                                     rState,
                                     pAct->GetTransparence() ) );
 
@@ -2274,7 +2256,6 @@ namespace cppcanvas
                                 vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                 rStates.getState().mapModeTransform *
                                 vcl::unotools::b2DVectorFromSize( pAct->GetSize() ),
-                                rCanvas,
                                 rStates.getState() ) );
 
                         if( pFloatTransAction )
@@ -2351,7 +2332,6 @@ namespace cppcanvas
                                     aSize.getWidth(),
                                     cppcanvastools::createTextLineInfo( rVDev,
                                                                rState )),
-                                rCanvas,
                                 rState ) );
 
                         if( pPolyAction )
@@ -2507,7 +2487,7 @@ namespace cppcanvas
 
             sal_Int32 nCurrActions(0);
             ActionFactoryParameters aParms(aStateStack,
-                                           rCanvas,
+                                           rCanvas->getUNOCanvas(),
                                            *aVDev,
                                            nCurrActions );
 
@@ -2568,7 +2548,7 @@ namespace cppcanvas
                 for (const MtfAction & rAction : maActions)
                     // ANDing the result. We want to fail if at least
                     // one action failed.
-                    bRet &= rAction.mpAction->render( aMatrix );
+                    bRet &= rAction.mpAction->render( mpCanvas, aMatrix );
                 return bRet;
             }
             catch( uno::Exception& )

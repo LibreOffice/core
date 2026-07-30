@@ -45,14 +45,15 @@ namespace cppcanvas
             public:
                 LineAction( const ::basegfx::B2DPoint&,
                             const ::basegfx::B2DPoint&,
-                            CanvasSharedPtr,
                             const OutDevState& );
 
                 LineAction(const LineAction&) = delete;
                 const LineAction& operator=(const LineAction&) = delete;
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                virtual bool render( const CanvasSharedPtr& rCanvas,
+                                     const ::basegfx::B2DHomMatrix& rTransformation ) const override;
+                virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+                                           const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
                 virtual sal_Int32 getActionCount() const override;
@@ -60,23 +61,20 @@ namespace cppcanvas
             private:
                 ::basegfx::B2DPoint     maStartPoint;
                 ::basegfx::B2DPoint     maEndPoint;
-                CanvasSharedPtr         mpCanvas;
                 vclcanvas::RenderState  maState;
             };
 
             LineAction::LineAction( const ::basegfx::B2DPoint& rStartPoint,
                                     const ::basegfx::B2DPoint& rEndPoint,
-                                    CanvasSharedPtr            xCanvas,
                                     const OutDevState&         rState ) :
                 maStartPoint( rStartPoint ),
-                maEndPoint( rEndPoint ),
-                mpCanvas(std::move( xCanvas ))
+                maEndPoint( rEndPoint )
             {
                 cppcanvastools::initRenderState(maState,rState);
                 maState.DeviceColor = rState.lineColor;
             }
 
-            bool LineAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool LineAction::render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::LineAction::render()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::LineAction: 0x" << std::hex << this );
@@ -84,15 +82,16 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                mpCanvas->getUNOCanvas()->drawLine( ::basegfx::unotools::point2DFromB2DPoint(maStartPoint),
+                rCanvas->getUNOCanvas()->drawLine( ::basegfx::unotools::point2DFromB2DPoint(maStartPoint),
                                                     ::basegfx::unotools::point2DFromB2DPoint(maEndPoint),
-                                                    mpCanvas->getViewState(),
+                                                    rCanvas->getViewState(),
                                                     aLocalState );
 
                 return true;
             }
 
-            bool LineAction::renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+            bool LineAction::renderSubset( const CanvasSharedPtr& rCanvas,
+                                           const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const
             {
                 // line only contains a single action, fail if subset
@@ -101,7 +100,7 @@ namespace cppcanvas
                     rSubset.mnSubsetEnd != 1 )
                     return false;
 
-                return render( rTransformation );
+                return render( rCanvas, rTransformation );
             }
 
             sal_Int32 LineAction::getActionCount() const
@@ -112,12 +111,10 @@ namespace cppcanvas
 
         std::shared_ptr<Action> LineActionFactory::createLineAction( const ::basegfx::B2DPoint& rStartPoint,
                                                              const ::basegfx::B2DPoint& rEndPoint,
-                                                             const CanvasSharedPtr&     rCanvas,
                                                              const OutDevState&         rState  )
         {
             return std::make_shared<LineAction>( rStartPoint,
                                                  rEndPoint,
-                                                 rCanvas,
                                                  rState);
         }
 

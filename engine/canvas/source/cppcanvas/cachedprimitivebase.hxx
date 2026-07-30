@@ -55,22 +55,21 @@ namespace cppcanvas
                 same. Otherwise, repaints are always performed via the
                 cached primitive.
              */
-            CachedPrimitiveBase( CanvasSharedPtr        xCanvas,
-                                 bool                   bOnlyRedrawWithSameTransform );
+            CachedPrimitiveBase( bool                   bOnlyRedrawWithSameTransform );
 
             CachedPrimitiveBase(const CachedPrimitiveBase&) = delete;
             const CachedPrimitiveBase& operator=(const CachedPrimitiveBase&) = delete;
 
-            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
+            virtual bool render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const override;
 
         protected:
             using Action::render;
 
         private:
-            virtual bool renderPrimitive( css::uno::Reference< vclcanvas::XCachedPrimitive >& rCachedPrimitive,
+            virtual bool renderPrimitive( const CanvasSharedPtr& rCanvas,
+                                          css::uno::Reference< vclcanvas::XCachedPrimitive >& rCachedPrimitive,
                                           const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
 
-            CanvasSharedPtr                                                 mpCanvas;
             mutable css::uno::Reference< vclcanvas::XCachedPrimitive >      mxCachedPrimitive;
             mutable ::basegfx::B2DHomMatrix                                 maLastTransformation;
             const bool                                                      mbOnlyRedrawWithSameTransform;

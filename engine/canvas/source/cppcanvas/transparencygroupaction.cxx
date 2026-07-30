@@ -87,14 +87,14 @@ namespace cppcanvas
                                          std::optional< Gradient >&&    rAlphaGradient,
                                          const ::basegfx::B2DPoint&     rDstPoint,
                                          const ::basegfx::B2DVector&    rDstSize,
-                                         const CanvasSharedPtr&         rCanvas,
                                          const OutDevState&             rState );
 
                 TransparencyGroupAction(const TransparencyGroupAction&) = delete;
                 const TransparencyGroupAction& operator=(const TransparencyGroupAction&) = delete;
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
+                virtual bool render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const override;
+                virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+                                           const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
                 virtual sal_Int32 getActionCount() const override;
@@ -111,7 +111,6 @@ namespace cppcanvas
 
                 // transformation for
                 // mxBufferBitmap content
-                CanvasSharedPtr                                     mpCanvas;
                 vclcanvas::RenderState                              maState;
             };
 
@@ -135,12 +134,10 @@ namespace cppcanvas
                                                               std::optional< Gradient >&&   rAlphaGradient,
                                                               const ::basegfx::B2DPoint&    rDstPoint,
                                                               const ::basegfx::B2DVector&   rDstSize,
-                                                              const CanvasSharedPtr&        rCanvas,
                                                               const OutDevState&            rState ) :
                 mpGroupMtf( std::move(rGroupMtf) ),
                 mpAlphaGradient( std::move(rAlphaGradient) ),
-                maDstSize(rDstSize.getX(), rDstSize.getY()),
-                mpCanvas( rCanvas )
+                maDstSize(rDstSize.getX(), rDstSize.getY())
             {
                 cppcanvastools::initRenderState(maState,rState);
                 implSetupTransform( maState, rDstPoint );
@@ -163,7 +160,8 @@ namespace cppcanvas
             // into the direction of having a direct GDIMetaFile2XCanvas
             // renderer, and maybe a separate metafile XCanvas
             // implementation.
-            bool TransparencyGroupAction::renderSubset( const ::basegfx::B2DHomMatrix&    rTransformation,
+            bool TransparencyGroupAction::renderSubset( const CanvasSharedPtr& rCanvas,
+                                                        const ::basegfx::B2DHomMatrix&    rTransformation,
                                                         const Subset&                     rSubset ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::TransparencyGroupAction::renderSubset()" );
@@ -174,7 +172,7 @@ namespace cppcanvas
                 ::basegfx::B2DHomMatrix aTransform = ::canvastools::getRenderStateTransform( maState );
                 aTransform = rTransformation * aTransform;
 
-                ::basegfx::B2DHomMatrix aTotalTransform = ::canvastools::getViewStateTransform( mpCanvas->getViewState() );
+                ::basegfx::B2DHomMatrix aTotalTransform = ::canvastools::getViewStateTransform( rCanvas->getViewState() );
                 aTotalTransform = aTotalTransform * aTransform;
 
                 // since pure translational changes to the transformation
@@ -431,8 +429,8 @@ namespace cppcanvas
 #endif
 
                 // no further alpha changes necessary -> draw directly
-                mpCanvas->getUNOCanvas()->drawBitmap( mxBufferBitmap,
-                                                      mpCanvas->getViewState(),
+                rCanvas->getUNOCanvas()->drawBitmap( mxBufferBitmap,
+                                                      rCanvas->getViewState(),
                                                       aLocalState );
                 return true;
             }
@@ -444,14 +442,14 @@ namespace cppcanvas
             // into the direction of having a direct GDIMetaFile2XCanvas
             // renderer, and maybe a separate metafile XCanvas
             // implementation.
-            bool TransparencyGroupAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool TransparencyGroupAction::render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 Subset aSubset;
 
                 aSubset.mnSubsetBegin = 0;
                 aSubset.mnSubsetEnd   = -1;
 
-                return renderSubset( rTransformation, aSubset );
+                return renderSubset( rCanvas, rTransformation, aSubset );
             }
 
             sal_Int32 TransparencyGroupAction::getActionCount() const
@@ -465,14 +463,12 @@ namespace cppcanvas
                                                                                        std::optional< Gradient >&&  rAlphaGradient,
                                                                                        const ::basegfx::B2DPoint&   rDstPoint,
                                                                                        const ::basegfx::B2DVector&  rDstSize,
-                                                                                       const CanvasSharedPtr&       rCanvas,
                                                                                        const OutDevState&           rState )
         {
             return std::make_shared<TransparencyGroupAction>(std::move(rGroupMtf),
                                                              std::move(rAlphaGradient),
                                                              rDstPoint,
                                                              rDstSize,
-                                                             rCanvas,
                                                              rState );
         }
 

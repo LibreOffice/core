@@ -31,7 +31,6 @@ struct OutDevState;
 
 class TextLinesHelper
 {
-    const CanvasSharedPtr mpCanvas;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxOverline;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxUnderline;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxStrikeout;
@@ -49,7 +48,7 @@ class TextLinesHelper
     bool mbUnderlineWavelineBold;
 
 public:
-    TextLinesHelper(CanvasSharedPtr xCanvas, const OutDevState& rState);
+    TextLinesHelper(const OutDevState& rState);
 
     /** Init textlines with specified linewidth and TextLineInfo.
      */
@@ -65,7 +64,8 @@ public:
         Use overline color and underline color if the value is true, ignore those
         colors otherwise ( typical case is to render the shadow ).
      */
-    void render(const ::vclcanvas::RenderState& rRenderState, bool bNormalText) const;
+    void render(const CanvasSharedPtr& rCanvas, const ::vclcanvas::RenderState& rRenderState,
+                bool bNormalText) const;
 };
 }
 

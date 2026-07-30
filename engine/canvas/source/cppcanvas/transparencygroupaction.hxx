@@ -76,7 +76,6 @@ namespace cppcanvas
                                                                   std::optional< Gradient >&&   rAlphaGradient,
                                                                   const ::basegfx::B2DPoint&    rDstPoint,
                                                                   const ::basegfx::B2DVector&   rDstSize,
-                                                                  const CanvasSharedPtr&        rCanvas,
                                                                   const OutDevState&            rState );
         }
 

@@ -228,17 +228,17 @@ namespace cppcanvas
         struct ActionFactoryParameters
         {
             ActionFactoryParameters( VectorOfOutDevStates&       rStates,
-                                     const CanvasSharedPtr&      rCanvas,
+                                     const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
                                      ::VirtualDevice&            rVDev,
                                      sal_Int32&                  io_rCurrActionIndex ) :
                 mrStates(rStates),
-                mrCanvas(rCanvas),
+                mrUnoCanvas(rCanvas),
                 mrVDev(rVDev),
                 mrCurrActionIndex(io_rCurrActionIndex)
             {}
 
             VectorOfOutDevStates&       mrStates;
-            const CanvasSharedPtr&      mrCanvas;
+            const css::uno::Reference<vclcanvas::XCanvas>& mrUnoCanvas;
             ::VirtualDevice&            mrVDev;
             sal_Int32&                  mrCurrActionIndex;
         };
