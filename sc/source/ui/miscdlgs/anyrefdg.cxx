@@ -433,6 +433,8 @@ void ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
         {
             ScInputWindow* pWin = static_cast<ScInputWindow*>(pChild->GetWindow());
             pWin->Enable();
+            // tdf#97354 - repaint to update the input line's disabled text color
+            pWin->TextInvalidate();
         }
     }
 

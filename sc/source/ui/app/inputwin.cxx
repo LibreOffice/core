@@ -22,6 +22,7 @@
 #include <string_view>
 
 #include <editeng/eeitem.hxx>
+#include <editeng/colritem.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/chalign.hxx>
@@ -1313,6 +1314,23 @@ void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangl
         }
     }
 
+    if (m_xEditEngine)
+    {
+        // tdf#97354 - use disabled text color while a modeless ref dialog owns reference input
+        Color aTxtColor = ScModule::get()->IsRefDialogOpen() ? rStyleSettings.GetDisableColor()
+                                                             : rStyleSettings.GetWindowTextColor();
+        if (aTextFont.GetColor() != aTxtColor)
+        {
+            aTextFont.SetColor(aTxtColor);
+            SfxItemSet aColorSet(m_xEditEngine->GetEmptyItemSet());
+            aColorSet.Put(SvxColorItem(aTxtColor, EE_CHAR_COLOR));
+            const bool bPrevInputMode = bInputMode;
+            bInputMode = true;
+            m_xEditEngine->QuickSetAttribs(aColorSet, ESelection::All());
+            bInputMode = bPrevInputMode;
+        }
+    }
+
     if (comphelper::LibreOfficeKit::isActive() && m_xEditEngine)
     {
         // EditEngine/EditView works in twips logical coordinates, so set the device map-mode to twips before painting
@@ -1662,6 +1680,10 @@ void ScTextWnd::UpdateFocus(const ErrorHdl& errorHdl)
 
 bool ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    // tdf#97354 - prevent editable input line while a modeless ref dialog owns reference input
+    if (ScModule::get()->IsRefDialogOpen())
+        return false;
+
     // tdf#169351 If trying to set focus to the formula bar triggers an error
     // dialog, intercept the launch of that dialog to detect this case, and in
     // that case abandon the mouse handler.

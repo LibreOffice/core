@@ -4641,12 +4641,21 @@ IMPL_LINK_NOARG( ScInputHandler, DelayTimer, Timer*, void )
         bInOwnChange = true; // disable ModifyHdl (reset below)
 
         pActiveViewSh = nullptr;
-        mpEditEngine->SetTextCurrentDefaults( OUString() );
-        if ( pInputWin )
+        // tdf#97354 - keep formula bar content visible while a ref dialog is open
+        if (!ScModule::get()->IsRefDialogOpen())
         {
-            pInputWin->SetPosString( OUString() );
-            pInputWin->SetTextString(OUString(), true);
+            mpEditEngine->SetTextCurrentDefaults(OUString());
+            if (pInputWin)
+            {
+                pInputWin->SetPosString(OUString());
+                pInputWin->SetTextString(OUString(), true);
+            }
+        }
+        if (pInputWin)
+        {
             pInputWin->Disable();
+            // tdf#97354 - repaint to update the input line's disabled text color
+            pInputWin->TextInvalidate();
         }
 
         bInOwnChange = false;
