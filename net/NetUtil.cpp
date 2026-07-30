@@ -445,7 +445,7 @@ static std::unique_ptr<AsyncDNS> AsyncDNSThread;
 void AsyncDNS::startAsyncDNS()
 {
     static std::once_flag once;
-    std::call_once(once, [&]() { AsyncDNSThread = std::make_unique<AsyncDNS>(); });
+    std::call_once(once, []() { AsyncDNSThread = std::make_unique<AsyncDNS>(); });
 }
 
 //static

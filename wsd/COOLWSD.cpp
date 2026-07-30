@@ -473,6 +473,10 @@ void COOLWSD::cleanupDocBrokers()
     if (count != DocBrokers.size())
     {
         LOG_TRC("Have " << DocBrokers.size() << " DocBrokers after cleanup" <<
+                // Use a capture-default even though nothing is captured, but which stops this
+                // lambda from converting to a function pointer, which would otherwise collide with
+                // the std::ostream manipulator operator<< overloads:
+                // [-loplugin:unusedcapturedefault]
                 [&](auto& log)
                 {
                     int i = 1;

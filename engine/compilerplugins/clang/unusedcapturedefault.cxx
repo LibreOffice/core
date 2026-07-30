@@ -43,6 +43,10 @@ public:
             // be empty, so filter those out here:
             return true;
         }
+        if (suppressWarningAt(expr->getCaptureDefaultLoc()))
+        {
+            return true;
+        }
         report(DiagnosticsEngine::Warning, "unused capture-default", expr->getCaptureDefaultLoc())
             << expr->getSourceRange();
         return true;
