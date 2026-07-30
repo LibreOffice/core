@@ -41,7 +41,6 @@
 #include <frmatr.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
-#include <unotools/securityoptions.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <comphelper/random.hxx>
@@ -59,14 +58,6 @@
 #include <docsh.hxx>
 
 #include "swmd.hxx"
-
-namespace
-{
-bool allowAccessLink(const SwDoc& rDoc)
-{
-    return !SvtSecurityOptions::isUntrustedReferer(rDoc.GetLinkReferer());
-}
-}
 
 void SwMarkdownParser::SetNodeNum(sal_uInt8 nLevel)
 {
@@ -652,7 +643,7 @@ void SwMarkdownParser::InsertImage(const MDImage& rImg)
     }
 
     Size aGrfSz(0, 0);
-    if (allowAccessLink(*m_xDoc) && !aGraphicURL.IsExoticProtocol() && !sGrfNm.isEmpty())
+    if (m_xDoc->AllowAccessLink() && !aGraphicURL.IsExoticProtocol() && !sGrfNm.isEmpty())
     {
         GraphicDescriptor aDescriptor(aGraphicURL);
         if (aDescriptor.Detect(true))

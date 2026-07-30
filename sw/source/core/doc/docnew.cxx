@@ -37,6 +37,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <sfx2/docfile.hxx>
+#include <unotools/securityoptions.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 #include <sal/log.hxx>
@@ -674,6 +675,11 @@ OUString SwDoc::GetLinkReferer() const
     if (pShell != nullptr && pShell->HasName())
         return pShell->GetMedium()->GetName();
     return OUString();
+}
+
+bool SwDoc::AllowAccessLink() const
+{
+    return !SvtSecurityOptions::isUntrustedReferer(GetLinkReferer());
 }
 
 void SwDoc::ClearDoc()
