@@ -525,6 +525,8 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
     }
     else if (QLayout* pLayout = qobject_cast<QLayout*>(pObject))
     {
+        setLayoutMargins(*pLayout, rProps);
+
         // add layout to parent layout
         if (QBoxLayout* pParentBoxLayout = qobject_cast<QBoxLayout*>(pParentLayout))
             pParentBoxLayout->addLayout(pLayout);
@@ -1282,6 +1284,13 @@ void QtBuilder::setWidgetProperties(QWidget& rWidget, stringmap& rProps)
     auto aWidthRequestIt = rProps.find(u"width-request"_ustr);
     if (aWidthRequestIt != rProps.end())
         rWidget.setMinimumWidth(aWidthRequestIt->second.toInt32());
+
+    // For QWidget and children, 0 means "unset" and allows Qt to
+    // use the system theme for that dimension. (in contrast to
+    // QLayout which uses -1...)
+    sal_Int32 nLeft = 0, nTop = 0, nRight = 0, nBottom = 0;
+    getMargins(rProps, nLeft, nTop, nRight, nBottom);
+    rWidget.setContentsMargins(nLeft, nTop, nRight, nBottom);
 }
 
 QWidget* QtBuilder::windowForObject(QObject* pObject)
@@ -1307,6 +1316,33 @@ void QtBuilder::setGridLayoutProperties(QGridLayout& rGridLayout, stringmap& rPr
     aIt = rProps.find(u"column-spacing"_ustr);
     if (aIt != rProps.end())
         rGridLayout.setHorizontalSpacing(aIt->second.toUInt32());
+}
+
+void QtBuilder::getMargins(stringmap& rProps, sal_Int32& nLeft, sal_Int32& nTop, sal_Int32& nRight,
+                           sal_Int32& nBottom)
+{
+    for (auto const & [ rKey, rValue ] : rProps)
+    {
+        if (rKey == u"margin-start")
+            nLeft = rValue.toUInt32();
+        else if (rKey == u"margin-top")
+            nTop = rValue.toUInt32();
+        else if (rKey == u"margin-end")
+            nRight = rValue.toUInt32();
+        else if (rKey == u"margin-bottom")
+            nBottom = rValue.toUInt32();
+    }
+}
+
+void QtBuilder::setLayoutMargins(QLayout& rLayout, stringmap& rProps)
+{
+    // For QLayout and children, -1 means "unset" and allows Qt to
+    // use the system theme for that dimension. (in contrast to
+    // QWidget which uses 0...)
+    sal_Int32 nLeft = -1, nTop = -1, nRight = -1, nBottom = -1;
+
+    getMargins(rProps, nLeft, nTop, nRight, nBottom);
+    rLayout.setContentsMargins(nLeft, nTop, nRight, nBottom);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
