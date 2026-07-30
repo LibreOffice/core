@@ -202,6 +202,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/pivotcalcfielddialog.ui" },
         { u"modules/scalc/ui/pivotfielddialog.ui" },
         { u"modules/scalc/ui/pivottablelayoutdialog.ui" },
+        { u"modules/scalc/ui/principalcomponentanalysisdialog.ui" },
         { u"modules/scalc/ui/protectsheetdlg.ui" },
         { u"modules/scalc/ui/regressiondialog.ui" },
         { u"modules/scalc/ui/rowheightdialog.ui" },

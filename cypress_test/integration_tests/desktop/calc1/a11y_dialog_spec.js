@@ -43,6 +43,7 @@ const allCalcDialogs = [
     '.uno:Move?FromContextMenu:bool=true&MoveOrCopySheetDialog:bool=true&ContextMenuIndex=0',
     '.uno:MovingAverageDialog',
     '.uno:PageFormatDialog',
+    '.uno:PrincipalComponentAnalysisDialog',
     '.uno:Protect',
     '.uno:RegressionDialog',
     '.uno:RowHeight',
