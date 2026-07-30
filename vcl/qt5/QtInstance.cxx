@@ -775,7 +775,6 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication()
     SAL_INFO("vcl.qt", "qt version string is " << aVersion);
 
     const sal_uInt32 nParams = osl_getCommandArgCount();
-    sal_uInt32 nDisplayValueIdx = 0;
     OUString aParam, aBin;
 
     osl_getExecutableFile(&aParam.pData);
@@ -789,18 +788,15 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication()
     for (sal_uInt32 nIdx = 0; nIdx < nParams; ++nIdx)
     {
         osl_getCommandArg(nIdx, &aParam.pData);
-        if (aParam != "-display")
-            continue;
-        ++nIdx;
-        nDisplayValueIdx = nIdx;
-    }
-
-    if (nDisplayValueIdx)
-    {
-        m_pFakeArgvFreeable.emplace_back(strdup("-display"));
-        osl_getCommandArg(nDisplayValueIdx, &aParam.pData);
-        OString aDisplay = OUStringToOString(aParam, osl_getThreadTextEncoding());
-        m_pFakeArgvFreeable.emplace_back(strdup(aDisplay.getStr()));
+        if (aParam == "-display" && nIdx + 1 < nParams)
+        {
+            ++nIdx;
+            osl_getCommandArg(nIdx, &aParam.pData);
+            OString aDisplay = OUStringToOString(aParam, osl_getThreadTextEncoding());
+            m_pFakeArgvFreeable.emplace_back(strdup("-display"));
+            m_pFakeArgvFreeable.emplace_back(strdup(aDisplay.getStr()));
+            break;
+        }
     }
 
     m_nFakeArgc = m_pFakeArgvFreeable.size();
