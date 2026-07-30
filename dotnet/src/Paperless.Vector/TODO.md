@@ -3,7 +3,8 @@
 Importers for embedded vector graphics: WMF, EMF, EMF+ and SVG.
 
 **Decided: full support for all four.** Not a subset, and no rasterise-via-LibreOffice
-shortcut.
+shortcut. SVG reuses an existing library (see below); WMF, EMF and EMF+ are ours to write,
+because nothing exists in C# for them.
 
 That makes this the largest single body of work in the project, so it is worth being clear
 why it earns that. Office documents embed these constantly — pasted clip art, chart and
@@ -11,11 +12,10 @@ Visio snapshots, equation images, and the fallback rendering that accompanies Sm
 OLE objects. Anything less than real vector import shows up as blank rectangles on visually
 important pages, and rasterised substitutes look wrong at print resolution.
 
-There is no C# library to build on for EMF/EMF+, so all of it is ours.
 
-Reference: `research/06-rendering.md` section D. LibreOffice's own implementations —
-`emfio/` for WMF/EMF/EMF+ and `svgio/` for SVG — are the working reference; port their
-record handling rather than reading the specifications cold.
+Reference: `research/06-rendering.md` section D. For the metafile formats, LibreOffice's
+`emfio/` is the working reference — port its record handling rather than reading the
+specifications cold.
 
 ## Shared groundwork
 
@@ -80,42 +80,71 @@ Roughly fifty record types, carried inside `EMR_COMMENT` records.
 - [ ] Anti-aliasing and pixel-offset modes, insofar as they change geometry rather than just
       quality
 
-## SVG
+## SVG — use Svg.SceneGraph, do not hand-roll
 
-Full static SVG: the SVG 1.1 static subset plus the SVG 2 features producers actually emit.
+**Decided: reuse the Svg.Skia family's parser rather than writing our own.** Verified by
+building against it on .NET 10.
 
-- [ ] Document structure: `svg`, `g`, `defs`, `symbol`, `use`, `switch`
-- [ ] `viewBox` and `preserveAspectRatio`
-- [ ] Shapes: `rect`, `circle`, `ellipse`, `line`, `polyline`, `polygon`, `path`
-- [ ] Full path grammar, including arc segments and the implicit-repeat forms
-- [ ] Presentation attributes **and** CSS: inline `style`, `<style>` blocks, selector
-      matching, specificity, inheritance. Producers use both interchangeably, so
-      attribute-only support silently mis-styles a lot of real files.
-- [ ] Paint: `fill`, `stroke`, `fill-rule`, dash arrays, caps, joins, `opacity`,
-      `fill-opacity`, `stroke-opacity`
-- [ ] Gradients (`linearGradient`, `radialGradient`, stops, `gradientUnits`,
-      `gradientTransform`, `spreadMethod`) and `pattern`
-- [ ] `clipPath`, `mask`, `marker`
-- [ ] Transforms, including `transform-origin`
-- [ ] Text: `text`, `tspan`, `textPath`, `x`/`y`/`dx`/`dy` lists, `text-anchor`, `font-*`.
-      Needs `Paperless.Text` for shaping.
-- [ ] Embedded raster via `image` with a data URI
-- [ ] Filters (`filter`, `feGaussianBlur`, `feOffset`, `feBlend`, `feColorMatrix`,
-      `feComposite`, `feMerge`, ...). **The expensive tail** — schedule it last and
-      separately from the rest. A document needing filters is far rarer than one needing
-      gradients, and partial filter support is more useful than none.
+Take `Svg.SceneGraph` + `Svg.Model` + `ShimSkiaSharp` but **not** `Svg.Skia` itself. That
+combination:
 
-### Deliberately excluded, permanently
+- pulls in **no SkiaSharp at all** — only `ExCSS`, `ShimSkiaSharp`, `Svg.Custom`,
+  `Svg.Model` — so there is no clash with our own SkiaSharp version and no second native
+  dependency;
+- produces a **device-independent canvas-command list**, not pixels, so the PDF backend
+  gets real vectors;
+- is permissively licensed (MIT, except `Svg.Custom` which is MS-PL).
 
-Not scope compromises — security decisions, and they stay excluded even under "full
-support":
+Hand-rolling SVG would have meant reimplementing a CSS cascade, the full path grammar,
+gradients, masks and filters — for no fidelity gain, since the command list is exactly what
+we would have produced anyway.
 
-- **No external references.** No network fetching and no local file reads, for `image`,
-  `use`, fonts or anything else. A document parser that makes network requests is an SSRF
-  and data-exfiltration vector.
-- **No scripting.** `<script>`, event attributes and `javascript:` URLs are ignored.
-- **No declarative animation.** `<animate>` and friends: render the initial state, which is
-  what a static export shows.
+`ShimSkiaSharp`'s command set maps almost one-to-one onto `IDrawingSink`, which is why the
+translation is small:
+
+| ShimSkiaSharp command | `IDrawingSink` |
+|---|---|
+| `SaveCanvasCommand` / `RestoreCanvasCommand` | `Save` / `Restore` |
+| `SetMatrixCanvasCommand` | `Transform` |
+| `ClipPathCanvasCommand` / `ClipRectCanvasCommand` | `ClipPath` |
+| `DrawPathCanvasCommand` | `FillPath` / `StrokePath`, per the paint's style |
+| `DrawImageCanvasCommand` | `DrawImage` |
+| `SaveLayerCanvasCommand` | `BeginTransparencyGroup` / `EndTransparencyGroup` |
+| `DrawTextCanvasCommand`, `DrawPositionedTextRunCanvasCommand`, `DrawTextBlobCanvasCommand`, `DrawTextOnPathCanvasCommand` | `DrawGlyphRun` |
+| `DrawPictureCanvasCommand` | recurse |
+
+### Work items
+
+- [ ] Open an SVG through `Svg.Model.Services.SvgService`, build the scene, and record it to
+      a `ShimSkiaSharp` picture.
+- [ ] Translate the command list to `IDrawingSink` per the table above.
+- [ ] Convert the shim's geometry and paint types to ours: `SKPath` → `GraphicsPath`,
+      `SKShader` gradients → `GradientPaint`, `SKPaint` stroke state → `Stroke`. Note the
+      shim's coordinates are floats in SVG user units — scale into EMUs once, at the
+      boundary.
+- [ ] **Plug our own text stack in** via `ISvgTextRunTypefaceResolver`,
+      `ISvgTextGlyphRunResolver` and `ISvgAssetLoader`, so SVG text is resolved and shaped by
+      `Paperless.Text` rather than by a second, divergent text path. This is the main reason
+      to prefer this library over a rasterising one, and it is what keeps SVG text
+      consistent with document text.
+- [ ] Route image loading through `ISvgAssetLoader` to our own decoder.
+- [ ] Assess filter coverage empirically against real documents before deciding how much
+      further to take it.
+
+### Enforce these at the boundary
+
+The library will happily do things a document parser must not. None of these are its fault;
+they are our responsibility to prevent:
+
+- [ ] **No external references.** Implement `ISvgAssetLoader` so it refuses network and
+      local-filesystem access outright — only data URIs and package-internal parts resolve. A
+      document parser that fetches URLs is an SSRF and data-exfiltration vector.
+- [ ] **No scripting.** Confirm `<script>`, event attributes and `javascript:` URLs are
+      inert, and add a test asserting it rather than trusting the default.
+- [ ] **Bound the work.** Cap element count, nesting depth and total time. SVG supports
+      recursive `<use>` and enormous filter chains; both are trivially weaponisable.
+- [ ] Render the initial state of any declarative animation, which is what a static export
+      shows.
 
 ## Open questions
 
@@ -126,3 +155,6 @@ support":
       slides?
 - [ ] EMF+ path gradients have no direct SkiaSharp equivalent and will need decomposing.
       Establish how faithful that has to be before building it.
+- [ ] `ShimSkiaSharp`'s text commands carry typeface plus string, not resolved glyph ids.
+      Check whether `ISvgTextGlyphRunResolver` gives us enough control to emit a real
+      `GlyphRun`, or whether SVG text needs re-shaping on our side after translation.

@@ -141,12 +141,17 @@ needs. .NET's globalization is ICU-backed on Linux but surfaces only collation, 
 normalisation and calendars, so ICU's `BreakIterator` is out of reach. That left `ICU4N`
 (prerelease-only) or a native binding; hand-rolling avoids both. Generate the property
 tables from `LineBreak.txt` and `EastAsianWidth.txt`, implement LB1–LB31, and verify
-against Unicode's `LineBreakTest.txt`. Caveat: South East Asian scripts need
-dictionary-based breaking that rules alone cannot do — deferred, and tracked in
-`src/Paperless.Text/TODO.md`.
+against Unicode's `LineBreakTest.txt`. South East Asian scripts (Thai, Lao, Khmer,
+Burmese) need dictionary-based breaking that rules alone cannot do; a dictionary built from
+ICU's word lists ships as an embedded resource, so those breaks agree with LibreOffice's
+rather than merely being defensible. Detail in `src/Paperless.Text/TODO.md`.
 
 **Vector graphics: full support for WMF, EMF, EMF+ and SVG.** No subset, no
-rasterise-via-LibreOffice shortcut. This is the largest single body of work in the project
+rasterise-via-LibreOffice shortcut. **SVG reuses `Svg.SceneGraph`/`Svg.Model`/`ShimSkiaSharp`**
+— taken without `Svg.Skia` itself, that combination pulls in no SkiaSharp, stays
+resolution-independent, and exposes hooks to shape SVG text through our own font stack, so
+hand-rolling it would cost a CSS cascade and a filter engine for no fidelity gain. WMF, EMF
+and EMF+ remain ours to write. This is still the largest single body of work in the project
 and there is no C# prior art for EMF/EMF+, so plan the timeline around it rather than
 treating it as a tail-end detail. Port from LibreOffice's `emfio/` and `svgio/` rather than
 working from the specifications. Scope and ordering in `src/Paperless.Vector/TODO.md`.

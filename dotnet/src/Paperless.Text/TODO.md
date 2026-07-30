@@ -89,8 +89,16 @@ gaps:
 - **South East Asian scripts (`SA`: Thai, Lao, Khmer, Burmese) need dictionary-based
   breaking.** These scripts do not delimit words with spaces, so UAX #14 defers to a
   dictionary and ICU ships one. A pure rule implementation cannot break them correctly.
-  Treat as a separate, deferred work item — not a bug in the rule engine — and until then
-  break only at explicit opportunities in those runs.
+  **Decided: ship a dictionary as an embedded resource.**
+  - [ ] Build the dictionary from ICU's own source word lists so breaks agree with
+        LibreOffice's rather than merely being defensible.
+  - [ ] Store it as a compact trie (or DAWG) embedded in the assembly — these lists are
+        large in text form and must not become a loose file to deploy.
+  - [ ] Longest-match segmentation over `SA` runs, with a sensible fallback for
+        out-of-dictionary text rather than refusing to break at all.
+  - [ ] Keep it in a separate assembly or an opt-in resource if size becomes a problem;
+        most documents never touch these scripts, so paying for it unconditionally is worth
+        measuring before accepting.
 - **ICU's minor tailorings** elsewhere. Find these empirically by diffing against reference
   output rather than trying to predict them, and record each as a known deviation.
 

@@ -15,7 +15,8 @@
 
     Current dependencies are all permissive: SkiaSharp (MIT), HarfBuzzSharp (MIT),
     PdfPig (Apache-2.0), HtmlAgilityPack (MIT), BouncyCastle (MIT), OpenMcdf (MPL-2.0),
-    SharpCompress (MIT).
+    SharpCompress (MIT), the Svg.Skia family (MIT, except Svg.Custom which is MS-PL),
+    ExCSS (MIT).
 
     Rasterisation and text are handled by SkiaSharp plus HarfBuzzSharp, with a
     hand-rolled OpenType metrics reader in Paperless.Text. HarfBuzz is what LibreOffice
@@ -48,6 +49,32 @@
 
   <ItemGroup Label="Markup">
     <PackageVersion Include="HtmlAgilityPack" Version="1.12.4" />
+  </ItemGroup>
+
+  <ItemGroup Label="SVG import">
+    <!--
+      The Svg.Skia family, minus Svg.Skia itself. Svg.SceneGraph and Svg.Model parse
+      SVG (CSS via ExCSS, gradients, clip paths, masks, filters) and build a scene,
+      which ShimSkiaSharp represents as a device-independent canvas-command list.
+      Paperless translates those commands into its own IDrawingSink.
+
+      Two properties make this work where a rasterising SVG library would not:
+
+        * Taking Svg.SceneGraph WITHOUT Svg.Skia pulls in NO SkiaSharp at all
+          (verified: only ExCSS, ShimSkiaSharp, Svg.Custom, Svg.Model). So there is
+          no clash with our own SkiaSharp version, and no second native dependency.
+        * The command list is resolution-independent, so the PDF backend gets real
+          vectors rather than a rasterised approximation.
+
+      Svg.Model also exposes ISvgAssetLoader / ISvgTextRunTypefaceResolver /
+      ISvgTextGlyphRunResolver, so SVG text can be shaped through OUR font resolver
+      and HarfBuzz rather than a second, divergent text stack.
+
+      Licences: MIT, except Svg.Custom which is MS-PL (also permissive).
+    -->
+    <PackageVersion Include="Svg.SceneGraph" Version="5.1.1" />
+    <PackageVersion Include="Svg.Model" Version="5.1.1" />
+    <PackageVersion Include="ShimSkiaSharp" Version="5.1.1" />
   </ItemGroup>
 
   <ItemGroup Label="Tooling">

@@ -129,10 +129,12 @@ The three highest-risk areas, in order:
    rules — see `research/06-rendering.md` section B.
 2. **DrawingML theme colour resolution.** Get the `lumMod`/`shade`/`tint` chain wrong and
    every themed shape on every slide is the wrong colour at once.
-3. **Vector import (WMF/EMF/EMF+/SVG).** Full support is committed, and there is no C#
-   prior art for EMF/EMF+ — roughly fifty EMF+ record types alone. Real `.pptx` and
-   `.docx` files embed these constantly, so this is the largest single body of work in the
-   project rather than a tail-end detail. Port from LibreOffice's `emfio/` and `svgio/`.
+3. **Vector import (WMF/EMF/EMF+).** Full support is committed and there is no C# prior
+   art — roughly fifty EMF+ record types alone. Real `.pptx` and `.docx` files embed these
+   constantly, so this is the largest single body of work in the project rather than a
+   tail-end detail. Port from LibreOffice's `emfio/`. SVG is the exception: it reuses
+   `Svg.SceneGraph`/`Svg.Model`, translated from `ShimSkiaSharp`'s command list into
+   `IDrawingSink`.
 
 ## Workflow
 
