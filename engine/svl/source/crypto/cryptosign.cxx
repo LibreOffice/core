@@ -22,6 +22,7 @@
 #endif
 
 #include <rtl/character.hxx>
+#include <rtl/random.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
@@ -30,7 +31,6 @@
 #include <comphelper/base64.hxx>
 #include <comphelper/hash.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/random.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/kit.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
@@ -1086,7 +1086,8 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         src.reqPolicy.data = nullptr;
         src.reqPolicy.len = 0;
 
-        unsigned int nNonce = comphelper::rng::uniform_uint_distribution(0, SAL_MAX_UINT32);
+        unsigned int nNonce;
+        rtl_random_getBytes(&nNonce, sizeof(nNonce));
         src.nonce.type = siUnsignedInteger;
         src.nonce.data = reinterpret_cast<unsigned char*>(&nNonce);
         src.nonce.len = sizeof(nNonce);
@@ -1481,7 +1482,8 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         CMSG_SIGNER_INFO *pDecodedSignerInfo = reinterpret_cast<CMSG_SIGNER_INFO *>(pDecodedSignerInfoBuf.get());
 
         CRYPT_TIMESTAMP_PARA aTsPara;
-        unsigned int nNonce = comphelper::rng::uniform_uint_distribution(0, SAL_MAX_UINT32);
+        unsigned int nNonce;
+        rtl_random_getBytes(&nNonce, sizeof(nNonce));
 
         aTsPara.pszTSAPolicyId = nullptr;
         aTsPara.fRequestCerts = TRUE;

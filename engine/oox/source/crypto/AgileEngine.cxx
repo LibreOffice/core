@@ -20,12 +20,12 @@
 
 #include <comphelper/hash.hxx>
 #include <comphelper/docpasswordhelper.hxx>
-#include <comphelper/random.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <filter/msfilter/mscodec.hxx>
+#include <rtl/random.h>
 #include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
 #include <sax/fastattribs.hxx>
@@ -319,12 +319,13 @@ namespace
 
 bool generateBytes(std::vector<sal_uInt8> & rBytes, sal_Int32 nSize)
 {
+    assert(0 <= nSize && o3tl::make_unsigned(nSize) <= rBytes.size());
+    if (nSize <= 0)
+        return false;
+
     size_t nMax = std::min(rBytes.size(), size_t(nSize));
 
-    for (size_t i = 0; i < nMax; ++i)
-    {
-        rBytes[i] = sal_uInt8(comphelper::rng::uniform_uint_distribution(0, 0xFF));
-    }
+    rtl_random_getBytes(rBytes.data(), nMax);
 
     return true;
 }

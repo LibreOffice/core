@@ -12,7 +12,7 @@
 #include <pdf/pdfwriter_impl.hxx>
 #include <comphelper/crypto/Crypto.hxx>
 #include <comphelper/hash.hxx>
-#include <comphelper/random.hxx>
+#include <rtl/random.h>
 
 using namespace css;
 
@@ -38,8 +38,10 @@ void generateBytes(std::vector<sal_uInt8>& rBytes, size_t nSize)
 {
     rBytes.resize(nSize);
 
-    for (size_t i = 0; i < rBytes.size(); ++i)
-        rBytes[i] = sal_uInt8(comphelper::rng::uniform_uint_distribution(0, 0xFF));
+    if (rBytes.empty())
+        return;
+
+    rtl_random_getBytes(rBytes.data(), rBytes.size());
 }
 
 } // end anonymous
