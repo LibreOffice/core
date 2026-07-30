@@ -5066,7 +5066,6 @@ include/o3tl/cow_wrapper.hxx
 include/o3tl/enumarray.hxx
 include/o3tl/enumrange.hxx
 include/o3tl/functional.hxx
-include/o3tl/lazy_update.hxx
 include/o3tl/numeric.hxx
 include/o3tl/safeint.hxx
 include/o3tl/sorted_vector.hxx

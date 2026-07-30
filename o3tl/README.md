@@ -17,12 +17,6 @@ to boost, but isn't as of now)."
 
     A copy-on-write wrapper.
 
-- `[git:include/o3tl/lazy_update.hxx]`
-
-    This template collects data in input type, and updates the output type with the given update functor,
-    but only if the output is requested. Useful if updating is expensive, or input changes frequently, but
-    output is only comparatively seldom used.
-
 - `[git:include/o3tl/vector_pool.hxx]`
 
     Simple vector-based memory pool allocator.
