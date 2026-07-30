@@ -1866,7 +1866,8 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste, 
         const bool bGroupForTable
             = bInsertCols && rDoc.IsUndoEnabled() && lcl_HasStyledTableOnTab(rDoc, nTab);
         if (bGroupForTable)
-            pDocSh->GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, ViewShellId(-1));
+            pDocSh->GetUndoManager()->EnterListAction(
+                u""_ustr, u""_ustr, 0, GetViewData().GetViewShell()->GetViewShellId());
 
         bool bSuccess = pDocSh->GetDocFunc().InsertCells( aRange, &rMark, eCmd, bRecord, false, bPartOfPaste, nCount );
         if (bSuccess)
