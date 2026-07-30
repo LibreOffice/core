@@ -2410,13 +2410,6 @@ void DocumentBroker::getBrowserSettingSync(const std::shared_ptr<ClientSession>&
         sendBrowserSetting(session);
 }
 
-struct PresetRequest
-{
-    std::string _uri;
-    std::string _fileName;
-    std::string _id;
-};
-
 std::shared_ptr<PresetsInstallTask>
 DocumentBroker::asyncInstallPresets(const std::shared_ptr<SocketPoll>& poll, const std::string& configId,
                                     const std::string& userSettingsUri,
