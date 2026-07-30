@@ -797,9 +797,10 @@ void ImplicitBoolConversion::reportWarning(ImplicitCastExpr const * expr) {
                 auto const args = t2->template_arguments();
                 assert(args.size() >= 1);
                 auto const a = args[0];
+                auto const tc = loplugin::TypeCheck(t1).TemplateSpecializationClass();
                 if (a.getKind() == TemplateArgument::Type && a.getAsType()->isBooleanType()
-                    && (loplugin::TypeCheck(t1).TemplateSpecializationClass()
-                        .ClassOrStruct("atomic").StdNamespace()))
+                    && (tc.ClassOrStruct("atomic").StdNamespace()
+                        || tc.ClassOrStruct("optional").StdNamespace()))
                 {
                     return;
                 }
