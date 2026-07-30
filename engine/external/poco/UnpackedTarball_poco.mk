@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,poco,\
 	external/poco/emscripten-no-epoll.patch \
 	external/poco/emscripten-no-prctl.patch \
 	external/poco/no-eventlogchannel.patch \
+	external/poco/werror.patch.0 \
 ))
 
 # POCO keeps each component's headers under <Component>/include/Poco/...;

@@ -1,0 +1,371 @@
+--- Foundation/include/Poco/Dynamic/Struct.h
++++ Foundation/include/Poco/Dynamic/Struct.h
+@@ -99,6 +99,8 @@
+ 		assignMap(val);
+ 	}
+ 
++	Struct(const Struct&) = default;
++	Struct& operator = (const Struct&) = default;
+ 	virtual ~Struct() = default;
+ 		/// Destroys the Struct.
+ 
+@@ -327,6 +327,7 @@
+ 		return typeid(ValueType);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8&) const override
+ 	{
+ 		throw BadCastException("Cannot cast Struct type to Int8");
+@@ -492,6 +493,7 @@
+ 		return typeid(ValueType);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8&) const override
+ 	{
+ 		throw BadCastException("Cannot cast Struct type to Int8");
+@@ -657,6 +659,7 @@
+ 		return typeid(ValueType);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8&) const override
+ 	{
+ 		throw BadCastException("Cannot cast Struct type to Int8");
+@@ -822,6 +825,7 @@
+ 		return typeid(ValueType);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8&) const override
+ 	{
+ 		throw BadCastException("Cannot cast Struct type to Int8");
+--- Foundation/include/Poco/Dynamic/VarHolder.h
++++ Foundation/include/Poco/Dynamic/VarHolder.h
+@@ -453,7 +453,7 @@
+ 	}
+ 
+ 	template <typename T, std::enable_if_t<std::is_same_v<T, bool>, bool> = true>
+-	static constexpr int numValDigits(const T& value)
++	static constexpr int numValDigits(const T&)
+ 	{
+ 		return 1;
+ 	}
+@@ -829,6 +829,7 @@
+ 		return typeid(T);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		if constexpr (std::is_enum_v<T>)
+@@ -1144,6 +1145,7 @@
+ 		return typeid(Int8);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		val = _val;
+@@ -1298,6 +1300,7 @@
+ 		return typeid(Int16);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		convertToSmaller(_val, val);
+@@ -1449,6 +1452,7 @@
+ 		return typeid(Int32);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		convertToSmaller(_val, val);
+@@ -1599,6 +1603,7 @@
+ 		return typeid(Int64);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		convertToSmaller(_val, val);
+@@ -1764,6 +1769,7 @@
+ 		return typeid(UInt8);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		convertUnsignedToSigned(_val, val);
+@@ -1914,6 +1920,7 @@
+ 		return typeid(UInt16);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		convertUnsignedToSigned(_val, val);
+@@ -2064,6 +2071,7 @@
+ 		return typeid(UInt32);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		convertUnsignedToSigned(_val, val);
+@@ -2214,6 +2222,7 @@
+ 		return typeid(UInt64);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		convertUnsignedToSigned(_val, val);
+@@ -2384,6 +2393,7 @@
+ 		return typeid(bool);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		val = static_cast<Int8>(_val ? 1 : 0);
+@@ -2532,6 +2542,7 @@
+ 		return typeid(float);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		convertToSmaller(_val, val);
+@@ -2683,6 +2694,7 @@
+ 		return typeid(double);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		convertToSmaller(_val, val);
+@@ -2840,6 +2852,7 @@
+ 		return typeid(char);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		val = static_cast<Int8>(_val);
+@@ -2992,6 +3005,7 @@
+ 		return typeid(std::string);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		const int v = NumberParser::parse(_val);
+@@ -3187,6 +3201,7 @@
+ 		return typeid(Poco::UTF16String);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		const int v = NumberParser::parse(toStdString());
+@@ -3386,6 +3401,7 @@
+ 		return typeid(long);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		convertToSmaller(_val, val);
+@@ -3522,6 +3538,7 @@
+ 		return typeid(unsigned long);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		convertUnsignedToSigned(_val, val);
+@@ -3661,6 +3678,7 @@
+ 		return typeid(long long);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		convertToSmaller(_val, val);
+@@ -3807,6 +3825,7 @@
+ 		return typeid(unsigned long long);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8& val) const override
+ 	{
+ 		convertUnsignedToSigned(_val, val);
+@@ -3956,6 +3975,7 @@
+ 		return typeid(std::vector<T>);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(std::string& val) const override
+ 	{
+ 		Impl::containerToJSON(_val, val);
+@@ -4019,6 +4039,7 @@
+ 		return typeid(std::list<T>);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(std::string& val) const override
+ 	{
+ 		Impl::containerToJSON(_val, val);
+@@ -4092,6 +4113,7 @@
+ 		return typeid(std::deque<T>);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(std::string& val) const override
+ 	{
+ 		Impl::containerToJSON(_val, val);
+@@ -4155,6 +4177,7 @@
+ 		return typeid(DateTime);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8 & /*val*/) const override
+ 	{
+ 		throw BadCastException();
+@@ -4303,6 +4326,7 @@
+ 		return typeid(LocalDateTime);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int64& val) const override
+ 	{
+ 		val = _val.timestamp().epochMicroseconds();
+@@ -4435,6 +4459,7 @@
+ 		return typeid(Timestamp);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int64& val) const override
+ 	{
+ 		val = _val.epochMicroseconds();
+@@ -4568,6 +4593,7 @@
+ 		return typeid(UUID);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(std::string& val) const override
+ 	{
+ 		val = _val.toString();
+--- Foundation/include/Poco/FileChannel.h
++++ Foundation/include/Poco/FileChannel.h
+@@ -177,6 +177,7 @@
+ 	void close() override;
+ 		/// Closes the FileChannel.
+ 
++	using Channel::log;
+ 	void log(const Message& msg) override;
+ 		/// Logs the given message to the file.
+ 
+--- JSON/include/Poco/JSON/Array.h
++++ JSON/include/Poco/JSON/Array.h
+@@ -347,6 +347,7 @@
+ 		return typeid(JSON::Array::Ptr);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8&) const override
+ 	{
+ 		throw BadCastException();
+@@ -479,6 +480,7 @@
+ 		return typeid(JSON::Array);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8&) const override
+ 	{
+ 		throw BadCastException();
+--- JSON/include/Poco/JSON/Object.h
++++ JSON/include/Poco/JSON/Object.h
+@@ -538,6 +538,7 @@
+ 		return typeid(JSON::Object::Ptr);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8&) const override
+ 	{
+ 		throw BadCastException();
+@@ -678,6 +679,7 @@
+ 		return typeid(JSON::Object);
+ 	}
+ 
++	using VarHolder::convert;
+ 	void convert(Int8&) const override
+ 	{
+ 		throw BadCastException();
+--- Net/include/Poco/Net/Socket.h
++++ Net/include/Poco/Net/Socket.h
+@@ -68,7 +68,7 @@
+ 		/// attaches the SocketImpl from the other socket and
+ 		/// increments the reference count of the SocketImpl.
+ 
+-#if POCO_NEW_STATE_ON_MOVE
++#if defined POCO_NEW_STATE_ON_MOVE && POCO_NEW_STATE_ON_MOVE
+ 
+ 	Socket(Socket&& socket);
+ 		/// Move constructor.
+--- Net/include/Poco/Net/StreamSocket.h
++++ Net/include/Poco/Net/StreamSocket.h
+@@ -86,7 +86,7 @@
+ 		/// attaches the SocketImpl from the other socket and
+ 		/// increments the reference count of the SocketImpl.
+ 
+-#if POCO_NEW_STATE_ON_MOVE
++#if defined POCO_NEW_STATE_ON_MOVE && POCO_NEW_STATE_ON_MOVE
+ 
+ 	StreamSocket(Socket&& socket);
+ 		/// Creates the StreamSocket with the SocketImpl
+--- Net/include/Poco/Net/WebSocket.h
++++ Net/include/Poco/Net/WebSocket.h
+@@ -200,7 +200,7 @@
+ 	WebSocket& operator = (const WebSocket& socket);
+ 		/// Assignment operator.
+ 
+-#if POCO_NEW_STATE_ON_MOVE
++#if defined POCO_NEW_STATE_ON_MOVE && POCO_NEW_STATE_ON_MOVE
+ 
+ 	WebSocket(Socket&& socket);
+ 		/// Creates the WebSocket with the SocketImpl
+--- NetSSL_OpenSSL/include/Poco/Net/SSLManager.h
++++ NetSSL_OpenSSL/include/Poco/Net/SSLManager.h
+@@ -23,6 +23,7 @@
+ #include "Poco/Net/Context.h"
+ #include "Poco/Net/PrivateKeyFactoryMgr.h"
+ #include "Poco/Net/CertificateHandlerFactoryMgr.h"
++#include "Poco/Net/PrivateKeyPassphraseHandler.h"
+ #include "Poco/Net/InvalidCertificateHandler.h"
+ #include "Poco/Util/AbstractConfiguration.h"
+ #include "Poco/BasicEvent.h"
+--- dependencies/tessil/include/Poco/ordered_hash.h
++++ dependencies/tessil/include/Poco/ordered_hash.h
+@@ -117,7 +117,7 @@
+ }
+ 
+ template <typename T, typename U>
+-static T numeric_cast(U value,
++T numeric_cast(U value,
+                       const char* error_message = "numeric_cast() failed.") {
+   T ret = static_cast<T>(value);
+   if (static_cast<U>(ret) != value) {
+@@ -145,7 +145,7 @@
+               "slz_size_type must be >= std::size_t");
+ 
+ template <class T, class Deserializer>
+-static T deserialize_value(Deserializer& deserializer) {
++T deserialize_value(Deserializer& deserializer) {
+   // MSVC < 2017 is not conformant, circumvent the problem by removing the
+   // template keyword
+ #if defined(_MSC_VER) && _MSC_VER < 1910
