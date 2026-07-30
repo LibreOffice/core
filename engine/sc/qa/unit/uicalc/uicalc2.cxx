@@ -10,6 +10,7 @@
 #include "../helper/qahelper.hxx"
 
 #include <comphelper/compbase.hxx>
+#include <comphelper/kit.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
@@ -630,6 +631,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf148669)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf124778)
 {
+    // .uno:ShowAnnotations is a no-op under the Kit, so there is no caption state to check
+    if (comphelper::COKit::isActive())
+        return;
+
     createScDoc();
     ScDocument* pDoc = getScDoc();
 
