@@ -35,7 +35,6 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/event.hxx>
 #include <vcl/imap.hxx>
 #include <svtools/htmltokn.h>
@@ -300,16 +299,6 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
     rType = GetScriptType( pHeaderAttrs );
     rTypeStr = GetScriptTypeString( pHeaderAttrs );
 }
-
-namespace
-{
-    bool allowAccessLink(const SwDoc& rDoc)
-    {
-        return !SvtSecurityOptions().isUntrustedReferer(rDoc.GetLinkReferer());
-    }
-}
-
-/*  */
 
 void SwHTMLParser::InsertImage()
 {
@@ -640,7 +629,7 @@ IMAGE_SETEVENT:
 
     // bPrcWidth / bPrcHeight means we have a percent size.  If that's not the case and we have no
     // size from nWidth / nHeight either, then inspect the image header.
-    if ((!bPrcWidth && !nWidth) && (!bPrcHeight && !nHeight) && allowAccessLink(*m_xDoc) &&
+    if ((!bPrcWidth && !nWidth) && (!bPrcHeight && !nHeight) && m_xDoc->AllowAccessLink() &&
         !aGraphicURL.IsExoticProtocol())
     {
         GraphicDescriptor aDescriptor(aGraphicURL);

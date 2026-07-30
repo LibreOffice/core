@@ -1361,6 +1361,9 @@ public:
         no file name. */
     OUString GetLinkReferer() const;
 
+    /** Whether a link in this document may be followed to the location it names. */
+    bool AllowAccessLink() const;
+
     // Pointer to storage of SfxDocShells. Can be 0!!!
     css::uno::Reference< css::embed::XStorage > GetDocStorage();
 
