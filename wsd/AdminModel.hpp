@@ -222,7 +222,7 @@ public:
     size_t getMemoryDirty() const { return _memoryDirty; }
 
     std::string getSnapshot(std::time_t now) const;
-    const std::string getHistory() const;
+    std::string getHistory() const;
     void takeSnapshot();
 
     void setModified(bool value) { _isModified = value; }

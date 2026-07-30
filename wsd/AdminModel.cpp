@@ -124,7 +124,7 @@ std::string AdminDocument::getSnapshot(std::time_t now) const
     return oss.str();
 }
 
-const std::string AdminDocument::getHistory() const
+std::string AdminDocument::getHistory() const
 {
     std::ostringstream oss;
     oss << "{";

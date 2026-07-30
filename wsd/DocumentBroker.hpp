@@ -1020,7 +1020,7 @@ private:
 
         /// How much time passed since the last request,
         /// regardless of whether we got a response or not.
-        const std::chrono::milliseconds timeSinceLastRequest(
+        std::chrono::milliseconds timeSinceLastRequest(
             const std::chrono::steady_clock::time_point now = RequestManager::now()) const
         {
             return std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastRequestTime);
@@ -1049,7 +1049,7 @@ private:
 
         /// How much time passed since the last response,
         /// regardless of whether there is a newer request or not.
-        const std::chrono::milliseconds timeSinceLastResponse(
+        std::chrono::milliseconds timeSinceLastResponse(
             const std::chrono::steady_clock::time_point now = RequestManager::now()) const
         {
             return std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastResponseTime);
@@ -1624,7 +1624,7 @@ private:
         {
         }
 
-        const std::chrono::milliseconds timeSinceRequest() const
+        std::chrono::milliseconds timeSinceRequest() const
         {
             return std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::steady_clock::now() - _startTime);

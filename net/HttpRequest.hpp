@@ -1502,7 +1502,7 @@ public:
     /// Note: when the server returns an error, the response body,
     /// if any, will be stored in memory and can be read via getBody().
     /// I.e. when statusLine().statusCategory() != StatusLine::StatusCodeClass::Successful.
-    const std::shared_ptr<const Response>
+    std::shared_ptr<const Response>
     syncDownload(const Request& req, const std::string& saveToFilePath, SocketPoll& poller)
     {
         LOG_TRC_S("syncDownload: " << req.getVerb() << ' ' << host() << ':' << port() << ' '
@@ -1518,7 +1518,7 @@ public:
     }
 
     /// Make a synchronous request to download a file to the given path.
-    const std::shared_ptr<const Response> syncDownload(const Request& req,
+    std::shared_ptr<const Response> syncDownload(const Request& req,
                                                        const std::string& saveToFilePath)
     {
         std::shared_ptr<TerminatingPoll> poller(std::make_shared<TerminatingPoll>("HttpSynReqPoll"));
@@ -1528,7 +1528,7 @@ public:
 
     /// Make a synchronous request.
     /// The payload body of the response, if any, can be read via getBody().
-    const std::shared_ptr<const Response> syncRequest(const Request& req, SocketPoll& poller)
+    std::shared_ptr<const Response> syncRequest(const Request& req, SocketPoll& poller)
     {
         LOG_TRC_S("syncRequest: " << req.getVerb() << ' ' << host() << ':' << port() << ' '
                                   << req.getUrl());
@@ -1540,7 +1540,7 @@ public:
 
     /// Make a synchronous request.
     /// The payload body of the response, if any, can be read via getBody().
-    const std::shared_ptr<const Response> syncRequest(const Request& req)
+    std::shared_ptr<const Response> syncRequest(const Request& req)
     {
         std::shared_ptr<TerminatingPoll> poller(std::make_shared<TerminatingPoll>("HttpSynReqPoll"));
         poller->runOnClientThread();
@@ -1549,7 +1549,7 @@ public:
 
     /// Make a synchronous request with the given timeout.
     /// After returning the timeout set by setTimeout is restored.
-    const std::shared_ptr<const Response> syncRequest(const Request& req,
+    std::shared_ptr<const Response> syncRequest(const Request& req,
                                                       std::chrono::milliseconds timeout)
     {
         LOG_TRC("syncRequest: " << req.getVerb() << ' ' << host() << ':' << port() << ' '
@@ -2120,7 +2120,7 @@ private:
 };
 
 /// HTTP Get a URL synchronously.
-inline const std::shared_ptr<const http::Response>
+inline std::shared_ptr<const http::Response>
 get(const std::string& url, std::chrono::milliseconds timeout = Session::getDefaultTimeout())
 {
     auto httpSession = http::Session::create(url);
@@ -2128,7 +2128,7 @@ get(const std::string& url, std::chrono::milliseconds timeout = Session::getDefa
 }
 
 /// HTTP Get synchronously given a url and a path.
-inline const std::shared_ptr<const http::Response>
+inline std::shared_ptr<const http::Response>
 get(const std::string& url, const std::string& path,
     std::chrono::milliseconds timeout = Session::getDefaultTimeout())
 {

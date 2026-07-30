@@ -90,7 +90,7 @@ public:
         bool getUserCanOnlyComment() const { return _userCanOnlyComment; }
         bool getUserCanOnlyManageRedlines() const { return _userCanOnlyManageRedlines; }
 
-        const std::optional<bool> getIsAdminUser() const { return _isAdminUser; }
+        std::optional<bool> getIsAdminUser() const { return _isAdminUser; }
         const std::string& getIsAdminUserError() const { return _isAdminUserError; }
 
         TriState getDisableChangeTrackingShow() const { return _disableChangeTrackingShow; }
