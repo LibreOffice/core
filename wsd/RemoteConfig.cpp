@@ -525,7 +525,7 @@ void RemoteConfigPoll::fetchIndirectionEndpoint(std::map<std::string, std::strin
     bool geolocationEnabled;
     if (JsonUtil::findJSONValue(geolocationSetupObj, "enable", geolocationEnabled))
         newAppConfig.insert(
-            std::make_pair(geolocationKey + ".enable", std::to_string(geolocationEnabled)));
+            std::make_pair(geolocationKey + ".enable", std::to_string(geolocationEnabled ? 1 : 0)));
 
     std::string geolocationTimezone;
     if (JsonUtil::findJSONValue(geolocationSetupObj, "timezone", geolocationTimezone))

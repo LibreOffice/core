@@ -585,13 +585,13 @@ int SocketPoll::poll(int64_t timeoutMaxMicroS, bool justPoll)
     if (justPoll)
     {
         // Done with the poll(), don't process anything.
-        bool ret = false;
+        int ret = 0;
         // Run through the poll entries (except the wakeup poll), and combine them into an answer.
         for (size_t i = 0; i < size; ++i)
         {
             if (_pollFds[i].revents)
             {
-                ret = true;
+                ret = 1;
                 break;
             }
         }
@@ -1703,7 +1703,7 @@ ssize_t StreamSocket::readHeader(const std::string_view clientName, std::istream
                 << messagesize << " bytes, shutdown: " << exc.displayText() << ", delay "
                 << delayMs.count() << "ms");
         asyncShutdown();
-        return false;
+        return 0;
     }
     catch (const Poco::Net::UnsupportedRedirectException& exc)
     {

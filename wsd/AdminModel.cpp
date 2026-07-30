@@ -994,7 +994,7 @@ void AdminModel::addLostKitsTerminated(unsigned lostKitsTerminated)
 
 int filterNumberName(const struct dirent *dir)
 {
-    return !fnmatch("[0-9]*", dir->d_name, 0);
+    return fnmatch("[0-9]*", dir->d_name, 0) == 0 ? 1 : 0;
 }
 
 // coverity[ -taint_source : arg-1 ] 2024.6.1

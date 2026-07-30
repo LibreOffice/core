@@ -3035,7 +3035,7 @@ std::string getCapabilitiesJson(bool convertToAvailable)
 {
     // Can the convert-to be used?
     Poco::JSON::Object::Ptr convert_to = new Poco::JSON::Object;
-    Poco::Dynamic::Var available = convertToAvailable;
+    Poco::Dynamic::Var available(convertToAvailable);
     convert_to->set("available", available);
     if (available)
         convert_to->set("endpoint", "/cool/convert-to");

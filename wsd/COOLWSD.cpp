@@ -1299,7 +1299,7 @@ bool COOLWSD::testMountingNSInFork()
         // so we have a mount namespace here just for the purposes of that test
         LOG_DBG("Test moving into user namespace as uid 0 in level 2 child");
 
-        int ret = JailUtil::enterMountingNS(geteuid(), getegid());
+        int ret = JailUtil::enterMountingNS(geteuid(), getegid()) ? 1 : 0;
 
         LOG_DBG("Level 2 child enterMountingNS result is: " << ret);
 

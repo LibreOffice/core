@@ -1491,7 +1491,7 @@ public:
         if (ignoringInput())
         {
             LOG_WRN("Ignoring attempted read from " << getFD());
-            return false; // error - close it.
+            return 0; // error - close it.
         }
 
         ssize_t len = 0;
