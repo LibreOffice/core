@@ -44,6 +44,7 @@
 #include <wrtsh.hxx>
 #include <swundo.hxx>
 #include <uitool.hxx>
+#include <wview.hxx>
 #include <cmdid.h>
 #include <docsh.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -174,9 +175,16 @@ void SwView::ExecSearch(SfxRequest& rReq)
     break;
 
     case FID_SEARCH_ON:
+    {
         s_bJustOpened = true;
         GetViewFrame().GetBindings().Invalidate(SID_SEARCH_ITEM);
-        break;
+
+        // ensure SvxSearchDialog's Format dialog uses the preferred measurement unit
+        const bool bIsHtmlMode = dynamic_cast<SwWebView*>(this);
+        auto nMetric = static_cast<sal_uInt16>(GetDfltMetric(bIsHtmlMode));
+        SwModule::get()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, nMetric));
+    }
+    break;
 
     case FID_SEARCH_OFF:
         if(pArgs)
