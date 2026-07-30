@@ -1453,6 +1453,10 @@ menuDefinitions.set('Menu Statistic', [
 		text: _UNO('.uno:FourierAnalysisDialog', 'spreadsheet'),
 		uno: '.uno:FourierAnalysisDialog',
 	},
+	{
+		text: _UNO('.uno:PrincipalComponentAnalysisDialog', 'spreadsheet'),
+		uno: '.uno:PrincipalComponentAnalysisDialog',
+	},
 ] as Array<MenuDefinition>);
 
 menuDefinitions.set('EditSparklineMenu', [

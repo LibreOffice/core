@@ -1119,7 +1119,8 @@ class Menubar extends window.L.Control {
 					{name: _UNO('.uno:FTestDialog', 'spreadsheet'), uno: '.uno:FTestDialog'},
 					{name: _UNO('.uno:ZTestDialog', 'spreadsheet'), uno: '.uno:ZTestDialog'},
 					{name: _UNO('.uno:ChiSquareTestDialog', 'spreadsheet'), uno: '.uno:ChiSquareTestDialog'},
-					{name: _UNO('.uno:FourierAnalysisDialog', 'spreadsheet'), uno: '.uno:FourierAnalysisDialog'}]},
+					{name: _UNO('.uno:FourierAnalysisDialog', 'spreadsheet'), uno: '.uno:FourierAnalysisDialog'},
+					{name: _UNO('.uno:PrincipalComponentAnalysisDialog', 'spreadsheet'), uno: '.uno:PrincipalComponentAnalysisDialog'}]},
 			]},
 			{name: _UNO('.uno:ToolsMenu', 'spreadsheet'), id: 'tools', type: 'menu', accessibility: {combination: 'MT'}, menu: [
 				{uno: '.uno:SpellDialog'},
