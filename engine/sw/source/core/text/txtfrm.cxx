@@ -2245,7 +2245,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         Broadcast(SfxHint()); // notify SwAccessibleParagraph
         if(IsLocked())
             return;
-        if(pDocPosAt->m_nDocPos > getFrameArea().Top())
+        if (pDocPosAt->m_nDocPos.as_twip<SwTwips>() > getFrameArea().Top())
             return;
         TextFrameIndex const nIndex(MapModelToView(
             &pDocPosAt->m_rNode,

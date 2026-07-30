@@ -325,7 +325,7 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     }
     else if (rHint.GetId() == SfxHintId::SwDocPosUpdate)
     {
-        UpdateDocPos(static_cast<const sw::DocPosUpdate*>(&rHint)->m_nDocPos);
+        UpdateDocPos(static_cast<const sw::DocPosUpdate*>(&rHint)->m_nDocPos.as_twip<SwTwips>());
     }
 }
 

@@ -22,6 +22,7 @@
 #include "swatrset.hxx"
 #include "swtypes.hxx"
 #include "names.hxx"
+#include <basegfx/units/Length.hxx>
 #include <utility>
 #include <vcl/vclptr.hxx>
 
@@ -136,8 +137,8 @@ public:
 class DocPosUpdate final : public SfxHint
 {
 public:
-    const SwTwips m_nDocPos;
-    DocPosUpdate(const SwTwips nDocPos)
+    const gfx::Length m_nDocPos;
+    DocPosUpdate(const gfx::Length nDocPos)
         : SfxHint(SfxHintId::SwDocPosUpdate)
         , m_nDocPos(nDocPos)
     {};
@@ -145,10 +146,10 @@ public:
 class DocPosUpdateAtIndex final : public SfxHint
 {
 public:
-    const SwTwips m_nDocPos;
+    const gfx::Length m_nDocPos;
     const SwTextNode& m_rNode;
     const sal_uInt32 m_nIndex;
-    DocPosUpdateAtIndex(const SwTwips nDocPos, const SwTextNode& rNode, sal_uInt32 nIndex)
+    DocPosUpdateAtIndex(const gfx::Length nDocPos, const SwTextNode& rNode, sal_uInt32 nIndex)
         : SfxHint(SfxHintId::SwDocPosUpdateAtIndex)
         , m_nDocPos(nDocPos)
         , m_rNode(rNode)
