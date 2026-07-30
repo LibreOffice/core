@@ -41,8 +41,6 @@
 #include <utility>
 #include <vector>
 
-#define STRINGIFY(X) #X
-
 #if CODE_COVERAGE
 extern "C"
 {
