@@ -304,7 +304,7 @@ public:
             << "\n\tisDumpingTiles: " <<_isDumpingTiles
             << "\n\tclientVisibleArea: " << _clientVisibleArea.toString()
             << "\n\thasURP: " << _hasURP
-            << "\n\tURPContext?: " << (_URPContext == nullptr)
+            << "\n\tURPContext?: " << (_urpContext == nullptr)
             << '\n';
 
         _stateRecorder.dumpState(oss);
@@ -358,7 +358,7 @@ private:
 
     Util::Rectangle _clientVisibleArea;
 
-    void* _URPContext;
+    void* _urpContext;
 
     /// whether there is a URP session created for this ChildSession
     bool _hasURP;

@@ -116,7 +116,7 @@ ChildSession::ChildSession(const std::shared_ptr<ProtocolHandlerInterface>& prot
     , _canonicalViewId(CanonicalViewId::Invalid)
     , _isDumpingTiles(false)
     , _clientVisibleArea(0, 0, 0, 0)
-    , _URPContext(nullptr)
+    , _urpContext(nullptr)
     , _hasURP(false)
 {
 #if !MOBILEAPP
@@ -125,7 +125,7 @@ ChildSession::ChildSession(const std::shared_ptr<ProtocolHandlerInterface>& prot
         LOG_WRN("URP is enabled in the config: Starting a URP tunnel for this session ["
                 << getName() << "]");
 
-        _hasURP = startURP(docManager.getLOKit(), &_URPContext);
+        _hasURP = startURP(docManager.getLOKit(), &_urpContext);
 
         if (!_hasURP)
             LOG_INF("Failed to start a URP bridge for this session [" << getName()
@@ -142,7 +142,7 @@ ChildSession::~ChildSession()
 
     if (_hasURP)
     {
-        _docManager->getLOKit()->stopURP(_URPContext);
+        _docManager->getLOKit()->stopURP(_urpContext);
     }
 
     // The iframe that would have answered any in-flight proxy listener calls is gone:
