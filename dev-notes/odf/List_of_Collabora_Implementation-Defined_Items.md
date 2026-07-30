@@ -374,9 +374,9 @@ The following algorithms are supported:
 | Identifying IRI | algorithm |
 | [http://www.w3.org/2000/09/xmldsig#sha1](http://www.w3.org/2000/09/xmldsig#sha1) | UTF16 LE/BE encoded StarOffice-SHA1, OOo legacy and allowed by ODF 1.1 |
 | [http://www.w3.org/2000/09/xmldsig#sha1](http://www.w3.org/2000/09/xmldsig#sha1) | UTF8 encoded SHA1, as required by ODF 1.2 |
-| [http://www.w3.org/2000/09/xmldsig#sha256](http://www.w3.org/2000/09/xmldsig#sha256) | UTF8 encoded SHA256, as required by ODF 1.2 |
+| `http://www.w3.org/2000/09/xmldsig#sha256` | UTF8 encoded SHA256, as required by ODF 1.2 |
 | [http://www.w3.org/2001/04/xmlenc#sha256](http://www.w3.org/2001/04/xmlenc#sha256) | UTF8 encoded SHA256, with W3C URI |
-| [http://docs.oasis-open.org/office/ns/table/legacy-hash-excel](http://docs.oasis-open.org/office/ns/table/legacy-hash-excel) combined with `loext:protection-key-digest-algorithm-2="`[`http://www.w3.org/2000/09/xmldsig#sha1`](http://www.w3.org/2000/09/xmldsig#sha1)`"` | Excel+SHA1 double-hash, see OFFICE-2112 [https://wiki.oasis-open.org/office/Spreadsheet_Table_Protection_Options](https://wiki.oasis-open.org/office/Spreadsheet_Table_Protection_Options) |
+| `http://docs.oasis-open.org/office/ns/table/legacy-hash-excel` combined with `loext:protection-key-digest-algorithm-2="`[`http://www.w3.org/2000/09/xmldsig#sha1`](http://www.w3.org/2000/09/xmldsig#sha1)`"` | Excel+SHA1 double-hash, see OFFICE-2112 [https://wiki.oasis-open.org/office/Spreadsheet_Table_Protection_Options](https://wiki.oasis-open.org/office/Spreadsheet_Table_Protection_Options) |
 
 ### table:show-empty
 
@@ -395,7 +395,7 @@ The following algorithms are supported:
 | Identifying IRI | algorithm |
 | [http://www.w3.org/2000/09/xmldsig#sha1](http://www.w3.org/2000/09/xmldsig#sha1) | UTF16 LE/BE encoded StarOffice-SHA1, OOo legacy and allowed by ODF 1.1 |
 | [http://www.w3.org/2000/09/xmldsig#sha1](http://www.w3.org/2000/09/xmldsig#sha1) | UTF8 encoded SHA1, as required by ODF 1.2 |
-| [http://www.w3.org/2000/09/xmldsig#sha256](http://www.w3.org/2000/09/xmldsig#sha256) | UTF8 encoded SHA256, as required by ODF 1.2 |
+| `http://www.w3.org/2000/09/xmldsig#sha256` | UTF8 encoded SHA256, as required by ODF 1.2 |
 | [http://www.w3.org/2001/04/xmlenc#sha256](http://www.w3.org/2001/04/xmlenc#sha256) | UTF8 encoded SHA256, with W3C URI |
 
 ### chart:symbol-name
@@ -550,7 +550,7 @@ The implementation-defined behavior is documented in the online-help
 about functions.
 
 For Collabora Office version n.k you access the help with
-https://help.collaboraoffice.com/n.k/en-US/text/shared/05/new_help.html.
+`https://help.collaboraoffice.com/n.k/en-US/text/shared/05/new_help.html`.
 For example  
 https://help.collaboraoffice.com/25.04/en-US/text/shared/05/new_help.html
 
@@ -604,7 +604,7 @@ The implementation-defined behavior of functions is documented in the
 online-help about the functions.
 
 For Collabora Office version n.k you access the help with
-https://help.collaboraoffice.com/n.k/en-US/text/shared/05/new_help.html.
+`https://help.collaboraoffice.com/n.k/en-US/text/shared/05/new_help.html`.
 For example  
 https://help.collaboraoffice.com/25.04/en-US/text/shared/05/new_help.html
 
@@ -637,7 +637,7 @@ No implementation defined values produced currently, only "SHA1/1K" and
 4.16.6 manifest:start-key-generation-name, Part 2, ODF 1.3
 
 No implementation defined values produced currently, only "SHA1" and
-"[http://www.w3.org/2000/09/xmldsig#sha256](http://www.w3.org/2000/09/xmldsig#sha256)".
+`http://www.w3.org/2000/09/xmldsig#sha256`.
 
 #### manifest:PGPAlgorithm
 
