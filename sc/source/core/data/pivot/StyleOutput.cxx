@@ -34,10 +34,9 @@
 
 namespace
 {
-constexpr sal_uInt16 SC_DP_FRAME_INNER_BOLD = 20;
-constexpr sal_uInt16 SC_DP_FRAME_OUTER_BOLD = 40;
+constexpr sal_uInt16 SC_DP_FRAME_WIDTH = SvxBorderLineWidth::Thin;
 
-constexpr Color SC_DP_FRAME_COLOR(0, 0, 0); //( 0x20, 0x40, 0x68 )
+constexpr Color SC_DP_FRAME_COLOR(0, 0, 0);
 
 void lcl_SetFrame(ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                   sal_uInt16 nWidth)
@@ -73,9 +72,9 @@ void lcl_SetBold(ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL n
     rDoc.ApplyPatternAreaTab(nCol1, nRow1, nCol2, nRow2, nTab, aPattern);
 }
 
-/** Draws the block frames of the table: each block gets a box around it, with a bold line on the
- *  outer edges of the table. The rows and columns where subtotal and member blocks begin are
- *  collected with AddRow and AddCol, and OutputDataArea then frames the blocks between them. */
+/** Draws the block frames of the table: each block gets a thin box around it. The rows and
+ *  columns where subtotal and member blocks begin are collected with AddRow and AddCol, and
+ *  OutputDataArea then frames the blocks between them. */
 class BlockFrameOutput
 {
     ScDocument& mrDocument;
@@ -131,30 +130,13 @@ public:
                           bool bHori = false)
     {
         Color color = SC_DP_FRAME_COLOR;
-        ::editeng::SvxBorderLine aLine(&color, SC_DP_FRAME_INNER_BOLD);
-        ::editeng::SvxBorderLine aOutLine(&color, SC_DP_FRAME_OUTER_BOLD);
+        ::editeng::SvxBorderLine aLine(&color, SC_DP_FRAME_WIDTH);
 
         SvxBoxItem aBox(ATTR_BORDER);
-
-        if (nStartCol == mnTabStartCol)
-            aBox.SetLine(&aOutLine, SvxBoxItemLine::LEFT);
-        else
-            aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
-
-        if (nStartRow == mnTabStartRow)
-            aBox.SetLine(&aOutLine, SvxBoxItemLine::TOP);
-        else
-            aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
-
-        if (nEndCol == mnTabEndCol) //bottom row
-            aBox.SetLine(&aOutLine, SvxBoxItemLine::RIGHT);
-        else
-            aBox.SetLine(&aLine, SvxBoxItemLine::RIGHT);
-
-        if (nEndRow == mnTabEndRow) //bottom
-            aBox.SetLine(&aOutLine, SvxBoxItemLine::BOTTOM);
-        else
-            aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
+        aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
+        aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
+        aBox.SetLine(&aLine, SvxBoxItemLine::RIGHT);
+        aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
 
         SvxBoxInfoItem aBoxInfo(ATTR_BORDER_INNER);
         aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, false);
@@ -248,12 +230,12 @@ void StyleOutput::apply()
     {
         if (rCell.bFrame)
             lcl_SetFrame(mrDocument, nTab, rCell.nCol, rCell.nRow, rCell.nCol, rCell.nRow,
-                         SC_DP_FRAME_INNER_BOLD);
+                         SC_DP_FRAME_WIDTH);
     }
     for (PageFieldValueCell const& rCell : maPageFieldValueCells)
     {
         lcl_SetFrame(mrDocument, nTab, rCell.nCol, rCell.nRow, rCell.nCol, rCell.nRow,
-                     SC_DP_FRAME_INNER_BOLD);
+                     SC_DP_FRAME_WIDTH);
     }
 
     BlockFrameOutput aBlockFrames(mrDocument, maGeometry);
