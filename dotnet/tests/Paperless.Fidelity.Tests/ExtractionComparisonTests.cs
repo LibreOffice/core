@@ -118,6 +118,11 @@ public class ExtractionComparisonTests : IDisposable
     [InlineData("revisions.doc")]
     [InlineData("revisions.docx")]
     [InlineData("revisions.odt")]
+    [InlineData("tables.fodt")]
+    [InlineData("tables.odt")]
+    [InlineData("tables.doc")]
+    [InlineData("tables.docx")]
+    [InlineData("tables.rtf")]
     public void NothingTheReferenceFindsIsMissingFromTheFeatureDocument(string name)
     {
         RequireLibreOffice();

@@ -271,6 +271,47 @@ public class RtfReaderTests
     }
 
     [Fact]
+    public void ARepeatingHeaderRowComesFromTrhdr()
+    {
+        // \trhdr marks a row that repeats at the top of every page the table spans. LibreOffice's own
+        // RTF export omits it, so this is the only way to cover it — and worth covering, because the
+        // alternative is reporting a header count Paperless never established.
+        IDocument document = OpenLiteral(
+            @"{\rtf1\ansi\pard\intbl" +
+            @"\trowd\trhdr\cellx1000\cellx2000 A\cell B\cell\row" +
+            @"\pard\intbl\trowd\cellx1000\cellx2000 c\cell d\cell\row}");
+
+        ContentTable table = Descendants(document.Content).OfType<ContentTable>().Single();
+        table.Children.Count.ShouldBe(2);
+        table.HeaderRowCount.ShouldBe(1);
+    }
+
+    [Fact]
+    public void ANestedTableNestsRatherThanFlatteningIntoItsCell()
+    {
+        // \itap gives the depth, \nestcell and \nestrow end the inner cells and rows, and the inner
+        // row's definition arrives *after* its cells inside {\*\nesttableprops} — an ignorable
+        // destination that must nonetheless be read, since it holds the row's geometry and its end.
+        IDocument document = OpenLiteral(
+            @"{\rtf1\ansi\pard\intbl\trowd\cellx5000\cellx9000 " +
+            @"\pard\intbl\itap2 inner a\nestcell\pard\intbl\itap2 inner b\nestcell" +
+            @"{\*\nesttableprops\trowd\cellx2000\cellx4000\nestrow}{\nonesttables\par}" +
+            @"\pard\intbl outer left\cell\pard\intbl outer right\cell\row}");
+
+        List<ContentTable> tables = [.. document.Content.Children.OfType<ContentSection>()
+                                        .SelectMany(s => s.Children).OfType<ContentTable>()];
+        tables.Count.ShouldBe(1);
+
+        ContentTableCell host = (ContentTableCell)((ContentTableRow)tables[0].Children[0]).Children[0];
+        ContentTable inner = host.Children.OfType<ContentTable>().Single();
+        inner.GetText().ShouldBe("inner a\tinner b\n");
+
+        // {\nonesttables …} is a plain-text approximation of the same table for readers that cannot
+        // nest, so reading it as well would duplicate every nested cell.
+        document.Content.GetText().Split("inner a", StringSplitOptions.None).Length.ShouldBe(2);
+    }
+
+    [Fact]
     public void HighBytesAreDecodedInTheDocumentsCodePage()
     {
         // 0x93 and 0x94 are curly quotes in Windows-1252 and control characters in Latin-1, which

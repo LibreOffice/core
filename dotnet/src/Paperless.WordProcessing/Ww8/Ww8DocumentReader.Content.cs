@@ -1,5 +1,6 @@
 using System.Text;
 using Paperless.Core.Extraction;
+using Paperless.Core.Globalization;
 using Paperless.Core.Numbering;
 using Paperless.Core.Units;
 
@@ -170,9 +171,9 @@ public sealed partial class Ww8DocumentReader
             }
         }
 
-        // A range need not end with a paragraph mark.
-        FinishParagraph(state, force: false);
-        FinishTable(state);
+        // A range need not end with a paragraph mark, or with the tables in it closed.
+        FinishParagraph(state, force: false, state.ParagraphFormat.Level);
+        CloseTablesDeeperThan(state, 0);
     }
 
     private void Append(WalkState state, int position, string text)
@@ -217,12 +218,40 @@ public sealed partial class Ww8DocumentReader
         state.HasFormat = false;
     }
 
-    /// <summary>Ends a paragraph at its mark, whose position is where its properties live.</summary>
+    /// <summary>
+    /// Ends a paragraph at its mark, whose position is where its properties live.
+    /// </summary>
+    /// <remarks>
+    /// A paragraph mark inside a nested table is also that table's cell or row end. Only the
+    /// outermost table uses U+0007 for its cells; a nested one reuses the paragraph mark and says
+    /// what it means with <c>sprmPFInnerTableCell</c> and <c>sprmPFInnerTtp</c> — so a reader that
+    /// treats every carriage return as merely a paragraph puts a nested table's whole contents into
+    /// one cell.
+    /// </remarks>
     private void EndParagraph(WalkState state, int markPosition)
     {
         Ww8ParagraphFormat format = ResolveParagraphFormat(markPosition);
         state.ParagraphFormat = format;
-        FinishParagraph(state, force: true);
+
+        if (!format.IsInnerTableCell)
+        {
+            FinishParagraph(state, force: true, format.Level);
+            return;
+        }
+
+        // At least two: the flag means "a table nested inside a cell", so it cannot be the
+        // outermost one however the depth sprm reads.
+        int level = Math.Max(2, format.Level);
+
+        if (format.IsInnerTableRowEnd)
+        {
+            FinishParagraph(state, force: false, level);
+            FinishRow(state, format, level);
+            return;
+        }
+
+        FinishParagraph(state, force: true, level);
+        FinishCell(state, level);
     }
 
     /// <summary>
@@ -231,29 +260,31 @@ public sealed partial class Ww8DocumentReader
     /// <remarks>
     /// U+0007 means both things. Only <c>sprmPFTtp</c> on the paragraph that contains it
     /// distinguishes the mark that ends a row from the one that ends a cell — so a reader that
-    /// treats every U+0007 the same either produces one row per cell or one cell per row.
+    /// treats every U+0007 the same either produces one row per cell or one cell per row. This mark
+    /// always belongs to the outermost table; a nested table's cells end at paragraph marks instead.
     /// </remarks>
     private void EndCellOrRow(WalkState state, int markPosition)
     {
         Ww8ParagraphFormat format = ResolveParagraphFormat(markPosition);
         state.ParagraphFormat = format;
 
+        const int OutermostTable = 1;
+
         if (format.IsTableRowEnd)
         {
             // The row-end mark also closes whatever cell was open. The format is passed on rather
             // than read back from the state, because finishing the paragraph clears it — and the
             // row's geometry lives on this paragraph, so losing it loses every column span.
-            FinishParagraph(state, force: false);
-            FinishRow(state, format);
+            FinishParagraph(state, force: false, OutermostTable);
+            FinishRow(state, format, OutermostTable);
             return;
         }
 
-        state.InCell = true;
-        FinishParagraph(state, force: true);
-        FinishCell(state);
+        FinishParagraph(state, force: true, OutermostTable);
+        FinishCell(state, OutermostTable);
     }
 
-    private void FinishParagraph(WalkState state, bool force)
+    private void FinishParagraph(WalkState state, bool force, int level)
     {
         FlushRun(state);
 
@@ -282,13 +313,10 @@ public sealed partial class Ww8DocumentReader
         foreach (ContentRun run in state.Runs) paragraph.Children.Add(run);
         foreach (ContentImage image in state.PendingImages) paragraph.Children.Add(image);
 
-        if (state.InCell || format.IsInTable) state.CellContent.Add(paragraph);
-        else
-        {
-            // Anything that is not a table row closes an open table, since WW8 marks no end.
-            FinishTable(state);
-            state.Target.Children.Add(paragraph);
-        }
+        // Anything shallower than the open tables closes them, since WW8 marks no table end — a
+        // paragraph back at the enclosing level is what says the nested table finished.
+        CloseTablesDeeperThan(state, level);
+        Destination(state, level).Add(paragraph);
 
         ResetParagraph(state);
     }
@@ -355,6 +383,18 @@ public sealed partial class Ww8DocumentReader
 
                 case Ww8SprmReader.Ids.IsTableRowEnd:
                     format = format with { IsTableRowEnd = sprm.Byte != 0 };
+                    break;
+
+                case Ww8SprmReader.Ids.TableDepth:
+                    format = format with { TableDepth = sprm.DoubleWord };
+                    break;
+
+                case Ww8SprmReader.Ids.IsInnerTableCell:
+                    format = format with { IsInnerTableCell = sprm.Byte != 0 };
+                    break;
+
+                case Ww8SprmReader.Ids.IsInnerTableRowEnd:
+                    format = format with { IsInnerTableRowEnd = sprm.Byte != 0 };
                     break;
 
                 case Ww8SprmReader.Ids.IsTableHeaderRow:
@@ -468,54 +508,12 @@ public sealed partial class Ww8DocumentReader
                     format = format with { CharacterStyleName = _styles.NameOf(sprm.Word) };
                     break;
                 case Ww8SprmReader.Ids.Language:
-                    format = format with { Language = LanguageTagOf(sprm.Word) };
+                    format = format with { Language = WindowsLanguages.TagOf(sprm.Word) };
                     break;
             }
         }
         return format;
     }
-
-    /// <summary>
-    /// A BCP 47 tag for a Word language id.
-    /// </summary>
-    /// <remarks>
-    /// Only the ids that appear in Western documents, returning null rather than guessing for the
-    /// rest: a wrong language tag is worse than none. The full table is large static data
-    /// (<c>research/05-infrastructure.md</c> section F.3).
-    /// </remarks>
-    private static string? LanguageTagOf(ushort languageId) => languageId switch
-    {
-        0 or 1024 => null,
-        1033 => "en-US",
-        2057 => "en-GB",
-        3081 => "en-AU",
-        4105 => "en-CA",
-        1031 => "de-DE",
-        2055 => "de-CH",
-        3079 => "de-AT",
-        1036 => "fr-FR",
-        3084 => "fr-CA",
-        1034 => "es-ES",
-        1040 => "it-IT",
-        1043 => "nl-NL",
-        1030 => "da-DK",
-        1044 => "nb-NO",
-        1053 => "sv-SE",
-        1035 => "fi-FI",
-        1045 => "pl-PL",
-        1029 => "cs-CZ",
-        1038 => "hu-HU",
-        1049 => "ru-RU",
-        1032 => "el-GR",
-        1055 => "tr-TR",
-        1041 => "ja-JP",
-        2052 => "zh-CN",
-        1028 => "zh-TW",
-        1042 => "ko-KR",
-        1046 => "pt-BR",
-        2070 => "pt-PT",
-        _ => null,
-    };
 
     /// <summary>The mutable state of one range's walk.</summary>
     private sealed class WalkState(ContentNode target)
@@ -535,10 +533,14 @@ public sealed partial class Ww8DocumentReader
         public string? CurrentHyperlink { get; set; }
         public Stack<string?> Hyperlinks { get; } = new();
 
-        public bool InCell { get; set; }
-        public List<ContentNode> CellContent { get; } = [];
-        public List<Ww8CellDraft> RowCells { get; } = [];
-        public List<Ww8RowDraft> Rows { get; } = [];
+        /// <summary>
+        /// One table under construction per nesting level, outermost first.
+        /// </summary>
+        /// <remarks>
+        /// A list rather than a single set of drafts because a nested table is being built at the same
+        /// time as the table whose cell contains it, and the inner one finishes first.
+        /// </remarks>
+        public List<Ww8TableLevel> Levels { get; } = [];
 
         public bool FormatCacheValid { get; set; }
         public int FormatCacheStart { get; set; }
@@ -565,6 +567,27 @@ public readonly record struct Ww8ParagraphFormat
 
     /// <summary>True when the paragraph is inside a table.</summary>
     public bool IsInTable { get; init; }
+
+    /// <summary>
+    /// How deeply the paragraph is nested in tables: 1 for a top-level table, 2 for one inside a cell.
+    /// </summary>
+    public int TableDepth { get; init; }
+
+    /// <summary>True when the paragraph's mark ends a cell of the inner table.</summary>
+    public bool IsInnerTableCell { get; init; }
+
+    /// <summary>True when the paragraph's mark ends a row of the inner table.</summary>
+    public bool IsInnerTableRowEnd { get; init; }
+
+    /// <summary>
+    /// The table nesting level the paragraph belongs to, or zero when it is not in a table.
+    /// </summary>
+    /// <remarks>
+    /// The depth sprm is what a nested table is expressed with, but an older producer may set only
+    /// <see cref="IsInTable"/> — so "in a table with no stated depth" means the top level rather than
+    /// no level.
+    /// </remarks>
+    public int Level => IsInTable || TableDepth > 0 ? Math.Max(1, TableDepth) : 0;
 
     /// <summary>True when the paragraph's mark ends a table row rather than a cell.</summary>
     public bool IsTableRowEnd { get; init; }

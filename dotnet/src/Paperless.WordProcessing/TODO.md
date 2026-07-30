@@ -127,8 +127,16 @@ does not need it and must not be made to pay for it.
 - [ ] Section descriptors (`PlcfSed`): page setup and which header slots a section uses. The
       stories are read by position today, which is right for extraction and not enough for
       layout.
-- [ ] Nested tables (`sprmPItap`): a nested table's cells flatten into the enclosing cell, as in
-      RTF
+- [x] Nested tables: `sprmPItap` for the depth, and the detail that makes them readable at all —
+      only the *outermost* table separates cells with U+0007. A nested table reuses the paragraph
+      mark and says what it means with `sprmPFInnerTableCell` and `sprmPFInnerTtp`, so a reader that
+      treats every carriage return as merely a paragraph puts a nested table's whole contents into
+      one cell.
+- [x] `sprmTDefTable`'s length field is the operand's length **plus one**, not plus two: it counts
+      itself as one byte rather than the two it occupies. Subtracting two loses the operand's last
+      byte and desynchronises the rest of the grpprl, so every sprm after a table definition decodes
+      as something else — which for a table means the repeat-header flag and the shading that follow
+      it. LibreOffice notes the same quirk at `ww8scan.cxx`'s `L_VAR2`.
 
 ### RTF — extraction done
 - [x] Byte-level tokeniser: groups, control words with parameters, control symbols, `\'hh`
@@ -148,11 +156,16 @@ does not need it and must not be made to pay for it.
       instruction, since RTF has no hyperlink markup
 - [x] Metadata from `{\info}`, whose timestamps are groups of numeric control words
 - [x] Embedded pictures recorded as graphics without decoding the bytes
-- [ ] Nested tables (`\itap`): a nested table's cells currently flatten into the enclosing
-      cell's content rather than nesting
-- [ ] `\trhdr` header rows, so `HeaderRowCount` can be reported rather than left at zero
-- [ ] The full LCID table, so every `\lang` maps to a language tag rather than only the common
-      ones (`research/05-infrastructure.md` section F.3)
+- [x] Nested tables: `\itap` for the depth, `\nestcell`/`\nestrow` for the inner ends, and
+      `{\*\nesttableprops}` — the one ignorable destination that must **not** be skipped, since it
+      holds the inner row's geometry and its end. `{\nonesttables …}` beside it is a plain-text
+      approximation for readers that cannot nest, and reading both duplicates every nested cell.
+      A nested row's definition arrives *after* its cells, so the declarations are matched to cells
+      when the row closes rather than as each cell ends.
+- [x] `\trhdr` header rows. LibreOffice's own export omits it, so this is covered by a hand-written
+      document rather than by the corpus.
+- [x] The full LCID table, now generated into `Paperless.Core.Globalization.WindowsLanguages` from
+      LibreOffice's `i18nlangtag` data and shared with the DOC reader
 
 ## Layout engine
 

@@ -78,12 +78,48 @@ public sealed partial class Ww8DocumentReader
         return new Ww8TableDefinition(edges, cells);
     }
 
-    private static void FinishCell(WalkState state)
+    /// <summary>
+    /// The list a paragraph at a nesting level belongs in: an open cell's content, or the section.
+    /// </summary>
+    private static IList<ContentNode> Destination(WalkState state, int level)
     {
+        if (level <= 0) return state.Target.Children;
+
+        EnsureLevels(state, level);
+        return state.Levels[level - 1].CellContent;
+    }
+
+    private static void EnsureLevels(WalkState state, int level)
+    {
+        while (state.Levels.Count < level) state.Levels.Add(new Ww8TableLevel());
+    }
+
+    /// <summary>
+    /// Materialises every table nested deeper than a level, innermost first.
+    /// </summary>
+    /// <remarks>
+    /// A finished inner table goes into the cell of the table that encloses it, which is why this has
+    /// to run innermost first: the inner table must exist before the cell holding it is closed. WW8
+    /// marks no end to a table, so the only signal is content arriving at a shallower level.
+    /// </remarks>
+    private static void CloseTablesDeeperThan(WalkState state, int level)
+    {
+        for (int deeper = state.Levels.Count; deeper > level; deeper--)
+        {
+            if (FinishTable(state, deeper) is { } table) Destination(state, deeper - 1).Add(table);
+            state.Levels.RemoveAt(deeper - 1);
+        }
+    }
+
+    private static void FinishCell(WalkState state, int level)
+    {
+        EnsureLevels(state, level);
+        Ww8TableLevel table = state.Levels[level - 1];
+
         Ww8CellDraft cell = new();
-        cell.Content.AddRange(state.CellContent);
-        state.CellContent.Clear();
-        state.RowCells.Add(cell);
+        cell.Content.AddRange(table.CellContent);
+        table.CellContent.Clear();
+        table.RowCells.Add(cell);
     }
 
     /// <summary>
@@ -94,42 +130,41 @@ public sealed partial class Ww8DocumentReader
     /// The row-end paragraph's properties, which carry the geometry. Passed in rather than read from
     /// the walk state, because the state's copy is cleared when that paragraph is finished.
     /// </param>
+    /// <param name="level">Which nesting level's table the row belongs to.</param>
     /// <remarks>
     /// The geometry arrives with the row's <em>end</em>, so it can only be applied once every cell
     /// has been collected — which is also why a cell cannot know its own column while it is being
     /// read.
     /// </remarks>
-    private static void FinishRow(WalkState state, Ww8ParagraphFormat format)
+    private static void FinishRow(WalkState state, Ww8ParagraphFormat format, int level)
     {
-        if (state.CellContent.Count > 0) FinishCell(state);
-        if (state.RowCells.Count == 0)
-        {
-            state.InCell = false;
-            return;
-        }
+        EnsureLevels(state, level);
+        Ww8TableLevel table = state.Levels[level - 1];
+
+        if (table.CellContent.Count > 0) FinishCell(state, level);
+        if (table.RowCells.Count == 0) return;
 
         Ww8TableDefinition? definition = format.TableDefinition;
-        for (int i = 0; i < state.RowCells.Count; i++)
+        for (int i = 0; i < table.RowCells.Count; i++)
         {
-            state.RowCells[i].RightEdge = definition?.RightEdgeOf(i) ?? 0;
+            table.RowCells[i].RightEdge = definition?.RightEdgeOf(i) ?? 0;
             Ww8CellDefinition cell = definition?.CellAt(i) ?? default;
-            state.RowCells[i].IsHorizontallyMerged = cell.IsMerged;
-            state.RowCells[i].ContinuesMergeAbove = cell.IsVerticallyMerged && !cell.StartsVerticalMerge;
+            table.RowCells[i].IsHorizontallyMerged = cell.IsMerged;
+            table.RowCells[i].ContinuesMergeAbove = cell.IsVerticallyMerged && !cell.StartsVerticalMerge;
         }
 
-        ApplyExplicitMerges(state);
+        ApplyExplicitMerges(table);
 
         Ww8RowDraft row = new()
         {
-            Index = state.Rows.Count,
+            Index = table.Rows.Count,
             LeftEdge = definition?.LeftEdge ?? 0,
             IsHeader = format.IsTableHeaderRow,
         };
-        row.Cells.AddRange(state.RowCells);
-        state.Rows.Add(row);
+        row.Cells.AddRange(table.RowCells);
+        table.Rows.Add(row);
 
-        state.RowCells.Clear();
-        state.InCell = false;
+        table.RowCells.Clear();
     }
 
     /// <summary>
@@ -139,36 +174,48 @@ public sealed partial class Ww8DocumentReader
     /// Only the merges a producer flags. A geometric merge cannot be recognised one row at a time —
     /// it needs the whole table's grid — so it is resolved later.
     /// </remarks>
-    private static void ApplyExplicitMerges(WalkState state)
+    private static void ApplyExplicitMerges(Ww8TableLevel table)
     {
-        for (int index = state.RowCells.Count - 1; index >= 1; index--)
+        for (int index = table.RowCells.Count - 1; index >= 1; index--)
         {
-            if (!state.RowCells[index].IsHorizontallyMerged) continue;
+            if (!table.RowCells[index].IsHorizontallyMerged) continue;
 
-            Ww8CellDraft owner = state.RowCells[index - 1];
-            owner.RightEdge = Math.Max(owner.RightEdge, state.RowCells[index].RightEdge);
-            owner.Content.AddRange(state.RowCells[index].Content);
-            state.RowCells.RemoveAt(index);
+            Ww8CellDraft owner = table.RowCells[index - 1];
+            owner.RightEdge = Math.Max(owner.RightEdge, table.RowCells[index].RightEdge);
+            owner.Content.AddRange(table.RowCells[index].Content);
+            table.RowCells.RemoveAt(index);
         }
     }
 
-    private static void FinishTable(WalkState state)
+    /// <summary>
+    /// Materialises one level's rows as a table, or null when that level holds none.
+    /// </summary>
+    private static ContentTable? FinishTable(WalkState state, int level)
     {
-        if (state.Rows.Count == 0) return;
+        if (level <= 0 || level > state.Levels.Count) return null;
 
-        AssignColumns(state.Rows);
-        ResolveVerticalMerges(state.Rows);
+        Ww8TableLevel level_ = state.Levels[level - 1];
+
+        // Content collected but never closed by a row mark: a truncated table, whose cells are still
+        // worth keeping.
+        if (level_.CellContent.Count > 0 || level_.RowCells.Count > 0)
+            FinishRow(state, default, level);
+
+        if (level_.Rows.Count == 0) return null;
+
+        AssignColumns(level_.Rows);
+        ResolveVerticalMerges(level_.Rows);
 
         ContentTable table = new()
         {
-            ColumnCount = state.Rows.Max(
+            ColumnCount = level_.Rows.Max(
                 r => r.Cells.Count == 0 ? 0 : r.Cells.Max(c => c.ColumnStart + c.ColumnSpan)),
             // Only the header rows at the top count: sprmTTableHeader on a row further down does
             // not make the rows above it headers, and Word does write it that way.
-            HeaderRowCount = state.Rows.TakeWhile(r => r.IsHeader).Count(),
+            HeaderRowCount = level_.Rows.TakeWhile(r => r.IsHeader).Count(),
         };
 
-        foreach (Ww8RowDraft row in state.Rows)
+        foreach (Ww8RowDraft row in level_.Rows)
         {
             ContentTableRow contentRow = new() { Index = row.Index };
             foreach (Ww8CellDraft cell in row.Cells)
@@ -188,8 +235,8 @@ public sealed partial class Ww8DocumentReader
             table.Children.Add(contentRow);
         }
 
-        state.Rows.Clear();
-        state.Target.Children.Add(table);
+        level_.Rows.Clear();
+        return table;
     }
 
     /// <summary>
@@ -294,6 +341,14 @@ public sealed partial class Ww8DocumentReader
         public int LeftEdge { get; init; }
         public bool IsHeader { get; init; }
         public List<Ww8CellDraft> Cells { get; } = [];
+    }
+
+    /// <summary>One table under construction, at one nesting level.</summary>
+    private sealed class Ww8TableLevel
+    {
+        public List<ContentNode> CellContent { get; } = [];
+        public List<Ww8CellDraft> RowCells { get; } = [];
+        public List<Ww8RowDraft> Rows { get; } = [];
     }
 }
 

@@ -87,8 +87,21 @@ public static class Ww8SprmReader
         /// <summary>The paragraph mark ends a table row.</summary>
         public const ushort IsTableRowEnd = 0x2417;
 
-        /// <summary>The paragraph's nesting depth in tables.</summary>
+        /// <summary>
+        /// The paragraph's nesting depth in tables: 1 for a top-level table, 2 for one inside a cell.
+        /// </summary>
         public const ushort TableDepth = 0x6649;
+
+        /// <summary>The paragraph's mark ends a cell of the <em>inner</em> table.</summary>
+        /// <remarks>
+        /// A nested table's cell marks are indistinguishable from the enclosing table's without this:
+        /// both are U+0007 inside the same run of text, so a reader that ignores it turns one nested
+        /// table into a handful of extra cells in the row that contains it.
+        /// </remarks>
+        public const ushort IsInnerTableCell = 0x244B;
+
+        /// <summary>The paragraph's mark ends a row of the inner table.</summary>
+        public const ushort IsInnerTableRowEnd = 0x244C;
 
         /// <summary>The row this paragraph ends repeats as a header on every page.</summary>
         public const ushort IsTableHeaderRow = 0x3404;
@@ -211,11 +224,18 @@ public static class Ww8SprmReader
                 // Code 6: the operand states its own length. sprmTDefTable is the one sprm whose
                 // length is two bytes rather than one, because a table definition can exceed 255
                 // bytes — and a reader that assumes one byte desynchronises on every table.
+                //
+                // The two-byte field is the operand's length *plus one*, not plus two: it counts
+                // itself as one byte rather than as the two it occupies. Subtracting two loses the
+                // last byte of the operand and leaves the walk one byte out of step, so every sprm
+                // after a table definition decodes as something else — which for a table means the
+                // repeat-header flag and the shading that follow it. LibreOffice notes the same
+                // quirk at <c>ww8scan.cxx</c>'s <c>L_VAR2</c>.
                 if (id == Ids.TableDefinition)
                 {
                     if (position + 2 > grpprl.Length) return -1;
                     prefixLength = 2;
-                    return BinaryPrimitives.ReadUInt16LittleEndian(grpprl.Span[position..]) - 2;
+                    return BinaryPrimitives.ReadUInt16LittleEndian(grpprl.Span[position..]) - 1;
                 }
 
                 if (position + 1 > grpprl.Length) return -1;

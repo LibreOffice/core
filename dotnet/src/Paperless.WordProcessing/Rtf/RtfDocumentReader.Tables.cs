@@ -19,6 +19,13 @@ namespace Paperless.WordProcessing.Rtf;
 /// edge the whole table uses — rather than read off the cell. Trusting the flags alone reports
 /// every LibreOffice-written merge as an ordinary cell.
 /// </para>
+/// <para>
+/// A <strong>nested</strong> table is written inside the enclosing cell with <c>\itap</c> giving its
+/// depth, <c>\nestcell</c> and <c>\nestrow</c> in place of <c>\cell</c> and <c>\row</c>, and its row
+/// definition <em>after</em> its cells rather than before, inside <c>{\*\nesttableprops}</c>. So the
+/// declarations cannot be matched to cells as each cell closes; they are applied when the row does,
+/// which works for both orders.
+/// </para>
 /// </remarks>
 public sealed partial class RtfDocumentReader
 {
@@ -28,95 +35,200 @@ public sealed partial class RtfDocumentReader
     /// </summary>
     public const int MaxTableColumns = 63;
 
+    /// <summary>How deeply tables may nest before the document is treated as malformed.</summary>
+    /// <remarks>
+    /// <c>\itap</c> is an arbitrary number from an untrusted file and each level is a live builder, so
+    /// without a cap a document claiming a depth of two billion would allocate that many.
+    /// </remarks>
+    public const int MaxTableDepth = 32;
+
+    /// <summary>The nesting level the paragraphs being read belong to.</summary>
+    /// <remarks>
+    /// <c>\itap</c> states it, but a producer predating nested tables writes only <c>\intbl</c> — so
+    /// "in a table at no stated depth" means the top level rather than no level at all.
+    /// </remarks>
+    private static int LevelOf(Flow flow)
+        => flow.TableLevelIndex > 0 ? Math.Min(flow.TableLevelIndex, MaxTableDepth)
+        : flow.InTable ? 1
+        : 0;
+
+    private static TableLevel LevelAt(Flow flow, int level)
+    {
+        while (flow.Levels.Count < level) flow.Levels.Add(new TableLevel());
+        return flow.Levels[level - 1];
+    }
+
+    /// <summary>
+    /// Begins a row definition at <c>\trowd</c>.
+    /// </summary>
+    /// <remarks>
+    /// The level is remembered, because a nested row's definition sits in a group that says nothing
+    /// about depth and its <c>\nestrow</c> has to close the same table its cells went into.
+    /// <c>\trowd</c> may be repeated to restate a row before it is filled, so an open definition is
+    /// replaced rather than nested.
+    /// </remarks>
     private static void BeginRowDefinition(Flow flow)
     {
-        // \trowd may be repeated to restate a row's definition before it is filled, so an open
-        // definition is replaced rather than nested.
-        flow.InRowDefinition = true;
-        flow.CellDefinitions.Clear();
-        flow.RowLeftEdge = 0;
-        ClearPendingCellFlags(flow);
+        int level = Math.Max(1, LevelOf(flow));
+        flow.DefinitionLevel = level;
+
+        TableLevel table = LevelAt(flow, level);
+        table.CellDefinitions.Clear();
+        table.RowLeftEdge = 0;
+        table.RowIsHeader = false;
+        ClearPendingCellFlags(table);
     }
+
+    /// <summary>The level a row-definition control word applies to.</summary>
+    private static TableLevel DefinitionTarget(Flow flow)
+        => LevelAt(flow, Math.Max(1, flow.DefinitionLevel));
 
     private static void AddCellDefinition(Flow flow, int? rightEdge)
     {
-        if (flow.CellDefinitions.Count >= MaxTableColumns)
+        TableLevel table = DefinitionTarget(flow);
+
+        if (table.CellDefinitions.Count >= MaxTableColumns)
         {
-            ClearPendingCellFlags(flow);
+            ClearPendingCellFlags(table);
             return;
         }
 
-        flow.CellDefinitions.Add(new CellDefinition(
+        table.CellDefinitions.Add(new CellDefinition(
             rightEdge ?? 0,
-            flow.PendingCellMergesFirst,
-            flow.PendingCellMerged,
-            flow.PendingCellVerticalFirst,
-            flow.PendingCellVerticalMerged));
-        ClearPendingCellFlags(flow);
+            table.PendingCellMergesFirst,
+            table.PendingCellMerged,
+            table.PendingCellVerticalFirst,
+            table.PendingCellVerticalMerged));
+        ClearPendingCellFlags(table);
     }
 
-    private static void ClearPendingCellFlags(Flow flow)
+    private static void ClearPendingCellFlags(TableLevel table)
     {
-        flow.PendingCellMergesFirst = false;
-        flow.PendingCellMerged = false;
-        flow.PendingCellVerticalFirst = false;
-        flow.PendingCellVerticalMerged = false;
+        table.PendingCellMergesFirst = false;
+        table.PendingCellMerged = false;
+        table.PendingCellVerticalFirst = false;
+        table.PendingCellVerticalMerged = false;
     }
 
-    /// <summary>Ends a cell at a <c>\cell</c>.</summary>
+    /// <summary>
+    /// The list a finished paragraph belongs in: an open cell's content, or the section itself.
+    /// </summary>
+    /// <remarks>
+    /// Anything at a shallower level than the open tables closes them first, since RTF marks no end to
+    /// a table — a paragraph back at the enclosing level is what says the nested one finished.
+    /// </remarks>
+    private static IList<ContentNode> Destination(Flow flow, int level)
+    {
+        CloseTablesDeeperThan(flow, level);
+        return level <= 0 ? flow.Target.Children : LevelAt(flow, level).CellContent;
+    }
+
+    /// <summary>Materialises every table nested deeper than a level, innermost first.</summary>
+    /// <remarks>
+    /// Innermost first, because a finished inner table goes into a cell of the table that encloses it
+    /// and so must exist before that cell is closed.
+    /// </remarks>
+    private static void CloseTablesDeeperThan(Flow flow, int level)
+    {
+        for (int deeper = flow.Levels.Count; deeper > Math.Max(0, level); deeper--)
+        {
+            ContentTable? table = FinishTable(flow, deeper);
+            flow.Levels.RemoveAt(deeper - 1);
+
+            if (table is null) continue;
+            if (deeper == 1) flow.Target.Children.Add(table);
+            else LevelAt(flow, deeper - 1).CellContent.Add(table);
+        }
+    }
+
+    /// <summary>Ends a cell at <c>\cell</c> or <c>\nestcell</c>.</summary>
     private void EndCell(GroupState state)
     {
         if (state.Destination is not RtfDestination.Body) return;
 
         Flow flow = CurrentFlow;
+        int level = LevelOf(flow);
 
-        // A cell whose row definition never arrived: treat the content as body text rather than
-        // losing it.
-        if (!flow.InRowDefinition)
+        // A cell mark with no table around it: keep the content as body text rather than losing it.
+        if (level <= 0)
         {
             FinishParagraph(flow, force: true);
             return;
         }
 
-        // The cell's last paragraph usually has no \par of its own — \cell ends it.
-        FinishParagraph(flow, force: flow.CellContent.Count == 0);
+        TableLevel table = LevelAt(flow, level);
 
-        int index = flow.RowCells.Count;
-        CellDefinition definition = index < flow.CellDefinitions.Count
-            ? flow.CellDefinitions[index]
-            : default;
-
-        CellDraft cell = new()
-        {
-            RightEdge = definition.RightEdge,
-            IsHorizontallyMerged = definition.Merged,
-            ContinuesMergeAbove = definition.VerticalMerged,
-        };
-        cell.Content.AddRange(flow.CellContent);
-        flow.CellContent.Clear();
-        flow.RowCells.Add(cell);
+        // The cell's last paragraph usually has no \par of its own — the cell mark ends it.
+        FinishParagraph(flow, force: table.CellContent.Count == 0);
+        CollectCell(table);
     }
 
-    /// <summary>Ends a row at a <c>\row</c>.</summary>
+    private static void CollectCell(TableLevel table)
+    {
+        CellDraft cell = new();
+        cell.Content.AddRange(table.CellContent);
+        table.CellContent.Clear();
+        table.RowCells.Add(cell);
+    }
+
+    /// <summary>Ends a row at <c>\row</c> or <c>\nestrow</c>.</summary>
+    /// <remarks>
+    /// The level comes from the paragraphs the row is made of, not from the row definition: the
+    /// definition of a nested row is the last one seen, so a <c>\row</c> closing the enclosing table
+    /// afterwards would otherwise close the nested one a second time.
+    /// </remarks>
     private void EndRow(GroupState state)
     {
         if (state.Destination is not RtfDestination.Body) return;
 
         Flow flow = CurrentFlow;
-        if (!flow.InRowDefinition) return;
+        int level = Math.Max(1, LevelOf(flow));
+        TableLevel table = LevelAt(flow, level);
 
-        // Content written after the last \cell but before \row still belongs to a cell.
-        if (flow.CellContent.Count > 0) EndCell(state);
+        // Content written after the last cell mark but before the row's end still belongs to a cell.
+        if (table.CellContent.Count > 0)
+        {
+            FinishParagraph(flow, force: false);
+            if (table.CellContent.Count > 0) CollectCell(table);
+        }
 
-        ApplyExplicitMerges(flow);
+        if (table.RowCells.Count == 0) return;
 
-        RowDraft row = new() { Index = flow.TableRows.Count, LeftEdge = flow.RowLeftEdge };
-        row.Cells.AddRange(flow.RowCells);
-        flow.TableRows.Add(row);
+        ApplyDefinitions(table);
+        ApplyExplicitMerges(table);
 
-        flow.RowCells.Clear();
-        flow.CellContent.Clear();
-        flow.InRowDefinition = false;
+        RowDraft row = new()
+        {
+            Index = table.TableRows.Count,
+            LeftEdge = table.RowLeftEdge,
+            IsHeader = table.RowIsHeader,
+        };
+        row.Cells.AddRange(table.RowCells);
+        table.TableRows.Add(row);
+
+        table.RowCells.Clear();
+        table.CellContent.Clear();
+    }
+
+    /// <summary>
+    /// Attaches the row definition's declarations to the cells that were collected, by index.
+    /// </summary>
+    /// <remarks>
+    /// Once the row is closed rather than as each cell ends: doing it per cell works for a top-level
+    /// table and fails for a nested one, whose definition arrives only after its cells.
+    /// </remarks>
+    private static void ApplyDefinitions(TableLevel table)
+    {
+        for (int index = 0; index < table.RowCells.Count; index++)
+        {
+            CellDefinition definition = index < table.CellDefinitions.Count
+                ? table.CellDefinitions[index]
+                : default;
+
+            table.RowCells[index].RightEdge = definition.RightEdge;
+            table.RowCells[index].IsHorizontallyMerged = definition.Merged;
+            table.RowCells[index].ContinuesMergeAbove = definition.VerticalMerged;
+        }
     }
 
     /// <summary>
@@ -126,44 +238,43 @@ public sealed partial class RtfDocumentReader
     /// Only the explicitly flagged merges Word writes. LibreOffice's geometric merges are resolved
     /// later, from the column grid, because they cannot be recognised one row at a time.
     /// </remarks>
-    private static void ApplyExplicitMerges(Flow flow)
+    private static void ApplyExplicitMerges(TableLevel table)
     {
-        for (int index = flow.RowCells.Count - 1; index >= 1; index--)
+        for (int index = table.RowCells.Count - 1; index >= 1; index--)
         {
-            if (!flow.RowCells[index].IsHorizontallyMerged) continue;
+            if (!table.RowCells[index].IsHorizontallyMerged) continue;
 
-            CellDraft owner = flow.RowCells[index - 1];
+            CellDraft owner = table.RowCells[index - 1];
             // The merged cell's right edge becomes the owner's: that is what the pair covers.
-            owner.RightEdge = Math.Max(owner.RightEdge, flow.RowCells[index].RightEdge);
-            owner.Content.AddRange(flow.RowCells[index].Content);
-            flow.RowCells.RemoveAt(index);
+            owner.RightEdge = Math.Max(owner.RightEdge, table.RowCells[index].RightEdge);
+            owner.Content.AddRange(table.RowCells[index].Content);
+            table.RowCells.RemoveAt(index);
         }
     }
 
     /// <summary>
-    /// Materialises the accumulated rows as a table, if there are any.
+    /// Materialises one level's accumulated rows as a table, or null when that level has none.
     /// </summary>
-    /// <remarks>
-    /// Called when something other than a row follows, and again when the flow ends: a table at
-    /// the very end of a document has nothing after it to close it.
-    /// </remarks>
-    private static void FinishTable(Flow flow)
+    private static ContentTable? FinishTable(Flow flow, int level)
     {
-        if (flow.TableRows.Count == 0) return;
+        if (level <= 0 || level > flow.Levels.Count) return null;
 
-        AssignColumns(flow.TableRows);
-        ResolveVerticalMerges(flow.TableRows);
+        TableLevel table = flow.Levels[level - 1];
+        if (table.TableRows.Count == 0) return null;
 
-        ContentTable table = new()
+        AssignColumns(table.TableRows);
+        ResolveVerticalMerges(table.TableRows);
+
+        ContentTable content = new()
         {
-            ColumnCount = flow.TableRows.Max(
+            ColumnCount = table.TableRows.Max(
                 r => r.Cells.Count == 0 ? 0 : r.Cells.Max(c => c.ColumnStart + c.ColumnSpan)),
-            // RTF marks a repeated header row with \trhdr, which Paperless does not read yet;
-            // reporting a count it has not established would be a guess.
-            HeaderRowCount = 0,
+            // Only the run of header rows at the top counts: \trhdr on a row further down does not
+            // make the rows above it headers.
+            HeaderRowCount = table.TableRows.TakeWhile(r => r.IsHeader).Count(),
         };
 
-        foreach (RowDraft row in flow.TableRows)
+        foreach (RowDraft row in table.TableRows)
         {
             ContentTableRow contentRow = new() { Index = row.Index };
             foreach (CellDraft cell in row.Cells)
@@ -180,11 +291,11 @@ public sealed partial class RtfDocumentReader
                 foreach (ContentNode node in cell.Content) contentCell.Children.Add(node);
                 contentRow.Children.Add(contentCell);
             }
-            table.Children.Add(contentRow);
+            content.Children.Add(contentRow);
         }
 
-        flow.TableRows.Clear();
-        flow.Target.Children.Add(table);
+        table.TableRows.Clear();
+        return content;
     }
 
     /// <summary>

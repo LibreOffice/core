@@ -1,5 +1,6 @@
 using System.Text;
 using Paperless.Core.Extraction;
+using Paperless.Core.Globalization;
 
 namespace Paperless.WordProcessing.Rtf;
 
@@ -157,18 +158,61 @@ public sealed partial class RtfDocumentReader
         public string? StyleName { get; set; }
         public List<ContentImage> PendingImages { get; } = [];
 
-        // Table state. A row definition is open between \trowd and \row, and paragraphs finished
-        // while it is open belong to a cell rather than to the section.
-        public bool InRowDefinition { get; set; }
+        /// <summary>
+        /// One table under construction per nesting level, outermost first.
+        /// </summary>
+        /// <remarks>
+        /// A list rather than one set of drafts because a nested table is being built while the table
+        /// whose cell contains it is still open, and the inner one finishes first.
+        /// </remarks>
+        public List<TableLevel> Levels { get; } = [];
+
+        /// <summary>
+        /// The nesting level the paragraphs being read belong to, from <c>\itap</c>.
+        /// </summary>
+        /// <remarks>
+        /// Zero outside a table. <c>\intbl</c> without <c>\itap</c> means the top level, which is how
+        /// a producer that predates nesting writes a table — so the two have to be combined rather
+        /// than either being trusted alone.
+        /// </remarks>
+        public int TableLevelIndex { get; set; }
+
+        /// <summary>True when <c>\intbl</c> has been seen for the paragraph being read.</summary>
+        public bool InTable { get; set; }
+
+        /// <summary>The level that <c>\trowd</c> and the cell declarations after it apply to.</summary>
+        /// <remarks>
+        /// A nested row's definition arrives <em>after</em> its cells, inside
+        /// <c>{\*\nesttableprops}</c>, and names no level of its own — so it belongs to whichever
+        /// level the cells before it were at.
+        /// </remarks>
+        public int DefinitionLevel { get; set; }
+    }
+
+    /// <summary>One table under construction, at one nesting level.</summary>
+    private sealed class TableLevel
+    {
+        /// <summary>The cell declarations from the row definition, in the order they arrived.</summary>
+        /// <remarks>
+        /// Applied to the cells when the row closes rather than as each cell ends, because a nested
+        /// row's definition comes after its cells — so at the moment a nested cell ends, nothing is
+        /// yet known about its geometry.
+        /// </remarks>
         public List<CellDefinition> CellDefinitions { get; } = [];
+
         public List<CellDraft> RowCells { get; } = [];
         public List<ContentNode> CellContent { get; } = [];
         public List<RowDraft> TableRows { get; } = [];
+
         public bool PendingCellMergesFirst { get; set; }
         public bool PendingCellMerged { get; set; }
         public bool PendingCellVerticalFirst { get; set; }
         public bool PendingCellVerticalMerged { get; set; }
+
         public int RowLeftEdge { get; set; }
+
+        /// <summary><c>\trhdr</c>: the row repeats as a header at the top of every page.</summary>
+        public bool RowIsHeader { get; set; }
     }
 
     /// <summary>A cell's declaration from <c>\cellx</c> and the merge flags before it.</summary>
@@ -198,15 +242,18 @@ public sealed partial class RtfDocumentReader
         public int RightEdge { get; set; }
 
         /// <summary>True when <c>\clmrg</c> merged this cell into the one before it.</summary>
-        public bool IsHorizontallyMerged { get; init; }
+        public bool IsHorizontallyMerged { get; set; }
 
-        public bool ContinuesMergeAbove { get; init; }
+        public bool ContinuesMergeAbove { get; set; }
         public List<ContentNode> Content { get; } = [];
     }
 
     private sealed class RowDraft
     {
         public int Index { get; init; }
+
+        /// <summary>True when the row repeats as a header on every page the table spans.</summary>
+        public bool IsHeader { get; init; }
 
         /// <summary>
         /// The row's left edge in twips, from <c>\trleft</c>. The first cell starts here, so a row
@@ -265,7 +312,9 @@ public sealed partial class RtfDocumentReader
         string? styleName = state.CharacterStyleId == 0
             ? null
             : _styles.CharacterStyle(state.CharacterStyleId)?.Name;
-        string? language = state.LanguageId == 0 ? null : LanguageTagOf(state.LanguageId);
+        string? language = state.LanguageId is < 0 or > ushort.MaxValue
+            ? null
+            : WindowsLanguages.TagOf((ushort)state.LanguageId);
         string? hyperlink = _fieldHyperlink ?? state.HyperlinkTarget;
 
         if (flow.HasPendingFormat
@@ -377,18 +426,9 @@ public sealed partial class RtfDocumentReader
         foreach (ContentRun run in flow.PendingRuns) paragraph.Children.Add(run);
         foreach (ContentImage image in flow.PendingImages) paragraph.Children.Add(image);
 
-        if (flow.InRowDefinition)
-        {
-            // A paragraph inside an open row definition belongs to a cell, not to the section.
-            flow.CellContent.Add(paragraph);
-        }
-        else
-        {
-            // Consecutive rows form a table only by being adjacent, so the first thing that is
-            // not a row is what closes it — and the table has to land before this paragraph.
-            FinishTable(flow);
-            flow.Target.Children.Add(paragraph);
-        }
+        // Consecutive rows form a table only by being adjacent, so the first paragraph that is not
+        // in one is what closes it — and the table has to land before that paragraph.
+        Destination(flow, LevelOf(flow)).Add(paragraph);
 
         ResetParagraphState(flow);
     }
@@ -463,7 +503,7 @@ public sealed partial class RtfDocumentReader
         {
             Flow finished = CurrentFlow;
             FinishParagraph(finished);
-            FinishTable(finished);
+            CloseTablesDeeperThan(finished, 0);
             _flows.RemoveAt(_flows.Count - 1);
 
             if (finished.Target.Children.Count > 0) _hoisted.Add(finished.Target);
@@ -479,47 +519,4 @@ public sealed partial class RtfDocumentReader
             name, state.StyleSheetBasedOn, state.OutlineLevel, state.StyleSheetIsCharacter));
     }
 
-    /// <summary>
-    /// A BCP 47 tag for an RTF language id.
-    /// </summary>
-    /// <remarks>
-    /// RTF records a Windows LCID. The full mapping is a large static table
-    /// (<c>research/05-infrastructure.md</c> section F.3) that the legacy binary readers will need
-    /// in full; until then this covers the ids that appear in Western documents and returns null
-    /// rather than guessing for the rest, since a wrong language tag is worse than none.
-    /// </remarks>
-    private static string? LanguageTagOf(int languageId) => languageId switch
-    {
-        1024 or 1023 => null,   // "no language" and "process none"
-        1033 => "en-US",
-        2057 => "en-GB",
-        3081 => "en-AU",
-        4105 => "en-CA",
-        1031 => "de-DE",
-        2055 => "de-CH",
-        3079 => "de-AT",
-        1036 => "fr-FR",
-        2060 => "fr-BE",
-        3084 => "fr-CA",
-        1034 => "es-ES",
-        1040 => "it-IT",
-        1043 => "nl-NL",
-        1030 => "da-DK",
-        1044 => "nb-NO",
-        1053 => "sv-SE",
-        1035 => "fi-FI",
-        1045 => "pl-PL",
-        1029 => "cs-CZ",
-        1038 => "hu-HU",
-        1049 => "ru-RU",
-        1032 => "el-GR",
-        1055 => "tr-TR",
-        1041 => "ja-JP",
-        2052 => "zh-CN",
-        1028 => "zh-TW",
-        1042 => "ko-KR",
-        1046 => "pt-BR",
-        2070 => "pt-PT",
-        _ => null,
-    };
 }

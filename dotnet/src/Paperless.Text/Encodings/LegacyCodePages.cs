@@ -128,9 +128,10 @@ public static class LegacyCodePages
     /// </summary>
     /// <remarks>
     /// The WW8 FIB names a language id, not a code page, so the encoding has to be inferred from
-    /// it — which is what LibreOffice's <c>utl_getWinTextEncodingFromLangStr</c> does. Keyed on
-    /// the ISO language prefix, since that is what decides the code page; the country does not.
-    /// Anything unlisted is Western, which is both the common case and the safest guess.
+    /// it — which is what LibreOffice's <c>utl_getWinTextEncodingFromLangStr</c> does. Keyed on the
+    /// ISO language prefix, since that is what decides the code page for every language but one:
+    /// Chinese is written in two code pages, and only the region says which. Anything unlisted is
+    /// Western, which is both the common case and the safest guess.
     /// </remarks>
     /// <param name="isoLanguage">
     /// A language tag or bare ISO 639 code, e.g. <c>ru</c> or <c>ja-JP</c>.
@@ -142,10 +143,21 @@ public static class LegacyCodePages
         int separator = isoLanguage.AsSpan().IndexOfAny('-', '_');
         string language = (separator < 0 ? isoLanguage : isoLanguage[..separator]).ToLowerInvariant();
 
+        // Traditional Chinese is a different code page from simplified, and nothing but the region
+        // distinguishes them — so a Taiwanese document read as GBK is mojibake throughout.
+        if (language is "zh")
+        {
+            return isoLanguage.Contains("TW", StringComparison.OrdinalIgnoreCase)
+                   || isoLanguage.Contains("HK", StringComparison.OrdinalIgnoreCase)
+                   || isoLanguage.Contains("MO", StringComparison.OrdinalIgnoreCase)
+                   || isoLanguage.Contains("Hant", StringComparison.OrdinalIgnoreCase)
+                ? 950
+                : 936;
+        }
+
         return language switch
         {
             "ja" => 932,
-            "zh" => 936,   // Simplified; traditional locales are corrected by the caller's country
             "ko" => 949,
             "th" => 874,
             "ru" or "uk" or "be" or "bg" or "sr" or "mk" or "kk" or "ky" or "tt" or "mn" => 1251,

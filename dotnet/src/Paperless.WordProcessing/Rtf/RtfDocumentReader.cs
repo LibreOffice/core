@@ -147,7 +147,7 @@ public sealed partial class RtfDocumentReader
 
         // A document need not end its last paragraph with \par.
         FinishParagraph(_flows[0]);
-        FinishTable(_flows[0]);
+        CloseTablesDeeperThan(_flows[0], 0);
 
         ContentDocument document = new() { Metadata = BuildMetadata() };
         document.Children.Add(body);
@@ -275,6 +275,11 @@ public sealed partial class RtfDocumentReader
             // ---- paragraph and character state
             case "pard":
                 state.ResetParagraph();
+                // Table membership is paragraph formatting, so \pard clears it and the \intbl and
+                // \itap that follow re-state it. Without the reset a paragraph after a table stays
+                // in it, and the table never closes.
+                CurrentFlow.InTable = false;
+                CurrentFlow.TableLevelIndex = 0;
                 return;
             case "plain":
                 state.ResetCharacter();
@@ -368,24 +373,44 @@ public sealed partial class RtfDocumentReader
                 return;
             case "intbl":
                 state.InTable = true;
+                CurrentFlow.InTable = true;
+                return;
+            case "itap":
+                // The paragraph's table nesting depth. Zero means it is not in a table at all, which
+                // is how a producer says "this paragraph left the table" without a closing marker.
+                CurrentFlow.TableLevelIndex = Math.Clamp(token.Parameter ?? 0, 0, MaxTableDepth);
+                if (CurrentFlow.TableLevelIndex > 0) CurrentFlow.InTable = true;
+                return;
+            case "trhdr":
+                DefinitionTarget(CurrentFlow).RowIsHeader = true;
                 return;
             case "cellx":
                 AddCellDefinition(CurrentFlow, token.Parameter);
                 return;
             case "trleft":
-                CurrentFlow.RowLeftEdge = token.Parameter ?? 0;
+                DefinitionTarget(CurrentFlow).RowLeftEdge = token.Parameter ?? 0;
                 return;
             case "clmgf":
-                CurrentFlow.PendingCellMergesFirst = true;
+                DefinitionTarget(CurrentFlow).PendingCellMergesFirst = true;
                 return;
             case "clmrg":
-                CurrentFlow.PendingCellMerged = true;
+                DefinitionTarget(CurrentFlow).PendingCellMerged = true;
                 return;
             case "clvmgf":
-                CurrentFlow.PendingCellVerticalFirst = true;
+                DefinitionTarget(CurrentFlow).PendingCellVerticalFirst = true;
                 return;
             case "clvmrg":
-                CurrentFlow.PendingCellVerticalMerged = true;
+                DefinitionTarget(CurrentFlow).PendingCellVerticalMerged = true;
+                return;
+            case "nesttableprops":
+                // A nested row's definition, and the one ignorable destination that must not be
+                // skipped: it holds the \trowd, the \cellx edges and the \nestrow that closes the
+                // row. It contains no text, so leaving the destination alone is enough.
+                return;
+            case "nonesttables":
+                // A plain-text approximation of the nested table, for readers that cannot nest.
+                // Reading it as well as the real thing duplicates every nested cell.
+                state.Destination = RtfDestination.Skip;
                 return;
             case "cell" or "nestcell":
                 EndCell(state);

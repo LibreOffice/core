@@ -3,6 +3,7 @@ using System.Text;
 using Paperless.Core.Diagnostics;
 using Paperless.Core.Documents;
 using Paperless.Core.Extraction;
+using Paperless.Core.Globalization;
 using Paperless.Core.Numbering;
 using Paperless.Text.Encodings;
 
@@ -84,7 +85,8 @@ public sealed partial class Ww8DocumentReader
 
         // WW8 records no code page: the encoding of its 8-bit text is inferred from the document's
         // language id (research/05-infrastructure.md section F.2).
-        _codePage = LegacyCodePages.Get(LegacyCodePages.FromLanguage(LanguageTag(fib.LanguageId)));
+        _codePage = LegacyCodePages.Get(
+            LegacyCodePages.FromLanguage(WindowsLanguages.TagOf(fib.LanguageId)));
 
         _pieces = Ww8PieceTable.Parse(
             Slice(Ww8FibTable.PieceTable), wordDocument, _codePage, diagnostics);
@@ -479,45 +481,6 @@ public sealed partial class Ww8DocumentReader
         return _table.AsSpan((int)offset, (int)length);
     }
 
-    /// <summary>
-    /// A BCP 47 tag for a Word language id, used only to pick a code page.
-    /// </summary>
-    /// <remarks>
-    /// Only the language matters for the code page, so this maps the id to a language rather than to
-    /// a full locale. The complete LCID table
-    /// (<c>research/05-infrastructure.md</c> section F.3) is large static data the legacy readers
-    /// will eventually want in full; until then an unrecognised id falls through to Western, which
-    /// is both the common case and what LibreOffice defaults to.
-    /// </remarks>
-    private static string LanguageTag(ushort languageId) => (languageId & 0x03FF) switch
-    {
-        0x11 => "ja",
-        0x04 => "zh",
-        0x12 => "ko",
-        0x1E => "th",
-        0x19 => "ru",
-        0x22 => "uk",
-        0x23 => "be",
-        0x02 => "bg",
-        0x1A => "sr",
-        0x2F => "mk",
-        0x05 => "cs",
-        0x15 => "pl",
-        0x1B => "sk",
-        0x24 => "sl",
-        0x0E => "hu",
-        0x18 => "ro",
-        0x08 => "el",
-        0x1F => "tr",
-        0x0D => "he",
-        0x01 => "ar",
-        0x29 => "fa",
-        0x25 => "et",
-        0x26 => "lv",
-        0x27 => "lt",
-        0x2A => "vi",
-        _ => "en",
-    };
 }
 
 /// <summary>A range of character positions.</summary>
