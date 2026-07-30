@@ -1,31 +1,42 @@
 # Paperless — master plan
 
-Status: **Phase 0 complete.** The container layer works and `paperless identify` correctly
-names all 17 corpus formats. No document content is readable yet — that is Phase 1.
+Status: **Phase 0 complete; Phase 1 under way.** ODF reads — `odt ods odp` plus their
+template and flat-XML variants, verified against LibreOffice's own text export. Nothing else
+reads yet.
 
 Each library has its own `TODO.md` with detail; this file is the ordering and the reasoning
 behind it.
 
 ## Start here (next session)
 
-Phase 1, first task: **ODF extraction** (`odt`/`ods`/`odp`). Read
-`src/Paperless.OpenDocument/TODO.md` and `research/02-writer.md` section D first.
+Phase 1, next task: **OOXML extraction** (`docx`/`xlsx`/`pptx`). Read
+`src/Paperless.Ooxml/TODO.md` and `research/02-writer.md` section C.1 first, and build the
+shared theme and relationship handling in `Paperless.Ooxml` before any one format.
 
-ODF before OOXML is deliberate: it is XML, well-specified, and it builds the
-style-resolution machinery OOXML needs afterwards. It is also where the
-`extraction-comparison` skill starts paying off, since LibreOffice's own text export gives
-an immediate oracle.
+The ODF work is the template to follow, and two of its decisions should carry over
+deliberately rather than be rediscovered:
+
+- **Keep "set here", "inherited" and "defaulted" apart.** `OdfPropertyOrigin` and the
+  two-pass cascade in `OdfStyles.ResolveProperty` are what make hard formatting
+  distinguishable from an inherited style, and DOCX's `w:pPr`/`w:rPr` over `styles.xml` over
+  `w:docDefaults` needs exactly the same distinction.
+- **One content walker per family group, not per format.** `OdfContentReader` serves all
+  three ODF families because the text content model is shared; DrawingML text bodies are
+  similarly shared across DOCX, XLSX and PPTX.
 
 Before trusting any comparison, run
 `.claude/skills/libreoffice-reference/scripts/check-env.sh`. **A fresh container will not
 have the LibreOffice application modules, poppler-utils, or the Carlito/Caladea fonts** — the
-script prints the exact `apt-get` lines.
+script prints the exact `apt-get` lines. `libreoffice-core` alone gives an `soffice` that
+starts, reports a version and then fails on every document, which is why
+`LibreOfficeRunner.IsAvailable` decides by converting a probe file rather than by finding the
+binary.
 
 ## Where things stand
 
 | Done | |
 |---|---|
-| ✅ | Solution: 12 libraries + CLI + 8 test projects, warning-free on .NET 10, 128 tests passing |
+| ✅ | Solution: 12 libraries + CLI + 9 test projects, warning-free on .NET 10, 269 tests passing |
 | ✅ | `Paperless.Core` API surface: units, geometry, colour, document model, drawing IR |
 | ✅ | `FormatCatalogue`: all 43 formats described |
 | ✅ | Content-based format identification, verified on all 17 corpus formats |
@@ -36,14 +47,17 @@ script prints the exact `apt-get` lines.
 | ✅ | Six research documents (~6000 lines) covering the LibreOffice implementation |
 | ✅ | Four comparison skills with verified working scripts |
 | ✅ | Dependencies audited: all permissive, none gated behind a build-time licence check |
+| ✅ | ODF extraction: `odt ods odp ott ots otp fodt fods fodp`, with style resolution, metadata, text, lists, tables, notes, comments, frames and shape text |
+| ✅ | `paperless extract` and `paperless metadata`, text and JSON |
+| ✅ | `LibreOfficeRunner` and an automated extraction comparison against LibreOffice, skipping cleanly when it is not installed |
 
 | Not started | |
 |---|---|
-| ❌ | Every format reader — no document content is parsed yet |
+| ❌ | OOXML, legacy binary, RTF and CSV readers |
 | ❌ | Decryption (detection works; decryption does not) |
 | ❌ | Text layout: fonts, metrics, shaping, line breaking |
 | ❌ | Layout engines and rendering backends |
-| ❌ | The CLI beyond `identify` |
+| ❌ | The CLI beyond `identify`, `extract` and `metadata` |
 
 ## Ordering principle
 
@@ -82,16 +96,24 @@ Nothing else can be verified until these work.
       prohibited throughout (XXE).
 - [x] **`paperless identify`** end to end. Done: text and `--json` output, correct on all 17
       corpus formats, with sysexits-style exit codes.
-- [ ] **Corpus and fidelity harness wiring**. Commit `tests/corpus/minimal/`, implement
-      `LibreOfficeRunner`, get one comparison running end to end even though it fails.
+- [x] **Corpus and fidelity harness wiring**. Done: `tests/corpus/minimal/` and
+      `tests/corpus/features/` are committed; `LibreOfficeRunner` drives headless `soffice`
+      with a private profile, batched conversions and an availability probe that survives a
+      `libreoffice-core`-only install; `TextComparer` normalises the way the
+      `extraction-comparison` skill documents. `OdfExtractionComparisonTests` runs the whole
+      ODF corpus against LibreOffice and skips with a reason when it is absent.
 
 ## Phase 1 — Extraction, all formats
 
 Per format: metadata, then text, then tables/structure.
 
-- [ ] ODF text/spreadsheet/presentation (`odt ods odp` + template and flat variants).
-      **Start here**: XML, well-specified, and it exercises the shared style-resolution
-      machinery that OOXML also needs.
+- [x] ODF text/spreadsheet/presentation (`odt ods odp` + template and flat variants). Done:
+      the three-container style resolution with set-here/inherited/defaulted kept apart,
+      `meta.xml`, the shared text walk, and tables shared between Writer tables and Calc
+      sheets. The minimal corpus matches LibreOffice's text filter exactly; the features
+      corpus accounts for every difference (see `src/Paperless.OpenDocument/TODO.md`).
+      Remaining ODF gaps are tracked there — tracked changes, number-format application,
+      embedded objects, and the OpenOffice.org 1.x namespaces.
 - [ ] OOXML (`docx xlsx pptx` + variants). Shared theme/relationship handling in
       `Paperless.Ooxml` first.
 - [ ] Legacy binary (`doc xls ppt`). Hardest. Needs the record-stream reader, sprm/BIFF
@@ -100,7 +122,9 @@ Per format: metadata, then text, then tables/structure.
 - [ ] `xlsb` (import only — LibreOffice cannot write it, so test files need Excel).
 - [ ] Encrypted documents, one scheme at a time
       (`research/05-infrastructure.md` section C).
-- [ ] `paperless extract` and `paperless metadata`.
+- [x] `paperless extract` and `paperless metadata`, in text and JSON. The output layout is
+      part of the `extraction-comparison` skill's contract: `--outdir DIR` writes
+      `<stem>.txt` per input.
 
 **Exit criterion:** extraction matches LibreOffice's text export across the whole corpus,
 allowing for the reference filters' known omissions (headers, comments, notes, shape text

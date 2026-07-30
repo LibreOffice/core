@@ -13,6 +13,17 @@ Two things make spreadsheets unlike the other families, and both shape the desig
 
 Reference: `research/03-calc.md`.
 
+**Done: ODS extraction** (`ods`/`ots`/`fods`), via `Paperless.OpenDocument`. Each sheet
+becomes a section holding one table; cells carry both their typed value and the cached text
+the authoring application displayed, plus their formula in the file's own syntax. Hidden
+sheets are extracted and flagged rather than skipped. Repeated rows and columns are expanded
+only within the used range — a spreadsheet pads every row to the sheet's full width and the
+sheet to its full height, so expanding naively would materialise billions of cells.
+
+Not yet: applying number formats (unnecessary while the cached display text is present, but
+rendering will need it), print setup, and the sparse typed cell storage below, which
+extraction does not need and layout will.
+
 ## Document model
 
 - [ ] Sparse column-oriented cell storage; typed blocks rather than boxed per-cell objects

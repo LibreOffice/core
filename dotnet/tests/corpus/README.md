@@ -68,6 +68,20 @@ require LibreOffice to be installed. Produced by LibreOffice 24.2.7.2.
 | `slides-ppt.ppt` | PPT | OLE2; `PowerPoint Document` stream; **large multi-sector stream** |
 | `slides-pptx.pptx` | PPTX | OPC presentation content type |
 
+`features/` — one document per cluster of features under test, hand-authored as flat ODF and
+then converted by LibreOffice 24.2.7.2 so that the committed file is one LibreOffice itself
+wrote. That matters: LibreOffice normalises what it reads, and the details it adds are exactly
+the ones a reader has to cope with — it rewrites a doubly-styled run as a span nested inside a
+span, caches a footnote's *recomputed* citation, replaces an authored bullet with a symbol-font
+code point in a Private Use Area, and pads every spreadsheet row out to the sheet's full width.
+
+| File | Format | Exercises |
+|---|---|---|
+| `text-features.odt` | ODT | Three heading levels; bold/italic/underline/strikethrough/superscript spans, including nested ones; a named character style; a run in another language; `text:s`/`text:tab`/`text:line-break`; a hyperlink; a footnote; a comment; bulleted and numbered lists with nesting, a continuation paragraph and letter numbering; a table with a header row, a column span and an empty cell; an anchored text box; a page break; a title field; a bookmark; a page header and footer; full `meta.xml` including user-defined properties of three types |
+| `text-features-flat.fodt` | FODT | The same document in flat form, so the packaged and flat paths can be asserted to extract identically |
+| `sheet-features.ods` | ODS | Three sheets, one hidden; float, currency, percentage, date, time, boolean and numeric-looking-string cells; formulas including `SUM`; a `#DIV/0!` error result; a row span with a covered cell; a blank row inside the used range; a cell comment; `meta:table-count` as the sheet count |
+| `slides-features.odp` | ODP | Three slides, one hidden; a title and an outline with a nested bullet; speaker notes on one slide only; a shape group containing a custom shape and a rectangle, both with text; a plain text box with an emphasised span; a shape style that formats the text inside it |
+
 ### Why `slides-ppt.ppt` is 460 kB
 
 96% of it is a thumbnail bitmap LibreOffice embeds in the `SummaryInformation` property set

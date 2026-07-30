@@ -30,9 +30,18 @@ Reference: `research/02-writer.md` — model, layout engine, and all four import
 
 Order chosen so each is verifiable before the next gets harder.
 
-### ODT — first
-- [ ] `content.xml` text content; automatic and named styles via `Paperless.OpenDocument`
-- [ ] Tables, lists, frames, sections, fields, notes
+### ODT — extraction done
+- [x] `content.xml` text content; automatic and named styles via `Paperless.OpenDocument`
+- [x] Tables, lists, frames, sections, fields, notes, comments, and the master pages'
+      headers and footers — the last four are things LibreOffice's own text filter drops, so
+      extracting them is a deliberate improvement rather than a difference to reconcile
+- [x] `ott` templates and flat `fodt`, through the same reader
+- [ ] Tracked changes (redlines) — see `Paperless.OpenDocument/TODO.md`
+- [ ] Layout, which needs the document model below rather than the extraction tree
+
+`OdtReader` builds the extraction tree directly today. The full `SwDoc`-shaped model below is
+for layout, and ODT will need a second pass through it once that exists; the extraction path
+does not need it and must not be made to pay for it.
 
 ### DOCX
 - [ ] `document.xml` body; `styles.xml`; `numbering.xml`; `settings.xml`; `fontTable.xml`

@@ -196,6 +196,13 @@ public sealed class OdfStyles : IOdfStyleResolver
     public OdfStyle? Find(string? name, OdfStyleFamily family)
     {
         if (name is null) return null;
+
+        // Page layouts live in their own container because they are written as
+        // style:page-layout rather than style:style, but they resolve like any other style —
+        // so the lookup has to reach them or a page's geometry would be unresolvable.
+        if (family == OdfStyleFamily.PageLayout)
+            return _pageLayouts.TryGetValue(name, out OdfStyle? layout) ? layout : null;
+
         if (_automatic.TryGetValue((family, name), out OdfStyle? automatic)) return automatic;
         return _named.TryGetValue((family, name), out OdfStyle? named) ? named : null;
     }

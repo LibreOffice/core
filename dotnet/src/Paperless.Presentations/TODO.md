@@ -8,6 +8,15 @@ burden.
 
 Reference: `research/04-impress.md`.
 
+**Done: ODP extraction** (`odp`/`otp`/`fodp`), via `Paperless.OpenDocument`. Each slide
+becomes a section, with its speaker notes as a section beside it; shapes are read in document
+order, including grouped shapes and shapes with text bodies, both of which LibreOffice's own
+HTML export loses. Hidden slides are extracted and flagged. A shape's own style joins the
+character cascade, which is where nearly all of a slide's formatting lives.
+
+Not yet: the placeholder inheritance chain against the master slide (extraction does not need
+it, slide rendering does), and everything below.
+
 ## Document model
 
 - [ ] Slides, layouts, masters, notes pages, handouts

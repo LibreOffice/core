@@ -37,10 +37,29 @@ public class FormatCatalogueTests
             Assert.False(info.Extension.StartsWith('.'), $"{info.Format} extension should not lead with a dot");
             Assert.False(string.IsNullOrWhiteSpace(info.MediaType), $"{info.Format} has no media type");
             Assert.False(string.IsNullOrWhiteSpace(info.DisplayName), $"{info.Format} has no display name");
-            // Nothing is readable yet; this flips per format as readers land, and an
-            // optimistic value here would make `paperless identify` lie.
-            Assert.False(info.IsReadSupported);
         }
+    }
+
+    [Fact]
+    public void ExactlyTheFormatsWithAWorkingReaderAreMarkedReadable()
+    {
+        // Enumerated rather than derived, so marking a format readable is a deliberate edit to
+        // this list and not a side effect. `paperless identify` reports this flag, and an
+        // optimistic value here would make the tool lie about what it can do.
+        DocumentFormat[] readable =
+        [
+            DocumentFormat.Odt, DocumentFormat.Ott, DocumentFormat.Fodt,
+            DocumentFormat.Ods, DocumentFormat.Ots, DocumentFormat.Fods,
+            DocumentFormat.Odp, DocumentFormat.Otp, DocumentFormat.Fodp,
+        ];
+
+        Assert.Equal(
+            readable.OrderBy(f => f).ToArray(),
+            FormatCatalogue.Instance.All
+                           .Where(i => i.IsReadSupported)
+                           .Select(i => i.Format)
+                           .OrderBy(f => f)
+                           .ToArray());
     }
 
     [Theory]
