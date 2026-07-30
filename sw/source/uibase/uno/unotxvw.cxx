@@ -126,18 +126,102 @@ void SwXTextView::Invalidate()
     m_pView = nullptr;
 }
 
+namespace
+{
+bool lcl_selectSequence(SwDoc& rTargetDoc, SwWrtShell& rSh, const uno::Sequence<uno::Any>& aRanges)
+{
+    std::vector<std::pair<SwPosition, SwPosition>> aPositions;
+    aPositions.reserve(aRanges.getLength());
+
+    // Convert all of the text ranges to position pairs
+    for (const auto& rAny : aRanges)
+    {
+        uno::Reference<text::XTextRange> xRange;
+        if (!(rAny >>= xRange) || !xRange.is())
+            return false;
+
+        SwUnoInternalPaM aInternalPaM(rTargetDoc);
+
+        if (!::sw::XTextRangeToSwPaM(aInternalPaM, xRange) || aInternalPaM.IsMultiSelection())
+            return false;
+
+        auto aStartEnd = aInternalPaM.StartEnd();
+        aPositions.emplace_back(*aStartEnd.first, *aStartEnd.second);
+    }
+
+    // Reject the sequence if there are any overlaps
+    if (aRanges.getLength() >= 2)
+    {
+        // Sort the positions so we can more easily check
+        std::sort(aPositions.begin(), aPositions.end(),
+                  [](const auto& a, const auto& b) { return a.first < b.first; });
+
+        for (auto it = aPositions.begin(), end = aPositions.end() - 1; it != end; ++it)
+        {
+            switch (ComparePosition(it->first, it->second, it[1].first, it[1].second))
+            {
+                case SwComparePosition::Before:
+                case SwComparePosition::Behind:
+                case SwComparePosition::CollideStart:
+                case SwComparePosition::CollideEnd:
+                    break;
+                case SwComparePosition::Inside:
+                case SwComparePosition::Outside:
+                case SwComparePosition::Equal:
+                case SwComparePosition::OverlapBefore:
+                case SwComparePosition::OverlapBehind:
+                    return false;
+            }
+        }
+    }
+
+    rSh.EnterStdMode();
+    if (aRanges.getLength() >= 1)
+    {
+        // Convert the positions into a ring of PaMs
+        SwUnoInternalPaM aRing(rTargetDoc);
+        *aRing.GetPoint() = aPositions[0].first;
+        aRing.SetMark();
+        *aRing.GetMark() = aPositions[0].second;
+
+        for (auto it = aPositions.begin() + 1, end = aPositions.end(); it != end; ++it)
+            new SwPaM(it->first, it->second, &aRing);
+
+        rSh.SetSelection(aRing);
+    }
+    else
+    {
+        // Empty array, just clear the selection
+        rSh.ClearMark();
+    }
+
+    return true;
+}
+}
+
 sal_Bool SwXTextView::select(const uno::Any& aInterface)
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< uno::XInterface >  xInterface;
-    if (!GetView() || !(aInterface >>= xInterface))
+    if (!GetView())
     {
         return false;
     }
 
     SwWrtShell& rSh = GetView()->GetWrtShell();
     SwDoc* pDoc = GetView()->GetDocShell()->GetDoc();
+
+    if (uno::Sequence<uno::Any> aRanges; aInterface >>= aRanges)
+    {
+        return lcl_selectSequence(*pDoc, rSh, aRanges);
+    }
+
+    uno::Reference< uno::XInterface >  xInterface;
+    if (!(aInterface >>= xInterface))
+    {
+        return false;
+    }
+
     std::vector<SdrObject *> sdrObjects;
     uno::Reference<awt::XControlModel> const xCtrlModel(xInterface,
             UNO_QUERY);

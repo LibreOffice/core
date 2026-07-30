@@ -2067,6 +2067,97 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenRedlineDeleteWordUndo)
     CPPUNIT_ASSERT(bWordShown());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testMultipleSelection)
+{
+    // Tests passing a Sequence of XTextRanges to XSelectionSupplier::select. See tdf#172967
+
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    uno::Reference<text::XText> xText = pTextDoc->getText();
+
+    pWrtShell->Insert(u"one potato two potatoes three potatoes four"_ustr);
+
+    // Make an XTextRange for each of the number words
+    uno::Reference<text::XTextCursor> xOne = xText->createTextCursorByRange(xText->getStart());
+    xOne->goRight(3, true);
+
+    uno::Reference<text::XTextCursor> xTwo = xText->createTextCursorByRange(xOne->getEnd());
+    xTwo->goRight(8, false);
+    xTwo->goRight(3, true);
+
+    uno::Reference<text::XTextCursor> xThree = xText->createTextCursorByRange(xTwo->getEnd());
+    xThree->goRight(10, false);
+    xThree->goRight(5, true);
+
+    uno::Reference<text::XTextCursor> xFour = xText->createTextCursorByRange(xThree->getEnd());
+    xFour->goRight(10, false);
+    xFour->goRight(4, true);
+
+    // Select all of the number words
+    uno::Sequence<uno::Any> xSelection{ uno::Any(xOne), uno::Any(xTwo), uno::Any(xThree),
+                                        uno::Any(xFour) };
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(pTextDoc->getCurrentController(),
+                                                                uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xSelectionSupplier->select(uno::Any(xSelection)));
+
+    // Get the current selection back from the supplier
+    uno::Reference<container::XIndexAccess> xRanges;
+    CPPUNIT_ASSERT(xSelectionSupplier->getSelection() >>= xRanges);
+
+    // Check the right words were returned
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xRanges->getCount());
+    uno::Reference<text::XTextRange> xWord;
+    CPPUNIT_ASSERT(xRanges->getByIndex(0) >>= xWord);
+    CPPUNIT_ASSERT_EQUAL(u"one"_ustr, xWord->getString());
+    CPPUNIT_ASSERT(xRanges->getByIndex(1) >>= xWord);
+    CPPUNIT_ASSERT_EQUAL(u"two"_ustr, xWord->getString());
+    CPPUNIT_ASSERT(xRanges->getByIndex(2) >>= xWord);
+    CPPUNIT_ASSERT_EQUAL(u"three"_ustr, xWord->getString());
+    CPPUNIT_ASSERT(xRanges->getByIndex(3) >>= xWord);
+    CPPUNIT_ASSERT_EQUAL(u"four"_ustr, xWord->getString());
+
+    // Reset the selection by passing an empty sequence
+    uno::Sequence<uno::Any> xEmptySelection;
+    CPPUNIT_ASSERT(xSelectionSupplier->select(uno::Any(xEmptySelection)));
+
+    // The selection should now be empty
+    CPPUNIT_ASSERT(xSelectionSupplier->getSelection() >>= xRanges);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xRanges->getCount());
+    CPPUNIT_ASSERT(xRanges->getByIndex(0) >>= xWord);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, xWord->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testMultipleSelectionOverlap)
+{
+    // Tests passing a Sequence of XTextRanges to XSelectionSupplier::select where one of them
+    // overlaps the other.
+
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    uno::Reference<text::XText> xText = pTextDoc->getText();
+
+    pWrtShell->Insert(u"orange"_ustr);
+
+    // Create two overlapping ranges
+    uno::Reference<text::XTextCursor> xOr = xText->createTextCursorByRange(xText->getStart());
+    xOr->goRight(2, true);
+    CPPUNIT_ASSERT_EQUAL(u"or"_ustr, xOr->getString());
+
+    uno::Reference<text::XTextCursor> xRange = xText->createTextCursorByRange(xText->getStart());
+    xRange->goRight(1, false);
+    xRange->goRight(5, true);
+    CPPUNIT_ASSERT_EQUAL(u"range"_ustr, xRange->getString());
+
+    // Try selecting them both
+    uno::Sequence<uno::Any> xSelection{ uno::Any(xOr), uno::Any(xRange) };
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(pTextDoc->getCurrentController(),
+                                                                uno::UNO_QUERY_THROW);
+    // The selection should fail
+    CPPUNIT_ASSERT(!xSelectionSupplier->select(uno::Any(xSelection)));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
