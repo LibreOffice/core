@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <CanvasFontBase.hxx>
+
 #include <comphelper/compbase.hxx>
 
 #include <com/sun/star/rendering/XCanvasFont.hpp>
@@ -21,10 +23,7 @@
 
 namespace oglcanvas
 {
-
-    typedef ::comphelper::WeakComponentImplHelper< css::rendering::XCanvasFont > CanvasFontBaseT;
-
-    class CanvasFont : public CanvasFontBaseT
+    class CanvasFont : public CanvasFontBase
     {
     public:
         typedef rtl::Reference<CanvasFont> ImplRef;
@@ -40,9 +39,6 @@ namespace oglcanvas
         // XCanvasFont
         virtual css::uno::Reference< css::rendering::XTextLayout > SAL_CALL createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) override;
         virtual css::rendering::FontRequest SAL_CALL getFontRequest(  ) override;
-        virtual css::rendering::FontMetrics SAL_CALL getFontMetrics(  ) override;
-        virtual css::uno::Sequence< double > SAL_CALL getAvailableSizes(  ) override;
-        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getExtraFontProperties(  ) override;
 
         const css::geometry::Matrix2D& getFontMatrix() const { return maFontMatrix; }
 

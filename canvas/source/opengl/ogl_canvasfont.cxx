@@ -39,29 +39,10 @@ namespace oglcanvas
         return new TextLayout( aText, nDirection, nRandomSeed, ImplRef( this ) );
     }
 
-    uno::Sequence< double > SAL_CALL CanvasFont::getAvailableSizes(  )
-    {
-        // TODO
-        return uno::Sequence< double >();
-    }
-
-    uno::Sequence< beans::PropertyValue > SAL_CALL CanvasFont::getExtraFontProperties(  )
-    {
-        // TODO
-        return uno::Sequence< beans::PropertyValue >();
-    }
-
     rendering::FontRequest SAL_CALL CanvasFont::getFontRequest(  )
     {
         return maFontRequest;
     }
-
-    rendering::FontMetrics SAL_CALL CanvasFont::getFontMetrics(  )
-    {
-        // TODO
-        return rendering::FontMetrics();
-    }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
