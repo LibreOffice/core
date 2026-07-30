@@ -27,7 +27,6 @@
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
-#include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <basegfx/utils/canvastools.hxx>
@@ -695,7 +694,7 @@ namespace cppcanvas
             rParms.mrStates.popState();
         }
 
-        uno::Reference< rendering::XCanvasFont > Renderer::createFont( double&                        o_rFontRotation,
+        rtl::Reference< vclcanvas::CanvasFont > Renderer::createFont( double&                        o_rFontRotation,
                                                                            const vcl::Font&               rFont,
                                                                            const ActionFactoryParameters& rParms )
         {

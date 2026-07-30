@@ -23,14 +23,15 @@
 #include <cpo/uno/Sequence.hxx>
 
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/rendercontext/State.hxx>
+#include <canvasfont.hxx>
 
 namespace cppcanvas
     {
@@ -92,7 +93,7 @@ namespace cppcanvas
                 @attention Beware, this member can be NULL, and
                 nevertheless text output is generated.
              */
-            css::uno::Reference< css::rendering::XCanvasFont >                       xFont;
+            rtl::Reference< vclcanvas::CanvasFont >                                  xFont;
             ::basegfx::B2DHomMatrix                                                  transform;
             ::basegfx::B2DHomMatrix                                                  mapModeTransform;
             double                                                                   fontRotation;

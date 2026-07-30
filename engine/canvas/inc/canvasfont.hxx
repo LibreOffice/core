@@ -23,23 +23,31 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/rendering/FontRequest.hpp>
-#include <com/sun/star/rendering/XCanvasFont.hpp>
+#include <com/sun/star/rendering/StringContext.hpp>
 
 #include <vcl/font.hxx>
 
-#include <vclwrapper.hxx>
+#include "vclwrapper.hxx"
 
-#include <outdevprovider.hxx>
+#include "outdevprovider.hxx"
 
 
 /* Definition of CanvasFont class */
 
 namespace vclcanvas
 {
-    typedef ::comphelper::WeakComponentImplHelper< css::rendering::XCanvasFont,
-                                             css::lang::XServiceInfo > CanvasFont_Base;
+    class TextLayout;
+    class XGraphicDevice;
 
+    typedef ::comphelper::WeakComponentImplHelper<> CanvasFont_Base;
+
+
+    /** This interface provides access to a specific, XCanvas-dependent
+        font incarnation. This font is not universally usable, but belongs
+        to the XCanvas it was queried from.
+     */
     class CanvasFont : public CanvasFont_Base
     {
     public:
@@ -58,19 +66,32 @@ namespace vclcanvas
         /// Dispose all internal references
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
-        // XCanvasFont
-        virtual css::uno::Reference< css::rendering::XTextLayout > createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) override;
-        virtual css::rendering::FontRequest getFontRequest(  ) override;
-        virtual cpo::uno::Sequence< double > getAvailableSizes(  ) override;
-        virtual cpo::uno::Sequence< css::beans::PropertyValue > getExtraFontProperties(  ) override;
+        /** Create a text layout interface.<p>
 
-        // XServiceInfo
-        virtual OUString getImplementationName() override;
-        virtual bool supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
+          Create a text layout interface for the given string, using
+          this font to generate the glyphs from.<p>
+
+          @param aText
+          The text to layout.
+
+          @param nDirection
+          Main text direction for the string specified. The main text
+          direction is e.g. important for characters that are not
+          strong, i.e. that change affinity according to the current
+          writing direction. Make sure that across text portions and
+          lines, the direction is set consistently.
+
+          @param nRandomSeed
+          Optional random seed for OpenType glyph variations.
+        */
+        rtl::Reference< vclcanvas::TextLayout > createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed );
+
+        /** Query the FontRequest that was used to generate this object.
+         */
+        css::rendering::FontRequest getFontRequest(  );
 
         vcl::Font const & getVCLFont() const;
-
+      
         const css::geometry::Matrix2D& getFontMatrix() const;
 
     private:

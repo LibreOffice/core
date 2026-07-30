@@ -46,11 +46,11 @@
 
 #include <canvastools.hxx>
 
-#include "canvasfont.hxx"
+#include <canvasfont.hxx>
 #include <canvashelper.hxx>
 #include <impltools.hxx>
 #include <verifyinput.hxx>
-#include "textlayout.hxx"
+#include <textlayout.hxx>
 #include <XGraphicDevice.hxx>
 
 
@@ -369,7 +369,7 @@ namespace vclcanvas
         return uno::Reference< vclcanvas::XCachedPrimitive >(nullptr);
     }
 
-    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const vclcanvas::XCanvas*                        ,
+    rtl::Reference< vclcanvas::CanvasFont > CanvasHelper::createFont( const vclcanvas::XCanvas*                        ,
                                                                        const rendering::FontRequest&                    fontRequest,
                                                                        const cpo::uno::Sequence< beans::PropertyValue >&     extraFontProperties,
                                                                        const geometry::Matrix2D&                        fontMatrix )
@@ -377,17 +377,16 @@ namespace vclcanvas
         if( mpOutDevProvider && mpDevice )
         {
             // TODO(F2): font properties and font matrix
-            return uno::Reference< rendering::XCanvasFont >(
-                    new CanvasFont(fontRequest, extraFontProperties, fontMatrix,
-                                   *mpDevice, mpOutDevProvider) );
+            return new CanvasFont(fontRequest, extraFontProperties, fontMatrix,
+                                   *mpDevice, mpOutDevProvider);
         }
 
-        return uno::Reference< rendering::XCanvasFont >();
+        return rtl::Reference< vclcanvas::CanvasFont >();
     }
 
     void CanvasHelper::drawText( const vclcanvas::XCanvas*                         ,
                                   const rendering::StringContext&                   text,
-                                  const uno::Reference< rendering::XCanvasFont >&   xFont,
+                                  const rtl::Reference< vclcanvas::CanvasFont >&   xFont,
                                   const vclcanvas::ViewState&                       viewState,
                                   const vclcanvas::RenderState&                     renderState,
                                   sal_Int8                                          textDirection )
@@ -432,39 +431,29 @@ namespace vclcanvas
     }
 
     void CanvasHelper::drawTextLayout( const vclcanvas::XCanvas*                       ,
-                                        const uno::Reference< rendering::XTextLayout >& xLayoutedText,
+                                        const rtl::Reference< vclcanvas::TextLayout >& xLayoutedText,
                                         const vclcanvas::ViewState&                     viewState,
                                         const vclcanvas::RenderState&                   renderState )
     {
         ENSURE_ARG_OR_THROW( xLayoutedText.is(),
                          "layout is NULL");
 
-        TextLayout* pTextLayout = dynamic_cast< TextLayout* >( xLayoutedText.get() );
-
-        if( pTextLayout )
+        if( mpOutDevProvider )
         {
-            if( mpOutDevProvider )
-            {
-                vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+            vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
 
-                // TODO(T3): Race condition. We're taking the font
-                // from xLayoutedText, and then calling draw() at it,
-                // without exclusive access. Move setupTextOutput(),
-                // e.g. to impltools?
+            // TODO(T3): Race condition. We're taking the font
+            // from xLayoutedText, and then calling draw() at it,
+            // without exclusive access. Move setupTextOutput(),
+            // e.g. to impltools?
 
-                ::Point aOutpos;
-                if( !setupTextOutput( aOutpos, viewState, renderState, xLayoutedText->getFont() ) )
-                    return; // no output necessary
+            ::Point aOutpos;
+            if( !setupTextOutput( aOutpos, viewState, renderState, xLayoutedText->getFont() ) )
+                return; // no output necessary
 
-                // TODO(F2): What about the offset scalings?
-                // TODO(F2): alpha
-                pTextLayout->draw( mpOutDevProvider->getOutDev(), aOutpos, viewState, renderState );
-            }
-        }
-        else
-        {
-            ENSURE_ARG_OR_THROW( false,
-                                 "TextLayout not compatible with this canvas" );
+            // TODO(F2): What about the offset scalings?
+            // TODO(F2): alpha
+            xLayoutedText->draw( mpOutDevProvider->getOutDev(), aOutpos, viewState, renderState );
         }
     }
 
@@ -752,7 +741,7 @@ namespace vclcanvas
     bool CanvasHelper::setupTextOutput( ::Point&                                        o_rOutPos,
                                         const vclcanvas::ViewState&                     viewState,
                                         const vclcanvas::RenderState&                   renderState,
-                                        const uno::Reference< rendering::XCanvasFont >& xFont   ) const
+                                        const rtl::Reference< vclcanvas::CanvasFont >& xFont   ) const
     {
         ENSURE_OR_THROW( mpOutDevProvider,
                          "outdev null. Are we disposed?" );
@@ -761,12 +750,10 @@ namespace vclcanvas
 
         setupOutDevState( viewState, renderState, TEXT_COLOR );
 
-        CanvasFont* pFont = dynamic_cast< CanvasFont* >( xFont.get() );
-
-        ENSURE_ARG_OR_THROW( pFont,
+        ENSURE_ARG_OR_THROW( xFont,
                              "Font not compatible with this canvas" );
 
-        vcl::Font aVCLFont = pFont->getVCLFont();
+        vcl::Font aVCLFont = xFont->getVCLFont();
 
         Color aColor( COL_BLACK );
 

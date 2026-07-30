@@ -33,15 +33,14 @@
 namespace com::sun::star::rendering
 {
 class XBitmap;
-class XCanvasFont;
 class XPolyPolygon2D;
-class XTextLayout;
 }
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <cppu/macros.hxx>
 #include <sal/types.h>
+#include <rtl/ref.hxx>
 
 namespace cpo::uno
 {
@@ -50,6 +49,8 @@ class Type;
 
 namespace vclcanvas
 {
+class CanvasFont;
+class TextLayout;
 class XCachedPrimitive;
 class XGraphicDevice;
 }
@@ -311,7 +312,7 @@ public:
         @throws com::sun::star::lang::IllegalArgumentException
         if one of the parameters is not within the allowed range.
      */
-    virtual ::css::uno::Reference<::css::rendering::XCanvasFont>
+    virtual rtl::Reference<vclcanvas::CanvasFont>
     createFont(const ::css::rendering::FontRequest& aFontRequest,
                const ::cpo::uno::Sequence<::css::beans::PropertyValue>& aExtraFontProperties,
                const ::css::geometry::Matrix2D& aFontMatrix)
@@ -350,7 +351,7 @@ public:
         specified range.
      */
     virtual void drawText(const ::css::rendering::StringContext& aText,
-                          const ::css::uno::Reference<::css::rendering::XCanvasFont>& xFont,
+                          const ::rtl::Reference<::vclcanvas::CanvasFont>& xFont,
                           const ::vclcanvas::ViewState& aViewState,
                           const ::vclcanvas::RenderState& aRenderState, ::sal_Int8 nTextDirection)
         = 0;
@@ -367,7 +368,7 @@ public:
 
         @param xLayoutetText
         An interface to the readily layouted text, obtained from a
-        XCanvasFont created at this canvas. The text
+        CanvasFont created at this canvas. The text
         layout already carries intrinsic font information.
 
         @param aViewState
@@ -380,10 +381,9 @@ public:
         if one of the view and render state parameters are outside the
         specified range.
      */
-    virtual void
-    drawTextLayout(const ::css::uno::Reference<::css::rendering::XTextLayout>& xLayoutetText,
-                   const ::vclcanvas::ViewState& aViewState,
-                   const ::vclcanvas::RenderState& aRenderState)
+    virtual void drawTextLayout(const ::rtl::Reference<::vclcanvas::TextLayout>& xLayoutetText,
+                                const ::vclcanvas::ViewState& aViewState,
+                                const ::vclcanvas::RenderState& aRenderState)
         = 0;
 
     /** Render the given bitmap.<p>

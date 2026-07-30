@@ -2843,12 +2843,10 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	TexturingMode \
 	XBezierPolyPolygon2D \
 	XBitmap \
-	XCanvasFont \
 	XLinePolyPolygon2D \
 	XMtfRenderer \
 	XParametricPolyPolygon2D \
 	XPolyPolygon2D \
-	XTextLayout \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/resource,\
 	MissingResourceException \

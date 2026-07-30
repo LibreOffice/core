@@ -24,15 +24,17 @@
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include <verifyinput.hxx>
+#include <canvasfont.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::rendering { class XBitmap; }
 namespace vclcanvas { class XCachedPrimitive; }
-namespace com::sun::star::rendering { class XCanvasFont; }
+namespace vclcanvas { class CanvasFont; }
 namespace vclcanvas { class XGraphicDevice; }
+namespace vclcanvas { class TextLayout; }
 namespace com::sun::star::rendering { class XPolyPolygon2D; }
-namespace com::sun::star::rendering { class XTextLayout; }
 namespace com::sun::star::rendering { struct FontInfo; }
 namespace com::sun::star::rendering { struct StringContext; }
 
@@ -205,7 +207,7 @@ namespace canvas
             return maCanvasHelper.fillTexturedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures );
         }
 
-        virtual css::uno::Reference< css::rendering::XCanvasFont >
+        virtual rtl::Reference< vclcanvas::CanvasFont >
             createFont( const css::rendering::FontRequest&                                     fontRequest,
                         const cpo::uno::Sequence< css::beans::PropertyValue >&                 extraFontProperties,
                         const css::geometry::Matrix2D&                                         fontMatrix ) override
@@ -225,7 +227,7 @@ namespace canvas
 
         virtual void
             drawText(const css::rendering::StringContext&                                     text,
-                     const css::uno::Reference< css::rendering::XCanvasFont >&                xFont,
+                     const rtl::Reference< vclcanvas::CanvasFont >&                xFont,
                      const ::vclcanvas::ViewState&                                         viewState,
                      const ::vclcanvas::RenderState&                                       renderState,
                      sal_Int8                                                                 textDirection) override
@@ -246,7 +248,7 @@ namespace canvas
 
 
         virtual void
-            drawTextLayout(const css::uno::Reference< css::rendering::XTextLayout >&               laidOutText,
+            drawTextLayout(const rtl::Reference< vclcanvas::TextLayout >&               laidOutText,
                             const ::vclcanvas::ViewState&                                       viewState,
                             const ::vclcanvas::RenderState&                                     renderState) override
         {

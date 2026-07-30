@@ -122,7 +122,7 @@ namespace vclcanvas
                                      const cpo::uno::Sequence<
                                              css::rendering::Texture >&        textures );
 
-        css::uno::Reference< css::rendering::XCanvasFont >
+        rtl::Reference< vclcanvas::CanvasFont >
             createFont( const vclcanvas::XCanvas*         rCanvas,
                         const css::rendering::FontRequest&     fontRequest,
                         const cpo::uno::Sequence<
@@ -131,15 +131,13 @@ namespace vclcanvas
 
         void drawText( const vclcanvas::XCanvas*       rCanvas,
                       const css::rendering::StringContext& text,
-                      const css::uno::Reference<
-                              css::rendering::XCanvasFont >& xFont,
+                      const rtl::Reference<vclcanvas::CanvasFont >& xFont,
                       const ::vclcanvas::ViewState&     viewState,
                       const ::vclcanvas::RenderState&   renderState,
                       sal_Int8                                          textDirection );
 
         void drawTextLayout( const vclcanvas::XCanvas*         rCanvas,
-                            const css::uno::Reference<
-                                    css::rendering::XTextLayout >& laidOutText,
+                            const rtl::Reference< vclcanvas::TextLayout >& laidOutText,
                             const ::vclcanvas::ViewState&       viewState,
                             const ::vclcanvas::RenderState&     renderState );
 
@@ -213,7 +211,7 @@ namespace vclcanvas
         bool setupTextOutput( ::Point&                                                                              o_rOutPos,
                               const ::vclcanvas::ViewState&                                         viewState,
                               const ::vclcanvas::RenderState&                                       renderState,
-                              const css::uno::Reference< css::rendering::XCanvasFont >&   xFont ) const;
+                              const rtl::Reference< vclcanvas::CanvasFont >&   xFont ) const;
 
     };
 }

@@ -171,8 +171,8 @@ namespace cppcanvas
                                  const ActionFactoryParameters&     rParms,
                                  bool                               bIntersect );
 
-            static css::uno::Reference<
-                css::rendering::XCanvasFont > createFont( double&                         o_rFontRotation,
+            static rtl::Reference<
+                vclcanvas::CanvasFont > createFont( double&                         o_rFontRotation,
                                                           const vcl::Font&                rFont,
                                                           const ActionFactoryParameters&  rParms );
             void createActions( GDIMetaFile&                    rMtf,

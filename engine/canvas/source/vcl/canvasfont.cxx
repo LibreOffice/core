@@ -28,8 +28,8 @@
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 
-#include "canvasfont.hxx"
-#include "textlayout.hxx"
+#include <canvasfont.hxx>
+#include <textlayout.hxx>
 
 using namespace ::com::sun::star;
 
@@ -48,7 +48,7 @@ namespace vclcanvas
         mpRefDevice( &rDevice ),
         mpOutDevProvider( rOutDevProvider ),
         maFontMatrix( rFontMatrix )
-    {
+  {
         maFont->SetAlignment( ALIGN_BASELINE );
         maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==css::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
         maFont->SetVertical( rFontRequest.FontDescription.IsVertical==css::util::TriState_YES );
@@ -85,12 +85,12 @@ namespace vclcanvas
         rGuard.lock();
     }
 
-    uno::Reference< rendering::XTextLayout >  CanvasFont::createTextLayout( const rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 )
+    rtl::Reference< vclcanvas::TextLayout >  CanvasFont::createTextLayout( const rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 )
     {
         SolarMutexGuard aGuard;
 
         if( !mpRefDevice.is() )
-            return uno::Reference< rendering::XTextLayout >(); // we're disposed
+            return rtl::Reference< vclcanvas::TextLayout >(); // we're disposed
 
         return new TextLayout( aText,
                                nDirection,
@@ -102,33 +102,6 @@ namespace vclcanvas
     rendering::FontRequest  CanvasFont::getFontRequest(  )
     {
         return maFontRequest;
-    }
-
-    cpo::uno::Sequence< double >  CanvasFont::getAvailableSizes(  )
-    {
-        // TODO(F1)
-        return cpo::uno::Sequence< double >();
-    }
-
-    cpo::uno::Sequence< beans::PropertyValue >  CanvasFont::getExtraFontProperties(  )
-    {
-        // TODO(F1)
-        return cpo::uno::Sequence< beans::PropertyValue >();
-    }
-
-    OUString CanvasFont::getImplementationName()
-    {
-        return u"VCLCanvas::CanvasFont"_ustr;
-    }
-
-    bool CanvasFont::supportsService( const OUString& ServiceName )
-    {
-        return cppu::supportsService( this, ServiceName );
-    }
-
-    cpo::uno::Sequence< OUString > CanvasFont::getSupportedServiceNames()
-    {
-        return { u"com.sun.star.rendering.CanvasFont"_ustr };
     }
 
     vcl::Font const & CanvasFont::getVCLFont() const

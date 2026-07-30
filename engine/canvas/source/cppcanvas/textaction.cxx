@@ -22,7 +22,6 @@
 
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/XCanvasFont.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drectangle.hxx>
@@ -42,6 +41,7 @@
 #include <sal/log.hxx>
 
 #include "textaction.hxx"
+#include <textlayout.hxx>
 #include "textlineshelper.hxx"
 #include "outdevstate.hxx"
 #include "mtftools.hxx"
@@ -81,7 +81,7 @@ namespace cppcanvas
             }
 
             void init( vclcanvas::RenderState&                      o_rRenderState,
-                       uno::Reference< rendering::XCanvasFont >&    o_rFont,
+                       rtl::Reference< vclcanvas::CanvasFont >&     o_rFont,
                        const ::basegfx::B2DPoint&                   rStartPoint,
                        const OutDevState&                           rState,
                        const css::uno::Reference<vclcanvas::XCanvas>&  rUnoCanvas      )
@@ -109,7 +109,7 @@ namespace cppcanvas
             }
 
             void init( vclcanvas::RenderState&                      o_rRenderState,
-                       uno::Reference< rendering::XCanvasFont >&    o_rFont,
+                       rtl::Reference< vclcanvas::CanvasFont >&     o_rFont,
                        const ::basegfx::B2DPoint&                   rStartPoint,
                        const OutDevState&                           rState,
                        const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
@@ -196,11 +196,11 @@ namespace cppcanvas
 
             /** Perform common setup for array text actions
 
-                This method creates the XTextLayout object and
+                This method creates the vclcanvas::TextLayout object and
                 initializes it, e.g. with the logical advancements.
              */
             void initArrayAction( vclcanvas::RenderState&                   o_rRenderState,
-                                  uno::Reference< rendering::XTextLayout >& o_rTextLayout,
+                                  rtl::Reference< vclcanvas::TextLayout >& o_rTextLayout,
                                   const ::basegfx::B2DPoint&                rStartPoint,
                                   const OUString&                    rText,
                                   sal_Int32                                 nStartPos,
@@ -217,7 +217,7 @@ namespace cppcanvas
                 const ::basegfx::B2DPoint aLocalStartPoint(
                     adaptStartPoint( rStartPoint, rState, rOffsets ) );
 
-                uno::Reference< rendering::XCanvasFont > xFont( rState.xFont );
+                rtl::Reference< vclcanvas::CanvasFont > xFont( rState.xFont );
 
                 if( pTextTransform )
                     init( o_rRenderState, xFont, aLocalStartPoint, rState, rCanvas, *pTextTransform );
@@ -254,7 +254,7 @@ namespace cppcanvas
                 calcSubsetOffsets( vclcanvas::RenderState&                          io_rRenderState,
                                    double&                                          o_rMinPos,
                                    double&                                          o_rMaxPos,
-                                   const uno::Reference< rendering::XTextLayout >&  rOrigTextLayout,
+                                   const rtl::Reference< vclcanvas::TextLayout >&   rOrigTextLayout,
                                    double                                           nLayoutWidth,
                                    const ::cppcanvas::Action::Subset&     rSubset )
             {
@@ -346,10 +346,10 @@ namespace cppcanvas
                 return aAdaptedOffsets;
             }
 
-            uno::Reference< rendering::XTextLayout >
+            rtl::Reference<vclcanvas::TextLayout>
                 createSubsetLayout( const rendering::StringContext&                 rOrigContext,
                                     const ::cppcanvas::Action::Subset&    rSubset,
-                                    const uno::Reference< rendering::XTextLayout >& rOrigTextLayout )
+                                    const rtl::Reference<vclcanvas::TextLayout>& rOrigTextLayout )
             {
                 // create temporary new text layout with subset string
 
@@ -366,13 +366,9 @@ namespace cppcanvas
                                                          nNewStartPos,
                                                          nNewLength );
 
-                uno::Reference< rendering::XTextLayout > xTextLayout(
-                    rOrigTextLayout->getFont()->createTextLayout( aContext,
+                return rOrigTextLayout->getFont()->createTextLayout( aContext,
                                                                   rOrigTextLayout->getMainTextDirection(),
-                                                                  0 ),
-                    uno::UNO_SET_THROW );
-
-                return xTextLayout;
+                                                                  0 );
             }
 
             /** Setup subset text layout
@@ -394,7 +390,7 @@ namespace cppcanvas
                 @param rSubset
                 Subset to prepare
              */
-            void createSubsetLayout( uno::Reference< rendering::XTextLayout >&  io_rTextLayout,
+            void createSubsetLayout( rtl::Reference<vclcanvas::TextLayout>&  io_rTextLayout,
                                      double                                     nLayoutWidth,
                                      vclcanvas::RenderState&                    io_rRenderState,
                                      double&                                    o_rMinPos,
@@ -424,7 +420,7 @@ namespace cppcanvas
                     return;
                 }
 
-                uno::Reference< rendering::XTextLayout > xTextLayout(
+                rtl::Reference<vclcanvas::TextLayout> xTextLayout(
                     createSubsetLayout( aOrigContext, rSubset, io_rTextLayout ) );
 
                 if( xTextLayout.is() )
@@ -570,7 +566,7 @@ namespace cppcanvas
                 // TextActions, maybe using maOffsets for the
                 // translation.
 
-                uno::Reference< rendering::XCanvasFont >    mxFont;
+                rtl::Reference< vclcanvas::CanvasFont >     mxFont;
                 const rendering::StringContext              maStringContext;
                 vclcanvas::RenderState                      maState;
                 const sal_Int8                              maTextDirection;
@@ -682,7 +678,7 @@ namespace cppcanvas
                 // TextActions, maybe using maOffsets for the
                 // translation.
 
-                uno::Reference< rendering::XCanvasFont >    mxFont;
+                rtl::Reference< vclcanvas::CanvasFont >     mxFont;
                 const rendering::StringContext              maStringContext;
                 vclcanvas::RenderState                      maState;
                 const cppcanvastools::TextLineInfo                   maTextLineInfo;
@@ -798,7 +794,7 @@ namespace cppcanvas
             {
                 // create XTextLayout, to have the
                 // XTextLayout::queryTextBounds() method available
-                uno::Reference< rendering::XTextLayout > xTextLayout(
+                rtl::Reference< vclcanvas::TextLayout > xTextLayout(
                     mxFont->createTextLayout(
                         maStringContext,
                         maTextDirection,
@@ -858,7 +854,7 @@ namespace cppcanvas
                 // TextActions, maybe using maOffsets for the
                 // translation.
 
-                uno::Reference< rendering::XTextLayout >    mxTextLayout;
+                rtl::Reference<vclcanvas::TextLayout>       mxTextLayout;
                 vclcanvas::RenderState                      maState;
                 double                                      mnLayoutWidth;
             };
@@ -912,7 +908,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextArrayAction: 0x" << std::hex << this );
 
                 vclcanvas::RenderState                      aLocalState( maState );
-                uno::Reference< rendering::XTextLayout >    xTextLayout( mxTextLayout );
+                rtl::Reference<vclcanvas::TextLayout>    xTextLayout( mxTextLayout );
 
                 double nDummy0, nDummy1;
                 createSubsetLayout( xTextLayout,
@@ -990,7 +986,7 @@ namespace cppcanvas
                 // TextActions, maybe using maOffsets for the
                 // translation.
 
-                uno::Reference< rendering::XTextLayout >        mxTextLayout;
+                rtl::Reference<vclcanvas::TextLayout>           mxTextLayout;
                 vclcanvas::RenderState                          maState;
                 const cppcanvastools::TextLineInfo                       maTextLineInfo;
                 TextLinesHelper                                 maTextLinesHelper;
@@ -1097,7 +1093,7 @@ namespace cppcanvas
             {
             public:
                 EffectTextArrayRenderHelper( const uno::Reference< vclcanvas::XCanvas >&        rCanvas,
-                                             const uno::Reference< rendering::XTextLayout >&    rTextLayout,
+                                             const rtl::Reference<vclcanvas::TextLayout>&       rTextLayout,
                                              const TextLinesHelper&                             rTextLinesHelper,
                                              const vclcanvas::ViewState&                        rViewState ) :
                     mrCanvas( rCanvas ),
@@ -1144,7 +1140,7 @@ namespace cppcanvas
                 }
 
                 const uno::Reference< vclcanvas::XCanvas >&         mrCanvas;
-                const uno::Reference< rendering::XTextLayout >&     mrTextLayout;
+                const rtl::Reference<vclcanvas::TextLayout>&        mrTextLayout;
                 const TextLinesHelper&                              mrTextLinesHelper;
                 const vclcanvas::ViewState&                         mrViewState;
             };
@@ -1158,7 +1154,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction: 0x" << std::hex << this );
 
                 vclcanvas::RenderState                   aLocalState( maState );
-                uno::Reference< rendering::XTextLayout > xTextLayout( mxTextLayout );
+                rtl::Reference<vclcanvas::TextLayout>    xTextLayout( mxTextLayout );
                 const geometry::RealRectangle2D          aTextBounds( mxTextLayout->queryTextBounds() );
 
                 double nMinPos(0.0);
@@ -1632,7 +1628,7 @@ namespace cppcanvas
                 if (rTextFillColor != COL_AUTO)
                 {
                     rendering::StringContext aStringContext( rText, nStartPos, nLen );
-                    uno::Reference< rendering::XTextLayout > xTextLayout(
+                    rtl::Reference<vclcanvas::TextLayout> xTextLayout(
                         rState.xFont->createTextLayout(
                             aStringContext,
                             rState.textDirection,

@@ -35,7 +35,7 @@
 
 #include <canvastools.hxx>
 
-#include "textlayout.hxx"
+#include <textlayout.hxx>
 
 #include <memory>
 
@@ -176,7 +176,7 @@ namespace vclcanvas
         return mnTextDirection;
     }
 
-    uno::Reference< rendering::XCanvasFont > TextLayout::getFont(  )
+    rtl::Reference< vclcanvas::CanvasFont > TextLayout::getFont(  )
     {
         SolarMutexGuard aGuard;
 
@@ -279,21 +279,6 @@ namespace vclcanvas
         std::for_each(inputOffsets.begin(), inputOffsets.end(),
                       [&outputOffsets, &aTransform](double n) {outputOffsets.push_back(aTransform(n)); } );
         return outputOffsets;
-    }
-
-    OUString TextLayout::getImplementationName()
-    {
-        return u"VCLCanvas::TextLayout"_ustr;
-    }
-
-    bool TextLayout::supportsService( const OUString& ServiceName )
-    {
-        return cppu::supportsService( this, ServiceName );
-    }
-
-    cpo::uno::Sequence< OUString > TextLayout::getSupportedServiceNames()
-    {
-        return { u"com.sun.star.rendering.TextLayout"_ustr };
     }
 }
 

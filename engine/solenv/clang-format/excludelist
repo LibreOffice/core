@@ -429,6 +429,7 @@ canvas/inc/bitmapbackbuffer.hxx
 canvas/inc/cachedbitmap.hxx
 canvas/inc/canvas.hxx
 canvas/inc/canvasbitmaphelper.hxx
+canvas/inc/canvasfont.hxx
 canvas/inc/canvashelper.hxx
 canvas/inc/canvastools.hxx
 canvas/inc/devicehelper.hxx
@@ -437,6 +438,7 @@ canvas/inc/outdevprovider.hxx
 canvas/inc/parametricpolypolygon.hxx
 canvas/inc/propertysethelper.hxx
 canvas/inc/repainttarget.hxx
+canvas/inc/textlayout.hxx
 canvas/inc/unopolypolygon.hxx
 canvas/inc/vclwrapper.hxx
 canvas/inc/verifyinput.hxx
@@ -488,14 +490,12 @@ canvas/source/vcl/cachedbitmap.cxx
 canvas/source/vcl/canvas.cxx
 canvas/source/vcl/canvasbitmaphelper.cxx
 canvas/source/vcl/canvasfont.cxx
-canvas/source/vcl/canvasfont.hxx
 canvas/source/vcl/canvashelper.cxx
 canvas/source/vcl/canvashelper_texturefill.cxx
 canvas/source/vcl/devicehelper.cxx
 canvas/source/vcl/impltools.cxx
 canvas/source/vcl/sprite.hxx
 canvas/source/vcl/textlayout.cxx
-canvas/source/vcl/textlayout.hxx
 chart2/inc/ChartModel.hxx
 chart2/inc/ChartTypeManager.hxx
 chart2/inc/ChartView.hxx
