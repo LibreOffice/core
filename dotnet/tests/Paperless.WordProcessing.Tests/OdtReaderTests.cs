@@ -280,10 +280,16 @@ public class OdtReaderTests
     public void AFormatWithNoReaderYetIsReportedAsUnsupportedRatherThanUnrecognised()
     {
         // "Not implemented" and "not a word-processing document" are different answers, and a
-        // caller deciding whether to try another reader needs to tell them apart.
+        // caller deciding whether to try another reader needs to tell them apart. Word 2003 XML is
+        // synthesised rather than taken from the corpus: what matters is the reader's answer for a
+        // format it claims but has not implemented, and the sniffer recognises this one from its
+        // processing instruction alone.
+        MemoryStream wordXml = new(System.Text.Encoding.UTF8.GetBytes(
+            "<?xml version=\"1.0\"?><?mso-application progid=\"Word.Document\"?><w:wordDocument/>"));
         UnsupportedFormatException unimplemented = Should.Throw<UnsupportedFormatException>(
-            () => Open("prose-doc.doc"));
-        unimplemented.Format.ShouldBe(DocumentFormat.Doc);
+            () => new WordProcessingReader().Read(
+                DocumentSource.FromStream(wordXml, "prose.xml")));
+        unimplemented.Format.ShouldBe(DocumentFormat.WordXml2003);
         unimplemented.Message.ShouldContain("not implemented yet");
 
         UnsupportedFormatException wrongFamily = Should.Throw<UnsupportedFormatException>(

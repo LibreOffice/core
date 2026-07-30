@@ -70,15 +70,52 @@ does not need it and must not be made to pay for it.
 - [ ] `fontTable.xml`, needed for font resolution rather than extraction
 - [ ] Theme colours for `w:color w:themeColor` references
 
-### DOC (WW8) — hardest
-- [ ] FIB; the text streams; `0Table`/`1Table`
-- [ ] **The piece table** for complex files: text is not contiguous, so a naive read produces
-      scrambled output. This is the first thing to get right.
-- [ ] PLCF structures
-- [ ] CHPX/PAPX sprm decoding; the `STSH` stylesheet
-- [ ] List tables (`LST`/`LFO`)
-- [ ] Escher drawings via `Paperless.MsBinary`
-- [ ] Codepage handling from the FIB language id
+### DOC (WW8) — extraction done
+- [x] FIB; the text streams; `0Table` vs `1Table` chosen by `fWhichTblStm`. The FIB's
+      offset-and-length array is positional and its indexes are easy to get wrong by three:
+      `fcPlcfLst` is 73, not 70 — verified against LibreOffice's own `Ww8Fib::Ww8Fib`, which
+      seeks to `0x2DA` for the field at index 72.
+- [x] **The piece table**: a position is turned into a byte offset through it, never by
+      arithmetic, so a fast-saved document reads in logical order rather than scrambled.
+      Compressed pieces decode in the document's code page with WW8's sixteen fixed overrides.
+- [x] PLCF structures, with the record size passed explicitly — a PLCF read as though it had no
+      data records takes its record bytes for positions, which point anywhere and yield stories
+      full of unrelated text
+- [x] CHPX/PAPX sprm decoding, including the `0xD608` two-byte-length exception; FKP pages with
+      the paragraph index's thirteen-byte stride
+- [x] The `STSH` stylesheet, with **both** UPXs per style: a paragraph style carries a CHPX half
+      as well as a PAPX half, and that half is how a heading style makes its runs bold. The
+      style name's length prefix is two bytes; read as one, every name comes back shifted eight
+      bits and arrives as CJK rather than as nothing.
+- [x] Character formatting resolved paragraph style → character style → direct, with the
+      character style found in a first pass over the exception: the sprm naming it sits in the
+      same grpprl as the direct formatting it must not override.
+- [x] List tables (`LSTF`/`LVL`/`LFO`): labels are computed, since the file stores none. The
+      level a placeholder stands for comes from the *character value* at its offset, not from
+      the offset's slot — producers pack `rgbxchNums` from zero rather than indexing it by
+      level, and LibreOffice reads the character for the same reason.
+      The `LVL` array also lies **outside** `lcbPlfLst`, so honouring the declared length finds
+      every list's header and none of its levels.
+- [x] Subdocuments: the eight ranges in CP space, the header PLCF's six leading separator
+      stories, and the terminating paragraph mark that ends every story rather than opening a
+      paragraph in it (LibreOffice reads `nLen - 1` for the same reason)
+- [x] Comments with their author: `GrpXstAtnOwners` is a bare array of strings rather than a
+      string table, and `ibst` follows a fixed 22 bytes of initials
+- [x] Metadata from the OLE property sets, via the shared reader in `Paperless.MsBinary` —
+      including the `FILETIME` that carries an elapsed time rather than an instant
+- [x] Codepage handling from the FIB language id
+- [ ] Escher drawings via `Paperless.MsBinary`. Until then a drawing anchor is not reported as
+      an image: telling an embedded picture from a shape needs the record stream, and counting
+      every `U+0001` reports a picture for every text box.
+- [ ] Section descriptors (`PlcfSed`): page setup and which header slots a section uses. The
+      stories are read by position today, which is right for extraction and not enough for
+      layout.
+- [ ] Tables: `sprmTDefTable` for column spans and `sprmTTableHeader` for repeated header rows.
+      Cells and rows are read; `ColumnSpan` and `HeaderRowCount` are not.
+- [ ] Hyperlink targets from the `HYPERLINK` field instruction, as the RTF reader does
+- [ ] Tracked changes (`PlcfRsid`/`sprmCFRMark`) — deleted text is currently emitted as content
+- [ ] Word 95 and earlier: a different FIB and a different sprm numbering, so it is rejected
+      rather than misread
 
 ### RTF — extraction done
 - [x] Byte-level tokeniser: groups, control words with parameters, control symbols, `\'hh`

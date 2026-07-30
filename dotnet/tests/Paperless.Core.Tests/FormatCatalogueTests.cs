@@ -50,6 +50,7 @@ public class FormatCatalogueTests
         [
             DocumentFormat.Odt, DocumentFormat.Ott, DocumentFormat.Fodt,
             DocumentFormat.Docx, DocumentFormat.Docm, DocumentFormat.Dotx, DocumentFormat.Dotm,
+            DocumentFormat.Doc, DocumentFormat.Dot,
             DocumentFormat.Rtf,
             DocumentFormat.Ods, DocumentFormat.Ots, DocumentFormat.Fods,
             DocumentFormat.Odp, DocumentFormat.Otp, DocumentFormat.Fodp,

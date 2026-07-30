@@ -57,6 +57,7 @@ public class ExtractionComparisonTests : IDisposable
     [InlineData("prose-odt.odt")]
     [InlineData("prose-ott.ott")]
     [InlineData("prose-fodt.fodt")]
+    [InlineData("prose-doc.doc")]
     public void MinimalTextDocumentsExtractIdenticallyToTheReferenceFilter(string name)
     {
         RequireLibreOffice();
@@ -93,6 +94,7 @@ public class ExtractionComparisonTests : IDisposable
         // wrote \ftnstart1 and then renders 0 — which is what makes it clearly LibreOffice's
         // restart-per-page path rather than anything either file says.
         "word-features.docx" or "word-features.dotx" or "word-features.rtf"
+            or "word-features.doc"
             => new HashSet<string>(StringComparer.Ordinal) { "reference0" },
         _ => new HashSet<string>(StringComparer.Ordinal),
     };
@@ -103,6 +105,7 @@ public class ExtractionComparisonTests : IDisposable
     [InlineData("word-features.docx")]
     [InlineData("word-features.dotx")]
     [InlineData("word-features.rtf")]
+    [InlineData("word-features.doc")]
     public void NothingTheReferenceFindsIsMissingFromTheFeatureDocument(string name)
     {
         RequireLibreOffice();

@@ -76,9 +76,10 @@ public sealed class FormatCatalogue : IFormatCatalogue
         // ---- Word processing: legacy binary ------------------------------------------
         // Macro-capable: WW8 stores VBA in a Macros/ storage inside the same OLE2 file.
         New(DocumentFormat.Doc, DocumentFamily.WordProcessing, ContainerKind.Ole2CompoundFile,
-            "doc", "application/msword", "Word 97-2003", macros: true),
+            "doc", "application/msword", "Word 97-2003", macros: true, read: true),
         New(DocumentFormat.Dot, DocumentFamily.WordProcessing, ContainerKind.Ole2CompoundFile,
-            "dot", "application/msword", "Word 97-2003 Template", template: true, macros: true),
+            "dot", "application/msword", "Word 97-2003 Template", template: true, macros: true,
+            read: true),
 
         // ---- Word processing: other ---------------------------------------------------
         New(DocumentFormat.Rtf, DocumentFamily.WordProcessing, ContainerKind.PlainText, "rtf",

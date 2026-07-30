@@ -1,0 +1,646 @@
+using System.Text;
+using Paperless.Core.Extraction;
+using Paperless.Core.Numbering;
+using Paperless.Core.Units;
+
+namespace Paperless.WordProcessing.Ww8;
+
+/// <content>The character walk that turns positions into paragraphs, runs, cells and fields.</content>
+public sealed partial class Ww8DocumentReader
+{
+    /// <summary>The special characters WW8 uses instead of markup.</summary>
+    private static class Special
+    {
+        /// <summary>A picture or embedded object placeholder.</summary>
+        public const char Picture = '\u0001';
+
+        /// <summary>An auto-numbered footnote, endnote or comment reference mark.</summary>
+        public const char AutoNumberedReference = '\u0002';
+
+        /// <summary>A comment reference.</summary>
+        public const char AnnotationReference = '\u0005';
+
+        /// <summary>A drawn object.</summary>
+        public const char DrawnObject = '\u0008';
+
+        /// <summary>A tab.</summary>
+        public const char Tab = '\t';
+
+        /// <summary>A line break within a paragraph.</summary>
+        public const char LineBreak = '\u000B';
+
+        /// <summary>A section break, which also ends the paragraph.</summary>
+        public const char SectionMark = '\u000C';
+
+        /// <summary>A field's beginning: what follows is its instruction.</summary>
+        public const char FieldBegin = '\u0013';
+
+        /// <summary>A field's separator: what follows is its cached result.</summary>
+        public const char FieldSeparator = '\u0014';
+
+        /// <summary>A field's end.</summary>
+        public const char FieldEnd = '\u0015';
+
+        /// <summary>A non-breaking hyphen.</summary>
+        public const char NonBreakingHyphen = '\u001E';
+
+        /// <summary>An optional hyphen, drawn only where a line breaks.</summary>
+        public const char OptionalHyphen = '\u001F';
+    }
+
+    /// <summary>
+    /// Reads a range of character positions into a section.
+    /// </summary>
+    /// <remarks>
+    /// One pass produces text, runs, paragraphs and table structure together, because in WW8 they
+    /// are all decided by the same characters. Splitting it into separate passes would mean
+    /// resolving each position's formatting more than once.
+    /// </remarks>
+    private void ReadRange(Ww8Range range, ContentNode target)
+    {
+        if (range.Length <= 0) return;
+
+        string text = _pieces.ReadText(range.Start, range.End, _diagnostics);
+        if (text.Length == 0) return;
+
+        // Each flow numbers its own lists: a list in a footnote does not continue the body's count.
+        _numbering.ResetCounters();
+
+        WalkState state = new(target);
+
+        for (int index = 0; index < text.Length; index++)
+        {
+            int position = range.Start + index;
+            char character = text[index];
+
+            switch (character)
+            {
+                case ParagraphMark:
+                    EndParagraph(state, position);
+                    continue;
+
+                case CellMark:
+                    EndCellOrRow(state, position);
+                    continue;
+
+                case Special.SectionMark:
+                    EndParagraph(state, position);
+                    continue;
+
+                case Special.LineBreak:
+                    Append(state, position, "\n");
+                    continue;
+
+                case Special.Tab:
+                    Append(state, position, "\t");
+                    continue;
+
+                case Special.NonBreakingHyphen:
+                    Append(state, position, "\u2011");
+                    continue;
+
+                case Special.OptionalHyphen:
+                    continue;
+
+                case Special.FieldBegin:
+                    state.FieldDepth++;
+                    state.InFieldInstruction = true;
+                    continue;
+
+                case Special.FieldSeparator:
+                    state.InFieldInstruction = false;
+                    continue;
+
+                case Special.FieldEnd:
+                    if (state.FieldDepth > 0) state.FieldDepth--;
+                    state.InFieldInstruction = false;
+                    continue;
+
+                case Special.AutoNumberedReference:
+                    // The footnote's number, which the file does not store: Word computes it, and so
+                    // does this. The note's own text is a separate subdocument.
+                    if (target is ContentSection { Kind: SectionKind.Note })
+                    {
+                        // Inside a note this is the note's own mark, and the section already carries
+                        // the number.
+                        continue;
+                    }
+                    Append(state, position, OutlineNumbers.Digits(_footnoteNumber + 1));
+                    _footnoteNumber++;
+                    continue;
+
+                case Special.AnnotationReference:
+                    // The comment itself is read from its own subdocument.
+                    continue;
+
+                case Special.Picture:
+                    // Only outside a field. A SHAPE or INCLUDEPICTURE field's cached result uses this
+                    // same character for its anchor, so counting every one of them reports a picture
+                    // for every shape in the document — and the shape's own text has already arrived
+                    // as a frame section.
+                    if (state.InFieldInstruction || state.FieldDepth > 0) continue;
+                    FlushRun(state);
+                    state.PendingImages.Add(new ContentImage());
+                    continue;
+
+                case Special.DrawnObject:
+                    // A drawing anchor, not a picture. Telling an embedded image from a shape needs
+                    // the Escher record stream, which extraction does not read.
+                    continue;
+
+                default:
+                    // Everything below space that is not handled above is a control character WW8
+                    // uses for bookkeeping, not text.
+                    if (character < ' ' && character != '\n') continue;
+                    Append(state, position, character.ToString());
+                    continue;
+            }
+        }
+
+        // A range need not end with a paragraph mark.
+        FinishParagraph(state, force: false);
+        FinishTable(state);
+    }
+
+    private void Append(WalkState state, int position, string text)
+    {
+        // A field's instruction is its code, not its result: emitting it puts PAGE and HYPERLINK
+        // into the document's text.
+        if (state.InFieldInstruction) return;
+
+        Ww8CharacterFormat format = ResolveCharacterFormat(position, state);
+        if (format.IsHidden) return;
+
+        if (state.HasFormat && state.Format != format) FlushRun(state);
+
+        state.HasFormat = true;
+        state.Format = format;
+        state.Text.Append(text);
+    }
+
+    private static void FlushRun(WalkState state)
+    {
+        if (state.Text.Length > 0)
+        {
+            state.Runs.Add(new ContentRun
+            {
+                Text = state.Text.ToString(),
+                StyleName = state.Format.CharacterStyleName,
+                Language = state.Format.Language,
+                Emphasis = state.Format.Emphasis,
+            });
+        }
+        state.Text.Clear();
+        state.HasFormat = false;
+    }
+
+    /// <summary>Ends a paragraph at its mark, whose position is where its properties live.</summary>
+    private void EndParagraph(WalkState state, int markPosition)
+    {
+        Ww8ParagraphFormat format = ResolveParagraphFormat(markPosition);
+        state.ParagraphFormat = format;
+        FinishParagraph(state, force: true);
+    }
+
+    /// <summary>
+    /// Ends a table cell, and the row too when the paragraph's properties say so.
+    /// </summary>
+    /// <remarks>
+    /// U+0007 means both things. Only <c>sprmPFTtp</c> on the paragraph that contains it
+    /// distinguishes the mark that ends a row from the one that ends a cell — so a reader that
+    /// treats every U+0007 the same either produces one row per cell or one cell per row.
+    /// </remarks>
+    private void EndCellOrRow(WalkState state, int markPosition)
+    {
+        Ww8ParagraphFormat format = ResolveParagraphFormat(markPosition);
+        state.ParagraphFormat = format;
+
+        if (format.IsTableRowEnd)
+        {
+            // The row-end mark also closes whatever cell was open.
+            FinishParagraph(state, force: false);
+            FinishRow(state);
+            return;
+        }
+
+        state.InCell = true;
+        FinishParagraph(state, force: true);
+        FinishCell(state);
+    }
+
+    private void FinishParagraph(WalkState state, bool force)
+    {
+        FlushRun(state);
+
+        bool hasContent = state.Runs.Count > 0 || state.PendingImages.Count > 0;
+        if (!hasContent && !force)
+        {
+            ResetParagraph(state);
+            return;
+        }
+
+        Ww8ParagraphFormat format = state.ParagraphFormat;
+
+        // The label has to be produced here rather than when the format was resolved, because
+        // advancing a counter is a side effect: a paragraph whose properties are read twice must
+        // still count once.
+        bool numbered = format.ListNumber > 0;
+        int listLevel = format.ListLevel ?? 0;
+
+        ContentParagraph paragraph = new()
+        {
+            StyleName = format.StyleName,
+            HeadingLevel = format.HeadingLevel,
+            ListLevel = numbered ? listLevel : null,
+            ListMarker = numbered ? _numbering.Advance(format.ListNumber, listLevel) : null,
+        };
+        foreach (ContentRun run in state.Runs) paragraph.Children.Add(run);
+        foreach (ContentImage image in state.PendingImages) paragraph.Children.Add(image);
+
+        if (state.InCell || format.IsInTable) state.CellContent.Add(paragraph);
+        else
+        {
+            // Anything that is not a table row closes an open table, since WW8 marks no end.
+            FinishTable(state);
+            state.Target.Children.Add(paragraph);
+        }
+
+        ResetParagraph(state);
+    }
+
+    private static void ResetParagraph(WalkState state)
+    {
+        state.Runs.Clear();
+        state.PendingImages.Clear();
+        state.ParagraphFormat = default;
+    }
+
+    private static void FinishCell(WalkState state)
+    {
+        Ww8CellDraft cell = new();
+        cell.Content.AddRange(state.CellContent);
+        state.CellContent.Clear();
+        state.RowCells.Add(cell);
+    }
+
+    private static void FinishRow(WalkState state)
+    {
+        if (state.CellContent.Count > 0) FinishCell(state);
+        if (state.RowCells.Count == 0)
+        {
+            state.InCell = false;
+            return;
+        }
+
+        Ww8RowDraft row = new() { Index = state.Rows.Count };
+        row.Cells.AddRange(state.RowCells);
+        state.Rows.Add(row);
+
+        state.RowCells.Clear();
+        state.InCell = false;
+    }
+
+    private static void FinishTable(WalkState state)
+    {
+        if (state.Rows.Count == 0) return;
+
+        ContentTable table = new()
+        {
+            ColumnCount = state.Rows.Max(r => r.Cells.Count),
+            // WW8 marks a repeated header row with sprmTTableHeader inside the row's table
+            // definition, which Paperless does not read yet; reporting a count it has not
+            // established would be a guess.
+            HeaderRowCount = 0,
+        };
+
+        foreach (Ww8RowDraft row in state.Rows)
+        {
+            ContentTableRow contentRow = new() { Index = row.Index };
+            for (int column = 0; column < row.Cells.Count; column++)
+            {
+                ContentTableCell cell = new() { Row = row.Index, Column = column };
+                foreach (ContentNode node in row.Cells[column].Content) cell.Children.Add(node);
+                contentRow.Children.Add(cell);
+            }
+            table.Children.Add(contentRow);
+        }
+
+        state.Rows.Clear();
+        state.Target.Children.Add(table);
+    }
+
+    // ------------------------------------------------------------------- formatting
+
+    /// <summary>
+    /// The paragraph formatting at a paragraph mark.
+    /// </summary>
+    /// <remarks>
+    /// Resolved by applying the style chain's sprms and then the paragraph's own, so the nearest
+    /// wins — the same shape as the other formats' resolvers, over a completely different encoding.
+    /// </remarks>
+    private Ww8ParagraphFormat ResolveParagraphFormat(int position)
+    {
+        int byteOffset = _pieces.FileOffsetOf(position);
+        (ushort styleIndex, ReadOnlyMemory<byte> direct) =
+            Ww8FormattingTable.SplitParagraphProperties(_paragraphProperties.Find(byteOffset));
+
+        Ww8ParagraphFormat format = new()
+        {
+            StyleName = _styles.NameOf(styleIndex),
+        };
+
+        foreach (ReadOnlyMemory<byte> inherited in _styles.ResolveChain(styleIndex))
+            format = ApplyParagraphSprms(format, inherited);
+
+        return ApplyParagraphSprms(format, direct);
+    }
+
+    private static Ww8ParagraphFormat ApplyParagraphSprms(
+        Ww8ParagraphFormat format, ReadOnlyMemory<byte> grpprl)
+    {
+        foreach (Ww8Sprm sprm in Ww8SprmReader.Read(grpprl))
+        {
+            switch (sprm.Identifier)
+            {
+                case Ww8SprmReader.Ids.OutlineLevel:
+                    // Zero-based, and 9 is WW8's "body text" rather than a tenth heading level.
+                    format = format with
+                    {
+                        HeadingLevel = sprm.Byte <= 8 ? sprm.Byte + 1 : null,
+                    };
+                    break;
+
+                case Ww8SprmReader.Ids.ListLevel:
+                    format = format with { ListLevel = sprm.Byte };
+                    break;
+
+                case Ww8SprmReader.Ids.ListFormatOverride:
+                    format = format with { ListNumber = sprm.Word };
+                    break;
+
+                case Ww8SprmReader.Ids.InTable:
+                    format = format with { IsInTable = sprm.Byte != 0 };
+                    break;
+
+                case Ww8SprmReader.Ids.IsTableRowEnd:
+                    format = format with { IsTableRowEnd = sprm.Byte != 0 };
+                    break;
+            }
+        }
+        return format;
+    }
+
+    /// <summary>
+    /// The character formatting at a position.
+    /// </summary>
+    /// <remarks>
+    /// Memoised on the exception's byte range rather than resolved per character: the walk asks for
+    /// every position in the document, and a formatting run usually covers hundreds of them.
+    /// </remarks>
+    private Ww8CharacterFormat ResolveCharacterFormat(int position, WalkState state)
+    {
+        int byteOffset = _pieces.FileOffsetOf(position);
+        if (state.FormatCacheValid && byteOffset >= state.FormatCacheStart && byteOffset < state.FormatCacheEnd)
+            return state.CachedFormat;
+
+        (ReadOnlyMemory<byte> direct, int start, int end) = _characterProperties.FindWithRange(byteOffset);
+
+        Ww8CharacterFormat format = new();
+
+        // The paragraph style contributes character formatting too — that is how a heading style
+        // makes its text bold without every run repeating it.
+        foreach (ReadOnlyMemory<byte> inherited in
+                 _styles.ResolveCharacterChain(ParagraphStyleIndexAt(position)))
+            format = ApplyCharacterSprms(format, inherited);
+
+        // Then the run's own character style, which has to be found before the exception is applied
+        // rather than while applying it: the sprm naming the style sits inside the same grpprl as the
+        // direct formatting, so a single pass would apply the style's properties over the direct ones
+        // that were meant to override them.
+        foreach (ReadOnlyMemory<byte> inherited in
+                 _styles.ResolveCharacterChain(CharacterStyleIndexIn(direct)))
+            format = ApplyCharacterSprms(format, inherited);
+
+        format = ApplyCharacterSprms(format, direct);
+
+        state.FormatCacheValid = end > start;
+        state.FormatCacheStart = start;
+        state.FormatCacheEnd = end;
+        state.CachedFormat = format;
+        return format;
+    }
+
+    /// <summary>
+    /// The character style a grpprl names, or zero when it names none.
+    /// </summary>
+    /// <remarks>
+    /// Style zero is <c>Default Paragraph Font</c>, which sets nothing — so treating "no style named"
+    /// and "style zero" alike costs nothing and saves the caller a nullable.
+    /// </remarks>
+    private static ushort CharacterStyleIndexIn(ReadOnlyMemory<byte> grpprl)
+    {
+        foreach (Ww8Sprm sprm in Ww8SprmReader.Read(grpprl))
+        {
+            if (sprm.Identifier == Ww8SprmReader.Ids.CharacterStyle) return sprm.Word;
+        }
+        return 0;
+    }
+
+    private Ww8CharacterFormat ApplyCharacterSprms(
+        Ww8CharacterFormat format, ReadOnlyMemory<byte> grpprl)
+    {
+        foreach (Ww8Sprm sprm in Ww8SprmReader.Read(grpprl))
+        {
+            switch (sprm.Identifier)
+            {
+                case Ww8SprmReader.Ids.Bold:
+                    format = format with { IsBold = sprm.ResolveToggle(format.IsBold) };
+                    break;
+                case Ww8SprmReader.Ids.Italic:
+                    format = format with { IsItalic = sprm.ResolveToggle(format.IsItalic) };
+                    break;
+                case Ww8SprmReader.Ids.Strike:
+                    format = format with { IsStruckThrough = sprm.ResolveToggle(format.IsStruckThrough) };
+                    break;
+                case Ww8SprmReader.Ids.DoubleStrike:
+                    format = format with { IsStruckThrough = sprm.ResolveToggle(format.IsStruckThrough) };
+                    break;
+                case Ww8SprmReader.Ids.Vanish:
+                    format = format with { IsHidden = sprm.ResolveToggle(format.IsHidden) };
+                    break;
+                case Ww8SprmReader.Ids.Underline:
+                    // The operand is the line style; zero is none.
+                    format = format with { IsUnderlined = sprm.Byte != 0 };
+                    break;
+                case Ww8SprmReader.Ids.VerticalPosition:
+                    format = format with
+                    {
+                        IsSuperscript = sprm.Byte == 1,
+                        IsSubscript = sprm.Byte == 2,
+                    };
+                    break;
+                case Ww8SprmReader.Ids.FontSize:
+                    format = format with { FontSize = Length.FromPoints(sprm.Word / 2.0) };
+                    break;
+                case Ww8SprmReader.Ids.CharacterStyle:
+                    format = format with { CharacterStyleName = _styles.NameOf(sprm.Word) };
+                    break;
+                case Ww8SprmReader.Ids.Language:
+                    format = format with { Language = LanguageTagOf(sprm.Word) };
+                    break;
+            }
+        }
+        return format;
+    }
+
+    /// <summary>
+    /// A BCP 47 tag for a Word language id.
+    /// </summary>
+    /// <remarks>
+    /// Only the ids that appear in Western documents, returning null rather than guessing for the
+    /// rest: a wrong language tag is worse than none. The full table is large static data
+    /// (<c>research/05-infrastructure.md</c> section F.3).
+    /// </remarks>
+    private static string? LanguageTagOf(ushort languageId) => languageId switch
+    {
+        0 or 1024 => null,
+        1033 => "en-US",
+        2057 => "en-GB",
+        3081 => "en-AU",
+        4105 => "en-CA",
+        1031 => "de-DE",
+        2055 => "de-CH",
+        3079 => "de-AT",
+        1036 => "fr-FR",
+        3084 => "fr-CA",
+        1034 => "es-ES",
+        1040 => "it-IT",
+        1043 => "nl-NL",
+        1030 => "da-DK",
+        1044 => "nb-NO",
+        1053 => "sv-SE",
+        1035 => "fi-FI",
+        1045 => "pl-PL",
+        1029 => "cs-CZ",
+        1038 => "hu-HU",
+        1049 => "ru-RU",
+        1032 => "el-GR",
+        1055 => "tr-TR",
+        1041 => "ja-JP",
+        2052 => "zh-CN",
+        1028 => "zh-TW",
+        1042 => "ko-KR",
+        1046 => "pt-BR",
+        2070 => "pt-PT",
+        _ => null,
+    };
+
+    /// <summary>The mutable state of one range's walk.</summary>
+    private sealed class WalkState(ContentNode target)
+    {
+        public ContentNode Target { get; } = target;
+
+        public StringBuilder Text { get; } = new();
+        public bool HasFormat { get; set; }
+        public Ww8CharacterFormat Format { get; set; }
+        public List<ContentRun> Runs { get; } = [];
+        public List<ContentImage> PendingImages { get; } = [];
+        public Ww8ParagraphFormat ParagraphFormat { get; set; }
+
+        public int FieldDepth { get; set; }
+        public bool InFieldInstruction { get; set; }
+
+        public bool InCell { get; set; }
+        public List<ContentNode> CellContent { get; } = [];
+        public List<Ww8CellDraft> RowCells { get; } = [];
+        public List<Ww8RowDraft> Rows { get; } = [];
+
+        public bool FormatCacheValid { get; set; }
+        public int FormatCacheStart { get; set; }
+        public int FormatCacheEnd { get; set; }
+        public Ww8CharacterFormat CachedFormat { get; set; }
+    }
+
+    private sealed class Ww8CellDraft
+    {
+        public List<ContentNode> Content { get; } = [];
+    }
+
+    private sealed class Ww8RowDraft
+    {
+        public int Index { get; init; }
+        public List<Ww8CellDraft> Cells { get; } = [];
+    }
+}
+
+/// <summary>Paragraph formatting resolved from sprms.</summary>
+public readonly record struct Ww8ParagraphFormat
+{
+    /// <summary>The paragraph style's name, when the document names it.</summary>
+    public string? StyleName { get; init; }
+
+    /// <summary>The heading level, or null for body text.</summary>
+    public int? HeadingLevel { get; init; }
+
+    /// <summary>The list nesting level, when the paragraph is in a list.</summary>
+    public int? ListLevel { get; init; }
+
+    /// <summary>The list this paragraph belongs to, as a list-format-override index.</summary>
+    public int ListNumber { get; init; }
+
+    /// <summary>True when the paragraph is inside a table.</summary>
+    public bool IsInTable { get; init; }
+
+    /// <summary>True when the paragraph's mark ends a table row rather than a cell.</summary>
+    public bool IsTableRowEnd { get; init; }
+}
+
+/// <summary>Character formatting resolved from sprms.</summary>
+public readonly record struct Ww8CharacterFormat
+{
+    /// <summary>True when the run is bold.</summary>
+    public bool IsBold { get; init; }
+
+    /// <summary>True when the run is italic.</summary>
+    public bool IsItalic { get; init; }
+
+    /// <summary>True when the run is underlined.</summary>
+    public bool IsUnderlined { get; init; }
+
+    /// <summary>True when the run is struck through.</summary>
+    public bool IsStruckThrough { get; init; }
+
+    /// <summary>True when the run is raised.</summary>
+    public bool IsSuperscript { get; init; }
+
+    /// <summary>True when the run is lowered.</summary>
+    public bool IsSubscript { get; init; }
+
+    /// <summary>True when the run is hidden, so no reader displays it.</summary>
+    public bool IsHidden { get; init; }
+
+    /// <summary>The font size, when a sprm sets one.</summary>
+    public Length? FontSize { get; init; }
+
+    /// <summary>The character style's name, when the run names one.</summary>
+    public string? CharacterStyleName { get; init; }
+
+    /// <summary>The run's language as a BCP 47 tag.</summary>
+    public string? Language { get; init; }
+
+    /// <summary>The coarse emphasis flags the content tree records.</summary>
+    public RunEmphasis Emphasis
+    {
+        get
+        {
+            RunEmphasis emphasis = RunEmphasis.None;
+            if (IsBold) emphasis |= RunEmphasis.Bold;
+            if (IsItalic) emphasis |= RunEmphasis.Italic;
+            if (IsUnderlined) emphasis |= RunEmphasis.Underline;
+            if (IsStruckThrough) emphasis |= RunEmphasis.Strikethrough;
+            if (IsSuperscript) emphasis |= RunEmphasis.Superscript;
+            if (IsSubscript) emphasis |= RunEmphasis.Subscript;
+            return emphasis;
+        }
+    }
+}
