@@ -57,13 +57,13 @@ class Base64 {
     char *p = const_cast<char*>(ret.c_str());
 
     for (i = 0; i < in_len - 2; i += 3) {
-      *p++ = encodingTable[(data[i] >> 2) & 0x3F];
+      *p++ = encodingTable[(static_cast<unsigned int>(data[i]) >> 2) & 0x3F];
       *p++ = encodingTable[((data[i] & 0x3) << 4) | ((int) (data[i + 1] & 0xF0) >> 4)];
       *p++ = encodingTable[((data[i + 1] & 0xF) << 2) | ((int) (data[i + 2] & 0xC0) >> 6)];
       *p++ = encodingTable[data[i + 2] & 0x3F];
     }
     if (i < in_len) {
-      *p++ = encodingTable[(data[i] >> 2) & 0x3F];
+      *p++ = encodingTable[(static_cast<unsigned int>(data[i]) >> 2) & 0x3F];
       if (i == (in_len - 1)) {
         *p++ = encodingTable[((data[i] & 0x3) << 4)];
         *p++ = '=';
