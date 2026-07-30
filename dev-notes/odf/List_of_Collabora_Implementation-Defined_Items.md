@@ -630,7 +630,7 @@ and
 4.16.3 manifest:checksum-type, Part 2, ODF 1.3
 
 No implementation defined values produced currently, only "SHA1/1K" and
-"[urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#sha256-1k](urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#sha256-1k)".
+`urn:oasis:names:tc:opendocument:xmlns:manifest:1.0#sha256-1k`.
 
 #### manifest:start-key-generation-name
 
@@ -652,7 +652,7 @@ see [\[1\]](https://www.w3.org/TR/xmlenc-core1/#sec-RSA-OAEP)
 4.8.9 manifest:key-derivation-name, Part 3, ODF 1.2  
 4.16.9 manifest:key-derivation-name, Part 2, ODF 1.3
 
-- "[urn:org:documentfoundation:names:experimental:office:manifest:argon2id](urn:org:documentfoundation:names:experimental:office:manifest:argon2id)"
+- `urn:org:documentfoundation:names:experimental:office:manifest:argon2id`
 
 The Argon2id algorithm as specified by \[RFC9106\]. From section 3.1.
 Argon2 Inputs and Outputs, the parameters "K" and "X" are not used. If
