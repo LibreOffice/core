@@ -39,9 +39,11 @@
   </ItemGroup>
 
   <ItemGroup Label="Containers and crypto">
-    <!-- OLE2 / Compound File Binary. Candidate for replacement by a hand-rolled
-         Span-based reader: we need tolerance of malformed real-world files. -->
-    <PackageVersion Include="OpenMcdf" Version="3.2.0" />
+    <!-- OLE2/CFB is hand-rolled in Paperless.Containers.Ole2 rather than taken from
+         OpenMcdf: tolerance of malformed real-world files was the deciding requirement,
+         and it needs control OpenMcdf does not expose. ZIP comes from the BCL's
+         System.IO.Compression, so SharpCompress is only a fallback if a package turns up
+         using a compression method the BCL lacks. -->
     <PackageVersion Include="SharpCompress" Version="1.0.0" />
     <!-- Legacy office crypto (RC4, Blowfish CFB for ODF) that the BCL lacks. -->
     <PackageVersion Include="BouncyCastle.Cryptography" Version="2.7.0" />

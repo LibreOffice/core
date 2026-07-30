@@ -1,6 +1,7 @@
 using System.IO.Compression;
 using System.Text;
 using Paperless.Containers.Ole2;
+using Paperless.Containers.Ooxml;
 using Paperless.Core.Formats;
 
 namespace Paperless.Containers;
@@ -37,9 +38,6 @@ public sealed class FormatIdentifier : IFormatIdentifier
 {
     /// <summary>A ready-to-use instance. The identifier is stateless.</summary>
     public static FormatIdentifier Instance { get; } = new();
-
-    private const string OfficeDocumentRelationship =
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument";
 
     /// <summary>The OLE2 / Compound File Binary signature.</summary>
     private static ReadOnlySpan<byte> Ole2Signature =>
@@ -121,13 +119,30 @@ public sealed class FormatIdentifier : IFormatIdentifier
 
             // OOXML: resolve the main part through the root relationships, then read its
             // content type. Assuming 'word/document.xml' would be wrong for many real files.
-            if (archive.GetEntry("[Content_Types].xml") is { } contentTypesEntry)
+            if (archive.GetEntry(OpcXml.ContentTypesPartName) is { } contentTypesEntry)
             {
-                string contentTypes = ReadEntryText(contentTypesEntry, 512 * 1024);
-                string? mainPart = FindMainDocumentPart(archive);
-                string? mainType = mainPart is null
-                    ? null
-                    : ResolveContentType(contentTypes, mainPart);
+                string contentTypes = ReadEntryText(contentTypesEntry, 4 * 1024 * 1024);
+                OpcXml.ContentTypeMap map = OpcXml.ContentTypeMap.Parse(contentTypes);
+
+                // Follow the officeDocument relationship rather than assuming a part name:
+                // the specification permits any, and real producers use several.
+                string? mainPart = null;
+                if (archive.GetEntry(OpcXml.RootRelationshipsPartName) is { } relsEntry)
+                {
+                    foreach (OpcXml.Relationship rel in OpcXml.ParseRelationships(
+                                 ReadEntryText(relsEntry, 4 * 1024 * 1024), sourcePartName: null))
+                    {
+                        if (rel.IsExternal) continue;
+                        if (string.Equals(rel.Type, OpcXml.OfficeDocumentRelationshipType,
+                                          StringComparison.OrdinalIgnoreCase)
+                            || rel.Type.EndsWith("/officeDocument", StringComparison.OrdinalIgnoreCase))
+                        {
+                            mainPart = rel.Target;
+                            break;
+                        }
+                    }
+                }
+                string? mainType = mainPart is null ? null : map.Resolve(mainPart);
 
                 // Fall back to whichever known main-part content type the package declares
                 // at all. Some producers write a malformed .rels while still declaring the
@@ -154,93 +169,6 @@ public sealed class FormatIdentifier : IFormatIdentifier
                 IdentificationConfidence.Probable, IsEncrypted: false,
                 "ZIP archive with neither an ODF 'mimetype' entry nor '[Content_Types].xml'.");
         }
-    }
-
-    /// <summary>Follows the officeDocument relationship from <c>_rels/.rels</c>.</summary>
-    private static string? FindMainDocumentPart(ZipArchive archive)
-    {
-        ZipArchiveEntry? rels = archive.GetEntry("_rels/.rels");
-        if (rels is null) return null;
-
-        string xml = ReadEntryText(rels, 256 * 1024);
-        try
-        {
-            using System.Xml.XmlReader reader = System.Xml.XmlReader.Create(
-                new StringReader(xml),
-                new System.Xml.XmlReaderSettings
-                {
-                    // Never resolve external entities: this is untrusted input, and an
-                    // external DTD reference would be an XXE vector.
-                    DtdProcessing = System.Xml.DtdProcessing.Prohibit,
-                    XmlResolver = null,
-                    IgnoreWhitespace = true,
-                    IgnoreComments = true,
-                });
-            while (reader.Read())
-            {
-                if (reader.NodeType != System.Xml.XmlNodeType.Element ||
-                    !string.Equals(reader.LocalName, "Relationship", StringComparison.Ordinal))
-                    continue;
-
-                string? type = reader.GetAttribute("Type");
-                string? target = reader.GetAttribute("Target");
-                if (target is null || type is null) continue;
-                if (!type.EndsWith("/officeDocument", StringComparison.OrdinalIgnoreCase) &&
-                    !string.Equals(type, OfficeDocumentRelationship, StringComparison.OrdinalIgnoreCase))
-                    continue;
-
-                return target.TrimStart('/');
-            }
-        }
-        catch (System.Xml.XmlException)
-        {
-            // A malformed .rels is recoverable; the caller falls back to the content types.
-            return null;
-        }
-        return null;
-    }
-
-    /// <summary>Resolves a part's content type: overrides first, then defaults by extension.</summary>
-    private static string? ResolveContentType(string contentTypesXml, string partName)
-    {
-        string normalised = "/" + partName.TrimStart('/');
-        try
-        {
-            using System.Xml.XmlReader reader = System.Xml.XmlReader.Create(
-                new StringReader(contentTypesXml),
-                new System.Xml.XmlReaderSettings
-                {
-                    DtdProcessing = System.Xml.DtdProcessing.Prohibit,
-                    XmlResolver = null,
-                    IgnoreWhitespace = true,
-                    IgnoreComments = true,
-                });
-
-            string? defaultForExtension = null;
-            string extension = Path.GetExtension(partName).TrimStart('.');
-
-            while (reader.Read())
-            {
-                if (reader.NodeType != System.Xml.XmlNodeType.Element) continue;
-
-                if (string.Equals(reader.LocalName, "Override", StringComparison.Ordinal))
-                {
-                    // An override names the part exactly and wins outright.
-                    if (string.Equals(reader.GetAttribute("PartName"), normalised,
-                                      StringComparison.OrdinalIgnoreCase))
-                        return reader.GetAttribute("ContentType");
-                }
-                else if (string.Equals(reader.LocalName, "Default", StringComparison.Ordinal)
-                         && extension.Length > 0
-                         && string.Equals(reader.GetAttribute("Extension"), extension,
-                                          StringComparison.OrdinalIgnoreCase))
-                {
-                    defaultForExtension = reader.GetAttribute("ContentType");
-                }
-            }
-            return defaultForExtension;
-        }
-        catch (System.Xml.XmlException) { return null; }
     }
 
     /// <summary>

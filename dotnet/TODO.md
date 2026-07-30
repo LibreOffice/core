@@ -51,10 +51,14 @@ Nothing else can be verified until these work.
       files, out-of-range sectors, cyclic chains and duplicate entries, reporting each as a
       `Diagnostic`. `OpenMcdf` was not needed and its package reference should be dropped
       once nothing else wants it.
-- [ ] **ZIP + OPC + ODF packages** (`Paperless.Containers`). `System.IO.Compression` for
-      the ZIP layer; hand-roll content-type resolution and relationships.
-- [ ] **`paperless identify`** end to end. First externally visible behaviour, and it makes
-      everything after it debuggable.
+- [x] **ZIP + OPC + ODF packages** (`Paperless.Containers`). Done: `ZipPackageBase` over
+      `System.IO.Compression` with part-name normalisation and zip-bomb/traversal guards;
+      `OpcPackage` resolves content types and relationships and finds the main part by
+      following the officeDocument relationship; `OdfPackage` reads `mimetype`, cross-checks
+      the manifest and detects per-entry encryption. XML is parsed with DTD processing
+      prohibited throughout (XXE).
+- [x] **`paperless identify`** end to end. Done: text and `--json` output, correct on all 17
+      corpus formats, with sysexits-style exit codes.
 - [ ] **Corpus and fidelity harness wiring**. Commit `tests/corpus/minimal/`, implement
       `LibreOfficeRunner`, get one comparison running end to end even though it fails.
 
@@ -160,6 +164,10 @@ working from the specifications. Scope and ordering in `src/Paperless.Vector/TOD
 Scripting, animation and external references stay excluded permanently — that is a security
 decision, not a scope compromise.
 
+**OLE2/CFB is hand-rolled, not OpenMcdf.** Tolerance of malformed real-world files was the
+deciding requirement, and the reader needs control over chain-walking and directory
+traversal that a library does not expose. The `OpenMcdf` dependency has been dropped.
+
 **Rasterise with SkiaSharp, shape with HarfBuzzSharp, read font metrics ourselves.**
 HarfBuzz is what LibreOffice shapes with, so advance widths agree by construction. Metrics
 come from a hand-rolled OpenType table reader because matching LibreOffice's line heights
@@ -169,14 +177,12 @@ needs raw `hhea`/`OS/2` access and its own precedence rules.
 
 Each of these should be resolved with a spike, not by guessing.
 
-1. **`OpenMcdf` vs hand-rolled CFB.** Depends entirely on how it behaves on malformed
-   input. Test against LibreOffice's own corpus in `sw/qa/`, `sc/qa/`, `sd/qa/`.
-2. **Formula recalculation.** Trust cached results, or recalculate? Cached matches what a
+1. **Formula recalculation.** Trust cached results, or recalculate? Cached matches what a
    reference renderer shows; recalculating is correct when the cache is stale. Currently a
    `LayoutOptions` flag, defaulting to trusting the cache. Confirm that is right.
-3. **SmartArt / DrawingML diagrams.** Files carry a pre-rendered fallback. Use it, or
+2. **SmartArt / DrawingML diagrams.** Files carry a pre-rendered fallback. Use it, or
    implement layout? The fallback is far cheaper and probably sufficient.
-4. **Charts.** Out of scope as a standalone application, but charts are embedded in real
+3. **Charts.** Out of scope as a standalone application, but charts are embedded in real
    documents constantly. Render them, or draw a placeholder? Needs a decision.
 
 ## Non-goals

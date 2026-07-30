@@ -16,11 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.CommandLine" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Paperless\Paperless.csproj" />
+    <ProjectReference Include="..\..\src\Paperless.Containers\Paperless.Containers.csproj" />
   </ItemGroup>
 
 </Project>
