@@ -12,4 +12,5 @@
   <tolerance elementName="Line2" attribName="column3" value="1"/>
   <tolerance elementName="XShape" attribName="positionY" value="1"/>
   <tolerance elementName="XShape" attribName="sizeY" value="1"/>
+  <tolerance elementName="point" attribName="positionY" value="1"/>
 </tolerances>
