@@ -177,7 +177,7 @@ void Cache::supplyConfigFiles(const std::string& configId, std::vector<CacheQuer
             continue;
         if (cacheHits.find(name) == cacheHits.end())
         {
-            LOG_INF("cacheFile: " << "removing stale cache file: " << name);
+            LOG_INF("cacheFile: " "removing stale cache file: " << name);
             Poco::Path cacheDir(rootPath, name);
             FileUtil::removeFile(cacheDir.toString(), true);
         }
@@ -216,7 +216,7 @@ void Cache::clearOutdatedConfigs()
                 continue;
         }
 
-        LOG_INF("cacheFile: " << "removing stale cache dir: " << rootPath.toString());
+        LOG_INF("cacheFile: " "removing stale cache dir: " << rootPath.toString());
         FileUtil::removeFile(rootPath.toString(), true);
     }
 }

@@ -219,7 +219,7 @@ void appendUserJson(std::ostringstream& oss,
                     bool withCanWrite)
 {
     oss << "{\"id\":\"" << JsonUtil::escapeJSONValue(h->getUserId()) << "\""
-        << ",\"name\":\"" << JsonUtil::escapeJSONValue(h->getUsername()) << "\"";
+           ",\"name\":\"" << JsonUtil::escapeJSONValue(h->getUsername()) << "\"";
     if (!h->getAvatar().empty())
     {
         std::string proxy = "/co/collab/avatar?WOPISrc="
@@ -244,7 +244,7 @@ std::string externalUserJson(const std::string& userId,
 {
     std::ostringstream oss;
     oss << "{\"id\":\"" << JsonUtil::escapeJSONValue(userId) << "\""
-        << ",\"name\":\"" << JsonUtil::escapeJSONValue(username) << "\"";
+           ",\"name\":\"" << JsonUtil::escapeJSONValue(username) << "\"";
     if (canWrite.has_value())
         oss << ",\"canWrite\":" << (*canWrite ? "true" : "false");
     oss << '}';

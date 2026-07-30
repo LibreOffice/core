@@ -280,7 +280,7 @@ public:
            << ", session " << getId()
            << (isReadOnly() ? ", ro": ", rw")
            << ", user: '" << getUserNameAnonym() << "'"
-           << ", load" << (_isDocLoaded ? "ed" : "ing")
+              ", load" << (_isDocLoaded ? "ed" : "ing")
            << ", type: " << _docType
            << ", lang: " << getLang();
         return ss.str();

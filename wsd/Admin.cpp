@@ -219,7 +219,7 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
         // for now, we have only these settings
         std::ostringstream oss;
         oss << "settings "
-            << "mem_stats_size=" << model.query("mem_stats_size") << ' '
+               "mem_stats_size=" << model.query("mem_stats_size") << ' '
             << "mem_stats_interval=" << _admin->getMemStatsInterval().count() << ' '
             << "cpu_stats_size="  << model.query("cpu_stats_size") << ' '
             << "cpu_stats_interval=" << _admin->getCpuStatsInterval().count() << ' '
@@ -370,16 +370,16 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
             model.setMigratingInfo(dockey, routeToken, serverId);
             std::ostringstream oss;
             oss << "migrate: {";
-            oss << "\"afterSave\"" << ":false,";
+            oss << "\"afterSave\"" ":false,";
             if (docStatus == "unsaved" && !model.isDocSaved(dockey))
             {
                 COOLWSD::autoSave(dockey);
-                oss << "\"saved\"" << ":false,";
+                oss << "\"saved\"" ":false,";
             }
             else if ((docStatus == "readonly" && model.isDocReadOnly(dockey)) ||
                      (docStatus == "saved" && model.isDocSaved(dockey)))
             {
-                oss << "\"saved\"" << ":true,";
+                oss << "\"saved\"" ":true,";
             }
             oss << "\"routeToken\"" << ':' << '"' << routeToken << '"' << ',';
             oss << "\"serverId\"" << ':' << '"' << serverId << '"' << '}';
@@ -1080,7 +1080,7 @@ void Admin::triggerMemoryCleanup(const size_t totalMem)
     for (const auto& doc : docList)
     {
         LOG_TRC("OOM Document: DocKey: [" << doc.getDocKey() << "], Idletime: ["
-                                          << doc.getIdleTime() << "]," << " Saved: ["
+                                          << doc.getIdleTime() << "]," " Saved: ["
                                           << doc.getSaved() << "], Mem: [" << doc.getMem() << ']');
         if (doc.getSaved())
         {

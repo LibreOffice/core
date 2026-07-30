@@ -386,12 +386,12 @@ private:
             LOG_DBG("SSL error (" << context << "): " << sslErrorToName(sslError) << " (" << sslError
                               << "), rc: " << rc << ", errno: " << last_errno << " ("
                               << Util::symbolicErrno(last_errno) << ": "
-                              << std::strerror(last_errno) << ")" << ": " << bioErrStr);
+                              << std::strerror(last_errno) << "): " << bioErrStr);
         } else {
             LOG_TRC("SSL error (" << context << "): " << sslErrorToName(sslError) << " (" << sslError
                               << "), rc: " << rc << ", errno: " << last_errno << " ("
                               << Util::symbolicErrno(last_errno) << ": "
-                              << std::strerror(last_errno) << ")" << ": " << bioErrStr);
+                              << std::strerror(last_errno) << "): " << bioErrStr);
         }
 
         // Handle non-fatal cases first.

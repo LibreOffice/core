@@ -2010,8 +2010,8 @@ bool ClientRequestDispatcher::handleWopiAccessCheckRequest(
         const http::Response::State responseState = httpResponse->state();
         const http::StatusCode statusCode = httpResponse->statusCode();
         LOG_DBG_S(logPfx << "Wopi Access Check: got response state: " << responseState << " "
-                                            << ", response status code: " << statusCode << " "
-                                            << ", last errno: " << lastErrno);
+                                               ", response status code: " << statusCode << " "
+                                               ", last errno: " << lastErrno);
 
         CheckStatus status = statusCode == http::StatusCode::OK ? CheckStatus::Ok: CheckStatus::NotHttpSuccess;
 

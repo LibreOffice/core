@@ -105,7 +105,7 @@ std::string AdminDocument::getSnapshot(std::time_t now) const
     oss << "\"memoryDirty\"" << ':' << getMemoryDirty() << ',';
     oss << "\"activeViews\"" << ':' << getActiveViews() << ',';
 
-    oss << "\"views\"" << ":[";
+    oss << "\"views\"" ":[";
     std::string separator;
     for (const auto& view : getViews())
     {
@@ -128,12 +128,12 @@ std::string AdminDocument::getHistory() const
 {
     std::ostringstream oss;
     oss << "{";
-    oss << "\"docKey\"" << ":\"" << _docKey << "\",";
-    oss << "\"filename\"" << ":\"" << Anonymizer::anonymizeUrl(getFilename()) << "\",";
+    oss << "\"docKey\"" ":\"" << _docKey << "\",";
+    oss << "\"filename\"" ":\"" << Anonymizer::anonymizeUrl(getFilename()) << "\",";
     oss << "\"start\"" << ':' << _start << ',';
     oss << "\"end\"" << ':' << _end << ',';
     oss << "\"pid\"" << ':' << getPid() << ',';
-    oss << "\"snapshots\"" << ":[";
+    oss << "\"snapshots\"" ":[";
     std::string separator;
     for (const auto& s : _snapshots)
     {
@@ -1425,7 +1425,7 @@ void AdminModel::sendMigrateMsgAfterSave(bool lastSaveSuccessful, const std::str
     std::string saveSuccessful = lastSaveSuccessful ? "true" : "false";
     oss << "migrate: {";
     oss << "\"afterSave\""
-        << ":true,";
+           ":true,";
     oss << "\"saved\":" << saveSuccessful;
     if (lastSaveSuccessful)
     {

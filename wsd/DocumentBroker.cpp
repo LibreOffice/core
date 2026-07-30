@@ -1274,7 +1274,7 @@ bool DocumentBroker::download(
             else
             {
                 LOG_WRN("Document [" << _docKey << "] has been modified behind our back. "
-                                     << "Informing all clients. Expected: "
+                                        "Informing all clients. Expected: "
                                      << _storageManager.getLastModifiedServerTimeString()
                                      << ", Actual: " << fileInfo.getLastModifiedServerTimeString());
 
@@ -3570,7 +3570,7 @@ void DocumentBroker::handleUploadToStorageSuccessful(const StorageBase::UploadRe
         const std::string url = uri.toString();
         std::string encodedName = Uri::encode(filename);
         std::ostringstream oss;
-        oss << "renamefile: " << "filename=" << encodedName << " url=" << url;
+        oss << "renamefile: " "filename=" << encodedName << " url=" << url;
         broadcastMessage(oss.str());
         broadcastMessage("close: reloadafterrename");
     }

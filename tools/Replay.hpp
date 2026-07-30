@@ -257,7 +257,7 @@ struct Stats {
         size_t recvKbps = (_bytesRecvd * 1000) / (_connections * runMs * 1024);
         size_t sentKbps = (_bytesSent * 1000) / (_connections * runMs * 1024);
         os << "  we sent " << Util::getHumanizedBytes(_bytesSent) << " (" << sentKbps << " kB/s) "
-           << " server sent " << Util::getHumanizedBytes(_bytesRecvd) << " (" << recvKbps
+              " server sent " << Util::getHumanizedBytes(_bytesRecvd) << " (" << recvKbps
            << " kB/s) to " << _connections << " connections.\n";
 
         endPhase(Log::Phase::Edit);

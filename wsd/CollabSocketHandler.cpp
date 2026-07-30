@@ -347,9 +347,9 @@ void CollabSocketHandler::handleAuthenticatedMessage(const std::string& msg)
                 std::ostringstream oss;
                 oss << "{\"type\":\"" << JsonUtil::escapeJSONValue(type)
                     << "\",\"user\":{"
-                    << "\"id\":\"" << JsonUtil::escapeJSONValue(_userId) << "\""
-                    << ",\"name\":\"" << JsonUtil::escapeJSONValue(_username) << "\""
-                    << "}}";
+                       "\"id\":\"" << JsonUtil::escapeJSONValue(_userId) << "\""
+                       ",\"name\":\"" << JsonUtil::escapeJSONValue(_username) << "\""
+                       "}}";
                 const std::string message = oss.str();
 
                 LOG_INF("Collab: broadcasting " << type << " from "
@@ -364,7 +364,7 @@ void CollabSocketHandler::handleAuthenticatedMessage(const std::string& msg)
         LOG_WRN("Collab: unknown message type: " << type);
         std::ostringstream oss;
         oss << "{\"type\":\"error\",\"error\":\"Unknown message type\""
-            << ",\"requestId\":\"" << JsonUtil::escapeJSONValue(requestId) << "\"}";
+               ",\"requestId\":\"" << JsonUtil::escapeJSONValue(requestId) << "\"}";
         sendTextMessage(oss.str());
     }
 }

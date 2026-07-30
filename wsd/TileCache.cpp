@@ -835,7 +835,7 @@ void TileCache::dumpState(std::ostream& os)
         totalSize += it.second->size();
         totalCapacity += it.second->data().capacity();
         os << "    " << std::setw(4) << it.first.getWireId() << '\t' << std::setw(6)
-           << it.second->size() << " bytes" << "\t'" << it.first.serialize() << " ";
+           << it.second->size() << " bytes\t'" << it.first.serialize() << " ";
         it.second->dumpState(os);
         os << '\n';
     }

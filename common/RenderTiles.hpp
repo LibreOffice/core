@@ -140,7 +140,7 @@ namespace RenderTiles
         LOG_DBG("paintPartTile      " << tileRecs.size() << " tiles at ("
                 << renderArea.getLeft() << ", " << renderArea.getTop() << "), ("
                 << renderArea.getWidth() << ", " << renderArea.getHeight() << ") "
-                << " took " << elapsedUs << " (" << area / elapsedUs.count() << " MP/s).");
+                   " took " << elapsedUs << " (" << area / elapsedUs.count() << " MP/s).");
 
         const auto mode = document->getTileMode();
 
@@ -240,7 +240,7 @@ namespace RenderTiles
                 << renderArea.getLeft() << ", " << renderArea.getTop()
                 << "), (" << renderArea.getWidth() << ", "
                 << renderArea.getHeight() << ") "
-                << " took " << elapsed << " (" << area / elapsed.count() << " MP/s).");
+                   " took " << elapsed << " (" << area / elapsed.count() << " MP/s).");
 
         if (tileIndex == 0)
         {

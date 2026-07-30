@@ -4094,7 +4094,7 @@ void ClientSession::dumpState(std::ostream& os)
         os << " between wid: " << _tilesOnFly.front().first << " as of " <<
             std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::steady_clock::now() - _tilesOnFly.front().second) << " ms "
-           << " and wid: " << _tilesOnFly.back().first << " as of " <<
+              " and wid: " << _tilesOnFly.back().first << " as of " <<
             std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::steady_clock::now() - _tilesOnFly.back().second) << " ms ";
 

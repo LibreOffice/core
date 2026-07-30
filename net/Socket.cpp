@@ -1221,7 +1221,7 @@ void SocketPoll::dumpState(std::ostream& os) const
     // FIXME: NOT thread-safe! _pollSockets is modified from the polling thread!
     const std::vector<std::shared_ptr<Socket>> pollSockets = _pollSockets;
 
-    os << "\n  SocketPoll [" << name() << "] with " << pollSockets.size() << " socket(s)" << " and "
+    os << "\n  SocketPoll [" << name() << "] with " << pollSockets.size() << " socket(s) and "
        << _newCallbacks.size() << " callback(s) - wakeup rfd: " << _wakeup[0]
        << " wfd: " << _wakeup[1] << '\n';
 

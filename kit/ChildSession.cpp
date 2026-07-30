@@ -2874,7 +2874,7 @@ bool ChildSession::renderSlide(const StringVector& tokens)
     getLOKitDocument()->postSlideshowCleanup();
 
     std::ostringstream msg;
-    msg << "sliderenderingcomplete: " << R"({"status": ")" << (success ? "success" : "fail");
+    msg << "sliderenderingcomplete: " R"({"status": ")" << (success ? "success" : "fail");
     if (EnableExperimental)
     {
         msg << R"(", "slidehash": ")" << hash << R"(", "compressedLayers": )"

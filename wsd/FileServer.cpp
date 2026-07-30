@@ -1360,8 +1360,8 @@ public:
 
         _vars[ACCESS_TOKEN_TTL] = std::to_string(tokenTtl);
         LOG_TRC("Field ["
-                << "access_token_ttl"
-                << "] for var [" << ACCESS_TOKEN_TTL << "] = [" << tokenTtl << ']');
+                   "access_token_ttl"
+                   "] for var [" << ACCESS_TOKEN_TTL << "] = [" << tokenTtl << ']');
 
         extractVariable(form, "access_header", ACCESS_HEADER);
 

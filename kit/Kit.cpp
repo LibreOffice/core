@@ -2936,7 +2936,7 @@ void Document::flushAndExit(int code)
 void Document::dumpState(std::ostream& oss)
 {
     oss << "Kit Document:\n"
-        << "\n\tpid: " << ProcUtil::getProcessId() << "\n\tstop: " << _stop
+           "\n\tpid: " << ProcUtil::getProcessId() << "\n\tstop: " << _stop
         << "\n\tjailId: " << _jailId << "\n\tdocKey: " << _docKey << "\n\tdocId: " << _docId
         << "\n\turl: " << _url << "\n\tobfuscatedFileId: " << _obfuscatedFileId
         << "\n\tjailedUrl: " << anonymizeUrl(_jailedUrl) << "\n\trenderOpts: " << _renderOpts

@@ -34,8 +34,8 @@ inline void sendError(http::StatusCode errorCode, const std::shared_ptr<StreamSo
 {
     std::ostringstream oss;
     oss << "HTTP/1.1 " << errorCode << "\r\n"
-        << "Date: " << Util::getHttpTimeNow() << "\r\n"
-        << "Content-Length: " << body.size() << "\r\n"
+           "Date: " << Util::getHttpTimeNow() << "\r\n"
+           "Content-Length: " << body.size() << "\r\n"
         << extraHeader << "\r\n"
         << body;
     socket->send(oss.str());

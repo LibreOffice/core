@@ -488,7 +488,7 @@ static constexpr std::size_t skipPathPrefix(const char (&s)[N], std::size_t n = 
             const auto UNIQUE_VAR(msg) = UNIQUE_VAR(oss).str();                                    \
             LOG("ERROR: Assertion failure: "                                                       \
                 << (UNIQUE_VAR(msg).empty() ? "" : UNIQUE_VAR(msg) + ". ")                         \
-                << "Condition: " << STRING(condition));                                            \
+                << "Condition: " STRING(condition));                                               \
             assert(!STRING(condition)); /* NOLINT(misc-static-assert) */                           \
         }                                                                                          \
     } while (false)

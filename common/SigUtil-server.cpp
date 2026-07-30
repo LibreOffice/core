@@ -549,8 +549,8 @@ void resetTerminationFlags()
         // Prepare this in advance just in case.
         std::ostringstream stream;
         stream << "\nERROR: Fatal signal! Attach debugger with:\n"
-               << "gdb -iex 'set sysroot /' --pid=" << getpid() << "\n or \n"
-               << "gdb -iex 'set sysroot /' --q --n --ex 'thread apply all backtrace full' --batch --pid="
+                  "gdb -iex 'set sysroot /' --pid=" << getpid() << "\n or \n"
+                  "gdb -iex 'set sysroot /' --q --n --ex 'thread apply all backtrace full' --batch --pid="
                << getpid() << '\n';
         std::string streamStr = stream.str();
         assert(sizeof(FatalGdbString) > streamStr.size() + 1);

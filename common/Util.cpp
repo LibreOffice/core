@@ -554,7 +554,7 @@ namespace Util
         if (!(trailing = strptime(cstr, "%Y-%m-%dT%H:%M:%S", &tm)))
         {
             LOG_WRN(logName << " [" << iso8601Time << "] is in invalid format."
-                            << "Returning " << timestamp.time_since_epoch().count());
+                               "Returning " << timestamp.time_since_epoch().count());
             return timestamp;
         }
 
@@ -565,7 +565,7 @@ namespace Util
         if (trailing[0] != '.')
         {
             LOG_WRN(logName << " [" << iso8601Time << "] is in invalid format."
-                            << ". Returning " << timestamp.time_since_epoch().count());
+                               ". Returning " << timestamp.time_since_epoch().count());
             return timestamp;
         }
 

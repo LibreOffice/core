@@ -164,7 +164,7 @@ public:
     {
         THREAD_UNSAFE_DUMP_BEGIN
         oss << "\tthreadPool:"
-            << "\n\t\tshutdown: " << _shutdown << "\n\t\tworking: " << _working
+               "\n\t\tshutdown: " << _shutdown << "\n\t\tworking: " << _working
             << "\n\t\twork count: " << count() << "\n\t\tthread count " << _threads.size() << "\n";
         THREAD_UNSAFE_DUMP_END
     }

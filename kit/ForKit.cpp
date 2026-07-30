@@ -101,17 +101,17 @@ void dump_forkit_state()
     oss << "Start ForKit " << getpid() << " Dump State:\n";
 
     oss << "Forkit: " << ForkCounter << " forks\n"
-        << "  LogLevel: " << LogLevel << "\n"
-        << "  LogDisabledAreas: " << LogDisabledAreas << "\n"
-        << "  LogLevelStartup: " << LogLevelStartup << "\n"
-        << "  unit test: " << UnitTestLibrary << "\n"
-        << "  NoCapsForKit: " << NoCapsForKit << "\n"
-        << "  NoSeccomp: " << NoSeccomp << "\n"
+           "  LogLevel: " << LogLevel << "\n"
+           "  LogDisabledAreas: " << LogDisabledAreas << "\n"
+           "  LogLevelStartup: " << LogLevelStartup << "\n"
+           "  unit test: " << UnitTestLibrary << "\n"
+           "  NoCapsForKit: " << NoCapsForKit << "\n"
+           "  NoSeccomp: " << NoSeccomp << "\n"
 #if ENABLE_DEBUG
-        << "  SingleKit: " << SingleKit << "\n"
+           "  SingleKit: " << SingleKit << "\n"
 #endif
-        << "  ClientPortNumber: " << ClientPortNumber << "\n"
-        << "  MasterLocation: " << MasterLocation
+           "  ClientPortNumber: " << ClientPortNumber << "\n"
+           "  MasterLocation: " << MasterLocation
         << "\n";
 
     oss << "\nMalloc info [" << getpid() << "]: \n\t"

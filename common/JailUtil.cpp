@@ -684,7 +684,7 @@ bool updateDynamicFilesImpl(const std::string& sysTemplate)
             // not a problem to fix.
             LOG_INF("The systemplate directory ["
                     << sysTemplate << "] is read-only; cloning the dynamic /etc "
-                    << "files (e.g. [" << dstFilename << "]) into each jail.");
+                       "files (e.g. [" << dstFilename << "]) into each jail.");
             return false;
         }
 

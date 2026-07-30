@@ -560,7 +560,7 @@ class DeltaGenerator {
             return false;
         }
 
-        LOGA_TRC(Pixel, "building delta of a " << cur.getWidth() << 'x' << cur.getHeight() << " bitmap " <<
+        LOGA_TRC(Pixel, "building delta of a " << cur.getWidth() << 'x' << cur.getHeight() << " bitmap "
                  "between old wid " << prev.getWid() << " and " << cur.getWid());
 
         // let's use uint8_t instead of char to avoid implicit sign extension

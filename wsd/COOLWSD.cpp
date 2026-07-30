@@ -3662,13 +3662,13 @@ void COOLWSDServer::dumpState(std::ostream& os) const
     THREAD_UNSAFE_DUMP_BEGIN
     os << "COOLWSDServer: " << version << " - " << hash << " state dumping"
 #if !MOBILEAPP
-       << "\n  Kit version: " << COOLWSD::LOKitVersion << "\n  Ports: server " << ClientPortNumber
+          "\n  Kit version: " << COOLWSD::LOKitVersion << "\n  Ports: server " << ClientPortNumber
        << " prisoner " << MasterLocation
        << "\n  SSL: " << (ConfigUtil::isSslEnabled() ? "https" : "http")
        << "\n  SSL-Termination: " << (ConfigUtil::isSSLTermination() ? "yes" : "no")
        << "\n  Security " << (COOLWSD::NoCapsForKit ? "no" : "") << " chroot, "
        << (COOLWSD::NoSeccomp ? "no" : "") << " api lockdown"
-       << "\n  Admin: " << (COOLWSD::AdminEnabled ? "enabled" : "disabled")
+          "\n  Admin: " << (COOLWSD::AdminEnabled ? "enabled" : "disabled")
        << "\n  RouteToken: " << COOLWSD::RouteToken
 #endif
        << "\n  Uptime (seconds): "
@@ -3702,7 +3702,7 @@ void COOLWSDServer::dumpState(std::ostream& os) const
        << "\n  OverrideWatermark: " << COOLWSD::OverrideWatermark
        << "\n  UserInterface: " << COOLWSD::UserInterface
        << "\n  Total PSS: " << ProcUtil::getProcessTreePss(ProcUtil::getProcessId()) << " KB"
-       << "\n  Config: " << LoggableConfigEntries;
+          "\n  Config: " << LoggableConfigEntries;
     THREAD_UNSAFE_DUMP_END
 
     std::string smap;
@@ -3748,7 +3748,7 @@ void COOLWSDServer::dumpState(std::ostream& os) const
 
     {
         std::lock_guard<std::mutex> docBrokerLock(DocBrokersMutex);
-        os << "\nDocument Broker polls " << "[ " << DocBrokers.size() << " ]:\n";
+        os << "\nDocument Broker polls " "[ " << DocBrokers.size() << " ]:\n";
         for (const auto& i : DocBrokers)
             i.second->dumpState(os);
     }
@@ -4120,7 +4120,7 @@ void COOLWSD::innerMain()
     std::ostringstream oss;
     std::ostringstream ossRO;
     oss << "\nLaunch one of these in your browser:\n\n"
-        << "Edit mode:" << '\n';
+           "Edit mode:" << '\n';
 
     auto names = FileUtil::getDirEntries(DEBUG_ABSSRCDIR "/test/samples");
     for (const auto &i : names)

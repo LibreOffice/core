@@ -420,7 +420,7 @@ int Config::main(const std::vector<std::string>& args)
             }
             else
             {
-                std::cout << "No property, \"" << args[1] << "\"," << " found in config file." << std::endl;
+                std::cout << "No property, \"" << args[1] << "\", found in config file." << std::endl;
                 std::cout << "Adding it as new with value: \"" << args[2] << '"' << std::endl;
             }
             _coolConfig.setString(args[1], args[2]);
