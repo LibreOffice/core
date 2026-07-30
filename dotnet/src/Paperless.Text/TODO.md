@@ -27,8 +27,7 @@ Reference: `research/06-rendering.md` section B; `research/05-infrastructure.md`
 ## Metrics — hand-rolled OpenType reader
 
 Hand-rolled deliberately: we need raw table access and our own precedence rules, not a
-library's interpretation of them. (Also, `SixLabors.Fonts` is unusable — it fails the build
-without a paid licence.)
+library's interpretation of them.
 
 - [ ] sfnt/TTC parsing; `head`, `hhea`, `OS/2`, `post`, `name`, `cmap`, `hmtx`
 - [ ] **Line height derivation.** The precedence between `hhea` ascent/descent, `OS/2`
@@ -49,11 +48,52 @@ without a paid licence.)
 
 ## Line breaking
 
-- [ ] UAX #14. LibreOffice delegates to ICU, so matching its breaks means matching ICU's
-      rules — hand-rolled approximations disagree on CJK, on hyphens and dashes, and around
-      punctuation.
-- [ ] Decide: `ICU4N` (prerelease only today), hand-roll, or bind native ICU. **Open
-      question in the master TODO; resolve early** — everything downstream depends on it.
+**Decided: hand-roll UAX #14.** The runtime offers nothing equivalent, so there is no
+cheaper option to weigh it against.
+
+What the BCL actually provides (verified by reflecting over the shipped assemblies on .NET
+10, not assumed):
+
+| Available | Not available |
+|---|---|
+| `TextElementEnumerator` / `StringInfo` — grapheme clusters (UAX #29) | Any line-break iterator |
+| `Rune` — code point enumeration | The Unicode `Line_Break` property |
+| `CharUnicodeInfo.GetUnicodeCategory` — general category only | `East_Asian_Width` |
+| `string.Normalize` — NFC/NFD | Word or sentence segmentation |
+
+Note the trap: `StringInfo` looks like segmentation but returns **grapheme clusters**, which
+are per-character and unrelated to where a line may break. And although .NET's globalization
+is ICU-backed on Linux, the BCL surfaces only collation, casing, normalisation and calendars
+— ICU's `BreakIterator` is not exposed, so being "on ICU" buys us nothing here.
+
+So `ICU4N` (prerelease-only) or a native ICU binding were the alternatives, and hand-rolling
+avoids both a prerelease dependency and a native one.
+
+- [ ] Generate the `Line_Break` property table from Unicode's `LineBreak.txt` into a compact
+      trie. This is the bulk of the data and it is mechanical — generate it, do not hand-write
+      it, and check the generator in so it can be re-run on a Unicode update.
+- [ ] Generate the `East_Asian_Width` table from `EastAsianWidth.txt` (needed by rule LB30
+      and by kinsoku).
+- [ ] Implement rules LB1–LB31 as a pair-table plus the handful of rules that need context.
+      Around 400 lines of rule engine on top of the generated tables.
+- [ ] Test against Unicode's own `LineBreakTest.txt` conformance suite — it is exhaustive and
+      makes this verifiable independently of LibreOffice.
+- [ ] Then diff against LibreOffice on real documents, since conformance to UAX #14 and
+      agreement with ICU are not the same thing (below).
+
+### Where this will diverge from LibreOffice, and what to do about it
+
+LibreOffice's breaks are **ICU's** breaks, and ICU is UAX #14 *plus tailorings*. Expect two
+gaps:
+
+- **South East Asian scripts (`SA`: Thai, Lao, Khmer, Burmese) need dictionary-based
+  breaking.** These scripts do not delimit words with spaces, so UAX #14 defers to a
+  dictionary and ICU ships one. A pure rule implementation cannot break them correctly.
+  Treat as a separate, deferred work item — not a bug in the rule engine — and until then
+  break only at explicit opportunities in those runs.
+- **ICU's minor tailorings** elsewhere. Find these empirically by diffing against reference
+  output rather than trying to predict them, and record each as a known deviation.
+
 - [ ] Hyphenation (optional; only when a document enables it). LibreOffice uses Hunspell
       dictionaries, so matching its breaks needs the same dictionaries.
 - [ ] East Asian line-break rules (kinsoku).

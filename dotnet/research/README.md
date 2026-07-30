@@ -30,7 +30,7 @@ drift as upstream changes.
 
 Deliberately excludes Draw, Math and Base, and excludes export paths: Paperless reads.
 
-Where a document recommends a C# approach or library, treat it as a starting position rather
-than a decision — the dependency audit in `Directory.Packages.props` already overrode one
-such recommendation, since `SixLabors.Fonts` turns out to fail the build without a purchased
-licence key.
+Where a document recommends a C# approach or library, treat it as a starting position
+rather than a decision. Several such recommendations were overridden after evaluating the
+packages directly; the settled choices are recorded in `Directory.Packages.props` and
+`CLAUDE.md`, and those win over anything suggested here.

@@ -758,7 +758,7 @@ For a from-scratch **C# renderer**, the practical target is closer to
 `VclMetafileProcessor2D`+`pdfwriter` for PDF output (emit real vector operators: path fill/stroke,
 text runs with font/position, image XObjects) and closer to `VclPixelProcessor2D` for raster PNG
 (rasterize fills/strokes/gradients/text into a pixel buffer — e.g. via `System.Drawing`/SkiaSharp/
-ImageSharp equivalents). Both need the *same* upstream geometry resolution (shape→final polygon,
+SkiaSharp equivalents). Both need the *same* upstream geometry resolution (shape→final polygon,
 including custom-shape evaluation, connector routing, text layout with autofit already applied) —
 build that shared layer once.
 

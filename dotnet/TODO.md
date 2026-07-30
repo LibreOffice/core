@@ -8,12 +8,12 @@ ordering and the reasoning behind it.
 
 | Done | |
 |---|---|
-| ✅ | Solution, 13 libraries + CLI + 8 test projects, building warning-free on .NET 10 |
+| ✅ | Solution: 12 libraries + CLI + 8 test projects, building warning-free on .NET 10 |
 | ✅ | `Paperless.Core` API surface: units, geometry, colour, format catalogue, document model, drawing IR |
 | ✅ | Dependency layering fixed and enforced by project references |
 | ✅ | Six research documents (~6000 lines) covering the LibreOffice implementation |
 | ✅ | Four comparison skills with verified working scripts |
-| ✅ | Dependency licensing audited — Six Labors packages ruled out (they fail the build without a paid key) |
+| ✅ | Dependencies audited: all permissive, none gated behind a build-time licence check |
 
 | Not started | |
 |---|---|
@@ -87,9 +87,10 @@ The part that decides whether rendering can ever match.
       Reproduce LibreOffice's substitution order. **Report substitutions**: a silent one
       explains most mysterious reflows.
 - [ ] **Shaping** via HarfBuzzSharp — same engine LibreOffice uses, so advances agree.
-- [ ] **Line breaking** (UAX #14). LibreOffice uses ICU's rules, so matching its breaks
-      means matching ICU. Evaluate `ICU4N` (currently prerelease-only) against
-      hand-rolling.
+- [ ] **Line breaking** (UAX #14), hand-rolled — nothing in the runtime does this. Generate
+      the `Line_Break` and `East_Asian_Width` tables, implement LB1-LB31, verify against
+      Unicode's `LineBreakTest.txt`. LibreOffice's breaks are ICU's, so expect small
+      tailoring differences to surface later.
 - [ ] Bidi and script runs; vertical text.
 - [ ] Paragraph layout: alignment, justification, tabs, indents, spacing, line spacing.
 
@@ -107,8 +108,9 @@ will differ for reasons that have nothing to do with drawing.
       page geometry.
 - [ ] Slide rendering: shapes, the placeholder/theme inheritance chain, preset geometries,
       text bodies with autofit.
-- [ ] Raster image decode (via Skia); vector import (EMF/WMF/EMF+ — the highest-risk item
-      in the project, no C# prior art).
+- [ ] Raster image decode (via Skia).
+- [ ] Vector import: full WMF, EMF, EMF+ and SVG. The largest single body of work here and
+      no C# prior art — start it early rather than treating it as a tail-end detail.
 - [ ] PDF writer with subset font embedding (`hb-subset` via HarfBuzzSharp).
 - [ ] SVG writer.
 - [ ] `paperless render` and `paperless convert`.
@@ -126,24 +128,48 @@ will differ for reasons that have nothing to do with drawing.
 
 ---
 
+## Settled decisions
+
+Recorded here because each one closes off alternatives that would otherwise look tempting
+later.
+
+**Line breaking: hand-roll UAX #14.** The runtime has no equivalent — verified by
+reflecting over .NET 10's shipped assemblies. `StringInfo`/`TextElementEnumerator` give
+grapheme clusters (UAX #29), not line-break opportunities, and `CharUnicodeInfo` exposes
+only the general category, not the `Line_Break` or `East_Asian_Width` properties UAX #14
+needs. .NET's globalization is ICU-backed on Linux but surfaces only collation, casing,
+normalisation and calendars, so ICU's `BreakIterator` is out of reach. That left `ICU4N`
+(prerelease-only) or a native binding; hand-rolling avoids both. Generate the property
+tables from `LineBreak.txt` and `EastAsianWidth.txt`, implement LB1–LB31, and verify
+against Unicode's `LineBreakTest.txt`. Caveat: South East Asian scripts need
+dictionary-based breaking that rules alone cannot do — deferred, and tracked in
+`src/Paperless.Text/TODO.md`.
+
+**Vector graphics: full support for WMF, EMF, EMF+ and SVG.** No subset, no
+rasterise-via-LibreOffice shortcut. This is the largest single body of work in the project
+and there is no C# prior art for EMF/EMF+, so plan the timeline around it rather than
+treating it as a tail-end detail. Port from LibreOffice's `emfio/` and `svgio/` rather than
+working from the specifications. Scope and ordering in `src/Paperless.Vector/TODO.md`.
+Scripting, animation and external references stay excluded permanently — that is a security
+decision, not a scope compromise.
+
+**Rasterise with SkiaSharp, shape with HarfBuzzSharp, read font metrics ourselves.**
+HarfBuzz is what LibreOffice shapes with, so advance widths agree by construction. Metrics
+come from a hand-rolled OpenType table reader because matching LibreOffice's line heights
+needs raw `hhea`/`OS/2` access and its own precedence rules.
+
 ## Open questions
 
 Each of these should be resolved with a spike, not by guessing.
 
-1. **Line breaking.** `ICU4N` has no stable release. Take the prerelease, hand-roll
-   UAX #14, or bind ICU natively? Affects every layout decision downstream, so decide
-   early.
-2. **EMF+.** No C# library. Hand-roll (large), skip vector fidelity and rasterise via
-   LibreOffice (defeats the purpose), or render only the embedded EMF fallback that many
-   files also carry? Spike this before committing to a rendering timeline.
-3. **`OpenMcdf` vs hand-rolled CFB.** Depends entirely on how it behaves on malformed
+1. **`OpenMcdf` vs hand-rolled CFB.** Depends entirely on how it behaves on malformed
    input. Test against LibreOffice's own corpus in `sw/qa/`, `sc/qa/`, `sd/qa/`.
-4. **Formula recalculation.** Trust cached results, or recalculate? Cached matches what a
+2. **Formula recalculation.** Trust cached results, or recalculate? Cached matches what a
    reference renderer shows; recalculating is correct when the cache is stale. Currently a
    `LayoutOptions` flag, defaulting to trusting the cache. Confirm that is right.
-5. **SmartArt / DrawingML diagrams.** Files carry a pre-rendered fallback. Use it, or
+3. **SmartArt / DrawingML diagrams.** Files carry a pre-rendered fallback. Use it, or
    implement layout? The fallback is far cheaper and probably sufficient.
-6. **Charts.** Out of scope as a standalone application, but charts are embedded in real
+4. **Charts.** Out of scope as a standalone application, but charts are embedded in real
    documents constantly. Render them, or draw a placeholder? Needs a decision.
 
 ## Non-goals

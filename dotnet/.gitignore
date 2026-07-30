@@ -14,6 +14,3 @@ tests/corpus/external/
 # Local comparison output
 **/comparison-output/
 **/diffs/
-
-# Six Labors licence keys, if anyone ever holds one
-sixlabors.lic

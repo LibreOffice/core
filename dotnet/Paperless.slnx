@@ -6,7 +6,6 @@
     <Project Path="src/Paperless.Ooxml/Paperless.Ooxml.csproj" />
     <Project Path="src/Paperless.OpenDocument/Paperless.OpenDocument.csproj" />
     <Project Path="src/Paperless.Presentations/Paperless.Presentations.csproj" />
-    <Project Path="src/Paperless.Rendering.ImageSharp/Paperless.Rendering.ImageSharp.csproj" />
     <Project Path="src/Paperless.Rendering/Paperless.Rendering.csproj" />
     <Project Path="src/Paperless.Spreadsheets/Paperless.Spreadsheets.csproj" />
     <Project Path="src/Paperless.Text/Paperless.Text.csproj" />

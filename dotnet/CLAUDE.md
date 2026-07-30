@@ -24,9 +24,11 @@ format (Paperless reads), macro execution (never — Paperless only reports that
    `soffice` for reference output — see the `libreoffice-reference` skill.
 2. **Never execute macros.** Macro-enabled formats are read as data. `CanCarryMacros` on
    `FormatInfo` exists so callers can surface the risk; nothing executes.
-3. **No Six Labors packages.** `SixLabors.Fonts` and `SixLabors.ImageSharp` (v3/v4) fail
-   the build outright without a purchased licence key — verified, not theoretical. Use
-   SkiaSharp and HarfBuzzSharp. See the note at the top of `Directory.Packages.props`.
+3. **Rasterise with SkiaSharp, shape with HarfBuzzSharp.** HarfBuzz is what LibreOffice
+   shapes with, so advance widths agree by construction. Font metrics come from a
+   hand-rolled OpenType reader in `Paperless.Text` — matching LibreOffice's line heights
+   needs raw `hhea`/`OS/2` access and our own precedence rules. Before adding any graphics
+   dependency, read the note at the top of `Directory.Packages.props`.
 4. **Detect formats by content, never by extension.** Mislabelled files are common, and
    some distinctions (DOCX vs DOCM, which application owns an OLE2 file) cannot be made
    from a name at all. The extension is a tie-breaker hint only.
@@ -86,9 +88,6 @@ abstractions everything else agrees on: units, geometry, colour, the format cata
 document model, and the drawing IR. A dependency added here is inherited by every
 consumer.
 
-`Paperless.Rendering.ImageSharp` is outside this graph: nothing depends on it, and it is
-off by default (see rule 3).
-
 ## Key design decisions, and why
 
 **All lengths are EMUs, in a `Length` struct.** 914400 per inch divides evenly by twips
@@ -130,9 +129,10 @@ The three highest-risk areas, in order:
    rules — see `research/06-rendering.md` section B.
 2. **DrawingML theme colour resolution.** Get the `lumMod`/`shade`/`tint` chain wrong and
    every themed shape on every slide is the wrong colour at once.
-3. **EMF/EMF+ import.** No C# library exists; roughly fifty record types to implement.
-   Real `.pptx` and `.docx` files embed these constantly, so skipping it leaves large
-   blank areas. This is the single largest unknown in the project.
+3. **Vector import (WMF/EMF/EMF+/SVG).** Full support is committed, and there is no C#
+   prior art for EMF/EMF+ — roughly fifty EMF+ record types alone. Real `.pptx` and
+   `.docx` files embed these constantly, so this is the largest single body of work in the
+   project rather than a tail-end detail. Port from LibreOffice's `emfio/` and `svgio/`.
 
 ## Workflow
 

@@ -50,7 +50,7 @@ Format is always determined from **content**, not the file extension.
 | `Paperless.Containers` | OLE2/CFB, ZIP, OPC, ODF packages, decryption |
 | `Paperless.Text` | Fonts, metrics, shaping, line breaking, paragraph layout |
 | `Paperless.Vector` | WMF, EMF, EMF+, SVG import |
-| `Paperless.Rendering` | Skia raster, PDF and SVG backends |
+| `Paperless.Rendering` | SkiaSharp raster, PDF and SVG backends |
 | `Paperless.Ooxml` | Shared OOXML: DrawingML, themes, VML |
 | `Paperless.OpenDocument` | Shared ODF: styles, common attributes, flat XML |
 | `Paperless.MsBinary` | Shared legacy binary: Escher, OLE property sets, codepages |
@@ -96,6 +96,6 @@ ground truth.
 
 MPL-2.0, matching the surrounding LibreOffice source tree.
 
-Note that no Six Labors package (`ImageSharp`, `Fonts`) is used: v3 and v4 fail the build
-without a purchased licence key. Paperless uses SkiaSharp (MIT) and HarfBuzzSharp (MIT)
-instead. See the note atop [Directory.Packages.props](Directory.Packages.props).
+Every dependency is permissively licensed — SkiaSharp and HarfBuzzSharp (MIT), PdfPig
+(Apache-2.0), OpenMcdf (MPL-2.0), and a few others. See the note atop
+[Directory.Packages.props](Directory.Packages.props) before adding another.

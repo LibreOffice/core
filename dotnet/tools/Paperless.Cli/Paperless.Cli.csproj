@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Paperless\Paperless.csproj" />
-    <ProjectReference Include="..\..\src\Paperless.Rendering.ImageSharp\Paperless.Rendering.ImageSharp.csproj" />
   </ItemGroup>
 
 </Project>

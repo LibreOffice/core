@@ -4,40 +4,25 @@
     Central package version management for the Paperless solution.
     Individual projects use <PackageReference Include="X" /> with no Version attribute.
 
-    LICENSING NOTE - read before adding a dependency to a src/ library:
-      Paperless ships as a set of redistributable NuGet libraries, so every
-      transitive dependency's licence becomes our users' problem.
+    Before adding a dependency to a src/ library, check two things. Paperless ships as
+    redistributable NuGet libraries, so every transitive dependency's licence becomes our
+    users' problem, and any build-time gate becomes their build's problem too.
 
-      * Safe (permissive):  SkiaSharp (MIT), HarfBuzzSharp (MIT), PdfPig (Apache-2.0),
-                            HtmlAgilityPack (MIT), BouncyCastle (MIT),
-                            OpenMcdf (MPL-2.0), SharpCompress (MIT).
+      1. The licence is permissive and unambiguous.
+      2. The package does not fail the build without a key, and does not phone home.
+         Some popular graphics packages have added exactly this; verify by building
+         against the package rather than trusting its licence metadata.
 
-      * DO NOT USE - Six Labors packages.
-                            VERIFIED 2026-07-30 by building against them: both
-                            SixLabors.Fonts 3.0.0 and SixLabors.ImageSharp 4.0.0
-                            ship an MSBuild target that FAILS THE BUILD outright
-                            unless a purchased licence key is supplied
-                            ($(SixLaborsLicenseKey) / sixlabors.lic):
-                              "No Six Labors license found ...
-                               Please obtain a license from https://sixlabors.com/pricing/"
-                            This is not merely a licence-text concern - it is a hard
-                            build-time gate, and it would be inherited by anyone
-                            building from our source. Neither package is referenced
-                            by any library in the default build.
+    Current dependencies are all permissive: SkiaSharp (MIT), HarfBuzzSharp (MIT),
+    PdfPig (Apache-2.0), HtmlAgilityPack (MIT), BouncyCastle (MIT), OpenMcdf (MPL-2.0),
+    SharpCompress (MIT).
 
-                            Consequences, and what we do instead:
-                              - Text shaping     -> HarfBuzzSharp, which is what
-                                                    LibreOffice itself shapes with.
-                              - Font metrics     -> a small hand-rolled OpenType table
-                                                    reader in Paperless.Text. Wanted
-                                                    anyway: matching LibreOffice's line
-                                                    heights needs raw hhea/OS-2 table
-                                                    access and our own precedence rules,
-                                                    not a library's opinion of them.
-                              - Raster encode/decode -> SkiaSharp (MIT).
-                            SixLabors.ImageSharp remains available behind the opt-in
-                            EnableImageSharpBackend flag for anyone who does hold a
-                            licence. It is off by default and nothing depends on it.
+    Rasterisation and text are handled by SkiaSharp plus HarfBuzzSharp, with a
+    hand-rolled OpenType metrics reader in Paperless.Text. HarfBuzz is what LibreOffice
+    itself shapes with, so advance widths agree by construction; and reading the font
+    tables ourselves is wanted regardless, because matching LibreOffice's line heights
+    needs raw hhea/OS-2 access and our own precedence rules rather than a library's
+    interpretation of them.
   -->
 
   <PropertyGroup>
@@ -50,10 +35,6 @@
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux" Version="4.150.1" />
     <PackageVersion Include="SkiaSharp.HarfBuzz" Version="4.150.1" />
     <PackageVersion Include="HarfBuzzSharp" Version="14.2.1.1" />
-  </ItemGroup>
-
-  <ItemGroup Label="Opt-in only (EnableImageSharpBackend) - requires a purchased Six Labors licence">
-    <PackageVersion Include="SixLabors.ImageSharp" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup Label="Containers and crypto">
