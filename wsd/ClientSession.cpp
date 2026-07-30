@@ -835,11 +835,11 @@ bool ClientSession::_handleInput(const char *buffer, int length)
                 endptr = nullptr;
                 double counter = strtod(str, &endptr);
                 if (*endptr == '\0' && counter > 0 &&
-                    (counter < (double)(uint64_t)(std::numeric_limits<uint64_t>::max() / 1000)))
+                    (counter < double(uint64_t(std::numeric_limits<uint64_t>::max() / 1000))))
                 {
                     // Now we know how to translate from the client's performance.now() values to
                     // microseconds since the epoch.
-                    _performanceCounterEpoch = ts * 1000 - (uint64_t)(counter * 1000);
+                    _performanceCounterEpoch = ts * 1000 - uint64_t(counter * 1000);
                     LOG_INF("Client timestamps: Date.now():" << ts <<
                             ", performance.now():" << counter
                             << " => " << _performanceCounterEpoch);
@@ -3954,7 +3954,7 @@ void ClientSession::removeOutdatedTilesOnFly(const std::chrono::steady_clock::ti
 {
     size_t dropped = 0;
     const auto highTimeoutMs = std::chrono::milliseconds(TILE_ROUNDTRIP_TIMEOUT_MS);
-    const auto lowTimeoutMs = std::chrono::milliseconds((int)(0.9 * TILE_ROUNDTRIP_TIMEOUT_MS));
+    const auto lowTimeoutMs = std::chrono::milliseconds(int(0.9 * TILE_ROUNDTRIP_TIMEOUT_MS));
     // Check only the beginning of the list, tiles are ordered by timestamp
     while(!_tilesOnFly.empty())
     {

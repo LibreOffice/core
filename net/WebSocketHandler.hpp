@@ -228,8 +228,8 @@ protected:
             {
                 const size_t len = statusMessage.size();
                 std::vector<char> buf(2 + len);
-                buf[0] = ((((int)statusCode) >> 8) & 0xff);
-                buf[1] = ((((int)statusCode) >> 0) & 0xff);
+                buf[0] = ((int(statusCode) >> 8) & 0xff);
+                buf[1] = ((int(statusCode) >> 0) & 0xff);
                 std::copy(statusMessage.begin(), statusMessage.end(), buf.begin() + 2);
                 const unsigned char flags = WSFrameMask::Fin | static_cast<char>(WSOpCode::Close);
 
@@ -348,7 +348,7 @@ private:
                 return false;
             }
 
-            payloadLen = (((unsigned)p[2]) << 8) | ((unsigned)p[3]);
+            payloadLen = (unsigned(p[2]) << 8) | unsigned(p[3]);
             headerLen += 2;
         }
         else if (payloadLen == 127) // 8 byte length
@@ -358,10 +358,10 @@ private:
                 LOGA_TRC(WebSocket, "Still incomplete WebSocket message, have " << len << " bytes");
                 return false;
             }
-            payloadLen = ((((uint64_t)p[9]) <<  0) + (((uint64_t)p[8]) <<  8) +
-                          (((uint64_t)p[7]) << 16) + (((uint64_t)p[6]) << 24) +
-                          (((uint64_t)p[5]) << 32) + (((uint64_t)p[4]) << 40) +
-                          (((uint64_t)p[3]) << 48) + (((uint64_t)p[2]) << 56));
+            payloadLen = ((uint64_t(p[9]) <<  0) + (uint64_t(p[8]) <<  8) +
+                          (uint64_t(p[7]) << 16) + (uint64_t(p[6]) << 24) +
+                          (uint64_t(p[5]) << 32) + (uint64_t(p[4]) << 40) +
+                          (uint64_t(p[3]) << 48) + (uint64_t(p[2]) << 56));
             // FIXME: crop read length to remove top / sign bits.
             headerLen += 8;
         }
@@ -391,7 +391,7 @@ private:
         LOGA_TRC(WebSocket, "Incoming WebSocket data of "
                                 << len << " bytes: "
                                 << HexUtil::stringifyHexLine(socket->getInBuffer(), 0,
-                                                             std::min((size_t)32, len)));
+                                                             std::min(size_t(32), len)));
 
         unsigned char *data = p + headerLen;
 
@@ -457,8 +457,8 @@ private:
                         // Otherwise, this is the echo to _our_ shutdown message, which we should ignore.
                         if (ctrlPayload.size())
                         {
-                            statusCode = static_cast<StatusCodes>((((uint64_t)(unsigned char)ctrlPayload[0]) << 8) +
-                                                                (((uint64_t)(unsigned char)ctrlPayload[1]) << 0));
+                            statusCode = static_cast<StatusCodes>((uint64_t(static_cast<unsigned char>(ctrlPayload[0])) << 8) +
+                                                                (uint64_t(static_cast<unsigned char>(ctrlPayload[1])) << 0));
                             if (ctrlPayload.size() > 2)
                                 message.assign(&ctrlPayload[2], &ctrlPayload[2] + ctrlPayload.size() - 2);
                         }
@@ -518,7 +518,7 @@ private:
                                 << ", residual socket data: " << socket->getInBuffer().size()
                                 << " bytes, unmasked data: " +
                                        HexUtil::stringifyHexLine(
-                                           _wsPayload, 0, std::min((size_t)32, _wsPayload.size())));
+                                           _wsPayload, 0, std::min(size_t(32), _wsPayload.size())));
 
         if (fin)
         {
@@ -617,7 +617,7 @@ protected:
             const auto timeSincePingMicroS
                 = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastPingSentTime);
             timeoutMaxMicroS
-                = std::min(timeoutMaxMicroS, (int64_t)(PingFrequencyMicroS - timeSincePingMicroS).count());
+                = std::min(timeoutMaxMicroS, int64_t((PingFrequencyMicroS - timeSincePingMicroS).count()));
         }
 #endif
         int events = POLLIN;
@@ -853,9 +853,9 @@ protected:
                  << " bytes buffered");
 
 #if ENABLE_DEBUG
-        if ((flags & 0xf) == (int)WSOpCode::Text) // utf8 validate
+        if ((flags & 0xf) == int(WSOpCode::Text)) // utf8 validate
         {
-            size_t offset = Util::isValidUtf8((unsigned char*)data, len);
+            size_t offset = Util::isValidUtf8(reinterpret_cast<unsigned char const*>(data), len);
             if (offset < len)
             {
                 std::string hex, raw;

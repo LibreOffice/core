@@ -180,7 +180,7 @@ class DeltaGenerator {
             size_t size = 2 + sizeof(_rleMask) + _rleSize * 4;
             LOGA_TRC(Pixel, "packed row of size "
                                 << size << " bytes "
-                                << HexUtil::dumpHex(std::string((char*)output, size)));
+                                << HexUtil::dumpHex(std::string(reinterpret_cast<char*>(output), size)));
 
             return size;
         }
@@ -281,7 +281,7 @@ class DeltaGenerator {
 
             if (_rleSize > 0)
             {
-                _rleData = (uint32_t *)malloc((size_t)_rleSize * 4);
+                _rleData = static_cast<uint32_t *>(malloc((size_t)_rleSize * 4));
                 memcpy(_rleData, scratch, _rleSize * 4);
             }
             else
@@ -346,7 +346,7 @@ class DeltaGenerator {
                     output.resize(dest + diff * 4);
 
                     copy_row(reinterpret_cast<unsigned char *>(&output[dest]),
-                              (const unsigned char *)(scratch),
+                              reinterpret_cast<const unsigned char *>(scratch),
                               diff, mode);
 
                     LOGA_TRC(Pixel, "row " << curY << " different " << diff << "pixels");
@@ -636,7 +636,7 @@ class DeltaGenerator {
 
         // FIXME: avoid allocation & make this more efficient.
         size_t maxCompressed = ZSTD_COMPRESSBOUND(output.size());
-        std::unique_ptr<char, void (*)(void*)> compressed((char*)malloc(maxCompressed), free);
+        std::unique_ptr<char, void (*)(void*)> compressed(static_cast<char*>(malloc(maxCompressed)), free);
 
         // compress for speed, not size - and trust to deltas.
         size_t compSize = ZSTD_compress(compressed.get(), maxCompressed,
@@ -834,10 +834,10 @@ class DeltaGenerator {
                          loc, output, wid, forceKeyframe, mode, rleData))
         {
             assert(rleData);
-            size_t rowSize = (size_t)width * 4 + spaceForBitmask + 2;
+            size_t rowSize = size_t(width) * 4 + spaceForBitmask + 2;
             size_t maxCompressed = ZSTD_COMPRESSBOUND(rowSize * height);
 
-            std::unique_ptr<char, void (*)(void*)> compressed((char*)malloc(maxCompressed), free);
+            std::unique_ptr<char, void (*)(void*)> compressed(static_cast<char*>(malloc(maxCompressed)), free);
             if (!compressed)
             {
                 LOG_ERR("Failed to allocate buffer of size " << maxCompressed << " to compress into");

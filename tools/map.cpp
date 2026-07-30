@@ -208,8 +208,8 @@ public:
         for (int i = 0; i < 3; ++i)
         {
             printf("%cStrings      :%20lld, %lld chars\n",
-                   prefixes[i], (addr_t)_strings[i].getCount(),
-                   (addr_t)_strings[i].getChars());
+                   prefixes[i], static_cast<addr_t>(_strings[i].getCount()),
+                   static_cast<addr_t>(_strings[i].getChars()));
         }
     }
 
@@ -328,7 +328,7 @@ public:
             std::vector<unsigned char> data;
             data.resize (map.size());
             if (lseek(mem_fd, map.getStart(), SEEK_SET) < 0 ||
-                read(mem_fd, data.data(), map.size()) != (int)map.size())
+                read(mem_fd, data.data(), map.size()) != static_cast<int>(map.size()))
                 error(EXIT_FAILURE, errno, "Failed to seek in /proc/%d/mem to %lld",
                       _proc_id, map.getStart());
 
@@ -469,7 +469,7 @@ static void dumpPages(unsigned proc_id, unsigned parent_id, const char *type, co
         if (DumpHex || DumpMap)
         {
             printf ("\n%s page: 0x%.8llx (%d/%d) - touched: %d - %s - from %s\n",
-                    type, page, (int)++cnt, (int)pages.size(), touched,
+                    type, page, static_cast<int>(++cnt), static_cast<int>(pages.size()), touched,
                     style, space.findName(page).c_str());
 
             if (touched == 0) // not present in parent
@@ -490,7 +490,7 @@ static void dumpPages(unsigned proc_id, unsigned parent_id, const char *type, co
 
     printf ("\tsame but unshared     %6lld (%lldkB)\n", sameButUnshared, sameButUnshared * 4);
     printf ("\tdirtied bytes touched %6lld per page %.2f\n\n",
-            bytesTouched, (double)bytesTouched / pages.size());
+            bytesTouched, static_cast<double>(bytesTouched) / pages.size());
 
     if (DumpMap)
     {
@@ -552,7 +552,7 @@ static void dump_unshared(unsigned proc_id, unsigned parent_id,
             // https://patchwork.kernel.org/patch/6787921/
 //            fprintf(stderr, "addr: 0x%8llx bits: 0x%8llx : %s\n", p, vaddrData,
 //                    (vaddrData & ((addr_t)1 << 56)) ? "unshared" : "shared");
-            if (vaddrData & ((addr_t)1 << 56))
+            if (vaddrData & (static_cast<addr_t>(1) << 56))
             {
                 numOwn++;
                 bitmap.push_back('*');
@@ -689,9 +689,9 @@ static void total_smaps(unsigned proc_id, unsigned parent_id,
     printf("Shared        :%20lld kB\n", total_shared_clean + total_shared_dirty);
     printf("Private       :%20lld kB\n", total_private_clean + total_private_dirty);
     printf("--------------------------------------\n");
-    printf("Heap page cnt :%20lld\n", (addr_t)heapVAddrs.size());
-    printf("Anon page cnt :%20lld\n", (addr_t)anonVAddrs.size());
-    printf("File page cnt :%20lld\n", (addr_t)fileVAddrs.size());
+    printf("Heap page cnt :%20lld\n", static_cast<addr_t>(heapVAddrs.size()));
+    printf("Anon page cnt :%20lld\n", static_cast<addr_t>(anonVAddrs.size()));
+    printf("File page cnt :%20lld\n", static_cast<addr_t>(fileVAddrs.size()));
     printf("--------------------------------------\n");
     space.printStats();
     printf("\n");
@@ -754,7 +754,7 @@ int main(int argc, char **argv)
             DumpStrings = true;
         else if (strstr(arg, "--width"))
         {
-            DumpWidth = std::max((int)pow(2, round(log(atoi(argv[++i]))/log(2))), 8);
+            DumpWidth = std::max(static_cast<int>(pow(2, round(log(atoi(argv[++i]))/log(2)))), 8);
         }
         else
             appOrPid = arg;

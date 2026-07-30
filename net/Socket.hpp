@@ -253,7 +253,7 @@ public:
         if constexpr (!Util::isMobileApp())
         {
             const int val = 1;
-            if (::setsockopt(_fd, IPPROTO_TCP, TCP_NODELAY, (char*)&val, sizeof(val)) == -1)
+            if (::setsockopt(_fd, IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val)) == -1)
             {
                 LOG_WRN_ONCE("Failed setsockopt TCP_NODELAY. Will not report further "
                              "failures to set TCP_NODELAY: "
@@ -1456,11 +1456,11 @@ public:
 
         const size_t fds_size = sizeof(int) * fds.size();
         auto* adata = static_cast<char*>(alloca(CMSG_SPACE(fds_size)));
-        cmsghdr *cmsg = (cmsghdr*)adata;
+        cmsghdr *cmsg = reinterpret_cast<cmsghdr*>(adata);
         cmsg->cmsg_type = SCM_RIGHTS;
         cmsg->cmsg_level = SOL_SOCKET;
         cmsg->cmsg_len = CMSG_LEN(fds_size);
-        int* fdsField = (int *)CMSG_DATA(cmsg);
+        int* fdsField = reinterpret_cast<int *>(CMSG_DATA(cmsg));
         memcpy(fdsField, fds.data(), fds_size);
 
         msg.msg_control = adata;
@@ -1579,7 +1579,7 @@ public:
                 // than we can handle them. In the non-MOBILEAPP case they are WebSocket messages so
                 // they already contain a header indicating their length. Not so in the MOBILEAPP
                 // case, so prefix them with a length header.
-                _inBuffer.append((const char*)&len, sizeof(ssize_t));
+                _inBuffer.append(reinterpret_cast<const char*>(&len), sizeof(ssize_t));
                 _inBuffer.append(buf.data(), len);
             }
         }
@@ -1900,7 +1900,7 @@ public:
             do
             {
                 // Writing much more than we can absorb in the kernel causes wastage.
-                const int size = std::min((int)_outBuffer.getBlockSize(), getSendBufferSize());
+                const int size = std::min(int(_outBuffer.getBlockSize()), getSendBufferSize());
                 if (size == 0)
                     break;
 
@@ -1999,7 +1999,7 @@ protected:
             if (cmsg && cmsg->cmsg_type == SCM_RIGHTS)
             {
                 size_t fds_count = static_cast<size_t>(cmsg->cmsg_len - CMSG_LEN(0)) / sizeof(int);
-                int* fdsField = (int*)CMSG_DATA(cmsg);
+                int* fdsField = reinterpret_cast<int*>(CMSG_DATA(cmsg));
                 fds.assign(fdsField, fdsField + fds_count);
                 if (_readType == ReadType::UseRecvmsgExpectFD)
                 {

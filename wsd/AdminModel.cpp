@@ -1075,7 +1075,7 @@ public:
         _count ++;
     }
 
-    uint64_t getIntAverage() const { return _count ? std::round(_total / (double)_count) : 0; }
+    uint64_t getIntAverage() const { return _count ? std::round(_total / double(_count)) : 0; }
     uint64_t getMin() const { return _count == 0 ? 0 : _min; }
     uint64_t getMax() const { return _max; }
     uint64_t getTotal() const { return _total; }
@@ -1347,11 +1347,11 @@ void AdminModel::getMetrics(std::ostream& oss) const
         oss << "doc_views_active" << suffix << doc.getActiveViews() << "\n";
         oss << "doc_is_modified" << suffix << doc.getModifiedStatus() << "\n";
         oss << "doc_memory_used_bytes" << suffix << doc.getMemoryDirty() * 1024 << "\n";
-        oss << "doc_cpu_used_seconds" << suffix << ((double)doc.getLastJiffies()/tick_per_sec) << "\n";
+        oss << "doc_cpu_used_seconds" << suffix << (double(doc.getLastJiffies())/tick_per_sec) << "\n";
         oss << "doc_open_time_seconds" << suffix << doc.getOpenTime() << "\n";
         oss << "doc_idle_time_seconds" << suffix << doc.getIdleTime() << "\n";
-        oss << "doc_download_time_seconds" << suffix << ((double)doc.getWopiDownloadDuration().count() / 1000) << "\n";
-        oss << "doc_upload_time_seconds" << suffix << ((double)doc.getWopiUploadDuration().count() / 1000) << "\n";
+        oss << "doc_download_time_seconds" << suffix << (double(doc.getWopiDownloadDuration().count()) / 1000) << "\n";
+        oss << "doc_upload_time_seconds" << suffix << (double(doc.getWopiUploadDuration().count()) / 1000) << "\n";
         oss << '\n';
     }
 }

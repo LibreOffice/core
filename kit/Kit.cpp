@@ -2940,7 +2940,7 @@ void Document::dumpState(std::ostream& oss)
         << "\n\tjailedUrl: " << anonymizeUrl(_jailedUrl) << "\n\trenderOpts: " << _renderOpts
         << "\n\thaveDocPassword: " << _haveDocPassword // not the pwd itself
         << "\n\tisDocPasswordProtected: " << _isDocPasswordProtected
-        << "\n\tdocPasswordType: " << (int)_docPasswordType << "\n\teditorId: " << _editorId
+        << "\n\tdocPasswordType: " << int(_docPasswordType) << "\n\teditorId: " << _editorId
         << "\n\teditorChangeWarning: " << _editorChangeWarning
         << "\n\tmobileAppDocId: " << _mobileAppDocId
         << "\n\tinputProcessingEnabled: " << processInputEnabled()

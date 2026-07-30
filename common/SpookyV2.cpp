@@ -80,54 +80,54 @@ void SpookyHash::Short(
     }
 
     // Handle the last 0..15 bytes, and its length
-    d += ((uint64)length) << 56;
+    d += static_cast<uint64>(length) << 56;
     switch (remainder)
     {
     case 15:
-        d += ((uint64)u.p8[14]) << 48;
+        d += static_cast<uint64>(u.p8[14]) << 48;
         [[fallthrough]];
     case 14:
-        d += ((uint64)u.p8[13]) << 40;
+        d += static_cast<uint64>(u.p8[13]) << 40;
         [[fallthrough]];
     case 13:
-        d += ((uint64)u.p8[12]) << 32;
+        d += static_cast<uint64>(u.p8[12]) << 32;
         [[fallthrough]];
     case 12:
         d += u.p32[2];
         c += u.p64[0];
         break;
     case 11:
-        d += ((uint64)u.p8[10]) << 16;
+        d += static_cast<uint64>(u.p8[10]) << 16;
         [[fallthrough]];
     case 10:
-        d += ((uint64)u.p8[9]) << 8;
+        d += static_cast<uint64>(u.p8[9]) << 8;
         [[fallthrough]];
     case 9:
-        d += (uint64)u.p8[8];
+        d += static_cast<uint64>(u.p8[8]);
         [[fallthrough]];
     case 8:
         c += u.p64[0];
         break;
     case 7:
-        c += ((uint64)u.p8[6]) << 48;
+        c += static_cast<uint64>(u.p8[6]) << 48;
         [[fallthrough]];
     case 6:
-        c += ((uint64)u.p8[5]) << 40;
+        c += static_cast<uint64>(u.p8[5]) << 40;
         [[fallthrough]];
     case 5:
-        c += ((uint64)u.p8[4]) << 32;
+        c += static_cast<uint64>(u.p8[4]) << 32;
         [[fallthrough]];
     case 4:
         c += u.p32[0];
         break;
     case 3:
-        c += ((uint64)u.p8[2]) << 16;
+        c += static_cast<uint64>(u.p8[2]) << 16;
         [[fallthrough]];
     case 2:
-        c += ((uint64)u.p8[1]) << 8;
+        c += static_cast<uint64>(u.p8[1]) << 8;
         [[fallthrough]];
     case 1:
-        c += (uint64)u.p8[0];
+        c += static_cast<uint64>(u.p8[0]);
         break;
     case 0:
         c += sc_const;
@@ -234,7 +234,7 @@ void SpookyHash::Update(const void *message, size_t length)
     {
         memcpy(&(reinterpret_cast<uint8 *>(m_data))[m_remainder], message, length);
         m_length = length + m_length;
-        m_remainder = (uint8)newLength;
+        m_remainder = newLength;
         return;
     }
 

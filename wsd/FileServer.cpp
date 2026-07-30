@@ -116,7 +116,7 @@ namespace
 int functionConversation(int /*num_msg*/, const struct pam_message** /*msg*/,
                          struct pam_response **reply, void *appdata_ptr)
 {
-    *reply = (struct pam_response *)malloc(sizeof(struct pam_response));
+    *reply = static_cast<struct pam_response *>(malloc(sizeof(struct pam_response)));
     (*reply)[0].resp = strdup(static_cast<char *>(appdata_ptr));
     (*reply)[0].resp_retcode = 0;
 
@@ -913,10 +913,10 @@ void FileServerRequestHandler::readDirToHash(const std::string& basePath, const 
             std::string compressedFile;
             const long unsigned int compSize = compressBound(size);
             compressedFile.resize(compSize);
-            strm.next_in = (unsigned char*)uncompressedFile.data();
+            strm.next_in = reinterpret_cast<unsigned char*>(uncompressedFile.data());
             strm.avail_in = size;
             strm.avail_out = compSize;
-            strm.next_out = (unsigned char*)compressedFile.data();
+            strm.next_out = reinterpret_cast<unsigned char*>(compressedFile.data());
             strm.total_out = strm.total_in = 0;
 
             const int deflateResult = deflate(&strm, Z_FINISH);
@@ -1620,11 +1620,11 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
 
     if (config.getBool("home_mode.enable", false))
     {
-        Poco::replaceInPlace(preprocess, std::string("%AUTO_SHOW_FEEDBACK%"), (std::string)"false");
+        Poco::replaceInPlace(preprocess, std::string("%AUTO_SHOW_FEEDBACK%"), std::string("false"));
     }
     else
     {
-        Poco::replaceInPlace(preprocess, std::string("%AUTO_SHOW_FEEDBACK%"), (std::string)"true");
+        Poco::replaceInPlace(preprocess, std::string("%AUTO_SHOW_FEEDBACK%"), std::string("true"));
     }
 
     bool allowUpdateNotification = config.getBool("allow_update_popup", true);

@@ -146,12 +146,12 @@ struct TileData
     }
 
     bool isPng() const { return (_deltas.size() > 1 &&
-                                 _deltas[0] == (char)0x89); }
+                                 _deltas[0] == char(0x89)); }
 
     static bool isKeyframe(const char *data, size_t dataSize)
     {
         // keyframe or png
-        return dataSize > 0 && (data[0] == 'Z' || data[0] == (char)0x89);
+        return dataSize > 0 && (data[0] == 'Z' || data[0] == char(0x89));
     }
 
     bool isValid() const { return _valid; }

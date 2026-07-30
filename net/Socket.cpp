@@ -154,13 +154,13 @@ std::ostream& Socket::streamStats(std::ostream& os,
     float kBpsIn, kBpsOut;
     if (durTotal.count() > 0)
     {
-        kBpsIn = (float)_bytesRcvd / (float)durTotal.count();
-        kBpsOut = (float)_bytesSent / (float)durTotal.count();
+        kBpsIn = float(_bytesRcvd) / float(durTotal.count());
+        kBpsOut = float(_bytesSent) / float(durTotal.count());
     }
     else
     {
-        kBpsIn = (float)_bytesRcvd / 1000.0f;
-        kBpsOut = (float)_bytesSent / 1000.0f;
+        kBpsIn = float(_bytesRcvd) / 1000.0f;
+        kBpsOut = float(_bytesSent) / 1000.0f;
     }
 
     const std::streamsize p = os.precision();
@@ -552,7 +552,7 @@ int SocketPoll::poll(int64_t timeoutMaxMicroS, bool justPoll)
 #if !MOBILEAPP
 #  if HAVE_PPOLL
         LOGA_TRC(Socket, "ppoll start, timeoutMicroS: " << timeoutMaxMicroS << " size " << size);
-        timeoutMaxMicroS = std::max(timeoutMaxMicroS, (int64_t)0);
+        timeoutMaxMicroS = std::max(timeoutMaxMicroS, int64_t(0));
         struct timespec timeout;
         timeout.tv_sec = timeoutMaxMicroS / (1000 * 1000);
         timeout.tv_nsec = (timeoutMaxMicroS % (1000 * 1000)) * 1000;
@@ -995,7 +995,7 @@ bool SocketPoll::insertNewUnixSocket(
     addrunix.sun_family = AF_UNIX;
     location.fillInto(addrunix);
 
-    const int res = connect(fd, (const struct sockaddr*)&addrunix, sizeof(addrunix));
+    const int res = connect(fd, reinterpret_cast<const struct sockaddr*>(&addrunix), sizeof(addrunix));
     if (res < 0 && errno != EINPROGRESS)
     {
         LOG_SYS("Failed to connect to unix socket at " << location);
@@ -1269,7 +1269,7 @@ bool ServerSocket::bind([[maybe_unused]] Type type, [[maybe_unused]] int port)
         else
             addrv4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
-        rc = ::bind(getFD(), (const sockaddr *)&addrv4, sizeof(addrv4));
+        rc = ::bind(getFD(), reinterpret_cast<const sockaddr *>(&addrv4), sizeof(addrv4));
     }
     else
     {
@@ -1283,10 +1283,10 @@ bool ServerSocket::bind([[maybe_unused]] Type type, [[maybe_unused]] int port)
             addrv6.sin6_addr = in6addr_loopback;
 
         const int ipv6only = (_type == Socket::Type::All ? 0 : 1);
-        if (::setsockopt(getFD(), IPPROTO_IPV6, IPV6_V6ONLY, (char*)&ipv6only, sizeof(ipv6only)) == -1)
+        if (::setsockopt(getFD(), IPPROTO_IPV6, IPV6_V6ONLY, &ipv6only, sizeof(ipv6only)) == -1)
             LOG_SYS("Failed set ipv6 socket to " << ipv6only);
 
-        rc = ::bind(getFD(), (const sockaddr *)&addrv6, sizeof(addrv6));
+        rc = ::bind(getFD(), reinterpret_cast<const sockaddr *>(&addrv6), sizeof(addrv6));
     }
 
     if (rc)
@@ -1356,7 +1356,7 @@ std::shared_ptr<Socket> ServerSocket::accept()
 
     struct sockaddr_in6 clientInfo;
     socklen_t addrlen = sizeof(clientInfo);
-    const int rc = Syscall::accept_cloexec_nonblock(getFD(), (struct sockaddr *)&clientInfo, &addrlen);
+    const int rc = Syscall::accept_cloexec_nonblock(getFD(), reinterpret_cast<struct sockaddr *>(&clientInfo), &addrlen);
     if (rc < 0)
     {
         if (isUnrecoverableAcceptError(errno))
@@ -1375,7 +1375,7 @@ std::shared_ptr<Socket> ServerSocket::accept()
     const void *inAddr;
     if (clientInfo.sin6_family == AF_INET)
     {
-        struct sockaddr_in *ipv4 = (struct sockaddr_in *)&clientInfo;
+        struct sockaddr_in *ipv4 = reinterpret_cast<struct sockaddr_in *>(&clientInfo);
         inAddr = &(ipv4->sin_addr);
         type = Socket::Type::IPv4;
     }
@@ -1573,7 +1573,7 @@ UnxSocketPath LocalServerSocket::bind()
         UnxSocketPath socketPath(socketName);
         socketPath.fillInto(addrunix);
 
-        rc = ::bind(getFD(), (const sockaddr *)&addrunix, sizeof(struct sockaddr_un));
+        rc = ::bind(getFD(), reinterpret_cast<const sockaddr *>(&addrunix), sizeof(struct sockaddr_un));
         last_errno = errno;
         LOG_TRC("Binding to Unix socket location ["
                 << socketPath << "], result: " << rc

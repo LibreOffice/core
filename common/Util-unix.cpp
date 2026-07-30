@@ -68,8 +68,8 @@ namespace Util
             if (offset < length)
             {
                 fprintf(stderr, "No adequate source of randomness, "
-                        "failed to read %ld bytes: with error %s\n",
-                        (long int)length, strerror(errno));
+                        "failed to read %zu bytes: with error %s\n",
+                        length, strerror(errno));
                 // Potentially dangerous to continue without randomness
                 abort();
             }

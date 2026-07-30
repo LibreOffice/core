@@ -58,8 +58,8 @@ class Base64 {
 
     for (i = 0; i < in_len - 2; i += 3) {
       *p++ = encodingTable[(static_cast<unsigned int>(data[i]) >> 2) & 0x3F];
-      *p++ = encodingTable[((data[i] & 0x3) << 4) | ((int) (data[i + 1] & 0xF0) >> 4)];
-      *p++ = encodingTable[((data[i + 1] & 0xF) << 2) | ((int) (data[i + 2] & 0xC0) >> 6)];
+      *p++ = encodingTable[((data[i] & 0x3) << 4) | (static_cast<int>(data[i + 1] & 0xF0) >> 4)];
+      *p++ = encodingTable[((data[i + 1] & 0xF) << 2) | (static_cast<int>(data[i + 2] & 0xC0) >> 6)];
       *p++ = encodingTable[data[i + 2] & 0x3F];
     }
     if (i < in_len) {
@@ -69,7 +69,7 @@ class Base64 {
         *p++ = '=';
       }
       else {
-        *p++ = encodingTable[((data[i] & 0x3) << 4) | ((int) (data[i + 1] & 0xF0) >> 4)];
+        *p++ = encodingTable[((data[i] & 0x3) << 4) | (static_cast<int>(data[i + 1] & 0xF0) >> 4)];
         *p++ = encodingTable[((data[i + 1] & 0xF) << 2)];
       }
       *p++ = '=';

@@ -1177,7 +1177,7 @@ void InotifySocket::handlePoll(SocketDisposition & /* disposition */, std::chron
 
         for (char* ptr = buf; ptr < buf + len; ptr += sizeof(struct inotify_event) + event->len)
         {
-            event = (const struct inotify_event*)ptr;
+            event = reinterpret_cast<const struct inotify_event*>(ptr);
 
             LOG_WRN("InotifyPoll - Config file " << event->name << " was modified, stopping COOLWSD");
             SigUtil::requestShutdown();

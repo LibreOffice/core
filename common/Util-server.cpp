@@ -491,13 +491,13 @@ std::size_t getStatFromPid(const pid_t pid, int ind)
 void setProcessAndThreadPriorities(const pid_t pid, int prio)
 {
     int res = setpriority(PRIO_PROCESS, pid, prio);
-    LOG_TRC("Lowered kit [" << (int)pid << "] priority: " << prio << " with result: " << res);
+    LOG_TRC("Lowered kit [" << pid << "] priority: " << prio << " with result: " << res);
 
 #ifdef __linux__
     // rely on Linux thread-id priority setting to drop this thread' priority
     pid_t tid = getThreadId();
     res = setpriority(PRIO_PROCESS, tid, prio);
-    LOG_TRC("Lowered own thread [" << (int)tid << "] priority: " << prio
+    LOG_TRC("Lowered own thread [" << tid << "] priority: " << prio
                                    << " with result: " << res);
 #endif
 }

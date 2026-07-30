@@ -128,7 +128,7 @@ namespace RenderTiles
         // Render the whole area
         const double area = pixmapWidth * pixmapHeight;
         const auto start = std::chrono::steady_clock::now();
-        LOG_TRC("Calling paintPartTile(" << (void*)pixmap.data() << ')');
+        LOG_TRC("Calling paintPartTile(" << static_cast<void*>(pixmap.data()) << ')');
         document->paintPartTile(pixmap.data(),
                                 paintPart >= 0 ? paintPart : tileCombined.getPart(),
                                 tileCombined.getEditMode(),

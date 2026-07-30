@@ -365,7 +365,7 @@ namespace Util
     /// for debugging validation only.
     inline size_t isValidUtf8(const std::string_view str)
     {
-        return Util::isValidUtf8((unsigned char*)str.data(), str.size());
+        return Util::isValidUtf8(reinterpret_cast<unsigned char const*>(str.data()), str.size());
     }
 #endif
 

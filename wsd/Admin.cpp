@@ -1133,7 +1133,7 @@ void Admin::cleanupLostKits()
         if (internalKitPids.find(pid) == internalKitPids.end())
         {
             // Check if this is our kit process (forked from our ForKit process)
-            if (ProcUtil::getStatFromPid(pid, 3) == (size_t)_forKitPid)
+            if (ProcUtil::getStatFromPid(pid, 3) == size_t(_forKitPid))
                 mapKitsLost.insert(std::pair<pid_t, std::time_t>(pid, std::time(nullptr)));
         }
         else
@@ -1142,7 +1142,7 @@ void Admin::cleanupLostKits()
 
     for (auto itLost = mapKitsLost.begin(); itLost != mapKitsLost.end();)
     {
-        if (std::time(nullptr) - itLost->second > (time_t)gracePeriod)
+        if (std::time(nullptr) - itLost->second > time_t(gracePeriod))
         {
             pid = itLost->first;
             if (::kill(pid, 0) == 0)

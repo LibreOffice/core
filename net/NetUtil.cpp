@@ -52,13 +52,13 @@ std::string HostEntry::makeIPAddress(const sockaddr* ai_addr)
     {
         case AF_INET:
         {
-            auto ipv4 = (const sockaddr_in*)ai_addr;
+            auto ipv4 = reinterpret_cast<const sockaddr_in*>(ai_addr);
             inAddr = &(ipv4->sin_addr);
             break;
         }
         case AF_INET6:
         {
-            auto ipv6 = (const sockaddr_in6*)ai_addr;
+            auto ipv6 = reinterpret_cast<const sockaddr_in6*>(ai_addr);
             inAddr = &(ipv6->sin6_addr);
             break;
         }
@@ -256,18 +256,18 @@ using sockaddr_ptr = std::unique_ptr<sockaddr, void (*)(void*)>;
 
 sockaddr_ptr dupAddrWithPort(const sockaddr* addr, socklen_t addrLen, uint16_t port)
 {
-    sockaddr_ptr newAddr((sockaddr*)malloc(addrLen), free);
+    sockaddr_ptr newAddr(static_cast<sockaddr*>(malloc(addrLen)), free);
     memcpy(newAddr.get(), addr, addrLen);
 
     // Change port based on address family
     if (newAddr->sa_family == AF_INET)
     {
-        sockaddr_in* addr_in = (sockaddr_in*)newAddr.get();
+        sockaddr_in* addr_in = reinterpret_cast<sockaddr_in*>(newAddr.get());
         addr_in->sin_port = htons(port);
     }
     else if (newAddr->sa_family == AF_INET6)
     {
-        sockaddr_in6* addr_in6 = (sockaddr_in6*)newAddr.get();
+        sockaddr_in6* addr_in6 = reinterpret_cast<sockaddr_in6*>(newAddr.get());
         addr_in6->sin6_port = htons(port);
     }
     else
