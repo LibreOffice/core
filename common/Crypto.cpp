@@ -79,7 +79,7 @@ struct SupportKeyImpl
 
                     _invalid = false;
                 }
-            } catch (SyntaxException &e) {
+            } catch (SyntaxException &) {
                 LOG_ERR("Invalid support key expiry '" << expiry << '\'');
             }
         }

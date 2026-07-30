@@ -86,7 +86,7 @@ void Quarantine::initialize(const std::string& path)
     {
         Poco::File(path).createDirectories();
     }
-    catch (const std::exception& exc)
+    catch (const std::exception&)
     {
         LOG_FTL("Quarantine directory [" << path
                                          << "] is invalid or we have no permission to create it");
@@ -111,7 +111,7 @@ void Quarantine::initialize(const std::string& path)
                                          "] as it is read-only");
             }
         }
-        catch (const std::exception& exc)
+        catch (const std::exception&)
         {
             LOG_FTL("Quarantine directory [" << path
                                              << "] is read-only. Please ensure that the coolwsd "

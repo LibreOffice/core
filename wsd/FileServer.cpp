@@ -367,7 +367,7 @@ bool FileServerRequestHandler::isAdminLoggedIn(const Poco::Net::HTTPRequest& req
 
         LOG_INF("Invalid JWT token, let the administrator re-login");
     }
-    catch (const Poco::Exception& exc)
+    catch (const Poco::Exception&)
     {
         LOG_INF("No existing JWT cookie found");
     }
@@ -1342,7 +1342,7 @@ public:
                 {
                     tokenTtl = std::stoul(accessTokenTtl);
                 }
-                catch (const std::exception& exc)
+                catch (const std::exception&)
                 {
                     LOG_ERR(
                         "access_token_ttl ["
@@ -1831,7 +1831,7 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
             {
                 maxAge = config.getInt("ssl.hpkp.max_age", maxAge);
             }
-            catch (Poco::SyntaxException& exc)
+            catch (Poco::SyntaxException&)
             {
                 LOG_ERR("Invalid value of HPKP's max-age directive found in config file. Defaulting to "
                         << maxAge);

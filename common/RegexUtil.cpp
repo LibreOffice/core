@@ -47,7 +47,7 @@ bool matchRegex(const std::set<std::string>& set, const std::string& subject)
                 return true;
             }
         }
-        catch (const std::exception& exc)
+        catch (const std::exception&)
         {
             // Nothing to do; skip.
         }
@@ -77,7 +77,7 @@ std::string getValue(const std::map<std::string, std::string>& map, const std::s
                 return value.second;
             }
         }
-        catch (const std::exception& exc)
+        catch (const std::exception&)
         {
             // Nothing to do; skip.
         }
@@ -108,7 +108,7 @@ std::string getValue(const std::set<std::string>& set, const std::string& subjec
                 return value;
             }
         }
-        catch (const std::exception& exc)
+        catch (const std::exception&)
         {
             // Nothing to do; skip.
         }

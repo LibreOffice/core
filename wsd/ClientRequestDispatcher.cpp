@@ -1317,7 +1317,7 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
                     if (!FileServerRequestHandler::isAdminLoggedIn(request, *response))
                         throw Poco::Net::NotAuthenticatedException("Invalid admin login");
             }
-            catch (const Poco::Net::NotAuthenticatedException& exc)
+            catch (const Poco::Net::NotAuthenticatedException&)
             {
                 //LOG_ERR("FileServerRequestHandler::NotAuthenticated: " << exc.displayText());
                 http::Response httpResponse(http::StatusCode::Unauthorized);
@@ -1896,11 +1896,11 @@ bool ClientRequestDispatcher::handleWopiAccessCheckRequest(
         try {
             port = std::stoul(portStr);
 
-        } catch(std::invalid_argument &exception) {
+        } catch(std::invalid_argument&) {
             LOG_WRN("Wopi Access Check error parsing invalid_argument portStr:" << portStr);
             HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket);
             return false;
-        } catch(std::exception &exception) {
+        } catch(std::exception&) {
             LOG_WRN("Wopi Access Check request error, bad request invalid porl ["
                     << text << "] on request to URL: " << request.getURI());
 

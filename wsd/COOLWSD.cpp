@@ -2166,7 +2166,7 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
 
                 LOG_DBG("Created cache directory [" << path << ']');
             }
-            catch (const std::exception& ex)
+            catch (const std::exception&)
             {
                 LOG_WRN("Failed to create cache directory [" << path << "]");
             }
@@ -3507,7 +3507,7 @@ private:
             // Using shared_from_this() from a constructor is not good.
             assert(!"Got std::bad_weak_ptr. Are we using shared_from_this() from a constructor?");
         }
-        catch (const std::exception& exc)
+        catch (const std::exception&)
         {
             // Probably don't have enough data just yet.
             // TODO: timeout if we never get enough.

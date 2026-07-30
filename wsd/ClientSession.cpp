@@ -1253,7 +1253,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
                     return false;
                 }
             }
-            catch (const std::exception& exception)
+            catch (const std::exception&)
             {
                 // Child will handle this case
             }

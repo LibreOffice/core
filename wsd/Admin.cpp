@@ -205,11 +205,11 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
                 LOG_ERR("Invalid PID to kill (not a document pid)");
             }
         }
-        catch (std::invalid_argument& exc)
+        catch (std::invalid_argument&)
         {
             LOG_ERR("Invalid PID to kill (invalid argument): " << tokens[1]);
         }
-        catch (std::out_of_range& exc)
+        catch (std::out_of_range&)
         {
             LOG_ERR("Invalid PID to kill (out of range): " << tokens[1]);
         }
@@ -261,7 +261,7 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
             {
                 settingVal = NumUtil::stoi(setting[1]);
             }
-            catch (const std::exception& exc)
+            catch (const std::exception&)
             {
                 LOG_ERR("Invalid setting value: " << setting[1] <<
                         " for " << setting[0]);
@@ -968,7 +968,7 @@ std::string Admin::getLogLines() const
 
         return line;
     }
-    catch (const std::exception& e) {
+    catch (const std::exception&) {
         return "Could not read the log file.";
     }
 }

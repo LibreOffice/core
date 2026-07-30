@@ -125,7 +125,7 @@ private:
                 return;
             }
         }
-        catch (const std::exception& exc)
+        catch (const std::exception&)
         {
             // Probably don't have enough data just yet.
             // TODO: timeout if we never get enough.
