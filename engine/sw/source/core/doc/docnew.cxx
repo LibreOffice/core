@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/types.hxx>
+#include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 #include <sal/log.hxx>
@@ -671,6 +672,14 @@ uno::Reference < embed::XStorage > SwDoc::GetDocStorage()
 SfxObjectShell* SwDoc::GetPersist() const
 {
     return mpDocShell ? mpDocShell : getIDocumentLinksAdministration().GetLinkManager().GetPersist();
+}
+
+OUString SwDoc::GetLinkReferer() const
+{
+    SfxObjectShell* pShell = GetPersist();
+    if (pShell != nullptr && pShell->HasName())
+        return pShell->GetMedium()->GetName();
+    return OUString();
 }
 
 void SwDoc::ClearDoc()

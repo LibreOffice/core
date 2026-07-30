@@ -864,13 +864,7 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
 
     OUString sGrfNm;
     sfx2::LinkManager::GetDisplayNames( mxLink.get(), nullptr, &sGrfNm );
-    OUString sReferer;
-    SfxObjectShell * sh = GetDoc().GetPersist();
-    if (sh != nullptr && sh->HasName())
-    {
-        sReferer = sh->GetMedium()->GetName();
-    }
-    mpThreadConsumer->CreateThread( sGrfNm, sReferer );
+    mpThreadConsumer->CreateThread( sGrfNm, GetDoc().GetLinkReferer() );
 }
 
 

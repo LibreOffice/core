@@ -1813,12 +1813,7 @@ void DrawGraphic(
     {
         if( rSh.GetViewOptions()->IsGraphic() )
         {
-            OUString referer;
-            SfxObjectShell * sh = rSh.GetDoc()->GetPersist();
-            if (sh != nullptr && sh->HasName()) {
-                referer = sh->GetMedium()->GetName();
-            }
-            const Graphic* pGrf = pBrush->GetGraphic(referer);
+            const Graphic* pGrf = pBrush->GetGraphic(rSh.GetDoc()->GetLinkReferer());
             if( pGrf && GraphicType::NONE != pGrf->GetType() )
             {
                 ePos = pBrush->GetGraphicPos();
@@ -7768,10 +7763,7 @@ Color SwPageFrame::GetDrawBackgroundColor() const
             OUString referer;
             SwViewShell * sh1 = getRootFrame()->GetCurrShell();
             if (sh1 != nullptr) {
-                SfxObjectShell * sh2 = sh1->GetDoc()->GetPersist();
-                if (sh2 != nullptr && sh2->HasName()) {
-                    referer = sh2->GetMedium()->GetName();
-                }
+                referer = sh1->GetDoc()->GetLinkReferer();
             }
             const Graphic* pGraphic = pBrushItem->GetGraphic(referer);
 

@@ -1278,13 +1278,7 @@ cpo::uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIn
         SwStyleNameMapper::FillProgName(sValue, aUString, SwGetPoolIdFromName::TxtColl);
     }
 
-    OUString referer;
-    if (m_pDoc != nullptr) {
-        auto const sh = m_pDoc->GetPersist();
-        if (sh != nullptr && sh->HasName()) {
-            referer = sh->GetMedium()->GetName();
-        }
-    }
+    const OUString referer = m_pDoc ? m_pDoc->GetLinkReferer() : OUString();
     return GetPropertiesForNumFormat(
         rFormat, CharStyleName, m_pDocShell ? & aUString : nullptr, referer);
 
@@ -1341,13 +1335,7 @@ cpo::uno::Any SwXNumberingRules::GetNumberingRuleByIndex(
         SwStyleNameMapper::FillProgName(sValue, aUString, SwGetPoolIdFromName::TxtColl);
     }
 
-    OUString referer;
-    if (m_pDoc != nullptr) {
-        auto const sh = m_pDoc->GetPersist();
-        if (sh != nullptr && sh->HasName()) {
-            referer = sh->GetMedium()->GetName();
-        }
-    }
+    const OUString referer = m_pDoc ? m_pDoc->GetLinkReferer() : OUString();
     return GetPropertyForNumFormat(
         rFormat, CharStyleName, m_pDocShell ? & aUString : nullptr, referer, rPropName);
 

@@ -1165,7 +1165,8 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
                     SfxItemSet aTempSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(*rTmpSet.GetPool()));
 
-                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet,
+                                                               getActiveDocumentLinkReferer());
                     aHeaderFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
                 }
             }
@@ -1201,7 +1202,8 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
                     SfxItemSet aTempSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(*rTmpSet.GetPool()));
 
-                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                    setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet,
+                                                               getActiveDocumentLinkReferer());
                     aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
                 }
             }
@@ -1227,7 +1229,8 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
             const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(*pItem);
             SfxItemSet aTempSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(*rSet.GetPool()));
 
-            setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+            setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet,
+                                                       getActiveDocumentLinkReferer());
             aPageFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
         }
     }
@@ -1290,7 +1293,8 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
                 const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rHeaderSet.Get(nWhich));
                 SfxItemSet aTempSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(*rHeaderSet.GetPool()));
 
-                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet,
+                                                           getActiveDocumentLinkReferer());
                 aHeaderFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
             }
         }
@@ -1345,7 +1349,8 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
             const SvxBrushItem& rItem = static_cast<const SvxBrushItem&>(rFooterSet.Get(nWhich));
             SfxItemSet aTempSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(*rFooterSet.GetPool()));
 
-            setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+            setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet,
+                                                       getActiveDocumentLinkReferer());
             aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
         }
     }

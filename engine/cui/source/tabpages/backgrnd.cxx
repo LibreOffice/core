@@ -116,13 +116,15 @@ void SvxBkgTabPage::Reset(const SfxItemSet* pItemSet)
         sal_uInt16 nWhich(pItemSet->GetPool()->GetWhichIDFromSlotID(SID_ATTR_CHAR_BACK_COLOR));
         Color aBackColor(static_cast<const SvxColorItem&>(pItemSet->Get(nWhich)).GetValue());
         SvxBrushItem aBrushItem(SvxBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR));
-        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, m_aAttrSet);
+        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, m_aAttrSet,
+                                                   getActiveDocumentLinkReferer());
     }
     else
     {
         sal_uInt16 nWhich(pItemSet->GetPool()->GetWhichIDFromSlotID(m_bHighlighting ? SID_ATTR_BRUSH_CHAR : SID_ATTR_BRUSH));
         SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(pItemSet->Get(nWhich)));
-        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, m_aAttrSet);
+        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, m_aAttrSet,
+                                                   getActiveDocumentLinkReferer());
     }
     SvxAreaTabPage::Reset(&m_aAttrSet);
 }
@@ -309,7 +311,8 @@ void SvxBkgTabPage::SetActiveTableDestinationBrushItem()
     if (SfxItemState::SET == GetItemSet().GetItemState(nWhich))
     {
         SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(GetItemSet().Get(nWhich)));
-        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, m_aAttrSet);
+        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, m_aAttrSet,
+                                                   getActiveDocumentLinkReferer());
     }
     else
     {
