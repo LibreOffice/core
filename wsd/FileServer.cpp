@@ -2072,7 +2072,7 @@ std::string redactViewSettingSecrets(const std::string& body)
         return body;
 
     bool changed = false;
-    for (const std::string_view field : ViewSettings::SecretFields)
+    for (const std::string_view& field : ViewSettings::SecretFields)
     {
         const std::string name(field);
         if (!json->has(name))
@@ -2097,7 +2097,7 @@ bool bodyKeepsStoredSecret(const std::string& body)
     Poco::JSON::Object::Ptr json;
     if (!JsonUtil::parseJSON(body, json) || !json)
         return false;
-    for (const std::string_view field : ViewSettings::SecretFields)
+    for (const std::string_view& field : ViewSettings::SecretFields)
     {
         const std::string flag = std::string(field) + std::string(ViewSettings::StoredFlagSuffix);
         bool keep = false;
@@ -2122,7 +2122,7 @@ std::string mergeKeptViewSettingSecrets(const std::string& uploadedBody,
     Poco::JSON::Object::Ptr stored;
     const bool haveStored = JsonUtil::parseJSON(storedBody, stored) && stored;
 
-    for (const std::string_view field : ViewSettings::SecretFields)
+    for (const std::string_view& field : ViewSettings::SecretFields)
     {
         const std::string name(field);
         const std::string flag = name + std::string(ViewSettings::StoredFlagSuffix);

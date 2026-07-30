@@ -28,7 +28,7 @@
 static std::set<std::string> parseCommaSeparatedList(const std::string& list)
 {
     std::set<std::string> result;
-    for (auto part : list | std::views::split(','))
+    for (auto&& part : list | std::views::split(','))
         result.emplace(part.begin(), part.end());
     return result;
 }

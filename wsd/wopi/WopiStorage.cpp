@@ -58,7 +58,7 @@ constexpr bool isTemplate(const std::string_view filename)
     constexpr std::string_view extensions[] = { ".stw",  ".ott",  ".dot",  ".dotx", ".dotm", ".otm",
                                                 ".stc",  ".ots",  ".xltx", ".xltm", ".sti",  ".otp",
                                                 ".potx", ".potm", ".std",  ".otg" };
-    for (const std::string_view extension : extensions)
+    for (const std::string_view& extension : extensions)
     {
         if (filename.ends_with(extension))
             return true;

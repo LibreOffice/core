@@ -583,7 +583,7 @@ public:
             if (Util::iequal(pair.first, COOKIE))
             {
                 const auto tokens = StringVector::tokenize(pair.second, ';');
-                for (const auto cookie : tokens)
+                for (const auto & cookie : tokens)
                 {
                     cookies.emplace_back(Util::split(tokens.getParam(cookie), '='));
                 }
