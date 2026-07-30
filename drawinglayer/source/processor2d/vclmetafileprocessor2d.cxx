@@ -1456,7 +1456,8 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
         return;
 
     // emulate data handling from ImpEditEngine::Paint
-    const basegfx::B2DRange aViewRange(rContent.getB2DRange(getViewInformation2D()));
+    basegfx::B2DRange aViewRange(rContent.getB2DRange(getViewInformation2D()));
+    aViewRange.transform(maCurrentTransformation);
     const tools::Rectangle aRectLogic(static_cast<sal_Int32>(floor(aViewRange.getMinX())),
                                       static_cast<sal_Int32>(floor(aViewRange.getMinY())),
                                       static_cast<sal_Int32>(ceil(aViewRange.getMaxX())),
