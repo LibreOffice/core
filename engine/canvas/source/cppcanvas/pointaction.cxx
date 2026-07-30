@@ -31,7 +31,6 @@
 
 #include "pointaction.hxx"
 #include "outdevstate.hxx"
-#include "canvas.hxx"
 #include "mtftools.hxx"
 #include <XCanvas.hxx>
 

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include "canvas.hxx"
 #include "renderer.hxx"
 #include <canvas/vclcanvasdllapi.h>
 
@@ -48,15 +47,14 @@ namespace cppcanvas
     class VCLCANVAS_DLLPUBLIC VCLFactory
     {
     public:
-        static CanvasSharedPtr   createCanvas( const css::uno::Reference< vclcanvas::XCanvas >& xCanvas );
-
         /** Create a renderer object from a Metafile
 
             The created renderer initially draws the metafile
             one-by-one units large, in user coordinate space
          */
-        static RendererSharedPtr createRenderer( const CanvasSharedPtr&          rCanvas,
-                                                const ::GDIMetaFile&            rMtf );
+        static RendererSharedPtr createRenderer( const css::uno::Reference< vclcanvas::XCanvas >& rCanvas,
+                                                 const basegfx::B2DHomMatrix& rViewTransform,
+                                                 const ::GDIMetaFile&            rMtf );
 
     private:
         VCLFactory() = delete;

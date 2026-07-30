@@ -447,11 +447,9 @@ canvas/source/cppcanvas/bitmapaction.cxx
 canvas/source/cppcanvas/bitmapaction.hxx
 canvas/source/cppcanvas/cachedprimitivebase.cxx
 canvas/source/cppcanvas/cachedprimitivebase.hxx
-canvas/source/cppcanvas/canvas.hxx
 canvas/source/cppcanvas/color.hxx
 canvas/source/cppcanvas/implbitmap.cxx
 canvas/source/cppcanvas/implbitmap.hxx
-canvas/source/cppcanvas/implcanvas.cxx
 canvas/source/cppcanvas/implcustomsprite.cxx
 canvas/source/cppcanvas/implcustomsprite.hxx
 canvas/source/cppcanvas/implpolypolygon.cxx

@@ -20,7 +20,6 @@
 #pragma once
 
 #include "action.hxx"
-#include "canvas.hxx"
 
 namespace basegfx {
     class B2DPoint;

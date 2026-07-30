@@ -75,7 +75,6 @@ $(eval $(call gb_Library_add_exception_objects,vclcanvas,\
 	canvas/source/cppcanvas/transparencygroupaction \
 	canvas/source/cppcanvas/tools \
 	canvas/source/cppcanvas/uno_mtfrenderer \
-	canvas/source/cppcanvas/implcanvas \
 	canvas/source/cppcanvas/vclfactory \
 ))
 

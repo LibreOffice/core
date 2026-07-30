@@ -23,7 +23,6 @@
 
 #include "vclfactory.hxx"
 
-#include "canvas.hxx"
 #include "renderer.hxx"
 #include <canvas/cppcanvastest.hxx>
 #include <canvas.hxx>
@@ -32,15 +31,11 @@ using namespace ::com::sun::star;
 
 namespace cppcanvas
 {
-    CanvasSharedPtr VCLFactory::createCanvas( const uno::Reference< vclcanvas::XCanvas >& xCanvas )
-    {
-        return std::make_shared<Canvas>( xCanvas );
-    }
-
-    RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,
+    RendererSharedPtr VCLFactory::createRenderer( const css::uno::Reference< vclcanvas::XCanvas >& rCanvas,
+                                                  const basegfx::B2DHomMatrix& rViewTransform,
                                                   const ::GDIMetaFile&          rMtf )
     {
-        return std::make_shared<Renderer>( rCanvas, rMtf );
+        return std::make_shared<Renderer>( rCanvas, rViewTransform, rMtf );
     }
 
     // only here so we can do a unit test from drawinglayer/qa/unit/vclmetafileprocessor2d.cxx
@@ -50,12 +45,8 @@ namespace cppcanvas
             const basegfx::B2DHomMatrix& rTransform2)
     {
         css::uno::Reference<vclcanvas::XCanvas> rCanvas = new vclcanvas::Canvas(pOutDev);
-        cppcanvas::CanvasSharedPtr cppCanvas = cppcanvas::VCLFactory::createCanvas(rCanvas);
-        // I got these matrices from a breakpoint in drawing the polyline, and walking up
-        // the stack to the canvas code.
-        cppCanvas->setTransformation(rTransform1);
         cppcanvas::RendererSharedPtr renderer
-            = cppcanvas::VCLFactory::createRenderer(cppCanvas, rMetaFile);
+            = cppcanvas::VCLFactory::createRenderer(rCanvas, rTransform1, rMetaFile);
         renderer->setTransformation(rTransform2);
         return renderer->draw();
     }

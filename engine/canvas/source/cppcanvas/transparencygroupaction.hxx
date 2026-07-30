@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include "canvas.hxx"
 #include <vcl/gradient.hxx>
 #include "action.hxx"
 

@@ -2434,8 +2434,9 @@ namespace cppcanvas
         // Public methods
 
 
-        Renderer::Renderer( const CanvasSharedPtr&  rCanvas,
-                                    const GDIMetaFile&      rMtf )
+        Renderer::Renderer( const css::uno::Reference< vclcanvas::XCanvas >& rCanvas,
+                            const basegfx::B2DHomMatrix& rViewTransform,
+                            const GDIMetaFile&      rMtf )
             : mpCanvas(rCanvas)
             , nFrameLeft(0)
             , nFrameTop(0)
@@ -2448,18 +2449,19 @@ namespace cppcanvas
         {
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::Renderer::Renderer(mtf)" );
 
-            OSL_ENSURE( rCanvas && rCanvas->getUNOCanvas().is(),
+            OSL_ENSURE( rCanvas && rCanvas.is(),
                         "Renderer::Renderer(): Invalid canvas" );
-            OSL_ENSURE( rCanvas->getUNOCanvas()->getDevice().is(),
+            OSL_ENSURE( rCanvas->getDevice().is(),
                         "Renderer::Renderer(): Invalid graphic device" );
 
+            ::canvastools::initViewState( maViewState );
+            ::canvastools::setViewStateTransform( maViewState, rViewTransform );
             ::canvastools::initRenderState( maRenderState );
 
             // make sure canvas and graphic device are valid; action
             // creation don't check that every time
             if( !rCanvas ||
-                !rCanvas->getUNOCanvas().is() ||
-                !rCanvas->getUNOCanvas()->getDevice().is() )
+                !rCanvas->getDevice().is() )
             {
                 // leave actions empty
                 return;
@@ -2487,7 +2489,7 @@ namespace cppcanvas
 
             sal_Int32 nCurrActions(0);
             ActionFactoryParameters aParms(aStateStack,
-                                           rCanvas->getUNOCanvas(),
+                                           rCanvas,
                                            *aVDev,
                                            nCurrActions );
 
@@ -2548,7 +2550,7 @@ namespace cppcanvas
                 for (const MtfAction & rAction : maActions)
                     // ANDing the result. We want to fail if at least
                     // one action failed.
-                    bRet &= rAction.mpAction->render( mpCanvas->getUNOCanvas(), mpCanvas->getViewState(), aMatrix );
+                    bRet &= rAction.mpAction->render( mpCanvas, maViewState, aMatrix );
                 return bRet;
             }
             catch( uno::Exception& )

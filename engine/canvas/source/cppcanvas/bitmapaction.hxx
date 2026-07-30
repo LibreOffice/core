@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include "canvas.hxx"
 #include "action.hxx"
 
 namespace basegfx {

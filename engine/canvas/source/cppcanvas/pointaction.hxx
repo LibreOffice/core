@@ -20,7 +20,6 @@
 #pragma once
 
 #include "action.hxx"
-#include "canvas.hxx"
 
 class Color;
 namespace basegfx {

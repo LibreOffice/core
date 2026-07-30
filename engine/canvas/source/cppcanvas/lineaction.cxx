@@ -28,7 +28,6 @@
 #include <sal/log.hxx>
 #include <RenderState.hxx>
 
-#include "canvas.hxx"
 #include <utility>
 
 #include "mtftools.hxx"

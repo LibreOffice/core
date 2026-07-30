@@ -29,7 +29,6 @@
 #include <vcl/kernarray.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include "renderer.hxx"
-#include "canvas.hxx"
 #include <RenderState.hxx>
 #include <canvas/vclcanvasdllapi.h>
 
@@ -125,8 +124,9 @@ namespace cppcanvas
         class VCLCANVAS_DLLPUBLIC Renderer
         {
         public:
-            Renderer( const CanvasSharedPtr&    rCanvas,
-                          const GDIMetaFile&        rMtf );
+            Renderer( const css::uno::Reference< vclcanvas::XCanvas >&    rCanvas,
+                      const basegfx::B2DHomMatrix& rViewTransform,
+                      const GDIMetaFile&        rMtf );
 
             ~Renderer();
 
@@ -205,8 +205,9 @@ namespace cppcanvas
                                    const ActionFactoryParameters& rParms,
                                    bool                           bSubsettable );
 
+            css::uno::Reference< vclcanvas::XCanvas > mpCanvas;
+            mutable vclcanvas::ViewState  maViewState;
             mutable ::vclcanvas::RenderState maRenderState;
-            CanvasSharedPtr mpCanvas;
             ActionVector maActions;
 
             /* EMF+ */

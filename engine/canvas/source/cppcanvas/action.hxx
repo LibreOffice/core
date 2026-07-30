@@ -20,7 +20,7 @@
 #pragma once
 
 #include <sal/types.h>
-#include "canvas.hxx"
+#include <XCanvas.hxx>
 
 namespace basegfx
 {

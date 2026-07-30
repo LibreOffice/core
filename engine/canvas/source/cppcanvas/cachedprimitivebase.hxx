@@ -23,7 +23,6 @@
 #include <XCachedPrimitive.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include "canvas.hxx"
 
 #include "action.hxx"
 

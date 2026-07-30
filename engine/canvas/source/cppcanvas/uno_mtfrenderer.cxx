@@ -63,11 +63,9 @@ sal_Int64 MtfRenderer::draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fS
     xBitmapCanvas->clear();
 
     GDIMetaFile* pMetafile = reinterpret_cast<GDIMetaFile*>(pMeta);
-    cppcanvas::CanvasSharedPtr canvas = cppcanvas::VCLFactory::createCanvas (xBitmapCanvas);
-    cppcanvas::RendererSharedPtr renderer = cppcanvas::VCLFactory::createRenderer (canvas, *pMetafile);
     ::basegfx::B2DHomMatrix aMatrix;
     aMatrix.scale( fScaleX, fScaleY );
-    canvas->setTransformation( aMatrix );
+    cppcanvas::RendererSharedPtr renderer = cppcanvas::VCLFactory::createRenderer (xBitmapCanvas, aMatrix, *pMetafile);
     renderer->draw ();
 
     Bitmap aBitmap = vcl::unotools::bitmapFromXBitmap(xBitmapCanvas);
