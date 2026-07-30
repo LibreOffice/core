@@ -278,6 +278,9 @@ ScRange ScPrincipalComponentAnalysisDialog::WriteOutput(ScDocShell& rDocShell, S
         aOutput.writeFormula(aTemplate.getTemplate());
         aOutput.nextColumn();
     }
+    // The column the scores start in further down is free this high up, so the
+    // label for the row goes there, right of the values it names.
+    aOutput.writeBoldString(ScResId(STRID_CALC_MEAN));
     aOutput.newLine();
 
     for (SCCOL nColumn = 0; nColumn < nColumnCount; ++nColumn)
@@ -287,6 +290,7 @@ ScRange ScPrincipalComponentAnalysisDialog::WriteOutput(ScDocShell& rDocShell, S
         aOutput.writeFormula(aTemplate.getTemplate());
         aOutput.nextColumn();
     }
+    aOutput.writeBoldString(ScResId(STRID_CALC_STD_DEVIATION));
     aOutput.newLine();
 
     auto aNumberedLabel = [&aTemplate](TranslateId aTemplateId, SCCOL nColumn) {

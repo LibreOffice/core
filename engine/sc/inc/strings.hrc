@@ -375,9 +375,9 @@
 #define STR_FEATURE_LABEL_TEMPLATE                  NC_("STR_FEATURE_LABEL_TEMPLATE", "Feature_%NUMBER%")
 #define STR_COMPONENT_SCORE_LABEL_TEMPLATE          NC_("STR_COMPONENT_SCORE_LABEL_TEMPLATE", "Score_%NUMBER%")
 #define STR_COMPONENT_LOADING_LABEL_TEMPLATE        NC_("STR_COMPONENT_LOADING_LABEL_TEMPLATE", "Loading_%NUMBER%")
-#define STR_SINGULAR_VALUE_LABEL                    NC_("STR_SINGULAR_VALUE_LABEL", "Singular value")
-#define STR_VARIANCE_SHARE_LABEL                    NC_("STR_VARIANCE_SHARE_LABEL", "Variance share")
-#define STR_CUMULATIVE_VARIANCE_SHARE_LABEL         NC_("STR_CUMULATIVE_VARIANCE_SHARE_LABEL", "Cumulative share")
+#define STR_SINGULAR_VALUE_LABEL                    NC_("STR_SINGULAR_VALUE_LABEL", "Singular Value")
+#define STR_VARIANCE_SHARE_LABEL                    NC_("STR_VARIANCE_SHARE_LABEL", "Variance Share")
+#define STR_CUMULATIVE_VARIANCE_SHARE_LABEL         NC_("STR_CUMULATIVE_VARIANCE_SHARE_LABEL", "Cumulative Share")
 /*Insert image dialog*/
 #define STR_ANCHOR_TO_CELL                          NC_("STR_ANCHOR_TO_CELL", "To cell")
 #define STR_ANCHOR_TO_CELL_RESIZE                   NC_("STR_ANCHOR_TO_CELL_RESIZE", "To cell (resize with cell)")

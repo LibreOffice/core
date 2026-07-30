@@ -71,21 +71,26 @@ class principalComponentAnalysis(UITestCase):
             # every column after them says what it holds.
             aExpectedHeader = [sLabel for sLabel, _ in aColumns] \
                 + ["Score_1", "Score_2", "Score_3"] \
-                + ["Singular value"] \
+                + ["Singular Value"] \
                 + ["Loading_1", "Loading_2", "Loading_3"] \
-                + ["Variance share", "Cumulative share"]
+                + ["Variance Share", "Cumulative Share"]
             aHeader = [
                 get_cell_by_position(document, 1, nColumn, nHeaderRow).getString()
                 for nColumn in range(len(aExpectedHeader))]
             self.assertEqual(aHeader, aExpectedHeader)
 
             # The mean and the standard deviation of every column sit above the
-            # standardized values.
+            # standardized values, each row named just right of its values.
             self.assertEqual(get_cell_by_position(document, 1, 0, 0).getValue(), 14)
             self.assertEqual(get_cell_by_position(document, 1, 1, 0).getValue(), 30)
             self.assertEqual(get_cell_by_position(document, 1, 2, 0).getValue(), 30)
             self.assertEqual(
                 round(get_cell_by_position(document, 1, 0, 1).getValue(), 10), 3.1622776602)
+            self.assertEqual(
+                get_cell_by_position(document, 1, len(aColumns), 0).getString(), "Mean")
+            self.assertEqual(
+                get_cell_by_position(document, 1, len(aColumns), 1).getString(),
+                "Standard Deviation")
 
             # The three parts of the decomposition all read the whole block of
             # standardized values and start on its first row. The left vectors
