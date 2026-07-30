@@ -6936,6 +6936,7 @@ sc/qa/unit/ucalc_condformat.cxx
 sc/qa/unit/ucalc_copypaste.cxx
 sc/qa/unit/ucalc_datatransformation.cxx
 sc/qa/unit/ucalc_formula.cxx
+sc/qa/unit/ucalc_formula2.cxx
 sc/qa/unit/ucalc_parallelism.cxx
 sc/qa/unit/ucalc_pivottable.cxx
 sc/qa/unit/ucalc_range.cxx
