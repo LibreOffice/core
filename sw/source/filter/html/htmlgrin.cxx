@@ -658,32 +658,12 @@ IMAGE_SETEVENT:
     bool bSetScaleImageMap = false;
     sal_uInt8 nPercentWidth = 0, nPercentHeight = 0;
 
-    // bPercentWidth / bPercentHeight means we have a percent size.  If that's not the case and we have no
-    // size from nWidth / nHeight either, then inspect the image header.
+    // bPercentWidth / bPercentHeight means we have a percent size.  If that's not the case and we
+    // have no size from nWidth / nHeight either, the frame gets the HTML default size here.  The
+    // image is registered as a link, so its own size arrives with the link update and the frame is
+    // resized then.
     bool bRelWidthScale = bPercentWidth && nWidth == SwFormatFrameSize::SYNCED;
-    bool bNeedWidth = (!bPercentWidth && !nWidth) || bRelWidthScale;
     bool bRelHeightScale = bPercentHeight && nHeight == SwFormatFrameSize::SYNCED;
-    bool bNeedHeight = (!bPercentHeight && !nHeight) || bRelHeightScale;
-    if ((bNeedWidth || bNeedHeight) && !bFuzzing && m_xDoc->AllowAccessLink() &&
-        !aGraphicURL.IsExoticProtocol())
-    {
-        GraphicDescriptor aDescriptor(aGraphicURL);
-        if (aDescriptor.Detect(/*bExtendedInfo=*/true))
-        {
-            // Try to use size info from the image header before defaulting to
-            // HTML_DFLT_IMG_WIDTH/HEIGHT.
-            aTwipSz
-                = o3tl::convert(aDescriptor.GetSizePixel(), o3tl::Length::px, o3tl::Length::twip);
-            if (!bPercentWidth && !nWidth)
-            {
-                nWidth = aTwipSz.getWidth();
-            }
-            if (!bPercentHeight && !nHeight)
-            {
-                nHeight = aTwipSz.getHeight();
-            }
-        }
-    }
 
     if( !(nWidth && !bRelWidthScale) || !(nHeight && !bRelHeightScale) )
     {
