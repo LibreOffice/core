@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFPageObjectType.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -815,10 +816,28 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152575)
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(3, pPdfDocument->getPageCount());
-    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/1);
-    CPPUNIT_ASSERT(pPdfPage);
-    // Without the fix for tdf#152575 this would be only 42 objects
-    CPPUNIT_ASSERT_EQUAL(51, pPdfPage->getObjectCount());
+
+    int nCommentsCount(0);
+    for (int nPageIndex = 0; nPageIndex < pPdfDocument->getPageCount(); ++nPageIndex)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(nPageIndex);
+        CPPUNIT_ASSERT(pPdfPage);
+        auto pTextPage = pPdfPage->getTextPage();
+        CPPUNIT_ASSERT(pTextPage);
+        for (int i = 0; i < pPdfPage->getObjectCount(); ++i)
+        {
+            auto pObject = pPdfPage->getObject(i);
+
+            if (pObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+            {
+                OUString aText = pObject->getText(pTextPage);
+                if (aText.startsWith("Test comment"))
+                    ++nCommentsCount;
+            }
+        }
+    }
+    // Without the fix for tdf#152575 this would be only 2 comments
+    CPPUNIT_ASSERT_EQUAL(4, nCommentsCount);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf140731)
