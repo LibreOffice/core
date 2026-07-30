@@ -431,7 +431,7 @@ void WopiStorage::updateLockStateAsync(const Authorization& auth, LockContext& l
 {
     auto profileZone = std::make_shared<ProfileZone>(
         std::string("WopiStorage::uploadLockStateAsync"),
-        std::map<std::string, std::string>({ { "url", getUri().toString() } }));
+        std::map<std::string, std::string>{ { "url", getUri().toString() } });
 
     // Always invoke the callback with the result of the async locking.
     ScopedInvokeAsyncRequestCallback<AsyncLockStateCallback, AsyncLockUpdate> scopedInvokeCallback(
@@ -719,7 +719,7 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
 {
     auto profileZone =
         std::make_shared<ProfileZone>(std::string("WopiStorage::uploadLocalFileToStorageAsync"),
-                                      std::map<std::string, std::string>({ { "url", _fileUrl } }));
+                                      std::map<std::string, std::string>{ { "url", _fileUrl } });
 
     // TODO: Check if this URI has write permission (canWrite = true)
 

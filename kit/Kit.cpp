@@ -3842,11 +3842,11 @@ void lokit_main(
 
             userdir_url = "file:///tmp/user";
 #ifndef __APPLE__
-            instdir_path = '/' + std::string(JailUtil::LO_JAIL_SUBPATH) + "/program";
+            instdir_path = '/' + JailUtil::LO_JAIL_SUBPATH + "/program";
 #else
             instdir_path = '/' + std::string(JailUtil::LO_JAIL_SUBPATH) + "/Contents/Frameworks";
 #endif
-            allowedPaths += ":r:/" + std::string(JailUtil::LO_JAIL_SUBPATH);
+            allowedPaths += ":r:/" + JailUtil::LO_JAIL_SUBPATH;
 
             Poco::Path jailLOInstallation(jailPath, JailUtil::LO_JAIL_SUBPATH);
             jailLOInstallation.makeDirectory();

@@ -1176,7 +1176,7 @@ std::string FileServerRequestHandler::getRequestPathname(const HTTPRequest& requ
     if (std::regex_search(path, gitHashMatch, gitHashRe))
     {
         // Convert version back to a real file name.
-        Poco::replaceInPlace(path, std::string("/browser" + gitHashMatch[0].str()), std::string("/browser/dist/"));
+        Poco::replaceInPlace(path, "/browser" + gitHashMatch[0].str(), std::string("/browser/dist/"));
     }
 
 #if !MOBILEAPP

@@ -95,7 +95,7 @@ std::string HostEntry::errorMessage() const
         errmsg = gai_strerror(_eaino);
     else
         errmsg = strerror(_saved_errno);
-    return std::string("[" + _requestName + "]: " + errmsg);
+    return "[" + _requestName + "]: " + errmsg;
 }
 
 HostEntry::HostEntry(std::string desc)

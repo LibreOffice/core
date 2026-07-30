@@ -2167,7 +2167,7 @@ bool ChildSession::extTextInputEvent(const StringVector& tokens)
 
     if (error)
     {
-        sendTextFrameAndLogError("error: cmd=" + std::string(tokens[0]) + " kind=syntax");
+        sendTextFrameAndLogError("error: cmd=" + tokens[0] + " kind=syntax");
         return false;
     }
 
@@ -2196,7 +2196,7 @@ bool ChildSession::keyEvent(const StringVector& tokens,
             !getTokenUInt32(tokens[counter++], "id", winId))
         {
             LOG_ERR("Window key event expects a valid id= attribute");
-            sendTextFrameAndLogError("error: cmd=" + std::string(tokens[0]) + " kind=syntax");
+            sendTextFrameAndLogError("error: cmd=" + tokens[0] + " kind=syntax");
             return false;
         }
         else // id= attribute is found
@@ -2210,7 +2210,7 @@ bool ChildSession::keyEvent(const StringVector& tokens,
         !getTokenInteger(tokens[counter++], "char", charcode) ||
         !getTokenInteger(tokens[counter++], "key", keycode))
     {
-        sendTextFrameAndLogError("error: cmd=" + std::string(tokens[0]) + "  kind=syntax");
+        sendTextFrameAndLogError("error: cmd=" + tokens[0] + "  kind=syntax");
         return false;
     }
 
@@ -2275,7 +2275,7 @@ bool ChildSession::gestureEvent(const StringVector& tokens)
 
     if (!success)
     {
-        sendTextFrameAndLogError("error: cmd=" +  std::string(tokens[0]) + " kind=syntax");
+        sendTextFrameAndLogError("error: cmd=" +  tokens[0] + " kind=syntax");
         return false;
     }
 
@@ -2337,7 +2337,7 @@ bool ChildSession::mouseEvent(const StringVector& tokens,
 
     if (!success)
     {
-        sendTextFrameAndLogError("error: cmd=" +  std::string(tokens[0]) + " kind=syntax");
+        sendTextFrameAndLogError("error: cmd=" +  tokens[0] + " kind=syntax");
         return false;
     }
 
@@ -3548,7 +3548,7 @@ bool ChildSession::removeTextContext(const StringVector& tokens)
         !getTokenInteger(tokens[2], "before", before) ||
         !getTokenInteger(tokens[3], "after", after))
     {
-        sendTextFrameAndLogError("error: cmd=" + std::string(tokens[0]) + " kind=syntax");
+        sendTextFrameAndLogError("error: cmd=" + tokens[0] + " kind=syntax");
         return false;
     }
 

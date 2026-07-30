@@ -38,7 +38,7 @@ inline std::chrono::milliseconds timeSinceTestStartMs()
 
 #if ENABLE_DEBUG
 #define TST_LOG_NAME(NAME, X)                                                                      \
-    LOG_TST(NAME << (std::string_view(NAME) != std::string_view(__func__)                          \
+    LOG_TST(NAME << (NAME != std::string_view(__func__)                                            \
                          ? (" [" + std::string(__func__) + "]")                                    \
                          : "")                                                                     \
                  << " (+" << helpers::timeSinceTestStartMs() << "): " << std::boolalpha << X)

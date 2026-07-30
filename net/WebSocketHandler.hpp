@@ -85,7 +85,7 @@ public:
         _key(isClient ? generateKey() : std::string())
         , _lastPingSentTime(std::chrono::steady_clock::now() -
                            PingFrequencyMicroS +
-                           std::chrono::microseconds(InitialPingDelayMicroS))
+                           InitialPingDelayMicroS)
         , _pingTimeUs(0)
         , _isMasking(isClient && isMasking)
         , _inFragmentBlock(false)
