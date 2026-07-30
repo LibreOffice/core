@@ -1394,7 +1394,10 @@ public:
 
     /** The file name carried by the document shell, or an empty string while the shell has
         no file name. */
-    SW_DLLPUBLIC OUString GetLinkReferer() const;
+    OUString GetLinkReferer() const;
+
+    /** Whether a link in this document may be followed to the location it names. */
+    bool AllowAccessLink() const;
 
     // Pointer to storage of SfxDocShells. Can be 0!!!
     SW_DLLPUBLIC css::uno::Reference< css::embed::XStorage > GetDocStorage();
