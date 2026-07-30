@@ -20,11 +20,14 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/embed/XInplaceObject.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/util/XLinkUpdate.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <tools/datetime.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -409,20 +412,69 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfTable)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageSize)
 {
-    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
-    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
-    if (!IsDefaultDPI())
-        return;
     createSwWebDoc("image-size.html");
-    awt::Size aSize = getShape(1)->getSize();
-    OutputDevice* pDevice = Application::GetDefaultDevice();
-    Size aPixelSize(200, 400);
-    Size aExpected = pDevice->PixelToLogic(aPixelSize, MapMode(MapUnit::Map100thMM));
 
-    // This was 1997, i.e. a hardcoded default, we did not look at the image
-    // header when the HTML markup declared no size.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aExpected.getWidth()), aSize.Width);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aExpected.getHeight()), aSize.Height);
+    // The markup declares no size, so the frame gets the HTML default size of 2cm by 1cm.  This was
+    // 5292 at 96 pixels per inch, i.e. the image's own size, read from the header of the image
+    // file while the markup was being parsed.
+    awt::Size aSize = getShape(1)->getSize();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2000), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1000), aSize.Height);
+
+    // The image is a link, and its own size reaches the frame when the links are updated.  The
+    // image is 200 by 400 pixels and declares 89 pixels per inch, so it is 5.708cm by 11.416cm.
+    uno::Reference<util::XLinkUpdate> xLinkUpdate(mxComponent, uno::UNO_QUERY_THROW);
+    xLinkUpdate->updateLinks();
+
+    aSize = getShape(1)->getSize();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5708), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11416), aSize.Height);
+}
+
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageSizeLinksUpdated)
+{
+    // When the links are updated as part of the load, the image size is already there when the
+    // load returns, without a separate update step.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(document::UpdateDocMode::QUIET_UPDATE)),
+    };
+    loadFromFile(u"image-size.html", aParams);
+
+    awt::Size aSize = getShape(1)->getSize();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5708), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11416), aSize.Height);
+}
+
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageNotFetchedWithoutPermission)
+{
+    // The image an img points at lives outside the document, so nothing may open it while the
+    // links are not allowed to update.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"image-size.html", aParams);
+
+    // the frame has the HTML default size of 2cm by 1cm.  This was 5292 by 10583, the size of the
+    // image, which only the image file itself can say
+    awt::Size aSize = getShape(1)->getSize();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2000), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1000), aSize.Height);
+
+    SwDoc* pDoc = getSwDoc();
+    SwNodeOffset nNodes = pDoc->GetNodes().Count();
+    for (SwNodeOffset i(0); i < nNodes; ++i)
+    {
+        if (SwGrfNode* pGrfNode = pDoc->GetNodes()[i]->GetGrfNode())
+        {
+            // and the image itself never arrived
+            CPPUNIT_ASSERT(pGrfNode->GetGrfObj().GetType() == GraphicType::NONE
+                           || pGrfNode->GetGrfObj().GetType() == GraphicType::Default);
+            return;
+        }
+    }
+    CPPUNIT_FAIL("no graphic node in the document");
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf79298StrikeoutVariants)
