@@ -911,6 +911,11 @@ void SdrPercentItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
+SfxPoolItem* SdrAngleItem::CreateDefault()
+{
+    return new SdrAngleItem;
+}
+
 SdrAngleItem* SdrAngleItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SdrAngleItem(TypedWhichId<SdrAngleItem>(Which()),GetValue());
