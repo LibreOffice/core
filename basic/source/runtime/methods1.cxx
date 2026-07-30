@@ -320,30 +320,27 @@ void SbRtl_CLng(StarBASIC *, SbxArray & rPar, bool)  // JSM
 void SbRtl_CSng(StarBASIC *, SbxArray & rPar, bool)  // JSM
 {
     float nVal = float(0.0);
-    if (rPar.Count() == 2)
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    SbxVariable* pSbxVariable = rPar.Get(1);
+    if( pSbxVariable->GetType() == SbxSTRING )
     {
-        SbxVariable* pSbxVariable = rPar.Get(1);
-        if( pSbxVariable->GetType() == SbxSTRING )
+        // #41690
+        double dVal = 0.0;
+        OUString aScanStr = pSbxVariable->GetOUString();
+        ErrCode Error = SbxValue::ScanNumIntnl( aScanStr, dVal, /*bSingle=*/true );
+        if( SbxBase::GetError() == ERRCODE_NONE && Error != ERRCODE_NONE )
         {
-            // #41690
-            double dVal = 0.0;
-            OUString aScanStr = pSbxVariable->GetOUString();
-            ErrCode Error = SbxValue::ScanNumIntnl( aScanStr, dVal, /*bSingle=*/true );
-            if( SbxBase::GetError() == ERRCODE_NONE && Error != ERRCODE_NONE )
-            {
-                StarBASIC::Error( Error );
-            }
-            nVal = static_cast<float>(dVal);
+            StarBASIC::Error( Error );
         }
-        else
-        {
-            nVal = pSbxVariable->GetSingle();
-        }
+        nVal = static_cast<float>(dVal);
     }
     else
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        nVal = pSbxVariable->GetSingle();
     }
+
     rPar.Get(0)->PutSingle(nVal);
 }
 
