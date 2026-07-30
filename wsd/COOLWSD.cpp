@@ -4671,6 +4671,7 @@ void dump_state()
 
 // The intent is that this function can be called from a debugger. It is not used otherwise.
 
+// [-loplugin:external] [-loplugin:unreffun]
 void lslr_childroot()
 {
     std::cout << "lslr: " << COOLWSD::ChildRoot << "\n";

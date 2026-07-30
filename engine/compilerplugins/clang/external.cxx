@@ -532,6 +532,10 @@ private:
             canStatic = isa<FunctionDecl>(decl) || isa<VarDecl>(decl)
                         || isa<FunctionTemplateDecl>(decl) || isa<VarTemplateDecl>(decl);
         }
+        if (suppressWarningAt(decl->getLocation()))
+        {
+            return true;
+        }
         // In general, moving functions into an unnamed namespace can: break ADL like in
         //
         //   struct S1 { int f() { return 1; } };

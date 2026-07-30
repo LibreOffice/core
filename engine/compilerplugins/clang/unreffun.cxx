@@ -169,6 +169,10 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
     {
         return true;
     }
+    if (suppressWarningAt(loc))
+    {
+        return true;
+    }
     report(
         DiagnosticsEngine::Warning,
         (canon->isDefined()
