@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Word-processing documents (the LibreOffice Writer equivalent): DOCX/DOCM/DOTX/DOTM, DOC/DOT, RTF, ODT/OTT/FODT. Content extraction plus paginated layout and rendering.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
+    <ProjectReference Include="..\Paperless.Containers\Paperless.Containers.csproj" />
+    <ProjectReference Include="..\Paperless.Text\Paperless.Text.csproj" />
+    <ProjectReference Include="..\Paperless.Vector\Paperless.Vector.csproj" />
+    <ProjectReference Include="..\Paperless.Ooxml\Paperless.Ooxml.csproj" />
+    <ProjectReference Include="..\Paperless.OpenDocument\Paperless.OpenDocument.csproj" />
+    <ProjectReference Include="..\Paperless.MsBinary\Paperless.MsBinary.csproj" />
+  </ItemGroup>
+
+</Project>

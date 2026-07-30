@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Presentation documents (the LibreOffice Impress equivalent): PPTX/PPTM/POTX/POTM/PPSX/PPSM, PPT/POT/PPS, ODP/OTP/FODP. Includes slide rendering.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
+    <ProjectReference Include="..\Paperless.Containers\Paperless.Containers.csproj" />
+    <ProjectReference Include="..\Paperless.Text\Paperless.Text.csproj" />
+    <ProjectReference Include="..\Paperless.Vector\Paperless.Vector.csproj" />
+    <ProjectReference Include="..\Paperless.Ooxml\Paperless.Ooxml.csproj" />
+    <ProjectReference Include="..\Paperless.OpenDocument\Paperless.OpenDocument.csproj" />
+    <ProjectReference Include="..\Paperless.MsBinary\Paperless.MsBinary.csproj" />
+  </ItemGroup>
+
+</Project>

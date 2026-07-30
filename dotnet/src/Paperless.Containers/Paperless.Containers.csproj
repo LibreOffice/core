@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Container formats underlying office documents: OLE2/CFB compound files, ZIP, OPC (OOXML) and ODF packages, plus password-protected document decryption.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BouncyCastle.Cryptography" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
+  </ItemGroup>
+
+</Project>

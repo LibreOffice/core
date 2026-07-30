@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Shared legacy Microsoft binary-format infrastructure: Escher/MS-ODRAW drawings, OLE property sets, legacy codepages and record-stream readers.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
+    <ProjectReference Include="..\Paperless.Containers\Paperless.Containers.csproj" />
+    <ProjectReference Include="..\Paperless.Text\Paperless.Text.csproj" />
+    <ProjectReference Include="..\Paperless.Vector\Paperless.Vector.csproj" />
+  </ItemGroup>
+
+</Project>

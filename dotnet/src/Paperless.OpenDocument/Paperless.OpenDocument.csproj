@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Shared OpenDocument Format infrastructure: style families and resolution, common ODF attributes, and flat-XML (.fo*) handling.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
+    <ProjectReference Include="..\Paperless.Containers\Paperless.Containers.csproj" />
+    <ProjectReference Include="..\Paperless.Text\Paperless.Text.csproj" />
+    <ProjectReference Include="..\Paperless.Vector\Paperless.Vector.csproj" />
+  </ItemGroup>
+
+</Project>

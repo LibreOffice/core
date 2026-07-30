@@ -1,0 +1,99 @@
+<Project>
+
+  <!--
+    Central package version management for the Paperless solution.
+    Individual projects use <PackageReference Include="X" /> with no Version attribute.
+
+    Before adding a dependency to a src/ library, check two things. Paperless ships as
+    redistributable NuGet libraries, so every transitive dependency's licence becomes our
+    users' problem, and any build-time gate becomes their build's problem too.
+
+      1. The licence is permissive and unambiguous.
+      2. The package does not fail the build without a key, and does not phone home.
+         Some popular graphics packages have added exactly this; verify by building
+         against the package rather than trusting its licence metadata.
+
+    Current dependencies are all permissive: SkiaSharp (MIT), HarfBuzzSharp (MIT),
+    PdfPig (Apache-2.0), HtmlAgilityPack (MIT), BouncyCastle (MIT), OpenMcdf (MPL-2.0),
+    SharpCompress (MIT), the Svg.Skia family (MIT, except Svg.Custom which is MS-PL),
+    ExCSS (MIT).
+
+    Rasterisation and text are handled by SkiaSharp plus HarfBuzzSharp, with a
+    hand-rolled OpenType metrics reader in Paperless.Text. HarfBuzz is what LibreOffice
+    itself shapes with, so advance widths agree by construction; and reading the font
+    tables ourselves is wanted regardless, because matching LibreOffice's line heights
+    needs raw hhea/OS-2 access and our own precedence rules rather than a library's
+    interpretation of them.
+  -->
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+
+  <ItemGroup Label="Rasterisation and text shaping">
+    <PackageVersion Include="SkiaSharp" Version="4.150.1" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.Linux" Version="4.150.1" />
+    <PackageVersion Include="SkiaSharp.HarfBuzz" Version="4.150.1" />
+    <PackageVersion Include="HarfBuzzSharp" Version="14.2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup Label="Containers and crypto">
+    <!-- OLE2/CFB is hand-rolled in Paperless.Containers.Ole2 rather than taken from
+         OpenMcdf: tolerance of malformed real-world files was the deciding requirement,
+         and it needs control OpenMcdf does not expose. ZIP comes from the BCL's
+         System.IO.Compression, so SharpCompress is only a fallback if a package turns up
+         using a compression method the BCL lacks. -->
+    <PackageVersion Include="SharpCompress" Version="1.0.0" />
+    <!-- Legacy office crypto (RC4, Blowfish CFB for ODF) that the BCL lacks. -->
+    <PackageVersion Include="BouncyCastle.Cryptography" Version="2.7.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Markup">
+    <PackageVersion Include="HtmlAgilityPack" Version="1.12.4" />
+  </ItemGroup>
+
+  <ItemGroup Label="SVG import">
+    <!--
+      The Svg.Skia family, minus Svg.Skia itself. Svg.SceneGraph and Svg.Model parse
+      SVG (CSS via ExCSS, gradients, clip paths, masks, filters) and build a scene,
+      which ShimSkiaSharp represents as a device-independent canvas-command list.
+      Paperless translates those commands into its own IDrawingSink.
+
+      Two properties make this work where a rasterising SVG library would not:
+
+        * Taking Svg.SceneGraph WITHOUT Svg.Skia pulls in NO SkiaSharp at all
+          (verified: only ExCSS, ShimSkiaSharp, Svg.Custom, Svg.Model). So there is
+          no clash with our own SkiaSharp version, and no second native dependency.
+        * The command list is resolution-independent, so the PDF backend gets real
+          vectors rather than a rasterised approximation.
+
+      Svg.Model also exposes ISvgAssetLoader / ISvgTextRunTypefaceResolver /
+      ISvgTextGlyphRunResolver, so SVG text can be shaped through OUR font resolver
+      and HarfBuzz rather than a second, divergent text stack.
+
+      Licences: MIT, except Svg.Custom which is MS-PL (also permissive).
+    -->
+    <PackageVersion Include="Svg.SceneGraph" Version="5.1.1" />
+    <PackageVersion Include="Svg.Model" Version="5.1.1" />
+    <PackageVersion Include="ShimSkiaSharp" Version="5.1.1" />
+  </ItemGroup>
+
+  <ItemGroup Label="Tooling">
+    <PackageVersion Include="System.CommandLine" Version="2.0.10" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.10" />
+  </ItemGroup>
+
+  <ItemGroup Label="Test-only">
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
+    <PackageVersion Include="xunit.v3" Version="3.2.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="Shouldly" Version="4.3.0" />
+    <!-- Reading LibreOffice's reference PDFs in the fidelity harness. -->
+    <PackageVersion Include="PdfPig" Version="0.1.15" />
+    <!-- Rasterising reference PDFs in-process (pdfium) so the fidelity harness
+         does not require poppler-utils on the machine. -->
+    <PackageVersion Include="PDFtoImage" Version="5.3.0" />
+  </ItemGroup>
+
+</Project>

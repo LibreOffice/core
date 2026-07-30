@@ -1,0 +1,29 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Paperless.Containers/Paperless.Containers.csproj" />
+    <Project Path="src/Paperless.Core/Paperless.Core.csproj" />
+    <Project Path="src/Paperless.MsBinary/Paperless.MsBinary.csproj" />
+    <Project Path="src/Paperless.Ooxml/Paperless.Ooxml.csproj" />
+    <Project Path="src/Paperless.OpenDocument/Paperless.OpenDocument.csproj" />
+    <Project Path="src/Paperless.Presentations/Paperless.Presentations.csproj" />
+    <Project Path="src/Paperless.Rendering/Paperless.Rendering.csproj" />
+    <Project Path="src/Paperless.Spreadsheets/Paperless.Spreadsheets.csproj" />
+    <Project Path="src/Paperless.Text/Paperless.Text.csproj" />
+    <Project Path="src/Paperless.Vector/Paperless.Vector.csproj" />
+    <Project Path="src/Paperless.WordProcessing/Paperless.WordProcessing.csproj" />
+    <Project Path="src/Paperless/Paperless.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Paperless.Containers.Tests/Paperless.Containers.Tests.csproj" />
+    <Project Path="tests/Paperless.Core.Tests/Paperless.Core.Tests.csproj" />
+    <Project Path="tests/Paperless.Fidelity.Tests/Paperless.Fidelity.Tests.csproj" />
+    <Project Path="tests/Paperless.Presentations.Tests/Paperless.Presentations.Tests.csproj" />
+    <Project Path="tests/Paperless.Spreadsheets.Tests/Paperless.Spreadsheets.Tests.csproj" />
+    <Project Path="tests/Paperless.TestKit/Paperless.TestKit.csproj" />
+    <Project Path="tests/Paperless.Text.Tests/Paperless.Text.Tests.csproj" />
+    <Project Path="tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Paperless.Cli/Paperless.Cli.csproj" />
+  </Folder>
+</Solution>

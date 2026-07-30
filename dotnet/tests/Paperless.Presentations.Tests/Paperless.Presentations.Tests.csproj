@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Unit tests for presentation readers and slide rendering.</Description>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Shouldly" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paperless.TestKit\Paperless.TestKit.csproj" />
+    <ProjectReference Include="..\..\src\Paperless.Presentations\Paperless.Presentations.csproj" />
+  </ItemGroup>
+
+</Project>

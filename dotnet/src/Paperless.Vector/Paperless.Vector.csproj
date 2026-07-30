@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Importers for embedded vector graphics: WMF, EMF, EMF+ and SVG, decoded into the Paperless display list.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      SVG parsing and scene building. Deliberately NOT Svg.Skia: taking these three
+      without it avoids pulling in a second SkiaSharp version, and keeps the output a
+      device-independent command list we can translate into IDrawingSink rather than
+      pixels. See the note in Directory.Packages.props.
+    -->
+    <PackageReference Include="Svg.SceneGraph" />
+    <PackageReference Include="Svg.Model" />
+    <PackageReference Include="ShimSkiaSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
+  </ItemGroup>
+
+</Project>

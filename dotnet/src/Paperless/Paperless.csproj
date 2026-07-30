@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>The Paperless facade: sniffs any supported office document and dispatches to the right reader. Reference this package if you do not want to pick libraries by hand.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paperless.Core\Paperless.Core.csproj" />
+    <ProjectReference Include="..\Paperless.Containers\Paperless.Containers.csproj" />
+    <ProjectReference Include="..\Paperless.Text\Paperless.Text.csproj" />
+    <ProjectReference Include="..\Paperless.Vector\Paperless.Vector.csproj" />
+    <ProjectReference Include="..\Paperless.Rendering\Paperless.Rendering.csproj" />
+    <ProjectReference Include="..\Paperless.WordProcessing\Paperless.WordProcessing.csproj" />
+    <ProjectReference Include="..\Paperless.Spreadsheets\Paperless.Spreadsheets.csproj" />
+    <ProjectReference Include="..\Paperless.Presentations\Paperless.Presentations.csproj" />
+  </ItemGroup>
+
+</Project>
