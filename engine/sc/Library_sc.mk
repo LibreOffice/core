@@ -609,6 +609,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/StatisticsDialogs/FTestDialog \
     sc/source/ui/StatisticsDialogs/MatrixComparisonGenerator \
     sc/source/ui/StatisticsDialogs/MovingAverageDialog \
+    sc/source/ui/StatisticsDialogs/PrincipalComponentAnalysisDialog \
     sc/source/ui/StatisticsDialogs/RandomNumberGeneratorDialog \
     sc/source/ui/StatisticsDialogs/RegressionDialog \
     sc/source/ui/StatisticsDialogs/SamplingDialog \

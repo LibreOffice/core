@@ -2371,6 +2371,23 @@ SfxVoidItem FourierAnalysisDialog SID_FOURIER_ANALYSIS_DIALOG
     GroupId = SfxGroupId::Options;
 ]
 
+SfxVoidItem PrincipalComponentAnalysisDialog SID_PRINCIPAL_COMPONENT_ANALYSIS_DIALOG
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Options;
+]
+
 SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
 ()
 [

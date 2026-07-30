@@ -21,4 +21,5 @@
   <menu:menuitem menu:id=".uno:ZTestDialog"/>
   <menu:menuitem menu:id=".uno:ChiSquareTestDialog"/>
   <menu:menuitem menu:id=".uno:FourierAnalysisDialog"/>
+  <menu:menuitem menu:id=".uno:PrincipalComponentAnalysisDialog"/>
 </menu:menupopup>

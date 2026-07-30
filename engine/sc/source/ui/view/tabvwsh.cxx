@@ -98,6 +98,7 @@ void ScTabViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(ScZTestDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScChiSquareTestDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScFourierAnalysisDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScPrincipalComponentAnalysisDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScCondFormatDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(sc::SparklineDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(sc::SparklineDataRangeDialogWrapper::GetChildWindowId());

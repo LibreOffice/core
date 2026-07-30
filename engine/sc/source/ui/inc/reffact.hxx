@@ -148,6 +148,13 @@ private:
     ScFourierAnalysisDialogWrapper() = delete;
 };
 
+class ScPrincipalComponentAnalysisDialogWrapper :
+    public ChildControllerWrapper<SID_PRINCIPAL_COMPONENT_ANALYSIS_DIALOG>
+{
+private:
+    ScPrincipalComponentAnalysisDialogWrapper() = delete;
+};
+
 namespace sc
 {
 /** Wrapper for the sparkline properties dialog */

@@ -140,6 +140,8 @@ dialogs = [
     # {"command": ".uno:ChiSquareTestDialog", "closeButton": "cancel"},
         # tested in sc/qa/uitest/statistics/chiSquare.py:53
     {"command": ".uno:FourierAnalysisDialog", "closeButton": "cancel"},
+    # {"command": ".uno:PrincipalComponentAnalysisDialog", "closeButton": "cancel"},
+        # tested in sc/qa/uitest/statistics/principalComponentAnalysis.py
     # {"command": ".uno:SpellDialog", "closeButton": "close"},
         # an extra dialog appears
     {"command": ".uno:Hyphenate", "closeButton": "cancel"},

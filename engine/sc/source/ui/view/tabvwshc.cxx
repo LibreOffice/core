@@ -73,6 +73,7 @@
 #include <ZTestDialog.hxx>
 #include <ChiSquareTestDialog.hxx>
 #include <FourierAnalysisDialog.hxx>
+#include <PrincipalComponentAnalysisDialog.hxx>
 
 #include <PivotLayoutDialog.hxx>
 #include <SparklineDialog.hxx>
@@ -189,6 +190,10 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             break;
         case SID_FOURIER_ANALYSIS_DIALOG:
             xResult = std::make_shared<ScFourierAnalysisDialog>(pB, pCW, pParent, GetViewData());
+            break;
+        case SID_PRINCIPAL_COMPONENT_ANALYSIS_DIALOG:
+            xResult = std::make_shared<ScPrincipalComponentAnalysisDialog>(pB, pCW, pParent,
+                                                                          GetViewData());
             break;
         case WID_SIMPLE_REF:
         {

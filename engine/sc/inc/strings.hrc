@@ -290,6 +290,8 @@
 #define STR_REGRESSION                              NC_("STR_REGRESSION", "Regression")
 #define STR_FOURIER_ANALYSIS_UNDO_NAME              NC_("STR_FOURIER_ANALYSIS_UNDO_NAME", "Fourier Analysis")
 #define STR_FOURIER_ANALYSIS                        NC_("STR_FOURIER_ANALYSIS", "Fourier Analysis")
+#define STR_PRINCIPAL_COMPONENT_ANALYSIS_UNDO_NAME  NC_("STR_PRINCIPAL_COMPONENT_ANALYSIS_UNDO_NAME", "Principal Component Analysis")
+#define STR_PRINCIPAL_COMPONENT_ANALYSIS            NC_("STR_PRINCIPAL_COMPONENT_ANALYSIS", "Principal Component Analysis")
 /* Common */
 #define STR_COLUMN_LABEL_TEMPLATE                   NC_("STR_COLUMN_LABEL_TEMPLATE", "Column %NUMBER%")
 #define STR_ROW_LABEL_TEMPLATE                      NC_("STR_ROW_LABEL_TEMPLATE", "Row %NUMBER%")
@@ -364,6 +366,12 @@
 #define STR_MESSAGE_NODATA_IN_RANGE                 NC_("STR_MESSAGE_NODATA_IN_RANGE", "No data in input range.")
 #define STR_MESSAGE_OUTPUT_TOO_LONG                 NC_("STR_MESSAGE_OUTPUT_TOO_LONG", "Output is too long to write into the sheet.")
 #define STR_INPUT_DATA_RANGE                        NC_("STR_INPUT_DATA_RANGE", "Input data range")
+/*Principal Component Analysis*/
+#define STR_MESSAGE_NOT_A_NUMBER                    NC_("STR_MESSAGE_NOT_A_NUMBER", "The cell %ADDRESS% does not hold a number. Every cell of the data range must hold a number.")
+#define STR_MESSAGE_SHEET_ALREADY_EXISTS            NC_("STR_MESSAGE_SHEET_ALREADY_EXISTS", "The sheet %NAME% already exists. Rename or delete it and try again.")
+#define STR_MESSAGE_TOO_FEW_DATA_ROWS               NC_("STR_MESSAGE_TOO_FEW_DATA_ROWS", "The data range needs at least two rows of numbers.")
+#define STR_MESSAGE_TOO_FEW_DATA_COLUMNS            NC_("STR_MESSAGE_TOO_FEW_DATA_COLUMNS", "The data range needs at least two columns.")
+#define STR_MESSAGE_RANGE_SPANS_SHEETS              NC_("STR_MESSAGE_RANGE_SPANS_SHEETS", "The data range has to be on a single sheet.")
 /*Insert image dialog*/
 #define STR_ANCHOR_TO_CELL                          NC_("STR_ANCHOR_TO_CELL", "To cell")
 #define STR_ANCHOR_TO_CELL_RESIZE                   NC_("STR_ANCHOR_TO_CELL_RESIZE", "To cell (resize with cell)")
