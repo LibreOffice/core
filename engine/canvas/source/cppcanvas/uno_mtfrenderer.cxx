@@ -50,25 +50,19 @@ public:
 
 sal_Int64 MtfRenderer::draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fScaleX, double fScaleY)
 {
-    rtl::Reference<vclcanvas::Canvas> xCanvas(new vclcanvas::Canvas(reinterpret_cast<OutputDevice*>(pOutputDevice)));
-    comphelper::ScopeGuard aCanvasScopeGuard([&xCanvas] {
-        comphelper::disposeComponent(xCanvas);
-    });
-
     Size aSize (fScaleX + 1, fScaleY + 1);
-    rtl::Reference<vclcanvas::CanvasBitmap> xBitmapCanvas = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
-    if( !xBitmapCanvas )
-        return 0;
+    ScopedVclPtrInstance<VirtualDevice> xVDev(*reinterpret_cast<OutputDevice*>(pOutputDevice), DeviceFormat::WITH_ALPHA);
+    xVDev->SetOutputSizePixel(aSize, /*bErase*/true, /*bAlphaMaskTransparent*/true);
 
-    xBitmapCanvas->clear();
+    rtl::Reference<vclcanvas::Canvas> xBitmapCanvas(new vclcanvas::Canvas(xVDev.get()));
 
     GDIMetaFile* pMetafile = reinterpret_cast<GDIMetaFile*>(pMeta);
     ::basegfx::B2DHomMatrix aMatrix;
     aMatrix.scale( fScaleX, fScaleY );
     cppcanvas::RendererSharedPtr renderer = cppcanvas::VCLFactory::createRenderer (xBitmapCanvas, aMatrix, *pMetafile);
-    renderer->draw ();
+    renderer->draw();
 
-    Bitmap aBitmap = vcl::unotools::bitmapFromXBitmap(xBitmapCanvas);
+    Bitmap aBitmap = xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel());
     return reinterpret_cast<sal_Int64>(new Bitmap(aBitmap));
 }
 
