@@ -59,8 +59,16 @@ private:
         label when the input cannot be analysed. */
     bool InputIsValid();
     OUString GetOutputSheetName() const;
+
+    /** A name for the chart that no drawing object in the document holds yet. */
+    OUString GetChartName(SCTAB nOutputTab) const;
     void Calculate();
     ScRange WriteOutput(ScDocShell& rDocShell, SCTAB nOutputTab);
+
+    /** Anchors a chart at nChartColumn drawing rShareRange, whose two columns
+        are the share of the variance and the running total of it, as bars with
+        a line over them. */
+    void AddVarianceChart(ScDocShell& rDocShell, const ScRange& rShareRange, SCCOL nChartColumn);
 
     DECL_LINK(ButtonClicked, weld::Button&, void);
     DECL_LINK(CheckBoxToggled, weld::Toggleable&, void);

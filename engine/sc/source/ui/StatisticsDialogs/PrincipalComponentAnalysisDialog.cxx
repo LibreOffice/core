@@ -11,11 +11,36 @@
 
 #include <algorithm>
 
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart2/XAxis.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartTypeManager.hpp>
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
+#include <com/sun/star/chart2/XFormattedString.hpp>
+#include <com/sun/star/chart2/XTitle.hpp>
+#include <com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/table/CellRangeAddress.hpp>
+#include <com/sun/star/table/XTableCharts.hpp>
+#include <com/sun/star/table/XTableChartsSupplier.hpp>
+
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/processfactory.hxx>
+#include <svl/numformat.hxx>
 #include <svl/undo.hxx>
 
 #include <docfunc.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
+#include <docuno.hxx>
+#include <drwlayer.hxx>
+#include <global.hxx>
 #include <rangelst.hxx>
 #include <reffact.hxx>
 #include <scresid.hxx>
@@ -194,7 +219,8 @@ bool ScPrincipalComponentAnalysisDialog::InputIsValid()
     // columns than rows they reach further down than the standardized values.
     const sal_Int32 nBlockHeight = std::max<sal_Int32>(nRowCount, nColumnCount);
 
-    if (nColumnCount + 2 * nRank + 2 > mrDocument.MaxCol()
+    // Two columns past the last one written, where the chart is anchored.
+    if (nColumnCount + 2 * nRank + 4 > mrDocument.MaxCol()
         || nFirstValueRow + nBlockHeight - 1 > mrDocument.MaxRow())
     {
         mxErrorMessage->set_label(ScResId(STR_MESSAGE_OUTPUT_TOO_LONG));
@@ -405,10 +431,137 @@ ScRange ScPrincipalComponentAnalysisDialog::WriteOutput(ScDocShell& rDocShell, S
         aOutput.nextRow();
     }
 
+    // The chart reads the two share columns together with the header row above
+    // them, which names the two things it draws.
+    const ScRange aShareRange(ScAddress(nShareColumn, nLabelRow, nOutputTab),
+                              ScAddress(nShareColumn + 1, nFirstValueRow + nRank - 1, nOutputTab));
+    AddVarianceChart(rDocShell, aShareRange, nShareColumn + 3);
+
     const SCROW nBlockHeight = std::max<SCROW>(nRowCount, nColumnCount);
     return ScRange(
         ScAddress(0, nMeanRow, nOutputTab),
         ScAddress(nColumnCount + 2 * nRank + 2, nFirstValueRow + nBlockHeight - 1, nOutputTab));
+}
+
+OUString ScPrincipalComponentAnalysisDialog::GetChartName(SCTAB nOutputTab) const
+{
+    OUString aSheetName;
+    mrDocument.GetName(nOutputTab, aSheetName);
+    const OUString aBaseName = aSheetName + "_Chart";
+
+    ScDrawLayer* pModel = mrDocument.GetDrawLayer();
+    if (!pModel)
+        return aBaseName;
+
+    // A drawing object name has to be free across every sheet, not just this
+    // one, so count up until nothing answers to it.
+    OUString aName = aBaseName;
+    SCTAB nFoundTab = 0;
+    for (sal_Int32 nSuffix = 2; pModel->GetNamedObject(aName, SdrObjKind::OLE2, nFoundTab);
+         ++nSuffix)
+    {
+        aName = aBaseName + "_" + OUString::number(nSuffix);
+    }
+    return aName;
+}
+
+void ScPrincipalComponentAnalysisDialog::AddVarianceChart(ScDocShell& rDocShell,
+                                                          const ScRange& rShareRange,
+                                                          SCCOL nChartColumn)
+{
+    const SCTAB nOutputTab = rShareRange.aStart.Tab();
+    try
+    {
+        css::uno::Reference<css::container::XIndexAccess> xSheets(rDocShell.GetModel()->getSheets(),
+                                                                  css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::table::XTableChartsSupplier> xSupplier(
+            xSheets->getByIndex(nOutputTab), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::table::XTableCharts> xCharts = xSupplier->getCharts();
+
+        // Anchor the chart at the top of the sheet, clear of the numbers.
+        const tools::Rectangle aCell = ScDrawLayer::GetCellRect(
+            mrDocument, ScAddress(nChartColumn, nMeanRow, nOutputTab), false);
+        const css::awt::Rectangle aChartRectangle(aCell.Left(), aCell.Top(), 12000, 8000);
+
+        const css::table::CellRangeAddress aAddress(nOutputTab, rShareRange.aStart.Col(),
+                                                    rShareRange.aStart.Row(),
+                                                    rShareRange.aEnd.Col(), rShareRange.aEnd.Row());
+        const OUString aChartName = GetChartName(nOutputTab);
+        // The first cell of each column names the series it heads, and the
+        // components need no names of their own along the bottom.
+        xCharts->addNewByName(aChartName, aChartRectangle, { aAddress }, true, false);
+
+        css::uno::Reference<css::container::XNameAccess> xChartsByName(xCharts,
+                                                                       css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::document::XEmbeddedObjectSupplier> xObjectSupplier(
+            xChartsByName->getByName(aChartName), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::chart2::XChartDocument> xChartDocument(
+            xObjectSupplier->getEmbeddedObject(), css::uno::UNO_QUERY_THROW);
+
+        // Bars for the share each component carries with a line over them for
+        // the running total. The template draws the last series of the two as
+        // the line, which is the running total.
+        css::uno::Reference<css::lang::XMultiServiceFactory> xTemplateFactory(
+            xChartDocument->getChartTypeManager(), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::chart2::XChartTypeTemplate> xTemplate(
+            xTemplateFactory->createInstance(u"com.sun.star.chart2.template.ColumnWithLine"_ustr),
+            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDocument->getFirstDiagram();
+        xTemplate->changeDiagram(xDiagram);
+
+        // A title is a Title object holding one run of text.
+        css::uno::Reference<css::lang::XMultiServiceFactory> xServiceFactory(
+            comphelper::getProcessServiceFactory(), css::uno::UNO_SET_THROW);
+        auto aMakeTitle = [&xServiceFactory](TranslateId aTextId) {
+            css::uno::Reference<css::chart2::XFormattedString> xText(
+                xServiceFactory->createInstance(u"com.sun.star.chart2.FormattedString"_ustr),
+                css::uno::UNO_QUERY_THROW);
+            xText->setString(ScResId(aTextId));
+            css::uno::Reference<css::chart2::XTitle> xTitle(
+                xServiceFactory->createInstance(u"com.sun.star.chart2.Title"_ustr),
+                css::uno::UNO_QUERY_THROW);
+            xTitle->setText({ xText });
+            return xTitle;
+        };
+
+        css::uno::Reference<css::chart2::XTitled> xTitled(xChartDocument,
+                                                          css::uno::UNO_QUERY_THROW);
+        xTitled->setTitleObject(aMakeTitle(STR_VARIANCE_SHARE_CHART_TITLE));
+
+        css::uno::Reference<css::chart2::XCoordinateSystemContainer> xCoordinateSystems(
+            xDiagram, css::uno::UNO_QUERY_THROW);
+        const auto aSystems = xCoordinateSystems->getCoordinateSystems();
+        if (aSystems.hasElements())
+        {
+            // One bar per component stands along the bottom.
+            css::uno::Reference<css::chart2::XTitled> xComponentAxis(
+                aSystems[0]->getAxisByDimension(0, 0), css::uno::UNO_QUERY_THROW);
+            xComponentAxis->setTitleObject(aMakeTitle(STR_PRINCIPAL_COMPONENTS_AXIS_TITLE));
+
+            const css::uno::Reference<css::chart2::XAxis> xShareAxis
+                = aSystems[0]->getAxisByDimension(1, 0);
+            css::uno::Reference<css::chart2::XTitled> xShareAxisTitled(xShareAxis,
+                                                                       css::uno::UNO_QUERY_THROW);
+            xShareAxisTitled->setTitleObject(aMakeTitle(STR_VARIANCE_SHARE_AXIS_TITLE));
+
+            // Both series are a share of a whole, so the axis they share counts
+            // in percent.
+            css::uno::Reference<css::beans::XPropertySet> xShareAxisProperties(
+                xShareAxis, css::uno::UNO_QUERY_THROW);
+            const sal_uInt32 nFormat = mrDocument.GetFormatTable()->GetStandardFormat(
+                SvNumFormatType::PERCENT, ScGlobal::eLnge);
+            xShareAxisProperties->setPropertyValue(u"NumberFormat"_ustr,
+                                                   cpo::uno::Any(sal_Int32(nFormat)));
+            xShareAxisProperties->setPropertyValue(u"LinkNumberFormatToSource"_ustr,
+                                                   cpo::uno::Any(false));
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        // The sheet of numbers stands on its own, so a chart that cannot be
+        // built is left out.
+        TOOLS_WARN_EXCEPTION("sc.ui", "adding the variance chart");
+    }
 }
 
 IMPL_LINK(ScPrincipalComponentAnalysisDialog, ButtonClicked, weld::Button&, rButton, void)

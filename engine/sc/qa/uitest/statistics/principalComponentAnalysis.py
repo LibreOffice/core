@@ -153,6 +153,63 @@ class principalComponentAnalysis(UITestCase):
                 sFormat = document.getNumberFormats().getByKey(nFormatKey).FormatString
                 self.assertIn("%", sFormat)
 
+            # A chart on the sheet draws the two share columns, the per
+            # component share as bars and the running total as a line over
+            # them.
+            oCharts = document.Sheets.getByIndex(1).Charts
+            self.assertEqual(oCharts.getCount(), 1)
+            oChart = oCharts.getByIndex(0)
+            aRanges = [
+                (oRange.StartColumn, oRange.StartRow, oRange.EndColumn, oRange.EndRow)
+                for oRange in oChart.getRanges()]
+            self.assertEqual(aRanges, [(10, nHeaderRow, 11, nFirstValueRow + 2)])
+
+            oChartDocument = oChart.getEmbeddedObject()
+
+            def sTitleOf(oTitled):
+                return "".join(oString.getString()
+                               for oString in oTitled.getTitleObject().getText())
+
+            self.assertEqual(sTitleOf(oChartDocument), "Variance share by component")
+
+            oDiagram = oChartDocument.getFirstDiagram()
+            aChartTypes = [
+                oChartType.getChartType()
+                for oSystem in oDiagram.getCoordinateSystems()
+                for oChartType in oSystem.getChartTypes()]
+            self.assertEqual(aChartTypes, ["com.sun.star.chart2.ColumnChartType",
+                                           "com.sun.star.chart2.LineChartType"])
+
+            # The bars read the share column and the line the running total
+            # beside it.
+            aSeriesRanges = []
+            for oSystem in oDiagram.getCoordinateSystems():
+                for oChartType in oSystem.getChartTypes():
+                    for oSeries in oChartType.getDataSeries():
+                        for oLabeled in oSeries.getDataSequences():
+                            oValues = oLabeled.getValues()
+                            if oValues.Role == "values-y":
+                                aSeriesRanges.append(
+                                    oValues.getSourceRangeRepresentation())
+            self.assertEqual(len(aSeriesRanges), 2)
+            self.assertIn("$K$", aSeriesRanges[0])
+            self.assertIn("$L$", aSeriesRanges[1])
+
+            # Both axes say what they carry.
+            oSystem = oDiagram.getCoordinateSystems()[0]
+            self.assertEqual(
+                sTitleOf(oSystem.getAxisByDimension(0, 0)), "Principal components")
+            self.assertEqual(
+                sTitleOf(oSystem.getAxisByDimension(1, 0)), "Variance share")
+
+            # Both series are a share of a whole, so the axis they share counts
+            # in percent of its own accord.
+            oAxis = oSystem.getAxisByDimension(1, 0)
+            self.assertFalse(oAxis.LinkNumberFormatToSource)
+            sAxisFormat = document.getNumberFormats().getByKey(
+                oAxis.NumberFormat).FormatString
+            self.assertIn("%", sAxisFormat)
+
             # A second run cannot have the sheet it needs, so it reports that
             # and adds nothing.
             self.runAnalysis(gridwin, "$A$1:$C$6", True, close_button="cancel")
