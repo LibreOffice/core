@@ -1347,8 +1347,8 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
         LOKitHelper::ScopedString undo(getLOKitDocument()->getCommandValues(".uno:Undo"));
         std::ostringstream jsonTemplate;
         jsonTemplate << R"({"commandName":".uno:DocumentRepair","Redo":)"
-                     << (values.get() == nullptr ? "" : values.get())
-                     << ",\"Undo\":" << (undo.get() == nullptr ? "" : undo.get()) << "}";
+                     << (!values ? "" : values.get())
+                     << ",\"Undo\":" << (!undo ? "" : undo.get()) << "}";
         std::string json = jsonTemplate.str();
         // json only contains view IDs, insert matching user names.
         std::map<int, UserInfo> viewInfo = _docManager->getViewInfo();
@@ -1360,7 +1360,7 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
         // The primitive-tree JSON is large, so compress it with zstd. Fall
         // back to an uncompressed text frame if compression fails.
         LOKitHelper::ScopedString values(getLOKitDocument()->getCommandValues(command.c_str()));
-        const char* json = values.get() ? values.get() : "{}";
+        const char* json = values ? values.get() : "{}";
         success = sendZstdFrame("zstdvectorprimitives:\n", json, std::strlen(json));
         if (!success)
             success = sendTextFrame("commandvalues: " + std::string(json));
@@ -1368,7 +1368,7 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
     else
     {
         LOKitHelper::ScopedString values(getLOKitDocument()->getCommandValues(command.c_str()));
-        success = sendTextFrame("commandvalues: " + std::string(values.get() == nullptr ? "{}" : values.get()));
+        success = sendTextFrame("commandvalues: " + std::string(!values ? "{}" : values.get()));
     }
 
     return success;
