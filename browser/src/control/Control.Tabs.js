@@ -296,6 +296,8 @@ window.L.Control.Tabs = window.L.Control.extend({
 						window.L.DomEvent.on(tab, 'dblclick', function(j) {
 							return function() {
 								// window.app.console.err('Double clicked ' + j);
+								if (this._map.isReadOnlyMode())
+									return;
 								this._tabForContextMenu = j;
 								this._renameSheet();
 							};

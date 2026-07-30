@@ -31,6 +31,13 @@ describe(['tagdesktop'], 'Sheet operations in a read-only view.', function () {
 		cy.cGet('#spreadsheet-tab0').should('have.text', 'Sheet1');
 	});
 
+	it('Double-clicking a sheet tab in a read-only view does not offer a rename', function () {
+		loadReadOnly();
+		cy.cGet('#spreadsheet-tab0').dblclick();
+
+		cy.cGet('#modal-dialog-rename-calc-sheet').should('not.exist');
+	});
+
 	it('A read-only view cannot turn sheet grid lines off, but still learns their setting', function () {
 		loadReadOnly();
 
