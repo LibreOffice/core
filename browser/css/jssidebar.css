@@ -184,6 +184,18 @@ img.sidebar.ui-image {
 	grid-template-columns: repeat(2, auto);
 }
 
+/* label + picker for each line end, all four on a single row */
+#LinePropertyPanel.sidebar.ui-grid #arrowgrid.sidebar.ui-grid {
+	display: grid !important;
+	grid-auto-flow: row !important;
+	grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr) !important;
+	align-items: center;
+}
+
+#LinePropertyPanel.sidebar.ui-grid #arrowgrid .sidebar.ui-combobox {
+	min-width: 0;
+}
+
 /* section content */
 
 .sidebar.ui-expander-content {

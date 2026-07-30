@@ -21,6 +21,9 @@
 
 #include <vcl/weld.hxx>
 #include <memory>
+#include <optional>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <rtl/ref.hxx>
 #include <svl/poolitem.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <svx/sidebar/LineWidthPopup.hxx>
@@ -28,6 +31,10 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 class ToolbarUnoDispatcher;
+class XLineStartItem;
+class XLineEndItem;
+class XLineEndList;
+typedef rtl::Reference<XLineEndList> XLineEndListRef;
 class XLineWidthItem;
 class XLineTransparenceItem;
 
@@ -49,6 +56,8 @@ public:
                           const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual void setLineWidth(const XLineWidthItem& rItem) = 0;
+    virtual void setLineStart(const XLineStartItem& rItem) = 0;
+    virtual void setLineEnd(const XLineEndItem& rItem) = 0;
 
     void SetNoneLineStyle(bool bNoneLineStyle)
     {
@@ -66,6 +75,9 @@ protected:
 
     void updateLineTransparence(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
     virtual void updateLineWidth(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
+    void updateLineStart(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
+    void updateLineEnd(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
+    void updateLineEndList(const SfxPoolItem* pItem);
 
     void setMapUnit(MapUnit eMapUnit);
 
@@ -87,13 +99,20 @@ private:
     std::unique_ptr<weld::Toolbar> mxTBWidth;
     std::unique_ptr<weld::Label> mxFTTransparency;
     std::unique_ptr<weld::MetricSpinButton> mxMFTransparent;
-    std::unique_ptr<weld::Label> mxArrowHeadStyleFT;
-    std::unique_ptr<weld::Toolbar> mxArrowHeadStyleTB;
-    std::unique_ptr<ToolbarUnoDispatcher> mxArrowHeadStyleDispatch;
+    std::unique_ptr<weld::Label> mxArrowStartFT;
+    std::unique_ptr<weld::Label> mxArrowEndFT;
+    std::unique_ptr<weld::ComboBox> mxLBStart;
+    std::unique_ptr<weld::ComboBox> mxLBEnd;
     //popup windows
     std::unique_ptr<LineWidthPopup> mxLineWidthPopup;
 
     std::unique_ptr<LineStyleNoneChange> mxLineStyleNoneChange;
+
+    // the current list of available line ends and the currently
+    // selected start/end arrows
+    XLineEndListRef mxLineEndList;
+    std::optional<basegfx::B2DPolyPolygon> moStartPolygon;
+    std::optional<basegfx::B2DPolyPolygon> moEndPolygon;
 
     sal_uInt16 mnTrans;
     MapUnit meMapUnit;
@@ -104,9 +123,20 @@ private:
 
     void Initialize();
 
+    void FillLineEndListBox(weld::ComboBox& rListBox);
+    void SelectLineEndEntry(weld::ComboBox& rListBox,
+                            const std::optional<basegfx::B2DPolyPolygon>& roPolygon);
+    // draw one dropdown entry for the given id
+    void RenderLineEndEntry(const weld::ComboBox::render_args& rArgs, bool bStart);
+
     DECL_DLLPRIVATE_LINK(ToolboxWidthSelectHdl, const OUString&, void);
     DECL_DLLPRIVATE_LINK(ToolboxWidthToggleMenuHdl, const OUString&, void);
     DECL_DLLPRIVATE_LINK(ChangeTransparentHdl, weld::MetricSpinButton&, void);
+    DECL_DLLPRIVATE_LINK(ChangeStartHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(ChangeEndHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(RenderStartHdl, weld::ComboBox::render_args, void);
+    DECL_DLLPRIVATE_LINK(RenderEndHdl, weld::ComboBox::render_args, void);
+    DECL_DLLPRIVATE_LINK(GetSizeHdl, vcl::RenderContext&, Size);
 };
 
 } // end of namespace svx::sidebar

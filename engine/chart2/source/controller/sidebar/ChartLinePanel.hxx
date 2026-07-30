@@ -50,6 +50,11 @@ public:
 
     virtual void setLineWidth(const XLineWidthItem& rItem) override;
 
+    // Charts do not support arrow heads (see disableArrowHead), so these
+    // are no-ops.
+    virtual void setLineStart(const XLineStartItem& rItem) override;
+    virtual void setLineEnd(const XLineEndItem& rItem) override;
+
 protected:
 
     virtual void setLineTransparency(const XLineTransparenceItem& rItem) override;

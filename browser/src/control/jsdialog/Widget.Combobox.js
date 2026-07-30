@@ -310,8 +310,14 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	for (var i in data.entries) {
 		entries.push({
 			text: data.entries[i].toString(),
+			// keep the name as a tooltip when it is only shown as an icon
+			hint: data.renderSelectedEntry
+				? data.entries[i].toString()
+				: undefined,
 			selected: parseInt(i) === selectedEntryPos,
-			customRenderer: data.customEntryRenderer
+			customRenderer: data.customEntryRenderer,
+			// icon-only rows for line-end arrow pickers
+			class: data.renderSelectedEntry ? 'ui-combobox-lineend' : undefined
 		});
 	}
 
@@ -490,6 +496,16 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	});
 
 	container.updateRenders = function (pos) {
+		if (container._selectedValuePos === parseInt(pos)) {
+			var valuePreview = container.querySelector(
+				':scope > img.ui-combobox-value-preview');
+			var cachedValue =
+				builder.rendersCache[data.id] &&
+				builder.rendersCache[data.id].images[pos];
+			if (valuePreview && cachedValue)
+				valuePreview.src = cachedValue;
+		}
+
 		var dropdownRoot = JSDialog.GetDropdown(data.id);
 		if (!dropdownRoot)
 			return;
@@ -504,15 +520,77 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 		}
 	};
 
+	if (data.renderSelectedEntry && data.customEntryRenderer) {
+		window.L.DomUtil.addClass(container, 'ui-combobox-rendered-value');
+
+		container._selectedValuePos = -1;
+		container._renderSelectedValue = function (pos) {
+			container._selectedValuePos =
+				pos === undefined || isNaN(pos) ? -1 : parseInt(pos);
+
+			var preview = container.querySelector(
+				':scope > .ui-combobox-value-preview');
+
+			if (container._selectedValuePos < 0 || !entries[container._selectedValuePos]) {
+				if (preview)
+					window.L.DomUtil.remove(preview);
+				return;
+			}
+
+			if (!preview)
+				preview = window.L.DomUtil.create(
+					'img', 'ui-combobox-value-preview', container);
+
+			var entryText = entries[container._selectedValuePos].text;
+			preview.alt = entryText;
+			preview.title = entryText;
+
+			var cache = builder.rendersCache[data.id];
+			if (cache && cache.images[container._selectedValuePos]) {
+				preview.src = cache.images[container._selectedValuePos];
+			} else {
+				preview.removeAttribute('src');
+				var pendingKey = data.id + ':' + container._selectedValuePos;
+				if (!app.pendingOnDemandRenderRequests.has(pendingKey)) {
+					app.pendingOnDemandRenderRequests.add(pendingKey);
+					app.pendingOnDemandRenders++;
+				}
+				builder.callback(
+					'combobox',
+					'render_entry',
+					{ id: data.id },
+					container._selectedValuePos +
+						';' +
+						Math.floor(100 * window.devicePixelRatio) +
+						';' +
+						Math.floor(100 * window.devicePixelRatio),
+					builder,
+				);
+			}
+		};
+
+		if (data.selectedCount > 0)
+			container._renderSelectedValue(selectedEntryPos);
+	}
+
 	container.onSelect = function (pos) {
 		resetSelection();
 		if (pos >= 0 && entries[pos])
 			entries[pos].selected = true;
 		else if (!entries[pos])
 			console.warn('Cannot find entry with pos: "' + pos + '" in "' + data.id + '"');
+		if (typeof container._renderSelectedValue === 'function')
+			container._renderSelectedValue(pos);
 	};
 
 	container.onSetText = function (text) {
+		if (typeof container._renderSelectedValue === 'function') {
+			var textPos = -1;
+			for (var e = 0; e < entries.length; e++) {
+				if (entries[e].text === text) { textPos = e; break; }
+			}
+			container._renderSelectedValue(textPos);
+		}
 		if (document.activeElement === content)
 			return;
 		content.value = text;

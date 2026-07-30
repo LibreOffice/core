@@ -51,6 +51,7 @@ private:
     bool m_isSyntheticModify : 1;
     bool m_isKeyBoardModify : 1;
     bool m_isMatchCase : 1;
+    bool m_bRenderSelectedEntry : 1;
     sal_Int32 m_nMaxWidthChars;
     sal_Int32 m_nWidthInChars;
     Link<ComboBox&, void> m_SelectHdl;
@@ -111,6 +112,9 @@ public:
 
     void            EnableAutoSize( bool bAuto );
     SAL_DLLPRIVATE bool IsAutoSizeEnabled() const;
+
+    void            SetRenderSelectedEntry( bool bOn ) { m_bRenderSelectedEntry = bOn; }
+    bool            IsRenderSelectedEntry() const { return m_bRenderSelectedEntry; }
 
     virtual void    SetText( const OUString& rStr ) override;
     virtual void    SetText( const OUString& rStr, const Selection& rNewSelection ) override;

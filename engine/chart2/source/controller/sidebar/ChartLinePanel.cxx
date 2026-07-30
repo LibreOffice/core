@@ -255,6 +255,16 @@ void ChartLinePanel::setLineWidth(const XLineWidthItem& rItem)
     xPropSet->setPropertyValue(u"LineWidth"_ustr, cpo::uno::Any(rItem.GetValue()));
 }
 
+void ChartLinePanel::setLineStart(const XLineStartItem& /*rItem*/)
+{
+    // Charts do not support arrow heads.
+}
+
+void ChartLinePanel::setLineEnd(const XLineEndItem& /*rItem*/)
+{
+    // Charts do not support arrow heads.
+}
+
 void ChartLinePanel::updateLineWidth(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem)
 {
     LinePropertyPanelBase::updateLineWidth(bDisabled, bSetOrDefault, pItem);

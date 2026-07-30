@@ -25,6 +25,8 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnedit.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <svl/itemset.hxx>
 
@@ -42,6 +44,9 @@ LinePropertyPanel::LinePropertyPanel(
     maDashControl (SID_ATTR_LINE_DASH, *pBindings, *this),
     maWidthControl(SID_ATTR_LINE_WIDTH, *pBindings, *this),
     maTransControl(SID_ATTR_LINE_TRANSPARENCE, *pBindings, *this),
+    maLineStartControl(SID_ATTR_LINE_START, *pBindings, *this),
+    maLineEndControl(SID_ATTR_LINE_END, *pBindings, *this),
+    maLineEndListControl(SID_LINEEND_LIST, *pBindings, *this),
     mpBindings(pBindings)
 {
     setMapUnit(maWidthControl.GetCoreMetric());
@@ -53,6 +58,9 @@ LinePropertyPanel::~LinePropertyPanel()
     maDashControl.dispose();
     maWidthControl.dispose();
     maTransControl.dispose();
+    maLineStartControl.dispose();
+    maLineEndControl.dispose();
+    maLineEndListControl.dispose();
 }
 
 std::unique_ptr<PanelLayout> LinePropertyPanel::Create (
@@ -88,6 +96,21 @@ void LinePropertyPanel::NotifyItemUpdate(
         case SID_ATTR_LINE_WIDTH:
         {
             updateLineWidth(bDisabled, bSetOrDefault, pState);
+            break;
+        }
+        case SID_ATTR_LINE_START:
+        {
+            updateLineStart(bDisabled, bSetOrDefault, pState);
+            break;
+        }
+        case SID_ATTR_LINE_END:
+        {
+            updateLineEnd(bDisabled, bSetOrDefault, pState);
+            break;
+        }
+        case SID_LINEEND_LIST:
+        {
+            updateLineEndList(pState);
             break;
         }
     }
@@ -132,6 +155,18 @@ void LinePropertyPanel::setLineTransparency(const XLineTransparenceItem& rItem)
 void LinePropertyPanel::setLineWidth(const XLineWidthItem& rItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_WIDTH,
+            SfxCallMode::RECORD, { &rItem });
+}
+
+void LinePropertyPanel::setLineStart(const XLineStartItem& rItem)
+{
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_START,
+            SfxCallMode::RECORD, { &rItem });
+}
+
+void LinePropertyPanel::setLineEnd(const XLineEndItem& rItem)
+{
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_END,
             SfxCallMode::RECORD, { &rItem });
 }
 

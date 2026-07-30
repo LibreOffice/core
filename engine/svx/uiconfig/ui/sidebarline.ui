@@ -186,42 +186,85 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="arrowlabel">
+          <!-- n-columns=4 n-rows=1 -->
+          <object class="GtkGrid" id="arrowgrid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="sidebarline|arrowlabel">Arrow styles:</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">width</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkToolbar" id="arrowheadstyle">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="halign">end</property>
-            <property name="toolbar-style">icons</property>
-            <property name="show-arrow">False</property>
-            <property name="icon_size">2</property>
+            <property name="hexpand">True</property>
+            <property name="column-spacing">6</property>
             <child>
-              <object class="GtkMenuToolButton" id=".uno:LineEndStyle">
+              <object class="GtkLabel" id="startarrowlabel">
                 <property name="visible">True</property>
-                <property name="tooltip-text" translatable="yes" context="sidebarline|arrowheadstyle|tooltip_text">Select the style of the arrowheads.</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="sidebarline|startarrowlabel">_Start:</property>
                 <property name="use-underline">True</property>
+                <property name="mnemonic-widget">startarrowstyle</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="homogeneous">False</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="startarrowstyle">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="has-entry">True</property>
+                <property name="render-selected-entry">True</property>
+                <property name="tooltip-text" translatable="yes" context="sidebarline|startarrowstyle|tooltip_text">Select the style of the start arrowhead.</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry">
+                    <property name="can-focus">True</property>
+                    <property name="editable">False</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="endarrowlabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="sidebarline|endarrowlabel">_End:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">endarrowstyle</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="endarrowstyle">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="has-entry">True</property>
+                <property name="render-selected-entry">True</property>
+                <property name="tooltip-text" translatable="yes" context="sidebarline|endarrowstyle|tooltip_text">Select the style of the end arrowhead.</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry">
+                    <property name="can-focus">True</property>
+                    <property name="editable">False</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="left-attach">1</property>
+            <property name="left-attach">0</property>
             <property name="top-attach">4</property>
+            <property name="width">2</property>
           </packing>
         </child>
       </object>
@@ -230,17 +273,5 @@
         <property name="top-attach">0</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkListStore" id="liststore5">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-      <!-- column-name image -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name surface -->
-      <column type="CairoSurface"/>
-    </columns>
   </object>
 </interface>

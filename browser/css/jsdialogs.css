@@ -1490,6 +1490,27 @@ img.context-menu-icon {
 	min-width: 70px;
 }
 
+.ui-combobox.ui-combobox-rendered-value {
+	position: relative;
+}
+
+.ui-combobox.ui-combobox-rendered-value > input.ui-combobox-content {
+	/* the rendered preview carries the name; hide the duplicate text */
+	color: transparent;
+}
+
+img.ui-combobox-value-preview {
+	position: absolute;
+	inset-inline-start: 6px;
+	top: 1px;
+	bottom: 1px;
+	height: calc(100% - 2px);
+	max-width: calc(100% - 28px);
+	object-fit: contain;
+	object-position: left center;
+	pointer-events: none;
+}
+
 .ui-listbox-container {
 	height: 32px;
 }
@@ -1834,6 +1855,37 @@ img.context-menu-icon {
  * to just the icons. */
 .modalpopup[id$='-dropdown']:has(.ui-combobox-entry.ui-combobox-notext):not(:has(.ui-combobox-entry:not(.ui-combobox-notext))) {
 	min-width: 50px !important;
+}
+
+/* Line-end arrow pickers: icon-only rows */
+.ui-combobox-entry.ui-combobox-lineend {
+	width: max-content;
+	min-width: 0;
+	justify-content: flex-start;
+}
+
+.ui-combobox-entry.ui-combobox-lineend > span {
+	color: transparent;
+	display: inline-block;
+	width: 2rem;
+	min-height: 1rem;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.ui-combobox-entry.ui-combobox-lineend img {
+	width: auto;
+	max-height: 24px;
+	padding: 2px 8px;
+}
+
+.modalpopup[id$='-dropdown']:has(.ui-combobox-entry.ui-combobox-lineend) {
+	min-width: 0 !important;
+	width: max-content !important;
+}
+
+.modalpopup[id$='-dropdown']:has(.ui-combobox-entry.ui-combobox-lineend) .ui-combobox-search-container {
+	display: none;
 }
 
 .ui-combobox-entry img:hover {

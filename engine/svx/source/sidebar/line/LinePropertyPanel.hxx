@@ -60,6 +60,8 @@ public:
         SfxBindings* pBindings);
 
     virtual void setLineWidth(const XLineWidthItem& rItem) override;
+    virtual void setLineStart(const XLineStartItem& rItem) override;
+    virtual void setLineEnd(const XLineEndItem& rItem) override;
 
 protected:
 
@@ -71,6 +73,9 @@ private:
     sfx2::sidebar::ControllerItem maDashControl;
     sfx2::sidebar::ControllerItem maWidthControl;
     sfx2::sidebar::ControllerItem maTransControl;
+    sfx2::sidebar::ControllerItem maLineStartControl;
+    sfx2::sidebar::ControllerItem maLineEndControl;
+    sfx2::sidebar::ControllerItem maLineEndListControl;
 
     SfxBindings* mpBindings;
     vcl::EnumContext maContext;
