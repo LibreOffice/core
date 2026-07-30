@@ -20,6 +20,7 @@
 
 #include "swtypes.hxx"
 #include "swrect.hxx"
+#include <basegfx/units/Length.hxx>
 #include <svx/svdobj.hxx>
 #include <libxml/xmlwriter.h>
 
@@ -64,7 +65,7 @@ class SAL_DLLPUBLIC_RTTI SwAnchoredObject
         // Last known top of line, in which the anchor character is in.
         // Used to decide, if invalidation has to been performed, if anchor position
         // has changed, and used to position object.
-        SwTwips mnLastTopOfLine;
+        gfx::Length mnLastTopOfLine = 0_emu;
 
         // for to-paragraph and to-character anchored objects:
         // Layout frame vertical position is orient at - typically it's the upper
@@ -275,7 +276,7 @@ class SAL_DLLPUBLIC_RTTI SwAnchoredObject
         void ResetLastCharRectHeight();
 
         // accessor to member <nmLastTopOfLine>
-        SwTwips GetLastTopOfLine() const { return mnLastTopOfLine;}
+        gfx::Length GetLastTopOfLine() const { return mnLastTopOfLine;}
         void AddLastTopOfLineY( SwTwips _nDiff );
 
         /** reset members <maLastCharRect> and <mnLastTopOfLine> */
