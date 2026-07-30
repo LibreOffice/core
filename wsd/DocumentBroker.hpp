@@ -31,7 +31,7 @@
 #include <wsd/TileDesc.hpp>
 
 #if !MOBILEAPP
-#include <wopi/WopiStorage.hpp>
+#include <wsd/wopi/WopiStorage.hpp>
 #include <wsd/Admin.hpp>
 #else // MOBILEAPP
 #include <common/MobileApp.hpp>

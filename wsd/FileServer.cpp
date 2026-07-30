@@ -38,7 +38,7 @@
 #if !MOBILEAPP
 #include <net/HttpHelper.hpp>
 #endif
-#include <wopi/StorageConnectionManager.hpp>
+#include <wsd/wopi/StorageConnectionManager.hpp>
 #include <wsd/AIUtil.hpp>
 #include <wsd/Auth.hpp>
 #include <wsd/COOLWSD.hpp>

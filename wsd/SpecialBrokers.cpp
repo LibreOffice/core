@@ -36,7 +36,7 @@
 #include <wsd/TileCache.hpp>
 
 #if !MOBILEAPP
-#include <wopi/CheckFileInfo.hpp>
+#include <wsd/wopi/CheckFileInfo.hpp>
 #include <net/HttpHelper.hpp>
 #endif
 

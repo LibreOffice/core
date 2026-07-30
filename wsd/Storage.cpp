@@ -21,7 +21,7 @@
 #if !MOBILEAPP
 
 #include <net/HttpRequest.hpp>
-#include <wopi/WopiStorage.hpp>
+#include <wsd/wopi/WopiStorage.hpp>
 #include <wsd/Auth.hpp>
 #include <wsd/HostUtil.hpp>
 #include <wsd/ProofKey.hpp>

@@ -15,16 +15,16 @@
 #include "CollabBroker.hpp"
 #include "DocumentBroker.hpp"
 
-#include <COOLWSD.hpp>
-#include <Storage.hpp>
+#include <wsd/COOLWSD.hpp>
+#include <wsd/Storage.hpp>
 #include <common/Anonymizer.hpp>
 #include <common/JsonUtil.hpp>
 #include <Protocol.hpp>
-#include <RequestDetails.hpp>
+#include <wsd/RequestDetails.hpp>
 #include <SigUtil.hpp>
 #include <Socket.hpp>
 #include <Util.hpp>
-#include <wopi/StorageConnectionManager.hpp>
+#include <wsd/wopi/StorageConnectionManager.hpp>
 
 #include <common/Uri.hpp>
 

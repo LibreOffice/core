@@ -15,7 +15,7 @@
 #include "CollabSocketHandler.hpp"
 
 #include <Anonymizer.hpp>
-#include <COOLWSD.hpp>
+#include <wsd/COOLWSD.hpp>
 #include <JsonUtil.hpp>
 #include <Log.hpp>
 #include <SigUtil.hpp>

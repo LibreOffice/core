@@ -37,7 +37,7 @@
 #include <common/ViewSettings.hpp>
 #include <net/HttpHelper.hpp>
 #include <net/HttpServer.hpp>
-#include <wopi/StorageConnectionManager.hpp>
+#include <wsd/wopi/StorageConnectionManager.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/FileServer.hpp>

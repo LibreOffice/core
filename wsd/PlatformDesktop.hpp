@@ -21,13 +21,13 @@
 #include <stdexcept>
 #include <unordered_map>
 
-#include <Admin.hpp>
-#include <Auth.hpp>
-#include <CacheUtil.hpp>
-#include <FileServer.hpp>
-#include <UserMessages.hpp>
-#include <wopi/CheckFileInfo.hpp>
-#include <wopi/StorageConnectionManager.hpp>
+#include <wsd/Admin.hpp>
+#include <wsd/Auth.hpp>
+#include <wsd/CacheUtil.hpp>
+#include <wsd/FileServer.hpp>
+#include <wsd/UserMessages.hpp>
+#include <wsd/wopi/CheckFileInfo.hpp>
+#include <wsd/wopi/StorageConnectionManager.hpp>
 #include <net/HttpHelper.hpp>
 #include <sys/wait.h>
 

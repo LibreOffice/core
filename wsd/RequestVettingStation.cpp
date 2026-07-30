@@ -34,7 +34,7 @@
 
 #if !MOBILEAPP
 #include <common/JailUtil.hpp>
-#include <wopi/CheckFileInfo.hpp>
+#include <wsd/wopi/CheckFileInfo.hpp>
 #endif // !MOBILEAPP
 
 extern std::pair<std::shared_ptr<DocumentBroker>, std::string>

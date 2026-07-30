@@ -17,8 +17,8 @@
 #pragma once
 
 #include <string>
-#include <RequestDetails.hpp>
-#include <COOLWSD.hpp>
+#include <wsd/RequestDetails.hpp>
+#include <wsd/COOLWSD.hpp>
 
 /** This class helps us to build a URL that will reliably point back
  * at our service. It does very simple splitting of proxy URL

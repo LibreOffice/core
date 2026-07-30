@@ -21,7 +21,7 @@
 #include <wsd/RequestDetails.hpp>
 #include <wsd/RequestVettingStation.hpp>
 #if !MOBILEAPP
-#include <wopi/WopiProxy.hpp>
+#include <wsd/wopi/WopiProxy.hpp>
 #endif // !MOBILEAPP
 
 #include <cstdint>

@@ -14,15 +14,15 @@
 #include "CollabFileProxy.hpp"
 
 #include <Anonymizer.hpp>
-#include <COOLWSD.hpp>
+#include <wsd/COOLWSD.hpp>
 #include <Common.hpp>
-#include <DocumentBroker.hpp>
+#include <wsd/DocumentBroker.hpp>
 #include <HttpHelper.hpp>
 #include <Log.hpp>
 #include <Protocol.hpp>
-#include <RequestDetails.hpp>
+#include <wsd/RequestDetails.hpp>
 #include <SigUtil.hpp>
-#include <wopi/StorageConnectionManager.hpp>
+#include <wsd/wopi/StorageConnectionManager.hpp>
 
 #include <Poco/JSON/Parser.h>
 #include <Poco/URI.h>
