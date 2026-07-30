@@ -90,16 +90,6 @@
 	animation: spin 2s linear infinite;
 }
 
-/* Keyframes for rotation */
-@keyframes spin {
-	from {
-		transform: rotate(0deg);
-	}
-
-	to {
-		transform: rotate(360deg);
-	}
-}
 nav [id^='save'].unotoolbutton,
 #toolbar-up [id^='save'].unotoolbutton {
 	display: flex;
@@ -546,6 +536,14 @@ nav.hasnotebookbar [id^='save'].saved::after {
 	0% {margin-top: 0;}
 	50% {margin-top: -20px;}
 	100% {margin-top: 0;}
+}
+
+/* The lock icon rises once and comes back only to catch the eye. It starts and ends at a top
+   margin of zero, which is where it sits with no animation at all. */
+@media (prefers-reduced-motion: reduce) {
+	#mobile-wizard.menuwizard .locking-overlay-lock {
+		animation: none;
+	}
 }
 
 .sidebar .locking-overlay {

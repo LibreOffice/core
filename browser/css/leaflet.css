@@ -153,7 +153,7 @@
 }
 .leaflet-fade-anim .leaflet-popup {
 	opacity: 0;
-	transition: opacity 0.2s linear;
+	transition: opacity var(--duration-normal) linear;
 }
 .leaflet-fade-anim .leaflet-map-pane .leaflet-popup {
 	opacity: 1;
@@ -714,6 +714,16 @@ input.clipboard {
 	margin: 0 0 4px;
 	background: var(--spinner-logo) no-repeat 44px center/78px;
 }
+
+/* The logo bobbing while the document loads is decoration. The bob starts and ends at a bottom
+   offset of -38px, so pinning that offset holds the logo exactly where the animation left it. */
+@media (prefers-reduced-motion: reduce) {
+	.leaflet-progress-spinner::before {
+		animation: none;
+		bottom: -38px;
+	}
+}
+
 .leaflet-progress-spinner-canvas {
 	position: static !important;
 }

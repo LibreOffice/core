@@ -68,6 +68,26 @@
 	}
 }
 
+/* Under reduced motion the sweep across the track is replaced by a bar that covers the whole
+   track and fades in and out, so the bar still reads as busy while nothing travels. */
+@media (prefers-reduced-motion: reduce) {
+	.ui-progressbar.infinite::after {
+		animation-name: indeterminatePulse;
+	}
+}
+
+@keyframes indeterminatePulse {
+	0% {
+		opacity: 0.35;
+	}
+	50% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0.35;
+	}
+}
+
 /* slideshow nav btns  */
 .slideshow-nav-container {
 	background-color: rgba(0, 0, 0, 9.0) !important;

@@ -83,8 +83,8 @@
    the space the dragged slide left and a new insertion gap opens under
    the pointer. */
 #slide-sorter.dragging-slide .preview-frame {
-	transition: margin 0.15s ease-out, height 0.15s ease-out,
-		width 0.15s ease-out, padding 0.15s ease-out, opacity 0.15s ease-out;
+	transition: margin var(--duration-fast) ease-out, height var(--duration-fast) ease-out,
+		width var(--duration-fast) ease-out, padding var(--duration-fast) ease-out, opacity var(--duration-fast) ease-out;
 }
 
 /* A finished drop rearranges the frames in a single step. */
@@ -180,7 +180,7 @@
 	background: transparent url('images/lc_menu_chevron.svg') no-repeat center;
 	filter: brightness(0.5);
 	transform: rotate(90deg); /* expanded: chevron points down */
-	transition: transform 0.1s ease-in;
+	transition: transform var(--duration-instant) ease-in;
 }
 
 .slide-section-header.collapsed .slide-section-toggle::before {

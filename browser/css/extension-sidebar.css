@@ -42,7 +42,7 @@
 	border-inline-start: 5px solid transparent;
 	border-inline-end: 5px solid transparent;
 	border-top: 6px solid currentColor;
-	transition: transform 0.15s ease-out;
+	transition: transform var(--duration-fast) ease-out;
 }
 
 .extension-panel.folded .extension-panel-disclosure {

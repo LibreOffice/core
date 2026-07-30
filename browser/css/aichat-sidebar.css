@@ -106,7 +106,7 @@
 	border-radius: var(--border-radius);
 	background: transparent;
 	cursor: pointer;
-	transition: all 0.15s ease;
+	transition: all var(--duration-fast) ease;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -423,7 +423,7 @@
 	border: 1px solid transparent;
 	background: transparent;
 	cursor: pointer;
-	transition: all 0.15s ease;
+	transition: all var(--duration-fast) ease;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -479,8 +479,8 @@
 	border-radius: var(--border-radius-large);
 	background: var(--color-main-background);
 	padding: 6px 8px;
-	transition: border-color 0.2s ease,
-		box-shadow 0.2s ease;
+	transition: border-color var(--duration-normal) ease,
+		box-shadow var(--duration-normal) ease;
 }
 
 #aichat-input-container:focus-within {
@@ -523,9 +523,9 @@
 	border: none;
 	border-radius: 50%;
 	cursor: pointer;
-	transition: background 0.15s ease,
-		transform 0.1s ease,
-		opacity 0.15s ease;
+	transition: background var(--duration-fast) ease,
+		transform var(--duration-instant) ease,
+		opacity var(--duration-fast) ease;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -596,8 +596,8 @@
 	color: var(--color-main-text);
 	font-family: var(--cool-font);
 	cursor: pointer;
-	transition: background 0.15s ease,
-		border-color 0.15s ease;
+	transition: background var(--duration-fast) ease,
+		border-color var(--duration-fast) ease;
 	white-space: nowrap;
 }
 
@@ -711,8 +711,8 @@
 	border: 1px solid var(--color-border);
 	background: var(--color-border);
 	cursor: pointer;
-	transition: background 0.15s ease,
-		border-color 0.15s ease;
+	transition: background var(--duration-fast) ease,
+		border-color var(--duration-fast) ease;
 }
 
 #aichat-tone-emojify button.ui-pushbutton::before {
@@ -726,7 +726,7 @@
 	background: #fff;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 	transform: translateX(0);
-	transition: transform 0.15s ease;
+	transition: transform var(--duration-fast) ease;
 }
 
 #aichat-tone-emojify button.ui-pushbutton[aria-pressed='true'] {
@@ -784,7 +784,7 @@
 	color: var(--color-text-lighter);
 	cursor: pointer;
 	margin-top: 4px;
-	transition: color 0.15s ease;
+	transition: color var(--duration-fast) ease;
 }
 
 #aichat-tone-add button.ui-pushbutton:hover:not([disabled]) {
@@ -872,8 +872,8 @@
 	border: 1px solid var(--color-border);
 	color: var(--color-main-text);
 	cursor: pointer;
-	transition: border-color 0.15s ease,
-		background 0.15s ease;
+	transition: border-color var(--duration-fast) ease,
+		background var(--duration-fast) ease;
 }
 
 #aichat-tone-form-icons
@@ -1281,7 +1281,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	padding: 4px 12px;
 	border-radius: 12px;
 	cursor: pointer;
-	transition: all 0.15s ease;
+	transition: all var(--duration-fast) ease;
 }
 
 [id^='aichat-retry-'] button.ui-pushbutton:hover {
@@ -1305,9 +1305,9 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	font-weight: 500;
 	border-radius: 14px;
 	cursor: pointer;
-	transition: background 0.15s ease,
-		border-color 0.15s ease,
-		box-shadow 0.15s ease;
+	transition: background var(--duration-fast) ease,
+		border-color var(--duration-fast) ease,
+		box-shadow var(--duration-fast) ease;
 	line-height: 1.4;
 }
 
@@ -1409,7 +1409,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	margin: 0;
 	white-space: nowrap;
 	overflow: hidden;
-	animation: aichat-slide-up 0.15s ease-out;
+	animation: aichat-slide-up var(--duration-fast) ease-out;
 }
 
 /* -- Prompt suggestion cards -- */
@@ -1426,7 +1426,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 /* Individual suggestion card - pushbutton wrapper */
 #aichat-chips > [id^='aichat-chip-'] {
 	margin: 0 0 8px;
-	animation: aichat-slide-up 0.2s ease-out both;
+	animation: aichat-slide-up var(--duration-normal) ease-out both;
 }
 
 #aichat-chips > [id^='aichat-chip-']:nth-child(2) {
@@ -1497,7 +1497,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	font-size: 12px;
 	font-family: var(--cool-font);
 	cursor: pointer;
-	transition: background 0.15s ease;
+	transition: background var(--duration-fast) ease;
 	display: inline-flex;
 	align-items: center;
 	gap: var(--spacing-s);
@@ -1517,8 +1517,8 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	border-radius: 3px;
 	border-bottom: 1px dotted rgba(var(--aichat-accent), 0.5);
 	cursor: pointer;
-	transition: background 0.15s ease,
-		border-color 0.15s ease;
+	transition: background var(--duration-fast) ease,
+		border-color var(--duration-fast) ease;
 	font-size: 12px;
 	white-space: nowrap;
 }

@@ -79,7 +79,15 @@
 }
 
 #viewModeDropdown.attention .unotoolbutton {
-	animation: viewmode-attention 200ms cubic-bezier(0.2, 0, 0, 1) 2;
+	animation: viewmode-attention var(--duration-normal) var(--ease-standard) 2;
+}
+
+/* The shake only points the user at a button that is already on screen and readable. It starts
+   and ends with no translation, so the button keeps its place when the shake is dropped. */
+@media (prefers-reduced-motion: reduce) {
+	#viewModeDropdown.attention .unotoolbutton {
+		animation: none;
+	}
 }
 
 /* Gated to real pointers - on touch, :hover sticks after a tap and would

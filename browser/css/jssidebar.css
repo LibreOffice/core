@@ -635,13 +635,13 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	font-size: 0.83rem;
 	border-bottom: none;
 	color: var(--color-main-text);
-	transition: background-color 0.3s, border-color 0.3s;
+	transition: background-color var(--duration-slow), border-color var(--duration-slow);
 }
 #navigation-options .tab:after {
 	content: '';
 	display: block;
 	margin-top: 4px;
-	transition: border-color 0.3s;
+	transition: border-color var(--duration-slow);
 	border-bottom: 2px solid transparent;
 }
 
@@ -828,7 +828,7 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	border-radius: 5px;
 	cursor: pointer;
 	font-size: 16px;
-	transition: background-color 0.3s ease;
+	transition: background-color var(--duration-slow) ease;
 }
 
 #toggle-sidebar-btn:hover {

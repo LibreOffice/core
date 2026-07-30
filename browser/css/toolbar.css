@@ -27,6 +27,23 @@
 	background-color: var(--color-main-text);
 	animation: moveIndicator 2s linear infinite;
 }
+
+/* Under reduced motion the short bar that travels along the track is replaced by a bar that
+   covers the whole track and fades in and out, so the loading bar still says that work is going
+   on while nothing crosses the screen. */
+@media (prefers-reduced-motion: reduce) {
+	#document-name-input-loading-bar::after {
+		animation-name: loadingBarPulse;
+		left: 0;
+		width: 100%;
+	}
+}
+
+@keyframes loadingBarPulse {
+	0%, 100% { opacity: 0.35; }
+	50% { opacity: 1; }
+}
+
 .margin-item {
 	display: flex;
 	align-items: center;
@@ -314,6 +331,14 @@
 	flex: 0.4 1 auto;
 	text-align: left;
 	animation: docNamePulse 1.5s infinite ease-in-out;
+}
+
+/* The pulse only brightens the glow around a field that already shows a focus shadow, so under
+   reduced motion the static focus shadow carries the same message. */
+@media (prefers-reduced-motion: reduce) {
+	#document-name-input.editable:focus {
+		animation: none;
+	}
 }
 
 .readonly #document-name-input.editable:focus {

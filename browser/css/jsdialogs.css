@@ -2453,11 +2453,6 @@ button.has-img img {
 	animation: spin 2s linear infinite;
 }
 
-@keyframes spin {
-	0% { transform: rotate(0deg); }
-	100% { transform: rotate(360deg); }
-}
-
 /* color picker */
 .ui-color-picker {
 	padding: var(--spacing-s);
@@ -2603,8 +2598,8 @@ button.has-img img {
 	border: 1px solid var(--color-border);
 	border-radius: 999px;
 	overflow: hidden;
-	transition: background 0.15s ease,
-		border-color 0.15s ease;
+	transition: background var(--duration-fast) ease,
+		border-color var(--duration-fast) ease;
 }
 
 .ui-chip:hover {
@@ -2630,8 +2625,8 @@ button.has-img img {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	transition: color 0.15s ease,
-		background 0.15s ease;
+	transition: color var(--duration-fast) ease,
+		background var(--duration-fast) ease;
 }
 
 .ui-chip-main {
@@ -2775,6 +2770,21 @@ button.has-img img {
 	20% {transform: translateY(5px) translateX(15px); opacity: 1;}
 	45% {transform: translateY(22px) translateX(-10px); opacity: 1;}
 	100% {transform: translateY(60px) translateX(15px); opacity: 0;}
+}
+
+/* The sheet of paper travels 80 pixels down the dialog and swings sideways on the way. Under
+   reduced motion it stays in place and fades in and out instead, which still tells the user that
+   the save is running. */
+@media (prefers-reduced-motion: reduce) {
+	#busypopup #spinner-paper-g,
+	.popup #spinner-paper-g {
+		animation-name: spinner-saving-pulse;
+	}
+}
+
+@keyframes spinner-saving-pulse {
+	0%, 100% {opacity: 0.2;}
+	50% {opacity: 1;}
 }
 
 .spinner-img #spinner-box-f-right {
@@ -2966,10 +2976,10 @@ button.has-img img {
 		animation: fade 0.7s;
 	}
 	.fadein {
-		animation: fade reverse 0.15s;
+		animation: fade reverse var(--duration-fast);
 	}
 	.fsdialog-overlay {
-		animation: fade reverse .3s;
+		animation: fade reverse var(--duration-slow);
 	}
 }
 
@@ -4323,7 +4333,7 @@ img#collab-choice-avatar {
 	border-radius: 8px;
 	cursor: pointer;
 	background: transparent;
-	transition: background 0.15s, border-color 0.15s;
+	transition: background var(--duration-fast), border-color var(--duration-fast);
 }
 
 #collab-choice-cards > *:hover {

@@ -44,7 +44,7 @@
 	.toc-h3 a {
 		border-radius: 5px;
 		/* Add rounded corners */
-		transition: background-color 0.3s ease;
+		transition: background-color var(--duration-slow) ease;
 		/* Smooth transition effect */
 		font-family: Arial, sans-serif;
 		/* Use a common font family */

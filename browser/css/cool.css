@@ -39,6 +39,20 @@
 	--shadow-subtle: 0 0 3px var(--color-box-shadow);
 	--shadow-elevated: 0 -1px 2px 0 var(--color-black-15), 0 2px 2px 0 var(--color-black-10);
 
+	/* Motion scale for transitions and animations. The duration grows with how much of the
+	   screen moves: instant for a colour or an opacity change, fast for a single small control,
+	   normal for a dropdown or a menu, slow for a panel, deliberate for a full width surface.
+	   Pick ease-standard for movement the user asked for, ease-out for something coming in and
+	   ease-in for something going away. */
+	--duration-instant: 100ms;
+	--duration-fast: 150ms;
+	--duration-normal: 200ms;
+	--duration-slow: 300ms;
+	--duration-deliberate: 400ms;
+	--ease-standard: cubic-bezier(0.2, 0, 0, 1);
+	--ease-out: cubic-bezier(0, 0, 0.2, 1);
+	--ease-in: cubic-bezier(0.4, 0, 1, 1);
+
 	--tooltip-font-size: 0.875rem;
 	--default-font-size: 0.75rem;
 	--overflow-group-font-size: 8.5pt; /* do not scale labels of groups */
@@ -73,6 +87,26 @@
 
 	/* Scrollbars */
 	--scrollbar-width: thin;
+}
+
+/* When the user asks the system for less motion, every transition and animation that takes its
+   time from the motion scale becomes short enough to read as immediate. One millisecond keeps the
+   transitionend and animationend events firing, so code that waits for them still runs. */
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--duration-instant: 1ms;
+		--duration-fast: 1ms;
+		--duration-normal: 1ms;
+		--duration-slow: 1ms;
+		--duration-deliberate: 1ms;
+	}
+}
+
+/* Shared rotation for the round loading indicators, defined once here rather than once per
+   widget stylesheet. */
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
 }
 
 html {
@@ -394,7 +428,7 @@ input, button {
 #sidebar-dock-wrapper.visible {
 	display: block;
 	/* synchronize time with Sidebar.ts setting focus */
-	animation: 200ms ease-out appear-from-right;
+	animation: var(--duration-normal) ease-out appear-from-right;
 	border-inline-start: 1px solid var(--color-border);
 }
 
@@ -411,7 +445,7 @@ input, button {
 #aichat-dock-wrapper.visible {
 	display: block;
 	width: 350px;
-	animation: 200ms ease-out aichat-dock-open;
+	animation: var(--duration-normal) ease-out aichat-dock-open;
 	border-inline-start: 1px solid var(--color-border);
 }
 
@@ -679,7 +713,7 @@ input, button {
 	margin-right: 8px;
 }
 .cool-annotation.annotation-pop-up.annotation-active {
-	transition: transform 400ms cubic-bezier(0.2,0,0,1), box-shadow 400ms cubic-bezier(0.2,0,0,1);
+	transition: transform var(--duration-deliberate) var(--ease-standard), box-shadow var(--duration-deliberate) var(--ease-standard);
 	will-change: transform, box-shadow;
 	box-shadow: 0 0 0 1000px rgba(var(--doc-type),0.15);
 }
@@ -1038,7 +1072,7 @@ input, button {
 	font-size: 1em;
 	line-height: 1;
 	opacity: 1;
-	transition: all 0.1s ease 0.5s;
+	transition: all var(--duration-instant) ease 0.5s;
 	visibility: visible;
 }
 [data-title]:after {
@@ -1184,12 +1218,20 @@ input, button {
 }
 
 .lokblink {
-	animation: lokblink 150ms infinite alternate;
+	animation: lokblink var(--duration-fast) infinite alternate;
 }
 
 @keyframes lokblink {
 	from { opacity: 1; }
 	to { opacity: 0; }
+}
+
+/* The blink is a flash of attention on a dialog that is already on screen, so under reduced
+   motion the dialog simply stays visible. */
+@media (prefers-reduced-motion: reduce) {
+	.lokblink {
+		animation: none;
+	}
 }
 
 .form-field-frame {

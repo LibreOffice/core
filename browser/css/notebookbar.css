@@ -105,12 +105,12 @@ button.ui-tab.notebookbar {
 	border: 1px solid transparent !important;
 	color: var(--color-text-darker) !important;
 	box-shadow: inset 12px 0 var(--color-main-background), inset -12px 0 var(--color-main-background), inset 0 -2px rgb(var(--doc-type));
-	transition: box-shadow 0.1s ease-out;
+	transition: box-shadow var(--duration-instant) ease-out;
 }
 
 .ui-tab.selected.notebookbar:hover {
 	box-shadow: inset 0 0 var(--color-main-background), inset 0 0 var(--color-main-background), inset 0 -2px rgb(var(--doc-type));
-	transition: box-shadow 0.3s ease;
+	transition: box-shadow var(--duration-slow) ease;
 }
 
 /* Tint contextual tabs (Table Design, Sparkline, Picture, Chart, Shape,
@@ -908,11 +908,6 @@ label.notebookbar.ui-checkbox-label {
 	top: 0;
 	width: 100%;
 	height: 100%;
-}
-
-@keyframes spin {
-	0% { transform: rotate(0deg); }
-	100% { transform: rotate(360deg); }
 }
 
 .ui-drawing-area-placeholder-container {
