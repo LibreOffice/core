@@ -50,7 +50,7 @@ namespace cppcanvastools
             sets up the transformation and the clip from the
             OutDevState.
          */
-        void initRenderState( css::rendering::RenderState&              renderState,
+        void initRenderState( ::vclcanvas::RenderState&              renderState,
                               const ::cppcanvas::OutDevState& outdevState );
 
         /** Calc output offset relative to baseline
@@ -127,7 +127,7 @@ namespace cppcanvastools
 
             @return true, if the clip has changed, false if not
          */
-        bool modifyClip( css::rendering::RenderState&                       o_rRenderState,
+        bool modifyClip( ::vclcanvas::RenderState&                       o_rRenderState,
                          const struct ::cppcanvas::OutDevState&   rOutdevState,
                          const ::cppcanvas::CanvasSharedPtr&                rCanvas,
                          const ::basegfx::B2DPoint&                         rOffset,

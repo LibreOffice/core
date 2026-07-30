@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the Collabora Office project.
  *
@@ -16,10 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#pragma once
 
-module com { module sun { module star { module rendering {
+#include <com/sun/star/geometry/AffineMatrix2D.hpp>
+#include <com/sun/star/rendering/ColorComponent.hpp>
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
+#include <cpo/uno/Sequence.hxx>
 
-interface XPolyPolygon2D;
+namespace vclcanvas {
 
 /** This structure contains information passed to each
     XCanvas render operation.<p>
@@ -56,7 +60,7 @@ struct RenderState
         clip. That means, nothing rendered to the canvas will be
         visible.<p>
      */
-    XPolyPolygon2D                                      Clip;
+    css::uno::Reference<css::rendering::XPolyPolygon2D> Clip;
 
 
     /** The device color associated with this render operation.<p>
@@ -66,10 +70,9 @@ struct RenderState
 
         @see XGraphicDevice
      */
-    sequence<ColorComponent>                            DeviceColor;
-
+    cpo::uno::Sequence<css::rendering::ColorComponent> DeviceColor;
 };
 
-}; }; }; };
+}
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

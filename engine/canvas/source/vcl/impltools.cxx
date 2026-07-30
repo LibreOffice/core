@@ -71,7 +71,7 @@ using namespace vclcanvas;
         bool setupFontTransform( ::Point&                       o_rPoint,
                                  vcl::Font&                    io_rVCLFont,
                                  const vclcanvas::ViewState&    rViewState,
-                                 const rendering::RenderState&  rRenderState,
+                                 const vclcanvas::RenderState&  rRenderState,
                                  ::OutputDevice const &         rOutDev )
         {
             ::basegfx::B2DHomMatrix aMatrix;
@@ -168,7 +168,7 @@ using namespace vclcanvas;
 
         ::Point mapRealPoint2D( const geometry::RealPoint2D&    rPoint,
                                 const vclcanvas::ViewState&     rViewState,
-                                const rendering::RenderState&   rRenderState )
+                                const vclcanvas::RenderState&   rRenderState )
         {
             ::basegfx::B2DPoint aPoint( ::basegfx::unotools::b2DPointFromRealPoint2D(rPoint) );
 
@@ -182,7 +182,7 @@ using namespace vclcanvas;
 
         ::tools::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&  rPoly,
                                       const vclcanvas::ViewState&       rViewState,
-                                      const rendering::RenderState&     rRenderState )
+                                      const vclcanvas::RenderState&     rRenderState )
         {
             ::basegfx::B2DHomMatrix aMatrix;
             ::canvastools::mergeViewAndRenderTransform(aMatrix,

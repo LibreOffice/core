@@ -30,7 +30,7 @@
 #include <vcl/metaactiontypes.hxx>
 #include "renderer.hxx"
 #include "canvas.hxx"
-#include <com/sun/star/rendering/RenderState.hpp>
+#include <RenderState.hxx>
 #include <canvas/vclcanvasdllapi.h>
 
 #include "action.hxx"
@@ -205,7 +205,7 @@ namespace cppcanvas
                                    const ActionFactoryParameters& rParms,
                                    bool                           bSubsettable );
 
-            mutable css::rendering::RenderState maRenderState;
+            mutable ::vclcanvas::RenderState maRenderState;
             CanvasSharedPtr mpCanvas;
             ActionVector maActions;
 

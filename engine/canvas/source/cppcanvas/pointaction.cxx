@@ -27,7 +27,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <canvastools.hxx>
-#include <com/sun/star/rendering/RenderState.hpp>
+#include <RenderState.hxx>
 
 #include "pointaction.hxx"
 #include "outdevstate.hxx"
@@ -64,7 +64,7 @@ namespace cppcanvas
             private:
                 ::basegfx::B2DPoint                         maPoint;
                 CanvasSharedPtr                             mpCanvas;
-                css::rendering::RenderState                 maState;
+                ::vclcanvas::RenderState                 maState;
             };
 
             PointAction::PointAction( const ::basegfx::B2DPoint& rPoint,
@@ -94,7 +94,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PointAction::render()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PointAction: 0x" << std::hex << this );
 
-                rendering::RenderState aLocalState( maState );
+                vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 mpCanvas->getUNOCanvas()->drawPoint( ::basegfx::unotools::point2DFromB2DPoint(maPoint),

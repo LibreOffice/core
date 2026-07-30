@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/rendering/RenderState.hpp>
+#include "RenderState.hxx"
 #include "XCachedPrimitive.hxx"
 #include <comphelper/compbase.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -46,7 +46,7 @@ namespace vclcanvas
                       const ::Size&                                   rSize,
                       const GraphicAttr&                              rAttr,
                       const ::vclcanvas::ViewState&                rUsedViewState,
-                      css::rendering::RenderState                     aUsedRenderState,
+                      ::vclcanvas::RenderState                     aUsedRenderState,
                       const css::uno::Reference< vclcanvas::XCanvas >&   rTarget );
 
         /// Dispose all internal references
@@ -64,7 +64,7 @@ namespace vclcanvas
         ::vclcanvas::ViewState                         maUsedViewState;
         css::uno::Reference< vclcanvas::XCanvas >                      mxTarget;
         GraphicObjectSharedPtr                                         mpGraphicObject;
-        const css::rendering::RenderState                              maRenderState;
+        const ::vclcanvas::RenderState                              maRenderState;
         const ::Point                                                  maPoint;
         const ::Size                                                   maSize;
         const GraphicAttr                                              maAttributes;

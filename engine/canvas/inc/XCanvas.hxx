@@ -24,7 +24,7 @@
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/rendering/FontRequest.hpp>
-#include <com/sun/star/rendering/RenderState.hpp>
+#include "RenderState.hxx"
 #include <com/sun/star/rendering/StringContext.hpp>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include <com/sun/star/rendering/Texture.hpp>
@@ -148,7 +148,7 @@ public:
      */
     virtual void drawPoint(const ::css::geometry::RealPoint2D& aPoint,
                            const ::vclcanvas::ViewState& aViewState,
-                           const ::css::rendering::RenderState& aRenderState)
+                           const ::vclcanvas::RenderState& aRenderState)
         = 0;
 
     /** Draw a line in device resolution width (i.e. one device pixel
@@ -173,7 +173,7 @@ public:
     virtual void drawLine(const ::css::geometry::RealPoint2D& aStartPoint,
                           const ::css::geometry::RealPoint2D& aEndPoint,
                           const ::vclcanvas::ViewState& aViewState,
-                          const ::css::rendering::RenderState& aRenderState)
+                          const ::vclcanvas::RenderState& aRenderState)
         = 0;
 
     /** Draw a poly-polygon in device resolution line width (i.e. the
@@ -195,7 +195,7 @@ public:
     virtual void
     drawPolyPolygon(const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
                     const ::vclcanvas::ViewState& aViewState,
-                    const ::css::rendering::RenderState& aRenderState)
+                    const ::vclcanvas::RenderState& aRenderState)
         = 0;
 
     /** Stroke each polygon of the provided poly-polygon with the
@@ -227,7 +227,7 @@ public:
     virtual void
     strokePolyPolygon(const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
                       const ::vclcanvas::ViewState& aViewState,
-                      const ::css::rendering::RenderState& aRenderState,
+                      const ::vclcanvas::RenderState& aRenderState,
                       const ::css::rendering::StrokeAttributes& aStrokeAttributes)
         = 0;
 
@@ -255,7 +255,7 @@ public:
     virtual ::css::uno::Reference<::vclcanvas::XCachedPrimitive>
     fillPolyPolygon(const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
                     const ::vclcanvas::ViewState& aViewState,
-                    const ::css::rendering::RenderState& aRenderState)
+                    const ::vclcanvas::RenderState& aRenderState)
         = 0;
 
     /** Fill the given poly-polygon with a texture.<p>
@@ -285,7 +285,7 @@ public:
     */
     virtual ::css::uno::Reference<::vclcanvas::XCachedPrimitive> fillTexturedPolyPolygon(
         const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
-        const ::vclcanvas::ViewState& aViewState, const ::css::rendering::RenderState& aRenderState,
+        const ::vclcanvas::ViewState& aViewState, const ::vclcanvas::RenderState& aRenderState,
         const ::cpo::uno::Sequence<::css::rendering::Texture>& xTextures)
         = 0;
 
@@ -352,8 +352,7 @@ public:
     virtual void drawText(const ::css::rendering::StringContext& aText,
                           const ::css::uno::Reference<::css::rendering::XCanvasFont>& xFont,
                           const ::vclcanvas::ViewState& aViewState,
-                          const ::css::rendering::RenderState& aRenderState,
-                          ::sal_Int8 nTextDirection)
+                          const ::vclcanvas::RenderState& aRenderState, ::sal_Int8 nTextDirection)
         = 0;
 
     /** Draw the formatted text given by the text layout.<p>
@@ -384,7 +383,7 @@ public:
     virtual void
     drawTextLayout(const ::css::uno::Reference<::css::rendering::XTextLayout>& xLayoutetText,
                    const ::vclcanvas::ViewState& aViewState,
-                   const ::css::rendering::RenderState& aRenderState)
+                   const ::vclcanvas::RenderState& aRenderState)
         = 0;
 
     /** Render the given bitmap.<p>
@@ -414,7 +413,7 @@ public:
     virtual ::css::uno::Reference<::vclcanvas::XCachedPrimitive>
     drawBitmap(const ::css::uno::Reference<::css::rendering::XBitmap>& xBitmap,
                const ::vclcanvas::ViewState& aViewState,
-               const ::css::rendering::RenderState& aRenderState)
+               const ::vclcanvas::RenderState& aRenderState)
         = 0;
 
     /** Request the associated graphic device for this canvas.<p>

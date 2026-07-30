@@ -26,7 +26,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <canvastools.hxx>
 #include <sal/log.hxx>
-#include <com/sun/star/rendering/RenderState.hpp>
+#include <RenderState.hxx>
 
 #include "canvas.hxx"
 #include <utility>
@@ -61,7 +61,7 @@ namespace cppcanvas
                 ::basegfx::B2DPoint     maStartPoint;
                 ::basegfx::B2DPoint     maEndPoint;
                 CanvasSharedPtr         mpCanvas;
-                rendering::RenderState  maState;
+                vclcanvas::RenderState  maState;
             };
 
             LineAction::LineAction( const ::basegfx::B2DPoint& rStartPoint,
@@ -81,7 +81,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::LineAction::render()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::LineAction: 0x" << std::hex << this );
 
-                rendering::RenderState aLocalState( maState );
+                vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 mpCanvas->getUNOCanvas()->drawLine( ::basegfx::unotools::point2DFromB2DPoint(maStartPoint),

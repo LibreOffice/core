@@ -41,12 +41,12 @@ namespace com::sun::star::geometry
 
 namespace com::sun::star::rendering
 {
-    struct RenderState;
     class  XBitmap;
 }
 
 namespace vclcanvas
 {
+    struct RenderState;
     struct ViewState;
 }
 
@@ -63,7 +63,7 @@ namespace vclcanvastools
         bool setupFontTransform( ::Point&                              o_rPoint,
                                  vcl::Font&                            io_rVCLFont,
                                  const ::vclcanvas::ViewState&      viewState,
-                                 const css::rendering::RenderState&    renderState,
+                                 const ::vclcanvas::RenderState&    renderState,
                                  ::OutputDevice const &                rOutDev );
 
         void setupFontWidth(const css::geometry::Matrix2D& rFontMatrix,
@@ -131,11 +131,11 @@ namespace vclcanvastools
 
         ::Point mapRealPoint2D( const css::geometry::RealPoint2D&  rPoint,
                                 const ::vclcanvas::ViewState&   rViewState,
-                                const css::rendering::RenderState& rRenderState );
+                                const ::vclcanvas::RenderState& rRenderState );
 
         ::tools::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&                          rPoly,
                                       const ::vclcanvas::ViewState&     rViewState,
-                                      const css::rendering::RenderState&   rRenderState );
+                                      const ::vclcanvas::RenderState&   rRenderState );
 
         ::Bitmap transformBitmap( const ::Bitmap&                                   rBitmap,
                                   const ::basegfx::B2DHomMatrix&                    rTransform );

@@ -95,30 +95,30 @@ namespace vclcanvas
                        const css::geometry::RealPoint2D&   aStartPoint,
                        const css::geometry::RealPoint2D&   aEndPoint,
                        const ::vclcanvas::ViewState&    viewState,
-                       const css::rendering::RenderState&  renderState );
+                       const ::vclcanvas::RenderState&  renderState );
         void drawPolyPolygon( const vclcanvas::XCanvas*        rCanvas,
                              const css::uno::Reference<
                                  css::rendering::XPolyPolygon2D >&     xPolyPolygon,
                              const ::vclcanvas::ViewState&      viewState,
-                             const css::rendering::RenderState&    renderState );
+                             const ::vclcanvas::RenderState&    renderState );
         void strokePolyPolygon( const vclcanvas::XCanvas*          rCanvas,
                                const css::uno::Reference<
                                        css::rendering::XPolyPolygon2D >&   xPolyPolygon,
                                const ::vclcanvas::ViewState&        viewState,
-                               const css::rendering::RenderState&      renderState,
+                               const ::vclcanvas::RenderState&      renderState,
                                const css::rendering::StrokeAttributes& strokeAttributes );
         css::uno::Reference< vclcanvas::XCachedPrimitive >
             fillPolyPolygon( const vclcanvas::XCanvas*            rCanvas,
                              const css::uno::Reference<
                                      css::rendering::XPolyPolygon2D >&     xPolyPolygon,
                              const ::vclcanvas::ViewState&          viewState,
-                             const css::rendering::RenderState&        renderState );
+                             const ::vclcanvas::RenderState&        renderState );
         css::uno::Reference< vclcanvas::XCachedPrimitive >
             fillTexturedPolyPolygon( const vclcanvas::XCanvas*            rCanvas,
                                      const css::uno::Reference<
                                              css::rendering::XPolyPolygon2D >& xPolyPolygon,
                                      const ::vclcanvas::ViewState&          viewState,
-                                     const css::rendering::RenderState&        renderState,
+                                     const ::vclcanvas::RenderState&        renderState,
                                      const cpo::uno::Sequence<
                                              css::rendering::Texture >&        textures );
 
@@ -134,27 +134,27 @@ namespace vclcanvas
                       const css::uno::Reference<
                               css::rendering::XCanvasFont >& xFont,
                       const ::vclcanvas::ViewState&     viewState,
-                      const css::rendering::RenderState&   renderState,
+                      const ::vclcanvas::RenderState&   renderState,
                       sal_Int8                                          textDirection );
 
         void drawTextLayout( const vclcanvas::XCanvas*         rCanvas,
                             const css::uno::Reference<
                                     css::rendering::XTextLayout >& laidOutText,
                             const ::vclcanvas::ViewState&       viewState,
-                            const css::rendering::RenderState&     renderState );
+                            const ::vclcanvas::RenderState&     renderState );
 
         css::uno::Reference< vclcanvas::XCachedPrimitive >
             drawBitmap( const vclcanvas::XCanvas*     rCanvas,
                         const css::uno::Reference<
                                 css::rendering::XBitmap >& xBitmap,
                         const ::vclcanvas::ViewState&   viewState,
-                        const css::rendering::RenderState& renderState );
+                        const ::vclcanvas::RenderState& renderState );
         css::uno::Reference< vclcanvas::XCachedPrimitive >
             drawBitmapModulated( const vclcanvas::XCanvas*        rCanvas,
                                  const css::uno::Reference<
                                          css::rendering::XBitmap >&        xBitmap,
                                  const ::vclcanvas::ViewState&      viewState,
-                                 const css::rendering::RenderState&    renderState );
+                                 const ::vclcanvas::RenderState&    renderState );
         // cast away const, need to change refcount (as this is
         // ~invisible to client code, still logically const)
         css::uno::Reference< vclcanvas::XGraphicDevice >
@@ -169,7 +169,7 @@ namespace vclcanvas
         /// Repaint a cached bitmap
         bool repaint( const GraphicObjectSharedPtr&                   rGrf,
                       const ::vclcanvas::ViewState&                viewState,
-                      const css::rendering::RenderState&              renderState,
+                      const ::vclcanvas::RenderState&              renderState,
                       const ::Point&                                  rPt,
                       const ::Size&                                   rSz,
                       const GraphicAttr&                              rAttr ) const;
@@ -181,7 +181,7 @@ namespace vclcanvas
 
         // returns alpha of color
         int setupOutDevState( const ::vclcanvas::ViewState&     viewState,
-                              const css::rendering::RenderState&   renderState,
+                              const ::vclcanvas::RenderState&   renderState,
                               ColorType                            eColorType ) const;
 
     protected:
@@ -207,12 +207,12 @@ namespace vclcanvas
                             const css::uno::Reference<
                                     css::rendering::XBitmap >&     xBitmap,
                             const ::vclcanvas::ViewState&   viewState,
-                            const css::rendering::RenderState& renderState,
+                            const ::vclcanvas::RenderState& renderState,
                             bool                                            bModulateColors );
 
         bool setupTextOutput( ::Point&                                                                              o_rOutPos,
                               const ::vclcanvas::ViewState&                                         viewState,
-                              const css::rendering::RenderState&                                       renderState,
+                              const ::vclcanvas::RenderState&                                       renderState,
                               const css::uno::Reference< css::rendering::XCanvasFont >&   xFont ) const;
 
     };

@@ -483,7 +483,7 @@ namespace vclcanvas
                            const std::vector< ::Color >&                   rColors,
                            const ::tools::PolyPolygon&                     rPoly,
                            const vclcanvas::ViewState&                     viewState,
-                           const rendering::RenderState&                   renderState,
+                           const vclcanvas::RenderState&                   renderState,
                            const rendering::Texture&                       texture)
         {
             // TODO(T2): It is maybe necessary to lock here, should
@@ -579,7 +579,7 @@ namespace vclcanvas
     uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const vclcanvas::XCanvas*                          pCanvas,
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                          const vclcanvas::ViewState&                        viewState,
-                                                                                         const rendering::RenderState&                      renderState,
+                                                                                         const vclcanvas::RenderState&                      renderState,
                                                                                          const cpo::uno::Sequence< rendering::Texture >&         textures )
     {
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
@@ -613,7 +613,7 @@ namespace vclcanvas
 
                     if( aValues.maColors.getLength() < 2 )
                     {
-                        rendering::RenderState aTempState=renderState;
+                        vclcanvas::RenderState aTempState=renderState;
                         aTempState.DeviceColor = aValues.maColors[0];
                         fillPolyPolygon(pCanvas, xPolyPolygon, viewState, aTempState);
                     }
@@ -686,7 +686,7 @@ namespace vclcanvas
                 if( bRectangularPolygon &&
                     aIntegerTextureDeviceRect == aPolygonDeviceRect )
                 {
-                    rendering::RenderState aLocalState( renderState );
+                    vclcanvas::RenderState aLocalState( renderState );
                     ::canvastools::appendToRenderState(aLocalState,
                                                          aTextureTransform);
                     ::basegfx::B2DHomMatrix aScaleCorrection;

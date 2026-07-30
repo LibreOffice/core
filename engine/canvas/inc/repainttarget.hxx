@@ -42,7 +42,7 @@ namespace vclcanvas
         // call this when a bitmap is repainted
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
                               const ::vclcanvas::ViewState&                viewState,
-                              const css::rendering::RenderState&              renderState,
+                              const ::vclcanvas::RenderState&              renderState,
                               const ::Point&                                  rPt,
                               const ::Size&                                   rSz,
                               const GraphicAttr&                              rAttr ) const = 0;

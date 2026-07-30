@@ -18,7 +18,7 @@
  */
 
 
-#include <com/sun/star/rendering/RenderState.hpp>
+#include <RenderState.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 
 namespace cppcanvastools
 {
-        void initRenderState( rendering::RenderState&                   renderState,
+        void initRenderState( vclcanvas::RenderState&                   renderState,
                               const ::cppcanvas::OutDevState& outdevState )
         {
             ::canvastools::initRenderState( renderState );
@@ -109,7 +109,7 @@ namespace cppcanvastools
             return o_rMatrix;
         }
 
-        bool modifyClip( rendering::RenderState&                            o_rRenderState,
+        bool modifyClip( vclcanvas::RenderState&                            o_rRenderState,
                          const struct ::cppcanvas::OutDevState&   rOutdevState,
                          const ::cppcanvas::CanvasSharedPtr&                rCanvas,
                          const ::basegfx::B2DPoint&                         rOffset,

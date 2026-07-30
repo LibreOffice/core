@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
 
     {
         // render something
-        rendering::RenderState aDefaultState;
+        vclcanvas::RenderState aDefaultState;
         cpo::uno::Sequence<double> aRedTransparent{ 1.0, // R
                                                     0.0, // G
                                                     0.0, // B

@@ -19,7 +19,7 @@
 
 
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/rendering/RenderState.hpp>
+#include <RenderState.hxx>
 #include <vcl/bitmap.hxx>
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
@@ -67,7 +67,7 @@ namespace cppcanvas
 
                 uno::Reference< rendering::XBitmap >                    mxBitmap;
                 CanvasSharedPtr                                         mpCanvas;
-                rendering::RenderState                                  maState;
+                vclcanvas::RenderState                                  maState;
             };
 
 
@@ -133,7 +133,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::BitmapAction::renderPrimitive()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::BitmapAction: 0x" << std::hex << this );
 
-                rendering::RenderState aLocalState( maState );
+                vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 rCachedPrimitive = mpCanvas->getUNOCanvas()->drawBitmap( mxBitmap,

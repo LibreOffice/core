@@ -40,7 +40,7 @@
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/rendering/RenderState.hpp>
+#include <RenderState.hxx>
 #include <com/sun/star/rendering/Texture.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
 
 namespace canvastools
 {
-        rendering::RenderState& initRenderState( rendering::RenderState& renderState )
+        vclcanvas::RenderState& initRenderState( vclcanvas::RenderState& renderState )
         {
             // setup identity transform
             setIdentityAffineMatrix2D( renderState.AffineTransform );
@@ -91,13 +91,13 @@ namespace canvastools
             return viewState;
         }
 
-        ::basegfx::B2DHomMatrix getRenderStateTransform( const rendering::RenderState& renderState )
+        ::basegfx::B2DHomMatrix getRenderStateTransform( const vclcanvas::RenderState& renderState )
         {
             ::basegfx::B2DHomMatrix aTransform;
             return ::basegfx::unotools::homMatrixFromAffineMatrix( aTransform, renderState.AffineTransform );
         }
 
-        rendering::RenderState& setRenderStateTransform( rendering::RenderState&        renderState,
+        vclcanvas::RenderState& setRenderStateTransform( vclcanvas::RenderState&        renderState,
                                                          const ::basegfx::B2DHomMatrix& transform )
         {
             ::basegfx::unotools::affineMatrixFromHomMatrix( renderState.AffineTransform, transform );
@@ -105,14 +105,14 @@ namespace canvastools
             return renderState;
         }
 
-        rendering::RenderState& appendToRenderState( rendering::RenderState&        renderState,
+        vclcanvas::RenderState& appendToRenderState( vclcanvas::RenderState&        renderState,
                                                    const ::basegfx::B2DHomMatrix&   rTransform )
         {
             ::basegfx::B2DHomMatrix transform = getRenderStateTransform( renderState );
             return setRenderStateTransform( renderState, transform * rTransform );
         }
 
-        rendering::RenderState& prependToRenderState( rendering::RenderState&           renderState,
+        vclcanvas::RenderState& prependToRenderState( vclcanvas::RenderState&           renderState,
                                                       const ::basegfx::B2DHomMatrix&    rTransform )
         {
             ::basegfx::B2DHomMatrix transform = getRenderStateTransform( renderState );
@@ -121,7 +121,7 @@ namespace canvastools
 
         ::basegfx::B2DHomMatrix& mergeViewAndRenderTransform( ::basegfx::B2DHomMatrix&      combinedTransform,
                                                               const vclcanvas::ViewState&   viewState,
-                                                              const rendering::RenderState& renderState )
+                                                              const vclcanvas::RenderState& renderState )
         {
             ::basegfx::B2DHomMatrix viewTransform;
 
@@ -225,7 +225,7 @@ namespace canvastools
 
         int calcGradientStepCount( ::basegfx::B2DHomMatrix&      rTotalTransform,
                                    const vclcanvas::ViewState&   viewState,
-                                   const rendering::RenderState& renderState,
+                                   const vclcanvas::RenderState& renderState,
                                    const rendering::Texture&     texture,
                                    int                           nColorSteps )
         {
@@ -270,7 +270,7 @@ namespace canvastools
         }
 
         void clipOutDev(const vclcanvas::ViewState& viewState,
-                        const rendering::RenderState& renderState,
+                        const vclcanvas::RenderState& renderState,
                         OutputDevice& rOutDev)
         {
             // accumulate non-empty clips into one region

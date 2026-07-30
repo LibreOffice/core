@@ -52,7 +52,6 @@ namespace com::sun::star::geometry
 
 namespace com::sun::star::rendering
 {
-    struct RenderState;
     struct Texture;
     class XGraphicDevice;
     class XPolyPolygon2D;
@@ -60,6 +59,7 @@ namespace com::sun::star::rendering
 
 namespace vclcanvas
 {
+    struct RenderState;
     struct ViewState;
 }
 
@@ -105,8 +105,8 @@ namespace canvastools
         // View- and RenderState utilities
 
 
-        CANVASTOOLS_DLLPUBLIC css::rendering::RenderState&
-            initRenderState( css::rendering::RenderState&                      renderState );
+        CANVASTOOLS_DLLPUBLIC ::vclcanvas::RenderState&
+            initRenderState( ::vclcanvas::RenderState&                      renderState );
 
         CANVASTOOLS_DLLPUBLIC ::vclcanvas::ViewState&
             initViewState( ::vclcanvas::ViewState&                          viewState );
@@ -119,24 +119,24 @@ namespace canvastools
                                    const ::basegfx::B2DHomMatrix&              transform );
 
         CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix
-            getRenderStateTransform( const css::rendering::RenderState&        renderState );
+            getRenderStateTransform( const ::vclcanvas::RenderState&        renderState );
 
-        CANVASTOOLS_DLLPUBLIC css::rendering::RenderState&
-            setRenderStateTransform( css::rendering::RenderState&              renderState,
+        CANVASTOOLS_DLLPUBLIC ::vclcanvas::RenderState&
+            setRenderStateTransform( ::vclcanvas::RenderState&              renderState,
                                      const ::basegfx::B2DHomMatrix&            transform );
 
-        CANVASTOOLS_DLLPUBLIC css::rendering::RenderState&
-            appendToRenderState( css::rendering::RenderState&                  renderState,
+        CANVASTOOLS_DLLPUBLIC ::vclcanvas::RenderState&
+            appendToRenderState( ::vclcanvas::RenderState&                  renderState,
                                  const ::basegfx::B2DHomMatrix&                transform );
 
-        CANVASTOOLS_DLLPUBLIC css::rendering::RenderState&
-            prependToRenderState( css::rendering::RenderState&                 renderState,
+        CANVASTOOLS_DLLPUBLIC ::vclcanvas::RenderState&
+            prependToRenderState( ::vclcanvas::RenderState&                 renderState,
                                   const ::basegfx::B2DHomMatrix&               transform );
 
         CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix&
             mergeViewAndRenderTransform( ::basegfx::B2DHomMatrix&              transform,
                                          const ::vclcanvas::ViewState&      viewState,
-                                         const css::rendering::RenderState&    renderState );
+                                         const ::vclcanvas::RenderState&    renderState );
 
 
         // Matrix utilities
@@ -240,7 +240,7 @@ namespace canvastools
          */
         CANVASTOOLS_DLLPUBLIC int calcGradientStepCount( ::basegfx::B2DHomMatrix&   rTotalTransform,
                                    const ::vclcanvas::ViewState&   viewState,
-                                   const css::rendering::RenderState& renderState,
+                                   const ::vclcanvas::RenderState& renderState,
                                    const css::rendering::Texture&     texture,
                                    int                                nColorSteps );
 
@@ -384,7 +384,7 @@ namespace canvastools
         };
 
         CANVASTOOLS_DLLPUBLIC void clipOutDev(const ::vclcanvas::ViewState& viewState,
-                        const css::rendering::RenderState& renderState,
+                        const ::vclcanvas::RenderState& renderState,
                         OutputDevice& rOutDev);
 
         CANVASTOOLS_DLLPUBLIC void extractExtraFontProperties(const cpo::uno::Sequence<css::beans::PropertyValue>& rExtraFontProperties,

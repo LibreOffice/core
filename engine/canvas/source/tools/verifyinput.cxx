@@ -33,7 +33,7 @@
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/RenderState.hpp>
+#include <RenderState.hxx>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include <com/sun/star/rendering/Texture.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
@@ -153,7 +153,7 @@ namespace canvastools
                          pStr, xIf, nArgPos );
         }
 
-        void verifyInput( const rendering::RenderState&             renderState,
+        void verifyInput( const vclcanvas::RenderState&             renderState,
                           const char*                               pStr,
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos,

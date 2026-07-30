@@ -112,7 +112,7 @@ namespace cppcanvas
                 // transformation for
                 // mxBufferBitmap content
                 CanvasSharedPtr                                     mpCanvas;
-                rendering::RenderState                              maState;
+                vclcanvas::RenderState                              maState;
             };
 
 
@@ -120,7 +120,7 @@ namespace cppcanvas
                 moved rPoint away, and scaled according to the ratio
                 given by src and dst size.
             */
-            void implSetupTransform( rendering::RenderState&    rRenderState,
+            void implSetupTransform( vclcanvas::RenderState&    rRenderState,
                                      const ::basegfx::B2DPoint& rDstPoint   )
             {
                 ::basegfx::B2DHomMatrix aLocalTransformation;
@@ -405,7 +405,7 @@ namespace cppcanvas
                 aScaleCorrection.scale( 1/aScale.getX(), 1/aScale.getY() );
                 aTransform = aTransform * aScaleCorrection;
 
-                rendering::RenderState aLocalState( maState );
+                vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::setRenderStateTransform(aLocalState, aTransform);
 
                 if(aLocalState.Clip.is())

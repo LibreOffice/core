@@ -164,7 +164,7 @@ namespace vclcanvas
                                  const geometry::RealPoint2D&   aStartRealPoint2D,
                                  const geometry::RealPoint2D&   aEndRealPoint2D,
                                  const vclcanvas::ViewState&    viewState,
-                                 const rendering::RenderState&  renderState )
+                                 const vclcanvas::RenderState&  renderState )
     {
         // are we disposed?
         if( !mpOutDevProvider )
@@ -185,7 +185,7 @@ namespace vclcanvas
     void CanvasHelper::drawPolyPolygon( const vclcanvas::XCanvas*                          ,
                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                          const vclcanvas::ViewState&                        viewState,
-                                         const rendering::RenderState&                      renderState )
+                                         const vclcanvas::RenderState&                      renderState )
     {
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "polygon is NULL");
@@ -225,7 +225,7 @@ namespace vclcanvas
     void CanvasHelper::strokePolyPolygon( const vclcanvas::XCanvas*                            ,
                                            const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
                                            const vclcanvas::ViewState&                          viewState,
-                                           const rendering::RenderState&                        renderState,
+                                           const vclcanvas::RenderState&                        renderState,
                                            const rendering::StrokeAttributes&                   strokeAttributes )
     {
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
@@ -338,7 +338,7 @@ namespace vclcanvas
     uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const vclcanvas::XCanvas*                          ,
                                                                                  const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                  const vclcanvas::ViewState&                        viewState,
-                                                                                 const rendering::RenderState&                      renderState )
+                                                                                 const vclcanvas::RenderState&                      renderState )
     {
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "polygon is NULL");
@@ -389,7 +389,7 @@ namespace vclcanvas
                                   const rendering::StringContext&                   text,
                                   const uno::Reference< rendering::XCanvasFont >&   xFont,
                                   const vclcanvas::ViewState&                       viewState,
-                                  const rendering::RenderState&                     renderState,
+                                  const vclcanvas::RenderState&                     renderState,
                                   sal_Int8                                          textDirection )
     {
         ENSURE_ARG_OR_THROW( xFont.is(),
@@ -434,7 +434,7 @@ namespace vclcanvas
     void CanvasHelper::drawTextLayout( const vclcanvas::XCanvas*                       ,
                                         const uno::Reference< rendering::XTextLayout >& xLayoutedText,
                                         const vclcanvas::ViewState&                     viewState,
-                                        const rendering::RenderState&                   renderState )
+                                        const vclcanvas::RenderState&                   renderState )
     {
         ENSURE_ARG_OR_THROW( xLayoutedText.is(),
                          "layout is NULL");
@@ -471,7 +471,7 @@ namespace vclcanvas
     uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::implDrawBitmap( const vclcanvas::XCanvas*                   pCanvas,
                                                                                 const uno::Reference< rendering::XBitmap >& xBitmap,
                                                                                 const vclcanvas::ViewState&                 viewState,
-                                                                                const rendering::RenderState&               renderState,
+                                                                                const vclcanvas::RenderState&               renderState,
                                                                                 bool                                        bModulateColors )
     {
         ENSURE_ARG_OR_THROW( xBitmap.is(),
@@ -655,7 +655,7 @@ namespace vclcanvas
     uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::drawBitmap( const vclcanvas::XCanvas*                   pCanvas,
                                                                             const uno::Reference< rendering::XBitmap >& xBitmap,
                                                                             const vclcanvas::ViewState&                 viewState,
-                                                                            const rendering::RenderState&               renderState )
+                                                                            const vclcanvas::RenderState&               renderState )
     {
         return implDrawBitmap( pCanvas,
                                xBitmap,
@@ -667,7 +667,7 @@ namespace vclcanvas
     uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const vclcanvas::XCanvas*                      pCanvas,
                                                                                      const uno::Reference< rendering::XBitmap >&    xBitmap,
                                                                                      const vclcanvas::ViewState&                    viewState,
-                                                                                     const rendering::RenderState&                  renderState )
+                                                                                     const vclcanvas::RenderState&                  renderState )
     {
         return implDrawBitmap( pCanvas,
                                xBitmap,
@@ -685,7 +685,7 @@ namespace vclcanvas
     }
 
     int CanvasHelper::setupOutDevState( const vclcanvas::ViewState&     viewState,
-                                        const rendering::RenderState&   renderState,
+                                        const vclcanvas::RenderState&   renderState,
                                         ColorType                       eColorType ) const
     {
         ENSURE_OR_THROW( mpOutDevProvider,
@@ -751,7 +751,7 @@ namespace vclcanvas
 
     bool CanvasHelper::setupTextOutput( ::Point&                                        o_rOutPos,
                                         const vclcanvas::ViewState&                     viewState,
-                                        const rendering::RenderState&                   renderState,
+                                        const vclcanvas::RenderState&                   renderState,
                                         const uno::Reference< rendering::XCanvasFont >& xFont   ) const
     {
         ENSURE_OR_THROW( mpOutDevProvider,
@@ -790,7 +790,7 @@ namespace vclcanvas
 
     bool CanvasHelper::repaint( const GraphicObjectSharedPtr&   rGrf,
                                 const vclcanvas::ViewState&     viewState,
-                                const rendering::RenderState&   renderState,
+                                const vclcanvas::RenderState&   renderState,
                                 const ::Point&                  rPt,
                                 const ::Size&                   rSz,
                                 const GraphicAttr&              rAttr ) const

@@ -24,7 +24,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <com/sun/star/rendering/RenderState.hpp>
+#include <RenderState.hxx>
 #include <canvastools.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -71,7 +71,7 @@ namespace cppcanvas
                 const CanvasSharedPtr                               mpCanvas;
 
                 // stroke color is now implicit: the maState.DeviceColor member
-                rendering::RenderState                              maState;
+                vclcanvas::RenderState                              maState;
 
                 cpo::uno::Sequence< double >                             maFillColor;
             };
@@ -137,7 +137,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PolyPolyAction::renderPrimitive()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PolyPolyAction: 0x" << std::hex << this );
 
-                rendering::RenderState aLocalState( maState );
+                vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 if( maFillColor.hasElements() )
@@ -209,7 +209,7 @@ namespace cppcanvas
                 const CanvasSharedPtr                               mpCanvas;
 
                 // stroke color is now implicit: the maState.DeviceColor member
-                rendering::RenderState                              maState;
+                vclcanvas::RenderState                              maState;
                 const rendering::Texture                            maTexture;
             };
 
@@ -231,7 +231,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PolyPolyAction::renderPrimitive()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PolyPolyAction: 0x" << std::hex << this );
 
-                rendering::RenderState aLocalState( maState );
+                vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 cpo::uno::Sequence< rendering::Texture > aSeq { maTexture };
@@ -286,7 +286,7 @@ namespace cppcanvas
 
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
                 const CanvasSharedPtr                               mpCanvas;
-                rendering::RenderState                              maState;
+                vclcanvas::RenderState                              maState;
                 const rendering::StrokeAttributes                   maStrokeAttributes;
             };
 
@@ -309,7 +309,7 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PolyPolyAction::renderPrimitive()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PolyPolyAction: 0x" << std::hex << this );
 
-                rendering::RenderState aLocalState( maState );
+                vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 mpCanvas->getUNOCanvas()->strokePolyPolygon( mxPolyPoly,

@@ -38,7 +38,7 @@ namespace vclcanvas
                                 const ::Size&                               rSize,
                                 const GraphicAttr&                          rAttr,
                                 const vclcanvas::ViewState&                 rUsedViewState,
-                                rendering::RenderState                      aUsedRenderState,
+                                vclcanvas::RenderState                      aUsedRenderState,
                                 const uno::Reference< vclcanvas::XCanvas >& rTarget ) :
         CachedBitmap_Base(),
         maUsedViewState( rUsedViewState ),

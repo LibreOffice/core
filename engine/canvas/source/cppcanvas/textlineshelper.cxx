@@ -81,7 +81,7 @@ void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo
     initLineStyleWaveline(rLineInfo.mnUnderlineStyle, mbUnderlineWaveline, mbUnderlineWavelineBold);
 }
 
-void TextLinesHelper::render(const rendering::RenderState& rRenderState, bool bNormalText) const
+void TextLinesHelper::render(const vclcanvas::RenderState& rRenderState, bool bNormalText) const
 {
     const vclcanvas::ViewState aViewState(mpCanvas->getViewState());
     const uno::Reference<vclcanvas::XCanvas> xCanvas(mpCanvas->getUNOCanvas());
@@ -90,7 +90,7 @@ void TextLinesHelper::render(const rendering::RenderState& rRenderState, bool bN
 
     if (mxOverline.is())
     {
-        rendering::RenderState aLocalState(rRenderState);
+        vclcanvas::RenderState aLocalState(rRenderState);
         if (bNormalText && mbIsOverlineColorSet)
             aLocalState.DeviceColor = maOverlineColor;
 
@@ -105,7 +105,7 @@ void TextLinesHelper::render(const rendering::RenderState& rRenderState, bool bN
 
     if (mxUnderline.is())
     {
-        rendering::RenderState aLocalState(rRenderState);
+        vclcanvas::RenderState aLocalState(rRenderState);
         if (bNormalText && mbIsUnderlineColorSet)
             aLocalState.DeviceColor = maUnderlineColor;
         if (mbUnderlineWaveline)

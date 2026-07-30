@@ -11,7 +11,7 @@
 
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/rendering/RenderState.hpp>
+#include <RenderState.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include "canvas.hxx"
 
@@ -65,7 +65,7 @@ public:
         Use overline color and underline color if the value is true, ignore those
         colors otherwise ( typical case is to render the shadow ).
      */
-    void render(const css::rendering::RenderState& rRenderState, bool bNormalText) const;
+    void render(const ::vclcanvas::RenderState& rRenderState, bool bNormalText) const;
 };
 }
 
