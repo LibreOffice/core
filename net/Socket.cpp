@@ -323,12 +323,12 @@ std::string SslStreamSocket::getSslCert(std::string& subjectHash)
 namespace {
     std::vector<int> &getWakeupsArray()
     {
-        static std::vector<int>* pollWakeups = new std::vector<int>();
+        static std::vector<int>* pollWakeups = new std::vector<int>;
         return *pollWakeups;
     }
     std::mutex &getPollWakeupsMutex()
     {
-        static std::mutex* pollWakeupsMutex = new std::mutex();
+        static std::mutex* pollWakeupsMutex = new std::mutex;
         return *pollWakeupsMutex;
     }
 }

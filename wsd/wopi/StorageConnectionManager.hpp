@@ -34,7 +34,7 @@ public:
         std::shared_ptr<StorageConnectionManager> scm = instance.lock();
         if (!scm)
         {
-            scm = std::shared_ptr<StorageConnectionManager>(new StorageConnectionManager());
+            scm = std::shared_ptr<StorageConnectionManager>(new StorageConnectionManager);
             instance = scm;
         }
 

@@ -474,12 +474,12 @@ namespace Log
             if (it == config.end() || Util::toLower(it->second) != "false")
             {
                 // Unbuffered (flushed) logging, directly writes each entry (to stderr).
-                channel = static_cast<Poco::Channel*>(new Log::ConsoleChannel());
+                channel = static_cast<Poco::Channel*>(new Log::ConsoleChannel);
             }
             else
             {
                 // Buffered logging, reduces number of write(2) syscalls.
-                channel = static_cast<Poco::Channel*>(new Log::BufferedConsoleChannel());
+                channel = static_cast<Poco::Channel*>(new Log::BufferedConsoleChannel);
             }
         }
 
