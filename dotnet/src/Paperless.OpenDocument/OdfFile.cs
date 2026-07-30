@@ -163,8 +163,8 @@ public sealed class OdfFile : IDisposable
             {
                 file._diagnostics.Add(new Diagnostic(
                     DiagnosticSeverity.Error, "PL2010",
-                    $"'{OdfPackage.PartNames.Styles}' is malformed and has been skipped: {stylesError}. "
-                    + "Named styles and page masters will be missing.",
+                    $"'{OdfPackage.PartNames.Styles}' is malformed and has been skipped "
+                    + $"({stylesError.TrimEnd('.')}). Named styles and page masters will be missing.",
                     new DiagnosticLocation(OdfPackage.PartNames.Styles)));
             }
 

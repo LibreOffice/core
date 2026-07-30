@@ -36,7 +36,7 @@ binary.
 
 | Done | |
 |---|---|
-| ✅ | Solution: 12 libraries + CLI + 9 test projects, warning-free on .NET 10, 269 tests passing |
+| ✅ | Solution: 12 libraries + CLI + 9 test projects, warning-free on .NET 10, 280 tests passing |
 | ✅ | `Paperless.Core` API surface: units, geometry, colour, document model, drawing IR |
 | ✅ | `FormatCatalogue`: all 43 formats described |
 | ✅ | Content-based format identification, verified on all 17 corpus formats |
@@ -176,7 +176,10 @@ will differ for reasons that have nothing to do with drawing.
       Rasterised output is byte-deterministic, so checksums are meaningful.
 - [ ] Performance: extraction should be well under a second for typical files.
 - [ ] Fuzz the readers. Malformed office files are a classic attack surface and the readers
-      are pure parsing code over untrusted input.
+      are pure parsing code over untrusted input. `OdfLenientReadTests` covers the cases a
+      fuzzer finds first — a truncated part, a malformed part, a missing part, an XXE, an
+      absurd repeat count, a cyclic style chain, nesting deep enough to overflow a stack —
+      but that is a floor, not a substitute for actual fuzzing.
 - [ ] Public API review, then a first release.
 
 ---

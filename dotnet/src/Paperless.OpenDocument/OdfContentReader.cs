@@ -115,16 +115,6 @@ public sealed partial class OdfContentReader
     }
 
     /// <summary>
-    /// Appends the hoisted notes and comments to a section, then clears them.
-    /// </summary>
-    public void FlushHoistedInto(ContentNode target)
-    {
-        ArgumentNullException.ThrowIfNull(target);
-        foreach (ContentNode node in _hoisted) target.Children.Add(node);
-        _hoisted.Clear();
-    }
-
-    /// <summary>
     /// True when a slide is marked as skipped during a presentation.
     /// </summary>
     /// <remarks>
