@@ -348,7 +348,7 @@ int domount(int argc, const char* const* argv)
         {
             // Now we need to set read-only and other flags with a remount.
             unsigned long mountflags = (MS_BIND | MS_REMOUNT | MS_NODEV | MS_NOSUID | MS_RDONLY);
-            const char* fstype = "none";
+            const char* const fstype = "none";
 
             /* a) In the linux namespace mount case an additional MS_NOATIME, etc. will result in
                EPERM on remounting something hosted in a toplevel [rel]atime mount. man 2 mount

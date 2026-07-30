@@ -48,7 +48,7 @@ using Poco::Net::HTTPRequest;
 using Poco::Net::HTTPResponse;
 using Poco::Net::WebSocket;
 
-const char *HostName = "127.0.0.1";
+const char *const HostName = "127.0.0.1";
 constexpr int HttpPortNumber = 9191;
 constexpr int SslPortNumber = 9193;
 

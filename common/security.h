@@ -56,7 +56,7 @@ inline int isInContainer()
     /* Legacy cgroups v1 check */
     FILE *cgroup;
     char line[80];
-    const char *docker = ":/docker/";
+    const char * const docker = ":/docker/";
     cgroup = fopen("/proc/self/cgroup", "r");
     if(!cgroup)
     {
