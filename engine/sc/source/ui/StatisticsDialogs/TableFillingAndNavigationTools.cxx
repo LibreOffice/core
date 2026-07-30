@@ -17,12 +17,18 @@
 #include <editeng/borderline.hxx>
 #include <editeng/justifyitem.hxx>
 
+#include <svl/numformat.hxx>
+#include <svl/intitem.hxx>
+
 #include <editutil.hxx>
 
 #include <TableFillingAndNavigationTools.hxx>
+#include <attrib.hxx>
 #include <formulacell.hxx>
 #include <docfunc.hxx>
 #include <docsh.hxx>
+#include <global.hxx>
+#include <scitems.hxx>
 
 using namespace ::editeng;
 
@@ -259,6 +265,19 @@ void AddressWalkerWriter::formatAsColumnHeader(SCCOL nCols)
 
 // Formats as the bottom end of a table with a bottom line
 // Starts in the current cell and formats nCols in total
+void AddressWalkerWriter::formatAsPercentage(SCCOL nCols, SCROW nRows)
+{
+    ScPatternAttr aPattern(mrDocument.getCellAttributeHelper());
+    const sal_uInt32 nFormat = mrDocument.GetFormatTable()->GetStandardFormat(
+                                    SvNumFormatType::PERCENT, ScGlobal::eLnge);
+    aPattern.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+
+    mrDocument.ApplyPatternAreaTab(mCurrentAddress.Col(), mCurrentAddress.Row(),
+                                   mCurrentAddress.Col() + nCols - 1,
+                                   mCurrentAddress.Row() + nRows - 1,
+                                   mCurrentAddress.Tab(), aPattern);
+}
+
 void AddressWalkerWriter::formatTableBottom(SCCOL nCols)
 {
     ScPatternAttr aPattern(mrDocument.getCellAttributeHelper());

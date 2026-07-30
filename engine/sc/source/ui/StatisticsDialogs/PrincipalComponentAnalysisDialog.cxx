@@ -194,7 +194,7 @@ bool ScPrincipalComponentAnalysisDialog::InputIsValid()
     // columns than rows they reach further down than the standardized values.
     const sal_Int32 nBlockHeight = std::max<sal_Int32>(nRowCount, nColumnCount);
 
-    if (nColumnCount + 2 * nRank > mrDocument.MaxCol()
+    if (nColumnCount + 2 * nRank + 2 > mrDocument.MaxCol()
         || nFirstValueRow + nBlockHeight - 1 > mrDocument.MaxRow())
     {
         mxErrorMessage->set_label(ScResId(STR_MESSAGE_OUTPUT_TOO_LONG));
@@ -338,6 +338,9 @@ ScRange ScPrincipalComponentAnalysisDialog::WriteOutput(ScDocShell& rDocShell, S
         aOutput.nextColumn();
 
     // The singular values, in descending order.
+    const ScRange aSingularValueRange(
+        ScAddress(aOutput.mCurrentAddress.Col(), nFirstValueRow, nOutputTab),
+        ScAddress(aOutput.mCurrentAddress.Col(), nFirstValueRow + nRank - 1, nOutputTab));
     aTemplate.setTemplate("=MSVD(%VALUES%;2)");
     aOutput.writeMatrixFormula(aTemplate.getTemplate(), 1, nRank);
     aOutput.nextColumn();
@@ -347,10 +350,38 @@ ScRange ScPrincipalComponentAnalysisDialog::WriteOutput(ScDocShell& rDocShell, S
     aTemplate.setTemplate("=MSVD(%VALUES%;3)");
     aOutput.writeMatrixFormula(aTemplate.getTemplate(), nRank, nColumnCount);
 
+    for (SCCOL nColumn = 0; nColumn < nRank; ++nColumn)
+        aOutput.nextColumn();
+
+    // Both of the last two columns are a share of a whole, so they read as
+    // percentages.
+    const SCCOL nShareColumn = aOutput.mCurrentAddress.Col();
+    aOutput.formatAsPercentage(2, nRank);
+
+    // A singular value squared is the variance the data has along that
+    // component, so the share of the total of the squares is the share of the
+    // variance.
+    aTemplate.setTemplate("=(%SINGULARVALUES%)^2/SUMSQ(%SINGULARVALUES%)");
+    aTemplate.applyRange(u"%SINGULARVALUES%", aSingularValueRange, false);
+    aOutput.writeMatrixFormula(aTemplate.getTemplate(), 1, nRank);
+    aOutput.nextColumn();
+
+    // The running total of those shares, which says how much of the variance
+    // the first few components carry between them.
+    for (SCROW nRow = 0; nRow < nRank; ++nRow)
+    {
+        const ScRange aSharesSoFar(ScAddress(nShareColumn, nFirstValueRow, nOutputTab),
+                                   ScAddress(nShareColumn, nFirstValueRow + nRow, nOutputTab));
+        aTemplate.setTemplate("=SUM(%SHARES%)");
+        aTemplate.applyRange(u"%SHARES%", aSharesSoFar, false);
+        aOutput.writeFormula(aTemplate.getTemplate());
+        aOutput.nextRow();
+    }
+
     const SCROW nBlockHeight = std::max<SCROW>(nRowCount, nColumnCount);
     return ScRange(
         ScAddress(0, nMeanRow, nOutputTab),
-        ScAddress(nColumnCount + 2 * nRank, nFirstValueRow + nBlockHeight - 1, nOutputTab));
+        ScAddress(nColumnCount + 2 * nRank + 2, nFirstValueRow + nBlockHeight - 1, nOutputTab));
 }
 
 IMPL_LINK(ScPrincipalComponentAnalysisDialog, ButtonClicked, weld::Button&, rButton, void)

@@ -111,6 +111,35 @@ class principalComponentAnalysis(UITestCase):
             # so the third singular value is zero.
             self.assertEqual(round(aSingularValues[2], 10), 0)
 
+            # Each component carries the share of the variance its squared
+            # singular value is of the total, and the shares add up to one.
+            fTotal = sum(x * x for x in aSingularValues)
+            aShares = [
+                get_cell_by_position(document, 1, 10, nFirstValueRow + nRow).getValue()
+                for nRow in range(3)]
+            for nRow in range(3):
+                self.assertEqual(
+                    round(aShares[nRow], 10),
+                    round(aSingularValues[nRow] ** 2 / fTotal, 10))
+            self.assertEqual(round(sum(aShares), 10), 1)
+
+            # The column beside it is the running total of the shares, so it
+            # reaches one on the last component.
+            aCumulative = [
+                get_cell_by_position(document, 1, 11, nFirstValueRow + nRow).getValue()
+                for nRow in range(3)]
+            for nRow in range(3):
+                self.assertEqual(
+                    round(aCumulative[nRow], 10), round(sum(aShares[:nRow + 1]), 10))
+            self.assertEqual(round(aCumulative[2], 10), 1)
+
+            # Both columns are shown as percentages.
+            for nColumn in (10, 11):
+                nFormatKey = get_cell_by_position(
+                    document, 1, nColumn, nFirstValueRow).NumberFormat
+                sFormat = document.getNumberFormats().getByKey(nFormatKey).FormatString
+                self.assertIn("%", sFormat)
+
             # A second run cannot have the sheet it needs, so it reports that
             # and adds nothing.
             self.runAnalysis(gridwin, "$A$1:$C$6", True, close_button="cancel")

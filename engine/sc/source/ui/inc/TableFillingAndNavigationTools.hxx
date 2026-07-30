@@ -87,6 +87,7 @@ public:
     void writeBoldString(const OUString& aString);
     void writeValue(double aValue);
     void formatAsColumnHeader(SCCOL nCols = 1);
+    void formatAsPercentage(SCCOL nCols = 1, SCROW nRows = 1);
     void formatTableBottom(SCCOL nCols = 1);
 };
 
