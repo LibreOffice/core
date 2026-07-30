@@ -795,7 +795,7 @@ void FileServerRequestHandler::readDirToHash(const std::string& basePath, const 
     }
 #endif // !MOBILEAPP
 
-    DIR* workingdir = opendir((fullPath).c_str());
+    DIR* workingdir = opendir(fullPath.c_str());
     if (!workingdir)
     {
         LOG_SYS("Failed to open directory [" << fullPath << ']');

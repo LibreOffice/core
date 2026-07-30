@@ -594,7 +594,7 @@ int createCOKit(const std::string& childRoot, const std::string& sysTemplate,
         childPid = forkKit(childFunc, processName, parentFunc);
     }
 
-    const auto duration = (std::chrono::steady_clock::now() - startForkingTime);
+    const auto duration = std::chrono::steady_clock::now() - startForkingTime;
     const auto durationMs = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
     LOG_TRC("Forking child took " << durationMs);
 
@@ -675,7 +675,7 @@ int createSubForKit(const std::string& subForKitIdent, const std::string& childR
     std::string processName = "subforkit_" + HexUtil::encodeId(subForKitId, 3);
     childPid = forkKit(childFunc, processName, parentFunc);
 
-    const auto duration = (std::chrono::steady_clock::now() - startForkingTime);
+    const auto duration = std::chrono::steady_clock::now() - startForkingTime;
     const auto durationMs = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
     LOG_TRC("Forking subForKit took " << durationMs);
 

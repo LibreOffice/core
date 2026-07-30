@@ -588,7 +588,7 @@ static void dump_unshared(unsigned proc_id, unsigned parent_id,
         for (const auto& addr : space.getAddrToStr())
         {
             if (DumpAll ||
-                unShared.find((addr.first & ~0x1fff)) != unShared.end())
+                unShared.find(addr.first & ~0x1fff) != unShared.end())
                 printf("0x%.16llx %s\n", addr.first, addr.second.c_str());
         }
 

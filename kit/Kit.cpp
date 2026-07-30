@@ -1968,7 +1968,7 @@ void Document::updateEditorSpeeds(int id, int speed)
         const std::shared_ptr<ChildSession>& session = it.second;
         int sessionId = session->getViewId();
 
-        auto duration = (_lastUpdatedAt[id] - now);
+        auto duration = _lastUpdatedAt[id] - now;
         std::chrono::milliseconds::rep durationInMs = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
         if (_speedCount[sessionId] != 0 && durationInMs > 5000)
         {

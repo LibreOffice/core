@@ -663,7 +663,7 @@ static void rebalanceChildren(const std::string& configId, int64_t balance)
     LOG_TRC("Rebalance children to " << balance << ", have " << available << " and "
                                      << OutstandingForks[configId] << " outstanding requests");
 
-    const auto duration = (std::chrono::steady_clock::now() - LastForkRequestTimes[configId]);
+    const auto duration = std::chrono::steady_clock::now() - LastForkRequestTimes[configId];
     const auto durationMs = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
     if (OutstandingForks[configId] != 0 && durationMs >= ChildSpawnTimeoutMs.load())
     {
@@ -3431,7 +3431,7 @@ private:
                 return;
             }
 
-            const auto duration = (std::chrono::steady_clock::now() - LastForkRequestTimes[configId]);
+            const auto duration = std::chrono::steady_clock::now() - LastForkRequestTimes[configId];
             const auto durationMs = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
             LOG_TRC("New child spawned after " << durationMs << " of requesting");
 

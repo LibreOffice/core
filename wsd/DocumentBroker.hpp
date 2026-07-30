@@ -782,7 +782,7 @@ private:
     /// Returns the time elapsed since the last user activity.
     std::chrono::milliseconds getIdleTime() const
     {
-        const auto duration = (std::chrono::steady_clock::now() - _lastActivityTime);
+        const auto duration = std::chrono::steady_clock::now() - _lastActivityTime;
         return std::chrono::duration_cast<std::chrono::milliseconds>(duration);
     }
 

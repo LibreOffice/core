@@ -194,8 +194,8 @@ void SpookyHash::Hash128(
     // handle the last partial block of sc_blockSize bytes
     remainder = (length - (reinterpret_cast<const uint8 *>(end) - static_cast<const uint8 *>(message)));
     memcpy(buf, end, remainder);
-    memset((reinterpret_cast<uint8 *>(buf))+remainder, 0, sc_blockSize-remainder);
-    (reinterpret_cast<uint8 *>(buf))[sc_blockSize-1] = remainder;
+    memset(reinterpret_cast<uint8 *>(buf)+remainder, 0, sc_blockSize-remainder);
+    reinterpret_cast<uint8 *>(buf)[sc_blockSize-1] = remainder;
 
     // do some final mixing
     End(buf, h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
@@ -232,7 +232,7 @@ void SpookyHash::Update(const void *message, size_t length)
     // Is this message fragment too short?  If it is, stuff it away.
     if (newLength < sc_bufSize)
     {
-        memcpy(&(reinterpret_cast<uint8 *>(m_data))[m_remainder], message, length);
+        memcpy(&reinterpret_cast<uint8 *>(m_data)[m_remainder], message, length);
         m_length = length + m_length;
         m_remainder = newLength;
         return;
@@ -266,11 +266,11 @@ void SpookyHash::Update(const void *message, size_t length)
     if (m_remainder)
     {
         uint8 prefix = sc_bufSize-m_remainder;
-        memcpy(&((reinterpret_cast<uint8 *>(m_data))[m_remainder]), message, prefix);
+        memcpy(&(reinterpret_cast<uint8 *>(m_data)[m_remainder]), message, prefix);
         u.p64 = m_data;
         Mix(u.p64, h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
         Mix(&u.p64[sc_numVars], h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
-        u.p8 = (static_cast<const uint8 *>(message)) + prefix;
+        u.p8 = static_cast<const uint8 *>(message) + prefix;
         length -= prefix;
     }
     else
@@ -356,9 +356,9 @@ void SpookyHash::Final(uint64 *hash1, uint64 *hash2)
     }
 
     // mix in the last partial block, and the length mod sc_blockSize
-    memset(&(reinterpret_cast<uint8 *>(data))[remainder], 0, (sc_blockSize-remainder));
+    memset(&reinterpret_cast<uint8 *>(data)[remainder], 0, (sc_blockSize-remainder));
 
-    (reinterpret_cast<uint8 *>(data))[sc_blockSize-1] = remainder;
+    reinterpret_cast<uint8 *>(data)[sc_blockSize-1] = remainder;
 
     // do some final mixing
     End(data, h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11);
