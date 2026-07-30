@@ -21,7 +21,6 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
-#include <com/sun/star/rendering/ViewState.hpp>
 #include "XCachedPrimitive.hxx"
 #include <comphelper/compbase.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -46,7 +45,7 @@ namespace vclcanvas
                       const ::Point&                                  rPoint,
                       const ::Size&                                   rSize,
                       const GraphicAttr&                              rAttr,
-                      const css::rendering::ViewState&                rUsedViewState,
+                      const ::vclcanvas::ViewState&                rUsedViewState,
                       css::rendering::RenderState                     aUsedRenderState,
                       const css::uno::Reference< vclcanvas::XCanvas >&   rTarget );
 
@@ -54,7 +53,7 @@ namespace vclcanvas
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XCachedPrimitive
-        virtual ::sal_Int8 redraw( const css::rendering::ViewState& aState ) override;
+        virtual ::sal_Int8 redraw( const ::vclcanvas::ViewState& aState ) override;
 
         // XServiceInfo
         virtual OUString getImplementationName(  ) override;
@@ -62,7 +61,7 @@ namespace vclcanvas
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     private:
-        css::rendering::ViewState                         maUsedViewState;
+        ::vclcanvas::ViewState                         maUsedViewState;
         css::uno::Reference< vclcanvas::XCanvas >                      mxTarget;
         GraphicObjectSharedPtr                                         mpGraphicObject;
         const css::rendering::RenderState                              maRenderState;

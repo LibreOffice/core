@@ -37,10 +37,10 @@
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include <com/sun/star/rendering/Texture.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 
 #include <verifyinput.hxx>
+#include <ViewState.hxx>
 
 
 using namespace ::com::sun::star;
@@ -144,7 +144,7 @@ namespace canvastools
 #endif
         }
 
-        void verifyInput( const rendering::ViewState&               viewState,
+        void verifyInput( const vclcanvas::ViewState&               viewState,
                           const char*                               pStr,
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )

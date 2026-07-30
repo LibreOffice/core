@@ -724,7 +724,7 @@ namespace cppcanvas
 
             bool EffectTextAction::operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool /*bNormalText*/ ) const
             {
-                const rendering::ViewState aViewState( mpCanvas->getViewState() );
+                const vclcanvas::ViewState aViewState( mpCanvas->getViewState() );
                 const uno::Reference< vclcanvas::XCanvas > aCanvas( mpCanvas->getUNOCanvas() );
 
                 //rhbz#1589029 non-transparent text fill background support
@@ -1025,7 +1025,7 @@ namespace cppcanvas
 
             bool EffectTextArrayAction::operator()( const rendering::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText) const
             {
-                const rendering::ViewState aViewState( mpCanvas->getViewState() );
+                const vclcanvas::ViewState aViewState( mpCanvas->getViewState() );
                 const uno::Reference< vclcanvas::XCanvas > aCanvas( mpCanvas->getUNOCanvas() );
 
                 //rhbz#1589029 non-transparent text fill background support
@@ -1072,7 +1072,7 @@ namespace cppcanvas
                 EffectTextArrayRenderHelper( const uno::Reference< vclcanvas::XCanvas >&        rCanvas,
                                              const uno::Reference< rendering::XTextLayout >&    rTextLayout,
                                              const TextLinesHelper&                             rTextLinesHelper,
-                                             const rendering::ViewState&                        rViewState ) :
+                                             const vclcanvas::ViewState&                        rViewState ) :
                     mrCanvas( rCanvas ),
                     mrTextLayout( rTextLayout ),
                     mrTextLinesHelper( rTextLinesHelper ),
@@ -1116,7 +1116,7 @@ namespace cppcanvas
                 const uno::Reference< vclcanvas::XCanvas >&         mrCanvas;
                 const uno::Reference< rendering::XTextLayout >&     mrTextLayout;
                 const TextLinesHelper&                              mrTextLinesHelper;
-                const rendering::ViewState&                         mrViewState;
+                const vclcanvas::ViewState&                         mrViewState;
             };
 
             bool EffectTextArrayAction::renderSubset( const ::basegfx::B2DHomMatrix&  rTransformation,
@@ -1148,7 +1148,7 @@ namespace cppcanvas
                 // ===================================
 
                 uno::Reference< vclcanvas::XCanvas > xCanvas( mpCanvas->getUNOCanvas() );
-                const rendering::ViewState           aViewState( mpCanvas->getViewState() );
+                const vclcanvas::ViewState           aViewState( mpCanvas->getViewState() );
 
                 TextLinesHelper aHelper = maTextLinesHelper;
                 aHelper.init(nMaxPos - nMinPos, maTextLineInfo);
@@ -1292,7 +1292,7 @@ namespace cppcanvas
 
             bool OutlineAction::operator()( const rendering::RenderState& rRenderState, const ::Color& /*rTextFillColor*/, bool /*bNormalText*/ ) const
             {
-                const rendering::ViewState                  aViewState( mpCanvas->getViewState() );
+                const vclcanvas::ViewState                  aViewState( mpCanvas->getViewState() );
                 const uno::Reference< vclcanvas::XCanvas >  xCanvas( mpCanvas->getUNOCanvas() );
 
                 if (mxBackgroundFillPoly.is())
@@ -1364,7 +1364,7 @@ namespace cppcanvas
                 OutlineTextArrayRenderHelper( const uno::Reference< rendering::XCanvas >&        rCanvas,
                                               const uno::Reference< rendering::XPolyPolygon2D >& rTextPolygon,
                                               const uno::Reference< rendering::XPolyPolygon2D >& rLinePolygon,
-                                              const rendering::ViewState&                        rViewState,
+                                              const vclcanvas::ViewState&                        rViewState,
                                               double                                             nOutlineWidth ) :
                     maFillColor(
                         vcl::unotools::colorToDoubleSequence(
@@ -1423,7 +1423,7 @@ namespace cppcanvas
                 const uno::Reference< rendering::XCanvas >&         mrCanvas;
                 const uno::Reference< rendering::XPolyPolygon2D >&  mrTextPolygon;
                 const uno::Reference< rendering::XPolyPolygon2D >&  mrLinePolygon;
-                const rendering::ViewState&                         mrViewState;
+                const vclcanvas::ViewState&                         mrViewState;
             };
 #endif
 

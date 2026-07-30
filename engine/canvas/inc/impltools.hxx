@@ -42,10 +42,13 @@ namespace com::sun::star::geometry
 namespace com::sun::star::rendering
 {
     struct RenderState;
-    struct ViewState;
     class  XBitmap;
 }
 
+namespace vclcanvas
+{
+    struct ViewState;
+}
 
 namespace vclcanvastools
 {
@@ -59,7 +62,7 @@ namespace vclcanvastools
          */
         bool setupFontTransform( ::Point&                              o_rPoint,
                                  vcl::Font&                            io_rVCLFont,
-                                 const css::rendering::ViewState&      viewState,
+                                 const ::vclcanvas::ViewState&      viewState,
                                  const css::rendering::RenderState&    renderState,
                                  ::OutputDevice const &                rOutDev );
 
@@ -127,11 +130,11 @@ namespace vclcanvastools
         };
 
         ::Point mapRealPoint2D( const css::geometry::RealPoint2D&  rPoint,
-                                const css::rendering::ViewState&   rViewState,
+                                const ::vclcanvas::ViewState&   rViewState,
                                 const css::rendering::RenderState& rRenderState );
 
         ::tools::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&                          rPoly,
-                                      const css::rendering::ViewState&     rViewState,
+                                      const ::vclcanvas::ViewState&     rViewState,
                                       const css::rendering::RenderState&   rRenderState );
 
         ::Bitmap transformBitmap( const ::Bitmap&                                   rBitmap,

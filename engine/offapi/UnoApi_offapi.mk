@@ -2847,7 +2847,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	TextDirection \
 	Texture \
 	TexturingMode \
-	ViewState \
 	XBezierPolyPolygon2D \
 	XBitmap \
 	XCanvasFont \

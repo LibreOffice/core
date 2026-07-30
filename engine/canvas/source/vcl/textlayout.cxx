@@ -26,7 +26,6 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
-#include <com/sun/star/rendering/ViewState.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
@@ -191,7 +190,7 @@ namespace vclcanvas
 
     void TextLayout::draw( OutputDevice&                 rOutDev,
                            const Point&                  rOutpos,
-                           const rendering::ViewState&   viewState,
+                           const vclcanvas::ViewState&   viewState,
                            const rendering::RenderState& renderState ) const
     {
         SolarMutexGuard aGuard;
@@ -265,7 +264,7 @@ namespace vclcanvas
 
     KernArray TextLayout::setupTextOffsets(
                                        const cpo::uno::Sequence< double >&   inputOffsets,
-                                       const rendering::ViewState&      viewState,
+                                       const vclcanvas::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const
     {
         ::basegfx::B2DHomMatrix aMatrix;

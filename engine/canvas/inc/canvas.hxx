@@ -101,7 +101,7 @@ namespace vclcanvas
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                 rGrf,
-                              const css::rendering::ViewState&              viewState,
+                              const ::vclcanvas::ViewState&              viewState,
                               const css::rendering::RenderState&            renderState,
                               const ::Point&                                rPt,
                               const ::Size&                                 rSz,

@@ -73,7 +73,6 @@
 #include <com/sun/star/rendering/RepaintResult.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/ViewState.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>

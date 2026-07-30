@@ -68,13 +68,13 @@ namespace vclcanvas
 
         void draw( OutputDevice&                                   rOutDev,
                    const Point&                                    rOutpos,
-                   const css::rendering::ViewState&                viewState,
+                   const ::vclcanvas::ViewState&                viewState,
                    const css::rendering::RenderState&              renderState ) const;
 
     private:
         KernArray setupTextOffsets(
                                const cpo::uno::Sequence< double >& inputOffsets,
-                               const css::rendering::ViewState&    viewState,
+                               const ::vclcanvas::ViewState&    viewState,
                                const css::rendering::RenderState&  renderState     ) const;
 
         css::rendering::StringContext                    maText;

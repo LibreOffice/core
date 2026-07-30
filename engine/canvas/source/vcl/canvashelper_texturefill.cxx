@@ -482,7 +482,7 @@ namespace vclcanvas
                            const ::canvas::ParametricPolyPolygon::Values&  rValues,
                            const std::vector< ::Color >&                   rColors,
                            const ::tools::PolyPolygon&                     rPoly,
-                           const rendering::ViewState&                     viewState,
+                           const vclcanvas::ViewState&                     viewState,
                            const rendering::RenderState&                   renderState,
                            const rendering::Texture&                       texture)
         {
@@ -578,7 +578,7 @@ namespace vclcanvas
 
     uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const vclcanvas::XCanvas*                          pCanvas,
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
-                                                                                         const rendering::ViewState&                        viewState,
+                                                                                         const vclcanvas::ViewState&                        viewState,
                                                                                          const rendering::RenderState&                      renderState,
                                                                                          const cpo::uno::Sequence< rendering::Texture >&         textures )
     {

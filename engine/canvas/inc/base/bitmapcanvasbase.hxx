@@ -111,7 +111,7 @@ namespace canvas
         }
 
         virtual void drawPoint(const css::geometry::RealPoint2D&     aPoint,
-                                        const css::rendering::ViewState&      viewState,
+                                        const ::vclcanvas::ViewState&      viewState,
                                         const css::rendering::RenderState&    renderState) override
         {
             canvastools::verifyArgs(aPoint, viewState, renderState,
@@ -125,7 +125,7 @@ namespace canvas
 
         virtual void drawLine(const css::geometry::RealPoint2D&  aStartPoint,
                                        const css::geometry::RealPoint2D&  aEndPoint,
-                                       const css::rendering::ViewState&   viewState,
+                                       const ::vclcanvas::ViewState&   viewState,
                                        const css::rendering::RenderState& renderState) override
         {
             canvastools::verifyArgs(aStartPoint, aEndPoint, viewState, renderState,
@@ -141,7 +141,7 @@ namespace canvas
 
         virtual void
             drawPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
-                            const css::rendering::ViewState&                             viewState,
+                            const ::vclcanvas::ViewState&                             viewState,
                             const css::rendering::RenderState&                           renderState) override
         {
             canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
@@ -157,7 +157,7 @@ namespace canvas
 
         virtual void
             strokePolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                              const css::rendering::ViewState&                               viewState,
+                              const ::vclcanvas::ViewState&                               viewState,
                               const css::rendering::RenderState&                             renderState,
                               const css::rendering::StrokeAttributes&                        strokeAttributes) override
         {
@@ -174,7 +174,7 @@ namespace canvas
 
         virtual css::uno::Reference< vclcanvas::XCachedPrimitive >
             fillPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&               xPolyPolygon,
-                             const css::rendering::ViewState&                                          viewState,
+                             const ::vclcanvas::ViewState&                                          viewState,
                              const css::rendering::RenderState&                                        renderState) override
         {
             canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
@@ -190,7 +190,7 @@ namespace canvas
 
         virtual css::uno::Reference< vclcanvas::XCachedPrimitive >
             fillTexturedPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
-                                    const css::rendering::ViewState&                             viewState,
+                                    const ::vclcanvas::ViewState&                             viewState,
                                     const css::rendering::RenderState&                           renderState,
                                     const cpo::uno::Sequence< css::rendering::Texture >&         textures) override
         {
@@ -226,7 +226,7 @@ namespace canvas
         virtual void
             drawText(const css::rendering::StringContext&                                     text,
                      const css::uno::Reference< css::rendering::XCanvasFont >&                xFont,
-                     const css::rendering::ViewState&                                         viewState,
+                     const ::vclcanvas::ViewState&                                         viewState,
                      const css::rendering::RenderState&                                       renderState,
                      sal_Int8                                                                 textDirection) override
         {
@@ -247,7 +247,7 @@ namespace canvas
 
         virtual void
             drawTextLayout(const css::uno::Reference< css::rendering::XTextLayout >&               laidOutText,
-                            const css::rendering::ViewState&                                       viewState,
+                            const ::vclcanvas::ViewState&                                       viewState,
                             const css::rendering::RenderState&                                     renderState) override
         {
             canvastools::verifyArgs(laidOutText, viewState, renderState,
@@ -264,7 +264,7 @@ namespace canvas
 
         virtual css::uno::Reference< vclcanvas::XCachedPrimitive >
             drawBitmap( const css::uno::Reference< css::rendering::XBitmap >&              xBitmap,
-                        const css::rendering::ViewState&                                   viewState,
+                        const ::vclcanvas::ViewState&                                   viewState,
                         const css::rendering::RenderState&                                 renderState ) override
         {
             canvastools::verifyArgs(xBitmap, viewState, renderState,

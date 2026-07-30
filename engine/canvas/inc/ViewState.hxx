@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the Collabora Office project.
  *
@@ -16,10 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#pragma once
 
-module com { module sun { module star { module rendering {
+#include <com/sun/star/geometry/AffineMatrix2D.hpp>
 
-interface XPolyPolygon2D;
+namespace vclcanvas {
 
 /** This structure contains information considered the view state.<p>
 
@@ -35,9 +36,8 @@ struct ViewState
         operations from user space to screen space.<p>
      */
     ::com::sun::star::geometry::AffineMatrix2D  AffineTransform;
-
 };
 
-}; }; }; };
+}
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

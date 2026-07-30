@@ -21,8 +21,8 @@
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/rendering/ViewState.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <ViewState.hxx>
 #include <memory>
 #include <optional>
 
@@ -67,10 +67,10 @@ namespace cppcanvas
 
         const css::uno::Reference< vclcanvas::XCanvas > & getUNOCanvas() const { return mxCanvas; }
 
-        const css::rendering::ViewState & getViewState() const { return maViewState; }
+        const vclcanvas::ViewState & getViewState() const { return maViewState; }
 
     private:
-        mutable css::rendering::ViewState                    maViewState;
+        mutable vclcanvas::ViewState                    maViewState;
         const css::uno::Reference< vclcanvas::XCanvas > mxCanvas;
     };
 

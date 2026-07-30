@@ -37,7 +37,7 @@ namespace vclcanvas
                                 const ::Point&                              rPoint,
                                 const ::Size&                               rSize,
                                 const GraphicAttr&                          rAttr,
-                                const rendering::ViewState&                 rUsedViewState,
+                                const vclcanvas::ViewState&                 rUsedViewState,
                                 rendering::RenderState                      aUsedRenderState,
                                 const uno::Reference< vclcanvas::XCanvas >& rTarget ) :
         CachedBitmap_Base(),
@@ -57,7 +57,7 @@ namespace vclcanvas
         mxTarget.clear();
     }
 
-    sal_Int8 CachedBitmap::redraw( const rendering::ViewState& aState )
+    sal_Int8 CachedBitmap::redraw( const vclcanvas::ViewState& aState )
     {
         ::basegfx::B2DHomMatrix aUsedTransformation;
         ::basegfx::B2DHomMatrix aNewTransformation;

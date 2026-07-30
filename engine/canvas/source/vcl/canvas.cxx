@@ -66,7 +66,7 @@ namespace vclcanvas
     }
 
     bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,
-                          const rendering::ViewState&   viewState,
+                          const vclcanvas::ViewState&   viewState,
                           const rendering::RenderState& renderState,
                           const ::Point&                rPt,
                           const ::Size&                 rSz,

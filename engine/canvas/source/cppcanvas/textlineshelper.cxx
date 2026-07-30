@@ -83,7 +83,7 @@ void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo
 
 void TextLinesHelper::render(const rendering::RenderState& rRenderState, bool bNormalText) const
 {
-    const rendering::ViewState aViewState(mpCanvas->getViewState());
+    const vclcanvas::ViewState aViewState(mpCanvas->getViewState());
     const uno::Reference<vclcanvas::XCanvas> xCanvas(mpCanvas->getUNOCanvas());
     rendering::StrokeAttributes aStrokeAttributes;
     aStrokeAttributes.JoinType = rendering::PathJoinType::ROUND;

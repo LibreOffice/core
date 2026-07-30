@@ -54,9 +54,13 @@ namespace com::sun::star::rendering
 {
     struct RenderState;
     struct Texture;
-    struct ViewState;
     class XGraphicDevice;
     class XPolyPolygon2D;
+}
+
+namespace vclcanvas
+{
+    struct ViewState;
 }
 
 namespace com::sun::star::awt
@@ -104,14 +108,14 @@ namespace canvastools
         CANVASTOOLS_DLLPUBLIC css::rendering::RenderState&
             initRenderState( css::rendering::RenderState&                      renderState );
 
-        CANVASTOOLS_DLLPUBLIC css::rendering::ViewState&
-            initViewState( css::rendering::ViewState&                          viewState );
+        CANVASTOOLS_DLLPUBLIC ::vclcanvas::ViewState&
+            initViewState( ::vclcanvas::ViewState&                          viewState );
 
         CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix
-            getViewStateTransform( const css::rendering::ViewState&            viewState );
+            getViewStateTransform( const ::vclcanvas::ViewState&            viewState );
 
-        CANVASTOOLS_DLLPUBLIC css::rendering::ViewState&
-            setViewStateTransform( css::rendering::ViewState&                  viewState,
+        CANVASTOOLS_DLLPUBLIC ::vclcanvas::ViewState&
+            setViewStateTransform( ::vclcanvas::ViewState&                  viewState,
                                    const ::basegfx::B2DHomMatrix&              transform );
 
         CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix
@@ -131,7 +135,7 @@ namespace canvastools
 
         CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix&
             mergeViewAndRenderTransform( ::basegfx::B2DHomMatrix&              transform,
-                                         const css::rendering::ViewState&      viewState,
+                                         const ::vclcanvas::ViewState&      viewState,
                                          const css::rendering::RenderState&    renderState );
 
 
@@ -235,7 +239,7 @@ namespace canvastools
            for smooth gradient color differences
          */
         CANVASTOOLS_DLLPUBLIC int calcGradientStepCount( ::basegfx::B2DHomMatrix&   rTotalTransform,
-                                   const css::rendering::ViewState&   viewState,
+                                   const ::vclcanvas::ViewState&   viewState,
                                    const css::rendering::RenderState& renderState,
                                    const css::rendering::Texture&     texture,
                                    int                                nColorSteps );
@@ -379,7 +383,7 @@ namespace canvastools
             bool                mbCaseSensitive;
         };
 
-        CANVASTOOLS_DLLPUBLIC void clipOutDev(const css::rendering::ViewState& viewState,
+        CANVASTOOLS_DLLPUBLIC void clipOutDev(const ::vclcanvas::ViewState& viewState,
                         const css::rendering::RenderState& renderState,
                         OutputDevice& rOutDev);
 

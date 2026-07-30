@@ -20,7 +20,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/rendering/ViewState.hdl>
+#include "ViewState.hxx"
 #include <com/sun/star/uno/XInterface.hdl>
 #include <com/sun/star/uno/Reference.h>
 #include <cppu/macros.hxx>
@@ -67,7 +67,7 @@ public:
         @throws com::sun::star::lang::IllegalArgumentException
         if the view transformation matrix is singular.
      */
-    virtual ::sal_Int8 redraw(const ::css::rendering::ViewState& aState) = 0;
+    virtual ::sal_Int8 redraw(const ::vclcanvas::ViewState& aState) = 0;
 
     static inline ::cpo::uno::Type const& static_type(void* = nullptr);
 

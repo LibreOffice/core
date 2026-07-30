@@ -70,7 +70,7 @@ using namespace vclcanvas;
 
         bool setupFontTransform( ::Point&                       o_rPoint,
                                  vcl::Font&                    io_rVCLFont,
-                                 const rendering::ViewState&    rViewState,
+                                 const vclcanvas::ViewState&    rViewState,
                                  const rendering::RenderState&  rRenderState,
                                  ::OutputDevice const &         rOutDev )
         {
@@ -167,7 +167,7 @@ using namespace vclcanvas;
 
 
         ::Point mapRealPoint2D( const geometry::RealPoint2D&    rPoint,
-                                const rendering::ViewState&     rViewState,
+                                const vclcanvas::ViewState&     rViewState,
                                 const rendering::RenderState&   rRenderState )
         {
             ::basegfx::B2DPoint aPoint( ::basegfx::unotools::b2DPointFromRealPoint2D(rPoint) );
@@ -181,7 +181,7 @@ using namespace vclcanvas;
         }
 
         ::tools::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&  rPoly,
-                                      const rendering::ViewState&       rViewState,
+                                      const vclcanvas::ViewState&       rViewState,
                                       const rendering::RenderState&     rRenderState )
         {
             ::basegfx::B2DHomMatrix aMatrix;

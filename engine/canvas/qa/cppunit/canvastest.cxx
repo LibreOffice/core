@@ -30,7 +30,7 @@ class CanvasTest : public test::BootstrapFixture
     VclPtr<VirtualDevice> mVclDevice;
     uno::Reference<vclcanvas::XCanvas> mCanvas;
     uno::Reference<vclcanvas::XGraphicDevice> mDevice;
-    rendering::ViewState mViewState;
+    vclcanvas::ViewState mViewState;
     rendering::RenderState mRenderState;
     cpo::uno::Sequence<double> mColorBlack;
     cpo::uno::Sequence<double> mColorBlue;

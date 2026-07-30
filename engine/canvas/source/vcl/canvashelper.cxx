@@ -163,7 +163,7 @@ namespace vclcanvas
     void CanvasHelper::drawLine( const vclcanvas::XCanvas*      ,
                                  const geometry::RealPoint2D&   aStartRealPoint2D,
                                  const geometry::RealPoint2D&   aEndRealPoint2D,
-                                 const rendering::ViewState&    viewState,
+                                 const vclcanvas::ViewState&    viewState,
                                  const rendering::RenderState&  renderState )
     {
         // are we disposed?
@@ -184,7 +184,7 @@ namespace vclcanvas
 
     void CanvasHelper::drawPolyPolygon( const vclcanvas::XCanvas*                          ,
                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
-                                         const rendering::ViewState&                        viewState,
+                                         const vclcanvas::ViewState&                        viewState,
                                          const rendering::RenderState&                      renderState )
     {
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
@@ -224,7 +224,7 @@ namespace vclcanvas
 
     void CanvasHelper::strokePolyPolygon( const vclcanvas::XCanvas*                            ,
                                            const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
-                                           const rendering::ViewState&                          viewState,
+                                           const vclcanvas::ViewState&                          viewState,
                                            const rendering::RenderState&                        renderState,
                                            const rendering::StrokeAttributes&                   strokeAttributes )
     {
@@ -337,7 +337,7 @@ namespace vclcanvas
 
     uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const vclcanvas::XCanvas*                          ,
                                                                                  const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
-                                                                                 const rendering::ViewState&                        viewState,
+                                                                                 const vclcanvas::ViewState&                        viewState,
                                                                                  const rendering::RenderState&                      renderState )
     {
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
@@ -388,7 +388,7 @@ namespace vclcanvas
     void CanvasHelper::drawText( const vclcanvas::XCanvas*                         ,
                                   const rendering::StringContext&                   text,
                                   const uno::Reference< rendering::XCanvasFont >&   xFont,
-                                  const rendering::ViewState&                       viewState,
+                                  const vclcanvas::ViewState&                       viewState,
                                   const rendering::RenderState&                     renderState,
                                   sal_Int8                                          textDirection )
     {
@@ -433,7 +433,7 @@ namespace vclcanvas
 
     void CanvasHelper::drawTextLayout( const vclcanvas::XCanvas*                       ,
                                         const uno::Reference< rendering::XTextLayout >& xLayoutedText,
-                                        const rendering::ViewState&                     viewState,
+                                        const vclcanvas::ViewState&                     viewState,
                                         const rendering::RenderState&                   renderState )
     {
         ENSURE_ARG_OR_THROW( xLayoutedText.is(),
@@ -470,7 +470,7 @@ namespace vclcanvas
 
     uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::implDrawBitmap( const vclcanvas::XCanvas*                   pCanvas,
                                                                                 const uno::Reference< rendering::XBitmap >& xBitmap,
-                                                                                const rendering::ViewState&                 viewState,
+                                                                                const vclcanvas::ViewState&                 viewState,
                                                                                 const rendering::RenderState&               renderState,
                                                                                 bool                                        bModulateColors )
     {
@@ -654,7 +654,7 @@ namespace vclcanvas
 
     uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::drawBitmap( const vclcanvas::XCanvas*                   pCanvas,
                                                                             const uno::Reference< rendering::XBitmap >& xBitmap,
-                                                                            const rendering::ViewState&                 viewState,
+                                                                            const vclcanvas::ViewState&                 viewState,
                                                                             const rendering::RenderState&               renderState )
     {
         return implDrawBitmap( pCanvas,
@@ -666,7 +666,7 @@ namespace vclcanvas
 
     uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const vclcanvas::XCanvas*                      pCanvas,
                                                                                      const uno::Reference< rendering::XBitmap >&    xBitmap,
-                                                                                     const rendering::ViewState&                    viewState,
+                                                                                     const vclcanvas::ViewState&                    viewState,
                                                                                      const rendering::RenderState&                  renderState )
     {
         return implDrawBitmap( pCanvas,
@@ -684,7 +684,7 @@ namespace vclcanvas
         return vcl::unotools::integerSize2DFromSize( mpOutDevProvider->getOutDev().GetOutputSizePixel() );
     }
 
-    int CanvasHelper::setupOutDevState( const rendering::ViewState&     viewState,
+    int CanvasHelper::setupOutDevState( const vclcanvas::ViewState&     viewState,
                                         const rendering::RenderState&   renderState,
                                         ColorType                       eColorType ) const
     {
@@ -750,7 +750,7 @@ namespace vclcanvas
     }
 
     bool CanvasHelper::setupTextOutput( ::Point&                                        o_rOutPos,
-                                        const rendering::ViewState&                     viewState,
+                                        const vclcanvas::ViewState&                     viewState,
                                         const rendering::RenderState&                   renderState,
                                         const uno::Reference< rendering::XCanvasFont >& xFont   ) const
     {
@@ -789,7 +789,7 @@ namespace vclcanvas
     }
 
     bool CanvasHelper::repaint( const GraphicObjectSharedPtr&   rGrf,
-                                const rendering::ViewState&     viewState,
+                                const vclcanvas::ViewState&     viewState,
                                 const rendering::RenderState&   renderState,
                                 const ::Point&                  rPt,
                                 const ::Size&                   rSz,

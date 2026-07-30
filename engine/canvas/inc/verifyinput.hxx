@@ -42,11 +42,15 @@ namespace com::sun::star::rendering
     struct RenderState;
     struct StrokeAttributes;
     struct Texture;
-    struct ViewState;
     struct FontRequest;
 }
 
 namespace cpo::uno { template <class E> class Sequence; }
+
+namespace vclcanvas
+{
+    struct ViewState;
+}
 
 namespace canvastools
 {
@@ -140,7 +144,7 @@ namespace canvastools
 
             @throws a lang::IllegalArgumentException, if anything is wrong
          */
-        CANVASTOOLS_DLLPUBLIC void verifyInput( const css::rendering::ViewState&   viewState,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::vclcanvas::ViewState&   viewState,
                           const char*                                   pStr,
                           const css::uno::Reference< css::uno::XInterface >& xIf,
                           ::sal_Int16                                   nArgPos );

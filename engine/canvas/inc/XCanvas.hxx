@@ -28,7 +28,7 @@
 #include <com/sun/star/rendering/StringContext.hpp>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include <com/sun/star/rendering/Texture.hpp>
-#include <com/sun/star/rendering/ViewState.hpp>
+#include "ViewState.hxx"
 
 namespace com::sun::star::rendering
 {
@@ -147,7 +147,7 @@ public:
         specified range.
      */
     virtual void drawPoint(const ::css::geometry::RealPoint2D& aPoint,
-                           const ::css::rendering::ViewState& aViewState,
+                           const ::vclcanvas::ViewState& aViewState,
                            const ::css::rendering::RenderState& aRenderState)
         = 0;
 
@@ -172,7 +172,7 @@ public:
      */
     virtual void drawLine(const ::css::geometry::RealPoint2D& aStartPoint,
                           const ::css::geometry::RealPoint2D& aEndPoint,
-                          const ::css::rendering::ViewState& aViewState,
+                          const ::vclcanvas::ViewState& aViewState,
                           const ::css::rendering::RenderState& aRenderState)
         = 0;
 
@@ -194,7 +194,7 @@ public:
      */
     virtual void
     drawPolyPolygon(const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
-                    const ::css::rendering::ViewState& aViewState,
+                    const ::vclcanvas::ViewState& aViewState,
                     const ::css::rendering::RenderState& aRenderState)
         = 0;
 
@@ -226,7 +226,7 @@ public:
      */
     virtual void
     strokePolyPolygon(const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
-                      const ::css::rendering::ViewState& aViewState,
+                      const ::vclcanvas::ViewState& aViewState,
                       const ::css::rendering::RenderState& aRenderState,
                       const ::css::rendering::StrokeAttributes& aStrokeAttributes)
         = 0;
@@ -254,7 +254,7 @@ public:
      */
     virtual ::css::uno::Reference<::vclcanvas::XCachedPrimitive>
     fillPolyPolygon(const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
-                    const ::css::rendering::ViewState& aViewState,
+                    const ::vclcanvas::ViewState& aViewState,
                     const ::css::rendering::RenderState& aRenderState)
         = 0;
 
@@ -285,8 +285,7 @@ public:
     */
     virtual ::css::uno::Reference<::vclcanvas::XCachedPrimitive> fillTexturedPolyPolygon(
         const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
-        const ::css::rendering::ViewState& aViewState,
-        const ::css::rendering::RenderState& aRenderState,
+        const ::vclcanvas::ViewState& aViewState, const ::css::rendering::RenderState& aRenderState,
         const ::cpo::uno::Sequence<::css::rendering::Texture>& xTextures)
         = 0;
 
@@ -352,7 +351,7 @@ public:
      */
     virtual void drawText(const ::css::rendering::StringContext& aText,
                           const ::css::uno::Reference<::css::rendering::XCanvasFont>& xFont,
-                          const ::css::rendering::ViewState& aViewState,
+                          const ::vclcanvas::ViewState& aViewState,
                           const ::css::rendering::RenderState& aRenderState,
                           ::sal_Int8 nTextDirection)
         = 0;
@@ -384,7 +383,7 @@ public:
      */
     virtual void
     drawTextLayout(const ::css::uno::Reference<::css::rendering::XTextLayout>& xLayoutetText,
-                   const ::css::rendering::ViewState& aViewState,
+                   const ::vclcanvas::ViewState& aViewState,
                    const ::css::rendering::RenderState& aRenderState)
         = 0;
 
@@ -414,7 +413,7 @@ public:
      */
     virtual ::css::uno::Reference<::vclcanvas::XCachedPrimitive>
     drawBitmap(const ::css::uno::Reference<::css::rendering::XBitmap>& xBitmap,
-               const ::css::rendering::ViewState& aViewState,
+               const ::vclcanvas::ViewState& aViewState,
                const ::css::rendering::RenderState& aRenderState)
         = 0;
 
