@@ -16,14 +16,20 @@
 #include <vcl/metaact.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
+#include <unotools/tempfile.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <cppcanvas/vclfactory.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <comphelper/string.hxx>
 
+#include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
 using namespace drawinglayer;
@@ -146,8 +152,138 @@ public:
         CPPUNIT_ASSERT_GREATER(100, nonWhiteCount);
     }
 
+    // Test that a link's clickable bounding box is correctly transformed
+    void tdf169919_link_bounding_box_transform()
+    {
+        // Impress presentation mode first draws the slide to a metafile.
+        GDIMetaFile metafile;
+        // I got these values by adding debug output to cppcanvas::internal::ImplRenderer::ImplRenderer().
+        metafile.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+        metafile.SetPrefSize(Size(14548, 3350));
+        ScopedVclPtrInstance<VirtualDevice> metadevice;
+
+        // Clickable links are only created during PDF export
+        vcl::PDFExtOutDevData aPDFExtOutDevData(*metadevice);
+        aPDFExtOutDevData.SetIsExportBookmarks(true);
+        aPDFExtOutDevData.SetIsExportTaggedPDF(true);
+        metadevice->SetExtOutDevData(&aPDFExtOutDevData);
+
+        vcl::pdf::PDFWriter::PDFWriterContext aContext;
+        aContext.Version = vcl::pdf::PDFWriter::PDFVersion::PDF_1_7;
+        aContext.Tagged = true;
+        aContext.PDFDocumentMode = vcl::pdf::PDFWriter::ModeDefault;
+        aContext.PDFDocumentAction = vcl::pdf::PDFWriter::ActionDefault;
+        aContext.PageLayout = vcl::pdf::PDFWriter::DefaultLayout;
+
+        // Create a temp file to store the written PDF
+        utl::TempFileNamed aTempFile;
+        aTempFile.EnableKillingFile();
+        aContext.URL = aTempFile.GetURL();
+
+        rtl::Reference<beans::XMaterialHolder> xEnc;
+        vcl::pdf::PDFWriter aPDFWriter(aContext, xEnc);
+        aPDFWriter.NewPage(14548, 3350);
+
+        metafile.Record(metadevice);
+        drawinglayer::geometry::ViewInformation2D view;
+
+        // Set a transform to ensure processed link honors transforms
+        const basegfx::B2DHomMatrix aMappingTransform(
+            basegfx::utils::createTranslateB2DHomMatrix(500, 500));
+        view.setObjectTransformation(aMappingTransform);
+
+        std::unique_ptr<processor2d::BaseProcessor2D> processor(
+            processor2d::createProcessor2DFromOutputDevice(*metadevice, view));
+        CPPUNIT_ASSERT(processor);
+
+        // Create a child primitive2d that holds the bounding box for the link
+        drawinglayer::primitive2d::Primitive2DContainer aSeq(1);
+        attribute::LineAttribute lineAttributes(
+            basegfx::BColor(0.047058823529411764, 0.19607843137254902, 0.17254901960784313), 35,
+            basegfx::B2DLineJoin::Miter, css::drawing::LineCap_ROUND);
+        basegfx::B2DPolygon aPolygon = { { -10, 65 }, { 539, 368 } };
+        aSeq[0] = new drawinglayer::primitive2d::PolygonStrokePrimitive2D(aPolygon, lineAttributes);
+
+        // The primitive2d for the link itself
+        std::vector<std::pair<OUString, OUString>> meValues;
+#define LINK_URL "http://libreoffice.org"
+        meValues.emplace_back("URL", OUString(LINK_URL));
+        meValues.emplace_back("AltText", "link");
+        rtl::Reference<primitive2d::TextHierarchyFieldPrimitive2D> fieldPrimitive(
+            new primitive2d::TextHierarchyFieldPrimitive2D(
+                std::move(aSeq), drawinglayer::primitive2d::FIELD_TYPE_URL, &meValues));
+
+        primitive2d::Primitive2DContainer primitives;
+        primitives.push_back(fieldPrimitive);
+
+        processor->process(primitives);
+
+        metafile.Stop();
+        metafile.WindStart();
+
+        // Match bookmarks with their link URL; usually done by each module's
+        // rendering code, eg ScModelObj::render() and such
+        std::vector<vcl::PDFExtOutDevBookmarkEntry>& rBookmarks = aPDFExtOutDevData.GetBookmarks();
+        CPPUNIT_ASSERT(!rBookmarks.empty());
+        for (const auto& rBookmark : rBookmarks)
+            aPDFExtOutDevData.SetLinkURL(rBookmark.nLinkId, rBookmark.aBookmark);
+
+        aPDFExtOutDevData.PlayGlobalActions(aPDFWriter);
+        CPPUNIT_ASSERT(aPDFWriter.Emit());
+        CPPUNIT_ASSERT(aPDFWriter.GetErrors().empty());
+
+        SvStream* pStream = aTempFile.GetStream(StreamMode::READ);
+        CPPUNIT_ASSERT(pStream->TellEnd() > 5000);
+
+        bool found = false;
+        OString sLine;
+        while (pStream->ReadLine(sLine))
+        {
+            if (sLine.isEmpty())
+                continue;
+
+            // Look for a line like
+            // <</Type/Annot/Subtype/Link/Border[0 0 0]/Rect[23.593 1630.65 52.907 1647.6]/A<</Type/Action/S/URI/URI(http://libreoffice.org/)>>
+            // and parse out the Rect[] bits
+            sal_Int32 nLinkIdx = sLine.indexOf(LINK_URL);
+            if (nLinkIdx > 0 && sLine.startsWith("<</Type/Annot/Subtype/Link/Border[0 0 0]/Rect["))
+            {
+#define RECT_START "/Rect["
+                sal_Int32 nStartIdx = sLine.indexOf(RECT_START);
+                CPPUNIT_ASSERT_EQUAL(sal_Int32(40), nStartIdx);
+                nStartIdx += strlen(RECT_START);
+                sal_Int32 nEndIdx = sLine.indexOf(']', nStartIdx);
+                CPPUNIT_ASSERT_GREATER(nStartIdx + 15, nEndIdx);
+
+                OString aStr(sLine.subView(nStartIdx, nEndIdx - nStartIdx - 1));
+                auto aCoords = comphelper::string::split(aStr, ' ');
+                CPPUNIT_ASSERT_EQUAL(size_t(4), aCoords.size());
+
+                // Assert that the Link's Rect is within the expected range, which depends
+                // on VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D()
+                // correctly doing the view transformation
+                CPPUNIT_ASSERT_GREATER(20.0, aCoords[0].toDouble());
+                CPPUNIT_ASSERT_LESS(25.0, aCoords[0].toDouble());
+
+                CPPUNIT_ASSERT_GREATER(1628.0, aCoords[1].toDouble());
+                CPPUNIT_ASSERT_LESS(1632.0, aCoords[1].toDouble());
+
+                CPPUNIT_ASSERT_GREATER(50.0, aCoords[2].toDouble());
+                CPPUNIT_ASSERT_LESS(55.0, aCoords[2].toDouble());
+
+                CPPUNIT_ASSERT_GREATER(1645.0, aCoords[3].toDouble());
+                CPPUNIT_ASSERT_LESS(1650.0, aCoords[3].toDouble());
+
+                found = true;
+                break;
+            }
+        }
+        CPPUNIT_ASSERT(found);
+    }
+
     CPPUNIT_TEST_SUITE(VclMetaFileProcessor2DTest);
     CPPUNIT_TEST(tdf136957_draw_impress_dotted_line);
+    CPPUNIT_TEST(tdf169919_link_bounding_box_transform);
     CPPUNIT_TEST_SUITE_END();
 };
 
