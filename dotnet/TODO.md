@@ -1,26 +1,49 @@
 # Paperless — master plan
 
-Status: **skeleton only.** Every project builds warning-free and the test suite runs, but
-no format is readable yet. Each library has its own `TODO.md` with detail; this file is the
-ordering and the reasoning behind it.
+Status: **Phase 0 complete.** The container layer works and `paperless identify` correctly
+names all 17 corpus formats. No document content is readable yet — that is Phase 1.
+
+Each library has its own `TODO.md` with detail; this file is the ordering and the reasoning
+behind it.
+
+## Start here (next session)
+
+Phase 1, first task: **ODF extraction** (`odt`/`ods`/`odp`). Read
+`src/Paperless.OpenDocument/TODO.md` and `research/02-writer.md` section D first.
+
+ODF before OOXML is deliberate: it is XML, well-specified, and it builds the
+style-resolution machinery OOXML needs afterwards. It is also where the
+`extraction-comparison` skill starts paying off, since LibreOffice's own text export gives
+an immediate oracle.
+
+Before trusting any comparison, run
+`.claude/skills/libreoffice-reference/scripts/check-env.sh`. **A fresh container will not
+have the LibreOffice application modules, poppler-utils, or the Carlito/Caladea fonts** — the
+script prints the exact `apt-get` lines.
 
 ## Where things stand
 
 | Done | |
 |---|---|
-| ✅ | Solution: 12 libraries + CLI + 8 test projects, building warning-free on .NET 10 |
-| ✅ | `Paperless.Core` API surface: units, geometry, colour, format catalogue, document model, drawing IR |
-| ✅ | Dependency layering fixed and enforced by project references |
+| ✅ | Solution: 12 libraries + CLI + 8 test projects, warning-free on .NET 10, 128 tests passing |
+| ✅ | `Paperless.Core` API surface: units, geometry, colour, document model, drawing IR |
+| ✅ | `FormatCatalogue`: all 43 formats described |
+| ✅ | Content-based format identification, verified on all 17 corpus formats |
+| ✅ | OLE2/CFB reader, hand-rolled, tolerant of real-world damage |
+| ✅ | ZIP / OPC / ODF package readers, with zip-bomb, traversal and XXE guards |
+| ✅ | `paperless identify`, text and JSON |
+| ✅ | 17-format test corpus committed, so unit tests need no LibreOffice install |
 | ✅ | Six research documents (~6000 lines) covering the LibreOffice implementation |
 | ✅ | Four comparison skills with verified working scripts |
 | ✅ | Dependencies audited: all permissive, none gated behind a build-time licence check |
 
 | Not started | |
 |---|---|
-| ❌ | Every format reader |
-| ❌ | Layout engines |
-| ❌ | Rendering backends |
-| ❌ | The CLI's actual subcommands |
+| ❌ | Every format reader — no document content is parsed yet |
+| ❌ | Decryption (detection works; decryption does not) |
+| ❌ | Text layout: fonts, metrics, shaping, line breaking |
+| ❌ | Layout engines and rendering backends |
+| ❌ | The CLI beyond `identify` |
 
 ## Ordering principle
 
@@ -49,8 +72,8 @@ Nothing else can be verified until these work.
 - [x] **OLE2 / CFB reader** (`Paperless.Containers`). Done, hand-rolled: header, DIFAT/FAT
       chains, mini-FAT and mini-stream, directory walk with cycle guard. Tolerates truncated
       files, out-of-range sectors, cyclic chains and duplicate entries, reporting each as a
-      `Diagnostic`. `OpenMcdf` was not needed and its package reference should be dropped
-      once nothing else wants it.
+      `Diagnostic`. `OpenMcdf` proved unnecessary and its package reference has been
+      removed.
 - [x] **ZIP + OPC + ODF packages** (`Paperless.Containers`). Done: `ZipPackageBase` over
       `System.IO.Compression` with part-name normalisation and zip-bomb/traversal guards;
       `OpcPackage` resolves content types and relationships and finds the main part by

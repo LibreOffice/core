@@ -8,8 +8,9 @@
 | `Paperless.*.Tests` | Unit tests per library |
 | `Paperless.Fidelity.Tests` | The comparison harness against LibreOffice |
 
-All seven test projects build and run; each currently holds one placeholder test. Delete the
-placeholders as real tests arrive.
+All seven test projects build and run. 128 tests currently pass: 106 in
+`Paperless.Containers.Tests` and 17 in `Paperless.Core.Tests`, plus five remaining
+placeholders. Delete each placeholder as real tests arrive in that project.
 
 ## TestKit
 
@@ -19,8 +20,15 @@ placeholders as real tests arrive.
 - [ ] `CheckFontEnvironment` — assert Calibri→Carlito and Cambria→Caladea up front. Without
       them every OOXML comparison is meaningless, and the failure looks like a Paperless
       layout bug.
-- [ ] Corpus discovery, skipping cleanly when a corpus directory is absent rather than
-      failing on a machine that never downloaded it
+- [x] `Corpus` helper: locates `tests/corpus/` by walking up from the test assembly, so the
+      files live in one place instead of being copied into every project's output.
+      `Require` throws with a message naming the generator script, since a missing corpus
+      file means the test cannot run at all and silently skipping would let coverage
+      evaporate.
+- [x] The 17 format samples committed under `tests/corpus/minimal/`, so unit tests need no
+      LibreOffice install
+- [ ] Optional-corpus handling for `external/`, which is not committed: skip cleanly rather
+      than failing on a machine that never downloaded it
 - [ ] `RasterComparer` — implement the metrics. Reference implementation already exists and
       is verified: `.claude/skills/render-comparison/scripts/compare-images.py`. Port it, and
       keep the metric names identical so numbers are comparable across the two.
@@ -30,10 +38,15 @@ placeholders as real tests arrive.
 
 ## Unit tests
 
+- [x] `Core`: format catalogue completeness, extension ambiguity, family partitioning,
+      template and macro flags
 - [ ] `Core`: `Length` conversion round-trips and rounding at boundaries; geometry;
-      `AffineTransform` composition order; format catalogue completeness
-- [ ] `Containers`: CFB against handcrafted and deliberately malformed files; OPC content-type
-      and relationship resolution; ODF mimetype/manifest mismatch handling; zip-bomb guards
+      `AffineTransform` composition order
+- [x] `Containers`: CFB on real and handcrafted damaged files (cyclic chains, missing
+      sectors, truncation); OPC content-type and relationship resolution in both directions;
+      ODF mimetype/manifest mismatch; zip-bomb guards on both the catch and false-positive
+      sides; XXE refusal
+- [ ] `Containers`: decryption, once it exists
 - [ ] `Text`: font metrics against known fonts; line breaking against UAX #14 test data;
       shaping stability
 - [ ] Per-format readers: one test per feature, with the smallest file that shows it

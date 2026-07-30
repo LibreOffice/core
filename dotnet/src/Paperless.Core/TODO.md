@@ -18,18 +18,19 @@ added here is inherited by every consumer.
 - [x] `IDrawingSink` and its supporting types (`GraphicsPath`, `Paint`, `Stroke`,
       `GlyphRun`, `FontReference`, `RasterImage`)
 - [x] `Diagnostic` / `DiagnosticLocation`; the exception hierarchy
+- [x] `FormatCatalogue` — all 43 formats with extensions, media types, display names, and
+      template/macro flags, transcribed from `research/01-formats-and-detection.md`. A test
+      asserts every enum member has an entry, so adding a format without describing it fails
+      the build. `FindByExtension` handles ambiguity: `.xml` maps to three flat-ODF formats
+      plus both Office 2003 XML dialects.
 
 ## To do
 
 ### Format catalogue
 
-- [ ] Populate the full catalogue from the table in
-      `research/01-formats-and-detection.md`: extensions, media types, display names,
-      template and macro flags, per-format read support.
-- [ ] `FindByExtension` with ambiguity handled properly — some extensions map to several
-      formats.
-- [ ] Keep `IsReadSupported` honest as readers land. It is what `paperless identify`
-      reports, so a wrong value is worse than a missing feature.
+- [ ] **Keep `IsReadSupported` honest as readers land.** Every entry is currently `false`.
+      This is what `paperless identify` reports, so flipping one before a reader actually
+      works would make the tool lie about what it can do.
 
 ### Drawing IR
 

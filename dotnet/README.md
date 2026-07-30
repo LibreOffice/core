@@ -3,8 +3,9 @@
 Pure C# / .NET libraries for **content extraction** and **headless rendering** of the file
 formats LibreOffice's Writer, Calc and Impress support.
 
-> **Status: skeleton.** The project structure, API surface and research are in place and the
-> solution builds warning-free, but no format can be read yet. See [TODO.md](TODO.md).
+> **Status: early.** The container layer works and `paperless identify` names all supported
+> formats from their content. No document *content* is readable yet — see [TODO.md](TODO.md)
+> for the plan and what is next.
 
 ## Why
 
@@ -96,6 +97,7 @@ ground truth.
 
 MPL-2.0, matching the surrounding LibreOffice source tree.
 
-Every dependency is permissively licensed — SkiaSharp and HarfBuzzSharp (MIT), PdfPig
-(Apache-2.0), OpenMcdf (MPL-2.0), and a few others. See the note atop
-[Directory.Packages.props](Directory.Packages.props) before adding another.
+Every dependency is permissively licensed — SkiaSharp and HarfBuzzSharp (MIT), the Svg.Skia
+family (MIT, except `Svg.Custom` which is MS-PL), PdfPig (Apache-2.0), BouncyCastle (MIT).
+See the note atop [Directory.Packages.props](Directory.Packages.props) before adding
+another.
