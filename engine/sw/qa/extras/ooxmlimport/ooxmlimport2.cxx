@@ -30,6 +30,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -1468,13 +1469,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165348_lockFileOnRepair)
                        u"InteractionHandler"_ustr,
                        uno::Reference<task::XInteractionHandler>(new ApproveRepairHandler)) });
 
-    // The document should be in repair/template mode, with empty URL
-    CPPUNIT_ASSERT(mxComponent.queryThrow<frame::XModel>()->getURL().isEmpty());
+    if (comphelper::COKit::isActive())
+    {
+        // The Kit repairs in place, so the document keeps the URL it was loaded from, and with it
+        // the lock that any open document holds.
+        CPPUNIT_ASSERT_EQUAL(aTempURL, mxComponent.queryThrow<frame::XModel>()->getURL());
+        CPPUNIT_ASSERT_NO_THROW(svt::DocumentLockFile(aTempURL).GetLockData());
+    }
+    else
+    {
+        // The document should be in repair/template mode, with empty URL
+        CPPUNIT_ASSERT(mxComponent.queryThrow<frame::XModel>()->getURL().isEmpty());
 
-    // The lock file must not remain. Before the fix, the lock was never released; in that scenario,
-    // DocumentLockFile::GetLockData succeeded.
-    CPPUNIT_ASSERT_THROW(svt::DocumentLockFile(aTempURL).GetLockData(),
-                         ucb::InteractiveAugmentedIOException);
+        // The lock file must not remain. Before the fix, the lock was never released; in that
+        // scenario, DocumentLockFile::GetLockData succeeded.
+        CPPUNIT_ASSERT_THROW(svt::DocumentLockFile(aTempURL).GetLockData(),
+                             ucb::InteractiveAugmentedIOException);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf159133NoBlankPage)

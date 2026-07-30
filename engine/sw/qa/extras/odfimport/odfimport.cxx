@@ -44,6 +44,7 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/boxitem.hxx>
@@ -1672,9 +1673,13 @@ CPPUNIT_TEST_FIXTURE(Test, testBrokenPackage_Tdf159474)
     CPPUNIT_ASSERT_ASSERTION_FAIL(loadFromURL(url));
     // importing it must succeed with RepairPackage set to true.
     loadWithParams(url, { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) });
-    // The document imports in repair mode; the original broken package is used as a template,
-    // and the loaded document has no URL:
-    CPPUNIT_ASSERT(mxComponent.queryThrow<frame::XModel>()->getURL().isEmpty());
+    // The document imports in repair mode. On the desktop the original broken package is used as a
+    // template, so the loaded document has no URL; the Kit keeps the URL, to write the repair back
+    // to the file it came from.
+    if (comphelper::COKit::isActive())
+        CPPUNIT_ASSERT_EQUAL(url, mxComponent.queryThrow<frame::XModel>()->getURL());
+    else
+        CPPUNIT_ASSERT(mxComponent.queryThrow<frame::XModel>()->getURL().isEmpty());
     CPPUNIT_ASSERT_EQUAL(u"Empty document"_ustr, getParagraph(1)->getString());
 }
 
