@@ -77,6 +77,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests$(1),\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
+    desktop/kitclipboard \
     desktop/source/deployment/deployment \
     drawinglayer/drawinglayer \
     embeddedobj/util/embobj \

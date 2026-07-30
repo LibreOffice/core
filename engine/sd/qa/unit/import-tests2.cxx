@@ -8,6 +8,8 @@
  */
 
 #include <sdpage.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
 
 #include "sdmodeltestbase.hxx"
 #include <tools/color.hxx>
@@ -62,6 +64,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/compbase.hxx>
@@ -2493,6 +2496,11 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testHTMLClipboardImport)
                           ->createInstanceWithContext(
                               u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr, xContext)
                           .queryThrow<datatransfer::clipboard::XClipboard>();
+    if (comphelper::COKit::isActive())
+    {
+        // The Kit keeps a clipboard per view, so name the one this window is to paste from
+        getSdDocShell()->GetViewShell()->GetActiveWindow()->SetClipboard(xClipboard);
+    }
     xClipboard->setContents(new HTMLTransferable(createFileURL(u"html.clipboard.html")), {});
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
