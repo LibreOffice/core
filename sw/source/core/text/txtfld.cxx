@@ -542,10 +542,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
             OUString referer;
             if (auto const sh1 = rInf.GetVsh()) {
                 if (auto const doc = sh1->GetDoc()) {
-                    auto const sh2 = doc->GetPersist();
-                    if (sh2 != nullptr && sh2->HasName()) {
-                        referer = sh2->GetMedium()->GetName();
-                    }
+                    referer = doc->GetLinkReferer();
                 }
             }
             pRet = new SwGrfNumPortion( pTextNd->GetLabelFollowedBy(),

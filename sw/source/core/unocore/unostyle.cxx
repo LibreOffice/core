@@ -1660,7 +1660,8 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_BACKGROUND)>(const SfxItemPropert
     if(*aChangedBrushItem == *aOriginalBrushItem && (MID_GRAPHIC_TRANSPARENT != nMemberId || !aValue.has<bool>() || !aValue.get<bool>()))
         return;
 
-    setSvxBrushItemAsFillAttributesToTargetSet(*aChangedBrushItem, rStyleSet);
+    setSvxBrushItemAsFillAttributesToTargetSet(*aChangedBrushItem, rStyleSet,
+                                               m_pDoc->GetLinkReferer());
 }
 template<>
 void SwXStyle::SetPropertyValue<OWN_ATTR_FILLBMP_MODE>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
@@ -3810,7 +3811,8 @@ PropValuesToAutoStyleItemSet(SwDoc& rDoc, IStyleAccess::SwAutoStyleFamily eFamil
 
                     if(*aChangedBrushItem != *aOriginalBrushItem)
                     {
-                        setSvxBrushItemAsFillAttributesToTargetSet(*aChangedBrushItem, aSet);
+                        setSvxBrushItemAsFillAttributesToTargetSet(*aChangedBrushItem, aSet,
+                                                                   rDoc.GetLinkReferer());
                     }
 
                     bDone = true;
