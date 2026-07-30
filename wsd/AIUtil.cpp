@@ -21,6 +21,7 @@
 #include <Poco/JSON/Parser.h>
 
 #include <array>
+#include <cstddef>
 #include <exception>
 #include <string>
 #include <string_view>
@@ -129,7 +130,7 @@ bool parseLenientArgs(const std::string& argsJson, Poco::JSON::Object::Ptr& args
 
         auto arr = v.extract<Poco::JSON::Array::Ptr>();
         Poco::JSON::Object::Ptr merged = new Poco::JSON::Object();
-        for (unsigned i = 0; arr && i < arr->size(); ++i)
+        for (std::size_t i = 0; arr && i < arr->size(); ++i)
         {
             Poco::JSON::Object::Ptr el = arr->getObject(i);
             if (!el)
@@ -182,7 +183,7 @@ std::optional<std::string> validateTransformStructure(
             "\"SlideCommands\" must be a JSON array. Put every slide operation in "
             "a single SlideCommands array.");
 
-    for (unsigned i = 0; i < cmds->size(); ++i)
+    for (std::size_t i = 0; i < cmds->size(); ++i)
     {
         Poco::JSON::Object::Ptr cmd = cmds->getObject(i);
         if (!cmd)

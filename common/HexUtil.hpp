@@ -35,7 +35,7 @@ inline std::string dataToHexString(const T& buffer, const std::size_t offset,
     char scratch[64];
     std::stringstream os;
 
-    for (unsigned int i = 0; i < length; i++)
+    for (std::size_t i = 0; i < length; i++)
     {
         if ((offset + i) >= buffer.size())
             break;
@@ -159,7 +159,7 @@ inline std::string stringifyHexLine(const T& buffer, std::size_t offset,
     std::string str;
     str.reserve(width * 4 + width / 8 + 3 + 1);
 
-    for (unsigned int i = 0; i < width; i++)
+    for (std::size_t i = 0; i < width; i++)
     {
         if (i && (i % 8) == 0)
             str.push_back(' ');
@@ -175,7 +175,7 @@ inline std::string stringifyHexLine(const T& buffer, std::size_t offset,
     }
     str.append(" | ");
 
-    for (unsigned int i = 0; i < width; i++)
+    for (std::size_t i = 0; i < width; i++)
     {
         if ((offset + i) < buffer.size())
             str.push_back(::isprint(buffer[offset + i]) ? buffer[offset + i] : '.');

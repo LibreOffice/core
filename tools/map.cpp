@@ -349,13 +349,13 @@ static void dumpDiff(const AddrSpace &space,
 
     const unsigned int width = DumpWidth;
 
-    for (unsigned int i = 0; i < pageData.size(); i += width)
+    for (std::size_t i = 0; i < pageData.size(); i += width)
     {
         std::string page = HexUtil::stringifyHexLine(pageData, i, width);
         std::string parent = HexUtil::stringifyHexLine(parentData, i, width);
 
         // page
-        printf("0x%.4x  %s\n", i, page.c_str());
+        printf("0x%.4zx  %s\n", i, page.c_str());
 
         // strings
         const addr_t *ptrs = reinterpret_cast<const addr_t *>(&pageData[i]);

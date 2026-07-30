@@ -36,6 +36,7 @@
 #include <Poco/Util/OptionSet.h>
 
 #include <algorithm>
+#include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
@@ -213,7 +214,7 @@ int Tool::main(const std::vector<std::string>& origArgs)
 {
     std::vector<std::string> args = origArgs;
 
-    for (unsigned i = 0; i < origArgs.size(); ++i)
+    for (std::size_t i = 0; i < origArgs.size(); ++i)
     {
         if (origArgs[i].length() > 0 && origArgs[i][0] != '-')
             break;

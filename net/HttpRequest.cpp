@@ -666,7 +666,7 @@ int64_t RequestParser::readData(const char* p, const int64_t len)
 
                     // Read the chunk length.
                     int64_t chunkLen = 0;
-                    int chunkLenSize = 0;
+                    std::int64_t chunkLenSize = 0;
                     for (; chunkLenSize < static_cast<int64_t>(available); ++chunkLenSize)
                     {
                         const int digit = HexUtil::hexDigitFromChar(p[chunkLenSize]);
@@ -905,7 +905,7 @@ int64_t Response::readData(const char* p, int64_t len)
 
                 // Read the chunk length.
                 int64_t chunkLen = 0;
-                int chunkLenSize = 0;
+                std::int64_t chunkLenSize = 0;
                 for (; chunkLenSize < available; ++chunkLenSize)
                 {
                     const int digit = HexUtil::hexDigitFromChar(p[chunkLenSize]);

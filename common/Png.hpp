@@ -55,6 +55,7 @@
 
 #include <cassert>
 #include <chrono>
+#include <cstddef>
 #include <iomanip>
 #include <fstream>
 
@@ -89,7 +90,7 @@ extern "C"
 static void
 unpremultiply_bgra_data (png_structp /*png*/, png_row_infop row_info, png_bytep data)
 {
-    unsigned int i;
+    std::size_t i;
 
     for (i = 0; i < row_info->rowbytes; i += 4)
     {
@@ -125,7 +126,7 @@ unpremultiply_bgra_data (png_structp /*png*/, png_row_infop row_info, png_bytep 
 static void
 unpremultiply_rgba_data (png_structp /*png*/, png_row_infop row_info, png_bytep data)
 {
-    unsigned int i;
+    std::size_t i;
 
     for (i = 0; i < row_info->rowbytes; i += 4)
     {

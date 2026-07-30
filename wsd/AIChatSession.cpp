@@ -52,6 +52,7 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <cstddef>
 #include <cstring>
 #include <exception>
 #include <fstream>
@@ -574,7 +575,7 @@ bool AIChatSession::handleAction(const std::string& firstLine)
 
     Poco::JSON::Array::Ptr sanitizedMessages = new Poco::JSON::Array();
 
-    for (unsigned i = 0; i < messages->size(); ++i)
+    for (std::size_t i = 0; i < messages->size(); ++i)
     {
         auto msg = messages->getObject(i);
         if (!msg)
@@ -684,7 +685,7 @@ bool AIChatSession::handleAction(const std::string& firstLine)
     systemMsg->set("role", "system");
     systemMsg->set("content", systemPrompt);
     finalMessages->add(systemMsg);
-    for (unsigned i = 0; i < sanitizedMessages->size(); ++i)
+    for (std::size_t i = 0; i < sanitizedMessages->size(); ++i)
         finalMessages->add(sanitizedMessages->get(i));
     sanitizedMessages = std::move(finalMessages);
 
@@ -1027,7 +1028,7 @@ void AIChatSession::handleLLMResponse(const std::string& responseBody)
 
         // Queue all tool calls for sequential processing
         _toolLoop->pendingToolCalls.clear();
-        for (unsigned i = 0; i < toolCalls->size(); ++i)
+        for (std::size_t i = 0; i < toolCalls->size(); ++i)
         {
             Poco::JSON::Object::Ptr call = toolCalls->getObject(i);
             if (!call)
@@ -1318,7 +1319,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
                 return true;
             }
 
-            for (unsigned i = 0; i < parsed->size(); ++i)
+            for (std::size_t i = 0; i < parsed->size(); ++i)
             {
                 auto obj = parsed->getObject(i);
                 if (!obj) continue;
@@ -1353,7 +1354,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
         if (summary.empty())
         {
             summary = "";
-            for (unsigned i = 0; i < pairs->size(); ++i)
+            for (std::size_t i = 0; i < pairs->size(); ++i)
             {
                 auto p = pairs->getObject(i);
                 std::string c, f;
@@ -1481,7 +1482,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
             if (cmds && cmds->size() > 0)
             {
                 navigationOnly = true;
-                for (unsigned i = 0; i < cmds->size(); ++i)
+                for (std::size_t i = 0; i < cmds->size(); ++i)
                 {
                     Poco::JSON::Object::Ptr cmd = cmds->getObject(i);
                     if (!cmd ||
@@ -1664,7 +1665,7 @@ bool AIChatSession::tryShortCircuitBigDocumentRead(const std::string& payloadJso
         modelTxt << "The document is too large to read in full. The user is "
                     "picking which section to scope the read by. Available "
                     "section target strings: ";
-        for (unsigned i = 0; i < choices->size(); ++i)
+        for (std::size_t i = 0; i < choices->size(); ++i)
         {
             Poco::JSON::Object::Ptr c = choices->getObject(i);
             if (!c)
@@ -1784,7 +1785,7 @@ bool AIChatSession::handleApprove(const std::string& firstLine)
 
             // Dispatch GoToCell + EnterString for each pair
             Poco::JSON::Array resultArr;
-            for (unsigned i = 0; i < pairs->size(); ++i)
+            for (std::size_t i = 0; i < pairs->size(); ++i)
             {
                 auto p = pairs->getObject(i);
                 if (!p) continue;
@@ -2115,7 +2116,7 @@ void AIChatSession::processTransformImageGenerations(
 
     if (cmds)
     {
-        for (unsigned i = 0; i < cmds->size(); ++i)
+        for (std::size_t i = 0; i < cmds->size(); ++i)
         {
             Poco::JSON::Object::Ptr cmd = cmds->getObject(i);
             if (!cmd)
