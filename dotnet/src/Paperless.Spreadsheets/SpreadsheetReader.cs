@@ -1,5 +1,8 @@
+using Paperless.Containers;
+using Paperless.Core;
 using Paperless.Core.Documents;
 using Paperless.Core.Formats;
+using Paperless.Spreadsheets.OpenDocument;
 
 namespace Paperless.Spreadsheets;
 
@@ -38,5 +41,25 @@ public sealed class SpreadsheetReader : IDocumentReader
     ];
 
     /// <inheritdoc/>
-    public IDocument Read(DocumentSource source) => throw new NotImplementedException();
+    public IDocument Read(DocumentSource source)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        DocumentFormat format = SourceIdentification.Resolve(source);
+
+        return format switch
+        {
+            DocumentFormat.Ods or DocumentFormat.Ots or DocumentFormat.Fods
+                => new OdsReader().Read(source, format),
+
+            // Named in SupportedFormats but not implemented yet.
+            DocumentFormat.Xlsx or DocumentFormat.Xlsm or DocumentFormat.Xltx or DocumentFormat.Xltm
+                or DocumentFormat.Xlsb or DocumentFormat.Xls or DocumentFormat.Xlt
+                or DocumentFormat.Xls5 or DocumentFormat.ExcelXml2003 or DocumentFormat.Csv
+                or DocumentFormat.Dif or DocumentFormat.Sxc or DocumentFormat.Stc
+                => throw new UnsupportedFormatException(
+                    format, $"Reading {format} is not implemented yet."),
+
+            _ => throw new UnsupportedFormatException(format, $"{format} is not a spreadsheet format."),
+        };
+    }
 }

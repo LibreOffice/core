@@ -88,15 +88,15 @@ public sealed class FormatCatalogue : IFormatCatalogue
 
         // ---- Word processing: ODF -----------------------------------------------------
         New(DocumentFormat.Odt, DocumentFamily.WordProcessing, ContainerKind.Zip, "odt",
-            "application/vnd.oasis.opendocument.text", "ODF Text Document"),
+            "application/vnd.oasis.opendocument.text", "ODF Text Document", read: true),
         New(DocumentFormat.Ott, DocumentFamily.WordProcessing, ContainerKind.Zip, "ott",
             "application/vnd.oasis.opendocument.text-template", "ODF Text Document Template",
-            template: true),
+            template: true, read: true),
         // The non-flat extension is also registered for the flat type in LibreOffice, so
         // that a mislabelled '.odt' still gets the flat filter offered as a candidate.
         New(DocumentFormat.Fodt, DocumentFamily.WordProcessing, ContainerKind.Xml, "fodt",
             "application/vnd.oasis.opendocument.text-flat-xml", "ODF Text Document (flat XML)",
-            alternates: ["xml"]),
+            read: true, alternates: ["xml"]),
         New(DocumentFormat.Sxw, DocumentFamily.WordProcessing, ContainerKind.Zip, "sxw",
             "application/vnd.sun.xml.writer", "OpenOffice.org 1.x Writer"),
         New(DocumentFormat.Stw, DocumentFamily.WordProcessing, ContainerKind.Zip, "stw",
@@ -141,13 +141,13 @@ public sealed class FormatCatalogue : IFormatCatalogue
 
         // ---- Spreadsheet: ODF ---------------------------------------------------------
         New(DocumentFormat.Ods, DocumentFamily.Spreadsheet, ContainerKind.Zip, "ods",
-            "application/vnd.oasis.opendocument.spreadsheet", "ODF Spreadsheet"),
+            "application/vnd.oasis.opendocument.spreadsheet", "ODF Spreadsheet", read: true),
         New(DocumentFormat.Ots, DocumentFamily.Spreadsheet, ContainerKind.Zip, "ots",
             "application/vnd.oasis.opendocument.spreadsheet-template",
-            "ODF Spreadsheet Template", template: true),
+            "ODF Spreadsheet Template", template: true, read: true),
         New(DocumentFormat.Fods, DocumentFamily.Spreadsheet, ContainerKind.Xml, "fods",
             "application/vnd.oasis.opendocument.spreadsheet-flat-xml",
-            "ODF Spreadsheet (flat XML)"),
+            "ODF Spreadsheet (flat XML)", read: true),
         New(DocumentFormat.Sxc, DocumentFamily.Spreadsheet, ContainerKind.Zip, "sxc",
             "application/vnd.sun.xml.calc", "OpenOffice.org 1.x Calc"),
         New(DocumentFormat.Stc, DocumentFamily.Spreadsheet, ContainerKind.Zip, "stc",
@@ -188,13 +188,13 @@ public sealed class FormatCatalogue : IFormatCatalogue
 
         // ---- Presentation: ODF --------------------------------------------------------
         New(DocumentFormat.Odp, DocumentFamily.Presentation, ContainerKind.Zip, "odp",
-            "application/vnd.oasis.opendocument.presentation", "ODF Presentation"),
+            "application/vnd.oasis.opendocument.presentation", "ODF Presentation", read: true),
         New(DocumentFormat.Otp, DocumentFamily.Presentation, ContainerKind.Zip, "otp",
             "application/vnd.oasis.opendocument.presentation-template",
-            "ODF Presentation Template", template: true),
+            "ODF Presentation Template", template: true, read: true),
         New(DocumentFormat.Fodp, DocumentFamily.Presentation, ContainerKind.Xml, "fodp",
             "application/vnd.oasis.opendocument.presentation-flat-xml",
-            "ODF Presentation (flat XML)"),
+            "ODF Presentation (flat XML)", read: true),
         New(DocumentFormat.Sxi, DocumentFamily.Presentation, ContainerKind.Zip, "sxi",
             "application/vnd.sun.xml.impress", "OpenOffice.org 1.x Impress"),
         New(DocumentFormat.Sti, DocumentFamily.Presentation, ContainerKind.Zip, "sti",
@@ -211,6 +211,7 @@ public sealed class FormatCatalogue : IFormatCatalogue
         string displayName,
         bool template = false,
         bool macros = false,
+        bool read = false,
         string[]? alternates = null) => new()
         {
             Format = format,
@@ -222,8 +223,9 @@ public sealed class FormatCatalogue : IFormatCatalogue
             IsTemplate = template,
             CanCarryMacros = macros,
             AlternateExtensions = alternates ?? [],
-            // Flipped on per format as readers land. This is what `paperless identify`
-            // reports, so an optimistic value here is worse than a missing feature.
-            IsReadSupported = false,
+            // Set per format as readers land, and only once the format genuinely reads. This
+            // is what `paperless identify` reports, so an optimistic value here is worse than
+            // a missing feature.
+            IsReadSupported = read,
         };
 }
