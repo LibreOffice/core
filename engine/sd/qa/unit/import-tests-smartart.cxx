@@ -21,6 +21,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <osl/process.h>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
 
@@ -72,6 +73,14 @@ public:
     SdImportTestSmartArt()
         : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
+    }
+
+    void setUp() override
+    {
+        SdModelTestBase::setUp();
+
+        // prevent showing warning message box
+        osl_setEnvironment(u"OOX_NO_SMARTART_WARNING"_ustr.pData, u"1"_ustr.pData);
     }
 };
 
