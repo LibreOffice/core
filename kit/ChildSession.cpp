@@ -1031,18 +1031,6 @@ bool ChildSession::_handleInput(const char *buffer, int length)
     return true;
 }
 
-std::string getMimeFromFileType(const std::string & fileType)
-{
-    if (fileType == "pdf")
-        return "application/pdf";
-    else if (fileType == "odt")
-        return "application/vnd.oasis.opendocument.text";
-    else if (fileType == "docx")
-        return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-
-    return std::string();
-}
-
 namespace {
 
     /**

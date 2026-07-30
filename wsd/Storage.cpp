@@ -530,36 +530,4 @@ void LockContext::dumpState(std::ostream& os) const
     os << "\n    last locked: " << Util::getSteadyClockAsString(_lastLockTime);
 }
 
-#if !MOBILEAPP
-
-/// A helper class to invoke the AsyncUploadCallback
-/// when it exits its scope.
-/// By default it invokes the callback with a failure state.
-class ScopedInvokeAsyncUploadCallback
-{
-public:
-    ScopedInvokeAsyncUploadCallback(StorageBase::AsyncUploadCallback asyncUploadCallback)
-        : _asyncUploadCallback(std::move(asyncUploadCallback))
-        , _arg(StorageBase::AsyncUpload(
-              StorageBase::AsyncUpload::State::Error,
-              StorageBase::UploadResult(StorageBase::UploadResult::Result::FAILED)))
-    {
-    }
-
-    ~ScopedInvokeAsyncUploadCallback()
-    {
-        if (_asyncUploadCallback)
-            _asyncUploadCallback(_arg);
-    }
-
-    /// Set a new callback argument.
-    void setArg(StorageBase::AsyncUpload arg) { _arg = std::move(arg); }
-
-private:
-    StorageBase::AsyncUploadCallback _asyncUploadCallback;
-    StorageBase::AsyncUpload _arg;
-};
-
-#endif // !MOBILEAPP
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

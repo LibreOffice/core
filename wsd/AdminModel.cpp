@@ -1078,8 +1078,6 @@ public:
     uint64_t getIntAverage() const { return _count ? std::round(_total / double(_count)) : 0; }
     uint64_t getMin() const { return _count == 0 ? 0 : _min; }
     uint64_t getMax() const { return _max; }
-    uint64_t getTotal() const { return _total; }
-    uint64_t getCount() const { return _count; }
 
     void Print(std::ostream& oss, const std::string_view prefix, const std::string_view unit) const
     {

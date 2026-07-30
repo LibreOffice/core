@@ -110,10 +110,12 @@ struct TileCache::TileBeingRendered
     int getVersion() const { return _tile.getVersion(); }
     void setVersion(int version) { _tile.setVersion(version); }
 
+#if ENABLE_STALE_TILE_REISSUE
     std::chrono::steady_clock::time_point getStartTime() const { return _startTime; }
     /// Reset the start time. Used after re-issuing a stalled render so the
     /// entry is not flagged stale again on the very next sweep.
     void resetStartTime(std::chrono::steady_clock::time_point now) { _startTime = now; }
+#endif
     std::chrono::milliseconds
     getElapsedTimeMs(const std::chrono::steady_clock::time_point now) const
     {
@@ -125,8 +127,10 @@ struct TileCache::TileBeingRendered
         return getElapsedTimeMs(now) > std::chrono::milliseconds(COMMAND_TIMEOUT_MS);
     }
 
+#if ENABLE_STALE_TILE_REISSUE
     int getReissueCount() const { return _reissueCount; }
     void bumpReissue() { ++_reissueCount; }
+#endif
     void resetReissueCount() { _reissueCount = 0; }
 
     std::vector<std::weak_ptr<ClientSession>>& getSubscribers() { return _subscribers; }
