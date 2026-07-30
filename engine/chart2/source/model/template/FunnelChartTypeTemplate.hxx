@@ -44,12 +44,15 @@ protected:
                              ::sal_Int32 nChartTypeGroupIndex, ::sal_Int32 nSeriesIndex,
                              ::sal_Int32 nSeriesCount) override;
     virtual void resetStyles2(const rtl::Reference<::chart::Diagram>& xDiagram) override;
+    virtual void createCoordinateSystems(const rtl::Reference<::chart::Diagram>& xDiagram) override;
 
     // ____ ChartTypeTemplate ____
     virtual sal_Int32 getDimension() const override;
 
     virtual rtl::Reference<::chart::ChartType>
     getChartTypeForIndex(sal_Int32 nChartTypeIndex) override;
+    virtual bool isSwapXAndY() const override;
+    virtual void adaptAxes(const std::vector<rtl::Reference<BaseCoordinateSystem>>& rCoordSys) override;
 
 private:
     sal_Int32 m_nDim;

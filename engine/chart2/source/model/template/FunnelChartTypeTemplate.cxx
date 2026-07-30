@@ -13,11 +13,18 @@
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <PropertyHelper.hxx>
+#include <Axis.hxx>
+#include <AxisHelper.hxx>
+#include <AxisIndexDefines.hxx>
+#include <BaseCoordinateSystem.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/chart2/AxisType.hpp>
 #include <comphelper/diagnose_ex.hxx>
+
+#include <comphelper/property.hxx>
 
 #include <algorithm>
 
@@ -186,6 +193,42 @@ void FunnelChartTypeTemplate::resetStyles2(const rtl::Reference<::chart::Diagram
     }
 
     xDiagram->setVertical(false);
+}
+
+bool FunnelChartTypeTemplate::isSwapXAndY() const
+{
+    // Ordinate axis is vertical
+    return true;
+}
+
+void FunnelChartTypeTemplate::createCoordinateSystems(
+    const rtl::Reference<::chart::Diagram>& xDiagram)
+{
+    ChartTypeTemplate::createCoordinateSystems(xDiagram);
+
+    xDiagram->setVertical(isSwapXAndY());
+}
+
+void FunnelChartTypeTemplate::adaptAxes(
+    const std::vector<rtl::Reference<BaseCoordinateSystem>>& rCoordSys)
+{
+    // override to hide the horizontal (value) axis
+    ChartTypeTemplate::adaptAxes(rCoordSys);
+
+    if (rCoordSys.empty())
+        return;
+
+    for (rtl::Reference<BaseCoordinateSystem> const& xCooSys : rCoordSys)
+    {
+        if (!xCooSys.is())
+            continue;
+
+        rtl::Reference<Axis> xAxis = AxisHelper::getAxis(1, 0, xCooSys);
+        if (!xAxis.is())
+            continue;
+
+        xAxis->setPropertyValue(u"Show"_ustr, cpo::uno::Any(false));
+    }
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2(FunnelChartTypeTemplate, ChartTypeTemplate, OPropertySet)
