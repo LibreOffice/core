@@ -439,12 +439,12 @@ canvas/inc/vclwrapper.hxx
 canvas/inc/verifyinput.hxx
 canvas/source/cppcanvas/action.hxx
 canvas/source/cppcanvas/bitmap.hxx
-canvas/source/cppcanvas/canvas.hxx
-canvas/source/cppcanvas/color.hxx
 canvas/source/cppcanvas/bitmapaction.cxx
 canvas/source/cppcanvas/bitmapaction.hxx
 canvas/source/cppcanvas/cachedprimitivebase.cxx
 canvas/source/cppcanvas/cachedprimitivebase.hxx
+canvas/source/cppcanvas/canvas.hxx
+canvas/source/cppcanvas/color.hxx
 canvas/source/cppcanvas/implbitmap.cxx
 canvas/source/cppcanvas/implbitmap.hxx
 canvas/source/cppcanvas/implcanvas.cxx
@@ -466,10 +466,10 @@ canvas/source/cppcanvas/polypolyaction.hxx
 canvas/source/cppcanvas/renderer.hxx
 canvas/source/cppcanvas/textaction.cxx
 canvas/source/cppcanvas/textaction.hxx
+canvas/source/cppcanvas/tools.cxx
 canvas/source/cppcanvas/tools.hxx
 canvas/source/cppcanvas/transparencygroupaction.cxx
 canvas/source/cppcanvas/transparencygroupaction.hxx
-canvas/source/cppcanvas/tools.cxx
 canvas/source/cppcanvas/uno_mtfrenderer.cxx
 canvas/source/cppcanvas/vclfactory.cxx
 canvas/source/cppcanvas/vclfactory.hxx
