@@ -218,7 +218,7 @@ public:
                     std::string url;
                     if (COOLProtocol::getTokenString(tokens[1], "url", url))
                     {
-                        Poco::URI uriPublic = Poco::URI(Uri::decode(url));
+                        Poco::URI uriPublic(Uri::decode(url));
                         if (uriPublic.isRelative() || uriPublic.getScheme() == "file")
                         {
                             uriPublic.normalize();

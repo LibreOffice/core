@@ -2005,7 +2005,7 @@ void Document::updateEditorSpeeds(int id, int speed)
 std::map<std::string, int> Document::getViewColors()
 {
     LOKitHelper::ScopedString values(_loKitDocument->getCommandValues(".uno:TrackedChangeAuthors"));
-    const std::string colorValues = std::string(!values ? "" : values.get());
+    const std::string colorValues(!values ? "" : values.get());
 
     std::map<std::string, int> viewColors;
     try

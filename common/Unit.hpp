@@ -137,7 +137,6 @@ protected:
     /// Construct a UnitBase instance with a default name.
     explicit UnitBase(const std::string& name, UnitType type)
         : testname(name)
-        , _socketPoll(nullptr)
         , _timeoutMilliSeconds(std::chrono::seconds(30))
         , _startTimeMilliSeconds(std::chrono::milliseconds::zero())
         , _type(type)

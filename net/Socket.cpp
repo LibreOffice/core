@@ -245,7 +245,7 @@ static std::string X509_NAME_to_utf8(X509_NAME* name)
                            ~ASN1_STRFLGS_ESC_MSB);
     BUF_MEM* buf;
     BIO_get_mem_ptr(bio, &buf);
-    std::string text = std::string(buf->data, buf->length);
+    std::string text(buf->data, buf->length);
     BIO_free(bio);
     return text;
 }

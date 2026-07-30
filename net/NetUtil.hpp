@@ -38,7 +38,7 @@ namespace net
 
 /// Initial values for DefaultValues. Tests that mutate net::Defaults
 /// should reset to these rather than hard-code a literal.
-constexpr std::chrono::seconds DefaultInactivityTimeout = std::chrono::seconds(3600);
+constexpr std::chrono::seconds DefaultInactivityTimeout(3600);
 constexpr size_t DefaultMaxExtConnections = 200000;
 
 class DefaultValues

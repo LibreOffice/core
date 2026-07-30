@@ -294,7 +294,7 @@ namespace FileUtil
         }
 
         // /chroot/jailId/user/doc/childId
-        const Poco::Path rootPath = Poco::Path(localStorePath, localPath);
+        const Poco::Path rootPath(localStorePath, localPath);
         Poco::File(rootPath).createDirectories();
 
         return rootPath.toString();

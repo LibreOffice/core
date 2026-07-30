@@ -224,7 +224,7 @@ private:
     static constexpr std::size_t RvsHighWatermark = (10 * RvsLowWatermark) - 1;
 
     /// Any RVS instance, in RequestVettingStations, older than this will be purged.
-    static constexpr std::chrono::seconds RvsMaxAge = std::chrono::seconds(60);
+    static constexpr std::chrono::seconds RvsMaxAge{60};
 
     /// The expected size of RVS to trigger the next cleanup.
     /// This is to avoid excessive cleanup attempts.

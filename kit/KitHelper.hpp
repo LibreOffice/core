@@ -171,7 +171,7 @@ namespace LOKitHelper
         ScopedString value(loKitDocument->pClass->getCommandValues(loKitDocument, ".uno:ReadOnly"));
         if (value)
         {
-            const std::string isReadOnly = std::string(value.get());
+            const std::string isReadOnly(value.get());
 
             bool readOnly = (isReadOnly.find("true") != std::string::npos);
             resultInfo["readonly"] = readOnly ? "true": "false";
@@ -180,7 +180,7 @@ namespace LOKitHelper
         ScopedString externalLinks(loKitDocument->pClass->getCommandValues(loKitDocument, ".uno:ExternalLinksDisabled"));
         if (externalLinks)
         {
-            const std::string isExternalLinksDisabled = std::string(externalLinks.get());
+            const std::string isExternalLinksDisabled(externalLinks.get());
 
             bool externalLinksDisabled = (isExternalLinksDisabled.find("true") != std::string::npos);
             resultInfo["externallinksdisabled"] = externalLinksDisabled ? "true": "false";

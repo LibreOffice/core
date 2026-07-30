@@ -35,7 +35,7 @@ inline bool parseJSON(const std::string_view json, Poco::JSON::Object::Ptr& obje
     const std::size_t index = json.find_first_of('{');
     if (index != std::string::npos)
     {
-        const std::string stringJSON = std::string(json.substr(index));
+        const std::string stringJSON(json.substr(index));
         Poco::JSON::Parser parser;
         try
         {

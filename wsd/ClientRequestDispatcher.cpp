@@ -717,8 +717,7 @@ void launchAsyncCheckFileInfo(
         options.push_back("userid=" + accessDetails.userId());
 #endif
 
-    const RequestDetails fullRequestDetails =
-        RequestDetails(accessDetails.wopiSrc(), options, /*compat=*/std::string());
+    const RequestDetails fullRequestDetails(accessDetails.wopiSrc(), options, /*compat=*/std::string());
 
     if (requestVettingStations.find(requestKey) != requestVettingStations.end())
     {

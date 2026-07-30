@@ -173,7 +173,7 @@ StorageBase::StorageType StorageBase::validate(const Poco::URI& uri,
             LOG_DBG("Validated URI [" << Anonymizer::anonymizeUrl(uri.toString())
                                       << "] as Conversion");
             // Normalize the path.
-            Poco::Path path = Poco::Path(uri.getPath());
+            Poco::Path path(uri.getPath());
             if (!path.isAbsolute() || !path.isFile() ||
                 !path.makeAbsolute().toString().starts_with(COOLWSD::ChildRoot))
             {
@@ -460,7 +460,7 @@ std::size_t LocalStorage::uploadLocalFileToStorageAsync(
     const std::string path = getUri().getPath();
 
     // Assume failure by default.
-    UploadResult res = UploadResult(UploadResult::Result::FAILED, "Internal error");
+    UploadResult res(UploadResult::Result::FAILED, "Internal error");
     std::size_t size = 0;
     try
     {

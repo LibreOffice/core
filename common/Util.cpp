@@ -118,7 +118,7 @@ namespace Util
         // Create the prng with a random-device for seed.
         // If we don't have a hardware random-device, we will get the same seed.
         // In that case we are better off with an arbitrary, but changing, seed.
-        static std::mt19937_64 _rng = std::mt19937_64(rng::getSeed());
+        static std::mt19937_64 _rng(rng::getSeed());
 
         uint_fast64_t getSeed()
         {

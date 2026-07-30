@@ -4325,7 +4325,7 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
         if constexpr (!Util::isMobileApp())
         {
             // This environment variable is always set in COOLWSD::innerInitialize().
-            static std::string fontsMissingHandling = std::string(std::getenv("FONTS_MISSING_HANDLING"));
+            static std::string fontsMissingHandling(std::getenv("FONTS_MISSING_HANDLING"));
             if (fontsMissingHandling == "report" || fontsMissingHandling == "both")
                 sendTextFrame("fontsmissing: " + payload);
             if (fontsMissingHandling == "log" || fontsMissingHandling == "both")

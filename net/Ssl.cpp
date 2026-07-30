@@ -33,8 +33,8 @@
 #include <functional>
 #include <memory>
 
-std::unique_ptr<SslContext> ssl::Manager::ServerInstance(nullptr);
-std::unique_ptr<SslContext> ssl::Manager::ClientInstance(nullptr);
+std::unique_ptr<SslContext> ssl::Manager::ServerInstance;
+std::unique_ptr<SslContext> ssl::Manager::ClientInstance;
 
 static const char* getCABundleFile()
 {
