@@ -227,8 +227,8 @@ void writeSystemFirebirdPluginsConf(std::u16string_view rDataDirURL)
 
     const OUString sURL = OUString::Concat(rDataDirURL) + "/" + our_sPluginsConfName;
     const OString sContent = aContent.makeStringAndClear();
-    SAL_WARN_IF(!writeFile(sURL, std::string_view(sContent)), "connectivity.firebird",
-                "could not write " << sURL);
+    const bool bWritten = writeFile(sURL, std::string_view(sContent));
+    SAL_WARN_IF(!bWritten, "connectivity.firebird", "could not write " << sURL);
 }
 
 // Copy the conf files of the international modules into an intl subdirectory of the directory the
@@ -274,8 +274,8 @@ void writeSystemFirebirdIntlConfs(std::u16string_view rDataDirURL)
             continue;
 
         const OUString sURL = sTargetURL + "/" + sName;
-        SAL_WARN_IF(!writeFile(sURL, std::string_view(sContent)), "connectivity.firebird",
-                    "could not write " << sURL);
+        const bool bWritten = writeFile(sURL, std::string_view(sContent));
+        SAL_WARN_IF(!bWritten, "connectivity.firebird", "could not write " << sURL);
     }
 }
 
@@ -430,8 +430,8 @@ void FirebirdDriver::writeExternalDatabaseNames()
     const OString sContent = aContent.makeStringAndClear();
 
     const OUString sURL = m_firebirdDataDirectory.GetURL() + "/" + our_sDatabasesConfName;
-    SAL_WARN_IF(!writeFile(sURL, std::string_view(sContent)), "connectivity.firebird",
-                "could not write " << sURL);
+    const bool bWritten = writeFile(sURL, std::string_view(sContent));
+    SAL_WARN_IF(!bWritten, "connectivity.firebird", "could not write " << sURL);
 }
 
 void FirebirdDriver::disposing()
