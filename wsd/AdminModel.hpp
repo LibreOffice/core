@@ -311,6 +311,9 @@ public:
 
     ~Subscriber() { LOG_DBG("Subscriber dtor"); }
 
+    Subscriber(Subscriber const &) = default;
+    Subscriber & operator=(Subscriber const &) = default;
+
     bool notify(const std::string& message);
 
     bool subscribe(const std::string& command);
