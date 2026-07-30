@@ -121,7 +121,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
                 const SvxBrushItem& rItem = rHeaderSet.Get(RES_BACKGROUND);
                 SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*rHeaderSet.GetPool());
 
-                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet,
+                                                           getActiveDocumentLinkReferer());
                 setHeaderFillAttributes(
                     std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
                             aTempSet));
@@ -157,7 +158,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
                 const SvxBrushItem& rItem = rFooterSet.Get(RES_BACKGROUND);
                 SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*rFooterSet.GetPool());
 
-                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet,
+                                                           getActiveDocumentLinkReferer());
                 setFooterFillAttributes(
                     std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
                             aTempSet));
@@ -172,7 +174,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
         // create FillAttributes from SvxBrushItem
         SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*rSet.GetPool());
 
-        setSvxBrushItemAsFillAttributesToTargetSet(*pBrushItem, aTempSet);
+        setSvxBrushItemAsFillAttributesToTargetSet(*pBrushItem, aTempSet,
+                                                   getActiveDocumentLinkReferer());
         setPageFillAttributes(
             std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
                     aTempSet));

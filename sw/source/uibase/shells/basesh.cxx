@@ -2732,8 +2732,9 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         // Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
         SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aCoreSet(GetPool());
 
-        aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());
-        setSvxBrushItemAsFillAttributesToTargetSet(*aBrushItem, aCoreSet);
+        SwDoc* pDoc = GetView().GetDocShell()->GetDoc();
+        aCoreSet.SetParent(&pDoc->GetDfltFrameFormat()->GetAttrSet());
+        setSvxBrushItemAsFillAttributesToTargetSet(*aBrushItem, aCoreSet, pDoc->GetLinkReferer());
 
         if((SelectionType::Frame & nSelType) || (SelectionType::Graphic & nSelType))
         {
