@@ -44,6 +44,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/classids.hxx>
+#include <o3tl/runtimetooustring.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.hxx>
 #include <rtl/ref.hxx>
@@ -52,6 +53,8 @@
 #include <closepreventer.hxx>
 
 #if defined(_WIN32)
+#include <systools/win32/comtools.hxx>
+
 #include "olecomponent.hxx"
 #endif
 
@@ -958,7 +961,20 @@ void OleEmbeddedObject::CreateOleComponent_Impl(
 {
     if ( !m_pOleComponent )
     {
-        m_pOleComponent = pOleComponent ? pOleComponent : new OleComponent( m_xContext, this );
+        if (pOleComponent)
+            m_pOleComponent = pOleComponent;
+        else
+        {
+            try
+            {
+                m_pOleComponent = new OleComponent(m_xContext, this);
+            }
+            catch (const sal::systools::ComError& e)
+            {
+                // Callers expect a UNO exception where an in-process server cannot be instantiated
+                throw uno::RuntimeException(o3tl::runtimeToOUString(e.what()));
+            }
+        }
 
         if ( !m_xClosePreventer.is() )
             m_xClosePreventer = new OClosePreventer;
