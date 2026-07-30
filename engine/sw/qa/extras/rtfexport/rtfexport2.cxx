@@ -30,6 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
 
 #include <bordertest.hxx>
@@ -430,7 +431,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48023)
     AllSettings aSettings(aSavedSettings);
     aSettings.SetLanguageTag(LanguageTag(u"ru"_ustr));
     Application::SetSettings(aSettings);
-    comphelper::ScopeGuard g([&aSavedSettings] { Application::SetSettings(aSavedSettings); });
+    // With the Kit active, AllSettings uses the Kit's language
+    const LanguageTag aSavedKitLanguage = comphelper::COKit::getLanguageTag();
+    comphelper::COKit::setLanguageTag(LanguageTag(u"ru"_ustr));
+    comphelper::ScopeGuard g([&aSavedSettings, &aSavedKitLanguage] {
+        comphelper::COKit::setLanguageTag(aSavedKitLanguage);
+        Application::SetSettings(aSavedSettings);
+    });
 
     createSwDoc("fdo48023.rtf");
     verify();
@@ -478,7 +485,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo44211)
     AllSettings aSettings(aSavedSettings);
     aSettings.SetLanguageTag(LanguageTag(u"lt"_ustr));
     Application::SetSettings(aSettings);
-    comphelper::ScopeGuard g([&aSavedSettings] { Application::SetSettings(aSavedSettings); });
+    // With the Kit active, AllSettings uses the Kit's language
+    const LanguageTag aSavedKitLanguage = comphelper::COKit::getLanguageTag();
+    comphelper::COKit::setLanguageTag(LanguageTag(u"lt"_ustr));
+    comphelper::ScopeGuard g([&aSavedSettings, &aSavedKitLanguage] {
+        comphelper::COKit::setLanguageTag(aSavedKitLanguage);
+        Application::SetSettings(aSavedSettings);
+    });
 
     createSwDoc("fdo44211.rtf");
     verify();
