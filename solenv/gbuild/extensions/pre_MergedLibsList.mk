@@ -72,7 +72,6 @@ gb_MERGE_LIBRARY_LIST := \
 	passwordcontainer \
 	sax \
 	sb \
-	simplecanvas \
 	sfx \
 	sofficeapp \
 	sot \

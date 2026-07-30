@@ -22,7 +22,6 @@ $(eval $(call gb_Module_Module,canvas))
 $(eval $(call gb_Module_add_targets,canvas,\
 	Library_canvasfactory \
 	Library_canvastools \
-	Library_simplecanvas \
 	Library_vclcanvas \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         $(if $(or $(DISABLE_GUI),$(DISABLE_DYNLOADING)),,Executable_canvasdemo)) \

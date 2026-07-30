@@ -364,7 +364,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(filter WNT,$(OS)),directx9canvas) \
 	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
 	$(if $(filter WNT,$(OS)),gdipluscanvas) \
-	simplecanvas \
 	vclcanvas \
 ))
 endif

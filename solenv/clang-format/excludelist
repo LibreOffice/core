@@ -541,7 +541,6 @@ canvas/source/opengl/ogl_textlayout.hxx
 canvas/source/opengl/ogl_texturecache.cxx
 canvas/source/opengl/ogl_texturecache.hxx
 canvas/source/opengl/ogl_tools.hxx
-canvas/source/simplecanvas/simplecanvasimpl.cxx
 canvas/source/tools/cachedprimitivebase.cxx
 canvas/source/tools/canvascustomspritehelper.cxx
 canvas/source/tools/canvastools.cxx
