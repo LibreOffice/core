@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_vclplug.h>
 
 #if HAVE_FEATURE_MACOSX_SANDBOX
 #include <premac.h>
@@ -625,6 +626,11 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 #endif
                     //ignore additional legacy options that don't do anything anymore
                     oArg != "nocrashreport" &&
+#if ENABLE_QT5 || ENABLE_QT6
+                    // allow style-related command line options natively supported by Qt applications
+                    !oArg.startsWith(u"style=") &&
+                    !oArg.startsWith(u"stylesheet=") &&
+#endif
                     m_unknown.isEmpty())
                 {
                     m_unknown = aArg;

@@ -781,7 +781,6 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication()
     osl_getSystemPathFromFileURL(aParam.pData, &aBin.pData);
     OString aExec = OUStringToOString(aBin, osl_getThreadTextEncoding());
 
-    m_pFakeArgvFreeable.reserve(4);
     m_pFakeArgvFreeable.emplace_back(strdup(aExec.getStr()));
     m_pFakeArgvFreeable.emplace_back(strdup("--nocrashhandler"));
 
@@ -795,7 +794,12 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication()
             OString aDisplay = OUStringToOString(aParam, osl_getThreadTextEncoding());
             m_pFakeArgvFreeable.emplace_back(strdup("-display"));
             m_pFakeArgvFreeable.emplace_back(strdup(aDisplay.getStr()));
-            break;
+            continue;
+        }
+        else if (aParam.startsWith(u"-style=") || aParam.startsWith(u"-stylesheet="))
+        {
+            const OString sStyleArg = OUStringToOString(aParam, osl_getThreadTextEncoding());
+            m_pFakeArgvFreeable.emplace_back(strdup(sStyleArg.getStr()));
         }
     }
 
