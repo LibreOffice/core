@@ -126,7 +126,7 @@ public:
 
     void updateMonitors(std::vector<std::pair<std::string, int>>& oldMonitors);
 
-    std::vector<std::pair<std::string, int>> getMonitorList() const;
+    static std::vector<std::pair<std::string, int>> getMonitorList();
 
     /// Custom poll thread function
     void pollingThread() override;
@@ -224,7 +224,7 @@ public:
     // delete entry from _monitorSocket map
     void deleteMonitorSocket(const std::string &uriWithoutParam);
 
-    bool logAdminAction()
+    static bool logAdminAction()
     {
         return ConfigUtil::getConfigValue<bool>("admin_console.logging.admin_action", true);
     }

@@ -410,7 +410,7 @@ void resetTerminationFlags()
     void handleFatalSignal(const int signal, siginfo_t *info, void * /* uctxt */)
     {
         SigHandlerTrap guard;
-        const bool reEntered = !guard.isExclusive();
+        const bool reEntered = !SigHandlerTrap::isExclusive();
 
         if (!reEntered)
             signalLogOpen();

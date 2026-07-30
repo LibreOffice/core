@@ -171,7 +171,7 @@ struct Stats {
 
     std::vector<PerfMetricInfo> _perfStatsList;
 
-    size_t getMemoryUsage()
+    static size_t getMemoryUsage()
     {
         std::ifstream smapsFile("/proc/" + std::to_string(getpid()) + "/smaps");
 
@@ -194,7 +194,7 @@ struct Stats {
         return totalDirtyPss;
     }
 
-    void accumulate(std::unordered_map<std::string, MessageStat>& map, const std::string& token,
+    static void accumulate(std::unordered_map<std::string, MessageStat>& map, const std::string& token,
                     size_t size)
     {
         auto it = map.find(token);
@@ -222,7 +222,7 @@ struct Stats {
 
     void addConnection() { _connections++; }
 
-    void dumpMap(std::ostream& os, std::unordered_map<std::string, MessageStat>& map)
+    static void dumpMap(std::ostream& os, std::unordered_map<std::string, MessageStat>& map)
     {
         // how much from each command ?
         std::vector<std::string> sortKeys;
@@ -311,17 +311,17 @@ struct Stats {
         }
     }
 
-    PerfMetricInfo getStressStats(size_t runMs, std::string testPhase)
+    static PerfMetricInfo getStressStats(size_t runMs, std::string testPhase)
     {
         return PerfMetricInfo(std::move(testPhase), "Stress run (ms)", runMs);
     }
 
-    PerfMetricInfo getCPUUSageStats(size_t cpuUsage, std::string testPhase)
+    static PerfMetricInfo getCPUUSageStats(size_t cpuUsage, std::string testPhase)
     {
         return PerfMetricInfo(std::move(testPhase), "CPU Usage (us)", cpuUsage);
     }
 
-    std::vector<PerfMetricInfo> getNetworkStats(size_t receivedKb, size_t sentKb, const std::string& testPhase)
+    static std::vector<PerfMetricInfo> getNetworkStats(size_t receivedKb, size_t sentKb, const std::string& testPhase)
     {
         std::vector<PerfMetricInfo> networkStatsList;
 
@@ -331,7 +331,7 @@ struct Stats {
         return networkStatsList;
     }
 
-    PerfMetricInfo getPeakMemoryUsageStats(size_t peakMemory, std::string testPhase)
+    static PerfMetricInfo getPeakMemoryUsageStats(size_t peakMemory, std::string testPhase)
     {
         return PerfMetricInfo(std::move(testPhase), "Peak memory usage (kB)", peakMemory);
     }
@@ -532,7 +532,7 @@ public:
                 out += ' ' + tokens[i];
         }
 
-        size_t currentMemoryUsage = _stats->getMemoryUsage();
+        size_t currentMemoryUsage = Stats::getMemoryUsage();
         if (currentMemoryUsage > _stats->_startUpMemoryUsage)
         {
             size_t postDocumentLoadingMemory = currentMemoryUsage - _stats->_startUpMemoryUsage;

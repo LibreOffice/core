@@ -399,6 +399,7 @@ class ClientDeltaTracker final
 
 public:
     // FIXME: only need to store this for the current viewports
+    // [-loplugin:staticmethods]
     void updateViewPort( /* ... */ )
     {
         // copy the set to another while filtering I guess.

@@ -2037,13 +2037,13 @@ std::map<std::string, int> Document::getViewColors()
     return viewColors;
 }
 
-std::string Document::getDefaultTheme(const std::shared_ptr<ChildSession>& session) const
+std::string Document::getDefaultTheme(const std::shared_ptr<ChildSession>& session)
 {
     bool darkTheme = session->getDarkTheme() == "true";
     return darkTheme ? "Dark" : "Light";
 }
 
-std::string Document::getDefaultBackgroundTheme(const std::shared_ptr<ChildSession>& session) const
+std::string Document::getDefaultBackgroundTheme(const std::shared_ptr<ChildSession>& session)
 {
     bool darkTheme = session->getDarkBackground() == "true";
     return darkTheme ? "Dark" : "Light";

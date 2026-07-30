@@ -223,7 +223,7 @@ private:
     bool removeTextContext(const StringVector& tokens);
 #if ENABLE_FEATURE_LOCK || ENABLE_FEATURE_RESTRICTION || ENABLE_DEBUG
     bool updateBlockingCommandStatus(const StringVector& tokens);
-    std::string getBlockedCommandType(const std::string& command);
+    static std::string getBlockedCommandType(const std::string& command);
 #endif
     bool handleZoteroMessage(const StringVector& tokens);
     bool formFieldEvent(const char* buffer, int length, const StringVector& tokens);
@@ -269,7 +269,7 @@ private:
     void updateCursorPosition(const std::string &rect);
     void updateCursorPositionJSON(const std::string &payload);
     std::string getJailDocRoot() const;
-    std::string getZoomPercent(const std::string &payload);
+    static std::string getZoomPercent(const std::string &payload);
 
 public:
     // simple one line for priming

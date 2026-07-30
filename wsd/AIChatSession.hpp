@@ -141,7 +141,7 @@ private:
                                             const std::string& reasonPhrase,
                                             const std::string& body = "",
                                             const std::string& context = "");
-    Poco::JSON::Array::Ptr buildToolDefinitions(const std::string& docType) const;
+    static Poco::JSON::Array::Ptr buildToolDefinitions(const std::string& docType);
 #if MOBILEAPP
     /// Desktop transport: POST via the registered ai::HttpPostFn and deliver the
     /// result to \p onResponse on \p docBroker's polling thread (statusCode is an

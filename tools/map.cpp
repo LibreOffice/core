@@ -246,7 +246,7 @@ public:
     // 20 00 00 00 00 00 00 00  02 00 00 00 05 00 00 00  4b 00 45 00 59 00 5f 00  55 00 00 00 00 00 00 00  |  ...............K.E.Y._.U......
     // 20 00 00 00 00 00 00 00  02 00 00 00 05 00 00 00  4b 45 59 5f 55 00 00 00  00 00 00 00 00 00 00 00  |  ...............KEY_U..........
 
-    bool isStringAtOffset(const std::vector<unsigned char> &data, size_t i,
+    static bool isStringAtOffset(const std::vector<unsigned char> &data, size_t i,
                           uint32_t len, bool isUnicode, std::string &str)
     {
         str = std::string(isUnicode ? "U_" : "S_");
@@ -262,7 +262,7 @@ public:
         return true;
     }
 
-    bool isCStringAtOffset(const std::vector<unsigned char> &data, size_t i,
+    static bool isCStringAtOffset(const std::vector<unsigned char> &data, size_t i,
                            std::string &str, size_t &skip)
     {
         str = "C_";

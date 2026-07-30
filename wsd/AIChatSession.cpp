@@ -328,7 +328,7 @@ std::string AIChatSession::mapHttpStatusToError(
     }
 }
 
-Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& docType) const
+Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& docType)
 {
     Poco::JSON::Array::Ptr tools = new Poco::JSON::Array();
 

@@ -29,7 +29,7 @@ namespace SigUtil
 
         /// Check that we have exclusive access to the trap.
         /// Otherwise, there is another signal in progress.
-        bool isExclusive() const
+        static bool isExclusive()
         {
             // Return true if we are alone.
             return SigHandlerTrap::SigHandling == 1;

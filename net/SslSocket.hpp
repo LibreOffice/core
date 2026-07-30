@@ -331,7 +331,7 @@ private:
     }
 
     /// Maps SSL Error codes to their respective string form.
-    constexpr std::string_view sslErrorToName(int sslError) const
+    static constexpr std::string_view sslErrorToName(int sslError)
     {
         switch (sslError)
         {
@@ -509,7 +509,7 @@ private:
     }
 
     /// Get the error string for the given error code from OpenSSL.
-    std::string getBioError(const unsigned long bioError) const
+    static std::string getBioError(const unsigned long bioError)
     {
         std::ostringstream oss;
         oss << "BIO error: " << bioError;

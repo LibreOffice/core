@@ -375,7 +375,7 @@ public:
 
     void invalidateCanonicalId(const std::string& sessionId);
 
-    std::string getViewProps(const std::shared_ptr<ChildSession>& session);
+    static std::string getViewProps(const std::shared_ptr<ChildSession>& session);
 
     void updateEditorSpeeds(int id, int speed);
 
@@ -383,9 +383,9 @@ private:
     // Get the color value for all author names from the core
     std::map<std::string, int> getViewColors();
 
-    std::string getDefaultTheme(const std::shared_ptr<ChildSession>& session) const;
+    static std::string getDefaultTheme(const std::shared_ptr<ChildSession>& session);
 
-    std::string getDefaultBackgroundTheme(const std::shared_ptr<ChildSession>& session) const;
+    static std::string getDefaultBackgroundTheme(const std::shared_ptr<ChildSession>& session);
 
     std::shared_ptr<kit::Document> load(const std::shared_ptr<ChildSession>& session,
                                         const std::string& renderOpts);

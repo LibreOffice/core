@@ -159,7 +159,7 @@ public:
 
 struct Client : public Poco::Util::Application
 {
-    void testPing()
+    static void testPing()
     {
         std::cerr << "testPing\n";
         Session first("init", EnableHttps);
@@ -178,7 +178,7 @@ struct Client : public Poco::Util::Application
         assert (back == count + 2);
     }
 
-    void testLadder()
+    static void testLadder()
     {
         std::cerr << "testLadder\n";
         ThreadWorker ladder;
@@ -186,7 +186,7 @@ struct Client : public Poco::Util::Application
         thread.join();
     }
 
-    void testParallel()
+    static void testParallel()
     {
         std::cerr << "testParallel\n";
         const int num = 10;

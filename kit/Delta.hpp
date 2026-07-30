@@ -188,9 +188,9 @@ class DeltaGenerator {
         }
 
     private:
-        void initPixRowCpu(const uint32_t *from, uint32_t *scratch,
+        static void initPixRowCpu(const uint32_t *from, uint32_t *scratch,
                            size_t *scratchLen, uint64_t *rleMaskBlock,
-                           unsigned int width) const
+                           unsigned int width)
         {
             uint32_t lastPix = 0x00000000; // transparency
             unsigned int x = 0, outp = 0;
@@ -546,11 +546,11 @@ class DeltaGenerator {
         }
     }
 
-    bool makeDelta(
+    static bool makeDelta(
         const DeltaData &prev,
         const DeltaData &cur,
         std::vector<char>& outStream,
-        COKitTileMode mode) const
+        COKitTileMode mode)
     {
         // TODO: should we split and compress alpha separately ?
         if (prev.getWidth() != cur.getWidth() || prev.getHeight() != cur.getHeight())

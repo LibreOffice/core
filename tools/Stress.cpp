@@ -28,7 +28,7 @@ public:
     Stress() {}
 protected:
     void defineOptions(Poco::Util::OptionSet& options) override;
-    void printHelp();
+    static void printHelp();
     void handleOption(const std::string& name, const std::string& value) override;
     int  main(const std::vector<std::string>& args) override;
 };

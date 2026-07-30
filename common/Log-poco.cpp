@@ -196,14 +196,14 @@ namespace Log
             writeRaw(data, N - 1); // Minus the null.
         }
 
-        void writeRaw(const std::string& string) { writeRaw(string.data(), string.size()); }
+        static void writeRaw(const std::string& string) { writeRaw(string.data(), string.size()); }
 
         /// Flush the stderr file data.
         static bool flush() { return ::fflush(stderr) == 0; }
 
         /// Overloaded log function that takes a naked data pointer to log.
         /// Appends new-line to the given data.
-        void log(const char* data, std::size_t size)
+        static void log(const char* data, std::size_t size)
         {
             char buffer[BufferSize];
             if (size < sizeof(buffer) - 1)
@@ -346,12 +346,12 @@ namespace Log
         };
 
     protected:
-        std::size_t size() const { return _tlb.size(); }
-        std::size_t available() const { return _tlb.available(); }
+        static std::size_t size() { return _tlb.size(); }
+        static std::size_t available() { return _tlb.available(); }
 
-        void buffer(const char* data, std::size_t size) { _tlb.buffer(data, size); }
+        static void buffer(const char* data, std::size_t size) { _tlb.buffer(data, size); }
 
-        void buffer(const std::string_view string) { buffer(string.data(), string.size()); }
+        static void buffer(const std::string_view string) { buffer(string.data(), string.size()); }
 
     public:
         ~BufferedConsoleChannel() { flush(); }

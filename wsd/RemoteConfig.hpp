@@ -86,13 +86,13 @@ public:
     void fetchAliasGroups(std::map<std::string, std::string>& newAppConfig,
                           const Poco::JSON::Object::Ptr& remoteJson);
 
-    void fetchRemoteFontConfig(std::map<std::string, std::string>& newAppConfig,
+    static void fetchRemoteFontConfig(std::map<std::string, std::string>& newAppConfig,
                                const Poco::JSON::Object::Ptr& remoteJson);
 
     void fetchLockedTranslations(std::map<std::string, std::string>& newAppConfig,
                                  const Poco::JSON::Object::Ptr& remoteJson);
 
-    void fetchUnlockImageUrl(std::map<std::string, std::string>& newAppConfig,
+    static void fetchUnlockImageUrl(std::map<std::string, std::string>& newAppConfig,
                              const Poco::JSON::Object::Ptr& remoteJson);
 
     void fetchIndirectionEndpoint(std::map<std::string, std::string>& newAppConfig,
@@ -101,11 +101,11 @@ public:
     void fetchMonitors(std::map<std::string, std::string>& newAppConfig,
                        const Poco::JSON::Object::Ptr& remoteJson);
 
-    void handleOptions(const Poco::JSON::Object::Ptr& remoteJson);
+    static void handleOptions(const Poco::JSON::Object::Ptr& remoteJson);
 
     //sets property to false if it is missing from JSON
     //and returns std::string
-    std::string booleanToString(Poco::Dynamic::Var& booleanFlag)
+    static std::string booleanToString(Poco::Dynamic::Var& booleanFlag)
     {
         if (booleanFlag.isEmpty())
         {
@@ -135,7 +135,7 @@ public:
 private:
     bool downloadPlain(const std::string& uri);
 
-    bool eTagUnchanged(const std::string& uri, const std::string& oldETag);
+    static bool eTagUnchanged(const std::string& uri, const std::string& oldETag);
 
     bool downloadWithETag(const std::string& uri, const std::string& oldETag);
 

@@ -55,7 +55,7 @@ namespace Log
 
         void setLogger(GenericLogger* logger) { _logger = logger; };
 
-        void setThreadLocalLogger(GenericLogger* logger)
+        static void setThreadLocalLogger(GenericLogger* logger)
         {
             // FIXME: What to do with the previous thread-local logger, if any? Will deleting it
             // destroy also its channel? That won't be good as we use the same channel for all
@@ -65,7 +65,7 @@ namespace Log
 
         GenericLogger* getLogger() const { return _logger; }
 
-        GenericLogger* getThreadLocalLogger() const { return _threadLocalLogger; }
+        static GenericLogger* getThreadLocalLogger() { return _threadLocalLogger; }
     };
 
     struct StaticUIHelper : StaticHelper

@@ -506,7 +506,7 @@ public:
 protected:
 
     /// Sanitize a URI by removing authorization tokens.
-    void sanitizeUri(Poco::URI& uri)
+    static void sanitizeUri(Poco::URI& uri)
     {
         static constexpr std::string_view access_token("access_token");
 

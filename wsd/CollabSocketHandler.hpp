@@ -134,7 +134,7 @@ private:
     void handleEditingStarted();
 
     /// Callback when fetch completes
-    void onFetchComplete(const std::string& requestId, const std::string& stream,
+    static void onFetchComplete(const std::string& requestId, const std::string& stream,
                          const std::shared_ptr<http::Session>& session);
 
     /// Active fetch sessions by requestId

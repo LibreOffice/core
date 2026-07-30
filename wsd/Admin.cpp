@@ -1309,7 +1309,7 @@ void Admin::start()
     startMonitors();
 }
 
-std::vector<std::pair<std::string, int>> Admin::getMonitorList() const
+std::vector<std::pair<std::string, int>> Admin::getMonitorList()
 {
     std::vector<std::pair<std::string, int>> monitorList;
     for (size_t i = 0;; ++i)

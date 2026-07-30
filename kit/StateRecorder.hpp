@@ -107,6 +107,7 @@ public:
         _recordedEventsVector.emplace_back(type, payload);
     }
 
+    // [-loplugin:staticmethods]
     void dumpState(std::ostream&)
     {
         // TODO: the rest ...

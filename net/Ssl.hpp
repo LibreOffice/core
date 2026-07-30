@@ -57,7 +57,7 @@ private:
     void initECDH();
     void shutdown();
 
-    std::string getLastErrorMsg() const;
+    static std::string getLastErrorMsg();
 
 private:
     SSL_CTX* _ctx;

@@ -163,7 +163,7 @@ private:
         return Type::Text;
     }
 
-    std::string getForwardToken(const char* buffer, int length)
+    static std::string getForwardToken(const char* buffer, int length)
     {
         std::string forward = COOLProtocol::getFirstToken(buffer, length);
         if (forward.find('-') != std::string::npos)
@@ -171,7 +171,7 @@ private:
         return std::string();
     }
 
-    std::vector<char> copyDataAfterOffset(const char *p, size_t len, size_t fromOffset)
+    static std::vector<char> copyDataAfterOffset(const char *p, size_t len, size_t fromOffset)
     {
         if (!p || fromOffset >= len)
             return std::vector<char>();
