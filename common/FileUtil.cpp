@@ -26,6 +26,8 @@
 #include <Poco/File.h>
 #include <Poco/Path.h>
 
+#include <o3tl/safeint.hxx>
+
 #include <chrono>
 #include <cstdio>
 #include <cstdlib>
@@ -334,7 +336,7 @@ namespace FileUtil
                 break;
 
             assert(n >= 0 && "Expected a positive read byte-count");
-            assert(static_cast<size_t>(n) <= nbytes && "Unexpectedly read more than requested");
+            assert(o3tl::make_unsigned(n) <= nbytes && "Unexpectedly read more than requested");
 
             nbytes -= n;
             p += n;

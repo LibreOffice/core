@@ -24,6 +24,8 @@
 
 #include <common/base64.hpp>
 
+#include <o3tl/safeint.hxx>
+
 #include <Poco/Crypto/RSADigestEngine.h>
 #include <Poco/Crypto/RSAKey.h>
 
@@ -207,12 +209,12 @@ int64_t Proof::DotNetTicks(const std::chrono::system_clock::time_point& utc)
 std::vector<unsigned char> Proof::GetProof(const std::string& access_token, const std::string& uri,
                                            int64_t ticks)
 {
-    assert(access_token.size() <= static_cast<size_t>(std::numeric_limits<int32_t>::max()));
+    assert(access_token.size() <= o3tl::make_unsigned(std::numeric_limits<int32_t>::max()));
     std::string uri_upper = uri;
     for (auto& c : uri_upper)
         if (c >= 'a' && c <= 'z')
             c -= 'a' - 'A';
-    assert(uri_upper.size() <= static_cast<size_t>(std::numeric_limits<int32_t>::max()));
+    assert(uri_upper.size() <= o3tl::make_unsigned(std::numeric_limits<int32_t>::max()));
     const auto access_token_size = ToNetworkOrderBytes<int32_t>(access_token.size());
     const auto uri_size = ToNetworkOrderBytes<int32_t>(uri_upper.size());
     const auto ticks_bytes = ToNetworkOrderBytes(ticks);

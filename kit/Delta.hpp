@@ -20,6 +20,8 @@
 #include <kit/DeltaSimd.h>
 #include <wsd/TileDesc.hpp>
 
+#include <o3tl/safeint.hxx>
+
 #include <cassert>
 #include <cstdint>
 #include <fstream>
@@ -375,9 +377,9 @@ class DeltaGenerator {
             , _rows(new DeltaBitmapRow[height])
         {
             assert(width > 0 && width <= 256);
-            assert (startX + width <= (size_t)bufferWidth);
+            assert (startX + width <= o3tl::make_unsigned(bufferWidth));
             assert(height > 0 && height <= 256);
-            assert (startY + height <= (size_t)bufferHeight);
+            assert (startY + height <= o3tl::make_unsigned(bufferHeight));
 
             LOGA_TRC(Pixel, "Converting pixel data to delta data of size "
                      << (width * height * 4) << " width " << width

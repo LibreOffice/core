@@ -30,6 +30,8 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+#include <o3tl/safeint.hxx>
+
 #ifdef __linux__
 #include <sys/vfs.h>
 #elif defined IOS
@@ -348,7 +350,7 @@ namespace FileUtil
                 std::vector<char> target(size + 1);
                 char* target_data = target.data();
                 const ssize_t read = readlink(fullpath.c_str(), target_data, size);
-                if (read <= 0 || static_cast<std::size_t>(read) > size)
+                if (read <= 0 || o3tl::make_unsigned(read) > size)
                     std::cerr << "lslr: fail to read: " << fullpath << " error: " << std::strerror(errno) << std::endl;
                 else
                 {

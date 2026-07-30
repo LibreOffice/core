@@ -19,6 +19,8 @@
 #include <common/Log.hpp>
 #include <common/Util.hpp>
 
+#include <o3tl/safeint.hxx>
+
 #include <fcntl.h>
 #include <time.h>
 #include <unistd.h>
@@ -58,7 +60,7 @@ namespace Util
                     break;
                 }
 
-                assert(static_cast<size_t>(b) <= nbytes);
+                assert(o3tl::make_unsigned(b) <= nbytes);
 
                 nbytes -= b;
                 p += b;

@@ -56,6 +56,8 @@
 #endif
 #endif // MOBILEAPP
 
+#include <o3tl/safeint.hxx>
+
 #include <csignal>
 #include <limits>
 
@@ -580,7 +582,7 @@ namespace
                 std::vector<char> target(size + 1);
                 char* target_data = target.data();
                 const ssize_t written = readlink(fpath, target_data, size);
-                if (written <= 0 || static_cast<std::size_t>(written) > size)
+                if (written <= 0 || o3tl::make_unsigned(written) > size)
                 {
                     LOG_SYS("nftw: readlink(\"" << fpath << "\") failed");
                     Util::forcedExit(EX_SOFTWARE);

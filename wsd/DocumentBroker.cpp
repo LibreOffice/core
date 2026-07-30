@@ -54,6 +54,8 @@
 #include <wsd/TileCache.hpp>
 #include <wsd/Unzip.hpp>
 
+#include <o3tl/safeint.hxx>
+
 #include <Poco/DigestStream.h>
 #include <Poco/DirectoryIterator.h>
 #include <Poco/DOM/AutoPtr.h>
@@ -646,9 +648,9 @@ void DocumentBroker::pollThread()
                          _docState.isCloseRequested())
                 {
                     if (limStoreFailures > 0 && (_saveManager.saveFailureCount() >=
-                                                     static_cast<std::size_t>(limStoreFailures) ||
+                                                     o3tl::make_unsigned(limStoreFailures) ||
                                                  _storageManager.uploadFailureCount() >=
-                                                     static_cast<std::size_t>(limStoreFailures)))
+                                                     o3tl::make_unsigned(limStoreFailures)))
                     {
                         LOG_ERR(
                             "Failed to store the document and reached maximum retry count of "
@@ -4224,7 +4226,7 @@ void DocumentBroker::autoSaveAndStop(const std::string_view reason)
                 ConfigUtil::getConfigValue<int>("per_document.limit_store_failures", 5);
 
             if (limStoreFailures > 0 &&
-                _storageManager.uploadFailureCount() >= static_cast<std::size_t>(limStoreFailures))
+                _storageManager.uploadFailureCount() >= o3tl::make_unsigned(limStoreFailures))
             {
                 LOG_TRC("Uploads for always-save-on-exit are failing. Will stop");
                 canStop = true;
