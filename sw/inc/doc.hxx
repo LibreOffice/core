@@ -1427,6 +1427,9 @@ public:
         no file name. */
     SW_DLLPUBLIC OUString GetLinkReferer() const;
 
+    /** Whether a link in this document may be followed to the location it names. */
+    SW_DLLPUBLIC bool AllowAccessLink() const;
+
     // Pointer to storage of SfxDocShells. Can be 0!!!
     SW_DLLPUBLIC css::uno::Reference< css::embed::XStorage > GetDocStorage();
 
