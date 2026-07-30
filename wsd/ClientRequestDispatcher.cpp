@@ -91,8 +91,8 @@ extern std::map<std::string, std::shared_ptr<DocumentBroker>> DocBrokers;
 extern std::mutex DocBrokersMutex;
 
 #if !MOBILEAPP
-static constexpr std::string_view MEDIA_STR = "str";
-static constexpr std::string_view MEDIA_MP4 = "url";
+constexpr std::string_view MEDIA_STR = "str";
+constexpr std::string_view MEDIA_MP4 = "url";
 #endif
 
 namespace

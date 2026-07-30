@@ -25,7 +25,7 @@ UnxSocketPath MasterLocation;
 
 // Embed variant string to ensure different build-id for coolforkit-caps vs coolforkit-ns
 #ifdef COOL_FORKIT_VARIANT
-__attribute__((used)) static const char* const ForkitVariant = COOL_FORKIT_VARIANT;
+__attribute__((used)) const char* const ForkitVariant = COOL_FORKIT_VARIANT;
 #endif
 
 int main (int argc, char **argv)

@@ -68,19 +68,19 @@ enum class RunState : char
 };
 
 /// Single flag to control the current run state.
-static std::atomic<RunState> RunStateFlag(RunState::Run);
+std::atomic<RunState> RunStateFlag(RunState::Run);
 
-static std::atomic<bool> DumpGlobalState(false);
-static std::atomic<bool> ForwardSigUsr2Flag(false); ///< Flags to forward SIGUSR2 to children.
+std::atomic<bool> DumpGlobalState(false);
+std::atomic<bool> ForwardSigUsr2Flag(false); ///< Flags to forward SIGUSR2 to children.
 
-static std::atomic<size_t> ActivityStringIndex = 0;
-static std::string ActivityHeader;
-static std::array<std::atomic<char*>, 16> ActivityStrings{};
-static bool UnattendedRun = false;
-static int SignalLogFD = STDERR_FILENO; ///< The FD where signalLogs are dumped.
-static char* VersionInfo = nullptr;
-static char FatalGdbString[256] = { '\0' };
-static SigUtil::SigChildHandler SigChildHandle;
+std::atomic<size_t> ActivityStringIndex = 0;
+std::string ActivityHeader;
+std::array<std::atomic<char*>, 16> ActivityStrings{};
+bool UnattendedRun = false;
+int SignalLogFD = STDERR_FILENO; ///< The FD where signalLogs are dumped.
+char* VersionInfo = nullptr;
+char FatalGdbString[256] = { '\0' };
+SigUtil::SigChildHandler SigChildHandle;
 
 } // namespace
 

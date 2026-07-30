@@ -68,7 +68,7 @@ bool EnableExperimental = false;
 static bool closeExpected = false;
 static std::mutex coutMutex;
 
-static const std::string Name = "connect ";
+const std::string Name = "connect ";
 
 /// Prints incoming data from a COOLWebSocket.
 class Output : public Runnable

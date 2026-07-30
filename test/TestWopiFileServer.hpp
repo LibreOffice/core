@@ -447,7 +447,7 @@ enum class PresetType : std::uint8_t
 };
 
 // search for presets file in test/data/presets directory
-static std::vector<asset> getAssetVec(PresetType type)
+std::vector<asset> getAssetVec(PresetType type)
 {
     std::string searchDir = "test/data/presets";
     std::vector<asset> assetVec;

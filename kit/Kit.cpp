@@ -291,8 +291,8 @@ void Document::shutdownBackgroundWatchdog()
 namespace
 {
     // for later consistency checking.
-    static std::string UserDirPath;
-    static std::string InstDirPath;
+    std::string UserDirPath;
+    std::string InstDirPath;
 
     std::string pathFromFileURL(const std::string &uri)
     {

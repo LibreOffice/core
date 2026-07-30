@@ -71,12 +71,12 @@
 
 using namespace COOLProtocol;
 
-static constexpr float TILES_ON_FLY_MIN_UPPER_LIMIT = 10.0;
-static constexpr int SYNTHETIC_COOL_PID_OFFSET = 10000000;
+constexpr float TILES_ON_FLY_MIN_UPPER_LIMIT = 10.0;
+constexpr int SYNTHETIC_COOL_PID_OFFSET = 10000000;
 
 /// Log a warning once the queue of messages waiting to be sent to a client
 /// grows past this many bytes, which usually means the client is not reading.
-static constexpr std::size_t LargeSenderQueueBytes = 200 * 1024 * 1024;
+constexpr std::size_t LargeSenderQueueBytes = 200 * 1024 * 1024;
 
 using Poco::Path;
 

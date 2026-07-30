@@ -153,8 +153,8 @@
 
 namespace http
 {
-static constexpr int64_t MaxBodyLen = 2LL * 1024 * 1024 * 1024; ///< Prevent runaway cases.
-static constexpr int64_t MaxChunkLen = 128LL * 1024 * 1024; ///< Prevent runaway cases.
+constexpr int64_t MaxBodyLen = 2LL * 1024 * 1024 * 1024; ///< Prevent runaway cases.
+constexpr int64_t MaxChunkLen = 128LL * 1024 * 1024; ///< Prevent runaway cases.
 
 /// The parse-state of a field.
 STATE_ENUM(FieldParseState,

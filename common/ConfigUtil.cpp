@@ -56,7 +56,7 @@ RuntimeConstant<bool> SslTermination;
 // NOTE: This is sorted, please keep it sorted as it's friendlier to readers,
 //       except for properties, which are sorted before the value, e.g.
 //       "setting[@name]" before "setting", which is more readable.
-static const Util::UnorderedStringMap<std::string> DefAppConfig = {
+const Util::UnorderedStringMap<std::string> DefAppConfig = {
 #if !MOBILEAPP
     { "accessibility.enable", "false" },
 #else

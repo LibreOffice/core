@@ -18,15 +18,15 @@ namespace JailUtil
 {
 
 /// General temporary directory owned by us.
-static const std::string CHILDROOT_TMP_PATH = "/tmp";
+const std::string CHILDROOT_TMP_PATH = "/tmp";
 
 /// Files uploaded by users are stored in this sub-directory of child-root.
-static const std::string CHILDROOT_TMP_INCOMING_PATH = "/tmp/incoming";
+const std::string CHILDROOT_TMP_INCOMING_PATH = "/tmp/incoming";
 
-static const std::string CHILDROOT_TMP_SHARED_PRESETS_PATH = "/tmp/sharedpresets";
+const std::string CHILDROOT_TMP_SHARED_PRESETS_PATH = "/tmp/sharedpresets";
 
 /// The LO installation directory with jail.
-static const std::string LO_JAIL_SUBPATH = "lo";
+const std::string LO_JAIL_SUBPATH = "lo";
 
 #ifdef __linux__
 

@@ -744,7 +744,7 @@ namespace Log
         Log::logger().doLog(l, text);
     }
 
-    static const std::string levelList[] = { "none",        "fatal",   "critical",
+    const std::string levelList[] = { "none",        "fatal",   "critical",
                                              "error",       "warning", "notice",
                                              "information", "debug",   "trace" };
 

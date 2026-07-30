@@ -62,7 +62,7 @@ constexpr long READ_BUFFER_SIZE = 64 * 1024;
 constexpr int MAX_MESSAGE_SIZE = 2 * 1024 * READ_BUFFER_SIZE;
 
 /// Limits number of HTTP redirections to prevent endless redirection loops.
-static constexpr int HTTP_REDIRECTION_LIMIT = 21;
+constexpr int HTTP_REDIRECTION_LIMIT = 21;
 
 constexpr const char JAILED_DOCUMENT_ROOT[] = "/tmp/user/docs/";
 constexpr const char JAILED_CONFIG_ROOT[] = "/tmp/user/user/";

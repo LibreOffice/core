@@ -1269,24 +1269,24 @@ std::string FileServerRequestHandler::getRequestPathname(const HTTPRequest& requ
 constexpr std::string_view BRANDING = "branding";
 constexpr std::string_view SUPPORT_KEY_BRANDING_UNSUPPORTED = "branding-unsupported";
 
-static const std::string ACCESS_TOKEN = "%ACCESS_TOKEN%";
-static const std::string ACCESS_TOKEN_TTL = "%ACCESS_TOKEN_TTL%";
-static const std::string NO_AUTH_HEADER = "%NO_AUTH_HEADER%";
-static const std::string ACCESS_HEADER = "%ACCESS_HEADER%";
-static const std::string UI_DEFAULTS = "%UI_DEFAULTS%";
-static const std::string CSS_VARS = "<!--%CSS_VARIABLES%-->";
-static const std::string POSTMESSAGE_ORIGIN = "%POSTMESSAGE_ORIGIN%";
-static const std::string BRANDING_THEME = "%BRANDING_THEME%";
-static const std::string CHECK_FILE_INFO_OVERRIDE = "%CHECK_FILE_INFO_OVERRIDE%";
-static const std::string DEBUG_WOPI_CONFIG_ID = "%DEBUG_WOPI_CONFIG_ID%";
-static const std::string BUYPRODUCT_URL = "%BUYPRODUCT_URL%";
-static const std::string PERMISSION = "%PERMISSION%";
-static const std::string WOPI_SETTING_BASE_URL = "%WOPI_SETTING_BASE_URL%";
-static const std::string IFRAME_TYPE = "%IFRAME_TYPE%";
-static const std::string UI_THEME = "%UI_THEME%";
-static const std::string VERSION = "%VERSION%";
-static const std::string WOPI_HOST_ID = "%WOPI_HOST_ID%";
-static const std::string EXPERIMENTAL_FEATURES = "%EXPERIMENTAL_FEATURES%";
+const std::string ACCESS_TOKEN = "%ACCESS_TOKEN%";
+const std::string ACCESS_TOKEN_TTL = "%ACCESS_TOKEN_TTL%";
+const std::string NO_AUTH_HEADER = "%NO_AUTH_HEADER%";
+const std::string ACCESS_HEADER = "%ACCESS_HEADER%";
+const std::string UI_DEFAULTS = "%UI_DEFAULTS%";
+const std::string CSS_VARS = "<!--%CSS_VARIABLES%-->";
+const std::string POSTMESSAGE_ORIGIN = "%POSTMESSAGE_ORIGIN%";
+const std::string BRANDING_THEME = "%BRANDING_THEME%";
+const std::string CHECK_FILE_INFO_OVERRIDE = "%CHECK_FILE_INFO_OVERRIDE%";
+const std::string DEBUG_WOPI_CONFIG_ID = "%DEBUG_WOPI_CONFIG_ID%";
+const std::string BUYPRODUCT_URL = "%BUYPRODUCT_URL%";
+const std::string PERMISSION = "%PERMISSION%";
+const std::string WOPI_SETTING_BASE_URL = "%WOPI_SETTING_BASE_URL%";
+const std::string IFRAME_TYPE = "%IFRAME_TYPE%";
+const std::string UI_THEME = "%UI_THEME%";
+const std::string VERSION = "%VERSION%";
+const std::string WOPI_HOST_ID = "%WOPI_HOST_ID%";
+const std::string EXPERIMENTAL_FEATURES = "%EXPERIMENTAL_FEATURES%";
 
 /// Per user request variables.
 /// Holds access_token, css_variables, postmessage_origin, etc.

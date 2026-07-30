@@ -28,18 +28,18 @@
 
 using Poco::Util::XMLConfiguration;
 
-static const std::string NET_POST_ALLOW_HOST = ".net.post_allow.host";
-static const std::string STORAGE_WOPI_HOST = ".storage.wopi.host";
-static const std::set<std::string> multiElems {NET_POST_ALLOW_HOST, STORAGE_WOPI_HOST, ".logging.file.property", ".ssl.hpkp.pins.pin"};
-static const std::set<std::string> migrateIfNoTarget {".admin_console.secure_password", ".support_key"};
-static const std::map<std::string, std::string> renamedElems { {"loleaflet_logging", "browser_logging"} };
-static const std::map<std::string, std::string> specialDefault {
+const std::string NET_POST_ALLOW_HOST = ".net.post_allow.host";
+const std::string STORAGE_WOPI_HOST = ".storage.wopi.host";
+const std::set<std::string> multiElems {NET_POST_ALLOW_HOST, STORAGE_WOPI_HOST, ".logging.file.property", ".ssl.hpkp.pins.pin"};
+const std::set<std::string> migrateIfNoTarget {".admin_console.secure_password", ".support_key"};
+const std::map<std::string, std::string> renamedElems { {"loleaflet_logging", "browser_logging"} };
+const std::map<std::string, std::string> specialDefault {
                     {".ssl.cert_file_path", "/etc/loolwsd/cert.pem"},
                     {".ssl.key_file_path", "/etc/loolwsd/key.pem"},
                     {".ssl.ca_file_path", "/etc/loolwsd/ca-chain.cert.pem"},
                     {".ssl.termination", "false"},
                     {".logging.file.property[@name=path]", "/var/log/loolwsd.log"} };
-static const std::map<std::string, std::string> specialAttribute {
+const std::map<std::string, std::string> specialAttribute {
                     {".logging.file", "enable"},
                     {".trace_event", "enable"},
                     {".trace", "enable"},

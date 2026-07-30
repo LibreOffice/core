@@ -374,8 +374,8 @@ namespace
         }
     };
 
-    static std::mutex fsmutex;
-    static std::set<fs, fsComparator> filesystems;
+    std::mutex fsmutex;
+    std::set<fs, fsComparator> filesystems;
 
 } // anonymous namespace
 

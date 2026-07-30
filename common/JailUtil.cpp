@@ -51,16 +51,16 @@ namespace JailUtil
 namespace
 {
 
-static const std::string CoolTestMountpoint = "cool_test_mount";
+const std::string CoolTestMountpoint = "cool_test_mount";
 
 #ifdef __linux__
-static void setdeny()
+void setdeny()
 {
     std::ofstream of("/proc/self/setgroups");
     of << "deny";
 }
 
-static void mapuser(uid_t origuid, uid_t newuid, gid_t origgid, gid_t newgid)
+void mapuser(uid_t origuid, uid_t newuid, gid_t origgid, gid_t newgid)
 {
     {
         std::ofstream of("/proc/self/uid_map");
@@ -130,7 +130,7 @@ bool enterUserNS(uid_t uid, gid_t gid)
 namespace
 {
 
-static bool coolmount(const std::string& arg, std::string source, std::string target,
+bool coolmount(const std::string& arg, std::string source, std::string target,
                       bool silent = false)
 {
     source = Util::rtrim(source, '/');
@@ -254,7 +254,7 @@ namespace
 {
 
 /// Unmount a bind-mounted jail directory.
-static bool unmount(const std::string& target, bool silent = false)
+bool unmount(const std::string& target, bool silent = false)
 {
     LOG_DBG("Unmounting [" << target << ']');
     const bool res = coolmount("-u", "", target, silent);
@@ -309,7 +309,7 @@ bool isJailCopied(const std::string& root)
 namespace
 {
 
-static bool safeRemoveDir(const std::string& path)
+bool safeRemoveDir(const std::string& path)
 {
     // Always unmount, just in case.
     unmount(path, /*silent=*/true);
@@ -630,7 +630,7 @@ namespace SysTemplate
 /// These must be up-to-date, as they can change during
 /// the long lifetime of our process. Also, it's unlikely
 /// that systemplate will get re-generated after installation.
-static const auto DynamicFilePaths
+const auto DynamicFilePaths
     = { "/etc/passwd", "/etc/group",
         "/etc/host.conf", "/etc/hosts",
         "/etc/nsswitch.conf", "/etc/resolv.conf" };
@@ -638,7 +638,7 @@ static const auto DynamicFilePaths
 namespace
 {
 /// Copy (false) by default for KIT_IN_PROCESS.
-static bool LinkDynamicFiles = false;
+bool LinkDynamicFiles = false;
 
 bool updateDynamicFilesImpl(const std::string& sysTemplate)
 {
