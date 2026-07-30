@@ -778,6 +778,14 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication()
     sal_uInt32 nDisplayValueIdx = 0;
     OUString aParam, aBin;
 
+    osl_getExecutableFile(&aParam.pData);
+    osl_getSystemPathFromFileURL(aParam.pData, &aBin.pData);
+    OString aExec = OUStringToOString(aBin, osl_getThreadTextEncoding());
+
+    m_pFakeArgvFreeable.reserve(4);
+    m_pFakeArgvFreeable.emplace_back(strdup(aExec.getStr()));
+    m_pFakeArgvFreeable.emplace_back(strdup("--nocrashhandler"));
+
     for (sal_uInt32 nIdx = 0; nIdx < nParams; ++nIdx)
     {
         osl_getCommandArg(nIdx, &aParam.pData);
@@ -787,13 +795,6 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication()
         nDisplayValueIdx = nIdx;
     }
 
-    osl_getExecutableFile(&aParam.pData);
-    osl_getSystemPathFromFileURL(aParam.pData, &aBin.pData);
-    OString aExec = OUStringToOString(aBin, osl_getThreadTextEncoding());
-
-    m_pFakeArgvFreeable.reserve(4);
-    m_pFakeArgvFreeable.emplace_back(strdup(aExec.getStr()));
-    m_pFakeArgvFreeable.emplace_back(strdup("--nocrashhandler"));
     if (nDisplayValueIdx)
     {
         m_pFakeArgvFreeable.emplace_back(strdup("-display"));
