@@ -11,6 +11,10 @@
 
 #pragma once
 
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XTitle.hpp>
+
 #include <address.hxx>
 #include "anyrefdg.hxx"
 #include "viewdata.hxx"
@@ -65,10 +69,25 @@ private:
     void Calculate();
     ScRange WriteOutput(ScDocShell& rDocShell, SCTAB nOutputTab);
 
-    /** Anchors a chart at nChartColumn drawing rShareRange, whose two columns
-        are the share of the variance and the running total of it, as bars with
-        a line over them. */
+    /** A chart title holding rText as its one run of text. */
+    static css::uno::Reference<css::chart2::XTitle> MakeChartTitle(const OUString& rText);
+
+    /** Puts a chart of rDataRange on the sheet that range is on, at rRectangle
+        in hundredths of a millimetre, and hands back its chart document. The
+        first cell of every column names the series it heads. */
+    css::uno::Reference<css::chart2::XChartDocument>
+    CreateSheetChart(ScDocShell& rDocShell, const ScRange& rDataRange,
+                     const css::awt::Rectangle& rRectangle);
+
+    /** Draws rShareRange, whose two columns are the share of the variance and
+        the running total of it, as bars with a line over them. */
     void AddVarianceChart(ScDocShell& rDocShell, const ScRange& rShareRange, SCCOL nChartColumn);
+
+    /** Draws rDataRange as a correlation circle. Its last two columns are the
+        two components the features are placed against, and every column before
+        them is a feature. */
+    void AddCorrelationCircleChart(ScDocShell& rDocShell, const ScRange& rDataRange,
+                                   SCCOL nChartColumn);
 
     DECL_LINK(ButtonClicked, weld::Button&, void);
     DECL_LINK(CheckBoxToggled, weld::Toggleable&, void);

@@ -157,7 +157,7 @@ class principalComponentAnalysis(UITestCase):
             # component share as bars and the running total as a line over
             # them.
             oCharts = document.Sheets.getByIndex(1).Charts
-            self.assertEqual(oCharts.getCount(), 1)
+            self.assertEqual(oCharts.getCount(), 2)
             oChart = oCharts.getByIndex(0)
             aRanges = [
                 (oRange.StartColumn, oRange.StartRow, oRange.EndColumn, oRange.EndRow)
@@ -198,7 +198,7 @@ class principalComponentAnalysis(UITestCase):
             # Both axes say what they carry.
             oSystem = oDiagram.getCoordinateSystems()[0]
             self.assertEqual(
-                sTitleOf(oSystem.getAxisByDimension(0, 0)), "Principal components")
+                sTitleOf(oSystem.getAxisByDimension(0, 0)), "Principal Components")
             self.assertEqual(
                 sTitleOf(oSystem.getAxisByDimension(1, 0)), "Variance share")
 
@@ -209,6 +209,47 @@ class principalComponentAnalysis(UITestCase):
             sAxisFormat = document.getNumberFormats().getByKey(
                 oAxis.NumberFormat).FormatString
             self.assertIn("%", sAxisFormat)
+
+            # The second chart is a correlation circle over one range that runs
+            # from the standardized features straight into the first two score
+            # columns.
+            oCircleChart = oCharts.getByIndex(1)
+            aCircleRanges = [
+                (oRange.StartColumn, oRange.StartRow, oRange.EndColumn, oRange.EndRow)
+                for oRange in oCircleChart.getRanges()]
+            self.assertEqual(
+                aCircleRanges, [(0, nHeaderRow, len(aColumns) + 1, nFirstValueRow + 4)])
+
+            oCircleDocument = oCircleChart.getEmbeddedObject()
+            self.assertEqual(sTitleOf(oCircleDocument), "Correlation circle")
+            oCircleDiagram = oCircleDocument.getFirstDiagram()
+
+            # Each direction is named after which of the pair of components it
+            # is.
+            oCircleSystem = oCircleDiagram.getCoordinateSystems()[0]
+            self.assertEqual(
+                sTitleOf(oCircleSystem.getAxisByDimension(0, 0)), "Principal Component 1")
+            self.assertEqual(
+                sTitleOf(oCircleSystem.getAxisByDimension(1, 0)), "Principal Component 2")
+
+            self.assertEqual(
+                [oChartType.getChartType()
+                 for oSystem in oCircleDiagram.getCoordinateSystems()
+                 for oChartType in oSystem.getChartTypes()],
+                ["com.sun.star.chart2.CorrelationCircleChartType"])
+
+            # One series per feature, each holding its own feature column beside
+            # the two component columns they all share.
+            aFeatureRoles = []
+            for oSystem in oCircleDiagram.getCoordinateSystems():
+                for oChartType in oSystem.getChartTypes():
+                    for oSeries in oChartType.getDataSeries():
+                        aFeatureRoles.append(sorted(
+                            oLabeled.getValues().Role
+                            for oLabeled in oSeries.getDataSequences()))
+            self.assertEqual(len(aFeatureRoles), len(aColumns))
+            for aRoles in aFeatureRoles:
+                self.assertEqual(aRoles, ["values-feature", "values-x", "values-y"])
 
             # A second run cannot have the sheet it needs, so it reports that
             # and adds nothing.
