@@ -1000,8 +1000,8 @@ int filterNumberName(const struct dirent *dir)
 // coverity[ -taint_source : arg-1 ] 2024.6.1
 int AdminModel::getPidsFromProcName(const std::regex& procNameRegEx, std::vector<int> *pids)
 {
-    struct dirent **namelist = NULL;
-    int n = scandir("/proc", &namelist, filterNumberName, 0);
+    struct dirent **namelist = nullptr;
+    int n = scandir("/proc", &namelist, filterNumberName, nullptr);
     int pidCount = 0;
 
     if (n < 0)
@@ -1021,13 +1021,13 @@ int AdminModel::getPidsFromProcName(const std::regex& procNameRegEx, std::vector
             if (fgets(line, sizeof (line), fp))
             {
                 char *nl = strchr(line, '\n');
-                if (nl != NULL)
+                if (nl != nullptr)
                     *nl = 0;
                 if (regex_match(line, procNameRegEx))
                 {
                     pidCount ++;
                     if (pids)
-                        pids->push_back(strtol(namelist[n]->d_name, NULL, 10));
+                        pids->push_back(strtol(namelist[n]->d_name, nullptr, 10));
                 }
             }
             fclose(fp);

@@ -32,7 +32,7 @@ int createForkit(const std::string& forKitPath, const StringVector& args)
 
 void TraceEvent::emitOneRecordingIfEnabled(const std::string& recording)
 {
-    if (COOLWSD::TraceEventFile == NULL)
+    if (COOLWSD::TraceEventFile == nullptr)
         return;
 
     COOLWSD::writeTraceEventRecording(recording);
@@ -40,7 +40,7 @@ void TraceEvent::emitOneRecordingIfEnabled(const std::string& recording)
 
 void TraceEvent::emitOneRecording(const std::string& recording)
 {
-    if (COOLWSD::TraceEventFile == NULL)
+    if (COOLWSD::TraceEventFile == nullptr)
         return;
 
     if (!TraceEvent::isRecordingOn())

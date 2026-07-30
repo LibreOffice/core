@@ -5286,7 +5286,7 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
         else if (message->firstTokenMatches("traceevent:"))
         {
             LOG_CHECK_RET(message->tokens().size() == 1, false);
-            if (COOLWSD::TraceEventFile != NULL && TraceEvent::isRecordingOn())
+            if (COOLWSD::TraceEventFile != nullptr && TraceEvent::isRecordingOn())
             {
                 const auto& firstLine = message->firstLine();
                 if (firstLine.size() < message->size())
@@ -5297,7 +5297,7 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
         else if (message->firstTokenMatches("forcedtraceevent:"))
         {
             LOG_CHECK_RET(message->tokens().size() == 1, false);
-            if (COOLWSD::TraceEventFile != NULL)
+            if (COOLWSD::TraceEventFile != nullptr)
             {
                 const auto& firstLine = message->firstLine();
                 if (firstLine.size() < message->size())

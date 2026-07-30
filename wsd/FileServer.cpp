@@ -171,7 +171,7 @@ bool isPamAuthOk(const std::string& userProvidedUsr, const std::string& userProv
     }
 
     struct pam_conv localConversation { functionConversation, nullptr };
-    pam_handle_t *localAuthHandle = NULL;
+    pam_handle_t *localAuthHandle = nullptr;
     int retval;
 
     localConversation.appdata_ptr = const_cast<char *>(userProvidedPwd.c_str());

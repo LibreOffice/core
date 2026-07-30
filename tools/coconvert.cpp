@@ -44,7 +44,7 @@ static void convert(kit::Office* office, const std::string& input, std::set<std:
     try
     {
         std::unique_ptr<kit::Document> doc(
-            office->documentLoad(Poco::URI(Poco::Path(input)).toString().c_str(), NULL /* options */));
+            office->documentLoad(Poco::URI(Poco::Path(input)).toString().c_str(), nullptr /* options */));
         if (!doc)
         {
             std::cerr << "Error: could not load document: " << office->getError() << "\n";
@@ -55,7 +55,7 @@ static void convert(kit::Office* office, const std::string& input, std::set<std:
         {
             try
             {
-                if (!doc->saveAs((stem + "." + format).c_str(), format.c_str(), NULL /* options */))
+                if (!doc->saveAs((stem + "." + format).c_str(), format.c_str(), nullptr /* options */))
                 {
                     std::cerr << "Error: could not export document as " << format
                               << ": " << office->getError() << "\n";

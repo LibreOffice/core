@@ -349,7 +349,7 @@ struct Stats {
 
         std::string commitHash = Util::getCoolVersionHash();
 
-        time_t now = time(0);
+        time_t now = time(nullptr);
         struct tm datetime;
         gmtime_r(&now, &datetime);
 

@@ -854,7 +854,7 @@ std::string COOLWSD::ConfigDir = COOLWSD_CONFIGDIR "/conf.d";
 bool COOLWSD::EnableTraceEventLogging = false;
 bool COOLWSD::EnableAccessibility = false;
 bool COOLWSD::EnableMountNamespaces = false;
-FILE *COOLWSD::TraceEventFile = NULL;
+FILE *COOLWSD::TraceEventFile = nullptr;
 std::string COOLWSD::LogLevel = "trace";
 std::string COOLWSD::LogLevelStartup = "trace";
 std::string COOLWSD::LogDisabledAreas = "Socket,WebSocket,Admin,Pixel";
@@ -1835,12 +1835,12 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
             conf, "trace_event.path", COOLWSD_TRACEEVENTFILE);
         LOG_INF("Trace Event file is " << traceEventFile << ".");
         TraceEventFile = fopen(traceEventFile.c_str(), "w");
-        if (TraceEventFile != NULL)
+        if (TraceEventFile != nullptr)
         {
             if (fcntl(fileno(TraceEventFile), F_SETFD, FD_CLOEXEC) == -1)
             {
                 fclose(TraceEventFile);
-                TraceEventFile = NULL;
+                TraceEventFile = nullptr;
             }
             else
             {
@@ -4348,7 +4348,7 @@ void COOLWSD::innerMain()
 
     SigUtil::addActivity("save traces");
 
-    if (TraceEventFile != NULL)
+    if (TraceEventFile != nullptr)
     {
         // If we have written any objects to it, it ends with a comma and newline. Back over those.
         if (ftell(TraceEventFile) > 2)
@@ -4356,7 +4356,7 @@ void COOLWSD::innerMain()
         // Close the JSON array.
         fprintf(TraceEventFile, "\n]\n");
         fclose(TraceEventFile);
-        TraceEventFile = NULL;
+        TraceEventFile = nullptr;
     }
 
 #if !MOBILEAPP

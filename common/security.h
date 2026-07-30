@@ -63,9 +63,9 @@ inline int isInContainer()
         fprintf(stderr, "Error: cannot open /proc/self/cgroup\n");
         return 0;
     }
-    while (fgets(line, sizeof(line), cgroup) != NULL)
+    while (fgets(line, sizeof(line), cgroup) != nullptr)
     {
-        if (strstr(line, docker) != NULL)
+        if (strstr(line, docker) != nullptr)
         {
             fclose(cgroup);
             return 1;
