@@ -57,7 +57,7 @@ public:
     void construct();
     virtual ~ClientSession();
 
-    void setReadOnly(bool value = true) override;
+    void setReadOnly(bool value) override;
 
     void sendFileMode(bool readOnly, bool editComments, bool manageRedlines);
 
