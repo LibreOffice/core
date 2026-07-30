@@ -28,7 +28,7 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::rendering { class XBitmap; }
-namespace com::sun::star::rendering { class XCachedPrimitive; }
+namespace vclcanvas { class XCachedPrimitive; }
 namespace com::sun::star::rendering { class XCanvasFont; }
 namespace vclcanvas { class XGraphicDevice; }
 namespace com::sun::star::rendering { class XPolyPolygon2D; }
@@ -172,7 +172,7 @@ namespace canvas
             maCanvasHelper.strokePolyPolygon( this, xPolyPolygon, viewState, renderState, strokeAttributes );
         }
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+        virtual css::uno::Reference< vclcanvas::XCachedPrimitive >
             fillPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&               xPolyPolygon,
                              const css::rendering::ViewState&                                          viewState,
                              const css::rendering::RenderState&                                        renderState) override
@@ -188,7 +188,7 @@ namespace canvas
             return maCanvasHelper.fillPolyPolygon( this, xPolyPolygon, viewState, renderState );
         }
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+        virtual css::uno::Reference< vclcanvas::XCachedPrimitive >
             fillTexturedPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
                                     const css::rendering::ViewState&                             viewState,
                                     const css::rendering::RenderState&                           renderState,
@@ -262,7 +262,7 @@ namespace canvas
         }
 
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
+        virtual css::uno::Reference< vclcanvas::XCachedPrimitive >
             drawBitmap( const css::uno::Reference< css::rendering::XBitmap >&              xBitmap,
                         const css::rendering::ViewState&                                   viewState,
                         const css::rendering::RenderState&                                 renderState ) override

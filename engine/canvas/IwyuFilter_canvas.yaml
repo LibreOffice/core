@@ -7,7 +7,6 @@ excludelist:
     - com/sun/star/rendering/XParametricPolyPolygon2D.hpp
     canvas/inc/base/cachedprimitivebase.hxx:
     # base class has to be a complete type
-    - com/sun/star/rendering/XCachedPrimitive.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     canvas/inc/unopolypolygon.hxx:
     # base class has to be a complete type

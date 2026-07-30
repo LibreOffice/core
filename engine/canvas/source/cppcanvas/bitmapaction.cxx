@@ -62,7 +62,7 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                virtual bool renderPrimitive( uno::Reference< vclcanvas::XCachedPrimitive >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
 
                 uno::Reference< rendering::XBitmap >                    mxBitmap;
@@ -127,7 +127,7 @@ namespace cppcanvas
                                    nullptr );
             }
 
-            bool BitmapAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+            bool BitmapAction::renderPrimitive( uno::Reference< vclcanvas::XCachedPrimitive >& rCachedPrimitive,
                                                 const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::BitmapAction::renderPrimitive()" );

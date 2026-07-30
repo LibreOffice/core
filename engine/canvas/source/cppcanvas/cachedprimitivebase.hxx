@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/rendering/XCachedPrimitive.hpp>
+#include <XCachedPrimitive.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include "canvas.hxx"
@@ -67,11 +67,11 @@ namespace cppcanvas
             using Action::render;
 
         private:
-            virtual bool renderPrimitive( css::uno::Reference< css::rendering::XCachedPrimitive >& rCachedPrimitive,
+            virtual bool renderPrimitive( css::uno::Reference< vclcanvas::XCachedPrimitive >& rCachedPrimitive,
                                           const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
 
             CanvasSharedPtr                                                 mpCanvas;
-            mutable css::uno::Reference< css::rendering::XCachedPrimitive > mxCachedPrimitive;
+            mutable css::uno::Reference< vclcanvas::XCachedPrimitive >      mxCachedPrimitive;
             mutable ::basegfx::B2DHomMatrix                                 maLastTransformation;
             const bool                                                      mbOnlyRedrawWithSameTransform;
         };

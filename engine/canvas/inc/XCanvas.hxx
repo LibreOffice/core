@@ -33,7 +33,6 @@
 namespace com::sun::star::rendering
 {
 class XBitmap;
-class XCachedPrimitive;
 class XCanvasFont;
 class XPolyPolygon2D;
 class XTextLayout;
@@ -51,6 +50,7 @@ class Type;
 
 namespace vclcanvas
 {
+class XCachedPrimitive;
 class XGraphicDevice;
 }
 
@@ -252,7 +252,7 @@ public:
         if one of the view and render state parameters are outside the
         specified range.
      */
-    virtual ::css::uno::Reference<::css::rendering::XCachedPrimitive>
+    virtual ::css::uno::Reference<::vclcanvas::XCachedPrimitive>
     fillPolyPolygon(const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
                     const ::css::rendering::ViewState& aViewState,
                     const ::css::rendering::RenderState& aRenderState)
@@ -283,7 +283,7 @@ public:
         if one of the view and render state parameters are outside the
         specified range.
     */
-    virtual ::css::uno::Reference<::css::rendering::XCachedPrimitive> fillTexturedPolyPolygon(
+    virtual ::css::uno::Reference<::vclcanvas::XCachedPrimitive> fillTexturedPolyPolygon(
         const ::css::uno::Reference<::css::rendering::XPolyPolygon2D>& xPolyPolygon,
         const ::css::rendering::ViewState& aViewState,
         const ::css::rendering::RenderState& aRenderState,
@@ -412,7 +412,7 @@ public:
         if one of the view and render state parameters are outside the
         specified range.
      */
-    virtual ::css::uno::Reference<::css::rendering::XCachedPrimitive>
+    virtual ::css::uno::Reference<::vclcanvas::XCachedPrimitive>
     drawBitmap(const ::css::uno::Reference<::css::rendering::XBitmap>& xBitmap,
                const ::css::rendering::ViewState& aViewState,
                const ::css::rendering::RenderState& aRenderState)

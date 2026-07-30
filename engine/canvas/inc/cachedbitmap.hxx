@@ -22,7 +22,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
-#include <com/sun/star/rendering/XCachedPrimitive.hpp>
+#include "XCachedPrimitive.hxx"
 #include <comphelper/compbase.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <memory>
@@ -34,7 +34,7 @@ namespace vclcanvas
 {
     typedef std::shared_ptr< GraphicObject > GraphicObjectSharedPtr;
 
-    typedef comphelper::WeakComponentImplHelper< css::rendering::XCachedPrimitive,
+    typedef comphelper::WeakComponentImplHelper< vclcanvas::XCachedPrimitive,
                                            css::lang::XServiceInfo > CachedBitmap_Base;
     class CachedBitmap : public CachedBitmap_Base
     {

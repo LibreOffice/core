@@ -107,13 +107,13 @@ namespace vclcanvas
                                const css::rendering::ViewState&        viewState,
                                const css::rendering::RenderState&      renderState,
                                const css::rendering::StrokeAttributes& strokeAttributes );
-        css::uno::Reference< css::rendering::XCachedPrimitive >
+        css::uno::Reference< vclcanvas::XCachedPrimitive >
             fillPolyPolygon( const vclcanvas::XCanvas*            rCanvas,
                              const css::uno::Reference<
                                      css::rendering::XPolyPolygon2D >&     xPolyPolygon,
                              const css::rendering::ViewState&          viewState,
                              const css::rendering::RenderState&        renderState );
-        css::uno::Reference< css::rendering::XCachedPrimitive >
+        css::uno::Reference< vclcanvas::XCachedPrimitive >
             fillTexturedPolyPolygon( const vclcanvas::XCanvas*            rCanvas,
                                      const css::uno::Reference<
                                              css::rendering::XPolyPolygon2D >& xPolyPolygon,
@@ -143,13 +143,13 @@ namespace vclcanvas
                             const css::rendering::ViewState&       viewState,
                             const css::rendering::RenderState&     renderState );
 
-        css::uno::Reference< css::rendering::XCachedPrimitive >
+        css::uno::Reference< vclcanvas::XCachedPrimitive >
             drawBitmap( const vclcanvas::XCanvas*     rCanvas,
                         const css::uno::Reference<
                                 css::rendering::XBitmap >& xBitmap,
                         const css::rendering::ViewState&   viewState,
                         const css::rendering::RenderState& renderState );
-        css::uno::Reference< css::rendering::XCachedPrimitive >
+        css::uno::Reference< vclcanvas::XCachedPrimitive >
             drawBitmapModulated( const vclcanvas::XCanvas*        rCanvas,
                                  const css::uno::Reference<
                                          css::rendering::XBitmap >&        xBitmap,
@@ -202,7 +202,7 @@ namespace vclcanvas
         bool                                         mbHaveAlpha;
 
     private:
-        css::uno::Reference< css::rendering::XCachedPrimitive >
+        css::uno::Reference< vclcanvas::XCachedPrimitive >
             implDrawBitmap( const vclcanvas::XCanvas*     rCanvas,
                             const css::uno::Reference<
                                     css::rendering::XBitmap >&     xBitmap,

@@ -335,7 +335,7 @@ namespace vclcanvas
         }
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const vclcanvas::XCanvas*                          ,
+    uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const vclcanvas::XCanvas*                          ,
                                                                                  const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                  const rendering::ViewState&                        viewState,
                                                                                  const rendering::RenderState&                      renderState )
@@ -366,7 +366,7 @@ namespace vclcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
+        return uno::Reference< vclcanvas::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const vclcanvas::XCanvas*                        ,
@@ -468,7 +468,7 @@ namespace vclcanvas
         }
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::implDrawBitmap( const vclcanvas::XCanvas*                   pCanvas,
+    uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::implDrawBitmap( const vclcanvas::XCanvas*                   pCanvas,
                                                                                 const uno::Reference< rendering::XBitmap >& xBitmap,
                                                                                 const rendering::ViewState&                 viewState,
                                                                                 const rendering::RenderState&               renderState,
@@ -526,7 +526,7 @@ namespace vclcanvas
 
                 // Returning a cache object is not useful, the XBitmap
                 // itself serves this purpose
-                return uno::Reference< rendering::XCachedPrimitive >(nullptr);
+                return uno::Reference< vclcanvas::XCachedPrimitive >(nullptr);
             }
             else if( mpOutDevProvider->getOutDev().HasFastDrawTransformedBitmap())
             {
@@ -536,7 +536,7 @@ namespace vclcanvas
                 const double fAlpha = bModulateColors ? renderState.DeviceColor[3] : 1.0;
 
                 mpOutDevProvider->getOutDev().DrawTransformedBitmapEx( aMatrix, aBmp, fAlpha );
-                return uno::Reference< rendering::XCachedPrimitive >(nullptr);
+                return uno::Reference< vclcanvas::XCachedPrimitive >(nullptr);
             }
             else
             {
@@ -633,7 +633,7 @@ namespace vclcanvas
                 // created GraphicObject, which possibly cached
                 // display bitmap - return cache object, to retain
                 // that information.
-                return uno::Reference< rendering::XCachedPrimitive >(
+                return uno::Reference< vclcanvas::XCachedPrimitive >(
                     new CachedBitmap( std::move(pGrfObj),
                                       aPt,
                                       aSz,
@@ -649,10 +649,10 @@ namespace vclcanvas
         }
 
         // Nothing rendered
-        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
+        return uno::Reference< vclcanvas::XCachedPrimitive >(nullptr);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const vclcanvas::XCanvas*                   pCanvas,
+    uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::drawBitmap( const vclcanvas::XCanvas*                   pCanvas,
                                                                             const uno::Reference< rendering::XBitmap >& xBitmap,
                                                                             const rendering::ViewState&                 viewState,
                                                                             const rendering::RenderState&               renderState )
@@ -664,7 +664,7 @@ namespace vclcanvas
                                false );
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const vclcanvas::XCanvas*                      pCanvas,
+    uno::Reference< vclcanvas::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const vclcanvas::XCanvas*                      pCanvas,
                                                                                      const uno::Reference< rendering::XBitmap >&    xBitmap,
                                                                                      const rendering::ViewState&                    viewState,
                                                                                      const rendering::RenderState&                  renderState )
