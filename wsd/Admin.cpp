@@ -624,7 +624,7 @@ void Admin::pollingThread()
     std::chrono::steady_clock::time_point lastCleanup = lastCPU;
 
     const static auto SystemClockTicks = sysconf(_SC_CLK_TCK);
-    constexpr auto MaxProximityToTargetPeriod = MinStatsIntervalMs / 8;
+    static constexpr auto MaxProximityToTargetPeriod = MinStatsIntervalMs / 8;
 
     while (!isStop() && !SigUtil::getShutdownRequestFlag())
     {

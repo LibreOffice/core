@@ -176,7 +176,7 @@ RequestDetails::Method RequestDetails::stringToMethod(const std::string_view met
 void RequestDetails::dehexify()
 {
     // For now, we only hexify cool/ URLs.
-    constexpr std::string_view Prefix = "cool/0x";
+    static constexpr std::string_view Prefix = "cool/0x";
     constexpr auto PrefixLen = Prefix.size();
 
     const auto hexPos = _uriString.find(Prefix);

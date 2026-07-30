@@ -102,7 +102,7 @@ private:
             const std::string str = os.str();
             insert(end(), str.c_str(), str.c_str() + str.size());
             insert(end(), msg, msg + len);
-            constexpr const char *terminator = "\n";
+            static constexpr const char *terminator = "\n";
             insert(end(), terminator, terminator + 1);
         }
     };

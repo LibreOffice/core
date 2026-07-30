@@ -1306,7 +1306,7 @@ bool ServerSocket::bind([[maybe_unused]] Type type, [[maybe_unused]] int port)
 
 bool ServerSocket::isUnrecoverableAcceptError(const int cause) const
 {
-    constexpr const char * messagePrefix = "Failed to accept. (errno: ";
+    static constexpr const char * messagePrefix = "Failed to accept. (errno: ";
     switch(cause)
     {
         case EINTR:
@@ -1678,11 +1678,11 @@ ssize_t StreamSocket::readHeader(const std::string_view clientName, std::istream
                                  Poco::Net::HTTPRequest& request,
                                  std::chrono::duration<float, std::milli> delayMs)
 {
-    constexpr std::chrono::duration<float, std::milli> delayMax =
+    static constexpr std::chrono::duration<float, std::milli> delayMax =
         std::chrono::duration_cast<std::chrono::milliseconds>(SocketPoll::DefaultPollTimeoutMicroS);
 
     // Find the end of the header, if any.
-    constexpr std::string_view marker("\r\n\r\n");
+    static constexpr std::string_view marker("\r\n\r\n");
     if (!Util::seekToMatch(message, marker))
     {
         LOG_TRC("parseHeader: " << clientName << " doesn't have enough data for the header yet. delay " << delayMs.count() << "ms");

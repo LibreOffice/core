@@ -282,7 +282,7 @@ inline std::string_view encodeId(char* buffer, std::size_t size, const std::uint
 
     // Hexify the remaining digits. We emit two chars per iteration when the
     // remaining bit count is byte-aligned, and a single leading char otherwise.
-    constexpr const char* const Hex = "0123456789abcdef";
+    static constexpr const char* const Hex = "0123456789abcdef";
     int bits = highNibble + 4; // total bits of @number still to emit
     if ((bits & 7) != 0) // odd hex digits remaining: emit the leading nibble
     {

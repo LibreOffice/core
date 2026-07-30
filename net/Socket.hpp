@@ -888,7 +888,7 @@ public:
     /// hitting an error. Always polls at least once. Returns last rc.
     int pollUntilDeadline(std::chrono::steady_clock::time_point deadline)
     {
-        constexpr auto zero = std::chrono::microseconds::zero();
+        static constexpr auto zero = std::chrono::microseconds::zero();
         auto timeoutMax = std::max(std::chrono::duration_cast<std::chrono::microseconds>(
                                        deadline - std::chrono::steady_clock::now()),
                                    zero);

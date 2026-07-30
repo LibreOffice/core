@@ -132,8 +132,8 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
 {
     Poco::URI requestUri(request.getURI());
     const Poco::Path path = requestUri.getPath();
-    constexpr std::string_view prefix = "/wopi/files";
-    constexpr std::string_view suffix = "/contents";
+    static constexpr std::string_view prefix = "/wopi/files";
+    static constexpr std::string_view suffix = "/contents";
     std::string localPath;
     if (path.toString().ends_with(suffix))
     {

@@ -286,7 +286,7 @@ bool KitQueue::elideDuplicateCallback(int view, COKitCallbackType type, const st
 
         case COKitCallbackType::STATE_CHANGED: // state changed
         {
-            constexpr std::string_view unoPrefix(".uno:");
+            static constexpr std::string_view unoPrefix(".uno:");
             if (!payload.starts_with(unoPrefix))
                 return false;
 

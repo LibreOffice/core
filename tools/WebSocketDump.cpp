@@ -95,7 +95,7 @@ private:
         LOG_TRC('#' << socket->getFD() << " handling incoming " << in.size() << " bytes");
 
         // Find the end of the header, if any.
-        constexpr std::string_view marker("\r\n\r\n");
+        static constexpr std::string_view marker("\r\n\r\n");
         auto itBody = std::search(in.begin(), in.end(),
                                   marker.begin(), marker.end());
         if (itBody == in.end())

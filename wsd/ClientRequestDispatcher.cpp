@@ -946,7 +946,7 @@ ssize_t ClientRequestDispatcher::readHeader(const std::shared_ptr<StreamSocket>&
     _headerPos = _headerPos > buffer.size() ? 0 : _headerPos; // Recover in release builds.
 
     // Find the end of the header, if any.
-    constexpr std::string_view marker("\r\n\r\n");
+    static constexpr std::string_view marker("\r\n\r\n");
     const auto headerSize = buffer.find(marker, _headerPos);
     if (headerSize == std::string_view::npos)
     {
@@ -960,7 +960,7 @@ ssize_t ClientRequestDispatcher::readHeader(const std::shared_ptr<StreamSocket>&
     // We found the end-of-header marker; Clear to allow for scanning again.
     _headerPos = 0;
 
-    constexpr std::chrono::duration<float, std::milli> DelayMax =
+    static constexpr std::chrono::duration<float, std::milli> DelayMax =
         std::chrono::duration_cast<std::chrono::milliseconds>(SocketPoll::DefaultPollTimeoutMicroS);
     const size_t messagesize = buffer.size();
     try
@@ -1233,7 +1233,7 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         {
             // File server
             assert(socket && "Must have a valid socket");
-            constexpr std::string_view ProxyRemoteStatic = "/remote/static/";
+            static constexpr std::string_view ProxyRemoteStatic = "/remote/static/";
             const auto& uri = requestDetails.getURI();
             const auto pos = uri.find(ProxyRemoteStatic);
             if (pos != std::string::npos)
@@ -2889,7 +2889,7 @@ bool ClientRequestDispatcher::handleClientWsUpgrade(const Poco::Net::HTTPRequest
     catch (const std::exception& exc)
     {
         LOG_ERR("Error while handling Client WS Request: " << exc.what());
-        constexpr std::string_view msg = "error: cmd=internal kind=load";
+        static constexpr std::string_view msg = "error: cmd=internal kind=load";
         ws->sendTextMessage(msg);
         ws->shutdown(WebSocketHandler::StatusCodes::ENDPOINT_GOING_AWAY, msg);
         socket->ignoreInput();

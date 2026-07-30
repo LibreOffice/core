@@ -519,7 +519,7 @@ void cleanupCollabBrokers()
     // Grace period before reclaiming an idle broker, so a transient
     // client disconnect (network blip) can reconnect and re-find the
     // same broker with its state intact.
-    constexpr auto grace = std::chrono::seconds(30);
+    static constexpr auto grace = std::chrono::seconds(30);
 
     std::lock_guard<std::mutex> lock(CollabBrokersMutex);
 

@@ -238,8 +238,8 @@ namespace Util
 
     std::string cleanupFilename(const std::string &filename)
     {
-        constexpr std::string_view mtch(",/?:@&=+$#'\"");
-        constexpr std::string_view repl("------------");
+        static constexpr std::string_view mtch(",/?:@&=+$#'\"");
+        static constexpr std::string_view repl("------------");
         return replaceAllOf(filename, mtch, repl);
     }
 

@@ -2432,7 +2432,7 @@ bool Document::forwardToChild(const std::string_view prefix, const std::vector<c
         {
             std::shared_ptr<ChildSession> session = it->second;
 
-            constexpr std::string_view disconnect("disconnect");
+            static constexpr std::string_view disconnect("disconnect");
             if (size == disconnect.size() &&
                 strncmp(data, disconnect.data(), disconnect.size()) == 0)
             {
@@ -4169,7 +4169,7 @@ void lokit_main(
             copyCertificateDatabaseToTmp(jailPath);
 
             // HOME must be writable, so create it in /tmp.
-            constexpr const char* HomePathInJail = "/tmp/home";
+            static constexpr const char* HomePathInJail = "/tmp/home";
             Poco::File(Poco::Path(jailPath, HomePathInJail)).createDirectories();
             ::setenv("HOME", HomePathInJail, 1);
 

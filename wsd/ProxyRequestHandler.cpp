@@ -34,7 +34,7 @@ void ProxyRequestHandler::handleRequest(const std::string& relPath,
 {
 
     Poco::URI uriProxy(serverUri);
-    constexpr const auto zero = std::chrono::system_clock::time_point();
+    static constexpr const auto zero = std::chrono::system_clock::time_point();
     const auto timeNow = std::chrono::system_clock::now();
 
     if (MaxAge > zero && timeNow > MaxAge)
@@ -58,7 +58,7 @@ void ProxyRequestHandler::handleRequest(const std::string& relPath,
     http::Request requestProxy(uriProxy.getPathAndQuery());
     std::weak_ptr<StreamSocket> socketWeak(socket);
     http::Session::FinishedCallback proxyCallback =
-        [socketWeak, zero](const std::shared_ptr<http::Session>& httpSession)
+        [socketWeak](const std::shared_ptr<http::Session>& httpSession)
             {
                 std::shared_ptr<StreamSocket> destSocket = socketWeak.lock();
                 if (!destSocket)

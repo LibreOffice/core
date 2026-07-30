@@ -2712,7 +2712,7 @@ void ClientSession::writeQueuedMessages(std::size_t capacity)
 // seekg variant which uses seekoff which was implemented
 bool ClientSession::postProcessCopyPayload(std::istream& in, std::ostream& out)
 {
-    constexpr std::string_view textPlain = "text/plain";
+    static constexpr std::string_view textPlain = "text/plain";
 
     char data[textPlain.size()];
     in.read(data, textPlain.size());
@@ -4137,7 +4137,7 @@ void ClientSession::handleTileInvalidation(const std::string& message,
     TileWireId wireId = 0;
     Util::Rectangle invalidateRect = TileCache::parseInvalidateMsg(message, part, mode, wireId);
 
-    constexpr SplitPaneName panes[4] = {
+    static constexpr SplitPaneName panes[4] = {
         TOPLEFT_PANE,
         TOPRIGHT_PANE,
         BOTTOMLEFT_PANE,
@@ -4279,7 +4279,7 @@ bool ClientSession::isTileInsideVisibleArea(const TileDesc& tile) const
         return tile.intersects( _clientVisibleArea );
     }
 
-    constexpr SplitPaneName panes[4] = {
+    static constexpr SplitPaneName panes[4] = {
         TOPLEFT_PANE,
         TOPRIGHT_PANE,
         BOTTOMLEFT_PANE,
@@ -4348,7 +4348,7 @@ std::string ClientSession::processSVGContent(const std::string& svg)
     std::string::size_type pos = 0;
     for (;;)
     {
-        constexpr std::string_view prefix = "src=\"file:///tmp/";
+        static constexpr std::string_view prefix = "src=\"file:///tmp/";
         const auto start = svg.find(prefix, pos);
         if (start == std::string::npos)
         {

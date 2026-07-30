@@ -742,7 +742,7 @@ void DocumentBroker::pollThread()
             // We have some activity ongoing.
             default:
             {
-                constexpr std::chrono::seconds postponeAutosaveDuration(30);
+                static constexpr std::chrono::seconds postponeAutosaveDuration(30);
                 LOG_TRC("Postponing autosave check by " << postponeAutosaveDuration);
                 _saveManager.postponeAutosave(postponeAutosaveDuration);
             }
@@ -865,7 +865,7 @@ void DocumentBroker::pollThread()
     // Flush socket data first, if any.
     if (_poll->getSocketCount())
     {
-        constexpr std::chrono::microseconds flushTimeoutMicroS(std::chrono::seconds(2));
+        static constexpr std::chrono::microseconds flushTimeoutMicroS(std::chrono::seconds(2));
         LOG_INF("Flushing " << _poll->getSocketCount() << " sockets for doc [" << _docKey
                             << "] for " << flushTimeoutMicroS);
 
@@ -4888,7 +4888,7 @@ std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
                                   << id << ']');
             if (ws)
             {
-                constexpr std::string_view msg("error: cmd=load kind=docunloading");
+                static constexpr std::string_view msg("error: cmd=load kind=docunloading");
                 ws->sendTextMessage(msg);
                 ws->shutdown(true, msg);
             }
@@ -4948,7 +4948,7 @@ std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
 
     if (ws)
     {
-        constexpr std::string_view msg("error: cmd=internal kind=load");
+        static constexpr std::string_view msg("error: cmd=internal kind=load");
         ws->sendTextMessage(msg);
         ws->shutdown(true, msg);
     }
@@ -6651,7 +6651,7 @@ void DocumentBroker::onUrpMessage(const char* data, size_t len)
     const auto session = getWriteableSession();
     if (session)
     {
-        constexpr std::string_view header = "urp: ";
+        static constexpr std::string_view header = "urp: ";
         const size_t responseSize = header.size() + len;
         std::vector<char> response(responseSize);
         std::memcpy(response.data(), header.data(), header.size());

@@ -163,7 +163,7 @@ std::pair<T, StrToState> parseStrTo(const std::string_view str, std::size_t& ori
     if (offset < len)
     {
         // Overflow-checked loop for remaining digits beyond digits10.
-        constexpr auto cutoff = std::numeric_limits<T>::max() / 10;
+        static constexpr auto cutoff = std::numeric_limits<T>::max() / 10;
         const Signed cutlim =
             (neg ? -(std::numeric_limits<T>::min() % 10) : std::numeric_limits<T>::max() % 10);
 

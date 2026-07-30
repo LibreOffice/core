@@ -2482,7 +2482,7 @@ bool ChildSession::renderSearchResult(const char* buffer, int length, const Stri
 
         if (Png::encodeBufferToPNG(bitmapBuffer, width, height, output, tileMode))
         {
-            constexpr std::string_view header = "rendersearchresult:\n";
+            static constexpr std::string_view header = "rendersearchresult:\n";
             const size_t responseSize = header.size() + output.size();
             std::vector<char> response(responseSize);
             std::copy(header.begin(), header.end(), response.begin());
@@ -3088,8 +3088,8 @@ namespace
 
 std::string extractCertificate(const std::string & certificate)
 {
-    constexpr std::string_view header("-----BEGIN CERTIFICATE-----");
-    constexpr std::string_view footer("-----END CERTIFICATE-----");
+    static constexpr std::string_view header("-----BEGIN CERTIFICATE-----");
+    static constexpr std::string_view footer("-----END CERTIFICATE-----");
 
     size_t pos1 = certificate.find(header);
     if (pos1 == std::string::npos)
@@ -3521,7 +3521,7 @@ bool ChildSession::renderShapeSelection(const StringVector& tokens)
     const std::size_t outputSize = getLOKitDocument()->renderShapeSelection(&output);
     if (output != nullptr && outputSize > 0)
     {
-        constexpr std::string_view header = "shapeselectioncontent:\n";
+        static constexpr std::string_view header = "shapeselectioncontent:\n";
         const size_t responseSize = header.size() + outputSize;
         std::unique_ptr<char[]> response(new char[responseSize]);
         std::memcpy(response.get(), header.data(), header.size());
@@ -3602,7 +3602,7 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
         return false;
     }
     std::string_view const full(buffer, length);
-    constexpr std::string_view prefix("executescript ");
+    static constexpr std::string_view prefix("executescript ");
     auto const idEnd = full.find(' ', prefix.size());
     if (idEnd == std::string_view::npos) {
         sendTextFrameAndLogError("error: cmd=executescript kind=syntax");
@@ -3659,7 +3659,7 @@ bool ChildSession::proxyReturn(char const * buffer, int length) {
     // Wire format: "proxyreturn <callId> <json-value>"; hand off to deliverProxyResult to
     // unblock the engine-side proxy spinning on Application::Yield for this callId:
     std::string_view const full(buffer, length);
-    constexpr std::string_view prefix("proxyreturn ");
+    static constexpr std::string_view prefix("proxyreturn ");
     auto const idEnd = full.find(' ', prefix.size());
     if (idEnd == std::string_view::npos)
     {
