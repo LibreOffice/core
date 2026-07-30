@@ -282,8 +282,8 @@ public class OdtReaderTests
         // "Not implemented" and "not a word-processing document" are different answers, and a
         // caller deciding whether to try another reader needs to tell them apart.
         UnsupportedFormatException unimplemented = Should.Throw<UnsupportedFormatException>(
-            () => Open("prose-docx.docx"));
-        unimplemented.Format.ShouldBe(DocumentFormat.Docx);
+            () => Open("prose-doc.doc"));
+        unimplemented.Format.ShouldBe(DocumentFormat.Doc);
         unimplemented.Message.ShouldContain("not implemented yet");
 
         UnsupportedFormatException wrongFamily = Should.Throw<UnsupportedFormatException>(

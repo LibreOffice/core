@@ -62,16 +62,16 @@ public sealed class FormatCatalogue : IFormatCatalogue
         // ---- Word processing: OOXML --------------------------------------------------
         New(DocumentFormat.Docx, DocumentFamily.WordProcessing, ContainerKind.Zip, "docx",
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "Word 2007-365"),
+            "Word 2007-365", read: true),
         New(DocumentFormat.Docm, DocumentFamily.WordProcessing, ContainerKind.Zip, "docm",
             "application/vnd.ms-word.document.macroEnabled.12",
-            "Word 2007-365 (macro-enabled)", macros: true),
+            "Word 2007-365 (macro-enabled)", macros: true, read: true),
         New(DocumentFormat.Dotx, DocumentFamily.WordProcessing, ContainerKind.Zip, "dotx",
             "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
-            "Word 2007-365 Template", template: true),
+            "Word 2007-365 Template", template: true, read: true),
         New(DocumentFormat.Dotm, DocumentFamily.WordProcessing, ContainerKind.Zip, "dotm",
             "application/vnd.ms-word.template.macroEnabledTemplate.12",
-            "Word 2007-365 Template (macro-enabled)", template: true, macros: true),
+            "Word 2007-365 Template (macro-enabled)", template: true, macros: true, read: true),
 
         // ---- Word processing: legacy binary ------------------------------------------
         // Macro-capable: WW8 stores VBA in a Macros/ storage inside the same OLE2 file.

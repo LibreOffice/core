@@ -1,6 +1,6 @@
-using System.Globalization;
 using System.Text;
 using System.Xml.Linq;
+using Paperless.Core.Numbering;
 
 namespace Paperless.OpenDocument.Styles;
 
@@ -182,7 +182,7 @@ public sealed class OdfListStyle
         if (definition.Kind == OdfListLabelKind.Bullet)
         {
             return definition.BulletCharacter is { Length: > 0 } bullet
-                ? definition.Prefix + NormaliseBullet(bullet) + definition.Suffix
+                ? definition.Prefix + OutlineNumbers.NormaliseBullet(bullet) + definition.Suffix
                 : null;
         }
         if (definition.Kind == OdfListLabelKind.Image) return null;
@@ -229,73 +229,10 @@ public sealed class OdfListStyle
     public static string FormatNumber(int value, string? format, bool letterSynchronised = false)
         => format switch
         {
-            "a" => ToAlphabetic(value, 'a', letterSynchronised),
-            "A" => ToAlphabetic(value, 'A', letterSynchronised),
-            "i" => ToRoman(value).ToLowerInvariant(),
-            "I" => ToRoman(value),
-            _ => value.ToString(CultureInfo.InvariantCulture),
+            "a" => OutlineNumbers.Alphabetic(value, upperCase: false, letterSynchronised),
+            "A" => OutlineNumbers.Alphabetic(value, upperCase: true, letterSynchronised),
+            "i" => OutlineNumbers.Roman(value, upperCase: false),
+            "I" => OutlineNumbers.Roman(value, upperCase: true),
+            _ => OutlineNumbers.Digits(value),
         };
-
-    /// <summary>
-    /// Replaces a Private Use Area bullet with U+2022 BULLET.
-    /// </summary>
-    /// <remarks>
-    /// Impress writes its default bullet as a code point in a Private Use Area, drawn from a
-    /// symbol font (<c>starbats</c>, <c>OpenSymbol</c>). A PUA code point means nothing outside
-    /// the font that defines it, so passing it through produces text no consumer can interpret
-    /// — and LibreOffice's own HTML export substitutes a bullet in exactly this case, so this
-    /// agrees with the reference rather than departing from it.
-    /// </remarks>
-    private static string NormaliseBullet(string bullet)
-    {
-        if (bullet.Length != 1) return bullet;
-        char character = bullet[0];
-        return character is >= '\uE000' and <= '\uF8FF' ? "•" : bullet;
-    }
-
-    private static string ToAlphabetic(int value, char first, bool synchronised)
-    {
-        if (value < 1) return value.ToString(CultureInfo.InvariantCulture);
-
-        if (synchronised)
-        {
-            // 27 becomes "aa", 53 "aaa": the letter repeats rather than counting in base 26.
-            int repeats = ((value - 1) / 26) + 1;
-            char letter = (char)(first + ((value - 1) % 26));
-            return new string(letter, repeats);
-        }
-
-        // Bijective base 26: 1 -> "a", 26 -> "z", 27 -> "aa", 28 -> "ab".
-        StringBuilder result = new();
-        int remaining = value;
-        while (remaining > 0)
-        {
-            int digit = (remaining - 1) % 26;
-            result.Insert(0, (char)(first + digit));
-            remaining = (remaining - 1) / 26;
-        }
-        return result.ToString();
-    }
-
-    private static string ToRoman(int value)
-    {
-        // Roman numerals have no representation for zero or negatives, and LibreOffice
-        // falls back to the bare number there too.
-        if (value < 1 || value > 3999) return value.ToString(CultureInfo.InvariantCulture);
-
-        ReadOnlySpan<int> magnitudes = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
-        string[] numerals = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"];
-
-        StringBuilder result = new();
-        int remaining = value;
-        for (int i = 0; i < magnitudes.Length; i++)
-        {
-            while (remaining >= magnitudes[i])
-            {
-                result.Append(numerals[i]);
-                remaining -= magnitudes[i];
-            }
-        }
-        return result.ToString();
-    }
 }

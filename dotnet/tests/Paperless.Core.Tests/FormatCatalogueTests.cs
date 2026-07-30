@@ -49,6 +49,7 @@ public class FormatCatalogueTests
         DocumentFormat[] readable =
         [
             DocumentFormat.Odt, DocumentFormat.Ott, DocumentFormat.Fodt,
+            DocumentFormat.Docx, DocumentFormat.Docm, DocumentFormat.Dotx, DocumentFormat.Dotm,
             DocumentFormat.Ods, DocumentFormat.Ots, DocumentFormat.Fods,
             DocumentFormat.Odp, DocumentFormat.Otp, DocumentFormat.Fodp,
         ];

@@ -43,12 +43,32 @@ Order chosen so each is verifiable before the next gets harder.
 for layout, and ODT will need a second pass through it once that exists; the extraction path
 does not need it and must not be made to pay for it.
 
-### DOCX
-- [ ] `document.xml` body; `styles.xml`; `numbering.xml`; `settings.xml`; `fontTable.xml`
-- [ ] Headers/footers, footnotes/endnotes, comments
-- [ ] Compatibility flags from `settings.xml` — these genuinely change layout, and ignoring
-      them makes documents authored by older Word versions lay out wrongly
-- [ ] `w:drawing` and legacy `w:pict` via `Paperless.Ooxml`
+### DOCX — extraction done
+- [x] `document.xml` body; `styles.xml`; `numbering.xml`; parts located by relationship with
+      the conventional name only as a fallback
+- [x] Style resolution across every layer, with **ECMA-376 §17.7.3's toggle rule**: bold set by
+      both the paragraph style and the character style comes out *off*, while direct formatting
+      is absolute. This is the single most common way a DOCX reader gets emphasis wrong; the
+      four cases are pinned by `WordToggleTests` and were verified against LibreOffice's HTML
+      export, where bold is visible.
+- [x] Numbering: `w:abstractNum` definitions against `w:num` instances, level overrides,
+      `w:lvlText` templates, `w:isLgl`, style-linked lists, and the `numId` of zero that means
+      "not numbered"
+- [x] Fields: the `w:fldChar` state machine, so the instruction is skipped and the cached result
+      kept. `w:fldSimple` too.
+- [x] Tracked changes: `w:ins` content read, `w:del`/`w:delText` skipped — deleted text is still
+      in the file and emitting it invents content
+- [x] Headers/footers (only the parts a section names), footnotes/endnotes with computed
+      citations, comments with their author
+- [x] `w:drawing` and legacy `w:pict`: images recorded, text boxes hoisted into their own
+      section, and the DrawingML/VML pair read once rather than twice
+- [x] Tables: `w:gridSpan`, and `w:vMerge`'s top-and-continuation encoding turned into a row
+      span, which needs the rows drafted before they are materialised
+- [ ] `settings.xml` compatibility flags — parsed and exposed, nothing reads them yet. They
+      genuinely change layout maths, so layout will need a handful of them.
+- [ ] `w:altChunk`: an embedded foreign document, reported as a diagnostic rather than read
+- [ ] `fontTable.xml`, needed for font resolution rather than extraction
+- [ ] Theme colours for `w:color w:themeColor` references
 
 ### DOC (WW8) — hardest
 - [ ] FIB; the text streams; `0Table`/`1Table`

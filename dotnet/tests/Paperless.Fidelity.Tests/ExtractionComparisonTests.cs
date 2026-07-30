@@ -8,7 +8,7 @@ using Shouldly;
 namespace Paperless.Fidelity.Tests;
 
 /// <summary>
-/// Compares Paperless ODF extraction against LibreOffice's own text export.
+/// Compares Paperless extraction against LibreOffice's own text export.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -25,7 +25,7 @@ namespace Paperless.Fidelity.Tests;
 /// keeps all five.
 /// </para>
 /// </remarks>
-public class OdfExtractionComparisonTests : IDisposable
+public class ExtractionComparisonTests : IDisposable
 {
     private readonly LibreOfficeRunner _libreOffice = new();
     private readonly string _workDirectory = Path.Combine(
@@ -72,9 +72,35 @@ public class OdfExtractionComparisonTests : IDisposable
             TextComparer.DescribeFirstDivergence(reference, actual));
     }
 
+    /// <summary>
+    /// Tokens a document's reference output contains that Paperless deliberately does not
+    /// produce, with the reason.
+    /// </summary>
+    /// <remarks>
+    /// Deliberately tiny and named one token at a time. A blanket loosening of the comparison
+    /// would hide the next real regression; an explicit entry with a reason is a decision that
+    /// can be reviewed.
+    /// </remarks>
+    private static HashSet<string> KnownDeviations(string name) => name switch
+    {
+        // LibreOffice numbers this document's single footnote 0 rather than 1. It is a
+        // LibreOffice import quirk, not a difference of opinion: with the section-level
+        // w:footnotePr removed from the same file LibreOffice renders 1, and on a minimal DOCX
+        // carrying one footnote and no footnote properties at all both LibreOffice and Paperless
+        // render 1. ECMA-376 §17.11.17 puts the default w:numStart at 1, so 1 is what the file
+        // says. Copying the quirk is explicitly a non-goal.
+        "word-features.docx" or "word-features.dotx" => new HashSet<string>(StringComparer.Ordinal)
+        {
+            "reference0",
+        },
+        _ => new HashSet<string>(StringComparer.Ordinal),
+    };
+
     [Theory]
     [InlineData("text-features.odt")]
     [InlineData("text-features-flat.fodt")]
+    [InlineData("word-features.docx")]
+    [InlineData("word-features.dotx")]
     public void NothingTheReferenceFindsIsMissingFromTheFeatureDocument(string name)
     {
         RequireLibreOffice();
@@ -82,8 +108,10 @@ public class OdfExtractionComparisonTests : IDisposable
         string reference = Reference(name);
         string actual = Extract(name);
 
+        HashSet<string> allowed = KnownDeviations(name);
         IReadOnlyList<(string Token, int Missing)> missing =
-            TextComparer.FindMissingTokens(reference, actual);
+            [.. TextComparer.FindMissingTokens(reference, actual)
+                            .Where(m => !allowed.Contains(m.Token))];
 
         missing.ShouldBeEmpty(
             "content the reference filter found is absent from the Paperless extraction: "

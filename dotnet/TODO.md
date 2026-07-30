@@ -1,28 +1,30 @@
 # Paperless — master plan
 
-Status: **Phase 0 complete; Phase 1 under way.** ODF reads — `odt ods odp` plus their
-template and flat-XML variants, verified against LibreOffice's own text export. Nothing else
-reads yet.
+Status: **Phase 0 complete; Phase 1 under way.** ODF and OOXML word processing read — `odt ods
+odp` plus their template and flat-XML variants, and `docx docm dotx dotm` — all verified against
+LibreOffice's own text export.
 
 Each library has its own `TODO.md` with detail; this file is the ordering and the reasoning
 behind it.
 
 ## Start here (next session)
 
-Phase 1, next task: **OOXML extraction** (`docx`/`xlsx`/`pptx`). Read
-`src/Paperless.Ooxml/TODO.md` and `research/02-writer.md` section C.1 first, and build the
-shared theme and relationship handling in `Paperless.Ooxml` before any one format.
+Phase 1, next task: **RTF extraction**, then **DOC (WW8)**, then `xlsx`/`pptx`. Read
+`src/Paperless.WordProcessing/TODO.md` and `research/02-writer.md` sections C.2 and C.3.
 
-The ODF work is the template to follow, and two of its decisions should carry over
-deliberately rather than be rediscovered:
+Three decisions from the ODF and DOCX work should carry over rather than be rediscovered:
 
-- **Keep "set here", "inherited" and "defaulted" apart.** `OdfPropertyOrigin` and the
-  two-pass cascade in `OdfStyles.ResolveProperty` are what make hard formatting
-  distinguishable from an inherited style, and DOCX's `w:pPr`/`w:rPr` over `styles.xml` over
-  `w:docDefaults` needs exactly the same distinction.
-- **One content walker per family group, not per format.** `OdfContentReader` serves all
-  three ODF families because the text content model is shared; DrawingML text bodies are
-  similarly shared across DOCX, XLSX and PPTX.
+- **Keep "set here", "inherited" and "defaulted" apart.** `OdfPropertyOrigin` and
+  `WordPropertyOrigin` are what make hard formatting distinguishable from an inherited style —
+  and in DOCX the toggle rule is *impossible* to implement without knowing which layer set a
+  value, which is the concrete payoff for not collapsing the three cases.
+- **One content walker per family group, not per format.** `OdfContentReader` serves all three
+  ODF families because the text content model is shared; DrawingML text bodies are similarly
+  shared across DOCX, XLSX and PPTX, so `Paperless.Ooxml` is where that belongs.
+- **Normalise the input once, at load.** Strict-versus-transitional namespaces and
+  `mc:AlternateContent` are both handled in `OoxmlXml.Normalise` rather than at every point that
+  walks the tree. The bug that prevents — a text box extracted twice — is invisible until a
+  diff.
 
 Before trusting any comparison, run
 `.claude/skills/libreoffice-reference/scripts/check-env.sh`. **A fresh container will not
@@ -48,12 +50,13 @@ binary.
 | ✅ | Four comparison skills with verified working scripts |
 | ✅ | Dependencies audited: all permissive, none gated behind a build-time licence check |
 | ✅ | ODF extraction: `odt ods odp ott ots otp fodt fods fodp`, with style resolution, metadata, text, lists, tables, notes, comments, frames and shape text |
+| ✅ | DOCX extraction: `docx docm dotx dotm`, with the §17.7.3 toggle rule, numbering, fields, tracked changes, tables with vertical merges, notes, comments, headers/footers and text boxes |
 | ✅ | `paperless extract` and `paperless metadata`, text and JSON |
 | ✅ | `LibreOfficeRunner` and an automated extraction comparison against LibreOffice, skipping cleanly when it is not installed |
 
 | Not started | |
 |---|---|
-| ❌ | OOXML, legacy binary, RTF and CSV readers |
+| ❌ | `xlsx`/`pptx`, legacy binary, RTF and CSV readers |
 | ❌ | Decryption (detection works; decryption does not) |
 | ❌ | Text layout: fonts, metrics, shaping, line breaking |
 | ❌ | Layout engines and rendering backends |
@@ -114,8 +117,11 @@ Per format: metadata, then text, then tables/structure.
       corpus accounts for every difference (see `src/Paperless.OpenDocument/TODO.md`).
       Remaining ODF gaps are tracked there — tracked changes, number-format application,
       embedded objects, and the OpenOffice.org 1.x namespaces.
-- [ ] OOXML (`docx xlsx pptx` + variants). Shared theme/relationship handling in
-      `Paperless.Ooxml` first.
+- [ ] OOXML (`docx xlsx pptx` + variants). Shared handling in `Paperless.Ooxml` first — done:
+      namespace normalisation, `mc:AlternateContent` resolution and `docProps` metadata.
+      - [x] `docx docm dotx dotm`. The interesting part was ECMA-376 §17.7.3's toggle rule; see
+            `src/Paperless.WordProcessing/TODO.md`.
+      - [ ] `xlsx` and `pptx`.
 - [ ] Legacy binary (`doc xls ppt`). Hardest. Needs the record-stream reader, sprm/BIFF
       decoding, the WW8 piece table, and codepage handling.
 - [ ] RTF, CSV.
@@ -183,6 +189,19 @@ will differ for reasons that have nothing to do with drawing.
 - [ ] Public API review, then a first release.
 
 ---
+
+## Known deviations from LibreOffice
+
+Recorded rather than reproduced. Where LibreOffice renders a document wrongly, copying the
+defect is explicitly a non-goal; each entry here is a place the comparison harness allows a
+difference on purpose, with the evidence that Paperless is the one following the format.
+
+**Footnote numbering with a section-level `w:footnotePr`.** In
+`tests/corpus/features/word-features.docx`, LibreOffice 24.2.7.2 numbers the single footnote 0;
+Paperless numbers it 1. ECMA-376 §17.11.17 puts the default `w:numStart` at 1, and the quirk is
+LibreOffice's: removing the section-level `w:footnotePr` from the same file makes LibreOffice
+render 1, and on a minimal DOCX with one footnote and no footnote properties at all the two
+agree on 1. Allowed by name in `ExtractionComparisonTests.KnownDeviations`.
 
 ## Settled decisions
 
