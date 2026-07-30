@@ -11,6 +11,7 @@
 
 #include <docsh.hxx>
 #include <editable.hxx>
+#include <rangelst.hxx>
 #include <undoconvert.hxx>
 
 namespace sc
@@ -45,6 +46,9 @@ bool ConvertFormulaToValueOperation::runImplementation()
 
     sc::TableValues aUndoVals(aRange);
     sc::TableValues* pUndoVals = mbRecord ? &aUndoVals : nullptr;
+
+    // A formula that nothing has read since its last change has no result to convert yet
+    rDoc.InterpretCellsIfNeeded(ScRangeList(aRange));
 
     rDoc.ConvertFormulaToValue(aRange, pUndoVals);
 

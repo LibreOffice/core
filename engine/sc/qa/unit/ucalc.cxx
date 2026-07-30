@@ -6305,6 +6305,29 @@ CPPUNIT_TEST_FIXTURE(Test, testFormulaToValue)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFormulaToValueUninterpreted)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // Nothing reads the cell after entry, so its result is not computed yet
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=1+1"_ustr);
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT(pFC->GetDirty());
+
+    m_xDocShell->GetDocFunc().ConvertFormulaToValue(ScRange(ScAddress(0, 0, 0)), false);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_VALUE, m_pDoc->GetCellType(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFormulaToValue2)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
