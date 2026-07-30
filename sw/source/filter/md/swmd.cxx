@@ -43,7 +43,6 @@
 #include <frmatr.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
-#include <unotools/securityoptions.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <comphelper/random.hxx>
@@ -63,16 +62,9 @@
 #include <unicode/ucsdet.h>
 #include <rtl/tencinfo.h>
 #include <unotextrange.hxx>
+#include <tools/urlobj.hxx>
 
 #include "swmd.hxx"
-
-namespace
-{
-bool allowAccessLink(const SwDoc& rDoc)
-{
-    return !SvtSecurityOptions::isUntrustedReferer(rDoc.GetLinkReferer());
-}
-}
 
 SwNumRuleItem SwMarkdownParser::GetNumRuleItem(const UIName& rName, sal_uInt8 nLevel) const
 {
@@ -682,7 +674,7 @@ void SwMarkdownParser::InsertImage(const MDImage& rImg)
     }
 
     Size aGrfSz(0, 0);
-    if (allowAccessLink(*m_xDoc) && !aGraphicURL.IsExoticProtocol() && !sGrfNm.isEmpty())
+    if (m_xDoc->AllowAccessLink() && !aGraphicURL.IsExoticProtocol() && !sGrfNm.isEmpty())
     {
         GraphicDescriptor aDescriptor(aGraphicURL);
         if (aDescriptor.Detect(true))
