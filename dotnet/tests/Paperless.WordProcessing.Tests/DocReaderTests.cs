@@ -154,10 +154,22 @@ public class DocReaderTests
         List<ContentTableRow> rows = [.. table.Children.Cast<ContentTableRow>()];
         rows.Count.ShouldBe(3);
 
+        table.ColumnCount.ShouldBe(3);
         rows[0].GetText().ShouldBe("Head A\tHead B\tHead C\n");
-        rows[1].Children.Count.ShouldBe(2);
-        ((ContentTableCell)rows[1].Children[0]).GetText().ShouldBe("Merged across two columns");
         rows[2].GetText().ShouldBe("Row two A\t\tRow two C\n");
+
+        // LibreOffice writes the merge as geometry alone: no cell carries a merge flag, and the
+        // merged cell's right edge simply reaches where two columns end in the rows around it. So the
+        // span comes from the table's column grid, exactly as it does in RTF.
+        rows[1].Children.Count.ShouldBe(2);
+        ContentTableCell merged = (ContentTableCell)rows[1].Children[0];
+        merged.ColumnSpan.ShouldBe(2);
+        merged.GetText().ShouldBe("Merged across two columns");
+        ((ContentTableCell)rows[1].Children[1]).Column.ShouldBe(2);
+
+        // sprmTTableHeader sits on the row-end paragraph of each repeating row, so only the run of
+        // them at the top of the table counts as the header.
+        table.HeaderRowCount.ShouldBe(1);
     }
 
     [Fact]
@@ -170,6 +182,24 @@ public class DocReaderTests
         text.Contains("HYPERLINK", StringComparison.Ordinal).ShouldBeFalse();
         text.Contains(" TITLE ", StringComparison.Ordinal).ShouldBeFalse();
         text.Contains(" PAGE ", StringComparison.Ordinal).ShouldBeFalse();
+    }
+
+    [Fact]
+    public void AHyperlinkComesFromItsFieldInstruction()
+    {
+        using IDocument document = Open("word-features.doc");
+        ContentRun link = Descendants(document.Content).OfType<ContentRun>()
+                                                      .First(r => r.HyperlinkTarget is not null);
+
+        // WW8 has no hyperlink markup: a link is a field whose instruction reads HYPERLINK "…". The
+        // instruction is skipped as text and read as an instruction, which is the only way to know
+        // where a link points — the cached result says only what it looked like.
+        link.Text.ShouldBe("the LibreOffice site");
+        link.HyperlinkTarget.ShouldBe("https://www.libreoffice.org/");
+
+        // And the link ends where the field does, rather than colouring the rest of the paragraph.
+        List<ContentRun> runs = [.. Descendants(document.Content).OfType<ContentRun>()];
+        runs.Where(r => r.HyperlinkTarget is not null).Count().ShouldBe(1);
     }
 
     [Fact]

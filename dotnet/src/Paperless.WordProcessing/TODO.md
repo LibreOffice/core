@@ -36,7 +36,10 @@ Order chosen so each is verifiable before the next gets harder.
       headers and footers — the last four are things LibreOffice's own text filter drops, so
       extracting them is a deliberate improvement rather than a difference to reconcile
 - [x] `ott` templates and flat `fodt`, through the same reader
-- [ ] Tracked changes (redlines) — see `Paperless.OpenDocument/TODO.md`
+- [x] Tracked changes: a change region is hoisted out of the body by ODF itself, so a deletion is
+      absent from the text without the reader having to skip it — which is why all four formats
+      agree. Reading the regions themselves, to report who changed what, is still to do; see
+      `Paperless.OpenDocument/TODO.md`.
 - [ ] Layout, which needs the document model below rather than the extraction tree
 
 `OdtReader` builds the extraction tree directly today. The full `SwDoc`-shaped model below is
@@ -57,7 +60,8 @@ does not need it and must not be made to pay for it.
 - [x] Fields: the `w:fldChar` state machine, so the instruction is skipped and the cached result
       kept. `w:fldSimple` too.
 - [x] Tracked changes: `w:ins` content read, `w:del`/`w:delText` skipped — deleted text is still
-      in the file and emitting it invents content
+      in the file and emitting it invents content. All four readers agree on this;
+      `TrackedChangeTests` pins it over one document converted to all four formats.
 - [x] Headers/footers (only the parts a section names), footnotes/endnotes with computed
       citations, comments with their author
 - [x] `w:drawing` and legacy `w:pict`: images recorded, text boxes hoisted into their own
@@ -104,18 +108,27 @@ does not need it and must not be made to pay for it.
 - [x] Metadata from the OLE property sets, via the shared reader in `Paperless.MsBinary` —
       including the `FILETIME` that carries an elapsed time rather than an instant
 - [x] Codepage handling from the FIB language id
+- [x] Tables: `sprmTDefTable`'s column edges and cell descriptors, and `sprmTTableHeader` for
+      repeated header rows. A horizontal merge is expressed *either* by a cell's flags or by
+      geometry alone — Word writes the flags, LibreOffice writes neither — so the span comes from
+      the table's column grid as well as from the cell, exactly as in RTF. The geometry lives on
+      the row-*end* paragraph, whose properties are cleared as soon as it is finished, so it has
+      to be handed to the row rather than read back from the walk.
+- [x] Hyperlink targets from the `HYPERLINK` field instruction, through the parser the RTF reader
+      shares. The target is in the instruction and nowhere else; the cached result says only what
+      the link looked like.
+- [x] Tracked changes: `sprmCFRMarkDel` text is skipped, so the extraction says what the changes
+      leave rather than what they removed. `TrackedChangeTests` pins all four readers agreeing.
+- [x] Word 95 and earlier: a different FIB and a different sprm numbering, so it is rejected
+      rather than misread
 - [ ] Escher drawings via `Paperless.MsBinary`. Until then a drawing anchor is not reported as
       an image: telling an embedded picture from a shape needs the record stream, and counting
       every `U+0001` reports a picture for every text box.
 - [ ] Section descriptors (`PlcfSed`): page setup and which header slots a section uses. The
       stories are read by position today, which is right for extraction and not enough for
       layout.
-- [ ] Tables: `sprmTDefTable` for column spans and `sprmTTableHeader` for repeated header rows.
-      Cells and rows are read; `ColumnSpan` and `HeaderRowCount` are not.
-- [ ] Hyperlink targets from the `HYPERLINK` field instruction, as the RTF reader does
-- [ ] Tracked changes (`PlcfRsid`/`sprmCFRMark`) — deleted text is currently emitted as content
-- [ ] Word 95 and earlier: a different FIB and a different sprm numbering, so it is rejected
-      rather than misread
+- [ ] Nested tables (`sprmPItap`): a nested table's cells flatten into the enclosing cell, as in
+      RTF
 
 ### RTF — extraction done
 - [x] Byte-level tokeniser: groups, control words with parameters, control symbols, `\'hh`

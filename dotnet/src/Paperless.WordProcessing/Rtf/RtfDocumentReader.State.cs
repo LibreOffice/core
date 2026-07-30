@@ -441,7 +441,7 @@ public sealed partial class RtfDocumentReader
                 break;
 
             case RtfDestination.FieldInstruction:
-                _fieldHyperlink = ParseHyperlink(state.Collected.ToString()) ?? _fieldHyperlink;
+                _fieldHyperlink = FieldInstructions.HyperlinkTarget(state.Collected.ToString()) ?? _fieldHyperlink;
                 break;
 
             case RtfDestination.Picture:
@@ -477,28 +477,6 @@ public sealed partial class RtfDocumentReader
 
         _styles.Add(id, new RtfStyle(
             name, state.StyleSheetBasedOn, state.OutlineLevel, state.StyleSheetIsCharacter));
-    }
-
-    /// <summary>
-    /// Extracts the target from a <c>HYPERLINK</c> field instruction.
-    /// </summary>
-    /// <remarks>
-    /// RTF has no hyperlink markup: a link is a field whose instruction reads
-    /// <c>HYPERLINK "https://…"</c>, optionally with switches. The quoted argument is the target,
-    /// and <c>\\l</c> introduces a bookmark within the document.
-    /// </remarks>
-    private static string? ParseHyperlink(string instruction)
-    {
-        string text = instruction.Trim();
-        if (!text.StartsWith("HYPERLINK", StringComparison.OrdinalIgnoreCase)) return null;
-
-        int firstQuote = text.IndexOf('"', StringComparison.Ordinal);
-        if (firstQuote < 0) return null;
-        int secondQuote = text.IndexOf('"', firstQuote + 1);
-        if (secondQuote < 0) return null;
-
-        string target = text[(firstQuote + 1)..secondQuote];
-        return target.Length == 0 ? null : target;
     }
 
     /// <summary>

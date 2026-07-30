@@ -105,15 +105,28 @@ public sealed partial class Ww8DocumentReader
                 case Special.FieldBegin:
                     state.FieldDepth++;
                     state.InFieldInstruction = true;
+                    state.Instruction.Clear();
+                    // A hyperlink around a nested field keeps its target for the inner field's
+                    // result too, so the outer target is stacked rather than overwritten.
+                    state.Hyperlinks.Push(state.CurrentHyperlink);
                     continue;
 
                 case Special.FieldSeparator:
                     state.InFieldInstruction = false;
+                    // The instruction is the only place a hyperlink's target appears: the cached
+                    // result is the text a reader saw, and says nothing about where it points.
+                    if (FieldInstructions.HyperlinkTarget(state.Instruction.ToString()) is { } link)
+                    {
+                        FlushRun(state);
+                        state.CurrentHyperlink = link;
+                    }
                     continue;
 
                 case Special.FieldEnd:
                     if (state.FieldDepth > 0) state.FieldDepth--;
                     state.InFieldInstruction = false;
+                    FlushRun(state);
+                    state.CurrentHyperlink = state.Hyperlinks.Count > 0 ? state.Hyperlinks.Pop() : null;
                     continue;
 
                 case Special.AutoNumberedReference:
@@ -165,11 +178,20 @@ public sealed partial class Ww8DocumentReader
     private void Append(WalkState state, int position, string text)
     {
         // A field's instruction is its code, not its result: emitting it puts PAGE and HYPERLINK
-        // into the document's text.
-        if (state.InFieldInstruction) return;
+        // into the document's text. It is still collected, because a hyperlink's target is in it.
+        if (state.InFieldInstruction)
+        {
+            state.Instruction.Append(text);
+            return;
+        }
 
         Ww8CharacterFormat format = ResolveCharacterFormat(position, state);
-        if (format.IsHidden) return;
+        if (format.IsHidden || format.IsDeleted) return;
+
+        // The link comes from the field the walk is inside rather than from any sprm, so it is
+        // applied after the exception is resolved — and included in the format, so a run ends where
+        // the link does.
+        format = format with { HyperlinkTarget = state.CurrentHyperlink };
 
         if (state.HasFormat && state.Format != format) FlushRun(state);
 
@@ -188,6 +210,7 @@ public sealed partial class Ww8DocumentReader
                 StyleName = state.Format.CharacterStyleName,
                 Language = state.Format.Language,
                 Emphasis = state.Format.Emphasis,
+                HyperlinkTarget = state.Format.HyperlinkTarget,
             });
         }
         state.Text.Clear();
@@ -217,9 +240,11 @@ public sealed partial class Ww8DocumentReader
 
         if (format.IsTableRowEnd)
         {
-            // The row-end mark also closes whatever cell was open.
+            // The row-end mark also closes whatever cell was open. The format is passed on rather
+            // than read back from the state, because finishing the paragraph clears it — and the
+            // row's geometry lives on this paragraph, so losing it loses every column span.
             FinishParagraph(state, force: false);
-            FinishRow(state);
+            FinishRow(state, format);
             return;
         }
 
@@ -273,60 +298,6 @@ public sealed partial class Ww8DocumentReader
         state.Runs.Clear();
         state.PendingImages.Clear();
         state.ParagraphFormat = default;
-    }
-
-    private static void FinishCell(WalkState state)
-    {
-        Ww8CellDraft cell = new();
-        cell.Content.AddRange(state.CellContent);
-        state.CellContent.Clear();
-        state.RowCells.Add(cell);
-    }
-
-    private static void FinishRow(WalkState state)
-    {
-        if (state.CellContent.Count > 0) FinishCell(state);
-        if (state.RowCells.Count == 0)
-        {
-            state.InCell = false;
-            return;
-        }
-
-        Ww8RowDraft row = new() { Index = state.Rows.Count };
-        row.Cells.AddRange(state.RowCells);
-        state.Rows.Add(row);
-
-        state.RowCells.Clear();
-        state.InCell = false;
-    }
-
-    private static void FinishTable(WalkState state)
-    {
-        if (state.Rows.Count == 0) return;
-
-        ContentTable table = new()
-        {
-            ColumnCount = state.Rows.Max(r => r.Cells.Count),
-            // WW8 marks a repeated header row with sprmTTableHeader inside the row's table
-            // definition, which Paperless does not read yet; reporting a count it has not
-            // established would be a guess.
-            HeaderRowCount = 0,
-        };
-
-        foreach (Ww8RowDraft row in state.Rows)
-        {
-            ContentTableRow contentRow = new() { Index = row.Index };
-            for (int column = 0; column < row.Cells.Count; column++)
-            {
-                ContentTableCell cell = new() { Row = row.Index, Column = column };
-                foreach (ContentNode node in row.Cells[column].Content) cell.Children.Add(node);
-                contentRow.Children.Add(cell);
-            }
-            table.Children.Add(contentRow);
-        }
-
-        state.Rows.Clear();
-        state.Target.Children.Add(table);
     }
 
     // ------------------------------------------------------------------- formatting
@@ -384,6 +355,14 @@ public sealed partial class Ww8DocumentReader
 
                 case Ww8SprmReader.Ids.IsTableRowEnd:
                     format = format with { IsTableRowEnd = sprm.Byte != 0 };
+                    break;
+
+                case Ww8SprmReader.Ids.IsTableHeaderRow:
+                    format = format with { IsTableHeaderRow = sprm.Byte != 0 };
+                    break;
+
+                case Ww8SprmReader.Ids.TableDefinition:
+                    format = format with { TableDefinition = ReadTableDefinition(sprm.Operand) };
                     break;
             }
         }
@@ -468,6 +447,9 @@ public sealed partial class Ww8DocumentReader
                 case Ww8SprmReader.Ids.Vanish:
                     format = format with { IsHidden = sprm.ResolveToggle(format.IsHidden) };
                     break;
+                case Ww8SprmReader.Ids.IsDeleted:
+                    format = format with { IsDeleted = sprm.ResolveToggle(format.IsDeleted) };
+                    break;
                 case Ww8SprmReader.Ids.Underline:
                     // The operand is the line style; zero is none.
                     format = format with { IsUnderlined = sprm.Byte != 0 };
@@ -549,6 +531,9 @@ public sealed partial class Ww8DocumentReader
 
         public int FieldDepth { get; set; }
         public bool InFieldInstruction { get; set; }
+        public StringBuilder Instruction { get; } = new();
+        public string? CurrentHyperlink { get; set; }
+        public Stack<string?> Hyperlinks { get; } = new();
 
         public bool InCell { get; set; }
         public List<ContentNode> CellContent { get; } = [];
@@ -561,16 +546,6 @@ public sealed partial class Ww8DocumentReader
         public Ww8CharacterFormat CachedFormat { get; set; }
     }
 
-    private sealed class Ww8CellDraft
-    {
-        public List<ContentNode> Content { get; } = [];
-    }
-
-    private sealed class Ww8RowDraft
-    {
-        public int Index { get; init; }
-        public List<Ww8CellDraft> Cells { get; } = [];
-    }
 }
 
 /// <summary>Paragraph formatting resolved from sprms.</summary>
@@ -593,6 +568,18 @@ public readonly record struct Ww8ParagraphFormat
 
     /// <summary>True when the paragraph's mark ends a table row rather than a cell.</summary>
     public bool IsTableRowEnd { get; init; }
+
+    /// <summary>True when the row this paragraph ends repeats as a header on every page.</summary>
+    public bool IsTableHeaderRow { get; init; }
+
+    /// <summary>
+    /// The row's geometry, when its row-end paragraph declares one.
+    /// </summary>
+    /// <remarks>
+    /// Carried on the paragraph because that is where WW8 puts it: a row's column edges and merge
+    /// flags live in the properties of the paragraph whose mark ends the row, not with its cells.
+    /// </remarks>
+    public Ww8TableDefinition? TableDefinition { get; init; }
 }
 
 /// <summary>Character formatting resolved from sprms.</summary>
@@ -618,6 +605,18 @@ public readonly record struct Ww8CharacterFormat
 
     /// <summary>True when the run is hidden, so no reader displays it.</summary>
     public bool IsHidden { get; init; }
+
+    /// <summary>True when a tracked change marks the run deleted.</summary>
+    public bool IsDeleted { get; init; }
+
+    /// <summary>
+    /// Where the run links to, when it sits inside a <c>HYPERLINK</c> field.
+    /// </summary>
+    /// <remarks>
+    /// Part of the format rather than beside it so that a run ends where the link does: two adjacent
+    /// pieces of text with identical formatting but different targets are two runs.
+    /// </remarks>
+    public string? HyperlinkTarget { get; init; }
 
     /// <summary>The font size, when a sprm sets one.</summary>
     public Length? FontSize { get; init; }

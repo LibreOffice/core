@@ -96,6 +96,14 @@ public class ExtractionComparisonTests : IDisposable
         "word-features.docx" or "word-features.dotx" or "word-features.rtf"
             or "word-features.doc"
             => new HashSet<string>(StringComparer.Ordinal) { "reference0" },
+
+        // The words of a deleted phrase. LibreOffice's text filter renders the document as a reader
+        // sees it, and its default is to show change marks — so text a tracked change removed appears
+        // in the reference. Paperless extracts the document as the changes leave it, because deleted
+        // text is still in the file and emitting it puts words into the extraction that the document
+        // does not say. All four readers agree on this; TrackedChangeTests pins it.
+        "revisions.rtf" or "revisions.doc" or "revisions.docx" or "revisions.odt"
+            => new HashSet<string>(StringComparer.Ordinal) { "a", "deleted", "phrase" },
         _ => new HashSet<string>(StringComparer.Ordinal),
     };
 
@@ -106,6 +114,10 @@ public class ExtractionComparisonTests : IDisposable
     [InlineData("word-features.dotx")]
     [InlineData("word-features.rtf")]
     [InlineData("word-features.doc")]
+    [InlineData("revisions.rtf")]
+    [InlineData("revisions.doc")]
+    [InlineData("revisions.docx")]
+    [InlineData("revisions.odt")]
     public void NothingTheReferenceFindsIsMissingFromTheFeatureDocument(string name)
     {
         RequireLibreOffice();

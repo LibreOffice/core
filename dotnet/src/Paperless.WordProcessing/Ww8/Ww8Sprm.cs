@@ -90,6 +90,18 @@ public static class Ww8SprmReader
         /// <summary>The paragraph's nesting depth in tables.</summary>
         public const ushort TableDepth = 0x6649;
 
+        /// <summary>The row this paragraph ends repeats as a header on every page.</summary>
+        public const ushort IsTableHeaderRow = 0x3404;
+
+        /// <summary>
+        /// The row's geometry: its column edges and its cells' merge flags.
+        /// </summary>
+        /// <remarks>
+        /// The one sprm whose operand length is two bytes rather than one, because a table definition
+        /// can exceed 255 bytes — see <see cref="Read"/>.
+        /// </remarks>
+        public const ushort TableDefinition = 0xD608;
+
         /// <summary>The paragraph's outline level, which is what makes it a heading.</summary>
         public const ushort OutlineLevel = 0x2640;
 
@@ -131,6 +143,16 @@ public static class Ww8SprmReader
 
         /// <summary>The run is a footnote or endnote reference mark.</summary>
         public const ushort IsSpecial = 0x0855;
+
+        /// <summary>
+        /// The run is marked deleted by a tracked change.
+        /// </summary>
+        /// <remarks>
+        /// Deleted text is still in the file — that is what makes the change reversible — so emitting
+        /// it invents content the document does not say. The insertion flag needs no handling for the
+        /// same reason: inserted text <em>is</em> content.
+        /// </remarks>
+        public const ushort IsDeleted = 0x0800;
     }
 
     /// <summary>
@@ -189,7 +211,7 @@ public static class Ww8SprmReader
                 // Code 6: the operand states its own length. sprmTDefTable is the one sprm whose
                 // length is two bytes rather than one, because a table definition can exceed 255
                 // bytes — and a reader that assumes one byte desynchronises on every table.
-                if (id == 0xD608)
+                if (id == Ids.TableDefinition)
                 {
                     if (position + 2 > grpprl.Length) return -1;
                     prefixLength = 2;
