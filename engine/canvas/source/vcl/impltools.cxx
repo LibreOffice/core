@@ -37,7 +37,7 @@
 
 #include <canvastools.hxx>
 
-#include "canvasbitmap.hxx"
+#include <canvasbitmap.hxx>
 #include <impltools.hxx>
 
 

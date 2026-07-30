@@ -26,7 +26,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
 
-#include "canvasbitmap.hxx"
+#include <canvasbitmap.hxx>
 #include <devicehelper.hxx>
 #include <unopolypolygon.hxx>
 
@@ -56,18 +56,17 @@ namespace vclcanvas
         return xPoly;
     }
 
-    uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap(
+    rtl::Reference< CanvasBitmap > DeviceHelper::createCompatibleAlphaBitmap(
         const uno::Reference< vclcanvas::XGraphicDevice >& rDevice,
         const geometry::IntegerSize2D&                     size )
     {
         if( !mpOutDev )
-            return uno::Reference< rendering::XBitmap >(); // we're disposed
+            return {}; // we're disposed
 
-        return uno::Reference< rendering::XBitmap >(
-            new CanvasBitmap( vcl::unotools::sizeFromIntegerSize2D(size),
+        return new CanvasBitmap( vcl::unotools::sizeFromIntegerSize2D(size),
                               true,
                               *rDevice,
-                              mpOutDev ) );
+                              mpOutDev );
     }
 
     void DeviceHelper::disposing()

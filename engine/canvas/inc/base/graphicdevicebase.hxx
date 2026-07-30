@@ -28,6 +28,7 @@
 #include <parametricpolypolygon.hxx>
 #include <propertysethelper.hxx>
 #include <verifyinput.hxx>
+#include <canvasbitmap.hxx>
 
 namespace com::sun::star::beans { class XPropertySetInfo; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
@@ -147,7 +148,7 @@ namespace canvas
             return maDeviceHelper.createCompatibleLinePolyPolygon( this, points );
         }
 
-        virtual css::uno::Reference< css::rendering::XBitmap > createCompatibleAlphaBitmap( const css::geometry::IntegerSize2D& size ) override
+        virtual rtl::Reference< vclcanvas::CanvasBitmap > createCompatibleAlphaBitmap( const css::geometry::IntegerSize2D& size ) override
         {
             canvastools::verifyBitmapSize(size,
                                     __func__,

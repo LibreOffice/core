@@ -22,7 +22,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/alpha.hxx>
 
-#include "canvasbitmap.hxx"
+#include <canvasbitmap.hxx>
 
 
 using namespace ::com::sun::star;

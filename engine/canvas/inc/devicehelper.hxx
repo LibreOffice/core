@@ -45,7 +45,7 @@ namespace vclcanvas
         css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon(
             const css::uno::Reference< vclcanvas::XGraphicDevice >&                               rDevice,
             const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points );
-        css::uno::Reference< css::rendering::XBitmap > createCompatibleAlphaBitmap(
+        rtl::Reference< CanvasBitmap > createCompatibleAlphaBitmap(
             const css::uno::Reference< vclcanvas::XGraphicDevice >&  rDevice,
             const css::geometry::IntegerSize2D&                                        size );
 

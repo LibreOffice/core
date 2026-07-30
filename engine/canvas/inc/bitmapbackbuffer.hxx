@@ -22,8 +22,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmap.hxx>
 
-#include <vclwrapper.hxx>
-#include <outdevprovider.hxx>
+#include "vclwrapper.hxx"
+#include "outdevprovider.hxx"
 
 #include <memory>
 

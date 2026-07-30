@@ -44,6 +44,8 @@ class Type;
 
 namespace vclcanvas
 {
+class CanvasBitmap;
+
 /* TODO: There's obviously a concept called window missing here, where
    methods such as bufferController, fullscreen mode etc . belong
    to. But see below
@@ -91,7 +93,7 @@ public:
         Size of the requested bitmap in pixel. Both components of the
         size must be greater than 0
      */
-    virtual ::css::uno::Reference<::css::rendering::XBitmap>
+    virtual rtl::Reference<vclcanvas::CanvasBitmap>
     createCompatibleAlphaBitmap(const ::css::geometry::IntegerSize2D& size) = 0;
 
     /** Create a parametric polygon.

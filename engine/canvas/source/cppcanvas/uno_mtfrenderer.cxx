@@ -21,6 +21,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/canvastools.hxx>
 #include <canvas.hxx>
+#include <canvasbitmap.hxx>
 
 using namespace ::com::sun::star;
 
@@ -55,11 +56,7 @@ sal_Int64 MtfRenderer::draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fS
     });
 
     Size aSize (fScaleX + 1, fScaleY + 1);
-    uno::Reference<rendering::XBitmap> xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
-    if( !xBitmap )
-        return 0;
-
-    uno::Reference< vclcanvas::XCanvas > xBitmapCanvas( xBitmap, uno::UNO_QUERY );
+    rtl::Reference<vclcanvas::CanvasBitmap> xBitmapCanvas = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
     if( !xBitmapCanvas )
         return 0;
 
@@ -73,7 +70,7 @@ sal_Int64 MtfRenderer::draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fS
     canvas->setTransformation( aMatrix );
     renderer->draw ();
 
-    Bitmap aBitmap = vcl::unotools::bitmapFromXBitmap(xBitmap);
+    Bitmap aBitmap = vcl::unotools::bitmapFromXBitmap(xBitmapCanvas);
     return reinterpret_cast<sal_Int64>(new Bitmap(aBitmap));
 }
 

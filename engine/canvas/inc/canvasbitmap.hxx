@@ -27,12 +27,12 @@
 
 #include <vcl/bitmap.hxx>
 
-#include <base/bitmapcanvasbase.hxx>
-#include <base/basemutexhelper.hxx>
+#include "base/bitmapcanvasbase.hxx"
+#include "base/basemutexhelper.hxx"
 #include "canvasbitmaphelper.hxx"
 
-#include <impltools.hxx>
-#include <repainttarget.hxx>
+#include "impltools.hxx"
+#include "repainttarget.hxx"
 
 
 /* Definition of CanvasBitmap class */

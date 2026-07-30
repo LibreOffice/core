@@ -19,6 +19,7 @@
 
 #include <vclfactory.hxx>
 #include <canvas.hxx>
+#include <canvasbitmap.hxx>
 
 using namespace ::com::sun::star;
 
@@ -74,11 +75,9 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
 
     // a huge canvas ...
     Size aSize(1, 1);
-    uno::Reference<rendering::XBitmap> xBitmap = xCanvas->getDevice()->createCompatibleAlphaBitmap(
-        vcl::unotools::integerSize2DFromSize(aSize));
-    CPPUNIT_ASSERT(xBitmap.is());
-
-    uno::Reference<vclcanvas::XCanvas> xBitmapCanvas(xBitmap, uno::UNO_QUERY);
+    rtl::Reference<vclcanvas::CanvasBitmap> xBitmapCanvas
+        = xCanvas->getDevice()->createCompatibleAlphaBitmap(
+            vcl::unotools::integerSize2DFromSize(aSize));
     CPPUNIT_ASSERT(xBitmapCanvas.is());
 
     {

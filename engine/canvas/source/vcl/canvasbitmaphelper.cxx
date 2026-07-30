@@ -26,8 +26,8 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/canvastools.hxx>
 
-#include "canvasbitmap.hxx"
-#include "canvasbitmaphelper.hxx"
+#include <canvasbitmap.hxx>
+#include <canvasbitmaphelper.hxx>
 
 
 using namespace ::com::sun::star;
