@@ -42,7 +42,6 @@
 #include <frmatr.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
-#include <unotools/securityoptions.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <comphelper/random.hxx>
@@ -62,6 +61,7 @@
 #include <unicode/ucsdet.h>
 #include <rtl/tencinfo.h>
 #include <unotextrange.hxx>
+#include <tools/urlobj.hxx>
 
 #include "swmd.hxx"
 
@@ -69,11 +69,6 @@ using namespace css;
 
 namespace
 {
-bool allowAccessLink(const SwDoc& rDoc)
-{
-    return !SvtSecurityOptions::isUntrustedReferer(rDoc.GetLinkReferer());
-}
-
 /// Checks if the bytes are a well-formed UTF-8 sequence.
 bool IsValidUtf8(const OString& rBytes)
 {
@@ -696,7 +691,7 @@ void SwMarkdownParser::InsertImage(const MDImage& rImg)
     }
 
     Size aGrfSz(0, 0);
-    if (allowAccessLink(*m_xDoc) && !aGraphicURL.IsExoticProtocol() && !sGrfNm.isEmpty())
+    if (m_xDoc->AllowAccessLink() && !aGraphicURL.IsExoticProtocol() && !sGrfNm.isEmpty())
     {
         GraphicDescriptor aDescriptor(aGraphicURL);
         if (aDescriptor.Detect(true))

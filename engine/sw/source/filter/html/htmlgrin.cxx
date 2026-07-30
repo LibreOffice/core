@@ -33,7 +33,6 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/langitem.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <vcl/imap.hxx>
@@ -73,7 +72,6 @@
 #include <tools/UnitConversion.hxx>
 #include <tools/hostfilter.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/securityoptions.hxx>
 #include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
@@ -303,16 +301,6 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
     rType = GetScriptType( pHeaderAttrs );
     rTypeStr = GetScriptTypeString( pHeaderAttrs );
 }
-
-namespace
-{
-    bool allowAccessLink(const SwDoc& rDoc)
-    {
-        return !SvtSecurityOptions::isUntrustedReferer(rDoc.GetLinkReferer());
-    }
-}
-
-/*  */
 
 void SwHTMLParser::InsertImage()
 {
@@ -674,7 +662,7 @@ IMAGE_SETEVENT:
     bool bNeedWidth = (!bPercentWidth && !nWidth) || bRelWidthScale;
     bool bRelHeightScale = bPercentHeight && nHeight == SwFormatFrameSize::SYNCED;
     bool bNeedHeight = (!bPercentHeight && !nHeight) || bRelHeightScale;
-    if ((bNeedWidth || bNeedHeight) && !bFuzzing && allowAccessLink(*m_xDoc) &&
+    if ((bNeedWidth || bNeedHeight) && !bFuzzing && m_xDoc->AllowAccessLink() &&
         !aGraphicURL.IsExoticProtocol())
     {
         GraphicDescriptor aDescriptor(aGraphicURL);

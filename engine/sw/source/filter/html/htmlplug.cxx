@@ -462,6 +462,10 @@ bool SwHTMLParser::InsertEmbed()
     if( !bHasURL && !bHasType && !bHasData )
         return true;
 
+    if ((bHasURL || bHasData)
+        && (!m_xDoc->AllowAccessLink() || aURLObj.IsExoticProtocol()))
+        return true;
+
     if (!m_aEmbeds.empty())
     {
         // Nested XHTML <object> element: points to replacement graphic.
