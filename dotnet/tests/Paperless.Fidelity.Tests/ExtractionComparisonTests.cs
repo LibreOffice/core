@@ -89,10 +89,11 @@ public class ExtractionComparisonTests : IDisposable
         // carrying one footnote and no footnote properties at all both LibreOffice and Paperless
         // render 1. ECMA-376 §17.11.17 puts the default w:numStart at 1, so 1 is what the file
         // says. Copying the quirk is explicitly a non-goal.
-        "word-features.docx" or "word-features.dotx" => new HashSet<string>(StringComparer.Ordinal)
-        {
-            "reference0",
-        },
+        // The same quirk shows in the RTF conversion of the same document, where LibreOffice
+        // wrote \ftnstart1 and then renders 0 — which is what makes it clearly LibreOffice's
+        // restart-per-page path rather than anything either file says.
+        "word-features.docx" or "word-features.dotx" or "word-features.rtf"
+            => new HashSet<string>(StringComparer.Ordinal) { "reference0" },
         _ => new HashSet<string>(StringComparer.Ordinal),
     };
 
@@ -101,6 +102,7 @@ public class ExtractionComparisonTests : IDisposable
     [InlineData("text-features-flat.fodt")]
     [InlineData("word-features.docx")]
     [InlineData("word-features.dotx")]
+    [InlineData("word-features.rtf")]
     public void NothingTheReferenceFindsIsMissingFromTheFeatureDocument(string name)
     {
         RequireLibreOffice();

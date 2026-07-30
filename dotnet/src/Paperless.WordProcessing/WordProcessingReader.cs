@@ -4,6 +4,7 @@ using Paperless.Core.Documents;
 using Paperless.Core.Formats;
 using Paperless.WordProcessing.OpenDocument;
 using Paperless.WordProcessing.Ooxml;
+using Paperless.WordProcessing.Rtf;
 
 namespace Paperless.WordProcessing;
 
@@ -52,7 +53,9 @@ public sealed class WordProcessingReader : IDocumentReader
             // Named in SupportedFormats but not implemented yet. Distinguishing "we will
             // support this" from "this is not a word-processing document" matters to callers
             // deciding whether to retry with another reader.
-            DocumentFormat.Doc or DocumentFormat.Dot or DocumentFormat.Rtf
+            DocumentFormat.Rtf => RtfReader.Read(source, format),
+
+            DocumentFormat.Doc or DocumentFormat.Dot
                 or DocumentFormat.WordXml2003 or DocumentFormat.Sxw or DocumentFormat.Stw
                 => throw new UnsupportedFormatException(
                     format, $"Reading {format} is not implemented yet."),

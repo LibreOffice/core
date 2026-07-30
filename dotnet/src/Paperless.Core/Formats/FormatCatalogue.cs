@@ -82,7 +82,7 @@ public sealed class FormatCatalogue : IFormatCatalogue
 
         // ---- Word processing: other ---------------------------------------------------
         New(DocumentFormat.Rtf, DocumentFamily.WordProcessing, ContainerKind.PlainText, "rtf",
-            "application/rtf", "Rich Text Format"),
+            "application/rtf", "Rich Text Format", read: true),
         New(DocumentFormat.WordXml2003, DocumentFamily.WordProcessing, ContainerKind.Xml, "xml",
             "text/xml", "Word 2003 XML"),
 

@@ -80,10 +80,29 @@ does not need it and must not be made to pay for it.
 - [ ] Escher drawings via `Paperless.MsBinary`
 - [ ] Codepage handling from the FIB language id
 
-### RTF
-- [ ] Group/control-word tokeniser; destination handling
-- [ ] Character encoding: `\ansicpg`, `\uN` with fallback characters
-- [ ] Embedded pictures; nested tables (`\itap`)
+### RTF — extraction done
+- [x] Byte-level tokeniser: groups, control words with parameters, control symbols, `\'hh`
+      escapes, and the three details that bite — one space after a control word is its
+      delimiter, a bare newline is *ignored*, and a backslash before a newline is `\par`
+- [x] Destination handling, including skipping an unknown `\*` destination whole. RTF puts
+      private extensions in the same syntax as content, so recursing hopefully emits binary
+      picture data as text.
+- [x] Character encoding: `\ansicpg`, per-font `\fcharset`, and `\uN` with its code-page
+      fallback skipped per `\ucN`. Not skipping the fallback doubles every non-ASCII character.
+- [x] Flows: footnotes with counted marks, annotations with their author, headers, footers and
+      shape text
+- [x] Tables, including the merge LibreOffice writes with **no flag at all** — the span has to
+      be derived from the table's column grid of `\cellx` edges, because `\clmgf`/`\clmrg` are
+      absent from LibreOffice's output
+- [x] Fields: `\fldinst` skipped, `\fldrslt` kept, and `HYPERLINK "…"` parsed out of the
+      instruction, since RTF has no hyperlink markup
+- [x] Metadata from `{\info}`, whose timestamps are groups of numeric control words
+- [x] Embedded pictures recorded as graphics without decoding the bytes
+- [ ] Nested tables (`\itap`): a nested table's cells currently flatten into the enclosing
+      cell's content rather than nesting
+- [ ] `\trhdr` header rows, so `HeaderRowCount` can be reported rather than left at zero
+- [ ] The full LCID table, so every `\lang` maps to a language tag rather than only the common
+      ones (`research/05-infrastructure.md` section F.3)
 
 ## Layout engine
 

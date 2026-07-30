@@ -1,16 +1,19 @@
 # Paperless — master plan
 
-Status: **Phase 0 complete; Phase 1 under way.** ODF and OOXML word processing read — `odt ods
-odp` plus their template and flat-XML variants, and `docx docm dotx dotm` — all verified against
-LibreOffice's own text export.
+Status: **Phase 0 complete; Phase 1 under way.** Everything but the legacy binary formats and
+spreadsheet/presentation OOXML reads: `odt ods odp` with their template and flat-XML variants,
+`docx docm dotx dotm`, and `rtf` — all verified against LibreOffice's own text export.
 
 Each library has its own `TODO.md` with detail; this file is the ordering and the reasoning
 behind it.
 
 ## Start here (next session)
 
-Phase 1, next task: **RTF extraction**, then **DOC (WW8)**, then `xlsx`/`pptx`. Read
-`src/Paperless.WordProcessing/TODO.md` and `research/02-writer.md` sections C.2 and C.3.
+Phase 1, next task: **DOC (WW8)**, then `xlsx`/`pptx`, then CSV. Read
+`src/Paperless.WordProcessing/TODO.md` and `research/02-writer.md` section C.2, and
+`research/05-infrastructure.md` sections A and F — the piece table is the thing to get right
+first, because a naive read of a complex file produces scrambled text rather than an obvious
+failure.
 
 Three decisions from the ODF and DOCX work should carry over rather than be rediscovered:
 
@@ -51,12 +54,14 @@ binary.
 | ✅ | Dependencies audited: all permissive, none gated behind a build-time licence check |
 | ✅ | ODF extraction: `odt ods odp ott ots otp fodt fods fodp`, with style resolution, metadata, text, lists, tables, notes, comments, frames and shape text |
 | ✅ | DOCX extraction: `docx docm dotx dotm`, with the §17.7.3 toggle rule, numbering, fields, tracked changes, tables with vertical merges, notes, comments, headers/footers and text boxes |
+| ✅ | RTF extraction: byte-level tokeniser, destination skipping, `\ansicpg`/`\fcharset`/`\uN` encoding, flows, fields, and tables whose merges carry no flag |
+| ✅ | Legacy code pages (`Paperless.Text.Encodings.LegacyCodePages`), shared by RTF and the legacy binary readers to come |
 | ✅ | `paperless extract` and `paperless metadata`, text and JSON |
 | ✅ | `LibreOfficeRunner` and an automated extraction comparison against LibreOffice, skipping cleanly when it is not installed |
 
 | Not started | |
 |---|---|
-| ❌ | `xlsx`/`pptx`, legacy binary, RTF and CSV readers |
+| ❌ | `xlsx`/`pptx`, legacy binary and CSV readers |
 | ❌ | Decryption (detection works; decryption does not) |
 | ❌ | Text layout: fonts, metrics, shaping, line breaking |
 | ❌ | Layout engines and rendering backends |
@@ -124,7 +129,10 @@ Per format: metadata, then text, then tables/structure.
       - [ ] `xlsx` and `pptx`.
 - [ ] Legacy binary (`doc xls ppt`). Hardest. Needs the record-stream reader, sprm/BIFF
       decoding, the WW8 piece table, and codepage handling.
-- [ ] RTF, CSV.
+- [x] RTF. The two things worth knowing: an unknown `\*` destination must be skipped whole, and
+      LibreOffice writes a horizontally merged table cell with no merge flag at all — the span
+      comes from the column grid.
+- [ ] CSV.
 - [ ] `xlsb` (import only — LibreOffice cannot write it, so test files need Excel).
 - [ ] Encrypted documents, one scheme at a time
       (`research/05-infrastructure.md` section C).
