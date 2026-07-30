@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_vclplug.h>
+
 #include <swmodeltestbase.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -799,7 +801,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136841, "tdf136841.docx")
     // - Expected: Color: R:228 G:71 B:69 A:0
     // - Actual  : Color: R:0 G:0 B:0 A:0
 
-#if defined(_WIN32) || defined(MACOSX)
+// A Windows build that takes the headless code draws this with Cairo, like the platforms below
+#if (defined(_WIN32) && !USE_HEADLESS_CODE) || defined(MACOSX)
     CPPUNIT_ASSERT_EQUAL( Color(228,71,69), bitmap.GetPixelColor(38,38));
 #else
     // NOTE: For CairoSDPR the Color changes slightly from (228,71,69)
