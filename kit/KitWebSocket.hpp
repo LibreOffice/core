@@ -56,6 +56,7 @@ public:
     {
     }
 
+    // [-loplugin:unnecessaryoverride]
     ~KitWebSocketHandler()
     {
         // Just to make it easier to set a breakpoint

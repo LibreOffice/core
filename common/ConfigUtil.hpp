@@ -204,8 +204,6 @@ public:
     {
     }
 
-    ~ConfigRawValueGetter() = default;
-
     void operator()(const std::string& name, int& value) const { value = _config->getInt(name); }
     void operator()(const std::string& name, unsigned int& value) const
     {

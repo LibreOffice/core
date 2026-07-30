@@ -229,6 +229,9 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
             report(DiagnosticsEngine::Fatal, "TODO", methodDecl->getLocation());
             return true;
         }
+        if (suppressWarningAt(methodDecl->getLocation())) {
+            return true;
+        }
         report(
             DiagnosticsEngine::Warning, "unnecessary user-declared destructor",
             methodDecl->getLocation())

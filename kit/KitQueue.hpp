@@ -51,7 +51,6 @@ public:
         , _lastServicedPosY(-1)
     {
     }
-    ~KitQueue() = default;
 
     KitQueue(const KitQueue&) = delete;
     KitQueue& operator=(const KitQueue&) = delete;
