@@ -1736,7 +1736,7 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
                             SwRect aLastCharRect( _rFrame.getFrameArea() );
                             aRectFnSet.SetWidth( aLastCharRect, 1 );
                             _pAnchoredObj->maLastCharRect = aLastCharRect;
-                            _pAnchoredObj->mnLastTopOfLine = aRectFnSet.GetTop(aLastCharRect);
+                            _pAnchoredObj->mnLastTopOfLine = gfx::Length::twip(aRectFnSet.GetTop(aLastCharRect));
                         }
                     }
                 }

@@ -75,7 +75,6 @@ SwAnchoredObject::SwAnchoredObject() :
     mpAnchorFrame( nullptr ),
     // --> #i28701#
     mpPageFrame( nullptr ),
-    mnLastTopOfLine( 0 ),
     mpVertPosOrientFrame( nullptr ),
     // --> #i28701#
     mbPositioningInProgress( false ),
@@ -198,7 +197,7 @@ void SwAnchoredObject::SetVertPosOrientFrame( const SwLayoutFrame& _rVertPosOrie
 // #i28701# - follow-up of #i22341#
 void SwAnchoredObject::AddLastTopOfLineY( SwTwips _nDiff )
 {
-    mnLastTopOfLine += _nDiff;
+    mnLastTopOfLine += gfx::Length::twip(_nDiff);
 }
 
 /** check anchor character rectangle and top of line
@@ -316,7 +315,7 @@ void SwAnchoredObject::CheckTopOfLine( const SwFormatAnchor& _rAnch,
     if ( !_rAnchorCharFrame.GetTopOfLine( nTopOfLine, *_rAnch.GetContentAnchor() ) )
         return;
 
-    if ( nTopOfLine == mnLastTopOfLine )
+    if (gfx::Length::twip(nTopOfLine) == mnLastTopOfLine)
         return;
 
     // check alignment for invalidation of position
@@ -332,13 +331,13 @@ void SwAnchoredObject::CheckTopOfLine( const SwFormatAnchor& _rAnch,
         InvalidateObjPos();
     }
     // keep new top of line value
-    mnLastTopOfLine = nTopOfLine;
+    mnLastTopOfLine = gfx::Length::twip(nTopOfLine);
 }
 
 void SwAnchoredObject::ClearCharRectAndTopOfLine()
 {
     maLastCharRect.Clear();
-    mnLastTopOfLine = 0;
+    mnLastTopOfLine = 0_emu;
 }
 
 void SwAnchoredObject::SetCurrRelPos( Point _aRelPos )
@@ -956,7 +955,7 @@ Point SwAnchoredObject::GetRelPosToChar() const
 Point SwAnchoredObject::GetRelPosToLine() const
 {
     Point aRelPos = GetObjRect().Pos();
-    aRelPos.AdjustY( -(GetLastTopOfLine()) );
+    aRelPos.AdjustY( -(GetLastTopOfLine().as_twip<SwTwips>()) );
 
     return aRelPos;
 }

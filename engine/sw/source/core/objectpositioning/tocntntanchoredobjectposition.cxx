@@ -210,14 +210,14 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             // rectangle can have no height. Thus, check also the width
             if ( ( !GetAnchoredObj().GetLastCharRect().Height() &&
                    !GetAnchoredObj().GetLastCharRect().Width() ) ||
-                 !GetAnchoredObj().GetLastTopOfLine() )
+                 GetAnchoredObj().GetLastTopOfLine() == 0_emu)
             {
                 GetAnchoredObj().CheckCharRectAndTopOfLine( false );
                 // Due to table break algorithm the character
                 // rectangle can have no height. Thus, check also the width
                 if ( ( !GetAnchoredObj().GetLastCharRect().Height() &&
                        !GetAnchoredObj().GetLastCharRect().Width() ) ||
-                     !GetAnchoredObj().GetLastTopOfLine() )
+                     GetAnchoredObj().GetLastTopOfLine() == 0_emu)
                 {
                     // Get default for <mpVertPosOrientFrame>, if it's not set.
                     if ( !mpVertPosOrientFrame )
@@ -229,7 +229,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             }
             mpToCharRect = &(GetAnchoredObj().GetLastCharRect());
             // #i22341# - get top of line, in which the anchor character is.
-            mnToCharTopOfLine = GetAnchoredObj().GetLastTopOfLine();
+            mnToCharTopOfLine = GetAnchoredObj().GetLastTopOfLine().as_twip<SwTwips>();
             pOrientFrame = &(const_cast<SwTextFrame&>(rAnchorTextFrame).GetFrameAtOfst(
                 rAnchorTextFrame.MapModelToViewPos(*rAnch.GetContentAnchor())));
             mpToCharOrientFrame = pOrientFrame;
