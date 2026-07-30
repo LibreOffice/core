@@ -92,8 +92,11 @@ namespace cppcanvas
                 TransparencyGroupAction(const TransparencyGroupAction&) = delete;
                 const TransparencyGroupAction& operator=(const TransparencyGroupAction&) = delete;
 
-                virtual bool render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+                virtual bool render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                     const vclcanvas::ViewState& rViewState,
+                                     const ::basegfx::B2DHomMatrix& rTransformation ) const override;
+                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                           const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
@@ -160,7 +163,8 @@ namespace cppcanvas
             // into the direction of having a direct GDIMetaFile2XCanvas
             // renderer, and maybe a separate metafile XCanvas
             // implementation.
-            bool TransparencyGroupAction::renderSubset( const CanvasSharedPtr& rCanvas,
+            bool TransparencyGroupAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                                        const vclcanvas::ViewState& rViewState,
                                                         const ::basegfx::B2DHomMatrix&    rTransformation,
                                                         const Subset&                     rSubset ) const
             {
@@ -172,7 +176,7 @@ namespace cppcanvas
                 ::basegfx::B2DHomMatrix aTransform = ::canvastools::getRenderStateTransform( maState );
                 aTransform = rTransformation * aTransform;
 
-                ::basegfx::B2DHomMatrix aTotalTransform = ::canvastools::getViewStateTransform( rCanvas->getViewState() );
+                ::basegfx::B2DHomMatrix aTotalTransform = ::canvastools::getViewStateTransform( rViewState );
                 aTotalTransform = aTotalTransform * aTransform;
 
                 // since pure translational changes to the transformation
@@ -429,9 +433,9 @@ namespace cppcanvas
 #endif
 
                 // no further alpha changes necessary -> draw directly
-                rCanvas->getUNOCanvas()->drawBitmap( mxBufferBitmap,
-                                                      rCanvas->getViewState(),
-                                                      aLocalState );
+                rCanvas->drawBitmap( mxBufferBitmap,
+                                      rViewState,
+                                      aLocalState );
                 return true;
             }
 
@@ -442,14 +446,16 @@ namespace cppcanvas
             // into the direction of having a direct GDIMetaFile2XCanvas
             // renderer, and maybe a separate metafile XCanvas
             // implementation.
-            bool TransparencyGroupAction::render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool TransparencyGroupAction::render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                                  const vclcanvas::ViewState& rViewState,
+                                                  const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 Subset aSubset;
 
                 aSubset.mnSubsetBegin = 0;
                 aSubset.mnSubsetEnd   = -1;
 
-                return renderSubset( rCanvas, rTransformation, aSubset );
+                return renderSubset( rCanvas, rViewState, rTransformation, aSubset );
             }
 
             sal_Int32 TransparencyGroupAction::getActionCount() const

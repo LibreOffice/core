@@ -39,14 +39,15 @@ namespace cppcanvas
             // redraw if changed.
         }
 
-        bool CachedPrimitiveBase::render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const
+        bool CachedPrimitiveBase::render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                          const vclcanvas::ViewState& rViewState,
+                                          const ::basegfx::B2DHomMatrix& rTransformation ) const
         {
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::CachedPrimitiveBase::render()" );
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::CachedPrimitiveBase: 0x" << std::hex << this );
 
-            const vclcanvas::ViewState  aViewState( rCanvas->getViewState() );
             ::basegfx::B2DHomMatrix     aTotalTransform = ::canvastools::getViewStateTransform(
-                                                    aViewState );
+                                                    rViewState );
             aTotalTransform *= rTransformation;
 
             // can we use the cached primitive? For that, it must be
@@ -57,7 +58,7 @@ namespace cppcanvas
                 (!mbOnlyRedrawWithSameTransform ||
                  maLastTransformation == aTotalTransform) )
             {
-                if( mxCachedPrimitive->redraw( aViewState ) ==
+                if( mxCachedPrimitive->redraw( rViewState ) ==
                     rendering::RepaintResult::REDRAWN )
                 {
                     // cached repaint succeeded, done.
@@ -68,7 +69,7 @@ namespace cppcanvas
             maLastTransformation = aTotalTransform;
 
             // delegate rendering to derived classes
-            return renderPrimitive( rCanvas, mxCachedPrimitive,
+            return renderPrimitive( rCanvas, rViewState, mxCachedPrimitive,
                                     rTransformation );
         }
 }

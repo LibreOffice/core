@@ -457,7 +457,10 @@ namespace cppcanvas
                 virtual ~TextRenderer() {}
 
                 /// Render text with given RenderState
-                virtual bool operator()( const CanvasSharedPtr& rCanvas, const vclcanvas::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText ) const = 0;
+                virtual bool operator()( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                         const vclcanvas::ViewState& rViewState,
+                                         const vclcanvas::RenderState& rRenderState,
+                                         const ::Color& rTextFillColor, bool bNormalText ) const = 0;
             };
 
             /** Render effect text.
@@ -467,7 +470,8 @@ namespace cppcanvas
                 part of the text effect (the text itself and the means
                 to render it are unknown to this method)
              */
-            bool renderEffectText( const CanvasSharedPtr& rCanvas,
+            bool renderEffectText( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                   const vclcanvas::ViewState&                  rViewState,
                                    const TextRenderer&                          rRenderer,
                                    const vclcanvas::RenderState&                rRenderState,
                                    const ::Color&                               rShadowColor,
@@ -492,7 +496,7 @@ namespace cppcanvas
                     aShadowState.DeviceColor =
                         canvastools::colorToDoubleSequence( rShadowColor );
 
-                    rRenderer( rCanvas, aShadowState, rTextFillColor, false );
+                    rRenderer( rCanvas, rViewState, aShadowState, rTextFillColor, false );
                 }
 
                 // draw relief text, if enabled
@@ -509,11 +513,11 @@ namespace cppcanvas
                     aReliefState.DeviceColor =
                         canvastools::colorToDoubleSequence( rReliefColor );
 
-                    rRenderer( rCanvas, aReliefState, rTextFillColor, false );
+                    rRenderer( rCanvas, rViewState, aReliefState, rTextFillColor, false );
                 }
 
                 // draw normal text
-                rRenderer( rCanvas, rRenderState, rTextFillColor, true );
+                rRenderer( rCanvas, rViewState, rRenderState, rTextFillColor, true );
 
                 return true;
             }
@@ -548,8 +552,11 @@ namespace cppcanvas
                 TextAction(const TextAction&) = delete;
                 const TextAction& operator=(const TextAction&) = delete;
 
-                virtual bool render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+                virtual bool render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                     const vclcanvas::ViewState& rViewState,
+                                     const ::basegfx::B2DHomMatrix& rTransformation ) const override;
+                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                           const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
@@ -587,7 +594,9 @@ namespace cppcanvas
                                   "::cppcanvas::TextAction(): Invalid font" );
             }
 
-            bool TextAction::render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool TextAction::render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                     const vclcanvas::ViewState& rViewState,
+                                     const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextAction::render()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextAction: 0x" << std::hex << this );
@@ -595,13 +604,14 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                rCanvas->getUNOCanvas()->drawText( maStringContext, mxFont,
-                                                    rCanvas->getViewState(), aLocalState, maTextDirection );
+                rCanvas->drawText( maStringContext, mxFont,
+                                    rViewState, aLocalState, maTextDirection );
 
                 return true;
             }
 
-            bool TextAction::renderSubset( const CanvasSharedPtr& rCanvas,
+            bool TextAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                           const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  /*rSubset*/ ) const
             {
@@ -611,7 +621,7 @@ namespace cppcanvas
                 // TextAction from XCanvas. Currently, the
                 // TextActionFactory does not generate this object for
                 // _subsettable_ text
-                return render( rCanvas, rTransformation );
+                return render( rCanvas, rViewState, rTransformation );
             }
 
             sal_Int32 TextAction::getActionCount() const
@@ -645,8 +655,11 @@ namespace cppcanvas
                 EffectTextAction(const EffectTextAction&) = delete;
                 const EffectTextAction& operator=(const EffectTextAction&) = delete;
 
-                virtual bool render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+                virtual bool render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                     const vclcanvas::ViewState& rViewState,
+                                     const ::basegfx::B2DHomMatrix& rTransformation ) const override;
+                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                           const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
@@ -654,7 +667,10 @@ namespace cppcanvas
 
             private:
                 /// Interface TextRenderer
-                virtual bool operator()( const CanvasSharedPtr& rCanvas, const vclcanvas::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText ) const override;
+                virtual bool operator()( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                         const vclcanvas::ViewState& rViewState,
+                                         const vclcanvas::RenderState& rRenderState,
+                                         const ::Color& rTextFillColor, bool bNormalText ) const override;
 
                 geometry::RealRectangle2D queryTextBoundsRect() const;
                 css::uno::Reference<css::rendering::XPolyPolygon2D> queryTextBoundsPoly() const;
@@ -716,11 +732,11 @@ namespace cppcanvas
                                   "::cppcanvas::EffectTextAction(): Invalid font or lines" );
             }
 
-            bool EffectTextAction::operator()( const CanvasSharedPtr& rCanvas, const vclcanvas::RenderState& rRenderState, const ::Color& rTextFillColor, bool /*bNormalText*/ ) const
+            bool EffectTextAction::operator()( const css::uno::Reference<vclcanvas::XCanvas>& xCanvas,
+                                               const vclcanvas::ViewState& rViewState,
+                                               const vclcanvas::RenderState& rRenderState,
+                                               const ::Color& rTextFillColor, bool /*bNormalText*/ ) const
             {
-                const vclcanvas::ViewState aViewState( rCanvas->getViewState() );
-                const uno::Reference< vclcanvas::XCanvas > aCanvas( rCanvas->getUNOCanvas() );
-
                 //rhbz#1589029 non-transparent text fill background support
                 if (rTextFillColor != COL_AUTO)
                 {
@@ -729,23 +745,25 @@ namespace cppcanvas
                         rTextFillColor);
                     auto xTextBounds = queryTextBoundsPoly();
                     // background of text
-                    aCanvas->fillPolyPolygon(xTextBounds, aViewState, aLocalState);
+                    xCanvas->fillPolyPolygon(xTextBounds, rViewState, aLocalState);
                 }
 
                 // under/over lines
-                aCanvas->fillPolyPolygon( mxTextLines,
-                                          aViewState,
+                xCanvas->fillPolyPolygon( mxTextLines,
+                                          rViewState,
                                           rRenderState );
 
-                aCanvas->drawText( maStringContext, mxFont,
-                                   aViewState,
+                xCanvas->drawText( maStringContext, mxFont,
+                                   rViewState,
                                    rRenderState,
                                    maTextDirection );
 
                 return true;
             }
 
-            bool EffectTextAction::render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool EffectTextAction::render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                           const vclcanvas::ViewState& rViewState,
+                                           const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextAction::render()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextAction: 0x" << std::hex << this );
@@ -753,7 +771,7 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                return renderEffectText( rCanvas, *this,
+                return renderEffectText( rCanvas, rViewState, *this,
                                          aLocalState,
                                          maShadowColor,
                                          maShadowOffset,
@@ -762,7 +780,8 @@ namespace cppcanvas
                                          maTextFillColor);
             }
 
-            bool EffectTextAction::renderSubset( const CanvasSharedPtr& rCanvas,
+            bool EffectTextAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                                 const vclcanvas::ViewState& rViewState,
                                                  const ::basegfx::B2DHomMatrix&   rTransformation,
                                                  const Subset&                    /*rSubset*/ ) const
             {
@@ -772,7 +791,7 @@ namespace cppcanvas
                 // TextAction from XCanvas. Currently, the
                 // TextActionFactory does not generate this object for
                 // subsettable text
-                return render( rCanvas, rTransformation );
+                return render( rCanvas, rViewState, rTransformation );
             }
 
             geometry::RealRectangle2D EffectTextAction::queryTextBoundsRect() const
@@ -821,8 +840,11 @@ namespace cppcanvas
                 TextArrayAction(const TextArrayAction&) = delete;
                 const TextArrayAction& operator=(const TextArrayAction&) = delete;
 
-                virtual bool render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+                virtual bool render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                     const vclcanvas::ViewState& rViewState,
+                                     const ::basegfx::B2DHomMatrix& rTransformation ) const override;
+                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                           const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
@@ -864,7 +886,9 @@ namespace cppcanvas
                                  rState, nullptr );
             }
 
-            bool TextArrayAction::render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool TextArrayAction::render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                          const vclcanvas::ViewState& rViewState,
+                                          const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextArrayAction::render()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::TextArrayAction: 0x" << std::hex << this );
@@ -872,14 +896,15 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                rCanvas->getUNOCanvas()->drawTextLayout( mxTextLayout,
-                                                          rCanvas->getViewState(),
-                                                          aLocalState );
+                rCanvas->drawTextLayout( mxTextLayout,
+                                      rViewState,
+                                      aLocalState );
 
                 return true;
             }
 
-            bool TextArrayAction::renderSubset( const CanvasSharedPtr& rCanvas,
+            bool TextArrayAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                                const vclcanvas::ViewState& rViewState,
                                                 const ::basegfx::B2DHomMatrix&    rTransformation,
                                                 const Subset&                     rSubset ) const
             {
@@ -901,9 +926,9 @@ namespace cppcanvas
                 if( !xTextLayout.is() )
                     return true; // empty layout, render nothing
 
-                rCanvas->getUNOCanvas()->drawTextLayout( xTextLayout,
-                                                          rCanvas->getViewState(),
-                                                          aLocalState );
+                rCanvas->drawTextLayout( xTextLayout,
+                                          rViewState,
+                                          aLocalState );
 
                 return true;
             }
@@ -939,8 +964,11 @@ namespace cppcanvas
                 EffectTextArrayAction(const EffectTextArrayAction&) = delete;
                 const EffectTextArrayAction& operator=(const EffectTextArrayAction&) = delete;
 
-                virtual bool render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+                virtual bool render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                     const vclcanvas::ViewState& rViewState,
+                                     const ::basegfx::B2DHomMatrix& rTransformation ) const override;
+                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                           const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
@@ -948,7 +976,10 @@ namespace cppcanvas
 
             private:
                 // TextRenderer interface
-                virtual bool operator()( const CanvasSharedPtr& rCanvas, const vclcanvas::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText ) const override;
+                virtual bool operator()( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                         const vclcanvas::ViewState& rViewState,
+                                         const vclcanvas::RenderState& rRenderState,
+                                         const ::Color& rTextFillColor, bool bNormalText ) const override;
 
                 css::uno::Reference<css::rendering::XPolyPolygon2D> queryTextBoundsPoly() const;
 
@@ -1017,11 +1048,11 @@ namespace cppcanvas
                 return ::canvastools::xPolyPolygonFromB2DPolygon(aTextBoundsPoly);
             }
 
-            bool EffectTextArrayAction::operator()( const CanvasSharedPtr& rCanvas, const vclcanvas::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText) const
+            bool EffectTextArrayAction::operator()( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                                    const vclcanvas::ViewState& rViewState,
+                                                    const vclcanvas::RenderState& rRenderState,
+                                                    const ::Color& rTextFillColor, bool bNormalText) const
             {
-                const vclcanvas::ViewState aViewState( rCanvas->getViewState() );
-                const uno::Reference< vclcanvas::XCanvas > aCanvas( rCanvas->getUNOCanvas() );
-
                 //rhbz#1589029 non-transparent text fill background support
                 if (rTextFillColor != COL_AUTO)
                 {
@@ -1030,20 +1061,22 @@ namespace cppcanvas
                         rTextFillColor);
                     auto xTextBounds = queryTextBoundsPoly();
                     // background of text
-                    aCanvas->fillPolyPolygon(xTextBounds, aViewState, aLocalState);
+                    rCanvas->fillPolyPolygon(xTextBounds, rViewState, aLocalState);
                 }
 
                 // under/over lines
-                maTextLinesHelper.render(rCanvas, rRenderState, bNormalText);
+                maTextLinesHelper.render(rCanvas, rViewState, rRenderState, bNormalText);
 
-                aCanvas->drawTextLayout( mxTextLayout,
-                                         aViewState,
+                rCanvas->drawTextLayout( mxTextLayout,
+                                         rViewState,
                                          rRenderState );
 
                 return true;
             }
 
-            bool EffectTextArrayAction::render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool EffectTextArrayAction::render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                                const vclcanvas::ViewState& rViewState,
+                                                const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction::render()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction: 0x" << std::hex << this );
@@ -1051,7 +1084,7 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                return renderEffectText( rCanvas, *this,
+                return renderEffectText( rCanvas, rViewState, *this,
                                          aLocalState,
                                          maShadowColor,
                                          maShadowOffset,
@@ -1075,9 +1108,12 @@ namespace cppcanvas
                 }
 
                 // TextRenderer interface
-                virtual bool operator()( const CanvasSharedPtr& rCanvas, const vclcanvas::RenderState& rRenderState, const ::Color& rTextFillColor,bool bNormalText) const override
+                virtual bool operator()( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                         const vclcanvas::ViewState& rViewState,
+                                         const vclcanvas::RenderState& rRenderState,
+                                         const ::Color& rTextFillColor,bool bNormalText) const override
                 {
-                    mrTextLinesHelper.render(rCanvas, rRenderState, bNormalText);
+                    mrTextLinesHelper.render(rCanvas, rViewState, rRenderState, bNormalText);
 
                     //rhbz#1589029 non-transparent text fill background support
                     if (rTextFillColor != COL_AUTO)
@@ -1113,7 +1149,8 @@ namespace cppcanvas
                 const vclcanvas::ViewState&                         mrViewState;
             };
 
-            bool EffectTextArrayAction::renderSubset( const CanvasSharedPtr& rCanvas,
+            bool EffectTextArrayAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                                      const vclcanvas::ViewState& rViewState,
                                                       const ::basegfx::B2DHomMatrix&  rTransformation,
                                                       const Subset&                   rSubset ) const
             {
@@ -1142,9 +1179,6 @@ namespace cppcanvas
                 // create and setup local line polygon
                 // ===================================
 
-                uno::Reference< vclcanvas::XCanvas > xCanvas( rCanvas->getUNOCanvas() );
-                const vclcanvas::ViewState           aViewState( rCanvas->getViewState() );
-
                 TextLinesHelper aHelper = maTextLinesHelper;
                 aHelper.init(nMaxPos - nMinPos, maTextLineInfo);
 
@@ -1154,10 +1188,11 @@ namespace cppcanvas
 
                 return renderEffectText(
                     rCanvas,
-                    EffectTextArrayRenderHelper( xCanvas,
+                    rViewState,
+                    EffectTextArrayRenderHelper( rCanvas,
                                                  xTextLayout,
                                                  aHelper,
-                                                 aViewState ),
+                                                 rViewState ),
                     aLocalState,
                     maShadowColor,
                     maShadowOffset,
@@ -1194,8 +1229,11 @@ namespace cppcanvas
                 OutlineAction(const OutlineAction&) = delete;
                 const OutlineAction& operator=(const OutlineAction&) = delete;
 
-                virtual bool render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+                virtual bool render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                     const vclcanvas::ViewState& rViewState,
+                                     const ::basegfx::B2DHomMatrix& rTransformation ) const override;
+                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                           const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
@@ -1203,7 +1241,10 @@ namespace cppcanvas
 
             private:
                 // TextRenderer interface
-                virtual bool operator()( const CanvasSharedPtr& rCanvas, const vclcanvas::RenderState& rRenderState, const ::Color& rTextFillColor, bool bNormalText ) const override;
+                virtual bool operator()( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                         const vclcanvas::ViewState& rViewState,
+                                         const vclcanvas::RenderState& rRenderState,
+                                         const ::Color& rTextFillColor, bool bNormalText ) const override;
 
                 // TODO(P2): This is potentially a real mass object
                 // (every character might be a separate TextAction),
@@ -1281,17 +1322,17 @@ namespace cppcanvas
                       rState );
             }
 
-            bool OutlineAction::operator()( const CanvasSharedPtr& rCanvas, const vclcanvas::RenderState& rRenderState, const ::Color& /*rTextFillColor*/, bool /*bNormalText*/ ) const
+            bool OutlineAction::operator()( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                            const vclcanvas::ViewState& rViewState,
+                                            const vclcanvas::RenderState& rRenderState,
+                                            const ::Color& /*rTextFillColor*/, bool /*bNormalText*/ ) const
             {
-                const vclcanvas::ViewState                  aViewState( rCanvas->getViewState() );
-                const uno::Reference< vclcanvas::XCanvas >  xCanvas( rCanvas->getUNOCanvas() );
-
                 if (mxBackgroundFillPoly.is())
                 {
                     vclcanvas::RenderState aLocalState( rRenderState );
                     aLocalState.DeviceColor = canvastools::colorToDoubleSequence(
                         maBackgroundFillColor);
-                    xCanvas->fillPolyPolygon(mxBackgroundFillPoly, aViewState, aLocalState);
+                    rCanvas->fillPolyPolygon(mxBackgroundFillPoly, rViewState, aLocalState);
                 }
 
                 rendering::StrokeAttributes aStrokeAttributes;
@@ -1308,30 +1349,32 @@ namespace cppcanvas
                 // TODO(P1): implement caching
 
                 // background of text
-                xCanvas->fillPolyPolygon( mxTextPoly,
-                                          aViewState,
+                rCanvas->fillPolyPolygon( mxTextPoly,
+                                          rViewState,
                                           aLocalState );
 
                 // border line of text
-                xCanvas->strokePolyPolygon( mxTextPoly,
-                                            aViewState,
+                rCanvas->strokePolyPolygon( mxTextPoly,
+                                            rViewState,
                                             rRenderState,
                                             aStrokeAttributes );
 
                 // underlines/strikethrough - background
-                xCanvas->fillPolyPolygon( mxTextLines,
-                                          aViewState,
+                rCanvas->fillPolyPolygon( mxTextLines,
+                                          rViewState,
                                           aLocalState );
                 // underlines/strikethrough - border
-                xCanvas->strokePolyPolygon( mxTextLines,
-                                            aViewState,
+                rCanvas->strokePolyPolygon( mxTextLines,
+                                            rViewState,
                                             rRenderState,
                                             aStrokeAttributes );
 
                 return true;
             }
 
-            bool OutlineAction::render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool OutlineAction::render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                        const vclcanvas::ViewState& rViewState,
+                                        const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction::render()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::EffectTextArrayAction: 0x" << std::hex << this );
@@ -1339,7 +1382,7 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                return renderEffectText( rCanvas, *this,
+                return renderEffectText( rCanvas, rViewState, *this,
                                          aLocalState,
                                          maShadowColor,
                                          maShadowOffset,
@@ -1418,7 +1461,8 @@ namespace cppcanvas
             };
 #endif
 
-            bool OutlineAction::renderSubset( const CanvasSharedPtr& rCanvas,
+            bool OutlineAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                              const vclcanvas::ViewState& rViewState,
                                               const ::basegfx::B2DHomMatrix&  rTransformation,
                                               const Subset&                   rSubset ) const
             {
@@ -1430,7 +1474,7 @@ namespace cppcanvas
 
 #if 1
                 // TODO(F3): Subsetting NYI for outline text!
-                return render( rCanvas, rTransformation );
+                return render( rCanvas, rViewState, rTransformation );
 #else
                 const rendering::StringContext rOrigContext( mxTextLayout->getText() );
 

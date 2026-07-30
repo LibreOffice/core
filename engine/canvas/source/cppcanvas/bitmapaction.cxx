@@ -53,7 +53,8 @@ namespace cppcanvas
                               const ::basegfx::B2DVector& rDstSize,
                               const OutDevState& );
 
-                virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                           const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
@@ -61,7 +62,8 @@ namespace cppcanvas
 
             private:
                 using Action::render;
-                virtual bool renderPrimitive( const CanvasSharedPtr& rCanvas,
+                virtual bool renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                              const vclcanvas::ViewState& rViewState,
                                               uno::Reference< vclcanvas::XCachedPrimitive >& rCachedPrimitive,
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
 
@@ -120,7 +122,8 @@ namespace cppcanvas
                                    nullptr );
             }
 
-            bool BitmapAction::renderPrimitive( const CanvasSharedPtr& rCanvas,
+            bool BitmapAction::renderPrimitive( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                                const vclcanvas::ViewState& rViewState,
                                                 uno::Reference< vclcanvas::XCachedPrimitive >& rCachedPrimitive,
                                                 const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
@@ -130,14 +133,15 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                rCachedPrimitive = rCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
-                                                                         rCanvas->getViewState(),
-                                                                         aLocalState );
+                rCachedPrimitive = rCanvas->drawBitmap( mxBitmap,
+                                                     rViewState,
+                                                     aLocalState );
 
                 return true;
             }
 
-            bool BitmapAction::renderSubset( const CanvasSharedPtr& rCanvas,
+            bool BitmapAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                             const vclcanvas::ViewState& rViewState,
                                              const ::basegfx::B2DHomMatrix&   rTransformation,
                                              const Subset&                    rSubset ) const
             {
@@ -147,7 +151,7 @@ namespace cppcanvas
                     rSubset.mnSubsetEnd != 1 )
                     return false;
 
-                return CachedPrimitiveBase::render( rCanvas, rTransformation );
+                return CachedPrimitiveBase::render( rCanvas, rViewState, rTransformation );
             }
 
             sal_Int32 BitmapAction::getActionCount() const

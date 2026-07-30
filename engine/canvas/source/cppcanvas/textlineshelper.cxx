@@ -78,11 +78,10 @@ void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo
     initLineStyleWaveline(rLineInfo.mnUnderlineStyle, mbUnderlineWaveline, mbUnderlineWavelineBold);
 }
 
-void TextLinesHelper::render(const CanvasSharedPtr& rCanvas,
+void TextLinesHelper::render(const css::uno::Reference<vclcanvas::XCanvas>& xCanvas,
+                             const vclcanvas::ViewState& aViewState,
                              const vclcanvas::RenderState& rRenderState, bool bNormalText) const
 {
-    const vclcanvas::ViewState aViewState(rCanvas->getViewState());
-    const uno::Reference<vclcanvas::XCanvas> xCanvas(rCanvas->getUNOCanvas());
     rendering::StrokeAttributes aStrokeAttributes;
     aStrokeAttributes.JoinType = rendering::PathJoinType::ROUND;
 

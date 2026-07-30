@@ -2548,7 +2548,7 @@ namespace cppcanvas
                 for (const MtfAction & rAction : maActions)
                     // ANDing the result. We want to fail if at least
                     // one action failed.
-                    bRet &= rAction.mpAction->render( mpCanvas, aMatrix );
+                    bRet &= rAction.mpAction->render( mpCanvas->getUNOCanvas(), mpCanvas->getViewState(), aMatrix );
                 return bRet;
             }
             catch( uno::Exception& )

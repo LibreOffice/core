@@ -50,9 +50,11 @@ namespace cppcanvas
                 LineAction(const LineAction&) = delete;
                 const LineAction& operator=(const LineAction&) = delete;
 
-                virtual bool render( const CanvasSharedPtr& rCanvas,
+                virtual bool render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                     const vclcanvas::ViewState& rViewState,
                                      const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                           const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
@@ -74,7 +76,9 @@ namespace cppcanvas
                 maState.DeviceColor = rState.lineColor;
             }
 
-            bool LineAction::render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool LineAction::render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                     const vclcanvas::ViewState& rViewState,
+                                     const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::LineAction::render()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::LineAction: 0x" << std::hex << this );
@@ -82,15 +86,16 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                rCanvas->getUNOCanvas()->drawLine( ::basegfx::unotools::point2DFromB2DPoint(maStartPoint),
-                                                    ::basegfx::unotools::point2DFromB2DPoint(maEndPoint),
-                                                    rCanvas->getViewState(),
-                                                    aLocalState );
+                rCanvas->drawLine( ::basegfx::unotools::point2DFromB2DPoint(maStartPoint),
+                                    ::basegfx::unotools::point2DFromB2DPoint(maEndPoint),
+                                    rViewState,
+                                    aLocalState );
 
                 return true;
             }
 
-            bool LineAction::renderSubset( const CanvasSharedPtr& rCanvas,
+            bool LineAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                           const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const
             {
@@ -100,7 +105,7 @@ namespace cppcanvas
                     rSubset.mnSubsetEnd != 1 )
                     return false;
 
-                return render( rCanvas, rTransformation );
+                return render( rCanvas, rViewState, rTransformation );
             }
 
             sal_Int32 LineAction::getActionCount() const

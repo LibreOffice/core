@@ -53,8 +53,11 @@ namespace cppcanvas
                 PointAction(const PointAction&) = delete;
                 const PointAction& operator=(const PointAction&) = delete;
 
-                virtual bool render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+                virtual bool render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                     const vclcanvas::ViewState& rViewState,
+                                     const ::basegfx::B2DHomMatrix& rTransformation ) const override;
+                virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                           const vclcanvas::ViewState& rViewState,
                                            const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
@@ -83,7 +86,9 @@ namespace cppcanvas
                     rAltColor );
             }
 
-            bool PointAction::render( const CanvasSharedPtr& rCanvas, const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool PointAction::render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                      const vclcanvas::ViewState& rViewState,
+                                      const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PointAction::render()" );
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::PointAction: 0x" << std::hex << this );
@@ -91,14 +96,15 @@ namespace cppcanvas
                 vclcanvas::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                rCanvas->getUNOCanvas()->drawPoint( ::basegfx::unotools::point2DFromB2DPoint(maPoint),
-                                                     rCanvas->getViewState(),
-                                                     aLocalState );
+                rCanvas->drawPoint( ::basegfx::unotools::point2DFromB2DPoint(maPoint),
+                                     rViewState,
+                                     aLocalState );
 
                 return true;
             }
 
-            bool PointAction::renderSubset( const CanvasSharedPtr& rCanvas,
+            bool PointAction::renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                            const vclcanvas::ViewState& rViewState,
                                             const ::basegfx::B2DHomMatrix&    rTransformation,
                                             const Subset&                     rSubset ) const
             {
@@ -108,7 +114,7 @@ namespace cppcanvas
                     rSubset.mnSubsetEnd != 1 )
                     return false;
 
-                return render( rCanvas, rTransformation );
+                return render( rCanvas, rViewState, rTransformation );
             }
 
             sal_Int32 PointAction::getActionCount() const

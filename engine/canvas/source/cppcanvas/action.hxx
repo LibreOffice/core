@@ -85,7 +85,8 @@ namespace cppcanvas
                 @return true, if rendering was successful. If
                 rendering failed, false is returned.
              */
-            virtual bool render( const CanvasSharedPtr& rCanvas,
+            virtual bool render( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                 const vclcanvas::ViewState& rViewState,
                                  const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
 
             /** Render the given part of the action to the associated
@@ -102,7 +103,8 @@ namespace cppcanvas
                 specified subset is invalid for this action, or if
                 rendering failed for other reasons, false is returned.
              */
-            virtual bool renderSubset( const CanvasSharedPtr& rCanvas,
+            virtual bool renderSubset( const css::uno::Reference<vclcanvas::XCanvas>& rCanvas,
+                                       const vclcanvas::ViewState& rViewState,
                                        const ::basegfx::B2DHomMatrix& rTransformation,
                                        const Subset&                  rSubset ) const = 0;
 
