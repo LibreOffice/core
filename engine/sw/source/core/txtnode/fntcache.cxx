@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <config_vclplug.h>
+
 #include <i18nlangtag/mslangid.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/outdev.hxx>
@@ -527,7 +529,7 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
 }
 
 void SwFntObj::GuessLeading( const SwViewShell&
-#if defined(_WIN32)
+#if defined(_WIN32) && !USE_HEADLESS_CODE
                              rSh
 #endif
                              , const FontMetric& rMet )
@@ -540,7 +542,10 @@ void SwFntObj::GuessLeading( const SwViewShell&
         return;
     }
 
-#if defined(_WIN32)
+// The guess corrects for the Windows font backend reporting different metrics for the reference
+// device and the screen; a headless build measures both with freetype, so there is nothing to
+// correct.
+#if defined(_WIN32) && !USE_HEADLESS_CODE
     OutputDevice *pWin = rSh.GetWin() ?
                          rSh.GetWin()->GetOutDev() :
                          Application::GetDefaultDevice();
