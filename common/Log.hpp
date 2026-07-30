@@ -385,9 +385,9 @@ static constexpr std::size_t skipPathPrefix(const char (&s)[N], std::size_t n = 
 #define LOG_ERR(X)        LOG_MESSAGE_(ERR, Generic, X, logPrefix, LOG_END)
 
 #define LOG_WRN_ONCE(X) LOG_MESSAGE_ONCE_(WRN, Generic, X, logPrefix, LOG_END)
-#define LOG_WRN_ONCE_S(X) LOG_MESSAGE_ONCE_(WRN, Generic, X, (void), LOG_END)
+#define LOG_WRN_ONCE_S(X) LOG_MESSAGE_ONCE_(WRN, Generic, X, ::logPrefix, LOG_END)
 #define LOG_ERR_ONCE(X) LOG_MESSAGE_ONCE_(ERR, Generic, X, logPrefix, LOG_END)
-#define LOG_ERR_ONCE_S(X) LOG_MESSAGE_ONCE_(ERR, Generic, X, (void), LOG_END)
+#define LOG_ERR_ONCE_S(X) LOG_MESSAGE_ONCE_(ERR, Generic, X, ::logPrefix, LOG_END)
 
 #define LOGA_TRC(A,X)        LOG_MESSAGE_(TRC, A, X, logPrefix, LOG_END)
 #define LOGA_TRC_NOFILE(A,X) LOG_MESSAGE_(TRC, A, X, logPrefix, LOG_END_NOFILE)
@@ -443,11 +443,11 @@ static constexpr std::size_t skipPathPrefix(const char (&s)[N], std::size_t n = 
 #define LOG_SFL(X) LOG_ERRNO_(LOG_FTL, errno, X)
 
 /// No-prefix versions:
-#define LOG_TRC_S(X) LOG_MESSAGE_(TRC, Generic, X, (void), LOG_END)
-#define LOG_DBG_S(X) LOG_MESSAGE_(DBG, Generic, X, (void), LOG_END)
-#define LOG_INF_S(X) LOG_MESSAGE_(INF, Generic, X, (void), LOG_END)
-#define LOG_WRN_S(X) LOG_MESSAGE_(WRN, Generic, X, (void), LOG_END)
-#define LOG_ERR_S(X) LOG_MESSAGE_(ERR, Generic, X, (void), LOG_END)
+#define LOG_TRC_S(X) LOG_MESSAGE_(TRC, Generic, X, ::logPrefix, LOG_END)
+#define LOG_DBG_S(X) LOG_MESSAGE_(DBG, Generic, X, ::logPrefix, LOG_END)
+#define LOG_INF_S(X) LOG_MESSAGE_(INF, Generic, X, ::logPrefix, LOG_END)
+#define LOG_WRN_S(X) LOG_MESSAGE_(WRN, Generic, X, ::logPrefix, LOG_END)
+#define LOG_ERR_S(X) LOG_MESSAGE_(ERR, Generic, X, ::logPrefix, LOG_END)
 
 #define SERIALIZE(_, X) STRING(X) ": " << (X) << ", "
 

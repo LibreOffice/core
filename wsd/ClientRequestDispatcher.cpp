@@ -2725,9 +2725,9 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
     throw BadRequestException("Invalid or unknown request.");
 }
 
-bool ClientRequestDispatcher::handleClientProxyRequest(const Poco::Net::HTTPRequest& request,
+bool ClientRequestDispatcher::handleClientProxyRequest(const Poco::Net::HTTPRequest&,
                                                        const RequestDetails& requestDetails,
-                                                       std::istream& message,
+                                                       std::istream&,
                                                        SocketDisposition& disposition)
 {
     // cf. RequestVettingStation::handleRequest ...
@@ -2751,9 +2751,6 @@ bool ClientRequestDispatcher::handleClientProxyRequest(const Poco::Net::HTTPRequ
 
     LOG_INF("URL [" << Anonymizer::anonymizeUrl(url) << "] is "
                     << (isReadOnly ? "readonly" : "writable") << '.');
-    (void)request;
-    (void)message;
-    (void)disposition;
 
     // Request a kit process for this doc.
     std::pair<std::shared_ptr<DocumentBroker>, std::string> pair

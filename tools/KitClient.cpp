@@ -176,7 +176,6 @@ namespace Util
 void alertAllUsers(const std::string& cmd, const std::string& kind)
 {
     std::cout << "error: cmd=" << cmd << " kind=" << kind << std::endl;
-    (void) kind;
 }
 
 }
