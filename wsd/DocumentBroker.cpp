@@ -3569,7 +3569,6 @@ void DocumentBroker::handleUploadToStorageSuccessful(const StorageBase::UploadRe
 
         const std::string url = uri.toString();
         std::string encodedName = Uri::encode(filename);
-        const std::string filenameAnonym = Anonymizer::anonymizeUrl(filename);
         std::ostringstream oss;
         oss << "renamefile: " << "filename=" << encodedName << " url=" << url;
         broadcastMessage(oss.str());

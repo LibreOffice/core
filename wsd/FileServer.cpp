@@ -1331,7 +1331,7 @@ public:
         const std::string accessToken = extractVariable(form, "access_token", ACCESS_TOKEN);
         const std::string accessTokenTtl =
             extractVariable(form, "access_token_ttl", ACCESS_TOKEN_TTL);
-        const std::string noAuthHeader = extractVariable(form, "no_auth_header", NO_AUTH_HEADER);
+        extractVariable(form, "no_auth_header", NO_AUTH_HEADER);
 
         unsigned long tokenTtl = 0;
         if (!accessToken.empty())
@@ -2824,9 +2824,6 @@ void FileServerRequestHandler::preprocessIntegratorAdminFile(const HTTPRequest& 
     const ServerURL cnxDetails(requestDetails);
     const std::string& responseRoot = cnxDetails.getResponseRoot();
     const auto& config = Application::instance().config();
-
-    static const std::string scriptJS("<script src=\"%s/browser/" COOLWSD_VERSION_HASH "/%s.js\"></script>");
-    static const std::string footerPage("<footer class=\"footer has-text-centered\"><strong>Key:</strong> %s &nbsp;&nbsp;<strong>Expiry Date:</strong> %s</footer>");
 
     const std::string relPath = getRequestPathname(request, requestDetails);
     LOG_DBG("Preprocessing file: " << relPath);

@@ -3542,7 +3542,6 @@ bool ChildSession::renderShapeSelection(const StringVector& tokens)
 bool ChildSession::removeTextContext(const StringVector& tokens)
 {
     int id, before, after;
-    std::string text;
     if (tokens.size() < 4 ||
         !getTokenInteger(tokens[1], "id", id) || id < 0 ||
         !getTokenInteger(tokens[2], "before", before) ||

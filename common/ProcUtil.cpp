@@ -290,7 +290,6 @@ Backtrace::Backtrace([[maybe_unused]] const int maxFrames, const int skip)
                 separateRawSymbol(rawSymbols[i], symbol);
                 int status;
                 char* demangled;
-                std::string s("`");
                 if ((demangled = abi::__cxa_demangle(symbol.mangled.c_str(), nullptr, nullptr,
                                                      &status)) != nullptr)
                 {
